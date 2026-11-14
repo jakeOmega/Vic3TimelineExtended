@@ -112,6 +112,7 @@ FOREIGN_CHECKS = frozenset({
     "texture_reference",  # texture_reference_audit (an asset path's line in an event)
     "trigger_event_cycle",  # trigger_event_cycle_audit (a trigger_event line in an event)
     "tooltip_walk",  # tooltip_walk_variable_audit (a variable read line in an event option)
+    "delayed_trigger",  # delayed_event_trigger_audit (an event's `trigger = {` line)
 })
 
 # ---------------------------------------------------------------------------
@@ -152,7 +153,7 @@ SYSTEMS: tuple[System, ...] = (
     ),
     System(
         "covert", "Covert warfare",
-        _rx(r"\bcovert_warfare_(?:enabled|disabled)\b|\bje_covert_warfare\b|\bcovert_\w+|\biw_\w+"),
+        _rx(r"\bcovert_warfare_(?:enabled|disabled|early_unlock)\b|\bte_covert_warfare_(?:on|early)\b|\bje_covert_warfare\b|\bcovert_\w+|\biw_\w+"),
         _rx(r"^covert_"),
         _rx(r"\bspy\b(?! satellites?)|\bspies\b|\bespionage\b|\bspy rings?\b"
             r"|\bintelligence (?:operatives?|agents?|networks?)\b|\bforeign (?:operatives?|agents?)\b"
@@ -194,14 +195,14 @@ SYSTEMS: tuple[System, ...] = (
     ),
     System(
         "un", "United Nations",
-        _rx(r"\bunited_nations_(?:enabled|disabled)\b|\bje_united_nations\b|\bun_\w+|\bte_un_\w+"),
+        _rx(r"\bunited_nations_(?:enabled|disabled|early_unlock)\b|\bte_united_nations_(?:on|early)\b|\bje_united_nations\b|\bun_\w+|\bte_un_\w+"),
         _rx(r"^(?:un_|te_debug_un)"),
         _rx(r"\bUnited Nations\b|\bSecurity Council\b|\bGeneral Assembly\b"
             r"|\bUN (?:resolutions?|votes?|charter|missions?|peacekeep\w*|sanctions)\b"),
     ),
     System(
         "cultural_hegemony", "Cultural hegemony",
-        _rx(r"\bcultural_hegemony_(?:enabled|disabled)\b|\bje_cultural_hegemony\b"
+        _rx(r"\bcultural_hegemony_(?:enabled|disabled|early_unlock)\b|\bte_cultural_hegemony_(?:on|early)\b|\bje_cultural_hegemony\b"
             r"|\bcultural_hegemony_\w+|\bch_\w+"),
         _rx(r"^(?:cultural_hegemony|te_debug_ch)"),
         _rx(r"\bcultural hegemony\b|\bsoft power\b|\bcultural imperialism\b"
@@ -209,7 +210,7 @@ SYSTEMS: tuple[System, ...] = (
     ),
     System(
         "world_war", "World war",
-        _rx(r"\bworld_war_(?:enabled|disabled)\b|\bje_world_war\b|\bworld_war_\w+|\bww_\w+"),
+        _rx(r"\bworld_war_(?:enabled|disabled|early_unlock)\b|\bte_world_war_(?:on|early)\b|\bje_world_war\b|\bworld_war_\w+|\bww_\w+"),
         _rx(r"^world_war"),
         _rx(r"\bworld war\b|\bglobal war\b", _I),
     ),

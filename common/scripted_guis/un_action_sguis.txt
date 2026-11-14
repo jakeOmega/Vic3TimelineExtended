@@ -25,7 +25,7 @@ un_act_found_sgui = {
 	is_shown = {
 		NOT = { has_global_variable = un_founded }
 		NOT = { un_conference_in_session = yes }
-		has_technology_researched = intergovernmental_organizations
+		un_founding_tech_reached = yes
 	}
 
 	ai_is_valid = { always = no }
@@ -37,7 +37,7 @@ un_act_found_sgui = {
 			NOT = { has_global_variable = un_founded }
 			NOT = { un_conference_in_session = yes }
 		}
-		has_technology_researched = intergovernmental_organizations
+		un_founding_tech_reached_tt = yes
 		country_rank >= rank_value:great_power
 		is_subject = no
 		# As joining (un_join_button): a founder is a member.

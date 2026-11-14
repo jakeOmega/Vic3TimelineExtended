@@ -140,7 +140,10 @@ class LawEventFitTests(unittest.TestCase):
 
     def _enacting_laws(self, number):
         """The laws an event's trigger names, at its top level or in its one OR."""
-        trigger = self._event(number)["trigger"][1]
+        event = self._event(number)
+        if "trigger" not in event:
+            return set()  # a hidden relay (#1596)
+        trigger = event["trigger"][1]
         laws = [v for k, v in _entries(trigger) if k == "is_enacting_law"]
         for key, value in _entries(trigger):
             if key == "OR":

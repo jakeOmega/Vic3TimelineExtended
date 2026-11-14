@@ -264,7 +264,7 @@ class LawsTest(unittest.TestCase):
     def test_international_oversight_needs_the_un(self):
         body = _strip_comments(_block(_read(LAWS), "law_international_ai_oversight"))
         self.assertIn("te_frontier_ai_un_member = yes", body[body.index("can_enact"):])
-        self.assertIn("has_game_rule = united_nations_enabled", body[body.index("is_visible"):])
+        self.assertIn("te_united_nations_on = yes", body[body.index("is_visible"):])
         trigger = _strip_comments(_block(_read(TRIGGERS), "te_frontier_ai_un_member"))
         self.assertIn("has_modifier = un_member_modifier", trigger)
         self.assertIn("has_variable = un_member_modifier_on", trigger)

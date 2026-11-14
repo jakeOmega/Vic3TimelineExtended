@@ -8,10 +8,12 @@ harness (`python3 -m game_qa`), and the build lens now offers the Construction S
 
 ## What was wrong
 
-**1. Base Construction followed the player's last lobby, not the save.** The Disabled setting applied the modifier with
-`apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line. The engine applies it
-by the rules the player last applied in a lobby on their machine (`player/game_rules/presets.txt`,
-`LastAppliedRules`), whatever save is loaded:
+**1. Base Construction did not follow the save; it seems to follow the player's last lobby.** The Disabled setting applied the modifier with
+`apply_modifier = all:te_direct_construction_base_modifier`. The base game never uses that line (as read by this
+session; not re-read since). The engine did not apply it by the save's rules; the setting it applied was the one the
+player last applied in a lobby on their machine (kept, all but certainly, in `player/game_rules/presets.txt`,
+`LastAppliedRules`). Every load below was a launch of the QA harness straight into the save (`-loadsave`). The check
+by hand further down found the save's own setting not applied at a load from the main menu either:
 
 | Save loaded | Its rules (`has_game_rule`) | The lobby's last applied rules | What the engine applied |
 |---|---|---|---|
@@ -20,18 +22,23 @@ by the rules the player last applied in a lobby on their machine (`player/game_r
 | The owner's own played save, loaded straight into play | Enabled | Disabled | A marker on every setting read 7 for the player and for two AI countries, so the rule's line is read at load on that path too |
 
 **What was read and what is inferred.** Read directly, in two rules: the modifier the engine applied was not the
-one of the save's setting, and `has_game_rule` and the setting's production-method flags did follow the save. Inferred:
-that `LastAppliedRules` is the source. It named the applied setting both times (Disabled, and culture merges enabled,
-neither of them the default nor both the last setting defined), and nothing else on the machine did; but the harness
-never writes that file, so it could not be flipped to watch the modifier follow. Also inferred: that a load from the
-main menu behaves as the harness's `-loadsave` launch does. One check by hand settles both, on the released 1.3.1
-build: start a game with the rule Disabled and save it; open New Game, set the rule to Enabled, start and quit; load the
-save. If the construction tooltip has lost Base Construction, the source is the last lobby. Either way the line could
-not be relied on, and script does not use it any more.
+one of the save's setting, and `has_game_rule` and the setting's production-method flags did follow the save. Read by
+hand on 2026-11-13 ("The check by hand (#1767)" below): at a load from the main menu the save's own setting was not
+applied either, in the same session and after a fresh launch. A Disabled save loaded after a lobby that applied
+Enabled had no Base Construction. The Enabled setting carries no modifier, so that reading cannot tell "applied the
+last lobby's setting" from "applied none". The other direction, the last lobby's modifier arriving on a save whose
+own setting lacks it, was read only through the harness's `-loadsave`, not at a main-menu load. Still inferred, though
+all but settled: that `LastAppliedRules` is where the engine keeps the last lobby's setting. The setting persists
+across launches: the harness's fresh launches applied a lobby set in an earlier session. The file named the applied
+setting every time (Disabled, and culture merges enabled, neither of them the default nor both the last setting
+defined). In the check by hand its contents changed once, during step 2's lobby. No other file in the user-data
+folder outside `save games/`, `logs/` and `mod/` names a setting of the rule. But nobody has edited the file by hand
+to watch the modifier follow. Either way the line could not be relied on, and script does not use it any more.
 
-So a player who starts a Disabled game has the 5 points while Disabled is what they last set up. Once they apply other
-rules in any lobby, that game loses its Base Construction at the next load, and a market game loaded after a Disabled
-lobby gains 5 points it should not have. The save holds no trace of the modifier, and `has_modifier` never saw it.
+So a player who starts a Disabled game has the 5 points while Disabled is what they last set up. Once they start a
+game under other rules from any lobby, that game loses its Base Construction at the next load (read by hand, at
+main-menu loads). A market game loaded after a Disabled lobby gains 5 points it should not have (read through the
+harness's `-loadsave`; not tried at a main-menu load). The save holds no trace of the modifier, and `has_modifier` never saw it.
 The production-method flags of a setting are not affected: they followed the save in every run.
 
 Fix: script adds the modifier under `has_game_rule`, which follows the save
@@ -69,6 +76,12 @@ day, before the conversion closed the sector. Its construction never finished: f
 points left. The weekly pass now cancels a sector under construction in a direct game.
 
 ## Live results with the fix (2026-11-13)
+
+**The base is 10 now (#1768, after these runs).** Every reading below was taken when Base Construction was 5 points a
+week, and they stand as read: the 5.0, 5.1, 5.2 and 5.4 figures are 5 plus a fraction of a site level, and a new game's
+countries read 5. On the current build the same rows should read 5 more (10.0, 10.2, 10.4, …; France 47.4 where it read 42.4: expected,
+not read), and the base self-check counts a holder under 10 as `under_base`. Nothing else in the runs depended on the
+figure.
 
 Every run loaded the branch's changed files as a variant mod beside the deployed build. Greece and France were played;
 a new game's rules were the owner's last applied (Free Market Construction Disabled).
@@ -108,11 +121,115 @@ Before the fix, in a new direct game: Greece queued a second site level on its 5
 weeks; a country made in play (Byzantium, from a Greek state) had 5 points at once and its AI queued a first site.
 Those hold with the script-owned base, which reaches a new country at its first weekly pulse.
 
+## The check by hand (#1767)
+
+The harness cannot settle where a rule setting's `apply_modifier` comes from: it never writes the owner's
+`presets.txt` (owner, 2026-11-12), its snapshot does not cover `player/game_rules/`, and it always launches straight
+into a save. Since this change, `start`'s reply names a rule whose setting in the loaded save is not the one
+`LastAppliedRules` names (`rules.lobby_differs`), so a later harness reading says when the two disagreed; the
+readings above predate that, and none of the recorded session files holds the presets file's contents.
+
+**What the repo's records add.** A fixture's key follows `LastAppliedRules`, so a `start` that finds one rather than
+making it was under the rules the fixture was made with. The last such start recorded, at 08:57 UTC on 2026-11-13
+(`docs/testing/game_qa_probe/captures/session_2026-11-13_qa_prs/sessionD_steps.jsonl`), found a fixture whose save
+carries `free_market_construction_enabled` and `culture_merges_enabled`; the runs above, later that day, were under a
+last lobby of Disabled. So the owner applied Disabled in a lobby in between. That fits the runs' account and is not
+evidence for the source either way.
+No other recorded session switched a rule that carried an `apply_modifier` line: Base Construction's was the mod's
+only one (added 2026-10-16, removed 2026-11-13).
+
+**What the check needs.** The released 1.3.1 build, which still has the line and a base of 5: a playset that loads
+it (the Workshop release) and not the local development copy, which no longer has the line. No harness, no console.
+About ten minutes.
+
+0. Close the game. Open `player/game_rules/presets.txt` in the user-data folder (the folder that holds `save games/`
+   and `mod/`) and copy down the `setting={ … }` list of the preset named `LastAppliedRules`: at least its
+   `free_market_construction_*` entry. Copy the whole file somewhere first if you like; nothing below writes it by
+   hand.
+1. Launch the game with the 1.3.1 playset. **New Game**, open **Game Rules**, set **Free Market Construction** to
+   **Disabled**, leave the rest, pick any country and start. In the game, hover the construction figure in the top
+   bar (or the construction panel's construction per week): its tooltip lists the sources of construction. Copy
+   down the total and whether **Base Construction +5** is listed (it should be: the lobby just applied Disabled). Save under a name of your own, say `te1767`. Quit to the
+   main menu.
+2. **New Game** again, set **Free Market Construction** to **Enabled**, start (any country), and once the map is up
+   quit to the main menu. Do not save.
+3. Without closing the game, **Load** `te1767`. Hover the top bar's construction figure. Copy down the total and
+   whether Base Construction is listed.
+4. Quit to the desktop. Open `presets.txt` again and copy down `LastAppliedRules`' `free_market_construction_*`
+   entry: it should now say `free_market_construction_enabled`. If it still says Disabled, step 2 did not apply its
+   rules: redo steps 2 to 4.
+5. Launch the game again with the same playset and load `te1767` from the main menu. Hover and copy down as in step 3.
+
+**What each outcome means**, with `LastAppliedRules` at Enabled after step 2 (step 4):
+
+| Step 3 (same session) | Step 5 (fresh launch) | Means |
+|---|---|---|
+| Base Construction gone, total 5 lower | gone | A main-menu load follows the last lobby as `-loadsave` did: inference (2) holds and loses "inferred". The source survives a restart, and `LastAppliedRules` is the one candidate recorded, so (1) is all but settled; the variant below proves it |
+| gone | listed | Inference (1) does not hold as stated: after a fresh launch the main-menu load followed the save, so what step 3 followed was the running game's last lobby, not the file; and a fresh main-menu load differs from the harness's `-loadsave`, which followed the lobby. The lesson is rewritten to that |
+| listed | listed | A main-menu load applies the save's setting: the harness's `-loadsave` differs. The lesson's heading stands (the harness's loads did not follow the save) and its first paragraph is corrected to that launch; players' reports then need another explanation |
+| listed | gone | Unexpected: write down both readings and the presets lines, and say so on #1767 |
+
+If step 1 does not list Base Construction, the 1.3.1 build is not the one loaded: check the playset. Write down
+the presets lines from steps 0 and 4, the three readings, the date and the game's version on #1767.
+
+### Readings, 2026-11-13
+
+Run by the owner as Greece on Victoria 3 1.15.1, with a session reading the files. A watcher read `presets.txt`, the
+Continue pointer and the `save games/` listing every two seconds from step 0 to the end.
+
+**Build.** The run did not load the Workshop 1.3.1 copy that "What the check needs" asks for. It loaded the owner's
+usual playset: Headlines, GDP Plotline Plus, Global Stats (GDP and POP) and the local `mod/Vic3TimelineExtended`
+folder (the game's log of each launch, at 16:07:33 and 16:25:17). That folder held local `main` at `a0fd0c0bd`
+(#1759), from before #1763, and its 1,164 `common/` and `events/` files all matched that commit. Its
+`extra_game_rules.txt` was byte for byte the same as tag 1.3.1's, `apply_modifier` line included. Base Construction
+was `country_construction_add = 5`, and no script in the folder added or removed the modifier, so the rule's line was
+its only source. The folder did not change during the run. The owner judged a second run on the Workshop copy not
+needed.
+
+| Step | `LastAppliedRules` (`free_market_construction_*`) | Construction (top bar) | Base Construction +5 listed |
+|---|---|---|---|
+| 0. Game closed (16:02) | `disabled` (file of 10:53 that morning) | — | — |
+| 1. New game from a lobby set to Disabled; saved as `te1767` (16:13:37) | `disabled`; the contents did not change | 5 | Yes |
+| 2. New game from a lobby set to Enabled, quit at the map | `enabled`, the contents changed at 16:13:56, in the lobby, before the new game's setup (its first lines in `debug.log` are at 16:14:14); that entry was the only change | — | — |
+| 3. Same session: Load `te1767` from the main menu | `enabled` | 0 at load; 0.1 a week later, all of it from the Construction Site | No, at load or a week later |
+| 4. Quit to the desktop | `enabled`, the contents did not change again | — | — |
+| 5. Fresh launch (a new game process), Load `te1767` from the main menu | `enabled` | 0 at load; 0.1 a week later, from the site | No, at load or a week later |
+
+The save `te1767` carries `free_market_construction_disabled` in both its `meta` and its `gamestate`, and no
+`te_direct_construction_base_modifier`. It was a direct game throughout: its only construction was the site's.
+
+**Outcome: the first row of the table above (gone, gone).** Inference (2) holds as far as it was read. At a load from
+the main menu, in the same session and after a fresh launch, the save's own setting (Disabled) was not applied, as at
+the harness's `-loadsave` launches. The reading cannot tell "applied the last lobby's setting" from "applied none",
+since Enabled carries no modifier. The other direction was not tried at a main-menu load: an Enabled save loaded after
+a Disabled lobby, gaining the +5. The harness read that direction only through `-loadsave`. Inference (1) is all but
+settled, not proved. The setting persists across launches (the harness's fresh launches applied a lobby set in an
+earlier session). In the whole run, sampled every two seconds, the contents of `presets.txt` changed once: in step
+2's lobby, when it took the new setting. A grep of the whole user-data folder after the run, outside `save games/`,
+`logs/` and `mod/`, found `free_market_construction` in no other file. The variant below, which edits the file by
+hand, was not run.
+
+**A further check for the other direction**, about five minutes, if the owner wants it, on a build that still has the
+line (as above). Start a game from a lobby set to Enabled and save it. Start a game from a lobby set to Disabled and quit to the main menu. Then load the Enabled
+save from the main menu. Base Construction +5 listed there reads the gain direction at a main-menu load. Its last
+lobby is Disabled, as `presets.txt` was before this run, but compare the file with the copy all the same.
+
+After the run `presets.txt` was copied back from the copy taken at step 0, and `cmp` found the two byte-identical
+(sha256 `e0b4a91a…`). `te1767` was deleted, and the `save games/` listing (name, size, time) matched the one taken
+before the run; the autosaves matched their copies byte for byte. The Continue pointer was left naming `te1767`.
+
+**A further variant, to prove (1)**, if the owner wants it: with the game closed, copy
+`presets.txt` aside, change only the `free_market_construction_*` entry of `LastAppliedRules` by hand to the other
+setting, launch, load `te1767` from the main menu, read the tooltip, then put the copy back. Base Construction
+following the edit proves the file is the source. It is a write to the owner's own settings file, which the harness
+never makes; the risk is a mistake in the edit (what the game does with an entry it cannot read is not known), which
+putting the copy back undoes.
+
 ## Self-checks
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … direct_base_construction` | A direct game, once each time the game becomes one: a week after its first weekly pass | Every country that holds Base Construction has 5 construction a week or more, and at most a tenth as many countries are still without it (new ones that have not had a weekly pulse) | `under_base` above 0: the engine does not sum the modifier's `country_construction_add` for a holder. `missing` large: a week of pulses left countries without it | `under_base`: read `modifier:country_construction_add` for one holder in the harness; if a script-added country modifier's construction is not summed, give the points through the Construction Site instead (a free level in the capital). `missing`: `te_direct_construction_on_weekly_pulse` is not reaching those countries; read `te_construction_market_pulse_events.3` for one |
+| `TE_SELF_CHECK … direct_base_construction` | A direct game, once each time the game becomes one: a week after its first weekly pass | Every country that holds Base Construction has 10 construction a week or more (5 before #1768), and at most a tenth as many countries are still without it (new ones that have not had a weekly pulse) | `under_base` above 0: the engine does not sum the modifier's `country_construction_add` for a holder. `missing` large: a week of pulses left countries without it | `under_base`: read `modifier:country_construction_add` for one holder in the harness; if a script-added country modifier's construction is not summed, give the points through the Construction Site instead (a free level in the capital). `missing`: `te_direct_construction_on_weekly_pulse` is not reaching those countries; read `te_construction_market_pulse_events.3` for one |
 | `TE_SELF_CHECK … construction_rule_switch` | Once for each time the rule is changed in a running game, the day the buildings follow it | `to=direct`: as many sites stand as the switch should have made (`expected`), no Construction Sector is left, standing or under construction, and no site carries the market's capacity modifier. `to=market`: as many sectors stand as `expected`, and at least one. `capped` is the number of states whose levels the switch cut to what the builder can make (200 to a site, 100 back to a sector); it does not change the verdict | `to=direct` with `sites` under `expected`: `create_building` refused a site, and that state's sector levels are lost; with `sectors_left` or `market_modifiers_left` above 0: `te_direct_construction_convert_state` did not replace the buildings. `to=market` with `sectors` under `expected`: `te_direct_construction_revert_state_site` removed a site and its sector was refused | `to=direct`: check that `remove_building` still removes a site and a sector in one effect (it did on 2026-11-13); otherwise remove in one daily pass and build in the next. `to=market`: `extended_timeline_build_specified_building_level` refused the sector (`create_building` checks its technology and may check `can_build_government`); build it under the `te_cm_placing_site` pattern, with a global the sector's permission accepts |
 
 ## Still to look at in a game
@@ -126,12 +243,16 @@ The harness reads values and takes screenshots; these need a player.
    its four lines (`test_game_rule_desc_length.py`), where it used to tell the player to build from the state view. The
    construction panel's Direct Construction intro says the sites are built "from the Development tab of the
    Production Lens or from a state's view". A raw `$key$` or `[concept…]` in either is a splice that did not resolve.
-3. **The modifier a player sees.** The country's modifier list shows Base Construction (+5 construction), and the
+3. **The modifier a player sees.** The country's modifier list shows Base Construction (+10 construction), and the
    Nation tab's Economy section has a Construction row whose hover lists it. Neither appears in a market game.
 4. **A market game switched to Disabled, as its player.** The day after: the construction panel shows the Direct
    Construction section, each state that had a Construction Sector has a Construction Site of the same level on the
    same tier, and the capital's site hires within a week. Construction Cost Scaling shows as Construction Goods
-   Cost from the same day, for a country rich and fully employed enough to have any.
+   Cost from the same day, for a country rich and fully employed enough to have any. Compare two countries of very
+   different GDP per capita in the Nation tab's Construction row: each must show its own figure. The switch runs in
+   one country's event, and until 2026-11-13 it set every country's modifier there, where the multiplier reads that
+   one country; it now goes through a hidden event for each country (`te_construction_market_recalc_events.4`).
+   Not run in the game.
 5. **Back to the market.** The sectors return at the same level and tier, owned by the government. On the way to
    Disabled the opposite holds: a sector's levels become government Construction Site levels whoever owned them
    (investors, a company, a foreign owner), with no payment. The runs here were AI games of three months, and who owned their

@@ -1,0 +1,8 @@
+﻿# Construction Cost Scaling's rule gates. Values: common/script_values/extra_script_values.txt (CONSTRUCTION COST
+# SCALING). Effects: common/scripted_effects/te_construction_cost_effects.txt.
+
+# te_small_economy_construction_rule is on. Reads only a game rule, so it works from any scope. Named positively:
+# a save from before the rule (neither flag stored) reads as off.
+te_small_economy_construction_on = {
+	has_game_rule = te_small_economy_construction_enabled
+}

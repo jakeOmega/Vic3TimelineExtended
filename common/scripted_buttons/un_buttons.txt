@@ -42,7 +42,8 @@
 # are what gen_un_button_descs.py reads to write each button's effects text.
 
 # ---- 0. FOUND THE UNITED NATIONS ----
-# A Great Power with intergovernmental_organizations tech creates the UN.
+# A Great Power with intergovernmental_organizations tech creates the UN
+# (also multilateral_alliances under the early unlock: un_founding_tech_reached).
 # Any recognized independent country can then join.
 
 un_found_button = {
@@ -56,7 +57,7 @@ un_found_button = {
 		is_ai = yes
 		NOT = { has_global_variable = un_founded }
 		NOT = { un_conference_in_session = yes }
-		has_technology_researched = intergovernmental_organizations
+		un_founding_tech_reached = yes
 	}
 
 	possible = {
@@ -66,7 +67,7 @@ un_found_button = {
 			NOT = { has_global_variable = un_founded }
 			NOT = { un_conference_in_session = yes }
 		}
-		has_technology_researched = intergovernmental_organizations
+		un_founding_tech_reached_tt = yes
 		country_rank >= rank_value:great_power
 		is_subject = no
 		# As joining (un_join_button): a founder is a member.

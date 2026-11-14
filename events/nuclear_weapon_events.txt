@@ -2708,7 +2708,7 @@ nuclear_weapon_events.25 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the scopes it reads are saved by the calling event before the call; a filter
 		exists = scope:nuclear_pg_guarantor
 		exists = scope:proliferating_country
 	}
@@ -2837,7 +2837,7 @@ nuclear_weapon_events.26 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:nuclear_pg_beneficiary is the answering country, saved by .25 before its options; a filter
 		exists = scope:nuclear_pg_beneficiary
 	}
 
@@ -2871,7 +2871,7 @@ nuclear_weapon_events.27 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the scopes it reads are saved by the calling event before the call; cancels if the victim dies before it fires
 		exists = scope:nd_claim_victim
 		scope:nd_claim_victim = { is_country_alive = yes }
 	}
@@ -3034,7 +3034,7 @@ nuclear_weapon_events.28 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_claim_schedule_truth saves both scopes before the call; cancels if either country dies before the truth comes out
 		exists = scope:nd_truth_launcher
 		exists = scope:nd_truth_victim
 		scope:nd_truth_launcher = { is_country_alive = yes }
@@ -3095,7 +3095,7 @@ nuclear_weapon_events.29 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_claim_schedule_truth saves both scopes before the call; cancels if either country dies before the truth comes out
 		exists = scope:nd_truth_launcher
 		exists = scope:nd_truth_victim
 		scope:nd_truth_launcher = { is_country_alive = yes }

@@ -25,7 +25,7 @@ international_relations_events.1 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:arms_race_rival is saved by .201's sender and rides along; a filter
 		exists = scope:arms_race_rival
 	}
 
@@ -421,7 +421,7 @@ international_relations_events.4 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:propaganda_rival saved by .202's sender; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:propaganda_rival
@@ -597,7 +597,7 @@ international_relations_events.6 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:espionage_rival saved by .203's sender; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:espionage_rival

@@ -186,6 +186,54 @@ class SafetyNetTest(unittest.TestCase):
             "NOT = { has_journal_entry = je_tax_code } NOT = { has_inactive_journal_entry = je_tax_code } } "
             "add_journal_entry = { type = je_tax_code } debug_log = \"TE_TAX light_entry_net "), net)
 
+    def test_the_full_code_has_the_same_net(self):
+        # The full code's entry is display only, but the Tax Code tab, where a tax is changed, opens only while
+        # the entry is active. A Workshop player's tab stayed greyed for ten years with the code in force and no
+        # record of the entry (2026-11-13): only the light setting had a net.
+        text = flat(strip_comments(read(ON_ACTIONS)))
+        pulse = re.search(r"on_monthly_pulse_country = \{ on_actions = \{ ([^}]*) \} \}", text)
+        self.assertIn("te_tax_full_entry_net", pulse.group(1).split())
+        net = flat(block(read(ON_ACTIONS), "te_tax_full_entry_net"))
+        self.assertTrue(net.startswith(
+            "effect = { if = { limit = { te_tax_code_full = yes te_tax_code_in_force = yes "
+            "NOT = { is_country_type = decentralized } "
+            "NOT = { has_journal_entry = je_tax_code } NOT = { has_inactive_journal_entry = je_tax_code } } "
+            "add_journal_entry = { type = je_tax_code } debug_log = \"TE_TAX full_entry_net "), net)
+        # The tab's two gates are what the net restores: the entry active, on a code in force.
+        sguis = flat(strip_comments(read("common/scripted_guis/te_system_tab_sguis.txt")))
+        self.assertIn("te_budget_tax_tab_sgui = { scope = country is_shown = { te_tax_code_on = yes "
+                      "has_journal_entry = je_tax_code }", sguis)
+        self.assertIn("te_tax_code_in_force = yes", flat(block(read(TRIGGERS), "te_tax_entry_unlocked")))
+
+    def test_an_inactive_copy_the_engine_never_activates_is_reported(self):
+        # The greyed tab's tooltip reads only has_journal_entry, so it cannot tell a country with no record from
+        # one holding an inactive copy, and the nets leave the second alone (add_journal_entry is refused over an
+        # inactive copy). A handler beside each net, gated on its own setting, counts the months.
+        text = flat(strip_comments(read(ON_ACTIONS)))
+        pulse = re.search(r"on_monthly_pulse_country = \{ on_actions = \{ ([^}]*) \} \}", text).group(1).split()
+        for handler, gate, in_force in (("te_tax_light_entry_stuck", "te_tax_code_light_on", "te_tax_light_in_force"),
+                                        ("te_tax_full_entry_stuck", "te_tax_code_full", "te_tax_code_in_force")):
+            self.assertIn(handler, pulse)
+            self.assertEqual(flat(block(strip_comments(read(ON_ACTIONS)), handler)),
+                             "effect = { if = { limit = { %s = yes } te_tax_entry_stuck_check = { IN_FORCE = %s } } }"
+                             % (gate, in_force))
+        check = flat(block(strip_comments(read("common/scripted_effects/te_tax_migration_effects.txt")),
+                           "te_tax_entry_stuck_check"))
+        self.assertTrue(check.startswith(
+            "if = { limit = { $IN_FORCE$ = yes NOT = { is_country_type = decentralized } "
+            "NOT = { has_journal_entry = je_tax_code } has_inactive_journal_entry = je_tax_code } "), check[:200])
+        # Three months running, one line, and the counter returns to 0 when the state goes (never removed: a
+        # revolution's winner would get a removed token back with the loser's value).
+        self.assertIn("limit = { var:te_tax_entry_stuck_months < 3 } "
+                      "change_variable = { name = te_tax_entry_stuck_months add = 1 } "
+                      "if = { limit = { var:te_tax_entry_stuck_months >= 3 } "
+                      "debug_log = \"TE_SELF_CHECK BROKEN tax_entry_inactive_stuck ", check)
+        self.assertTrue(check.endswith("else_if = { limit = { has_variable = te_tax_entry_stuck_months "
+                                       "var:te_tax_entry_stuck_months > 0 } "
+                                       "set_variable = { name = te_tax_entry_stuck_months value = 0 } }"), check[-200:])
+        self.assertEqual(check.count("debug_log"), 1)
+        self.assertNotIn("remove_variable", check)
+
     def test_in_force_is_enough_for_the_entrys_own_gates(self):
         triggers = read(TRIGGERS)
         self.assertIn("has_game_rule = te_tax_code_light", flat(block(triggers, "te_tax_code_on")))

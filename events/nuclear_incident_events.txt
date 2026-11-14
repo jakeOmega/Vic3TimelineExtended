@@ -369,7 +369,7 @@ nuclear_incident.3 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): nd_warning_cause is set when the warning starts, before .1, .2 and nd_start_unconfirmed_warning queue this; a filter
 		has_variable = nd_warning_cause
 	}
 
@@ -606,7 +606,7 @@ nuclear_incident.6 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: only a country under the no-first-use doctrine records an unordered breach; cancels if the doctrine changes in the three days
 		nd_doctrine_nfu = yes
 	}
 

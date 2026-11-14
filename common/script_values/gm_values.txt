@@ -606,7 +606,7 @@ gm_policy_factor_culture = {
 	if = {
 		limit = {
 			gm_policy_is = { P = culture STANDARD = yes }
-			has_game_rule = cultural_hegemony_enabled
+			te_cultural_hegemony_on = yes
 		}
 		value = 1.5
 	}
@@ -643,7 +643,7 @@ gm_policy_factor_prestige = {
 	if = {
 		limit = {
 			gm_policy_is = { P = culture STANDARD = yes }
-			NOT = { has_game_rule = cultural_hegemony_enabled }
+			NOT = { te_cultural_hegemony_on = yes }
 		}
 		value = 1.5
 	}

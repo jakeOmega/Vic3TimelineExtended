@@ -48,7 +48,7 @@ te_tax_light.3 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { te_tax_code_light_on = yes }
+	trigger = { te_tax_code_light_on = yes } # REVIEWED 2026-11-13 (delayed_trigger): the tax code's game rule, which every caller already runs under; a filter, not a wait
 
 	immediate = {
 		te_tax_light_sync = yes

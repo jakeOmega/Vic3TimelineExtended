@@ -88,6 +88,35 @@ def last_applied(user_data: Path) -> list[str]:
     return []
 
 
+def lobby_differs(settings: Sequence[str], last: Sequence[str], table: Mapping[str, dict]) -> list[dict]:
+    """Each rule whose setting in the save loaded (`settings`) is not the one the owner last applied in a lobby
+    (`last`, `last_applied`), as {"rule", "save", "last_applied"}, by rule name. A rule `table` (`load_rules`)
+    does not define is left out, and so is one neither list names. Where only one list names a rule, the other
+    side is taken to be at the rule's default (what the game falls back to), and the entry says so in
+    "assumed_default" ("save" or "last_applied"): whether `LastAppliedRules` lists settings left at their default
+    is not recorded, and a preset written before a mod added a rule cannot name it. With no last-applied list at
+    all there is nothing to compare.
+
+    Why a session says so (#1767): a rule setting's `apply_modifier` did not follow the save in the game on
+    2026-11-13; the modifier applied was the setting the last lobby named (inferred to come from that preset). So
+    where the two differ, a reading that rests on such a line reads the lobby's setting, not the save's."""
+    if not last:
+        return []
+    owner = {setting: rule for rule, info in table.items() for setting in info.get("settings", ())}
+    saved = {owner[s]: s for s in settings if s in owner}
+    lobby = {owner[s]: s for s in last if s in owner}
+    out = []
+    for rule in sorted(set(saved) | set(lobby)):
+        default = table[rule].get("default")
+        entry = {"rule": rule, "save": saved.get(rule, default), "last_applied": lobby.get(rule, default)}
+        if entry["save"] is None or entry["last_applied"] is None or entry["save"] == entry["last_applied"]:
+            continue
+        if rule not in saved or rule not in lobby:
+            entry["assumed_default"] = "save" if rule not in saved else "last_applied"
+        out.append(entry)
+    return out
+
+
 def _uncommented(line: str) -> str:
     in_string = False
     for i, char in enumerate(line):

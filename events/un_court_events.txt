@@ -31,7 +31,7 @@ un_court.1 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): un_court_referral_on_carried saves both scopes just before the call, after the UN was founded; a filter
 		has_global_variable = un_founded
 		exists = scope:un_resolution
 		exists = scope:un_crt_region

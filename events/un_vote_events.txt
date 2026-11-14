@@ -1073,6 +1073,12 @@ un_vote.2 = {
 
 	# scope:un_resolution comes from un_resolution_open. A resolution the
 	# watchdog already lapsed, or a queued event from before containers, fails here.
+	# Opened undelayed by the relay un_vote.9 a year after the vote opens, so
+	# this is read on the day the results are due: a resolution that lapsed
+	# meanwhile (un_dissolve_quiet tags it un_res_lapsed, archives it and frees
+	# the lock) is not decided again and its outcome is not applied. A copy a
+	# save from before the relay still holds queued with its delay rests on the
+	# engine reading the trigger when it fires, as it always did.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		scope:un_resolution ?= { has_tag = un_res_voting }
@@ -2766,7 +2772,7 @@ un_vote.6 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; its immediate checks again, so a resolution closed early takes no last call
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
@@ -2779,15 +2785,21 @@ un_vote.6 = {
 	immediate = {
 		if = {
 			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
+			global_var:un_active_resolution ?= { save_scope_as = un_resolution }
 		}
-		scope:un_resolution = {
-			if = {
-				limit = { NOT = { has_variable = un_res_last_call } }
-				set_variable = un_res_last_call
+		# The trigger again (#1596): it was read when this was queued, 360
+		# days ago, and whether it is read again when due is unverified. A
+		# resolution closed in the meantime takes no last call.
+		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			scope:un_resolution = {
+				if = {
+					limit = { NOT = { has_variable = un_res_last_call } }
+					set_variable = un_res_last_call
+				}
 			}
+			un_vote_refresh_leans = yes
 		}
-		un_vote_refresh_leans = yes
 	}
 }
 
@@ -2800,7 +2812,7 @@ un_vote.7 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_vote_refresh_leans runs while a resolution is voting; its immediate checks again, so a resolution closed overnight is not sorted
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
@@ -2813,10 +2825,34 @@ un_vote.7 = {
 	immediate = {
 		if = {
 			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
+			global_var:un_active_resolution ?= { save_scope_as = un_resolution }
 		}
-		scope:un_resolution = {
-			un_deleg_reassign_rows = yes
+		# The trigger again (#1596), as un_vote.6: whether it is read when the
+		# event is due is unverified, and a vote that closed overnight leaves
+		# the lock's variable gone and nothing to sort.
+		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			scope:un_resolution = {
+				un_deleg_reassign_rows = yes
+			}
 		}
+	}
+}
+
+# The results' year (un_resolution_open), for un_vote.2 (#1596). Hidden, with
+# no trigger: a delayed trigger_event seems to read its event's trigger on
+# the day it is queued, and whether it reads it again when due is not
+# established (scripting_best_practices.md § "A Delayed `trigger_event`
+# Re-Checks Its Trigger When It Fires"). un_vote.2's trigger is what stops the
+# results of a resolution that lapsed within the year, and its immediate
+# decides the vote, archives it and its option applies the outcome, so it must
+# be read on the day. Opened undelayed from here it is. scope:un_resolution
+# rides along.
+un_vote.9 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = un_vote.2 }
 	}
 }

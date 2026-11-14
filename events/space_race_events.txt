@@ -383,7 +383,7 @@ space_race_events.5 = {
 
 	# Once per milestone. `immediate` asks only while unanswered; this re-check
 	# covers a second question queued before the first was answered.
-	trigger = { NOT = { sr_moon_landing_choice_made = yes } }
+	trigger = { NOT = { sr_moon_landing_choice_made = yes } } # REVIEWED 2026-11-13 (delayed_trigger): cancels: the entry's immediate queues it only while the choice is not made; cancels if it is made in the month
 	immediate = { }
 
 	# Shackleton Crater - polar ice, science + progress
@@ -826,7 +826,7 @@ space_race_events.20 = {
 
 	# One queued popup per completion; each takes exactly one pending entry
 	# (sr_notify_milestone_achievement).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): sr_notify_milestone_achievement adds the achiever to the list sr_has_milestone_notice reads before the call; a filter
 		OR = {
 			sr_has_milestone_notice = { MILESTONE = suborbital }
 			sr_has_milestone_notice = { MILESTONE = orbital }
@@ -4235,7 +4235,7 @@ space_race_events.77 = {
 
 	duration = 3
 
-	trigger = { sr_space_race_concluded = yes }
+	trigger = { sr_space_race_concluded = yes } # REVIEWED 2026-11-13 (delayed_trigger): sr_refresh_space_dividend queues it under its own sr_space_race_concluded limit; a filter
 
 	option = {
 		name = space_race_events.77.a
@@ -4266,7 +4266,7 @@ space_race_events.80 = {
 
 	# Once per milestone. `immediate` asks only while unanswered; this re-check
 	# covers a second question queued before the first was answered.
-	trigger = { NOT = { sr_orbital_choice_made = yes } }
+	trigger = { NOT = { sr_orbital_choice_made = yes } } # REVIEWED 2026-11-13 (delayed_trigger): cancels: the entry's immediate queues it only while the choice is not made; cancels if it is made in the month
 	immediate = { }
 
 	# Civilian astronaut - prestige and soft power
@@ -4345,7 +4345,7 @@ space_race_events.81 = {
 
 	# Once per milestone. `immediate` asks only while unanswered; this re-check
 	# covers a second question queued before the first was answered.
-	trigger = { NOT = { sr_probe_choice_made = yes } }
+	trigger = { NOT = { sr_probe_choice_made = yes } } # REVIEWED 2026-11-13 (delayed_trigger): cancels: the entry's immediate queues it only while the choice is not made; cancels if it is made in the month
 	immediate = { }
 
 	# Venus - atmospheric science
@@ -4457,7 +4457,7 @@ space_race_events.83 = {
 
 	# Once per milestone. `immediate` asks only while unanswered; this re-check
 	# covers a second question queued before the first was answered.
-	trigger = { NOT = { sr_mars_landing_choice_made = yes } }
+	trigger = { NOT = { sr_mars_landing_choice_made = yes } } # REVIEWED 2026-11-13 (delayed_trigger): cancels: the entry's immediate queues it only while the choice is not made; cancels if it is made in the month
 	immediate = { }
 
 	# Direct landing - bold and prestigious
@@ -4558,7 +4558,7 @@ space_race_events.90 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): sr_site_note_for_notice sets the notice variable before sr_site_fire_treaty_notice queues this; a filter
 		OR = {
 			has_variable = sr_site_notice_gained
 			has_variable = sr_site_notice_lost
@@ -4591,7 +4591,7 @@ space_race_events.91 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_site_notice_heir }
+	trigger = { has_variable = sr_site_notice_heir } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_note_for_notice sets sr_site_notice_heir just before the call; a filter
 
 	option = {
 		name = space_race_events.91.a
@@ -5019,7 +5019,7 @@ space_race_events.98 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_freed_site }
+	trigger = { has_variable = sr_freed_site } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
 
 	option = {
 		name = space_race_events.98.a
@@ -5198,7 +5198,7 @@ space_race_events.102 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_occ_site }
+	trigger = { has_variable = sr_occ_site } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
 
 	option = {
 		name = space_race_events.102.a
@@ -5227,7 +5227,7 @@ space_race_events.103 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_destroyed_site }
+	trigger = { has_variable = sr_destroyed_site } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
 
 	option = {
 		name = space_race_events.103.a
@@ -5256,7 +5256,7 @@ space_race_events.104 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_seized_free_site }
+	trigger = { has_variable = sr_seized_free_site } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
 
 	option = {
 		name = space_race_events.104.a
@@ -5326,7 +5326,7 @@ space_race_events.107 = {
 
 	duration = 3
 
-	trigger = { has_variable = sr_garrison_lapsed_site }
+	trigger = { has_variable = sr_garrison_lapsed_site } # REVIEWED 2026-11-13 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
 
 	option = {
 		name = space_race_events.107.a
@@ -5437,7 +5437,7 @@ space_race_events.110 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the base's technology does not arrive overnight: true when queued for a base its owner researched, and false both days for one it did not; a filter
 		has_technology_researched = in_situ_resource_utilization
 	}
 

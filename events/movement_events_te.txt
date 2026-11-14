@@ -342,7 +342,7 @@ movement_events_te.4 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .17's own trigger holds te_ea_cr_condemnable for the condemned country and saved scope:criticizing_country; cancels if that lapses in the three days
 		exists = scope:criticizing_country
 		te_ea_cr_condemnable = yes
 	}

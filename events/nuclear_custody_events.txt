@@ -606,7 +606,7 @@ nuclear_custody.10 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_bp_new_state is set just before the call to the armed new state; cancels once it has answered or lost its arsenal
 		var:nd_bp_new_state ?= {
 			is_country_alive = yes
 			nd_is_armed = yes
@@ -821,5 +821,35 @@ nuclear_custody.12 = {
 	after = {
 		remove_variable = nd_bp_answer
 		remove_variable = nd_bp_answer_from
+	}
+}
+
+# ---- Delayed relays (#1596) ------------------------------------------------------------
+# A delayed trigger_event seems to drop its event when the event's trigger is
+# false on the day it is queued (scripting_best_practices.md § "A Delayed
+# `trigger_event` Re-Checks Its Trigger When It Fires"). Each of these waits
+# with no trigger and opens its popup when due; the popup's trigger decides.
+
+# .6's week (nd_cw_notify_world): its trigger reads the rebels at war with the
+# original country, sent from the uprising's first day (on_revolution_start /
+# on_secession_start), when that war may not exist yet.
+nuclear_custody.13 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = nuclear_custody.6 popup = yes }
+	}
+}
+
+# The Budapest Offer's month (nd_bp_press): the first presser queues it before
+# it joins nd_bp_guarantors, so .11's trigger, which needs a guarantor in that
+# list, is false on the day it is queued.
+nuclear_custody.14 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = nuclear_custody.11 popup = yes }
 	}
 }

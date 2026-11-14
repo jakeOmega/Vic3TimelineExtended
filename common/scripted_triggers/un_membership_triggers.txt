@@ -17,18 +17,75 @@
 # is_shown_when_inactive. Either the country has the founding technology or
 # the UN already exists. Also the checklist in the Diplomacy panel's greyed UN
 # tab (te_diplomacy_un_tab_unlock_sgui's is_valid), which is why the whole
-# test is one tooltip line.
+# test is one tooltip line per setting.
 # Scope: country
 un_entry_unlocked = {
 	# One line: a bare OR prints as an empty "All of these:" in the UN tab's
 	# locked tooltip (IsValidTooltip; owner, 2026-09-29).
-	custom_tooltip = {
-		text = un_unlock_tt
-		OR = {
-			has_technology_researched = intergovernmental_organizations
-			has_global_variable = un_founded
+	trigger_if = {
+		limit = { te_united_nations_early = yes }
+		custom_tooltip = {
+			text = un_unlock_early_tt
+			OR = {
+				un_founding_tech_reached = yes
+				has_global_variable = un_founded
+			}
 		}
 	}
+	trigger_else = {
+		custom_tooltip = {
+			text = un_unlock_tt
+			OR = {
+				has_technology_researched = intergovernmental_organizations
+				has_global_variable = un_founded
+			}
+		}
+	}
+}
+
+# The technology a great power needs to found the organisation (un_found_button,
+# un_act_found_sgui): Intergovernmental Organizations (era 6) under the late
+# unlock; also Multilateral Alliances (era 4) under the early one, the age of
+# the Hague conferences and the League of Nations.
+# Scope: country
+un_founding_tech_reached = {
+	OR = {
+		has_technology_researched = intergovernmental_organizations
+		AND = {
+			te_united_nations_early = yes
+			has_technology_researched = multilateral_alliances
+		}
+	}
+}
+
+# un_founding_tech_reached as the founding control's line: the late unlock's is
+# the bare technology test it always printed.
+# Scope: country
+un_founding_tech_reached_tt = {
+	trigger_if = {
+		limit = { te_united_nations_early = yes }
+		custom_tooltip = {
+			text = un_found_tech_early_tt
+			un_founding_tech_reached = yes
+		}
+	}
+	trigger_else = {
+		has_technology_researched = intergovernmental_organizations
+	}
+}
+
+# The early unlock's league: the organisation was founded (or may be) before
+# any country had Intergovernmental Organizations. Its charter can't be
+# reformed (un_charter_reform_ripe), so it stays under the founding charter's
+# ceiling (Established) and Reform I and II's business stays shut; the
+# pressure counter runs on, so a reform ripened meanwhile can be tabled the
+# month the age arrives. un_igo_age is set by the global pulse
+# (un_global_authority_on_action) the first month some country has the
+# technology, and never removed.
+# Scope: any
+un_league_stage = {
+	te_united_nations_early = yes
+	NOT = { has_global_variable = un_igo_age }
 }
 
 # The scoped country conducts its own foreign policy, so it may join and, as a

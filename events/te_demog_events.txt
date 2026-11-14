@@ -55,7 +55,7 @@ te_demog_events.3 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): te_demog_clock_tick runs only while the clock's global is set; a filter
 		te_demog_clock_on = yes
 	}
 

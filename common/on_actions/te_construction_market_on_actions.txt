@@ -28,6 +28,10 @@ on_game_started_after_lobby = {
 te_construction_market_on_game_started_after_lobby = {
 	effect = {
 		te_direct_construction_convert_sectors = yes
+		# After the conversion, which starts a direct game's cost scaling
+		# afresh: the small-economy rule's factor from the first day
+		# (te_construction_cost_effects.txt).
+		te_cc_game_start = yes
 	}
 }
 
