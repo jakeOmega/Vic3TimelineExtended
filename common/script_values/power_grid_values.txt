@@ -1039,6 +1039,136 @@ te_grid_rec_markets_disp = {
 	}
 }
 
+# State scope, a hub: the grid's generation by source a week, every member's
+# own, whoever owns it (te_grid_rec_mix_<source>, te_grid_record_effect), the
+# total, and each source's share of it, for the grid's card.
+te_grid_rec_mix_total_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_total }
+		value = var:te_grid_rec_mix_total
+	}
+}
+
+te_grid_rec_mix_coal_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_coal }
+		value = var:te_grid_rec_mix_coal
+	}
+}
+
+te_grid_rec_mix_oil_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_oil }
+		value = var:te_grid_rec_mix_oil
+	}
+}
+
+te_grid_rec_mix_hydro_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_hydro }
+		value = var:te_grid_rec_mix_hydro
+	}
+}
+
+te_grid_rec_mix_nuclear_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_nuclear }
+		value = var:te_grid_rec_mix_nuclear
+	}
+}
+
+te_grid_rec_mix_renewable_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_renewable }
+		value = var:te_grid_rec_mix_renewable
+	}
+}
+
+te_grid_rec_mix_fusion_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_fusion }
+		value = var:te_grid_rec_mix_fusion
+	}
+}
+
+te_grid_rec_mix_space_solar_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_space_solar }
+		value = var:te_grid_rec_mix_space_solar
+	}
+}
+
+te_grid_rec_mix_coal_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_coal_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_oil_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_oil_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_hydro_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_hydro_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_nuclear_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_nuclear_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_renewable_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_renewable_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_fusion_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_fusion_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_space_solar_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_space_solar_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
 # State scope, a station: its staffing, 0 to 1, for the Stations table.
 te_grid_station_staffing_disp = {
 	value = 0
