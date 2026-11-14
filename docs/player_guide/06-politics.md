@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 165 laws, most of them in 39 new law groups, with the institutions,
+The mod adds 166 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
