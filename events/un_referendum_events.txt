@@ -218,7 +218,7 @@ un_referendum.3 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
+	event_image = { texture = "gfx/event_pictures/referendum_ballot_count.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

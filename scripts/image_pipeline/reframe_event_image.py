@@ -33,6 +33,11 @@ shows it (`contact_sheet.py --window generated_images/reframed/NAME.png`),
 then write the texture by naming a .dds output: that goes through
 convert_event_image.py and needs texconv and a checkout that has gfx/.
 Needs Pillow (system python3 usually has it; see contact_sheet.py).
+
+The tool reads the texture in the checkout, so run it once per picture: a
+second --mirror undoes the first and a second --shift adds to it. Record the
+edit on the picture's entry in event_image_prompts.py ("reframed": "mirror" or
+"shift 0.2"); a render from the entry's prompt would undo it.
 """
 
 from __future__ import annotations
