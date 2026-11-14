@@ -17,7 +17,7 @@ in phases. Every tool built on ModState sees ModState's value (#1191).
 | Group | Keys |
 |---|---|
 | Differences (ModState holds a value the engine doesn't load) | 0 |
-| Model unsure | 1 |
+| Model unsure | 0 |
 | Undetermined without the game files | 111 |
 | Not compared | 0 |
 | Vanilla's own files | not checked |
@@ -29,7 +29,7 @@ their status:
 | Entry | Status | Where |
 |---|---|---|
 | `interleaving` | probed | docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26), fact 2. Setting: KNOWN_LOAD_READING. |
-| `bare_duplicate` | probed in `decisions`, `script_values`, `scripted_effects`, `scripted_rules`, `scripted_triggers`, `static_modifiers`; documented in the other folders | docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26), fact 3 (static_modifiers, scripted_effects, scripted_triggers, scripted_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES. |
+| `bare_duplicate` | probed in `decisions`, `game_rules`, `script_values`, `scripted_effects`, `scripted_rules`, `scripted_triggers`, `static_modifiers`; documented in the other folders | docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26), fact 3 (static_modifiers, scripted_effects, scripted_triggers, scripted_rules, game_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES. |
 | `bare_duplicate_script_values` | probed | docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26), fact 5; § Vanilla Script-Value Overrides. |
 | `bare_duplicate_other` | unknown | docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26) (not probed). Setting: BARE_DUPLICATE_RULES. |
 | `directives` | documented | Modding-Digests 1.12.0 inject_types.md; the message's text, docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26), fact 4. |
@@ -56,17 +56,7 @@ ModState agrees with the engine under one reading of something the
 load-order model doesn't know and differs under another, or the value rests
 on a rule nobody has read in game. Not a finding until a probe settles it.
 
-### `common/game_rules` `free_construction`
-
-- Definitions: vanilla (its file isn't in the snapshot); `common/game_rules/00_a_te_free_construction.txt:25` (bare)
-- ModState holds: the definition at `common/game_rules/00_a_te_free_construction.txt:25`
-- Depends on: `bare_duplicate` (LOAD_ORDER_MODEL entry `bare_duplicate_other`)
-- If bare_duplicate is first_wins: the engine reads the definition at `common/game_rules/00_a_te_free_construction.txt:25` (agrees with ModState)
-  - `common/game_rules/00_a_te_free_construction.txt:25` (bare): creates the entry
-  - vanilla's entry (bare): dropped, the key already exists
-- If bare_duplicate is last_wins: the engine reads vanilla's entry (differs)
-  - `common/game_rules/00_a_te_free_construction.txt:25` (bare): creates the entry
-  - vanilla's entry (bare): read later, takes the key's place
+_None._
 
 ## Undetermined without the game files
 
