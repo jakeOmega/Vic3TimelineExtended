@@ -850,6 +850,15 @@ Invalid left side during comparison 'c'
 
 Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`, the Sick Man's `c:TUR`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries. 2026-10-25: the Sick Man's too, in a 1988 save without the Ottomans.
 
+### `common/journal_entries/00_acw_entries.txt:30` — `je_acw_countdown`'s completion removes the Missouri Compromise with no guard
+- stack: vanilla only
+
+```
+Timed modifier missouri_compromise in scope object
+```
+
+The entry's completion effect has a bare `remove_modifier = missouri_compromise`. The United States start with the modifier for fifty years, decaying (the country's history file), so it is gone by 1886 at the latest, while the entry stays active until slavery is banned or a civil war starts. From then on, drawing the completion effect's tooltip logs this line every frame: 1,947 lines in 17 seconds with the game paused (2026-11-13, 15 January 1947; the entry was held by the North American Union, the mod's formable that continues the United States). The mod does not override the file, and its one removal of the modifier (Algorithmic Governance's `on_activate`, in the mod's extra laws) is guarded with `has_modifier`. Vanilla bug; a flood only while that tooltip is open, but enough to rotate error.log in a minute.
+
 ### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
 
 ```

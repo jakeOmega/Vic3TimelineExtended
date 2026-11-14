@@ -407,7 +407,8 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   `filter` with `percent`, or the share, otherwise than modelled; go back to the `NOT` form, which counts right and
   lists nothing. **2026-11-13 (log triage of a 1945 game):** the file loaded with neither line, and both fail checks
   read OK: `une_supermajority_fail_wide` (China, 28 July 1945) and `une_supermajority_fail` (Singapore, 25 November
-  1945). `_pass` has not fired, and the tooltip has not been read.
+  1945). A year later `une_supermajority_pass` read OK too (Singapore, 25 November 1946), so the gate reads right on
+  both sides. The tooltip has not been read.
 
 - **Treaty articles: `can_propose` and the lens (#1440).** In the treaty designer, add Extensive Modernization Aid
   before Modernization Aid, Joint Military Exercises before an alliance, and a Nuclear Guarantee before a Guarantee
