@@ -100,9 +100,9 @@ the page says so at the top while anything is off its default.
 | Area | World, Continent, Market, Power Bloc, Country | Limits every map to one continent, your market, your power bloc or your own country. States outside turn slate and show no figure, and a map of figures runs its colors over the states inside. |
 | Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
 
-Limit GDP per Capita to Europe and its colors run from Europe's poorest state
-to its richest, so you see how Europe's states differ where the world map
-shows them all as rich. Continent starts on the one your capital stands in,
+Limit GDP per Capita to Europe and its colors run over Europe's states alone,
+so you see how they differ where the world map shows them all as rich.
+Continent starts on the one your capital stands in,
 and each continent's tooltip lists its strategic regions: the Middle East and
 Siberia count as Asia, Mexico and the Caribbean as North America. Market,
 Power Bloc and Country follow your country, a month behind at most; if you
