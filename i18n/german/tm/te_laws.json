@@ -1607,6 +1607,10 @@
   "en": "Minority Rights",
   "de": "Minderheitenrechte"
  },
+ "lawgroup_minority_rights_desc": {
+  "en": "How the state treats its minorities, from violent persecution to preference in schooling and work.",
+  "de": "Wie der Staat mit seinen Minderheiten umgeht, von gewaltsamer Verfolgung bis zur Bevorzugung in Schule und Beruf."
+ },
  "lawgroup_monetary_policy": {
   "en": "Monetary Policy",
   "de": "Geldpolitik"

@@ -329,7 +329,7 @@
  },
  "CR_GRADUALIST_ACCOMMODATION": {
   "en": "Gradualist Accommodation",
-  "de": "Schrittweise Anpassung"
+  "de": "Schrittweise Verständigung"
  },
  "CR_GRASSROOTS_ORGANIZING": {
   "en": "Grassroots Organizing",
@@ -888,8 +888,8 @@
   "de": "KI-Systeme haben einen Großteil der traditionellen [concept_bureaucracy] ersetzt, was die Effizienz drastisch verbessert, aber Arbeitslosigkeit verursacht."
  },
  "ai_policing_banned_modifier_desc": {
-  "en": "A ban on AI in law enforcement protects civil liberties but limits security capabilities.",
-  "de": "Ein Verbot von KI in der Strafverfolgung schützt die bürgerlichen Freiheiten, schränkt aber die Sicherheitsfähigkeiten ein."
+  "en": "Our government has ordered the police to stop using software that predicts who will commit a crime.",
+  "de": "Unsere Regierung hat der Polizei verboten, Software einzusetzen, die vorhersagt, wer ein Verbrechen begehen wird."
  },
  "ai_strategy_irredentist": {
   "en": "Irredentist Pressure",
@@ -1387,6 +1387,10 @@
   "en": "Cultural Assimilation Legacy",
   "de": "Erbe der Kulturellen Assimilierung"
  },
+ "assimilation_legacy_modifier_desc": {
+  "en": "This country's former ruler schooled a few of its people in the ruler's own language and culture, and they now run the state.",
+  "de": "Der frühere Herrscher dieses Landes hat einige seiner Leute in der eigenen Sprache und Kultur des Herrschers unterrichtet, und sie leiten jetzt den Staat."
+ },
  "atlantic_charter": {
   "en": "Atlantic Charter",
   "de": "Atlantik-Charta"
@@ -1466,14 +1470,6 @@
  "augmentation_kill_switch_modifier_desc": {
   "en": "Mandatory kill switches in all augmentation implants deter criminal use but reduce their effectiveness.",
   "de": "Verpflichtende Notabschaltungen in allen Augmentierungsimplantaten schrecken vor krimineller Nutzung ab, verringern aber deren Wirksamkeit."
- },
- "augmentation_mandate_modifier": {
-  "en": "Augmentation Mandate",
-  "de": "Augmentierungspflicht"
- },
- "augmentation_mandate_modifier_desc": {
-  "en": "Mandatory augmentation for certain [Concept('concept_profession', 'professions')] drives innovation but creates backlash among traditionalists.",
-  "de": "Verpflichtende Augmentierung für bestimmte [Concept('concept_profession', 'Berufe')] treibt die Innovation voran, erzeugt aber Gegenwehr bei Traditionalisten."
  },
  "augmentation_market_efficiency_modifier_desc": {
   "en": "Allowing companies to prefer augmented workers has increased productivity but deepened the augmentation divide.",
@@ -1607,6 +1603,10 @@
   "en": "Emergency capital controls and trade restrictions imposed to contain financial contagion.",
   "de": "Notfall-Kapitalverkehrskontrollen und Handelsbeschränkungen, verhängt zur Eindämmung der Finanzansteckung."
  },
+ "banking_cycle_value_bar_desc": {
+  "en": "[concept_banking_cycle] Value — panic",
+  "de": "Wert des [concept_banking_cycle] — Panik"
+ },
  "banking_directed_credit_agriculture_desc": {
   "en": "Applies the effects of the Directed Credit to Agriculture banking policy.",
   "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an die Landwirtschaft an."
@@ -1639,29 +1639,9 @@
   "en": "Applies the effects of the Export Credit Facility banking policy.",
   "de": "Wendet die Effekte der Bankenpolitik Exportkreditfazilität an."
  },
- "banking_fx_devaluation": {
-  "en": "Currency Devaluation",
-  "de": "Währungsabwertung"
- },
- "banking_fx_devaluation_desc": {
-  "en": "A banking tool from an earlier version. It is converted into a weak Exchange Rate Index and removed on the next monthly update.",
-  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen schwachen Wechselkursindex umgewandelt und entfernt."
- },
- "banking_fx_support": {
-  "en": "Foreign Exchange Support",
-  "de": "Devisenstützung"
- },
- "banking_fx_support_desc": {
-  "en": "A banking tool from an earlier version. It is converted into a strong Exchange Rate Index and removed on the next monthly update.",
-  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen starken Wechselkursindex umgewandelt und entfernt."
- },
  "banking_fx_surrender": {
   "en": "Foreign Exchange Surrender Requirement",
   "de": "Devisenabgabepflicht"
- },
- "banking_fx_swap_lines_desc": {
-  "en": "Applies the effects of the FX Swap Lines banking policy.",
-  "de": "Wendet die Effekte der Bankenpolitik Devisen-Swap-Linien an."
  },
  "banking_moral_suasion": {
   "en": "Moral Suasion",
@@ -1674,10 +1654,6 @@
  "banking_open_market_ops_desc": {
   "en": "Applies the effects of the Open Market Operations banking policy.",
   "de": "Wendet die Effekte der Bankpolitik Offenmarktgeschäfte an."
- },
- "banking_policy_rate_hike_desc": {
-  "en": "Applies the effects of the Policy Rate Hike banking policy.",
-  "de": "Wendet die Effekte der Bankpolitik Leitzinserhöhung an."
  },
  "banking_raise_margin_requirements_desc": {
   "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
@@ -1794,6 +1770,10 @@
  "biohacker_research_modifier_desc": {
   "en": "Academic researchers studying underground biohacking techniques have made breakthroughs in human augmentation technology.",
   "de": "Wissenschaftler, die Untergrund-Biohacking-Techniken erforschen, haben Durchbrüche in der Technologie der menschlichen Augmentierung erzielt."
+ },
+ "bloody_decolonization_legacy_modifier_desc": {
+  "en": "This country's former ruler held it by force to the end, and the people who took over govern the same way.",
+  "de": "Der frühere Herrscher dieses Landes hat es bis zuletzt mit Gewalt gehalten, und die Leute, die übernommen haben, regieren genauso."
  },
  "border_dispute_active_modifier_desc": {
   "en": "A territorial dispute with a neighboring nation over colonial-era borders is causing diplomatic tension.",
@@ -2391,14 +2371,6 @@
   "en": "By rejecting the international climate accord, our fossil fuel industries operate without the constraints accepted by other nations, boosting coal and oil output at the cost of increased emissions.",
   "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Auflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer Emissionen."
  },
- "climate_accord_rejection_no_gw_modifier": {
-  "en": "Climate Accord Rejected",
-  "de": "Klimaabkommen abgelehnt"
- },
- "climate_accord_rejection_no_gw_modifier_desc": {
-  "en": "By rejecting the international climate accord, our fossil fuel industries operate without environmental constraints accepted by other nations, boosting coal and oil output at the cost of increased [concept_pollution_system].",
-  "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Umweltauflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer [concept_pollution_system]."
- },
  "climate_adaptation_modifier": {
   "en": "Climate Adaptation Program",
   "de": "Klimaanpassungsprogramm"
@@ -2439,14 +2411,6 @@
   "en": "With the climate threat receding, we are rolling back environmental regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though emissions are creeping back up.",
   "de": "Da die Klimabedrohung nachlässt, bauen wir Umweltauflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die Emissionen wieder langsam steigen."
  },
- "climate_deregulation_no_gw_modifier": {
-  "en": "Climate Deregulation",
-  "de": "Klimaderegulierung"
- },
- "climate_deregulation_no_gw_modifier_desc": {
-  "en": "With the environmental threat receding, we are rolling back regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though [concept_pollution_system] is creeping back up.",
-  "de": "Da die Umweltbedrohung nachlässt, bauen wir Auflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die [concept_pollution_system] wieder langsam steigt."
- },
  "climate_dismissal_boost_modifier": {
   "en": "Business as Usual",
   "de": "Business as usual"
@@ -2454,14 +2418,6 @@
  "climate_dismissal_boost_modifier_desc": {
   "en": "By dismissing climate warnings, our industries continue to operate without environmental restrictions. [concept_throughput] is higher, but so are greenhouse gas emissions.",
   "de": "Indem wir Klimawarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Umweltauflagen. Der [concept_throughput] ist höher, aber ebenso die Treibhausgasemissionen."
- },
- "climate_dismissal_boost_no_gw_modifier": {
-  "en": "Business as Usual",
-  "de": "Business as usual"
- },
- "climate_dismissal_boost_no_gw_modifier_desc": {
-  "en": "By dismissing environmental warnings, our industries continue to operate without restrictions. [concept_throughput] is higher, but so is [concept_pollution_system].",
-  "de": "Indem wir Umweltwarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Auflagen. Der [concept_throughput] ist höher, aber ebenso die [concept_pollution_system]."
  },
  "climate_fortress_modifier": {
   "en": "Fortress Nation",
@@ -2486,14 +2442,6 @@
  "climate_measures_sunset_modifier_desc": {
   "en": "With temperatures returning to manageable levels, emergency climate regulations have been dismantled. Industry is thriving without environmental compliance costs, though emissions are rising again.",
   "de": "Da die Temperaturen wieder auf ein beherrschbares Niveau zurückkehren, wurden die Klimanotstandsvorschriften aufgehoben. Die Industrie gedeiht ohne Umweltauflagenkosten, doch die Emissionen steigen wieder."
- },
- "climate_measures_sunset_no_gw_modifier": {
-  "en": "Climate Safeguards Lifted",
-  "de": "Klimaschutzmaßnahmen aufgehoben"
- },
- "climate_measures_sunset_no_gw_modifier_desc": {
-  "en": "Emergency environmental regulations have been dismantled. Industry is thriving without compliance costs, though [concept_pollution_system] is rising again.",
-  "de": "Die Umweltnotstandsvorschriften wurden aufgehoben. Die Industrie gedeiht ohne Auflagenkosten, doch die [concept_pollution_system] steigt wieder."
  },
  "climate_political_turmoil_modifier": {
   "en": "Climate Political Turmoil",
@@ -2527,14 +2475,6 @@
   "en": "Our nation took the lead at an international climate summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing emissions.",
   "de": "Unsere Nation übernahm die Führung bei einem internationalen Klimagipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der Emissionen."
  },
- "climate_summit_leader_no_gw_modifier": {
-  "en": "Climate Summit Leadership",
-  "de": "Führungsrolle beim Klimagipfel"
- },
- "climate_summit_leader_no_gw_modifier_desc": {
-  "en": "Our nation took the lead at an international environmental summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing [concept_pollution_system].",
-  "de": "Unsere Nation übernahm die Führung bei einem internationalen Umweltgipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der [concept_pollution_system]."
- },
  "climate_summit_pledge_modifier": {
   "en": "Climate Summit Signatory",
   "de": "Unterzeichner des Klimagipfels"
@@ -2542,14 +2482,6 @@
  "climate_summit_pledge_modifier_desc": {
   "en": "Our nation signed an international climate accord, pledging to reduce emissions in solidarity with the global community.",
   "de": "Unsere Nation unterzeichnete ein internationales Klimaabkommen und verpflichtete sich, die Emissionen in Solidarität mit der Weltgemeinschaft zu senken."
- },
- "climate_summit_pledge_no_gw_modifier": {
-  "en": "Climate Summit Signatory",
-  "de": "Unterzeichner des Klimagipfels"
- },
- "climate_summit_pledge_no_gw_modifier_desc": {
-  "en": "Our nation signed an international environmental accord, pledging to reduce [concept_pollution_system] in solidarity with the global community.",
-  "de": "Unsere Nation unterzeichnete ein internationales Umweltabkommen und verpflichtete sich, die [concept_pollution_system] in Solidarität mit der Weltgemeinschaft zu senken."
  },
  "climate_survival_footing_modifier": {
   "en": "Survival Footing",
@@ -2575,14 +2507,6 @@
   "en": "Having declared victory over climate change, our nation basks in [concept_prestige] and channels former climate spending into economic growth. Some worry this complacency may prove premature.",
   "de": "Nachdem sie den Sieg über den Klimawandel erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Klimaausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
  },
- "climate_victory_dividend_no_gw_modifier": {
-  "en": "Climate Victory Dividend",
-  "de": "Dividende des Klimasiegs"
- },
- "climate_victory_dividend_no_gw_modifier_desc": {
-  "en": "Having declared victory over environmental challenges, our nation basks in [concept_prestige] and channels former environmental spending into economic growth. Some worry this complacency may prove premature.",
-  "de": "Nachdem sie den Sieg über die Umweltherausforderungen erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Umweltausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
- },
  "coastal_flood_defense_modifier_desc": {
   "en": "Ministry-coordinated engineering projects have constructed flood barriers and drainage systems, reducing port disruption and improving [concept_infrastructure].",
   "de": "Vom Ministerium koordinierte Bauprojekte haben Hochwasserbarrieren und Entwässerungssysteme errichtet, was Hafenstörungen verringert und die [concept_infrastructure] verbessert."
@@ -2604,8 +2528,8 @@
   "de": "Wir siedeln die Küstenbevölkerung ins Landesinnere um, um dem steigenden Meeresspiegel zu entgehen. Die Störung des Alltags ist gravierend, doch die geringere Abhängigkeit von Häfen und neue Migrationsmuster könnten sich als nützlich erweisen."
  },
  "colonial_assimilation_disruption_modifier_desc": {
-  "en": "Forced cultural conversion stalls the local economy.",
-  "de": "Erzwungene kulturelle Umwandlung bremst die örtliche Wirtschaft."
+  "en": "The colonial power that rules here is running its $colonial_cultural_assimilation_modifier$, and forced conversion keeps people from skilled work. This lasts while the program runs.",
+  "de": "Die Kolonialmacht, die hier herrscht, führt ihr $colonial_cultural_assimilation_modifier$ durch, und die erzwungene Umwandlung hält die Leute von qualifizierter Arbeit ab. Das gilt, solange das Programm läuft."
  },
  "colonial_crackdown_modifier": {
   "en": "Colonial Crackdown",
@@ -2684,8 +2608,8 @@
   "de": "Die Regierung zahlt Reparationen an eine ehemalige Kolonie und erkennt damit vergangenes Unrecht an — zu erheblichen finanziellen Kosten."
  },
  "colonial_stability_bar_desc": {
-  "en": "100: empire integrated. 0: collapse.",
-  "de": "100: Reich integriert. 0: Zusammenbruch."
+  "en": "Colonial Stability: collapse at 0",
+  "de": "Koloniale Stabilität: Zusammenbruch bei 0"
  },
  "colonial_unrest_suppressed_modifier_desc": {
   "en": "Military force has been used to suppress unrest in a colonial territory, at the cost of our international reputation.",
@@ -2698,6 +2622,10 @@
  "commonwealth_legacy_modifier": {
   "en": "Commonwealth Legacy",
   "de": "Vermächtnis des Commonwealth"
+ },
+ "commonwealth_legacy_modifier_desc": {
+  "en": "This country's former ruler left it a trained civil service of its own people.",
+  "de": "Der frühere Herrscher dieses Landes hat ihm einen geschulten öffentlichen Dienst aus eigenen Leuten hinterlassen."
  },
  "commonwealth_path_modifier": {
   "en": "The Commonwealth Path",
@@ -3060,8 +2988,8 @@
   "de": "Verdeckte Operationen"
  },
  "concept_covert_operations_desc": {
-  "en": "[concept_covert_operations] launched against rival nations, or in support of a friend, via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Eighteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (requires [GetTechnology('television_broadcasting').GetName]; target must have an elected legislature)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash] (requires [GetTechnology('computer_networks').GetName])\\n• #bold Industrial Espionage#! — Steals production technology (target must have researched a production technology you could research; ends once there is none)\\n• #bold Military Espionage#! — Steals military technology (target must have researched a military technology you could research; ends once there is none)\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [GetTechnology('mass_media').GetName] and [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (requires [GetTechnology('pop_culture').GetName]; target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (requires [GetTechnology('social_media').GetName]; target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires [GetTechnology('satellite_communications').GetName], a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Program Sabotage#! — Slows the target's nuclear weapons program (requires a funded program and #bold Seasoned#! Tradecraft)\\n• #bold Space Program Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Incite Colonial Autonomy#! — Raises the autonomy of every colony the target holds in the solar system; one that reaches 100 breaks away (target must hold a colony)\\n• #bold Sabotage Colony#! — Kills a share of the people of the target's most populous colony and raises its autonomy (target must hold a colony; #bold Seasoned#! Tradecraft)\\n• #bold Survey Colony Defenses#! — Our fleets fire harder on the defenses of the target's colonies, and we see their Defenses, integrity and marines (target must hold a colony; Full Colonies)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold Counterintelligence Support#! — Raises a friend's economic, military and ideological covert defenses; open, never exposed, and gives you nothing in return (target must be a friend; one supporting country per target)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (requires [GetTechnology('cryptography').GetName]; war, or a [concept_diplomatic_play] against them)\\nOnly Infrastructure Sabotage and Communications Disruption need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation against it. Good relations do not, but a friend (cordial relations together with an [concept_alliance], a [concept_defensive_pact], a shared [concept_power_bloc] or a subject tie, or amicable relations alone) is a costly target: the launch tooltip says so, and an exposed operation costs you at home. Only Regime Change requires a [concept_rivalry]. Seven operations need a [concept_technology] first, the ones that can bring down a great power the latest.\\nEach operation occupies a slot and requires funding. Each operation against a country carries a monthly [concept_operation_detection]. Unused slots provide a domestic intelligence bonus.",
-  "de": "[concept_covert_operations], die über [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gegen rivalisierende Nationen oder zur Unterstützung eines Freundes gestartet werden. Es stehen achtzehn Arten zur Verfügung:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (erfordert [GetTechnology('television_broadcasting').GetName]; das Ziel muss eine gewählte Legislative haben)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash] (erfordert [GetTechnology('computer_networks').GetName])\\n• #bold Industriespionage#! — Stiehlt Produktionstechnologie (das Ziel muss eine Produktionstechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Militärspionage#! — Stiehlt Militärtechnologie (das Ziel muss eine Militärtechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Einflusskampagne#! — Senkt den Einflusshebel-Widerstand des Ziels (erfordert [GetTechnology('mass_media').GetName] und die Führung eines [Concept('concept_power_bloc', 'Machtblocks')]; Ziel außerhalb Ihres Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die Ihrer Ideologie entsprechen (erfordert [GetTechnology('pop_culture').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (erfordert [GetTechnology('social_media').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert [GetTechnology('satellite_communications').GetName], eine [concept_rivalry] und #bold Erfahrenes#! Spionagehandwerk; nicht gegen das eigene Klientelland)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Nuklearwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt Ihre Meilensteine im [concept_space_race] und senkt deren Risiko (das Ziel muss Ihnen voraus sein)\\n• #bold Koloniale Autonomie schüren#! — Erhöht die Autonomie jeder Kolonie, die das Ziel im Sonnensystem hält; eine, die 100 erreicht, löst sich los (das Ziel muss eine Kolonie halten)\\n• #bold Kolonie sabotieren#! — Tötet einen Teil der Bevölkerung der bevölkerungsreichsten Kolonie des Ziels und erhöht deren Autonomie (das Ziel muss eine Kolonie halten; #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Kolonieverteidigung auskundschaften#! — Unsere Flotten feuern härter auf die Verteidigungsanlagen der Kolonien des Ziels, und wir sehen ihre Verteidigungsanlagen, Integrität und Marineinfanterie (das Ziel muss eine Kolonie halten; Volle Kolonien)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort Ihr Netzwerk schneller auf als jede andere Operation (nicht gegen das eigene Klientelland)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Nuklearsprengköpfe aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold Unterstützung der Spionageabwehr#! — Erhöht die wirtschaftliche, militärische und ideologische Abwehr eines Freundes gegen verdeckte Operationen; offen, wird nie aufgedeckt und bringt Ihnen nichts ein (das Ziel muss ein Freund sein; pro Ziel ein unterstützendes Land)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (erfordert [GetTechnology('cryptography').GetName]; Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur Infrastruktur-Sabotage und Kommunikationsstörung erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation gegen es. Gute Beziehungen tun das nicht, doch ein Freund (herzliche Beziehungen zusammen mit einem [concept_alliance], einem [concept_defensive_pact], einem gemeinsamen [concept_power_bloc] oder einem Klientelverhältnis, oder einvernehmliche Beziehungen allein) ist ein kostspieliges Ziel: Der Tooltip beim Start weist darauf hin, und eine aufgedeckte Operation kostet Sie im Inland. Nur Regimewechsel erfordert eine [concept_rivalry]. Sieben Operationen erfordern zuerst eine [concept_technology], diejenigen, die eine Großmacht zu Fall bringen können, die späteste.\\nJede Operation belegt einen Slot und erfordert Finanzierung. Jede Operation gegen ein Land birgt ein monatliches [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
+  "en": "[concept_covert_operations] launched against rival nations, or in support of a friend, via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Eighteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (requires [GetTechnology('television_broadcasting').GetName]; target must hold elections: a voting law, or Anarchy)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash] (requires [GetTechnology('computer_networks').GetName])\\n• #bold Industrial Espionage#! — Steals production technology (target must have researched a production technology you could research; ends once there is none)\\n• #bold Military Espionage#! — Steals military technology (target must have researched a military technology you could research; ends once there is none)\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [GetTechnology('mass_media').GetName] and [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (requires [GetTechnology('pop_culture').GetName]; target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (requires [GetTechnology('social_media').GetName]; target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires [GetTechnology('satellite_communications').GetName], a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Program Sabotage#! — Slows the target's nuclear weapons program (requires a funded program and #bold Seasoned#! Tradecraft)\\n• #bold Space Program Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Incite Colonial Autonomy#! — Raises the autonomy of every colony the target holds in the solar system; one that reaches 100 breaks away (target must hold a colony)\\n• #bold Sabotage Colony#! — Kills a share of the people of the target's most populous colony and raises its autonomy (target must hold a colony; #bold Seasoned#! Tradecraft)\\n• #bold Survey Colony Defenses#! — Our fleets fire harder on the defenses of the target's colonies, and we see their Defenses, integrity and marines (target must hold a colony; Full Colonies)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold Counterintelligence Support#! — Raises a friend's economic, military and ideological covert defenses; open, never exposed, and gives you nothing in return (target must be a friend; one supporting country per target)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (requires [GetTechnology('cryptography').GetName]; war, or a [concept_diplomatic_play] against them)\\nOnly Infrastructure Sabotage and Communications Disruption need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation against it. Good relations do not, but a friend (cordial relations together with an [concept_alliance], a [concept_defensive_pact], a shared [concept_power_bloc] or a subject tie, or amicable relations alone) is a costly target: the launch tooltip says so, and an exposed operation costs you at home. Only Regime Change requires a [concept_rivalry]. Seven operations need a [concept_technology] first, the ones that can bring down a great power the latest.\\nEach operation occupies a slot and requires funding. Each operation against a country carries a monthly [concept_operation_detection]. Unused slots provide a domestic intelligence bonus.",
+  "de": "[concept_covert_operations], die über [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] gegen rivalisierende Nationen oder zur Unterstützung eines Freundes gestartet werden. Es stehen achtzehn Arten zur Verfügung:\\n• #bold Wahleinmischung#! — Senkt die [concept_legitimacy] des Ziels (erfordert [GetTechnology('television_broadcasting').GetName]; das Ziel muss Wahlen abhalten: ein Wahlgesetz oder Anarchie)\\n• #bold Finanzielle Subversion#! — Erhöht den [concept_bubble_pressure] des Ziels und riskiert einen [concept_banking_crash] (erfordert [GetTechnology('computer_networks').GetName])\\n• #bold Industriespionage#! — Stiehlt Produktionstechnologie (das Ziel muss eine Produktionstechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Militärspionage#! — Stiehlt Militärtechnologie (das Ziel muss eine Militärtechnologie erforscht haben, die Sie erforschen könnten; endet, sobald es keine mehr gibt)\\n• #bold Einflusskampagne#! — Senkt den Einflusshebel-Widerstand des Ziels (erfordert [GetTechnology('mass_media').GetName] und die Führung eines [Concept('concept_power_bloc', 'Machtblocks')]; Ziel außerhalb Ihres Blocks)\\n• #bold Ideologische Subversion#! — Fördert Bewegungen im Ziel, die Ihrer Ideologie entsprechen (erfordert [GetTechnology('pop_culture').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Destabilisierung#! — Fördert separatistische Bewegungen und allgemeinen Radikalismus im Ziel (erfordert [GetTechnology('social_media').GetName]; das Ziel muss eine Protestbewegung haben)\\n• #bold Regimewechsel#! — Untergräbt die [concept_legitimacy] und den Putschwiderstand des Ziels und begünstigt jeden dort laufenden Putsch (erfordert [GetTechnology('satellite_communications').GetName], eine [concept_rivalry] und #bold Erfahrenes#! Spionagehandwerk; nicht gegen das eigene Klientelland)\\n• #bold Sabotage des Nuklearprogramms#! — Verlangsamt das Nuklearwaffenprogramm des Ziels (erfordert ein finanziertes Programm und #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Weltraumprogrammspionage#! — Beschleunigt Ihre Meilensteine im [concept_space_race] und senkt deren Risiko (das Ziel muss Ihnen voraus sein)\\n• #bold Koloniale Autonomie schüren#! — Erhöht die Autonomie jeder Kolonie, die das Ziel im Sonnensystem hält; eine, die 100 erreicht, löst sich los (das Ziel muss eine Kolonie halten)\\n• #bold Kolonie sabotieren#! — Tötet einen Teil der Bevölkerung der bevölkerungsreichsten Kolonie des Ziels und erhöht deren Autonomie (das Ziel muss eine Kolonie halten; #bold Erfahrenes#! Spionagehandwerk)\\n• #bold Kolonieverteidigung auskundschaften#! — Unsere Flotten feuern härter auf die Verteidigungsanlagen der Kolonien des Ziels, und wir sehen ihre Verteidigungsanlagen, Integrität und Marineinfanterie (das Ziel muss eine Kolonie halten; Volle Kolonien)\\n• #bold Netzwerk aufbauen#! — Keine Wirkung auf das Ziel; baut dort Ihr Netzwerk schneller auf als jede andere Operation (nicht gegen das eigene Klientelland)\\n• #bold Loses Nuklearmaterial sichern#! — Keine Wirkung auf das Ziel; kann aus dessen Arsenal fehlende Nuklearsprengköpfe aufspüren und zerstören (das Ziel muss Sprengköpfe verloren haben)\\n• #bold Unterstützung der Spionageabwehr#! — Erhöht die wirtschaftliche, militärische und ideologische Abwehr eines Freundes gegen verdeckte Operationen; offen, wird nie aufgedeckt und bringt Ihnen nichts ein (das Ziel muss ein Freund sein; pro Ziel ein unterstützendes Land)\\n• #bold [concept_infrastructure]-Sabotage#! — Senkt die Infrastruktur und den [concept_throughput] des Ziels (Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\n• #bold Kommunikationsstörung#! — Senkt Angriffs- und Verteidigungswerte des gegnerischen Militärs (erfordert [GetTechnology('cryptography').GetName]; Krieg oder ein [concept_diplomatic_play] gegen das Ziel)\\nNur Infrastruktur-Sabotage und Kommunikationsstörung erfordern einen Krieg oder ein [concept_diplomatic_play] gegen das Ziel; die übrigen laufen in Krieg wie Frieden. Ein Waffenstillstand oder ein Geheimdienst-Kooperationspakt mit dem Ziel blockiert jede Operation gegen es. Gute Beziehungen tun das nicht, doch ein Freund (herzliche Beziehungen zusammen mit einem [concept_alliance], einem [concept_defensive_pact], einem gemeinsamen [concept_power_bloc] oder einem Klientelverhältnis, oder einvernehmliche Beziehungen allein) ist ein kostspieliges Ziel: Der Tooltip beim Start weist darauf hin, und eine aufgedeckte Operation kostet Sie im Inland. Nur Regimewechsel erfordert eine [concept_rivalry]. Sieben Operationen erfordern zuerst eine [concept_technology], diejenigen, die eine Großmacht zu Fall bringen können, die späteste.\\nJede Operation belegt einen Slot und erfordert Finanzierung. Jede Operation gegen ein Land birgt ein monatliches [concept_operation_detection]. Ungenutzte Slots gewähren einen Bonus auf die Inlandsaufklärung."
  },
  "concept_covert_warfare_system_desc": {
   "en": "A covert warfare system where nations build [concept_intelligence_capacity] defenses and launch [concept_covert_operations] against rivals. Defense has two layers: general IC (from technologies, [Concept('concept_institution', 'institutions')], [concept_literacy], [Concept('concept_gdp', 'GDP')]) and type-specific defense (Economic, Military, Ideological — from relevant laws). A truce or an Intelligence Sharing Pact with the target blocks every operation against it; good relations do not, but an operation exposed against a friend costs you at home. Offensive operations can undermine enemy [concept_legitimacy], destabilize finances, steal technology, weaken [concept_power_bloc] resistance, subvert foreign movements, boost separatists, sabotage [concept_infrastructure], disrupt military communications, or turn a rival's colonies in space against it. Counterintelligence Support instead lends your service to a friend, raising its covert defenses. Unused operation slots provide domestic intelligence benefits. The journal entry opens once a country holds more operation slots than every country of its rank gets for free; the first extra slot comes from the Ministry of Intelligence and Security law or the Mainframe Computers technology. Can be toggled via game rules.",
@@ -3604,8 +3532,8 @@
   "de": "Eine feindliche Flotte, die an einem Ort Position bezieht, an dem keine unserer Flotten den Orbit hält, blockiert unsere dortigen Kolonien: Weder Siedler noch Module erreichen sie, ihr Bergbau und ihr Transport kommen zum Erliegen, und jeder Monat zählt als einer ohne Kontakt zur Heimat. Ein Land, das mit uns im Frieden ist, kann dasselbe durch Unterbindung erreichen, was uns einen Casus Belli gegen es gibt. Bei der Erde hält eine Flotte, die im Orbit mit uns im Krieg ist, solange keine der unseren dort steht, alles von uns am Verlassen der Erde auf, blockiert unsere Kolonien auf dem Mond und kappt den Kontakt jeder Kolonie zur Heimat."
  },
  "concept_sr_colony_autonomy_desc": {
-  "en": "How far a colony runs its own affairs, from #v 0#! to #v 100#!. Each month it rises with the colony's people (#v +0.05#! a 10,000), its distance by our drive (#v +0.01#! a month of transit, at most #v +0.5#!), a year with no settlers or modules (#v +0.25#!), our wars (#v +0.25#!) and a garrison (#v +0.2#!), and falls with the pull of home (#v -0.25#!) and a charter (#v -0.4#!). It also settles: #v 1%#! of the autonomy itself comes off each month, so it levels out where the rest of its terms balance that, at #v 100#! times their sum. Autonomy has its use: a colony builds modules of its own, faster the more autonomy and people it has. At #v 50#! the colony demands self-government: a charter, a garrison, or its freedom. At #v 100#! it declares itself a [concept_sr_free_colony].",
-  "de": "Wie weit eine Kolonie ihre eigenen Angelegenheiten selbst regelt, von #v 0#! bis #v 100#!. Jeden Monat steigt sie mit der Bevölkerung der Kolonie (#v +0,05#! je 10.000), ihrer Entfernung nach unserem Antrieb (#v +0,01#! je Transitmonat, höchstens #v +0,5#!), einem Jahr ohne Siedler oder Module (#v +0,25#!), unseren Kriegen (#v +0,25#!) und einer Garnison (#v +0,2#!) und sinkt mit der Anziehungskraft der Heimat (#v -0,25#!) und einer Charta (#v -0,4#!). Sie pendelt sich auch ein: #v 1%#! der Autonomie selbst geht jeden Monat ab, sodass sie sich dort einpendelt, wo die übrigen Posten das ausgleichen, beim #v 100#!-Fachen ihrer Summe. Autonomie hat ihren Nutzen: Eine Kolonie baut eigene Module, schneller, je mehr Autonomie und Bevölkerung sie hat. Bei #v 50#! verlangt die Kolonie Selbstverwaltung: eine Charta, eine Garnison oder ihre Freiheit. Bei #v 100#! erklärt sie sich zu einer [Concept('concept_sr_free_colony', 'Freien Kolonie')]."
+  "en": "How far a colony runs its own affairs, from #v 0#! to #v 100#!. Each month it rises with the colony's people (#v +0.05#! a 10,000), its distance by our drive (#v +0.01#! a month of transit, at most #v +0.5#!), a year with no settlers or modules (#v +0.25#!), our wars (#v +0.25#!) and a garrison (#v +0.2#!), and falls with the pull of home (#v -0.25#!) and a charter (#v -0.4#!). It also settles: #v 1%#! of the autonomy itself comes off each month, so it levels out where the rest of its terms balance that, at #v 100#! times their sum. A colony of fewer than #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people has none of these terms: its autonomy only settles, and it makes no demands. Autonomy has its use: a colony builds modules of its own, faster the more autonomy and people it has. At #v 50#! the colony demands self-government: a charter, a garrison, or its freedom. At #v 100#! it declares itself a [concept_sr_free_colony].",
+  "de": "Wie weit eine Kolonie ihre eigenen Angelegenheiten selbst regelt, von #v 0#! bis #v 100#!. Jeden Monat steigt sie mit der Bevölkerung der Kolonie (#v +0,05#! je 10.000), ihrer Entfernung nach unserem Antrieb (#v +0,01#! je Transitmonat, höchstens #v +0,5#!), einem Jahr ohne Siedler oder Module (#v +0,25#!), unseren Kriegen (#v +0,25#!) und einer Garnison (#v +0,2#!) und sinkt mit der Anziehungskraft der Heimat (#v -0,25#!) und einer Charta (#v -0,4#!). Sie pendelt sich auch ein: #v 1%#! der Autonomie selbst geht jeden Monat ab, sodass sie sich dort einpendelt, wo die übrigen Posten das ausgleichen, beim #v 100#!-Fachen ihrer Summe. Eine Kolonie mit weniger als #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! Einwohnern hat keinen dieser Posten: Ihre Autonomie pendelt sich nur ein, und sie stellt keine Forderungen. Autonomie hat ihren Nutzen: Eine Kolonie baut eigene Module, schneller, je mehr Autonomie und Bevölkerung sie hat. Bei #v 50#! verlangt die Kolonie Selbstverwaltung: eine Charta, eine Garnison oder ihre Freiheit. Bei #v 100#! erklärt sie sich zu einer [Concept('concept_sr_free_colony', 'Freien Kolonie')]."
  },
  "concept_sr_colony_fleet_desc": {
   "en": "The ships that found a colony in [concept_solar_colonization], paid for by the program's progress. A colony fleet leaves Earth in its site's [concept_sr_launch_window] and flies at our [concept_sr_drive]'s pace. The first fleet to land claims the site; any others go on to another free site of the same planet or belt, or are lost. It carries no guns: warships are [concept_sr_space_fleet]s.",
@@ -4603,14 +4531,6 @@
   "en": "[COUNTRY.GetName] launches a covert destabilization campaign against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet eine verdeckte Destabilisierungskampagne gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
- "covert_destabilization_general": {
-  "en": "Foreign Destabilization",
-  "de": "Ausländische Destabilisierung"
- },
- "covert_destabilization_general_desc": {
-  "en": "A foreign power is covertly fueling general unrest and radicalism across all [Concept('concept_political_movement', 'political movements')].",
-  "de": "Eine ausländische Macht schürt verdeckt allgemeine Unruhen und Radikalismus in allen [Concept('concept_political_movement', 'Protestbewegungen')]."
- },
  "covert_destabilization_resist": {
   "en": "Foreign Destabilization",
   "de": "Ausländische Destabilisierung"
@@ -4618,14 +4538,6 @@
  "covert_destabilization_resist_desc": {
   "en": "Foreign agents are funding and arming [Concept('concept_political_movement', 'political movements')] of every stripe here, and wearing down our resistance to separatism.",
   "de": "Ausländische Agenten finanzieren und bewaffnen hier [Concept('concept_political_movement', 'Protestbewegungen')] jeder Couleur und schwächen unseren Widerstand gegen Separatismus."
- },
- "covert_destabilization_separatist": {
-  "en": "Foreign-Backed Separatism",
-  "de": "Vom Ausland unterstützter Separatismus"
- },
- "covert_destabilization_separatist_desc": {
-  "en": "A foreign power is covertly funding and arming separatist movements, dramatically increasing their strength and radicalism.",
-  "de": "Eine ausländische Macht finanziert und bewaffnet verdeckt separatistische Bewegungen und steigert deren Stärke und Radikalismus drastisch."
  },
  "covert_election_interference": {
   "en": "Foreign Election Interference",
@@ -4658,14 +4570,6 @@
  "covert_election_interference_desc": {
   "en": "A foreign power is covertly manipulating our political processes, undermining government [concept_legitimacy].",
   "de": "Eine ausländische Macht manipuliert verdeckt unsere politischen Prozesse und untergräbt die [concept_legitimacy] der Regierung."
- },
- "covert_espionage_base": {
-  "en": "Basic Espionage",
-  "de": "Grundlegende Spionage"
- },
- "covert_espionage_base_desc": {
-  "en": "Our intelligence services pass what they learn of foreign research on to our own laboratories.",
-  "de": "Unsere Geheimdienste geben das, was sie über ausländische Forschung erfahren, an unsere eigenen Labore weiter."
  },
  "covert_financial_subversion": {
   "en": "Financial Subversion",
@@ -4752,12 +4656,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Kampagne gestartet, um die Autonomie in den Kolonien einer fremden Macht zu schüren."
  },
  "covert_incite_autonomy_action_desc": {
-  "en": "Carry agitators, money and the case for home rule to the target's colonies in the solar system. Once established, every colony it holds gains #v 0.5#! autonomy a month, #v 1#! once fully operational and up to #v 2#! at priority 3; a colony whose autonomy reaches #v 100#! breaks away and becomes a free colony. Requires the target to hold a colony, and ends by itself when it holds none.\\n$iw_exposure_tier_moderate_note$",
-  "de": "Bringt Agitatoren, Geld und die Argumente für Eigenverwaltung zu den Kolonien des Ziels im Sonnensystem. Sobald sie etabliert ist, gewinnt jede Kolonie, die es hält, #v 0,5#! Autonomie pro Monat, #v 1#! sobald sie voll einsatzbereit ist und bis zu #v 2#! bei Priorität 3; eine Kolonie, deren Autonomie #v 100#! erreicht, löst sich los und wird zu einer Freien Kolonie. Erfordert, dass das Ziel eine Kolonie hält, und endet von selbst, wenn es keine mehr hält.\\n$iw_exposure_tier_moderate_note$"
- },
- "covert_industrial_espionage": {
-  "en": "Industrial Espionage",
-  "de": "Industriespionage"
+  "en": "Carry agitators, money and the case for home rule to the target's colonies in the solar system. Once established, every colony of #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more it holds gains #v 0.5#! autonomy a month, #v 1#! once fully operational and up to #v 2#! at priority 3; a colony whose autonomy reaches #v 100#! breaks away and becomes a free colony. Requires the target to hold a colony that size, and ends by itself when it holds no colony at all.\\n$iw_exposure_tier_moderate_note$",
+  "de": "Bringt Agitatoren, Geld und die Argumente für Eigenverwaltung zu den Kolonien des Ziels im Sonnensystem. Sobald sie etabliert ist, gewinnt jede Kolonie mit #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! oder mehr Einwohnern, die das Ziel hält, #v 0,5#! Autonomie pro Monat, #v 1#! sobald sie voll einsatzbereit ist und bis zu #v 2#! bei Priorität 3; eine Kolonie, deren Autonomie #v 100#! erreicht, löst sich los und wird zu einer Freien Kolonie. Erfordert, dass das Ziel eine Kolonie dieser Größe hält, und endet von selbst, wenn es überhaupt keine Kolonie mehr hält.\\n$iw_exposure_tier_moderate_note$"
  },
  "covert_industrial_espionage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their industrial espionage operations.",
@@ -4782,10 +4682,6 @@
  "covert_industrial_espionage_action_effect_desc_third": {
   "en": "[COUNTRY.GetName] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet verdeckte Industriespionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
- },
- "covert_industrial_espionage_desc": {
-  "en": "Our intelligence services are extracting production techniques and industrial secrets from a rival, boosting our innovation.",
-  "de": "Unsere Geheimdienste entwenden einem Rivalen Produktionstechniken und Industriegeheimnisse und steigern damit unsere Innovation."
  },
  "covert_industrial_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents extracting our industrial secrets. Plugging the leak diverts administrative attention from other priorities.",
@@ -4859,10 +4755,6 @@
   "en": "Enemy [concept_covert_operations] are disrupting our [concept_infrastructure] and production capacity.",
   "de": "Feindliche [concept_covert_operations] stören unsere [concept_infrastructure] und Produktionskapazität."
  },
- "covert_military_espionage": {
-  "en": "Military Espionage",
-  "de": "Militärspionage"
- },
  "covert_military_espionage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their military espionage operations.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Militärspionageoperationen eingestellt."
@@ -4887,17 +4779,9 @@
   "en": "[COUNTRY.GetName] launches covert military espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet verdeckte Militärspionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
- "covert_military_espionage_desc": {
-  "en": "Our intelligence services are gathering classified military intelligence from a rival, improving our armed forces' capabilities.",
-  "de": "Unsere Geheimdienste beschaffen sich geheime militärische Informationen von einem Rivalen und verbessern damit die Fähigkeiten unserer Streitkräfte."
- },
  "covert_military_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents gathering classified military intelligence. Tightening compartmentalization across the chain of command consumes administrative focus.",
   "de": "Die Spionageabwehr hat ausländische Agenten aufgedeckt, die geheime militärische Informationen sammelten. Die verschärfte Abschottung der Befehlskette beansprucht administrative Aufmerksamkeit."
- },
- "covert_military_espionage_unit_desc": {
-  "en": "Intelligence gathered through espionage provides a tactical advantage to [Concept('concept_unit', 'military units')].",
-  "de": "Durch Spionage gewonnene Informationen verschaffen [Concept('concept_unit', 'Militäreinheiten')] einen taktischen Vorteil."
  },
  "covert_nuclear_sabotage": {
   "en": "Nuclear Program Sabotage",
@@ -4956,8 +4840,8 @@
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat eine Sabotageoperation gegen eine Kolonie im Sonnensystem gestartet."
  },
  "covert_sabotage_colony_action_desc": {
-  "en": "Failed seals, poisoned stores, air that runs out: strike the target's most populous colony in the solar system. Once established, it loses #R 1%#! of its people a month and gains #v 0.25#! autonomy; twice that once fully operational, and up to #R 4%#! and #v 1#! at priority 3. Requires the target to hold a colony and an agency of at least #bold Seasoned#! Tradecraft, and ends by itself when the target holds no colony.\\n$iw_exposure_tier_severe_note$",
-  "de": "Versagende Dichtungen, vergiftete Vorräte, Luft, die ausgeht: Trifft die bevölkerungsreichste Kolonie des Ziels im Sonnensystem. Einmal etabliert, verliert die Kolonie pro Monat #R 1%#! ihrer Bevölkerung und gewinnt #v 0,25#! Autonomie; doppelt so viel bei voller Einsatzbereitschaft, und bis zu #R 4%#! und #v 1#! bei Priorität 3. Erfordert, dass das Ziel eine Kolonie besitzt, sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk, und endet von selbst, wenn das Ziel keine Kolonie mehr besitzt.\\n$iw_exposure_tier_severe_note$"
+  "en": "Failed seals, poisoned stores, air that runs out: strike the target's most populous colony in the solar system. Once established, it loses #R 1%#! of its people a month and, with #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more, gains #v 0.25#! autonomy; twice that once fully operational, and up to #R 4%#! and #v 1#! at priority 3. Requires the target to hold a colony and an agency of at least #bold Seasoned#! Tradecraft, and ends by itself when the target holds no colony.\\n$iw_exposure_tier_severe_note$",
+  "de": "Versagende Dichtungen, vergiftete Vorräte, Luft, die ausgeht: Trifft die bevölkerungsreichste Kolonie des Ziels im Sonnensystem. Einmal etabliert, verliert die Kolonie pro Monat #R 1%#! ihrer Bevölkerung und gewinnt bei #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! oder mehr Einwohnern #v 0,25#! Autonomie; doppelt so viel bei voller Einsatzbereitschaft, und bis zu #R 4%#! und #v 1#! bei Priorität 3. Erfordert, dass das Ziel eine Kolonie besitzt, sowie eine Behörde mit mindestens #bold erfahrenem#! Spionagehandwerk, und endet von selbst, wenn das Ziel keine Kolonie mehr besitzt.\\n$iw_exposure_tier_severe_note$"
  },
  "covert_secure_material_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has stopped searching for loose nuclear material.",
@@ -5450,6 +5334,10 @@
  "dp_nuclear_exchange": {
   "en": "War After a Nuclear Exchange",
   "de": "Krieg nach einem nuklearen Schlagabtausch"
+ },
+ "dp_te_colonial_uprising_desc": {
+  "en": "Sets the initiating [concept_war_goal] to win the colony's independence from its colonial power.",
+  "de": "Legt als auslösendes [concept_war_goal] fest, die Unabhängigkeit der Kolonie von ihrer Kolonialmacht zu erkämpfen."
  },
  "dp_te_colonial_war_desc": {
   "en": "Sets the initiating [concept_war_goal] to take back the colony that declared its independence.",
@@ -5987,10 +5875,6 @@
   "en": "The government has granted concessions to the fossil fuel industry, boosting coal and oil production but increasing greenhouse gas emissions.",
   "de": "Die Regierung hat der fossilen Brennstoffindustrie Zugeständnisse gemacht, was die Kohle- und Ölproduktion steigert, aber die Treibhausgasemissionen erhöht."
  },
- "fossil_lobby_concessions_no_gw_modifier_desc": {
-  "en": "The government has granted concessions to the fossil fuel industry, boosting coal and oil production but increasing [concept_pollution_system].",
-  "de": "Die Regierung hat der fossilen Brennstoffindustrie Zugeständnisse gemacht, was die Kohle- und Ölproduktion steigert, aber die [concept_pollution_system] erhöht."
- },
  "free_port_concession": {
   "en": "Free Port Concession",
   "de": "Freihafenkonzession"
@@ -6190,6 +6074,18 @@
  "global_warming_desc": {
   "en": "Rising global temperatures are causing increased mortality, reduced agricultural output, more frequent floods and droughts, and rising sea levels. All effects scale linearly with the current [concept_temperature_anomaly].",
   "de": "Steigende globale Temperaturen verursachen höhere Sterblichkeit, geringere landwirtschaftliche Produktion, häufigere Überschwemmungen und Dürren sowie steigende Meeresspiegel. Alle Effekte skalieren linear mit der aktuellen [concept_temperature_anomaly]."
+ },
+ "global_warming_high_latitudes_desc": {
+  "en": "At 55° or more from the equator, warming shortens the winters: fewer people die of the cold, frosts ease and the growing season lengthens, so farms gain a little, while drier summers burn more of the northern forests. It comes on top of $global_warming$ and scales with the [concept_temperature_anomaly] in the same way.",
+  "de": "Ab 55° Abstand vom Äquator verkürzt die Erwärmung die Winter: Weniger Menschen sterben an der Kälte, Fröste lassen nach und die Vegetationsperiode verlängert sich, sodass die Höfe etwas gewinnen, während trockenere Sommer mehr der nördlichen Wälder verbrennen. Das kommt zur $global_warming$ hinzu und skaliert auf dieselbe Weise mit der [concept_temperature_anomaly]."
+ },
+ "global_warming_tropics": {
+  "en": "Tropical Warming",
+  "de": "Tropische Erwärmung"
+ },
+ "global_warming_tropics_desc": {
+  "en": "Between the tropics, heat already sits near what people and crops can bear, so each degree of warming costs more here than elsewhere: more deaths in the hot season, a lower standard of living, poorer farms and plantations, and longer heatwaves. It comes on top of $global_warming$ and scales with the [concept_temperature_anomaly] in the same way.",
+  "de": "Zwischen den Wendekreisen liegt die Hitze schon nahe an dem, was Menschen und Pflanzen ertragen, daher kostet jedes Grad Erwärmung hier mehr als anderswo: mehr Tote in der heißen Jahreszeit, ein niedrigerer Lebensstandard, schlechtere Höfe und Plantagen und längere Hitzewellen. Das kommt zur $global_warming$ hinzu und skaliert auf dieselbe Weise mit der [concept_temperature_anomaly]."
  },
  "globalization_embrace_modifier": {
   "en": "Globalization Embraced",
@@ -6704,8 +6600,8 @@
   "de": "Nachgeborene Söhne im Offizierskorps"
  },
  "inh_cadets_church": {
-  "en": "Cadet Sons in Holy Orders",
-  "de": "Nachgeborene Söhne im geistlichen Stand"
+  "en": "Cadet Sons in the Clergy",
+  "de": "Nachgeborene Söhne im Klerus"
  },
  "inh_cadets_colonies": {
   "en": "Cadet Sons in the Colonies",
@@ -6972,8 +6868,8 @@
   "de": "Die Vorlage ging zur Überarbeitung zurück, um ihren Kritikern zu begegnen, was den Gesetzeserlassfortschritt verlangsamt."
  },
  "irr_cultural_ties_modifier_desc": {
-  "en": "We have invested in cultural exchange with our same-culture neighbor. Goodwill flows both ways.",
-  "de": "Wir haben in den Kulturaustausch mit unserem kulturverwandten Nachbarn investiert. Das Wohlwollen fließt in beide Richtungen."
+  "en": "Schools, presses and libraries, paid for as cultural exchange, tie our people to a neighbor of the same culture.",
+  "de": "Schulen, Druckereien und Bibliotheken, finanziert als Kulturaustausch, verbinden unser Volk mit einem Nachbarn derselben Kultur."
  },
  "irr_defiance_modifier": {
   "en": "Defiance Against Foreign Demands",
@@ -7016,16 +6912,16 @@
   "de": "Italienische Union"
  },
  "iw_decrease_funding_button_desc": {
-  "en": "Decrease the funding level for all active cyber operations. Lower funding reduces cost and detection risk but also reduces effectiveness.",
-  "de": "Verringert das Finanzierungsniveau für alle aktiven Cyberoperationen. Geringere Finanzierung senkt Kosten und Entdeckungsrisiko, verringert aber auch die Wirksamkeit."
+  "en": "Decrease the funding level for all active covert operations. Lower funding reduces cost and detection risk but also reduces effectiveness.",
+  "de": "Verringert das Finanzierungsniveau für alle aktiven verdeckten Operationen. Geringere Finanzierung senkt Kosten und Entdeckungsrisiko, verringert aber auch die Wirksamkeit."
  },
  "iw_domestic_defense": {
   "en": "Domestic Intelligence Focus",
   "de": "Fokus auf Inlandsgeheimdienst"
  },
  "iw_domestic_defense_desc": {
-  "en": "Unused cyber operation slots are redirected to domestic intelligence, providing counter-espionage and counter-subversion capabilities.",
-  "de": "Ungenutzte Cyberoperations-Slots werden auf den Inlandsgeheimdienst umgeleitet und liefern Spionageabwehr- und Subversionsabwehrfähigkeiten."
+  "en": "Unused operation slots are redirected to domestic intelligence, providing counter-espionage and counter-subversion capabilities.",
+  "de": "Ungenutzte Operationsplätze werden auf den Inlandsgeheimdienst umgeleitet und liefern Spionageabwehr- und Subversionsabwehrfähigkeiten."
  },
  "iw_funding_defense": {
   "en": "Covert Funding (Counterintelligence)",
@@ -7036,8 +6932,8 @@
   "de": "Höhere verdeckte Finanzierung verbessert unsere Spionageabwehrfähigkeiten und erhöht die [concept_intelligence_capacity], um feindliche Operationen besser zu erkennen und zu vereiteln."
  },
  "iw_increase_funding_button_desc": {
-  "en": "Increase the funding level for all active cyber operations. Higher funding increases effectiveness but also increases detection risk and cost.",
-  "de": "Erhöht das Finanzierungsniveau für alle aktiven Cyberoperationen. Höhere Finanzierung steigert die Wirksamkeit, erhöht aber auch Entdeckungsrisiko und Kosten."
+  "en": "Increase the funding level for all active covert operations. Higher funding increases effectiveness but also increases detection risk and cost.",
+  "de": "Erhöht das Finanzierungsniveau für alle aktiven verdeckten Operationen. Höhere Finanzierung steigert die Wirksamkeit, erhöht aber auch Entdeckungsrisiko und Kosten."
  },
  "iw_op_exposed_desc_comms_disruption": {
   "en": "Jamming of military command and control. While it runs, at base strength, its target carries:\\n[GetStaticModifier('covert_comms_disruption').GetDesc]",
@@ -7068,8 +6964,8 @@
   "de": "Verdeckte Unterstützung für [Concept('concept_political_movement', 'Protestbewegungen')], die die Politik des ausführenden Landes teilen und dadurch radikaler werden und mehr Unterstützung gewinnen. Solange sie läuft, trägt ihr Ziel bei Grundstärke:\\n[GetStaticModifier('covert_ideological_subversion_resist').GetDesc]"
  },
  "iw_op_exposed_desc_incite_autonomy": {
-  "en": "Agitators and money for home rule, carried to a country's colonies in the solar system. While it runs, every colony its target holds gains autonomy each month, and one whose autonomy reaches 100 breaks away.",
-  "de": "Agitatoren und Geld für Eigenverwaltung, in die Kolonien eines Landes im Sonnensystem getragen. Solange sie läuft, gewinnt jede Kolonie des Ziels jeden Monat an Autonomie, und eine Kolonie, deren Autonomie 100 erreicht, spaltet sich ab."
+  "en": "Agitators and money for home rule, carried to a country's colonies in the solar system. While it runs, every colony of #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more its target holds gains autonomy each month, and one whose autonomy reaches 100 breaks away.",
+  "de": "Agitatoren und Geld für Eigenverwaltung, in die Kolonien eines Landes im Sonnensystem getragen. Solange sie läuft, gewinnt jede Kolonie des Ziels mit #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! oder mehr Einwohnern jeden Monat an Autonomie, und eine Kolonie, deren Autonomie 100 erreicht, spaltet sich ab."
  },
  "iw_op_exposed_desc_industrial_espionage": {
   "en": "Theft of production secrets: the country running it gains progress toward production technologies its target has researched. While it runs, at base strength, its target carries:\\n[GetStaticModifier('covert_industrial_espionage_detected').GetDesc]",
@@ -8723,13 +8619,21 @@
   "en": "The aftermath of a [concept_nuclear_strike].",
   "de": "Die Nachwirkungen eines [Concept('concept_nuclear_strike', 'Nuklearschlags')]."
  },
+ "nuclear_warning_review": {
+  "en": "Warning Procedures Reviewed",
+  "de": "Warnverfahren überprüft"
+ },
+ "nuclear_warning_review_desc": {
+  "en": "After a false alarm of an incoming strike, we reviewed how our warning stations confirm a reading before they report it.",
+  "de": "Nach einem Fehlalarm wegen eines angeblich anfliegenden Angriffs haben wir überprüft, wie unsere Warnstationen eine Messung bestätigen, bevor sie sie melden."
+ },
  "nuclear_weapon_program_funding_desc": {
   "en": "Represents the current level of funding devoted to the nuclear weapons program.",
   "de": "Stellt die aktuelle Höhe der Finanzierung des Nuklearwaffenprogramms dar."
  },
  "nuke_success_chance_desc": {
-  "en": "Our attack chance modifier: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')]\\nTheir defense chance modifier: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\\nSuccess chance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!",
-  "de": "Unser Angriffschancen-Modifikator: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')]\\nIhr Verteidigungschancen-Modifikator: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\\nErfolgschance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!"
+  "en": "Our attack chance modifier: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')][GetPlayer.GetCustom('te_nuke_attack_held_arsenal')]\\nTheir defense chance modifier: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\\nSuccess chance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!",
+  "de": "Unser Angriffschancen-Modifikator: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')][GetPlayer.GetCustom('te_nuke_attack_held_arsenal')]\\nIhr Verteidigungschancen-Modifikator: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\\nErfolgschance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!"
  },
  "oil_spill_cleanup_modifier_desc": {
   "en": "A major oil spill cleanup effort is underway, diverting resources but protecting the local environment.",
@@ -9052,12 +8956,12 @@
   "de": "Massenautomatisierung erzeugt gesellschaftliche Umwälzungen, während traditionelle Beschäftigung zusammenbricht."
  },
  "predictive_intelligence_only_modifier_desc": {
-  "en": "AI is used only for intelligence analysis, not direct policing, balancing security with civil liberties.",
-  "de": "KI wird nur zur Auswertung von Erkenntnissen eingesetzt, nicht zur direkten Polizeiarbeit, und schafft so ein Gleichgewicht zwischen Sicherheit und bürgerlichen Freiheiten."
+  "en": "Our analysts use prediction software to sort intelligence reports. The police do not use it.",
+  "de": "Unsere Analysten ordnen Geheimdienstberichte mit Prognosesoftware. Die Polizei setzt sie nicht ein."
  },
  "predictive_policing_deployed_modifier_desc": {
-  "en": "AI-driven predictive policing algorithms reduce crime but raise serious civil liberties concerns.",
-  "de": "KI-gestützte Algorithmen zur vorausschauenden Polizeiarbeit senken die Kriminalität, werfen aber ernste Bedenken hinsichtlich der bürgerlichen Freiheiten auf."
+  "en": "Our police use prediction software in every district, and stop the people it names.",
+  "de": "Unsere Polizei setzt in jedem Bezirk Prognosesoftware ein und hält die Leute an, die sie benennt."
  },
  "prestige_gain_huge": {
   "en": "Resounding Prestige Gain",
@@ -9503,6 +9407,10 @@
   "en": "A temporary modifier from a recent event choice.",
   "de": "Ein vorübergehender Modifikator aus einer kürzlichen Ereignisentscheidung."
  },
+ "re_orbit_laser_sweep_cost_desc": {
+  "en": "We are paying for the laser sweeps that clear debris from our orbital lanes.",
+  "de": "Wir bezahlen die Laserdurchgänge, die Trümmer aus unseren Orbitalbahnen räumen."
+ },
  "re_orbit_laser_sweep_desc": {
   "en": "A temporary modifier from a recent event choice.",
   "de": "Ein vorübergehender Modifikator aus einer kürzlichen Ereignisentscheidung."
@@ -9527,6 +9435,10 @@
   "en": "Quantum Subsidy",
   "de": "Quantensubvention"
  },
+ "re_quantum_subsidy_cost_desc": {
+  "en": "We are paying the plants short of specialized materials to keep their priority orders running.",
+  "de": "Wir bezahlen die Werke, denen Spezialwerkstoffe fehlen, damit ihre vorrangigen Aufträge weiterlaufen."
+ },
  "re_quantum_subsidy_desc": {
   "en": "A temporary modifier from a recent event choice.",
   "de": "Ein vorübergehender Modifikator aus einer kürzlichen Ereignisentscheidung."
@@ -9543,6 +9455,10 @@
   "en": "SBSP Imports",
   "de": "SBSP-Importe"
  },
+ "re_sbsp_imports_cost_desc": {
+  "en": "We are paying for power bought from abroad while damaged orbital arrays are repaired.",
+  "de": "Wir bezahlen Strom aus dem Ausland, solange beschädigte Orbitalanlagen repariert werden."
+ },
  "re_sbsp_imports_desc": {
   "en": "A temporary modifier from a recent event choice.",
   "de": "Ein vorübergehender Modifikator aus einer kürzlichen Ereignisentscheidung."
@@ -9550,6 +9466,10 @@
  "re_sbsp_reserves": {
   "en": "SBSP Reserves",
   "de": "SBSP-Reserven"
+ },
+ "re_sbsp_reserves_cost_desc": {
+  "en": "We are paying to run the grid on its reserves while damaged orbital arrays are repaired.",
+  "de": "Wir bezahlen den Betrieb des Netzes aus seinen Reserven, solange beschädigte Orbitalanlagen repariert werden."
  },
  "re_sbsp_reserves_desc": {
   "en": "A temporary modifier from a recent event choice.",
@@ -9800,8 +9720,8 @@
   "de": "Religiöse Konservative haben sich massiv gegen gesellschaftliche Liberalisierung mobilisiert und fordern eine Rückkehr zu traditionellen Werten."
  },
  "rre_digital_faith_modifier_desc": {
-  "en": "Online religious communities, streaming megachurches, and faith influencers reach vast new audiences in the digital age.",
-  "de": "Religiöse Online-Gemeinschaften, gestreamte Megakirchen und Glaubens-Influencer erreichen im digitalen Zeitalter riesige neue Zielgruppen."
+  "en": "Online religious communities, streamed services, and faith influencers reach vast new audiences in the digital age.",
+  "de": "Religiöse Online-Gemeinschaften, gestreamte Gottesdienste und Glaubens-Influencer erreichen im digitalen Zeitalter riesige neue Zielgruppen."
  },
  "rre_faith_partnership_modifier_desc": {
   "en": "A partnership between religious organizations and the state delivers welfare services efficiently.",
@@ -10206,6 +10126,10 @@
  "sr_choice_probe_mars_desc": {
   "en": "Mars is well-studied and relatively accessible — a reliable target that builds toward future colonization.",
   "de": "Der Mars ist gut erforscht und relativ zugänglich – ein zuverlässiges Ziel, das den Weg für künftige Kolonisierung ebnet."
+ },
+ "sr_choice_probe_tour_desc": {
+  "en": "We are building a heavier probe to pass Jupiter and the planets beyond, and the whole program waits on it.",
+  "de": "Wir bauen eine schwerere Sonde, die Jupiter und die Planeten dahinter erreichen soll, und das ganze Programm wartet darauf."
  },
  "sr_choice_probe_venus_desc": {
   "en": "Venus's crushing atmosphere and sulfuric acid clouds make probe survival extremely challenging.",
@@ -10903,6 +10827,10 @@
   "en": "Our probe surveyed Mars, generating data that accelerates future Mars missions.",
   "de": "Unsere Sonde vermaß den Mars und erzeugte Daten, die künftige Marsmissionen beschleunigen."
  },
+ "sr_probe_target_tour_desc": {
+  "en": "Our probe passed Jupiter and the planets beyond it, and sent back a survey of each.",
+  "de": "Unsere Sonde hat Jupiter und die Planeten dahinter passiert und von jedem eine Vermessung zurückgesandt."
+ },
  "sr_probe_target_venus_desc": {
   "en": "Our probe studied Venus's atmosphere, yielding invaluable atmospheric science data.",
   "de": "Unsere Sonde untersuchte die Atmosphäre der Venus und lieferte unschätzbare atmosphärenwissenschaftliche Daten."
@@ -11138,6 +11066,10 @@
  "ste_antiglobal_concession": {
   "en": "Labor Standard Concessions",
   "de": "Zugeständnisse bei Arbeitsstandards"
+ },
+ "ste_antiglobal_concession_cost_desc": {
+  "en": "We are paying for the labor inspectors and the job retraining promised to the protesters.",
+  "de": "Wir bezahlen die Arbeitsinspektoren und die Umschulung, die den Demonstranten versprochen wurden."
  },
  "ste_antiglobal_concession_desc": {
   "en": "The government made concessions on labor standards to calm anti-globalization protesters.",
@@ -11387,9 +11319,17 @@
   "en": "Nuclear Meltdown - Evacuation",
   "de": "Kernschmelze – Evakuierung"
  },
+ "ste_meltdown_evacuate_cost_desc": {
+  "en": "We are moving and housing the people evacuated from around the breached reactor.",
+  "de": "Wir verlegen und beherbergen die Menschen, die aus der Umgebung des beschädigten Reaktors evakuiert wurden."
+ },
  "ste_meltdown_evacuate_desc": {
   "en": "A catastrophic nuclear meltdown has forced mass evacuation and devastated power supply.",
   "de": "Eine katastrophale Kernschmelze hat eine Massenevakuierung erzwungen und die Energieversorgung verwüstet."
+ },
+ "ste_meltdown_institutional_response_cost_desc": {
+  "en": "We are paying for the ministry crews and equipment sent to the breached reactor.",
+  "de": "Wir bezahlen die Einsatzkräfte und die Ausrüstung der Ministerien, die zum beschädigten Reaktor geschickt wurden."
  },
  "ste_meltdown_institutional_response_desc": {
   "en": "Government institutions have mobilized an emergency response to the nuclear meltdown, containing damage but at significant cost to the treasury and public confidence.",
@@ -11507,6 +11447,10 @@
   "en": "A cooperative settlement beyond Earth strengthens international bonds.",
   "de": "Eine gemeinschaftlich betriebene Siedlung jenseits der Erde stärkt die internationalen Bindungen."
  },
+ "ste_space_colony_national_cost_desc": {
+  "en": "We supply our colony beyond Earth alone, with no partner sharing the launches.",
+  "de": "Wir versorgen unsere Kolonie jenseits der Erde allein, ohne einen Partner, der sich die Starts teilt."
+ },
  "ste_space_colony_national_desc": {
   "en": "Our nation's flag flies on another world, a source of immense [concept_prestige].",
   "de": "Die Flagge unserer Nation weht auf einer anderen Welt – eine Quelle immensen [concept_prestige]."
@@ -11530,6 +11474,10 @@
  "ste_terror_intelligence_reform_desc": {
   "en": "A reformed intelligence service works smarter, not harder.",
   "de": "Ein reformierter Geheimdienst arbeitet klüger, nicht härter."
+ },
+ "ste_terror_security_state_cost_desc": {
+  "en": "We are paying for the guards, analysts and surveillance added after the attack.",
+  "de": "Wir bezahlen die Wachleute, Analysten und die Überwachung, die nach dem Anschlag hinzugekommen sind."
  },
  "ste_terror_security_state_desc": {
   "en": "The security apparatus has been massively expanded in response to terrorism.",
@@ -11803,6 +11751,14 @@
   "en": "#lore History is kept only for played countries and major powers.#!",
   "de": "#lore Die Geschichte wird nur für gespielte Länder und Mittelmächte geführt.#!"
  },
+ "te_jmap_pick_academics_desc": {
+  "en": "Color each state by its Academics as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. Universities and a literate, urban people draw them. Counted once a year.",
+  "de": "Färbt jeden Staat nach dem Anteil der Akademiker an seiner Bevölkerung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. Universitäten und ein gebildetes, städtisches Volk ziehen sie an. Einmal im Jahr gezählt."
+ },
+ "te_jmap_pick_aristocrats_desc": {
+  "en": "Color each state by its Aristocrats as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year.",
+  "de": "Färbt jeden Staat nach dem Anteil der Aristokraten an seiner Bevölkerung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. Gutsbesitz und Leibeigenschaft halten ihre Zahl hoch; Landreform und Industrie senken sie. Einmal im Jahr gezählt."
+ },
  "te_jmap_pick_armed_forces_desc": {
   "en": "Color each state by its Soldiers and Officers, against the world as it is now: the same share of the color for each doubling from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#! people. A state with none is pale. Counted once a year.",
   "de": "Färbt jeden Staat nach seinen Soldaten und Offizieren, im Vergleich zur Welt, wie sie jetzt ist: derselbe Anteil der Farbe für jede Verdopplung von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#! Menschen. Ein Staat ohne sie ist blass. Wird einmal im Jahr gezählt."
@@ -11815,9 +11771,17 @@
   "en": "Color each state by its births per 1,000 people last year, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!.",
   "de": "Färbt jeden Staat nach seinen Geburten pro 1.000 Einwohner im letzten Jahr, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!."
  },
+ "te_jmap_pick_capitalists_desc": {
+  "en": "Color each state by its Capitalists as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. They gather where industry and finance do, so a few great cities hold most of them. Counted once a year.",
+  "de": "Färbt jeden Staat nach dem Anteil der Kapitalisten an seiner Bevölkerung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. Sie sammeln sich dort, wo sich Industrie und Finanzen sammeln, sodass wenige große Städte die meisten von ihnen beherbergen. Einmal im Jahr gezählt."
+ },
  "te_jmap_pick_city_rank_desc": {
   "en": "Color each state by its city's place in the world's ranking, the one tourism's [concept_tourism_cities] bonus reads: the 20 largest from amber at 20th to crimson at 1st, the rest steel blue, paler with each doubling of the rank. A state past 501st has no rank and is pale. The ranking is recalculated every month.",
   "de": "Färbt jeden Staat nach dem Platz seiner Stadt in der Weltrangliste, den der Bonus der [concept_tourism_cities] des Tourismus liest: die 20 größten von Bernstein auf Platz 20 bis Purpur auf Platz 1, der Rest stahlblau, mit jeder Verdopplung des Rangs blasser. Ein Staat jenseits von Platz 501 hat keinen Rang und ist blass. Die Rangliste wird jeden Monat neu berechnet."
+ },
+ "te_jmap_pick_clergy_desc": {
+  "en": "Color each state by its Clergymen as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. A state church and devout people keep them many. Counted once a year.",
+  "de": "Färbt jeden Staat nach dem Anteil der Geistlichen an seiner Bevölkerung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. Eine Staatskirche und fromme Menschen halten ihre Zahl hoch. Einmal im Jahr gezählt."
  },
  "te_jmap_pick_colonies_desc": {
   "en": "Color each colony, and each colonial subject's state, by its empire's [concept_colonial_stability]: red while it collapses, then orange, yellow and green up to solidified. An empire's home states are taupe.",
@@ -11883,6 +11847,10 @@
   "en": "Color each state by how many of every 1,000 babies die in their first year, in the last census, against the world as it is now: teal at #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#!, amber halfway and oxblood at #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!.",
   "de": "Färbt jeden Staat danach, wie viele von je 1.000 Babys in der letzten Volkszählung im ersten Lebensjahr sterben, im Vergleich zur Welt, wie sie jetzt ist: petrol bei #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#!, bernsteinfarben in der Mitte und ochsenblutrot bei #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!."
  },
+ "te_jmap_pick_investment_desc": {
+  "en": "Color each state by what its owners pay into the [concept_investment_pool] each week: the same share of the color for each doubling from @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_lo')|K] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_hi')|K], against the world as it is now. An estimate: the profit of its financial districts, manor houses and company headquarters, times the share their owners reinvest. Worker-owned buildings and the government's dividends are not counted. A state that pays nothing is pale.",
+  "de": "Färbt jeden Staat danach, was seine Eigentümer jede Woche in den [concept_investment_pool] einzahlen: derselbe Farbanteil für jede Verdopplung von @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_lo')|K] bis @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_hi')|K], im Vergleich zur Welt, wie sie jetzt ist. Eine Schätzung: der Gewinn seiner Finanzviertel, Herrenhäuser und Firmenzentralen, mal dem Anteil, den ihre Eigentümer wieder anlegen. Arbeitereigene Gebäude und die Dividenden der Regierung werden nicht gezählt. Ein Staat, der nichts einzahlt, ist blass."
+ },
  "te_jmap_pick_leading_cause_desc": {
   "en": "Color each state by what killed most of its people last year, in the colors of the Causes of Death chart: infection blue, chronic illness orange, accidents green, work gold, childbirth pink, killed by events lavender, war red. The color is full where that cause took 90% of the deaths or more, and fades to pale at 30%. Stripes in a second cause's color mark a state where the runner-up took at least half as many deaths as the leader.",
   "de": "Färbt jeden Staat nach dem, was im letzten Jahr die meisten seiner Einwohner getötet hat, in den Farben des Diagramms „Todesursachen“: Infektion blau, chronische Krankheit orange, Unfälle grün, Arbeit gold, Geburt rosa, durch Ereignisse getötet lavendelfarben, Krieg rot. Die Farbe ist am kräftigsten, wo diese Ursache 90% der Todesfälle oder mehr ausmachte, und wird bis 30% immer blasser. Streifen in der Farbe einer zweiten Ursache kennzeichnen einen Staat, in dem die zweithäufigste Ursache mindestens halb so viele Todesfälle forderte wie die häufigste."
@@ -11942,6 +11910,10 @@
  "te_jmap_pick_tourism_appeal_desc": {
   "en": "Color each state by its [concept_tourism_base_appeal], the score its scenery, climate and townscape give its tourism, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_hi')|%0]#!. As on the state panel, the share its monuments stand for counts under them instead.",
   "de": "Färbt jeden Staat nach seiner [concept_tourism_base_appeal], dem Wert, den Landschaft, Klima und Stadtbild seinem Tourismus verleihen, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_lo')|%0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_hi')|%0]#!. Wie auf der Staatstafel zählt der Anteil, den seine Monumente ausmachen, stattdessen unter diesen."
+ },
+ "te_jmap_pick_trade_capacity_desc": {
+  "en": "Color each state by its own [concept_trade_capacity], what its Trade Center can carry, against the world as it is now: the same share of the color for each doubling from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_trade_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_trade_hi')|0]#!. A state with none is pale.",
+  "de": "Färbt jeden Staat nach seiner eigenen [concept_trade_capacity], also danach, was sein Handelszentrum tragen kann, im Vergleich zur Welt, wie sie jetzt ist: derselbe Farbanteil für jede Verdopplung von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_trade_lo')|0]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_trade_hi')|0]#!. Ein Staat ohne Handelskapazität ist blass."
  },
  "te_jmap_pick_turmoil_desc": {
   "en": "Color each state by its [concept_turmoil], against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_hi')|%0]#! of its people radical, half the color in the first fifth of that span.",
@@ -12155,6 +12127,22 @@
   "en": "The $concept_journal_entry$ ended with no homeland of its culture left",
   "de": "Der $concept_journal_entry$ endete, ohne dass eine Heimat ihrer Kultur übrig war"
  },
+ "te_reparations": {
+  "en": "Reparations",
+  "de": "Reparationen"
+ },
+ "te_reparations_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] pays [TARGET_COUNTRY.GetNameNoFormatting] reparations",
+  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] zahlt [TARGET_COUNTRY.GetAltNameNoFormatting('DAT')] Reparationen"
+ },
+ "te_reparations_desc": {
+  "en": "A sum one country pays another once, to settle a wrong done to it: colonial rule, or a nuclear crisis that ended in its favor.",
+  "de": "Eine Summe, die ein Land einem anderen einmalig zahlt, um ein ihm zugefügtes Unrecht zu begleichen: Kolonialherrschaft oder eine nukleare Krise, die zu seinen Gunsten endete."
+ },
+ "te_reparations_effects_desc": {
+  "en": "• The sum passes to the receiver once, when the treaty enters into force.\\n• Nothing is paid back when the treaty ends.",
+  "de": "• Die Summe geht einmalig an den Empfänger, sobald der Vertrag in Kraft tritt.\\n• Beim Ende des Vertrags wird nichts zurückgezahlt."
+ },
  "te_reserve_cadre_capacity_desc": {
   "en": "Room for the reservists of this state's $pm_reserve_cadre$ barracks: one more [Concept('concept_conscription_center', 'conscription center')] per [Concept('concept_reserve_battalions', 'reserve battalion')].",
   "de": "Platz für die Reservisten der Kasernen dieses Staates unter $pm_reserve_cadre$: ein weiteres [Concept('concept_conscription_center', 'Einberufungszentrum')] pro [Concept('concept_reserve_battalions', 'Reservebataillon')]."
@@ -12343,6 +12331,10 @@
   "en": "Training",
   "de": "Ausbildung"
  },
+ "training_desc": {
+  "en": "The specialized training and bioenhancement this Army gives its soldiers.",
+  "de": "Die spezielle Ausbildung und Bioverbesserung, die diese Armee ihren Soldaten gibt."
+ },
  "trait_combined_arms_air_superiority_desc": {
   "en": "Aircraft provide close air support, battlefield interdiction, and real-time intelligence, dramatically increasing the lethality of ground forces.",
   "de": "Flugzeuge bieten Nahunterstützung aus der Luft, Angriffe auf feindliche Nachschublinien und Aufklärung in Echtzeit, was die Schlagkraft der Bodentruppen drastisch erhöht."
@@ -12392,8 +12384,8 @@
   "de": "Dieser Befehlshaber beherrscht autonome Schwarmtechnologie und erweitert damit die effektive Kommandokapazität erheblich."
  },
  "tropical_disease_public_health_modifier_desc": {
-  "en": "A coordinated public health response has mobilized medical resources against climate-driven disease outbreaks, containing mortality while straining the [concept_sol].",
-  "de": "Eine koordinierte Reaktion des Gesundheitswesens hat medizinische Ressourcen gegen klimabedingte Krankheitsausbrüche mobilisiert, wodurch die Sterblichkeit eingedämmt, aber der [concept_sol] belastet wird."
+  "en": "A coordinated public health response has mobilized medical resources against climate-driven disease outbreaks, containing mortality.",
+  "de": "Eine koordinierte Reaktion des Gesundheitswesens hat medizinische Ressourcen gegen klimabedingte Krankheitsausbrüche mobilisiert und die Sterblichkeit eingedämmt."
  },
  "tropical_disease_research_modifier_desc": {
   "en": "Medical researchers are studying climate-driven diseases, boosting technological advancement but at the cost of resources and ongoing mortality.",
@@ -13140,8 +13132,8 @@
   "de": "Dieses Land hat nach einem dramatischen Auszug bei der Generalversammlung versucht zu vermitteln."
  },
  "un_withdrawal_penalty_modifier_desc": {
-  "en": "Having withdrawn from the United Nations, this country faces a temporary reduction in diplomatic reputation and [concept_prestige].",
-  "de": "Nach seinem Austritt aus den Vereinten Nationen erleidet dieses Land eine vorübergehende Verringerung seines diplomatischen Ansehens und [concept_prestige]."
+  "en": "This country walked out of the United Nations, or the [concept_un_general_assembly] voted its permanent seat away. While this lasts it cannot rejoin, and cannot be seated on the [concept_un_security_council] again.",
+  "de": "Dieses Land hat die Vereinten Nationen verlassen, oder die [concept_un_general_assembly] hat ihm den ständigen Sitz entzogen. Solange das gilt, kann es nicht wieder beitreten und keinen Sitz im [concept_un_security_council] mehr erhalten."
  },
  "united_nations": {
   "en": "United Nations",
@@ -13363,6 +13355,10 @@
   "en": "Unlimited clean energy is being channeled directly into research facilities across the nation.",
   "de": "Unbegrenzte saubere Energie wird landesweit direkt in Forschungseinrichtungen geleitet."
  },
+ "we_sc_postscarcity_subsidize_cost_desc": {
+  "en": "We are paying part of every household's energy bill.",
+  "de": "Wir übernehmen einen Teil der Energiekosten jedes Haushalts."
+ },
  "we_sc_postscarcity_subsidize_desc": {
   "en": "The government subsidizes energy costs for all citizens, leveraging the orbital collector's output.",
   "de": "Die Regierung subventioniert die Energiekosten für alle Bürger und nutzt dabei die Leistung des Orbitalkollektors."
@@ -13498,6 +13494,10 @@
  "workforce_retraining_modifier_desc": {
   "en": "workforce retraining programs help workers adapt to automation.",
   "de": "Umschulungsprogramme für die Beschäftigten helfen Arbeitern, sich an die Automatisierung anzupassen."
+ },
+ "ww_air_raid_relief_modifier_desc": {
+  "en": "After enemy bombers struck our cities, we gave the city authorities first call on men and supplies.",
+  "de": "Nachdem feindliche Bomber unsere Städte getroffen haben, haben wir den Stadtverwaltungen Vorrang bei Männern und Material eingeräumt."
  },
  "ww_appeasement_modifier": {
   "en": "Policy of Appeasement",

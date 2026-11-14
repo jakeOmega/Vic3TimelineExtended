@@ -67,6 +67,10 @@
   "en": "Power Bloc Principle Slots",
   "es": "Cupos de principios del bloque de poder"
  },
+ "rule_te_small_economy_construction_rule": {
+  "en": "Small-Economy Construction",
+  "es": "Construcción en economías pequeñas"
+ },
  "rule_united_nations_rule": {
   "en": "United Nations",
   "es": "Naciones Unidas"
@@ -100,8 +104,8 @@
   "es": "Sistema bancario simplificado"
  },
  "setting_banking_system_simplified_desc": {
-  "en": "The [concept_banking_cycle] [concept_journal_entry] is active, but without the monetary-policy layer built on top of it. There is no policy interest rate to set, no inflation, no exchange rate, and no international monetary arrangements such as currency pegs, swap lines or a shared currency. Your government still borrows at a rate of its own — the world reference rate plus the risk premium your standing earns — you simply do not steer it.",
-  "es": "La [concept_journal_entry|l] del [concept_banking_cycle|l] está activa, pero sin la capa de política monetaria construida sobre ella. No hay tipo de interés oficial que fijar, ni inflación, ni tipo de cambio, ni acuerdos monetarios internacionales como anclajes de la moneda, líneas de swap o una moneda compartida. Tu gobierno sigue endeudándose a un tipo propio —el tipo de referencia mundial más la prima de riesgo que le corresponde por tu posición—; simplemente no lo diriges tú."
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active, without monetary policy: no policy rate to set, no inflation, no exchange rate, and no currency pegs, swap lines or shared currency. Your government still borrows at the world reference rate plus its own risk premium.",
+  "es": "La [concept_journal_entry|l] del [concept_banking_cycle|l] está activa, sin política monetaria: sin tipo de interés oficial que fijar, sin inflación, sin tipo de cambio y sin anclajes de la moneda, líneas de swap ni moneda compartida. Tu gobierno sigue endeudándose al tipo de referencia mundial más su propia prima de riesgo."
  },
  "setting_covert_warfare_disabled": {
   "en": "Covert Warfare Disabled",
@@ -111,13 +115,21 @@
   "en": "The covert warfare [concept_journal_entry] is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but [concept_covert_operations] are unavailable.",
   "es": "La [concept_journal_entry|l] de la guerra encubierta está desactivada. Los modificadores de [concept_intelligence_capacity|l] de las tecnologías siguen apareciendo, pero las [concept_covert_operations|l] no están disponibles."
  },
+ "setting_covert_warfare_early_unlock": {
+  "en": "Covert Warfare: Early Unlock",
+  "es": "Guerra encubierta: desbloqueo temprano"
+ },
+ "setting_covert_warfare_early_unlock_desc": {
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Until $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law, funding stops at Professional, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
+  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con $central_archives$. Hasta que se investigue la tecnología $mainframe_computers$ o se apruebe la ley $law_ministry_of_intelligence_and_security$, la financiación se queda en Profesional, y solo se pueden lanzar las operaciones cuya tecnología tienes: al principio, espionaje y sabotaje en tiempo de guerra."
+ },
  "setting_covert_warfare_enabled": {
-  "en": "Covert Warfare Enabled",
-  "es": "Guerra encubierta activada"
+  "en": "Covert Warfare: Late Unlock",
+  "es": "Guerra encubierta: desbloqueo tardío"
  },
  "setting_covert_warfare_enabled_desc": {
-  "en": "The [concept_covert_warfare_system] [concept_journal_entry] is active. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and can launch [concept_covert_operations] against rivals. Unused operation slots boost domestic defense.",
-  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] está activa. Las naciones desarrollan [concept_intelligence_capacity|l] mediante la tecnología y la [concept_literacy|l], y pueden lanzar [concept_covert_operations|l] contra sus rivales. Los cupos de operaciones sin usar refuerzan la defensa interna."
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
+  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con la tecnología $mainframe_computers$ o la ley $law_ministry_of_intelligence_and_security$. Las naciones desarrollan [concept_intelligence_capacity|l] mediante la tecnología y la [concept_literacy|l], y lanzan [concept_covert_operations|l] contra sus rivales."
  },
  "setting_cultural_hegemony_disabled": {
   "en": "Cultural Hegemony Disabled",
@@ -127,13 +139,21 @@
   "en": "The cultural hegemony [concept_journal_entry] is disabled. [concept_cultural_pull] modifiers from technologies and events still apply to tooltips but have no gameplay effect.",
   "es": "La [concept_journal_entry|l] de la hegemonía cultural está desactivada. Los modificadores de [concept_cultural_pull|l] de tecnologías y eventos siguen apareciendo en las descripciones emergentes, pero no tienen efecto en el juego."
  },
+ "setting_cultural_hegemony_early_unlock": {
+  "en": "Cultural Hegemony: Early Unlock",
+  "es": "Hegemonía cultural: desbloqueo temprano"
+ },
+ "setting_cultural_hegemony_early_unlock_desc": {
+  "en": "As Late Unlock, but the [concept_journal_entry] opens once any country has the $electric_telegraph$, and International Cultural Outreach needs the telegraph rather than $mass_media$. The Global Media Campaign and the events about broadcast media still wait for $mass_media$.",
+  "es": "Como el desbloqueo tardío, pero la [concept_journal_entry|l] se abre en cuanto cualquier país tiene la tecnología $electric_telegraph$, y la Difusión cultural internacional necesita el telégrafo en lugar de la tecnología $mass_media$. La Campaña mediática global y los eventos sobre los medios de radiodifusión siguen esperando a la tecnología $mass_media$."
+ },
  "setting_cultural_hegemony_enabled": {
-  "en": "Cultural Hegemony Enabled",
-  "es": "Hegemonía cultural activada"
+  "en": "Cultural Hegemony: Late Unlock",
+  "es": "Hegemonía cultural: desbloqueo tardío"
  },
  "setting_cultural_hegemony_enabled_desc": {
-  "en": "The [concept_cultural_hegemony_system] [concept_journal_entry] is active. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology. The dominant cultural power attracts migrants, and events can let countries under its influence gain research speed by opening up to its culture.",
-  "es": "La [concept_journal_entry|l] de la [concept_cultural_hegemony_system|l] está activa. Las naciones compiten por la influencia cultural global mediante el arte, el [concept_prestige|l], el nivel de vida y la tecnología. La potencia cultural dominante atrae a migrantes, y los eventos pueden permitir que los países bajo su influencia ganen velocidad de investigación al abrirse a su cultura."
+  "en": "The [concept_cultural_hegemony_system] [concept_journal_entry] opens once any country has $mass_media$. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology, and the dominant cultural power attracts migrants.",
+  "es": "La [concept_journal_entry|l] de la [concept_cultural_hegemony_system|l] se abre en cuanto cualquier país tiene la tecnología $mass_media$. Las naciones compiten por la influencia cultural global mediante el arte, el [concept_prestige|l], el nivel de vida y la tecnología, y la potencia cultural dominante atrae a migrantes."
  },
  "setting_culture_merges_disabled": {
   "en": "Culture Merges Disabled",
@@ -148,8 +168,8 @@
   "es": "Fusiones culturales activadas"
  },
  "setting_culture_merges_enabled_desc": {
-  "en": "Related cultures can merge into one national culture. A country that holds most of a set of closely related cultures, such as $north_german$ and $south_german$, treats them as equals and has the right technology can start a merge. Over a few decades the constituent cultures assimilate into the merged culture, and once it dominates one's homeland, every remaining pop of that culture switches at once, wherever it lives. In a game saved before culture merges were added, the merges that make a new culture never start.",
-  "es": "Las culturas emparentadas pueden fusionarse en una sola cultura nacional. Un país que controle la mayor parte de un conjunto de culturas muy emparentadas, como $north_german$ y $south_german$, las trate como iguales y tenga la tecnología adecuada puede iniciar una fusión. A lo largo de unas décadas, las culturas integrantes se asimilan a la cultura fusionada, y cuando esta domina la tierra natal propia, todos los colectivos restantes de esa cultura se pasan a ella a la vez, vivan donde vivan. En una partida guardada antes de que se añadieran las fusiones culturales, las fusiones que crean una cultura nueva nunca empiezan."
+  "en": "Related cultures can merge into one national culture. A country that holds most of a set of closely related cultures, such as $north_german$ and $south_german$, treats them as equals and has the right technology can start a merge, which takes a few decades.",
+  "es": "Las culturas emparentadas pueden fusionarse en una sola cultura nacional. Un país que controle la mayor parte de un conjunto de culturas muy emparentadas, como $north_german$ y $south_german$, las trate como iguales y tenga la tecnología adecuada puede iniciar una fusión, que dura unas décadas."
  },
  "setting_custom_religions_allowed": {
   "en": "Custom Religions Allowed",
@@ -204,48 +224,48 @@
   "es": "Completo"
  },
  "setting_demographics_full_desc": {
-  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births, deaths and workforce. It takes over the birth, death and workforce effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top.",
-  "es": "Experimental. Cada estado lleva un censo de su población por edad y sexo, que se muestra en el panel de Demografía, y es el censo el que determina sus nacimientos, sus muertes y su mano de obra. Asume los efectos sobre natalidad, mortalidad y mano de obra que figuran en la mayoría de las leyes y tecnologías, y los de la inanición leve; la inanición grave, la guerra y otras crisis se aplican además."
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel. The census sets births, deaths and workforce in place of most law and technology effects on them; severe starvation, war and other shocks still apply.",
+  "es": "Experimental. Cada estado lleva un censo de su población por edad y sexo, que se muestra en el panel de Demografía. El censo determina nacimientos, muertes y mano de obra en lugar de la mayoría de los efectos de leyes y tecnologías sobre ellos; la inanición grave, la guerra y otras crisis se siguen aplicando."
  },
  "setting_free_market_construction_disabled": {
   "en": "Free Market Construction Disabled",
   "es": "Construcción de libre mercado desactivada"
  },
  "setting_free_market_construction_disabled_desc": {
-  "en": "Construction works as in the base game. The $te_construction_market_site$ is your construction sector: the government builds and expands it, and each level provides construction points according to its production method. There is no construction good and no construction maintenance, and your economic-system law sets the private share of construction. The materials for each construction point spent are bought as in the base game. Every country gets a small base of construction, and AI countries keep the Construction Sites they have.\\n\\n#b Construction Sites must currently be built from the state view.#! This is a technical limitation that is being worked on.",
-  "es": "La construcción funciona como en el juego base. $te_construction_market_site$ es tu sector de la construcción: su construcción y ampliación corren a cargo del gobierno, y cada nivel aporta puntos de construcción según su método de producción. No hay un bien de construcción ni mantenimiento de la construcción, y tu ley de sistema económico fija la parte privada de la construcción. Los materiales de cada punto de construcción gastado se compran como en el juego base. Todos los países cuentan con una pequeña base de construcción, y los países de la IA conservan las obras de construcción que tienen.\\n\\n#b Por ahora, las obras de construcción deben construirse desde la vista de estado.#! Es una limitación técnica en la que se está trabajando."
+  "en": "Construction works as in the base game, with the $te_construction_market_site$ as the construction sector. There is no construction good and no construction maintenance, and your economic-system law sets the private share. If the rule is changed in a running game, sectors and sites are converted within a day.",
+  "es": "La construcción funciona como en el juego base, con $te_construction_market_site$ como sector de la construcción. No hay un bien de construcción ni mantenimiento de la construcción, y tu ley de sistema económico fija la parte privada. Si se cambia la regla en una partida en curso, los sectores y las obras se convierten en el plazo de un día."
  },
  "setting_free_market_construction_enabled": {
   "en": "Free Market Construction Enabled",
   "es": "Construcción de libre mercado activada"
  },
  "setting_free_market_construction_enabled_desc": {
-  "en": "[concept_construction] is a tradeable good. $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and much more while they retool after switching production methods. The private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
-  "es": "La [concept_construction|l] es un bien comerciable. Los edificios de tipo $building_construction_sector$ la venden en el mercado, el gobierno compra cada semana la cantidad que fijas en el panel Construcción, y los inversores compran para proyectos privados con cargo al [concept_investment_pool|l]. La industria y las infraestructuras usan algo de construcción como mantenimiento, y mucha más mientras se reconvierten tras cambiar de método de producción. La parte privada de la construcción depende de las dos compras, en lugar de tu ley de sistema económico. Consulta el [concept_te_construction_market|l]."
+  "en": "[concept_construction] is a traded good. $building_construction_sector$ buildings sell it, the government buys what you set in the construction panel, and investors buy from the [concept_investment_pool]. Industry and infrastructure use some as maintenance, and more after changing production methods. See [concept_te_construction_market].",
+  "es": "La [concept_construction|l] es un bien comerciable. Los edificios de tipo $building_construction_sector$ la venden, el gobierno compra lo que fijas en el panel Construcción y los inversores compran con cargo al [concept_investment_pool|l]. La industria y las infraestructuras usan algo como mantenimiento, y más tras cambiar de método de producción. Consulta el [concept_te_construction_market|l]."
  },
  "setting_free_market_construction_no_ai_retooling": {
   "en": "Free Market Construction without AI Retooling Costs",
   "es": "Construcción de libre mercado sin costes de reconversión para la IA"
  },
  "setting_free_market_construction_no_ai_retooling_desc": {
-  "en": "As Free Market Construction Enabled, but AI countries pay no retooling costs: switching production methods does not raise the construction their buildings use as maintenance. Player countries still pay normal retooling costs. Industry and infrastructure in every country still use construction as maintenance, and the construction market and private share work as in the enabled setting. See [concept_te_construction_market].",
-  "es": "Como «Construcción de libre mercado activada», pero los países de la IA no pagan costes de reconversión: cambiar de método de producción no aumenta la construcción que sus edificios usan como mantenimiento. Los países de los jugadores siguen pagando los costes de reconversión normales. La industria y las infraestructuras de todos los países siguen usando construcción como mantenimiento, y el mercado de la construcción y la parte privada funcionan como en el ajuste activado. Consulta el [concept_te_construction_market|l]."
+  "en": "As Free Market Construction Enabled, but AI countries pay no retooling costs: switching production methods does not raise the construction their buildings use as maintenance. Players still pay them. See [concept_te_construction_market].",
+  "es": "Como «Construcción de libre mercado activada», pero los países de la IA no pagan costes de reconversión: cambiar de método de producción no aumenta la construcción que sus edificios usan como mantenimiento. Los jugadores sí los pagan. Consulta el [concept_te_construction_market|l]."
  },
  "setting_free_market_construction_no_maintenance": {
   "en": "Free Market Construction without Maintenance",
   "es": "Construcción de libre mercado sin mantenimiento"
  },
  "setting_free_market_construction_no_maintenance_desc": {
-  "en": "As Free Market Construction Enabled, but buildings use no construction as maintenance, so switching production methods costs no construction either. [concept_construction] is still a tradeable good: $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, investors buy for private projects from the [concept_investment_pool], and a few company buildings use it in their production. The private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
-  "es": "Como «Construcción de libre mercado activada», pero los edificios no usan construcción como mantenimiento, de modo que cambiar de método de producción tampoco cuesta construcción. La [concept_construction|l] sigue siendo un bien comerciable: los edificios de tipo $building_construction_sector$ la venden en el mercado, el gobierno compra cada semana la cantidad que fijas en el panel Construcción, los inversores compran para proyectos privados con cargo al [concept_investment_pool|l] y unos pocos edificios de compañía la usan en su producción. La parte privada de la construcción depende de las dos compras, en lugar de tu ley de sistema económico. Consulta el [concept_te_construction_market|l]."
+  "en": "As Free Market Construction Enabled, but buildings use no construction as maintenance, so switching production methods costs none either. [concept_construction] is still traded, and a few company buildings use it in production. See [concept_te_construction_market].",
+  "es": "Como «Construcción de libre mercado activada», pero los edificios no usan construcción como mantenimiento, de modo que cambiar de método de producción tampoco cuesta construcción. La [concept_construction|l] se sigue comerciando, y unos pocos edificios de compañía la usan en su producción. Consulta el [concept_te_construction_market|l]."
  },
  "setting_free_market_construction_no_retooling": {
   "en": "Free Market Construction without Retooling Costs",
   "es": "Construcción de libre mercado sin costes de reconversión"
  },
  "setting_free_market_construction_no_retooling_desc": {
-  "en": "As Free Market Construction Enabled, but buildings do not retool: switching production methods does not raise the construction a building uses as maintenance. [concept_construction] is a tradeable good: $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and the private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
-  "es": "Como «Construcción de libre mercado activada», pero los edificios no se reconvierten: cambiar de método de producción no aumenta la construcción que usa un edificio como mantenimiento. La [concept_construction|l] es un bien comerciable: los edificios de tipo $building_construction_sector$ la venden en el mercado, el gobierno compra cada semana la cantidad que fijas en el panel Construcción y los inversores compran para proyectos privados con cargo al [concept_investment_pool|l]. La industria y las infraestructuras usan algo de construcción como mantenimiento, y la parte privada de la construcción depende de las dos compras, en lugar de tu ley de sistema económico. Consulta el [concept_te_construction_market|l]."
+  "en": "As Free Market Construction Enabled, but buildings do not retool: switching production methods does not raise the construction a building uses as maintenance. See [concept_te_construction_market].",
+  "es": "Como «Construcción de libre mercado activada», pero los edificios no se reconvierten: cambiar de método de producción no aumenta la construcción que usa un edificio como mantenimiento. Consulta el [concept_te_construction_market|l]."
  },
  "setting_global_commons_disabled": {
   "en": "Global Commons Disabled",
@@ -260,8 +280,8 @@
   "es": "Bienes comunes globales activados"
  },
  "setting_global_commons_enabled_desc": {
-  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licenses, shared out every year by claim weight among every coastal country, and every $building_ocean_mine$ level needs one. A country's share waits for it until it researches Abyssal Plain Mining, so the first to research it can't take every pool. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
-  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparte cada año según el peso de la reclamación entre todos los países costeros, y cada nivel de $building_ocean_mine$ necesita una. La parte de cada país le espera hasta que investiga Minería de llanuras abisales, así que el primero en investigarla no puede quedarse con todas las reservas. El Derecho del Mar de la ONU puede regular el lecho marino, las estaciones de investigación pueden invernar en el hielo antártico y un Tratado Antártico puede cerrar la cuenca austral."
+  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licenses, shared out yearly among coastal countries by claim weight, and every $building_ocean_mine$ level needs one. The UN can regulate the seabed, and an Antarctic Treaty can close the Southern basin.",
+  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparten cada año entre los países costeros según el peso de la reclamación, y cada nivel de $building_ocean_mine$ necesita una. La ONU puede regular el lecho marino, y un Tratado Antártico puede cerrar la cuenca austral."
  },
  "setting_global_warming_disabled": {
   "en": "Global Warming Disabled",
@@ -356,8 +376,8 @@
   "es": "Movimientos sociales desactivados"
  },
  "setting_social_movements_disabled_desc": {
-  "en": "The social movement journal entries are disabled: civil rights, human augmentation, morphological freedom, digital rights and surveillance, the post-scarcity transition, and the mental health crisis, together with the events those entries fire. Related technologies and laws still exist, and social events that do not come from these entries, such as those on feminism, LGBTQ+ rights, religion, anti-war and transhumanist movements, and the environment, still occur.",
-  "es": "Las anotaciones en el diario de movimientos sociales están desactivadas: derechos civiles, mejora humana, libertad morfológica, derechos digitales y vigilancia, la transición a la posescasez y la crisis de salud mental, junto con los eventos que esas anotaciones lanzan. Las tecnologías y leyes relacionadas siguen existiendo, y los eventos sociales que no proceden de estas anotaciones, como los del feminismo, los derechos LGBTQ+, la religión, los movimientos antibelicistas y transhumanistas y el medio ambiente, siguen ocurriendo."
+  "en": "The social movement journal entries are disabled: civil rights, human augmentation, morphological freedom, digital rights and surveillance, the post-scarcity transition, and mental health, with the events they fire. Related technologies and laws still exist.",
+  "es": "Las anotaciones en el diario de movimientos sociales están desactivadas: derechos civiles, mejora humana, libertad morfológica, derechos digitales y vigilancia, la transición a la posescasez y la salud mental, junto con los eventos que lanzan. Las tecnologías y leyes relacionadas siguen existiendo."
  },
  "setting_social_movements_enabled": {
   "en": "Social Movements Enabled",
@@ -372,16 +392,16 @@
   "es": "[concept_space_race]: colonias completas"
  },
  "setting_space_race_colonies_full_desc": {
-  "en": "As Simple Colonies, and wars reach space. Space Command builds warships that fly between the planets, fight, blockade colonies, and seize or destroy them; marines garrison colonies; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. Holding Earth orbit supports your troops on the ground.",
-  "es": "Igual que las colonias simples, y las guerras llegan al espacio. El Mando espacial construye buques de guerra que vuelan entre los planetas, combaten, bloquean colonias y las toman o las destruyen; los infantes de marina guarnecen las colonias; una flota enemiga en la órbita terrestre detiene tus lanzamientos hasta que pones en órbita tu reserva, y las baterías tierra-órbita disparan contra ella. Controlar la órbita terrestre apoya a tus tropas en tierra."
+  "en": "As Simple Colonies, and wars reach space. Space Command builds warships that fight between the planets and blockade, seize or destroy colonies, and marines garrison them. An enemy fleet in Earth orbit can stop your launches, and holding Earth orbit supports your troops on the ground.",
+  "es": "Como las colonias simples, y las guerras llegan al espacio. El Mando espacial construye buques de guerra que combaten entre los planetas y bloquean, toman o destruyen colonias, y los infantes de marina las guarnecen. Una flota enemiga en la órbita terrestre puede detener tus lanzamientos, y controlar la órbita terrestre apoya a tus tropas en tierra."
  },
  "setting_space_race_colonies_simple": {
   "en": "[concept_space_race]: Simple Colonies",
   "es": "[concept_space_race]: colonias simples"
  },
  "setting_space_race_colonies_simple_desc": {
-  "en": "As Races Only, and colonies are built up, held and lost. A colony fleet travels to the site you choose and claims it when it lands; colonies hold settlers from Earth and modules, and Extraplanetary Bases draw on their room. The Cede Colony treaty article sells or gives a colony, and a war can force one. A colony grows restless as it grows, can demand self-government and break away, can be abandoned, and lives on as a free colony that trades with whoever supplies it.",
-  "es": "Igual que solo carreras, y las colonias se construyen, se conservan y se pierden. Una flota colonial viaja al emplazamiento que eliges y lo reclama cuando aterriza; las colonias albergan colonos de la Tierra y módulos, y las Bases extraplanetarias usan su espacio. El artículo de tratado Ceder colonia vende o regala una colonia, y una guerra puede obligar a ceder una. Una colonia se vuelve inquieta a medida que crece, puede exigir autogobierno y separarse, puede abandonarse y sigue viviendo como colonia libre que comercia con quien la abastece."
+  "en": "As Races Only, and colonies are built up, held and lost. A colony fleet claims the site you choose when it lands, and settlers and modules fill the colony. A colony can be ceded by treaty or taken in war, and as it grows it can break away and live on as a free colony.",
+  "es": "Como solo carreras, y las colonias se construyen, se conservan y se pierden. Una flota colonial reclama el emplazamiento que eliges cuando aterriza, y colonos y módulos llenan la colonia. Una colonia puede cederse por tratado o tomarse en una guerra, y al crecer puede separarse y seguir viviendo como colonia libre."
  },
  "setting_space_race_disabled": {
   "en": "[concept_space_race] Disabled",
@@ -396,8 +416,8 @@
   "es": "[concept_space_race]: solo carreras"
  },
  "setting_space_race_enabled_desc": {
-  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed. A colony stays with the power that founded it; if that power is annexed, its colonies pass to whoever owns its last capital.",
-  "es": "Las anotaciones en el diario de la [concept_space_race|l] están activas. Las [Concept('concept_great_power', 'grandes potencias')] y las [Concept('concept_major_power', 'potencias importantes')] compiten mediante una progresión por hitos que va del vuelo suborbital a las sondas interestelares, y los niveles de financiación influyen en la velocidad del progreso. Una colonia sigue en manos de la potencia que la fundó; si esa potencia es anexionada, sus colonias pasan a quien posea su última capital."
+  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] race through milestones from suborbital flight to interstellar probes, at a pace their funding sets. A colony stays with the power that founded it.",
+  "es": "Las anotaciones en el diario de la [concept_space_race|l] están activas. Las [Concept('concept_great_power', 'grandes potencias')] y las [Concept('concept_major_power', 'potencias importantes')] compiten por hitos, del vuelo suborbital a las sondas interestelares, a un ritmo que marca su financiación. Una colonia sigue en manos de la potencia que la fundó."
  },
  "setting_te_principle_slots_eight": {
   "en": "Up to Eight",
@@ -415,6 +435,22 @@
   "en": "A [concept_power_bloc] holds up to #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')], opened by [concept_power_bloc_rank] and members as in the base game. Technologies add no slots.",
   "es": "Un [concept_power_bloc|l] tiene hasta #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l], que se abren según el [concept_power_bloc_rank|l] y los miembros, como en el juego base. Las tecnologías no añaden cupos."
  },
+ "setting_te_small_economy_construction_disabled": {
+  "en": "Full Cost for Every Country",
+  "es": "Coste íntegro para todos los países"
+ },
+ "setting_te_small_economy_construction_disabled_desc": {
+  "en": "Every country pays the same price for construction, raised only by $construction_cost_scaling$ for rich countries with few idle workers.",
+  "es": "Todos los países pagan el mismo precio por la construcción, que solo sube con $construction_cost_scaling$ en los países ricos con pocos trabajadores ociosos."
+ },
+ "setting_te_small_economy_construction_enabled": {
+  "en": "Cheaper for Small Economies",
+  "es": "Más barata para las economías pequeñas"
+ },
+ "setting_te_small_economy_construction_enabled_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a small economy less: a tenth of the price for a country with almost no [concept_gdp], rising in a straight line to the full price at a GDP of 10 million. AI countries get the same.",
+  "es": "Experimental. La construcción y su mantenimiento cuestan menos a una economía pequeña: una décima parte del precio para un país con un [Concept('concept_gdp', 'PIB')] casi nulo, que sube en línea recta hasta el precio íntegro con un PIB de 10 millones. Los países de la IA reciben lo mismo."
+ },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",
   "es": "Naciones Unidas desactivadas"
@@ -423,21 +459,29 @@
   "en": "The United Nations [concept_journal_entry] is disabled. Intergovernmental organization technology can still be researched but the UN founding, membership, voting, and related diplomatic events are inactive.",
   "es": "La [concept_journal_entry|l] de las Naciones Unidas está desactivada. La tecnología de organizaciones intergubernamentales aún se puede investigar, pero la fundación de la ONU, la pertenencia, las votaciones y los eventos diplomáticos relacionados están inactivos."
  },
+ "setting_united_nations_early_unlock": {
+  "en": "United Nations: Early Unlock",
+  "es": "Naciones Unidas: desbloqueo temprano"
+ },
+ "setting_united_nations_early_unlock_desc": {
+  "en": "As Late Unlock, but a great power can found the organization with $multilateral_alliances$, as the League of Nations. Until some country has $intergovernmental_organizations$, it keeps that name and its charter can't be reformed, which holds it at Established or below.",
+  "es": "Como el desbloqueo tardío, pero una gran potencia puede fundar la organización con la tecnología $multilateral_alliances$, con el nombre de Sociedad de Naciones. Hasta que algún país investigue la tecnología $intergovernmental_organizations$, conserva ese nombre y su carta no puede reformarse, lo que la mantiene en Consolidada o por debajo."
+ },
  "setting_united_nations_enabled": {
-  "en": "United Nations Enabled",
-  "es": "Naciones Unidas activadas"
+  "en": "United Nations: Late Unlock",
+  "es": "Naciones Unidas: desbloqueo tardío"
  },
  "setting_united_nations_enabled_desc": {
-  "en": "The United Nations [concept_journal_entry] is active. Nations can found and join the UN, participate in General Assembly votes, contribute to peacekeeping, and engage with UN-related diplomatic events.",
-  "es": "La [concept_journal_entry|l] de las Naciones Unidas está activa. Las naciones pueden fundar la ONU y unirse a ella, participar en las votaciones de la Asamblea General, contribuir al mantenimiento de la paz e intervenir en eventos diplomáticos relacionados con la ONU."
+  "en": "The United Nations [concept_journal_entry] opens with $intergovernmental_organizations$. Nations can found and join the UN, vote in the General Assembly, contribute to peacekeeping, and engage with UN-related diplomatic events.",
+  "es": "La [concept_journal_entry|l] de las Naciones Unidas se abre con la tecnología $intergovernmental_organizations$. Las naciones pueden fundar la ONU y unirse a ella, votar en la Asamblea General, contribuir al mantenimiento de la paz e intervenir en eventos diplomáticos relacionados con la ONU."
  },
  "setting_universal_aptitude_traits_disabled": {
   "en": "Universal Aptitude Traits Disabled",
   "es": "Rasgos de aptitud universales desactivados"
  },
  "setting_universal_aptitude_traits_disabled_desc": {
-  "en": "Administrative, diplomatic, and military aptitude traits only exist alongside Heir Education. With Heir Education enabled, only rulers and heirs have them: a character who leaves the throne loses their aptitude traits, and regains the same ones if they return to power. Other characters (such as [concept_interest_group] leaders and generals) remain without them. With Heir Education also disabled, no character has aptitude traits.",
-  "es": "Los rasgos de aptitud administrativa, diplomática y militar solo existen junto con la Educación del heredero. Con la Educación del heredero activada, solo los gobernantes y los herederos los tienen: un personaje que abandona el trono pierde sus rasgos de aptitud y recupera los mismos si vuelve al poder. Los demás personajes (como los líderes de [Concept('concept_interest_group', 'grupos de interés')] y los generales) siguen sin ellos. Con la Educación del heredero también desactivada, ningún personaje tiene rasgos de aptitud."
+  "en": "Administrative, diplomatic and military aptitude traits exist only with Heir Education enabled, and only rulers and heirs have them. A ruler who leaves the throne loses them, and regains the same ones on returning to power.",
+  "es": "Los rasgos de aptitud administrativa, diplomática y militar solo existen con la Educación del heredero activada, y solo los tienen gobernantes y herederos. Un gobernante que abandona el trono los pierde, y recupera los mismos al volver al poder."
  },
  "setting_universal_aptitude_traits_enabled": {
   "en": "Universal Aptitude Traits Enabled",
@@ -455,12 +499,20 @@
   "en": "The world war [concept_journal_entry] is disabled. Ideological tensions and world war events will not occur.",
   "es": "La [concept_journal_entry|l] de la guerra mundial está desactivada. No se producirán tensiones ideológicas ni eventos de guerra mundial."
  },
+ "setting_world_war_early_unlock": {
+  "en": "World War: Early Unlock",
+  "es": "Guerra Mundial: desbloqueo temprano"
+ },
+ "setting_world_war_early_unlock_desc": {
+  "en": "As Late Unlock, but the [concept_journal_entry] opens with $trench_works$, and until $combined_arms$ a liberal great power and an autocratic one count as opposed, as in 1914. A world war begun before $combined_arms$ leaves room for another once a great power has it.",
+  "es": "Como el desbloqueo tardío, pero la [concept_journal_entry|l] se abre con la tecnología $trench_works$, y hasta que se investigue la tecnología $combined_arms$ una gran potencia liberal y una autocrática cuentan como opuestas, como en 1914. Una guerra mundial iniciada antes de $combined_arms$ deja lugar a otra cuando una gran potencia ya tiene esa tecnología."
+ },
  "setting_world_war_enabled": {
-  "en": "World War Enabled",
-  "es": "Guerra Mundial activada"
+  "en": "World War: Late Unlock",
+  "es": "Guerra Mundial: desbloqueo tardío"
  },
  "setting_world_war_enabled_desc": {
-  "en": "The world war [concept_journal_entry] is active for [Concept('concept_great_power', 'great powers')]. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases.",
-  "es": "La [concept_journal_entry|l] de la guerra mundial está activa para las [Concept('concept_great_power', 'grandes potencias')]. Las tensiones ideológicas entre grandes potencias pueden escalar hasta un conflicto global con fases de preparación, guerra abierta y posguerra."
+  "en": "The world war [concept_journal_entry] opens for [Concept('concept_great_power', 'great powers')] with $combined_arms$. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases.",
+  "es": "La [concept_journal_entry|l] de la guerra mundial se abre para las [Concept('concept_great_power', 'grandes potencias')] con la tecnología $combined_arms$. Las tensiones ideológicas entre grandes potencias pueden escalar hasta un conflicto global con fases de preparación, guerra abierta y posguerra."
  }
 }

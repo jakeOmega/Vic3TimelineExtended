@@ -3060,8 +3060,8 @@
   "de": "Die Sklaverei ist so oder so geklärt, und ein Bürgerkrieg darüber ist beendet: das Gesetz $law_slavery_banned$ nach Ablauf von $je_acw_countdown$ oder Sklaverei, die in jedem Staat unter $law_slave_trade$ oder $law_debt_slavery$ legal ist."
  },
  "te_cmg_american_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $yankee$ or $dixie$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $yankee$ oder $dixie$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $yankee$, $dixie$ or $cm_american$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $yankee$, $dixie$ oder $cm_american$."
  },
  "te_cmg_american_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_american').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_american').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_american').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_american').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1].",
@@ -3096,8 +3096,8 @@
   "de": "Wir haben das Land $PBC$ oder $FND$ gebildet."
  },
  "te_cmg_andean_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $north_andean$, $south_andean$, $peruvian$ or $bolivian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $north_andean$, $south_andean$, $peruvian$ oder $bolivian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $north_andean$, $south_andean$, $peruvian$, $bolivian$ or $cm_andean$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $north_andean$, $south_andean$, $peruvian$, $bolivian$ oder $cm_andean$."
  },
  "te_cmg_andean_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_andean').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_andean').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_andean').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_andean').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_andean').GetValue|1].",
@@ -3120,8 +3120,8 @@
   "de": "Das Gesetz $law_slavery_banned$ ist in Kraft."
  },
  "te_cmg_anglophone_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $british$, $yankee$ or $cm_american$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $british$, $yankee$ oder $cm_american$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $british$, $yankee$, $cm_american$ or $cm_anglophone$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $british$, $yankee$, $cm_american$ oder $cm_anglophone$."
  },
  "te_cmg_anglophone_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_anglophone').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_anglophone').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_anglophone').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_anglophone').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_anglophone').GetValue|1].",
@@ -3156,8 +3156,8 @@
   "de": "Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft."
  },
  "te_cmg_arab_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $maghrebi$, $misri$, $mashriqi$, $bedouin$ or $yemenite$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $maghrebi$, $misri$, $mashriqi$, $bedouin$ oder $yemenite$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $maghrebi$, $misri$, $mashriqi$, $bedouin$, $yemenite$ or $cm_arab$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $maghrebi$, $misri$, $mashriqi$, $bedouin$, $yemenite$ oder $cm_arab$."
  },
  "te_cmg_arab_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_arab').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_arab').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_arab').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_arab').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_arab').GetValue|1].",
@@ -3188,8 +3188,8 @@
   "de": "Die Pops der Kulturen $nordestino$, $paulista$, $amazonic$ und $sulista$ sind alle zu $brazilian$ gewechselt."
  },
  "te_cmg_brazilian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $brazilian$, $nordestino$, $paulista$, $amazonic$ or $sulista$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $brazilian$, $nordestino$, $paulista$, $amazonic$ oder $sulista$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $brazilian$, $nordestino$, $paulista$, $amazonic$ or $sulista$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $brazilian$, $nordestino$, $paulista$, $amazonic$ oder $sulista$."
  },
  "te_cmg_brazilian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_brazilian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_brazilian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_brazilian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_brazilian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_brazilian').GetValue|1].",
@@ -3212,8 +3212,8 @@
   "de": "Die Pops der Kultur $scottish$ sind alle zu $british$ gewechselt."
  },
  "te_cmg_british_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $british$ or $scottish$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $british$ oder $scottish$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $british$ or $scottish$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $british$ oder $scottish$."
  },
  "te_cmg_british_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_british').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_british').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_british').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_british').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_british').GetValue|1].",
@@ -3244,8 +3244,8 @@
   "de": "Das Gesetz $law_public_schools$ ist in Kraft."
  },
  "te_cmg_chinese_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $han$, $yue$, $min$ or $hakka$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $han$, $yue$, $min$ oder $hakka$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $han$, $yue$, $min$ or $hakka$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $han$, $yue$, $min$ oder $hakka$."
  },
  "te_cmg_chinese_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_chinese').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_chinese').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_chinese').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_chinese').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_chinese').GetValue|1].",
@@ -3268,8 +3268,8 @@
   "de": "Wir haben das Land $CZH$ gebildet."
  },
  "te_cmg_czechoslovak_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $czech$ or $slovak$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $czech$ oder $slovak$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $czech$, $slovak$ or $cm_czechoslovak$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $czech$, $slovak$ oder $cm_czechoslovak$."
  },
  "te_cmg_czechoslovak_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_czechoslovak').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_czechoslovak').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_czechoslovak').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_czechoslovak').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_czechoslovak').GetValue|1].",
@@ -3296,8 +3296,8 @@
   "de": "Wir haben das Land $DRA$ gebildet."
  },
  "te_cmg_dravidian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $tamil$, $kannada$ or $malayalam$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $tamil$, $kannada$ oder $malayalam$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $tamil$, $kannada$, $malayalam$ or $cm_dravidian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $tamil$, $kannada$, $malayalam$ oder $cm_dravidian$."
  },
  "te_cmg_dravidian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_dravidian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_dravidian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_dravidian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_dravidian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_dravidian').GetValue|1].",
@@ -3316,8 +3316,8 @@
   "de": "Die Pops der Kultur $flemish$ sind alle zu $dutch$ gewechselt."
  },
  "te_cmg_dutch_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $dutch$ or $flemish$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $dutch$ oder $flemish$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $dutch$ or $flemish$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $dutch$ oder $flemish$."
  },
  "te_cmg_dutch_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_dutch').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_dutch').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_dutch').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_dutch').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_dutch').GetValue|1].",
@@ -3344,8 +3344,8 @@
   "de": "Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft."
  },
  "te_cmg_east_african_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $swahili$, $nyamwezi$ or $sukuma$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $swahili$, $nyamwezi$ oder $sukuma$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $swahili$, $nyamwezi$, $sukuma$ or $cm_east_african$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $swahili$, $nyamwezi$, $sukuma$ oder $cm_east_african$."
  },
  "te_cmg_east_african_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_east_african').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_east_african').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_east_african').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_east_african').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_east_african').GetValue|1].",
@@ -3368,8 +3368,8 @@
   "de": "Die Pops der Kulturen $russian$, $ukrainian$ und $byelorussian$ sind alle zu $cm_east_slavic$ gewechselt."
  },
  "te_cmg_east_slavic_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $russian$, $ukrainian$ or $byelorussian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $russian$, $ukrainian$ oder $byelorussian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $russian$, $ukrainian$, $byelorussian$ or $cm_east_slavic$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $russian$, $ukrainian$, $byelorussian$ oder $cm_east_slavic$."
  },
  "te_cmg_east_slavic_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_east_slavic').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_east_slavic').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_east_slavic').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_east_slavic').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_east_slavic').GetValue|1].",
@@ -3408,8 +3408,8 @@
   "de": "Wir sind nicht Klientelstaat eines anderen Landes."
  },
  "te_cmg_filipino_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $filipino$, $visayan$, $tagalog$ or $ilocano$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $filipino$, $visayan$, $tagalog$ oder $ilocano$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $filipino$, $visayan$, $tagalog$ or $ilocano$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $filipino$, $visayan$, $tagalog$ oder $ilocano$."
  },
  "te_cmg_filipino_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_filipino').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_filipino').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_filipino').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_filipino').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_filipino').GetValue|1].",
@@ -3428,8 +3428,8 @@
   "de": "Die Pops der Kultur $karelian$ sind alle zu $finnish$ gewechselt."
  },
  "te_cmg_finnish_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $finnish$ or $karelian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $finnish$ oder $karelian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $finnish$ or $karelian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $finnish$ oder $karelian$."
  },
  "te_cmg_finnish_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_finnish').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_finnish').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_finnish').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_finnish').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_finnish').GetValue|1].",
@@ -3452,8 +3452,8 @@
   "de": "Das Gesetz $law_public_schools$ ist in Kraft."
  },
  "te_cmg_french_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $french$ or $occitan$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $french$ oder $occitan$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $french$ or $occitan$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $french$ oder $occitan$."
  },
  "te_cmg_french_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_french').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_french').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_french').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_french').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_french').GetValue|1].",
@@ -3476,8 +3476,8 @@
   "de": "Wir haben das Land $GER$ oder $HRE$ gebildet."
  },
  "te_cmg_german_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $north_german$ or $south_german$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $north_german$ oder $south_german$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $north_german$, $south_german$ or $cm_german$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $north_german$, $south_german$ oder $cm_german$."
  },
  "te_cmg_german_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_german').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_german').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_german').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_german').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_german').GetValue|1].",
@@ -3504,8 +3504,8 @@
   "de": "Wir haben das Land $GCO$ gebildet."
  },
  "te_cmg_gran_colombian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $colombian$, $venezuelan$ or $ecuadorian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $colombian$, $venezuelan$ oder $ecuadorian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $colombian$, $venezuelan$, $ecuadorian$ or $cm_gran_colombian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $colombian$, $venezuelan$, $ecuadorian$ oder $cm_gran_colombian$."
  },
  "te_cmg_gran_colombian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_gran_colombian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_gran_colombian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_gran_colombian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_gran_colombian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_gran_colombian').GetValue|1].",
@@ -3540,8 +3540,8 @@
   "de": "Wir sind nicht Klientelstaat eines anderen Landes."
  },
  "te_cmg_hindustani_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $hindustani$, $avadhi$, $bundeli$, $chhattisgarhi$ or $bageli$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $hindustani$, $avadhi$, $bundeli$, $chhattisgarhi$ oder $bageli$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $hindustani$, $avadhi$, $bundeli$, $chhattisgarhi$ or $bageli$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $hindustani$, $avadhi$, $bundeli$, $chhattisgarhi$ oder $bageli$."
  },
  "te_cmg_hindustani_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_hindustani').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_hindustani').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_hindustani').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_hindustani').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_hindustani').GetValue|1].",
@@ -3560,8 +3560,8 @@
   "de": "Die Pops der Kultur $szekely$ sind alle zu $hungarian$ gewechselt."
  },
  "te_cmg_hungarian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $hungarian$ or $szekely$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $hungarian$ oder $szekely$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $hungarian$ or $szekely$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $hungarian$ oder $szekely$."
  },
  "te_cmg_hungarian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_hungarian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_hungarian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_hungarian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_hungarian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_hungarian').GetValue|1].",
@@ -3592,8 +3592,8 @@
   "de": "Wir haben das Land $IDN$ gebildet."
  },
  "te_cmg_indonesian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $javan$, $malay$, $sumatran$ or $bornean$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $javan$, $malay$, $sumatran$ oder $bornean$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $javan$, $malay$, $sumatran$, $bornean$ or $cm_indonesian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $javan$, $malay$, $sumatran$, $bornean$ oder $cm_indonesian$."
  },
  "te_cmg_indonesian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_indonesian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_indonesian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_indonesian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_indonesian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_indonesian').GetValue|1].",
@@ -3616,8 +3616,8 @@
   "de": "Wir haben das Land $ITA$ gebildet."
  },
  "te_cmg_italian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $north_italian$ or $south_italian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $north_italian$ oder $south_italian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $north_italian$, $south_italian$ or $cm_italian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $north_italian$, $south_italian$ oder $cm_italian$."
  },
  "te_cmg_italian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_italian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_italian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_italian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_italian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_italian').GetValue|1].",
@@ -3640,8 +3640,8 @@
   "de": "Die Krise der Restauration ist vorüber: $je_meiji_restoration$ ist abgeschlossen, oder das Gesetz $law_bakufu$ ist abgeschafft."
  },
  "te_cmg_japanese_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $japanese$ or $ryukyuan$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $japanese$ oder $ryukyuan$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $japanese$ or $ryukyuan$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $japanese$ oder $ryukyuan$."
  },
  "te_cmg_japanese_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_japanese').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_japanese').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_japanese').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_japanese').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_japanese').GetValue|1].",
@@ -3676,8 +3676,8 @@
   "de": "Die Pops der Kulturen $french$, $cm_italian$, $spanish$ und $portuguese$ sind alle zu $cm_latin$ gewechselt."
  },
  "te_cmg_latin_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $french$, $cm_italian$, $spanish$ or $portuguese$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $french$, $cm_italian$, $spanish$ oder $portuguese$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $french$, $cm_italian$, $spanish$, $portuguese$ or $cm_latin$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $french$, $cm_italian$, $spanish$, $portuguese$ oder $cm_latin$."
  },
  "te_cmg_latin_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_latin').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_latin').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_latin').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_latin').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_latin').GetValue|1].",
@@ -3700,8 +3700,8 @@
   "de": "Die Pops der Kulturen $nguni$, $zulu$ und $xhosa$ sind alle zu $cm_nguni$ gewechselt."
  },
  "te_cmg_nguni_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $nguni$, $zulu$ or $xhosa$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $nguni$, $zulu$ oder $xhosa$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $nguni$, $zulu$, $xhosa$ or $cm_nguni$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $nguni$, $zulu$, $xhosa$ oder $cm_nguni$."
  },
  "te_cmg_nguni_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_nguni').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_nguni').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_nguni').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_nguni').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_nguni').GetValue|1].",
@@ -3720,8 +3720,8 @@
   "de": "Die Pops der Kulturen $turkish$ und $azerbaijani$ sind alle zu $cm_oghuz_turkic$ gewechselt."
  },
  "te_cmg_oghuz_turkic_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $turkish$ or $azerbaijani$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $turkish$ oder $azerbaijani$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $turkish$, $azerbaijani$ or $cm_oghuz_turkic$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $turkish$, $azerbaijani$ oder $cm_oghuz_turkic$."
  },
  "te_cmg_oghuz_turkic_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_oghuz_turkic').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_oghuz_turkic').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_oghuz_turkic').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_oghuz_turkic').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_oghuz_turkic').GetValue|1].",
@@ -3748,8 +3748,8 @@
   "de": "Die Pops der Kulturen $cm_indonesian$ und $filipino$ sind alle zu $cm_pan_malay$ gewechselt."
  },
  "te_cmg_pan_malay_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $cm_indonesian$ or $filipino$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $cm_indonesian$ oder $filipino$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $cm_indonesian$, $filipino$ or $cm_pan_malay$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $cm_indonesian$, $filipino$ oder $cm_pan_malay$."
  },
  "te_cmg_pan_malay_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_pan_malay').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_pan_malay').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_pan_malay').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_pan_malay').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_pan_malay').GetValue|1].",
@@ -3784,8 +3784,8 @@
   "de": "Die Pops der Kulturen $cm_east_slavic$, $cm_czechoslovak$ und $cm_yugoslav$ sind alle zu $cm_pan_slavic$ gewechselt."
  },
  "te_cmg_pan_slavic_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $cm_east_slavic$, $cm_czechoslovak$ or $cm_yugoslav$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $cm_east_slavic$, $cm_czechoslovak$ oder $cm_yugoslav$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $cm_east_slavic$, $cm_czechoslovak$, $cm_yugoslav$ or $cm_pan_slavic$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $cm_east_slavic$, $cm_czechoslovak$, $cm_yugoslav$ oder $cm_pan_slavic$."
  },
  "te_cmg_pan_slavic_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_pan_slavic').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_pan_slavic').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_pan_slavic').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_pan_slavic').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_pan_slavic').GetValue|1].",
@@ -3820,8 +3820,8 @@
   "de": "Die Pops der Kulturen $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ und $kirgiz$ sind alle zu $cm_pan_turkic$ gewechselt."
  },
  "te_cmg_pan_turkic_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ or $kirgiz$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ oder $kirgiz$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$, $kirgiz$ or $cm_pan_turkic$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$, $kirgiz$ oder $cm_pan_turkic$."
  },
  "te_cmg_pan_turkic_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_pan_turkic').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_pan_turkic').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_pan_turkic').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_pan_turkic').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_pan_turkic').GetValue|1].",
@@ -3840,8 +3840,8 @@
   "de": "Die Pops der Kultur $luri$ sind alle zu $persian$ gewechselt."
  },
  "te_cmg_persian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $persian$ or $luri$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $persian$ oder $luri$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $persian$ or $luri$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $persian$ oder $luri$."
  },
  "te_cmg_persian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_persian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_persian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_persian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_persian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_persian').GetValue|1].",
@@ -3872,8 +3872,8 @@
   "de": "Wir haben das Land $PLT$ gebildet."
  },
  "te_cmg_platine_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $platinean$, $argentine$, $uruguayan$ or $paraguayan$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $platinean$, $argentine$, $uruguayan$ oder $paraguayan$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $platinean$, $argentine$, $uruguayan$, $paraguayan$ or $cm_platine$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $platinean$, $argentine$, $uruguayan$, $paraguayan$ oder $cm_platine$."
  },
  "te_cmg_platine_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_platine').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_platine').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_platine').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_platine').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_platine').GetValue|1].",
@@ -3900,8 +3900,8 @@
   "de": "Wir haben das Land $SCA$ gebildet."
  },
  "te_cmg_scandinavian_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $swedish$, $danish$ or $norwegian$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $swedish$, $danish$ oder $norwegian$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $swedish$, $danish$, $norwegian$ or $cm_scandinavian$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $swedish$, $danish$, $norwegian$ oder $cm_scandinavian$."
  },
  "te_cmg_scandinavian_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_scandinavian').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_scandinavian').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_scandinavian').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_scandinavian').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_scandinavian').GetValue|1].",
@@ -4312,8 +4312,8 @@
   "de": "Wir haben das Land $YUG$ gebildet."
  },
  "te_cmg_yugoslav_primary_tt": {
-  "en": "A core culture of the merge is a primary culture here: $serb$, $croat$ or $bosniak$.",
-  "de": "Eine Kernkultur der Verschmelzung ist hier eine Primärkultur: $serb$, $croat$ oder $bosniak$."
+  "en": "A core culture of the merge, or its result, is a primary culture here: $serb$, $croat$, $bosniak$ or $cm_yugoslav$.",
+  "de": "Eine Kernkultur der Verschmelzung oder ihr Ergebnis ist hier eine Primärkultur: $serb$, $croat$, $bosniak$ oder $cm_yugoslav$."
  },
  "te_cmg_yugoslav_sol_tt": {
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_yugoslav').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_yugoslav').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_yugoslav').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_yugoslav').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_yugoslav').GetValue|1].",

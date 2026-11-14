@@ -1,12 +1,4 @@
 {
- "country_te_budget_expense_archaeology_add": {
-  "en": "Breakdown: Archaeological Digs",
-  "de": "Aufschlüsselung: Archäologische Grabungen"
- },
- "country_te_budget_expense_archaeology_add_desc": {
-  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Archaeological Digs.",
-  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Archäologische Grabungen aufführen kann."
- },
  "country_te_budget_expense_banking_add": {
   "en": "Breakdown: Banking",
   "de": "Aufschlüsselung: Bankwesen"
@@ -54,6 +46,14 @@
  "country_te_budget_expense_drugs_add_desc": {
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Reaktion auf Drogenknappheit aufführen kann."
+ },
+ "country_te_budget_expense_energy_industry_add": {
+  "en": "Breakdown: Energy and Industry Programs",
+  "de": "Aufschlüsselung: Programme für Energie und Industrie"
+ },
+ "country_te_budget_expense_energy_industry_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Energy and Industry Programs.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter „Programme für Energie und Industrie“ aufführen kann."
  },
  "country_te_budget_expense_family_add": {
   "en": "Breakdown: Family Policy",
@@ -423,14 +423,6 @@
   "en": "Shipping and Connections",
   "de": "Schifffahrt und Verbindungen"
  },
- "te_budget_chart_source_expense_archaeology": {
-  "en": "Archaeological Digs",
-  "de": "Archäologische Grabungen"
- },
- "te_budget_chart_source_expense_archaeology_tt": {
-  "en": "#b Archaeological Digs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]",
-  "de": "#b Archäologische Grabungen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]"
- },
  "te_budget_chart_source_expense_banking": {
   "en": "Banking",
   "de": "Bankwesen"
@@ -478,6 +470,14 @@
  "te_budget_chart_source_expense_drugs_tt": {
   "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]",
   "de": "#b Reaktion auf Drogenknappheit#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]"
+ },
+ "te_budget_chart_source_expense_energy_industry": {
+  "en": "Energy and Industry Programs",
+  "de": "Programme für Energie und Industrie"
+ },
+ "te_budget_chart_source_expense_energy_industry_tt": {
+  "en": "#b Energy and Industry Programs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]",
+  "de": "#b Programme für Energie und Industrie#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]"
  },
  "te_budget_chart_source_expense_family": {
   "en": "Family Policy",

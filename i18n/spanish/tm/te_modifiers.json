@@ -100,24 +100,24 @@
   "es": "Eficacia de la [concept_assimilation|l] colonial"
  },
  "country_colonial_assim_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes mientras la política de [concept_assimilation|l] cultural está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley que contribuye y en la vista previa del botón de la política."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes y tecnologías mientras la política de [concept_assimilation|l] cultural está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley y tecnología que contribuye y en la vista previa del botón de la política."
  },
  "country_colonial_garrison_effectiveness_add": {
   "en": "Colonial Garrison Effectiveness",
   "es": "Eficacia de la guarnición colonial"
  },
  "country_colonial_garrison_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes mientras la política de guarnición militar está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley que contribuye y en la vista previa del botón de la política."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes y tecnologías mientras la política de guarnición militar está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley y tecnología que contribuye y en la vista previa del botón de la política."
  },
  "country_colonial_invest_effectiveness_add": {
   "en": "Colonial Investment Effectiveness",
   "es": "Eficacia de la inversión colonial"
  },
  "country_colonial_invest_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes mientras la política de inversión en desarrollo está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley que contribuye y en la vista previa del botón de la política."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "es": "Bonificación mensual de estabilidad colonial que aportan las leyes y tecnologías mientras la política de inversión en desarrollo está activa. La lee la barra de [concept_colonial_stability|l]; se ve en la descripción emergente de cada ley y tecnología que contribuye y en la vista previa del botón de la política."
  },
  "country_colonial_stability_drift_add": {
   "en": "[concept_colonial_stability] Drift",
@@ -262,6 +262,14 @@
  "country_economic_dependence_leverage_gain_mult_desc": {
   "en": "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market].",
   "es": "Multiplicador de la [concept_power_bloc_leverage|l] que se obtiene según cuánto depende otro [concept_country|l] de nuestro [concept_market|l]."
+ },
+ "country_enactment_speed_law_multicultural_mult": {
+  "en": "Enactment Speed for [GetLawType('law_multicultural').GetName]",
+  "es": "Velocidad de promulgación de [GetLawType('law_multicultural').GetName]"
+ },
+ "country_enactment_speed_law_multicultural_mult_desc": {
+  "en": "An increase or decrease to the speed of legislative enactments for the specific law",
+  "es": "Un aumento o una reducción de la velocidad de las promulgaciones legislativas de la ley concreta"
  },
  "country_enactment_success_chance_law_compulsory_primary_school_add": {
   "en": "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]",

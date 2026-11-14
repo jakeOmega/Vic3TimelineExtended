@@ -912,13 +912,14 @@ def cmd_prepare(args) -> int:
 def cmd_refresh(args) -> int:
     """Rebuild the given chunks' files (glossary header included) from the
     manifest, keeping each chunk's keys: picks up terms and TM entries added
-    since `prepare`, for chunks no agent has started yet."""
+    since `prepare`, for chunks no agent has started yet. `--no-vanilla`, as
+    for `prepare`, leaves out the base game's terms where there is no game."""
     language, lang_field = args.language, args.field
     entries = load_english()
     by_key = {e.key: e for e in entries}
     tm = load_tm(language)
     glossary_keys = {e.key for e in entries if is_glossary_entry(e)}
-    vanilla = VanillaTerms(language)
+    vanilla = None if getattr(args, "no_vanilla", False) is True else VanillaTerms(language)
     terms = load_terms(language)
     work = language_dirs(language)[1]
     with open(os.path.join(work, "manifest.json"), encoding="utf-8") as fh:
@@ -1298,6 +1299,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("respell", help="keep translations whose English changed only to American spelling")
     rf = sub.add_parser("refresh", help="rebuild unstarted chunks' glossaries from the manifest")
     rf.add_argument("chunks", nargs="+")
+    rf.add_argument("--no-vanilla", action="store_true", help="skip the vanilla glossary (no game install)")
     pf = sub.add_parser("prepare-fixes", help="write a correction chunk for check-terms mismatches")
     pf.add_argument("--note", action="append", metavar="REGEX=NOTE",
                     help="also correct translations matching REGEX, with this instruction")

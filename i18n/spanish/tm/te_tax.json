@@ -24,8 +24,8 @@
   "es": "Código fiscal legislado"
  },
  "law_te_tax_code_desc": {
-  "en": "This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected.",
-  "es": "Esta ley no fija ningún tipo por sí misma. Cada impuesto lo fija una enmienda a la ley, y un impuesto sin enmienda no se recauda."
+  "en": "This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected. To change a tax, open the Budget panel's Tax Code tab and draft a reform.",
+  "es": "Esta ley no fija ningún tipo por sí misma. Cada impuesto lo fija una enmienda a la ley, y un impuesto sin enmienda no se recauda. Para cambiar un impuesto, abre la pestaña Código fiscal del panel Presupuesto y redacta una reforma."
  },
  "rule_te_tax_code_rule": {
   "en": "Legislated Tax Code",
@@ -52,16 +52,16 @@
   "es": "Experimental. Como Código fiscal activado, y además los aranceles y las subvenciones se fijan por ley: un país que posee su mercado legisla sus niveles de importación y exportación como cualquier impuesto. Los países de la IA legislan sus impuestos mediante los mismos proyectos de ley; sus aranceles siguen las decisiones comerciales del juego base."
  },
  "setting_te_tax_code_enabled_desc": {
-  "en": "Experimental. The five base game taxation laws can no longer be enacted. Every country holds the Legislated Tax Code instead, a law with no rates of its own, and each tax is set by an amendment to it. Tariffs and subsidies stay as in the base game. AI countries legislate through the same bills, which need the same interest-group support.",
-  "es": "Experimental. Las cinco leyes de tributación del juego base ya no se pueden promulgar. Todos los países tienen en su lugar el Código fiscal legislado, una ley sin tipos propios, y cada impuesto lo fija una enmienda a esta. Los aranceles y las subvenciones siguen como en el juego base. Los países de la IA legislan mediante los mismos proyectos de ley, que necesitan el mismo apoyo de los grupos de interés."
+  "en": "Experimental. Every country holds the Legislated Tax Code in place of a taxation law. To change a tax, draft a reform on the Budget panel's Tax Code tab and pass it as a bill. Tariffs and subsidies stay as in the base game. AI countries legislate through the same bills.",
+  "es": "Experimental. Todos los países tienen el Código fiscal legislado en lugar de una ley de tributación. Para cambiar un impuesto, redacta una reforma en la pestaña Código fiscal del panel Presupuesto y apruébala como proyecto de ley. Los aranceles y las subvenciones siguen como en el juego base. Los países de la IA legislan mediante los mismos proyectos de ley."
  },
  "setting_te_tax_code_light": {
   "en": "Light Tax Code",
   "es": "Código fiscal ligero"
  },
  "setting_te_tax_code_light_desc": {
-  "en": "Experimental. The five taxation laws stay. Each sets a range for every tax it levies, from its rate at a Very Low tax level to its rate at Very High, and within that range you set each tax yourself on the Tax Code tab of the Budget panel, with no bills; collections follow a change within days. Your tax level follows your heaviest tax, and interest groups react to each change and favor a code that spares their members. AI countries keep choosing their tax level as in the base game, and their taxes follow it.",
-  "es": "Experimental. Se mantienen las cinco leyes de tributación. Cada una fija un rango para cada impuesto que grava, desde su tipo con un nivel de impuestos muy bajo hasta su tipo con un nivel muy alto, y dentro de ese rango tú fijas cada impuesto en la pestaña Código fiscal del panel Presupuesto, sin proyectos de ley; la recaudación sigue a un cambio en cuestión de días. Tu nivel de impuestos sigue a tu impuesto más gravoso, y los grupos de interés reaccionan a cada cambio y favorecen un código que proteja a sus miembros. Los países de la IA siguen eligiendo su nivel de impuestos como en el juego base, y sus impuestos lo siguen."
+  "en": "Experimental. The five taxation laws stay, each setting a range for every tax it levies. Within it you set each tax yourself on the Budget panel's Tax Code tab, with no bills, and your tax level follows your heaviest tax. AI countries keep choosing their tax level as in the base game.",
+  "es": "Experimental. Se mantienen las cinco leyes de tributación, y cada una fija un rango para cada impuesto que grava. Dentro de él, tú fijas cada impuesto en la pestaña Código fiscal del panel Presupuesto, sin proyectos de ley, y tu nivel de impuestos sigue a tu impuesto más gravoso. Los países de la IA siguen eligiendo su nivel de impuestos como en el juego base."
  },
  "te_tax_bs_support_value": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_committed_share')|%0]#!, more than [GetPlayer.MakeScope.ScriptValue('te_tax_view_passage_share')|%0] needed",
