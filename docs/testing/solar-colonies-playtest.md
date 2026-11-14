@@ -911,10 +911,11 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
 1. **The card.** Each fleet sits in its own framed box, 480 wide, with a gap between cards. The head reads, left to
    right: the gold emblem in its inset, the fleet's number (I to IX), where it is, its drive (or Refit and its
    months), and the roll-up arrow at the right edge. Nothing overlaps and no label ends in "...".
-2. **Ships by role.** Five cells: Warships, Rapid, Siege, Carriers, Tenders, each with its pictogram, its count beside
-   it and its word beneath. A role the fleet has none of shows its icon faint and a 0. Hovering any cell gives the
-   fleet's ships, each role of its full number. The pictograms are cream line drawings: are they legible at 24 px,
-   and do they sit acceptably beside the painted icons elsewhere in the panel?
+2. **Ships by role.** Five cells: Warships, Rapid, Siege, Carriers, Tenders, each with its icon, its count beside it
+   and its word beneath. A role the fleet has none of shows its icon faint and a 0. Hovering any cell gives the
+   fleet's ships, each role of its full number. The icons are painted (the dark grey warship, a silver dart, a bronze
+   gunship behind one big gun, a grey carrier with three orange bays, an orange tank): can the five be told apart at
+   24 px, lit and faint?
 3. **The bars.** Strength, km/s, Supply and Marines, each a caption, a bar and "now/full" under it. A fleet fresh from
    Earth has four full bars; one back from a battle or a long leg shows the bars part empty, and the figures agree
    with the hover on a role cell (propellant of capacity, supply of months). A fleet with no carriers shows Marines
@@ -926,15 +927,19 @@ lists the art. Needs Full Colonies and at least two fleets (`event te_debug_spac
    ship riding the bar's end, with "Lands in N months." beside it. The ship marker is not clipped at either end of
    the bar. The orders and posture lines are gone until it lands; the ships and bars still show unless rolled up.
 6. **Orders and posture.** Go, Transfer, Land and Embark each carry their sign left of the word, in one line that
-   fits the card. The four posture buttons show their sign over their word; the one in force is lit, sign included.
-   Seize shows the flag; with the order set to destroy, the burst and Destroy.
-7. **The banner.** A picture 480 × 110 sits under the Space Fleets header, above the cards, cropped (not squashed).
-   It is the chemical-drive picture at first, and changes once Fusion Power, Compact Fusion Reactors and antimatter
-   drives are ours (the same step as Colony Fleets' Drive line). All four are placeholders; note which crops badly.
-   If `fittype = centercrop` squashes or tiles the picture instead of cropping it, the fallback is a 480 × 110 crop
-   of each saved as its own texture.
+   fits the card. The four posture buttons show their icon over their word, a teal world each time: inside a blue
+   shield (Station), inside a white ring (Stand off), under four closing arrows (Close in), behind a red-and-white
+   barrier (Interdict); the one in force is lit, icon included. Seize shows the flag; with the order set to destroy,
+   the burst and Destroy. The orders' signs are still cream line drawings: do they sit acceptably beside the
+   painted icons at 16 px?
+7. **The banner.** A picture 480 × 110 sits under the Space Fleets header, above the cards. Each is painted at the
+   slot's own shape (960 × 220), so it should fill the slot with nothing squashed, tiled or cut off. It is the
+   chemical-drive picture at first (white rocket warships in a line over the Earth's edge), and changes once Fusion
+   Power (three dark ships on blue-white ring engines), Compact Fusion Reactors (needle ships ahead of long white
+   plumes, Jupiter behind) and antimatter drives (dark ships on violet beams, a ringed planet ahead) are ours, the
+   same step as Colony Fleets' Drive line. Is each still sharp at that size, with its ships clear of the slot's edges?
 8. **A card's world.** Left of where a fleet is, the head shows that location's world at 24 px: Earth Orbit the
-   Earth-and-satellite stand-in, Mars the red planet, and so on out to the Kuiper Belt's dwarf planet. A fleet in
+   Earth in its gold ring, Mars the red planet, and so on out to the Kuiper Belt's dwarf planet. A fleet in
    transit shows the world it is bound for. Exactly one shows at a time.
 
 ## Space Command's cells, the Locations strip and the colony fleets' track (2026-11-14)
@@ -947,14 +952,15 @@ flight has a track.
    Each keeps the hover its row had. Pause: Built a month reads Paused in the same box, with the paused hover, and
    nothing moves. Under them Launch, Auto and Pause as before; then the build mix, five buttons with a role's sign
    over "Warship 1" and so on, in one line that fits. A click still steps the weight 0 to 3.
-2. **Locations.** One strip, 476 wide: a narrow column of three small icons (the gold emblem, the grey shield, the
+2. **Locations.** One strip, 476 wide: a narrow column of three small icons (the gold shield, the steel shield, the
    warship; hover each for Ours, Others, Inbound), then nine columns, Earth Orbit to the Kuiper Belt, each under
    its world's icon (the name on hover). Down a column: our strength, the strongest other power's flag, every other
    power's strength, the inbound "count·months", and a status icon. The three caption icons sit level with their
    lines. The flag sits centred in its column; a column with no other power there shows no flag and a 0.
-3. **Statuses.** With a fleet standing off an enemy's colonies, that column's foot shows the cream Stand off sign
-   (hover: Blockading); as the one blockaded, the same sign in red (Blockaded). A battle month shows the red burst;
-   interdiction the barred circle, cream for ours and red against us. Earth's column shows the Earth hovers.
+3. **Statuses.** With a fleet standing off an enemy's colonies, that column's foot shows the Stand off icon, the
+   world in its ring (hover: Blockading); as the one blockaded, the same icon on a red disc (Blockaded). A battle
+   month shows a burst on the red disc; interdiction the world behind its barrier, plain for ours and on the red
+   disc against us. Earth's column shows the Earth hovers.
 4. **Colony fleets.** Each fleet in flight in Colony Fleets shows, between its world and its landing, a short bar
    with the ship on it, filling from launch to landing. A lunar fleet lands the month it leaves and never shows. A
    fleet launched before this build has its departure month stored already, so its bar is right from the first

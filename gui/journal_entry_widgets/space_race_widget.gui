@@ -5389,7 +5389,7 @@ types space_race_widget_types
 				icon = {
 					size = { 24 24 }
 					parentanchor = center
-					texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+					texture = "gfx/interface/icons/space_race_icons/location_earth.dds"
 					block "fl_place_earth" {}
 				}
 				icon = {
@@ -7472,8 +7472,8 @@ types space_race_widget_types
 	### The picture at the head of Space Fleets (owner, 2026-11-14): a fleet of
 	### the day, by the drive our program flies on (sr_drive_level: chemical,
 	### fusion, fusion torch, antimatter), so it changes as the drives do. One
-	### slot, the four pictures taking turns, each cropped to it. The four are
-	### event pictures standing in until the banners are painted
+	### slot, the four pictures taking turns. Each is painted at the slot's own
+	### shape, 960 x 220, so centercrop has nothing to cut
 	### (space_race_gui_icons.md, "Space Fleets: the banner").
 	type te_sr_fleet_banner = widget {
 		size = { 480 110 }
@@ -7484,7 +7484,7 @@ types space_race_widget_types
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_drive_level'), '(CFixedPoint)0' )]"
 
 			background = {
-				texture = "gfx/event_pictures/orbital_arms_race.dds"
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_chemical.dds"
 				fittype = centercrop
 			}
 		}
@@ -7493,7 +7493,7 @@ types space_race_widget_types
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_drive_level'), '(CFixedPoint)1' )]"
 
 			background = {
-				texture = "gfx/event_pictures/orbital_battlestation_construction.dds"
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_fusion.dds"
 				fittype = centercrop
 			}
 		}
@@ -7502,7 +7502,7 @@ types space_race_widget_types
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_drive_level'), '(CFixedPoint)2' )]"
 
 			background = {
-				texture = "gfx/event_pictures/interstellar_probe_departure.dds"
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_torch.dds"
 				fittype = centercrop
 			}
 		}
@@ -7511,7 +7511,7 @@ types space_race_widget_types
 			visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_drive_level'), '(CFixedPoint)3' )]"
 
 			background = {
-				texture = "gfx/event_pictures/antimatter_propulsion_drive.dds"
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_antimatter.dds"
 				fittype = centercrop
 			}
 		}
