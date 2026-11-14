@@ -322,6 +322,40 @@ even in that save, and the scale comes from those lines.
     A save from before the move loses the state's copy at the next monthly update. The
     multiplier is a state variable read through `root` (`resettlement_refresh_destination_readout`'s
     pattern): check the figure stays right between monthly updates, not only on the day of one.
+32. **Build only on local claims** (the Seabed tab's checkbox, owner 2026-11-14; `te_seabed_local_only`,
+    `global_commons.md` § the gate). (a) **The checkbox.** The overview shows "Build only on local
+    claims", centred between the Long-haul / Unused claims row and the Policy / Regime row, unticked in a
+    new game and in an old save. Hover: what ticking does. Tick it: the box shows ticked at once (its
+    `checked` reads `te_seabed_local_only_disp`, vanilla's `button_checkbox_label` used in a mod panel
+    for the first time: if the tick never shows, the binding is the suspect) and the hover says it is on
+    and what unticking does. Another country's National Info Seabed tab has no checkbox. At 1080p the
+    label doesn't elide. (b) **The blocked build's line.** Ticked, in a coastal state whose basin has no
+    claim of ours to spare while another basin has some: the build button is greyed; the requirements
+    read "Seabed Licenses to spare: N" ticked and "No local claim to spare in the <Basin> Ocean, and Build
+    only on local claims is on. Untick it on the Seabed tab ..." crossed, the basin's name the one the
+    state's tile shows, and no "takes another basin's license" line. A state in a basin with local
+    claims reads "Local claims to spare in the <Basin> Ocean: N" ticked and the own-basin line. The
+    numbers render (they read `GetPlayer`, as the room line does). Untick: the first state builds again,
+    with the distant line. (c) **Private investment respects it.** Ticked, with one basin at local room
+    0 and claims elsewhere, watch a year of the investment pool's construction (and a Deep-Sea Mine set
+    to auto-expand): it queues no level in that basin's states, except at most one in a state with a
+    level already under construction (the gate's second branch). That one takes another basin's license
+    and shows in the Long-haul box, and after it nothing more is queued there until a local claim frees
+    up and replaces it. More than one such level in a basin at a time means the local room's distant
+    term isn't holding (compare `te_seabed_local_room_<basin>` with the basin's claims, levels and
+    distant licenses in the variable inspector). (d) **Nothing built or queued changes.** Tick and
+    untick with long-haul mines standing: the tile's licenses and the Long-haul box read the same at the
+    next monthly update. With distant licenses in a basin's states and no claim left there, no new level
+    is let in there until freed claims have replaced them (the line says none to spare while the Free
+    column shows claims: those go to the long-haul levels first). If construction already under way in
+    that basin stops while the box is ticked, the engine re-checks `possible` (item 2's unknown): the
+    local room is then below 0 there, as the national room is under a waiting level. (e) A revolution's
+    winner keeps the setting (a variable); a country the player leaves to the AI builds as it did
+    before, ticked or not (the gate reads it only while the country isn't AI). (f) The setting can still
+    be beaten by a claim moving after a level was queued and before the monthly recording: a lease of
+    our claims entering force, Administer Seabed Claims taken on us, or a level in another basin with no
+    claim left (queued before the box was ticked) taking this basin's claim first. Such a level takes
+    another basin's license; it is expected, and the swap replaces it when a local claim frees up.
 
 ### The Seabed tab after the GUI audit (2026-10-27)
 
@@ -347,7 +381,14 @@ The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit
   under construction in the state), so a country with no licences never walks. Watch the script
   profiler (`ScriptProfiling.Dump`) on a late-game save with many claimants.
 - Whether a failing `possible` halts construction already under way (item 2): it decides whether
-  the gate's second branch is needed at all.
+  the gate's second branch is needed at all, the local gate's under Build only on local claims too
+  (item 32). If it never halts, both second branches can go, and the setting then lets no level take a
+  distant license (the model: none); if it halts, the local room's distant term halts construction in a
+  basin whose states hold more distant licenses than its claims, and the fallback is to count only
+  unrecorded levels in the second branch's room, which leaks one long-haul level a month while a
+  construction runs there (`test_seabed_local_only.py`'s plain-count control).
+- The engine's builders (the AI's, private investment's, auto-expand) obey `possible` for a player
+  country, and `is_ai = no` reads false for a country the player has left (item 32).
 - `is_revolutionary` reads true for a revolution's side in a civil war (the AI's policy choice skips
   it).
 - The rivals list rests on four reads nothing in the mod has shown for this shape: an
