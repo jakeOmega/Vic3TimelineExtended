@@ -12,13 +12,16 @@
 #
 # Every site carries the same throughput: the week's purchase over the
 # country's site levels. Staffing is not read (owner, 2026-11-13): a site is
-# taken to be fully staffed, or about to be. Its group hires at a rate of 1.0
-# and its method makes it a very attractive job
-# (building_job_attractiveness_mult on pm_te_construction_market_base), so a new
-# site fills within the week and keeps its ten laborers. A site delivers its
-# throughput times its real staffing, so the sites together deliver the
-# purchase when they are staffed and less while one is hiring; what is not
-# delivered is not paid for. They never deliver more than the purchase, which
+# taken to be fully staffed. Its group asks for a hiring rate of 1.0 and its
+# method makes it a very attractive job (building_job_attractiveness_mult on
+# pm_te_construction_market_base), which was meant to fill a new site within
+# the week. It does not (measured 2026-11-13, docs/testing/
+# ai-economy-playtest.md, "First verdict"): a site hires one of its ten
+# laborers a week, the base game's default rate, and most are removed before
+# they fill, so a country whose construction moves between states gets a
+# fraction of its purchase. A site delivers its throughput times its real
+# staffing, so the sites together deliver the purchase when they are staffed
+# and less while one is hiring; what is not delivered is not paid for. They never deliver more than the purchase, which
 # is the failure to avoid: the government queue spends whatever the sites
 # deliver, at the treasury's cost.
 #

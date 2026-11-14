@@ -137,6 +137,9 @@ te_construction_market_apply_per_site_modifier = {
 #                  what the values say.
 #        A week with another unstaffed site decides nothing: the country arms
 #        again and reads the week after.
+#        First verdict, 2026-11-13: BROKEN (Russia, 42% delivered). A site
+#        hires one laborer a week, so "hired in its first week" never holds;
+#        the play-test list has the measurements.
 #
 # TE_SELF_CHECK construction_site_unstaffed. A site that never hires would have
 # the read above put off every week, for good, with no line at all: the very

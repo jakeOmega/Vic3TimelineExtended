@@ -272,6 +272,38 @@ No line of either kind after a year means no AI country sized an unstaffed site 
 | **Sites stay staffed.** Over a few years, in a rich country with little unemployment and in a poor one: open a few Construction Sites now and then. | Each at or near its ten laborers. | Sites often short of staff, so the country gets less construction than it buys: the fallback above; the owner's call |
 | **The job attractiveness does no harm.** The same states: the buildings the site's laborers came from. | Ten laborers a site is too few to notice. | A visible drain on a small state's buildings: lower the bonus |
 
+### First verdict: BROKEN, and why (2026-11-13, a 1945 market game loaded on the new sizing)
+
+`TE_SELF_CHECK BROKEN construction_site_delivery country=RUS bought=932.5 delivered=396.2 ratio=0.42`, eleven game days after the save was loaded. Three autosaves of that game (1 April, 1 July and 1 October 1945) were read for every Construction Site's level, staffing and start date. The sites the check read are not in them (all ten of Russia's on 1 April were placed after 8 February), but they show what the check ran into:
+
+- **A site hires one laborer a week, so it takes ten weeks to fill.** Level-1 sites under ten weeks old on 1 April, by age in whole weeks, and the laborers most of them held:
+
+  | Weeks old | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+  |---|---|---|---|---|---|---|---|---|---|---|
+  | Sites | 6 | 16 | 18 | 14 | 4 | 13 | 19 | 24 | 50 | 4 |
+  | Of them, with as many laborers as weeks | 6 | 13 | 12 | 11 | 2 | 7 | 11 | 20 | 34 | 3 |
+
+  Of the 168, 119 are on that line, 35 below it, 13 one laborer above it (a site older by part of a week), and one well above it (ten laborers in its fifth week). Other new buildings in the save hire on the same slope (a Government Administration: 8%, 19%, 28%, 60% and 75% staffed at 0, 1, 3, 5 and 8 weeks), which is the base game's `DEFAULT_MAX_HIRING_RATE`, 10% of a level's jobs a week. So neither the group's `min_hiring_rate = 1.0` / `max_hiring_rate = 1.0` nor the method's job attractiveness makes a site hire faster. Why the group's rates do nothing is not established.
+- **Most sites are gone before they fill.** A site is removed when construction ends in its state: of the 168 sites under ten weeks old on 1 April, 99 were gone by 1 July (87 of 162 in the next quarter). Russia had ten sites one to four weeks old, then seven one to five weeks old, then one a week old.
+- **So a country whose construction moves from state to state gets a fraction of what it buys.** The staffed share of a country's site levels, which is the share of the purchase the sizing delivers:
+
+  | | 1 April | 1 July | 1 October |
+  |---|---|---|---|
+  | Russia | 18% | 19% | 0% |
+  | Italy | 18% | 20% | 10% |
+  | The North American Union (`UNA`) | 87% | 10% | 30% |
+  | China (`ZHO`) | 86% | 78% | 39% |
+  | Japan | 100% | 65% | 55% |
+  | Great Britain | 54% | 84% | 100% |
+  | Singapore (the player; eight sites, each over five years old) | 80% | 91% | 89% |
+  | Countries under half, of all with a site | 43 of 269 | 91 of 266 | 48 of 258 |
+
+- **A site that stands is not always full either.** Of the 170 sites in their owner's capital that were at least 14 weeks old on 1 April, 109 held all ten laborers, 19 held eight or nine, and 31 held five or fewer, 5 of them none. Over a quarter some standing sites lost laborers (nine to three, seven to two).
+
+What this does to the fallbacks in the table above. Raising the job attractiveness cannot help: the young sites sit on the hiring line, not under it, so the limit is the weekly hiring rate and not a lack of takers. A standing capital site would have to carry the whole purchase alone (a sizing change: the multiplier on that site only), takes ten weeks to fill in a new game or after the capital moves, and by the figures above is short of laborers in about a third of countries. The other way is the one the 2026-11-13 sizing gave up: one multiplier for all the sites, the purchase over the staffing the sites will have next week (each site's own plus one laborer, ten at most), which delivers the purchase while every site hires its laborer and cannot exceed it unless a site hires faster than the rate measured here. The owner's call; the sizing is unchanged until it is made, so AI countries in a market game build well under what they buy.
+
+One more reading from the same saves, unexplained: a staffed site's throughput reads 125.7 where the multiplier alone gives 115.9 (1 + 114.9), and its input of the construction good runs at 128.9 a week at full staff. If that is what the site delivers, a fully staffed country gets several percent more than it buys.
+
 ## Stacked automation hires a flat crew (#1684)
 
 Methods that cut a level to 10 or 20 staff now hire a flat crew of 1,000 instead (owner, 2026-11-13). The crews themselves are checked in `docs/testing/ai-managed-flat-staff-playtest.md` item 8. Inputs and outputs are unchanged, so a building's value added per employee now grows with its size: a 20-level Software Industry on AI-Mediated Mind Sharing makes about 2,100 per employee at base prices, a 5-level one about 530. The Fusion Plant and tourism were left alone: their high figures come from their base methods' output (and tourism's output bonuses), not from a staff cut.
