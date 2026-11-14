@@ -398,7 +398,7 @@ te_judiciary_events.9 = {
 	type = country_event
 	hidden = yes
 
-	trigger = { # REVIEWED 2026-11-12: the probe; false when queued on purpose
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the self-check's probe; false when queued on purpose
 		has_variable = te_jud_rule_probe_queued
 		te_jud_overhaul_gap >= 20
 	}
@@ -420,6 +420,82 @@ te_judiciary_events.10 = {
 			limit = { has_variable = te_jud_rule_probe_queued }
 			set_variable = { name = te_jud_rule_probe_due_gap value = te_jud_overhaul_gap days = 30 }
 		}
+	}
+}
+
+# ----------------------------------------------------------------------
+#  The delayed-event rule in ordinary play (#1596): TE_SELF_CHECK
+#  delayed_trigger_queue_probe and delayed_trigger_fire_probe, once a game,
+#  in the first country's monthly pulse (te_jud_dt_probe_start). Unlike the
+#  probe above, these need no court law change. Day 0 queues .12, .13 and .14
+#  for day 2, the flip .11 for day 1 and the verdict .15 for day 3.
+# ----------------------------------------------------------------------
+
+# Day 1, the flip: .12's trigger turns true, .13's false. Records that it ran.
+te_judiciary_events.11 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		set_variable = { name = te_jud_dt_queue_armed days = 30 }
+		if = {
+			limit = { has_variable = te_jud_dt_fire_armed }
+			remove_variable = te_jud_dt_fire_armed
+		}
+		set_variable = { name = te_jud_dt_flipped days = 30 }
+	}
+}
+
+# Day 2, the queue probe: its trigger was false when queued, true since day 1.
+te_judiciary_events.12 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the self-check's queue probe; false when queued on purpose
+		has_variable = te_jud_dt_queue_armed
+	}
+
+	immediate = {
+		set_variable = { name = te_jud_dt_queue_ran days = 30 }
+	}
+}
+
+# Day 2, the fire probe: its trigger was true when queued, false since day 1.
+te_judiciary_events.13 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = te_jud_dt_fire_armed
+	}
+
+	immediate = {
+		set_variable = { name = te_jud_dt_fire_ran days = 30 }
+	}
+}
+
+# Day 2, the control: its trigger holds throughout, so it must run; without
+# it the verdict could read "dropped" for events that were never run at all.
+te_judiciary_events.14 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = te_jud_dt_control
+	}
+
+	immediate = {
+		set_variable = { name = te_jud_dt_control_ran days = 30 }
+	}
+}
+
+# Day 3, the verdict (te_jud_dt_probe_verdict).
+te_judiciary_events.15 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_jud_dt_probe_verdict = yes
 	}
 }
 

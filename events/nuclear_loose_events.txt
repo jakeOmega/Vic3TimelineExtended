@@ -136,7 +136,7 @@ nuclear_loose.4 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): nd_loose_surface sets nd_loose_attribution before the call; a filter
 		has_variable = nd_loose_attribution
 	}
 

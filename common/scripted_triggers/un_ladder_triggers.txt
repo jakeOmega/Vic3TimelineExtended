@@ -59,6 +59,16 @@ un_charter_can_be_reformed = {
 # un_charter_reform_margin of the ceiling for un_charter_reform_months_needed
 # months running. The counter is kept by un_ladder_charter_pressure_update.
 un_charter_reform_ripe = {
+	un_charter_pressure_met = yes
+	# The early unlock's league reforms nothing until the age of
+	# Intergovernmental Organizations (un_league_stage); every way to table a
+	# reform asks this trigger.
+	NOT = { un_league_stage = yes }
+}
+
+# The pressure half of un_charter_reform_ripe, which the refusal line
+# (un_charter_reform_ripe_tt) states; the league stage has a line of its own.
+un_charter_pressure_met = {
 	un_charter_can_be_reformed = yes
 	has_global_variable = un_charter_pressure_months
 	global_var:un_charter_pressure_months >= un_charter_reform_months_needed

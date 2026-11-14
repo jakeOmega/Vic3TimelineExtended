@@ -727,6 +727,10 @@ class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
     def test_each_guard_names_its_custom_entry_and_a_plain_fallback(self):
         guarded = {}
         for key, value in self.loc.items():
+            if key == "je_united_nations":
+                # The same guard around a scripted GUI, not a GetCustom (test_rule_unlock_settings.py,
+                # UnitedNationsLeagueNameTest).
+                continue
             for entry, plain in self.GUARD.findall(value):
                 guarded[entry] = plain
                 self.assertIn(plain, self.loc, key)

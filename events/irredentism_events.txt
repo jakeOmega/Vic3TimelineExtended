@@ -280,7 +280,7 @@ irredentism.2 = {
 	# a play in the meantime, since a refusal's create_diplomatic_play would
 	# then open nothing while its tooltip promised a play. A demand that fails
 	# here lapses without a word to either side.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .1's option has the state and neither side in a play when it sends this; cancels if the state changes hands or a play starts in the five days
 		exists = scope:irr_unifier
 		exists = scope:irr_demanded_state
 		scope:irr_demanded_state = { owner = { this = root } }
@@ -510,7 +510,7 @@ irredentism.4 = {
 	duration = 3
 
 	# The text names the proposer (scope:irr_unifier, carried from Event 3).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:irr_unifier rides along from .3; a filter
 		exists = scope:irr_unifier
 	}
 
@@ -623,7 +623,7 @@ irredentism.7 = {
 	# have left our bloc. Suppress the event in that case -- vanilla
 	# event-target accessor errors otherwise cascade through every option's
 	# ai_chance evaluation.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: irr_send_war_blessing_request runs for a bloc member and goes to its leader; cancels if the requester leaves the bloc or the leader loses the lead in the three days
 		exists = scope:irr_requester
 		exists = scope:target_country
 		scope:irr_requester = {
@@ -811,7 +811,7 @@ irredentism.10 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .7, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:target_country
 	}
@@ -841,7 +841,7 @@ irredentism.11 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .7, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:target_country
 	}
@@ -879,7 +879,7 @@ irredentism.8 = {
 
 	# Inherited scopes (irr_proposed_target, irr_unifier) saved by the on-action
 	# 3 days before fire. Either may have invalidated -- suppress event then.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the on-action dispatch sends it to a leader other than the proposer; cancels if the proposer takes the lead in the three days (#1617)
 		exists = scope:irr_proposed_target
 		exists = scope:irr_unifier
 		scope:irr_proposed_target = { NOT = { is_country_type = decentralized } }
@@ -1035,7 +1035,7 @@ irredentism.12 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .8, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:irr_proposed_target
 		exists = scope:irr_unifier
@@ -1084,7 +1084,7 @@ irredentism.13 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .8, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:irr_proposed_target
 		exists = scope:irr_unifier
@@ -1145,7 +1145,7 @@ irredentism.6 = {
 	# Per-target cooldown handles dedup if multiple regions overlap.
 	cooldown = { years = 1 }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the scopes are saved by te_irredentism_notify_third_parties_effect's caller before the call; a filter
 		exists = scope:irr_annexed_country
 		exists = scope:irr_unifier
 	}

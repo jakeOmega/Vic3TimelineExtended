@@ -436,7 +436,12 @@ class OtherDebatesTests(unittest.TestCase):
             body = _block(_read(*parts), je)
             for hook in ("on_complete", "on_fail", "on_timeout"):
                 with self.subTest(je=je, hook=hook):
-                    self.assertRegex(old_block(body, hook), r"set_variable\s*=\s*" + var + r"\b")
+                    # Or through the entry's own helper, which sets it (RESOLVE_HELPERS).
+                    helper = getattr(self, "RESOLVE_HELPERS", {}).get(je)
+                    pattern = r"set_variable\s*=\s*" + var + r"\b"
+                    if helper:
+                        pattern = rf"(?:{pattern}|\b{helper[0]}\s*=\s*yes\b)"
+                    self.assertRegex(old_block(body, hook), pattern)
             for gate in ("is_shown_when_inactive", "possible"):
                 with self.subTest(je=je, gate=gate):
                     self.assertRegex(_block(body, gate, top_level=False),
@@ -475,12 +480,30 @@ class ResolvedEntriesTests(unittest.TestCase):
                              "post_scarcity_resolved", ("on_complete", "on_timeout")),
     }
 
+    # World War's outcomes call ww_mark_entry_resolved, which sets ww_entry_resolved, or under the early unlock
+    # after a war begun before Combined Arms ww_early_war_resolved, which holds the entry until Combined Arms
+    # (game_rules.md § Early and late unlock; test_rule_unlock_settings.py).
+    RESOLVE_HELPERS = {
+        "je_world_war": ("ww_mark_entry_resolved", ("common", "scripted_effects", "te_event_agency_ww_effects.txt")),
+    }
+
+    def test_a_resolve_helper_sets_the_variable(self):
+        for je, (helper, parts) in self.RESOLVE_HELPERS.items():
+            with self.subTest(je=je):
+                body = _block(_read(*parts), helper)
+                self.assertRegex(body, r"set_variable\s*=\s*" + self.CASES[je][1] + r"\b")
+
     def test_every_end_records_and_activation_checks(self):
         for je, (parts, var, hooks) in self.CASES.items():
             body = _block(_read(*parts), je)
             for hook in hooks:
                 with self.subTest(je=je, hook=hook):
-                    self.assertRegex(old_block(body, hook), r"set_variable\s*=\s*" + var + r"\b")
+                    # Or through the entry's own helper, which sets it (RESOLVE_HELPERS).
+                    helper = getattr(self, "RESOLVE_HELPERS", {}).get(je)
+                    pattern = r"set_variable\s*=\s*" + var + r"\b"
+                    if helper:
+                        pattern = rf"(?:{pattern}|\b{helper[0]}\s*=\s*yes\b)"
+                    self.assertRegex(old_block(body, hook), pattern)
             with self.subTest(je=je, hook="on_invalid"):
                 self.assertNotIn(var, outcome_text(body, "invalid"))
             for gate in ("is_shown_when_inactive", "possible"):

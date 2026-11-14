@@ -586,6 +586,9 @@ class Session:
             result.update(self._dated or {})
         if self._rules is not None:
             result["rules"] = self._rules
+            differs = self._lobby_differs(self._rules.get("settings") or [])
+            if differs:
+                result["rules"] = dict(self._rules, lobby_differs=differs)
         result["profiler_window"] = self._profiler_window
         if self._game_args:
             result["game_args"] = list(self._game_args)
@@ -631,6 +634,17 @@ class Session:
         current`, are not read, so a rule of theirs cannot be switched)."""
         return rules.load_rules([Path(self._paths.base_game) / "game" / rules.RULES_FOLDER,
                                  Path(self._paths.deploy_dir) / rules.RULES_FOLDER])
+
+    def _lobby_differs(self, settings: list[str]) -> list[dict]:
+        """The rules whose setting in the save loaded is not the owner's last applied one (`rules.lobby_differs`);
+        empty when the presets file names none or the rule files cannot be read. Read only."""
+        last = rules.last_applied(Path(self._paths.user_data))
+        if not last or not settings:
+            return []
+        try:
+            return rules.lobby_differs(settings, last, self._rule_table())
+        except rules.RulesError:
+            return []
 
     @staticmethod
     def _own_fixture_key(save: str | None) -> str | None:
@@ -699,6 +713,14 @@ class Session:
             # made it, as for this build's own (it read "a save of the owner's" and showed none, review 2026-11-13).
             self._record("fixture", outcome="found" if own else "not_used", save=save, **({"named": True} if own else {}))
             if not switch_rules:
+                if own:
+                    # The rules the named fixture holds, so `start` can say where they differ from the last
+                    # lobby's (`_lobby_differs`): a fixture of another build is the case that can differ.
+                    try:
+                        self._rules = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (save + ".v3"))
+                                                                     .read_bytes())}
+                    except (OSError, rules.RulesError) as e:
+                        self._record("rules", outcome="unread", detail=str(e))
                 return save, False, []
             try:
                 path, changed, settings = rules.switched_fixture(user, self._switchable_fixture_key(save),

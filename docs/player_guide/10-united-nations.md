@@ -10,6 +10,18 @@ pay. It also holds the General Assembly, where you vote and table resolutions.
 The same panels appear as a UN tab in the Diplomacy panel (see [The UN
 panels](#the-un-panels)). The United Nations game rule turns the system off.
 
+With the game rule set to *Early Unlock*, a great power can found it with
+Multilateral Alliances (era 4) instead, as the League of Nations was founded,
+and the entry appears with that technology. Until some country has researched
+Intergovernmental Organizations, its charter can't be reformed (see [UN charter
+reforms](#un-charter-reforms)), so it stays at Established or below; the months
+toward a reform still count. Until then the journal entry, its Timeline
+Extended tab, the UN panels' header and the founding control call it the League
+of Nations; the month the technology arrives it takes the name United Nations,
+and its members are told.
+Everything else is unchanged. Switching the rule from early to late leaves a
+founded organization standing.
+
 ## Founding the United Nations
 
 A great power that has researched Intergovernmental Organizations and is not a
@@ -188,6 +200,9 @@ than a charter reform that two thirds of the members with a vote carry is no
 longer stopped by a veto. Each reform also opens new business before the
 Assembly and strengthens the World Development Fund (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
 
+Under the *Early Unlock* rule, no reform can be tabled until some country has
+researched Intergovernmental Organizations.
+
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; Why UN Authority Is Moving counts the months. A member of major-power
 rank may then table it, and the docket may offer it to a great power (The
@@ -210,7 +225,7 @@ Dissolution ends every membership, seat, program, convention, agency, sanctions
 regime, mandate and mission, demolishes the headquarters and writes off unpaid
 dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20% leverage
 generation, fading over ten years). Twenty years later any great power with
-Intergovernmental Organizations can convene a founding conference with Convene
+Intergovernmental Organizations (or Multilateral Alliances, under *Early Unlock*) can convene a founding conference with Convene
 a Conference, in the same place, at the founder's influence cost. The great power with the most prestige, if it is not the
 convener, receives A Founding Conference and may join, stay out or oppose;
 opposing wrecks it and blocks another for ten years. Otherwise the UN is

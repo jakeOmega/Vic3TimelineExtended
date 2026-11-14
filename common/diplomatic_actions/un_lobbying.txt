@@ -71,7 +71,7 @@ un_secure_commitment_action = {
 	# Asker-side only: evaluated once for us, not per target, so it is the
 	# right place for the structural gates. Any member may ask (spec §4).
 	selectable = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_global_variable = un_active_resolution
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { un_representation_suspended = yes }
@@ -380,7 +380,7 @@ un_secure_commitment_against_action = {
 	can_use_obligations = no
 
 	selectable = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_global_variable = un_active_resolution
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { un_representation_suspended = yes }

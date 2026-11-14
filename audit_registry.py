@@ -111,12 +111,16 @@ AUDITS: tuple[Audit, ...] = (
     ),
     Audit(
         "delayed_event_trigger_audit",
-        "Not a gate: lists the events queued with a delay whose `trigger` may be false when queued, "
-        "which seems to drop them (#1596), for the play-test that settles the rule.",
-        ci=None,
+        "An event queued with `days`, `months` or `years` whose top-level `trigger` may be false on the "
+        "day it is queued, which seems to drop it for good (#1596). One that waits for something to "
+        "become true takes no `trigger` (conditions in `immediate`) or waits in a hidden relay with none; "
+        "the comment says why the trigger already holds when queued, starting \"cancels\" when it also "
+        "stops an event whose premise went away during the delay.",
         where="trailing on the target event's `trigger = {` line",
-        note="A report: it fails nothing and adds no reload warning until the self-check "
-             "`delayed_trigger_queue_check` confirms the rule. `--write` writes the report offline.",
+        tags=("delayed_trigger",),
+        note="Call sites are read through `script_call_graph`, so an id passed as `$EVENT$` counts at its "
+             "caller. The self-checks `delayed_trigger_queue_probe` and `delayed_trigger_fire_probe` settle "
+             "the engine rule. `--write` writes the report offline.",
     ),
     Audit(
         "random_list_weight_audit",
@@ -654,9 +658,9 @@ PROSE_FIGURES: tuple[Figure, ...] = (
     Figure("The other {N} post-load audits stay out of CI.",
            lambda _: (len(_out_of_ci()),),
            "post-load audits with no CI command"),
-    Figure("the {N} offline audit CLIs (the {N} in CI plus {NAMES})",
-           lambda names: (len(ci_audits()) + len(_named(names)), len(ci_audits())),
-           "CI audits plus the ones named after `plus`, then CI audits"),
+    Figure("the {N} offline audit CLIs (all in CI)",
+           lambda _: (len(ci_audits()),),
+           "CI audits"),
 )
 
 
@@ -675,7 +679,7 @@ PROSE_NAMES: tuple[Names, ...] = (
     Names("CI-only audits (", ")", _ci_only, "the audits only CI runs"),
     Names("build one.", "Each prints its report", _ci_builders,
           "the CI audits whose `builds_mod_state` is True", exact=False),
-    Names("post-load audits stay out of CI.", "settles its rule", _out_of_ci,
+    Names("post-load audits stay out of CI.", "(vanilla data, loc index)", _out_of_ci,
           "the post-load audits with no CI command"),
 )
 

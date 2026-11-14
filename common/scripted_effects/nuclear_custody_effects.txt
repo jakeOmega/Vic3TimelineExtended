@@ -867,7 +867,9 @@ nd_cw_notify_world = {
 		limit = { nd_cw_would_watch = { ORIGIN = scope:nd_cw_origin REBEL = scope:nd_cw_rebel } }
 		set_variable = { name = nd_cwr_origin value = scope:nd_cw_origin days = 30 }
 		set_variable = { name = nd_cwr_rebel value = scope:nd_cw_rebel days = 30 }
-		trigger_event = { id = nuclear_custody.6 days = 7 popup = yes }
+		# Through the hidden .13, which opens .6 when due (#1596): .6's trigger
+		# reads the pair at war, which may not hold on the uprising's first day.
+		trigger_event = { id = nuclear_custody.13 days = 7 }
 	}
 }
 
@@ -1136,7 +1138,9 @@ nd_bp_press = {
 							}
 						}
 					}
-					trigger_event = { id = nuclear_custody.11 days = 30 popup = yes }
+					# Through the hidden .14, which opens .11 when due (#1596): .11's
+					# trigger needs a guarantor in the list this presser joins below.
+					trigger_event = { id = nuclear_custody.14 days = 30 }
 				}
 				add_to_variable_list = { name = nd_bp_guarantors target = ROOT }
 			}
