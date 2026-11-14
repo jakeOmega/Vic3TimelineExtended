@@ -11,7 +11,7 @@ Steam shows `[img]URL[/img]` in a description, the URL a direct link to the imag
 
 - **Width.** Steam's `workshop.css` caps a description image at 630 px (`.workshopItemDescription img { max-width: 630px; }`), so draw them 1260 px wide, sharp on high-DPI screens, and judge each at 630.
 - **Length.** The URL counts toward the 8,000 characters: with its tags, a Steam-hosted image (`images.steamusercontent.com/ugc/...`) takes about 114, a GitHub raw link about 115, an imgur one about 43.
-- **Hosts.** Of the 60 most-subscribed Victoria 3 mods, 23 embed images: imgur in 14 of them, then postimg, ibb, seeusercontent and Steam's own host; 33 of the images are links. Imgur has blocked visitors from the UK since 2025-09-30, its images embedded elsewhere included, so don't host there. A GitHub raw link (`https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/<path>`) keeps the images with the release they describe and is served as an image that other sites may embed; whether Steam shows one is untested, so try one in the description editor's preview first. Another mod's raw BBCode, to see how it embeds: `POST https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/` with `itemcount=N&publishedfileids[0]=<id>...` (no key; item pages rate-limit).
+- **Hosts.** Of the 60 most-subscribed Victoria 3 mods, 23 embed images: imgur in 14 of them, then postimg, ibb, seeusercontent and Steam's own host; 33 of the images are links. Imgur has blocked visitors from the UK since 2025-09-30, its images embedded elsewhere included, so don't host there. A GitHub raw link (`https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/<path>`) keeps the images with the release they describe and is served as an image that other sites may embed; Steam shows one: the owner tried a player-guide image at the 1.3.1 tag in the description on 2026-11-14. The file has to be in the repository at that tag, and `build/workshop_composites/` is gitignored, so the draft below takes the images from `docs/workshop/`, rendered there (`--out docs/workshop`) and committed before the release is tagged. Another mod's raw BBCode, to see how it embeds: `POST https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/` with `itemcount=N&publishedfileids[0]=<id>...` (no key; item pages rate-limit).
 - **Text in an image** isn't searchable or translated, and vanishes with its host. The draft below keeps the systems' names as text.
 
 `scripts/image_pipeline/workshop_composites.py` draws the description images (a hero, an at-a-glance card, the eras, the systems as cards, a section heading) and the carousel's state-picture image, with their figures counted from the mod files when they are drawn; `workshop_screenshots.py` annotates the carousel's screenshots (2026-11-06). See `docs/guides/python_tools.md`.
@@ -115,54 +115,51 @@ The mod contains AI-generated event images, icons, and some flavor text. Hand-wr
 
 ## Draft for the next release
 
-Not yet published. The description above with six images from `workshop_composites.py` in place of the at-a-glance list, the systems' paragraphs and the technology paragraph, and these changes to the text: Victoria 3 1.15.1, 50 buried sites (not 36), a State Pictures line, state pictures in the AI disclosure, and American spelling (program, licenses, programs). With six Steam-hosted URLs it is 4,781 characters counting each line break as two, so about 3,200 are free. Moving only the hero, the at-a-glance card and the eras into images saves nothing: 8,124, over the limit. `desc_hero_eras` is a hero with no pictures in it, for `desc_hero_ages`. Before publishing, point the guide link at the release's tag and put each image's URL in place of its `<... URL>`.
+Not yet published (proposed 2026-11-14). Six images from `workshop_composites.py` stand in for the title, the at-a-glance list, the systems' paragraphs and the technology paragraph, and the text that only repeated them is gone: the megastructures sentence (the eras image and the at-a-glance card have them), the game-rules bullet (the opening line and Compatibility say it) and the counts. What the images can't carry stays as text: everything no image covers, and the systems' names, for search and for a reader whose images don't load. The names are a sentence that leads into the cards, grouped by where each system acts; a bare list under the cards read as a repeat of them (owner, 2026-11-14). Against the player guide, the text gains what the description never named: the Map Room, formable countries and city-states, reunification, culture merges and bloc summits, and the World War gets a line of its own. It gives no end year (owner, 2026-11-14). Other changes from the published text: Victoria 3 1.15.1, a State Pictures line, state pictures in the AI disclosure, American spelling, and the Laws paragraph names law groups the system cards don't already cover.
+
+With a five-character tag it is 5,051 characters counting each line break as two, so about 2,900 are free. Before publishing: render the images into `docs/workshop/`, commit them, tag, and put the tag in place of each `<tag>` (seven: six images and the guide link). `desc_hero_eras` is a hero with no pictures in it, for `desc_hero_ages`. Moving only the hero, the at-a-glance card and the eras into images saved nothing on the 1.3.1 text (8,124, over the limit): the systems' paragraphs are where the characters are.
 
 ```bbcode
-[h1]Vic3TimelineExtended[/h1]
-
 [b]Updated for Victoria 3: 1.15.1.[/b]
+
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_hero_ages.jpg[/img]
 
 [i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
-[img]<desc_hero_ages.jpg URL>[/img]
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/<tag>/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
-[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.1/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
-
-[img]<desc_at_a_glance.jpg URL>[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_at_a_glance.jpg[/img]
 [list]
-[*]New goods, production chains, company buildings, and megastructures
-[*]New combat units, ship classes, treaty articles, decrees, and companies
-[*]Visual dashboards and dedicated controls, with new tabs in the Budget, Society, Diplomacy, Military, and Market panels
-[*]Toggleable game rules for the major systems
+[*]New goods, production chains, companies, combat units, ship classes, treaty articles, and decrees
+[*]A dashboard for each system, a Map Room of more than 40 world maps, and new tabs in the Budget, Society, Diplomacy, Military, and Market panels
 [*]English, plus machine-translated German and Spanish; English fallback for other languages
 [/list]
 
-[hr][/hr]
+Nineteen systems run alongside the base game. In the economy: banking and monetary policy, free market construction, power grids, and a legislated tax code. Between nations: the United Nations, the global commons, decolonization, cultural hegemony, covert warfare, nuclear weapons, a modern military, global warming, and the space race. Within them: demographics, healthcare and biotechnology, courts and judiciary, social movements, internal resettlement, and grand monuments and archaeology.
 
-[img]<desc_systems_1.jpg URL>[/img]
-[img]<desc_systems_2.jpg URL>[/img]
-[img]<desc_systems_3.jpg URL>[/img]
-Banking and Monetary Policy, Space Race, Global Warming, Demographics, United Nations, Global Commons, Nuclear Weapons, Decolonization, Covert Warfare, Cultural Hegemony, Modern Military, Social Movements, Free Market Construction, Power Grids, Courts and Judiciary, Grand Monuments and Archaeology, Legislated Tax Code (experimental), Healthcare and Biotechnology, Internal Resettlement.
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_1.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_2.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_systems_3.jpg[/img]
 
-[h2]More ways to shape your country[/h2]
+[h1]More ways to shape your country[/h1]
 
-[b]Tourism[/b] — Historic sites, pollution, turmoil, infrastructure, and air travel shape demand.
+[b]World War[/b] — Tension between great powers of opposed ideologies builds to a world war and its aftermath.
+[b]Formables and Reunification[/b] — Ten new formable countries, 22 releasable city-states, and divided peoples who press for reunion by war or by consent.
 [b]Strategic Reserves[/b] — Stockpile food, fuel, and military supplies; buy low, release in shortages.
+[b]Tourism[/b] — Historic sites, pollution, turmoil, infrastructure, and air travel shape demand.
 [b]Dynastic Wealth[/b] — Inheritance laws decide who inherits; great fortunes strengthen elites and feed bubbles.
 [b]Migration and Homelands[/b] — Crowded states attract fewer migrants, and homelands form or dissolve with acceptance and population.
+[b]Culture Merges[/b] — Related cultures can grow into one national culture over decades (off by default).
 [b]Living-Standard Expectations[/b] — A long boom makes a later downturn harder to accept.
-[b]Power Blocs[/b] — New principles and identities, with names that reflect your bloc's members.
+[b]Power Blocs[/b] — New principles and identities, summits, and names that reflect your bloc's members.
 [b]State Pictures[/b] — The state banner follows technology, city size, and wealth: 356 new pictures of cities, ports, mines, farms, smog, and ruins.
-[b]Personal Play Options[/b] — Heir education, custom religions, aptitude traits for all adults, and a World War system.
+[b]Rulers and Religion[/b] — Heir education, aptitude traits for all adults, and a custom religion creator.
 
-[hr][/hr]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/<tag>/docs/workshop/desc_eras.jpg[/img]
 
-[h1]Technology, laws, and society[/h1]
+[h1]Laws and politics[/h1]
 
-[img]<desc_eras.jpg URL>[/img]
-Build space elevators, orbital solar collectors, and antimatter facilities.
-
-Shape inheritance, minority rights, the courts, financial regulation, family policy, internet governance, genetic modification, and universal basic income, or entrench two parties with first past the post. New ministries cover science, the environment, intelligence, and urban planning. New ideologies include environmentalists, anti-colonialists, transhumanists, and business-interest movements, alongside Green, Populist, and Technocratic parties.
+Legislate minority rights, inheritance, privacy, internet governance, genetic modification, automation, frontier AI, the rules of war, and universal basic income, or entrench two parties with first past the post. Sixteen new ministries run from science and the environment to intelligence and urban planning. New ideologies include environmentalists, anti-colonialists, transhumanists, and corpocrats, alongside Green, Populist, and Technocratic parties.
 
 [h1]Compatibility[/h1]
 
