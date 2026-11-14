@@ -548,12 +548,14 @@ a grid, the grids they are on, the Electricity your stations send and receive
 a week, your transmission efficiency, and your Grid Interconnection Agreements,
 with the countries whose undersea cables reach yours but aren't joined to you.
 Under the boxes, Bloc partners counts the members of your bloc joined to you
-through its principle that you have no agreement with. Generation shows how much Electricity your power plants made a week, by
-kind of plant (coal, oil, hydro, nuclear, renewables, fusion and space solar),
-each with its share of the total, counted at the start of each month; power
+through its principle that you have no agreement with. National Generation,
+under your flag in the same frame, shows how much Electricity your power plants
+made a week in all your states, by kind of plant (coal, oil, hydro, nuclear,
+renewables, fusion and space solar), each with its share of the total; power
 your stations received from a grid isn't counted. A card for each grid, named
 for its hub, gives its stations, its supply against its demand, its price,
-what it sends and delivers a week, and the flags of the countries on it. The
+what it sends and delivers a week, its own generation by kind of plant (every
+state on it, a partner's too), and the flags of the countries on it. The
 Stations table lists each of your stations with its mode, flow, grid and
 staffing, those on no grid last. Most figures are the
 last monthly balancing's, so a new station joins them on the 1st. A station's

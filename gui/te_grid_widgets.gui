@@ -347,8 +347,9 @@ types te_grid_widget_types
 	### ----------------------------------------------------------------------
 
 	### National Generation's heading: the country's flag (its hover names the
-	### country), the heading, the total at the right, a rule under them.
-	### Flag 27, then 7, then the heading in 266: the right 180 as te_grid_heading.
+	### country; it reads the tab's Country, so no datacontext), the heading,
+	### the total at the right, a rule under them. Flag 27, then 7, then the
+	### heading in 266: the right 180 as te_grid_heading.
 	type te_grid_national_heading = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -357,7 +358,6 @@ types te_grid_widget_types
 			size = { 480 30 }
 
 			tiny_flag = {
-				datacontext = "[Country.Self]"
 				parentanchor = left|vcenter
 			}
 			textbox = {

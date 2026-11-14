@@ -1902,8 +1902,11 @@ class RecordTest(unittest.TestCase):
     """The grid's record, for the Power Grids tab: a grid lasts one run, so its hub carries its
     figures and each country lists its grids and stations until the next run clears them."""
 
+    # The grid's generation by source (2026-11-14), the sums of its members' splits.
+    MIX_SOURCES = ("coal", "oil", "hydro", "nuclear", "renewable", "fusion", "space_solar")
     REC_VARS = ("te_grid_rec_supply", "te_grid_rec_demand", "te_grid_rec_price", "te_grid_rec_sent",
-                "te_grid_rec_delivered", "te_grid_rec_countries", "te_grid_rec_markets")
+                "te_grid_rec_delivered", "te_grid_rec_countries", "te_grid_rec_markets") + tuple(
+                    f"te_grid_rec_mix_{src}" for src in MIX_SOURCES + ("total",))
 
     def setUp(self):
         self.effects = _code(_read(EFFECTS))
@@ -1954,7 +1957,8 @@ class RecordTest(unittest.TestCase):
             "te_grid_rec_sent": "local_var:te_grid_rec_sent",
             "te_grid_rec_delivered": "local_var:te_grid_rec_delivered",
             "te_grid_rec_countries": "local_var:te_grid_rec_countries",
-            "te_grid_rec_markets": "local_var:te_grid_rec_markets"})
+            "te_grid_rec_markets": "local_var:te_grid_rec_markets",
+            **{f"te_grid_rec_mix_{src}": f"local_var:te_grid_rec_mix_{src}" for src in self.MIX_SOURCES + ("total",)}})
         # On the hub, every one, and the hub (not ROOT, the country) is what the next run clears.
         hub_blocks = [_block_from(record, m.end()) for m in re.finditer(r"scope:te_grid_hub_state = \{", record)]
         self.assertEqual(sum(b.count("set_variable = { name = te_grid_rec_") for b in hub_blocks), len(self.REC_VARS))
