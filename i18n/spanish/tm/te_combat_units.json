@@ -35,9 +35,17 @@
   "en": "Aircraft",
   "es": "Aviones"
  },
+ "combat_unit_group_aircraft_desc": {
+  "en": "Small battalions that strike enemy positions from the air and, in later eras, from orbit.",
+  "es": "Pequeños batallones que atacan las posiciones enemigas desde el aire y, en épocas posteriores, desde la órbita."
+ },
  "combat_unit_group_tanks": {
   "en": "Heavy Tanks",
   "es": "Tanques pesados"
+ },
+ "combat_unit_group_tanks_desc": {
+  "en": "Armored units that break into enemy positions and hold the ground they take.",
+  "es": "Unidades blindadas que penetran en las posiciones enemigas y mantienen el terreno que toman."
  },
  "combat_unit_type_DEW_tank": {
   "en": "DEW Tank",

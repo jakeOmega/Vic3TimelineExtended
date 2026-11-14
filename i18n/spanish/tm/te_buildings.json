@@ -2512,8 +2512,8 @@
   "es": "Mina Sumitomo Besshi"
  },
  "building_sumitomo_besshi_mine_desc": {
-  "en": "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.",
-  "es": "La mina y fundición de cobre de Besshi, cuna industrial del zaibatsu Sumitomo."
+  "en": "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo [glossary_zaibatsu].",
+  "es": "La mina y fundición de cobre de Besshi, cuna industrial del [glossary_zaibatsu|l] Sumitomo."
  },
  "building_sunhwaguk_seoul_tobacco_factory": {
   "en": "Sunhwaguk Seoul Tobacco Factory",
