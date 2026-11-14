@@ -40,9 +40,10 @@ they keep spending when the income stops.
 4. Construction Sites turn the purchased good into construction points. They
 appear on their own in every state where construction is under way, and one
 always stands in your capital. Nobody builds them. A new site starts working
-once it has hired its laborer, a week or two after it appears, and the sites
-that already have theirs deliver your whole purchase meanwhile. The capital's
-site stands idle while other sites are at work and the capital builds nothing.
+about a month after it appears, once it has settled on its one laborer, and the
+sites that are already at work deliver your whole purchase meanwhile. The
+capital's site stands idle while other sites are at work and the capital builds
+nothing.
 
 Each purchase is capped at what its queue can use that week: at most one week's
 maximum progress for each level in the queue. The share of points that goes to
@@ -227,8 +228,8 @@ at once can take the construction your queues were counting on.
 - Don't downsize Construction Sites at all. They can be downsized only because
 the Disabled setting uses them as an ordinary government building. Under the
 market settings the game places and removes them as needed, and if you downsize
-them all, construction stops for about two weeks, until a new one in your
-capital has hired.
+them all, construction stops for about a month, until a new one in your
+capital is at work.
 
 AI countries choose their own purchase each week, always as a fixed quantity.
 They spend roughly their net income, more when their gold reserves are full and
