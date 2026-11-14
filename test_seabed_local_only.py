@@ -304,6 +304,13 @@ class LocalOnlyCheckboxTest(unittest.TestCase):
         start = self.panel.rindex("using = te_own_country_only", 0, at)
         self.assertNotIn("visible =", self.panel[start:at])
 
+    def test_another_countrys_tab_closes_up_the_slot(self):
+        """Hidden there, the fixed 480 x 34 slot would leave a blank row unless
+        the overview's vertical flow ignores invisible children."""
+        slot = self.panel.rindex("widget = {", 0, self.panel.index("te_seabed_local_only_sgui"))
+        flow = self.panel.rindex("direction = vertical", 0, slot)
+        self.assertIn("ignoreinvisible = yes", self.panel[flow:self.panel.index("flowcontainer = {", flow)])
+
     def test_it_is_bound_to_its_scripted_gui(self):
         at = self.panel.index("button_checkbox_label = {")
         box = self.panel[at:self.panel.index("flowcontainer = {", at)]

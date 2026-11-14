@@ -328,7 +328,8 @@ even in that save, and the scale comes from those lines.
     new game and in an old save. Hover: what ticking does. Tick it: the box shows ticked at once (its
     `checked` reads `te_seabed_local_only_disp`, vanilla's `button_checkbox_label` used in a mod panel
     for the first time: if the tick never shows, the binding is the suspect) and the hover says it is on
-    and what unticking does. Another country's National Info Seabed tab has no checkbox. At 1080p the
+    and what unticking does. Another country's National Info Seabed tab has no checkbox and no blank
+    row where it would be (the overview's flow ignores the hidden slot). At 1080p the
     label doesn't elide. (b) **The blocked build's line.** Ticked, in a coastal state whose basin has no
     claim of ours to spare while another basin has some: the build button is greyed; the requirements
     read "Seabed Licenses to spare: N" ticked and "No local claim to spare in the <Basin> Ocean, and Build

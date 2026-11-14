@@ -575,6 +575,7 @@ types te_seabed_widget_types
 				spacing = 4
 				margin_top = 4
 				margin_bottom = 4
+				ignoreinvisible = yes
 
 				flowcontainer = {
 					direction = horizontal
