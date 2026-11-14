@@ -288,11 +288,18 @@ and a power bloc's banking union 1 more. The overview's Budget box shows how
 many are in use and how many are free. Hover the free figure to see what each
 grant adds and what each active tool holds.
 
-Switching a tool on has its own price: the lending tools charge the treasury
-0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
+Switching a tool on has a small price, the same for every tool you use from
+cycle to cycle: 0.5% of pops radicalize, or, for Open-Market Operations, the
+directed-credit sectors and Export Credit Facility, 0.2% of GDP comes out of the
+treasury. Lifting the tool costs nothing, so neither does a lift forced by a law
+change or by the tool's own conditions ending. Expand Deposit Guarantee works the
+other way round: 2% of pops turn loyalist when you expand it and 2.5% radicalize
+when you withdraw it, so a round trip nets the same 0.5%. Moral Suasion costs
+nothing either way. The four crisis tools (Bank Holiday, Emergency Liquidity,
+Asset Relief and Bail-in) have a larger price of their own, and Capital Controls
 (Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
-Emergency Import Financing add a weekly government expense while they run, a
-quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
+Emergency Import Financing also add a weekly government expense while they run,
+a quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
 Budget panel under Banking, and their tooltips show the current weekly cost.
 
 ### Market economy banking tools
@@ -320,9 +327,9 @@ International Exchange Standards; the other three are available from the start.
 | Tool | What you gain each month | What you pay or give up |
 |---|---|---|
 | Moral Suasion | −0.15 bubble pressure, −0.02 momentum | 1 point and nothing else. |
-| Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. 2% of pops radicalize when you raise them, and again when you lift them. |
-| Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. Radicals when you enable it and when you lift it, as above. |
-| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −1 standard of living for the middle strata. Radicals when you raise them and when you lift them. |
+| Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. |
+| Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. |
+| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −1 standard of living for the middle strata. |
 
 Measure them against the phases: Expansion adds 3 bubble pressure a month, Boom
 4 and Frenzy 8. All four together drain about 3.75 and take 7 points, enough to
@@ -343,8 +350,7 @@ climbing, and drops Moral Suasion more freely, since switching it costs nothing.
 Directed credit steers cheap loans to one sector. Each sector builds its
 buildings 10% faster, pleases some interest groups and angers others, and adds
 momentum and bubble pressure, so it belongs in a cycle at or below Stable, not in
-a boom. Switching one on costs a one-off 0.8% of GDP from the treasury, the
-state's share of the loans, and lifting it radicalizes 2% of pops. Only one
+a boom. Switching one on costs 0.2% of GDP from the treasury. Only one
 sector runs at a time, two under Directed Credit & Development Banks, and
 Prudential / Narrow Banking forbids them all. Electrification needs Rural
 Electrification; the other four are available from the start.
@@ -405,8 +411,8 @@ Globalization and the deposit guarantee Consumer Credit.
 | Emergency Liquidity Program | +12 cycle value at once, once per crisis, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once, with the +12, and +0.8 a month. Only in a Downturn or Panic. Closes itself, with the refund, once the cycle has held at Stable or above for 12 months. |
 | Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
 | Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
-| Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
-| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, 1 point of inflation pressure, more while inflation is under target. |
+| Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 2.5% radicalize when you withdraw it. |
+| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.2% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, 1 point of inflation pressure, more while inflation is under target. |
 
 A Bank Holiday is the first answer to a Panic: it stops the fall at once, holds
 it while the banks are shut and keeps a trading partner's crash out, but you get
@@ -495,6 +501,15 @@ point cost. Under Cooperative Ownership it measures the balance between what
 worker-owners pay themselves and what they reinvest, and there are eight council
 tools. Changing economic system switches the old system's tools off. An open
 Emergency Liquidity Program still refunds 1% of GDP when that closes it.
+
+Switching a planning or council tool on costs 0.5% of pops radicalized, as in a
+market economy, and lifting it costs nothing. The three one-point tools cost
+nothing either way. Five tools pay with one stratum instead, 2.5% radicalized on
+one switch and 2% turned loyalist on the other, so a round trip nets the same
+0.5%: Production Target Reduction and Administrative Performance Campaign (upper
+strata), Dividend Restraint Resolution (middle) and Consumption Ceiling
+Resolution (lower) radicalize when you switch them on, and Mutual Aid Fund
+Deployment (lower) wins loyalists when you deploy it.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
