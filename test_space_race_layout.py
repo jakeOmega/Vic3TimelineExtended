@@ -1406,12 +1406,15 @@ class FleetCardTest(unittest.TestCase):
         """The orders and the transit marker are signs, drawn by the script; the
         emblems, the roles, the postures and Locations' statuses are painted
         (icon_prompts.py). A file with both sources would be written twice."""
-        from scripts.image_pipeline import gen_space_fleet_pictograms as drawn
         from scripts.image_pipeline import icon_prompts
+        # Read, not imported: the script needs Pillow, which CI's main job does not install.
+        script = _read(os.path.join(REPO, "scripts", "image_pipeline", "gen_space_fleet_pictograms.py"))
+        table = script[script.index("\nICONS = {"):script.index("\n}\n", script.index("\nICONS = {"))]
+        drawn = set(re.findall(r'"(\w+)": \(', table))
         painted = {key for cat in ("space", "space_state") for key in icon_prompts.ICONS[cat]}
-        self.assertEqual(set(drawn.ICONS), {"order_go", "order_transfer", "order_land", "order_embark", "order_seize",
-                                            "order_destroy", "track_ship"})
-        self.assertEqual(set(drawn.ICONS) & painted, set())
+        self.assertEqual(drawn, {"order_go", "order_transfer", "order_land", "order_embark", "order_seize",
+                                 "order_destroy", "track_ship"})
+        self.assertEqual(drawn & painted, set())
         for stem in ("fleet", "fleet_other", "status_battle", "status_blockaded", "status_interdicted", "location_earth",
                      *(f[:-4] for _, f in FLEET_CARD_ICONS if not f.startswith("order_"))):
             with self.subTest(icon=stem):

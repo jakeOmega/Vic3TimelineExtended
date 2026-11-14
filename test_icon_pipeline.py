@@ -506,11 +506,10 @@ class StripTests(unittest.TestCase):
 class BannerTests(unittest.TestCase):
     """compose_banner fits a wide render to the banner's own size; the category is written where the GUI reads it."""
 
-    def setUp(self):
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_the_render_covers_the_banner_and_is_cropped_about_its_centre(self):
         import icon_render
         self.r = icon_render
-
-    def test_the_render_covers_the_banner_and_is_cropped_about_its_centre(self):
         spec = ip.CATEGORIES["space_banner"]
         w, h = spec["gen_size"]
         raw = np.zeros((h, w, 3), dtype=np.uint8)
