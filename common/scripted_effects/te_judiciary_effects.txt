@@ -474,7 +474,13 @@ te_jud_rule_probe_queue = {
 # and .13's tomorrow; all three are due the day after; .15 reads the result
 # a day later (te_jud_dt_probe_verdict). A run whose flip or control did not
 # happen (the country gone) gives no verdict, and the probe starts again in
-# another country a month later.
+# another country a month later, three times at most
+# (global_var:te_jud_dt_probe_runs). A fourth start means three runs gave no
+# verdict, which a country lost three times over does not explain: the
+# control, a delayed event whose trigger held throughout, did not run, or the
+# verdict event itself did not. That is logged once as TE_SELF_CHECK BROKEN
+# delayed_trigger_control and the probe stops; it restarted every month for
+# the rest of the game until 2026-11-13.
 te_jud_dt_probe_start = {
 	if = {
 		limit = {
@@ -482,14 +488,30 @@ te_jud_dt_probe_start = {
 			NOT = { has_global_variable = te_jud_dt_probe_running }
 			NOT = { has_variable = te_jud_dt_queue_armed }
 		}
-		set_global_variable = { name = te_jud_dt_probe_running days = 30 }
-		set_variable = { name = te_jud_dt_fire_armed days = 30 }
-		set_variable = { name = te_jud_dt_control days = 30 }
-		trigger_event = { id = te_judiciary_events.11 days = 1 }
-		trigger_event = { id = te_judiciary_events.12 days = 2 }
-		trigger_event = { id = te_judiciary_events.13 days = 2 }
-		trigger_event = { id = te_judiciary_events.14 days = 2 }
-		trigger_event = { id = te_judiciary_events.15 days = 3 }
+		if = {
+			limit = {
+				has_global_variable = te_jud_dt_probe_runs
+				global_var:te_jud_dt_probe_runs >= 3
+			}
+			set_global_variable = te_jud_dt_probe_done
+			remove_global_variable = te_jud_dt_probe_runs
+			debug_log = "TE_SELF_CHECK BROKEN delayed_trigger_control country=[THIS.GetCountry.GetTagName] (three runs of the delayed-trigger probe gave no verdict: the control, a delayed event whose trigger held throughout, or the verdict event did not run; delayed_trigger_queue_probe and delayed_trigger_fire_probe stay unsettled)"
+		}
+		else = {
+			if = {
+				limit = { NOT = { has_global_variable = te_jud_dt_probe_runs } }
+				set_global_variable = { name = te_jud_dt_probe_runs value = 0 }
+			}
+			change_global_variable = { name = te_jud_dt_probe_runs add = 1 }
+			set_global_variable = { name = te_jud_dt_probe_running days = 30 }
+			set_variable = { name = te_jud_dt_fire_armed days = 30 }
+			set_variable = { name = te_jud_dt_control days = 30 }
+			trigger_event = { id = te_judiciary_events.11 days = 1 }
+			trigger_event = { id = te_judiciary_events.12 days = 2 }
+			trigger_event = { id = te_judiciary_events.13 days = 2 }
+			trigger_event = { id = te_judiciary_events.14 days = 2 }
+			trigger_event = { id = te_judiciary_events.15 days = 3 }
+		}
 	}
 }
 
@@ -509,6 +531,10 @@ te_jud_dt_probe_verdict = {
 			has_variable = te_jud_dt_control_ran
 		}
 		set_global_variable = te_jud_dt_probe_done
+		if = {
+			limit = { has_global_variable = te_jud_dt_probe_runs }
+			remove_global_variable = te_jud_dt_probe_runs
+		}
 		if = {
 			limit = { has_variable = te_jud_dt_queue_ran }
 			debug_log = "TE_SELF_CHECK BROKEN delayed_trigger_queue_probe country=[THIS.GetCountry.GetTagName] (a delayed event whose trigger was false when queued and true when due ran: the trigger is read only when the event is due, so the relays of #1596 are harmless and not needed; see docs/testing/judiciary-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"

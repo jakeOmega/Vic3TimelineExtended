@@ -130,10 +130,25 @@ class LobbyDiffersTest(unittest.TestCase):
                          [{"rule": "merges", "save": "merges_on", "last_applied": "merges_off"},
                           {"rule": "tax", "save": "tax_off", "last_applied": "tax_light"}])
 
-    def test_agreement_a_rule_one_list_lacks_and_an_unknown_setting_are_left_out(self):
-        self.assertEqual(rules.lobby_differs(["deny", "tax_off", "gone_setting"], ["deny", "merges_on", "other"],
+    def test_agreement_and_an_unknown_setting_are_left_out(self):
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off", "gone_setting"], ["deny", "tax_off", "other"],
                                              self.TABLE), [])
+        # No last-applied list at all: nothing to compare.
         self.assertEqual(rules.lobby_differs(["deny"], [], self.TABLE), [])
+
+    def test_a_rule_one_list_lacks_is_compared_at_its_default_and_says_so(self):
+        # Whether LastAppliedRules lists a setting left at its default is not recorded, and a preset written
+        # before a mod added a rule cannot name it: the game falls back to the default, so the comparison does.
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off"], ["deny", "merges_on"], self.TABLE),
+                         [{"rule": "merges", "save": "merges_off", "last_applied": "merges_on",
+                           "assumed_default": "save"}])
+        self.assertEqual(rules.lobby_differs(["deny", "tax_light"], ["deny"], self.TABLE),
+                         [{"rule": "tax", "save": "tax_light", "last_applied": "tax_off",
+                           "assumed_default": "last_applied"}])
+        # At the default on the side that names it: no difference. A rule with no default is left out.
+        self.assertEqual(rules.lobby_differs(["deny", "tax_off"], ["deny"], self.TABLE), [])
+        table = dict(self.TABLE, tax={"default": None, "settings": ["tax_off", "tax_light"]})
+        self.assertEqual(rules.lobby_differs(["deny", "tax_light"], ["deny"], table), [])
 
 
 class RuleTableTest(RulesTestCase):

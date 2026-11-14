@@ -13,6 +13,7 @@ Run: python3 -m pytest test_rule_unlock_settings.py
 """
 
 import re
+import sys
 import unittest
 from pathlib import Path
 
@@ -243,6 +244,7 @@ WW_TRIGGERS = ROOT / "common/scripted_triggers/world_war_triggers.txt"
 WW_BUTTONS = ROOT / "common/scripted_buttons/world_war_buttons.txt"
 WW_EFFECTS = ROOT / "common/scripted_effects/te_event_agency_ww_effects.txt"
 WW_ON_ACTIONS = ROOT / "common/on_actions/extra_on_actions.txt"
+WW_EVENTS = ROOT / "events/world_war_events.txt"
 
 
 class WorldWarEarlyUnlockTest(unittest.TestCase):
@@ -284,15 +286,97 @@ class WorldWarEarlyUnlockTest(unittest.TestCase):
                          "NOT = { has_technology_researched = combined_arms } "
                          "$TARGET$ = { NOT = { has_technology_researched = combined_arms } }")
 
+    def test_the_late_opposition_is_the_three_ideological_pairs(self):
+        # country_has_opposed_ideology is the ideological pairs or the early pairing, and the early pairing needs
+        # the early setting, so under the late unlock it is what it was before the setting existed.
+        opposed = words(braced(self.triggers, r"^country_has_opposed_ideology = \{"))
+        self.assertTrue(opposed.startswith(
+            "OR = { country_has_ideological_opposition = { TARGET = $TARGET$ } AND = { te_world_war_early = yes "),
+            opposed[:120])
+        pairs = words(braced(self.triggers, r"^country_has_ideological_opposition = \{"))
+        self.assertNotIn("te_world_war_early", pairs)
+        self.assertNotIn("authoritarian", pairs)
+        for a, b in (("democratic", "communist"), ("democratic", "fascist"), ("communist", "fascist")):
+            for x, y in ((a, b), (b, a)):
+                self.assertIn("AND = { country_is_%s = yes $TARGET$ = { country_is_%s = yes } }" % (x, y), pairs)
+        self.assertEqual(pairs.count("AND = {"), 6)
+
+    def test_yesterdays_ally_needs_an_ideological_opposition(self):
+        # Review, 2026-11-13: a liberal and an autocratic great power that fought the war on one side are
+        # "opposed" by the early pairing all through it, so world_war_events.105 (an ally turning into the next
+        # rival) would fire between them, take 30 relations and close the war early. It asks for the ideological
+        # pairs alone, in its trigger and where it picks the rival.
+        event = words(braced(code(WW_EVENTS), r"^world_war_events\.105 = \{"))
+        self.assertEqual(event.count("ROOT = { country_has_ideological_opposition = { TARGET = prev } }"), 2)
+        self.assertNotIn("country_has_opposed_ideology", event)
+        self.assertEqual(event.count("ww_fought_alongside = { COUNTRY = root }"), 2)
+
     def test_an_early_war_leaves_room_for_a_second(self):
         self.assertNotIn("set_variable = ww_entry_resolved", self.je)
         self.assertEqual(self.je.count("ww_mark_entry_resolved = yes"), 2)
-        mark = words(braced(code(WW_EFFECTS), r"^ww_mark_entry_resolved = \{"))
-        self.assertEqual(mark, "if = { limit = { te_world_war_early = yes NOT = { has_technology_researched = "
-                               "combined_arms } } set_variable = ww_early_war_resolved } "
-                               "else = { set_variable = ww_entry_resolved }")
         for block in (r"^\tis_shown_when_inactive = \{", r"^\tpossible = \{"):
             self.assertIn("NOT = { ww_resting_after_early_war = yes }", words(braced(self.je, block)))
+
+    def test_the_war_is_classed_when_it_breaks_out(self):
+        # Review, 2026-11-13: the entry's outcomes tested the country's own Combined Arms on the day the entry
+        # closed, 36 months after the peace. Which of the two wars it was is settled at the outbreak, once, for
+        # the whole world.
+        effects = code(WW_EFFECTS)
+        self.assertEqual(words(braced(effects, r"^ww_record_war_kind = \{")),
+                         "if = { limit = { te_world_war_early = yes ww_before_ideological_age = { TARGET = "
+                         "scope:war_target } } set_global_variable = { name = ww_last_war_early value = 1 } } "
+                         "else = { set_global_variable = { name = ww_last_war_early value = 0 } }")
+        launch = words(braced(code(WW_EVENTS), r"^world_war_events\.5 = \{"))
+        self.assertEqual(launch.count("ww_record_war_kind = yes"), 1)
+        # In the launch option, where the two belligerents are marked, and after scope:war_target is saved.
+        self.assertLess(launch.index("save_scope_as = war_target"), launch.index("ww_record_war_kind = yes"))
+        self.assertLess(launch.index("ww_record_war_kind = yes"), launch.index("set_variable = ww_aggressor_side"))
+        self.assertEqual(code(WW_EVENTS).count("ww_record_war_kind = yes"), 1)
+        self.assertEqual(effects.count("ww_last_war_early"), 5)     # two writes, two guards and the read
+
+    def test_the_entry_closes_on_the_war_not_on_the_countrys_research(self):
+        mark = words(braced(code(WW_EFFECTS), r"^ww_mark_entry_resolved = \{"))
+        self.assertEqual(mark, "if = { limit = { te_world_war_early = yes OR = { "
+                               "AND = { has_global_variable = ww_last_war_early global_var:ww_last_war_early >= 1 } "
+                               "AND = { NOT = { has_global_variable = ww_last_war_early } "
+                               "NOT = { has_technology_researched = combined_arms } } } } "
+                               "set_variable = ww_early_war_resolved } else = { set_variable = ww_entry_resolved }")
+
+        def resolved(early_setting, last_war_early, combined_arms):
+            """What ww_mark_entry_resolved sets, by the rule the string above pins. last_war_early is None while
+            no world war has broken out in the game."""
+            if early_setting and (last_war_early == 1 or (last_war_early is None and not combined_arms)):
+                return "ww_early_war_resolved"
+            return "ww_entry_resolved"
+
+        # The review's two scenarios: a power that researched Combined Arms during an early war or its
+        # aftermath, and one that held it while others fought an early war. Both keep the later war.
+        self.assertEqual(resolved(True, 1, True), "ww_early_war_resolved")
+        # A power without it after an early war, as before.
+        self.assertEqual(resolved(True, 1, False), "ww_early_war_resolved")
+        # A war begun with Combined Arms on either side is the last one, whoever lacks the technology.
+        self.assertEqual(resolved(True, 0, False), "ww_entry_resolved")
+        self.assertEqual(resolved(True, 0, True), "ww_entry_resolved")
+        # No war yet (the entry failed on rank): the old test.
+        self.assertEqual(resolved(True, None, False), "ww_early_war_resolved")
+        self.assertEqual(resolved(True, None, True), "ww_entry_resolved")
+        # The late unlock: for good, whatever else holds, as before the setting existed.
+        for last, tech in ((1, True), (1, False), (0, False), (None, False), (None, True)):
+            self.assertEqual(resolved(False, last, tech), "ww_entry_resolved")
+
+    def test_a_power_with_combined_arms_gets_its_entry_back_once_the_early_war_has_wound_down(self):
+        # ww_early_war_resolved with Combined Arms is not "resting", so the monthly net adds the entry back; it
+        # waits until no country still carries the old war's peace, or the new entry's observer branch would
+        # read that peace as its own and complete again three years on.
+        self.assertEqual(words(braced(self.triggers, r"^ww_resting_after_early_war = \{")),
+                         "has_variable = ww_early_war_resolved NOT = { has_technology_researched = combined_arms }")
+        net = words(braced(code(WW_ON_ACTIONS), r"^world_war_events_on_action = \{"))
+        add = net[:net.index("add_journal_entry = { type = je_world_war }")]
+        self.assertIn("OR = { has_variable = ww_reopen_at_gate has_variable = ww_early_war_resolved }", add)
+        self.assertIn("NOT = { has_inactive_journal_entry = je_world_war } "
+                      "NOT = { any_country = { has_variable = ww_peace_concluded } } }", add)
+        # The walk over every country comes last, after the tests only a marked country passes.
+        self.assertLess(add.index("has_variable = ww_early_war_resolved"), add.index("any_country"))
 
     def test_switched_to_late_the_entry_closes_and_the_net_brings_it_back(self):
         outcomes = re.findall(r"^\toutcome = \{", self.je, re.M)
@@ -358,10 +442,16 @@ class UnitedNationsEarlyUnlockTest(unittest.TestCase):
         self.assertEqual(words(braced(ladder, r"^un_charter_reform_ripe = \{")),
                          "un_charter_pressure_met = yes NOT = { un_league_stage = yes }")
         possible = words(braced(code(UN_PROPOSE), r"^un_propose_reform_possible = \{"))
-        self.assertIn("custom_tooltip = { text = un_charter_league_tt NOT = { un_league_stage = yes } }", possible)
+        # The league's line shows only under the early setting (review, 2026-11-13: under the late unlock it was a
+        # new, always-met tooltip line about a setting the game is not in). un_league_stage needs the early flag,
+        # so the late unlock's test is unchanged.
+        self.assertIn("trigger_if = { limit = { te_united_nations_early = yes } custom_tooltip = { "
+                      "text = un_charter_league_tt NOT = { un_league_stage = yes } } }", possible)
+        self.assertEqual(possible.count("un_charter_league_tt"), 1)
         pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
-        self.assertIn("any_country = { has_technology_researched = intergovernmental_organizations } } "
-                      "set_global_variable = un_igo_age", pulse)
+        # The league's notice (UnitedNationsLeagueNameTest) may sit between the test and the mark.
+        self.assertRegex(pulse, re.escape("any_country = { has_technology_researched = intergovernmental_organizations } }")
+                         + r" (if = \{ limit = \{ un_league_stage = yes .*? \} )?set_global_variable = un_igo_age")
         # Nothing ever removes the mark.
         for folder in ("common", "events"):
             for path in (ROOT / folder).rglob("*.txt"):
@@ -371,6 +461,158 @@ class UnitedNationsEarlyUnlockTest(unittest.TestCase):
         rules = loc(RULES_LOC)
         self.assertIn("$multilateral_alliances$", rules["setting_united_nations_early_unlock_desc"])
         self.assertIn("$intergovernmental_organizations$", rules["setting_united_nations_enabled_desc"])
+
+
+EXTRA_MESSAGES = ROOT / "common/messages/extra_messages.txt"
+UN_CHAMBER_SGUIS = ROOT / "common/scripted_guis/un_chamber_sguis.txt"
+UN_OVERVIEW_GUI = ROOT / "gui/journal_entry_widgets/un_overview_widget.gui"
+UN_EVENTS = ROOT / "events/un_events.txt"
+CUSTOM_LOC = ROOT / "common/customizable_localization"
+LOC_DIR = ROOT / "localization/english"
+NAME = "[SelectLocalization(GetPlayer.IsValid,'un_org_name_ingame','un_org_name_un')]"
+LEAGUE_SGUI = ("[SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( GuiScope.SetRoot( "
+               "GetPlayer.MakeScope ).End ), 'un_org_name_league', 'un_org_name_un' )]")
+
+
+def all_loc():
+    out = {}
+    for path in sorted(LOC_DIR.glob("*_l_english.yml")):
+        out.update(loc(path))
+    return out
+
+
+def render(text, keys, league, player=True, depth=0):
+    """`text` as the engine would show it: `$key$` splices expanded, and the two selections of the organization's
+    name taken as the game would, with a player (`GetPlayer.IsValid`) and with un_ov_league_sgui shown or not."""
+    assert depth < 10, text
+    text = re.sub(r"\$(\w+)\$", lambda m: render(keys[m.group(1)], keys, league, player, depth + 1)
+                  if m.group(1) in keys else m.group(0), text)
+    choices = {NAME: "un_org_name_ingame" if player else "un_org_name_un",
+               LEAGUE_SGUI: "un_org_name_league" if league else "un_org_name_un"}
+    for markup, key in choices.items():
+        if markup in text:
+            text = text.replace(markup, render(keys[key], keys, league, player, depth + 1))
+    return text
+
+
+class UnitedNationsLeagueNameTest(unittest.TestCase):
+    """While the early unlock's league stands (un_league_stage) the names a player meets first read "League of
+    Nations"; under the late unlock, and from the month of un_igo_age, they read as before."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = all_loc()
+        cls.splicing = sorted(k for k, v in cls.loc.items() if "$je_united_nations$" in v)
+
+    def test_the_name_is_picked_by_the_league_scripted_gui(self):
+        sgui = words(braced(code(UN_CHAMBER_SGUIS), r"^un_ov_league_sgui = \{"))
+        self.assertEqual(sgui, "scope = country is_shown = { un_league_stage = yes } "
+                               "ai_is_valid = { always = no } is_valid = { always = no } effect = { }")
+        # The player guard outside, the scripted GUI inside: no customizable localization, so no GetCustom.
+        self.assertEqual(self.loc["je_united_nations"], NAME)
+        self.assertEqual(self.loc["un_org_name_ingame"], LEAGUE_SGUI)
+        self.assertEqual(self.loc["un_org_name_league"], "League of Nations")
+        self.assertEqual(self.loc["un_org_name_un"], "United Nations")
+        for path in CUSTOM_LOC.glob("*.txt"):
+            self.assertNotIn("un_org_name", read(path), path)
+
+    def test_outside_the_league_every_switched_name_reads_as_before(self):
+        # The real chain with un_ov_league_sgui not shown (Late Unlock, Disabled, or past un_igo_age), with a player
+        # and without one: each reads what it read before the League.
+        self.assertGreaterEqual(len(self.splicing), 5, self.splicing)
+        exact = {
+            "je_united_nations": "United Nations",
+            "te_window_tab_united_nations": "United Nations",
+            "te_window_tab_united_nations_locked_tt": r"#b United Nations#!\nNot open yet. It opens once:\n",
+            "je_un_ov_status_no_un": "#v There is no United Nations.#! None has been founded, or the last one was "
+                                     "dissolved.",
+            "je_un_act_found_label": "Found the United Nations",
+        }
+        for player in (True, False):
+            for key in sorted(set(self.splicing) | set(exact) | {"je_united_nations"}):
+                with self.subTest(key=key, player=player):
+                    shown = render(f"${key}$", self.loc, league=False, player=player)
+                    self.assertNotIn("un_org_name", shown)
+                    self.assertNotIn("League", shown)
+                    if key in exact:
+                        self.assertEqual(shown, exact[key])
+                    else:
+                        before = self.loc[key].replace("$je_united_nations$", "United Nations")
+                        self.assertEqual(shown, render(before, self.loc, league=False, player=player))
+
+    def test_in_the_league_the_spliced_names_read_the_league(self):
+        for key in self.splicing + ["je_united_nations", "te_window_tab_united_nations"]:
+            with self.subTest(key=key):
+                self.assertIn("League of Nations", render(f"${key}$", self.loc, league=True))
+                # An observer has no player: the plain name, and no scripted GUI read on a missing player.
+                self.assertNotIn("League", render(f"${key}$", self.loc, league=True, player=False))
+
+    def test_the_founding_control_reads_the_league_stage(self):
+        # "Found the League of Nations" is wider than the button, so the label is a short key picked in the GUI.
+        scope = "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End"
+        self.assertIn(f"'je_un_act_convene_label', SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( "
+                      f"{scope} ), 'je_un_act_found_league_label', 'je_un_act_found_label' ) )",
+                      read(UN_OVERVIEW_GUI))
+        self.assertEqual(self.loc["je_un_act_found_label"], "Found the United Nations")
+        self.assertEqual(self.loc["je_un_act_found_league_label"], "Found the League")
+
+    def test_the_charter_event_keeps_its_title(self):
+        # Its text says the United Nations and its Charter throughout, so its title doesn't switch.
+        event = braced(code(UN_EVENTS), r"^un_events\.1 = \{")
+        self.assertIn("title = un_events.1.t\n", event)
+        self.assertEqual(self.loc["un_events.1.t"], "The United Nations Charter")
+
+    def test_the_age_is_marked_whatever_the_rule(self):
+        # A game whose rule was Disabled or Late when the age came finds the mark if switched to Early later.
+        pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
+        self.assertIn("if = { limit = { NOT = { has_global_variable = un_igo_age } any_country = { "
+                      "has_technology_researched = intergovernmental_organizations } } if = { limit = { "
+                      "un_league_stage = yes", pulse)
+
+    def test_the_league_is_told_once_when_it_takes_the_name(self):
+        pulse = words(braced(code(UN_ON_ACTIONS), r"^un_global_authority_on_action = \{"))
+        notice = ("if = { limit = { un_league_stage = yes has_global_variable = un_founded } every_country = { "
+                  "limit = { OR = { je:je_united_nations ?= { has_modifier = un_member_modifier } is_player = yes } } "
+                  "post_notification = un_league_becomes_un_notice } } set_global_variable = un_igo_age")
+        # Inside the block that sets the mark, so it runs only the month the mark is set, and before the mark,
+        # while un_league_stage still holds. un_league_stage asks the early flag, so Late and Disabled never send it.
+        self.assertIn("any_country = { has_technology_researched = intergovernmental_organizations } } " + notice,
+                      pulse)
+        self.assertEqual(pulse.count("un_league_becomes_un_notice"), 1)
+        self.assertRegex(code(EXTRA_MESSAGES), r"(?m)^un_league_becomes_un_notice = \{")
+        for suffix in ("name", "desc", "tooltip"):
+            self.assertIn(f"notification_un_league_becomes_un_notice_{suffix}", self.loc)
+        self.assertNotIn("refounded", self.loc["notification_un_league_becomes_un_notice_desc"])
+
+
+class UnitedNationsLeagueTranslationTest(unittest.TestCase):
+    """German and Spanish keep today's name for the United Nations: je_united_nations's records follow its markup,
+    and un_org_name_un carries the memory's existing translation (the League's keys wait for the owner's pass)."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / "scripts" / "i18n"))
+        import translate_loc
+        cls.t = translate_loc
+        cls.loc = all_loc()
+
+    def test_the_name_is_translated_and_not_stale(self):
+        for language, field, name in (("german", "de", "Vereinte Nationen"), ("spanish", "es", "Naciones Unidas")):
+            overlay = self.t.load_overlay(language)
+            with self.subTest(language=language):
+                tm = overlay.tm
+                self.assertEqual(tm["je_united_nations"]["en"], self.loc["je_united_nations"])
+                self.assertEqual(tm["je_united_nations"][field], self.loc["je_united_nations"])
+                self.assertEqual(tm["un_org_name_un"]["en"], self.loc["un_org_name_un"])
+                self.assertEqual(tm["un_org_name_un"][field], name)
+                self.assertEqual(tm["concept_united_nations_system"][field], name)
+                shipped = {k: overlay.value(k, v) for k, v in self.loc.items()}
+                for key in ("je_united_nations", "te_window_tab_united_nations"):
+                    self.assertEqual(render(f"${key}$", shipped, league=False), name, key)
+                for key in ("je_un_ov_status_no_un", "te_diplomacy_un_open_journal_tt", "un_unlock_tt"):
+                    shown = render(f"${key}$", shipped, league=False)
+                    self.assertIn(name, shown, key)
+                    self.assertNotIn("United Nations", shown, key)
 
 
 # --- Cultural Hegemony ---------------------------------------------------------------------------------------------

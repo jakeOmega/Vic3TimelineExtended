@@ -38,6 +38,8 @@ MARKET_PRICE = os.path.join(REPO, "common", "script_values", "te_construction_ma
 MARKET_TARGETS = os.path.join(REPO, "common", "script_values", "te_construction_market_target_values.txt")
 RULE_LOC = os.path.join(REPO, "localization", "english", "te_game_rules_l_english.yml")
 MISC_LOC = os.path.join(REPO, "localization", "english", "te_miscellaneous_l_english.yml")
+STATIC = os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt")
+WEEKLY_PULSE = os.path.join(REPO, "common", "scripted_effects", "te_construction_market_pulse_effects.txt")
 
 
 def _value(text, name):
@@ -199,11 +201,23 @@ def _parse(text):
     return parse_block(tokenize(text), 0)[0]
 
 
+class _CountryEnv(Env):
+    """Env, with has_modifier: the scaling's modifiers the country held when the effect began (a modifier change
+    is not visible inside the effect that makes it)."""
+
+    def one_cond(self, key, op, val):
+        if key == "has_modifier":
+            return val in self.held
+        if key == "is_country_type":
+            return val == self.country_type
+        return super().one_cond(key, op, val)
+
+
 class Country:
     """A country's variables, modifiers and engine figures, with the script's values and effects run over them."""
 
     def __init__(self, rule=False, gdp=50e6, gdppc=1.0, slack=0.5, walked=1e6, others=0.0, direct=False,
-                 **variables):
+                 country_type="recognized", **variables):
         text = _read(VALUES)
         self.constants = {name: float(re.search(r"^%s\s*=\s*([\d.]+)" % name, text, re.M).group(1))
                           for name in CONSTANTS}
@@ -212,16 +226,20 @@ class Country:
             _body(_read(MARKET_TARGETS), "te_construction_market_goods_per_point"))
         blocks = _top_blocks(_read(EFFECTS))  # not the self-checks: their log lines are not script
         self.effects = {name: _parse(blocks[name])
-                        for name in ("te_cc_yearly_update", "te_cc_apply_scaling")}
+                        for name in ("te_cc_yearly_update", "te_cc_apply_scaling", "te_cc_weekly_new_country")}
+        self.country_type = country_type
         self.rule, self.gdp, self.gdppc, self.slack, self.walked, self.others = rule, gdp, gdppc, slack, walked, others
         self.direct = direct  # free_market_construction_rule disabled
         self.variables = dict(variables)
         self.modifiers = {}  # the scaling's two modifiers: name -> multiplier
         self.seen = None     # what a modifier: read returns while an effect runs
+        self.held = None     # the modifiers has_modifier sees while an effect runs
 
     def env(self):
         own = sum(self.modifiers.values()) if self.seen is None else self.seen
-        env = Env.__new__(Env)
+        env = _CountryEnv.__new__(_CountryEnv)
+        env.held = set(self.modifiers) if self.held is None else self.held
+        env.country_type = self.country_type
         env.memo = {}
         env.constants, env.values = self.constants, self.values
         env.names = {
@@ -243,10 +261,11 @@ class Country:
         # add_modifier and remove_modifier are not visible to a modifier: read inside the same effect, which is
         # why the adjusted multipliers back var:prior_construction_scaling out of the read.
         self.seen = sum(self.modifiers.values())
+        self.held = set(self.modifiers)
         try:
             self._run(self.effects[name])
         finally:
-            self.seen = None
+            self.seen = self.held = None
 
     def _run(self, items):
         done = False
@@ -264,11 +283,15 @@ class Country:
                 self.variables[fields["name"]] = self.env().operand(fields["value"])
             elif key == "remove_modifier":
                 self.modifiers.pop(val, None)
+            elif key == "remove_variable":
+                self.variables.pop(val, None)
             elif key == "add_modifier":
                 fields = {k: v for k, _o, v in val}
                 self.modifiers[fields["name"]] = self.env().operand(fields["multiplier"])
             elif key in ("set_local_variable", "te_cc_slack_selfcheck"):
                 pass  # the self-check's own state
+            elif key in self.effects and val == "yes":
+                self._run(self.effects[key])
             else:
                 raise AssertionError("the effect runner does not know %r" % key)
 
@@ -392,6 +415,58 @@ class TheCapAndTheSmallEconomy(unittest.TestCase):
         self.assertAlmostEqual(country.pulse(), 1.65, places=3)
         self.assertAlmostEqual(country.value("construction_cost_scaling_mult"), 1.65 * 0.55 - 1, places=3)
 
+    def test_a_revolutions_winner_gets_the_scaling_it_is_owed(self):
+        # A revolution's winner inherits the loser's variables and none of its modifiers, so it arrives with
+        # var:prior_construction_scaling and without the modifier the prior stands for. Backing the prior out of
+        # a modifier read that never held it shrank a positive scaling for a year and carried a small economy's
+        # negative one past -1 (review of #1770). The prior is set to 0, which is what the winner holds, so it
+        # gets at once what an ordinary country has from its second pulse: X times one plus the other sources.
+        cases = (
+            dict(rule=True, gdp=2e6, gdppc=0.4, slack=0.6, others=0.2, te_cc_scale=1.0, te_cc_small_factor=0.28),
+            dict(rule=False, gdp=50e6, gdppc=10.9, slack=0.0, others=0.2, te_cc_scale=2.0, te_cc_small_factor=1.0),
+        )
+        for direct in (False, True):
+            name = "construction_cost_scaling_direct" if direct else "construction_cost_scaling"
+            for case in cases:
+                with self.subTest(direct=direct, rule=case["rule"]):
+                    x = case["te_cc_scale"] * case["te_cc_small_factor"] - 1
+                    winner = Country(direct=direct, prior_construction_scaling=x, **case)
+                    self.assertEqual(winner.modifiers, {})
+                    winner.run("te_cc_apply_scaling")
+                    self.assertAlmostEqual(winner.modifiers[name], x * (1 + winner.others), places=5)
+                    self.assertAlmostEqual(winner.variables["prior_construction_scaling"], winner.modifiers[name],
+                                           places=5)
+                    # the cost in force is the two factors multiplied, above nothing
+                    self.assertAlmostEqual(1 + winner.others + winner.modifiers[name],
+                                           (1 + winner.others) * (1 + x), places=5)
+                    self.assertGreater(1 + winner.others + winner.modifiers[name], 0)
+                    # the same as a settled country of the same figures, which took two pulses to get there
+                    settled = Country(direct=direct, **case)
+                    settled.run("te_cc_apply_scaling")
+                    settled.run("te_cc_apply_scaling")
+                    self.assertAlmostEqual(winner.modifiers[name], settled.modifiers[name], places=5)
+                    # and it stays there
+                    winner.run("te_cc_apply_scaling")
+                    self.assertAlmostEqual(winner.modifiers[name], x * (1 + winner.others), places=5)
+        # The variable is set, never removed: the direct modifier's multiplier is the variable itself, which
+        # the engine reads again on later ticks (modifier_multiplier_var_audit).
+        self.assertNotIn("remove_variable", _squash(_top_blocks(_read(EFFECTS))["te_cc_apply_scaling"]))
+
+    def test_a_prior_with_its_modifier_is_kept(self):
+        # The ordinary country: the prior is backed out of the modifier that holds it.
+        country = Country(rule=True, gdp=1e6, gdppc=0.4, slack=0.6, others=0.2)
+        country.pulse()
+        country.pulse()
+        before = dict(country.modifiers)
+        country.pulse()
+        self.assertAlmostEqual(country.modifiers["construction_cost_scaling"], before["construction_cost_scaling"],
+                               places=5)
+        # A prior of 0 has no modifier beside it and is not a stale one: the adjusted path is still taken.
+        idle = Country(gdppc=0.5, slack=0.6, prior_construction_scaling=0.0)
+        idle.run("te_cc_apply_scaling")
+        self.assertEqual(idle.variables["prior_construction_scaling"], 0.0)
+        self.assertEqual(idle.modifiers, {})
+
     def test_the_market_price_and_goods_per_point_follow_the_discount_to_its_floor(self):
         for path, name in ((MARKET_PRICE, "te_construction_market_price"),
                            (MARKET_TARGETS, "te_construction_market_goods_per_point")):
@@ -436,6 +511,65 @@ class TheSmallEconomyRule(unittest.TestCase):
         self.assertIn("NOT = { has_variable = te_cc_small_factor }", country)
         self.assertIn("if = { limit = { gdp > 0 } te_cc_yearly_update = yes", country)
         self.assertIn("trigger_event = { id = te_construction_market_recalc_events.3 days = 7 }", country)
+
+    def test_a_country_made_during_play_gets_the_factor_at_the_weekly_pulse(self):
+        # A release or an uprising's rebels hold no te_cc_small_factor until their first yearly pulse, up to a
+        # year of full prices for the countries the rule is for (review of #1770). The weekly pulse, which runs in
+        # the country's own event under either construction setting, gives them the yearly steps once.
+        pulse = _squash(_body(_read(WEEKLY_PULSE), "te_construction_market_on_weekly_pulse"))
+        self.assertTrue(pulse.startswith("te_cc_weekly_new_country = yes if = { limit = { "
+                                         "te_free_market_construction_off = yes }"), pulse[:120])
+        body = _squash(_top_blocks(_read(EFFECTS))["te_cc_weekly_new_country"])
+        self.assertEqual(body, "if = { limit = { te_small_economy_construction_on = yes "
+                               "NOT = { is_country_type = decentralized } NOT = { has_variable = te_cc_small_factor } "
+                               "gdp > 0 } te_cc_yearly_update = yes te_cc_apply_scaling = yes }")
+        for direct in (False, True):
+            name = "construction_cost_scaling_direct" if direct else "construction_cost_scaling"
+            with self.subTest(direct=direct):
+                new = Country(rule=True, gdp=1e6, gdppc=0.4, slack=0.6, direct=direct)
+                new.run("te_cc_weekly_new_country")
+                self.assertAlmostEqual(new.variables["te_cc_small_factor"], 0.19, places=4)
+                self.assertAlmostEqual(new.modifiers[name], -0.81, places=4)
+                # once: the next week finds the factor stored and leaves the country to its yearly pulse
+                before = (dict(new.variables), dict(new.modifiers))
+                new.run("te_cc_weekly_new_country")
+                self.assertEqual((new.variables, new.modifiers), before)
+        # Not with the rule off, not before the engine has a GDP for it, not a decentralized country.
+        for kwargs in (dict(rule=False, gdp=1e6), dict(rule=True, gdp=0),
+                       dict(rule=True, gdp=1e6, country_type="decentralized")):
+            with self.subTest(**kwargs):
+                other = Country(gdppc=0.4, slack=0.6, **kwargs)
+                other.run("te_cc_weekly_new_country")
+                self.assertEqual((other.variables, other.modifiers), ({}, {}))
+
+    def test_the_start_self_check_reads_the_modifier_two_days_on(self):
+        # It used to read only the variable the same effect stored, which is right whatever ROOT the modifier's
+        # multiplier resolved against (review of #1770). The verdict now reads the modifier, from a hidden event
+        # two days later: a modifier set in an effect is not visible inside it.
+        effects = _top_blocks(_read(EFFECTS))
+        arm = _squash(effects["te_cc_small_start_selfcheck"])
+        self.assertIn("global_var:te_cc_small_start_queued < 3", arm)
+        self.assertIn("var:te_cc_small_factor < 0.8", arm)  # a discount nothing else on the country can hide
+        self.assertIn("trigger_event = { id = te_construction_market_recalc_events.5 days = 2 }", arm)
+        self.assertNotIn("debug_log", arm)
+        event = _squash(_body(_read(START_EVENTS), "te_construction_market_recalc_events.5"))
+        # no trigger: a delayed event whose trigger is false when queued is dropped (#1596)
+        self.assertEqual(event, "type = country_event hidden = yes immediate = { te_cc_small_start_verdict = yes }")
+        verdict = _squash(effects["te_cc_small_start_verdict"])
+        self.assertIn("set_variable = { name = te_cc_chk_total value = te_cc_modifier_total }", verdict)
+        self.assertIn("limit = { NOT = { has_variable = te_cc_start_retried } var:te_cc_chk_total < 0 "
+                      "var:te_cc_chk_stored < 0 } debug_log = \"TE_SELF_CHECK OK small_economy_start ", verdict)
+        self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN small_economy_start ", verdict)
+        self.assertEqual(verdict.count("set_global_variable = { name = te_cc_small_start_check_done value = yes }"), 1)
+        # what it reads is the lever of the construction setting in force
+        total = _value(_read(VALUES), "te_cc_modifier_total")
+        self.assertIn("modifier:country_construction_goods_cost_mult", total)
+        self.assertIn("modifier:goods_input_construction_mult", total)
+        # A wrong ROOT resolves the multiplier to 1: the static modifiers' own value, a rise, never a discount.
+        with open(STATIC, encoding="utf-8-sig") as f:
+            static = f.read()
+        self.assertRegex(static, r"construction_cost_scaling = \{[^}]*goods_input_construction_mult = 1\b")
+        self.assertRegex(static, r"construction_cost_scaling_direct = \{[^}]*country_construction_goods_cost_mult = 1\b")
 
     def test_the_text_names_the_figures_the_script_uses(self):
         constants = Country().constants

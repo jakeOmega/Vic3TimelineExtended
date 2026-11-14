@@ -122,6 +122,15 @@ class UnitedNationsQuietEndTest(unittest.TestCase):
         for block in effect.children[1:]:
             limit = next(c for c in block.children if c.key == "limit")
             with self.subTest(line=block.line):
+                if "un_igo_age" in {c.value for c in block.children if c.key == "set_global_variable"}:
+                    # The age of Intergovernmental Organizations is marked whatever the rule, so a later switch to
+                    # the early unlock finds it. All it does besides is the League's notice, which un_league_stage
+                    # (the early flag) gates (test_rule_unlock_settings.py, UnitedNationsLeagueNameTest).
+                    self.assertEqual([c.key for c in block.children], ["limit", "if", "set_global_variable"])
+                    notice = next(c for c in block.children if c.key == "if")
+                    notice_limit = next(c for c in notice.children if c.key == "limit")
+                    self.assertIn(("un_league_stage", "yes"), pairs(notice_limit.children))
+                    continue
                 self.assertIn(("te_united_nations_on", "yes"), pairs(limit.children))
 
 

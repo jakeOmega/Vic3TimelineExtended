@@ -481,8 +481,8 @@ class ResolvedEntriesTests(unittest.TestCase):
     }
 
     # World War's outcomes call ww_mark_entry_resolved, which sets ww_entry_resolved, or under the early unlock
-    # before Combined Arms ww_early_war_resolved, which holds the entry until Combined Arms (game_rules.md § Early
-    # and late unlock; test_rule_unlock_settings.py).
+    # after a war begun before Combined Arms ww_early_war_resolved, which holds the entry until Combined Arms
+    # (game_rules.md § Early and late unlock; test_rule_unlock_settings.py).
     RESOLVE_HELPERS = {
         "je_world_war": ("ww_mark_entry_resolved", ("common", "scripted_effects", "te_event_agency_ww_effects.txt")),
     }

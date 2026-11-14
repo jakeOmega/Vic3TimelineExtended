@@ -137,6 +137,17 @@ te_construction_market_apply_per_site_modifier = {
 #                  what the values say.
 #        A week with another unstaffed site decides nothing: the country arms
 #        again and reads the week after.
+#
+# TE_SELF_CHECK construction_site_unstaffed. A site that never hires would have
+# the read above put off every week, for good, with no line at all: the very
+# failure the sizing rests on not happening. So the weeks running in which an
+# armed country finds a site under 10% staffed again are counted
+# (var:te_cm_chk_skips), and the fourth writes, once a game:
+#          BROKEN  a site under 10% staffed at four weekly sizings running: a
+#                  site that is not hiring (so its share of the purchase is
+#                  never delivered), or a new site placed each of four weeks.
+#                  The play-test row says how to tell them apart.
+#        It also ends the delivery check for the game: it has had its answer.
 te_cm_site_delivery_selfcheck = {
 	if = {
 		limit = {
@@ -178,8 +189,42 @@ te_cm_site_delivery_selfcheck = {
 				}
 				remove_variable = te_cm_chk_delivered
 				remove_variable = te_cm_chk_ratio
+				if = {
+					limit = { has_variable = te_cm_chk_skips }
+					remove_variable = te_cm_chk_skips
+				}
+			}
+			else_if = {
+				limit = {
+					is_ai = yes
+					any_scope_building = {
+						is_building_type = te_construction_market_site
+						occupancy < 0.1
+					}
+				}
+				if = {
+					limit = { NOT = { has_variable = te_cm_chk_skips } }
+					set_variable = { name = te_cm_chk_skips value = 0 }
+				}
+				change_variable = { name = te_cm_chk_skips add = 1 }
+				if = {
+					limit = { var:te_cm_chk_skips >= 4 }
+					set_global_variable = { name = te_cm_site_delivery_check_done value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN construction_site_unstaffed country=[THIS.GetCountry.GetTagName] weeks=[THIS.Var('te_cm_chk_skips').GetValue|0] bought=[THIS.Var('te_cm_chk_target').GetValue|1] (a Construction Site under 10 percent staffed at four weekly sizings running: a site that is not hiring, or a new site placed each week)"
+					debug_log_scopes = yes
+					remove_variable = te_cm_chk_skips
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_cm_chk_skips }
+				remove_variable = te_cm_chk_skips
 			}
 			remove_variable = te_cm_chk_target
+		}
+		# Not armed last week: the weeks no longer run on.
+		else_if = {
+			limit = { has_variable = te_cm_chk_skips }
+			remove_variable = te_cm_chk_skips
 		}
 		if = {
 			limit = {
@@ -194,9 +239,15 @@ te_cm_site_delivery_selfcheck = {
 			set_variable = { name = te_cm_chk_target value = te_construction_market_total_use_target }
 		}
 	}
-	else_if = {
-		limit = { has_variable = te_cm_chk_target }
-		remove_variable = te_cm_chk_target
+	else = {
+		if = {
+			limit = { has_variable = te_cm_chk_target }
+			remove_variable = te_cm_chk_target
+		}
+		if = {
+			limit = { has_variable = te_cm_chk_skips }
+			remove_variable = te_cm_chk_skips
+		}
 	}
 }
 

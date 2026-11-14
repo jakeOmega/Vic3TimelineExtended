@@ -237,6 +237,116 @@ class BranchTests(unittest.TestCase):
 """), "likely_false")
 
 
+SET_BEFORE_EVENTS = """namespace = s
+s.1 = {
+	type = country_event
+	hidden = yes
+	trigger = { is_at_war = yes }
+	immediate = { }
+}
+s.2 = {
+	type = country_event
+	hidden = yes
+	trigger = { has_variable = v_x }
+	immediate = { }
+}
+"""
+
+
+class SetBeforeTests(unittest.TestCase):
+    """`set_before` is the one class that passes with no review, so it must only hold what is certain: a
+    condition a `limit` around the call tests, or a variable written on the calling scope whenever the call
+    is reached. Until 2026-11-13 a condition that merely appeared in an earlier block's `limit` counted, and
+    so did a write on another scope (a reviewer's fixture: all three shapes passed `--strict`)."""
+
+    def _cls(self, effects: str, event: str) -> str:
+        root = _mod({"events/s_events.txt": SET_BEFORE_EVENTS, "common/scripted_effects/s.txt": effects})
+        return {t.event: t for t in audit(mod_path=root).targets}[event].cls
+
+    def test_a_condition_only_in_an_earlier_limit_proves_nothing(self):
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { is_at_war = yes } add_loyalists = { value = 0.1 } }
+	trigger_event = { id = s.1 days = 5 }
+}
+""", "s.1"), "review")
+
+    def test_has_variable_only_in_an_earlier_limit_proves_nothing(self):
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { has_variable = v_x } add_loyalists = { value = 0.1 } }
+	trigger_event = { id = s.2 days = 5 }
+}
+""", "s.2"), "review")
+
+    def test_a_write_on_another_scope_does_not_count(self):
+        self.assertEqual(self._cls("""e = {
+	scope:other = { set_variable = v_x }
+	trigger_event = { id = s.2 days = 5 }
+}
+""", "s.2"), "review")
+        # Nor one made before a block that changes scope on the way to the call.
+        self.assertEqual(self._cls("""e = {
+	set_variable = v_x
+	scope:other = { trigger_event = { id = s.2 days = 5 } }
+}
+""", "s.2"), "review")
+
+    def test_a_write_only_an_earlier_if_makes_does_not_count(self):
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { is_ai = yes } set_variable = v_x }
+	trigger_event = { id = s.2 days = 5 }
+}
+""", "s.2"), "review")
+
+    def test_a_write_the_call_always_follows_counts(self):
+        self.assertEqual(self._cls("""e = {
+	set_variable = { name = v_x value = 1 }
+	if = { limit = { is_ai = yes } trigger_event = { id = s.2 days = 5 } }
+}
+""", "s.2"), "set_before")
+        self.assertEqual(self._cls("""e = {
+	hidden_effect = { set_variable = v_x }
+	trigger_event = { id = s.2 days = 5 }
+}
+""", "s.2"), "set_before")
+
+    def test_a_limit_around_the_call_counts(self):
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { is_at_war = yes } trigger_event = { id = s.1 days = 5 } }
+}
+""", "s.1"), "set_before")
+        # An iterator's limit is about the country the event is sent to.
+        self.assertEqual(self._cls("""e = {
+	every_country = { limit = { is_at_war = yes } trigger_event = { id = s.1 days = 5 } }
+}
+""", "s.1"), "set_before")
+        # A limit tested before the scope changes is about another country.
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { is_at_war = yes } scope:other = { trigger_event = { id = s.1 days = 5 } } }
+}
+""", "s.1"), "review")
+        # The if's limit does not hold in its else.
+        self.assertEqual(self._cls("""e = {
+	if = { limit = { is_at_war = yes } add_loyalists = { value = 0.1 } }
+	else = { trigger_event = { id = s.1 days = 5 } }
+}
+""", "s.1"), "review")
+
+    def test_the_calling_events_own_trigger_counts_in_its_immediate_only(self):
+        caller = """s.3 = {
+	type = country_event
+	hidden = yes
+	trigger = { is_at_war = yes }
+	immediate = { %s }
+	option = { name = a %s }
+}
+"""
+        for where, expected in ((("trigger_event = { id = s.1 days = 5 }", ""), "set_before"),
+                                (("", "trigger_event = { id = s.1 days = 5 }"), "review")):
+            root = _mod({"events/s_events.txt": SET_BEFORE_EVENTS + caller % where})
+            with self.subTest(where=where):
+                self.assertEqual({t.event: t for t in audit(mod_path=root).targets}["s.1"].cls, expected)
+
+
 class ModTests(unittest.TestCase):
     def test_the_court_events_are_queued_without_a_trigger(self):
         result = audit()

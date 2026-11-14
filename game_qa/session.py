@@ -713,6 +713,14 @@ class Session:
             # made it, as for this build's own (it read "a save of the owner's" and showed none, review 2026-11-13).
             self._record("fixture", outcome="found" if own else "not_used", save=save, **({"named": True} if own else {}))
             if not switch_rules:
+                if own:
+                    # The rules the named fixture holds, so `start` can say where they differ from the last
+                    # lobby's (`_lobby_differs`): a fixture of another build is the case that can differ.
+                    try:
+                        self._rules = {"settings": rules.settings_of((user / fixture.SAVE_FOLDER / (save + ".v3"))
+                                                                     .read_bytes())}
+                    except (OSError, rules.RulesError) as e:
+                        self._record("rules", outcome="unread", detail=str(e))
                 return save, False, []
             try:
                 path, changed, settings = rules.switched_fixture(user, self._switchable_fixture_key(save),

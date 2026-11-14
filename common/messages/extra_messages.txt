@@ -2259,6 +2259,16 @@ un_crisis_closed_notice = {
 	notification_type = feed
 	color = good
 }
+# The early unlock's League of Nations takes the name United Nations, and its
+# charter can be reformed: the month some country first has Intergovernmental
+# Organizations, to every member and every player
+# (un_global_authority_on_action, un_on_actions.txt).
+un_league_becomes_un_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = good
+}
 # A founding conference for a new UN is in session (to major and great powers).
 un_conference_opened_notice = {
 	type = country

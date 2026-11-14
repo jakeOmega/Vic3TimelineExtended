@@ -25,6 +25,8 @@ RELAYS = {
     "extra_law_events.92": ("events/extra_law_events.txt", "extra_law_events.27", False),
     "nuclear_custody.13": ("events/nuclear_custody_events.txt", "nuclear_custody.6", True),
     "nuclear_custody.14": ("events/nuclear_custody_events.txt", "nuclear_custody.11", True),
+    # Not a trigger false when queued: one that must be read again a year on (a resolution that lapsed meanwhile).
+    "un_vote.9": ("events/un_vote_events.txt", "un_vote.2", False),
 }
 
 
@@ -89,6 +91,24 @@ class RelayTests(unittest.TestCase):
         immediate = block[block.index("immediate = {"):]
         self.assertIn("scope:un_resolution ?= { has_tag = un_res_voting }", immediate)
         self.assertLess(immediate.index("has_tag = un_res_voting"), immediate.index("un_vote_refresh_leans"))
+
+    def test_the_delegation_sort_checks_the_vote_again(self):
+        # un_vote.7 runs a day after it is queued. A vote that closed overnight has no lock variable left: the
+        # read of it must not fail, and nothing is sorted.
+        block = _block(_read("events/un_vote_events.txt"), "un_vote.7")
+        immediate = block[block.index("immediate = {"):]
+        self.assertIn("global_var:un_active_resolution ?= { save_scope_as = un_resolution }", immediate)
+        self.assertNotRegex(immediate, r"global_var:un_active_resolution = \{")
+        self.assertIn("scope:un_resolution ?= { has_tag = un_res_voting }", immediate)
+        self.assertLess(immediate.index("has_tag = un_res_voting"), immediate.index("un_deleg_reassign_rows"))
+
+    def test_the_results_keep_the_trigger_the_relay_leaves_to_them(self):
+        # un_vote.2 decides the vote in its immediate and applies the outcome in its option. Its trigger is what
+        # stops that for a resolution that lapsed within the year, and the relay is what has it read on the day.
+        block = _block(_read("events/un_vote_events.txt"), "un_vote.2")
+        trigger = block[block.index("\ttrigger = {"):block.index("\timmediate = {")]
+        self.assertIn("scope:un_resolution ?= { has_tag = un_res_voting }", trigger)
+        self.assertIn("je:je_united_nations ?= { has_modifier = un_member_modifier }", trigger)
 
 
 if __name__ == "__main__":
