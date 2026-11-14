@@ -3275,6 +3275,14 @@
   "en": "Emergency restrictions on capital movement have been imposed to stem a currency crisis, constraining trade.",
   "de": "Notfallbeschränkungen für den Kapitalverkehr wurden verhängt, um eine Währungskrise einzudämmen, was den Handel beeinträchtigt."
  },
+ "banking_event_federation_relief_fund": {
+  "en": "Federation Relief Fund Opened",
+  "de": "Hilfsfonds des Verbunds eröffnet"
+ },
+ "banking_event_federation_relief_fund_desc": {
+  "en": "We are paying out the federation's emergency relief fund to cooperatives that have run out of cash.",
+  "de": "Wir zahlen den Notfallhilfsfonds des Verbunds an Genossenschaften aus, denen das Bargeld ausgegangen ist."
+ },
  "banking_event_fintech_growth": {
   "en": "Financial Technology Growth",
   "de": "Wachstum der Finanztechnologie"
@@ -3427,6 +3435,14 @@
   "en": "A novel financial instrument is unlocking new channels of investment, boosting manufacturing [concept_throughput] as capital flows more freely to productive enterprise.",
   "de": "Ein neuartiges Finanzinstrument erschließt neue Investitionskanäle und steigert den [concept_throughput] der Fertigung, da Kapital freier in produktive Unternehmen fließt."
  },
+ "banking_event_old_slate_upheld": {
+  "en": "The Old Slate Upheld",
+  "de": "Die alte Liste bestätigt"
+ },
+ "banking_event_old_slate_upheld_desc": {
+  "en": "We backed the older slate for the federation council: its money stays under members' votes and open books.",
+  "de": "Wir haben die ältere Liste für den Rat des Verbunds unterstützt: Ihr Geld bleibt unter der Abstimmung der Mitglieder und offenen Büchern."
+ },
  "banking_event_partial_default": {
   "en": "Partial Default",
   "de": "Teilweiser Zahlungsausfall"
@@ -3442,6 +3458,14 @@
  "banking_event_pension_stability_desc": {
   "en": "Growing pension funds provide a stable, long-term source of capital.",
   "de": "Wachsende Pensionsfonds bieten eine stabile, langfristige Kapitalquelle."
+ },
+ "banking_event_plan_figures_upheld": {
+  "en": "Planning Bureau Upheld",
+  "de": "Planungsbehörde bestätigt"
+ },
+ "banking_event_plan_figures_upheld_desc": {
+  "en": "We backed the planning bureau against the secretariat, and the plan's figures for money and credit stand.",
+  "de": "Wir haben die Planungsbehörde gegen das Sekretariat unterstützt, und die Zahlen des Plans für Geld und Kredit bleiben bestehen."
  },
  "banking_event_predatory_crackdown": {
   "en": "Lending Practice Reforms",
@@ -3554,6 +3578,14 @@
  "banking_event_sovereign_wealth_fund_desc": {
   "en": "A state investment fund is building a reserve against future downturns, enhancing national [concept_prestige].",
   "de": "Ein staatlicher Investitionsfonds baut eine Rücklage gegen künftige Abschwünge auf und steigert das nationale [concept_prestige]."
+ },
+ "banking_event_stockpile_release": {
+  "en": "Emergency Stockpiles Opened",
+  "de": "Notvorräte geöffnet"
+ },
+ "banking_event_stockpile_release_desc": {
+  "en": "We have opened the emergency stockpiles to supply the factories that a failed depot left idle.",
+  "de": "Wir haben die Notvorräte geöffnet, um die Fabriken zu versorgen, die ein ausgefallenes Depot stillgelegt hat."
  },
  "banking_event_student_debt_relief": {
   "en": "Student Debt Relief",
@@ -28092,12 +28124,12 @@
   "de": "Die Arbeit geht weiter. Wir ruhen uns aus, wenn sie fertig ist."
  },
  "wonder_events.1.d": {
-  "en": "Engineers report that the space elevator's tether, spooling down from the counterweight station in geostationary orbit, has entered the lower atmosphere and is approaching the ground anchor site. The [ROOT.GetCountry.GetAdjectiveNoFormatting] space program is the talk of the world's scientific community.",
-  "de": "Ingenieure melden, dass das Kabel des Weltraumlifts, das von der Gegengewichtsstation im geostationären Orbit herabgelassen wird, in die untere Atmosphäre eingetreten ist und sich der Bodenverankerung nähert. Das [ROOT.GetCountry.GetAdjectiveNoFormatting]e Weltraumprogramm ist das Gesprächsthema der wissenschaftlichen Welt."
+  "en": "A new tether ribbon, lowered from the space elevator's station in geostationary orbit, has entered the lower atmosphere above the anchor site in [SCOPE.sState('wonder_state').GetName]. The [ROOT.GetCountry.GetAdjectiveNoFormatting] engineers expect to make it fast to the ground anchor within days, and observatories abroad have asked for the descent schedule so that they can watch.",
+  "de": "Ein neues Haltekabel, das von der Station des Weltraumaufzugs im geostationären Orbit herabgelassen wurde, ist über dem Ankerplatz in [SCOPE.sState('wonder_state').GetName] in die untere Atmosphäre eingetreten. Die [ROOT.GetCountry.GetAdjectiveNoFormatting]en Ingenieure erwarten, es binnen weniger Tage am Boden zu verankern, und Sternwarten im Ausland haben um den Abstiegsplan gebeten, um ihn verfolgen zu können."
  },
  "wonder_events.1.f": {
-  "en": "\\\"Do you see it? That thread coming down from the sky, so thin you can barely make it out?\\\"\\n\\n\\\"I see it. The first real ladder to the stars.\\\"\\n\\n\\\"We'll remember this day. The day gravity became optional.\\\"",
-  "de": "„Siehst du es? Dieser Faden, der vom Himmel herabkommt, so dünn, dass man ihn kaum erkennen kann?“\\n\\n„Ich sehe es. Die erste echte Leiter zu den Sternen.“\\n\\n„Wir werden uns an diesen Tag erinnern. Den Tag, an dem die Schwerkraft optional wurde.“"
+  "en": "The duty engineer at the anchor station watched the tether on the long-range camera feed, because through the window there was nothing to see yet. On the screen it was a gray line against the sky, swaying a little as the lower winds took it. He checked each tension reading against the descent plan and called the figures up to the orbital station on schedule. Out on the anchor pad the ground crew had the clamps open and greased, and the spare cable drums were chocked beside them. When the tip came down below the cloud the people on the viewing platform began to point, and he logged the time and the altitude and went back to the tension figures.",
+  "de": "Der diensthabende Ingenieur an der Ankerstation verfolgte das Kabel auf dem Bild der Fernkamera, denn durchs Fenster war noch nichts zu sehen. Auf dem Schirm war es eine graue Linie vor dem Himmel, die in den unteren Winden leicht schwankte. Er verglich jeden Spannungswert mit dem Abstiegsplan und meldete die Zahlen planmäßig an die Orbitalstation. Draußen auf dem Ankerplatz hatte die Bodenmannschaft die Klemmen geöffnet und gefettet, die Ersatztrommeln standen mit Keilen gesichert daneben. Als die Spitze unter die Wolken kam, begannen die Leute auf der Aussichtsplattform zu zeigen. Er trug Uhrzeit und Höhe ein und wandte sich wieder den Spannungswerten zu."
  },
  "wonder_events.1.t": {
   "en": "The Tether Descends",
@@ -28112,16 +28144,16 @@
   "de": "Wunderschön, aber die eigentliche Arbeit beginnt jetzt."
  },
  "wonder_events.10.d": {
-  "en": "The first orbital solar collector has completed alignment and begun transmitting power via microwave beam to the ground rectenna. Instruments confirm a steady output, and the [ROOT.GetCountry.GetAdjectiveNoFormatting] solar collector program is officially operational.",
-  "de": "Der erste orbitale Sonnenkollektor hat die Ausrichtung abgeschlossen und überträgt nun Energie per Mikrowellenstrahl an die Bodenrectenna. Instrumente bestätigen eine stabile Leistung, und das [ROOT.GetCountry.GetAdjectiveNoFormatting]e Sonnenkollektorprogramm ist offiziell einsatzbereit."
+  "en": "The orbital solar collector under construction has made a test transmission: a low-power microwave beam aimed at a receiving antenna beside the ground station in [SCOPE.sState('wonder_state').GetName]. The [ROOT.GetCountry.GetAdjectiveNoFormatting] engineers there report the beam steady and on target, and they want to raise the power in stages.",
+  "de": "Der im Bau befindliche orbitale Sonnenkollektor hat eine Testübertragung durchgeführt: einen Mikrowellenstrahl mit geringer Leistung auf eine Empfangsantenne neben der Bodenstation in [SCOPE.sState('wonder_state').GetName]. Die [ROOT.GetCountry.GetAdjectiveNoFormatting]en Ingenieure vor Ort melden den Strahl als stabil und zielgenau und wollen die Leistung stufenweise erhöhen."
  },
  "wonder_events.10.f": {
-  "en": "\\\"The rectenna is live. Gigawatts, pouring in from orbit: invisible, silent, and continuous. You can't see the beam, but you can see the lights coming on across the grid.\\\"\\n\\n\\\"It doesn't look like much.\\\"\\n\\n\\\"That's the beauty of it. The most powerful energy source in history, and it's invisible.\\\"",
-  "de": "„Die Rectenna ist aktiv. Gigawatt strömen aus dem Orbit herein: unsichtbar, lautlos und ununterbrochen. Man sieht den Strahl nicht, aber man sieht, wie im ganzen Netz die Lichter angehen.“\\n\\n„Sieht nicht nach viel aus.“\\n\\n„Das ist gerade das Schöne daran. Die stärkste Energiequelle der Geschichte, und sie ist unsichtbar.“"
+  "en": "In the hut beside the test antenna, the technicians had taped a strip of paper along the bottom of the power display so that they could mark it in pencil. The beam came on at the minute the orbit team had promised. The reading rose, held and did not drift, and the senior technician read it to the orbit team over the line: \\\"Steady. Center of the field. Nothing on the edge sensors.\\\" Someone made a mark on the paper and wrote the time beside it. Outside, a second crew was walking the rows of wire mesh with handheld meters, checking the edge of the field post by post.",
+  "de": "In der Hütte neben der Testantenne hatten die Techniker einen Papierstreifen unten an die Leistungsanzeige geklebt, um sie mit Bleistift zu markieren. Der Strahl setzte in der Minute ein, die das Orbitteam zugesagt hatte. Der Wert stieg, hielt sich und wanderte nicht, und der leitende Techniker las ihn dem Orbitteam über die Leitung vor: „Stabil. Mitte des Feldes. Nichts an den Randsensoren.“ Jemand machte einen Strich auf dem Papier und schrieb die Uhrzeit daneben. Draußen ging eine zweite Mannschaft mit Handmessgeräten die Reihen des Drahtgitters ab und prüfte den Feldrand Pfosten für Pfosten."
  },
  "wonder_events.10.t": {
-  "en": "First Light",
-  "de": "Erstes Licht"
+  "en": "A Test Beam",
+  "de": "Ein Teststrahl"
  },
  "wonder_events.11.a": {
   "en": "Compensate the farmers and implement new safeguards.",
@@ -28132,16 +28164,16 @@
   "de": "Eine Erklärung abgeben. Die Risiken herunterspielen."
  },
  "wonder_events.11.d": {
-  "en": "A calibration error in the orbital collector's phased array causes the microwave beam to drift off the rectenna, irradiating several square kilometers of surrounding countryside. Prolonged exposure damages crops and disrupts electronics across the affected zone. Public alarm is considerable.",
-  "de": "Ein Kalibrierungsfehler im Phasenarray des orbitalen Kollektors lässt den Mikrowellenstrahl von der Rectenna abdriften und mehrere Quadratkilometer des umliegenden Landes bestrahlen. Die anhaltende Einwirkung schädigt Ernten und stört Elektronik in der gesamten betroffenen Zone. Die öffentliche Beunruhigung ist erheblich."
+  "en": "A calibration error in the orbital collector's transmitting array let its test beam drift off the receiving antenna in [SCOPE.sState('wonder_state').GetName] and across the farmland beside it before the operators cut the power. The crops in its path have wilted, and every machine and phone there stopped working. The farmers want to be paid for the harvest, and their neighbors want to know whether it can happen again.",
+  "de": "Ein Kalibrierungsfehler im Sendearray des orbitalen Kollektors ließ den Teststrahl von der Empfangsantenne in [SCOPE.sState('wonder_state').GetName] und über das angrenzende Ackerland abdriften, bevor die Betreiber den Strom abschalteten. Die Feldfrüchte in seiner Bahn sind verwelkt, und jede Maschine und jedes Telefon dort fiel aus. Die Bauern wollen für die Ernte entschädigt werden, und ihre Nachbarn wollen wissen, ob das wieder passieren kann."
  },
  "wonder_events.11.f": {
-  "en": "\\\"The beam drifted three degrees off the rectenna. Three degrees! Every electronic device in the zone is dead, and the crops are cooked from microwave exposure.\\\"\\n\\n\\\"Could it have hit a city?\\\"\\n\\n\\\"If the error had been in the other direction? Absolutely.\\\"",
-  "de": "„Der Strahl ist drei Grad von der Rectenna abgedriftet. Drei Grad! Jedes elektronische Gerät in der Zone ist hin, und die Ernten sind durch die Mikrowellenstrahlung verkocht.“\\n\\n„Hätte er eine Stadt treffen können?“\\n\\n„Wenn der Fehler in die andere Richtung gegangen wäre? Absolut.“"
+  "en": "To the government, from the inspectors sent to the receiving station after the beam fault. We walked the beam's track with field meters the morning after. It runs from the edge of the antenna field across several farms, and along it the crops have wilted in a strip about as wide as a road. Nothing on the strip is radioactive, and the soil is safe to work. Every electrical device that was switched on in the strip has failed, including two tractors, the pumps on one farm and the phones of the people working there. Two farm workers felt heat on their skin and have been examined, and neither was badly hurt. We attach a map of the strip, a list of the damaged property by owner, and the operators' log of the minutes before the power was cut.",
+  "de": "An die Regierung, von den Inspektoren, die nach der Strahlstörung zur Empfangsstation entsandt wurden. Wir sind am Morgen danach die Bahn des Strahls mit Feldmessgeräten abgegangen. Sie führt vom Rand des Antennenfeldes über mehrere Höfe, und entlang ihr sind die Feldfrüchte in einem Streifen von etwa der Breite einer Straße verwelkt. Nichts auf dem Streifen ist radioaktiv, und der Boden kann bedenkenlos bearbeitet werden. Jedes elektrische Gerät, das im Streifen eingeschaltet war, ist ausgefallen, darunter zwei Traktoren, die Pumpen eines Hofes und die Telefone der Arbeiter dort. Zwei Landarbeiter spürten Hitze auf der Haut und wurden untersucht, keiner von beiden wurde ernstlich verletzt. Wir fügen eine Karte des Streifens bei, eine Liste der beschädigten Sachen nach Eigentümern und das Protokoll der Betreiber über die Minuten vor der Abschaltung."
  },
  "wonder_events.11.t": {
-  "en": "Beam Misalignment",
-  "de": "Fehlausrichtung des Strahls"
+  "en": "Off Target",
+  "de": "Am Ziel vorbei"
  },
  "wonder_events.12.a": {
   "en": "Invest in electrification of heavy industry.",
@@ -28152,12 +28184,12 @@
   "de": "Den Überschuss über unsere Handelsnetze exportieren."
  },
  "wonder_events.12.d": {
-  "en": "The orbital solar collector is producing power far in excess of current demand. Electricity prices have plummeted, making energy-intensive industries suddenly viable at scales previously unimaginable.",
-  "de": "Der orbitale Sonnenkollektor erzeugt weit mehr Energie, als derzeit benötigt wird. Die Strompreise sind eingebrochen, wodurch energieintensive Industrien plötzlich in einem zuvor unvorstellbaren Maßstab rentabel werden."
+  "en": "The engineers of the orbital solar collector say it can send more power to the ground than our grid now uses, as fast as receiving stations are built to take it. Smelters, chemical works and other heavy users of electricity have asked for a share. Our traders say foreign buyers would take the rest.",
+  "de": "Die Ingenieure des orbitalen Sonnenkollektors sagen, er könne mehr Energie zum Boden schicken, als unser Netz jetzt verbraucht, und zwar so schnell, wie Empfangsstationen gebaut werden, um sie aufzunehmen. Hütten, Chemiewerke und andere Großverbraucher von Strom haben um einen Anteil gebeten. Unsere Händler sagen, ausländische Abnehmer würden den Rest nehmen."
  },
  "wonder_events.12.f": {
-  "en": "\\\"We're generating more power than we can use. Factories that were marginal are now printing money. The smelters alone have tripled output.\\\"\\n\\n\\\"And this is only one collector.\\\"",
-  "de": "„Wir erzeugen mehr Energie, als wir verbrauchen können. Fabriken, die kaum rentabel waren, drucken jetzt Geld. Allein die Hütten haben ihre Produktion verdreifacht.“\\n\\n„Und das ist erst ein einziger Kollektor.“"
+  "en": "Applications for new connections received by the grid office since the collector came into service, each with the reason it gives:\\n\\nAn aluminum smelter wants twice its present supply, because power is most of what aluminum costs, and it can run a second line on the difference.\\nA fertilizer works wants a supply it can count on through the night, so that it no longer has to bank its furnaces when demand on the grid is highest.\\nThree steel mills, applying together, want enough to replace their fuel-fired furnaces with electric ones, and ask for a contract long enough to pay for the change.\\nA water board wants to run its treatment works at full capacity, instead of in shifts to keep its bill down.",
+  "de": "Anträge auf neue Anschlüsse, die das Netzamt seit der Inbetriebnahme des Kollektors erhalten hat, jeweils mit der angegebenen Begründung:\\n\\nEine Aluminiumhütte will das Doppelte ihrer jetzigen Versorgung, weil Strom den größten Teil der Aluminiumkosten ausmacht und sie mit dem Unterschied eine zweite Linie betreiben kann.\\nEin Düngemittelwerk will eine Versorgung, auf die es sich auch nachts verlassen kann, damit es seine Öfen nicht mehr herunterfahren muss, wenn die Last im Netz am höchsten ist.\\nDrei Stahlwerke wollen gemeinsam genug Strom, um ihre brennstoffbefeuerten Öfen durch elektrische zu ersetzen, und bitten um einen Vertrag, der lang genug läuft, um die Umstellung zu bezahlen.\\nEine Wasserbehörde will ihre Aufbereitungsanlagen mit voller Kapazität laufen lassen statt in Schichten, um die Rechnung niedrig zu halten."
  },
  "wonder_events.12.t": {
   "en": "The Power Surplus",
@@ -28172,12 +28204,12 @@
   "de": "Den Überschuss in die Forschung stecken."
  },
  "wonder_events.13.d": {
-  "en": "With the solar collector array at full capacity, the nation effectively has access to unlimited clean energy. The implications extend far beyond mere electricity; this is a fundamental transformation of what civilization can achieve.",
-  "de": "Mit dem Sonnenkollektor-Array auf voller Kapazität hat die Nation praktisch Zugang zu unbegrenzter sauberer Energie. Die Auswirkungen reichen weit über bloßen Strom hinaus; dies ist ein grundlegender Wandel dessen, was die Zivilisation zu leisten vermag."
+  "en": "The orbital solar collector has grown large enough that our planners no longer expect electricity to limit anything we want to build. They put two proposals to the government: to cut what every household and business pays for power, at the treasury's expense, or to put the surplus into the laboratories.",
+  "de": "Der orbitale Sonnenkollektor ist so groß geworden, dass unsere Planer nicht mehr erwarten, dass Strom irgendetwas begrenzt, das wir bauen wollen. Sie legen der Regierung zwei Vorschläge vor: zu Lasten der Staatskasse zu senken, was jeder Haushalt und jeder Betrieb für Strom zahlt, oder den Überschuss in die Labore zu lenken."
  },
  "wonder_events.13.f": {
-  "en": "\\\"Do you know what unlimited energy means? Unlimited fresh water. Unlimited agriculture. Unlimited manufacturing. The only constraint on human ambition is human imagination.\\\"\\n\\n\\\"And the other nations?\\\"\\n\\n\\\"They'll either buy our power or build their own.\\\"",
-  "de": "„Wisst ihr, was unbegrenzte Energie bedeutet? Unbegrenztes Frischwasser. Unbegrenzte Landwirtschaft. Unbegrenzte Fertigung. Die einzige Grenze menschlichen Strebens ist die menschliche Vorstellungskraft.“\\n\\n„Und die anderen Nationen?“\\n\\n„Sie werden entweder unseren Strom kaufen oder ihren eigenen bauen.“"
+  "en": "\\\"Visitors to the control room expect noise, and there isn't any. There are no fuel deliveries to schedule and no ash to haul away. The collector stays where we put it and sends down the same power at noon and at midnight, through cloud and through rain, and we turn the beam down only when the collector is ordered to point somewhere else. Last month the grid office asked us to carry a whole region's evening load while a plant was down for repairs, and we did it from the same chairs. Most of my shift is meter readings and maintenance sheets.\\\"\\n\\n— an engineer in the control room of the orbital solar collector",
+  "de": "„Besucher im Kontrollraum erwarten Lärm, aber es gibt keinen. Es gibt keine Brennstofflieferungen zu planen und keine Asche abzufahren. Der Kollektor bleibt, wo wir ihn hingestellt haben, und schickt mittags wie um Mitternacht dieselbe Leistung herab, durch Wolken und durch Regen, und wir drosseln den Strahl nur, wenn der Kollektor auf ein anderes Ziel ausgerichtet werden soll. Letzten Monat bat uns das Netzamt, die Abendlast einer ganzen Region zu tragen, während ein Kraftwerk zur Reparatur stillstand, und wir haben das von denselben Stühlen aus erledigt. Der größte Teil meiner Schicht besteht aus Zählerablesungen und Wartungsblättern.“\\n\\n— ein Ingenieur im Kontrollraum des orbitalen Sonnenkollektors"
  },
  "wonder_events.13.t": {
   "en": "The End of Night",
@@ -28192,16 +28224,16 @@
   "de": "Die Abschirmung wird halten. Die Kollektoren am Netz lassen."
  },
  "wonder_events.14.d": {
-  "en": "Astronomers detect a massive coronal mass ejection heading directly for the orbital collector array. The electromagnetic pulse could damage the collectors' sensitive electronics if they remain operational.",
-  "de": "Astronomen entdecken einen gewaltigen koronalen Massenauswurf, der direkt auf das orbitale Kollektor-Array zusteuert. Der elektromagnetische Puls könnte die empfindliche Elektronik der Kollektoren beschädigen, wenn sie in Betrieb bleiben."
+  "en": "Solar observers have seen a large coronal mass ejection leave the sun on a course that will carry it past Earth and the orbital solar collector within a day or two. If the collector is running when the storm arrives, its electronics may be damaged. Shutting it down cuts the power it sends to the ground until the storm has passed.",
+  "de": "Sonnenbeobachter haben einen großen koronalen Massenauswurf gesehen, der die Sonne auf einer Bahn verlässt, die ihn binnen ein bis zwei Tagen an der Erde und am orbitalen Sonnenkollektor vorbeiführen wird. Läuft der Kollektor, wenn der Sturm eintrifft, kann seine Elektronik beschädigt werden. Schalten wir ihn ab, sinkt die Leistung, die er zum Boden schickt, bis der Sturm vorüber ist."
  },
  "wonder_events.14.f": {
-  "en": "\\\"The sun giveth and the sun taketh away. This CME could fry every circuit board in the array if we don't shut down.\\\"\\n\\n\\\"And if we do shut down?\\\"\\n\\n\\\"Half the continent loses power for a month.\\\"",
-  "de": "„Die Sonne gibt, und die Sonne nimmt. Dieser CME könnte jede Platine im Array durchbrennen lassen, wenn wir nicht abschalten.“\\n\\n„Und wenn wir abschalten?“\\n\\n„Dann verliert ein halber Kontinent für einen Monat den Strom.“"
+  "en": "\\\"The observatory gives us about a day and a half. If we power down the transmitters and turn the panels edge-on, the storm passes through and we bring everything back the day after. If we lose the electronics instead, we are replacing them one launch at a time for the next year.\\\"\\n\\n\\\"And for the whole of that day and a half the collector sends nothing down, and the grid has to find the power somewhere else. The hospitals have generators. Most of the factories do not. The shielding was designed for storms of this size, and the test figures say it holds. I would rather trust the design and keep the power on.\\\"",
+  "de": "„Das Observatorium gibt uns etwa anderthalb Tage. Wenn wir die Sender herunterfahren und die Paneele hochkant stellen, zieht der Sturm hindurch und wir fahren am Tag danach alles wieder hoch. Verlieren wir stattdessen die Elektronik, ersetzen wir sie das ganze nächste Jahr über Start für Start.“\\n\\n„Und anderthalb Tage lang schickt der Kollektor nichts herab, und das Netz muss den Strom anderswo auftreiben. Die Krankenhäuser haben Generatoren. Die meisten Fabriken nicht. Die Abschirmung wurde für Stürme dieser Größe ausgelegt, und die Testwerte sagen, dass sie hält. Ich würde lieber der Auslegung vertrauen und den Strom anlassen.“"
  },
  "wonder_events.14.t": {
-  "en": "Solar Storm Warning",
-  "de": "Warnung vor Sonnensturm"
+  "en": "Weather from the Sun",
+  "de": "Wetter von der Sonne"
  },
  "wonder_events.15.a": {
   "en": "Access to our technology is access to our strength.",
@@ -28212,12 +28244,12 @@
   "de": "Lizenzabkommen anbieten. Kontrolle durch Kooperation."
  },
  "wonder_events.15.d": {
-  "en": "International voices accuse [ROOT.GetCountry.GetName] of monopolizing orbital energy, arguing that sunlight in space belongs to all humanity. Several nations call for the solar collectors to be placed under international oversight.",
-  "de": "Internationale Stimmen beschuldigen [ROOT.GetCountry.GetAltName('AKK')], die orbitale Energie zu monopolisieren, und argumentieren, dass Sonnenlicht im All der gesamten Menschheit gehöre. Mehrere Nationen fordern, die Sonnenkollektoren unter internationale Aufsicht zu stellen."
+  "en": "Several foreign governments accuse [ROOT.GetCountry.GetName] of keeping orbital solar power to itself, and argue that sunlight in space belongs to no country. They want our solar collector placed under international oversight, or the technology licensed to them.",
+  "de": "Mehrere ausländische Regierungen beschuldigen [ROOT.GetCountry.GetAltName('AKK')], die orbitale Solarenergie für sich zu behalten, und argumentieren, Sonnenlicht im All gehöre keinem Land. Sie wollen unseren Sonnenkollektor unter internationale Aufsicht gestellt sehen oder die Technologie an sie lizenziert."
  },
  "wonder_events.15.f": {
-  "en": "\\\"They want our collectors. Publicly they call it fair access. Privately they call it the energy weapon.\\\"\\n\\n\\\"Are they wrong? We could shut off power to half the world's receivers if we chose.\\\"\\n\\n\\\"Which is precisely why we won't give it up.\\\"",
-  "de": "„Sie wollen unsere Kollektoren. Öffentlich nennen sie es fairen Zugang. Privat nennen sie es die Energiewaffe.“\\n\\n„Liegen sie falsch? Wir könnten die halbe Welt vom Strom abschneiden, wenn wir wollten.“\\n\\n„Genau deshalb geben wir es nicht her.“"
+  "en": "To the government, from our envoys abroad. The governments that raised the matter of the solar collector have put their proposal on paper, and we enclose a copy. It asks for an international board to inspect the collector and approve where its beam is pointed, and for licenses on fixed terms for any country that wants to build its own. In private, several of their envoys have told us that they would drop the board if the licenses were offered. One said that his government worries less about what the collector does than about what it could do if we stopped selling power. We ask for instructions before the next meeting.",
+  "de": "An die Regierung, von unseren Gesandten im Ausland. Die Regierungen, die das Thema Sonnenkollektor aufgebracht haben, haben ihren Vorschlag schriftlich vorgelegt, eine Kopie liegt bei. Er fordert ein internationales Gremium, das den Kollektor prüft und genehmigt, wohin sein Strahl gerichtet wird, sowie Lizenzen zu festen Bedingungen für jedes Land, das einen eigenen bauen will. Mehrere ihrer Gesandten haben uns unter vier Augen gesagt, sie würden auf das Gremium verzichten, wenn die Lizenzen angeboten würden. Einer sagte, seine Regierung sorge sich weniger darum, was der Kollektor tut, als darum, was er tun könnte, wenn wir aufhörten, Strom zu verkaufen. Wir bitten vor der nächsten Sitzung um Weisung."
  },
  "wonder_events.15.t": {
   "en": "The Sunlight Monopoly",
@@ -28227,37 +28259,41 @@
   "en": "Halt construction until we understand the problem.",
   "de": "Den Bau stoppen, bis wir das Problem verstehen."
  },
+ "wonder_events.2.a.tt": {
+  "en": "Our space elevator construction sites switch to Paused for 180 days. They make no progress, lay off their crews and cost only a paused site's upkeep. Each site then returns by itself to the speed it had and hires its crews back.",
+  "de": "Unsere Baustellen des Weltraumaufzugs werden für 180 Tage auf Pausiert gestellt. Sie machen keine Fortschritte, entlassen ihre Mannschaften und kosten nur den Unterhalt einer pausierten Baustelle. Danach kehrt jede Baustelle von selbst auf ihre frühere Geschwindigkeit zurück und stellt ihre Mannschaften wieder ein."
+ },
  "wonder_events.2.b": {
   "en": "Reinforce the weak points and press on.",
   "de": "Die Schwachstellen verstärken und weitermachen."
  },
  "wonder_events.2.d": {
-  "en": "Monitoring stations detect alarming oscillations in the space elevator's tether during construction. Engineers warn that resonance patterns could lead to catastrophic failure if not addressed immediately.",
-  "de": "Überwachungsstationen registrieren beunruhigende Schwingungen im Kabel des Weltraumlifts während der Bauphase. Ingenieure warnen, dass Resonanzmuster zu einem katastrophalen Versagen führen könnten, wenn nicht sofort gehandelt wird."
+  "en": "Monitoring stations along the space elevator's tether have recorded a slow sideways swing in the section under construction, and it grows a little with every climber that passes. The engineers say the tether can break if the swing keeps growing. They ask whether to stop work until they have found the cause, or to reinforce the weak sections and keep going.",
+  "de": "Überwachungsstationen entlang des Kabels des Weltraumaufzugs haben im Abschnitt im Bau ein langsames seitliches Schwingen aufgezeichnet, das mit jedem vorbeifahrenden Kletterer etwas zunimmt. Die Ingenieure sagen, das Kabel könne reißen, wenn das Schwingen weiter wächst. Sie fragen, ob die Arbeit eingestellt werden soll, bis sie die Ursache gefunden haben, oder ob die schwachen Abschnitte verstärkt und die Arbeiten fortgesetzt werden sollen."
  },
  "wonder_events.2.f": {
-  "en": "\\\"The readings are off the charts. The tether is singing, and not in a good way.\\\"\\n\\n\\\"How long before it becomes critical?\\\"\\n\\n\\\"If we're lucky? Weeks. If we're not, we find out the hard way.\\\"",
-  "de": "„Die Messwerte sprengen jede Skala. Das Kabel singt, und nicht auf eine gute Art.“\\n\\n„Wie lange, bis es kritisch wird?“\\n\\n„Wenn wir Glück haben? Wochen. Wenn nicht, erfahren wir es auf die harte Tour.“"
+  "en": "To the construction office of the space elevator, from the tether monitoring service. Since the last climber went up, the sensors at the middle stations have recorded a lateral swing in the new section. Each climber that passes adds to it. The swing is regular, and its period matches the climber timetable closely enough that we believe the climbers are driving it. As a trial we have slowed the next two climbers by half. If the swing does not fall, we recommend that no further climbers go up until the section has been stiffened. The logs from every station are attached.",
+  "de": "An das Baubüro des Weltraumaufzugs, vom Kabelüberwachungsdienst. Seit der letzte Kletterer aufgestiegen ist, haben die Sensoren an den mittleren Stationen ein seitliches Schwingen im neuen Abschnitt aufgezeichnet. Jeder vorbeifahrende Kletterer verstärkt es. Das Schwingen ist regelmäßig, und seine Periode stimmt so genau mit dem Fahrplan der Kletterer überein, dass wir glauben, die Kletterer treiben es an. Versuchsweise haben wir die nächsten zwei Kletterer um die Hälfte gebremst. Sinkt das Schwingen nicht, empfehlen wir, keine weiteren Kletterer aufsteigen zu lassen, bis der Abschnitt versteift wurde. Die Protokolle aller Stationen liegen bei."
  },
  "wonder_events.2.t": {
-  "en": "Structural Anomaly",
-  "de": "Strukturanomalie"
+  "en": "A Swing in the Tether",
+  "de": "Ein Schwingen im Kabel"
  },
  "wonder_events.20.a": {
-  "en": "Accelerate the program. Finish before they react.",
-  "de": "Das Programm beschleunigen. Fertigstellen, bevor sie reagieren."
+  "en": "Let them worry. The station is ours to build.",
+  "de": "Sollen sie sich sorgen. Die Station zu bauen ist unsere Sache."
  },
  "wonder_events.20.b": {
   "en": "Reassure the international community.",
   "de": "Die internationale Gemeinschaft beruhigen."
  },
  "wonder_events.20.d": {
-  "en": "Intelligence reports indicate that rival nations are deeply alarmed by the orbital weapons platform [concept_under_construction]. Military attaches have been recalled, and defensive postures are shifting worldwide.",
-  "de": "Geheimdienstberichte deuten darauf hin, dass rivalisierende Nationen durch die orbitale Waffenplattform [concept_under_construction] zutiefst alarmiert sind. Militärattachés wurden zurückbeordert, und weltweit verschieben sich die Verteidigungshaltungen."
+  "en": "Our intelligence services report that foreign governments are following the orbital battlestation [concept_under_construction] closely. Several have recalled their military attachés for consultation, and some have moved air defense units to cover their capitals.",
+  "de": "Unsere Geheimdienste melden, dass ausländische Regierungen die [concept_under_construction] orbitale Kampfstation genau beobachten. Mehrere haben ihre Militärattachés zu Beratungen zurückgerufen, und einige haben Luftabwehreinheiten zum Schutz ihrer Hauptstädte verlegt."
  },
  "wonder_events.20.f": {
-  "en": "\\\"They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\\\"\\n\\n\\\"Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\\\"\\n\\n\\\"Or they try to stop us before it's finished.\\\"\\n\\n\\\"That's why we have the Navy.\\\"",
-  "de": "„Sie beobachten, wie wir es bauen. Jeder Spionagesatellit, jede abgefangene Funkverbindung. Sie wissen, was das ist.“\\n\\n„Gut. Sollen sie zusehen. Bis es einsatzbereit ist, wird sich das Kräftegleichgewicht dauerhaft verschoben haben.“\\n\\n„Oder sie versuchen, uns zu stoppen, bevor es fertig ist.“\\n\\n„Dafür haben wir die Marine.“"
+  "en": "\\\"Our officers say that whoever holds orbit can see and strike anything below, and that nobody can easily strike back. Every other country can do that sum too, and some will try to stop us before we finish.\\\"\\n\\n\\\"I sign for every component that goes up to the battlestation, and for a month now every one has gone up under guard. We were told that someone abroad has been photographing the launch site from orbit, and to assume they still are.\\\"\\n\\n\\\"At dinner the foreign ambassador asked me what the station is for. I gave him the answer we were given, that it is for the defense of our territory, and he asked whether he might have that in writing.\\\"\\n\\n\\\"My son works on the station's guidance systems. He can't tell us anything, and he hasn't been home for two months.\\\"",
+  "de": "„Unsere Offiziere sagen, wer den Orbit hält, kann alles darunter sehen und treffen, und kaum jemand kann zurückschlagen. Jedes andere Land kann diese Rechnung auch aufmachen, und manche werden versuchen, uns aufzuhalten, bevor wir fertig sind.“\\n\\n„Ich zeichne für jedes Bauteil, das zur Kampfstation hinaufgeht, und seit einem Monat geht jedes unter Bewachung hinauf. Man hat uns gesagt, jemand im Ausland fotografiere den Startplatz aus dem Orbit, und wir sollen annehmen, dass er das noch tut.“\\n\\n„Beim Abendessen fragte mich der ausländische Botschafter, wozu die Station dient. Ich gab ihm die Antwort, die man uns gegeben hat, nämlich dass sie der Verteidigung unseres Gebiets dient, und er fragte, ob er das schriftlich haben könne.“\\n\\n„Mein Sohn arbeitet an den Lenksystemen der Station. Er darf uns nichts erzählen, und er war seit zwei Monaten nicht zu Hause.“"
  },
  "wonder_events.20.t": {
   "en": "The High Ground",
@@ -28272,16 +28308,16 @@
   "de": "Ausgewählte Erkenntnisse mit Verbündeten teilen."
  },
  "wonder_events.21.d": {
-  "en": "The orbital battlestation's sensor suite can track individual vehicles and resolve meter-scale objects across the globe. Every major military movement on Earth is visible in real time. The intelligence advantage is decisive.",
-  "de": "Die Sensorik der orbitalen Kampfstation kann einzelne Fahrzeuge verfolgen und Objekte im Meterbereich weltweit auflösen. Jede größere militärische Bewegung auf der Erde ist in Echtzeit sichtbar. Der nachrichtendienstliche Vorteil ist entscheidend."
+  "en": "The orbital battlestation's sensors can pick out an object a meter across anywhere on Earth and follow a single vehicle as it moves. Our general staff now sees foreign armies and fleets move as it happens. It asks whether to keep the picture to ourselves or share parts of it with friendly governments.",
+  "de": "Die Sensoren der orbitalen Kampfstation können überall auf der Erde ein Objekt von einem Meter Größe erkennen und ein einzelnes Fahrzeug auf seinem Weg verfolgen. Unser Generalstab sieht nun ausländische Armeen und Flotten in Echtzeit marschieren und fahren. Er fragt, ob wir das Lagebild für uns behalten oder Teile davon mit befreundeten Regierungen teilen sollen."
  },
  "wonder_events.21.f": {
-  "en": "\\\"We can see their armor columns marshaling. We can track every warship in every ocean. We can watch their missile convoys move in real time.\\\"\\n\\n\\\"And they know we can see them?\\\"\\n\\n\\\"That's the best part. They know, and they can't do a thing about it.\\\"",
-  "de": "„Wir sehen, wie sich ihre Panzerkolonnen sammeln. Wir verfolgen jedes Kriegsschiff auf jedem Ozean. Wir beobachten ihre Raketenkonvois in Echtzeit.“\\n\\n„Und sie wissen, dass wir sie sehen können?“\\n\\n„Das ist das Beste daran. Sie wissen es, und sie können nichts dagegen tun.“"
+  "en": "The night analyst had six screens and a flask of coffee. On the left were the harbors: a carrier group at its moorings with its deck lights on, two submarines alongside a tender, a tanker taking on fuel. In the middle was a highway in a foreign country, where a column of trucks had been moving north since dusk, and he counted the trucks twice and wrote the number in the log with the time. On the right was an airfield where ground crews were refueling a row of transport aircraft. At the change of shift he printed the column's track, initialed it and put it in the tray for the morning briefing.",
+  "de": "Der Nachtanalyst hatte sechs Bildschirme und eine Thermoskanne Kaffee. Links lagen die Häfen: eine Trägergruppe an den Liegeplätzen mit eingeschalteten Decklichtern, zwei U-Boote neben einem Tender, ein Tanker beim Bunkern. In der Mitte war eine Fernstraße in einem fremden Land, auf der sich seit der Dämmerung eine Lastwagenkolonne nach Norden bewegte; er zählte die Wagen zweimal und trug die Zahl mit der Uhrzeit ins Protokoll ein. Rechts lag ein Flugplatz, auf dem Bodenmannschaften eine Reihe von Transportflugzeugen betankten. Beim Schichtwechsel druckte er die Spur der Kolonne aus, zeichnete sie ab und legte sie in das Fach für die Morgenbesprechung."
  },
  "wonder_events.21.t": {
-  "en": "Eye of God",
-  "de": "Auge Gottes"
+  "en": "The View from Above",
+  "de": "Der Blick von oben"
  },
  "wonder_events.22.a": {
   "en": "Strength invites no challenge.",
@@ -28292,32 +28328,32 @@
   "de": "Aus dieser Position der Stärke verhandeln."
  },
  "wonder_events.22.d": {
-  "en": "The orbital battlestation has fundamentally altered the global strategic calculus. No conventional force can challenge a nation with orbital fire support, and rival powers are beginning to seek diplomatic accommodation.",
-  "de": "Die orbitale Kampfstation hat das globale strategische Kalkül grundlegend verändert. Keine konventionelle Streitmacht kann eine Nation mit orbitaler Feuerunterstützung herausfordern, und rivalisierende Mächte beginnen, diplomatische Verständigung zu suchen."
+  "en": "Since the orbital battlestation came into service, foreign governments have been more careful with us. Their envoys raise disputes more slowly and settle them more readily, and several have asked where we stand before choosing a side in their own quarrels.",
+  "de": "Seit die orbitale Kampfstation in Dienst gestellt wurde, gehen ausländische Regierungen vorsichtiger mit uns um. Ihre Gesandten bringen Streitfälle zögerlicher vor und legen sie bereitwilliger bei, und mehrere haben gefragt, wo wir stehen, bevor sie in ihren eigenen Streitigkeiten Partei ergreifen."
  },
  "wonder_events.22.f": {
-  "en": "\\\"Three border disputes settled this month. Two territorial claims abandoned. One unilateral ceasefire.\\\"\\n\\n\\\"All without firing a shot.\\\"\\n\\n\\\"The best weapons are the ones you never use.\\\"",
-  "de": "„Drei Grenzstreitigkeiten diesen Monat beigelegt. Zwei Gebietsansprüche fallengelassen. Ein einseitiger Waffenstillstand.“\\n\\n„Und das alles, ohne einen Schuss abzufeuern.“\\n\\n„Die besten Waffen sind die, die man nie benutzt.“"
+  "en": "Note for our envoys, from the planning office of the foreign service. Since the battlestation came into service, the tone of the correspondence we receive has changed. Disputes that foreign governments used to press now arrive as questions, and requests for meetings come from countries that did not write to us before. Envoys should understand this as respect for the station, which will last only while other governments believe we would not use it carelessly. Do not mention the station in any meeting. If it is raised, say that it exists for our defense and return to the business at hand. Report every approach of this kind to this office.",
+  "de": "Hinweis für unsere Gesandten, vom Planungsstab des Auswärtigen Dienstes. Seit die Kampfstation in Dienst gestellt wurde, hat sich der Ton der Schreiben, die wir erhalten, verändert. Streitfälle, die ausländische Regierungen früher vorantrieben, kommen jetzt als Fragen an, und Gesuche um Treffen kommen aus Ländern, die uns vorher nicht geschrieben haben. Gesandte sollen das als Respekt vor der Station verstehen, der nur so lange anhält, wie andere Regierungen glauben, wir würden sie nicht leichtfertig einsetzen. Erwähnen Sie die Station in keinem Gespräch. Wird sie angesprochen, sagen Sie, sie diene unserer Verteidigung, und kehren Sie zum Thema zurück. Melden Sie jede Annäherung dieser Art diesem Büro."
  },
  "wonder_events.22.t": {
   "en": "Peace Through Superior Firepower",
   "de": "Frieden durch überlegene Feuerkraft"
  },
  "wonder_events.23.a": {
-  "en": "Launch a massive relief effort.",
-  "de": "Eine groß angelegte Hilfsaktion starten."
+  "en": "Send the city everything it needs, at once.",
+  "de": "Der Stadt sofort alles schicken, was sie braucht."
  },
  "wonder_events.23.b": {
   "en": "Classify the incident. National security demands it.",
   "de": "Den Vorfall als geheim einstufen. Die nationale Sicherheit verlangt es."
  },
  "wonder_events.23.d": {
-  "en": "A targeting malfunction on the orbital battlestation causes a kinetic impactor to fire along an unintended trajectory. The projectile strikes the ocean near a coastal city, and the resulting shockwave shatters windows, capsizes boats, and injures dozens on shore.",
-  "de": "Eine Zielfehlfunktion an der orbitalen Kampfstation lässt einen kinetischen Einschlagskörper auf einer ungewollten Flugbahn abfeuern. Das Geschoss schlägt im Meer nahe einer Küstenstadt ein, und die entstehende Druckwelle zerschmettert Fenster, lässt Boote kentern und verletzt Dutzende an Land."
+  "en": "A targeting fault on the orbital battlestation released a kinetic impactor on a path nobody had ordered. It came down in the sea off a coastal city, and the shock broke windows along the waterfront, overturned small boats in the harbor and injured dozens of people on shore.",
+  "de": "Ein Zielfehler der orbitalen Kampfstation setzte einen kinetischen Einschlagskörper auf einer Bahn frei, die niemand befohlen hatte. Er schlug vor einer Küstenstadt im Meer ein, und die Druckwelle zerbrach Fenster an der Uferpromenade, kippte kleine Boote im Hafen um und verletzte Dutzende Menschen an Land."
  },
  "wonder_events.23.f": {
-  "en": "\\\"The impactor hit water twelve kilometers from the harbor. The shockwave alone did this much damage.\\\"\\n\\n\\\"If it had struck land?\\\"\\n\\n\\\"A crater the size of a city block. And it's on every news feed on the planet.\\\"",
-  "de": "„Der Einschlagskörper hat zwölf Kilometer vor dem Hafen das Wasser getroffen. Allein die Druckwelle hat diesen Schaden angerichtet.“\\n\\n„Und wenn er Land getroffen hätte?“\\n\\n„Ein Krater von der Größe eines Häuserblocks. Und es ist in jedem Nachrichtensender der Welt.“"
+  "en": "By the afternoon the harbor master had a list of the boats that had gone over, and someone had chalked it on the board outside his office: the owner, the boat, and whether anyone had been aboard. Along the waterfront the shopkeepers were sweeping glass into piles at the curb. A lifeboat crew was towing the last of the overturned boats in, hull up, and a diver went down beside each one to look underneath before it was righted. The hospital had sent its walking wounded home with dressings on their arms and faces, and some of them came back down to the harbor to help with the boats.",
+  "de": "Am Nachmittag hatte der Hafenmeister eine Liste der gekenterten Boote, und jemand hatte sie an die Tafel vor seinem Büro geschrieben: Eigner, Boot und ob jemand an Bord gewesen war. Entlang der Uferpromenade fegten die Ladenbesitzer Glas am Bordstein zusammen. Eine Rettungsbootbesatzung schleppte die letzten umgedrehten Boote mit dem Kiel nach oben ein, und neben jedem tauchte ein Taucher hinab, um darunter nachzusehen, bevor es aufgerichtet wurde. Das Krankenhaus hatte seine gehfähigen Verletzten mit Verbänden an Armen und Gesichtern nach Hause geschickt, und einige von ihnen kamen zum Hafen zurück, um bei den Booten zu helfen."
  },
  "wonder_events.23.t": {
   "en": "Misfire from Orbit",
@@ -28332,12 +28368,12 @@
   "de": "Ein Abkommen zur Begrenzung orbitaler Rüstung vorschlagen."
  },
  "wonder_events.24.d": {
-  "en": "Rival powers have begun their own orbital weapons programs in response to the [ROOT.GetCountry.GetAdjectiveNoFormatting] battlestation. The militarization of space is accelerating beyond anyone's projections.",
-  "de": "Rivalisierende Mächte haben als Antwort auf die [ROOT.GetCountry.GetAdjectiveNoFormatting]e Kampfstation eigene orbitale Waffenprogramme gestartet. Die Militarisierung des Weltraums schreitet schneller voran, als irgendjemand vorausgesagt hatte."
+  "en": "At least one other major power now has the technology to put weapons in orbit, and our intelligence services report that it has begun a program in answer to the [ROOT.GetCountry.GetAdjectiveNoFormatting] battlestation. Our defense planners want to spend to stay ahead of it. Our diplomats think the time is right to propose limits on orbital weapons, while we still hold the lead.",
+  "de": "Mindestens eine andere Großmacht hat nun die Technologie, Waffen in den Orbit zu bringen, und unsere Geheimdienste melden, dass sie als Antwort auf die [ROOT.GetCountry.GetAdjectiveNoFormatting]e Kampfstation ein Programm begonnen hat. Unsere Verteidigungsplaner wollen Geld ausgeben, um vorn zu bleiben. Unsere Diplomaten halten den Zeitpunkt für günstig, Grenzen für Orbitalwaffen vorzuschlagen, solange wir noch führen."
  },
  "wonder_events.24.f": {
-  "en": "\\\"They're building their own. Crude, compared to ours, but give them five years.\\\"\\n\\n\\\"Then we need to stay five years ahead.\\\"\\n\\n\\\"That's what they said about nuclear weapons. We ended up with enough to destroy the world twelve times over.\\\"\\n\\n\\\"Thirteen. But who's counting?\\\"",
-  "de": "„Sie bauen ihre eigene. Primitiv im Vergleich zu unserer, aber gebt ihnen fünf Jahre.“\\n\\n„Dann müssen wir fünf Jahre voraus bleiben.“\\n\\n„Das hat man auch bei den Nuklearwaffen gesagt. Am Ende hatten wir genug, um die Welt zwölfmal zu zerstören.“\\n\\n„Dreizehnmal. Aber wer zählt schon mit?“"
+  "en": "\\\"Their program is far behind ours, and the station we have is the best argument for keeping it that way. If we stop improving it while they build, we hand them the lead for the price of a few years' budgets. Every month we stay ahead is a month in which nobody tests us.\\\"\\n\\n\\\"It is also a month in which they spend more to catch up, and then we spend more again. Every country that has raced another for a weapon has ended with more of it than it could ever use. A treaty proposed now, while we hold the lead, can be written around the station we already have and the limits we can live with.\\\"",
+  "de": "„Ihr Programm liegt weit hinter unserem, und die Station, die wir haben, ist das beste Argument dafür, dass es so bleibt. Wenn wir aufhören, sie zu verbessern, während sie bauen, überlassen wir ihnen die Führung für den Preis einiger Jahresbudgets. Jeder Monat, den wir vorn bleiben, ist ein Monat, in dem uns niemand testet.“\\n\\n„Es ist auch ein Monat, in dem sie mehr ausgeben, um aufzuholen, und dann geben wir wieder mehr aus. Jedes Land, das sich mit einem anderen um eine Waffe gemessen hat, endete mit mehr davon, als es je brauchen konnte. Ein Vertrag, der jetzt vorgeschlagen wird, solange wir führen, kann um die Station, die wir schon haben, und um die Grenzen, mit denen wir leben können, herum geschrieben werden.“"
  },
  "wonder_events.24.t": {
   "en": "Arms Race in Orbit",
@@ -28352,12 +28388,12 @@
   "de": "Allein die Fähigkeit ist Abschreckung genug."
  },
  "wonder_events.25.d": {
-  "en": "The orbital battlestation has achieved global strike capability. Kinetic energy weapons can reach any point on Earth within minutes, delivering devastating force without nuclear fallout.",
-  "de": "Die orbitale Kampfstation hat globale Schlagkraft erreicht. Kinetische Energiewaffen können jeden Punkt der Erde innerhalb von Minuten erreichen und verheerende Zerstörungskraft ohne nuklearen Fallout entfesseln."
+  "en": "The orbital battlestation can now strike any point on Earth with kinetic weapons: heavy metal rods dropped from orbit that hit with the force of a large bomb and leave no fallout. Our general staff asks whether to make the capability known abroad or to hold it back as a deterrent.",
+  "de": "Die orbitale Kampfstation kann nun jeden Punkt der Erde mit kinetischen Waffen treffen: schweren Metallstäben, die aus dem Orbit abgeworfen werden, mit der Wucht einer großen Bombe einschlagen und keinen Fallout hinterlassen. Unser Generalstab fragt, ob wir diese Fähigkeit im Ausland bekannt machen oder als Abschreckung zurückhalten sollen."
  },
  "wonder_events.25.f": {
-  "en": "\\\"Tungsten rods, six meters long and half a meter across, dropped from orbit at eight kilometers per second. No warhead needed. The kinetic energy alone is equivalent to dozens of tons of high explosive.\\\"\\n\\n\\\"And no radiation.\\\"\\n\\n\\\"Clean. Precise. And we can put one through any roof on Earth within thirty minutes.\\\"",
-  "de": "„Wolframstäbe, sechs Meter lang und einen halben Meter im Durchmesser, aus dem Orbit abgeworfen mit acht Kilometern pro Sekunde. Kein Sprengkopf nötig. Allein die kinetische Energie entspricht dutzenden Tonnen hochexplosivem Sprengstoff.“\\n\\n„Und keine Strahlung.“\\n\\n„Sauber. Präzise. Und wir können innerhalb von dreißig Minuten jedes Dach der Erde durchschlagen.“"
+  "en": "From the battlestation's weapons officer, the points of the strike system the general staff asked to have explained:\\n\\nEach projectile is a solid rod of tungsten, chosen because it is dense and does not melt on the way down.\\nThere is no explosive in it. It does its damage by speed alone, so it can be stored aboard the station for years with no maintenance.\\nNo radiation is released, so our own troops can enter the target area once the strike is over.\\nA strike needs the station to be over the right part of the world, so the time from order to impact depends on where the target is.\\nEach rod is used once, and replacements have to be lifted to orbit, so the general staff should know how many are aboard before it gives an order.",
+  "de": "Vom Waffenoffizier der Kampfstation, die Punkte des Schlagsystems, die der Generalstab erklärt haben wollte:\\n\\nJedes Geschoss ist ein massiver Wolframstab, gewählt, weil er dicht ist und beim Abstieg nicht schmilzt.\\nEr enthält keinen Sprengstoff. Er richtet seinen Schaden allein durch Geschwindigkeit an und kann deshalb jahrelang ohne Wartung an Bord der Station gelagert werden.\\nEs wird keine Strahlung freigesetzt, sodass unsere eigenen Truppen das Zielgebiet nach dem Schlag betreten können.\\nFür einen Schlag muss die Station über dem richtigen Teil der Welt stehen, daher hängt die Zeit vom Befehl bis zum Einschlag davon ab, wo das Ziel liegt.\\nJeder Stab wird nur einmal verwendet, und Ersatz muss in den Orbit gebracht werden, daher sollte der Generalstab wissen, wie viele an Bord sind, bevor er einen Befehl gibt."
  },
  "wonder_events.25.t": {
   "en": "Rods from God",
@@ -28372,8 +28408,8 @@
   "de": "Astronomen entdecken einen erdnahen Asteroiden auf Kollisionskurs mit einer besiedelten Region. Die orbitale Kampfstation, ursprünglich für die Kriegsführung konzipiert, ist das einzige Mittel, das ihn rechtzeitig ablenken kann."
  },
  "wonder_events.26.f": {
-  "en": "\\\"The irony isn't lost on me. We built a weapon to threaten our enemies, and it just saved us all.\\\"\\n\\n\\\"The asteroid was three hundred meters across. It would have leveled a region the size of a small country.\\\"\\n\\n\\\"Fire the interceptors.\\\"\\n\\n\\\"Interceptors away. God help us all.\\\"",
-  "de": "„Die Ironie entgeht mir nicht. Wir haben eine Waffe gebaut, um unsere Feinde zu bedrohen, und sie hat gerade uns alle gerettet.“\\n\\n„Der Asteroid hatte einen Durchmesser von dreihundert Metern. Er hätte eine Region von der Größe eines kleinen Landes dem Erdboden gleichgemacht.“\\n\\n„Feuert die Abfangraketen.“\\n\\n„Abfangraketen unterwegs. Gott stehe uns bei.“"
+  "en": "The fire control room had been cleared of everyone not on the firing roster, and the observers from the astronomy institute stood along the back wall with their own computers open. The track officer read out the asteroid's range at every update. The commander asked once more whether the firing solution was good, heard it confirmed by two stations, and gave the order: \\\"Fire the interceptors.\\\" The launch lights went green in sequence. The impacts would come long after the order, and the room settled down to watch the range figures. At the back wall the astronomers kept their own tracking running, so that the new orbit could be checked by a second set of hands as soon as the first reports came in.",
+  "de": "Der Feuerleitraum war von allen geräumt worden, die nicht auf der Feuerliste standen, und die Beobachter vom astronomischen Institut standen an der Rückwand mit ihren eigenen aufgeklappten Rechnern. Der Bahnoffizier las bei jeder Aktualisierung die Entfernung des Asteroiden vor. Der Kommandant fragte noch einmal, ob die Feuerlösung stimme, ließ sie von zwei Stationen bestätigen und gab den Befehl: „Abfangkörper abfeuern.“ Die Startlichter wurden nacheinander grün. Die Einschläge würden lange nach dem Befehl kommen, und der Raum richtete sich darauf ein, die Entfernungswerte zu beobachten. An der Rückwand ließen die Astronomen ihre eigene Verfolgung laufen, damit die neue Bahn von einem zweiten Paar Augen geprüft werden konnte, sobald die ersten Meldungen eintrafen."
  },
  "wonder_events.26.t": {
   "en": "The Shield of Civilization",
@@ -28388,12 +28424,12 @@
   "de": "Das ist ein nationales Gut. Zugang ist ein Privileg."
  },
  "wonder_events.3.d": {
-  "en": "The completed space elevator has made orbital access routine. Scientists, entrepreneurs, and diplomats from across the globe petition for access to [ROOT.GetCountry.GetAdjectiveNoFormatting] orbital facilities.",
-  "de": "Der fertiggestellte Weltraumlift hat den Zugang zum Orbit zur Routine gemacht. Wissenschaftler, Unternehmer und Diplomaten aus aller Welt ersuchen um Zugang zu den [ROOT.GetCountry.GetAdjectiveNoFormatting]en orbitalen Anlagen."
+  "en": "Climbers now run on a timetable from the space elevator's ground station in [SCOPE.sState('wonder_state').GetName] to orbit, and there are more requests for seats than there are seats. Research institutes at home and governments abroad have asked for places for their people and their equipment at [ROOT.GetCountry.GetAdjectiveNoFormatting] orbital facilities.",
+  "de": "Kletterer fahren nun nach Fahrplan von der Bodenstation des Weltraumaufzugs in [SCOPE.sState('wonder_state').GetName] in den Orbit, und es gibt mehr Anfragen nach Plätzen als Plätze. Forschungsinstitute im Inland und Regierungen im Ausland haben um Plätze für ihre Leute und ihre Ausrüstung an den [ROOT.GetCountry.GetAdjectiveNoFormatting]en orbitalen Anlagen gebeten."
  },
  "wonder_events.3.f": {
-  "en": "\\\"Thirty hours. That's all it takes to climb from the ground to geostationary orbit. The electromagnetic climbers run day and night. The old rockets seem like covered wagons by comparison.\\\"\\n\\n\\\"And everyone wants a ticket.\\\"",
-  "de": "„Dreißig Stunden. Mehr braucht es nicht, um vom Boden bis in den geostationären Orbit zu klettern. Die elektromagnetischen Kletterkapseln laufen Tag und Nacht. Die alten Raketen wirken im Vergleich wie Planwagen.“\\n\\n„Und jeder will ein Ticket.“"
+  "en": "\\\"I keep the passenger list at the ground station, and this is my morning. A research institute wants four seats on the next climber and has sent the forms twice. A foreign delegation wants a car to itself and a promise that nobody else's cargo rides with theirs. A man came to the front desk in person to ask what a ticket costs, and I had to tell him there is no price yet, because the government has not decided who may buy one. Every seat on this week's climbers is taken by our own people. I have put the waiting list in order of application and sent it up to the director's office.\\\"",
+  "de": "„Ich führe die Passagierliste an der Bodenstation, und das ist mein Vormittag. Ein Forschungsinstitut will vier Plätze auf dem nächsten Kletterer und hat die Formulare zweimal geschickt. Eine ausländische Delegation will eine Kabine für sich allein und das Versprechen, dass keine fremde Fracht mit ihrer fährt. Ein Mann kam persönlich an den Schalter, um zu fragen, was eine Fahrkarte kostet, und ich musste ihm sagen, dass es noch keinen Preis gibt, weil die Regierung nicht entschieden hat, wer eine kaufen darf. Jeder Platz auf den Kletterern dieser Woche ist von unseren eigenen Leuten belegt. Ich habe die Warteliste nach Antragseingang geordnet und ans Büro der Direktion geschickt.“"
  },
  "wonder_events.3.t": {
   "en": "Gateway to the Stars",
@@ -28408,16 +28444,16 @@
   "de": "Militärische Anwendungen sofort priorisieren."
  },
  "wonder_events.30.d": {
-  "en": "Scientists at the [concept_antimatter_facility] report stable containment of macroscopic quantities of antihydrogen for the first time. The breakthrough opens the door to practical antimatter applications.",
-  "de": "Wissenschaftler der [concept_antimatter_facility] melden erstmals die stabile Eindämmung makroskopischer Mengen von Antiwasserstoff. Der Durchbruch öffnet die Tür zu praktischen Antimaterie-Anwendungen."
+  "en": "Scientists at the [concept_antimatter_facility] construction site have held enough antihydrogen to weigh in a magnetic trap for a full day, longer than any earlier test there. They ask for more money to study it, and our military planners ask that the first results go to them.",
+  "de": "Wissenschaftler auf der Baustelle der [concept_antimatter_facility] haben genug Antiwasserstoff, um ihn zu wiegen, einen ganzen Tag lang in einer Magnetfalle gehalten, länger als bei jedem früheren Test dort. Sie bitten um mehr Geld, um ihn zu erforschen, und unsere Militärplaner bitten darum, dass die ersten Ergebnisse an sie gehen."
  },
  "wonder_events.30.f": {
-  "en": "\\\"One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\\\"\\n\\n\\\"One milligram. The energy equivalent of forty-three tons of TNT.\\\"\\n\\n\\\"Imagine what we'll do with a gram.\\\"",
-  "de": "„Ein Milligramm. Das ist alles, was wir haben. Ein Milligramm Antiwasserstoff, gehalten in einer Penning-Falle.“\\n\\n„Ein Milligramm. Das Energieäquivalent von dreiundvierzig Tonnen TNT.“\\n\\n„Stellt euch vor, was wir mit einem Gramm anstellen werden.“"
+  "en": "\\\"I work nights on the containment team. What we have is a vacuum chamber the size of a wardrobe, a ring of magnets around it and a row of screens that say the magnets are holding. The antihydrogen inside comes to about a milligram. If it met the same mass of ordinary matter, it would release as much energy as forty tons of high explosive, and all of our work is making sure it touches nothing until we choose. Every hour I check the field readings against the ones from the hour before, and I sign the sheet.\\\"\\n\\n— a physicist at the antimatter facility",
+  "de": "„Ich arbeite nachts im Eindämmungsteam. Wir haben eine Vakuumkammer von der Größe eines Kleiderschranks, einen Ring aus Magneten darum und eine Reihe von Bildschirmen, die sagen, dass die Magnete halten. Der Antiwasserstoff darin wiegt etwa ein Milligramm. Träfe er auf dieselbe Masse gewöhnlicher Materie, würde er so viel Energie freisetzen wie vierzig Tonnen Sprengstoff, und unsere ganze Arbeit besteht darin, dafür zu sorgen, dass er nichts berührt, bis wir es wollen. Jede Stunde vergleiche ich die Feldwerte mit denen der Stunde davor und unterschreibe das Blatt.“\\n\\n— ein Physiker an der Antimaterie-Eindämmungsanlage"
  },
  "wonder_events.30.t": {
-  "en": "Breakthrough at the Collider",
-  "de": "Durchbruch am Beschleuniger"
+  "en": "Antimatter Held",
+  "de": "Antimaterie gehalten"
  },
  "wonder_events.31.a": {
   "en": "Rebuild with improved safety protocols.",
@@ -28432,12 +28468,12 @@
   "de": "Ein Ausfall der magnetischen Eindämmung in der [concept_antimatter_facility] löst ein lokal begrenztes Annihilationsereignis aus. Die Explosion zerstört einen Flügel der Anlage und tötet Dutzende Wissenschaftler und Ingenieure."
  },
  "wonder_events.31.f": {
-  "en": "\\\"The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\\\"\\n\\n\\\"How much was released?\\\"\\n\\n\\\"Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.\\\"",
-  "de": "„Das Magnetfeld schwankte für weniger als eine Nanosekunde. Mehr brauchte es nicht. Die Antimaterie berührte die Eindämmungswand und...“\\n\\n„Wie viel wurde freigesetzt?“\\n\\n„Mikrogramm. Die Sprengkraft entspricht hundert Kilogramm hochexplosivem Sprengstoff, konzentriert auf einen Punkt kleiner als ein Atom. Der Eindämmungsflügel hat seine Aufgabe erfüllt: gerade so.“"
+  "en": "Report of the inquiry into the containment failure, first findings. The failure began in the power supply to the magnets of trap four, which dropped for a fraction of a second during a scheduled transfer. The backup supply switched in as designed, but not quickly enough. The antihydrogen in the trap reached the chamber wall and annihilated. The blast destroyed the east wing and started fires in two laboratories beside it. Everyone in the wing at the time was killed. The roll of the dead is attached, and the next of kin have been told in each case. The inquiry has sealed the logs of the other traps and will report on the design of the backup supply in full.",
+  "de": "Bericht der Untersuchung zum Versagen der Eindämmung, erste Ergebnisse. Das Versagen begann in der Stromversorgung der Magnete von Falle vier, die bei einer planmäßigen Umschaltung für den Bruchteil einer Sekunde aussetzte. Die Reserveversorgung sprang wie vorgesehen ein, aber nicht schnell genug. Der Antiwasserstoff in der Falle erreichte die Kammerwand und zerstrahlte. Die Explosion zerstörte den Ostflügel und löste Brände in zwei benachbarten Laboren aus. Alle, die sich zu dieser Zeit im Flügel aufhielten, kamen ums Leben. Die Liste der Toten liegt bei, und die Angehörigen sind in jedem Fall benachrichtigt. Die Untersuchung hat die Protokolle der übrigen Fallen versiegelt und wird zur Auslegung der Reserveversorgung ausführlich berichten."
  },
  "wonder_events.31.t": {
-  "en": "Containment Breach",
-  "de": "Bruch der Eindämmung"
+  "en": "When the Magnets Failed",
+  "de": "Als die Magnete versagten"
  },
  "wonder_events.32.a": {
   "en": "Integrate antimatter weapons into our arsenal.",
@@ -28448,12 +28484,12 @@
   "de": "Auf Antriebstechnik konzentrieren. Beweglichkeit gewinnt Kriege."
  },
  "wonder_events.32.d": {
-  "en": "Antimatter-catalyzed propulsion and weapons systems are entering the prototype phase. Military planners are ecstatic. Formations with antimatter-powered logistics will have limitless range, and antimatter warheads will render conventional arsenals obsolete.",
-  "de": "Antimateriegestützte Antriebs- und Waffensysteme treten in die Prototypenphase ein. Militärplaner sind begeistert. Verbände mit antimateriegetriebener Logistik werden grenzenlose Reichweite haben, und Antimateriesprengköpfe werden konventionelle Arsenale obsolet machen."
+  "en": "The first antimatter-catalyzed engines and warheads made from the facility's output have passed their trials as prototypes. Our military planners want one of the two in service first: warheads small enough for any launcher, or engines that let our formations go much farther before they refuel.",
+  "de": "Die ersten antimaterie-katalysierten Triebwerke und Sprengköpfe aus der Produktion der Anlage haben ihre Prototypenerprobung bestanden. Unsere Militärplaner wollen eines von beiden zuerst im Dienst sehen: Sprengköpfe, klein genug für jeden Träger, oder Triebwerke, mit denen unsere Verbände viel weiter kommen, bevor sie auftanken müssen."
  },
  "wonder_events.32.f": {
-  "en": "\\\"An antimatter-fueled aircraft never needs to land. A fleet with antimatter propulsion can sustain operations indefinitely at maximum speed.\\\"\\n\\n\\\"And the weapons?\\\"\\n\\n\\\"A warhead with a milligram of antimatter has the yield of a massive conventional bomb. Scale it up from there.\\\"",
-  "de": "„Ein antimateriebetriebenes Flugzeug muss nie landen. Eine Flotte mit Antimaterieantrieb kann unbegrenzt mit Höchstgeschwindigkeit operieren.“\\n\\n„Und die Waffen?“\\n\\n„Ein Sprengkopf mit einem Milligramm Antimaterie hat die Sprengkraft einer gewaltigen konventionellen Bombe. Und das ist erst der Anfang.“"
+  "en": "\\\"You asked the general staff to explain in plain words what the prototypes change, and I will. A warhead with a small fraction of a gram of antimatter in it fits anything that now carries a conventional shell or missile, and it strikes as hard as a bomb many times its size. An engine catalyzed with antimatter lets a ship or a supply column run for months on what it carries at the start, so our formations stop depending on fuel depots that an enemy can find and destroy. The facility cannot supply both programs at full speed. We recommend choosing one now and the other when the output allows.\\\"",
+  "de": "„Sie haben den Generalstab gebeten, in einfachen Worten zu erklären, was die Prototypen ändern, und das tue ich. Ein Sprengkopf mit einem kleinen Bruchteil eines Gramms Antimaterie passt in alles, was jetzt eine herkömmliche Granate oder Rakete trägt, und schlägt so hart ein wie eine um ein Vielfaches größere Bombe. Ein mit Antimaterie katalysiertes Triebwerk lässt ein Schiff oder eine Nachschubkolonne monatelang mit dem fahren, was es zu Beginn mitführt, sodass unsere Verbände nicht mehr von Treibstofflagern abhängen, die ein Feind finden und zerstören kann. Die Anlage kann nicht beide Programme mit voller Geschwindigkeit versorgen. Wir empfehlen, jetzt eines zu wählen und das andere, wenn die Produktion es erlaubt.“"
  },
  "wonder_events.32.t": {
   "en": "The Power of Annihilation",
@@ -28468,12 +28504,12 @@
   "de": "Macht ohne Diplomatie ist Tyrannei."
  },
  "wonder_events.33.d": {
-  "en": "The mere existence of practical antimatter weapons has fundamentally altered the diplomatic landscape. Nations that once challenged [ROOT.GetCountry.GetName] now seek accommodation and alliance.",
-  "de": "Die bloße Existenz praktikabler Antimateriewaffen hat die diplomatische Landschaft grundlegend verändert. Nationen, die einst [ROOT.GetCountry.GetAltName('AKK')] herausgefordert haben, suchen nun Verständigung und Bündnis."
+  "en": "Since word spread that [ROOT.GetCountry.GetName] can make antimatter weapons, governments that used to oppose us have softened their tone, and some have asked about alliances. Our diplomats ask how to use the change: by reminding others of the arsenal, or by offering talks while the mood lasts.",
+  "de": "Seit sich herumgesprochen hat, dass [ROOT.GetCountry.GetAltName('NOM')] Antimaterie-Waffen herstellen kann, haben Regierungen, die uns bisher entgegenstanden, ihren Ton gemäßigt, und einige haben nach Bündnissen gefragt. Unsere Diplomaten fragen, wie wir den Wandel nutzen sollen: indem wir andere an das Arsenal erinnern oder indem wir Gespräche anbieten, solange die Stimmung anhält."
  },
  "wonder_events.33.f": {
-  "en": "\\\"The ambassadors are very polite now. Have you noticed?\\\"\\n\\n\\\"There's nothing quite like the ability to annihilate a city with a warhead the size of a suitcase to improve diplomatic relations.\\\"\\n\\n\\\"An oversimplification.\\\"\\n\\n\\\"But not an inaccurate one.\\\"",
-  "de": "„Die Botschafter sind jetzt sehr höflich. Ist euch das aufgefallen?“\\n\\n„Nichts verbessert die diplomatischen Beziehungen so sehr wie die Fähigkeit, eine Stadt mit einem koffergroßen Sprengkopf auszulöschen.“\\n\\n„Eine Vereinfachung.“\\n\\n„Aber keine falsche.“"
+  "en": "\\\"Fear is not friendship. The governments that are polite to us now are counting our warheads and talking among themselves about what to do if we ever use one.\\\"\\n\\n\\\"The ambassador who used to keep us waiting an hour came to our offices himself this morning, ten minutes early, with a draft trade agreement in his case.\\\"\\n\\n\\\"I translate for the foreign delegations. Nobody says the word antimatter in the meetings. They talk about recent developments, and everyone at the table knows what is meant.\\\"\\n\\n\\\"My cousin teaches abroad. She writes that her colleagues there have started asking her about us, whether it is true and whether we would ever use such a thing, and that she answers as well as she can.\\\"",
+  "de": "„Furcht ist keine Freundschaft. Die Regierungen, die jetzt höflich zu uns sind, zählen unsere Sprengköpfe und beraten untereinander, was zu tun ist, falls wir je einen einsetzen.“\\n\\n„Der Botschafter, der uns früher eine Stunde warten ließ, kam heute Morgen selbst in unsere Büros, zehn Minuten zu früh, mit dem Entwurf eines Handelsabkommens in der Tasche.“\\n\\n„Ich dolmetsche für die ausländischen Delegationen. In den Sitzungen sagt niemand das Wort Antimaterie. Man spricht von jüngsten Entwicklungen, und jeder am Tisch weiß, was gemeint ist.“\\n\\n„Meine Cousine lehrt im Ausland. Sie schreibt, ihre Kollegen dort fragten sie neuerdings nach uns, ob es stimme und ob wir so etwas je einsetzen würden, und sie antworte, so gut sie könne.“"
  },
  "wonder_events.33.t": {
   "en": "Antimatter Diplomacy",
@@ -28492,8 +28528,8 @@
   "de": "Ein Unfall bei einem routinemäßigen Antimaterietransfer verursacht eine unkontrollierte Freisetzung von Energie. Die daraus resultierende Explosion wird von Überwachungsstationen weltweit registriert und löst internationalen Alarm aus."
  },
  "wonder_events.34.f": {
-  "en": "\\\"The seismographs registered it as a 3.5. Except it wasn't an earthquake.\\\"\\n\\n\\\"How many casualties?\\\"\\n\\n\\\"Thirty-seven confirmed. The facility will need months of repair.\\\"\\n\\n\\\"And the international reaction?\\\"\\n\\n\\\"Exactly what you'd expect when an unexplained explosion with the seismic signature of a bomb goes off inside a classified facility.\\\"",
-  "de": "„Die Seismographen haben eine Stärke von 3,5 registriert. Nur war es kein Erdbeben.“\\n\\n„Wie viele Opfer?“\\n\\n„Siebenunddreißig bestätigt. Die Anlage braucht Monate für die Reparatur.“\\n\\n„Und die internationale Reaktion?“\\n\\n„Genau das, was man erwarten würde, wenn in einer geheimen Anlage eine ungeklärte Explosion mit der seismischen Signatur einer Bombe stattfindet.“"
+  "en": "The duty officer at the seismic service had the trace on his screen before the phones started: a single sharp spike, too short for an earthquake, centered under the antimatter facility. He called the facility and got no answer, then called the regional emergency office and was told the fire crews were already on the road. By the time he put the phone down, two foreign monitoring services had sent automatic notices asking for an explanation of the event. His supervisor read them over his shoulder and said, \\\"Answer nothing until the government tells us what we may say.\\\" He sent the trace and the notices to the government together.",
+  "de": "Der diensthabende Beamte des seismischen Dienstes hatte die Kurve auf dem Bildschirm, bevor die Telefone zu klingeln begannen: ein einzelner scharfer Ausschlag, zu kurz für ein Erdbeben, mit dem Zentrum unter der Antimaterie-Eindämmungsanlage. Er rief die Anlage an und bekam keine Antwort, dann das regionale Notfallbüro, wo man ihm sagte, die Feuerwehren seien schon unterwegs. Bis er den Hörer auflegte, hatten zwei ausländische Überwachungsdienste automatische Meldungen geschickt, in denen sie eine Erklärung des Ereignisses verlangten. Sein Vorgesetzter las sie ihm über die Schulter und sagte: „Antworten Sie nichts, bis uns die Regierung sagt, was wir sagen dürfen.“ Er schickte die Kurve und die Meldungen gemeinsam an die Regierung."
  },
  "wonder_events.34.t": {
   "en": "The Annihilation Incident",
@@ -28508,12 +28544,12 @@
   "de": "Handel verändert Nationen mehr als Armeen."
  },
  "wonder_events.35.d": {
-  "en": "The [concept_antimatter_facility] is now producing enough fuel to power a new generation of engines. Antimatter propulsion makes global logistics trivial and opens the door to rapid interplanetary transit.",
-  "de": "Die [concept_antimatter_facility] produziert nun genug Treibstoff, um eine neue Generation von Triebwerken anzutreiben. Antimaterieantrieb macht globale Logistik trivial und öffnet die Tür zu schnellem interplanetarem Transit."
+  "en": "The [concept_antimatter_facility] now makes enough antimatter to fuel engines in regular service, where until now it fueled only prototypes. Our military planners want them in transports and warships first. Our traders and shippers want them for freight.",
+  "de": "Die [concept_antimatter_facility] erzeugt nun genug Antimaterie, um Triebwerke im regulären Dienst zu betanken, wo sie bisher nur Prototypen versorgte. Unsere Militärplaner wollen sie zuerst in Transportern und Kriegsschiffen. Unsere Händler und Reeder wollen sie für die Fracht."
  },
  "wonder_events.35.f": {
-  "en": "\\\"Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\\\"\\n\\n\\\"And military applications?\\\"\\n\\n\\\"Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.\\\"",
-  "de": "„Erde bis Mars in drei Wochen. Erde bis Jupiter in zwei Monaten. Das sind keine Prognosen. Das sind Fahrpläne.“\\n\\n„Und militärische Anwendungen?“\\n\\n„Jeder Verband, überall auf der Erde, innerhalb von Stunden. Das Konzept der Entfernung als strategische Grenze ist Geschichte.“"
+  "en": "Notes from the transport office on what antimatter engines change, for the government's decision:\\n\\nA cargo ship with these engines need not stop to refuel between any two ports on Earth, so the fuel depots along our trade routes could be closed or sold.\\nA craft leaving orbit can keep accelerating for days instead of minutes, which brings the outer planets within weeks of Earth instead of years.\\nA heavy aircraft can stay aloft as long as its crew can, so the limit on an air route becomes the crew's hours and not the fuel.\\nAn army supply column can carry its own fuel for a whole campaign, which is why the general staff asked for the engines first.\\nEvery engine has to be refueled at the facility itself, since antimatter can be moved only in sealed traps, so every service must be planned around trips back to it.",
+  "de": "Notizen des Transportbüros dazu, was Antimaterie-Triebwerke ändern, für die Entscheidung der Regierung:\\n\\nEin Frachtschiff mit diesen Triebwerken muss zwischen zwei beliebigen Häfen der Erde nicht zum Tanken anhalten, daher könnten die Treibstofflager entlang unserer Handelsrouten geschlossen oder verkauft werden.\\nEin Raumfahrzeug, das den Orbit verlässt, kann tagelang statt minutenlang weiter beschleunigen, was die äußeren Planeten statt in Jahren in Wochen von der Erde aus erreichbar macht.\\nEin schweres Flugzeug kann so lange in der Luft bleiben wie seine Besatzung, sodass die Grenze einer Flugroute die Stunden der Besatzung sind und nicht der Treibstoff.\\nEine Nachschubkolonne der Armee kann ihren Treibstoff für einen ganzen Feldzug selbst mitführen, weshalb der Generalstab die Triebwerke zuerst verlangt hat.\\nJedes Triebwerk muss in der Anlage selbst betankt werden, da Antimaterie nur in verschlossenen Fallen bewegt werden kann, daher muss jeder Dienst um Fahrten dorthin zurück geplant werden."
  },
  "wonder_events.35.t": {
   "en": "The Annihilation Drive",
@@ -28528,12 +28564,12 @@
   "de": "Unsere eigenen nationalen Industrien bevorzugen."
  },
  "wonder_events.4.d": {
-  "en": "At the space elevator's current capacity, orbital commerce has become routine. Nations and corporations compete for launch slots, and the elevator state has become a nexus of unprecedented trade.",
-  "de": "Bei der aktuellen Kapazität des Weltraumlifts ist der orbitale Handel zur Routine geworden. Nationen und Konzerne konkurrieren um Startplätze, und der Staat des Aufzugs ist zu einem Knotenpunkt beispiellosen Handels geworden."
+  "en": "Cargo climbs the space elevator from [SCOPE.sState('wonder_state').GetName] every day, and foreign governments and companies now bid against each other for room on the climbers. Warehouses, freight yards and brokers' offices have filled the land around the ground station.",
+  "de": "Täglich steigt Fracht von [SCOPE.sState('wonder_state').GetName] am Weltraumaufzug empor, und ausländische Regierungen und Unternehmen bieten nun gegeneinander um Platz auf den Kletterern. Lagerhäuser, Güterhöfe und Maklerbüros füllen das Land rund um die Bodenstation."
  },
  "wonder_events.4.f": {
-  "en": "\\\"Silk, spices, gold. Those were the treasures of the old roads. Ours carry advanced materials, processed data, and the hopes of ten billion people.\\\"\\n\\n\\\"And the profits are rather better.\\\"",
-  "de": "„Seide, Gewürze, Gold. Das waren die Schätze der alten Straßen. Unsere transportieren hochentwickelte Materialien, verarbeitete Daten und die Hoffnungen von zehn Milliarden Menschen.“\\n\\n„Und die Gewinne sind erheblich besser.“"
+  "en": "Cargo booked on this week's climbers, from the dispatch board at the space elevator's ground station:\\n\\nSatellite parts for a foreign weather service, booked through a broker who paid extra for the first climber of the week, because the window for that satellite's orbit closes before the weekend.\\nMachine tools for the assembly yard in orbit, on the government's account, carried at cost under standing orders.\\nMedical samples for the station laboratories, which must ride in the heated car and go up within a day of arriving at the station.\\nReplacement wheels for the climbers themselves, loaded last so that they come off first at the top.",
+  "de": "Für die Kletterer dieser Woche gebuchte Fracht, von der Dispositionstafel an der Bodenstation des Weltraumaufzugs:\\n\\nSatellitenteile für einen ausländischen Wetterdienst, gebucht über einen Makler, der für den ersten Kletterer der Woche einen Aufpreis zahlte, weil das Fenster für die Umlaufbahn dieses Satelliten vor dem Wochenende schließt.\\nWerkzeugmaschinen für die Montagewerft im Orbit, auf Rechnung der Regierung, zu Selbstkosten nach Dauerauftrag befördert.\\nMedizinische Proben für die Stationslabore, die in der beheizten Kabine fahren und binnen eines Tages nach ihrer Ankunft an der Station aufsteigen müssen.\\nErsatzräder für die Kletterer selbst, als Letztes verladen, damit sie oben als Erstes herauskommen."
  },
  "wonder_events.4.t": {
   "en": "The New Silk Road",
@@ -28552,8 +28588,8 @@
   "de": "Eine Kaskade von Weltraumschrott bedroht das Kabel des Weltraumlifts und die umliegende orbitale Infrastruktur. Ohne Eingreifen könnte eine außer Kontrolle geratene Kollisionskette den erdnahen Orbit für Jahrzehnte unbrauchbar machen."
  },
  "wonder_events.5.f": {
-  "en": "One collision becomes ten. Ten becomes a thousand. A thousand becomes a wall of shrapnel moving at eight kilometers per second.\\n\\nAnd our elevator cable is sitting right in the path.",
-  "de": "Aus einer Kollision werden zehn. Aus zehn werden tausend. Aus tausend wird eine Wand aus Splittern, die sich mit acht Kilometern pro Sekunde bewegt.\\n\\nUnd unser Aufzugskabel sitzt genau in ihrem Weg."
+  "en": "\\\"Two dead satellites collided last night in an orbit the tether passes through. We count several hundred new fragments, and we can track only the larger ones. Each fragment crosses the tether's path many times a day, and when they hit each other they make more. If we send a clearance craft up now, it can sweep the worst band before the pieces spread out.\\\"\\n\\n\\\"A sweeper clears one band once, and the fragments it misses go on breaking each other up. I would rather mount point defenses on the cable itself and destroy whatever comes close. They work every day, on every band, without another launch. They take up climber capacity, and I think the cable is worth it.\\\"",
+  "de": "„Zwei tote Satelliten sind letzte Nacht in einer Umlaufbahn kollidiert, die das Kabel durchquert. Wir zählen mehrere hundert neue Bruchstücke und können nur die größeren verfolgen. Jedes Bruchstück kreuzt den Weg des Kabels viele Male am Tag, und wenn sie aufeinandertreffen, erzeugen sie weitere. Schicken wir jetzt ein Räumfahrzeug hinauf, kann es das schlimmste Band fegen, bevor sich die Trümmer verteilen.“\\n\\n„Ein Räumer säubert ein Band einmal, und die Bruchstücke, die er verfehlt, zerschlagen einander weiter. Ich würde lieber Punktabwehr am Kabel selbst anbringen und alles zerstören, was nahe kommt. Sie arbeiten jeden Tag, auf jedem Band, ohne einen weiteren Start. Sie nehmen Kletterkapazität weg, und ich halte das Kabel das wert.“"
  },
  "wonder_events.5.t": {
   "en": "Kessler Syndrome",
@@ -28568,12 +28604,12 @@
   "de": "Ihr Talent in die Industrie lenken."
  },
  "wonder_events.6.d": {
-  "en": "A generation raised in the shadow of the space elevator has come of age. These young engineers and scientists grew up treating orbital access as routine, and their ambitions are correspondingly vast.",
-  "de": "Eine Generation, die im Schatten des Weltraumlifts aufgewachsen ist, hat das Erwachsenenalter erreicht. Diese jungen Ingenieure und Wissenschaftler sind damit groß geworden, den Zugang zum Orbit als selbstverständlich zu betrachten, und ihre Ambitionen sind entsprechend gewaltig."
+  "en": "Applications to our engineering and science courses have risen since the space elevator began to run, and the students who come in talk about orbit as a place to work. The universities ask for money to teach them what they want to learn. The construction trades want them on their sites as soon as they can be spared.",
+  "de": "Die Bewerbungen für unsere Ingenieur- und Naturwissenschaftskurse sind gestiegen, seit der Weltraumaufzug in Betrieb ist, und die Studenten, die kommen, sprechen vom Orbit als Arbeitsplatz. Die Universitäten bitten um Geld, um ihnen beizubringen, was sie lernen wollen. Die Bauberufe wollen sie auf ihren Baustellen, sobald sie entbehrlich sind."
  },
  "wonder_events.6.f": {
-  "en": "\\\"When I was young, space was a dream. For my students, it's a commute. Do you understand what that means?\\\"\\n\\n\\\"It means they'll build things we can't even imagine.\\\"",
-  "de": "„Als ich jung war, war das All ein Traum. Für meine Studenten ist es ein Arbeitsweg. Versteht ihr, was das bedeutet?“\\n\\n„Es bedeutet, dass sie Dinge bauen werden, die wir uns nicht einmal vorstellen können.“"
+  "en": "\\\"I teach physics to the oldest classes at the school nearest the ground station, and I have stopped teaching orbits from the textbook. Many of my students have parents who work on the climbers, and they know the shift times, the cargo limits and which car is the cold one. When I ask what they want to do after school, they name jobs I had to look up: tether inspector, docking clerk, anchor engineer. One girl brought me a drawing of a second station she wants to build farther up the cable, with the load figures worked out in the margin. I have asked the school board for a second physics teacher.\\\"",
+  "de": "„Ich unterrichte Physik in den obersten Klassen der Schule nahe der Bodenstation und habe aufgehört, Umlaufbahnen nach dem Lehrbuch zu lehren. Viele meiner Schüler haben Eltern, die auf den Kletterern arbeiten, und sie kennen die Schichtzeiten, die Frachtgrenzen und welche Kabine die kalte ist. Wenn ich frage, was sie nach der Schule tun wollen, nennen sie Berufe, die ich nachschlagen musste: Kabelprüfer, Andockschreiber, Ankeringenieur. Ein Mädchen brachte mir eine Zeichnung einer zweiten Station, die sie weiter oben am Kabel bauen will, mit den Lastzahlen am Rand ausgerechnet. Ich habe den Schulrat um einen zweiten Physiklehrer gebeten.“"
  },
  "wonder_events.6.t": {
   "en": "The Astronaut Generation",
@@ -28588,12 +28624,12 @@
   "de": "Einen gemeinsamen Ordnungsrahmen vorschlagen."
  },
  "wonder_events.7.d": {
-  "en": "Foreign powers demand that orbital infrastructure be governed under international law, arguing that no single nation should control access to space. The diplomatic pressure is mounting.",
-  "de": "Fremde Mächte fordern, dass die orbitale Infrastruktur internationalem Recht unterstellt wird, und argumentieren, dass keine einzelne Nation den Zugang zum Weltraum kontrollieren solle. Der diplomatische Druck wächst."
+  "en": "Several foreign governments have asked that the space elevator and the stations it serves be placed under international law, on the ground that no single country should decide who reaches orbit. Their envoys have put the request in writing and want our answer.",
+  "de": "Mehrere ausländische Regierungen haben darum gebeten, den Weltraumaufzug und die Stationen, die er bedient, unter internationales Recht zu stellen, mit der Begründung, kein einzelnes Land solle entscheiden, wer den Orbit erreicht. Ihre Gesandten haben die Bitte schriftlich vorgelegt und wollen unsere Antwort."
  },
  "wonder_events.7.f": {
-  "en": "\\\"The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\\\"\\n\\n\\\"They don't want to share it. They want to control what we do with it.\\\"\\n\\n\\\"Then let them build their own.\\\"",
-  "de": "„Der Aufzug wurde mit unserem Geld, unseren Ingenieuren, unserer Vision gebaut. Und jetzt wollen sie ihn zum Gemeingut machen?“\\n\\n„Sie wollen ihn nicht teilen. Sie wollen kontrollieren, was wir damit tun.“\\n\\n„Dann sollen sie ihren eigenen bauen.“"
+  "en": "\\\"We built it with our money and our engineers. If other countries want a say in who rides it, they can hang a cable of their own.\\\"\\n\\n\\\"I load freight at the ground station. A good share of what goes up already belongs to foreign customers, and they pay on time. If their governments want a say in the rules, I would like to know which rules they mean.\\\"\\n\\n\\\"We teach the law of the sea: no state owns the open ocean, and every ship may pass. This morning my students asked whether the cable is a ship or a harbor, and we spent the whole hour on it.\\\"\\n\\n\\\"The foreign envoy was polite about it. Nobody is asking us to give the elevator away, she said, only to agree that whoever holds the way up may not close it to one country over a quarrel about something else.\\\"",
+  "de": "„Wir haben ihn mit unserem Geld und unseren Ingenieuren gebaut. Wenn andere Länder mitreden wollen, wer damit fährt, können sie ein eigenes Kabel aufhängen.“\\n\\n„Ich lade Fracht an der Bodenstation. Ein guter Teil dessen, was hinaufgeht, gehört schon ausländischen Kunden, und sie zahlen pünktlich. Wenn ihre Regierungen bei den Regeln mitreden wollen, würde ich gern wissen, welche Regeln sie meinen.“\\n\\n„Wir lehren das Seerecht: Kein Staat besitzt das offene Meer, und jedes Schiff darf passieren. Heute Morgen fragten meine Schüler, ob das Kabel ein Schiff oder ein Hafen ist, und wir haben die ganze Stunde darauf verwendet.“\\n\\n„Die ausländische Gesandte war höflich dabei. Niemand verlange von uns, den Aufzug zu verschenken, sagte sie, nur zuzustimmen, dass wer den Weg nach oben hält, ihn einem Land nicht wegen eines Streits um etwas anderes versperren darf.“"
  },
  "wonder_events.7.t": {
   "en": "Orbital Sovereignty",
@@ -28612,36 +28648,36 @@
   "de": "Ein Gegenultimatum stellen."
  },
  "world_war_events.1.d": {
-  "en": "[SCOPE.sCountry('ideological_rival').GetName] has formally delivered a series of provocative demands to our government, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the [Concept('concept_great_power', 'great powers')].",
-  "de": "[SCOPE.sCountry('ideological_rival').GetAltName('NOM')|U] hat unserer Regierung förmlich eine Reihe provokanter Forderungen überbracht und damit unsere ideologische Haltung auf der Weltbühne infrage gestellt. Ihre aggressive Haltung droht, den brüchigen Frieden zwischen den [Concept('concept_great_power', 'Großmächten')] zu erschüttern."
+  "en": "[SCOPE.sCountry('ideological_rival').GetName] has sent our government a formal note. It demands that we renounce, in public, our hostility to its system of government, and that we end the official campaign against it. A refusal will be read abroad as a step toward war between the [Concept('concept_great_power', 'great powers')]. We must decide whether to refuse, to negotiate, or to answer with demands of our own.",
+  "de": "[SCOPE.sCountry('ideological_rival').GetName] hat unserer Regierung eine förmliche Note geschickt. Sie verlangt, dass wir unserer Feindseligkeit gegenüber ihrem Regierungssystem öffentlich abschwören und die staatliche Kampagne gegen sie beenden. Eine Weigerung wird im Ausland als Schritt zum Krieg zwischen den [Concept('concept_great_power', 'Großmächten')] gelesen werden. Wir müssen entscheiden, ob wir ablehnen, verhandeln oder mit eigenen Forderungen antworten."
  },
  "world_war_events.1.f": {
-  "en": "The foreign minister read the demands aloud, then set the paper down and removed his spectacles.\\n\\n'They wish us to renounce our system of government,' he said. 'Publicly. Before the world press.'\\n\\nThe room was quiet for a long time.\\n\\n'And if we refuse?'\\n\\n'Then, I rather think, we shall have our answer about whether they want peace or something else entirely.'",
-  "de": "Der Außenminister las die Forderungen laut vor, legte dann das Papier nieder und nahm seine Brille ab.\\n\\n'Sie wollen, dass wir unserem Regierungssystem abschwören', sagte er. 'Öffentlich. Vor der Weltpresse.'\\n\\nDer Raum blieb lange still.\\n\\n'Und wenn wir uns weigern?'\\n\\n'Dann, denke ich, werden wir unsere Antwort darauf haben, ob sie Frieden wollen oder etwas ganz anderes.'"
+  "en": "To the government of [ROOT.GetCountry.GetName], from the government of [SCOPE.sCountry('ideological_rival').GetName]. For some time the official speakers of your country have described our system of government as a danger to the world, and your printed matter has called on our people to overthrow it. We regard this as hostile conduct between states. We therefore ask that your government declare publicly that it has no quarrel with the form of government under which our people live, and that it end the official campaign against us. We will take your answer, or the absence of one, as a statement of your intentions. We await your reply through the usual channels.",
+  "de": "An die Regierung von [ROOT.GetCountry.GetName], von der Regierung von [SCOPE.sCountry('ideological_rival').GetName]. Seit einiger Zeit beschreiben die offiziellen Sprecher Ihres Landes unser Regierungssystem als Gefahr für die Welt, und Ihre Druckschriften haben unser Volk aufgerufen, es zu stürzen. Wir betrachten das als feindseliges Verhalten zwischen Staaten. Wir bitten deshalb, dass Ihre Regierung öffentlich erklärt, keinen Streit mit der Regierungsform zu haben, unter der unser Volk lebt, und dass sie die staatliche Kampagne gegen uns beendet. Wir werden Ihre Antwort oder ihr Ausbleiben als Aussage über Ihre Absichten werten. Wir erwarten Ihre Antwort auf den üblichen Wegen."
  },
  "world_war_events.1.t": {
-  "en": "Ideological Confrontation",
-  "de": "Ideologische Konfrontation"
+  "en": "A Note to Answer",
+  "de": "Eine Note, die zu beantworten ist"
  },
  "world_war_events.10.a": {
-  "en": "Sell war bonds!",
-  "de": "Kriegsanleihen verkaufen!"
+  "en": "Honor the volunteers and the workers in every town.",
+  "de": "Die Freiwilligen und die Arbeiter in jeder Stadt ehren."
  },
  "world_war_events.10.b": {
-  "en": "Use this moment for conscription.",
-  "de": "Den Moment für die Wehrpflicht nutzen."
+  "en": "Call up more recruits while the mood holds.",
+  "de": "Mehr Rekruten einziehen, solange die Stimmung anhält."
  },
  "world_war_events.10.d": {
-  "en": "A surge of patriotic fervor sweeps the nation. Citizens line the streets waving flags, factories run double shifts, and volunteers flood recruitment offices. The will to fight has never been stronger.",
-  "de": "Eine Welle patriotischer Begeisterung erfasst die Nation. Bürger säumen mit Flaggen schwenkend die Straßen, Fabriken laufen in Doppelschichten, und Freiwillige strömen in die Rekrutierungsbüros. Der Kampfeswille war nie stärker."
+  "en": "Since the war began, the recruiting offices have had lines at their doors, and the factories that supply the army are running extra shifts that their workers asked for. Families have put out flags. Our generals and our officials each have ideas about how to use the mood while it lasts.",
+  "de": "Seit Kriegsbeginn stehen vor den Rekrutierungsbüros Schlangen, und die Fabriken, die die Armee beliefern, fahren Sonderschichten, um die ihre Arbeiter selbst gebeten haben. Familien haben Fahnen gehisst. Unsere Generäle und unsere Beamten haben jeweils eigene Ideen, wie sich die Stimmung nutzen lässt, solange sie anhält."
  },
  "world_war_events.10.f": {
-  "en": "The factory foreman wiped his hands on his apron and addressed the morning shift. 'Double production this week,' he said. 'The front needs shells more than you need sleep.'\\n\\nNo one complained. The woman at the lathe had received a telegram yesterday. Her husband was not coming home. She picked up her tools and worked a sixteen-hour shift without a word.",
-  "de": "Der Vorarbeiter wischte sich die Hände an seiner Schürze ab und wandte sich an die Frühschicht. 'Diese Woche die Produktion verdoppeln', sagte er. 'Die Front braucht Granaten dringender, als ihr Schlaf braucht.'\\n\\nNiemand beschwerte sich. Die Frau an der Drehbank hatte gestern ein Telegramm erhalten. Ihr Mann würde nicht nach Hause kommen. Sie nahm ihr Werkzeug und arbeitete wortlos eine sechzehnstündige Schicht."
+  "en": "\\\"I signed on this morning with my cousin. The sergeant said they had taken more volunteers by noon than in the whole of last month.\\\"\\n\\n\\\"My son is at the front. I go to the station every afternoon to see who comes back on the trains, and I take something to eat for whoever does.\\\"\\n\\n\\\"The night shift asked to stay on through the day shift as well. I told them the machines need rest even if they do not, and in the end I let them.\\\"\\n\\n\\\"We have sewn a flag for every house on the street, and the shop on the corner gave us the cloth.\\\"",
+  "de": "„Ich habe mich heute Morgen mit meinem Cousin gemeldet. Der Feldwebel sagte, sie hätten bis Mittag mehr Freiwillige genommen als im ganzen letzten Monat.“\\n\\n„Mein Sohn ist an der Front. Ich gehe jeden Nachmittag zum Bahnhof, um zu sehen, wer mit den Zügen zurückkommt, und nehme etwas zu essen für jeden mit, der es tut.“\\n\\n„Die Nachtschicht bat darum, auch die Tagschicht durchzuarbeiten. Ich sagte ihnen, die Maschinen brauchen Ruhe, auch wenn sie selbst keine brauchen, und am Ende habe ich es erlaubt.“\\n\\n„Wir haben für jedes Haus in der Straße eine Fahne genäht, und der Laden an der Ecke hat uns den Stoff gegeben.“"
  },
  "world_war_events.10.t": {
-  "en": "Home Front Rally",
-  "de": "Aufbruch an der Heimatfront"
+  "en": "The Country Answers",
+  "de": "Das Land antwortet"
  },
  "world_war_events.100.a": {
   "en": "Impose a harsh peace.",
@@ -28656,28 +28692,28 @@
   "de": "Eine neue Weltordnung errichten."
  },
  "world_war_events.100.d": {
-  "en": "The guns have fallen silent at last. The victorious powers gather to redraw the map of the world and shape the post-war order. The decisions made here will echo for generations.",
-  "de": "Die Geschütze sind endlich verstummt. Die siegreichen Mächte versammeln sich, um die Weltkarte neu zu zeichnen und die Nachkriegsordnung zu gestalten. Die hier getroffenen Entscheidungen werden noch Generationen nachhallen."
+  "en": "The fighting has stopped, and we are among the victors. The powers that won are gathering to settle the peace: what the beaten countries must give up, and what the world will look like afterward. We must decide what we will ask of those we defeated.",
+  "de": "Die Kämpfe sind eingestellt, und wir gehören zu den Siegern. Die siegreichen Mächte kommen zusammen, um den Frieden zu regeln: was die besiegten Länder abtreten müssen und wie die Welt danach aussehen wird. Wir müssen entscheiden, was wir von den Besiegten verlangen."
  },
  "world_war_events.100.d_defeated": {
-  "en": "The guns have fallen silent, and the war is lost. Our enemies have forced us to concede what they fought for, and the victorious powers now gather to settle the peace. Whatever else they ask of us, we are in no position to refuse.",
-  "de": "Die Geschütze sind verstummt, und der Krieg ist verloren. Unsere Feinde haben uns gezwungen, das zuzugestehen, wofür sie gekämpft haben, und die siegreichen Mächte versammeln sich nun, um den Frieden zu regeln. Was auch immer sie sonst noch von uns verlangen, wir sind nicht in der Lage, es zu verweigern."
+  "en": "The fighting has stopped, and we have lost. We have had to concede what our enemies fought for, and the powers that won are gathering to settle the peace without us. Whatever they ask of us next, we are in no position to refuse.",
+  "de": "Die Kämpfe sind eingestellt, und wir haben verloren. Wir mussten zugestehen, wofür unsere Feinde gekämpft haben, und die siegreichen Mächte kommen zusammen, um den Frieden ohne uns zu regeln. Was sie als Nächstes von uns verlangen, wir sind nicht in der Lage, es zu verweigern."
  },
  "world_war_events.100.d_no_victory": {
-  "en": "The guns have fallen silent at last, but the war has ended without a victory for us. There are no terms for us to dictate, and none to receive: only the dead to bury, and an army to bring home.",
-  "de": "Die Geschütze sind endlich verstummt, doch der Krieg hat für uns ohne Sieg geendet. Es gibt keine Bedingungen, die wir diktieren können, und keine, die wir entgegennehmen: nur Tote zu begraben und ein Heer, das heimzuholen ist."
+  "en": "The fighting has stopped, but the war has ended without a victory for us. We have no terms to dictate and none to receive. The army is still in the field and waiting to be told whether it is coming home.",
+  "de": "Die Kämpfe sind eingestellt, aber der Krieg ist für uns ohne Sieg zu Ende gegangen. Wir haben keine Bedingungen zu diktieren und keine entgegenzunehmen. Die Armee steht noch im Feld und wartet darauf, dass man ihr sagt, ob sie heimkehrt."
  },
  "world_war_events.100.demobilize": {
   "en": "Bring the soldiers home.",
   "de": "Die Soldaten nach Hause holen."
  },
  "world_war_events.100.f": {
-  "en": "The delegates filed into the palace hall in silence. Chandeliers blazed overhead; below, the carpet was threadbare from the boots of soldiers quartered there during the siege.\\n\\n'Shall we begin?' the chairman asked.\\n\\nA diplomat from the losing side studied his hands. 'We are here to receive your terms,' he said. 'Let us not pretend this is a negotiation.'\\n\\nThe chairman permitted himself a thin smile. 'Quite right. Shall we call it an opportunity instead?'",
-  "de": "Die Delegierten zogen schweigend in den Palastsaal ein. Über ihnen strahlten Kronleuchter; darunter war der Teppich von den Stiefeln der Soldaten, die während der Belagerung dort einquartiert waren, ganz abgetreten.\\n\\n'Sollen wir beginnen?', fragte der Vorsitzende.\\n\\nEin Diplomat der unterlegenen Seite betrachtete seine Hände. 'Wir sind hier, um Ihre Bedingungen entgegenzunehmen', sagte er. 'Lassen Sie uns nicht so tun, als wäre dies eine Verhandlung.'\\n\\nDer Vorsitzende gestattete sich ein dünnes Lächeln. 'Ganz recht. Sollen wir es stattdessen eine Gelegenheit nennen?'"
+  "en": "The order of business for the peace conference, as circulated to the delegations:\\n\\nEach delegation will present its credentials to the secretariat. No delegation may sign for a country it has not shown it represents.\\nThe armistice lines will be confirmed as they stand. No army is to move while the conference sits.\\nEach victorious power will present its claims in writing. Claims made only in speeches will not be entered in the record.\\nThe prisoners of war will be the subject of a separate committee. Their return can be arranged while the larger questions are argued.\\nThe defeated powers will hear the claims made against them and may answer in writing. They will not vote on them.",
+  "de": "Die Tagesordnung der Friedenskonferenz, wie sie an die Delegationen verteilt wurde:\\n\\nJede Delegation legt dem Sekretariat ihre Vollmachten vor. Keine Delegation darf für ein Land unterzeichnen, dessen Vertretung sie nicht nachgewiesen hat.\\nDie Waffenstillstandslinien werden so bestätigt, wie sie verlaufen. Solange die Konferenz tagt, bewegt sich keine Armee.\\nJede siegreiche Macht legt ihre Forderungen schriftlich vor. Forderungen, die nur in Reden erhoben werden, gehen nicht ins Protokoll ein.\\nDie Kriegsgefangenen sind Gegenstand eines gesonderten Ausschusses. Ihre Rückführung lässt sich regeln, während die größeren Fragen verhandelt werden.\\nDie besiegten Mächte hören die gegen sie erhobenen Forderungen und dürfen schriftlich antworten. Sie stimmen darüber nicht ab."
  },
  "world_war_events.100.f_no_victory": {
-  "en": "The armistice was signed in a railway carriage on a siding nobody could find on the map. Neither delegation stayed for lunch.\\n\\n'So who won?' a young aide asked on the train home.\\n\\nThe general watched the fields go past, still cratered, still strung with wire. 'The undertakers,' he said.",
-  "de": "Der Waffenstillstand wurde in einem Eisenbahnwaggon auf einem Nebengleis unterzeichnet, das niemand auf der Karte finden konnte. Keine der Delegationen blieb zum Mittagessen.\\n\\n'Wer hat also gewonnen?', fragte ein junger Adjutant auf der Heimfahrt im Zug.\\n\\nDer General beobachtete die vorbeiziehenden Felder, noch von Kratern übersät, noch mit Draht durchzogen. 'Die Leichenbestatter', sagte er."
+  "en": "The first train of wounded came into the station after the armistice was signed. The station master had cleared the platform of freight and put out benches, but most of the families stood. The orderlies brought the men down from the carriages one at a time, on stretchers or on their own feet, and an officer at the barrier read each name aloud from a list. When a family answered, the orderlies took the man to them. When nobody did, they took him to the carts for the hospital, and the officer read the next name.",
+  "de": "Nach der Unterzeichnung des Waffenstillstands lief der erste Zug mit Verwundeten im Bahnhof ein. Der Bahnhofsvorsteher hatte den Bahnsteig von Fracht geräumt und Bänke aufgestellt, aber die meisten Familien standen. Die Sanitäter holten die Männer einzeln aus den Wagen, auf Tragen oder auf eigenen Füßen, und ein Offizier an der Sperre las jeden Namen von einer Liste vor. Meldete sich eine Familie, brachten die Sanitäter den Mann zu ihr. Meldete sich niemand, brachten sie ihn zu den Karren für das Krankenhaus, und der Offizier las den nächsten Namen."
  },
  "world_war_events.100.stand_ready": {
   "en": "This is not the end. Keep the army ready.",
@@ -28692,20 +28728,20 @@
   "de": "Die neue Ordnung akzeptieren."
  },
  "world_war_events.101.b": {
-  "en": "Resist the occupation.",
-  "de": "Der Besatzung Widerstand leisten."
+  "en": "We will not govern under their constitution.",
+  "de": "Wir werden nicht unter ihrer Verfassung regieren."
  },
  "world_war_events.101.d": {
-  "en": "The victorious powers have demanded a complete transformation of our government. Our former ideology - the one we fought and bled for - is to be dismantled. A new political order will be imposed upon us.",
-  "de": "Die siegreichen Mächte haben eine vollständige Umgestaltung unserer Regierung gefordert. Unsere bisherige Ideologie - jene, für die wir gekämpft und geblutet haben - soll zerschlagen werden. Eine neue politische Ordnung wird uns auferlegt."
+  "en": "The victors have sent us their terms. They require that we give up the system of government we fought for, and they have sent us a constitution of their own drafting to take its place. We can accept it, or refuse it and govern a defeated country without their consent.",
+  "de": "Die Sieger haben uns ihre Bedingungen geschickt. Sie verlangen, dass wir das Regierungssystem aufgeben, für das wir gekämpft haben, und haben uns eine selbst entworfene Verfassung geschickt, die es ersetzen soll. Wir können sie annehmen oder sie ablehnen und ein besiegtes Land ohne ihre Zustimmung regieren."
  },
  "world_war_events.101.f": {
-  "en": "The foreign officer placed the document on the desk with the careful courtesy of a man delivering a death sentence. 'Your new constitution,' he said. 'We have taken the liberty of drafting it.'\\n\\nThe minister stared at the seal - not his nation's seal, but theirs. 'And if we object to its provisions?'\\n\\n'You misunderstand your position. You may object to the font.'",
-  "de": "Der fremde Offizier legte das Dokument mit der sorgsamen Höflichkeit eines Mannes, der ein Todesurteil überbringt, auf den Schreibtisch. 'Ihre neue Verfassung', sagte er. 'Wir haben uns die Freiheit genommen, sie zu entwerfen.'\\n\\nDer Minister starrte auf das Siegel - nicht das Siegel seiner Nation, sondern ihres. 'Und wenn wir gegen ihre Bestimmungen Einspruch erheben?'\\n\\n'Sie missverstehen Ihre Lage. Sie dürfen gegen die Schriftart Einspruch erheben.'"
+  "en": "To the government of [ROOT.GetCountry.GetName], from the commission of the victorious powers. We enclose the constitution under which your country is to be governed from the date of its signature. It provides for the offices of state, the courts, and the manner of choosing those who hold them. The persons named in its annex may hold no public office under it. The commission will remain in your capital until the constitution is in force, and will hear representations on its wording but not on its principles. We ask that your government sign it within thirty days and return one copy to the commission.",
+  "de": "An die Regierung von [ROOT.GetCountry.GetName], von der Kommission der siegreichen Mächte. Wir übersenden die Verfassung, nach der Ihr Land ab dem Tag ihrer Unterzeichnung regiert werden soll. Sie regelt die Staatsämter, die Gerichte und die Art, wie ihre Inhaber bestimmt werden. Die in ihrer Anlage genannten Personen dürfen unter ihr kein öffentliches Amt bekleiden. Die Kommission bleibt in Ihrer Hauptstadt, bis die Verfassung in Kraft ist, und wird Eingaben zu ihrem Wortlaut anhören, nicht aber zu ihren Grundsätzen. Wir bitten Ihre Regierung, sie binnen dreißig Tagen zu unterzeichnen und der Kommission ein Exemplar zurückzugeben."
  },
  "world_war_events.101.t": {
-  "en": "Regime Change",
-  "de": "Regimewechsel"
+  "en": "A Constitution Delivered",
+  "de": "Eine Verfassung wird überbracht"
  },
  "world_war_events.102.a": {
   "en": "Accept the aid.",
@@ -28716,16 +28752,16 @@
   "de": "Wir werden allein wiederaufbauen."
  },
  "world_war_events.102.d": {
-  "en": "The victorious powers have offered substantial aid to rebuild our shattered nation. Their generosity comes with strings attached - closer economic ties, political alignment, and a permanent military presence. But the alternative is years of poverty and isolation.",
-  "de": "Die siegreichen Mächte haben umfangreiche Hilfe zum Wiederaufbau unserer zerschlagenen Nation angeboten. Ihre Großzügigkeit ist an Bedingungen geknüpft - engere Wirtschaftsbeziehungen, politische Anlehnung und eine dauerhafte militärische Präsenz. Doch die Alternative sind Jahre der Armut und Isolation."
+  "en": "The victors have offered to help us rebuild. They will send materials, money and engineers. In return they want our trade turned toward theirs and our politics toward their camp. If we refuse, we rebuild with what we have, and it will take longer.",
+  "de": "Die Sieger haben angeboten, uns beim Wiederaufbau zu helfen. Sie schicken Material, Geld und Ingenieure. Dafür wollen sie unseren Handel auf den ihren und unsere Politik auf ihr Lager ausrichten. Lehnen wir ab, bauen wir mit dem wieder auf, was wir haben, und es dauert länger."
  },
  "world_war_events.102.f": {
-  "en": "The trucks arrived at dawn, stenciled with foreign markings. Canned meat, steel girders, sacks of cement. The mayor stood in the rubble of what had been the town hall and watched them unload.\\n\\n'Generous of them,' his deputy muttered.\\n\\n'Generous.' The mayor kicked a piece of masonry. 'Last year they dropped bombs on us. This year, powdered milk. I suppose that is what they call the arc of civilization.'",
-  "de": "Die Lastwagen trafen bei Tagesanbruch ein, mit fremden Aufschriften versehen. Dosenfleisch, Stahlträger, Zementsäcke. Der Bürgermeister stand in den Trümmern des einstigen Rathauses und sah beim Entladen zu.\\n\\n'Großzügig von ihnen', murmelte sein Stellvertreter.\\n\\n'Großzügig.' Der Bürgermeister trat gegen ein Stück Mauerwerk. 'Letztes Jahr haben sie Bomben auf uns geworfen. Dieses Jahr Milchpulver. Ich nehme an, das nennt man den Bogen der Zivilisation.'"
+  "en": "The first shipment came in on a freight train with foreign stencils on every crate: cement, steel rods, canned meat, blankets. The mayor met it at the station with a list of the buildings that had to be roofed before anything else. \\\"There is a letter with it,\\\" the station master said, and handed it to him. The mayor read it standing on the platform. It said that the next train would come when the agreement was signed, and it named the office in the capital where the signing would take place. He folded it into his pocket and told the men to start unloading.",
+  "de": "Die erste Lieferung kam mit einem Güterzug, auf jeder Kiste fremde Schablonenschrift: Zement, Stahlstäbe, Dosenfleisch, Decken. Der Bürgermeister empfing sie am Bahnhof mit einer Liste der Gebäude, die vor allem anderen ein Dach brauchten. „Es liegt ein Brief dabei“, sagte der Bahnhofsvorsteher und reichte ihn ihm. Der Bürgermeister las ihn auf dem Bahnsteig stehend. Darin stand, dass der nächste Zug kommen werde, wenn das Abkommen unterzeichnet sei, und das Amt in der Hauptstadt war genannt, in dem die Unterzeichnung stattfinden sollte. Er faltete ihn in die Tasche und sagte den Männern, sie sollten mit dem Entladen beginnen."
  },
  "world_war_events.102.t": {
-  "en": "Reconstruction Aid",
-  "de": "Wiederaufbauhilfe"
+  "en": "Help with Conditions",
+  "de": "Hilfe mit Bedingungen"
  },
  "world_war_events.103.a": {
   "en": "Prosecute the war criminals.",
@@ -28740,16 +28776,16 @@
   "de": "Die Beweise verschwinden lassen."
  },
  "world_war_events.103.d": {
-  "en": "As the fog of war lifts, horrifying revelations emerge about atrocities committed during the conflict. Mass graves, forced labor, systematic brutality - the scale of the crimes shocks the world. The question is: what do we do about it?",
-  "de": "Während sich der Nebel des Krieges lichtet, kommen entsetzliche Enthüllungen über die während des Konflikts begangenen Gräueltaten ans Licht. Massengräber, Zwangsarbeit, systematische Brutalität - das Ausmaß der Verbrechen erschüttert die Welt. Die Frage ist: Was unternehmen wir dagegen?"
+  "en": "Since the war ended, accounts of atrocities committed during it have come to light: mass graves, prisoners worked to death, villages burned with their people inside. Every government is being asked who did these things and whether they will be tried. We must decide what part we will take in the answer.",
+  "de": "Seit dem Ende des Krieges sind Berichte über Gräueltaten aus der Kriegszeit ans Licht gekommen: Massengräber, Gefangene, die zu Tode gearbeitet wurden, Dörfer, die samt ihren Bewohnern niedergebrannt wurden. Jede Regierung wird gefragt, wer das getan hat und ob die Täter vor Gericht gestellt werden. Wir müssen entscheiden, welche Rolle wir bei der Antwort übernehmen."
  },
  "world_war_events.103.f": {
-  "en": "The prosecutor held up the photograph. The courtroom fell silent.\\n\\n'The defendant claims he was following orders,' she said. 'Let us examine what those orders produced.'\\n\\nIn the dock, the old soldier stared straight ahead. He had not spoken since the trial began. His lawyer had advised him to show remorse. He showed nothing at all, and in its way, that was the most damning testimony of the week.",
-  "de": "Die Anklägerin hielt das Foto hoch. Im Gerichtssaal wurde es still.\\n\\n'Der Angeklagte behauptet, er habe nur Befehle befolgt', sagte sie. 'Sehen wir uns an, was diese Befehle hervorgebracht haben.'\\n\\nAuf der Anklagebank starrte der alte Soldat geradeaus. Er hatte seit Beginn des Prozesses kein Wort gesprochen. Sein Anwalt hatte ihm geraten, Reue zu zeigen. Er zeigte gar nichts, und auf seine Weise war das die vernichtendste Aussage der ganzen Woche."
+  "en": "\\\"The wrongs which we seek to condemn and punish have been so calculated, so malignant, and so devastating, that civilization cannot tolerate their being ignored, because it cannot survive their being repeated.\\\"\\n\\n— Robert H. Jackson, opening statement at Nuremberg",
+  "de": "„Die Untaten, die wir verurteilen und bestrafen wollen, waren so berechnet, so bösartig und so verheerend, dass die Zivilisation es nicht dulden kann, dass sie ignoriert werden, denn sie kann nicht überleben, wenn sie sich wiederholen.“\\n\\n— Robert H. Jackson, Eröffnungsrede in Nürnberg"
  },
  "world_war_events.103.t": {
-  "en": "War Crimes Tribunal",
-  "de": "Kriegsverbrechertribunal"
+  "en": "What Was Done",
+  "de": "Was getan wurde"
  },
  "world_war_events.104.a": {
   "en": "Establish our sphere of influence.",
@@ -28764,24 +28800,24 @@
   "de": "Auf die Erholung im Inland konzentrieren."
  },
  "world_war_events.104.d": {
-  "en": "With the great conflict behind us, the victorious powers must decide what kind of world they wish to build. Spheres of influence, new alliances, and international institutions are all on the table.",
-  "de": "Mit dem großen Konflikt hinter uns müssen die siegreichen Mächte entscheiden, was für eine Welt sie erschaffen wollen. Einflusssphären, neue Bündnisse und internationale Institutionen stehen alle zur Debatte."
+  "en": "The war is over, and the powers that won it, ourselves among them, are deciding what comes after: where each will hold sway, which alliances will bind them, and whether to build institutions to keep the peace. We must decide what we want from it.",
+  "de": "Der Krieg ist vorbei, und die Mächte, die ihn gewonnen haben, wir unter ihnen, entscheiden, was danach kommt: wo jede von ihnen Einfluss haben wird, welche Bündnisse sie binden werden und ob Institutionen zur Wahrung des Friedens geschaffen werden sollen. Wir müssen entscheiden, was wir davon wollen."
  },
  "world_war_events.104.d_neutral": {
   "en": "With the great conflict behind them, the powers that won it are redrawing the map and deciding what kind of world will follow. We did not share in their victory, and they will not ask our leave, but we must still decide what part we will play in the order they are building.",
   "de": "Mit dem großen Konflikt hinter sich zeichnen die Mächte, die ihn gewonnen haben, die Karte neu und entscheiden, welche Welt darauf folgen wird. Wir hatten keinen Anteil an ihrem Sieg, und sie werden uns nicht um Erlaubnis fragen, doch wir müssen dennoch entscheiden, welche Rolle wir in der Ordnung spielen werden, die sie errichten."
  },
  "world_war_events.104.f": {
-  "en": "'We have won the war,' the prime minister said, pouring himself a brandy. 'Now we must win the peace, which, I am given to understand, is considerably more difficult.'\\n\\n'Spheres of influence?'\\n\\n'Naturally. The question is how large a sphere our friends will permit us, and how small a sphere we can persuade our enemies to accept.'\\n\\nHe raised his glass. 'To the new world order. May it last longer than the one we just buried.'",
-  "de": "'Wir haben den Krieg gewonnen', sagte der Premierminister und schenkte sich einen Brandy ein. 'Jetzt müssen wir den Frieden gewinnen, was, wie man mir versichert hat, erheblich schwieriger ist.'\\n\\n'Einflusssphären?'\\n\\n'Natürlich. Die Frage ist, wie groß eine Sphäre unsere Freunde uns zugestehen werden, und wie klein eine Sphäre wir unsere Feinde zu akzeptieren überreden können.'\\n\\nEr hob sein Glas. 'Auf die neue Weltordnung. Möge sie länger währen als jene, die wir gerade zu Grabe getragen haben.'"
+  "en": "\\\"I have come back from the conference to tell the government where we stand. I spent the morning with our allies' delegation and the afternoon with our own. Everyone there agrees that the war must not happen again, and on very little else. They want the frontiers settled before anything is said about trade. We want trade settled first, because once the frontiers are drawn they will have no reason to give us anything. I have told them we will discuss both together or neither. Tomorrow I expect them to offer us half of what we asked for in return for our silence on the rest. I need the government's instructions on that tonight, so that I do not have to invent them in the room.\\\"",
+  "de": "„Ich bin von der Konferenz zurückgekehrt, um der Regierung zu sagen, wo wir stehen. Den Vormittag verbrachte ich mit der Delegation unserer Verbündeten und den Nachmittag mit unserer eigenen. Alle dort sind sich einig, dass sich der Krieg nicht wiederholen darf, und über sehr wenig sonst. Sie wollen die Grenzen klären, bevor über Handel gesprochen wird. Wir wollen zuerst den Handel klären, denn sobald die Grenzen gezogen sind, haben sie keinen Grund mehr, uns etwas zu geben. Ich habe ihnen gesagt, wir verhandeln beides zusammen oder keines. Morgen erwarte ich, dass sie uns die Hälfte dessen anbieten, was wir verlangt haben, wenn wir zum Rest schweigen. Ich brauche heute Abend die Weisung der Regierung dazu, damit ich sie nicht im Saal erfinden muss.“"
  },
  "world_war_events.104.f_neutral": {
-  "en": "'They are carving up the world,' the foreign secretary said, 'and we have not been invited to the table.'\\n\\n'Should we have been?'\\n\\nShe considered the question. 'No. But I should like us to be in the room when they come to the parts that concern us.'",
-  "de": "'Sie teilen die Welt unter sich auf', sagte die Außenministerin, 'und wir wurden nicht an den Tisch geladen.'\\n\\n'Hätten wir werden sollen?'\\n\\nSie überlegte. 'Nein. Aber ich würde es begrüßen, wenn wir im Raum wären, sobald sie zu den Teilen kommen, die uns betreffen.'"
+  "en": "\\\"They are dividing up the world,\\\" our envoy told the government, \\\"and we have not been invited.\\\"\\n\\n\\\"Should we have been? We won nothing.\\\"\\n\\n\\\"No. But some of what they are dividing lies next to us, and some of it trades with us, and decisions about it will be made in a room we are not in.\\\"\\n\\n\\\"Then we get someone into that room. Not as a party to the peace, but as a neighbor with interests they will have to manage anyway.\\\"\\n\\n\\\"I will write to each of the delegations tonight and ask to be heard on the questions that touch us.\\\"",
+  "de": "„Sie teilen die Welt auf“, sagte unser Gesandter der Regierung, „und wir sind nicht eingeladen.“\\n\\n„Hätten wir es sein sollen? Wir haben nichts gewonnen.“\\n\\n„Nein. Aber ein Teil dessen, was sie aufteilen, liegt neben uns, und ein Teil davon handelt mit uns, und Entscheidungen darüber fallen in einem Raum, in dem wir nicht sind.“\\n\\n„Dann bringen wir jemanden in diesen Raum. Nicht als Partei des Friedens, sondern als Nachbar mit Interessen, die sie ohnehin berücksichtigen müssen.“\\n\\n„Ich schreibe heute Abend an jede der Delegationen und bitte darum, zu den Fragen gehört zu werden, die uns berühren.“"
  },
  "world_war_events.104.t": {
-  "en": "The Post-War Order",
-  "de": "Die Nachkriegsordnung"
+  "en": "Dividing the Peace",
+  "de": "Der Frieden wird aufgeteilt"
  },
  "world_war_events.105.a": {
   "en": "Prepare for the long struggle.",
@@ -28792,20 +28828,20 @@
   "de": "Friedliche Koexistenz anstreben."
  },
  "world_war_events.105.d": {
-  "en": "The war is over, but already the seeds of the next conflict are being sown. [SCOPE.sCountry('new_rival_power').GetName] - once our ally of convenience - now stands as the greatest rival to our vision of the world. Two superpowers, two ideologies, one world.",
-  "de": "Der Krieg ist vorbei, doch schon wird die Saat für den nächsten Konflikt gelegt. [SCOPE.sCountry('new_rival_power').GetAltName('NOM')|U] - einst unser Verbündeter aus Zweckmäßigkeit - ist nun der größte Rivale unserer Vision der Welt. Zwei Supermächte, zwei Ideologien, eine Welt."
+  "en": "The war is over, and [SCOPE.sCountry('new_rival_power').GetName], which fought on our side, now stands against everything our government believes in. It is a great power, as we are, and without a common enemy there is nothing left to hold us together. We must decide whether to prepare for a long rivalry or try to live alongside it.",
+  "de": "Der Krieg ist vorbei, und [SCOPE.sCountry('new_rival_power').GetName], das an unserer Seite gekämpft hat, steht nun gegen alles, woran unsere Regierung glaubt. Es ist wie wir eine Großmacht, und ohne einen gemeinsamen Feind gibt es nichts mehr, was uns zusammenhält. Wir müssen entscheiden, ob wir uns auf eine lange Rivalität vorbereiten oder versuchen, neben ihm zu leben."
  },
  "world_war_events.105.f": {
-  "en": "The intelligence briefing was three pages long. The analyst summarized it in one sentence: 'They no longer need us, and they have stopped pretending otherwise.'\\n\\nThe defense minister closed the folder. 'Six months ago they were our allies.'\\n\\n'Six months ago we had a common enemy. Now we are each other's.'",
-  "de": "Das Geheimdienst-Briefing war drei Seiten lang. Der Analyst fasste es in einem Satz zusammen: 'Sie brauchen uns nicht mehr, und sie geben nicht länger vor, das Gegenteil zu tun.'\\n\\nDer Verteidigungsminister schloss die Akte. 'Vor sechs Monaten waren sie noch unsere Verbündeten.'\\n\\n'Vor sechs Monaten hatten wir einen gemeinsamen Feind. Jetzt sind wir einander der Feind.'"
+  "en": "Assessment for the government, from our intelligence staff, on [SCOPE.sCountry('new_rival_power').GetName] since the peace. Its government no longer shares with ours what it learns about the defeated powers, and it has recalled the liaison officers it kept with our army during the war. Its newspapers, which praised our soldiers while we fought together, now describe our system of government as the next danger to the world. Its officials speak of us in private as they used to speak of the enemy. We judge that it now regards us as its principal rival, and that it expects us to regard it in the same way. We will report again as we learn more.",
+  "de": "Lagebeurteilung für die Regierung, von unserem Nachrichtenstab, zu [SCOPE.sCountry('new_rival_power').GetName] seit dem Frieden. Seine Regierung teilt mit der unseren nicht mehr, was sie über die besiegten Mächte erfährt, und hat die Verbindungsoffiziere abgezogen, die sie während des Krieges bei unserer Armee hatte. Seine Zeitungen, die unsere Soldaten lobten, solange wir gemeinsam kämpften, beschreiben unser Regierungssystem jetzt als die nächste Gefahr für die Welt. Seine Beamten sprechen unter sich über uns, wie sie früher über den Feind sprachen. Wir schätzen, dass es uns nun als seinen Hauptrivalen betrachtet und erwartet, dass wir es ebenso sehen. Wir berichten wieder, sobald wir mehr erfahren."
  },
  "world_war_events.105.t": {
-  "en": "The New Rivalry",
-  "de": "Die neue Rivalität"
+  "en": "Yesterday's Ally",
+  "de": "Der Verbündete von gestern"
  },
  "world_war_events.11.a": {
-  "en": "Strengthen air defenses.",
-  "de": "Die Luftverteidigung stärken."
+  "en": "Put the safety of our cities first.",
+  "de": "Die Sicherheit unserer Städte an die erste Stelle setzen."
  },
  "world_war_events.11.b": {
   "en": "Retaliate in kind.",
@@ -28816,16 +28852,16 @@
   "de": "Auf den Landkrieg konzentrieren."
  },
  "world_war_events.11.d": {
-  "en": "Enemy bombers have struck our cities, leaving [concept_devastation] in their wake. Fires burn through the night as rescue crews dig through the rubble. The civilian toll mounts, but so does our resolve.",
-  "de": "Feindliche Bomber haben unsere Städte getroffen und hinterlassen [concept_devastation]. Feuer brennen die ganze Nacht, während Rettungskräfte sich durch die Trümmer graben. Die zivilen Opferzahlen steigen, doch ebenso unsere Entschlossenheit."
+  "en": "Enemy bombers have struck our cities. Fires burned through the night, and rescue crews are still digging through collapsed buildings for survivors. The armed forces and the city authorities each want resources from us, and we must decide where to put them.",
+  "de": "Feindliche Bomber haben unsere Städte getroffen. Die Brände brannten die ganze Nacht, und Rettungsmannschaften graben noch immer in eingestürzten Gebäuden nach Überlebenden. Die Streitkräfte und die Stadtverwaltungen wollen jeweils Mittel von uns, und wir müssen entscheiden, wohin wir sie lenken."
  },
  "world_war_events.11.f": {
-  "en": "The sirens woke the children first. Then the thunder came - not from the sky but from the street, where the grocery had stood that morning.\\n\\nThe warden found the family in the cellar, covered in plaster dust, the youngest still clutching a wooden horse. 'Everyone accounted for?' he asked.\\n\\n'Everyone,' the mother said. She did not mention the cat, or the kitchen, or the life they had built above ground. There would be time for that later. Or there would not.",
-  "de": "Die Sirenen weckten zuerst die Kinder. Dann kam der Donner - nicht vom Himmel, sondern von der Straße, wo an diesem Morgen noch der Lebensmittelladen gestanden hatte.\\n\\nDer Luftschutzwart fand die Familie im Keller, bedeckt mit Gipsstaub, das Jüngste noch immer ein Holzpferd umklammernd. 'Ist jeder da?', fragte er.\\n\\n'Jeder', sagte die Mutter. Sie erwähnte nicht die Katze, nicht die Küche, nicht das Leben, das sie über der Erde aufgebaut hatten. Dafür würde später Zeit sein. Oder auch nicht."
+  "en": "The warden reached the street an hour after the raid ended. Two houses in the middle of the row had gone, and the ones on either side stood open to the road, their wallpaper and a hanging lamp in plain view. He went down into each cellar with a lamp of his own, called out, and listened. In the third he found a family of five under a table, white with plaster dust, all of them alive. He wrote their names in his book, sent them to the school that was taking people in, and went on to the next house.",
+  "de": "Der Luftschutzwart erreichte die Straße eine Stunde nach dem Ende des Angriffs. Zwei Häuser in der Mitte der Reihe waren verschwunden, und die Häuser zu beiden Seiten standen zur Straße hin offen, Tapeten und eine hängende Lampe deutlich sichtbar. Er stieg mit seiner eigenen Lampe in jeden Keller hinab, rief und horchte. Im dritten fand er eine fünfköpfige Familie unter einem Tisch, weiß vom Gipsstaub, alle am Leben. Er schrieb ihre Namen in sein Buch, schickte sie zur Schule, die Leute aufnahm, und ging zum nächsten Haus."
  },
  "world_war_events.11.t": {
-  "en": "Strategic Bombing",
-  "de": "Strategisches Bombardement"
+  "en": "Fire from the Air",
+  "de": "Feuer aus der Luft"
  },
  "world_war_events.12.a": {
   "en": "Support the resistance.",
@@ -28836,16 +28872,16 @@
   "de": "Sie zügeln: keine Angriffe ohne Befehl der Armee."
  },
  "world_war_events.12.d": {
-  "en": "In the occupied territories, a resistance movement has taken root. Brave men and women sabotage enemy supply lines, shelter fugitives, and maintain a flicker of hope in the darkness of occupation.",
-  "de": "In den besetzten Gebieten hat eine Widerstandsbewegung Wurzeln geschlagen. Mutige Männer und Frauen sabotieren feindliche Versorgungslinien, verstecken Flüchtige und bewahren einen Funken Hoffnung in der Dunkelheit der Besatzung."
+  "en": "The enemy holds part of our territory, and people there have begun to resist: they hide those the occupiers are hunting, pass information to our army and attack supply columns. The occupiers answer each attack by punishing the nearest town. The resistance is asking us for support, and for orders.",
+  "de": "Der Feind hält einen Teil unseres Gebiets, und Menschen dort haben begonnen, Widerstand zu leisten: Sie verstecken, wen die Besatzer jagen, geben Informationen an unsere Armee weiter und überfallen Nachschubkolonnen. Die Besatzer antworten auf jeden Anschlag, indem sie die nächste Stadt bestrafen. Der Widerstand bittet uns um Unterstützung und um Befehle."
  },
  "world_war_events.12.f": {
-  "en": "The baker slid the loaves across the counter and, beneath them, a folded note. The customer pocketed it without looking.\\n\\n'Same time Thursday?' she asked.\\n\\n'If the flour holds out.'\\n\\nNeither smiled. In occupied territory, a smile between strangers was as conspicuous as a gunshot.",
-  "de": "Der Bäcker schob die Laibe über die Theke und darunter einen gefalteten Zettel. Die Kundin steckte ihn ein, ohne hinzusehen.\\n\\n'Gleiche Zeit am Donnerstag?', fragte sie.\\n\\n'Wenn das Mehl reicht.'\\n\\nKeiner von beiden lächelte. In besetztem Gebiet war ein Lächeln zwischen Fremden so auffällig wie ein Schuss."
+  "en": "To our army command, from the people working against the occupation in the districts the enemy holds. We have the names of the officers who run the occupation in our district, the hours at which their supply columns use the main road, and where they keep their fuel. We can send this to you every week by the courier who brings this letter. We have also burned two of their stores. After the second, they took ten people from the market and shot them in the square, and some of us now say we should stop until the army can reach us. We ask you to tell us which you want from us: information only, or attacks as well, and on what.",
+  "de": "An unser Armeekommando, von den Menschen, die in den vom Feind gehaltenen Bezirken gegen die Besatzung arbeiten. Wir haben die Namen der Offiziere, die die Besatzung in unserem Bezirk leiten, die Stunden, zu denen ihre Nachschubkolonnen die Hauptstraße benutzen, und wissen, wo sie ihren Treibstoff lagern. Wir können Ihnen das jede Woche durch den Kurier schicken, der diesen Brief bringt. Wir haben auch zwei ihrer Lager niedergebrannt. Nach dem zweiten holten sie zehn Menschen vom Markt und erschossen sie auf dem Platz, und einige von uns sagen jetzt, wir sollten aufhören, bis die Armee uns erreichen kann. Wir bitten Sie, uns zu sagen, was Sie von uns wollen: nur Informationen oder auch Anschläge, und auf was."
  },
  "world_war_events.12.t": {
-  "en": "Resistance Movement",
-  "de": "Widerstandsbewegung"
+  "en": "Behind Their Lines",
+  "de": "Hinter ihren Linien"
  },
  "world_war_events.2.a": {
   "en": "Demand a formal apology.",
@@ -28860,16 +28896,16 @@
   "de": "Truppen an die Grenze mobilisieren."
  },
  "world_war_events.2.d": {
-  "en": "A violent skirmish has erupted along the frontier with [SCOPE.sCountry('border_rival').GetName]. Shots were fired and casualties reported. Both sides blame the other. The incident threatens to spiral into something far larger.",
-  "de": "Ein gewaltsames Gefecht ist entlang der Grenze zu [SCOPE.sCountry('border_rival').GetAltName('DAT')] ausgebrochen. Schüsse fielen, und Opfer wurden gemeldet. Beide Seiten geben sich gegenseitig die Schuld. Der Vorfall droht, sich zu etwas weitaus Größerem auszuweiten."
+  "en": "There has been shooting at our frontier with [SCOPE.sCountry('border_rival').GetName], and there are dead on both sides. Each government says the other's patrol crossed first. Our officers want an answer that shows we will not be pushed back.",
+  "de": "An unserer Grenze zu [SCOPE.sCountry('border_rival').GetName] ist geschossen worden, und es gibt Tote auf beiden Seiten. Jede Regierung sagt, die Patrouille der anderen sei zuerst herübergekommen. Unsere Offiziere wollen eine Antwort, die zeigt, dass wir uns nicht zurückdrängen lassen."
  },
  "world_war_events.2.f": {
-  "en": "The lieutenant's hands were still shaking when he filed the report. 'They crossed the line,' he said. 'I gave the order to fire.'\\n\\n'And the casualties?'\\n\\n'Three of theirs. One of ours. A corporal, twenty-two years old.'\\n\\nThe colonel closed the file. Somewhere between this desk and the capital, those numbers would become a crisis.",
-  "de": "Die Hände des Leutnants zitterten noch, als er den Bericht einreichte. 'Sie haben die Linie überschritten', sagte er. 'Ich gab den Feuerbefehl.'\\n\\n'Und die Opfer?'\\n\\n'Drei von ihnen. Einer von uns. Ein Obergefreiter, zweiundzwanzig Jahre alt.'\\n\\nDer Oberst schloss die Akte. Irgendwo zwischen diesem Schreibtisch und der Hauptstadt würden diese Zahlen zu einer Krise werden."
+  "en": "\\\"I commanded the post that night. Their patrol came along the track before first light, on our side of the markers. I am sure of that, because we had walked the markers the evening before. I called out to them twice. Someone on their side fired, or one of my men did, and after that everyone fired. It lasted perhaps a minute. When it was light we carried in one of ours, and we found three of theirs on the track. I gave the order to return fire. I have written down the names of my men who were there and where each of them stood.\\\"",
+  "de": "„Ich habe den Posten in jener Nacht befehligt. Ihre Patrouille kam vor Tagesanbruch auf dem Pfad herauf, auf unserer Seite der Markierungen. Dessen bin ich sicher, denn wir waren am Abend zuvor die Markierungen abgegangen. Ich habe sie zweimal angerufen. Jemand auf ihrer Seite schoss, oder einer meiner Männer, und danach schoss jeder. Es dauerte vielleicht eine Minute. Als es hell wurde, trugen wir einen der Unseren herein, und auf dem Pfad fanden wir drei von ihnen. Ich gab den Befehl, das Feuer zu erwidern. Ich habe die Namen meiner Männer aufgeschrieben, die dabei waren, und wo jeder von ihnen stand.“"
  },
  "world_war_events.2.t": {
-  "en": "Border Incident",
-  "de": "Grenzzwischenfall"
+  "en": "Shots at the Frontier",
+  "de": "Schüsse an der Grenze"
  },
  "world_war_events.20.a": {
   "en": "Enter the war against the aggressors.",
@@ -28884,12 +28920,16 @@
   "de": "Unsere Neutralität wahren."
  },
  "world_war_events.20.d": {
-  "en": "The world war rages on, and we have remained on the sidelines. But the balance of power is shifting, and neutrality grows ever more untenable. [SCOPE.sCountry('ww_main_aggressor').GetName] grows stronger with each passing month. If we do not act soon, the window of opportunity may close forever.",
-  "de": "Der Weltkrieg tobt weiter, und wir sind am Rand geblieben. Doch das Kräfteverhältnis verschiebt sich, und Neutralität wird zunehmend unhaltbar. [SCOPE.sCountry('ww_main_aggressor').GetAltName('NOM')|U] wird mit jedem Monat stärker. Handeln wir nicht bald, könnte sich das Zeitfenster für immer schließen."
+  "en": "A world war is being fought, and we are not in it. [SCOPE.sCountry('ww_main_aggressor').GetName] and its side are at war with [SCOPE.sCountry('ww_main_defender').GetName] and its own, and both sides want what we can give: our army, or our factories and our credit. We must decide whether to go to war against [SCOPE.sCountry('ww_main_aggressor').GetName], help without fighting, or stay out.",
+  "de": "Ein Weltkrieg wird geführt, und wir sind nicht darin. [SCOPE.sCountry('ww_main_aggressor').GetName] und seine Seite sind im Krieg mit [SCOPE.sCountry('ww_main_defender').GetName] und dessen Seite, und beide Seiten wollen, was wir geben können: unsere Armee oder unsere Fabriken und unseren Kredit. Wir müssen entscheiden, ob wir [SCOPE.sCountry('ww_main_aggressor').GetAltName('DAT')] den Krieg erklären, helfen ohne zu kämpfen oder uns heraushalten."
+ },
+ "world_war_events.20.d_no_side": {
+  "en": "A world war is being fought, and we are not in it. Both sides want what we can give: our army, or our factories and our credit. While no great power of the defending side is at war with one of the aggressors, there is no front for us to join, but we can still decide whether to help without fighting or to stay out.",
+  "de": "Ein Weltkrieg wird geführt, und wir sind nicht darin. Beide Seiten wollen, was wir geben können: unsere Armee oder unsere Fabriken und unseren Kredit. Solange keine Großmacht der verteidigenden Seite mit einem der Angreifer im Krieg ist, gibt es keine Front, der wir beitreten könnten, aber wir können dennoch entscheiden, ob wir helfen, ohne zu kämpfen, oder uns heraushalten."
  },
  "world_war_events.20.f": {
-  "en": "The general spread the map across the cabinet table and tapped the front line with a blunt finger. 'Here,' he said. 'And here. If they break through, there will be nothing between them and the coast.'\\n\\n'And if we intervene?'\\n\\n'Then we are at war.' He folded his arms. 'But if we do not intervene, excellency, we shall be at their mercy - which, I assure you, is considerably worse.'",
-  "de": "Der General breitete die Karte auf dem Kabinettstisch aus und tippte mit einem stumpfen Finger auf die Frontlinie. 'Hier', sagte er. 'Und hier. Wenn sie durchbrechen, liegt nichts mehr zwischen ihnen und der Küste.'\\n\\n'Und wenn wir eingreifen?'\\n\\n'Dann sind wir im Krieg.' Er verschränkte die Arme. 'Aber wenn wir nicht eingreifen, Exzellenz, sind wir ihrer Gnade ausgeliefert - was, das versichere ich Ihnen, erheblich schlimmer ist.'"
+  "en": "\\\"General, show me where their line is.\\\"\\n\\n\\\"Here, and here. It has held so far, but they are short of shells, and if it breaks there is nothing behind it for a long way.\\\"\\n\\n\\\"If we go in, we go in for as long as it takes. I would be asking this country for its young people, and for years.\\\"\\n\\n\\\"If we stay out, the side that wins will not ask us what we think of the peace. We will be dealing with them alone, and with whatever they have taken.\\\"\\n\\n\\\"Then tell me what the army needs and how soon, and I will take it to the others in the morning.\\\"",
+  "de": "„General, zeigen Sie mir, wo ihre Linie verläuft.“\\n\\n„Hier und hier. Sie hat bisher gehalten, aber ihnen fehlen Granaten, und wenn sie bricht, ist lange nichts dahinter.“\\n\\n„Wenn wir eintreten, dann so lange, wie es dauert. Ich würde von diesem Land seine jungen Menschen verlangen, und für Jahre.“\\n\\n„Wenn wir uns heraushalten, fragt die Seite, die gewinnt, uns nicht, was wir vom Frieden halten. Wir haben es dann allein mit ihr zu tun und mit allem, was sie sich genommen hat.“\\n\\n„Dann sagen Sie mir, was die Armee braucht und wie bald, und ich bringe es morgen früh zu den anderen.“"
  },
  "world_war_events.20.t": {
   "en": "The Hour of Decision",
@@ -28912,16 +28952,16 @@
   "de": "Zur Verteidigung [SCOPE.sCountry('crisis_victim').GetAltName('GEN')] mobilisieren."
  },
  "world_war_events.3.d": {
-  "en": "[SCOPE.sCountry('crisis_aggressor').GetName] has opened a diplomatic play against [SCOPE.sCountry('crisis_victim').GetName], a smaller nation in our sphere of influence, and is pressing it for concessions and political subservience. If we do not act, the balance of power may shift irrevocably.",
-  "de": "[SCOPE.sCountry('crisis_aggressor').GetAltName('NOM')|U] hat ein Diplomatiespiel gegen [SCOPE.sCountry('crisis_victim').GetAltName('AKK')] eröffnet, eine kleinere Nation in unserer Einflusssphäre, und verlangt von ihr Zugeständnisse und politische Unterwürfigkeit. Handeln wir nicht, könnte sich das Kräfteverhältnis unwiderruflich verschieben."
+  "en": "[SCOPE.sCountry('crisis_aggressor').GetName] has opened a diplomatic play against [SCOPE.sCountry('crisis_victim').GetName], a smaller country that shares our power bloc or that we are bound by treaty to defend, and is pressing it for concessions. [SCOPE.sCountry('crisis_victim').GetName]'s envoys have asked us what our commitments are worth. We must decide whether to stand by it, and how openly.",
+  "de": "[SCOPE.sCountry('crisis_aggressor').GetName] hat ein Diplomatiespiel gegen [SCOPE.sCountry('crisis_victim').GetName] eröffnet, ein kleineres Land, das mit uns im selben Machtblock ist oder das wir vertraglich zu verteidigen verpflichtet sind, und setzt es um Zugeständnisse unter Druck. Die Gesandten von [SCOPE.sCountry('crisis_victim').GetName] haben uns gefragt, was unsere Zusagen wert sind. Wir müssen entscheiden, ob wir zu ihm stehen und wie offen."
  },
  "world_war_events.3.f": {
-  "en": "The ambassador from the small nation placed both palms flat on the table, as if to steady himself. 'If your guarantees mean nothing,' he said, 'then say so plainly, and we will make other arrangements.'\\n\\n'What arrangements?' the foreign minister asked.\\n\\n'The only kind available to nations without powerful friends: surrender.'",
-  "de": "Der Botschafter der kleinen Nation legte beide Handflächen flach auf den Tisch, als wolle er sich abstützen. 'Wenn Ihre Garantien nichts bedeuten', sagte er, 'dann sagen Sie es offen, und wir werden andere Vorkehrungen treffen.'\\n\\n'Welche Vorkehrungen?', fragte der Außenminister.\\n\\n'Die einzige Art, die Nationen ohne mächtige Freunde offensteht: Kapitulation.'"
+  "en": "\\\"Ambassador, the government has read your note. It wants to hear from you what [SCOPE.sCountry('crisis_victim').GetName] needs from us.\\\"\\n\\n\\\"A public statement that you will stand with us if it comes to war. Nothing less will make them stop. Private assurances have been given before, and in [SCOPE.sCountry('crisis_aggressor').GetName] they were read as permission.\\\"\\n\\n\\\"A public statement commits us before we know how far they mean to go.\\\"\\n\\n\\\"That is why it works. If you keep your choices open, so will they, and it is our border they will cross while you decide.\\\"\\n\\n\\\"Then I will be plain about what I can do. I will put what you have said to the government tonight, with my own advice that it answer you within the week, and I will send for you as soon as there is a reply.\\\"",
+  "de": "„Herr Botschafter, die Regierung hat Ihre Note gelesen. Sie möchte von Ihnen hören, was [SCOPE.sCountry('crisis_victim').GetName] von uns braucht.“\\n\\n„Eine öffentliche Erklärung, dass Sie im Kriegsfall an unserer Seite stehen. Nichts Geringeres bringt sie zum Einhalten. Private Zusicherungen hat es schon früher gegeben, und in [SCOPE.sCountry('crisis_aggressor').GetName] wurden sie als Erlaubnis gelesen.“\\n\\n„Eine öffentliche Erklärung bindet uns, bevor wir wissen, wie weit sie gehen wollen.“\\n\\n„Gerade deshalb wirkt sie. Halten Sie sich die Wahl offen, tun sie es auch, und es ist unsere Grenze, die sie überschreiten, während Sie entscheiden.“\\n\\n„Dann sage ich klar, was ich tun kann. Ich trage der Regierung heute Abend vor, was Sie gesagt haben, mit meinem eigenen Rat, Ihnen binnen der Woche zu antworten, und ich lasse Sie rufen, sobald es eine Antwort gibt.“"
  },
  "world_war_events.3.t": {
-  "en": "Diplomatic Crisis",
-  "de": "Diplomatiekrise"
+  "en": "A Friend Under Pressure",
+  "de": "Ein Freund unter Druck"
  },
  "world_war_events.30.a": {
   "en": "We must push through to victory.",
@@ -28932,16 +28972,16 @@
   "de": "Diplomatische Kanäle ausloten."
  },
  "world_war_events.30.d": {
-  "en": "The war has dragged on far longer than anyone expected. Casualty lists grow longer by the day, food is scarce, and the civilian population is exhausted. Voices demanding peace grow louder - but our enemies show no sign of surrender.",
-  "de": "Der Krieg hat sich weit länger hingezogen, als irgendjemand erwartet hatte. Die Verlustlisten werden von Tag zu Tag länger, Nahrung ist knapp, und die Zivilbevölkerung ist erschöpft. Die Stimmen, die Frieden fordern, werden lauter - doch unsere Feinde zeigen keine Anzeichen einer Kapitulation."
+  "en": "The war has gone on for more than two years. The casualty lists in the papers grow longer every month, and in many towns most families have someone at the front or someone dead. Calls for peace are growing louder. Our enemies have not asked for terms.",
+  "de": "Der Krieg dauert nun schon mehr als zwei Jahre. Die Verlustlisten in den Zeitungen werden jeden Monat länger, und in vielen Städten hat die Mehrzahl der Familien jemanden an der Front oder einen Toten. Die Rufe nach Frieden werden lauter. Unsere Feinde haben nicht um Bedingungen gebeten."
  },
  "world_war_events.30.f": {
-  "en": "The postman no longer knocked. He simply left the telegrams on the step, because the sound of knocking had become something the women on this street could not bear to hear.\\n\\n'Another one,' the neighbor said, watching from her window. 'The Hendersons.'\\n\\n'That's their third son.'\\n\\nSilence. Somewhere, a church bell rang. It had been ringing for so many funerals that no one could remember the last time it rang for joy.",
-  "de": "Der Postbote klopfte nicht mehr. Er legte die Telegramme einfach auf die Stufe, denn das Geräusch des Klopfens war zu etwas geworden, das die Frauen in dieser Straße nicht mehr ertragen konnten.\\n\\n'Noch eins', sagte die Nachbarin und beobachtete vom Fenster aus. 'Die Hendersons.'\\n\\n'Das ist ihr dritter Sohn.'\\n\\nStille. Irgendwo läutete eine Kirchenglocke. Sie hatte für so viele Beerdigungen geläutet, dass sich niemand mehr erinnern konnte, wann sie zuletzt aus Freude geläutet hatte."
+  "en": "The postman on this street had learned which envelopes were the army's telegrams. He no longer knocked when he had one. He left it on the step and went on, because the families behind the doors had come to dread the knock more than the paper. This morning he had two. He left the first at a house that had already had one, and the second three doors down, and went on with the rest of his round.",
+  "de": "Der Briefträger in dieser Straße hatte gelernt, welche Umschläge die Telegramme der Armee waren. Er klopfte nicht mehr, wenn er eines hatte. Er legte es auf die Stufe und ging weiter, denn die Familien hinter den Türen fürchteten das Klopfen mehr als das Papier. Heute Morgen hatte er zwei. Das erste legte er vor ein Haus, das schon eines bekommen hatte, das zweite drei Türen weiter, und ging mit dem Rest seiner Runde weiter."
  },
  "world_war_events.30.t": {
-  "en": "War Weariness",
-  "de": "Kriegsmüdigkeit"
+  "en": "The Long Lists",
+  "de": "Die langen Listen"
  },
  "world_war_events.31.a": {
   "en": "Hold the line. They will break before we do.",
@@ -28952,16 +28992,16 @@
   "de": "Waffenstillstandsgespräche aufnehmen."
  },
  "world_war_events.31.d": {
-  "en": "Two years on, the front has not moved. Every offensive has bled out in the same few miles of churned earth, and the war aims we set out with are no closer than the day the guns first spoke. The general staff insists the next push will break them. The public, reading the same casualty lists as last month and the month before, is no longer sure what 'breaking them' would even mean.",
-  "de": "Zwei Jahre später hat sich die Front nicht bewegt. Jede Offensive ist in denselben paar Meilen aufgewühlter Erde verblutet, und die Kriegsziele, mit denen wir aufgebrochen sind, sind uns nicht nähergerückt als am Tag, an dem die Geschütze zum ersten Mal sprachen. Der Generalstab beharrt darauf, dass der nächste Vorstoß sie brechen wird. Die Öffentlichkeit, die dieselben Verlustlisten liest wie letzten Monat und den davor, ist sich nicht mehr sicher, was 'sie brechen' überhaupt bedeuten würde."
+  "en": "The war has lasted more than two years, and the front has not moved. Every offensive has ended in the same few miles of shelled ground, and the war goals we set out to win are no closer. The general staff says the next attack will break the enemy's line. The casualty lists are as long each month as the month before.",
+  "de": "Der Krieg dauert mehr als zwei Jahre, und die Front hat sich nicht bewegt. Jede Offensive endete in denselben paar Meilen zerschossenen Bodens, und die Kriegsziele, die wir erreichen wollten, sind nicht näher gerückt. Der Generalstab sagt, der nächste Angriff werde die Linie des Feindes durchbrechen. Die Verlustlisten sind jeden Monat so lang wie im Monat davor."
  },
  "world_war_events.31.f": {
-  "en": "The staff car had been stuck behind a supply column for forty minutes, which gave the minister time to study the map on his knees.\\n\\nThe line on it was the same line as in the spring. The same line as the autumn before that. Someone had drawn a fresh arrow over the old ones in a different color of ink, and the arrows underneath showed through like bruises.\\n\\n'How far did we get this time?' he asked.\\n\\nThe colonel did not look up. 'Far enough to see their wire,' he said. 'Same as always.'",
-  "de": "Der Stabswagen hatte vierzig Minuten hinter einer Nachschubkolonne festgesteckt, was dem Minister Zeit gab, die Karte auf seinen Knien zu studieren.\\n\\nDie Linie darauf war dieselbe wie im Frühjahr. Dieselbe wie im Herbst davor. Jemand hatte in einer anderen Tintenfarbe einen frischen Pfeil über die alten gezeichnet, und die darunterliegenden Pfeile schimmerten durch wie blaue Flecken.\\n\\n'Wie weit sind wir diesmal gekommen?', fragte er.\\n\\nDer Oberst blickte nicht auf. 'Weit genug, um ihren Draht zu sehen', sagte er. 'Wie immer.'"
+  "en": "\\\"You have come from the government to ask how far we got, so I will tell you. We took their first trench on the second morning and held it until evening. Then their reserves came up from the rear by train, and by midnight we were back where we had started. It was the same the time before. The wire was cut in some places and not in others, and where it was not, we lost most of a battalion. My officers did everything that was asked of them. I have written it all down for the general staff, with the names of the dead, and I will give you a copy to take back with you.\\\"",
+  "de": "„Sie kommen von der Regierung, um zu fragen, wie weit wir gekommen sind, also sage ich es Ihnen. Wir nahmen am zweiten Morgen ihren ersten Graben und hielten ihn bis zum Abend. Dann kamen ihre Reserven mit der Bahn aus dem Hinterland, und um Mitternacht waren wir wieder dort, wo wir angefangen hatten. Beim Mal davor war es dasselbe. Der Draht war an manchen Stellen zerschnitten und an anderen nicht, und wo nicht, verloren wir den größten Teil eines Bataillons. Meine Offiziere haben alles getan, was von ihnen verlangt wurde. Ich habe alles für den Generalstab aufgeschrieben, mit den Namen der Toten, und gebe Ihnen eine Abschrift zum Mitnehmen.“"
  },
  "world_war_events.31.t": {
-  "en": "Stalemate on the Front",
-  "de": "Patt an der Front"
+  "en": "The Same Line",
+  "de": "Dieselbe Linie"
  },
  "world_war_events.4.a": {
   "en": "Deliver the demands.",
@@ -28972,16 +29012,16 @@
   "de": "Zurückhalten. Noch nicht."
  },
  "world_war_events.4.d": {
-  "en": "Our quarrel with [SCOPE.sCountry('ww_demand_target').GetName] has become a contest between two irreconcilable systems of government. The foreign ministry has drafted a set of demands: that [SCOPE.sCountry('ww_demand_target').GetName] publicly renounce its hostility to our system and silence its propaganda against us. Once delivered, the demands will force [SCOPE.sCountry('ww_demand_target').GetName] to answer, and whatever it answers, the fragile peace between the [Concept('concept_great_power', 'great powers')] will be tested.",
-  "de": "Unser Zwist mit [SCOPE.sCountry('ww_demand_target').GetAltName('DAT')] ist zu einem Wettstreit zweier unvereinbarer Regierungssysteme geworden. Das Außenministerium hat eine Reihe von Forderungen ausgearbeitet: dass [SCOPE.sCountry('ww_demand_target').GetAltName('NOM')] öffentlich seiner Feindseligkeit gegenüber unserem System abschwört und seine Propaganda gegen uns zum Schweigen bringt. Einmal überbracht, werden die Forderungen [SCOPE.sCountry('ww_demand_target').GetAltName('AKK')] zu einer Antwort zwingen, und was auch immer es antwortet, der brüchige Frieden zwischen den [Concept('concept_great_power', 'Großmächten')] wird auf die Probe gestellt."
+  "en": "Our quarrel with [SCOPE.sCountry('ww_demand_target').GetName] has become a quarrel between two systems of government. Our diplomats have drafted a note demanding that [SCOPE.sCountry('ww_demand_target').GetName] publicly renounce its hostility to our system and end its propaganda against us. Once the note is delivered, [SCOPE.sCountry('ww_demand_target').GetName] must answer it in public, and either answer will test the peace between the [Concept('concept_great_power', 'great powers')].",
+  "de": "Unser Streit mit [SCOPE.sCountry('ww_demand_target').GetName] ist zu einem Streit zwischen zwei Regierungssystemen geworden. Unsere Diplomaten haben eine Note entworfen, die verlangt, dass [SCOPE.sCountry('ww_demand_target').GetName] seiner Feindseligkeit gegenüber unserem System öffentlich abschwört und seine Propaganda gegen uns beendet. Sobald die Note überbracht ist, muss [SCOPE.sCountry('ww_demand_target').GetName] öffentlich antworten, und jede Antwort wird den Frieden zwischen den [Concept('concept_great_power', 'Großmächten')] auf die Probe stellen."
  },
  "world_war_events.4.f": {
-  "en": "'It is a strong note,' the foreign minister said, sliding the draft across the desk. 'Some would say too strong.'\\n\\nThe premier read it twice. 'Will they accept?'\\n\\n'No. But they will have to refuse in public, and that is rather the point.'",
-  "de": "'Das ist eine scharfe Note', sagte der Außenminister und schob den Entwurf über den Schreibtisch. 'Manche würden sagen, zu scharf.'\\n\\nDer Premier las sie zweimal. 'Werden sie annehmen?'\\n\\n'Nein. Aber sie werden öffentlich ablehnen müssen, und genau das ist der Sinn der Sache.'"
+  "en": "The points of the note to [SCOPE.sCountry('ww_demand_target').GetName], as drafted for the government, with the drafters' reasons:\\n\\nThat its government declare in public that it has no quarrel with our form of government. A private assurance can be denied later, and a public one cannot.\\nThat its official speakers stop calling for our overthrow. This is the conduct we can point to if the note is refused.\\nThat the note be published on the day it is delivered. Our own people should hear the terms from us and not from them.\\nThat it answer within a fixed time. Without a date, they can go on talking until the moment has passed.",
+  "de": "Die Punkte der Note an [SCOPE.sCountry('ww_demand_target').GetName], wie für die Regierung entworfen, mit den Gründen der Verfasser:\\n\\nDass seine Regierung öffentlich erklärt, keinen Streit mit unserer Regierungsform zu haben. Eine private Zusicherung kann später bestritten werden, eine öffentliche nicht.\\nDass seine offiziellen Sprecher aufhören, zu unserem Sturz aufzurufen. Dieses Verhalten können wir anführen, wenn die Note abgelehnt wird.\\nDass die Note am Tag ihrer Überbringung veröffentlicht wird. Unser eigenes Volk soll die Bedingungen von uns hören und nicht von ihnen.\\nDass es innerhalb einer festen Frist antwortet. Ohne Termin können sie weiterreden, bis der Moment vorbei ist."
  },
  "world_war_events.4.t": {
-  "en": "Ideological Demands",
-  "de": "Ideologische Forderungen"
+  "en": "The Strong Note",
+  "de": "Die scharfe Note"
  },
  "world_war_events.5.a": {
   "en": "To arms! For our nation and our cause!",
@@ -28992,12 +29032,12 @@
   "de": "Zurückziehen. Diesmal nicht."
  },
  "world_war_events.5.d": {
-  "en": "Years of mounting tension have brought us to the brink of war with [SCOPE.sCountry('war_target').GetName]. The general staff reports that the army is ready and asks for the order to move. If we give it, [SCOPE.sCountry('war_target').GetName] and its friends will answer, and the [Concept('concept_great_power', 'great powers')] will be drawn in one by one to the most devastating war in human history. If we do not, the moment will pass, and perhaps the initiative with it.",
-  "de": "Jahre wachsender Spannungen haben uns an den Rand eines Krieges mit [SCOPE.sCountry('war_target').GetAltName('DAT')] gebracht. Der Generalstab meldet, dass die Armee bereit ist, und bittet um den Marschbefehl. Geben wir ihn, werden [SCOPE.sCountry('war_target').GetAltName('NOM')] und seine Freunde antworten, und die [Concept('concept_great_power', 'Großmächte')] werden nach und nach in den verheerendsten Krieg der Menschheitsgeschichte hineingezogen. Tun wir es nicht, wird der Moment verstreichen, und vielleicht die Initiative mit ihm."
+  "en": "Our general staff reports that the army is ready for a war against [SCOPE.sCountry('war_target').GetName]. The staff asks for the order to move. If we give it, [SCOPE.sCountry('war_target').GetName] and the powers that stand with it will answer, and the [Concept('concept_great_power', 'great powers')] will be drawn one by one into a world war. If we do not, the general staff will say we let the moment pass.",
+  "de": "Unser Generalstab meldet, dass die Armee für einen Krieg gegen [SCOPE.sCountry('war_target').GetName] bereit ist. Der Stab bittet um den Marschbefehl. Geben wir ihn, werden [SCOPE.sCountry('war_target').GetName] und die Mächte, die zu ihm stehen, antworten, und die [Concept('concept_great_power', 'Großmächte')] werden eine nach der anderen in einen Weltkrieg hineingezogen. Geben wir ihn nicht, wird der Generalstab sagen, wir hätten den Moment verstreichen lassen."
  },
  "world_war_events.5.f": {
-  "en": "The chief of the general staff did not sit down. 'The divisions are at the railheads,' he said. 'The plans are current. I need only your signature.'\\n\\nThe minister looked at the order for a long time. Outside, a tram bell rang; somewhere a café was opening its shutters, as though it were an ordinary morning.\\n\\n'And if I do not sign?'\\n\\n'Then you will have to explain to them,' the general said, nodding at the window, 'why we built all this and then lost our nerve.'",
-  "de": "Der Chef des Generalstabs setzte sich nicht. 'Die Divisionen stehen an den Verladebahnhöfen', sagte er. 'Die Pläne sind aktuell. Ich brauche nur Ihre Unterschrift.'\\n\\nDer Minister betrachtete den Befehl lange. Draußen läutete eine Straßenbahnklingel; irgendwo öffnete ein Café seine Fensterläden, als wäre es ein ganz gewöhnlicher Morgen.\\n\\n'Und wenn ich nicht unterschreibe?'\\n\\n'Dann werden Sie ihnen erklären müssen', sagte der General mit einem Nicken zum Fenster, 'warum wir all das aufgebaut und dann die Nerven verloren haben.'"
+  "en": "The chief of the general staff brought the order to the government himself and did not sit down. He laid it on the table with the mobilization schedule clipped to it: which units would board which trains on which day, and which lines would carry nothing but troops for the first two weeks. \\\"Everything in it is current as of this morning,\\\" he said. \\\"Each day we wait, they have one more day to do the same.\\\" Nobody at the table answered him. He said he would wait outside for the government's decision, and went out.",
+  "de": "Der Chef des Generalstabs brachte den Befehl persönlich zur Regierung und setzte sich nicht. Er legte ihn mit dem angehefteten Mobilmachungsplan auf den Tisch: welche Einheiten an welchem Tag in welche Züge steigen und welche Strecken in den ersten zwei Wochen nur Truppen befördern. „Alles darin ist seit heute Morgen aktuell“, sagte er. „Jeden Tag, den wir warten, haben sie einen Tag mehr, dasselbe zu tun.“ Niemand am Tisch antwortete ihm. Er sagte, er werde draußen auf die Entscheidung der Regierung warten, und ging hinaus."
  },
  "world_war_events.5.t": {
   "en": "The Brink of War",
