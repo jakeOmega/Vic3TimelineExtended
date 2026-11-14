@@ -40,12 +40,15 @@ itself and the annotations are more noise than anything"):
     none   for a shot of one thing: a map, an event, a list, a chart, or a small panel
            whose own text explains it
     cut    a caption that repeats the image's header or a tooltip in the shot
-    few    on a dense panel: two or three, four at most, for the features a viewer
-           can't pick out at carousel size. Prefer a caption that adds a rule (trophies
-           add to your grandeur; each permanent seat has a veto) to one that lists what
-           its frame holds. The ones that only list were kept where the panel had
-           nothing better (05's "Causes of death", 08's "Space fleets"), and are the
-           first to go if the set is cut again.
+    few    on a dense panel, and only on what the system is mainly about. Take the
+           header's own terms where its subtitle lists them: 01 (tourism, climate,
+           wealth), 05 (a census by age and sex: the census and the pyramid), 07 (hold,
+           release or lose: stability and the colony list). Otherwise take the panel's
+           top-level parts: 06's two lists, 08's sub-tabs.
+Never caption a side panel while a main one goes unmarked. A first cut of 05 skipped the
+pyramid as self-evident and captioned Causes of Death and Family Policy, and the owner
+asked why those two: "some of this feels arbitrary". "Obvious" is a reason to drop an
+image's captions altogether, not to skip its centerpiece and caption around it.
 Where the shot has an empty part, stack the captions over it (column_region): an added
 column with two captions in it is mostly blank. A narrow panel shot with no captions
 takes a margin, not a column. A lone caption has no number, so give it an arrow.
@@ -150,19 +153,20 @@ SPECS['04_united_nations'] = dict(
              body='Infamy, aggression and defiance build the case for a condemnation or sanctions'),
     ])
 
-# The pyramid needs no caption. The two captions lie over the History charts, which
-# are empty a year into the game.
+# The subtitle's two: the census and the pyramid. The captions lie over the History
+# charts, which are empty a year into the game.
 SPECS['05_demographics'] = dict(
     src='Screenshot 2026-11-06 134003.png', u=1.0, gap=20,
     column_region=(690, 932, 1290, 1425),
     title='Demographics', subtitle='a census by age and sex in every state',
     callouts=[
-        dict(box=(1338, 132, 1950, 428), title='Causes of death',
-             body='Infection, chronic illness, accidents, work, childbirth and war'),
-        dict(box=(1338, 455, 1950, 1046), title='Family policy',
-             body='The measures your family law allows, each with its cost'),
+        dict(box=(18, 85, 628, 470), title='The census',
+             body='Births, deaths, life expectancy, fertility and migration'),
+        dict(box=(678, 132, 1290, 790), title='Population pyramid',
+             body='Men and women by age, with an outline twenty years ahead'),
     ])
 
+# The panel's two lists. Monument policy and the opportunities were left out: a judgment.
 SPECS['06_grand_monuments'] = dict(
     src='Screenshot 2026-11-06 133913.png', u=0.9, gap=14,
     column_region=(716, 424, 1300, 1132),
@@ -174,17 +178,21 @@ SPECS['06_grand_monuments'] = dict(
              body="A rival's treasures add to your grandeur; their homeland wants them back"),
     ])
 
+# The subtitle's terms: stability is what holds or loses them, the list is where you
+# release them. The tab bar's caption ("Every system, one window") was about the window,
+# not this system, and went.
 SPECS['07_colonial_empire'] = dict(
     src='Screenshot 2026-11-06 133839.png', u=0.9, gap=30,
     column_region=(18, 180, 410, 960),
     title='Colonial Empire', subtitle='hold your colonies, release them, or lose them',
     callouts=[
-        dict(box=(428, 110, 2040, 156), pad=4, title='Every system, one window',
-             body='Each system has a tab in the Timeline Extended window'),
         dict(box=(426, 217, 935, 502), title='Colonial stability',
              body='Programs prop it up; condemnation by great powers drags it down'),
+        dict(box=(426, 522, 935, 868), title='Your colonies',
+             body='Living standard and GDP of each, with a Release button'),
     ])
 
+# Three of the Space Race tab's four sub-tabs: Mission Control, Fleets, Colonies.
 SPECS['08_space_race'] = dict(
     src='Screenshot 2026-11-06 152026.png', u=0.95, gap=18,
     column_region=(1362, 462, 1975, 1432),
