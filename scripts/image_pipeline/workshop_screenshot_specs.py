@@ -24,7 +24,9 @@ Image keys:
 Callout keys:
     box            (x0, y0, x1, y1): frame this, with its number at a corner
     pt             (x, y): point an arrow here instead of framing anything
-    title, body    the caption; a callout with no title is a bare frame (box and pad only)
+    title, body    the caption. The title is required: a frame with no caption says nothing
+                   (owner, 2026-11-13: "I don't think the frames without the annotations
+                   make sense")
     pad            frame padding (default 6)
     badge_at       the frame corner for the number: tl (default), tr, bl, br
     badge          False hides the frame's number
@@ -47,6 +49,8 @@ itself and the annotations are more noise than anything"):
 Where the shot has an empty part, stack the captions over it (column_region): an added
 column with two captions in it is mostly blank. A narrow panel shot with no captions
 takes a margin, not a column. A lone caption has no number, so give it an arrow.
+A frame never stands without a caption: 01 was tried with its four frames alone, and
+the owner's answer is quoted under the callout keys.
 
 Counts in the text were taken from the mod files on 2026-11-06: 191
 technologies in eras VI to XIII; 39 new law groups; about 1,035 visible events
@@ -82,11 +86,8 @@ def validate(spec: dict) -> list[str]:
             x0, y0, x1, y1 = co["box"]
             if not (x0 < x1 and y0 < y1):
                 out.append(f"{where}: box {co['box']} is not (x0, y0, x1, y1)")
-        if not co.get("title"):  # a bare frame
-            if "box" not in co:
-                out.append(f"{where}: a callout with no 'title' is a bare frame and needs a 'box'")
-            out += [f"{where}: {k!r} needs a 'title'" for k in sorted(co.keys() - {"box", "pt", "pad"})]
-            continue
+        if not co.get("title"):
+            out.append(f"{where}: missing 'title' (a frame always has a caption)")
         for k in ("from", "to", "badge_at"):
             if k in co and co[k] not in SIDES:
                 out.append(f"{where}: {k} {co[k]!r} is not one of {sorted(SIDES)}")
@@ -101,15 +102,19 @@ def validate(spec: dict) -> list[str]:
 
 SPECS = {}
 
-# Frames only: each block's own heading names it, and the subtitle lists them.
+# The one shot where pointing is the point: a mostly base-game panel with the mod's
+# blocks in it. The three captions are the subtitle's three (tourism, wealth, climate);
+# Arable Land lost its frame with its caption.
 SPECS['01_state_panel'] = dict(
-    src='Screenshot 2026-11-06 140931.png', u=0.95, margin=350,
+    src='Screenshot 2026-11-06 140931.png', u=0.95, column=700,
     title='State Panels', subtitle='tourism, climate and wealth in every state',
     callouts=[
-        dict(box=(18, 325, 652, 568)),             # Tourism
-        dict(box=(343, 943, 652, 1068)),           # Arable Land
-        dict(box=(20, 1083, 330, 1240)),           # Dynastic Wealth
-        dict(box=(343, 1083, 652, 1326), pad=4),   # Local Climate
+        dict(box=(18, 325, 652, 568), title='Tourism',
+             body='Output and throughput by source, each with a bar toward its cap'),
+        dict(box=(20, 1083, 330, 1240), title='Dynastic Wealth',
+             body="The state's score, heading for its target, and the property effects it brings"),
+        dict(box=(343, 1083, 652, 1326), pad=4, title='Local Climate',
+             body='Heat, winter, sun, water and malaria; Comfort weighs on migration'),
     ])
 
 # The tooltip in the shot gives the cause; only the stripes need saying. The rule is the

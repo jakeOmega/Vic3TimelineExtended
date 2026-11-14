@@ -21,9 +21,11 @@ Owner preferences (2026-11-06):
 And on 2026-11-13, of the first set (two to five callouts on twelve of the
 thirteen images): "A few are fine, but sometimes the image speaks for itself
 and the annotations are more noise than anything. The header and styling are
-good though." So a callout stays only where its caption says something the
-shot doesn't (workshop_screenshot_specs.py gives the test), an image may have
-none, and a lone caption carries no number.
+good though." So an image may have no callouts, a dense panel keeps a few
+(workshop_screenshot_specs.py says which), and a lone caption carries no
+number. And of frames left on a shot with their captions removed: "I don't
+think the frames without the annotations make sense." A frame always has a
+caption; a callout without one is a spec error.
 
 Usage:
     python3 scripts/image_pipeline/workshop_screenshots.py --src <screenshot dir>
@@ -333,15 +335,10 @@ def render(spec, shot: Image.Image) -> Image.Image:
     cv.band()
     u = cv.u
     callouts = reading_order(spec.get("callouts", []))
-    # A callout without a title is a bare frame. Captions are numbered only when
-    # there are two or more of them: a lone "1" points at nothing else.
-    numbered = sum(1 for co in callouts if co.get("title")) > 1
-    items, n = [], 0
-    for co in callouts:
-        if not co.get("title"):
-            items.append(dict(co=co, n=None, bare=True))
-            continue
-        n += 1
+    # Captions are numbered only when there are two or more: a lone "1" points at nothing else.
+    numbered = len(callouts) > 1
+    items = []
+    for n, co in enumerate(callouts, 1):
         if "box" in co:
             x0, y0 = cv.c(co["box"][0], co["box"][1])
             x1, y1 = cv.c(co["box"][2], co["box"][3])
@@ -362,18 +359,16 @@ def render(spec, shot: Image.Image) -> Image.Image:
             width = cv.col_w - 2 * round(28 * u) - 14 * u
             pos = [cv.W - cv.col_w + 42 * u, None]
         h = cv.caption_size(co["title"], co.get("body", ""), width, numbered)[2]
-        items.append(dict(co=co, n=n if numbered else None, bare=False,
-                          tgt=tgt, width=width, pos=pos, h=h))
+        items.append(dict(co=co, n=n if numbered else None, tgt=tgt, width=width, pos=pos, h=h))
 
-    captioned = [it for it in items if not it["bare"]]
-    col = [it for it in captioned if it["pos"][1] is None]
+    col = [it for it in items if it["pos"][1] is None]
     if col:
         stack_column(cv, spec, col)
 
     for it in items:
         if "box" in it["co"]:
             cv.frame(it["co"]["box"], pad=it["co"].get("pad", 6))
-    for it in captioned:
+    for it in items:
         co, tgt = it["co"], it["tgt"]
         if co.get("arrow", "at" in co):
             x, y = it["pos"]
@@ -382,9 +377,9 @@ def render(spec, shot: Image.Image) -> Image.Image:
             ts = co.get("to", "r" if fs == "l" else "l")
             p1 = anchor_on_box(tgt, ts) if "box" in co else (tgt[0], tgt[1])
             cv.arrow(anchor_on_box(cb, fs), p1)
-    for it in captioned:
+    for it in items:
         cv.caption(*it["pos"], it["width"], it["co"]["title"], it["co"].get("body", ""), it["n"])
-    for it in captioned:
+    for it in items:
         if "box" in it["co"] and it["co"].get("badge", True) and it["n"] is not None:
             cv.badge(*anchor_on_box(it["tgt"], it["co"].get("badge_at", "tl")), it["n"])
     for st in spec.get("stats", []):
