@@ -324,7 +324,7 @@ The autosave of 1 April 1948, read as before, with each state's crew variables b
 | Singapore (the player) | 8 of 8 counted, each at one of one. On the first build they were at five to ten of ten |
 | Russia | 6 counted at one of one, 3 new |
 
-Of the 255 countries with a site, 232 had a counted one. The other 23 are decentralized countries, whose sites the pulse does not size, and countries whose only site was under a month old.
+Of the 255 countries with a site, 232 had a counted one. The other 23: thirteen whose one site carries no throughput modifier and no crew variable, ten of them as old as the game, so the weekly pass has never reached them (whether they are decentralized countries, which the pulse skips, was not checked; Georgia's is four years old with one laborer of ten); two whose old site was settling; seven whose only site was under two months old; and one site whose owner the scan could not name. The session's last two saves, 1 July and 20 September 1948, read the same for the counted sites (432 and 440, all at one of one), with 19 and 8 countries holding no counted site: #1787.
 
 Against the first verdict's 43 to 91 countries under half their purchase and Russia at 18%, 19% and 0%: on this build a country gets what it buys once its sites have settled, and nothing over.
 
