@@ -561,9 +561,12 @@ class SwitchTest(unittest.TestCase):
         self.assertIn("limit = { has_global_variable = te_cm_in_$CULTURE$ } remove_global_variable = te_cm_in_$CULTURE$", self.body)
 
     def test_the_merge_completes_once_its_core_has_switched_and_only_from_running(self):
+        # The completion is also marked for the notices to the other human countries (te_cmg_<m>_tell,
+        # test_culture_merge_notices.py), in the same block, so only a merge that was running is marked.
         self.assertIn(
             "if = { limit = { global_var:te_cm_state_$MERGE$ ?= 1 te_cmg_$MERGE$_core_switched = yes } "
-            "set_global_variable = { name = te_cm_state_$MERGE$ value = 2 } }",
+            "set_global_variable = { name = te_cm_state_$MERGE$ value = 2 } "
+            "set_local_variable = { name = te_cm_tl_done value = 1 } }",
             self.body,
         )
         self.assertEqual(self.body.count("value = 2"), 1)
@@ -1057,6 +1060,10 @@ class Sim:
             elif k == "set_variable" and n.children:
                 args = {c.key: c.value for c in n.children}
                 self.cvars.setdefault(self.this, {})[args["name"]] = args["value"]
+            elif k == "set_local_variable" and n.children:
+                # te_cmg_dominance_all's marks for the notices (te_cm_tl_*), which the recorded switch would set.
+                args = {c.key: c.value for c in n.children}
+                self.locals[args["name"]] = args["value"]
             elif k in RECORDED:
                 self.calls.append((k, {c.key: c.value for c in n.children}))
             elif k.endswith("_join_ready") and n.value == "yes":

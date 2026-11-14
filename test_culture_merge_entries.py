@@ -1154,10 +1154,12 @@ class CensusTailTest(unittest.TestCase):
                 guard += " NOT = { te_cmg_%s_result_switched = yes }" % key
             # A milestone gate held, since can_start did: the start latches it, as the census would.
             latch = " set_variable = { name = te_cm_gate_met_%s value = 1 }" % key if gen.milestone_gate(merge) else ""
+            # Last, the other human countries hear of the start (te_cm_tell_start, test_culture_merge_notices.py).
             self.assertEqual(
                 squash(block(self.effects, "te_cmg_start_%s" % key)),
-                "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s }%s te_cmg_%s_join_ready = yes }"
-                % (guard, key, merge.result, latch, key),
+                "if = { limit = { %s } te_cm_start_merge = { MERGE = %s RESULT = %s }%s te_cmg_%s_join_ready = yes "
+                "te_cm_tell_start = { MERGE = %s RESULT = %s } }"
+                % (guard, key, merge.result, latch, key, key, merge.result),
             )
 
     def test_a_wait_year_counts_once_a_census_while_the_merge_could_start_and_an_entry_is_open(self):

@@ -70,6 +70,8 @@ NOTICES = (
     "te_mon_swap_settled_notice", "te_mon_swap_repaid_notice",
     "irr_cultural_ties_notice",
     "covert_exposure_repeat_notice", "covert_backlash_public_notice",
+    # Another country's culture merge, where it doesn't reach us (test_culture_merge_notices.py holds who gets which).
+    "te_cm_merge_started_notice", "te_cm_merge_complete_notice",
 )
 
 # event -> its file, and the keys its script names
@@ -83,6 +85,10 @@ EVENTS = {
     "te_pb_summit.2": "events/te_power_bloc_summit_events.txt",
     "nuclear_weapon_events.33": "events/nuclear_weapon_events.txt",
     "te_orbital_debris.2": "events/te_orbital_debris_events.txt",
+    # Another country's culture merge, where it reaches us (test_culture_merge_notices.py).
+    "te_culture_merge.2": "events/te_culture_merge_events.txt",
+    "te_culture_merge.3": "events/te_culture_merge_events.txt",
+    "te_culture_merge.4": "events/te_culture_merge_events.txt",
 }
 
 
