@@ -13,7 +13,7 @@ import struct
 import subprocess
 import unittest
 
-from test_demographics_registry import FIXED_MAX, ROOT, _Engine, _find, _raw_blocks
+from test_demographics_registry import ROOT, _Engine, _find, _raw_blocks
 
 REGISTRY_PATH = ROOT / "scripts" / "image_pipeline" / "state_picture_registry.py"
 GENERATOR_PATH = ROOT / "scripts" / "generators" / "gen_state_pictures.py"
@@ -57,7 +57,7 @@ except ImportError:  # CI installs numpy but not Pillow
 class _WorldEngine(_Engine):
     """_Engine with global variables (`globals_`, read as global_var:X and has_global_variable, written by
     set_global_variable and remove_global_variable) and every_state over `world`: each state a dict of the reads
-    it gives inside the walk (state_population, average_sol). The calendar year is the fixture `year`, 1950 unless
+    it gives inside the walk (state_population, average_sol, and `exists:owner` False for one with no owner). The calendar year is the fixture `year`, 1950 unless
     given. The pass's self-checks write debug_log lines, which the script parser doesn't read: their text is tested
     on its own (test_the_world_self_checks_can_fail)."""
 
@@ -79,6 +79,9 @@ class _WorldEngine(_Engine):
     def _test(self, key, op, arg):
         if key == "has_global_variable":
             return arg in self.globals
+        if key == "exists":
+            # a state of the walk says `exists:owner: False` when it has no owner
+            return bool(self.fixtures.get(f"exists:{arg}", True))
         return super()._test(key, op, arg)
 
     def run(self, items):
@@ -738,14 +741,24 @@ class TestYearlyPass(unittest.TestCase):
                 self.assertIn("te_sp_rundown", eng.vars)
                 self.assertFalse(eng.globals.get("te_sp_world_sol"))
 
-    def test_the_world_average_is_weighted_by_people(self):
-        # 1,000 people at 10 and 3,000 at 30: 25, not the states' plain mean of 20
-        eng = self.judge(3, 24, world=None, states=[(1000, 10), (3000, 30)])
-        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], 25.0)
+    def test_the_world_average_counts_each_state_once(self):
+        # the owner (2026-11-14): one rich, populous country shouldn't move every state's floors. 1,000 people at 10
+        # and 3,000 at 30 average 20, not the people-weighted 25; a state with no people is left out
+        eng = self.judge(3, 24, world=None, states=[(1000, 10), (3000, 30), (0, 80)])
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], 20.0)
         self.assertEqual(eng.globals["te_sp_world_year"], 1950)
         # the state is judged against it, and keeps it for its hover
         self.assertEqual(eng.vars["te_sp_world"], eng.globals["te_sp_world_sol"])
-        self.assertEqual(eng.number("te_state_picture_hover_world"), 25.0)
+        self.assertEqual(eng.number("te_state_picture_hover_world"), 20.0)
+        # and a state with no owner is left out too
+        eng = _WorldEngine({}, world=[{"state_population": 1000.0, "average_sol": 10.0},
+                                      {"state_population": 3000.0, "average_sol": 30.0},
+                                      {"state_population": 500.0, "average_sol": 90.0, "exists:owner": False}],
+                           effects=_raw_blocks([EFFECTS]))
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.call("te_state_picture_world_walk")
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], 20.0)
+        self.assertEqual(eng.locals["te_sp_w_states"], 2)
 
     def test_the_world_is_measured_once_a_calendar_year(self):
         world = [(1000, 10), (3000, 30)]
@@ -756,8 +769,8 @@ class TestYearlyPass(unittest.TestCase):
         rich = 17 * _value_literal("te_state_picture_k_affluent_ratio")    # affluent against 17
         eng = self.judge(3, rich, world=17.0, world_year=1949, year=1950, states=world)
         self.assertEqual((eng.walks, eng.globals["te_sp_world_year"]), (1, 1950))
-        self.assertAlmostEqual(eng.vars["te_sp_world"], 25.0)
-        self.assertEqual(eng.vars.get("te_sp_means", 2.0), 2)               # but judged against 25: ordinary
+        self.assertAlmostEqual(eng.vars["te_sp_world"], 20.0)
+        self.assertEqual(eng.vars.get("te_sp_means", 2.0), 2)               # but judged against 20: ordinary
         # the first measure of a game always runs
         self.assertEqual(self.judge(3, 24, world=None, states=world).walks, 1)
 
@@ -769,27 +782,17 @@ class TestYearlyPass(unittest.TestCase):
         self.assertEqual(eng.number("te_state_picture_poor_floor"), poor)
         self.assertEqual(eng.number("te_state_picture_hover_world"), 20.0)
 
-    def test_the_world_sum_fits_in_fixed_point(self):
-        # the worst case the scale is chosen for: 900 states of 20 million people at a standard of living of 99
-        # (18 billion people) sums to 1.8 x 10^9 in thousands, far under the ceiling; and a mixed world's average in
-        # fixed point is its float average to the fifth decimal
-        world = [{"state_population": 2e7, "average_sol": 99.0}] * 900
-        eng = _WorldEngine({}, world=world, truncate=True, effects=_raw_blocks([EFFECTS]))
-        eng.values.update(_raw_blocks([VALUES]))
-        eng.call("te_state_picture_world_walk")
-        self.assertEqual(eng.globals["te_sp_world_sol"], 99.0)
-        self.assertLess(eng.locals["te_sp_w_sum"], FIXED_MAX / 10_000)
-        mixed = [(123_456_789, 7.25), (4_321, 63.5), (98_765_432, 31.125), (5_000_000, 12.0)]
+    def test_the_world_average_in_fixed_point(self):
+        # the engine's five decimals: a mixed world's average is its float average to the fifth decimal, and the walk
+        # keeps its least and greatest for the self-check
+        mixed = [(123_456_789, 7.25), (4_321, 63.5), (98_765_432, 31.125), (5_000_000, 12.0), (77, 18.33333)]
         eng = _WorldEngine({}, world=[{"state_population": float(p), "average_sol": s} for p, s in mixed],
                            truncate=True, effects=_raw_blocks([EFFECTS]))
         eng.values.update(_raw_blocks([VALUES]))
         eng.call("te_state_picture_world_walk")
-        want = sum(p * s for p, s in mixed) / sum(p for p, _ in mixed)
-        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], want, delta=2e-5)
-        self.assertEqual((eng.locals["te_sp_w_min"], eng.locals["te_sp_w_max"]), (7.25, 63.5))
-        # people in thousands before the product (the order a value block applies its operations in)
-        body = _raw_blocks([VALUES])["te_state_picture_world_people_sol"]
-        self.assertLess(body.index("divide = 1000"), body.index("multiply = average_sol"))
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], sum(s for _, s in mixed) / len(mixed), delta=2e-5)
+        self.assertEqual((eng.locals["te_sp_w_min"], eng.locals["te_sp_w_max"], eng.locals["te_sp_w_states"]),
+                         (7.25, 63.5, 5))
 
     def test_the_world_self_checks_can_fail(self):
         text = EFFECTS.read_text(encoding="utf-8-sig")
@@ -797,8 +800,8 @@ class TestYearlyPass(unittest.TestCase):
         world = blocks["te_state_picture_world_selfcheck"]
         ok = world.index('debug_log = "TE_SELF_CHECK OK state_picture_world ')
         gate = world[world.rindex("limit = {", 0, ok):ok]
-        # OK can't pass on degenerate reads: no people, a year that isn't one, every read the measuring state's
-        for cond in ("te_state_picture_year >= 1836", "local_var:te_sp_w_people > 0",
+        # OK can't pass on degenerate reads: no state counted, a year that isn't one, every read the measuring state's
+        for cond in ("te_state_picture_year >= 1836", "local_var:te_sp_w_states > 0",
                      "local_var:te_sp_w_min < local_var:te_sp_w_max",
                      "te_state_picture_world_sol >= local_var:te_sp_w_min",
                      "te_state_picture_world_sol <= local_var:te_sp_w_max"):
@@ -1078,6 +1081,38 @@ class TestBannerHover(unittest.TestCase):
         # the boomtown lines read the floor and its keep from the values, so a new figure needs no loc change
         self.assertIn("ScriptValue('te_state_picture_k_boom')", self.loc["te_sp_tt_why_boomtown_at"])
         self.assertIn("ScriptValue('te_state_picture_k_boom_keep')", self.loc["te_sp_tt_why_boomtown_kept"])
+
+    def chosen(self, key, eng):
+        """The line the hover shows for `key` in the state `eng` holds: each SelectLocalization on a value over 0
+        followed to the line it picks, as the GUI picks it."""
+        sel = re.compile(r"^\[SelectLocalization\(GreaterThan_CFixedPoint\(State\.MakeScope\.ScriptValue\('(\w+)'\), "
+                         r"'\(CFixedPoint\)0'\), '(\w+)', '(\w+)'\)\]$")
+        seen = [key]
+        while (m := sel.match(self.loc[key])):
+            key = m.group(2) if eng.number(m.group(1)) > 0 else m.group(3)
+            seen.append(key)
+        return seen
+
+    def test_a_state_not_yet_judged_against_the_world_gives_no_world_figure(self):
+        # an existing save: a state keeps the old rule's tag, and has no stored world figure, until its next count;
+        # its hover then gives its standard of living and no average or floor, not "a world average of 0.0"
+        values = _raw_blocks([VALUES])
+        for kind, tag in (("poor", 1), ("affluent", 3)):
+            with self.subTest(kind):
+                old = _WorldEngine({})
+                old.values.update(values)
+                old.vars.update({"te_sp_means": float(tag), "te_sp_sol": 9.0 if tag == 1 else 60.0})
+                line = self.chosen(f"te_sp_tt_why_{kind}", old)[-1]
+                self.assertEqual(line, "te_sp_tt_why_means_unmeasured")
+                self.assertNotRegex(self.loc[line], r"hover_world|_floor|_ratio")
+                self.assertIn("ScriptValue('te_state_picture_hover_sol')|1", self.loc[line])
+                # judged against the world: the line with the figure, at or kept as before
+                for sol, kept in ((5.0, "at"), (10.3, "kept")) if tag == 1 else ((40.0, "at"), (31.8, "kept")):
+                    judged = _WorldEngine({})
+                    judged.values.update(values)
+                    judged.vars.update({"te_sp_means": float(tag), "te_sp_sol": sol, "te_sp_world": 20.0})
+                    self.assertEqual(self.chosen(f"te_sp_tt_why_{kind}", judged)[1:],
+                                     [f"te_sp_tt_why_{kind}_judged", f"te_sp_tt_why_{kind}_{kept}"])
 
     def test_the_banner_finds_its_text_by_the_overlay_and_a_vanilla_picture_has_none(self):
         panel = STATES_PANEL.read_text(encoding="utf-8-sig")

@@ -10,7 +10,7 @@ te_state_picture_growth_known = {
 }
 
 # The world's average standard of living has been measured (te_state_picture_world_measure) and is a
-# figure a floor can stand on: a world of no people has none.
+# figure a floor can stand on: a walk that counted no state has none.
 te_state_picture_world_known = {
 	has_global_variable = te_sp_world_sol
 	global_var:te_sp_world_sol > 0

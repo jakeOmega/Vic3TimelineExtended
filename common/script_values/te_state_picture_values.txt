@@ -96,15 +96,19 @@ te_state_picture_city_rung = {
 # Means: the state's standard of living (average_sol) against the world's (the owner, 2026-11-14:
 # "the world average +/- a percentage"; until then fixed floors by city rung, which in the owner's
 # Singapore game tagged 88% of states poor, its AI owners being on rungs 3 and 4 by the 1940s). The
-# world's figure is every state's average_sol weighted by its people, measured once a calendar year
-# (te_state_picture_world_measure); each state keeps the figure it was judged against (te_sp_world),
-# so its hover gives the floors its picture stands on. Poor while under te_state_picture_k_poor_ratio
-# of it, affluent from te_state_picture_k_affluent_ratio of it. The owner floated double and half.
-# In eight saves of 1932 to 2054 those tag 4% to 41% of states poor and 0.4% to 9% affluent
-# (1.3% to 1.7% in the three of the Singapore game, which also held the old tags); the pairs 1.75
-# and 0.57, 1.5 and 0.67, 1.33 and 0.75, 1.25 and 0.8 tag more on both sides (the table is in pull
-# request #1799). Each ratio is one line.
-te_state_picture_k_affluent_ratio = { value = 2 }
+# world's figure is the plain average of every state's average_sol, each state counted once, measured
+# once a calendar year (te_state_picture_world_measure); each state keeps the figure it was judged
+# against (te_sp_world), so its hover gives the floors its picture stands on. Poor while under
+# te_state_picture_k_poor_ratio of it, affluent from te_state_picture_k_affluent_ratio of it (the
+# owner's pick, 2026-11-14, aiming at roughly 5% to 15% of the world's states on each side and 80% to
+# 90% on neither). The average is not weighted by people: one rich, populous country shouldn't move
+# every state's floors. In the 1957 save of the owner's Singapore game, Singapore's nine states
+# (10.3% of the world's people, at a standard of living of 81) lifted a people-weighted figure from
+# 16.5 to 23.1. Against the plain average, 0.5 tags 4% to 6% of states poor and 1.6 tags 4% to 8%
+# affluent in saves of 1932 to 1978; in two later saves of other games on older builds (2020, 2054)
+# 0.5 tags 20% to 29% poor and 1.6 tags 14% to 20% affluent (the table is in pull request #1799).
+# Each ratio is one line.
+te_state_picture_k_affluent_ratio = { value = 1.6 }
 te_state_picture_k_poor_ratio = { value = 0.5 }
 # The world's average the state was judged against, 0 before its first judgement.
 te_state_picture_hover_world = {
@@ -146,21 +150,6 @@ te_state_picture_world_sol = {
 	value = 0
 	if = { limit = { has_global_variable = te_sp_world_sol } value = global_var:te_sp_world_sol }
 }
-# Inside the walk's every_state: the state's people in thousands, and those times its standard of
-# living. Counting in thousands before the product keeps the largest state's product (some 10^8
-# people at a standard of 40 is 4 x 10^6) far under 9 x 10^8, where even a naive fixed-point
-# multiply holds; the world's sum fits either way (8 x 10^10 unscaled in a 1957 save of 3.5
-# billion people, against a ceiling near 9 x 10^13).
-te_state_picture_world_people = {
-	value = state_population
-	divide = 1000
-}
-te_state_picture_world_people_sol = {
-	value = state_population
-	divide = 1000
-	multiply = average_sol
-}
-
 # Upkeep: how far the standard of living sits under what the state's people expect
 # (average_expected_sol, which the mod's Standard of Living Expectations system moves). Run-down
 # from te_state_picture_k_rundown under, until within te_state_picture_k_rundown_keep.

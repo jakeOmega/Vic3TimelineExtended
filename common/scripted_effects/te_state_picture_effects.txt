@@ -359,7 +359,7 @@ te_state_picture_refresh_prosperity = {
 				remove_variable = te_sp_means
 			}
 		}
-		# no world's figure to judge by (a world of no people): no means
+		# no world's figure to judge by (no state counted, or an average of 0): no means
 		else = {
 			remove_variable = te_sp_world
 			remove_variable = te_sp_means
@@ -400,16 +400,22 @@ te_state_picture_world_measure = {
 	}
 }
 
-# The walk: every state's people (in thousands) and those times its standard of living; the world's
-# figure is their quotient. Its least and greatest standard of living are for the self-check.
+# The walk: the plain average of every state's standard of living, each state counted once (the
+# owner, 2026-11-14: one rich, populous country shouldn't move every state's floors, as a figure
+# weighted by people let it). A state with an owner and people counts; an empty one doesn't. Its
+# least and greatest standard of living are for the self-check.
 te_state_picture_world_walk = {
-	set_local_variable = { name = te_sp_w_people value = 0 }
+	set_local_variable = { name = te_sp_w_states value = 0 }
 	set_local_variable = { name = te_sp_w_sum value = 0 }
 	set_local_variable = { name = te_sp_w_min value = 1000 }
 	set_local_variable = { name = te_sp_w_max value = -1 }
 	every_state = {
-		change_local_variable = { name = te_sp_w_people add = te_state_picture_world_people }
-		change_local_variable = { name = te_sp_w_sum add = te_state_picture_world_people_sol }
+		limit = {
+			exists = owner
+			te_state_picture_state_people > 0
+		}
+		change_local_variable = { name = te_sp_w_states add = 1 }
+		change_local_variable = { name = te_sp_w_sum add = te_state_picture_sol }
 		if = {
 			limit = { te_state_picture_sol < local_var:te_sp_w_min }
 			set_local_variable = { name = te_sp_w_min value = te_state_picture_sol }
@@ -420,8 +426,8 @@ te_state_picture_world_walk = {
 		}
 	}
 	if = {
-		limit = { local_var:te_sp_w_people > 0 }
-		set_global_variable = { name = te_sp_world_sol value = { value = local_var:te_sp_w_sum divide = local_var:te_sp_w_people } }
+		limit = { local_var:te_sp_w_states > 0 }
+		set_global_variable = { name = te_sp_world_sol value = { value = local_var:te_sp_w_sum divide = local_var:te_sp_w_states } }
 	}
 	else = {
 		remove_global_variable = te_sp_world_sol
@@ -431,7 +437,7 @@ te_state_picture_world_walk = {
 
 # Once a game, at the first measure: whether the walk's figures hold together. It rests on
 # every_state reaching every state with the locals carrying through it, on state_population and
-# average_sol reading the state it is at, and on the year read. OK when the world has people, the
+# average_sol reading the state it is at, and on the year read. OK when some state was counted, the
 # year is a game year, its states' standards of living differ (if every read were the measuring
 # state's, the least and the greatest would be one figure and the average would sit between them),
 # and the average lies between the least and the greatest. Called with the walk's locals still set.
@@ -441,21 +447,21 @@ te_state_picture_world_selfcheck = {
 		set_global_variable = { name = te_sp_world_check_done value = yes }
 		set_global_variable = { name = te_sp_chk_w_year value = te_state_picture_year }
 		set_global_variable = { name = te_sp_chk_w_avg value = te_state_picture_world_sol }
-		set_global_variable = { name = te_sp_chk_w_people value = local_var:te_sp_w_people }
+		set_global_variable = { name = te_sp_chk_w_states value = local_var:te_sp_w_states }
 		set_global_variable = { name = te_sp_chk_w_min value = local_var:te_sp_w_min }
 		set_global_variable = { name = te_sp_chk_w_max value = local_var:te_sp_w_max }
 		if = {
 			limit = {
 				te_state_picture_year >= 1836
-				local_var:te_sp_w_people > 0
+				local_var:te_sp_w_states > 0
 				local_var:te_sp_w_min < local_var:te_sp_w_max
 				te_state_picture_world_sol >= local_var:te_sp_w_min
 				te_state_picture_world_sol <= local_var:te_sp_w_max
 			}
-			debug_log = "TE_SELF_CHECK OK state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] people_thousands=[GetGlobalVariable('te_sp_chk_w_people').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2]"
+			debug_log = "TE_SELF_CHECK OK state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] states=[GetGlobalVariable('te_sp_chk_w_states').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] people_thousands=[GetGlobalVariable('te_sp_chk_w_people').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2] (year under 1836: the year read; no people: the walk; least equal to greatest: the reads in every_state are one state's; an average outside them: the sums)"
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] states=[GetGlobalVariable('te_sp_chk_w_states').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2] (year under 1836: the year read; no states: the walk's limit or its locals; least equal to greatest: the reads in every_state are one state's; an average outside them: the sums)"
 		}
 	}
 }
