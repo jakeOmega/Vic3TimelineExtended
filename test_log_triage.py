@@ -143,7 +143,7 @@ class Fixture:
         ]), "12:06:00")
         self.log("gui.log", "[12:00:30][pdx_gui_layout.cpp:186]: gui/te_new.gui:162 - Widget cannot have a position in a layout\n",
                  "12:00:30")
-        self.log("debug-Manfred.log", "[09:00:00][pdx_assert.cpp:1]: another machine's log\n", "09:00:00")
+        self.log("debug-OtherPC.log", "[09:00:00][pdx_assert.cpp:1]: another machine's log\n", "09:00:00")
         self.log("ai.log", "", "12:00:00")
 
     def report(self, **kwargs) -> str:
@@ -166,7 +166,7 @@ class SnapshotTests(unittest.TestCase):
             self.assertEqual(sorted(manifest["files"]), [
                 "debug.1.log", "debug.log", "dedicated_server.log", "error.log", "game.log", "gui.log",
                 "system.1.log", "system.log"])
-            self.assertFalse(os.path.exists(os.path.join(fx.snap, "debug-Manfred.log")))
+            self.assertFalse(os.path.exists(os.path.join(fx.snap, "debug-OtherPC.log")))
             self.assertFalse(manifest["game_running"])
             # mtimes survive the copy: every date in the report is worked back from them.
             self.assertEqual(os.path.getmtime(os.path.join(fx.snap, "debug.1.log")), at("10:31:00"))

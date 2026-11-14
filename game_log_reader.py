@@ -255,7 +255,7 @@ def list_logs(logs_dir: str, include_mp_sessions: bool = False) -> list[LogFileI
             continue
         m = _FAMILY_RE.match(fname)
         if not m:
-            # Includes -Manfred / -pickle session-suffixed files.
+            # Includes other PCs' session-suffixed files, such as error-<PC name>.log.
             if not include_mp_sessions:
                 continue
             family = fname[:-4]  # strip .log
