@@ -248,3 +248,13 @@ Duplicated key has_indian_primary_culture will not be created from file: common/
 ```
 
 One line per launch, and it is the override working: `00_a_te_culture_merge_vanilla_triggers.txt` sorts before vanilla's file, the first bare definition of a scripted trigger wins, and the engine names the copy it dropped, vanilla's. The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.
+
+### `gamedatabase.h:394` — Base Construction Capacity: the one-setting copy drops vanilla's rule
+- source: `gamedatabase.h:394`
+- tracked: `docs/audits/open_issues.md#l32-base-construction-capacity-the-one-setting-copy-logs-a-duplicated-key`
+
+```
+Duplicated key free_construction will not be created from file: common/game_rules/00_game_rules.txt
+```
+
+One line per launch, and it is the copy working: `00_a_te_free_construction.txt` sorts before vanilla's file and `game_rules` keeps the first bare definition (read 2026-11-13, #1768). The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.

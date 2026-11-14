@@ -9,18 +9,18 @@
 # the Modding-Digests 1.12.0 inject_types.md list), so this is a bare copy. A bare copy in the
 # other probed folders keeps the first definition read, in ASCII order of file name with
 # vanilla's files and the mod's in one list (scripting_best_practices.md, Load Order, facts 1-3),
-# so this file's name sorts before vanilla's 00_game_rules.txt ('a' before 'g'). Whether
-# game_rules follows that rule is unprobed: the Game Rules screen shows it, one setting if this
-# copy won and vanilla's three if it didn't (#1768).
+# so this file's name sorts before vanilla's 00_game_rules.txt ('a' before 'g'). Read in game
+# 2026-11-13 (#1768): the launch logged "Duplicated key free_construction will not be created
+# from file: common/game_rules/00_game_rules.txt:42", once a launch (docs/audits/mod_known_noise.md).
 #
 # The one setting keeps the name, and the flag, of vanilla's default, which most saves carry.
-# A save made under Scaled (All) or Maximum names a setting no file defines: the engine drops it
-# at load (debug.log: Failed to read key reference), so has_game_rule is false for every setting
-# of this rule in that save. Whether its screen then shows No Effect is unread (a save from
-# before a rule existed doesn't take the rule's default: game_rules.md, Global Commons). The flag
-# keeps vanilla's one script reader, ai_strategy_default's wanted_construction_output
-# (00_default_strategy.txt), on the default's branch for AI countries either way; the mod's
-# INJECT of that field may replace it anyway (#1771).
+# A save made under Scaled (All) or Maximum names a setting no file defines, which the engine
+# drops at load (debug.log: Failed to read key reference); what that save's screen then shows is
+# unread. A has_game_rule naming a setting no file defines passes (scripting_best_practices.md,
+# "has_game_rule on a Setting No File Defines Is True"), and vanilla's one script reader,
+# ai_strategy_default's wanted_construction_output (00_default_strategy.txt), names
+# free_construction_unscaled. It logged no error at load, so whether it now takes Maximum's
+# branch (+10 for every country) is unread; the mod's INJECT may replace that field anyway (#1771).
 # test_free_construction_rule.py keeps this file in step with vanilla's.
 free_construction = {
 	default = free_construction_scaled_player_exemption
