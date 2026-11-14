@@ -1,6 +1,6 @@
 # Space Race GUI: Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws 41 icons of its own, including three pie layers, ten for the kinds of world in Our Colonies and thirteen on a colony's page. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws 62 icons of its own, including three pie layers, ten for the kinds of world in Our Colonies, thirteen on a colony's page and the twenty-one pictograms of the fleet cards and Locations. They were vanilla or borrowed placeholders in the first rounds of the pass (`gui_style_guide.md` rule 10), and PR #586 replaced them. All of them live in `gfx/interface/icons/space_race_icons/`. The programme row's seven single-state icons are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`), used as they are.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below, and the states are chosen by a display value's code. No script reads the paths. `SpaceRaceIconsTest` in `test_space_race_layout.py` holds each state to its file, and each tile and module row on a colony's page to its own. It also fails on any placeholder left in the widget, and, once #586's files are in the repo, on any path that does not exist.
 
@@ -116,6 +116,74 @@ The page a colony's name opens (colony management design § 8, rebuilt on the ow
 | Nuclear Command Center | `building_icons/building_nuclear_plant.dds` | a steel blast door in a concrete frame, a yellow radiation sign beside it | `module_bunker.dds` |
 
 Three of the briefs changed in review, because at 24 px they were scenes: the amphitheater under a dome was a ring of steps, so Cultural Center shows the theater masks; the twin turrets on a crater rim were specks on a large rock, so Defenses is one turret; two marines drilling were two specks, so Training Ground is one marine (in sand-tan: the first round's olive armor and orange visor drew Halo's Master Chief). The Habitat is the lighter of its candidates, so the drawn crack shows on Integrity.
+
+## Space Fleets: the fleet cards (2026-11-14)
+
+Each fleet in Space Fleets is a card (`te_sr_fleet_row`; owner, 2026-11-14): its ships by role as a row of icons, its readings as bars, and icons on its posture and order buttons. The seventeen icons are **flat line pictograms, drawn, not painted**: `scripts/image_pipeline/gen_space_fleet_pictograms.py` draws each on a 24-unit grid and writes it at 64 px, cream (`#e9e2cf`, the panel's text) except the gold emblem. They are a first set, so the cards could be judged in game with art of their own (`gui_style_guide.md` rule 10). To paint one, give it an entry in `icon_prompts.py` (category `space`) with the subject below, `write` it under the same file name, and drop its entry from the drawing script; the GUI needs no edit. `FleetCardTest` in `test_space_race_layout.py` holds each cell and button to its file, and the script's `--check` to the files as committed.
+
+| Where | Drawn now | To paint | File |
+|---|---|---|---|
+| A card's emblem (24 px, in the head's inset box) | a shield with two chevrons, gold | a gold shield badge, two silver chevrons on it, a small star above | `fleet.dds` |
+| Warships (24 px, lit with any, 30% with none, as every role) | a hull with a bridge | the Locations warship (`warship.dds`), side on | `role_war.dds` |
+| Rapid response | a dart | a slim silver interceptor with swept fins and a long blue exhaust | `role_rapid.dds` |
+| Siege ships | a low hull under one long gun | a heavy dark-grey gunship, one oversized cannon along its spine | `role_siege.dds` |
+| Assault carriers | a flat deck, a craft lifting off it | a broad flat-decked grey ship, two small landers lifting from it | `role_carrier.dds` |
+| Tenders | a tank on a boom | a white spherical propellant tank in a girder frame, a docking boom at one end | `role_tender.dds` |
+| Station (20 px, over the posture's word) | a world, a ship on its orbit | a planet with one ship parked on a thin orbit ring | `posture_station.dds` |
+| Stand off | a world, a screen held off it | a planet with a line of ships held at a distance, an arc between them | `posture_standoff.dds` |
+| Close in | four arrows closing on a world | a planet in a red targeting ring, ships diving at it | `posture_closein.dds` |
+| Interdict | a barred lane | a freighter stopped by a red barrier across its lane | `posture_interdict.dds` |
+| Go (16 px, left of the order's word, as every order) | an arrow | keep the arrow: an order reads best as a sign | `order_go.dds` |
+| Transfer | two arrows passing | keep | `order_transfer.dds` |
+| Land (marines) | an arrow down to a line | keep | `order_land.dds` |
+| Embark (marines) | an arrow up from a line | keep | `order_embark.dds` |
+| Seize | a flag planted | keep | `order_seize.dds` |
+| Destroy (in Seize's place while the order is to destroy) | a burst | keep | `order_destroy.dds` |
+| The transit track's marker (18 px, on the bar at the share of the leg flown) | a filled dart | keep | `track_ship.dds` |
+
+The roll-up and roll-down buttons at the right of a card's head are vanilla's `generic_icons/up_up.dds` (the module queue's move-up, already kept) and `generic_icons/down_down.dds`, in vanilla's round action button.
+
+## Locations and a card's world (2026-11-14)
+
+Locations is a strip (`te_sr_location_cell`, a column per location from Earth outward; owner, 2026-11-14), and a fleet card's head shows the world of where the fleet is, or is bound. Both take a location's icon from `LOCATION_ICONS` in `scripts/generators/gen_space_fleets.py`: the kind-of-world icons above, by the worlds found there, at 30 px in the strip and 24 px on a card.
+
+| Location | Icon | File |
+|---|---|---|
+| Earth Orbit | **placeholder**: the Earth-orbit production method's embossed Earth and satellite. To paint: a blue-and-white Earth, a thin gold orbit ring around it; proposed `gfx/interface/icons/space_race_icons/location_earth.dds` | `gfx/interface/icons/production_method_icons/pm_earth_orbit.dds` |
+| Mercury & Venus | Venus | `colony_venus.dds` |
+| Mars | Mars | `colony_mars.dds` |
+| Asteroid Belt | the asteroid | `colony_asteroid.dds` |
+| Jupiter | the Jovian moon before its giant | `colony_jovian.dds` |
+| Saturn | the Saturnian moon's ringed world | `colony_saturnian.dds` |
+| Uranus | the Uranian moon | `colony_uranian.dds` |
+| Neptune | the Neptunian moon | `colony_neptunian.dds` |
+| Kuiper Belt | the dwarf planet | `colony_dwarf.dds` |
+
+Swapping Earth Orbit's in is one path in `LOCATION_ICONS`, one in `te_sr_fleet_row` and `EARTH_ORBIT_PLACEHOLDER` in `test_space_race_layout.py`.
+
+The strip's captions and statuses are icons with their word on hover (`te_sr_location_captions`, `te_sr_location_cell`). Ours is the card's emblem (`fleet.dds`), the warships on their way the warship (`warship.dds`), and a status of ours wears its posture's sign (`posture_standoff.dds` for Blockading, `posture_interdict.dds` for Interdicting). The rest are drawn by the same script as the cards' (`gen_space_fleet_pictograms.py`):
+
+| Where | Drawn now | To paint | File |
+|---|---|---|---|
+| The others' line (18 px, left of every other power's strength) | the emblem's shield, bare, in grey | a plain steel shield badge | `fleet_other.dds` |
+| Battle (20 px) | the burst, red | two crossed red beams over a small explosion | `status_battle.dds` |
+| Blockaded, Earth Blockaded | the Stand off sign, red | keep: the enemy's posture in red | `status_blockaded.dds` |
+| Interdicted | the Interdict sign, red | keep | `status_interdicted.dds` |
+
+Space Command's four overview cells use art the panel already has: Space Command's building icon (Built a month), the warship (Fleet strength), the colonist with a wrench (`page_crews.dds`, Upkeep) and the Spaceport's lander on its pad (`module_port.dds`, Reserve). The build mix's five buttons wear the cards' role icons.
+
+## Space Fleets: the banner (2026-11-14, placeholders)
+
+A picture heads Space Fleets (`te_sr_fleet_banner`, 480 × 110, cropped to fit; owner, 2026-11-14): a fleet of the day, chosen by the drive our program flies on (`sr_drive_level`), so it changes as the drives do. **The four are placeholders**: event pictures the mod already ships, standing in until the banners are painted. Each is a literal `texture` line in `te_sr_fleet_banner`; swapping one in is that one path. `FleetBannerTest` in `test_space_race_layout.py` holds each drive to its path.
+
+| Drive (`sr_drive_level`) | Placeholder now | The banner should show | Proposed path |
+|---|---|---|---|
+| Chemical (0) | `gfx/event_pictures/orbital_arms_race.dds` | a line of stubby white chemical-rocket warships in low orbit, Earth's limb below, exhaust plumes short and bright, the look of a 21st-century space program under arms | `gfx/interface/illustrations/space_race/fleet_banner_chemical.dds` |
+| Fusion (1) | `gfx/event_pictures/orbital_battlestation_construction.dds` | long truss-built warships with ring radiators and blue-white fusion exhausts leaving an orbital yard | `gfx/interface/illustrations/space_race/fleet_banner_fusion.dds` |
+| Fusion torch (2) | `gfx/event_pictures/interstellar_probe_departure.dds` | a squadron under hard burn, each ship a needle ahead of a long white torch plume, Jupiter small behind them | `gfx/interface/illustrations/space_race/fleet_banner_torch.dds` |
+| Antimatter (3) | `gfx/event_pictures/antimatter_propulsion_drive.dds` | sleek dark warships with magnetic nozzles throwing violet-white beams, a ringed planet ahead | `gfx/interface/illustrations/space_race/fleet_banner_antimatter.dds` |
+
+The banners are wide and short (about 4.4 to 1), so each scene keeps its ships in the middle band; a tall composition loses them in the crop.
 
 ## Kept as they are
 
