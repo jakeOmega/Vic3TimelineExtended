@@ -570,6 +570,9 @@ world_war_events.5 = {
 			remove_global_variable = ww_outbreak_pending
 			# A new world war: forget the outcome of any earlier one
 			ww_clear_stale_outcome_latches = yes
+			# Which of the early unlock's two wars this is, for every entry that
+			# closes after it (ww_mark_entry_resolved).
+			ww_record_war_kind = yes
 			# Mark only the two primary belligerents
 			set_variable = ww_active_phase
 			set_variable = ww_aggressor_side
@@ -1895,7 +1898,9 @@ world_war_events.105 = {
 			NOT = { this = root }
 			NOT = { has_war_with = root }
 			ww_fought_alongside = { COUNTRY = root }
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			# The ideological pairs only, not the early unlock's liberal-against-
+			# autocratic one: those two were "opposed" all through the war.
+			ROOT = { country_has_ideological_opposition = { TARGET = prev } }
 		}
 	}
 
@@ -1908,7 +1913,7 @@ world_war_events.105 = {
 				NOT = { this = root }
 				NOT = { has_war_with = root }
 				ww_fought_alongside = { COUNTRY = root }
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+				ROOT = { country_has_ideological_opposition = { TARGET = prev } }
 			}
 			save_scope_as = new_rival_power
 		}

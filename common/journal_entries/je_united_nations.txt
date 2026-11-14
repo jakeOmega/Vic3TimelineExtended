@@ -41,10 +41,10 @@
 	# mid-game, from the screen that changes country; an active entry ends through its
 	# invalid outcome on the rule.
 	disable_evaluation = {
-		NOT = { has_game_rule = united_nations_enabled }
+		NOT = { te_united_nations_on = yes }
 	}
 	is_shown_when_inactive = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		un_entry_unlocked = yes
 	}
 
@@ -1160,7 +1160,7 @@
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_united_nations_invalid_conclusion_desc
 		trigger = {
-			NOT = { has_game_rule = united_nations_enabled }
+			NOT = { te_united_nations_on = yes }
 		}
 		effect = {
 			un_stop_for_rule = yes

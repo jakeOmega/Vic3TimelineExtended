@@ -602,7 +602,7 @@ covert_warfare.2 = {
 			NOT = { this = scope:iw_exposed_by }
 			custom_tooltip = {
 				text = covert_warfare.2.b_needs_service_tt
-				has_game_rule = covert_warfare_enabled
+				te_covert_warfare_on = yes
 				has_journal_entry = je_covert_warfare
 			}
 		}
@@ -854,7 +854,7 @@ covert_warfare.4 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the target's iw_known_ops list holds the record of the operation it caught, which exists before the catch queues this
 		has_variable_list = iw_known_ops
 	}
 

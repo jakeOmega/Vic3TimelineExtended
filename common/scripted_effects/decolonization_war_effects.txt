@@ -714,7 +714,7 @@ decol_iw_end_unstarted = {
 			limit = { is_country_alive = yes }
 			save_scope_as = decolonized_new_country
 			decol_path_legacy = yes
-			trigger_event = { id = decolonization_events.15 days = 7 }
+			trigger_event = { id = decolonization_events.81 days = 7 }
 		}
 	}
 	post_notification = decol_iw_war_unstarted_notice
@@ -868,7 +868,7 @@ decol_iw_aftermath_bloody = {
 	activate_law = law_type:law_outlawed_dissent
 	activate_law = law_type:law_minority_rights_discrimination
 	# Tell the former colony what it starts with (.22).
-	trigger_event = { id = decolonization_events.22 days = 1 }
+	trigger_event = { id = decolonization_events.82 days = 1 }
 }
 
 # ---------------------------------------------------------------------------

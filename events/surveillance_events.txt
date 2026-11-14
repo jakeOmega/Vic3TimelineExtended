@@ -432,13 +432,13 @@ surveillance_events.5 = {
 			# Covert warfare on: the event follows an operation our counterintelligence exposed.
 			triggered_desc = {
 				trigger = {
-					has_game_rule = covert_warfare_enabled
+					te_covert_warfare_on = yes
 					exists = scope:surv_cyber_spy
 				}
 				desc = surveillance_events.5.d_exposed_named
 			}
 			triggered_desc = {
-				trigger = { has_game_rule = covert_warfare_enabled }
+				trigger = { te_covert_warfare_on = yes }
 				desc = surveillance_events.5.d_exposed
 			}
 			triggered_desc = {
@@ -474,7 +474,7 @@ surveillance_events.5 = {
 			# country's monthly pulse (covert_warfare_monthly_country), whether or
 			# not it runs a covert service of its own.
 			AND = {
-				has_game_rule = covert_warfare_enabled
+				te_covert_warfare_on = yes
 				covert_code_tier_mild = { VAR = iw_last_exposed_type }
 				has_variable = iw_last_exposed_age
 				var:iw_last_exposed_age < 24
@@ -487,7 +487,7 @@ surveillance_events.5 = {
 		# (covert_op_burn's record, the same write as the type the trigger
 		# reads).
 		if = {
-			limit = { has_game_rule = covert_warfare_enabled }
+			limit = { te_covert_warfare_on = yes }
 			var:iw_last_exposed_country ?= { save_scope_as = surv_cyber_spy }
 		}
 	}

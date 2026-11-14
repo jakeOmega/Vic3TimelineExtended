@@ -211,6 +211,10 @@ class Evaluator:
         if key == "has_game_rule":
             assert val == "united_nations_enabled"
             return w.un_rule
+        if key == "te_united_nations_on":
+            # The UN rule's gate (te_rule_setting_triggers.txt): either unlock.
+            assert val == "yes"
+            return w.un_rule
         if key == "un_tier_is_supranational":
             return w.supranational
         if key == "any_country":

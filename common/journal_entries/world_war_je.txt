@@ -24,12 +24,16 @@ je_world_war = {
 	# mid-game, from the screen that changes country; an active entry ends through its
 	# invalid outcome on the rule.
 	disable_evaluation = {
-		NOT = { has_game_rule = world_war_enabled }
+		NOT = { te_world_war_on = yes }
 	}
 	is_shown_when_inactive = {
-		has_game_rule = world_war_enabled
-		has_technology_researched = combined_arms
+		te_world_war_on = yes
+		# Combined Arms; also Trench Works under the early unlock
+		ww_era_reached = yes
 		country_rank >= rank_value:great_power
+		# A world war fought under the early unlock is over; the entry waits
+		# for Combined Arms (world_war_events_on_action adds it back).
+		NOT = { ww_resting_after_early_war = yes }
 		NOT = { has_variable = ww_fully_resolved }
 		# Set by the completion and failure outcomes, never removed. A
 		# revolution's winner gets a fresh record of an entry the loser had
@@ -42,7 +46,8 @@ je_world_war = {
 
 	possible = {
 		NOT = { has_variable = ww_entry_resolved }
-		has_technology_researched = combined_arms
+		NOT = { ww_resting_after_early_war = yes }
+		ww_era_reached = yes
 		country_rank >= rank_value:great_power
 		OR = {
 			# Leadup: opposing ideology great powers exist anywhere
@@ -188,7 +193,7 @@ je_world_war = {
 			has_variable = ww_fully_resolved
 		}
 		effect = {
-			set_variable = ww_entry_resolved
+			ww_mark_entry_resolved = yes
 			# Clean up all world war variables
 			remove_variable = ww_active_phase
 			remove_variable = ww_aggressor_side
@@ -217,7 +222,7 @@ je_world_war = {
 			country_rank < rank_value:great_power
 		}
 		effect = {
-			set_variable = ww_entry_resolved
+			ww_mark_entry_resolved = yes
 			remove_variable = ww_active_phase
 			remove_variable = ww_aggressor_side
 			remove_variable = ww_defender_side
@@ -243,14 +248,24 @@ je_world_war = {
 	# belligerent that holds no entry, so a stale ww_active_phase can't block a
 	# later world war (world_war_conditions_met) once the rule is back on. A war
 	# already under way goes on as an ordinary war.
+	# Also the early unlock switched to the late one while this country lacks
+	# Combined Arms: the same teardown, and world_war_events_on_action adds the
+	# entry back at Combined Arms (ww_reopen_at_gate).
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_world_war_invalid_conclusion_desc
 		trigger = {
-			NOT = { has_game_rule = world_war_enabled }
+			OR = {
+				NOT = { te_world_war_on = yes }
+				NOT = { ww_era_reached = yes }
+			}
 		}
 		effect = {
 			ww_stop_for_rule = yes
+			if = {
+				limit = { te_world_war_on = yes }
+				set_variable = ww_reopen_at_gate
+			}
 		}
 	}
 

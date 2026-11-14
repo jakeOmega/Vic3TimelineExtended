@@ -46,29 +46,22 @@ je_covert_warfare = {
 	# mid-game, from the screen that changes country; an active entry ends through its
 	# invalid outcome on the rule.
 	disable_evaluation = {
-		NOT = { has_game_rule = covert_warfare_enabled }
+		NOT = { te_covert_warfare_on = yes }
 	}
 	is_shown_when_inactive = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
-	# Activate once a source beyond the base slot and the rank bonus grants a
-	# slot: a technology, or the Ministry of Intelligence and Security's law.
-	# Each source is named, not counted. Until 2026-11-08 the test was the slot
-	# count against the rank's (4 for a great power, 3 major, 2 otherwise), and
-	# Two Sicilies opened the entry in 1836 (Workshop report): most likely a
-	# drop in rank read before the old rank's slot bonus lapsed, and an entry
-	# never closes. test_covert_warfare_gate.py fails when a slot source is
-	# added or removed and this list doesn't follow. Copied verbatim in
-	# covert_warfare_entry_unlocked (covert_warfare_triggers.txt).
+	# Activate once the setting's gate is met (covert_warfare_entry_unlocked,
+	# covert_warfare_triggers.txt): under the late unlock a named source of an
+	# operation slot beyond the base slot and the rank bonus, a technology or the
+	# Ministry of Intelligence and Security's law (covert_warfare_slot_source,
+	# which says why each source is named rather than counted); under the early
+	# unlock also Central Archives, with the budget capped at Professional until
+	# the late gate (covert_agency_limited). One trigger, so the Military panel's
+	# Covert tab shows the same checklist as one line.
 	possible = {
-		OR = {
-			has_technology_researched = mainframe_computers
-			has_technology_researched = computer_networks
-			has_technology_researched = cyber_warfare
-			has_technology_researched = quantum_computing
-			has_law = law_type:law_ministry_of_intelligence_and_security
-		}
+		covert_warfare_entry_unlocked = yes
 	}
 
 	# Funding management buttons (operations launched via diplomatic actions)
@@ -116,6 +109,15 @@ je_covert_warfare = {
 		# Agency experience starts at 0 (slice 5). Also seeded by the monthly
 		# pass, for saves whose entry was already active.
 		covert_tradecraft_init = yes
+		# Opened under the early unlock, before the late gate: marked, so that
+		# a switch to the late unlock closes the entry until the late gate (the
+		# invalid outcome below). Cleared by the pulse once the late gate is
+		# met. Set only while the condition holds, so a re-run (a revolution's
+		# inherited entry) writes the same.
+		if = {
+			limit = { covert_agency_limited = yes }
+			set_variable = iw_opened_early
+		}
 	}
 
 	on_monthly_pulse = {
@@ -228,6 +230,28 @@ je_covert_warfare = {
 				}
 			}
 
+			# ---- The early unlock's budget cap ----
+			# Before the late gate an early agency's funding stops at
+			# Professional (covert_agency_funding_cap): the AI's levels above
+			# are cut to it, and so is a level set before a switch to the early
+			# unlock. The steppers stop there on their own
+			# (covert_possible_increase_funding).
+			if = {
+				limit = {
+					covert_agency_limited = yes
+					has_variable = iw_funding_level
+					var:iw_funding_level > covert_agency_funding_cap
+				}
+				set_variable = { name = iw_funding_level value = covert_agency_funding_cap }
+			}
+			if = {
+				limit = {
+					has_variable = iw_opened_early
+					covert_warfare_slot_source = yes
+				}
+				remove_variable = iw_opened_early
+			}
+
 			# ---- The world's best intelligence capacity, for the panel ----
 			# Display only: intelligence_capacity_relative turns it into the
 			# standing tier, the capacity bar and the overview tooltip. It is a
@@ -327,14 +351,33 @@ je_covert_warfare = {
 	# modifiers along; covert_stop_for_rule ends the operations and the agent
 	# networks, which other systems read (Space Race intelligence, loose
 	# material, the map).
+	# Also the early unlock switched to the late one while an entry opened
+	# early (iw_opened_early) is still short of the late gate: the same
+	# teardown, and covert_warfare_monthly_country adds the entry back once the
+	# late gate is met (iw_reopen_at_gate).
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_covert_warfare_invalid_conclusion_desc
 		trigger = {
-			NOT = { has_game_rule = covert_warfare_enabled }
+			OR = {
+				NOT = { te_covert_warfare_on = yes }
+				AND = {
+					has_variable = iw_opened_early
+					NOT = { te_covert_warfare_early = yes }
+					NOT = { covert_warfare_slot_source = yes }
+				}
+			}
 		}
 		effect = {
 			covert_stop_for_rule = yes
+			if = {
+				limit = { te_covert_warfare_on = yes }
+				set_variable = iw_reopen_at_gate
+			}
+			if = {
+				limit = { has_variable = iw_opened_early }
+				remove_variable = iw_opened_early
+			}
 		}
 	}
 

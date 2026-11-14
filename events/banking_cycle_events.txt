@@ -4169,7 +4169,7 @@ banking_cycle_events.45 = {
 
 	# Once asked, we answer: the donor's own gate (banking_can_offer_bailout)
 	# was read when its pulse put the question to the partner (.68).
-	trigger = { exists = scope:bailout_country }
+	trigger = { exists = scope:bailout_country } # REVIEWED 2026-11-13 (delayed_trigger): scope:bailout_country is saved before .68 is sent (banking_rescue_review) and rides along
 
 	cancellation_trigger = { NOT = { exists = scope:bailout_country } }
 

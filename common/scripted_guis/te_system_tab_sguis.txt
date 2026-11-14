@@ -109,7 +109,7 @@ te_budget_tax_tab_unlock_sgui = {
 te_society_ch_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 		has_journal_entry = je_cultural_hegemony
 	}
 	ai_is_valid = { always = no }
@@ -119,7 +119,7 @@ te_society_ch_tab_sgui = {
 
 te_society_ch_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = cultural_hegemony_enabled }
+	is_shown = { te_cultural_hegemony_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { ch_entry_unlocked = yes }
 	effect = { }
@@ -133,7 +133,7 @@ te_society_ch_tab_unlock_sgui = {
 te_diplomacy_un_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_journal_entry = je_united_nations
 	}
 	ai_is_valid = { always = no }
@@ -143,7 +143,7 @@ te_diplomacy_un_tab_sgui = {
 
 te_diplomacy_un_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = united_nations_enabled }
+	is_shown = { te_united_nations_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { un_entry_unlocked = yes }
 	effect = { }
@@ -206,7 +206,7 @@ te_ni_nuclear_tab_sgui = {
 te_military_covert_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		has_journal_entry = je_covert_warfare
 	}
 	ai_is_valid = { always = no }
@@ -216,7 +216,7 @@ te_military_covert_tab_sgui = {
 
 te_military_covert_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = covert_warfare_enabled }
+	is_shown = { te_covert_warfare_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { covert_warfare_entry_unlocked = yes }
 	effect = { }

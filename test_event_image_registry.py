@@ -55,6 +55,34 @@ class RegistryMatchesEventFilesTests(unittest.TestCase):
             "prints the full report.")
 
 
+class ReframedFieldTests(unittest.TestCase):
+    """An entry's `reframed` names an edit reframe_event_image.py can make, on a picture that exists."""
+
+    def test_reframed_values_are_edits_the_tool_makes(self):
+        import re
+        import reframe_event_image as reframe
+        pattern = re.compile(r"^(mirror|shift (0\.\d+)|mirror, shift (0\.\d+))$")
+        bad = []
+        for key, img in eip.IMAGES.items():
+            value = img.get("reframed")
+            if value is None:
+                continue
+            m = pattern.match(value)
+            shift = m and (m.group(2) or m.group(3))
+            if not m or (shift and not 0 < float(shift) <= reframe.MAX_SHIFT):
+                bad.append((key, value))
+        self.assertEqual(bad, [], "reframed takes 'mirror', 'shift F' or 'mirror, shift F', "
+                                  f"with 0 < F <= {reframe.MAX_SHIFT}")
+
+    def test_reframed_pictures_exist(self):
+        try:
+            pictures = inv.committed_pictures(MOD_ROOT)
+        except (OSError, subprocess.CalledProcessError):
+            self.skipTest("git is unavailable")
+        missing = sorted(k for k, img in eip.IMAGES.items() if "reframed" in img and k not in pictures)
+        self.assertEqual(missing, [], "a pending picture has nothing to reframe yet")
+
+
 class PhaseUpdateTests(unittest.TestCase):
     """generate_event_images._update_event_file and _build_event_to_texture."""
 

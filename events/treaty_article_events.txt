@@ -93,7 +93,7 @@ treaty_article_events.1 = {
 		# Use the intelligence to harden our counter-espionage. Its payoff is
 		# covert defence, which only the covert-warfare system reads; without
 		# that system the option would be a strictly weaker copy of option a.
-		trigger = { has_game_rule = covert_warfare_enabled }
+		trigger = { te_covert_warfare_on = yes }
 		add_modifier = {
 			name = intelligence_tip_off_modifier
 			days = short_modifier_time

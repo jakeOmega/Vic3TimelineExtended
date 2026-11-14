@@ -53,13 +53,18 @@ apply_decolonization_path = {
 		# country's GDP and foreign-ownership figures, which .15's trigger reads,
 		# settle first. If the engine also sends on_become_independent, the
 		# nationalization_cooldown_var .15 sets in immediate stops a second firing.
-		trigger_event = { id = decolonization_events.15 days = 7 }
+		# The week is waited out in the hidden .81, which has no trigger: .15's
+		# is false while those figures settle, and a delayed event whose trigger
+		# is false when queued seems to be dropped (#1596).
+		trigger_event = { id = decolonization_events.81 days = 7 }
 	}
 }
 
 # apply_decolonization_path's legacy: the former-colony mark, the programme's
 # legacy, and the relations by policy and release type; a country given a
-# legacy hears of it in decolonization_events.22. Scope: the new
+# legacy hears of it in decolonization_events.22, through the hidden .82 a
+# day later (#1596: .22's trigger reads the legacy modifier added in the same
+# block, which a delayed event's trigger cannot see on the day it is queued). Scope: the new
 # country (scope:decolonized_new_country); scope:decolonizing_parent.
 decol_path_legacy = {
 	# The parent is our former overlord, as for a country released by the
@@ -101,7 +106,7 @@ decol_path_legacy = {
 			activate_law = law_type:law_outlawed_dissent
 			activate_law = law_type:law_minority_rights_discrimination
 			# Tell the new country what it starts with (.22).
-			trigger_event = { id = decolonization_events.22 days = 1 }
+			trigger_event = { id = decolonization_events.82 days = 1 }
 		}
 		# Commonwealth legacy — parent leaned hardest on investment
 		else_if = {
@@ -125,7 +130,7 @@ decol_path_legacy = {
 			activate_law = law_type:law_protected_speech
 			activate_law = law_type:law_minority_rights_indifference
 			# Tell the new country what it starts with (.22).
-			trigger_event = { id = decolonization_events.22 days = 1 }
+			trigger_event = { id = decolonization_events.82 days = 1 }
 		}
 		# Quiet Assimilation legacy — parent leaned hardest on assimilation
 		else_if = {
@@ -149,7 +154,7 @@ decol_path_legacy = {
 			activate_law = law_type:law_cultural_exclusion
 			activate_law = law_type:law_minority_rights_indifference
 			# Tell the new country what it starts with (.22).
-			trigger_event = { id = decolonization_events.22 days = 1 }
+			trigger_event = { id = decolonization_events.82 days = 1 }
 		}
 	}
 

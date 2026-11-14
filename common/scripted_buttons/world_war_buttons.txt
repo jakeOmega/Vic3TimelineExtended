@@ -48,10 +48,7 @@ ww_rearm_button = {
 			text = WW_REQ_TENSION_30_TT
 			ww_ideological_tension >= 30
 		}
-		custom_tooltip = {
-			text = WW_REQ_COMBINED_ARMS_TT
-			has_technology_researched = combined_arms
-		}
+		ww_era_reached_tt = yes
 	}
 
 	effect = {
@@ -319,10 +316,7 @@ ww_total_war_economy_button = {
 			has_variable = ww_active_phase
 			is_at_war = yes
 		}
-		custom_tooltip = {
-			text = WW_REQ_COMBINED_ARMS_TT
-			has_technology_researched = combined_arms
-		}
+		ww_era_reached_tt = yes
 	}
 
 	effect = {
