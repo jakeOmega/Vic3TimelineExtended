@@ -16,21 +16,23 @@
 # (var:te_cm_site_crew, te_construction_market_site_crew in
 # te_construction_market_update_effects.txt). A crewed site is fully staffed:
 # it was placed with ten laborer jobs a level, took one laborer a level in its
-# first week, which is all a building may hire in a week, and had its jobs cut
-# to that one (te_construction_market_crew_modifier). So the crewed sites
-# together deliver the purchase. A site still waiting for its first laborer
-# gets no throughput and is not counted, so it neither thins the others' share
-# nor adds to it once it hires. A site cut while it held more laborers than
-# the cut leaves jobs for (every site of a save from before this rule) is not
-# counted either, and delivers nothing, until a weekly pass finds the surplus
-# gone: a site is only ever counted at 105% staffed or less.
+# first week, which is all a building may hire in a week, had its jobs cut to
+# that one (te_construction_market_crew_modifier), and was counted once a
+# weekly pass after the cut found it at 105% staffed or less. So the crewed
+# sites together deliver the purchase. A site still waiting for its first
+# laborer gets no throughput and is not counted, so it neither thins the
+# others' share nor adds to it once it hires. A site that has just been cut is
+# not counted either, and delivers nothing: it takes one more laborer at the
+# engine's next employment update, and a site of a save from before this rule
+# holds up to ten, and the engine lets them go only an update or two later.
+# A site is only ever counted at 105% staffed or less.
 #
 # They never deliver more than the purchase, which is the failure to avoid: the
 # government queue spends whatever the sites deliver, at the treasury's cost.
 # They deliver less in two cases, and what is not delivered is not paid for:
 #   - no site has a crew yet (a new country, or one whose capital's site has
-#     lost its laborer): nothing until a site's first hire and the pulse after
-#     it, a week or two. Construction moving to a new state is not such a
+#     lost its laborer): nothing until a site has hired, been cut and settled,
+#     three or four weeks. Construction moving to a new state is not such a
 #     case: the capital's site always stands and carries the purchase while
 #     the new one hires;
 #   - a crewed site was removed since the pulse (construction ended in its

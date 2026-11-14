@@ -154,6 +154,7 @@ class Site:
         self.level = level
         self.laborers = laborers
         self.capacity = None  # the capacity modifier's multiplier, or the variable it re-reads
+        self.known_jobs = 10 * level  # the jobs the engine's last employment update saw
 
     @property
     def country(self):
@@ -216,11 +217,15 @@ class World:
     """The sites of some countries, the script files, and the engine's part: hiring and letting go.
 
     surplus: what the engine does with laborers above a site's jobs. "at_once" lets them go the moment the
-    jobs are cut, "weekly" at the weekly employment update, "never" not at all.
-    inert_cut: the state's modifier does not change the jobs (the unverified engine fact).
+    jobs are cut, "weekly" at the next weekly employment update, "late" at the one after that, "never" not
+    at all. The first game on the crew (1947) showed "late": a cut site took one more laborer at the next
+    update and was back at one of one an update later.
+    late_hire: the update after a cut still hires for the jobs the site had before it (seen in that game:
+    ten of twelve sites held two laborers on one job a week after their cut).
+    inert_cut: the state's modifier does not change the jobs.
     labor: laborers a site can find in a week."""
 
-    def __init__(self, surplus="weekly", inert_cut=False, labor=1000):
+    def __init__(self, surplus="late", late_hire=True, inert_cut=False, labor=1000):
         self.effects = load(EFFECTS, PLACEMENT)
         # One block of the on_actions file: the rest is lists of names, which are not key = value.
         hook = body_of(code(ON_ACTIONS), "te_construction_market_on_state_owner_change") + "\n}"
@@ -228,7 +233,7 @@ class World:
         self.values = load(VALUES)
         self.cut = float(re.search(r"%s\s*=\s*(-[\d.]+)" % EMPLOYEE_MULT,
                                    body_of(code(MODIFIERS), CREW_MODIFIER)).group(1))
-        self.surplus, self.inert_cut, self.labor = surplus, inert_cut, labor
+        self.surplus, self.late_hire, self.inert_cut, self.labor = surplus, late_hire, inert_cut, labor
         self.day = 0
         self.globals = {}
         self.countries = []
@@ -244,13 +249,17 @@ class World:
 
     def employment(self):
         """The weekly employment update: surplus laborers go, and a site hires up to a tenth of its jobs."""
-        if self.surplus == "weekly":
-            self.shed()
         for country in self.countries:
             for site in country.sites:
-                room = math.floor(site.jobs + 1e-9) - site.laborers
-                may = math.floor(HIRING_RATE * site.jobs + 1e-9)
+                jobs = site.jobs
+                if self.surplus == "weekly" or (self.surplus == "late" and site.known_jobs == jobs):
+                    site.laborers = min(site.laborers, max(0, math.floor(jobs + 1e-9)))
+                # With late_hire the update hires for the jobs it saw last time, a cut made since included.
+                seen = site.known_jobs if self.late_hire else jobs
+                room = math.floor(seen + 1e-9) - site.laborers
+                may = math.floor(HIRING_RATE * seen + 1e-9)
                 site.laborers += max(0, min(room, may, self.labor))
+                site.known_jobs = jobs
 
     def run(self, name, scope):
         Run(self).effect(self.effects[name], scope)
@@ -530,12 +539,22 @@ class Run:
 
 
 ORDERS = (True, False)  # the weekly hiring before the weekly pulse, and after it
-SURPLUS = ("at_once", "weekly", "never")
+SURPLUS = ("at_once", "weekly", "late", "never")
+# How long a site may take from its first laborer to being counted: the cut, the laborer it takes after
+# the cut, the update that lets that one go, and the weekly pass that then finds it at one of one.
+SETTLE = 5
 
 
-def worlds(**kwargs):
-    for surplus, hiring_first in itertools.product(SURPLUS, ORDERS):
-        yield surplus, hiring_first, World(surplus=surplus, **kwargs)
+def worlds(surpluses=SURPLUS, **kwargs):
+    """Every way the engine might treat a surplus, with and without the hire after a cut, in both orders."""
+    for surplus, late_hire, hiring_first in itertools.product(surpluses, (True, False), ORDERS):
+        yield "%s%s" % (surplus, ", a hire after the cut" if late_hire else ""), hiring_first, \
+            World(surplus=surplus, late_hire=late_hire, **kwargs)
+
+
+def shedding_worlds(**kwargs):
+    """The worlds in which the engine does let a surplus go, sooner or later: a site then settles."""
+    return worlds(surpluses=("at_once", "weekly", "late"), **kwargs)
 
 
 class NeverMoreThanThePurchase(unittest.TestCase):
@@ -563,12 +582,13 @@ class NeverMoreThanThePurchase(unittest.TestCase):
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 country = Country(world)
                 country.site()
-                self.watch(world, country, 3, hiring_first)
+                self.watch(world, country, SETTLE, hiring_first)
                 for _ in range(5):
                     country.site()
                 # Five sites each taking their first laborer of ten: a tenth of a point each, not a share each.
-                self.watch(world, country, 4, hiring_first, slack=5 * HIRING_RATE)
-                self.assertAlmostEqual(country.delivered(), country.purchase, places=4)
+                self.watch(world, country, SETTLE + 1, hiring_first, slack=5 * HIRING_RATE)
+                if world.surplus != "never":  # where the engine never lets a surplus go, nothing settles this soon
+                    self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
 
     def test_a_save_from_before_the_crew(self):
         # Every site holds up to ten laborers on its ten jobs and carries the old sizing's modifier.
@@ -591,7 +611,8 @@ class NeverMoreThanThePurchase(unittest.TestCase):
                 # From the first pass that sees it. What such a site delivers before that, at the engine's
                 # own throughput, is the switch's business (te_direct_construction_revert_all).
                 world.pulse(country)
-                self.watch(world, country, 8, hiring_first)
+                world.employment()
+                self.watch(world, country, 12, hiring_first)
 
     def test_a_site_that_hires_twice_before_it_is_cut(self):
         # Two laborers on the one job the cut leaves: 200% staffed.
@@ -621,10 +642,10 @@ class NeverMoreThanThePurchase(unittest.TestCase):
 
     def test_a_site_over_its_jobs_is_never_sized(self):
         # Seen at a pass, a site above 105% carries no share: its throughput is -100% until it is back.
-        world = World(surplus="never")
+        world = World()
         country = Country(world)
         site = country.site()
-        for _ in range(2):
+        for _ in range(SETTLE):
             world.week()
         self.assertTrue(site.crewed)
         site.laborers = 3
@@ -637,24 +658,48 @@ class NeverMoreThanThePurchase(unittest.TestCase):
 class TheCrew(unittest.TestCase):
     """What a site goes through."""
 
-    def test_a_new_site_is_full_from_its_first_hire(self):
-        for surplus, hiring_first, world in worlds():
+    def test_a_new_site_is_fully_staffed_within_weeks_and_stays_so(self):
+        for surplus, hiring_first, world in shedding_worlds():
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 country = Country(world)
                 site = country.site()
-                for _ in range(2):
+                for _ in range(SETTLE):
                     world.week(hiring_first)
-                # At most two weeks: its first hire, and the pulse after it.
                 self.assertEqual((site.laborers, site.jobs), (1, 1))
                 self.assertTrue(site.crewed)
-                self.assertAlmostEqual(country.delivered(), country.purchase, places=4)
+                self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
                 self.assertEqual(site.state.modifiers, [CREW_MODIFIER])
                 for _ in range(10):
                     world.week(hiring_first)
                     world.button(country)
                 self.assertEqual(site.state.modifiers, [CREW_MODIFIER])  # never a second copy
-                self.assertAlmostEqual(country.delivered(), country.purchase, places=4)
+                self.assertEqual((site.laborers, site.jobs), (1, 1))
+                self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
                 self.assertEqual(world.errors, [])
+
+    def test_the_laborer_that_arrives_after_the_cut_is_waited_out(self):
+        # The first game on the crew, 1947: ten of twelve sites held two laborers on one job a week after
+        # their cut, were counted, and delivered twice their share. A site is now counted only once a weekly
+        # pass after the cut finds it at 105% staffed or less.
+        for hiring_first in ORDERS:
+            with self.subTest(hiring_first=hiring_first):
+                world = World(surplus="late", late_hire=True)
+                country = Country(world)
+                country.capital = None  # so that nothing else carries the purchase
+                site = country.site()
+                seen_two = False
+                for week in range(SETTLE):
+                    world.day += 7
+                    steps = [world.employment, lambda: world.pulse(country)]
+                    for step in (steps if hiring_first else steps[::-1]):
+                        step()
+                        seen_two = seen_two or site.laborers == 2
+                        if site.laborers != 1 or site.jobs != 1:
+                            self.assertFalse(site.crewed, "week %d: counted at %s of %s" % (week, site.laborers, site.jobs))
+                        self.assertLessEqual(country.delivered(), country.purchase + ROUNDING)
+                self.assertTrue(seen_two)
+                self.assertTrue(site.crewed)
+                self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
 
     def test_before_the_cut_a_site_would_take_ten_weeks(self):
         # What the cut is for. With the modifier doing nothing a site hires its one laborer in ten a week.
@@ -669,16 +714,17 @@ class TheCrew(unittest.TestCase):
     def test_a_site_that_loses_its_laborer_hires_again(self):
         # A cut site holds one job and may hire a tenth of a laborer a week: nothing. With no laborer the
         # cut goes, it has ten jobs, and it hires one.
-        for surplus, hiring_first, world in worlds():
+        for surplus, hiring_first, world in shedding_worlds():
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 country = Country(world)
                 site = country.site()
-                for _ in range(3):
+                for _ in range(SETTLE):
                     world.week(hiring_first)
+                self.assertTrue(site.crewed)
                 site.laborers = 0
                 world.employment()
                 self.assertEqual(site.laborers, 0)  # stuck while the cut stands
-                for _ in range(3):
+                for _ in range(SETTLE + 1):
                     world.week(hiring_first)
                 self.assertEqual((site.laborers, site.jobs), (1, 1))
                 self.assertTrue(site.crewed)
@@ -695,46 +741,65 @@ class TheCrew(unittest.TestCase):
         self.assertEqual(country.delivered(), 0)
 
     def test_an_old_saves_sites_are_cut_and_counted_once_the_surplus_is_gone(self):
-        # Owner, 2026-11-13: the engine lets the laborers above a cut site's jobs go.
-        for surplus in ("at_once", "weekly"):
-            for hiring_first in ORDERS:
-                with self.subTest(surplus=surplus, hiring_first=hiring_first):
-                    world = World(surplus=surplus)
-                    country = Country(world, purchase=80.0)
-                    sites = [country.site(laborers=laborers) for laborers in (10, 8, 5, 3, 2)]
+        # Owner, 2026-11-13: the engine lets the laborers above a cut site's jobs go. It does, an
+        # employment update or two later (the first game on the crew).
+        for surplus, hiring_first, world in shedding_worlds():
+            with self.subTest(surplus=surplus, hiring_first=hiring_first):
+                country = Country(world, purchase=80.0)
+                sites = [country.site(laborers=laborers) for laborers in (10, 8, 5, 3, 2)]
+                world.week(hiring_first)
+                # Cut at the first pulse, and not counted while they may hold more laborers than jobs.
+                self.assertTrue(all(site.state.modifiers == [CREW_MODIFIER] for site in sites))
+                self.assertFalse(any(site.crewed for site in sites))
+                # Nothing but the tenth of a point of the capital's new site, if it has hired by now.
+                self.assertLessEqual(country.delivered(), HIRING_RATE)
+                for _ in range(SETTLE):
                     world.week(hiring_first)
-                    # Cut at the first pulse, and not counted while they may hold more laborers than jobs.
-                    self.assertTrue(all(site.state.modifiers == [CREW_MODIFIER] for site in sites))
-                    self.assertFalse(any(site.crewed for site in sites))
-                    # Nothing but the tenth of a point of the capital's new site, if it has hired by now.
-                    self.assertLessEqual(country.delivered(), HIRING_RATE)
-                    for _ in range(2):
-                        world.week(hiring_first)
-                    self.assertTrue(all(site.crewed and (site.laborers, site.jobs) == (1, 1) for site in sites))
-                    self.assertAlmostEqual(country.delivered(), 80.0, places=4)
-                    self.assertEqual(len(world.lines("construction_site_surplus")), 1)
-                    self.assertIn("TE_SELF_CHECK OK construction_site_surplus", world.lines("construction_site_surplus")[0])
-                    self.assertEqual(world.errors, [])
+                self.assertTrue(all(site.crewed and (site.laborers, site.jobs) == (1, 1) for site in sites))
+                self.assertAlmostEqual(country.delivered(), 80.0, places=3)
+                lines = world.lines("construction_site_surplus")
+                self.assertEqual(len([line for line in lines if line.startswith("TE_SELF_CHECK")]), 1, lines)
+                self.assertTrue(lines[0].startswith("TE_SELF_CHECK OK construction_site_surplus"))
+                self.assertEqual(world.errors, [])
 
-    def test_if_the_engine_keeps_the_surplus_the_cut_comes_off(self):
+    def test_a_mark_the_first_build_left_without_a_cut_is_taken_up_again(self):
+        # The build of 2026-11-13 gave up on a surplus after one week: the cut came off and the site was
+        # marked 3 with te_cm_site_crew_nocut, which nothing sets any more. Such a site is cut again.
+        world = World()
+        country = Country(world, purchase=80.0)
+        sites = [country.site(laborers=laborers) for laborers in (9, 5)]
+        for site in sites:
+            site.state.vars[CREW_MARK] = (3.0, None)
+            site.state.vars["te_cm_site_crew_nocut"] = (1.0, None)
+            site.capacity = "te_cm_capacity_mult"
+        country.vars["te_cm_capacity_mult"] = (39.0, None)
+        for _ in range(SETTLE):
+            world.week()
+            self.assertLessEqual(country.delivered(), 80.0 + ROUNDING + HIRING_RATE)
+        self.assertTrue(all(site.crewed and (site.laborers, site.jobs) == (1, 1) for site in sites))
+        self.assertAlmostEqual(country.delivered(), 80.0, places=3)
+        self.assertEqual(world.errors, [])
+
+    def test_if_the_engine_never_lets_the_surplus_go_the_cut_comes_off_in_the_end(self):
         for hiring_first in ORDERS:
             with self.subTest(hiring_first=hiring_first):
-                world = World(surplus="never")
+                world = World(surplus="never", late_hire=False)
                 country = Country(world, purchase=80.0)
+                country.capital = None
                 sites = [country.site(laborers=laborers) for laborers in (10, 5, 3)]
-                for _ in range(4):
+                for _ in range(12):
                     world.week(hiring_first)
                     self.assertLessEqual(country.delivered(), 80.0 + ROUNDING)
                 # Uncut, on their ten jobs, counted, and filling at one laborer a week as before the crew.
                 self.assertTrue(all(site.state.modifiers == [] and site.crewed for site in sites))
-                lines = world.lines("construction_site_surplus")
+                lines = [line for line in world.lines("construction_site_surplus") if line.startswith("TE_SELF_CHECK")]
                 self.assertEqual(len(lines), 1, lines)
                 self.assertTrue(lines[0].startswith("TE_SELF_CHECK BROKEN construction_site_surplus"))
-                for _ in range(8):
+                for _ in range(9):
                     world.week(hiring_first)
                     self.assertLessEqual(country.delivered(), 80.0 + ROUNDING)
                 self.assertEqual([site.laborers for site in sites], [10, 10, 10])
-                self.assertAlmostEqual(country.delivered(), 80.0, places=4)
+                self.assertAlmostEqual(country.delivered(), 80.0, places=3)
                 self.assertEqual(world.errors, [])
 
     def test_the_purchase_buttons_read_nothing_off_a_site(self):
@@ -751,13 +816,38 @@ class TheCrew(unittest.TestCase):
             self.assertEqual(world.lines("construction_site_crew"), [])
         self.assertEqual(world.errors, [])
 
+    def test_a_site_cut_by_a_button_is_not_read_before_an_employment_update(self):
+        # The button cuts a site that took its first laborer since the weekly pass. The next weekly pass
+        # may come before the engine's employment update has, and would count the site with its second
+        # laborer still to arrive.
+        world = World(surplus="late", late_hire=True)
+        country = Country(world)
+        country.capital = None
+        site = country.site()
+        world.day += 7
+        world.pulse(country)       # no laborer yet
+        world.employment()         # its first
+        world.day += 1
+        world.button(country)      # cut, a day after the weekly pass
+        self.assertEqual(site.state.modifiers, [CREW_MODIFIER])
+        world.day += 6
+        world.pulse(country)       # the weekly pass, before that week's employment update
+        self.assertFalse(site.crewed)
+        world.employment()         # the second laborer arrives
+        self.assertEqual(site.laborers, 2)
+        self.assertLessEqual(country.delivered(), ROUNDING)
+        for _ in range(SETTLE):
+            world.week(hiring_first=False)
+            self.assertLessEqual(country.delivered(), country.purchase + ROUNDING)
+        self.assertTrue(site.crewed)
+
 
 class TheCapitalsSite(unittest.TestCase):
     """One site always stands in the capital and keeps its laborer (owner, 2026-11-14)."""
 
     def settled(self, world, hiring_first=True, purchase=50.0):
         country = Country(world, purchase=purchase)
-        for _ in range(3):
+        for _ in range(SETTLE):
             world.week(hiring_first)
         site = country.capital.site
         self.assertIsNotNone(site)
@@ -766,7 +856,7 @@ class TheCapitalsSite(unittest.TestCase):
         return country
 
     def test_a_country_gets_its_capital_site_from_the_weekly_pulse(self):
-        for surplus, hiring_first, world in worlds():
+        for surplus, hiring_first, world in shedding_worlds():
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 self.settled(world, hiring_first)
                 self.assertEqual(world.errors, [])
@@ -774,7 +864,8 @@ class TheCapitalsSite(unittest.TestCase):
     def test_construction_that_moves_from_state_to_state_never_pauses_a_one_site_country(self):
         # The case this is for. Until 2026-11-14 the capital's site went when construction started elsewhere,
         # and the country built nothing until the new state's site had hired: a week or two at every move.
-        for surplus, hiring_first, world in worlds():
+        # A new site now takes longer still to be counted, and it costs nothing.
+        for surplus, hiring_first, world in shedding_worlds():
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 country = self.settled(world, hiring_first)
                 capital = country.capital.site
@@ -782,7 +873,7 @@ class TheCapitalsSite(unittest.TestCase):
                     state = State(country)
                     world.start_construction(state)
                     self.assertIs(country.capital.site, capital)  # it stays
-                    for week in range(3):
+                    for week in range(SETTLE):
                         world.day += 7
                         steps = [world.employment, lambda: world.pulse(country)]
                         for step in (steps if hiring_first else steps[::-1]):
@@ -810,7 +901,7 @@ class TheCapitalsSite(unittest.TestCase):
         other = State(country)
         world.start_construction(other)
         country.capital.building = True
-        for _ in range(3):
+        for _ in range(SETTLE):
             world.week()
         self.assertFalse(country.capital.has("te_cm_site_standby"))
         self.assertAlmostEqual(country.capital.site.delivers(), country.purchase / 2, places=3)
@@ -839,12 +930,12 @@ class TheCapitalsSite(unittest.TestCase):
         country = self.settled(world)
         other = State(country)
         world.start_construction(other)
-        for _ in range(3):
+        for _ in range(SETTLE):
             world.week()
         old = country.capital
         self.assertTrue(old.has("te_cm_site_standby"))
         country.capital = State(country)
-        for _ in range(3):
+        for _ in range(SETTLE + 1):
             world.week()
         # The old capital's site is a site like any other; the new capital has its own, standing by.
         self.assertFalse(old.has("te_cm_site_standby"))
@@ -860,7 +951,7 @@ class TheCapitalsSite(unittest.TestCase):
         world.week()
         self.assertIsNotNone(country.capital.site)
         self.assertFalse(country.capital.site.crewed)  # placed without the old one's crew
-        for _ in range(2):
+        for _ in range(SETTLE):
             world.week()
         self.assertTrue(country.capital.site.crewed)
         self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
@@ -875,14 +966,14 @@ class AStateChangesHands(unittest.TestCase):
         states = [State(giver), State(giver), State(taker)]
         for state in states:
             world.start_construction(state)
-        for _ in range(3):
+        for _ in range(SETTLE + 1):
             world.week(hiring_first)
         for country in (giver, taker):
             self.assertAlmostEqual(country.delivered(), country.purchase, places=3)
         return giver, taker, states
 
     def test_the_new_owner_never_gets_more_than_it_bought(self):
-        for surplus, hiring_first, world in worlds():
+        for surplus, hiring_first, world in shedding_worlds():
             with self.subTest(surplus=surplus, hiring_first=hiring_first):
                 giver, taker, states = self.pair(world, hiring_first)
                 # Both arrive crewed, fully staffed, and carrying a throughput that now reads the taker's
@@ -926,7 +1017,7 @@ class AStateChangesHands(unittest.TestCase):
         states[0].modifiers.clear()
         world.change_owner(states[0], taker)
         self.assertLessEqual(taker.delivered(), taker.purchase + ROUNDING)
-        for _ in range(3):
+        for _ in range(SETTLE + 1):
             world.week()
             self.assertLessEqual(taker.delivered(), taker.purchase + ROUNDING)
         self.assertEqual((states[0].site.laborers, states[0].site.jobs), (1, 1))
@@ -942,7 +1033,7 @@ class TheSelfChecks(unittest.TestCase):
                     country = Country(world)
                     country.site()
                     country.site()
-                    for _ in range(6):
+                    for _ in range(8):
                         world.week(hiring_first)
                     lines = world.lines("construction_site_crew")
                     self.assertEqual(len(lines), 1, lines)  # once a game
@@ -975,7 +1066,7 @@ class TheSelfChecks(unittest.TestCase):
                 country = Country(world, purchase=100.0)
                 country.site()
                 country.site()
-                for _ in range(6):
+                for _ in range(12):
                     world.week(hiring_first)
                 lines = world.lines("construction_site_delivery")
                 self.assertEqual(len(lines), 1, lines)
@@ -985,12 +1076,12 @@ class TheSelfChecks(unittest.TestCase):
         world = World()
         player = Country(world, purchase=100.0, ai=False)
         player.site()
-        for _ in range(6):
+        for _ in range(10):
             world.week()
         self.assertEqual(world.lines("construction_site_delivery"), [])
         for _ in range(2):
             Country(world, purchase=100.0).site()
-        for _ in range(8):
+        for _ in range(14):
             world.week()
         self.assertEqual(len(world.lines("construction_site_delivery")), 1)
 
@@ -1000,9 +1091,13 @@ class TheSelfChecks(unittest.TestCase):
                 world = World()
                 country = Country(world, purchase=100.0)
                 sites = [country.site(), country.site()]
-                world.week()  # each hires, is cut and sized, and the country stores its purchase
+                for _ in range(12):  # until the sites are counted and the country has stored its purchase
+                    world.week()
+                    if country.has("te_cm_chk_target"):
+                        break
                 self.assertEqual(world.lines("construction_site_delivery"), [])
                 self.assertTrue(country.has("te_cm_chk_target"))
+                self.assertTrue(all(site.crewed for site in sites))
                 if what == "removed":
                     # te_construction_market_state_on_end_market: the building goes, then the crew.
                     country.sites.remove(sites[1])
@@ -1013,7 +1108,7 @@ class TheSelfChecks(unittest.TestCase):
                 world.pulse(country)
                 # Half the purchase was delivered that week, and it is not called BROKEN.
                 self.assertEqual(world.lines("construction_site_delivery"), [])
-                for _ in range(4):
+                for _ in range(10):
                     world.week()
                 lines = world.lines("construction_site_delivery")
                 self.assertEqual(len(lines), 1)
@@ -1023,7 +1118,10 @@ class TheSelfChecks(unittest.TestCase):
         world = World()
         country = Country(world, purchase=100.0)
         country.site()
-        world.week()
+        for _ in range(12):
+            world.week()
+            if country.has("te_cm_chk_target"):
+                break
         self.assertTrue(country.has("te_cm_chk_target"))
         # The yardstick is the stored purchase: a sizing that gave the sites half of it is BROKEN.
         country.vars["te_cm_capacity_mult"] = (49.0, None)
@@ -1037,19 +1135,20 @@ class TheSelfChecks(unittest.TestCase):
         world = World(labor=0)
         country = Country(world, purchase=100.0)
         country.site()
-        for week in range(1, 7):
+        for week in range(1, 11):
             world.week()
-            self.assertEqual(len(world.lines("construction_site_unstaffed")), 1 if week >= 4 else 0, week)
+            self.assertEqual(len(world.lines("construction_site_unstaffed")), 1 if week >= 8 else 0, week)
         self.assertEqual(world.lines("construction_site_delivery"), [])
 
     def test_no_such_verdict_in_a_game_that_works(self):
-        world = World()
-        for _ in range(3):
-            Country(world, purchase=100.0).site()
-        for _ in range(12):
-            world.week()
-        self.assertEqual(world.lines("construction_site_unstaffed"), [])
-        self.assertEqual(world.errors, [])
+        for surplus, hiring_first, world in shedding_worlds():
+            with self.subTest(surplus=surplus, hiring_first=hiring_first):
+                for _ in range(3):
+                    Country(world, purchase=100.0).site()
+                for _ in range(14):
+                    world.week(hiring_first)
+                self.assertEqual(world.lines("construction_site_unstaffed"), [])
+                self.assertEqual(world.errors, [])
 
 
 class TheNumbers(unittest.TestCase):
@@ -1088,7 +1187,7 @@ class TheNumbers(unittest.TestCase):
                 country = Country(world, purchase=purchase)
                 for level in levels:
                     country.site(level=level)
-                for _ in range(3):
+                for _ in range(SETTLE + 1):
                     world.week()
                 self.assertAlmostEqual(country.delivered(), purchase, places=2)
 
@@ -1099,7 +1198,7 @@ class TheNumbers(unittest.TestCase):
         self.assertEqual(country.get("te_cm_capacity_mult"), 0)
         nothing = Country(world, purchase=0.0)
         nothing.site()
-        for _ in range(3):
+        for _ in range(SETTLE):
             world.week()
         # No purchase: throughput -100%, so the site delivers, and buys, nothing.
         self.assertEqual(nothing.delivered(), 0)

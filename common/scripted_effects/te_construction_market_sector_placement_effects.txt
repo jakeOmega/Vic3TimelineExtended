@@ -159,7 +159,7 @@ te_construction_market_site_arrived = {
 			}
 			set_variable = {
 				name = te_cm_site_crew_settling
-				value = 2
+				value = 3
 			}
 		}
 		# Without it (whether a state keeps them through a transfer is not
