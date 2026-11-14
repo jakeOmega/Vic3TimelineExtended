@@ -382,3 +382,22 @@ decaying ones come back at the share of their term left, read off a ladder of li
    the full value. Full value or near 0: a literal `multiplier` on an `is_decaying` add is not read as a starting
    strength; read `cr_rebuild_outcome_modifier`'s civil-rights modifiers on the same winner, which rest on the same
    reading.
+
+## Every intervention costs a little to switch, and the same (2026-11-14)
+
+The owner's rule: switching any intervention on and off again costs something, Moral Suasion and the other economies'
+three 1-point tools excepted, and the routine tools all net the same small round trip, 0.5% of pops radicalized
+(`banking_toggle_radicals_value`) or 0.2% of GDP for the lending tools (`banking_toggle_treasury_cost`), paid on
+switching on. `test_banking_toggle_costs.py` holds the script to it; these are what only the game shows.
+
+1. **The figure reads 0.5%.** The engine prints `add_radicals` with one decimal (`$VALUE|-=1%$`). Hover Enable on
+   Raise Margin Requirements or Restrict Speculative Inflows: "0.5% of Pops become more Radical", not 0% or 1%. Lift
+   it: nothing is charged. Withdraw an Expanded Deposit Guarantee: "2.5% of Pops become more Radical".
+2. **The radicals land.** Note a state's radical count (its pops panel), raise margin requirements, and read it again
+   next day: up by about half a percent of the state's pops. Nothing at all: a fraction this small is lost in the
+   engine's rounding, so the friction needs a larger value (1%, vanilla's `very_small_radicals`).
+3. **The lending tools charge 0.2%.** Enable Open-Market Operations or a directed-credit sector: the tooltip and the
+   treasury both show about 0.2% of GDP (the overview's GDP × 0.002), and lifting it charges nothing.
+4. **The council tools.** Under Cooperative Ownership, Dividend Restraint Resolution radicalizes 2.5% of the middle
+   strata when switched on and turns 2% loyalist when lifted, every time (no five-year wait any more), and Mutual Aid
+   Fund Deployment the other way round for the lower strata.
