@@ -949,6 +949,272 @@ types te_map_widgets
 			}
 		}
 	}
+
+	### One option of the Map Room (te_jmap_options, below). As a pick does, it runs its scripted GUI and then fires
+	### te_jmap_repaint on te_jmap_repainter, which closes and reopens the page: the option's effect marks the area
+	### and measures the range before the reopen, so a paused map repaints on it. No repaint state of its own, for
+	### the pick button's reason. Unlike a pick, it draws pressed from the option's script value (te_jmap_area,
+	### te_jmap_continent, te_jmap_trim), not from its scripted GUI's is_valid, which is kept for what greys it
+	### (Power Bloc with no bloc, Outliers on a map with no range): pressed and greyed are two things here. Each use
+	### sets its own width, to its label, so a row is as wide whatever it shows.
+	type te_jmap_option_button = button {
+		using = default_button
+		size = { 150 30 }
+	}
+
+	### A row's label in the options section, centred over its centred buttons (gui_style_guide.md, Sections).
+	type te_jmap_options_label = textbox {
+		parentanchor = hcenter
+		autoresize = yes
+		align = center|nobaseline
+		margin_top = 2
+	}
+
+	### The Map Room's options (owner, 2026-11-14), on its page below the picks (te_map_room_widget.gui): where the
+	### maps are drawn and measured (Area), and what a fitted map's range leaves out (Outliers). One collapsible
+	### section in the picks' form, closed at first so it doesn't push the picks off the page; its flag,
+	### te_jmap_options_open, outlives a reopen as the categories' do. The header's right text names the options in
+	### force, so they show while the section is closed. Scripted GUIs (te_journal_map_sguis.txt), as the picks are.
+	###   Area      World | Continent | Market | Power Bloc | Country, and under Continent two rows of three continents
+	###   Outliers  Keep All | Trim 4 Each End | Trim 5%, greyed with the reason on a map that has no range
+	###   and a line saying what the map on the page was measured over.
+	type te_jmap_options = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_jmap_category_header = {
+			tooltip = "te_jmap_options_tt"
+			blockoverride "left_text" {
+				text = "te_jmap_options_heading"
+			}
+			blockoverride "right_text" {
+				section_header_right_text = {
+					text = "te_jmap_options_now"
+				}
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_jmap_options_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_jmap_options_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_jmap_options_open')]"
+			}
+		}
+		te_jmap_category = {
+			visible = "[GetVariableSystem.Exists('te_jmap_options_open')]"
+
+			te_jmap_options_label = {
+				text = "te_jmap_options_area"
+			}
+
+			# Area. The widths are the labels': 70 + 98 + 76 + 106 + 84 and four gaps make 450, inside the header's 470.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_option_button = {
+					size = { 70 30 }
+					text = "te_jmap_area_world"
+					tooltip = "te_jmap_area_world_tt"
+					visible = "[GetScriptedGui('te_jmap_area_world_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)0' )]"
+					onclick = "[GetScriptedGui('te_jmap_area_world_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 98 30 }
+					text = "te_jmap_area_continent"
+					tooltip = "te_jmap_area_continent_tt"
+					visible = "[GetScriptedGui('te_jmap_area_continent_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)1' )]"
+					onclick = "[GetScriptedGui('te_jmap_area_continent_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 76 30 }
+					text = "te_jmap_area_market"
+					tooltip = "te_jmap_area_market_tt"
+					visible = "[GetScriptedGui('te_jmap_area_market_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)2' )]"
+					onclick = "[GetScriptedGui('te_jmap_area_market_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				# Greyed for a country in no power bloc; the tooltip then gives that reason instead.
+				te_jmap_option_button = {
+					size = { 106 30 }
+					text = "te_jmap_area_bloc"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_area_bloc_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_area_bloc_tt', 'te_jmap_area_bloc_none_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_area_bloc_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_area_bloc_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)3' )]"
+					onclick = "[GetScriptedGui('te_jmap_area_bloc_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 84 30 }
+					text = "te_jmap_area_country"
+					tooltip = "te_jmap_area_country_tt"
+					visible = "[GetScriptedGui('te_jmap_area_country_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)4' )]"
+					onclick = "[GetScriptedGui('te_jmap_area_country_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			# The continents, while the area is one: two rows of three, as the picks.
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_area'), '(CFixedPoint)1' )]"
+
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = hcenter
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_europe"
+						tooltip = "te_jmap_continent_europe_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_europe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)1' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_europe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_asia"
+						tooltip = "te_jmap_continent_asia_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_asia_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)2' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_asia_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_africa"
+						tooltip = "te_jmap_continent_africa_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_africa_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)3' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_africa_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+				}
+
+				flowcontainer = {
+					direction = horizontal
+					parentanchor = hcenter
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_north_america"
+						tooltip = "te_jmap_continent_north_america_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_north_america_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)4' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_north_america_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_south_america"
+						tooltip = "te_jmap_continent_south_america_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_south_america_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)5' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_south_america_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+
+					te_jmap_option_button = {
+						text = "te_jmap_continent_oceania"
+						tooltip = "te_jmap_continent_oceania_tt"
+						visible = "[GetScriptedGui('te_jmap_continent_oceania_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_continent'), '(CFixedPoint)6' )]"
+						onclick = "[GetScriptedGui('te_jmap_continent_oceania_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+					}
+				}
+			}
+
+			te_jmap_options_label = {
+				text = "te_jmap_options_outliers"
+			}
+
+			# Outliers. Greyed while the map on the page has no range to trim (a map of categories, or on a fixed
+			# scale); each tooltip then gives that reason instead. The setting pressed is still the one in force.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_option_button = {
+					text = "te_jmap_trim_none"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_none_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_none_tt', 'te_jmap_trim_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_trim_none_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_trim_none_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)1' )]"
+					onclick = "[GetScriptedGui('te_jmap_trim_none_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					text = "te_jmap_trim_default"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_default_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_default_tt', 'te_jmap_trim_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_trim_default_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_trim_default_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)0' )]"
+					onclick = "[GetScriptedGui('te_jmap_trim_default_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					text = "te_jmap_trim_percent"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_percent_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_percent_tt', 'te_jmap_trim_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_trim_percent_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_trim_percent_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)2' )]"
+					onclick = "[GetScriptedGui('te_jmap_trim_percent_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			# What the map on the page was measured over (te_jmap_shown_states, te_jmap_shown_cut: the last measure
+			# of a fitted pick), or that it has no range. Nothing before the first pick.
+			textbox = {
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 460
+				align = center|nobaseline
+				margin_top = 2
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' )]"
+				text = "te_jmap_options_measured"
+			}
+			textbox = {
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 460
+				align = center|nobaseline
+				margin_top = 2
+				visible = "[And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_selector'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)0' ) )]"
+				text = "te_jmap_options_no_range"
+			}
+		}
+	}
 }
 
 ### THE REPAINTER (a scripted widget: gui/scripted_widgets/te_systems_window.txt). A pick's second click fires

@@ -1,0 +1,157 @@
+﻿# ============================================================================
+# The Map Room's options in words (docs/systems/mod_systems/journal_map_modes.md)
+# ============================================================================
+# The Map Room's Area and Outliers options are global variables (te_jmap_area, te_jmap_continent, te_jmap_trim:
+# common/script_values/te_journal_map_values.txt), and four texts name them: on the Map Options header, in every
+# fitted pick's tooltip and in the hover of a state outside the area. Read as [GetPlayer.GetCustom('<key>')]: the
+# triggers read only globals, so any country gives the same answer. A market's, a power bloc's and a country's names
+# come from the viewer's scopes (global_var:te_jmap_viewer, the player who last clicked), never typed; the names of
+# the continents and of the three kinds of area are vanilla's own keys.
+#
+# Each block ends on the default, the world and the default trim, which also covers an area whose anchor has gone
+# (the viewer left its power bloc) until the next marking sends the option back to the world (te_jmap_mark_area):
+# the bloc's name is asked for only while the viewer is in one.
+# ============================================================================
+
+# The area as its button names it, the continent's own name under Continent: the Map Options header.
+te_jmap_area_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 1 }
+		localization_key = te_jmap_continent_europe
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 2 }
+		localization_key = te_jmap_continent_asia
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 3 }
+		localization_key = te_jmap_continent_africa
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 4 }
+		localization_key = te_jmap_continent_north_america
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 5 }
+		localization_key = te_jmap_continent_south_america
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 6 }
+		localization_key = te_jmap_continent_oceania
+	}
+	text = {
+		trigger = { te_jmap_area = 2 }
+		localization_key = te_jmap_area_market
+	}
+	text = {
+		trigger = { te_jmap_area = 3 }
+		localization_key = te_jmap_area_bloc
+	}
+	text = {
+		trigger = { te_jmap_area = 4 }
+		localization_key = te_jmap_area_country
+	}
+	text = {
+		localization_key = te_jmap_area_world
+	}
+}
+
+# The area as a sentence names it: "the world", a continent, the viewer's market, power bloc or country by name.
+te_jmap_area_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 1 }
+		localization_key = te_jmap_continent_europe
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 2 }
+		localization_key = te_jmap_continent_asia
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 3 }
+		localization_key = te_jmap_continent_africa
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 4 }
+		localization_key = te_jmap_continent_north_america
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 5 }
+		localization_key = te_jmap_continent_south_america
+	}
+	text = {
+		trigger = { te_jmap_area = 1 te_jmap_continent = 6 }
+		localization_key = te_jmap_continent_oceania
+	}
+	text = {
+		trigger = {
+			te_jmap_area = 2
+			global_var:te_jmap_viewer ?= { exists = market }
+		}
+		localization_key = te_jmap_area_text_market
+	}
+	text = {
+		trigger = {
+			te_jmap_area = 3
+			global_var:te_jmap_viewer ?= { is_in_power_bloc = yes }
+		}
+		localization_key = te_jmap_area_text_bloc
+	}
+	text = {
+		trigger = {
+			te_jmap_area = 4
+			global_var:te_jmap_viewer ?= { exists = capital }
+		}
+		localization_key = te_jmap_area_text_country
+	}
+	text = {
+		localization_key = te_jmap_area_text_world
+	}
+}
+
+# The Outliers setting as its button names it: the Map Options header.
+te_jmap_trim_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_trim = 1 }
+		localization_key = te_jmap_trim_none
+	}
+	text = {
+		trigger = { te_jmap_trim = 2 }
+		localization_key = te_jmap_trim_percent
+	}
+	text = {
+		localization_key = te_jmap_trim_default
+	}
+}
+
+# The Outliers setting as a sentence, for a fitted pick's tooltip: what its range leaves out. The default's reads
+# differently under a limited area, where it leaves out at most a tenth of the area's states at each end
+# (te_jmap_trim_count, te_journal_map_scales_generated.txt).
+te_jmap_trim_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_trim = 1 }
+		localization_key = te_jmap_trim_text_none
+	}
+	text = {
+		trigger = { te_jmap_trim = 2 }
+		localization_key = te_jmap_trim_text_percent
+	}
+	text = {
+		trigger = { te_jmap_area > 0 }
+		localization_key = te_jmap_trim_text_default_area
+	}
+	text = {
+		localization_key = te_jmap_trim_text_default
+	}
+}
