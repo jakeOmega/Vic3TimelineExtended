@@ -138,6 +138,7 @@ class Script:
         self.globals = {} if world_gdp_m is None else {"te_mon_world_gdp_m": world_gdp_m}
         self.stub_values = {}       # script values a scenario fixes instead of running
         self.stub_triggers = {}     # likewise triggers
+        self.log = []               # debug_log lines, in order
 
     # ---------------------------------------------------------------- values
     def number(self, value, scope, root):
@@ -145,6 +146,8 @@ class Script:
             return self.value(value, scope, root)
         if value.startswith("var:"):
             return scope.vars[value[4:]]        # fail on an unguarded read
+        if value.startswith("root.var:"):
+            return root.vars[value[len("root.var:"):]]
         if value.startswith("global_var:"):
             return self.globals[value[len("global_var:"):]]
         if value.startswith("scope:te_mon_arr_party."):
@@ -270,6 +273,12 @@ class Script:
                 self.execute(val, root, root)
             elif key == "save_scope_as":
                 self.saved[val] = scope
+            elif key == "remove_variable":
+                del scope.vars[val]
+            elif key == "set_global_variable":
+                self.globals[val] = True
+            elif key == "debug_log":
+                self.log.append(val)
             elif key == "power_bloc":
                 for item, _, inner in val:
                     assert item == "every_power_bloc_member", item
@@ -773,6 +782,79 @@ class StepNineBTest(unittest.TestCase):
                       .read_text(encoding="utf-8-sig"))
         for name in ("te_mon_union_issuer_premium", "te_mon_union_issuer_bank", "te_mon_union_credit"):
             self.assertIn(f"te_mon_mod_strip = {{ NAME = {name} }}", text)
+
+
+class SelfCheckTest(unittest.TestCase):
+    """TE_SELF_CHECK mon_union_issuer: one line a game, read on the second pulse a leader
+    with a real adopter qualifies, and never OK on a union with nothing to check."""
+
+    def setUp(self):
+        self.s = Script(world_gdp_m=WORLD_M)
+        body = self.s.effects["te_monetary_update_union"]
+        after = next(i for i, (key, _, val) in enumerate(body)
+                     if key == "set_variable" and field(val, "name") == "te_mon_union_q_state")
+        self.tail = body[after + 1:]
+        self.assertEqual(self.tail[-1][0], "te_mon_selfcheck_union_issuer")
+
+    def pulse(self, leader):
+        self.s.run("te_monetary_init_union_variables", leader)
+        for name in ("te_mon_work", "te_mon_work2"):
+            leader.vars.setdefault(name, 0)
+        leader.vars["te_mon_work_gdp"] = leader.gdp      # the discovery caches it
+        self.s.execute(self.tail, leader, leader)
+
+    def test_ok_on_the_second_pulse_and_once_a_game(self):
+        leader = union(5, adopters=(2e9,))
+        self.pulse(leader)
+        self.assertEqual(self.s.log, [], "the first pulse only marks the leader: its adds are not visible yet")
+        self.assertIn("te_mon_union_issuer_check", leader.vars)
+        self.pulse(leader)
+        self.assertEqual(len(self.s.log), 1)
+        self.assertTrue(self.s.log[0].startswith("TE_SELF_CHECK OK mon_union_issuer "), self.s.log[0])
+        self.assertNotIn("te_mon_union_issuer_check", leader.vars)
+        for _ in range(3):
+            self.pulse(leader)
+        self.assertEqual(len(self.s.log), 1)
+
+    def test_broken_when_the_discovery_summed_nothing(self):
+        leader = union(5, adopters=(2e9,))
+        leader.vars.update(te_mon_union_adopters=0, te_mon_union_adopter_gdp_m=0)
+        self.pulse(leader)
+        self.pulse(leader)
+        self.assertEqual(len(self.s.log), 1)
+        self.assertTrue(self.s.log[0].startswith("TE_SELF_CHECK BROKEN mon_union_issuer "), self.s.log[0])
+
+    def test_broken_when_a_modifier_did_not_land(self):
+        leader = union(5, adopters=(2e9,))
+        self.pulse(leader)
+        real_add = self.s.effects["te_monetary_apply_fx_one"]
+        # The second pulse finds the cut's modifier gone and cannot put it back.
+        del leader.mods["te_mon_union_issuer_premium"]
+        self.s.effects["te_monetary_apply_fx_one"] = []
+        self.s.execute(self.tail, leader, leader)
+        self.s.effects["te_monetary_apply_fx_one"] = real_add
+        self.assertTrue(self.s.log[0].startswith("TE_SELF_CHECK BROKEN mon_union_issuer "), self.s.log)
+
+    def test_no_line_from_a_union_with_nothing_to_check(self):
+        cases = {"an adopter under 1% of the leader's GDP": union(5, leader_gdp=1e11, adopters=(5e8,)),
+                 "no adopter": union(5, adopters=()),
+                 "tier 1": union(1),
+                 "a leader that cannot issue": union(5, dial=False),
+                 "an adopter, not the leader": union(5, adopters=(2e9,)).bloc.members[1]}
+        for label, country in cases.items():
+            with self.subTest(case=label):
+                self.pulse(country)
+                self.pulse(country)
+                self.assertEqual(self.s.log, [])
+
+    def test_both_lines_name_the_check_and_print_the_figures(self):
+        text = (ROOT / UNION_EFFECTS).read_text(encoding="utf-8-sig")
+        lines = re.findall(r'debug_log = "(TE_SELF_CHECK (?:OK|BROKEN) mon_union_issuer [^"]*)"', text)
+        self.assertEqual(len(lines), 2)
+        for line in lines:
+            for name in ("te_mon_union_adopters", "te_mon_union_adopter_gdp_m", "te_mon_union_seigniorage_pts",
+                         "te_mon_union_issuer_cut_pts"):
+                self.assertIn(f"THIS.Var('{name}').GetValue", line)
 
 
 def principle_blocks():
