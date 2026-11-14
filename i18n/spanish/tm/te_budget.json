@@ -1,12 +1,4 @@
 {
- "country_te_budget_expense_archaeology_add": {
-  "en": "Breakdown: Archaeological Digs",
-  "es": "Desglose: Excavaciones arqueológicas"
- },
- "country_te_budget_expense_archaeology_add_desc": {
-  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Archaeological Digs.",
-  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Excavaciones arqueológicas."
- },
  "country_te_budget_expense_banking_add": {
   "en": "Breakdown: Banking",
   "es": "Desglose: Banca"
@@ -422,14 +414,6 @@
  "te_budget_chart_shipping": {
   "en": "Shipping and Connections",
   "es": "Transporte marítimo y conexiones"
- },
- "te_budget_chart_source_expense_archaeology": {
-  "en": "Archaeological Digs",
-  "es": "Excavaciones arqueológicas"
- },
- "te_budget_chart_source_expense_archaeology_tt": {
-  "en": "#b Archaeological Digs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]",
-  "es": "#b Excavaciones arqueológicas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]"
  },
  "te_budget_chart_source_expense_banking": {
   "en": "Banking",

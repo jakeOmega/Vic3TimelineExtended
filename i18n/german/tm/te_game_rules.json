@@ -67,6 +67,10 @@
   "en": "Power Bloc Principle Slots",
   "de": "Prinzipienplätze des Machtblocks"
  },
+ "rule_te_small_economy_construction_rule": {
+  "en": "Small-Economy Construction",
+  "de": "Bau in kleinen Volkswirtschaften"
+ },
  "rule_united_nations_rule": {
   "en": "United Nations",
   "de": "Vereinte Nationen"

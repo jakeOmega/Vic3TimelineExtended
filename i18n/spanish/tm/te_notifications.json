@@ -1743,22 +1743,6 @@
   "en": "Multicultural Ideology Added",
   "es": "Ideología multicultural añadida"
  },
- "notification_industrial_nuke_fails_attacker_desc": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has failed.",
-  "es": "Nuestro [concept_nuclear_strike|l] contra [SCOPE.sState('target_state').GetName] ha fracasado."
- },
- "notification_industrial_nuke_fails_attacker_name": {
-  "en": "Attempted [concept_nuclear_strike] Failed",
-  "es": "Intento de [concept_nuclear_strike|l] fallido"
- },
- "notification_industrial_nuke_fails_defender_desc": {
-  "en": "Our defenses stopped a [concept_nuclear_strike] by [SCOPE.sCountry('nd_current_strike_launcher').GetName] on [SCOPE.sState('target_state').GetName].",
-  "es": "Nuestras defensas detuvieron un [concept_nuclear_strike|l] de [SCOPE.sCountry('nd_current_strike_launcher').GetName] contra [SCOPE.sState('target_state').GetName]."
- },
- "notification_industrial_nuke_fails_defender_name": {
-  "en": "Attempted [concept_nuclear_strike] Failed",
-  "es": "Intento de [concept_nuclear_strike|l] fallido"
- },
  "notification_industrial_nuke_succeeds_attacker_desc": {
   "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
   "es": "Nuestro [concept_nuclear_strike|l] contra [SCOPE.sState('target_state').GetName] ha tenido éxito."
@@ -1887,22 +1871,6 @@
   "en": "Space Command Dismantled",
   "es": "Mando espacial desmantelado"
  },
- "notification_tactical_nuke_fails_attacker_desc": {
-  "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses.",
-  "es": "Nuestro [concept_nuclear_strike|l] táctico contra [SCOPE.sState('target_state').GetName] fue detenido por sus defensas."
- },
- "notification_tactical_nuke_fails_attacker_name": {
-  "en": "Tactical [concept_nuclear_strike] Failed",
-  "es": "[concept_nuclear_strike] táctico fallido"
- },
- "notification_tactical_nuke_fails_defender_desc": {
-  "en": "Our defenses stopped a tactical [concept_nuclear_strike] by [SCOPE.sCountry('attacking_country').GetName] on [SCOPE.sState('target_state').GetName].",
-  "es": "Nuestras defensas detuvieron un [concept_nuclear_strike|l] táctico de [SCOPE.sCountry('attacking_country').GetName] contra [SCOPE.sState('target_state').GetName]."
- },
- "notification_tactical_nuke_fails_defender_name": {
-  "en": "Tactical [concept_nuclear_strike] Stopped",
-  "es": "[concept_nuclear_strike] táctico detenido"
- },
  "notification_tactical_nuke_succeeds_attacker_desc": {
   "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
   "es": "Nuestro [concept_nuclear_strike|l] táctico contra [SCOPE.sState('target_state').GetName] ha tenido éxito."
@@ -1910,14 +1878,6 @@
  "notification_tactical_nuke_succeeds_attacker_name": {
   "en": "Tactical [concept_nuclear_strike] Successful",
   "es": "[concept_nuclear_strike] táctico exitoso"
- },
- "notification_tactical_nuke_succeeds_defender_desc": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has struck [SCOPE.sState('target_state').GetName] with a tactical [concept_nuclear_strike].",
-  "es": "[SCOPE.sCountry('attacking_country').GetName] ha golpeado [SCOPE.sState('target_state').GetName] con un [concept_nuclear_strike|l] táctico."
- },
- "notification_tactical_nuke_succeeds_defender_name": {
-  "en": "Tactical [concept_nuclear_strike] Suffered",
-  "es": "[concept_nuclear_strike] táctico sufrido"
  },
  "notification_te_antarctic_treaty_lapsed_notice_desc": {
   "en": "Two great powers outside the Antarctic Treaty hold Southern seabed licenses, and it can no longer hold. Its parties are released, and the Southern basin is open to every claimant.",

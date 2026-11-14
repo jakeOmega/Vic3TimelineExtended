@@ -455,13 +455,33 @@
   "en": "Civil Rights Movement",
   "es": "Movimiento por los derechos civiles"
  },
+ "je_civil_rights_broken_header": {
+  "en": "The Movement Broken",
+  "es": "El movimiento, quebrantado"
+ },
  "je_civil_rights_complete_bar_tt": {
   "en": "Movement support reaches 100",
   "es": "El apoyo al movimiento llega a 100"
  },
- "je_civil_rights_complete_conclusion_desc": {
-  "en": "The $concept_journal_entry$ concluded with a #b victory#! for the movement",
-  "es": "La $concept_journal_entry$ concluyó con una #b victoria#! del movimiento"
+ "je_civil_rights_coopted_header": {
+  "en": "Reform on Paper",
+  "es": "Reforma sobre el papel"
+ },
+ "je_civil_rights_demobilized_header": {
+  "en": "The Movement Demobilizes",
+  "es": "El movimiento se desmoviliza"
+ },
+ "je_civil_rights_drift_header": {
+  "en": "The Long Drift",
+  "es": "La larga deriva"
+ },
+ "je_civil_rights_equality_header": {
+  "en": "A New Era of Equality",
+  "es": "Una nueva era de igualdad"
+ },
+ "je_civil_rights_faded_header": {
+  "en": "The Movement Fades",
+  "es": "El movimiento se apaga"
  },
  "je_civil_rights_fail_1": {
   "en": "#b The Movement Broken#!",
@@ -479,9 +499,21 @@
   "en": "#b The Movement Fades#!",
   "es": "#b El movimiento se apaga#!"
  },
- "je_civil_rights_fail_conclusion_desc": {
-  "en": "The $concept_journal_entry$ concluded with the movement #b defeated#!",
-  "es": "La $concept_journal_entry$ concluyó con el movimiento #b derrotado#!"
+ "je_civil_rights_federal_header": {
+  "en": "The Civil Rights Mandate is Signed",
+  "es": "Se firma el mandato por los derechos civiles"
+ },
+ "je_civil_rights_gradualist_header": {
+  "en": "A Settlement, At Last",
+  "es": "Por fin, un acuerdo"
+ },
+ "je_civil_rights_grassroots_header": {
+  "en": "The Movement Carries the Day",
+  "es": "El movimiento se impone"
+ },
+ "je_civil_rights_hollow_header": {
+  "en": "Victory on Paper",
+  "es": "Victoria sobre el papel"
  },
  "je_civil_rights_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended with no discriminated community left to campaign, or with the Social Movements game rule switched off",
@@ -607,10 +639,6 @@
   "en": "Release",
   "es": "Liberar"
  },
- "je_colonial_empire_complete_conclusion_desc": {
-  "en": "The $concept_journal_entry$ concluded with our empire #b secured#!",
-  "es": "La $concept_journal_entry$ concluyó con nuestro imperio #b asegurado#!"
- },
  "je_colonial_empire_complete_tt": {
   "en": "Completes when the Colonial Stability bar holds at #G 100#! for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] sustained months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Drops below 100 reset the counter. Alternatively, completes when the Imperial Federation Act is taken; that decision separately requires sustaining the Solidified band (bar ≥ 90) for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) plus the Act's other prerequisites.",
   "es": "Se completa cuando la barra de Estabilidad colonial se mantiene en #G 100#! durante [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] meses seguidos (actual: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Si baja de 100, el contador se reinicia. También se completa al adoptar la Ley de Federación Imperial; esa decisión exige además mantener la banda Consolidada (barra ≥ 90) durante [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] meses (actual: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!), así como los demás requisitos de la ley."
@@ -730,10 +758,6 @@
  "je_colonial_empire_drift_total_tt": {
   "en": "What the bar moves by this month: the rows above, after the monthly limit.",
   "es": "Lo que se mueve la barra este mes: las filas de arriba, tras aplicar el límite mensual."
- },
- "je_colonial_empire_fail_conclusion_desc": {
-  "en": "The $concept_journal_entry$ concluded with the #b end of the empire#!",
-  "es": "La $concept_journal_entry$ concluyó con el #b fin del imperio#!"
  },
  "je_colonial_empire_fail_tt": {
   "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programs let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
@@ -3192,8 +3216,8 @@
   "es": "Programa interestelar suspendido"
  },
  "je_space_race_interstellar_probe_first_outcome_header": {
-  "en": "If we send the first probe beyond the Sun",
-  "es": "Si enviamos la primera sonda más allá del Sol"
+  "en": "First Probe Beyond the Sun",
+  "es": "Primera sonda más allá del Sol"
  },
  "je_space_race_interstellar_probe_first_outcome_tt": {
   "en": "An interstellar mission resets the [concept_prestige] and innovation ceiling — durable research [concept_throughput], durable influence, and a long shadow of [concept_cultural_pull].",
@@ -3234,10 +3258,6 @@
  "je_space_race_interstellar_probe_status_safe": {
   "en": "Methodical development and testing of interstellar drive systems. Slower but reliable.",
   "es": "Desarrollo y pruebas metódicos de sistemas de propulsión interestelar. Más lento, pero fiable."
- },
- "je_space_race_interstellar_probe_subsequent_outcome_header": {
-  "en": "If we follow others into the void",
-  "es": "Si seguimos a otros hacia el vacío"
  },
  "je_space_race_interstellar_probe_subsequent_outcome_tt": {
   "en": "Even a follow-on interstellar probe earns substantial [concept_prestige], research speed, and [concept_cultural_pull].",
@@ -3300,8 +3320,8 @@
   "es": "Programa marciano suspendido"
  },
  "je_space_race_mars_landing_first_outcome_header": {
-  "en": "If our flag flies first on Mars",
-  "es": "Si nuestra bandera ondea primero en Marte"
+  "en": "First on Mars",
+  "es": "Primeros en Marte"
  },
  "je_space_race_mars_landing_first_outcome_tt": {
   "en": "The first crewed Mars landing is the achievement of the century. [concept_prestige], research speed, and [concept_cultural_pull] all leap forward.",
@@ -3355,10 +3375,6 @@
   "en": "Careful incremental testing of life support, propulsion, and landing systems for the Mars transit.",
   "es": "Pruebas graduales y cuidadosas de los sistemas de soporte vital, propulsión y aterrizaje para el tránsito a Marte."
  },
- "je_space_race_mars_landing_subsequent_outcome_header": {
-  "en": "If we follow others to Mars",
-  "es": "Si seguimos a otros hasta Marte"
- },
  "je_space_race_mars_landing_subsequent_outcome_tt": {
   "en": "Even a follow-on Mars expedition delivers major [concept_prestige] and research gains, plus durable cultural reach.",
   "es": "Incluso una expedición posterior a Marte aporta un gran [concept_prestige|l] y mejoras de investigación, además de un alcance cultural duradero."
@@ -3384,8 +3400,8 @@
   "es": "Programa lunar suspendido"
  },
  "je_space_race_moon_landing_first_outcome_header": {
-  "en": "If we are first on the Moon",
-  "es": "Si somos los primeros en la Luna"
+  "en": "First on the Moon",
+  "es": "Primeros en la Luna"
  },
  "je_space_race_moon_landing_first_outcome_tt": {
   "en": "Boots on lunar regolith, broadcast worldwide, becomes the defining national achievement of the era. Massive [concept_prestige], research [concept_throughput], and [concept_cultural_pull] follow.",
@@ -3443,10 +3459,6 @@
   "en": "#bold Landing Site:#! Sea of Tranquility\\nTargeting a flat, iconic expanse for maximum symbolic impact.",
   "es": "#bold Lugar de aterrizaje:#! Mar de la Tranquilidad\\nApuntar a una extensión plana e icónica para lograr el máximo impacto simbólico."
  },
- "je_space_race_moon_landing_subsequent_outcome_header": {
-  "en": "If we follow others to the Moon",
-  "es": "Si seguimos a otros hasta la Luna"
- },
  "je_space_race_moon_landing_subsequent_outcome_tt": {
   "en": "A late-arriving lunar program still reshapes how the world sees us — meaningful [concept_prestige], research speed, and cultural reach, even without the historic first.",
   "es": "Un programa lunar tardío sigue cambiando la forma en que nos ve el mundo: un [concept_prestige|l] significativo, mayor velocidad de investigación y alcance cultural, aun sin la primicia histórica."
@@ -3472,8 +3484,8 @@
   "es": "Programa orbital suspendido"
  },
  "je_space_race_orbital_first_outcome_header": {
-  "en": "If we are first to orbit Earth",
-  "es": "Si somos los primeros en orbitar la Tierra"
+  "en": "First in Orbit",
+  "es": "Primeros en órbita"
  },
  "je_space_race_orbital_first_outcome_tt": {
   "en": "Putting the first spacecraft into orbit reframes our nation as the leading scientific power. [concept_prestige], innovation, and [concept_cultural_pull] all surge.",
@@ -3527,10 +3539,6 @@
   "en": "#bold Astronaut:#! Scientist-Astronaut\\nA scientist will fly our first orbital mission, turning it into a research expedition.",
   "es": "#bold Astronauta:#! Científico astronauta\\nUn científico volará nuestra primera misión orbital y la convertirá en una expedición de investigación."
  },
- "je_space_race_orbital_subsequent_outcome_header": {
-  "en": "If another nation orbits first",
-  "es": "Si otra nación orbita antes"
- },
  "je_space_race_orbital_subsequent_outcome_tt": {
   "en": "A second-place orbital flight is still a major engineering feat. Our scientific community gains credibility, even if the headlines have already been claimed.",
   "es": "Un vuelo orbital en segundo lugar sigue siendo una gran proeza de ingeniería. Nuestra comunidad científica gana credibilidad, aunque los titulares ya hayan sido reclamados."
@@ -3556,8 +3564,8 @@
   "es": "Programa de sondas suspendido"
  },
  "je_space_race_probe_first_outcome_header": {
-  "en": "If our probe arrives first",
-  "es": "Si nuestra sonda llega primero"
+  "en": "First Probe at Its Target",
+  "es": "Primera sonda en su destino"
  },
  "je_space_race_probe_first_outcome_tt": {
   "en": "Returning the first interplanetary data is a generational scientific coup. Our research culture surges and our [concept_prestige] carries the discovery.",
@@ -3610,10 +3618,6 @@
  "je_space_race_probe_status_venus": {
   "en": "#bold Target:#! Venus\\nOur probe will study Venus's atmosphere and greenhouse dynamics.",
   "es": "#bold Objetivo:#! Venus\\nNuestra sonda estudiará la atmósfera de Venus y su dinámica de efecto invernadero."
- },
- "je_space_race_probe_subsequent_outcome_header": {
-  "en": "If others reach the target before us",
-  "es": "Si otros llegan al objetivo antes que nosotros"
  },
  "je_space_race_probe_subsequent_outcome_tt": {
   "en": "Even a follow-on probe expands our knowledge of the inner solar system and earns modest [concept_prestige] and research benefits.",
@@ -3688,8 +3692,8 @@
   "es": "Programa suborbital suspendido"
  },
  "je_space_race_suborbital_first_outcome_header": {
-  "en": "If we are first across the Kármán line",
-  "es": "Si somos los primeros en cruzar la línea de Kármán"
+  "en": "First into Space",
+  "es": "Primeros en el espacio"
  },
  "je_space_race_suborbital_first_outcome_tt": {
   "en": "Our nation will be remembered as the first to touch space — a generational propaganda coup, fast-tracked innovation, and a magnetic pull on the world's imagination.",
@@ -3730,10 +3734,6 @@
  "je_space_race_suborbital_status_safe": {
   "en": "Careful, incremental test flights building toward the edge of space.",
   "es": "Vuelos de prueba cuidadosos y graduales que se acercan al borde del espacio."
- },
- "je_space_race_suborbital_subsequent_outcome_header": {
-  "en": "If others reach space before us",
-  "es": "Si otros llegan al espacio antes que nosotros"
  },
  "je_space_race_suborbital_subsequent_outcome_tt": {
   "en": "Even a follow-up flight matters. Our scientific community gains credibility and a modest cultural lift, but the headlines belong to whoever flew first.",
@@ -7302,6 +7302,10 @@
  "je_un_act_found_label": {
   "en": "Found the United Nations",
   "es": "Fundar las Naciones Unidas"
+ },
+ "je_un_act_found_league_label": {
+  "en": "Found the League",
+  "es": "Fundar la Sociedad de Naciones"
  },
  "je_un_act_fund_development_label": {
   "en": "Fund Development",

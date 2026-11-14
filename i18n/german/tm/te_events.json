@@ -272,8 +272,8 @@
   "de": "Der Bischof hatte seine Ausführungen sorgfältig vorbereitet und trug sie dem Ausschuss mit sanfter, vernünftiger Stimme vor.\\n\\n„Wir bitten den Staat nicht, seine Gesetze zu ändern. Wir bitten ihn, das Innere unserer Kirchen in Ruhe zu lassen. Unsere Schulen, unsere Krankenhäuser, unsere Wahl derer, die unseren Glauben lehren.“\\n\\n„Ihre Krankenhäuser behandeln die Hälfte der Armen dieser Stadt“, sagte ein Abgeordneter. „Ihre Schulen unterrichten ein Drittel ihrer Kinder. Wo endet das Innere Ihrer Kirche?“\\n\\nDer Bischof überlegte. „Dort, wo wir sagen, dass es endet“, sagte er sanft, „wie es immer war.“"
  },
  "amendment_petition_events.13.t": {
-  "en": "The Pulpit's Exception",
-  "de": "Die Ausnahme der Kanzel"
+  "en": "An Exemption for Faith",
+  "de": "Eine Ausnahme für den Glauben"
  },
  "amendment_petition_events.14.a": {
   "en": "Those who carried us to power have earned their share.",
@@ -966,10 +966,6 @@
  "augmentation_events.3.b": {
   "en": "Let the market decide",
   "de": "Den Markt entscheiden lassen"
- },
- "augmentation_events.3.c": {
-  "en": "Mandate augmentation for competitive industries",
-  "de": "Augmentierung für wettbewerbsfähige Branchen vorschreiben"
  },
  "augmentation_events.3.d": {
   "en": "Employers are quietly replacing unaugmented workers with enhanced employees who can work faster, think sharper, and never tire. Unions are furious, warning of a new underclass of 'naturals' locked out of the economy.",
@@ -3178,14 +3174,6 @@
  "banking_event_bailout_goodwill_desc": {
   "en": "Our generous financial assistance has earned us diplomatic goodwill.",
   "de": "Unsere großzügige finanzielle Unterstützung hat uns diplomatisches Wohlwollen eingebracht."
- },
- "banking_event_bank_holiday": {
-  "en": "Bank Holiday Disruption",
-  "de": "Störung durch Bankfeiertag"
- },
- "banking_event_bank_holiday_desc": {
-  "en": "The temporary closure of all banks is disrupting normal commerce.",
-  "de": "Die vorübergehende Schließung aller Banken stört den normalen Geschäftsverkehr."
  },
  "banking_event_cb_independence": {
   "en": "Central Bank Independence",
@@ -13124,8 +13112,8 @@
   "de": "„Wir fanden den Tunnel im März. Die Erdarbeiten waren professionell – ordentlich abgestützt, ordentlich belüftet. Jemand mit technischer Ausbildung hatte ihn gebaut, und er hatte ihn gebaut, um zu halten. Als wir ihn fanden, waren bereits vierhundert hindurchgegangen.“\\n\\n„Meine Frau und ich gehörten zu den Letzten, die gingen. Wir schliefen dreißig Stunden am Stück auf der anderen Seite, im hinteren Teil einer Bauernscheune, auf Stroh, das nach Pferden roch. Ich war noch nie so dankbar für den Geruch von Pferden.“\\n\\n„Ich frage nicht nach ihren Namen. Ich frage nicht, warum sie gehen. Ich bringe sie bis zum Fluss, und dann drehe ich um und gehe nach Hause. Je weniger Fragen, desto länger halte ich durch.“"
  },
  "movement_events_te.13.t": {
-  "en": "The Underground Railroad",
-  "de": "Die Underground Railroad"
+  "en": "The Way Out",
+  "de": "Der Ausweg"
  },
  "movement_events_te.14.a": {
   "en": "Protect the targeted businesses",

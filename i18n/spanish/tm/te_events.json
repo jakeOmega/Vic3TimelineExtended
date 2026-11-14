@@ -272,8 +272,8 @@
   "es": "El obispo había preparado su intervención con esmero, y se la expuso a la comisión con voz suave y razonable.\\n\\n—No pedimos al Estado que cambie sus leyes. Le pedimos que deje en paz el interior de nuestras iglesias. Nuestras escuelas, nuestros hospitales, nuestra elección de quienes enseñan nuestra fe.\\n\\n—Sus hospitales atienden a la mitad de los pobres de esta ciudad —dijo un diputado—. Sus escuelas enseñan a un tercio de sus niños. ¿Dónde acaba el interior de su iglesia?\\n\\nEl obispo lo meditó. —Donde nosotros digamos —respondió con suavidad—, como siempre ha sido."
  },
  "amendment_petition_events.13.t": {
-  "en": "The Pulpit's Exception",
-  "es": "La excepción del púlpito"
+  "en": "An Exemption for Faith",
+  "es": "Una exención por la fe"
  },
  "amendment_petition_events.14.a": {
   "en": "Those who carried us to power have earned their share.",
@@ -966,10 +966,6 @@
  "augmentation_events.3.b": {
   "en": "Let the market decide",
   "es": "Que decida el mercado"
- },
- "augmentation_events.3.c": {
-  "en": "Mandate augmentation for competitive industries",
-  "es": "Imponer las mejoras en las industrias competitivas"
  },
  "augmentation_events.3.d": {
   "en": "Employers are quietly replacing unaugmented workers with enhanced employees who can work faster, think sharper, and never tire. Unions are furious, warning of a new underclass of 'naturals' locked out of the economy.",
@@ -3178,14 +3174,6 @@
  "banking_event_bailout_goodwill_desc": {
   "en": "Our generous financial assistance has earned us diplomatic goodwill.",
   "es": "Nuestra generosa asistencia financiera nos ha granjeado buena voluntad diplomática."
- },
- "banking_event_bank_holiday": {
-  "en": "Bank Holiday Disruption",
-  "es": "Trastornos por el cierre bancario"
- },
- "banking_event_bank_holiday_desc": {
-  "en": "The temporary closure of all banks is disrupting normal commerce.",
-  "es": "El cierre temporal de todos los bancos está perturbando el comercio normal."
  },
  "banking_event_cb_independence": {
   "en": "Central Bank Independence",
@@ -13124,8 +13112,8 @@
   "es": "«Encontramos el túnel en marzo. Las obras eran profesionales: bien apuntaladas, bien ventiladas. Lo construyó alguien con formación en ingeniería, y lo construyó para durar. Cuando lo encontramos, ya habían pasado cuatrocientas personas.»\\n\\n«Mi esposa y yo estuvimos entre los últimos en marcharnos. Dormimos treinta horas seguidas al otro lado, al fondo del granero de un granjero, sobre paja que olía a caballos. Nunca he estado tan agradecido por un olor a caballos.»\\n\\n«No pregunto sus nombres. No pregunto por qué se van. Los llevo hasta el río, doy media vuelta y me vuelvo a casa. Cuantas menos preguntas, más tiempo aguanto.»"
  },
  "movement_events_te.13.t": {
-  "en": "The Underground Railroad",
-  "es": "El Ferrocarril Subterráneo"
+  "en": "The Way Out",
+  "es": "La salida"
  },
  "movement_events_te.14.a": {
   "en": "Protect the targeted businesses",

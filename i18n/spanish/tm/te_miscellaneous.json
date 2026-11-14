@@ -6747,10 +6747,6 @@
   "en": "Foreign-Currency Borrowing Limits",
   "es": "Límites al endeudamiento en divisas"
  },
- "banking_fx_swap_lines": {
-  "en": "FX Swap Lines",
-  "es": "Líneas de swap de divisas"
- },
  "banking_mon_delegate_off_tt": {
   "en": "Takes the rate target back from the central bank. It stays where the bank last left it until you move it.",
   "es": "Recupera el tipo objetivo de manos del banco central. Se queda donde el banco lo dejó por última vez hasta que lo muevas."
@@ -6986,10 +6982,6 @@
  "banking_partial_default_write_off_tt": {
   "en": "#b A quarter#! of our debt is written off. It will never be repaid, and the bondholders who held it take the loss.",
   "es": "#b Una cuarta parte#! de nuestra deuda se cancela. Nunca se pagará, y los tenedores de bonos que la poseían asumen la pérdida."
- },
- "banking_policy_rate_hike": {
-  "en": "Policy Rate Hike",
-  "es": "Subida del tipo de interés oficial"
  },
  "banking_policy_stance_bar_name": {
   "en": "Policy Stance — tight",
@@ -8719,10 +8711,6 @@
   "en": "Foreign Military Espionage",
   "es": "Espionaje militar extranjero"
  },
- "covert_military_espionage_unit": {
-  "en": "Military Intelligence Advantage",
-  "es": "Ventaja de inteligencia militar"
- },
  "covert_nuclear_sabotage_action": {
   "en": "Covert: $iw_op_name_nuclear_sabotage$",
   "es": "Encubierta: $iw_op_name_nuclear_sabotage$"
@@ -9707,10 +9695,6 @@
   "en": "Fossil Fuel Lobby Concessions",
   "es": "Concesiones al lobby de los combustibles fósiles"
  },
- "fossil_lobby_concessions_no_gw_modifier": {
-  "en": "Fossil Fuel Lobby Concessions",
-  "es": "Concesiones al lobby de los combustibles fósiles"
- },
  "free_port_state_modifier": {
   "en": "Free Port",
   "es": "Puerto franco"
@@ -9763,6 +9747,10 @@
   "en": "Glass Ceiling Broken",
   "es": "Techo de cristal roto"
  },
+ "global_warming_high_latitudes": {
+  "en": "High-Latitude Warming",
+  "es": "Calentamiento de latitudes altas"
+ },
  "gm_arch_article_sponsor_tech_concession_tt": {
   "en": "The country that would dig has researched Romanticism",
   "es": "El país que excavaría ha investigado el Romanticismo"
@@ -9802,14 +9790,6 @@
  "gm_arch_diversion_desc": {
   "en": "The universities have sent their philologists, chemists and engineers to dig instead of to research.",
   "es": "Las universidades han enviado a sus filólogos, químicos e ingenieros a excavar en lugar de a investigar."
- },
- "gm_arch_expense": {
-  "en": "Excavation Costs",
-  "es": "Costes de excavación"
- },
- "gm_arch_expense_desc": {
-  "en": "Labor, equipment and expeditions for archaeological digs.",
-  "es": "Mano de obra, equipo y expediciones para excavaciones arqueológicas."
  },
  "gm_arch_history_lead": {
   "en": "Historical note:",
@@ -32683,14 +32663,6 @@
   "en": "The people gave up on the currency before the government did, and the state followed them: prices, wages and contracts are now written in foreign money. Inflation is somebody else's problem, and so is the interest rate. What is gone is #b seigniorage#! — the quiet income a state earns by issuing the money its people use. Three quarters of it now accrues to whoever prints the notes in the shopkeepers' tills.",
   "es": "La gente abandonó la moneda antes que el gobierno, y el Estado la siguió: precios, salarios y contratos se escriben ahora en dinero extranjero. La inflación es problema de otro, y el tipo de interés también. Lo que se ha perdido es el #b señoreaje#!, el ingreso silencioso que obtiene un Estado al emitir el dinero que usa su gente. Tres cuartas partes de él van ahora a quien imprime los billetes de las cajas de los comerciantes."
  },
- "te_mon_gold_carry_expense": {
-  "en": "Interest on Borrowed Gold",
-  "es": "Intereses del oro prestado"
- },
- "te_mon_gold_carry_expense_desc": {
-  "en": "The central bank drew gold in from abroad with a high rate, and the balances that came are paid that rate for as long as they stay. The gold sits in the vault earning nothing; the interest is real, and the treasury pays it.",
-  "es": "El banco central atrajo oro del extranjero con un tipo alto, y los saldos que llegaron cobran ese tipo mientras permanezcan. El oro está en la cámara acorazada sin rendir nada; el interés es real, y lo paga el tesoro."
- },
  "te_mon_lolr_reneged": {
   "en": "Broken Guarantee",
   "es": "Garantía incumplida"
@@ -32738,14 +32710,6 @@
  "te_mon_peg_devaluation_pressure_desc": {
   "en": "Imports cost more in the devalued currency, and the rise works its way through every price that depends on them until the economy has digested it.",
   "es": "Las importaciones cuestan más en la moneda devaluada, y la subida se abre camino por todos los precios que dependen de ellas hasta que la economía la digiere."
- },
- "te_mon_peg_devalued": {
-  "en": "Devalued Peg",
-  "es": "Paridad devaluada"
- },
- "te_mon_peg_devalued_desc": {
-  "en": "#lore (From an earlier version: a devaluation now moves the Exchange Rate Index instead.)#! The currency still converts to gold — at a worse price than it did. Everything this country sells abroad is suddenly cheap and everything it buys is expensive, an advantage that wears off as prices at home catch up.",
-  "es": "#lore (De una versión anterior: ahora una devaluación mueve el Índice de tipo de cambio.)#! La moneda aún se convierte en oro, a un precio peor que antes. Todo lo que este país vende al extranjero es de pronto barato y todo lo que compra es caro, una ventaja que se desgasta a medida que los precios internos se ponen al día."
  },
  "te_mon_peg_suspension": {
   "en": "Convertibility Suspended",
@@ -34479,6 +34443,182 @@
   "en": "Your cultural pull, your programs and where you stand.",
   "es": "Tu atractivo cultural, tus programas y tu posición."
  },
+ "te_sp_tt_e_1930s": {
+  "en": "1930s",
+  "es": "Década de 1930"
+ },
+ "te_sp_tt_e_1960s": {
+  "en": "1960s",
+  "es": "Década de 1960"
+ },
+ "te_sp_tt_e_1980s": {
+  "en": "1980s",
+  "es": "Década de 1980"
+ },
+ "te_sp_tt_e_1990s": {
+  "en": "1990s",
+  "es": "Década de 1990"
+ },
+ "te_sp_tt_e_2000s": {
+  "en": "2000s",
+  "es": "Década de 2000"
+ },
+ "te_sp_tt_e_2020s": {
+  "en": "2020s",
+  "es": "Década de 2020"
+ },
+ "te_sp_tt_e_2030s": {
+  "en": "Near Future",
+  "es": "Futuro próximo"
+ },
+ "te_sp_tt_e_2040s": {
+  "en": "Near Future",
+  "es": "Futuro próximo"
+ },
+ "te_sp_tt_e_2080s": {
+  "en": "Far Future",
+  "es": "Futuro lejano"
+ },
+ "te_sp_tt_k_affluent": {
+  "en": "Affluent Street",
+  "es": "Calle acomodada"
+ },
+ "te_sp_tt_k_boomtown": {
+  "en": "Boomtown",
+  "es": "Ciudad en auge"
+ },
+ "te_sp_tt_k_city": {
+  "en": "City Street",
+  "es": "Calle urbana"
+ },
+ "te_sp_tt_k_cleared_land": {
+  "en": "Cleared Land",
+  "es": "Tierras desbrozadas"
+ },
+ "te_sp_tt_k_colliery": {
+  "en": "Colliery",
+  "es": "Cuenca minera"
+ },
+ "te_sp_tt_k_declining": {
+  "en": "Declining City",
+  "es": "Ciudad en declive"
+ },
+ "te_sp_tt_k_devastated": {
+  "en": "Ruins",
+  "es": "Ruinas"
+ },
+ "te_sp_tt_k_divided": {
+  "en": "Divided City",
+  "es": "Ciudad dividida"
+ },
+ "te_sp_tt_k_farmland": {
+  "en": "Farmland",
+  "es": "Tierras de cultivo"
+ },
+ "te_sp_tt_k_forestry": {
+  "en": "Forestry",
+  "es": "Explotación forestal"
+ },
+ "te_sp_tt_k_harbor": {
+  "en": "Harbor",
+  "es": "Puerto"
+ },
+ "te_sp_tt_k_housing_blocks": {
+  "en": "Housing Blocks",
+  "es": "Bloques de viviendas"
+ },
+ "te_sp_tt_k_industry": {
+  "en": "Industrial City",
+  "es": "Ciudad industrial"
+ },
+ "te_sp_tt_k_land_desert": {
+  "en": "Desert",
+  "es": "Desierto"
+ },
+ "te_sp_tt_k_land_forest": {
+  "en": "Forest",
+  "es": "Bosque"
+ },
+ "te_sp_tt_k_land_hills": {
+  "en": "Hills",
+  "es": "Colinas"
+ },
+ "te_sp_tt_k_land_jungle": {
+  "en": "Jungle",
+  "es": "Selva"
+ },
+ "te_sp_tt_k_land_mountain": {
+  "en": "Mountains",
+  "es": "Montañas"
+ },
+ "te_sp_tt_k_land_plains": {
+  "en": "Plains",
+  "es": "Llanuras"
+ },
+ "te_sp_tt_k_land_savanna": {
+  "en": "Savanna",
+  "es": "Sabana"
+ },
+ "te_sp_tt_k_land_tundra": {
+  "en": "Tundra",
+  "es": "Tundra"
+ },
+ "te_sp_tt_k_land_wetland": {
+  "en": "Wetland",
+  "es": "Humedal"
+ },
+ "te_sp_tt_k_major_port": {
+  "en": "Major Port",
+  "es": "Gran puerto"
+ },
+ "te_sp_tt_k_megacity": {
+  "en": "Megacity",
+  "es": "Megaciudad"
+ },
+ "te_sp_tt_k_metropolis": {
+  "en": "Metropolis",
+  "es": "Metrópolis"
+ },
+ "te_sp_tt_k_nuclear": {
+  "en": "After a Nuclear Strike",
+  "es": "Tras un ataque nuclear"
+ },
+ "te_sp_tt_k_oil": {
+  "en": "Oil Field",
+  "es": "Campo petrolífero"
+ },
+ "te_sp_tt_k_open_pit": {
+  "en": "Open-Pit Mine",
+  "es": "Mina a cielo abierto"
+ },
+ "te_sp_tt_k_plantation": {
+  "en": "Plantation",
+  "es": "Plantación"
+ },
+ "te_sp_tt_k_poor": {
+  "en": "Poor Street",
+  "es": "Calle pobre"
+ },
+ "te_sp_tt_k_ranch": {
+  "en": "Ranch",
+  "es": "Rancho"
+ },
+ "te_sp_tt_k_resort": {
+  "en": "Resort",
+  "es": "Centro turístico"
+ },
+ "te_sp_tt_k_rundown": {
+  "en": "Run-Down Street",
+  "es": "Calle deteriorada"
+ },
+ "te_sp_tt_k_smog": {
+  "en": "City in Smog",
+  "es": "Ciudad bajo el esmog"
+ },
+ "te_sp_tt_k_town": {
+  "en": "Town",
+  "es": "Pueblo"
+ },
  "te_state_climate_comfort_none": {
   "en": "#v None#!",
   "es": "#v Ninguno#!"
@@ -36030,6 +36170,10 @@
  "un_order_standing_refused_tt": {
   "en": "#R International Standing: −5#! for refusing the referendum the Assembly ordered.",
   "es": "#R Posición internacional: −5#! por rechazar el referéndum que ordenó la Asamblea."
+ },
+ "un_org_name_league": {
+  "en": "League of Nations",
+  "es": "Sociedad de Naciones"
  },
  "un_org_name_un": {
   "en": "United Nations",

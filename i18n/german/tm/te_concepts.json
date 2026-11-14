@@ -1467,14 +1467,6 @@
   "en": "Mandatory kill switches in all augmentation implants deter criminal use but reduce their effectiveness.",
   "de": "Verpflichtende Notabschaltungen in allen Augmentierungsimplantaten schrecken vor krimineller Nutzung ab, verringern aber deren Wirksamkeit."
  },
- "augmentation_mandate_modifier": {
-  "en": "Augmentation Mandate",
-  "de": "Augmentierungspflicht"
- },
- "augmentation_mandate_modifier_desc": {
-  "en": "Mandatory augmentation for certain [Concept('concept_profession', 'professions')] drives innovation but creates backlash among traditionalists.",
-  "de": "Verpflichtende Augmentierung für bestimmte [Concept('concept_profession', 'Berufe')] treibt die Innovation voran, erzeugt aber Gegenwehr bei Traditionalisten."
- },
  "augmentation_market_efficiency_modifier_desc": {
   "en": "Allowing companies to prefer augmented workers has increased productivity but deepened the augmentation divide.",
   "de": "Die Erlaubnis für Unternehmen, augmentierte Arbeitskräfte zu bevorzugen, hat die Produktivität gesteigert, aber den Augmentierungsgraben vertieft."
@@ -1639,29 +1631,9 @@
   "en": "Applies the effects of the Export Credit Facility banking policy.",
   "de": "Wendet die Effekte der Bankenpolitik Exportkreditfazilität an."
  },
- "banking_fx_devaluation": {
-  "en": "Currency Devaluation",
-  "de": "Währungsabwertung"
- },
- "banking_fx_devaluation_desc": {
-  "en": "A banking tool from an earlier version. It is converted into a weak Exchange Rate Index and removed on the next monthly update.",
-  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen schwachen Wechselkursindex umgewandelt und entfernt."
- },
- "banking_fx_support": {
-  "en": "Foreign Exchange Support",
-  "de": "Devisenstützung"
- },
- "banking_fx_support_desc": {
-  "en": "A banking tool from an earlier version. It is converted into a strong Exchange Rate Index and removed on the next monthly update.",
-  "de": "Ein Bankinstrument aus einer früheren Version. Es wird bei der nächsten monatlichen Aktualisierung in einen starken Wechselkursindex umgewandelt und entfernt."
- },
  "banking_fx_surrender": {
   "en": "Foreign Exchange Surrender Requirement",
   "de": "Devisenabgabepflicht"
- },
- "banking_fx_swap_lines_desc": {
-  "en": "Applies the effects of the FX Swap Lines banking policy.",
-  "de": "Wendet die Effekte der Bankenpolitik Devisen-Swap-Linien an."
  },
  "banking_moral_suasion": {
   "en": "Moral Suasion",
@@ -1674,10 +1646,6 @@
  "banking_open_market_ops_desc": {
   "en": "Applies the effects of the Open Market Operations banking policy.",
   "de": "Wendet die Effekte der Bankpolitik Offenmarktgeschäfte an."
- },
- "banking_policy_rate_hike_desc": {
-  "en": "Applies the effects of the Policy Rate Hike banking policy.",
-  "de": "Wendet die Effekte der Bankpolitik Leitzinserhöhung an."
  },
  "banking_raise_margin_requirements_desc": {
   "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
@@ -2391,14 +2359,6 @@
   "en": "By rejecting the international climate accord, our fossil fuel industries operate without the constraints accepted by other nations, boosting coal and oil output at the cost of increased emissions.",
   "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Auflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer Emissionen."
  },
- "climate_accord_rejection_no_gw_modifier": {
-  "en": "Climate Accord Rejected",
-  "de": "Klimaabkommen abgelehnt"
- },
- "climate_accord_rejection_no_gw_modifier_desc": {
-  "en": "By rejecting the international climate accord, our fossil fuel industries operate without environmental constraints accepted by other nations, boosting coal and oil output at the cost of increased [concept_pollution_system].",
-  "de": "Durch die Ablehnung des internationalen Klimaabkommens arbeiten unsere fossilen Industrien ohne die von anderen Nationen akzeptierten Umweltauflagen, was die Kohle- und Ölförderung steigert — auf Kosten höherer [concept_pollution_system]."
- },
  "climate_adaptation_modifier": {
   "en": "Climate Adaptation Program",
   "de": "Klimaanpassungsprogramm"
@@ -2439,14 +2399,6 @@
   "en": "With the climate threat receding, we are rolling back environmental regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though emissions are creeping back up.",
   "de": "Da die Klimabedrohung nachlässt, bauen wir Umweltauflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die Emissionen wieder langsam steigen."
  },
- "climate_deregulation_no_gw_modifier": {
-  "en": "Climate Deregulation",
-  "de": "Klimaderegulierung"
- },
- "climate_deregulation_no_gw_modifier_desc": {
-  "en": "With the environmental threat receding, we are rolling back regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though [concept_pollution_system] is creeping back up.",
-  "de": "Da die Umweltbedrohung nachlässt, bauen wir Auflagen ab. Die Industrie profitiert von geringeren Befolgungskosten und frei gewordener bürokratischer Kapazität, während die [concept_pollution_system] wieder langsam steigt."
- },
  "climate_dismissal_boost_modifier": {
   "en": "Business as Usual",
   "de": "Business as usual"
@@ -2454,14 +2406,6 @@
  "climate_dismissal_boost_modifier_desc": {
   "en": "By dismissing climate warnings, our industries continue to operate without environmental restrictions. [concept_throughput] is higher, but so are greenhouse gas emissions.",
   "de": "Indem wir Klimawarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Umweltauflagen. Der [concept_throughput] ist höher, aber ebenso die Treibhausgasemissionen."
- },
- "climate_dismissal_boost_no_gw_modifier": {
-  "en": "Business as Usual",
-  "de": "Business as usual"
- },
- "climate_dismissal_boost_no_gw_modifier_desc": {
-  "en": "By dismissing environmental warnings, our industries continue to operate without restrictions. [concept_throughput] is higher, but so is [concept_pollution_system].",
-  "de": "Indem wir Umweltwarnungen ignorieren, arbeiten unsere Industrien weiterhin ohne Auflagen. Der [concept_throughput] ist höher, aber ebenso die [concept_pollution_system]."
  },
  "climate_fortress_modifier": {
   "en": "Fortress Nation",
@@ -2486,14 +2430,6 @@
  "climate_measures_sunset_modifier_desc": {
   "en": "With temperatures returning to manageable levels, emergency climate regulations have been dismantled. Industry is thriving without environmental compliance costs, though emissions are rising again.",
   "de": "Da die Temperaturen wieder auf ein beherrschbares Niveau zurückkehren, wurden die Klimanotstandsvorschriften aufgehoben. Die Industrie gedeiht ohne Umweltauflagenkosten, doch die Emissionen steigen wieder."
- },
- "climate_measures_sunset_no_gw_modifier": {
-  "en": "Climate Safeguards Lifted",
-  "de": "Klimaschutzmaßnahmen aufgehoben"
- },
- "climate_measures_sunset_no_gw_modifier_desc": {
-  "en": "Emergency environmental regulations have been dismantled. Industry is thriving without compliance costs, though [concept_pollution_system] is rising again.",
-  "de": "Die Umweltnotstandsvorschriften wurden aufgehoben. Die Industrie gedeiht ohne Auflagenkosten, doch die [concept_pollution_system] steigt wieder."
  },
  "climate_political_turmoil_modifier": {
   "en": "Climate Political Turmoil",
@@ -2527,14 +2463,6 @@
   "en": "Our nation took the lead at an international climate summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing emissions.",
   "de": "Unsere Nation übernahm die Führung bei einem internationalen Klimagipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der Emissionen."
  },
- "climate_summit_leader_no_gw_modifier": {
-  "en": "Climate Summit Leadership",
-  "de": "Führungsrolle beim Klimagipfel"
- },
- "climate_summit_leader_no_gw_modifier_desc": {
-  "en": "Our nation took the lead at an international environmental summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing [concept_pollution_system].",
-  "de": "Unsere Nation übernahm die Führung bei einem internationalen Umweltgipfel, gewann dabei enormes [concept_prestige] und bewies ihr Engagement für die Senkung der [concept_pollution_system]."
- },
  "climate_summit_pledge_modifier": {
   "en": "Climate Summit Signatory",
   "de": "Unterzeichner des Klimagipfels"
@@ -2542,14 +2470,6 @@
  "climate_summit_pledge_modifier_desc": {
   "en": "Our nation signed an international climate accord, pledging to reduce emissions in solidarity with the global community.",
   "de": "Unsere Nation unterzeichnete ein internationales Klimaabkommen und verpflichtete sich, die Emissionen in Solidarität mit der Weltgemeinschaft zu senken."
- },
- "climate_summit_pledge_no_gw_modifier": {
-  "en": "Climate Summit Signatory",
-  "de": "Unterzeichner des Klimagipfels"
- },
- "climate_summit_pledge_no_gw_modifier_desc": {
-  "en": "Our nation signed an international environmental accord, pledging to reduce [concept_pollution_system] in solidarity with the global community.",
-  "de": "Unsere Nation unterzeichnete ein internationales Umweltabkommen und verpflichtete sich, die [concept_pollution_system] in Solidarität mit der Weltgemeinschaft zu senken."
  },
  "climate_survival_footing_modifier": {
   "en": "Survival Footing",
@@ -2574,14 +2494,6 @@
  "climate_victory_dividend_modifier_desc": {
   "en": "Having declared victory over climate change, our nation basks in [concept_prestige] and channels former climate spending into economic growth. Some worry this complacency may prove premature.",
   "de": "Nachdem sie den Sieg über den Klimawandel erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Klimaausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
- },
- "climate_victory_dividend_no_gw_modifier": {
-  "en": "Climate Victory Dividend",
-  "de": "Dividende des Klimasiegs"
- },
- "climate_victory_dividend_no_gw_modifier_desc": {
-  "en": "Having declared victory over environmental challenges, our nation basks in [concept_prestige] and channels former environmental spending into economic growth. Some worry this complacency may prove premature.",
-  "de": "Nachdem sie den Sieg über die Umweltherausforderungen erklärt hat, sonnt sich unsere Nation in [concept_prestige] und lenkt frühere Umweltausgaben in Wirtschaftswachstum um. Manche befürchten, diese Selbstzufriedenheit könnte verfrüht sein."
  },
  "coastal_flood_defense_modifier_desc": {
   "en": "Ministry-coordinated engineering projects have constructed flood barriers and drainage systems, reducing port disruption and improving [concept_infrastructure].",
@@ -4603,14 +4515,6 @@
   "en": "[COUNTRY.GetName] launches a covert destabilization campaign against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet eine verdeckte Destabilisierungskampagne gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
- "covert_destabilization_general": {
-  "en": "Foreign Destabilization",
-  "de": "Ausländische Destabilisierung"
- },
- "covert_destabilization_general_desc": {
-  "en": "A foreign power is covertly fueling general unrest and radicalism across all [Concept('concept_political_movement', 'political movements')].",
-  "de": "Eine ausländische Macht schürt verdeckt allgemeine Unruhen und Radikalismus in allen [Concept('concept_political_movement', 'Protestbewegungen')]."
- },
  "covert_destabilization_resist": {
   "en": "Foreign Destabilization",
   "de": "Ausländische Destabilisierung"
@@ -4618,14 +4522,6 @@
  "covert_destabilization_resist_desc": {
   "en": "Foreign agents are funding and arming [Concept('concept_political_movement', 'political movements')] of every stripe here, and wearing down our resistance to separatism.",
   "de": "Ausländische Agenten finanzieren und bewaffnen hier [Concept('concept_political_movement', 'Protestbewegungen')] jeder Couleur und schwächen unseren Widerstand gegen Separatismus."
- },
- "covert_destabilization_separatist": {
-  "en": "Foreign-Backed Separatism",
-  "de": "Vom Ausland unterstützter Separatismus"
- },
- "covert_destabilization_separatist_desc": {
-  "en": "A foreign power is covertly funding and arming separatist movements, dramatically increasing their strength and radicalism.",
-  "de": "Eine ausländische Macht finanziert und bewaffnet verdeckt separatistische Bewegungen und steigert deren Stärke und Radikalismus drastisch."
  },
  "covert_election_interference": {
   "en": "Foreign Election Interference",
@@ -4658,14 +4554,6 @@
  "covert_election_interference_desc": {
   "en": "A foreign power is covertly manipulating our political processes, undermining government [concept_legitimacy].",
   "de": "Eine ausländische Macht manipuliert verdeckt unsere politischen Prozesse und untergräbt die [concept_legitimacy] der Regierung."
- },
- "covert_espionage_base": {
-  "en": "Basic Espionage",
-  "de": "Grundlegende Spionage"
- },
- "covert_espionage_base_desc": {
-  "en": "Our intelligence services pass what they learn of foreign research on to our own laboratories.",
-  "de": "Unsere Geheimdienste geben das, was sie über ausländische Forschung erfahren, an unsere eigenen Labore weiter."
  },
  "covert_financial_subversion": {
   "en": "Financial Subversion",
@@ -4755,10 +4643,6 @@
   "en": "Carry agitators, money and the case for home rule to the target's colonies in the solar system. Once established, every colony it holds gains #v 0.5#! autonomy a month, #v 1#! once fully operational and up to #v 2#! at priority 3; a colony whose autonomy reaches #v 100#! breaks away and becomes a free colony. Requires the target to hold a colony, and ends by itself when it holds none.\\n$iw_exposure_tier_moderate_note$",
   "de": "Bringt Agitatoren, Geld und die Argumente für Eigenverwaltung zu den Kolonien des Ziels im Sonnensystem. Sobald sie etabliert ist, gewinnt jede Kolonie, die es hält, #v 0,5#! Autonomie pro Monat, #v 1#! sobald sie voll einsatzbereit ist und bis zu #v 2#! bei Priorität 3; eine Kolonie, deren Autonomie #v 100#! erreicht, löst sich los und wird zu einer Freien Kolonie. Erfordert, dass das Ziel eine Kolonie hält, und endet von selbst, wenn es keine mehr hält.\\n$iw_exposure_tier_moderate_note$"
  },
- "covert_industrial_espionage": {
-  "en": "Industrial Espionage",
-  "de": "Industriespionage"
- },
  "covert_industrial_espionage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their industrial espionage operations.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Industriespionageoperationen eingestellt."
@@ -4782,10 +4666,6 @@
  "covert_industrial_espionage_action_effect_desc_third": {
   "en": "[COUNTRY.GetName] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet verdeckte Industriespionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
- },
- "covert_industrial_espionage_desc": {
-  "en": "Our intelligence services are extracting production techniques and industrial secrets from a rival, boosting our innovation.",
-  "de": "Unsere Geheimdienste entwenden einem Rivalen Produktionstechniken und Industriegeheimnisse und steigern damit unsere Innovation."
  },
  "covert_industrial_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents extracting our industrial secrets. Plugging the leak diverts administrative attention from other priorities.",
@@ -4859,10 +4739,6 @@
   "en": "Enemy [concept_covert_operations] are disrupting our [concept_infrastructure] and production capacity.",
   "de": "Feindliche [concept_covert_operations] stören unsere [concept_infrastructure] und Produktionskapazität."
  },
- "covert_military_espionage": {
-  "en": "Military Espionage",
-  "de": "Militärspionage"
- },
  "covert_military_espionage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their military espionage operations.",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] hat seine Militärspionageoperationen eingestellt."
@@ -4887,17 +4763,9 @@
   "en": "[COUNTRY.GetName] launches covert military espionage against [TARGET_COUNTRY.GetName]",
   "de": "[COUNTRY.GetAltName('NOM')|U] startet verdeckte Militärspionage gegen [TARGET_COUNTRY.GetAltName('AKK')]"
  },
- "covert_military_espionage_desc": {
-  "en": "Our intelligence services are gathering classified military intelligence from a rival, improving our armed forces' capabilities.",
-  "de": "Unsere Geheimdienste beschaffen sich geheime militärische Informationen von einem Rivalen und verbessern damit die Fähigkeiten unserer Streitkräfte."
- },
  "covert_military_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents gathering classified military intelligence. Tightening compartmentalization across the chain of command consumes administrative focus.",
   "de": "Die Spionageabwehr hat ausländische Agenten aufgedeckt, die geheime militärische Informationen sammelten. Die verschärfte Abschottung der Befehlskette beansprucht administrative Aufmerksamkeit."
- },
- "covert_military_espionage_unit_desc": {
-  "en": "Intelligence gathered through espionage provides a tactical advantage to [Concept('concept_unit', 'military units')].",
-  "de": "Durch Spionage gewonnene Informationen verschaffen [Concept('concept_unit', 'Militäreinheiten')] einen taktischen Vorteil."
  },
  "covert_nuclear_sabotage": {
   "en": "Nuclear Program Sabotage",
@@ -5987,10 +5855,6 @@
   "en": "The government has granted concessions to the fossil fuel industry, boosting coal and oil production but increasing greenhouse gas emissions.",
   "de": "Die Regierung hat der fossilen Brennstoffindustrie Zugeständnisse gemacht, was die Kohle- und Ölproduktion steigert, aber die Treibhausgasemissionen erhöht."
  },
- "fossil_lobby_concessions_no_gw_modifier_desc": {
-  "en": "The government has granted concessions to the fossil fuel industry, boosting coal and oil production but increasing [concept_pollution_system].",
-  "de": "Die Regierung hat der fossilen Brennstoffindustrie Zugeständnisse gemacht, was die Kohle- und Ölproduktion steigert, aber die [concept_pollution_system] erhöht."
- },
  "free_port_concession": {
   "en": "Free Port Concession",
   "de": "Freihafenkonzession"
@@ -6190,6 +6054,10 @@
  "global_warming_desc": {
   "en": "Rising global temperatures are causing increased mortality, reduced agricultural output, more frequent floods and droughts, and rising sea levels. All effects scale linearly with the current [concept_temperature_anomaly].",
   "de": "Steigende globale Temperaturen verursachen höhere Sterblichkeit, geringere landwirtschaftliche Produktion, häufigere Überschwemmungen und Dürren sowie steigende Meeresspiegel. Alle Effekte skalieren linear mit der aktuellen [concept_temperature_anomaly]."
+ },
+ "global_warming_tropics": {
+  "en": "Tropical Warming",
+  "de": "Tropische Erwärmung"
  },
  "globalization_embrace_modifier": {
   "en": "Globalization Embraced",
