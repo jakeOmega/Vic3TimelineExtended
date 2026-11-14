@@ -497,6 +497,13 @@ status line gives the share itself. At the switch:
 
 If you run the merge, an event tells you each time a culture switches.
 
+When another country runs a merge, you hear of it if it reaches you: one of
+its cultures is a primary culture of yours, or you hold a homeland of one. An
+event tells you when it begins and when it completes, and a popup each time
+one of those cultures of yours switches. If it doesn't reach you, a notice in
+the feed tells you when it begins and when it completes. These events are for
+information only: their one option changes nothing.
+
 The old culture keeps its homelands and stays a primary culture of every country that
 had it, so formable countries and other content that look for it keep working.
 Its homeland in a state lasts as long as the merged culture's homeland there:
