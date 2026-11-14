@@ -57,17 +57,23 @@ pm_te_construction_market_base = {
 			goods_input_construction_add = 1
 		}
 
+		# Ten jobs so that the tenth of them a building may hire in a week is
+		# one laborer; the site's state then cuts the group's jobs to that
+		# one, and the site is fully staffed (te_construction_market_site_crew,
+		# te_construction_market_crew_modifier). Change the ten and the
+		# modifier's 90% together.
 		level_scaled = {
 			building_employment_laborers_add = 10
 		}
 
 		# +500%, as the Grid Transfer Station (power_grid_pms.txt): pops take
 		# the job over others, and an employed pop's job satisfaction grows
-		# with it, so they stay. The weekly sizing takes every site to be fully
-		# staffed (te_construction_market_site_throughput), so a site short of
-		# its ten laborers delivers less than its share of the purchase. The
-		# direct methods below don't carry it: there the site is a sector with
-		# a real workforce, which shouldn't outbid industry.
+		# with it, so they stay. A site's crew is its one laborer a level, and
+		# the weekly sizing counts only sites that have theirs
+		# (te_construction_market_site_throughput), so a site whose laborer
+		# leaves delivers nothing until it has hired again. The direct methods
+		# below don't carry it: there the site is a sector with a real
+		# workforce, which shouldn't outbid industry.
 		unscaled = {
 			building_job_attractiveness_mult = 5
 		}

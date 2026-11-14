@@ -6,6 +6,10 @@
 #   sr_disp_fl_<n>_months_left  months until it lands
 #   sr_disp_fl_<n>_refit_left   months of its refit left
 #   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination
+#   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)
+#   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:
+#                               each reading as a share of its full, 0 to 1
+#   sr_disp_fl_<n>_transit_frac the share of its leg flown so far (the transit track)
 #   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders
 #   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)
 #   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the
@@ -67,6 +71,46 @@ sr_disp_fl_1_pick = {
 sr_disp_fl_1_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_target } value = var:sr_fl_1_target }
+}
+sr_disp_fl_1_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_loc } value = var:sr_fl_1_loc }
+	else_if = { limit = { has_variable = sr_fl_1_dest } value = var:sr_fl_1_dest }
+}
+sr_disp_fl_1_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_1_strength_full > 0 } value = sr_fl_1_strength divide = sr_fl_1_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_1_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_1_dv_capacity > 0 } value = sr_fl_1_dv_value divide = sr_fl_1_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_1_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_1_endurance > 0 } value = sr_fl_1_supply_value divide = sr_fl_1_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_1_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_1_marine_capacity > 0 } value = sr_fl_1_marines_value divide = sr_fl_1_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_1_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_1_leg_months var:sr_fl_1_leg_months > 0 }
+		value = var:sr_fl_1_leg_months
+		subtract = sr_disp_fl_1_months_left
+		divide = var:sr_fl_1_leg_months
+	}
+	min = 0
+	max = 1
 }
 sr_disp_fl_1_combat = {
 	value = 0
@@ -133,6 +177,46 @@ sr_disp_fl_2_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_target } value = var:sr_fl_2_target }
 }
+sr_disp_fl_2_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_2_loc } value = var:sr_fl_2_loc }
+	else_if = { limit = { has_variable = sr_fl_2_dest } value = var:sr_fl_2_dest }
+}
+sr_disp_fl_2_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_2_strength_full > 0 } value = sr_fl_2_strength divide = sr_fl_2_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_2_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_2_dv_capacity > 0 } value = sr_fl_2_dv_value divide = sr_fl_2_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_2_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_2_endurance > 0 } value = sr_fl_2_supply_value divide = sr_fl_2_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_2_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_2_marine_capacity > 0 } value = sr_fl_2_marines_value divide = sr_fl_2_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_2_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_2_leg_months var:sr_fl_2_leg_months > 0 }
+		value = var:sr_fl_2_leg_months
+		subtract = sr_disp_fl_2_months_left
+		divide = var:sr_fl_2_leg_months
+	}
+	min = 0
+	max = 1
+}
 sr_disp_fl_2_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_loc NOT = { var:sr_fl_2_loc = 1 } } value = 1 }
@@ -197,6 +281,46 @@ sr_disp_fl_3_pick = {
 sr_disp_fl_3_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_target } value = var:sr_fl_3_target }
+}
+sr_disp_fl_3_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_3_loc } value = var:sr_fl_3_loc }
+	else_if = { limit = { has_variable = sr_fl_3_dest } value = var:sr_fl_3_dest }
+}
+sr_disp_fl_3_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_3_strength_full > 0 } value = sr_fl_3_strength divide = sr_fl_3_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_3_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_3_dv_capacity > 0 } value = sr_fl_3_dv_value divide = sr_fl_3_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_3_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_3_endurance > 0 } value = sr_fl_3_supply_value divide = sr_fl_3_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_3_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_3_marine_capacity > 0 } value = sr_fl_3_marines_value divide = sr_fl_3_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_3_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_3_leg_months var:sr_fl_3_leg_months > 0 }
+		value = var:sr_fl_3_leg_months
+		subtract = sr_disp_fl_3_months_left
+		divide = var:sr_fl_3_leg_months
+	}
+	min = 0
+	max = 1
 }
 sr_disp_fl_3_combat = {
 	value = 0
@@ -263,6 +387,46 @@ sr_disp_fl_4_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_target } value = var:sr_fl_4_target }
 }
+sr_disp_fl_4_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_4_loc } value = var:sr_fl_4_loc }
+	else_if = { limit = { has_variable = sr_fl_4_dest } value = var:sr_fl_4_dest }
+}
+sr_disp_fl_4_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_4_strength_full > 0 } value = sr_fl_4_strength divide = sr_fl_4_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_4_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_4_dv_capacity > 0 } value = sr_fl_4_dv_value divide = sr_fl_4_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_4_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_4_endurance > 0 } value = sr_fl_4_supply_value divide = sr_fl_4_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_4_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_4_marine_capacity > 0 } value = sr_fl_4_marines_value divide = sr_fl_4_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_4_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_4_leg_months var:sr_fl_4_leg_months > 0 }
+		value = var:sr_fl_4_leg_months
+		subtract = sr_disp_fl_4_months_left
+		divide = var:sr_fl_4_leg_months
+	}
+	min = 0
+	max = 1
+}
 sr_disp_fl_4_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_loc NOT = { var:sr_fl_4_loc = 1 } } value = 1 }
@@ -327,6 +491,46 @@ sr_disp_fl_5_pick = {
 sr_disp_fl_5_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_target } value = var:sr_fl_5_target }
+}
+sr_disp_fl_5_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_5_loc } value = var:sr_fl_5_loc }
+	else_if = { limit = { has_variable = sr_fl_5_dest } value = var:sr_fl_5_dest }
+}
+sr_disp_fl_5_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_5_strength_full > 0 } value = sr_fl_5_strength divide = sr_fl_5_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_5_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_5_dv_capacity > 0 } value = sr_fl_5_dv_value divide = sr_fl_5_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_5_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_5_endurance > 0 } value = sr_fl_5_supply_value divide = sr_fl_5_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_5_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_5_marine_capacity > 0 } value = sr_fl_5_marines_value divide = sr_fl_5_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_5_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_5_leg_months var:sr_fl_5_leg_months > 0 }
+		value = var:sr_fl_5_leg_months
+		subtract = sr_disp_fl_5_months_left
+		divide = var:sr_fl_5_leg_months
+	}
+	min = 0
+	max = 1
 }
 sr_disp_fl_5_combat = {
 	value = 0
@@ -393,6 +597,46 @@ sr_disp_fl_6_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_target } value = var:sr_fl_6_target }
 }
+sr_disp_fl_6_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_6_loc } value = var:sr_fl_6_loc }
+	else_if = { limit = { has_variable = sr_fl_6_dest } value = var:sr_fl_6_dest }
+}
+sr_disp_fl_6_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_6_strength_full > 0 } value = sr_fl_6_strength divide = sr_fl_6_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_6_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_6_dv_capacity > 0 } value = sr_fl_6_dv_value divide = sr_fl_6_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_6_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_6_endurance > 0 } value = sr_fl_6_supply_value divide = sr_fl_6_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_6_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_6_marine_capacity > 0 } value = sr_fl_6_marines_value divide = sr_fl_6_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_6_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_6_leg_months var:sr_fl_6_leg_months > 0 }
+		value = var:sr_fl_6_leg_months
+		subtract = sr_disp_fl_6_months_left
+		divide = var:sr_fl_6_leg_months
+	}
+	min = 0
+	max = 1
+}
 sr_disp_fl_6_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_loc NOT = { var:sr_fl_6_loc = 1 } } value = 1 }
@@ -457,6 +701,46 @@ sr_disp_fl_7_pick = {
 sr_disp_fl_7_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_target } value = var:sr_fl_7_target }
+}
+sr_disp_fl_7_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_7_loc } value = var:sr_fl_7_loc }
+	else_if = { limit = { has_variable = sr_fl_7_dest } value = var:sr_fl_7_dest }
+}
+sr_disp_fl_7_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_7_strength_full > 0 } value = sr_fl_7_strength divide = sr_fl_7_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_7_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_7_dv_capacity > 0 } value = sr_fl_7_dv_value divide = sr_fl_7_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_7_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_7_endurance > 0 } value = sr_fl_7_supply_value divide = sr_fl_7_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_7_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_7_marine_capacity > 0 } value = sr_fl_7_marines_value divide = sr_fl_7_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_7_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_7_leg_months var:sr_fl_7_leg_months > 0 }
+		value = var:sr_fl_7_leg_months
+		subtract = sr_disp_fl_7_months_left
+		divide = var:sr_fl_7_leg_months
+	}
+	min = 0
+	max = 1
 }
 sr_disp_fl_7_combat = {
 	value = 0
@@ -523,6 +807,46 @@ sr_disp_fl_8_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_target } value = var:sr_fl_8_target }
 }
+sr_disp_fl_8_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_8_loc } value = var:sr_fl_8_loc }
+	else_if = { limit = { has_variable = sr_fl_8_dest } value = var:sr_fl_8_dest }
+}
+sr_disp_fl_8_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_8_strength_full > 0 } value = sr_fl_8_strength divide = sr_fl_8_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_8_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_8_dv_capacity > 0 } value = sr_fl_8_dv_value divide = sr_fl_8_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_8_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_8_endurance > 0 } value = sr_fl_8_supply_value divide = sr_fl_8_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_8_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_8_marine_capacity > 0 } value = sr_fl_8_marines_value divide = sr_fl_8_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_8_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_8_leg_months var:sr_fl_8_leg_months > 0 }
+		value = var:sr_fl_8_leg_months
+		subtract = sr_disp_fl_8_months_left
+		divide = var:sr_fl_8_leg_months
+	}
+	min = 0
+	max = 1
+}
 sr_disp_fl_8_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_loc NOT = { var:sr_fl_8_loc = 1 } } value = 1 }
@@ -587,6 +911,46 @@ sr_disp_fl_9_pick = {
 sr_disp_fl_9_target = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_target } value = var:sr_fl_9_target }
+}
+sr_disp_fl_9_place = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_9_loc } value = var:sr_fl_9_loc }
+	else_if = { limit = { has_variable = sr_fl_9_dest } value = var:sr_fl_9_dest }
+}
+sr_disp_fl_9_strength_frac = {
+	value = 0
+	if = { limit = { sr_fl_9_strength_full > 0 } value = sr_fl_9_strength divide = sr_fl_9_strength_full }
+	min = 0
+	max = 1
+}
+sr_disp_fl_9_dv_frac = {
+	value = 0
+	if = { limit = { sr_fl_9_dv_capacity > 0 } value = sr_fl_9_dv_value divide = sr_fl_9_dv_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_9_supply_frac = {
+	value = 0
+	if = { limit = { sr_fl_9_endurance > 0 } value = sr_fl_9_supply_value divide = sr_fl_9_endurance }
+	min = 0
+	max = 1
+}
+sr_disp_fl_9_marines_frac = {
+	value = 0
+	if = { limit = { sr_fl_9_marine_capacity > 0 } value = sr_fl_9_marines_value divide = sr_fl_9_marine_capacity }
+	min = 0
+	max = 1
+}
+sr_disp_fl_9_transit_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_9_leg_months var:sr_fl_9_leg_months > 0 }
+		value = var:sr_fl_9_leg_months
+		subtract = sr_disp_fl_9_months_left
+		divide = var:sr_fl_9_leg_months
+	}
+	min = 0
+	max = 1
 }
 sr_disp_fl_9_combat = {
 	value = 0

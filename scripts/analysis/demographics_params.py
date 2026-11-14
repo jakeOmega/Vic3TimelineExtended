@@ -838,7 +838,7 @@ DEATH_CAUSE_TAGS = {
         "crop_failure_modifier", "water_crisis_rationing_modifier", "tropical_disease_spread_modifier",
         "tropical_disease_research_modifier", "tropical_disease_public_health_modifier", "un_mission_aid_state_modifier",
         "un_humanitarian_aid_received_modifier", "un_aid_received_modifier", "un_food_reserve_relief_state_modifier",
-        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl", "healthcare_aid",
+        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl",
         "company_pfizer", "company_biontech", "pm_pfizer_rd_campus", "pm_biontech_mainz_campus",
     ),
     # chronic illness and old age: pollution, the climate's heat, drugs and addiction, radiation, care of the old
@@ -1389,6 +1389,8 @@ MT_FERTILITY = 0.10
 # range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
 LT_TAIL_RATE_MIN = 1.0
 # The panel shows life expectancy as it is up to this and "over" it past (owner, 2026-10-20); the stored figure stays
-# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this.
+# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this. The
+# minimum was 100, the chart's fixed axis, until 2026-11-14 (owner: the charts fit their figures, with a small
+# minimum); a save whose census hasn't set the axis still draws on 100 (te_demog_hist_e0_axis_unset).
 E0_SHOWN_MAX = 10000
-E0_AXIS_MIN = 100
+E0_AXIS_MIN = 10

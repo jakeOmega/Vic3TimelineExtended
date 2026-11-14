@@ -1149,8 +1149,9 @@ engine fact (script values and locals as the tables already use), so no self-che
 3. **The states list's column.** The 56-pixel Life column shows a tenth of a year below 999.95, whole years from there
    (1,709), and 10K+ from 9,999.5, so no figure rounds up past its branch: check a four-digit figure isn't cut
    (`test_demographics_layout` holds the edges, 999.95 and 9,999.5, to the width).
-4. **The history chart (my call: the axis follows the data).** Until a figure past 100 is recorded the Life Expectancy
-   chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
+4. **The history chart (my call: the axis follows the data).** Since 2026-11-14 the axis fits the figures below 100
+   too (the last section of this file); what follows is the check as written on 2026-10-20. Until a figure past 100 is
+   recorded the Life Expectancy chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
    the late game shrink to slivers. The owner judges whether that reads well, against the alternative of a fixed 0-100
    axis whose late bars are all full. A bar over 10,000 stops at the top and its hover says "Its bar stops at 10,000". On an
    old save the axis reads 100 until the next census sets it (`te_demog_hist_e0_axis_shown` falls back while
@@ -1784,3 +1785,70 @@ table: `cause_deaths_estimate` (the sweep's natural deaths against the independe
    deaths per 1,000 in the panel against the year before: the same to the first decimal.
 4. **A seed** (any rule that runs the census). Console option c, which re-seeds the country's census, then the
    country's pyramid: the same shape as before the re-seed, the bars from 85 up no shorter or longer by eye.
+
+## The history charts' axes follow their figures (2026-11-14)
+
+Five history charts had fixed axes (Births and Deaths 0 to 60, Net Migration ±20, Children per Woman 0 to 8, Median Age
+0 to 60) or a label that did not follow its axis (Life Expectancy's bars rescaled past 100 while its label still read
+100). Each axis is now the largest figure the chart's samples hold, rounded up and never under a small minimum (10, or 2
+for net migration and children per woman), so it shrinks to small figures as well as growing to large ones, and the
+label prints it (`te_demog_history_axes`; `docs/systems/mod_systems/demographics.md`, "The history charts' axes span what
+they show, and fit it"). Offline: `test_demographics_chart_axes.py`.
+
+No self-check was added: the script's pieces are each in use elsewhere (`ceiling = yes` after a divide in the Strategic
+Reserve's steppers, an expression for a progressbar's `min` in vanilla's market panel, a script value printed by
+`raw_text` in the Solar System rows). What only the game shows is how the charts read.
+
+1. **A new 1836 game** (Full or Display only, two censuses). The five charts fill their frames where they sat low
+   before: for a typical country the labels read about 40 (births and deaths), +2 and -2 or a little more (net
+   migration), 40 (life expectancy), 6 (children per woman) and 25 (median age), each a round number at or just above
+   its tallest bar, at both sizes (the panel's and the full-screen viewer's). The other three charts keep their fixed
+   labels (100%, 1, 100).
+2. **A late game** (a save where life expectancy is over 100, or a median age over 60). After one census the Life
+   Expectancy chart's label reads a round number at or above its tallest bar (130 for 123.4), no bar is cut off at
+   the top, and Median Age's does the same; Children per Woman draws on 2 or 3, not 8.
+3. **Net Migration's lower half.** A year of net emigration hangs from the zero line to its length against the axis,
+   the label below reads the same number as the label above with a minus, and a positive year draws nothing below
+   the line. This is the one bar whose `min` is an expression. Its small minimum (2 per 1,000) is the one to judge:
+   a country with almost no migration should read as flat, not as noise.
+4. **An old save.** Loaded before its first census under this version, the charts draw on their old fixed axes (60,
+   ±20, 100, 8, 60: `te_demog_hist_<axis>_axis_unset`), `debug.log` has no variable-not-found line for
+   `te_dg_h_*_max` with the History section open, and within a year each tracked country's axes are set and the
+   charts change scale once. A save from between 2026-10-20 and this version holds life expectancy's axis already,
+   at 100 or more, until that census.
+5. **Another country's charts** (the Census Data window's Demographics tab, a country with a longer life than the
+   player's). Its charts draw on its own axes, not the player's, so two countries' charts no longer share a scale:
+   read the labels when comparing.
+6. **One extreme year** (my call: one axis for all three ranges). A war year whose deaths pass the other years' lifts
+   the Births and Deaths axis for as long as that year is in the store, in the 5-year and 20-year views too, where
+   the year itself may be out of sight. The owner judges whether that reads well, against an axis for each range.
+7. **A falling axis** (my call). The axis is read again at each census, so it can step down from one year to the
+   next as an old high year leaves the 100-year store, and every bar grows at once. Rare; say if it reads as a jump
+   in the figures.
+
+## The Healthcare principles in the census (2026-11-14)
+
+The Healthcare power bloc ladder carries census inputs and a discount on the Family Policy measures' money upkeep
+(`docs/systems/mod_systems/demographics.md`, "The Healthcare principles"). Offline: `test_healthcare_principles.py`
+pins the ladder and `test_demographics_measures.py` the discount. No self-check was added: script-read state types
+already sit in principles' `member_modifier` and `institution_modifier` (Cultural Plurality V), and script reads a
+country type off a principle too (`country_cultural_pull_add`, Cultural Hegemony's pull).
+
+1. **The tooltips** (any rule). A Healthcare tier's tooltip lists Health Care Access and Mortality with one decimal
+   (0.5% at tiers I and II, 1.5% at V), a level of the Ministry of Health. The three health laws' own lines read with
+   one decimal too (3.0%, 6.0%, 10.0%); if they read wrong, set `decimals = 0` back on `state_health_care_access_add`
+   and `state_demog_absorbed_mortality_mult` and make the ladder's steps whole percents.
+2. **Access** (Full). In a bloc with Healthcare, a member's incorporated state under a health law: the Causes of Death
+   section's Health Care Access heads for 40% + the law's line + the principle's, each times the Ministry of Health's
+   level, and closes on it faster from tier II (`TE_DEMOG_MODS`' `diff=` higher by 0.05, 0.10 from tier IV). If access
+   doesn't move, a principle's `institution_modifier` doesn't reach a state's read of a script-only type: carry access
+   flat in `member_modifier` instead (2.5, 5 and 7.5 points).
+3. **Outside Full** (Display only or Disabled). The same state's mortality tooltip lists Laws and Institutions lower
+   by the principle's absorbed line within a month of the bloc taking the principle.
+4. **Family Policy** (Full). With Child Allowance running in a member of a tier III bloc, the row's running cost is
+   10% under what it reads outside the bloc, and the budget's Family Policy row follows at the next yearly pulse.
+5. **Malaria** (any rule). A member without Malaria Prevention owning a malarial state at tier III: the state's Local
+   Climate tooltip shows its malaria part eased by a quarter; under Full its infection hover's Malaria line shrinks.
+6. **Healthcare Aid** (Full, then Disabled). A recipient's state heads for 10 points more Health Care Access, with no
+   health system too, its infection hover's treatment heads 10 points higher, and its mortality tooltip shows no line from the article; with the rule off, Laws and
+   Institutions is 5% lower, as the article's own line was.

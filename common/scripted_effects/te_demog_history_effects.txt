@@ -32,7 +32,8 @@
 #              which marks a sample already stored too)
 #   country    te_dg_hist (the list), te_dg_hist_year (the year last recorded),
 #              te_dg_famine_year and te_dg_wv_year (the markers' years),
-#              te_dg_h_e0_max (the Life Expectancy chart's axis, 100-10,000)
+#              te_dg_h_bd_max, te_dg_h_mig_max, te_dg_h_e0_max, te_dg_h_tfr_max, te_dg_h_median_max
+#              (five charts' axes: te_demog_history_axes)
 #
 # ONE SAMPLE A YEAR. The census can run twice in the game's first year, at game
 # start and at the country's yearly pulse (each country on its own day), so a
@@ -117,8 +118,8 @@ te_demog_history_record = {
 				}
 				te_demog_history_markers = yes
 			}
-			# the Life Expectancy chart's axis (2026-10-20)
-			te_demog_history_e0_axis = yes
+			# the charts' axes (life expectancy's 2026-10-20, the other four 2026-11-14)
+			te_demog_history_axes = yes
 		}
 	}
 }
@@ -303,19 +304,109 @@ te_demog_history_sort = {
 	}
 }
 
-# Scope: the country, after its samples are stored (te_demog_history_record; the life table's open last interval,
-# 2026-10-20): the Life Expectancy chart's axis, te_dg_h_e0_max, the largest figure its samples hold, at least
-# te_demog_k_e0_axis_min (100) and at most te_demog_k_e0_shown_max (10,000), where a bar stops. Read over every sample, so
-# it falls again once the long-lived years leave the chart.
-te_demog_history_e0_axis = {
-	set_local_variable = { name = te_dg_h_ax value = te_demog_k_e0_axis_min }
+# Scope: the country, after its samples are stored (te_demog_history_record; life expectancy's since the life table's
+# open last interval, 2026-10-20, the other four since 2026-11-14, owner: a chart's axis spans the values it shows,
+# and fits them, with a small minimum).
+# The axes of the five charts whose figures have no fixed top, te_dg_h_<axis>_max on the country:
+#   bd      Births and Deaths: the larger of the two rates (te_dg_h_cbr, te_dg_h_cdr)
+#   mig     Net Migration: the rate's size either way (te_dg_h_mig), the axis's reach above and below the line
+#   e0      Life Expectancy (te_dg_h_e0), at most te_demog_k_e0_shown_max (10,000), where a bar stops
+#   tfr     Children per Woman (te_dg_h_tfr)
+#   median  Median Age (te_dg_h_median)
+# Each is the largest figure its samples hold, at least the chart's small minimum (te_demog_hist_<axis>_axis_min in
+# te_demog_display_values.txt, 2 or 10; te_demog_k_e0_axis_min for life expectancy), and rounded up to a round number
+# (te_demog_history_axis_set), since the chart prints it as the axis's label. Read over every sample, so an axis
+# falls again once the years that raised it leave the chart. One pass for all five. The charts read
+# te_demog_hist_<axis>_axis_shown, never the variables: an old save holds none until its next census, and draws on
+# the fixed axes the charts had before (te_demog_hist_<axis>_axis_unset).
+# Wealth Concentration (0 to 100), the Gini (0 to 1) and the causes' shares have fixed tops and keep their axes.
+te_demog_history_axes = {
+	set_local_variable = { name = te_dg_hax_bd value = te_demog_hist_bd_axis_min }
+	set_local_variable = { name = te_dg_hax_mig value = te_demog_hist_mig_axis_min }
+	set_local_variable = { name = te_dg_hax_e0 value = te_demog_k_e0_axis_min }
+	set_local_variable = { name = te_dg_hax_tfr value = te_demog_hist_tfr_axis_min }
+	set_local_variable = { name = te_dg_hax_median value = te_demog_hist_median_axis_min }
 	every_in_list = {
 		variable = te_dg_hist
-		limit = { has_variable = te_dg_h_e0 }
+		te_demog_history_axis_take = { AXIS = bd VAR = te_dg_h_cbr }
+		te_demog_history_axis_take = { AXIS = bd VAR = te_dg_h_cdr }
+		te_demog_history_axis_take = { AXIS = mig VAR = te_dg_h_mig }
+		te_demog_history_axis_take = { AXIS = e0 VAR = te_dg_h_e0 }
+		te_demog_history_axis_take = { AXIS = tfr VAR = te_dg_h_tfr }
+		te_demog_history_axis_take = { AXIS = median VAR = te_dg_h_median }
+	}
+	# a life expectancy bar stops at 10,000, so its axis does (10,000 is round already)
+	set_local_variable = { name = te_dg_hax_e0 value = { value = local_var:te_dg_hax_e0 max = te_demog_k_e0_shown_max } }
+	te_demog_history_axis_set = { AXIS = bd }
+	te_demog_history_axis_set = { AXIS = mig }
+	te_demog_history_axis_set = { AXIS = e0 }
+	te_demog_history_axis_set = { AXIS = tfr }
+	te_demog_history_axis_set = { AXIS = median }
+}
+
+# Scope: a sample container, inside te_demog_history_axes. Raises the local te_dg_hax_$AXIS$ to the size of the
+# sample's $VAR$ where the sample holds one (a year without the figure is no zero). The size is the figure without its
+# sign, for net migration, by a sign flip (not `abs = yes`, as elsewhere in the mod).
+te_demog_history_axis_take = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		set_local_variable = { name = te_dg_hax_v value = var:$VAR$ }
 		if = {
-			limit = { local_var:te_dg_h_ax < var:te_dg_h_e0 }
-			set_local_variable = { name = te_dg_h_ax value = var:te_dg_h_e0 }
+			limit = { local_var:te_dg_hax_v < 0 }
+			set_local_variable = { name = te_dg_hax_v value = { value = local_var:te_dg_hax_v multiply = -1 } }
+		}
+		if = {
+			limit = { local_var:te_dg_hax_$AXIS$ < local_var:te_dg_hax_v }
+			set_local_variable = { name = te_dg_hax_$AXIS$ value = local_var:te_dg_hax_v }
 		}
 	}
-	set_variable = { name = te_dg_h_e0_max value = { value = local_var:te_dg_h_ax max = te_demog_k_e0_shown_max } }
+}
+
+# Scope: the country, inside te_demog_history_axes. Stores the local te_dg_hax_$AXIS$ as te_dg_h_$AXIS$_max, rounded
+# up to the next multiple of a step that grows with the figure: 1 to 20, 5 to 50, 10 to 200, 50 to 500, 100 to 2,000,
+# 500 to 5,000 and 1,000 past that, so the axis's label is a whole round number and the axis stands at most a quarter
+# over its tallest bar once that is 4 or more (below 4 the step of 1 is coarser: 1.3 children per woman draw on an
+# axis of 2). A figure already on a step keeps it (60 stays 60).
+te_demog_history_axis_set = {
+	if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 20 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 1 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 50 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 5 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 200 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 10 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 500 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 50 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 2000 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 100 }
+	}
+	else_if = {
+		limit = { local_var:te_dg_hax_$AXIS$ <= 5000 }
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 500 }
+	}
+	else = {
+		te_demog_history_axis_round = { AXIS = $AXIS$ STEP = 1000 }
+	}
+}
+
+# Scope: the country. te_dg_h_$AXIS$_max: the local te_dg_hax_$AXIS$ rounded up to a multiple of $STEP$, a literal
+# (te_demog_history_axis_set's ladder), so the division is by no figure that could be 0.
+te_demog_history_axis_round = {
+	set_variable = {
+		name = te_dg_h_$AXIS$_max
+		value = {
+			value = local_var:te_dg_hax_$AXIS$
+			divide = $STEP$
+			ceiling = yes
+			multiply = $STEP$
+		}
+	}
 }

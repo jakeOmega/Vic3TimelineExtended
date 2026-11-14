@@ -73,7 +73,7 @@ te_history_repair_after_civil_war = {
 		}
 		if = {
 			limit = { has_variable_list = te_dg_hist }
-			te_demog_history_e0_axis = yes
+			te_demog_history_axes = yes
 		}
 		te_history_cw_selfcheck_read = yes
 		remove_variable = te_hcw_hist_before

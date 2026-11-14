@@ -286,6 +286,46 @@ class ReportTests(unittest.TestCase):
         self.assertIn("[untagged] Variable 'st_1' is not set", volume)
 
 
+class CutOffTests(unittest.TestCase):
+    """A log read while the game runs can stop in the middle of a line: the
+    engine writes a buffer at a time. 2026-11-13: gui.log, one 4,096-byte
+    buffer until the game quits, ended `Loading Font F` and was a finding."""
+
+    def report(self, name: str, text: str) -> str:
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        fx = Fixture(tmp.name)
+        fx.standard()
+        fx.log(name, text, "12:06:00")
+        return fx.report()
+
+    def test_half_a_line_is_named_and_not_judged(self):
+        report = self.report("gui.log", (
+            "[12:00:30][pdx_gui_layout.cpp:186]: gui/te_new.gui:162 - Widget cannot have a position in a layout\r\n"
+            "[12:00:31][pdx_font.cpp:88]: Loading Font F"))
+        untagged = section(report, "Untagged")
+        self.assertNotIn("Loading Font F", untagged)
+        self.assertIn("Widget cannot have a position in a layout", untagged)  # the whole line before it stays
+        self.assertIn("CUT OFF gui.log stops in the middle of a line, which is not judged: "
+                      "[12:00:31][pdx_font.cpp:88]: Loading Font F", report.split("\n== ")[0])
+
+    def test_an_entry_cut_before_its_last_line_is_left_out_whole(self):
+        report = self.report("error.log", (
+            SCRIPT_ERROR.format(t="12:05:10", error="Variable 'st_1' is not set",
+                                where="common/scripted_effects/te_x.txt:45")
+            + "[12:05:20][jomini_script_system.cpp:247]: Script system error!\n  Error: Variable 'st_9' is no"))
+        self.assertNotIn("st_9", section(report, "Untagged"))
+        self.assertIn("CUT OFF error.log", report)
+        self.assertIn("Error: Variable 'st_9' is no", report.split("\n== ")[0])
+
+    def test_a_file_that_ends_at_a_line_break_loses_nothing(self):
+        for ending in ("\n", "\r\n", "\r"):  # "\r" alone: the line is whole, its "\n" unwritten
+            report = self.report(
+                "gui.log", "[12:00:31][pdx_gui_layout.cpp:186]: gui/te_new.gui:9 - Widget is lost" + ending)
+            self.assertIn("gui/te_new.gui:N - Widget is lost", section(report, "Untagged"), repr(ending))
+            self.assertNotIn("CUT OFF", report, repr(ending))
+
+
 class ModGuiUntagTests(unittest.TestCase):
     """#1269: a mod GUI's data-context failure names no file, and three
     source-only vanilla entries match its lines. The report lists the lines a

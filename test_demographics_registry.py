@@ -630,6 +630,8 @@ class _Engine:
                 acc = min(acc, self.value(arg))
             elif key == "floor":
                 acc = float(math.floor(acc))
+            elif key == "ceiling":
+                acc = float(math.ceil(acc))
             elif key == "modulo":
                 acc = math.fmod(acc, self.value(arg))
             else:
@@ -1759,6 +1761,9 @@ class TestEngineLineTypes(unittest.TestCase):
     replaces, with vanilla's format and ai_value."""
 
     TYPES = ROOT / "common" / "modifier_type_definitions" / "demographics_engine_line_types.txt"
+    # A type that shows more decimals than its vanilla field: the Healthcare principles carry the absorbed mortality
+    # line at half a point a level of the Health System (owner, 2026-11-14), which no decimals would round away.
+    MORE_DECIMALS = {"state_demog_absorbed_mortality_mult": "1"}
 
     def _vanilla_types(self):
         import json
@@ -1776,6 +1781,8 @@ class TestEngineLineTypes(unittest.TestCase):
             self.assertIn("script_only = yes", body, name)
             for key in ("decimals", "color", "percent"):
                 want = vanilla[field][1][key][1]
+                if key == "decimals":
+                    want = self.MORE_DECIMALS.get(name, want)
                 self.assertRegex(body, rf"\b{key} = {re.escape(str(want))}\b", f"{name}: {key}")
             self.assertRegex(body, r"ai_value = 0\b", name)
 

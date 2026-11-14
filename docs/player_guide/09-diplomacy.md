@@ -131,7 +131,7 @@ gains leverage over it, and relations improve.
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
 | Crisis Resolution | Bloc leader | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
-| Healthcare Aid | A member with a Ministry of Health at level 3+ | −5% mortality and +1 standard of living for a recipient with a weak health system. |
+| Healthcare Aid | A member with a Ministry of Health at level 3+ | For a recipient with a weak health system: +1 standard of living and, under Demographics' Full setting, 10 points of health care access, faster spread of medicine and some treatment of infection even without the technologies; without it, −5% mortality. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
 | Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |
@@ -388,7 +388,7 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Multilateral Institutions | Intergovernmental Organizations | Diplomatic reputation and UN alignment; at tiers IV and V members can't fight each other. |
 | Global Security | Nuclear Weapons | Less radicalism and turmoil in members, more maneuvers for the leader. |
 | Education | Nothing | Cheaper schools, education access, technology spread. |
-| Healthcare | Pharmaceuticals | Cheaper health ministries, recovery and birth rate. |
+| Healthcare | Pharmaceuticals | Cheaper health ministries and unit recovery. With each Ministry of Health level, more health care access under Demographics' Full setting and lower mortality without it. Higher tiers add faster spread of medicine, malaria control, cheaper family policy measures and, at tier V, a faster fall in the price of longevity care. |
 | Welfare | Nothing | Welfare payments, lower living-standard expectations. |
 | Cultural Unity | Nothing | Faster assimilation and homeland change. |
 | Cultural Plurality | Nothing | Cultural acceptance, migration, technology spread. |
