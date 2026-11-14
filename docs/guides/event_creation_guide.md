@@ -46,7 +46,7 @@ namespace_name.N = {
 
 Ways to get the subject there, cheapest first (mirroring and extend-then-crop are the owner's, 2026-11-11):
 
-1. **Say it in the prompt:** where the subject stands ("at the left of the frame") and what fills the right. Nobody has yet tested whether FLUX obeys a placement, so check the render with `--window`.
+1. **Say it in the prompt:** open with where the subject stands and close with what fills the right ("At the left of the frame, a rocket ascends on a pillar of flame. The right of the frame is open sky above the crowd."). FLUX follows it: tried on four subjects at three seeds each (#1608, 2026-11-13), the left-placed prompt put the subject clear of the panel in all 12 renders, the original prompt in about 2. It lands near 40% of the width, close to the panel's edge, so still check each render with `--window`.
 2. **Mirror it** when the subject came out on the right and nothing in the picture reads wrong reversed (lettering, a flag or emblem, a map or a coastline anyone would know, a clock face, a written page): `python3 scripts/image_pipeline/reframe_event_image.py <name> --mirror`. The astronaut of `orbital_earth_view`, wholly hidden on the right, comes clear this way.
 3. **Shift it** when the subject is centered, or cannot be mirrored: `--shift 0.2` extends the picture on the right and crops the same width off the left, so a centered subject lands at 30%. The extension is the picture's right edge reflected, and it lies under the text panel (the tool caps the shift at 0.45 for that reason). The cost is the leftmost strip of the picture. A subject that touches the right edge is doubled by the reflection: mirror that one instead.
 4. **Render it again,** or point the event at a picture that already fits.

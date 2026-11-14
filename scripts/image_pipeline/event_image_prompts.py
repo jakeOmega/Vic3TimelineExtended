@@ -42,10 +42,16 @@ DO:
     frame is open dust and sky"). The event window lays its text panel over
     the right half of the picture, so a centered subject is half hidden and
     one on the right is not seen at all (docs/guides/event_creation_guide.md;
-    owner, 2026-11-11). FLUX may ignore the placement: review every render
-    with `contact_sheet.py --window`, and if the subject sits in the middle
-    or on the right, move it with `reframe_event_image.py` (`--mirror` for a
-    subject on the right, `--shift 0.2` for a centered one) or render again.
+    owner, 2026-11-11). Open the prompt with "At the left of the frame, ..."
+    and close it with "The right of the frame is ...": FLUX followed that in
+    12 of 12 test renders, against about 2 of 12 for the unplaced prompts
+    (#1608, 2026-11-13). The subject lands near 40% of the width, close to
+    the panel, and a "politician at a lectern" placed this way came out large
+    and face-on, which the rule below on political figures asks to avoid. So
+    review every render with `contact_sheet.py --window`, and if the subject
+    sits in the middle or on the right, move it with `reframe_event_image.py`
+    (`--mirror` for a subject on the right, `--shift 0.2` for a centered one)
+    or render again.
     A picture that will be mirrored must hold nothing that reads wrong
     reversed, which the rules below about lettering and flags already ask
   - Describe posture and body language instead of facial expressions
