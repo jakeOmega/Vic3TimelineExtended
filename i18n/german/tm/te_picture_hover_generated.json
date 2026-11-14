@@ -1,0 +1,74 @@
+{
+ "te_sp_tt_era_advanced_structural_engineering": {
+  "en": "$te_sp_tt_e_2030s$: [State.GetOwner.GetName] has researched $advanced_structural_engineering$.",
+  "de": "$te_sp_tt_e_2030s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $advanced_structural_engineering$ erforscht."
+ },
+ "te_sp_tt_era_art_deco_architecture": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $art_deco_architecture$.",
+  "de": "$te_sp_tt_e_1930s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $art_deco_architecture$ erforscht."
+ },
+ "te_sp_tt_era_autonomous_vehicles": {
+  "en": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] has researched $autonomous_vehicles$.",
+  "de": "$te_sp_tt_e_2040s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $autonomous_vehicles$ erforscht."
+ },
+ "te_sp_tt_era_computer_aided_design": {
+  "en": "$te_sp_tt_e_1990s$: [State.GetOwner.GetName] has researched $computer_aided_design$.",
+  "de": "$te_sp_tt_e_1990s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $computer_aided_design$ erforscht."
+ },
+ "te_sp_tt_era_containerization": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $containerization$.",
+  "de": "$te_sp_tt_e_1980s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $containerization$ erforscht."
+ },
+ "te_sp_tt_era_green_revolution": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $green_revolution$.",
+  "de": "$te_sp_tt_e_1960s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $green_revolution$ erforscht."
+ },
+ "te_sp_tt_era_hydraulic_fracturing": {
+  "en": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] has researched $hydraulic_fracturing$.",
+  "de": "$te_sp_tt_e_2000s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $hydraulic_fracturing$ erforscht."
+ },
+ "te_sp_tt_era_integrated_circuits": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $integrated_circuits$.",
+  "de": "$te_sp_tt_e_1960s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $integrated_circuits$ erforscht."
+ },
+ "te_sp_tt_era_internet_of_things": {
+  "en": "$te_sp_tt_e_2020s$: [State.GetOwner.GetName] has researched $internet_of_things$.",
+  "de": "$te_sp_tt_e_2020s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $internet_of_things$ erforscht."
+ },
+ "te_sp_tt_era_microprocessor": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $microprocessor$.",
+  "de": "$te_sp_tt_e_1980s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $microprocessor$ erforscht."
+ },
+ "te_sp_tt_era_modern_chemical_processes": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $modern_chemical_processes$.",
+  "de": "$te_sp_tt_e_1930s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $modern_chemical_processes$ erforscht."
+ },
+ "te_sp_tt_era_modern_tools": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $modern_tools$.",
+  "de": "$te_sp_tt_e_1930s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $modern_tools$ erforscht."
+ },
+ "te_sp_tt_era_modern_urban_planning": {
+  "en": "$te_sp_tt_e_1960s$: [State.GetOwner.GetName] has researched $modern_urban_planning$.",
+  "de": "$te_sp_tt_e_1960s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $modern_urban_planning$ erforscht."
+ },
+ "te_sp_tt_era_robotics": {
+  "en": "$te_sp_tt_e_1980s$: [State.GetOwner.GetName] has researched $robotics$.",
+  "de": "$te_sp_tt_e_1980s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $robotics$ erforscht."
+ },
+ "te_sp_tt_era_rural_electrification": {
+  "en": "$te_sp_tt_e_1930s$: [State.GetOwner.GetName] has researched $rural_electrification$.",
+  "de": "$te_sp_tt_e_1930s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $rural_electrification$ erforscht."
+ },
+ "te_sp_tt_era_supply_chain_management": {
+  "en": "$te_sp_tt_e_2000s$: [State.GetOwner.GetName] has researched $supply_chain_management$.",
+  "de": "$te_sp_tt_e_2000s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $supply_chain_management$ erforscht."
+ },
+ "te_sp_tt_era_synthetic_biology": {
+  "en": "$te_sp_tt_e_2040s$: [State.GetOwner.GetName] has researched $synthetic_biology$.",
+  "de": "$te_sp_tt_e_2040s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $synthetic_biology$ erforscht."
+ },
+ "te_sp_tt_era_vactrains": {
+  "en": "$te_sp_tt_e_2080s$: [State.GetOwner.GetName] has researched $vactrains$.",
+  "de": "$te_sp_tt_e_2080s$: [State.GetOwner.GetAltName('NOM')|U] hat die Technologie $vactrains$ erforscht."
+ }
+}

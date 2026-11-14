@@ -100,24 +100,24 @@
   "de": "Wirksamkeit der kolonialen [concept_assimilation]"
  },
  "country_colonial_assim_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Kulturelle [concept_assimilation]“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze und Technologien beisteuern, solange die Politik „Kulturelle [concept_assimilation]“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und jeder beitragenden Technologie und in der Vorschau der Politik-Schaltfläche."
  },
  "country_colonial_garrison_effectiveness_add": {
   "en": "Colonial Garrison Effectiveness",
   "de": "Wirksamkeit der kolonialen Garnison"
  },
  "country_colonial_garrison_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Militärgarnison“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze und Technologien beisteuern, solange die Politik „Militärgarnison“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und jeder beitragenden Technologie und in der Vorschau der Politik-Schaltfläche."
  },
  "country_colonial_invest_effectiveness_add": {
   "en": "Colonial Investment Effectiveness",
   "de": "Wirksamkeit der kolonialen Investition"
  },
  "country_colonial_invest_effectiveness_add_desc": {
-  "en": "Per-month colonial-stability bonus contributed by laws while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law's tooltip and in the policy button's preview.",
-  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze beisteuern, solange die Politik „Investition in die Entwicklung“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und in der Vorschau der Politik-Schaltfläche."
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "de": "Monatlicher Bonus auf die koloniale Stabilität, den Gesetze und Technologien beisteuern, solange die Politik „Investition in die Entwicklung“ aktiv ist. Wird von der Leiste für [concept_colonial_stability] ausgelesen; sichtbar im Tooltip jedes beitragenden Gesetzes und jeder beitragenden Technologie und in der Vorschau der Politik-Schaltfläche."
  },
  "country_colonial_stability_drift_add": {
   "en": "[concept_colonial_stability] Drift",
@@ -262,6 +262,14 @@
  "country_economic_dependence_leverage_gain_mult_desc": {
   "en": "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market].",
   "de": "Ein Multiplikator für den [concept_power_bloc_leverage], der daraus entsteht, wie stark ein anderes [concept_country] von unserem [concept_market] abhängt."
+ },
+ "country_enactment_speed_law_multicultural_mult": {
+  "en": "Enactment Speed for [GetLawType('law_multicultural').GetName]",
+  "de": "Verabschiedungsgeschwindigkeit für [GetLawType('law_multicultural').GetName]"
+ },
+ "country_enactment_speed_law_multicultural_mult_desc": {
+  "en": "An increase or decrease to the speed of legislative enactments for the specific law",
+  "de": "Eine Erhöhung oder Senkung der Geschwindigkeit gesetzgeberischer Verabschiedungen für das jeweilige Gesetz"
  },
  "country_enactment_success_chance_law_compulsory_primary_school_add": {
   "en": "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]",

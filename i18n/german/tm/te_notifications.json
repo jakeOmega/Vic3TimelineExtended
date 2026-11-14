@@ -111,6 +111,14 @@
   "en": "Propaganda Countered",
   "de": "Propaganda gekontert"
  },
+ "notification_covert_backlash_public_notice_desc": {
+  "en": "The exposure of an operation by #b [SCOPE.sCountry('iw_exposed_by').GetName]#! has turned public anger on its friends at home. The interest groups in the lobby that favors it gain $covert_foreign_ties_discredited$ and lose [concept_political_strength] for a time.",
+  "de": "Die Aufdeckung einer Operation von #b [SCOPE.sCountry('iw_exposed_by').GetAltName('VON')]#! hat den Volkszorn auf ihre Freunde im Inland gelenkt. Die Interessengruppen in der Lobby, die sie begünstigt, erhalten $covert_foreign_ties_discredited$ und verlieren zeitweise [concept_political_strength]."
+ },
+ "notification_covert_backlash_public_notice_name": {
+  "en": "Anger at Foreign Friends",
+  "de": "Zorn auf Freunde im Ausland"
+ },
  "notification_covert_catch_watched_notice_desc": {
   "en": "Our counterintelligence has caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [GetPlayer.GetCustom('covert_caught_type_name')] against us. Under our standing order it is letting the operation run and watching it. It is listed under Known Foreign Operations, where we can expose it at any time.",
   "de": "Unsere Spionageabwehr hat Agenten #b [SCOPE.sCountry('iw_catcher_attacker').GetAltName('GEN')]#! dabei ertappt, wie sie [GetPlayer.GetCustom('covert_caught_type_name')] gegen uns durchführen. Gemäß unserer Dauerweisung lässt sie die Operation weiterlaufen und beobachtet sie. Sie ist unter „Bekannte ausländische Operationen“ aufgeführt, wo wir sie jederzeit enttarnen können."
@@ -126,6 +134,14 @@
  "notification_covert_exposure_expelled_notice_name": {
   "en": "Operation Exposed, Diplomats Expelled",
   "de": "Operation enttarnt, Diplomaten ausgewiesen"
+ },
+ "notification_covert_exposure_repeat_notice_desc": {
+  "en": "Our counterintelligence has exposed another operation run against us by #b [SCOPE.sCountry('iw_exposed_by').GetName]#!: $covert_exposed_op_link$. It is over.",
+  "de": "Unsere Spionageabwehr hat eine weitere gegen uns geführte Operation von #b [SCOPE.sCountry('iw_exposed_by').GetAltName('VON')]#! aufgedeckt: $covert_exposed_op_link$. Sie ist beendet."
+ },
+ "notification_covert_exposure_repeat_notice_name": {
+  "en": "Another Operation Exposed",
+  "de": "Weitere Operation aufgedeckt"
  },
  "notification_covert_exposure_shored_notice_desc": {
   "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and our counterintelligence is on alert.",
@@ -158,6 +174,46 @@
  "notification_decentralized_claims_renounced_name": {
   "en": "Colonial Claims Renounced",
   "de": "Koloniale Ansprüche aufgegeben"
+ },
+ "notification_decol_border_claim_pressed_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] demands that the border between us be redrawn and now claims [SCOPE.sState('rival_border_state').GetName]. Our relations fall by 40.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] verlangt, dass die Grenze zwischen uns neu gezogen wird, und erhebt nun Anspruch auf [SCOPE.sState('rival_border_state').GetName]. Unsere Beziehungen sinken um 40."
+ },
+ "notification_decol_border_claim_pressed_notice_name": {
+  "en": "A Claim on Our Border",
+  "de": "Anspruch auf unsere Grenze"
+ },
+ "notification_decol_border_mediation_lost_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for it. It now claims [SCOPE.sState('rival_border_state').GetName], and our relations fall by 10.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler gaben dem Land recht. Es erhebt nun Anspruch auf [SCOPE.sState('rival_border_state').GetName], und unsere Beziehungen sinken um 10."
+ },
+ "notification_decol_border_mediation_lost_notice_name": {
+  "en": "The Mediators Find Against Us",
+  "de": "Die Vermittler entscheiden gegen uns"
+ },
+ "notification_decol_border_mediation_split_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators split the difference. Neither of us gains a claim, and our relations rise by 10.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler einigten sich auf einen Kompromiss. Keiner von uns gewinnt einen Anspruch, und unsere Beziehungen steigen um 10."
+ },
+ "notification_decol_border_mediation_split_notice_name": {
+  "en": "The Border Is Mediated",
+  "de": "Die Grenze wird vermittelt"
+ },
+ "notification_decol_border_mediation_won_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for us. We now claim [SCOPE.sState('disputed_state').GetName].",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler gaben uns recht. Wir erheben nun Anspruch auf [SCOPE.sState('disputed_state').GetName]."
+ },
+ "notification_decol_border_mediation_won_notice_name": {
+  "en": "The Mediators Find for Us",
+  "de": "Die Vermittler entscheiden für uns"
+ },
+ "notification_decol_collapse_aftershock_notice_desc": {
+  "en": "The colonial empire of [SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has collapsed. We gain $colonial_collapse_subject_unrest_modifier$ for 20 years, and our relations with it fall by 50.",
+  "de": "Das Kolonialreich [SCOPE.sCountry('decol_colonial_power').GetAltName('GEN')], unseres [Concept('concept_overlord', 'Suzeräns')], ist zusammengebrochen. Wir erhalten 20 Jahre lang $colonial_collapse_subject_unrest_modifier$, und unsere Beziehungen zu diesem Land sinken um 50."
+ },
+ "notification_decol_collapse_aftershock_notice_name": {
+  "en": "Our Overlord's Empire Collapses",
+  "de": "Das Reich unseres Suzeräns bricht zusammen"
  },
  "notification_decol_iw_accords_notice_desc": {
   "en": "The talks with [SCOPE.sCountry('decol_iw_talks_rebels').GetName] have reached terms: our claim is dropped, and the war can end in a white peace. Offer one from the peace screen.",
@@ -238,6 +294,14 @@
  "notification_decol_iw_war_won_rebels_notice_name": {
   "en": "Independence Won",
   "de": "Unabhängigkeit errungen"
+ },
+ "notification_decol_liberation_contagion_notice_desc": {
+  "en": "[SCOPE.sCountry('decolonized_new_country').GetName] has broken free of [SCOPE.sCountry('decolonizing_parent').GetName], and our own colonies have taken note. We gain $colonial_stability_negative_event$ for a year: our colonial stability falls by 1 a month.",
+  "de": "[SCOPE.sCountry('decolonized_new_country').GetAltName('NOM')|U] hat sich [SCOPE.sCountry('decolonizing_parent').GetAltName('VON')] befreit, und unsere eigenen Kolonien haben es zur Kenntnis genommen. Wir erhalten ein Jahr lang $colonial_stability_negative_event$: Unsere Koloniale Stabilität sinkt um 1 pro Monat."
+ },
+ "notification_decol_liberation_contagion_notice_name": {
+  "en": "Independence Spreads",
+  "de": "Die Unabhängigkeit breitet sich aus"
  },
  "notification_decol_truce_proposal_accepted_notice_desc": {
   "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
@@ -366,6 +430,22 @@
  "notification_gp_condemnation_rejected_notice_name": {
   "en": "Condemnation Rejected",
   "de": "Verurteilung zurückgewiesen"
+ },
+ "notification_gp_intervention_condemned_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_condemning_power').GetName] has condemned our intervention in [SCOPE.sCountry('intervention_victim').GetName]. We gain $gp_intervention_condemned_modifier$ for five years, fading, and its relations with us fall by 40.",
+  "de": "[SCOPE.sCountry('decol_condemning_power').GetAltName('NOM')|U] hat unsere Intervention [SCOPE.sCountry('intervention_victim').GetAltName('IN')] verurteilt. Wir erhalten fünf Jahre lang $gp_intervention_condemned_modifier$, abklingend, und die Beziehungen dieses Landes zu uns sinken um 40."
+ },
+ "notification_gp_intervention_condemned_notice_name": {
+  "en": "Our Intervention Condemned",
+  "de": "Unsere Intervention wird verurteilt"
+ },
+ "notification_gp_intervention_target_notice_desc": {
+  "en": "[SCOPE.sCountry('intervening_power').GetName] has answered our nationalization with a military intervention. We gain $gp_intervention_target_modifier$ for ten years, fading, and its relations with us fall by 100.",
+  "de": "[SCOPE.sCountry('intervening_power').GetAltName('NOM')|U] hat auf unsere Verstaatlichung mit einer militärischen Intervention geantwortet. Wir erhalten zehn Jahre lang $gp_intervention_target_modifier$, abklingend, und die Beziehungen dieses Landes zu uns sinken um 100."
+ },
+ "notification_gp_intervention_target_notice_name": {
+  "en": "Foreign Troops Land",
+  "de": "Fremde Truppen landen"
  },
  "notification_gp_support_accepted_notice_desc": {
   "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defense of the colonial powers.",
@@ -1759,6 +1839,14 @@
   "en": "[concept_nuclear_strike] Successful",
   "de": "[concept_nuclear_strike] erfolgreich"
  },
+ "notification_irr_cultural_ties_notice_desc": {
+  "en": "[SCOPE.sCountry('irr_ties_funder').GetName] is paying for schools, presses and libraries that tie our people to theirs. Our relations rise by 15, and we gain $irr_cultural_ties_modifier$ for 5 years, fading.",
+  "de": "[SCOPE.sCountry('irr_ties_funder').GetAltName('NOM')|U] bezahlt Schulen, Druckereien und Bibliotheken, die unser Volk mit dem ihren verbinden. Unsere Beziehungen steigen um 15, und wir erhalten 5 Jahre lang $irr_cultural_ties_modifier$, abklingend."
+ },
+ "notification_irr_cultural_ties_notice_name": {
+  "en": "Cultural Ties Funded",
+  "de": "Kulturelle Bindungen finanziert"
+ },
  "notification_iw_election_interference_confidence_desc": {
   "en": "Foreign intelligence services have undermined public confidence in our electoral process. [concept_electoral_confidence] has been reduced.",
   "de": "Ausländische Geheimdienste haben das öffentliche Vertrauen in unseren Wahlprozess untergraben. [concept_electoral_confidence] wurde verringert."
@@ -1983,6 +2071,30 @@
   "en": "Sex Education Ended",
   "de": "Sexualaufklärung beendet"
  },
+ "notification_te_law_replaced_notice_desc": {
+  "en": "One of our laws could no longer stand with our other laws or with what we have researched. [SCOPE.sLaw('te_law_sweep_new_law').GetName] has taken its place.",
+  "de": "Eines unserer Gesetze konnte neben unseren anderen Gesetzen oder dem, was wir erforscht haben, nicht mehr bestehen. [SCOPE.sLaw('te_law_sweep_new_law').GetName] ist an seine Stelle getreten."
+ },
+ "notification_te_law_replaced_notice_name": {
+  "en": "A Law Replaced",
+  "de": "Ein Gesetz ersetzt"
+ },
+ "notification_te_mon_swap_repaid_notice_desc": {
+  "en": "Our $swap_line$ to [SCOPE.sCountry('te_mon_swap_settle_recipient').GetName] has ended, and it has repaid the whole balance it had drawn in one payment: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#!.",
+  "de": "Unsere $swap_line$ zu [SCOPE.sCountry('te_mon_swap_settle_recipient').GetAltName('DAT')] ist ausgelaufen, und das Land hat den gesamten abgerufenen Restbetrag in einer Zahlung zurückgezahlt: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#!."
+ },
+ "notification_te_mon_swap_repaid_notice_name": {
+  "en": "Swap Line Repaid",
+  "de": "Swap-Linie zurückgezahlt"
+ },
+ "notification_te_mon_swap_settled_notice_desc": {
+  "en": "Our $swap_line$ from [SCOPE.sCountry('te_mon_swap_settle_provider').GetName] has ended, and the whole balance we had drawn fell due at once: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#! has gone from our treasury to theirs.",
+  "de": "Unsere $swap_line$ [SCOPE.sCountry('te_mon_swap_settle_provider').GetAltName('VON')] ist ausgelaufen, und der gesamte abgerufene Restbetrag wurde auf einmal fällig: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#! sind aus unserer Staatskasse in die des Partnerlandes geflossen."
+ },
+ "notification_te_mon_swap_settled_notice_name": {
+  "en": "Swap Line Called In",
+  "de": "Swap-Linie gekündigt"
+ },
  "notification_te_seabed_basin_full_notice_arctic_desc": {
   "en": "Every [concept_seabed_licence] in the $te_seabed_basin_arctic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] in der $te_seabed_basin_arctic$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
@@ -2103,6 +2215,14 @@
   "en": "Article 19: Our Vote Is Lost",
   "de": "Artikel 19: Unser Stimmrecht ist verloren"
  },
+ "notification_un_bloc_vacuum_notice_desc": {
+  "en": "The United Nations is Moribund or gone, and the power blocs fill the space it leaves. Our bloc gains $un_bloc_vacuum_modifier$ until a working United Nations returns.",
+  "de": "Die Vereinten Nationen sind „Marode“ oder verschwunden, und die Machtblöcke füllen den Raum, den sie hinterlassen. Unser Block erhält $un_bloc_vacuum_modifier$, bis wieder funktionierende Vereinte Nationen entstehen."
+ },
+ "notification_un_bloc_vacuum_notice_name": {
+  "en": "Blocs Fill the Vacuum",
+  "de": "Blöcke füllen das Vakuum"
+ },
  "notification_un_charter_reform_ripe_notice_desc": {
   "en": "UN authority has held within five points of the Charter's ceiling for two years. The next charter reform can now be tabled in the General Assembly chamber.",
   "de": "Die UN-Autorität hat sich zwei Jahre lang innerhalb von fünf Punkten der Charta-Obergrenze gehalten. Die nächste Chartareform kann nun im Plenarsaal der Generalversammlung eingebracht werden."
@@ -2159,6 +2279,14 @@
   "en": "The United Nations in Crisis",
   "de": "Die Vereinten Nationen in der Krise"
  },
+ "notification_un_decolonization_pressure_notice_desc": {
+  "en": "The [concept_un_general_assembly] has adopted a declaration against colonial rule. As a country that holds overseas colonies, we gain $un_decolonization_pressure_modifier$ for 5 years, fading.",
+  "de": "Die [concept_un_general_assembly] hat eine Erklärung gegen die Kolonialherrschaft angenommen. Als Land mit Überseekolonien erhalten wir 5 Jahre lang $un_decolonization_pressure_modifier$, abklingend."
+ },
+ "notification_un_decolonization_pressure_notice_name": {
+  "en": "The Decolonization Declaration",
+  "de": "Die Dekolonisierungserklärung"
+ },
  "notification_un_dev_fund_contribution_lapsed_notice_desc": {
   "en": "Our contribution to UN development programs has ended: no [concept_un_development_fund] stands to pay its grants, so the money reached no one. We can contribute again once the [concept_un_general_assembly] founds the Fund.",
   "de": "Unser Beitrag zu den Entwicklungsprogrammen der UN ist beendet: Es besteht kein [concept_un_development_fund], der seine Zuschüsse auszahlt, daher erreichte das Geld niemanden. Wir können wieder beitragen, sobald die [concept_un_general_assembly] den Fonds gründet."
@@ -2166,6 +2294,14 @@
  "notification_un_dev_fund_contribution_lapsed_notice_name": {
   "en": "Development Programs Contribution Ended",
   "de": "Beitrag zu Entwicklungsprogrammen beendet"
+ },
+ "notification_un_dissolution_vacuum_notice_desc": {
+  "en": "The United Nations has dissolved. Our power bloc gains $un_dissolution_vacuum_modifier$ for 10 years, fading.",
+  "de": "Die Vereinten Nationen haben sich aufgelöst. Unser Machtblock erhält 10 Jahre lang $un_dissolution_vacuum_modifier$, abklingend."
+ },
+ "notification_un_dissolution_vacuum_notice_name": {
+  "en": "The Blocs After the United Nations",
+  "de": "Die Blöcke nach den Vereinten Nationen"
  },
  "notification_un_floor_open_notice_desc": {
   "en": "The General Assembly's recess is over. Every member may table business again.",
@@ -2207,6 +2343,14 @@
   "en": "A War Goal Struck",
   "de": "Ein Kriegsziel gestrichen"
  },
+ "notification_un_headquarters_host_notice_desc": {
+  "en": "The United Nations has moved its headquarters to our country: its last host no longer holds it. We gain $un_headquarters_modifier$ for as long as we host it, and only we may build the $building_un_headquarters$.",
+  "de": "Die Vereinten Nationen haben ihren Hauptsitz in unser Land verlegt: Der bisherige Gastgeber hat ihn nicht mehr. Wir erhalten $un_headquarters_modifier$, solange wir ihn beherbergen, und nur wir dürfen das Gebäude $building_un_headquarters$ errichten."
+ },
+ "notification_un_headquarters_host_notice_name": {
+  "en": "The UN Headquarters Comes to Us",
+  "de": "Der UN-Hauptsitz kommt zu uns"
+ },
  "notification_un_humanitarian_token_received_desc": {
   "en": "[SCOPE.sCountry('aid_donor').GetName] has provided modest humanitarian assistance to help address the ongoing crisis.",
   "de": "[SCOPE.sCountry('aid_donor').GetAltName('NOM')|U] hat bescheidene humanitäre Hilfe geleistet, um die anhaltende Krise zu bewältigen."
@@ -2214,6 +2358,14 @@
  "notification_un_humanitarian_token_received_name": {
   "en": "Humanitarian Assistance Received",
   "de": "Humanitäre Hilfe erhalten"
+ },
+ "notification_un_league_becomes_un_notice_desc": {
+  "en": "A country has researched $intergovernmental_organizations$, and the League of Nations is now the United Nations. Its charter can be reformed from now on.",
+  "de": "Ein Land hat $intergovernmental_organizations$ erforscht, und aus dem Völkerbund sind nun die Vereinten Nationen geworden. Ihre Charta kann von jetzt an reformiert werden."
+ },
+ "notification_un_league_becomes_un_notice_name": {
+  "en": "The League Becomes the United Nations",
+  "de": "Der Völkerbund wird zu den Vereinten Nationen"
  },
  "notification_un_mission_aid_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. UN delivery falls.",

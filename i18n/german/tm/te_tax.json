@@ -28,8 +28,8 @@
   "de": "Gesetzliche Steuerordnung"
  },
  "law_te_tax_code_desc": {
-  "en": "This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected.",
-  "de": "Dieses Gesetz legt selbst keine Sätze fest. Jede Steuer wird durch einen Nachtrag dazu festgelegt, und eine Steuer ohne Nachtrag wird nicht erhoben."
+  "en": "This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected. To change a tax, open the Budget panel's Tax Code tab and draft a reform.",
+  "de": "Dieses Gesetz legt selbst keine Sätze fest. Jede Steuer wird durch einen Nachtrag dazu festgelegt, und eine Steuer ohne Nachtrag wird nicht erhoben. Um eine Steuer zu ändern, öffnen Sie den Reiter „Steuerordnung“ der Etat-Tafel und entwerfen Sie eine Reform."
  },
  "rule_te_tax_code_rule": {
   "en": "Legislated Tax Code",
@@ -56,16 +56,16 @@
   "de": "Experimentell. Wie „Steuerordnung aktiviert“, und auch Zölle und Subventionen werden per Gesetz festgelegt: Ein Land, das Marktbesitzer ist, legt seine Import- und Exportstufen wie jede Steuer per Gesetz fest. KI-Länder legen ihre Steuern über dieselben Vorlagen fest; ihre Zölle folgen weiterhin den Handelsentscheidungen des Grundspiels."
  },
  "setting_te_tax_code_enabled_desc": {
-  "en": "Experimental. The five base game taxation laws can no longer be enacted. Every country holds the Legislated Tax Code instead, a law with no rates of its own, and each tax is set by an amendment to it. Tariffs and subsidies stay as in the base game. AI countries legislate through the same bills, which need the same interest-group support.",
-  "de": "Experimentell. Die fünf Steuergesetze des Grundspiels können nicht mehr erlassen werden. Stattdessen gilt in jedem Land die Gesetzliche Steuerordnung, ein Gesetz ohne eigene Sätze, und jede Steuer wird durch einen Nachtrag dazu festgelegt. Zölle und Subventionen bleiben wie im Grundspiel. KI-Länder legen ihre Steuern über dieselben Vorlagen fest, die dieselbe Unterstützung der Interessengruppen brauchen."
+  "en": "Experimental. Every country holds the Legislated Tax Code in place of a taxation law. To change a tax, draft a reform on the Budget panel's Tax Code tab and pass it as a bill. Tariffs and subsidies stay as in the base game. AI countries legislate through the same bills.",
+  "de": "Experimentell. Jedes Land hat die Gesetzliche Steuerordnung anstelle eines Steuergesetzes. Um eine Steuer zu ändern, entwerfen Sie im Reiter „Steuerordnung“ der Etat-Tafel eine Reform und bringen sie als Vorlage durch. Zölle und Subventionen bleiben wie im Grundspiel. KI-Länder legen ihre Steuern über dieselben Vorlagen fest."
  },
  "setting_te_tax_code_light": {
   "en": "Light Tax Code",
   "de": "Leichte Steuerordnung"
  },
  "setting_te_tax_code_light_desc": {
-  "en": "Experimental. The five taxation laws stay. Each sets a range for every tax it levies, from its rate at a Very Low tax level to its rate at Very High, and within that range you set each tax yourself on the Tax Code tab of the Budget panel, with no bills; collections follow a change within days. Your tax level follows your heaviest tax, and interest groups react to each change and favor a code that spares their members. AI countries keep choosing their tax level as in the base game, and their taxes follow it.",
-  "de": "Experimentell. Die fünf Steuergesetze bleiben bestehen. Jedes legt für jede Steuer, die es erhebt, eine Spanne fest, von seinem Satz bei der Besteuerungsstufe „Sehr niedrig“ bis zu seinem Satz bei „Sehr hoch“, und innerhalb dieser Spanne legen Sie jede Steuer selbst fest, und zwar im Reiter „Steuerordnung“ der Etat-Tafel, ohne Vorlagen; die Einnahmen folgen einer Änderung binnen weniger Tage. Ihre Besteuerungsstufe richtet sich nach Ihrer schwersten Steuer, und Interessengruppen reagieren auf jede Änderung und bevorzugen eine Ordnung, die ihre Mitglieder schont. KI-Länder wählen ihre Besteuerungsstufe weiterhin wie im Basisspiel, und ihre Steuern folgen dieser."
+  "en": "Experimental. The five taxation laws stay, each setting a range for every tax it levies. Within it you set each tax yourself on the Budget panel's Tax Code tab, with no bills, and your tax level follows your heaviest tax. AI countries keep choosing their tax level as in the base game.",
+  "de": "Experimentell. Die fünf Steuergesetze bleiben bestehen, und jedes legt für jede Steuer, die es erhebt, eine Spanne fest. Innerhalb davon legen Sie jede Steuer selbst im Reiter „Steuerordnung“ der Etat-Tafel fest, ohne Vorlagen, und Ihre Besteuerungsstufe richtet sich nach Ihrer schwersten Steuer. KI-Länder wählen ihre Besteuerungsstufe weiterhin wie im Basisspiel."
  },
  "te_tax_bs_support_value": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_committed_share')|%0]#!, more than [GetPlayer.MakeScope.ScriptValue('te_tax_view_passage_share')|%0] needed",

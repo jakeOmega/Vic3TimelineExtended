@@ -871,6 +871,10 @@
   "en": "Requires [GetLawType('law_ministry_of_culture').GetName].",
   "de": "Erfordert [GetLawType('law_ministry_of_culture').GetName]."
  },
+ "CH_REQUIRES_TELEGRAPH_TT": {
+  "en": "Requires [GetTechnology('electric_telegraph').GetName] or [GetTechnology('mass_media').GetName].",
+  "de": "Erfordert [GetTechnology('electric_telegraph').GetName] oder [GetTechnology('mass_media').GetName]."
+ },
  "CH_WORLD_EXPOSITION_DESC": {
   "en": "Dedicate state resources to sustained cultural projection abroad — touring shows, foreign cultural centers, sponsored translations. Costs scale with GDP while the program runs.",
   "de": "Widmet staatliche Mittel einer dauerhaften kulturellen Ausstrahlung im Ausland — Gastspielreisen, ausländische Kulturzentren, geförderte Übersetzungen. Die Kosten steigen mit dem BIP, solange das Programm läuft."
@@ -2300,8 +2304,8 @@
   "de": "Die manuelle Steuerung reichte nicht aus. Eine harte Landung beschädigte die Ausrüstung und warf das Programm zurück."
  },
  "SR_MANUAL_OVERRIDE_SUCCESS_TT": {
-  "en": "The pilot seized manual control and brought the lander down safely: a remarkable feat of skill under pressure.",
-  "de": "Der Pilot übernahm die manuelle Steuerung und brachte die Landefähre sicher herunter: eine bemerkenswerte Leistung unter Druck."
+  "en": "The pilot took manual control and brought the lander down safely.",
+  "de": "Der Pilot übernahm die manuelle Steuerung und brachte die Landefähre sicher herunter."
  },
  "SR_MARS_DIRECT_CHOSEN_TT": {
   "en": "We will attempt a direct landing on Mars: bold, fast, and high-risk. The dramatic moment will yield [concept_prestige] and cultural influence for ten years, fading over that time.",
@@ -2366,6 +2370,10 @@
  "SR_PROBE_MARS_CHOSEN_TT": {
   "en": "Our probe will target Mars, searching for evidence of water and past life. The Mars survey will yield [concept_prestige] and the strongest boost to our space-race progress for ten years, fading over that time.",
   "de": "Unsere Sonde wird den Mars anvisieren und nach Spuren von Wasser und früherem Leben suchen. Die Mars-Erkundung bringt zehn Jahre lang [concept_prestige] und den stärksten Schub für unseren Fortschritt im Wettlauf ins All und klingt dabei allmählich ab."
+ },
+ "SR_PROBE_TOUR_CHOSEN_TT": {
+  "en": "Our probe will pass Jupiter and go on to the planets beyond it. Until the milestone is finished it costs #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_tour_probe')|0]#! innovation a week on top of funding (as much as two more funding levels), whatever the approach. Its data will speed our research and the space-race program, raise our innovation cap and yield [concept_prestige] for twenty years, fading over that time.",
+  "de": "Unsere Sonde passiert Jupiter und fliegt weiter zu den Planeten dahinter. Bis der Meilenstein abgeschlossen ist, kostet sie zusätzlich zur Finanzierung #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_tour_probe')|0]#! Innovation pro Woche (so viel wie zwei weitere Finanzierungsstufen), unabhängig vom Anflug. Ihre Daten beschleunigen unsere Forschung und das Programm für den Weltraumwettlauf, erhöhen unsere Innovationsobergrenze und bringen zwanzig Jahre lang [concept_prestige] ein, das in dieser Zeit abklingt."
  },
  "SR_PROBE_VENUS_CHOSEN_TT": {
   "en": "Our probe will target Venus, studying its atmosphere and greenhouse dynamics. The atmospheric data will accelerate our research and the wider space-race program for ten years, fading over that time.",
@@ -2464,8 +2472,8 @@
   "de": "Windscherung überforderte das Leitsystem. Der Start wurde auf der Rampe abgebrochen."
  },
  "SR_WEATHER_LAUNCH_SUCCESS_TT": {
-  "en": "The vehicle threaded the gap in the weather and reached orbit successfully.",
-  "de": "Das Fahrzeug nutzte das Wetterfenster und erreichte erfolgreich die Umlaufbahn."
+  "en": "The vehicle launched through the gap in the weather and flew as planned.",
+  "de": "Das Fahrzeug startete durch die Lücke im Wetter und flog wie geplant."
  },
  "STANDARD_OF_LIVING_LEVEL_101": {
   "en": "Extremely Opulent",
@@ -3528,8 +3536,8 @@
   "de": "Direkter Bau"
  },
  "TE_DC_SECTION_INTRO": {
-  "en": "With the Free Market Construction game rule off, construction works as in the base game: it comes from your $te_construction_market_site$ buildings, which you build from a state's view and expand like any government building.",
-  "de": "Bei deaktivierter Spielregel Freie Marktbauwirtschaft funktioniert der Bau wie im Basisspiel: Er stammt aus Ihren $te_construction_market_site$-Gebäuden, die Sie über die Staatenansicht errichten und wie jedes staatliche Gebäude erweitern."
+  "en": "With the Free Market Construction game rule off, construction works as in the base game: it comes from your $te_construction_market_site$ buildings, which you build from the $development_lens_tab$ tab of the [concept_production_lens] or from a state's view and expand like any government building.",
+  "de": "Bei deaktivierter Spielregel Freie Marktbauwirtschaft funktioniert der Bau wie im Basisspiel: Er stammt aus Ihren $te_construction_market_site$-Gebäuden, die Sie im Reiter $development_lens_tab$ der Ansicht [concept_production_lens] oder über die Staatenansicht errichten und wie jedes staatliche Gebäude erweitern."
  },
  "TE_DC_STAT_CAPACITY": {
   "en": "Construction: @construction! #v [GetPlayer.MakeScope.ScriptValue('te_direct_construction_display_capacity')|1]#! per week",
@@ -3548,8 +3556,8 @@
   "de": "#header Privatbau#!\\nWie im Basisspiel legt Ihr Wirtschaftssystem-[concept_law] den Anteil des Baus fest, der privaten Projekten zugewiesen und aus dem [concept_investment_pool] finanziert wird:\\n$law_traditionalism$: 25%\\n$law_interventionism$, $law_agrarianism$, $law_extraction_economy$, $law_industry_banned$: 50%\\n$law_laissez_faire$: 75%\\n$law_cooperative_ownership$: 35%\\n$law_command_economy$: 10%\\n\\nWeitere Modifikatoren können ihn erhöhen. Wenn eine Warteschlange ihren Anteil in einer Woche nicht nutzen kann, kann die andere den Rest nutzen."
  },
  "TE_EA_IR_AGENT_CAUGHT_TT": {
-  "en": "The agent is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with him, and when we hear of it his reports stop.",
-  "de": "Der Agent wird gefasst: [SCOPE.sCountry('espionage_catcher').GetName] entscheidet, was mit ihm geschieht, und sobald wir davon erfahren, enden seine Meldungen."
+  "en": "The clerk is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with our source, and when we hear of it the reports stop.",
+  "de": "Der Schreiber wird gefasst: [SCOPE.sCountry('espionage_catcher').GetAltName('NOM')|U] entscheidet, was mit unserer Quelle geschieht, und sobald wir davon erfahren, enden die Meldungen."
  },
  "TE_EA_IR_AGENT_UNDETECTED_TT": {
   "en": "The agent works undetected.",
@@ -3572,8 +3580,8 @@
   "de": "Die Analysten von [SCOPE.sCountry('interference_target').GetName] werden die Kampagne bemerken und auf uns zurückführen, und ihre Regierung wird entscheiden, wie darauf zu reagieren ist."
  },
  "TE_EA_IR_PROPAGANDA_RIVAL_TT": {
-  "en": "[SCOPE.sCountry('propaganda_instigator').GetName] will hear the broadcasts and decide whether to answer them.",
-  "de": "[SCOPE.sCountry('propaganda_instigator').GetName] wird die Sendungen hören und entscheiden, ob darauf reagiert wird."
+  "en": "[SCOPE.sCountry('propaganda_instigator').GetName] will read the campaign in the foreign press and decide whether to answer it.",
+  "de": "[SCOPE.sCountry('propaganda_instigator').GetAltName('NOM')|U] wird die Kampagne in der ausländischen Presse lesen und entscheiden, ob darauf reagiert wird."
  },
  "TE_FX_SHOCK_MINUS_10_DESC": {
   "en": "The currency weakens: #v Exchange Rate Index#! about #R −10#! over the coming year, fading after",
@@ -4232,8 +4240,8 @@
   "de": "Stellt unser Gewicht gegen die Vereinten Nationen und behauptet unsere souveräne Unabhängigkeit. Solange wir das tun, zählen wir gegen ihre Säule #R Engagement#!, im Verhältnis zu unserem [concept_un_weight], was das Ziel senkt, dem sich die [concept_un_authority] annähert."
  },
  "UN_VOTE_ACCEPT_TARGET_TT": {
-  "en": "Acknowledge the resolution and accept its verdict. If it passes, it lands more softly on us: a condemnation or sanctions do not take effect, an arms embargo becomes the voluntary one, and a suspension of our credentials, a ceasefire order or the cost of fighting on under one costs less standing; a referendum can then not be refused. International observers read the gesture as performative, and the regime visibly loses face at home.",
-  "de": "Nimmt die Resolution zur Kenntnis und akzeptiert ihr Urteil. Bei Annahme trifft sie uns glimpflicher: Eine Verurteilung oder Sanktionen treten nicht in Kraft, ein Waffenembargo wird zum freiwilligen, und eine Aussetzung unserer Vollmachten, eine Waffenstillstandsanordnung oder die Kosten, unter einer solchen weiterzukämpfen, kosten weniger Ansehen; ein Referendum kann dann nicht abgelehnt werden. Internationale Beobachter deuten die Geste als Schauspiel, und das Regime verliert innenpolitisch sichtbar an Gesicht."
+  "en": "Acknowledge the resolution and accept its verdict. If it passes, it lands more softly on us: a condemnation or sanctions do not take effect, an arms embargo becomes the voluntary one, and a suspension of our credentials, a ceasefire order or the cost of fighting on under one costs less standing; a referendum can then not be refused, nor a World Court ruling defied. International observers read the gesture as performative, and the regime visibly loses face at home.",
+  "de": "Nimmt die Resolution zur Kenntnis und akzeptiert ihr Urteil. Bei Annahme trifft sie uns glimpflicher: Eine Verurteilung oder Sanktionen treten nicht in Kraft, ein Waffenembargo wird zum freiwilligen, und eine Aussetzung unserer Vollmachten, eine Waffenstillstandsanordnung oder die Kosten, unter einer solchen weiterzukämpfen, kosten weniger Ansehen; ein Referendum kann dann nicht abgelehnt werden, und ein Urteil des Internationalen Gerichtshofs kann nicht missachtet werden. Internationale Beobachter deuten die Geste als Schauspiel, und das Regime verliert innenpolitisch sichtbar an Gesicht."
  },
  "UN_VOTE_AGAINST_TT": {
   "en": "Cast our vote #bold against#! the resolution.",
@@ -4467,6 +4475,10 @@
   "en": "Rebuked by the United Nations",
   "de": "Von den Vereinten Nationen gerügt"
  },
+ "WAR_SUPPORT_TE_WW_AIR_RAIDS": {
+  "en": "Air raids on our cities (World War)",
+  "de": "Luftangriffe auf unsere Städte (Weltkrieg)"
+ },
  "WAR_SUPPORT_TE_WW_HOME_FRONT_STRAIN": {
   "en": "Home front strain (World War)",
   "de": "Belastung der Heimatfront (Weltkrieg)"
@@ -4567,6 +4579,10 @@
   "en": "Ideological tension of #v 30%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)",
   "de": "Ideologische Spannungen von #v 30%#! oder mehr (derzeit #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)"
  },
+ "WW_REQ_TRENCH_WORKS_TT": {
+  "en": "[GetTechnology('trench_works').GetName] or [GetTechnology('combined_arms').GetName] researched",
+  "de": "[GetTechnology('trench_works').GetName] oder [GetTechnology('combined_arms').GetName] erforscht"
+ },
  "WW_STOP_APPEASE_BUTTON": {
   "en": "End Appeasement",
   "de": "Beschwichtigung beenden"
@@ -4660,8 +4676,8 @@
   "de": "KI-gestützte Regierungsführung"
  },
  "ai_policing_banned_modifier": {
-  "en": "AI Policing Banned",
-  "de": "KI-Polizeiarbeit verboten"
+  "en": "Predictive Policing Banned",
+  "de": "Vorausschauende Polizeiarbeit verboten"
  },
  "ai_strategy_un_mandate": {
   "en": "Enforce the Mandate",
@@ -5066,6 +5082,10 @@
  "banking_cycle_value_bar_name": {
   "en": "[concept_banking_cycle] Value",
   "de": "[concept_banking_cycle]-Wert"
+ },
+ "banking_cycle_value_bar_second": {
+  "en": "frenzy",
+  "de": "Überschwang"
  },
  "banking_dash_active_header": {
   "en": "Active Policies",
@@ -7080,8 +7100,8 @@
   "de": "#title Jeden Monat:#!"
  },
  "banking_nonmod_open_market_ops_tt": {
-  "en": "$banking_nonmod_monthly_label$ adds #v 1#! percentage point to [concept_banking_price_pressure] while the programme runs.",
-  "de": "$banking_nonmod_monthly_label$ erhöht sich der [concept_banking_price_pressure], solange das Programm läuft, um #v 1#! Prozentpunkt."
+  "en": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_open_market_ops').GetDesc]\\nPlus #v 0.5%#! for each point [concept_banking_inflation] runs below its target, up to #v 5%#! in all: #v 3%#! with prices 4 points under target.",
+  "de": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_open_market_ops').GetDesc]\\nPlus #v 0,5%#! für jeden Punkt, um den die [concept_banking_inflation] unter ihrem Ziel liegt, insgesamt bis zu #v 5%#!: #v 3%#! bei Preisen 4 Punkte unter dem Ziel."
  },
  "banking_nonmod_restrict_inflows_tt": {
   "en": "$banking_nonmod_monthly_label$ any [concept_banking_gold_flow] coming in is #b halved#!, and so is the lift a real interest rate above the world's gives the [concept_banking_exchange_rate]. Nothing slows money or gold leaving.",
@@ -7266,6 +7286,10 @@
  "ce_unlock_colonies_tt": {
   "en": "Holds an overseas colony or a colonial subject",
   "de": "Besitzt eine Überseekolonie oder ein koloniales Klientelland"
+ },
+ "ce_unlock_no_civil_war_tt": {
+  "en": "Is not fighting a civil war of its own",
+  "de": "Führt keinen eigenen Bürgerkrieg"
  },
  "ce_unlock_no_collapse_tt": {
   "en": "The colonial system has not collapsed in the last ten years",
@@ -7607,6 +7631,10 @@
   "en": "Any country has researched $mass_media$",
   "de": "Ein beliebiges Land hat $mass_media$ erforscht"
  },
+ "ch_unlock_any_telegraph_tt": {
+  "en": "Any country has researched the $electric_telegraph$ or $mass_media$",
+  "de": "Ein Land hat $electric_telegraph$ oder $mass_media$ erforscht"
+ },
  "ch_world_exposition_cost": {
   "en": "Cultural Outreach Costs",
   "de": "Kosten der Kulturarbeit"
@@ -7846,6 +7874,10 @@
  "colonial_stability_bar_name": {
   "en": "Colonial Stability",
   "de": "Koloniale Stabilität"
+ },
+ "colonial_stability_bar_second": {
+  "en": "integrated at 100",
+  "de": "integriert bei 100"
  },
  "colonial_turmoil_penalty_tt": {
   "en": "Domestic [concept_turmoil] saps focus from the colonies (scales with country turmoil)",
@@ -8732,8 +8764,8 @@
   "de": "Koloniale Autonomie schüren"
  },
  "covert_incite_autonomy_extra_tt": {
-  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, every colony the target holds gains #v 0.5#! autonomy a month; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #v 1#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly gain to #v 2#!. A colony whose autonomy reaches #v 100#! breaks away and becomes a free colony.",
-  "de": "Auf der Erde geschieht nichts. Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, gewinnt jede Kolonie des Ziels im Monat #v 0,5#! Autonomie; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, #v 1#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht den monatlichen Zuwachs auf #v 2#!. Eine Kolonie, deren Autonomie #v 100#! erreicht, löst sich los und wird zu einer Freien Kolonie."
+  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, every colony of #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more the target holds gains #v 0.5#! autonomy a month; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #v 1#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly gain to #v 2#!. A colony whose autonomy reaches #v 100#! breaks away and becomes a free colony.",
+  "de": "Auf der Erde geschieht nichts. Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, gewinnt jede Kolonie des Ziels mit #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! Menschen oder mehr im Monat #v 0,5#! Autonomie; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, #v 1#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht den monatlichen Zuwachs auf #v 2#!. Eine Kolonie, deren Autonomie #v 100#! erreicht, löst sich los und wird zu einer Freien Kolonie."
  },
  "covert_industrial_espionage_action": {
   "en": "Covert: $iw_op_name_industrial_espionage$",
@@ -9052,8 +9084,8 @@
   "de": "Kolonie sabotieren"
  },
  "covert_sabotage_colony_extra_tt": {
-  "en": "From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, the target's most populous colony loses #R 1%#! of its people a month and gains #v 0.25#! autonomy; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #R 2%#! and #v 0.5#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly toll to #R 4%#! and #v 1#!.",
-  "de": "Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, verliert die bevölkerungsreichste Kolonie des Ziels im Monat #R 1%#! ihrer Bevölkerung und gewinnt #v 0,25#! Autonomie; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, #R 2%#! und #v 0,5#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht den monatlichen Schaden auf #R 4%#! und #v 1#!."
+  "en": "From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, the target's most populous colony loses #R 1%#! of its people a month and, with #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more, gains #v 0.25#! autonomy; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #R 2%#! and #v 0.5#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly toll to #R 4%#! and #v 1#!.",
+  "de": "Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, verliert die bevölkerungsreichste Kolonie des Ziels im Monat #R 1%#! ihrer Bevölkerung und gewinnt bei #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! Menschen oder mehr #v 0,25#! Autonomie; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, #R 2%#! und #v 0,5#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht den monatlichen Schaden auf #R 4%#! und #v 1#!."
  },
  "covert_secure_material_action": {
   "en": "Covert: $iw_op_name_secure_material$",
@@ -9126,6 +9158,10 @@
  "covert_survey_defences_extra_tt": {
   "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, our fleets' fire on the defenses of every colony the target holds is #G +20%#!; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #G +40%#!. A network of ours already in the target shortens the wait, and priority 3 raises it to #G +80%#!. While it runs, our Fleets panel shows the Defenses, integrity and marines of the target's colonies exactly.",
   "de": "Auf der Erde geschieht nichts. Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, steigt das Feuer unserer Flotten auf die Verteidigung jeder Kolonie des Ziels um #G +20%#!; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, um #G +40%#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht es auf #G +80%#!. Solange die Operation läuft, zeigt unsere Flottenübersicht die Verteidigung, Integrität und Marineinfanterie der Kolonien des Ziels genau an."
+ },
+ "covert_warfare_unlock_early_tt": {
+  "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
+  "de": "$central_archives$, oder ein [Concept('concept_operation_slots', 'Operationsplatz')] über das hinaus, was Ihr Rang gewährt, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$ oder $quantum_computing$, oder das Gesetz $law_ministry_of_intelligence_and_security$"
  },
  "covert_warfare_unlock_tt": {
   "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
@@ -9261,7 +9297,7 @@
  },
  "cr_cooptation_push_tt": {
   "en": "Cooptation / Token Reform",
-  "de": "Vereinnahmung / Symbolische Reform"
+  "de": "Kooptation / Alibi-Reform"
  },
  "cr_federal_protection_modifier": {
   "en": "Federal Protection",
@@ -9277,11 +9313,11 @@
  },
  "cr_gradualist_push_tt": {
   "en": "Gradualist Accommodation",
-  "de": "Schrittweises Entgegenkommen"
+  "de": "Schrittweise Verständigung"
  },
  "cr_grassroots_push_tt": {
   "en": "Grassroots Organizing",
-  "de": "Basisorganisation"
+  "de": "Basisorganisierung"
  },
  "cr_low_acceptance_states_tt": {
   "en": "States with low-acceptance [Concept('concept_pop', 'pops')]",
@@ -9510,6 +9546,10 @@
  "disestablishment_religious_movement_modifier": {
   "en": "Disestablishment Pressure",
   "de": "Druck zur Kirchentrennung"
+ },
+ "dp_te_colonial_uprising": {
+  "en": "War of Independence",
+  "de": "Unabhängigkeitskrieg"
  },
  "dp_te_colonial_war": {
   "en": "War of Independence",
@@ -11664,8 +11704,8 @@
   "de": "Hier stehen weniger als sechs Große Monumente, ein im Bau befindliches mitgezählt. „Abräumen“ beim am wenigsten großartigen schafft Platz."
  },
  "gm_expand_migrating_tt": {
-  "en": "The Grand Monument here has settled into the new construction rules (within two months of loading an older save)",
-  "de": "Das Große Monument hier hat sich in die neuen Bauregeln eingefügt (binnen zwei Monaten nach dem Laden eines älteren Spielstands)"
+  "en": "The Grand Monument here belongs to a recorded monument: a building left by a merge or a revolt is settled within a month",
+  "de": "Das Große Monument hier gehört zu einem erfassten Monument: Ein Gebäude, das eine Verschmelzung oder ein Aufstand hinterlassen hat, wird innerhalb eines Monats eingeordnet"
  },
  "gm_expand_pending_tt": {
   "en": "No dedication, unveiling or naming is under way here",
@@ -13964,8 +14004,8 @@
   "de": "Unsere Armeen halten die Hälfte des Staates, in dem es steht, in einem Krieg mit seinem Besitzer"
  },
  "gm_mon_sgui_takeable_tt": {
-  "en": "Not being rebuilt, no ceremony asking about it, and nothing carried off from this state in the last ten years",
-  "de": "Es wird nicht wiederaufgebaut, keine Zeremonie fragt nach ihm, und in den letzten zehn Jahren wurde nichts aus diesem Staat fortgeschafft"
+  "en": "Not being rebuilt, no ceremony asking about it, nothing carried off from this state in the last ten years, and no piece of it still abroad",
+  "de": "Es wird nicht wiederaufgebaut, keine Zeremonie fragt nach ihm, in den letzten zehn Jahren wurde nichts aus diesem Staat fortgeschafft, und kein Teil davon befindet sich noch im Ausland"
  },
  "gm_mon_take_button_tooltip": {
   "en": "#b Carry it off#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]",
@@ -15984,8 +16024,8 @@
   "de": "Unsere Armeen halten die Hälfte des Staates, in dem es steht, in einem Krieg mit seinem Besitzer"
  },
  "gm_tr_sgui_takeable_tt": {
-  "en": "A dedicated monument, not a Grand Shrine, not being rebuilt, and with no piece taken from it in the last ten years",
-  "de": "Ein gewidmetes Monument, kein Großer Schrein, nicht im Wiederaufbau und ohne ein Teil, das in den letzten zehn Jahren von ihm weggenommen wurde"
+  "en": "A dedicated monument, not a Grand Shrine, not being rebuilt, with no piece taken from it in the last ten years, and none of it still abroad",
+  "de": "Ein gewidmetes Monument, kein Großer Schrein, nicht im Wiederaufbau, ohne ein Teil, das in den letzten zehn Jahren von ihm weggenommen wurde, und nichts davon befindet sich noch im Ausland"
  },
  "gm_tr_sig_line_dormant": {
   "en": "Dormant: [ScriptContainer.GetCustom('gm_tr_sig_name')], a unique dedication of #v [ScriptContainer.GetCustom('gm_tr_sig_parent_name')]#!",
@@ -16176,8 +16216,8 @@
   "de": "Wir sind nicht an einen Vertrag zur Emissionssenkung gebunden"
  },
  "gw_cond_penalty_tt": {
-  "en": "Each line below applies at #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, the temperature anomaly in °C.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]",
-  "de": "Jede Zeile unten gilt mit #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, der Temperaturanomalie in °C.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]"
+  "en": "Each line below applies at #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, the temperature anomaly in °C.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]\\n$TOOLTIP_DELIMITER$\\nOn top of it, at the same scale, #b $global_warming_tropics$#! in a state between the tropics (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_regional_n_tropics')|0]#! of ours):\\n[GetStaticModifier('global_warming_tropics').GetDesc]\\n$TOOLTIP_DELIMITER$\\n#b $global_warming_high_latitudes$#! in a state #v 55°#! or more from the equator (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_regional_n_high_latitudes')|0]#! of ours):\\n[GetStaticModifier('global_warming_high_latitudes').GetDesc]",
+  "de": "Jede Zeile unten gilt mit #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gw_warming_penalty_scale_display')|2]#!, der Temperaturanomalie in °C.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]\\n$TOOLTIP_DELIMITER$\\nZusätzlich, im selben Maßstab, #b $global_warming_tropics$#! in einem Staat zwischen den Wendekreisen (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_regional_n_tropics')|0]#! bei uns):\\n[GetStaticModifier('global_warming_tropics').GetDesc]\\n$TOOLTIP_DELIMITER$\\n#b $global_warming_high_latitudes$#! in einem Staat, der #v 55°#! oder mehr vom Äquator entfernt liegt (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_regional_n_high_latitudes')|0]#! bei uns):\\n[GetStaticModifier('global_warming_high_latitudes').GetDesc]"
  },
  "gw_cond_role_tt": {
   "en": "Only the leader of a market can adopt or repeal the three market-wide policies - a carbon tax, renewable investment and emission standards - and they then bind every member of that market.\\n\\n#lore The other five policies are ours alone, whoever leads the market.#!",
@@ -16306,6 +16346,10 @@
  "gw_how_emissions_2": {
   "en": "The emissions figures, our share and last year's warming are measured once a year, in January, which is why the charts step once a year. The emissions cut in force is live.",
   "de": "Die Emissionswerte, unser Anteil und die Erwärmung des letzten Jahres werden einmal im Jahr gemessen, im Januar, weshalb die Diagramme nur einmal im Jahr einen Sprung machen. Die geltende Emissionssenkung ist dagegen live."
+ },
+ "gw_how_penalty_2": {
+  "en": "Warming is not shared equally. A state between the tropics also carries $global_warming_tropics$: more deaths, a lower standard of living, poorer farms and plantations, and longer heatwaves. A state #v 55°#! or more from the equator carries $global_warming_high_latitudes$ instead: fewer deaths, milder frosts and a little more from its farms, but more forest fires. Both scale with the anomaly as Climate Warming does, and the Warming Penalty hover lists their lines and how many of your states carry each.",
+  "de": "Die Erwärmung ist nicht gleich verteilt. Ein Staat zwischen den Wendekreisen trägt zusätzlich $global_warming_tropics$: mehr Todesfälle, einen niedrigeren Lebensstandard, schwächere Farmen und Plantagen und längere Hitzewellen. Ein Staat, der #v 55°#! oder mehr vom Äquator entfernt liegt, trägt stattdessen $global_warming_high_latitudes$: weniger Todesfälle, mildere Fröste und etwas mehr aus seinen Farmen, aber mehr Waldbrände. Beide wachsen mit der Anomalie wie die Klimaerwärmung, und der Tooltip „Erwärmungsstrafe“ listet ihre Zeilen auf und wie viele Ihrer Staaten jeweils betroffen sind."
  },
  "gw_how_policies_1": {
   "en": "Ten [Concept('concept_climate_policy','climate policies')] are national, including Carbon Tax, Renewable Investment and Emission Standards: every country adopts its own. Only Fossil-Fuel Tariffs belongs to the market leader, who sets it for the whole market.",
@@ -16963,6 +17007,10 @@
   "en": "#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!",
   "de": "#lore Wird dies aufgedeckt, nachdem der Krieg begonnen hat, zuckt die Welt nur mit den Schultern – Sabotage zwischen Kriegsparteien kostet überhaupt nichts. Wird sie im Vorfeld aufgedeckt, gilt sie als Kriegstreiberei und kostet so viel Verrufenheit wie ein Versuch, eine Regierung zu stürzen.#!"
  },
+ "iw_funding_early_cap_tt": {
+  "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)",
+  "de": "Finanzierung über „Professionell“ braucht $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ oder das Gesetz $law_ministry_of_intelligence_and_security$ (frühe Freischaltung)"
+ },
  "iw_funding_name_0": {
   "en": "Dormant",
   "de": "Ruhend"
@@ -17180,8 +17228,8 @@
   "de": "Das Ziel muss einen Meilenstein des Wettlaufs ins All erreicht haben, den wir noch nicht haben"
  },
  "iw_target_has_elections_tt": {
-  "en": "Target must have some form of elected legislature",
-  "de": "Das Ziel muss über eine Form von gewählter Legislative verfügen"
+  "en": "Target must hold elections: a voting law, or Anarchy",
+  "de": "Das Ziel muss Wahlen abhalten: ein Wahlrechtsgesetz oder Anarchie"
  },
  "iw_target_has_loose_material_tt": {
   "en": "Warheads from the target's arsenal must be unaccounted for",
@@ -17198,6 +17246,10 @@
  "iw_target_has_stealable_production_tt": {
   "en": "Target must have researched a production [concept_technology] that we have not and could research now",
   "de": "Das Ziel muss eine Produktions-[concept_technology] erforscht haben, die wir noch nicht haben und jetzt erforschen könnten"
+ },
+ "iw_target_holds_peopled_colony_tt": {
+  "en": "Target must hold a colony of at least #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people in the solar system",
+  "de": "Das Ziel muss eine Kolonie mit mindestens #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! Menschen im Sonnensystem halten"
  },
  "iw_target_holds_space_colony_tt": {
   "en": "Target must hold a colony in the solar system",
@@ -21427,6 +21479,10 @@
   "en": "Nuclear Weapons Program Funding",
   "de": "Finanzierung des Nuklearwaffenprogramms"
  },
+ "nuke_attack_line_held_arsenal": {
+  "en": "\\n#variable +100%#! from warheads that were built before we held them",
+  "de": "\\n#variable +100%#! von Sprengköpfen, die gebaut wurden, bevor wir sie hielten"
+ },
  "nuke_attack_line_hypersonic": {
   "en": "\\n#variable +50%#! from $hypersonic_weapons$",
   "de": "\\n#variable +50%#! durch $hypersonic_weapons$"
@@ -21464,8 +21520,8 @@
   "de": "\\n#variable +25%#! durch $radar$"
  },
  "nuke_success_final_chance_breakdown_tt": {
-  "en": "#tooltip_header Final Success Chance Formula#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')] our attack modifier\\n[Country.MakeScope.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')] their defense modifier\\n\\nResult is clamped between #variable 5%#! and #variable 100%#!.",
-  "de": "#tooltip_header Formel für die endgültige Erfolgschance#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')] unser Angriffsmodifikator\\n[Country.MakeScope.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')] ihr Verteidigungsmodifikator\\n\\nDas Ergebnis wird zwischen #variable 5%#! und #variable 100%#! begrenzt."
+  "en": "#tooltip_header Final Success Chance Formula#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')] our attack modifier[Country.GetCustom('te_nuke_attack_held_arsenal')]\\n[Country.MakeScope.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')] their defense modifier\\n\\nResult is clamped between #variable 5%#! and #variable 100%#!.",
+  "de": "#tooltip_header Formel für die endgültige Erfolgschance#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')] unser Angriffsmodifikator[Country.GetCustom('te_nuke_attack_held_arsenal')]\\n[Country.MakeScope.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')] ihr Verteidigungsmodifikator\\n\\nDas Ergebnis wird zwischen #variable 5%#! und #variable 100%#! begrenzt."
  },
  "oil_spill_cleanup_modifier": {
   "en": "Oil Spill Cleanup",
@@ -21544,12 +21600,12 @@
   "de": "Übergang zur Postknappheit"
  },
  "predictive_intelligence_only_modifier": {
-  "en": "AI Intelligence Analysis",
-  "de": "KI-Geheimdienstanalyse"
+  "en": "Prediction for Intelligence Only",
+  "de": "Vorhersage nur für Geheimdienste"
  },
  "predictive_policing_deployed_modifier": {
-  "en": "AI Predictive Policing",
-  "de": "KI-gestützte vorausschauende Polizeiarbeit"
+  "en": "Predictive Policing",
+  "de": "Vorausschauende Polizeiarbeit"
  },
  "prestige_good_advanced_aircraft": {
   "en": "Superior Airframes",
@@ -21711,6 +21767,10 @@
   "en": "Orbital Laser Sweep",
   "de": "Orbitaler Laser-Scan"
  },
+ "re_orbit_laser_sweep_cost": {
+  "en": "Laser Sweep Costs",
+  "de": "Kosten der Laserräumung"
+ },
  "re_orbit_laser_sweep_tt": {
   "en": "This option is available because we have researched #bold Orbital Manufacturing#! or #bold Orbital Weapon Platforms#!.",
   "de": "Diese Option ist verfügbar, weil wir #bold Orbitale Fertigung#! oder #bold Orbitale Waffenplattformen#! erforscht haben."
@@ -21722,6 +21782,18 @@
  "re_quantum_patent_pool": {
   "en": "Quantum Patent Pool",
   "de": "Quanten-Patentpool"
+ },
+ "re_quantum_subsidy_cost": {
+  "en": "Quantum Subsidy Payments",
+  "de": "Zahlungen für Quantensubventionen"
+ },
+ "re_sbsp_imports_cost": {
+  "en": "Imported Power Costs",
+  "de": "Kosten für importierten Strom"
+ },
+ "re_sbsp_reserves_cost": {
+  "en": "Reserve Power Costs",
+  "de": "Kosten für Reservestrom"
  },
  "re_spectrum_foreign_relays": {
   "en": "Foreign Relay Access",
@@ -21832,12 +21904,12 @@
   "de": "Das Zwangsprogramm in [SCOPE.sState('rs_event_state').GetName] endet: seine Siedlungsbehörde wechselt zum besten freiwilligen Programm, das wir haben. Unsere übrigen Siedlungsbehörden behalten ihre Programme."
  },
  "resettlement_hard_winter": {
-  "en": "A Hard Winter",
-  "de": "Ein harter Winter"
+  "en": "Hardship on the Frontier",
+  "de": "Härten an der Grenze"
  },
  "resettlement_hard_winter_desc": {
-  "en": "Word of the last winter keeps settlers away.",
-  "de": "Die Nachricht vom letzten Winter hält Siedler fern."
+  "en": "Word of what the settlers went through keeps others away.",
+  "de": "Die Kunde von dem, was die Siedler durchgemacht haben, hält andere fern."
  },
  "resettlement_homesteads_destination": {
   "en": "Virgin Soil",
@@ -22631,6 +22703,10 @@
   "en": "• no settlers or modules for over a year: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_no_contact')|=-2]#!",
   "de": "• seit über einem Jahr keine Siedler oder Module: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_no_contact')|=-2]#!"
  },
+ "sr_aut_line_unpeopled": {
+  "en": "With fewer than #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people it makes no demands: none of the terms below counts, and its autonomy only settles.",
+  "de": "Mit weniger als #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! Menschen stellt sie keine Forderungen: Keine der folgenden Bedingungen zählt, und ihre Autonomie pendelt sich nur ein."
+ },
  "sr_aut_line_war": {
   "en": "• we are at war: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_at_war')|=-2]#!",
   "de": "• wir sind im Krieg: #v [GetPlayer.MakeScope.ScriptValue('sr_aut_at_war')|=-2]#!"
@@ -22722,6 +22798,10 @@
  "sr_choice_probe_mars": {
   "en": "Mars Mission Profile",
   "de": "Missionsprofil Mars"
+ },
+ "sr_choice_probe_tour": {
+  "en": "Grand Tour Mission Profile",
+  "de": "Missionsprofil Grand Tour"
  },
  "sr_choice_probe_venus": {
   "en": "Venus Mission Profile",
@@ -23771,6 +23851,14 @@
   "en": "Milestone progress is reset and program costs are recalculated.",
   "de": "Der Fortschritt des Meilensteins wird zurückgesetzt, und die Programmkosten werden neu berechnet."
  },
+ "sr_milestone_first_claimed_tt": {
+  "en": "Another country has already achieved this milestone",
+  "de": "Ein anderes Land hat diesen Meilenstein bereits erreicht"
+ },
+ "sr_milestone_first_open_tt": {
+  "en": "No other country has achieved this milestone yet",
+  "de": "Noch kein anderes Land hat diesen Meilenstein erreicht"
+ },
  "sr_mission_failure_catastrophic": {
   "en": "Catastrophic Space Mission Failure",
   "de": "Katastrophales Scheitern der Weltraummission"
@@ -24038,6 +24126,10 @@
  "sr_probe_target_mars": {
   "en": "Mars Probe Data",
   "de": "Mars-Sondendaten"
+ },
+ "sr_probe_target_tour": {
+  "en": "Grand Tour Data",
+  "de": "Daten der Grand Tour"
  },
  "sr_probe_target_venus": {
   "en": "Venus Probe Data",
@@ -25895,6 +25987,14 @@
   "en": "Strategic Reserve Tanks Release",
   "de": "Strategische Reserve: Panzer-Abfluss"
  },
+ "state_collapse_buildings_lost_tt": {
+  "en": "Every state has lost its Barracks, Military Base, Naval Administration, Naval Fortification, Naval Logistics Center, Port, Railway, University and Government Administration",
+  "de": "Jeder Staat hat seine Kaserne, Militärbasis, Marineverwaltung, Marinebefestigung, sein Marinelogistikzentrum, seinen Hafen, seine Eisenbahn, Universität und Regierungsverwaltung verloren"
+ },
+ "state_collapse_institutions_reset_tt": {
+  "en": "Every institution and ministry is abolished: each of those laws is replaced by the one that provides none",
+  "de": "Jede Institution und jedes Ministerium wird abgeschafft: Jedes dieser Gesetze wird durch das ersetzt, das keine bietet"
+ },
  "state_power_grid_connection_bool": {
   "en": "[concept_power_grid] Connection",
   "de": "[concept_power_grid]-Anschluss"
@@ -25954,6 +26054,10 @@
  "ste_algo_gov_reject": {
   "en": "Automated Administration Rejected",
   "de": "Automatisierte Verwaltung abgelehnt"
+ },
+ "ste_antiglobal_concession_cost": {
+  "en": "Labor Concession Costs",
+  "de": "Kosten für Arbeitszugeständnisse"
  },
  "ste_augmented_sports_embrace": {
   "en": "Post-Human Athletics",
@@ -26051,9 +26155,17 @@
   "en": "Gaming Content Regulated",
   "de": "Spieleinhalte reguliert"
  },
+ "ste_meltdown_evacuate_cost": {
+  "en": "Meltdown Evacuation Costs",
+  "de": "Kosten der Evakuierung bei der Kernschmelze"
+ },
  "ste_meltdown_institutional_response": {
   "en": "Institutional Emergency Response",
   "de": "Institutionelle Notfallreaktion"
+ },
+ "ste_meltdown_institutional_response_cost": {
+  "en": "Emergency Response Costs",
+  "de": "Kosten für Notfallmaßnahmen"
  },
  "ste_misinfo_free_speech": {
   "en": "Free Speech Upheld",
@@ -26095,6 +26207,10 @@
   "en": "National Space Colony",
   "de": "Nationale Raumkolonie"
  },
+ "ste_space_colony_national_cost": {
+  "en": "National Space Colony Upkeep",
+  "de": "Nationaler Unterhalt für Raumkolonien"
+ },
  "ste_space_gov_autonomy": {
   "en": "Colonial Autonomy",
   "de": "Koloniale Autonomie"
@@ -26118,6 +26234,10 @@
  "ste_terror_security_state": {
   "en": "Expanded Security State",
   "de": "Ausgebauter Sicherheitsstaat"
+ },
+ "ste_terror_security_state_cost": {
+  "en": "Security Apparatus Costs",
+  "de": "Kosten für den Sicherheitsapparat"
  },
  "ste_terror_unity_resilience": {
   "en": "National Resilience",
@@ -30684,8 +30804,8 @@
   "de": "Geförderte Überfahrten für Frauen"
  },
  "te_demog_wave_branches_brides_desc": {
-  "en": "The government pays the passage of women who come to settle, and the churches approve.",
-  "de": "Die Regierung bezahlt die Überfahrt von Frauen, die sich ansiedeln wollen, und die Kirchen billigen es."
+  "en": "The government pays the passage of women who come to settle, and the clergy approve.",
+  "de": "Die Regierung bezahlt die Überfahrt von Frauen, die sich ansiedeln wollen, und die Geistlichkeit billigt es."
  },
  "te_demog_wave_branches_idle": {
   "en": "Bare Branches",
@@ -30772,8 +30892,8 @@
   "de": "Geburtslizenzen"
  },
  "te_demog_wave_immortal_licences_desc": {
-  "en": "A child may be born only for a death, by license, so families want fewer children. The churches and the universities oppose it.",
-  "de": "Ein Kind darf nur für einen Todesfall geboren werden, per Lizenz, daher wollen Familien weniger Kinder. Die Kirchen und die Universitäten lehnen es ab."
+  "en": "A child may be born only for a death, by license, so families want fewer children. The clergy and the universities oppose it.",
+  "de": "Ein Kind darf nur für einen Todesfall geboren werden, per Lizenz, daher wollen Familien weniger Kinder. Die Geistlichkeit und die Universitäten lehnen es ab."
  },
  "te_demog_wave_immortal_right": {
   "en": "Children a Right",
@@ -30804,8 +30924,8 @@
   "de": "Frauen in Männerberufen"
  },
  "te_demog_wave_lost_women_work_desc": {
-  "en": "Women have taken the places of the dead at the benches, and the churches and the landed families disapprove.",
-  "de": "Frauen haben an den Werkbänken die Plätze der Toten eingenommen, und die Kirchen und die Grundbesitzerfamilien missbilligen es."
+  "en": "Women have taken the places of the dead at the benches, and the clergy and the landed families disapprove.",
+  "de": "Frauen haben an den Werkbänken die Plätze der Toten eingenommen, und die Geistlichkeit und die Grundbesitzerfamilien missbilligen es."
  },
  "te_demog_wave_lost_workbenches": {
   "en": "Empty Workbenches",
@@ -31455,6 +31575,10 @@
   "en": "None yet. A station joins its grid at the first monthly balancing after it is built.",
   "de": "Noch keine. Eine Station schließt sich dem Netz beim ersten monatlichen Abgleich nach ihrem Bau an."
  },
+ "te_grid_how_generation": {
+  "en": "The Generation panel shows the $electricity$ our power plants made each week, by kind of plant, counted at the start of each month. It counts only what our states make themselves, not what their stations deliver from a grid. Each state's total is measured. Where a state has more than one kind of plant, its total is shared among them by what each one's [concept_production_method] makes at its size and staffing. A bonus that only one kind of plant gets, such as a technology that raises the [concept_throughput] of $building_nuclear_plant$s, is in the state's total but not in that share.",
+  "de": "Die Tafel „Erzeugung“ zeigt, wie viel $electricity$ unsere Kraftwerke jede Woche erzeugt haben, nach Kraftwerkstyp, gezählt zu Beginn jedes Monats. Sie zählt nur, was unsere Staaten selbst erzeugen, nicht das, was ihre Stationen aus einem Netz beziehen. Die Summe jedes Staates wird gemessen. Hat ein Staat mehr als einen Kraftwerkstyp, wird seine Summe darauf aufgeteilt, je nachdem, was die [concept_production_method] jedes Typs bei seiner Größe und Besetzung erzeugt. Ein Bonus, den nur ein Kraftwerkstyp erhält, etwa eine Technologie für mehr [concept_throughput] bei Anlagen des Typs $building_nuclear_plant$, steckt in der Summe des Staates, aber nicht in dieser Aufteilung."
+ },
  "te_grid_how_grids": {
   "en": "A $building_grid_transfer_station$ joins its state to a [concept_power_grid]. A grid starts as one country's stations in one [concept_market_area]. Once a month it moves $electricity$ from states where it is cheap to states where it is expensive: a sending state's station buys its spare power and sends it, and a receiving state's station delivers it. A grid takes out what it puts in. After a change, such as a new power plant or station, it takes a few months to settle. Each grid is named for its hub, its largest producer.",
   "de": "Eine $building_grid_transfer_station$ verbindet ihren Staat mit einem [concept_power_grid]. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area]. Einmal im Monat bewegt es $electricity$ von Staaten, in denen sie billig ist, zu Staaten, in denen sie teuer ist: Die Station eines sendenden Staates kauft seinen überschüssigen Strom und sendet ihn, und die Station eines empfangenden Staates liefert ihn. Ein Netz nimmt heraus, was es hineingibt. Nach einer Veränderung, etwa einem neuen Kraftwerk oder einer neuen Station, braucht es einige Monate, um sich einzupendeln. Jedes Netz ist nach seinem Knoten benannt, seinem größten Erzeuger."
@@ -31482,6 +31606,10 @@
  "te_grid_how_stations": {
   "en": "One station a state. Our first in a market area can go in any of our states there, and each later one must border a state of ours with a station, built or queued, so a grid grows outward. A station joins its grid at the first monthly balancing after it is built. It moves power in proportion to its staff, so the grid orders a short-staffed station to move more to make up the gap, as far down as a fifth staffed; with no staff it moves nothing until it hires. Our government pays whatever its wages and upkeep cost beyond what it earns.",
   "de": "Eine Station je Staat. Unsere erste in einem Marktgebiet kann in jedem unserer Staaten dort stehen, und jede weitere muss an einen Staat von uns mit einer Station grenzen, gebaut oder in Bau, sodass ein Netz nach außen wächst. Eine Station schließt sich dem Netz beim ersten monatlichen Abgleich nach ihrem Bau an. Sie bewegt Strom im Verhältnis zu ihrem Personal, daher muss eine knapp besetzte Station vom Netz mehr bewegen, um die Lücke auszugleichen, bis hinunter zu einer Besetzung von einem Fünftel; ohne Personal bewegt sie nichts, bis sie Personal einstellt. Unsere Regierung zahlt, was Löhne und Unterhalt über ihre Einnahmen hinaus kosten."
+ },
+ "te_grid_how_sub_generation": {
+  "en": "Generation",
+  "de": "Erzeugung"
  },
  "te_grid_how_sub_grids": {
   "en": "Grids",
@@ -31530,6 +31658,78 @@
  "te_grid_market_send_more": {
   "en": "send more than they receive",
   "de": "senden mehr, als sie empfangen"
+ },
+ "te_grid_mix_coal": {
+  "en": "Coal",
+  "de": "Kohle"
+ },
+ "te_grid_mix_coal_tt": {
+  "en": "#b Coal#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_share_disp')|%0]#!\\nFrom $building_power_plant$ on a coal-fired [concept_production_method], and the coal-fired power stations of companies.",
+  "de": "#b Kohle#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_share_disp')|%0]#!\\nAus $building_power_plant$ mit einer kohlebefeuerten [concept_production_method] und den Kohlekraftwerken von Firmen."
+ },
+ "te_grid_mix_fusion": {
+  "en": "Fusion",
+  "de": "Fusion"
+ },
+ "te_grid_mix_fusion_tt": {
+  "en": "#b Fusion#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_share_disp')|%0]#!\\nFrom $building_fusion_plant$s.",
+  "de": "#b Fusion#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_share_disp')|%0]#!\\nAus Anlagen des Typs $building_fusion_plant$."
+ },
+ "te_grid_mix_header": {
+  "en": "Generation",
+  "de": "Erzeugung"
+ },
+ "te_grid_mix_hydro": {
+  "en": "Hydro",
+  "de": "Wasserkraft"
+ },
+ "te_grid_mix_hydro_tt": {
+  "en": "#b Hydro#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_share_disp')|%0]#!\\nFrom $building_hydro_plant$s.",
+  "de": "#b Wasserkraft#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_share_disp')|%0]#!\\nAus Anlagen des Typs $building_hydro_plant$."
+ },
+ "te_grid_mix_none": {
+  "en": "None yet. The country's power plants are counted at the start of each month.",
+  "de": "Noch keine. Die Kraftwerke des Landes werden zu Beginn jedes Monats gezählt."
+ },
+ "te_grid_mix_nuclear": {
+  "en": "Nuclear",
+  "de": "Kernkraft"
+ },
+ "te_grid_mix_nuclear_tt": {
+  "en": "#b Nuclear#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_share_disp')|%0]#!\\nFrom $building_nuclear_plant$s, and the reactors of the $building_rosatom_mayak_association$.",
+  "de": "#b Kernkraft#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_share_disp')|%0]#!\\nAus Anlagen des Typs $building_nuclear_plant$ und den Reaktoren der $building_rosatom_mayak_association$."
+ },
+ "te_grid_mix_oil": {
+  "en": "Oil",
+  "de": "Öl"
+ },
+ "te_grid_mix_oil_tt": {
+  "en": "#b Oil#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_share_disp')|%0]#!\\nFrom $building_power_plant$ on an oil-fired [concept_production_method].",
+  "de": "#b Öl#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_share_disp')|%0]#!\\nAus $building_power_plant$ mit einer ölbefeuerten [concept_production_method]."
+ },
+ "te_grid_mix_renewable": {
+  "en": "Renewables",
+  "de": "Erneuerbare"
+ },
+ "te_grid_mix_renewable_tt": {
+  "en": "#b Renewables#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_share_disp')|%0]#!\\nFrom $building_renewable_energy_plant$s.",
+  "de": "#b Erneuerbare#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_share_disp')|%0]#!\\nAus Anlagen des Typs $building_renewable_energy_plant$."
+ },
+ "te_grid_mix_space_solar": {
+  "en": "Space Solar",
+  "de": "Weltraumsolar"
+ },
+ "te_grid_mix_space_solar_tt": {
+  "en": "#b Space Solar#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_disp')|1]#!\\nShare of the country's generation: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_share_disp')|%0]#!\\nFrom $building_solar_receiver$s, which take in power collected in orbit.",
+  "de": "#b Weltraumsolar#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_disp')|1]#!\\nAnteil an der Erzeugung des Landes: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_share_disp')|%0]#!\\nAus Anlagen des Typs $building_solar_receiver$, die im Orbit gesammelte Energie aufnehmen."
+ },
+ "te_grid_mix_total": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|K]#! a week",
+  "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|K]#! pro Woche"
+ },
+ "te_grid_mix_total_tt": {
+  "en": "#b Generation#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|1]#!\\nThe $electricity$ the country's power plants made each week, by kind of plant, counted at the start of each month. Power its stations delivered from a grid isn't counted.",
+  "de": "#b Erzeugung#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|1]#!\\nDie Kraftwerke des Landes haben jede Woche $electricity$ erzeugt, nach Kraftwerkstyp, gezählt zu Beginn jedes Monats. Strom, den seine Stationen aus einem Netz bezogen haben, wird nicht gezählt."
  },
  "te_grid_mode_idle": {
   "en": "Idle",
@@ -31927,6 +32127,34 @@
   "en": "#b Show on the Map#!\\nOpens the journal entry, which colors every country by the phase of its financial cycle. The map shows while the entry's page is open; the eye at its top left fades the page so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Journaleintrag, der jedes Land nach der Phase seines Finanzzyklus einfärbt. Die Karte wird angezeigt, solange die Seite des Eintrags geöffnet ist; das Auge oben links macht die Seite durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_cat_census": {
+  "en": "Census",
+  "de": "Zensus"
+ },
+ "te_jmap_cat_classes": {
+  "en": "Classes",
+  "de": "Klassen"
+ },
+ "te_jmap_cat_economy": {
+  "en": "Economy",
+  "de": "Wirtschaft"
+ },
+ "te_jmap_cat_migration": {
+  "en": "Migration and Cities",
+  "de": "Migration und Städte"
+ },
+ "te_jmap_cat_military": {
+  "en": "Military",
+  "de": "Militär"
+ },
+ "te_jmap_cat_society": {
+  "en": "Society",
+  "de": "Gesellschaft"
+ },
+ "te_jmap_cat_systems": {
+  "en": "Systems",
+  "de": "Systeme"
+ },
  "te_jmap_ce_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the colonies, each colored by its empire's colonial stability. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Kolonien, jede nach der Kolonialen Stabilität ihres Kolonialreichs eingefärbt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
@@ -31959,6 +32187,14 @@
   "en": "#b Show on the Map#!\\nOpens the Map Room on nuclear weapons: the world's nuclear powers, and your deterrent's hosts, umbrella and guarantees. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Nuklearwaffen: die Nuklearmächte der Welt sowie die Gastländer, der Schirm und die Garantien Ihrer Abschreckung. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_pick_academics": {
+  "en": "Academics",
+  "de": "Akademiker"
+ },
+ "te_jmap_pick_aristocrats": {
+  "en": "Aristocrats",
+  "de": "Aristokraten"
+ },
  "te_jmap_pick_armed_forces": {
   "en": "Armed Forces",
   "de": "Streitkräfte"
@@ -31971,9 +32207,17 @@
   "en": "Birth Rate",
   "de": "Geburtsrate"
  },
+ "te_jmap_pick_capitalists": {
+  "en": "Capitalists",
+  "de": "Kapitalisten"
+ },
  "te_jmap_pick_city_rank": {
   "en": "City Rank",
   "de": "Stadtrang"
+ },
+ "te_jmap_pick_clergy": {
+  "en": "Clergymen",
+  "de": "Geistliche"
  },
  "te_jmap_pick_colonies": {
   "en": "Colonies",
@@ -32035,6 +32279,10 @@
   "en": "Infant Mortality",
   "de": "Säuglingssterblichkeit"
  },
+ "te_jmap_pick_investment": {
+  "en": "Investment",
+  "de": "Investitionen"
+ },
  "te_jmap_pick_leading_cause": {
   "en": "Leading Cause",
   "de": "Häufigste Ursache"
@@ -32095,6 +32343,10 @@
   "en": "Tourism Appeal",
   "de": "Tourismusattraktivität"
  },
+ "te_jmap_pick_trade_capacity": {
+  "en": "Trade Capacity",
+  "de": "Handelskapazität"
+ },
  "te_jmap_pick_turmoil": {
   "en": "Turmoil",
   "de": "Aufruhr"
@@ -32119,6 +32371,14 @@
   "en": "#b Show on the Map#!\\nOpens the Map Room on the ocean basins, each coastal state in its basin's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Meeresbecken, jeder Küstenstaat in der Farbe seines Beckens. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_tt_academics": {
+  "en": "#b [THIS.GetState.GetName]#!\\nAcademics: #v [THIS.GetState.MakeScope.Var('te_dg_academics').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_academics_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nAkademiker: #v [THIS.GetState.MakeScope.Var('te_dg_academics').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_academics_share')|%1]#! der Bevölkerung"
+ },
+ "te_jmap_tt_aristocrats": {
+  "en": "#b [THIS.GetState.GetName]#!\\nAristocrats: #v [THIS.GetState.MakeScope.Var('te_dg_aristocrats').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_aristocrats_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nAristokraten: #v [THIS.GetState.MakeScope.Var('te_dg_aristocrats').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_aristocrats_share')|%1]#! der Bevölkerung"
+ },
  "te_jmap_tt_banking": {
   "en": "#b [THIS.GetState.GetOwner.GetName]#!\\nFinancial cycle: [THIS.GetState.GetOwner.GetCustom('banking_dash_phase_word')] (#v [THIS.GetState.GetOwner.MakeScope.Var('finance_cycle_value').GetValue|0]#!)",
   "de": "#b [THIS.GetState.GetOwner.GetName]#!\\nFinanzzyklus: [THIS.GetState.GetOwner.GetCustom('banking_dash_phase_word')] (#v [THIS.GetState.GetOwner.MakeScope.Var('finance_cycle_value').GetValue|0]#!)"
@@ -32138,6 +32398,10 @@
  "te_jmap_tt_birth_rate": {
   "en": "#b [THIS.GetState.GetName]#!\\nBirths: #v [THIS.GetState.MakeScope.Var('te_dg_cbr').GetValue|1]#! per 1,000 people last year",
   "de": "#b [THIS.GetState.GetName]#!\\nGeburten: #v [THIS.GetState.MakeScope.Var('te_dg_cbr').GetValue|1]#! pro 1.000 Menschen im Vorjahr"
+ },
+ "te_jmap_tt_capitalists": {
+  "en": "#b [THIS.GetState.GetName]#!\\nCapitalists: #v [THIS.GetState.MakeScope.Var('te_dg_capitalists').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_capitalists_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nKapitalisten: #v [THIS.GetState.MakeScope.Var('te_dg_capitalists').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_capitalists_share')|%1]#! der Bevölkerung"
  },
  "te_jmap_tt_cause_chr": {
   "en": "#b [THIS.GetState.GetName]#!\\nLeading cause of death: #v $te_demog_dc_chr_word$#!, #v [THIS.GetState.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of last year's deaths",
@@ -32234,6 +32498,10 @@
  "te_jmap_tt_city_unranked": {
   "en": "#b [THIS.GetState.GetName]#!\\nNot among the world's 501 largest cities.",
   "de": "#b [THIS.GetState.GetName]#!\\nNicht unter den 501 größten Städten der Welt."
+ },
+ "te_jmap_tt_clergy": {
+  "en": "#b [THIS.GetState.GetName]#!\\nClergymen: #v [THIS.GetState.MakeScope.Var('te_dg_clergy').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_clergy_share')|%1]#! of its people",
+  "de": "#b [THIS.GetState.GetName]#!\\nGeistliche: #v [THIS.GetState.MakeScope.Var('te_dg_clergy').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_clergy_share')|%1]#! der Bevölkerung"
  },
  "te_jmap_tt_crowding": {
   "en": "#b [THIS.GetState.GetName]#!\\n$concept_migration_crowding$: #R -[THIS.GetState.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#! migration attraction\\n#v [THIS.GetState.GetPopulationSize|K]#! people against a threshold of #v [THIS.GetState.MakeScope.ScriptValue('migration_crowding_threshold_pop')|K]#!",
@@ -32342,6 +32610,14 @@
  "te_jmap_tt_infant_mortality": {
   "en": "#b [THIS.GetState.GetName]#!\\nInfant mortality: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! deaths in the first year per 1,000 births",
   "de": "#b [THIS.GetState.GetName]#!\\nSäuglingssterblichkeit: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! Todesfälle im ersten Lebensjahr pro 1.000 Geburten"
+ },
+ "te_jmap_tt_invest": {
+  "en": "#b [THIS.GetState.GetName]#!\\nPaid into the [concept_investment_pool] each week, estimated: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_value')|K]#!\\nFrom financial districts and company headquarters: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_cap')|K]#!\\nFrom manor houses: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_ari')|K]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\nPro Woche in [concept_investment_pool] eingezahlt, geschätzt: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_value')|K]#!\\nAus Finanzvierteln und Firmenzentralen: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_cap')|K]#!\\nAus Herrenhäusern: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_ari')|K]#!"
+ },
+ "te_jmap_tt_invest_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nIts owners pay nothing into the [concept_investment_pool].",
+  "de": "#b [THIS.GetState.GetName]#!\\nSeine Eigentümer zahlen nichts in [concept_investment_pool] ein."
  },
  "te_jmap_tt_life_expectancy": {
   "en": "#b [THIS.GetState.GetName]#!\\nLife expectancy: #v [THIS.GetState.MakeScope.Var('te_dg_e0').GetValue|1]#! years",
@@ -32470,6 +32746,18 @@
  "te_jmap_tt_tourism_appeal": {
   "en": "#b [THIS.GetState.GetName]#!\\n$concept_tourism_base_appeal$: [THIS.GetState.MakeScope.Var('te_tourism_base_appeal').GetValue|+=0%] tourism output",
   "de": "#b [THIS.GetState.GetName]#!\\n$concept_tourism_base_appeal$: [THIS.GetState.MakeScope.Var('te_tourism_base_appeal').GetValue|+=0%] Tourismusertrag"
+ },
+ "te_jmap_tt_trade": {
+  "en": "#b [THIS.GetState.GetName]#!\\n[concept_trade_capacity]: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_capacity')|0]#!\\n[THIS.GetState.GetOwner.GetNameNoFlag]'s [concept_trade] with the world market: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_value')|K]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\n[concept_trade_capacity]: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_capacity')|0]#!\\n[concept_trade] [THIS.GetState.GetOwner.GetAltNameNoFlag('VON')] mit dem Weltmarkt: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_value')|K]#!"
+ },
+ "te_jmap_tt_trade_center": {
+  "en": "Trade Center: level #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_center_levels')|0]#!",
+  "de": "Handelszentrum: Stufe #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_center_levels')|0]#!"
+ },
+ "te_jmap_tt_trade_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo [concept_trade_capacity].\\n[THIS.GetState.GetOwner.GetNameNoFlag]'s [concept_trade] with the world market: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_value')|K]#!",
+  "de": "#b [THIS.GetState.GetName]#!\\nKeine [concept_trade_capacity].\\n[concept_trade] [THIS.GetState.GetOwner.GetAltNameNoFlag('VON')] mit dem Weltmarkt: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_trade_value')|K]#!"
  },
  "te_jmap_tt_turmoil": {
   "en": "#b [THIS.GetState.GetName]#!\\nTurmoil: [THIS.GetState.CalcTurmoil|v%1]",
@@ -32859,6 +33147,10 @@
   "en": "Credit standing earned through a currency peg — by borrowing a credible currency, or by being the currency others borrow.",
   "de": "Kreditwürdigkeit, die durch eine Währungsbindung erworben wurde — dadurch, dass eine glaubwürdige Währung geliehen wird, oder dadurch, die Währung zu sein, die andere sich leihen."
  },
+ "te_mon_article_needs_full_system_tt": {
+  "en": "The Banking System game rule is set to Enabled, which runs the monetary system this [concept_article] belongs to",
+  "de": "Die Spielregel „Bankensystem“ steht auf „Aktiviert“; sie betreibt das Geldsystem, zu dem [concept_article] gehört"
+ },
  "te_mon_board_seigniorage": {
   "en": "Seigniorage from Currency Boards",
   "de": "Seigniorage von Currency Boards"
@@ -33132,8 +33424,16 @@
   "de": "Baukosten: #v [Country.MakeScope.ScriptValue('te_nation_construction_cost')|+%0]#!"
  },
  "te_nation_construction_row_tt": {
-  "en": "Each construction point costs #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! of its base: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! from $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! from the other construction-cost modifiers.\\n\\n#b $construction_cost_scaling$#!, set once a year: the GDP part, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × the share of it that applies, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!.\\n• #b GDP part#!: GDP per capita was #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. The part is nothing below @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] and rises in a straight line to [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] at @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Share that applies#!: all of the GDP part while peasants and unemployed are at most [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] of the workforce, none at [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0] or more. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]",
-  "de": "Jeder Baupunkt kostet #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! seiner Basis: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! aus $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! aus den übrigen Baukosten-Modifikatoren.\\n\\n#b $construction_cost_scaling$#!, einmal im Jahr festgelegt: der BIP-Anteil, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × der Anteil davon, der gilt, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!.\\n• #b BIP-Anteil#!: Das BIP pro Kopf lag bei #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. Der Anteil ist null unter @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] und steigt geradlinig auf [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] bei @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Anteil, der gilt#!: der gesamte BIP-Anteil, solange Bauern und Arbeitslose höchstens [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] der Arbeitskräfte ausmachen, keiner ab [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0]. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]"
+  "en": "Each construction point costs #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! of its base: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! from $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! from the other construction-cost modifiers.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] It is heading for #v [Country.MakeScope.ScriptValue('te_cc_scale_target')|%0]#!, which is one plus the GDP part, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × the share of it that applies, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, and moves at most [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] of itself a year.\\n• #b GDP part#!: GDP per capita was #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. The part is nothing below @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] and rises in a straight line to [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] at @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Share that applies#!: all of the GDP part while peasants and unemployed are at most [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] of the workforce, none at [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0] or more. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]",
+  "de": "Jeder Baupunkt kostet #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! seiner Basis: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! aus $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! aus den übrigen Baukosten-Modifikatoren.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] Sie strebt #v [Country.MakeScope.ScriptValue('te_cc_scale_target')|%0]#! an, das ist eins plus der BIP-Anteil, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × der Anteil davon, der gilt, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, und bewegt sich um höchstens [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] ihrer selbst pro Jahr.\\n• #b BIP-Anteil#!: Das BIP pro Kopf lag bei #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. Der Anteil ist null unter @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] und steigt geradlinig auf [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] bei @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Anteil, der gilt#!: der gesamte BIP-Anteil, solange Bauern und Arbeitslose höchstens [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] der Arbeitskräfte ausmachen, keiner ab [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0]. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]"
+ },
+ "te_nation_construction_scale_plain": {
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost.",
+  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten."
+ },
+ "te_nation_construction_scale_small": {
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! for a small economy under the $rule_te_small_economy_construction_rule$ game rule: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] with almost no GDP, rising in a straight line to the full cost at a GDP of 10 million.",
+  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! für eine kleine Volkswirtschaft unter der Spielregel $rule_te_small_economy_construction_rule$: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] bei fast keinem BIP, geradlinig steigend bis zu den vollen Kosten bei einem BIP von 10 Millionen."
  },
  "te_nation_construction_scaled": {
   "en": "Scaled by wealth",
@@ -33324,8 +33624,8 @@
   "de": "Bau"
  },
  "te_nation_ov_construction_tt": {
-  "en": "#header $te_nation_how_sub_construction$#!\\nEach construction point costs #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! of its base: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! from $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! from the other construction-cost modifiers.\\n$TOOLTIP_DELIMITER$\\n$construction_cost_scaling$, set once a year: the part GDP per capita gives, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × the share of it that applies while few workers are idle, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!.",
-  "de": "#header $te_nation_how_sub_construction$#!\\nJeder Baupunkt kostet #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! seiner Basis: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! aus $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! aus den übrigen Baukosten-Modifikatoren.\\n$TOOLTIP_DELIMITER$\\n$construction_cost_scaling$, einmal im Jahr festgelegt: der Anteil, den das BIP pro Kopf ergibt, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × der Anteil davon, der gilt, solange wenige Arbeitskräfte unbeschäftigt sind, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!."
+  "en": "#header $te_nation_how_sub_construction$#!\\nEach construction point costs #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! of its base: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! from $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! from the other construction-cost modifiers.\\n$TOOLTIP_DELIMITER$\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] It is heading for one plus the part GDP per capita gives, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × the share of it that applies while few workers are idle, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, and moves at most [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] of itself a year.",
+  "de": "#header $te_nation_how_sub_construction$#!\\nJeder Baupunkt kostet #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! seiner Basis: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! aus $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! aus den übrigen Baukosten-Modifikatoren.\\n$TOOLTIP_DELIMITER$\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] Sie strebt eins plus dem Anteil an, den das BIP pro Kopf ergibt, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × dem Anteil davon, der gilt, solange wenige Arbeitskräfte unbeschäftigt sind, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, zu und bewegt sich um höchstens [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] ihrer selbst pro Jahr."
  },
  "te_nation_ov_jud_set_tt": {
   "en": "#header $concept_judicial_independence$#!\\nRises 4 a year toward its ceiling and falls 10 a year above it.\\n$TOOLTIP_DELIMITER$\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ), 'te_nation_jud_ceiling_paper_row', 'te_nation_jud_ceiling_row' )]",
@@ -34867,6 +35167,214 @@
   "en": "Town",
   "de": "Kleinstadt"
  },
+ "te_sp_tt_land_city_great": {
+  "en": "Its largest city, about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, is a metropolis, but city pictures start with $art_deco_architecture$.",
+  "de": "Seine größte Stadt mit etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohnern ist eine Metropole, doch Stadtbilder beginnen erst mit $art_deco_architecture$."
+ },
+ "te_sp_tt_land_city_small": {
+  "en": "Its largest city, about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, is smaller than a metropolis.",
+  "de": "Seine größte Stadt mit etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohnern ist kleiner als eine Metropole."
+ },
+ "te_sp_tt_terrain_docks": {
+  "en": "Terrain: port, set by the game.",
+  "de": "Gelände: Hafen, vom Spiel festgelegt."
+ },
+ "te_sp_tt_terrain_mining": {
+  "en": "Terrain: mining, set by the game.",
+  "de": "Gelände: Bergbau, vom Spiel festgelegt."
+ },
+ "te_sp_tt_terrain_urban_line": {
+  "en": "\\nTerrain: urban, set by the game.",
+  "de": "\\nGelände: städtisch, vom Spiel festgelegt."
+ },
+ "te_sp_tt_why_affluent_at": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: an affluent street from #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|0]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Wohlhabende Straße ab #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|0]#!."
+ },
+ "te_sp_tt_why_affluent_kept": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: an affluent street stays affluent down to #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Wohlhabende Straße bleibt wohlhabend bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!."
+ },
+ "te_sp_tt_why_boomtown_at": {
+  "en": "Its people have grown about #v [State.MakeScope.ScriptValue('te_state_picture_hover_growth')|%1]#! a year over recent years: a boomtown from #v [State.MakeScope.ScriptValue('te_state_picture_k_boom')|%0]#!.",
+  "de": "Seine Bevölkerung ist in den letzten Jahren um etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_growth')|%1]#! pro Jahr gewachsen: eine Boomtown ab #v [State.MakeScope.ScriptValue('te_state_picture_k_boom')|%0]#!."
+ },
+ "te_sp_tt_why_boomtown_kept": {
+  "en": "Its people have grown about #v [State.MakeScope.ScriptValue('te_state_picture_hover_growth')|%1]#! a year over recent years: a boomtown stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_boom_keep')|%1]#!.",
+  "de": "Seine Bevölkerung ist in den letzten Jahren um etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_growth')|%1]#! pro Jahr gewachsen: eine Boomtown bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_boom_keep')|%1]#!."
+ },
+ "te_sp_tt_why_city": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: more than a town, less than a metropolis.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: mehr als eine Kleinstadt, weniger als eine Metropole."
+ },
+ "te_sp_tt_why_cleared_land": {
+  "en": "The game gives this state cleared land terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Rodungsland. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_colliery_at": {
+  "en": "Its $building_coal_mine$ are #v [State.MakeScope.ScriptValue('te_state_picture_hover_coal_share')|%0]#! of its mine levels: a colliery from #v [State.MakeScope.ScriptValue('te_state_picture_k_coal_share')|%0]#!.",
+  "de": "Anteil von $building_coal_mine$ an seinen Bergwerksstufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_coal_share')|%0]#!. Zechenland ab #v [State.MakeScope.ScriptValue('te_state_picture_k_coal_share')|%0]#!."
+ },
+ "te_sp_tt_why_colliery_kept": {
+  "en": "Its $building_coal_mine$ are #v [State.MakeScope.ScriptValue('te_state_picture_hover_coal_share')|%0]#! of its mine levels: a colliery stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_coal_share_keep')|%1]#!.",
+  "de": "Anteil von $building_coal_mine$ an seinen Bergwerksstufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_coal_share')|%0]#!. Zechenland bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_coal_share_keep')|%1]#!."
+ },
+ "te_sp_tt_why_declining_at": {
+  "en": "Its people have fallen about #v [State.MakeScope.ScriptValue('te_state_picture_hover_fall')|%1]#! a year over recent years: a declining city from #v [State.MakeScope.ScriptValue('te_state_picture_k_decline_fall')|%0]#!.",
+  "de": "Seine Bevölkerung ist in den letzten Jahren um etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_fall')|%1]#! pro Jahr geschrumpft: eine Schrumpfende Stadt ab #v [State.MakeScope.ScriptValue('te_state_picture_k_decline_fall')|%0]#!."
+ },
+ "te_sp_tt_why_declining_kept": {
+  "en": "Its people have fallen about #v [State.MakeScope.ScriptValue('te_state_picture_hover_fall')|%1]#! a year over recent years: a declining city stays so until the fall is under #v [State.MakeScope.ScriptValue('te_state_picture_k_decline_keep_fall')|%1]#!.",
+  "de": "Seine Bevölkerung ist in den letzten Jahren um etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_fall')|%1]#! pro Jahr geschrumpft: eine Schrumpfende Stadt bleibt es, bis der Rückgang unter #v [State.MakeScope.ScriptValue('te_state_picture_k_decline_keep_fall')|%1]#! liegt."
+ },
+ "te_sp_tt_why_devastated": {
+  "en": "Its [concept_devastation] is #v [State.MakeScope.ScriptValue('te_state_picture_k_ruins')|%0]#! or more.",
+  "de": "Seine [concept_devastation] liegt bei #v [State.MakeScope.ScriptValue('te_state_picture_k_ruins')|%0]#! oder darüber."
+ },
+ "te_sp_tt_why_divided_at": {
+  "en": "Its income is spread very unequally, a Gini coefficient of #v [State.MakeScope.ScriptValue('te_state_picture_hover_gini')|2]#!: a metropolis is divided from #v [State.MakeScope.ScriptValue('te_state_picture_k_divided')|2]#!.",
+  "de": "Sein Einkommen ist sehr ungleich verteilt, ein Gini-Koeffizient von #v [State.MakeScope.ScriptValue('te_state_picture_hover_gini')|2]#!: eine Metropole ist ab #v [State.MakeScope.ScriptValue('te_state_picture_k_divided')|2]#! eine Geteilte Stadt."
+ },
+ "te_sp_tt_why_divided_kept": {
+  "en": "Its income is spread very unequally, a Gini coefficient of #v [State.MakeScope.ScriptValue('te_state_picture_hover_gini')|2]#!: a divided city stays so down to #v [State.MakeScope.ScriptValue('te_state_picture_k_divided_keep')|2]#!.",
+  "de": "Sein Einkommen ist sehr ungleich verteilt, ein Gini-Koeffizient von #v [State.MakeScope.ScriptValue('te_state_picture_hover_gini')|2]#!: eine Geteilte Stadt bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_divided_keep')|2]#!."
+ },
+ "te_sp_tt_why_farmland": {
+  "en": "The game gives this state farmland terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Ackerland. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_forestry": {
+  "en": "The game gives this state forestry terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Forstwirtschaft. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_harbor": {
+  "en": "The game gives this state port terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Hafen. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_housing_blocks": {
+  "en": "[State.GetOwner.GetName] runs a $law_command_economy$ and has researched $prefabricated_construction$.",
+  "de": "[State.GetOwner.GetAltName('NOM')|U] führt das Gesetz $law_command_economy$ und hat die Technologie $prefabricated_construction$ erforscht."
+ },
+ "te_sp_tt_why_industry_at": {
+  "en": "Its heavy industry is #v [State.MakeScope.ScriptValue('te_state_picture_hover_industry_share')|%0]#! of all its building levels: an industrial city from #v [State.MakeScope.ScriptValue('te_state_picture_k_industry_share')|%0]#!.",
+  "de": "Seine Schwerindustrie macht #v [State.MakeScope.ScriptValue('te_state_picture_hover_industry_share')|%0]#! aller seiner Gebäudestufen aus: eine Industriestadt ab #v [State.MakeScope.ScriptValue('te_state_picture_k_industry_share')|%0]#!."
+ },
+ "te_sp_tt_why_industry_kept": {
+  "en": "Its heavy industry is #v [State.MakeScope.ScriptValue('te_state_picture_hover_industry_share')|%0]#! of all its building levels: an industrial city stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_industry_share_keep')|%1]#!.",
+  "de": "Seine Schwerindustrie macht #v [State.MakeScope.ScriptValue('te_state_picture_hover_industry_share')|%0]#! aller seiner Gebäudestufen aus: eine Industriestadt bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_industry_share_keep')|%1]#!."
+ },
+ "te_sp_tt_why_land_desert": {
+  "en": "The game gives this state desert terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Wüste. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_forest": {
+  "en": "The game gives this state forest terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Wald. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_hills": {
+  "en": "The game gives this state hills terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Hügel. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_jungle": {
+  "en": "The game gives this state jungle terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Dschungel. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_mountain": {
+  "en": "The game gives this state mountain terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Gebirge. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_plains": {
+  "en": "The game gives this state plains terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Ebene. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_savanna": {
+  "en": "The game gives this state savanna terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Savanne. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_tundra": {
+  "en": "The game gives this state tundra terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Tundra. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_wetland": {
+  "en": "The game gives this state wetland terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Feuchtgebiet. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_major_port": {
+  "en": "Its $building_port$ is at level #v [State.MakeScope.ScriptValue('te_state_picture_hover_port_level')|0]#!: a major port from level #v [State.MakeScope.ScriptValue('te_state_picture_k_major_port')|0]#!.",
+  "de": "Sein $building_port$ hat Stufe #v [State.MakeScope.ScriptValue('te_state_picture_hover_port_level')|0]#!: ein Großhafen ab Stufe #v [State.MakeScope.ScriptValue('te_state_picture_k_major_port')|0]#!."
+ },
+ "te_sp_tt_why_megacity_at": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: a megacity from #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity')|K]#!.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: eine Megastadt ab #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity')|K]#!."
+ },
+ "te_sp_tt_why_megacity_kept": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: once a megacity, a city stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity_keep')|K]#!.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: Wer einmal eine Megastadt war, bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity_keep')|K]#!."
+ },
+ "te_sp_tt_why_metropolis_at": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: a metropolis from #v [State.MakeScope.ScriptValue('te_state_picture_k_metropolis')|K]#!.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: eine Metropole ab #v [State.MakeScope.ScriptValue('te_state_picture_k_metropolis')|K]#!."
+ },
+ "te_sp_tt_why_metropolis_kept": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: once a metropolis, a city stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_metropolis_keep')|K]#!.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: Wer einmal eine Metropole war, bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_metropolis_keep')|K]#!."
+ },
+ "te_sp_tt_why_nuclear": {
+  "en": "It is still in the aftermath of a nuclear strike.",
+  "de": "Es steht noch unter den Folgen eines Nuklearschlags."
+ },
+ "te_sp_tt_why_oil_at": {
+  "en": "Its $building_oil_rig$ are #v [State.MakeScope.ScriptValue('te_state_picture_hover_oil_share')|%0]#! of all its building levels: an oil field from #v [State.MakeScope.ScriptValue('te_state_picture_k_oil_share')|%0]#!.",
+  "de": "Anteil von $building_oil_rig$ an allen seinen Gebäudestufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_oil_share')|%0]#!. Ölfeld ab #v [State.MakeScope.ScriptValue('te_state_picture_k_oil_share')|%0]#!."
+ },
+ "te_sp_tt_why_oil_kept": {
+  "en": "Its $building_oil_rig$ are #v [State.MakeScope.ScriptValue('te_state_picture_hover_oil_share')|%0]#! of all its building levels: an oil field stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_oil_share_keep')|%1]#!.",
+  "de": "Anteil von $building_oil_rig$ an allen seinen Gebäudestufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_oil_share')|%0]#!. Ölfeld bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_oil_share_keep')|%1]#!."
+ },
+ "te_sp_tt_why_open_pit": {
+  "en": "The game gives this state mining terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Bergbau. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_plantation": {
+  "en": "The game gives this state plantation terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Plantage. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_poor_at": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: under #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|0]#!, the line for a poor street.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: unter #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|0]#!, der Grenze für eine Arme Straße."
+ },
+ "te_sp_tt_why_poor_kept": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: a poor street stays poor until #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Arme Straße bleibt arm bis #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!."
+ },
+ "te_sp_tt_why_ranch": {
+  "en": "The game gives this state pasture terrain. $te_sp_tt_land_city$",
+  "de": "Das Spiel gibt diesem Staat das Gelände Weideland. $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_resort_at": {
+  "en": "Its $building_tourism_industry$ is #v [State.MakeScope.ScriptValue('te_state_picture_hover_resort_share')|%0]#! of all its building levels: a resort from #v [State.MakeScope.ScriptValue('te_state_picture_k_resort_share')|%0]#!.",
+  "de": "Anteil von $building_tourism_industry$ an allen seinen Gebäudestufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_resort_share')|%0]#!. Ferienort ab #v [State.MakeScope.ScriptValue('te_state_picture_k_resort_share')|%0]#!."
+ },
+ "te_sp_tt_why_resort_kept": {
+  "en": "Its $building_tourism_industry$ is #v [State.MakeScope.ScriptValue('te_state_picture_hover_resort_share')|%0]#! of all its building levels: a resort stays one down to #v [State.MakeScope.ScriptValue('te_state_picture_k_resort_share_keep')|%1]#!.",
+  "de": "Anteil von $building_tourism_industry$ an allen seinen Gebäudestufen: #v [State.MakeScope.ScriptValue('te_state_picture_hover_resort_share')|%0]#!. Ferienort bleibt es bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_k_resort_share_keep')|%1]#!."
+ },
+ "te_sp_tt_why_rundown_at": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! under the #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#! its people expect: run-down from #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown')|0]#! under.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! unter den #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#!, die seine Bevölkerung erwartet: eine Heruntergekommene Straße ab #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown')|0]#! darunter."
+ },
+ "te_sp_tt_why_rundown_kept": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! under the #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#! its people expect: a run-down street stays so until within #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown_keep')|1]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! unter den #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#!, die seine Bevölkerung erwartet: eine Heruntergekommene Straße bleibt es, bis der Abstand höchstens #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown_keep')|1]#! beträgt."
+ },
+ "te_sp_tt_why_smog": {
+  "en": "Pollution in its region is at #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! of 255 or more.",
+  "de": "Die Verschmutzung in seiner Region liegt bei #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! von 255 oder mehr."
+ },
+ "te_sp_tt_why_town": {
+  "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, under the #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! of a city.",
+  "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner, weniger als die #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! einer Stadt."
+ },
  "te_state_climate_comfort_none": {
   "en": "#v None#!",
   "de": "#v Keine#!"
@@ -35535,6 +36043,10 @@
   "en": "Ends #bold $un_champion_order_cost$#!",
   "de": "Beendet #bold $un_champion_order_cost$#!"
  },
+ "un_charter_league_tt": {
+  "en": "Some country has researched $intergovernmental_organizations$ (the organization was founded under the early unlock)",
+  "de": "Ein Land hat $intergovernmental_organizations$ erforscht (die Organisation wurde unter der frühen Freischaltung gegründet)"
+ },
  "un_charter_needs_reform_1_tt": {
   "en": "The [concept_un_charter] carries Charter Reform I",
   "de": "Die [concept_un_charter] enthält die Charta-Reform I"
@@ -35835,6 +36347,10 @@
   "en": "We have #bold 500#! [concept_influence] available",
   "de": "Uns stehen #bold 500#! [concept_influence] zur Verfügung"
  },
+ "un_found_tech_early_tt": {
+  "en": "You have researched $multilateral_alliances$ or $intergovernmental_organizations$",
+  "de": "Sie haben $multilateral_alliances$ oder $intergovernmental_organizations$ erforscht"
+ },
  "un_founding_cost_modifier": {
   "en": "UN Founding Costs",
   "de": "UN-Gründungskosten"
@@ -35866,6 +36382,10 @@
  "un_grounds_condemn_tt": {
   "en": "A rival prosecuting a war of its own making has a record that supports a censure (case strength 30 or more)",
   "de": "Ein Rivale, der einen selbst verschuldeten Krieg führt, hat eine Akte, die eine Missbilligung stützt (Fallstärke von mindestens 30)"
+ },
+ "un_grounds_expulsion_tt": {
+  "en": "A [concept_un_permanent_member] that is not our ally, overlord or subject has used its [concept_un_veto] in the last five years",
+  "de": "Ein [concept_un_permanent_member], das nicht unser Verbündeter, Suzerän oder Klientelland ist, hat in den letzten fünf Jahren sein [concept_un_veto] eingesetzt"
  },
  "un_grounds_sanctions_tt": {
   "en": "A rival not already under sanctions has a record that supports them (case strength 50 or more)",
@@ -36943,6 +37463,10 @@
   "en": "Unilateral Tariffs Imposed",
   "de": "Einseitige Zölle verhängt"
  },
+ "un_unlock_early_tt": {
+  "en": "You have researched $multilateral_alliances$ or $intergovernmental_organizations$, or the $je_united_nations$ has been founded",
+  "de": "Sie haben $multilateral_alliances$ oder $intergovernmental_organizations$ erforscht, oder die Organisation $je_united_nations$ wurde gegründet"
+ },
  "un_veto_abolition_modifier": {
   "en": "Veto Abolition Advocate",
   "de": "Befürworter der Vetoabschaffung"
@@ -37212,8 +37736,8 @@
   "de": "Vermittler beim Auszug aus der Versammlung"
  },
  "un_withdrawal_penalty_modifier": {
-  "en": "UN Withdrawal Consequences",
-  "de": "Folgen des UN-Austritts"
+  "en": "Estranged from the United Nations",
+  "de": "Entfremdet von den Vereinten Nationen"
  },
  "une_formation_bloc_unanimity_tt": {
   "en": "Every other [concept_great_power] is in our [concept_power_bloc]",
@@ -37543,6 +38067,10 @@
   "en": "Universal Energy Subsidy",
   "de": "Allgemeine Energiesubvention"
  },
+ "we_sc_postscarcity_subsidize_cost": {
+  "en": "Energy Subsidy Payments",
+  "de": "Zahlungen für Energiesubventionen"
+ },
  "we_sc_storm_rideout": {
   "en": "Solar Storm Weathered",
   "de": "Überstandener Sonnensturm"
@@ -37626,6 +38154,10 @@
  "women_combat_roles_modifier": {
   "en": "Women in Combat Roles",
   "de": "Frauen in Kampfrollen"
+ },
+ "ww_air_raid_relief_modifier": {
+  "en": "Air Raid Relief",
+  "de": "Luftangriffshilfe"
  },
  "ww_arsenal_of_democracy_modifier": {
   "en": "Arsenal of Democracy",
