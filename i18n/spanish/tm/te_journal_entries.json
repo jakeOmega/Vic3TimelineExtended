@@ -5177,7 +5177,7 @@
  },
  "je_space_race_widget_howc_autonomy": {
   "en": "Each colony's [concept_sr_colony_autonomy] moves every month; hover a colony's drift in the Autonomy view for its own terms. With #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more, a colony demands self-government at 50 and breaks away at 100; a smaller one's autonomy only settles. A colony we abandon or let go becomes a [concept_sr_free_colony].",
-  "es": "La [concept_sr_colony_autonomy|l] de cada colonia se mueve cada mes; pasa el cursor por la deriva de una colonia en la vista Autonomía para ver sus propios términos. Con #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! habitantes o más, una colonia exige el autogobierno con 50 y se separa con 100; la autonomía de una más pequeña solo se estabiliza. Una colonia que abandonamos o dejamos marchar se convierte en una [concept_sr_free_colony|l]."
+  "es": "En cada colonia, la [concept_sr_colony_autonomy|l] se mueve cada mes; pasa el cursor por la deriva de una colonia en la vista Autonomía para ver sus propios términos. Con #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! habitantes o más, una colonia exige el autogobierno con 50 y se separa con 100; la autonomía de una más pequeña solo se estabiliza. Una colonia que abandonamos o dejamos marchar se convierte en una [concept_sr_free_colony|l]."
  },
  "je_space_race_widget_howc_defences": {
   "en": "A site's Defenses fire on enemy fleets that close in on it. Their fire wears down its [concept_sr_integrity], and at 0 an enemy with enough [concept_sr_marines] occupies it. Integrity comes back by 5 a month, 10 with a Spaceport. Marines we land raise what a seizure needs.",

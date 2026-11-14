@@ -465,7 +465,7 @@
  },
  "setting_united_nations_early_unlock_desc": {
   "en": "As Late Unlock, but a great power can found the organization with $multilateral_alliances$, as the League of Nations. Until some country has $intergovernmental_organizations$, it keeps that name and its charter can't be reformed, which holds it at Established or below.",
-  "es": "Como el desbloqueo tardío, pero una gran potencia puede fundar la organización con la tecnología $multilateral_alliances$, como Sociedad de Naciones. Hasta que algún país investigue la tecnología $intergovernmental_organizations$, conserva ese nombre y su carta no puede reformarse, lo que la mantiene en Establecida o por debajo."
+  "es": "Como el desbloqueo tardío, pero una gran potencia puede fundar la organización con la tecnología $multilateral_alliances$, con el nombre de Sociedad de Naciones. Hasta que algún país investigue la tecnología $intergovernmental_organizations$, conserva ese nombre y su carta no puede reformarse, lo que la mantiene en Consolidada o por debajo."
  },
  "setting_united_nations_enabled": {
   "en": "United Nations: Late Unlock",
