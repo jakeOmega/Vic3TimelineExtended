@@ -1077,7 +1077,8 @@ banking_qe_debate_possible = {
 
 # banking_cycle_events.34 (the deposit insurance debate). Is a deposit guarantee
 # already in force? The dashboard's Expanded Deposit Guarantee; a power-bloc
-# banking union's common guarantee (tier 4 and up, on the currency's adopters —
+# banking union's common guarantee (tier 4 and up, on the currency's adopters and,
+# since 2026-11-14, its issuer —
 # the te_mon_union_banking_union managed modifier, which only exists under the
 # full monetary system); or the scheme a previous debate set up.
 banking_deposit_guarantee_in_force = {
