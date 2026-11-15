@@ -32,6 +32,21 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
 - **Concepts:** Defined in `common/game_concepts/extra_concepts.txt`, with textures for hoverable tooltip links. The tourism rows label with `concept_tourism_*` and reuse those concept textures as row icons.
 - **Pattern:** Use `[concept_X]` for hoverable concept links, `[State.GetModifier.GetValueWithBreakdownFor('modifier_key')]` for modifier breakdowns, and `[State.MakeScope.ScriptValue('sv_name')]` for computed values. A value cell that shows one expression inlines it as `raw_text = "#v [...]#!"`.
 
+## Construction List Columns
+
+When the player picks a building to construct, vanilla lists the states it can go in (`map_list_panel.gui`). One column shows each state's productivity impact, except for Government Administration (tax capacity balance) and Trade Center (trade capacity balance). `gui/00_te_build_list_columns.gui` adds the mod's cases (a Workshop request, 2026-11-15):
+
+| Building | Cell | Cell tooltip | Header |
+|---|---|---|---|
+| National Park | `State.GetStateRegion.GetPollutionImpact\|%R1`, as vanilla's state pollution list shows it | vanilla's `STATE_POLLUTION` (impact, trend, generated pollution) | `state_status_icons/pollution.dds`, `te_build_list_pollution_header_tt` |
+| Public Housing | the crowding pull penalty, `migration_crowding_pull_pct\|%0-` (red above 0) | `te_build_list_crowding_tt`: penalty, population, threshold | `generic_icons/population.dds`, `te_build_list_crowding_header_tt` |
+
+- **How:** the file redefines three vanilla types (gotcha #30): the cell `productivity_or_other_information`, which both of the list's layouts instance, and the header rows `construction_headers_condensed` and `construction_headers_full`. It is generated (`scripts/generators/gen_build_list_columns.py`, table `COLUMNS`) from `test_fixtures/vanilla_gui/map_list_panel.gui`, so the rest of vanilla's 5,400-line file stays vanilla's. Productivity's cell and header are hidden for the buildings in `COLUMNS`, and each gets a cell and a header in the same slot.
+- **No sorting:** `MapListPanel.Sort` takes a key the engine knows (`tax_capacity_balance`, `trade_capacity_balance`, ...). The data types don't list the keys and script can't add one, so the mod's headers have no `onclick`, and their tooltips say the column can't be sorted.
+- **Compatibility:** no Workshop mod installed here (2026-11-15) redefines the three types or ships `map_list_panel.gui`. CMF and the Multi-line Production Methods framework redefine the list's row (`construction_interaction_item_full`) and keep instancing the cell, so the cell's change reaches their row too. A mod that overrides the whole of `map_list_panel.gui` would lose these three types to this file. The three were unchanged from 1.13.0 to 1.15.1.
+- **Left on productivity:** Carbon Conversion Works (its Direct Air Capture removes the same carbon a level in any state, and it is a private industry, so productivity still applies). Open: the Settlement Authority (frontier density), the Grid Transfer Station and the other state-funded buildings; adding one is a `COLUMNS` row.
+- **In game:** unverified; `docs/testing/build-list-columns-playtest.md`.
+
 ## Nation Tab
 
 Spec: `docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md`. The first tab of the Timeline Extended window (`gui/te_systems_window.gui`), always open: no journal entry, no game rule, so the window's launcher has no rule gate either. Everything reads the shown country, `Country`, which each mount supplies: the player's in the window, any country's in National Info, where the tab is public and shows another country all of it, with no control to hide (spec `docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md` § 6.4; `test_te_system_tab_bodies.py`, and `test_nation_tab.py`'s `ForeignViewTest`). The modifier types' names the type rows splice keep `GetPlayer`: they render wherever the engine names a type and ask only a game rule (`WORLD_LOC`).

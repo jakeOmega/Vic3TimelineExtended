@@ -579,7 +579,9 @@ pollution-control methods below and National Parks do it per level at full
 staffing (500 on the National Park and National Wildlife Refuge methods, 250 on
 National Forest), and a monument dedicated as Botanical Gardens takes 5,000 a
 step (see [Monument dedications](02-timeline.md#monument-dedications)). A
-polluting production method adds between 3 and 100 a level.
+polluting production method adds between 3 and 100 a level. When you pick a
+National Park to build, the list of states shows each one's pollution impact
+where other buildings show productivity; the column can't be sorted.
 
 ### Pollution-control methods
 
