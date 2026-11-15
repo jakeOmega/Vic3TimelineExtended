@@ -979,10 +979,17 @@ class InstitutionHookTest(unittest.TestCase):
         for o in (1, 2, 3, 4):
             self.assertIn(f"var:te_tax_o{o}_kind = 1", owes)
 
-    def test_no_political_strategy_is_injected(self):
+    def test_no_political_strategy_institution_scores_are_touched(self):
+        # The agendas score schools and health themselves, and whether an INJECT into their nested institution_scores
+        # sums or replaces is unread (spec §2.8). An agenda INJECT of another field (the AI law cadence's
+        # revolution_aversion, edited_political_strategies.txt) leaves them alone; a REPLACE would restate them.
         import pathlib
         for f in pathlib.Path(__file__).parent.glob("common/ai_strategies/*.txt"):
-            self.assertNotRegex(f.read_text(encoding="utf-8-sig"), r"(INJECT|REPLACE):ai_strategy_\w+_agenda")
+            text = re.sub(r"#[^\n]*", "", f.read_text(encoding="utf-8-sig"))
+            with self.subTest(file=f.name):
+                self.assertNotRegex(text, r"REPLACE\w*:ai_strategy_\w+_agenda")
+                for m in re.finditer(r"(?m)^INJECT:(ai_strategy_\w+_agenda)\s*=", text):
+                    self.assertNotIn("institution_scores", block(text, "INJECT:" + m.group(1)), m.group(1))
 
     # -- beyond the brief's sample ------------------------------------------
 

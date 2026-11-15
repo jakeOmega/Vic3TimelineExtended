@@ -53,7 +53,7 @@
 		# interest group a level of this institution weights it higher while the
 		# promise binds it, so the native AI invests in it at native speed and cost.
 		# te_tax_ai_owes_institution is false with the rule off, so rule-off scores
-		# are unchanged. The political agenda strategies are not touched.
+		# are unchanged. The political agendas' own institution scores are not touched.
 		institution_schools = {
 			value = 10
 			if = {
