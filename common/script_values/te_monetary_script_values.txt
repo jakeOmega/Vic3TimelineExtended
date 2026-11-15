@@ -415,6 +415,9 @@
 # is displayed and is their sum, so publishing either recovers the other, and a
 # recoverable core plus the displayed expectations recovers the pressure sum
 # from two months of readings. Nothing displays cost-push today; nothing may.
+# te_mon_anchor_core, the copy of an anchor's core that a common-currency
+# adopter's regime pull reads (2026-11-15), is hidden on the same terms: it is
+# the leader's te_inflation_core (te_monetary_arrangement_script_values.txt).
 # What phase 2 shows exactly: headline inflation, expected inflation, the
 # target, the rate paid, the monetisation level, and the two pressure modifier
 # types, which are what the player chose. The console debug event is the one
@@ -2729,6 +2732,8 @@ te_mon_pressure_noise = {
 #   a DOLLARISED country (ruling P9: it now uses somebody
 #   else's money)                                           -(pi_core - anchor)
 #   decentralized cryptocurrency                            -(pi_core + 1)
+#   a common-currency ADOPTER (§15A.3)                      -te_mon_union_price_pull
+#                                                            x (pi_core - leader's pi_core)
 #
 # THE DOLLARISED PULL IS TO THE ANCHOR, NOT TO ZERO (#1084, owner 2026-10-20).
 # Decision K pins a dollarised country's expectations at
@@ -2754,6 +2759,37 @@ te_mon_pressure_noise = {
 # job. What holds the price LEVEL is a quantity channel, and each convertible
 # regime has its own: te_mon_pressure_gold_flow for a gold standard,
 # te_mon_pressure_commodity_specie (immediately below) for commodity money.
+#
+# THE ADOPTER'S PULL IS TO THE LEADER'S CORE (owner, 2026-11-15). An adopter
+# keeps its own inflation (§15A.1, ruling G1), but goods that cross borders in
+# one money sell at one price, so only the non-traded half of its basket can
+# run apart from the leader's: euro members' gaps since 1999 are a point a year
+# or less among like economies, nearly all in services. Read off
+# te_mon_anchor_core, step 1c's copy, last pulse's or this one's by country
+# order like every other anchor copy. Core to core because the shared part of
+# the headline, a market's goods prices, already reaches both through the §9.3
+# basket when the two share a market. Two-sided: a colder adopter is pulled up.
+# Only an adopter: a treaty peg can be broken and a board's subject is a
+# colony, and both still have only the premium or peg confidence between them
+# and their own inflation.
+#
+# WHY 1, NOT 0.5. Without the pull an adopter has no fixed point. Its rate is
+# the leader's with no term for its own expectations (ruling G13), so each
+# point of its own inflation is a point off its real rate, and the stance term
+# hands back 0.4 of it: the manual dial's Taylor-principle failure, against an
+# imported credibility (max(own, 0.8 x the leader's)) of 0.56 behind an
+# independent bank and less behind any other. Iterating step 6 with that loop
+# (2026-11-15), a standing 1pp of domestic pressure carried an adopter 50
+# points above its leader in about a century, 2pp in about fifty years. With a
+# pull of 1 the gap settles at 0.9 to 1.2 x the pressure; at 0.5, 1.6 to 3 x.
+# And with half the basket traded, a pull of 1 halves the gap the domestic sum
+# alone would open, the same proportion the dollarised pull gives.
+# test_monetary_union_price_pull.py holds both: the fixed point, and the loop
+# with the stance term in it.
+te_mon_union_price_pull = {
+	value = 1
+}
+
 te_mon_pressure_regime_pull = {
 	value = 0
 	if = {
@@ -2769,6 +2805,18 @@ te_mon_pressure_regime_pull = {
 		limit = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
 		subtract = te_mon_inflation_core_read
 		subtract = 1
+	}
+	else_if = {
+		# Last: an adopter joins on fiat or digital money and not dollarised
+		# (te_mon_union_regime_fits). One dollarised since gets the dollarised
+		# pull above, which is right: that money is what circulates.
+		limit = {
+			te_mon_is_union_adopter = yes
+			has_variable = te_mon_anchor_core
+		}
+		add = var:te_mon_anchor_core
+		subtract = te_mon_inflation_core_read
+		multiply = te_mon_union_price_pull
 	}
 }
 
