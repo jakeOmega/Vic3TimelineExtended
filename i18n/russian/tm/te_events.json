@@ -20717,7 +20717,7 @@
  },
  "space_race_events.42.d": {
   "en": "Depending on where Earth and Mars stand in their orbits, a signal between them takes from about three to twenty-two minutes each way. Any emergency on the Martian surface will have to be handled by the crew before mission control even hears of it. The mission's computers and the crew's training must be planned around that delay.",
-  "ru": "В зависимости от положения Земли и Марса на орбитах сигнал между ними идёт в одну сторону от трёх до двадцати двух минут. Любую аварийную ситуацию на поверхности Марса экипажу придётся решать, прежде чем центр управления вообще о ней узнает. Бортовые компьютеры миссии и подготовку экипажа нужно планировать с учётом этой задержки."
+  "ru": "В зависимости от положения Земли и Марса на орбитах сигнал между ними идёт в одну сторону от трёх до двадцати двух минут. Любую аварийную ситуацию на поверхности Марса экипажу придётся решать, прежде чем Центр управления полётами вообще о ней узнает. Бортовые компьютеры миссии и подготовку экипажа нужно планировать с учётом этой задержки."
  },
  "space_race_events.42.f": {
   "en": "In the simulator the warning light came on six minutes into the exercise, and the crew commander read it out to Earth as the procedure required: pressure falling in the second airlock. Then the crew got on with it. By the time Earth's reply came over the speaker, twenty minutes later, they had found the leak, closed the outer door and logged the repair. \\\"Control recommends you isolate the second airlock and check the outer seal.\\\" The commander acknowledged it, wrote the time of the reply in the log beside the time of the repair, and called the next item on the checklist.",
@@ -22233,7 +22233,7 @@
  },
  "te_debug_colonial_empire.1.a": {
   "en": "Solidified (95)",
-  "ru": "Прочная (95)"
+  "ru": "Упрочена (95)"
  },
  "te_debug_colonial_empire.1.b": {
   "en": "Stable (75)",
@@ -22241,7 +22241,7 @@
  },
  "te_debug_colonial_empire.1.c": {
   "en": "Strained (50)",
-  "ru": "Напряжённая (50)"
+  "ru": "Напряжена (50)"
  },
  "te_debug_colonial_empire.1.d": {
   "en": "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session.",
@@ -22249,7 +22249,7 @@
  },
  "te_debug_colonial_empire.1.e": {
   "en": "Collapsing (10)",
-  "ru": "Крах (10)"
+  "ru": "Разваливается (10)"
  },
  "te_debug_colonial_empire.1.f": {
   "en": "The cartographers await instruction.",
@@ -22257,7 +22257,7 @@
  },
  "te_debug_colonial_empire.1.opt_d": {
   "en": "Crumbling (30)",
-  "ru": "Шаткая (30)"
+  "ru": "Рушится (30)"
  },
  "te_debug_colonial_empire.1.opt_f": {
   "en": "Just refresh the panel (and log it)",
@@ -22365,15 +22365,15 @@
  },
  "te_debug_covert.1.a": {
   "en": "Funding 0 - Dormant",
-  "ru": "Финансирование 0 — Бездействие"
+  "ru": "Финансирование 0 — Спящая"
  },
  "te_debug_covert.1.b": {
   "en": "Funding 1 - Operational",
-  "ru": "Финансирование 1 — Действующая служба"
+  "ru": "Финансирование 1 — Действующая"
  },
  "te_debug_covert.1.c": {
   "en": "Funding 2 - Professional",
-  "ru": "Финансирование 2 — Профессиональная служба"
+  "ru": "Финансирование 2 — Профессиональная"
  },
  "te_debug_covert.1.d": {
   "en": "Console-only shortcuts for testing the covert-warfare command center. None of these can happen in normal play.\\n\\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\\n\\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation.",
@@ -22389,7 +22389,7 @@
  },
  "te_debug_covert.1.g": {
   "en": "Funding 4 - Black Budget",
-  "ru": "Финансирование 4 — Чёрный бюджет"
+  "ru": "Финансирование 4 — Чёрная касса"
  },
  "te_debug_covert.1.h": {
   "en": "Funding 5 - Deep State",
@@ -22413,7 +22413,7 @@
  },
  "te_debug_covert.2.d": {
   "en": "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\\n\\nSeeding plants four operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11, military espionage at month 14 and a fully-operational destabilization at month 14 - so all three phase layouts show at once, two operations tip over their boundary at the next monthly pulse, and the severe-tier third-party blowback is reachable if the destabilization is later caught. It raises funding to level 2 (Professional) first if the service is dormant.\\n\\nForcing detection burns one operation, sends the target the detection event, and writes the record the command center reads back as #italic Counterintelligence exposed ...#!\\n\\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped.\\n\\nRaising priority runs the same effect as the row's priority stepper, without the button, so it works even if the stepper stays grayed out: upkeep and detection change immediately, and the scaled effect modifiers follow at the start of next month.",
-  "ru": "Только для консоли: быстрые пути для проверки строк операций. В обычной игре ничего из этого произойти не может.\\n\\nСоздание размещает четыре операции против одной подходящей страны: промышленный шпионаж на 5-м месяце, кампанию влияния на 11-м, военный шпионаж на 14-м и полностью действующую дестабилизацию на 14-м, так что все три раскладки фаз видны одновременно, две операции переходят свою границу при следующем ежемесячном импульсе, а откат от третьей стороны тяжёлого уровня достижим, если дестабилизацию позже раскроют. Сначала оно поднимает финансирование до уровня 2 (профессиональная), если служба бездействует.\\n\\nПринудительное обнаружение сжигает одну операцию, отправляет цели событие об обнаружении и записывает запись, которую командный центр читает как #italic Контрразведка раскрыла ...#!\\n\\nПовторный расчёт состояния отображения — то, что делает первый ежемесячный импульс после загрузки старого сохранения: используйте его, если в строках, восстановленных из сохранения, сделанного до выхода этого виджета, нет строк фаз.\\n\\nПовышение приоритета запускает тот же эффект, что и переключатель приоритета строки, но без кнопки, так что оно работает, даже если переключатель остаётся серым: расходы и обнаружение меняются сразу, а масштабируемые модификаторы эффектов следуют в начале следующего месяца."
+  "ru": "Только для консоли: быстрые пути для проверки строк операций. В обычной игре ничего из этого произойти не может.\\n\\nСоздание размещает четыре операции против одной подходящей страны: промышленный шпионаж на 5-м месяце, кампанию влияния на 11-м, военный шпионаж на 14-м и полностью действующую дестабилизацию на 14-м, так что все три раскладки фаз видны одновременно, две операции переходят свою границу при следующем ежемесячном импульсе, а откат от третьей стороны тяжёлого уровня достижим, если дестабилизацию позже раскроют. Сначала оно поднимает финансирование до уровня 2 (Профессиональная), если служба бездействует.\\n\\nПринудительное обнаружение сжигает одну операцию, отправляет цели событие об обнаружении и записывает запись, которую командный центр читает как #italic Контрразведка раскрыла ...#!\\n\\nПовторный расчёт состояния отображения — то, что делает первый ежемесячный импульс после загрузки старого сохранения: используйте его, если в строках, восстановленных из сохранения, сделанного до выхода этого виджета, нет строк фаз.\\n\\nПовышение приоритета запускает тот же эффект, что и переключатель приоритета строки, но без кнопки, так что оно работает, даже если переключатель остаётся серым: расходы и обнаружение меняются сразу, а масштабируемые модификаторы эффектов следуют в начале следующего месяца."
  },
  "te_debug_covert.2.e": {
   "en": "Age every operation by a year",
@@ -22601,7 +22601,7 @@
  },
  "te_debug_demog.1.d.tt": {
   "en": "Walks every state of the world that has a census three times, then runs its yearly cohort step three times, each pass between TE_DEMOG_BENCH lines in debug.log, whose timestamps time it. The start line says whether the walk summed what the census absorbs (full=1, the Full setting). The passes leave each census wrong, so afterwards every one is seeded again from today's population.",
-  "ru": "Обходит каждую область мира, у которой есть перепись, три раза, затем три раза запускает её ежегодный шаг когорт, каждый проход между строками TE_DEMOG_BENCH в debug.log, по меткам времени которых его и измеряют. Начальная строка сообщает, суммировал ли обход то, что поглощает перепись (full=1, настройка «Полная»). После проходов каждая перепись оказывается неверной, поэтому затем каждая засевается заново по сегодняшнему населению."
+  "ru": "Обходит каждую область мира, у которой есть перепись, три раза, затем три раза запускает её ежегодный шаг когорт, каждый проход между строками TE_DEMOG_BENCH в debug.log, по меткам времени которых его и измеряют. Начальная строка сообщает, суммировал ли обход то, что поглощает перепись (full=1, настройка «Полное»). После проходов каждая перепись оказывается неверной, поэтому затем каждая засевается заново по сегодняшнему населению."
  },
  "te_debug_demog.1.desc": {
   "en": "Console-only tools for checking the demographic census against its Python model. Nothing in the mod fires this event. Every option writes to debug.log.\\n\\nA second replay in the same year steps our capital's census twice in one year, which leaves it wrong: re-seed our census afterwards. The benchmark does the same to every census in the world, then seeds them all again itself.",
@@ -22741,7 +22741,7 @@
  },
  "te_debug_demog.1.t_opt.tt": {
   "en": "Writes a TE_DEMOG_CONSEQ line for our capital: fam and faw are its men aged 20 to 39 and the women of those ages, share their share of its people and men_share of its men, term the conscription term from them, mc the one the census applies under Full and consc_mod the state's conscription multiplier; youth is the share aged 20 to 29, unemp the share of its workforce without work the census stored, y_now the youth bulge's strength now and yb the one in force; sex is men per 100 women aged 20 to 59, sxb the balance this year's births read, tfr_sex and women_add its terms, fewer and more the two sex-balance modifiers' strengths; radicals_mod, turmoil_mod and feminist_mod are the state's reads of the fields they move. A TE_DEMOG_CONSEQ_COUNTRY line gives our census states together.",
-  "ru": "Записывает строку TE_DEMOG_CONSEQ для нашей столицы: fam и faw — её мужчины в возрасте от 20 до 39 лет и женщины тех же возрастов, share — их доля в её населении, а men_share — в её мужчинах, term — срок призыва, полученный из них, mc — применяемый переписью при «Полной», а consc_mod — множитель призыва области; youth — доля в возрасте от 20 до 29 лет, unemp — сохранённая переписью доля её рабочей силы без работы, y_now — сила молодёжного бугра сейчас, а yb — действующая; sex — число мужчин на 100 женщин в возрасте от 20 до 59 лет, sxb — баланс, который читают рождения этого года, tfr_sex и women_add — его члены, fewer и more — силы двух модификаторов баланса полов; radicals_mod, turmoil_mod и feminist_mod — чтения областью полей, которые они двигают. Строка TE_DEMOG_CONSEQ_COUNTRY даёт сводку по областям нашей переписи вместе."
+  "ru": "Записывает строку TE_DEMOG_CONSEQ для нашей столицы: fam и faw — её мужчины в возрасте от 20 до 39 лет и женщины тех же возрастов, share — их доля в её населении, а men_share — в её мужчинах, term — срок призыва, полученный из них, mc — применяемый переписью при настройке «Полное», а consc_mod — множитель призыва области; youth — доля в возрасте от 20 до 29 лет, unemp — сохранённая переписью доля её рабочей силы без работы, y_now — сила молодёжного бугра сейчас, а yb — действующая; sex — число мужчин на 100 женщин в возрасте от 20 до 59 лет, sxb — баланс, который читают рождения этого года, tfr_sex и women_add — его члены, fewer и more — силы двух модификаторов баланса полов; radicals_mod, turmoil_mod и feminist_mod — чтения областью полей, которые они двигают. Строка TE_DEMOG_CONSEQ_COUNTRY даёт сводку по областям нашей переписи вместе."
  },
  "te_debug_demog.1.u": {
   "en": "The late game: log our capital's longevity figures",
@@ -22765,7 +22765,7 @@
  },
  "te_debug_demog.1.w.tt": {
   "en": "Opens a chooser that fires any of the ten events of the demographic event wave on our country now, whatever its condition and whether it fired within a generation. Its options act as they would under Full; the ones that use the census's levers need Full.",
-  "ru": "Открывает выбор, который запускает для нашей страны любое из десяти событий демографической волны событий сейчас, независимо от условия и от того, запускалось ли оно на протяжении поколения. Его варианты действуют так же, как при «Полной»; те из них, что используют рычаги переписи, требуют «Полной»."
+  "ru": "Открывает выбор, который запускает для нашей страны любое из десяти событий демографической волны событий сейчас, независимо от условия и от того, запускалось ли оно на протяжении поколения. Его варианты действуют так же, как при настройке «Полное»; те из них, что используют рычаги переписи, требуют настройки «Полное»."
  },
  "te_debug_demog.1.x": {
   "en": "Family policy: log what our capital's census reads",
@@ -22861,7 +22861,7 @@
  },
  "te_debug_deterrence.1.g": {
   "en": "Recessed at once (warheads in storage)",
-  "ru": "Немедленно в режиме хранения (боеголовки на складе)"
+  "ru": "Немедленно в пониженной готовности (боеголовки на складе)"
  },
  "te_debug_deterrence.1.h": {
   "en": "Automatic Retaliation at once (with its technology)",
@@ -24229,7 +24229,7 @@
  },
  "te_debug_un.1.c": {
   "en": "Set my standing to Exemplary (85)",
-  "ru": "Установить моё положение «Образцовое» (85)"
+  "ru": "Установить мой международный авторитет «Образцовый» (85)"
  },
  "te_debug_un.1.d": {
   "en": "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\\n\\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighboring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.\\n\\nDooming the UN sets its authority to 1 and its credibility and order ledgers to their floors: the crisis opens at the next monthly update, the collapse clock runs, and it dissolves a few months later. Dissolving does it at once. After a dissolution the Found button convenes a founding conference once the cooldown is skipped; skipping again while a conference sits ends its year at the next monthly update.",
@@ -24237,7 +24237,7 @@
  },
  "te_debug_un.1.e": {
   "en": "Set my standing to Disgraced (10)",
-  "ru": "Установить моё положение «Опозоренное» (10)"
+  "ru": "Установить мой международный авторитет «Опозоренный» (10)"
  },
  "te_debug_un.1.f": {
   "en": "'Is this in order?'\\n\\n'Nothing about this is in order.'",
@@ -26169,7 +26169,7 @@
  },
  "un_events.10.e_tt": {
   "en": "We join the United Nations now, bound by every convention it has ratified. Our share of world power counts toward its participation pillar from next month.",
-  "ru": "Мы вступаем в Организацию Объединённых Наций сейчас и связываем себя каждой ратифицированной ею конвенцией. Наша доля мировой мощи идёт в счёт опоры участия со следующего месяца."
+  "ru": "Мы вступаем в Организацию Объединённых Наций сейчас и связываем себя каждой ратифицированной ею конвенцией. Наша доля мировой мощи идёт в счёт опоры «Участие» со следующего месяца."
  },
  "un_events.10.f": {
   "en": "\\\"I sell newspapers at the corner opposite the main gate. The delegates used to buy three or four each in the morning. Now most of them walk straight past, and the ones who stop ask me whether the building will still be open next year.\\\"\\n\\n\\\"I interpret in the Assembly hall. Last week I put one speech into three languages, and the hall was half empty for all of them. The delegations that came had sent their juniors.\\\"\\n\\n\\\"My government's instructions are to support the organization in principle and commit to nothing. I have had the same instructions since the spring, and the other delegations tell me theirs say the same.\\\"\\n\\n\\\"I work in the Secretariat's budget office. We have been told to finish the reports already started and to begin no new ones until the members settle what they owe.\\\"",

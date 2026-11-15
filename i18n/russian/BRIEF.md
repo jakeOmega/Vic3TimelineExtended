@@ -161,6 +161,26 @@ These base-game terms recur everywhere. Use them, inflected, wherever the Englis
 
 For a term in none of the lists, choose Russian that fits the official game's register, and list it in your report.
 
+The first run settled these mod words too, which are too short or too common for the glossaries to catch:
+
+| English | Russian |
+|---|---|
+| amendment / bill | поправка / законопроект |
+| census | перепись населения |
+| the player | игрок |
+| a Strategic Reserve hub | узел |
+| the Drugs good (vanilla's opium, renamed) | препараты; *лекарства* where the text means medicine, *наркотики* where it means narcotics |
+| devastation | опустошение |
+| a country's (UN, international) standing | международный авторитет |
+| clout (of interest groups) | вес |
+| the Tender ship role | суда снабжения |
+| Grand Monument(s) | великий монумент (великие монументы) |
+| launch window | стартовое окно |
+
+Level and band names read as their labels do, quoted or agreeing with *уровень*: UN authority — Угасающий / Оспариваемый / Устоявшийся / Сильный / Надгосударственный; tradecraft — Необстрелянный / Новичок / Состоявшийся / Опытный / Ветеран; nuclear readiness — пониженная / обычная / усиленная; colonial stability — Упрочена / Стабильна / Напряжена / Рушится / Разваливается; UN standing — Образцовый / Уважаемый / Нейтральный / Плохой / Опозоренный; the UN authority pillars — Участие / Приверженность / Финансирование / Политика / Доверие / Результативность; seabed regimes — Открытый / Регулируемый / Схватка.
+
+Some inserted names have a fixed form to write around: ocean basins (`$te_seabed_basin_*$`) are masculine adjectives, so write «океан» after them («Тихий океан»); the merged cultures (`$cm_*$`) are feminine adjectives agreeing with *культура* («культура $cm_american$»); a power bloc named after its capital is «Лига $X$» or «Пакт $X$».
+
 Names and titles take a capital on the first word only, as Russian writes them: «Свободная торговля», «Силовой блок», «Оружейная промышленность», «Запись журнала». Don't copy English Title Case. Proper names of real organisations follow their official Russian form («Организация Объединённых Наций», «Всемирный банк», «Совет Безопасности»).
 
 Proper names stay as they are, or in their established Russian form: people, places, companies, historical buildings, products. Transliterate a foreign proper name the usual Russian way (Eiffel Tower → «Эйфелева башня», Siemens → «Сименс», but a brand normally written in Latin letters may stay Latin), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → «Текстильная фабрика Гецнер Блуденц»). A generic descriptive name is not a proper name and is translated ("Communist Party" → «Коммунистическая партия», "Technocratic Party" → «Технократическая партия»).

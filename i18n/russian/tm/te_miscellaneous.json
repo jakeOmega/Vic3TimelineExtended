@@ -27069,7 +27069,7 @@
  },
  "te_demog_cd_dc_war_tt": {
   "en": "#b War and Devastation#!\\n$te_demog_cd_dc_war_deaths$\\nThe dead of the country's wars, shared out to the states by their soldiers. The census takes them from the people of fighting age, 20 to 39, nineteen in twenty of them men. Under the Full setting, the civilians that devastation and war's other harms kill count here too, from people of every age.",
-  "ru": "#b Война и опустошение#!\\n$te_demog_cd_dc_war_deaths$\\nПогибшие в войнах страны, распределённые по областям по числу их солдат. Перепись населения берёт их из людей призывного возраста, 20–39 лет, девятнадцать из двадцати — мужчины. В режиме «Полный» гражданские, убитые опустошением и другим вредом войны, учитываются здесь же, из людей всех возрастов."
+  "ru": "#b Война и опустошение#!\\n$te_demog_cd_dc_war_deaths$\\nПогибшие в войнах страны, распределённые по областям по числу их солдат. Перепись населения берёт их из людей призывного возраста, 20–39 лет, девятнадцать из двадцати — мужчины. В режиме «Полное» гражданские, убитые опустошением и другим вредом войны, учитываются здесь же, из людей всех возрастов."
  },
  "te_demog_cd_dc_work_deaths": {
   "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]",
@@ -27101,7 +27101,7 @@
  },
  "te_demog_cd_ontop_rate": {
   "en": "\\nUnder the Full setting the game adds deaths on top of the census's own, which the pie counts under their causes. Across the country's states last year: #v [Country.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! deaths per 1,000 people[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], against #v [Country.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! at the census's own rate (×#v [Country.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!).",
-  "ru": "\\nВ режиме «Полный» игра добавляет смерти сверх учтённых переписью, которые диаграмма относит к их причинам. По областям страны за прошлый год: #v [Country.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! смертей на 1 000 человек[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], против #v [Country.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! при собственной норме переписи (×#v [Country.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!)."
+  "ru": "\\nВ режиме «Полное» игра добавляет смерти сверх учтённых переписью, которые диаграмма относит к их причинам. По областям страны за прошлый год: #v [Country.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! смертей на 1 000 человек[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], против #v [Country.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! при собственной норме переписи (×#v [Country.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!)."
  },
  "te_demog_cd_pie_tt": {
   "en": "#b Causes of Death#!\\nLast year's #v [Country.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths in the country's states; the table beside the pie splits them by cause.",
@@ -27217,7 +27217,7 @@
  },
  "te_demog_census_workforce_down_desc": {
   "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count. The game's own workforce takes up a new figure only as people are born, a few percent of the way a year, so while it trails, this line runs past the census's figure, by as much as closes about half the gap in a year and at most 20% either way.",
-  "ru": "При правиле «Демография» в режиме «Полный» перепись задаёт рабочую силу этой области по тому, кто в трудоспособном возрасте и кто работает: законы о детском труде, пенсионный возраст, труд женщин и здоровье. Она заменяет собственные строки рабочей силы законов и технологий при каждом ежегодном подсчёте. Собственная рабочая сила игры принимает новое значение лишь по мере рождения людей, на несколько процентов за год, поэтому пока она отстаёт, эта строка превышает показатель переписи на столько, чтобы за год закрыть около половины разрыва, но не более чем на 20% в любую сторону."
+  "ru": "При правиле «Демография» в режиме «Полное» перепись задаёт рабочую силу этой области по тому, кто в трудоспособном возрасте и кто работает: законы о детском труде, пенсионный возраст, труд женщин и здоровье. Она заменяет собственные строки рабочей силы законов и технологий при каждом ежегодном подсчёте. Собственная рабочая сила игры принимает новое значение лишь по мере рождения людей, на несколько процентов за год, поэтому пока она отстаёт, эта строка превышает показатель переписи на столько, чтобы за год закрыть около половины разрыва, но не более чем на 20% в любую сторону."
  },
  "te_demog_census_workforce_up": {
   "en": "Census: Workforce",
@@ -27225,7 +27225,7 @@
  },
  "te_demog_census_workforce_up_desc": {
   "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labor laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count. The game's own workforce takes up a new figure only as people are born, a few percent of the way a year, so while it trails, this line runs past the census's figure, by as much as closes about half the gap in a year and at most 20% either way.",
-  "ru": "При правиле «Демография» в режиме «Полный» перепись задаёт рабочую силу этой области по тому, кто в трудоспособном возрасте и кто работает: законы о детском труде, пенсионный возраст, труд женщин и здоровье. Она заменяет собственные строки рабочей силы законов и технологий при каждом ежегодном подсчёте. Собственная рабочая сила игры принимает новое значение лишь по мере рождения людей, на несколько процентов за год, поэтому пока она отстаёт, эта строка превышает показатель переписи на столько, чтобы за год закрыть около половины разрыва, но не более чем на 20% в любую сторону."
+  "ru": "При правиле «Демография» в режиме «Полное» перепись задаёт рабочую силу этой области по тому, кто в трудоспособном возрасте и кто работает: законы о детском труде, пенсионный возраст, труд женщин и здоровье. Она заменяет собственные строки рабочей силы законов и технологий при каждом ежегодном подсчёте. Собственная рабочая сила игры принимает новое значение лишь по мере рождения людей, на несколько процентов за год, поэтому пока она отстаёт, эта строка превышает показатель переписи на столько, чтобы за год закрыть около половины разрыва, но не более чем на 20% в любую сторону."
  },
  "te_demog_census_youth_bulge": {
   "en": "Census: Youth Bulge",
@@ -27281,7 +27281,7 @@
  },
  "te_demog_dc_head_deaths_tt": {
   "en": "Last year's deaths from the cause. The four natural causes are estimated: the census's own deaths shared out by each cause's rate in each five-year age band. Under the Full setting, the deaths the game adds on top of the census count under their causes, as the game's effects tag them. Childbirth's deaths, the war dead and the people killed by events are counted as they are.",
-  "ru": "Смерти за прошлый год от этой причины. Четыре естественные причины оценены: смерти по переписи, распределённые по норме каждой причины в каждой пятилетней возрастной группе. В режиме «Полный» смерти, которые игра добавляет сверх переписи, учитываются по их причинам, как их помечают эффекты игры. Смерти при родах, погибшие на войне и убитые событиями учитываются как есть."
+  "ru": "Смерти за прошлый год от этой причины. Четыре естественные причины оценены: смерти по переписи, распределённые по норме каждой причины в каждой пятилетней возрастной группе. В режиме «Полное» смерти, которые игра добавляет сверх переписи, учитываются по их причинам, как их помечают эффекты игры. Смерти при родах, погибшие на войне и убитые событиями учитываются как есть."
  },
  "te_demog_dc_head_share": {
   "en": "Share",
@@ -27585,11 +27585,11 @@
  },
  "te_demog_how_applied": {
   "en": "Under the Full setting the census sets each state's births and deaths. From its first step in a state, the Laws and Institutions lines in the state's birth rate and mortality go: the effects the census models, such as those of the child labor and women's rights laws, the health laws, vaccines, antibiotics, the pill and mild starvation, become part of its own rates, and the rest, such as the family-policy laws and the late medical technologies, it applies at its own rate. Either way, a new law or technology takes effect at the state's next census step. An effect on the whole state, such as pollution, devastation or a decree, moves its births or deaths by its own percentage of the census's rate, as its tooltip line reads; an effect on some of its people, such as severe starvation, applies to their rate in the base game. Private Health Insurance's cut for the wealthy works at the census's rate, and no pop's deaths fall below half of it. Under Display only the census only reports, and births and deaths follow the game's own rules. The workforce follows the game's own rules either way.",
-  "ru": "В режиме «Полный» перепись задаёт рождаемость и смертность каждой области. С её первого шага в области строки «Законы и институты» в рождаемости и смертности области исчезают: эффекты, которые моделирует перепись, такие как эффекты законов о детском труде и правах женщин, законов о здравоохранении, вакцин, антибиотиков, противозачаточных таблеток и лёгкого голода, становятся частью её собственных норм, а остальные, такие как законы семейной политики и поздние медицинские технологии, она применяет по своей норме. В любом случае новый закон или технология вступает в силу на следующем шаге переписи области. Эффект на всю область, такой как загрязнение, опустошение или указ, меняет её рождаемость или смертность на свой процент от нормы переписи, как сказано в строке его подсказки; эффект на часть её населения, такой как тяжёлый голод, применяется к их норме, как в базовой игре. Сокращение смертности для богатых по Частному медицинскому страхованию действует от нормы переписи, и ни у одной группы населения смертность не опускается ниже её половины. В режиме «Только показ» перепись лишь сообщает данные, а рождаемость и смертность подчиняются собственным правилам игры. Рабочая сила в любом случае подчиняется собственным правилам игры."
+  "ru": "В режиме «Полное» перепись задаёт рождаемость и смертность каждой области. С её первого шага в области строки «Законы и институты» в рождаемости и смертности области исчезают: эффекты, которые моделирует перепись, такие как эффекты законов о детском труде и правах женщин, законов о здравоохранении, вакцин, антибиотиков, противозачаточных таблеток и лёгкого голода, становятся частью её собственных норм, а остальные, такие как законы семейной политики и поздние медицинские технологии, она применяет по своей норме. В любом случае новый закон или технология вступает в силу на следующем шаге переписи области. Эффект на всю область, такой как загрязнение, опустошение или указ, меняет её рождаемость или смертность на свой процент от нормы переписи, как сказано в строке его подсказки; эффект на часть её населения, такой как тяжёлый голод, применяется к их норме, как в базовой игре. Сокращение смертности для богатых по Частному медицинскому страхованию действует от нормы переписи, и ни у одной группы населения смертность не опускается ниже её половины. В режиме «Только отображение» перепись лишь сообщает данные, а рождаемость и смертность подчиняются собственным правилам игры. Рабочая сила в любом случае подчиняется собственным правилам игры."
  },
  "te_demog_how_causes": {
   "en": "The census counts one total of deaths a year. Causes of Death splits it: each natural cause's deaths at the year's rates, from the people of each five-year age band at the last count, are scaled so the four add up to the census's own deaths from them. The split is exact where an age band holds one age group, and an estimate for children under 5, for people 85 and over, and for people in longevity care, whose bodies age at their own pace. Under the Full setting the game adds deaths on top of the census's own: famine, pollution, devastation, dangerous work, decrees and events. Each of those effects names the cause its deaths count under, and the census places them on that cause's ages; devastation's dead join the war dead. Mothers who die in childbirth, the war dead and the people killed by events are counted as they are. The country's figures are its states' added up.",
-  "ru": "Перепись считает одну общую цифру смертей в год. «Причины смерти» разбивают её: смерти от каждой естественной причины по нормам года, из людей каждой пятилетней возрастной группы по последнему подсчёту, масштабируются так, чтобы четыре причины в сумме дали собственные смерти переписи от них. Разбивка точна там, где возрастная группа состоит из одной когорты, и является оценкой для детей до 5 лет, для людей 85 лет и старше и для людей на медицине долголетия, чьи тела стареют в собственном темпе. В режиме «Полный» игра добавляет смерти сверх собственных смертей переписи: голод, загрязнение, опустошение, опасный труд, указы и события. Каждый из этих эффектов называет причину, по которой учитываются его смерти, и перепись помещает их на возрасты этой причины; погибшие от опустошения присоединяются к погибшим на войне. Матери, умирающие при родах, погибшие на войне и убитые событиями учитываются как есть. Показатели страны — сумма показателей её областей."
+  "ru": "Перепись считает одну общую цифру смертей в год. «Причины смерти» разбивают её: смерти от каждой естественной причины по нормам года, из людей каждой пятилетней возрастной группы по последнему подсчёту, масштабируются так, чтобы четыре причины в сумме дали собственные смерти переписи от них. Разбивка точна там, где возрастная группа состоит из одной когорты, и является оценкой для детей до 5 лет, для людей 85 лет и старше и для людей на медицине долголетия, чьи тела стареют в собственном темпе. В режиме «Полное» игра добавляет смерти сверх собственных смертей переписи: голод, загрязнение, опустошение, опасный труд, указы и события. Каждый из этих эффектов называет причину, по которой учитываются его смерти, и перепись помещает их на возрасты этой причины; погибшие от опустошения присоединяются к погибшим на войне. Матери, умирающие при родах, погибшие на войне и убитые событиями учитываются как есть. Показатели страны — сумма показателей её областей."
  },
  "te_demog_how_census": {
   "en": "Every state keeps its people as a count by single year of age, women and men apart. Each year the count grows a year older: the newborn enter at 0, each age loses its dead at its own rates, and the war dead, the people killed by events and the migrants who come or go are taken from the ages they belong to. The count is then scaled to the state's real population, so the census and the game never disagree on how many people there are. A state's first count, at the start of the game or when the state first appears, is the settled shape of its own birth and death rates.",
@@ -27597,7 +27597,7 @@
  },
  "te_demog_how_family": {
   "en": "The $lawgroup_family_reproductive_policy$ law sets which measures the government may take (under $law_communal_child_rearing$, so does the form of government), and each is a button in Family Policy. A measure takes effect at once, costs money, authority or bureaucracy while it runs, moves the interest groups, and can't be ended for five years. One the law no longer allows ends at once when the law changes. The Crash Campaign ends itself after five years and can't return for ten; Birth Limit's button moves from two children to one, then ends it. Measures act only under the Full Demographics rule. The census reads a measure at each state's next count: how many children families want, the means to plan a family, mothers' deaths and, once prenatal sexing exists, the boys and girls born; the births follow over the year after, and the children reach working age fifteen years on. Parental Leave's women's work counts as the women's rights laws' does.",
-  "ru": "Действующий закон группы «$lawgroup_family_reproductive_policy$» определяет, какие меры может принимать правительство (при $law_communal_child_rearing$ это зависит и от формы правления), и каждая из них — кнопка в «Семейной политике». Мера вступает в силу сразу, пока действует, стоит денег, авторитета или бюрократии, двигает группы интересов и не может быть отменена пять лет. Мера, которую закон больше не разрешает, заканчивается сразу при смене закона. «Ударная кампания» сама заканчивается через пять лет и не может вернуться десять; кнопка «Ограничение рождаемости» переходит от двух детей к одному, затем отключает его. Меры действуют только при правиле «Демография» в режиме «Полный». Перепись считывает меру при следующем подсчёте каждой области: сколько детей хотят семьи, средства планировать семью, смерти матерей и, когда появится дородовое определение пола, рождение мальчиков и девочек; рождаемость следует в течение следующего года, а дети достигают трудоспособного возраста через пятнадцать лет. Труд женщин при «Отпуске по уходу за ребёнком» учитывается так же, как при законах о правах женщин."
+  "ru": "Действующий закон группы «$lawgroup_family_reproductive_policy$» определяет, какие меры может принимать правительство (при $law_communal_child_rearing$ это зависит и от формы правления), и каждая из них — кнопка в «Семейной политике». Мера вступает в силу сразу, пока действует, стоит денег, авторитета или бюрократии, двигает группы интересов и не может быть отменена пять лет. Мера, которую закон больше не разрешает, заканчивается сразу при смене закона. «Ударная кампания» сама заканчивается через пять лет и не может вернуться десять; кнопка «Ограничение рождаемости» переходит от двух детей к одному, затем отключает его. Меры действуют только при правиле «Демография» в режиме «Полное». Перепись считывает меру при следующем подсчёте каждой области: сколько детей хотят семьи, средства планировать семью, смерти матерей и, когда появится дородовое определение пола, рождение мальчиков и девочек; рождаемость следует в течение следующего года, а дети достигают трудоспособного возраста через пятнадцать лет. Труд женщин при «Отпуске по уходу за ребёнком» учитывается так же, как при законах о правах женщин."
  },
  "te_demog_how_fertility": {
   "en": "Wealth sets how many children couples would have with nothing holding them back. Women's legal standing moves that, and two customs lower it: late marriage, where women marry in their mid-twenties and many never marry, and birth spacing, where couples space and stop births by custom. Both fade as modern contraception spreads, and birth spacing fades with health care too; women's paid work and farms that pass whole to one heir make late marriage more common. [concept_literacy], child survival (life expectancy between 30 and 80 years) and urban life each lower how many they want, family policy moves it up or down, and where a cultural hegemon's media reach, its smaller or larger families pull a little. The means to plan a family grow with [concept_literacy] and with medicine, from vulcanized rubber to the pill, and decide how much of the gap between the two they close. Family limitation, couples stopping by older methods before modern ones arrive, adds to the means and spreads from neighbors who practice it. Births added on top of the census, such as a decree's or a famine's, scale the year's figure. Births follow the body, not the calendar: once longevity care exists a woman in it can have a far younger body than her years, so mean age at childbirth rises and some births come to women of 50 and over.",
@@ -27617,7 +27617,7 @@
  },
  "te_demog_how_longevity_laws": {
   "en": "$law_human_purity$ bans longevity care: those in it leave, and their bodies keep the years it saved them. $law_mandatory_augmentation$ puts at least 90% of people in care, and $law_unrestricted_augmentation$ brings the market 20 levels of wealth lower. Where the market brings care before the health system does, the rich have it first, and under the Full setting a wide longevity gap turns the Trade Unions and the Rural Folk against the government, the more so the fewer people are in care, and swells the labor movement where it is widest.",
-  "ru": "Закон $law_human_purity$ запрещает медицину долголетия: те, кто на ней, выбывают, а их тела сохраняют сэкономленные ею годы. Закон $law_mandatory_augmentation$ ставит на медицину не менее 90% людей, а закон $law_unrestricted_augmentation$ приводит рынок на 20 уровней богатства ниже. Там, где рынок приносит медицину раньше системы здравоохранения, богатые получают её первыми, а в режиме «Полный» большой разрыв в долголетии настраивает «Профсоюзы» и «Сельское население» против правительства, тем сильнее, чем меньше людей на медицине, и раздувает рабочее движение там, где он шире всего."
+  "ru": "Закон $law_human_purity$ запрещает медицину долголетия: те, кто на ней, выбывают, а их тела сохраняют сэкономленные ею годы. Закон $law_mandatory_augmentation$ ставит на медицину не менее 90% людей, а закон $law_unrestricted_augmentation$ приводит рынок на 20 уровней богатства ниже. Там, где рынок приносит медицину раньше системы здравоохранения, богатые получают её первыми, а в режиме «Полное» большой разрыв в долголетии настраивает «Профсоюзы» и «Сельское население» против правительства, тем сильнее, чем меньше людей на медицине, и раздувает рабочее движение там, где он шире всего."
  },
  "te_demog_how_migration": {
   "en": "Migrants are the people a state gains or loses beyond what its births, deaths, war dead and the people killed by events account for. They come and go mostly as young adults, and where light industry and services draw women to work, more of them are women. War dead are taken from the men and women aged 18 to 40, nineteen in twenty of them men.",
@@ -27629,7 +27629,7 @@
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
-  "ru": "В режиме «Полный» ежегодный подсчёт накладывает на область постоянные модификаторы там, где этого требуют её показатели: «Неравенство», «Молодёжный бугор», «Нехватка мужчин», «Избыток мужчин», «Разрыв в долголетии», «Метрополис», «Разбросанные города», «Город-примат» и «Забвение провинции». Каждый пересчитывается каждый год с силой, задаваемой стоящим за ним показателем, и исчезает, когда показатель возвращается. Их перечисляет раздел «Модификаторы», а строка модификаторов области, где хранится то, что начинается и кончается в дату, — нет. Наведите на один, чтобы увидеть его эффекты с той силой, какую область имеет сейчас."
+  "ru": "В режиме «Полное» ежегодный подсчёт накладывает на область постоянные модификаторы там, где этого требуют её показатели: «Неравенство», «Молодёжный бугор», «Нехватка мужчин», «Избыток мужчин», «Разрыв в долголетии», «Метрополис», «Разбросанные города», «Город-примат» и «Забвение провинции». Каждый пересчитывается каждый год с силой, задаваемой стоящим за ним показателем, и исчезает, когда показатель возвращается. Их перечисляет раздел «Модификаторы», а строка модификаторов области, где хранится то, что начинается и кончается в дату, — нет. Наведите на один, чтобы увидеть его эффекты с той силой, какую область имеет сейчас."
  },
  "te_demog_how_mortality": {
   "en": "Deaths come from five causes: infection and hunger, accidents and violence, chronic illness and old age, work, and childbirth. Each runs at the rates of a poor country without modern medicine, times a multiplier that medical technology, health laws, institutions and a higher [concept_sol] bring down. Life expectancy is how long a child born now would live at this year's rates: the census's own, before famine, war and disasters. Medicine reaches a state over years: health care access and each treatment close a share of the gap at each count, a tenth at first and more as communications and medical training improve. Turmoil raises deaths from accidents and violence.",
@@ -27641,7 +27641,7 @@
  },
  "te_demog_how_pensions": {
   "en": "Under $law_old_age_pension$ the government chooses the pension age from five settings, and a choice holds for five years: Early at 60, Standard at 65, Raised at 70, and two linked to longevity. A linked setting keeps the pension age where it is (at least 65) and moves it at most one year each year toward five years below Old Age From, the age at which people have fifteen years left to live. Linked to Average follows the average lifespan of all the people, the treated included, so once longevity treatment spreads it can climb past the age those who still age live to. Linked to Common follows the common lifespan, that of the people outside longevity care, so the pension stays within their reach, but the treated draw it for life. Until longevity care begins the two would give the same age, so Linked to Common can be chosen only once it has. Under the Full setting the pension bill pays each pensioner a share of output per head for each level of $institution_social_security$, on top of the law's own welfare payments, and the health system's bureaucracy cost follows the care the people's ages need.",
-  "ru": "При законе $law_old_age_pension$ правительство выбирает пенсионный возраст из пяти настроек, и выбор действует пять лет: «Ранний» — 60, «Стандартный» — 65, «Повышенный» — 70 и две, привязанные к долголетию. Привязанная настройка сохраняет пенсионный возраст на месте (не ниже 65) и сдвигает его не более чем на год в год к возрасту на пять лет ниже границы «Старость с» — возраста, в котором у людей остаётся пятнадцать лет жизни. «Привязка к среднему» следует средней продолжительности жизни всех людей, включая получивших лечение, поэтому с распространением лечения долголетия она может подняться выше возраста тех, кто ещё стареет. «Привязка к общему» следует общей продолжительности жизни — людей вне медицины долголетия, так что пенсия остаётся им по силам, но получившие лечение берут её пожизненно. Пока медицины долголетия нет, обе давали бы один и тот же возраст, поэтому «Привязку к общему» можно выбрать, лишь когда она появится. В режиме «Полный» пенсионные расходы выплачивают каждому пенсионеру долю выпуска на душу за каждый уровень института $institution_social_security$ сверх собственных социальных выплат закона, а бюрократическая стоимость системы здравоохранения следует за помощью, которая нужна по возрасту людей."
+  "ru": "При законе $law_old_age_pension$ правительство выбирает пенсионный возраст из пяти настроек, и выбор действует пять лет: «Ранний» — 60, «Стандартный» — 65, «Повышенный» — 70 и две, привязанные к долголетию. Привязанная настройка сохраняет пенсионный возраст на месте (не ниже 65) и сдвигает его не более чем на год в год к возрасту на пять лет ниже границы «Старость с» — возраста, в котором у людей остаётся пятнадцать лет жизни. «Привязка к среднему» следует средней продолжительности жизни всех людей, включая получивших лечение, поэтому с распространением лечения долголетия она может подняться выше возраста тех, кто ещё стареет. «Привязка к общему» следует общей продолжительности жизни — людей вне медицины долголетия, так что пенсия остаётся им по силам, но получившие лечение берут её пожизненно. Пока медицины долголетия нет, обе давали бы один и тот же возраст, поэтому «Привязку к общему» можно выбрать, лишь когда она появится. В режиме «Полное» пенсионные расходы выплачивают каждому пенсионеру долю выпуска на душу за каждый уровень института $institution_social_security$ сверх собственных социальных выплат закона, а бюрократическая стоимость системы здравоохранения следует за помощью, которая нужна по возрасту людей."
  },
  "te_demog_how_places": {
   "en": "For the urban pattern each state counts as one city, and its urban people are everyone not working the land or the mines, $peasants$ counting as rural. Primacy is the largest city's share of all urban people, and the effective number of cities is how many cities of equal size would spread them as evenly. The pattern is $te_demog_pattern_0$ when the largest city holds 40% or more, $te_demog_pattern_1$ from 25%, $te_demog_pattern_2$ from 10% and $te_demog_pattern_3$ below that. Within a state, its metropolitan share is the share of its urban people living in its largest city: a modeled figure that moves a twentieth of the way each year to a target the capital, a world market hub, a financial district, the state's size and economy, its infrastructure, crowding, urban planning and the country's urbanization set. It reads $te_demog_mt_label_0$ from 60%, $te_demog_mt_label_1$ from 40%, $te_demog_mt_label_2$ from 20% and $te_demog_mt_label_3$ below; each state's Settlement row on its Demographics subtab shows the terms. Largest Cities names the towns themselves: a state's capital and its port, mining, farming and logging towns, as the map names them, ordered by the people at work in each kind of building, farm, mine and logging work at a quarter and subsistence farms not at all; a port, mining, farming or logging town with no such work is left out. The largest holds the state's metropolitan share of its urban people (before the state's first yearly count, the target it starts at) and each next town that share of the rest. Largest Urban States lists the three states the game's city ranking puts first.",
@@ -27701,7 +27701,7 @@
  },
  "te_demog_how_work": {
   "en": "The workforce is counted in the game's units, the share of all people at work: the share of working age, times the share of them at work, plus those still at work past the working ages. Working age runs from 15, with children of 10 to 14 working at a share under the child labor laws, to the pension age; with no pension age, to where old age begins, the age at which people have fifteen years of life left, so it rises as lives lengthen. Under the Full setting the census sets each state's workforce from these figures, in place of the laws' and technologies' own workforce lines, and the game's own count moves toward it over the years that follow.",
-  "ru": "Рабочая сила считается в единицах игры, как доля всех людей, занятых трудом: доля трудоспособного возраста, умноженная на долю работающих среди них, плюс те, кто продолжает работать после трудоспособного возраста. Трудоспособный возраст начинается с 15 лет (дети от 10 до 14 лет работают в доле, зависящей от законов о детском труде) и длится до пенсионного возраста; если пенсионного возраста нет — до начала старости, то есть возраста, в котором людям остаётся пятнадцать лет жизни, так что он растёт вместе с продолжительностью жизни. При настройке «Полная» перепись населения задаёт рабочую силу каждой области по этим цифрам вместо собственных строк рабочей силы в законах и технологиях, а собственный подсчёт игры в последующие годы сдвигается к ней."
+  "ru": "Рабочая сила считается в единицах игры, как доля всех людей, занятых трудом: доля трудоспособного возраста, умноженная на долю работающих среди них, плюс те, кто продолжает работать после трудоспособного возраста. Трудоспособный возраст начинается с 15 лет (дети от 10 до 14 лет работают в доле, зависящей от законов о детском труде) и длится до пенсионного возраста; если пенсионного возраста нет — до начала старости, то есть возраста, в котором людям остаётся пятнадцать лет жизни, так что он растёт вместе с продолжительностью жизни. При настройке «Полное» перепись населения задаёт рабочую силу каждой области по этим цифрам вместо собственных строк рабочей силы в законах и технологиях, а собственный подсчёт игры в последующие годы сдвигается к ней."
  },
  "te_demog_line_births_down": {
   "en": "Laws and Institutions",
@@ -28033,7 +28033,7 @@
  },
  "te_demog_ms_display_only": {
   "en": "#lore Family policy measures act only under the Full Demographics rule: the rows show what each would do.#!",
-  "ru": "#lore Меры семейной политики действуют только при правиле «Полная демография»: строки показывают, что дала бы каждая из них.#!"
+  "ru": "#lore Меры семейной политики действуют только при правиле «Демография» в режиме «Полное»: строки показывают, что дала бы каждая из них.#!"
  },
  "te_demog_ms_end_tt": {
   "en": "Ends this measure: its effects and running cost stop at once",
@@ -28289,7 +28289,7 @@
  },
  "te_demog_ms_rule_tt": {
   "en": "Family policy measures act only under the Full Demographics rule",
-  "ru": "Меры семейной политики действуют только при правиле «Полная демография»"
+  "ru": "Меры семейной политики действуют только при правиле «Демография» в режиме «Полное»"
  },
  "te_demog_ms_rural_exemption": {
   "en": "Rural Exemption",
@@ -28461,7 +28461,7 @@
  },
  "te_demog_mt_eff_display": {
   "en": "#lore Under the Full Demographics rule, from 40% the largest city would crowd sooner, its people would give more infrastructure, its $building_urban_center$ would work at a larger scale, turmoil would weigh more and families would be smaller, more as its share rises, the crowding and families up to 60% and the rest, more slowly, beyond it; below 20% the state's towns would give less infrastructure.#!",
-  "ru": "#lore При правиле «Полная демография», начиная с 40%, крупнейший город теснился бы раньше, его население давало бы больше инфраструктуры, его $building_urban_center$ работал бы в большем масштабе, беспорядки сказывались бы сильнее, а семьи были бы меньше, и тем больше, чем выше его доля: теснота и семьи — до 60%, остальное, медленнее, — за этим пределом; ниже 20% города области давали бы меньше инфраструктуры.#!"
+  "ru": "#lore При правиле «Демография» в режиме «Полное», начиная с 40%, крупнейший город теснился бы раньше, его население давало бы больше инфраструктуры, его $building_urban_center$ работал бы в большем масштабе, беспорядки сказывались бы сильнее, а семьи были бы меньше, и тем больше, чем выше его доля: теснота и семьи — до 60%, остальное, медленнее, — за этим пределом; ниже 20% города области давали бы меньше инфраструктуры.#!"
  },
  "te_demog_mt_eff_metro": {
   "en": "#b Effects#! at #v [State.MakeScope.ScriptValue('te_demog_mt_e_pos_strength')|%0]#! strength (none at 40%, 100% at 60% and more beyond; the state takes a new figure at its next yearly count): its people give #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_infra_up')|%0]#! [concept_infrastructure], its $building_urban_center$ works at #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_services')|%0]#! [concept_throughput] and [concept_turmoil] weighs #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_turmoil')|%0]#! more. Its crowding and smaller families stop growing at 60%: it crowds #v [State.MakeScope.ScriptValue('te_demog_mt_shown_crowding')|%0]#! sooner ([concept_migration_crowding]), and city life's pull toward smaller families is #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_fertility')|%0]#! stronger.",
@@ -28557,7 +28557,7 @@
  },
  "te_demog_ov_census_tt": {
   "en": "Taken at the start of the game and then once a year, each country on a day of its own. Under the Full setting it sets each state's births and deaths; under Display only it only reports. How Demographics Works, below, says how it counts.",
-  "ru": "Проводится в начале игры, а затем раз в год, в каждой стране в свой день. При настройке «Полная» задаёт рождения и смерти в каждой области; при настройке «Только показ» лишь сообщает данные. Как считает Демография, рассказано ниже."
+  "ru": "Проводится в начале игры, а затем раз в год, в каждой стране в свой день. При настройке «Полное» задаёт рождения и смерти в каждой области; при настройке «Только отображение» лишь сообщает данные. Как считает Демография, рассказано ниже."
  },
  "te_demog_ov_deaths": {
   "en": "Deaths: #v [Country.MakeScope.Var('te_dg_cdr').GetValue|1]#! per 1,000 people last year",
@@ -28609,7 +28609,7 @@
  },
  "te_demog_ov_fam_display": {
   "en": "Under the Full setting the census would set conscription ×#v [Country.MakeScope.ScriptValue('te_demog_country_conscription_mult')|2]#! across the country's states.",
-  "ru": "При настройке «Полная» перепись задала бы призыв ×#v [Country.MakeScope.ScriptValue('te_demog_country_conscription_mult')|2]#! во всех областях страны."
+  "ru": "При настройке «Полное» перепись задала бы призыв ×#v [Country.MakeScope.ScriptValue('te_demog_country_conscription_mult')|2]#! во всех областях страны."
  },
  "te_demog_ov_fam_figures": {
   "en": "Men aged 20 to 39 are #v [Country.MakeScope.Var('te_dg_fam_men').GetValue|%0]#! of the country's men and #v [Country.MakeScope.Var('te_dg_fam_share').GetValue|%1]#! of the country's people. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_k_conscription_effects'), '(CFixedPoint)0' ), SelectLocalization( GetScriptedGui('te_demog_full_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_fam_full', 'te_demog_ov_fam_display' ), 'te_demog_ov_fam_held' )]",
@@ -29001,7 +29001,7 @@
  },
  "te_demog_pension_full_only_tt": {
   "en": "The Full Demographics rule is on",
-  "ru": "Включено правило «Полная демография»"
+  "ru": "Включено правило «Демография» в режиме «Полное»"
  },
  "te_demog_pension_linked_average_button": {
   "en": "Linked: Average",
@@ -29561,7 +29561,7 @@
  },
  "te_demog_sex_rule": {
   "en": "Below 90 men per 100 women fewer women marry: children per woman fall with the balance, by at most a fifth, and more women work, up to a tenth more at 80, where support for women's rights movements rises by 25%, and more again below it, up to twice at 60. From 110 men per 100 women radicals from movements and the effects of turmoil rise, by 15% each at 130, and more again above it, up to twice at 170. The census's births and work figures take the balance under either setting; the movements and radicals only under Full.",
-  "ru": "При менее чем 90 мужчин на 100 женщин меньше женщин выходит замуж: детей на женщину становится меньше вместе с соотношением, не более чем на пятую часть, а больше женщин работает, до десятой части больше при 80, когда поддержка движений за права женщин растёт на 25%, и ещё больше ниже этого значения, до двукратного при 60. Начиная с 110 мужчин на 100 женщин растут радикалы из движений и эффекты беспорядков, на 15% каждый при 130, и ещё больше выше этого значения, до двукратного при 170. Показатели рождений и труда в переписи учитывают соотношение при любой настройке; движения и радикалы — только при «Полной»."
+  "ru": "При менее чем 90 мужчин на 100 женщин меньше женщин выходит замуж: детей на женщину становится меньше вместе с соотношением, не более чем на пятую часть, а больше женщин работает, до десятой части больше при 80, когда поддержка движений за права женщин растёт на 25%, и ещё больше ниже этого значения, до двукратного при 60. Начиная с 110 мужчин на 100 женщин растут радикалы из движений и эффекты беспорядков, на 15% каждый при 130, и ещё больше выше этого значения, до двукратного при 170. Показатели рождений и труда в переписи учитывают соотношение при любой настройке; движения и радикалы — только при настройке «Полное»."
  },
  "te_demog_st_acc_tt": {
   "en": "#b [concept_health_care_access]#!\\nHow many of the state's people medicine reaches; each cause's treatment saves lives only this far.\\nWhere it is heading:\\n Markets and charity, everywhere: #v [State.MakeScope.ScriptValue('te_demog_k_base_access')|%0]#!\\n The health law and the $institution_health_system$: #v [State.MakeScope.ScriptValue('te_demog_access_from_law')|+%0]#!\\n#lore The health law adds its share at each level of the $institution_health_system$, in incorporated states only, times the Impact of Institutions.#!\\n\\nNew medicine and a larger health system reach the state over years: each count closes #v [State.MakeScope.ScriptValue('te_demog_medical_diffusion')|%0]#! of the gap ($state_medical_diffusion_add$).",
@@ -29593,7 +29593,7 @@
  },
  "te_demog_st_census_tt": {
   "en": "#b Census of [State.GetName]#!\\nThe state's people counted by single year of age and by sex, scaled to its #v [State.MakeScope.Var('te_dg_people').GetValue|D]#! people at the count. Each state is counted at the start of the game and then once a year, on a day of its own, and laws and technology that change its rates wait for its next count under Full; the Population panel's Demographics tab adds the states up. Under the Full setting the census sets the state's births and deaths; under Display only it only reports. How Demographics Works, below, says more.",
-  "ru": "#b Перепись области [State.GetName]#!\\nНаселение области, сосчитанное по годам возраста и полу и приведённое к её #v [State.MakeScope.Var('te_dg_people').GetValue|D]#! человек на момент подсчёта. Каждая область считается в начале игры, а затем раз в год, в свой день, а законы и технологии, меняющие её показатели, при настройке «Полная» ждут её следующего подсчёта; вкладка «Демография» панели населения суммирует области. При настройке «Полная» перепись задаёт рождения и смерти области; при настройке «Только показ» лишь сообщает данные. Подробнее — в разделе «Как работает Демография» ниже."
+  "ru": "#b Перепись области [State.GetName]#!\\nНаселение области, сосчитанное по годам возраста и полу и приведённое к её #v [State.MakeScope.Var('te_dg_people').GetValue|D]#! человек на момент подсчёта. Каждая область считается в начале игры, а затем раз в год, в свой день, а законы и технологии, меняющие её показатели, при настройке «Полное» ждут её следующего подсчёта; вкладка «Демография» панели населения суммирует области. При настройке «Полное» перепись задаёт рождения и смерти области; при настройке «Только отображение» лишь сообщает данные. Подробнее — в разделе «Как работает Демография» ниже."
  },
  "te_demog_st_chr_lx": {
   "en": " by the body's age (longevity care keeps bodies young: here the average body, counting children and those outside care, is #v [State.MakeScope.ScriptValue('te_demog_lx_body_gap')|1]#! years younger than its age)",
@@ -29681,7 +29681,7 @@
  },
  "te_demog_st_dc_war_tt": {
   "en": "#b War and Devastation#!\\n$te_demog_st_dc_war_deaths$\\nThe state's share of the owner's war dead, by its soldiers. The census takes them from the people of fighting age, 20 to 39, nineteen in twenty of them men. Under the Full setting, the civilians that devastation and war's other harms kill count here too, from people of every age.",
-  "ru": "#b Война и опустошение#!\\n$te_demog_st_dc_war_deaths$\\nДоля области в числе погибших на войне у страны-владельца, по её солдатам. Перепись берёт их из людей призывного возраста, от 20 до 39 лет, девятнадцать из двадцати — мужчины. При настройке «Полная» сюда же относятся мирные жители, убитые опустошением и другими бедами войны, из людей всех возрастов."
+  "ru": "#b Война и опустошение#!\\n$te_demog_st_dc_war_deaths$\\nДоля области в числе погибших на войне у страны-владельца, по её солдатам. Перепись берёт их из людей призывного возраста, от 20 до 39 лет, девятнадцать из двадцати — мужчины. При настройке «Полное» сюда же относятся мирные жители, убитые опустошением и другими бедами войны, из людей всех возрастов."
  },
  "te_demog_st_dc_work_deaths": {
   "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]",
@@ -29725,7 +29725,7 @@
  },
  "te_demog_st_fam_display": {
   "en": "Under the Full setting the census would set its conscription ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#!.",
-  "ru": "При настройке «Полная» перепись задала бы её призыв ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#!."
+  "ru": "При настройке «Полное» перепись задала бы её призыв ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#!."
  },
  "te_demog_st_fam_figures": {
   "en": "Men aged 20 to 39 are #v [State.MakeScope.ScriptValue('te_demog_fam_men_share')|%0]#! of the state's men and #v [State.MakeScope.ScriptValue('te_demog_fam_share')|%1]#! of its people. [SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_conscription_effects'), '(CFixedPoint)0' ), SelectLocalization( GetScriptedGui('te_demog_state_full_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_full', 'te_demog_st_fam_display' ), 'te_demog_st_fam_held' )]",
@@ -29929,7 +29929,7 @@
  },
  "te_demog_st_ontop_rate": {
   "en": "\\nUnder the Full setting the game adds deaths on top of the census's own, which the pie counts under their causes. Last count: #v [State.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! deaths per 1,000 people at the census's own rate, #v [State.MakeScope.ScriptValue('te_demog_cdr_all')|1]#![SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )] with the game's own effects (×#v [State.MakeScope.ScriptValue('te_demog_deaths_on_top')|2]#!).[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_ed_clamp_d').GetValue, '(CFixedPoint)1' ), 'te_demog_st_ontop_floor', 'te_tt_blank' )]",
-  "ru": "\\nПри настройке «Полная» игра добавляет смерти сверх собственных смертей переписи, которые круговая диаграмма учитывает по их причинам. Прошлый подсчёт: #v [State.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! смертей на 1 000 человек по собственному уровню переписи, #v [State.MakeScope.ScriptValue('te_demog_cdr_all')|1]#![SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )] с учётом собственных эффектов игры (×#v [State.MakeScope.ScriptValue('te_demog_deaths_on_top')|2]#!).[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_ed_clamp_d').GetValue, '(CFixedPoint)1' ), 'te_demog_st_ontop_floor', 'te_tt_blank' )]"
+  "ru": "\\nПри настройке «Полное» игра добавляет смерти сверх собственных смертей переписи, которые круговая диаграмма учитывает по их причинам. Прошлый подсчёт: #v [State.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! смертей на 1 000 человек по собственному уровню переписи, #v [State.MakeScope.ScriptValue('te_demog_cdr_all')|1]#![SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )] с учётом собственных эффектов игры (×#v [State.MakeScope.ScriptValue('te_demog_deaths_on_top')|2]#!).[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_ed_clamp_d').GetValue, '(CFixedPoint)1' ), 'te_demog_st_ontop_floor', 'te_tt_blank' )]"
  },
  "te_demog_st_pending": {
   "en": "#lore Census pending. This state has not been counted yet. Each state is counted once a year, on a day of its own, and its figures appear here after its first count.#!",
@@ -30293,7 +30293,7 @@
  },
  "te_demog_st_wk_need_tt": {
   "en": "#b Health Need#!\\nHow much care this state's people need for their ages, against the world of 1836: the old need several times what the young do, so need rises as a people ages. The country's need sets its health system's bureaucracy cost under the Full Demographics rule.",
-  "ru": "#b Потребность в медицине#!\\nСколько помощи нужно людям этой области по их возрастам по сравнению с миром 1836 года: старым нужно в несколько раз больше, чем молодым, поэтому потребность растёт по мере старения народа. Потребность страны определяет стоимость бюрократии её системы здравоохранения при правиле «Полная демография»."
+  "ru": "#b Потребность в медицине#!\\nСколько помощи нужно людям этой области по их возрастам по сравнению с миром 1836 года: старым нужно в несколько раз больше, чем молодым, поэтому потребность растёт по мере старения народа. Потребность страны определяет стоимость бюрократии её системы здравоохранения при правиле «Демография» в режиме «Полное»."
  },
  "te_demog_st_wk_need_value": {
   "en": "×#v [State.MakeScope.Var('te_dg_need').GetValue|2]#! of 1836",
@@ -30313,11 +30313,11 @@
  },
  "te_demog_st_wk_term": {
   "en": "Under the Full rule the census sets what the pops are set to with Census: Workforce, a term on the pops' own base of #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! from its last count: its aim #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#!, and #v [State.MakeScope.ScriptValue('te_demog_wf_lead_shown')|+%0]#! past it while the game's own count trails. The laws, unions and pollution that change who works enter as shares: men #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, everyone #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, fitness for work ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Lines the census leaves on top add #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#!.",
-  "ru": "При правиле «Полная» перепись задаёт то, на что настроены группы населения, с помощью слагаемого «Перепись: рабочая сила» к собственной базе групп населения в #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! по последнему подсчёту: её цель #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#! и #v [State.MakeScope.ScriptValue('te_demog_wf_lead_shown')|+%0]#! сверх неё, пока собственный подсчёт игры отстаёт. Законы, профсоюзы и загрязнение, меняющие, кто работает, входят в виде долей: мужчины #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, все #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, пригодность к труду ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Строки, которые перепись оставляет сверху, добавляют #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#!."
+  "ru": "При настройке «Полное» перепись задаёт то, на что настроены группы населения, с помощью слагаемого «Перепись: рабочая сила» к собственной базе групп населения в #v [State.MakeScope.ScriptValue('te_demog_wf_pop_base')|%0]#!: #v [State.MakeScope.Var('te_dg_mw').GetValue|+%0]#! по последнему подсчёту: её цель #v [State.MakeScope.ScriptValue('te_demog_wf_term_target')|+%0]#! и #v [State.MakeScope.ScriptValue('te_demog_wf_lead_shown')|+%0]#! сверх неё, пока собственный подсчёт игры отстаёт. Законы, профсоюзы и загрязнение, меняющие, кто работает, входят в виде долей: мужчины #v [State.MakeScope.ScriptValue('te_demog_wk_input_men')|+%0]#!, все #v [State.MakeScope.ScriptValue('te_demog_wk_input_both')|+%0]#!, пригодность к труду ×#v [State.MakeScope.ScriptValue('te_demog_wk_input_capacity')|2]#!. Строки, которые перепись оставляет сверху, добавляют #v [State.MakeScope.Var('te_dg_wf_rem').GetValue|+%0]#!."
  },
  "te_demog_st_wk_term_pending": {
   "en": "#grey Under the Full rule the census takes this state's workforce over at its next step.#!",
-  "ru": "#grey При правиле «Полная» перепись возьмёт рабочую силу этой области на себя на следующем шаге.#!"
+  "ru": "#grey При настройке «Полное» перепись возьмёт рабочую силу этой области на себя на следующем шаге.#!"
  },
  "te_demog_st_wk_workforce_tt": {
   "en": "#b Workforce#!\\nThe share of this state's people at work, in the game's units: the share of working age times the share of them at work, plus those still at work past the working ages.\\n Working age: #v [State.MakeScope.Var('te_dg_wa_share').GetValue|%0]#! of people\\n At work: #v [State.MakeScope.ScriptValue('te_demog_wk_at_work_shown')|%0]#! of them\\n Past the working ages and still at work: #v [State.MakeScope.Var('te_dg_wk_past').GetValue|%1]#! of all people\\nMen of working age work at #v [State.MakeScope.ScriptValue('te_demog_wk_men_rate')|%0]#! and women at #v [State.MakeScope.ScriptValue('te_demog_wk_women_rate')|%0]#!; the lower strata, whose women work in any case, are #v [State.MakeScope.ScriptValue('te_demog_low_share')|%0]#! of the people.\\n\\n[SelectLocalization( GetScriptedGui('te_demog_state_wf_engine_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_wk_engine', 'te_demog_wk_engine_pending' )]\\n\\n[SelectLocalization( GetScriptedGui('te_demog_state_wf_term_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_wk_term', SelectLocalization( GetScriptedGui('te_demog_state_full_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_wk_term_pending', 'te_demog_wk_not_full' ) )]",
@@ -30333,7 +30333,7 @@
  },
  "te_demog_st_youth_effects": {
   "en": "Under the Full setting the state takes #b $te_demog_census_youth_bulge$#! at this strength, listed in its Modifiers section: radicals from movements +#R [State.MakeScope.ScriptValue('te_demog_youth_radicals_shown')|%0]#!, turmoil's effects +#R [State.MakeScope.ScriptValue('te_demog_youth_turmoil_shown')|%0]#!.",
-  "ru": "При настройке «Полная» область получает #b $te_demog_census_youth_bulge$#! с этой силой, указанной в её разделе «Модификаторы»: радикалы из движений +#R [State.MakeScope.ScriptValue('te_demog_youth_radicals_shown')|%0]#!, эффекты беспорядков +#R [State.MakeScope.ScriptValue('te_demog_youth_turmoil_shown')|%0]#!."
+  "ru": "При настройке «Полное» область получает #b $te_demog_census_youth_bulge$#! с этой силой, указанной в её разделе «Модификаторы»: радикалы из движений +#R [State.MakeScope.ScriptValue('te_demog_youth_radicals_shown')|%0]#!, эффекты беспорядков +#R [State.MakeScope.ScriptValue('te_demog_youth_turmoil_shown')|%0]#!."
  },
  "te_demog_st_youth_tt": {
   "en": "#b Youth Bulge#!\\nYoung adults aged 20 to 29 are #v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! of the state's people, and #v [State.MakeScope.ScriptValue('te_demog_unemployment_census')|%0]#! of its workforce had no work at the census. Strength: #v [State.MakeScope.ScriptValue('te_demog_youth_bulge_shown')|%0]#!.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_youth_effects'), '(CFixedPoint)0' ), 'te_demog_st_youth_effects', 'te_demog_youth_held' )]",
@@ -30489,7 +30489,7 @@
  },
  "te_demog_um_nexus_in_advanced_materials_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_in_digital_access": {
   "en": "Inputs by Hosted Minds",
@@ -30497,7 +30497,7 @@
  },
  "te_demog_um_nexus_in_digital_access_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_in_electricity": {
   "en": "Inputs by Hosted Minds",
@@ -30505,7 +30505,7 @@
  },
  "te_demog_um_nexus_in_electricity_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_in_electronic_components": {
   "en": "Inputs by Hosted Minds",
@@ -30513,7 +30513,7 @@
  },
  "te_demog_um_nexus_in_electronic_components_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_out_digital_assets": {
   "en": "Output by Hosted Minds",
@@ -30521,7 +30521,7 @@
  },
  "te_demog_um_nexus_out_digital_assets_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_out_fine_art": {
   "en": "Output by Hosted Minds",
@@ -30529,7 +30529,7 @@
  },
  "te_demog_um_nexus_out_fine_art_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_out_services": {
   "en": "Output by Hosted Minds",
@@ -30537,7 +30537,7 @@
  },
  "te_demog_um_nexus_out_services_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_nexus_out_tourism": {
   "en": "Output by Hosted Minds",
@@ -30545,7 +30545,7 @@
  },
  "te_demog_um_nexus_out_tourism_desc": {
   "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полная» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
  },
  "te_demog_um_ontop_note": {
   "en": " (the uploads' bodies among them)",
@@ -30573,7 +30573,7 @@
  },
  "te_demog_up_eff_display": {
   "en": "#lore Under the Full Demographics rule, a largest city with 25% or more of the urban people would work its $building_urban_center$ and $building_university$ at a larger scale and draw more migrants, and the other states would lose migrants and grow restless, more as its share rises, and more slowly past 50%.#!",
-  "ru": "#lore При правиле «Полная демография» крупнейший город с 25% и более городского населения заставлял бы свои $building_urban_center$ и $building_university$ работать в большем масштабе и привлекал бы больше мигрантов, а остальные области теряли бы мигрантов и становились беспокойнее, тем больше, чем выше его доля, и медленнее после 50%.#!"
+  "ru": "#lore При правиле «Демография» в режиме «Полное» крупнейший город с 25% и более городского населения заставлял бы свои $building_urban_center$ и $building_university$ работать в большем масштабе и привлекал бы больше мигрантов, а остальные области теряли бы мигрантов и становились беспокойнее, тем больше, чем выше его доля, и медленнее после 50%.#!"
  },
  "te_demog_up_eff_few": {
   "en": "#b Effects:#! none. A country of fewer than three states has no urban hierarchy to speak of.",
@@ -31133,7 +31133,7 @@
  },
  "te_demog_wk_buttons_full_only": {
   "en": "Pension settings act only under the Full Demographics rule.",
-  "ru": "Параметры пенсий действуют только при правиле «Полная демография»."
+  "ru": "Параметры пенсий действуют только при правиле «Демография» в режиме «Полное»."
  },
  "te_demog_wk_buttons_term": {
   "en": "The setting chosen in #v [Country.MakeScope.ScriptValue('te_demog_pension_since_year')|0]#! holds until #v [Country.MakeScope.ScriptValue('te_demog_pension_term_end_year')|0]#!.",
@@ -31153,7 +31153,7 @@
  },
  "te_demog_wk_full": {
   "en": "Under the Full rule the census sets each state's workforce from these figures at each yearly count; the game's own count moves toward it over the years that follow.",
-  "ru": "При полном правиле перепись задаёт рабочую силу каждой области по этим показателям при каждом ежегодном подсчёте; собственный подсчёт игры движется к ней в последующие годы."
+  "ru": "При настройке «Полное» перепись задаёт рабочую силу каждой области по этим показателям при каждом ежегодном подсчёте; собственный подсчёт игры движется к ней в последующие годы."
  },
  "te_demog_wk_need": {
   "en": "Health Need",
@@ -31165,7 +31165,7 @@
  },
  "te_demog_wk_need_no_bill": {
   "en": "#grey Outside the Full Demographics rule it changes no cost.#!",
-  "ru": "#grey Вне правила «Полная демография» затраты не меняются.#!"
+  "ru": "#grey Вне режима «Полное» правила «Демография» затраты не меняются.#!"
  },
  "te_demog_wk_need_saving": {
   "en": "The country's people are younger than the world of 1836, so the $institution_health_system$ costs #v [Country.MakeScope.ScriptValue('te_demog_health_term_saving')|%0]#! less bureaucracy: need #v [Country.MakeScope.ScriptValue('te_demog_health_need_term')|+%0]#!, treating chronic illness #v [Country.MakeScope.ScriptValue('te_demog_health_tech_term')|+%0]#!. Set at each census.",
@@ -31181,7 +31181,7 @@
  },
  "te_demog_wk_not_full": {
   "en": "#grey Outside the Full Demographics rule these figures change nothing: the workforce follows the game's own rules.#!",
-  "ru": "#grey Вне правила «Полная демография» эти показатели ничего не меняют: рабочая сила следует собственным правилам игры.#!"
+  "ru": "#grey Вне режима «Полное» правила «Демография» эти показатели ничего не меняют: рабочая сила следует собственным правилам игры.#!"
  },
  "te_demog_wk_pending": {
   "en": "#grey Work figures arrive with the next census.#!",
@@ -31225,7 +31225,7 @@
  },
  "te_demog_youth_effects": {
   "en": "At 100% strength radicals from movements rise by #R 25%#! and the effects of turmoil by #R 15%#!, and more again past it, up to twice as much at 200%, under the Full setting only ($te_demog_census_youth_bulge$).",
-  "ru": "При силе 100% число радикалов из движений растёт на #R 25%#!, а последствия беспорядков — на #R 15%#!, и ещё больше выше этого значения, вплоть до удвоения при 200%; только при полной настройке («$te_demog_census_youth_bulge$»)."
+  "ru": "При силе 100% число радикалов из движений растёт на #R 25%#!, а последствия беспорядков — на #R 15%#!, и ещё больше выше этого значения, вплоть до удвоения при 200%; только при настройке «Полное» («$te_demog_census_youth_bulge$»)."
  },
  "te_demog_youth_held": {
   "en": "#grey Not applied yet: a youth bulge has no effect on radicals or turmoil for now.#!",
@@ -32005,11 +32005,11 @@
  },
  "te_irredentist_bloc_check_peace_target_tt": {
   "en": "[SCOPE.sCountry('target_country').GetName]'s bloc situation permits this union: they are not in a [concept_power_bloc], they lead one themselves, their bloc is a Diplomatic Framework, they belong to a bloc that we lead, or their [Concept('concept_power_bloc_leader', 'bloc leader')] has blessed the union.",
-  "ru": "Положение страны [SCOPE.sCountry('target_country').GetName] в блоках допускает это объединение: она не состоит в [Concept('concept_power_bloc','силовом блоке')], сама возглавляет его, её блок — Дипломатическая структура, она входит в блок, который возглавляем мы, или её [Concept('concept_power_bloc_leader', 'лидер блока')] благословил объединение."
+  "ru": "Положение страны [SCOPE.sCountry('target_country').GetName] в блоках допускает это объединение: она не состоит в [Concept('concept_power_bloc','силовом блоке')], сама возглавляет его, её блок — Дипломатическая рамка, она входит в блок, который возглавляем мы, или её [Concept('concept_power_bloc_leader', 'лидер блока')] благословил объединение."
  },
  "te_irredentist_bloc_check_peace_unifier_tt": {
   "en": "Our bloc situation permits this union: we are not in a [concept_power_bloc], we lead one ourselves, our bloc is a Diplomatic Framework, [SCOPE.sCountry('target_country').GetName] leads the bloc we are in, or our [Concept('concept_power_bloc_leader', 'bloc leader')] has blessed the union.",
-  "ru": "Наше положение в блоках допускает это объединение: мы не состоим в [Concept('concept_power_bloc','силовом блоке')], сами возглавляем его, наш блок — Дипломатическая структура, страна [SCOPE.sCountry('target_country').GetName] возглавляет блок, в котором мы состоим, или наш [Concept('concept_power_bloc_leader', 'лидер блока')] благословил объединение."
+  "ru": "Наше положение в блоках допускает это объединение: мы не состоим в [Concept('concept_power_bloc','силовом блоке')], сами возглавляем его, наш блок — Дипломатическая рамка, страна [SCOPE.sCountry('target_country').GetName] возглавляет блок, в котором мы состоим, или наш [Concept('concept_power_bloc_leader', 'лидер блока')] благословил объединение."
  },
  "te_irredentist_bloc_check_war_tt": {
   "en": "Our bloc situation permits this war of reunification: we are not in a [concept_power_bloc], we lead one ourselves, or our [Concept('concept_power_bloc_leader', 'bloc leader')] has endorsed the war. A member asks for that blessing with the #b $irr_seek_war_blessing$#! diplomatic action on the country it would fight; a war on the bloc leader itself cannot be blessed.",
@@ -34761,7 +34761,7 @@
  },
  "te_seabed_claim_again_tt": {
   "en": "Claim this basin again. Our claim weight here counts from the next sharing; nothing comes back before it.",
-  "ru": "Заявить претензии на этот бассейн вновь. Вес нашей претензии здесь считается со следующего раздела; до него ничего не возвращается."
+  "ru": "Заявить претензии на этот бассейн вновь. Вес нашего притязания здесь считается со следующего раздела; до него ничего не возвращается."
  },
  "te_seabed_col_basin": {
   "en": "Basin",
@@ -34797,7 +34797,7 @@
  },
  "te_seabed_col_weight_tt": {
   "en": "Share of the basin's claim weight at the last sharing; each pool is divided by weight. Unincorporated coastal states count half. Hover a basin's figure for its breakdown.",
-  "ru": "Доля в весе претензий бассейна при последнем разделе; каждый пул делится по весу. Невключённые прибрежные области считаются за половину. Наведите курсор на цифру бассейна, чтобы увидеть расклад."
+  "ru": "Доля в весе притязаний бассейна при последнем разделе; каждый пул делится по весу. Невключённые прибрежные области считаются за половину. Наведите курсор на цифру бассейна, чтобы увидеть расклад."
  },
  "te_seabed_defection_case_tt": {
   "en": "#R The defection counts against us#! (+10 to the case the Assembly could make against us)",
@@ -34901,7 +34901,7 @@
  },
  "te_seabed_how_pools": {
   "en": "Each Deep-Sea Mine level needs a [concept_seabed_licence]. Each ocean basin holds a fixed pool: Pacific [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_pacific')|0], Atlantic [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0], Indian [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_indian')|0], Southern [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_southern')|0] and Arctic [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_arctic')|0]. Every January the pools are divided by claim weight among every coastal country. One without $abyssal_plain_mining$ counts at [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] of its weight and its share waits for it: no one can build on it, and it turns into claims the month after the country researches the technology. A share never falls below the licenses a country holds.",
-  "ru": "Каждый уровень «Глубоководной шахты» требует [Concept('concept_seabed_licence','лицензии на морское дно')]. В каждом океаническом бассейне фиксированный пул: Тихий [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_pacific')|0], Атлантический [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0], Индийский [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_indian')|0], Южный [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_southern')|0] и Северный Ледовитый [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_arctic')|0]. Каждый январь пулы делятся по весу претензий между всеми прибрежными странами. Страна без технологии «$abyssal_plain_mining$» учитывается с [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] своего веса, и её доля ждёт её: никто не может на ней строить, и она превращается в претензии через месяц после того, как страна изучит эту технологию. Доля никогда не опускается ниже числа лицензий, которыми страна владеет."
+  "ru": "Каждый уровень «Глубоководной шахты» требует [Concept('concept_seabed_licence','лицензии на морское дно')]. В каждом океаническом бассейне фиксированный пул: Тихий [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_pacific')|0], Атлантический [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0], Индийский [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_indian')|0], Южный [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_southern')|0] и Северный Ледовитый [GetPlayer.MakeScope.ScriptValue('te_seabed_pool_arctic')|0]. Каждый январь пулы делятся по весу притязаний между всеми прибрежными странами. Страна без технологии «$abyssal_plain_mining$» учитывается с [GetPlayer.MakeScope.ScriptValue('te_seabed_latent_factor')|%0] своего веса, и её доля ждёт её: никто не может на ней строить, и она превращается в претензии через месяц после того, как страна изучит эту технологию. Доля никогда не опускается ниже числа лицензий, которыми страна владеет."
  },
  "te_seabed_how_regime": {
   "en": "While the Law of the Sea is in force, half of each pool is reserved for its poorer parties and half is open to all. If two or more great powers license unilaterally, the regime falls into a scramble: whole pools, every navy counted twice, and no protection for anyone's claims.",
@@ -34929,7 +34929,7 @@
  },
  "te_seabed_how_sub_weight": {
   "en": "Claim Weight",
-  "ru": "Вес претензий"
+  "ru": "Вес притязаний"
  },
  "te_seabed_how_weight": {
   "en": "In a basin where we have coastal states, our weight is twice those states, plus their port levels, plus our [Concept('concept_naval_power_projection','naval power projection')] divided by [GetPlayer.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], in proportion to our coast there; an unincorporated state counts half, its ports in full. Anywhere else it is a twentieth of that naval power projection term, so a distant claim is small but never barred. An Antarctic research station adds [GetPlayer.MakeScope.ScriptValue('te_seabed_station_weight')|0] in the Southern basin.",
@@ -35053,7 +35053,7 @@
  },
  "te_seabed_ov_claims_tt": {
   "en": "Unused [concept_seabed_claim]s: shares of the pools no level holds yet. Every January sharing divides each pool again by claim weight, so a rival's buildup can take them. On Sponsor Contractors the sharing leaves a claimant at least three quarters of each basin's claims (rounded down); otherwise all of them are divided again. Build on them, or queue a level to hold a license (at the holding fee after a year).\\nNext January can take at most: Pacific #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_pacific')|0]#!, Atlantic #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_atlantic')|0]#!, Indian #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_indian')|0]#!, Arctic #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_arctic')|0]#!, Southern #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_southern')|0]#![SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_borrowed_claims_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_borrowed', 'te_seabed_ov_none' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lent_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_lent', 'te_seabed_ov_none' )]",
-  "ru": "Неиспользованные [Concept('concept_seabed_claim','претензии на морское дно')]: доли пулов, которые пока не удерживает ни один уровень. Каждый январский раздел делит каждый пул заново по весу претензий, поэтому наращивание соперника может их отнять. При «Спонсировать подрядчиков» раздел оставляет претенденту не менее трёх четвертей претензий каждого бассейна (с округлением вниз); иначе все они делятся заново. Стройте на них или ставьте уровень в очередь, чтобы закрепить лицензию (с платой за удержание через год).\\nСледующий январь может забрать не более: Тихий #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_pacific')|0]#!, Атлантический #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_atlantic')|0]#!, Индийский #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_indian')|0]#!, Северный Ледовитый #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_arctic')|0]#!, Южный #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_southern')|0]#![SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_borrowed_claims_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_borrowed', 'te_seabed_ov_none' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lent_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_lent', 'te_seabed_ov_none' )]"
+  "ru": "Неиспользованные [Concept('concept_seabed_claim','претензии на морское дно')]: доли пулов, которые пока не удерживает ни один уровень. Каждый январский раздел делит каждый пул заново по весу притязаний, поэтому наращивание соперника может их отнять. При «Спонсировать подрядчиков» раздел оставляет претенденту не менее трёх четвертей претензий каждого бассейна (с округлением вниз); иначе все они делятся заново. Стройте на них или ставьте уровень в очередь, чтобы закрепить лицензию (с платой за удержание через год).\\nСледующий январь может забрать не более: Тихий #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_pacific')|0]#!, Атлантический #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_atlantic')|0]#!, Индийский #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_indian')|0]#!, Северный Ледовитый #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_arctic')|0]#!, Южный #v [Country.MakeScope.ScriptValue('te_seabed_jan_loss_southern')|0]#![SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_borrowed_claims_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_borrowed', 'te_seabed_ov_none' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lent_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_claims_lent', 'te_seabed_ov_none' )]"
  },
  "te_seabed_ov_licences_cap": {
   "en": "Licenses",
@@ -35153,7 +35153,7 @@
  },
  "te_seabed_ov_regime_ours_1": {
   "en": "#b Open#!: each pool is divided by claim weight among every coastal country.",
-  "ru": "#b Открытый#!: каждый пул делится по весу претензий между всеми прибрежными странами."
+  "ru": "#b Открытый#!: каждый пул делится по весу притязаний между всеми прибрежными странами."
  },
  "te_seabed_ov_regime_ours_2": {
   "en": "#b Regulated#!, the Law of the Sea in force: half of each pool is reserved for its poorer parties, and half is open to all. A party pays royalties of #v [Country.MakeScope.ScriptValue('te_seabed_royalty_rate')|%0]#! of a mine's base output value a week, about @money![Country.MakeScope.ScriptValue('te_seabed_royalty_per_level')|0] a mine.",
@@ -35161,7 +35161,7 @@
  },
  "te_seabed_ov_regime_ours_3": {
   "en": "#b Scramble#!: two or more great powers license unilaterally, so each whole pool goes by weight, every navy counts twice, and no one's claims are protected.",
-  "ru": "#b Свалка#!: две или более великие державы лицензируют в одностороннем порядке, поэтому каждый пул целиком делится по весу, флот каждой страны считается дважды, и ничьи претензии не защищены."
+  "ru": "#b Схватка#!: две или более великие державы лицензируют в одностороннем порядке, поэтому каждый пул целиком делится по весу, флот каждой страны считается дважды, и ничьи претензии не защищены."
  },
  "te_seabed_ov_regime_tt": {
   "en": "[Country.GetCustom('te_seabed_regime_ours')]\\nHow the pools are divided: [concept_seabed_regime].",
@@ -35333,7 +35333,7 @@
  },
  "te_seabed_rival_col_weight_tt": {
   "en": "#header Weight#!\\nThe claimant's share of the basin's claim weight at the last sharing.",
-  "ru": "#header Вес#!\\nДоля претендента в весе претензий бассейна при последнем разделе."
+  "ru": "#header Вес#!\\nДоля претендента в весе притязаний бассейна при последнем разделе."
  },
  "te_seabed_rival_us_name": {
   "en": "#b Us#!",
@@ -35401,23 +35401,23 @@
  },
  "te_seabed_weight_tt_arctic": {
   "en": "Claim weight in the Arctic: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_arctic')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_arctic')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_arctic', 'te_seabed_weight_far_arctic' )]",
-  "ru": "Вес претензий в Северном Ледовитом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_arctic')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_arctic')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_arctic', 'te_seabed_weight_far_arctic' )]"
+  "ru": "Вес притязаний в Северном Ледовитом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_arctic')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_arctic')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_arctic', 'te_seabed_weight_far_arctic' )]"
  },
  "te_seabed_weight_tt_atlantic": {
   "en": "Claim weight in the Atlantic: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_atlantic')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_atlantic')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_atlantic', 'te_seabed_weight_far_atlantic' )]",
-  "ru": "Вес претензий в Атлантическом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_atlantic')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_atlantic')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_atlantic', 'te_seabed_weight_far_atlantic' )]"
+  "ru": "Вес притязаний в Атлантическом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_atlantic')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_atlantic')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_atlantic', 'te_seabed_weight_far_atlantic' )]"
  },
  "te_seabed_weight_tt_indian": {
   "en": "Claim weight in the Indian Ocean: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_indian')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_indian')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_weight_home_indian', 'te_seabed_weight_far_indian' )]",
-  "ru": "Вес претензий в Индийском океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_indian')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_indian')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_weight_home_indian', 'te_seabed_weight_far_indian' )]"
+  "ru": "Вес притязаний в Индийском океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_indian')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_indian')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_weight_home_indian', 'te_seabed_weight_far_indian' )]"
  },
  "te_seabed_weight_tt_pacific": {
   "en": "Claim weight in the Pacific: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_pacific')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_pacific')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_weight_home_pacific', 'te_seabed_weight_far_pacific' )]",
-  "ru": "Вес претензий в Тихом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_pacific')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_pacific')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_weight_home_pacific', 'te_seabed_weight_far_pacific' )]"
+  "ru": "Вес притязаний в Тихом океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_pacific')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_pacific')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_weight_home_pacific', 'te_seabed_weight_far_pacific' )]"
  },
  "te_seabed_weight_tt_southern": {
   "en": "Claim weight in the Southern Ocean: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]",
-  "ru": "Вес претензий в Южном океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]"
+  "ru": "Вес притязаний в Южном океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]"
  },
  "te_society_ch_open_journal_tt": {
   "en": "Opens $je_cultural_hegemony$ in the journal, which shows these same panels.",
@@ -36373,7 +36373,7 @@
  },
  "un_asat_terms_tt": {
   "en": "As a party, a destructive anti-satellite strike would cost us #R twice#! the infamy and twice the case strength, and a debris-removal method on our $building_space_program$ would count toward the UN's Delivery pillar each year.",
-  "ru": "Как сторона, мы за разрушительный противоспутниковый удар понесли бы #R вдвое#! больше дурной славы и вдвое большую весомость дела, а метод удаления мусора в нашей «$building_space_program$» засчитывался бы каждый год в столп «Исполнение» ООН."
+  "ru": "Как сторона, мы за разрушительный противоспутниковый удар понесли бы #R вдвое#! больше дурной славы и вдвое большую весомость дела, а метод удаления мусора в нашей «$building_space_program$» засчитывался бы каждый год в опору «Результативность» ООН."
  },
  "un_authority_at_least_20_tt": {
   "en": "[concept_un_authority] is at least 20",
@@ -36609,7 +36609,7 @@
  },
  "un_defund_development_effect_tt": {
   "en": "Ends our contribution: its expense, its benefits and its share of the UN's #bold funding#! pillar stop.",
-  "ru": "Прекращает наш вклад: его расходы, его выгоды и его доля в опоре ООН, связанной с #bold финансированием#!."
+  "ru": "Прекращает наш вклад: его расходы, его выгоды и его доля в опоре ООН #bold «Финансирование»#!."
  },
  "un_deleg_bulk_against_effect_tt": {
   "en": "Our delegation presses the members on the list to vote #R against#!. A campaign starts on each one the Assembly does not already read as leaning against, from the top of the list down, until our [concept_influence] runs out. Each uses #v 100#! [concept_influence] for as long as it runs, and our [concept_influence] covers #v [THIS.ScriptValue('un_deleg_bulk_budget')|0]#! of them now.",
@@ -36965,7 +36965,7 @@
  },
  "un_ledger_tt_p5_walkout": {
   "en": "#R UN authority −4#! × our weight in world affairs (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, at most ×2), at once: a permanent member walking out is a world moment, on top of our share of world power leaving the participation pillar.",
-  "ru": "#R Авторитет ООН −4#! × наш вес в мировых делах (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, не более ×2), немедленно: уход постоянного члена — событие мирового масштаба, помимо того, что наша доля мировой мощи покидает опору участия."
+  "ru": "#R Авторитет ООН −4#! × наш вес в мировых делах (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, не более ×2), немедленно: уход постоянного члена — событие мирового масштаба, помимо того, что наша доля мировой мощи покидает опору «Участие»."
  },
  "un_lift_sanctions_grounds_tt": {
   "en": "We are under [concept_un_sanctions]",
@@ -37089,7 +37089,7 @@
  },
  "un_mandate_standing_tt": {
   "en": "Our International Standing in the organization is not Disgraced",
-  "ru": "Наш международный авторитет в организации не «Опозорен»"
+  "ru": "Наш международный авторитет в организации не «Опозоренный»"
  },
  "un_mandate_war_support_modifier": {
   "en": "A War the United Nations Authorized",
@@ -37809,11 +37809,11 @@
  },
  "un_standing_disgraced_modifier": {
   "en": "International Standing: Disgraced",
-  "ru": "Международный авторитет: позорный"
+  "ru": "Международный авторитет: Опозоренный"
  },
  "un_standing_exemplary_modifier": {
   "en": "International Standing: Exemplary",
-  "ru": "Международный авторитет: образцовый"
+  "ru": "Международный авторитет: Образцовый"
  },
  "un_standing_force_need_major_power_tt": {
   "en": "We are a [concept_major_power] or greater",
@@ -37837,7 +37837,7 @@
  },
  "un_standing_respected_modifier": {
   "en": "International Standing: Respected",
-  "ru": "Международный авторитет: уважаемый"
+  "ru": "Международный авторитет: Уважаемый"
  },
  "un_standing_sanctioned_accepted_tt": {
   "en": "#R International Standing: −3#! for accepting the Assembly's [concept_un_sanctions].",
@@ -37925,7 +37925,7 @@
  },
  "un_vote_asat_passed_tt": {
   "en": "The Moratorium on Destructive Anti-Satellite Tests was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! A party's destructive anti-satellite strike costs it twice the infamy and twice the case strength, and a party running a debris-removal method counts toward the Delivery pillar.",
-  "ru": "Мораторий на разрушительные противоспутниковые испытания принят. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Разрушительный противоспутниковый удар участника обходится ему в двойную дурную славу и двойную весомость дела, а участник, применяющий метод уборки мусора, засчитывается в опору результативности."
+  "ru": "Мораторий на разрушительные противоспутниковые испытания принят. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Разрушительный противоспутниковый удар участника обходится ему в двойную дурную славу и двойную весомость дела, а участник, применяющий метод уборки мусора, засчитывается в опору «Результативность»."
  },
  "un_vote_bloc_leverage_gain_tt": {
   "en": "Our [concept_power_bloc] gains #G 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we have shown the bloc we can deliver.",
@@ -38009,7 +38009,7 @@
  },
  "un_vote_food_reserve_passed_tt": {
   "en": "The [concept_un_food_reserve] is founded. #G UN credibility +1, moving [concept_un_authority]'s target.#! Members may pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges. From next month the delivery pillar of authority answers for hunger among the members: down to #R -10#! with famine, #G +3#! while almost no one goes hungry.",
-  "ru": "[Concept('concept_un_food_reserve','Всемирный продовольственный резерв')] основан. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Члены могут обещать зерно из своих стратегических резервов, и каждая новая [Concept('concept_un_mission_aid','миссия помощи')] использует эти обещания. Со следующего месяца опора авторитета, связанная с результативностью, отвечает за голод среди членов: до #R −10#! при голоде, #G +3#! пока почти никто не голодает."
+  "ru": "[Concept('concept_un_food_reserve','Всемирный продовольственный резерв')] основан. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Члены могут обещать зерно из своих стратегических резервов, и каждая новая [Concept('concept_un_mission_aid','миссия помощи')] использует эти обещания. Со следующего месяца опора «Результативность» авторитета отвечает за голод среди членов: до #R −10#! при голоде, #G +3#! пока почти никто не голодает."
  },
  "un_vote_heritage_passed_tt": {
   "en": "The Cultural Heritage Program was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN Educational, Scientific and Cultural Organization (UNESCO) is established.",
@@ -38025,7 +38025,7 @@
  },
  "un_vote_icc_passed_vetoed_tt": {
   "en": "The ICC referral passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The General Assembly issues a symbolic censure of the last power to veto it, which is recorded as having #R Rejected the Rome Statute#! unless the UN is Moribund — no court jurisdiction is established.",
-  "ru": "Передача в МУС прошла в Генеральной Ассамблее, но была заблокирована вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Генеральная Ассамблея выносит символическое порицание последней державе, применившей вето, и это записывается как #R отказ от Римского статута#!, если только ООН не «Угасающая» — юрисдикция суда не устанавливается."
+  "ru": "Передача в МУС прошла в Генеральной Ассамблее, но была заблокирована вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Генеральная Ассамблея выносит символическое порицание последней державе, применившей вето, и это записывается как #R отказ от Римского статута#!, если только ООН не «Угасающий» — юрисдикция суда не устанавливается."
  },
  "un_vote_initiated_tt": {
   "en": "#bold A General Assembly vote has been called.#! All UN member states will vote on this resolution over the next year. Results will depend on the balance of support and opposition.",
@@ -38521,7 +38521,7 @@
  },
  "we_se_debris_clearance": {
   "en": "Orbital Debris Clearance",
-  "ru": "Очистка орбиты от мусора"
+  "ru": "Очистка от орбитального мусора"
  },
  "we_se_debris_defense": {
   "en": "Orbital Defense Grid",

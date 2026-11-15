@@ -5053,7 +5053,7 @@
  },
  "pm_debris_active_removal": {
   "en": "Active Debris Removal",
-  "ru": "Активное удаление мусора"
+  "ru": "Активная уборка мусора"
  },
  "pm_debris_active_removal_desc": {
   "en": "Servicer spacecraft rendezvous with dead satellites and spent stages, grapple them and drag them down to burn up. Slow and costly, one object at a time.",
@@ -5077,7 +5077,7 @@
  },
  "pm_debris_removal_none": {
   "en": "No Debris Removal",
-  "ru": "Без удаления мусора"
+  "ru": "Без уборки мусора"
  },
  "pm_debris_removal_none_desc": {
   "en": "The program flies its missions and leaves the debris to others.",
@@ -6649,7 +6649,7 @@
  },
  "pm_monument_naturalist_desc": {
   "en": "Glasshouses, an arboretum, a great public park. Pleases the Rural Folk. #R The dedication is permanent.#!",
-  "ru": "Оранжереи, дендрарий, большой общественный парк. Нравится сельским жителям. #R Посвящение необратимо.#!"
+  "ru": "Оранжереи, дендрарий, большой общественный парк. Нравится сельскому населению. #R Посвящение необратимо.#!"
  },
  "pm_monument_religious": {
   "en": "Grand Shrine",
@@ -6657,7 +6657,7 @@
  },
  "pm_monument_religious_desc": {
   "en": "A cathedral, a temple, a mosque built to outlast the government that paid for it. Pleases the Devout, and becomes contested if the country abandons the faith it honors. #R The dedication is permanent.#!",
-  "ru": "Собор, храм, мечеть, построенные так, чтобы пережить правительство, оплатившее их. Нравится верующим и становится спорным, если страна отречётся от почитаемой им веры. #R Посвящение необратимо.#!"
+  "ru": "Собор, храм, мечеть, построенные так, чтобы пережить правительство, оплатившее их. Нравится духовенству и становится спорным, если страна отречётся от почитаемой им веры. #R Посвящение необратимо.#!"
  },
  "pm_monument_republic": {
   "en": "To the Republic",
@@ -8257,7 +8257,7 @@
  },
  "pm_sr_fabrication_fusion_shipyards_desc": {
   "en": "Orbital yards run on fusion power turn out colony modules by the dozen. Only under the Simple and Full Colonies settings of the Space Race rule.",
-  "ru": "Орбитальные верфи на термоядерной энергии выпускают модули для колоний десятками. Только при настройках «Простые колонии» и «Полные колонии» правила «Космическая гонка»."
+  "ru": "Орбитальные верфи на термоядерной энергии выпускают модули для колоний десятками. Только при настройках «Простые колонии» и «Полноценные колонии» правила «Космическая гонка»."
  },
  "pm_sr_fabrication_lunar_foundries": {
   "en": "Orbital Foundries",
@@ -8265,7 +8265,7 @@
  },
  "pm_sr_fabrication_lunar_foundries_desc": {
   "en": "Foundries in orbit cast module frames from metal mined beyond Earth, which never has to be lifted out of its gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",
-  "ru": "Литейные на орбите отливают каркасы модулей из металла, добытого за пределами Земли, который не нужно поднимать из её гравитационного колодца. Только при настройках «Простые колонии» и «Полные колонии» правила «Космическая гонка»."
+  "ru": "Литейные на орбите отливают каркасы модулей из металла, добытого за пределами Земли, который не нужно поднимать из её гравитационного колодца. Только при настройках «Простые колонии» и «Полноценные колонии» правила «Космическая гонка»."
  },
  "pm_sr_fabrication_none": {
   "en": "No Module Fabrication",
@@ -8281,7 +8281,7 @@
  },
  "pm_sr_fabrication_orbital_assembly_desc": {
   "en": "Modules for our colonies are assembled in Earth orbit from parts lifted one launch at a time. Only under the Simple and Full Colonies settings of the Space Race rule.",
-  "ru": "Модули для наших колоний собираются на околоземной орбите из деталей, доставляемых по одному запуску. Только при настройках «Простые колонии» и «Полные колонии» правила «Космическая гонка»."
+  "ru": "Модули для наших колоний собираются на околоземной орбите из деталей, доставляемых по одному запуску. Только при настройках «Простые колонии» и «Полноценные колонии» правила «Космическая гонка»."
  },
  "pm_sr_site_marker": {
   "en": "Colony Record",
@@ -8461,7 +8461,7 @@
  },
  "pm_tethered_launch_building_space_mine_desc": {
   "en": "Cargo climbs to orbit on space elevator ribbons instead of burning propellant, so the base buys far less Launch Capacity.",
-  "ru": "Грузы поднимаются на орбиту по лентам космического лифта, не сжигая топливо, поэтому базе нужно гораздо меньше мощностей запуска."
+  "ru": "Грузы поднимаются на орбиту по лентам космического лифта, не сжигая топливо, поэтому базе нужно гораздо меньше пусковых мощностей."
  },
  "pm_textile_finishing_machinery": {
   "en": "Textile Finishing Machinery",

@@ -121,7 +121,7 @@
  },
  "setting_covert_warfare_early_unlock_desc": {
   "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Until $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law, funding stops at Professional, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
-  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $central_archives$. До появления технологии $mainframe_computers$ или закона «$law_ministry_of_intelligence_and_security$» финансирование не поднимается выше уровня «Профессиональное», а запускать можно только операции, технологии для которых у вас есть: поначалу это шпионаж и диверсии военного времени."
+  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $central_archives$. До появления технологии $mainframe_computers$ или закона «$law_ministry_of_intelligence_and_security$» финансирование не поднимается выше уровня «Профессиональная», а запускать можно только операции, технологии для которых у вас есть: поначалу это шпионаж и диверсии военного времени."
  },
  "setting_covert_warfare_enabled": {
   "en": "Covert Warfare: Late Unlock",

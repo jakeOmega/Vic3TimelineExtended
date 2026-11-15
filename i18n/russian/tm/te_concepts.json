@@ -10689,11 +10689,11 @@
  },
  "sr_module_black": {
   "en": "Off-World Black Sites",
-  "ru": "Внеземные чёрные объекты"
+  "ru": "Внеземные секретные объекты"
  },
  "sr_module_black_desc": {
   "en": "Our colonies' Black Sites work beyond any inspector's reach.",
-  "ru": "Чёрные объекты наших колоний работают вне досягаемости любых инспекторов."
+  "ru": "Секретные объекты наших колоний работают вне досягаемости любых инспекторов."
  },
  "sr_module_culture": {
   "en": "Off-World Cultural Centers",
@@ -12533,7 +12533,7 @@
  },
  "un_condemned_modifier_desc": {
   "en": "This country has been formally condemned by the UN General Assembly, severely damaging its international reputation and diplomatic standing.",
-  "ru": "Эта страна была официально осуждена Генеральной Ассамблеей ООН, что серьёзно подорвало её международную репутацию и дипломатическое положение."
+  "ru": "Эта страна была официально осуждена Генеральной Ассамблеей ООН, что серьёзно подорвало её международный авторитет и дипломатическое положение."
  },
  "un_condemned_restraint_modifier_desc": {
   "en": "A supranational United Nations has condemned this country. Its diplomatic plays are hemmed in, and every act of aggression costs it more.",
@@ -12865,7 +12865,7 @@
  },
  "un_peacekeeping_deployed_modifier_desc": {
   "en": "A full peacekeeping contingent has been deployed under our flag, significantly boosting our international standing.",
-  "ru": "Под нашим флагом развёрнут полный миротворческий контингент, что значительно повышает наше международное положение."
+  "ru": "Под нашим флагом развёрнут полный миротворческий контингент, что значительно повышает наш международный авторитет."
  },
  "un_peacekeeping_deployment_cost_desc": {
   "en": "The cost of the peacekeeping force this country sent to a collapsing state for the UN.",
@@ -12925,7 +12925,7 @@
  },
  "un_refused_aid_penalty_modifier_desc": {
   "en": "This nation's refusal to contribute humanitarian aid has damaged its international standing and credibility.",
-  "ru": "Отказ этой страны вносить вклад в гуманитарную помощь подорвал её международное положение и доверие к ней."
+  "ru": "Отказ этой страны вносить вклад в гуманитарную помощь подорвал её международный авторитет и доверие к ней."
  },
  "un_regime_antarctic_station_modifier_desc": {
   "en": "This country runs an Antarctic research station and is party to the Antarctic Treaty, whose stations share what they learn. Scaled by UN enforcement.",
@@ -13001,7 +13001,7 @@
  },
  "un_rejectionist_modifier_desc": {
   "en": "This country has rejected the United Nations, strengthening domestic authority but damaging international standing.",
-  "ru": "Эта страна отвергла Организацию Объединённых Наций, укрепив внутреннюю власть, но подорвав международное положение."
+  "ru": "Эта страна отвергла Организацию Объединённых Наций, укрепив внутреннюю власть, но подорвав международный авторитет."
  },
  "un_request_cooldown": {
   "en": "UN Request Cooldown",

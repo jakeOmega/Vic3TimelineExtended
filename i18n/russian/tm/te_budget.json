@@ -225,7 +225,7 @@
  },
  "te_budget_chart_how_civil": {
   "en": "Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Program Costs as part of Space Race, capped at what the civil total holds after administration. Construction Goods leaves out the Investment Pool Transfer, which funds private construction.",
-  "ru": "Университеты, порты и прочие гражданские здания остаются в статье «Прочие гражданские здания», кроме «Космической программы»: её еженедельный операционный дефицит, зарплаты и стартовая мощность отражаются в статье «Расходы на программы» как часть «Космической гонки» и ограничены тем, что остаётся от гражданского итога после администрации. «Строительные товары» не включают перевод в инвестиционный пул, который финансирует частное строительство."
+  "ru": "Университеты, порты и прочие гражданские здания остаются в статье «Прочие гражданские здания», кроме «Космической программы»: её еженедельный операционный дефицит, зарплаты и пусковые мощности отражаются в статье «Расходы на программы» как часть «Космической гонки» и ограничены тем, что остаётся от гражданского итога после администрации. «Строительные товары» не включают перевод в инвестиционный пул, который финансирует частное строительство."
  },
  "te_budget_chart_how_journal": {
   "en": "Banking, Covert Actions, Cultural Hegemony, the United Nations and other systems have rows of their own, each listing the sources applied now, with their multipliers and any decay. Their amounts are taken out of Additional Expenses or Income once, and only the unattributed remainder stays there. One-time treasury payments and costs in other resources are outside the weekly budget.",
@@ -465,11 +465,11 @@
  },
  "te_budget_chart_source_expense_drugs": {
   "en": "Drug Shortage Response",
-  "ru": "Меры при дефиците наркотиков"
+  "ru": "Меры при дефиците лекарств"
  },
  "te_budget_chart_source_expense_drugs_tt": {
   "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]",
-  "ru": "#b Меры при дефиците наркотиков#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]"
+  "ru": "#b Меры при дефиците лекарств#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]"
  },
  "te_budget_chart_source_expense_energy_industry": {
   "en": "Energy and Industry Programs",
