@@ -70,6 +70,7 @@ NOTICES = (
     "te_mon_swap_settled_notice", "te_mon_swap_repaid_notice",
     "irr_cultural_ties_notice",
     "covert_exposure_repeat_notice", "covert_backlash_public_notice",
+    "banking_overdraft_lift_notice",
 )
 
 # event -> its file, and the keys its script names
@@ -299,6 +300,27 @@ class Monetary(unittest.TestCase):
         given = re.sub(r"\s+", " ", re.search(r"add_modifier = \{\s*name = te_mon_currency_reform_premium[^}]*\}",
                                              effect).group(0))
         self.assertIn(given, re.sub(r"\s+", " ", inner(event("te_inflation.2"), "show_as_tooltip = {")))
+
+
+class BankingOverdraft(unittest.TestCase):
+    """An overdrawn intervention budget lifts a tool from the entry's hidden monthly pulse, and
+    the cut can be another country's doing (an adopter leaves the common currency, the bloc
+    drops a tier). test_banking_overdraft_shed.py holds every branch to the notice and the
+    notice to a name for every tool; this holds its place in the rule."""
+
+    def test_the_pulse_tells_a_player_which_tool_went_and_why(self):
+        effects = strip_comments(read("common/scripted_effects/banking_cycle_effects.txt"))
+        told = block(effects, "banking_overdraft_told")
+        self.assertIn("is_ai = no", told)
+        self.assertLess(told.index("set_variable = { name = banking_overdraft_lifted value = flag:$TOOL$ }"),
+                        told.index("post_notification = banking_overdraft_lift_notice"))
+        chain = block(effects, "banking_crash_check_overdrawn_interventions")
+        lifts = len(re.findall(r"remove_modifier = \w+|banking_strip_tool = \{|banking_effect_cb_disable_\w+ = yes", chain))
+        self.assertGreater(lifts, 45)
+        self.assertEqual(chain.count("banking_overdraft_told = { TOOL = "), lifts)
+        desc = KEYS["notification_banking_overdraft_lift_notice_desc"]
+        self.assertIn("GetCustom('banking_overdraft_lifted_tool')", desc)
+        self.assertIn("no longer covers", desc)
 
 
 class Irredentism(unittest.TestCase):

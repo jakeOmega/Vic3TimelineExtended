@@ -936,6 +936,9 @@ class State:
     eliq_announced: bool = False
     eliq_recovery_months: int = 0
     eliq_wind_downs: int = 0
+    # banking_overdraft_wait: an earlier step of this month's pulse lifted a tool,
+    # so prune_overdrawn_tools sits the month out (banking_overdraft_wait_a_pulse)
+    overdraft_wait: bool = False
 
     # exogenous
     gdp: float = 1.0e7
@@ -2769,6 +2772,7 @@ def eliq_wind_down(cfg: Config, state: State) -> None:
         if "eliq" in state.tools and "eliq" not in cfg.hold_tools:
             state.tools.discard("eliq")
             state.eliq_wind_downs += 1
+            state.overdraft_wait = True  # banking_overdraft_wait_a_pulse
         state.eliq_announced = False
         state.eliq_recovery_months = 0
 
@@ -3078,7 +3082,19 @@ OVERDRAFT_SHED_ORDER = {
 
 
 def prune_overdrawn_tools(cfg: Config, state: State) -> None:
-    """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
+    """banking_crash_check_overdrawn_interventions, for the dashboard tools.
+
+    Not in a month where an earlier step of the pulse lifted a tool: in the game the
+    chain still reads the budget the pulse opened with, so the script has it clear the
+    mark and wait for the next month's true sum (review of PR #1810, finding B). The
+    only such step modelled here is the Emergency Liquidity wind-down; the script's
+    other two, the Outflow Controls cleanup and the directed-credit cap, follow a law
+    change, and a run's laws are fixed. The AI's own switches and a timer running out
+    are separate effects in the game and mark nothing.
+    """
+    if state.overdraft_wait:
+        state.overdraft_wait = False
+        return
     if intervention_points(cfg, state) < 0:
         # Family interventions are shed first (the timed crash modifiers), then
         # the per-law base options — banking_crash_check_overdrawn_interventions.
