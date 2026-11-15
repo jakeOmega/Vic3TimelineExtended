@@ -545,6 +545,31 @@ INJECT:pmg_base_building_vineyard = {
 		GMO_plantation_building_vineyard
 	}
 }
+# Harvesting Process for the plantation-type buildings (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
+# ranches and plantations"), the farms' group of that name. A plantation's base
+# methods already carry its labor savings, down to a floor of no laborers on
+# rail transport, so these tiers cut the farmers and engineers left. One group
+# for the ten buildings whose late bases staff alike (as
+# pmg_precision_environmental_management is one for the grain farms); the
+# Rubber Plantation's Mechanized Farm keeps fewer, so it has its own
+# autonomous copy. Attached in common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_harvesting_process_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_plantation
+	}
+}
+REPLACE_OR_CREATE:pmg_harvesting_process_building_rubber_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_building_rubber_plantation
+	}
+}
 INJECT:pmg_amenities = {
 	production_methods = {
 		pm_department_stores

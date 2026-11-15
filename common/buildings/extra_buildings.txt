@@ -670,6 +670,76 @@ INJECT:building_millet_farm = {
 	}
 }
 
+# Harvesting Process for the plantation-type buildings: the nine plantations,
+# the Vineyard and the Rubber Plantation (Workshop request, 2026-11-15;
+# docs/systems/mod_systems/production_methods.md § "Livestock ranches and
+# plantations"). Groups in extra_pm_groups.txt.
+INJECT:building_banana_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_coffee_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_cotton_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_dye_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_opium_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_silk_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_sugar_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_tea_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_tobacco_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_vineyard = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_rubber_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_building_rubber_plantation
+	}
+}
+
 REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/building_solar_collector_construction_site.dds"

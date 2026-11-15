@@ -50,17 +50,44 @@ NEW_METHODS = {
     "pm_gene_edited_livestock": ("genetic_engineering", 11),
     "pm_mechanized_feeding_lines": ("green_revolution", 7),
     "pm_robotic_barns": ("internet_of_things", 10),
+    "pm_mechanical_harvesters_plantation": ("microprocessor", 8),
+    "pm_autonomous_harvesters_plantation": ("autonomous_vehicles", 11),
+    "pm_autonomous_harvesters_building_rubber_plantation": ("autonomous_vehicles", 11),
 }
+# Methods with no technology of their own: a group's ungated first method.
+UNGATED_METHODS = ("pm_hand_harvesting",)
 NEW_RANCH_BASES = ("pm_industrial_feedlots", "pm_recombinant_growth_hormones", "pm_gene_edited_livestock")
 # The ranch's base group from vanilla's top method up, and Herd Management from Electric Fences up.
 RANCH_MEAT_LADDER = ("pm_mechanized_slaughtering",) + NEW_RANCH_BASES
 HERD_LADDER = ("pm_standard_fences", "pm_barbed_wire_fences", "pm_electric_fencing",
                "pm_mechanized_feeding_lines", "pm_robotic_barns")
-ROBOTIC = ("pm_robotic_barns",)
-NOT_ROBOTIC = ("pm_mechanized_feeding_lines",) + NEW_RANCH_BASES
+ROBOTIC = ("pm_robotic_barns", "pm_autonomous_harvesters_plantation",
+           "pm_autonomous_harvesters_building_rubber_plantation")
+NOT_ROBOTIC = ("pm_mechanized_feeding_lines", "pm_hand_harvesting",
+               "pm_mechanical_harvesters_plantation") + NEW_RANCH_BASES
+
+# The plantation-type buildings: vanilla's bg_plantations, the Vineyard (bg_agriculture) and
+# the Rubber Plantation (bg_rubber), which run the same family of base methods.
+PLANTATIONS = ("building_banana_plantation", "building_coffee_plantation", "building_cotton_plantation",
+               "building_dye_plantation", "building_opium_plantation", "building_silk_plantation",
+               "building_sugar_plantation", "building_tea_plantation", "building_tobacco_plantation",
+               "building_vineyard")
+RUBBER = "building_rubber_plantation"
+HARVEST = {**dict.fromkeys(PLANTATIONS, "pmg_harvesting_process_plantation"),
+           RUBBER: "pmg_harvesting_process_building_rubber_plantation"}
+HARVEST_LADDERS = {
+    "pmg_harvesting_process_plantation": (
+        "pm_hand_harvesting", "pm_mechanical_harvesters_plantation", "pm_autonomous_harvesters_plantation"),
+    "pmg_harvesting_process_building_rubber_plantation": (
+        "pm_hand_harvesting", "pm_mechanical_harvesters_plantation",
+        "pm_autonomous_harvesters_building_rubber_plantation"),
+}
+# The late plantation bases (Mechanized Farm, GMO Plantation) the autonomous tier needs.
+LATE_BASE_PREFIXES = ("factory_farm_building_", "GMO_plantation_building_")
+CAPTURE_EXCLUDED_GROUPS = tuple(HARVEST_LADDERS)
 
 # Buildings whose every method combination is checked for negative or token staff.
-CHECKED_BUILDINGS = (RANCH,)
+CHECKED_BUILDINGS = (RANCH,) + PLANTATIONS + (RUBBER,)
 MIN_STAFF = 100  # test_flat_crews.py's rule: a level keeps 0 or at least this many
 
 
@@ -238,7 +265,91 @@ class RanchTest(unittest.TestCase):
                 with self.subTest(method=name, base=base):
                     self.assertIn(base, needs)
 
-    def test_robotic_barns_join_the_automation_policy(self):
+    def test_the_group_is_named_for_what_it_now_holds(self):
+        loc = _loc()
+        self.assertEqual(loc.get(HERD), "Herd Management")
+
+
+class PlantationTest(unittest.TestCase):
+    def test_every_plantation_type_runs_a_harvesting_group(self):
+        """Each plantation-type building runs its Harvesting Process group, and a plantation
+        added later to bg_plantations is flagged until it gets one."""
+        data = _data()
+        plantations = {b for b, body in data.buildings.items() if isinstance(body, dict)
+                       and _body(body.get("building_group")) == "bg_plantations"}
+        self.assertLessEqual(plantations, set(PLANTATIONS))
+        for building, group in HARVEST.items():
+            with self.subTest(building=building):
+                self.assertIn(group, data.groups(building))
+
+    def test_the_harvest_ladders(self):
+        """An ungated first method, then tiers that cut more staff and come later."""
+        data = _data()
+        for group, ladder in HARVEST_LADDERS.items():
+            with self.subTest(group=group):
+                self.assertEqual(tuple(data.methods(group)), ladder)
+                first = data.pms[ladder[0]]
+                for gate in ("unlocking_technologies", "unlocking_production_methods", "unlocking_laws"):
+                    self.assertFalse(_list(first.get(gate)), gate)
+                self.assertFalse(data.staff(ladder[0]))
+                previous = (0, 1)
+                for name in ladder[1:]:
+                    cut = -sum(data.staff(name).values())
+                    era = data.era(data.techs_of(name)[0])
+                    self.assertGreater(cut, previous[0], name)
+                    self.assertGreater(era, previous[1], name)
+                    previous = (cut, era)
+
+    def test_the_tiers_cut_no_laborers_or_machinists(self):
+        """Rail transport takes a GMO Plantation's last laborers and the infrastructure-4
+        transport method its machinists, so a harvesting tier cuts neither."""
+        data = _data()
+        for ladder in HARVEST_LADDERS.values():
+            for name in ladder:
+                with self.subTest(method=name):
+                    self.assertFalse({"laborers", "machinists"} & set(data.staff(name)))
+
+    def test_the_autonomous_tier_needs_a_late_base_on_every_building(self):
+        """The autonomous tier cuts engineers, whom only the Mechanized Farm and GMO
+        Plantation employ, so it lists those bases and nothing else; and it lists every one
+        of them that a building with its group runs, or that building could never use it."""
+        data = _data()
+        for group, ladder in HARVEST_LADDERS.items():
+            top = ladder[-1]
+            needs = set(_list(data.pms[top].get("unlocking_production_methods")))
+            with self.subTest(method=top):
+                self.assertTrue(needs)
+                for base in needs:
+                    self.assertIn(base, data.pms)
+                    self.assertTrue(base.startswith(LATE_BASE_PREFIXES), base)
+                for building, used in HARVEST.items():
+                    if used != group:
+                        continue
+                    base_group = data.groups(building)[0]
+                    late = {m for m in data.methods(base_group) if m.startswith(LATE_BASE_PREFIXES)}
+                    self.assertTrue(late, building)
+                    self.assertEqual(late - needs, set(), building)
+
+    def test_carbon_capture_leaves_the_harvesters_out(self):
+        """The Mechanical Harvesters burn oil; like the farms' harvesters they are dispersed
+        machinery, so gen_carbon_capture_pms.py gives the groups no capture controls (the
+        sugar mill keeps its own)."""
+        import pm_carbon_capture
+
+        data = _data()
+        for group in CAPTURE_EXCLUDED_GROUPS:
+            with self.subTest(group=group):
+                self.assertIn(group, pm_carbon_capture.EXCLUDED_GROUPS)
+                self.assertNotIn(pm_carbon_capture.PREFIX + group.removeprefix("pmg_"), data.groups_by_name)
+        self.assertIn("pmg_carbon_capture_refinement_building_sugar_plantation",
+                      _list(data.buildings["building_sugar_plantation"].get("production_method_groups")))
+
+
+class AutomationTest(unittest.TestCase):
+    def test_the_robotic_tiers_join_the_automation_policy(self):
+        """The robotic tiers carry the marker in unscaled and Human Labor Quotas' gate, as
+        docs/systems/mod_systems/automation_policy.md asks of a new one; the other new
+        methods carry neither. test_automation_policy.py holds the building list and counts."""
         data = _data()
         for name in ROBOTIC:
             with self.subTest(method=name):
@@ -248,10 +359,6 @@ class RanchTest(unittest.TestCase):
             with self.subTest(method=name):
                 self.assertNotIn(MARKER, data.modifiers(name, "unscaled"))
                 self.assertNotIn(QUOTAS, _list(data.pms[name].get("disallowing_laws")))
-
-    def test_the_group_is_named_for_what_it_now_holds(self):
-        loc = _loc()
-        self.assertEqual(loc.get(HERD), "Herd Management")
 
 
 class EmploymentTest(unittest.TestCase):
@@ -282,16 +389,27 @@ class EmploymentTest(unittest.TestCase):
             with self.subTest(base=base):
                 self.assertEqual(staff["laborers"], 0)
         self.assertEqual(data.by_profession(("pm_gene_edited_livestock", "pm_robotic_barns"))["farmers"], 0)
+        # Autonomous Harvesters take a GMO Plantation's farmers, and the Rubber
+        # Plantation's copy its Mechanized Farm's farmers and engineers, to zero.
+        for base in ("GMO_plantation_building_banana_plantation", "GMO_plantation_building_tobacco_plantation"):
+            with self.subTest(base=base):
+                self.assertEqual(data.by_profession((base, "pm_autonomous_harvesters_plantation"))["farmers"], 0)
+        rubber = data.by_profession(("factory_farm_building_rubber_plantation",
+                                     "pm_autonomous_harvesters_building_rubber_plantation"))
+        self.assertEqual((rubber["farmers"], rubber["engineers"]), (0, 0))
 
 
 class LocTest(unittest.TestCase):
     def test_every_new_method_has_a_name_and_a_description(self):
         loc = _loc()
-        for name in NEW_METHODS:
+        for name in tuple(NEW_METHODS) + UNGATED_METHODS:
             with self.subTest(method=name):
                 self.assertTrue(loc.get(name))
                 self.assertTrue(loc.get(f"{name}_desc"))
                 self.assertNotRegex(loc[f"{name}_desc"], r"\d", "a method description carries no figures")
+        for group in HARVEST_LADDERS:
+            with self.subTest(group=group):
+                self.assertTrue(loc.get(group))
 
 
 def _table():
@@ -304,7 +422,19 @@ def _table():
         ("Ranch, era 9", ("pm_recombinant_growth_hormones", "pm_antibiotic_growth_promoters", "pm_mechanized_feeding_lines", rail)),
         ("Ranch, era 10", ("pm_recombinant_growth_hormones", "pm_antibiotic_growth_promoters", "pm_robotic_barns", rail)),
         ("Ranch, era 11", ("pm_gene_edited_livestock", "pm_antibiotic_growth_promoters", "pm_robotic_barns", rail)),
+        ("Cultured Meat", ("pm_synthetic_meat", "pm_manual_batch_processing")),
+        ("Cultured Meat", ("pm_synthetic_meat", "pm_distributed_control_systems")),
     ]
+    rail = "pm_steam_rail_transport"
+    for crop in ("banana", "tobacco"):
+        building = f"building_{crop}_plantation"
+        extra = ("electric_rollers", "default_labour_tobacco") if crop == "tobacco" else ("default_labour",)
+        for era, base in ((7, f"factory_farm_building_{crop}_plantation"), (9, f"GMO_plantation_building_{crop}_plantation")):
+            for harvest in HARVEST_LADDERS[HARVEST[building]]:
+                rows.append((f"{crop.title()}, base e{era}", (base, rail, harvest) + extra))
+    wheat = ("pm_modern_farming", "pm_no_secondary", "pm_no_precision_environmental_management")
+    for harvest in ("pm_hydraulic_equipment", "pm_automated_mechanical_harvesters"):
+        rows.append(("Wheat, era 7-8", wheat + (harvest,)))
     print(f"{'Combination':16s} {'Input':>7s} {'Output':>7s} {'Profit':>7s} {'Staff':>6s} {'Per head':>8s}")
     for label, combo in rows:
         cost, value = data.value(combo)

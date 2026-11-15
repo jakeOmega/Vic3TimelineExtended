@@ -10336,6 +10336,159 @@ pm_automated_harvesters_and_planters = {
 	required_input_goods = electricity
 }
 
+# Plantations' Harvesting Process (pmg_harvesting_process_plantation and the
+# Rubber Plantation's own group; Workshop request, 2026-11-15). A plantation's
+# base methods carry its labor: Mechanized Farm and GMO Plantation already cut
+# the field hands, and rail transport takes the last 1,000 laborers a level on
+# several of them. So these tiers cut the farmers (the skilled harvest crews,
+# who earn twice a laborer's wage) and, once the machines run themselves, some
+# engineers; no laborers and no machinists, whom the infrastructure-4 transport
+# method can take to zero. test_ranch_plantation_methods.py checks every
+# combination.
+pm_hand_harvesting = {
+	texture = "gfx/interface/icons/production_method_icons/harvesting_tools.dds"
+}
+
+pm_mechanical_harvesters_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_mechanical_harvesters.dds"
+
+	unlocking_technologies = {
+		microprocessor
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (60.00%)
+			goods_input_oil_add = 1                              # Price:   40, Total cost:    40.0 (40.00%)
+			# Output goods
+			# Total input cost: 100.0
+			# Total output cost: 0
+			# Profit: -100.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -500
+			# Wage breakeven: 0.20
+		}
+
+		level_scaled = {
+			building_employment_farmers_add = -500
+		}
+	}
+}
+
+# Needs a Mechanized Farm or GMO Plantation base: the earlier bases employ no
+# engineers.
+pm_autonomous_harvesters_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_harvesters_and_planters.dds"
+
+	unlocking_technologies = {
+		autonomous_vehicles
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	unlocking_production_methods = {
+		factory_farm_building_banana_plantation
+		factory_farm_building_coffee_plantation
+		factory_farm_building_cotton_plantation
+		factory_farm_building_dye_plantation
+		factory_farm_building_opium_plantation
+		factory_farm_building_silk_plantation
+		factory_farm_building_sugar_plantation
+		factory_farm_building_tea_plantation
+		factory_farm_building_tobacco_plantation
+		factory_farm_building_vineyard
+		GMO_plantation_building_banana_plantation
+		GMO_plantation_building_coffee_plantation
+		GMO_plantation_building_sugar_plantation
+		GMO_plantation_building_tea_plantation
+		GMO_plantation_building_tobacco_plantation
+		GMO_plantation_building_vineyard
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (20.00%)
+			goods_input_electronic_components_add = 1            # Price:   80, Total cost:    80.0 (26.67%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (20.00%)
+			goods_input_digital_assets_add = 1                   # Price:  100, Total cost:   100.0 (33.33%)
+			# Output goods
+			# Total input cost: 300.0
+			# Total output cost: 0
+			# Profit: -300.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -1250
+			# Wage breakeven: 0.24
+		}
+
+		level_scaled = {
+			building_employment_farmers_add = -1000
+			building_employment_engineers_add = -250
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# The Rubber Plantation's Mechanized Farm keeps 800 farmers and 100 engineers a
+# level, so its copy cuts those.
+pm_autonomous_harvesters_building_rubber_plantation = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_harvesters_and_planters.dds"
+
+	unlocking_technologies = {
+		autonomous_vehicles
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	unlocking_production_methods = {
+		factory_farm_building_rubber_plantation
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (20.00%)
+			goods_input_electronic_components_add = 1            # Price:   80, Total cost:    80.0 (26.67%)
+			goods_input_electricity_add = 2                      # Price:   30, Total cost:    60.0 (20.00%)
+			goods_input_digital_assets_add = 1                   # Price:  100, Total cost:   100.0 (33.33%)
+			# Output goods
+			# Total input cost: 300.0
+			# Total output cost: 0
+			# Profit: -300.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -900
+			# Wage breakeven: 0.33
+		}
+
+		level_scaled = {
+			building_employment_farmers_add = -800
+			building_employment_engineers_add = -100
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_hydraulic_equipment_building_rice_farm = {
 	texture = "gfx/interface/icons/production_method_icons/pm_hydraulic_equipment.dds"
 
