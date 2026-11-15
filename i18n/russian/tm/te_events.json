@@ -11039,6 +11039,1370 @@
   "en": "The Autonomous Question",
   "ru": "Вопрос об автономных системах"
  },
+ "modern_election_events.4.a": {
+  "en": "Deploy the targeting machine.",
+  "ru": "Задействовать машину таргетинга."
+ },
+ "modern_election_events.4.b": {
+  "en": "This crosses a line. Reject it.",
+  "ru": "Это перебор. Отказаться."
+ },
+ "modern_election_events.4.c": {
+  "en": "Regulate data use in campaigns.",
+  "ru": "Регулировать использование данных в кампаниях."
+ },
+ "modern_election_events.4.d": {
+  "en": "A contractor has offered our campaign a large store of personal data: what people buy, what they read and search for, and whom they know. With it the campaign could send each voter a message written for them alone. Our analysts expect it to win votes. None of the people in the records agreed to their data being sold.",
+  "ru": "Подрядчик предложил нашей кампании огромный массив личных данных: что люди покупают, что читают и ищут, кого знают. С ним кампания могла бы отправлять каждому избирателю послание, написанное только для него. Наши аналитики рассчитывают, что это принесёт голоса. Никто из людей в этих записях не давал согласия на продажу своих данных."
+ },
+ "modern_election_events.4.f": {
+  "en": "To the campaign committee, from the analytics office. The records on offer cover most adults with a phone or a bank card: what they buy, what they read, whom they write to and where they go. Matched against the voter rolls, they would allow the campaign to sort the electorate into several hundred groups and send each group advertisements that no other group would see. In a trial on one district, the people who received the tailored messages were noticeably more likely to say they would vote for us. We have not been told how the contractor obtained the records. We attach the trial figures and ask whether to proceed.",
+  "ru": "Предвыборному комитету от аналитического отдела. Предложенные записи охватывают большинство взрослых, у кого есть телефон или банковская карта: что они покупают, что читают, кому пишут и где бывают. В сопоставлении со списками избирателей они позволили бы кампании разделить электорат на несколько сотен групп и показывать каждой группе рекламу, которой не увидит ни одна другая. В пробном запуске на одном округе люди, получившие персональные сообщения, заметно чаще говорили, что проголосуют за нас. Нам не сообщили, как подрядчик получил эти записи. Прилагаем итоги пробного запуска и просим решить, продолжать ли."
+ },
+ "modern_election_events.4.t": {
+  "en": "The Algorithm Knows",
+  "ru": "Алгоритм знает"
+ },
+ "modern_election_events.5.a": {
+  "en": "Co-opt their message — claim it as our own.",
+  "ru": "Перехватить их лозунги и выдать за свои."
+ },
+ "modern_election_events.5.b": {
+  "en": "Demagogues, the lot of them.",
+  "ru": "Все они демагоги."
+ },
+ "modern_election_events.5.c": {
+  "en": "Engage honestly with their concerns.",
+  "ru": "Честно откликнуться на их тревоги."
+ },
+ "modern_election_events.5.d": {
+  "en": "A rally organized through social media has filled the center of the capital with far more people than its organizers told the city to expect. The signs are hand-painted, and nearly all of them make the same complaint: that the government answers to money and not to ordinary citizens. Every party is now trying to speak for the crowd.",
+  "ru": "Митинг, организованный через социальные сети, заполнил центр столицы гораздо большим числом людей, чем организаторы сообщили городу. Плакаты нарисованы от руки, и почти все они выражают одну жалобу: правительство служит деньгам, а не простым гражданам. Теперь каждая партия пытается говорить от имени толпы."
+ },
+ "modern_election_events.5.f": {
+  "en": "The organizers had asked the city for room for a few hundred people. By noon one of them had given up counting and was walking the edge of the crowd with a borrowed megaphone: \\\"Back onto the sidewalk, please, the buses still need to get through.\\\" Most of the signs were cardboard, painted the night before, and many said the same thing, that nobody in the government had ever asked them anything. Near the front a man was reading a list of grievances from his phone, and the people around him called out the ones that were theirs. At the corner the police were putting up barriers, and the organizer went over to talk to them.",
+  "ru": "Организаторы просили у города место для нескольких сотен человек. К полудню один из них бросил считать и шёл вдоль края толпы с одолженным мегафоном: «Пожалуйста, обратно на тротуар, автобусам ещё нужно проехать». Большинство плакатов были из картона, их нарисовали накануне вечером, и многие говорили одно и то же: никто в правительстве никогда ни о чём их не спрашивал. Впереди мужчина читал с телефона список обид, а окружающие выкрикивали те, что касались их. На углу полиция ставила заграждения, и организатор пошёл с ней поговорить."
+ },
+ "modern_election_events.5.t": {
+  "en": "The People's Roar",
+  "ru": "Рёв народа"
+ },
+ "modern_election_events.6.a": {
+  "en": "The opposition is clearly compromised.",
+  "ru": "Оппозиция явно скомпрометирована."
+ },
+ "modern_election_events.6.b": {
+  "en": "Launch a full public investigation.",
+  "ru": "Начать полное публичное расследование."
+ },
+ "modern_election_events.6.c": {
+  "en": "Strengthen our cyber defenses quietly.",
+  "ru": "Тихо усилить нашу киберзащиту."
+ },
+ "modern_election_events.6.d": {
+  "en": "Our investigators have found foreign operations aimed at the election: party databases broken into, and networks of accounts spreading divisive material. The evidence is classified, and it leaves no real doubt that the operations are directed from abroad.",
+  "ru": "Наши следователи обнаружили иностранные операции, нацеленные на выборы: взломаны базы данных партий, сети аккаунтов распространяют материалы, сеющие раздор. Доказательства засекречены, и они не оставляют реальных сомнений, что операциями руководят из-за рубежа."
+ },
+ "modern_election_events.6.f": {
+  "en": "To the government, from the joint investigation into the campaign networks. Since our last report we have confirmed three things. First, the membership records of one party were entered with stolen passwords and copied in full. Second, several thousand accounts posting about the election are run through the same handful of servers abroad. Third, most of what they post is true, and it is chosen to make each side angrier at the other. We have found no attempt on the counting systems. We can attribute the work to a foreign state with confidence, but not in public without revealing how we know. We ask whether our findings are to be published before the vote.",
+  "ru": "Правительству от совместного расследования по сетям кампании. С прошлого доклада мы подтвердили три вещи. Во-первых, реестр членов одной из партий вскрыт с помощью украденных паролей и скопирован полностью. Во-вторых, несколько тысяч аккаунтов, пишущих о выборах, управляются с одной и той же горстки серверов за границей. В-третьих, большая часть того, что они публикуют, правда, и подобрана так, чтобы каждая сторона злилась на другую ещё сильнее. Попыток вмешаться в системы подсчёта голосов мы не обнаружили. Мы уверенно можем приписать эту работу иностранному государству, но публично не можем, не раскрыв, откуда нам это известно. Просим решить, публиковать ли наши выводы до голосования."
+ },
+ "modern_election_events.6.t": {
+  "en": "Shadows on the Ballot",
+  "ru": "Тени над бюллетенем"
+ },
+ "modern_election_events.7.a": {
+  "en": "Capital speaks. We should listen.",
+  "ru": "Капитал говорит. Нам стоит прислушаться."
+ },
+ "modern_election_events.7.b": {
+  "en": "Denounce corporate influence on democracy.",
+  "ru": "Осудить влияние корпораций на демократию."
+ },
+ "modern_election_events.7.c": {
+  "en": "Spend to match — we won't be outgunned.",
+  "ru": "Потратить столько же — нас не перекричат."
+ },
+ "modern_election_events.7.d": {
+  "en": "Committees funded by industrial interests are spending more on this election than the parties themselves. Their advertisements run on television, online and in text messages, and none of them says who paid for it. Under our laws the money is legal. The candidates they oppose say the election is being bought.",
+  "ru": "Комитеты, финансируемые промышленными кругами, тратят на эти выборы больше, чем сами партии. Их реклама идёт по телевидению, в сети и в текстовых сообщениях, и ни в одной не сказано, кто за неё заплатил. По нашим законам эти деньги законны. Кандидаты, которым они противостоят, заявляют, что выборы покупают."
+ },
+ "modern_election_events.7.f": {
+  "en": "\\\"Every advertisement break tonight was theirs. I sat with the schedule and a pencil and counted: the evening news, the match, the late film, the same three advertisements in rotation, and not one of them says who paid. We have a budget for leaflets and a hall booked for Thursday. They have the screens, the billboards on the main roads and, from what the printers tell me, every free slot on the presses until polling day. Nothing they are doing is against the law here. I have checked twice. I am writing to the party treasurer tonight to ask what we can afford for the last weeks.\\\"",
+  "ru": "«Каждый рекламный блок сегодня вечером был их. Я сидел с программой передач и карандашом и считал: вечерние новости, матч, поздний фильм, одни и те же три ролика по кругу, и ни в одном не сказано, кто заплатил. У нас есть бюджет на листовки и зал, снятый на четверг. У них экраны, щиты на главных дорогах и, по словам печатников, каждое свободное место в типографиях до самого дня выборов. Ничего из того, что они делают, здесь не противозаконно. Я проверил дважды. Сегодня вечером пишу казначею партии, чтобы узнать, что мы можем себе позволить на последние недели.»"
+ },
+ "modern_election_events.7.t": {
+  "en": "Dark Money",
+  "ru": "Тёмные деньги"
+ },
+ "modern_election_events.8.a": {
+  "en": "The future belongs to the young.",
+  "ru": "Будущее принадлежит молодым."
+ },
+ "modern_election_events.8.b": {
+  "en": "Youth and inexperience are not virtues.",
+  "ru": "Молодость и неопытность — не добродетели."
+ },
+ "modern_election_events.8.c": {
+  "en": "Channel their energy into civic institutions.",
+  "ru": "Направить их энергию в гражданские институты."
+ },
+ "modern_election_events.8.d": {
+  "en": "Young voters across [ROOT.GetCountry.GetName] are organizing on social platforms: registration drives, meetings for first-time voters, campaigns passed from phone to phone. People of an age that usually stays home on election day are registering in numbers the parties did not plan for. They want answers on jobs, rents and the future, and they want them before the vote.",
+  "ru": "Молодые избиратели по всей стране [ROOT.GetCountry.GetName] организуются в социальных сетях: кампании по регистрации, встречи для тех, кто голосует впервые, акции, передаваемые от телефона к телефону. Люди того возраста, что обычно сидит дома в день выборов, регистрируются в числах, на которые партии не рассчитывали. Они хотят ответов о работе, аренде и будущем, и хотят получить их до голосования."
+ },
+ "modern_election_events.8.f": {
+  "en": "\\\"I registered on my phone in the line for lunch. It took four minutes, and then I sent the link to everyone in my class.\\\"\\n\\n\\\"We are not asking the parties to like us. We are asking them to say what they will do about rents and jobs, in writing, before the vote.\\\"\\n\\n\\\"My parents vote every time and never talk about it. This is the first year we have argued about it at dinner.\\\"\\n\\n\\\"We run a group for first-time voters at the college. Last month there were thirty of us. Now there are four hundred, and half of them want to stand for something themselves.\\\"",
+  "ru": "«Я зарегистрировался с телефона в очереди за обедом. Это заняло четыре минуты, а потом я отправил ссылку всем в моём классе».\\n\\n«Мы не просим партии нас любить. Мы просим их письменно сказать, что они сделают с арендой и работой, до голосования».\\n\\n«Мои родители голосуют каждый раз и никогда об этом не говорят. В этом году мы впервые спорили об этом за ужином».\\n\\n«Мы ведём группу для тех, кто голосует впервые, в колледже. В прошлом месяце нас было тридцать. Теперь четыреста, и половина хочет сама за что-нибудь баллотироваться»."
+ },
+ "modern_election_events.8.t": {
+  "en": "Generation Next",
+  "ru": "Следующее поколение"
+ },
+ "modern_election_events.9.a": {
+  "en": "Let it run as often as the networks like.",
+  "ru": "Пусть крутят, сколько захотят."
+ },
+ "modern_election_events.9.a_own": {
+  "en": "Say nothing, and let the networks run it as often as they like.",
+  "ru": "Ничего не говорить и позволить каналам крутить это сколько им вздумается."
+ },
+ "modern_election_events.9.b": {
+  "en": "Take the high road.",
+  "ru": "Не опускаться до этого."
+ },
+ "modern_election_events.9.b_own": {
+  "en": "Apologize for it and move on.",
+  "ru": "Извиниться за это и двигаться дальше."
+ },
+ "modern_election_events.9.c": {
+  "en": "Make light of it. Anyone can fumble a line.",
+  "ru": "Обратить в шутку. Любой может оговориться."
+ },
+ "modern_election_events.9.d": {
+  "en": "During a live broadcast, a prominent candidate of the [SCOPE.sParty('gaffe_party').GetName] made a blunder that every news program has since replayed. Commentators have talked of little else for a day. Every campaign, ours included, is deciding how to respond.",
+  "ru": "В прямом эфире видный кандидат от партии [SCOPE.sParty('gaffe_party').GetName] допустил промах, который с тех пор повторили все выпуски новостей. Комментаторы весь день говорят почти только об этом. Каждая кампания, включая нашу, решает, как отреагировать."
+ },
+ "modern_election_events.9.f": {
+  "en": "In the editing room the producer ran the clip back and forward until she had the cut she wanted: the question, the candidate's first words, the answer going wrong halfway through, the pause, the laugh from somewhere in the audience. She timed it at eleven seconds and wrote the number on the running order for the evening bulletin. Down the corridor the phones on the news desk had started ringing. She made a second copy for the morning program, labeled both, and went to find the presenter.",
+  "ru": "В монтажной продюсер гоняла запись вперёд и назад, пока не получила нужную нарезку: вопрос, первые слова кандидата, ответ, сбивающийся на полпути, пауза, смех откуда-то из зала. Она засекла одиннадцать секунд и записала число в сетку вечернего выпуска. В коридоре на новостном столе уже зазвонили телефоны. Она сделала вторую копию для утренней программы, подписала обе и пошла искать ведущего."
+ },
+ "modern_election_events.9.t": {
+  "en": "Foot in Mouth",
+  "ru": "Сел в лужу"
+ },
+ "monument_events.10.a": {
+  "en": "Subsidize the tickets",
+  "ru": "Субсидировать билеты"
+ },
+ "monument_events.10.b": {
+  "en": "Let the clubs set their prices and pay the state its share",
+  "ru": "Пусть клубы сами назначают цены и отдают государству его долю"
+ },
+ "monument_events.10.d": {
+  "en": "A match at our stadium in [SCOPE.sState('monument_state').GetName] has filled every seat, and the crowd outside without tickets was nearly as large as the one inside. The trade unions ask the government to pay part of the ticket price, so that workers can afford a seat. The clubs that play there would rather set their own prices and pay the state its share of the takings.",
+  "ru": "Матч на нашем стадионе в области [SCOPE.sState('monument_state').GetName] собрал полные трибуны, а толпа без билетов снаружи была почти так же велика, как внутри. Профсоюзы просят правительство оплатить часть цены билета, чтобы рабочие могли позволить себе место. Играющие там клубы предпочли бы сами назначать цены и отдавать государству его долю сборов."
+ },
+ "monument_events.10.f": {
+  "en": "\\\"I paid a day's wage for a seat at the far end, and I would pay it again, but I cannot bring my boys at that price.\\\"\\n\\n\\\"We had people climbing the wall at the north end before the gates opened. Two of my men were hurt pulling them down, and the crowd outside stayed for the whole game, listening to the noise.\\\"\\n\\n\\\"I sat beside a man from the other side of the city whom I would not usually speak to, and by the end we were sharing his bread.\\\"\\n\\n\\\"The clubs took more at the gate this season than the ground has ever taken. They pay the state for the use of the ground, and the government has written asking to see the books.\\\"",
+  "ru": "«Я заплатил дневной заработок за место на дальней трибуне и заплатил бы снова, но привести своих мальчишек по такой цене не могу».\\n\\n«Люди лезли на стену с северной стороны ещё до открытия ворот. Двое моих людей пострадали, стаскивая их, а толпа снаружи простояла всю игру, слушая шум».\\n\\n«Я сидел рядом с человеком с другого конца города, с которым обычно и не заговорил бы, и к концу мы делили его хлеб».\\n\\n«В этом сезоне клубы собрали у ворот больше, чем это поле когда-либо собирало. Они платят государству за пользование полем, и правительство написало с просьбой показать им книги»."
+ },
+ "monument_events.10.t": {
+  "en": "Every Seat Taken",
+  "ru": "Все места заняты"
+ },
+ "monument_events.11.building_artistic_chinese": {
+  "en": "Raise it as a Chinese opera stage",
+  "ru": "Возвести как сцену китайской оперы"
+ },
+ "monument_events.11.building_artistic_greek": {
+  "en": "Raise it as a Greek open-air theater",
+  "ru": "Возвести как греческий театр под открытым небом"
+ },
+ "monument_events.11.building_athletic_greek": {
+  "en": "Raise it as a Greek stadium",
+  "ru": "Возвести как греческий стадион"
+ },
+ "monument_events.11.building_athletic_latin": {
+  "en": "Raise it as a Roman amphitheater",
+  "ru": "Возвести как римский амфитеатр"
+ },
+ "monument_events.11.building_athletic_mayan": {
+  "en": "Raise it as a Maya ball court",
+  "ru": "Возвести как площадку для игры в мяч майя"
+ },
+ "monument_events.11.building_athletic_nahuatl": {
+  "en": "Raise it as an Aztec ball court",
+  "ru": "Возвести как площадку для игры в мяч ацтеков"
+ },
+ "monument_events.11.building_naturalist_arabic": {
+  "en": "Lay it out as an Andalusian courtyard garden",
+  "ru": "Разбить как андалусский сад во внутреннем дворе"
+ },
+ "monument_events.11.building_naturalist_avestan": {
+  "en": "Lay it out as a Persian garden",
+  "ru": "Разбить как персидский сад"
+ },
+ "monument_events.11.building_naturalist_chinese": {
+  "en": "Lay it out as a Chinese scholar's garden",
+  "ru": "Разбить как китайский сад учёного"
+ },
+ "monument_events.11.building_scientific_avestan": {
+  "en": "Raise it as a Persian observatory",
+  "ru": "Возвести как персидскую обсерваторию"
+ },
+ "monument_events.11.building_scientific_chinese": {
+  "en": "Raise it as a Chinese observatory platform",
+  "ru": "Возвести как китайскую обсерваторную платформу"
+ },
+ "monument_events.11.building_scientific_mayan": {
+  "en": "Raise it as a Maya round tower",
+  "ru": "Возвести как круглую башню майя"
+ },
+ "monument_events.11.building_scientific_sanskrit": {
+  "en": "Raise it as a Jantar Mantar",
+  "ru": "Возвести как Джантар-Мантар"
+ },
+ "monument_events.11.d": {
+  "en": "The monument in [SCOPE.sState('monument_state').GetName] has its dedication. The architects have drawn it in several styles, each taken from a tradition we claim as our own, and once more in the plain classical style.",
+  "ru": "Памятник в области [SCOPE.sState('monument_state').GetName] получает посвящение. Архитекторы нарисовали его в нескольких стилях, каждый из которых взят из традиции, которую мы считаем своей, и ещё раз в простом классическом стиле."
+ },
+ "monument_events.11.f": {
+  "en": "The architects had pinned their drawings along one wall of the long room at the works office, each the same monument drawn a different way: the roofline, the doors, the ornament over the entrance, the material it would be faced in. The official walked the length of the wall twice with his hands behind his back. The youngest of the architects followed him and stopped at each sheet. \\\"This one follows the old builders of this country, and this one follows builders older still,\\\" she said. \\\"This last is the plain classical style, which any country could put up anywhere.\\\" The official asked for the drawings to be sent up to the government, with a note under each saying what it showed.",
+  "ru": "Архитекторы развесили свои чертежи вдоль одной стены длинной комнаты строительной конторы: один и тот же памятник, нарисованный по-разному, с разной линией крыши, дверями, орнаментом над входом и облицовкой. Чиновник дважды прошёл вдоль стены, заложив руки за спину. Младшая из архитекторов следовала за ним и останавливалась у каждого листа. «Этот следует древним строителям нашей страны, а этот — строителям ещё более древним, — сказала она. — А последний — простой классический стиль, который любая страна могла бы возвести где угодно». Чиновник попросил отправить чертежи правительству, подписав под каждым, что он изображает."
+ },
+ "monument_events.11.faith_animist": {
+  "en": "Plant it as a sacred grove",
+  "ru": "Посадить как священную рощу"
+ },
+ "monument_events.11.faith_catholic": {
+  "en": "Raise it as a basilica",
+  "ru": "Возвести как базилику"
+ },
+ "monument_events.11.faith_confucian": {
+  "en": "Raise it as a temple of Confucius",
+  "ru": "Возвести как храм Конфуция"
+ },
+ "monument_events.11.faith_gelugpa": {
+  "en": "Raise it as a great monastery",
+  "ru": "Возвести как великий монастырь"
+ },
+ "monument_events.11.faith_hindu": {
+  "en": "Raise it as a temple complex",
+  "ru": "Возвести как храмовый комплекс"
+ },
+ "monument_events.11.faith_ibadi": {
+  "en": "Raise it as a great mosque",
+  "ru": "Возвести как великую мечеть"
+ },
+ "monument_events.11.faith_jewish": {
+  "en": "Raise it as a great temple",
+  "ru": "Возвести как великий храм"
+ },
+ "monument_events.11.faith_mahayana": {
+  "en": "Raise it as a pagoda",
+  "ru": "Возвести как пагоду"
+ },
+ "monument_events.11.faith_oriental_orthodox": {
+  "en": "Raise it as a great church",
+  "ru": "Возвести как великую церковь"
+ },
+ "monument_events.11.faith_orthodox": {
+  "en": "Raise it as an Orthodox cathedral",
+  "ru": "Возвести как православный собор"
+ },
+ "monument_events.11.faith_protestant": {
+  "en": "Raise it as a cathedral",
+  "ru": "Возвести как кафедральный собор"
+ },
+ "monument_events.11.faith_shiite": {
+  "en": "Raise it as a shrine mosque",
+  "ru": "Возвести как мечеть-святыню"
+ },
+ "monument_events.11.faith_shinto": {
+  "en": "Raise it as a grand shrine",
+  "ru": "Возвести как великое святилище"
+ },
+ "monument_events.11.faith_sikh": {
+  "en": "Raise it as a gurdwara",
+  "ru": "Возвести как гурдвару"
+ },
+ "monument_events.11.faith_theravada": {
+  "en": "Raise it as a great stupa",
+  "ru": "Возвести как великую ступу"
+ },
+ "monument_events.11.generic": {
+  "en": "Keep to the plain classical style",
+  "ru": "Остаться при простом классическом стиле"
+ },
+ "monument_events.11.heritage_arabic": {
+  "en": "Raise it as a caliphal hall",
+  "ru": "Возвести как халифский зал"
+ },
+ "monument_events.11.heritage_aramaic": {
+  "en": "Raise it as a rock-cut monument",
+  "ru": "Возвести как высеченный в скале памятник"
+ },
+ "monument_events.11.heritage_avestan": {
+  "en": "Raise it as a gate of nations",
+  "ru": "Возвести как ворота народов"
+ },
+ "monument_events.11.heritage_chinese": {
+  "en": "Raise it as a hall of dynasties",
+  "ru": "Возвести как зал династий"
+ },
+ "monument_events.11.heritage_geez": {
+  "en": "Raise it as an Aksumite stele",
+  "ru": "Возвести как аксумскую стелу"
+ },
+ "monument_events.11.heritage_gothic": {
+  "en": "Raise it as a hall of heroes",
+  "ru": "Возвести как зал героев"
+ },
+ "monument_events.11.heritage_greek": {
+  "en": "Raise it as a pantheon",
+  "ru": "Возвести как пантеон"
+ },
+ "monument_events.11.heritage_hebrew": {
+  "en": "Raise it as a great menorah",
+  "ru": "Возвести как великую менору"
+ },
+ "monument_events.11.heritage_irish": {
+  "en": "Raise it as a round tower and high cross",
+  "ru": "Возвести как круглую башню и высокий крест"
+ },
+ "monument_events.11.heritage_latin": {
+  "en": "Raise it as a forum and triumphal column",
+  "ru": "Возвести как форум и триумфальную колонну"
+ },
+ "monument_events.11.heritage_mayan": {
+  "en": "Raise it as a temple-pyramid",
+  "ru": "Возвести как храм-пирамиду"
+ },
+ "monument_events.11.heritage_nahuatl": {
+  "en": "Raise it as a stepped pyramid",
+  "ru": "Возвести как ступенчатую пирамиду"
+ },
+ "monument_events.11.heritage_norse": {
+  "en": "Raise it as a rune-stone hall",
+  "ru": "Возвести как зал рунических камней"
+ },
+ "monument_events.11.heritage_prussian": {
+  "en": "Raise it as a hill-fort monument",
+  "ru": "Возвести как памятник-городище"
+ },
+ "monument_events.11.heritage_sanskrit": {
+  "en": "Raise it as a pillar of dharma",
+  "ru": "Возвести как столп дхармы"
+ },
+ "monument_events.11.heritage_slavonic": {
+  "en": "Raise it as a memorial bell tower",
+  "ru": "Возвести как мемориальную колокольню"
+ },
+ "monument_events.11.t": {
+  "en": "A Style for the Monument",
+  "ru": "Стиль для памятника"
+ },
+ "monument_events.12.a": {
+  "en": "Hold a lavish jubilee",
+  "ru": "Устроить пышный юбилей"
+ },
+ "monument_events.12.b": {
+  "en": "A simple service, and the sovereign walks among the crowd",
+  "ru": "Скромная служба, и государь идёт среди толпы"
+ },
+ "monument_events.12.d": {
+  "en": "The anniversary of the reign falls this year, and the ruler's household wants it marked at [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. The treasury would rather it were marked quietly.",
+  "ru": "В этом году приходится годовщина правления, и двор правителя хочет отметить её в [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName]. Казна предпочла бы отметить её скромно."
+ },
+ "monument_events.12.d_beside": {
+  "en": "The anniversary of the reign falls this year, and the ruler's household wants it marked at the monument standing beside [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. The treasury would rather it were marked quietly.",
+  "ru": "В этом году приходится годовщина правления, и двор правителя хочет отметить её у памятника, стоящего рядом с [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName]. Казна предпочла бы отметить её скромно."
+ },
+ "monument_events.12.f": {
+  "en": "\\\"I am steward of the household, and the household wants the square hung with banners and a dinner given in the hall for every notable in the province. People will judge the reign by how it is marked.\\\"\\n\\n\\\"I am from the treasury, and I have the bill for the banners already. It is a twentieth of what the dinner will cost, and I am asked to find the money from roads that are not yet built.\\\"\\n\\n\\\"Then we will both put it to the sovereign this afternoon, with your figures and my list, and the sovereign can choose.\\\"",
+  "ru": "«Я управляющий двором, и двор хочет, чтобы площадь увешали знамёнами и в зале дали обед для каждого именитого человека провинции. Правление будут судить по тому, как оно отмечено».\\n\\n«Я из казны, и счёт за знамёна у меня уже есть. Он составляет двадцатую часть стоимости обеда, а от меня требуют найти деньги из дорог, которые ещё не построены».\\n\\n«Тогда мы оба доложим государю сегодня днём, с вашими цифрами и моим списком, и государь выберет»."
+ },
+ "monument_events.12.t": {
+  "en": "Jubilee at the Monument",
+  "ru": "Юбилей у памятника"
+ },
+ "monument_events.13.a": {
+  "en": "Convene a citizens' assembly",
+  "ru": "Созвать собрание граждан"
+ },
+ "monument_events.13.b": {
+  "en": "Hold a military parade",
+  "ru": "Провести военный парад"
+ },
+ "monument_events.13.d": {
+  "en": "Constitution Day comes around again at [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. Two proposals are before the government: open the monument to a citizens' assembly, or march the regiments past it.",
+  "ru": "День Конституции снова наступает у [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName]. Перед правительством два предложения: открыть памятник для собрания граждан или провести мимо него полки."
+ },
+ "monument_events.13.d_beside": {
+  "en": "Constitution Day comes around again at the monument standing beside [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. Two proposals are before the government: open the monument to a citizens' assembly, or march the regiments past it.",
+  "ru": "День Конституции снова наступает у памятника, стоящего рядом с [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName]. Перед правительством два предложения: открыть памятник для собрания граждан или провести мимо него полки."
+ },
+ "monument_events.13.f": {
+  "en": "Minutes of the committee for Constitution Day. Present: an official of the government, the garrison commander, two delegates of the citizens and a secretary. The official read the two proposals. The delegates spoke for opening the monument's steps to a citizens' assembly, at which any citizen might speak for five minutes on the state of the republic. The commander spoke for a parade of the regiments past the monument, saying the public expects one and that it can be ready in a week. The committee could not agree. Resolved that both proposals go to the government with these minutes, and that the committee meet again once the government has decided.",
+  "ru": "Протокол комитета по Дню Конституции. Присутствовали: чиновник правительства, командир гарнизона, два делегата от граждан и секретарь. Чиновник зачитал оба предложения. Делегаты высказались за то, чтобы открыть ступени памятника для собрания граждан, на котором любой гражданин мог бы пять минут говорить о положении республики. Командир высказался за парад полков мимо памятника, заметив, что публика его ждёт и что к нему можно подготовиться за неделю. Комитет не смог прийти к согласию. Постановлено: направить оба предложения правительству вместе с настоящим протоколом, а комитету собраться снова, когда правительство примет решение."
+ },
+ "monument_events.13.t": {
+  "en": "Constitution Day",
+  "ru": "День Конституции"
+ },
+ "monument_events.14.a": {
+  "en": "Fill the square",
+  "ru": "Заполнить площадь"
+ },
+ "monument_events.14.b": {
+  "en": "A quiet commemoration with the veterans",
+  "ru": "Тихое поминовение с ветеранами"
+ },
+ "monument_events.14.d": {
+  "en": "Every year the revolution is remembered at [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. This year the government wants the square full.",
+  "ru": "Каждый год у [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName] вспоминают революцию. В этом году правительство хочет, чтобы площадь была полна."
+ },
+ "monument_events.14.d_beside": {
+  "en": "Every year the revolution is remembered at the monument standing beside [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName]. This year the government wants the square full.",
+  "ru": "Каждый год у памятника, стоящего рядом с [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName], вспоминают революцию. В этом году правительство хочет, чтобы площадь была полна."
+ },
+ "monument_events.14.f": {
+  "en": "\\\"The young people on the committee asked me to say a few words about the day, so I will keep it short. I was in the streets when the old government fell. I was frightened most of the time and hungry the rest of it, and I did not understand half of what the speakers were shouting. What I understood was that the people around me would not go home until it was done, and so I stayed too. You want the square full this year. Fill it, then, but give the veterans the front row and a chair each, and let one of us speak before the officials do.\\\"",
+  "ru": "«Молодые из комитета попросили меня сказать несколько слов об этом дне, так что буду краток. Я был на улицах, когда пало старое правительство. Большую часть времени мне было страшно, остальное время — голодно, и я не понимал и половины того, что кричали ораторы. Я понимал одно: люди вокруг не уйдут домой, пока всё не кончится, и потому остался и я. Вы хотите в этом году полную площадь. Что ж, заполните её, но дайте ветеранам первый ряд и по стулу каждому и позвольте одному из нас выступить раньше чиновников»."
+ },
+ "monument_events.14.t": {
+  "en": "Anniversary of the Revolution",
+  "ru": "Годовщина революции"
+ },
+ "monument_events.15.a": {
+  "en": "Let the celebrations go ahead",
+  "ru": "Позволить празднествам идти своим чередом"
+ },
+ "monument_events.15.b": {
+  "en": "The leader declines the honor, in public",
+  "ru": "Лидер публично отказывается от почестей"
+ },
+ "monument_events.15.d": {
+  "en": "The head of state's birthday falls this week, and [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] has been decked out in advance by people eager to be seen doing it.",
+  "ru": "На этой неделе приходится день рождения главы государства, и [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName] заранее украсили люди, стремящиеся, чтобы их увидели за этим занятием."
+ },
+ "monument_events.15.d_beside": {
+  "en": "The head of state's birthday falls this week, and the monument standing beside [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] has been decked out in advance by people eager to be seen doing it.",
+  "ru": "На этой неделе приходится день рождения главы государства, и памятник, стоящий рядом с [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName], заранее украсили люди, стремящиеся, чтобы их увидели за этим занятием."
+ },
+ "monument_events.15.f": {
+  "en": "Instructions from the district office to the committee decorating the monument for the head of state's birthday:\\n\\nBanners go on the monument and along the main avenue only. The head of state has said in public that there is to be no fuss, and a whole district hung with flags would contradict that.\\nEach workplace, school and office may send one delegation with flowers, and no more. Where an organization sends three to be seen, the crush at the steps lasts all afternoon.\\nPortraits of the head of state are to be no taller than the monument's doors, so that the monument itself can still be seen from the avenue.\\nThe committee pays for its own materials and keeps the receipts. The district treasury will repay what the office approves, after the day and not before.",
+  "ru": "Указания районной конторы комитету по украшению памятника ко дню рождения главы государства:\\n\\nЗнамёна вешать только на памятнике и вдоль главной аллеи. Глава государства публично заявил, что никакой суеты быть не должно, а целый район, увешанный флагами, противоречил бы этому.\\nОт каждого предприятия, школы и учреждения может прийти одна делегация с цветами, не больше. Там, где организация присылает три, чтобы её заметили, давка у ступеней длится весь день.\\nПортреты главы государства не должны быть выше дверей памятника, чтобы сам памятник был виден с аллеи.\\nКомитет оплачивает материалы сам и хранит чеки. Районная казна возместит то, что одобрит контора, после праздника, а не до."
+ },
+ "monument_events.15.t": {
+  "en": "The Leader's Birthday",
+  "ru": "День рождения вождя"
+ },
+ "monument_events.16.a": {
+  "en": "Tear them all down",
+  "ru": "Снести их все"
+ },
+ "monument_events.16.a.tt": {
+  "en": "Every one of them is pulled down, and its [concept_grandeur] with it. The new order gains legitimacy that fades over about five years. Those who opposed the old order approve; those who raised the monuments resent it.",
+  "ru": "Каждый из них сносится, и вместе с ним уходит его [Concept('concept_grandeur','величие')]. Новый порядок получает легитимность, которая угасает примерно за пять лет. Противники прежнего порядка одобряют; те, кто воздвигал памятники, возмущены."
+ },
+ "monument_events.16.b": {
+  "en": "Keep them all as heritage",
+  "ru": "Сохранить все как наследие"
+ },
+ "monument_events.16.b.tt": {
+  "en": "Every one of them stays as heritage. Their prestige, visitors and local effects return, but they lend this government no legitimacy, and those who opposed the old order resent that they still stand, less each year.",
+  "ru": "Каждый из них остаётся как наследие. Их престиж, посетители и местные эффекты возвращаются, но легитимности этому правительству они не дают, а противники прежнего порядка возмущены тем, что они всё ещё стоят, с каждым годом всё меньше."
+ },
+ "monument_events.16.c": {
+  "en": "Decide on each in turn",
+  "ru": "Решать по каждому отдельно"
+ },
+ "monument_events.16.c.tt": {
+  "en": "One decision follows for each monument. Any of them can also be decided later, from its row on the Grand Monuments tab of the Timeline Extended window. Until then, those who opposed the old order resent every one still standing.",
+  "ru": "По каждому памятнику последует отдельное решение. Любое из них можно принять и позже, из его строки на вкладке «Великие памятники» окна Timeline Extended. До тех пор противники прежнего порядка возмущены каждым памятником, который всё ещё стоит."
+ },
+ "monument_events.16.d": {
+  "en": "[SCOPE.GetRootScope.ScriptValue('gm_notice_count')|0] of the monuments in our states now honor a regime, a ruler or a faith that this government does not stand for: the order that raised them has fallen, or they were raised by another country in states that are now ours. Until we decide, those who opposed what they stand for resent each one still standing.",
+  "ru": "[SCOPE.GetRootScope.ScriptValue('gm_notice_count')|0] из памятников в наших областях теперь чтят режим, правителя или веру, за которые это правительство не выступает: порядок, воздвигший их, пал, или их воздвигла другая страна в областях, которые теперь наши. Пока мы не решили, противники того, что они символизируют, возмущены каждым стоящим памятником."
+ },
+ "monument_events.16.f": {
+  "en": "The caretaker came to the district office before it opened and waited on the step until the clerk arrived. Someone had climbed the railings of the monument in the night and painted over the inscription, and someone else had laid flowers at the foot of it before he could get there with a bucket. \\\"If I scrub the paint off, they will say the office is on the old side,\\\" he said. \\\"If I leave it, the other lot will be back tonight with more.\\\" He wanted to know whether to clean it, clear away the flowers or leave both. The clerk told him to touch nothing yet, wrote down what he had said, and took the note up to the director.",
+  "ru": "Смотритель пришёл в районную контору до её открытия и ждал на ступеньке, пока не появился писарь. Ночью кто-то перелез через ограду памятника и закрасил надпись, а кто-то другой успел возложить цветы к его подножию раньше, чем он добрался туда с ведром. «Если я отскребу краску, скажут, что контора на стороне старого, — сказал он. — Если оставлю, те, другие, вернутся сегодня ночью с добавкой». Он хотел знать, смывать ли краску, убирать ли цветы или оставить и то и другое. Писарь велел ему пока ничего не трогать, записал его слова и отнёс записку директору."
+ },
+ "monument_events.16.t": {
+  "en": "Monuments to a Fallen Order",
+  "ru": "Памятники павшему порядку"
+ },
+ "monument_events.17.a": {
+  "en": "Pull it down",
+  "ru": "Снести"
+ },
+ "monument_events.17.b": {
+  "en": "Rededicate it",
+  "ru": "Посвятить заново"
+ },
+ "monument_events.17.c": {
+  "en": "Keep it as heritage",
+  "ru": "Сохранить как наследие"
+ },
+ "monument_events.17.d": {
+  "en": "Leave it for now",
+  "ru": "Пока оставить"
+ },
+ "monument_events.17.desc": {
+  "en": "In [SCOPE.sState('monument_state').GetName], [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')], dedicated [SCOPE.sState('monument_state').GetCustom('gm_dedication_name')], honors something this government does not stand for. We can pull it down, rededicate it, keep it as heritage, or leave the question for later.",
+  "ru": "В области [SCOPE.sState('monument_state').GetName] [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')], посвящённый [SCOPE.sState('monument_state').GetCustom('gm_dedication_name')], чтит то, за что это правительство не выступает. Мы можем снести его, посвятить заново, сохранить как наследие или отложить вопрос на потом."
+ },
+ "monument_events.17.f": {
+  "en": "The contractors' estimates for the monument in [SCOPE.sState('monument_state').GetName], sent to the government as it asked:\\n\\nTo pull it down: scaffolding, ropes and a crew of forty for most of a month, and haulage to take away the rubble. The ground can be paved over afterward.\\nTo rededicate it: the old inscription cut away and a new one cut in its place, and the figures and emblems that belong to the old order replaced. The work runs in stages, and less of it stands when it is done.\\nTo keep it as heritage: cleaning, repairs to the steps and railings, and a plaque saying when it was raised and by whom.\\nTo leave it as it is for now: a watchman at night, at the government's expense, until a decision is made.",
+  "ru": "Сметы подрядчиков по памятнику в области [SCOPE.sState('monument_state').GetName], отправленные правительству по его запросу:\\n\\nСнос: леса, канаты и бригада из сорока человек почти на месяц, плюс вывоз обломков. Потом землю можно замостить.\\nНовое посвящение: старую надпись сбить и вырезать на её месте новую, заменить фигуры и эмблемы, принадлежащие прежнему порядку. Работа идёт этапами, и по завершении остаётся меньше.\\nСохранение как наследия: чистка, ремонт ступеней и ограды и табличка с указанием, когда и кем он воздвигнут.\\nОставить пока как есть: ночной сторож за счёт правительства до принятия решения."
+ },
+ "monument_events.17.t": {
+  "en": "What Becomes of the Monument",
+  "ru": "Что станет с памятником"
+ },
+ "monument_events.2.a": {
+  "en": "Let it stand as it is, for now",
+  "ru": "Пока оставить как есть"
+ },
+ "monument_events.2.a.tt": {
+  "en": "The work stands as it is, with no effects, and more may be built on it. Its Dedicate button, on its state's card and under Awaiting Dedication, holds the ceremony again when we are ready.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Сооружение остаётся как есть, без эффектов, и на нём можно строить дальше. Его кнопка «Посвятить» на карточке области и в разделе «Ожидают посвящения» снова проведёт церемонию, когда мы будем готовы.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.b": {
+  "en": "Dedicate it to the republic",
+  "ru": "Посвятить республике"
+ },
+ "monument_events.2.b.tt": {
+  "en": "A monument to the republic. While the country is a republic and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_intelligentsia$ approve and the $ig_landowners$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_republic')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf the republic falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Памятник республике. Пока страна остаётся республикой и владеет им, он даёт #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! за каждую ступень [Concept('concept_grandeur','величия')] режима, считая вместе с остальными нашими памятниками режиму. Одобряет группа интересов $ig_intelligentsia$, возражает группа интересов $ig_landowners$. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_republic')|%0]#! $state_loyalists_from_political_movements_mult$ за каждую его собственную ступень.\\n\\nЕсли республика падёт или область перейдёт к другой стране, памятник станет #R спорным#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.c": {
+  "en": "Consecrate it",
+  "ru": "Освятить"
+ },
+ "monument_events.2.c.tt": {
+  "en": "A grand shrine to our faith. The $ig_devout$ approve, and #v $interest_group_ig_devout_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_religious')|%0]#! for each step of [concept_grandeur], counted with our other shrines. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_religious')|%0]#! $state_conversion_mult$ for each step of its own.\\n\\nIf the country abandons the faith it honors, or adopts State Atheism, it becomes #R contested#!. If the state passes to another country, it becomes heritage.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Великое святилище нашей веры. Одобряет группа интересов $ig_devout$, и #v $interest_group_ig_devout_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_religious')|%0]#! за каждую ступень [Concept('concept_grandeur','величия')], считая вместе с остальными нашими святилищами. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_religious')|%0]#! $state_conversion_mult$ за каждую его собственную ступень.\\n\\nЕсли страна отречётся от почитаемой им веры или примет государственный атеизм, он станет #R спорным#!. Если область перейдёт к другой стране, он станет наследием.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.common_tt": {
+  "en": "Every monument: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige_pct')|%0]#! prestige for each step of standing [concept_grandeur], counted with our other monuments, and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $goods_output_tourism_mult$ in [SCOPE.sState('monument_state').GetName] for each step of its own.",
+  "ru": "Каждый памятник: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! и #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige_pct')|%0]#! престижа за каждую ступень накопленного [Concept('concept_grandeur','величия')], считая вместе с остальными нашими памятниками, и #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $goods_output_tourism_mult$ в области [SCOPE.sState('monument_state').GetName] за каждую его собственную ступень."
+ },
+ "monument_events.2.d": {
+  "en": "The building work in [SCOPE.sState('monument_state').GetName] has stopped, and the monument waits to be told what it is for. Once dedicated, it is finished as it stands: it grows grander with its years, not with more building, and whatever is built here afterward becomes a monument of its own. Only a rededication, paid for, can change its meaning later.",
+  "ru": "Строительные работы в области [SCOPE.sState('monument_state').GetName] прекращены, и памятник ждёт, чтобы ему назначили предназначение. После посвящения он считается завершённым: его величие растёт с годами, а не с дальнейшим строительством, и всё, что будет построено здесь потом, станет отдельным памятником. Изменить его смысл позже может лишь новое посвящение, за которое придётся заплатить."
+ },
+ "monument_events.2.d_commission": {
+  "en": "$monument_events.2.d$\\n\\n#b An opportunity is open:#! the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] asked for a monument dedicated #b [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]#!.",
+  "ru": "$monument_events.2.d$\\n\\n#b Открыта возможность:#! [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] просит памятник с посвящением #b [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]#!."
+ },
+ "monument_events.2.d_rededicate": {
+  "en": "We have resolved to give [SCOPE.sState('monument_state').GetName]'s monument a new meaning. A rededication costs half of what it was: half its levels, half its standing and half its years, and the treasury pays for the work. What should it stand for now?",
+  "ru": "Мы решили придать памятнику в области [SCOPE.sState('monument_state').GetName] новый смысл. Новое посвящение стоит вдвое меньше прежнего: половина его уровней, половина его величия и половина его лет, и работу оплачивает казна. Чему он будет посвящён теперь?"
+ },
+ "monument_events.2.e": {
+  "en": "Inscribe the names of the fallen",
+  "ru": "Вырезать имена павших"
+ },
+ "monument_events.2.e.tt": {
+  "en": "A memorial to the fallen. The $ig_armed_forces$ approve, and #v $country_war_support_casualties_mult$#! #G [SCOPE.GetRootScope.ScriptValue('gm_step_national_war_memorial')|%0]#! for each step of [concept_grandeur], counted with our other memorials. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_war_memorial')|%0]#! $state_conscription_rate_add$ for each step of its own, at most #G +[SCOPE.GetRootScope.ScriptValue('gm_local_max_war_memorial')|%0]#!. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Памятник павшим. Одобряют $ig_armed_forces$, и #v $country_war_support_casualties_mult$#! #G [SCOPE.GetRootScope.ScriptValue('gm_step_national_war_memorial')|%0]#! за каждую ступень [Concept('concept_grandeur','величия')], считая вместе с остальными нашими мемориалами. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_war_memorial')|%0]#! $state_conscription_rate_add$ за каждую его собственную ступень, но не более #G +[SCOPE.GetRootScope.ScriptValue('gm_local_max_war_memorial')|%0]#!. Он никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.f": {
+  "en": "\\\"I am the master mason, and I need the words from the government in writing before my men cut anything. Spell them as you want them carved, and have the page signed by someone who can answer for it, because once a letter is cut it stays cut. Tell me as well how large the letters are to be and which face they go on, the one toward the square or the one toward the road, since that decides where we put up the scaffold. My men can cut a line a day if the surface is sound. Until I have the page they are paid to wait, and I would rather they were working.\\\"",
+  "ru": "«Я мастер-каменщик, и прежде чем мои люди что-нибудь высекут, мне нужны слова от правительства в письменном виде. Напишите их так, как хотите видеть вырезанными, и пусть страницу подпишет тот, кто может за неё ответить, ведь вырезанная буква остаётся вырезанной. Скажите также, какого размера должны быть буквы и на какой стороне они пойдут: на обращённой к площади или к дороге, потому что от этого зависит, где ставить леса. Мои люди могут вырезать по строке в день, если камень здоров. Пока страницы у меня нет, им платят за ожидание, а я предпочёл бы, чтобы они работали»."
+ },
+ "monument_events.2.g": {
+  "en": "Give it over to the arts",
+  "ru": "Отдать искусствам"
+ },
+ "monument_events.2.g.tt": {
+  "en": "A grand opera house. The $ig_intelligentsia$ approve, and #v $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_artistic')|%0]#! for each step of [concept_grandeur], counted with our other opera houses. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_artistic')|%0]#! $building_art_academy_throughput_add$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Великий оперный театр. Одобряет группа интересов $ig_intelligentsia$, и #v $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_artistic')|%0]#! за каждую ступень [Concept('concept_grandeur','величия')], считая вместе с остальными нашими оперными театрами. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_artistic')|%0]#! $building_art_academy_throughput_add$ за каждую его собственную ступень. Он никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.h": {
+  "en": "Plant it about with gardens",
+  "ru": "Окружить садами"
+ },
+ "monument_events.2.h.tt": {
+  "en": "Botanical gardens. The $ig_rural_folk$ approve. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_naturalist')|0]#! $state_pollution_generation_add$ for each step of its own [concept_grandeur]. They never fall with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Ботанические сады. Одобряет группа интересов $ig_rural_folk$. В области [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_naturalist')|0]#! $state_pollution_generation_add$ за каждую ступень его собственного [Concept('concept_grandeur','величия')]. Они никогда не падают вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.i": {
+  "en": "Turn its eye to the heavens",
+  "ru": "Обратить его взор к небесам"
+ },
+ "monument_events.2.i.tt": {
+  "en": "A grand observatory. The $ig_intelligentsia$ approve, and #v $country_weekly_innovation_max_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_scientific')|0]#! for each step of [concept_grandeur], counted with our other observatories. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_scientific')|%3]#! $state_literacy_growth_add$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Великая обсерватория. Одобряет группа интересов $ig_intelligentsia$, и #v $country_weekly_innovation_max_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_scientific')|0]#! за каждую ступень [Concept('concept_grandeur','величия')], считая вместе с остальными нашими обсерваториями. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_scientific')|%3]#! $state_literacy_growth_add$ за каждую его собственную ступень. Она никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.j": {
+  "en": "Fill it with the works of industry",
+  "ru": "Наполнить плодами промышленности"
+ },
+ "monument_events.2.j.tt": {
+  "en": "A great exhibition hall. The $ig_industrialists$ approve, and #v $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_industrial')|%0]#! for each step of [concept_grandeur], counted with our other exhibition halls. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_industrial')|%0]#! $state_migration_pull_mult$ for each step of its own. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Великий выставочный зал. Одобряет группа интересов $ig_industrialists$, и #v $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_industrial')|%0]#! за каждую ступень [Concept('concept_grandeur','величия')], считая вместе с остальными нашими выставочными залами. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_industrial')|%0]#! $state_migration_pull_mult$ за каждую его собственную ступень. Он никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.k": {
+  "en": "Build the arena beneath it",
+  "ru": "Построить под ним арену"
+ },
+ "monument_events.2.k.tt": {
+  "en": "A grand stadium. The $ig_trade_unions$ approve. In [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_athletic')|%0]#! $state_turmoil_effects_mult$ for each step of its own [concept_grandeur], at most #G [SCOPE.GetRootScope.ScriptValue('gm_local_max_athletic')|%0]#!. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Великий стадион. Одобряет группа интересов $ig_trade_unions$. В области [SCOPE.sState('monument_state').GetName]: #G [SCOPE.GetRootScope.ScriptValue('gm_step_local_athletic')|%0]#! $state_turmoil_effects_mult$ за каждую ступень его собственного [Concept('concept_grandeur','величия')], но не более #G [SCOPE.GetRootScope.ScriptValue('gm_local_max_athletic')|%0]#!. Он никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.keep": {
+  "en": "Keep it as it is",
+  "ru": "Оставить как есть"
+ },
+ "monument_events.2.keep.tt": {
+  "en": "Nothing is paid and nothing changes: it keeps its dedication, its levels and its years.",
+  "ru": "Ничего не оплачивается и ничего не меняется: он сохраняет своё посвящение, уровни и годы."
+ },
+ "monument_events.2.l": {
+  "en": "Dedicate it to the Crown",
+  "ru": "Посвятить Короне"
+ },
+ "monument_events.2.l.tt": {
+  "en": "A monument to the Crown. While the country is crowned and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_landowners$ approve and the $ig_intelligentsia$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_crown')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf the crown falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Памятник Короне. Пока страна остаётся монархией и владеет им, он даёт #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! за каждую ступень [Concept('concept_grandeur','величия')] режима, считая вместе с остальными нашими памятниками режиму. Одобряет группа интересов $ig_landowners$, возражает группа интересов $ig_intelligentsia$. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_crown')|%0]#! $state_loyalists_from_political_movements_mult$ за каждую его собственную ступень.\\n\\nЕсли корона падёт или область перейдёт к другой стране, памятник станет #R спорным#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.m": {
+  "en": "Dedicate it to the nation",
+  "ru": "Посвятить нации"
+ },
+ "monument_events.2.m.tt": {
+  "en": "Not to a party and not to a house, but to the country itself. The $ig_petty_bourgeoisie$ approve. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_civic')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own [concept_grandeur]. It never falls with a government.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Не партии и не дому, а самой стране. Одобряет группа интересов $ig_petty_bourgeoisie$. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_civic')|%0]#! $state_loyalists_from_political_movements_mult$ за каждую ступень его собственного [Concept('concept_grandeur','величия')]. Он никогда не падает вместе с правительством.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.n": {
+  "en": "Dedicate it to the revolution",
+  "ru": "Посвятить революции"
+ },
+ "monument_events.2.n.tt": {
+  "en": "A monument to the revolution. While the country is a single-party state or a council republic and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_trade_unions$ approve and the $ig_industrialists$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_revolution')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nIf that regime falls, or the state passes to another country, it becomes #R contested#!.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Памятник революции. Пока страна остаётся однопартийным государством или советской республикой и владеет им, он даёт #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! за каждую ступень [Concept('concept_grandeur','величия')] режима, считая вместе с остальными нашими памятниками режиму. Одобряет группа интересов $ig_trade_unions$, возражает группа интересов $ig_industrialists$. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_revolution')|%0]#! $state_loyalists_from_political_movements_mult$ за каждую его собственную ступень.\\n\\nЕсли этот режим падёт или область перейдёт к другой стране, памятник станет #R спорным#!.\\n\\n$monument_events.2.common_tt$"
+ },
+ "monument_events.2.o": {
+  "en": "Raise it to our leader",
+  "ru": "Воздвигнуть нашему вождю"
+ },
+ "monument_events.2.opp": {
+  "en": "As the opportunity asks: [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]",
+  "ru": "Как просит возможность: [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]"
+ },
+ "monument_events.2.sig_concert_of_nations": {
+  "en": "Dedicate it To the Concert of Nations",
+  "ru": "Посвятить Концерту наций"
+ },
+ "monument_events.2.sig_concert_of_nations.tt": {
+  "en": "#b $gm_sig_concert_of_nations$#!, a unique dedication of $pm_monument_civic$ we hold from an opportunity seized. On top of what $pm_monument_civic$ does, it adds #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_concert_of_nations')|%0]#! [concept_influence] for each step of [concept_grandeur], counted with every monument that carries it, while this one stands upheld on it. One fewer is held.\\n\\n$monument_events.2.m.tt$",
+  "ru": "#b $gm_sig_concert_of_nations$#! — уникальное посвящение «$pm_monument_civic$», которое мы получили, использовав возможность. Помимо того, что даёт «$pm_monument_civic$», оно добавляет #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_concert_of_nations')|%0]#! [Concept('concept_influence','влияния')] за каждую ступень [Concept('concept_grandeur','величия')], считая вместе со всеми памятниками, несущими его, пока этот памятник сохраняет его. Число хранимых посвящений уменьшается на одно.\\n\\n$monument_events.2.m.tt$"
+ },
+ "monument_events.2.sig_conquerors_of_space": {
+  "en": "Dedicate it To the Conquerors of Space",
+  "ru": "Посвятить Покорителям космоса"
+ },
+ "monument_events.2.sig_conquerors_of_space.tt": {
+  "en": "#b $gm_sig_conquerors_of_space$#!, a unique dedication of $pm_monument_civic$ we hold from an opportunity seized. On top of what $pm_monument_civic$ does, it adds #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_conquerors_of_space')|%0]#! [concept_innovation] for each step of [concept_grandeur], counted with every monument that carries it, while this one stands upheld on it. The $ig_intelligentsia$ approve of it too. One fewer is held.\\n\\n$monument_events.2.m.tt$",
+  "ru": "#b $gm_sig_conquerors_of_space$#! — уникальное посвящение «$pm_monument_civic$», которое мы получили, использовав возможность. Помимо того, что даёт «$pm_monument_civic$», оно добавляет #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_conquerors_of_space')|%0]#! [Concept('concept_innovation','инноваций')] за каждую ступень [Concept('concept_grandeur','величия')], считая вместе со всеми памятниками, несущими его, пока этот памятник сохраняет его. Его одобряет и группа интересов $ig_intelligentsia$. Число хранимых посвящений уменьшается на одно.\\n\\n$monument_events.2.m.tt$"
+ },
+ "monument_events.2.sig_olympic": {
+  "en": "Raise it as the Olympic stadium",
+  "ru": "Возвести как Олимпийский стадион"
+ },
+ "monument_events.2.sig_olympic.tt": {
+  "en": "#b $gm_sig_olympic$#!, a unique dedication of $pm_monument_athletic$ we hold from an opportunity seized. On top of what $pm_monument_athletic$ does, it adds #G [SCOPE.GetRootScope.ScriptValue('gm_step_sig_olympic')|%0]#! $state_mortality_mult$ for each step of [concept_grandeur], counted with every monument that carries it, while this one stands upheld on it. One fewer is held.\\n\\n$monument_events.2.k.tt$",
+  "ru": "#b $gm_sig_olympic$#! — уникальное посвящение «$pm_monument_athletic$», которое мы получили, использовав возможность. Помимо того, что даёт «$pm_monument_athletic$», оно добавляет #G [SCOPE.GetRootScope.ScriptValue('gm_step_sig_olympic')|%0]#! $state_mortality_mult$ за каждую ступень [Concept('concept_grandeur','величия')], считая вместе со всеми памятниками, несущими его, пока этот памятник сохраняет его. Число хранимых посвящений уменьшается на одно.\\n\\n$monument_events.2.k.tt$"
+ },
+ "monument_events.2.sig_to_victory": {
+  "en": "Dedicate it To Victory",
+  "ru": "Посвятить Победе"
+ },
+ "monument_events.2.sig_unknown_soldier": {
+  "en": "Dedicate it To the Unknown Soldier",
+  "ru": "Посвятить Неизвестному солдату"
+ },
+ "monument_events.2.t": {
+  "en": "The Scaffolding Comes Down",
+  "ru": "Леса снимают"
+ },
+ "monument_events.21.a": {
+  "en": "Seize the opportunity",
+  "ru": "Воспользоваться возможностью"
+ },
+ "monument_events.21.b": {
+  "en": "Let it pass",
+  "ru": "Упустить"
+ },
+ "monument_events.21.c": {
+  "en": "Seize it and start building",
+  "ru": "Воспользоваться и начать строить"
+ },
+ "monument_events.21.d_centenary": {
+  "en": "[ROOT.GetCountry.GetCustom('gm_com_centenary_years')] years have passed since [ROOT.GetCountry.GetName] was founded, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the anniversary marked: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation in [SCOPE.sState('gm_com_where').GetNameNoFormatting], raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Со дня основания государства [ROOT.GetCountry.GetName] прошло [ROOT.GetCountry.GetCustom('gm_com_centenary_years')] лет, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят отметить годовщину: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации» в области [SCOPE.sState('gm_com_where').GetNameNoFormatting]; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_centenary_anywhere": {
+  "en": "[ROOT.GetCountry.GetCustom('gm_com_centenary_years')] years have passed since [ROOT.GetCountry.GetName] was founded, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the anniversary marked: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Со дня основания государства [ROOT.GetCountry.GetName] прошло [ROOT.GetCountry.GetCustom('gm_com_centenary_years')] лет, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят отметить годовщину: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации»; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_defeat": {
+  "en": "The war is lost. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ask that the dead at least be honored: a memorial to the fallen, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Война проиграна. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] просят хотя бы почтить погибших: памятник павшим; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_faith": {
+  "en": "[ROOT.GetCountry.GetName] has a new state faith, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want it housed as it deserves: a #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "У страны [ROOT.GetCountry.GetName] новая государственная вера, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят, чтобы она получила достойное вместилище: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_great_power": {
+  "en": "[ROOT.GetCountry.GetName] is counted among the great powers for the first time. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the country's rise set in stone: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation in [SCOPE.sState('gm_com_where').GetNameNoFormatting], raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Страна [ROOT.GetCountry.GetName] впервые причислена к великим державам. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят запечатлеть в камне подъём страны: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации» в области [SCOPE.sState('gm_com_where').GetNameNoFormatting]; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_great_power_anywhere": {
+  "en": "[ROOT.GetCountry.GetName] is counted among the great powers for the first time. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the country's rise set in stone: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Страна [ROOT.GetCountry.GetName] впервые причислена к великим державам. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят запечатлеть в камне подъём страны: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации»; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_historical": {
+  "en": "[SCOPE.sState('gm_com_where').GetNameNoFormatting] could raise a monument history remembers: #b [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]#!. [ROOT.GetCountry.GetCustom('gm_com_hist_desc')]\\n\\nThe [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want it built here, dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#! and raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')]. The chance comes once.",
+  "ru": "В области [SCOPE.sState('gm_com_where').GetNameNoFormatting] можно воздвигнуть памятник, который помнит история: #b [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]#!. [ROOT.GetCountry.GetCustom('gm_com_hist_desc')]\\n\\n[SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят построить его здесь, с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]. Такой случай выпадает один раз."
+ },
+ "monument_events.21.d_other": {
+  "en": "The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ask for a monument dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "[SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] просят памятник с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_regime": {
+  "en": "The new order has no monument of its own. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ask for one: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')], so that no one mistakes what now governs [ROOT.GetCountry.GetName].",
+  "ru": "У нового порядка нет собственного памятника. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] просят о нём: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], чтобы никто не ошибался, что теперь правит страной [ROOT.GetCountry.GetName]."
+ },
+ "monument_events.21.d_reign": {
+  "en": "[SCOPE.sCharacter('gm_com_honoree').GetFullName] takes the throne, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] see a chance to show the crown in stone: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, bearing the new monarch's name, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "[SCOPE.sCharacter('gm_com_honoree').GetFullName] вступает на трон, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] видят возможность показать корону в камне: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, носящий имя нового монарха; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_reign_leader": {
+  "en": "[SCOPE.sCharacter('gm_com_honoree').GetFullName] now leads [ROOT.GetCountry.GetName]. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the new leadership seen: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, bearing the leader's name, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Теперь страной [ROOT.GetCountry.GetName] руководит лидер [SCOPE.sCharacter('gm_com_honoree').GetFullName]. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят, чтобы новое руководство было заметно: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, носящий имя лидера; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_reign_unnamed": {
+  "en": "A new head of state has taken power, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want it marked in stone: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "К власти пришёл новый глава государства, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят отметить это в камне: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_ruler_death": {
+  "en": "[SCOPE.sCharacter('gm_com_honoree').GetFullName] is dead after a long reign. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation in [SCOPE.sState('gm_com_where').GetNameNoFormatting], raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')], where the country can come to remember.",
+  "ru": "Правитель [SCOPE.sCharacter('gm_com_honoree').GetFullName] скончался после долгого правления. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации» в области [SCOPE.sState('gm_com_where').GetNameNoFormatting]; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]; место, куда страна сможет прийти помнить."
+ },
+ "monument_events.21.d_ruler_death_anywhere": {
+  "en": "[SCOPE.sCharacter('gm_com_honoree').GetFullName] is dead after a long reign. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')], where the country can come to remember.",
+  "ru": "Правитель [SCOPE.sCharacter('gm_com_honoree').GetFullName] скончался после долгого правления. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации»; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]; место, куда страна сможет прийти помнить."
+ },
+ "monument_events.21.d_ruler_death_unnamed": {
+  "en": "Our late ruler is dead after a long reign. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')], where the country can come to remember.",
+  "ru": "Наш прежний правитель скончался после долгого правления. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации»; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]; место, куда страна сможет прийти помнить."
+ },
+ "monument_events.21.d_space": {
+  "en": "We were first. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the achievement remembered where people can see it: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation in [SCOPE.sState('gm_com_where').GetNameNoFormatting], raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Мы были первыми. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят, чтобы это достижение помнили там, где его могут увидеть: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации» в области [SCOPE.sState('gm_com_where').GetNameNoFormatting]; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_space_anywhere": {
+  "en": "We were first. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the achievement remembered where people can see it: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] To the Nation, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Мы были первыми. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят, чтобы это достижение помнили там, где его могут увидеть: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] «Нации»; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.d_tech_artistic": {
+  "en": "$romanticism$ has reached our salons and concert halls. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want a stage worthy of it: a #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] in whichever city we choose.",
+  "ru": "Технология $romanticism$ дошла до наших салонов и концертных залов. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят сцену, достойную её: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом городе по нашему выбору."
+ },
+ "monument_events.21.d_tech_athletic": {
+  "en": "$television_broadcasting$ brings sport into every home. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want a ground worthy of the cameras: a #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "Технология $television_broadcasting$ приносит спорт в каждый дом. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят арену, достойную камер: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_tech_industrial": {
+  "en": "$marketing_research$ has taught our firms to show what they make. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want somewhere to show it to the world: a #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "Технология $marketing_research$ научила наши фирмы показывать, что они производят. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят места, где можно показать это миру: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_tech_naturalist": {
+  "en": "$environmental_movement$ has made nature a public cause. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want a garden the whole country can visit: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "$environmental_movement$ сделало природу общественным делом. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят сад, который сможет посетить вся страна: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_tech_scientific": {
+  "en": "$empiricism$ has taken hold in our universities. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want to study the heavens properly: a #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it.",
+  "ru": "Технология $empiricism$ укрепилась в наших университетах. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят как следует изучать небеса: #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')], в любом месте по нашему выбору."
+ },
+ "monument_events.21.d_victory": {
+  "en": "The war is won, and the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] want the victory carried in stone: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] to it, a War Memorial raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')].",
+  "ru": "Война выиграна, и [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] хотят сохранить победу в камне: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] ей, военный мемориал; срок возведения — [ROOT.GetCountry.GetCustom('gm_com_time_words')]."
+ },
+ "monument_events.21.f": {
+  "en": "\\\"I head the works office, and the government has asked me what this request would mean for us. It means a site first, unless the request names one: somewhere with room around it, solid ground and a road wide enough for the loads. It means masons and engineers we would otherwise put on bridges and barracks, for as long as the work runs. And it means a deadline, which is the part that worries me, because a monument built in a hurry looks it for as long as it stands. If the government says yes, I ask for a decision on the site this month, so that the drawings can begin.\\\"",
+  "ru": "«Я возглавляю строительную контору, и правительство спросило меня, что означает для нас эта просьба. Прежде всего это площадка, если в просьбе она не названа: место, вокруг которого есть простор, твёрдая земля и дорога, достаточно широкая для грузов. Это каменщики и инженеры, которых мы иначе поставили бы на мосты и казармы, на всё время работ. И это срок, а он меня тревожит, потому что наспех построенный памятник выглядит таким всё время, пока стоит. Если правительство скажет „да“, прошу решить вопрос о площадке в этом месяце, чтобы можно было начать чертежи»."
+ },
+ "monument_events.21.t": {
+  "en": "An Opportunity: [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]",
+  "ru": "Возможность: [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]"
+ },
+ "monument_events.24.arch": {
+  "en": "Arch",
+  "ru": "Арка"
+ },
+ "monument_events.24.bell_tower": {
+  "en": "Bell Tower",
+  "ru": "Колокольня"
+ },
+ "monument_events.24.colonnade": {
+  "en": "Colonnade",
+  "ru": "Колоннада"
+ },
+ "monument_events.24.column": {
+  "en": "Column",
+  "ru": "Колонна"
+ },
+ "monument_events.24.court": {
+  "en": "Court",
+  "ru": "Двор"
+ },
+ "monument_events.24.d": {
+  "en": "The architects have drawn [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetNameNoFormatting] several ways within its style. Each would carry a different name.",
+  "ru": "Архитекторы нарисовали [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetNameNoFormatting] несколькими способами в рамках его стиля. Каждый получил бы своё название."
+ },
+ "monument_events.24.f": {
+  "en": "\\\"I am for the drawing that rises. A monument that stands up over the roofs can be seen from the far end of the city and from the road in, and people start to give directions by it. That is how it becomes part of the place.\\\"\\n\\n\\\"I am for the drawing people can walk into. They will go through it and sit on its steps, and children will climb on it. A monument you can only look at from a distance gets visited once.\\\"\\n\\n\\\"You are both describing a monument I would be glad to see built. Write on each drawing the name that its form would give it, and I will take them to the government together.\\\"",
+  "ru": "«Я за чертёж, который устремляется вверх. Памятник, возвышающийся над крышами, виден с дальнего конца города и с дороги, и люди начинают объяснять путь по нему. Так он становится частью места».\\n\\n«Я за чертёж, в который можно войти. Люди пройдут сквозь него и посидят на его ступенях, а дети будут по нему лазить. Памятник, на который можно только смотреть издали, посещают один раз».\\n\\n«Вы оба описываете памятник, который я был бы рад увидеть построенным. Напишите на каждом чертеже название, которое дала бы ему его форма, и я отнесу их правительству вместе»."
+ },
+ "monument_events.24.forum": {
+  "en": "Forum",
+  "ru": "Форум"
+ },
+ "monument_events.24.gate": {
+  "en": "Gate",
+  "ru": "Ворота"
+ },
+ "monument_events.24.hall": {
+  "en": "Hall",
+  "ru": "Зал"
+ },
+ "monument_events.24.hall_of_fame": {
+  "en": "Hall of Fame",
+  "ru": "Зал славы"
+ },
+ "monument_events.24.high_cross": {
+  "en": "High Cross",
+  "ru": "Высокий крест"
+ },
+ "monument_events.24.hill_shrine": {
+  "en": "Hill Shrine",
+  "ru": "Холмовое святилище"
+ },
+ "monument_events.24.keep": {
+  "en": "Keep the [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
+  "ru": "Оставить: [SCOPE.sState('monument_state').GetCustom('gm_form_name')]"
+ },
+ "monument_events.24.mausoleum": {
+  "en": "Mausoleum",
+  "ru": "Мавзолей"
+ },
+ "monument_events.24.memorial_church": {
+  "en": "Memorial Church",
+  "ru": "Церковь-памятник"
+ },
+ "monument_events.24.menorah": {
+  "en": "Menorah",
+  "ru": "Менора"
+ },
+ "monument_events.24.obelisk": {
+  "en": "Obelisk",
+  "ru": "Обелиск"
+ },
+ "monument_events.24.pagoda": {
+  "en": "Pagoda",
+  "ru": "Пагода"
+ },
+ "monument_events.24.pantheon": {
+  "en": "Pantheon",
+  "ru": "Пантеон"
+ },
+ "monument_events.24.pillar": {
+  "en": "Pillar",
+  "ru": "Столп"
+ },
+ "monument_events.24.pyramid": {
+  "en": "Pyramid",
+  "ru": "Пирамида"
+ },
+ "monument_events.24.rock_cut": {
+  "en": "Rock-Cut Monument",
+  "ru": "Высеченный в скале памятник"
+ },
+ "monument_events.24.rock_hewn_church": {
+  "en": "Rock-Hewn Church",
+  "ru": "Церковь, высеченная в скале"
+ },
+ "monument_events.24.round_tower": {
+  "en": "Round Tower",
+  "ru": "Круглая башня"
+ },
+ "monument_events.24.rune_stone": {
+  "en": "Rune Stone",
+  "ru": "Рунический камень"
+ },
+ "monument_events.24.sacred_oak": {
+  "en": "Sacred Oak",
+  "ru": "Священный дуб"
+ },
+ "monument_events.24.statue": {
+  "en": "Statue",
+  "ru": "Статуя"
+ },
+ "monument_events.24.stela": {
+  "en": "Stela",
+  "ru": "Стела"
+ },
+ "monument_events.24.stele": {
+  "en": "Stele",
+  "ru": "Стела"
+ },
+ "monument_events.24.stoa": {
+  "en": "Stoa",
+  "ru": "Стоя"
+ },
+ "monument_events.24.sun_stone": {
+  "en": "Sun Stone",
+  "ru": "Камень Солнца"
+ },
+ "monument_events.24.t": {
+  "en": "The Form It Takes",
+  "ru": "Какую форму он примет"
+ },
+ "monument_events.24.tower": {
+  "en": "Tower",
+  "ru": "Башня"
+ },
+ "monument_events.25.city": {
+  "en": "The [SCOPE.sState('monument_state').GetCityHubName] [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] города [SCOPE.sState('monument_state').GetCityHubName]"
+ },
+ "monument_events.25.commission": {
+  "en": "As the opportunity asks",
+  "ru": "Как просит возможность"
+ },
+ "monument_events.25.d": {
+  "en": "The monument in [SCOPE.sState('monument_state').GetNameNoFormatting] needs a name for its inscription and its guidebooks. A name of our own can be given later, from the monument's row on the Grand Monuments tab of the Timeline Extended window.",
+  "ru": "Памятнику в области [SCOPE.sState('monument_state').GetNameNoFormatting] нужно название для надписи и путеводителей. Собственное название можно дать позже, из строки памятника на вкладке «Великие памятники» окна Timeline Extended."
+ },
+ "monument_events.25.f": {
+  "en": "To the government, from the printers of the guidebook to the monument in [SCOPE.sState('monument_state').GetNameNoFormatting]. We have set the text of the guidebook and of the plan to be sold at the gate, and we have left a space on the cover and on the first page for the monument's name. We cannot print until it is filled. We ask that the name be sent to us written out in full, as it is to appear in the inscription, so that the guidebook and the monument agree. If the name is changed after printing, the copies already made will be wrong, and we would ask to be paid for a second printing. We will begin on the day the name reaches us.",
+  "ru": "Правительству от печатников путеводителя по памятнику в области [SCOPE.sState('monument_state').GetNameNoFormatting]. Мы набрали текст путеводителя и плана, который будет продаваться у входа, и оставили место на обложке и на первой странице для названия памятника. Печатать мы не можем, пока оно не вписано. Просим прислать нам название полностью, в том виде, в каком оно появится в надписи, чтобы путеводитель и памятник совпадали. Если название изменят после печати, уже изготовленные экземпляры окажутся неверными, и мы попросили бы оплатить вторую печать. Мы начнём в тот же день, когда название дойдёт до нас."
+ },
+ "monument_events.25.honours": {
+  "en": "The [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').GetCustom('gm_honours_name')]",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')]: [SCOPE.sState('monument_state').GetCustom('gm_honours_name')]"
+ },
+ "monument_events.25.keep_centenary": {
+  "en": "Keep the name: $gm_name_centenary_evt$",
+  "ru": "Оставить название: $gm_name_centenary_evt$"
+ },
+ "monument_events.25.landmark": {
+  "en": "Its historical name, $gm_name_landmark_evt$",
+  "ru": "Его историческое название: $gm_name_landmark_evt$"
+ },
+ "monument_events.25.t": {
+  "en": "A Name for the Monument",
+  "ru": "Название для памятника"
+ },
+ "monument_events.28.a": {
+  "en": "A fitting monument",
+  "ru": "Достойный памятник"
+ },
+ "monument_events.28.d": {
+  "en": "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] is finished as the moment asked, and gains #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur] at no cost. The group that asked for it is pleased.\\n\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! is ours for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')].",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName] завершён так, как требовал момент, и бесплатно получает #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [Concept('concept_grandeur','величия')]. Группа, просившая о нём, довольна.\\n\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! остаётся с нами на #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! г.: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')]."
+ },
+ "monument_events.28.d_held": {
+  "en": "$monument_events.28.d$\\n\\nIt already carries a unique dedication of its own, so #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! is held for our next monument dedicated [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: its dedication ceremony offers it.",
+  "ru": "$monument_events.28.d$\\n\\nУ него уже есть собственное уникальное посвящение, поэтому #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! сохраняется для нашего следующего памятника с посвящением [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: его предложит церемония посвящения."
+ },
+ "monument_events.28.d_historical": {
+  "en": "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] in [SCOPE.sState('monument_state').GetName] is finished as #b [ROOT.GetCountry.GetCustom('gm_com_hist_seized_name')]#!, and gains #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur] at no cost. The group that asked for it is pleased.\\n\\nIt is a historical monument now, with its own name and look.[ROOT.GetCountry.GetCustom('gm_com_hist_seized_sig_line')]",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] в области [SCOPE.sState('monument_state').GetName] завершён как #b [ROOT.GetCountry.GetCustom('gm_com_hist_seized_name')]#! и бесплатно получает #v [SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [Concept('concept_grandeur','величия')]. Группа, просившая о нём, довольна.\\n\\nТеперь это исторический памятник со своим названием и обликом.[ROOT.GetCountry.GetCustom('gm_com_hist_seized_sig_line')]"
+ },
+ "monument_events.28.d_special": {
+  "en": "$monument_events.28.d$\\n\\nIt is now dedicated #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#!, a unique dedication of [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: [ROOT.GetCountry.GetCustom('gm_com_special_effect')] for each step of its [concept_grandeur].",
+  "ru": "$monument_events.28.d$\\n\\nТеперь он посвящён #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! — уникальному посвящению [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: [ROOT.GetCountry.GetCustom('gm_com_special_effect')] за каждую ступень его [Concept('concept_grandeur','величия')]."
+ },
+ "monument_events.28.d_unnamed": {
+  "en": "The monument is finished as the moment asked, and the group that asked for it is pleased.\\n\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! is ours for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')].",
+  "ru": "Памятник завершён так, как требовал момент, и группа, просившая о нём, довольна.\\n\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! остаётся с нами на #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! г.: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')]."
+ },
+ "monument_events.28.d_unnamed_held": {
+  "en": "$monument_events.28.d_unnamed$\\n\\nNo monument could take it, so #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! is held for our next monument dedicated [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: its dedication ceremony offers it.",
+  "ru": "$monument_events.28.d_unnamed$\\n\\nНи один памятник не смог его принять, поэтому #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! сохраняется для нашего следующего памятника с посвящением [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: его предложит церемония посвящения."
+ },
+ "monument_events.28.d_unnamed_historical": {
+  "en": "#b [ROOT.GetCountry.GetCustom('gm_com_hist_seized_name')]#! is finished, a historical monument with its own name and look, and the group that asked for it is pleased.[ROOT.GetCountry.GetCustom('gm_com_hist_seized_sig_line')]",
+  "ru": "#b [ROOT.GetCountry.GetCustom('gm_com_hist_seized_name')]#! завершён — исторический памятник со своим названием и обликом, и группа, просившая о нём, довольна.[ROOT.GetCountry.GetCustom('gm_com_hist_seized_sig_line')]"
+ },
+ "monument_events.28.d_unnamed_special": {
+  "en": "$monument_events.28.d_unnamed$\\n\\nThe monument that completed it is now dedicated #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#!, a unique dedication of [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: [ROOT.GetCountry.GetCustom('gm_com_special_effect')] for each step of its [concept_grandeur].",
+  "ru": "$monument_events.28.d_unnamed$\\n\\nПамятник, завершивший его, теперь посвящён #b [ROOT.GetCountry.GetCustom('gm_com_special_name')]#! — уникальному посвящению [ROOT.GetCountry.GetCustom('gm_com_special_parent_name')]: [ROOT.GetCountry.GetCustom('gm_com_special_effect')] за каждую ступень его [Concept('concept_grandeur','величия')]."
+ },
+ "monument_events.28.f": {
+  "en": "Lector, si monumentum requiris, circumspice.\\n(Reader, if you seek his monument, look around you.)\\n\\n— Epitaph of Christopher Wren, architect of St. Paul's Cathedral",
+  "ru": "Lector, si monumentum requiris, circumspice.\\n(Читатель, если ищешь его памятник, оглянись вокруг.)\\n\\n— Эпитафия Кристоферу Рену, архитектору собора Святого Павла"
+ },
+ "monument_events.28.t": {
+  "en": "An Opportunity Seized",
+  "ru": "Возможность использована"
+ },
+ "monument_events.3.a": {
+  "en": "Make it a state occasion",
+  "ru": "Сделать это государственным событием"
+ },
+ "monument_events.3.b": {
+  "en": "Let the day keep itself",
+  "ru": "Пусть день идёт своим чередом"
+ },
+ "monument_events.3.d": {
+  "en": "The anniversary of our monument to the nation in [SCOPE.sState('monument_state').GetName] has come around. The officials who must attend will be there, and so will a good many people who need not. The state's officials ask for a public holiday and money for the day. Others would leave the townspeople to mark it in their own way.",
+  "ru": "Наступила годовщина нашего памятника нации в области [SCOPE.sState('monument_state').GetName]. Придут чиновники, обязанные присутствовать, и немало тех, кому это вовсе не нужно. Чиновники государства просят объявить праздничный день и выделить деньги. Другие оставили бы горожан отмечать его по-своему."
+ },
+ "monument_events.3.f": {
+  "en": "\\\"I am a schoolteacher, and I bring my class every year. They draw the monument in their notebooks, and the ones who can write copy out the inscription and read it back to me on the walk home.\\\"\\n\\n\\\"My mother asked me to bring her. She cannot stand through the speeches any more, so we sit on the steps across the road and she listens from there with her eyes shut.\\\"\\n\\n\\\"I keep the shop on the corner. I stay open until the band starts, then I pull the shutter down and come and stand at the back with my apron still on.\\\"\\n\\n\\\"The wreath from the government came at nine and the speeches started at ten. I was sent to carry the wreath, and I am to stand beside it until the last speaker has finished.\\\"",
+  "ru": "«Я школьная учительница и каждый год привожу сюда класс. Дети рисуют памятник в тетрадях, а те, кто умеет писать, переписывают надпись и пересказывают её мне по дороге домой».\\n\\n«Мама попросила привести её. Ей уже не выстоять речи, поэтому мы сидим на ступенях через дорогу, и она слушает оттуда с закрытыми глазами».\\n\\n«Я держу лавку на углу. Остаюсь открытым, пока не заиграет оркестр, потом опускаю ставню и встаю в задних рядах, не снимая фартука».\\n\\n«Венок от правительства привезли в девять, а речи начались в десять. Меня послали нести венок, и я должен стоять рядом с ним, пока не закончит последний оратор»."
+ },
+ "monument_events.3.t": {
+  "en": "A Wreath at the Monument",
+  "ru": "Венок у памятника"
+ },
+ "monument_events.4.a": {
+  "en": "Build hostels for the pilgrims",
+  "ru": "Построить приюты для паломников"
+ },
+ "monument_events.4.b": {
+  "en": "Leave the pilgrims to the shrine's keepers",
+  "ru": "Оставить паломников на попечение хранителей святилища"
+ },
+ "monument_events.4.d": {
+  "en": "Pilgrims are coming to our grand shrine in [SCOPE.sState('monument_state').GetName] in greater numbers than its keepers can house, from distant parts of the country and from beyond our borders. They sleep in the courtyards and along the road to the gate. The devout ask us to build hostels for them. The shrine's keepers say they can manage the crowds themselves.",
+  "ru": "Паломники прибывают к нашему великому святилищу в области [SCOPE.sState('monument_state').GetName] в большем числе, чем хранители могут разместить, из дальних уголков страны и из-за наших границ. Они ночуют во дворах и вдоль дороги к воротам. Верующие просят нас построить для них приюты. Хранители святилища говорят, что справятся с толпами сами."
+ },
+ "monument_events.4.f": {
+  "en": "To the government, from the keepers of the shrine in [SCOPE.sState('monument_state').GetName]. The pilgrims now come faster than we can find room for them. We have opened the outer courts at night, and they sleep there in rows with their bundles under their heads, and those who find no room sleep along the road to the gate. The water runs short by midday. Many bring the sick and the old with them, and we have nowhere to put those who cannot walk on. We can feed some of them and we turn none of them away. We ask the government to build hostels on the land beside the shrine, or to tell us how it wishes us to manage.",
+  "ru": "Правительству от хранителей святилища в области [SCOPE.sState('monument_state').GetName]. Паломники теперь прибывают быстрее, чем мы успеваем найти для них место. Мы открыли на ночь внешние дворы, и они спят там рядами, подложив узелки под голову, а те, кому места не нашлось, спят вдоль дороги к воротам. К полудню не хватает воды. Многие привозят с собой больных и стариков, и нам некуда деть тех, кто не может идти дальше. Некоторых из них мы можем накормить, и никого не гоним. Просим правительство построить приюты на земле рядом со святилищем или сообщить, как оно желает, чтобы мы справлялись."
+ },
+ "monument_events.4.t": {
+  "en": "Pilgrims at the Shrine",
+  "ru": "Паломники у святилища"
+ },
+ "monument_events.5.a": {
+  "en": "Make it a national day of remembrance",
+  "ru": "Сделать его национальным днём памяти"
+ },
+ "monument_events.5.b": {
+  "en": "Keep it a quiet ceremony",
+  "ru": "Оставить тихую церемонию"
+ },
+ "monument_events.5.d": {
+  "en": "Once a year the names carved on our memorial to the fallen in [SCOPE.sState('monument_state').GetName] are read aloud, one after another, to the last. The armed forces ask for the day to be made a national day of remembrance. The families who come each year would keep it as it has been: the names, and a quiet morning in the square.",
+  "ru": "Раз в год имена, высеченные на нашем мемориале павшим в области [SCOPE.sState('monument_state').GetName], зачитывают вслух, одно за другим, до последнего. Вооружённые силы просят сделать этот день национальным днём памяти. Семьи, приходящие каждый год, оставили бы всё как есть: имена и тихое утро на площади."
+ },
+ "monument_events.5.f": {
+  "en": "The reading began a little after sunrise. Two officers took turns at the lectern, a page each, and the names went out over the square at the pace of someone walking. Near the front an old woman stood with both hands on the head of her stick. A young official brought her a folding chair and set it beside her, and she shook her head. \\\"Not while they are reading,\\\" she said. He left the chair where it was and went back to his place by the steps. By the middle of the morning the officers had changed places four times, and they were about halfway down the list.",
+  "ru": "Чтение началось немного после восхода. Два офицера сменяли друг друга у кафедры, по странице каждый, и имена звучали над площадью в темпе идущего человека. Впереди стояла старая женщина, обеими руками опираясь на набалдашник трости. Молодой чиновник принёс ей раскладной стул и поставил рядом, а она покачала головой. «Не пока читают», — сказала она. Он оставил стул где был и вернулся на своё место у ступеней. К середине утра офицеры сменились четыре раза, и они были примерно на середине списка."
+ },
+ "monument_events.5.t": {
+  "en": "The Names Are Read",
+  "ru": "Читают имена"
+ },
+ "monument_events.6.a": {
+  "en": "Defend the artists",
+  "ru": "Защитить художников"
+ },
+ "monument_events.6.b": {
+  "en": "Close the scandalous works",
+  "ru": "Закрыть скандальные работы"
+ },
+ "monument_events.6.d": {
+  "en": "Our opera house in [SCOPE.sState('monument_state').GetName] has opened its season with two new works that the critics call indecent, and every performance has sold out. Some of the devout want the two works taken off. The artists and their audiences want the government to say that the house chooses its own program.",
+  "ru": "Наш оперный театр в области [SCOPE.sState('monument_state').GetName] открыл сезон двумя новыми работами, которые критики называют непристойными, и все спектакли распроданы. Часть верующих хочет снять обе работы. Художники и их зрители хотят, чтобы правительство заявило, что театр сам выбирает свою программу."
+ },
+ "monument_events.6.f": {
+  "en": "Notices the manager of the opera house has pinned up inside the box office for the ticket clerks this season:\\n\\nThe two new works have been called indecent in the newspapers. Do not argue about them with anyone at the window, and send letters of complaint to the director, who answers them himself.\\nSell seats for the new works one week ahead and no further, because the government may yet ask us to take them off, and every ticket sold would then have to be refunded.\\nA patron who leaves either new work before the second act may have the price of the seat back. A refund costs us less than another letter to the newspapers.\\nKeep two seats in the middle of the front rows free each night for visitors from the government, and write their names in the book, so that the director knows who has seen what.",
+  "ru": "Объявления, которые директор оперного театра вывесил в кассе для кассиров на этот сезон:\\n\\nДве новые работы в газетах названы непристойными. Не спорьте о них ни с кем у окошка, а письма с жалобами отправляйте директору, который отвечает на них сам.\\nПродавайте места на новые работы на неделю вперёд и не дальше, потому что правительство ещё может потребовать снять их, и тогда каждый проданный билет придётся возвращать.\\nЗрителю, покинувшему любую из новых работ до второго акта, можно вернуть деньги за место. Возврат обходится нам дешевле, чем ещё одно письмо в газеты.\\nДержите каждый вечер два места в середине первых рядов свободными для гостей от правительства и записывайте их имена в книгу, чтобы директор знал, кто что видел."
+ },
+ "monument_events.6.t": {
+  "en": "A Season of Some Note",
+  "ru": "Сезон, о котором говорят"
+ },
+ "monument_events.7.a": {
+  "en": "Open the gardens free to all",
+  "ru": "Открыть сады для всех бесплатно"
+ },
+ "monument_events.7.b": {
+  "en": "Charge a small admission",
+  "ru": "Назначить небольшую плату за вход"
+ },
+ "monument_events.7.d": {
+  "en": "The botanical gardens in [SCOPE.sState('monument_state').GetName] are in flower, and on fine days the paths are full from opening to closing. The gardeners would open the gates to everyone at no charge. The treasury points out that visitors would pay a small fee to come in, and that the beds and glasshouses cost money to keep.",
+  "ru": "Ботанические сады в области [SCOPE.sState('monument_state').GetName] в цвету, и в погожие дни дорожки полны от открытия до закрытия. Садовники открыли бы ворота для всех бесплатно. Казна указывает, что посетители заплатили бы небольшую плату за вход, а содержание клумб и оранжерей стоит денег."
+ },
+ "monument_events.7.f": {
+  "en": "\\\"I am the head gardener, and since the treasury has sent you to count the visitors, I will tell you what they do. They come at opening time with bread for the birds and stay until we ring the bell. Clerks eat their lunch on the benches by the pond. Children run on the grass where the signs tell them not to, and old men sit in the glasshouse all afternoon because it is warm. The path through it is worn down to the stones. I have two men and a boy to keep all of it. Whichever the government decides about the gate, I need two more men to keep the beds as they are.\\\"",
+  "ru": "«Я главный садовник, и раз казна прислала вас считать посетителей, расскажу, что они делают. Приходят к открытию с хлебом для птиц и сидят, пока мы не позвоним в колокол. Служащие обедают на скамейках у пруда. Дети бегают по траве там, где таблички велят не бегать, а старики весь день сидят в оранжерее, потому что там тепло. Дорожка через неё стёрта до камней. У меня два человека и мальчишка на всё это. Что бы ни решило правительство насчёт ворот, мне нужны ещё двое, чтобы клумбы остались как есть»."
+ },
+ "monument_events.7.t": {
+  "en": "The Gardens in Flower",
+  "ru": "Сады в цвету"
+ },
+ "monument_events.8.a": {
+  "en": "Fund public lectures",
+  "ru": "Финансировать публичные лекции"
+ },
+ "monument_events.8.b": {
+  "en": "Keep the telescopes for research",
+  "ru": "Оставить телескопы для исследований"
+ },
+ "monument_events.8.d": {
+  "en": "Our observatory in [SCOPE.sState('monument_state').GetName] opens its telescopes to the public on clear nights, and the queue at the door grows longer every season. The astronomers say the public nights cost them working hours at the instruments. A group of teachers asks for the nights to become a regular series of public lectures.",
+  "ru": "Наша обсерватория в области [SCOPE.sState('monument_state').GetName] открывает телескопы для публики в ясные ночи, и очередь у двери растёт с каждым сезоном. Астрономы говорят, что публичные ночи отнимают у них рабочие часы за приборами. Группа учителей просит превратить эти ночи в регулярный цикл публичных лекций."
+ },
+ "monument_events.8.f": {
+  "en": "\\\"I had forty minutes at the telescope last night, between the last of the public and the clouds coming in. The rest of the night went to a queue of people who wanted to see the moon and ask me whether anyone lives on it.\\\"\\n\\n\\\"And half the young people who work in this building first came up those stairs on a public night. I did, and so did you.\\\"\\n\\n\\\"I am not asking for the doors to be shut. Give the public two nights in the month and give us the rest, and hold the lectures in the hall downstairs, where they do not need the instrument.\\\"\\n\\n\\\"Then write that to the government, and I will sign it with you.\\\"",
+  "ru": "«Вчера ночью у меня было сорок минут у телескопа: между последними посетителями и набежавшими облаками. Остальная ночь ушла на очередь людей, которые хотели увидеть Луну и спросить меня, живёт ли там кто-нибудь».\\n\\n«А половина молодых людей, работающих в этом здании, впервые поднялись по этим ступеням в публичную ночь. Я поднимался, и вы тоже».\\n\\n«Я не прошу закрыть двери. Отдайте публике две ночи в месяц, а остальное оставьте нам, и читайте лекции в зале внизу, где прибор не нужен».\\n\\n«Тогда напишите это правительству, и я подпишу вместе с вами»."
+ },
+ "monument_events.8.t": {
+  "en": "A Night at the Glass",
+  "ru": "Ночь у окуляра"
+ },
+ "monument_events.9.a": {
+  "en": "Reserve the halls for our own manufacturers",
+  "ru": "Оставить залы для наших производителей"
+ },
+ "monument_events.9.b": {
+  "en": "Invite exhibitors from abroad",
+  "ru": "Пригласить экспонентов из-за рубежа"
+ },
+ "monument_events.9.d": {
+  "en": "Our exhibition hall in [SCOPE.sState('monument_state').GetName] has more manufacturers asking for floor space than it has floor. The industrialists want the halls kept for our own makers. Others would invite exhibitors from abroad, which would bring foreign visitors and some goodwill with them.",
+  "ru": "У нашего выставочного зала в области [SCOPE.sState('monument_state').GetName] больше производителей, просящих место, чем самого места. Промышленники хотят оставить залы для наших собственных производителей. Другие пригласили бы экспонентов из-за рубежа, что привлекло бы иностранных гостей и немного доброй воли."
+ },
+ "monument_events.9.f": {
+  "en": "To the director of the exhibition hall, from a maker of pumps and engines in the provinces. We applied for floor space last year and were told the halls were full, and we apply again. Our machines are made in this country by our own workmen, and we would show them running, so that buyers can see what they do. We are told that space may now be offered to firms from abroad. We do not object to competition, but we ask that a hall built for the nation give its first places to the nation's own makers. We will take a corner if a corner is what remains, and we await your reply.",
+  "ru": "Директору выставочного зала от производителя насосов и двигателей из провинции. В прошлом году мы просили место и нам ответили, что залы полны, и просим снова. Наши машины сделаны в этой стране нашими же рабочими, и мы хотели бы показать их в работе, чтобы покупатели видели, что они умеют. Нам сообщили, что место теперь могут предложить фирмам из-за границы. Мы не возражаем против конкуренции, но просим, чтобы зал, построенный для нации, отдавал первые места производителям нации. Мы возьмём угол, если остался только угол, и ждём вашего ответа."
+ },
+ "monument_events.9.t": {
+  "en": "The Halls Are Full",
+  "ru": "Залы переполнены"
+ },
+ "monument_trophy_events.1.a": {
+  "en": "Carry it off",
+  "ru": "Вывезти"
+ },
+ "monument_trophy_events.1.b": {
+  "en": "Leave it standing",
+  "ru": "Оставить стоять"
+ },
+ "monument_trophy_events.1.d": {
+  "en": "Our armies hold [SCOPE.sState('monument_state').GetName], where [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')] stands, raised by [SCOPE.sCountry('monument_owner').GetName]. The officers ask whether it should be crated and sent home as a trophy: #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels.",
+  "ru": "Наши армии удерживают область [SCOPE.sState('monument_state').GetName], где стоит [SCOPE.sState('monument_state').GetCustom('gm_monument_name_evt')], воздвигнутый страной [SCOPE.sCountry('monument_owner').GetName]. Офицеры спрашивают, не упаковать ли его и не отправить ли домой как трофей: #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_tr_levels')|0]#! из его #v [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_state_primary_levels')|0]#! уровней."
+ },
+ "monument_trophy_events.1.f": {
+  "en": "To the general staff, from the officer commanding our troops in [SCOPE.sState('monument_state').GetName]. The monument here is under our guard, and the townspeople come every day to see that it is still standing. Our engineers say that part of it could be taken down in pieces, numbered, crated and sent home while we hold the state, if the staff will send the men and the transport. They warn that what is taken apart in a hurry is seldom put back as it was. Some of my officers point to the Quadriga, which Napoleon's army carried off the Brandenburg Gate to Paris, and say this is how such things have always been done. Others say the people here will not forget who took it. I await the staff's order.",
+  "ru": "Генеральному штабу от офицера, командующего нашими войсками в области [SCOPE.sState('monument_state').GetName]. Памятник здесь находится под нашей охраной, и горожане приходят каждый день проверить, стоит ли он ещё. Наши инженеры говорят, что часть его можно разобрать, пронумеровать, упаковать и отправить домой, пока мы удерживаем область, если штаб пришлёт людей и транспорт. Они предупреждают, что разобранное в спешке редко удаётся собрать как было. Некоторые мои офицеры указывают на Квадригу, которую армия Наполеона увезла с Бранденбургских ворот в Париж, и говорят, что так всегда поступали с такими вещами. Другие говорят, что местные не забудут, кто это взял. Жду приказа штаба."
+ },
+ "monument_trophy_events.1.t": {
+  "en": "Within Our Reach",
+  "ru": "В пределах досягаемости"
+ },
+ "morphological_freedom_events.1.a": {
+  "en": "Inspect them like any other clinic",
+  "ru": "Проверять их, как любую другую клинику"
+ },
+ "morphological_freedom_events.1.b": {
+  "en": "Leave the clinics to their customers",
+  "ru": "Оставить клиники их клиентам"
+ },
+ "morphological_freedom_events.1.c": {
+  "en": "Shut them down",
+  "ru": "Закрыть их"
+ },
+ "morphological_freedom_events.1.d": {
+  "en": "Licensed clinics are opening across the country, and the queues outside run around the block. The licensing boards approved a short list of procedures, but the clinics are already testing its edges: last week a client asked for scales, and the board has no rule on scales. Our health inspectors want to know how closely we mean to watch them.",
+  "ru": "По всей стране открываются лицензированные клиники, и очереди у них растягиваются на квартал. Лицензионные комиссии одобрили короткий список процедур, но клиники уже проверяют его границы: на прошлой неделе клиент попросил чешую, а у комиссии нет правила о чешуе. Наши санитарные инспекторы хотят знать, насколько пристально мы намерены за ними следить."
+ },
+ "morphological_freedom_events.1.d_natural": {
+  "en": "Clinics across the border have begun to offer what our law does not: a new face, a new skin, the sex characteristics a client asks for, even fur and a tail grown from the client's own cells. Many of our citizens have made the trip and come home changed. Now a surgeon in the capital has been found doing the same work under a medical license, and our health inspectors want to know what we intend to do about it.",
+  "ru": "Клиники за границей начали предлагать то, чего не разрешает наш закон: новое лицо, новую кожу, желаемые половые признаки, даже мех и хвост, выращенные из собственных клеток клиента. Многие наши граждане съездили туда и вернулись изменившимися. Теперь в столице обнаружили хирурга, делающего то же самое по медицинской лицензии, и наши санитарные инспекторы хотят знать, что мы намерены с этим делать."
+ },
+ "morphological_freedom_events.1.f": {
+  "en": "\\\"You are the first inspector to ask me what the work is, so I will tell you. I trained as a surgeon to rebuild faces after burns and car accidents, and for most of my working life that was all anyone asked of me. The people in my waiting room now are not ill. One wants her skin the gray of slate. One wants his ears long and pointed, with fur on the backs. A young man asked me last week for scales along his arms, and I told him I would have to read about scales first. I take a sample of a client's own cells and grow what they ask for, and it takes to the body better than any graft I ever made for a burn. Write down what you need to, and I will answer the rest of your questions.\\\"",
+  "ru": "«Вы первый инспектор, кто спросил меня, в чём состоит работа, так что я расскажу. Я учился на хирурга, чтобы восстанавливать лица после ожогов и аварий, и большую часть рабочей жизни от меня не требовали ничего другого. Люди в моей приёмной сейчас не больны. Одна хочет кожу цвета сланца. Один хочет уши длинные и острые, с мехом на задней стороне. Молодой человек на прошлой неделе попросил чешую вдоль рук, и я сказал, что сначала мне придётся почитать о чешуе. Я беру образец собственных клеток клиента и выращиваю то, что он просит, и оно приживается лучше любого трансплантата, что я делал при ожогах. Запишите, что вам нужно, и я отвечу на остальные ваши вопросы»."
+ },
+ "morphological_freedom_events.1.t": {
+  "en": "Clinics on Every Street",
+  "ru": "Клиники на каждой улице"
+ },
+ "morphological_freedom_events.100.a": {
+  "en": "The law is the law",
+  "ru": "Закон есть закон"
+ },
+ "morphological_freedom_events.100.b": {
+  "en": "Leave them be",
+  "ru": "Оставить их в покое"
+ },
+ "morphological_freedom_events.100.d": {
+  "en": "Twenty years of argument have ended where they began. The law still holds every body to the form it was born with, and nobody now expects it to change. What is left to decide is what to do about the many who had the work done anyway, abroad or in back rooms, and who now walk our streets with faces and skins the law does not recognize.",
+  "ru": "Двадцать лет споров закончились там, где начались. Закон по-прежнему оставляет каждому тело в той форме, в какой он родился, и никто теперь не ждёт перемен. Остаётся решить, что делать со многими, кто всё равно сделал это, за границей или в подпольных кабинетах, и теперь ходит по нашим улицам с лицами и кожей, которых закон не признаёт."
+ },
+ "morphological_freedom_events.100.f": {
+  "en": "\\\"I have worked the counter at the passport office for eleven years, and I am telling you this, Director, because nobody has told us what to do. Every week someone comes to my window whose face does not match the photograph we hold for them. Some were changed abroad and some in back rooms here, and they all say the same thing, that the photograph is of who they were. The law says a person is who they were born as, so the photograph is right and the face is wrong. If I issue a passport with the old photograph, the border guards abroad will stop them. If I take a new one, I break the rule. I have put their applications in a drawer until someone tells me which to do.\\\"",
+  "ru": "«Я уже одиннадцать лет работаю за стойкой паспортного стола, и говорю вам это, директор, потому что никто не объяснил нам, что делать. Каждую неделю к моему окну подходит кто-то, чьё лицо не совпадает с фотографией, которая у нас на него есть. Одних изменили за границей, других здесь в подпольных кабинетах, и все говорят одно: фотография — того, кем они были. Закон говорит, что человек — тот, кем он родился, значит, фотография верна, а лицо неверно. Если я выдам паспорт со старой фотографией, пограничники за рубежом их остановят. Если приму новую, нарушу правило. Я убрал их заявления в ящик, пока кто-нибудь не скажет, как поступить»."
+ },
+ "morphological_freedom_events.100.t": {
+  "en": "The Body as Given",
+  "ru": "Тело, как оно дано"
+ },
+ "morphological_freedom_events.2.a": {
+  "en": "She has our admiration",
+  "ru": "Она вызывает наше восхищение"
+ },
+ "morphological_freedom_events.2.b": {
+  "en": "The government has no view on a citizen's face",
+  "ru": "Правительство не имеет мнения о лице гражданки"
+ },
+ "morphological_freedom_events.2.c": {
+  "en": "A spectacle unworthy of the airwaves",
+  "ru": "Зрелище, недостойное эфира"
+ },
+ "morphological_freedom_events.2.d": {
+  "en": "The country's best-loved television host opened last night's show with a new face. In the months the show was off the air she had her features remade, her hair turned the silver-blue of a kingfisher's wing and two small horns grown at her temples, and she spent the first ten minutes explaining why. Half the country seems to be talking about nothing else, and reporters want to know what the government thinks.",
+  "ru": "Самая любимая в стране телеведущая открыла вчерашнее шоу с новым лицом. Пока шоу не выходило в эфир, она переделала черты лица, окрасила волосы в серебристо-голубой цвет крыла зимородка и вырастила на висках два маленьких рога, а первые десять минут объясняла, зачем. Полстраны, похоже, говорит только об этом, и репортёры хотят знать, что думает правительство."
+ },
+ "morphological_freedom_events.2.d_natural": {
+  "en": "The country's best-loved television host opened last night's show with a new face. In the months the show was off the air, in a clinic abroad where our law could not follow her, she had her features remade, her hair turned the silver-blue of a kingfisher's wing and two small horns grown at her temples. She spent the first ten minutes daring anyone to call it a crime. Half the country seems to be talking about nothing else, and reporters want to know what the government thinks.",
+  "ru": "Самая любимая в стране телеведущая открыла вчерашнее шоу с новым лицом. Пока шоу не выходило в эфир, в клинике за границей, куда наш закон не мог за ней последовать, она переделала черты лица, окрасила волосы в серебристо-голубой цвет крыла зимородка и вырастила на висках два маленьких рога. Первые десять минут она бросала вызов каждому, кто назовёт это преступлением. Полстраны, похоже, говорит только об этом, и репортёры хотят знать, что думает правительство."
+ },
+ "morphological_freedom_events.2.f": {
+  "en": "\\\"My mother called me during the opening to ask whether the horns were real. I said they were. She was quiet for a while, and then she asked whether they had hurt.\\\"\\n\\n\\\"We had the show on in the break room. One of the drivers said she had spoiled a good face, and the cook said it was her face to spoil, and they went on about it until the end of the shift.\\\"\\n\\n\\\"I have watched her since I was a girl. She talked for ten minutes about why she did it and I listened to every word, and I still could not tell you why.\\\"\\n\\n\\\"My daughter wants the hair. Not the horns, only the hair. She asked me at breakfast, and I said we would talk about it when she got home.\\\"",
+  "ru": "«Мама позвонила мне во время заставки спросить, настоящие ли рога. Я сказал, что настоящие. Она помолчала, а потом спросила, не было ли больно».\\n\\n«У нас в комнате отдыха шло шоу. Один из водителей сказал, что она испортила хорошее лицо, а повар сказал, что это её лицо, ей и портить, и они спорили до конца смены».\\n\\n«Я смотрю на неё с детства. Она десять минут рассказывала, зачем это сделала, и я слушала каждое слово, и всё равно не могу сказать, зачем».\\n\\n«Моя дочь хочет такие волосы. Не рога, только волосы. Она спросила за завтраком, и я сказала, что мы поговорим, когда она вернётся домой»."
+ },
+ "morphological_freedom_events.2.t": {
+  "en": "A Face Everyone Knows",
+  "ru": "Лицо, знакомое всем"
+ },
+ "morphological_freedom_events.200.a": {
+  "en": "Let people be what they choose to be",
+  "ru": "Пусть люди будут теми, кем выберут быть"
+ },
+ "morphological_freedom_events.200.d": {
+  "en": "The debate is over. A [ROOT.GetCountry.GetAdjective] citizen may now change how their body looks as they choose, and the state asks only that the work be done safely. Clinics may offer any change a client asks for, and nothing on a citizen's papers need say what was done.",
+  "ru": "Дебаты окончены. Теперь [ROOT.GetCountry.GetAdjective] гражданин вправе менять свой внешний вид по собственному выбору, а государство требует лишь, чтобы работа выполнялась безопасно. Клиники могут предложить любое изменение, которого просит клиент, и в документах гражданина необязательно указывать, что было сделано."
+ },
+ "morphological_freedom_events.200.f": {
+  "en": "The clinic on the corner opened at eight, between a pharmacy and a shop that repaired phones. The receptionist unlocked the door and set out the forms, which were one page now: a name, the work wanted, and a signature to say the client understood the risks. By nine the waiting room held a man who wanted the gray taken out of his fur, a woman of about seventy who had come to have her horns filed down because they caught on her scarves, and a couple who had brought their grown son for his first consultation and sat on either side of him. \\\"The first appointment, please,\\\" the receptionist said, and the man with the gray fur put down his magazine and went through.",
+  "ru": "Клиника на углу открылась в восемь, между аптекой и мастерской по ремонту телефонов. Администратор отперла дверь и разложила бланки, которые теперь уместились на одной странице: имя, желаемая работа и подпись, подтверждающая, что клиент понимает риски. К девяти в приёмной сидели мужчина, который хотел убрать седину из меха, женщина лет семидесяти, пришедшая спилить рога, потому что они цеплялись за шарфы, и пара, приведшая взрослого сына на первую консультацию и севшая по обе стороны от него. «Первый приём, пожалуйста», — сказала администратор, и мужчина с седым мехом отложил журнал и прошёл внутрь."
+ },
+ "morphological_freedom_events.200.t": {
+  "en": "The Chosen Body",
+  "ru": "Избранное тело"
+ },
+ "morphological_freedom_events.3.a": {
+  "en": "Every body competes",
+  "ru": "Все тела соревнуются"
+ },
+ "morphological_freedom_events.3.b": {
+  "en": "Give them events of their own",
+  "ru": "Дать им собственные соревнования"
+ },
+ "morphological_freedom_events.3.c": {
+  "en": "Natural bodies only on the national team",
+  "ru": "В национальной сборной только природные тела"
+ },
+ "morphological_freedom_events.3.d": {
+  "en": "The national swimming federation has written to the government. A swimmer who had webbing grown between her fingers, for its looks, her clinic insists, broke the national record by two seconds, and every rival in the final has signed a protest. A sprinter with a tail grown for the same reason swears it does nothing for his balance. The federation's rules were written for the bodies people were born with, and it wants to know whether the state will back new ones.",
+  "ru": "Национальная федерация плавания написала правительству. Пловчиха, вырастившая между пальцами перепонки ради внешнего вида, как уверяет её клиника, побила национальный рекорд на две секунды, и каждый соперник по финалу подписал протест. Спринтер с хвостом, выращенным по той же причине, клянётся, что хвост не помогает ему удерживать равновесие. Правила федерации писались для тел, с которыми люди рождаются, и она хочет знать, поддержит ли государство новые."
+ },
+ "morphological_freedom_events.3.f": {
+  "en": "To the national swimming federation, from the seven other finalists of the women's freestyle. We do not accuse our teammate of cheating. She broke no rule, because the rules say nothing about hands. Her clinic says the webbing was grown for its looks. We have trained beside her for years and we know what a tenth of a second costs in the water, and she was two seconds faster than her own best. We ask the federation to measure what the webbing does in the pool, with her consent, before the record is entered. We also ask it to tell every swimmer in the country, before the next season begins, what may and may not be grown on a body that competes. Each of us has signed below.",
+  "ru": "Национальной федерации плавания от семи остальных финалисток вольного стиля среди женщин. Мы не обвиняем нашу соперницу в жульничестве. Она не нарушила ни одного правила, потому что правила ничего не говорят о руках. Её клиника утверждает, что перепонки выращены ради внешнего вида. Мы тренировались рядом с ней годами и знаем, чего в воде стоит десятая доля секунды, а она оказалась на две секунды быстрее собственного лучшего результата. Просим федерацию измерить, что перепонки дают в бассейне, с её согласия, прежде чем рекорд будет занесён. Просим также до начала следующего сезона объявить каждому пловцу страны, что можно и что нельзя выращивать на теле, которое участвует в соревнованиях. Каждая из нас подписалась ниже."
+ },
+ "morphological_freedom_events.3.t": {
+  "en": "Fair Play",
+  "ru": "Честная игра"
+ },
+ "morphological_freedom_events.4.a": {
+  "en": "Not before eighteen",
+  "ru": "Не раньше восемнадцати"
+ },
+ "morphological_freedom_events.4.b": {
+  "en": "From sixteen, with a parent's consent",
+  "ru": "С шестнадцати, с согласия родителя"
+ },
+ "morphological_freedom_events.4.c": {
+  "en": "At any age, after counseling",
+  "ru": "В любом возрасте, после консультации"
+ },
+ "morphological_freedom_events.4.d": {
+  "en": "A fifteen-year-old has asked a court to let her have the fox ears her parents refused her, the kind she has seen on older students at her school. The clinics turn minors away, but the licensing rules never said they must. The judge has asked the government to decide at what age a young person may choose how her body looks, and whether her parents have the last word until then.",
+  "ru": "Пятнадцатилетняя девочка обратилась в суд с просьбой разрешить ей лисьи уши, в которых ей отказали родители, такие, какие она видела у старшеклассников своей школы. Клиники отказывают несовершеннолетним, но правила лицензирования никогда не требовали этого. Судья просит правительство решить, с какого возраста молодой человек может выбирать свой внешний вид и имеют ли родители последнее слово до тех пор."
+ },
+ "morphological_freedom_events.4.f": {
+  "en": "The mother sat on the bench outside the courtroom with her daughter's coat across her knees. Her daughter had refused to wear it that morning because it hid the paper fox ears she had pinned to her collar. The lawyer had gone in to speak to the clerk. Through the glass panel in the door the mother could see two tables, one for her and one for her child, and the judge's chair between them. She took out the leaflet the clinic had sent and read again the parts about counseling and the waiting period, and the line saying that the clinic, as its own policy, did not treat anyone under eighteen. She was still reading when the clerk came out and called their names.",
+  "ru": "Мать сидела на скамье у зала суда, положив на колени пальто дочери. Утром дочь отказалась его надеть, потому что оно скрывало бумажные лисьи уши, которые она приколола к воротнику. Адвокат вошёл поговорить с секретарём. Сквозь стеклянную панель двери мать видела два стола, один для неё, другой для её ребёнка, и кресло судьи между ними. Она достала присланную клиникой брошюру и снова перечитала разделы о консультации и сроке ожидания и строку о том, что клиника по собственным правилам не принимает никого младше восемнадцати. Она всё ещё читала, когда вышел секретарь и назвал их имена."
+ },
+ "morphological_freedom_events.4.t": {
+  "en": "Old Enough to Choose",
+  "ru": "Достаточно взрослая, чтобы выбирать"
+ },
+ "morphological_freedom_events.5.a": {
+  "en": "Keep the clinic doors open",
+  "ru": "Оставить двери клиник открытыми"
+ },
+ "morphological_freedom_events.5.b": {
+  "en": "A conscience clause for the faithful",
+  "ru": "Оговорка по совести для верующих"
+ },
+ "morphological_freedom_events.5.c": {
+  "en": "Promise them the law goes no further",
+  "ru": "Пообещать, что закон дальше не пойдёт"
+ },
+ "morphological_freedom_events.5.d": {
+  "en": "The [SCOPE.gsInterestGroup('devout_ig').GetName] have turned against the clinics. A letter read out in places of worship across the country last week called the remade body an insult to the body as it was given, and congregations have begun to picket clinic doors, praying aloud over the clients who go in. Two clinics have closed for fear of worse, and the rest want the police at their doors.",
+  "ru": "[SCOPE.gsInterestGroup('devout_ig').GetName] обратились против клиник. Письмо, прочитанное на прошлой неделе в молитвенных домах по всей стране, назвало изменённое тело оскорблением тела, как оно было дано, и общины начали пикетировать двери клиник, вслух молясь над входящими клиентами. Две клиники закрылись из страха перед худшим, а остальные хотят видеть у своих дверей полицию."
+ },
+ "morphological_freedom_events.5.f": {
+  "en": "\\\"Excuse me. I am a nurse at this clinic, and I need to get to the door.\\\"\\n\\n\\\"I am not stopping you. I am standing on the sidewalk, which the police say I may do, and I am praying for the people who go in.\\\"\\n\\n\\\"You pray aloud, at them, as they climb the steps. The girl who came at nine this morning was shaking when she reached the desk.\\\"\\n\\n\\\"Then something in her was afraid, and she might listen to it. Nobody asked us what we thought of any of this. We were told it was a private matter, and that was the end of it.\\\"\\n\\n\\\"Everyone is asking you now. You are in every paper. I have patients waiting, and I am going inside.\\\"",
+  "ru": "«Простите. Я медсестра в этой клинике, и мне нужно пройти к двери».\\n\\n«Я вас не задерживаю. Я стою на тротуаре, а это, по словам полиции, мне позволено, и молюсь за людей, которые входят».\\n\\n«Вы молитесь вслух, в их адрес, пока они поднимаются по ступеням. Девушка, пришедшая сегодня в девять, дрожала, когда дошла до стойки».\\n\\n«Значит, что-то в ней испугалось, и ей стоило бы к этому прислушаться. Никто не спрашивал нас, что мы обо всём этом думаем. Нам сказали, что это частное дело, и на этом всё кончилось».\\n\\n«Теперь вас спрашивают все. Вы во всех газетах. У меня ждут пациенты, и я иду внутрь»."
+ },
+ "morphological_freedom_events.5.t": {
+  "en": "The Faithful Object",
+  "ru": "Верующие возражают"
+ },
+ "morphological_freedom_events.6.a": {
+  "en": "Let them have their fashion",
+  "ru": "Пусть у них будет своя мода"
+ },
+ "morphological_freedom_events.6.b": {
+  "en": "Tax the salons",
+  "ru": "Обложить салоны налогом"
+ },
+ "morphological_freedom_events.6.c": {
+  "en": "Remind them it is for life",
+  "ru": "Напомнить, что это навсегда"
+ },
+ "morphological_freedom_events.6.d": {
+  "en": "Among our young adults the clinics' work has become a fashion: soft fur along the forearms, eyes in colors no eye was born with, small curled horns and, for the bold, a tail. The clinics cannot keep up, employers and universities are writing dress codes for bodies, and foreign magazines put our young people on their covers.",
+  "ru": "Среди нашей молодёжи работа клиник стала модой: мягкий мех вдоль предплечий, глаза цветов, с какими никто не рождался, маленькие завитые рога и, для смелых, хвост. Клиники не справляются, работодатели и университеты пишут дресс-коды для тел, а иностранные журналы ставят нашу молодёжь на обложки."
+ },
+ "morphological_freedom_events.6.f": {
+  "en": "The new price board a barber has hung in his shop window, beside the old one:\\n\\nHaircut, as before. Most of my customers still come in for this.\\nForearm fur, trimmed short. Ask for it if your sleeves are catching, and I will use a guard so the skin is not nicked.\\nTail, trimmed and shaped. It takes longer than a haircut because the fur grows two ways, so it costs more.\\nHorns, cleaned and oiled. Ask your clinic first whether yours may be oiled, because some may not.\\nEars, the fur on the backs evened out. Half price with a haircut, since the clippers are already out.\\nNo dyeing of grown fur. The clinics say its color can only be changed at the clinic, and I will not answer for a bad result.",
+  "ru": "Новый прейскурант, который цирюльник повесил в витрине рядом со старым:\\n\\nСтрижка, как прежде. Большинство моих клиентов по-прежнему приходят за ней.\\nМех на предплечьях, подстриженный коротко. Просите, если он цепляется за рукава, и я использую насадку, чтобы не поранить кожу.\\nХвост, подстриженный и уложенный. Это дольше, чем стрижка, потому что мех растёт в две стороны, поэтому дороже.\\nРога, вычищенные и смазанные маслом. Сначала спросите в клинике, можно ли смазывать ваши, потому что некоторые нельзя.\\nУши, мех на задней стороне выровнен. Полцены вместе со стрижкой, раз машинка всё равно в руках.\\nБез окраски отращенного меха. Клиники говорят, что цвет его можно менять только в клинике, и за плохой результат я не отвечаю."
+ },
+ "morphological_freedom_events.6.t": {
+  "en": "Everyone Has Ears Now",
+  "ru": "Теперь у всех уши"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "ru": "Пусть маршируют мирно"
@@ -11050,6 +12414,14 @@
  "movement_events_te.1.c": {
   "en": "We march alongside them",
   "ru": "Мы идём вместе с ними"
+ },
+ "movement_events_te.1.d": {
+  "en": "Members of discriminated communities are marching through [SCOPE.sState('march_state').GetName] to demand equal rights under the law. The column has grown through the day as people come out of the side streets to join it, and its organizers say it will not disperse until the government answers them. We must decide how to meet it.",
+  "ru": "Члены дискриминируемых общин маршируют по области [SCOPE.sState('march_state').GetName], требуя равных прав перед законом. К колонне в течение дня присоединяются люди, выходящие из боковых улиц, и организаторы говорят, что она не разойдётся, пока правительство им не ответит. Мы должны решить, как с ней поступить."
+ },
+ "movement_events_te.1.f": {
+  "en": "A steward of the march walked backward at the head of the column with the list of songs in her hand. The organizers had asked for a permit and been refused, and at nine they had set out anyway, two hundred of them from the door of their meeting hall. By noon the column filled the main street from end to end, and people were still coming out of the side streets to join it. At each crossing the steward stopped and called back the next song. Near the square a line of men in uniform stood across the road. Their officer came forward, and the steward went to speak with him while the singing went on behind her.",
+  "ru": "Распорядительница марша шла спиной вперёд во главе колонны со списком песен в руке. Организаторы просили разрешение и получили отказ, и в девять они всё равно вышли, двести человек от дверей своего зала собраний. К полудню колонна заполнила главную улицу из конца в конец, а люди всё продолжали выходить из боковых улиц, чтобы присоединиться. На каждом перекрёстке распорядительница останавливалась и выкликала следующую песню. Возле площади поперёк дороги стояла шеренга людей в форме. Их офицер вышел вперёд, и распорядительница пошла говорить с ним, пока позади неё продолжалось пение."
  },
  "movement_events_te.1.t": {
   "en": "Civil Rights March",
@@ -11067,6 +12439,14 @@
   "en": "Let the market decide",
   "ru": "Пусть решает рынок"
  },
+ "movement_events_te.10.d": {
+  "en": "Augmentation has opened a visible gap in our society. People who can pay for it have neural implants, faster reflexes and tuned metabolisms, and employers are starting to prefer them. People who cannot pay are losing work to them. Transhumanist activists want augmentation for everyone at public expense, and others question whether it should be sold at all.",
+  "ru": "Аугментация открыла в нашем обществе заметный разрыв. Люди, которые могут за неё заплатить, получают нейроимпланты, ускоренные рефлексы и настроенный обмен веществ, и работодатели начинают отдавать им предпочтение. Те, кто заплатить не может, теряют из-за них работу. Активисты-трансгуманисты хотят аугментации для всех за счёт государства, а другие сомневаются, стоит ли вообще её продавать."
+ },
+ "movement_events_te.10.f": {
+  "en": "\\\"I have been the best clerk on this floor for fifteen years. Now you tell me the new hires with implants clear three times the files I do, and that the board has noticed.\\\"\\n\\n\\\"The board looks at the figures. I have put your reviews in front of it every year, and this year it asked me why we pay for speed we could buy.\\\"\\n\\n\\\"Then let the firm buy mine. It pays for the new hires' training, and an implant for me would cost less than hiring someone to replace me.\\\"\\n\\n\\\"It would cost about a year of your wages, and the board says you could take it to another firm the week after. I will put the case to them again at the next meeting, with your figures, and tell you what they decide.\\\"",
+  "ru": "«Пятнадцать лет я был лучшим служащим на этом этаже. Теперь вы говорите мне, что новички с имплантами разбирают втрое больше дел, чем я, и что совет это заметил».\\n\\n«Совет смотрит на цифры. Я каждый год представлял ему ваши аттестации, а в этом году он спросил, зачем нам платить за скорость, которую можно купить».\\n\\n«Тогда пусть фирма купит мою. Она оплачивает обучение новичков, а имплант для меня обойдётся дешевле, чем нанять кого-то взамен».\\n\\n«Он стоил бы примерно ваш годовой заработок, а совет говорит, что через неделю вы могли бы уйти с ним в другую фирму. Я снова представлю им дело на следующем заседании, с вашими цифрами, и сообщу, что они решат»."
+ },
  "movement_events_te.10.t": {
   "en": "The Augmentation Divide",
   "ru": "Пропасть аугментации"
@@ -11083,9 +12463,25 @@
   "en": "Enforce strict separation",
   "ru": "Ввести строгое разделение"
  },
+ "movement_events_te.100.d": {
+  "en": "Reduce their political influence",
+  "ru": "Ослабить их политическое влияние"
+ },
+ "movement_events_te.100.desc": {
+  "en": "The civil rights movement has been broken. Its leaders have been imprisoned, exiled or silenced, and its supporters have stopped coming to its meetings. The streets are quiet again. For those who hold power, the existing order has been defended and the [Concept('concept_agitator', 'agitators')] defeated. We must decide what to do with the victory.",
+  "ru": "Движение за гражданские права разгромлено. Его лидеры брошены в тюрьмы, высланы или заставлены молчать, а сторонники перестали ходить на его собрания. На улицах снова тихо. Для тех, кто у власти, существующий порядок отстоян, а [Concept('concept_agitator','агитаторы')] разбиты. Нам предстоит решить, что делать с победой."
+ },
+ "movement_events_te.100.desc_faded": {
+  "en": "The civil rights movement is finished, and the government never had to move against it. The law did the work: organizers could not hire halls, marchers lost their jobs, and petitions went unanswered until the petitioners stopped writing. For those who hold power, the existing order has been defended and the [Concept('concept_agitator', 'agitators')] defeated without a crackdown. We must decide what to do with the victory.",
+  "ru": "Движение за гражданские права закончилось, и правительству не пришлось выступать против него. Работу сделал закон: организаторы не могли снять залы, участники маршей теряли работу, а петиции оставались без ответа, пока подававшие их не перестали писать. Для тех, кто у власти, существующий порядок отстоян, а [Concept('concept_agitator','агитаторы')] разбиты без репрессий. Нам предстоит решить, что делать с победой."
+ },
  "movement_events_te.100.e": {
   "en": "They are no longer welcome here",
   "ru": "Им здесь больше не рады"
+ },
+ "movement_events_te.100.f": {
+  "en": "\\\"I was the secretary of our chapter, and I am the one who closed its office. The landlord would not renew the lease, so we packed the files into boxes and took them home between us. The minute book and the membership roll are in a box at the back of my cupboard. Most of our members have stopped coming to anything. I do not blame them. Some have children, and some have jobs they cannot afford to lose. My neighbor marched with us every time, and now she crosses the street when she sees me coming.\\\"",
+  "ru": "«Я была секретарём нашего отделения и именно я закрыла его контору. Хозяин не продлил аренду, и мы упаковали документы в коробки и разобрали их по домам. Протокольная книга и список членов лежат в коробке в глубине моего шкафа. Большинство наших членов перестали приходить куда бы то ни было. Я их не виню. У некоторых дети, у некоторых работа, которой они не могут рисковать. Моя соседка участвовала в каждом нашем марше, а теперь переходит на другую сторону улицы, когда видит, что я иду»."
  },
  "movement_events_te.100.t": {
   "en": "The Movement Broken",
