@@ -1,803 +1,1647 @@
 {
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_affirmative_action": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups receive preferential treatment in education, employment, and other areas to counteract past [concept_discrimination] and promote diversity and inclusion#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Группы меньшинств получают преференции в образовании, трудоустройстве и других сферах, чтобы компенсировать прошлую [Concept('concept_discrimination','дискриминацию')] и содействовать разнообразию и инклюзии#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_cultural_assimilation": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are pressured to conform to the dominant culture, leading to increased [concept_assimilation] but extensive resistance and radicalization#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ На группы меньшинств давят, требуя приспособиться к господствующей культуре, что усиливает [Concept('concept_assimilation','ассимиляцию')], но вызывает широкое сопротивление и радикализацию#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_discrimination": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups face systemic [concept_discrimination] and unequal treatment in various aspects of life, such as employment, education, housing, and public services#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Группы меньшинств сталкиваются с системной [Concept('concept_discrimination','дискриминацией')] и неравным обращением в разных сферах жизни: в трудоустройстве, образовании, жилье и общественных услугах#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_ghettoization": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are [concept_marginalized] and isolated from the rest of society, leading to social and economic disparities, limited opportunities, and little [concept_assimilation]#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Группы меньшинств, [concept_marginalized|l] и изолированные от остального общества, страдают от социального и экономического неравенства, ограниченных возможностей и слабой [Concept('concept_assimilation','ассимиляции')]#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_indifference": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups receive little attention or support from the government, leading to social and economic disparities from private [concept_discrimination] and neglect#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Группы меньшинств почти не получают внимания и поддержки от правительства, что ведёт к социальному и экономическому неравенству из-за частной [Concept('concept_discrimination','дискриминации')] и пренебрежения#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_protection": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Minority groups are supported and empowered by the government, leading to increased social inclusion and equality, though the dominant group may resent the perceived favoritism#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Правительство поддерживает группы меньшинств и расширяет их возможности, что усиливает социальную инклюзию и равенство, хотя господствующая группа может негодовать из-за предполагаемого фаворитизма#!#!"
+ },
+ "EFFECTS_ON_ACCEPTANCE_law_minority_rights_violent_hostility": {
+  "en": "#tooltippable #tooltip:$BREAKDOWN_TAG$ The government actively and violently suppresses minority groups, leading to widespread [concept_discrimination], persecution, and abuses#!#!",
+  "ru": "#tooltippable #tooltip:$BREAKDOWN_TAG$ Правительство активно и насильственно подавляет группы меньшинств, что ведёт к повсеместной [Concept('concept_discrimination','дискриминации')], преследованиям и злоупотреблениям#!#!"
+ },
  "law_active_persecution": {
   "en": "Active Persecution",
   "ru": "Активные преследования"
+ },
+ "law_active_persecution_desc": {
+  "en": "LGBTQ+ individuals face active persecution, with laws criminalizing same-sex relationships and gender nonconformity. Severe penalties and social stigmatization limit the rights and freedoms of [concept_lgbtq_rights_movement] individuals.",
+  "ru": "Лица ЛГБТК+ подвергаются активным преследованиям: законы криминализуют однополые отношения и гендерное несоответствие. Суровые наказания и социальная стигматизация ограничивают права и свободы лиц [Concept('concept_lgbtq_rights_movement','ЛГБТК+')]."
  },
  "law_algorithmic_governance": {
   "en": "Algorithmic Governance",
   "ru": "Алгоритмическое управление"
  },
+ "law_algorithmic_governance_desc": {
+  "en": "Supreme political authority is vested in artificial intelligence, which determines the state's objectives and directs their implementation. Human institutions serve in advisory and executive capacities.",
+  "ru": "Верховная политическая власть принадлежит искусственному интеллекту, который определяет цели государства и руководит их исполнением. Человеческие институты работают в совещательной и исполнительной роли."
+ },
  "law_algorithmic_jurisprudence": {
   "en": "Algorithmic Jurisprudence",
   "ru": "Алгоритмическая юриспруденция"
+ },
+ "law_algorithmic_jurisprudence_desc": {
+  "en": "Models decide routine cases and draft judgments for the rest, and human judges sign them. The rulings are fast and consistent, and as impartial as whoever trains the models.",
+  "ru": "Модели решают рядовые дела и составляют проекты приговоров для остальных, а судьи-люди их подписывают. Решения быстры и единообразны и столь же беспристрастны, как те, кто обучает модели."
  },
  "law_automated_bureaucracy": {
   "en": "Automated Bureaucracy",
   "ru": "Автоматизированная бюрократия"
  },
+ "law_automated_bureaucracy_desc": {
+  "en": "Autonomous systems administer the state's institutions within mandates established by its political authorities. Human officials retain oversight, but routine administration and operational decisions are entrusted to machines.",
+  "ru": "Автономные системы управляют институтами государства в рамках мандатов, установленных политической властью. Чиновники-люди сохраняют надзор, но рутинное управление и оперативные решения доверены машинам."
+ },
  "law_automation_dividend": {
   "en": "Automation Dividend",
   "ru": "Дивиденд от автоматизации"
+ },
+ "law_automation_dividend_desc": {
+  "en": "What the machines make belongs to everyone, paid out as a dividend on the nation's robots and code.",
+  "ru": "Что производят машины, принадлежит всем и выплачивается дивидендом на роботов и программный код нации."
  },
  "law_auxiliary_fleet": {
   "en": "Auxiliary Fleet",
   "ru": "Вспомогательный флот"
  },
+ "law_auxiliary_fleet_desc": {
+  "en": "The fleet's purpose is to sustain the army at extreme distance — sealift, [concept_naval_invasion], and forward logistics. Operational reach and amphibious capability are unmatched, but the surface combat fleet is hollowed out in favor of [Concept('concept_supply_ship', 'supply ships')] and transports.",
+  "ru": "Задача флота: поддерживать армию на предельном удалении, то есть морская переброска, [Concept('concept_naval_invasion','морское вторжение')] и передовое снабжение. Оперативный охват и десантные возможности не имеют равных, но надводный боевой флот обескровлен в пользу [Concept('concept_supply_ship','судов снабжения')] и транспортов."
+ },
  "law_ban_on_genetic_modification": {
   "en": "Ban on Genetic Modification",
   "ru": "Запрет генетических модификаций"
+ },
+ "law_ban_on_genetic_modification_desc": {
+  "en": "Fearing the unknown consequences, the state prohibits all forms of genetic engineering.",
+  "ru": "Опасаясь неведомых последствий, государство запрещает любую генную инженерию."
  },
  "law_basic_protections": {
   "en": "Basic Protections",
   "ru": "Базовая защита"
  },
+ "law_basic_protections_desc": {
+  "en": "LGBTQ+ individuals have basic legal protections, such as decriminalization of same-sex relationships. However, [concept_lgbtq_rights_movement] protections may be limited in scope and not fully enforced.",
+  "ru": "Лица ЛГБТК+ имеют базовую правовую защиту, например декриминализацию однополых отношений. Однако защита [Concept('concept_lgbtq_rights_movement','ЛГБТК+')] может быть ограничена по объёму и соблюдаться не полностью."
+ },
  "law_central_bank_independence": {
   "en": "Central Bank Independence",
   "ru": "Независимость центрального банка"
+ },
+ "law_central_bank_independence_desc": {
+  "en": "A technocratic central bank manages liquidity and expectations. Powerful stabilization tools are available at arm’s length from day-to-day politics.",
+  "ru": "Технократический центральный банк управляет ликвидностью и ожиданиями. Мощные стабилизационные инструменты доступны вне повседневной политики."
  },
  "law_civic_monolingualism": {
   "en": "Civic Monolingualism",
   "ru": "Гражданский монолингвизм"
  },
+ "law_civic_monolingualism_desc": {
+  "en": "Compulsory schooling and public life operate in a single civic language. Proficiency becomes a gateway to citizenship, office, and social mobility.",
+  "ru": "Обязательное школьное обучение и общественная жизнь ведутся на едином гражданском языке. Владение им становится пропуском к гражданству, должностям и социальной мобильности."
+ },
  "law_clade_citizenship": {
   "en": "Clade Citizenship",
   "ru": "Гражданство по кладе"
+ },
+ "law_clade_citizenship_desc": {
+  "en": "A citizen who has left the human body plan behind keeps every right the law gives anyone else, whether they breathe water, see by heat or were built for low gravity. The state no longer asks what a person is made like, and the old lines of descent mean little where so many people have chosen their own.",
+  "ru": "Гражданин, оставивший позади человеческий план строения тела, сохраняет все права, которые закон даёт любому другому, дышит ли он водой, видит ли тепло или создан для малой гравитации. Государство больше не спрашивает, каким устроен человек, а старые линии происхождения мало значат там, где столь многие выбрали свои собственные."
  },
  "law_command_cooperative_economy": {
   "en": "Command/Cooperative Economy",
   "ru": "Командно-кооперативная экономика"
  },
+ "law_command_cooperative_economy_desc": {
+  "en": "Large firms are socialized or reorganized into public and worker cooperatives. Prices and output are directed, prioritizing equity and stability over market competition.",
+  "ru": "Крупные фирмы обобществляются или реорганизуются в публичные и рабочие кооперативы. Цены и выпуск устанавливаются сверху, равенство и стабильность ставятся выше рыночной конкуренции."
+ },
  "law_commodity_money": {
   "en": "Commodity Money",
   "ru": "Товарные деньги"
+ },
+ "law_commodity_money_desc": {
+  "en": "A commodity, such as gold or silver, is used directly as currency. A national bank can set a discount rate on it, but can make credit no more than a point cheaper than the world's, or three points costlier — the coin is the metal, and metal leaves for wherever it earns more.",
+  "ru": "Товар, например золото или серебро, используется напрямую как валюта. Национальный банк может устанавливать на него учётную ставку, но сделать кредит дешевле мирового более чем на пункт или дороже более чем на три пункта не может: монета есть металл, а металл уходит туда, где приносит больше."
  },
  "law_communal_child_rearing": {
   "en": "Communal Child-Rearing",
   "ru": "Общинное воспитание детей"
  },
+ "law_communal_child_rearing_desc": {
+  "en": "The family is a relic of bourgeois individualism. To ensure absolute equality of opportunity and loyalty to the state above all, children will be raised collectively by the state in public crèches and dormitories. Without $building_state_youth_centers$ raising children communally, working parents have fewer children.",
+  "ru": "Семья есть пережиток буржуазного индивидуализма. Чтобы обеспечить абсолютное равенство возможностей и верность прежде всего государству, детей будет коллективно воспитывать государство в общественных яслях и общежитиях. Без «$building_state_youth_centers$», воспитывающих детей сообща, у работающих родителей меньше детей."
+ },
  "law_comprehensive_rights": {
   "en": "Anti-Discrimination Laws",
   "ru": "Законы против дискриминации"
+ },
+ "law_comprehensive_rights_desc": {
+  "en": "LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.",
+  "ru": "Лица ЛГБТК+ имеют юридические права по законодательству о [Concept('concept_lgbtq_rights_movement','ЛГБТК+')], включая законы против [Concept('concept_discrimination','дискриминации')] и защиту от преступлений на почве ненависти. Однако им могут быть недоступны некоторые стороны полного социального равенства, например равенство браков или право на усыновление."
  },
  "law_constitutional_review": {
   "en": "Constitutional Review",
   "ru": "Конституционный контроль"
  },
+ "law_constitutional_review_desc": {
+  "en": "The courts may strike down any law that breaches the written constitution. Ordinary majorities govern within it, and changing its core is slow.",
+  "ru": "Суды могут отменить любой закон, нарушающий писаную конституцию. Обычное большинство правит в её рамках, а менять её суть медленно."
+ },
  "law_contracted_administration": {
   "en": "Contracted Administration",
   "ru": "Управление по контракту"
+ },
+ "law_contracted_administration_desc": {
+  "en": "Private firms carry out much of the state's administration under contract. A smaller civil service writes and oversees the contracts, and the firms that win them answer for results rather than procedure.",
+  "ru": "Частные фирмы выполняют значительную часть государственного управления по контракту. Меньший штат чиновников составляет контракты и следит за ними, а победившие в торгах фирмы отвечают за результат, а не за процедуру."
  },
  "law_corporate_genetic_licensing": {
   "en": "Corporate Genetic Licensing",
   "ru": "Корпоративное лицензирование генов"
  },
+ "law_corporate_genetic_licensing_desc": {
+  "en": "Genetic modification is a profitable enterprise, and its use is restricted to licensed corporations.",
+  "ru": "Генная модификация есть прибыльное предприятие, и её применение ограничено лицензированными корпорациями."
+ },
  "law_creative_commons": {
   "en": "Creative Commons",
   "ru": "Creative Commons"
+ },
+ "law_creative_commons_desc": {
+  "en": "Intellectual property protection is based on a Creative Commons philosophy, which encourages sharing and collaboration. Creators can choose from various licenses to determine how their works may be used, adapted, or redistributed by others.",
+  "ru": "Защита интеллектуальной собственности основана на философии Creative Commons, поощряющей обмен и сотрудничество. Авторы могут выбирать различные лицензии, определяющие, как другие могут использовать, адаптировать и распространять их работы."
  },
  "law_decentralized_cryptocurrency": {
   "en": "Decentralized Cryptocurrency",
   "ru": "Децентрализованная криптовалюта"
  },
+ "law_decentralized_cryptocurrency_desc": {
+  "en": "A monetary system built on distributed cryptographic networks rather than central bank authority. Transactions are pseudonymous and resistant to state control, enabling frictionless cross-border trade but undermining tax collection and amplifying financial volatility.",
+  "ru": "Денежная система, построенная на распределённых криптографических сетях, а не на власти центрального банка. Операции псевдонимны и неподконтрольны государству, что облегчает трансграничную торговлю, но подрывает сбор налогов и усиливает финансовую волатильность."
+ },
  "law_devolution": {
   "en": "Devolved Administration",
   "ru": "Делегированное управление"
+ },
+ "law_devolution_desc": {
+  "en": "Significant powers are delegated to regional governments, granting them a high degree of autonomy.",
+  "ru": "Значительные полномочия передаются региональным правительствам, давая им высокую степень автономии."
  },
  "law_digital_currency": {
   "en": "Digital Currency",
   "ru": "Цифровая валюта"
  },
+ "law_digital_currency_desc": {
+  "en": "A form of currency that exists only in digital form, with transactions conducted electronically.",
+  "ru": "Форма валюты, существующая только в цифровом виде, с электронными операциями."
+ },
  "law_direct_democracy": {
   "en": "Collective Governance",
   "ru": "Коллективное управление"
+ },
+ "law_direct_democracy_desc": {
+  "en": "No one person holds supreme executive power. Authority rests with a body of equals: an assembly of voters, a party presidium, a college of bureaus, a federation of communes or a council of the powerful, depending on who holds power. Whoever chairs it is first among equals, not a ruler.",
+  "ru": "Ни один человек не обладает верховной исполнительной властью. Власть принадлежит собранию равных: собранию избирателей, президиуму партии, коллегии бюро, федерации коммун или совету сильных, в зависимости от того, у кого власть. Кто бы ни председательствовал, он первый среди равных, а не правитель."
  },
  "law_directed_credit_development_banks": {
   "en": "Directed Credit & Development Banks",
   "ru": "Направленное кредитование и банки развития"
  },
+ "law_directed_credit_development_banks_desc": {
+  "en": "Private banks remain in the driver's seat, but state-backed development institutions co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.",
+  "ru": "Частные банки остаются за рулём, но государственные институты развития софинансируют приоритетные отрасли и принимают на себя риск, который частный капитал брать не станет. Государство направляет, но не владеет."
+ },
  "law_dirigisme": {
   "en": "Dirigiste Policy",
   "ru": "Дирижистская политика"
+ },
+ "law_dirigisme_desc": {
+  "en": "The state cultivates national champions, coordinates cartels under supervision, and steers investment for strategic aims, accepting higher concentration to accelerate development.",
+  "ru": "Государство взращивает национальных чемпионов, координирует картели под надзором и направляет инвестиции на стратегические цели, мирясь с большей концентрацией ради ускорения развития."
  },
  "law_donation_limits": {
   "en": "Donation Limits",
   "ru": "Ограничения пожертвований"
  },
+ "law_donation_limits_desc": {
+  "en": "Caps are placed on how much any single entity can donate to a political campaign, aiming to reduce the influence of wealth.",
+  "ru": "Устанавливаются пределы суммы, которую любое лицо может пожертвовать на политическую кампанию, чтобы снизить влияние богатства."
+ },
  "law_equal_inheritance": {
   "en": "Forced Heirship",
   "ru": "Обязательная доля наследства"
+ },
+ "law_equal_inheritance_desc": {
+  "en": "The law reserves every child a fixed share of the estate, as the Napoleonic Code does. Farms divide with each generation, so peasants have fewer children to keep the plot whole and stay on the land, while the great fortunes slowly dissolve.",
+  "ru": "Закон резервирует за каждым ребёнком фиксированную долю наследства, как это делает Кодекс Наполеона. Фермы делятся с каждым поколением, так что у крестьян меньше детей, чтобы сохранить участок целым и остаться на земле, а великие состояния медленно растворяются."
  },
  "law_executive_tribunals": {
   "en": "Executive Tribunals",
   "ru": "Исполнительные трибуналы"
  },
+ "law_executive_tribunals_desc": {
+  "en": "The officials who govern also judge. A magistrate collects the taxes, keeps the peace and hears the cases of the district, and a judge who displeases the ruler is replaced.",
+  "ru": "Чиновники, которые правят, также судят. Магистрат собирает налоги, поддерживает порядок и разбирает дела округа, а судья, не угодивший правителю, заменяется."
+ },
  "law_federal_system": {
   "en": "Federal System",
   "ru": "Федеративная система"
+ },
+ "law_federal_system_desc": {
+  "en": "Power is shared between the central government and its constituent political units.",
+  "ru": "Власть разделена между центральным правительством и входящими в него политическими единицами."
  },
  "law_feudal_contracts": {
   "en": "Traditional Vassalage",
   "ru": "Традиционный вассалитет"
  },
+ "law_feudal_contracts_desc": {
+  "en": "The state is a tapestry of personal oaths and traditional obligations.",
+  "ru": "Государство есть гобелен из личных клятв и традиционных обязательств."
+ },
  "law_fiat_currency": {
   "en": "Fiat Money",
   "ru": "Необеспеченные деньги"
+ },
+ "law_fiat_currency_desc": {
+  "en": "Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it.",
+  "ru": "Деньги, не имеющие внутренней стоимости и не обеспеченные физическим товаром. Их стоимость вытекает из доверия и уверенности тех, кто ими пользуется."
  },
  "law_fossil_expansion_moratorium": {
   "en": "Fossil Expansion Moratorium",
   "ru": "Мораторий на расширение добычи ископаемого топлива"
  },
+ "law_fossil_expansion_moratorium_desc": {
+  "en": "The country draws a line under the fossil economy's growth. What already burns may go on burning, but the age of new mines, rigs and plants is over.",
+  "ru": "Страна подводит черту под ростом ископаемой экономики. Что уже горит, может гореть и дальше, но эпоха новых шахт, буровых и электростанций окончена."
+ },
  "law_free_mutual_banking": {
   "en": "Free & Mutual Banking",
   "ru": "Свободный и взаимный банкинг"
+ },
+ "law_free_mutual_banking_desc": {
+  "en": "A patchwork of private and cooperative banks clears through mutual arrangements. Some informal coordination is possible, but there is no true central bank.",
+  "ru": "Лоскутное одеяло частных и кооперативных банков проводит расчёты по взаимным договорённостям. Возможна некоторая неформальная координация, но настоящего центрального банка нет."
  },
  "law_free_testation": {
   "en": "Freedom of Testation",
   "ru": "Свобода завещания"
  },
+ "law_free_testation_desc": {
+  "en": "The owner's will decides who inherits, and no share is reserved for the children. A family firm can pass whole to the heir who runs it, and a fortune can go to a foundation instead of a dynasty.",
+  "ru": "Воля владельца решает, кто наследует, и детям никакая доля не резервируется. Семейная фирма может перейти целиком к наследнику, который ею управляет, а состояние может достаться фонду вместо династии."
+ },
  "law_freedom_of_contract": {
   "en": "Freedom of Contract",
   "ru": "Свобода контрактов"
+ },
+ "law_freedom_of_contract_desc": {
+  "en": "The state largely abstains from competition policy. Firms may consolidate and coordinate absent fraud, prioritizing property rights and low administrative burden.",
+  "ru": "Государство в основном воздерживается от политики в области конкуренции. Фирмы могут объединяться и координироваться при отсутствии мошенничества, а приоритет отдаётся правам собственности и малой административной нагрузке."
  },
  "law_freedom_of_information": {
   "en": "Freedom of Information",
   "ru": "Свобода информации"
  },
+ "law_freedom_of_information_desc": {
+  "en": "Comprehensive laws guaranteeing the public's right to access government information, subject to certain exceptions for national security or privacy concerns.",
+  "ru": "Всеобъемлющие законы гарантируют право общества на доступ к государственной информации, с некоторыми исключениями из соображений национальной безопасности или неприкосновенности частной жизни."
+ },
  "law_full_equality_and_protection": {
   "en": "Full Equality and Protection",
   "ru": "Полное равенство и защита"
+ },
+ "law_full_equality_and_protection_desc": {
+  "en": "LGBTQ+ individuals enjoy full legal and social equality under [concept_lgbtq_rights_movement] legislation, including marriage equality and adoption rights with robust protections against [concept_discrimination] and hate crimes.",
+  "ru": "Лица ЛГБТК+ пользуются полным правовым и социальным равенством по законодательству о [Concept('concept_lgbtq_rights_movement','ЛГБТК+')], включая равенство браков и право на усыновление, с надёжной защитой от [Concept('concept_discrimination','дискриминации')] и преступлений на почве ненависти."
  },
  "law_gold_standard": {
   "en": "Gold Standard",
   "ru": "Золотой стандарт"
  },
+ "law_gold_standard_desc": {
+  "en": "The currency is backed by a fixed amount of gold, and the government guarantees to exchange paper money for gold at a fixed rate.",
+  "ru": "Валюта обеспечена фиксированным количеством золота, и правительство гарантирует обмен бумажных денег на золото по фиксированному курсу."
+ },
  "law_guilds_chartered_monopolies": {
   "en": "Guilds and Chartered Monopolies",
   "ru": "Гильдии и привилегированные монополии"
+ },
+ "law_guilds_chartered_monopolies_desc": {
+  "en": "Exclusive charters and guild privileges govern market entry. Rents flow to the crown and corporations, trading dynamism for stability and control.",
+  "ru": "Исключительные хартии и привилегии гильдий регулируют вход на рынок. Рента течёт короне и корпорациям, динамизм обменивается на стабильность и контроль."
  },
  "law_human_labor_quotas": {
   "en": "Human Labor Quotas",
   "ru": "Квоты на человеческий труд"
  },
+ "law_human_labor_quotas_desc": {
+  "en": "Work that people can do is kept for people. Factories, shops and farms keep their staff and give up what the machines would have made.",
+  "ru": "Работа, которую могут делать люди, остаётся людям. Фабрики, лавки и фермы сохраняют свой штат и отказываются от того, что произвели бы машины."
+ },
  "law_human_purity": {
   "en": "Human Purity",
   "ru": "Чистота человека"
+ },
+ "law_human_purity_desc": {
+  "en": "[concept_human_augmentation_system] is strictly prohibited, based on the belief that human beings should remain in their natural state. Laws enforce the preservation of human purity, and those attempting to modify themselves face severe penalties.",
+  "ru": "[concept_human_augmentation_system] строго запрещена, исходя из убеждения, что человек должен оставаться в своём естественном состоянии. Законы обеспечивают сохранение чистоты человека, а тем, кто пытается изменить себя, грозят суровые наказания."
  },
  "law_humanitarian_regulations": {
   "en": "Humanitarian Regulations",
   "ru": "Гуманитарное регулирование"
  },
+ "law_humanitarian_regulations_desc": {
+  "en": "Comprehensive protections for civilians, prisoners of war and the wounded and sick of both sides. A nation that keeps them is trusted to keep its other promises, and more of its own wounded come home. Strategic nuclear strikes are forbidden unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
+  "ru": "Всеобъемлющая защита гражданских лиц, военнопленных, раненых и больных обеих сторон. Нации, соблюдающей её, доверяют и в других обещаниях, и больше её раненых возвращается домой. Стратегические ядерные удары запрещены, если только мы или страна под нашей защитой не подверглись удару или нам в идущей войне не грозит аннексия или подчинение."
+ },
  "law_informal_government_secrecy": {
   "en": "Informal Government Secrecy",
   "ru": "Неформальная секретность правительства"
+ },
+ "law_informal_government_secrecy_desc": {
+  "en": "Limited transparency and accountability, with government information kept confidential and access restricted to certain officials or agencies.",
+  "ru": "Ограниченная прозрачность и подотчётность: государственная информация конфиденциальна, а доступ к ней ограничен определёнными чиновниками или ведомствами."
  },
  "law_international_ai_oversight": {
   "en": "International Oversight",
   "ru": "Международный надзор"
  },
+ "law_international_ai_oversight_desc": {
+  "en": "Under a treaty administered through the United Nations, our laboratories report every large training run and open their doors to international inspectors, as nuclear plants do.",
+  "ru": "По договору, который администрирует Организация Объединённых Наций, наши лаборатории сообщают о каждом крупном обучении и открывают двери международным инспекторам, как атомные станции."
+ },
+ "law_international_ai_oversight_falls_tt": {
+  "en": "If we leave the United Nations, or it dissolves, this law falls to $law_national_ai_licensing$",
+  "ru": "Если мы покинем Организацию Объединённых Наций или она распадётся, этот закон сменится законом «$law_national_ai_licensing$»"
+ },
+ "law_international_ai_oversight_needs_un_tt": {
+  "en": "We are a member of the United Nations",
+  "ru": "Мы член Организации Объединённых Наций"
+ },
  "law_intrusive_surveillance": {
   "en": "Intrusive Surveillance System",
   "ru": "Система тотальной слежки"
+ },
+ "law_intrusive_surveillance_desc": {
+  "en": "An extensive surveillance system monitors citizens' activities, both online and offline. Personal information is collected, stored, and used by the government to control and manipulate society, with little or no privacy protection.",
+  "ru": "Обширная система слежения отслеживает действия граждан как онлайн, так и офлайн. Правительство собирает, хранит и использует личные данные, чтобы контролировать общество и манипулировать им, почти или совсем не защищая частную жизнь."
  },
  "law_judicial_supremacy": {
   "en": "Judicial Supremacy",
   "ru": "Верховенство судов"
  },
+ "law_judicial_supremacy_desc": {
+  "en": "The courts decide only the cases brought before them, and the government still governs. But the courts' reading of the constitution binds the legislature, reaches rights the text does not name, and no ordinary law can overturn it.",
+  "ru": "Суды решают лишь поступившие к ним дела, а правительство по-прежнему правит. Но толкование конституции судами связывает законодательную власть, распространяется на права, которых текст не называет, и никакой обычный закон не может его отменить."
+ },
  "law_legal_limbo": {
   "en": "Legal Limbo",
   "ru": "Правовая неопределённость"
+ },
+ "law_legal_limbo_desc": {
+  "en": "LGBTQ+ rights are neither criminalized nor protected, and authorities mostly ignore the issue. This leaves LGBTQ+ individuals vulnerable to [concept_lgbtq_rights_movement] gaps, leaving them [concept_discrimination] and mistreatment, with no legal recourse or support.",
+  "ru": "Права ЛГБТК+ не криминализованы и не защищены, а власти в основном игнорируют вопрос. Из-за этого лица ЛГБТК+ уязвимы перед пробелами в правах [Concept('concept_lgbtq_rights_movement','ЛГБТК+')] и остаются без защиты от [Concept('concept_discrimination','дискриминации')] и дурного обращения, без правовой помощи и поддержки."
  },
  "law_licensed_modification": {
   "en": "Licensed Modification",
   "ru": "Лицензированные модификации"
  },
+ "law_licensed_modification_desc": {
+  "en": "Licensed clinics may reshape an adult's body on request, after counseling and a waiting period. Boards decide which changes are safe and which go too far, and a modified citizen's papers record what was done.",
+  "ru": "Лицензированные клиники могут по просьбе перестроить тело взрослого после консультации и срока ожидания. Комиссии решают, какие изменения безопасны, а какие заходят слишком далеко, и в документах изменённого гражданина записано, что было сделано."
+ },
  "law_limited_war": {
   "en": "Limited War",
   "ru": "Ограниченная война"
+ },
+ "law_limited_war_desc": {
+  "en": "War is fought for limited aims with proportionate force, sparing civilians and civilian [concept_infrastructure]. Crises are slow to become wars, and the public follows the fighting from a distance. No nuclear strike, strategic or tactical, may be ordered except in answer to one or to save the nation.",
+  "ru": "Война ведётся ради ограниченных целей соразмерной силой, с пощадой гражданских лиц и гражданской [Concept('concept_infrastructure','инфраструктуры')]. Кризисы медленно перерастают в войны, а общество наблюдает за боями со стороны. Ядерный удар, стратегический или тактический, нельзя приказать, кроме как в ответ на такой же или ради спасения нации."
  },
  "law_linguistic_purity": {
   "en": "Linguistic Purity",
   "ru": "Языковая чистота"
  },
+ "law_linguistic_purity_desc": {
+  "en": "The state suppresses minority languages in public life and enforces a single national language as a marker of loyalty and identity.",
+  "ru": "Государство подавляет языки меньшинств в общественной жизни и навязывает единый национальный язык как знак верности и идентичности."
+ },
  "law_liquid_democracy": {
   "en": "Liquid Democracy",
   "ru": "Жидкая демократия"
+ },
+ "law_liquid_democracy_desc": {
+  "en": "Every citizen may vote on every question put to the nation, or delegate the vote, issue by issue, to anyone they trust. A delegation can be withdrawn at any moment, so those who carry many votes carry them only as long as their voters allow.",
+  "ru": "Каждый гражданин может голосовать по любому вопросу, вынесенному на уровень нации, или делегировать голос по каждому вопросу тому, кому доверяет. Делегирование можно отозвать в любой момент, поэтому те, у кого много голосов, держат их лишь столько, сколько позволяют избиратели."
  },
  "law_littoral_defense": {
   "en": "Littoral Defense",
   "ru": "Прибрежная оборона"
  },
+ "law_littoral_defense_desc": {
+  "en": "The fleet exists to defend the home coast, not to project power abroad. Dense flotillas of small craft and reinforced coastal [concept_fortification_system] make landings costly for any aggressor, but the navy cannot operate far from port and capital ships are deliberately neglected.",
+  "ru": "Флот существует, чтобы защищать родное побережье, а не проецировать силу за рубежом. Плотные флотилии малых судов и усиленные береговые [Concept('concept_fortification_system','укрепления')] делают высадку дорогой для любого агрессора, но флот не может действовать вдали от порта, а линейные корабли сознательно заброшены."
+ },
  "law_local_vernacular": {
   "en": "Local Vernacular",
   "ru": "Местные наречия"
+ },
+ "law_local_vernacular_desc": {
+  "en": "Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.",
+  "ru": "Управление и школьное обучение следуют местным обычаям. Государство не устанавливает единого языкового стандарта, из-за чего возникает лоскутное одеяло практик и идентичностей."
  },
  "law_managed_fossil_phaseout": {
   "en": "Managed Fossil Phaseout",
   "ru": "Управляемый отказ от ископаемого топлива"
  },
+ "law_managed_fossil_phaseout_desc": {
+  "en": "The state takes charge of the fossil economy's decline. Rather than wait for the market or the climate to force the issue, it buys out the mines, rigs and plants and closes them in an orderly retreat.",
+  "ru": "Государство берёт на себя упадок ископаемой экономики. Не дожидаясь, пока рынок или климат вынудят к этому, оно выкупает шахты, буровые и электростанции и закрывает их в порядке организованного отступления."
+ },
  "law_mandatory_augmentation": {
   "en": "Mandatory Augmentation",
   "ru": "Обязательная аугментация"
+ },
+ "law_mandatory_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] is not only allowed but mandatory for certain segments of the population or specific roles, such as military personnel or other specialized [Concept('concept_profession', 'professions')]. The government enforces and oversees the augmentation process.",
+  "ru": "[concept_human_augmentation_system] не просто разрешена, а обязательна для определённых слоёв населения или конкретных ролей, например военнослужащих и других специализированных [Concept('concept_profession','профессий')]. Правительство обеспечивает и контролирует процесс аугментации."
  },
  "law_medical_augmentation_only": {
   "en": "Medical Augmentation Only",
   "ru": "Только медицинская аугментация"
  },
+ "law_medical_augmentation_only_desc": {
+  "en": "[concept_human_augmentation_system] is strictly regulated and limited to medical purposes, such as correcting disabilities or treating severe illnesses. Enhancement of human abilities beyond natural limitations is prohibited.",
+  "ru": "[concept_human_augmentation_system] строго регулируется и ограничена медицинскими целями, например исправлением инвалидности или лечением тяжёлых болезней. Усиление человеческих способностей сверх естественных пределов запрещено."
+ },
  "law_minimal_privacy_protection": {
   "en": "Minimal Privacy Protection",
   "ru": "Минимальная защита частной жизни"
+ },
+ "law_minimal_privacy_protection_desc": {
+  "en": "Basic privacy rights exist, primarily focused on physical spaces. No comprehensive [concept_digital_rights_system] framework exists for data protection or surveillance restrictions.",
+  "ru": "Базовые права на частную жизнь существуют, в основном в отношении физических пространств. Всеобъемлющей рамки [concept_digital_rights_system|l] для защиты данных или ограничения слежки нет."
  },
  "law_ministry_of_commerce": {
   "en": "Ministry of Commerce Established",
   "ru": "Министерство торговли учреждено"
  },
+ "law_ministry_of_commerce_desc": {
+  "en": "The Ministry of Commerce regulates trade policies, promotes economic growth, and ensures fair business practices.",
+  "ru": "Министерство торговли регулирует торговую политику, содействует экономическому росту и обеспечивает честную деловую практику."
+ },
  "law_ministry_of_consumer_protection": {
   "en": "Ministry of Consumer Protection Established",
   "ru": "Министерство защиты прав потребителей учреждено"
+ },
+ "law_ministry_of_consumer_protection_desc": {
+  "en": "The Ministry of Consumer Protection manages the nation's consumer protection efforts, including the regulation of product safety and the enforcement of consumer rights.",
+  "ru": "Министерство защиты прав потребителей ведёт работу государства по защите потребителей, включая регулирование безопасности продукции и соблюдение прав потребителей."
  },
  "law_ministry_of_culture": {
   "en": "Ministry of Culture Established",
   "ru": "Министерство культуры учреждено"
  },
+ "law_ministry_of_culture_desc": {
+  "en": "The Ministry of Culture promotes the nation's cultural heritage, arts, and creative industries, fostering national identity and cultural diversity.",
+  "ru": "Министерство культуры содействует культурному наследию, искусству и творческим отраслям страны, укрепляя национальную идентичность и культурное разнообразие."
+ },
  "law_ministry_of_foreign_affairs": {
   "en": "Ministry of Foreign Affairs Established",
   "ru": "Министерство иностранных дел учреждено"
+ },
+ "law_ministry_of_foreign_affairs_desc": {
+  "en": "The Ministry of Foreign Affairs manages the nation's diplomatic relations, international treaties, and foreign policy.",
+  "ru": "Министерство иностранных дел ведёт дипломатические отношения, международные договоры и внешнюю политику страны."
  },
  "law_ministry_of_intelligence_and_security": {
   "en": "Ministry of Intelligence and Security Established",
   "ru": "Министерство разведки и безопасности учреждено"
  },
+ "law_ministry_of_intelligence_and_security_desc": {
+  "en": "The Ministry of Intelligence and Security manages national security, conducting intelligence operations and ensuring internal stability.",
+  "ru": "Министерство разведки и безопасности ведает национальной безопасностью, проводит разведывательные операции и обеспечивает внутреннюю стабильность."
+ },
  "law_ministry_of_international_aid": {
   "en": "Ministry of International Aid Established",
   "ru": "Министерство международной помощи учреждено"
+ },
+ "law_ministry_of_international_aid_desc": {
+  "en": "The Ministry of International Aid manages the nation's international aid efforts, including the provision of humanitarian assistance and the promotion of development.",
+  "ru": "Министерство международной помощи ведёт международную помощь страны, включая оказание гуманитарной поддержки и содействие развитию."
  },
  "law_ministry_of_propaganda": {
   "en": "Ministry of Propaganda Established",
   "ru": "Министерство пропаганды учреждено"
  },
+ "law_ministry_of_propaganda_desc": {
+  "en": "The Ministry of Propaganda manages the nation's propaganda efforts, including the dissemination of information and the promotion of government policies.",
+  "ru": "Министерство пропаганды ведёт пропагандистскую работу страны, включая распространение информации и продвижение политики правительства."
+ },
  "law_ministry_of_refugee_affairs": {
   "en": "Ministry of Refugee Affairs Established",
   "ru": "Министерство по делам беженцев учреждено"
+ },
+ "law_ministry_of_refugee_affairs_desc": {
+  "en": "The Ministry of Refugee Affairs manages the nation's refugee policies, including the processing of asylum claims and the resettlement of refugees.",
+  "ru": "Министерство по делам беженцев ведёт политику страны в отношении беженцев, включая рассмотрение просьб об убежище и расселение беженцев."
  },
  "law_ministry_of_religion": {
   "en": "Ministry of Religion Established",
   "ru": "Министерство по делам религий учреждено"
  },
+ "law_ministry_of_religion_desc": {
+  "en": "The Ministry of Religion manages the nation's religious affairs, including the regulation of religious institutions and the enforcement of religious laws.",
+  "ru": "Министерство по делам религий ведает религиозными делами страны, включая регулирование религиозных институтов и соблюдение религиозных законов."
+ },
  "law_ministry_of_science": {
   "en": "Ministry of Science Established",
   "ru": "Министерство науки учреждено"
+ },
+ "law_ministry_of_science_desc": {
+  "en": "The Ministry of Science manages the nation's scientific research, technological development, and innovation efforts.",
+  "ru": "Министерство науки ведёт научные исследования, технологическое развитие и инновационную работу страны."
  },
  "law_ministry_of_the_environment": {
   "en": "Ministry of the Environment Established",
   "ru": "Министерство окружающей среды учреждено"
  },
+ "law_ministry_of_the_environment_desc": {
+  "en": "The Ministry of Environment is tasked with the protection and conservation of the [concept_pollution_system] and the nation's natural resources, implementing policies for clean air, water, and soil.",
+  "ru": "Министерство окружающей среды отвечает за борьбу с [Concept('concept_pollution_system','загрязнением')], охрану и сохранение природных ресурсов страны и проводит политику чистого воздуха, воды и почвы."
+ },
  "law_ministry_of_thought_control": {
   "en": "Ministry of Thought Control Established",
   "ru": "Министерство контроля над мыслью учреждено"
+ },
+ "law_ministry_of_thought_control_desc": {
+  "en": "The Ministry of Thought Control manages the nation's censorship and surveillance efforts, including the monitoring of communications and the suppression of dissent.",
+  "ru": "Министерство контроля над мыслью ведёт цензуру и слежку в стране, включая контроль связи и подавление инакомыслия."
  },
  "law_ministry_of_urban_planning": {
   "en": "Ministry of Urban Planning Established",
   "ru": "Министерство градостроительства учреждено"
  },
+ "law_ministry_of_urban_planning_desc": {
+  "en": "The Ministry of Urban Planning manages the nation's urban planning efforts, including the development of [concept_infrastructure] and the regulation of land use.",
+  "ru": "Министерство градостроительства ведёт градостроительную работу страны, включая развитие [Concept('concept_infrastructure','инфраструктуры')] и регулирование землепользования."
+ },
  "law_ministry_of_war": {
   "en": "Ministry of War Established",
   "ru": "Военное министерство учреждено"
+ },
+ "law_ministry_of_war_desc": {
+  "en": "The Ministry of War is responsible for the defense of the nation, overseeing military strategy, operations, and personnel.",
+  "ru": "Военное министерство отвечает за оборону страны и руководит военной стратегией, операциями и личным составом."
  },
  "law_minority_rights_affirmative_action": {
   "en": "Affirmative Action",
   "ru": "Позитивная дискриминация"
  },
+ "law_minority_rights_affirmative_action_desc": {
+  "en": "The government implements policies to address historical [concept_discrimination] and promote equal opportunities for minority groups.",
+  "ru": "Правительство проводит политику, направленную на исправление исторической [Concept('concept_discrimination','дискриминации')] и равные возможности для групп меньшинств."
+ },
  "law_minority_rights_cultural_assimilation": {
   "en": "Cultural Assimilation",
   "ru": "Культурная ассимиляция"
+ },
+ "law_minority_rights_cultural_assimilation_desc": {
+  "en": "The government promotes the [concept_assimilation] of minority groups into the dominant culture, suppressing their distinct identities and traditions.",
+  "ru": "Правительство способствует [Concept('concept_assimilation','ассимиляции')] групп меньшинств в господствующую культуру, подавляя их особую идентичность и традиции."
  },
  "law_minority_rights_discrimination": {
   "en": "Discrimination",
   "ru": "Дискриминация"
  },
+ "law_minority_rights_discrimination_desc": {
+  "en": "The government discriminates against minority groups, treating them as second-class citizens and limiting their rights and opportunities.",
+  "ru": "Правительство дискриминирует группы меньшинств, обращаясь с ними как с гражданами второго сорта и ограничивая их права и возможности."
+ },
  "law_minority_rights_ghettoization": {
   "en": "Ghettoization",
   "ru": "Геттоизация"
+ },
+ "law_minority_rights_ghettoization_desc": {
+  "en": "The government enforces segregation and isolation of minority groups, confining them to specific areas or neighborhoods.",
+  "ru": "Правительство проводит сегрегацию и изоляцию групп меньшинств, ограничивая их определёнными районами или кварталами."
  },
  "law_minority_rights_indifference": {
   "en": "Indifference",
   "ru": "Безразличие"
  },
+ "law_minority_rights_indifference_desc": {
+  "en": "The government is indifferent to the rights and needs of minority groups, neither actively supporting nor oppressing them.",
+  "ru": "Правительство безразлично к правам и нуждам групп меньшинств: оно ни активно поддерживает, ни угнетает их."
+ },
  "law_minority_rights_protection": {
   "en": "Protection",
   "ru": "Защита"
+ },
+ "law_minority_rights_protection_desc": {
+  "en": "The government actively protects the rights and interests of minority groups, ensuring their safety, equality, and opportunities.",
+  "ru": "Правительство активно защищает права и интересы групп меньшинств, обеспечивая их безопасность, равенство и возможности."
  },
  "law_minority_rights_violent_hostility": {
   "en": "Violent Hostility",
   "ru": "Насильственная враждебность"
  },
+ "law_minority_rights_violent_hostility_desc": {
+  "en": "Minorities are violently oppressed by the government.",
+  "ru": "Правительство жестоко угнетает меньшинства."
+ },
  "law_moderate_data_privacy": {
   "en": "Moderate Data Privacy",
   "ru": "Умеренная защита данных"
+ },
+ "law_moderate_data_privacy_desc": {
+  "en": "Comprehensive data protection laws are in place, including limitations on government surveillance and private data collection. Exceptions exist for national security or public interest purposes, and enforcement may be inconsistent.",
+  "ru": "Действуют всеобъемлющие законы о защите данных, включая ограничения государственной слежки и частного сбора данных. Есть исключения в интересах национальной безопасности или общества, а соблюдение может быть неровным."
  },
  "law_morphological_freedom": {
   "en": "Morphological Freedom",
   "ru": "Морфологическая свобода"
  },
+ "law_morphological_freedom_desc": {
+  "en": "A person's body is theirs to remake. Adults may change their appearance, sex characteristics and shape as they choose, and the state asks only that the work be done safely. A citizen with a tail is still a citizen.",
+  "ru": "Тело человека принадлежит ему, и он вправе его переделывать. Взрослые могут менять внешность, половые признаки и облик по своему выбору, а государство требует лишь, чтобы работа была сделана безопасно. Гражданин с хвостом остаётся гражданином."
+ },
  "law_multilingual_federalism": {
   "en": "Multilingual Federalism",
   "ru": "Многоязычный федерализм"
+ },
+ "law_multilingual_federalism_desc": {
+  "en": "Multiple co-official languages are recognized by region, with rights to courts, schooling, and administration in the local tongue and a federal lingua franca for coordination.",
+  "ru": "По регионам признаются несколько равноправных официальных языков, с правом на суд, школу и управление на местном языке и общей федеральной лингва франка для координации."
  },
  "law_national_ai_licensing": {
   "en": "National Licensing",
   "ru": "Национальное лицензирование"
  },
+ "law_national_ai_licensing_desc": {
+  "en": "Training a model beyond a set size needs a license. The labs stay in private hands, but they submit their systems for testing, and a regulator decides what may be released.",
+  "ru": "Обучение модели свыше определённого размера требует лицензии. Лаборатории остаются в частных руках, но представляют свои системы на проверку, а регулятор решает, что можно выпускать."
+ },
  "law_national_bank": {
   "en": "National Bank Established",
   "ru": "Национальный банк учреждён"
+ },
+ "law_national_bank_desc": {
+  "en": "The National Bank oversees the country's monetary policy and the [concept_banking_cycle], ensuring economic stability and [concept_financial_regulation].",
+  "ru": "Национальный банк ведает денежной политикой страны и [Concept('concept_banking_cycle','банковским циклом')], обеспечивая экономическую стабильность и [Concept('concept_financial_regulation','финансовое регулирование')]."
  },
  "law_natural_form": {
   "en": "Natural Form",
   "ru": "Естественная форма"
  },
+ "law_natural_form_desc": {
+  "en": "The law makes no room for changing a body for its own sake. Surgery and gene therapy are for the sick and the injured, and a body is expected to look as it was born. Those who want more must go abroad, or to the back-street clinics.",
+  "ru": "Закон не оставляет места для изменения тела ради самого изменения. Хирургия и генная терапия предназначены для больных и раненых, а тело должно выглядеть таким, каким родилось. Кто хочет большего, должен уехать за границу или обратиться в подпольные клиники."
+ },
  "law_neocameralism": {
   "en": "Neocameralism",
   "ru": "Неокамерализм"
+ },
+ "law_neocameralism_desc": {
+  "en": "A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.",
+  "ru": "Политическая система, в которой государство устроено как акционерная корпорация, а акционеры контролируют государственные функции и политику."
  },
  "law_neocolonialism": {
   "en": "Neocolonialism",
   "ru": "Неоколониализм"
  },
+ "law_neocolonialism_desc": {
+  "en": "A [concept_decolonization_system]-era form of indirect control and exploitation where powerful nations or corporations exert influence over less developed countries, often through economic, political, or cultural means.",
+  "ru": "Форма косвенного контроля и эксплуатации эпохи [Concept('concept_decolonization_system','деколонизации')], при которой могущественные страны или корпорации влияют на менее развитые страны, часто экономическими, политическими или культурными средствами."
+ },
  "law_net_neutrality": {
   "en": "Net Neutrality",
   "ru": "Сетевой нейтралитет"
+ },
+ "law_net_neutrality_desc": {
+  "en": "All internet data must be treated equally, preventing service providers from creating 'fast lanes' for preferred content.",
+  "ru": "Все интернет-данные должны обрабатываться одинаково, что мешает провайдерам создавать «быстрые полосы» для предпочитаемого контента."
  },
  "law_no_augmentation": {
   "en": "No Augmentation",
   "ru": "Без аугментации"
  },
+ "law_no_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] technologies mostly do not exist or are in their infancy. No augmentations have been allowed to market and society has not yet addressed the ethical, legal, and social implications of human modification.",
+  "ru": "Технологии [concept_human_augmentation_system|l] в основном не существуют или находятся в зачаточном состоянии. Ни одна аугментация не допущена на рынок, а общество ещё не осмыслило этические, правовые и социальные последствия изменения человека."
+ },
  "law_no_campaign_finance_laws": {
   "en": "No Campaign Finance Laws",
   "ru": "Без законов о финансировании кампаний"
+ },
+ "law_no_campaign_finance_laws_desc": {
+  "en": "The state does not regulate political donations, as no formal elections take place.",
+  "ru": "Государство не регулирует политические пожертвования, так как формальных выборов нет."
  },
  "law_no_frontier_ai_policy": {
   "en": "No Frontier AI Policy",
   "ru": "Без политики в отношении передового ИИ"
  },
+ "law_no_frontier_ai_policy_closed_tt": {
+  "en": "Only before $ai_agents$: once machines act on their own, the frontier has to be governed",
+  "ru": "Только до появления «$ai_agents$»: когда машины действуют сами, рубежом нужно управлять"
+ },
+ "law_no_frontier_ai_policy_desc": {
+  "en": "No machine yet acts on its own, so there is no frontier to govern. The question waits on the technology.",
+  "ru": "Ни одна машина пока не действует сама, так что управлять рубежом нечем. Вопрос ждёт технологии."
+ },
  "law_no_internet_policy": {
   "en": "No Internet Policy",
   "ru": "Без интернет-политики"
+ },
+ "law_no_internet_policy_desc": {
+  "en": "The state has no policy regarding the governance of global digital networks.",
+  "ru": "У государства нет политики в отношении управления глобальными цифровыми сетями."
  },
  "law_no_ip_protection": {
   "en": "No IP Protection",
   "ru": "Без защиты интеллектуальной собственности"
  },
+ "law_no_ip_protection_desc": {
+  "en": "Intellectual property is not recognized or protected, allowing for open creation, distribution, and use of inventions, artistic works, and other forms of intellectual property without legal consequences or restrictions.",
+  "ru": "Интеллектуальная собственность не признаётся и не защищается, что позволяет свободно создавать, распространять и использовать изобретения, произведения искусства и другие формы интеллектуальной собственности без правовых последствий и ограничений."
+ },
  "law_no_ministry_of_commerce": {
   "en": "No Ministry of Commerce",
   "ru": "Без министерства торговли"
+ },
+ "law_no_ministry_of_commerce_desc": {
+  "en": "We have no Ministry of Commerce.",
+  "ru": "У нас нет министерства торговли."
  },
  "law_no_ministry_of_consumer_protection": {
   "en": "No Ministry of Consumer Protection",
   "ru": "Без министерства защиты прав потребителей"
  },
+ "law_no_ministry_of_consumer_protection_desc": {
+  "en": "We have no Ministry of Consumer Protection.",
+  "ru": "У нас нет министерства защиты прав потребителей."
+ },
  "law_no_ministry_of_culture": {
   "en": "No Ministry of Culture",
   "ru": "Без министерства культуры"
+ },
+ "law_no_ministry_of_culture_desc": {
+  "en": "We have no Ministry of Culture.",
+  "ru": "У нас нет министерства культуры."
  },
  "law_no_ministry_of_foreign_affairs": {
   "en": "No Ministry of Foreign Affairs",
   "ru": "Без министерства иностранных дел"
  },
+ "law_no_ministry_of_foreign_affairs_desc": {
+  "en": "We have no Ministry of Foreign Affairs.",
+  "ru": "У нас нет министерства иностранных дел."
+ },
  "law_no_ministry_of_intelligence_and_security": {
   "en": "No Ministry of Intelligence and Security",
   "ru": "Без министерства разведки и безопасности"
+ },
+ "law_no_ministry_of_intelligence_and_security_desc": {
+  "en": "We have no Ministry of Intelligence and Security.",
+  "ru": "У нас нет министерства разведки и безопасности."
  },
  "law_no_ministry_of_international_aid": {
   "en": "No Ministry of International Aid",
   "ru": "Без министерства международной помощи"
  },
+ "law_no_ministry_of_international_aid_desc": {
+  "en": "We have no Ministry of International Aid.",
+  "ru": "У нас нет министерства международной помощи."
+ },
  "law_no_ministry_of_labor": {
   "en": "No Ministry of Labor",
   "ru": "Без министерства труда"
+ },
+ "law_no_ministry_of_labor_desc": {
+  "en": "We have no Ministry of Labor.",
+  "ru": "У нас нет министерства труда."
  },
  "law_no_ministry_of_propaganda": {
   "en": "No Ministry of Propaganda",
   "ru": "Без министерства пропаганды"
  },
+ "law_no_ministry_of_propaganda_desc": {
+  "en": "We have no Ministry of Propaganda.",
+  "ru": "У нас нет министерства пропаганды."
+ },
  "law_no_ministry_of_refugee_affairs": {
   "en": "No Ministry of Refugee Affairs",
   "ru": "Без министерства по делам беженцев"
+ },
+ "law_no_ministry_of_refugee_affairs_desc": {
+  "en": "We have no Ministry of Refugee Affairs.",
+  "ru": "У нас нет министерства по делам беженцев."
  },
  "law_no_ministry_of_religion": {
   "en": "No Ministry of Religion",
   "ru": "Без министерства по делам религий"
  },
+ "law_no_ministry_of_religion_desc": {
+  "en": "We have no Ministry of Religion.",
+  "ru": "У нас нет министерства по делам религий."
+ },
  "law_no_ministry_of_science": {
   "en": "No Ministry of Science",
   "ru": "Без министерства науки"
+ },
+ "law_no_ministry_of_science_desc": {
+  "en": "We have no Ministry of Science.",
+  "ru": "У нас нет министерства науки."
  },
  "law_no_ministry_of_the_environment": {
   "en": "No Ministry of the Environment",
   "ru": "Без министерства окружающей среды"
  },
+ "law_no_ministry_of_the_environment_desc": {
+  "en": "We have no Ministry of the Environment.",
+  "ru": "У нас нет министерства окружающей среды."
+ },
  "law_no_ministry_of_thought_control": {
   "en": "No Ministry of Thought Control",
   "ru": "Без министерства контроля над мыслью"
+ },
+ "law_no_ministry_of_thought_control_desc": {
+  "en": "We have no Ministry of Thought Control.",
+  "ru": "У нас нет министерства контроля над мыслью."
  },
  "law_no_ministry_of_urban_planning": {
   "en": "No Ministry of Urban Planning",
   "ru": "Без министерства градостроительства"
  },
+ "law_no_ministry_of_urban_planning_desc": {
+  "en": "We have no Ministry of Urban Planning.",
+  "ru": "У нас нет министерства градостроительства."
+ },
  "law_no_ministry_of_war": {
   "en": "No Ministry of War",
   "ru": "Без военного министерства"
+ },
+ "law_no_ministry_of_war_desc": {
+  "en": "We have no Ministry of War.",
+  "ru": "У нас нет военного министерства."
  },
  "law_no_national_bank": {
   "en": "No National Bank",
   "ru": "Без национального банка"
  },
+ "law_no_national_bank_desc": {
+  "en": "We have no National Bank.",
+  "ru": "У нас нет национального банка."
+ },
  "law_non_inheritable_usage_rights": {
   "en": "Possession by Use",
   "ru": "Владение по использованию"
+ },
+ "law_non_inheritable_usage_rights_desc": {
+  "en": "Land and workshops belong to those who work them, not to an owner who can bequeath them. When a holder dies, the commune that uses the holding reallocates it; nothing passes to the state. With nothing to leave their children, families save less.",
+  "ru": "Земля и мастерские принадлежат тем, кто на них работает, а не владельцу, который может их завещать. Когда держатель умирает, община, пользующаяся наделом, перераспределяет его; государству ничего не переходит. Семьи, которым нечего оставить детям, меньше сберегают."
  },
  "law_open_government": {
   "en": "Open Government",
   "ru": "Открытое правительство"
  },
+ "law_open_government_desc": {
+  "en": "Government operates with transparency and accountability, proactively providing public access to information, decision-making processes, and official records.",
+  "ru": "Правительство работает прозрачно и подотчётно, заблаговременно открывая обществу доступ к информации, процессам принятия решений и официальным документам."
+ },
  "law_open_source_genetics": {
   "en": "Open-Source Genetics",
   "ru": "Генетика с открытым кодом"
+ },
+ "law_open_source_genetics_desc": {
+  "en": "The genetic code is the shared heritage of all life; research and modification are placed in the public domain to accelerate progress.",
+  "ru": "Генетический код есть общее наследие всего живого; исследования и модификации передаются в общественное достояние, чтобы ускорить прогресс."
  },
  "law_open_source_innovation": {
   "en": "Open Source Innovation",
   "ru": "Инновации с открытым кодом"
  },
+ "law_open_source_innovation_desc": {
+  "en": "Intellectual property protection is geared towards fostering innovation and collaboration, with a focus on open-source [Concept('concept_power_bloc_principle', 'principles')]. Creators are encouraged to share their work, while still retaining certain rights and receiving recognition for their contributions.",
+  "ru": "Защита интеллектуальной собственности направлена на поощрение инноваций и сотрудничества, с упором на [Concept('concept_power_bloc_principle','принципы')] открытого исходного кода. Авторов поощряют делиться своей работой, сохраняя при этом некоторые права и получая признание за вклад."
+ },
  "law_open_weights": {
   "en": "Open Weights",
   "ru": "Открытые веса"
+ },
+ "law_open_weights_desc": {
+  "en": "Frontier models must be published in full, for anyone to study, run and improve. Nothing at the frontier stays secret for long, here or abroad.",
+  "ru": "Передовые модели должны публиковаться полностью, чтобы любой мог их изучать, запускать и улучшать. Ничто на переднем крае не остаётся тайной надолго, ни у нас, ни за рубежом."
+ },
+ "law_open_weights_world_spread_tt": {
+  "en": "While we are a [concept_major_power] or greater, every country gains #v +100#! [concept_technology_spread] from $global_technological_development$, up to #v +300#! from all the countries that hold this law",
+  "ru": "Пока мы [concept_major_power|l] или выше, каждая страна получает #v +100#! к [Concept('concept_technology_spread','распространению технологий')] от «$global_technological_development$», до #v +300#! от всех стран, у которых действует этот закон"
  },
  "law_partible": {
   "en": "Customary Inheritance",
   "ru": "Обычное наследование"
  },
+ "law_partible_desc": {
+  "en": "No national rule decides who inherits: local custom does, so estates are divided in one province and kept whole in the next.",
+  "ru": "Наследование определяется не национальным правилом, а местным обычаем, так что имения делятся в одной провинции и сохраняются целыми в соседней."
+ },
  "law_penal_labor_camps": {
   "en": "Penal Labor Camps",
   "ru": "Исправительно-трудовые лагеря"
+ },
+ "law_penal_labor_camps_desc": {
+  "en": "Convicts and political prisoners serve their sentences as forced labor in state camps, digging the mines, felling the forests and working the plantations. The camps cow the opposition and pay part of their own way, but a government that runs them loses the trust of its own people.",
+  "ru": "Осуждённые и политические заключённые отбывают наказание на принудительных работах в государственных лагерях: роют шахты, валят лес и работают на плантациях. Лагеря запугивают оппозицию и частично окупают себя, но правительство, которое их содержит, теряет доверие собственного народа."
  },
  "law_population_control_measures": {
   "en": "Population Control Measures",
   "ru": "Меры по контролю населения"
  },
+ "law_population_control_measures_desc": {
+  "en": "The state takes direct action to manage the size and growth of its populace. These measures can range from strict limits on the number of children to state-guided eugenics programs, all in the name of the greater national good.",
+  "ru": "Государство напрямую вмешивается в управление численностью и ростом населения. Меры могут варьироваться от строгих ограничений на число детей до государственных евгенических программ, всё это во имя высшего национального блага."
+ },
  "law_post-scarcity": {
   "en": "Post-Scarcity Economy",
   "ru": "Экономика постдефицита"
+ },
+ "law_post-scarcity_desc": {
+  "en": "In this economic model, advanced technologies and efficient resource management have achieved [concept_post_scarcity_system], making scarcity a thing of the past. All essential goods and services are readily available to every citizen, nullifying traditional economic challenges tied to supply and demand.",
+  "ru": "В этой экономической модели передовые технологии и эффективное управление ресурсами достигли состояния [concept_post_scarcity_system|l], и дефицит остался в прошлом. Все необходимые товары и услуги доступны каждому гражданину, что снимает традиционные экономические проблемы, связанные со спросом и предложением."
  },
  "law_prescribed_form": {
   "en": "Prescribed Form",
   "ru": "Предписанная форма"
  },
+ "law_prescribed_form_desc": {
+  "en": "The state decides what a citizen looks like, and the clinics that once sold change now enforce sameness. No one can be told apart by face, skin or frame, and no one may choose otherwise.",
+  "ru": "Государство решает, как должен выглядеть гражданин, а клиники, прежде продававшие перемены, теперь навязывают единообразие. Никого нельзя отличить по лицу, коже или сложению, и никто не вправе выбрать иначе."
+ },
  "law_primogeniture": {
   "en": "Primogeniture & Entail",
   "ru": "Майорат и заповедное имущество"
+ },
+ "law_primogeniture_desc": {
+  "en": "The eldest son inherits the estate whole, and entail binds each heir to pass it on undivided. The great houses last for generations; the younger sons make their way in the army, the church, the colonies and the city.",
+  "ru": "Старший сын наследует имение целиком, а майорат обязывает каждого наследника передавать его неделимым. Великие дома существуют поколениями; младшие сыновья пробиваются в армии, церкви, колониях и городе."
  },
  "law_private_ai_labs": {
   "en": "Private Labs",
   "ru": "Частные лаборатории"
  },
+ "law_private_ai_labs_desc": {
+  "en": "Companies race to build the most capable systems, raising capital on each new model. They move fast, and they guard their secrets only as well as a company can.",
+  "ru": "Компании наперегонки создают самые мощные системы, привлекая капитал под каждую новую модель. Они движутся быстро и хранят свои секреты лишь настолько, насколько может компания."
+ },
  "law_private_military_contractors": {
   "en": "Private Military Contractors",
   "ru": "Частные военные подрядчики"
+ },
+ "law_private_military_contractors_desc": {
+  "en": "The state contracts private firms to wage its wars. Operations abroad gain plausible deniability and the home front tolerates protracted conflicts, but contractors are expensive, line-combat performance suffers, and reliance on mercenaries draws international suspicion.",
+  "ru": "Государство нанимает частные фирмы, чтобы вести свои войны. Операции за рубежом получают правдоподобное отрицание, а тыл терпимее относится к затяжным конфликтам, но подрядчики дороги, эффективность в линейном бою страдает, а опора на наёмников вызывает международные подозрения."
  },
  "law_private_policing": {
   "en": "Private Policing",
   "ru": "Частная полиция"
  },
+ "law_private_policing_desc": {
+  "en": "Licensed private firms carry out most ordinary police work, hired and directed by property owners, businesses and residents' associations, while a smaller public force backs them up. Wealthy districts are well guarded and poor ones are left to fend for themselves.",
+  "ru": "Лицензированные частные фирмы выполняют большую часть обычной полицейской работы, и их нанимают и направляют собственники, предприятия и жилищные объединения, а меньшие государственные силы им помогают. Богатые районы хорошо охраняются, а бедные предоставлены сами себе."
+ },
  "law_pro_capital_ministry_of_labor": {
   "en": "Pro-Capital Ministry of Labor Established",
   "ru": "Министерство труда в интересах капитала учреждено"
+ },
+ "law_pro_capital_ministry_of_labor_desc": {
+  "en": "The Ministry of Labor regulates employment laws, employer rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.",
+  "ru": "Министерство труда регулирует трудовое законодательство, права работодателей и состояние рынка труда, стремясь обеспечить, чтобы квалифицированные работники были обучены и заняты там, где нужно."
  },
  "law_pro_labor_ministry_of_labor": {
   "en": "Pro-Labor Ministry of Labor Established",
   "ru": "Министерство труда в интересах рабочих учреждено"
  },
+ "law_pro_labor_ministry_of_labor_desc": {
+  "en": "The Ministry of Labor regulates employment laws, worker rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed.",
+  "ru": "Министерство труда регулирует трудовое законодательство, права работников и состояние рынка труда, стремясь обеспечить, чтобы квалифицированные работники были обучены и заняты там, где нужно."
+ },
  "law_pro_natalist_subsidies": {
   "en": "Pro-Natalist Policy",
   "ru": "Политика стимулирования рождаемости"
+ },
+ "law_pro_natalist_subsidies_desc": {
+  "en": "Through propaganda, incentives, or even coercion, this policy encourages higher birthrates.",
+  "ru": "Эта политика с помощью пропаганды, стимулов или даже принуждения поощряет более высокую рождаемость."
  },
  "law_protected_class": {
   "en": "Protected Class",
   "ru": "Защищённый класс"
  },
+ "law_protected_class_desc": {
+  "en": "[concept_discrimination] on the basis of gender is prohibited by law, and individuals are protected from unfair treatment or bias based on gender.",
+  "ru": "[concept_discrimination] по признаку пола запрещена законом, а лица защищены от несправедливого обращения или предвзятости по признаку пола."
+ },
  "law_prudential_narrow_banking": {
   "en": "Prudential / Narrow Banking",
   "ru": "Пруденциальный/узкий банкинг"
+ },
+ "law_prudential_narrow_banking_desc": {
+  "en": "Commercial deposits are walled off from speculation. Banks can lend only against safe assets, capping crashes and volatility at the cost of slower capital formation - capitalists have less room to take risks.",
+  "ru": "Коммерческие вклады отгорожены от спекуляций. Банки могут кредитовать только под надёжные активы, что ограничивает крахи и волатильность ценой более медленного формирования капитала: у капиталистов меньше простора для риска."
  },
  "law_publicly_funded_elections": {
   "en": "Publicly Funded Elections",
   "ru": "Выборы за счёт государства"
  },
+ "law_publicly_funded_elections_desc": {
+  "en": "The state provides funding for political campaigns to create a level playing field, paid for by the taxpayer.",
+  "ru": "Государство финансирует политические кампании, чтобы создать равные условия, за счёт налогоплательщиков."
+ },
  "law_punishment_focused_criminal_justice": {
   "en": "Punishment-Focused Criminal Justice",
   "ru": "Уголовное правосудие, ориентированное на наказание"
+ },
+ "law_punishment_focused_criminal_justice_desc": {
+  "en": "A criminal justice system that emphasizes punishment and retribution, with a focus on deterrence and incapacitation.",
+  "ru": "Система уголовного правосудия, делающая упор на наказание и возмездие, с акцентом на сдерживание и изоляцию."
  },
  "law_regulated_augmentation_market": {
   "en": "Regulated Augmentation Market",
   "ru": "Регулируемый рынок аугментаций"
  },
+ "law_regulated_augmentation_market_desc": {
+  "en": "[concept_human_augmentation_system] is legal and regulated by the government, with strict controls on safety, ethical considerations, and distribution. Access to augmentation technologies is limited by factors such as affordability or [concept_pop_qualifications].",
+  "ru": "[concept_human_augmentation_system] законна и регулируется правительством, со строгим контролем безопасности, этических соображений и распределения. Доступ к технологиям аугментации ограничен такими факторами, как доступность по цене или [Concept('concept_pop_qualifications','квалификации населения')]."
+ },
  "law_regulated_utilities": {
   "en": "Regulated Utilities",
   "ru": "Регулируемые коммунальные услуги"
+ },
+ "law_regulated_utilities_desc": {
+  "en": "Network industries are treated as natural monopolies or unbundled ‘pipes.’ Access, rates, and interconnection are set by regulators to ensure fair, reliable service.",
+  "ru": "Сетевые отрасли рассматриваются как естественные монополии или разделённые «трубы». Доступ, тарифы и взаимное подключение устанавливают регуляторы, чтобы обеспечить честное и надёжное обслуживание."
  },
  "law_rehabilitation_focused_criminal_justice": {
   "en": "Rehabilitation-Focused Criminal Justice",
   "ru": "Уголовное правосудие, ориентированное на реабилитацию"
  },
+ "law_rehabilitation_focused_criminal_justice_desc": {
+  "en": "A criminal justice system that emphasizes rehabilitation and reintegration of offenders into society.",
+  "ru": "Система уголовного правосудия, делающая упор на реабилитацию правонарушителей и их возвращение в общество."
+ },
  "law_religious_courts": {
   "en": "Religious Courts",
   "ru": "Религиозные суды"
+ },
+ "law_religious_courts_desc": {
+  "en": "Clerical judges apply religious law to most disputes, beside whatever the ruler decrees. They answer to the faith rather than to the state. Should the state separate itself from religion, state courts replace them.",
+  "ru": "Духовные судьи применяют религиозное право к большинству споров наряду с тем, что постановляет правитель. Они подотчётны вере, а не государству. Если государство отделится от религии, их заменят государственные суды."
  },
  "law_restorative_justice": {
   "en": "Restorative Justice",
   "ru": "Восстановительное правосудие"
  },
+ "law_restorative_justice_desc": {
+  "en": "A criminal justice system that focuses on repairing harm caused by criminal behavior.",
+  "ru": "Система уголовного правосудия, сосредоточенная на возмещении вреда, причинённого преступным поведением."
+ },
  "law_robot_tax": {
   "en": "Robot Tax",
   "ru": "Налог на роботов"
+ },
+ "law_robot_tax_desc": {
+  "en": "A machine that does a worker's job pays toward the state the worker once paid for. The robots stay at their posts, and their owners pay for the privilege.",
+  "ru": "Машина, выполняющая работу работника, платит в пользу государства, которое прежде содержал работник. Роботы остаются на своих постах, а их владельцы платят за эту привилегию."
  },
  "law_state_ai_monopoly": {
   "en": "State Monopoly",
   "ru": "Государственная монополия"
  },
+ "law_state_ai_monopoly_desc": {
+  "en": "Only the state may build at the frontier. Its laboratories sit behind security clearances, and their systems serve the government and the armed forces first.",
+  "ru": "Только государство может строить на переднем крае. Его лаборатории скрыты за допусками секретности, а их системы служат прежде всего правительству и вооружённым силам."
+ },
  "law_state_controlled_internet": {
   "en": "State-Controlled Internet",
   "ru": "Интернет под контролем государства"
+ },
+ "law_state_controlled_internet_desc": {
+  "en": "The state heavily monitors, censors, and controls all internet traffic within its borders.",
+  "ru": "Государство тщательно отслеживает, цензурирует и контролирует весь интернет-трафик в своих границах."
  },
  "law_state_eugenics_program": {
   "en": "State Eugenics Program",
   "ru": "Государственная программа евгеники"
  },
+ "law_state_eugenics_program_desc": {
+  "en": "Heredity becomes a matter of state. Officials screen the population for 'fitness', decide who may marry and bear children, and, as the science allows, direct the evolution of the populace itself.",
+  "ru": "Наследственность становится делом государства. Чиновники отбирают население по «пригодности», решают, кому вступать в брак и рожать детей, и, по мере возможностей науки, направляют эволюцию самого населения."
+ },
  "law_state_intellectual_property": {
   "en": "State Intellectual Property",
   "ru": "Государственная интеллектуальная собственность"
+ },
+ "law_state_intellectual_property_desc": {
+  "en": "Patents, copyrights, and industrial designs are owned by the state and licensed freely to domestic firms; foreign access is gated and expensive. State research bureaus coordinate where private R&D would otherwise duplicate effort, but the apparatus consumes administrative capacity and starves the capitalist [concept_investment_pool] of monopoly rents.",
+  "ru": "Патентами, авторскими правами и промышленными образцами владеет государство и свободно лицензирует их отечественным фирмам; иностранный доступ ограничен и дорог. Государственные научные бюро координируют работу там, где частные НИОКР дублировали бы усилия, но аппарат потребляет административные возможности и лишает капиталистический [concept_investment_pool|l] монопольной ренты."
  },
  "law_state_led_language_reform": {
   "en": "State-Led Language Reform",
   "ru": "Государственная языковая реформа"
  },
+ "law_state_led_language_reform_desc": {
+  "en": "Script changes, orthographic simplification, standard grammar, and terminology planning are mandated and funded to modernize [concept_literacy]-or to revive an ancestral or constructed language.",
+  "ru": "Изменение письма, упрощение орфографии, стандартная грамматика и терминологическое планирование предписываются и финансируются, чтобы повысить [concept_literacy|l], либо чтобы возродить язык предков или искусственный язык."
+ },
  "law_state_owned_banking": {
   "en": "State-Owned Banking",
   "ru": "Государственный банкинг"
+ },
+ "law_state_owned_banking_desc": {
+  "en": "Private banks have been dissolved or absorbed; all credit allocation is conducted by state-owned institutions answering to the central plan. The cycle of speculative excess and crash is replaced with the steady drumbeat of administrative capacity, but capitalist investment dries up.",
+  "ru": "Частные банки распущены или поглощены; всё распределение кредитов осуществляют государственные учреждения, подотчётные центральному плану. Цикл спекулятивного избытка и краха сменяется ровным барабанным боем административных возможностей, но капиталистические инвестиции иссякают."
  },
  "law_state_secrets": {
   "en": "State Secrets",
   "ru": "Государственная тайна"
  },
+ "law_state_secrets_desc": {
+  "en": "Government information is classified as state secrets, with strict controls on access and dissemination. Unauthorized disclosure of state secrets is a criminal offense.",
+  "ru": "Государственная информация засекречена как государственная тайна, с жёстким контролем доступа и распространения. Несанкционированное разглашение государственной тайны является преступлением."
+ },
  "law_state_sponsored_family_planning": {
   "en": "State-Sponsored Family Planning",
   "ru": "Государственное планирование семьи"
+ },
+ "law_state_sponsored_family_planning_desc": {
+  "en": "Empowering citizens with the knowledge and means to choose the size of their own family is a hallmark of a modern, healthy society. The state provides education and access to contraception to manage population growth.",
+  "ru": "Дать гражданам знания и средства для выбора размера собственной семьи есть признак современного, здорового общества. Государство обеспечивает образование и доступ к контрацепции, чтобы управлять ростом населения."
  },
  "law_state_universal_heir": {
   "en": "State as Universal Heir",
   "ru": "Государство как универсальный наследник"
  },
+ "law_state_universal_heir_desc": {
+  "en": "Private property ends with its owner's life: estates pass to the state, which administers them for the nation. With nothing to leave their children, families save less.",
+  "ru": "Частная собственность заканчивается вместе с жизнью владельца: имущество переходит государству, которое управляет им для нации. Семьи, которым нечего оставить детям, меньше сберегают."
+ },
  "law_statutory_courts": {
   "en": "Statutory Courts",
   "ru": "Статутные суды"
+ },
+ "law_statutory_courts_desc": {
+  "en": "Judges hold office for life or by career and cannot be dismissed for their rulings, but they apply the law as written. Whoever makes the law, a parliament or a king in council, has the last word: no court can strike it down.",
+  "ru": "Судьи занимают должность пожизненно или по службе и не могут быть уволены за свои решения, но применяют закон как написано. Последнее слово принадлежит тому, кто принимает закон, парламенту или королю в совете: ни один суд не может его отменить."
  },
  "law_strict_ip_protection": {
   "en": "Strict IP Protection",
   "ru": "Строгая защита интеллектуальной собственности"
  },
+ "law_strict_ip_protection_desc": {
+  "en": "Intellectual property protection is heavily enforced, with extended durations for patents, copyrights, and trademarks. Infringement penalties are severe, prioritizing creator rights and revenue over collaboration and innovation.",
+  "ru": "Защита интеллектуальной собственности жёстко обеспечивается, с продлёнными сроками для патентов, авторских прав и товарных знаков. Наказания за нарушения суровы, права авторов и доход ставятся выше сотрудничества и инноваций."
+ },
  "law_strong_privacy_rights": {
   "en": "Strong Privacy Rights",
   "ru": "Сильная защита частной жизни"
+ },
+ "law_strong_privacy_rights_desc": {
+  "en": "Privacy rights are enshrined in the constitution or equivalent legal framework. Extensive laws protect personal privacy in both physical and digital realms, with strict [concept_digital_rights_system] laws and robust enforcement mechanisms.",
+  "ru": "Права на частную жизнь закреплены в конституции или аналогичной правовой основе. Обширные законы защищают личную жизнь как в физической, так и в цифровой сфере, с жёсткими законами о [concept_digital_rights_system|l] и надёжными механизмами исполнения."
  },
  "law_total_war": {
   "en": "Total War",
   "ru": "Тотальная война"
  },
+ "law_total_war_desc": {
+  "en": "No restrictions on warfare. The whole population and economy are mobilized, and enemy civilians and civilian [concept_infrastructure] are legitimate targets. Our armies hit harder and lay waste to what they occupy, and the home front shrugs off its losses, but the world sees a nation that answers to no rules.",
+  "ru": "Никаких ограничений на ведение войны. Всё население и экономика мобилизованы, а вражеские гражданские лица и гражданская [Concept('concept_infrastructure','инфраструктура')] являются законными целями. Наши армии бьют сильнее и опустошают занятое, а тыл не замечает потерь, но мир видит нацию, не отвечающую ни перед какими правилами."
+ },
  "law_traditional_family_structure": {
   "en": "Traditional Family Structure",
   "ru": "Традиционная структура семьи"
+ },
+ "law_traditional_family_structure_desc": {
+  "en": "The nuclear family is the natural bedrock of society. The state's role is not to interfere, but to uphold this institution through its example and other laws.",
+  "ru": "Нуклеарная семья есть естественная основа общества. Роль государства не в том, чтобы вмешиваться, а в том, чтобы поддерживать этот институт своим примером и другими законами."
  },
  "law_traditional_heredity": {
   "en": "Traditional Heredity",
   "ru": "Традиционная наследственность"
  },
+ "law_traditional_heredity_desc": {
+  "en": "An individual's traits are determined by their lineage and divine will. The concept of altering this inheritance is not a matter for state legislation.",
+  "ru": "Черты человека определяются его родом и божественной волей. Изменение этого наследия не является предметом государственного законодательства."
+ },
  "law_traditional_ip_protection": {
   "en": "Traditional IP Protection",
   "ru": "Традиционная защита интеллектуальной собственности"
+ },
+ "law_traditional_ip_protection_desc": {
+  "en": "Intellectual property is protected under a traditional system, with patents, copyrights, and trademarks offering exclusive rights to creators for a limited time. Enforcement and infringement penalties are moderate, balancing protection with innovation.",
+  "ru": "Интеллектуальная собственность защищена по традиционной системе: патенты, авторские права и товарные знаки дают авторам исключительные права на ограниченное время. Исполнение и наказания за нарушения умеренны, защита уравновешивается инновациями."
  },
  "law_traditional_rules_of_war": {
   "en": "Traditional Rules of War",
   "ru": "Традиционные правила войны"
  },
+ "law_traditional_rules_of_war_desc": {
+  "en": "War is the business of armies and is fought by custom: chivalry, just war theory and the soldier's code of honor. Nothing is forbidden and nothing is promised to other nations, and an officer corps raised on the code holds steady under fire and learns fast.",
+  "ru": "Война есть дело армий и ведётся по обычаю: рыцарство, теория справедливой войны и воинский кодекс чести. Ничего не запрещено и ничего не обещано другим нациям, а офицерский корпус, воспитанный на кодексе, держится под огнём и быстро учится."
+ },
  "law_trust_busting": {
   "en": "Antitrust Enforcement",
   "ru": "Антимонопольное принуждение"
+ },
+ "law_trust_busting_desc": {
+  "en": "Courts police cartels and abusive conduct, scrutinizing mergers case-by-case. Collusion is deterred while scale economies are preserved where lawful.",
+  "ru": "Суды следят за картелями и злоупотреблениями, изучая слияния в каждом случае отдельно. Сговор сдерживается, а экономия на масштабе сохраняется там, где это законно."
  },
  "law_ubiquitous_translation": {
   "en": "Ubiquitous Translation",
   "ru": "Повсеместный перевод"
  },
+ "law_ubiquitous_translation_desc": {
+  "en": "Machine and institutional translation remove most language barriers. Services must accommodate any language, shifting policy from [concept_assimilation] to seamless access.",
+  "ru": "Машинный и институциональный перевод устраняют большинство языковых барьеров. Службы обязаны обслуживать на любом языке, и политика смещается от [Concept('concept_assimilation','ассимиляции')] к бесшовному доступу."
+ },
  "law_unitary_state": {
   "en": "Unitary State",
   "ru": "Унитарное государство"
+ },
+ "law_unitary_state_desc": {
+  "en": "All administrative power is concentrated in the hands of the central government.",
+  "ru": "Вся административная власть сосредоточена в руках центрального правительства."
  },
  "law_universal_banking_light_prudence": {
   "en": "Universal Banking (Light Prudence)",
   "ru": "Универсальный банкинг (лёгкая осмотрительность)"
  },
+ "law_universal_banking_light_prudence_desc": {
+  "en": "Large, diversified banks face limited prudential rules. Authorities can temper exuberance but lack a full central bank toolkit.",
+  "ru": "Крупные диверсифицированные банки подчиняются ограниченным пруденциальным правилам. Власти могут умерять эйфорию, но не располагают полным набором инструментов центрального банка."
+ },
  "law_universal_basic_income": {
   "en": "Universal Basic Income",
   "ru": "Универсальный базовый доход"
+ },
+ "law_universal_basic_income_desc": {
+  "en": "A [concept_post_scarcity_system] policy providing a guaranteed, unconditional income is provided to all citizens, regardless of employment status, wealth, or other factors. This financial safety net aims to reduce poverty, stimulate economic growth, and support individual freedom and well-being.",
+  "ru": "Политика [Concept('concept_post_scarcity_system','постдефицита')], гарантирующая безусловный доход всем гражданам независимо от занятости, богатства и других факторов. Эта финансовая подушка безопасности призвана сократить бедность, стимулировать экономический рост и поддержать индивидуальную свободу и благополучие."
  },
  "law_unregulated_banking": {
   "en": "Unregulated Banking",
   "ru": "Нерегулируемый банкинг"
  },
+ "law_unregulated_banking_desc": {
+  "en": "Banks operate freely with minimal oversight. Credit flows cheaply - until it doesn’t. The state has no formal tools to stabilize the cycle.",
+  "ru": "Банки работают свободно, почти без надзора. Кредит дёшев, пока не перестаёт быть таким. У государства нет формальных инструментов для стабилизации цикла."
+ },
  "law_unregulated_donations": {
   "en": "Unregulated Donations",
   "ru": "Нерегулируемые пожертвования"
+ },
+ "law_unregulated_donations_desc": {
+  "en": "Wealthy individuals and corporations are free to donate unlimited funds to political campaigns, ensuring their voices are heard.",
+  "ru": "Богатые люди и корпорации вправе жертвовать неограниченные суммы на политические кампании, обеспечивая, чтобы их голоса были услышаны."
  },
  "law_unregulated_internet": {
   "en": "Unregulated Internet",
   "ru": "Нерегулируемый интернет"
  },
+ "law_unregulated_internet_desc": {
+  "en": "The internet is a free and open frontier of information and commerce.",
+  "ru": "Интернет есть свободный и открытый рубеж информации и торговли."
+ },
  "law_unrestricted_augmentation": {
   "en": "Unrestricted Augmentation",
   "ru": "Неограниченная аугментация"
+ },
+ "law_unrestricted_augmentation_desc": {
+  "en": "[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.",
+  "ru": "[concept_human_augmentation_system] не регулируется, что допускает открытую разработку, распространение и применение технологий усиления. Это способствует быстрому прогрессу, но может вызвать серьёзные этические, социальные и связанные с безопасностью проблемы."
  },
  "law_unrestricted_automation": {
   "en": "Unrestricted Automation",
   "ru": "Неограниченная автоматизация"
  },
+ "law_unrestricted_automation_desc": {
+  "en": "Owners put machines to work wherever they pay, and keep what the machines make.",
+  "ru": "Владельцы пускают машины в дело везде, где это окупается, и оставляют себе то, что машины производят."
+ },
  "law_unrestricted_extraction": {
   "en": "Unrestricted Extraction",
   "ru": "Неограниченная добыча"
+ },
+ "law_unrestricted_extraction_desc": {
+  "en": "Coal mines, oil rigs and power plants are built, expanded and kept as their owners see fit.",
+  "ru": "Угольные шахты, буровые и электростанции строятся, расширяются и содержатся, как сочтут нужным их владельцы."
  },
  "law_war_crimes_forbidden": {
   "en": "War Crimes Forbidden",
   "ru": "Военные преступления запрещены"
  },
+ "law_war_crimes_forbidden_desc": {
+  "en": "The laws and customs of war are codified, from the treatment of prisoners to the conduct of a military occupation, and their violation becomes a war crime with individual responsibility. Territory taken under these rules is held with less damage and less bitterness.",
+  "ru": "Законы и обычаи войны кодифицированы, от обращения с пленными до ведения военной оккупации, а их нарушение становится военным преступлением с индивидуальной ответственностью. Территория, взятая по этим правилам, удерживается с меньшим ущербом и меньшей горечью."
+ },
  "lawgroup_LGBTQ_rights": {
   "en": "LGBTQ+ Rights",
   "ru": "Права ЛГБТК+"
+ },
+ "lawgroup_LGBTQ_rights_desc": {
+  "en": "The extent to which [concept_lgbtq_rights_movement] rights are recognized, protected, and supported in society.",
+  "ru": "Степень, в которой права [Concept('concept_lgbtq_rights_movement','ЛГБТК+')] признаются, защищаются и поддерживаются в обществе."
  },
  "lawgroup_antitrust": {
   "en": "Antitrust & Market Structure",
   "ru": "Антимонопольная политика и структура рынка"
  },
+ "lawgroup_antitrust_desc": {
+  "en": "Regulates market concentration, monopolies, mergers, and access to essential networks, balancing scale with contestability and consumer welfare.",
+  "ru": "Регулирует концентрацию рынка, монополии, слияния и доступ к необходимым сетям, уравновешивая масштаб с состязательностью и благосостоянием потребителей."
+ },
  "lawgroup_automation_policy": {
   "en": "Automation Policy",
   "ru": "Политика автоматизации"
+ },
+ "lawgroup_automation_policy_desc": {
+  "en": "Whether robots and AI may do the work people did, and who gains when they do. [GetLawType('law_robot_tax').GetName] and [GetLawType('law_automation_dividend').GetName] scale with our automated share, now #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!: the part of our automatable building levels that run a robotic or AI-managed [concept_production_method]. Under [GetLawType('law_unrestricted_automation').GetName] a rise in the share puts workers out of work, at half the cost under [GetLawType('law_robot_tax').GetName]; last year it rose #v [GetPlayer.MakeScope.ScriptValue('te_ap_disp_rise_display')|1]#! points.",
+  "ru": "Могут ли роботы и ИИ выполнять работу, которую делали люди, и кому это выгодно. [GetLawType('law_robot_tax').GetName] и [GetLawType('law_automation_dividend').GetName] масштабируются по нашей автоматизированной доле, сейчас #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!: части наших автоматизируемых уровней зданий, использующих роботизированный или управляемый ИИ [concept_production_method|l]. При законе «[GetLawType('law_unrestricted_automation').GetName]» рост доли оставляет работников без работы, а при законе «[GetLawType('law_robot_tax').GetName]» это обходится вдвое дешевле; в прошлом году она выросла на #v [GetPlayer.MakeScope.ScriptValue('te_ap_disp_rise_display')|1]#! п."
  },
  "lawgroup_bodily_autonomy": {
   "en": "Bodily Autonomy",
   "ru": "Телесная автономия"
  },
+ "lawgroup_bodily_autonomy_desc": {
+  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether someone who leaves the human body plan behind is still a citizen. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
+  "ru": "Насколько люди могут менять внешний вид своего тела, от кожи и половых признаков до меха и хвостов, и, в пределе, остаётся ли гражданином тот, кто оставил позади человеческий план строения тела. Что тело способно делать, является отдельным вопросом, для законов об [Concept('concept_human_augmentation_system','аугментации человека')]."
+ },
  "lawgroup_criminal_justice": {
   "en": "Criminal Justice",
   "ru": "Уголовное правосудие"
+ },
+ "lawgroup_criminal_justice_desc": {
+  "en": "The form and function of the criminal justice system: what follows a conviction, and how offenders are punished or rehabilitated.",
+  "ru": "Форма и функция системы уголовного правосудия: что следует за приговором и как правонарушителей наказывают или реабилитируют."
  },
  "lawgroup_electoral_finance": {
   "en": "Electoral Finance",
   "ru": "Финансирование выборов"
  },
+ "lawgroup_electoral_finance_desc": {
+  "en": "Regulates the influence of money in political campaigns.",
+  "ru": "Регулирует влияние денег в политических кампаниях."
+ },
  "lawgroup_family_reproductive_policy": {
   "en": "Family & Reproductive Policy",
   "ru": "Семейная и репродуктивная политика"
+ },
+ "lawgroup_family_reproductive_policy_desc": {
+  "en": "Determines the state's role in defining the family structure and influencing the procreation of its populace.",
+  "ru": "Определяет роль государства в определении структуры семьи и влиянии на деторождение его населения."
  },
  "lawgroup_financial_regulation": {
   "en": "Financial Regulation",
   "ru": "Финансовое регулирование"
  },
+ "lawgroup_financial_regulation_desc": {
+  "en": "Governs the behavior of banks and financial institutions, regulating the [concept_banking_cycle] and [concept_financial_regulation].",
+  "ru": "Регулирует поведение банков и финансовых учреждений, управляя [Concept('concept_banking_cycle','банковским циклом')] и [Concept('concept_financial_regulation','финансовым регулированием')]."
+ },
  "lawgroup_frontier_ai_control": {
   "en": "Frontier AI Control",
   "ru": "Контроль передового ИИ"
+ },
+ "lawgroup_frontier_ai_control_desc": {
+  "en": "Who may build the most capable artificial intelligence systems, who may see how they work, and who answers for what they do.",
+  "ru": "Кто может строить самые мощные системы искусственного интеллекта, кто может видеть, как они работают, и кто отвечает за то, что они делают."
  },
  "lawgroup_genetic_rights": {
   "en": "Genetic Rights",
   "ru": "Генетические права"
  },
+ "lawgroup_genetic_rights_desc": {
+  "en": "Governs heredity: whether the state may decide who bears children, and who may engineer the genes of flora, fauna and humanity itself.",
+  "ru": "Регулирует наследственность: может ли государство решать, кто рожает детей, и кто может изменять гены флоры, фауны и самого человечества."
+ },
  "lawgroup_human_augmentation": {
   "en": "Human Augmentation",
   "ru": "Аугментация человека"
+ },
+ "lawgroup_human_augmentation_desc": {
+  "en": "The extent to which [concept_human_augmentation_system] rights and regulations, through genetics, mechanical augmentation, or other means, are recognized and managed in society.",
+  "ru": "Степень, в которой права и регулирование [Concept('concept_human_augmentation_system','аугментации человека')] посредством генетики, механического усиления или иными средствами признаются и управляются в обществе."
  },
  "lawgroup_inheritance": {
   "en": "Inheritance Laws",
   "ru": "Законы о наследовании"
  },
+ "lawgroup_inheritance_desc": {
+  "en": "Who inherits an estate. The law in force and its amendments move the target the [concept_inheritance_concentration] drifts toward: now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!.",
+  "ru": "Кто наследует имущество. Действующий закон и его поправки сдвигают цель, к которой стремится [concept_inheritance_concentration|l]: сейчас #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!, цель #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target')|0]#!."
+ },
  "lawgroup_intellectual_property": {
   "en": "Intellectual Property",
   "ru": "Интеллектуальная собственность"
+ },
+ "lawgroup_intellectual_property_desc": {
+  "en": "The extent to which the creation, use, and distribution of intellectual property are regulated and protected in society.",
+  "ru": "Степень, в которой создание, использование и распространение интеллектуальной собственности регулируются и защищаются в обществе."
  },
  "lawgroup_internet_governance": {
   "en": "Internet Governance",
   "ru": "Управление интернетом"
  },
+ "lawgroup_internet_governance_desc": {
+  "en": "Defines the state's control over the [concept_digital_rights_system].",
+  "ru": "Определяет контроль государства над [Concept('concept_digital_rights_system','цифровыми правами')]."
+ },
  "lawgroup_judiciary": {
   "en": "Judiciary",
   "ru": "Судебная система"
+ },
+ "lawgroup_judiciary_desc": {
+  "en": "Who judges disputes and the government's own acts, how independent the judges are, and whether they can overturn the law.",
+  "ru": "Кто разрешает споры и оценивает действия самого правительства, насколько независимы судьи и могут ли они отменять закон."
  },
  "lawgroup_language_policy": {
   "en": "Language Policy",
   "ru": "Языковая политика"
  },
+ "lawgroup_language_policy_desc": {
+  "en": "Governs the official status of languages, schooling standards, and how the state manages [concept_assimilation] and linguistic rights.",
+  "ru": "Регулирует официальный статус языков, стандарты обучения и то, как государство управляет [Concept('concept_assimilation','ассимиляцией')] и языковыми правами."
+ },
  "lawgroup_ministry_of_commerce": {
   "en": "Ministry of Commerce",
   "ru": "Министерство торговли"
+ },
+ "lawgroup_ministry_of_commerce_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Commerce allows for the regulation of trade policies, economic growth, and business practices.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства торговли позволяет регулировать торговую политику, экономический рост и деловую практику."
  },
  "lawgroup_ministry_of_consumer_protection": {
   "en": "Ministry of Consumer Protection",
   "ru": "Министерство защиты прав потребителей"
  },
+ "lawgroup_ministry_of_consumer_protection_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Consumer Protection allows for the management of consumer rights, product safety, and fair trade practices.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства защиты прав потребителей позволяет управлять правами потребителей, безопасностью продукции и честной торговой практикой."
+ },
  "lawgroup_ministry_of_culture": {
   "en": "Ministry of Culture",
   "ru": "Министерство культуры"
+ },
+ "lawgroup_ministry_of_culture_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Culture allows for the promotion of national heritage, arts, and creative industries.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства культуры позволяет содействовать национальному наследию, искусству и творческим отраслям."
  },
  "lawgroup_ministry_of_foreign_affairs": {
   "en": "Ministry of Foreign Affairs",
   "ru": "Министерство иностранных дел"
  },
+ "lawgroup_ministry_of_foreign_affairs_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Foreign Affairs allows for the management of diplomatic relations, international treaties, and foreign policy.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства иностранных дел позволяет управлять дипломатическими отношениями, международными договорами и внешней политикой."
+ },
  "lawgroup_ministry_of_intelligence_and_security": {
   "en": "Ministry of Intelligence and Security",
   "ru": "Министерство разведки и безопасности"
+ },
+ "lawgroup_ministry_of_intelligence_and_security_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Intelligence and Security allows for the management of national security, intelligence operations, and internal stability.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства разведки и безопасности позволяет управлять национальной безопасностью, разведывательными операциями и внутренней стабильностью."
  },
  "lawgroup_ministry_of_international_aid": {
   "en": "Ministry of International Aid",
   "ru": "Министерство международной помощи"
  },
+ "lawgroup_ministry_of_international_aid_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of International Aid allows for the management of international aid efforts, humanitarian assistance, and development projects.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства международной помощи позволяет управлять международной помощью, гуманитарной поддержкой и проектами развития."
+ },
  "lawgroup_ministry_of_labor": {
   "en": "Ministry of Labor",
   "ru": "Министерство труда"
+ },
+ "lawgroup_ministry_of_labor_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Labor allows for the regulation of employment laws, worker rights, and labor market conditions.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства труда позволяет регулировать трудовое законодательство, права работников и состояние рынка труда."
  },
  "lawgroup_ministry_of_propaganda": {
   "en": "Ministry of Propaganda",
   "ru": "Министерство пропаганды"
  },
+ "lawgroup_ministry_of_propaganda_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Propaganda allows for the management of information dissemination, public relations, and government messaging.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства пропаганды позволяет управлять распространением информации, связями с общественностью и сообщениями правительства."
+ },
  "lawgroup_ministry_of_refugee_affairs": {
   "en": "Ministry of Refugee Affairs",
   "ru": "Министерство по делам беженцев"
+ },
+ "lawgroup_ministry_of_refugee_affairs_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Refugee Affairs allows for the management of refugee policies, asylum claims, and resettlement efforts.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства по делам беженцев позволяет управлять политикой в отношении беженцев, просьбами об убежище и усилиями по расселению."
  },
  "lawgroup_ministry_of_religion": {
   "en": "Ministry of Religion",
   "ru": "Министерство по делам религий"
  },
+ "lawgroup_ministry_of_religion_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Religion allows for the management of religious affairs, including the regulation of religious institutions and the enforcement of religious laws.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства по делам религий позволяет управлять религиозными делами, включая регулирование религиозных институтов и соблюдение религиозных законов."
+ },
  "lawgroup_ministry_of_science": {
   "en": "Ministry of Science",
   "ru": "Министерство науки"
+ },
+ "lawgroup_ministry_of_science_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Science allows for the management of scientific research, technological development, and innovation.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства науки позволяет управлять научными исследованиями, технологическим развитием и инновациями."
  },
  "lawgroup_ministry_of_the_environment": {
   "en": "Ministry of the Environment",
   "ru": "Министерство окружающей среды"
  },
+ "lawgroup_ministry_of_the_environment_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of the Environment allows for the protection and conservation of natural resources, environmental policies, and sustainability efforts.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства окружающей среды позволяет защищать и сохранять природные ресурсы, проводить экологическую политику и усилия по устойчивому развитию."
+ },
  "lawgroup_ministry_of_thought_control": {
   "en": "Ministry of Thought Control",
   "ru": "Министерство контроля над мыслью"
+ },
+ "lawgroup_ministry_of_thought_control_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Thought Control allows for the management of censorship, surveillance, and suppression of dissent.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства контроля над мыслью позволяет управлять цензурой, слежкой и подавлением инакомыслия."
  },
  "lawgroup_ministry_of_urban_planning": {
   "en": "Ministry of Urban Planning",
   "ru": "Министерство градостроительства"
  },
+ "lawgroup_ministry_of_urban_planning_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of Urban Planning allows for the management of urban development, [concept_infrastructure], and land use policies.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание министерства градостроительства позволяет управлять городским развитием, [Concept('concept_infrastructure','инфраструктурой')] и политикой землепользования."
+ },
  "lawgroup_ministry_of_war": {
   "en": "Ministry of War",
   "ru": "Военное министерство"
+ },
+ "lawgroup_ministry_of_war_desc": {
+  "en": "As part of the [concept_ministry_system], the establishment of a Ministry of War allows for the management of military affairs, defense strategy, and national security.",
+  "ru": "В рамках [Concept('concept_ministry_system','системы министерств')] создание военного министерства позволяет управлять военными делами, оборонной стратегией и национальной безопасностью."
  },
  "lawgroup_minority_rights": {
   "en": "Minority Rights",
   "ru": "Права меньшинств"
  },
+ "lawgroup_minority_rights_desc": {
+  "en": "How the state treats its minorities, from violent persecution to preference in schooling and work.",
+  "ru": "Как государство обращается со своими меньшинствами: от насильственных преследований до преференций в школе и на работе."
+ },
  "lawgroup_monetary_policy": {
   "en": "Monetary Policy",
   "ru": "Денежная политика"
+ },
+ "lawgroup_monetary_policy_desc": {
+  "en": "The form money take and the extent to which the government controls the money supply, interest rates, and inflation in the economy.",
+  "ru": "Форма, которую принимают деньги, и степень, в которой правительство контролирует денежное предложение, процентные ставки и инфляцию в экономике."
  },
  "lawgroup_national_bank": {
   "en": "National Bank",
   "ru": "Национальный банк"
  },
+ "lawgroup_national_bank_desc": {
+  "en": "The establishment of a National Bank allows for the regulation of monetary policy, [concept_financial_regulation], and economic growth.",
+  "ru": "Создание национального банка позволяет регулировать денежную политику, [Concept('concept_financial_regulation','финансовое регулирование')] и экономический рост."
+ },
  "lawgroup_privacy_rights": {
   "en": "Privacy Rights",
   "ru": "Права на частную жизнь"
  },
+ "lawgroup_privacy_rights_desc": {
+  "en": "The extent to which personal privacy is protected and regulated in society.",
+  "ru": "Степень, в которой личная неприкосновенность защищается и регулируется в обществе."
+ },
  "lawgroup_resource_transition": {
   "en": "Resource Transition",
   "ru": "Ресурсный переход"
+ },
+ "lawgroup_resource_transition_desc": {
+  "en": "Whether the state lets coal mines, oil rigs and power plants keep growing, freezes them, or retires them: the [concept_fossil_transition]. Part of the [concept_ministry_system]'s environmental agenda: both restrictive laws need a Ministry of the Environment, and lapse if it is abolished.",
+  "ru": "Позволяет ли государство угольным шахтам, буровым и электростанциям продолжать расти, замораживает их или выводит из эксплуатации: [concept_fossil_transition|l]. Часть экологической повестки [Concept('concept_ministry_system','системы министерств')]: оба ограничительных закона требуют министерства окружающей среды и утрачивают силу, если оно упразднено."
  },
  "lawgroup_right_to_information": {
   "en": "Right to Information",
