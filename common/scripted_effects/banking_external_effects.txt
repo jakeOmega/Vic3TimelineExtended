@@ -38,7 +38,10 @@ banking_external_monthly_update = {
 			set_variable = { name = banking_external_sterilization_funded value = 1 }
 			banking_external_charge_sterilization = yes
 		}
-		else = { banking_effect_cb_disable_sterilize_inflows = yes }
+		else = {
+			banking_effect_cb_disable_sterilize_inflows = yes
+			banking_overdraft_wait_a_pulse = yes
+		}
 	}
 	if = {
 		limit = { banking_tool_emergency_import_financing_active = yes }
@@ -52,7 +55,10 @@ banking_external_monthly_update = {
 			banking_external_charge_import = yes
 			change_variable = { name = banking_external_import_months add = 1 }
 		}
-		else = { banking_effect_cb_disable_emergency_import_financing = yes }
+		else = {
+			banking_effect_cb_disable_emergency_import_financing = yes
+			banking_overdraft_wait_a_pulse = yes
+		}
 	}
 	else = { change_variable = { name = banking_external_import_months subtract = 1 } }
 	clamp_variable = { name = banking_external_import_months min = 0 max = banking_external_import_fatigue_cap }
@@ -122,17 +128,30 @@ banking_external_purchase_reserves = {
 
 # Unavailable tools never occupy intervention points indefinitely. Disable
 # helpers also record the policy change in history; state stocks persist.
+#
+# EACH LIFT HERE AND IN THE MONTHLY UPDATE ABOVE MARKS THE MONTH FOR THE OVERDRAFT
+# CHAIN (banking_overdraft_wait_a_pulse, banking_cycle_effects.txt). The points come
+# back, and the chain at the end of the banking entry's pulse must not lift a second
+# tool on the budget as it stood before. This update runs from the country's monthly
+# on_action, a different effect from the entry's pulse on the same day; whether a
+# removal made here has reached the modifier sum the chain reads is not verified, and
+# the order of the two is not known either, so the mark is set regardless. At worst
+# the chain waits a month it did not need to. test_banking_overdraft_shed.py walks
+# every monthly on_action for a lift with no mark beside it.
 banking_external_cleanup = {
 	if = {
 		limit = { banking_tool_restrict_inflows_active = yes banking_external_eligible_restrict_inflows = no }
 		banking_effect_cb_disable_restrict_inflows = yes
+		banking_overdraft_wait_a_pulse = yes
 	}
 	if = {
 		limit = { banking_tool_foreign_borrowing_limits_active = yes banking_external_eligible_foreign_borrowing_limits = no }
 		banking_effect_cb_disable_foreign_borrowing_limits = yes
+		banking_overdraft_wait_a_pulse = yes
 	}
 	if = {
 		limit = { banking_tool_fx_surrender_active = yes banking_external_eligible_fx_surrender = no }
 		banking_effect_cb_disable_fx_surrender = yes
+		banking_overdraft_wait_a_pulse = yes
 	}
 }

@@ -48,7 +48,7 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
-from test_monetary_union_leader import Script, definitions, substitute
+from test_monetary_union_leader import Script, definitions, parse_body, substitute
 
 ROOT = Path(__file__).resolve().parent
 EFFECT = "banking_crash_check_overdrawn_interventions"
@@ -341,6 +341,36 @@ class LiftWalk:
         return found
 
 
+def monthly_on_actions():
+    """{on_action: its effect blocks} for everything the mod hangs on a monthly pulse, the
+    country's and the global one, through nested on_actions lists."""
+    hooks, defs = [], {}
+    for path in sorted((ROOT / "common/on_actions").glob("*.txt")):
+        for key, _, val in parse_body(path.read_text(encoding="utf-8-sig")):
+            if not isinstance(val, list):
+                continue
+            if key in ("on_monthly_pulse_country", "on_monthly_pulse"):
+                hooks.append(val)           # declared in many files: each adds to the hook
+            else:
+                defs.setdefault(key, []).extend(val)
+    out, queue = {}, []
+    for body in hooks:
+        for key, _, val in body:
+            if key == "on_actions":
+                queue += [name for name, _, _ in val]
+            elif key == "effect":
+                out.setdefault("the hook itself", []).append(val)
+    while queue:
+        name = queue.pop()
+        if name in out or name not in defs:
+            continue
+        out[name] = [val for key, _, val in defs[name] if key == "effect"]
+        for key, _, val in defs[name]:
+            if key == "on_actions":
+                queue += [sub for sub, _, _ in val]
+    return out
+
+
 class EarlierStepsTest(unittest.TestCase):
     """Whatever lifts a tool before the chain, in the same pulse, marks the pulse."""
 
@@ -382,6 +412,29 @@ class EarlierStepsTest(unittest.TestCase):
                 self.assertEqual(walk.uncovered(self.step_body(step), ()), [],
                                  f"lifts a tool that holds points and does not call {WAIT} beside it: the "
                                  "overdraft chain reads this pulse's opening budget")
+
+    def test_every_lift_from_a_monthly_on_action_marks_the_month(self):
+        # The monetary update runs from the country's monthly on_action, the same day as the
+        # entry's pulse and in an order nobody has measured. It lifts External & Currency tools
+        # that are no longer eligible or funded, and all five when the banking rule leaves Full.
+        # Whether such a lift has reached the sum the chain reads is not verified, so each marks.
+        actions = monthly_on_actions()
+        self.assertGreater(len(actions), 60)
+        seen, marked = LiftWalk(marks=False), LiftWalk()
+        lifting = set()
+        for name, effects in actions.items():
+            for effect in effects:
+                if seen.uncovered(effect, ()):
+                    lifting.add(name)
+                with self.subTest(on_action=name):
+                    self.assertEqual(marked.uncovered(effect, (name,)), [],
+                                     f"lifts a tool that holds points and does not call {WAIT} beside it")
+        self.assertEqual(lifting, {"te_monetary_monthly_on_action"},
+                         "the monthly on_actions that lift a point-holding tool changed")
+        lifts = {trail[-1].split(" = ")[1] for effect in actions["te_monetary_monthly_on_action"]
+                 for trail in seen.uncovered(effect, ())}
+        self.assertEqual(lifts, {"banking_restrict_inflows", "banking_sterilize_inflows", "banking_fx_surrender",
+                                 "banking_foreign_borrowing_limits", "banking_emergency_import_financing"})
 
     def test_a_lift_with_no_mark_is_caught(self):
         # The same walk on a step that forgot: the Outflow Controls cleanup without its mark.
