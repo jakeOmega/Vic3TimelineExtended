@@ -677,7 +677,7 @@ def self_checks(families: dict, clock: Clock, docs_root: str) -> list[str]:
         flag = ""
         if status.get("BROKEN"):
             flag = "  <-- BROKEN"
-        elif status.get("START") and not (status.get("OK") or status.get("BROKEN")):
+        elif status.get("START") and not (status.get("OK") or status.get("BROKEN") or status.get("NO_VERDICT")):
             flag = "  <-- START with no verdict: a dead path until the save says otherwise"
         homes = [doc for doc, text in lists.items() if name in text]
         first = rec["first"].get("BROKEN") or rec["first"].get("OK") or next(iter(rec["first"].values()))
