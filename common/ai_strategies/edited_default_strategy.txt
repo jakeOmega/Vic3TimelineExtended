@@ -1,6 +1,19 @@
 ﻿INJECT:ai_strategy_default = {
+	# The chance (1 = 1%) that an AI country starts changing a law at its law update, which the engine runs every
+	# 50 days for each country (measured from saves, docs/systems/mod_systems/ai.md § Law-Change Cadence). The
+	# country's political strategy adds its own change_law_chance to this one (vanilla 1.15.1: 2.5 conservative,
+	# 3.5 reactionary, 10 progressive and nationalist, 15 egalitarian). Vanilla's 1 here left a conservative AI about
+	# four years between finishing one enactment and starting the next; 40 makes it a 41-60% chance a roll on every
+	# common agenda, about a three-month wait, so an AI with a law it wants seldom sits idle (owner, 2026-11-15:
+	# frequent AI law changes are fine). edited_political_strategies.txt raises revolution_aversion to match.
+	# value = 1 restates vanilla's field and add = 39 carries the change, so the field reads 40 whether the engine
+	# replaces vanilla's field with this one (an interest group's field does) or merges in only the keys vanilla's
+	# lacks (a strategy's subsidies block does). Whether this INJECT takes at all is unread: normal times read 1 either
+	# way before 2026-11-15. TE_SELF_CHECK ai_law_cadence (te_ai_law_cadence_selfcheck_on_actions.txt) reads it.
 	change_law_chance = {
 		value = 1
+		add = 39
+		# Crisis: a movement with over 20% support at over 0.75 radicalism. 400, a start at the next update.
 		if = {
 			limit = {
 				any_political_movement = {

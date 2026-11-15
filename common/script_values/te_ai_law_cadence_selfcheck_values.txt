@@ -1,0 +1,14 @@
+﻿# TE_SELF_CHECK ai_law_cadence (common/on_actions/te_ai_law_cadence_selfcheck_on_actions.txt): the counts it stores,
+# read back for its verdict and its log line. Delete with that file.
+te_alc_chk_countries_g = { value = global_var:te_alc_chk_countries }
+te_alc_chk_enacting_g = { value = global_var:te_alc_chk_enacting }
+
+# The share of those AI countries enacting a law (0 with none counted).
+te_alc_chk_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alc_chk_countries > 0 }
+		value = global_var:te_alc_chk_enacting
+		divide = global_var:te_alc_chk_countries
+	}
+}
