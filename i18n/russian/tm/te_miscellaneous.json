@@ -9163,69 +9163,2013 @@
   "en": "Drainage work below $gm_arch_site_vindolanda_tablets_place$, in [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName], has struck a layer of black, airless earth. The laborers have brought up leather shoes, a wooden comb, and thin slivers of wood that look, under a lens, as if they were once written on.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$",
   "ru": "Дренажные работы под участком ($gm_arch_site_vindolanda_tablets_place$) в области [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName] вскрыли слой чёрной бескислородной земли. Рабочие подняли кожаную обувь, деревянный гребень и тонкие дощечки, которые под лупой выглядят так, будто на них когда-то писали.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$"
  },
+ "gm_arch_site_vindolanda_tablets_history": {
+  "en": "Robin Birley found the first tablets in 1973, digging the fort's ditches and drains. Written between about AD 85 and 130, they are the oldest surviving handwritten documents in Britain, and Claudia Severa's invitation to Sulpicia Lepidina is among the earliest known writing in Latin by a woman. Most are in the British Museum.",
+  "ru": "Первые таблички нашёл в 1973 году Робин Бёрли, раскапывая рвы и стоки форта. Написанные примерно между 85 и 130 годами н. э., они — старейшие сохранившиеся рукописные документы Британии, а приглашение Клаудии Северы к Сульпиции Лепидине — одно из древнейших известных текстов на латыни, написанных женщиной. Большинство табличек хранится в Британском музее."
+ },
  "gm_arch_site_vindolanda_tablets_place": {
   "en": "the Roman fort of Vindolanda, behind Hadrian's Wall",
   "ru": "римский форт Виндоланда за Адриановым валом"
+ },
+ "gm_arch_site_winged_victory_of_samothrace_dug": {
+  "en": "On the terrace above the theater of $gm_arch_site_winged_victory_of_samothrace_place$, off the coast of [SCOPE.sState('gm_arch_ev_winged_victory_of_samothrace').GetName], the diggers have lifted a marble goddess from the earth in more than a hundred fragments: a winged Victory alighting on the prow of a warship, the robes blown back by the sea wind, carved about 190 BC. The head and arms are lost; the prow, of gray marble, lies nearby in pieces.\\n\\n$gm_arch_history_lead$ $gm_arch_site_winged_victory_of_samothrace_history$",
+  "ru": "На террасе над театром ($gm_arch_site_winged_victory_of_samothrace_place$) у побережья области [SCOPE.sState('gm_arch_ev_winged_victory_of_samothrace').GetName] землекопы подняли из земли мраморную богиню, собранную более чем из сотни обломков: крылатая Победа опускается на нос боевого корабля, морской ветер откидывает её одежды назад. Статуя высечена около 190 г. до н. э. Голова и руки утрачены; нос из серого мрамора лежит неподалёку, разбитый на куски.\\n\\n$gm_arch_history_lead$ $gm_arch_site_winged_victory_of_samothrace_history$"
+ },
+ "gm_arch_site_winged_victory_of_samothrace_found": {
+  "en": "Travelers describe the ruins of a sanctuary of mystery cults on the north shore of Samothrace, off the coast of [SCOPE.sState('gm_arch_ev_winged_victory_of_samothrace').GetName]. Our classicists believe $gm_arch_site_winged_victory_of_samothrace_place$ was rich in offerings, and that the hillside above its theater hides more than broken columns.\\n\\n$gm_arch_history_lead$ $gm_arch_site_winged_victory_of_samothrace_history$",
+  "ru": "Путешественники описывают руины святилища мистериальных культов на северном берегу Самофракии, у побережья области [SCOPE.sState('gm_arch_ev_winged_victory_of_samothrace').GetName]. Наши классицисты полагают, что это $gm_arch_site_winged_victory_of_samothrace_place$: оно было богато приношениями, и склон холма над его театром скрывает больше, чем обломки колонн.\\n\\n$gm_arch_history_lead$ $gm_arch_site_winged_victory_of_samothrace_history$"
+ },
+ "gm_arch_site_winged_victory_of_samothrace_history": {
+  "en": "Charles Champoiseau, the French vice-consul at Adrianople, found the statue in April 1863 and shipped it to the Louvre, where it was first shown in 1866. The prow followed in 1879, and the reassembled Victory has stood at the head of the Daru staircase since 1884. Fragments of the right hand were found in 1950.",
+  "ru": "Шарль Шампуазо, французский вице-консул в Адрианополе, нашёл статую в апреле 1863 года и отправил её в Лувр, где её впервые показали в 1866 году. Нос корабля последовал за ней в 1879 году, и с 1884 года собранная заново Победа стоит на верху лестницы Дарю. Фрагменты правой руки нашли в 1950 году."
+ },
+ "gm_arch_site_winged_victory_of_samothrace_place": {
+  "en": "the Sanctuary of the Great Gods on the island of Samothrace",
+  "ru": "святилище великих богов на острове Самофракия"
+ },
+ "gm_arch_suspend": {
+  "en": "Suspend Dig",
+  "ru": "Приостановить раскопки"
+ },
+ "gm_arch_suspend_tooltip": {
+  "en": "#b Suspend Dig#!\\nThe dig stops diverting [concept_innovation]. What was done is kept, and the site stays open to whoever holds the ground.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Приостановить раскопки#!\\nРаскопки перестают отвлекать [concept_innovation|l]. Сделанное сохраняется, а место остаётся открытым для того, кто владеет землёй.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_arch_suspend_tt": {
+  "en": "Stop digging at this site; the progress is kept",
+  "ru": "Прекратить раскопки на этом месте; прогресс сохраняется"
  },
  "gm_boon_centenary": {
   "en": "A Century of Nationhood",
   "ru": "Столетие нации"
  },
+ "gm_boon_centenary_desc": {
+  "en": "A monument to the country's founding draws its peoples together. Won from an opportunity.",
+  "ru": "Монумент в честь основания страны сплачивает её народы. Получено благодаря возможности."
+ },
  "gm_boon_defeat": {
   "en": "Lest We Forget",
   "ru": "Чтобы не забыть"
+ },
+ "gm_boon_defeat_desc": {
+  "en": "A memorial to the fallen lets the country grieve together instead of turning on its government. Won from an opportunity.",
+  "ru": "Мемориал павшим позволяет стране скорбеть сообща, а не обращаться против правительства. Получено благодаря возможности."
  },
  "gm_boon_faith": {
   "en": "A Faith Proclaimed",
   "ru": "Провозглашённая вера"
  },
+ "gm_boon_faith_desc": {
+  "en": "A great shrine to the new faith draws the doubtful in. Won from an opportunity.",
+  "ru": "Великая святыня новой веры привлекает сомневающихся. Получено благодаря возможности."
+ },
  "gm_boon_great_power": {
   "en": "A Seat Among the Powers",
   "ru": "Место среди держав"
+ },
+ "gm_boon_great_power_desc": {
+  "en": "A monument marks the country's rise among the great powers, and the world takes note. Won from an opportunity.",
+  "ru": "Монумент отмечает возвышение страны среди великих держав, и мир это замечает. Получено благодаря возможности."
  },
  "gm_boon_homecoming": {
   "en": "The Homecoming",
   "ru": "Возвращение домой"
  },
+ "gm_boon_homecoming_desc": {
+  "en": "A monument carried off as a trophy stands in its own city again.",
+  "ru": "Монумент, увезённый как трофей, снова стоит в своём городе."
+ },
+ "gm_boon_none": {
+  "en": "No boon",
+  "ru": "Без бонуса"
+ },
+ "gm_boon_none_effect": {
+  "en": "nothing more",
+  "ru": "ничего более"
+ },
  "gm_boon_regime": {
   "en": "The New Order Proclaimed",
   "ru": "Провозглашение нового порядка"
+ },
+ "gm_boon_regime_desc": {
+  "en": "A monument proclaims the new order, and those who welcome it are louder for a time. Won from an opportunity.",
+  "ru": "Монумент провозглашает новый порядок, и его сторонники на время становятся громче. Получено благодаря возможности."
  },
  "gm_boon_reign": {
   "en": "The New Reign",
   "ru": "Новое правление"
  },
+ "gm_boon_reign_desc": {
+  "en": "A monument marks the start of the reign, and the new ruler's word carries further for a time. Won from an opportunity.",
+  "ru": "Монумент отмечает начало правления, и слово нового правителя на время звучит дальше. Получено благодаря возможности."
+ },
  "gm_boon_ruler_death": {
   "en": "A Nation in Mourning",
   "ru": "Нация в трауре"
+ },
+ "gm_boon_ruler_death_desc": {
+  "en": "A mausoleum for the late ruler lends the government the dignity of their memory. Won from an opportunity.",
+  "ru": "Мавзолей покойного правителя придаёт правительству достоинство его памяти. Получено благодаря возможности."
  },
  "gm_boon_space": {
   "en": "The Space Age",
   "ru": "Космическая эра"
  },
+ "gm_boon_space_desc": {
+  "en": "A monument to the country's first in space fires a generation of engineers and scientists. Won from an opportunity.",
+  "ru": "Монумент первым шагам страны в космосе воодушевляет поколение инженеров и учёных. Получено благодаря возможности."
+ },
  "gm_boon_tech_artistic": {
   "en": "A Golden Age of the Arts",
   "ru": "Золотой век искусств"
+ },
+ "gm_boon_tech_artistic_desc": {
+  "en": "A grand opera house gives the arts a home and an audience. Won from an opportunity.",
+  "ru": "Большой оперный театр даёт искусствам дом и зрителей. Получено благодаря возможности."
+ },
+ "gm_boon_tech_artistic_effect": {
+  "en": "#G +10%#! $building_art_academy$ throughput",
+  "ru": "#G +10%#! пропускная способность: $building_art_academy$"
  },
  "gm_boon_tech_athletic": {
   "en": "A Sporting Nation",
   "ru": "Спортивная нация"
  },
+ "gm_boon_tech_athletic_desc": {
+  "en": "A grand stadium makes a sporting people, and a healthier one. Won from an opportunity.",
+  "ru": "Большой стадион воспитывает спортивный народ, а вместе с тем и более здоровый. Получено благодаря возможности."
+ },
+ "gm_boon_tech_athletic_effect": {
+  "en": "#G −5%#! mortality",
+  "ru": "#G −5%#! смертность"
+ },
  "gm_boon_tech_industrial": {
   "en": "The Great Exhibition",
   "ru": "Великая выставка"
+ },
+ "gm_boon_tech_industrial_desc": {
+  "en": "A great exhibition hall shows the best of the country's manufacturers to the world. Won from an opportunity.",
+  "ru": "Большой выставочный зал показывает миру лучшее, что производят фабрики страны. Получено благодаря возможности."
+ },
+ "gm_boon_tech_industrial_effect": {
+  "en": "#G +5%#! $bg_manufacturing$ throughput",
+  "ru": "#G +5%#! пропускная способность: $bg_manufacturing$"
  },
  "gm_boon_tech_naturalist": {
   "en": "The Green Movement",
   "ru": "Зелёное движение"
  },
+ "gm_boon_tech_naturalist_desc": {
+  "en": "Botanical gardens turn the public's mind to clean air and water. Won from an opportunity.",
+  "ru": "Ботанические сады обращают мысли публики к чистому воздуху и воде. Получено благодаря возможности."
+ },
  "gm_boon_tech_scientific": {
   "en": "An Age of Inquiry",
   "ru": "Эпоха познания"
  },
+ "gm_boon_tech_scientific_desc": {
+  "en": "A grand observatory draws scholars from abroad, and their ideas with them. Won from an opportunity.",
+  "ru": "Большая обсерватория привлекает учёных из-за рубежа, а с ними и их идеи. Получено благодаря возможности."
+ },
  "gm_boon_victory": {
   "en": "Victory Parade",
   "ru": "Парад победы"
+ },
+ "gm_boon_victory_desc": {
+  "en": "A monument to the victory keeps the triumph in the world's eye. Won from an opportunity.",
+  "ru": "Монумент победе удерживает триумф в поле зрения мира. Получено благодаря возможности."
+ },
+ "gm_button_clear": {
+  "en": "Clear It Away",
+  "ru": "Расчистить"
+ },
+ "gm_button_clear_name": {
+  "en": "Clear Name",
+  "ru": "Стереть название"
+ },
+ "gm_button_clear_name_tooltip": {
+  "en": "#b Clear the typed name#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Стереть введённое название#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_button_clear_tooltip": {
+  "en": "#b Clear it away#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Расчистить#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_button_com_let_pass": {
+  "en": "Let It Pass",
+  "ru": "Пропустить"
+ },
+ "gm_button_com_let_pass_tooltip": {
+  "en": "#b Let it pass#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )][Country.GetCustom('gm_com_special_pass_line')]",
+  "ru": "#b Пропустить#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )][Country.GetCustom('gm_com_special_pass_line')]"
+ },
+ "gm_button_com_raise": {
+  "en": "Raise It",
+  "ru": "Возвести"
+ },
+ "gm_button_com_raise_nowhere": {
+  "en": "No state can take the missing levels.",
+  "ru": "Ни одна область не может принять недостающие уровни."
+ },
+ "gm_button_com_raise_tooltip": {
+  "en": "#b Raise it#!\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_com_has_where'), '(CFixedPoint)1' ), 'gm_button_com_raise_where', 'gm_button_com_raise_nowhere' )]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]",
+  "ru": "#b Возвести#!\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_com_has_where'), '(CFixedPoint)1' ), 'gm_button_com_raise_where', 'gm_button_com_raise_nowhere' )]\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+ },
+ "gm_button_com_raise_where": {
+  "en": "Queues the #v [Country.MakeScope.ScriptValue('gm_com_levels_to_go')|0]#! missing levels in #v [Country.MakeScope.Var('gm_com_build_where').GetState.GetNameNoFormatting]#! as government construction: #v [Country.MakeScope.ScriptValue('gm_disp_com_raise_cost')|0]#! construction.",
+  "ru": "Ставит в очередь недостающие уровни (#v [Country.MakeScope.ScriptValue('gm_com_levels_to_go')|0]#!) в области #v [Country.MakeScope.Var('gm_com_build_where').GetState.GetNameNoFormatting]#! как государственное строительство: #v [Country.MakeScope.ScriptValue('gm_disp_com_raise_cost')|0]#! ед. строительства."
+ },
+ "gm_button_dedicate": {
+  "en": "Dedicate",
+  "ru": "Посвятить"
+ },
+ "gm_button_dedicate_tooltip": {
+  "en": "#b Dedicate it#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Посвятить#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_button_mon_preserve_tooltip": {
+  "en": "#b Keep it as heritage#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Сохранить как наследие#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_button_mon_rededicate_tooltip": {
+  "en": "#b Rededicate it#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Посвятить заново#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_button_mon_tear_down_tooltip": {
+  "en": "#b Pull it down#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Разрушить#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_button_name_cancel": {
+  "en": "Cancel",
+  "ru": "Отмена"
+ },
+ "gm_button_name_cancel_tooltip": {
+  "en": "#b Stop naming#!\\nThe monument keeps its current name.",
+  "ru": "#b Прекратить выбор названия#!\\nМонумент сохраняет нынешнее название."
+ },
+ "gm_button_name_popup": {
+  "en": "Rename",
+  "ru": "Переименовать"
+ },
+ "gm_button_name_popup_tooltip": {
+  "en": "#b Type the name again#!\\nOpens the box to type this monument's name in.",
+  "ru": "#b Ввести название заново#!\\nОткрывает окно, в котором можно ввести название этого монумента."
+ },
+ "gm_button_name_start": {
+  "en": "Name It",
+  "ru": "Назвать"
+ },
+ "gm_button_name_start_tooltip": {
+  "en": "#b Name it ourselves#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Назвать самим#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_button_name_use": {
+  "en": "Use This Name",
+  "ru": "Принять название"
+ },
+ "gm_button_name_use_tooltip": {
+  "en": "#b Use this name#!\\nGive the monument the name shown above, if confirming it in the box has not already.",
+  "ru": "#b Принять это название#!\\nДайте монументу название, показанное выше, если подтверждение в окне ввода этого ещё не сделало."
+ },
+ "gm_button_preserve": {
+  "en": "Keep as Heritage",
+  "ru": "Сохранить как наследие"
+ },
+ "gm_button_rededicate": {
+  "en": "Rededicate",
+  "ru": "Посвятить заново"
+ },
+ "gm_button_rename_tooltip": {
+  "en": "#b Rename it#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Переименовать#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_button_tear_down": {
+  "en": "Pull Down",
+  "ru": "Разрушить"
+ },
+ "gm_button_tr_bring_home": {
+  "en": "Bring It Home",
+  "ru": "Вернуть на родину"
+ },
+ "gm_button_tr_carry_off": {
+  "en": "Carry It Off",
+  "ru": "Вывезти"
+ },
+ "gm_button_tr_return_it": {
+  "en": "Return It",
+  "ru": "Вернуть"
+ },
+ "gm_button_tr_take_tooltip": {
+  "en": "#b Carry it off#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
+  "ru": "#b Вывезти#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+ },
+ "gm_clear_landmark_line": {
+  "en": "#R A historical monument:#! its history goes with it.",
+  "ru": "#R Исторический монумент:#! его история уйдёт вместе с ним."
+ },
+ "gm_clear_req_full_tt": {
+  "en": "Six Grand Monuments stand in this state, counting a construction site",
+  "ru": "В этой области стоят шесть Великих монументов, считая строящийся"
+ },
+ "gm_clear_req_least_tt": {
+  "en": "It is the least grand of them, contested ones aside",
+  "ru": "Он наименее великий из них, не считая спорных"
+ },
+ "gm_clear_req_quiet_tt": {
+  "en": "Nothing is under way here: no ceremony, naming, rebuilding or other order",
+  "ru": "Здесь ничего не происходит: ни церемонии, ни наречения, ни перестройки, ни иного распоряжения"
+ },
+ "gm_clear_tt": {
+  "en": "Clear it away to make room: it is gone for good, with its #v [THIS.ScriptValue('gm_state_primary_grandeur')|1]#! [concept_grandeur] and all it gave, and the grandest monument beside it takes its place. [SelectLocalization( EqualTo_CFixedPoint( THIS.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' ), 'gm_clear_landmark_line', 'te_tt_blank' )]\\nSix Grand Monuments may stand in a state, a construction site among them; with one fewer, a new site can be started here.",
+  "ru": "Расчистите его, чтобы освободить место: он исчезнет навсегда вместе со своим #v [THIS.ScriptValue('gm_state_primary_grandeur')|1]#! ед. [Concept('concept_grandeur','величия')] и всем, что давал, а его место займёт величайший из соседних монументов. [SelectLocalization( EqualTo_CFixedPoint( THIS.ScriptValue('gm_disp_is_landmark'), '(CFixedPoint)1' ), 'gm_clear_landmark_line', 'te_tt_blank' )]\\nВ области может стоять шесть Великих монументов, считая строящийся; когда их на один меньше, здесь можно начать новую стройку."
+ },
+ "gm_com_accept_build_line": {
+  "en": "The #v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_target_levels')|0]#! levels its [concept_grandeur] takes at today's rate are queued at once in #v [SCOPE.sState('gm_com_build_state').GetNameNoFormatting]#! as government construction: #v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_accept_cost')|0]#! construction.",
+  "ru": "Уровни, которых требует его [concept_grandeur|l] по сегодняшнему курсу (#v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_target_levels')|0]#!), сразу ставятся в очередь в области #v [SCOPE.sState('gm_com_build_state').GetNameNoFormatting]#! как государственное строительство: #v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_accept_cost')|0]#! ед. строительства."
+ },
+ "gm_com_accept_head": {
+  "en": "The opportunity opens: raise #v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_target')|1]#! [concept_grandeur] in monuments dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#! within #v [SCOPE.GetRootScope.ScriptValue('gm_com_time_months')|0]#! months, in a new monument or one built beside another: a finished monument takes no more levels of its own, and years of age do not count.\\nCompleted, it brings:\\nThe monument that completes it gains #G +[SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur] at no cost.\\nThe approval of the [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName]: about #G +2#!, fading.",
+  "ru": "Возможность открывается: набрать #v [SCOPE.GetRootScope.ScriptValue('gm_disp_com_target')|1]#! ед. [Concept('concept_grandeur','величия')] в монументах с посвящением #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#! в течение #v [SCOPE.GetRootScope.ScriptValue('gm_com_time_months')|0]#! мес., в новом монументе или в построенном рядом с другим: готовый монумент уже не принимает собственных уровней, а возраст в годах не засчитывается.\\nПосле завершения он приносит:\\nМонумент, завершивший её, получает #G +[SCOPE.GetRootScope.ScriptValue('gm_com_gift')|0]#! ед. [Concept('concept_grandeur','величия')] бесплатно.\\nОдобрение: группа интересов [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName], около #G +2#!, со временем затухает."
+ },
+ "gm_com_accept_hist_tt": {
+  "en": "$gm_com_accept_head$\\nThe monument that completes it becomes #b [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]#!, a historical monument with its own name and look.[ROOT.GetCountry.GetCustom('gm_com_hist_sig_line')]\\nThis opportunity comes once: let it pass and it does not come again.\\nIf time runs out, the moment passes at no cost.",
+  "ru": "$gm_com_accept_head$\\nМонумент, завершивший её, становится монументом #b [ROOT.GetCountry.GetCustom('gm_com_occasion_name')]#! — историческим, со своим названием и обликом.[ROOT.GetCountry.GetCustom('gm_com_hist_sig_line')]\\nЭта возможность даётся один раз: если её упустить, она не повторится.\\nЕсли время выйдет, момент пройдёт без затрат."
+ },
+ "gm_com_accept_tt": {
+  "en": "$gm_com_accept_head$\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! for #v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! years: [ROOT.GetCountry.GetCustom('gm_com_boon_effect')].[ROOT.GetCountry.GetCustom('gm_com_special_line')]\\nIf time runs out, the moment passes at no cost.",
+  "ru": "$gm_com_accept_head$\\n#b [ROOT.GetCountry.GetCustom('gm_com_boon_name')]#! (#v [SCOPE.GetRootScope.ScriptValue('gm_disp_boon_years')|0]#! г.): [ROOT.GetCountry.GetCustom('gm_com_boon_effect')].[ROOT.GetCountry.GetCustom('gm_com_special_line')]\\nЕсли время выйдет, момент пройдёт без затрат."
+ },
+ "gm_com_boon_historical": {
+  "en": "a historical monument",
+  "ru": "исторический монумент"
+ },
+ "gm_com_decline_tt": {
+  "en": "The moment passes. No one holds it against us, and the next moment can bring another opportunity.[ROOT.GetCountry.GetCustom('gm_com_special_pass_line')]",
+  "ru": "Момент проходит. Никто не поставит нам это в вину, и следующий момент может принести новую возможность.[ROOT.GetCountry.GetCustom('gm_com_special_pass_line')]"
+ },
+ "gm_com_form_arch": {
+  "en": "an arch",
+  "ru": "арка"
+ },
+ "gm_com_form_column": {
+  "en": "a column",
+  "ru": "колонна"
+ },
+ "gm_com_form_default": {
+  "en": "a monument",
+  "ru": "монумент"
+ },
+ "gm_com_form_hall": {
+  "en": "a memorial hall",
+  "ru": "мемориальный зал"
+ },
+ "gm_com_form_mausoleum": {
+  "en": "a mausoleum",
+  "ru": "мавзолей"
+ },
+ "gm_com_form_obelisk": {
+  "en": "an obelisk",
+  "ru": "обелиск"
+ },
+ "gm_com_form_statue": {
+  "en": "a statue",
+  "ru": "статуя"
+ },
+ "gm_com_hist_sig_heroes": {
+  "en": "\\nIts unique dedication, #b $gm_sig_heroes$#!: $gm_sig_heroes_effect$ for each step of its [concept_grandeur].",
+  "ru": "\\nЕго уникальное посвящение, #b $gm_sig_heroes$#!: $gm_sig_heroes_effect$ за каждую ступень его [Concept('concept_grandeur','величия')]."
+ },
+ "gm_com_hist_sig_liberty": {
+  "en": "\\nIts unique dedication, #b $gm_sig_liberty$#!: $gm_sig_liberty_effect$ for each step of its [concept_grandeur], counted with every monument that carries it.",
+  "ru": "\\nЕго уникальное посвящение, #b $gm_sig_liberty$#!: $gm_sig_liberty_effect$ за каждую ступень его [Concept('concept_grandeur','величия')], считая все монументы с таким посвящением."
+ },
+ "gm_com_ig_unknown": {
+  "en": "An interest group",
+  "ru": "Группа интересов"
+ },
+ "gm_com_let_pass_effect_tt": {
+  "en": "The opportunity closes at no cost, so the next moment can bring another.",
+  "ru": "Возможность закрывается без затрат, так что следующий момент может принести другую."
+ },
+ "gm_com_named_centenary": {
+  "en": "the centenary",
+  "ru": "в честь столетия"
+ },
+ "gm_com_named_city": {
+  "en": "the city it stands in",
+  "ru": "в честь города, где он стоит"
+ },
+ "gm_com_named_defeat": {
+  "en": "the fallen",
+  "ru": "в честь павших"
+ },
+ "gm_com_named_honours": {
+  "en": "what it honors",
+  "ru": "в честь того, что он чтит"
+ },
+ "gm_com_named_new_ruler": {
+  "en": "the new ruler",
+  "ru": "в честь нового правителя"
+ },
+ "gm_com_named_ruler": {
+  "en": "the late ruler",
+  "ru": "в честь покойного правителя"
+ },
+ "gm_com_named_space_interstellar_probe": {
+  "en": "the first probe sent to the stars",
+  "ru": "в честь первого зонда, отправленного к звёздам"
+ },
+ "gm_com_named_space_mars_landing": {
+  "en": "the first landing on Mars",
+  "ru": "в честь первой посадки на Марс"
+ },
+ "gm_com_named_space_moon_base": {
+  "en": "the first colony on the Moon",
+  "ru": "в честь первой колонии на Луне"
+ },
+ "gm_com_named_space_moon_landing": {
+  "en": "the first landing on the Moon",
+  "ru": "в честь первой посадки на Луну"
+ },
+ "gm_com_named_space_orbital": {
+  "en": "the first flight into orbit",
+  "ru": "в честь первого полёта на орбиту"
+ },
+ "gm_com_named_victory": {
+  "en": "the victory",
+  "ru": "в честь победы"
+ },
+ "gm_com_named_year": {
+  "en": "this year",
+  "ru": "в честь этого года"
+ },
+ "gm_com_occasion_centenary": {
+  "en": "A Centenary",
+  "ru": "Столетие"
+ },
+ "gm_com_occasion_defeat": {
+  "en": "Defeat",
+  "ru": "Поражение"
+ },
+ "gm_com_occasion_faith": {
+  "en": "A New Faith",
+  "ru": "Новая вера"
+ },
+ "gm_com_occasion_great_power": {
+  "en": "Among the Great Powers",
+  "ru": "Среди великих держав"
+ },
+ "gm_com_occasion_petition": {
+  "en": "A Petition",
+  "ru": "Прошение"
+ },
+ "gm_com_occasion_regime": {
+  "en": "A New Order",
+  "ru": "Новый порядок"
+ },
+ "gm_com_occasion_reign": {
+  "en": "A New Reign",
+  "ru": "Новое правление"
+ },
+ "gm_com_occasion_ruler_death": {
+  "en": "A Reign Remembered",
+  "ru": "Память о правлении"
+ },
+ "gm_com_occasion_space_interstellar_probe": {
+  "en": "First Interstellar Probe",
+  "ru": "Первый межзвёздный зонд"
+ },
+ "gm_com_occasion_space_mars_landing": {
+  "en": "First on Mars",
+  "ru": "Первые на Марсе"
+ },
+ "gm_com_occasion_space_moon_base": {
+  "en": "First Lunar Colony",
+  "ru": "Первая лунная колония"
+ },
+ "gm_com_occasion_space_moon_landing": {
+  "en": "First on the Moon",
+  "ru": "Первые на Луне"
+ },
+ "gm_com_occasion_space_orbital": {
+  "en": "First into Orbit",
+  "ru": "Первые на орбите"
+ },
+ "gm_com_occasion_victory": {
+  "en": "Victory",
+  "ru": "Победа"
+ },
+ "gm_com_raise_building_tt": {
+  "en": "None of our Grand Monuments is under construction",
+  "ru": "Ни один из наших Великих монументов не строится"
+ },
+ "gm_com_raise_effect_tt": {
+  "en": "The missing levels are queued as government construction. They count once they are finished and their monument is dedicated: its Dedicate button holds the ceremony, which offers the opportunity's dedication first.",
+  "ru": "Недостающие уровни ставятся в очередь как государственное строительство. Они засчитываются, когда будут достроены и их монумент будет посвящён: церемонию проводит кнопка «Посвятить», и сначала она предлагает посвящение, связанное с возможностью."
+ },
+ "gm_com_raise_nowhere_tt": {
+  "en": "A state can take the missing levels",
+  "ru": "Какая-либо область может принять недостающие уровни"
+ },
+ "gm_com_special_line_concert_of_nations": {
+  "en": "\\nThe monument that completes it is dedicated #b $gm_sig_concert_of_nations$#!, a unique dedication of $pm_monument_civic$: $gm_sig_concert_of_nations_effect$ for each step of its [concept_grandeur], for as long as it stands on it. This moment comes once.",
+  "ru": "\\nМонумент, завершивший её, получает посвящение #b $gm_sig_concert_of_nations$#!, уникальное посвящение типа «$pm_monument_civic$»: $gm_sig_concert_of_nations_effect$ за каждую ступень его [Concept('concept_grandeur','величия')], пока он на нём стоит. Этот момент даётся один раз."
+ },
+ "gm_com_special_line_to_victory": {
+  "en": "\\nThe monument that completes it is dedicated #b $gm_sig_to_victory$#!, a unique dedication of $pm_monument_war_memorial$: $gm_sig_to_victory_effect$ for each step of its [concept_grandeur], for as long as it stands on it.",
+  "ru": "\\nМонумент, завершивший её, получает посвящение #b $gm_sig_to_victory$#!, уникальное посвящение типа «$pm_monument_war_memorial$»: $gm_sig_to_victory_effect$ за каждую ступень его [Concept('concept_grandeur','величия')], пока он на нём стоит."
+ },
+ "gm_com_special_pass_concert_of_nations": {
+  "en": "\\nThis moment comes once: letting it pass loses its unique dedication, #b $gm_sig_concert_of_nations$#!, for good.",
+  "ru": "\\nЭтот момент даётся один раз: если его пропустить, уникальное посвящение #b $gm_sig_concert_of_nations$#! будет утрачено навсегда."
+ },
+ "gm_com_time_10_years": {
+  "en": "ten years",
+  "ru": "десять лет"
+ },
+ "gm_com_time_15_years": {
+  "en": "fifteen years",
+  "ru": "пятнадцать лет"
+ },
+ "gm_com_time_20_years": {
+  "en": "twenty years",
+  "ru": "двадцать лет"
+ },
+ "gm_com_time_30_years": {
+  "en": "thirty years",
+  "ru": "тридцать лет"
+ },
+ "gm_com_time_5_years": {
+  "en": "five years",
+  "ru": "пять лет"
+ },
+ "gm_com_years_100": {
+  "en": "A hundred",
+  "ru": "Сто"
+ },
+ "gm_com_years_200": {
+  "en": "Two hundred",
+  "ru": "Двести"
+ },
+ "gm_ded_reason_crowned_tt": {
+  "en": "Our government is crowned: $law_monarchy$, $law_social_monarchy$ or $law_chiefdom$.",
+  "ru": "У нашего правительства есть корона: $law_monarchy$, $law_social_monarchy$ или $law_chiefdom$."
+ },
+ "gm_ded_reason_industry_allowed_tt": {
+  "en": "We have not enacted $law_industry_banned$.",
+  "ru": "Мы не приняли закон $law_industry_banned$."
+ },
+ "gm_ded_reason_keep_tt": {
+  "en": "A rededication can always be called off, and nothing is paid.",
+  "ru": "Повторное посвящение всегда можно отменить, и ничего не тратится."
+ },
+ "gm_ded_reason_leader_tt": {
+  "en": "Our head of state rules under $law_autocracy$ or a $law_single_party_state$, and wears no crown.",
+  "ru": "Наш глава государства правит при строе $law_autocracy$ или $law_single_party_state$ и не носит короны."
+ },
+ "gm_ded_reason_leave_tt": {
+  "en": "What is being built can always be left as it is, and dedicated later with its Dedicate button.",
+  "ru": "То, что строится, всегда можно оставить как есть и посвятить позже кнопкой «Посвятить»."
+ },
+ "gm_ded_reason_opportunity_tt": {
+  "en": "An open opportunity asks for this dedication, and this monument can answer it.",
+  "ru": "Открытая возможность требует этого посвящения, и этот монумент может на неё ответить."
+ },
+ "gm_ded_reason_republic_tt": {
+  "en": "Our government is a republic: $law_presidential_republic$, $law_parliamentary_republic$, $law_council_republic$ or $law_direct_democracy$.",
+  "ru": "Наше правительство — республика: $law_presidential_republic$, $law_parliamentary_republic$, $law_council_republic$ или $law_direct_democracy$."
+ },
+ "gm_ded_reason_revolution_tt": {
+  "en": "Our government is revolutionary: $law_single_party_state$ or $law_council_republic$.",
+  "ru": "Наше правительство революционное: $law_single_party_state$ или $law_council_republic$."
+ },
+ "gm_ded_reason_special_tt": {
+  "en": "We hold this unique dedication from an opportunity seized, and this monument has none of its own.",
+  "ru": "У нас есть уникальное посвящение, полученное благодаря использованной возможности, а у этого монумента собственного нет."
+ },
+ "gm_ded_reason_tech_empiricism_tt": {
+  "en": "We have researched $empiricism$.",
+  "ru": "Мы изучили технологию $empiricism$."
+ },
+ "gm_dedicate_effect_tt": {
+  "en": "Hold its dedication ceremony and say what it honors. Dedicated, it is finished at its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_site_level')|0]#! levels: a Grand Monument at level 1 stands here with their grandeur, and grows grander with age. More built here after is a monument of its own. #b $monument_events.2.a$#! leaves the work as it is.",
+  "ru": "Провести церемонию посвящения и объявить, что он чтит. После посвящения он считается завершённым, уровней: #v [THIS.GetState.MakeScope.ScriptValue('gm_state_site_level')|0]#!. Здесь встаёт Великий монумент 1-го уровня с их величием и со временем становится величественнее. Всё, что будет построено здесь потом, — отдельный монумент. #b $monument_events.2.a$#! оставляет работу как есть."
+ },
+ "gm_evt_artists_defended": {
+  "en": "Artists Defended",
+  "ru": "Художников защитили"
+ },
+ "gm_evt_artists_defended_desc": {
+  "en": "The government stood by the opera house's scandalous season.",
+  "ru": "Правительство поддержало скандальный сезон оперного театра."
+ },
+ "gm_evt_citizens_assembly": {
+  "en": "A Citizens’ Assembly",
+  "ru": "Собрание граждан"
+ },
+ "gm_evt_citizens_assembly_desc": {
+  "en": "Constitution Day was marked with a citizens' assembly at our monument to the republic.",
+  "ru": "День конституции отметили собранием граждан у нашего монумента республике."
+ },
+ "gm_evt_clergy_trusted": {
+  "en": "The Clergy Trusted",
+  "ru": "Доверие духовенству"
+ },
+ "gm_evt_clergy_trusted_desc": {
+  "en": "The government left the shrine's pilgrims to the clergy.",
+  "ru": "Правительство оставило паломников у святыни на попечение духовенства."
+ },
+ "gm_evt_devout_pleased": {
+  "en": "Pilgrims Welcomed",
+  "ru": "Паломникам рады"
+ },
+ "gm_evt_devout_pleased_desc": {
+  "en": "The government built hostels for the shrine's pilgrims.",
+  "ru": "Правительство построило приюты для паломников у святыни."
+ },
+ "gm_evt_domestic_exhibition": {
+  "en": "Our Own Manufacturers",
+  "ru": "Наши собственные производители"
+ },
+ "gm_evt_domestic_exhibition_desc": {
+  "en": "The exhibition halls are reserved for our own industry.",
+  "ru": "Выставочные залы зарезервированы для нашей промышленности."
+ },
+ "gm_evt_foreign_exhibitors": {
+  "en": "Exhibitors from Abroad",
+  "ru": "Экспоненты из-за рубежа"
+ },
+ "gm_evt_foreign_exhibitors_desc": {
+  "en": "Foreign manufacturers now show their machines in our exhibition halls.",
+  "ru": "Иностранные производители теперь показывают свои машины в наших выставочных залах."
+ },
+ "gm_evt_gardens_open": {
+  "en": "Gardens Open to All",
+  "ru": "Сады открыты для всех"
+ },
+ "gm_evt_gardens_open_desc": {
+  "en": "The botanical gardens here are free to all.",
+  "ru": "Здешние ботанические сады бесплатны для всех."
+ },
+ "gm_evt_grandeur_tt": {
+  "en": "The monument gains #G +[ROOT.GetCountry.MakeScope.Var('gm_ann_gain').GetValue|1]#! [concept_grandeur]: the occasion adds to its fame.",
+  "ru": "Монумент получает #G +[ROOT.GetCountry.MakeScope.Var('gm_ann_gain').GetValue|1]#! ед. [Concept('concept_grandeur','величия')]: событие прибавляет ему славы."
+ },
+ "gm_evt_jubilee": {
+  "en": "A Royal Jubilee",
+  "ru": "Королевский юбилей"
+ },
+ "gm_evt_jubilee_desc": {
+  "en": "The reign was celebrated at our monument to the Crown.",
+  "ru": "Правление отпраздновали у нашего монумента Короне."
+ },
+ "gm_evt_leader_celebrated": {
+  "en": "The Leader Celebrated",
+  "ru": "Чествование лидера"
+ },
+ "gm_evt_leader_celebrated_desc": {
+  "en": "The head of state's birthday was celebrated at the monument to them.",
+  "ru": "День рождения главы государства отпраздновали у монумента в его честь."
+ },
+ "gm_evt_mass_rally": {
+  "en": "The Square Filled",
+  "ru": "Полная площадь"
+ },
+ "gm_evt_mass_rally_desc": {
+  "en": "The revolution's anniversary filled the square at our monument to it.",
+  "ru": "Годовщина революции заполнила площадь у нашего монумента ей."
+ },
+ "gm_evt_military_parade": {
+  "en": "A Constitution Day Parade",
+  "ru": "Парад в День конституции"
+ },
+ "gm_evt_military_parade_desc": {
+  "en": "Constitution Day was marked with a military parade.",
+  "ru": "День конституции отметили военным парадом."
+ },
+ "gm_evt_pilgrim_hostels": {
+  "en": "Pilgrim Hostels",
+  "ru": "Приюты для паломников"
+ },
+ "gm_evt_pilgrim_hostels_desc": {
+  "en": "Hostels for the pilgrims who come to the shrine in this state.",
+  "ru": "Приюты для паломников, которые приходят к святыне в этой области."
+ },
+ "gm_evt_public_lectures": {
+  "en": "Public Lectures",
+  "ru": "Публичные лекции"
+ },
+ "gm_evt_public_lectures_desc": {
+  "en": "The observatory here holds public lectures.",
+  "ru": "В здешней обсерватории читают публичные лекции."
+ },
+ "gm_evt_quiet_commemoration": {
+  "en": "With the Veterans",
+  "ru": "С ветеранами"
+ },
+ "gm_evt_quiet_commemoration_desc": {
+  "en": "The revolution was remembered quietly, with those who made it.",
+  "ru": "Революцию вспомнили тихо, вместе с теми, кто её совершил."
+ },
+ "gm_evt_quiet_remembrance": {
+  "en": "A Quiet Remembrance",
+  "ru": "Тихая память"
+ },
+ "gm_evt_quiet_remembrance_desc": {
+  "en": "The names are read at the war memorial here each year, without ceremony.",
+  "ru": "Каждый год у здешнего военного мемориала читают имена, без церемоний."
+ },
+ "gm_evt_remembrance_day": {
+  "en": "A Day of Remembrance",
+  "ru": "День памяти"
+ },
+ "gm_evt_remembrance_day_desc": {
+  "en": "The reading of the names at our war memorial is now a national day.",
+  "ru": "Чтение имён у нашего военного мемориала теперь стало национальным днём."
+ },
+ "gm_evt_research_nights": {
+  "en": "The Telescopes Kept for Research",
+  "ru": "Телескопы для исследований"
+ },
+ "gm_evt_research_nights_desc": {
+  "en": "The observatory's nights go to its astronomers.",
+  "ru": "Ночи обсерватории отданы её астрономам."
+ },
+ "gm_evt_ruler_popular": {
+  "en": "Among the People",
+  "ru": "В народе"
+ },
+ "gm_evt_ruler_popular_desc": {
+  "en": "The head of state was seen among the crowd rather than above it.",
+  "ru": "Главу государства видели в толпе, а не над ней."
+ },
+ "gm_evt_state_occasion": {
+  "en": "A State Occasion",
+  "ru": "Государственное торжество"
+ },
+ "gm_evt_state_occasion_desc": {
+  "en": "The anniversary at our monument to the nation was made a state occasion.",
+  "ru": "Годовщину у нашего монумента нации сделали государственным торжеством."
+ },
+ "gm_evt_subsidised_tickets": {
+  "en": "Subsidized Tickets",
+  "ru": "Билеты со скидкой"
+ },
+ "gm_evt_subsidised_tickets_desc": {
+  "en": "The government pays toward tickets at the stadium here.",
+  "ru": "Правительство оплачивает часть стоимости билетов на здешний стадион."
+ },
+ "gm_evt_unions_pleased": {
+  "en": "Cheap Seats",
+  "ru": "Дешёвые места"
+ },
+ "gm_evt_unions_pleased_desc": {
+  "en": "The government made the stadium affordable to working people.",
+  "ru": "Правительство сделало стадион доступным для трудящихся."
+ },
+ "gm_evt_works_closed": {
+  "en": "Scandalous Works Closed",
+  "ru": "Скандальные постановки закрыты"
+ },
+ "gm_evt_works_closed_desc": {
+  "en": "The government closed the opera house's scandalous works.",
+  "ru": "Правительство закрыло скандальные постановки оперного театра."
+ },
+ "gm_expand_contested_tt": {
+  "en": "The Grand Monument here is not contested: decide what becomes of it first",
+  "ru": "Великий монумент здесь не спорный: сначала решите его судьбу"
+ },
+ "gm_expand_full_tt": {
+  "en": "Fewer than six Grand Monuments stand here, counting one under construction. Clear It Away, on the least grand one, makes room.",
+  "ru": "Здесь стоят менее шести Великих монументов, считая строящийся. «Расчистить» для наименее великого освобождает место."
+ },
+ "gm_expand_migrating_tt": {
+  "en": "The Grand Monument here belongs to a recorded monument: a building left by a merge or a revolt is settled within a month",
+  "ru": "Великий монумент здесь принадлежит учтённому монументу: здание, оставшееся после слияния или мятежа, будет улажено в течение месяца"
+ },
+ "gm_expand_pending_tt": {
+  "en": "No dedication, unveiling or naming is under way here",
+  "ru": "Здесь не идёт ни посвящение, ни открытие, ни наречение"
+ },
+ "gm_expand_rebuilding_tt": {
+  "en": "No Grand Monument here is waiting for its dedication to be put back",
+  "ru": "Ни один Великий монумент здесь не ждёт возвращения своего посвящения"
+ },
+ "gm_form_choice_tt": {
+  "en": "The monument takes this form. The form changes its name, not what it does.",
+  "ru": "Монумент принимает эту форму. Форма меняет его название, а не то, что он делает."
+ },
+ "gm_form_exhibition_hall": {
+  "en": "Exhibition Hall",
+  "ru": "Выставочный зал"
+ },
+ "gm_form_gardens": {
+  "en": "Gardens",
+  "ru": "Сады"
+ },
+ "gm_form_keep_tt": {
+  "en": "The form stays as the architects proposed it.",
+  "ru": "Форма остаётся такой, какой её предложили архитекторы."
+ },
+ "gm_form_monument": {
+  "en": "Monument",
+  "ru": "Монумент"
+ },
+ "gm_form_observatory": {
+  "en": "Observatory",
+  "ru": "Обсерватория"
+ },
+ "gm_form_opera_house": {
+  "en": "Opera House",
+  "ru": "Оперный театр"
+ },
+ "gm_form_stadium": {
+  "en": "Stadium",
+  "ru": "Стадион"
+ },
+ "gm_honours_civic": {
+  "en": "the Nation",
+  "ru": "нации"
+ },
+ "gm_honours_crown": {
+  "en": "the Crown",
+  "ru": "Короне"
+ },
+ "gm_honours_religious": {
+  "en": "the Faith",
+  "ru": "вере"
+ },
+ "gm_honours_republic": {
+  "en": "the Republic",
+  "ru": "республике"
+ },
+ "gm_honours_revolution": {
+  "en": "the Revolution",
+  "ru": "революции"
+ },
+ "gm_honours_war_memorial": {
+  "en": "the Fallen",
+  "ru": "павшим"
+ },
+ "gm_ig_approval_armed_forces_desc": {
+  "en": "How the $ig_armed_forces$ regard what our monuments honor. It grows with the [concept_grandeur] of the monuments they approve of, falls with those they oppose, and follows what we did with contested monuments.",
+  "ru": "Отношение группы интересов $ig_armed_forces$ к тому, что чтят наши монументы. Оно растёт с [Concept('concept_grandeur','величием')] монументов, которые они одобряют, падает с теми, что они не принимают, и зависит от того, как мы поступили со спорными монументами."
+ },
+ "gm_ig_nobody": {
+  "en": "no one",
+  "ru": "никто"
+ },
+ "gm_inscription_arabic": {
+  "en": "Its dedication is carved in revived Classical Arabic.",
+  "ru": "Посвящение высечено на возрождённом классическом арабском."
+ },
+ "gm_inscription_aramaic": {
+  "en": "Its dedication is carved in revived Aramaic.",
+  "ru": "Посвящение высечено на возрождённом арамейском."
+ },
+ "gm_inscription_avestan": {
+  "en": "Its dedication is carved in revived Avestan.",
+  "ru": "Посвящение высечено на возрождённом авестийском."
+ },
+ "gm_inscription_chinese": {
+  "en": "Its dedication is carved in revived Literary Chinese.",
+  "ru": "Посвящение высечено на возрождённом литературном китайском."
+ },
+ "gm_inscription_coptic": {
+  "en": "Its dedication is carved in revived Coptic.",
+  "ru": "Посвящение высечено на возрождённом коптском."
+ },
+ "gm_inscription_geez": {
+  "en": "Its dedication is carved in revived Ge'ez.",
+  "ru": "Посвящение высечено на возрождённом геэзе."
+ },
+ "gm_inscription_gothic": {
+  "en": "Its dedication is carved in revived Gothic.",
+  "ru": "Посвящение высечено на возрождённом готском."
+ },
+ "gm_inscription_greek": {
+  "en": "Its dedication is carved in revived Classical Greek.",
+  "ru": "Посвящение высечено на возрождённом классическом греческом."
+ },
+ "gm_inscription_hebrew": {
+  "en": "Its dedication is carved in revived Hebrew.",
+  "ru": "Посвящение высечено на возрождённом иврите."
+ },
+ "gm_inscription_irish": {
+  "en": "Its dedication is carved in revived Classical Irish.",
+  "ru": "Посвящение высечено на возрождённом классическом ирландском."
+ },
+ "gm_inscription_latin": {
+  "en": "Its dedication is carved in revived Latin.",
+  "ru": "Посвящение высечено на возрождённой латыни."
+ },
+ "gm_inscription_mayan": {
+  "en": "Its dedication is carved in revived Classic Mayan.",
+  "ru": "Посвящение высечено на возрождённом классическом майя."
+ },
+ "gm_inscription_nahuatl": {
+  "en": "Its dedication is carved in revived Classical Nahuatl.",
+  "ru": "Посвящение высечено на возрождённом классическом науатле."
+ },
+ "gm_inscription_norse": {
+  "en": "Its dedication is carved in revived Old Norse.",
+  "ru": "Посвящение высечено на возрождённом древнескандинавском."
+ },
+ "gm_inscription_pali": {
+  "en": "Its dedication is carved in revived Pali.",
+  "ru": "Посвящение высечено на возрождённом пали."
+ },
+ "gm_inscription_prussian": {
+  "en": "Its dedication is carved in revived Old Prussian.",
+  "ru": "Посвящение высечено на возрождённом древнепрусском."
+ },
+ "gm_inscription_sanskrit": {
+  "en": "Its dedication is carved in revived Sanskrit.",
+  "ru": "Посвящение высечено на возрождённом санскрите."
+ },
+ "gm_inscription_slavonic": {
+  "en": "Its dedication is carved in revived Old Church Slavonic.",
+  "ru": "Посвящение высечено на возрождённом церковнославянском."
+ },
+ "gm_je_abroad_header": {
+  "en": "Held Abroad",
+  "ru": "Хранятся за рубежом"
+ },
+ "gm_je_abroad_summary": {
+  "en": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count')|0]#! taken from the country's lands stand abroad",
+  "ru": "Вывезено из земель страны и хранится за рубежом: #v [Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count')|0]#!"
+ },
+ "gm_je_abroad_ways_tt": {
+  "en": "To bring it home: occupy the state where it stands in a war and carry it off; demand it with the Return Cultural Property treaty article, which a war can enforce; or wait for its holder to send it back.",
+  "ru": "Чтобы вернуть его на родину: в войне занять область, где он стоит, и вывезти его; потребовать его статьёй договора «Возврат культурных ценностей», исполнения которой можно добиться войной; или ждать, пока владелец сам его вернёт."
+ },
+ "gm_je_arch_costs": {
+  "en": "Digs divert #R [Country.MakeScope.ScriptValue('gm_arch_disp_innovation')|0]#! [concept_innovation] a week",
+  "ru": "Раскопки отвлекают #R [Country.MakeScope.ScriptValue('gm_arch_disp_innovation')|0]#! ед. [Concept('concept_innovation','инноваций')] в неделю"
+ },
+ "gm_je_arch_costs_tt": {
+  "en": "The scholars in the field are not in the universities: an Antiquarian dig diverts #v [Country.MakeScope.ScriptValue('gm_arch_innovation_antiquarian')|0]#! weekly [concept_innovation], a Systematic one #v [Country.MakeScope.ScriptValue('gm_arch_innovation_systematic')|0]#! and a Forensic one #v [Country.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#!, for as long as it runs. That is the whole cost of a dig: the country's universities already pay for that [concept_innovation]. The innovation cap does not fall.",
+  "ru": "Учёные в поле — не в университетах: антикварные раскопки отвлекают #v [Country.MakeScope.ScriptValue('gm_arch_innovation_antiquarian')|0]#! ед. [Concept('concept_innovation','инноваций')] в неделю, систематические — #v [Country.MakeScope.ScriptValue('gm_arch_innovation_systematic')|0]#!, а криминалистические — #v [Country.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#!, пока они идут. Это вся цена раскопок: за эти [concept_innovation|l] уже платят университеты страны. Предел инноваций не снижается."
+ },
+ "gm_je_arch_sub_digs": {
+  "en": "Digs Under Way",
+  "ru": "Идущие раскопки"
+ },
+ "gm_je_arch_sub_open": {
+  "en": "Open Sites",
+  "ru": "Открытые места"
+ },
+ "gm_je_arch_summary": {
+  "en": "#v [Country.MakeScope.ScriptValue('gm_arch_disp_dig_count')|0]#! digs under way, #v [Country.MakeScope.ScriptValue('gm_arch_disp_open_count')|0]#! sites open to dig",
+  "ru": "Идёт раскопок: #v [Country.MakeScope.ScriptValue('gm_arch_disp_dig_count')|0]#!, мест, открытых для раскопок: #v [Country.MakeScope.ScriptValue('gm_arch_disp_open_count')|0]#!"
+ },
+ "gm_je_arch_summary_tt": {
+  "en": "#b Archaeological Expeditions#!\\nThe digs under way and the buried sites open to dig.",
+  "ru": "#b Археологические экспедиции#!\\nИдущие раскопки и погребённые места, открытые для раскопок."
+ },
+ "gm_je_archaeology_header": {
+  "en": "Archaeological Expeditions",
+  "ru": "Археологические экспедиции"
+ },
+ "gm_je_awaiting_header": {
+  "en": "Awaiting Dedication",
+  "ru": "Ожидают посвящения"
+ },
+ "gm_je_com_ask": {
+  "en": "#b [Country.GetCustom('gm_com_ig_name')]#! ask for a monument: #b [Country.GetCustom('gm_com_dedication_name')]#!",
+  "ru": "Просят монумент: #b [Country.GetCustom('gm_com_ig_name')]#!. Посвящение: #b [Country.GetCustom('gm_com_dedication_name')]#!"
+ },
+ "gm_je_com_ask_tt": {
+  "en": "#b An opportunity#!\\nA moment an interest group wants marked in stone.",
+  "ru": "#b Возможность#!\\nМомент, который группа интересов хочет увековечить в камне."
+ },
+ "gm_je_com_building": {
+  "en": "#v Under construction:#! levels count once they are finished and their monument is dedicated.",
+  "ru": "#v Строится:#! уровни засчитываются, когда будут достроены и их монумент будет посвящён."
+ },
+ "gm_je_com_lbl_levels": {
+  "en": "Levels to Go",
+  "ru": "Осталось уровней"
+ },
+ "gm_je_com_lbl_months": {
+  "en": "Months Left",
+  "ru": "Осталось месяцев"
+ },
+ "gm_je_com_lbl_progress": {
+  "en": "Grandeur Added",
+  "ru": "Добавлено величия"
+ },
+ "gm_je_com_levels_tt": {
+  "en": "#b Levels to go#!\\nAbout this many more levels of a fitting monument, at today's rate of #v [Country.MakeScope.ScriptValue('gm_world_rate_value')|3]#! [concept_grandeur] a level. Raise It queues them.",
+  "ru": "#b Осталось уровней#!\\nПримерно столько ещё уровней подходящего монумента при сегодняшнем курсе: #v [Country.MakeScope.ScriptValue('gm_world_rate_value')|3]#! ед. [Concept('concept_grandeur','величия')] за уровень. «Возвести» ставит их в очередь."
+ },
+ "gm_je_com_months_tt": {
+  "en": "When they run out, the moment passes, at no cost.",
+  "ru": "Когда они закончатся, момент пройдёт без затрат."
+ },
+ "gm_je_com_named_hist": {
+  "en": "To become #b [Country.GetCustom('gm_com_occasion_name')]#!",
+  "ru": "Станет: #b [Country.GetCustom('gm_com_occasion_name')]#!"
+ },
+ "gm_je_com_named_plain": {
+  "en": "To be named for [Country.GetCustom('gm_com_namesake_phrase')]",
+  "ru": "Будет назван [Country.GetCustom('gm_com_namesake_phrase')]"
+ },
+ "gm_je_com_occasion_tt": {
+  "en": "#b The moment#!\\nWhat brought this opportunity. Each kind of moment brings its own boon when the opportunity is completed.",
+  "ru": "#b Момент#!\\nЧто принесло эту возможность. Каждый вид момента приносит свой бонус, когда возможность выполнена."
+ },
+ "gm_je_com_progress_tt": {
+  "en": "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting.",
+  "ru": "#b Набрано величия#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! из #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nСчитается начальное величие подходящих монументов с этим посвящением, посвящённых с тех пор, как мы воспользовались возможностью, — новых или построенных рядом с другими; их возраст не учитывается. Засчитанный монумент, ставший спорным, перестаёт засчитываться."
+ },
+ "gm_je_com_reward": {
+  "en": "Completed: #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur], approval and #b [Country.GetCustom('gm_com_boon_name')]#!",
+  "ru": "Выполнено: #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! ед. [Concept('concept_grandeur','величия')], одобрение и #b [Country.GetCustom('gm_com_boon_name')]#!"
+ },
+ "gm_je_com_reward_boon": {
+  "en": "#b [Country.GetCustom('gm_com_boon_name')]#! for #v [Country.MakeScope.ScriptValue('gm_disp_boon_years')|0]#! years: [Country.GetCustom('gm_com_boon_effect')].",
+  "ru": "#b [Country.GetCustom('gm_com_boon_name')]#! (#v [Country.MakeScope.ScriptValue('gm_disp_boon_years')|0]#! г.): [Country.GetCustom('gm_com_boon_effect')]."
+ },
+ "gm_je_com_reward_hist": {
+  "en": "It becomes #b [Country.GetCustom('gm_com_occasion_name')]#!, a historical monument with its own name and look.[Country.GetCustom('gm_com_hist_sig_line')]",
+  "ru": "Он становится монументом #b [Country.GetCustom('gm_com_occasion_name')]#! — историческим, со своим названием и обликом.[Country.GetCustom('gm_com_hist_sig_line')]"
+ },
+ "gm_je_com_reward_tt": {
+  "en": "#b What completing it gives#!\\nThe monument that completes it gains #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur], at no cost.\\nThe [Country.GetCustom('gm_com_ig_name')] approve: about #G +2#!, fading.\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_com_historical'), '(CFixedPoint)1' ), 'gm_je_com_reward_hist', 'gm_je_com_reward_boon' )][Country.GetCustom('gm_com_special_line')]",
+  "ru": "#b Что даёт выполнение#!\\nМонумент, завершивший её, получает #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! ед. [Concept('concept_grandeur','величия')] бесплатно.\\nОдобрение: [Country.GetCustom('gm_com_ig_name')], около #G +2#!, со временем затухает.\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_com_historical'), '(CFixedPoint)1' ), 'gm_je_com_reward_hist', 'gm_je_com_reward_boon' )][Country.GetCustom('gm_com_special_line')]"
+ },
+ "gm_je_com_where_line_any": {
+  "en": "Where: any of our states",
+  "ru": "Где: любая из наших областей"
+ },
+ "gm_je_com_where_line_fixed": {
+  "en": "Where: #v [Country.MakeScope.Var('gm_com_state').GetState.GetNameNoFormatting]#!",
+  "ru": "Где: #v [Country.MakeScope.Var('gm_com_state').GetState.GetNameNoFormatting]#!"
+ },
+ "gm_je_commission_header": {
+  "en": "Opportunity",
+  "ru": "Возможность"
+ },
+ "gm_je_decisions_header": {
+  "en": "Awaiting a Decision",
+  "ru": "Ждут решения"
+ },
+ "gm_je_how_archaeology": {
+  "en": "A buried site opens to a country that holds its ground and has the technology that gates it; some are only turned up by chance, by a plow or a railway cutting. A dig takes months, and what it unearths stands as a Grand Monument in our part of the ground. Its only cost is the [concept_innovation] it diverts each week while it runs: our universities already pay for it, and the innovation cap does not fall. An Antiquarian dig is quick and the cheapest, but hasty, and may destroy half of what it finds. A Systematic one is slow and careful, and the monument comes out whole. A Forensic one, with radar and radiocarbon dating, is the most expensive, and the monument comes out with more levels. A site abroad is dug by a treaty article with its owner: an $archaeological_concession$ brings half the levels home as a trophy, and an $excavation_permit$ leaves the finds there and gives us Foreign Scholarship.",
+  "ru": "Погребённое место открывается стране, которая владеет землёй и имеет технологию, дающую к нему доступ; некоторые находят лишь случайно — плугом или при прокладке железной дороги. Раскопки занимают месяцы, а найденное встаёт Великим монументом на нашей земле. Их единственная цена — [concept_innovation|l], которые они отвлекают каждую неделю, пока идут: за них уже платят наши университеты, и предел инноваций не снижается. Антикварные раскопки быстры и дешевле всех, но поспешны и могут уничтожить половину найденного. Систематические медленны и аккуратны, и монумент получается целым. Криминалистические, с радаром и радиоуглеродным анализом, самые дорогие, и монумент получается с большим числом уровней. Место за рубежом раскапывается по статье договора с его владельцем: статья «$archaeological_concession$» привозит домой половину уровней как трофей, а статья «$excavation_permit$» оставляет находки на месте и даёт нам «Зарубежную науку»."
+ },
+ "gm_je_how_choices": {
+  "en": "Pull Down removes it, and the new government gains legitimacy that fades over about five years. Rededicate rebuilds it at half its level for 500 a level, and the ceremony dedicates it again under our current laws. Keep as Heritage returns its prestige, but the group that objected resents it, less each year. Every gain and grievance from these choices goes into a record that fades month by month, so pulling down many monuments at once gives what pulling down one of their combined grandeur would. If what a contested or heritage monument honors returns, it counts in full again.",
+  "ru": "«Разрушить» убирает монумент, и новое правительство получает легитимность, которая угасает около пяти лет. «Посвятить заново» перестраивает его до половины уровня по 500 за уровень, и церемония посвящает его снова при наших нынешних законах. «Сохранить как наследие» возвращает его престиж, но группа, возражавшая против него, негодует, с каждым годом всё меньше. Все выгоды и обиды от этих решений заносятся в запись, которая угасает месяц за месяцем, так что разрушение многих монументов сразу даёт то же, что разрушение одного с их суммарным величием. Если то, что чтит спорный монумент или памятник наследия, вернётся, он снова засчитывается полностью."
+ },
+ "gm_je_how_commissions": {
+  "en": "Moments in the country's life bring opportunities to raise a monument:\\n• a new ruler (but not a regent)\\n• a new crown, republic or revolution that has no monument of its own\\n• becoming a great power for the first time\\n• a new state faith\\n• the end of a war of a year or more as war leader\\n• the hundredth or two hundredth year of the founding\\n• the death of a ruler who reigned fifteen years\\n• the space race's firsts, from the first flight into orbit to the first interstellar probe\\n• the technologies that bring an opera house, an observatory, an exhibition hall, a stadium or botanical gardens within reach\\nOne is open at a time, and a moment that comes while one is open passes. Each asks for 5 [concept_grandeur] of its dedication within 60 months in a great power, 120 in a major power and 180 in any other, raised in a new monument or one built beside another: a finished monument takes no more levels of its own, and its years do not count.",
+  "ru": "Моменты в жизни страны приносят возможности возвести монумент:\\n• новый правитель (но не регент)\\n• новая корона, республика или революция, у которой нет своего монумента\\n• первое превращение в великую державу\\n• новая государственная вера\\n• окончание войны длительностью в год и более в роли лидера войны\\n• сотая или двухсотая годовщина основания\\n• смерть правителя, правившего пятнадцать лет\\n• первые шаги космической гонки — от первого полёта на орбиту до первого межзвёздного зонда\\n• технологии, открывающие оперный театр, обсерваторию, выставочный зал, стадион или ботанические сады\\nОткрыта может быть только одна, а момент, наступивший при открытой, проходит. Каждая требует 5 ед. [Concept('concept_grandeur','величия')] своего посвящения за 60 мес. у великой державы, за 120 — у крупной и за 180 — у любой другой, в новом монументе или в построенном рядом с другим: готовый монумент уже не принимает собственных уровней, а его возраст не засчитывается."
+ },
+ "gm_je_how_commissions_rewards": {
+  "en": "Completing one adds 5 grandeur to the monument that completed it at no cost, pleases the group that asked, and brings a boon for ten years that fits the moment: authority for a new reign, influence for a new great power, prestige for a victory. Letting one pass, running out of time, or losing the state or the government it needs costs nothing.",
+  "ru": "Выполнение добавляет 5 ед. величия монументу, который её завершил, бесплатно, радует группу, попросившую о ней, и приносит на десять лет бонус, подходящий к моменту: авторитет за новое правление, влияние за новую великую державу, престиж за победу. Если пропустить возможность, не уложиться во время или потерять нужную область или правительство, это ничего не стоит."
+ },
+ "gm_je_how_contested": {
+  "en": "A monument to the Crown, the Republic, the Revolution, the Leader or a faith becomes [Concept('concept_contested_monument','contested')] when what it honors falls, or when another country takes its state. It keeps its tourism and its effect in its state but gives nothing else, and the group that objected to its message resents it every month it stands undecided. A shrine in a state another country takes becomes [Concept('concept_heritage_monument','heritage')] at once instead.",
+  "ru": "Монумент Короне, Республике, Революции, Лидеру или вере становится [Concept('concept_contested_monument','спорным')], когда то, что он чтит, падает или когда другая страна занимает его область. Он сохраняет туризм и свой эффект в области, но больше ничего не даёт, а группа, возражавшая против его послания, негодует каждый месяц, пока решение не принято. Святыня в области, которую занимает другая страна, вместо этого сразу становится [Concept('concept_heritage_monument','памятником наследия')]."
+ },
+ "gm_je_how_counts": {
+  "en": "Every monument that is not contested adds to standing grandeur, which gives prestige and cultural pull. Monuments to the Crown, the Republic, the Revolution and the Leader add to regime grandeur, which gives legitimacy while what they honor still stands. A dedicated monument whose message still fits also gives its dedication's own effect, and the interest groups that share its message approve while those that object disapprove.",
+  "ru": "Каждый неспорный монумент прибавляет к текущему величию, которое даёт престиж и культурное притяжение. Монументы Короне, Республике, Революции и Лидеру прибавляют к величию режима, которое даёт легитимность, пока то, что они чтят, ещё существует. Посвящённый монумент, чьё послание ещё актуально, также даёт собственный эффект своего посвящения, а группы интересов, разделяющие его послание, одобряют его, тогда как несогласные — не одобряют."
+ },
+ "gm_je_how_counts_other": {
+  "en": "Each interest group has one total across all our monuments, so no number of monuments can buy a group outright. A [Concept('concept_heritage_monument','heritage monument')] gives prestige, cultural pull, tourism and its effect in its state, but no legitimacy and no approval. A construction site gives nothing until its Dedicate button holds its ceremony.",
+  "ru": "У каждой группы интересов один общий итог по всем нашим монументам, поэтому никакое число монументов не может купить группу целиком. [Concept('concept_heritage_monument','Памятник наследия')] даёт престиж, культурное притяжение, туризм и свой эффект в области, но не легитимность и не одобрение. Стройка ничего не даёт, пока кнопка «Посвятить» не проведёт церемонию."
+ },
+ "gm_je_how_grandeur": {
+  "en": "A monument's [concept_grandeur] is its starting grandeur and its years. It is built as a construction site, a $building_grand_monument_site$: every level built on it adds to the monument it will be, at what a level is worth the year it is finished (5 in 1836, and a tenth as much in a world ten times richer), and the work can stand paused as long as we like. Its Dedicate button holds its ceremony once none of its levels are under construction, and the dedication finishes it: a Grand Monument at level 1 stands in its place, its levels and grandeur kept in its records, and more building in its state is a new site and a new monument. Everything a monument gives grows with grandeur in steps, each taking more than the one before; hover [concept_grandeur] for each kind's steps. The bars under National Effects show how far the current step has come.",
+  "ru": "[Concept('concept_grandeur','Величие')] монумента — это его начальное величие и его возраст. Он строится как строительная площадка: $building_grand_monument_site$. Каждый построенный на ней уровень прибавляет к будущему монументу столько, сколько стоит уровень в год завершения (5 в 1836 году и в десять раз меньше в мире, который в десять раз богаче), и работу можно держать на паузе сколько угодно. Кнопка «Посвятить» проводит церемонию, когда ни один из его уровней не строится, и посвящение завершает его: на его месте встаёт Великий монумент 1-го уровня, а его уровни и величие сохраняются в записях, и любое дальнейшее строительство в области — это новая площадка и новый монумент. Всё, что даёт монумент, растёт вместе с величием ступенями, и каждая требует больше, чем предыдущая; наведите курсор на [Concept('concept_grandeur','величие')], чтобы увидеть ступени каждого вида. Полосы под заголовком «Национальные эффекты» показывают, как далеко продвинулась нынешняя ступень."
+ },
+ "gm_je_how_grandeur_age": {
+  "en": "A finished monument grows grander as it ages: by 2% of its starting grandeur a year, while its message stands or it is kept as heritage, for a century. It doubles in fifty years and stops at three times its starting grandeur. A monument older than the game, standing in 1836 or dug up, comes with its years already counted: its grandeur is split as if it had aged since it was built, so one a century old has finished aging. A contested one does not age. Each anniversary's public celebration and each opportunity it completes add to its grandeur too. Pulling one down throws its years away with its stone; rededicating halves its levels, its grandeur and its years.",
+  "ru": "Готовый монумент становится величественнее с возрастом: на 2% начального величия в год, пока стоит его послание или он хранится как наследие, в течение века. За пятьдесят лет оно удваивается и останавливается на трёхкратном начальном величии. Монумент старше игры, стоящий в 1836 году или раскопанный, приходит с уже посчитанным возрастом: его величие рассчитывается так, словно он старел с момента постройки, поэтому столетний уже закончил стареть. Спорный монумент не стареет. Публичное празднование каждой годовщины и каждая завершённая им возможность тоже добавляют ему величия. Разрушение выбрасывает его возраст вместе с камнем; повторное посвящение вдвое сокращает его уровни, величие и возраст."
+ },
+ "gm_je_how_grandeur_national": {
+  "en": "National effects count the grandeur of all our monuments together, so twenty small monuments give what one tall one gives. Each monument's effect in its own state, and its tourism output, count its own grandeur.",
+  "ru": "Национальные эффекты считают величие всех наших монументов вместе, так что двадцать малых монументов дают столько же, сколько один высокий. Эффект каждого монумента в его области и его туристический продукт зависят от его собственного величия."
+ },
+ "gm_je_how_hard_times": {
+  "en": "While the country is in default, in famine or in recession, finishing monument levels turns 0.5% of the state's pops radical and costs 1 legitimacy for each point of grandeur such levels add, fading over about two years. The overview shows Hard Times while this would happen, so construction can be paused first.",
+  "ru": "Пока страна в дефолте, в голоде или в рецессии, достройка уровней монумента делает радикальными 0,5% населения области и стоит 1 легитимности за каждый пункт величия, который добавляют такие уровни; штраф угасает около двух лет. Обзор показывает «Трудные времена», пока это возможно, так что строительство можно сначала приостановить."
+ },
+ "gm_je_how_header": {
+  "en": "How Grand Monuments Work",
+  "ru": "Как работают Великие монументы"
+ },
+ "gm_je_how_names": {
+  "en": "Every monument has a name: what it is named for (its city, its state, the ruler, what it honors, the year, or the occasion an opportunity marks) and its form, from those its style offers: a column, an arch, a gate, a pagoda. The monument that completes an opportunity takes its name. An upheld monument can be renamed from its row at no cost, or given a name of our own with Name It, which opens the game's rename box; a contested or heritage one keeps its name.",
+  "ru": "У каждого монумента есть название: в честь чего он назван (город, область, правитель, то, что он чтит, год или событие, которое отмечает возможность) и его форма из тех, что предлагает его стиль: колонна, арка, ворота, пагода. Монумент, завершающий возможность, получает её название. Признанный монумент можно бесплатно переименовать из его строки или дать ему собственное название кнопкой «Назвать», которая открывает окно переименования игры; спорный монумент или памятник наследия сохраняет своё название."
+ },
+ "gm_je_how_policy": {
+  "en": "One policy covers all our monuments, and each is the best at one thing. $gm_policy_open$ raises the tourism each brings by half, the tourism of $gm_sig_antiquity$ and $gm_sig_first_emperor$ included. $gm_policy_ceremonial$ lets legitimacy and the Leader's authority count a quarter of the [concept_grandeur] of every monument, not only those to the regime and the Leader. $gm_policy_culture$, the policy until we choose another, raises their [concept_cultural_pull] by half, or their [concept_prestige] when $rule_cultural_hegemony_rule$ is off. $gm_policy_education$ raises education access in every state. After a change, the policy cannot change again for five years; a first choice starts no wait.",
+  "ru": "Одна политика действует для всех наших монументов, и каждая лучше всего делает что-то одно. «$gm_policy_open$» повышает туризм каждого на половину, включая туризм «$gm_sig_antiquity$» и «$gm_sig_first_emperor$». «$gm_policy_ceremonial$» позволяет легитимности и авторитету лидера учитывать четверть [Concept('concept_grandeur','величия')] каждого монумента, а не только монументов режиму и лидеру. «$gm_policy_culture$», политика по умолчанию, пока мы не выберем другую, повышает их [Concept('concept_cultural_pull','культурное притяжение')] на половину, а при отключённом правиле «$rule_cultural_hegemony_rule$» — их [Concept('concept_prestige','престиж')]. «$gm_policy_education$» повышает доступ к образованию в каждой области. После смены политику нельзя менять снова пять лет; первый выбор не вызывает ожидания."
+ },
+ "gm_je_how_signatures": {
+  "en": "Most historical monuments carry a unique dedication of their own on top of the one they stand on: the Temple of Heaven's is The Mandate of Heaven, on To the Crown. Its name shows in place of the dedication's, and hovering it says what it adds. Monuments of one kind share one:\\n• Ancestral Antiquity: the ruins, tombs and treasures of the ancient world\\n• the Epigraphic Archive: inscriptions and lost libraries\\n• Seat of the Throne: royal palaces\\n• Royal Pantheon: royal tombs and statues\\n• Martial Glory: monuments to victories\\n• Liberty: monuments to liberty\\n• Heroes of the Nation: national halls of fame\\nA few have one of their own beside their kind's. It counts only while the monument stands on the dedication it was given on: upheld, it adds its national effect and its effect in its state; contested or kept as heritage, only its effect in its state; rededicated to another, nothing until it is rededicated back. A trophy that carries one counts for whoever holds it, at the trophy's grandeur.",
+  "ru": "У большинства исторических монументов есть собственное уникальное посвящение поверх того, на котором они стоят: у Храма Неба это «Небесный мандат» поверх посвящения «Короне». Его название показывается вместо названия посвящения, а при наведении курсора сказано, что оно добавляет. Монументы одного вида разделяют одно:\\n• Древность предков: руины, гробницы и сокровища древнего мира\\n• Эпиграфический архив: надписи и утраченные библиотеки\\n• Престол: королевские дворцы\\n• Королевский пантеон: королевские гробницы и статуи\\n• Воинская слава: монументы победам\\n• Свобода: монументы свободе\\n• Героям нации: национальные залы славы\\nУ некоторых есть и собственное, помимо принадлежащего их виду. Оно засчитывается, только пока монумент стоит на посвящении, на котором его дали: у признанного оно добавляет национальный эффект и эффект в области; у спорного или сохранённого как наследие — только эффект в области; у посвящённого другому — ничего, пока его не посвятят обратно. Трофей, несущий такое, засчитывается тому, кто его держит, по величию трофея."
+ },
+ "gm_je_how_signatures_specials": {
+  "en": "Some opportunities give the monument that completes them a unique dedication: To Victory and To the Unknown Soldier for war memorials after a war, To the Concert of Nations on becoming a great power, To the Conquerors of Space for a space first and Olympic for Television Broadcasting's stadium. Each completion gives one monument. A monument that already carries one keeps it, and the country holds the new one instead: the dedication ceremony of its next monument of that dedication offers it. Pulled down or rededicated, it is gone for good.",
+  "ru": "Некоторые возможности дают монументу, который их завершает, уникальное посвящение: «К победе» и «Неизвестному солдату» для военных мемориалов после войны, «Концерту наций» при превращении в великую державу, «Покорителям космоса» за космическое первенство и «Олимпийский» для стадиона технологии «Телевещание». Каждое выполнение даёт одному монументу. Монумент, который уже несёт такое, сохраняет его, а страна вместо этого держит новое: церемония посвящения её следующего монумента с этим посвящением предлагает его. Если монумент разрушен или посвящён заново, посвящение утрачивается навсегда."
+ },
+ "gm_je_how_sub_archaeology": {
+  "en": "Archaeology",
+  "ru": "Археология"
+ },
+ "gm_je_how_sub_commissions": {
+  "en": "Opportunities",
+  "ru": "Возможности"
+ },
+ "gm_je_how_sub_contested": {
+  "en": "Contested Monuments",
+  "ru": "Спорные монументы"
+ },
+ "gm_je_how_sub_counts": {
+  "en": "What Counts Where",
+  "ru": "Что и где засчитывается"
+ },
+ "gm_je_how_sub_grandeur": {
+  "en": "Grandeur and Steps",
+  "ru": "Величие и ступени"
+ },
+ "gm_je_how_sub_hard_times": {
+  "en": "Hard Times and Vanity Backlash",
+  "ru": "Трудные времена и ответ на тщеславие"
+ },
+ "gm_je_how_sub_names": {
+  "en": "Names",
+  "ru": "Названия"
+ },
+ "gm_je_how_sub_policy": {
+  "en": "Monument Policy",
+  "ru": "Политика в отношении монументов"
+ },
+ "gm_je_how_sub_signatures": {
+  "en": "Unique Dedications",
+  "ru": "Уникальные посвящения"
+ },
+ "gm_je_how_sub_trophies": {
+  "en": "Trophies",
+  "ru": "Трофеи"
+ },
+ "gm_je_how_trophies": {
+  "en": "A country can carry off a monument, or part of one, from a state its armies hold in a war (half its provinces or more), or from its own unincorporated state if it did not raise the monument. A column, obelisk, statue or stele goes whole; an arch, gate or tower loses a quarter of its levels; a hall, mausoleum or civic building a tenth. A Grand Shrine is never taken, and a monument that loses a piece is spared for ten years. Taking one in a war costs [concept_infamy] and relations, and stiffens its owner's war support.",
+  "ru": "Страна может вывезти монумент или его часть из области, которую её армии удерживают в войне (половина провинций и более), или из собственной невключённой области, если не она возвела этот монумент. Колонна, обелиск, статуя или стела уходят целиком; арка, ворота или башня теряют четверть уровней; зал, мавзолей или гражданское здание — десятую часть. Великая святыня никогда не вывозится, а монумент, лишившийся части, неприкосновенен десять лет. Вывоз в войне стоит [concept_infamy|l] и отношений и укрепляет поддержку войны у его владельца."
+ },
+ "gm_je_how_trophies_home": {
+  "en": "A trophy stands in its taker's capital and counts for half its grandeur in standing grandeur, and the Armed Forces approve. Whoever owns the state it came from can get it back: occupy the state where it stands and carry it off, demand it with the Return Cultural Property treaty article (a war can enforce it), or wait for its holder to send it back. At home all its levels are rebuilt and its years come back with it, and the Homecoming gives legitimacy for ten years.",
+  "ru": "Трофей стоит в столице того, кто его взял, и засчитывается в текущем величии в половину своего величия, а Вооружённые силы это одобряют. Тот, кто владеет областью, откуда он родом, может вернуть его: занять область, где он стоит, и вывезти его, потребовать его статьёй договора «Возврат культурных ценностей» (исполнения можно добиться войной) или ждать, пока владелец сам его вернёт. Дома все его уровни восстанавливаются, возраст возвращается с ним, а возвращение на родину даёт легитимность на десять лет."
+ },
+ "gm_je_lbl_artistic": {
+  "en": "$ig_intelligentsia$ Attraction",
+  "ru": "Привлечение: $ig_intelligentsia$"
+ },
+ "gm_je_lbl_scientific": {
+  "en": "Max [concept_innovation]",
+  "ru": "Макс. [concept_innovation|l]"
+ },
+ "gm_je_lbl_sig_conquerors_of_space": {
+  "en": "Conquerors of Space",
+  "ru": "Покорители космоса"
+ },
+ "gm_je_lbl_sig_held_concert_of_nations": {
+  "en": "Held: $gm_sig_concert_of_nations$",
+  "ru": "В запасе: $gm_sig_concert_of_nations$"
+ },
+ "gm_je_lbl_teardown": {
+  "en": "The Old Order Torn Down",
+  "ru": "Старый порядок разрушен"
+ },
+ "gm_je_lbl_vanity": {
+  "en": "Palaces amid Hardship",
+  "ru": "Дворцы среди невзгод"
+ },
+ "gm_je_lbl_war_memorial": {
+  "en": "[concept_war_support] Loss",
+  "ru": "Потеря [Concept('concept_war_support','поддержки войны')]"
+ },
+ "gm_je_monuments_all_awaiting": {
+  "en": "Every monument awaits a decision, above.",
+  "ru": "Каждый монумент ждёт решения — см. выше."
+ },
+ "gm_je_monuments_header_ours": {
+  "en": "Our Monuments",
+  "ru": "Наши монументы"
+ },
+ "gm_je_monuments_header_theirs": {
+  "en": "Monuments",
+  "ru": "Монументы"
+ },
+ "gm_je_monuments_none_ours": {
+  "en": "We have no Grand Monument. The entry stays until the records under Interest Group Approval and Fading Legitimacy have faded.",
+  "ru": "У нас нет Великого монумента. Запись остаётся, пока не угаснут записи в разделах «Одобрение групп интересов» и «Угасающая легитимность»."
+ },
+ "gm_je_monuments_none_theirs": {
+  "en": "The country has no Grand Monument.",
+  "ru": "У страны нет Великого монумента."
+ },
+ "gm_je_national_header": {
+  "en": "National Effects",
+  "ru": "Национальные эффекты"
+ },
+ "gm_je_national_none": {
+  "en": "No national effect is in force.",
+  "ru": "Ни один национальный эффект не действует."
+ },
+ "gm_je_ov_building_tt": {
+  "en": "#b Construction Sites#!\\nReady to dedicate: #v [Country.MakeScope.ScriptValue('gm_disp_count_sites_ready')|0]#!\\nLevels still being built: #v [Country.MakeScope.ScriptValue('gm_disp_count_sites_building')|0]#!\\nA site gives nothing until its Dedicate button holds its ceremony, under Awaiting Dedication or on its state's card.",
+  "ru": "#b Стройки#!\\nГотовы к посвящению: #v [Country.MakeScope.ScriptValue('gm_disp_count_sites_ready')|0]#!\\nУровней ещё строится: #v [Country.MakeScope.ScriptValue('gm_disp_count_sites_building')|0]#!\\nСтройка ничего не даёт, пока кнопка «Посвятить» не проведёт церемонию — в разделе «Ожидают посвящения» или на карточке её области."
+ },
+ "gm_je_ov_contested_some": {
+  "en": "#R [Country.MakeScope.ScriptValue('gm_disp_count_contested')|0] to decide#!",
+  "ru": "#R Ждёт решения: [Country.MakeScope.ScriptValue('gm_disp_count_contested')|0]#!"
+ },
+ "gm_je_ov_contested_tt": {
+  "en": "#b [concept_contested_monument]#!\\nNo prestige, legitimacy or approval while it stands undecided: the #v [Country.MakeScope.ScriptValue('gm_disp_contested_grandeur')|0]#! [concept_grandeur] that is contested waits on the choices under Awaiting a Decision.",
+  "ru": "#b [concept_contested_monument]#!\\nНи престижа, ни легитимности, ни одобрения, пока решение не принято: спорные #v [Country.MakeScope.ScriptValue('gm_disp_contested_grandeur')|0]#! ед. [Concept('concept_grandeur','величия')] ждут выбора в разделе «Ждут решения»."
+ },
+ "gm_je_ov_hard_times": {
+  "en": "#R In force#!",
+  "ru": "#R Действует#!"
+ },
+ "gm_je_ov_hard_times_act": {
+  "en": "Pause building",
+  "ru": "Приостановить строительство"
+ },
+ "gm_je_ov_hard_times_label": {
+  "en": "Hard Times",
+  "ru": "Трудные времена"
+ },
+ "gm_je_ov_hard_times_none_tt": {
+  "en": "#b Hard Times#!\\nNone: finishing a monument level now causes no backlash. In default, in famine or in recession it would turn part of its state radical and cost legitimacy.",
+  "ru": "#b Трудные времена#!\\nНет: достройка уровня монумента сейчас не вызывает ответной реакции. При дефолте, голоде или рецессии она сделала бы часть населения области радикальной и стоила бы легитимности."
+ },
+ "gm_je_ov_hard_times_tt": {
+  "en": "#b Hard Times#!\\nThe country is in default, in famine or in recession. Finishing a monument level now turns part of its state radical and costs legitimacy for about two years. Pause monument construction until the country recovers.",
+  "ru": "#b Трудные времена#!\\nСтрана в дефолте, в голоде или в рецессии. Достройка уровня монумента сейчас делает часть населения области радикальной и стоит легитимности около двух лет. Приостановите строительство монументов, пока страна не оправится."
+ },
+ "gm_je_ov_monuments_tt": {
+  "en": "#b $gm_je_ov_monuments_label$#!\\nUpheld: #v [Country.MakeScope.ScriptValue('gm_disp_count_upheld')|0]#!, counting in full\\n[Concept('concept_heritage_monument','Heritage')]: #v [Country.MakeScope.ScriptValue('gm_disp_count_heritage')|0]#!\\n[Concept('concept_contested_monument','Contested')]: #v [Country.MakeScope.ScriptValue('gm_disp_count_contested')|0]#![SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_count_undedicated'), '(CFixedPoint)0' ), 'gm_ov_monuments_undedicated_line', 'te_tt_blank' )]\\nStanding [concept_grandeur]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!",
+  "ru": "#b $gm_je_ov_monuments_label$#!\\nПризнанные: #v [Country.MakeScope.ScriptValue('gm_disp_count_upheld')|0]#!, засчитываются полностью\\n[Concept('concept_heritage_monument','Наследие')]: #v [Country.MakeScope.ScriptValue('gm_disp_count_heritage')|0]#!\\n[Concept('concept_contested_monument','Спорные')]: #v [Country.MakeScope.ScriptValue('gm_disp_count_contested')|0]#![SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_count_undedicated'), '(CFixedPoint)0' ), 'gm_ov_monuments_undedicated_line', 'te_tt_blank' )]\\nТекущее [concept_grandeur|l]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!"
+ },
+ "gm_je_ov_policy": {
+  "en": "Monument Policy: #b [Country.GetCustom('gm_policy_name')]#!",
+  "ru": "Политика в отношении монументов: #b [Country.GetCustom('gm_policy_name')]#!"
+ },
+ "gm_je_ov_policy_free": {
+  "en": "It can be changed from National Effects.",
+  "ru": "Её можно сменить в разделе «Национальные эффекты»."
+ },
+ "gm_je_ov_policy_tt": {
+  "en": "#b Monument Policy: [Country.GetCustom('gm_policy_name')]#!\\n[Country.GetCustom('gm_policy_effects')]\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_policy_months_left'), '(CFixedPoint)0' ), 'gm_je_ov_policy_wait', 'gm_je_ov_policy_free' )]",
+  "ru": "#b Политика в отношении монументов: [Country.GetCustom('gm_policy_name')]#!\\n[Country.GetCustom('gm_policy_effects')]\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_policy_months_left'), '(CFixedPoint)0' ), 'gm_je_ov_policy_wait', 'gm_je_ov_policy_free' )]"
+ },
+ "gm_je_ov_policy_wait": {
+  "en": "It can change again in #v [Country.MakeScope.ScriptValue('gm_disp_policy_months_left')|0]#! months.",
+  "ru": "Её можно будет сменить снова через #v [Country.MakeScope.ScriptValue('gm_disp_policy_months_left')|0]#! мес."
+ },
+ "gm_je_ov_sites_building": {
+  "en": "#v [Country.MakeScope.ScriptValue('gm_disp_count_sites')|0]#! building",
+  "ru": "Строится: #v [Country.MakeScope.ScriptValue('gm_disp_count_sites')|0]#!"
+ },
+ "gm_je_ov_sites_label": {
+  "en": "Sites",
+  "ru": "Стройки"
+ },
+ "gm_je_ov_sites_ready": {
+  "en": "#R [Country.MakeScope.ScriptValue('gm_disp_count_sites_ready')|0] to dedicate#!",
+  "ru": "#R К посвящению: [Country.MakeScope.ScriptValue('gm_disp_count_sites_ready')|0]#!"
+ },
+ "gm_je_ov_upheld": {
+  "en": "Upheld #v [Country.MakeScope.ScriptValue('gm_disp_count_upheld')|0]#!",
+  "ru": "Признанные: #v [Country.MakeScope.ScriptValue('gm_disp_count_upheld')|0]#!"
+ },
+ "gm_je_status_contested_tt": {
+  "en": "#b [concept_contested_monument]#!\\nNo prestige, legitimacy or approval while it stands undecided.",
+  "ru": "#b [concept_contested_monument]#!\\nНи престижа, ни легитимности, ни одобрения, пока решение не принято."
+ },
+ "gm_je_status_heritage_tt": {
+  "en": "#b Heritage#!\\nKept under a government it does not honor, or a shrine in a state taken from another country. It gives prestige, cultural pull, tourism and its effect in its state, but no legitimacy and no approval.",
+  "ru": "#b Наследие#!\\nСохраняется при правительстве, которое его не чтит, или это святыня в области, отнятой у другой страны. Даёт престиж, культурное притяжение, туризм и свой эффект в области, но не легитимность и не одобрение."
+ },
+ "gm_je_status_undedicated_tt": {
+  "en": "#b Undedicated#!\\nFinished but not dedicated: it gives prestige, cultural pull and tourism, and nothing for its dedication. The month's check makes it a construction site again, whose Dedicate button holds its ceremony.",
+  "ru": "#b Без посвящения#!\\nЗавершён, но не посвящён: даёт престиж, культурное притяжение и туризм, но ничего за своё посвящение. Ежемесячная проверка снова превращает его в строительную площадку, где кнопка «Посвятить» проводит церемонию."
+ },
+ "gm_je_status_upheld_tt": {
+  "en": "#b Upheld#!\\nWhat it honors still holds, so it counts in full: prestige and cultural pull, legitimacy if it honors the regime or its leader, its dedication's own effect, and the approval of the groups that share its message.\\n#b Unsettled#! means the government has just changed and the month's check has yet to judge it.",
+  "ru": "#b Признан#!\\nТо, что он чтит, ещё в силе, поэтому он засчитывается полностью: престиж и культурное притяжение, легитимность, если он чтит режим или его лидера, эффект своего посвящения и одобрение групп, разделяющих его послание.\\n#b Не определён#! значит, что правительство только что сменилось и ежемесячная проверка ещё не вынесла о нём суждения."
+ },
+ "gm_je_sub_approval": {
+  "en": "Interest Group Approval",
+  "ru": "Одобрение групп интересов"
+ },
+ "gm_je_sub_boons": {
+  "en": "Opportunities Seized",
+  "ru": "Использованные возможности"
+ },
+ "gm_je_sub_fading": {
+  "en": "Fading Legitimacy",
+  "ru": "Угасающая легитимность"
+ },
+ "gm_je_sub_in_force": {
+  "en": "Effects in Force",
+  "ru": "Действующие эффекты"
+ },
+ "gm_je_sub_policy_tt": {
+  "en": "#b Monument Policy#!\\nChoosing one ends the others' effects. National effects change within a few days, each monument's own at the start of next month. After a change the policy is locked for #v 60#! months; a first choice starts no wait.",
+  "ru": "#b Политика в отношении монументов#!\\nВыбор одной прекращает эффекты остальных. Национальные эффекты меняются в течение нескольких дней, эффекты каждого монумента — в начале следующего месяца. После смены политика заблокирована на #v 60#! мес.; первый выбор не вызывает ожидания."
+ },
+ "gm_je_tr_summary": {
+  "en": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_held_count')|0]#! trophies count for #v [Country.MakeScope.ScriptValue('gm_tr_disp_held_grandeur')|0]#! [concept_grandeur]",
+  "ru": "Трофеев: #v [Country.MakeScope.ScriptValue('gm_tr_disp_held_count')|0]#!, засчитываются как #v [Country.MakeScope.ScriptValue('gm_tr_disp_held_grandeur')|0]#! ед. [Concept('concept_grandeur','величия')]"
+ },
+ "gm_je_tr_summary_tt": {
+  "en": "Each trophy counts for half the grandeur carried off, its levels and its years, rounded up, toward the standing [concept_grandeur] that gives [concept_prestige] and [concept_cultural_pull], and the Armed Forces approve of them. Each stands in the capital it was carried to: whoever holds that state holds it.",
+  "ru": "Каждый трофей засчитывается в половину вывезенного величия, его уровней и возраста, с округлением вверх, в текущее [concept_grandeur|l], которое даёт [concept_prestige|l] и [concept_cultural_pull|l], и Вооружённые силы их одобряют. Каждый стоит в столице, куда его вывезли: кто держит эту область, тот держит и его."
+ },
+ "gm_je_tt_artistic": {
+  "en": "#b $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_artistic')|%0]#!\\nFrom opera houses: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_artistic')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_artistic')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_national_artistic')|%0]#! a step.",
+  "ru": "#b $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_artistic')|%0]#!\\nОт оперных театров: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_artistic')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_artistic')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_national_artistic')|%0]#! за ступень."
+ },
+ "gm_je_tt_boon_centenary": {
+  "en": "#b $gm_boon_centenary$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_centenary')|0]#! more months\\n[GetStaticModifier('gm_boon_centenary').GetDesc]\\n$gm_boon_centenary_desc$",
+  "ru": "#b $gm_boon_centenary$#!, ещё месяцев: #v [Country.MakeScope.ScriptValue('gm_disp_boon_centenary')|0]#!\\n[GetStaticModifier('gm_boon_centenary').GetDesc]\\n$gm_boon_centenary_desc$"
+ },
+ "gm_je_tt_culture": {
+  "en": "#b Cultural Pull#! #G +[Country.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nStanding [concept_grandeur]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested, in steps of 10.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_culture')|0]#! a step.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_culture_standing'), '(CFixedPoint)1' ), 'gm_policy_culture_standing_tt_line', 'te_tt_blank' )]",
+  "ru": "#b Культурное притяжение#! #G +[Country.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nТекущее [concept_grandeur|l]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, все неспорные монументы, ступенями по 10.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_culture')|0]#! за ступень.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_culture_standing'), '(CFixedPoint)1' ), 'gm_policy_culture_standing_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_education": {
+  "en": "#b [concept_education_access]#! #G +[Country.MakeScope.ScriptValue('gm_display_education')|%0]#! in every state\\nFrom $gm_policy_education$. [concept_grandeur] counted: #v [Country.MakeScope.ScriptValue('gm_display_g_education')|0]#!, every monument that is not contested[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], in steps of 10.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_education')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_education')|%0]#! a step.",
+  "ru": "#b [concept_education_access]#! #G +[Country.MakeScope.ScriptValue('gm_display_education')|%0]#! в каждой области\\nОт политики «$gm_policy_education$». Учтённое [concept_grandeur|l]: #v [Country.MakeScope.ScriptValue('gm_display_g_education')|0]#!, все неспорные монументы[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], ступенями по 10.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_education')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_education')|%0]#! за ступень."
+ },
+ "gm_je_tt_ig": {
+  "en": "#b Approval from monuments#!\\nEach group has one total across all our monuments: the [concept_grandeur] of those it approves of that still fit, minus those it objects to and the contested monuments it resents, plus what remains of past decisions on contested monuments, which fades. The total moves approval by #v [Country.MakeScope.ScriptValue('gm_step_ig')|0]#! a step either way.",
+  "ru": "#b Одобрение от монументов#!\\nУ каждой группы один общий итог по всем нашим монументам: [concept_grandeur|l] одобряемых ею монументов, которые всё ещё подходят, минус монументы, против которых она возражает, и спорные, вызывающие её негодование, плюс остаток прошлых решений о спорных монументах, который затухает. Итог сдвигает одобрение на #v [Country.MakeScope.ScriptValue('gm_step_ig')|0]#! за ступень в любую сторону."
+ },
+ "gm_je_tt_ig_armed_forces": {
+  "en": "#b $ig_armed_forces$: [Country.MakeScope.ScriptValue('gm_display_ig_armed_forces')|+=1] approval#!\\nFrom the monuments it approves of: #G +[Country.MakeScope.ScriptValue('gm_disp_ig_pos_armed_forces')|1]#! [concept_grandeur]\\nFrom those it objects to: #R -[Country.MakeScope.ScriptValue('gm_disp_ig_neg_armed_forces')|1]#!\\nFrom the contested ones it resents: #R -[Country.MakeScope.ScriptValue('gm_disp_ig_res_armed_forces')|1]#!\\nFrom past decisions, fading: #v [Country.MakeScope.ScriptValue('gm_disp_ig_ledger_armed_forces')|+1]#!",
+  "ru": "#b $ig_armed_forces$: одобрение [Country.MakeScope.ScriptValue('gm_display_ig_armed_forces')|+=1]#!\\nОт монументов, которые она одобряет: #G +[Country.MakeScope.ScriptValue('gm_disp_ig_pos_armed_forces')|1]#! ед. [Concept('concept_grandeur','величия')]\\nОт тех, против которых она возражает: #R -[Country.MakeScope.ScriptValue('gm_disp_ig_neg_armed_forces')|1]#!\\nОт спорных, вызывающих её негодование: #R -[Country.MakeScope.ScriptValue('gm_disp_ig_res_armed_forces')|1]#!\\nОт прошлых решений, затухает: #v [Country.MakeScope.ScriptValue('gm_disp_ig_ledger_armed_forces')|+1]#!"
+ },
+ "gm_je_tt_industrial": {
+  "en": "#b $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_industrial')|%0]#!\\nFrom exhibition halls: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_industrial')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_industrial')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_national_industrial')|%0]#! a step.",
+  "ru": "#b $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_industrial')|%0]#!\\nОт выставочных залов: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_industrial')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_industrial')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_national_industrial')|%0]#! за ступень."
+ },
+ "gm_je_tt_leader": {
+  "en": "#b $country_authority_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nFrom monuments to the Leader that still fit: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_national_leader')|0]#! a step.",
+  "ru": "#b $country_authority_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nОт монументов Лидеру, которые всё ещё подходят: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_national_leader')|0]#! за ступень."
+ },
+ "gm_je_tt_legitimacy": {
+  "en": "#b $country_legitimacy_base_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\nRegime [concept_grandeur]: #v [Country.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, the monuments to the Crown, the Republic, the Revolution and the Leader that still fit.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! a step.",
+  "ru": "#b $country_legitimacy_base_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\n[concept_grandeur] режима: #v [Country.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, монументы Короне, Республике, Революции и Лидеру, которые всё ещё подходят.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! за ступень."
+ },
+ "gm_je_tt_prestige": {
+  "en": "#b Prestige#! #G +[Country.MakeScope.ScriptValue('gm_display_prestige')|0]#! and #G +[Country.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nStanding [concept_grandeur]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_prestige')|0]#! and #G +[Country.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! a step.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]",
+  "ru": "#b Престиж#! #G +[Country.MakeScope.ScriptValue('gm_display_prestige')|0]#! и #G +[Country.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nТекущее [concept_grandeur|l]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, все неспорные монументы.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_prestige')|0]#! и #G +[Country.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! за ступень.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_prestige_pct": {
+  "en": "#b [concept_prestige] (%)#! #G +[Country.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nA share of the country's prestige for each step of standing [concept_grandeur], on the same steps as the flat prestige above: #G +[Country.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! a step.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]",
+  "ru": "#b [concept_prestige] (%)#! #G +[Country.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nДоля престижа страны за каждую ступень текущего [Concept('concept_grandeur','величия')] на тех же ступенях, что и фиксированный престиж выше: #G +[Country.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! за ступень.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_religious": {
+  "en": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_religious')|%0]#!\\nFrom grand shrines that still fit: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_religious')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_religious')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_national_religious')|%0]#! a step.",
+  "ru": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[Country.MakeScope.ScriptValue('gm_display_religious')|%0]#!\\nОт великих святынь, которые всё ещё подходят: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_religious')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_religious')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_national_religious')|%0]#! за ступень."
+ },
+ "gm_je_tt_scientific": {
+  "en": "#b $country_weekly_innovation_max_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_scientific')|1]#!\\nFrom observatories: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_scientific')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_scientific')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_national_scientific')|0]#! a step.",
+  "ru": "#b $country_weekly_innovation_max_add$#! #G +[Country.MakeScope.ScriptValue('gm_display_scientific')|1]#!\\nОт обсерваторий: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_scientific')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_scientific')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_national_scientific')|0]#! за ступень."
+ },
+ "gm_je_tt_sig_antiquity": {
+  "en": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [concept_cultural_pull] a step. There is no ceiling: each step takes 5 grandeur more than the one before.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_culture'), '(CFixedPoint)1' ), 'gm_policy_culture_tt_line', 'te_tt_blank' )]",
+  "ru": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [concept_cultural_pull|l] за ступень. Потолка нет: каждая ступень требует на 5 ед. величия больше предыдущей.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_culture'), '(CFixedPoint)1' ), 'gm_policy_culture_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_sig_archive": {
+  "en": "#b $gm_sig_archive$#!: max [concept_innovation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_archive')|0]#! and #G +[Country.MakeScope.ScriptValue('gm_display_sig_archive_spread')|%1]#! [concept_technology_spread]\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_archive')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_archive')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_archive')|0]#! max [concept_innovation] and #G +[Country.MakeScope.ScriptValue('gm_step_sig_archive_spread')|%0]#! [concept_technology_spread] a step.",
+  "ru": "#b $gm_sig_archive$#!: макс. [concept_innovation|l] #G +[Country.MakeScope.ScriptValue('gm_display_sig_archive')|0]#! и #G +[Country.MakeScope.ScriptValue('gm_display_sig_archive_spread')|%1]#! [concept_technology_spread|l]\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_archive')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_archive')|0]#!, за ступень: #G +[Country.MakeScope.ScriptValue('gm_step_sig_archive')|0]#! макс. [concept_innovation|l] и #G +[Country.MakeScope.ScriptValue('gm_step_sig_archive_spread')|%0]#! [concept_technology_spread|l]."
+ },
+ "gm_je_tt_sig_concert_of_nations": {
+  "en": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence] a step.",
+  "ru": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence|l] за ступень."
+ },
+ "gm_je_tt_sig_held_concert_of_nations": {
+  "en": "#b $gm_sig_concert_of_nations$#!, held\\nA unique dedication of $pm_monument_civic$ won from an opportunity, waiting for a monument to carry it: the dedication ceremony of the next monument dedicated $pm_monument_civic$ offers it. Each monument takes one.\\n$gm_sig_concert_of_nations_effect$ for each step of its [concept_grandeur].",
+  "ru": "#b $gm_sig_concert_of_nations$#!, в запасе\\nУникальное посвящение типа «$pm_monument_civic$», полученное благодаря возможности и ожидающее монумент, который его примет: церемония посвящения следующего монумента типа «$pm_monument_civic$» предложит его. Каждый монумент принимает одно.\\n$gm_sig_concert_of_nations_effect$ за каждую ступень его [Concept('concept_grandeur','величия')]."
+ },
+ "gm_je_tt_sig_martial_glory": {
+  "en": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ a step.",
+  "ru": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ за ступень."
+ },
+ "gm_je_tt_sig_olympic": {
+  "en": "#b $gm_sig_olympic$#!: $state_mortality_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_olympic')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_olympic')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_olympic')|0]#!, for #G [Country.MakeScope.ScriptValue('gm_step_sig_olympic')|%1]#! $state_mortality_mult$ a step.",
+  "ru": "#b $gm_sig_olympic$#!: $state_mortality_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_olympic')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_olympic')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_olympic')|0]#!, по #G [Country.MakeScope.ScriptValue('gm_step_sig_olympic')|%1]#! $state_mortality_mult$ за ступень."
+ },
+ "gm_je_tt_teardown": {
+  "en": "#b The Old Order Torn Down#! #G +[Country.MakeScope.ScriptValue('gm_display_teardown')|1]#! [concept_legitimacy]\\nFrom the contested monuments pulled down, through the same steps as grandeur. It fades by about half every 17 months.",
+  "ru": "#b Старый порядок разрушен#! #G +[Country.MakeScope.ScriptValue('gm_display_teardown')|1]#! [concept_legitimacy|l]\\nОт разрушенных спорных монументов, по тем же ступеням, что и величие. Затухает примерно наполовину каждые 17 мес."
+ },
+ "gm_je_tt_vanity": {
+  "en": "#b Palaces amid Hardship#! #R [Country.MakeScope.ScriptValue('gm_display_vanity')|1]#! [concept_legitimacy]\\nFrom monument levels finished in hard times, #R [Country.MakeScope.ScriptValue('gm_step_vanity')|0]#! each. It fades by about half every eight months.",
+  "ru": "#b Дворцы среди невзгод#! #R [Country.MakeScope.ScriptValue('gm_display_vanity')|1]#! [concept_legitimacy|l]\\nОт уровней монументов, достроенных в трудные времена, по #R [Country.MakeScope.ScriptValue('gm_step_vanity')|0]#! за каждый. Затухает примерно наполовину каждые восемь месяцев."
+ },
+ "gm_je_tt_war_memorial": {
+  "en": "#b $country_war_support_casualties_mult$#! #G [Country.MakeScope.ScriptValue('gm_display_war_memorial')|%0]#!\\nFrom war memorials: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_war_memorial')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_war_memorial')|0]#!, for #G [Country.MakeScope.ScriptValue('gm_step_national_war_memorial')|%0]#! a step.",
+  "ru": "#b $country_war_support_casualties_mult$#! #G [Country.MakeScope.ScriptValue('gm_display_war_memorial')|%0]#!\\nОт военных мемориалов: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_war_memorial')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_war_memorial')|0]#!, по #G [Country.MakeScope.ScriptValue('gm_step_national_war_memorial')|%0]#! за ступень."
+ },
+ "gm_je_val_boon_centenary": {
+  "en": "#v [Country.MakeScope.ScriptValue('gm_disp_boon_centenary')|0]#! mo",
+  "ru": "#v [Country.MakeScope.ScriptValue('gm_disp_boon_centenary')|0]#! мес."
+ },
+ "gm_je_world_rate": {
+  "en": "A level built now adds #v [Country.MakeScope.ScriptValue('gm_world_rate_value')|3]#! [concept_grandeur] (#v [Country.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836)",
+  "ru": "Уровень, построенный сейчас, добавляет #v [Country.MakeScope.ScriptValue('gm_world_rate_value')|3]#! ед. [Concept('concept_grandeur','величия')] (#v [Country.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! в 1836 году)"
+ },
+ "gm_je_world_rate_tt": {
+  "en": "#b What a level is worth#!\\nA monument is impressive for what it cost its time: a level adds #v [Country.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836, and the world is #v [Country.MakeScope.ScriptValue('gm_world_wealth_factor')|1]#! times as rich now, so a level built this year adds that much less, to the nearest thousandth and at least 0.001. Each level counts at the rate of the January before it was finished; the monuments already standing keep theirs.",
+  "ru": "#b Чего стоит уровень#!\\nМонумент впечатляет тем, чего он стоил своему времени: уровень добавляет #v [Country.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! в 1836 году, а богатство мира теперь выросло: #v [Country.MakeScope.ScriptValue('gm_world_wealth_factor')|1]#!×, так что уровень, построенный в этом году, добавляет во столько же раз меньше, с округлением до тысячных и не менее 0,001. Каждый уровень засчитывается по курсу января перед его завершением; уже стоящие монументы сохраняют свой."
+ },
+ "gm_landmark_aachen_cathedral_desc": {
+  "en": "The palace chapel Charlemagne built at Aachen, consecrated in 805, where he is buried and where the kings of Germany were crowned for six hundred years.",
+  "ru": "Дворцовая капелла, которую Карл Великий построил в Аахене и освятил в 805 году; он погребён в ней, и в ней же шестьсот лет короновали королей Германии."
+ },
+ "gm_landmark_abu_simbel_desc": {
+  "en": "Two temples Ramesses II cut into the sandstone cliffs above the Nile in Nubia, the greater guarded by four seated colossi of the king. Burckhardt saw its buried facade in 1813, and Giovanni Belzoni dug his way inside in 1817.",
+  "ru": "Два храма, которые Рамсес II вырубил в песчаниковых скалах над Нилом в Нубии; большой охраняют четыре сидящих колосса царя. Буркхардт увидел его погребённый фасад в 1813 году, а Джованни Бельцони пробился внутрь в 1817-м."
+ },
+ "gm_landmark_alexander_column_desc": {
+  "en": "Raised in 1834 to Alexander I and the victory over Napoleon: one shaft of red granite, standing by its own weight.",
+  "ru": "Воздвигнута в 1834 году в честь Александра I и победы над Наполеоном: один ствол из красного гранита, стоящий под собственной тяжестью."
+ },
+ "gm_landmark_alexander_column_evt": {
+  "en": "the $gm_skin_landmark_alexander_column$",
+  "ru": "$gm_skin_landmark_alexander_column$"
+ },
+ "gm_landmark_alhambra_desc": {
+  "en": "The palace-fortress of the Nasrid sultans of Granada, the last Muslim kingdom in Spain, with its courts of fountains and halls of carved stucco. Washington Irving lodged in its rooms in 1829.",
+  "ru": "Дворец-крепость султанов династии Насридов Гранады, последнего мусульманского королевства в Испании, с дворами фонтанов и залами резного стука. Вашингтон Ирвинг жил в её покоях в 1829 году."
+ },
+ "gm_landmark_amphitheatre_of_el_djem_desc": {
+  "en": "The amphitheater of Thysdrus, built around 238 for some 35,000 spectators, the largest in Roman Africa. The Berber queen al-Kahina is said to have held out in it against the Arab armies in the seventh century.",
+  "ru": "Амфитеатр Тисдра, построенный около 238 года на 35 000 зрителей, крупнейший в римской Африке. По преданию, берберская царица аль-Кахина держалась в нём против арабских армий в VII веке."
+ },
+ "gm_landmark_antikythera_mechanism_desc": {
+  "en": "A geared bronze calculator of the second century BC, hauled by sponge divers from a Roman wreck off Antikythera in 1901. It modeled the motions of the Sun, the Moon and the planets.",
+  "ru": "Бронзовый зубчатый вычислитель II века до н. э., поднятый ловцами губок с римского затонувшего корабля у Антикиферы в 1901 году. Он моделировал движения Солнца, Луны и планет."
+ },
+ "gm_landmark_arc_de_triomphe_desc": {
+  "en": "Raised 1806–1836 to the armies of the Revolution and the Empire.",
+  "ru": "Воздвигнута в 1806–1836 годах в честь армий Революции и Империи."
+ },
+ "gm_landmark_arch_of_ctesiphon_desc": {
+  "en": "Taq Kasra, the vaulted audience hall of the Sasanian kings, the widest vault of brick ever raised. Arab poets mourned it, and in 637 its conquerors carried off the treasures of Khosrow.",
+  "ru": "Так-и Кисра, сводчатый приёмный зал сасанидских царей, самый широкий кирпичный свод, когда-либо возведённый. Арабские поэты оплакивали его, а в 637 году завоеватели вывезли сокровища Хосрова."
+ },
+ "gm_landmark_arco_de_santa_maria_desc": {
+  "en": "Rebuilt 1536–1553 as a triumphal gate to Charles V, with the founders of Castile carved around him.",
+  "ru": "Перестроена в 1536–1553 годах как триумфальные ворота Карлу V, с основателями Кастилии, высеченными вокруг него."
+ },
+ "gm_landmark_baba_merzoug_desc": {
+  "en": "The great cannon that guarded Algiers harbor from 1542, taken by the French in 1830 and set up in the arsenal at Brest as a column crowned with a cockerel.",
+  "ru": "Огромная пушка, охранявшая гавань Алжира с 1542 года; французы захватили её в 1830 году и поставили в арсенале Бреста колонной, увенчанной петухом."
+ },
+ "gm_landmark_basilica_of_saint_francis_desc": {
+  "en": "The double church raised from 1228 over the tomb of Saint Francis at Assisi, its upper church painted with his life, traditionally by Giotto.",
+  "ru": "Двойная церковь, возведённая с 1228 года над гробницей святого Франциска в Ассизи; верхняя церковь расписана сценами его жизни, по традиции — Джотто."
+ },
+ "gm_landmark_basilica_of_superga_desc": {
+  "en": "Vowed by Victor Amadeus II during the siege of Turin in 1706 and raised 1717–1731 on the hill above the city. The House of Savoy is buried beneath it.",
+  "ru": "Обет Виктора Амадея II во время осады Турина в 1706 году; возведена в 1717–1731 годах на холме над городом. Под ней погребён Савойский дом."
+ },
+ "gm_landmark_bodrum_castle_desc": {
+  "en": "Built by the Knights of Saint John from 1404 with stone from the ruined Mausoleum of Halicarnassus, and taken by the Ottomans in 1523. Slabs of the Mausoleum's frieze are set in its walls.",
+  "ru": "Построен рыцарями-иоаннитами с 1404 года из камня разрушенного Мавзолея в Галикарнасе и взят османами в 1523 году. Плиты фриза Мавзолея вставлены в его стены."
+ },
+ "gm_landmark_borobudur_desc": {
+  "en": "A mountain of carved stone in central Java, built around 800 as a Buddhist stupa of nine terraces with 504 statues of the Buddha. Buried for centuries under volcanic ash and jungle, it was cleared on the orders of Thomas Stamford Raffles in 1814.",
+  "ru": "Гора резного камня в центральной Яве, построенная около 800 года как буддийская ступа из девяти террас с 504 статуями Будды. Веками погребённая под вулканическим пеплом и джунглями, она была расчищена по приказу Томаса Стамфорда Раффлза в 1814 году."
+ },
+ "gm_landmark_brandenburg_gate_desc": {
+  "en": "Finished in 1791. Napoleon carried its Quadriga off to Paris in 1806, and Prussia brought it home in 1814.",
+  "ru": "Завершены в 1791 году. Наполеон увёз их квадригу в Париж в 1806 году, а Пруссия вернула её домой в 1814-м."
+ },
+ "gm_landmark_buddhas_of_bamiyan_desc": {
+  "en": "Two standing Buddhas, 53 and 35 meters tall, carved into the cliff of the Bamiyan valley in the sixth century among hundreds of painted caves where monks lived.",
+  "ru": "Два стоящих Будды высотой 53 и 35 метров, высеченных в скале долины Бамиан в VI веке среди сотен расписных пещер, где жили монахи."
+ },
+ "gm_landmark_bukgwan_victory_stele_desc": {
+  "en": "Raised at Kilju in 1707 to the volunteer army that defeated the Japanese invaders in Hamgyong in 1592.",
+  "ru": "Воздвигнута в Кильчжу в 1707 году в честь ополчения, победившего японских захватчиков в Хамгёне в 1592 году."
+ },
+ "gm_landmark_bulguksa_desc": {
+  "en": "A Buddhist temple on the slopes of Mount Toham near Gyeongju, the old capital of Silla, finished in 774, with two stone pagodas in its court and the Seokguram grotto above it.",
+  "ru": "Буддийский храм на склонах горы Тохам близ Кёнджу, древней столицы Силла, завершённый в 774 году, с двумя каменными пагодами во дворе и пещерой Соккурам над ним."
+ },
+ "gm_landmark_bunker_hill_monument_desc": {
+  "en": "A granite obelisk on Breed's Hill in Charlestown, where the colonial militia met the British army in 1775. Its cornerstone was laid on the battle's fiftieth anniversary; the money ran out before it was half built.",
+  "ru": "Гранитный обелиск на Бридс-Хилл в Чарлстауне, где колониальная милиция встретила британскую армию в 1775 году. Его краеугольный камень заложили в пятидесятую годовщину битвы; деньги кончились, когда не было достроено и половины."
+ },
+ "gm_landmark_bust_of_nefertiti_desc": {
+  "en": "The painted limestone bust of Queen Nefertiti, found in the sculptor Thutmose's workshop at Amarna in 1912 and taken to Berlin in the division of finds.",
+  "ru": "Раскрашенный известняковый бюст царицы Нефертити, найденный в мастерской скульптора Тутмоса в Амарне в 1912 году и увезённый в Берлин при разделе находок."
+ },
+ "gm_landmark_capitoline_museums_desc": {
+  "en": "Founded on the ancient bronzes Pope Sixtus IV gave the people of Rome in 1471, and opened to the public in 1734. The Dying Gaul and the Capitoline Venus went to Paris under the Treaty of Tolentino in 1797 and came back in 1816.",
+  "ru": "Основаны на древних бронзах, которые папа Сикст IV подарил народу Рима в 1471 году, и открыты для публики в 1734 году. «Умирающий галл» и Капитолийская Венера отправились в Париж по Толентинскому договору 1797 года и вернулись в 1816-м."
+ },
+ "gm_landmark_caral_supe_desc": {
+  "en": "A city of the Norte Chico civilization with six stepped pyramids, which radiocarbon dating in 1994 put at about 2600 BC, as old as the Egyptian pyramids.",
+  "ru": "Город цивилизации Норте-Чико с шестью ступенчатыми пирамидами, который радиоуглеродный анализ в 1994 году отнёс примерно к 2600 году до н. э., — он так же стар, как египетские пирамиды."
+ },
+ "gm_landmark_cenotaph_of_maximilian_desc": {
+  "en": "The empty tomb of Emperor Maximilian I in Innsbruck's Court Church, finished in 1584 and guarded by 28 bronze figures of his ancestors, kin and heroes.",
+  "ru": "Пустая гробница императора Максимилиана I в Придворной церкви Инсбрука, завершённая в 1584 году; её охраняют 28 бронзовых фигур его предков, родичей и героев."
+ },
+ "gm_landmark_changdeokgung_desc": {
+  "en": "A palace of the Joseon kings in Hanseong, rebuilt in 1610 after the Japanese invasions burned it, with its Secret Garden on the hill behind. It was the main palace for two and a half centuries while Gyeongbokgung lay in ruins.",
+  "ru": "Дворец королей Чосон в Хансоне, перестроенный в 1610 году после того, как японские захватчики сожгли его, с Тайным садом на холме позади. Два с половиной века он был главным дворцом, пока Кёнбоккун лежал в руинах."
+ },
+ "gm_landmark_charminar_desc": {
+  "en": "A square monument of four arches and four minarets at the heart of Hyderabad, raised by Sultan Muhammad Quli Qutb Shah in 1591 when he founded the city.",
+  "ru": "Квадратный монумент с четырьмя арками и четырьмя минаретами в сердце Хайдарабада, воздвигнутый султаном Мухаммадом Кули Кутб-шахом в 1591 году, когда он основал город."
+ },
+ "gm_landmark_chateau_de_chambord_desc": {
+  "en": "The hunting palace Francis I raised in the forests of the Loire from 1519, with a double-spiral staircase at its heart and a roofline of towers, lanterns and chimneys.",
+  "ru": "Охотничий дворец, который Франциск I возвёл в лесах Луары с 1519 года, с двойной винтовой лестницей в сердце и силуэтом крыш из башен, фонарей и труб."
+ },
+ "gm_landmark_chichen_itza_desc": {
+  "en": "A Maya city of the Yucatán with the stepped pyramid of El Castillo, a great ball court, an observatory and the Sacred Cenote, the well into which offerings were thrown.",
+  "ru": "Город майя на Юкатане со ступенчатой пирамидой Эль-Кастильо, большой площадкой для игры в мяч, обсерваторией и Священным сеноте — колодцем, в который бросали приношения."
+ },
+ "gm_landmark_chogha_zanbil_desc": {
+  "en": "The ziggurat the Elamite king Untash-Napirisha raised near Susa around 1250 BC, its bricks stamped with his inscriptions, inside three rings of walls.",
+  "ru": "Зиккурат, который эламский царь Унташ-Напириша возвёл близ Суз около 1250 года до н. э.; его кирпичи покрыты клеймами с его надписями, а вокруг — три кольца стен."
+ },
+ "gm_landmark_citadel_of_aleppo_desc": {
+  "en": "A fortified hill above Aleppo, its great gate and bridge rebuilt by the Ayyubid sultan al-Zahir Ghazi around 1213. An earthquake wrecked much of it in 1822.",
+  "ru": "Укреплённый холм над Алеппо; его большие ворота и мост перестроил айюбидский султан аз-Захир Гази около 1213 года. Землетрясение разрушило значительную часть цитадели в 1822 году."
+ },
+ "gm_landmark_cyrene_desc": {
+  "en": "The greatest of the Greek cities of Libya, founded around 630 BC, with the Temple of Apollo at its sacred spring and a Temple of Zeus larger than the Parthenon.",
+  "ru": "Величайший из греческих городов Ливии, основанный около 630 года до н. э., с храмом Аполлона у священного источника и храмом Зевса, превосходящим Парфенон."
+ },
+ "gm_landmark_dead_sea_scrolls_desc": {
+  "en": "Scrolls from the caves above Qumran, found by Bedouin shepherds from 1947: the oldest manuscripts of the Hebrew Bible yet known.",
+  "ru": "Свитки из пещер над Кумраном, которые бедуинские пастухи находили с 1947 года: старейшие из известных рукописей еврейской Библии."
+ },
+ "gm_landmark_deir_el_bahari_cache_desc": {
+  "en": "A rock-cut tomb above Hatshepsut's temple where priests hid the royal mummies of the New Kingdom. The Abd el-Rassul family sold its contents for years before the Antiquities Service opened it in 1881.",
+  "ru": "Скальная гробница над храмом Хатшепсут, где жрецы спрятали царские мумии Нового царства. Семья Абд эль-Расул годами продавала её содержимое, прежде чем Служба древностей вскрыла её в 1881 году."
+ },
+ "gm_landmark_delphi_desc": {
+  "en": "The oracle of Apollo on Mount Parnassus, buried under the village of Kastri. The French School at Athens moved the village and dug the sanctuary from 1892.",
+  "ru": "Оракул Аполлона на горе Парнас, погребённый под деревней Кастри. Французская школа в Афинах переселила деревню и с 1892 года раскапывала святилище."
+ },
+ "gm_landmark_diocletians_palace_desc": {
+  "en": "The palace the emperor Diocletian built on the Adriatic shore to retire to around 305. The people of Salona took refuge in it from the Avars, and the town of Split grew up inside its walls.",
+  "ru": "Дворец, который император Диоклетиан построил на берегу Адриатики, чтобы удалиться туда около 305 года. Жители Салоны укрывались в нём от аваров, а город Сплит вырос внутри его стен."
+ },
+ "gm_landmark_ephesus_desc": {
+  "en": "The Greek and Roman city at the mouth of the Cayster, with a theater for 25,000, the Library of Celsus and the Temple of Artemis, one of the Seven Wonders of the world, lost under the silt of the river.",
+  "ru": "Греческий и римский город в устье Каистра, с театром на 25 000 мест, библиотекой Цельса и храмом Артемиды — одним из семи чудес света, потерянным под речным илом."
+ },
+ "gm_landmark_fasil_ghebbi_desc": {
+  "en": "The walled royal enclosure of Gondar, where Emperor Fasilides and his successors built castles, halls and churches from 1636. From 1769, in the Zemene Mesafint, the emperors reigned there while warlords ruled in their name.",
+  "ru": "Огороженная царская территория Гондэра, где император Фасилидес и его преемники с 1636 года строили замки, залы и церкви. С 1769 года, в эпоху Земене Мэсафинт, императоры царствовали там, а военачальники правили от их имени."
+ },
+ "gm_landmark_gobekli_tepe_desc": {
+  "en": "Rings of T-shaped limestone pillars raised on a hill in southeastern Anatolia by hunter-gatherers around 9500 BC, before farming and about six thousand years before Stonehenge.",
+  "ru": "Кольца Т-образных известняковых столбов, которые охотники-собиратели воздвигли на холме на юго-востоке Анатолии около 9500 года до н. э., до земледелия и примерно за шесть тысяч лет до Стоунхенджа."
+ },
+ "gm_landmark_golestan_palace_desc": {
+  "en": "The Qajar shahs' palace in Tehran. Its Marble Throne terrace was finished in 1806 for Fath-Ali Shah.",
+  "ru": "Дворец шахов Каджаров в Тегеране. Терраса Мраморного трона была завершена в 1806 году для Фетх-Али-шаха."
+ },
+ "gm_landmark_grand_palace_bangkok_desc": {
+  "en": "The palace Rama I built for his new capital of Bangkok from 1782, with the Temple of the Emerald Buddha within its walls.",
+  "ru": "Дворец, который Рама I построил для своей новой столицы Бангкока с 1782 года, с храмом Изумрудного Будды внутри стен."
+ },
+ "gm_landmark_great_zimbabwe_desc": {
+  "en": "Walls of dressed stone laid without mortar by the kings of Zimbabwe from the eleventh century, the Great Enclosure's conical tower among them. Carved soapstone birds stand on pillars in the ruins on the hill.",
+  "ru": "Стены из тёсаного камня, уложенного без раствора царями Зимбабве с XI века; среди них — коническая башня Большого ограждения. Резные птицы из стеатита стоят на столбах в руинах на холме."
+ },
+ "gm_landmark_gwalior_fort_desc": {
+  "en": "A fortress on a sheer sandstone hill above Gwalior, with the tiled palace Raja Man Singh Tomar built around 1500 and Jain colossi cut into its cliffs.",
+  "ru": "Крепость на отвесном песчаниковом холме над Гвалиором, с облицованным плиткой дворцом, который раджа Ман Сингх Томар построил около 1500 года, и джайнскими колоссами, высеченными в её скалах."
+ },
+ "gm_landmark_hampi_desc": {
+  "en": "The ruins of Vijayanagara, capital of the last great Hindu empire of the south, sacked after the battle of Talikota in 1565: temples, bazaars and palaces among boulder hills on the Tungabhadra.",
+  "ru": "Руины Виджаянагара, столицы последней великой индуистской империи юга, разграбленной после битвы при Таликоте в 1565 году: храмы, базары и дворцы среди холмов из валунов на Тунгабхадре."
+ },
+ "gm_landmark_hattusa_desc": {
+  "en": "The capital of the Hittite kings in the hills of central Anatolia, with its Lion Gate, its temples and a royal archive of clay tablets.",
+  "ru": "Столица хеттских царей в холмах центральной Анатолии, с Львиными воротами, храмами и царским архивом глиняных табличек."
+ },
+ "gm_landmark_horses_of_saint_mark_desc": {
+  "en": "Four bronze horses from the Hippodrome of Constantinople, carried off by Venice in 1204. Napoleon took them to Paris in 1797, and they came back to Saint Mark's in 1815.",
+  "ru": "Четыре бронзовых коня с Константинопольского ипподрома, увезённые Венецией в 1204 году. Наполеон забрал их в Париж в 1797 году, а в 1815-м они вернулись в собор Святого Марка."
+ },
+ "gm_landmark_humble_administrators_garden_desc": {
+  "en": "A scholar's garden of pools, rockeries and pavilions in Suzhou, laid out from 1509 by the retired official Wang Xianchen, who named it after a poem on the simple life.",
+  "ru": "Сад учёного с прудами, скальными горками и павильонами в Сучжоу, разбитый с 1509 года отставным чиновником Ван Сяньчэнем, который назвал его по стихотворению о простой жизни."
+ },
+ "gm_landmark_imperial_city_of_hue_desc": {
+  "en": "The Nguyen emperors' citadel at Huế, begun under Gia Long in 1804. Minh Mang finished its Meridian Gate in 1833.",
+  "ru": "Цитадель императоров Нгуен в Хюэ, начатая при Зя Лонге в 1804 году. Минь Манг завершил её Меридианные ворота в 1833 году."
+ },
+ "gm_landmark_ishtar_gate_babylon_desc": {
+  "en": "Nebuchadnezzar's Babylon, with its Processional Way and the Ishtar Gate of blue glazed brick. Robert Koldewey's German expedition dug it from 1899, and the gate was rebuilt in Berlin.",
+  "ru": "Вавилон Навуходоносора с Дорогой процессий и воротами Иштар из синего глазурованного кирпича. Немецкая экспедиция Роберта Кольдевея раскапывала его с 1899 года, а ворота были воссозданы в Берлине."
+ },
+ "gm_landmark_itchan_kala_desc": {
+  "en": "The walled inner town of Khiva, its palaces, mosques and madrasas inside walls of mud brick, raised for the most part under the Qongrat khans from about 1800.",
+  "ru": "Внутренний обнесённый стенами город Хивы с дворцами, мечетями и медресе внутри стен из сырцового кирпича, возведённых по большей части при хивинских Кунгратах с 1800 года."
+ },
+ "gm_landmark_itsukushima_shrine_desc": {
+  "en": "A Shinto shrine on the island of Miyajima in the Inland Sea, built on piers over the water, with its great vermilion torii standing in the sea. Taira no Kiyomori rebuilt it in its present form in 1168.",
+  "ru": "Синтоистское святилище на острове Миядзима во Внутреннем море, построенное на сваях над водой, с огромными киноварными тории, стоящими в море. Тайра-но Киёмори перестроил его в нынешнем виде в 1168 году."
+ },
+ "gm_landmark_jantar_mantar_desc": {
+  "en": "Finished in 1734 for Maharaja Jai Singh II, founder of Jaipur: instruments of stone, built at the scale of buildings, for reading the sun and the stars.",
+  "ru": "Завершён в 1734 году для махараджи Джая Сингха II, основателя Джайпура: каменные инструменты размером со здания, для наблюдения за солнцем и звёздами."
+ },
+ "gm_landmark_jardim_botanico_desc": {
+  "en": "Founded in 1808 by the Prince Regent, the future John VI, to grow the spices of the East Indies in Brazil.",
+  "ru": "Основан в 1808 году принцем-регентом, будущим Жуаном VI, чтобы выращивать в Бразилии пряности Ост-Индии."
+ },
+ "gm_landmark_jeronimos_monastery_desc": {
+  "en": "The monastery of the Hieronymites at Belém, raised from 1501 with the wealth of the spice trade where Vasco da Gama set out for India. Its order was dissolved in 1833.",
+  "ru": "Монастырь иеронимитов в Белене, возведённый с 1501 года на богатства торговли пряностями, откуда Васко да Гама отправился в Индию. Орден был распущен в 1833 году."
+ },
+ "gm_landmark_kazan_kremlin_desc": {
+  "en": "The citadel of Kazan, rebuilt in white stone after Ivan IV took the city in 1552, with the Annunciation Cathedral and the leaning Söyembikä Tower.",
+  "ru": "Цитадель Казани, перестроенная в белом камне после взятия города Иваном IV в 1552 году, с Благовещенским собором и падающей башней Сююмбике."
+ },
+ "gm_landmark_khajuraho_desc": {
+  "en": "The temples of the Chandela kings in Bundelkhand, built around 1000 and carved with gods, dancers and lovers, overgrown and forgotten after the dynasty fell.",
+  "ru": "Храмы царей Чанделов в Бундельханде, построенные около 1000 года и покрытые резными богами, танцовщицами и влюблёнными; заросшие и забытые после падения династии."
+ },
+ "gm_landmark_kinkaku_ji_desc": {
+  "en": "The Golden Pavilion, a reliquary hall covered in gold leaf above a pond in the hills of Kyoto, built for the shogun Ashikaga Yoshimitsu in 1397, among the hundreds of temples of the old capital.",
+  "ru": "Золотой павильон, зал-реликварий, покрытый листовым золотом над прудом в холмах Киото, построенный для сёгуна Асикага Ёсимицу в 1397 году, среди сотен храмов древней столицы."
+ },
+ "gm_landmark_klungkung_palace_desc": {
+  "en": "The palace of the Dewa Agung at Klungkung, paramount king of Bali, with the Kertha Gosa hall of justice painted with scenes of heaven and hell.",
+  "ru": "Дворец деву агунга Клунгкунга, верховного царя Бали, с залом правосудия Керта Госа, расписанным сценами рая и ада."
+ },
+ "gm_landmark_la_scala_desc": {
+  "en": "Opened in 1778 where the church of Santa Maria alla Scala stood, which gave it its name.",
+  "ru": "Открыт в 1778 году на месте церкви Санта-Мария алла Скала, давшей ему название."
+ },
+ "gm_landmark_lascaux_caves_desc": {
+  "en": "A cave in the Dordogne where hunters of the Paleolithic painted bulls, horses and deer, found by four boys and a dog in 1940.",
+  "ru": "Пещера в Дордони, где охотники палеолита рисовали быков, лошадей и оленей; её нашли четверо мальчишек с собакой в 1940 году."
+ },
+ "gm_landmark_leptis_magna_desc": {
+  "en": "The city the emperor Septimius Severus rebuilt for his birthplace on the Libyan coast, with its forum, basilica, four-way arch and harbor, buried by the dunes.",
+  "ru": "Город, который император Септимий Север перестроил для своей родины на ливийском побережье, с форумом, базиликой, четырёхсторонней аркой и гаванью, погребёнными дюнами."
+ },
+ "gm_landmark_leshan_giant_buddha_desc": {
+  "en": "A Buddha 71 meters tall carved into the cliff where three rivers meet at Leshan, begun in 713 by the monk Haitong to calm the waters and finished in 803.",
+  "ru": "Будда высотой 71 метр, высеченный в скале там, где у Лэшаня сходятся три реки; начат в 713 году монахом Хайтуном, чтобы усмирить воды, и завершён в 803 году."
+ },
+ "gm_landmark_liberty_column_desc": {
+  "en": "Raised 1792–1797 to the reform of 1788 that ended adscription, which had bound Danish peasants to their estates.",
+  "ru": "Воздвигнута в 1792–1797 годах в честь реформы 1788 года, отменившей прикрепление, которое привязывало датских крестьян к их имениям."
+ },
+ "gm_landmark_lion_monument_desc": {
+  "en": "Carved into the rock in 1820–1821 for the Swiss Guards who died defending the Tuileries in 1792.",
+  "ru": "Высечен в скале в 1820–1821 годах в честь швейцарских гвардейцев, погибших при защите Тюильри в 1792 году."
+ },
+ "gm_landmark_lion_of_saint_mark_desc": {
+  "en": "The winged lion of the Venetian Republic on its column by the Doge's Palace. Napoleon carried it to Paris in 1797, and it came home, broken, in 1815.",
+  "ru": "Крылатый лев Венецианской республики на своей колонне у Дворца дожей. Наполеон увёз его в Париж в 1797 году, и он вернулся домой разбитым в 1815-м."
+ },
+ "gm_landmark_longmen_grottoes_desc": {
+  "en": "Caves and niches with some hundred thousand statues cut into the limestone cliffs of the Yi river south of Luoyang, among them a Vairocana Buddha 17 meters tall finished in 675.",
+  "ru": "Пещеры и ниши со ста тысячами статуй, вырубленных в известняковых скалах реки И к югу от Лояна, среди них — Будда Вайрочана высотой 17 метров, завершённый в 675 году."
+ },
+ "gm_landmark_luxor_obelisk_desc": {
+  "en": "One of the two obelisks of Ramesses II before the temple of Luxor, given to France by Muhammad Ali in 1830 and raised on the Place de la Concorde in 1836.",
+  "ru": "Один из двух обелисков Рамсеса II перед храмом Луксора, подаренный Франции Мухаммедом Али в 1830 году и установленный на площади Согласия в 1836-м."
+ },
+ "gm_landmark_machu_picchu_desc": {
+  "en": "The Inca citadel on a ridge above the Urubamba, left overgrown after the conquest. Hiram Bingham brought it to the world's notice in 1911 and Yale carried off its finds.",
+  "ru": "Цитадель инков на гребне над Урубамбой, оставленная зарастать после завоевания. Хайрам Бингем привлёк к ней внимание мира в 1911 году, а Йель вывез её находки."
+ },
+ "gm_landmark_marksburg_desc": {
+  "en": "A castle high above Braubach, begun in the thirteenth century and the only one on the Middle Rhine never destroyed, among the castles of the Rhine Gorge whose ruins drew the Romantics.",
+  "ru": "Замок высоко над Браубахом, начатый в XIII веке и единственный на Среднем Рейне, никогда не разрушавшийся, — среди замков Рейнского ущелья, чьи руины привлекали романтиков."
+ },
+ "gm_landmark_mausoleum_of_sultan_sanjar_desc": {
+  "en": "The domed tomb of Ahmad Sanjar, the last great sultan of the Seljuks, among the ruins of Merv, finished around 1157. Its turquoise dome could once be seen a day's march away.",
+  "ru": "Купольная гробница Ахмада Санджара, последнего великого султана сельджуков, среди руин Мерва, завершённая около 1157 года. Её бирюзовый купол когда-то был виден за день пути."
+ },
+ "gm_landmark_mawangdui_tombs_desc": {
+  "en": "Han tombs of the Marquis of Dai's family near Changsha, opened in 1972. His wife Lady Xin Zhui lay in a wonderfully preserved state among silk banners and a library of manuscripts on silk.",
+  "ru": "Гробницы Хань семьи маркиза Дай близ Чанша, вскрытые в 1972 году. Его жена, госпожа Синь Чжуй, лежала в удивительно хорошо сохранившемся состоянии среди шёлковых знамён и библиотеки рукописей на шёлке."
+ },
+ "gm_landmark_merida_theatre_desc": {
+  "en": "The theater Agrippa gave the Roman colony of Emerita Augusta around 16 BC, with a tall stage front of marble columns, buried to its top tiers.",
+  "ru": "Театр, который Агриппа подарил римской колонии Эмерита Августа около 16 года до н. э., с высоким фасадом сцены из мраморных колонн, погребённый до верхних рядов."
+ },
+ "gm_landmark_mesha_stele_desc": {
+  "en": "A basalt stone King Mesha of Moab raised at Dibon around 840 BC, telling in his own words how he threw off the rule of Israel.",
+  "ru": "Базальтовый камень, который царь Моава Меша воздвиг в Дибоне около 840 года до н. э., рассказывающий его собственными словами, как он сбросил власть Израиля."
+ },
+ "gm_landmark_meteora_desc": {
+  "en": "Monasteries built from the fourteenth century on the summits of sandstone pillars above the plain of Thessaly, reached by ladders and by nets hauled up on ropes.",
+  "ru": "Монастыри, построенные с XIV века на вершинах песчаниковых столбов над Фессалийской равниной; до них добираются по лестницам и сетям, поднимаемым на канатах."
+ },
+ "gm_landmark_mezquita_of_cordoba_desc": {
+  "en": "The Great Mosque of Córdoba, begun in 785 under Abd al-Rahman I and enlarged for two centuries into a forest of striped arches. It has been a cathedral since 1236, with a Renaissance choir raised in its middle.",
+  "ru": "Большая мечеть Кордовы, начатая в 785 году при Абд ар-Рахмане I и два века расширявшаяся в лес полосатых арок. С 1236 года это собор, с ренессансным хором, воздвигнутым посреди неё."
+ },
+ "gm_landmark_mogao_caves_desc": {
+  "en": "A walled-up chamber at the Mogao grottoes near Dunhuang, holding some fifty thousand manuscripts and paintings, sealed around 1000, among them the oldest dated printed book.",
+  "ru": "Замурованная камера в пещерах Могао близ Дуньхуана, где хранятся около пятидесяти тысяч рукописей и картин, запечатанная около 1000 года, среди них — старейшая датированная печатная книга."
+ },
+ "gm_landmark_mohenjo_daro_desc": {
+  "en": "A city of the Indus civilization, laid out on a grid of streets in baked brick around 2500 BC. Its ruins were recognized for what they were in 1921.",
+  "ru": "Город цивилизации Инда, распланированный по сетке улиц из обожжённого кирпича около 2500 года до н. э. Его руины были опознаны как таковые в 1921 году."
+ },
+ "gm_landmark_mont_saint_michel_desc": {
+  "en": "An abbey on a tidal island off the coast of Normandy, its Gothic Merveille raised from 1211 above the walled village. Since the Revolution it has been a prison.",
+  "ru": "Аббатство на приливном острове у берегов Нормандии; его готическое «Чудо» возводится с 1211 года над обнесённой стенами деревней. Со времён Революции это тюрьма."
+ },
+ "gm_landmark_monte_alban_desc": {
+  "en": "The Zapotec capital on a leveled mountaintop above the valley of Oaxaca, with its plaza of palaces, ball court and carved stones, and tombs the Mixtecs later filled with gold.",
+  "ru": "Столица сапотеков на выровненной горной вершине над долиной Оахаки, с площадью дворцов, площадкой для игры в мяч и резными камнями, и гробницами, которые позже миштеки наполнили золотом."
+ },
+ "gm_landmark_moscow_kremlin_desc": {
+  "en": "The fortress of the grand princes and tsars above the Moskva, its red brick walls and towers raised by Italian masters from 1485 around the cathedrals where the tsars were crowned and buried. Napoleon's rearguard tried to blow it up as the French left Moscow in 1812.",
+  "ru": "Крепость великих князей и царей над Москвой-рекой; её красные кирпичные стены и башни с 1485 года возвели итальянские мастера вокруг соборов, где венчали на царство и хоронили царей. Арьергард Наполеона пытался взорвать её, когда французы уходили из Москвы в 1812 году."
+ },
+ "gm_landmark_mount_nemrut_desc": {
+  "en": "The tomb sanctuary of King Antiochus I of Commagene on a peak of the Taurus, guarded by colossal stone figures of the king and his gods, their heads toppled by earthquakes.",
+  "ru": "Погребальное святилище царя Антиоха I Коммагенского на вершине Тавра, охраняемое колоссальными каменными фигурами царя и его богов, чьи головы свалили землетрясения."
+ },
+ "gm_landmark_muhammad_ali_mosque_desc": {
+  "en": "A great mosque in the Ottoman manner on the summit of Cairo's Citadel, its walls faced in alabaster, which Muhammad Ali Pasha raised for himself and his dynasty.",
+  "ru": "Большая мечеть в османском стиле на вершине Каирской цитадели, со стенами, облицованными алебастром, которую паша Мухаммед Али воздвиг для себя и своей династии."
+ },
+ "gm_landmark_musalla_of_herat_desc": {
+  "en": "The minarets, college and domed mausoleum of the great religious complex Queen Gawhar Shad raised at Herat from 1417, where the Timurid princes are buried.",
+  "ru": "Минареты, медресе и купольный мавзолей великого религиозного комплекса, который царица Гаухар-Шад воздвигла в Герате с 1417 года и где похоронены тимуридские принцы."
+ },
+ "gm_landmark_mycenae_grave_circle_desc": {
+  "en": "Agamemnon's citadel behind the Lion Gate. Schliemann opened the shaft graves of Grave Circle A in 1876 and found gold masks, among them the one he called Agamemnon's.",
+  "ru": "Цитадель Агамемнона за Львиными воротами. Шлиман вскрыл шахтовые гробницы Круга А в 1876 году и нашёл золотые маски, среди них ту, которую назвал маской Агамемнона."
+ },
+ "gm_landmark_nag_hammadi_library_desc": {
+  "en": "Thirteen leather-bound papyrus codices of Gnostic and Hermetic texts, found sealed in a jar by a farmer near Nag Hammadi in 1945.",
+  "ru": "Тринадцать папирусных кодексов в кожаных переплётах с гностическими и герметическими текстами, найденные запечатанными в кувшине фермером близ Наг-Хаммади в 1945 году."
+ },
+ "gm_landmark_name_evt_none": {
+  "en": "the monument",
+  "ru": "монумент"
+ },
+ "gm_landmark_naqsh_e_jahan_square_desc": {
+  "en": "The great square Shah Abbas laid out at Isfahan, with the Shah Mosque, the Mosque of Sheikh Lotfollah, the Ali Qapu palace and the gate of the bazaar on its four sides. Polo was played on it.",
+  "ru": "Великая площадь, которую шах Аббас разбил в Исфахане, с мечетью Шаха, мечетью шейха Лотфоллы, дворцом Али-Капу и воротами базара на четырёх её сторонах. На ней играли в поло."
+ },
+ "gm_landmark_nelsons_column_desc": {
+  "en": "A granite column in a new square at Charing Cross, with a statue of Admiral Nelson at the top and bronze lions at its foot, for the victor of Trafalgar.",
+  "ru": "Гранитная колонна на новой площади у Чаринг-Кросс со статуей адмирала Нельсона наверху и бронзовыми львами у подножия — победителю при Трафальгаре."
+ },
+ "gm_landmark_nikko_toshogu_desc": {
+  "en": "The shrine and tomb of Tokugawa Ieyasu, founder of the shogunate, rebuilt in its present splendor in 1636.",
+  "ru": "Святилище и гробница Токугава Иэясу, основателя сёгуната, перестроенные в нынешнем великолепии в 1636 году."
+ },
+ "gm_landmark_nineveh_library_desc": {
+  "en": "The Assyrian kings' capital on the Tigris. Botta and Layard dug up its palaces from the 1840s, and Ashurbanipal's library of cuneiform tablets, the Epic of Gilgamesh among them, went to London.",
+  "ru": "Столица ассирийских царей на Тигре. Ботта и Лэйярд раскапывали её дворцы с 1840-х годов, а библиотека Ашшурбанапала с клинописными табличками, среди которых «Эпос о Гильгамеше», отправилась в Лондон."
+ },
+ "gm_landmark_obelisk_of_the_second_of_may_desc": {
+  "en": "An obelisk on a sarcophagus in Madrid's Paseo del Prado, raised over the ashes of the citizens shot by the French after the rising of 2 May 1808.",
+  "ru": "Обелиск на саркофаге на мадридском Пасео-дель-Прадо, воздвигнутый над прахом граждан, расстрелянных французами после восстания 2 мая 1808 года."
+ },
+ "gm_landmark_obelisks_of_karnak_desc": {
+  "en": "Raised before the temples of Amun at Karnak. Hatshepsut's, almost thirty meters of a single stone, is the tallest still standing in Egypt.",
+  "ru": "Воздвигнуты перед храмами Амона в Карнаке. Обелиск Хатшепсут, почти тридцать метров из цельного камня, — самый высокий из всё ещё стоящих в Египте."
+ },
+ "gm_landmark_old_city_of_sanaa_desc": {
+  "en": "A walled city of tower houses of rammed earth and fired brick, their windows framed in white gypsum, on a plateau in the Yemeni highlands: the seat of the Zaydi imams.",
+  "ru": "Город в стенах из башенных домов из утрамбованной земли и обожжённого кирпича, с окнами в обрамлении белого гипса, на плато в йеменском нагорье: резиденция имамов-зейдитов."
+ },
+ "gm_landmark_olympia_desc": {
+  "en": "The sanctuary of Zeus in Elis, where the Games were held. A German expedition dug it from 1875 and found the Hermes of Praxiteles in the Temple of Hera.",
+  "ru": "Святилище Зевса в Элиде, где проводились Игры. Немецкая экспедиция раскапывала его с 1875 года и нашла Гермеса Праксителя в храме Геры."
+ },
+ "gm_landmark_oseberg_ship_desc": {
+  "en": "A Viking ship buried with two women under a mound at Oseberg in 834, dug up in 1904 with its carved prow and its sledges.",
+  "ru": "Корабль викингов, погребённый с двумя женщинами под курганом в Осеберге в 834 году, раскопанный в 1904 году вместе с резным носом и санями."
+ },
+ "gm_landmark_otzi_the_iceman_desc": {
+  "en": "A man of about 3300 BC, preserved in glacier ice in the Ötztal Alps with his copper axe and his bow, found by two hikers in 1991.",
+  "ru": "Человек примерно 3300 года до н. э., сохранившийся во льду ледника в Эцтальских Альпах вместе с медным топором и луком; найден двумя туристами в 1991 году."
+ },
+ "gm_landmark_palace_of_knossos_desc": {
+  "en": "The palace of the Minoan kings on Crete, with its frescoes of bull-leapers. Arthur Evans dug it from 1900 and rebuilt parts of it in concrete.",
+  "ru": "Дворец миносских царей на Крите, с фресками прыгунов через быка. Артур Эванс раскапывал его с 1900 года и частично восстановил в бетоне."
+ },
+ "gm_landmark_palais_des_papes_desc": {
+  "en": "The fortress-palace the popes built at Avignon in the fourteenth century, the largest Gothic palace in Europe. Since the Revolution it has served as a barracks and a prison.",
+  "ru": "Дворец-крепость, который папы построили в Авиньоне в XIV веке, крупнейший готический дворец Европы. Со времён Революции в нём размещались казармы и тюрьма."
+ },
+ "gm_landmark_palmyra_desc": {
+  "en": "Queen Zenobia's caravan city, whose colonnaded street and temple of Bel stand in the desert between Homs and the Euphrates. Villagers live inside the temple's walls.",
+  "ru": "Караванный город царицы Зенобии; его колоннадная улица и храм Бела стоят в пустыне между Хомсом и Евфратом. Деревенские жители живут внутри стен храма."
+ },
+ "gm_landmark_parthenon_desc": {
+  "en": "Raised for Athena on the Acropolis of Athens in the fifth century BC. Lord Elgin's agents took about half its surviving sculpture to London between 1801 and 1812.",
+  "ru": "Воздвигнут для Афины на афинском Акрополе в V веке до н. э. Агенты лорда Элгина вывезли в Лондон около половины его уцелевших скульптур в 1801–1812 годах."
+ },
+ "gm_landmark_pergamon_altar_desc": {
+  "en": "The great marble altar of the Attalid kings on the acropolis of Pergamon, whose frieze shows the gods' war on the giants. Carl Humann found it in 1878, and the Ottomans divided the finds with Germany.",
+  "ru": "Великий мраморный алтарь царей Атталидов на акрополе Пергама, чей фриз изображает войну богов с гигантами. Карл Хуманн нашёл его в 1878 году, и османы поделили находки с Германией."
+ },
+ "gm_landmark_persepolis_desc": {
+  "en": "The palace city of the Achaemenid kings, burned by Alexander in 330 BC. Persians call it Takht-e Jamshid, the throne of the Shahnameh's king Jamshid.",
+  "ru": "Дворцовый город царей Ахеменидов, сожжённый Александром в 330 году до н. э. Персы зовут его Тахт-е Джамшид — трон царя Джамшида из «Шахнаме»."
+ },
+ "gm_landmark_petra_desc": {
+  "en": "The rose-red city of the Nabataeans, its tombs and temples carved into the cliffs of a desert gorge. Johann Ludwig Burckhardt, traveling as a Muslim scholar, was the first European in centuries to see it, in 1812.",
+  "ru": "Розово-красный город набатеев, чьи гробницы и храмы высечены в скалах пустынного ущелья. Иоганн Людвиг Буркхардт, путешествовавший под видом мусульманского учёного, в 1812 году стал первым европейцем за века, увидевшим его."
+ },
+ "gm_landmark_piraeus_lion_desc": {
+  "en": "A marble lion that guarded the harbor of Piraeus, carried off by the Venetian commander Morosini in 1687 to stand at the gate of the Arsenal in Venice.",
+  "ru": "Мраморный лев, охранявший гавань Пирея, увезённый венецианским командующим Морозини в 1687 году, чтобы стоять у ворот Арсенала в Венеции."
+ },
+ "gm_landmark_pompeii_desc": {
+  "en": "The Roman town at the foot of Vesuvius, buried by the eruption of AD 79 with its streets, shops, houses and frescoes. Bourbon diggers began in 1748, and Giuseppe Fiorelli's house-by-house work from 1863 made it the model of an excavation.",
+  "ru": "Римский город у подножия Везувия, погребённый извержением 79 года н. э. вместе с улицами, лавками, домами и фресками. Бурбонские землекопы начали работы в 1748 году, а поквартальные раскопки Джузеппе Фьорелли с 1863 года сделали его образцом раскопок."
+ },
+ "gm_landmark_pont_du_gard_desc": {
+  "en": "A Roman aqueduct bridge of three tiers of arches that carried water across the Gardon valley to Nîmes, built of stone laid without mortar in the first century. A road bridge was added beside its lowest tier in 1743.",
+  "ru": "Римский мост-акведук из трёх ярусов арок, переносивший воду через долину Гардона в Ним, построенный из камня, уложенного без раствора, в I веке. В 1743 году рядом с его нижним ярусом добавили дорожный мост."
+ },
+ "gm_landmark_potala_palace_desc": {
+  "en": "The palace of the Dalai Lamas on the Red Hill above Lhasa, its White Palace raised under the Fifth Dalai Lama from 1645 and its Red Palace finished in 1694.",
+  "ru": "Дворец далай-лам на Красном холме над Лхасой; его Белый дворец возведён при Пятом далай-ламе с 1645 года, а Красный дворец завершён в 1694 году."
+ },
+ "gm_landmark_pyramids_of_giza_desc": {
+  "en": "The tombs of Khufu, Khafre and Menkaure on the desert's edge across the Nile from Cairo, with the Great Sphinx below them. The Great Pyramid was the tallest building on earth for nearly four thousand years.",
+  "ru": "Гробницы Хуфу, Хафры и Менкаура на краю пустыни, напротив Каира за Нилом, с Великим сфинксом под ними. Великая пирамида почти четыре тысячи лет была самым высоким зданием на земле."
+ },
+ "gm_landmark_pyramids_of_meroe_desc": {
+  "en": "Some two hundred steep pyramids of the kings and queens of Kush on the east bank of the Nile, north of the sixth cataract. Giuseppe Ferlini blew the tops off several of them in 1834 looking for gold, and found it.",
+  "ru": "Около двухсот крутых пирамид царей и цариц Куша на восточном берегу Нила, севернее шестого порога. Джузеппе Ферлини в 1834 году сбил верхушки нескольких из них в поисках золота и нашёл его."
+ },
+ "gm_landmark_red_fort_desc": {
+  "en": "Shah Jahan's fortress-palace at Delhi, finished in 1648, where the Mughal emperor still holds court.",
+  "ru": "Дворец-крепость Шах-Джахана в Дели, завершённый в 1648 году, где могольский император по-прежнему держит двор."
+ },
+ "gm_landmark_registan_desc": {
+  "en": "The square at the heart of Samarkand, framed by three madrasas, Ulugh Beg's of 1420 and the Sher-Dor and Tilya-Kori of the seventeenth century, their gateways faced in glazed tile.",
+  "ru": "Площадь в сердце Самарканда, обрамлённая тремя медресе: Улугбека 1420 года и Шер-Дор и Тилля-Кари XVII века, с порталами, облицованными глазурованной плиткой."
+ },
+ "gm_landmark_rosetta_stone_desc": {
+  "en": "A decree of 196 BC in hieroglyphs, Demotic and Greek, found by French soldiers at Rosetta in 1799. Britain took it under the capitulation of 1801, and Champollion read the hieroglyphs from it in 1822.",
+  "ru": "Указ 196 года до н. э. на иероглифах, демотическом и греческом, найденный французскими солдатами в Розетте в 1799 году. Британия забрала его по капитуляции 1801 года, а Шампольон прочёл по нему иероглифы в 1822-м."
+ },
+ "gm_landmark_royal_cemetery_at_ur_desc": {
+  "en": "The graves of the Sumerian kings and queens of Ur, opened by Leonard Woolley from 1922, with their lyres, their helmets and the Standard of Ur.",
+  "ru": "Могилы шумерских царей и цариц Ура, вскрытые Леонардом Вулли с 1922 года, с лирами, шлемами и Штандартом Ура."
+ },
+ "gm_landmark_royal_palace_of_benin_desc": {
+  "en": "The Oba's palace in Benin City, home to the brass and ivory works the kingdom's royal guilds have cast and carved for centuries.",
+  "ru": "Дворец обы в городе Бенин, дом бронзовых и костяных работ, которые царские гильдии королевства веками отливают и режут."
+ },
+ "gm_landmark_royal_palace_of_kandy_desc": {
+  "en": "The palace of the kings of Kandy, the last Sinhalese kingdom. When Britain took the kingdom in 1815, it sent the king's throne to Windsor.",
+  "ru": "Дворец царей Канди, последнего сингальского королевства. Когда Британия взяла королевство в 1815 году, она отправила трон царя в Виндзор."
+ },
+ "gm_landmark_royal_palace_of_kumasi_desc": {
+  "en": "The Asantehene's palace in Kumasi, with the stone treasure house Osei Bonsu built to hold the kingdom's gold.",
+  "ru": "Дворец ашантихене в Кумаси, с каменной сокровищницей, которую Осей Бонсу построил для хранения золота королевства."
+ },
+ "gm_landmark_royal_palaces_of_abomey_desc": {
+  "en": "The palaces of the kings of Dahomey at Abomey, each king raising his own beside his forebears'. Clay reliefs on their walls tell of the kingdom's kings and battles.",
+  "ru": "Дворцы королей Дагомеи в Абомее; каждый король возводил свой рядом с дворцами предшественников. Глиняные рельефы на их стенах рассказывают о королях и битвах королевства."
+ },
+ "gm_landmark_royal_tombs_of_sipan_desc": {
+  "en": "Tombs of the Moche lords of Sipán, found by Walter Alva in 1987 after looters had begun to dig them, with the Lord of Sipán's gold and turquoise regalia.",
+  "ru": "Гробницы правителей мочика в Сипане, найденные Уолтером Альвой в 1987 году после того, как грабители начали их раскапывать, с золотыми и бирюзовыми регалиями Владыки Сипана."
+ },
+ "gm_landmark_saint_sophia_kiev_desc": {
+  "en": "The cathedral Yaroslav the Wise raised in Kyiv in 1037, its domes rebuilt in the Ukrainian Baroque, its mosaics and frescoes those of the eleventh century.",
+  "ru": "Собор, который Ярослав Мудрый воздвиг в Киеве в 1037 году; его купола перестроены в украинском барокко, а мозаики и фрески — XI века."
+ },
+ "gm_landmark_sans_souci_palace_desc": {
+  "en": "Built 1810–1813 for Henri Christophe, King Henry I of Haiti, whose kingdom ended with him in 1820.",
+  "ru": "Построен в 1810–1813 годах для Анри Кристофа, короля Гаити Генриха I, чьё королевство закончилось вместе с ним в 1820 году."
+ },
+ "gm_landmark_sanxingdui_pits_desc": {
+  "en": "Sacrificial pits of the Shu kingdom near Guanghan, found by a farmer in 1929, that held bronze masks, a bronze tree and elephant tusks.",
+  "ru": "Жертвенные ямы царства Шу близ Гуанхани, найденные фермером в 1929 году, в которых были бронзовые маски, бронзовое дерево и слоновые бивни."
+ },
+ "gm_landmark_shalimar_gardens_desc": {
+  "en": "Laid out in 1641–1642 for the emperor Shah Jahan: a Mughal garden of three terraces and more than four hundred fountains.",
+  "ru": "Разбиты в 1641–1642 годах для императора Шах-Джахана: могольский сад из трёх террас и более чем четырёхсот фонтанов."
+ },
+ "gm_landmark_shibam_desc": {
+  "en": "A walled town of some five hundred mud-brick tower houses up to eight stories tall on the floor of the Wadi Hadhramaut, most of them rebuilt after a flood in the sixteenth century.",
+  "ru": "Город в стенах из пятисот глинобитных башенных домов высотой до восьми этажей на дне вади Хадрамаут, большинство из которых перестроены после наводнения в XVI веке."
+ },
+ "gm_landmark_shore_temple_desc": {
+  "en": "Granite temples on the beach at Mahabalipuram, built by the Pallava kings around 700, with the rock-cut shrines and carved boulders of their old port around them.",
+  "ru": "Гранитные храмы на пляже Махабалипурама, построенные царями Паллавов около 700 года, с вырубленными в скале святилищами и резными валунами их древнего порта вокруг."
+ },
+ "gm_landmark_sidon_necropolis_desc": {
+  "en": "The tombs of the kings of Sidon. Ernest Renan's mission found Phoenician sarcophagi there in 1855, and Hamdi Bey found the sarcophagus called Alexander's in 1887.",
+  "ru": "Гробницы царей Сидона. Миссия Эрнеста Ренана нашла там финикийские саркофаги в 1855 году, а Хамди-бей — саркофаг, называемый Александровым, в 1887-м."
+ },
+ "gm_landmark_statue_of_louis_xiv_desc": {
+  "en": "Louis XIV on horseback, raised on Place Bellecour in 1713, melted down in the Revolution and cast again for the Restoration in 1825.",
+  "ru": "Людовик XIV на коне, воздвигнутый на площади Белькур в 1713 году, переплавленный в Революцию и отлитый заново для Реставрации в 1825 году."
+ },
+ "gm_landmark_stelae_of_aksum_desc": {
+  "en": "Raised by the kings of Aksum by the fourth century, in the city where Ethiopia's emperors go to be crowned.",
+  "ru": "Воздвигнуты царями Аксума к IV веку в городе, где короновались императоры Эфиопии."
+ },
+ "gm_landmark_sutton_hoo_desc": {
+  "en": "An Anglo-Saxon ship burial under a mound in Suffolk, opened in 1939, with a warrior's helmet and regalia that may have belonged to King Rædwald.",
+  "ru": "Англосаксонское погребение в ладье под курганом в Саффолке, вскрытое в 1939 году, с воинским шлемом и регалиями, которые могли принадлежать королю Рэдвальду."
+ },
+ "gm_landmark_swayambhunath_desc": {
+  "en": "A white stupa painted with the eyes of the Buddha on a hill above Kathmandu, one of the oldest shrines of the valley and its temple cities.",
+  "ru": "Белая ступа с нарисованными глазами Будды на холме над Катманду, одно из древнейших святилищ долины и её храмовых городов."
+ },
+ "gm_landmark_teatro_di_san_carlo_desc": {
+  "en": "Opened by Charles of Bourbon in 1737 and rebuilt within a year of the fire of 1816: the oldest opera house still in use.",
+  "ru": "Открыт Карлом Бурбонским в 1737 году и перестроен за год после пожара 1816 года: старейший из всё ещё действующих оперных театров."
+ },
+ "gm_landmark_temple_of_confucius_desc": {
+  "en": "The temple at Qufu, the Master's home town, where offerings have been made to him since the fifth century BC, rebuilt for the Ming emperors after a fire in 1499.",
+  "ru": "Храм в Цюйфу, родном городе Учителя, где ему приносят жертвы с V века до н. э.; перестроен для императоров Мин после пожара 1499 года."
+ },
+ "gm_landmark_temple_of_dendera_desc": {
+  "en": "The temple of Hathor at Dendera. Its stone zodiac was cut from a chapel ceiling in 1821 and sold to Louis XVIII.",
+  "ru": "Храм Хатхор в Дендере. Его каменный зодиак вырезали из потолка капеллы в 1821 году и продали Людовику XVIII."
+ },
+ "gm_landmark_temple_of_heaven_desc": {
+  "en": "Raised in 1420 for the Yongle Emperor. Here the Son of Heaven sacrifices to Heaven at the winter solstice and prays for good harvests.",
+  "ru": "Воздвигнут в 1420 году для императора Юнлэ. Здесь Сын Неба приносит жертву Небу в день зимнего солнцестояния и молится об урожае."
+ },
+ "gm_landmark_temple_of_seti_abydos_desc": {
+  "en": "The temple Seti I raised to Osiris and the kings before him at Abydos, finished by his son Ramesses II, its walls carved with the finest reliefs of the New Kingdom and a list of seventy-six kings.",
+  "ru": "Храм, который Сети I воздвиг Осирису и царям до него в Абидосе, завершённый его сыном Рамсесом II; его стены покрыты тончайшими рельефами Нового царства и списком семидесяти шести царей."
+ },
+ "gm_landmark_temples_of_baalbek_desc": {
+  "en": "The Roman temples of Heliopolis, with Jupiter's six standing columns and the temple of Bacchus. Local legend says Solomon raised them, and in the Middle Ages their precinct was walled as a citadel.",
+  "ru": "Римские храмы Гелиополя с шестью стоящими колоннами Юпитера и храмом Вакха. Местное предание гласит, что их воздвиг Соломон, а в Средние века их территорию обнесли стеной как цитадель."
+ },
+ "gm_landmark_teotihuacan_desc": {
+  "en": "The city of the Pyramids of the Sun and the Moon on the Avenue of the Dead, home to perhaps a hundred thousand people around 500 and in ruins long before the Aztecs named it.",
+  "ru": "Город пирамид Солнца и Луны на Аллее Мёртвых, где около 500 года жили, возможно, сто тысяч человек, лежавший в руинах задолго до того, как ацтеки дали ему имя."
+ },
+ "gm_landmark_terracotta_army_desc": {
+  "en": "The army of the First Emperor of Qin: thousands of life-sized warriors, chariots and horses in pits beside his burial mound, found by farmers digging a well in 1974.",
+  "ru": "Армия Первого императора Цинь: тысячи воинов, колесниц и лошадей в натуральную величину в ямах рядом с его погребальным курганом, найденные крестьянами, копавшими колодец, в 1974 году."
+ },
+ "gm_landmark_tikal_desc": {
+  "en": "The greatest city of the Classic Maya, in the forests of Petén, its temple pyramids rising above the canopy over plazas abandoned in the tenth century.",
+  "ru": "Величайший город классических майя, в лесах Петена, с храмовыми пирамидами, поднимающимися над кронами над площадями, покинутыми в X веке."
+ },
+ "gm_landmark_tipus_tiger_desc": {
+  "en": "A wooden tiger mauling a European soldier, made for Tipu Sultan of Mysore and taken when Seringapatam fell in 1799. It growls in the East India Company's museum in London.",
+  "ru": "Деревянный тигр, терзающий европейского солдата, сделанный для Типу Султана Майсура и захваченный при падении Серингапатама в 1799 году. Он рычит в музее Ост-Индской компании в Лондоне."
+ },
+ "gm_landmark_todai_ji_desc": {
+  "en": "The temple Emperor Shōmu founded at Nara, consecrated in 752, whose Great Buddha Hall, rebuilt in 1709, is the largest wooden building in the world.",
+  "ru": "Храм, основанный императором Сёму в Наре и освящённый в 752 году, чей Зал Великого Будды, перестроенный в 1709 году, — крупнейшее деревянное здание в мире."
+ },
+ "gm_landmark_tomb_of_alexander_desc": {
+  "en": "The tomb in Alexandria where the Ptolemies displayed the body of Alexander the Great, last seen in late antiquity and long since lost under the city.",
+  "ru": "Гробница в Александрии, где Птолемеи выставили тело Александра Великого; последний раз её видели в поздней античности, и давно она потеряна под городом."
+ },
+ "gm_landmark_tomb_of_marquis_yi_desc": {
+  "en": "The tomb of Marquis Yi of Zeng, a lord of the fifth century BC, opened in 1978 with a set of sixty-five bronze bells and its lacquerware.",
+  "ru": "Гробница маркиза И из Цзэн, правителя V века до н. э., вскрытая в 1978 году, с набором из шестидесяти пяти бронзовых колоколов и лаковой утварью."
+ },
+ "gm_landmark_tomb_of_pakal_desc": {
+  "en": "The pyramid at Palenque whose hidden stair Alberto Ruz Lhuillier cleared in 1952 to the burial chamber of King K'inich Janaab' Pakal and his jade death mask.",
+  "ru": "Пирамида в Паленке, потайную лестницу которой Альберто Рус Люилье расчистил в 1952 году до погребальной камеры царя К'инич-Ханааб-Пакаля и его нефритовой посмертной маски."
+ },
+ "gm_landmark_tomb_of_philip_ii_desc": {
+  "en": "The tombs of the Macedonian kings at Aigai. Manolis Andronikos opened one in 1977 and found a gold larnax, probably that of Philip II, Alexander's father.",
+  "ru": "Гробницы македонских царей в Эгах. Манолис Андроникос вскрыл одну из них в 1977 году и нашёл золотой ларнакс, вероятно, Филиппа II, отца Александра."
+ },
+ "gm_landmark_tomb_of_tutankhamun_desc": {
+  "en": "The nearly intact tomb of a boy pharaoh in the Valley of the Kings, opened by Howard Carter in 1922 with its golden funerary mask, its three coffins and some five thousand objects.",
+  "ru": "Почти нетронутая гробница мальчика-фараона в Долине царей, вскрытая Говардом Картером в 1922 году, с золотой погребальной маской, тремя гробами и примерно пятью тысячами предметов."
  },
  "gm_landmark_tomb_of_william_the_silent_desc": {
   "en": "Raised 1614–1622 in the New Church of Delft over William of Orange, father of the Dutch nation, whose House is buried there still.",
