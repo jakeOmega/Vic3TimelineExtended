@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # The Map Room's options in words (docs/systems/mod_systems/journal_map_modes.md)
 # ============================================================================
-# The Map Room's Area and Outliers options are global variables (te_jmap_area, te_jmap_continent, te_jmap_trim:
-# common/script_values/te_journal_map_values.txt), and four texts name them: on the Map Options header, in every
+# The Map Room's Area, Outliers and Scale options are global variables (te_jmap_area, te_jmap_continent,
+# te_jmap_trim, te_jmap_scale: common/script_values/te_journal_map_values.txt), and these texts name them: on the Map Options header, in every
 # fitted pick's tooltip and in the hover of a state outside the area. Read as [GetPlayer.GetCustom('<key>')]: the
 # triggers read only globals, so any country gives the same answer. A market's, a power bloc's and a country's names
 # come from the viewer's scopes (global_var:te_jmap_viewer, the player who last clicked), never typed; the names of
@@ -153,5 +153,149 @@ te_jmap_trim_text = {
 	}
 	text = {
 		localization_key = te_jmap_trim_text_default
+	}
+}
+
+# The Outliers setting in two words, for the Map Options header, which has room for little beside its title.
+te_jmap_trim_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_trim = 1 }
+		localization_key = te_jmap_trim_none
+	}
+	text = {
+		trigger = { te_jmap_trim = 2 }
+		localization_key = te_jmap_trim_percent
+	}
+	text = {
+		localization_key = te_jmap_trim_short_default
+	}
+}
+
+# The Scale setting as its button names it: the line at the top of the page.
+te_jmap_scale_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 1 }
+		localization_key = te_jmap_scale_linear
+	}
+	text = {
+		trigger = { te_jmap_scale = 2 }
+		localization_key = te_jmap_scale_log
+	}
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scale_ranked
+	}
+	text = {
+		localization_key = te_jmap_scale_own
+	}
+}
+
+# The Scale setting in a word or two, for the Map Options header.
+te_jmap_scale_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 1 }
+		localization_key = te_jmap_scale_linear
+	}
+	text = {
+		trigger = { te_jmap_scale = 2 }
+		localization_key = te_jmap_scale_short_log
+	}
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scale_ranked
+	}
+	text = {
+		localization_key = te_jmap_scale_short_own
+	}
+}
+
+# What the scale in force does, for a fitted pick's tooltip under any scale but the map's own
+# (te_jmap_pick_<map>_scaled, which the pick's button shows in place of its own-curve description). A custom
+# localization can't know which button is hovered, so there are three, and each pick's key names the one for its
+# kind of map: a straight map, a map already on a doubling scale (where Logarithmic is its own curve), and a map
+# with a meaningful midpoint (where Logarithmic and Ranked work on each side of it).
+te_jmap_scale_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 1 }
+		localization_key = te_jmap_scale_text_linear
+	}
+	text = {
+		trigger = { te_jmap_scale = 2 }
+		localization_key = te_jmap_scale_text_log
+	}
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scale_text_ranked
+	}
+	text = {
+		localization_key = te_jmap_scale_text_own
+	}
+}
+
+te_jmap_scale_text_doubling = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 1 }
+		localization_key = te_jmap_scale_text_linear
+	}
+	text = {
+		trigger = { te_jmap_scale = 2 }
+		localization_key = te_jmap_scale_text_log_doubling
+	}
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scale_text_ranked
+	}
+	text = {
+		localization_key = te_jmap_scale_text_own
+	}
+}
+
+te_jmap_scale_text_mid = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 1 }
+		localization_key = te_jmap_scale_text_linear_mid
+	}
+	text = {
+		trigger = { te_jmap_scale = 2 }
+		localization_key = te_jmap_scale_text_log_mid
+	}
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scale_text_ranked_mid
+	}
+	text = {
+		localization_key = te_jmap_scale_text_own
+	}
+}
+
+# What leads the range's two figures in that tooltip: Ranked reads no range, and says so.
+te_jmap_scaled_range_lead = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 3 }
+		localization_key = te_jmap_scaled_lead_ranked
+	}
+	text = {
+		localization_key = te_jmap_scaled_lead_range
 	}
 }

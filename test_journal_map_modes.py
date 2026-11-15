@@ -383,7 +383,12 @@ class MapRoomTest(unittest.TestCase):
                 self.assertIn(f"GetScriptedGui('{name}').{call}(", button, f"{name}: no {call} on its button")
             key = name[:-len("_sgui")]
             self.assertIn(f'text = "{key}"', button, f"{name}: its button shows another pick's name")
-            self.assertIn(f'tooltip = "{key}_desc"', button, f"{name}: its button shows another pick's tooltip")
+            # its own description; for a map fitted to a range, only under the map's own curve, which is the
+            # one that description describes (ScaleTooltipTest)
+            plain = f'tooltip = "{key}_desc"'
+            scaled = ("tooltip = \"[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                      f"'te_jmap_scale'), '(CFixedPoint)0' ), '{key}_desc', '{key}_scaled' )]\"")
+            self.assertTrue((plain in button) != (scaled in button), f"{name}: its button shows another pick's tooltip")
             clicks = re.findall(r'onclick\s*=\s*"([^"]*)"', button)
             self.assertEqual(len(clicks), 2, f"{name}: pick, then the repaint")
             self.assertIn(".Execute(", clicks[0], f"{name}: the pick runs first")
@@ -1075,7 +1080,7 @@ def option_buttons():
 
 
 class OptionsTest(unittest.TestCase):
-    """The Map Room's options (owner, 2026-11-14): Area and Outliers."""
+    """The Map Room's options (owner, 2026-11-14): Area, Outliers and, since the thirteenth pass, Scale."""
 
     # scripted GUI -> (the effect it runs, its argument, the script value its button draws pressed from)
     OPTIONS = {
@@ -1093,13 +1098,25 @@ class OptionsTest(unittest.TestCase):
         "te_jmap_trim_default_sgui": ("te_jmap_set_trim", "TRIM", 0, "te_jmap_trim"),
         "te_jmap_trim_none_sgui": ("te_jmap_set_trim", "TRIM", 1, "te_jmap_trim"),
         "te_jmap_trim_percent_sgui": ("te_jmap_set_trim", "TRIM", 2, "te_jmap_trim"),
+        "te_jmap_scale_own_sgui": ("te_jmap_set_scale", "SCALE", 0, "te_jmap_scale"),
+        "te_jmap_scale_linear_sgui": ("te_jmap_set_scale", "SCALE", 1, "te_jmap_scale"),
+        "te_jmap_scale_log_sgui": ("te_jmap_set_scale", "SCALE", 2, "te_jmap_scale"),
+        "te_jmap_scale_ranked_sgui": ("te_jmap_set_scale", "SCALE", 3, "te_jmap_scale"),
     }
-    # the options that can be greyed, each with the reason its tooltip then gives
+    # Outliers is greyed on a map with no range and under the Ranked scale, which reads none: one reason each
+    TRIM_VALID = "te_jmap_pick_fitted = 1 NOT = { te_jmap_scale = 3 }"
+    TRIM_REASONS = ("SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), "
+                    "'(CFixedPoint)1' ), 'te_jmap_trim_ranked_tt', 'te_jmap_trim_no_range_tt' )")
+    # the options that can be greyed: (is_valid, what the tooltip shows in place of the option's own text)
     GREYED = {
-        "te_jmap_area_bloc_sgui": ("is_in_power_bloc = yes", "te_jmap_area_bloc_none_tt"),
-        "te_jmap_trim_default_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
-        "te_jmap_trim_none_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
-        "te_jmap_trim_percent_sgui": ("te_jmap_pick_fitted = 1", "te_jmap_trim_no_range_tt"),
+        "te_jmap_area_bloc_sgui": ("is_in_power_bloc = yes", "'te_jmap_area_bloc_none_tt'"),
+        "te_jmap_trim_default_sgui": (TRIM_VALID, TRIM_REASONS),
+        "te_jmap_trim_none_sgui": (TRIM_VALID, TRIM_REASONS),
+        "te_jmap_trim_percent_sgui": (TRIM_VALID, TRIM_REASONS),
+        # the map's own curve is always there, to go back to
+        "te_jmap_scale_linear_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
+        "te_jmap_scale_log_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
+        "te_jmap_scale_ranked_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
     }
 
     def setUp(self):
@@ -1215,18 +1232,19 @@ class OptionsTest(unittest.TestCase):
     def test_the_options_default_to_what_the_map_room_showed(self):
         values = code(VALUES)
         for value, var in (("te_jmap_area", "te_jmap_opt_area"), ("te_jmap_continent", "te_jmap_opt_cont"),
-                           ("te_jmap_trim", "te_jmap_opt_trim")):
+                           ("te_jmap_trim", "te_jmap_opt_trim"), ("te_jmap_scale", "te_jmap_opt_scale")):
             self.assertEqual(" ".join(block(values, value).split()),
                              f"value = 0 if = {{ limit = {{ has_global_variable = {var} }} value = global_var:{var} }}")
         # globals, as the pick: they survive a save, and nothing else writes them
         for effect, arg, var in (("te_jmap_set_area", "AREA", "te_jmap_opt_area"),
                                  ("te_jmap_set_continent", "CONT", "te_jmap_opt_cont"),
-                                 ("te_jmap_set_trim", "TRIM", "te_jmap_opt_trim")):
+                                 ("te_jmap_set_trim", "TRIM", "te_jmap_opt_trim"),
+                                 ("te_jmap_set_scale", "SCALE", "te_jmap_opt_scale")):
             self.assertRegex(block(self.effects, effect),
                              r"^\s*set_global_variable = \{ name = " + var + r" value = \$" + arg + r"\$ \}")
 
     def test_each_option_runs_its_effect_as_the_player(self):
-        found = set(re.findall(r"^(te_jmap_(?:area|continent|trim)_\w+_sgui)\s*=\s*\{", self.sguis, re.M))
+        found = set(re.findall(r"^(te_jmap_(?:area|continent|trim|scale)_\w+_sgui)\s*=\s*\{", self.sguis, re.M))
         self.assertEqual(found, set(self.OPTIONS))
         for name, (effect, arg, number, _value) in self.OPTIONS.items():
             body = block(self.sguis, name)
@@ -1261,7 +1279,7 @@ class OptionsTest(unittest.TestCase):
                     reason = self.GREYED[name][1]
                     self.assertIn(f"enabled = \"[GetScriptedGui('{name}').IsValid( {scope} )]\"", body)
                     self.assertIn(f"tooltip = \"[SelectLocalization( GetScriptedGui('{name}').IsValid( {scope} ), "
-                                  f"'{key}_tt', '{reason}' )]\"", body)
+                                  f"'{key}_tt', {reason} )]\"", body)
                 else:
                     self.assertNotIn("enabled =", body)
                     self.assertIn(f'tooltip = "{key}_tt"', body)
@@ -1299,7 +1317,47 @@ class OptionsTest(unittest.TestCase):
         self.assertIn("visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_options_set'), "
                       "'(CFixedPoint)1' )]\"", notice)
         self.assertEqual(" ".join(block(code(VALUES), "te_jmap_options_set").split()),
-                         "value = 0 if = { limit = { OR = { te_jmap_area > 0 te_jmap_trim > 0 } } value = 1 }")
+                         "value = 0 if = { limit = { OR = { te_jmap_area > 0 te_jmap_trim > 0 te_jmap_scale > 0 } } "
+                         "value = 1 }")
+        # the header has room for little beside its title: the area, and the other two in a word or two
+        values = loc_values()
+        self.assertEqual(values["te_jmap_options_now"], "[GetPlayer.GetCustom('te_jmap_area_name')], "
+                         "[GetPlayer.GetCustom('te_jmap_trim_short')], [GetPlayer.GetCustom('te_jmap_scale_short')]")
+        longest = max(len(", ".join((a, t, c))) for a in ("North America", "South America", "Power Bloc")
+                      for t in ("Trim 4", "Keep All", "Trim 5%") for c in ("Own Scale", "Linear", "Log", "Ranked"))
+        self.assertLessEqual(longest, 34, "the header's summary, at its longest")
+        self.assertEqual((values["te_jmap_trim_short_default"], values["te_jmap_scale_short_own"],
+                          values["te_jmap_scale_short_log"]), ("Trim 4", "Own Scale", "Log"))
+        # the line at the top names all three in full
+        for text in ("te_jmap_area_name", "te_jmap_trim_name", "te_jmap_scale_name"):
+            self.assertIn(f"[GetPlayer.GetCustom('{text}')]", values["te_jmap_options_in_use"])
+
+    def test_the_scale_row_and_what_the_page_says_of_a_ranked_map(self):
+        section = block(code(WIDGETS), "te_jmap_options")
+        body = enclosing(section, re.search(r"\bte_jmap_category\s*=\s*\{", section).end())
+        # Area, Outliers, Scale, then the line on what the map was measured over
+        order = [body.index(f'text = "{key}"') for key in ("te_jmap_options_area", "te_jmap_options_outliers",
+                                                           "te_jmap_options_scale", "te_jmap_options_measured")]
+        self.assertEqual(order, sorted(order))
+        row = body[body.index('text = "te_jmap_options_scale"'):body.index('text = "te_jmap_options_measured"')]
+        self.assertEqual(re.findall(r'text = "te_jmap_scale_(\w+)"', row), ["own", "linear", "log", "ranked"])
+        widths = [int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", row)]
+        self.assertEqual(len(widths), 4)
+        self.assertLessEqual(sum(widths) + 3 * 4, 470)
+        # a fitted map says what it was measured over; a Ranked one says how old its places can be instead, since
+        # they are taken at the measure and a paint only reads them
+        fitted = "EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' )"
+        ranked = "EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)3' )"
+        lines = {re.search(r'text = "(\w+)"', box).group(1): re.search(r'visible = "([^"]*)"', box).group(1)
+                 for box in (enclosing(body, m.end()) for m in re.finditer(r"\btextbox\s*=\s*\{", body))}
+        self.assertEqual(lines["te_jmap_options_measured"], f"[And( {fitted}, Not{ranked} )]")
+        self.assertEqual(lines["te_jmap_options_measured_ranked"], f"[And( {fitted}, {ranked} )]")
+        self.assertIn("te_jmap_options_no_range", lines)
+        values = loc_values()
+        self.assertIn("a month old at most", values["te_jmap_options_measured_ranked"])
+        self.assertIn("te_jmap_shown_states", values["te_jmap_options_measured_ranked"])
+        self.assertNotIn("left out", values["te_jmap_options_measured_ranked"], "Ranked leaves no state out")
+        self.assertIn("te_jmap_shown_cut", values["te_jmap_options_measured"])
 
     def test_the_area_row_fits_the_page(self):
         # five buttons of their labels' widths in one row, inside the header's 470
@@ -1316,15 +1374,18 @@ class OptionsTest(unittest.TestCase):
         for name in self.OPTIONS:
             key = name[:-len("_sgui")]
             wanted |= {key, key + "_tt"}
-        wanted |= {reason for _valid, reason in self.GREYED.values()}
+        for _valid, reason in self.GREYED.values():
+            wanted |= set(re.findall(r"'(te_jmap_\w+_tt)'", reason))
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
         named = set(re.findall(r"localization_key\s*=\s*(\w+)", custom))
-        self.assertEqual(sorted(re.findall(r"^(\w+)\s*=\s*\{", custom, re.M)),
-                         ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_trim_name", "te_jmap_trim_text"])
+        texts = ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_scale_name", "te_jmap_scale_short",
+                 "te_jmap_scale_text", "te_jmap_scale_text_doubling", "te_jmap_scale_text_mid",
+                 "te_jmap_scaled_range_lead", "te_jmap_trim_name", "te_jmap_trim_short", "te_jmap_trim_text"]
+        self.assertEqual(sorted(re.findall(r"^(\w+)\s*=\s*\{", custom, re.M)), texts)
         self.assertEqual((wanted | named) - keys, set(), "loc keys missing")
         # every custom text is read somewhere, as [GetPlayer.GetCustom('<key>')]
         loc = "\n".join(loc_values().values())
-        for text in ("te_jmap_area_name", "te_jmap_area_text", "te_jmap_trim_name", "te_jmap_trim_text"):
+        for text in texts:
             self.assertIn(f"[GetPlayer.GetCustom('{text}')]", loc, text)
             body = block(custom, text)
             self.assertRegex(" ".join(body.split()), r"text = \{ localization_key = \w+ \} *$",
@@ -1352,7 +1413,8 @@ class OptionsTest(unittest.TestCase):
     def test_the_unverified_reads_are_self_checked(self):
         monthly = block(code(ON_ACTIONS), "te_jmap_monthly_ranges")
         doc = read(PLAYTEST)
-        for name, effect in (("area_mark", "te_jmap_area_selfcheck"), ("range_count", "te_jmap_range_selfcheck")):
+        for name, effect in (("area_mark", "te_jmap_area_selfcheck"), ("range_count", "te_jmap_range_selfcheck"),
+                             ("rank_walk", "te_jmap_rank_selfcheck")):
             body = block(self.effects, effect)
             with self.subTest(check=name):
                 self.assertIn(f"{effect} = yes", monthly)
@@ -1364,9 +1426,109 @@ class OptionsTest(unittest.TestCase):
         # each arms on enough states that an all-one-side answer means something
         self.assertRegex(block(self.effects, "te_jmap_area_selfcheck"), r"any_state = \{\s*count >= 20")
         self.assertRegex(block(self.effects, "te_jmap_range_selfcheck"), r"any_state = \{\s*count >= 20\s*gdp_per_capita > 0")
+        # the rank's walk is checked on a fixed map whatever the Scale option, so a game answers it before anyone
+        # picks Ranked: every state visited, none out of order, by the very walk a rank takes
+        rank = block(self.effects, "te_jmap_rank_selfcheck")
+        self.assertRegex(rank, r"any_state = \{\s*count >= 20\s*gdp_per_capita > 0")
+        self.assertNotIn("te_jmap_scale", rank)
+        self.assertRegex(" ".join(rank.split()), r"ordered_state = \{ limit = \{ gdp_per_capita > 0 \} order_by = "
+                         r"te_jmap_gdppc_input_neg min = 0 max = 5000 check_range_bounds = no ")
+        self.assertIn("global_var:te_jmap_sc_rank_seen = global_var:te_jmap_sc_rank_states", rank)
+        self.assertNotIn("te_jmap_rank ", rank.replace("te_jmap_rank_selfcheck", ""), "the check stores no place")
         # not from a click: a tooltip that walked an option's effect would read the counts unset
-        for caller in ("te_jmap_apply_options", "te_jmap_set_area", "te_jmap_set_selector", "te_jmap_mark_area"):
+        for caller in ("te_jmap_apply_options", "te_jmap_set_area", "te_jmap_set_scale", "te_jmap_set_selector",
+                       "te_jmap_mark_area"):
             self.assertNotIn("selfcheck", block(self.effects, caller), caller)
+
+
+class ScaleTooltipTest(unittest.TestCase):
+    """No tooltip describes a curve that isn't the one in force (owner, 2026-11-14). A fitted pick's own description
+    describes the map's own curve, so its button shows it only under that; under any other scale it shows
+    te_jmap_pick_<map>_scaled: the pick's name, the scale in force and the range, and nothing of the own curve."""
+
+    # words the own-curve descriptions use for their shapes
+    CURVE = ("half the color", "two-thirds", "most of the color", "most of them", "halfway", "first fifth",
+             "first third", "for each doubling", "of that span")
+
+    def setUp(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "gen_journal_map_scales", os.path.join(REPO, "scripts", "generators", "gen_journal_map_scales.py"))
+        self.gen = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.gen)
+        self.values = loc_values()
+        self.sguis = code(SGUIS)
+        self.row = block(code(WIDGETS), "te_jmap_pick_row")
+
+    def picks(self):
+        """{pick key: its scale} for every map fitted to a range."""
+        out = {}
+        for scale in self.gen.SCALES:
+            if self.gen.fitted(scale) and self.gen.in_room(scale):
+                m = re.search(r"^(te_jmap_pick_\w+)_sgui\s*=\s*\{(?:(?!^\}).)*?SEL = " + str(scale["sel"]) + r"\b",
+                              self.sguis, re.M | re.S)
+                out[m.group(1)] = scale
+        return out
+
+    def test_a_fitted_pick_shows_its_own_description_only_under_its_own_curve(self):
+        picks = self.picks()
+        self.assertEqual(len(picks), 35)
+        everything = set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))
+        for key in sorted(everything):
+            plain = f'tooltip = "{key}_desc"'
+            with self.subTest(pick=key):
+                if key in picks:
+                    self.assertNotIn(plain, self.row)
+                    self.assertIn(f"'{key}_desc', '{key}_scaled' )]\"", self.row)
+                else:
+                    # a map of categories or on a fixed scale: the option can't change it, and its text stands
+                    self.assertIn(plain, self.row)
+                    self.assertNotIn(f"{key}_scaled", self.values)
+
+    def test_the_scaled_tooltip_names_the_scale_in_force_and_the_range(self):
+        kinds = {"frac": "$te_jmap_scale_in_force$", "doubling": "$te_jmap_scale_in_force_doubling$",
+                 "mid": "$te_jmap_scale_in_force_mid$"}
+        for key, scale in self.picks().items():
+            text, n = self.values[f"{key}_scaled"], scale["name"]
+            with self.subTest(pick=key):
+                self.assertTrue(text.startswith(f"#b ${key}$#!\\n{kinds[scale['world']['kind']]}\\n"
+                                                "$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), text)
+                # the same two figures as its own description, in the same formats
+                own = self.values[f"{key}_desc"]
+                for end in ("lo", "hi"):
+                    figure = re.search(r"\[GetPlayer\.MakeScope\.ScriptValue\('te_jmap_" + n + "_" + end +
+                                       r"'\)\|[^\]]*\]", own).group(0)
+                    self.assertIn(figure, text)
+                self.assertTrue(text.endswith("$te_jmap_measured_trim$"))
+                for words in self.CURVE:
+                    self.assertNotIn(words, text, "a curve the scale in force doesn't draw")
+
+    def test_each_kind_of_map_has_its_scale_s_words(self):
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        for text, keys in (("te_jmap_scale_text", ("linear", "log", "ranked")),
+                           ("te_jmap_scale_text_doubling", ("linear", "log_doubling", "ranked")),
+                           ("te_jmap_scale_text_mid", ("linear_mid", "log_mid", "ranked_mid"))):
+            body = " ".join(block(custom, text).split())
+            for number, key in enumerate(keys, 1):
+                self.assertIn(f"trigger = {{ te_jmap_scale = {number} }} localization_key = te_jmap_scale_text_{key}",
+                              body, text)
+        # each says which scale, by the button's own name
+        for key, button in (("linear", "linear"), ("log", "log"), ("ranked", "ranked"), ("log_doubling", "log"),
+                            ("linear_mid", "linear"), ("log_mid", "log"), ("ranked_mid", "ranked")):
+            self.assertTrue(self.values[f"te_jmap_scale_text_{key}"].startswith(
+                f"$te_jmap_scale$: #b $te_jmap_scale_{button}$#!"), key)
+        # the midpoint maps' logarithm is said in what it does, not by a name
+        self.assertIn("each doubling of the distance from it", self.values["te_jmap_scale_text_log_mid"])
+        self.assertIn("Close to the midpoint the colors run straight", self.values["te_jmap_scale_text_log_mid"])
+        for text in self.values:
+            if text.startswith("te_jmap_"):
+                self.assertNotIn("symlog", self.values[text].lower(), text)
+        # a Ranked map's tooltip says how old it can be, and that the range isn't read
+        for key in ("te_jmap_scale_text_ranked", "te_jmap_scale_text_ranked_mid"):
+            self.assertIn("a month old at most", self.values[key])
+        lead = " ".join(block(custom, "te_jmap_scaled_range_lead").split())
+        self.assertIn("trigger = { te_jmap_scale = 3 } localization_key = te_jmap_scaled_lead_ranked", lead)
+        self.assertIn("Not read by this scale", self.values["te_jmap_scaled_lead_ranked"])
 
 
 class AreaTest(unittest.TestCase):

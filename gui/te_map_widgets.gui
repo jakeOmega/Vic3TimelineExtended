@@ -19,8 +19,10 @@
 ### pass's twentieth for each sometimes left the page closed, 2026-11-07).
 ###
 ### te_jmap_options is the Map Room's options (2026-11-14), on the same page below the picks: where the maps are
-### drawn and measured (Area) and what a fitted map's range leaves out (Outliers). Scripted GUIs too, and each option
-### fires the picks' own repaint, so a paused map repaints on it.
+### drawn and measured (Area), what a fitted map's range leaves out (Outliers) and the scale its colors run on
+### (Scale). Scripted GUIs too, and each option fires the picks' own repaint, so a paused map repaints on it. A
+### fitted pick's tooltip is its own description under the map's own curve and te_jmap_pick_<map>_scaled under any
+### other scale, so no tooltip describes a curve that isn't in force.
 ###
 ### Any journal page can be made see-through (the eye in its header, gui/journal_entry.gui), to look at its map. The
 ### flag outlives a pick's reopen, so a faded Map Room stays faded from map to map.
@@ -316,7 +318,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_turmoil"
-					tooltip = "te_jmap_pick_turmoil_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_turmoil_desc', 'te_jmap_pick_turmoil_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_turmoil_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_turmoil_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -325,7 +327,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_devastation"
-					tooltip = "te_jmap_pick_devastation_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_desc', 'te_jmap_pick_devastation_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_devastation_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_devastation_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_devastation_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -334,7 +336,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_urban_share"
-					tooltip = "te_jmap_pick_urban_share_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_urban_share_desc', 'te_jmap_pick_urban_share_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_urban_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_urban_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -369,7 +371,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_aristocrats"
-					tooltip = "te_jmap_pick_aristocrats_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_aristocrats_desc', 'te_jmap_pick_aristocrats_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -378,7 +380,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_clergy"
-					tooltip = "te_jmap_pick_clergy_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_clergy_desc', 'te_jmap_pick_clergy_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_clergy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_clergy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_clergy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -394,7 +396,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_capitalists"
-					tooltip = "te_jmap_pick_capitalists_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_capitalists_desc', 'te_jmap_pick_capitalists_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_capitalists_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -403,7 +405,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_academics"
-					tooltip = "te_jmap_pick_academics_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_academics_desc', 'te_jmap_pick_academics_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_academics_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_academics_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_academics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -439,7 +441,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_gdp_per_capita"
-					tooltip = "te_jmap_pick_gdp_per_capita_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_gdp_per_capita_desc', 'te_jmap_pick_gdp_per_capita_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -448,7 +450,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_gini"
-					tooltip = "te_jmap_pick_gini_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_gini_desc', 'te_jmap_pick_gini_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_gini_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_gini_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_gini_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -457,7 +459,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_dynastic_wealth"
-					tooltip = "te_jmap_pick_dynastic_wealth_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_dynastic_wealth_desc', 'te_jmap_pick_dynastic_wealth_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_dynastic_wealth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -482,7 +484,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_company_hqs"
-					tooltip = "te_jmap_pick_company_hqs_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_company_hqs_desc', 'te_jmap_pick_company_hqs_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_company_hqs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_company_hqs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -498,7 +500,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_investment"
-					tooltip = "te_jmap_pick_investment_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_investment_desc', 'te_jmap_pick_investment_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_investment_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_investment_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_investment_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -507,7 +509,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_trade_capacity"
-					tooltip = "te_jmap_pick_trade_capacity_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_trade_capacity_desc', 'te_jmap_pick_trade_capacity_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_trade_capacity_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_trade_capacity_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_trade_capacity_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -543,7 +545,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_base_comfort"
-					tooltip = "te_jmap_pick_base_comfort_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_base_comfort_desc', 'te_jmap_pick_base_comfort_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_base_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_base_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -552,7 +554,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_current_comfort"
-					tooltip = "te_jmap_pick_current_comfort_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_current_comfort_desc', 'te_jmap_pick_current_comfort_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_current_comfort_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_current_comfort_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -561,7 +563,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_crowding"
-					tooltip = "te_jmap_pick_crowding_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_crowding_desc', 'te_jmap_pick_crowding_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_crowding_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_crowding_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_crowding_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -577,7 +579,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_tourism_appeal"
-					tooltip = "te_jmap_pick_tourism_appeal_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_tourism_appeal_desc', 'te_jmap_pick_tourism_appeal_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_tourism_appeal_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -622,7 +624,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_armed_forces"
-					tooltip = "te_jmap_pick_armed_forces_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_armed_forces_desc', 'te_jmap_pick_armed_forces_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_armed_forces_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_armed_forces_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -631,7 +633,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_fighting_age_men"
-					tooltip = "te_jmap_pick_fighting_age_men_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_fighting_age_men_desc', 'te_jmap_pick_fighting_age_men_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_fighting_age_men_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -640,7 +642,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_war_dead"
-					tooltip = "te_jmap_pick_war_dead_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_war_dead_desc', 'te_jmap_pick_war_dead_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_war_dead_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_war_dead_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -676,7 +678,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_emissions"
-					tooltip = "te_jmap_pick_emissions_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_emissions_desc', 'te_jmap_pick_emissions_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_emissions_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_emissions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -744,7 +746,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_grandeur"
-					tooltip = "te_jmap_pick_grandeur_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_grandeur_desc', 'te_jmap_pick_grandeur_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_grandeur_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_grandeur_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -799,7 +801,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_life_expectancy"
-					tooltip = "te_jmap_pick_life_expectancy_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_life_expectancy_desc', 'te_jmap_pick_life_expectancy_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_life_expectancy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_life_expectancy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -808,7 +810,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_infant_mortality"
-					tooltip = "te_jmap_pick_infant_mortality_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_infant_mortality_desc', 'te_jmap_pick_infant_mortality_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_infant_mortality_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_infant_mortality_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -833,7 +835,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_birth_rate"
-					tooltip = "te_jmap_pick_birth_rate_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_birth_rate_desc', 'te_jmap_pick_birth_rate_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_birth_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_birth_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -842,7 +844,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_death_rate"
-					tooltip = "te_jmap_pick_death_rate_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_death_rate_desc', 'te_jmap_pick_death_rate_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_death_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_death_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -851,7 +853,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_natural_change"
-					tooltip = "te_jmap_pick_natural_change_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_natural_change_desc', 'te_jmap_pick_natural_change_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_natural_change_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_natural_change_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -867,7 +869,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_fertility"
-					tooltip = "te_jmap_pick_fertility_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_fertility_desc', 'te_jmap_pick_fertility_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_fertility_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_fertility_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_fertility_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -876,7 +878,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_median_age"
-					tooltip = "te_jmap_pick_median_age_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_median_age_desc', 'te_jmap_pick_median_age_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_median_age_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_median_age_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_median_age_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -885,7 +887,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_old_share"
-					tooltip = "te_jmap_pick_old_share_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_old_share_desc', 'te_jmap_pick_old_share_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_old_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_old_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_old_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -901,7 +903,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_sex_balance"
-					tooltip = "te_jmap_pick_sex_balance_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_sex_balance_desc', 'te_jmap_pick_sex_balance_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_sex_balance_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_sex_balance_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -910,7 +912,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_net_migration"
-					tooltip = "te_jmap_pick_net_migration_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_net_migration_desc', 'te_jmap_pick_net_migration_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_net_migration_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_net_migration_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -919,7 +921,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_population_growth"
-					tooltip = "te_jmap_pick_population_growth_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_population_growth_desc', 'te_jmap_pick_population_growth_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_population_growth_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_population_growth_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -935,7 +937,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_health_care"
-					tooltip = "te_jmap_pick_health_care_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_health_care_desc', 'te_jmap_pick_health_care_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_health_care_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_health_care_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_health_care_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -944,7 +946,7 @@ types te_map_widgets
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_family_planning"
-					tooltip = "te_jmap_pick_family_planning_desc"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_pick_family_planning_desc', 'te_jmap_pick_family_planning_scaled' )]"
 					visible = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_family_planning_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_family_planning_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -981,7 +983,8 @@ types te_map_widgets
 	### force, so they show while the section is closed. Scripted GUIs (te_journal_map_sguis.txt), as the picks are.
 	###   Area      World | Continent | Market | Power Bloc | Country, and under Continent two rows of three continents
 	###   Outliers  Keep All | Trim 4 Each End | Trim 5%, greyed with the reason on a map that has no range
-	###   and a line saying what the map on the page was measured over.
+	###   Scale     Map's Own | Linear | Logarithmic | Ranked (the thirteenth pass), the last three greyed likewise
+	###   and a line saying what the map on the page was measured over, or how old a Ranked map's places can be.
 	type te_jmap_options = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1157,7 +1160,8 @@ types te_map_widgets
 			}
 
 			# Outliers. Greyed while the map on the page has no range to trim (a map of categories, or on a fixed
-			# scale); each tooltip then gives that reason instead. The setting pressed is still the one in force.
+			# scale) and under the Ranked scale, which reads no range; each tooltip then gives the reason that
+			# applies instead. The setting pressed is still the one in force.
 			flowcontainer = {
 				direction = horizontal
 				parentanchor = hcenter
@@ -1166,7 +1170,7 @@ types te_map_widgets
 
 				te_jmap_option_button = {
 					text = "te_jmap_trim_none"
-					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_none_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_none_tt', 'te_jmap_trim_no_range_tt' )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_none_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_none_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' ), 'te_jmap_trim_ranked_tt', 'te_jmap_trim_no_range_tt' ) )]"
 					visible = "[GetScriptedGui('te_jmap_trim_none_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					enabled = "[GetScriptedGui('te_jmap_trim_none_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)1' )]"
@@ -1176,7 +1180,7 @@ types te_map_widgets
 
 				te_jmap_option_button = {
 					text = "te_jmap_trim_default"
-					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_default_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_default_tt', 'te_jmap_trim_no_range_tt' )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_default_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_default_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' ), 'te_jmap_trim_ranked_tt', 'te_jmap_trim_no_range_tt' ) )]"
 					visible = "[GetScriptedGui('te_jmap_trim_default_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					enabled = "[GetScriptedGui('te_jmap_trim_default_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)0' )]"
@@ -1186,7 +1190,7 @@ types te_map_widgets
 
 				te_jmap_option_button = {
 					text = "te_jmap_trim_percent"
-					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_percent_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_percent_tt', 'te_jmap_trim_no_range_tt' )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_trim_percent_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_trim_percent_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' ), 'te_jmap_trim_ranked_tt', 'te_jmap_trim_no_range_tt' ) )]"
 					visible = "[GetScriptedGui('te_jmap_trim_percent_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					enabled = "[GetScriptedGui('te_jmap_trim_percent_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_trim'), '(CFixedPoint)2' )]"
@@ -1195,8 +1199,66 @@ types te_map_widgets
 				}
 			}
 
+			te_jmap_options_label = {
+				text = "te_jmap_options_scale"
+			}
+
+			# Scale (the thirteenth pass). The map's own curve is always there, to go back to; the other three are
+			# greyed while the map on the page has no range for a scale to run over, with that as the tooltip.
+			# Four of 112 and three gaps make 460, inside the header's 470.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_option_button = {
+					size = { 112 30 }
+					text = "te_jmap_scale_own"
+					tooltip = "te_jmap_scale_own_tt"
+					visible = "[GetScriptedGui('te_jmap_scale_own_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' )]"
+					onclick = "[GetScriptedGui('te_jmap_scale_own_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 112 30 }
+					text = "te_jmap_scale_linear"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_scale_linear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_scale_linear_tt', 'te_jmap_scale_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_scale_linear_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_scale_linear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)1' )]"
+					onclick = "[GetScriptedGui('te_jmap_scale_linear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 112 30 }
+					text = "te_jmap_scale_log"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_scale_log_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_scale_log_tt', 'te_jmap_scale_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_scale_log_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_scale_log_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)2' )]"
+					onclick = "[GetScriptedGui('te_jmap_scale_log_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					size = { 112 30 }
+					text = "te_jmap_scale_ranked"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_scale_ranked_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_scale_ranked_tt', 'te_jmap_scale_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_scale_ranked_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_scale_ranked_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)3' )]"
+					onclick = "[GetScriptedGui('te_jmap_scale_ranked_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
 			# What the map on the page was measured over (te_jmap_shown_states, te_jmap_shown_cut: the last measure
-			# of a fitted pick), or that it has no range. Nothing before the first pick.
+			# of a fitted pick), or that it has no range. Nothing before the first pick. Under the Ranked scale the
+			# line says instead how old the places can be: they are taken at the measure, not as the map paints.
 			textbox = {
 				parentanchor = hcenter
 				autoresize = yes
@@ -1204,8 +1266,18 @@ types te_map_widgets
 				max_width = 460
 				align = center|nobaseline
 				margin_top = 2
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' )]"
+				visible = "[And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)3' ) )]"
 				text = "te_jmap_options_measured"
+			}
+			textbox = {
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 460
+				align = center|nobaseline
+				margin_top = 2
+				visible = "[And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_pick_fitted'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)3' ) )]"
+				text = "te_jmap_options_measured_ranked"
 			}
 			textbox = {
 				parentanchor = hcenter

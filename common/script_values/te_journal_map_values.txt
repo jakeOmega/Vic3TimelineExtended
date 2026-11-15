@@ -30,11 +30,11 @@ te_jmap_selector = {
 }
 
 # ---------------------------------------------------------------------------
-# The Map Room's options (2026-11-14): where the maps are drawn and what their ranges leave out
+# The Map Room's options (2026-11-14): where the maps are drawn, what their ranges leave out, and their scale
 # ---------------------------------------------------------------------------
 # Global variables, as the pick is and for the same reason, so every player in a multiplayer game shares them; unset
 # is the default, what the Map Room showed before it had options. Set by the option buttons' scripted GUIs
-# (te_jmap_set_area, te_jmap_set_continent, te_jmap_set_trim: te_journal_map_effects.txt). Root-free. The script
+# (te_jmap_set_area, te_jmap_set_continent, te_jmap_set_trim, te_jmap_set_scale: te_journal_map_effects.txt). Root-free. The script
 # values a range's measure reads them through (te_jmap_trim_count, te_jmap_pick_fitted ...) are generated:
 # te_journal_map_scales_generated.txt.
 
@@ -70,6 +70,18 @@ te_jmap_trim = {
 	}
 }
 
+# The scale a fitted map's colors run on (2026-11-14, the thirteenth pass): 0 the map's own curve, 1 linear, 2
+# logarithmic, 3 ranked (each state's place in line, which te_jmap_rank_<map> stores on it as te_jmap_rank). Every
+# factor the Map Room reads branches on this (te_journal_map_scales_generated.txt); the paint may run it once per
+# state per frame, so it is one guarded global read, as the selector is.
+te_jmap_scale = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_scale }
+		value = global_var:te_jmap_opt_scale
+	}
+}
+
 # 1 while an option is off its default, so the page can say so above the picks.
 te_jmap_options_set = {
 	value = 0
@@ -78,6 +90,7 @@ te_jmap_options_set = {
 			OR = {
 				te_jmap_area > 0
 				te_jmap_trim > 0
+				te_jmap_scale > 0
 			}
 		}
 		value = 1
