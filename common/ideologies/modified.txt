@@ -15247,10 +15247,10 @@ REPLACE:ideology_labor_movement = {
 		law_open_weights = approve
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = disapprove
+		law_unrestricted_automation = neutral
 		law_robot_tax = approve
 		law_human_labor_quotas = strongly_approve
-		law_automation_dividend = neutral
+		law_automation_dividend = approve
 	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
@@ -15354,9 +15354,9 @@ REPLACE:ideology_socialist_movement = {
 		law_open_weights = approve
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = strongly_disapprove
-		law_robot_tax = neutral
-		law_human_labor_quotas = neutral
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = approve
 		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
@@ -15408,7 +15408,7 @@ REPLACE:ideology_socialist_movement = {
 	}
 	lawgroup_electoral_finance = {
 		law_no_campaign_finance_laws = neutral
-		law_unregulated_donations = strongly_disapprove
+		law_unregulated_donations = neutral
 		law_donation_limits = approve
 		law_publicly_funded_elections = strongly_approve
 	}

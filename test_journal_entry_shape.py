@@ -275,16 +275,28 @@ def outcome_flags(outcome: Node, lines: list[str]) -> set[str]:
     return set(match.group(1).split()) if match else set()
 
 
-def _true_with_rule_off(node: Node, rules: set[tuple[str, str | None]]) -> bool:
+def _true_with_rule_off(node: Node, rules: set[tuple[str, str | None]],
+                        triggers: dict[str, Node] | None = None, seen: tuple[str, ...] = ()) -> bool:
+    """Does `node` hold whenever the prune's rule is off? A named trigger called with `= yes` (not a rule test
+    itself) is read through its body, every top-level line of which must hold: je_covert_warfare's outcome is
+    `covert_warfare_entry_would_end = yes`, the OR the monthly net reads too (2026-11-15)."""
+    triggers = triggers or {}
+
+    def again(n: Node) -> bool:
+        return _true_with_rule_off(n, rules, triggers, seen)
+
     # `T = no` is `NOT = { T = yes }` for a rule-pure trigger (gm_system_enabled = no).
     if node.value == "no" and not node.children and (node.key, "yes") in rules:
         return True
     if node.key == "NOT" and len(node.children) == 1:
         return (node.children[0].key, node.children[0].value) in rules
     if node.key == "OR":
-        return any(_true_with_rule_off(c, rules) for c in node.children)
+        return any(again(c) for c in node.children)
     if node.key == "AND":
-        return bool(node.children) and all(_true_with_rule_off(c, rules) for c in node.children)
+        return bool(node.children) and all(again(c) for c in node.children)
+    called = _calls(node, triggers) if node.value == "yes" and node.key not in seen else None
+    if called is not None and called.children:
+        return all(_true_with_rule_off(c, rules, triggers, seen + (node.key,)) for c in called.children)
     return False
 
 
@@ -306,7 +318,7 @@ def rule_end_problems(entry: Node, triggers: dict[str, Node], lines: list[str], 
         return [f"line {o.line}: a second invalid outcome (an entry has at most one)" for o in invalid[1:]]
     trigger = child(invalid[0], "trigger") if invalid else None
     ends = deactivates_on_rule(entry, triggers, rules) or (trigger is not None and bool(trigger.children) and all(
-        _true_with_rule_off(c, rules) for c in trigger.children))
+        _true_with_rule_off(c, rules, triggers) for c in trigger.children))
     if tagged:
         return [f"line {prune.line}: stale ({OUTLIVES_TAG}) tag, the entry ends on its rule"] if ends else []
     if ends:
@@ -354,6 +366,17 @@ class RuleEndFixtureTest(unittest.TestCase):
         nodes, comments = parse_text(entry, "j.txt")
         triggers = _triggers("w = { has_game_rule = r }")
         self.assertEqual(rule_end_problems(nodes[0], triggers, entry.split("\n"), comments), [])
+
+    def test_a_named_trigger_holding_the_rule_ends_it(self):
+        """The outcome reads one named trigger that the entry's net reads too (covert_warfare_entry_would_end)."""
+        def run(body: str) -> list[str]:
+            text = "je_x = {\n" + self.PRUNE % "" + self.GATE + self.invalid("ends = yes") + "}\n"
+            nodes, comments = parse_text(text, "j.txt")
+            return rule_end_problems(nodes[0], _triggers(f"ends = {{ {body} }}"), text.split("\n"), comments)
+        self.assertEqual(run("OR = { NOT = { has_game_rule = r } AND = { has_variable = y has_variable = z } }"), [])
+        self.assertEqual(run("NOT = { has_game_rule = r }"), [])
+        self.assertEqual(len(run("has_variable = y")), 1)
+        self.assertEqual(len(run("NOT = { has_game_rule = r } has_variable = y")), 1)
 
     def test_deactivating_on_the_rule_ends_it(self):
         def run(deactivate: str, possible: str) -> list[str]:

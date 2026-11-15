@@ -58,6 +58,50 @@ covert_agency_limited = {
 	NOT = { covert_warfare_slot_source = yes }
 }
 
+# Country scope: je_covert_warfare would end now, through its invalid outcome,
+# which reads exactly this. Two branches: the rule is off (switched off
+# mid-game, from the screen that changes country), or the early unlock was
+# switched to the late one while an entry opened early (iw_opened_early, set
+# in the entry's immediate while covert_agency_limited) is still short of the
+# late gate. covert_warfare_entry_due reads it too, so the net's condition and
+# the outcome's can't drift apart. With the rule read the same way in both,
+# the gate alone keeps the net from adding an entry the outcome ends (it needs
+# the rule on, and under the late setting a late source); a loop from a rule
+# read that differs between the outcome and the on_action is caught by the
+# net's self-check and held (a Workshop report of 2026-11-15 described the
+# entry coming back every month and ending each time; covert_warfare.md,
+# "Coming back").
+covert_warfare_entry_would_end = {
+	OR = {
+		NOT = { te_covert_warfare_on = yes }
+		AND = {
+			has_variable = iw_opened_early
+			NOT = { te_covert_warfare_early = yes }
+			NOT = { covert_warfare_slot_source = yes }
+		}
+	}
+}
+
+# Country scope: covert_warfare_monthly_country's net adds je_covert_warfare.
+# The rule on, the gate of the setting in force met, and no record of the
+# entry, active or inactive. A country with no record is one whose entry
+# ended (on the rule, or early to late short of the late gate), one whose
+# inactive record disable_evaluation removed while the rule was off (or from
+# the game's start, when it began off), or one the engine left out. Every
+# other country holds an inactive record, which the engine activates itself,
+# and add_journal_entry is refused over it (test_add_journal_entry_guard.py).
+# Not decentralized or revolutionary, as Banking's net (te_banking_entry_expected).
+# Cheap tests first; the gate reads technologies and a law.
+covert_warfare_entry_due = {
+	te_covert_warfare_on = yes
+	NOT = { has_journal_entry = je_covert_warfare }
+	NOT = { has_inactive_journal_entry = je_covert_warfare }
+	NOT = { is_country_type = decentralized }
+	is_revolutionary = no
+	covert_warfare_entry_unlocked = yes
+	NOT = { covert_warfare_entry_would_end = yes }
+}
+
 # Check if a diplomatic pact is a covert operation pact (any type; the list is
 # pinned by test_covert_op_registry).
 # Scope: diplomatic_pact

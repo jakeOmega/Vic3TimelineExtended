@@ -353,27 +353,25 @@ je_covert_warfare = {
 	# material, the map).
 	# Also the early unlock switched to the late one while an entry opened
 	# early (iw_opened_early) is still short of the late gate: the same
-	# teardown, and covert_warfare_monthly_country adds the entry back once the
-	# late gate is met (iw_reopen_at_gate).
+	# teardown.
+	# Either way covert_warfare_monthly_country's net adds the entry back once
+	# the rule is on and the gate of the setting in force is met. The trigger is
+	# covert_warfare_entry_would_end, which the net reads too, so the two can't
+	# drift apart; a loop from a rule read that differs between this outcome and
+	# the on_action is caught by the net's self-check and held.
+	# covert_log_entry_end writes a debug.log line saying which branch held and
+	# what the three settings read (covert_warfare.md, "Coming back").
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_covert_warfare_invalid_conclusion_desc
 		trigger = {
-			OR = {
-				NOT = { te_covert_warfare_on = yes }
-				AND = {
-					has_variable = iw_opened_early
-					NOT = { te_covert_warfare_early = yes }
-					NOT = { covert_warfare_slot_source = yes }
-				}
-			}
+			covert_warfare_entry_would_end = yes
 		}
 		effect = {
+			covert_log_entry_end = yes
 			covert_stop_for_rule = yes
-			if = {
-				limit = { te_covert_warfare_on = yes }
-				set_variable = iw_reopen_at_gate
-			}
+			# For the net's log line (ended_before=yes), removed at the add.
+			set_variable = iw_reopen_at_gate
 			if = {
 				limit = { has_variable = iw_opened_early }
 				remove_variable = iw_opened_early

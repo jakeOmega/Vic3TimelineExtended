@@ -348,7 +348,7 @@ types T { type mine = engine_base { } type bad = no_such_base { } }
         self.assertIn({'name': 'vanilla_type', 'line': 2, 'resolved': True}, result.references['gui/test.gui']['gui_types'])
 
     def test_the_mod_against_the_vanilla_gui_fixtures_as_an_install(self):
-        # The reproduction without a game: the eight vanilla files under
+        # The reproduction without a game: the vanilla files under
         # test_fixtures/vanilla_gui stand in for <install>/game/gui, which
         # marks gui_types complete, as a real install does. Against the whole
         # mod, the names a real install flagged came to 270 errors here before
