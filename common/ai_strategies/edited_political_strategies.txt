@@ -1,0 +1,89 @@
+﻿# AI law cadence (2026-11-15): more revolution aversion for the political agendas whose law rate the default
+# strategy raises (edited_default_strategy.txt: change_law_chance 1 -> 40), so that more law changes don't bring
+# more civil wars. The arithmetic and the readings it rests on: docs/systems/mod_systems/ai.md § Law-Change Cadence.
+#
+# How aversion works (vanilla 00_ai.txt CHANGE_LAW_*): at the start of a law change a movement that would defend the
+# current law at 0.70 radicalism or more makes it a possible civil war; the AI then goes ahead with chance
+# 100 - aversion (it remembers a refusal for 24 months), and during the enactment it cancels once its aversion beats
+# a boldness drawn from 0-100 for that law (kept 24 months). A faster AI meets each such law more often within those
+# 24 months, so its chance to go ahead must fall: the factor is the rise in enactment starts per 24 months (1.2 to
+# 2.8, by agenda), and with both gates counted the new aversion is 100 - (100 - vanilla) / sqrt(factor).
+#
+# Each field restates vanilla 1.15.1's whole block (game/common/ai_strategies/03_political_strategies.txt) and adds
+# the rise as its own `add` line, so it reads the same whether the engine replaces vanilla's field with this one or
+# merges in only the keys vanilla's lacks. test_ai_law_cadence.py holds the restated lines to the game's file.
+# Not touched: change_law_chance (the default strategy's field adds to every agenda's, by vanilla's comment;
+# unread in game), min_law_chance_to_pass (the rate is the bottleneck, not the floor: ai.md), Mandate of Heaven
+# (aversion 100 already), the Meiji Restoration, the Tanzimat and the Great Reforms (their rates change by under a
+# tenth).
+#
+# The file name sorts before another mod's kai_political_strategies.txt on purpose: two INJECTs of one field apply
+# in file order and the later one wins (an interest group's field, read 2026-10-10), so with that mod on, its own
+# aversion values stand. Neither mod's were sized for the combined rate (its agenda rates plus this mod's 39); the
+# extra exposure is probably small, since that mod's waits are already short.
+
+INJECT:ai_strategy_conservative_agenda = {
+	revolution_aversion = {
+		value = 75
+		add = 10	# AI law cadence: 85
+		if = {
+			limit = { has_journal_entry = je_tp_pool_suppress_revolts }
+			add = 50
+		}
+		if = {
+			limit = { divided_monarchists_ai_monarchist = yes }
+			add = 50
+		}
+		if = {
+			limit = { divided_monarchists_ai_republican = yes }
+			subtract = 50
+		}
+		min = 10
+	}
+}
+
+INJECT:ai_strategy_reactionary_agenda = {
+	revolution_aversion = {
+		value = 50
+		add = 20	# AI law cadence: 70
+		if = {
+			limit = { has_journal_entry = je_tp_pool_suppress_revolts }
+			add = 50
+		}
+	}
+}
+
+INJECT:ai_strategy_progressive_agenda = {
+	revolution_aversion = {
+		value = 50
+		add = 10	# AI law cadence: 60
+	}
+}
+
+INJECT:ai_strategy_egalitarian_agenda = {
+	revolution_aversion = {
+		value = 25
+		add = 10	# AI law cadence: 35
+	}
+}
+
+INJECT:ai_strategy_nationalist_agenda = {
+	revolution_aversion = {
+		value = 35
+		add = 10	# AI law cadence: 45
+	}
+}
+
+INJECT:ai_strategy_consolidation_agenda = {
+	revolution_aversion = {
+		value = 75
+		add = 5	# AI law cadence: 80
+	}
+}
+
+INJECT:ai_strategy_confrontation_agenda = {
+	revolution_aversion = {
+		value = 25
+		add = 5	# AI law cadence: 30
+	}
+}
