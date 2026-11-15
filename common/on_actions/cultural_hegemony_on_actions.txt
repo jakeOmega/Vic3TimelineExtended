@@ -34,7 +34,7 @@ on_monthly_pulse_country = {
 }
 ch_monthly_pulse_on_action = {
 	effect = {
-		# ---- The entry's net ----
+		# ---- The entry's net (cultural_hegemony.md, "Coming back") ----
 		# An ended entry doesn't come back on its own, and a record
 		# disable_evaluation removed while the rule was off is gone for good;
 		# add_journal_entry brings a concluded type back (Colonial Empire's
@@ -42,17 +42,21 @@ ch_monthly_pulse_on_action = {
 		# entry gets it once the rule is on and the gate of the setting in
 		# force is met (ch_entry_due), whether its entry ended on the rule,
 		# ended early to late, or it never had one. Covert Warfare's net
-		# (covert_warfare_monthly_country) is the same, with the same
-		# self-check:
+		# (covert_warfare_monthly_country) is the same, step for step, with the
+		# same self-check:
 		#   TE_SELF_CHECK OK ch_entry_return      the entry the net added last
 		#                                         month is running (once a game)
 		#   TE_SELF_CHECK BROKEN ch_entry_return  it is not, though the country
-		#                                         is still due it; the net then
-		#                                         waits a year for that country
-		#                                         (ch_entry_net_hold)
+		#                                         is still due it; a first marks
+		#                                         the country (ch_entry_net_strike,
+		#                                         400 days), a second while the
+		#                                         mark stands holds the net off it
+		#                                         for a year (ch_entry_net_hold)
+		# and the add only once the country has been due for a whole month
+		# (ch_entry_net_waiting), with a TE_CH_ENTRY adding line written before it.
+		save_scope_as = ch_net_country
 		if = {
 			limit = { has_variable = ch_entry_net_added }
-			save_scope_as = ch_net_country
 			if = {
 				limit = { var:ch_entry_net_added ?= scope:ch_net_country }
 				if = {
@@ -65,8 +69,15 @@ ch_monthly_pulse_on_action = {
 				}
 				else_if = {
 					limit = { ch_entry_due = yes }
-					set_variable = { name = ch_entry_net_hold value = yes days = 365 }
-					debug_log = "TE_SELF_CHECK BROKEN ch_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_cultural_hegemony last month; it is not running and the country is still due it, so it ended at once or the add failed: the net waits a year for this country; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
+					if = {
+						limit = { has_variable = ch_entry_net_strike }
+						set_variable = { name = ch_entry_net_hold value = yes days = 365 }
+						debug_log = "TE_SELF_CHECK BROKEN ch_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] strike=2 on=[THIS.ScriptValue('ch_log_rule_on')|0] late=[THIS.ScriptValue('ch_log_rule_late')|0] early=[THIS.ScriptValue('ch_log_rule_early')|0] off=[THIS.ScriptValue('ch_log_rule_off')|0] late_gate=[THIS.ScriptValue('ch_log_late_gate')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_cultural_hegemony last month; it is not running and the country is still due it, so it ended at once or the add failed, the second time within 400 days: the net waits a year for this country; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
+					}
+					else = {
+						set_variable = { name = ch_entry_net_strike value = yes days = 400 }
+						debug_log = "TE_SELF_CHECK BROKEN ch_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] strike=1 on=[THIS.ScriptValue('ch_log_rule_on')|0] late=[THIS.ScriptValue('ch_log_rule_late')|0] early=[THIS.ScriptValue('ch_log_rule_early')|0] off=[THIS.ScriptValue('ch_log_rule_off')|0] late_gate=[THIS.ScriptValue('ch_log_late_gate')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_cultural_hegemony last month; it is not running and the country is still due it, so it ended at once or the add failed: the net tries again, and a second time within 400 days holds it a year; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
+					}
 				}
 			}
 			remove_variable = ch_entry_net_added
@@ -77,16 +88,26 @@ ch_monthly_pulse_on_action = {
 				ch_entry_due = yes
 			}
 			if = {
-				limit = { has_variable = ch_reopen_at_gate }
-				debug_log = "TE_CH_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=yes date=[TimeKeeper.GetCurrentDate.GetString]"
-				remove_variable = ch_reopen_at_gate
+				limit = { var:ch_entry_net_waiting ?= scope:ch_net_country }
+				remove_variable = ch_entry_net_waiting
+				if = {
+					limit = { has_variable = ch_reopen_at_gate }
+					debug_log = "TE_CH_ENTRY adding country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=yes on=[THIS.ScriptValue('ch_log_rule_on')|0] late=[THIS.ScriptValue('ch_log_rule_late')|0] early=[THIS.ScriptValue('ch_log_rule_early')|0] off=[THIS.ScriptValue('ch_log_rule_off')|0] late_gate=[THIS.ScriptValue('ch_log_late_gate')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+					remove_variable = ch_reopen_at_gate
+				}
+				else = {
+					debug_log = "TE_CH_ENTRY adding country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=no on=[THIS.ScriptValue('ch_log_rule_on')|0] late=[THIS.ScriptValue('ch_log_rule_late')|0] early=[THIS.ScriptValue('ch_log_rule_early')|0] off=[THIS.ScriptValue('ch_log_rule_off')|0] late_gate=[THIS.ScriptValue('ch_log_late_gate')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				add_journal_entry = { type = je_cultural_hegemony }
+				set_variable = { name = ch_entry_net_added value = scope:ch_net_country }
 			}
 			else = {
-				debug_log = "TE_CH_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=no date=[TimeKeeper.GetCurrentDate.GetString]"
+				set_variable = { name = ch_entry_net_waiting value = scope:ch_net_country }
 			}
-			add_journal_entry = { type = je_cultural_hegemony }
-			save_scope_as = ch_net_country
-			set_variable = { name = ch_entry_net_added value = scope:ch_net_country }
+		}
+		else_if = {
+			limit = { has_variable = ch_entry_net_waiting }
+			remove_variable = ch_entry_net_waiting
 		}
 		if = {
 			limit = {

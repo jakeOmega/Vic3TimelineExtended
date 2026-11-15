@@ -356,10 +356,11 @@ je_covert_warfare = {
 	# teardown.
 	# Either way covert_warfare_monthly_country's net adds the entry back once
 	# the rule is on and the gate of the setting in force is met. The trigger is
-	# covert_warfare_entry_would_end, which the net reads too, so the net never
-	# adds an entry this ends at once. covert_log_entry_end writes a debug.log
-	# line saying which branch held and what the three settings read
-	# (covert_warfare.md, "Coming back").
+	# covert_warfare_entry_would_end, which the net reads too, so the two can't
+	# drift apart; a loop from a rule read that differs between this outcome and
+	# the on_action is caught by the net's self-check and held.
+	# covert_log_entry_end writes a debug.log line saying which branch held and
+	# what the three settings read (covert_warfare.md, "Coming back").
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_covert_warfare_invalid_conclusion_desc

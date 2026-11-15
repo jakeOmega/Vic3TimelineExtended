@@ -231,8 +231,9 @@ je_cultural_hegemony = {
 	# teardown.
 	# Either way ch_monthly_pulse_on_action's net adds the entry back once the
 	# rule is on and the gate of the setting in force is met. The trigger is
-	# ch_entry_would_end, which the net reads too, so the net never adds an
-	# entry this ends at once.
+	# ch_entry_would_end, which the net reads too, so the two can't drift apart;
+	# a loop from a rule read that differs between this outcome and the
+	# on_action is caught by the net's self-check and held.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_cultural_hegemony_invalid_conclusion_desc

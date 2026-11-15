@@ -63,10 +63,14 @@ covert_agency_limited = {
 # mid-game, from the screen that changes country), or the early unlock was
 # switched to the late one while an entry opened early (iw_opened_early, set
 # in the entry's immediate while covert_agency_limited) is still short of the
-# late gate. covert_warfare_entry_due reads it too, so the monthly net never
-# adds an entry that would end on its next update (a Workshop report of
-# 2026-11-15 described the entry coming back every month and ending each
-# time; covert_warfare.md, "Coming back").
+# late gate. covert_warfare_entry_due reads it too, so the net's condition and
+# the outcome's can't drift apart. With the rule read the same way in both,
+# the gate alone keeps the net from adding an entry the outcome ends (it needs
+# the rule on, and under the late setting a late source); a loop from a rule
+# read that differs between the outcome and the on_action is caught by the
+# net's self-check and held (a Workshop report of 2026-11-15 described the
+# entry coming back every month and ending each time; covert_warfare.md,
+# "Coming back").
 covert_warfare_entry_would_end = {
 	OR = {
 		NOT = { te_covert_warfare_on = yes }

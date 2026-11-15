@@ -1562,3 +1562,45 @@ ch_total_weight = {
 		add = var:ch_total
 	}
 }
+
+# ---- debug.log reads (ch_monthly_pulse_on_action's net) ----
+# 1 where the read holds, 0 where it doesn't, printed as [THIS.ScriptValue('x')|0],
+# as Covert Warfare's iw_log_* (covert_warfare_script_values.txt): the three
+# settings read one by one tell a setting the save holds from none at all (all
+# three 0) and from a setting name no rule file defines (two at 1). on is
+# te_cultural_hegemony_on, what every gate reads; late_gate is ch_late_gate_met.
+ch_log_rule_late = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_late_read_for_log = yes }
+		value = 1
+	}
+}
+ch_log_rule_on = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_on = yes }
+		value = 1
+	}
+}
+ch_log_rule_early = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_early = yes }
+		value = 1
+	}
+}
+ch_log_rule_off = {
+	value = 0
+	if = {
+		limit = { has_game_rule = cultural_hegemony_disabled }
+		value = 1
+	}
+}
+ch_log_late_gate = {
+	value = 0
+	if = {
+		limit = { ch_late_gate_met = yes }
+		value = 1
+	}
+}

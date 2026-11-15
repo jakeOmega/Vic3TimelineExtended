@@ -91,3 +91,12 @@ te_cultural_hegemony_on = {
 te_cultural_hegemony_early = {
 	has_game_rule = cultural_hegemony_early_unlock
 }
+
+# The late setting's own read, for the debug.log lines alone (ch_log_rule_late,
+# ch_monthly_pulse_on_action's net): never a gate. As te_covert_warfare_late_read_for_log:
+# beside te_cultural_hegemony_early and a read of cultural_hegemony_disabled it
+# tells the three settings apart in a player's log. Gate on
+# te_cultural_hegemony_on and te_cultural_hegemony_early.
+te_cultural_hegemony_late_read_for_log = {
+	has_game_rule = cultural_hegemony_enabled
+}

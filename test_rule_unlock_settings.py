@@ -71,6 +71,80 @@ def loc(path):
     return out
 
 
+def nesting(text, index):
+    """The blocks around position `index` of `text` (one line, as `words` gives), innermost first, each as
+    (key, limit, start, end): `key` the word before `= {`, `limit` the words of the block's leading
+    `limit = { }` or None, `start` and `end` the positions of its braces."""
+    stack, around = [], []
+    for i, ch in enumerate(text):
+        if ch == "{":
+            m = re.search(r"([\w:.@$]+) = $", text[max(0, i - 80):i])
+            stack.append((m.group(1) if m else "", i))
+        elif ch == "}":
+            key, start = stack.pop()
+            if start < index < i:
+                around.append((key, start, i))
+    out = []
+    for key, start, end in sorted(around, key=lambda b: b[1], reverse=True):
+        body = text[start + 1:end]
+        limit = words(braced(body, r"^ limit = \{")) if body.startswith(" limit = {") else None
+        out.append((key, limit, start, end))
+    return out
+
+
+def chain(text, index):
+    """`nesting` without the positions: [(key, limit), ...], innermost first."""
+    return [(key, limit) for key, limit, _, _ in nesting(text, index)]
+
+
+class EntryNetShape:
+    """The shape of an entry net (covert_warfare_monthly_country, ch_monthly_pulse_on_action), each part where
+    its job needs it, so a mutation that silences the self-check or misplaces the hold fails (review of #1823):
+    1. the self-check reads last month's mark, which names the country it was set on; OK when the entry runs,
+       BROKEN only while the country is still due it, a first BROKEN a strike, a second within the strike's
+       400 days the year's hold; the mark removed after the check, whatever it read;
+    2. the add only once the country has been due a whole month (a waiting mark naming it), the mark set with
+       the country after the add, and the waiting mark dropped once the country is no longer due."""
+
+    def assert_net_shape(self, net, p, country, due, entry):
+        added = f"var:{p}_added ?= scope:{country}"
+        hold = f"set_variable = {{ name = {p}_hold value = yes days = 365 }}"
+        strike = f"set_variable = {{ name = {p}_strike value = yes days = 400 }}"
+        mark = f"set_variable = {{ name = {p}_added value = scope:{country} }}"
+        wait = f"set_variable = {{ name = {p}_waiting value = scope:{country} }}"
+        add = f"add_journal_entry = {{ type = {entry} }}"
+        gate = f"NOT = {{ has_variable = {p}_hold }} {due} = yes"
+        for part in (hold, strike, mark, wait, add, f"remove_variable = {p}_added", f"save_scope_as = {country}"):
+            self.assertEqual(net.count(part), 1, part)
+        # The country saved before anything reads it.
+        self.assertLess(net.index(f"save_scope_as = {country}"), net.index(f"scope:{country}"))
+        # 1. The self-check.
+        check = [("if", added), ("if", f"has_variable = {p}_added")]
+        broken = [("else_if", f"{due} = yes")] + check
+        self.assertEqual(chain(net, net.index(hold))[:4], [("if", f"has_variable = {p}_strike")] + broken)
+        self.assertEqual(chain(net, net.index(strike))[:4], [("else", None)] + broken)
+        for m in re.finditer(r"TE_SELF_CHECK BROKEN", net):
+            self.assertEqual(chain(net, m.start())[1:4], broken)
+        ok = net.index("TE_SELF_CHECK OK")
+        self.assertEqual(chain(net, ok)[1:4], [("if", f"has_journal_entry = {entry}")] + check)
+        # The mark removed after the check, in the block that found it.
+        remove = net.index(f"remove_variable = {p}_added")
+        check_end = nesting(net, ok)[2][3]
+        self.assertGreater(remove, check_end)
+        self.assertEqual(chain(net, remove)[0], ("if", f"has_variable = {p}_added"))
+        # 2. The add, after the check, once the country has waited a month; the mark with the country after it.
+        self.assertGreater(net.index(add), nesting(net, remove)[0][3])
+        self.assertEqual(chain(net, net.index(add))[:2],
+                         [("if", f"var:{p}_waiting ?= scope:{country}"), ("if", gate)])
+        self.assertEqual(nesting(net, net.index(mark))[0][1], nesting(net, net.index(add))[0][1])
+        self.assertGreater(net.index(mark), net.index(add))
+        self.assertEqual(chain(net, net.index(wait))[:2], [("else", None), ("if", gate)])
+        # Not due (or held): the waiting mark goes.
+        self.assertIn(f"else_if = {{ limit = {{ has_variable = {p}_waiting }} remove_variable = {p}_waiting }}", net)
+        # The line before the add says "adding": it is written before add_journal_entry, which may refuse.
+        self.assertNotRegex(net, r"_ENTRY added ")
+
+
 class RuleSettingsTest(unittest.TestCase):
 
     @classmethod
@@ -165,7 +239,7 @@ def tech_eras():
     return eras
 
 
-class CovertEarlyUnlockTest(unittest.TestCase):
+class CovertEarlyUnlockTest(EntryNetShape, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -246,13 +320,12 @@ class CovertEarlyUnlockTest(unittest.TestCase):
                      "covert_warfare_entry_unlocked = yes", "NOT = { covert_warfare_entry_would_end = yes }"):
             self.assertIn(part, due)
         self.assertNotIn("reopen_at_gate", due)
+
+    def test_the_net_checks_its_add_holds_on_a_repeat_and_waits_a_month(self):
         net = words(braced(code(COVERT_ON_ACTIONS), r"^covert_warfare_monthly_country = \{"))
-        self.assertIn("limit = { NOT = { has_variable = iw_entry_net_hold } covert_warfare_entry_due = yes }", net)
-        self.assertEqual(net.count("add_journal_entry = { type = je_covert_warfare }"), 1)
-        # The self-check reads last month's add before the net can add again, and a failed return holds the net.
-        self.assertLess(net.index("TE_SELF_CHECK OK covert_entry_return"), net.index("add_journal_entry"))
-        self.assertIn("set_variable = { name = iw_entry_net_hold value = yes days = 365 }", net)
-        self.assertIn("TE_SELF_CHECK BROKEN covert_entry_return", net)
+        self.assert_net_shape(net, "iw_entry_net", "iw_net_country", "covert_warfare_entry_due",
+                              "je_covert_warfare")
+        self.assertEqual(net.count("TE_SELF_CHECK BROKEN covert_entry_return"), 2)
 
     def test_the_outcome_logs_which_branch_ended_it(self):
         log = words(braced(code(COVERT_EFFECTS), r"^covert_log_entry_end = \{"))
@@ -660,7 +733,7 @@ CH_EVENTS = ROOT / "events/cultural_hegemony_events.txt"
 EVENTS_LOC = ROOT / "localization/english/te_events_l_english.yml"
 
 
-class CulturalHegemonyEarlyUnlockTest(unittest.TestCase):
+class CulturalHegemonyEarlyUnlockTest(EntryNetShape, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -738,11 +811,16 @@ class CulturalHegemonyEarlyUnlockTest(unittest.TestCase):
             self.assertIn(part, due)
         self.assertTrue(due.endswith("ch_entry_unlocked = yes"), "the gate walks every country: last")
         self.assertNotIn("reopen_at_gate", due)
+
+    def test_the_net_checks_its_add_holds_on_a_repeat_and_waits_a_month(self):
         net = words(braced(code(CH_ON_ACTIONS), r"^ch_monthly_pulse_on_action = \{"))
-        self.assertIn("limit = { NOT = { has_variable = ch_entry_net_hold } ch_entry_due = yes }", net)
-        self.assertEqual(net.count("add_journal_entry = { type = je_cultural_hegemony }"), 1)
-        self.assertLess(net.index("TE_SELF_CHECK OK ch_entry_return"), net.index("add_journal_entry"))
-        self.assertIn("set_variable = { name = ch_entry_net_hold value = yes days = 365 }", net)
+        self.assert_net_shape(net, "ch_entry_net", "ch_net_country", "ch_entry_due", "je_cultural_hegemony")
+        broken = re.findall(r'"TE_SELF_CHECK BROKEN ch_entry_return [^"]*"', net)
+        self.assertEqual(len(broken), 2)
+        # The rule as the on_action reads it, as on Covert Warfare's lines: the outcome writes no line of its own.
+        for line in broken:
+            for read in ("ch_log_rule_on", "ch_log_rule_late", "ch_log_rule_early", "ch_log_rule_off"):
+                self.assertIn(f"[THIS.ScriptValue('{read}')|0]", line)
 
     def test_the_setting_descriptions_name_their_technology(self):
         rules = loc(RULES_LOC)
