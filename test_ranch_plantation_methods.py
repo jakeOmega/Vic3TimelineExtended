@@ -6,7 +6,11 @@ tobacco. The mod answers with (docs/systems/mod_systems/production_methods.md
 § "Livestock ranches and plantations"):
 
 - three meat tiers in the ranch's base group (Industrial Feedlots, era 7; Recombinant Growth
-  Hormones, era 9; Gene-Edited Livestock, era 11), which the wool group's methods unlock on;
+  Hormones, era 9; Gene-Edited Livestock, era 11), which Intensive Wool Gathering and
+  Antibiotic Growth Promoters unlock on;
+- Antibiotic Growth Promoters moved out of vanilla's Wool Production into a Feed Additives group
+  of its own (owner, 2026-11-15), adding what it added over Intensive Wool Gathering, and a
+  Drugs input;
 - two tiers in the ranch's Herd Management group, vanilla's Fencing (Mechanized Feeding Lines,
   era 7; Robotic Barns, era 10, robotic, so Human Labor Quotas withdraws it);
 - a Harvesting Process group on every plantation-type building (Hand Harvesting, Mechanical
@@ -40,6 +44,15 @@ RANCH = "building_livestock_ranch"
 RANCH_BASE = "pmg_base_building_livestock_ranch"
 RANCH_WOOL = "pmg_sheep_ranch"
 HERD = "pmg_fencing"
+FEED = "pmg_feed_additives_building_livestock_ranch"
+PROMOTERS = "pm_antibiotic_growth_promoters"
+INTENSIVE_WOOL = "pm_intensive_grazing_ranch"
+# Vanilla's Wool Production, which the mod no longer adds to.
+VANILLA_WOOL_LADDER = ("pm_simple_ranch", "pm_sheep_farms", INTENSIVE_WOOL)
+# The promoters when they sat in Wool Production in place of Intensive Wool Gathering (to
+# 2026-11-15): grain 40 and Chemicals 10 for 40 wool and 35 meat, 750 a level at base prices.
+OLD_PROMOTERS = {"fabric": 40, "meat": 35, "profit": 750}
+PROMOTERS_DRUGS = 2
 MARKER = "building_robotic_or_ai_managed_bool"
 QUOTAS = "law_human_labor_quotas"
 
@@ -56,7 +69,7 @@ NEW_METHODS = {
 }
 # Methods with no technology of their own: a group's ungated first method, and the Cultured
 # Produce Facility's secondary, which its building's Lab-Grown Food gates.
-UNGATED_METHODS = ("pm_hand_harvesting", "pm_cultured_tobacco_leaf")
+UNGATED_METHODS = ("pm_hand_harvesting", "pm_cultured_tobacco_leaf", "pm_plain_feed")
 
 CULTURED_PRODUCE = "building_synthetics_plant_fruit"
 CULTURED_SECONDARY = "pmg_secondary_building_synthetics_plant_fruit"
@@ -264,7 +277,7 @@ class RanchTest(unittest.TestCase):
         """Intensive Wool Gathering (vanilla, INJECTed) and Antibiotic Growth Promoters
         need one of the base methods; a ranch on a new tier keeps them."""
         data = _data()
-        for name in ("pm_intensive_grazing_ranch", "pm_antibiotic_growth_promoters"):
+        for name in (INTENSIVE_WOOL, PROMOTERS):
             needs = _list(data.pms[name].get("unlocking_production_methods"))
             for base in NEW_RANCH_BASES:
                 with self.subTest(method=name, base=base):
@@ -273,6 +286,38 @@ class RanchTest(unittest.TestCase):
     def test_the_group_is_named_for_what_it_now_holds(self):
         loc = _loc()
         self.assertEqual(loc.get(HERD), "Herd Management")
+        self.assertEqual(loc.get(FEED), "Feed Additives")
+
+
+class FeedAdditivesTest(unittest.TestCase):
+    """Antibiotic Growth Promoters in a group of its own (owner, 2026-11-15)."""
+
+    def test_the_promoters_have_a_group_of_their_own_and_wool_production_is_vanillas(self):
+        data = _data()
+        self.assertIn(FEED, data.groups(RANCH))
+        self.assertEqual(tuple(data.methods(FEED)), ("pm_plain_feed", PROMOTERS))
+        self.assertEqual(data.modifiers("pm_plain_feed", "workforce_scaled"), {})
+        self.assertEqual(tuple(data.methods(RANCH_WOOL)), VANILLA_WOOL_LADDER)
+
+    def test_with_intensive_wool_they_make_what_they_made_alone(self):
+        """Intensive Wool Gathering and the promoters together make the 40 wool and 35 meat the
+        promoters made in its place, and before the Drugs input earn what they did."""
+        data = _data()
+        both = (INTENSIVE_WOOL, PROMOTERS)
+        out = {}
+        for name in both:
+            for good, q in data.goods(name, "output").items():
+                out[good] = out.get(good, 0) + q
+        self.assertEqual((out["fabric"], out["meat"]), (OLD_PROMOTERS["fabric"], OLD_PROMOTERS["meat"]))
+        cost, value = data.value(both)
+        drugs = data.goods(PROMOTERS, "input")["opium"] * data.prices["opium"]
+        self.assertEqual(value - cost + drugs, OLD_PROMOTERS["profit"])
+
+    def test_the_drugs_input_leaves_them_worth_taking(self):
+        data = _data()
+        self.assertEqual(data.goods(PROMOTERS, "input")["opium"], PROMOTERS_DRUGS)
+        cost, value = data.value([PROMOTERS])
+        self.assertGreater(value - cost, 0, "the promoters must earn more than Plain Feed")
 
 
 class PlantationTest(unittest.TestCase):
@@ -440,7 +485,7 @@ class LocTest(unittest.TestCase):
                 self.assertTrue(loc.get(name))
                 self.assertTrue(loc.get(f"{name}_desc"))
                 self.assertNotRegex(loc[f"{name}_desc"], r"\d", "a method description carries no figures")
-        for group in HARVEST_LADDERS:
+        for group in tuple(HARVEST_LADDERS) + (FEED,):
             with self.subTest(group=group):
                 self.assertTrue(loc.get(group))
 
@@ -449,12 +494,12 @@ def _table():
     data = _data()
     rail = "pm_refrigerated_rail_cars_building_livestock_ranch"
     rows = [
-        ("Ranch, era 4", ("pm_mechanized_slaughtering", "pm_intensive_grazing_ranch", "pm_electric_fencing", rail)),
-        ("Ranch, era 7", ("pm_industrial_feedlots", "pm_intensive_grazing_ranch", "pm_mechanized_feeding_lines", rail)),
-        ("Ranch, era 8", ("pm_industrial_feedlots", "pm_antibiotic_growth_promoters", "pm_mechanized_feeding_lines", rail)),
-        ("Ranch, era 9", ("pm_recombinant_growth_hormones", "pm_antibiotic_growth_promoters", "pm_mechanized_feeding_lines", rail)),
-        ("Ranch, era 10", ("pm_recombinant_growth_hormones", "pm_antibiotic_growth_promoters", "pm_robotic_barns", rail)),
-        ("Ranch, era 11", ("pm_gene_edited_livestock", "pm_antibiotic_growth_promoters", "pm_robotic_barns", rail)),
+        ("Ranch, era 4", ("pm_mechanized_slaughtering", INTENSIVE_WOOL, "pm_electric_fencing", rail, "pm_plain_feed")),
+        ("Ranch, era 7", ("pm_industrial_feedlots", INTENSIVE_WOOL, "pm_mechanized_feeding_lines", rail, "pm_plain_feed")),
+        ("Ranch, era 8", ("pm_industrial_feedlots", INTENSIVE_WOOL, "pm_mechanized_feeding_lines", rail, PROMOTERS)),
+        ("Ranch, era 9", ("pm_recombinant_growth_hormones", INTENSIVE_WOOL, "pm_mechanized_feeding_lines", rail, PROMOTERS)),
+        ("Ranch, era 10", ("pm_recombinant_growth_hormones", INTENSIVE_WOOL, "pm_robotic_barns", rail, PROMOTERS)),
+        ("Ranch, era 11", ("pm_gene_edited_livestock", INTENSIVE_WOOL, "pm_robotic_barns", rail, PROMOTERS)),
         ("Cultured Meat", ("pm_synthetic_meat", "pm_manual_batch_processing")),
         ("Cultured Meat", ("pm_synthetic_meat", "pm_distributed_control_systems")),
     ]

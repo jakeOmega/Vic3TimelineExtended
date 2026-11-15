@@ -14953,6 +14953,19 @@ pm_metamaterial_explosives = {
 	required_input_goods = electricity
 }
 
+# Feed Additives (pmg_feed_additives_building_livestock_ranch; owner,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
+# ranches and plantations"). Antibiotic Growth Promoters was the top method of
+# vanilla's Wool Production, in place of Intensive Wool Gathering. In a group
+# of its own it adds what it added over that method: 15 wool and 35 meat for
+# 25 grain and 10 Chemicals, plus 7.5 grain for the 5 Chemicals (manure)
+# Intensive Wool Gathering keeps making beside it, so a ranch on both earns
+# what it earned on the promoters alone. The antibiotic itself is 2 Drugs a
+# level (owner, 2026-11-15), about the hormone tier's share of its input cost.
+pm_plain_feed = {
+	texture = "gfx/interface/icons/production_method_icons/subsistence_pastures.dds"
+}
+
 pm_antibiotic_growth_promoters = {
 	texture = "gfx/interface/icons/production_method_icons/intensive_grazing.dds"
 
@@ -14972,16 +14985,17 @@ pm_antibiotic_growth_promoters = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_grain_add = 40                           # Price:   20, Total cost:   800.0 (72.73%)
-			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (27.27%)
+			goods_input_grain_add = 32.5                         # Price:   20, Total cost:   650.0 (61.90%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (28.57%)
+			goods_input_opium_add = 2                            # Price:   50, Total cost:   100.0 (9.52%)
 			# Output goods
-			goods_output_fabric_add = 40                         # Price:   20, Total cost:   800.0 (43.24%)
-			goods_output_meat_add = 35                           # Price:   30, Total cost:  1050.0 (56.76%)
-			# Total input cost: 1100.0
-			# Total output cost: 1850.0
-			# Profit: 750.0
-			# Profit margin: 68.18%
-			# Zero profit price multiplier: 0.59
+			goods_output_fabric_add = 15                         # Price:   20, Total cost:   300.0 (22.22%)
+			goods_output_meat_add = 35                           # Price:   30, Total cost:  1050.0 (77.78%)
+			# Total input cost: 1050.0
+			# Total output cost: 1350.0
+			# Profit: 300.0
+			# Profit margin: 28.57%
+			# Zero profit price multiplier: 0.78
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
@@ -14994,8 +15008,8 @@ pm_antibiotic_growth_promoters = {
 # ranches and plantations"). Each tier keeps vanilla's floor of 3,500 laborers
 # and at least 500 farmers a level, which Herd Management (pmg_fencing) and
 # Refrigeration cut at most together, so no combination goes below zero
-# (test_ranch_plantation_methods.py). Antibiotic Growth Promoters and
-# Intensive Wool Gathering in the wool group unlock on each of them.
+# (test_ranch_plantation_methods.py). Intensive Wool Gathering (Wool
+# Production) and Antibiotic Growth Promoters (Feed Additives) unlock on each.
 pm_industrial_feedlots = {
 	texture = "gfx/interface/icons/production_method_icons/simple_ranching.dds"
 

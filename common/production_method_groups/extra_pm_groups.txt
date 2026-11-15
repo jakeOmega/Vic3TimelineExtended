@@ -300,11 +300,6 @@ INJECT:pmg_secondary_building_millet_farm = {
 		pm_designed_fig_orchards
 	}
 }
-INJECT:pmg_sheep_ranch = {
-	production_methods = {
-		pm_antibiotic_growth_promoters
-	}
-}
 # Livestock Ranch: the meat ladder after Mechanized Slaughterhouses, and Herd
 # Management's (Fencing's) labor ladder after Electric Fences (Workshop request,
 # 2026-11-15; docs/systems/mod_systems/production_methods.md).
@@ -319,6 +314,19 @@ INJECT:pmg_fencing = {
 	production_methods = {
 		pm_mechanized_feeding_lines
 		pm_robotic_barns
+	}
+}
+# Feed Additives: Antibiotic Growth Promoters, which sat in vanilla's Wool
+# Production (pmg_sheep_ranch) as its top tier although it adds meat too, in a
+# group of its own (owner, 2026-11-15), so it stacks on any wool method and
+# Wool Production is vanilla's again. Its wool is the 15 it added over
+# Intensive Wool Gathering, so the two make what it made alone. Attached in
+# common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_feed_additives_building_livestock_ranch = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_plain_feed
+		pm_antibiotic_growth_promoters
 	}
 }
 INJECT:pmg_mining_equipment_building_coal_mine = {
