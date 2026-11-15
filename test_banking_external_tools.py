@@ -217,6 +217,9 @@ class Script:
                 # other systems' calls (the history chart, Wealth Concentration's crash shock):
                 # no banking state
                 continue
+            elif key in ('add_radicals', 'add_loyalists'):
+                # the toggle friction (test_banking_toggle_costs.py holds its size): pops only
+                continue
             elif key == 'custom_tooltip':
                 # Records the line the tooltip would draw; a block still runs.
                 if isinstance(val, list):
@@ -312,7 +315,7 @@ class ExternalPolicyScenarios(unittest.TestCase):
                     self.assertNotIn('emergency_import_financing', s.tools)
 
     def test_the_two_bills_are_weekly_charges_at_a_quarter_of_the_month(self):
-        """The owner, 2026-10-27 (BNK-14): Sterilize Capital Inflows and
+        """The owner, 2026-10-27 (BNK-14): Sterilization and
         Emergency Import Financing pay a weekly government expense of a
         month's cost / 4, not a monthly add_treasury, so the budget shows them;
         FX Surrender's purchase stays monthly, one sum moved treasury to vault.
@@ -567,7 +570,7 @@ class NonModifierTooltipTest(unittest.TestCase):
             self.assertNotIn(tool, s.tools)
 
     def test_capital_controls_cleanup_spares_exactly_the_unlocked_laws(self):
-        # Outflow Controls' peace-time lift names laws rather than reading the
+        # Capital Controls' peace-time lift names laws rather than reading the
         # lock, so the war-end line is right only while the two lists agree.
         laws = (ROOT/'common/laws/extra_laws.txt').read_text(encoding='utf-8-sig')
         unlocked = {name for name, body in re.findall(r'(?ms)^(law_\w+) = \{\n(.*?)^\}', laws)
@@ -682,6 +685,108 @@ class DisplayModifierTest(unittest.TestCase):
         for name, key in printed.items():
             with self.subTest(modifier=name):
                 self.assertIn("[GetStaticModifier('%s').GetDesc]" % name, self.loc[key])
+
+
+class OnYourCurrencyTest(unittest.TestCase):
+    """Each exchange tool's dashboard tooltip has an "On this currency" line
+    (2026-11-14, docs/superpowers/specs/2026-11-14-external-currency-tools-design.md)
+    whose figures are display values: the pulse's own formula with the tool's
+    factor taken out or put in. Each "with the tool" figure is held to what the
+    pulse computes with the tool on, and each "without" to what it computes
+    with the tool off, so the line cannot drift from the effect."""
+
+    ROWS = {'capital_controls_outflow': 'capital_controls', 'restrict_inflows': 'restrict_inflows',
+            'sterilize_inflows': 'sterilize_inflows', 'fx_surrender': 'fx_surrender',
+            'foreign_borrowing_limits': 'foreign_borrowing_limits'}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = english_loc()
+        cls.custom = definitions('common/customizable_localization/banking_dash_custom_loc.txt')
+
+    def close(self, a, b):
+        self.assertTrue(math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12), (a, b))
+
+    def script(self, **inputs):
+        s = Script(**{'te_mon_fx_inflation_read': 2.0, 'te_mon_capital_controls_in_force': False, **inputs})
+        s.vars.update(te_policy_rate=5.0, te_mon_world_rate_now=3.0)
+        return s
+
+    def test_each_row_prints_its_line_and_every_branch_has_text(self):
+        for row, custom in self.ROWS.items():
+            with self.subTest(row=row):
+                tooltip = self.loc['banking_dash_tt_cb_' + row]
+                call = "[Country.GetCustom('banking_ext_now_%s')]" % custom
+                self.assertIn(call, tooltip)
+                self.assertLess(tooltip.index(call), tooltip.index('#title Requires:#!'))
+                keys = [Script.field(body, 'localization_key')
+                        for key, _, body in self.custom['banking_ext_now_' + custom] if key == 'text']
+                self.assertTrue(keys)
+                for key in keys:
+                    self.assertTrue(self.loc[key].startswith('#title On this currency:#! '), key)
+                # The last branch takes everything else: it has no trigger.
+                last = [body for key, _, body in self.custom['banking_ext_now_' + custom] if key == 'text'][-1]
+                self.assertNotIn('trigger', [k for k, _, _ in last])
+
+    def test_the_rate_term_pairs_are_the_target_term_with_each_tool_off_and_on(self):
+        for policy in (6.5, 1.0, 12.0, -4.0):  # positive and negative carry, both clamps
+            for other_tool in (False, True):
+                with self.subTest(policy=policy, other_tool=other_tool):
+                    s = self.script()
+                    s.vars['te_policy_rate'] = policy
+                    if other_tool:
+                        s.tools.add('restrict_inflows')
+                    free, controlled = s.number('banking_ext_disp_rate_points_free'), s.number('banking_ext_disp_rate_points_controlled')
+                    self.close(free, s.number('te_mon_fx_term_rate'))
+                    s.inputs['te_mon_capital_controls_in_force'] = True
+                    self.close(controlled, s.number('te_mon_fx_term_rate'))
+
+                    s = self.script(te_mon_capital_controls_in_force=other_tool)
+                    s.vars['te_policy_rate'] = policy
+                    unrestricted, restricted = (s.number('banking_ext_disp_rate_points_unrestricted'),
+                                                s.number('banking_ext_disp_rate_points_restricted'))
+                    self.close(unrestricted, s.number('te_mon_fx_term_rate'))
+                    s.tools.add('restrict_inflows')
+                    self.close(restricted, s.number('te_mon_fx_term_rate'))
+                    # A fall is not slowed.
+                    if policy - 2.0 - 3.0 <= 0:
+                        self.close(restricted, unrestricted)
+
+    def test_the_rate_term_is_zero_without_a_dial(self):
+        s = self.script(dial=False)
+        for name in ('free', 'controlled', 'unrestricted', 'restricted'):
+            self.assertEqual(s.number('banking_ext_disp_rate_points_' + name), 0)
+
+    def test_the_gold_gap_pair_is_the_flow_gap_with_controls_off_and_on(self):
+        for policy in (4.0, 0.0, 11.0, -6.0):
+            with self.subTest(policy=policy):
+                s = self.script()
+                s.vars['te_policy_rate'] = policy
+                self.close(s.number('banking_ext_disp_gold_gap'), s.number('te_mon_gold_gap_value'))
+                s.inputs['te_mon_capital_controls_in_force'] = True
+                self.close(s.number('banking_ext_disp_gold_gap_controlled'), s.number('te_mon_gold_gap_value'))
+
+    def test_the_gold_pressure_pair_is_the_flow_pressure_unsterilized_and_sterilized(self):
+        for pct in (0.8, 3.0, 20.0, -2.0):
+            with self.subTest(pct=pct):
+                s = self.script()
+                s.vars.update(te_gold_flow_pct=pct, te_gold_flow=pct * 100)
+                plain = s.number('te_mon_pressure_gold_flow')
+                self.close(s.number('banking_ext_disp_gold_pressure'), max(plain, 0))
+                s.tools.add('sterilize_inflows')
+                s.vars['banking_external_sterilization_funded'] = 1
+                sterilized = s.number('te_mon_pressure_gold_flow')
+                self.close(s.number('banking_ext_disp_gold_pressure_sterilized'), max(sterilized, 0))
+
+    def test_the_premium_pair_is_the_fx_premium_unprotected_and_protected(self):
+        for index, protection in ((88.0, 0.0), (80.0, 0.25), (70.0, 0.5), (104.0, 0.3)):
+            with self.subTest(index=index, protection=protection):
+                s = self.script()
+                s.vars.update(te_fx_index=index, banking_external_fx_protection=0.0)
+                self.close(s.number('banking_ext_disp_fx_premium'), s.number('te_mon_premium_fx'))
+                s.vars['banking_external_fx_protection'] = protection
+                self.close(s.number('banking_ext_disp_fx_premium_protected'), s.number('te_mon_premium_fx'))
+        self.assertEqual(Script().number('banking_ext_disp_fx_weak_points'), 0)  # unset index reads 0
 
 
 if __name__ == '__main__':

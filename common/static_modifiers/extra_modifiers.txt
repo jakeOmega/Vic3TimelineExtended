@@ -8726,7 +8726,7 @@ te_mon_mandate_loosen_step = {
 	country_risk_premium_add = 0.005
 }
 
-# The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
+# The weekly bills of Sterilization and Emergency Import Financing
 # (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, declared
 # on the entry beside the tool from the cache banking_external_charge_* writes
 # monthly (its header has the rules). The mirror field puts them under
