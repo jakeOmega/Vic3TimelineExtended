@@ -1,7 +1,8 @@
 """AI law cadence (2026-11-15): AI countries start law changes more often, with more revolution aversion to match.
 
 - common/ai_strategies/edited_default_strategy.txt: ai_strategy_default's change_law_chance is vanilla's 1 plus 39,
-  times 10 in the mod's crisis case. The default's field adds to every political strategy's own.
+  times 10 in the mod's crisis case. By vanilla's comment (unread in game) the default's field adds to every
+  political strategy's own.
 - common/ai_strategies/edited_political_strategies.txt: seven political agendas' revolution_aversion, each vanilla's
   whole block plus one `add` line; nothing else in those strategies (the pass-chance floor stays vanilla's).
 - TE_SELF_CHECK ai_law_cadence (common/on_actions/te_ai_law_cadence_selfcheck_on_actions.txt) and its play-test row.
