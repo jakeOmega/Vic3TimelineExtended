@@ -77,7 +77,7 @@
  },
  "colonial_overlord_strained_subject_ld_modifier_desc": {
   "en": "The colonial empire this country belongs to is Strained: its [concept_colonial_stability] is below 65. This lasts while it stays there.",
-  "ru": "Колониальная империя, к которой принадлежит эта страна, испытывает напряжение: её [concept_colonial_stability|l] ниже 65. Действует, пока так остаётся."
+  "ru": "Колониальная империя, к которой принадлежит эта страна, напряжена: её [concept_colonial_stability|l] ниже 65. Действует, пока так остаётся."
  },
  "concept_colonial_subject_desc": {
   "en": "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts.",

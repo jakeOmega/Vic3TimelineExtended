@@ -985,7 +985,7 @@
  },
  "building_group_bg_bureaucracy_throughput_add": {
   "en": "Government Administration [concept_throughput] Modifier",
-  "ru": "Государственное управление: модификатор [concept_throughput]"
+  "ru": "Правительственная администрация: модификатор [concept_throughput]"
  },
  "building_group_bg_bureaucracy_throughput_add_desc": {
   "en": "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings",

@@ -649,7 +649,7 @@
  },
  "je_colonial_empire_act_civilizing_tt": {
   "en": "We take the $imperial_federation_act_civilizing_mission$ decision. It needs the Solidified band held for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (now #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) and liberal laws; the decision lists the rest.",
-  "ru": "Мы принимаем решение «$imperial_federation_act_civilizing_mission$». Для него нужно удерживать диапазон «Упроченный» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и либеральные законы; остальное перечислено в решении."
+  "ru": "Мы принимаем решение «$imperial_federation_act_civilizing_mission$». Для него нужно удерживать полосу «Упрочена» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и либеральные законы; остальное перечислено в решении."
  },
  "je_colonial_empire_act_iron_fist_conclusion_desc": {
   "en": "The $concept_journal_entry$ concluded when we passed the #b Imperial Federation Act#!",
@@ -657,7 +657,7 @@
  },
  "je_colonial_empire_act_iron_fist_tt": {
   "en": "We take the $imperial_federation_act_iron_fist$ decision. It needs the Solidified band held for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (now #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) and hard-line laws; the decision lists the rest.",
-  "ru": "Мы принимаем решение «$imperial_federation_act_iron_fist$». Для него нужно удерживать диапазон «Упроченный» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и жёсткие законы; остальное перечислено в решении."
+  "ru": "Мы принимаем решение «$imperial_federation_act_iron_fist$». Для него нужно удерживать полосу «Упрочена» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и жёсткие законы; остальное перечислено в решении."
  },
  "je_colonial_empire_assim_led_tt": {
   "en": "Cultural Assimilation has run longer than each other program, and more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
@@ -949,11 +949,11 @@
  },
  "je_colonial_empire_holdings_subjects_tt_ours": {
   "en": "#header Colonial subjects#!\\nEvery [concept_colonial_subject] of ours or of our subjects. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
-  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l], наше или наших зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в диапазоне «Напряжённый» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
+  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l], наше или наших зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в полосе «Напряжена» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
  },
  "je_colonial_empire_holdings_subjects_tt_theirs": {
   "en": "#header Colonial subjects#!\\nEvery [concept_colonial_subject] of the country or of its subjects. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
-  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l] страны или её зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в диапазоне «Напряжённый» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
+  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l] страны или её зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в полосе «Напряжена» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
  },
  "je_colonial_empire_holdings_territories": {
   "en": "Territories: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",

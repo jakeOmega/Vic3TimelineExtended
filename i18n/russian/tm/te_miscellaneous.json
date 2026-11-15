@@ -477,7 +477,7 @@
  },
  "CB_EXPAND_DEPOSIT_GUARANTEE": {
   "en": "Expand Deposit Guarantee",
-  "ru": "Расширить гарантии по вкладам"
+  "ru": "Расширение гарантий по вкладам"
  },
  "CB_EXPAND_DEPOSIT_GUARANTEE_DESC": {
   "en": "To prevent a total collapse of public trust during a panic, the State will guarantee the savings of the common citizen. This ensures loyalty and social stability, even as the markets tremble.",
@@ -3953,11 +3953,11 @@
  },
  "UN_ARMS_CONTROL_DESC": {
   "en": "Join the UN's arms control agreements. While we keep them, they count toward the UN's #bold Funding#! pillar, in proportion to our [concept_un_weight].",
-  "ru": "Присоединиться к соглашениям ООН по контролю над вооружениями. Пока мы их соблюдаем, они засчитываются в столп #bold Финансирование#! ООН пропорционально нашему [Concept('concept_un_weight', 'весу')]."
+  "ru": "Присоединиться к соглашениям ООН по контролю над вооружениями. Пока мы их соблюдаем, они засчитываются в опору ООН #bold Финансирование#! пропорционально нашему [Concept('concept_un_weight', 'весу')]."
  },
  "UN_CHAMPION_ORDER_DESC": {
   "en": "Put our weight behind the United Nations. While we do, we count as a champion in its #G Commitment#! pillar, in proportion to our [concept_un_weight], which raises the target [concept_un_authority] moves toward.",
-  "ru": "Поставить наш вес на службу Организации Объединённых Наций. Пока мы это делаем, мы считаемся поборником в её столпе #G Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что повышает цель, к которой движется [concept_un_authority|l]."
+  "ru": "Поставить наш вес на службу Организации Объединённых Наций. Пока мы это делаем, мы считаемся поборником в её опоре #G Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что повышает цель, к которой движется [concept_un_authority|l]."
  },
  "UN_CONVENE_CONFERENCE_TT": {
   "en": "We will convene a #bold founding conference#! for a new United Nations. It sits for 12 months; then the new organization is founded, with us as founder, headquarters host and (as a [concept_great_power]) a permanent member. It starts weak (authority 25) under the founding charter, with no reforms and no agencies. The world's leading power, if it is not us, is asked to join, stay out, or #R oppose#! — and its opposition ends the conference and bars another for ten years.",
@@ -3965,11 +3965,11 @@
  },
  "UN_DEFUND_DEVELOPMENT_DESC": {
   "en": "Stop contributing to UN development programs, at whatever size. Its benefits end, its money stops counting toward the UN's #bold funding#! pillar and no longer pays the [concept_un_development_fund]'s grants, and the recipients' goodwill fades over the next few years.",
-  "ru": "Прекратить взносы в программы развития ООН, каким бы ни был их размер. Их выгоды заканчиваются, деньги перестают засчитываться в столп #bold финансирования#! ООН и больше не оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')], а добрая воля получателей угасает в ближайшие годы."
+  "ru": "Прекратить взносы в программы развития ООН, каким бы ни был их размер. Их выгоды заканчиваются, деньги перестают засчитываться в опору ООН #bold Финансирование#! и больше не оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')], а добрая воля получателей угасает в ближайшие годы."
  },
  "UN_END_PEACEKEEPING_DESC": {
   "en": "Bring our forces home from [concept_un_peacekeeping]. It stops counting toward the UN's #bold Funding#! pillar.",
-  "ru": "Вернуть наши силы домой из [Concept('concept_un_peacekeeping', 'миротворчества ООН')]. Оно перестаёт засчитываться в столп #bold Финансирование#! ООН."
+  "ru": "Вернуть наши силы домой из [Concept('concept_un_peacekeeping', 'миротворчества ООН')]. Оно перестаёт засчитываться в опору ООН #bold Финансирование#!."
  },
  "UN_FOOD_RESERVE_PLEDGE": {
   "en": "Pledge Grain to the World Food Reserve",
@@ -3989,11 +3989,11 @@
  },
  "UN_FUND_DEVELOPMENT_DESC": {
   "en": "Contribute to UN development programs, starting at #bold Token#! size: 0.0625% of our [Concept('concept_gdp', 'GDP')] a year, paid weekly. The money pays the [concept_un_development_fund]'s grants to the poorest members, as long as we pay our [concept_un_dues]. The contribution can be raised to Small (0.125%), Modest (0.25%), Substantial (0.5%) or Generous (1%); each doubling of the money adds a quarter of the Substantial size's benefits. In return our [concept_infamy] decays faster and our [concept_prestige] rises (+2% and +1% at Token, up to +10% and +5% at Generous), the program earns UN standing once it has run two years, and the members the Fund pays grow more receptive to our lobbying as they come to count on our money. Its money counts toward the UN's #bold funding#! pillar. Requires a [concept_un_development_fund] the [concept_un_general_assembly] has founded, and that the Fund pays us no grant.",
-  "ru": "Вносить вклад в программы развития ООН, начиная с размера #bold Символический#!: 0,0625% нашего [Concept('concept_gdp', 'ВВП')] в год, выплачиваются еженедельно. Эти деньги оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')] беднейшим членам, пока мы платим [Concept('concept_un_dues', 'взносы в ООН')]. Вклад можно повысить до размера Малый (0,125%), Скромный (0,25%), Значительный (0,5%) или Щедрый (1%); каждое удвоение средств добавляет четверть выгод размера Значительный. Взамен наша [concept_infamy|l] убывает быстрее, а [concept_prestige|l] растёт (+2% и +1% при размере Символический, до +10% и +5% при размере Щедрый), программа приносит авторитет в ООН после двух лет работы, а члены, которым платит Фонд, становятся восприимчивее к нашему лоббированию, по мере того как привыкают рассчитывать на наши деньги. Эти деньги засчитываются в столп #bold финансирования#! ООН. Требуется, чтобы [concept_un_general_assembly] учредила [concept_un_development_fund] и чтобы Фонд не выплачивал нам грант."
+  "ru": "Вносить вклад в программы развития ООН, начиная с размера #bold Символический#!: 0,0625% нашего [Concept('concept_gdp', 'ВВП')] в год, выплачиваются еженедельно. Эти деньги оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')] беднейшим членам, пока мы платим [Concept('concept_un_dues', 'взносы в ООН')]. Вклад можно повысить до размера Малый (0,125%), Скромный (0,25%), Значительный (0,5%) или Щедрый (1%); каждое удвоение средств добавляет четверть выгод размера Значительный. Взамен наша [concept_infamy|l] убывает быстрее, а [concept_prestige|l] растёт (+2% и +1% при размере Символический, до +10% и +5% при размере Щедрый), программа приносит авторитет в ООН после двух лет работы, а члены, которым платит Фонд, становятся восприимчивее к нашему лоббированию, по мере того как привыкают рассчитывать на наши деньги. Эти деньги засчитываются в опору ООН #bold Финансирование#!. Требуется, чтобы [concept_un_general_assembly] учредила [concept_un_development_fund] и чтобы Фонд не выплачивал нам грант."
  },
  "UN_HUMAN_RIGHTS_DESC": {
   "en": "Champion human rights at the United Nations. While we do, it counts toward the UN's #bold Funding#! pillar, in proportion to our [concept_un_weight].",
-  "ru": "Отстаивать права человека в Организации Объединённых Наций. Пока мы это делаем, это засчитывается в столп #bold Финансирование#! ООН пропорционально нашему [Concept('concept_un_weight', 'весу')]."
+  "ru": "Отстаивать права человека в Организации Объединённых Наций. Пока мы это делаем, это засчитывается в опору ООН #bold Финансирование#! пропорционально нашему [Concept('concept_un_weight', 'весу')]."
  },
  "UN_LIFT_SANCTIONS_DESC": {
   "en": "Lift the [concept_un_sanctions] we enforce: the country they target loses their penalties, and the embargoes the Assembly imposed with them. Sanctions nobody enforces any more are lifted too; another member's stay in force. $UN_LIFT_SANCTIONS_EFFECTS$",
@@ -4117,7 +4117,7 @@
  },
  "UN_PROPOSE_EXPULSION_DESC": {
   "en": "Call a two-thirds vote of the [concept_un_general_assembly] to strip a [concept_un_permanent_member] that has used its [concept_un_veto] in the last five years, and is not our ally, our overlord or our subject, of its [concept_un_security_council] seat. No veto can stop it, and no member presumes in its favor: each weighs the case for expulsion, the target's veto record (5 for each veto cast while the UN is not Moribund, fading by 5% a year) less its standing (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and its service (−5 each for hosting the headquarters, running the development program, and running the peacekeeping program or serving in a mission; −10 at most). If it carries, the target loses its seat and cannot be seated again for ten years, and the [concept_great_power] member with the most [concept_prestige] that holds no seat takes it, which may be us. Members hold that against a proposer a little (−5).",
-  "ru": "Созвать голосование [Concept('concept_un_general_assembly','Генеральной Ассамблеи')], требующее двух третей, чтобы лишить места в [concept_un_security_council] [concept_un_permanent_member|l], который использовал своё [concept_un_veto|l] за последние пять лет и не является нашим союзником, сюзереном или зависимым государством. Никакое вето не может её остановить, и никто из членов не предполагает решения в его пользу: каждый взвешивает довод за исключение — историю вето цели (5 за каждое вето, наложенное, пока уровень ООН не «Угасающий», затухающую на 5% в год) за вычетом её международного авторитета (Образцовая −10, Уважаемая −5, Плохая +5, Опозоренная +10) и заслуг (−5 за каждое из: размещение штаб-квартиры, ведение программы развития, ведение программы миротворчества или служба в миссии; не более −10). Если она принята, цель теряет место и не может быть возвращена на него десять лет, а его занимает [concept_great_power|l] с наибольшим [concept_prestige|l], не имеющая места, — возможно, мы. Члены немного ставят это в вину инициатору (−5)."
+  "ru": "Созвать голосование [Concept('concept_un_general_assembly','Генеральной Ассамблеи')], требующее двух третей, чтобы лишить места в [concept_un_security_council] [concept_un_permanent_member|l], который использовал своё [concept_un_veto|l] за последние пять лет и не является нашим союзником, сюзереном или зависимым государством. Никакое вето не может её остановить, и никто из членов не предполагает решения в его пользу: каждый взвешивает довод за исключение — историю вето цели (5 за каждое вето, наложенное, пока уровень ООН не «Угасающий», затухающую на 5% в год) за вычетом её международного авторитета (Образцовый −10, Уважаемый −5, Плохой +5, Опозоренный +10) и заслуг (−5 за каждое из: размещение штаб-квартиры, ведение программы развития, ведение программы миротворчества или служба в миссии; не более −10). Если она принята, цель теряет место и не может быть возвращена на него десять лет, а его занимает [concept_great_power|l] с наибольшим [concept_prestige|l], не имеющая места, — возможно, мы. Члены немного ставят это в вину инициатору (−5)."
  },
  "UN_PROPOSE_EXPULSION_TT": {
   "en": "We will propose a motion in the [concept_un_general_assembly] calling for the expulsion of a [concept_un_permanent_member] who has recently abused the [concept_un_veto]. As a [concept_un_resolution_recommendatory] motion against the Council itself, it requires a #G 2/3 supermajority#! to pass.",
@@ -4129,7 +4129,7 @@
  },
  "UN_PROPOSE_FOOD_RESERVE_DESC": {
   "en": "Move the [concept_un_general_assembly] to found the [concept_un_food_reserve]: members pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges to feed its state. While it stands, hunger among the members' people moves the delivery pillar of [concept_un_authority]. It is recommendatory and a simple majority carries it. #G UN credibility +1 if it passes.#!",
-  "ru": "Побудить [concept_un_general_assembly] учредить [concept_un_food_reserve]: члены обещают зерно из своих Стратегических резервов, и каждая новая [concept_un_mission_aid|l] черпает из этих обещаний, чтобы накормить свою область. Пока он существует, голод среди населения членов влияет на столп поставок [Concept('concept_un_authority', 'авторитета ООН')]. Резолюция рекомендательная и принимается простым большинством. #G Доверие к ООН +1, если она принята.#!"
+  "ru": "Побудить [concept_un_general_assembly] учредить [concept_un_food_reserve]: члены обещают зерно из своих Стратегических резервов, и каждая новая [concept_un_mission_aid|l] черпает из этих обещаний, чтобы накормить свою область. Пока он существует, голод среди населения членов влияет на опору «Результативность» [Concept('concept_un_authority', 'авторитета ООН')]. Резолюция рекомендательная и принимается простым большинством. #G Доверие к ООН +1, если она принята.#!"
  },
  "UN_PROPOSE_FOOD_RESERVE_TT": {
   "en": "#bold A General Assembly vote has been called#! to found the World Food Reserve. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
@@ -4221,15 +4221,15 @@
  },
  "UN_STOP_CHAMPIONING_DESC": {
   "en": "Stop championing the United Nations: we no longer count in its #bold Commitment#! pillar.",
-  "ru": "Перестать поддерживать Организацию Объединённых Наций: мы больше не учитываемся в её столпе #bold Приверженность#!."
+  "ru": "Перестать поддерживать Организацию Объединённых Наций: мы больше не учитываемся в её опоре #bold Приверженность#!."
  },
  "UN_STOP_UNDERMINING_DESC": {
   "en": "Stop undermining the United Nations: we no longer count against its #bold Commitment#! pillar.",
-  "ru": "Перестать подрывать Организацию Объединённых Наций: мы больше не учитываемся против её столпа #bold Приверженность#!."
+  "ru": "Перестать подрывать Организацию Объединённых Наций: мы больше не учитываемся против её опоры #bold Приверженность#!."
  },
  "UN_UNDERMINE_ORDER_DESC": {
   "en": "Put our weight against the United Nations and assert our sovereign independence. While we do, we count against its #R Commitment#! pillar, in proportion to our [concept_un_weight], which lowers the target [concept_un_authority] moves toward.",
-  "ru": "Поставить наш вес против Организации Объединённых Наций и отстаивать нашу суверенную независимость. Пока мы это делаем, мы учитываемся против её столпа #R Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что понижает цель, к которой движется [concept_un_authority|l]."
+  "ru": "Поставить наш вес против Организации Объединённых Наций и отстаивать нашу суверенную независимость. Пока мы это делаем, мы учитываемся против её опоры #R Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что понижает цель, к которой движется [concept_un_authority|l]."
  },
  "UN_VOTE_ACCEPT_TARGET_TT": {
   "en": "Acknowledge the resolution and accept its verdict. If it passes, it lands more softly on us: a condemnation or sanctions do not take effect, an arms embargo becomes the voluntary one, and a suspension of our credentials, a ceasefire order or the cost of fighting on under one costs less standing; a referendum can then not be refused, nor a World Court ruling defied. International observers read the gesture as performative, and the regime visibly loses face at home.",
@@ -4269,7 +4269,7 @@
  },
  "UN_WITHDRAW_ARMS_CONTROL_DESC": {
   "en": "Leave the UN's arms control agreements. They stop counting toward the UN's #bold Funding#! pillar.",
-  "ru": "Выйти из соглашений ООН по контролю над вооружениями. Они перестают засчитываться в столп #bold Финансирование#! ООН."
+  "ru": "Выйти из соглашений ООН по контролю над вооружениями. Они перестают засчитываться в опору ООН #bold Финансирование#!."
  },
  "UN_WITHDRAW_HUMAN_RIGHTS": {
   "en": "Withdraw Human Rights Support",
@@ -4277,7 +4277,7 @@
  },
  "UN_WITHDRAW_HUMAN_RIGHTS_DESC": {
   "en": "Stop championing human rights at the United Nations. It stops counting toward the UN's #bold Funding#! pillar.",
-  "ru": "Перестать отстаивать права человека в Организации Объединённых Наций. Это перестаёт засчитываться в столп #bold Финансирование#! ООН."
+  "ru": "Перестать отстаивать права человека в Организации Объединённых Наций. Это перестаёт засчитываться в опору ООН #bold Финансирование#!."
  },
  "UN_WITHHOLD_DUES_DESC": {
   "en": "Stop paying our assessed [concept_un_dues]. The money is ours to keep, but withholding it weakens the funding of the United Nations, costs our international standing, and after #v 24#! months in arrears costs us our vote in the [concept_un_general_assembly] until we pay what we owe.",
@@ -4653,7 +4653,7 @@
  },
  "aerosol_injection_cost_modifier": {
   "en": "Aerosol Injection: Running Cost",
-  "ru": "Аэрозольная инъекция: эксплуатационные расходы"
+  "ru": "Закачка аэрозолей: эксплуатационные расходы"
  },
  "agdiff_first_mover_prestige": {
   "en": "Agricultural Innovator",
@@ -5549,7 +5549,7 @@
  },
  "banking_dash_mon_anchoring_tt": {
   "en": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nAbsorbing #v [Country.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! of the wage and price pressure above, out of #v [Country.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#! it could.\\n#title Where it comes from:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]",
-  "ru": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nПоглощает #v [Country.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! описанного выше давления на зарплаты и цены из #v [Country.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#!, которые мог бы поглотить.\\n#title Откуда оно берётся:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]"
+  "ru": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nПоглощает #v [Country.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! описанного выше ценового давления и давления на зарплаты из #v [Country.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#!, которые мог бы поглотить.\\n#title Откуда оно берётся:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]"
  },
  "banking_dash_mon_anchorpeg_tt": {
   "en": "#header Peg Confidence#!\\nHow far the world believes the country will hold its parity with #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!. With no rate of its own to defend it, it moves on #b overvaluation#!: how far the anchor's exchange rate sits above where the country's own currency would float.\\n$TOOLTIP_DELIMITER$\\nOvervalued by #v [Country.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#! now. Its parity sits #v [Country.MakeScope.ScriptValue('te_mon_peg_parity_offset_display')|1]#! points under the anchor's.\\nAt #v 20#! the markets force the question: shut the door, break the peg, or re-peg lower.",
@@ -6845,11 +6845,11 @@
  },
  "banking_mon_delegate_off_tt": {
   "en": "Takes the rate target back from the central bank. It stays where the bank last left it until you move it.",
-  "ru": "Забирает цель по ставке у центрального банка. Она остаётся там, где банк её оставил, пока вы её не сдвинете."
+  "ru": "Забирает целевую ставку у центрального банка. Она остаётся там, где банк её оставил, пока вы её не сдвинете."
  },
  "banking_mon_delegate_on_tt": {
   "en": "Hands the rate target to the central bank, which will set it from its mandate at each monthly update.",
-  "ru": "Передаёт цель по ставке центральному банку, который будет устанавливать её по своему мандату при каждом ежемесячном обновлении."
+  "ru": "Передаёт целевую ставку центральному банку, который будет устанавливать её по своему мандату при каждом ежемесячном обновлении."
  },
  "banking_mon_mandate_cost_tt": {
   "en": "From the next monthly update, then fixed for a year. A looser rule than the bank runs now costs, for each step looser:\\n[GetStaticModifier('te_mon_mandate_loosen_step').GetDesc]\\n#lore Fading over two years. $banking_dash_mon_mandate_inflation$, the $banking_dash_mon_mandate_dual$ and $banking_dash_mon_mandate_growth$ run from tightest to loosest; a tighter rule earns nothing at once.#!",
@@ -6857,7 +6857,7 @@
  },
  "banking_mon_mandate_peg_set_tt": {
   "en": "#b $banking_dash_mon_mandate_peg$#! holds the rate target on the [concept_banking_world_rate], to the tenth of a point (up to a point above it while the vault is short of gold), so that gold does not drain away, and ignores your own cycle while it does. From the next monthly update, then fixed for a year.",
-  "ru": "#b $banking_dash_mon_mandate_peg$#! удерживает цель по ставке на уровне [Concept('concept_banking_world_rate','мировой ставки')] с точностью до десятой пункта (до пункта выше неё, пока в хранилище не хватает золота), чтобы золото не утекало, и пока действует, игнорирует ваш собственный цикл. Со следующего ежемесячного обновления, затем фиксируется на год."
+  "ru": "#b $banking_dash_mon_mandate_peg$#! удерживает целевую ставку на уровне [Concept('concept_banking_world_rate','мировой ставки')] с точностью до десятой пункта (до пункта выше неё, пока в хранилище не хватает золота), чтобы золото не утекало, и пока действует, игнорирует ваш собственный цикл. Со следующего ежемесячного обновления, затем фиксируется на год."
  },
  "banking_mon_mandate_set_dual_tt": {
   "en": "#b The $banking_dash_mon_mandate_dual$#! reacts to inflation as hard as $banking_dash_mon_mandate_inflation$ and leans against the [concept_banking_cycle] with its full weight: tightening into a boom, hard into a frenzy, and cutting hard in a panic. It reads where the cycle is heading, not where it stands. Every bank starts on it.\\n$banking_mon_mandate_cost_tt$",
@@ -16253,11 +16253,11 @@
  },
  "gw_how_aerosols_1": {
   "en": "[GetTechnology('geoengineering').GetName] unlocks Stratospheric Aerosol Injection, which needs #v 1.0 °C#! of warming beneath any haze already flying. The countries running it hold up an aerosol mask: a degree for each fifth of world GDP among them, at most #v 2 °C#!. The mask builds up over a year or two, and the temperature, the warming penalty, the tiers and the warming events read the warming less the mask. Emissions keep accumulating beneath it, and the cooling events wait for that warming to fall.",
-  "ru": "Технология «[GetTechnology('geoengineering').GetName]» открывает стратосферный аэрозольный впрыск, для которого нужно #v 1,0 °C#! потепления под любой уже существующей дымкой. Страны, которые его проводят, поддерживают аэрозольную завесу: градус на каждую пятую часть мирового ВВП среди них, не более #v 2 °C#!. Завеса нарастает за год-два, а температура, штраф от потепления, ступени и события потепления учитывают потепление за вычетом завесы. Выбросы продолжают накапливаться под ней, а события охлаждения ждут, пока это потепление спадёт."
+  "ru": "Технология «[GetTechnology('geoengineering').GetName]» открывает стратосферную закачку аэрозолей, для которой нужно #v 1,0 °C#! потепления под любой уже существующей дымкой. Страны, которые её проводят, поддерживают аэрозольную завесу: градус на каждую пятую часть мирового ВВП среди них, не более #v 2 °C#!. Завеса нарастает за год-два, а температура, штраф от потепления, ступени и события потепления учитывают потепление за вычетом завесы. Выбросы продолжают накапливаться под ней, а события охлаждения ждут, пока это потепление спадёт."
  },
  "gw_how_aerosols_2": {
   "en": "When no country runs it any more, the masked warming returns as fast as it was hidden, two thirds within a year, and every country suffers a termination shock: five years of worse harvests. The haze also weakens the monsoons of South and Southeast Asia, southern China and West Africa. Countries in those regions, and those that would not run it themselves, object: each loses relations with a country that starts it, and again every January.",
-  "ru": "Когда ни одна страна больше не проводит впрыск, скрытое потепление возвращается так же быстро, как было скрыто, на две трети за год, и каждая страна страдает от терминального шока: пять лет худших урожаев. Дымка также ослабляет муссоны Южной и Юго-Восточной Азии, южного Китая и Западной Африки. Страны этих регионов, а также те, кто сам не стал бы проводить впрыск, возражают: каждая теряет отношения со страной, которая его начинает, и снова каждый январь."
+  "ru": "Когда ни одна страна больше не проводит закачку, скрытое потепление возвращается так же быстро, как было скрыто, на две трети за год, и каждая страна страдает от шока прекращения: пять лет худших урожаев. Дымка также ослабляет муссоны Южной и Юго-Восточной Азии, южного Китая и Западной Африки. Страны этих регионов, а также те, кто сам не стал бы проводить закачку, возражают: каждая теряет отношения со страной, которая её начинает, и снова каждый январь."
  },
  "gw_how_emissions_1": {
   "en": "Each country counts the buildings and households in its own states, subtracting source capture, synthetic-fuel credits and atmospheric removal. Its own industrial policy reductions apply to its remaining industrial emissions. Markets sum their members; the Top Emitters list ranks countries individually. A synthetic-fuel credit counts where the fuel is made and its burning where it is burned, so a country exporting synthetic fuels can report negative emissions.",
@@ -16277,7 +16277,7 @@
  },
  "gw_how_policies_2": {
   "en": "Every policy needs 0.5 °C of warming, Fossil-Fuel Divestment 1.0 °C and Aerosol Injection 1.0 °C beneath any haze. A policy that depends on something you must be able to build also needs its technology: [GetTechnology('clean_energy_technologies').GetName] for Renewable Investment and Green Building Codes, [GetTechnology('pollution_control').GetName] for Emission Standards, [GetTechnology('modern_urban_planning').GetName] for Public Transit, [GetTechnology('carbon_capture_and_storage').GetName] for Carbon Removal Support and [GetTechnology('geoengineering').GetName] for Aerosol Injection. Most cost [concept_authority] for as long as they are in force, and Renewable Investment also half a percent of GDP a year, Aerosol Injection one percent. A national policy in force calms the Environmental Movement, as its tooltip shows, and each one you could adopt but haven't stirs it by #v 10%#!. A grayed control's tooltip lists each condition with a tick or a cross, then what the control would do.",
-  "ru": "Каждой политике нужно 0,5 °C потепления, «Отказ от ископаемого топлива в инвестициях» требует 1,0 °C, а «Аэрозольный впрыск» — 1,0 °C под любой дымкой. Политике, которая зависит от того, что нужно уметь построить, нужна также технология: «[GetTechnology('clean_energy_technologies').GetName]» для «Инвестиций в возобновляемую энергетику» и «Зелёных строительных норм», «[GetTechnology('pollution_control').GetName]» для «Стандартов выбросов», «[GetTechnology('modern_urban_planning').GetName]» для «Общественного транспорта», «[GetTechnology('carbon_capture_and_storage').GetName]» для «Поддержки удаления углерода» и «[GetTechnology('geoengineering').GetName]» для «Аэрозольного впрыска». Большинство стоит [Concept('concept_authority','авторитета')], пока действует, а «Инвестиции в возобновляемую энергетику» — ещё полпроцента ВВП в год, «Аэрозольный впрыск» — один процент. Действующая национальная политика успокаивает Экологическое движение, как показывает её подсказка, а каждая, которую вы могли бы принять, но не приняли, будоражит его на #v 10%#!. Подсказка неактивного элемента перечисляет каждое условие с галочкой или крестиком, а затем то, что сделал бы элемент."
+  "ru": "Каждой политике нужно 0,5 °C потепления, «Отказ от ископаемого топлива в инвестициях» требует 1,0 °C, а «Закачка аэрозолей» — 1,0 °C под любой дымкой. Политике, которая зависит от того, что нужно уметь построить, нужна также технология: «[GetTechnology('clean_energy_technologies').GetName]» для «Инвестиций в возобновляемую энергетику» и «Зелёных строительных норм», «[GetTechnology('pollution_control').GetName]» для «Стандартов выбросов», «[GetTechnology('modern_urban_planning').GetName]» для «Общественного транспорта», «[GetTechnology('carbon_capture_and_storage').GetName]» для «Поддержки удаления углерода» и «[GetTechnology('geoengineering').GetName]» для «Закачки аэрозолей». Большинство стоит [Concept('concept_authority','авторитета')], пока действует, а «Инвестиции в возобновляемую энергетику» — ещё полпроцента ВВП в год, «Закачка аэрозолей» — один процент. Действующая национальная политика успокаивает Экологическое движение, как показывает её подсказка, а каждая, которую вы могли бы принять, но не приняли, будоражит его на #v 10%#!. Подсказка неактивного элемента перечисляет каждое условие с галочкой или крестиком, а затем то, что сделал бы элемент."
  },
  "gw_how_policies_3": {
   "en": "One country can bind another to cut its emissions with an [Concept('concept_emissions_reduction_treaty','Emissions Reduction')] treaty article, whether or not the bound country leads its market.",
@@ -16929,7 +16929,7 @@
  },
  "iw_funding_early_cap_tt": {
   "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)",
-  "ru": "Финансирование выше уровня «Профессиональный» требует: $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ или закона «$law_ministry_of_intelligence_and_security$» (раннее открытие)"
+  "ru": "Финансирование выше уровня «Профессиональная» требует: $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ или закона «$law_ministry_of_intelligence_and_security$» (раннее открытие)"
  },
  "iw_funding_name_0": {
   "en": "Dormant",
@@ -17189,7 +17189,7 @@
  },
  "iw_target_nuclear_programme_tt": {
   "en": "Target must be running a funded nuclear weapons program",
-  "ru": "Цель должна вести финансируемую ядерную программу"
+  "ru": "Цель должна вести финансируемую программу ядерного оружия"
  },
  "iw_tradecraft_reason_0": {
   "en": "#italic No operation has yet taught our service anything.#!",

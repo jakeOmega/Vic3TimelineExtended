@@ -3449,7 +3449,7 @@
  },
  "banking_event_partial_default_desc": {
   "en": "The government has refused to repay part of what it owes. Lenders now charge for the risk that it will do so again, and its standing abroad has suffered.",
-  "ru": "Правительство отказалось погасить часть своих долгов. Кредиторы теперь требуют плату за риск, что это повторится, а репутация страны за рубежом пострадала."
+  "ru": "Правительство отказалось погасить часть своих долгов. Кредиторы теперь требуют плату за риск, что это повторится, а международный авторитет страны пострадал."
  },
  "banking_event_pension_stability": {
   "en": "Pension Fund Stability",
@@ -6753,7 +6753,7 @@
  },
  "extra_law_events.32.a": {
   "en": "Pledge never to strike first with nuclear weapons.",
-  "ru": "Обязаться никогда не наносить первый ядерный удар."
+  "ru": "Обязаться никогда не наносить первый удар ядерным оружием."
  },
  "extra_law_events.32.b": {
   "en": "Carve out a military necessity exception.",

@@ -41,11 +41,11 @@
  },
  "country_te_budget_expense_drugs_add": {
   "en": "Breakdown: Drug Shortage Response",
-  "ru": "Разбивка: Меры при дефиците наркотиков"
+  "ru": "Разбивка: Меры при дефиците лекарств"
  },
  "country_te_budget_expense_drugs_add_desc": {
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
-  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Меры при дефиците наркотиков»."
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Меры при дефиците лекарств»."
  },
  "country_te_budget_expense_energy_industry_add": {
   "en": "Breakdown: Energy and Industry Programs",

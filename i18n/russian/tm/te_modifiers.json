@@ -1145,7 +1145,7 @@
  },
  "country_seabed_claim_weight_mult": {
   "en": "Seabed Claim Weight",
-  "ru": "Вес претензий на морское дно"
+  "ru": "Вес притязания на морское дно"
  },
  "country_seabed_claim_weight_mult_desc": {
   "en": "Our claim weight in every ocean basin, which sets our share of each basin's [concept_seabed_licence]s.",
@@ -1157,7 +1157,7 @@
  },
  "country_seabed_naval_weight_mult_desc": {
   "en": "How much more our naval power projection counts in our seabed claim weight.",
-  "ru": "Насколько сильнее проекция нашей морской мощи учитывается в весе наших претензий на морское дно."
+  "ru": "Насколько сильнее проекция нашей морской мощи учитывается в нашем весе притязания на морское дно."
  },
  "country_seabed_unilateral_relations_add": {
   "en": "Relations a Year with Each Other Unilateral Claimant",
@@ -1593,7 +1593,7 @@
  },
  "country_te_mon_fx_target_support_add": {
   "en": "Exchange-Rate Target, at Most",
-  "ru": "Целевой обменный курс, не более"
+  "ru": "Целевая ставка обменного курса, не более"
  },
  "country_te_mon_fx_target_support_add_desc": {
   "en": "Points that exporters' earnings sold to the central bank add to the target the [concept_banking_exchange_rate] heads for, at the full export share.",
