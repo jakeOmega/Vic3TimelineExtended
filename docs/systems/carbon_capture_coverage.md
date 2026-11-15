@@ -95,6 +95,7 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 |---|---|---|
 | `building_airport` | `pm_airport` | Transport or dispersed mobile machinery; no stationary capture stack. |
 | `building_anglo_persian_abadan_refinery` | `pm_anglo_persian_abadan_refinery` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
+| `building_banana_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_bauxite_mine` | `pm_dragline_excavators_bauxite_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_bauxite_mine` | `pm_large_scale_earth_movers_bauxite_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_bauxite_mine` | `pm_geophysical_survey_techniques_bauxite_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
@@ -109,10 +110,13 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_coal_mine` | `pm_large_scale_earth_movers_coal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_coal_mine` | `pm_geophysical_survey_techniques_coal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_coal_mine` | `pm_ore_sorting_and_separation_technology_coal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
+| `building_coffee_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_copper_mine` | `pm_dragline_excavators_copper_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_copper_mine` | `pm_large_scale_earth_movers_copper_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_copper_mine` | `pm_geophysical_survey_techniques_copper_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_copper_mine` | `pm_ore_sorting_and_separation_technology_copper_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
+| `building_cotton_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
+| `building_dye_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_el_aguila_tampico_refinery` | `pm_el_aguila_tampico_refinery` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_fishing_wharf` | `pm_steam_trawlers` | Transport or dispersed mobile machinery; no stationary capture stack. |
 | `building_fishing_wharf` | `pm_purse_seine_nets` | Transport or dispersed mobile machinery; no stationary capture stack. |
@@ -182,6 +186,7 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_nickel_cobalt_mine` | `pm_ore_sorting_and_separation_technology_nickel_cobalt_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_nioc_masjed_soleyman_field` | `pm_nioc_masjed_soleyman_field` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_nobel_baku_refinery` | `pm_nobel_baku_refinery` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
+| `building_opium_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_panama_canal` | `pm_canal` | Transport or dispersed mobile machinery; no stationary capture stack. |
 | `building_phosphate_mine` | `pm_dragline_excavators_sulfur_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_phosphate_mine` | `pm_large_scale_earth_movers_sulfur_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
@@ -227,6 +232,7 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_rice_farm` | `pm_automated_mechanical_harvesters_building_rice_farm` | Dispersed agricultural machinery. |
 | `building_rice_farm` | `pm_automated_harvesters_and_planters_building_rice_farm` | Dispersed agricultural machinery. |
 | `building_romanian_star_ploiesti_refinery` | `pm_romanian_star_ploiesti_refinery` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
+| `building_rubber_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_rye_farm` | `pm_steam_threshers` | Dispersed agricultural machinery. |
 | `building_rye_farm` | `pm_tractors` | Dispersed agricultural machinery. |
 | `building_rye_farm` | `pm_compression_ignition_tractors` | Dispersed agricultural machinery. |
@@ -234,6 +240,7 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_rye_farm` | `pm_automated_mechanical_harvesters` | Dispersed agricultural machinery. |
 | `building_rye_farm` | `pm_automated_harvesters_and_planters` | Dispersed agricultural machinery. |
 | `building_sibur_tobolsk_complex` | `pm_sibur_tobolsk_complex` | Oil/coal used as chemical feedstock rather than burnt fuel. |
+| `building_silk_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_specialty_alloy_metal_mine` | `pm_dragline_excavators_specialty_alloy_metal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_specialty_alloy_metal_mine` | `pm_large_scale_earth_movers_specialty_alloy_metal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_specialty_alloy_metal_mine` | `pm_geophysical_survey_techniques_specialty_alloy_metal_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
@@ -241,6 +248,7 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_standard_oil_refinery` | `pm_standard_oil_refinery` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_steel_brothers_syriam_depot` | `pm_steel_brothers_syriam_depot` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_suez_canal` | `pm_canal` | Transport or dispersed mobile machinery; no stationary capture stack. |
+| `building_sugar_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_sulfur_mine` | `pm_dragline_excavators_sulfur_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_sulfur_mine` | `pm_large_scale_earth_movers_sulfur_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
 | `building_sulfur_mine` | `pm_geophysical_survey_techniques_sulfur_mine` | Oil used by mobile excavators/earth movers. Coal-fired steam automation remains eligible. |
@@ -256,8 +264,11 @@ Electricity producers pay energy costs as reduced output; other sources buy elec
 | `building_synthetics_plant_silk` | `pm_microfiber_blends` | Oil/coal used as chemical feedstock rather than burnt fuel. |
 | `building_synthetics_plant_silk` | `pm_elastomeric_blends` | Oil/coal used as chemical feedstock rather than burnt fuel. |
 | `building_synthetics_plant_silk` | `pm_performance_textiles` | Oil/coal used as chemical feedstock rather than burnt fuel. |
+| `building_tea_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
+| `building_tobacco_plantation` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_turkish_petroleum_kirkuk_depot` | `pm_turkish_petroleum_kirkuk_depot` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_urban_center` | `pm_gas_streetlights` | Coal consumed by dispersed street lighting. |
+| `building_vineyard` | `pm_mechanical_harvesters_plantation` | Dispersed agricultural machinery. |
 | `building_west_ural_oil_depot` | `pm_west_ural_oil_depot` | Oil is refinery/feedstock or storage inventory, not a capturable combustion stream. |
 | `building_whaling_station` | `pm_steam_whaling_ships` | Transport or dispersed mobile machinery; no stationary capture stack. |
 | `building_whaling_station` | `pm_motor_whaling_ships` | Transport or dispersed mobile machinery; no stationary capture stack. |

@@ -300,8 +300,33 @@ INJECT:pmg_secondary_building_millet_farm = {
 		pm_designed_fig_orchards
 	}
 }
-INJECT:pmg_sheep_ranch = {
+# Livestock Ranch: the meat ladder after Mechanized Slaughterhouses, and Herd
+# Management's (Fencing's) labor ladder after Electric Fences (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md).
+INJECT:pmg_base_building_livestock_ranch = {
 	production_methods = {
+		pm_industrial_feedlots
+		pm_recombinant_growth_hormones
+		pm_gene_edited_livestock
+	}
+}
+INJECT:pmg_fencing = {
+	production_methods = {
+		pm_mechanized_feeding_lines
+		pm_robotic_barns
+	}
+}
+# Feed Additives: Antibiotic Growth Promoters, which sat in vanilla's Wool
+# Production (pmg_sheep_ranch) as its top tier although it adds meat too, in a
+# group of its own (PR #1828, after the owner found the placement odd), so it
+# stacks on any wool method and
+# Wool Production is vanilla's again. Its wool is the 15 it added over
+# Intensive Wool Gathering, so the two make what it made alone. Attached in
+# common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_feed_additives_building_livestock_ranch = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_plain_feed
 		pm_antibiotic_growth_promoters
 	}
 }
@@ -527,6 +552,31 @@ INJECT:pmg_base_building_vineyard = {
 	production_methods = {
 		factory_farm_building_vineyard
 		GMO_plantation_building_vineyard
+	}
+}
+# Harvesting Process for the plantation-type buildings (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
+# ranches and plantations"), the farms' group of that name. A plantation's base
+# methods already carry its labor savings, down to a floor of no laborers on
+# rail transport, so these tiers cut the farmers and engineers left. One group
+# for the ten buildings whose late bases staff alike (as
+# pmg_precision_environmental_management is one for the grain farms); the
+# Rubber Plantation's Mechanized Farm keeps fewer, so it has its own
+# autonomous copy. Attached in common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_harvesting_process_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_plantation
+	}
+}
+REPLACE_OR_CREATE:pmg_harvesting_process_building_rubber_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_building_rubber_plantation
 	}
 }
 INJECT:pmg_amenities = {
@@ -804,6 +854,15 @@ REPLACE_OR_CREATE:pmg_synthetic_fruit = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
 		pm_synthetic_fruit
+	}
+}
+# The Cultured Produce Facility's secondary product, as the farms' secondary
+# group: tobacco leaf in place of some fruit (Workshop request, 2026-11-15).
+REPLACE_OR_CREATE:pmg_secondary_building_synthetics_plant_fruit = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_no_secondary
+		pm_cultured_tobacco_leaf
 	}
 }
 REPLACE_OR_CREATE:pmg_synthetic_drinks = {
