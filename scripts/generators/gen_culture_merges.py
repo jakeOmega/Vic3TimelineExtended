@@ -1943,8 +1943,9 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
     out.line("# Every human country but the starter (which has te_culture_merge.1 and its journal entry) is told, from the locals")
     out.line("# the pass set:")
     out.line("# - The merge completed in this pass (te_cm_tl_done): a country the merge reaches (te_cmg_<m>_involves) gets")
-    out.line("#   te_culture_merge.4, naming the first of its own cultures that switched in the same pass if one did (one event,")
-    out.line("#   not two); any other country a feed notice.")
+    out.line("#   te_culture_merge.4, naming one of its own cultures that switched in the same pass if one did (one event, not")
+    out.line("#   two): a primary culture first, so the event says the result becomes one too, then one whose homeland it holds,")
+    out.line("#   each in roster order; any other country a feed notice.")
     out.line("# - Otherwise: a country tied to a culture that switched (te_cm_tied_to: a primary culture, or a homeland it holds)")
     out.line("#   gets te_culture_merge.3 for each such culture. A country the switch doesn't touch hears nothing.")
     out.line("# The branches of each event's text are decided here, as saved scopes (te_cm_ev_note_part), not when it is read: the")
@@ -1965,11 +1966,15 @@ def _write_conversion_effects(out: "_Script", vanilla: dict, merges: tuple[cfg.M
                     with out.block("if"):
                         out.line("limit = { te_cmg_%s_involves = yes }" % key)
                         out.line("te_cm_ev_clear_part = yes")
-                        for index, culture in enumerate(told):
+                        # A switched primary culture first: a homeland held only would hide that the result becomes
+                        # a primary culture here too. Then any switched culture tied to the country.
+                        picks = ([(c, "country_has_primary_culture = cu:%s" % c) for c in told]
+                                 + [(c, "te_cm_tied_to = { CULTURE = %s }" % c) for c in told])
+                        for index, (culture, test) in enumerate(picks):
                             with out.block("if" if index == 0 else "else_if"):
                                 with out.block("limit"):
                                     out.line("local_var:te_cm_tl_%s = 1" % culture)
-                                    out.line("te_cm_tied_to = { CULTURE = %s }" % culture)
+                                    out.line(test)
                                 out.line("te_cm_ev_note_part = { CULTURE = %s }" % culture)
                         out.line("te_cm_tell_complete = yes")
                     with out.block("else"):

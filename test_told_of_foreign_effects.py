@@ -71,7 +71,7 @@ NOTICES = (
     "irr_cultural_ties_notice",
     "covert_exposure_repeat_notice", "covert_backlash_public_notice",
     # Another country's culture merge, where it doesn't reach us (test_culture_merge_notices.py holds who gets which).
-    "te_cm_merge_started_notice", "te_cm_merge_complete_notice",
+    "te_cm_merge_started_notice", "te_cm_merge_started_sphere_notice", "te_cm_merge_complete_notice",
 )
 
 # event -> its file, and the keys its script names

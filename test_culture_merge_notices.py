@@ -12,6 +12,8 @@ Who is told what (docs/systems/mod_systems/culture_merges.md § The Notices):
 |                     | it is tied to that culture           |                              |                        |
 | the merge completes | te_culture_merge.4, in place of .3   | te_cm_merge_complete_notice  | nothing new            |
 
+An unreached country in the starter's sphere gets te_cm_merge_started_sphere_notice at the start instead.
+
 Files under test:
 * common/scripted_effects/te_culture_merge_effects.txt (te_cm_switch_part's marks, te_cm_tell_start, te_cm_tell_switch,
   te_cm_tell_complete, te_cm_ev_clear_part, te_cm_ev_note_part)
@@ -51,7 +53,7 @@ GEN_TRIGGERS = ROOT / gen.TRIGGERS_GEN_OUT
 CUSTOM_LOC = ROOT / gen.CUSTOM_LOC_OUT
 EVENTS = ROOT / "events/te_culture_merge_events.txt"
 MESSAGES = ROOT / "common/messages/extra_messages.txt"
-NOTICES = ("te_cm_merge_started_notice", "te_cm_merge_complete_notice")
+NOTICES = ("te_cm_merge_started_notice", "te_cm_merge_started_sphere_notice", "te_cm_merge_complete_notice")
 NEW_EVENTS = ("te_culture_merge.2", "te_culture_merge.3", "te_culture_merge.4")
 BOM = b"\xef\xbb\xbf"
 
@@ -240,14 +242,33 @@ class WhoIsToldTest(unittest.TestCase):
         self.assertEqual(len(sent), len(people()) - 2)
 
     def test_the_start_event_knows_the_sphere_from_the_sender(self):
-        scopes = {name: s for name, _, _, s in start(GERMAN, people())}
-        self.assertIn("te_cm_ev_sphere", scopes["bloc"])
-        # Saved for one country, cleared before the next: a later card can't read the bloc member's.
-        for name in ("near", "north", "north_home", "both"):
-            self.assertNotIn("te_cm_ev_sphere", scopes[name], name)
-        for s in scopes.values():
-            self.assertIn("te_cm_ev_starter", s)
-            self.assertIn("te_cm_ev_result", s)
+        # Both orders: with the bloc member last, a missing clear_saved_scope would go unseen. With it first, every
+        # reached country after it would carry its te_cm_ev_sphere into its own card.
+        everyone = people()
+        bloc_first = [c for c in everyone if c.name == "bloc"] + [c for c in everyone if c.name != "bloc"]
+        for countries in (everyone, bloc_first):
+            order = [c.name for c in countries]
+            scopes = {name: s for name, _, _, s in start(GERMAN, countries)}
+            self.assertIn("te_cm_ev_sphere", scopes["bloc"], order)
+            # Saved for one country, cleared before the next: a later card can't read the bloc member's.
+            for name in ("near", "north", "north_home", "both", "far"):
+                self.assertNotIn("te_cm_ev_sphere", scopes[name], (name, order))
+            for s in scopes.values():
+                self.assertIn("te_cm_ev_starter", s)
+                self.assertIn("te_cm_ev_result", s)
+        self.assertEqual(bloc_first[0].name, "bloc")   # the sphere country before every reached and unreached one
+
+    def test_an_unreached_sphere_member_hears_its_pops_convert_yearly(self):
+        # Its diaspora pops of a joined culture convert every year (te_cmg_yearly_country), which the plain notice,
+        # "when their culture switches", would leave out.
+        countries = [Country("starter", starter=True, involved=True), Country("subject", sphere=True), Country("far"),
+                     Country("bloc", involved=True, sphere=True)]
+        for order in (countries, countries[::-1]):
+            sent = {n: (w, s) for n, w, _, s in start(GERMAN, order)}
+            self.assertEqual(sent["subject"][0], "te_cm_merge_started_sphere_notice")
+            self.assertEqual(sent["far"][0], "te_cm_merge_started_notice")
+            self.assertEqual(sent["bloc"][0], "te_culture_merge.2")
+            self.assertNotIn("te_cm_ev_sphere", sent["far"][1])
 
     def test_a_switch_tells_only_the_countries_tied_to_that_culture(self):
         sent = census(GERMAN, people(), switched={"north_german"})
@@ -264,6 +285,12 @@ class WhoIsToldTest(unittest.TestCase):
         sent = [(n, s["te_cm_ev_own_part"], "te_cm_ev_primary" in s)
                 for n, w, _, s in census(GERMAN, people(), switched={"north_german", "south_german"}) if n == "both"]
         self.assertEqual(sent, [("both", "cu:north_german", False), ("both", "cu:south_german", True)])
+        # The other way round: a primary culture first, then a homeland only, so the second event's primary scope is
+        # cleared and never saved again (the play-test list's "A clear with no save after it" reads this in game).
+        country = Country("north_alem", involved=True, tied={"north_german", "alemannic"}, primary={"north_german"})
+        sent = [(s["te_cm_ev_own_part"], "te_cm_ev_primary" in s)
+                for n, w, _, s in census(GERMAN, [country], switched={"north_german", "alemannic"})]
+        self.assertEqual(sent, [("cu:north_german", True), ("cu:alemannic", False)])
 
     def test_a_completion_sends_one_word_to_every_human_country_but_the_starter(self):
         for switched in ({"north_german"}, {"north_german", "south_german"}, {"alemannic"}):
@@ -277,13 +304,24 @@ class WhoIsToldTest(unittest.TestCase):
 
     def test_the_completion_event_names_a_culture_of_ours_that_switched_with_it(self):
         sent = {n: (p, s) for n, w, p, s in census(GERMAN, people(), switched={"north_german", "south_german"}, done=True)}
+        # "both" holds a North German homeland and has South German as a primary culture: the primary culture is named,
+        # though North German comes first in the roster, so the event says the result becomes a primary culture too.
         popup, scopes = sent["both"]
         self.assertTrue(popup)
-        self.assertEqual(scopes["te_cm_ev_own_part"], "cu:north_german")   # the first in roster order
-        self.assertNotIn("te_cm_ev_primary", scopes)
+        self.assertEqual(scopes["te_cm_ev_own_part"], "cu:south_german")
+        self.assertEqual(scopes["te_cm_ev_primary"], "cu:south_german")
         popup, scopes = sent["north"]
         self.assertTrue(popup)
         self.assertIn("te_cm_ev_primary", scopes)
+        # A homeland only: named, with no primary culture.
+        popup, scopes = sent["north_home"]
+        self.assertTrue(popup)
+        self.assertEqual(scopes["te_cm_ev_own_part"], "cu:north_german")
+        self.assertNotIn("te_cm_ev_primary", scopes)
+        # With only the homeland culture switched, "both" is named for it, plainly.
+        scopes = {n: s for n, _, _, s in census(GERMAN, people(), switched={"north_german"}, done=True)}["both"]
+        self.assertEqual(scopes["te_cm_ev_own_part"], "cu:north_german")
+        self.assertNotIn("te_cm_ev_primary", scopes)
         # No culture of its own switched: a card that names none, whatever the country before it was sent.
         for name in ("near", "bloc"):
             popup, scopes = sent[name]
@@ -519,7 +557,7 @@ class EventsTest(unittest.TestCase):
         allowed = {"te_cm_ev_starter", "te_cm_ev_result", "te_cm_ev_own_part"}
         keys = [k for k in LOC if k.split(".")[0] == "te_culture_merge" and k.split(".")[1] in "234"]
         keys += ["notification_%s_%s" % (n, s) for n in NOTICES for s in ("name", "desc", "tooltip")]
-        self.assertEqual(len(keys), 16 + 6)
+        self.assertEqual(len(keys), 16 + 9)
         for key in keys:
             text = LOC[key]
             used = set(re.findall(r"SCOPE\.s(?:Culture|Country)\('(\w+)'\)", text))

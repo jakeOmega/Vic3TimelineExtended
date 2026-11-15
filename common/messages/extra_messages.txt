@@ -2525,6 +2525,15 @@ te_cm_merge_started_notice = {
 	color = neutral
 }
 
+# The same start, for a country in the starter's sphere (its subject, or a member of the bloc it leads) that the merge
+# does not reach: its pops of a joined culture convert each year, as the plain notice would not say.
+te_cm_merge_started_sphere_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}
+
 te_cm_merge_complete_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/pops.dds"

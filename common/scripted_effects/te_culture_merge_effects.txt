@@ -830,14 +830,16 @@ te_cm_copy_fervor = {
 # pressed the button, gets te_culture_merge.1 at each switch and has the journal entry. A country the merge reaches
 # (te_cmg_<m>_involves: a culture of the merge is one of its primary cultures, or it holds a homeland of one) gets an
 # event, any other a feed notice:
-#   the start          te_culture_merge.2, or te_cm_merge_started_notice    (te_cm_tell_start, from te_cmg_start_<m>)
+#   the start          te_culture_merge.2, or te_cm_merge_started_notice    (te_cm_tell_start, from te_cmg_start_<m>);
+#                      te_cm_merge_started_sphere_notice where the country is in the starter's sphere
 #   a culture switches te_culture_merge.3 to a country tied to that culture  (te_cmg_<m>_tell, end of the census's pass)
 #   the completion     te_culture_merge.4, or te_cm_merge_complete_notice   (the same; it takes the switch's place)
 # The events change nothing; they name the starter, the result and the cultures from saved scopes. The permanent names
 # here (te_cm_ev_*) are saved nowhere as temporaries: a permanent scope refuses a temporary one of the same name, and
 # the census saves te_cm_starter, te_cm_part and te_cm_result as temporaries. The branches of each event's text are
 # saved scopes set here, before the event fires (each event keeps its own copy), and cleared before the next country's:
-#   te_cm_ev_sphere    (.2) the country is in the starter's sphere, so its pops of the joined cultures convert too
+#   te_cm_ev_sphere    (.2, and which start notice) the country is in the starter's sphere, so its pops of the joined
+#                      cultures convert too
 #   te_cm_ev_own_part  (.3, .4) the culture of this country's that switched in the census's pass
 #   te_cm_ev_primary   (.3, .4) that culture is one of this country's primary cultures (the monthly upkeep can take it off
 #                      before the player opens the event, so the event's text must not test it then)
@@ -845,7 +847,8 @@ te_cm_copy_fervor = {
 
 # Country scope = the starter, at the end of te_cmg_start_<m> (the button's effect, which its tooltip walks every frame:
 # so the starter is this scope, saved here, never the global set just above). $MERGE$ = a merge key, $RESULT$ = its result.
-# Every other human country hears that the merge has begun: an event where the merge reaches it, a feed notice where not.
+# Every other human country hears that the merge has begun: an event where the merge reaches it, a feed notice where not
+# (one that says its pops convert yearly where it is in the starter's sphere).
 te_cm_tell_start = {
 	save_scope_as = te_cm_ev_starter
 	save_temporary_scope_as = te_cm_starter
@@ -855,18 +858,25 @@ te_cm_tell_start = {
 			is_ai = no
 			NOT = { this = scope:te_cm_ev_starter }
 		}
+		# Whether this country is in the starter's sphere, for the event's text or the notice it gets; the last
+		# country's answer cleared first, whichever branch it took.
+		if = {
+			limit = { exists = scope:te_cm_ev_sphere }
+			clear_saved_scope = te_cm_ev_sphere
+		}
+		# te_cm_in_sphere reads the temporary scope:te_cm_starter saved above.
+		if = {
+			limit = { te_cm_in_sphere = yes }
+			save_scope_as = te_cm_ev_sphere
+		}
 		if = {
 			limit = { te_cmg_$MERGE$_involves = yes }
-			if = {
-				limit = { exists = scope:te_cm_ev_sphere }
-				clear_saved_scope = te_cm_ev_sphere
-			}
-			# te_cm_in_sphere reads the temporary scope:te_cm_starter saved above.
-			if = {
-				limit = { te_cm_in_sphere = yes }
-				save_scope_as = te_cm_ev_sphere
-			}
 			trigger_event = { id = te_culture_merge.2 }
+		}
+		# Not reached, but in the sphere: its pops of a joined culture, all living outside the homelands, convert yearly.
+		else_if = {
+			limit = { exists = scope:te_cm_ev_sphere }
+			post_notification = te_cm_merge_started_sphere_notice
 		}
 		else = {
 			post_notification = te_cm_merge_started_notice
