@@ -8371,7 +8371,7 @@ pm_synthetic_fruit = {
 # docs/systems/mod_systems/production_methods.md § "Livestock ranches and plantations").
 # No technology of its own: the facility needs Lab-Grown Food.
 pm_cultured_tobacco_leaf = {
-	texture = "gfx/interface/icons/production_method_icons/hand_rolled.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_cultured_tobacco_leaf.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15013,7 +15013,7 @@ pm_antibiotic_growth_promoters = {
 # (test_ranch_plantation_methods.py). Intensive Wool Gathering (Wool
 # Production) and Antibiotic Growth Promoters (Feed Additives) unlock on each.
 pm_industrial_feedlots = {
-	texture = "gfx/interface/icons/production_method_icons/simple_ranching.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_industrial_feedlots.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -15054,7 +15054,7 @@ pm_industrial_feedlots = {
 }
 
 pm_recombinant_growth_hormones = {
-	texture = "gfx/interface/icons/production_method_icons/pm_pharma_biologics.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_recombinant_growth_hormones.dds"
 
 	unlocking_technologies = {
 		biotechnology
@@ -15096,7 +15096,7 @@ pm_recombinant_growth_hormones = {
 }
 
 pm_gene_edited_livestock = {
-	texture = "gfx/interface/icons/production_method_icons/pm_designed_crops.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_gene_edited_livestock.dds"
 
 	unlocking_technologies = {
 		genetic_engineering
@@ -15154,7 +15154,7 @@ INJECT:pm_intensive_grazing_ranch = {
 # 1,000 takes a base's 3,500 laborers to zero; its 500 farmers are every base's
 # floor.
 pm_mechanized_feeding_lines = {
-	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_mechanized_feeding_lines.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -15185,7 +15185,7 @@ pm_mechanized_feeding_lines = {
 }
 
 pm_robotic_barns = {
-	texture = "gfx/interface/icons/production_method_icons/pm_robotic_food_processing.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_robotic_barns.dds"
 
 	unlocking_technologies = {
 		internet_of_things
