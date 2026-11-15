@@ -33,7 +33,7 @@
 
 je_world_climate = {
 	icon = "gfx/interface/icons/event_icons/je_global_warming.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 	context = none
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);

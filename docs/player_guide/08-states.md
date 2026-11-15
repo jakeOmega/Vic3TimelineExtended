@@ -338,11 +338,11 @@ Every merge is in the [Culture merge list](20-appendix-reference-lists.md#cultur
 
 ### Starting a culture merge
 
-Each merge has a journal entry under Domestic Affairs, such as Cultural Merge:
-German. It appears once one of the merge's core cultures is a primary culture of
-yours and you have the technology for its tier. Until the merge can start, the
-entry lists its conditions and checks off each one that holds; then a button,
-Begin the German Merge, starts it, and its tooltip lists anything still
+Each merge has a journal entry under Timeline Extended Systems, such as Cultural
+Merge: German. It appears once one of the merge's core cultures is a primary
+culture of yours and you have the technology for its tier. Until the merge can
+start, the entry lists its conditions and checks off each one that holds; then a
+button, Begin the German Merge, starts it, and its tooltip lists anything still
 missing. The AI starts a merge as soon as it qualifies. Only one country runs
 each merge, and once another country has started it, your entry ends.
 

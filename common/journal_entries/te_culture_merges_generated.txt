@@ -8,7 +8,7 @@
 # ---- german (north_german, south_german) ----
 je_te_cm_german = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -279,7 +279,7 @@ je_te_cm_german = {
 # ---- italian (north_italian, south_italian) ----
 je_te_cm_italian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -558,7 +558,7 @@ je_te_cm_italian = {
 # ---- scandinavian (swedish, danish, norwegian) ----
 je_te_cm_scandinavian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -873,7 +873,7 @@ je_te_cm_scandinavian = {
 # ---- east_slavic (russian, ukrainian, byelorussian) ----
 je_te_cm_east_slavic = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -1202,7 +1202,7 @@ je_te_cm_east_slavic = {
 # ---- yugoslav (serb, croat, bosniak) ----
 je_te_cm_yugoslav = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -1525,7 +1525,7 @@ je_te_cm_yugoslav = {
 # ---- czechoslovak (czech, slovak) ----
 je_te_cm_czechoslovak = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -1804,7 +1804,7 @@ je_te_cm_czechoslovak = {
 # ---- hungarian (hungarian, szekely) ----
 je_te_cm_hungarian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -2058,7 +2058,7 @@ je_te_cm_hungarian = {
 # ---- dutch (dutch, flemish) ----
 je_te_cm_dutch = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -2312,7 +2312,7 @@ je_te_cm_dutch = {
 # ---- finnish (finnish, karelian) ----
 je_te_cm_finnish = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -2566,7 +2566,7 @@ je_te_cm_finnish = {
 # ---- french (french, occitan) ----
 je_te_cm_french = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -2845,7 +2845,7 @@ je_te_cm_french = {
 # ---- british (british, scottish) ----
 je_te_cm_british = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -3112,7 +3112,7 @@ je_te_cm_british = {
 # ---- american (yankee, dixie) ----
 je_te_cm_american = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -3412,7 +3412,7 @@ je_te_cm_american = {
 # ---- anglophone (british, yankee/cm_american) ----
 je_te_cm_anglophone = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -3839,7 +3839,7 @@ je_te_cm_anglophone = {
 # ---- brazilian (brazilian, nordestino, paulista, amazonic, sulista) ----
 je_te_cm_brazilian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -4232,7 +4232,7 @@ je_te_cm_brazilian = {
 # ---- platine (platinean, argentine, uruguayan, paraguayan) ----
 je_te_cm_platine = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -4604,7 +4604,7 @@ je_te_cm_platine = {
 # ---- andean (north_andean, south_andean, peruvian, bolivian) ----
 je_te_cm_andean = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -4963,7 +4963,7 @@ je_te_cm_andean = {
 # ---- gran_colombian (colombian, venezuelan, ecuadorian) ----
 je_te_cm_gran_colombian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -5278,7 +5278,7 @@ je_te_cm_gran_colombian = {
 # ---- chinese (han, yue, min, hakka) ----
 je_te_cm_chinese = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -5637,7 +5637,7 @@ je_te_cm_chinese = {
 # ---- japanese (japanese, ryukyuan) ----
 je_te_cm_japanese = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -5899,7 +5899,7 @@ je_te_cm_japanese = {
 # ---- arab (maghrebi, misri, mashriqi, bedouin, yemenite) ----
 je_te_cm_arab = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -6311,7 +6311,7 @@ je_te_cm_arab = {
 # ---- persian (persian, luri) ----
 je_te_cm_persian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -6565,7 +6565,7 @@ je_te_cm_persian = {
 # ---- oghuz_turkic (turkish, azerbaijani) ----
 je_te_cm_oghuz_turkic = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -6836,7 +6836,7 @@ je_te_cm_oghuz_turkic = {
 # ---- hindustani (hindustani, avadhi, bundeli, chhattisgarhi, bageli) ----
 je_te_cm_hindustani = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -7239,7 +7239,7 @@ je_te_cm_hindustani = {
 # ---- dravidian (tamil, kannada, malayalam) ----
 je_te_cm_dravidian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -7554,7 +7554,7 @@ je_te_cm_dravidian = {
 # ---- indonesian (javan, malay, sumatran, bornean) ----
 je_te_cm_indonesian = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -7921,7 +7921,7 @@ je_te_cm_indonesian = {
 # ---- filipino (filipino, visayan, tagalog, ilocano) ----
 je_te_cm_filipino = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -8288,7 +8288,7 @@ je_te_cm_filipino = {
 # ---- nguni (nguni, zulu, xhosa) ----
 je_te_cm_nguni = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -8595,7 +8595,7 @@ je_te_cm_nguni = {
 # ---- latin (french, cm_italian, spanish, portuguese) ----
 je_te_cm_latin = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -9074,7 +9074,7 @@ je_te_cm_latin = {
 # ---- pan_slavic (cm_east_slavic, cm_czechoslovak, cm_yugoslav) ----
 je_te_cm_pan_slavic = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -9489,7 +9489,7 @@ je_te_cm_pan_slavic = {
 # ---- pan_turkic (cm_oghuz_turkic, uzbek, kazak, tatar, kirgiz) ----
 je_te_cm_pan_turkic = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -10050,7 +10050,7 @@ je_te_cm_pan_turkic = {
 # ---- pan_malay (cm_indonesian, filipino) ----
 je_te_cm_pan_malay = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {
@@ -10385,7 +10385,7 @@ je_te_cm_pan_malay = {
 # ---- east_african (swahili, nyamwezi, sukuma) ----
 je_te_cm_east_african = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this; always = yes is vanilla's own default.
 	activation_description = {

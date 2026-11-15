@@ -37,7 +37,7 @@
 # ===========================================
 je_space_race_suborbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -321,7 +321,7 @@ je_space_race_suborbital = {
 # ===========================================
 je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -627,7 +627,7 @@ je_space_race_orbital = {
 # ===========================================
 je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -946,7 +946,7 @@ je_space_race_moon_landing = {
 # ===========================================
 je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -1266,7 +1266,7 @@ je_space_race_probe = {
 # ===========================================
 je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -1574,7 +1574,7 @@ je_space_race_mars_landing = {
 # ===========================================
 je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -1840,7 +1840,7 @@ je_space_race_interstellar_probe = {
 # ===========================================
 je_space_race_interstellar_results = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
@@ -1974,7 +1974,7 @@ je_space_race_interstellar_results = {
 # ===========================================
 je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.
