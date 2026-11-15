@@ -847,6 +847,15 @@ REPLACE_OR_CREATE:pmg_synthetic_fruit = {
 		pm_synthetic_fruit
 	}
 }
+# The Cultured Produce Facility's secondary product, as the farms' secondary
+# group: tobacco leaf in place of some fruit (Workshop request, 2026-11-15).
+REPLACE_OR_CREATE:pmg_secondary_building_synthetics_plant_fruit = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_no_secondary
+		pm_cultured_tobacco_leaf
+	}
+}
 REPLACE_OR_CREATE:pmg_synthetic_drinks = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {

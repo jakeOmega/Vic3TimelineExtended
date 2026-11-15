@@ -54,8 +54,13 @@ NEW_METHODS = {
     "pm_autonomous_harvesters_plantation": ("autonomous_vehicles", 11),
     "pm_autonomous_harvesters_building_rubber_plantation": ("autonomous_vehicles", 11),
 }
-# Methods with no technology of their own: a group's ungated first method.
-UNGATED_METHODS = ("pm_hand_harvesting",)
+# Methods with no technology of their own: a group's ungated first method, and the Cultured
+# Produce Facility's secondary, which its building's Lab-Grown Food gates.
+UNGATED_METHODS = ("pm_hand_harvesting", "pm_cultured_tobacco_leaf")
+
+CULTURED_PRODUCE = "building_synthetics_plant_fruit"
+CULTURED_SECONDARY = "pmg_secondary_building_synthetics_plant_fruit"
+CULTURED_TOBACCO = "pm_cultured_tobacco_leaf"
 NEW_RANCH_BASES = ("pm_industrial_feedlots", "pm_recombinant_growth_hormones", "pm_gene_edited_livestock")
 # The ranch's base group from vanilla's top method up, and Herd Management from Electric Fences up.
 RANCH_MEAT_LADDER = ("pm_mechanized_slaughtering",) + NEW_RANCH_BASES
@@ -87,7 +92,7 @@ LATE_BASE_PREFIXES = ("factory_farm_building_", "GMO_plantation_building_")
 CAPTURE_EXCLUDED_GROUPS = tuple(HARVEST_LADDERS)
 
 # Buildings whose every method combination is checked for negative or token staff.
-CHECKED_BUILDINGS = (RANCH,) + PLANTATIONS + (RUBBER,)
+CHECKED_BUILDINGS = (RANCH,) + PLANTATIONS + (RUBBER, CULTURED_PRODUCE)
 MIN_STAFF = 100  # test_flat_crews.py's rule: a level keeps 0 or at least this many
 
 
@@ -343,6 +348,34 @@ class PlantationTest(unittest.TestCase):
                 self.assertNotIn(pm_carbon_capture.PREFIX + group.removeprefix("pmg_"), data.groups_by_name)
         self.assertIn("pmg_carbon_capture_refinement_building_sugar_plantation",
                       _list(data.buildings["building_sugar_plantation"].get("production_method_groups")))
+
+
+class TobaccoTest(unittest.TestCase):
+    def test_a_late_building_makes_tobacco(self):
+        """Tobacco was the one plantation good no factory made. The Cultured Produce
+        Facility's secondary group now offers it, after an ungated default."""
+        data = _data()
+        groups = data.groups(CULTURED_PRODUCE)
+        self.assertEqual(groups[:2], ["pmg_synthetic_fruit", CULTURED_SECONDARY])
+        methods = data.methods(CULTURED_SECONDARY)
+        self.assertEqual(methods, ["pm_no_secondary", CULTURED_TOBACCO])
+        self.assertFalse(data.modifiers("pm_no_secondary", "workforce_scaled"))
+        self.assertGreater(data.goods(CULTURED_TOBACCO, "output").get("tobacco", 0), 0)
+        self.assertEqual(_body(data.buildings[CULTURED_PRODUCE].get("unlocking_technologies")), ["lab-grown_food"])
+
+    def test_the_swap_is_worth_a_little_more_and_leaves_fruit(self):
+        """A pure output swap like the farms' secondary crops: worth a little more at base
+        prices than the fruit it replaces, and the facility still makes fruit."""
+        data = _data()
+        cost, value = data.value([CULTURED_TOBACCO])
+        self.assertEqual(cost, 0)
+        _, fruit_value = data.value(["pm_synthetic_fruit"])
+        self.assertGreater(value, 0)
+        self.assertLess(value, 0.05 * fruit_value)
+        fruit = data.goods("pm_synthetic_fruit", "output")["fruit"] + data.goods(CULTURED_TOBACCO, "output")["fruit"]
+        self.assertGreater(fruit, 0)
+        self.assertFalse(data.staff(CULTURED_TOBACCO))
+        self.assertFalse(data.techs_of(CULTURED_TOBACCO))
 
 
 class AutomationTest(unittest.TestCase):

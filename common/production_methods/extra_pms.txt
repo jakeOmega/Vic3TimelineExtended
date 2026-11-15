@@ -8364,6 +8364,32 @@ pm_synthetic_fruit = {
 	}
 }
 
+# The Cultured Produce Facility's secondary (pmg_secondary_building_synthetics_plant_fruit,
+# beside vanilla's Maintain Single Crop): half its fruit cultures grow tobacco leaf, worth
+# a little more at base prices, as the farms' secondary crops are. Tobacco was the one
+# plantation good no late building made (Workshop request, 2026-11-15;
+# docs/systems/mod_systems/production_methods.md § "Livestock ranches and plantations").
+# No technology of its own: the facility needs Lab-Grown Food.
+pm_cultured_tobacco_leaf = {
+	texture = "gfx/interface/icons/production_method_icons/hand_rolled.dds"
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			# Output goods
+			goods_output_fruit_add = -150                        # Price:   30, Total cost: -4500.0 (-1500.00%)
+			goods_output_tobacco_add = 120                       # Price:   40, Total cost:  4800.0 (1600.00%)
+			# Total input cost: 0
+			# Total output cost: 300.0
+			# Profit: 300.0
+			# Profit margin: 0.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+}
+
 pm_synthetic_drinks = {
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
 
