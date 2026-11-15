@@ -110,6 +110,8 @@ class Fixture:
         self.log("debug.1.log", "".join([
             "[10:30:00][pdx_assert.cpp:637]: Assertion failed: Trying to reposition a dead formation\n",
             "[10:30:01][jomini_effect_impl.cpp:459]: common/scripted_effects/te_x.txt:5: TE_SELF_CHECK START te_late\n",
+            "[10:30:02][jomini_effect_impl.cpp:459]: common/scripted_effects/te_x.txt:7: TE_SELF_CHECK START te_unsure\n",
+            "[10:30:02][jomini_effect_impl.cpp:459]: common/scripted_effects/te_x.txt:8: TE_SELF_CHECK NO_VERDICT te_unsure\n",
         ]), "10:31:00")
         self.log("debug.log", "".join([
             "[12:00:01][dlc.cpp:748]: Mod Vic3TimelineExtended () version 1.15.0 successfully matched game version 1.15.0.\n",
@@ -276,6 +278,7 @@ class ReportTests(unittest.TestCase):
         self.assertIn("te_seize_strait: OK", checks)
         self.assertIn("launch #2, 12:05:00, game date 1870.1.1; listed in docs/testing/strait-playtest.md", checks)
         self.assertIn("te_late: START  <-- START with no verdict", checks)
+        self.assertIn("te_unsure: NO_VERDICT, START\n", checks)  # NO_VERDICT is a verdict: no dead-path flag
         self.assertIn("in no play-test list", checks)
         self.assertIn("LOST TE_SELF_CHECK INFO te_lost", checks)
         self.assertIn("other trace lines: TE_CIVIL_WAR 1", checks)
