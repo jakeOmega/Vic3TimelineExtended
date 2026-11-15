@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Eleventh pass, 2026-11-11 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Twelfth pass, 2026-11-14 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -16,7 +16,10 @@ lengthens the repaint's two waits. The ninth (2026-11-08, the owner's ask) adds 
 stripes for regional headquarters), Armed Forces and War Dead, then Ownership, Population Growth, Family Planning,
 Health Care and Fighting-Age Men. The tenth (2026-11-11, the owner's ask) adds five, Capitalists, Aristocrats, Clergymen,
 Academics and Trade Volume, and puts the picks in seven collapsible categories (§ Buttons). The eleventh (the same
-day, the owner's ask) turns Trade Volume into Trade Capacity, each state's own, and adds Investment.
+day, the owner's ask) turns Trade Volume into Trade Capacity, each state's own, and adds Investment. The twelfth
+(2026-11-14, the owner's ask: "a section below the mode selection where you can change some aspects of the plotting")
+gives the Map Room two options, Area and Outliers (§ The Map Room's Options); the scale and the colors, the other two
+the owner named, are not built.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -63,13 +66,15 @@ stands (below). Colors are named in `common/named_colors/te_journal_map_colors.t
 average has gone up, they want to see the regional differences"). Until then each curve was fixed and historical (life
 expectancy 25–80), so a color meant the same in 1850 and 1950, and a 1950 world sat in one corner of the palette. Now
 every map but two runs its colors from the world's low to its high: the fifth lowest and fifth highest of the states it
-paints (`TRIM` = 4 left out at each end, so one outlier doesn't flatten the rest; the extremes where fewer have a
-figure), which `te_jmap_range_<map>` measures with `ordered_state` into `te_jmap_rng_<map>_lo` / `_hi`
-(`common/scripted_effects/te_journal_map_ranges_generated.txt`). A pick measures its map before the page reopens
-(`te_jmap_set_selector` calls `te_jmap_refresh_range`), and the global monthly pulse measures the pick's map again
-and the two the systems' entries draw (Emissions, Grandeur: `te_jmap_refresh_entry_ranges`;
-`te_journal_map_on_actions.txt`), so an observer's game measures too. Before the first measure a map paints on the
-old fixed curve's ends. Each curve keeps its shape on the new span, its knots now fractions of it (turmoil still half
+paints (`TRIM` = 4 left out at each end, so one outlier doesn't flatten the rest), which `te_jmap_range_<map>`
+measures with `ordered_state` into `te_jmap_rng_<map>_lo` / `_hi`
+(`common/scripted_effects/te_journal_map_ranges_generated.txt`). Since the twelfth pass the measure first counts the
+states it will order and takes the trim from the count, and the Map Room's own ranges follow its options (§ The Map
+Room's Options): under the defaults a range is what it was wherever ten states or more have a figure. A pick measures
+its map before the page reopens (`te_jmap_set_selector` calls `te_jmap_refresh_range`), and the global monthly pulse
+measures the pick's map again and the two the systems' entries draw (Emissions, Grandeur:
+`te_jmap_refresh_entry_ranges`; `te_journal_map_on_actions.txt`), so an observer's game measures too. Before the
+first measure a map paints on the old fixed curve's ends. Each curve keeps its shape on the new span, its knots now fractions of it (turmoil still half
 its color in the first fifth), and no span is narrower than the map's `min_span` (turmoil 10 points, life expectancy 10
 years), so a world where every state stands alike doesn't paint noise as contrast. A map whose midpoint means
 something (replacement fertility 2.1, no natural change, no net migration, even sexes, no comfort penalty, Dynastic
@@ -253,6 +258,10 @@ entry, in no country's journal.
   second's close and a tenth's reopen (sixth session); the fifth pass's twentieth each sometimes left the page closed
   (the owner, 2026-11-07), so the close now waits a tenth and the reopen a fifth (check 1).
 - **Nothing to inherit.** `transferable = no`, `can_revolution_inherit = no`; the pick is global.
+- **Two options** (2026-11-14), below the picks on the page and global as the pick is: the area the maps are drawn
+  and measured over, and the outliers a fitted map's range leaves out. A state outside the area is greyed by
+  `map_color`'s first branch, before any selector, and the Map Room reads its own ranges for the two fitted maps a
+  system's entry also draws. § The Map Room's Options has both.
 
 ### Why not a country entry added by a button
 
@@ -263,6 +272,116 @@ holds an inactive copy of a country entry with its own activation triggers from 
 made the copy shown (the journal's Potential section) and the engine activated it at its own check, up to two weeks
 later. An entry with neither trigger has no copy until added, so `add_journal_entry` would work on it, but then nothing
 takes it out again short of an outcome, which leaves it in the concluded tab. The contextless entry needs neither.
+
+## The Map Room's Options
+
+Twelfth pass (2026-11-14). The owner: "a section below the mode selection where you can change some aspects of the
+plotting - for example, if it is on a linear or (different kinds of) nonlinear scale, the color, maybe excluding
+outliers, maybe limiting where we draw it (e.g. if Europe in 1900 is much richer than Africa, but you want to see the
+variation within Europe, you could limit it to Europe - or maybe to your country, your power bloc, etc?)". Two of the
+four are built, the two that live in a range's measurement: **Area**, where the maps are drawn and measured, and
+**Outliers**, how many states each end of a fitted map's range leaves out. The scale and the colors are not: a paint
+evaluates each map's factor and can pass it no argument, so each would multiply every map's tree unless the paint
+were rebuilt.
+
+The options are global variables, as the pick is and for the same reason (`te_jmap_opt_area`, `te_jmap_opt_cont`,
+`te_jmap_opt_trim`, read through the root-free `te_jmap_area`, `te_jmap_continent` and `te_jmap_trim`,
+`te_journal_map_values.txt`): every player in a multiplayer game shares them, a save keeps them, and unset is the
+default, the world and four states left out at each end, which is what the Map Room showed before it had options.
+
+- **Area.** 0 the world, 1 a continent, 2 the viewer's market, 3 its power bloc, 4 its country. A state outside the
+  area is painted slate (`te_jmap_outside`, darker and bluer than the "no data" grey), hovers as "Outside the area the
+  maps are limited to", carries no stripes and no second hover line, and is left out of the range, so the colors run
+  over the states inside: limit GDP per Capita to Europe and Europe's poorest state takes the palette's low end. The
+  area greys every map, the categorical ones too; only a fitted map has a range for it to narrow.
+- **One stored mark, read first.** A paint may run once per state per frame, so it asks one thing: whether the state
+  carries `te_jmap_out`. That is `map_color`'s and `map_tooltip`'s first branch, before any selector (the stripes and
+  the hover's second line ask `te_jmap_in_area`, the same test, in each of their branches, since a first branch there
+  would have to name a color to stripe with). Under the world no state carries the mark, so the cost of the options
+  to a default Map Room is one `has_variable` per state, and a save from before them paints as it did.
+  `test_journal_map_modes.py` (`OptionsTest`) fails on a paint that names a continent, a market, a power bloc or an
+  option.
+- **What the area is, the marking effect asks.** `te_jmap_mark_area` (`te_journal_map_effects.txt`) walks the world's
+  states once and marks those `te_jmap_state_in_area` (`te_journal_map_triggers.txt`) fails: a continent's strategic
+  regions, the state's market against the viewer's, its owner against the viewer and the viewer's power bloc
+  (`is_in_same_power_bloc`, which takes a member's subjects with it), or its owner against the viewer. It runs at
+  each option click and each pick, after the viewer is noted and before the range is measured, and each month from
+  the global pulse before the month's ranges. So **a later change shows within a month, and at once at the next
+  pick**: a state that changes hands, a market that splits, a country that joins or leaves the bloc. A state made
+  since the last marking has no mark and counts as inside until then. Under the world nothing is walked: the global
+  `te_jmap_marks` records that some state may still carry a mark to clear.
+- **An area that loses its anchor goes back to the world.** Where `te_jmap_area_holds` fails at a marking (the viewer
+  left its power bloc, or holds no state), the option is set back to the world and `TE_JMAP area reset` is logged: a
+  map greyed everywhere reads as broken. The Power Bloc button is greyed for a country in no bloc, with that as its
+  tooltip.
+- **The continents** are six lists of strategic regions (`te_jmap_in_continent_<name>`, by `region = sr:…`), every
+  land region in exactly one; `AreaTest` holds every state region of `map_data/state_regions` to one continent,
+  against `vanilla_parsed/` with the mod's own strategic regions over it. Vanilla's geographic regions don't divide
+  the world (its `north_america` and `south_america` both leave out `region_central_america`, and its `asia` holds
+  Oceania), so the lists are the mod's, and where a border falls is vanilla's regions' doing: the Middle East, the
+  Caucasus south of the main ridge (`region_greater_persia`), Siberia and New Guinea (`region_indonesia`) are in
+  Asia; Russia west of the Urals, Iceland and Greenland (`region_northern_europe`) in Europe; Egypt and Sinai in
+  Africa; Mexico, Central America and the Caribbean (`region_central_america`) in North America; Hawaii in Oceania.
+  Each continent button's tooltip lists its regions by vanilla's names. The first pick of Continent takes the
+  player's capital's (`te_jmap_default_continent`); later picks keep the last one chosen.
+- **The viewer.** The market, the bloc and the country are `global_var:te_jmap_viewer`'s, the "your" maps' viewer
+  (§ The Systems' Maps): the player who last clicked a pick, an option or a map button, and each month a player's
+  country. In a single-player game that is the player, through a change of country too. In multiplayer the area is
+  one for everybody, as the pick is, and follows the viewer from player to player.
+- **Outliers.** 0, the default: four states at each end (`TRIM`), and under a limited area at most a tenth of the
+  area's states with a figure (`AREA_TRIM_PART`), so a country of fifteen states keeps thirteen in range where four
+  at each end would leave seven. 1: none, the lowest state to the highest. 2: a twentieth of the states with a figure
+  at each end (`TRIM_SHARE`), rounded down. The states left out take the colors' limits, as before. The Outliers
+  buttons are greyed, with the reason, while the pick has no range (`te_jmap_pick_fitted`, generated: the categorical
+  maps and the fixed scales); the setting is kept for the next pick that has one.
+- **A measure counts first.** `te_jmap_range_<map>` counts the states it will order (`te_jmap_n`: the map's `where`,
+  and for the Map Room's ranges `te_jmap_in_area`), works out the trim from the count and the option
+  (`te_jmap_trim_count` into `te_jmap_k`), and has `te_jmap_measure_at` take the state at that place from each end.
+  `position` takes no script value (`effects.log`: `position = int`), so `te_jmap_measure_at` is a ladder of literal
+  positions, 0 to `TRIM_MAX` (80: 5% of 1,600 states), each a call of `te_jmap_measure_<map> = { K = n }`. The trim
+  never passes the middle (`te_jmap_trim_most`: two states are always left to span), and where no state has a figure
+  nothing is measured and the fixed curve's ends serve. The count matters twice, both worked out from the script and
+  neither seen in game. With five to eight figures the eighth pass's two ends crossed (the fifth highest of eight is
+  below the fifth lowest), so the stored low was above the stored high; the high then floored at the low plus the
+  map's narrowest span, and the range ran for that one span up from the fifth lowest state: every state at five
+  figures, and most at eight, took the low color. With fewer than five, "the extremes where fewer have a figure"
+  rested on a fallback that runs only if a `position` past the end takes nothing, where the lesson says it takes the
+  last state and logs (`scripting_best_practices.md`, "`position = N` + `check_range_bounds = no` Clamps
+  Out-of-Range"; seen on `ordered_scope_state`, unverified on `ordered_state`). A world map has hundreds of figures,
+  so only the sparse ones were exposed (Grandeur's and Company HQs' in a game's first decades), and nobody reported
+  it; under Country or Bloc a short list is the usual case. `test_journal_map_scales.py` (`RangeRunTest`) runs the
+  generated effects over made-up states against a plain sort, taking the last state for a position past the end as
+  the engine does.
+- **The Map Room only.** Seven maps are also drawn by their system's own entry, and two of those are fitted:
+  Emissions and Grandeur. An entry's paint never reads the mark, so its page greys nothing. Its range is kept apart
+  too: `te_jmap_range_gw` and `te_jmap_range_gm` stay the entries', the whole world on the default trim whatever the
+  options, each month; the Map Room reads a twin of each (`te_jmap_range_gw_room`, `te_jmap_gw_room_factor`, the
+  generator's `_room_twin`), measured under the options, since a script value can't tell which page asks. A twin's
+  range is the entry's until its own first measure, so a save from before paints the same. The parity test compares
+  the two pages' ladders with the twin's name folded back. The other five entry maps are categorical. The options
+  don't reach an entry's range; the count does, since all the ranges are written by one generator: an entry's range
+  with under ten figures (a world with few monuments) no longer takes its ends past the middle, so that page and the
+  Map Room's still agree under the default options.
+- **A change repaints at once.** Each option button (`te_jmap_option_button`) runs its scripted GUI and then fires
+  `te_jmap_repaint`, the picks' own state on `te_jmap_repainter`, unchanged: the option's effect has marked the area
+  and measured the pick's range before the page reopens, so a paused map repaints on them.
+- **What the page says.** The Map Options header names the options in force at its right, closed or open
+  (`te_jmap_options_now`); while any is off its default a line under the page's heading says so too
+  (`te_jmap_options_in_use`, on `te_jmap_options_set`), since a map limited to one continent looks broken to someone
+  who forgot they set it. The open section ends on what the map on the page was measured over: the area by name, the
+  states with a figure and the states each end left out (`te_jmap_shown_states`, `te_jmap_shown_cut`, a copy the Map
+  Room's ranges keep, since the entries' ranges count into `te_jmap_n` and `te_jmap_k` too). Each fitted pick's
+  tooltip names the area in place of "the world" and ends on what the range leaves out (`$te_jmap_measured_area$`,
+  `$te_jmap_measured_trim$`); the figures in it are the map's last measure, which for a map that is not the pick may
+  be older than the options. The words come from four custom localizations
+  (`common/customizable_localization/te_journal_map_custom_loc.txt`), a market's, a bloc's and a country's names
+  from the viewer's scopes.
+- **Unverified** (play-test check 29): everything here. Script can tell success from failure in two places, each a
+  once-a-game line from the global monthly pulse: `TE_SELF_CHECK OK|BROKEN area_mark` (`te_jmap_area_selfcheck`, the
+  first month an area is set: BROKEN when the marking put every state on one side, or the viewer's own capital
+  outside its market, bloc or country) and `TE_SELF_CHECK OK|BROKEN range_count` (`te_jmap_range_selfcheck`, the
+  first month under the default options: GDP per capita's range through the count and the ladder against
+  `position = 4` taken outright). The check names each fallback.
 
 ## The See-Through Page
 
@@ -363,6 +482,18 @@ Every map button clears the see-through flag before it opens a page.
   rows of three, Grandeur, Colonies and Power Grids last); Census (its maps three to a row, Population Growth, the walk's,
   beside Net Migration, and a last row of Health Care and Family Planning). `test_journal_map_modes.py`'s
   `CategoriesTest` holds every pick to one category.
+- `te_jmap_options`: the Map Room's options (2026-11-14, § The Map Room's Options), one more collapsible section in
+  the picks' form, mounted below `te_jmap_pick_row` on the page (`te_map_room_widget.gui`) and closed at first
+  (`te_jmap_options_open`), with the options in force at the header's right. Open: an Area row of five buttons
+  (World, Continent, Market, Power Bloc, Country, each as wide as its label, 450 in all inside the header's 470);
+  under Continent, two rows of three continents; an Outliers row (Keep All, Trim 4 Each End, Trim 5%); and a line
+  saying what the map on the page was measured over. Each is a `te_jmap_option_button` on a scripted GUI
+  (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`), then the picks' repaint. Unlike a
+  pick, an option draws pressed from its script value (`down` on `te_jmap_area`, `te_jmap_continent`,
+  `te_jmap_trim`), not from `is_valid`, which is kept for what greys it (`enabled`): Power Bloc with no bloc, and
+  Outliers on a map with no range, each with its reason in the tooltip (`SelectLocalization` on the same
+  `IsValid`). A click on the option already in force measures and repaints again. `OptionsTest` holds each button to
+  its scripted GUI, its number and the repaint.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
@@ -371,16 +502,21 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
 
 1. Add `map_color` (and `map_color_second`, `map_tooltip`) to the system's entry, branching on `owner ?= { … }` for a
    per-country map or on the state's own variables for a per-state one. Name the colors in
-   `te_journal_map_colors.txt`; give each `lerp` its factor as a row in `gen_journal_map_scales.py`'s `SCALES` and
+   `te_journal_map_colors.txt`; give each `lerp` its factor as a row in `gen_journal_map_scales.py`'s `TABLE` and
    re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks). Fit it
    to the world unless its numbers mean something fixed (a row with `sel`, `where` and a `rel*` shape: the range
-   effect, the dispatcher's branch and the trees come with it), give its pick's tooltip the range
-   (`te_jmap_<map>_lo` / `_hi`), and mark it `entry` if a system's own entry draws it.
+   effect, the dispatcher's branch and the trees come with it, and so do the Map Room's options: the range keeps to
+   its area and takes its trim). Give its pick's tooltip the range (`te_jmap_<map>_lo` / `_hi`), the area in place of
+   "the world" (`$te_jmap_measured_area$`) and, last, what the range leaves out (`$te_jmap_measured_trim$`). Mark it
+   `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
+   and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
    pick scripted GUI and its `te_jmap_pick_button` in one of `te_jmap_pick_row`'s categories, and loc for both. A map that reads a stored
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
    figure behind a long `state_region` chain is stored by the refresh that already computes it, not read live
-   (tourism's and Local Climate's are the pattern).
+   (tourism's and Local Climate's are the pattern). The Area option needs nothing from a new map: `map_color`'s and
+   `map_tooltip`'s first branches grey a state outside the area before any selector is read. A new stripe or second
+   hover line asks `te_jmap_in_area = yes` after its selector.
 3. A map on both an entry and the Map Room asks shared triggers (`te_journal_map_triggers.txt`) in the same order in
    both, and joins `SYSTEM_MAPS` in `test_journal_map_modes.py`, whose parity test compares them.
 4. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,

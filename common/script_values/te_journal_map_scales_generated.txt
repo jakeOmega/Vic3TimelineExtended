@@ -1156,6 +1156,72 @@ te_jmap_gw_factor = {
 	max = 1
 }
 
+# Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): half the color by a fifth of the world's range; a thousand-odd states average 0.1%.
+# The Map Room's own copy of te_jmap_gw_*: its range follows the Map Room's options, the entry's doesn't.
+# Fitted to the world; before its first measure, the entry's range.
+te_jmap_gw_room_input = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		value = te_jmap_gw_share
+	}
+}
+te_jmap_gw_room_input_neg = {
+	value = te_jmap_gw_room_input
+	multiply = -1
+}
+te_jmap_gw_room_lo = {
+	value = te_jmap_gw_lo
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gw_room_lo }
+		value = global_var:te_jmap_rng_gw_room_lo
+	}
+}
+te_jmap_gw_room_hi = {
+	value = te_jmap_gw_hi
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gw_room_hi }
+		value = global_var:te_jmap_rng_gw_room_hi
+	}
+	min = te_jmap_gw_room_hi_floor
+}
+te_jmap_gw_room_hi_floor = {
+	value = te_jmap_gw_room_lo
+	add = 0.005
+}
+te_jmap_gw_room_span = {
+	value = te_jmap_gw_room_hi
+	subtract = te_jmap_gw_room_lo
+}
+te_jmap_gw_room_k1 = {
+	value = te_jmap_gw_room_span
+	multiply = 0.2
+	add = te_jmap_gw_room_lo
+}
+te_jmap_gw_room_d0 = {
+	value = te_jmap_gw_room_span
+	multiply = 0.4
+}
+te_jmap_gw_room_d1 = {
+	value = te_jmap_gw_room_span
+	multiply = 1.6
+}
+te_jmap_gw_room_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		if = {
+			limit = { te_jmap_gw_share < te_jmap_gw_room_k1 }
+			value = te_jmap_gw_share subtract = te_jmap_gw_room_lo divide = te_jmap_gw_room_d0
+		}
+		else = {
+			value = te_jmap_gw_share subtract = te_jmap_gw_room_k1 divide = te_jmap_gw_room_d1 add = 0.5
+		}
+	}
+	min = 0
+	max = 1
+}
+
 # Covert Warfare: the viewer's network in the state's owner, 0-100 (intel tiers at 50 and 75). Fixed: the tiers are what the map shows.
 # Fixed. Knots: 0 -> 0, 100 -> 1.
 te_jmap_net_factor = {
@@ -1216,6 +1282,64 @@ te_jmap_gm_factor = {
 	}
 	else = {
 		value = gm_state_grandeur subtract = te_jmap_gm_k1 divide = te_jmap_gm_d1 add = 0.66667
+	}
+	min = 0
+	max = 1
+}
+
+# Grand Monuments: the state's grandeur, two-thirds of the color by a third of the world's range.
+# The Map Room's own copy of te_jmap_gm_*: its range follows the Map Room's options, the entry's doesn't.
+# Fitted to the world; before its first measure, the entry's range.
+te_jmap_gm_room_input = {
+	value = gm_state_grandeur
+}
+te_jmap_gm_room_input_neg = {
+	value = te_jmap_gm_room_input
+	multiply = -1
+}
+te_jmap_gm_room_lo = {
+	value = te_jmap_gm_lo
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gm_room_lo }
+		value = global_var:te_jmap_rng_gm_room_lo
+	}
+}
+te_jmap_gm_room_hi = {
+	value = te_jmap_gm_hi
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gm_room_hi }
+		value = global_var:te_jmap_rng_gm_room_hi
+	}
+	min = te_jmap_gm_room_hi_floor
+}
+te_jmap_gm_room_hi_floor = {
+	value = te_jmap_gm_room_lo
+	add = 25
+}
+te_jmap_gm_room_span = {
+	value = te_jmap_gm_room_hi
+	subtract = te_jmap_gm_room_lo
+}
+te_jmap_gm_room_k1 = {
+	value = te_jmap_gm_room_span
+	multiply = 0.33333
+	add = te_jmap_gm_room_lo
+}
+te_jmap_gm_room_d0 = {
+	value = te_jmap_gm_room_span
+	multiply = 0.5
+}
+te_jmap_gm_room_d1 = {
+	value = te_jmap_gm_room_span
+	multiply = 2
+}
+te_jmap_gm_room_factor = {
+	if = {
+		limit = { gm_state_grandeur < te_jmap_gm_room_k1 }
+		value = gm_state_grandeur subtract = te_jmap_gm_room_lo divide = te_jmap_gm_room_d0
+	}
+	else = {
+		value = gm_state_grandeur subtract = te_jmap_gm_room_k1 divide = te_jmap_gm_room_d1 add = 0.66667
 	}
 	min = 0
 	max = 1
@@ -3320,4 +3444,124 @@ te_jmap_invest_factor = {
 	divide = te_jmap_invest_log_span
 	min = 0
 	max = 1
+}
+
+# ---- The Map Room's options (the generator's header): what a range counts and leaves out ----
+# The states with a figure the range being measured counted (te_jmap_n, set by te_jmap_range_<map>).
+te_jmap_states = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_n }
+		value = global_var:te_jmap_n
+	}
+}
+# The states each end of it leaves out (te_jmap_k, from te_jmap_trim_count or _entry).
+te_jmap_cut = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_k }
+		value = global_var:te_jmap_k
+	}
+}
+# The most an end can leave out with two states still left to span: a short list is never trimmed past
+# its middle (ordered_state's position past the end takes the last state, it doesn't skip).
+te_jmap_trim_most = {
+	value = te_jmap_states
+	subtract = 2
+	divide = 2
+	floor = yes
+	min = 0
+}
+# The Map Room's trim, by its Outliers option (te_jmap_trim): 4 at each end by default, and under a
+# limited area at most one state in 10; none; or 5% of the states with a figure. Never past
+# te_jmap_trim_most, nor 80, the last literal position te_jmap_measure_at holds.
+te_jmap_trim_count = {
+	value = 4
+	if = {
+		limit = { te_jmap_trim = 1 }
+		value = 0
+	}
+	else_if = {
+		limit = { te_jmap_trim = 2 }
+		value = te_jmap_states
+		multiply = 0.05
+		floor = yes
+	}
+	else_if = {
+		limit = { te_jmap_area > 0 }
+		value = te_jmap_states
+		divide = 10
+		floor = yes
+		max = 4
+	}
+	max = te_jmap_trim_most
+	max = 80
+}
+# A system's own entry: the default trim over the whole world, whatever the Map Room's options.
+te_jmap_trim_count_entry = {
+	value = 4
+	max = te_jmap_trim_most
+}
+# What the pick's map was last measured over, for the Map Room's page (te_jmap_shown_n, te_jmap_shown_k:
+# a copy the Map Room's ranges keep, since the entries' ranges count into te_jmap_n and te_jmap_k too).
+te_jmap_shown_states = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_shown_n }
+		value = global_var:te_jmap_shown_n
+	}
+}
+te_jmap_shown_cut = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_shown_k }
+		value = global_var:te_jmap_shown_k
+	}
+}
+# 1 while the pick is a map fitted to a range, which the Outliers option acts on; 0 on a map of categories
+# or on a fixed scale, which has no range to trim.
+te_jmap_pick_fitted = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_jmap_selector = 1
+				te_jmap_selector = 3
+				te_jmap_selector = 4
+				te_jmap_selector = 5
+				te_jmap_selector = 6
+				te_jmap_selector = 7
+				te_jmap_selector = 8
+				te_jmap_selector = 9
+				te_jmap_selector = 10
+				te_jmap_selector = 12
+				te_jmap_selector = 13
+				te_jmap_selector = 14
+				te_jmap_selector = 15
+				te_jmap_selector = 16
+				te_jmap_selector = 17
+				te_jmap_selector = 18
+				te_jmap_selector = 24
+				te_jmap_selector = 26
+				te_jmap_selector = 27
+				te_jmap_selector = 28
+				te_jmap_selector = 29
+				te_jmap_selector = 30
+				te_jmap_selector = 33
+				te_jmap_selector = 34
+				te_jmap_selector = 35
+				te_jmap_selector = 37
+				te_jmap_selector = 38
+				te_jmap_selector = 39
+				te_jmap_selector = 40
+				te_jmap_selector = 41
+				te_jmap_selector = 42
+				te_jmap_selector = 43
+				te_jmap_selector = 44
+				te_jmap_selector = 45
+				te_jmap_selector = 46
+			}
+		}
+		value = 1
+	}
 }

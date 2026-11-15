@@ -18,11 +18,18 @@ te_jmap_monthly_ranges = {
 		te_jmap_store_hqs = yes
 		# The Investment map's, while it is the pick, and its once-a-game check.
 		te_jmap_monthly_invest = yes
+		# The Map Room's area, before the range that leaves out the states outside it: a state that changed hands,
+		# market or power bloc this month joins or leaves the area here. Nothing is walked under the world.
+		te_jmap_mark_area = yes
 		te_jmap_refresh_range = yes
 		te_jmap_refresh_entry_ranges = yes
 		# Once a game each: whether the store finds the headquarters, and whether their profit read is live.
 		te_jmap_hq_found_selfcheck = yes
 		te_jmap_hq_selfcheck = yes
+		# Once a game each: whether the area's test divides the world, and whether a range measured through the
+		# count and the ladder of positions is the one position = 4 gave.
+		te_jmap_area_selfcheck = yes
+		te_jmap_range_selfcheck = yes
 	}
 }
 

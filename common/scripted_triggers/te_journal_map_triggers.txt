@@ -17,6 +17,180 @@ te_jmap_owner_is_viewer = {
 }
 
 # ---------------------------------------------------------------------------
+# The Map Room's area (2026-11-14): the states its maps are drawn and measured over
+# ---------------------------------------------------------------------------
+# The one test of the area a paint makes: the state carries no te_jmap_out. te_jmap_mark_area
+# (te_journal_map_effects.txt) puts that mark on every state outside the area at each option click, each pick and
+# each month, with the tests below, so a paint never asks about a continent, a market or a power bloc. No state is
+# marked under the world, so a save from before the options, and a state made since the last marking, count as inside.
+# The Map Room's first map_color and map_tooltip branches read the mark itself; this trigger is for the stripes, the
+# hover's second line and the ranges (te_journal_map_ranges_generated.txt), where it sits beside other conditions.
+te_jmap_in_area = {
+	NOT = { has_variable = te_jmap_out }
+}
+
+# The continents, each a list of strategic regions, every land region in exactly one (test_journal_map_modes.py,
+# AreaTest, holds every state region to one continent). They follow vanilla's regions, so: the Middle East, the
+# Caucasus south of the main ridge, Siberia and New Guinea are in Asia; Russia west of the Urals, Iceland and Greenland
+# in Europe; Egypt and Sinai in Africa; Mexico, Central America and the Caribbean in North America; Hawaii in Oceania.
+# Vanilla's own geographic regions don't divide the world (its north_america and south_america both leave out
+# region_central_america, and its asia holds Oceania), so these are the mod's lists.
+te_jmap_in_continent_europe = {
+	OR = {
+		region = sr:region_western_europe
+		region = sr:region_southern_europe
+		region = sr:region_central_europe
+		region = sr:region_northern_europe
+		region = sr:region_eastern_europe
+		region = sr:region_balkans
+		region = sr:region_russia
+	}
+}
+
+te_jmap_in_continent_asia = {
+	OR = {
+		region = sr:region_near_east
+		region = sr:region_arabia
+		region = sr:region_greater_persia
+		region = sr:region_central_asia
+		region = sr:region_himalayas
+		region = sr:region_north_india
+		region = sr:region_south_india
+		region = sr:region_north_china
+		region = sr:region_south_china
+		region = sr:region_northeast_asia
+		region = sr:region_siberia
+		region = sr:region_indochina
+		region = sr:region_indonesia
+	}
+}
+
+te_jmap_in_continent_africa = {
+	OR = {
+		region = sr:region_north_africa
+		region = sr:region_nile_basin
+		region = sr:region_west_africa
+		region = sr:region_equatorial_africa
+		region = sr:region_east_africa
+		region = sr:region_southern_africa
+	}
+}
+
+te_jmap_in_continent_north_america = {
+	OR = {
+		region = sr:region_canada
+		region = sr:region_atlantic_coast
+		region = sr:region_great_plains
+		region = sr:region_pacific_coast
+		region = sr:region_central_america
+	}
+}
+
+te_jmap_in_continent_south_america = {
+	OR = {
+		region = sr:region_gran_colombia
+		region = sr:region_andes
+		region = sr:region_brazil
+		region = sr:region_la_plata
+	}
+}
+
+te_jmap_in_continent_oceania = {
+	region = sr:region_oceania
+}
+
+# The state is in the picked continent (te_jmap_continent, te_journal_map_values.txt). The marking effect's test.
+te_jmap_state_in_continent = {
+	trigger_if = {
+		limit = { te_jmap_continent = 1 }
+		te_jmap_in_continent_europe = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_continent = 2 }
+		te_jmap_in_continent_asia = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_continent = 3 }
+		te_jmap_in_continent_africa = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_continent = 4 }
+		te_jmap_in_continent_north_america = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_continent = 5 }
+		te_jmap_in_continent_south_america = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_continent = 6 }
+		te_jmap_in_continent_oceania = yes
+	}
+	trigger_else = {
+		always = no
+	}
+}
+
+# The state is in the Map Room's area (te_jmap_area). The marking effect's test, never a paint's: it reaches the
+# viewer's market and power bloc. Run only once te_jmap_area_holds has passed, which is what makes the viewer's market
+# a scope that exists.
+te_jmap_state_in_area = {
+	trigger_if = {
+		limit = { te_jmap_area = 1 }
+		te_jmap_state_in_continent = yes
+	}
+	trigger_else_if = {
+		limit = { te_jmap_area = 2 }
+		global_var:te_jmap_viewer ?= {
+			market ?= { save_temporary_scope_as = te_jmap_viewer_market }
+		}
+		market ?= { this = scope:te_jmap_viewer_market }
+	}
+	# A power bloc's members, and their subjects with them, as the engine counts a bloc.
+	trigger_else_if = {
+		limit = { te_jmap_area = 3 }
+		global_var:te_jmap_viewer ?= { save_temporary_scope_as = te_jmap_viewer_scope }
+		owner ?= {
+			OR = {
+				this = scope:te_jmap_viewer_scope
+				is_in_same_power_bloc = scope:te_jmap_viewer_scope
+			}
+		}
+	}
+	trigger_else_if = {
+		limit = { te_jmap_area = 4 }
+		te_jmap_owner_is_viewer = yes
+	}
+	trigger_else = {
+		always = yes
+	}
+}
+
+# The area still has what it is drawn around: a continent picked, or a viewer with a market, a power bloc or a state
+# of its own. Any scope. When it fails (the viewer left its bloc, or was annexed), te_jmap_mark_area goes back to the
+# world: a map greyed everywhere would read as broken.
+te_jmap_area_holds = {
+	trigger_if = {
+		limit = { te_jmap_area = 1 }
+		te_jmap_continent > 0
+	}
+	trigger_else_if = {
+		limit = { te_jmap_area = 2 }
+		global_var:te_jmap_viewer ?= { exists = market }
+	}
+	trigger_else_if = {
+		limit = { te_jmap_area = 3 }
+		global_var:te_jmap_viewer ?= { is_in_power_bloc = yes }
+	}
+	trigger_else_if = {
+		limit = { te_jmap_area = 4 }
+		global_var:te_jmap_viewer ?= { exists = capital }
+	}
+	trigger_else = {
+		always = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
 # Global Warming: each state's share of the world's emissions last year
 # ---------------------------------------------------------------------------
 # No figure yet: no yearly snapshot of the state (gw_state_emis, gw_snapshot_country_emissions_effect) or no world
