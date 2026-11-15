@@ -1,7 +1,415 @@
 {
+ "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Aristocracy",
+  "ru": "@red_cross! Аристократия"
+ },
+ "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC": {
+  "en": "Remove [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]",
+  "ru": "Убрать: [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]"
+ },
+ "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE": {
+  "en": "@red_cross! Corporate Rule",
+  "ru": "@red_cross! Власть корпораций"
+ },
+ "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK": {
+  "en": "@red_cross! Exploitation",
+  "ru": "@red_cross! Эксплуатация"
+ },
+ "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY": {
+  "en": "@red_cross! Divine Wealth",
+  "ru": "@red_cross! Божественное богатство"
+ },
+ "DESELECT_IDEOLOGY_IMPERIALIST_OUTLOOK": {
+  "en": "@red_cross! Imperialism",
+  "ru": "@red_cross! Империализм"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY": {
+  "en": "@red_cross! Enlightened Imperial Economy",
+  "ru": "@red_cross! Просвещённая имперская экономика"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE": {
+  "en": "@red_cross! Imperial Cult",
+  "ru": "@red_cross! Имперский культ"
+ },
+ "DESELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY": {
+  "en": "@red_cross! Imperial Society",
+  "ru": "@red_cross! Имперское общество"
+ },
+ "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY": {
+  "en": "@red_cross! Inclusive Society",
+  "ru": "@red_cross! Инклюзивное общество"
+ },
+ "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK": {
+  "en": "@red_cross! Isolationism",
+  "ru": "@red_cross! Изоляционизм"
+ },
+ "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY": {
+  "en": "@red_cross! Meritocracy",
+  "ru": "@red_cross! Меритократия"
+ },
+ "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK": {
+  "en": "@red_cross! Militarism",
+  "ru": "@red_cross! Милитаризм"
+ },
+ "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK": {
+  "en": "@red_cross! Pacifism",
+  "ru": "@red_cross! Пацифизм"
+ },
+ "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE": {
+  "en": "@red_cross! Republicanism",
+  "ru": "@red_cross! Республиканизм"
+ },
+ "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY": {
+  "en": "@red_cross! Divine Command Economy",
+  "ru": "@red_cross! Экономика божественных предписаний"
+ },
+ "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY": {
+  "en": "@red_cross! Social Welfare",
+  "ru": "@red_cross! Социальное обеспечение"
+ },
+ "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Technocracy",
+  "ru": "@red_cross! Технократия"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_ECONOMY": {
+  "en": "@red_cross! Theocratic Economy",
+  "ru": "@red_cross! Теократическая экономика"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE": {
+  "en": "@red_cross! Theocracy",
+  "ru": "@red_cross! Теократия"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_OUTLOOK": {
+  "en": "@red_cross! Theocratic Expansion",
+  "ru": "@red_cross! Теократическая экспансия"
+ },
+ "DESELECT_IDEOLOGY_THEOCRATIC_SOCIETY": {
+  "en": "@red_cross! Theocratic Society",
+  "ru": "@red_cross! Теократическое общество"
+ },
+ "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY": {
+  "en": "@red_cross! Totalitarianism",
+  "ru": "@red_cross! Тоталитаризм"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY": {
+  "en": "@red_cross! Traditionalism",
+  "ru": "@red_cross! Традиционализм"
+ },
+ "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY": {
+  "en": "@red_cross! Social Orthodoxy",
+  "ru": "@red_cross! Социальная ортодоксия"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_HAPPY": {
+  "en": "@red_cross! Imperial Glory (happy)",
+  "ru": "@red_cross! Имперская слава (довольство)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_happy$ #b happy #![concept_interest_group_trait]",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] больше не получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_happy$» #b (довольство) #!"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_LOYAL": {
+  "en": "@red_cross! Loyalty to the Empire (loyal)",
+  "ru": "@red_cross! Верность империи (лояльность)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_loyal$ #b loyal #![concept_interest_group_trait]",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] больше не получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_loyal$» #b (лояльность) #!"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_UNHAPPY": {
+  "en": "@red_cross! Militarism and Conquest (unhappy)",
+  "ru": "@red_cross! Милитаризм и завоевания (недовольство)"
+ },
+ "DESELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is no longer granted the $ig_trait_custom_religion_imperial_cult_unhappy$ #b unhappy #![concept_interest_group_trait]",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] больше не получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_unhappy$» #b (недовольство) #!"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY": {
+  "en": "@red_cross! Prosperity Doctrine (happy)",
+  "ru": "@red_cross! Доктрина процветания (довольство)"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL": {
+  "en": "@red_cross! Investing for the Afterlife (loyal)",
+  "ru": "@red_cross! Инвестиции в загробную жизнь (лояльность)"
+ },
+ "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY": {
+  "en": "@red_cross! Opulence and Greed (unhappy)",
+  "ru": "@red_cross! Роскошь и алчность (недовольство)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY": {
+  "en": "@red_cross! Secular Service (happy)",
+  "ru": "@red_cross! Светская служба (довольство)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL": {
+  "en": "@red_cross! Social Harmony (loyal)",
+  "ru": "@red_cross! Социальная гармония (лояльность)"
+ },
+ "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY": {
+  "en": "@red_cross! Inequality and Injustice (unhappy)",
+  "ru": "@red_cross! Неравенство и несправедливость (недовольство)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_HAPPY": {
+  "en": "@red_cross! Ecumenism (happy)",
+  "ru": "@red_cross! Экуменизм (довольство)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_LOYAL": {
+  "en": "@red_cross! Divine Law (loyal)",
+  "ru": "@red_cross! Божественный закон (лояльность)"
+ },
+ "DESELECT_TRAIT_THEOCRATIC_UNHAPPY": {
+  "en": "@red_cross! Religious Persecution (unhappy)",
+  "ru": "@red_cross! Религиозные преследования (недовольство)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_HAPPY": {
+  "en": "@red_cross! Unity and Conformity (happy)",
+  "ru": "@red_cross! Единство и единообразие (довольство)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_LOYAL": {
+  "en": "@red_cross! Order and Obedience (loyal)",
+  "ru": "@red_cross! Порядок и послушание (лояльность)"
+ },
+ "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY": {
+  "en": "@red_cross! Repression of Dissent (unhappy)",
+  "ru": "@red_cross! Подавление инакомыслия (недовольство)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_HAPPY": {
+  "en": "@red_cross! Divine Right (happy)",
+  "ru": "@red_cross! Божественное право (довольство)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_LOYAL": {
+  "en": "@red_cross! Encourage Natalism (loyal)",
+  "ru": "@red_cross! Поощрение рождаемости (лояльность)"
+ },
+ "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY": {
+  "en": "@red_cross! Obscurantism (unhappy)",
+  "ru": "@red_cross! Мракобесие (недовольство)"
+ },
+ "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE": {
+  "en": "Aristocracy",
+  "ru": "Аристократия"
+ },
+ "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC": {
+  "en": "Add [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]\\n$ideology_custom_religion_aristocratic_governance_desc$",
+  "ru": "Добавить: [GetIdeology('ideology_custom_religion_aristocratic_governance').GetName]\\n$ideology_custom_religion_aristocratic_governance_desc$"
+ },
+ "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE": {
+  "en": "Corporate Rule",
+  "ru": "Власть корпораций"
+ },
+ "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK": {
+  "en": "Exploitation",
+  "ru": "Эксплуатация"
+ },
+ "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY": {
+  "en": "Divine Wealth",
+  "ru": "Божественное богатство"
+ },
+ "SELECT_IDEOLOGY_IMPERIALIST_OUTLOOK": {
+  "en": "Imperialism",
+  "ru": "Империализм"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY": {
+  "en": "Enlightened Imperial Economy",
+  "ru": "Просвещённая имперская экономика"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE": {
+  "en": "Imperial Cult",
+  "ru": "Имперский культ"
+ },
+ "SELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY": {
+  "en": "Imperial Society",
+  "ru": "Имперское общество"
+ },
+ "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY": {
+  "en": "Inclusive Society",
+  "ru": "Инклюзивное общество"
+ },
+ "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK": {
+  "en": "Isolationism",
+  "ru": "Изоляционизм"
+ },
+ "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY": {
+  "en": "Meritocracy",
+  "ru": "Меритократия"
+ },
+ "SELECT_IDEOLOGY_MILITARIST_OUTLOOK": {
+  "en": "Militarism",
+  "ru": "Милитаризм"
+ },
+ "SELECT_IDEOLOGY_PACIFIST_OUTLOOK": {
+  "en": "Pacifism",
+  "ru": "Пацифизм"
+ },
+ "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE": {
+  "en": "Republicanism",
+  "ru": "Республиканизм"
+ },
+ "SELECT_IDEOLOGY_SOCIALIST_ECONOMY": {
+  "en": "Divine Command Economy",
+  "ru": "Экономика божественных предписаний"
+ },
+ "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY": {
+  "en": "Social Welfare",
+  "ru": "Социальное обеспечение"
+ },
+ "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE": {
+  "en": "Technocracy",
+  "ru": "Технократия"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_ECONOMY": {
+  "en": "Theocratic Economy",
+  "ru": "Теократическая экономика"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE": {
+  "en": "Theocracy",
+  "ru": "Теократия"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_OUTLOOK": {
+  "en": "Theocratic Expansion",
+  "ru": "Теократическая экспансия"
+ },
+ "SELECT_IDEOLOGY_THEOCRATIC_SOCIETY": {
+  "en": "Theocratic Society",
+  "ru": "Теократическое общество"
+ },
+ "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY": {
+  "en": "Totalitarianism",
+  "ru": "Тоталитаризм"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY": {
+  "en": "Traditionalism",
+  "ru": "Традиционализм"
+ },
+ "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY": {
+  "en": "Social Orthodoxy",
+  "ru": "Социальная ортодоксия"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_HAPPY": {
+  "en": "Imperial Glory (happy)",
+  "ru": "Имперская слава (довольство)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_happy_desc$\\n\\n#b $state_decree_cost_mult$: #!#g -10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_happy$» #b (довольство) #!\\n$ig_trait_custom_religion_imperial_cult_happy_desc$\\n\\n#b $state_decree_cost_mult$: #!#g -10%#!"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_LOYAL": {
+  "en": "Loyalty to the Empire (loyal)",
+  "ru": "Верность империи (лояльность)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_loyal_desc$\\n\\n#b $country_authority_mult$: #!#g +10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_loyal$» #b (лояльность) #!\\n$ig_trait_custom_religion_imperial_cult_loyal_desc$\\n\\n#b $country_authority_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_UNHAPPY": {
+  "en": "Militarism and Conquest (unhappy)",
+  "ru": "Милитаризм и завоевания (недовольство)"
+ },
+ "SELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_imperial_cult_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_imperial_cult_unhappy_desc$\\n\\n#b $state_conversion_mult$: #!#r -25%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_imperial_cult_unhappy$» #b (недовольство) #!\\n$ig_trait_custom_religion_imperial_cult_unhappy_desc$\\n\\n#b $state_conversion_mult$: #!#r -25%#!"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_HAPPY": {
+  "en": "Prosperity Doctrine (happy)",
+  "ru": "Доктрина процветания (довольство)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_market_liberal_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_happy_desc$\\n\\n#b $country_state_religion_wages_mult$: #!#g +10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_market_liberal_happy$» #b (довольство) #!\\n$ig_trait_custom_religion_market_liberal_happy_desc$\\n\\n#b $country_state_religion_wages_mult$: #!#g +10%#!"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_LOYAL": {
+  "en": "Investing for the Afterlife (loyal)",
+  "ru": "Инвестиции в загробную жизнь (лояльность)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY": {
+  "en": "Opulence and Greed (unhappy)",
+  "ru": "Роскошь и алчность (недовольство)"
+ },
+ "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_market_liberal_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_market_liberal_unhappy_desc$\\n\\n#b $state_upper_strata_expected_sol_add$: #!#r +3#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_market_liberal_unhappy$» #b (недовольство) #!\\n$ig_trait_custom_religion_market_liberal_unhappy_desc$\\n\\n#b $state_upper_strata_expected_sol_add$: #!#r +3#!"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY": {
+  "en": "Secular Service (happy)",
+  "ru": "Светская служба (довольство)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL": {
+  "en": "Social Harmony (loyal)",
+  "ru": "Социальная гармония (лояльность)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_social_democrat_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_loyal_desc$\\n\\n#b $state_lower_strata_expected_sol_add$: #!#g -1#!\\n #b $country_bureaucracy_investment_cost_factor_mult$: #!#g -10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_social_democrat_loyal$» #b (лояльность) #!\\n$ig_trait_custom_religion_social_democrat_loyal_desc$\\n\\n#b $state_lower_strata_expected_sol_add$: #!#g -1#!\\n #b $country_bureaucracy_investment_cost_factor_mult$: #!#g -10%#!"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY": {
+  "en": "Inequality and Injustice (unhappy)",
+  "ru": "Неравенство и несправедливость (недовольство)"
+ },
+ "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_social_democrat_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_social_democrat_unhappy_desc$\\n\\n#b $state_radicals_from_political_movements_mult$: #!#r +10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_social_democrat_unhappy$» #b (недовольство) #!\\n$ig_trait_custom_religion_social_democrat_unhappy_desc$\\n\\n#b $state_radicals_from_political_movements_mult$: #!#r +10%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_HAPPY": {
+  "en": "Ecumenism (happy)",
+  "ru": "Экуменизм (довольство)"
+ },
+ "SELECT_TRAIT_THEOCRATIC_HAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_theocratic_happy$ #b happy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_happy_desc$\\n\\n#b $country_influence_mult$: #!#g +25%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_theocratic_happy$» #b (довольство) #!\\n$ig_trait_custom_religion_theocratic_happy_desc$\\n\\n#b $country_influence_mult$: #!#g +25%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_LOYAL": {
+  "en": "Divine Law (loyal)",
+  "ru": "Божественный закон (лояльность)"
+ },
+ "SELECT_TRAIT_THEOCRATIC_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_theocratic_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_theocratic_loyal_desc$\\n\\n#b $state_conversion_mult$: #!#g +25%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_theocratic_loyal$» #b (лояльность) #!\\n$ig_trait_custom_religion_theocratic_loyal_desc$\\n\\n#b $state_conversion_mult$: #!#g +25%#!"
+ },
+ "SELECT_TRAIT_THEOCRATIC_UNHAPPY": {
+  "en": "Religious Persecution (unhappy)",
+  "ru": "Религиозные преследования (недовольство)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_HAPPY": {
+  "en": "Unity and Conformity (happy)",
+  "ru": "Единство и единообразие (довольство)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_LOYAL": {
+  "en": "Order and Obedience (loyal)",
+  "ru": "Порядок и послушание (лояльность)"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_totalitarian_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_totalitarian_loyal_desc$\\n\\n#b $country_institution_cost_institution_police_mult$: #!#g -25%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_totalitarian_loyal$» #b (лояльность) #!\\n$ig_trait_custom_religion_totalitarian_loyal_desc$\\n\\n#b $country_institution_cost_institution_police_mult$: #!#g -25%#!"
+ },
+ "SELECT_TRAIT_TOTALITARIAN_UNHAPPY": {
+  "en": "Repression of Dissent (unhappy)",
+  "ru": "Подавление инакомыслия (недовольство)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_HAPPY": {
+  "en": "Divine Right (happy)",
+  "ru": "Божественное право (довольство)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_LOYAL": {
+  "en": "Encourage Natalism (loyal)",
+  "ru": "Поощрение рождаемости (лояльность)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_traditionalist_loyal$ #b loyal #![concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_loyal_desc$\\n\\n#b $state_birth_rate_mult$: #!#g +2.5%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_traditionalist_loyal$» #b (лояльность) #!\\n$ig_trait_custom_religion_traditionalist_loyal_desc$\\n\\n#b $state_birth_rate_mult$: #!#g +2,5%#!"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_UNHAPPY": {
+  "en": "Obscurantism (unhappy)",
+  "ru": "Мракобесие (недовольство)"
+ },
+ "SELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC": {
+  "en": "[GetInterestGroupVariant('ig_devout',GetPlayer).GetName] is granted the $ig_trait_custom_religion_traditionalist_unhappy$ #b unhappy #![concept_interest_group_trait]\\n$ig_trait_custom_religion_traditionalist_unhappy_desc$\\n\\n#b $state_education_access_add$: #!#r -10%#!",
+  "ru": "Группа интересов [GetInterestGroupVariant('ig_devout',GetPlayer).GetName] получает [concept_interest_group_trait|l] «$ig_trait_custom_religion_traditionalist_unhappy$» #b (недовольство) #!\\n$ig_trait_custom_religion_traditionalist_unhappy_desc$\\n\\n#b $state_education_access_add$: #!#r -10%#!"
+ },
  "concept_custom_religion": {
   "en": "Custom Religion",
   "ru": "Собственная религия"
+ },
+ "concept_custom_religion_desc": {
+  "en": "A syncretic religion created by blending elements of existing religious traditions. Tracked through a [concept_journal_entry] system that allows countries to develop a unique faith combining aspects of their population's diverse religious backgrounds.",
+  "ru": "Синкретическая религия, созданная смешением элементов существующих религиозных традиций. Отслеживается через систему [concept_journal_entry], которая позволяет странам развить уникальную веру, объединяющую черты разнообразных религиозных традиций их населения."
  },
  "concept_decline_of_religion": {
   "en": "Decline of Religion",
