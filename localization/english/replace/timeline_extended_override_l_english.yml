@@ -62,6 +62,7 @@
  goods_output_radios_mult:0 "Building @radios! $radios$ output"
  goods_output_radios_mult_desc:0 "A bonus or penalty to the amount of @radios! $radios$ produced by buildings"
  pmg_fertilizer_production:0 "Chemicals Production"
+ pmg_fencing:0 "Herd Management"
  pm_artificial_fertilizers:0 "Basic Chemical Production"
  pm_improved_fertilizer:0 "Refined Chemical Processes"
  pm_nitrogen_fixation:0 "Synthetic Nitrogen Production"

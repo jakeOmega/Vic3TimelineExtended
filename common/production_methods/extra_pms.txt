@@ -14785,6 +14785,9 @@ pm_antibiotic_growth_promoters = {
 	unlocking_production_methods = {
 		pm_slaughterhouses
 		pm_mechanized_slaughtering
+		pm_industrial_feedlots
+		pm_recombinant_growth_hormones
+		pm_gene_edited_livestock
 	}
 
 	building_modifiers = {
@@ -14804,6 +14807,226 @@ pm_antibiotic_growth_promoters = {
 			# Wage breakeven: 0.00
 		}
 	}
+}
+
+# Livestock Ranch: the meat ladder after vanilla's Mechanized Slaughterhouses
+# (era 4), one tier every two eras up to Cultured Meat's (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
+# ranches and plantations"). Each tier keeps vanilla's floor of 3,500 laborers
+# and at least 500 farmers a level, which Herd Management (pmg_fencing) and
+# Refrigeration cut at most together, so no combination goes below zero
+# (test_ranch_plantation_methods.py). Antibiotic Growth Promoters and
+# Intensive Wool Gathering in the wool group unlock on each of them.
+pm_industrial_feedlots = {
+	texture = "gfx/interface/icons/production_method_icons/simple_ranching.dds"
+
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 40                           # Price:   20, Total cost:   800.0 (69.57%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (17.39%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (13.04%)
+			# Output goods
+			goods_output_meat_add = 100                          # Price:   30, Total cost:  3000.0 (100.00%)
+			# Total input cost: 1150.0
+			# Total output cost: 3000.0
+			# Profit: 1850.0
+			# Profit margin: 160.87%
+			# Zero profit price multiplier: 0.38
+			# Employment: 5000
+			# Wage breakeven: 0.37
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 3500
+			building_employment_farmers_add = 750
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 250
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_recombinant_growth_hormones = {
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_biologics.dds"
+
+	unlocking_technologies = {
+		biotechnology
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 20
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 60                           # Price:   20, Total cost:  1200.0 (64.86%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (10.81%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (16.22%)
+			goods_input_opium_add = 3                            # Price:   50, Total cost:   150.0 (8.11%)
+			# Output goods
+			goods_output_meat_add = 200                          # Price:   30, Total cost:  6000.0 (100.00%)
+			# Total input cost: 1850.0
+			# Total output cost: 6000.0
+			# Profit: 4150.0
+			# Profit margin: 224.32%
+			# Zero profit price multiplier: 0.31
+			# Employment: 5000
+			# Wage breakeven: 0.83
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 3500
+			building_employment_farmers_add = 500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_gene_edited_livestock = {
+	texture = "gfx/interface/icons/production_method_icons/pm_designed_crops.dds"
+
+	unlocking_technologies = {
+		genetic_engineering
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 15
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 80                           # Price:   20, Total cost:  1600.0 (69.57%)
+			goods_input_tools_add = 5                            # Price:   40, Total cost:   200.0 (8.70%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (19.57%)
+			goods_input_opium_add = 1                            # Price:   50, Total cost:    50.0 (2.17%)
+			# Output goods
+			goods_output_meat_add = 320                          # Price:   30, Total cost:  9600.0 (100.00%)
+			# Total input cost: 2300.0
+			# Total output cost: 9600.0
+			# Profit: 7300.0
+			# Profit margin: 317.39%
+			# Zero profit price multiplier: 0.24
+			# Employment: 5000
+			# Wage breakeven: 1.46
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 3500
+			building_employment_farmers_add = 500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+# Vanilla gates Intensive Wool Gathering on the butchering base methods, so a
+# ranch on one of the three tiers above could not keep it. Same fix as
+# pm_elastics.
+INJECT:pm_intensive_grazing_ranch = {
+	unlocking_production_methods = {
+		pm_industrial_feedlots
+		pm_recombinant_growth_hormones
+		pm_gene_edited_livestock
+	}
+}
+
+# Livestock Ranch: Herd Management (vanilla's pmg_fencing, renamed in
+# localization/english/replace/) after Electric Fences (era 3). The laborer cut
+# replaces the fence's, so Robotic Barns' 2,500 with refrigerated rail cars'
+# 1,000 takes a base's 3,500 laborers to zero; its 500 farmers are every base's
+# floor.
+pm_mechanized_feeding_lines = {
+	texture = "gfx/interface/icons/production_method_icons/assembly_lines.dds"
+
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 1                             # Price:   40, Total cost:    40.0 (21.05%)
+			goods_input_electricity_add = 3                      # Price:   30, Total cost:    90.0 (47.37%)
+			goods_input_engines_add = 1                          # Price:   60, Total cost:    60.0 (31.58%)
+			# Output goods
+			# Total input cost: 190.0
+			# Total output cost: 0
+			# Profit: -190.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -2000
+			# Wage breakeven: 0.10
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -2000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_robotic_barns = {
+	texture = "gfx/interface/icons/production_method_icons/pm_robotic_food_processing.dds"
+
+	unlocking_technologies = {
+		internet_of_things
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 1                             # Price:   40, Total cost:    40.0 (8.51%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (31.91%)
+			goods_input_robotics_add = 2                         # Price:   80, Total cost:   160.0 (34.04%)
+			goods_input_digital_access_add = 1                   # Price:  120, Total cost:   120.0 (25.53%)
+			# Output goods
+			# Total input cost: 470.0
+			# Total output cost: 0
+			# Profit: -470.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -3000
+			# Wage breakeven: 0.16
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = -2500
+			building_employment_farmers_add = -500
+		}
+
+		unscaled = {
+			building_robotic_or_ai_managed_bool = yes
+		}
+	}
+
+	required_input_goods = electricity
+	required_input_goods = digital_access
 }
 
 REPLACE:pm_early_trains = {

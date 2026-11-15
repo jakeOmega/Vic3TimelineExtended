@@ -305,6 +305,22 @@ INJECT:pmg_sheep_ranch = {
 		pm_antibiotic_growth_promoters
 	}
 }
+# Livestock Ranch: the meat ladder after Mechanized Slaughterhouses, and Herd
+# Management's (Fencing's) labor ladder after Electric Fences (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md).
+INJECT:pmg_base_building_livestock_ranch = {
+	production_methods = {
+		pm_industrial_feedlots
+		pm_recombinant_growth_hormones
+		pm_gene_edited_livestock
+	}
+}
+INJECT:pmg_fencing = {
+	production_methods = {
+		pm_mechanized_feeding_lines
+		pm_robotic_barns
+	}
+}
 INJECT:pmg_mining_equipment_building_coal_mine = {
 	production_methods = {
 		pm_high_pressure_hydraulic_pump_building_coal_mine
