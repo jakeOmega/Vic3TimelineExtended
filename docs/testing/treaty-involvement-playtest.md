@@ -44,3 +44,12 @@ gains where the target is local.
 | **Covert.** Launch Cultivate Assets (any target not your subject); hover the action and, after a few months, the target's region interest tier. | The same Involvement line as Fund Lobbies, up to 1,000; the operation listed in "Involvement is due to". | No line: the fields are not read on this pact; compare with Humanitarian Aid and record which pacts show one. |
 | **Aid.** Give Humanitarian Aid (Welfare IV bloc principle). | As Increase Relations: up to 1,000. | As above. |
 | **None.** Hover Lobby For the Resolution on an AI UN member. | No Involvement line. | Cosmetic; the reviewed reason no longer holds. |
+
+## Activism and turmoil in the AI's answer (2026-11-15, #1829)
+
+Six tests in the AI's acceptance scores compared fractions against whole percentages (activism and turmoil run 0 to 1), so they never applied. They read 0.25, 0.5 and 0.75 now (`docs/systems/mod_systems/pops_and_migration.md` § Population Transfer, `treaties.md` § AI demand weights). Nothing here rests on an unread engine fact.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Population Transfer.** Demand one from an AI country that hosts a cultural minority movement of one of our primary cultures at 25% activism or more. | The AI's answer lists "from cultural tensions" (+25), or "from severe cultural unrest" at +50 above 50% and +80 above 75%. | No line: read `political_movement_radicalism` on that movement in the console and record it. |
+| **Aid and turmoil.** Offer Crisis Resolution or Security Aid to a country with a state above 25% turmoil. | The score lists "from turmoil in target country" (+20; +15 for Development Assistance). | As above, with the state's `turmoil`. |

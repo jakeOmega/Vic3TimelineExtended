@@ -192,7 +192,7 @@ crisis_resolution = {
 			}
 			# AI is more likely to propose to countries with turmoil or low legitimacy.
 			if = {
-				limit = { scope:other_country = { any_scope_state = { turmoil > 25 } } }
+				limit = { scope:other_country = { any_scope_state = { turmoil > 0.25 } } }
 				add = {
 					desc = "AI_TARGET_TURMOIL"
 					value = 20
@@ -658,7 +658,7 @@ security_aid = {
 				}
 			}
 			if = {
-				limit = { scope:target_country = { any_scope_state = { turmoil > 25 } } }
+				limit = { scope:target_country = { any_scope_state = { turmoil > 0.25 } } }
 				add = {
 					desc = "AI_TARGET_TURMOIL"
 					value = 20
@@ -774,7 +774,7 @@ development_assistance = {
 				}
 			}
 			if = {
-				limit = { scope:target_country = { any_scope_state = { turmoil > 25 } } }
+				limit = { scope:target_country = { any_scope_state = { turmoil > 0.25 } } }
 				add = {
 					desc = "AI_TARGET_TURMOIL"
 					value = 15
@@ -2717,12 +2717,13 @@ population_transfer = {  # REVIEWED 2026-11-03 (involvement): a one-off concessi
 						value = -25
 					}
 				}
-				# Much more willing if there's a cultural movement of relevant cultures with high radicalism
+				# Much more willing if there's a cultural movement of relevant cultures with high radicalism.
+				# Activism runs 0 to 1; the tiers are vanilla's militant, protesting and agitating thresholds.
 				if = {
 					limit = {
 						any_political_movement = {
 							is_political_movement_type = movement_cultural_minority
-							political_movement_radicalism > 75
+							political_movement_radicalism > 0.75
 							culture = {
 								is_primary_culture_of = scope:target_country
 							}
@@ -2737,7 +2738,7 @@ population_transfer = {  # REVIEWED 2026-11-03 (involvement): a one-off concessi
 					limit = {
 						any_political_movement = {
 							is_political_movement_type = movement_cultural_minority
-							political_movement_radicalism > 50
+							political_movement_radicalism > 0.5
 							culture = {
 								is_primary_culture_of = scope:target_country
 							}
@@ -2752,7 +2753,7 @@ population_transfer = {  # REVIEWED 2026-11-03 (involvement): a one-off concessi
 					limit = {
 						any_political_movement = {
 							is_political_movement_type = movement_cultural_minority
-							political_movement_radicalism > 25
+							political_movement_radicalism > 0.25
 							culture = {
 								is_primary_culture_of = scope:target_country
 							}
