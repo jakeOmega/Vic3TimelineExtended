@@ -62,11 +62,14 @@ DEV_ONLY_FILES = {"te_debug_tax_l_english.yml"}
 # German declines country names with the article baked in; vanilla defines
 # these seven forms for every tag and dynamic name, and German text reaches
 # them through GetAltName('<FORM>'). A language vanilla doesn't decline
-# (Spanish) has no forms, and its text must keep GetName.
+# (Spanish) has no forms, and its text must keep GetName. Russian vanilla does
+# decline (`GetAltName('RU_CL_RP')` and verb endings, issue #566), but its form
+# set wasn't checked against the game when the Russian memory was made, so
+# Russian keeps GetName for now and phrases around the name ("страна X").
 COUNTRY_FORMS = {"german": ("NOM", "GEN", "DAT", "AKK", "VON", "IN", "NACH")}
 
 # The translation-memory field holding each language's text.
-TM_FIELDS = {"german": "de", "spanish": "es"}
+TM_FIELDS = {"german": "de", "spanish": "es", "russian": "ru"}
 
 
 def country_forms(language: str) -> tuple[str, ...]:
@@ -405,7 +408,7 @@ THOUSANDS_SEPARATOR = {
     "french": " ", "spanish": " ", "polish": " ", "russian": " ",
 }
 # Languages whose official loc mostly writes 10%, not 10 %.
-CLOSED_PERCENT = {"german", "spanish"}
+CLOSED_PERCENT = {"german", "spanish", "russian"}
 _MARKUP = re.compile(r"\[[^\[\]]*\]|\$[^$]*\$|#[a-zA-Z_]+(?::\S*)?|@\w+!")
 _EN_DECIMAL = re.compile(r"(?<![\w.,])\d+\.\d+(?![.,]?\d)")
 _EN_THOUSANDS = re.compile(r"(?<![\w.,])\d{1,3}(?:,\d{3})+(?![.,]?\d)")
@@ -456,11 +459,11 @@ def localize_numbers(en: str, translated: str, language: str) -> str:
 
 # (outer open, outer close, inner open, inner close) as the official
 # translation writes them.
-QUOTES = {"german": ("„", "“", "‚", "‘"), "spanish": ("«", "»", "“", "”")}
+QUOTES = {"german": ("„", "“", "‚", "‘"), "spanish": ("«", "»", "“", "”"), "russian": ("«", "»", "„", "“")}
 # The marks a translator may type to open and to close a quotation. German's
 # “ closes („…“) where Spanish's opens (“…”); Spanish leaves out ‘’, since
-# its ’ is an apostrophe.
-QUOTE_MARKS = {"german": ("„‚", "“”‘"), "spanish": ("«“", "»”")}
+# its ’ is an apostrophe. Russian nests „…“ inside «…», so its “ closes too.
+QUOTE_MARKS = {"german": ("„‚", "“”‘"), "spanish": ("«“", "»”"), "russian": ("«„", "»“”")}
 
 
 def localize_quotes(value: str, language: str) -> str:
@@ -1165,13 +1168,16 @@ def term_mismatches(tm: dict[str, dict], terms: dict[str, str], field: str) -> l
     English uses a listed term but whose translation lacks that rendering.
     Inflection is allowed: each word of the rendering need only appear by its
     stem (all but its last three letters, at least four)."""
+    def fold(text: str) -> str:
+        return text.casefold().replace("ё", "е")  # Russian writes е for ё at will
+
     out = []
     for en_term, rendering in terms.items():
-        stems = [w[: max(4, len(w) - 3)].casefold() for w in re.findall(r"\w+", rendering) if len(w) >= 4]
+        stems = [fold(w[: max(4, len(w) - 3)]) for w in re.findall(r"\w+", rendering) if len(w) >= 4]
         for key, record in tm.items():
             if "base" in record or not _mentions(en_term, record["en"]):
                 continue
-            text = record[field].casefold()
+            text = fold(record[field])
             if not all(stem in text for stem in stems):
                 out.append((key, en_term, rendering))
     return sorted(out)

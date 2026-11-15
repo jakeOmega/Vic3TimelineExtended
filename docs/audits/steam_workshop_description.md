@@ -29,7 +29,7 @@ Steam shows `[img]URL[/img]` in a description, the URL a direct link to the imag
 [list]
 [*]New goods, production chains, companies, combat units, ship classes, treaty articles, and decrees
 [*]A dashboard for each system, a Map Room of more than 40 world maps, and new tabs in the Budget, Society, Diplomacy, Military, and Market panels
-[*]English, plus machine-translated German and Spanish; English fallback for other languages
+[*]English, plus machine-translated German, Spanish and Russian; English fallback for other languages
 [/list]
 
 Nineteen systems run alongside the base game. In the economy: banking and monetary policy, free market construction, power grids, and a legislated tax code. Between nations: the United Nations, the global commons, decolonization, cultural hegemony, covert warfare, nuclear weapons, a modern military, global warming, and the space race. Within them: demographics, healthcare and biotechnology, courts and judiciary, social movements, internal resettlement, and grand monuments and archaeology.

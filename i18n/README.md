@@ -7,7 +7,7 @@ The mod is written in English. `localization/english/` is the only loc the repo 
 
 None of the generated `.yml` is committed. The translation memory is.
 
-Two languages have one: German (`german/`) and Spanish (`spanish/`), both machine-translated.
+Three languages have one: German (`german/`), Spanish (`spanish/`) and Russian (`russian/`), all machine-translated.
 
 ## What's here
 
@@ -21,12 +21,12 @@ Two languages have one: German (`german/`) and Spanish (`spanish/`), both machin
 
 `scripts/i18n/translate_loc.py` keeps what differs between languages in four tables, each taken from what the base game's own loc does in that language (issue #566 has the survey):
 
-| Table | German | Spanish |
-|---|---|---|
-| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` |
-| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` |
-| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside |
-| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% |
+| Table | German | Spanish | Russian |
+|---|---|---|---|
+| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` | `ru` |
+| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` | none for now, as for Spanish: vanilla declines (`RU_CL_RP` …, issue #566), but the first run had no game files to read its forms from, so the brief phrases around the name («страна X») |
+| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside | «…» with „…“ inside |
+| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% | 1 000 with a no-break space, 10% |
 
 A new language needs a row in each table it differs in, a `BRIEF.md` (copy the nearest one and rewrite its grammar, number, quote and voice sections against the base game's loc in that language), and an empty `terms.json`. Pass `--language <folder>` to every command below; the default is German.
 
