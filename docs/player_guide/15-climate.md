@@ -648,6 +648,8 @@ Public Transit and Fossil-Fuel Divestment. Each one in force lowers it, and each
 one you could adopt but haven't raises it. Carbon Removal Support only lowers
 it, by 5 points, Aerosol Injection in force raises it by 10, and Green Building
 Codes and Fossil-Fuel Tariffs don't count.
-Each unfunded level of the ministry raises it by 5 points. It disbands once the
+Each unfunded level of the ministry raises it by 5 points. Without the ministry,
+the levels your technologies would add count as unfunded, so a missing ministry
+costs nothing until the Environmental Movement technology. It disbands once the
 Ministry of the Environment is established and funded to its maximum. Its
 support also pushes AI countries toward climate policies.

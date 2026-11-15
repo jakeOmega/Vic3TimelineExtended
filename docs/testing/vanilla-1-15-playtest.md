@@ -199,7 +199,8 @@ game, in English.
     Unrestricted Automation. Of a fascist one: none from Traditional Heredity or No Ministry of Propaganda.
   - Of the Environmental Movement in a country without the Ministry of the Environment: one "no institution" line
     (0.05 per level of the technologies' part of the maximum) and no line from the No Ministry of the Environment
-    law or from Unrestricted Extraction. Before, the law line added 0.10 more.
+    law or from Unrestricted Extraction. Before, the law line added 0.10 more. Before the Environmental Movement
+    technology that line is 0: note whether a zero line shows at all, and the movement's activism then.
   - Count the Environmental Movement's "could adopt" climate-policy lines (+0.10 each) in an AI country with the
     Global Warming entry open, and note the country's activism. The 2026-11-15 save read found most AI countries
     holding none of the seven policies those lines count. If most such movements sit at full activism from these
