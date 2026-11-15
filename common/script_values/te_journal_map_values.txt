@@ -30,6 +30,61 @@ te_jmap_selector = {
 }
 
 # ---------------------------------------------------------------------------
+# The Map Room's options (2026-11-14): where the maps are drawn and what their ranges leave out
+# ---------------------------------------------------------------------------
+# Global variables, as the pick is and for the same reason, so every player in a multiplayer game shares them; unset
+# is the default, what the Map Room showed before it had options. Set by the option buttons' scripted GUIs
+# (te_jmap_set_area, te_jmap_set_continent, te_jmap_set_trim: te_journal_map_effects.txt). Root-free. The script
+# values a range's measure reads them through (te_jmap_trim_count, te_jmap_pick_fitted ...) are generated:
+# te_journal_map_scales_generated.txt.
+
+# The area: 0 the world, 1 a continent (te_jmap_continent), 2 the viewer's market, 3 its power bloc, 4 its country
+# (the viewer: global_var:te_jmap_viewer, the player who last clicked). A state outside it carries te_jmap_out
+# (te_jmap_mark_area), is painted te_jmap_outside, and is left out of the range.
+te_jmap_area = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_area }
+		value = global_var:te_jmap_opt_area
+	}
+}
+
+# The continent of area 1: 1 Europe, 2 Asia, 3 Africa, 4 North America, 5 South America, 6 Oceania (the strategic
+# regions of each: te_jmap_in_continent_*, te_journal_map_triggers.txt). 0 until Continent is first picked, which
+# takes the player's capital's.
+te_jmap_continent = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_cont }
+		value = global_var:te_jmap_opt_cont
+	}
+}
+
+# The outliers a fitted map's range leaves out: 0 four states at each end (fewer in a small area), 1 none, 2 a
+# twentieth of the states with a figure at each end (te_jmap_trim_count works out the number).
+te_jmap_trim = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_trim }
+		value = global_var:te_jmap_opt_trim
+	}
+}
+
+# 1 while an option is off its default, so the page can say so above the picks.
+te_jmap_options_set = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_jmap_area > 0
+				te_jmap_trim > 0
+			}
+		}
+		value = 1
+	}
+}
+
+# ---------------------------------------------------------------------------
 # The census's figures (state scope: the state being painted or hovered)
 # ---------------------------------------------------------------------------
 # The runner-up cause of death's deaths over the leader's, 0-1 (te_demog_dc_second_share over te_demog_dc_lead_share):

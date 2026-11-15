@@ -548,6 +548,150 @@ te_jmap_pick_colonies_sgui = {
 		te_jmap_set_selector = { SEL = 25 }
 	}
 }
+
+# ---------------------------------------------------------------------------
+# The Map Room's options (2026-11-14): Area and Outliers, on the page below the picks (te_jmap_options,
+# gui/te_map_widgets.gui). Scripted GUIs for the reason the picks are: nobody is involved in the Map Room, so its own
+# scripted buttons would be locked. Unlike a pick's, an option's is_valid is not "this isn't the current one": the
+# button draws pressed from the option's script value (te_jmap_area, te_jmap_continent, te_jmap_trim), and is_valid
+# is kept for what greys it, with the reason in its tooltip (gui_style_guide.md, rule 6): Power Bloc for a country in
+# none, and Outliers on a map with no range.
+# ---------------------------------------------------------------------------
+te_jmap_area_world_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_area = { AREA = 0 }
+	}
+}
+
+te_jmap_area_continent_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_area = { AREA = 1 }
+	}
+}
+
+te_jmap_area_market_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_area = { AREA = 2 }
+	}
+}
+
+# Greyed for a country in no power bloc (the button's tooltip says so). A viewer that leaves its bloc later sends the
+# area back to the world at the next marking (te_jmap_mark_area).
+te_jmap_area_bloc_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { is_in_power_bloc = yes }
+	effect = {
+		te_jmap_set_area = { AREA = 3 }
+	}
+}
+
+te_jmap_area_country_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_area = { AREA = 4 }
+	}
+}
+
+# The continents (te_jmap_in_continent_*, te_journal_map_triggers.txt), shown while the area is a continent.
+te_jmap_continent_europe_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 1 }
+	}
+}
+
+te_jmap_continent_asia_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 2 }
+	}
+}
+
+te_jmap_continent_africa_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 3 }
+	}
+}
+
+te_jmap_continent_north_america_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 4 }
+	}
+}
+
+te_jmap_continent_south_america_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 5 }
+	}
+}
+
+te_jmap_continent_oceania_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_continent = { CONT = 6 }
+	}
+}
+
+# Outliers: greyed while the pick has no range to trim (te_jmap_pick_fitted, generated: a map of categories or on a
+# fixed scale). The setting is kept, and acts again on the next fitted pick.
+te_jmap_trim_default_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_trim = { TRIM = 0 }
+	}
+}
+
+te_jmap_trim_none_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_trim = { TRIM = 1 }
+	}
+}
+
+te_jmap_trim_percent_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_trim = { TRIM = 2 }
+	}
+}
+
 # A map button that opens a page without picking (the Timeline Extended window's, and each system tab's): notes the
 # player as the maps' viewer first (te_jmap_note_viewer).
 te_jmap_note_viewer_sgui = {
