@@ -92,7 +92,7 @@ NOT_COPIED = {
     "te_gold_flow_gap", "te_gold_flow_pct",
     "te_mon_overvaluation", "te_fx_imported", "te_mon_anchor_kind_new",
     "te_mon_anchor_rate", "te_mon_anchor_fx_index", "te_mon_anchor_c",
-    "te_mon_anchor_target", "te_mon_arr_recipient_pts",
+    "te_mon_anchor_target", "te_mon_anchor_core", "te_mon_arr_recipient_pts",
     "te_mon_arr_provider_pts", "te_mon_arr_standing_pts",
     "te_mon_union_holdouts", "te_mon_union_refusers",
     "te_mon_union_seigniorage_pts", "te_mon_commodity_centre",
