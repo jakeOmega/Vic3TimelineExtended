@@ -174,6 +174,41 @@ game, in English.
   - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
     hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
     engaged.
+- **Reform or Revolution and movement activism (2026-11-15).** In any game where a country has a socialist or a
+  labor movement, hover the movement's activism and open its predicted-activism breakdown:
+  - No "from Unrestricted Automation (active law)" line for either movement, and for the socialists none from
+    Unregulated Donations in a country with a voting law. Both stances are neutral now, so that no law a country
+    holds from 1836 and cannot leave pushes these movements toward revolution.
+  - Read the per-law lines for one law the movement disapproves and one it strongly disapproves, and note the two
+    figures. The branch's sizing assumes +3.75% and +7.5% (−0.05, vanilla's define, × −1 or −2 × 0.75). Half that
+    means the engine counts a stance as ±0.5 and ±1, and the figures in
+    `docs/systems/mod_systems/automation_policy.md` and the PR halve.
+  - The mod stopped setting the define on the same day (it had −0.1), so vanilla's −0.05 holds. That halves every
+    movement's per-law line in every country, not only these two. Note whether movement civil wars and revolutions in an
+    observer run come later or fewer than in the runs before it.
+  - Note any line that is not a law, radical or loyalist supporters, or the vanilla factors (lack of suffrage,
+    institution funding, neighbouring revolution): it is a mod source the save study missed.
+  Once the entry runs, read its bar tooltip every few years and note the date and outcome: the three 1.15 games
+  read in the 2026-11-15 save study all ended in revolution (about 1856, 1888 and 1890), and no game without the
+  mod has been measured.
+- **Movements on laws no country can leave (#1832, 2026-11-15).** Thirteen movement ideologies are neutral now
+  on a law a country holds from 1836 and can't replace until more than an era after the movement can form
+  (`ideology_modifications.NEUTRAL_ON_LOCKED_DEFAULT`). In any game, open the predicted-activism breakdown:
+  - Of a liberal, liberal republican, radical, anarchist or national liberal movement: no line from
+    Punishment-Focused Criminal Justice. Of an anarchist, communist, revolutionary socialist, fascist or radical movement: none from
+    Unrestricted Automation. Of a fascist one: none from No Ministry of Propaganda, but still one from Traditional
+    Heredity (State Eugenics opens an era after the movement, within the grace).
+  - Of the Environmental Movement in a country without the Ministry of the Environment: one "no institution" line
+    (0.05 per level of the technologies' part of the maximum), no line from the No Ministry of the Environment law,
+    and still one from Unrestricted Extraction. Before, the ministry law's line added 0.10 more. Before the Environmental Movement
+    technology that line is 0: note whether a zero line shows at all, and the movement's activism then.
+  - Count the Environmental Movement's "could adopt" climate-policy lines (+0.10 each) in an AI country with the
+    Global Warming entry open, and note the country's activism. The 2026-11-15 save read found most AI countries
+    holding none of the seven policies those lines count. If most such movements sit at full activism from these
+    lines alone, that is the gap the AI climate-policy follow-up to #1832 takes up.
+  - In an observer run, note whether movement civil wars come later or fewer than in the runs before #1832.
+    Estimated from four saves: a fifth to a half fewer movements reach 0.75 activism from the law, radical and
+    loyalist terms alone (26→18, 36→23, 28→15, 38→30).
 - **Stalemates (#1449).** In a long world war, `world_war_events.31` (The Same Line) should also arrive for a
   war leader whose war is in the engine's stalemate countdown (both leaders at minimum war support, the war
   panel's stalemate timer running), whatever its age and battle count; its co-belligerents should not get it

@@ -41,9 +41,14 @@ NPolitics = {
 	MOVEMENT_DEFAULT_MIN_SUPPORT_TO_CREATE = 0.025	# Default support (as calculated value) required to create a political movement, can be overriden in database
 	MOVEMENT_DEFAULT_MIN_SUPPORT_TO_MAINTAIN = 0.02	# Default support (as actual value) required to maintain a political movement, can be overriden in database
 
+	# Movement activism (radicalism in code). Set in 2025 to keep activism mid-range for the old direct-democracy mechanic,
+	# under which a country could enact only what a movement above an activism threshold lobbied for; that mechanic is gone.
+	# 2026-11-15 (#1824), the owner: the mod no longer sets MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (it had -0.1), so
+	# vanilla's is in force (-0.05 in 1.15.1) and another mod can change it. Kept: the two 0.1 thresholds (vanilla 0.25),
+	# and the supporter pair (vanilla 1.0 / -0.75), which also damps the radicals-turmoil-poverty loop that breaks AI
+	# countries; the owner is designing another mechanism for that.
 	MOVEMENT_MIN_RADICALISM_FOR_LAW_ENACTMENT_IMPACT = 0.1
 
-	MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE = -0.1    # Multiplied by a movement's stance on each active law (positive stance = negative radicalism)
 	MOVEMENT_RADICALISM_FROM_RADICAL_SUPPORTERS = 0.5    # Scales against fraction of radicals among movement supporters
 	MOVEMENT_RADICALISM_FROM_LOYALIST_SUPPORTERS = -0.25 # Scales against fraction of loyalists among movement supporters
 

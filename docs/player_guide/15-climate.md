@@ -89,7 +89,11 @@ throughput, each level removes 42 a year in the dashboard's units and uses
 Removal and synthetic-fuel credits follow staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.
 Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
-produces fuel while capturing carbon.
+produces fuel while capturing carbon. Both methods use the same electricity,
+nearly all of what a level costs to run, and electricity is priced state by
+state, so when you pick the works to build, the list of states shows each
+one's electricity price where other buildings show productivity; the column
+can't be sorted.
 
 ## Capturing carbon at the source
 
@@ -579,7 +583,9 @@ pollution-control methods below and National Parks do it per level at full
 staffing (500 on the National Park and National Wildlife Refuge methods, 250 on
 National Forest), and a monument dedicated as Botanical Gardens takes 5,000 a
 step (see [Monument dedications](02-timeline.md#monument-dedications)). A
-polluting production method adds between 3 and 100 a level.
+polluting production method adds between 3 and 100 a level. When you pick a
+National Park to build, the list of states shows each one's pollution impact
+where other buildings show productivity; the column can't be sorted.
 
 ### Pollution-control methods
 
@@ -642,6 +648,8 @@ Public Transit and Fossil-Fuel Divestment. Each one in force lowers it, and each
 one you could adopt but haven't raises it. Carbon Removal Support only lowers
 it, by 5 points, Aerosol Injection in force raises it by 10, and Green Building
 Codes and Fossil-Fuel Tariffs don't count.
-Each unfunded level of the ministry raises it by 5 points. It disbands once the
+Each unfunded level of the ministry raises it by 5 points. Without the ministry,
+the levels your technologies would add count as unfunded, so a missing ministry
+costs nothing until the Environmental Movement technology. It disbands once the
 Ministry of the Environment is established and funded to its maximum. Its
 support also pushes AI countries toward climate policies.
