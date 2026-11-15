@@ -92,6 +92,23 @@ COLUMNS = (
         header_icon="gfx/interface/icons/generic_icons/population.dds",
         header_tooltip="te_build_list_crowding_header_tt",
     ),
+    # Carbon Conversion Works makes no goods on Direct Air Capture, the method
+    # it unlocks with (carbon_capture_and_storage), so its productivity is zero
+    # in every state; Synthetic Coal (genetic_engineering) sells coal. Both buy
+    # 1,200 Electricity a staffed level, 98% and 99% of their inputs at base
+    # prices, and Electricity is a local good, so the state's price ranks
+    # states under either method (coal sells at one price across a market).
+    # The cell can't tell which method an unbuilt level would run: the GUI has
+    # no lookup of a production method by key. Its tooltip keeps productivity,
+    # for the coal method.
+    Column(
+        building="building_synthetics_plant_coal",
+        what="the state's Electricity price, nearly all of a level's running cost",
+        cell_text="#v @money![State.MakeScope.ScriptValue('te_build_list_electricity_price')|1]#!",
+        cell_tooltip="te_build_list_electricity_tt",
+        header_icon="gfx/interface/icons/goods_icons/electricity.dds",
+        header_tooltip="te_build_list_electricity_header_tt",
+    ),
 )
 
 
@@ -239,9 +256,10 @@ def generated(vanilla_text=None):
         f"### {HEADER}",
         "### Vanilla's construction list cell and its two header rows (gui/map_list_panel.gui:",
         f"### {CELL_TYPE}, {HEADER_TYPES[0]}, {HEADER_TYPES[1]}),",
-        "### redefined from this file so National Parks show pollution and Public Housing",
-        "### migration crowding where other buildings show productivity (gui_modding_guide.md",
-        "### gotcha #30: the 00_ file is read first and its definitions win). Copied from",
+        "### redefined from this file so National Parks show pollution, Public Housing migration",
+        "### crowding and Carbon Conversion Works the price of Electricity where other buildings",
+        "### show productivity (gui_modding_guide.md gotcha #30: the 00_ file is read first and",
+        "### its definitions win). Copied from",
         "### test_fixtures/vanilla_gui/map_list_panel.gui; only the `### MOD: Build list columns`",
         "### blocks differ.",
         "",
