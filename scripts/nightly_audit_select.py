@@ -148,6 +148,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "gui/te_history_charts_generated.gui",
     "gui/00_te_country_panel_information.gui",
     "gui/00_te_law_effects.gui",
+    "gui/00_te_build_list_columns.gui",
     "common/scripted_triggers/te_tax_generated_triggers.txt",
     "common/customizable_localization/te_tax_generated_custom_loc.txt",
     "common/scripted_guis/te_tax_generated_sguis.txt",

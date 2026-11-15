@@ -1344,8 +1344,8 @@ and a local `--strict` failed with 270 errors on twenty engine names that CI
 never saw. To get the with-install mode without a game, copy
 `test_fixtures/vanilla_gui/` to `<dir>/game/gui/` and pass
 `--vanilla-path <dir>`. That is not a clean run: a type vanilla defines
-outside those eight files resolves only if one of the eight uses it, and
-errors otherwise (110 names on the mod as of #1637), so read only the names
+outside those files (nine since 2026-11-15) resolves only if one of them uses it, and
+errors otherwise (110 names on the mod as of #1637, with eight), so read only the names
 you are after (`test_the_mod_against_the_vanilla_gui_fixtures_as_an_install`).
 The committed report shows the mode of the machine that last regenerated it.
 

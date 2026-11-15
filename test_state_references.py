@@ -37,8 +37,9 @@ BLOC_KEY_RE = re.compile(rf"\bte_pb_name_(?:league|pact)_({STATE})\b")
 LIST_RE = {"geographic_regions": re.compile(r"\bstate_regions\s*=\s*\{([^}]*)\}"),
            "strategic_regions": re.compile(r"\bstates\s*=\s*\{([^}]*)\}")}
 PY_LITERAL_RE = re.compile(rf"""["']({STATE})["']""")
-# Quoted STATE_ names in the tools' Python that are not states: placeholders and other constants.
-NOT_STATES = {"STATE_X", "STATE_GOODS", "STATE_REGION", "STATE_TRAITS"}
+# Quoted STATE_ names in the tools' Python that are not states: placeholders, other constants and vanilla loc
+# keys (STATE_POLLUTION, the state pollution tooltip gen_build_list_columns.py reuses).
+NOT_STATES = {"STATE_X", "STATE_GOODS", "STATE_REGION", "STATE_TRAITS", "STATE_POLLUTION"}
 
 
 def map_states(root=ROOT):

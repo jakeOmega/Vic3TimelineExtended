@@ -178,6 +178,22 @@ hooks onto. It writes:
 
 This generator runs explicitly; it is not a post-load regenerator.
 
+## Construction list columns (explicit regeneration)
+
+Run `python3 scripts/generators/gen_build_list_columns.py` after changing its
+`COLUMNS` table (a building, its cell's text and tooltip, its header's icon and
+tooltip), or after a vanilla patch, with
+`test_fixtures/vanilla_gui/map_list_panel.gui` replaced by the new vanilla file;
+`--check` writes nothing and exits 1 when the file is stale.
+`test_build_list_columns.py` fails while it is, and the generator raises, naming
+what moved, if vanilla moves a line it hooks onto. It writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `gui/00_te_build_list_columns.gui` | `scripts/generators/gen_build_list_columns.py` | `test_fixtures/vanilla_gui/map_list_panel.gui` (vanilla, byte for byte): the construction list's figure cell `productivity_or_other_information` and its two header rows `construction_headers_condensed` and `construction_headers_full`, each with two `### MOD: Build list columns` blocks: productivity hidden for the buildings in `COLUMNS`, and a cell or header of their own in its place |
+
+This generator runs explicitly; it is not a post-load regenerator.
+
 ## Tooling data
 
 | File / glob | Owner script | Input | Notes |
