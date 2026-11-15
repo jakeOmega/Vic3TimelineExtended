@@ -27,9 +27,10 @@ te_jmap_set_selector = {
 }
 
 # ---------------------------------------------------------------------------
-# The Map Room's options (2026-11-14): Area and Outliers
+# The Map Room's options (2026-11-14): Area, Outliers and Scale
 # ---------------------------------------------------------------------------
-# te_jmap_area, te_jmap_continent and te_jmap_trim (te_journal_map_values.txt) read the three globals set here.
+# te_jmap_area, te_jmap_continent, te_jmap_trim and te_jmap_scale (te_journal_map_values.txt) read the four globals
+# set here.
 # Each option button (te_jmap_option_button, gui/te_map_widgets.gui) runs one of these through its scripted GUI with
 # the player as root, then fires the picks' own repaint (te_jmap_repaint): the option, the area's marks and the
 # pick's range have landed before the page reopens, so a paused map repaints on them.
@@ -87,6 +88,15 @@ te_jmap_set_trim = {
 	set_global_variable = { name = te_jmap_opt_trim value = $TRIM$ }
 	te_jmap_apply_options = yes
 	debug_log = "TE_JMAP outliers $TRIM$ date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# SCALE: 0 the map's own curve (the default), 1 linear, 2 logarithmic, 3 ranked. Every factor the Map Room reads
+# branches on it (te_journal_map_scales_generated.txt), so the reopened page paints on the new scale; under Ranked
+# te_jmap_refresh_range also stores each state's place (te_jmap_rank), and under any other it clears them.
+te_jmap_set_scale = {
+	set_global_variable = { name = te_jmap_opt_scale value = $SCALE$ }
+	te_jmap_apply_options = yes
+	debug_log = "TE_JMAP scale $SCALE$ date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # An option changed. Country scope: the player's, who becomes the viewer the area is drawn around.
@@ -193,6 +203,66 @@ te_jmap_area_selfcheck = {
 		}
 		remove_global_variable = te_jmap_sc_area_in
 		remove_global_variable = te_jmap_sc_area_out
+	}
+}
+
+# TE_SELF_CHECK rank_walk (docs/testing/journal-map-modes-playtest.md, check 30). The Scale option's Ranked setting
+# stores each state's place in line by walking the states in order: ordered_state with min = 0 and max = 5000
+# (te_jmap_rank_<map>, te_journal_map_ranges_generated.txt). The mod walks other ordered lists that way, never this
+# one, and never thousands long. Once a game, the first month GDP per capita has a figure in at least 20 states,
+# from the global monthly pulse and whatever the Scale option is, so a game answers it before anyone picks Ranked: it
+# counts those states, then walks them lowest first as a rank's walk does, counting the states visited and the times
+# a figure is lower than the one before. OK when every state was visited and none was out of order; BROKEN when the
+# walk visited fewer (or none: the body never ran) or out of order, and a Ranked map's places are wrong or missing.
+# It stores no place itself. The fallback, if BROKEN: take the places from the ladder of literal positions instead
+# (te_jmap_measure_at holds 0 to 80): the state at each twentieth of the list, and color in twenty bands by the
+# band a state's figure falls in; or take the lowest unmarked state with position = 0, mark it and repeat (a while
+# loop, slower by the length of the list). No root: the counts are globals.
+te_jmap_rank_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_rank_selfcheck_done }
+			any_state = {
+				count >= 20
+				gdp_per_capita > 0
+			}
+		}
+		set_global_variable = te_jmap_rank_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_rank_states value = 0 }
+		set_global_variable = { name = te_jmap_sc_rank_seen value = 0 }
+		set_global_variable = { name = te_jmap_sc_rank_wrong value = 0 }
+		set_global_variable = { name = te_jmap_sc_rank_prev value = -1000000000 }
+		every_state = {
+			limit = { gdp_per_capita > 0 }
+			change_global_variable = { name = te_jmap_sc_rank_states add = 1 }
+		}
+		ordered_state = {
+			limit = { gdp_per_capita > 0 }
+			order_by = te_jmap_gdppc_input_neg
+			min = 0
+			max = 5000
+			check_range_bounds = no
+			change_global_variable = { name = te_jmap_sc_rank_seen add = 1 }
+			if = {
+				limit = { te_jmap_gdppc_input < global_var:te_jmap_sc_rank_prev }
+				change_global_variable = { name = te_jmap_sc_rank_wrong add = 1 }
+			}
+			set_global_variable = { name = te_jmap_sc_rank_prev value = te_jmap_gdppc_input }
+		}
+		if = {
+			limit = {
+				global_var:te_jmap_sc_rank_seen = global_var:te_jmap_sc_rank_states
+				global_var:te_jmap_sc_rank_wrong = 0
+			}
+			debug_log = "TE_SELF_CHECK OK rank_walk states=[GetGlobalVariable('te_jmap_sc_rank_states').GetValue|0] seen=[GetGlobalVariable('te_jmap_sc_rank_seen').GetValue|0] out_of_order=0 date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN rank_walk states=[GetGlobalVariable('te_jmap_sc_rank_states').GetValue|0] seen=[GetGlobalVariable('te_jmap_sc_rank_seen').GetValue|0] out_of_order=[GetGlobalVariable('te_jmap_sc_rank_wrong').GetValue|0] (an ordered walk of the world's states, min = 0 to max = 5000, missed states or took them out of order: a Ranked map's places are wrong; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_rank_states
+		remove_global_variable = te_jmap_sc_rank_seen
+		remove_global_variable = te_jmap_sc_rank_wrong
+		remove_global_variable = te_jmap_sc_rank_prev
 	}
 }
 

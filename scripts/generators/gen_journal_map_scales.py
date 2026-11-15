@@ -26,6 +26,26 @@ entry's: the whole world, the default trim, whatever the Map Room's options, eac
 te_jmap_range_<map>_room is the Map Room's, under the options, with a factor of its own (te_jmap_<map>_room_factor),
 since a script value can't tell which page asks. The twin's range is the entry's until its first measure.
 
+**The Scale option** (owner, 2026-11-14, the thirteenth pass: te_jmap_scale, te_journal_map_values.txt). A factor is
+a script value, and a script value can read a global, so each factor the Map Room reads takes one of four branches:
+the map's own curve (the default, first, so a default paint pays one comparison), Linear, Logarithmic or Ranked. The
+paint itself doesn't change, and neither do the factors a system's own entry reads, nor the fixed curves.
+
+- Linear: straight from the range's low to its high; on a map with a meaningful midpoint, straight on each side of it.
+- Logarithmic: the same share of the color for each doubling. A map already on a doubling scale keeps its tree. A
+  straight map starts at its range's low, or at a LOG_RATIO-th of its high where the low is smaller (a low of 0 has
+  no logarithm). A map with a meaningful midpoint is logarithmic on each side of it by the distance from it, and
+  straight within min_half of it, where a logarithm has no start: the knee is min_half / LOG_KNEE_PART, and the log
+  is read in straight pieces between powers of two, so the first doubling past the knee is straight too. The
+  midpoint stays at exactly 0.5.
+- Ranked: the state's place in line among the states the map paints in the area, 0 to 1, equal figures sharing a
+  place (peacetime Devastation is hundreds of states at exactly 0, which an index would smear across the palette).
+  A paint can't sort, so the place is stored on the state (te_jmap_rank) by te_jmap_rank_<map>, which
+  te_jmap_refresh_range runs after the range: an ordered walk that counts places, then a pass that divides by the
+  number of places. A map with a meaningful midpoint is ranked on each side of it, outward, so the midpoint keeps its
+  color. One variable for every map: te_jmap_refresh_range clears it before any measure. Each map is ranked by its
+  own figure, though Current Comfort shares Base Comfort's range.
+
 **Fitted to the world** (owner, 2026-11-07: "people are not going to it to see that the world GDP/c average has gone
 up, they want to see the regional differences"). Nearly every map's colors run from the world's low to its high as
 it stands: the fifth lowest and the fifth highest of the states the map paints (TRIM states left out at each end, so
@@ -94,6 +114,19 @@ AREA_TRIM_PART = 10
 TRIM_DEFAULT, TRIM_NONE, TRIM_PERCENT = 0, 1, 2
 # The most doublings a doubling map's ladder reads (2^20 is a millionfold).
 MAX_DOUBLINGS = 20
+# The Scale option's settings (te_jmap_scale, te_journal_map_values.txt; unset is the map's own curve).
+SCALE_OWN, SCALE_LINEAR, SCALE_LOG, SCALE_RANKED = 0, 1, 2, 3
+# Logarithmic on a straight map: the scale starts at the range's low, or at this share of its high where the low is
+# smaller: six doublings at most. The engine keeps five decimals, so the share can't be much smaller: a
+# thousandth of the smallest range (0.002, the Capitalists' share) would truncate to 0 and be divided by.
+LOG_RATIO = 64
+# The smallest start the engine's five decimals leave after the division (asserted for every straight row, below).
+LOG_FLOOR = 0.00002
+# Logarithmic on a map with a meaningful midpoint: the knee is the map's min_half over this, so the scale is
+# straight within min_half of the midpoint (the log's first piece past the knee, from 1 to 2 knees, is straight).
+LOG_KNEE_PART = 2
+# The most states a rank's walk visits (ordered_state's max is a literal here; a game holds far fewer states).
+RANK_MAX = 5000
 
 
 def linear(lo, hi):
@@ -452,6 +485,81 @@ def world_factor(scale, lo, hi, x):
     return min(1.0, max(0.0, y))
 
 
+def log_start(scale, lo, hi):
+    """Where Logarithmic starts on a straight map: the range's low, or a LOG_RATIO-th of its high where the low is
+    smaller, as te_jmap_<map>_lg_lo works it out."""
+    L, H = world_bounds(scale, lo, hi)
+    return max(L, H / LOG_RATIO, 0.00001)
+
+
+def knee(scale):
+    """The knee of a midpoint map's Logarithmic scale: straight within twice this (min_half) of the midpoint."""
+    return scale["world"]["min_half"] / LOG_KNEE_PART
+
+
+def _side_share(option, d, span, k):
+    """How far along its side of the midpoint a state d from the side's start sits, 0-1, the side span long."""
+    if option == SCALE_LINEAR:
+        return d / span
+    return (1 + log2_pieces(d / k)) / (1 + log2_pieces(span / k))
+
+
+def scaled_factor(scale, option, lo, hi, x, rank=None):
+    """The factor te_jmap_<map>_factor gives at x under a Scale setting, for stored globals lo and hi (None: not
+    yet measured), clamped 0-1: the test's reference. rank: the state's stored place, for Ranked (None: no place
+    yet, which paints the midpoint color on a three-color map and the low color on any other)."""
+    if option == SCALE_OWN:
+        return world_factor(scale, lo, hi, x)
+    w = scale["world"]
+    if option == SCALE_RANKED:
+        y = rank if rank is not None else (0.5 if scale["three"] else 0.0)
+    elif w["kind"] == "mid":
+        L, H = world_bounds(scale, lo, hi)
+        mid, h = w["mid"], w["min_half"]
+        if x < mid:
+            B = min(H, mid)
+            y = min(0.5, 0.5 - 0.5 * _side_share(option, B - x, max(B - L, h), knee(scale)))
+        else:
+            A = max(L, mid)
+            y = max(0.5, 0.5 + 0.5 * _side_share(option, x - A, max(H - A, h), knee(scale)))
+    elif option == SCALE_LINEAR:
+        L, H = world_bounds(scale, lo, hi)
+        y = (x - L) / (H - L)
+    elif w["kind"] == "doubling":
+        return world_factor(scale, lo, hi, x)
+    else:
+        L, H = world_bounds(scale, lo, hi)
+        start = log_start(scale, lo, hi)
+        y = log2_pieces(x / start) / max(log2_pieces(H / start), 1)
+    return min(1.0, max(0.0, y))
+
+
+def ranks(figures, mid=None):
+    """{index: place} for a list of figures, as te_jmap_rank_<map> stores it: the place in line from the lowest, 0
+    to 1, equal figures sharing a place and each distinct figure a step of the same size. With a midpoint, each
+    side is ranked outward from it (0.5 to 0 below, 0.5 to 1 above) and a figure at the midpoint itself is 0.5."""
+    def places(values):
+        distinct = sorted(set(values))
+        return {v: i for i, v in enumerate(distinct)}, len(distinct)
+
+    out = {}
+    if mid is None:
+        place, count = places(figures)
+        for i, x in enumerate(figures):
+            out[i] = place[x] / max(count - 1, 1)
+        return out
+    below, n_below = places([-x for x in figures if x < mid])     # nearest the midpoint first
+    above, n_above = places([x for x in figures if x > mid])
+    for i, x in enumerate(figures):
+        if x < mid:
+            out[i] = 0.5 - 0.5 * (below[-x] + 1) / n_below
+        elif x > mid:
+            out[i] = 0.5 + 0.5 * (above[x] + 1) / n_above
+        else:
+            out[i] = 0.5
+    return out
+
+
 # ---- writing ------------------------------------------------------------------------------------------------------
 
 def segments(knots):
@@ -569,8 +677,66 @@ def _frac_ladder(inp, prefix, knots, start, sign, fmid=None):
                    lambda i: f"{inp} {cmp} {prefix}_k{i + 1}")
 
 
+def _indent(body):
+    return ["\t" + ln for ln in body]
+
+
+def _side_bodies(inp, mid, low, up):
+    """A midpoint map's two sides: below the midpoint the factor runs down from 0.5, above it up from 0.5; a state
+    past its side's start (the whole world on the other side) stays at 0.5."""
+    return (["if = {", f"\tlimit = {{ {inp} < {mid} }}"] + _indent(low) + ["\tmax = 0.5", "}",
+            "else = {"] + _indent(up) + ["\tmin = 0.5", "}"])
+
+
+def scale_bodies(scale):
+    """(values, {setting: body}) for the Scale option's other three settings: the script values Linear and
+    Logarithmic are drawn through, and each setting's lines inside te_jmap_<map>_factor."""
+    n, inp, w = scale["name"], scale["input"], scale["world"]
+    p = f"te_jmap_{n}"
+    lines, bodies = [], {}
+    # Ranked: the stored place. A state the map paints but the last measure didn't walk (made since) has none: the
+    # midpoint color on a three-color map, the low color on any other, until the next measure.
+    bodies[SCALE_RANKED] = [f"value = {num(0.5 if scale['three'] else 0)}", "if = {",
+                            "\tlimit = { has_variable = te_jmap_rank }", "\tvalue = var:te_jmap_rank", "}"]
+    if w["kind"] == "mid":
+        mid, k = num(w["mid"]), num(knee(scale))
+        bodies[SCALE_LINEAR] = _side_bodies(inp, mid, [
+            f"value = {p}_b", f"subtract = {inp}", f"divide = {p}_span_low", "multiply = -0.5", "add = 0.5"], [
+            f"value = {inp}", f"subtract = {p}_a", f"divide = {p}_span_up", "multiply = 0.5", "add = 0.5"])
+        # Logarithmic by the distance from the side's start, in knees: 1 + log2 of it, in straight pieces, which
+        # below one knee is the distance itself, so the scale is straight from the midpoint and 0 at it.
+        for side, dist, span in (("low", [f"value = {p}_b", f"subtract = {inp}"], f"{p}_span_low"),
+                                 ("up", [f"value = {inp}", f"subtract = {p}_a"], f"{p}_span_up")):
+            lines += _sv(f"{p}_sl_{side}_r", dist + [f"divide = {k}"])
+            lines += _sv(f"{p}_sl_{side}_t", _log_ladder(f"{p}_sl_{side}_r") + ["add = 1"])
+            lines += _sv(f"{p}_sl_{side}_span_r", [f"value = {span}", f"divide = {k}"])
+            lines += _sv(f"{p}_sl_{side}_top", _log_ladder(f"{p}_sl_{side}_span_r") + ["add = 1", "min = 1"])
+        bodies[SCALE_LOG] = _side_bodies(inp, mid, [
+            f"value = {p}_sl_low_t", f"divide = {p}_sl_low_top", "multiply = -0.5", "add = 0.5"], [
+            f"value = {p}_sl_up_t", f"divide = {p}_sl_up_top", "multiply = 0.5", "add = 0.5"])
+    elif w["kind"] == "doubling":
+        lines += _sv(f"{p}_span", [f"value = {p}_hi", f"subtract = {p}_lo"])
+        bodies[SCALE_LINEAR] = [f"value = {inp}", f"subtract = {p}_lo", f"divide = {p}_span"]
+        # Already a doubling at a time: Logarithmic is the map's own curve.
+        bodies[SCALE_LOG] = [f"value = {p}_log", f"divide = {p}_log_span"]
+    else:
+        if scale["min_span"] / LOG_RATIO < LOG_FLOOR:
+            raise ValueError(f"{n}: a {LOG_RATIO}th of its narrowest range, {scale['min_span']}, doesn't survive "
+                             "the engine's five decimals; Logarithmic would divide by 0")
+        bodies[SCALE_LINEAR] = [f"value = {inp}", f"subtract = {p}_lo", f"divide = {p}_span"]
+        lines += _sv(f"{p}_lg_lo", [f"value = {p}_hi", f"divide = {LOG_RATIO}", f"min = {p}_lo", "min = 0.00001"])
+        lines += _sv(f"{p}_lg_r", [f"value = {inp}", f"divide = {p}_lg_lo"])
+        lines += _sv(f"{p}_lg_t", _log_ladder(f"{p}_lg_r"))
+        lines += _sv(f"{p}_lg_span_r", [f"value = {p}_hi", f"divide = {p}_lg_lo"])
+        lines += _sv(f"{p}_lg_top", _log_ladder(f"{p}_lg_span_r") + ["min = 1"])
+        bodies[SCALE_LOG] = [f"value = {p}_lg_t", f"divide = {p}_lg_top"]
+    return lines, bodies
+
+
 def fitted_factor(scale):
-    """te_jmap_<name>_factor and the script values its curve is drawn through, for a map fitted to the world."""
+    """te_jmap_<name>_factor and the script values its curve is drawn through, for a map fitted to the world. A
+    factor the Map Room reads branches on its Scale option, the map's own curve first; a factor a system's own
+    entry reads is the map's own curve alone."""
     n, inp, w = scale["name"], scale["input"], scale["world"]
     p = f"te_jmap_{n}"
     lines = []
@@ -593,8 +759,7 @@ def fitted_factor(scale):
         lines += _frac_values(f"{p}_u", upper, f"{p}_a", f"{p}_span_up", 1, fu)
         low = _frac_ladder(inp, f"{p}_l", lower, f"{p}_b", -1, fl)
         up = _frac_ladder(inp, f"{p}_u", upper, f"{p}_a", 1, fu)
-        body = (["if = {", f"\tlimit = {{ {inp} < {mid} }}"] + ["\t" + ln for ln in low] + ["\tmax = 0.5", "}",
-                "else = {"] + ["\t" + ln for ln in up] + ["\tmin = 0.5", "}"])
+        body = _side_bodies(inp, mid, low, up)
     else:
         # log2 in straight pieces between powers of two, of x over the world's low, over the same of the high.
         lines += _sv(f"{p}_ratio", [f"value = {inp}", f"divide = {p}_lo"])
@@ -602,6 +767,15 @@ def fitted_factor(scale):
         lines += _sv(f"{p}_span_ratio", [f"value = {p}_hi", f"divide = {p}_lo"])
         lines += _sv(f"{p}_log_span", _log_ladder(f"{p}_span_ratio") + ["min = 1"])
         body = [f"value = {p}_log", f"divide = {p}_log_span"]
+    if in_room(scale):
+        # The Scale option: the map's own curve first, so a default paint pays one comparison.
+        values, bodies = scale_bodies(scale)
+        lines += values
+        switch = ["if = {", f"\tlimit = {{ te_jmap_scale = {SCALE_OWN} }}"] + _indent(body) + ["}"]
+        for setting in (SCALE_LINEAR, SCALE_LOG):
+            switch += ["else_if = {", f"\tlimit = {{ te_jmap_scale = {setting} }}"] + _indent(bodies[setting]) + ["}"]
+        switch += ["else = {"] + _indent(bodies[SCALE_RANKED]) + ["}"]
+        body = switch
     lines += _sv(f"{p}_factor", _guarded(scale, body) + ["min = 0", "max = 1"])
     return lines
 
@@ -659,6 +833,27 @@ def option_values():
               "# a copy the Map Room's ranges keep, since the entries' ranges count into te_jmap_n and te_jmap_k too)."]
     lines += stored("te_jmap_shown_states", "te_jmap_shown_n")
     lines += stored("te_jmap_shown_cut", "te_jmap_shown_k")
+    lines += ["# ---- The Scale option's Ranked setting: what te_jmap_rank_<map>'s walk reads and writes ----",
+              "# The place the walk has reached (te_jmap_i: the number of distinct figures so far, less one on a map",
+              "# ranked from its lowest, where the first place is 0) and the figure of the state before",
+              "# (te_jmap_prev). Read through these, never as bare globals: a tooltip that walked an option's effect",
+              "# would find them unset."]
+    lines += stored("te_jmap_rank_place", "te_jmap_i")
+    lines += stored("te_jmap_rank_prev", "te_jmap_prev")
+    lines += ["# The divisor that turns a place into 0-1: the last place, at least 1 (one distinct figure: every state",
+              "# at the low color, or at the midpoint's on a side with one figure)."]
+    lines += _sv("te_jmap_rank_top", ["value = te_jmap_rank_place", "min = 1"])
+    lines += ["# A state's place as its factor (state scope: the walk stored the place itself in te_jmap_rank). From",
+              "# the lowest: 0 to 1. On a side of a midpoint, outward: 0.5 down to 0 below it, 0.5 up to 1 above."]
+
+    def share(name, ops):
+        return _sv(name, ["value = 0", "if = {", "\tlimit = { has_variable = te_jmap_rank }",
+                          "\tvalue = var:te_jmap_rank", "\tdivide = te_jmap_rank_top"] + ["\t" + op for op in ops] +
+                   ["}"])
+
+    lines += share("te_jmap_rank_share", [])
+    lines += share("te_jmap_rank_share_low", ["multiply = -0.5", "add = 0.5"])
+    lines += share("te_jmap_rank_share_up", ["multiply = 0.5", "add = 0.5"])
     sels = sorted({s["sel"] for s in SCALES if fitted(s) and in_room(s)})
     lines += ["# 1 while the pick is a map fitted to a range, which the Outliers option acts on; 0 on a map of categories",
               "# or on a fixed scale, which has no range to trim."]
@@ -727,6 +922,60 @@ def _measure(scale, order, var):
     ]
 
 
+def _rank_walk(scale, extra, order, newer, first):
+    """One ordered walk that stores each state's place (te_jmap_rank): the states of `extra` among those the map
+    measures, in `order`, a new place whenever the figure moves on (`newer`: > rising, < falling) from the state
+    before; `first` is the place before the first (-1: the first place is 0; 0: it is 1)."""
+    n = scale["name"]
+    limit = " ".join(measured(scale) + extra)
+    sentinel = "-1000000000" if newer == ">" else "1000000000"
+    return [
+        f"set_global_variable = {{ name = te_jmap_i value = {first} }}",
+        f"set_global_variable = {{ name = te_jmap_prev value = {sentinel} }}",
+        "ordered_state = {",
+        f"\tlimit = {{ {limit} }}",
+        f"\torder_by = te_jmap_{n}_{order}",
+        "\tmin = 0",
+        f"\tmax = {RANK_MAX}",
+        "\tcheck_range_bounds = no",
+        "\tif = {",
+        f"\t\tlimit = {{ te_jmap_{n}_input {newer} te_jmap_rank_prev }}",
+        "\t\tchange_global_variable = { name = te_jmap_i add = 1 }",
+        f"\t\tset_global_variable = {{ name = te_jmap_prev value = te_jmap_{n}_input }}",
+        "\t}",
+        "\tset_variable = { name = te_jmap_rank value = te_jmap_rank_place }",
+        "}",
+    ]
+
+
+def _rank_share(scale, extra, share):
+    """The pass after a walk: each walked state's place becomes its factor (te_jmap_rank_share*)."""
+    limit = " ".join(measured(scale) + extra + ["has_variable = te_jmap_rank"])
+    return ["every_state = {", f"\tlimit = {{ {limit} }}",
+            f"\tset_variable = {{ name = te_jmap_rank value = {share} }}", "}"]
+
+
+def rank_effect(scale):
+    """te_jmap_rank_<map>: the Scale option's Ranked setting. Each state the map measures gets its place in line as
+    te_jmap_rank, 0-1 (the factor reads it as it is)."""
+    n, w = scale["name"], scale["world"]
+    body = ["set_global_variable = te_jmap_ranks"]
+    if w["kind"] == "mid":
+        mid = num(w["mid"])
+        below, above = [f"te_jmap_{n}_input < {mid}"], [f"te_jmap_{n}_input > {mid}"]
+        body += ["# Below the midpoint, the nearest first: 0.5 down to 0."]
+        body += _rank_walk(scale, below, "input", "<", 0) + _rank_share(scale, below, "te_jmap_rank_share_low")
+        body += ["# Above it, the nearest first: 0.5 up to 1."]
+        body += _rank_walk(scale, above, "input_neg", ">", 0) + _rank_share(scale, above, "te_jmap_rank_share_up")
+        body += ["# At the midpoint itself: its color.",
+                 "every_state = {", f"\tlimit = {{ {' '.join(measured(scale) + [f'te_jmap_{n}_input = {mid}'])} }}",
+                 "\tset_variable = { name = te_jmap_rank value = 0.5 }", "}"]
+    else:
+        body += ["# From the lowest: 0 to 1."]
+        body += _rank_walk(scale, [], "input_neg", ">", -1) + _rank_share(scale, [], "te_jmap_rank_share")
+    return _sv(f"te_jmap_rank_{n}", body)
+
+
 def render_effects():
     lines = [
         "# AUTO-GENERATED by scripts/generators/gen_journal_map_scales.py — do not edit manually.",
@@ -778,12 +1027,39 @@ def render_effects():
         lines += ["# Its two ends: the state K places from the top, and from the bottom."]
         lines += _sv(f"te_jmap_measure_{n}", _measure(scale, "input", "hi") + _measure(scale, "input_neg", "lo"))
     picks = sorted((s["sel"], range_name(s)) for s in SCALES if fitted(s) and in_room(s))
-    body = []
+    body = ["# One rank variable serves every map: no place outlives the pick or the setting it was taken under.",
+            "te_jmap_clear_ranks = yes"]
     for i, (sel, rn) in enumerate(picks):
         body += ["else_if = {" if i else "if = {", f"\tlimit = {{ te_jmap_selector = {sel} }}",
                  f"\tte_jmap_range_{rn} = yes", "}"]
+    body += ["# The Scale option's Ranked setting: the pick's places, taken with its range.",
+             "if = {", f"\tlimit = {{ te_jmap_scale = {SCALE_RANKED} }}", "\tte_jmap_refresh_rank = yes", "}"]
     lines += ["", "# The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt)."]
     lines += _sv("te_jmap_refresh_range", body)
+
+    lines += ["", "# ---- Ranked (the Scale option): each state's place in line, stored for the paint ----",
+              "# te_jmap_rank_<map> walks the states the map measures (those in the Map Room's area), lowest figure",
+              "# first, and stores each one's place as te_jmap_rank, 0 to 1, which te_jmap_<map>_factor reads under",
+              "# Ranked. Equal figures share a place, and each distinct figure is one step. A map with a meaningful",
+              "# midpoint is ranked on each side of it, outward, so the midpoint keeps its color. The walk is",
+              f"# ordered_state with min = 0 and max = {RANK_MAX} (a place is a count the body keeps, not a position);",
+              "# the pass after it divides each place by the last. Each map by its own figure, though Current Comfort",
+              "# shares Base Comfort's range. te_jmap_refresh_range runs the pick's after its range, having cleared",
+              "# every place first: a pick, an option click and each month's pulse.",
+              "", "# Every place off every state, where any was stored (te_jmap_ranks)."]
+    lines += _sv("te_jmap_clear_ranks", [
+        "if = {", "\tlimit = { has_global_variable = te_jmap_ranks }",
+        "\tevery_state = {", "\t\tlimit = { has_variable = te_jmap_rank }", "\t\tremove_variable = te_jmap_rank", "\t}",
+        "\tremove_global_variable = te_jmap_ranks", "}"])
+    ranked = [s for s in SCALES if fitted(s) and in_room(s)]
+    for scale in ranked:
+        lines += ["", f"# {scale['note']}."] + rank_effect(scale)
+    body = []
+    for i, scale in enumerate(sorted(ranked, key=lambda s: s["sel"])):
+        body += ["else_if = {" if i else "if = {", f"\tlimit = {{ te_jmap_selector = {scale['sel']} }}",
+                 f"\tte_jmap_rank_{scale['name']} = yes", "}"]
+    lines += ["", "# The pick's places, if it is fitted to the world."]
+    lines += _sv("te_jmap_refresh_rank", body)
     entries = [s["name"] for s in SCALES if s.get("entry")]
     lines += ["", "# The maps a system's own entry draws whatever the pick (je_global_warming, je_grand_monuments)."]
     lines += _sv("te_jmap_refresh_entry_ranges", [f"te_jmap_range_{n} = yes" for n in entries])

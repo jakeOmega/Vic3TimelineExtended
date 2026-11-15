@@ -661,12 +661,16 @@ te_jmap_continent_oceania_sgui = {
 }
 
 # Outliers: greyed while the pick has no range to trim (te_jmap_pick_fitted, generated: a map of categories or on a
-# fixed scale). The setting is kept, and acts again on the next fitted pick.
+# fixed scale), and under the Ranked scale, which colors by place in line and reads no range. The setting is kept,
+# and acts again on the next fitted pick or the next scale that reads a range.
 te_jmap_trim_default_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_jmap_pick_fitted = 1 }
+	is_valid = {
+		te_jmap_pick_fitted = 1
+		NOT = { te_jmap_scale = 3 }
+	}
 	effect = {
 		te_jmap_set_trim = { TRIM = 0 }
 	}
@@ -676,7 +680,10 @@ te_jmap_trim_none_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_jmap_pick_fitted = 1 }
+	is_valid = {
+		te_jmap_pick_fitted = 1
+		NOT = { te_jmap_scale = 3 }
+	}
 	effect = {
 		te_jmap_set_trim = { TRIM = 1 }
 	}
@@ -686,9 +693,55 @@ te_jmap_trim_percent_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_jmap_pick_fitted = 1 }
+	is_valid = {
+		te_jmap_pick_fitted = 1
+		NOT = { te_jmap_scale = 3 }
+	}
 	effect = {
 		te_jmap_set_trim = { TRIM = 2 }
+	}
+}
+
+# Scale (the thirteenth pass, 2026-11-14): the map's own curve, linear, logarithmic or ranked (te_jmap_scale). The
+# map's own is always there, to go back to; the other three are greyed while the pick has no range for a scale to run
+# over (te_jmap_pick_fitted), with that as the tooltip. Logarithmic applies to every fitted map: a map with a
+# meaningful midpoint is logarithmic on each side of it (te_journal_map_scales_generated.txt).
+te_jmap_scale_own_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_scale = { SCALE = 0 }
+	}
+}
+
+te_jmap_scale_linear_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_scale = { SCALE = 1 }
+	}
+}
+
+te_jmap_scale_log_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_scale = { SCALE = 2 }
+	}
+}
+
+te_jmap_scale_ranked_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_scale = { SCALE = 3 }
 	}
 }
 
