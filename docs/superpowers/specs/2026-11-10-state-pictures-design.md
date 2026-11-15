@@ -272,6 +272,11 @@ era 8's floors until it reaches rung 4. Reading the floors off the owner's actua
 country-era value the mod doesn't have. The pass stores `te_sp_means` (1 poor, 3 affluent, absent
 ordinary), and a state leaves a level only half a point past its floor.
 
+*Superseded 2026-11-14:* the floors are now relative to the world of the day after all, the world's average
+standard of living (the plain average of states, each counted once, measured once a year) times 0.5 for poor and
+1.6 for affluent (the owner: "the world average +/- a percentage", then the two ratios picked from #1799's table). The fixed floors above tagged 88% of states poor in the
+owner's Singapore game, whose AI owners stood on rungs 3 and 4 by the 1940s. As built: the system doc.
+
 **Upkeep** is relative: `average_sol` minus `average_expected_sol`, the game's own measure of whether people
 have what they expect. It decides how the place is kept, so it draws neglect: litter, shuttered shops,
 broken windows, peeling paint, queues and idle crowds. Two levels: ordinary and run-down, run-down (`te_sp_rundown`) when the
@@ -293,7 +298,7 @@ order below shows (each has its own digit in the character place of the weight).
 | Picture | Shows when | Signal | Read |
 |---|---|---|---|
 | Housing blocks | Command Economy and Prefabricated Construction | the owner's law and technology | live |
-| Boomtown, cranes everywhere | a city (100,000 or more) whose people have grown 3% a year, smoothed | the pass's `te_sp_boom`: `te_dg_walk_pop` against the year before, held within a tenth either way and smoothed (a fifth of each year's rate), so 5% a year makes a boomtown in its fifth year. A year in which the state's province count changed is left out | the yearly pass |
+| Boomtown, cranes everywhere | a city (100,000 or more) whose people have grown 3% a year, smoothed (5% since 2026-11-14, the owner's "~5%/year"; the system doc gives the years it takes) | the pass's `te_sp_boom`: `te_dg_walk_pop` against the year before, held within a tenth either way and smoothed (a fifth of each year's rate), so 5% a year makes a boomtown in its fifth year. A year in which the state's province count changed is left out | the yearly pass |
 | Declining city, empty works | a city whose people have fallen 1% a year, smoothed | `te_sp_decline`, the same figure: 2% a year makes one in its fourth year | the yearly pass |
 | Divided city, shacks under towers | a metropolis with a Gini of 0.85 or more | `te_sp_divided`: `te_dg_gini` (in a 1940 save the metropolises' median is 0.78 and a quarter are at 0.85) | the yearly pass |
 | Smog city | heavy pollution | the state region's `pollution_amount` at 150 or more of 255 (vanilla's pollution map mode is at full color from 153) | live |
