@@ -19638,5 +19638,1125 @@
  "space_race_events.32.t": {
   "en": "Who Goes to the Moon?",
   "ru": "Кто полетит на Луну?"
+ },
+ "space_race_events.33.a": {
+  "en": "Redirect to the water-rich site immediately.",
+  "ru": "Немедленно перенацелиться на богатую водой площадку."
+ },
+ "space_race_events.33.b": {
+  "en": "Stick to the original plan.",
+  "ru": "Придерживаться первоначального плана."
+ },
+ "space_race_events.33.d": {
+  "en": "Orbital surveys of Mars have found signs of ice beneath the surface in a region near our planned landing zone. If the ice is confirmed, a base there could make its own water and rocket fuel instead of carrying them from Earth.",
+  "ru": "Орбитальная съёмка Марса обнаружила признаки льда под поверхностью в районе рядом с намеченной зоной посадки. Если лёд подтвердится, база там сможет сама производить воду и ракетное топливо, а не возить их с Земли."
+ },
+ "space_race_events.33.f": {
+  "en": "\\\"The radar returns from that region are what buried ice looks like: a few meters down, over a wide area. I have checked them against the ice we already know at the poles, and they match. Ice there means drinking water, oxygen to breathe and hydrogen for fuel, none of it lifted from Earth. The new site is rougher than the one we planned for, and the pilots want to see the surveys before they agree to it.\\\"\\n\\n— The mission geologist",
+  "ru": "«Радарные отражения от этого района выглядят так, как выглядит погребённый лёд: в нескольких метрах под поверхностью, на большой площади. Я сверил их со льдом на полюсах, который нам уже известен, и они совпадают. Лёд там означает питьевую воду, кислород для дыхания и водород для топлива, и ничего из этого не придётся поднимать с Земли. Новая площадка более неровная, чем та, что мы планировали, и пилоты хотят увидеть данные съёмки, прежде чем согласиться.»\\n\\n— Геолог миссии"
+ },
+ "space_race_events.33.t": {
+  "en": "Water on Mars",
+  "ru": "Вода на Марсе"
+ },
+ "space_race_events.34.a": {
+  "en": "Maximize the payload: we may not get another chance.",
+  "ru": "Максимальная полезная нагрузка: другого шанса может не быть."
+ },
+ "space_race_events.34.b": {
+  "en": "Strip to essentials: speed is everything.",
+  "ru": "Оставить только необходимое: скорость превыше всего."
+ },
+ "space_race_events.34.c": {
+  "en": "International consortium: shared instruments.",
+  "ru": "Международный консорциум: общие приборы."
+ },
+ "space_race_events.34.d": {
+  "en": "The design of our interstellar probe has reached the point where its payload must be fixed. Its mass is limited, and every kilogram of instruments adds to the time it takes to reach its target. Some of our scientists want every instrument they can fit, since we may never send another probe. Others want only the essentials, to shorten the voyage by years. A third group wants to offer instrument space to foreign partners.",
+  "ru": "Проект нашего межзвёздного зонда дошёл до этапа, когда нужно определить его полезную нагрузку. Масса зонда ограничена, и каждый килограмм приборов удлиняет путь к цели. Часть наших учёных хочет взять все приборы, какие поместятся, ведь второго зонда мы можем и не отправить. Другие хотят только самое необходимое, чтобы сократить полёт на годы. Третья группа предлагает отдать место для приборов зарубежным партнёрам."
+ },
+ "space_race_events.34.f": {
+  "en": "The payload manager's list of the instruments proposed for the probe, with the case made for each:\\n\\nTwo cameras, one wide and one narrow. They are the only way to see any planets the target star has, and the public will expect pictures.\\nA spectrometer. It reads what the star and anything around it is made of, and the scientists rank it with the cameras.\\nA magnetometer. It is light, and it would measure the fields between the stars, which nothing has measured at that distance.\\nA radar sounder. It would map the surface of any planet the probe passes close to, and it is by far the heaviest instrument proposed.\\nA dust counter. It weighs less than a kilogram and would tell us how fast the hull is being worn on the way.",
+  "ru": "Список приборов, предложенных для зонда, составленный руководителем полезной нагрузки, с доводами в пользу каждого:\\n\\nДве камеры, широкоугольная и узкоугольная. Только с их помощью можно увидеть планеты целевой звезды, если они есть, и публика ждёт снимков.\\nСпектрометр. Он определяет состав звезды и всего, что вокруг неё, и учёные ставят его в один ряд с камерами.\\nМагнитометр. Он лёгкий и измерил бы поля между звёздами, которых на таком расстоянии ещё никто не измерял.\\nРадиолокационный зондировщик. Он составил бы карту поверхности любой планеты, возле которой пройдёт зонд, и это самый тяжёлый из предложенных приборов.\\nСчётчик пыли. Он весит меньше килограмма и показал бы, как быстро в пути изнашивается корпус."
+ },
+ "space_race_events.34.t": {
+  "en": "The Instrument Debate",
+  "ru": "Спор о приборах"
+ },
+ "space_race_events.35.a": {
+  "en": "National supply chain: full control.",
+  "ru": "Национальная цепочка поставок: полный контроль."
+ },
+ "space_race_events.35.b": {
+  "en": "Multi-national logistics: fly the supplies with partners.",
+  "ru": "Многонациональная логистика: доставлять грузы вместе с партнёрами."
+ },
+ "space_race_events.35.c": {
+  "en": "Let private enterprise lead: faster turnaround.",
+  "ru": "Пусть ведёт частное предпринимательство: быстрее оборот."
+ },
+ "space_race_events.35.d": {
+  "en": "As our colony program grows, keeping its sites supplied has become a system of its own. Launch windows, fuel budgets and radiation limits for perishable cargo all have to be planned together. Our planners now disagree about who should run the supply chain to the colonies.",
+  "ru": "По мере роста нашей программы колонизации снабжение её площадок превратилось в отдельную систему. Стартовые окна, топливные бюджеты и пределы облучения для скоропортящихся грузов приходится планировать вместе. Наши планировщики расходятся во мнениях, кому управлять цепочкой поставок к колониям."
+ },
+ "space_race_events.35.f": {
+  "en": "Remarks at the program's logistics meeting, from the minutes.\\n\\n\\\"The colony managers want a ship every month. I can give them a ship every launch window, because that is when the fuel budget allows one, and anything that misses it waits in orbit.\\\"\\n\\n\\\"Then send more on each ship. The seed stock in the last shipment was three weeks from the end of its shelf life when it arrived.\\\"\\n\\n\\\"Every kilogram more needs more fuel, and the fuel has weight of its own. If I load the ship heavier, it needs a bigger rocket than the one we have.\\\"\\n\\n\\\"Then let the colony managers decide what goes on it. We are packing their ships from lists we made before we knew what the sites actually need.\\\"",
+  "ru": "Реплики с совещания по логистике программы, из протокола.\\n\\n«Управляющие колониями хотят корабль каждый месяц. Я могу дать им корабль в каждое стартовое окно, потому что только тогда топливный бюджет это позволяет, а всё, что не успело, ждёт на орбите.»\\n\\n«Тогда грузите на каждый корабль больше. Семена в прошлой партии пришли за три недели до конца срока хранения.»\\n\\n«Каждый лишний килограмм требует больше топлива, а у топлива тоже есть вес. Если загрузить корабль тяжелее, понадобится ракета больше той, что у нас есть.»\\n\\n«Тогда пусть управляющие колониями сами решают, что грузить. Мы комплектуем их корабли по спискам, составленным до того, как мы узнали, что на самом деле нужно площадкам.»"
+ },
+ "space_race_events.35.t": {
+  "en": "Supply Chain to the Stars",
+  "ru": "Цепочка поставок к звёздам"
+ },
+ "space_race_events.36.a": {
+  "en": "Begin extraction operations.",
+  "ru": "Начать добычу."
+ },
+ "space_race_events.36.b": {
+  "en": "Study the deposits thoroughly first.",
+  "ru": "Сначала тщательно изучить залежи."
+ },
+ "space_race_events.36.c": {
+  "en": "License extraction to private industry.",
+  "ru": "Выдать частной промышленности лицензии на добычу."
+ },
+ "space_race_events.36.d": {
+  "en": "Surveys of the sites chosen for our first lunar colony have found deposits of helium-3 far richer than expected. The isotope could fuel a kind of fusion reactor, and if such reactors come into use, the colony would have something to sell.",
+  "ru": "Разведка площадок, выбранных для нашей первой лунной колонии, обнаружила залежи гелия-3, гораздо богаче ожидавшихся. Этот изотоп мог бы стать топливом для термоядерных реакторов особого типа, и если такие реакторы войдут в употребление, колонии будет что продавать."
+ },
+ "space_race_events.36.f": {
+  "en": "To the program, from the lunar survey team. The cores from the three candidate sites all show helium-3 in the upper regolith, and at two of them the concentration is several times our estimate from orbit. The helium is spread thinly through the soil, so getting it out means heating a great deal of regolith and capturing the gas that comes off. We can describe the deposits, but we cannot say what they are worth, since that depends on reactors that may or may not be built. We recommend a wider survey before any site is marked for extraction, and we attach the core logs.",
+  "ru": "Программе, от лунной геологоразведочной группы. Керны с трёх площадок-кандидатов показывают гелий-3 в верхнем слое реголита, а на двух из них концентрация в несколько раз выше нашей оценки с орбиты. Гелий тонким слоем распределён по грунту, поэтому для его добычи придётся нагревать огромное количество реголита и собирать выделяющийся газ. Мы можем описать залежи, но не можем сказать, сколько они стоят, поскольку это зависит от реакторов, которые могут быть построены, а могут и нет. Мы рекомендуем провести более широкую разведку, прежде чем отводить какую-либо площадку под добычу, и прилагаем журналы кернов."
+ },
+ "space_race_events.36.t": {
+  "en": "Helium in the Dust",
+  "ru": "Гелий в пыли"
+ },
+ "space_race_events.37.a": {
+  "en": "Show the world what lies beyond.",
+  "ru": "Показать миру, что лежит за пределами."
+ },
+ "space_race_events.37.b": {
+  "en": "Analyze the data before releasing it.",
+  "ru": "Проанализировать данные, прежде чем публиковать."
+ },
+ "space_race_events.37.d": {
+  "en": "Our deep-space probe has sent back its first close images of its target, in more detail than any telescope on Earth can give. The program's scientists are reading the first of them now, and the rest of the set is still coming in.",
+  "ru": "Наш зонд дальнего космоса прислал первые снимки цели с близкого расстояния, более подробные, чем способен дать любой телескоп на Земле. Учёные программы читают первые из них прямо сейчас, а остальные ещё приходят."
+ },
+ "space_race_events.37.d_asteroid": {
+  "en": "Our deep-space probe has sent back close images of the first asteroid on its course through the belt: a cratered, irregular body that telescopes on Earth show only as a moving speck of light. One frame, taken looking back, shows Earth as a pale blue point. The program's scientists are reading the first images now, and the rest of the set is still coming in.",
+  "ru": "Наш зонд дальнего космоса прислал снимки первого астероида на своём пути через пояс: изрытого кратерами тела неправильной формы, которое в земные телескопы видно лишь как движущаяся точка света. На одном кадре, снятом назад, Земля видна бледно-голубой точкой. Учёные программы читают первые снимки прямо сейчас, а остальные ещё приходят."
+ },
+ "space_race_events.37.d_mars": {
+  "en": "Our deep-space probe has sent back its first close images of Mars: dry channels and the edge of a polar cap, in more detail than any telescope on Earth can give. One frame, taken looking back, shows Earth as a pale blue point. The program's scientists are reading the first images now, and the rest of the set is still coming in.",
+  "ru": "Наш зонд дальнего космоса прислал первые снимки Марса с близкого расстояния: высохшие русла и край полярной шапки, более подробные, чем способен дать любой телескоп на Земле. На одном кадре, снятом назад, Земля видна бледно-голубой точкой. Учёные программы читают первые снимки прямо сейчас, а остальные ещё приходят."
+ },
+ "space_race_events.37.d_tour": {
+  "en": "Our deep-space probe has sent back its first close images of Jupiter: bands of cloud and a storm wider than Earth, in more detail than any telescope on Earth can give. One frame, taken looking back, shows Earth as a pale blue point. The program's scientists are reading the first images now, and the rest of the set is still coming in.",
+  "ru": "Наш зонд дальнего космоса прислал первые снимки Юпитера с близкого расстояния: полосы облаков и шторм шире Земли, более подробные, чем способен дать любой телескоп на Земле. На одном кадре, снятом назад, Земля видна бледно-голубой точкой. Учёные программы читают первые снимки прямо сейчас, а остальные ещё приходят."
+ },
+ "space_race_events.37.d_venus": {
+  "en": "Our deep-space probe has sent back its first close images of Venus: the bands of cloud that cover the whole planet, in more detail than any telescope on Earth can give. One frame, taken looking back, shows Earth as a pale blue point. The program's scientists are reading the first images now, and the rest of the set is still coming in.",
+  "ru": "Наш зонд дальнего космоса прислал первые снимки Венеры с близкого расстояния: полосы облаков, покрывающие всю планету, более подробные, чем способен дать любой телескоп на Земле. На одном кадре, снятом назад, Земля видна бледно-голубой точкой. Учёные программы читают первые снимки прямо сейчас, а остальные ещё приходят."
+ },
+ "space_race_events.37.f": {
+  "en": "The first image came in line by line, and the control room watched it build on the display from the top down: black at first, then the edge of the target, then the first markings across it. Someone at the back began to clap, and the operators kept working while the room clapped around them. The mission director stood behind them until the last line was in. \\\"Make two copies and keep them in separate rooms. Then send one to the university and one to the government, in that order.\\\" The operator nearest the director began copying the file.",
+  "ru": "Первый снимок приходил построчно, и в зале управления смотрели, как он вырастает на дисплее сверху вниз: сначала чёрный фон, потом край цели, потом первые отметины на ней. Кто-то в глубине зала начал хлопать, и операторы продолжали работу, пока зал аплодировал вокруг них. Директор миссии стоял позади них, пока не пришла последняя строка. «Сделайте две копии и храните их в разных помещениях. Потом отправьте одну в университет, а другую правительству, именно в таком порядке.» Ближайший к директору оператор начал копировать файл."
+ },
+ "space_race_events.37.t": {
+  "en": "Pale Blue Dot",
+  "ru": "Бледно-голубая точка"
+ },
+ "space_race_events.4.a": {
+  "en": "Venus holds the key to understanding our own world.",
+  "ru": "Венера хранит ключ к пониманию нашего собственного мира."
+ },
+ "space_race_events.4.b": {
+  "en": "Mars is our future: every measurement matters.",
+  "ru": "Марс — наше будущее: важно каждое измерение."
+ },
+ "space_race_events.4.c": {
+  "en": "The asteroid belt is an untapped treasure.",
+  "ru": "Пояс астероидов — нетронутое сокровище."
+ },
+ "space_race_events.4.d": {
+  "en": "Our deep-space probe has sent back its final survey of its target. The program's scientists now hold its complete record: the images, the readings from every instrument it carried, and the probe's own reports on its condition. They expect the work of reading it to keep the universities busy for years.",
+  "ru": "Наш зонд дальнего космоса прислал заключительный обзор своей цели. Учёные программы теперь располагают его полной записью: снимками, показаниями всех приборов, которые он нёс, и собственными донесениями зонда о его состоянии. Они полагают, что на разбор уйдут годы работы университетов."
+ },
+ "space_race_events.4.d_tour": {
+  "en": "Our deep-space probe has passed the last planet on its tour and sent back its survey of it. The program's scientists now hold the complete record of the flight: the images of every planet it passed, the readings from every instrument it carried, and the probe's own reports on its condition. They expect the work of reading it to keep the universities busy for years.",
+  "ru": "Наш зонд дальнего космоса миновал последнюю планету своего маршрута и прислал её обзор. Учёные программы теперь располагают полной записью полёта: снимками всех планет, мимо которых он прошёл, показаниями всех приборов, которые он нёс, и собственными донесениями зонда о его состоянии. Они полагают, что на разбор уйдут годы работы университетов."
+ },
+ "space_race_events.4.e": {
+  "en": "Share our discoveries freely with the scientific world.",
+  "ru": "Свободно поделиться открытиями с научным миром."
+ },
+ "space_race_events.4.f": {
+  "en": "To the government, from the probe's mission team. The final survey package arrived overnight and is complete. Every instrument reported, and the receiving stations checked each block against the probe's own count before we called it received. The images are being cleaned and assembled now, and the first will be ready for the government within the week. The other readings go to the universities that built the instruments that took them. We recommend that the probe be kept powered and listened to for as long as it answers, since its signal still tells us about the space it is crossing. We ask for the government's decision on how the results are to be released.",
+  "ru": "Правительству, от группы миссии зонда. Пакет заключительного обзора пришёл за ночь и полон. Все приборы отчитались, а принимающие станции сверили каждый блок со счётчиком самого зонда, прежде чем мы сочли его принятым. Снимки сейчас очищаются и собираются, и первые будут готовы для правительства в течение недели. Остальные показания идут в университеты, построившие приборы, которые их сняли. Мы рекомендуем держать зонд включённым и слушать его, пока он отвечает, поскольку его сигнал по-прежнему рассказывает о пространстве, которое он пересекает. Просим правительство решить, как обнародовать результаты."
+ },
+ "space_race_events.4.g": {
+  "en": "Jupiter, and every planet beyond it. Publish the whole record.",
+  "ru": "Юпитер и каждая планета за ним. Опубликовать всю запись."
+ },
+ "space_race_events.4.t": {
+  "en": "Voices from the Void",
+  "ru": "Голоса из пустоты"
+ },
+ "space_race_events.40.a": {
+  "en": "Active magnetic shielding: deflect the particles.",
+  "ru": "Активная магнитная защита: отклонять частицы."
+ },
+ "space_race_events.40.b": {
+  "en": "Water-wall passive shielding: proven physics.",
+  "ru": "Пассивная водяная защита: проверенная физика."
+ },
+ "space_race_events.40.c": {
+  "en": "Accept higher dose limits and fly lighter.",
+  "ru": "Принять более высокие пределы доз и лететь легче."
+ },
+ "space_race_events.40.d": {
+  "en": "Radiation readings from our test flights show that crews beyond the Earth's magnetic field would receive far more than our first models predicted. The radiation belts and cosmic rays stand in the way of long crewed missions. Our engineers must find a way to shield the crew without going over the mass budget.",
+  "ru": "Показания радиации с наших испытательных полётов говорят, что экипажи за пределами магнитного поля Земли получат намного больше, чем предсказывали наши первые модели. Радиационные пояса и космические лучи преграждают путь длительным пилотируемым миссиям. Нашим инженерам нужно найти способ защитить экипаж, не превысив бюджет массы."
+ },
+ "space_race_events.40.f": {
+  "en": "\\\"The dosimeters we flew behind a centimeter of aluminum read almost the same as the ones outside it. The protons go straight through that. To stop them we need mass, and the cheapest mass we carry is water, if we put the tanks around the crew instead of behind them. The other way is a magnetic field around the cabin, which weighs less but has never been built at that size. I have set out both, with the dose each would give, for the mission architect.\\\"\\n\\n— The radiation protection officer, after the last test flight",
+  "ru": "«Дозиметры, которые мы пускали за сантиметром алюминия, показали почти то же, что и снаружи. Протоны проходят его насквозь. Чтобы их остановить, нужна масса, и самая дешёвая масса на борту — вода, если разместить баки вокруг экипажа, а не позади него. Другой путь — магнитное поле вокруг кабины: оно легче, но такого размера его ещё никто не создавал. Я изложил оба варианта с дозой, которую даст каждый, для архитектора миссии.»\\n\\n— Офицер по радиационной защите, после последнего испытательного полёта"
+ },
+ "space_race_events.40.t": {
+  "en": "The Invisible Storm",
+  "ru": "Невидимая буря"
+ },
+ "space_race_events.41.a": {
+  "en": "Invest in electromagnetic launch assist.",
+  "ru": "Инвестировать в электромагнитный разгон при старте."
+ },
+ "space_race_events.41.b": {
+  "en": "Leverage existing infrastructure.",
+  "ru": "Использовать существующую инфраструктуру."
+ },
+ "space_race_events.41.c": {
+  "en": "Conventional chemical rockets: reliable, expensive.",
+  "ru": "Обычные химические ракеты: надёжно, но дорого."
+ },
+ "space_race_events.41.d": {
+  "en": "A cost study of our current mission plan has found that every kilogram delivered to the lunar or Martian surface costs many times what the same kilogram costs to put in orbit around Earth, and most of that cost is the fuel to lift it. The program can only grow if it finds a cheaper way to lift mass.",
+  "ru": "Анализ затрат по нашему нынешнему плану миссий показал, что каждый килограмм, доставленный на поверхность Луны или Марса, стоит во много раз больше, чем тот же килограмм на орбите вокруг Земли, и большая часть этих затрат — топливо для подъёма. Программа сможет расти, только если найдёт более дешёвый способ поднимать массу."
+ },
+ "space_race_events.41.f": {
+  "en": "\\\"I am the program's financial controller, and I have one figure for the government: what it costs us to put a kilogram where the mission needs it. Most of that cost is fuel, and most of the fuel is spent lifting the rest of the fuel. The engineers can take a little off with better engines. A magnetic catapult on the surface, or a cable to orbit if we have one, would change the figure entirely, and I have asked the engineers to cost both before the next budget.\\\"",
+  "ru": "«Я финансовый контролёр программы, и у меня для правительства одна цифра: во что нам обходится доставка килограмма туда, где он нужен миссии. Большая часть затрат — топливо, а большая часть топлива уходит на подъём остального топлива. Инженеры могут немного сэкономить с помощью лучших двигателей. Магнитная катапульта на поверхности или кабель до орбиты, если он у нас будет, изменили бы эту цифру полностью, и я попросил инженеров рассчитать стоимость обоих вариантов до следующего бюджета.»"
+ },
+ "space_race_events.41.t": {
+  "en": "The Tyranny of the Rocket Equation",
+  "ru": "Тирания ракетного уравнения"
+ },
+ "space_race_events.42.a": {
+  "en": "Develop autonomous AI decision-support systems.",
+  "ru": "Разработать автономные системы поддержки принятия решений на основе ИИ."
+ },
+ "space_race_events.42.b": {
+  "en": "Build a laser relay network to keep the link open.",
+  "ru": "Построить сеть лазерных ретрансляторов для поддержания связи."
+ },
+ "space_race_events.42.c": {
+  "en": "Train the crew for complete independence.",
+  "ru": "Подготовить экипаж к полной самостоятельности."
+ },
+ "space_race_events.42.d": {
+  "en": "Depending on where Earth and Mars stand in their orbits, a signal between them takes from about three to twenty-two minutes each way. Any emergency on the Martian surface will have to be handled by the crew before mission control even hears of it. The mission's computers and the crew's training must be planned around that delay.",
+  "ru": "В зависимости от положения Земли и Марса на орбитах сигнал между ними идёт в одну сторону от трёх до двадцати двух минут. Любую аварийную ситуацию на поверхности Марса экипажу придётся решать, прежде чем центр управления вообще о ней узнает. Бортовые компьютеры миссии и подготовку экипажа нужно планировать с учётом этой задержки."
+ },
+ "space_race_events.42.f": {
+  "en": "In the simulator the warning light came on six minutes into the exercise, and the crew commander read it out to Earth as the procedure required: pressure falling in the second airlock. Then the crew got on with it. By the time Earth's reply came over the speaker, twenty minutes later, they had found the leak, closed the outer door and logged the repair. \\\"Control recommends you isolate the second airlock and check the outer seal.\\\" The commander acknowledged it, wrote the time of the reply in the log beside the time of the repair, and called the next item on the checklist.",
+  "ru": "На тренажёре сигнальная лампа загорелась на шестой минуте упражнения, и командир экипажа передал на Землю, как требовала процедура: падает давление во втором шлюзе. Затем экипаж занялся делом. К тому времени, когда ответ Земли прозвучал из динамика, спустя двадцать минут, они уже нашли утечку, закрыли внешний люк и записали ремонт в журнал. «Центр рекомендует изолировать второй шлюз и проверить внешнее уплотнение.» Командир подтвердил приём, записал в журнале время ответа рядом со временем ремонта и назвал следующий пункт контрольного списка."
+ },
+ "space_race_events.42.t": {
+  "en": "Twenty Minutes of Silence",
+  "ru": "Двадцать минут молчания"
+ },
+ "space_race_events.43.a": {
+  "en": "Full bioregenerative system: living machinery.",
+  "ru": "Полностью биорегенеративная система: живые механизмы."
+ },
+ "space_race_events.43.b": {
+  "en": "Hybrid chemical-biological: engineered redundancy.",
+  "ru": "Гибридная химико-биологическая: продуманное резервирование."
+ },
+ "space_race_events.43.c": {
+  "en": "Import consumables from Earth: simple but fragile.",
+  "ru": "Ввозить расходные материалы с Земли: просто, но хрупко."
+ },
+ "space_race_events.43.d": {
+  "en": "Long stays away from Earth need a life-support system that recycles nearly all its air, water and waste. Our present systems recover about nine-tenths of each, and living away for years needs nearly all of it back. The problem is as much one of biology as of engineering.",
+  "ru": "Длительное пребывание вдали от Земли требует системы жизнеобеспечения, которая перерабатывает почти весь воздух, воду и отходы. Наши нынешние системы возвращают около девяти десятых каждого, а жизнь вдали на протяжении лет требует вернуть почти всё. Эта задача в такой же мере биологическая, как и инженерная."
+ },
+ "space_race_events.43.f": {
+  "en": "The bioengineer began the morning round at the algae tanks, holding each sample tube up to the light to read its color against the chart taped to the wall. Two tanks had gone pale overnight. He drew a sample from each for the microscope, turned up the lamps over both, and noted it on the clipboard. In the next bay the bacterial reactors were running warm, as they had all week, and he turned the cooling up by a quarter and wrote that down too. At the end of the round he copied the readings into the log for the life-support team.",
+  "ru": "Биоинженер начал утренний обход с бассейнов с водорослями, поднимая каждую пробирку к свету, чтобы сравнить цвет с таблицей, приклеенной к стене. Два бассейна за ночь побледнели. Он взял из каждого пробу для микроскопа, прибавил свет над обоими и записал это в блокнот. В следующем отсеке бактериальные реакторы работали тёплыми, как и всю неделю, и он на четверть усилил охлаждение и тоже это записал. В конце обхода он перенёс показания в журнал для группы жизнеобеспечения."
+ },
+ "space_race_events.43.t": {
+  "en": "The Loop Must Close",
+  "ru": "Цикл должен замкнуться"
+ },
+ "space_race_events.44.a": {
+  "en": "Emergency shelter protocols: protect the crew.",
+  "ru": "Аварийные протоколы укрытия: защитить экипаж."
+ },
+ "space_race_events.44.b": {
+  "en": "Our shielding should hold. Continue operations.",
+  "ru": "Наша защита должна выдержать. Продолжать работу."
+ },
+ "space_race_events.44.d": {
+  "en": "Our solar monitors have detected a large eruption from the Sun aimed toward the inner planets. Within hours a cloud of charged particles will cross the paths of our missions, putting crews and sensitive electronics at risk.",
+  "ru": "Наши солнечные мониторы зафиксировали мощный выброс на Солнце, направленный к внутренним планетам. Через несколько часов облако заряженных частиц пересечёт пути наших миссий, подвергнув риску экипажи и чувствительную электронику."
+ },
+ "space_race_events.44.f": {
+  "en": "To all mission crews, from the solar weather office. A coronal mass ejection left the Sun at the start of this shift and is headed toward you. We expect the particles to arrive in about fourteen hours and to stay high for several hours after that. Crews are to be in the storm shelter before the arrival time, with the shelter's supplies checked. Electronics that are not needed during the storm are to be powered down. We will send the all-clear when the readings return to normal.",
+  "ru": "Всем экипажам миссий, от службы космической погоды. Корональный выброс массы покинул Солнце в начале этой смены и движется к вам. Мы ожидаем прибытия частиц примерно через четырнадцать часов и высокого уровня ещё в течение нескольких часов после этого. Экипажам надлежит находиться в штормовом укрытии до времени прибытия, проверив запасы укрытия. Электронику, не нужную во время бури, следует отключить. Мы подадим отбой, когда показания вернутся к норме."
+ },
+ "space_race_events.44.t": {
+  "en": "Weather from the Sun",
+  "ru": "Погода от Солнца"
+ },
+ "space_race_events.45.a": {
+  "en": "Rocket straight to the target: the fastest path.",
+  "ru": "Ракета прямо к цели: самый быстрый путь."
+ },
+ "space_race_events.45.a_tour": {
+  "en": "The close pass: all the speed Jupiter will give us.",
+  "ru": "Близкий пролёт: вся скорость, которую даст Юпитер."
+ },
+ "space_race_events.45.b": {
+  "en": "Swing past another planet on the way: more data, longer flight.",
+  "ru": "Облететь по пути другую планету: больше данных, дольше полёт."
+ },
+ "space_race_events.45.b_tour": {
+  "en": "The wide pass: longer among the moons, a slower flight.",
+  "ru": "Широкий пролёт: дольше среди лун, медленнее полёт."
+ },
+ "space_race_events.45.c": {
+  "en": "Ion drive on a direct trajectory: no gravity tricks.",
+  "ru": "Ионный двигатель на прямой траектории: без гравитационных манёвров."
+ },
+ "space_race_events.45.c_tour": {
+  "en": "Add the ion drive: correct the course after every planet.",
+  "ru": "Добавить ионный двигатель: корректировать курс после каждой планеты."
+ },
+ "space_race_events.45.d": {
+  "en": "The navigation team has three trajectories for our deep-space probe. The first flies straight to its target. The second swings close past another planet on the way, which takes longer and gives the probe more to photograph. The third uses an ion drive and needs no planet's help. The choice decides how long the probe takes to arrive and what it sees on the way.",
+  "ru": "У навигационной группы есть три траектории для нашего зонда дальнего космоса. Первая ведёт прямо к цели. Вторая проходит близко от другой планеты, что занимает больше времени и даёт зонду больше объектов для съёмки. Третья использует ионный двигатель и обходится без помощи планеты. Выбор определяет, сколько времени зонд будет лететь и что увидит по пути."
+ },
+ "space_race_events.45.d_tour": {
+  "en": "The navigation team has three ways to fly our probe past Jupiter, whose gravity will send it on to the planets beyond. A close pass takes the most speed and reaches the next planet soonest. A wide pass takes less and keeps the cameras among Jupiter's moons for longer. The third adds an ion drive, so that the course can be corrected after each planet. The choice decides how fast the probe travels and what it sees on the way.",
+  "ru": "У навигационной группы есть три способа провести наш зонд мимо Юпитера, чья гравитация отправит его к планетам за ним. Близкий пролёт даёт больше всего скорости и быстрее всего приводит к следующей планете. Широкий даёт меньше и надолго оставляет камеры среди лун Юпитера. Третий добавляет ионный двигатель, чтобы можно было корректировать курс после каждой планеты. Выбор определяет, как быстро зонд полетит и что увидит по пути."
+ },
+ "space_race_events.45.f": {
+  "en": "\\\"The direct route leaves in the few days when Earth and the target are placed for it, and coasts the whole way. It is the fastest of the three. The second route passes close behind another planet first. That planet's gravity bends the probe's path and adds speed we would otherwise have to carry as fuel, so the probe can carry more instruments, but the flight is longer and the timing has to be right to within hours. The ion drive needs no planet at all. It pushes so gently that the probe takes many months of thrust to reach the speed a rocket gives it in minutes. I have the numbers for all three on one sheet.\\\"\\n\\n— The orbital mechanics lead, briefing the program director",
+  "ru": "«Прямой маршрут стартует в те несколько дней, когда Земля и цель расположены для этого подходящим образом, и весь путь идёт по инерции. Он самый быстрый из трёх. Второй маршрут сначала проходит близко за другой планетой. Гравитация этой планеты искривляет путь зонда и добавляет скорость, которую иначе пришлось бы везти в виде топлива, так что зонд может нести больше приборов, но полёт длиннее, а время нужно выдержать с точностью до часов. Ионному двигателю планета не нужна вовсе. Он толкает так мягко, что зонду требуются многие месяцы тяги, чтобы набрать скорость, которую ракета даёт за минуты. Цифры по всем трём у меня на одном листе.»\\n\\n— Руководитель по орбитальной механике, на брифинге для директора программы"
+ },
+ "space_race_events.45.f_tour": {
+  "en": "\\\"You asked me, as the program's navigator, to say in plain words what Jupiter does for us, so here it is. The probe falls toward the planet and swings around behind it. Jupiter is moving along its own orbit the whole time, and for a few hours it carries the probe along, so the probe leaves with some of the planet's motion added to its own. We choose how close to pass. The closer the pass, the more speed we take and the more sharply the path turns toward the next planet. A wide pass turns the path less and leaves the cameras more hours among the moons. An ion drive lets us correct afterward whatever we did not get right. I have the three courses drawn on one chart.\\\"",
+  "ru": "«Вы попросили меня, как штурмана программы, простыми словами сказать, что Юпитер даёт нам, вот ответ. Зонд падает к планете и огибает её сзади. Юпитер всё время движется по своей орбите, и несколько часов он увлекает зонд за собой, так что зонд уходит, получив к своему движению часть движения планеты. Мы выбираем, насколько близко пройти. Чем ближе пролёт, тем больше скорости мы берём и тем круче путь поворачивает к следующей планете. Широкий пролёт поворачивает путь меньше и оставляет камерам больше часов среди лун. Ионный двигатель позволяет потом исправить всё, что мы не добрали. Три курса у меня нарисованы на одной карте.»"
+ },
+ "space_race_events.45.t": {
+  "en": "Borrowing Speed",
+  "ru": "Заём скорости"
+ },
+ "space_race_events.46.a": {
+  "en": "Focus on oxygen and water extraction: proven chemistry.",
+  "ru": "Сосредоточиться на добыче кислорода и воды: проверенная химия."
+ },
+ "space_race_events.46.b": {
+  "en": "Try smelting metal from the local ore as well.",
+  "ru": "Попробовать также выплавлять металл из местной руды."
+ },
+ "space_race_events.46.d": {
+  "en": "Our first trials of making supplies from local rock are complete. An automated reactor has drawn oxygen out of heated regolith, so later missions need not carry all of their oxygen from Earth. The engineers now want to know how far to take the process.",
+  "ru": "Наши первые испытания по получению припасов из местной породы завершены. Автоматический реактор извлёк кислород из нагретого реголита, так что последующим миссиям не придётся везти весь кислород с Земли. Теперь инженеры хотят знать, как далеко стоит развивать этот процесс."
+ },
+ "space_race_events.46.f": {
+  "en": "\\\"We heated a batch of regolith to nine hundred degrees Celsius in the reactor and drew off oxygen at the other end, a few liters an hour. It is not much, and the reactor used more power than the design allowed for. But the chemistry does what it says on paper, and from here the work is making the reactor bigger and making it use less power. The smelting team wants to try the metal left behind in the slag next.\\\"\\n\\n— The test lead for the resource trials",
+  "ru": "«Мы нагрели партию реголита в реакторе до девятисот градусов Цельсия и отвели кислород с другого конца, несколько литров в час. Это немного, и реактор потребил больше энергии, чем заложено в проекте. Но химия работает так, как сказано на бумаге, и теперь задача — сделать реактор больше и снизить его энергопотребление. Группа металлургов хочет следом попробовать металл, оставшийся в шлаке.»\\n\\n— Руководитель испытаний ресурсов"
+ },
+ "space_race_events.46.t": {
+  "en": "Living Off the Land",
+  "ru": "Жить подножным кормом"
+ },
+ "space_race_events.47.a": {
+  "en": "Repair and resume: standard operating procedure.",
+  "ru": "Починить и продолжить: стандартная процедура."
+ },
+ "space_race_events.47.b": {
+  "en": "Redesign with enhanced Whipple shielding.",
+  "ru": "Переделать с усиленной защитой Уиппла."
+ },
+ "space_race_events.47.d": {
+  "en": "A particle no larger than a grain of sand, moving many times faster than a rifle bullet, has struck one of our spacecraft in orbit. It punched through the outer skin and cut a secondary system. The Whipple shield, thin layers of metal set apart behind the skin, took most of the impact. The engineers can patch the damage and carry on, or redesign the shielding first.",
+  "ru": "Частица не крупнее песчинки, летящая во много раз быстрее винтовочной пули, ударила в один из наших космических аппаратов на орбите. Она пробила внешнюю обшивку и повредила вторичную систему. Защита Уиппла, тонкие слои металла, разнесённые позади обшивки, приняла на себя большую часть удара. Инженеры могут залатать повреждение и продолжать работу или сначала переделать защиту."
+ },
+ "space_race_events.47.f": {
+  "en": "\\\"The camera on the inspection arm found the hole on its second pass. On the outer skin it is smaller than a fingernail. The shielding behind it is torn and blistered over the width of a hand, which is what the shielding is there to do. Whatever hit us was no bigger than a grain of sand. It cut one of the backup power lines behind the panel, and the craft switched to the spare on its own. I have asked for the panel to be photographed again tomorrow from the same angle, to see whether anything is still working loose.\\\"\\n\\n— Damage Assessment Officer, in the incident report",
+  "ru": "«Камера на осмотровой штанге нашла пробоину со второго прохода. На внешней обшивке она меньше ногтя. Защита за ней порвана и вздута на ширину ладони, для этого она и предназначена. Что бы ни ударило в нас, оно было не больше песчинки. Оно перерезало одну из резервных линий питания за панелью, и аппарат сам переключился на запасную. Я попросил завтра снова сфотографировать панель под тем же углом, чтобы проверить, не расшатывается ли что-нибудь.»\\n\\n— Офицер по оценке повреждений, в докладе об инциденте"
+ },
+ "space_race_events.47.t": {
+  "en": "Impact at Orbital Velocity",
+  "ru": "Удар на орбитальной скорости"
+ },
+ "space_race_events.48.a": {
+  "en": "Mandatory psychological screening and crew rotation.",
+  "ru": "Обязательный психологический отбор и ротация экипажей."
+ },
+ "space_race_events.48.b": {
+  "en": "VR communication suites: bring Earth to them.",
+  "ru": "Комплексы связи на основе VR: принести Землю к ним."
+ },
+ "space_race_events.48.c": {
+  "en": "Select for psychological resilience above all else.",
+  "ru": "Отбирать прежде всего по психологической устойчивости."
+ },
+ "space_race_events.48.d": {
+  "en": "The psychologists' evaluations of our latest long-duration crew show more irritability, more withdrawal and broken sleep, and a steady homesickness the crew themselves call Earth-longing. The crew still meets every mission target. The psychologists want changes made before the next crew goes up.",
+  "ru": "Оценки психологов по нашему последнему экипажу длительного полёта показывают больше раздражительности, больше замкнутости и прерывистый сон, а также постоянную тоску по дому, которую сами члены экипажа называют «земной тоской». Экипаж по-прежнему выполняет все цели миссии. Психологи хотят внести изменения до отправки следующего экипажа."
+ },
+ "space_race_events.48.f": {
+  "en": "To the program director, from the mission psychologist. The monthly evaluations of the long-duration crew show the same pattern in most of them: shorter tempers, poorer sleep, and more time spent alone in their bunks. Three have described dreams of rain and open fields, and one wrote in her journal that she woke from such a dream and could not stop crying. Their work is still done on schedule. I recommend fixed rotation dates that the crew can count on, private calls home at a set hour each week, and a screening interview before every assignment. I will report again after the next evaluation.",
+  "ru": "Директору программы, от психолога миссии. Ежемесячные оценки экипажа длительного полёта показывают у большинства одну и ту же картину: более вспыльчивый нрав, худший сон и больше времени, проведённого в одиночестве на койках. Трое описали сны о дожде и открытых полях, а одна записала в дневнике, что проснулась после такого сна и не могла перестать плакать. Работа по-прежнему выполняется по графику. Я рекомендую установить твёрдые даты ротации, на которые экипаж мог бы рассчитывать, личные звонки домой в определённый час каждую неделю и собеседование перед каждым назначением. После следующей оценки я доложу снова."
+ },
+ "space_race_events.48.t": {
+  "en": "The Long Dark",
+  "ru": "Долгая тьма"
+ },
+ "space_race_events.49.a": {
+  "en": "Build the depot: a permanent orbital gas station.",
+  "ru": "Построить склад: постоянная орбитальная заправка."
+ },
+ "space_race_events.49.b": {
+  "en": "Research in-orbit propellant manufacturing instead.",
+  "ru": "Вместо этого исследовать производство топлива на орбите."
+ },
+ "space_race_events.49.d": {
+  "en": "Our engineers propose a propellant depot in low orbit: a store that tankers fill and that departing spacecraft refuel at, so that a vehicle bound beyond Earth orbit no longer has to lift all its propellant from the ground. The alternative is to spend the money on research into making propellant in orbit.",
+  "ru": "Наши инженеры предлагают топливный склад на низкой орбите: хранилище, которое наполняют танкеры и на котором заправляются отбывающие космические аппараты, так что аппарату, летящему за пределы околоземной орбиты, больше не придётся поднимать с земли всё своё топливо. Альтернатива — потратить деньги на исследования по производству топлива на орбите."
+ },
+ "space_race_events.49.f": {
+  "en": "\\\"Today every deep-space vehicle carries the propellant for its whole journey from the pad, and most of what we launch is tanks. A depot changes that. Tankers go up first and fill a store in low orbit. The deep-space vehicle goes up nearly empty, docks, fills its tanks and leaves, and it can be built half as heavy. The hard part is keeping the propellant cold for months without losing it to boil-off. We have three designs for the insulation, and I am asking the board to fund tests of all three.\\\"\\n\\n— Orbital Depot Concept Lead, presenting to the program board",
+  "ru": "«Сегодня каждый аппарат дальнего космоса несёт с собой топливо на весь путь со стартовой площадки, и большая часть того, что мы запускаем, — это баки. Склад это меняет. Сначала поднимаются танкеры и наполняют хранилище на низкой орбите. Аппарат дальнего космоса уходит вверх почти пустым, стыкуется, заполняет баки и отбывает, и его можно сделать вдвое легче. Трудность в том, чтобы месяцами держать топливо холодным и не терять его на испарение. У нас есть три проекта изоляции, и я прошу совет профинансировать испытания всех трёх.»\\n\\n— Руководитель концепции орбитального склада, на презентации перед советом программы"
+ },
+ "space_race_events.49.t": {
+  "en": "Fuel in the Void",
+  "ru": "Топливо в пустоте"
+ },
+ "space_race_events.5.a": {
+  "en": "Target Shackleton Crater, and the ice in its shadow.",
+  "ru": "Целиться в кратер Шеклтон и лёд в его тени."
+ },
+ "space_race_events.5.b": {
+  "en": "The Equatorial Plain is the sensible choice.",
+  "ru": "Экваториальная равнина — разумный выбор."
+ },
+ "space_race_events.5.c": {
+  "en": "The Sea of Tranquility: flat ground, and a name on every map.",
+  "ru": "Море Спокойствия: ровная земля и название на каждой карте."
+ },
+ "space_race_events.5.d": {
+  "en": "The committee choosing our lunar landing site has narrowed the field to four. Shackleton Crater, near the south pole, may hold water ice in its shadowed floor, and is the hardest place to land. The Equatorial Plain is well mapped and easy to reach. The Sea of Tranquility is flat, and its name is on every map of the Moon. The far side cannot hear Earth's radio, which suits observation, but the crew would land without a direct link to us.",
+  "ru": "Комитет по выбору места лунной посадки сузил круг до четырёх. Кратер Шеклтон у южного полюса, возможно, хранит водяной лёд на затенённом дне, и это самое трудное место для посадки. Экваториальная равнина хорошо изучена и легко достижима. Море Спокойствия ровное, и его название есть на каждой карте Луны. Обратная сторона не слышит радио с Земли, что хорошо для наблюдений, но экипаж сел бы без прямой связи с нами."
+ },
+ "space_race_events.5.e": {
+  "en": "The far side of the Moon: where no radio from Earth can reach.",
+  "ru": "Обратная сторона Луны: куда не доходит радио с Земли."
+ },
+ "space_race_events.5.f": {
+  "en": "The site committee's notes for the government, one on each candidate:\\n\\nShackleton Crater. The rim is in sunlight most of the time and the floor never is, and the floor is where any ice would be. The lander must come down on the rim, and the rim is narrow.\\nThe Equatorial Plain. Our maps of it are the best of any site and the approach is the simplest, but the geologists expect little there they have not already seen from orbit.\\nThe Sea of Tranquility. It is flat for a long way in every direction, which gives the pilot room to correct a bad approach, and the public knows its name.\\nThe far side. Earth's radio cannot reach it, so it is the quietest place we know for listening to space. The crew would work out of contact unless we first put a relay in orbit.",
+  "ru": "Записки комитета по выбору места для правительства, по одной на каждого кандидата:\\n\\nКратер Шеклтон. Кромка почти всё время освещена солнцем, а дно — никогда, и именно на дне мог бы быть лёд. Посадочный модуль должен сесть на кромку, а кромка узка.\\nЭкваториальная равнина. Наши карты её лучшие из всех площадок, и подход проще всего, но геологи ждут там немногого, чего бы они уже не видели с орбиты.\\nМоре Спокойствия. Оно ровное на большое расстояние во всех направлениях, что даёт пилоту место исправить неудачный заход, и публика знает его название.\\nОбратная сторона. Радио с Земли туда не доходит, так что это самое тихое известное нам место для прослушивания космоса. Экипаж работал бы без связи, если только мы сначала не выведем на орбиту ретранслятор."
+ },
+ "space_race_events.5.t": {
+  "en": "Where the Eagle Shall Land",
+  "ru": "Где сядет «Орёл»"
+ },
+ "space_race_events.50.a": {
+  "en": "Public-private partnership: combine our strengths.",
+  "ru": "Государственно-частное партнёрство: объединить сильные стороны."
+ },
+ "space_race_events.50.b": {
+  "en": "Let the company take the lead.",
+  "ru": "Пусть компания возьмёт руководство."
+ },
+ "space_race_events.50.c": {
+  "en": "Keep the program fully state-run.",
+  "ru": "Сохранить программу полностью государственной."
+ },
+ "space_race_events.50.d": {
+  "en": "A private launch company of ours has flown a booster that comes back down after launch and can fly again. It now charges far less to put a load in orbit than our state program spends on the same launch. The company wants a larger share of the program's work, and the program's managers disagree on how much to give it.",
+  "ru": "Наша частная пусковая компания запустила ракету-носитель, которая возвращается на землю после старта и может лететь снова. Теперь она берёт за вывод груза на орбиту гораздо меньше, чем наша государственная программа тратит на такой же запуск. Компания хочет большую долю работ программы, а руководители программы расходятся во мнениях, сколько ей отдать."
+ },
+ "space_race_events.50.f": {
+  "en": "\\\"Their booster came down on its own legs and they say it will fly again next month. Ours are built to be thrown away. I have asked my staff what a launch of theirs would cost us to buy and what one of ours costs us to build.\\\"\\n\\n\\\"We will fly whatever the government wants flown, with whatever flag it wants on the side. We would rather sign a ten-year contract than sell it one launch at a time.\\\"\\n\\n\\\"Half the engineers I trained have gone to work for the company. It pays better, and it launches more often.\\\"\\n\\n\\\"If the company carries the cargo, the agency still decides where the cargo goes. I would not hand that part over.\\\"",
+  "ru": "«Их ускоритель сел на собственные опоры, и они говорят, что в следующем месяце он полетит снова. Наши сделаны так, чтобы их выбрасывать. Я попросил своих сотрудников подсчитать, во сколько нам обошёлся бы их запуск, если покупать, и во сколько нам обходится построить свой.»\\n\\n«Мы запустим всё, что захочет правительство, с любым флагом на борту. Мы предпочли бы подписать десятилетний контракт, а не продавать запуски по одному.»\\n\\n«Половина инженеров, которых я обучил, ушла работать в компанию. Там платят больше, и запуски чаще.»\\n\\n«Если груз везёт компания, агентство всё равно решает, куда этот груз идёт. Эту часть я бы не отдавал.»"
+ },
+ "space_race_events.50.t": {
+  "en": "The Private Sector Steps Up",
+  "ru": "Частный сектор выходит вперёд"
+ },
+ "space_race_events.51.a": {
+  "en": "Develop space [concept_tourism_system]: sell the seats.",
+  "ru": "Развивать космический [concept_tourism_system|l]: продавать места."
+ },
+ "space_race_events.51.b": {
+  "en": "Space is for science, not entertainment.",
+  "ru": "Космос — для науки, а не для развлечений."
+ },
+ "space_race_events.51.c": {
+  "en": "Regulated [concept_tourism_system]: limited and carefully managed.",
+  "ru": "Регулируемый [concept_tourism_system|l]: ограниченный и под тщательным контролем."
+ },
+ "space_race_events.51.d": {
+  "en": "With orbital flight proven, entrepreneurs propose selling suborbital and orbital flights to wealthy civilians. The tickets would pay part of the program's costs. Scientists object that the program was built for research, and that turning it into a luxury for the rich cheapens it.",
+  "ru": "Теперь, когда орбитальный полёт освоен, предприниматели предлагают продавать суборбитальные и орбитальные полёты состоятельным гражданским лицам. Билеты покрыли бы часть расходов программы. Учёные возражают, что программа создавалась для исследований и превращение её в роскошь для богатых принижает её."
+ },
+ "space_race_events.51.f": {
+  "en": "The prospectus that a space tour company has sent to investors lists what it means to sell:\\n\\nA suborbital flight with a few minutes of weightlessness, for passengers who pass a two-day medical. The flights would use rockets the program already flies, so no new vehicle is needed.\\nA week in orbit aboard a module the company will lease, for those who can afford the longer training. The company says most of its waiting list has asked for this.\\nA passenger's name carried on the next scientific payload, for those who cannot fly. The company expects this to pay for its advertising.\\nA share of every ticket paid to the space program, in return for the use of the program's launch sites. The size of the share is left for negotiation.",
+  "ru": "В проспекте, который компания космических туров разослала инвесторам, перечислено, что она намерена продавать:\\n\\nСуборбитальный полёт с несколькими минутами невесомости для пассажиров, прошедших двухдневный медосмотр. Полёты шли бы на ракетах, которые программа уже запускает, так что новый аппарат не нужен.\\nНеделя на орбите на борту модуля, который компания возьмёт в аренду, для тех, кто может позволить себе более долгую подготовку. Компания говорит, что большинство её списка ожидания просило именно этого.\\nИмя пассажира на борту следующей научной полезной нагрузки, для тех, кто не может лететь. Компания рассчитывает, что это окупит её рекламу.\\nДоля с каждого билета, выплачиваемая космической программе в обмен на использование её стартовых площадок. Размер доли оставлен для переговоров."
+ },
+ "space_race_events.51.t": {
+  "en": "Tickets to the Stars",
+  "ru": "Билеты к звёздам"
+ },
+ "space_race_events.52.a": {
+  "en": "Propose the joint station to our fellow members.",
+  "ru": "Предложить совместную станцию нашим коллегам по организации."
+ },
+ "space_race_events.52.b": {
+  "en": "Build our own station: we share with no one.",
+  "ru": "Построить собственную станцию: мы ни с кем не делимся."
+ },
+ "space_race_events.52.d": {
+  "en": "Our space agency has drawn up a proposal for a jointly operated orbital station, to be built with [SCOPE.sCountry('sr_station_partner').GetName] and open to any other member of the United Nations that reaches orbit: a laboratory in orbit, crewed without a break and paid for by its members. Sharing it would mean working beside the other members' engineers and showing them our equipment and procedures.",
+  "ru": "Наше космическое агентство подготовило предложение о совместно управляемой орбитальной станции, которую построят вместе со страной [SCOPE.sCountry('sr_station_partner').GetName] и которая будет открыта для любого другого члена Организации Объединённых Наций, вышедшего на орбиту: лаборатории на орбите с непрерывно работающим экипажем, оплачиваемой её участниками. Общая станция означала бы работу бок о бок с инженерами других участников и показ им нашего оборудования и процедур."
+ },
+ "space_race_events.52.f": {
+  "en": "\\\"A station that stays up lets our scientists run experiments for months instead of days: crystals, cell cultures, combustion, the body's own response to weightlessness. [SCOPE.sCountry('sr_station_partner').GetName] has the launchers to share the building of it, and we would share the cost of keeping a crew there.\\\"\\n\\n\\\"And every docking procedure we use, every seal and every flight computer we bolt onto it, their engineers will see at close range. I am not saying no. I am saying that whatever we send up there, we should assume they will copy.\\\"\\n\\n\\\"Then we send up what we are willing to share and keep the rest on the ground. The science comes back to both of us either way.\\\"\\n\\n\\\"Then put that in writing before anything is signed, and let our military advisers read it.\\\"",
+  "ru": "«Станция, остающаяся на орбите, позволяет нашим учёным ставить эксперименты месяцами вместо дней: кристаллы, клеточные культуры, горение, реакцию самого тела на невесомость. У страны [SCOPE.sCountry('sr_station_partner').GetName] есть ракеты-носители, чтобы разделить строительство, а расходы на содержание экипажа мы разделили бы.»\\n\\n«И каждую процедуру стыковки, которую мы используем, каждое уплотнение и каждый бортовой компьютер, который мы туда установим, их инженеры увидят вблизи. Я не говорю „нет“. Я говорю, что всё, что мы туда отправим, следует считать будущей копией.»\\n\\n«Тогда отправим то, чем готовы делиться, а остальное оставим на земле. Наука в любом случае вернётся к нам обоим.»\\n\\n«Тогда запишите это до подписания чего бы то ни было и дайте прочитать нашим военным советникам.»"
+ },
+ "space_race_events.52.t": {
+  "en": "A Station for All Nations",
+  "ru": "Станция для всех наций"
+ },
+ "space_race_events.53.a": {
+  "en": "Fully integrate off-world industry with the program.",
+  "ru": "Полностью интегрировать внеземную промышленность с программой."
+ },
+ "space_race_events.53.b": {
+  "en": "Keep mining and exploration as separate programs.",
+  "ru": "Оставить добычу и разведку отдельными программами."
+ },
+ "space_race_events.53.d": {
+  "en": "Our mining operations in space can now supply the space program directly. The program could take the metal, shielding mass and propellant for its craft from our mines in space instead of lifting them from the ground. The mines' managers would rather go on selling what they produce as they do now.",
+  "ru": "Наша добыча в космосе теперь может снабжать космическую программу напрямую. Программа могла бы брать металл, защитную массу и топливо для своих аппаратов с наших рудников в космосе, вместо того чтобы поднимать их с земли. Управляющие рудников предпочли бы и дальше продавать свою продукцию, как сейчас."
+ },
+ "space_race_events.53.f": {
+  "en": "\\\"Our mines send everything they produce down to Earth, and the program buys its metal and propellant on Earth and lifts it back up again. Some of that never needed to come down. If the program takes its structural metal and its shielding straight from the mines, and fills its tanks from what we extract up there, the launches we save can carry crews and instruments instead. My people have drawn up the contracts. They need the program's signature, and a decision on who sets the prices.\\\"\\n\\n— Extraplanetary Operations Director",
+  "ru": "«Наши рудники отправляют всё, что добывают, на Землю, а программа покупает металл и топливо на Земле и поднимает обратно. Часть этого вообще не должна была спускаться. Если программа возьмёт конструкционный металл и защитную массу прямо с рудников и будет заправлять баки тем, что мы добываем там, сэкономленные запуски смогут нести экипажи и приборы. Мои люди подготовили контракты. Им нужна подпись программы и решение о том, кто устанавливает цены.»\\n\\n— Директор внепланетных операций"
+ },
+ "space_race_events.53.t": {
+  "en": "Off-World Supply",
+  "ru": "Внеземное снабжение"
+ },
+ "space_race_events.54.a": {
+  "en": "Ablative heat shield: proven, expendable.",
+  "ru": "Абляционный тепловой щит: проверенный, одноразовый."
+ },
+ "space_race_events.54.b": {
+  "en": "Ceramic tile system: reusable, complex.",
+  "ru": "Система керамической плитки: многоразовая, сложная."
+ },
+ "space_race_events.54.c": {
+  "en": "Experimental transpiration cooling: bleeding edge.",
+  "ru": "Экспериментальное транспирационное охлаждение: передний край."
+ },
+ "space_race_events.54.d": {
+  "en": "The capsule's heat shield has to keep the crew alive through the heat of re-entry, and the engineers cannot agree on how to build it. An ablative shield is proven and burns away on each flight. Ceramic tiles can be flown again but are fragile and slow to fit. Transpiration cooling, which sweats coolant through a porous skin, is lighter if it works, and nobody has flown it yet.",
+  "ru": "Тепловой щит капсулы должен сохранить жизнь экипажу в жаре возвращения в атмосферу, и инженеры не могут договориться, как его строить. Абляционный щит проверен и сгорает при каждом полёте. Керамическую плитку можно использовать повторно, но она хрупкая и долго монтируется. Транспирационное охлаждение, при котором хладагент просачивается сквозь пористую оболочку, легче, если сработает, но его пока никто не испытывал в полёте."
+ },
+ "space_race_events.54.f": {
+  "en": "The test engineers set three samples side by side on the rack: a block of ablative resin, a ceramic tile, and a plate of porous metal with a coolant line fixed to its back. The rig's torch played over each in turn while the lead engineer watched the temperature readings from the back face. The resin charred and flaked away, as it was built to, and the back stayed cool. The tile glowed white and came out whole, with a hairline crack along one corner. The porous plate sweated coolant through its face and ran coolest of the three until the coolant pump faltered. \\\"Again,\\\" she said, \\\"with the spare pump,\\\" and the technicians began to reset the rack.",
+  "ru": "Инженеры-испытатели выставили на стенд три образца рядом: блок абляционной смолы, керамическую плитку и пластину пористого металла с трубкой хладагента на обороте. Горелка стенда поочерёдно обдавала каждый, а ведущий инженер следила за показаниями температуры с обратной стороны. Смола обуглилась и осыпалась, как и было задумано, а обратная сторона осталась холодной. Плитка раскалилась добела и вышла целой, с волосяной трещиной вдоль одного угла. Пористая пластина просачивала хладагент через лицевую сторону и была самой холодной из трёх, пока насос хладагента не дал сбой. «Ещё раз, — сказала она, — с запасным насосом», и техники начали перенастраивать стенд."
+ },
+ "space_race_events.54.t": {
+  "en": "Re-entry Equations",
+  "ru": "Уравнения возвращения"
+ },
+ "space_race_events.55.a": {
+  "en": "Route all cargo through the elevator.",
+  "ru": "Направить весь груз через лифт."
+ },
+ "space_race_events.55.b": {
+  "en": "Elevator for bulk, rockets for the time-sensitive.",
+  "ru": "Лифт для массовых грузов, ракеты для срочных."
+ },
+ "space_race_events.55.d": {
+  "en": "Our space elevator lifts cargo to orbit for a small part of what a rocket launch costs, but slowly. The program's logistics staff propose sending every load that can wait up the elevator, and keeping rocket launches for crews and urgent payloads.",
+  "ru": "Наш космический лифт поднимает груз на орбиту за малую часть стоимости ракетного запуска, но медленно. Сотрудники логистики программы предлагают отправлять через лифт каждый груз, который может подождать, а ракетные запуски оставить для экипажей и срочных грузов."
+ },
+ "space_race_events.55.f": {
+  "en": "\\\"We have gone through last year's manifests. Most of what we launched was propellant, water, structural metal and food, and none of it minds a slow ride. The elevator sends a car up every day, whatever the weather at the pad. A rocket can still get a crew or an urgent part to orbit in hours, and the elevator cannot. So my proposal is that every load goes up the elevator unless someone signs a form saying why it cannot wait. The forms would come to my office for approval.\\\"\\n\\n— Space Program Logistics Director",
+  "ru": "«Мы просмотрели манифесты прошлого года. Большая часть того, что мы запускали, — топливо, вода, конструкционный металл и продовольствие, и ничему из этого не мешает медленный подъём. Лифт отправляет кабину каждый день, какая бы погода ни была на старте. Ракета по-прежнему может доставить экипаж или срочную деталь на орбиту за часы, а лифт нет. Поэтому я предлагаю, чтобы любой груз шёл по лифту, если только кто-нибудь не подпишет бумагу о том, почему он не может ждать. Бумаги приходили бы на утверждение в мой офис.»\\n\\n— Директор логистики космической программы"
+ },
+ "space_race_events.55.t": {
+  "en": "The Elevator Advantage",
+  "ru": "Преимущество лифта"
+ },
+ "space_race_events.6.a": {
+  "en": "Our flag flies over a colony on the Moon.",
+  "ru": "Наш флаг развевается над колонией на Луне."
+ },
+ "space_race_events.6.d": {
+  "en": "Our first lunar colony has pressurized its habitat and declared it ready for its settlers: the first colony anyone has founded on the Moon. Its machines keep the air, the power and the water running in the empty habitat, so that it is ready on the day the first settlers arrive.",
+  "ru": "Наша первая лунная колония герметизировала жилой модуль и объявила его готовым к приёму поселенцев: это первая колония, которую кто-либо основал на Луне. Её машины поддерживают воздух, энергию и воду в пустом модуле, так что он будет готов в день прибытия первых поселенцев."
+ },
+ "space_race_events.6.d_later": {
+  "en": "Our first lunar colony has pressurized its habitat and declared it ready for its settlers. Others founded colonies on the Moon before us, and now [ROOT.GetCountry.GetName] has one too. Its machines keep the air, the power and the water running in the empty habitat, so that it is ready on the day the first settlers arrive.",
+  "ru": "Наша первая лунная колония герметизировала жилой модуль и объявила его готовым к приёму поселенцев. Другие основали колонии на Луне раньше нас, и теперь она есть и у страны [ROOT.GetCountry.GetName]. Её машины поддерживают воздух, энергию и воду в пустом модуле, так что он будет готов в день прибытия первых поселенцев."
+ },
+ "space_race_events.6.f": {
+  "en": "\\\"The habitat held its pressure through its first night on the Moon, and every reading came down on time: the air plant, the heaters, the water loop and the power from the panels. The air filters clogged twice as fast as the manual said, because the dust gets into everything, and the maintenance robot changed them both times without a fault. Nobody will sleep there until the settlers come up. I read the morning data before anything else each day, and I send a summary of it to the settlers' training center.\\\"\\n\\n— The habitat's systems engineer, at the program's control center",
+  "ru": "«Модуль удержал давление в свою первую лунную ночь, и все показания пришли вовремя: воздушная установка, обогреватели, водяной контур и питание от панелей. Воздушные фильтры забивались вдвое быстрее, чем сказано в руководстве, потому что пыль проникает везде, и ремонтный робот менял их оба раза без сбоев. Никто не будет спать там, пока не прибудут поселенцы. Я читаю утренние данные раньше всего остального каждый день и отправляю их сводку в учебный центр поселенцев.»\\n\\n— Инженер систем модуля, в центре управления программы"
+ },
+ "space_race_events.6.t": {
+  "en": "Foothold on Another World",
+  "ru": "Опора на другом мире"
+ },
+ "space_race_events.60.a": {
+  "en": "Share the data freely with all nations.",
+  "ru": "Свободно поделиться данными со всеми нациями."
+ },
+ "space_race_events.60.b": {
+  "en": "Classify key findings: strategic advantage.",
+  "ru": "Засекретить ключевые выводы: стратегическое преимущество."
+ },
+ "space_race_events.60.c": {
+  "en": "License the data to our industries.",
+  "ru": "Лицензировать данные нашей промышленности."
+ },
+ "space_race_events.60.d.1": {
+  "en": "\\n\\nThe target world is an airless, scorched rock. Flares from Proxima Centauri have stripped its surface of every volatile, and radiation has baked the bare stone beneath.",
+  "ru": "\\n\\nЦелевой мир — безвоздушная выжженная скала. Вспышки Проксимы Центавра лишили её поверхность всех летучих веществ, а радиация запекла голый камень под ней."
+ },
+ "space_race_events.60.d.10": {
+  "en": "\\n\\nInfrared images show a world three times Earth's mass whose crust never rests: plates the size of continents moving over a hot, active mantle, and volcanoes taller than Olympus Mons that are built and torn down again every few million years.",
+  "ru": "\\n\\nИнфракрасные снимки показывают мир втрое массивнее Земли, чья кора никогда не знает покоя: плиты размером с континенты движутся по горячей активной мантии, а вулканы выше горы Олимп строятся и разрушаются заново каждые несколько миллионов лет."
+ },
+ "space_race_events.60.d.11": {
+  "en": "\\n\\nAgainst every prediction, a rocky world around a violent red dwarf has a magnetic field twice as strong as Earth's, which keeps a thin atmosphere from being stripped away. The dynamo that drives it does not match any of our models.",
+  "ru": "\\n\\nВопреки всем предсказаниям, скалистый мир вокруг неистового красного карлика обладает магнитным полем вдвое сильнее земного, которое не даёт сорвать тонкую атмосферу. Динамо, которое его создаёт, не соответствует ни одной из наших моделей."
+ },
+ "space_race_events.60.d.12": {
+  "en": "\\n\\nSpectroscopy shows an ocean over the whole planet, more than a hundred kilometers deep, with a floor of ice held solid by the pressure above it. There is no land anywhere, and the sky is thick with water vapor.",
+  "ru": "\\n\\nСпектроскопия показывает океан по всей планете, глубиной более ста километров, с дном из льда, удерживаемого твёрдым давлением сверху. Суши нет нигде, а небо плотно насыщено водяным паром."
+ },
+ "space_race_events.60.d.13": {
+  "en": "\\n\\nAn icy moon of a gas giant in the Epsilon Eridani system is venting plumes of water and ammonia into space. The plumes point to an ocean under the ice, kept liquid by the giant's tides, where the chemistry may be more complex than we expected.",
+  "ru": "\\n\\nЛедяная луна газового гиганта в системе Эпсилон Эридана выбрасывает в космос струи воды и аммиака. Струи указывают на океан под льдом, остающийся жидким благодаря приливам гиганта, где химия может оказаться сложнее, чем мы ожидали."
+ },
+ "space_race_events.60.d.14": {
+  "en": "\\n\\nThe probe has found a world like Titan, with a thick sky of nitrogen and methane and lakes of liquid hydrocarbons under the dim red light of its star. Its spectra show a rich organic chemistry, with molecules our catalogs do not list.",
+  "ru": "\\n\\nЗонд обнаружил мир, подобный Титану, с плотным небом из азота и метана и озёрами жидких углеводородов под тусклым красным светом своей звезды. Его спектры показывают богатую органическую химию с молекулами, которых нет в наших каталогах."
+ },
+ "space_race_events.60.d.15": {
+  "en": "\\n\\nA planet inside its star's habitable zone has been baked to 450°C under a thick atmosphere of carbon dioxide: a runaway greenhouse, confirmed beyond doubt. Our climate scientists have asked for every reading of its atmosphere, to compare with our own.",
+  "ru": "\\n\\nПланета в обитаемой зоне своей звезды раскалена до 450°C под плотной атмосферой из углекислого газа: неудержимый парниковый эффект, подтверждённый вне всяких сомнений. Наши климатологи запросили все показания её атмосферы, чтобы сравнить с нашей."
+ },
+ "space_race_events.60.d.16": {
+  "en": "\\n\\nSpectroscopy finds oxygen, nitrogen and methane together in proportions that cannot last unless something keeps renewing them. No known geological process can do it. The one explanation that fits the data is life.",
+  "ru": "\\n\\nСпектроскопия обнаруживает кислород, азот и метан вместе в пропорциях, которые не могут сохраняться, если что-то не обновляет их. Ни один известный геологический процесс на это не способен. Единственное объяснение, подходящее к данным, — жизнь."
+ },
+ "space_race_events.60.d.17": {
+  "en": "\\n\\nThe probe's cameras show a sharp change in the light reflected from the planet's northern hemisphere, at the wavelength where green plants on Earth stop absorbing light. It is the signature of photosynthesis: vegetation across a whole continent.",
+  "ru": "\\n\\nКамеры зонда показывают резкое изменение света, отражаемого северным полушарием планеты, на длине волны, на которой зелёные растения на Земле перестают поглощать свет. Это признак фотосинтеза: растительность на целом континенте."
+ },
+ "space_race_events.60.d.18": {
+  "en": "\\n\\nImages of the night side of a tidally locked world show a glowing band thousands of kilometers long along the line between day and night. The light is biological, made by organisms that live in the permanent twilight there.",
+  "ru": "\\n\\nСнимки ночной стороны приливно захваченного мира показывают светящуюся полосу длиной в тысячи километров вдоль линии между днём и ночью. Свет биологический, его создают организмы, живущие там в вечных сумерках."
+ },
+ "space_race_events.60.d.19": {
+  "en": "\\n\\nSpectroscopy of a gas giant's upper atmosphere finds complex organic polymers in proportions that no chemistry without life explains. Something lives in those clouds of hydrogen and helium, drifting, feeding and reproducing.",
+  "ru": "\\n\\nСпектроскопия верхней атмосферы газового гиганта обнаруживает сложные органические полимеры в пропорциях, которых не объясняет никакая химия без жизни. Нечто живёт в этих облаках водорода и гелия, дрейфуя, питаясь и размножаясь."
+ },
+ "space_race_events.60.d.2": {
+  "en": "\\n\\nThe probe has found a tidally locked super-Earth orbiting Barnard's Star, with one hemisphere in permanent daylight and the other in permanent dark. Over the line between them sits a cyclone the size of a mountain range, the largest storm yet observed on a rocky world.",
+  "ru": "\\n\\nЗонд обнаружил приливно захваченную суперземлю на орбите вокруг звезды Барнарда, с одним полушарием в вечном дне и другим в вечной тьме. На линии между ними стоит циклон размером с горный хребет, крупнейший шторм из виденных на скалистом мире."
+ },
+ "space_race_events.60.d.20": {
+  "en": "\\n\\nThe continents of this world show violet in the probe's cameras, covered by organisms that live on sulfur, like the purple microbes some scientists believe once covered the early Earth. The biologists cannot yet say whether it is a young biosphere or one that took a different path.",
+  "ru": "\\n\\nКонтиненты этого мира выглядят в камерах зонда фиолетовыми: их покрывают организмы, питающиеся серой, подобные пурпурным микробам, которые, по мнению некоторых учёных, когда-то покрывали раннюю Землю. Биологи пока не могут сказать, молодая ли это биосфера или та, что пошла иным путём."
+ },
+ "space_race_events.60.d.21": {
+  "en": "\\n\\nNear volcanic vents the probe has imaged regular mineral structures whose heat does not behave like inert rock. The scientists reviewing the data are cautious, but it may be life built on a chemistry other than carbon.",
+  "ru": "\\n\\nВозле вулканических жерл зонд заснял правильные минеральные структуры, чьё тепло ведёт себя не так, как у инертной породы. Учёные, изучающие данные, осторожны, но это может быть жизнь, построенная на иной химии, чем углеродная."
+ },
+ "space_race_events.60.d.22": {
+  "en": "\\n\\nA frozen world in the Barnard's Star system has a biosphere in which liquid methane does the work of water. Organisms there breathe, grow and reproduce at temperatures that would freeze any life on Earth solid.",
+  "ru": "\\n\\nНа замёрзшем мире в системе звезды Барнарда есть биосфера, где работу воды выполняет жидкий метан. Тамошние организмы дышат, растут и размножаются при температурах, которые заморозили бы любую земную жизнь намертво."
+ },
+ "space_race_events.60.d.23": {
+  "en": "\\n\\nLaser mapping shows huge structures under a shallow sea, built of calcium carbonate by living organisms over geological time. The reef they form runs across several continents and is many times the size of the Great Barrier Reef.",
+  "ru": "\\n\\nЛазерное картографирование показывает огромные структуры под мелким морем, построенные из карбоната кальция живыми организмами за геологическое время. Образуемый ими риф тянется через несколько континентов и во много раз больше Большого Барьерного рифа."
+ },
+ "space_race_events.60.d.24": {
+  "en": "\\n\\nThe images show a humid, overcast world where all the visible land is covered by one interconnected mat of life that does not photosynthesize. The probe can make out no separate organisms in it: it may be a single network spread over the planet.",
+  "ru": "\\n\\nСнимки показывают влажный пасмурный мир, где вся видимая суша покрыта единым связным ковром жизни, не занимающейся фотосинтезом. Зонд не различает в нём отдельных организмов: возможно, это единая сеть, раскинувшаяся по планете."
+ },
+ "space_race_events.60.d.25": {
+  "en": "\\n\\nA rocky planet is surrounded by a dense cloud of debris in decaying orbits, and thousands of the objects in it are artificial. Someone built them and put them there. The probe could not see whether anyone is still alive on the surface.",
+  "ru": "\\n\\nСкалистую планету окружает плотное облако обломков на распадающихся орбитах, и тысячи объектов в нём искусственные. Кто-то построил их и поместил туда. Зонд не смог увидеть, жив ли кто-нибудь на поверхности."
+ },
+ "space_race_events.60.d.26": {
+  "en": "\\n\\nThe planet's atmosphere holds chlorofluorocarbons and sulfur hexafluoride, gases that no natural process makes. An industrial civilization made them, and the amounts suggest it has been making them for decades or centuries.",
+  "ru": "\\n\\nВ атмосфере планеты есть хлорфторуглероды и гексафторид серы, газы, которые не образует ни один естественный процесс. Их создала индустриальная цивилизация, и количества говорят, что она делала это десятилетиями или веками."
+ },
+ "space_race_events.60.d.27": {
+  "en": "\\n\\nA world that meets every test of habitability, temperate and with oceans and oxygen, shows radiation far above any natural level. The isotope ratios match the products of nuclear fission. The scientists conclude that a civilization there destroyed itself.",
+  "ru": "\\n\\nМир, отвечающий всем критериям обитаемости, умеренный, с океанами и кислородом, показывает радиацию далеко выше любого естественного уровня. Соотношения изотопов совпадают с продуктами ядерного деления. Учёные заключают, что тамошняя цивилизация уничтожила себя."
+ },
+ "space_race_events.60.d.28": {
+  "en": "\\n\\nThe probe's antennas have picked up faint, repeating, modulated radio emissions from a nearby system. They are not natural. Their structure suggests carrier waves leaking from the transmitters of an industrial civilization.",
+  "ru": "\\n\\nАнтенны зонда уловили слабые повторяющиеся модулированные радиоизлучения из соседней системы. Они не природные. Их структура говорит о несущих волнах, просачивающихся из передатчиков индустриальной цивилизации."
+ },
+ "space_race_events.60.d.29": {
+  "en": "\\n\\nImages of the planet's night side show patterns of artificial light across its dark hemisphere: cities, roads and coastlines traced in electric light. An intelligent civilization lives there.",
+  "ru": "\\n\\nСнимки ночной стороны планеты показывают узоры искусственного света на тёмном полушарии: города, дороги и береговые линии, прочерченные электрическим светом. Там живёт разумная цивилизация."
+ },
+ "space_race_events.60.d.3": {
+  "en": "\\n\\nSpectral analysis shows a world unlike any in our solar system: plains of graphite and rock studded with diamond, orbiting a star rich in carbon.",
+  "ru": "\\n\\nСпектральный анализ показывает мир, не похожий ни на один в нашей Солнечной системе: равнины из графита и камня, усеянные алмазами, на орбите вокруг звезды, богатой углеродом."
+ },
+ "space_race_events.60.d.30": {
+  "en": "\\n\\nAt a stable point in the target system's orbits the probe has found a small, inert object made of manufactured alloys. The decay in its surface shows it has been there for millions of years: someone sent probes between the stars long before we did.",
+  "ru": "\\n\\nВ устойчивой точке орбит целевой системы зонд нашёл небольшой инертный объект из рукотворных сплавов. Износ его поверхности показывает, что он там миллионы лет: кто-то отправлял зонды между звёздами задолго до нас."
+ },
+ "space_race_events.60.d.4": {
+  "en": "\\n\\nThe probe's gravity readings show a world of great density, nearly nine parts in ten iron and nickel by mass. It is most likely the bare core of a planet that lost its mantle in a collision early in its system's history.",
+  "ru": "\\n\\nПоказания гравитации зонда говорят о мире огромной плотности, почти девять десятых его массы составляют железо и никель. Скорее всего, это голое ядро планеты, потерявшей мантию при столкновении в начале истории своей системы."
+ },
+ "space_race_events.60.d.5": {
+  "en": "\\n\\nThe probe found no rocky planet in the target's habitable zone. Its precise tracking has given us a three-dimensional map of the gravity of the system's asteroid belts instead, and the resonances in it do not fit our models of how planets form.",
+  "ru": "\\n\\nЗонд не нашёл скалистой планеты в обитаемой зоне цели. Его точное слежение вместо этого дало нам трёхмерную карту гравитации астероидных поясов системы, и резонансы в ней не вписываются в наши модели образования планет."
+ },
+ "space_race_events.60.d.6": {
+  "en": "\\n\\nBeyond the habitable zone the probe has found a world covered in ices of nitrogen and carbon monoxide. Its thin atmosphere freezes onto the surface through the long winter and thaws back out in summer.",
+  "ru": "\\n\\nЗа пределами обитаемой зоны зонд обнаружил мир, покрытый льдами азота и угарного газа. Его тонкая атмосфера вымерзает на поверхность в течение долгой зимы и оттаивает обратно летом."
+ },
+ "space_race_events.60.d.7": {
+  "en": "\\n\\nA close flyby of Sirius B shows the remains of planets around the dead star: rings of dust and rubble, slowly cooling.",
+  "ru": "\\n\\nБлизкий пролёт Сириуса B показывает остатки планет вокруг мёртвой звезды: кольца пыли и обломков, медленно остывающие."
+ },
+ "space_race_events.60.d.8": {
+  "en": "\\n\\nThe probe has observed a superflare striking a planet's magnetic field, the most violent stellar event ever recorded at such close range. The data will be used to design radiation shielding for later interstellar missions.",
+  "ru": "\\n\\nЗонд наблюдал супервспышку, ударившую в магнитное поле планеты, самое яростное звёздное событие, когда-либо зарегистрированное на столь близком расстоянии. Данные будут использованы для проектирования радиационной защиты будущих межзвёздных миссий."
+ },
+ "space_race_events.60.d.9": {
+  "en": "\\n\\nA rocky planet has a ring system made from the debris of a moon that broke up not long ago. With the star behind them, the rings show in the probe's cameras as bands of bright dust.",
+  "ru": "\\n\\nУ скалистой планеты есть система колец из обломков луны, недавно распавшейся. На фоне звезды кольца видны в камерах зонда как полосы яркой пыли."
+ },
+ "space_race_events.60.d.intro": {
+  "en": "After years of silence, our deep-space receivers have picked up the carrier signal of our interstellar probe. The data is coming in, and the first images are being processed.",
+  "ru": "После многолетнего молчания наши приёмники дальнего космоса уловили несущий сигнал нашего межзвёздного зонда. Данные поступают, первые снимки обрабатываются."
+ },
+ "space_race_events.60.d.intro_confirms": {
+  "en": "After years of silence, our deep-space receivers have picked up the carrier signal of our interstellar probe. As the data comes in, the astronomers recognize what the first images show: [SCOPE.sCountry('sr_probe_first_finder').GetName]'s probe reported it before ours. Our own instruments now confirm the finding, and add to it.",
+  "ru": "После многолетнего молчания наши приёмники дальнего космоса уловили несущий сигнал нашего межзвёздного зонда. По мере поступления данных астрономы узнают, что показывают первые снимки: об этом раньше нас сообщил зонд страны [SCOPE.sCountry('sr_probe_first_finder').GetName]. Наши собственные приборы теперь подтверждают открытие и дополняют его."
+ },
+ "space_race_events.60.d.intro_repeat": {
+  "en": "After years of silence, our deep-space receivers have picked up the carrier signal of our interstellar probe. As the data comes in, the astronomers recognize what the first images show: another nation's probe reported it before ours. Our own instruments now confirm the finding, and add to it.",
+  "ru": "После многолетнего молчания наши приёмники дальнего космоса уловили несущий сигнал нашего межзвёздного зонда. По мере поступления данных астрономы узнают, что показывают первые снимки: об этом раньше нас сообщил зонд другой нации. Наши собственные приборы теперь подтверждают открытие и дополняют его."
+ },
+ "space_race_events.60.d.outro": {
+  "en": "\\n\\n[ROOT.GetCountry.GetName] must decide who sees the data.",
+  "ru": "\\n\\nСтрана [ROOT.GetCountry.GetName] должна решить, кто увидит данные."
+ },
+ "space_race_events.60.d.outro_repeat": {
+  "en": "\\n\\n[ROOT.GetCountry.GetName] must decide who sees the data that confirms the earlier finding and adds to it.",
+  "ru": "\\n\\nСтрана [ROOT.GetCountry.GetName] должна решить, кто увидит данные, подтверждающие прежнее открытие и дополняющие его."
+ },
+ "space_race_events.60.f": {
+  "en": "The image came in one line at a time, the newest line at the bottom of the screen. The astronomer on the night shift sat with a cup going cold beside her and watched it fill. Twice the signal dropped below the noise and a line came in black, and she noted the time of each gap in the log. Past midnight the frame was complete, with the star overexposed at its center and the rest of the system faint around it. She saved the frame, copied it to the archive drive, and called the mission scientist at home.",
+  "ru": "Снимок приходил по одной строке, новая строка внизу экрана. Астроном ночной смены сидела с остывающей рядом чашкой и смотрела, как он заполняется. Дважды сигнал падал ниже шума, и строка приходила чёрной, и она записывала в журнал время каждого пропуска. Заполночь кадр был полон: звезда пересвечена в центре, остальная система бледно вокруг неё. Она сохранила кадр, скопировала его на архивный диск и позвонила учёному миссии домой."
+ },
+ "space_race_events.60.f.cat2": {
+  "en": "To the government, from the probe's science team. The images and spectra of the target system are now processed, and we enclose the first selection. What they show behaves in ways our models of planets did not predict, and several of us spent the week checking the instruments before we would believe them. The instruments are sound. We have begun drafting papers, and every observatory we work with has asked us for the raw data. We ask the government to decide how widely it may be shared.",
+  "ru": "Правительству, от научной группы зонда. Снимки и спектры целевой системы теперь обработаны, и мы прилагаем первую подборку. То, что они показывают, ведёт себя так, как наши модели планет не предсказывали, и несколько человек из нас неделю проверяли приборы, прежде чем поверить им. Приборы исправны. Мы начали составлять статьи, и каждая обсерватория, с которой мы работаем, запросила у нас необработанные данные. Просим правительство решить, насколько широко ими можно делиться."
+ },
+ "space_race_events.60.f.cat3": {
+  "en": "Remarks from the probe's science team and the laboratories reading its data, the week the results came in.\\n\\n\\\"I checked the readings four times on two different computers before I let anyone else see them. Nothing we know of makes that signature except living things.\\\"\\n\\n\\\"My students stayed in the lab all night. None of us could say what the organisms are like, only that they are there.\\\"\\n\\n\\\"The telephones in the department have not stopped since the news got out. Half the calls are from reporters, and half are from people asking whether it is dangerous.\\\"\\n\\n\\\"We have asked for time on every large telescope we have, to keep watching that world while the probe still sends.\\\"",
+  "ru": "Реплики научной группы зонда и лабораторий, изучающих его данные, на неделе, когда пришли результаты.\\n\\n«Я проверил показания четыре раза на двух разных компьютерах, прежде чем кому-то их показать. Ничто из известного нам не даёт такой сигнатуры, кроме живых существ.»\\n\\n«Мои студенты не уходили из лаборатории всю ночь. Никто из нас не может сказать, каковы эти организмы, только что они там есть.»\\n\\n«Телефоны на кафедре не умолкают с тех пор, как новость просочилась. Половина звонков от репортёров, а половина от людей, спрашивающих, не опасно ли это.»\\n\\n«Мы попросили время на каждом большом телескопе, какой у нас есть, чтобы продолжать наблюдать за этим миром, пока зонд ещё передаёт.»"
+ },
+ "space_race_events.60.f.cat4": {
+  "en": "Memorandum to the government, from the head of the probe's science team. The data show the work of makers other than ourselves. We have tested every other explanation we could think of, and asked two teams that had not seen our conclusions to test them again, and none of the other explanations survives. We do not know whether those who made what we have seen are alive now. We have shown our own data to no one outside the team and this office. Before anything is published, we ask the government to decide what will be said, by whom, and on what day.",
+  "ru": "Меморандум правительству, от руководителя научной группы зонда. Данные показывают работу созидателей, не являющихся нами. Мы проверили все другие объяснения, какие смогли придумать, и попросили две группы, не видевшие наших выводов, проверить их снова, и ни одно из других объяснений не выдерживает. Мы не знаем, живы ли сейчас те, кто создал увиденное. Мы не показывали свои данные никому за пределами группы и этого кабинета. Прежде чем что-либо публиковать, просим правительство решить, что будет сказано, кем и в какой день."
+ },
+ "space_race_events.60.f_repeat": {
+  "en": "\\\"The other team published their frames of this system before ours came in, so the first thing we did was lay theirs over ours. Everything is where they said it would be, and the readings agree to within what either instrument can measure. That is worth more than it sounds. One probe could have been fooled by a fault in its own camera, and now two have seen the same thing. Our frames are sharper in places and were taken from a different angle, so there is something in our data that theirs did not have. We will publish the comparison as soon as it is checked.\\\"",
+  "ru": "«Другая группа опубликовала свои кадры этой системы раньше, чем пришли наши, поэтому первым делом мы наложили их кадры на наши. Всё на месте, как они и говорили, и показания совпадают в пределах точности обоих приборов. Это значит больше, чем кажется. Один зонд мог быть обманут неисправностью собственной камеры, а теперь то же самое увидели два. Наши кадры местами резче и сняты под другим углом, так что в наших данных есть то, чего у них не было. Мы опубликуем сравнение, как только оно будет проверено.»"
+ },
+ "space_race_events.601.t": {
+  "en": "A Scorched World",
+  "ru": "Выжженный мир"
+ },
+ "space_race_events.602.t": {
+  "en": "The Eternal Storm",
+  "ru": "Вечная буря"
+ },
+ "space_race_events.603.t": {
+  "en": "World of Diamonds",
+  "ru": "Мир алмазов"
+ },
+ "space_race_events.604.t": {
+  "en": "Heart of Iron",
+  "ru": "Сердце из железа"
+ },
+ "space_race_events.605.t": {
+  "en": "Echoes in the Void",
+  "ru": "Эхо в пустоте"
+ },
+ "space_race_events.606.t": {
+  "en": "The Frozen Laboratory",
+  "ru": "Замёрзшая лаборатория"
+ },
+ "space_race_events.607.t": {
+  "en": "Graveyard of Worlds",
+  "ru": "Кладбище миров"
+ },
+ "space_race_events.608.t": {
+  "en": "The Stellar Fury",
+  "ru": "Звёздная ярость"
+ },
+ "space_race_events.609.t": {
+  "en": "Rings of Ruin",
+  "ru": "Кольца руин"
+ },
+ "space_race_events.610.t": {
+  "en": "The Living Crust",
+  "ru": "Живая кора"
+ },
+ "space_race_events.611.t": {
+  "en": "The Invisible Shield",
+  "ru": "Невидимый щит"
+ },
+ "space_race_events.612.t": {
+  "en": "The Endless Sea",
+  "ru": "Бескрайнее море"
+ },
+ "space_race_events.613.t": {
+  "en": "Fountains of Ice",
+  "ru": "Ледяные фонтаны"
+ },
+ "space_race_events.614.t": {
+  "en": "Shores of Methane",
+  "ru": "Берега метана"
+ },
+ "space_race_events.615.t": {
+  "en": "A World on Fire",
+  "ru": "Мир в огне"
+ },
+ "space_race_events.616.t": {
+  "en": "The Breath of Life",
+  "ru": "Дыхание жизни"
+ },
+ "space_race_events.617.t": {
+  "en": "The Red Edge",
+  "ru": "Красная кромка"
+ },
+ "space_race_events.618.t": {
+  "en": "The Twilight Glow",
+  "ru": "Сумеречное сияние"
+ },
+ "space_race_events.619.t": {
+  "en": "Life Among the Clouds",
+  "ru": "Жизнь среди облаков"
+ },
+ "space_race_events.620.t": {
+  "en": "The Purple World",
+  "ru": "Пурпурный мир"
+ },
+ "space_race_events.621.t": {
+  "en": "Life, But Not as We Know It",
+  "ru": "Жизнь, но не такая, как мы знаем"
+ },
+ "space_race_events.622.t": {
+  "en": "The Frozen Garden",
+  "ru": "Замёрзший сад"
+ },
+ "space_race_events.623.t": {
+  "en": "Cathedrals of Coral",
+  "ru": "Соборы из кораллов"
+ },
+ "space_race_events.624.t": {
+  "en": "One Mind, One World",
+  "ru": "Один разум, один мир"
+ },
+ "space_race_events.625.t": {
+  "en": "Echoes of a Dead Civilization",
+  "ru": "Отголоски мёртвой цивилизации"
+ },
+ "space_race_events.626.t": {
+  "en": "The Smoking Gun",
+  "ru": "Дымящийся пистолет"
+ },
+ "space_race_events.627.t": {
+  "en": "The Great Silence, Explained",
+  "ru": "Великое молчание объяснено"
+ },
+ "space_race_events.628.t": {
+  "en": "A Voice in the Dark",
+  "ru": "Голос во тьме"
+ },
+ "space_race_events.629.t": {
+  "en": "The City of Stars",
+  "ru": "Город звёзд"
+ },
+ "space_race_events.630.t": {
+  "en": "Someone Else Was Here First",
+  "ru": "Кто-то был здесь первым"
+ },
+ "space_race_events.7.a": {
+  "en": "We went straight for the surface, and our flag stands on Mars!",
+  "ru": "Мы пошли прямо к поверхности, и наш флаг стоит на Марсе!"
+ },
+ "space_race_events.7.b": {
+  "en": "Building in Mars orbit first was the right call. The station stays in service.",
+  "ru": "Сначала строить на орбите Марса было правильным решением. Станция остаётся в строю."
+ },
+ "space_race_events.7.c": {
+  "en": "The robots had the site ready, and their surveys show deposits worth mining.",
+  "ru": "Роботы подготовили площадку, и их съёмка показывает залежи, достойные добычи."
+ },
+ "space_race_events.7.d": {
+  "en": "After a crossing of months, the lander has come down through the thin Martian air and set down in a cloud of red dust. The crew has reported every system working and has walked out onto the ground: the first people to stand on another planet.",
+  "ru": "После многомесячного перелёта посадочный модуль прошёл сквозь разреженный марсианский воздух и сел в облаке красной пыли. Экипаж доложил, что все системы работают, и вышел на грунт: первые люди, ступившие на другую планету."
+ },
+ "space_race_events.7.d_later": {
+  "en": "After a crossing of months, the lander has come down through the thin Martian air and set down in a cloud of red dust. The crew has reported every system working and has walked out onto the ground. Others reached Mars before us, and now [ROOT.GetCountry.GetName] has too.",
+  "ru": "После многомесячного перелёта посадочный модуль прошёл сквозь разреженный марсианский воздух и сел в облаке красной пыли. Экипаж доложил, что все системы работают, и вышел на грунт. Другие достигли Марса раньше нас, а теперь это сделала и страна [ROOT.GetCountry.GetName]."
+ },
+ "space_race_events.7.e": {
+  "en": "They are down safely. Let the crew begin their work.",
+  "ru": "Они сели благополучно. Пусть экипаж приступает к работе."
+ },
+ "space_race_events.7.f": {
+  "en": "\\\"We came down level, and nothing broke. The dust we raised took a long time to settle, and when it had, the ground outside was red and covered in small stones as far as I could see. I put the first boot down at a quarter past the hour by the mission clock. It is colder than anywhere I have been. Tonight we have checked the suits and the habitat, and tomorrow we start on the drilling.\\\"\\n\\n— A crew member, the first night on Mars",
+  "ru": "«Мы сели ровно, и ничего не сломалось. Поднятая нами пыль оседала долго, а когда осела, грунт снаружи был красным и покрытым мелкими камнями, насколько я мог видеть. Первый шаг я сделал в четверть часа по часам миссии. Здесь холоднее, чем где-либо, где я бывал. Сегодня вечером мы проверили скафандры и жилой модуль, а завтра начнём бурение.»\\n\\n— Член экипажа, первая ночь на Марсе"
+ },
+ "space_race_events.7.f_later": {
+  "en": "\\\"We came down level, and nothing broke. Other crews have stood on Mars before us, and now we have too. The dust we raised took a long time to settle, and when it had, the ground outside was red and covered in small stones as far as I could see. It is colder than anywhere I have been. Tonight we have checked the suits and the habitat, and tomorrow we start on the drilling.\\\"\\n\\n— A [ROOT.GetCountry.GetAdjectiveNoFormatting] crew member, the first night on Mars",
+  "ru": "«Мы сели ровно, и ничего не сломалось. Другие экипажи стояли на Марсе раньше нас, а теперь и мы. Поднятая нами пыль оседала долго, а когда осела, грунт снаружи был красным и покрытым мелкими камнями, насколько я мог видеть. Здесь холоднее, чем где-либо, где я бывал. Сегодня вечером мы проверили скафандры и жилой модуль, а завтра начнём бурение.»\\n\\n— [ROOT.GetCountry.GetAdjectiveNoFormatting] член экипажа, первая ночь на Марсе"
+ },
+ "space_race_events.7.t": {
+  "en": "Red Soil, New World",
+  "ru": "Красная почва, новый мир"
+ },
+ "space_race_events.70.a": {
+  "en": "Rebuild the pad: full safety overhaul before resuming.",
+  "ru": "Перестроить площадку: полная проверка безопасности перед возобновлением."
+ },
+ "space_race_events.70.b": {
+  "en": "Repair the pad quickly and resume launches.",
+  "ru": "Быстро починить площадку и возобновить запуски."
+ },
+ "space_race_events.70.d": {
+  "en": "The primary launch complex has exploded during fueling. A column of fire rose hundreds of meters over the pad, and the blast wrecked the pad and the support buildings around it. Hundreds of the engineers and technicians working near it were killed. The pad will have to be rebuilt before anything flies from it again.",
+  "ru": "Главный стартовый комплекс взорвался при заправке. Столб огня поднялся на сотни метров над площадкой, а взрыв разрушил площадку и окружающие вспомогательные здания. Сотни инженеров и техников, работавших рядом, погибли. Площадку придётся перестроить, прежде чем с неё снова что-либо полетит."
+ },
+ "space_race_events.70.f": {
+  "en": "\\\"We were forty minutes into fueling. The first thing I knew was the sound, and then the windows of the control room came in. When we got up off the floor, the screens from the pad were blank. I sent the fire crews out and kept everyone else inside until the fires on the pad had burned down. The crews are still out there, working through the wreckage with the medical teams behind them. I have the names of everyone who was signed in at the pad this morning, and I am going down the list.\\\"\\n\\n— Launch Director, in the hours after the explosion",
+  "ru": "«Мы были на сороковой минуте заправки. Первое, что я понял, был звук, а потом выбило окна зала управления. Когда мы поднялись с пола, экраны с площадки были пусты. Я отправил пожарные расчёты и держал всех остальных внутри, пока пожары на площадке не выгорели. Расчёты всё ещё там, разбирают обломки, за ними идут медицинские бригады. У меня список всех, кто сегодня утром отметился на площадке, и я иду по нему.»\\n\\n— Директор запуска, в часы после взрыва"
+ },
+ "space_race_events.70.t": {
+  "en": "Inferno at the Launch Complex",
+  "ru": "Ад на стартовом комплексе"
+ },
+ "space_race_events.71.a": {
+  "en": "Ground all capsules: redesign the pressure system.",
+  "ru": "Приземлить все капсулы: переработать систему давления."
+ },
+ "space_race_events.71.b": {
+  "en": "Implement the fix and resume testing.",
+  "ru": "Внедрить исправление и возобновить испытания."
+ },
+ "space_race_events.71.d": {
+  "en": "During a routine pressure test of the crew capsule on the ground, the main seal failed without warning and the cabin lost its air in seconds. The test crew of scientists and engineers, carrying out a standard checkout, had no time to reach their emergency equipment. None of them survived.",
+  "ru": "Во время обычной проверки давления экипажной капсулы на земле главное уплотнение отказало без предупреждения, и кабина потеряла воздух за секунды. Испытательная группа из учёных и инженеров, проводившая стандартную проверку, не успела добраться до аварийного оборудования. Никто из них не выжил."
+ },
+ "space_race_events.71.f": {
+  "en": "To the program director, from the board of inquiry into the capsule pressure test. The test crew were sealed in at the start of a routine check of the cabin's pressure integrity. Eleven minutes in, the main hatch seal failed along a third of its length, and the cabin lost its air in seconds. The crew had no time to reach their emergency masks. We have recovered the seal and found that its material had hardened and cracked where the hatch clamps press on it, a fault the acceptance tests do not look for. We recommend that every capsule fitted with seals from the same batch stays on the ground until the seals are replaced. Our full findings will follow within the month.",
+  "ru": "Директору программы, от комиссии по расследованию испытания давления капсулы. Испытательную группу запечатали в начале обычной проверки герметичности кабины. На одиннадцатой минуте уплотнение главного люка отказало на трети длины, и кабина потеряла воздух за секунды. У экипажа не было времени добраться до аварийных масок. Мы нашли уплотнение и обнаружили, что его материал затвердел и растрескался там, где на него давят зажимы люка, а такой дефект приёмочные испытания не выявляют. Мы рекомендуем, чтобы все капсулы с уплотнениями из той же партии оставались на земле, пока уплотнения не заменят. Наши полные выводы последуют в течение месяца."
+ },
+ "space_race_events.71.t": {
+  "en": "Silent Capsule",
+  "ru": "Безмолвная капсула"
+ },
+ "space_race_events.72.a": {
+  "en": "Replace the damaged equipment and get back to work.",
+  "ru": "Заменить повреждённое оборудование и вернуться к работе."
+ },
+ "space_race_events.72.b": {
+  "en": "Rebuild the facility to a higher safety standard.",
+  "ru": "Перестроить объект по более высокому стандарту безопасности."
+ },
+ "space_race_events.72.d": {
+  "en": "A fire broke out in the main integration building during the night shift. The technicians on duty started the fire suppression system before the flames reached the propellant store, and no one was hurt. Smoke and water have ruined much of the clean room and its test equipment, and the work done there has stopped until it is repaired.",
+  "ru": "В главном сборочном корпусе во время ночной смены вспыхнул пожар. Дежурные техники включили систему пожаротушения до того, как пламя достигло склада топлива, и никто не пострадал. Дым и вода погубили значительную часть чистой комнаты и её испытательного оборудования, и работа там остановлена до ремонта."
+ },
+ "space_race_events.72.f": {
+  "en": "\\\"The fire started in the cable trays above the clean room, and the night technicians had the suppression system running before it got anywhere near the propellant store. The rest of the building is soot on every surface and water in every floor drain. The centrifuge motors sat under the sprinklers for an hour and will have to be replaced. We are going through the clean room bench by bench, tagging what can be cleaned and what has to be thrown out, and I will have a list for procurement by the end of the week.\\\"\\n\\n— Facility Manager, after the fire",
+  "ru": "«Пожар начался в кабельных лотках над чистой комнатой, и ночные техники запустили систему пожаротушения раньше, чем огонь приблизился к складу топлива. Остальное здание — копоть на каждой поверхности и вода в каждом сливе. Двигатели центрифуги час простояли под разбрызгивателями, и их придётся заменить. Мы разбираем чистую комнату по стендам, помечая, что можно очистить, а что выбросить, и к концу недели у меня будет список для снабжения.»\\n\\n— Управляющий объектом, после пожара"
+ },
+ "space_race_events.72.t": {
+  "en": "Fire in the Assembly Building",
+  "ru": "Пожар в сборочном корпусе"
+ },
+ "space_race_events.73.a": {
+  "en": "Open a public inquiry into the contracts.",
+  "ru": "Открыть публичное расследование контрактов."
+ },
+ "space_race_events.73.b": {
+  "en": "Suppress the story: national security demands secrecy.",
+  "ru": "Замять историю: национальная безопасность требует секретности."
+ },
+ "space_race_events.73.c": {
+  "en": "Restructure the program: bring in new leadership.",
+  "ru": "Реструктурировать программу: привлечь новое руководство."
+ },
+ "space_race_events.73.d": {
+  "en": "A journalist has published evidence of waste and fraud in the space program: contracts given at inflated prices to firms with friends inside it, expense accounts nobody checked, and progress reports that claimed milestones the engineers had not reached. Many who supported the program now doubt it.",
+  "ru": "Журналист опубликовал свидетельства расточительства и мошенничества в космической программе: контракты по завышенным ценам фирмам с друзьями внутри неё, отчёты о расходах, которые никто не проверял, и отчёты о ходе работ, заявлявшие этапы, которых инженеры не достигли. Многие сторонники программы теперь в ней сомневаются."
+ },
+ "space_race_events.73.f": {
+  "en": "Remarks heard the week the article ran, inside the program and among its suppliers.\\n\\n\\\"The contract for the tracking dishes went to a firm that had been registered for six weeks, and its director is the brother-in-law of the official who signed it. The article prints the documents.\\\"\\n\\n\\\"I machine parts for one of the program's suppliers. The engineers did nothing wrong, and they are the ones who will lose their jobs if the money is cut.\\\"\\n\\n\\\"The progress reports were written to keep the money coming. The inspectors who approved them have been asked to explain why they did.\\\"\\n\\n\\\"Every big project spends more than it planned. I still want to know who approved the expense accounts.\\\"",
+  "ru": "Реплики, услышанные на той неделе, когда вышла статья, внутри программы и среди её поставщиков.\\n\\n«Контракт на антенны слежения достался фирме, зарегистрированной шесть недель назад, а её директор — шурин чиновника, подписавшего его. В статье напечатаны документы.»\\n\\n«Я делаю детали для одного из поставщиков программы. Инженеры ничего не сделали плохого, и именно они потеряют работу, если деньги урежут.»\\n\\n«Отчёты о ходе работ писались, чтобы деньги продолжали поступать. Инспекторов, которые их одобряли, попросили объяснить, почему они это сделали.»\\n\\n«Любой большой проект тратит больше запланированного. Но я всё равно хочу знать, кто одобрял отчёты о расходах.»"
+ },
+ "space_race_events.73.t": {
+  "en": "Stars and Scandals",
+  "ru": "Звёзды и скандалы"
+ },
+ "space_race_events.74.a": {
+  "en": "Apply the breakthrough to the current program.",
+  "ru": "Применить прорыв в текущей программе."
+ },
+ "space_race_events.74.b": {
+  "en": "Patent and commercialize the technology.",
+  "ru": "Запатентовать и коммерциализировать технологию."
+ },
+ "space_race_events.74.d": {
+  "en": "Engineers working on an unstable engine have found an injector design that cures the instability and gives more thrust from the same propellant. Their results have held up over repeated test runs. The design can go straight into the current program's engines, or be patented and licensed to industry as well.",
+  "ru": "Инженеры, работавшие над неустойчивым двигателем, нашли конструкцию форсунки, которая устраняет неустойчивость и даёт больше тяги от того же топлива. Их результаты подтвердились при повторных испытательных прогонах. Конструкцию можно сразу поставить на двигатели текущей программы либо запатентовать и дополнительно лицензировать промышленности."
+ },
+ "space_race_events.74.f": {
+  "en": "\\\"We were chasing a combustion instability in the injector, the kind that shakes an engine apart in a few seconds. We tried a new pattern of holes on the injector face to break up the oscillation, and the instability went away. Then the test stand's figures showed the engine giving noticeably more thrust for the same flow of propellant. We ran it six more times to rule out the instruments, and the gain held every time. We are writing up the injector drawings now, so that the other teams can build it.\\\"\\n\\n— Lead Propulsion Engineer",
+  "ru": "«Мы гонялись за неустойчивостью горения в форсунке, из тех, что разрывают двигатель за несколько секунд. Мы попробовали новый рисунок отверстий на лицевой стороне форсунки, чтобы разбить колебания, и неустойчивость пропала. Потом цифры испытательного стенда показали, что двигатель даёт заметно больше тяги при том же расходе топлива. Мы прогнали его ещё шесть раз, чтобы исключить приборы, и прирост держался каждый раз. Сейчас мы оформляем чертежи форсунки, чтобы другие группы могли её построить.»\\n\\n— Ведущий инженер по двигателям"
+ },
+ "space_race_events.74.t": {
+  "en": "An Unexpected Breakthrough",
+  "ru": "Неожиданный прорыв"
+ },
+ "space_race_events.75.a": {
+  "en": "Wait for the original suppliers: quality matters.",
+  "ru": "Ждать прежних поставщиков: качество важнее."
+ },
+ "space_race_events.75.b": {
+  "en": "Source alternative suppliers: accept trade-offs.",
+  "ru": "Найти альтернативных поставщиков: принять компромиссы."
+ },
+ "space_race_events.75.c": {
+  "en": "Develop domestic production capacity.",
+  "ru": "Развить собственные производственные мощности."
+ },
+ "space_race_events.75.d": {
+  "en": "Precision parts for the vehicle have not arrived on schedule: guidance gyroscopes, hardened electronics and special alloys. The suppliers blame defense contracts that came before ours and a shortage of raw materials. Until the parts arrive, the vehicle's integration cannot go ahead.",
+  "ru": "Прецизионные детали для аппарата не пришли в срок: гироскопы наведения, закалённая электроника и специальные сплавы. Поставщики винят оборонные контракты, заключённые раньше нашего, и нехватку сырья. Пока детали не придут, интеграция аппарата не может продолжаться."
+ },
+ "space_race_events.75.f": {
+  "en": "The supply chain director's list of the parts that are late, read out at the progress review:\\n\\nThe gyroscope bearings for the guidance platform. Only a few factories can grind them to our tolerances, and all of them are behind.\\nThe titanium alloy for the propellant tanks. The mill is short of ore and has cut its output by half.\\nThe hardened electronics for the guidance system. The supplier has given its first production run to a defense contract that was signed before ours.\\nThe test equipment for the integration hall. It is built, but it is waiting at the supplier's works for parts of its own.",
+  "ru": "Список опаздывающих деталей от директора по цепочке поставок, зачитанный на обзоре хода работ:\\n\\nПодшипники гироскопов для платформы наведения. Лишь несколько заводов могут отшлифовать их до наших допусков, и все они отстают.\\nТитановый сплав для топливных баков. На комбинате не хватает руды, и выпуск сокращён вдвое.\\nЗакалённая электроника для системы наведения. Поставщик отдал первую производственную партию оборонному контракту, подписанному раньше нашего.\\nИспытательное оборудование для сборочного зала. Оно построено, но ждёт на заводе поставщика деталей для самого себя."
+ },
+ "space_race_events.75.t": {
+  "en": "The Parts That Didn't Come",
+  "ru": "Детали, которые не пришли"
+ },
+ "space_race_events.76.a": {
+  "en": "The program has served its purpose.",
+  "ru": "Программа выполнила свою задачу."
+ },
+ "space_race_events.76.a_lost": {
+  "en": "We will build again.",
+  "ru": "Мы построим снова."
+ },
+ "space_race_events.76.d": {
+  "en": "Our launch complex has been refitted to a mission profile that can no longer carry some of the programs it was built for, and [ROOT.GetCountry.GetAdjective] ambitions at that scale have been shelved. The scientists and engineers who dedicated themselves to those missions now seek new assignments, and the infrastructure built for them sits idle.",
+  "ru": "Наш стартовый комплекс переоснащён под профиль миссий, который больше не может обслуживать некоторые программы, ради которых он строился, и [ROOT.GetCountry.GetAdjective] размах в таких масштабах отложен. Учёные и инженеры, посвятившие себя этим миссиям, теперь ищут новые назначения, а построенная для них инфраструктура простаивает."
+ },
+ "space_race_events.76.d_lost": {
+  "en": "We no longer hold a working launch complex, and the programs it was carrying cannot continue without one. Their progress is lost. The scientists and engineers who built them are dispersing to other work, and whatever infrastructure remains in our hands sits idle until we can launch again.",
+  "ru": "У нас больше нет работающего стартового комплекса, и программы, которые он обслуживал, не могут продолжаться без него. Их прогресс потерян. Учёные и инженеры, построившие их, расходятся по другой работе, а оставшаяся в наших руках инфраструктура простаивает, пока мы снова не сможем запускать."
+ },
+ "space_race_events.76.f": {
+  "en": "The program director read the notice to the engineers in the assembly hall, standing on a crate so that the back rows could see her. The launch complex was to be refitted for smaller missions, and the work they had been doing would stop at the end of the month. Someone near the front asked whether it would start again. \\\"Not on this complex, and not soon,\\\" she said. \\\"The drawings and the test records go to the archive, complete. I want them in a state that someone could take down from the shelf in ten years and fly.\\\" Then she read out the teams that would be kept on, and the offices they were to report to.",
+  "ru": "Директор программы зачитала уведомление инженерам в сборочном зале, встав на ящик, чтобы задние ряды её видели. Стартовый комплекс предстояло переоснастить под менее масштабные миссии, а их работа должна была прекратиться в конце месяца. Кто-то впереди спросил, начнётся ли она снова. «Не на этом комплексе и не скоро, — сказала она. — Чертежи и протоколы испытаний уходят в архив полностью. Я хочу, чтобы они были в таком состоянии, чтобы кто-то мог снять их с полки через десять лет и полететь.» Потом она зачитала группы, которые остаются, и кабинеты, куда им следует явиться."
+ },
+ "space_race_events.76.f_lost": {
+  "en": "In the program's head office, an archivist went through the filing cabinets one drawer at a time. Each folder of drawings went into a numbered box, and each box number went into the ledger with the program's name beside it. Engineers came in through the afternoon to hand over their notebooks, and some of them stayed to help tape the boxes shut. By evening the drawers were empty. The boxes stood stacked against the wall to wait for the archive's truck, and the archivist wrote the last box number into the ledger and closed it.",
+  "ru": "В главном офисе программы архивист один за другим просматривал ящики картотеки. Каждая папка с чертежами шла в нумерованный короб, и номер короба заносился в журнал с названием программы рядом. Инженеры весь день приходили сдавать свои тетради, и некоторые остались помогать заклеивать короба. К вечеру ящики опустели. Короба стояли штабелем у стены в ожидании грузовика архива, и архивист вписал последний номер короба в журнал и закрыл его."
+ },
+ "space_race_events.76.t": {
+  "en": "Program Discontinued",
+  "ru": "Программа закрыта"
+ },
+ "space_race_events.76.t_lost": {
+  "en": "The Silent Gantry",
+  "ru": "Безмолвная башня"
+ },
+ "space_race_events.77.a": {
+  "en": "Put the rockets to work.",
+  "ru": "Поставить ракеты на службу."
+ },
+ "space_race_events.77.d": {
+  "en": "Every milestone is behind us, and every colony site from the Moon to Sedna has been claimed. What the race built is still here: the launch crews, the spaceports, the colony outposts and the contractors who served them. The agencies that once competed for firsts are bidding for freight contracts, and [ROOT.GetCountry.GetAdjective] industry wants the metal they can bring down from space.",
+  "ru": "Все рубежи позади, и каждая колониальная площадка от Луны до Седны занята. То, что построила гонка, всё ещё здесь: стартовые бригады, космодромы, колониальные форпосты и подрядчики, обслуживавшие их. Агентства, которые когда-то соревновались за первенства, теперь торгуются за грузовые контракты, а [ROOT.GetCountry.GetAdjective] бизнес хочет металл, который можно спустить из космоса."
+ },
+ "space_race_events.77.f": {
+  "en": "\\\"For as long as there was a race, every launch we planned was measured against what the others were doing. Now the contracts on my desk are for freight: nickel and platinum from the belt, and parts and supplies for the colonies. The customers want a price per ton and a delivery date, and they want the same price next year. Most of the people who flew the race missions are still on my staff. We are rewriting the launch schedule around cargo, and the first runs under the new contracts go up next month.\\\"\\n\\n— Director of Commercial Launch Operations",
+  "ru": "«Пока шла гонка, каждый запуск, который мы планировали, мерился тем, что делают другие. Теперь контракты на моём столе грузовые: никель и платина из пояса, детали и припасы для колоний. Заказчики хотят цену за тонну и дату поставки и хотят ту же цену в следующем году. Большинство тех, кто летал на миссиях гонки, всё ещё в моём штате. Мы переписываем график запусков под грузы, и первые рейсы по новым контрактам уйдут в следующем месяце.»\\n\\n— Директор коммерческих пусковых операций"
+ },
+ "space_race_events.77.t": {
+  "en": "The Commercial Space Age",
+  "ru": "Коммерческий космический век"
+ },
+ "space_race_events.8.a": {
+  "en": "Fusion torch drive: proven and reliable.",
+  "ru": "Привод термоядерного факела: проверенный и надёжный."
+ },
+ "space_race_events.8.b": {
+  "en": "Antimatter-catalyzed engine: the experimental design.",
+  "ru": "Двигатель с антивещественным катализом: экспериментальная конструкция."
+ },
+ "space_race_events.8.c": {
+  "en": "Build it with other countries, and share the data.",
+  "ru": "Построить вместе с другими странами и поделиться данными."
+ },
+ "space_race_events.8.d": {
+  "en": "Our interstellar probe stands ready on the launch pad, aimed at the nearest stars. Even at a large fraction of the speed of light the crossing takes years, and its signal takes years more to come back, so we will not hear from it for more than a decade.\\n\\nHow shall we configure the drive system?",
+  "ru": "Наш межзвёздный зонд стоит готовым на стартовой площадке, нацеленный на ближайшие звёзды. Даже на значительной доле скорости света перелёт занимает годы, и его сигналу нужны ещё годы, чтобы вернуться, так что мы не услышим о нём более десяти лет.\\n\\nКак настроить приводную систему?"
+ },
+ "space_race_events.8.d_later": {
+  "en": "Our interstellar probe stands ready on the launch pad, aimed at the nearest stars, where it will follow the probes other countries have already sent. Even at a large fraction of the speed of light the crossing takes years, and its signal takes years more to come back, so we will not hear from it for more than a decade.\\n\\nHow shall we configure the drive system?",
+  "ru": "Наш межзвёздный зонд стоит готовым на стартовой площадке, нацеленный на ближайшие звёзды, куда он последует за зондами, уже отправленными другими странами. Даже на значительной доле скорости света перелёт занимает годы, и его сигналу нужны ещё годы, чтобы вернуться, так что мы не услышим о нём более десяти лет.\\n\\nКак настроить приводную систему?"
+ },
+ "space_race_events.8.f": {
+  "en": "The launch director stayed at the window after the countdown was handed over to the machines. He watched the pad lights go off one by one as the crews withdrew, and the last service truck drive down the access road. The probe stood on top of its rocket in the floodlights, smaller than the stage beneath it. Behind him the room was quiet except for the controllers reading out their checks. He went through the board once more, signed the launch log on the line marked for him, and went back to the window.",
+  "ru": "Директор запуска остался у окна после того, как обратный отсчёт передали машинам. Он смотрел, как огни площадки гаснут один за другим, пока бригады отходили, и как последняя служебная машина уезжает по подъездной дороге. Зонд стоял на вершине ракеты в свете прожекторов, меньше ступени под ним. За его спиной в комнате было тихо, лишь диспетчеры зачитывали проверки. Он ещё раз прошёл по пульту, расписался в журнале запуска на отведённой для него строке и вернулся к окну."
+ },
+ "space_race_events.8.t": {
+  "en": "The Longest Voyage",
+  "ru": "Самое долгое путешествие"
  }
 }
