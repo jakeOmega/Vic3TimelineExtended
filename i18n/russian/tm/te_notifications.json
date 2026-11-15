@@ -1913,7 +1913,7 @@
  },
  "notification_nd_doctrine_bound_by_law_desc": {
   "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
-  "ru": "[concept_amendment] #bold «Обязательство не наносить первый удар»#! действует и связывает нашу ядерную доктрину: теперь мы обязаны придерживаться #v «Отказа от первого применения»#!. Это изменение внёс закон, а не наше правительство, поэтому срок ожидания до следующего выбора доктрины отсчитывается от нашего последнего собственного выбора. Отказ от этого принципа аннулирует обязательство и вычёркивает поправку из наших законов."
+  "ru": "[concept_amendment] #bold «Обязательство не наносить первый удар»#! действует и связывает нашу ядерную доктрину: теперь мы обязаны придерживаться принципа #v «Неприменение первым»#!. Это изменение внёс закон, а не наше правительство, поэтому срок ожидания до следующего выбора доктрины отсчитывается от нашего последнего собственного выбора. Отказ от этого принципа аннулирует обязательство и вычёркивает поправку из наших законов."
  },
  "notification_nd_doctrine_bound_by_law_name": {
   "en": "Doctrine Bound by Law",
@@ -2009,11 +2009,11 @@
  },
  "notification_te_demog_ms_crash_campaign_over_desc": {
   "en": "The Crash Campaign has run its five years and ended. It can't return for ten years.",
-  "ru": "Кампания ускоренного роста продлилась пять лет и завершилась. Она не может вернуться в течение десяти лет."
+  "ru": "Ударная кампания продлилась пять лет и завершилась. Она не может вернуться в течение десяти лет."
  },
  "notification_te_demog_ms_crash_campaign_over_name": {
   "en": "Crash Campaign Over",
-  "ru": "Кампания ускоренного роста окончена"
+  "ru": "Ударная кампания окончена"
  },
  "notification_te_demog_ms_ended_birth_limit_desc": {
   "en": "Our $lawgroup_family_reproductive_policy$ law doesn't allow the Birth Limit, so it has ended, and its running cost with it. Under a law that allows it, it can start again, for a new five-year term.",
@@ -2033,11 +2033,11 @@
  },
  "notification_te_demog_ms_ended_crash_campaign_desc": {
   "en": "Our $lawgroup_family_reproductive_policy$ law doesn't allow Crash Campaign, so it has ended, and its running cost with it. Under a law that allows it, it can start again, for a new five-year term.",
-  "ru": "Наш закон ($lawgroup_family_reproductive_policy$) не допускает кампании ускоренного роста, поэтому она прекращена вместе со своими текущими расходами. При законе, допускающем её, она может начаться снова на новый пятилетний срок."
+  "ru": "Наш закон ($lawgroup_family_reproductive_policy$) не допускает ударной кампании, поэтому она прекращена вместе со своими текущими расходами. При законе, допускающем её, она может начаться снова на новый пятилетний срок."
  },
  "notification_te_demog_ms_ended_crash_campaign_name": {
   "en": "Crash Campaign Ended",
-  "ru": "Кампания ускоренного роста прекращена"
+  "ru": "Ударная кампания прекращена"
  },
  "notification_te_demog_ms_ended_family_housing_desc": {
   "en": "Our $lawgroup_family_reproductive_policy$ law doesn't allow Family Housing, so it has ended, and its running cost with it. Under a law that allows it, it can start again, for a new five-year term.",
@@ -2217,7 +2217,7 @@
  },
  "notification_te_seabed_regime_regulated_notice_desc": {
   "en": "Half of each ocean basin's licenses are now reserved for the poorer parties to the Convention on the Law of the Sea, and parties pay royalties on their $building_ocean_mine$ levels.",
-  "ru": "Половина лицензий каждого океанского бассейна теперь зарезервирована для более бедных сторон Конвенции по морскому праву, а стороны платят роялти за свои уровни здания $building_ocean_mine$."
+  "ru": "Половина лицензий каждого океанического бассейна теперь зарезервирована для более бедных сторон Конвенции по морскому праву, а стороны платят роялти за свои уровни здания $building_ocean_mine$."
  },
  "notification_te_seabed_regime_regulated_notice_name": {
   "en": "The Law of the Sea Regulates the Seabed",
@@ -2249,7 +2249,7 @@
  },
  "notification_un_bloc_vacuum_notice_desc": {
   "en": "The United Nations is Moribund or gone, and the power blocs fill the space it leaves. Our bloc gains $un_bloc_vacuum_modifier$ until a working United Nations returns.",
-  "ru": "Организация Объединённых Наций угасает или исчезла, и силовые блоки заполняют оставленное ею пространство. Наш блок получает $un_bloc_vacuum_modifier$, пока не вернётся работающая Организация Объединённых Наций."
+  "ru": "Организация Объединённых Наций находится на уровне «Угасающий» или исчезла, и силовые блоки заполняют оставленное ею пространство. Наш блок получает $un_bloc_vacuum_modifier$, пока не вернётся работающая Организация Объединённых Наций."
  },
  "notification_un_bloc_vacuum_notice_name": {
   "en": "Blocs Fill the Vacuum",
@@ -2289,7 +2289,7 @@
  },
  "notification_un_credentials_suspended_notice_desc": {
   "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programs are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
-  "ru": "Генеральная Ассамблея приостановила полномочия нашей делегации. Мы остаёмся членом и по-прежнему платим взносы в ООН, но не голосуем и не вносим резолюций, лишаемся любого постоянного места и наших программ ООН и не пользуемся никакими выгодами членства. Приостановка длится пять лет или пока наш послужной список не улучшится до силы дела ниже 30."
+  "ru": "Генеральная Ассамблея приостановила полномочия нашей делегации. Мы остаёмся членом и по-прежнему платим взносы в ООН, но не голосуем и не вносим резолюций, лишаемся любого постоянного места и наших программ ООН и не пользуемся никакими выгодами членства. Приостановка длится пять лет или пока наш послужной список не улучшится до весомости дела ниже 30."
  },
  "notification_un_credentials_suspended_notice_name": {
   "en": "Our Credentials Are Suspended",
@@ -2357,7 +2357,7 @@
  },
  "notification_un_food_reserve_empty_notice_name": {
   "en": "The World Food Reserve Is Empty",
-  "ru": "Мировой продовольственный резерв пуст"
+  "ru": "Всемирный продовольственный резерв пуст"
  },
  "notification_un_food_reserve_relief_notice_desc": {
   "en": "The [concept_un_food_reserve] is sending grain with the UN aid mission to [SCOPE.sState('un_msn_state').GetName]. Its food security rises for a year.",
@@ -2365,7 +2365,7 @@
  },
  "notification_un_food_reserve_relief_notice_name": {
   "en": "Grain from the World Food Reserve",
-  "ru": "Зерно из мирового продовольственного резерва"
+  "ru": "Зерно из Всемирного продовольственного резерва"
  },
  "notification_un_force_war_goal_struck_notice_desc": {
   "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",

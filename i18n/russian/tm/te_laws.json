@@ -213,7 +213,7 @@
  },
  "law_directed_credit_development_banks": {
   "en": "Directed Credit & Development Banks",
-  "ru": "Направленное кредитование и банки развития"
+  "ru": "Целевое кредитование и банки развития"
  },
  "law_directed_credit_development_banks_desc": {
   "en": "Private banks remain in the driver's seat, but state-backed development institutions co-finance priority sectors and absorb risk that private capital won't. The state guides; it does not own.",
@@ -389,7 +389,7 @@
  },
  "law_intrusive_surveillance": {
   "en": "Intrusive Surveillance System",
-  "ru": "Система тотальной слежки"
+  "ru": "Система навязчивой слежки"
  },
  "law_intrusive_surveillance_desc": {
   "en": "An extensive surveillance system monitors citizens' activities, both online and offline. Personal information is collected, stored, and used by the government to control and manipulate society, with little or no privacy protection.",
