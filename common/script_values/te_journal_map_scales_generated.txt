@@ -11560,3 +11560,391 @@ te_jmap_pick_fitted = {
 		value = 1
 	}
 }
+
+# ---- The Color option (the generator's header): the pick's ramp and factor, for the shared branches ----
+# 0 where the pick's own lerp branch wouldn't paint this state (no figure, none, off the scale, or a
+# pick with no range), 1 where it would and the pick runs one way, 2 where it would and the pick runs both
+# ways from a midpoint. Each row repeats its lerp branch's limit; a figure is read only inside its
+# has_variable guard.
+te_jmap_pick_ramp = {
+	value = 0
+	if = {
+		limit = { te_jmap_selector = 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 3 has_variable = te_dg_e0 }
+		if = {
+			limit = { var:te_dg_e0 > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 4 has_variable = te_dg_tfr }
+		if = {
+			limit = { var:te_dg_tfr > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 5 has_variable = te_dg_median }
+		if = {
+			limit = { var:te_dg_median > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 6 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 7 has_variable = te_dg_stepped has_variable = te_dg_cbr has_variable = te_dg_cdr }
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 8 has_variable = te_dg_stepped has_variable = te_dg_cdr }
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 9 has_variable = te_dg_stepped has_variable = te_dg_cbr }
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 10 has_variable = te_dg_imr has_variable = te_dg_e0 }
+		if = {
+			limit = { var:te_dg_e0 > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 12 has_variable = te_dg_sex_balance }
+		if = {
+			limit = { var:te_dg_sex_balance > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 13 has_variable = te_dg_stepped has_variable = te_dg_mig_rate }
+		if = {
+			limit = { var:te_dg_stepped > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 14 has_variable = te_dg_old_share has_variable = te_dg_median }
+		if = {
+			limit = { var:te_dg_median > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 15 has_variable = te_dg_urban_share }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 16 has_variable = te_dg_gini }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 17 has_variable = te_dg_wc }
+		value = 2
+	}
+	else_if = {
+		limit = { te_jmap_selector = 18 }
+		if = {
+			limit = { te_jmap_gw_no_data = no te_jmap_gw_removal = no }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 24 }
+		if = {
+			limit = { te_jmap_gm_monument = yes }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 26 has_variable = te_tourism_base_appeal }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 27 has_variable = te_climate_base_penalty }
+		value = 2
+	}
+	else_if = {
+		limit = { te_jmap_selector = 28 has_variable = te_climate_penalty_applied }
+		value = 2
+	}
+	else_if = {
+		limit = { te_jmap_selector = 29 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 30 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 33 has_variable = te_dg_soldiers }
+		if = {
+			limit = { var:te_dg_soldiers > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 34 has_variable = te_jmap_hq_n }
+		if = {
+			limit = { te_jmap_hq_profit > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 35 has_variable = te_dg_stepped has_variable = te_dg_dc_war }
+		if = {
+			limit = { var:te_dg_stepped > 0 var:te_dg_dc_war > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 37 has_variable = te_dg_walk_pop has_variable = te_dg_walk_pop_prev }
+		if = {
+			limit = { var:te_dg_walk_pop_prev > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 38 has_variable = te_dg_means }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 39 has_variable = te_dg_acc }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 40 has_variable = te_dg_fam has_variable = te_dg_people }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 41 has_variable = te_dg_capitalists has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 42 has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 43 has_variable = te_dg_clergy has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 44 has_variable = te_dg_academics has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 45 }
+		if = {
+			limit = { te_jmap_trade_capacity > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 46 has_variable = te_jmap_inv_cap }
+		if = {
+			limit = { te_jmap_invest_value > 0 }
+			value = 1
+		}
+	}
+}
+# The picked map's factor, 0-1, under the Scale option as every factor is (each tree guards its own read).
+te_jmap_pick_factor = {
+	value = 0
+	if = {
+		limit = { te_jmap_selector = 1 }
+		value = te_jmap_turmoil_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 3 }
+		value = te_jmap_e0_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 4 }
+		value = te_jmap_tfr_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 5 }
+		value = te_jmap_median_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 6 }
+		value = te_jmap_devastation_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 7 }
+		value = te_jmap_natural_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 8 }
+		value = te_jmap_cdr_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 9 }
+		value = te_jmap_cbr_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 10 }
+		value = te_jmap_imr_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 12 }
+		value = te_jmap_sex_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 13 }
+		value = te_jmap_mig_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 14 }
+		value = te_jmap_old_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 15 }
+		value = te_jmap_urban_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 16 }
+		value = te_jmap_gini_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 17 }
+		value = te_jmap_wc_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 18 }
+		value = te_jmap_gw_room_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 24 }
+		value = te_jmap_gm_room_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 26 }
+		value = te_jmap_tourism_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 27 }
+		value = te_jmap_comfort_base_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 28 }
+		value = te_jmap_comfort_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 29 }
+		value = te_jmap_gdppc_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 30 }
+		value = te_jmap_crowding_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 33 }
+		value = te_jmap_soldiers_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 34 }
+		value = te_jmap_hq_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 35 }
+		value = te_jmap_war_dead_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 37 }
+		value = te_jmap_growth_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 38 }
+		value = te_jmap_means_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 39 }
+		value = te_jmap_health_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 40 }
+		value = te_jmap_fam_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 41 }
+		value = te_jmap_capitalists_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 42 }
+		value = te_jmap_aristocrats_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 43 }
+		value = te_jmap_clergy_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 44 }
+		value = te_jmap_academics_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 45 }
+		value = te_jmap_trade_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 46 }
+		value = te_jmap_invest_factor
+	}
+}
+# The factor along each of a shared ramp's 4 lerps: the paint takes the first whose end the factor is
+# under (te_jmap_pick_factor < 0.25, 0.5, 0.75; the last takes the rest).
+te_jmap_pick_q1 = {
+	value = te_jmap_pick_factor
+	multiply = 4
+	min = 0
+	max = 1
+}
+te_jmap_pick_q2 = {
+	value = te_jmap_pick_factor
+	subtract = 0.25
+	multiply = 4
+	min = 0
+	max = 1
+}
+te_jmap_pick_q3 = {
+	value = te_jmap_pick_factor
+	subtract = 0.5
+	multiply = 4
+	min = 0
+	max = 1
+}
+te_jmap_pick_q4 = {
+	value = te_jmap_pick_factor
+	subtract = 0.75
+	multiply = 4
+	min = 0
+	max = 1
+}

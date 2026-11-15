@@ -3028,6 +3028,8 @@
  te_hist_since:0 "#lore History available since [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  te_history_untracked:0 "#lore History is kept only for played countries and major powers.#!"
  te_jmap_area:0 "Area"
+ te_jmap_color:0 "Color"
+ te_jmap_empty:0 ""
  te_jmap_outliers:0 "Outliers"
  te_jmap_pick_academics_desc:0 "Color each state by its Academics as a share of its people, against $te_jmap_measured_area$ as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. Universities and a literate, urban people draw them. Counted once a year. $te_jmap_measured_trim$"
  te_jmap_pick_aristocrats_desc:0 "Color each state by its Aristocrats as a share of its people, against $te_jmap_measured_area$ as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year. $te_jmap_measured_trim$"

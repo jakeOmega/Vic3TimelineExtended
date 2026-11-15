@@ -10,6 +10,40 @@ colors = {
 	# (52), and nothing like the pale te_jmap_none, each of which can sit inside the area beside it.
 	te_jmap_outside = hsv360 { 218 16 23 }
 
+	# je_te_map_room, every map fitted to a range: the Color option's shared ramps (2026-11-14, the fourteenth pass).
+	# Published schemes, not the mod's own, each stop rounded to whole hsv360 (within 1 in 255 of the hex beside it).
+	# The engine mixes two colors at a time, so a ramp of five stops is four lerps, and a diverging one two a side.
+	#
+	# Colorblind-safe, one way: ColorBrewer 2.0's five-class sequential YlOrBr (Cynthia Brewer, Mark Harrower and the
+	# Pennsylvania State University, colorbrewer2.org, which marks it colorblind safe), pale yellow at the low end to
+	# brown at the high. Its lightness falls at every step, so it keeps its order in grey.
+	te_jmap_cb_seq_0 = hsv360 { 60 17 100 }	# #FFFFD4
+	te_jmap_cb_seq_1 = hsv360 { 40 44 100 }	# #FED98E
+	te_jmap_cb_seq_2 = hsv360 { 32 84 100 }	# #FE9929
+	te_jmap_cb_seq_3 = hsv360 { 24 94 85 }	# #D95F0E
+	te_jmap_cb_seq_4 = hsv360 { 19 97 60 }	# #993404
+	# Colorblind-safe, both ways from a midpoint: ColorBrewer 2.0's five-class diverging PuOr (the same source, marked
+	# colorblind safe), orange below the midpoint, near white at it, purple above; each side darkens away from it.
+	# The published middle (#F7F7F7) is written twice, as the same near white with each side's hue, so that a mix in
+	# hue, saturation and value would not sweep the hues between (nothing records how the engine's lerp mixes).
+	te_jmap_cb_div_0 = hsv360 { 25 100 90 }	# #E66101
+	te_jmap_cb_div_1 = hsv360 { 33 61 99 }	# #FDB863
+	te_jmap_cb_div_mid_low = hsv360 { 33 1 97 }	# #F7F7F7, toward orange
+	te_jmap_cb_div_mid_high = hsv360 { 251 1 97 }	# #F7F7F7, toward purple
+	te_jmap_cb_div_3 = hsv360 { 251 19 82 }	# #B2ABD2
+	te_jmap_cb_div_4 = hsv360 { 262 61 60 }	# #5E3C99
+	# Colorblind-safe: a state its map paints below its scale (a company headquarters at a loss, a state that takes
+	# more out of the air than it emits; te_jmap_pick_below). The first color of Tableau's Color Blind 10, as
+	# matplotlib ships it (the "tableau-colorblind10" style): far from every color of the sequential ramp under each
+	# color vision deficiency, where the maps' own red and green are not.
+	te_jmap_cb_below = hsv360 { 201 100 64 }	# #006BA4
+	# Greyscale: ColorBrewer 2.0's nine-class sequential Greys, its second to its sixth class, light at the low end to
+	# dark at the high. Two stops, one lerp: a grey ramp has no hue to bend. It stops well short of te_jmap_outside's
+	# slate (value 23), and a state with no figure is striped, since a grey for "no data" would be a grey on the ramp.
+	te_jmap_grey_low = hsv360 { 0 0 94 }	# #F0F0F0
+	te_jmap_grey_high = hsv360 { 0 0 45 }	# #737373
+	te_jmap_grey_stripe = hsv360 { 0 0 94 }	# the stripes over te_jmap_no_data: no figure, none, or off the scale
+
 	# je_te_map_room: turmoil, calm to unrest.
 	te_jmap_turmoil_low = hsv360 { 150 18 62 }
 	te_jmap_turmoil_high = hsv360 { 356 82 72 }

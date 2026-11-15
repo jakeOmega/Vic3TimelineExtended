@@ -156,24 +156,6 @@ te_jmap_trim_text = {
 	}
 }
 
-# The Outliers setting in two words, for the Map Options header, which has room for little beside its title.
-te_jmap_trim_short = {
-	type = country
-	random_valid = no
-
-	text = {
-		trigger = { te_jmap_trim = 1 }
-		localization_key = te_jmap_trim_none
-	}
-	text = {
-		trigger = { te_jmap_trim = 2 }
-		localization_key = te_jmap_trim_percent
-	}
-	text = {
-		localization_key = te_jmap_trim_short_default
-	}
-}
-
 # The Scale setting as its button names it: the line at the top of the page.
 te_jmap_scale_name = {
 	type = country
@@ -196,7 +178,8 @@ te_jmap_scale_name = {
 	}
 }
 
-# The Scale setting in a word or two, for the Map Options header.
+# The Scale setting in a word, for the Map Options header, which names it only while it is off its default
+# (te_jmap_now_scale, below): so the last entry is Ranked's, and there is none for the default.
 te_jmap_scale_short = {
 	type = country
 	random_valid = no
@@ -210,11 +193,7 @@ te_jmap_scale_short = {
 		localization_key = te_jmap_scale_short_log
 	}
 	text = {
-		trigger = { te_jmap_scale = 3 }
 		localization_key = te_jmap_scale_ranked
-	}
-	text = {
-		localization_key = te_jmap_scale_short_own
 	}
 }
 
@@ -297,5 +276,152 @@ te_jmap_scaled_range_lead = {
 	}
 	text = {
 		localization_key = te_jmap_scaled_lead_range
+	}
+}
+
+# The Color setting as its button names it (the line at the top of the page), and in a word (the header).
+te_jmap_color_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_safe
+	}
+	text = {
+		trigger = { te_jmap_color = 2 }
+		localization_key = te_jmap_color_grey
+	}
+	text = {
+		localization_key = te_jmap_color_own
+	}
+}
+
+te_jmap_color_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_short_safe
+	}
+	text = {
+		localization_key = te_jmap_color_short_grey
+	}
+}
+
+# The options in force, for the Map Options header and the line at the top of the page (2026-11-14, the fourteenth
+# pass): only those off their defaults, in the rows' order, so four options fit where three already filled the
+# header. Each option is a part that is empty at its default and otherwise its setting's name, led by a comma
+# where an option before it is set too. The header and the line read the same parts' triggers, so they can't
+# disagree about what is set; the header takes the Scale's and the Color's short names, the line their full ones.
+te_jmap_now = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_options_set = 0 }
+		localization_key = te_jmap_now_none
+	}
+	text = {
+		localization_key = te_jmap_now_list
+	}
+}
+
+te_jmap_now_area = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_area = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		localization_key = te_jmap_now_area_first
+	}
+}
+
+te_jmap_now_trim = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_trim = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		trigger = { te_jmap_area > 0 }
+		localization_key = te_jmap_now_trim_next
+	}
+	text = {
+		localization_key = te_jmap_now_trim_first
+	}
+}
+
+te_jmap_now_scale = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		trigger = { OR = { te_jmap_area > 0 te_jmap_trim > 0 } }
+		localization_key = te_jmap_now_scale_next
+	}
+	text = {
+		localization_key = te_jmap_now_scale_first
+	}
+}
+
+te_jmap_now_color = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		trigger = { OR = { te_jmap_area > 0 te_jmap_trim > 0 te_jmap_scale > 0 } }
+		localization_key = te_jmap_now_color_next
+	}
+	text = {
+		localization_key = te_jmap_now_color_first
+	}
+}
+
+te_jmap_set_scale = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_scale = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		trigger = { OR = { te_jmap_area > 0 te_jmap_trim > 0 } }
+		localization_key = te_jmap_set_scale_next
+	}
+	text = {
+		localization_key = te_jmap_set_scale_first
+	}
+}
+
+te_jmap_set_color = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 0 }
+		localization_key = te_jmap_empty
+	}
+	text = {
+		trigger = { OR = { te_jmap_area > 0 te_jmap_trim > 0 te_jmap_scale > 0 } }
+		localization_key = te_jmap_set_color_next
+	}
+	text = {
+		localization_key = te_jmap_set_color_first
 	}
 }

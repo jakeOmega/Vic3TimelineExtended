@@ -984,6 +984,7 @@ types te_map_widgets
 	###   Area      World | Continent | Market | Power Bloc | Country, and under Continent two rows of three continents
 	###   Outliers  Keep All | Trim 4 Each End | Trim 5%, greyed with the reason on a map that has no range
 	###   Scale     Map Default | Linear | Logarithmic | Ranked (the thirteenth pass), the last three greyed likewise
+	###   Color     Map Default | Colorblind-Safe | Grayscale (the fourteenth pass), the last two greyed likewise
 	###   and a line saying what the map on the page was measured over, or how old a Ranked map's places can be.
 	type te_jmap_options = flowcontainer {
 		direction = vertical
@@ -1252,6 +1253,49 @@ types te_map_widgets
 					enabled = "[GetScriptedGui('te_jmap_scale_ranked_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)3' )]"
 					onclick = "[GetScriptedGui('te_jmap_scale_ranked_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			te_jmap_options_label = {
+				text = "te_jmap_options_color"
+			}
+
+			# Color (the fourteenth pass). The map's own colors are always there, to go back to; the other two are
+			# greyed while the map on the page has no range, and so no ramp to swap, with that as the tooltip.
+			# Three of 150 and two gaps make 458, inside the header's 470.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_option_button = {
+					text = "te_jmap_color_own"
+					tooltip = "te_jmap_color_own_tt"
+					visible = "[GetScriptedGui('te_jmap_color_own_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' )]"
+					onclick = "[GetScriptedGui('te_jmap_color_own_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					text = "te_jmap_color_safe"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_color_safe_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_color_safe_tt', 'te_jmap_color_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_color_safe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_color_safe_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)1' )]"
+					onclick = "[GetScriptedGui('te_jmap_color_safe_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_option_button = {
+					text = "te_jmap_color_grey"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_jmap_color_grey_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_jmap_color_grey_tt', 'te_jmap_color_no_range_tt' )]"
+					visible = "[GetScriptedGui('te_jmap_color_grey_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					enabled = "[GetScriptedGui('te_jmap_color_grey_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)2' )]"
+					onclick = "[GetScriptedGui('te_jmap_color_grey_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}
