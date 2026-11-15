@@ -65,6 +65,12 @@ principle_internal_trade_4 = {
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
+	power_bloc_modifier = {
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
+	}
+
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
 		country_company_throughput_bonus_add = 0.01
@@ -92,6 +98,12 @@ principle_internal_trade_5 = {
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce
@@ -129,6 +141,9 @@ principle_market_unification_4 = {
 	power_bloc_modifier = {
 		# Members are permanently part of the same Customs Union
 		power_bloc_customs_union_bool = yes
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce
@@ -165,6 +180,9 @@ principle_market_unification_5 = {
 	power_bloc_modifier = {
 		# Members are permanently part of the same Customs Union
 		power_bloc_customs_union_bool = yes
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce

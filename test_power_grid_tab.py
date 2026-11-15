@@ -1,7 +1,7 @@
 """The Power Grids tab of the Timeline Extended window and a Grid Transfer
 Station's building panel section (gui/te_grid_widgets.gui): every fixed-width
-cell fits its longest text at its font, the tab's structure (four sections,
-the full-screen columns), what it reads (the grid record of
+cell fits its longest text at its font, the tab's structure (three sections,
+National Generation in the overview's frame, the full-screen columns), what it reads (the grid record of
 te_grid_record_effect, through guarded script values and the country's and
 hubs' lists), its gates and checklist, every key defined, and the Generation
 panel's table of what each power plant method makes (GenerationTableTest).
@@ -144,10 +144,20 @@ class WidthTest(_Budget, unittest.TestCase):
                 self.fits(f"te_grid_mix_{src}_amount", amount, KILO)
                 self.fits(f"te_grid_mix_{src}_share", share, SHARE)
         panel = _type_body(self.gui, "te_grid_mix_panel")
-        self.assertIn('text = "te_grid_mix_header"', panel)
-        self.assertIn('text = "te_grid_mix_total"', panel)
-        self.fits("te_grid_mix_header", self.type_box("te_grid_heading", "heading_text"))
-        self.fits("te_grid_mix_total", self.type_box("te_grid_heading", "heading_right"), KILO)
+        self.assertIn("te_grid_national_heading = {}", panel)
+        heading = _type_body(self.gui, "te_grid_national_heading")
+        self.assertIn("tiny_flag = {", heading)
+        # The flag reads the tab's Country, as every other figure in the panel does.
+        self.assertNotIn("datacontext", heading)
+        self.fits("te_grid_mix_header", self.box(heading, '"te_grid_mix_header"'))
+        self.fits("te_grid_mix_total", self.box(heading, '"te_grid_mix_total"'), KILO)
+        # Flag (vanilla's tiny_flag is 27 by 18, gui/shared/flags.gui), a gap of 7, the
+        # heading and the total fill the 480 row, as te_grid_heading's do.
+        flag = 27
+        x = int(re.search(r"position = \{ (\d+) 0 \}", heading).group(1))
+        name, total = self.box(heading, '"te_grid_mix_header"')[0], self.box(heading, '"te_grid_mix_total"')[0]
+        self.assertEqual(x - flag, 7)
+        self.assertEqual(x + name + total, 480)
 
     def test_grid_card(self):
         card = _type_body(self.gui, "te_grid_card")
@@ -164,6 +174,26 @@ class WidthTest(_Budget, unittest.TestCase):
         self.fits("te_grid_card_markets", self.box(card, '"te_grid_card_markets"'))
         # two halves and their spacing fill the row
         self.assertEqual(2 * half[0] + 8, 480)
+
+    def test_grid_card_generation(self):
+        """The grid's generation: its total on a 480 line, then a chip a source (icon and
+        share) on one row: seven chips and their spacing fill 480."""
+        card = _type_body(self.gui, "te_grid_card")
+        line = self.box(card, "'te_grid_card_mix', 'te_grid_card_mix_none'")
+        self.assertEqual(line, (480, "row"))
+        self.fits("te_grid_card_mix", line, KILO)
+        self.fits("te_grid_card_mix_none", line)
+        chip = _type_body(self.gui, "te_grid_card_mix_chip")
+        icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", chip).group(1))
+        share = self.box(chip, 'block "chip_share"')
+        gap = int(re.search(r"spacing = (\d+)", chip).group(1))
+        # the chips' row: the last spacing before the first chip
+        between = int(re.findall(r"spacing = (\d+)", card[:card.index("te_grid_card_mix_chip = {")])[-1])
+        self.assertEqual(card.count("te_grid_card_mix_chip = {"), len(SOURCES))
+        self.assertEqual(len(SOURCES) * (icon + gap + share[0]) + (len(SOURCES) - 1) * between, 480)
+        for src in SOURCES:
+            with self.subTest(source=src):
+                self.fits(f"te_grid_card_mix_{src}_share", share, SHARE)
 
     def test_station_columns(self):
         cells = _type_body(self.gui, "te_grid_station_cells")
@@ -212,21 +242,74 @@ class StructureTest(unittest.TestCase):
         self.assertEqual(head[:3], b"\xef\xbb\xbf")
         self.assertNotEqual(head[3:6], b"\xef\xbb\xbf")
 
-    def test_four_sections_in_order(self):
+    def test_the_sections_in_order(self):
         body = _type_body(self.gui, "te_grid_tab_body")
         content = body[body.index('block "te_grid_tab_layout"'):]
         self.assertEqual(re.findall(r"^\t+(te_grid_\w+_panel) = \{\}", content, re.M),
-                         ["te_grid_overview_panel", "te_grid_mix_panel", "te_grid_grids_panel",
-                          "te_grid_stations_panel"])
+                         ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel"])
+        # National Generation is in the overview's frame, after the boxes and the Bloc partners
+        # line, so it reads as the country's and not as a grid's (owner, 2026-11-14).
+        overview = _type_body(self.gui, "te_grid_overview_panel")
+        frame = _block_from(overview, overview.index("te_grid_panel = {") + len("te_grid_panel = "))
+        self.assertEqual(overview.count("te_grid_mix_panel = {}"), 1)
+        self.assertIn("te_grid_mix_panel = {}", frame)
+        self.assertLess(frame.index("te_grid_ov_bloc_tt"), frame.index("te_grid_mix_panel = {}"))
+        self.assertNotIn("te_grid_panel = {", _type_body(self.gui, "te_grid_mix_panel"))
+        # The frame stacks the boxes and National Generation, not side by side.
+        self.assertIn("direction = vertical", _type_body(self.gui, "te_grid_panel"))
         self.assertIn("GetVariableSystem.Set('te_popup', 'help_power_grids')", body)
         self.assertIn('blockoverride "tab_open_journal" {}', body)
         self.assertIn("te_window_power_grids_tab_sgui", body[body.index('blockoverride "tab_gate"'):])
 
+    def test_a_hidden_child_leaves_no_gap(self):
+        """Every flowcontainer with a child that can be hidden sets ignoreinvisible, so a hidden
+        line (the overview's Bloc partners outside a bloc, a source with no generation) leaves no
+        blank row (the review of 2026-11-14 found the overview's without it)."""
+        text = _no_comments(self.gui)
+
+        def block(s, at):
+            """(body, end) of the brace block opening at s[at] == '{'."""
+            depth = 0
+            for i in range(at, len(s)):
+                depth += {"{": 1, "}": -1}.get(s[i], 0)
+                if depth == 0:
+                    return s[at + 1:i], i
+            raise AssertionError("unbalanced")
+
+        def own_and_children(body):
+            """The body's own text at its top level, and its child blocks' bodies."""
+            own, children, i = [], [], 0
+            while i < len(body):
+                if body[i] == "{":
+                    inner, i = block(body, i)
+                    children.append(inner)
+                else:
+                    own.append(body[i])
+                i += 1
+            return "".join(own), children
+
+        def hideable(child):
+            # its own visible, or one its instance passes through a *visible block
+            return (re.search(r"\bvisible = ", own_and_children(child)[0])
+                    or re.search(r'(?m)^\s*blockoverride "\w*visible"', child))
+
+        checked = 0
+        for m in re.finditer(r"(?:\bflowcontainer = |= flowcontainer )\{", text):
+            own, children = own_and_children(block(text, m.end() - 1)[0])
+            if any(hideable(c) for c in children):
+                checked += 1
+                with self.subTest(line=text.count("\n", 0, m.start()) + 1):
+                    self.assertRegex(own, r"\bignoreinvisible = yes\b")
+        self.assertGreater(checked, 5)
+        # The overview's own, which holds the Bloc partners line.
+        overview = _type_body(self.gui, "te_grid_overview_panel")
+        inner = overview[overview.index("flowcontainer = {"):overview.index("te_grid_ov_cell = {")]
+        self.assertIn("ignoreinvisible = yes", inner)
+
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_grid_wide_sections",
                                              layout=("te_grid_tab_body", "te_grid_tab_layout"))
-        self.assertEqual(columns, [["te_grid_overview_panel", "te_grid_mix_panel", "te_grid_grids_panel"],
-                                   ["te_grid_stations_panel"]])
+        self.assertEqual(columns, [["te_grid_overview_panel", "te_grid_grids_panel"], ["te_grid_stations_panel"]])
 
     def test_the_registry(self):
         tab = next(t for t in window_gen.TABS if t.key == "power_grids")
@@ -382,8 +465,9 @@ class StructureTest(unittest.TestCase):
     def test_no_control_in_the_tab(self):
         """The tab shows another country all of it (National Info), so it has
         no control: no scripted GUI's Execute, no onclick but the "?"."""
-        for name in ("te_grid_overview_panel", "te_grid_mix_panel", "te_grid_mix_row", "te_grid_grids_panel",
-                     "te_grid_stations_panel", "te_grid_card", "te_grid_station_row", "te_grid_station_cells"):
+        for name in ("te_grid_overview_panel", "te_grid_mix_panel", "te_grid_national_heading", "te_grid_mix_row",
+                     "te_grid_grids_panel", "te_grid_stations_panel", "te_grid_card", "te_grid_card_mix_chip",
+                     "te_grid_station_row", "te_grid_station_cells"):
             with self.subTest(type=name):
                 body = _type_body(self.gui, name)
                 self.assertNotIn("Execute", body)
@@ -548,7 +632,9 @@ class GenerationTableTest(unittest.TestCase):
         first so the product stays under the fixed-point ceiling; a state with no staffed plant
         falls back to full-staff weights."""
         state = _txt_block(self.effects, "te_grid_mix_state_effect")
-        self.assertIn("set_local_variable = { name = te_grid_mix_gen value = te_grid_local_production_value }", state)
+        # The caller sets the generation it splits (GridGenerationTest has both callers).
+        self.assertNotIn("name = te_grid_mix_gen", state)
+        self.assertRegex(state, r"^\{\s*te_grid_mix_clear_parts_effect = yes")
         self.assertIn("WEIGHT = te_grid_mix_staffed_output_value", state)
         self.assertIn("WEIGHT = te_grid_mix_capacity_output_value", state)
         self.assertLess(state.index("te_grid_mix_staffed_output_value"), state.index("te_grid_mix_capacity_output_value"))
@@ -565,6 +651,118 @@ class GenerationTableTest(unittest.TestCase):
         self.assertIn("te_grid_mix_on_action", pulse)
         hook = _txt_block(on_actions, "te_grid_mix_on_action")
         self.assertRegex(hook, r"limit = \{ te_grid_tab_unlocked = yes \}\s*te_grid_mix_record_effect = yes")
+
+
+class GridGenerationTest(unittest.TestCase):
+    """Each grid's generation by source (2026-11-14). The balancing on the 1st splits each
+    member once, from the production it has just read (te_grid_mix_store_state_effect), and
+    keeps the split on the state; the grid's record sums its members' splits, whoever owns
+    them; the country's monthly count takes a grid state's split as it stands rather than
+    walking its buildings again; a state off every grid keeps none."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _no_comments(_read(EFFECTS))
+        cls.gui = _read(GUI)
+
+    def block(self, name):
+        return _txt_block(self.effects, name)
+
+    def test_split_at_the_balancing(self):
+        balance = self.block("te_grid_balance_region_effect")
+        first = _block_from(balance, balance.index("every_in_global_list = {") + len("every_in_global_list = "))
+        self.assertIn("variable = te_grid_region", first)
+        self.assertEqual(balance.count("te_grid_mix_store_state_effect = yes"), 1)
+        # After the production is read, in the first member loop, so before the orders
+        # (te_grid_set_station_flow_effect) overwrite the rate and delivery it is read from.
+        self.assertLess(first.index("set_variable = { name = te_grid_local_production value"),
+                        first.index("te_grid_mix_store_state_effect = yes"))
+        self.assertLess(balance.index("te_grid_mix_store_state_effect = yes"),
+                        balance.index("te_grid_set_station_flow_effect = yes"))
+        store = self.block("te_grid_mix_store_state_effect")
+        self.assertIn("set_local_variable = { name = te_grid_mix_gen value = var:te_grid_local_production }", store)
+        self.assertNotIn("te_grid_local_production_value", store)
+        # A state that made next to nothing of its own (a plantless receiver's rounding residual)
+        # stores zeros without walking its buildings, which the full-staff fallback would do twice;
+        # the threshold stays under 1% staffing of one level of the smallest plant (12 a week).
+        self.assertRegex(store, r"if = \{\s*limit = \{ var:te_grid_local_production >= 0\.1 \}\s*"
+                                r"te_grid_mix_state_effect = yes\s*\}\s*else = \{\s*te_grid_mix_clear_parts_effect = yes")
+        self.assertEqual(tuple(re.findall(r"set_variable = \{ name = te_grid_state_mix_(\w+) "
+                                          r"value = local_var:te_grid_mix_part_(\w+) \}", store)),
+                         tuple((s, s) for s in SOURCES))
+        self.assertEqual(tuple(re.findall(r"name = te_grid_mix_part_(\w+) value = 0",
+                                          self.block("te_grid_mix_clear_parts_effect"))), SOURCES)
+
+    def test_a_state_off_every_grid_keeps_no_split(self):
+        clear = self.block("te_grid_mix_clear_state_effect")
+        for src in SOURCES:
+            with self.subTest(source=src):
+                self.assertRegex(clear, rf"limit = \{{ has_variable = te_grid_state_mix_{src} \}}\s*"
+                                        rf"remove_variable = te_grid_state_mix_{src}\b")
+        for name in ("te_grid_idle_station_effect", "te_grid_clear_state_effect"):
+            with self.subTest(effect=name):
+                self.assertIn("te_grid_mix_clear_state_effect = yes", self.block(name))
+
+    def test_the_record_sums_each_member_once(self):
+        record = self.block("te_grid_record_effect")
+        loop = record.index("every_in_global_list = {")
+        self.assertEqual(tuple(re.findall(r"set_local_variable = \{ name = te_grid_rec_mix_(\w+) value = 0 \}",
+                                          record[:loop])), SOURCES)
+        members = _block_from(record, loop + len("every_in_global_list = "))
+        self.assertIn("variable = te_grid_region", members)
+        self.assertEqual(record.count("te_grid_mix_add_member_effect = yes"), 1)
+        self.assertIn("te_grid_mix_add_member_effect = yes", members)
+        add = self.block("te_grid_mix_add_member_effect")
+        self.assertEqual(tuple(re.findall(r"change_local_variable = \{ name = te_grid_rec_mix_(\w+) "
+                                          r"add = var:te_grid_state_mix_(\w+) \}", add)),
+                         tuple((s, s) for s in SOURCES))
+        total = record[record.index("name = te_grid_rec_mix_total"):]
+        self.assertEqual(tuple(re.findall(r"local_var:te_grid_rec_mix_(\w+)", total[:total.index("}")])), SOURCES)
+        hub = record[record.rindex("scope:te_grid_hub_state = {"):]
+        self.assertEqual(tuple(re.findall(r"set_variable = \{ name = te_grid_rec_mix_(\w+) "
+                                          r"value = local_var:te_grid_rec_mix_(\w+) \}", hub)),
+                         tuple((s, s) for s in SOURCES + ("total",)))
+        clear = self.block("te_grid_clear_record_effect")
+        for src in SOURCES + ("total",):
+            self.assertRegex(clear, rf"limit = \{{ has_variable = te_grid_rec_mix_{src} \}}\s*"
+                                    rf"remove_variable = te_grid_rec_mix_{src}\b")
+
+    def test_the_country_count_reuses_the_split(self):
+        """A state the balancing split adds what it stored; any other is measured now and walked."""
+        record = self.block("te_grid_mix_record_effect")
+        self.assertRegex(record, r"if = \{\s*limit = \{ has_variable = te_grid_state_mix_coal \}\s*"
+                                 r"te_grid_mix_add_stored_effect = yes\s*\}\s*else = \{\s*"
+                                 r"set_local_variable = \{ name = te_grid_mix_gen value = te_grid_local_production_value \}"
+                                 r"\s*te_grid_mix_state_effect = yes\s*te_grid_mix_add_parts_effect = yes\s*\}")
+        self.assertEqual(record.count("te_grid_mix_state_effect = yes"), 1)
+        stored = self.block("te_grid_mix_add_stored_effect")
+        self.assertEqual(tuple(re.findall(r"name = te_grid_mix_sum_(\w+) add = var:te_grid_state_mix_(\w+) \}", stored)),
+                         tuple((s, s) for s in SOURCES))
+        parts = self.block("te_grid_mix_add_parts_effect")
+        self.assertEqual(tuple(re.findall(r"name = te_grid_mix_sum_(\w+) add = local_var:te_grid_mix_part_(\w+) \}",
+                                          parts)), tuple((s, s) for s in SOURCES))
+        split = self.block("te_grid_mix_split_effect")
+        self.assertIn("name = te_grid_mix_part_$SOURCE$", split)
+
+    def test_the_card_reads_the_record(self):
+        card = _type_body(self.gui, "te_grid_card")
+        chips = card[card.index("te_grid_card_mix_chip = {"):]
+        self.assertEqual(tuple(re.findall(r"ScriptValue\('te_grid_rec_mix_(\w+)_disp'\), '\(CFixedPoint\)0' \)",
+                                          chips)), SOURCES)
+        self.assertEqual(tuple(re.findall(r'tooltip = "te_grid_card_mix_(\w+)_tt"', chips)), SOURCES)
+        self.assertEqual(tuple(re.findall(r'text = "te_grid_card_mix_(\w+)_share"', chips)), SOURCES)
+        # The row and the total's text go with the grid having any generation at all.
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp'), "
+                      "'(CFixedPoint)0' )]\"", card[:card.index("te_grid_card_mix_chip = {")])
+        loc = _all_loc()
+        values = _no_comments(_read(VALUES))
+        for src in SOURCES:
+            with self.subTest(source=src):
+                self.assertIn(f"te_grid_rec_mix_{src}_share_disp", loc[f"te_grid_card_mix_{src}_share"])
+                self.assertIn(f"$te_grid_mix_{src}$", loc[f"te_grid_card_mix_{src}_tt"])
+                share = _txt_block(values, f"te_grid_rec_mix_{src}_share_disp")
+                self.assertRegex(share, rf"limit = \{{ te_grid_rec_mix_total_disp > 0 \}}\s*"
+                                        rf"value = te_grid_rec_mix_{src}_disp\s*divide = te_grid_rec_mix_total_disp")
 
 
 class BuildingPanelTest(unittest.TestCase):
