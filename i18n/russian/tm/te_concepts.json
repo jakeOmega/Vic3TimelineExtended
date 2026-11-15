@@ -75,6 +75,10 @@
   "en": "from friendly relations",
   "ru": "из-за дружественных отношений"
  },
+ "AI_FRIENDLY_RELATIONS": {
+  "en": "from friendly relations",
+  "ru": "из-за дружественных отношений"
+ },
  "AI_GOOD_RELATIONS": {
   "en": "from good relations",
   "ru": "из-за хороших отношений"
@@ -259,6 +263,10 @@
   "en": "Restrict Speculative Inflows",
   "ru": "Ограничить спекулятивные притоки"
  },
+ "CB_STERILIZE_INFLOWS": {
+  "en": "Sterilization",
+  "ru": "Стерилизация"
+ },
  "CE_ADMIN_CAMPAIGN": {
   "en": "Administrative Performance Campaign",
   "ru": "Кампания за эффективность управления"
@@ -314,6 +322,26 @@
  "CREATE_NEW_RELIGION": {
   "en": "Create New Religion",
   "ru": "Создание новой религии"
+ },
+ "CR_FEDERAL_PROTECTION": {
+  "en": "Federal Protection",
+  "ru": "Федеральная защита"
+ },
+ "CR_GRADUALIST_ACCOMMODATION": {
+  "en": "Gradualist Accommodation",
+  "ru": "Постепенное примирение"
+ },
+ "CR_GRASSROOTS_ORGANIZING": {
+  "en": "Grassroots Organizing",
+  "ru": "Низовая самоорганизация"
+ },
+ "CR_SEGREGATIONIST_CONSOLIDATION": {
+  "en": "Segregationist Consolidation",
+  "ru": "Сегрегационистская консолидация"
+ },
+ "CR_SUPPRESSION_CRACKDOWN": {
+  "en": "Suppression / Crackdown",
+  "ru": "Подавление / репрессии"
  },
  "CUSTOM_RELIGION_BACK": {
   "en": "Back",
@@ -519,6 +547,14 @@
   "en": "Has enacted $law_human_purity$",
   "ru": "Закон «$law_human_purity$» принят"
  },
+ "LAW_REGULATED_AUGMENTATION": {
+  "en": "Has enacted $law_regulated_augmentation_market$",
+  "ru": "Закон «$law_regulated_augmentation_market$» принят"
+ },
+ "LAW_UNRESTRICTED_AUGMENTATION": {
+  "en": "Has enacted $law_unrestricted_augmentation$",
+  "ru": "Закон «$law_unrestricted_augmentation$» принят"
+ },
  "MINORITY_RIGHTS_VIOLATED": {
   "en": "Minority Rights Violated",
   "ru": "Нарушены права меньшинств"
@@ -643,6 +679,10 @@
   "en": "Join Arms Control Treaty",
   "ru": "Присоединиться к договору о контроле над вооружениями"
  },
+ "UN_CHAMPION_ORDER": {
+  "en": "Champion International Order",
+  "ru": "Защита международного порядка"
+ },
  "UN_DEFUND_DEVELOPMENT": {
   "en": "Withdraw Development Funding",
   "ru": "Прекратить финансирование развития"
@@ -750,6 +790,10 @@
  "UN_STOP_UNDERMINING": {
   "en": "Stop Undermining Order",
   "ru": "Приказ: прекратить подрыв"
+ },
+ "UN_UNDERMINE_ORDER": {
+  "en": "Undermine International Order",
+  "ru": "Подрыв международного порядка"
  },
  "UN_WITHHOLD_DUES": {
   "en": "Withhold our UN dues",
@@ -1247,6 +1291,10 @@
   "en": "State-encouraged boycotts of minority businesses are deepening social divisions and breeding resentment.",
   "ru": "Поощряемые государством бойкоты предприятий меньшинств углубляют социальные расколы и порождают обиду."
  },
+ "antimatter_facility_progress": {
+  "en": "[concept_antimatter_facility] Progress",
+  "ru": "[concept_antimatter_facility]: прогресс"
+ },
  "antimatter_facility_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Antimatter Containment Facility.",
   "ru": "Отслеживает накопленный прогресс в строительстве Хранилища антиматерии."
@@ -1327,6 +1375,10 @@
   "en": "Assassinate a domestic target.",
   "ru": "Убить цель внутри страны."
  },
+ "assassinate_foreign": {
+  "en": "Assassinate",
+  "ru": "Убить"
+ },
  "assassinate_foreign_desc": {
   "en": "Assassinate a foreign target.",
   "ru": "Убить цель за рубежом."
@@ -1342,6 +1394,14 @@
  "atlantic_charter": {
   "en": "Atlantic Charter",
   "ru": "Атлантическая хартия"
+ },
+ "augment_ethics_board_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "augment_ethics_board_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "augment_health_panic": {
   "en": "Augmentation Health Scare",
@@ -1438,6 +1498,10 @@
  "augmentation_subsidies_modifier_desc": {
   "en": "Government subsidies make augmentation accessible, driving innovation at a cost.",
   "ru": "Государственные субсидии делают аугментацию доступной и стимулируют инновации, но недёшево."
+ },
+ "augmentation_subsidy_modifier": {
+  "en": "Augmentation Subsidies",
+  "ru": "Субсидии на аугментацию"
  },
  "augmentation_subsidy_modifier_desc": {
   "en": "Government subsidies for human augmentation have improved [concept_sol] across all strata but strain the [concept_bureaucracy].",
@@ -1575,6 +1639,14 @@
   "en": "Applies the effects of the Export Credit Facility banking policy.",
   "ru": "Применяет эффекты банковской политики «Экспортное кредитование»."
  },
+ "banking_fx_surrender": {
+  "en": "Foreign Exchange Surrender Requirement",
+  "ru": "Требование продажи иностранной валюты"
+ },
+ "banking_moral_suasion": {
+  "en": "Moral Suasion",
+  "ru": "Моральное убеждение"
+ },
  "banking_moral_suasion_desc": {
   "en": "Applies the effects of the Moral Suasion banking policy.",
   "ru": "Применяет эффекты банковской политики «Моральное воздействие»."
@@ -1661,7 +1733,7 @@
  },
  "bg_grand_monuments": {
   "en": "Grand Monuments",
-  "ru": "Великие памятники"
+  "ru": "Великие монументы"
  },
  "bg_high_tech": {
   "en": "High-Tech Industry",
@@ -1902,6 +1974,10 @@
  "ch_domestic_university_focus_desc": {
   "en": "Exclusive focus on domestic students strengthens our own education system but misses the opportunity to attract foreign talent.",
   "ru": "Исключительное внимание к отечественным студентам укрепляет нашу систему образования, но упускает возможность привлечь иностранные таланты."
+ },
+ "ch_entertainment_adaptation": {
+  "en": "Cultural Adaptation",
+  "ru": "Культурная адаптация"
  },
  "ch_entertainment_adaptation_desc": {
   "en": "A creative blending of foreign and domestic entertainment traditions is producing something uniquely our own.",
@@ -2601,7 +2677,7 @@
  },
  "concept_banking_common_currency_desc": {
   "en": "A power bloc leader's money, which any member may adopt once the bloc's [concept_banking_monetary_union] reaches its second tier. An adopter has no dial: it takes the leader's policy rate with no spread, its exchange rate and most of its credibility, and can no longer monetize its deficit. With no peg to break, an overvalued adopter pays more [concept_banking_risk_premium] instead. Once a member has adopted, the leader uses the currency too, and gains what its adopters gain from the bloc's principle except the backstop on their debts and the cuts to their premium. Each country's cycle and debts stay its own. Its [concept_banking_inflation] stays its own too, except that goods traded in one money sell at one price: each point an adopter's inflation sits above or below the leader's, short swings in goods prices aside, counts as a point of [concept_banking_price_pressure] pulling it back.",
-  "ru": "Деньги лидера силового блока, которые может принять любой член, когда [Concept('concept_banking_monetary_union', 'валютный союз')] блока достигнет второго уровня. У принявшего нет рычага: он берёт ключевую ставку лидера без спреда, его валютный курс и большую часть его доверия и больше не может монетизировать свой дефицит. Раз нет привязки, которую можно разорвать, переоценённая валюта принявшего вместо этого платит бо́льшую [Concept('concept_banking_risk_premium', 'премию за риск')]. Как только член принял валюту, лидер тоже использует её и получает то, что получают принявшие от принципа блока, кроме поддержки их долгов и снижения их премии. Цикл и долги каждой страны остаются её собственными. Её [Concept('concept_banking_inflation', 'инфляция')] тоже остаётся своей, за исключением того, что товары, торгуемые в одной валюте, продаются по одной цене: каждый пункт, на который инфляция принявшего выше или ниже инфляции лидера, помимо коротких колебаний цен на товары, считается пунктом [Concept('concept_banking_price_pressure', 'ценового давления')], тянущего её назад."
+  "ru": "Деньги лидера силового блока, которые может принять любой член, когда [Concept('concept_banking_monetary_union', 'валютный союз')] блока достигнет второго уровня. У принявшего нет рычага: он берёт ключевую ставку лидера без спреда, его валютный курс и большую часть его доверия и больше не может монетизировать свой дефицит. Раз нет привязки, которую можно разорвать, переоценённая валюта принявшего вместо этого платит большую [Concept('concept_banking_risk_premium', 'премию за риск')]. Как только член принял валюту, лидер тоже использует её и получает то, что получают принявшие от принципа блока, кроме поддержки их долгов и снижения их премии. Цикл и долги каждой страны остаются её собственными. Её [Concept('concept_banking_inflation', 'инфляция')] тоже остаётся своей, за исключением того, что товары, торгуемые в одной валюте, продаются по одной цене: каждый пункт, на который инфляция принявшего выше или ниже инфляции лидера, помимо коротких колебаний цен на товары, считается пунктом [Concept('concept_banking_price_pressure', 'ценового давления')], тянущего её назад."
  },
  "concept_banking_contagion": {
   "en": "Banking Contagion",
@@ -2893,7 +2969,7 @@
  },
  "concept_contested_monument_desc": {
   "en": "A $building_grand_monument$ that honors something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from its row on the Grand Monuments tab of the Timeline Extended window.",
-  "ru": "Здание «$building_grand_monument$», чтящее то, чем правительство не является: корону, республику, революцию, лидера или веру, павшие, либо режим или правителя другой страны, когда её государство переходит из рук в руки. Он сохраняет свой туризм и эффект в своей области, но не даёт ни престижа, ни легитимности, ни одобрения, а группа интересов, возражавшая против его послания, негодует каждый месяц, пока он остаётся нерешённым. Снесите его, посвятите заново или оставьте как [Concept('concept_heritage_monument', 'памятник наследия')] из его строки на вкладке «Великие памятники» окна Timeline Extended."
+  "ru": "Здание «$building_grand_monument$», чтящее то, чем правительство не является: корону, республику, революцию, лидера или веру, павшие, либо режим или правителя другой страны, когда её государство переходит из рук в руки. Он сохраняет свой туризм и эффект в своей области, но не даёт ни престижа, ни легитимности, ни одобрения, а группа интересов, возражавшая против его послания, негодует каждый месяц, пока он остаётся нерешённым. Снесите его, посвятите заново или оставьте как [Concept('concept_heritage_monument', 'памятник наследия')] из его строки на вкладке «Великие монументы» окна Timeline Extended."
  },
  "concept_covert_efficiency": {
   "en": "Efficiency Factor",
@@ -3193,7 +3269,7 @@
  },
  "concept_migration_crowding_desc": {
   "en": "A density-based reduction in [concept_migration_pull] for overpopulated states. A state's crowding threshold is #v 10,000#! people for each unit of [concept_arable_land], plus #v 1,000#! for each point of [concept_urban_engineering], all multiplied by its $state_migration_crowding_density_mult$. Past the threshold the penalty rises gradually with a quadratic ramp, then grows linearly from ten times the threshold. The penalty is #R 45%#! × r², r being the crowding ratio (0% at the threshold, 100% at ten times it); past ten times the threshold it grows by #R 10#! percentage points for each further multiple: #R 45%#! at ten times the threshold, #R 145%#! at twenty.\\n\\nMore [concept_urban_engineering] (from the early urban technologies, $urbanization$ to $elevator$) or a higher $state_migration_crowding_density_mult$ (from the Ministry of Urban Planning, the Urban Planning principles, civil highways and later technologies; national parks, forests and wildlife refuges lower it) raises the threshold.",
-  "ru": "Штраф за перенаселённость: в переполненных областях [concept_migration_pull|l] снижается в зависимости от плотности. Порог перенаселённости области — #v 10 000#! человек на каждую единицу [Concept('concept_arable_land','пахотной земли')] плюс #v 1 000#! на каждое очко [Concept('concept_urban_engineering','городской инженерии')], и всё это умножается на её показатель «$state_migration_crowding_density_mult$». За порогом штраф растёт постепенно по квадратичной кривой, а начиная с десятикратного порога — линейно. Штраф равен #R 45%#! × r², где r — коэффициент перенаселённости (0% на пороге, 100% при десятикратном пороге); сверх десятикратного порога он растёт на #R 10#! процентных пунктов за каждое следующее кратное: #R 45%#! при десятикратном пороге, #R 145%#! при двадцатикратном.\\n\\nПорог повышают бо́льшая [Concept('concept_urban_engineering','городская инженерия')] (ранние городские технологии, от «$urbanization$» до «$elevator$») или более высокий показатель «$state_migration_crowding_density_mult$» (от Министерства градостроительства, принципов «Градостроительство», гражданских автомагистралей и более поздних технологий; национальные парки, леса и заповедники снижают его)."
+  "ru": "Штраф за перенаселённость: в переполненных областях [concept_migration_pull|l] снижается в зависимости от плотности. Порог перенаселённости области — #v 10 000#! человек на каждую единицу [Concept('concept_arable_land','пахотной земли')] плюс #v 1 000#! на каждое очко [Concept('concept_urban_engineering','городской инженерии')], и всё это умножается на её показатель «$state_migration_crowding_density_mult$». За порогом штраф растёт постепенно по квадратичной кривой, а начиная с десятикратного порога — линейно. Штраф равен #R 45%#! × r², где r — коэффициент перенаселённости (0% на пороге, 100% при десятикратном пороге); сверх десятикратного порога он растёт на #R 10#! процентных пунктов за каждое следующее кратное: #R 45%#! при десятикратном пороге, #R 145%#! при двадцатикратном.\\n\\nПорог повышают большая [Concept('concept_urban_engineering','городская инженерия')] (ранние городские технологии, от «$urbanization$» до «$elevator$») или более высокий показатель «$state_migration_crowding_density_mult$» (от Министерства градостроительства, принципов «Градостроительство», гражданских автомагистралей и более поздних технологий; национальные парки, леса и заповедники снижают его)."
  },
  "concept_ministry_system": {
   "en": "Ministry System",
@@ -3885,7 +3961,7 @@
  },
  "concept_un_specialized_agencies_desc": {
   "en": "Standing organizations of the United Nations. Sixteen are founded when the General Assembly adopts the matching convention: WHO (pandemic response), UNESCO (heritage protection), UNHRC (human rights), IAEA (nuclear non-proliferation), UNEP (climate), UNHCR (refugees), UNOOSA (space cooperation), ITLOS (the law of the sea), the ICC (international criminal justice), the regime for the physical protection of nuclear material, the INCB (narcotics), the Convention on Cultural Diversity, the Treaty on the Prohibition of Nuclear Weapons, the ATS (the Antarctic Treaty), UNODA (the anti-satellite moratorium) and COPUOS (the settlement of outer space). The ICJ (international court) is founded when a country first accepts a World Court ruling against it. An agency stands for its convention: the convention's terms bind the members that ratify it, and some reach every country, member or not. Hover an agency in the overview for its terms. The ICJ has no effects of its own.",
-  "ru": "Постоянные организации Организации Объединённых Наций. Шестнадцать основываются, когда Генеральная Ассамблея принимает соответствующую конвенцию: ВОЗ (реагирование на пандемии), ЮНЕСКО (защита наследия), СПЧ ООН (права человека), МАГАТЭ (ядерное нераспространение), ЮНЕП (климат), УВКБ ООН (беженцы), УВКП ООН (космическое сотрудничество), МТМП (морское право), МУС (международное уголовное правосудие), режим физической защиты ядерного материала, МККН (наркотики), Конвенция о культурном разнообразии, Договор о запрещении ядерного оружия, ДА (Договор об Антарктике), УДРВ ООН (противоспутниковый мораторий) и КОПУОС (освоение космоса). Международный суд ООН основывается, когда страна впервые принимает против себя решение Всемирного суда. Агентство стоит за свою конвенцию: условия конвенции связывают членов, которые её ратифицируют, а некоторые касаются каждой страны, члена или нет. Наведите курсор на агентство в обзоре, чтобы увидеть его условия. У Международного суда ООН нет собственных эффектов."
+  "ru": "Постоянные организации Организации Объединённых Наций. Шестнадцать основываются, когда Генеральная Ассамблея принимает соответствующую конвенцию: ВОЗ (реагирование на пандемии), ЮНЕСКО (защита наследия), СПЧ ООН (права человека), МАГАТЭ (ядерное нераспространение), ЮНЕП (климат), УВКБ ООН (беженцы), УВКП ООН (космическое сотрудничество), МТМП (морское право), МУС (международное уголовное правосудие), режим физической защиты ядерного материала, МККН (наркотики), Конвенция о культурном разнообразии, Договор о запрещении ядерного оружия, СДА (Договор об Антарктике), УДРВ ООН (противоспутниковый мораторий) и КОПУОС (освоение космоса). Международный суд ООН основывается, когда страна впервые принимает против себя решение Всемирного суда. Агентство стоит за свою конвенцию: условия конвенции связывают членов, которые её ратифицируют, а некоторые касаются каждой страны, члена или нет. Наведите курсор на агентство в обзоре, чтобы увидеть его условия. У Международного суда ООН нет собственных эффектов."
  },
  "concept_un_standing": {
   "en": "International Standing",
@@ -3979,6 +4055,10 @@
   "en": "Congress System",
   "ru": "Конгрессная система"
  },
+ "consciousness_network_progress": {
+  "en": "Consciousness Network Progress",
+  "ru": "Сеть сознания: прогресс"
+ },
  "consciousness_network_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Consciousness Network.",
   "ru": "Отслеживает накопленный прогресс в завершении Сети сознания."
@@ -4003,6 +4083,10 @@
   "en": "Additional private sector investment in [Concept('concept_ship_construction_capacity', 'construction capacity')].",
   "ru": "Дополнительные инвестиции частного сектора в [Concept('concept_ship_construction_capacity', 'строительные мощности')]."
  },
+ "construction_site_throughput": {
+  "en": "Construction Site",
+  "ru": "Стройплощадка"
+ },
  "construction_site_throughput_desc": {
   "en": "A construction site is being developed.",
   "ru": "Идёт развитие строительной площадки."
@@ -4018,6 +4102,10 @@
  "contraception_restricted_modifier_desc": {
   "en": "Restrictions on contraception have pleased religious authorities but harmed women's health and reduced our innovation capacity.",
   "ru": "Ограничения контрацепции порадовали религиозные власти, но навредили женскому здоровью и снизили наш инновационный потенциал."
+ },
+ "cooperative_capital_plan": {
+  "en": "Collective Capital Investment Plan",
+  "ru": "План коллективных инвестиций капитала"
  },
  "cooperative_capital_plan_desc": {
   "en": "Member cooperatives are pooling surplus for a coordinated light industrial investment program, strengthening capacity and accelerating reinvestment momentum.",
@@ -4047,6 +4135,10 @@
   "en": "Federation credit unions have expanded lending capacity at reduced interest rates, providing liquidity to member cooperatives during the downturn.",
   "ru": "Кредитные союзы федерации расширили кредитные мощности по сниженным ставкам, обеспечив ликвидность кооперативам-членам во время спада."
  },
+ "cooperative_dividend_restraint": {
+  "en": "Dividend Restraint Resolution",
+  "ru": "Резолюция об ограничении дивидендов"
+ },
  "cooperative_dividend_restraint_desc": {
   "en": "The cooperative council has voted to cap payout ratios and redirect surplus to collective reinvestment funds. Reduces [concept_bubble_pressure] at the cost of some trade union enthusiasm.",
   "ru": "Совет кооперативов проголосовал за ограничение коэффициентов выплат и перенаправление излишков в коллективные фонды реинвестирования. Снижает [concept_bubble_pressure|l] ценой некоторого энтузиазма профсоюзов."
@@ -4059,9 +4151,17 @@
   "en": "Federation mutual aid reserves are being deployed to cooperatives near financial distress, stabilizing the network and boosting [concept_lower_strata] loyalty.",
   "ru": "Резервы взаимопомощи федерации направляются кооперативам, близким к финансовому краху, стабилизируя сеть и повышая лояльность [concept_lower_strata|l]."
  },
+ "cooperative_solidarity_campaign": {
+  "en": "Worker Solidarity Campaign",
+  "ru": "Кампания рабочей солидарности"
+ },
  "cooperative_solidarity_campaign_desc": {
   "en": "A coordinated media campaign is urging worker-owners to voluntarily moderate consumption in the collective interest.",
   "ru": "Скоординированная медиакампания призывает рабочих-владельцев добровольно умерить потребление в коллективных интересах."
+ },
+ "cooperative_worker_buyout": {
+  "en": "Worker Buyout Facilitation",
+  "ru": "Содействие выкупу предприятий рабочими"
  },
  "cooperative_worker_buyout_desc": {
   "en": "The federation is actively supporting worker acquisitions of failing enterprises before insolvency cascades through the collective network.",
@@ -4162,6 +4262,10 @@
  "country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool_desc": {
   "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_ministry_of_science').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]",
   "ru": "Позволяет #b навязывать#! тот же [concept_law|l], что и у себя, в группе [GetLawGroup('lawgroup_ministry_of_science').GetName] другим [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]"
+ },
+ "country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool_desc": {
+  "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_minority_rights').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]",
+  "ru": "Позволяет #b навязывать#! тот же [concept_law|l], что и у себя, в группе [GetLawGroup('lawgroup_minority_rights').GetName] другим [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]"
  },
  "country_can_join_united_nations_bool_desc": {
   "en": "Lets a [concept_great_power] found the [concept_united_nations_system] while none exists, or convene a founding conference after one has been dissolved. Also lets a [concept_power_bloc] leader bring this country into the United Nations by treaty. Joining a United Nations that already exists needs no technology.",
@@ -4331,6 +4435,10 @@
   "en": "Our country will become recognized if currently unrecognized.",
   "ru": "Наша страна станет признанной, если сейчас не признана."
  },
+ "covert_comms_disruption": {
+  "en": "Communications Disruption",
+  "ru": "Нарушение связи"
+ },
  "covert_comms_disruption_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their communications disruption operations.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] прекратила операции по нарушению связи."
@@ -4351,9 +4459,17 @@
   "en": "Disrupts target's military communications, reducing combat effectiveness",
   "ru": "Нарушает военную связь цели, снижая боевую эффективность"
  },
+ "covert_comms_disruption_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches covert communications disruption operations against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайные операции по нарушению связи против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_comms_disruption_desc": {
   "en": "Enemy [concept_covert_operations] are degrading our military communications, reducing combat effectiveness.",
   "ru": "[concept_covert_operations|U] противника ухудшают нашу военную связь, снижая боевую эффективность."
+ },
+ "covert_counterintel_support": {
+  "en": "Counterintelligence Support",
+  "ru": "Контрразведывательная поддержка"
  },
  "covert_counterintel_support_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has stopped supporting our counterintelligence services.",
@@ -4415,6 +4531,10 @@
   "en": "Fuels separatist movements and general unrest in the target nation",
   "ru": "Питает сепаратистские движения и общие волнения в целевой стране"
  },
+ "covert_destabilization_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches a covert destabilization campaign against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайную кампанию дестабилизации против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_destabilization_resist": {
   "en": "Foreign Destabilization",
   "ru": "Иностранная дестабилизация"
@@ -4447,9 +4567,17 @@
   "en": "Undermines target's political [concept_legitimacy] and government stability",
   "ru": "Подрывает политическую [concept_legitimacy|l] цели и стабильность правительства"
  },
+ "covert_election_interference_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches a covert election interference campaign against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайную кампанию по вмешательству в выборы против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_election_interference_desc": {
   "en": "A foreign power is covertly manipulating our political processes, undermining government [concept_legitimacy].",
   "ru": "Иностранная держава тайно манипулирует нашими политическими процессами, подрывая [concept_legitimacy|l] правительства."
+ },
+ "covert_financial_subversion": {
+  "en": "Financial Subversion",
+  "ru": "Финансовая диверсия"
  },
  "covert_financial_subversion_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their financial subversion operations.",
@@ -4471,6 +4599,10 @@
   "en": "Destabilizes target's financial markets and economic stability",
   "ru": "Дестабилизирует финансовые рынки и экономическую стабильность цели"
  },
+ "covert_financial_subversion_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches covert financial subversion against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайную финансовую диверсию против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_financial_subversion_desc": {
   "en": "A foreign power is destabilizing our financial markets through [concept_covert_operations], increasing the risk of a banking crisis.",
   "ru": "Иностранная держава дестабилизирует наши финансовые рынки через [concept_covert_operations|l], повышая риск банковского кризиса."
@@ -4482,6 +4614,10 @@
  "covert_friend_spying_scandal_desc": {
   "en": "We were caught running [concept_covert_operations] against a friend. At home the government is blamed for betraying a country many of our citizens trust, and its [concept_legitimacy] suffers until the scandal fades.",
   "ru": "Нас поймали на [concept_covert_operations|l] против друга. Дома правительство винят в предательстве страны, которой доверяют многие наши граждане, и его [concept_legitimacy|l] страдает, пока скандал не уляжется."
+ },
+ "covert_ideological_subversion": {
+  "en": "Ideological Subversion",
+  "ru": "Идеологическая диверсия"
  },
  "covert_ideological_subversion_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their ideological subversion operations.",
@@ -4502,6 +4638,10 @@
  "covert_ideological_subversion_action_effect_desc_global": {
   "en": "Promotes our ideology within the target nation, supporting sympathetic [Concept('concept_political_movement', 'political movements')]",
   "ru": "Продвигает нашу идеологию в целевой нации, поддерживая сочувствующие [Concept('concept_political_movement', 'политические движения')]"
+ },
+ "covert_ideological_subversion_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches a covert ideological subversion campaign within [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайную кампанию идеологической диверсии внутри страны [TARGET_COUNTRY.GetName]"
  },
  "covert_ideological_subversion_desc": {
   "en": "A foreign power is covertly supporting [Concept('concept_political_movement', 'political movements')] aligned with their ideology within our borders.",
@@ -4543,6 +4683,10 @@
   "en": "Steals production [concept_technology]",
   "ru": "Крадёт [concept_technology|l] производства"
  },
+ "covert_industrial_espionage_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайный промышленный шпионаж против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_industrial_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents extracting our industrial secrets. Plugging the leak diverts administrative attention from other priorities.",
   "ru": "Контрразведка обнаружила иностранных агентов, выкачивающих наши промышленные секреты. Устранение утечки отвлекает внимание администрации от других приоритетов."
@@ -4571,6 +4715,10 @@
   "en": "Weakens target's resistance to our [concept_power_bloc] pressure",
   "ru": "Ослабляет сопротивление цели нашему давлению [concept_power_bloc|l]"
  },
+ "covert_influence_campaign_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches a covert influence campaign against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайную кампанию влияния против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_influence_campaign_desc": {
   "en": "A foreign power is conducting bribery and blackmail campaigns to undermine our resistance to international pressure.",
   "ru": "Иностранная держава ведёт кампании подкупа и шантажа, подрывая наше сопротивление международному давлению."
@@ -4578,6 +4726,10 @@
  "covert_infra_sabotage_morale_desc": {
   "en": "Covert [concept_infrastructure] sabotage is undermining military morale and combat effectiveness.",
   "ru": "Тайный саботаж [concept_infrastructure|l] подрывает боевой дух и боевую эффективность армии."
+ },
+ "covert_infrastructure_sabotage": {
+  "en": "Infrastructure Sabotage",
+  "ru": "Саботаж инфраструктуры"
  },
  "covert_infrastructure_sabotage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their [concept_infrastructure] sabotage operations.",
@@ -4598,6 +4750,10 @@
  "covert_infrastructure_sabotage_action_effect_desc_global": {
   "en": "Sabotages target's [concept_infrastructure], reducing production and logistics",
   "ru": "Саботирует [concept_infrastructure|l] цели, снижая производство и логистику"
+ },
+ "covert_infrastructure_sabotage_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches covert [concept_infrastructure] sabotage against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайный саботаж [concept_infrastructure|l] против страны [TARGET_COUNTRY.GetName]"
  },
  "covert_infrastructure_sabotage_desc": {
   "en": "Enemy [concept_covert_operations] are disrupting our [concept_infrastructure] and production capacity.",
@@ -4623,9 +4779,17 @@
   "en": "Gathers military intelligence, stealing military [concept_technology]",
   "ru": "Собирает военные разведданные, крадя военную [concept_technology|l]"
  },
+ "covert_military_espionage_action_effect_desc_third": {
+  "en": "[COUNTRY.GetName] launches covert military espionage against [TARGET_COUNTRY.GetName]",
+  "ru": "[COUNTRY.GetName] разведывательный аппарат начинает тайный военный шпионаж против страны [TARGET_COUNTRY.GetName]"
+ },
  "covert_military_espionage_detected_desc": {
   "en": "Counterintelligence has uncovered foreign agents gathering classified military intelligence. Tightening compartmentalization across the chain of command consumes administrative focus.",
   "ru": "Контрразведка обнаружила иностранных агентов, собирающих секретные военные сведения. Ужесточение разграничения доступа по всей цепочке командования отнимает внимание администрации."
+ },
+ "covert_nuclear_sabotage": {
+  "en": "Nuclear Program Sabotage",
+  "ru": "Саботаж ядерной программы"
  },
  "covert_nuclear_sabotage_action_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has discontinued their Nuclear Program Sabotage operation.",
@@ -4739,6 +4903,10 @@
   "en": "The movement has learned that the appointments were symbolic. The bar bonus from cooptation has run out for the rest of this struggle; ending and restarting the program does not restore it.",
   "ru": "Движение узнало, что назначения были символическими. Бонус к шкале от кооптации исчерпан до конца этой борьбы; завершение и перезапуск программы его не восстанавливают."
  },
+ "cr_cooptation_modifier": {
+  "en": "Cooptation / Token Reform",
+  "ru": "Кооптация / символические реформы"
+ },
  "cr_cooptation_modifier_desc": {
   "en": "Token appointments and symbolic statutes take the heat off; ideological coherence suffers.",
   "ru": "Символические назначения и показные статуты снимают напряжение; идеологическая цельность страдает."
@@ -4747,17 +4915,33 @@
   "en": "Marshals deploy; civil rights statutes are enforced from the top. [concept_bureaucracy] and authority bear the weight.",
   "ru": "Маршалы развёрнуты; статуты о гражданских правах исполняются сверху. Бремя несут [concept_bureaucracy|l] и авторитет."
  },
+ "cr_gradualist_modifier": {
+  "en": "Gradualist Accommodation",
+  "ru": "Постепенное примирение"
+ },
  "cr_gradualist_modifier_desc": {
   "en": "Quiet steps, signed at cabinet level. [concept_turmoil] eases, acceptance creeps up.",
   "ru": "Тихие шаги, подписанные на уровне кабинета. [concept_turmoil|U] стихают, принятие медленно растёт."
+ },
+ "cr_grassroots_modifier": {
+  "en": "Grassroots Organizing",
+  "ru": "Низовая самоорганизация"
  },
  "cr_grassroots_modifier_desc": {
   "en": "Organizers travel, train, and recruit. Reform laws move faster; awareness creates [Concept('concept_radical', 'radicals')].",
   "ru": "Организаторы ездят, обучают и вербуют. Законы о реформах движутся быстрее; осведомлённость порождает [Concept('concept_radical', 'радикалов')]."
  },
+ "cr_segregationist_modifier": {
+  "en": "Segregationist Consolidation",
+  "ru": "Сегрегационистская консолидация"
+ },
  "cr_segregationist_modifier_desc": {
   "en": "The regime's hard line is formalized in law and practice. Radicalization spikes.",
   "ru": "Жёсткий курс режима закрепляется в законе и практике. Радикализация резко растёт."
+ },
+ "cr_suppression_modifier": {
+  "en": "Suppression / Crackdown",
+  "ru": "Подавление / репрессии"
  },
  "cr_suppression_modifier_desc": {
   "en": "Police raids and surveillance push the movement underground; resentment compounds in the longer run.",
@@ -4774,6 +4958,14 @@
  "crimjust_radicalism_uptick": {
   "en": "Reformist Agitation",
   "ru": "Реформистская агитация"
+ },
+ "crimjust_reform_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "crimjust_reform_debate_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "crimjust_rehabilitation_focus": {
   "en": "Criminal Justice: Rehabilitation Focus",
@@ -4891,6 +5083,10 @@
   "en": "The nation embraces cultural exchange, accelerating [concept_assimilation] and international [concept_prestige].",
   "ru": "Нация принимает культурный обмен, ускоряя [concept_assimilation|l] и международный [concept_prestige|l]."
  },
+ "cultural_protection_modifier": {
+  "en": "Cultural Protectionism",
+  "ru": "Культурный протекционизм"
+ },
  "cultural_protection_modifier_desc": {
   "en": "Measures to protect local culture from foreign influence strengthen traditional institutions.",
   "ru": "Меры по защите местной культуры от иностранного влияния укрепляют традиционные институты."
@@ -4906,6 +5102,10 @@
  "cultural_renaissance_funding_modifier_desc": {
   "en": "Government funding for arts and culture provides meaning in a post-work world.",
   "ru": "Государственное финансирование искусства и культуры придаёт смысл миру без труда."
+ },
+ "cultural_renaissance_modifier": {
+  "en": "Cultural Renaissance",
+  "ru": "Культурный ренессанс"
  },
  "cultural_renaissance_modifier_desc": {
   "en": "A state-funded cultural program celebrating diverse heritage has improved cultural acceptance and national [concept_prestige].",
@@ -5231,6 +5431,10 @@
   "en": "Education aid has been redirected toward practical technical training.",
   "ru": "Помощь в образовании перенаправлена на практическую техническую подготовку."
  },
+ "electfin_donor_scandal_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
  "electfin_donor_scandal_cautious_desc": {
   "en": "A smaller positive boost to law enactment progress from a recent event.",
   "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
@@ -5447,6 +5651,14 @@
   "en": "The government has sided with religious tradition over social reform, pleasing the devout but slowing modernization.",
   "ru": "Правительство встало на сторону религиозной традиции, а не социальных реформ, порадовав верующих, но замедлив модернизацию."
  },
+ "famrep_demographic_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "famrep_demographic_debate_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
  "famrep_family_planning": {
   "en": "Family Policy: Comprehensive Family Planning",
   "ru": "Семейная политика: всестороннее планирование семьи"
@@ -5550,6 +5762,22 @@
  "financial_panic_desc": {
   "en": "A sudden and severe economic downturn, often triggered by a loss of confidence in financial institutions.",
   "ru": "Внезапный и резкий экономический спад, часто вызванный потерей доверия к финансовым институтам."
+ },
+ "finreg_bank_panic_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "finreg_bank_panic_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
+ },
+ "finreg_bankers_lobby_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "finreg_bankers_lobby_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "finreg_banking_stability": {
   "en": "Restored Banking Confidence",
@@ -5703,9 +5931,17 @@
   "en": "Environmentalist Leader Ideology",
   "ru": "Идеология лидера: эколог"
  },
+ "from_environmentalist": {
+  "en": "Environmentalist Leader Ideology",
+  "ru": "Идеология лидера: эколог"
+ },
  "from_ethno_nationalism": {
   "en": "Ethno-Nationalist Leader Ideology",
   "ru": "Идеология лидера: этнонационалист"
+ },
+ "from_expertise": {
+  "en": "Intelligentsia Interest Group",
+  "ru": "Группа интересов «Интеллигенция»"
  },
  "from_far_right": {
   "en": "Fascist, Integralist or Ethno-Nationalist Leader Ideology",
@@ -5719,9 +5955,21 @@
   "en": "Feminist Leader Ideology",
   "ru": "Идеология лидера: феминист"
  },
+ "from_green_tech": {
+  "en": "Environmentalist Leader Ideology",
+  "ru": "Идеология лидера: эколог"
+ },
  "from_industrialist_base": {
   "en": "Industrialists Interest Group",
   "ru": "Группа интересов «Промышленники»"
+ },
+ "from_industry_opposition": {
+  "en": "Industrialists Interest Group",
+  "ru": "Группа интересов «Промышленники»"
+ },
+ "from_intelligentsia": {
+  "en": "Intelligentsia Interest Group",
+  "ru": "Группа интересов «Интеллигенция»"
  },
  "from_landowner_tradition": {
   "en": "Landowners Interest Group",
@@ -5747,6 +5995,10 @@
   "en": "Armed Forces with a Jingoist or Ethno-Nationalist Leader",
   "ru": "Вооружённые силы с лидером-шовинистом или этнонационалистом"
  },
+ "from_populist_opposition": {
+  "en": "Ethno-Nationalist Leader Ideology",
+  "ru": "Идеология лидера: этнонационалист"
+ },
  "from_progressive_values": {
   "en": "Pacifist, Humanitarian or Enlightened Royalist Leader Ideology",
   "ru": "Идеология лидера: пацифист, гуманист или просвещённый роялист"
@@ -5759,7 +6011,19 @@
   "en": "Reformer or Liberal Leader Ideology",
   "ru": "Идеология лидера: реформист или либерал"
  },
+ "from_religious_skepticism": {
+  "en": "Devout Interest Group",
+  "ru": "Группа интересов «Духовенство»"
+ },
  "from_rural_base": {
+  "en": "Rural Folk Interest Group",
+  "ru": "Группа интересов «Сельское население»"
+ },
+ "from_rural_conservation": {
+  "en": "Rural Folk Interest Group",
+  "ru": "Группа интересов «Сельское население»"
+ },
+ "from_rural_skepticism": {
   "en": "Rural Folk Interest Group",
   "ru": "Группа интересов «Сельское население»"
  },
@@ -5774,6 +6038,14 @@
  "from_transhumanist": {
   "en": "Optimist Transhumanist Leader Ideology",
   "ru": "Идеология лидера: оптимист-трансгуманист"
+ },
+ "genetics_ethics_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "genetics_ethics_debate_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "genetics_research_exemption": {
   "en": "Genetics: Research Exemption",
@@ -5939,9 +6211,25 @@
   "en": "Governance: Human Oversight First",
   "ru": "Управление: приоритет человеческого контроля"
  },
+ "govprin_popular_assembly_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "govprin_popular_assembly_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
  "govprin_tech_first": {
   "en": "Governance: Tech First",
   "ru": "Управление: приоритет технологий"
+ },
+ "govprin_technocrat_showcase_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "govprin_technocrat_showcase_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
  },
  "gp_anti_colonial_policy_modifier_desc": {
   "en": "This nation has publicly adopted an anti-colonial stance, gaining [concept_prestige] and influence among decolonizing nations.",
@@ -6463,6 +6751,14 @@
   "en": "Inheritance: Primogeniture Preserved",
   "ru": "Наследование: майорат сохранён"
  },
+ "inherit_succession_dispute_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "inherit_succession_dispute_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
  "inherit_wealth_consolidation": {
   "en": "Concentrated Inheritances",
   "ru": "Концентрированные наследства"
@@ -6555,9 +6851,25 @@
   "en": "Internet Governance: Freedom Safeguards",
   "ru": "Управление интернетом: гарантии свободы"
  },
+ "internet_viral_campaign_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "internet_viral_campaign_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
+ },
  "ip_creator_protection": {
   "en": "Intellectual Property: Creator Protection",
   "ru": "Интеллектуальная собственность: защита создателей"
+ },
+ "ip_piracy_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "ip_piracy_debate_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "irr_cultural_ties_modifier_desc": {
   "en": "Schools, presses and libraries, paid for as cultural exchange, tie our people to a neighbor of the same culture.",
@@ -6759,6 +7071,14 @@
   "en": "Language Policy: Assimilationist Push",
   "ru": "Языковая политика: ассимиляторский курс"
  },
+ "langpol_cultural_resistance_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "langpol_cultural_resistance_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
  "langpol_pluralist_accommodation": {
   "en": "Language Policy: Pluralist Accommodation",
   "ru": "Языковая политика: плюралистическое приспособление"
@@ -6767,9 +7087,17 @@
   "en": "Language Advisory Panel",
   "ru": "Языковой консультативный совет"
  },
+ "langreform_advisory_panel_desc": {
+  "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
+  "ru": "Совет учёных публикует авторитетные рекомендации по употреблению языка, обладающие моральным весом, но не силой закона."
+ },
  "langreform_constructed": {
   "en": "Constructed Language",
   "ru": "Искусственный язык"
+ },
+ "langreform_constructed_desc": {
+  "en": "The state has adopted an entirely new constructed language designed for logical grammar and universal accessibility, accelerating technological exchange at the cost of traditional cultural bonds.",
+  "ru": "Государство приняло совершенно новый искусственный язык с логичной грамматикой и всеобщей доступностью, что ускоряет обмен технологиями ценой традиционных культурных связей."
  },
  "langreform_intensive_transition_cost_desc": {
   "en": "An ambitious state-funded education campaign is rapidly teaching the reformed language. School costs are sharply higher, but the transition period is considerably shorter.",
@@ -6787,93 +7115,185 @@
   "en": "Minority Language Protection",
   "ru": "Защита языков меньшинств"
  },
+ "langreform_minority_protection_desc": {
+  "en": "The state language reform includes protections and revival programs for minority and regional languages, reducing separatist sentiment.",
+  "ru": "Реформа государственного языка включает защиту и программы возрождения языков меньшинств и регионов, снижая сепаратистские настроения."
+ },
  "langreform_national_focus": {
   "en": "National Language Priority",
   "ru": "Приоритет национального языка"
+ },
+ "langreform_national_focus_desc": {
+  "en": "The state language reform concentrates all resources on promoting the national language, accelerating [concept_assimilation] but fueling minority resentment.",
+  "ru": "Реформа государственного языка направляет все ресурсы на продвижение национального языка, ускоряя [Concept('concept_assimilation', 'ассимиляцию')], но подпитывая обиды меньшинств."
  },
  "langreform_powerful_academy": {
   "en": "Language Academy Established",
   "ru": "Создание языковой академии"
  },
+ "langreform_powerful_academy_desc": {
+  "en": "A powerful state language academy has been established with authority to regulate terminology, grammar, and orthography.",
+  "ru": "Учреждена влиятельная государственная языковая академия с полномочиями регулировать терминологию, грамматику и орфографию."
+ },
  "langreform_revival": {
   "en": "Classical Language Revival",
   "ru": "Возрождение классического языка"
+ },
+ "langreform_revival_desc": {
+  "en": "The state is reviving a classical or ancestral language as the modern national standard, inspiring cultural pride and religious fervor.",
+  "ru": "Государство возрождает классический или древний язык как современный национальный стандарт, вдохновляя культурную гордость и религиозный пыл."
  },
  "langreform_revived_arabic": {
   "en": "Classical Arabic Revival",
   "ru": "Возрождение классического арабского"
  },
+ "langreform_revived_arabic_desc": {
+  "en": "The state has chosen to revive Classical Arabic as the literary and administrative standard, building on its [concept_prestige] as the language of the Quran, of philosophy, mathematics, and poetry.",
+  "ru": "Государство решило возродить классический арабский как литературный и административный стандарт, опираясь на его [concept_prestige|l] как языка Корана, философии, математики и поэзии."
+ },
  "langreform_revived_aramaic": {
   "en": "Aramaic Revival",
   "ru": "Возрождение арамейского"
+ },
+ "langreform_revived_aramaic_desc": {
+  "en": "The state has chosen to revive Aramaic, the ancient lingua franca of the Near East and the language of the Talmud and early Christianity, as the foundation for a modern national standard.",
+  "ru": "Государство решило возродить арамейский — древний лингва франка Ближнего Востока и язык Талмуда и раннего христианства — как основу современного национального стандарта."
  },
  "langreform_revived_avestan": {
   "en": "Avestan Revival",
   "ru": "Возрождение авестийского"
  },
+ "langreform_revived_avestan_desc": {
+  "en": "The state has chosen to revive Avestan, the sacred tongue of the Zoroastrian Gathas, as the foundation for a national language rooted in the deepest antiquity.",
+  "ru": "Государство решило возродить авестийский — священный язык зороастрийских Гат — как основу национального языка, уходящего корнями в глубочайшую древность."
+ },
  "langreform_revived_chinese": {
   "en": "Literary Chinese Revival",
   "ru": "Возрождение литературного китайского"
+ },
+ "langreform_revived_chinese_desc": {
+  "en": "The state has chosen to revive Literary Chinese as the national written standard, drawing on the classical tradition shared across centuries of East Asian scholarship, law, and governance.",
+  "ru": "Государство решило возродить литературный китайский как национальный письменный стандарт, опираясь на классическую традицию, общую для столетий восточноазиатской учёности, права и управления."
  },
  "langreform_revived_coptic": {
   "en": "Coptic Revival",
   "ru": "Возрождение коптского"
  },
+ "langreform_revived_coptic_desc": {
+  "en": "The state has chosen to revive Coptic, the last descendant of the language of the pharaohs, preserved through centuries of Christian liturgy as the foundation for a modern literary standard.",
+  "ru": "Государство решило возродить коптский — последний потомок языка фараонов, сохранённый столетиями христианской литургии, — как основу современного литературного стандарта."
+ },
  "langreform_revived_geez": {
   "en": "Ge’ez Revival",
   "ru": "Возрождение геэза"
+ },
+ "langreform_revived_geez_desc": {
+  "en": "The state has chosen to revive Ge'ez, the ancient liturgical tongue preserved through centuries of monastic manuscript tradition, as the basis for a modern literary standard.",
+  "ru": "Государство решило возродить геэз — древний литургический язык, сохранённый столетиями монастырской рукописной традиции, — как основу современного литературного стандарта."
  },
  "langreform_revived_gothic": {
   "en": "Gothic Revival",
   "ru": "Возрождение готского"
  },
+ "langreform_revived_gothic_desc": {
+  "en": "The state has chosen to revive Gothic, the earliest attested Germanic language, known through Wulfila's fourth-century Bible translation, as the scholarly foundation for a modern standard.",
+  "ru": "Государство решило возродить готский — древнейший засвидетельствованный германский язык, известный по переводу Библии, сделанному Вульфилой в IV веке, — как научную основу современного стандарта."
+ },
  "langreform_revived_greek": {
   "en": "Classical Greek Revival",
   "ru": "Возрождение древнегреческого"
+ },
+ "langreform_revived_greek_desc": {
+  "en": "The state has chosen to revive Classical Greek as the national scholarly standard, harnessing the language of philosophy, democracy, and the sciences.",
+  "ru": "Государство решило возродить классический греческий как национальный научный стандарт, взяв на вооружение язык философии, демократии и наук."
  },
  "langreform_revived_hebrew": {
   "en": "Hebrew Revival",
   "ru": "Возрождение иврита"
  },
+ "langreform_revived_hebrew_desc": {
+  "en": "The state has chosen to revive Hebrew as the modern national language, transforming an ancient scriptural tongue into a living vehicle for law, commerce, and science.",
+  "ru": "Государство решило возродить иврит как современный национальный язык, превратив древний язык Писания в живое средство права, торговли и науки."
+ },
  "langreform_revived_irish": {
   "en": "Classical Irish Revival",
   "ru": "Возрождение классического ирландского"
+ },
+ "langreform_revived_irish_desc": {
+  "en": "The state has chosen to revive Classical Irish as the national literary standard, drawing on the oldest vernacular literature in Western Europe and centuries of Gaelic legal, poetic, and monastic tradition.",
+  "ru": "Государство решило возродить классический ирландский как национальный литературный стандарт, опираясь на старейшую народную литературу Западной Европы и столетия гэльской правовой, поэтической и монастырской традиции."
  },
  "langreform_revived_latin": {
   "en": "Latin Revival",
   "ru": "Возрождение латыни"
  },
+ "langreform_revived_latin_desc": {
+  "en": "The state has chosen to revive Latin as the national scholarly and administrative standard, drawing on centuries of Western legal, diplomatic, and ecclesiastical tradition.",
+  "ru": "Государство решило возродить латынь как национальный научный и административный стандарт, опираясь на столетия западной правовой, дипломатической и церковной традиции."
+ },
  "langreform_revived_mayan": {
   "en": "Classic Mayan Revival",
   "ru": "Возрождение классического майя"
+ },
+ "langreform_revived_mayan_desc": {
+  "en": "The state has chosen to revive Classic Mayan as the national literary standard, restoring the courtly language of Tikal, Palenque, and Copán and its intricate hieroglyphic script.",
+  "ru": "Государство решило возродить классический язык майя как национальный литературный стандарт, восстанавливая придворный язык Тикаля, Паленке и Копана и его замысловатую иероглифическую письменность."
  },
  "langreform_revived_nahuatl": {
   "en": "Classical Nahuatl Revival",
   "ru": "Возрождение классического науатля"
  },
+ "langreform_revived_nahuatl_desc": {
+  "en": "The state has chosen to revive Classical Nahuatl, the courtly language of the Aztec Triple Alliance, renowned for its poetry, legal codes, and philosophical discourse.",
+  "ru": "Государство решило возродить классический науатль — придворный язык Тройственного союза ацтеков, известный своей поэзией, сводами законов и философской прозой."
+ },
  "langreform_revived_norse": {
   "en": "Old Norse Revival",
   "ru": "Возрождение древнескандинавского"
+ },
+ "langreform_revived_norse_desc": {
+  "en": "The state has chosen to revive Old Norse as the national standard, drawing on the language of the Eddas, the sagas, and the oldest parliamentary tradition in Europe.",
+  "ru": "Государство решило возродить древнескандинавский как национальный стандарт, опираясь на язык Эдд, саг и старейшей парламентской традиции Европы."
  },
  "langreform_revived_pali": {
   "en": "Pali Revival",
   "ru": "Возрождение пали"
  },
+ "langreform_revived_pali_desc": {
+  "en": "The state has chosen to revive Pali, the canonical language of Theravada Buddhism, as the national scholarly standard - a tongue of elegant simplicity and monastic discipline.",
+  "ru": "Государство решило возродить пали — канонический язык буддизма тхеравады — как национальный научный стандарт: язык изящной простоты и монастырской дисциплины."
+ },
  "langreform_revived_prussian": {
   "en": "Old Prussian Revival",
   "ru": "Возрождение древнепрусского"
+ },
+ "langreform_revived_prussian_desc": {
+  "en": "The state has chosen to revive Old Prussian, the extinct Baltic tongue prized by linguists for its extraordinary archaism, in an unprecedented act of cultural resurrection.",
+  "ru": "Государство решило возродить древнепрусский — вымерший балтийский язык, ценимый лингвистами за необычайную архаичность, — в беспрецедентном акте культурного воскрешения."
  },
  "langreform_revived_sanskrit": {
   "en": "Sanskrit Revival",
   "ru": "Возрождение санскрита"
  },
+ "langreform_revived_sanskrit_desc": {
+  "en": "The state has chosen to revive Sanskrit as the foundation of the national language, harnessing its unmatched grammatical precision and vast philosophical-scientific literature.",
+  "ru": "Государство решило возродить санскрит как основу национального языка, взяв на вооружение его непревзойдённую грамматическую точность и обширную философскую и научную литературу."
+ },
  "langreform_revived_slavonic": {
   "en": "Old Church Slavonic Revival",
   "ru": "Возрождение церковнославянского"
  },
+ "langreform_revived_slavonic_desc": {
+  "en": "The state has chosen to revive Old Church Slavonic as a pan-Slavic literary standard, drawing on its centuries of use as the sacred language of Orthodox Slavic civilization.",
+  "ru": "Государство решило возродить старославянский как общеславянский литературный стандарт, опираясь на столетия его использования как священного языка православной славянской цивилизации."
+ },
  "langreform_simplification": {
   "en": "Language Simplification",
   "ru": "Упрощение языка"
+ },
+ "langreform_simplification_desc": {
+  "en": "The state is standardizing and simplifying the national language, making it more accessible to learners and boosting education.",
+  "ru": "Государство стандартизирует и упрощает национальный язык, делая его доступнее для изучающих и повышая уровень образования."
  },
  "langreform_transition_cost": {
   "en": "Language Transition Costs",
@@ -6943,6 +7363,14 @@
   "en": "Opening military service to all citizens regardless of identity has boosted our armed forces' professionalism and international [concept_prestige].",
   "ru": "Открытие военной службы для всех граждан независимо от идентичности повысило профессионализм наших вооружённых сил и международный [concept_prestige|l]."
  },
+ "lgbtq_public_petition_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "lgbtq_public_petition_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
+ },
  "lgbtq_reform_civil_rights_movement_modifier_desc": {
   "en": "Public outrage over hate crimes has attracted more supporters to the civil rights movement.",
   "ru": "Общественное возмущение преступлениями на почве ненависти привлекло больше сторонников к Движению за гражданские права."
@@ -6962,6 +7390,10 @@
  "local_climate_amenity_desc": {
   "en": "Newcomers weigh the [concept_local_climate] where they would live: a winter milder or sunnier than London's draws them, and little else in this state's climate turns them away. Heating and warm clothing narrow the difference as technologies arrive, and the last of them bring every winter its sun; it is recalculated every year.",
   "ru": "Новоприбывшие оценивают [concept_local_climate|l] там, где собираются жить: зима мягче или солнечнее лондонской привлекает их, а всё остальное в климате этой области их почти не отталкивает. Отопление и тёплая одежда сглаживают разницу по мере появления технологий, а последние из них дарят солнце каждой зиме; пересчитывается каждый год."
+ },
+ "local_climate_discomfort": {
+  "en": "Local Climate",
+  "ru": "Местный климат"
  },
  "local_climate_discomfort_desc": {
   "en": "Newcomers weigh the [concept_local_climate] where they would live: the hottest days, a harsh or gloomy winter, scarce water and malaria all cost a state [concept_migration_pull]. Technologies that ease each one reduce the cost, which is recalculated every year.",
@@ -7215,9 +7647,17 @@
   "en": "Ministry: Budget Advance",
   "ru": "Министерство: продвижение бюджета"
  },
+ "ministry_budget_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_budget_concession": {
   "en": "Ministry: Budget Concession",
   "ru": "Министерство: бюджетная уступка"
+ },
+ "ministry_budget_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
  },
  "ministry_budget_generous": {
   "en": "Ministry Budget: Generous Funding",
@@ -7235,6 +7675,10 @@
   "en": "Commerce Ministry: Protectionist",
   "ru": "Министерство торговли: протекционизм"
  },
+ "ministry_commerce_trade_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_commerce_trade_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
   "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
@@ -7247,13 +7691,37 @@
   "en": "Consumer Protection Ministry: Strict Standards",
   "ru": "Министерство защиты потребителей: строгие стандарты"
  },
+ "ministry_consumer_tainted_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_consumer_tainted_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
+ "ministry_culture_patronage_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_culture_patronage_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
  "ministry_dissolution_advance": {
   "en": "Ministry: Dissolution Advance",
   "ru": "Министерство: продвижение роспуска"
  },
+ "ministry_dissolution_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_dissolution_concession": {
   "en": "Ministry: Dissolution Concession",
   "ru": "Министерство: уступка при роспуске"
+ },
+ "ministry_dissolution_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
  },
  "ministry_dissolution_phased": {
   "en": "Ministry Dissolution: Phased Wind-Down",
@@ -7267,6 +7735,14 @@
   "en": "Ministry Dissolution: Swift Wind-Down",
   "ru": "Роспуск министерства: быстрое свёртывание"
  },
+ "ministry_env_smokestacks_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_env_smokestacks_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
  "ministry_env_voluntary": {
   "en": "Environment Ministry: Voluntary Standards",
   "ru": "Министерство окружающей среды: добровольные стандарты"
@@ -7279,6 +7755,38 @@
   "en": "Foreign Affairs Ministry: Hawkish Doctrine",
   "ru": "Министерство иностранных дел: ястребиная доктрина"
  },
+ "ministry_intel_shadow_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_intel_shadow_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
+ "ministry_labor_struggle_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_labor_struggle_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
+ "ministry_prop_loudspeaker_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_prop_loudspeaker_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
+ "ministry_refugee_crisis_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_refugee_crisis_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_refugee_generous": {
   "en": "Refugee Affairs Ministry: Generous Resettlement",
   "ru": "Министерство по делам беженцев: щедрое расселение"
@@ -7287,13 +7795,29 @@
   "en": "Refugee Affairs Ministry: Restrictive Resettlement",
   "ru": "Министерство по делам беженцев: ограничительное расселение"
  },
+ "ministry_sci_laboratory_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_sci_laboratory_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_staffing_advance": {
   "en": "Ministry: Staffing Advance",
   "ru": "Министерство: продвижение кадрового набора"
  },
+ "ministry_staffing_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_staffing_cautious": {
   "en": "Ministry: Staffing Cautious Advance",
   "ru": "Министерство: осторожное продвижение кадров"
+ },
+ "ministry_staffing_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
  },
  "ministry_staffing_loyalist": {
   "en": "Ministry Staffing: Loyalist Appointments",
@@ -7315,9 +7839,21 @@
   "en": "Thought Control Ministry: Restrictive Standards",
   "ru": "Министерство контроля над мыслями: ограничительные стандарты"
  },
+ "ministry_thought_watchers_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_thought_watchers_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
  "ministry_turf_advance": {
   "en": "Ministry: Turf Advance",
   "ru": "Министерство: продвижение в борьбе за сферы"
+ },
+ "ministry_turf_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
  },
  "ministry_turf_coexist": {
   "en": "Ministry Turf: Coexist with Existing Departments",
@@ -7327,6 +7863,10 @@
   "en": "Ministry: Turf Concession",
   "ru": "Министерство: уступка в борьбе за сферы"
  },
+ "ministry_turf_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
  "ministry_turf_consolidate": {
   "en": "Ministry Turf: Consolidate Authority",
   "ru": "Сферы министерства: укрепление полномочий"
@@ -7334,6 +7874,22 @@
  "ministry_turf_stall": {
   "en": "Bureaucratic Turf Wars Stall",
   "ru": "Задержка из-за бюрократической борьбы за сферы"
+ },
+ "ministry_urban_sprawl_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_urban_sprawl_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
+ },
+ "ministry_war_generals_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_war_generals_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows ministry law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона о министерстве."
  },
  "minority_business_protection_modifier_desc": {
   "en": "The government has intervened to protect minority-owned businesses from organized boycotts, at some bureaucratic cost.",
@@ -7378,6 +7934,14 @@
  "minrights_majority_grievance": {
   "en": "Majority Backlash",
   "ru": "Ответная реакция большинства"
+ },
+ "minrights_solidarity_march_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "minrights_solidarity_march_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
  },
  "modifier_grid_station_download_desc": {
   "en": "The $grid_power$ this station pays its grid for the $electricity$ it supplies to the state, at the grid's price. A station that takes in power from another [concept_market] also buys that import here.",
@@ -7435,9 +7999,25 @@
   "en": "Currency Stabilization",
   "ru": "Стабилизация валюты"
  },
+ "monpol_gold_hoarders_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "monpol_gold_hoarders_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
  "monpol_industrial_alignment": {
   "en": "Monetary Policy: Industrial Alignment",
   "ru": "Денежная политика: согласование с промышленностью"
+ },
+ "monpol_printing_press_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "monpol_printing_press_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
  },
  "monpol_wage_indexation": {
   "en": "Monetary Policy: Wage Indexation",
@@ -7466,6 +8046,10 @@
  "motor_ships_desc": {
   "en": "Diesel- and turbine-powered oceangoing vessels — supertankers, container ships, and modern liners that displaced coal-fired steamers in the post-war era.",
   "ru": "Дизельные и турбинные океанские суда — супертанкеры, контейнеровозы и современные лайнеры, вытеснившие угольные пароходы в послевоенную эпоху."
+ },
+ "nanofabrication_center_progress": {
+  "en": "Nanofabrication Center Progress",
+  "ru": "Центр нанопроизводства: прогресс"
  },
  "nanofabrication_center_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Nanofabrication Center.",
@@ -7748,6 +8332,10 @@
   "ru": "Влияние уровня «Повышенная готовность» на наши ядерные силы."
  },
  "nd_repudiate_pledge_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] отказалась от своего обязательства о неприменении ядерного оружия перед страной [TARGET_COUNTRY.GetName]."
+ },
+ "nd_repudiate_pledge_action_action_notification_third_party_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName].",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] отказалась от своего обязательства о неприменении ядерного оружия перед страной [TARGET_COUNTRY.GetName]."
  },
@@ -8059,6 +8647,10 @@
   "en": "A single party has consolidated control, directing national resources toward rapid modernization.",
   "ru": "Единственная партия сосредоточила контроль в своих руках и направляет национальные ресурсы на быструю модернизацию."
  },
+ "orbital_battlestation_progress": {
+  "en": "Orbital Battlestation Progress",
+  "ru": "Орбитальная боевая станция: прогресс"
+ },
  "orbital_battlestation_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Orbital Battlestation.",
   "ru": "Отслеживает накопленный прогресс в строительстве Орбитальной боевой станции."
@@ -8199,13 +8791,25 @@
   "en": "Perpetual Union",
   "ru": "Вечный союз"
  },
+ "planning_admin_campaign": {
+  "en": "Administrative Performance Campaign",
+  "ru": "Кампания за эффективность управления"
+ },
  "planning_admin_campaign_desc": {
   "en": "A nationwide efficiency drive is replacing or reassigning underperforming planners. Strong friction reduction at the cost of intelligentsia and industrialist political relations.",
   "ru": "Общенациональная кампания за эффективность заменяет или переводит нерадивых плановиков. Сильно снижает трения ценой отношений с интеллигенцией и промышленниками."
  },
+ "planning_consolidation_order": {
+  "en": "Plant Consolidation Order",
+  "ru": "Приказ о консолидации предприятий"
+ },
  "planning_consolidation_order_desc": {
   "en": "Redundant parallel production units are being merged into consolidated complexes, freeing investment capital and reducing administrative overhead.",
   "ru": "Лишние параллельные производственные единицы сливаются в укрупнённые комплексы, высвобождая инвестиционный капитал и снижая административные издержки."
+ },
+ "planning_coordination_protocol": {
+  "en": "Inter-Sectoral Coordination Protocol",
+  "ru": "Протокол межотраслевой координации"
  },
  "planning_coordination_protocol_desc": {
   "en": "A permanent multi-ministry committee is proactively resolving allocation conflicts before they escalate into supply-chain failures.",
@@ -8227,6 +8831,10 @@
   "en": "Critical inputs and transport have been rerouted to a designated priority sector. Accelerates coordination momentum but risks building imbalances elsewhere in the planned network.",
   "ru": "Критически важные ресурсы и транспорт перенаправлены в назначенный приоритетный сектор. Ускоряет набор темпа координации, но грозит дисбалансом в остальной плановой сети."
  },
+ "planning_plan_revision": {
+  "en": "Emergency Plan Revision",
+  "ru": "Экстренный пересмотр плана"
+ },
  "planning_plan_revision_desc": {
   "en": "An emergency revision order has been issued requiring all bureaus to scale targets back to provisioned capacity. Reduces supply-chain friction and slows momentum accumulation.",
   "ru": "Издан чрезвычайный приказ о пересмотре плана: все ведомства должны сократить задания до обеспеченных мощностей. Снижает трения в цепочках поставок и замедляет накопление темпа."
@@ -8238,6 +8846,10 @@
  "planning_strategic_stockpile_desc": {
   "en": "Nationwide material reserves are being accumulated as a buffer against sudden input shortages in the planned network.",
   "ru": "По всей стране накапливаются запасы материалов как буфер на случай внезапной нехватки сырья в плановой сети."
+ },
+ "planning_target_reduction": {
+  "en": "Production Target Reduction",
+  "ru": "Снижение производственных целей"
  },
  "planning_target_reduction_desc": {
   "en": "Plan targets have been formally scaled down to remove overcommitment from the production network. Significantly reduces [concept_bubble_pressure] and momentum.",
@@ -8423,11 +9035,35 @@
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
  },
+ "principle_artistic_expression_2_desc": {
+  "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
+  "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
+ },
+ "principle_artistic_expression_3_desc": {
+  "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
+  "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
+ },
  "principle_cultural_plurality_1_desc": {
   "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
   "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
  },
+ "principle_cultural_plurality_2_desc": {
+  "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
+  "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
+ },
+ "principle_cultural_plurality_3_desc": {
+  "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
+  "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
+ },
  "principle_cultural_unity_1_desc": {
+  "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
+  "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_cultural_unity_2_desc": {
+  "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
+  "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_cultural_unity_3_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
  },
@@ -8451,7 +9087,27 @@
   "en": "Universal [concept_literacy] and global media networks make the bloc the world's cultural hegemon. Foreign-born talent assimilates rapidly; rival blocs' cultural pressure breaks against bloc literacy.",
   "ru": "Всеобщая [Concept('concept_literacy','грамотность')] и глобальные медиасети делают блок культурным гегемоном мира. Таланты иностранного происхождения быстро ассимилируются; культурное давление блоков-соперников разбивается о грамотность блока."
  },
+ "principle_engineering_and_logistics_1_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "ru": "[concept_power_bloc] поощряет развитие военной инженерии и логистики."
+ },
+ "principle_engineering_and_logistics_2_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "ru": "[concept_power_bloc] поощряет развитие военной инженерии и логистики."
+ },
+ "principle_engineering_and_logistics_3_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "ru": "[concept_power_bloc] поощряет развитие военной инженерии и логистики."
+ },
  "principle_environmental_sustainability_1_desc": {
+  "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
+  "ru": "[concept_power_bloc] поощряет экологическую устойчивость и защиту окружающей среды."
+ },
+ "principle_environmental_sustainability_2_desc": {
+  "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
+  "ru": "[concept_power_bloc] поощряет экологическую устойчивость и защиту окружающей среды."
+ },
+ "principle_environmental_sustainability_3_desc": {
   "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
   "ru": "[concept_power_bloc] поощряет экологическую устойчивость и защиту окружающей среды."
  },
@@ -8459,11 +9115,35 @@
   "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
   "ru": "[concept_power_bloc] поощряет глобальную безопасность и видит свою миссию в защите международного мира."
  },
+ "principle_global_security_2_desc": {
+  "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
+  "ru": "[concept_power_bloc] поощряет глобальную безопасность и видит свою миссию в защите международного мира."
+ },
+ "principle_global_security_3_desc": {
+  "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
+  "ru": "[concept_power_bloc] поощряет глобальную безопасность и видит свою миссию в защите международного мира."
+ },
  "principle_healthcare_1_desc": {
   "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
   "ru": "[concept_power_bloc] поощряет здравоохранение и благополучие своих граждан."
  },
+ "principle_healthcare_2_desc": {
+  "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет здравоохранение и благополучие своих граждан."
+ },
+ "principle_healthcare_3_desc": {
+  "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет здравоохранение и благополучие своих граждан."
+ },
  "principle_military_training_1_desc": {
+  "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
+  "ru": "[concept_power_bloc] поощряет военную подготовку и развитие военных технологий."
+ },
+ "principle_military_training_2_desc": {
+  "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
+  "ru": "[concept_power_bloc] поощряет военную подготовку и развитие военных технологий."
+ },
+ "principle_military_training_3_desc": {
   "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
   "ru": "[concept_power_bloc] поощряет военную подготовку и развитие военных технологий."
  },
@@ -8511,13 +9191,45 @@
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
  },
+ "principle_rural_2_desc": {
+  "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
+  "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "principle_rural_3_desc": {
+  "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
+  "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
  "principle_urban_planning_1_desc": {
+  "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
+  "ru": "[concept_power_bloc] поощряет градостроительство и развитие городов."
+ },
+ "principle_urban_planning_2_desc": {
+  "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
+  "ru": "[concept_power_bloc] поощряет градостроительство и развитие городов."
+ },
+ "principle_urban_planning_3_desc": {
   "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
   "ru": "[concept_power_bloc] поощряет градостроительство и развитие городов."
  },
  "principle_welfare_1_desc": {
   "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
   "ru": "[concept_power_bloc] поощряет социальное обеспечение и благополучие своих граждан."
+ },
+ "principle_welfare_2_desc": {
+  "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет социальное обеспечение и благополучие своих граждан."
+ },
+ "principle_welfare_3_desc": {
+  "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет социальное обеспечение и благополучие своих граждан."
+ },
+ "privacy_surveillance_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "privacy_surveillance_debate_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
  },
  "propaganda_campaign_modifier": {
   "en": "Propaganda Campaign",
@@ -8583,21 +9295,41 @@
   "en": "Automation Layoffs",
   "ru": "Сокращения из-за автоматизации"
  },
+ "re_automation_layoffs_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_automation_retraining": {
   "en": "Automation Retraining",
   "ru": "Переобучение в связи с автоматизацией"
+ },
+ "re_automation_retraining_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_compute_audit": {
   "en": "Compute Audit",
   "ru": "Аудит вычислений"
  },
+ "re_compute_audit_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_compute_fasttrack": {
   "en": "Fast-Track Compute",
   "ru": "Ускоренные вычисления"
  },
+ "re_compute_fasttrack_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_compute_prioritization": {
   "en": "Compute Prioritization",
   "ru": "Приоритизация вычислений"
+ },
+ "re_compute_prioritization_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_cyber_forensics": {
   "en": "Cyber Forensics",
@@ -8627,17 +9359,37 @@
   "en": "Debate Microtargeting",
   "ru": "Микротаргетинг в дебатах"
  },
+ "re_debate_microtargeting_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_debate_open": {
   "en": "Debate Open",
   "ru": "Открытые дебаты"
+ },
+ "re_debate_open_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_debate_stage_managed_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_media_ignore": {
   "en": "Ignore the Media",
   "ru": "Игнорировать СМИ"
  },
+ "re_media_ignore_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_media_moderation": {
   "en": "Content Moderation",
   "ru": "Модерация контента"
+ },
+ "re_media_moderation_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_media_state_control_desc": {
   "en": "The government has deployed state media control to manage the information crisis, bolstering authority but drawing criticism from intellectuals.",
@@ -8647,17 +9399,41 @@
   "en": "Transparency Push",
   "ru": "Курс на прозрачность"
  },
+ "re_media_transparency_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_orbit_avoid": {
   "en": "Avoid Orbital Escalation",
   "ru": "Избежать орбитальной эскалации"
+ },
+ "re_orbit_avoid_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_orbit_laser_sweep_cost_desc": {
   "en": "We are paying for the laser sweeps that clear debris from our orbital lanes.",
   "ru": "Мы оплачиваем лазерную очистку, убирающую мусор с наших орбитальных трасс."
  },
+ "re_orbit_laser_sweep_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_orbit_press_on_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_quantum_patent_pool_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_quantum_rationing": {
   "en": "Quantum Rationing",
   "ru": "Нормирование квантовых ресурсов"
+ },
+ "re_quantum_rationing_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_quantum_subsidy": {
   "en": "Quantum Subsidy",
@@ -8667,9 +9443,17 @@
   "en": "We are paying the plants short of specialized materials to keep their priority orders running.",
   "ru": "Мы доплачиваем заводам, испытывающим нехватку специальных материалов, чтобы приоритетные заказы продолжали выполняться."
  },
+ "re_quantum_subsidy_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_sbsp_blackouts": {
   "en": "SBSP Blackouts",
   "ru": "Отключения из-за космических электростанций"
+ },
+ "re_sbsp_blackouts_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_sbsp_imports": {
   "en": "SBSP Imports",
@@ -8679,6 +9463,10 @@
   "en": "We are paying for power bought from abroad while damaged orbital arrays are repaired.",
   "ru": "Мы платим за электроэнергию, купленную за рубежом, пока ремонтируются повреждённые орбитальные массивы."
  },
+ "re_sbsp_imports_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_sbsp_reserves": {
   "en": "SBSP Reserves",
   "ru": "Резервы космических электростанций"
@@ -8687,17 +9475,49 @@
   "en": "We are paying to run the grid on its reserves while damaged orbital arrays are repaired.",
   "ru": "Мы платим за работу сети на резервах, пока ремонтируются повреждённые орбитальные массивы."
  },
+ "re_sbsp_reserves_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_spectrum_auction": {
   "en": "Spectrum Auction",
   "ru": "Аукцион частот"
+ },
+ "re_spectrum_auction_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_spectrum_foreign_relays_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_spectrum_public_grid_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "re_supply_fasttrack_ports_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
  },
  "re_supply_ministry_coordination_desc": {
   "en": "The commerce ministry has coordinated emergency logistics to stabilize supply chains, boosting [concept_trade_capacity] and port [concept_throughput].",
   "ru": "Министерство торговли скоординировало экстренную логистику для стабилизации цепочек поставок, повысив [Concept('concept_trade_capacity','торговую мощность')] и [Concept('concept_throughput','пропускную способность')] портов."
  },
+ "re_supply_prioritize_inputs_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
  "re_supply_subsidy": {
   "en": "Supply Subsidy",
   "ru": "Субсидия на снабжение"
+ },
+ "re_supply_subsidy_desc": {
+  "en": "A temporary modifier from a recent event choice.",
+  "ru": "Временный модификатор от недавнего выбора в событии."
+ },
+ "reforestation_subsidies_modifier": {
+  "en": "Reforestation Subsidies",
+  "ru": "Субсидии на лесовосстановление"
  },
  "reforestation_subsidies_modifier_desc": {
   "en": "State-funded tree planting and land restoration. Improves agricultural [concept_throughput] and reduces the severity and duration of droughts and floods, at the cost of some authority.",
@@ -8867,9 +9687,25 @@
   "en": "Widespread property damage from rioting has disrupted local commerce and [concept_infrastructure].",
   "ru": "Масштабный ущерб имуществу от беспорядков нарушил местную торговлю и [Concept('concept_infrastructure','инфраструктуру')]."
  },
+ "row_atrocity_reports_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "row_atrocity_reports_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
+ },
  "row_civilian_oversight": {
   "en": "Rules of War: Civilian Oversight",
   "ru": "Правила войны: гражданский надзор"
+ },
+ "row_military_pushback_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "row_military_pushback_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "row_realpolitik_exemptions": {
   "en": "Rules of War: Realpolitik Exemptions",
@@ -8955,9 +9791,17 @@
   "en": "Right to Information: Whistleblower Advance",
   "ru": "Право на информацию: продвижение разоблачителей"
  },
+ "rti_whistleblower_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
  "rti_whistleblower_cautious": {
   "en": "Right to Information: Whistleblower Cautious Advance",
   "ru": "Право на информацию: осторожное продвижение разоблачителей"
+ },
+ "rti_whistleblower_cautious_desc": {
+  "en": "A smaller positive boost to law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона от недавнего события."
  },
  "rti_whistleblower_stall": {
   "en": "Right to Information: Whistleblower Stall",
@@ -9195,6 +10039,10 @@
   "en": "The total expected SoL adjustment for the upper class: the adaptive shift converging toward the national target, plus any direct upper-class offset from political power, voting rights, and social norms.",
   "ru": "Суммарная ожидаемая поправка к уровню жизни для высшего класса: адаптивный сдвиг к национальной цели плюс любое прямое смещение для высшего класса от политической власти, избирательных прав и общественных норм."
  },
+ "solar_collector_progress": {
+  "en": "Solar Collector Progress",
+  "ru": "Солнечный коллектор: прогресс"
+ },
  "solar_collector_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Orbital Solar Collector.",
   "ru": "Отслеживает накопленный прогресс в строительстве Орбитального солнечного коллектора."
@@ -9202,6 +10050,10 @@
  "solidarity_boycott_movement_momentum_desc": {
   "en": "A solidarity campaign in support of minority businesses has energized the civil rights movement.",
   "ru": "Кампания солидарности в поддержку бизнеса меньшинств воодушевила движение за гражданские права."
+ },
+ "space_elevator_progress": {
+  "en": "Space Elevator Progress",
+  "ru": "Космический лифт: прогресс"
  },
  "space_elevator_progress_desc": {
   "en": "Tracks accumulated progress toward completing the Space Elevator.",
@@ -10073,35 +10925,35 @@
  },
  "st_res_aeroplanes_store_flow_desc": {
   "en": "This hub is purchasing aeroplanes for the strategic reserve.",
-  "ru": "Этот хаб закупает самолёты для стратегического резерва."
+  "ru": "Этот узел закупает самолёты для стратегического резерва."
  },
  "st_res_aeroplanes_withdraw_flow_desc": {
   "en": "This hub is releasing aeroplanes from the strategic reserve.",
-  "ru": "Этот хаб выпускает самолёты из стратегического резерва."
+  "ru": "Этот узел выпускает самолёты из стратегического резерва."
  },
  "st_res_ammunition_store_flow_desc": {
   "en": "This hub is purchasing ammunition for the strategic reserve.",
-  "ru": "Этот хаб закупает боеприпасы для стратегического резерва."
+  "ru": "Этот узел закупает боеприпасы для стратегического резерва."
  },
  "st_res_ammunition_withdraw_flow_desc": {
   "en": "This hub is releasing ammunition from the strategic reserve.",
-  "ru": "Этот хаб выпускает боеприпасы из стратегического резерва."
+  "ru": "Этот узел выпускает боеприпасы из стратегического резерва."
  },
  "st_res_artillery_store_flow_desc": {
   "en": "This hub is purchasing artillery for the strategic reserve.",
-  "ru": "Этот хаб закупает артиллерию для стратегического резерва."
+  "ru": "Этот узел закупает артиллерию для стратегического резерва."
  },
  "st_res_artillery_withdraw_flow_desc": {
   "en": "This hub is releasing artillery from the strategic reserve.",
-  "ru": "Этот хаб выпускает артиллерию из стратегического резерва."
+  "ru": "Этот узел выпускает артиллерию из стратегического резерва."
  },
  "st_res_copper_store_flow_desc": {
   "en": "This hub is purchasing conductive metals for the strategic reserve.",
-  "ru": "Этот хаб закупает проводниковые металлы для стратегического резерва."
+  "ru": "Этот узел закупает проводниковые металлы для стратегического резерва."
  },
  "st_res_copper_withdraw_flow_desc": {
   "en": "This hub is releasing conductive metals from the strategic reserve.",
-  "ru": "Этот хаб выпускает проводниковые металлы из стратегического резерва."
+  "ru": "Этот узел выпускает проводниковые металлы из стратегического резерва."
  },
  "st_res_cycle_step_size_button_desc": {
   "en": "Change the reserve rate adjustment step. Current step: [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Cycles 1 -> 10 -> 100 -> 1000 -> 10000 -> 1.",
@@ -10109,47 +10961,47 @@
  },
  "st_res_fertilizer_store_flow_desc": {
   "en": "This hub is purchasing chemicals for the strategic reserve.",
-  "ru": "Этот хаб закупает химикаты для стратегического резерва."
+  "ru": "Этот узел закупает химикаты для стратегического резерва."
  },
  "st_res_fertilizer_withdraw_flow_desc": {
   "en": "This hub is releasing chemicals from the strategic reserve.",
-  "ru": "Этот хаб выпускает химикаты из стратегического резерва."
+  "ru": "Этот узел выпускает химикаты из стратегического резерва."
  },
  "st_res_grain_store_flow_desc": {
   "en": "This hub is purchasing grain for the strategic reserve.",
-  "ru": "Этот хаб закупает зерно для стратегического резерва."
+  "ru": "Этот узел закупает зерно для стратегического резерва."
  },
  "st_res_grain_withdraw_flow_desc": {
   "en": "This hub is releasing grain from the strategic reserve.",
-  "ru": "Этот хаб выпускает зерно из стратегического резерва."
+  "ru": "Этот узел выпускает зерно из стратегического резерва."
  },
  "st_res_oil_store_flow_desc": {
   "en": "This hub is purchasing oil for the strategic reserve.",
-  "ru": "Этот хаб закупает нефть для стратегического резерва."
+  "ru": "Этот узел закупает нефть для стратегического резерва."
  },
  "st_res_oil_withdraw_flow_desc": {
   "en": "This hub is releasing oil from the strategic reserve.",
-  "ru": "Этот хаб выпускает нефть из стратегического резерва."
+  "ru": "Этот узел выпускает нефть из стратегического резерва."
  },
  "st_res_reset_rates_button_desc": {
   "en": "Reset all reserve rate settings to 0/week, switch every good back to the Manual policy, and refresh hub flow modifiers.",
-  "ru": "Сбросить все настройки скорости резерва на 0 в неделю, вернуть каждый товар к ручной политике и обновить модификаторы потоков хабов."
+  "ru": "Сбросить все настройки скорости резерва на 0 в неделю, вернуть каждый товар к ручной политике и обновить модификаторы потоков узлов."
  },
  "st_res_small_arms_store_flow_desc": {
   "en": "This hub is purchasing small arms for the strategic reserve.",
-  "ru": "Этот хаб закупает стрелковое оружие для стратегического резерва."
+  "ru": "Этот узел закупает стрелковое оружие для стратегического резерва."
  },
  "st_res_small_arms_withdraw_flow_desc": {
   "en": "This hub is releasing small arms from the strategic reserve.",
-  "ru": "Этот хаб выпускает стрелковое оружие из стратегического резерва."
+  "ru": "Этот узел выпускает стрелковое оружие из стратегического резерва."
  },
  "st_res_tanks_store_flow_desc": {
   "en": "This hub is purchasing tanks for the strategic reserve.",
-  "ru": "Этот хаб закупает танки для стратегического резерва."
+  "ru": "Этот узел закупает танки для стратегического резерва."
  },
  "st_res_tanks_withdraw_flow_desc": {
   "en": "This hub is releasing tanks from the strategic reserve.",
-  "ru": "Этот хаб выпускает танки из стратегического резерва."
+  "ru": "Этот узел выпускает танки из стратегического резерва."
  },
  "state_power_grid_connection_bool_desc": {
   "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is expensive.",
@@ -10162,6 +11014,14 @@
  "state_violence_against_minorities_bool_desc": {
   "en": "The state engages in violence against minority groups, leading to occasional deaths and injuries.",
   "ru": "В области применяется насилие против групп меньшинств, что приводит к случайным смертям и увечьям."
+ },
+ "statepower_autonomy_debate_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "statepower_autonomy_debate_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "statepower_centralized": {
   "en": "State Power: Centralized Administration",
@@ -10965,7 +11825,7 @@
  },
  "te_jmap_pick_devastation_desc": {
   "en": "Color each state by its [concept_devastation], the share of it devastated.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по уровню [Concept('concept_devastation','разрухи')], то есть по доле разорённой их части.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_colors', 'te_jmap_color_in_force' )]"
+  "ru": "Окрасить области по уровню [Concept('concept_devastation','опустошения')], то есть по доле разорённой их части.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_pick_dynastic_wealth_desc": {
   "en": "Color each state by its [concept_inheritance_concentration]. The midpoint is 50: property is dispersed below it and concentrated above.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_dynastic_wealth_colors', 'te_jmap_color_in_force_mid' )]",
@@ -10997,7 +11857,7 @@
  },
  "te_jmap_pick_grandeur_desc": {
   "en": "Color each state by the [concept_grandeur] of its grand monuments.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_grandeur_colors', 'te_jmap_color_in_force_none' )]",
-  "ru": "Окрасить области по [Concept('concept_grandeur','величию')] их великих памятников.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_grandeur_colors', 'te_jmap_color_in_force_none' )]"
+  "ru": "Окрасить области по [Concept('concept_grandeur','величию')] их великих монументов.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_gm_room_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_grandeur_colors', 'te_jmap_color_in_force_none' )]"
  },
  "te_jmap_pick_health_care_desc": {
   "en": "Color each state by its [concept_health_care_access] in the last census, the share of its people medicine reaches. Its health law and health system raise it, a step each year. The hover adds the mothers who die in childbirth.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_health_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_health_care_colors', 'te_jmap_color_in_force' )]",
@@ -11351,6 +12211,70 @@
   "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_arctic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
   "ru": "• Собственные претензии арендодателя ($te_seabed_basin_arctic$ океан) в пределах согласованного числа сразу переходят к арендатору.\\n• Каждый раздел делит их заново, и тогда аренда забирает их обратно из новой доли арендодателя, насколько хватает, пока лицензии, построенные арендатором на аренде, и его неиспользуемые арендованные претензии не составят согласованное число.\\n• Лицензии, которые арендатор строит на аренде, остаются его навсегда. В каждом разделе они засчитываются в долю арендодателя, так что собственная доля арендатора не затрагивается.\\n• Когда аренда заканчивается, её неиспользуемые претензии возвращаются при ближайшем разделе, а построенные на ней лицензии продолжают засчитываться в долю арендодателя, пока обе страны участвуют.\\n• Спонсировать подрядчиков не защищает арендованные претензии."
  },
+ "te_seabed_lease_atlantic": {
+  "en": "Lease $te_seabed_basin_atlantic$ Seabed Claims",
+  "ru": "Аренда претензий на морское дно: $te_seabed_basin_atlantic$ океан"
+ },
+ "te_seabed_lease_atlantic_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] leases $te_seabed_basin_atlantic$ [concept_seabed_claim]s to [TARGET_COUNTRY.GetNameNoFormatting]",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] сдаёт стране [TARGET_COUNTRY.GetNameNoFormatting] в аренду [Concept('concept_seabed_claim','претензии на морское дно')]: $te_seabed_basin_atlantic$ океан"
+ },
+ "te_seabed_lease_atlantic_desc": {
+  "en": "A country leases some of its $te_seabed_basin_atlantic$ seabed claims to another, which may license Deep-Sea Mine levels on them.",
+  "ru": "Страна сдаёт другой в аренду часть своих претензий на морское дно ($te_seabed_basin_atlantic$ океан); та может выдавать лицензии на уровни глубоководной шахты на них."
+ },
+ "te_seabed_lease_atlantic_effects_desc": {
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_atlantic$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "ru": "• Собственные претензии арендодателя ($te_seabed_basin_atlantic$ океан) в пределах согласованного числа сразу переходят к арендатору.\\n• Каждый раздел делит их заново, и тогда аренда забирает их обратно из новой доли арендодателя, насколько хватает, пока лицензии, построенные арендатором на аренде, и его неиспользуемые арендованные претензии не составят согласованное число.\\n• Лицензии, которые арендатор строит на аренде, остаются его навсегда. В каждом разделе они засчитываются в долю арендодателя, так что собственная доля арендатора не затрагивается.\\n• Когда аренда заканчивается, её неиспользуемые претензии возвращаются при ближайшем разделе, а построенные на ней лицензии продолжают засчитываться в долю арендодателя, пока обе страны участвуют.\\n• Спонсировать подрядчиков не защищает арендованные претензии."
+ },
+ "te_seabed_lease_indian": {
+  "en": "Lease $te_seabed_basin_indian$ Seabed Claims",
+  "ru": "Аренда претензий на морское дно: $te_seabed_basin_indian$ океан"
+ },
+ "te_seabed_lease_indian_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] leases $te_seabed_basin_indian$ [concept_seabed_claim]s to [TARGET_COUNTRY.GetNameNoFormatting]",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] сдаёт стране [TARGET_COUNTRY.GetNameNoFormatting] в аренду [Concept('concept_seabed_claim','претензии на морское дно')]: $te_seabed_basin_indian$ океан"
+ },
+ "te_seabed_lease_indian_desc": {
+  "en": "A country leases some of its $te_seabed_basin_indian$ seabed claims to another, which may license Deep-Sea Mine levels on them.",
+  "ru": "Страна сдаёт другой в аренду часть своих претензий на морское дно ($te_seabed_basin_indian$ океан); та может выдавать лицензии на уровни глубоководной шахты на них."
+ },
+ "te_seabed_lease_indian_effects_desc": {
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_indian$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "ru": "• Собственные претензии арендодателя ($te_seabed_basin_indian$ океан) в пределах согласованного числа сразу переходят к арендатору.\\n• Каждый раздел делит их заново, и тогда аренда забирает их обратно из новой доли арендодателя, насколько хватает, пока лицензии, построенные арендатором на аренде, и его неиспользуемые арендованные претензии не составят согласованное число.\\n• Лицензии, которые арендатор строит на аренде, остаются его навсегда. В каждом разделе они засчитываются в долю арендодателя, так что собственная доля арендатора не затрагивается.\\n• Когда аренда заканчивается, её неиспользуемые претензии возвращаются при ближайшем разделе, а построенные на ней лицензии продолжают засчитываться в долю арендодателя, пока обе страны участвуют.\\n• Спонсировать подрядчиков не защищает арендованные претензии."
+ },
+ "te_seabed_lease_pacific": {
+  "en": "Lease $te_seabed_basin_pacific$ Seabed Claims",
+  "ru": "Аренда претензий на морское дно: $te_seabed_basin_pacific$ океан"
+ },
+ "te_seabed_lease_pacific_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] leases $te_seabed_basin_pacific$ [concept_seabed_claim]s to [TARGET_COUNTRY.GetNameNoFormatting]",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] сдаёт стране [TARGET_COUNTRY.GetNameNoFormatting] в аренду [Concept('concept_seabed_claim','претензии на морское дно')]: $te_seabed_basin_pacific$ океан"
+ },
+ "te_seabed_lease_pacific_desc": {
+  "en": "A country leases some of its $te_seabed_basin_pacific$ seabed claims to another, which may license Deep-Sea Mine levels on them.",
+  "ru": "Страна сдаёт другой в аренду часть своих претензий на морское дно ($te_seabed_basin_pacific$ океан); та может выдавать лицензии на уровни глубоководной шахты на них."
+ },
+ "te_seabed_lease_pacific_effects_desc": {
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_pacific$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "ru": "• Собственные претензии арендодателя ($te_seabed_basin_pacific$ океан) в пределах согласованного числа сразу переходят к арендатору.\\n• Каждый раздел делит их заново, и тогда аренда забирает их обратно из новой доли арендодателя, насколько хватает, пока лицензии, построенные арендатором на аренде, и его неиспользуемые арендованные претензии не составят согласованное число.\\n• Лицензии, которые арендатор строит на аренде, остаются его навсегда. В каждом разделе они засчитываются в долю арендодателя, так что собственная доля арендатора не затрагивается.\\n• Когда аренда заканчивается, её неиспользуемые претензии возвращаются при ближайшем разделе, а построенные на ней лицензии продолжают засчитываться в долю арендодателя, пока обе страны участвуют.\\n• Спонсировать подрядчиков не защищает арендованные претензии."
+ },
+ "te_seabed_lease_southern": {
+  "en": "Lease $te_seabed_basin_southern$ Seabed Claims",
+  "ru": "Аренда претензий на морское дно: $te_seabed_basin_southern$ океан"
+ },
+ "te_seabed_lease_southern_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] leases $te_seabed_basin_southern$ [concept_seabed_claim]s to [TARGET_COUNTRY.GetNameNoFormatting]",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] сдаёт стране [TARGET_COUNTRY.GetNameNoFormatting] в аренду [Concept('concept_seabed_claim','претензии на морское дно')]: $te_seabed_basin_southern$ океан"
+ },
+ "te_seabed_lease_southern_desc": {
+  "en": "A country leases some of its $te_seabed_basin_southern$ seabed claims to another, which may license Deep-Sea Mine levels on them.",
+  "ru": "Страна сдаёт другой в аренду часть своих претензий на морское дно ($te_seabed_basin_southern$ океан); та может выдавать лицензии на уровни глубоководной шахты на них."
+ },
+ "te_seabed_lease_southern_effects_desc": {
+  "en": "• Up to the agreed number of the lessor's own $te_seabed_basin_southern$ claims pass to the lessee at once.\\n• Every sharing divides them again, and the lease then takes them back from the lessor's new share, as far as it goes, until the licenses the lessee has built on the lease and its unused leased claims make up the agreed number.\\n• Licenses the lessee builds on the lease are its own for good. In each sharing they count against the lessor's share, so the lessee's own share is untouched.\\n• When the lease ends, its unused claims go back at the next sharing, and the licenses built on it go on counting against the lessor's share while both countries take part.\\n• Sponsor Contractors does not protect leased claims.",
+  "ru": "• Собственные претензии арендодателя ($te_seabed_basin_southern$ океан) в пределах согласованного числа сразу переходят к арендатору.\\n• Каждый раздел делит их заново, и тогда аренда забирает их обратно из новой доли арендодателя, насколько хватает, пока лицензии, построенные арендатором на аренде, и его неиспользуемые арендованные претензии не составят согласованное число.\\n• Лицензии, которые арендатор строит на аренде, остаются его навсегда. В каждом разделе они засчитываются в долю арендодателя, так что собственная доля арендатора не затрагивается.\\n• Когда аренда заканчивается, её неиспользуемые претензии возвращаются при ближайшем разделе, а построенные на ней лицензии продолжают засчитываться в долю арендодателя, пока обе страны участвуют.\\n• Спонсировать подрядчиков не защищает арендованные претензии."
+ },
  "te_seabed_long_haul_desc": {
   "en": "Some of this Deep-Sea Mine's levels work on another ocean basin's [concept_seabed_licence]. Their crews and ore travel the long way round. The penalty falls as local licenses replace the distant ones.",
   "ru": "Часть уровней этой глубоководной шахты работает на [Concept('concept_seabed_licence','лицензии на морское дно')] другого океанического бассейна. Их экипажи и руда идут долгим кружным путём. Штраф снижается по мере того, как местные лицензии заменяют дальние."
@@ -11525,7 +12449,7 @@
  },
  "un_arms_control_participant_modifier_desc": {
   "en": "This country participates in UN arms control agreements, reducing military [concept_devastation] and costs. The peace-loving framing has teeth: aggressive acts taken while a signatory generate more [concept_infamy] than they otherwise would.",
-  "ru": "Эта страна участвует в соглашениях ООН по контролю над вооружениями, снижая военную [Concept('concept_devastation','разруху')] и расходы. Миролюбивая позиция обязывает: агрессивные действия, предпринятые в статусе подписавшей стороны, порождают больше [Concept('concept_infamy','дурной славы')], чем иначе."
+  "ru": "Эта страна участвует в соглашениях ООН по контролю над вооружениями, снижая военную [Concept('concept_devastation','опустошение')] и расходы. Миролюбивая позиция обязывает: агрессивные действия, предпринятые в статусе подписавшей стороны, порождают больше [Concept('concept_infamy','дурной славы')], чем иначе."
  },
  "un_arms_embargo_target_modifier_desc": {
   "en": "The General Assembly has embargoed arms to this country. Its trade in every military good is choked, imports and exports alike, and its armies cost more to supply.",
@@ -11811,6 +12735,10 @@
   "en": "Send our delegation to press an AI member of the [concept_un_general_assembly] to vote against the resolution in session. Each full month the campaign runs moves the member's lean 3 points against, up to 15, both raised by our UN lobbying effectiveness with that member (the members the [concept_un_development_fund] pays listen more to its contributors); campaigns on the same side stack to 20, and campaigns on opposite sides cancel out. It uses [concept_influence] while it runs, and ends when the member votes, when the resolution closes, or when we stop it, which also drops what it had gained.",
   "ru": "Отправить нашу делегацию, чтобы убедить члена [Concept('concept_un_general_assembly','Генеральной Ассамблеи')], управляемого ИИ, проголосовать против резолюции на заседании. Каждый полный месяц кампании сдвигает склонность члена на 3 пункта против, до 15, и то и другое повышается эффективностью нашего лоббирования в ООН у этого члена (члены, которым платит [concept_un_development_fund], больше прислушиваются к его вкладчикам); кампании на одной стороне складываются до 20, а кампании на противоположных сторонах взаимно гасятся. Расходует [concept_influence|l], пока идёт, и заканчивается, когда член голосует, когда резолюция закрывается или когда мы её останавливаем, что также сбрасывает достигнутое."
  },
+ "un_lobby_for_action_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has stopped lobbying us on the resolution before the [concept_un_general_assembly].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] прекратила лоббировать нас по резолюции, стоящей перед [Concept('concept_un_general_assembly','Генеральной Ассамблеей')]."
+ },
  "un_lobby_for_action_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] is lobbying us to vote in favor of the resolution before the [concept_un_general_assembly].",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] лоббирует нас, чтобы мы проголосовали за резолюцию, стоящую перед [Concept('concept_un_general_assembly','Генеральной Ассамблеей')]."
@@ -11953,7 +12881,7 @@
  },
  "un_peacekeeping_welcomed_modifier_desc": {
   "en": "[concept_un_peacekeeping] forces have been welcomed, reducing [concept_devastation] but at the cost of national [concept_prestige].",
-  "ru": "Силы [Concept('concept_un_peacekeeping','миротворчества ООН')] встречены тепло, что снижает [Concept('concept_devastation','разруху')], но ценой национального [Concept('concept_prestige','престижа')]."
+  "ru": "Силы [Concept('concept_un_peacekeeping','миротворчества ООН')] встречены тепло, что снижает [Concept('concept_devastation','опустошение')], но ценой национального [Concept('concept_prestige','престижа')]."
  },
  "un_physical_protection_modifier_desc": {
   "en": "This country is party to the Convention on the Physical Protection of Nuclear Material. It guards and counts its warheads to a common standard: half as many go missing whenever they change hands, and each month there is a chance to find one of its own that already has.",
@@ -12231,6 +13159,10 @@
   "en": "This country walked out of the United Nations, or the [concept_un_general_assembly] voted its permanent seat away. While this lasts it cannot rejoin, and cannot be seated on the [concept_un_security_council] again.",
   "ru": "Эта страна покинула Организацию Объединённых Наций, либо [concept_un_general_assembly] лишила её постоянного места голосованием. Пока это длится, она не может вернуться и снова получить место в [Concept('concept_un_security_council','Совете Безопасности')]."
  },
+ "united_nations": {
+  "en": "United Nations",
+  "ru": "Организация Объединённых Наций"
+ },
  "use_one_nuke_desc": {
   "en": "Use one nuclear weapon from our stockpile.",
   "ru": "Использовать одно ядерное оружие из нашего арсенала."
@@ -12268,6 +13200,10 @@
   "ru": "Включить децентрализованную державу"
  },
  "voluntary_union_decentralized_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated the decentralized power of [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] мирно включила в себя децентрализованную державу — страну [TARGET_COUNTRY.GetName]."
+ },
+ "voluntary_union_decentralized_action_notification_third_party_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated the decentralized power of [TARGET_COUNTRY.GetName].",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] мирно включила в себя децентрализованную державу — страну [TARGET_COUNTRY.GetName]."
  },
@@ -12526,6 +13462,14 @@
  "we_se_trade_national_desc": {
   "en": "Domestic industries receive priority access to orbital launch capacity.",
   "ru": "Отечественная промышленность получает приоритетный доступ к орбитальным пусковым мощностям."
+ },
+ "welfare_automation_fears_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "welfare_automation_fears_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
  },
  "welfare_investment_chill": {
   "en": "Investor Caution",

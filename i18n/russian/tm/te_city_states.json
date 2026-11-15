@@ -11,6 +11,10 @@
   "en": "Bombay",
   "ru": "Бомбей"
  },
+ "BOM_ADJ": {
+  "en": "Bombay",
+  "ru": "Бомбей"
+ },
  "BUE": {
   "en": "Buenos Aires",
   "ru": "Буэнос-Айрес"
@@ -55,6 +59,10 @@
   "en": "Dubai",
   "ru": "Дубай"
  },
+ "DXB_ADJ": {
+  "en": "Dubai",
+  "ru": "Дубай"
+ },
  "FIU": {
   "en": "Fiume",
   "ru": "Фиуме"
@@ -80,6 +88,10 @@
   "ru": "гуаякильский"
  },
  "HKG": {
+  "en": "Hong Kong",
+  "ru": "Гонконг"
+ },
+ "HKG_ADJ": {
   "en": "Hong Kong",
   "ru": "Гонконг"
  },
@@ -111,7 +123,15 @@
   "en": "New York",
   "ru": "Нью-Йорк"
  },
+ "NYC_ADJ": {
+  "en": "New York",
+  "ru": "Нью-Йорк"
+ },
  "OCL": {
+  "en": "Calabar",
+  "ru": "Калабар"
+ },
+ "OCL_ADJ": {
   "en": "Calabar",
   "ru": "Калабар"
  },

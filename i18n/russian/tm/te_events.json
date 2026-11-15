@@ -781,7 +781,7 @@
  },
  "arch_events.2.a.tt": {
   "en": "The monument stands in our state at its full levels, with its row in our Grand Monuments",
-  "ru": "Памятник стоит в нашей области на полном числе уровней, и его строка добавлена в наши «Великие памятники»"
+  "ru": "Памятник стоит в нашей области на полном числе уровней, и его строка добавлена в наши «Великие монументы»"
  },
  "arch_events.2.b": {
   "en": "A pity",
@@ -966,6 +966,10 @@
  "augmentation_events.3.a": {
   "en": "Protect unaugmented workers",
   "ru": "Защитить неаугментированных работников"
+ },
+ "augmentation_events.3.b": {
+  "en": "Let the market decide",
+  "ru": "Пусть решает рынок"
  },
  "augmentation_events.3.d": {
   "en": "Employers are filling jobs with workers whose reflexes or eyesight have been enhanced, at clinics abroad or under a medical license stretched to fit. Hiring tests are now set at speeds an unenhanced worker cannot reach. Workers' representatives say a class of \\\"naturals\\\" is being shut out of work it has always done, and they want the government to stop it.",
@@ -1482,6 +1486,10 @@
  "banking_cycle_events.160.b": {
   "en": "Borrow from allied institutions to cover it.",
   "ru": "Занять у союзных учреждений, чтобы покрыть расходы."
+ },
+ "banking_cycle_events.160.c": {
+  "en": "Default on a quarter of what the state owes.",
+  "ru": "Объявить дефолт по четверти того, что государство должно."
  },
  "banking_cycle_events.160.d": {
   "en": "The state's debt has grown large enough that its lenders charge more each time it borrows. Much of it was raised for the cooperative federation's shared capital reserve, which services inter-cooperative agreements, mutual guarantees and [concept_infrastructure] bonds, and the member cooperatives have drawn on that reserve faster than they paid into it. The council must choose between a levy, new credit, and defaulting on part of what is owed.",
@@ -3179,6 +3187,10 @@
   "en": "The government has affirmed the central bank's independence, bolstering market confidence and reducing borrowing costs.",
   "ru": "Правительство подтвердило независимость центрального банка, что укрепляет доверие рынков и снижает стоимость заимствований."
  },
+ "banking_event_commercial_paper": {
+  "en": "Commercial Paper Market",
+  "ru": "Рынок коммерческих бумаг"
+ },
  "banking_event_commercial_paper_desc": {
   "en": "Short-term business lending instruments are lubricating the wheels of commerce.",
   "ru": "Краткосрочные деловые кредитные инструменты смазывают колёса торговли."
@@ -3366,6 +3378,10 @@
  "banking_event_investigation_chill_desc": {
   "en": "An official investigation into asset price valuations has spooked the financial sector, dampening services output as banks and investors adopt a wait-and-see posture.",
   "ru": "Официальное расследование оценок стоимости активов напугало финансовый сектор и сократило выпуск услуг, поскольку банки и инвесторы заняли выжидательную позицию."
+ },
+ "banking_event_joint_stock_boom": {
+  "en": "Joint-Stock Company Boom",
+  "ru": "Бум акционерных компаний"
  },
  "banking_event_joint_stock_boom_desc": {
   "en": "A proliferation of joint-stock companies is fueling industrial investment.",
@@ -3806,6 +3822,10 @@
  "cultural_hegemony.1.f": {
   "en": "The attendant at the national gallery opened the doors at ten and closed them at six, and for most of his years there the rooms between had been quiet. This season there was a queue on the steps before he arrived, and he moved the rope barriers twice a day to keep it off the street. Students sat on the floor of the new rooms with sketchbooks. A party of foreign visitors went through with a guide speaking their language. A man in work clothes stood for a long time in front of one painting. At six the attendant walked the rooms, found a sketchbook left on a bench, and put it in the drawer for lost things.",
   "ru": "Служитель национальной галереи открывал двери в десять и закрывал в шесть, и большую часть его лет там залы между этими часами были тихи. В этом сезоне на ступенях стояла очередь ещё до его прихода, и он дважды в день переставлял барьерные верёвки, чтобы она не выходила на улицу. Студенты сидели на полу новых залов с альбомами для набросков. Группа иностранных гостей прошла с гидом, говорящим на их языке. Человек в рабочей одежде долго стоял перед одной картиной. В шесть служитель обошёл залы, нашёл на скамье забытый альбом и положил его в ящик для потерянных вещей."
+ },
+ "cultural_hegemony.1.t": {
+  "en": "Cultural Renaissance",
+  "ru": "Культурный ренессанс"
  },
  "cultural_hegemony.10.a": {
   "en": "Send the exhibition on an international tour",
@@ -4603,6 +4623,10 @@
   "en": "\\\"The school in our district was built with money from the capital, and the teacher was trained there. My daughter writes better in their language than I do in ours. I am proud of her, and I do not know what to make of it.\\\"\\n\\n\\\"I sat on the investment board for six years. Every bridge we built had to be argued for twice, once in the colony and once in the capital, and the second argument was always the longer one.\\\"\\n\\n\\\"Our firm moved its regional office out to the colony last year. The rents are lower, the clerks are good, and the new road takes a day off every delivery.\\\"\\n\\n\\\"The governor's council has three of our people on it now. When they object to something, the governor writes to the capital before he signs it, which he never used to do.\\\"",
   "ru": "«Школу в нашем округе построили на деньги из столицы, и учительницу там выучили. Моя дочь пишет на их языке лучше, чем я на нашем. Я горжусь ею и не знаю, что об этом думать.»\\n\\n«Я шесть лет заседал в инвестиционном совете. За каждый мост приходилось спорить дважды, один раз в колонии и один раз в столице, и второй спор всегда был длиннее.»\\n\\n«Наша фирма в прошлом году перевела региональную контору в колонию. Аренда ниже, клерки хорошие, а новая дорога экономит день на каждой поставке.»\\n\\n«В совете губернатора теперь трое наших. Когда они возражают против чего-либо, губернатор пишет в столицу, прежде чем подписать, чего раньше никогда не делал.»"
  },
+ "decolonization_events.202.t": {
+  "en": "The Commonwealth Path",
+  "ru": "Путь Содружества"
+ },
  "decolonization_events.203.a": {
   "en": "The empire stands. Let them speak.",
   "ru": "Империя стоит. Пусть говорят."
@@ -4630,6 +4654,10 @@
  "decolonization_events.204.f": {
   "en": "\\\"We built your schools and paid your teachers for years,\\\" the governor told the leader of the territory's congress. \\\"I am not asking for gratitude. I am asking you to tell your people that the handover will be orderly, so that it can be.\\\"\\n\\n\\\"My people know who paid the teachers. They also know who decided what the teachers taught, and who sat on the councils that were never allowed a vote. If I tell them to wait for an orderly handover, I need a date to give them.\\\"\\n\\n\\\"I can give you the order in which the territories will go, and yours will be near the top of it. The dates depend on the capital.\\\"\\n\\n\\\"Then send me the order in writing, and I will read it to the congress tomorrow as a commitment of your government.\\\"",
   "ru": "«Мы строили ваши школы и годами платили вашим учителям», — сказал губернатор лидеру конгресса территории. «Я не прошу благодарности. Я прошу вас сказать своему народу, что передача будет упорядоченной, чтобы она такой и стала.»\\n\\n«Мой народ знает, кто платил учителям. Он знает и кто решал, чему учителя учат, и кто заседал в советах, которым никогда не давали голоса. Если я скажу людям ждать упорядоченной передачи, мне нужна дата, которую я им назову.»\\n\\n«Я могу назвать очередь, в которой территории будут уходить, и ваша будет почти в начале. Даты зависят от столицы.»\\n\\n«Тогда пришлите мне очередь письменно, и я зачитаю её конгрессу завтра как обязательство вашего правительства.»"
+ },
+ "decolonization_events.204.t": {
+  "en": "Negotiated Withdrawal",
+  "ru": "Согласованный вывод войск"
  },
  "decolonization_events.205.a": {
   "en": "They are part of the nation now.",
@@ -4822,6 +4850,14 @@
  "decolonization_events.400.a": {
   "en": "Release [SCOPE.sState('decolonization_target_state_1').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_1_count').GetValue] states) as an independent nation.",
   "ru": "Освободить область [SCOPE.sState('decolonization_target_state_1').GetName] и её регион исторической родины (областей: [ROOT.GetVariable('decolonization_region_1_count').GetValue]) как независимую нацию."
+ },
+ "decolonization_events.400.b": {
+  "en": "Release [SCOPE.sState('decolonization_target_state_2').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_2_count').GetValue] states) as an independent nation.",
+  "ru": "Освободить область [SCOPE.sState('decolonization_target_state_2').GetName] и её регион исторической родины (областей: [ROOT.GetVariable('decolonization_region_2_count').GetValue]) как независимую нацию."
+ },
+ "decolonization_events.400.c": {
+  "en": "Release [SCOPE.sState('decolonization_target_state_3').GetName] and its homeland region ([ROOT.GetVariable('decolonization_region_3_count').GetValue] states) as an independent nation.",
+  "ru": "Освободить область [SCOPE.sState('decolonization_target_state_3').GetName] и её регион исторической родины (областей: [ROOT.GetVariable('decolonization_region_3_count').GetValue]) как независимую нацию."
  },
  "decolonization_events.400.d": {
   "en": "Reconsider. The territories stay in the empire.",
@@ -5127,6 +5163,10 @@
   "en": "We demand #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! of [SCOPE.sCountry('reparations_payer').GetName]: a tenth of its yearly revenue, or a tenth of our [Concept('concept_gdp', 'GDP')] if that is less. It will decide within days whether to pay.",
   "ru": "Мы требуем #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! от страны [SCOPE.sCountry('reparations_payer').GetName]: десятую часть её годовых доходов или десятую часть нашего [Concept('concept_gdp', 'ВВП')], если это меньше. В течение нескольких дней она решит, платить ли."
  },
+ "decolonization_events.61.b": {
+  "en": "Not now.",
+  "ru": "Не сейчас."
+ },
  "decolonization_events.61.d": {
   "en": "Our historians and lawyers have finished their account of the colonial years under [SCOPE.sCountry('reparations_payer').GetName]: the land taken and the goods and labor carried off, year by year. We must decide whether to present it as a formal claim for reparations of #v @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#!, or to keep it back for now.",
   "ru": "Наши историки и юристы закончили счёт колониальных лет под властью страны [SCOPE.sCountry('reparations_payer').GetName]: отнятая земля, вывезенные товары и труд, год за годом. Нам надо решить, предъявлять ли его как официальное требование репараций на сумму #v @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#! или пока придержать."
@@ -5202,6 +5242,10 @@
  "decolonization_events.7.t": {
   "en": "Building the State",
   "ru": "Строительство государства"
+ },
+ "decolonization_events.70.a": {
+  "en": "Let them go.",
+  "ru": "Пусть уходят."
  },
  "decolonization_events.70.b": {
   "en": "Negotiate the handover.",
@@ -5407,6 +5451,10 @@
   "en": "#header Arms for [SCOPE.sCountry('decol_iw_gp_metropole').GetName]#!\\nFor two years they fight harder, less so as the months pass.",
   "ru": "#header Оружие для страны [SCOPE.sCountry('decol_iw_gp_metropole').GetName]#!\\nВ течение двух лет они сражаются упорнее, но с каждым месяцем эффект слабеет."
  },
+ "decolonization_events.79.b": {
+  "en": "This is not our quarrel.",
+  "ru": "Это не наша ссора."
+ },
  "decolonization_events.79.d": {
   "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war with [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName]. Our government has declared its support for the colonial powers' right to keep order in their possessions, and [SCOPE.sCountry('decol_iw_gp_metropole').GetName]'s ambassador has asked, quietly, whether that still holds.",
   "ru": "Страна [SCOPE.sCountry('decol_iw_gp_metropole').GetName] начала войну против колонии [SCOPE.sCountry('decol_iw_gp_rebels').GetName], объявившей независимость в области [SCOPE.sState('decol_iw_note_state').GetName]. Наше правительство заявило о поддержке права колониальных держав поддерживать порядок в своих владениях, и посол страны [SCOPE.sCountry('decol_iw_gp_metropole').GetName] негромко спросил, остаётся ли это в силе."
@@ -5471,9 +5519,17 @@
   "en": "Restore order by force.",
   "ru": "Восстановить порядок силой."
  },
+ "decolonization_events.9.c": {
+  "en": "Let them go.",
+  "ru": "Пусть уходят."
+ },
  "decolonization_events.9.d": {
   "en": "In [SCOPE.sState('unrest_colony').GetName], communities that our laws treat as lesser are demanding equal rights under our rule. Their protests are growing, and our administrators there say they cannot keep order much longer with the police they have.",
   "ru": "В области [SCOPE.sState('unrest_colony').GetName] общины, которых наши законы считают второсортными, требуют равных прав под нашей властью. Их протесты нарастают, а наши администраторы там говорят, что не смогут долго сохранять порядок с имеющейся полицией."
+ },
+ "decolonization_events.9.e": {
+  "en": "Release them, but secure our interests.",
+  "ru": "Освободить их, но обеспечить наши интересы."
  },
  "decolonization_events.9.f": {
   "en": "To the government, from the governor of [SCOPE.sState('unrest_colony').GetName]. I repeat my request of last month for more police. The meetings in the market towns have become marches, and the marches now go past my offices every evening. The people marching want the same rights in law as those we count as citizens. My police know the leaders by name and could arrest them tomorrow, but I would then need soldiers to hold the towns while they were tried. I ask the government to send either the police or an answer to the marchers' petition, which I enclose.",
@@ -7991,6 +8047,10 @@
   "en": "The Champion's Decade Ends",
   "ru": "Десятилетие чемпиона заканчивается"
  },
+ "extra_law_events.86.a": {
+  "en": "Make the exemption permanent.",
+  "ru": "Сделать исключение постоянным."
+ },
  "extra_law_events.86.b": {
   "en": "The grace period is over. Let it lapse.",
   "ru": "Льготный период окончен. Пусть исключение истечёт."
@@ -8169,7 +8229,7 @@
  },
  "formation_te.1.d": {
   "en": "From the Khyber Pass to Cape Comorin, people have long spoken of a single Indian nation, and today [ROOT.GetCountry.GetName] has been proclaimed as its state. Most of the subcontinent's heartland now answers to one government. Not all of it does: wherever the lands of the northwest, of eastern Bengal, of the Himalayas or of Ceylon lie outside our borders, we now claim them.",
-  "ru": "От Хайберского прохода до мыса Коморин люди давно говорили о единой индийской нации, и сегодня государством этой нации провозглашена страна [ROOT.GetCountry.GetName]. Бо́льшая часть сердцевины субконтинента теперь подчиняется одному правительству. Но не всё: где бы земли северо-запада, восточной Бенгалии, Гималаев или Цейлона ни лежали за нашими границами, мы теперь предъявляем на них права."
+  "ru": "От Хайберского прохода до мыса Коморин люди давно говорили о единой индийской нации, и сегодня государством этой нации провозглашена страна [ROOT.GetCountry.GetName]. Большая часть сердцевины субконтинента теперь подчиняется одному правительству. Но не всё: где бы земли северо-запада, восточной Бенгалии, Гималаев или Цейлона ни лежали за нашими границами, мы теперь предъявляем на них права."
  },
  "formation_te.1.f": {
   "en": "\\\"At the stroke of the midnight hour, when the world sleeps, India will awake to life and freedom.\\\"\\n\\n— Jawaharlal Nehru",
@@ -8209,7 +8269,7 @@
  },
  "formation_te.2.d": {
   "en": "Across thousands of islands, one people now has one state: [ROOT.GetCountry.GetName]. Most of the archipelago's heartland, from Sumatra and Java to the Moluccas, answers to a single government. Not all of it does: wherever the Malay peninsula, northern Borneo or eastern New Guinea lie outside our borders, we now claim them.",
-  "ru": "На тысячах островов один народ теперь имеет одно государство: [ROOT.GetCountry.GetName]. Бо́льшая часть сердцевины архипелага, от Суматры и Явы до Молуккских островов, подчиняется одному правительству. Но не вся: где бы Малаккский полуостров, северное Борнео или восточная Новая Гвинея ни лежали за нашими границами, мы теперь предъявляем на них права."
+  "ru": "На тысячах островов один народ теперь имеет одно государство: [ROOT.GetCountry.GetName]. Большая часть сердцевины архипелага, от Суматры и Явы до Молуккских островов, подчиняется одному правительству. Но не вся: где бы Малаккский полуостров, северное Борнео или восточная Новая Гвинея ни лежали за нашими границами, мы теперь предъявляем на них права."
  },
  "formation_te.2.f": {
   "en": "A schoolteacher on one of the outer islands, to her class, on the first morning under the new flag: \\\"Find our island on the map. It is the small one near the edge, there. Now find the big island to the west, and the long one beyond it, and all the small ones in between that you have never heard of. Since this morning, everyone who lives on those islands is a citizen of the same country as you. Some of them speak a language at home that you would not understand. Their children are sitting in a room like this one, looking at the same map. Write the name of the country at the top of the page.\\\"",
@@ -8331,6 +8391,14 @@
   "en": "Death Duties",
   "ru": "Пошлины на наследство"
  },
+ "inheritance_events.11.a": {
+  "en": "Let the trusts run forever.",
+  "ru": "Пусть трасты действуют вечно."
+ },
+ "inheritance_events.11.b": {
+  "en": "Every fortune passes through an estate.",
+  "ru": "Каждое состояние проходит через наследство."
+ },
  "inheritance_events.11.d": {
   "en": "The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to abolish the rule against perpetuities, so that a family trust may run forever. A fortune placed in such a trust never passes through an estate, and never pays a duty on one.",
   "ru": "Группа интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] хочет, чтобы закон «[SCOPE.sLaw('current_law_scope').GetName]» отменил правило против бессрочных ограничений, чтобы семейный траст мог существовать вечно. Состояние, помещённое в такой траст, никогда не проходит через наследство и никогда не платит с него пошлину."
@@ -8366,6 +8434,14 @@
  "inheritance_events.12.t": {
   "en": "A Stake at Twenty-One",
   "ru": "Доля к двадцати одному году"
+ },
+ "inheritance_events.13.a": {
+  "en": "One heir takes the farm.",
+  "ru": "Ферму получает один наследник."
+ },
+ "inheritance_events.13.b": {
+  "en": "Every child keeps a share.",
+  "ru": "Каждый ребёнок сохраняет свою долю."
  },
  "inheritance_events.13.d": {
   "en": "The [SCOPE.gsInterestGroup('rural_folk_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to let one heir take the family farm whole and pay the others out, as the farms of Westphalia and Hanover have long done by custom. Smallholders would no longer have to divide their fields, or limit their families, to keep a farm alive.",
@@ -8422,6 +8498,10 @@
  "inheritance_events.15.b": {
   "en": "The family keeps working it.",
   "ru": "Семья продолжает её обрабатывать."
+ },
+ "inheritance_events.15.b.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области растёт на #v 5#!."
  },
  "inheritance_events.15.d": {
   "en": "Under [GetLawType('law_non_inheritable_usage_rights').GetName] land belongs to whoever uses it, and when a holder dies the holding goes back to the commune. One has just fallen empty. The dead holder's children have worked it since they could walk, and they say that continuing to use it is all the title anyone needs. The commune's assembly says that if the children keep it, the holding has been inherited, which the law forbids.",
@@ -8503,6 +8583,10 @@
   "en": "Let them sell to a neighbor.",
   "ru": "Позволить им продать землю соседу."
  },
+ "inheritance_events.3.c.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области растёт на #v 5#!."
+ },
  "inheritance_events.3.d": {
   "en": "The reserved shares have divided the family farms of a district once too often. A field that fed one household in the grandfathers' day now feeds four, and another division would leave plots too small to plow. The peasants are deciding what to do about it, and the state can lean one way or the other.",
   "ru": "Обязательные доли раз за разом дробили семейные фермы в округе. Поле, которое во времена дедов кормило одну семью, теперь кормит четыре, а ещё одно деление оставит участки слишком малыми для вспашки. Крестьяне решают, как быть, и государство может склониться в ту или иную сторону."
@@ -8531,6 +8615,10 @@
   "en": "The fortune founds a dynasty.",
   "ru": "Состояние закладывает основу династии."
  },
+ "inheritance_events.4.b.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области растёт на #v 5#!."
+ },
  "inheritance_events.4.c": {
   "en": "The heirs contest it in court.",
   "ru": "Наследники оспаривают его в суде."
@@ -8554,6 +8642,10 @@
  "inheritance_events.5.a": {
   "en": "The state buys the land for smallholders.",
   "ru": "Государство выкупает землю для мелких хозяев."
+ },
+ "inheritance_events.5.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 10#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области снижается на #v 10#!."
  },
  "inheritance_events.5.b": {
   "en": "The market takes them, and the duty is paid.",
@@ -9019,6 +9111,10 @@
   "en": "The duty officer read the message twice before he woke anyone. The government of [SCOPE.sCountry('nuclear_rival').GetName] had repeated in public, in the same words as before, that it would not give way. He put the message on the general's desk, squared it with the edge, and went back to the operations room, where two clerks were moving markers on the wall map. The line to the weapons command was open and silent. He sat down with the log sheet and wrote the time the message had come in and the time he had passed it on.",
   "ru": "Дежурный офицер прочитал сообщение дважды, прежде чем кого-либо будить. Правительство страны [SCOPE.sCountry('nuclear_rival').GetName] публично повторило теми же словами, что не уступит. Он положил сообщение на стол генерала, выровнил его по краю и вернулся в оперативный зал, где двое клерков переставляли отметки на настенной карте. Линия связи с командованием ядерных сил была открыта и молчала. Он сел с журналом и записал время, когда сообщение пришло, и время, когда он передал его дальше."
  },
+ "international_relations_events.8.t": {
+  "en": "Nuclear Brinkmanship",
+  "ru": "Ядерное балансирование на грани"
+ },
  "irredentism.1.a": {
   "en": "Lay claim to more of our homeland in their lands.",
   "ru": "Заявить права на большую часть нашей исторической родины в их землях."
@@ -9266,6 +9362,10 @@
  "irredentism.8.t": {
   "en": "[SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union",
   "ru": "Страна [SCOPE.sCountry('irr_proposed_target').GetName] рассматривает добровольное объединение"
+ },
+ "irredentism.9.a": {
+  "en": "We take note",
+  "ru": "Принять к сведению"
  },
  "irredentism.9.d": {
   "en": "[SCOPE.sCountry('irr_dc_annexer').GetName] has taken the lands of [SCOPE.sCountry('irr_dc_target').GetName], a decentralized power, into its own territory without a war. Its rule now reaches into a region where we hold interests of our own.",
@@ -10687,6 +10787,10 @@
   "en": "Let the losses fall where they fall.",
   "ru": "Пусть потери лягут туда, куда лягут."
  },
+ "minor_events_timelineextended.6.capital_controls": {
+  "en": "Impose emergency capital controls",
+  "ru": "Ввести чрезвычайный контроль капитала"
+ },
  "minor_events_timelineextended.6.correspondent_liquidity": {
   "en": "Inject liquidity through correspondent banks",
   "ru": "Влить ликвидность через банки-корреспонденты"
@@ -10774,6 +10878,10 @@
  "minor_events_timelineextended.6.t_crash": {
   "en": "Financial Crash",
   "ru": "Финансовый крах"
+ },
+ "minor_events_timelineextended.6.t_downturn": {
+  "en": "Market Downturn",
+  "ru": "Рыночный спад"
  },
  "minor_events_timelineextended.6.t_panic": {
   "en": "Banking Panic",
@@ -10892,6 +11000,10 @@
   "ru": "Мастер прочёл список у ворот завода в семь: имена людей, оставленных на неделю, и никого больше. Он прочёл его дважды, для тех, кто стоял сзади. «Банк прекратил нам кредит, а покупатели прекратили заказы», — сказал он, закончив. «Не знаю, что было раньше, и для зарплат это не имеет значения.» Несколько человек, чьих имён он не прочёл, спросили, будет ли список на следующей неделе. Он ответил, что будет, сложил бумагу в пальто и пошёл внутрь расписывать смены."
  },
  "minor_events_timelineextended.8.t": {
+  "en": "The Great Depression",
+  "ru": "Великая депрессия"
+ },
+ "minor_events_timelineextended.8.t_crashed": {
   "en": "The Great Depression",
   "ru": "Великая депрессия"
  },
@@ -11887,6 +11999,10 @@
   "en": "Raise it as a gurdwara",
   "ru": "Возвести как гурдвару"
  },
+ "monument_events.11.faith_sunni": {
+  "en": "Raise it as a great mosque",
+  "ru": "Возвести как великую мечеть"
+ },
  "monument_events.11.faith_theravada": {
   "en": "Raise it as a great stupa",
   "ru": "Возвести как великую ступу"
@@ -11910,6 +12026,10 @@
  "monument_events.11.heritage_chinese": {
   "en": "Raise it as a hall of dynasties",
   "ru": "Возвести как зал династий"
+ },
+ "monument_events.11.heritage_coptic": {
+  "en": "Raise it as a great church",
+  "ru": "Возвести как великую церковь"
  },
  "monument_events.11.heritage_geez": {
   "en": "Raise it as an Aksumite stele",
@@ -11946,6 +12066,10 @@
  "monument_events.11.heritage_norse": {
   "en": "Raise it as a rune-stone hall",
   "ru": "Возвести как зал рунических камней"
+ },
+ "monument_events.11.heritage_pali": {
+  "en": "Raise it as a great stupa",
+  "ru": "Возвести как великую ступу"
  },
  "monument_events.11.heritage_prussian": {
   "en": "Raise it as a hill-fort monument",
@@ -12081,7 +12205,7 @@
  },
  "monument_events.16.c.tt": {
   "en": "One decision follows for each monument. Any of them can also be decided later, from its row on the Grand Monuments tab of the Timeline Extended window. Until then, those who opposed the old order resent every one still standing.",
-  "ru": "По каждому памятнику последует отдельное решение. Любое из них можно принять и позже, из его строки на вкладке «Великие памятники» окна Timeline Extended. До тех пор противники прежнего порядка возмущены каждым памятником, который всё ещё стоит."
+  "ru": "По каждому памятнику последует отдельное решение. Любое из них можно принять и позже, из его строки на вкладке «Великие монументы» окна Timeline Extended. До тех пор противники прежнего порядка возмущены каждым памятником, который всё ещё стоит."
  },
  "monument_events.16.d": {
   "en": "[SCOPE.GetRootScope.ScriptValue('gm_notice_count')|0] of the monuments in our states now honor a regime, a ruler or a faith that this government does not stand for: the order that raised them has fallen, or they were raised by another country in states that are now ours. Until we decide, those who opposed what they stand for resent each one still standing.",
@@ -12290,6 +12414,10 @@
  "monument_events.2.sig_unknown_soldier": {
   "en": "Dedicate it To the Unknown Soldier",
   "ru": "Посвятить Неизвестному солдату"
+ },
+ "monument_events.2.sig_unknown_soldier.tt": {
+  "en": "#b $gm_sig_unknown_soldier$#!, a unique dedication of $pm_monument_war_memorial$ we hold from an opportunity seized. On top of what $pm_monument_war_memorial$ does, it adds #G [SCOPE.GetRootScope.ScriptValue('gm_step_sig_unknown_soldier')|%0]#! $country_radicals_from_legitimacy_mult$ for each step of [concept_grandeur], counted with every monument that carries it, while this one stands upheld on it. One fewer is held.\\n\\n$monument_events.2.e.tt$",
+  "ru": "#b $gm_sig_unknown_soldier$#! — уникальное посвящение «$pm_monument_war_memorial$», которое мы получили, использовав возможность. Помимо того, что даёт «$pm_monument_war_memorial$», оно добавляет #G [SCOPE.GetRootScope.ScriptValue('gm_step_sig_unknown_soldier')|%0]#! $country_radicals_from_legitimacy_mult$ за каждую ступень [Concept('concept_grandeur','величия')], считая вместе со всеми памятниками, несущими его, пока этот памятник сохраняет его. Число хранимых посвящений уменьшается на одно.\\n\\n$monument_events.2.e.tt$"
  },
  "monument_events.2.t": {
   "en": "The Scaffolding Comes Down",
@@ -12553,7 +12681,7 @@
  },
  "monument_events.25.d": {
   "en": "The monument in [SCOPE.sState('monument_state').GetNameNoFormatting] needs a name for its inscription and its guidebooks. A name of our own can be given later, from the monument's row on the Grand Monuments tab of the Timeline Extended window.",
-  "ru": "Памятнику в области [SCOPE.sState('monument_state').GetNameNoFormatting] нужно название для надписи и путеводителей. Собственное название можно дать позже, из строки памятника на вкладке «Великие памятники» окна Timeline Extended."
+  "ru": "Памятнику в области [SCOPE.sState('monument_state').GetNameNoFormatting] нужно название для надписи и путеводителей. Собственное название можно дать позже, из строки памятника на вкладке «Великие монументы» окна Timeline Extended."
  },
  "monument_events.25.f": {
   "en": "To the government, from the printers of the guidebook to the monument in [SCOPE.sState('monument_state').GetNameNoFormatting]. We have set the text of the guidebook and of the plan to be sold at the gate, and we have left a space on the cover and on the first page for the monument's name. We cannot print until it is filled. We ask that the name be sent to us written out in full, as it is to appear in the inscription, so that the guidebook and the monument agree. If the name is changed after printing, the copies already made will be wrong, and we would ask to be paid for a second printing. We will begin on the day the name reaches us.",
@@ -12567,13 +12695,81 @@
   "en": "Keep the name: $gm_name_centenary_evt$",
   "ru": "Оставить название: $gm_name_centenary_evt$"
  },
+ "monument_events.25.keep_city": {
+  "en": "Keep the name: $gm_name_city_evt$",
+  "ru": "Оставить название: $gm_name_city_evt$"
+ },
+ "monument_events.25.keep_custom": {
+  "en": "Keep the name: $gm_name_custom_evt$",
+  "ru": "Оставить название: $gm_name_custom_evt$"
+ },
+ "monument_events.25.keep_defeat": {
+  "en": "Keep the name: $gm_name_defeat_evt$",
+  "ru": "Оставить название: $gm_name_defeat_evt$"
+ },
+ "monument_events.25.keep_honours": {
+  "en": "Keep the name: $gm_name_honours_evt$",
+  "ru": "Оставить название: $gm_name_honours_evt$"
+ },
+ "monument_events.25.keep_landmark": {
+  "en": "Keep the name: $gm_name_landmark_evt$",
+  "ru": "Оставить название: $gm_name_landmark_evt$"
+ },
+ "monument_events.25.keep_ruler": {
+  "en": "Keep the name: $gm_name_ruler_evt$",
+  "ru": "Оставить название: $gm_name_ruler_evt$"
+ },
+ "monument_events.25.keep_skin": {
+  "en": "Keep the name: $gm_name_skin_evt$",
+  "ru": "Оставить название: $gm_name_skin_evt$"
+ },
+ "monument_events.25.keep_space_interstellar_probe": {
+  "en": "Keep the name: $gm_name_space_interstellar_probe_evt$",
+  "ru": "Оставить название: $gm_name_space_interstellar_probe_evt$"
+ },
+ "monument_events.25.keep_space_mars_landing": {
+  "en": "Keep the name: $gm_name_space_mars_landing_evt$",
+  "ru": "Оставить название: $gm_name_space_mars_landing_evt$"
+ },
+ "monument_events.25.keep_space_moon_base": {
+  "en": "Keep the name: $gm_name_space_moon_base_evt$",
+  "ru": "Оставить название: $gm_name_space_moon_base_evt$"
+ },
+ "monument_events.25.keep_space_moon_landing": {
+  "en": "Keep the name: $gm_name_space_moon_landing_evt$",
+  "ru": "Оставить название: $gm_name_space_moon_landing_evt$"
+ },
+ "monument_events.25.keep_space_orbital": {
+  "en": "Keep the name: $gm_name_space_orbital_evt$",
+  "ru": "Оставить название: $gm_name_space_orbital_evt$"
+ },
+ "monument_events.25.keep_state": {
+  "en": "Keep the name: $gm_name_state_evt$",
+  "ru": "Оставить название: $gm_name_state_evt$"
+ },
+ "monument_events.25.keep_victory": {
+  "en": "Keep the name: $gm_name_victory_evt$",
+  "ru": "Оставить название: $gm_name_victory_evt$"
+ },
+ "monument_events.25.keep_year": {
+  "en": "Keep the name: $gm_name_year_evt$",
+  "ru": "Оставить название: $gm_name_year_evt$"
+ },
  "monument_events.25.landmark": {
   "en": "Its historical name, $gm_name_landmark_evt$",
   "ru": "Его историческое название: $gm_name_landmark_evt$"
  },
+ "monument_events.25.state": {
+  "en": "The [SCOPE.sState('monument_state').GetNameNoFormatting] [SCOPE.sState('monument_state').GetCustom('gm_form_name')]",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')] города [SCOPE.sState('monument_state').GetNameNoFormatting]"
+ },
  "monument_events.25.t": {
   "en": "A Name for the Monument",
   "ru": "Название для памятника"
+ },
+ "monument_events.25.year": {
+  "en": "The [SCOPE.sState('monument_state').GetCustom('gm_form_name')] of [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_this_year')|0]",
+  "ru": "[SCOPE.sState('monument_state').GetCustom('gm_form_name')]: [SCOPE.sState('monument_state').MakeScope.ScriptValue('gm_this_year')|0]"
  },
  "monument_events.28.a": {
   "en": "A fitting monument",
@@ -14979,6 +15175,10 @@
   "en": "Named in the Investigation",
   "ru": "Названы в расследовании"
  },
+ "nuclear_loose.8.a": {
+  "en": "Noted.",
+  "ru": "Принято к сведению."
+ },
  "nuclear_loose.8.d_denied": {
   "en": "[ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] denies that the warhead was ever its own.",
   "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] отрицает, что боеголовка когда-либо была её."
@@ -15251,6 +15451,10 @@
   "en": "Dawn of the Atomic Age",
   "ru": "Заря атомной эры"
  },
+ "nuclear_weapon_events.11.a": {
+  "en": "This is nothing less than a monstrous crime against humanity!",
+  "ru": "Это не что иное, как чудовищное преступление против человечества!"
+ },
  "nuclear_weapon_events.11.b": {
   "en": "Respond with a single [concept_nuclear_strike]",
   "ru": "Ответить одним [Concept('concept_nuclear_strike','ядерным ударом')]"
@@ -15259,9 +15463,17 @@
   "en": "Launch a full nuclear response",
   "ru": "Начать полномасштабный ядерный ответ"
  },
+ "nuclear_weapon_events.11.d": {
+  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName].",
+  "ru": "Страна [SCOPE.sCountry('target_country').GetName] взорвала ядерное оружие в области [SCOPE.sState('target_state').GetName]."
+ },
  "nuclear_weapon_events.11.f": {
   "en": "The rescue teams sent to [SCOPE.sState('target_state').GetName] stopped at the outskirts, where fallen buildings blocked the roads and heat still came off the ground. Their leader sent back the first estimate, #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead, with a note that it counted only the districts the teams could reach. From where they stood they could see smoke over the center and nothing standing in it. Survivors walked out toward them in ones and twos, burned on the side that had faced the flash. The teams set up a station on the road, gave water to everyone who came, and took down each person's name and the district they had come from.",
   "ru": "Спасательные группы, посланные в область [SCOPE.sState('target_state').GetName], остановились на окраинах, где обрушенные здания перегородили дороги, а от земли ещё шёл жар. Их руководитель передал первую оценку: #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! погибших, с пометкой, что учтены лишь районы, куда группы смогли добраться. С того места, где они стояли, был виден дым над центром и ничего уцелевшего в нём. Уцелевшие выходили к ним поодиночке и по двое, обожжённые с той стороны, что была обращена к вспышке. Группы развернули пункт на дороге, давали воду всем подходившим и записывали имя каждого и район, откуда он пришёл."
+ },
+ "nuclear_weapon_events.11.t": {
+  "en": "The Bomb Falls on [SCOPE.sState('target_state').GetName]",
+  "ru": "Бомба падает на область [SCOPE.sState('target_state').GetName]"
  },
  "nuclear_weapon_events.12.a": {
   "en": "It is with heavy hearts that we acknowledge the necessity of this dire action.",
@@ -15447,9 +15659,17 @@
   "en": "An Accident at the Laboratory",
   "ru": "Авария в лаборатории"
  },
+ "nuclear_weapon_events.2.a": {
+  "en": "It is with heavy hearts that we acknowledge the necessity of this dire action.",
+  "ru": "С тяжёлым сердцем мы признаём необходимость этого страшного шага."
+ },
  "nuclear_weapon_events.2.a_incident": {
   "en": "No one in this government chose it, but it was done in our name. We will answer for it.",
   "ru": "Никто в этом правительстве этого не выбирал, но это сделано от нашего имени. Мы ответим за это."
+ },
+ "nuclear_weapon_events.2.d": {
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.",
+  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] достиг цели, боеголовка взорвалась."
  },
  "nuclear_weapon_events.2.d_commander": {
   "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.",
@@ -15651,6 +15871,10 @@
   "en": "An Offer of Extended Deterrence",
   "ru": "Предложение расширенного сдерживания"
  },
+ "nuclear_weapon_events.26.a": {
+  "en": "Noted.",
+  "ru": "Принято к сведению."
+ },
  "nuclear_weapon_events.26.d_accepted": {
   "en": "[SCOPE.sCountry('nuclear_pg_beneficiary').GetName] has accepted our $nuclear_guarantee$. It is in force for ten years. We pay for it, and we will be asked to answer if [SCOPE.sCountry('nuclear_pg_beneficiary').GetNameNoFlag] is threatened or struck.",
   "ru": "Страна [SCOPE.sCountry('nuclear_pg_beneficiary').GetName] приняла наш договор «$nuclear_guarantee$». Он действует десять лет. Мы платим за него, и от нас потребуют ответить, если стране [SCOPE.sCountry('nuclear_pg_beneficiary').GetNameNoFlag] будут угрожать или нанесут по ней удар."
@@ -15727,9 +15951,21 @@
   "en": "It Was No Accident",
   "ru": "Это не было случайностью"
  },
+ "nuclear_weapon_events.3.a": {
+  "en": "Our defenses held. Find out how close it came.",
+  "ru": "Наша оборона выстояла. Выяснить, насколько близко было дело."
+ },
+ "nuclear_weapon_events.3.d": {
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName]. Our defenses have stopped the attack.",
+  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] попыталась нанести [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName]. Наша оборона остановила атаку."
+ },
  "nuclear_weapon_events.3.f": {
   "en": "To the government, from the officers responsible for the defense of [SCOPE.sState('target_state').GetName]. A warhead launched by [SCOPE.sCountry('attacking_country').GetName] was brought down before it reached the state, and nothing in [SCOPE.sState('target_state').GetName] was damaged. Our records show the time it was first detected and the time it was stopped, and every reading in between. We have kept them all. We ask that the record go to whoever plans our defenses, since the next attack may come with more than one weapon, and that the officers on duty be told that the government has seen their work.",
   "ru": "Правительству от офицеров, отвечающих за оборону области [SCOPE.sState('target_state').GetName]. Боеголовка, запущенная страной [SCOPE.sCountry('attacking_country').GetName], была сбита, не долетев до области, и ничто в области [SCOPE.sState('target_state').GetName] не пострадало. Наши журналы показывают время, когда её обнаружили, время, когда её остановили, и каждое показание между ними. Мы сохранили всё. Просим передать запись тем, кто планирует нашу оборону, поскольку следующая атака может прийти с несколькими боеголовками сразу, и сообщить дежурным офицерам, что правительство увидело их работу."
+ },
+ "nuclear_weapon_events.3.t": {
+  "en": "Nuclear Nightmare Averted",
+  "ru": "Ядерный кошмар предотвращён"
  },
  "nuclear_weapon_events.30.a": {
   "en": "There is nothing to say",
@@ -15807,9 +16043,21 @@
   "en": "An Answer on Reparations",
   "ru": "Ответ о репарациях"
  },
+ "nuclear_weapon_events.4.a": {
+  "en": "We must strengthen our resolve and prepare for what comes next.",
+  "ru": "Мы должны укрепить решимость и подготовиться к тому, что будет дальше."
+ },
+ "nuclear_weapon_events.4.d": {
+  "en": "Our nuclear forces attempted to launch a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName], but their defenses have stopped the attack.",
+  "ru": "Наши ядерные силы попытались нанести [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName], но их оборона остановила атаку."
+ },
  "nuclear_weapon_events.4.f": {
   "en": "\\\"Our warhead did not reach [SCOPE.sState('target_state').GetName], and I am here to tell the government what we know of why. Their defenses brought it down before it arrived. We have the time it was launched and the time we lost it, and the officers who study their defenses are going over the record now to learn how it was done. They know what we tried, and I expect them to answer it. I have asked that our forces be ready for that. I cannot yet tell you whether a second warhead would fare any better. I will have an answer when the review is finished.\\\"",
   "ru": "«Наша боеголовка не достигла области [SCOPE.sState('target_state').GetName], и я здесь, чтобы рассказать правительству, что нам известно о причине. Их оборона сбила её до прибытия. У нас есть время пуска и время, когда мы её потеряли, и офицеры, изучающие их оборону, сейчас разбирают запись, чтобы понять, как это было сделано. Они знают, что мы пытались, и я жду, что они ответят на это. Я просил, чтобы наши силы были к этому готовы. Пока не могу сказать, будет ли вторая боеголовка успешнее. Ответ у меня будет, когда закончится разбор.»"
+ },
+ "nuclear_weapon_events.4.t": {
+  "en": "Our Strike Falls Short",
+  "ru": "Наш удар не достиг цели"
  },
  "nuclear_weapon_events.5.a": {
   "en": "Our enemy has crossed a line that cannot be ignored.",
@@ -16747,6 +16995,10 @@
   "en": "Send relief.",
   "ru": "Отправить помощь."
  },
+ "resettlement.3.b": {
+  "en": "They will have to endure.",
+  "ru": "Им придётся вытерпеть."
+ },
  "resettlement.3.d": {
   "en": "The first winter has caught the settlers of [SCOPE.sState('rs_event_state').GetName] in tents, dugouts and half-built houses. Fuel is short, the roads are closed, and the new arrivals are falling sick.",
   "ru": "Первая зима застала поселенцев области [SCOPE.sState('rs_event_state').GetName] в палатках, землянках и недостроенных домах. Топлива не хватает, дороги закрыты, а прибывшие заболевают."
@@ -16790,6 +17042,10 @@
  "resettlement.4.t": {
   "en": "The Topsoil of [SCOPE.sState('rs_event_state').GetName]",
   "ru": "Верхний слой почвы области [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.5.a": {
+  "en": "End the coercive programs.",
+  "ru": "Прекратить принудительные программы."
  },
  "resettlement.5.b": {
   "en": "These accounts are exaggerated.",
@@ -17334,6 +17590,10 @@
  "social_tensions_events.8.t": {
   "en": "The Count in the Yard",
   "ru": "Счёт во дворе"
+ },
+ "social_tensions_events.9.a": {
+  "en": "Ignore it",
+  "ru": "Не обращать внимания"
  },
  "social_tensions_events.9.b": {
   "en": "Launch an investigation",
@@ -17982,6 +18242,10 @@
  "society_technology_events.34.a": {
   "en": "Open the channel.",
   "ru": "Открыть канал."
+ },
+ "society_technology_events.34.b": {
+  "en": "Our thoughts are our own.",
+  "ru": "Наши мысли принадлежат только нам."
  },
  "society_technology_events.34.d": {
   "en": "The neural-linked diplomats of [SCOPE.sCountry('telepathic_proposer').GetName] have proposed a telepathic channel between our two governments. Diplomats on both sides would share their thoughts directly, with no translation and no room for a lie. It could settle disputes that talks have not. It would also let their side see whatever our diplomats know.",
@@ -19567,6 +19831,10 @@
   "en": "[ROOT.GetCountry.GetCustom('sr_destroyed_site_name')] Destroyed",
   "ru": "Уничтожено: [ROOT.GetCountry.GetCustom('sr_destroyed_site_name')]"
  },
+ "space_race_events.104.a": {
+  "en": "Noted.",
+  "ru": "Принято к сведению."
+ },
  "space_race_events.104.d": {
   "en": "The free colony of [ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] has fallen to marines. Its council is dissolved, its ties to those who supplied it are cut, and it answers to Earth again.",
   "ru": "Свободная колония [ROOT.GetCountry.GetCustom('sr_seized_free_site_name')] пала перед морской пехотой. Её совет распущен, связи с теми, кто её снабжал, перерезаны, и она снова подчиняется Земле."
@@ -19626,6 +19894,10 @@
  "space_race_events.107.t": {
   "en": "Garrison for [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')] Never Came",
   "ru": "Гарнизон так и не прибыл: [ROOT.GetCountry.GetCustom('sr_garrison_lapsed_site_name')]"
+ },
+ "space_race_events.108.a": {
+  "en": "Noted.",
+  "ru": "Принято к сведению."
  },
  "space_race_events.108.d_back": {
   "en": "The state of our $building_space_program$ is back under our control and its pads are working again. Launches, module fabrication and the reserve resume this month.",
@@ -21515,6 +21787,10 @@
   "en": "Send a garrison.",
   "ru": "Отправить гарнизон."
  },
+ "space_race_events.94.c": {
+  "en": "Let them go.",
+  "ru": "Пусть уходят."
+ },
  "space_race_events.94.d": {
   "en": "The settlers of [ROOT.GetCountry.GetCustom('sr_aut_site_name')] have elected a council of their own, and it has sent us its demands: the right to make its own laws, and to keep a share of what the colony produces.",
   "ru": "Поселенцы [ROOT.GetCountry.GetCustom('sr_aut_site_name')] избрали собственный совет и прислали нам его требования: право самим принимать законы и оставлять себе долю того, что производит колония."
@@ -21603,6 +21879,14 @@
   "en": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] Declares Itself Free",
   "ru": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] объявляет о своей свободе"
  },
+ "space_race_events.99.a": {
+  "en": "Welcome them.",
+  "ru": "Приветствовать их."
+ },
+ "space_race_events.99.b": {
+  "en": "Not now.",
+  "ru": "Не сейчас."
+ },
  "space_race_events.99.d": {
   "en": "Years of our supply ships have made friends of the free colony of [ROOT.GetCountry.GetCustom('sr_petition_site_name')]. Its council now asks to place the colony under our flag, with its people, its works and its specializations.",
   "ru": "Годы наших рейсов снабжения сделали нас друзьями свободной колонии [ROOT.GetCountry.GetCustom('sr_petition_site_name')]. Её совет просит принять колонию под наш флаг вместе с её людьми, сооружениями и специализациями."
@@ -21623,6 +21907,10 @@
   "en": "Prosecute the traitor",
   "ru": "Преследовать предателя"
  },
+ "surveillance_events.1.c": {
+  "en": "Suppress the story",
+  "ru": "Замять историю"
+ },
  "surveillance_events.1.d": {
   "en": "A clerk in the security services has given the press copies of classified files showing how much the state collects on ordinary citizens: whom they write to, where they go and whom they meet. Most of the people in the files were never suspected of anything. Civil liberties groups want the program ended, and the security services want the clerk arrested.",
   "ru": "Клерк службы безопасности передал прессе копии секретных файлов, показывающих, как много государство собирает об обычных гражданах: с кем они переписываются, куда ходят и с кем встречаются. Большинство людей из этих файлов никогда ни в чём не подозревались. Правозащитные группы требуют закрыть программу, а службы безопасности хотят ареста клерка."
@@ -21634,6 +21922,10 @@
  "surveillance_events.1.f": {
   "en": "\\\"I worked in the records section of the security service, and I am giving you these files because I could not find anyone inside who would read them. My job was to file the summaries of what the system collected. It collected whom people wrote to, where they went, what they bought and which meetings they attended. Most of it was about people who had never been suspected of anything. I asked my supervisor once what the summaries were for, and he said it was not our job to ask. I copied the files over six months, a few pages at a time. I know what I can be charged with, and I will not run from it. Publish the files as they are, and use my name if you need to.\\\"",
   "ru": "«Я работал в архивном отделе службы безопасности и передаю вам эти файлы, потому что не нашёл внутри никого, кто стал бы их читать. Моя работа состояла в том, чтобы подшивать сводки о том, что собирала система. Она собирала сведения о том, с кем люди переписываются, куда ходят, что покупают и на какие собрания приходят. Большая часть касалась людей, которых никогда ни в чём не подозревали. Однажды я спросил начальника, для чего эти сводки, и он ответил, что наше дело не спрашивать. Я копировал файлы полгода, по нескольку страниц за раз. Я знаю, в чём меня могут обвинить, и не стану бежать. Опубликуйте файлы как есть и назовите моё имя, если понадобится»."
+ },
+ "surveillance_events.1.t": {
+  "en": "The Whistleblower",
+  "ru": "Разоблачитель"
  },
  "surveillance_events.100.a": {
   "en": "Security is the highest good",
@@ -21830,6 +22122,10 @@
  "te_culture_merge.3.f": {
   "en": "Instructions from the office that keeps the population register, sent to its officials once the [SCOPE.sCulture('te_cm_ev_own_part').GetName] people had become [SCOPE.sCulture('te_cm_ev_result').GetName]:\\n\\nWhere a household gives its people as [SCOPE.sCulture('te_cm_ev_own_part').GetName], write [SCOPE.sCulture('te_cm_ev_result').GetName]. Everyone who was [SCOPE.sCulture('te_cm_ev_own_part').GetName] counts as [SCOPE.sCulture('te_cm_ev_result').GetName] now, here and in every other country, and our figures must agree with theirs.\\nDo not alter the earlier registers. They were correct when they were taken, and anyone comparing the years will need them as they stood.\\nWhere the members of one household give different answers, write down each answer as it was given. The office will reconcile them, and officials at the door are not to argue with anyone.\\nUntil the new forms arrive, strike out the [SCOPE.sCulture('te_cm_ev_own_part').GetName] line on the old ones by hand and write [SCOPE.sCulture('te_cm_ev_result').GetName] beside it, so that no form is wasted.",
   "ru": "Указания ведомства, ведущего реестр населения, его чиновникам после того, как народ культуры [SCOPE.sCulture('te_cm_ev_own_part').GetName] стал народом культуры [SCOPE.sCulture('te_cm_ev_result').GetName]:\\n\\nГде домохозяйство указывает свой народ как [SCOPE.sCulture('te_cm_ev_own_part').GetName], пишите [SCOPE.sCulture('te_cm_ev_result').GetName]. Все, кто был [SCOPE.sCulture('te_cm_ev_own_part').GetName], теперь считаются [SCOPE.sCulture('te_cm_ev_result').GetName], здесь и в каждой другой стране, и наши цифры должны совпадать с их цифрами.\\nНе изменяйте прежние реестры. Они были верны, когда составлялись, и тем, кто будет сравнивать годы, они понадобятся такими, какими были.\\nГде члены одного домохозяйства дают разные ответы, записывайте каждый ответ так, как он дан. Ведомство их согласует, а чиновникам на пороге ни с кем спорить не следует.\\nПока не придут новые бланки, вычёркивайте в старых строку [SCOPE.sCulture('te_cm_ev_own_part').GetName] от руки и пишите рядом [SCOPE.sCulture('te_cm_ev_result').GetName], чтобы ни один бланк не пропал."
+ },
+ "te_culture_merge.3.t": {
+  "en": "From [SCOPE.sCulture('te_cm_ev_own_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]",
+  "ru": "От культуры [SCOPE.sCulture('te_cm_ev_own_part').GetName] к культуре [SCOPE.sCulture('te_cm_ev_result').GetName]"
  },
  "te_culture_merge.4.a": {
   "en": "Then that question is settled.",
@@ -22251,6 +22547,10 @@
   "en": "Start Counterintelligence Support on a friend",
   "ru": "Запустить «Контрразведывательную поддержку» для друга"
  },
+ "te_debug_covert.7.f": {
+  "en": "Test harness. Nothing here is real intelligence.",
+  "ru": "Тестовый стенд. Ничто здесь не является настоящей разведкой."
+ },
  "te_debug_covert.7.t": {
   "en": "Covert Test Console: Watching and Backlash",
   "ru": "Тестовая консоль тайной войны: наблюдение и откат"
@@ -22471,6 +22771,10 @@
   "en": "Writes a TE_DEMOG_FAMILY line to debug.log for our capital: the Family Policy readings it takes (desired family size, family housing, family planning knowledge, maternal deaths, the rural exemption, the boys per 100 girls), our measures' desired family size, the family policy term and Birth Limit's part of it, the farm share and the urban pull left, the boys added per 100 girls in force, and the census's stored desired family size, means, children per woman with its planned and unplanned parts, maternal deaths and men per 100 women.",
   "ru": "Записывает в debug.log строку TE_DEMOG_FAMILY для нашей столицы: показатели «Семейной политики», которые она берёт (желаемый размер семьи, жильё для семей, знания о планировании семьи, материнская смертность, сельское исключение, число мальчиков на 100 девочек), желаемый размер семьи по нашим мерам, член семейной политики и часть «Ограничения рождаемости» в нём, долю фермеров и оставшееся городское притяжение, добавленных мальчиков на 100 девочек в силе, а также сохранённые переписью желаемый размер семьи, средства, число детей на женщину с запланированной и незапланированной частями, материнскую смертность и число мужчин на 100 женщин."
  },
+ "te_debug_demog.1.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_demog.80.a": {
   "en": "The Demographic Dividend",
   "ru": "Демографический дивиденд"
@@ -22523,6 +22827,10 @@
   "en": "Demographic Events Test",
   "ru": "Тест демографических событий"
  },
+ "te_debug_demog.80.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_deterrence.1.a": {
   "en": "Arm us with ten warheads and initialize the posture",
   "ru": "Вооружить нас десятью боеголовками и задать позицию"
@@ -22574,6 +22882,10 @@
  "te_debug_deterrence.2.desc": {
   "en": "Fire one incident chain now, or force the weekly meaningful-incident roll to fire every week.",
   "ru": "Запустить сейчас одну цепочку инцидентов или заставить недельный бросок значимого инцидента срабатывать каждую неделю."
+ },
+ "te_debug_deterrence.2.e": {
+  "en": "A Routine Mishap",
+  "ru": "Рядовой инцидент"
  },
  "te_debug_deterrence.2.f": {
   "en": "Each chain checks its own eligibility; an ineligible one does nothing or falls back to a routine mishap.",
@@ -22659,6 +22971,10 @@
   "en": "The deadline fires on the next weekly tick.",
   "ru": "Срок наступает при следующем недельном такте."
  },
+ "te_debug_deterrence.4.g": {
+  "en": "The Exercise They Mistook",
+  "ru": "Учения, принятые за другое"
+ },
  "te_debug_deterrence.4.t": {
   "en": "Deterrence Console: Push the Crisis",
   "ru": "Консоль сдерживания: подтолкнуть кризис"
@@ -22682,6 +22998,10 @@
  "te_debug_deterrence.5.t": {
   "en": "Deterrence Console: Estimates and Guarantees",
   "ru": "Консоль сдерживания: оценки и гарантии"
+ },
+ "te_debug_drugs.1.a": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_drugs.1.d": {
   "en": "Console-only measurement for the Healthcare need. Every country now holds its population, the share of it in pops at each wealth level, its Drugs buildings, its market's Drugs price and whether it bans Drugs. We also hold the world totals below. Every number is also written to debug.log, on lines starting TE_DRUGS_PROBE, so there is no need to save.\\n\\nWorld population: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_pop').GetValue|K]#!\\nWealth 10 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w10').GetValue|1]%#!\\nWealth 15 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w15').GetValue|1]%#!\\nWealth 20 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w20').GetValue|1]%#!\\nWealth 25 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w25').GetValue|1]%#!\\nWealth 30 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w30').GetValue|1]%#!\\nWealth 35 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w35').GetValue|1]%#!\\nWealth 40 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w40').GetValue|1]%#!\\nWealth 50 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w50').GetValue|1]%#!\\n\\nWorld Drugs buy orders: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_buy').GetValue|K]#!\\nWorld Drugs sell orders: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_sell').GetValue|K]#!\\nDrugs price in our market: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_price').GetValue|2]#! × base",
@@ -22787,6 +23107,10 @@
   "en": "Launch Windows Test Console",
   "ru": "Тестовая консоль стартовых окон"
  },
+ "te_debug_launch_windows.1.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.1.a": {
   "en": "Run one monthly update now (target, drift, premium, inflation, rate paid, stance)",
   "ru": "Выполнить одно ежемесячное обновление сейчас (цель, дрейф, премия, инфляция, выплачиваемая ставка, политика)"
@@ -22810,6 +23134,10 @@
  "te_debug_monetary.1.t": {
   "en": "Monetary Policy Test Console",
   "ru": "Тестовая консоль денежной политики"
+ },
+ "te_debug_monetary.1.z": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_monetary.10.a": {
   "en": "Pin a debug kind-1 anchor on the largest dial economy",
@@ -22843,6 +23171,10 @@
   "en": "Monetary Debug — International Arrangements",
   "ru": "Денежная отладка — международные соглашения"
  },
+ "te_debug_monetary.10.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.11.a": {
   "en": "Pin a debug swap line from the largest dial economy",
   "ru": "Закрепить отладочную своп-линию от крупнейшей экономики со шкалой"
@@ -22875,6 +23207,10 @@
   "en": "Monetary Debug — Leverage and Coercion",
   "ru": "Денежная отладка — рычаги влияния и принуждение"
  },
+ "te_debug_monetary.11.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.2.a": {
   "en": "Re-apply the pair with the production multiplier (var:te_rate_paid_applied)",
   "ru": "Заново применить пару с производственным множителем (var:te_rate_paid_applied)"
@@ -22895,6 +23231,10 @@
   "en": "Interest Multiplier Test: Variable Form",
   "ru": "Проверка процентного множителя: форма с переменной"
  },
+ "te_debug_monetary.2.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.3.a": {
   "en": "Re-apply the pair with a named script value as the multiplier",
   "ru": "Заново применить пару с именованным значением сценария в качестве множителя"
@@ -22911,6 +23251,10 @@
   "en": "Interest Multiplier Test: Script Value Form",
   "ru": "Проверка процентного множителя: форма со значением сценария"
  },
+ "te_debug_monetary.3.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.4.a": {
   "en": "Re-apply the pair with a literal multiplier of 7",
   "ru": "Заново применить пару с буквальным множителем 7"
@@ -22926,6 +23270,10 @@
  "te_debug_monetary.4.t": {
   "en": "Interest Multiplier Test: Literal Control",
   "ru": "Проверка процентного множителя: буквальный контроль"
+ },
+ "te_debug_monetary.4.z": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_monetary.5.a": {
   "en": "Pin: fiat currency, a national bank, no independence, delegation off, target 5",
@@ -22951,6 +23299,10 @@
   "en": "Monetary Harness: The Pin Is Not In Place",
   "ru": "Денежный стенд: закрепление не сработало"
  },
+ "te_debug_monetary.5.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.6.a": {
   "en": "Run twelve monthly updates now (one year)",
   "ru": "Выполнить двенадцать ежемесячных обновлений сейчас (один год)"
@@ -22970,6 +23322,10 @@
  "te_debug_monetary.6.t": {
   "en": "Monetary Harness: Fast-Forward",
   "ru": "Денежный стенд: перемотка"
+ },
+ "te_debug_monetary.6.z": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_monetary.7.a": {
   "en": "Seed the worked example: inflation and expectations at 2, dial at 5, nothing monetized",
@@ -22995,6 +23351,10 @@
   "en": "Monetary Harness: The Monetized War",
   "ru": "Денежный стенд: монетизированная война"
  },
+ "te_debug_monetary.7.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.8.a": {
   "en": "Add 2 points to the world rate",
   "ru": "Добавить 2 пункта к мировой ставке"
@@ -23002,6 +23362,10 @@
  "te_debug_monetary.8.b": {
   "en": "Remove the world-rate offset",
   "ru": "Убрать смещение мировой ставки"
+ },
+ "te_debug_monetary.8.c": {
+  "en": "Set peg confidence to 25",
+  "ru": "Установить доверие к привязке на 25"
  },
  "te_debug_monetary.8.d": {
   "en": "#lore Console-only. Nothing in the mod fires this event. None of these figures is hidden state; the two globals are simply printed nowhere else.#!\\n\\n#title The world rate#!\\nWorld rate (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   This country's copy: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Reference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAccumulators — sum of weight x real rate: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   sum of weight (GDP in millions of the discretionary great powers): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — both 0 means nobody is discretionary and the world rate is the reference rate\\nDebug offset: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — blank when none is set\\nThis country's weight and weighted real rate, if it were counted: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Gold#!\\nGap: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Flow this month: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   as % of GDP a year: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Pressure it adds next month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nOne point of gap is worth: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! a month   Room left for inflow: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Hot money: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Own share of the world-rate accumulators (0 / 0 unless this country is in the average): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nBank vault: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! of a limit of #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   seeded: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (the TREASURY's scaled reserves, for comparison: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nOne recapitalization step: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!\\n\\n#title The peg#!\\nConfidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Move this month if under pressure: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nDefending, months left: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Suspended, months left: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nPeg-defence formula: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — world rate + half of a shortfall of #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Target floor / ceiling now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!",
@@ -23023,6 +23387,10 @@
   "en": "Monetary Debug — Gold and the Peg",
   "ru": "Денежная отладка — золото и привязка"
  },
+ "te_debug_monetary.8.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_monetary.9.a": {
   "en": "Level shock: shadow index −20",
   "ru": "Шок уровня: теневой индекс −20"
@@ -23039,6 +23407,10 @@
   "en": "#lore Console-only. Nothing in the mod fires this event. Nothing here is hidden state; the globals are simply printed nowhere else.#!\\n\\n#title The index#!\\nIndex: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow (where it would float): #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!   Devalued months left: #v [ROOT.GetVariable('te_fx_devalued_months').GetValue|0]#!\\nTarget now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_target_value')|2]#! = 100 + rate #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_rate')|2]#! + confidence #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_confidence')|2]#! (price gap #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_inflation')|2]#!, one-sided on a float) + premium #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_premium')|2]#! + shock #v [ROOT.GetVariable('te_fx_shock').GetValue|2]#!\\nInflation this currency is judged on (core on metal, expected otherwise): #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_inflation_read')|2]#!   controls_damp: #v [SCOPE.GetRootScope.ScriptValue('te_mon_controls_damp')|2]#!\\n\\n#title World inflation#!\\nGlobal: #v [GetGlobalVariable('te_world_inflation').GetValue|3]#!   This country's copy, own share excluded: #v [ROOT.GetVariable('te_mon_world_inflation_now').GetValue|3]#!\\nAccumulators — sum of weight x inflation: #v [GetGlobalVariable('te_world_inflation_acc_num').GetValue|3]#!   sum of weight: #v [GetGlobalVariable('te_world_inflation_acc_den').GetValue|3]#!   own share: #v [ROOT.GetVariable('te_mon_world_infl_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_infl_own_den').GetValue|3]#!\\n\\n#title Consequences#!\\nWeak points applied: #v [ROOT.GetVariable('te_fx_weak_applied').GetValue|2]#!   Strong points applied: #v [ROOT.GetVariable('te_fx_strong_applied').GetValue|2]#!   FX premium (off last month's index): #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_fx')|2]#!\\nThree-year average: #v [ROOT.GetVariable('te_fx_avg').GetValue|2]#!   Openness band: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_openness')|1]#!   Imported inflation: #v [ROOT.GetVariable('te_fx_imported').GetValue|2]#!   Cost-push in all: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!\\n\\n#title Capital controls#!\\nPeacetime months held: #v [ROOT.GetVariable('te_capital_controls_months').GetValue|0]#!   Fatigue steps applied: #v [ROOT.GetVariable('te_capital_controls_fatigue_applied').GetValue|2]#!   Overvaluation drain on the peg this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!",
   "ru": "#lore Только для консоли. Ничто в моде не вызывает это событие. Ничто здесь не является скрытым состоянием; просто глобальные значения больше нигде не выводятся.#!\\n\\n#title Индекс#!\\nИндекс: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Тень (где он плавал бы): #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Переоценка: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!   Осталось месяцев девальвации: #v [ROOT.GetVariable('te_fx_devalued_months').GetValue|0]#!\\nЦель сейчас: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_target_value')|2]#! = 100 + ставка #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_rate')|2]#! + доверие #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_confidence')|2]#! (разрыв цен #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_inflation')|2]#!, односторонний при плавающем курсе) + премия #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_term_premium')|2]#! + шок #v [ROOT.GetVariable('te_fx_shock').GetValue|2]#!\\nИнфляция, по которой оценивается эта валюта (базовая для металла, иначе ожидаемая): #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_inflation_read')|2]#!   controls_damp: #v [SCOPE.GetRootScope.ScriptValue('te_mon_controls_damp')|2]#!\\n\\n#title Мировая инфляция#!\\nГлобальная: #v [GetGlobalVariable('te_world_inflation').GetValue|3]#!   Копия этой страны без её собственной доли: #v [ROOT.GetVariable('te_mon_world_inflation_now').GetValue|3]#!\\nНакопители — сумма вес x инфляция: #v [GetGlobalVariable('te_world_inflation_acc_num').GetValue|3]#!   сумма весов: #v [GetGlobalVariable('te_world_inflation_acc_den').GetValue|3]#!   собственная доля: #v [ROOT.GetVariable('te_mon_world_infl_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_infl_own_den').GetValue|3]#!\\n\\n#title Последствия#!\\nПрименено слабых пунктов: #v [ROOT.GetVariable('te_fx_weak_applied').GetValue|2]#!   Применено сильных пунктов: #v [ROOT.GetVariable('te_fx_strong_applied').GetValue|2]#!   Валютная премия (по индексу прошлого месяца): #v [SCOPE.GetRootScope.ScriptValue('te_mon_premium_fx')|2]#!\\nТрёхлетнее среднее: #v [ROOT.GetVariable('te_fx_avg').GetValue|2]#!   Полоса открытости: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_openness')|1]#!   Импортируемая инфляция: #v [ROOT.GetVariable('te_fx_imported').GetValue|2]#!   Всего издержек: #v [ROOT.GetVariable('te_cost_push').GetValue|2]#!\\n\\n#title Контроль капитала#!\\nМесяцев мирного времени: #v [ROOT.GetVariable('te_capital_controls_months').GetValue|0]#!   Применено шагов усталости: #v [ROOT.GetVariable('te_capital_controls_fatigue_applied').GetValue|2]#!   Отток из-за переоценки на привязку в этом месяце: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!"
  },
+ "te_debug_monetary.9.e": {
+  "en": "Run one monthly update now",
+  "ru": "Выполнить одно ежемесячное обновление сейчас"
+ },
  "te_debug_monetary.9.f": {
   "en": "#lore Console-only. §19 row 4's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!",
   "ru": "#lore Только для консоли. Критерии выхода для строки 4 §19 и способы подготовки каждой описаны в заголовке над этим событием в events/te_debug_monetary_events.txt.#!"
@@ -23046,6 +23418,10 @@
  "te_debug_monetary.9.t": {
   "en": "Monetary Debug — The Exchange Rate",
   "ru": "Денежная отладка — обменный курс"
+ },
+ "te_debug_monetary.9.z": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_monuments.1.a": {
   "en": "Raise a 20-level Grand Monument construction site in the capital",
@@ -23077,7 +23453,7 @@
  },
  "te_debug_monuments.1.t": {
   "en": "Debug: Grand Monuments",
-  "ru": "Отладка: Великие памятники"
+  "ru": "Отладка: Великие монументы"
  },
  "te_debug_monuments.2.a": {
   "en": "Offer a Victory opportunity (a random rival as the enemy)",
@@ -23106,6 +23482,10 @@
  "te_debug_monuments.2.f": {
   "en": "Offer a space first opportunity",
   "ru": "Предложить возможность космического первенства"
+ },
+ "te_debug_monuments.2.flavor": {
+  "en": "Console only.",
+  "ru": "Только для консоли."
  },
  "te_debug_monuments.2.g": {
   "en": "Offer a new reign's opportunity, if the government can raise one",
@@ -23147,9 +23527,21 @@
   "en": "Re-open the dedication in [SCOPE.sState('gm_dbg_m1').GetName]",
   "ru": "Заново открыть посвящение в области [SCOPE.sState('gm_dbg_m1').GetName]"
  },
+ "te_debug_monuments.3.b": {
+  "en": "Re-open the dedication in [SCOPE.sState('gm_dbg_m2').GetName]",
+  "ru": "Заново открыть посвящение в области [SCOPE.sState('gm_dbg_m2').GetName]"
+ },
+ "te_debug_monuments.3.c": {
+  "en": "Re-open the dedication in [SCOPE.sState('gm_dbg_m3').GetName]",
+  "ru": "Заново открыть посвящение в области [SCOPE.sState('gm_dbg_m3').GetName]"
+ },
  "te_debug_monuments.3.desc": {
   "en": "Re-open one monument's dedication: its records and name go, and the ceremony asks again.",
   "ru": "Заново открыть посвящение одного монумента: его записи и название убираются, и церемония спрашивает снова."
+ },
+ "te_debug_monuments.3.flavor": {
+  "en": "Console only.",
+  "ru": "Только для консоли."
  },
  "te_debug_monuments.3.t": {
   "en": "Debug: Re-open a Dedication",
@@ -23310,6 +23702,10 @@
  "te_debug_monuments.8.desc": {
   "en": "Grand Monument unique dedication test tools. The last option writes TE_MONUMENTS: lines to debug.log: each signature's total, then each monument's signature, parent and whether it counts (1 nationally, 2 locally only, 3 dormant).",
   "ru": "Инструменты проверки уникальных посвящений Великих монументов. Последний вариант записывает в debug.log строки TE_MONUMENTS: итог по каждой сигнатуре, затем сигнатуру, родителя каждого монумента и то, засчитывается ли он (1 — на национальном уровне, 2 — только на местном, 3 — дремлет)."
+ },
+ "te_debug_monuments.8.flavor": {
+  "en": "Console only.",
+  "ru": "Только для консоли."
  },
  "te_debug_monuments.8.t": {
   "en": "Debug: Unique Dedications",
@@ -23535,6 +23931,10 @@
   "en": "Toggle fast mandates",
   "ru": "Переключить быстрые мандаты"
  },
+ "te_debug_pb.1.m": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_debug_pb.1.t": {
   "en": "Power Bloc Test Console",
   "ru": "Тестовая консоль силового блока"
@@ -23558,6 +23958,10 @@
  "te_debug_resettlement.1.desc": {
   "en": "Test the Settlement Authority. Every option writes TE_RESETTLEMENT: lines to debug.log.",
   "ru": "Проверка Управления по заселению. Каждый вариант записывает в debug.log строки TE_RESETTLEMENT:."
+ },
+ "te_debug_resettlement.1.flavor": {
+  "en": "Console only.",
+  "ru": "Только для консоли."
  },
  "te_debug_resettlement.1.t": {
   "en": "Debug: Internal Resettlement",
@@ -23610,6 +24014,10 @@
  "te_debug_space_race.1.t": {
   "en": "Space Race Test Console",
   "ru": "Тестовая консоль Космической гонки"
+ },
+ "te_debug_space_race.1.z": {
+  "en": "Close",
+  "ru": "Закрыть"
  },
  "te_debug_space_race.2.a": {
   "en": "Log every site's record",
@@ -23907,6 +24315,10 @@
   "en": "Have the strongest other member take a trade dispute with us to the UN (its choice reaches us as a notification)",
   "ru": "Пусть сильнейший другой член передаст торговый спор с нами в ООН (его выбор приходит к нам уведомлением)"
  },
+ "te_debug_un.1.z": {
+  "en": "Close",
+  "ru": "Закрыть"
+ },
  "te_demog_capital.1.a": {
   "en": "Build it in [SCOPE.sState('te_pc_site_1').GetName]",
   "ru": "Построить её в области [SCOPE.sState('te_pc_site_1').GetName]"
@@ -23914,6 +24326,22 @@
  "te_demog_capital.1.a.tt": {
   "en": "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_1').GetName]#! at once",
   "ru": "[concept_capital_state] немедленно переносится в область #v [SCOPE.sState('te_pc_site_1').GetName]#!"
+ },
+ "te_demog_capital.1.b": {
+  "en": "Build it in [SCOPE.sState('te_pc_site_2').GetName]",
+  "ru": "Построить её в области [SCOPE.sState('te_pc_site_2').GetName]"
+ },
+ "te_demog_capital.1.b.tt": {
+  "en": "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_2').GetName]#! at once",
+  "ru": "[concept_capital_state] немедленно переносится в область #v [SCOPE.sState('te_pc_site_2').GetName]#!"
+ },
+ "te_demog_capital.1.c": {
+  "en": "Build it in [SCOPE.sState('te_pc_site_3').GetName]",
+  "ru": "Построить её в области [SCOPE.sState('te_pc_site_3').GetName]"
+ },
+ "te_demog_capital.1.c.tt": {
+  "en": "Our [concept_capital_state] moves to #v [SCOPE.sState('te_pc_site_3').GetName]#! at once",
+  "ru": "[concept_capital_state] немедленно переносится в область #v [SCOPE.sState('te_pc_site_3').GetName]#!"
  },
  "te_demog_capital.1.d": {
   "en": "The planners have marked out the sites where a new capital could be built, each away from our largest city. Wherever we build it, the offices of government and the courts will move there, and with them the clerks, builders and merchants who serve them.",
@@ -23955,6 +24383,10 @@
   "en": "\\\"You are from the census office, so I will give you the whole household. When I started work, my wage fed my mother, my wife and six children, and there was never anything left at the end of the week. My son earns about what I did. He keeps a wife and two children, his mother-in-law lives with her other son, and every month there is money over. He puts it by and shows me the sum. I tell him to buy land with it, or a share in a business, before his children are grown and need it themselves. You can write all of that down.\\\"",
   "ru": "«Раз вы из переписного бюро, я расскажу вам всё про наш дом. Когда я пошёл работать, моей зарплаты хватало на мать, жену и шестерых детей, и к концу недели у нас никогда ничего не оставалось. Мой сын получает примерно столько же, сколько я. Он содержит жену и двоих детей, мать жены живёт у её другого сына, и каждый месяц у него остаются деньги. Он откладывает их и показывает мне сумму. Я говорю ему: купи на них землю или долю в деле, пока дети не выросли и не нуждаются в них сами. Всё это можете записать»."
  },
+ "te_demog_wave.1.t": {
+  "en": "The Demographic Dividend",
+  "ru": "Демографический дивиденд"
+ },
  "te_demog_wave.10.a": {
   "en": "A child for each death: license every birth.",
   "ru": "Ребёнок на каждую смерть: разрешать каждые роды."
@@ -23974,6 +24406,10 @@
  "te_demog_wave.10.f": {
   "en": "\\\"The man from the census office asked me how many children I mean to have, so I will tell you what I told him. My grandmother had nine because she expected to bury four. My mother had two because she expected to bury none. I took the treatment last year, and now I do not expect to bury anyone, myself included, so the question is not the one my mother answered. I told him I would like one child, in a few years. He wrote it down and asked whether my husband agreed, and I said that he did.\\\"",
   "ru": "«Человек из переписного бюро спросил меня, сколько детей я собираюсь иметь, и я скажу вам то же, что сказала ему. У моей бабушки их было девять, потому что она ждала, что похоронит четверых. У матери — двое, потому что она не ждала, что похоронит никого. В прошлом году я прошла лечение, и теперь я не жду, что похороню кого-либо, включая себя, так что вопрос не тот, на который отвечала моя мать. Я сказала ему, что хотела бы одного ребёнка — через несколько лет. Он записал это и спросил, согласен ли мой муж, и я ответила, что согласен»."
+ },
+ "te_demog_wave.10.t": {
+  "en": "The Last Generation?",
+  "ru": "Последнее поколение?"
  },
  "te_demog_wave.2.a": {
   "en": "Homes fit for heroes.",
@@ -23995,6 +24431,10 @@
   "en": "The registrar at the town hall has given up on lunch. By noon the corridor outside her office holds four couples waiting to marry and two fathers waiting to register a birth, one of them still in the uniform he was discharged in. \\\"Name?\\\" she asks him, without looking up. He gives his son's, and then his own, and when she asks for the mother's he stops, laughs, and gives it. She writes all three into the book, blots the page, and calls in the next couple.",
   "ru": "Регистраторша в ратуше махнула рукой на обед. К полудню в коридоре у её кабинета ждут четыре пары, желающие пожениться, и двое отцов, которым нужно зарегистрировать рождение, один из них — всё ещё в форме, в которой его демобилизовали. «Имя?» — спрашивает она его, не поднимая глаз. Он называет имя сына, затем своё, а когда она просит назвать мать, замолкает, смеётся и называет. Она вписывает всех троих в книгу, промокает страницу и вызывает следующую пару."
  },
+ "te_demog_wave.2.t": {
+  "en": "The Baby Boom",
+  "ru": "Бэби-бум"
+ },
  "te_demog_wave.3.a": {
   "en": "Raise a memorial in every town square.",
   "ru": "Воздвигнуть памятник на каждой городской площади."
@@ -24014,6 +24454,10 @@
  "te_demog_wave.3.f": {
   "en": "\\\"They shall grow not old, as we that are left grow old: age shall not weary them, nor the years condemn.\\\"\\n\\n— Laurence Binyon, For the Fallen",
   "ru": "«Не состарятся они, как мы, оставшиеся, стареем: возраст не утомит их, и годы не осудят».\\n\\n— Лоренс Биньон, «Павшим»"
+ },
+ "te_demog_wave.3.t": {
+  "en": "The Lost Generation",
+  "ru": "Потерянное поколение"
  },
  "te_demog_wave.4.a": {
   "en": "People live longer. Let them work longer.",
@@ -24055,6 +24499,10 @@
   "en": "Families have always cared for their own.",
   "ru": "Семьи всегда заботились о своих."
  },
+ "te_demog_wave.4.t": {
+  "en": "The Graying of the Nation",
+  "ru": "Старение нации"
+ },
  "te_demog_wave.5.a": {
   "en": "Public works. Put them to work building the country.",
   "ru": "Общественные работы. Пусть строят страну."
@@ -24078,6 +24526,10 @@
  "te_demog_wave.5.f": {
   "en": "\\\"You have a certificate from the technical school as well, so you know how it goes. I am at the gates of every works in town each morning, and the foreman picks five men out of the crowd.\\\"\\n\\n\\\"I stopped going. My cousin got work through a man he knew, and I don't know anyone. I sit here and read the notices.\\\"\\n\\n\\\"There's a meeting at the hall tonight. They say the government has kept the jobs for its own people, and they want young men to march with them at the end of the week.\\\"\\n\\n\\\"I'll come and listen with you. If what they say makes sense I'll march as well, and if it doesn't I'll be back on this bench on Monday.\\\"",
   "ru": "«У вас тоже есть свидетельство технического училища, так что вы знаете, как это бывает. Я каждое утро стою у ворот каждого завода в городе, а мастер выбирает из толпы пятерых».\\n\\n«Я перестал ходить. Моему двоюродному брату дали работу через знакомого, а у меня знакомых нет. Сижу здесь и читаю объявления».\\n\\n«Сегодня вечером собрание в зале. Говорят, правительство приберегло работу для своих, и они хотят, чтобы молодые шли с ними маршем в конце недели».\\n\\n«Пойду послушаю вместе с тобой. Если то, что они говорят, разумно, пойду и маршем, а если нет, в понедельник вернусь на эту скамейку»."
+ },
+ "te_demog_wave.5.t": {
+  "en": "The Youth Bulge",
+  "ru": "Молодёжный бугор"
  },
  "te_demog_wave.6.a": {
   "en": "Ban prenatal sex selection, and enforce the ban.",
@@ -24103,6 +24555,10 @@
   "en": "The clinic is above a pharmacy, up a narrow staircase. The doctor is young and polite and never says the word. He turns the screen a little toward the mother, and the mother looks at her husband's mother, who came along and has been very quiet all morning. The old woman nods once. On the way down the stairs nobody speaks. At the bottom the husband pays at the desk, and the three of them wait together for the bus home.",
   "ru": "Клиника над аптекой, наверх ведёт узкая лестница. Врач молод и вежлив и ни разу не произносит этого слова. Он слегка поворачивает экран к матери, а мать смотрит на мать мужа, которая пришла вместе с ними и всё утро молчит. Старуха один раз кивает. Спускаясь по лестнице, никто не говорит ни слова. Внизу муж платит у стойки, и все трое вместе ждут автобуса домой."
  },
+ "te_demog_wave.6.t": {
+  "en": "Missing Girls",
+  "ru": "Пропавшие девочки"
+ },
  "te_demog_wave.7.a": {
   "en": "Pay the passage of women who will settle here.",
   "ru": "Оплатить проезд женщинам, которые здесь поселятся."
@@ -24127,6 +24583,10 @@
   "en": "To the district office, from the magistrate of the market town's court. I have sat in this court for nineteen years, and I write because its work has changed. Most of the men brought before me now are under thirty, unmarried, and living in rooms they share with three or four others. The charges are fighting, drunkenness and damage, nearly always on their nights off. Their landlords tell me that most of them send money home and give no trouble during the week. I can fine them, and I do, but I cannot find them wives or give them something to do in the evenings. I ask the office to consider whether the town might provide sports grounds or evening classes, and I enclose the figures from the court book.",
   "ru": "В окружное управление, от судьи суда торгового городка. Я заседаю в этом суде девятнадцать лет и пишу потому, что его работа изменилась. Большинство мужчин, которых ко мне теперь приводят, моложе тридцати, не женаты и живут в комнатах, которые делят с тремя-четырьмя другими. Обвинения — драки, пьянство и порча имущества, почти всегда в их выходные вечера. Их хозяева говорят мне, что большинство из них отправляют деньги домой и в будни не доставляют хлопот. Я могу их оштрафовать, и штрафую, но не могу найти им жён или дать им занятие по вечерам. Прошу управление рассмотреть, не мог бы город предоставить спортивные площадки или вечерние классы, и прилагаю цифры из судебной книги."
  },
+ "te_demog_wave.7.t": {
+  "en": "Bare Branches",
+  "ru": "Голые ветви"
+ },
  "te_demog_wave.8.a": {
   "en": "Subsidize the farms that still work the land.",
   "ru": "Субсидировать хозяйства, которые ещё обрабатывают землю."
@@ -24147,6 +24607,10 @@
   "en": "The schoolteacher's list of the households left in the upper village, made for the district office before the school closes:\\n\\nMyself, who will have no post here after this year. I have been offered a school in the market town and have not yet answered.\\nThe widow at the top of the lane, who is eighty and lives alone. Her son is in the city, and she cannot get down to the market without help.\\nThe brothers who farm the land by the stream. Both are past sixty and have no heirs, and they have let the far fields go back to scrub because there is no one to work them.\\nThe couple in the house by the old mill, whose grandchildren come only in the holidays. They have asked whether anyone will still carry the post up once the school has closed.",
   "ru": "Список школьного учителя о домах, оставшихся в верхней деревне, составленный для окружного управления перед закрытием школы:\\n\\nЯ сам, у кого после этого года здесь не будет места. Мне предложили школу в торговом городке, и я пока не ответил.\\nВдова в конце переулка, ей восемьдесят, она живёт одна. Её сын в городе, и без помощи ей не добраться до рынка.\\nБратья, что ведут хозяйство на земле у ручья. Обоим за шестьдесят, наследников нет, и дальние поля они отдали зарослям, потому что обрабатывать их некому.\\nСупруги в доме у старой мельницы, чьи внуки приезжают только на каникулы. Они спрашивали, будет ли кто-нибудь по-прежнему носить почту наверх, когда школа закроется."
  },
+ "te_demog_wave.8.t": {
+  "en": "The Empty Villages",
+  "ru": "Опустевшие деревни"
+ },
  "te_demog_wave.9.a": {
   "en": "Build new towns beyond the city, and send the newcomers there.",
   "ru": "Построить новые города за пределами города и направлять туда приезжих."
@@ -24166,6 +24630,10 @@
  "te_demog_wave.9.f": {
   "en": "Memorandum to the government, from the city's planning office. Our map of the city was surveyed three years ago and no longer shows its edge. On the eastern side, ground that was market gardens when the survey was made now holds houses built by the people who live in them, with standpipes at the corners and no drains. The new districts are growing faster than we can extend the mains to them. The office can carry the drains and water out to them, or mark a boundary beyond which no building will be allowed, but it cannot do both within its present budget. We ask which the government prefers, and we have begun a new survey in the meantime.",
   "ru": "Меморандум правительству от городского управления планирования. Наша карта города была снята три года назад и больше не показывает его края. С восточной стороны земля, бывшая огородами к моменту съёмки, теперь занята домами, построенными теми, кто в них живёт, с водоразборными колонками на углах и без канализации. Новые районы растут быстрее, чем мы успеваем тянуть к ним магистрали. Управление может подвести к ним канализацию и воду или провести границу, за которой застройка будет запрещена, но не то и другое одновременно при нынешнем бюджете. Просим сообщить, что предпочитает правительство, а пока мы начали новую съёмку."
+ },
+ "te_demog_wave.9.t": {
+  "en": "The Overspill",
+  "ru": "Переполнение"
  },
  "te_fptp_events.1.a": {
   "en": "Whoever tops the poll takes the seat, as before.",
@@ -24318,6 +24786,10 @@
  "te_judiciary_events.21.t": {
   "en": "The Jury Question",
   "ru": "Вопрос о присяжных"
+ },
+ "te_judiciary_events.22.a": {
+  "en": "Every appeal goes to a human judge.",
+  "ru": "Любая апелляция рассматривается судьёй-человеком."
  },
  "te_judiciary_events.22.b": {
   "en": "The machine is more consistent than any judge.",
@@ -24554,6 +25026,10 @@
  "te_judiciary_events.6.a": {
   "en": "Let them march.",
   "ru": "Пусть маршируют."
+ },
+ "te_judiciary_events.6.b": {
+  "en": "Clear the streets.",
+  "ru": "Очистить улицы."
  },
  "te_judiciary_events.6.c": {
   "en": "Promise the judges their tenure.",
@@ -24967,6 +25443,10 @@
   "en": "You keep the peg at a #b worse parity#!: your exchange rate drops by #b half your overvaluation#! and stays that far under theirs. #v Peg Confidence#! returns to #v 50#!, not 100 — a parity that moved once can move again.",
   "ru": "Вы сохраняете привязку по #b худшему паритету#!: ваш обменный курс падает на #b половину вашей переоценки#! и остаётся настолько ниже их курса. #v Доверие к привязке#! возвращается к #v 50#!, а не к 100 — паритет, который однажды сдвинулся, может сдвинуться снова."
  },
+ "te_peg.2.c.tt": {
+  "en": "You keep the peg at a #b worse parity#!: your exchange rate drops by #b half your overvaluation#! and stays that far under theirs. #v Peg Confidence#! returns to #v 50#!, not 100 — a parity that moved once can move again.",
+  "ru": "Вы сохраняете привязку по #b худшему паритету#!: ваш обменный курс падает на #b половину вашей переоценки#! и остаётся настолько ниже их курса. #v Доверие к привязке#! возвращается к #v 50#!, а не к 100 — паритет, который однажды сдвинулся, может сдвинуться снова."
+ },
  "te_peg.2.d": {
   "en": "Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are expensive, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. We can close the border to money leaving, leave the treaty, or change the parity.",
   "ru": "Наша валюта привязана к валюте страны [SCOPE.sCountry('te_peg_anchor_country').GetName], и рынки больше этому не верят. Цены и зарплаты у нас слишком долго росли быстрее, чем у них: при обещанном паритете наши товары дороги, наши резервы утекают, и каждый торговец в столице спрашивает, сколько стоили бы наши деньги, если их отпустить. Собственной ставки, которую можно повысить, у нас нет. Мы можем закрыть границу для вывоза денег, выйти из договора или изменить паритет."
@@ -25146,6 +25626,10 @@
  "treaty_article_events.10.f": {
   "en": "The clerk at the transit hall sat at a table by the door with a ledger and two pens. The people came in the order in which they had been brought, a family at a time, and gave her their names, the place they had come from and the place they had been assigned. Several of them gave the name of their town and then corrected it, because it had already been given a new one. She wrote both. Behind her, volunteers were handing out blankets and bread and showing people to rows of cots, and the next family was already waiting at the table.",
   "ru": "Секретарь в зале транзита сидела за столом у двери с книгой записей и двумя перьями. Люди входили в том порядке, в котором их привезли, по одной семье, и называли ей свои имена, место, откуда они пришли, и место, куда их направили. Некоторые называли свой город и тут же поправлялись, потому что у него уже было новое название. Она записывала оба. За её спиной добровольцы раздавали одеяла и хлеб и провожали людей к рядам коек, а следующая семья уже ждала у стола."
+ },
+ "treaty_article_events.10.t": {
+  "en": "The Uprooted",
+  "ru": "Вырванные с корнем"
  },
  "treaty_article_events.11.a": {
   "en": "Celebrate this diplomatic triumph",
@@ -25687,6 +26171,10 @@
   "en": "\\\"I sell newspapers at the corner opposite the main gate. The delegates used to buy three or four each in the morning. Now most of them walk straight past, and the ones who stop ask me whether the building will still be open next year.\\\"\\n\\n\\\"I interpret in the Assembly hall. Last week I put one speech into three languages, and the hall was half empty for all of them. The delegations that came had sent their juniors.\\\"\\n\\n\\\"My government's instructions are to support the organization in principle and commit to nothing. I have had the same instructions since the spring, and the other delegations tell me theirs say the same.\\\"\\n\\n\\\"I work in the Secretariat's budget office. We have been told to finish the reports already started and to begin no new ones until the members settle what they owe.\\\"",
   "ru": "«Я продаю газеты на углу напротив главных ворот. Раньше делегаты брали у меня по три-четыре утром. Теперь большинство проходят мимо, а те, кто останавливается, спрашивают, будет ли здание открыто в следующем году.»\\n\\n«Я перевожу в зале Ассамблеи. На прошлой неделе я перевёл одну речь на три языка, и зал был наполовину пуст для каждого из них. Делегации, которые пришли, прислали младших сотрудников.»\\n\\n«Инструкции моего правительства — поддерживать организацию в принципе и ни к чему не обязываться. Те же инструкции у меня с весны, и другие делегации говорят, что у них такие же.»\\n\\n«Я работаю в бюджетном отделе секретариата. Нам велели закончить уже начатые отчёты и не начинать новых, пока члены не рассчитаются по долгам.»"
  },
+ "un_events.10.t": {
+  "en": "The United Nations in Crisis",
+  "ru": "Организация Объединённых Наций в кризисе"
+ },
  "un_events.101.a": {
   "en": "We are grateful for this generosity.",
   "ru": "Мы благодарны за эту щедрость."
@@ -26175,6 +26663,10 @@
   "en": "Two delegates were waiting outside the committee room where the chart of the proposed zones hung on the wall.\\n\\n\\\"Two hundred nautical miles from every coast. Draw that around every island on the chart and half the sea our fishing fleets work becomes somebody else's zone.\\\"\\n\\n\\\"Half of it was ours already in all but name, and your fleets fished it anyway. Our coast has been fished out by boats flying every flag on that chart. A zone at least tells us whose boats we may stop.\\\"\\n\\n\\\"And then every quarrel over a boat becomes a quarrel between governments.\\\"\\n\\n\\\"That is what the tribunal is for. I would rather argue with your fleets before judges than at sea, and I expect your government would too. Put your objection in writing and I will take it to the drafting committee.\\\"",
   "ru": "Два делегата ждали у зала комитета, где на стене висела карта предлагаемых зон.\\n\\n«Двести морских миль от каждого берега. Проведите это вокруг каждого острова на карте, и половина моря, где работают наши рыболовные флоты, станет чьей-то чужой зоной.»\\n\\n«Половина её и так была нашей во всём, кроме названия, а ваши флоты всё равно там ловили. Наш берег выловлен лодками под всеми флагами на этой карте. Зона по крайней мере говорит нам, чьи лодки мы можем останавливать.»\\n\\n«А тогда каждая ссора из-за лодки становится ссорой между правительствами.»\\n\\n«Для этого и нужен трибунал. Я лучше поспорю с вашими флотами перед судьями, чем в море, и думаю, ваше правительство тоже. Изложите своё возражение письменно, и я передам его редакционному комитету.»"
  },
+ "un_events.21.t": {
+  "en": "Convention on the Law of the Sea",
+  "ru": "Конвенция по морскому праву"
+ },
  "un_events.22.a": {
   "en": "Propose the Rome Statute to the General Assembly.",
   "ru": "Внести Римский статут на рассмотрение Генеральной Ассамблеи."
@@ -26202,6 +26694,10 @@
  "un_events.22.t": {
   "en": "International Criminal Court",
   "ru": "Международный уголовный суд"
+ },
+ "un_events.23.a": {
+  "en": "Propose the Convention to the General Assembly.",
+  "ru": "Внести Конвенцию на рассмотрение Генеральной Ассамблеи."
  },
  "un_events.23.c": {
   "en": "Our depots are our own business.",
@@ -26311,6 +26807,10 @@
   "en": "Two of our senior diplomats sat over the convener's invitation late into the evening.\\n\\n\\\"Without our signature the other delegations will not sign, and they know it. We could ask for almost anything in the charter.\\\"\\n\\n\\\"We could, and they would remember what we asked while the organization was weak and we were not. A charter we bargained for at their expense is one they will spend the next twenty years trying to rewrite.\\\"\\n\\n\\\"Then we join and ask for nothing, and sit in an Assembly where the smallest state has the same vote as we do.\\\"\\n\\n\\\"Or we stay out, as we are entitled to, and join later on whatever terms they have written by then. I would rather be in the room while the terms are written, and I will say so to the government in the morning.\\\"",
   "ru": "Два наших старших дипломата допоздна сидели над приглашением организатора.\\n\\n«Без нашей подписи другие делегации не подпишут, и они это знают. Мы могли бы потребовать в уставе почти что угодно.»\\n\\n«Могли бы, и они запомнили бы, что мы требовали, пока организация была слаба, а мы нет. Устав, выторгованный за их счёт, они потом двадцать лет будут пытаться переписать.»\\n\\n«Тогда мы вступим и ничего не попросим, и будем сидеть в Ассамблее, где у самого малого государства такой же голос, как у нас.»\\n\\n«Или останемся в стороне, как имеем право, и вступим позже на тех условиях, которые к тому времени будут написаны. Я бы предпочёл быть в комнате, пока пишутся условия, и скажу об этом правительству утром.»"
  },
+ "un_events.31.t": {
+  "en": "A Founding Conference",
+  "ru": "Учредительная конференция"
+ },
  "un_events.32.a": {
   "en": "They will regret this.",
   "ru": "Они об этом пожалеют."
@@ -26403,6 +26903,10 @@
   "en": "We receive @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! at once, and repay #v 110%#! of it over five years as a weekly expense. The conditions hold for as long.",
   "ru": "Мы сразу получаем @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! и возвращаем #v 110%#! этой суммы в течение пяти лет как еженедельный расход. Условия действуют столько же."
  },
+ "un_events.35.b": {
+  "en": "We will weather this alone",
+  "ru": "Мы переживём это сами"
+ },
  "un_events.35.b_tt": {
   "en": "We refuse the facility and face the crisis with what we have.",
   "ru": "Мы отказываемся от кредита и встречаем кризис с тем, что имеем."
@@ -26442,6 +26946,10 @@
  "un_events.36.t": {
   "en": "Conventions Passed in Our Absence",
   "ru": "Конвенции, принятые в наше отсутствие"
+ },
+ "un_events.37.a": {
+  "en": "Propose the Convention to the General Assembly.",
+  "ru": "Внести Конвенцию на рассмотрение Генеральной Ассамблеи."
  },
  "un_events.37.c": {
   "en": "Our nation has one culture.",
@@ -26663,6 +27171,10 @@
   "en": "Two delegates had stayed behind in the reform committee's room after its session.\\n\\n\\\"The permanent seats were handed out when the charter was signed. Half the members in this room had no say in it. Every session we vote on resolutions that one of a few delegations can stop with a word.\\\"\\n\\n\\\"Those few delegations are the ones whose armies and treasuries carry out what the Assembly decides. Take away the veto and you will pass resolutions that nobody with the means to enforce them has agreed to.\\\"\\n\\n\\\"Then they will have to persuade the rest of us, as we have to persuade them.\\\"\\n\\n\\\"My government will not vote for a charter that turns its seat into a formality, and I have told every delegation that asked. Bring me a reform that adds seats and leaves the veto alone, and I will send it home with a recommendation.\\\"",
   "ru": "Два делегата остались в зале комитета по реформе после заседания.\\n\\n«Постоянные места раздали при подписании устава. Половина членов в этом зале не имела к этому отношения. На каждой сессии мы голосуем за резолюции, которые одна из нескольких делегаций может остановить одним словом».\\n\\n«Эти несколько делегаций — те, чьи армии и казна исполняют то, что решает Ассамблея. Уберите вето, и вы будете принимать резолюции, с которыми не согласился никто, кто способен их обеспечить».\\n\\n«Тогда им придётся убеждать остальных, как нам приходится убеждать их».\\n\\n«Моё правительство не проголосует за устав, который превращает его место в формальность, и я сказал это каждой делегации, которая спрашивала. Принесите мне реформу, которая добавляет места и не трогает вето, и я отправлю её домой с рекомендацией»."
  },
+ "un_events.6.t": {
+  "en": "The Charter Has Been Outgrown",
+  "ru": "Устав перерос свои рамки"
+ },
  "un_events.7.a": {
   "en": "Mount a major humanitarian relief effort.",
   "ru": "Развернуть крупную гуманитарную помощь."
@@ -26733,7 +27245,7 @@
  },
  "un_events.9.d": {
   "en": "Delegations at the United Nations are pressing for a convention to protect sites of outstanding cultural and natural heritage, with a UN agency to keep watch over them. Nothing is before the General Assembly yet: we could table it. Its parties would gain [concept_prestige], and those with great monuments more visitors, at the price of slower building at home; and once it stands, carrying off another nation's monuments in war would cost twice the [concept_infamy].",
-  "ru": "Делегации в Организации Объединённых Наций настаивают на конвенции о защите объектов выдающегося культурного и природного наследия под надзором учреждения ООН. Перед Генеральной Ассамблеей пока ничего нет: мы могли бы внести её сами. Её участники получали бы [concept_prestige|l], а те, у кого есть великие памятники, — больше посетителей, ценой более медленного строительства внутри страны; а когда она вступит в силу, вывоз памятников другого народа во время войны обходился бы вдвое дороже в [Concept('concept_infamy','дурной славе')]."
+  "ru": "Делегации в Организации Объединённых Наций настаивают на конвенции о защите объектов выдающегося культурного и природного наследия под надзором учреждения ООН. Перед Генеральной Ассамблеей пока ничего нет: мы могли бы внести её сами. Её участники получали бы [concept_prestige|l], а те, у кого есть великие монументы, — больше посетителей, ценой более медленного строительства внутри страны; а когда она вступит в силу, вывоз памятников другого народа во время войны обходился бы вдвое дороже в [Concept('concept_infamy','дурной славе')]."
  },
  "un_events.9.f": {
   "en": "\\\"I have looked after the old walls for thirty years, and I am glad the delegation from the heritage committee has come to see them. You will have noticed the scaffolding on the east side. That is where the stones began to fall, after the road below was widened. The town would rather have the road than the walls, and I understand why, because people use the road every day and come up to the walls only when there are visitors to show. If the convention lists this place, someone outside the town will have said that it matters, and the town will have to ask before it builds here. I have made a survey of every stone that has moved, and the committee may take a copy with it.\\\"",
@@ -27827,6 +28339,10 @@
   "en": "\\\"The observatory gives us about a day and a half. If we power down the transmitters and turn the panels edge-on, the storm passes through and we bring everything back the day after. If we lose the electronics instead, we are replacing them one launch at a time for the next year.\\\"\\n\\n\\\"And for the whole of that day and a half the collector sends nothing down, and the grid has to find the power somewhere else. The hospitals have generators. Most of the factories do not. The shielding was designed for storms of this size, and the test figures say it holds. I would rather trust the design and keep the power on.\\\"",
   "ru": "«Обсерватория даёт нам около полутора суток. Если отключить передатчики и развернуть панели ребром, буря пройдёт сквозь, а на следующий день мы всё вернём. Если же потеряем электронику, то весь следующий год будем заменять её по одному запуску.»\\n\\n«И все эти полтора суток коллектор ничего не передаёт вниз, и сети придётся искать энергию в другом месте. У больниц есть генераторы. У большинства заводов — нет. Защиту рассчитывали на бури такого размера, и испытания говорят, что она выдержит. Я бы лучше доверился проекту и оставил энергию включённой.»"
  },
+ "wonder_events.14.t": {
+  "en": "Weather from the Sun",
+  "ru": "Погода от Солнца"
+ },
  "wonder_events.15.a": {
   "en": "Access to our technology is access to our strength.",
   "ru": "Доступ к нашей технологии — доступ к нашей силе."
@@ -28103,6 +28619,10 @@
   "en": "\\\"Fear is not friendship. The governments that are polite to us now are counting our warheads and talking among themselves about what to do if we ever use one.\\\"\\n\\n\\\"The ambassador who used to keep us waiting an hour came to our offices himself this morning, ten minutes early, with a draft trade agreement in his case.\\\"\\n\\n\\\"I translate for the foreign delegations. Nobody says the word antimatter in the meetings. They talk about recent developments, and everyone at the table knows what is meant.\\\"\\n\\n\\\"My cousin teaches abroad. She writes that her colleagues there have started asking her about us, whether it is true and whether we would ever use such a thing, and that she answers as well as she can.\\\"",
   "ru": "«Страх — не дружба. Правительства, которые сейчас с нами вежливы, считают наши боеголовки и между собой говорят о том, что делать, если мы когда-нибудь применим хоть одну.»\\n\\n«Посол, который раньше заставлял нас ждать час, сегодня утром сам пришёл в наши кабинеты на десять минут раньше срока, с проектом торгового соглашения в портфеле.»\\n\\n«Я перевожу для иностранных делегаций. На встречах никто не произносит слово „антиматерия“. Говорят о недавних событиях, и все за столом знают, что имеется в виду.»\\n\\n«Моя двоюродная сестра преподаёт за границей. Она пишет, что её тамошние коллеги стали расспрашивать её о нас, правда ли это и применим ли мы когда-нибудь такое, и что она отвечает как может.»"
  },
+ "wonder_events.33.t": {
+  "en": "Antimatter Diplomacy",
+  "ru": "Дипломатия антиматерии"
+ },
  "wonder_events.34.a": {
   "en": "Full transparency. Open the facility to inspectors.",
   "ru": "Полная прозрачность. Открыть установку для инспекторов."
@@ -28227,6 +28747,10 @@
   "en": "We will not yield an inch.",
   "ru": "Мы не уступим ни дюйма."
  },
+ "world_war_events.1.b": {
+  "en": "Open negotiations.",
+  "ru": "Начать переговоры."
+ },
  "world_war_events.1.c": {
   "en": "Issue a counter-ultimatum.",
   "ru": "Выдвинуть встречный ультиматум."
@@ -28306,6 +28830,10 @@
  "world_war_events.100.t": {
   "en": "The Peace Conference",
   "ru": "Мирная конференция"
+ },
+ "world_war_events.101.a": {
+  "en": "Accept the new order.",
+  "ru": "Принять новый порядок."
  },
  "world_war_events.101.b": {
   "en": "We will not govern under their constitution.",
@@ -28422,6 +28950,10 @@
  "world_war_events.11.a": {
   "en": "Put the safety of our cities first.",
   "ru": "Поставить на первое место безопасность наших городов."
+ },
+ "world_war_events.11.b": {
+  "en": "Retaliate in kind.",
+  "ru": "Ответить тем же."
  },
  "world_war_events.11.c": {
   "en": "Focus on the ground war.",

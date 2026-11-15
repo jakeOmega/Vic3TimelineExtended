@@ -347,6 +347,10 @@
   "en": "$building_chromium_mine$ building [concept_throughput]",
   "ru": "$building_chromium_mine$: [concept_throughput]"
  },
+ "building_chromium_mine_throughput_add_desc": {
+  "en": "$building_chromium_mine$ building [concept_throughput]",
+  "ru": "$building_chromium_mine$: [concept_throughput]"
+ },
  "building_coats_ferguslie_mills": {
   "en": "J&P Coats Ferguslie Thread Mills",
   "ru": "Ниточные фабрики J&P Coats в Фергуслии"
@@ -913,7 +917,7 @@
  },
  "building_grand_monument_desc": {
   "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favor of like-minded interest groups while what it honors still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
-  "ru": "Монумент, который правительство воздвигает тому, за что оно стоит: короне, республике, революции, вождю, вере или нации. Он строится как «$building_grand_monument_site$» и завершается торжественным освящением, с [Concept('concept_grandeur','величием')], соответствующим числу построенных уровней. Он придаёт престиж, а также легитимность и расположение единомышленных групп интересов, пока то, чему он посвящён, остаётся. Когда оно падает, следующему правительству придётся решать, что с ним делать. См. вкладку «Великие памятники» окна Timeline Extended."
+  "ru": "Монумент, который правительство воздвигает тому, за что оно стоит: короне, республике, революции, вождю, вере или нации. Он строится как «$building_grand_monument_site$» и завершается торжественным освящением, с [Concept('concept_grandeur','величием')], соответствующим числу построенных уровней. Он придаёт престиж, а также легитимность и расположение единомышленных групп интересов, пока то, чему он посвящён, остаётся. Когда оно падает, следующему правительству придётся решать, что с ним делать. См. вкладку «Великие монументы» окна Timeline Extended."
  },
  "building_grand_monument_site": {
   "en": "Grand Monument (Under Construction)",
@@ -921,13 +925,17 @@
  },
  "building_grand_monument_site_desc": {
   "en": "A Grand Monument being built. Each level adds to the monument it will be; it has no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.",
-  "ru": "Строящийся великий монумент. Каждый уровень добавляет к будущему монументу; пока он не освящён, эффектов у него нет. Освятить его можно с его карточки в обзоре области или на вкладке «Великие памятники», когда здесь больше ничего не строится. Освящение завершает монумент с построенными уровнями."
+  "ru": "Строящийся великий монумент. Каждый уровень добавляет к будущему монументу; пока он не освящён, эффектов у него нет. Освятить его можно с его карточки в обзоре области или на вкладке «Великие монументы», когда здесь больше ничего не строится. Освящение завершает монумент с построенными уровнями."
  },
  "building_graphite_mine": {
   "en": "Graphite Mine",
   "ru": "Графитовая шахта"
  },
  "building_graphite_mine_throughput_add": {
+  "en": "$building_graphite_mine$ building [concept_throughput]",
+  "ru": "$building_graphite_mine$: [concept_throughput]"
+ },
+ "building_graphite_mine_throughput_add_desc": {
   "en": "$building_graphite_mine$ building [concept_throughput]",
   "ru": "$building_graphite_mine$: [concept_throughput]"
  },
@@ -978,6 +986,10 @@
  "building_group_bg_bureaucracy_throughput_add": {
   "en": "Government Administration [concept_throughput] Modifier",
   "ru": "Государственное управление: модификатор [concept_throughput]"
+ },
+ "building_group_bg_bureaucracy_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$bg_bureaucracy$»"
  },
  "building_group_bg_clean_power_construction_efficiency_add": {
   "en": "$bg_clean_power$ Construction Efficiency",
@@ -1031,6 +1043,10 @@
   "en": "[concept_infrastructure_usage] of $bg_power$ buildings",
   "ru": "$bg_power$: [concept_infrastructure_usage]"
  },
+ "building_group_bg_power_infrastructure_usage_mult_desc": {
+  "en": "A bonus or penalty to the [concept_infrastructure_usage] of $bg_power$ buildings",
+  "ru": "Бонус или штраф. $bg_power$: [concept_infrastructure_usage]"
+ },
  "building_group_bg_power_throughput_add": {
   "en": "Power Plant [concept_throughput]",
   "ru": "Электростанции: [concept_throughput]"
@@ -1042,6 +1058,10 @@
  "building_group_bg_ship_construction_construction_efficiency_add": {
   "en": "$bg_ship_construction$ Construction Efficiency",
   "ru": "$bg_ship_construction$: эффективность строительства"
+ },
+ "building_group_bg_ship_construction_construction_efficiency_add_desc": {
+  "en": "An increase or decrease to the weekly [concept_construction] progress for $bg_ship_construction$ buildings",
+  "ru": "Увеличение или снижение еженедельного прогресса [Concept('concept_construction','строительства')] зданий группы «$bg_ship_construction$»"
  },
  "building_group_bg_trade_employee_mult": {
   "en": "Trade Employee Multiplier",
@@ -1055,9 +1075,17 @@
   "en": "Urban Facilities Employee Multiplier",
   "ru": "Городские объекты: множитель работников"
  },
+ "building_group_bg_urban_facilities_employee_mult_desc": {
+  "en": "A percentage change to the number of employees in $bg_urban_facilities$ buildings",
+  "ru": "Процентное изменение числа работников в зданиях группы «$bg_urban_facilities$»"
+ },
  "building_group_te_construction_market_bg_employee_mult": {
   "en": "Construction Site [concept_workforce]",
   "ru": "Стройплощадки: [concept_workforce]"
+ },
+ "building_group_te_construction_market_bg_employee_mult_desc": {
+  "en": "A percentage change to the number of employees in $te_construction_market_bg$ buildings",
+  "ru": "Процентное изменение числа работников в зданиях группы «$te_construction_market_bg$»"
  },
  "building_guinness_st_james_gate_brewery": {
   "en": "Guinness St. James's Gate Brewery",
@@ -1160,6 +1188,10 @@
   "ru": "Шахта промышленных минералов и соли"
  },
  "building_industrial_mineral_salt_mine_throughput_add": {
+  "en": "$building_industrial_mineral_salt_mine$ building [concept_throughput]",
+  "ru": "$building_industrial_mineral_salt_mine$: [concept_throughput]"
+ },
+ "building_industrial_mineral_salt_mine_throughput_add_desc": {
   "en": "$building_industrial_mineral_salt_mine$ building [concept_throughput]",
   "ru": "$building_industrial_mineral_salt_mine$: [concept_throughput]"
  },
@@ -1283,6 +1315,10 @@
   "en": "$building_lithium_mine$ building [concept_throughput]",
   "ru": "$building_lithium_mine$: [concept_throughput]"
  },
+ "building_lithium_mine_throughput_add_desc": {
+  "en": "$building_lithium_mine$ building [concept_throughput]",
+  "ru": "$building_lithium_mine$: [concept_throughput]"
+ },
  "building_lkab_kiruna_mine": {
   "en": "LKAB Kiruna Iron Mine",
   "ru": "Железный рудник LKAB в Кируне"
@@ -1304,6 +1340,10 @@
   "ru": "Марганцевая шахта"
  },
  "building_manganese_mine_throughput_add": {
+  "en": "$building_manganese_mine$ building [concept_throughput]",
+  "ru": "$building_manganese_mine$: [concept_throughput]"
+ },
+ "building_manganese_mine_throughput_add_desc": {
   "en": "$building_manganese_mine$ building [concept_throughput]",
   "ru": "$building_manganese_mine$: [concept_throughput]"
  },
@@ -1483,6 +1523,10 @@
   "en": "$building_nickel_cobalt_mine$ building [concept_throughput]",
   "ru": "$building_nickel_cobalt_mine$: [concept_throughput]"
  },
+ "building_nickel_cobalt_mine_throughput_add_desc": {
+  "en": "$building_nickel_cobalt_mine$ building [concept_throughput]",
+  "ru": "$building_nickel_cobalt_mine$: [concept_throughput]"
+ },
  "building_nintendo_development_center": {
   "en": "Nintendo Development Center",
   "ru": "Центр разработки Nintendo"
@@ -1544,6 +1588,10 @@
   "ru": "Глубоководная шахта"
  },
  "building_ocean_mine_throughput_add": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "ru": "$building_ocean_mine$: [concept_throughput]"
+ },
+ "building_ocean_mine_throughput_add_desc": {
   "en": "$building_ocean_mine$ building [concept_throughput]",
   "ru": "$building_ocean_mine$: [concept_throughput]"
  },
@@ -1655,6 +1703,10 @@
   "en": "$building_phosphate_mine$ building [concept_throughput]",
   "ru": "$building_phosphate_mine$: [concept_throughput]"
  },
+ "building_phosphate_mine_throughput_add_desc": {
+  "en": "$building_phosphate_mine$ building [concept_throughput]",
+  "ru": "$building_phosphate_mine$: [concept_throughput]"
+ },
  "building_pirelli_bicocca_plant": {
   "en": "Pirelli Bicocca Plant",
   "ru": "Завод Pirelli в Бикокке"
@@ -1671,6 +1723,10 @@
   "en": "$building_platinum_group_metals_mine$ building [concept_throughput]",
   "ru": "$building_platinum_group_metals_mine$: [concept_throughput]"
  },
+ "building_platinum_group_metals_mine_throughput_add_desc": {
+  "en": "$building_platinum_group_metals_mine$ building [concept_throughput]",
+  "ru": "$building_platinum_group_metals_mine$: [concept_throughput]"
+ },
  "building_portalis_lyon_silk_house": {
   "en": "Portalis Lyon Silk House",
   "ru": "Шёлковый дом Порталис в Лионе"
@@ -1683,6 +1739,10 @@
   "en": "$building_potash_mine$ building [concept_throughput]",
   "ru": "$building_potash_mine$: [concept_throughput]"
  },
+ "building_potash_mine_throughput_add_desc": {
+  "en": "$building_potash_mine$ building [concept_throughput]",
+  "ru": "$building_potash_mine$: [concept_throughput]"
+ },
  "building_power_bloc_hq": {
   "en": "Power Bloc Headquarters",
   "ru": "Штаб-квартира силового блока"
@@ -1692,6 +1752,10 @@
   "ru": "Шахта драгоценных и малых цветных металлов"
  },
  "building_precious_minor_base_metal_mine_throughput_add": {
+  "en": "$building_precious_minor_base_metal_mine$ building [concept_throughput]",
+  "ru": "$building_precious_minor_base_metal_mine$: [concept_throughput]"
+ },
+ "building_precious_minor_base_metal_mine_throughput_add_desc": {
   "en": "$building_precious_minor_base_metal_mine$ building [concept_throughput]",
   "ru": "$building_precious_minor_base_metal_mine$: [concept_throughput]"
  },
@@ -1736,6 +1800,10 @@
   "ru": "Шахта редкоземельных металлов"
  },
  "building_rare_earth_metals_mine_throughput_add": {
+  "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
+  "ru": "$building_rare_earth_metals_mine$: [concept_throughput]"
+ },
+ "building_rare_earth_metals_mine_throughput_add_desc": {
   "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
   "ru": "$building_rare_earth_metals_mine$: [concept_throughput]"
  },
@@ -2007,6 +2075,10 @@
   "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "ru": "Свободный слот солнечного приёмника: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! свободно по стране (уровни в состоянии «[concept_under_construction|l]» считаются занятыми)"
  },
+ "building_solar_receiver_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_solar_receiver$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$building_solar_receiver$»"
+ },
  "building_sony_pictures_studios": {
   "en": "Sony Pictures Studios",
   "ru": "Студии Sony Pictures"
@@ -2027,9 +2099,17 @@
   "en": "Space Elevator Construction Site",
   "ru": "Космический лифт: стройплощадка"
  },
+ "building_space_elevator_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_elevator$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$building_space_elevator$»"
+ },
  "building_space_mine": {
   "en": "Extraplanetary Base",
   "ru": "Внепланетная база"
+ },
+ "building_space_mine_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_mine$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$building_space_mine$»"
  },
  "building_space_program": {
   "en": "Space Program",
@@ -2055,6 +2135,10 @@
   "en": "$building_specialty_alloy_metal_mine$ building [concept_throughput]",
   "ru": "$building_specialty_alloy_metal_mine$: [concept_throughput]"
  },
+ "building_specialty_alloy_metal_mine_throughput_add_desc": {
+  "en": "$building_specialty_alloy_metal_mine$ building [concept_throughput]",
+  "ru": "$building_specialty_alloy_metal_mine$: [concept_throughput]"
+ },
  "building_sr_site_amalthea": {
   "en": "$sr_site_name_amalthea$ Colony",
   "ru": "Колония: $sr_site_name_amalthea$"
@@ -2067,17 +2151,33 @@
   "en": "$sr_site_name_arcadia_planitia$ Colony",
   "ru": "Колония: $sr_site_name_arcadia_planitia$"
  },
+ "building_sr_site_arcadia_planitia_desc": {
+  "en": "The colony on $sr_site_name_arcadia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_arcadia_planitia$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_ariel": {
   "en": "$sr_site_name_ariel$ Colony",
   "ru": "Колония: $sr_site_name_ariel$"
+ },
+ "building_sr_site_ariel_desc": {
+  "en": "The colony on $sr_site_name_ariel$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_ariel$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_callisto": {
   "en": "$sr_site_name_callisto$ Colony",
   "ru": "Колония: $sr_site_name_callisto$"
  },
+ "building_sr_site_callisto_desc": {
+  "en": "The colony on $sr_site_name_callisto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_callisto$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_ceres": {
   "en": "$sr_site_name_ceres$ Colony",
   "ru": "Колония: $sr_site_name_ceres$"
+ },
+ "building_sr_site_ceres_desc": {
+  "en": "The colony on $sr_site_name_ceres$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_ceres$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_daedalus": {
   "en": "$sr_site_name_daedalus$ Colony",
@@ -2091,137 +2191,273 @@
   "en": "$sr_site_name_enceladus$ Colony",
   "ru": "Колония: $sr_site_name_enceladus$"
  },
+ "building_sr_site_enceladus_desc": {
+  "en": "The colony on $sr_site_name_enceladus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_enceladus$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_eris": {
   "en": "$sr_site_name_eris$ Colony",
   "ru": "Колония: $sr_site_name_eris$"
+ },
+ "building_sr_site_eris_desc": {
+  "en": "The colony on $sr_site_name_eris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_eris$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_europa": {
   "en": "$sr_site_name_europa$ Colony",
   "ru": "Колония: $sr_site_name_europa$"
  },
+ "building_sr_site_europa_desc": {
+  "en": "The colony on $sr_site_name_europa$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_europa$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_ganymede": {
   "en": "$sr_site_name_ganymede$ Colony",
   "ru": "Колония: $sr_site_name_ganymede$"
+ },
+ "building_sr_site_ganymede_desc": {
+  "en": "The colony on $sr_site_name_ganymede$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_ganymede$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_haumea": {
   "en": "$sr_site_name_haumea$ Colony",
   "ru": "Колония: $sr_site_name_haumea$"
  },
+ "building_sr_site_haumea_desc": {
+  "en": "The colony on $sr_site_name_haumea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_haumea$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_hellas_planitia": {
   "en": "$sr_site_name_hellas_planitia$ Colony",
   "ru": "Колония: $sr_site_name_hellas_planitia$"
+ },
+ "building_sr_site_hellas_planitia_desc": {
+  "en": "The colony on $sr_site_name_hellas_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_hellas_planitia$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_himalia": {
   "en": "$sr_site_name_himalia$ Colony",
   "ru": "Колония: $sr_site_name_himalia$"
  },
+ "building_sr_site_himalia_desc": {
+  "en": "The colony on $sr_site_name_himalia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_himalia$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_hygiea": {
   "en": "$sr_site_name_hygiea$ Colony",
   "ru": "Колония: $sr_site_name_hygiea$"
+ },
+ "building_sr_site_hygiea_desc": {
+  "en": "The colony on $sr_site_name_hygiea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_hygiea$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_iapetus": {
   "en": "$sr_site_name_iapetus$ Colony",
   "ru": "Колония: $sr_site_name_iapetus$"
  },
+ "building_sr_site_iapetus_desc": {
+  "en": "The colony on $sr_site_name_iapetus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_iapetus$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_imbrium": {
   "en": "$sr_site_name_imbrium$ Colony",
   "ru": "Колония: $sr_site_name_imbrium$"
+ },
+ "building_sr_site_imbrium_desc": {
+  "en": "The colony at $sr_site_name_imbrium$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_imbrium$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_io": {
   "en": "$sr_site_name_io$ Colony",
   "ru": "Колония: $sr_site_name_io$"
  },
+ "building_sr_site_io_desc": {
+  "en": "The colony on $sr_site_name_io$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_io$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_makemake": {
   "en": "$sr_site_name_makemake$ Colony",
   "ru": "Колония: $sr_site_name_makemake$"
+ },
+ "building_sr_site_makemake_desc": {
+  "en": "The colony on $sr_site_name_makemake$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_makemake$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_marius_hills": {
   "en": "$sr_site_name_marius_hills$ Colony",
   "ru": "Колония: $sr_site_name_marius_hills$"
  },
+ "building_sr_site_marius_hills_desc": {
+  "en": "The colony at $sr_site_name_marius_hills$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_marius_hills$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_mercury": {
   "en": "$sr_site_name_mercury$ Colony",
   "ru": "Колония: $sr_site_name_mercury$"
+ },
+ "building_sr_site_mercury_desc": {
+  "en": "The colony on $sr_site_name_mercury$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_mercury$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_mimas": {
   "en": "$sr_site_name_mimas$ Colony",
   "ru": "Колония: $sr_site_name_mimas$"
  },
+ "building_sr_site_mimas_desc": {
+  "en": "The colony on $sr_site_name_mimas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_mimas$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_miranda": {
   "en": "$sr_site_name_miranda$ Colony",
   "ru": "Колония: $sr_site_name_miranda$"
+ },
+ "building_sr_site_miranda_desc": {
+  "en": "The colony on $sr_site_name_miranda$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_miranda$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_oberon": {
   "en": "$sr_site_name_oberon$ Colony",
   "ru": "Колония: $sr_site_name_oberon$"
  },
+ "building_sr_site_oberon_desc": {
+  "en": "The colony on $sr_site_name_oberon$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_oberon$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_olympus_mons": {
   "en": "$sr_site_name_olympus_mons$ Colony",
   "ru": "Колония: $sr_site_name_olympus_mons$"
+ },
+ "building_sr_site_olympus_mons_desc": {
+  "en": "The colony on $sr_site_name_olympus_mons$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_olympus_mons$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_pallas": {
   "en": "$sr_site_name_pallas$ Colony",
   "ru": "Колония: $sr_site_name_pallas$"
  },
+ "building_sr_site_pallas_desc": {
+  "en": "The colony on $sr_site_name_pallas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_pallas$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_peary": {
   "en": "$sr_site_name_peary$ Colony",
   "ru": "Колония: $sr_site_name_peary$"
+ },
+ "building_sr_site_peary_desc": {
+  "en": "The colony at $sr_site_name_peary$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_peary$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_pluto": {
   "en": "$sr_site_name_pluto$ Colony",
   "ru": "Колония: $sr_site_name_pluto$"
  },
+ "building_sr_site_pluto_desc": {
+  "en": "The colony on $sr_site_name_pluto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_pluto$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_proteus": {
   "en": "$sr_site_name_proteus$ Colony",
   "ru": "Колония: $sr_site_name_proteus$"
+ },
+ "building_sr_site_proteus_desc": {
+  "en": "The colony on $sr_site_name_proteus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_proteus$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_psyche": {
   "en": "$sr_site_name_psyche$ Colony",
   "ru": "Колония: $sr_site_name_psyche$"
  },
+ "building_sr_site_psyche_desc": {
+  "en": "The colony on $sr_site_name_psyche$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_psyche$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_rhea": {
   "en": "$sr_site_name_rhea$ Colony",
   "ru": "Колония: $sr_site_name_rhea$"
+ },
+ "building_sr_site_rhea_desc": {
+  "en": "The colony on $sr_site_name_rhea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_rhea$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_sedna": {
   "en": "$sr_site_name_sedna$ Colony",
   "ru": "Колония: $sr_site_name_sedna$"
  },
+ "building_sr_site_sedna_desc": {
+  "en": "The colony on $sr_site_name_sedna$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_sedna$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_shackleton": {
   "en": "$sr_site_name_shackleton$ Colony",
   "ru": "Колония: $sr_site_name_shackleton$"
+ },
+ "building_sr_site_shackleton_desc": {
+  "en": "The colony at $sr_site_name_shackleton$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_shackleton$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_titan": {
   "en": "$sr_site_name_titan$ Colony",
   "ru": "Колония: $sr_site_name_titan$"
  },
+ "building_sr_site_titan_desc": {
+  "en": "The colony on $sr_site_name_titan$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_titan$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_titania": {
   "en": "$sr_site_name_titania$ Colony",
   "ru": "Колония: $sr_site_name_titania$"
+ },
+ "building_sr_site_titania_desc": {
+  "en": "The colony on $sr_site_name_titania$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_titania$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_tranquility": {
   "en": "$sr_site_name_tranquility$ Colony",
   "ru": "Колония: $sr_site_name_tranquility$"
  },
+ "building_sr_site_tranquility_desc": {
+  "en": "The colony at $sr_site_name_tranquility$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_tranquility$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_triton": {
   "en": "$sr_site_name_triton$ Colony",
   "ru": "Колония: $sr_site_name_triton$"
+ },
+ "building_sr_site_triton_desc": {
+  "en": "The colony on $sr_site_name_triton$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_triton$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_utopia_planitia": {
   "en": "$sr_site_name_utopia_planitia$ Colony",
   "ru": "Колония: $sr_site_name_utopia_planitia$"
  },
+ "building_sr_site_utopia_planitia_desc": {
+  "en": "The colony on $sr_site_name_utopia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_utopia_planitia$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_valles_marineris": {
   "en": "$sr_site_name_valles_marineris$ Colony",
   "ru": "Колония: $sr_site_name_valles_marineris$"
+ },
+ "building_sr_site_valles_marineris_desc": {
+  "en": "The colony on $sr_site_name_valles_marineris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_valles_marineris$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_venus": {
   "en": "$sr_site_name_venus$ Colony",
   "ru": "Колония: $sr_site_name_venus$"
  },
+ "building_sr_site_venus_desc": {
+  "en": "The colony on $sr_site_name_venus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_venus$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
+ },
  "building_sr_site_vesta": {
   "en": "$sr_site_name_vesta$ Colony",
   "ru": "Колония: $sr_site_name_vesta$"
+ },
+ "building_sr_site_vesta_desc": {
+  "en": "The colony on $sr_site_name_vesta$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_vesta$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_standard_oil_refinery": {
   "en": "Standard Oil Refinery",
@@ -2303,6 +2539,10 @@
   "en": "Beverage Concentrates Plant",
   "ru": "Завод концентратов напитков"
  },
+ "building_synthetics_plant_drinks_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_drinks$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_drinks$»"
+ },
  "building_synthetics_plant_fruit": {
   "en": "Cultured Produce Facility",
   "ru": "Предприятие культивируемых продуктов"
@@ -2310,6 +2550,10 @@
  "building_synthetics_plant_meat": {
   "en": "Cultured Meat Plant",
   "ru": "Завод культивируемого мяса"
+ },
+ "building_synthetics_plant_meat_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_meat$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_meat$»"
  },
  "building_synthetics_plant_oil": {
   "en": "Synthetic Fuel Works",
@@ -2326,6 +2570,10 @@
  "building_synthetics_plant_opium": {
   "en": "Pharmaceutical Industries",
   "ru": "Фармацевтическая промышленность"
+ },
+ "building_synthetics_plant_opium_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_opium$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_opium$»"
  },
  "building_synthetics_plant_rubber": {
   "en": "Synthetic Rubber Works",
@@ -2347,9 +2595,17 @@
   "en": "$building_synthetics_plant_silk$ building [concept_throughput]",
   "ru": "$building_synthetics_plant_silk$: [concept_throughput]"
  },
+ "building_synthetics_plant_silk_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_silk$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_silk$»"
+ },
  "building_synthetics_plant_sugar": {
   "en": "Artificial Sweeteners Plant",
   "ru": "Завод искусственных подсластителей"
+ },
+ "building_synthetics_plant_sugar_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_sugar$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_sugar$»"
  },
  "building_synthetics_plant_wood": {
   "en": "Phenolic Resin Panels Plant",
@@ -2403,7 +2659,15 @@
   "en": "Antimatter Facility Progress",
   "ru": "Хранилище антиматерии: прогресс"
  },
+ "building_total_antimatter_facility_progress_desc": {
+  "en": "[concept_antimatter_facility] Progress",
+  "ru": "[concept_antimatter_facility]: прогресс"
+ },
  "building_total_consciousness_network_progress": {
+  "en": "Consciousness Network Progress",
+  "ru": "Сеть сознания: прогресс"
+ },
+ "building_total_consciousness_network_progress_desc": {
   "en": "Consciousness Network Progress",
   "ru": "Сеть сознания: прогресс"
  },
@@ -2411,7 +2675,15 @@
   "en": "Mind Upload Nexus Progress",
   "ru": "Узел загрузки сознания: прогресс"
  },
+ "building_total_mind_upload_nexus_progress_desc": {
+  "en": "Mind Upload Nexus Progress",
+  "ru": "Узел загрузки сознания: прогресс"
+ },
  "building_total_nanofabrication_center_progress": {
+  "en": "Nanofabrication Center Progress",
+  "ru": "Центр нанопроизводства: прогресс"
+ },
+ "building_total_nanofabrication_center_progress_desc": {
   "en": "Nanofabrication Center Progress",
   "ru": "Центр нанопроизводства: прогресс"
  },
@@ -2419,11 +2691,23 @@
   "en": "Orbital Battlestation Progress",
   "ru": "Орбитальная боевая станция: прогресс"
  },
+ "building_total_orbital_battlestation_progress_desc": {
+  "en": "Orbital Battlestation Progress",
+  "ru": "Орбитальная боевая станция: прогресс"
+ },
  "building_total_solar_collector_progress": {
   "en": "Solar Collector Progress",
   "ru": "Солнечный коллектор: прогресс"
  },
+ "building_total_solar_collector_progress_desc": {
+  "en": "Solar Collector Progress",
+  "ru": "Солнечный коллектор: прогресс"
+ },
  "building_total_space_elevator_progress": {
+  "en": "Space Elevator Progress",
+  "ru": "Космический лифт: прогресс"
+ },
+ "building_total_space_elevator_progress_desc": {
   "en": "Space Elevator Progress",
   "ru": "Космический лифт: прогресс"
  },

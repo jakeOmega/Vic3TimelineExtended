@@ -3,9 +3,17 @@
   "en": "Peaceful Integration",
   "ru": "Мирная интеграция"
  },
+ "annex_subject_peaceful_action_name": {
+  "en": "Peaceful Integration",
+  "ru": "Мирная интеграция"
+ },
  "annex_subject_peaceful_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated [TARGET_COUNTRY.GetName].",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] мирно интегрировала страну [TARGET_COUNTRY.GetName]."
+ },
+ "annex_subject_peaceful_action_notification_name": {
+  "en": "Peaceful Integration",
+  "ru": "Мирная интеграция"
  },
  "annex_subject_peaceful_action_propose_name": {
   "en": "Propose Peaceful Integration",
@@ -171,6 +179,10 @@
   "en": "End Diplomatic Alignment",
   "ru": "Прекратить дипломатическое согласование"
  },
+ "diplomatic_alignment_action_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
  "diplomatic_alignment_action_notification_break_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has ended their alignment of [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] прекратила согласование внешней политики страны [TARGET_COUNTRY.GetName] со своей собственной."
@@ -182,6 +194,14 @@
  "diplomatic_alignment_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has aligned [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] согласовала внешнюю политику страны [TARGET_COUNTRY.GetName] со своей собственной."
+ },
+ "diplomatic_alignment_action_notification_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
+ "diplomatic_alignment_action_propose_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
  },
  "diplomatic_alignment_desc": {
   "en": "Diplomatic Alignment is a [concept_diplomatic_action] that allows a country to influence the foreign policy of another country.",
@@ -251,9 +271,17 @@
   "en": "Foreign Affairs Ministry: Diplomacy Advance",
   "ru": "Министерство иностранных дел: продвижение дипломатии"
  },
+ "ministry_fa_diplomacy_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
  "ministry_fa_diplomacy_cautious": {
   "en": "Foreign Affairs Ministry: Diplomacy Cautious Advance",
   "ru": "Министерство иностранных дел: осторожное продвижение дипломатии"
+ },
+ "ministry_fa_diplomacy_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
  },
  "ministry_fa_diplomacy_stall": {
   "en": "Foreign Affairs Ministry: Diplomacy Stall",
@@ -304,6 +332,14 @@
   "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может использовать [concept_diplomatic_action|l] «Дипломатическое согласование», чтобы согласовать внешнюю политику [Concept('concept_country','страны')] с политикой [Concept('concept_power_bloc','силового блока')]."
  },
  "principle_diplomacy_1_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
+ },
+ "principle_diplomacy_2_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
+ },
+ "principle_diplomacy_3_desc": {
   "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
   "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
  },
@@ -503,9 +539,17 @@
   "en": "[TARGET_COUNTRY.GetName] will not pledge their vote against the resolution.",
   "ru": "Страна [TARGET_COUNTRY.GetName] не обещает свой голос против резолюции."
  },
+ "un_secure_commitment_against_action_proposal_declined_name": {
+  "en": "Our approach was refused",
+  "ru": "Нам отказали"
+ },
  "un_secure_commitment_against_action_proposal_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] asks us to vote against the resolution before the [concept_un_general_assembly].",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] просит нас проголосовать против резолюции в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]."
+ },
+ "un_secure_commitment_against_action_proposal_notification_name": {
+  "en": "A request for our vote at the United Nations",
+  "ru": "Просьба о нашем голосе в Организации Объединённых Наций"
  },
  "voluntary_union_proposal_accepted_desc": {
   "en": "[TARGET_COUNTRY.GetName] has accepted our proposal of voluntary union.",

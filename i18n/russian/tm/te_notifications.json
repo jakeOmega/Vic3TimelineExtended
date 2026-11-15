@@ -1935,6 +1935,22 @@
   "en": "$building_coal_mine$ Retired",
   "ru": "Закрыто: $building_coal_mine$"
  },
+ "notification_rt_oil_retired_notice_desc": {
+  "en": "Our retirement program has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "ru": "Наша программа вывода из эксплуатации закрыла здание $building_oil_rig$ в области [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! ур., из казны выплачена компенсация: @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#!."
+ },
+ "notification_rt_oil_retired_notice_name": {
+  "en": "$building_oil_rig$ Retired",
+  "ru": "Закрыто: $building_oil_rig$"
+ },
+ "notification_rt_power_retired_notice_desc": {
+  "en": "Our retirement program has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "ru": "Наша программа вывода из эксплуатации закрыла здание $building_power_plant$ в области [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! ур., из казны выплачена компенсация: @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#!."
+ },
+ "notification_rt_power_retired_notice_name": {
+  "en": "$building_power_plant$ Retired",
+  "ru": "Закрыто: $building_power_plant$"
+ },
  "notification_sr_earth_hostile_notice_desc": {
   "en": "A fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName], a power at war with us, is on its way to Earth. The overview's Hostile Fleet cell shows when the first lands, and what is bound for Earth against what we have there.",
   "ru": "Флот страны [SCOPE.sCountry('sr_earth_alert_power').GetName], державы, воюющей с нами, направляется к Земле. Ячейка «Враждебный флот» в обзоре показывает, когда прибудет первый, и сколько кораблей направляется к Земле против того, что есть у нас."
@@ -2119,17 +2135,33 @@
   "en": "The $te_seabed_basin_arctic$ Ocean Is Fully Licensed",
   "ru": "$te_seabed_basin_arctic$ океан полностью лицензирован"
  },
+ "notification_te_seabed_basin_full_notice_atlantic_desc": {
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_atlantic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Бассейн ($te_seabed_basin_atlantic$ океан): каждая [concept_seabed_licence|l] здесь занята одним из уровней здания $building_ocean_mine$, построенным или стоящим в очереди. Ни у кого не остаётся здесь [Concept('concept_seabed_claim','претензии на морское дно')], пока какой-нибудь уровень не будет уменьшен или уничтожен; наше новое здание $building_ocean_mine$ на его берегах заберёт лицензию из другого бассейна, где у нас есть претензии, с пониженной пропускной способностью. См. вкладку «Морское дно» окна $te_systems_window_title$."
+ },
  "notification_te_seabed_basin_full_notice_atlantic_name": {
   "en": "The $te_seabed_basin_atlantic$ Ocean Is Fully Licensed",
   "ru": "$te_seabed_basin_atlantic$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_indian_desc": {
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_indian$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Бассейн ($te_seabed_basin_indian$ океан): каждая [concept_seabed_licence|l] здесь занята одним из уровней здания $building_ocean_mine$, построенным или стоящим в очереди. Ни у кого не остаётся здесь [Concept('concept_seabed_claim','претензии на морское дно')], пока какой-нибудь уровень не будет уменьшен или уничтожен; наше новое здание $building_ocean_mine$ на его берегах заберёт лицензию из другого бассейна, где у нас есть претензии, с пониженной пропускной способностью. См. вкладку «Морское дно» окна $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_indian_name": {
   "en": "The $te_seabed_basin_indian$ Ocean Is Fully Licensed",
   "ru": "$te_seabed_basin_indian$ океан полностью лицензирован"
  },
+ "notification_te_seabed_basin_full_notice_pacific_desc": {
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_pacific$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Бассейн ($te_seabed_basin_pacific$ океан): каждая [concept_seabed_licence|l] здесь занята одним из уровней здания $building_ocean_mine$, построенным или стоящим в очереди. Ни у кого не остаётся здесь [Concept('concept_seabed_claim','претензии на морское дно')], пока какой-нибудь уровень не будет уменьшен или уничтожен; наше новое здание $building_ocean_mine$ на его берегах заберёт лицензию из другого бассейна, где у нас есть претензии, с пониженной пропускной способностью. См. вкладку «Морское дно» окна $te_systems_window_title$."
+ },
  "notification_te_seabed_basin_full_notice_pacific_name": {
   "en": "The $te_seabed_basin_pacific$ Ocean Is Fully Licensed",
   "ru": "$te_seabed_basin_pacific$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_southern_desc": {
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_southern$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Бассейн ($te_seabed_basin_southern$ океан): каждая [concept_seabed_licence|l] здесь занята одним из уровней здания $building_ocean_mine$, построенным или стоящим в очереди. Ни у кого не остаётся здесь [Concept('concept_seabed_claim','претензии на морское дно')], пока какой-нибудь уровень не будет уменьшен или уничтожен; наше новое здание $building_ocean_mine$ на его берегах заберёт лицензию из другого бассейна, где у нас есть претензии, с пониженной пропускной способностью. См. вкладку «Морское дно» окна $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_southern_name": {
   "en": "The $te_seabed_basin_southern$ Ocean Is Fully Licensed",
@@ -2143,17 +2175,33 @@
   "en": "A New Claimant in the $te_seabed_basin_arctic$ Ocean",
   "ru": "Новый претендент: $te_seabed_basin_arctic$ океан"
  },
+ "notification_te_seabed_new_claimant_notice_atlantic_desc": {
+  "en": "[SCOPE.sCountry('te_seabed_newcomer').GetName] has won its first share of the $te_seabed_basin_atlantic$ Ocean's [concept_seabed_licence]s. The basin's pool is fixed: a new share there comes out of the others', ours among them. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Страна [SCOPE.sCountry('te_seabed_newcomer').GetName] получила свою первую долю [Concept('concept_seabed_licence','лицензий на морское дно')] бассейна ($te_seabed_basin_atlantic$ океан). Пул бассейна фиксирован: новая доля здесь выделяется за счёт долей других, в том числе нашей. См. вкладку «Морское дно» окна $te_systems_window_title$."
+ },
  "notification_te_seabed_new_claimant_notice_atlantic_name": {
   "en": "A New Claimant in the $te_seabed_basin_atlantic$ Ocean",
   "ru": "Новый претендент: $te_seabed_basin_atlantic$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_indian_desc": {
+  "en": "[SCOPE.sCountry('te_seabed_newcomer').GetName] has won its first share of the $te_seabed_basin_indian$ Ocean's [concept_seabed_licence]s. The basin's pool is fixed: a new share there comes out of the others', ours among them. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Страна [SCOPE.sCountry('te_seabed_newcomer').GetName] получила свою первую долю [Concept('concept_seabed_licence','лицензий на морское дно')] бассейна ($te_seabed_basin_indian$ океан). Пул бассейна фиксирован: новая доля здесь выделяется за счёт долей других, в том числе нашей. См. вкладку «Морское дно» окна $te_systems_window_title$."
  },
  "notification_te_seabed_new_claimant_notice_indian_name": {
   "en": "A New Claimant in the $te_seabed_basin_indian$ Ocean",
   "ru": "Новый претендент: $te_seabed_basin_indian$ океан"
  },
+ "notification_te_seabed_new_claimant_notice_pacific_desc": {
+  "en": "[SCOPE.sCountry('te_seabed_newcomer').GetName] has won its first share of the $te_seabed_basin_pacific$ Ocean's [concept_seabed_licence]s. The basin's pool is fixed: a new share there comes out of the others', ours among them. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Страна [SCOPE.sCountry('te_seabed_newcomer').GetName] получила свою первую долю [Concept('concept_seabed_licence','лицензий на морское дно')] бассейна ($te_seabed_basin_pacific$ океан). Пул бассейна фиксирован: новая доля здесь выделяется за счёт долей других, в том числе нашей. См. вкладку «Морское дно» окна $te_systems_window_title$."
+ },
  "notification_te_seabed_new_claimant_notice_pacific_name": {
   "en": "A New Claimant in the $te_seabed_basin_pacific$ Ocean",
   "ru": "Новый претендент: $te_seabed_basin_pacific$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_southern_desc": {
+  "en": "[SCOPE.sCountry('te_seabed_newcomer').GetName] has won its first share of the $te_seabed_basin_southern$ Ocean's [concept_seabed_licence]s. The basin's pool is fixed: a new share there comes out of the others', ours among them. See the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "Страна [SCOPE.sCountry('te_seabed_newcomer').GetName] получила свою первую долю [Concept('concept_seabed_licence','лицензий на морское дно')] бассейна ($te_seabed_basin_southern$ океан). Пул бассейна фиксирован: новая доля здесь выделяется за счёт долей других, в том числе нашей. См. вкладку «Морское дно» окна $te_systems_window_title$."
  },
  "notification_te_seabed_new_claimant_notice_southern_name": {
   "en": "A New Claimant in the $te_seabed_basin_southern$ Ocean",
@@ -2415,6 +2463,10 @@
   "en": "A UN Peacekeeping Mission Fails",
   "ru": "Миротворческая миссия ООН провалена"
  },
+ "notification_un_mission_peacekeeping_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
+  "ru": "Миссия ООН в области [SCOPE.sState('un_msn_state_done').GetName] (тип миссии: [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')]) выполнила свою работу. Счёт результативности Ассамблеи растёт, а страны, которые в ней служили, получают за это почести."
+ },
  "notification_un_mission_peacekeeping_succeeded_notice_name": {
   "en": "A UN Peacekeeping Mission Accomplished",
   "ru": "Миротворческая миссия ООН выполнена"
@@ -2434,6 +2486,10 @@
  "notification_un_mission_stabilisation_failed_notice_name": {
   "en": "A UN Stabilization Mission Fails",
   "ru": "Стабилизационная миссия ООН провалена"
+ },
+ "notification_un_mission_stabilisation_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilization mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
+  "ru": "Миссия ООН в области [SCOPE.sState('un_msn_state_done').GetName] (тип миссии: [Concept('concept_un_mission_stabilisation', 'stabilization mission')]) выполнила свою работу. Счёт результативности Ассамблеи растёт, а страны, которые в ней служили, получают за это почести."
  },
  "notification_un_mission_stabilisation_succeeded_notice_name": {
   "en": "A UN Stabilization Mission Accomplished",
@@ -2514,6 +2570,10 @@
  "notification_violence_against_minorities_desc": {
   "en": "Violence has erupted against minorities in [SCOPE.GetRootScope.GetState.GetName]. Some have died and many have fled for [SCOPE.sState('migration_target').GetName].",
   "ru": "В области [SCOPE.GetRootScope.GetState.GetName] вспыхнуло насилие против меньшинств. Есть погибшие, многие бежали в область [SCOPE.sState('migration_target').GetName]."
+ },
+ "notification_violence_against_minorities_name": {
+  "en": "Violence Against Minorities",
+  "ru": "Насилие над меньшинствами"
  },
  "notification_wonder_construction_complete_antimatter_facility_desc": {
   "en": "Construction of the Antimatter Containment Facility has been completed in [SCOPE.sState('wonder_complete_state').GetName].",

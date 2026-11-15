@@ -31,11 +31,35 @@
   "en": "BAE Systems",
   "ru": "BAE Systems"
  },
+ "company_basic_advanced_materials": {
+  "en": "Advanced Materials",
+  "ru": "Передовые материалы"
+ },
+ "company_basic_advanced_materials_dynamic_name_tag_plural": {
+  "en": "Advanced Materials",
+  "ru": "Передовые материалы"
+ },
+ "company_basic_advanced_materials_dynamic_name_tag_singular": {
+  "en": "Advanced Materials",
+  "ru": "Передовые материалы"
+ },
  "company_basic_aerospace": {
   "en": "Aerospace",
   "ru": "Аэрокосмическая отрасль"
  },
+ "company_basic_aerospace_dynamic_name_tag_plural": {
+  "en": "Aerospace",
+  "ru": "Аэрокосмическая отрасль"
+ },
+ "company_basic_aerospace_dynamic_name_tag_singular": {
+  "en": "Aerospace",
+  "ru": "Аэрокосмическая отрасль"
+ },
  "company_basic_autarky": {
+  "en": "Synthetic Fuels & Rubber",
+  "ru": "Синтетическое топливо и каучук"
+ },
+ "company_basic_autarky_dynamic_name_tag_plural": {
   "en": "Synthetic Fuels & Rubber",
   "ru": "Синтетическое топливо и каучук"
  },
@@ -47,7 +71,23 @@
   "en": "Biotechnology",
   "ru": "Биотехнологии"
  },
+ "company_basic_biotechnology_dynamic_name_tag_plural": {
+  "en": "Biotechnology",
+  "ru": "Биотехнологии"
+ },
+ "company_basic_biotechnology_dynamic_name_tag_singular": {
+  "en": "Biotechnology",
+  "ru": "Биотехнологии"
+ },
  "company_basic_electronics": {
+  "en": "Electronics",
+  "ru": "Электроника"
+ },
+ "company_basic_electronics_dynamic_name_tag_plural": {
+  "en": "Electronics",
+  "ru": "Электроника"
+ },
+ "company_basic_electronics_dynamic_name_tag_singular": {
   "en": "Electronics",
   "ru": "Электроника"
  },
@@ -55,11 +95,43 @@
   "en": "Entertainment",
   "ru": "Развлечения"
  },
+ "company_basic_entertainment_dynamic_name_tag_plural": {
+  "en": "Entertainment",
+  "ru": "Развлечения"
+ },
+ "company_basic_entertainment_dynamic_name_tag_singular": {
+  "en": "Entertainment",
+  "ru": "Развлечения"
+ },
  "company_basic_power": {
   "en": "Power",
   "ru": "Энергетика"
  },
+ "company_basic_power_dynamic_name_tag_plural": {
+  "en": "Power",
+  "ru": "Энергетика"
+ },
+ "company_basic_power_dynamic_name_tag_singular": {
+  "en": "Power",
+  "ru": "Энергетика"
+ },
+ "company_basic_software": {
+  "en": "Software",
+  "ru": "Программное обеспечение"
+ },
+ "company_basic_software_dynamic_name_tag_plural": {
+  "en": "Software",
+  "ru": "Программное обеспечение"
+ },
+ "company_basic_software_dynamic_name_tag_singular": {
+  "en": "Software",
+  "ru": "Программное обеспечение"
+ },
  "company_basic_synthetics": {
+  "en": "Synthetic Dyes & Fibers",
+  "ru": "Синтетические красители и волокна"
+ },
+ "company_basic_synthetics_dynamic_name_tag_plural": {
   "en": "Synthetic Dyes & Fibers",
   "ru": "Синтетические красители и волокна"
  },
@@ -183,6 +255,18 @@
   "en": "Infosys",
   "ru": "Infosys"
  },
+ "company_infrastructure": {
+  "en": "Infrastructure",
+  "ru": "Инфраструктура"
+ },
+ "company_infrastructure_dynamic_name_tag_plural": {
+  "en": "Infrastructure",
+  "ru": "Инфраструктура"
+ },
+ "company_infrastructure_dynamic_name_tag_singular": {
+  "en": "Infrastructure",
+  "ru": "Инфраструктура"
+ },
  "company_ingen": {
   "en": "InGen",
   "ru": "InGen"
@@ -208,6 +292,14 @@
   "ru": "Lockheed Martin"
  },
  "company_megastructure_consortium": {
+  "en": "Megastructure",
+  "ru": "Мегаструктуры"
+ },
+ "company_megastructure_consortium_dynamic_name_tag_plural": {
+  "en": "Megastructure",
+  "ru": "Мегаструктуры"
+ },
+ "company_megastructure_consortium_dynamic_name_tag_singular": {
   "en": "Megastructure",
   "ru": "Мегаструктуры"
  },

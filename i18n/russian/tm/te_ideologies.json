@@ -243,6 +243,10 @@
   "en": "Multiculturalist",
   "ru": "Мультикультуралист"
  },
+ "ideology_multicultural_ig_desc": {
+  "en": "Multiculturalists believe that diversity is a strength and that different cultures should be celebrated.",
+  "ru": "Мультикультуралисты считают, что разнообразие — это сила и что разные культуры следует чествовать."
+ },
  "ideology_multicultural_inclusive": {
   "en": "Inclusive Multiculturalist",
   "ru": "Инклюзивный мультикультуралист"

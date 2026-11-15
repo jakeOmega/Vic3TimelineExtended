@@ -67,6 +67,10 @@
   "en": "Members Can Give Science Aid",
   "ru": "Члены могут оказывать научную помощь"
  },
+ "power_bloc_can_give_science_aid_bool_desc": {
+  "en": "Can give science aid to another country, spending [concept_innovation], increasing [concept_technology_spread] in the target country.",
+  "ru": "Может оказать научную помощь другой стране, затрачивая [Concept('concept_innovation','инновации')] и повышая [Concept('concept_technology_spread','распространение технологий')] в стране-получателе."
+ },
  "power_bloc_can_give_security_aid_bool": {
   "en": "Members Can Give Security Aid",
   "ru": "Члены могут оказывать помощь в обеспечении безопасности"
@@ -159,13 +163,25 @@
   "en": "Artistic Expression",
   "ru": "Художественное самовыражение"
  },
+ "principle_group_artistic_expression_desc": {
+  "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
+  "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
+ },
  "principle_group_cultural_plurality": {
   "en": "Cultural Plurality",
   "ru": "Культурный плюрализм"
  },
+ "principle_group_cultural_plurality_desc": {
+  "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
+  "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
+ },
  "principle_group_cultural_unity": {
   "en": "Cultural Unity",
   "ru": "Культурное единство"
+ },
+ "principle_group_cultural_unity_desc": {
+  "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
+  "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
  },
  "principle_group_education": {
   "en": "Education",
@@ -187,17 +203,33 @@
   "en": "Environmental Sustainability",
   "ru": "Экологическая устойчивость"
  },
+ "principle_group_environmental_sustainability_desc": {
+  "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
+  "ru": "[concept_power_bloc] поощряет экологическую устойчивость и защиту окружающей среды."
+ },
  "principle_group_global_security": {
   "en": "Global Security",
   "ru": "Глобальная безопасность"
+ },
+ "principle_group_global_security_desc": {
+  "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
+  "ru": "[concept_power_bloc] поощряет глобальную безопасность и видит свою миссию в защите международного мира."
  },
  "principle_group_healthcare": {
   "en": "Healthcare",
   "ru": "Здравоохранение"
  },
+ "principle_group_healthcare_desc": {
+  "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет здравоохранение и благополучие своих граждан."
+ },
  "principle_group_military_training": {
   "en": "Military Training",
   "ru": "Военная подготовка"
+ },
+ "principle_group_military_training_desc": {
+  "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
+  "ru": "[concept_power_bloc] поощряет военную подготовку и развитие военных технологий."
  },
  "principle_group_monetary_union": {
   "en": "Monetary Union",
@@ -219,12 +251,24 @@
   "en": "Rural Development",
   "ru": "Развитие сельских районов"
  },
+ "principle_group_rural_desc": {
+  "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
+  "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
  "principle_group_urban_planning": {
   "en": "Urban Planning",
   "ru": "Градостроительство"
  },
+ "principle_group_urban_planning_desc": {
+  "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
+  "ru": "[concept_power_bloc] поощряет градостроительство и развитие городов."
+ },
  "principle_group_welfare": {
   "en": "Welfare",
   "ru": "Социальное обеспечение"
+ },
+ "principle_group_welfare_desc": {
+  "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет социальное обеспечение и благополучие своих граждан."
  }
 }

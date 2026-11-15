@@ -3,9 +3,33 @@
   "en": "Investment level for [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
   "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
  },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_international_aid": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_refugee_affairs": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_the_environment": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
  "NO_INSTITUTION_ministry_of_foreign_affairs": {
   "en": "No [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
   "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_international_aid": {
+  "en": "No [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_refugee_affairs": {
+  "en": "No [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_the_environment": {
+  "en": "No [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
  },
  "institution_migration_controls": {
   "en": "Migration Controls",
