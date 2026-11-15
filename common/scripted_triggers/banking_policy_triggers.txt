@@ -699,13 +699,14 @@ banking_ai_core_cb_bail_in_regime = {
 # Every cb_disable_* button multiplies its ai_chance by 0 while its trigger
 # below is true, so the AI lifts a tool only once the conditions it was bought
 # for have changed. Switching a tool on and off costs what a player pays: the
-# activation cost (asset relief 2.5% of GDP; emergency liquidity 1.2%, 1% back
-# on closing; directed credit 0.8%), the toggle radicals, the capital
-# controls' infamy. Before these gates the disable weights started at the edge
-# of the zone a tool was bought in, so a cycle that touched stable on the way
-# out of a slump lost its directed credit, bail-in, asset relief or export
-# credit and bought it back when it dipped again, and capital controls held
-# for a war could be lifted in a boom mid-war and bought straight back. The
+# toggle friction (0.5% radicals, or 0.2% of GDP for a lending tool), a crisis
+# program's own price (asset relief 2.5% of GDP; emergency liquidity 1.2%, 1%
+# back on closing), the capital controls' infamy. Before these gates the
+# disable weights started at the edge of the zone a tool was bought in, so a
+# cycle that touched stable on the way out of a slump lost its directed
+# credit, bail-in, asset relief or export credit and bought it back when it
+# dipped again, and capital controls held for a war could be lifted in a boom
+# mid-war and bought straight back. The
 # simulator counted 6.7 re-buys a century within a year of a lift, 3.2 with
 # the gates (docs/audits/banking_cycle_simulation.md §18).
 #
