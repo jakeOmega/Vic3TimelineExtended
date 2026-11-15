@@ -6427,7 +6427,7 @@ cb_disable_sterilize_inflows = {
 cb_foreign_borrowing_limits = {
 	name = "CB_FOREIGN_BORROWING_LIMITS"
 	desc = "CB_FOREIGN_BORROWING_LIMITS_DESC"
-	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes banking_tool_foreign_borrowing_limits_active = no }
+	visible = { is_ai = yes te_banking_cycle_running = yes banking_external_available = yes te_mon_fx_pinned_at_par = no banking_tool_foreign_borrowing_limits_active = no }
 	possible = { banking_possible_cb_foreign_borrowing_limits = yes }
 	effect = { banking_effect_cb_foreign_borrowing_limits = yes }
 	ai_chance = { value = 0 if = { limit = { banking_ai_core_cb_foreign_borrowing_limits = yes } add = 30 } }

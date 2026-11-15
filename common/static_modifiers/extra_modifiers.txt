@@ -8661,6 +8661,12 @@ banking_monthly_sterilize_inflows = {
 	country_te_mon_inflow_price_pressure_mult = -0.75
 }
 
+# Sterilization on a floating currency: banking_external_fx_sterilized_speed.
+banking_monthly_sterilize_float = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_fx_adjust_speed_mult = -0.5
+}
+
 banking_monthly_foreign_borrowing_limits = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_fx_debt_protection_add = 0.02084
@@ -8669,6 +8675,12 @@ banking_monthly_foreign_borrowing_limits = {
 banking_monthly_fx_surrender = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_reserve_purchase_gdp_add = 0.0005
+}
+
+# Foreign Exchange Surrender on a floating currency: banking_external_surrender_fx_points.
+banking_monthly_fx_surrender_float = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_fx_target_support_add = 4
 }
 
 # One step of Monetise Deficit, while it runs (te_mon_monetisation_gdp_share,

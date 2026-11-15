@@ -96,7 +96,8 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     and always resolved as Defend. Elsewhere confidence can sit at 0 unanswered.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
     Foreign-borrowing limits, FX surrender and import financing therefore have
-    no AI selection here; actual-script scenarios test their accounting. The
+    no AI selection here, nor Sterilization on a floating currency (which slows
+    the index); actual-script scenarios test their accounting. The
     two flow tools assume funding, since liquid treasury is not modeled.
     The currency's share of cost-push goes through the `fx_imported` hook, 0
     here; banking_deflation_trap.py plugs the script's loop into it. A deep
@@ -1228,7 +1229,7 @@ def monetary_update(cfg: Config, state: State, rng: random.Random, year_index: i
         state.inflation_band = state.inflation_band_applied = 2
         state.stance_gap, state.stance_band = 0.0, 3
         return
-    if not has_dial(cfg, state):
+    if not (has_gold_flows(cfg, state) or (has_dial(cfg, state) and not is_metallic(cfg))):
         state.tools.discard("restrict_inflows")
     if not has_gold_flows(cfg, state):
         state.tools.discard("sterilize_inflows")
@@ -2697,8 +2698,13 @@ def tool_possible(cfg: Config, state: State, tool: str) -> bool:
     if tool in {"foreign_borrowing_limits", "fx_surrender", "emergency_import_financing"}:
         # The FX index, export reliance and spendable treasury are outside this model.
         return False
-    if tool == "restrict_inflows" and not has_dial(cfg, state):
+    # banking_external_rate_moves_money: gold flows, or a floating currency with
+    # a dial. Commodity money has a dial and nothing for the tool to act on.
+    if tool == "restrict_inflows" and not (
+            has_gold_flows(cfg, state) or (has_dial(cfg, state) and not is_metallic(cfg))):
         return False
+    # The script's floating Sterilization slows the FX index, which this model
+    # holds at par, so only the gold version is selected here (2026-11-14).
     if tool == "sterilize_inflows" and not has_gold_flows(cfg, state):
         return False
     if tool == "omo":

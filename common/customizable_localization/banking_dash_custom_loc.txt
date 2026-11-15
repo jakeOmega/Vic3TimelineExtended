@@ -853,6 +853,35 @@ te_mon_fx_effect = {
 	}
 }
 
+# The index tooltip's line for Foreign Exchange Surrender's term while it adds one
+# (a floating currency, 2026-11-14), and its note on Sterilization's slower
+# step. Both are empty otherwise; each branch's text opens with its own newline.
+te_mon_fx_surrender_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { banking_external_surrender_fx_term > 0 }
+		localization_key = banking_dash_mon_fx_surrender_on
+	}
+	text = {
+		localization_key = banking_dash_empty
+	}
+}
+
+te_mon_fx_sterilized_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { banking_external_fx_adjust_factor < 1 }
+		localization_key = banking_dash_mon_fx_sterilized_on
+	}
+	text = {
+		localization_key = banking_dash_empty
+	}
+}
+
 # One sentence in the index tooltip on what capital controls are doing to it.
 te_mon_fx_controls_note = {
 	type = country
@@ -876,7 +905,7 @@ te_mon_fx_controls_note = {
 # with the figure it changes, from the banking_ext_disp_* values in
 # banking_external_values.txt. The same tool acts on gold on the gold standard
 # and on the exchange rate on a floating currency, so the branch is the
-# currency's. Design: docs/superpowers/specs/2026-11-14-external-currency-tools-design.md.
+# currency's. Design: docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md.
 
 banking_ext_now_capital_controls = {
 	type = country
@@ -944,7 +973,14 @@ banking_ext_now_sterilize_inflows = {
 		localization_key = banking_ext_now_sterilize_inflows_gold_quiet
 	}
 	text = {
-		localization_key = banking_ext_now_sterilize_inflows_off_gold
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_sterilize_inflows_float
+	}
+	text = {
+		localization_key = banking_ext_now_sterilize_inflows_none
 	}
 }
 
@@ -957,7 +993,51 @@ banking_ext_now_fx_surrender = {
 		localization_key = banking_ext_now_fx_surrender_gold
 	}
 	text = {
-		localization_key = banking_ext_now_fx_surrender_off_gold
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_fx_surrender_float
+	}
+	text = {
+		localization_key = banking_ext_now_fx_surrender_none
+	}
+}
+
+# Each tool's line under its modifier, for the dashboard row: what the monthly
+# pulse does, as display-only modifier lines, on the country's currency. A
+# floating currency with a dial gets the floating line; everything else the gold
+# one, which is what the tool does wherever it can be used besides
+# (banking_effect_cb_* draws the same two keys, gold first).
+banking_ext_monthly_sterilize_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_nonmod_sterilize_float_tt
+	}
+	text = {
+		localization_key = banking_nonmod_sterilize_inflows_tt
+	}
+}
+
+banking_ext_monthly_fx_surrender = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_nonmod_fx_surrender_float_tt
+	}
+	text = {
+		localization_key = banking_nonmod_fx_surrender_tt
 	}
 }
 

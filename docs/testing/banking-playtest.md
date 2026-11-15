@@ -407,7 +407,7 @@ switching on. `test_banking_toggle_costs.py` holds the script to it; these are w
 The five exchange tools' tooltips gained an "On this currency" line under the description, picked by the country's
 currency (`banking_ext_now_*` in `banking_dash_custom_loc.txt`) and printing live figures (`banking_ext_disp_*` in
 `banking_external_values.txt`). Capital Controls (Outflows) is now Capital Controls and Sterilize Capital Inflows is
-Sterilization. Nothing a pulse runs changed. Design: `docs/superpowers/specs/2026-11-14-external-currency-tools-design.md`.
+Sterilization. Nothing a pulse runs changed. Design: `docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md`.
 
 1. **The line renders, on each currency.** Hover each of the five rows (Enable and active) as a country on a convertible
    Gold Standard with a national bank, as one on Fiat Money with a national bank, and as one on Commodity Money. Each
@@ -426,3 +426,29 @@ Sterilization. Nothing a pulse runs changed. Design: `docs/superpowers/specs/202
 4. **The new names.** Capital Controls' row, its End button and the modifier on the entry read "Capital Controls";
    Sterilization's read "Sterilization" and its weekly bill "Sterilization Bill"; an option of
    `minor_events_timelineextended.7` adds "Targeted Capital Controls".
+
+## External & Currency: Sterilization and surrender on a floating currency (2026-11-14, PR 2)
+
+Sterilization halves how fast a floating index moves toward its target (`banking_external_fx_adjust_factor` in
+`te_mon_fx_shadow_step`); the surrender requirement adds up to 4 points to a floating target
+(`banking_external_surrender_fx_term`); Restrict Speculative Inflows, Sterilization and the surrender requirement need
+gold flows or a floating currency with a national bank; Limit Foreign-Currency Borrowing is hidden on metal at par.
+The script scenarios in `test_banking_external_tools.py` run each formula; what follows only the game shows.
+
+1. **Sterilization slows the index.** On Fiat Money with a national bank and the index well away from its target
+   (the Exchange Rate tooltip's "Where it is heading" ten points or more from the index), note the index for two
+   months, enable Sterilization, and note two more: each monthly move is about half the one before it would have
+   been, the tooltip's first lines carry "Sterilization: the index closes a twenty-fourth of the distance a month",
+   and the tool's "On this currency" figures are the move now and half of it. The weekly bill shows under Banking in
+   the budget. *If the index moves as fast as before:* the funded flag is unset when step 5b reads it; check
+   `banking_external_monthly_update` runs before `te_monetary_update_fx` in the monthly update.
+2. **Surrender lifts the target.** On Fiat Money with exports, enable the surrender requirement: the Exchange Rate
+   tooltip gains "Exporters' earnings sold to the central bank: +4.0" (+2.0 or +1.0 with fewer exports) and "Where
+   it is heading" rises by as much; the treasury pays nothing and the Banking row in the budget names no purchase.
+3. **The shared requirement.** On Commodity Money with a national bank, the three flow tools' Enable rows are
+   greyed with "Your country's national bank sets its own rate, on the gold standard or a floating currency"
+   unticked, and an active Restrict Speculative Inflows is lifted the month after the switch, with its history mark.
+   Suspending convertibility on gold with Sterilization on leaves it on, and its line turns to the floating one.
+4. **Limit Foreign-Currency Borrowing at par.** On a convertible Gold Standard its Enable row is gone from Available
+   Interventions; after a devaluation (index 88) it is back, and it is lifted again the month the index returns to
+   par. On Fiat Money it is there as before.

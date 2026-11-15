@@ -585,7 +585,14 @@ banking_effect_cb_sterilize_inflows = {
 	}
 	banking_external_charge_sterilization = yes
 	set_variable = { name = banking_external_sterilization_funded value = 1 }
-	custom_tooltip = banking_nonmod_sterilize_inflows_tt
+	# Gold: the price pressure gold brings. Floating: the index's speed.
+	if = {
+		limit = { te_mon_has_gold_flows = yes }
+		custom_tooltip = banking_nonmod_sterilize_inflows_tt
+	}
+	else = {
+		custom_tooltip = banking_nonmod_sterilize_float_tt
+	}
 }
 banking_effect_cb_disable_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
@@ -614,7 +621,14 @@ banking_effect_cb_fx_surrender = {
 	te_history_record_banking_marker = { MARK = on_cb_fx_surrender }
 	je:je_banking_cycle = { add_modifier = { name = banking_fx_surrender } }
 	add_radicals = { value = banking_toggle_radicals_value }
-	custom_tooltip = banking_nonmod_fx_surrender_tt
+	# Gold: the vault's purchases. Floating: the exchange-rate target's support.
+	if = {
+		limit = { te_mon_has_gold_flows = yes }
+		custom_tooltip = banking_nonmod_fx_surrender_tt
+	}
+	else = {
+		custom_tooltip = banking_nonmod_fx_surrender_float_tt
+	}
 	banking_nonmod_war_end_lift_tooltip = yes
 }
 banking_effect_cb_disable_fx_surrender = {
