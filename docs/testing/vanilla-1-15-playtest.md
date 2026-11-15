@@ -183,8 +183,8 @@ game, in English.
     figures. The branch's sizing assumes +3.75% and +7.5% (−0.05, vanilla's define, × −1 or −2 × 0.75). Half that
     means the engine counts a stance as ±0.5 and ±1, and the figures in
     `docs/systems/mod_systems/automation_policy.md` and the PR halve.
-  - The define went back from the mod's −0.1 to vanilla's −0.05 on the same day, which halves every movement's
-    per-law line in every country, not only these two. Note whether movement civil wars and revolutions in an
+  - The mod stopped setting the define on the same day (it had −0.1), so vanilla's −0.05 holds. That halves every
+    movement's per-law line in every country, not only these two. Note whether movement civil wars and revolutions in an
     observer run come later or fewer than in the runs before it.
   - Note any line that is not a law, radical or loyalist supporters, or the vanilla factors (lack of suffrage,
     institution funding, neighbouring revolution): it is a mod source the save study missed.

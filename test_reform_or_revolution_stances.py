@@ -4,8 +4,8 @@ Vanilla's global entry `je_reform_or_revolution` counts, each month and for
 each socialist or labor movement with 5% support, (activism - 0.25) x 10
 toward revolution, weighted by the country's share of the involved population.
 The engine sets part of a movement's activism from its stance on each active
-law: MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (-0.05, vanilla's; the mod
-had -0.1 until 2026-11-15) x the stance x the movement's
+law: MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (vanilla's -0.05; the mod set
+-0.1 until 2026-11-15 and sets nothing now) x the stance x the movement's
 active_law_radicalism_multiplier (0.75 for both). A disapproved law that every
 country holds from 1836 and none can replace while the entry runs is therefore
 a fixed push toward revolution in every country: +0.075 activism for a
@@ -15,8 +15,9 @@ Unrestricted Automation (to Humanoid Robotics, era 11) and Unregulated
 Donations (to Mass Media or Keynesian Economics, era 6) were two such laws.
 
 These tests hold: the two movements are neutral on both, they still rate above
-each one every law the lists they came from rated above it, the figures above
-rest on the defines they quote, and no 1836 law either movement disapproves
+each one every law the lists they came from rated above it, the mod leaves the
+define to vanilla (so another mod can set it), the figures above rest on
+vanilla's value and multiplier, and no 1836 law either movement disapproves
 lacks a law it rates higher that a country holding it can enact before era 6.
 
 Run: python3 test_reform_or_revolution_stances.py
@@ -35,7 +36,12 @@ from paradox_file_parser import ParadoxFileParser  # noqa: E402
 
 GENERATED = os.path.join(REPO, "common", "ideologies", "modified.txt")
 HISTORY = os.path.join(REPO, "common", "history", "extra_history.txt")
-DEFINES = os.path.join(REPO, "common", "defines", "extra_defines.txt")
+DEFINES_DIR = os.path.join(REPO, "common", "defines")
+ACTIVE_LAW_STANCE = "MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE"
+# Vanilla 1.15.1's value (game/common/defines/00_defines.txt). The repo keeps no
+# copy of vanilla's defines (vanilla_parsed/ holds none), so the literal is
+# checked against an installed game when there is one.
+VANILLA_ACTIVE_LAW_STANCE = -0.05
 VANILLA = os.path.join(REPO, "vanilla_parsed", "common")
 
 MOVEMENTS = {
@@ -166,10 +172,30 @@ class NeutralOnLockedDefaultsTest(unittest.TestCase):
         self.assertEqual(generated_stances("ideology_proletarian")[AUTOMATION][UNRESTRICTED], -1)
         self.assertEqual(generated_stances("ideology_communist")[AUTOMATION][UNRESTRICTED], -2)
 
+    def test_the_mod_leaves_the_define_to_vanilla(self):
+        """No mod defines file sets it, so vanilla's value holds and another mod
+        that sets it alone wins (the owner, 2026-11-15). Comments don't count."""
+        for path in sorted(glob.glob(os.path.join(DEFINES_DIR, "*.txt"))):
+            code = re.sub(r"#[^\n]*", "", _read(path))
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotRegex(code, rf"\b{ACTIVE_LAW_STANCE}\s*=")
+
+    def test_vanilla_value_matches_the_installed_game_when_present(self):
+        try:
+            import path_constants
+            base = path_constants.base_game_path
+        except Exception:  # no paths on this machine
+            self.skipTest("no game paths")
+        path = os.path.join(base, "game", "common", "defines", "00_defines.txt")
+        if not os.path.exists(path):
+            self.skipTest("no installed Victoria 3")
+        m = re.search(rf"(?m)^\s*{ACTIVE_LAW_STANCE}\s*=\s*(-?[\d.]+)", _read(path))
+        self.assertIsNotNone(m)
+        self.assertEqual(float(m.group(1)), VANILLA_ACTIVE_LAW_STANCE)
+
     def test_the_figures_rest_on_these_values(self):
-        """+0.075 = 2 x 0.05 x 0.75 and +0.0375 = 1 x 0.05 x 0.75."""
-        m = re.search(r"(?m)^\s*MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE\s*=\s*(-?[\d.]+)", _read(DEFINES))
-        self.assertEqual(float(m.group(1)), -0.05)
+        """+0.075 = 2 x 0.05 x 0.75 and +0.0375 = 1 x 0.05 x 0.75: vanilla's define
+        (above) and the movements' multiplier."""
         with open(os.path.join(VANILLA, "political_movements.json")) as f:
             movements = json.load(f)
         for movement in MOVEMENTS.values():
