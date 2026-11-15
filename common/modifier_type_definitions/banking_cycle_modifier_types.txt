@@ -379,26 +379,25 @@ country_te_mon_expected_inflation_add = {
 # Monetary union: what each tier hands the LEADER, on the principle's tooltip
 # ============================================================================
 # 2026-11-14 (monetary_policy_design.md §0.14). principle_monetary_union_2..5
-# carry these four in `leader_modifier`, so the engine lists the tier's figures
-# under the principle's Leader heading. DISPLAY FIELDS, like the block above:
-# nothing reads them. The work is script (te_monetary_update_union), because
-# every one of them depends on something a principle's static block cannot
-# test: an adopter, a currency the leader can issue, its banking law, the
-# banking rule. test_monetary_union_leader.py holds each tier's figures to the
-# script values the update pays, so the tooltip and the effect cannot drift.
-# They are numbers, not text markers, so a higher tier restates and raises each
-# (principle_tier_audit).
-
-# The line that says when: once a member has adopted, and what reach is.
-country_te_mon_issuer_bool = {
-	color = good
-	boolean = yes
-	script_only = yes
-	game_data = { ai_value = 0 }
-}
+# carry these three in `leader_modifier`, so the engine lists the tier's figures
+# under the principle's Leader heading. DISPLAY FIELDS: nothing reads them. The
+# work is script (te_monetary_update_union), because every one of them depends
+# on something a principle's static block cannot test: an adopter, a currency
+# the leader can issue, its banking law, the banking rule.
+# test_monetary_union_leader.py holds each tier's figures to the script values
+# the update pays, so the tooltip and the effect cannot drift. They are numbers,
+# so a higher tier restates and raises each (principle_tier_audit).
+#
+# 2026-11-15 (owner): short names, conditions in each _desc, the rules in
+# concept_banking_common_currency and concept_banking_currency_reach. The
+# paragraph-long country_te_mon_issuer_bool that said "once a member adopts"
+# went: each desc says it. What the leader shares with its adopters prints under
+# the principle's Power Bloc heading (power_bloc_te_mon_currency_*,
+# power_bloc_extra_modifier_types.txt), the banking union's intervention point
+# among them, so the interventions field here is the issuer's own points.
 
 # te_mon_union_seigniorage_pct_N / 100: of the leader's own GDP a year, at
-# full reach.
+# full reach, before its minting bonuses.
 country_te_mon_issuer_seigniorage_gdp_add = {
 	color = good
 	percent = yes
@@ -417,12 +416,58 @@ country_te_mon_issuer_premium_add = {
 	game_data = { ai_value = 0 }
 }
 
-# te_mon_union_issuer_bank_points_N, plus the banking union's own point at
-# tiers 4 and 5: the leader's whole gain in intervention points.
+# te_mon_union_issuer_bank_points_N: the issuer's own extra intervention points
+# (te_mon_union_issuer_bank). The banking union's point is the Power Bloc
+# line's.
 country_te_mon_issuer_interventions_add = {
 	color = good
 	percent = no
 	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# What only MEMBERS get, in principle_monetary_union_N's non_leader_modifier
+# (2026-11-15, owner: the heading names who gets it, so the name need not).
+# Display fields like the three above: nothing reads them, and they sit
+# inert on each member's own modifiers, ai_value 0.
+
+# te_mon_union_cooperation_cut / 100, negated: points off a member's risk
+# premium from the leader's swap line, in vanilla's interest scale like
+# country_risk_premium_add (0.01 = 1pp). Tier 1 up.
+country_te_mon_swap_premium_add = {
+	color = bad
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_cooperation_confidence: peg confidence a month. Tier 1 up.
+country_te_mon_swap_confidence_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_premium_union_overvaluation's halving from tier 3: -0.5. Adopters
+# only, so the name says so.
+country_te_mon_adopter_overvaluation_premium_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_reserve_standing_cut / 100, negated, in the scale of
+# country_credit_standing_add. Tier 5, adopters only.
+country_te_mon_adopter_credit_standing_add = {
+	color = bad
+	percent = yes
+	decimals = 2
 	script_only = yes
 	game_data = { ai_value = 0 }
 }

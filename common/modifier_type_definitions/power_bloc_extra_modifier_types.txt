@@ -157,19 +157,37 @@ power_bloc_can_give_development_aid_bool = {
 }
 
 
-# Monetary policy phase 5b — principle_group_monetary_union's five markers
-# (docs/systems/monetary_policy_design.md §15A.3). Script-only bools; vanilla's
-# power_bloc_allow_foreign_investment_lower_rank_bool is the precedent. They are
-# what the principle's tooltip prints — script reads the tier via has_principle.
-power_bloc_monetary_cooperation_bool = {
-	color = good
-	boolean = yes
-	game_data = {
-		ai_value = 100
-	}
-	script_only = yes
-}
+# Monetary policy phase 5b — principle_group_monetary_union's DISPLAY FIELDS
+# (docs/systems/monetary_policy_design.md §15A.3, §0.14). Nothing reads them:
+# what the union does depends on who has ADOPTED, which no principle block can
+# test, so script pays it (te_monetary_update_union and its neighbours) and
+# reads the tier through has_principle. These only print the tier's terms
+# under the principle's "Power Bloc" heading. test_monetary_union_leader.py
+# holds every figure to the script value or static modifier that pays it.
+#
+# The rule (2026-11-15, owner): a figure is a numeric field the engine formats,
+# never a number written into a name; a name is a short label; the conditions
+# go in its _desc, and the rule a player plans around in a concept
+# (concept_banking_common_currency, concept_banking_currency_reach). A bool is
+# kept only for a rule with no quantity. modifier_name_audit enforces the names.
+#
+# The types are named for what they describe, not for a tier, so every tier
+# restates and raises the same ones (principle_tier_audit). Each goes in the
+# block whose heading names who gets it, so its name need not:
+#   power_bloc_te_mon_currency_*  here, under "Power Bloc": every country USING
+#                                 the common currency, each adopter and the
+#                                 leader once one has
+#   country_te_mon_swap_*,        banking_cycle_modifier_types.txt, in
+#   country_te_mon_adopter_*      non_leader_modifier: what only members get
+#   country_te_mon_issuer_*       the same file, in leader_modifier
+# Each mirrors a modifier type the script applies, at the same scale, so its
+# value is the applied figure.
 
+# --- The four rules with no quantity -----------------------------------------
+# ai_value 100 as before 2026-11-15: unchanged, so the AI weighs the tiers as
+# it did.
+
+# Tier 2: members may adopt the leader's money.
 power_bloc_shared_currency_bool = {
 	color = good
 	boolean = yes
@@ -179,6 +197,7 @@ power_bloc_shared_currency_bool = {
 	script_only = yes
 }
 
+# Tier 3: the leader is lender of last resort to every adopter.
 power_bloc_fiscal_backstop_bool = {
 	color = good
 	boolean = yes
@@ -188,6 +207,7 @@ power_bloc_fiscal_backstop_bool = {
 	script_only = yes
 }
 
+# Tier 4: one supervisor and one deposit guarantee; contagion damped.
 power_bloc_banking_union_bool = {
 	color = good
 	boolean = yes
@@ -197,6 +217,8 @@ power_bloc_banking_union_bool = {
 	script_only = yes
 }
 
+# Tier 5: the world's holders count toward reach; the leader's standing cut
+# may grow.
 power_bloc_reserve_currency_bool = {
 	color = good
 	boolean = yes
@@ -204,6 +226,53 @@ power_bloc_reserve_currency_bool = {
 		ai_value = 100
 	}
 	script_only = yes
+}
+
+# --- The figures ---------------------------------------------------------------
+
+# te_mon_union_adopter's state_export_advantage_mult (and the same import one),
+# plus te_mon_union_reserve's at tier 5.
+power_bloc_te_mon_currency_trade_advantage_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_credit_points_N / 100: te_mon_union_credit's
+# state_capitalists_investment_pool_contribution_add.
+power_bloc_te_mon_currency_investment_pool_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_banking_union's three, from tier 4.
+power_bloc_te_mon_currency_crash_chance_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_mon_currency_volatility_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_mon_currency_interventions_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
 }
 
 # Power grids (2026-11-14): Market Unification IV and V and Internal Trade IV

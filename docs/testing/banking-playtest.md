@@ -372,12 +372,19 @@ by `test_monetary_union_leader.py` and `test_banking_overdraft_shed.py`; these a
 bloc leader on Fiat Money with a national bank, take Monetary Union to tier II or above, and get a member to adopt
 (Press for Convergence, or an AI minor inside your market). Read `TE_SELF_CHECK mon_union_issuer` (the table above).
 
-1. **The principle's tooltip.** Tiers II to V show a Leader block of four lines: the sentence that begins "Once a
-   member adopts its currency", then "+0.50% Seigniorage at Full Reach, of GDP a Year, before Minting Bonuses",
-   "−0.50% Risk Premium at Full Reach" and "+1 Banking Intervention Points: More Central-Bank Tools in Force at Once" at tier II, rising to
-   +1.50%, −1.50% and +4 at tier V, each green. Tier I has no Leader block. A figure missing, or a raw
-   `country_te_mon_issuer_…` key: a script-only numeric type does not print in a principle's `leader_modifier`; the
-   fallback is one text marker per tier carrying the figures in words.
+1. **The principle's tooltip.** A script-only numeric type prints in a principle's `leader_modifier`: the owner's
+   screenshot of Monetary Union V (2026-11-15) showed the leader's figures. Since then (owner: the lines read as
+   paragraphs) the names are short labels. Tiers II to V show a Leader block of three lines, "+0.50% Common Currency
+   Seigniorage", "−0.50% Issuer Risk Premium" and "+1 Issuer Intervention Budget" at tier II, rising to +1.50%, −1.50%
+   and +3 at tier V, each green. Under Non-leader Bloc Members, tier I shows "−0.50% Swap Line Risk Premium" and "+1
+   Swap Line Peg Confidence a Month", and tier V adds "−50% Adopters' Overvaluation Risk Premium" and "−0.25%
+   Adopters' Credit Standing". Tier I has no Power Bloc block; tier V's has four checkmarks (Members May Adopt the
+   Common Currency, Leader Is Lender of Last Resort to Adopters, Common Currency Banking Union, Common Currency Is a
+   Reserve Currency), +2 cohesion per member, +10% Common Currency Trade Advantage, +5% Common Currency Investment Pool
+   Contribution, −25% Common Currency Banking Crash Likelihood, −25% Common Currency Banking Cycle Volatility and +1
+   Common Currency Intervention Budget, each green. "Common Currency" and "Currency Reach" link their concepts. A
+   figure missing, or a raw `power_bloc_te_mon_…` key: a script-only numeric type does not print in a principle's
+   `power_bloc_modifier`; the fallback is to move those lines to `member_modifier` as `country_` types.
 2. **The entry's modifiers, the month after a member adopts.** The leader's banking entry lists Common Currency
    (+5% export and import advantage), Seigniorage from the Common Currency (pounds a week), Issuer of the Common
    Currency (a negative risk premium), Central Bank of the Union (+1 to +3) and Common Capital Market. From tier IV

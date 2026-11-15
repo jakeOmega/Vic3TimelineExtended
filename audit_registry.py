@@ -529,6 +529,15 @@ AUDITS: tuple[Audit, ...] = (
         tags=("long_tooltip",),
     ),
     Audit(
+        "modifier_name_audit",
+        "A modifier type's or static modifier's English name over 70 rendered characters, or one "
+        "that reads as a sentence, or a modifier type's name with a figure in it (`+5%`, `-0.5`). A "
+        "name is the label beside the value the engine prints: make the figure a numeric field, put "
+        "the conditions in the `_desc` and the rules in a concept it links.",
+        where="trailing on the name's loc line",
+        tags=("modifier_name",),
+    ),
+    Audit(
         "hidden_modifier_audit",
         "A `custom_tooltip` around an `add_modifier` whose text renders no `GetStaticModifier` for it: "
         "the player sees the text and none of the modifier's lines.",
