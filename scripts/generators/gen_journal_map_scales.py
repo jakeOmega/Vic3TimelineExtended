@@ -120,7 +120,8 @@ SCALE_OWN, SCALE_LINEAR, SCALE_LOG, SCALE_RANKED = 0, 1, 2, 3
 # smaller: six doublings at most. The engine keeps five decimals, so the share can't be much smaller: a
 # thousandth of the smallest range (0.002, the Capitalists' share) would truncate to 0 and be divided by.
 LOG_RATIO = 64
-# The smallest start the engine's five decimals leave after the division (asserted for every straight row, below).
+# The least a LOG_RATIO-th of a map's narrowest range may be, so the engine's five decimals can still tell a low
+# above it from one below (asserted for every straight row, below).
 LOG_FLOOR = 0.00002
 # Logarithmic on a map with a meaningful midpoint: the knee is the map's min_half over this, so the scale is
 # straight within min_half of the midpoint (the log's first piece past the knee, from 1 to 2 knees, is straight).
@@ -487,9 +488,9 @@ def world_factor(scale, lo, hi, x):
 
 def log_start(scale, lo, hi):
     """Where Logarithmic starts on a straight map: the range's low, or a LOG_RATIO-th of its high where the low is
-    smaller, as te_jmap_<map>_lg_lo works it out."""
+    smaller (a low of 0 has no logarithm)."""
     L, H = world_bounds(scale, lo, hi)
-    return max(L, H / LOG_RATIO, 0.00001)
+    return max(L, H / LOG_RATIO)
 
 
 def knee(scale):
@@ -530,7 +531,7 @@ def scaled_factor(scale, option, lo, hi, x, rank=None):
     else:
         L, H = world_bounds(scale, lo, hi)
         start = log_start(scale, lo, hi)
-        y = log2_pieces(x / start) / max(log2_pieces(H / start), 1)
+        y = log2_pieces(x / start) / max(log2_pieces(H / start), 0.001)
     return min(1.0, max(0.0, y))
 
 
@@ -722,13 +723,20 @@ def scale_bodies(scale):
     else:
         if scale["min_span"] / LOG_RATIO < LOG_FLOOR:
             raise ValueError(f"{n}: a {LOG_RATIO}th of its narrowest range, {scale['min_span']}, doesn't survive "
-                             "the engine's five decimals; Logarithmic would divide by 0")
+                             "the engine's five decimals; Logarithmic couldn't place its start")
         bodies[SCALE_LINEAR] = [f"value = {inp}", f"subtract = {p}_lo", f"divide = {p}_span"]
-        lines += _sv(f"{p}_lg_lo", [f"value = {p}_hi", f"divide = {LOG_RATIO}", f"min = {p}_lo", "min = 0.00001"])
-        lines += _sv(f"{p}_lg_r", [f"value = {inp}", f"divide = {p}_lg_lo"])
+        # The start is the range's low, or a LOG_RATIO-th of its high where the low is smaller. The figure over
+        # the start is then the smaller of figure / low and figure * LOG_RATIO / high, which is how it is worked
+        # out: dividing by the small start itself would lose most of its five decimals. _lg_min is only compared.
+        low_start = ["if = {", f"\tlimit = {{ {p}_lo > {p}_lg_min }}"]
+        lines += _sv(f"{p}_lg_min", [f"value = {p}_hi", f"divide = {LOG_RATIO}"])
+        lines += _sv(f"{p}_lg_r", [f"value = {inp}", f"multiply = {LOG_RATIO}", f"divide = {p}_hi"] + low_start +
+                     [f"\tvalue = {inp}", f"\tdivide = {p}_lo", "}"])
         lines += _sv(f"{p}_lg_t", _log_ladder(f"{p}_lg_r"))
-        lines += _sv(f"{p}_lg_span_r", [f"value = {p}_hi", f"divide = {p}_lg_lo"])
-        lines += _sv(f"{p}_lg_top", _log_ladder(f"{p}_lg_span_r") + ["min = 1"])
+        lines += _sv(f"{p}_lg_span_r", [f"value = {LOG_RATIO}"] + low_start +
+                     [f"\tvalue = {p}_hi", f"\tdivide = {p}_lo", "}"])
+        # A range under one doubling wide is straight (the log's first piece); never divided by nothing.
+        lines += _sv(f"{p}_lg_top", _log_ladder(f"{p}_lg_span_r") + ["min = 0.001"])
         bodies[SCALE_LOG] = [f"value = {p}_lg_t", f"divide = {p}_lg_top"]
     return lines, bodies
 

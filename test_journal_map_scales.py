@@ -12,6 +12,10 @@ The Map Room's options (2026-11-14) live in the same two files: a range the Map 
 states in its area and leaves out the trim its Outliers option gives, never past the middle of a short list. The
 range effects are run here over made-up states (RangeRunTest), the way the engine would run them, against a plain
 sort; a map a system's own entry draws too keeps a range the options don't touch.
+
+The Scale option (the thirteenth pass) is a branch inside each factor the Map Room reads: every committed tree is
+evaluated under Linear and Logarithmic against the generator's reference (ScaleTest), and the effects that store a
+Ranked map's places are run over made-up states, ties and all, against a plain sort (RankRunTest).
 """
 
 import importlib.util
@@ -78,17 +82,20 @@ CMP = {"<": lambda a, b: a < b, ">": lambda a, b: a > b, "<=": lambda a, b: a <=
 
 
 class Env:
-    """A paint's view: the state's figure (x, for the map's input token), whether its guards hold (have), the
-    globals the range effects stored (globals: name -> value), and the hand-written script values a generated one
-    reads (named: te_jmap_selector, te_jmap_area, te_jmap_trim)."""
+    """A paint's view: the state's figure (x, for the map's input token; a dict by token where several maps'
+    figures are in play), whether its guards hold (have; absent names the state variables it lacks whatever have
+    says), the globals the range effects stored (globals: name -> value), and the hand-written script values and
+    state variables a generated value reads (named: te_jmap_selector, te_jmap_area, te_jmap_trim, te_jmap_scale,
+    var:te_jmap_rank). The Scale option is the map's own curve unless named says otherwise."""
 
-    def __init__(self, defs, inp, x, have=True, globs=None, fixed=False, named=None):
+    def __init__(self, defs, inp, x, have=True, globs=None, fixed=False, named=None, absent=()):
         self.defs, self.inp, self.x, self.have, self.globs, self.fixed = defs, inp, x, have, globs or {}, fixed
-        self.named = named or {}
+        self.named = {"te_jmap_scale": 0, **(named or {})}
+        self.absent = set(absent)
 
     def lit(self, t):
-        if t == self.inp:
-            return self.x
+        if t == self.inp or (isinstance(self.inp, (set, frozenset)) and t in self.inp):
+            return self.x[t] if isinstance(self.x, dict) else self.x
         if t in self.named:
             return self.named[t]
         if t.startswith("global_var:"):
@@ -100,7 +107,7 @@ class Env:
     def holds(self, limit):
         for key, arg in limit:
             if key == "has_variable":
-                if not self.have:
+                if not self.have or arg in self.absent:
                     return False
             elif key == "has_global_variable":
                 if arg not in self.globs:
@@ -187,8 +194,14 @@ class ScalesTest(unittest.TestCase):
         cls.text = _read(OUT)
         cls.defs = trees(cls.text)
 
-    def factor(self, scale, x, have=True, globs=None, fixed=False):
-        env = Env(self.defs, scale["input"], x, have, globs, fixed)
+    def factor(self, scale, x, have=True, globs=None, fixed=False, option=0, rank=None):
+        """The committed tree's factor at x, under a Scale setting (the map's own curve by default) and, for
+        Ranked, with the state's stored place (None: it has none)."""
+        named = {"te_jmap_scale": option}
+        if rank is not None:
+            named["var:te_jmap_rank"] = rank
+        env = Env(self.defs, scale["input"], x, have, globs, fixed, named,
+                  absent=() if rank is not None else ("te_jmap_rank",))
         return env.run(self.defs[f"te_jmap_{scale['name']}_factor"])
 
     def test_the_committed_files_are_current(self):
@@ -597,10 +610,139 @@ class TwinTest(unittest.TestCase):
                         delta=1e-4)
 
 
+class State:
+    """A made-up state: its figure (or figures, by input token), whether the map paints it (its `where` holds),
+    whether it is in the Map Room's area, and the variables script has put on it."""
+
+    def __init__(self, x, painted=True, inside=True):
+        self.x, self.painted, self.inside, self.vars = x, painted, inside, {}
+
+
+INPUTS = frozenset(s["input"] for s in gen.SCALES)
+WHERES = {tuple(s["where"]) for s in FITTED}
+
+
+class Run:
+    """The generated effects, run over made-up states the way the engine would run them: globals, state
+    variables, every_state, ordered_state by position (a place past the end takes the last state, as the engine
+    does: it doesn't skip) or from min to max, and scripted effects with their arguments. A list's limit is taken
+    apart: the map's own `where` is the state's `painted`, te_jmap_in_area its `inside`, and a test of a figure or
+    of a stored place is worked out."""
+
+    def __init__(self, test, effects, values, states, named=None, globs=None):
+        self.test, self.effects, self.values, self.states = test, effects, values, states
+        self.named, self.globs = dict(named or {}), dict(globs or {})
+        self.clamped, self.walked = [], 0
+
+    def env(self, state=None):
+        named, absent = dict(self.named), ()
+        if state is not None:
+            if "te_jmap_rank" in state.vars:
+                named["var:te_jmap_rank"] = state.vars["te_jmap_rank"]
+            else:
+                absent = ("te_jmap_rank",)
+        return Env(self.values, INPUTS, state.x if state is not None else 0, globs=self.globs, fixed=True,
+                   named=named, absent=absent)
+
+    def value(self, token, state=None):
+        return self.env(state).lit(token)
+
+    def listed(self, limit):
+        where, tests = [], []
+        for key, arg in limit:
+            if key == "compare" and arg[0].endswith("_input"):
+                tests.append((key, arg))
+            elif key.endswith("_input") or (key, arg) in (("has_variable", "te_jmap_rank"), ("te_jmap_in_area", "yes")):
+                tests.append((key, arg))
+            else:
+                where.append("%s %s %s" % arg if key == "compare" else f"{key} = {arg}")
+        self.test.assertIn(tuple(where), WHERES, "a list that isn't a map's")
+        out = []
+        for state in self.states:
+            if where and not state.painted:
+                continue
+            keep = True
+            for key, arg in tests:
+                if (key, arg) == ("te_jmap_in_area", "yes"):
+                    keep = keep and state.inside
+                elif (key, arg) == ("has_variable", "te_jmap_rank"):
+                    keep = keep and "te_jmap_rank" in state.vars
+                else:
+                    keep = keep and self.env(state).holds([(key, arg)])
+            if keep:
+                out.append(state)
+        return out
+
+    def run(self, block, args=None, state=None):
+        args = args or {}
+        taken = False
+        for key, arg in block:
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                if taken:
+                    continue
+                if key != "else" and not self.env(state).holds(dict(arg).get("limit", [])):
+                    continue
+                taken = True
+                self.run([p for p in arg if p[0] != "limit"], args, state)
+            elif key == "debug_log":
+                continue
+            elif key == "remove_global_variable":
+                del self.globs[arg]
+            elif key == "set_global_variable":
+                if isinstance(arg, str):
+                    self.globs[arg] = 1.0
+                else:
+                    d = dict(arg)
+                    self.globs[d["name"]] = self.value(d["value"], state)
+            elif key == "change_global_variable":
+                d = dict(arg)
+                self.globs[d["name"]] += float(d["add"])
+            elif key == "set_variable":
+                self.test.assertIsNotNone(state, "set_variable outside a state")
+                if isinstance(arg, str):
+                    state.vars[arg] = 1.0
+                else:
+                    d = dict(arg)
+                    state.vars[d["name"]] = self.value(d["value"], state)
+            elif key == "remove_variable":
+                del state.vars[arg]
+            elif key == "every_state":
+                body = [p for p in arg if p[0] != "limit"]
+                for each in self.listed(dict(arg).get("limit", [])):
+                    self.run(body, args, each)
+            elif key == "ordered_state":
+                d = dict(arg)
+                self.test.assertEqual(d["check_range_bounds"], "no")
+                rows = self.listed(d.get("limit", []))
+                rows.sort(key=lambda each: self.value(d["order_by"], each), reverse=True)
+                body = [p for p in arg if p[0] not in ("limit", "order_by", "position", "min", "max",
+                                                        "check_range_bounds")]
+                if "position" in d:
+                    pos = int(d["position"].replace("$K$", str(args.get("K", ""))))
+                    if not rows:
+                        continue
+                    if pos >= len(rows):
+                        self.clamped.append(pos)
+                        pos = len(rows) - 1
+                    rows = [rows[pos]]
+                else:
+                    self.test.assertEqual(d["min"], "0")
+                    self.test.assertLess(len(rows), int(d["max"]), "more states than the walk visits")
+                    self.walked += 1
+                for each in rows:
+                    self.run(body, args, each)
+            else:
+                name = key.replace("$MAP$", args.get("MAP", ""))
+                self.test.assertIn(name, self.effects, key)
+                self.run(self.effects[name], dict(arg) if isinstance(arg, list) else args, state)
+
+
 class RangeRunTest(unittest.TestCase):
-    """The range effects, run over made-up states as the engine would run them: the count, the trim, the ladder and
-    the two ordered picks, against a plain sort. Each state is (figure, the map paints it, it is in the area); an
-    ordered_state past the end of its list takes the last state, as the engine does (it doesn't skip)."""
+    """The range effects, run over made-up states as the engine would run them (Run): the count, the trim, the
+    ladder and the two ordered picks, against a plain sort. Each state is (figure, the map paints it, it is in the
+    area)."""
 
     @classmethod
     def setUpClass(cls):
@@ -610,68 +752,11 @@ class RangeRunTest(unittest.TestCase):
 
     def run_range(self, scale, states, option=0, area=0):
         n = gen.range_name(scale)
-        globs = {"te_jmap_rng_%s_lo" % n: -1, "te_jmap_rng_%s_hi" % n: -1}     # stale, from the last measure
-        named = {"te_jmap_trim": option, "te_jmap_area": area}
-        where = " ".join(gen.measured(scale))
-        clamped = []
-
-        def value(name, x=0.0):
-            env = Env(self.values, scale["input"], x, globs=globs, fixed=True, named=named)
-            return env.run(self.values[name])
-
-        def listed(limit):
-            text = " ".join(limit)
-            self.assertEqual(text, where, "a list that isn't the map's")
-            return [s for s in states if s[1] and (s[2] or "te_jmap_in_area = yes" not in text)]
-
-        def flat(limit):
-            return [f"{a} {op} {b}" if key == "compare" else f"{key} = {arg}" for key, arg in limit
-                    for a, op, b in [arg if key == "compare" else (0, 0, 0)]]
-
-        def run(block, args):
-            taken = False
-            for key, arg in block:
-                if key in ("if", "else_if", "else"):
-                    if key == "if":
-                        taken = False
-                    if taken:
-                        continue
-                    limit = dict(arg).get("limit", []) if key != "else" else []
-                    env = Env(self.values, None, 0, globs=globs, fixed=True, named=named)
-                    if key != "else" and not env.holds(limit):
-                        continue
-                    taken = True
-                    run([p for p in arg if p[0] != "limit"], args)
-                elif key == "remove_global_variable":
-                    del globs[arg]
-                elif key == "set_global_variable":
-                    d = dict(arg)
-                    globs[d["name"]] = value(d["value"]) if d["value"] in self.values else float(d["value"])
-                elif key == "every_state":
-                    d = dict(arg)
-                    for _state in listed(flat(d.get("limit", []))):
-                        globs[dict(d["change_global_variable"])["name"]] += 1
-                elif key == "ordered_state":
-                    d = dict(arg)
-                    rows = listed(flat(d.get("limit", [])))
-                    order = d["order_by"]
-                    rows.sort(key=lambda s: value(order, s[0]), reverse=True)
-                    pos = int(d["position"].replace("$K$", str(args["K"])))
-                    self.assertEqual(d["check_range_bounds"], "no")
-                    if not rows:
-                        continue
-                    if pos >= len(rows):
-                        clamped.append(pos)
-                        pos = len(rows) - 1
-                    setter = dict(d["set_global_variable"])
-                    globs[setter["name"]] = value(setter["value"], rows[pos][0])
-                else:
-                    name = key.replace("$MAP$", args.get("MAP", ""))
-                    self.assertIn(name, self.effects, key)
-                    run(self.effects[name], dict(arg) if isinstance(arg, list) else args)
-
-        run(self.effects[f"te_jmap_range_{n}"], {})
-        return globs, clamped
+        run = Run(self, self.effects, self.values, [State(*each) for each in states],
+                  named={"te_jmap_trim": option, "te_jmap_area": area},
+                  globs={"te_jmap_rng_%s_lo" % n: -1, "te_jmap_rng_%s_hi" % n: -1})     # stale, from the last measure
+        run.run(self.effects[f"te_jmap_range_{n}"])
+        return run.globs, run.clamped
 
     def expect(self, states, limited, option=0, area=0):
         xs = sorted(x for x, painted, inside in states if painted and (inside or not limited))
@@ -727,6 +812,364 @@ class RangeRunTest(unittest.TestCase):
         globs, _ = self.run_range(scale, states)
         xs = sorted(x for x, _p, _i in states)
         self.assertEqual((globs["te_jmap_rng_turmoil_lo"], globs["te_jmap_rng_turmoil_hi"]), (xs[4], xs[-5]))
+
+
+MIDS = [s for s in ROOM if s["world"]["kind"] == "mid"]
+SETTINGS = {"linear": gen.SCALE_LINEAR, "logarithmic": gen.SCALE_LOG}
+
+
+class ScaleTest(unittest.TestCase):
+    """The Scale option: each factor the Map Room reads, under Linear and Logarithmic, against the generator's
+    reference; Ranked reads the stored place."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _read(OUT)
+        cls.defs = trees(cls.text)
+
+    factor = ScalesTest.factor
+
+    def test_each_tree_follows_its_scale(self):
+        # the committed tree against gen.scaled_factor, in floats and in the engine's five decimals, for each
+        # measured range the own curve is tested on
+        for scale in ROOM:
+            for name, option in SETTINGS.items():
+                for rng in ranges(scale):
+                    globs = store(scale, rng)
+                    for x in samples(scale, rng):
+                        want = gen.scaled_factor(scale, option, *(rng or (None, None)), x)
+                        for fixed, delta in ((False, 1e-4), (True, 5e-3)):
+                            with self.subTest(map=scale["name"], scale=name, range=rng, x=x, fixed=fixed):
+                                self.assertAlmostEqual(self.factor(scale, x, globs=globs, fixed=fixed, option=option),
+                                                       want, delta=delta)
+
+    def test_each_scale_rises_and_spans_the_range(self):
+        for scale in ROOM:
+            w = scale["world"]
+            for name, option in SETTINGS.items():
+                for rng in ranges(scale):
+                    L, H = gen.world_bounds(scale, *(rng or (None, None)))
+                    ys = [gen.scaled_factor(scale, option, *(rng or (None, None)), x) for x in samples(scale, rng)]
+                    low = gen.scaled_factor(scale, option, *(rng or (None, None)), L)
+                    high = gen.scaled_factor(scale, option, *(rng or (None, None)), H)
+                    with self.subTest(map=scale["name"], scale=name, range=rng):
+                        self.assertEqual(ys, sorted(ys), "rising")
+                        if w["kind"] == "mid" and H <= w["mid"]:
+                            self.assertEqual((round(low, 9), round(high, 9)), (0.0, 0.5))
+                        elif w["kind"] == "mid" and L >= w["mid"]:
+                            self.assertEqual((round(low, 9), round(high, 9)), (0.5, 1.0))
+                        elif option == gen.SCALE_LOG and w["kind"] == "frac":
+                            # the low end is the range's low, or a 64th of its high where the low is smaller
+                            self.assertEqual(round(high, 9), 1.0)
+                            start = gen.log_start(scale, *(rng or (None, None)))
+                            self.assertEqual(round(gen.scaled_factor(scale, option, *(rng or (None, None)), start), 9), 0.0)
+                            self.assertEqual(start, max(L, H / gen.LOG_RATIO))
+                        else:
+                            self.assertEqual((round(low, 9), round(high, 9)), (0.0, 1.0))
+
+    def test_linear_is_straight(self):
+        # halfway along the range, half the color; on a midpoint map, halfway along each side
+        for scale in ROOM:
+            w = scale["world"]
+            lo, hi = w["default"]
+            got = lambda x: gen.scaled_factor(scale, gen.SCALE_LINEAR, lo, hi, x)   # noqa: E731
+            with self.subTest(map=scale["name"]):
+                if w["kind"] == "mid":
+                    self.assertAlmostEqual(got((lo + w["mid"]) / 2), 0.25)
+                    self.assertAlmostEqual(got((hi + w["mid"]) / 2), 0.75)
+                else:
+                    L, H = gen.world_bounds(scale, lo, hi)
+                    self.assertAlmostEqual(got((L + H) / 2), 0.5)
+
+    def test_logarithmic_gives_each_doubling_the_same_color(self):
+        for scale in ROOM:
+            w = scale["world"]
+            if w["kind"] != "frac":
+                continue
+            lo, hi = w["default"]
+            start = gen.log_start(scale, lo, hi)
+            H = gen.world_bounds(scale, lo, hi)[1]
+            steps = gen.log2_pieces(H / start)
+            ys = [gen.scaled_factor(scale, gen.SCALE_LOG, lo, hi, start * 2 ** k) for k in range(int(steps) + 1)]
+            with self.subTest(map=scale["name"]):
+                for a, b in zip(ys, ys[1:]):
+                    self.assertAlmostEqual(b - a, 1 / max(steps, 1))
+                self.assertLessEqual(steps, math.log2(gen.LOG_RATIO) + 1e-9, "six doublings at most")
+
+    def test_a_doubling_map_is_already_logarithmic(self):
+        for scale in ROOM:
+            if scale["world"]["kind"] != "doubling":
+                continue
+            for rng in ranges(scale):
+                globs = store(scale, rng)
+                for x in samples(scale, rng):
+                    with self.subTest(map=scale["name"], range=rng, x=x):
+                        self.assertEqual(self.factor(scale, x, globs=globs, fixed=True, option=gen.SCALE_LOG),
+                                         self.factor(scale, x, globs=globs, fixed=True))
+
+    def test_logarithmic_keeps_the_midpoint_and_is_straight_within_min_half(self):
+        # the eight maps that run both ways from a midpoint (owner, 2026-11-14: "What about symlog?"): logarithmic
+        # on each side by the distance from the midpoint, straight within min_half of it, and the midpoint at
+        # exactly 0.5, which map_color's split and the neutral color rest on
+        self.assertEqual(sorted(s["name"] for s in MIDS),
+                         ["comfort", "comfort_base", "growth", "mig", "natural", "sex", "tfr", "wc"])
+        for scale in MIDS:
+            w = scale["world"]
+            mid, h = w["mid"], w["min_half"]
+            lo, hi = w["default"]
+            self.assertEqual(gen.knee(scale), h / 2)
+            for option in SETTINGS.values():
+                for rng in ranges(scale):
+                    L, H = gen.world_bounds(scale, *(rng or (None, None)))
+                    if L < mid < H:
+                        with self.subTest(map=scale["name"], scale=option, range=rng):
+                            self.assertEqual(self.factor(scale, mid, globs=store(scale, rng), fixed=True,
+                                                         option=option), 0.5)
+            got = lambda x: gen.scaled_factor(scale, gen.SCALE_LOG, lo, hi, x)   # noqa: E731
+            with self.subTest(map=scale["name"]):
+                # straight to min_half on each side ...
+                for sign in (1, -1):
+                    self.assertAlmostEqual(got(mid + sign * h / 2) - 0.5, (got(mid + sign * h) - 0.5) / 2)
+                    self.assertAlmostEqual(got(mid + sign * h / 4) - 0.5, (got(mid + sign * h) - 0.5) / 4)
+                # ... then the same share of the color for each doubling of the distance, half the straight band's
+                up = hi - mid
+                if up >= 4 * h:
+                    band = got(mid + h) - 0.5
+                    self.assertAlmostEqual(got(mid + 2 * h) - got(mid + h), band / 2)
+                    self.assertAlmostEqual(got(mid + 4 * h) - got(mid + 2 * h), band / 2)
+                # and it is not the straight scale: more of the color near the midpoint
+                self.assertGreater(got(mid + h) - 0.5, gen.scaled_factor(scale, gen.SCALE_LINEAR, lo, hi, mid + h) - 0.5)
+
+    def test_the_logarithmic_start_survives_the_engine_s_five_decimals(self):
+        # a low of 0 has no logarithm, so a straight map starts at a 64th of its high; on the narrowest range a
+        # map can have (its low 0, its high min_span) the engine's five decimals must still hold that start
+        for scale in ROOM:
+            if scale["world"]["kind"] != "frac":
+                continue
+            n = scale["name"]
+            with self.subTest(map=n):
+                self.assertGreaterEqual(scale["min_span"] / gen.LOG_RATIO, gen.LOG_FLOOR)
+                env = Env(self.defs, scale["input"], 0, fixed=True,
+                          globs={f"te_jmap_rng_{n}_lo": 0, f"te_jmap_rng_{n}_hi": 0})
+                self.assertGreaterEqual(env.lit(f"te_jmap_{n}_lg_min"), gen.LOG_FLOOR)
+                # the figure over the start is worked out without dividing by the small start itself
+                self.assertNotIn(f"divide = te_jmap_{n}_lg_min", self.text)
+                # and a figure of 0 is the low color, not an error
+                self.assertEqual(self.factor(scale, 0, fixed=True, option=gen.SCALE_LOG,
+                                             globs={f"te_jmap_rng_{n}_lo": 0, f"te_jmap_rng_{n}_hi": 0}), 0.0)
+
+    def test_ranked_reads_the_stored_place(self):
+        for scale in ROOM:
+            with self.subTest(map=scale["name"]):
+                for rank in (0.0, 0.25, 0.5, 1.0):
+                    self.assertEqual(self.factor(scale, 123.0, fixed=True, option=gen.SCALE_RANKED, rank=rank), rank)
+                # no place yet (a state made since the measure): the midpoint color, or the low one
+                self.assertEqual(self.factor(scale, 123.0, option=gen.SCALE_RANKED), 0.5 if scale["three"] else 0.0)
+                body = effect_body(self.text, f"te_jmap_{scale['name']}_factor")
+                self.assertIn("limit = { has_variable = te_jmap_rank }\n", body, "the place is read inside its guard")
+
+    def test_the_default_is_the_map_s_own_curve_first(self):
+        # one comparison on a default paint: the own curve is the switch's first branch
+        for scale in ROOM:
+            body = self.defs[f"te_jmap_{scale['name']}_factor"]
+            if scale["guards"]:
+                body = [p for p in dict(body)["if"] if p[0] != "limit"]
+            keys = [k for k, _ in body if k not in ("min", "max")]
+            with self.subTest(map=scale["name"]):
+                self.assertEqual(keys, ["if", "else_if", "else_if", "else"])
+                limits = [dict(arg).get("limit") for k, arg in body if k in ("if", "else_if")]
+                self.assertEqual(limits, [[("te_jmap_scale", "0")], [("te_jmap_scale", "1")], [("te_jmap_scale", "2")]])
+
+    def test_the_scale_is_the_map_room_s_alone(self):
+        # a system's own entry reads its own factor (te_jmap_gw_factor, te_jmap_gm_factor), and the fixed curves
+        # have no range to rescale: none of them reads the option or a stored place
+        for scale in ENTRY + FIXED:
+            tree = effect_body(self.text, f"te_jmap_{scale['name']}_factor")
+            with self.subTest(map=scale["name"]):
+                self.assertNotIn("te_jmap_scale", tree)
+                self.assertNotIn("te_jmap_rank", tree)
+        for scale in ENTRY:
+            for extra in ("_lg_lo", "_sl_up_t", "_lg_t"):
+                self.assertNotIn(f"te_jmap_{scale['name']}{extra} =", self.text)
+        hand = _read(HAND)
+        self.assertRegex(hand, r"te_jmap_scale = \{\s*value = 0\s*if = \{\s*limit = \{ has_global_variable = "
+                         r"te_jmap_opt_scale \}\s*value = global_var:te_jmap_opt_scale\s*\}\s*\}")
+
+    def test_the_knees_are_worth_a_logarithm(self):
+        # how many doublings lie between the straight band's edge (min_half) and each map's default extreme: under
+        # one, Logarithmic would be Linear in all but name. (Fertility's low side, 1 to 2.1, is the shortest.)
+        doublings = {}
+        for scale in MIDS:
+            w = scale["world"]
+            lo, hi = w["default"]
+            doublings[scale["name"]] = (round(math.log2((w["mid"] - lo) / w["min_half"]), 1),
+                                        round(math.log2((hi - w["mid"]) / w["min_half"]), 1))
+        self.assertEqual(doublings, {"wc": (2.3, 2.3), "tfr": (1.1, 3.1), "natural": (3.0, 3.2), "sex": (2.0, 2.6),
+                                     "mig": (3.6, 3.6), "comfort_base": (1.8, 4.7), "comfort": (1.8, 4.7),
+                                     "growth": (4.0, 4.3)})
+        self.assertGreaterEqual(min(min(pair) for pair in doublings.values()), 1)
+
+
+class RankRunTest(unittest.TestCase):
+    """Ranked: te_jmap_rank_<map> and the dispatch around it, run over made-up states (Run) against a plain sort
+    with ties (gen.ranks). A paint can't sort, so a wrong place here is a wrong color with nothing in the log."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _read(EFFECTS_OUT)
+        cls.effects = trees(cls.text)
+        cls.values = trees(_read(OUT))
+
+    def rank(self, scale, figures, painted=None, inside=None, stale=None, named=None):
+        states = [State(x, painted[i] if painted else True, inside[i] if inside else True)
+                  for i, x in enumerate(figures)]
+        for i, value in (stale or {}).items():
+            states[i].vars["te_jmap_rank"] = value
+        run = Run(self, self.effects, self.values, states, named=named or {})
+        run.run(self.effects[f"te_jmap_rank_{scale['name']}"])
+        return states, run
+
+    def check(self, scale, figures):
+        states, run = self.rank(scale, figures)
+        mid = scale["world"]["mid"] if scale["world"]["kind"] == "mid" else None
+        want = gen.ranks(figures, mid)
+        for i, state in enumerate(states):
+            self.assertAlmostEqual(state.vars["te_jmap_rank"], want[i], delta=2e-5, msg=(scale["name"], i, figures[i]))
+        self.assertEqual(run.globs.get("te_jmap_ranks"), 1.0, "the mark that places are stored")
+        return [state.vars["te_jmap_rank"] for state in states]
+
+    def test_places_are_the_sort_s(self):
+        scale = SCALES_BY_NAME["gini"][0]
+        for count in (1, 2, 3, 10, 61, 400, 2600):
+            figures = [float((i * 37) % 4099) / 4099 for i in range(count)]
+            got = self.check(scale, figures)
+            with self.subTest(count=count):
+                self.assertEqual(min(got), 0.0)
+                if count > 1:
+                    self.assertEqual(max(got), 1.0)
+                    # evenly: each state a step of the same size, whatever the figures
+                    steps = sorted(got)
+                    for a, b in zip(steps, steps[1:]):
+                        self.assertAlmostEqual(b - a, 1 / (count - 1), delta=3e-5)
+
+    def test_equal_figures_share_a_place(self):
+        # peacetime Devastation: hundreds of states at exactly 0 and a few torn ones. An index would smear the
+        # zeros across most of the palette in whatever order the engine walks them; they share the lowest place,
+        # and each distinct figure above them is one even step
+        scale = SCALES_BY_NAME["devastation"][0]
+        figures = [0.0] * 600 + [0.05, 0.2, 0.2, 0.4, 0.75] + [0.0] * 300
+        got = self.check(scale, figures)
+        self.assertEqual({got[i] for i, x in enumerate(figures) if x == 0.0}, {0.0})
+        self.assertEqual([got[600], got[601], got[602], got[603], got[604]], [0.25, 0.5, 0.5, 0.75, 1.0])
+        # every state alike: one place, the low color
+        self.assertEqual(set(self.check(scale, [0.0] * 50)), {0.0})
+
+    def test_a_midpoint_map_is_ranked_outward_on_each_side(self):
+        # Fertility: cream stays at replacement (2.1), not at the median state. Each side's states step evenly from
+        # the midpoint out to that side's full color, and a state exactly at the midpoint is the midpoint's color
+        scale = SCALES_BY_NAME["tfr"][0]
+        figures = [1.2, 1.9, 2.1, 2.2, 3.0, 4.5, 6.0, 1.9, 2.1]
+        got = self.check(scale, figures)
+        self.assertEqual(got, [0.0, 0.25, 0.5, 0.625, 0.75, 0.875, 1.0, 0.25, 0.5])
+        # the whole world on one side: that side's colors alone, the nearest state just off the midpoint's
+        above = self.check(scale, [2.5, 3.0, 4.0, 5.0])
+        self.assertEqual(above, [0.625, 0.75, 0.875, 1.0])
+        below = self.check(scale, [1.0, 1.5, 2.0])
+        for value, want in zip(below, [0.0, 1 / 6, 1 / 3]):
+            self.assertAlmostEqual(value, want, delta=2e-5)
+        for scale in MIDS:
+            mid = scale["world"]["mid"]
+            lo, hi = scale["world"]["default"]
+            figures = [lo + (hi - lo) * ((i * 7) % 23) / 22 for i in range(23)] + [mid, mid]
+            with self.subTest(map=scale["name"]):
+                got = self.check(scale, figures)
+                for x, value in zip(figures, got):
+                    self.assertEqual(value == 0.5, x == mid)
+                    self.assertEqual(value < 0.5, x < mid)
+
+    def test_only_the_states_the_map_measures_are_ranked(self):
+        # the states the map paints with a figure, in the Map Room's area: a state outside either has no place
+        scale = SCALES_BY_NAME["gini"][0]
+        figures = [float(i) for i in range(40)]
+        painted = [i % 3 != 0 for i in range(40)]
+        inside = [i % 4 != 0 for i in range(40)]
+        states, _run = self.rank(scale, figures, painted, inside)
+        ranked = [i for i, state in enumerate(states) if "te_jmap_rank" in state.vars]
+        self.assertEqual(ranked, [i for i in range(40) if painted[i] and inside[i]])
+        want = gen.ranks([figures[i] for i in ranked])
+        for j, i in enumerate(ranked):
+            self.assertAlmostEqual(states[i].vars["te_jmap_rank"], want[j], delta=2e-5)
+        for scale in ROOM:
+            body = effect_body(self.text, f"te_jmap_rank_{scale['name']}")
+            limit = " ".join(gen.measured(scale))
+            with self.subTest(map=scale["name"]):
+                self.assertNotIn("\n\tlimit = {  }", body)
+                for line in re.findall(r"\n\tlimit = \{ (.*) \}", body):
+                    self.assertTrue(line.startswith(limit), "a walk or a pass over states the map doesn't measure")
+                self.assertIn("te_jmap_in_area = yes", body)
+                # by its own figure: Current Comfort shares Base Comfort's range, not its order
+                self.assertRegex(body, rf"order_by = te_jmap_{scale['name']}_input(_neg)?\n")
+                self.assertNotRegex(body, rf"order_by = te_jmap_(?!{scale['name']}_input)")
+                self.assertNotRegex(body, r"\bposition\s*=", "a place is a count the walk keeps, not a position")
+                self.assertEqual(body.count("min = 0\n"), body.count(f"max = {gen.RANK_MAX}\n"))
+                self.assertEqual(body.count("check_range_bounds = no"), body.count("ordered_state = {"))
+
+    def refresh(self, sel, option, states, stale_flag=True):
+        run = Run(self, self.effects, self.values, states,
+                  named={"te_jmap_selector": sel, "te_jmap_scale": option, "te_jmap_trim": 0, "te_jmap_area": 0},
+                  globs={"te_jmap_ranks": 1.0} if stale_flag else {})
+        run.run(self.effects["te_jmap_refresh_range"])
+        return run
+
+    def test_a_measure_takes_the_pick_s_places_and_clears_every_other(self):
+        # one variable serves every map, so te_jmap_refresh_range clears it first: at a pick, an option click and
+        # each month. Ranked, the pick's places follow its range; under any other scale none is left behind
+        figures = [float((i * 37) % 101) for i in range(60)]
+
+        def states():
+            out = [State(x, painted=i % 5 != 0) for i, x in enumerate(figures)]
+            for state in out:
+                state.vars["te_jmap_rank"] = 0.77      # another map's, from the last pick
+            return out
+
+        made = states()
+        run = self.refresh(16, gen.SCALE_RANKED, made)      # Gini, ranked
+        want = gen.ranks([x for i, x in enumerate(figures) if i % 5 != 0])
+        got = [state.vars.get("te_jmap_rank") for state in made]
+        self.assertEqual([value is None for value in got], [i % 5 == 0 for i in range(60)],
+                         "a state the map doesn't paint keeps no place from the map before")
+        for j, value in enumerate(v for v in got if v is not None):
+            self.assertAlmostEqual(value, want[j], delta=2e-5)
+        self.assertIn("te_jmap_rng_gini_hi", run.globs, "the range is still measured: the tooltip prints it")
+        for option in (gen.SCALE_OWN, gen.SCALE_LINEAR, gen.SCALE_LOG):
+            made = states()
+            run = self.refresh(16, option, made)
+            with self.subTest(scale=option):
+                self.assertEqual([state.vars for state in made], [{}] * 60)
+                self.assertNotIn("te_jmap_ranks", run.globs)
+                self.assertEqual(run.walked, 0, "no walk of the states for a scale that reads no place")
+        # a pick with no range (Leading Cause): cleared, and nothing stored
+        made = states()
+        self.refresh(11, gen.SCALE_RANKED, made)
+        self.assertEqual([state.vars for state in made], [{}] * 60)
+        # and with no place stored anywhere, nothing is walked to clear
+        body = effect_body(self.text, "te_jmap_clear_ranks")
+        self.assertRegex(body, r"if = \{\n\t\tlimit = \{ has_global_variable = te_jmap_ranks \}\n\t\tevery_state = \{\n"
+                         r"\t\t\tlimit = \{ has_variable = te_jmap_rank \}\n\t\t\tremove_variable = te_jmap_rank\n")
+
+    def test_every_fitted_pick_has_its_own_places(self):
+        body = effect_body(self.text, "te_jmap_refresh_rank")
+        picked = {int(sel): name for sel, name in
+                  re.findall(r"limit = \{ te_jmap_selector = (\d+) \}\s*(te_jmap_rank_\w+) = yes", body)}
+        self.assertEqual(picked, {s["sel"]: f"te_jmap_rank_{s['name']}" for s in ROOM})
+        self.assertEqual((picked[27], picked[28]), ("te_jmap_rank_comfort_base", "te_jmap_rank_comfort"))
+        dispatch = effect_body(self.text, "te_jmap_refresh_range")
+        self.assertLess(dispatch.index("te_jmap_clear_ranks = yes"), dispatch.index("te_jmap_selector = 1 }"))
+        self.assertRegex(dispatch, r"if = \{\n\t\tlimit = \{ te_jmap_scale = 3 \}\n\t\tte_jmap_refresh_rank = yes\n\t\}\n\}$")
+        # a range's own effect stores no place: the once-a-game range check measures GDP per capita whatever the
+        # pick, and must not leave GDP's places under another map
+        for scale in OWN:
+            self.assertNotIn("te_jmap_rank", effect_body(self.text, f"te_jmap_range_{scale['name']}"))
 
 
 class UseTest(unittest.TestCase):

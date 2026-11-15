@@ -51,15 +51,19 @@ te_jmap_turmoil_d1 = {
 	value = te_jmap_turmoil_span
 	multiply = 1.6
 }
-te_jmap_turmoil_lg_lo = {
+te_jmap_turmoil_lg_min = {
 	value = te_jmap_turmoil_hi
 	divide = 64
-	min = te_jmap_turmoil_lo
-	min = 0.00001
 }
 te_jmap_turmoil_lg_r = {
 	value = turmoil
-	divide = te_jmap_turmoil_lg_lo
+	multiply = 64
+	divide = te_jmap_turmoil_hi
+	if = {
+		limit = { te_jmap_turmoil_lo > te_jmap_turmoil_lg_min }
+		value = turmoil
+		divide = te_jmap_turmoil_lo
+	}
 }
 te_jmap_turmoil_lg_t = {
 	if = {
@@ -147,8 +151,12 @@ te_jmap_turmoil_lg_t = {
 	}
 }
 te_jmap_turmoil_lg_span_r = {
-	value = te_jmap_turmoil_hi
-	divide = te_jmap_turmoil_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_turmoil_lo > te_jmap_turmoil_lg_min }
+		value = te_jmap_turmoil_hi
+		divide = te_jmap_turmoil_lo
+	}
 }
 te_jmap_turmoil_lg_top = {
 	if = {
@@ -234,7 +242,7 @@ te_jmap_turmoil_lg_top = {
 	else = {
 		value = te_jmap_turmoil_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_turmoil_factor = {
 	if = {
@@ -314,15 +322,19 @@ te_jmap_devastation_d1 = {
 	value = te_jmap_devastation_span
 	multiply = 1.6
 }
-te_jmap_devastation_lg_lo = {
+te_jmap_devastation_lg_min = {
 	value = te_jmap_devastation_hi
 	divide = 64
-	min = te_jmap_devastation_lo
-	min = 0.00001
 }
 te_jmap_devastation_lg_r = {
 	value = devastation
-	divide = te_jmap_devastation_lg_lo
+	multiply = 64
+	divide = te_jmap_devastation_hi
+	if = {
+		limit = { te_jmap_devastation_lo > te_jmap_devastation_lg_min }
+		value = devastation
+		divide = te_jmap_devastation_lo
+	}
 }
 te_jmap_devastation_lg_t = {
 	if = {
@@ -410,8 +422,12 @@ te_jmap_devastation_lg_t = {
 	}
 }
 te_jmap_devastation_lg_span_r = {
-	value = te_jmap_devastation_hi
-	divide = te_jmap_devastation_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_devastation_lo > te_jmap_devastation_lg_min }
+		value = te_jmap_devastation_hi
+		divide = te_jmap_devastation_lo
+	}
 }
 te_jmap_devastation_lg_top = {
 	if = {
@@ -497,7 +513,7 @@ te_jmap_devastation_lg_top = {
 	else = {
 		value = te_jmap_devastation_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_devastation_factor = {
 	if = {
@@ -572,15 +588,19 @@ te_jmap_urban_d0 = {
 	value = te_jmap_urban_span
 	multiply = 1
 }
-te_jmap_urban_lg_lo = {
+te_jmap_urban_lg_min = {
 	value = te_jmap_urban_hi
 	divide = 64
-	min = te_jmap_urban_lo
-	min = 0.00001
 }
 te_jmap_urban_lg_r = {
 	value = var:te_dg_urban_share
-	divide = te_jmap_urban_lg_lo
+	multiply = 64
+	divide = te_jmap_urban_hi
+	if = {
+		limit = { te_jmap_urban_lo > te_jmap_urban_lg_min }
+		value = var:te_dg_urban_share
+		divide = te_jmap_urban_lo
+	}
 }
 te_jmap_urban_lg_t = {
 	if = {
@@ -668,8 +688,12 @@ te_jmap_urban_lg_t = {
 	}
 }
 te_jmap_urban_lg_span_r = {
-	value = te_jmap_urban_hi
-	divide = te_jmap_urban_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_urban_lo > te_jmap_urban_lg_min }
+		value = te_jmap_urban_hi
+		divide = te_jmap_urban_lo
+	}
 }
 te_jmap_urban_lg_top = {
 	if = {
@@ -755,7 +779,7 @@ te_jmap_urban_lg_top = {
 	else = {
 		value = te_jmap_urban_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_urban_factor = {
 	value = 0
@@ -828,15 +852,19 @@ te_jmap_gini_d0 = {
 	value = te_jmap_gini_span
 	multiply = 1
 }
-te_jmap_gini_lg_lo = {
+te_jmap_gini_lg_min = {
 	value = te_jmap_gini_hi
 	divide = 64
-	min = te_jmap_gini_lo
-	min = 0.00001
 }
 te_jmap_gini_lg_r = {
 	value = var:te_dg_gini
-	divide = te_jmap_gini_lg_lo
+	multiply = 64
+	divide = te_jmap_gini_hi
+	if = {
+		limit = { te_jmap_gini_lo > te_jmap_gini_lg_min }
+		value = var:te_dg_gini
+		divide = te_jmap_gini_lo
+	}
 }
 te_jmap_gini_lg_t = {
 	if = {
@@ -924,8 +952,12 @@ te_jmap_gini_lg_t = {
 	}
 }
 te_jmap_gini_lg_span_r = {
-	value = te_jmap_gini_hi
-	divide = te_jmap_gini_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_gini_lo > te_jmap_gini_lg_min }
+		value = te_jmap_gini_hi
+		divide = te_jmap_gini_lo
+	}
 }
 te_jmap_gini_lg_top = {
 	if = {
@@ -1011,7 +1043,7 @@ te_jmap_gini_lg_top = {
 	else = {
 		value = te_jmap_gini_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_gini_factor = {
 	value = 0
@@ -1585,15 +1617,19 @@ te_jmap_e0_d0 = {
 	value = te_jmap_e0_span
 	multiply = 1
 }
-te_jmap_e0_lg_lo = {
+te_jmap_e0_lg_min = {
 	value = te_jmap_e0_hi
 	divide = 64
-	min = te_jmap_e0_lo
-	min = 0.00001
 }
 te_jmap_e0_lg_r = {
 	value = var:te_dg_e0
-	divide = te_jmap_e0_lg_lo
+	multiply = 64
+	divide = te_jmap_e0_hi
+	if = {
+		limit = { te_jmap_e0_lo > te_jmap_e0_lg_min }
+		value = var:te_dg_e0
+		divide = te_jmap_e0_lo
+	}
 }
 te_jmap_e0_lg_t = {
 	if = {
@@ -1681,8 +1717,12 @@ te_jmap_e0_lg_t = {
 	}
 }
 te_jmap_e0_lg_span_r = {
-	value = te_jmap_e0_hi
-	divide = te_jmap_e0_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_e0_lo > te_jmap_e0_lg_min }
+		value = te_jmap_e0_hi
+		divide = te_jmap_e0_lo
+	}
 }
 te_jmap_e0_lg_top = {
 	if = {
@@ -1768,7 +1808,7 @@ te_jmap_e0_lg_top = {
 	else = {
 		value = te_jmap_e0_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_e0_factor = {
 	value = 0
@@ -1854,15 +1894,19 @@ te_jmap_imr_d0 = {
 	value = te_jmap_imr_span
 	multiply = 1
 }
-te_jmap_imr_lg_lo = {
+te_jmap_imr_lg_min = {
 	value = te_jmap_imr_hi
 	divide = 64
-	min = te_jmap_imr_lo
-	min = 0.00001
 }
 te_jmap_imr_lg_r = {
 	value = var:te_dg_imr
-	divide = te_jmap_imr_lg_lo
+	multiply = 64
+	divide = te_jmap_imr_hi
+	if = {
+		limit = { te_jmap_imr_lo > te_jmap_imr_lg_min }
+		value = var:te_dg_imr
+		divide = te_jmap_imr_lo
+	}
 }
 te_jmap_imr_lg_t = {
 	if = {
@@ -1950,8 +1994,12 @@ te_jmap_imr_lg_t = {
 	}
 }
 te_jmap_imr_lg_span_r = {
-	value = te_jmap_imr_hi
-	divide = te_jmap_imr_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_imr_lo > te_jmap_imr_lg_min }
+		value = te_jmap_imr_hi
+		divide = te_jmap_imr_lo
+	}
 }
 te_jmap_imr_lg_top = {
 	if = {
@@ -2037,7 +2085,7 @@ te_jmap_imr_lg_top = {
 	else = {
 		value = te_jmap_imr_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_imr_factor = {
 	value = 0
@@ -2624,15 +2672,19 @@ te_jmap_median_d0 = {
 	value = te_jmap_median_span
 	multiply = 1
 }
-te_jmap_median_lg_lo = {
+te_jmap_median_lg_min = {
 	value = te_jmap_median_hi
 	divide = 64
-	min = te_jmap_median_lo
-	min = 0.00001
 }
 te_jmap_median_lg_r = {
 	value = var:te_dg_median
-	divide = te_jmap_median_lg_lo
+	multiply = 64
+	divide = te_jmap_median_hi
+	if = {
+		limit = { te_jmap_median_lo > te_jmap_median_lg_min }
+		value = var:te_dg_median
+		divide = te_jmap_median_lo
+	}
 }
 te_jmap_median_lg_t = {
 	if = {
@@ -2720,8 +2772,12 @@ te_jmap_median_lg_t = {
 	}
 }
 te_jmap_median_lg_span_r = {
-	value = te_jmap_median_hi
-	divide = te_jmap_median_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_median_lo > te_jmap_median_lg_min }
+		value = te_jmap_median_hi
+		divide = te_jmap_median_lo
+	}
 }
 te_jmap_median_lg_top = {
 	if = {
@@ -2807,7 +2863,7 @@ te_jmap_median_lg_top = {
 	else = {
 		value = te_jmap_median_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_median_factor = {
 	value = 0
@@ -3433,15 +3489,19 @@ te_jmap_cdr_d1 = {
 	value = te_jmap_cdr_span
 	multiply = 2.10526
 }
-te_jmap_cdr_lg_lo = {
+te_jmap_cdr_lg_min = {
 	value = te_jmap_cdr_hi
 	divide = 64
-	min = te_jmap_cdr_lo
-	min = 0.00001
 }
 te_jmap_cdr_lg_r = {
 	value = var:te_dg_cdr
-	divide = te_jmap_cdr_lg_lo
+	multiply = 64
+	divide = te_jmap_cdr_hi
+	if = {
+		limit = { te_jmap_cdr_lo > te_jmap_cdr_lg_min }
+		value = var:te_dg_cdr
+		divide = te_jmap_cdr_lo
+	}
 }
 te_jmap_cdr_lg_t = {
 	if = {
@@ -3529,8 +3589,12 @@ te_jmap_cdr_lg_t = {
 	}
 }
 te_jmap_cdr_lg_span_r = {
-	value = te_jmap_cdr_hi
-	divide = te_jmap_cdr_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_cdr_lo > te_jmap_cdr_lg_min }
+		value = te_jmap_cdr_hi
+		divide = te_jmap_cdr_lo
+	}
 }
 te_jmap_cdr_lg_top = {
 	if = {
@@ -3616,7 +3680,7 @@ te_jmap_cdr_lg_top = {
 	else = {
 		value = te_jmap_cdr_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_cdr_factor = {
 	value = 0
@@ -3695,15 +3759,19 @@ te_jmap_cbr_d0 = {
 	value = te_jmap_cbr_span
 	multiply = 1
 }
-te_jmap_cbr_lg_lo = {
+te_jmap_cbr_lg_min = {
 	value = te_jmap_cbr_hi
 	divide = 64
-	min = te_jmap_cbr_lo
-	min = 0.00001
 }
 te_jmap_cbr_lg_r = {
 	value = var:te_dg_cbr
-	divide = te_jmap_cbr_lg_lo
+	multiply = 64
+	divide = te_jmap_cbr_hi
+	if = {
+		limit = { te_jmap_cbr_lo > te_jmap_cbr_lg_min }
+		value = var:te_dg_cbr
+		divide = te_jmap_cbr_lo
+	}
 }
 te_jmap_cbr_lg_t = {
 	if = {
@@ -3791,8 +3859,12 @@ te_jmap_cbr_lg_t = {
 	}
 }
 te_jmap_cbr_lg_span_r = {
-	value = te_jmap_cbr_hi
-	divide = te_jmap_cbr_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_cbr_lo > te_jmap_cbr_lg_min }
+		value = te_jmap_cbr_hi
+		divide = te_jmap_cbr_lo
+	}
 }
 te_jmap_cbr_lg_top = {
 	if = {
@@ -3878,7 +3950,7 @@ te_jmap_cbr_lg_top = {
 	else = {
 		value = te_jmap_cbr_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_cbr_factor = {
 	value = 0
@@ -3951,15 +4023,19 @@ te_jmap_old_d0 = {
 	value = te_jmap_old_span
 	multiply = 1
 }
-te_jmap_old_lg_lo = {
+te_jmap_old_lg_min = {
 	value = te_jmap_old_hi
 	divide = 64
-	min = te_jmap_old_lo
-	min = 0.00001
 }
 te_jmap_old_lg_r = {
 	value = var:te_dg_old_share
-	divide = te_jmap_old_lg_lo
+	multiply = 64
+	divide = te_jmap_old_hi
+	if = {
+		limit = { te_jmap_old_lo > te_jmap_old_lg_min }
+		value = var:te_dg_old_share
+		divide = te_jmap_old_lo
+	}
 }
 te_jmap_old_lg_t = {
 	if = {
@@ -4047,8 +4123,12 @@ te_jmap_old_lg_t = {
 	}
 }
 te_jmap_old_lg_span_r = {
-	value = te_jmap_old_hi
-	divide = te_jmap_old_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_old_lo > te_jmap_old_lg_min }
+		value = te_jmap_old_hi
+		divide = te_jmap_old_lo
+	}
 }
 te_jmap_old_lg_top = {
 	if = {
@@ -4134,7 +4214,7 @@ te_jmap_old_lg_top = {
 	else = {
 		value = te_jmap_old_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_old_factor = {
 	value = 0
@@ -5326,15 +5406,19 @@ te_jmap_gw_room_d1 = {
 	value = te_jmap_gw_room_span
 	multiply = 1.6
 }
-te_jmap_gw_room_lg_lo = {
+te_jmap_gw_room_lg_min = {
 	value = te_jmap_gw_room_hi
 	divide = 64
-	min = te_jmap_gw_room_lo
-	min = 0.00001
 }
 te_jmap_gw_room_lg_r = {
 	value = te_jmap_gw_share
-	divide = te_jmap_gw_room_lg_lo
+	multiply = 64
+	divide = te_jmap_gw_room_hi
+	if = {
+		limit = { te_jmap_gw_room_lo > te_jmap_gw_room_lg_min }
+		value = te_jmap_gw_share
+		divide = te_jmap_gw_room_lo
+	}
 }
 te_jmap_gw_room_lg_t = {
 	if = {
@@ -5422,8 +5506,12 @@ te_jmap_gw_room_lg_t = {
 	}
 }
 te_jmap_gw_room_lg_span_r = {
-	value = te_jmap_gw_room_hi
-	divide = te_jmap_gw_room_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_gw_room_lo > te_jmap_gw_room_lg_min }
+		value = te_jmap_gw_room_hi
+		divide = te_jmap_gw_room_lo
+	}
 }
 te_jmap_gw_room_lg_top = {
 	if = {
@@ -5509,7 +5597,7 @@ te_jmap_gw_room_lg_top = {
 	else = {
 		value = te_jmap_gw_room_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_gw_room_factor = {
 	value = 0
@@ -5659,15 +5747,19 @@ te_jmap_gm_room_d1 = {
 	value = te_jmap_gm_room_span
 	multiply = 2
 }
-te_jmap_gm_room_lg_lo = {
+te_jmap_gm_room_lg_min = {
 	value = te_jmap_gm_room_hi
 	divide = 64
-	min = te_jmap_gm_room_lo
-	min = 0.00001
 }
 te_jmap_gm_room_lg_r = {
 	value = gm_state_grandeur
-	divide = te_jmap_gm_room_lg_lo
+	multiply = 64
+	divide = te_jmap_gm_room_hi
+	if = {
+		limit = { te_jmap_gm_room_lo > te_jmap_gm_room_lg_min }
+		value = gm_state_grandeur
+		divide = te_jmap_gm_room_lo
+	}
 }
 te_jmap_gm_room_lg_t = {
 	if = {
@@ -5755,8 +5847,12 @@ te_jmap_gm_room_lg_t = {
 	}
 }
 te_jmap_gm_room_lg_span_r = {
-	value = te_jmap_gm_room_hi
-	divide = te_jmap_gm_room_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_gm_room_lo > te_jmap_gm_room_lg_min }
+		value = te_jmap_gm_room_hi
+		divide = te_jmap_gm_room_lo
+	}
 }
 te_jmap_gm_room_lg_top = {
 	if = {
@@ -5842,7 +5938,7 @@ te_jmap_gm_room_lg_top = {
 	else = {
 		value = te_jmap_gm_room_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_gm_room_factor = {
 	if = {
@@ -5917,15 +6013,19 @@ te_jmap_tourism_d0 = {
 	value = te_jmap_tourism_span
 	multiply = 1
 }
-te_jmap_tourism_lg_lo = {
+te_jmap_tourism_lg_min = {
 	value = te_jmap_tourism_hi
 	divide = 64
-	min = te_jmap_tourism_lo
-	min = 0.00001
 }
 te_jmap_tourism_lg_r = {
 	value = var:te_tourism_base_appeal
-	divide = te_jmap_tourism_lg_lo
+	multiply = 64
+	divide = te_jmap_tourism_hi
+	if = {
+		limit = { te_jmap_tourism_lo > te_jmap_tourism_lg_min }
+		value = var:te_tourism_base_appeal
+		divide = te_jmap_tourism_lo
+	}
 }
 te_jmap_tourism_lg_t = {
 	if = {
@@ -6013,8 +6113,12 @@ te_jmap_tourism_lg_t = {
 	}
 }
 te_jmap_tourism_lg_span_r = {
-	value = te_jmap_tourism_hi
-	divide = te_jmap_tourism_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_tourism_lo > te_jmap_tourism_lg_min }
+		value = te_jmap_tourism_hi
+		divide = te_jmap_tourism_lo
+	}
 }
 te_jmap_tourism_lg_top = {
 	if = {
@@ -6100,7 +6204,7 @@ te_jmap_tourism_lg_top = {
 	else = {
 		value = te_jmap_tourism_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_tourism_factor = {
 	value = 0
@@ -7437,15 +7541,19 @@ te_jmap_crowding_d1 = {
 	value = te_jmap_crowding_span
 	multiply = 1.93103
 }
-te_jmap_crowding_lg_lo = {
+te_jmap_crowding_lg_min = {
 	value = te_jmap_crowding_hi
 	divide = 64
-	min = te_jmap_crowding_lo
-	min = 0.00001
 }
 te_jmap_crowding_lg_r = {
 	value = migration_crowding_pull_pct
-	divide = te_jmap_crowding_lg_lo
+	multiply = 64
+	divide = te_jmap_crowding_hi
+	if = {
+		limit = { te_jmap_crowding_lo > te_jmap_crowding_lg_min }
+		value = migration_crowding_pull_pct
+		divide = te_jmap_crowding_lo
+	}
 }
 te_jmap_crowding_lg_t = {
 	if = {
@@ -7533,8 +7641,12 @@ te_jmap_crowding_lg_t = {
 	}
 }
 te_jmap_crowding_lg_span_r = {
-	value = te_jmap_crowding_hi
-	divide = te_jmap_crowding_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_crowding_lo > te_jmap_crowding_lg_min }
+		value = te_jmap_crowding_hi
+		divide = te_jmap_crowding_lo
+	}
 }
 te_jmap_crowding_lg_top = {
 	if = {
@@ -7620,7 +7732,7 @@ te_jmap_crowding_lg_top = {
 	else = {
 		value = te_jmap_crowding_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_crowding_factor = {
 	if = {
@@ -8996,15 +9108,19 @@ te_jmap_means_d0 = {
 	value = te_jmap_means_span
 	multiply = 1
 }
-te_jmap_means_lg_lo = {
+te_jmap_means_lg_min = {
 	value = te_jmap_means_hi
 	divide = 64
-	min = te_jmap_means_lo
-	min = 0.00001
 }
 te_jmap_means_lg_r = {
 	value = var:te_dg_means
-	divide = te_jmap_means_lg_lo
+	multiply = 64
+	divide = te_jmap_means_hi
+	if = {
+		limit = { te_jmap_means_lo > te_jmap_means_lg_min }
+		value = var:te_dg_means
+		divide = te_jmap_means_lo
+	}
 }
 te_jmap_means_lg_t = {
 	if = {
@@ -9092,8 +9208,12 @@ te_jmap_means_lg_t = {
 	}
 }
 te_jmap_means_lg_span_r = {
-	value = te_jmap_means_hi
-	divide = te_jmap_means_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_means_lo > te_jmap_means_lg_min }
+		value = te_jmap_means_hi
+		divide = te_jmap_means_lo
+	}
 }
 te_jmap_means_lg_top = {
 	if = {
@@ -9179,7 +9299,7 @@ te_jmap_means_lg_top = {
 	else = {
 		value = te_jmap_means_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_means_factor = {
 	value = 0
@@ -9252,15 +9372,19 @@ te_jmap_health_d0 = {
 	value = te_jmap_health_span
 	multiply = 1
 }
-te_jmap_health_lg_lo = {
+te_jmap_health_lg_min = {
 	value = te_jmap_health_hi
 	divide = 64
-	min = te_jmap_health_lo
-	min = 0.00001
 }
 te_jmap_health_lg_r = {
 	value = var:te_dg_acc
-	divide = te_jmap_health_lg_lo
+	multiply = 64
+	divide = te_jmap_health_hi
+	if = {
+		limit = { te_jmap_health_lo > te_jmap_health_lg_min }
+		value = var:te_dg_acc
+		divide = te_jmap_health_lo
+	}
 }
 te_jmap_health_lg_t = {
 	if = {
@@ -9348,8 +9472,12 @@ te_jmap_health_lg_t = {
 	}
 }
 te_jmap_health_lg_span_r = {
-	value = te_jmap_health_hi
-	divide = te_jmap_health_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_health_lo > te_jmap_health_lg_min }
+		value = te_jmap_health_hi
+		divide = te_jmap_health_lo
+	}
 }
 te_jmap_health_lg_top = {
 	if = {
@@ -9435,7 +9563,7 @@ te_jmap_health_lg_top = {
 	else = {
 		value = te_jmap_health_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_health_factor = {
 	value = 0
@@ -9504,15 +9632,19 @@ te_jmap_fam_d0 = {
 	value = te_jmap_fam_span
 	multiply = 1
 }
-te_jmap_fam_lg_lo = {
+te_jmap_fam_lg_min = {
 	value = te_jmap_fam_hi
 	divide = 64
-	min = te_jmap_fam_lo
-	min = 0.00001
 }
 te_jmap_fam_lg_r = {
 	value = te_demog_fam_share
-	divide = te_jmap_fam_lg_lo
+	multiply = 64
+	divide = te_jmap_fam_hi
+	if = {
+		limit = { te_jmap_fam_lo > te_jmap_fam_lg_min }
+		value = te_demog_fam_share
+		divide = te_jmap_fam_lo
+	}
 }
 te_jmap_fam_lg_t = {
 	if = {
@@ -9600,8 +9732,12 @@ te_jmap_fam_lg_t = {
 	}
 }
 te_jmap_fam_lg_span_r = {
-	value = te_jmap_fam_hi
-	divide = te_jmap_fam_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_fam_lo > te_jmap_fam_lg_min }
+		value = te_jmap_fam_hi
+		divide = te_jmap_fam_lo
+	}
 }
 te_jmap_fam_lg_top = {
 	if = {
@@ -9687,7 +9823,7 @@ te_jmap_fam_lg_top = {
 	else = {
 		value = te_jmap_fam_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_fam_factor = {
 	if = {
@@ -9761,15 +9897,19 @@ te_jmap_capitalists_d1 = {
 	value = te_jmap_capitalists_span
 	multiply = 1.6
 }
-te_jmap_capitalists_lg_lo = {
+te_jmap_capitalists_lg_min = {
 	value = te_jmap_capitalists_hi
 	divide = 64
-	min = te_jmap_capitalists_lo
-	min = 0.00001
 }
 te_jmap_capitalists_lg_r = {
 	value = te_jmap_capitalists_share
-	divide = te_jmap_capitalists_lg_lo
+	multiply = 64
+	divide = te_jmap_capitalists_hi
+	if = {
+		limit = { te_jmap_capitalists_lo > te_jmap_capitalists_lg_min }
+		value = te_jmap_capitalists_share
+		divide = te_jmap_capitalists_lo
+	}
 }
 te_jmap_capitalists_lg_t = {
 	if = {
@@ -9857,8 +9997,12 @@ te_jmap_capitalists_lg_t = {
 	}
 }
 te_jmap_capitalists_lg_span_r = {
-	value = te_jmap_capitalists_hi
-	divide = te_jmap_capitalists_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_capitalists_lo > te_jmap_capitalists_lg_min }
+		value = te_jmap_capitalists_hi
+		divide = te_jmap_capitalists_lo
+	}
 }
 te_jmap_capitalists_lg_top = {
 	if = {
@@ -9944,7 +10088,7 @@ te_jmap_capitalists_lg_top = {
 	else = {
 		value = te_jmap_capitalists_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_capitalists_factor = {
 	if = {
@@ -10015,15 +10159,19 @@ te_jmap_aristocrats_d0 = {
 	value = te_jmap_aristocrats_span
 	multiply = 1
 }
-te_jmap_aristocrats_lg_lo = {
+te_jmap_aristocrats_lg_min = {
 	value = te_jmap_aristocrats_hi
 	divide = 64
-	min = te_jmap_aristocrats_lo
-	min = 0.00001
 }
 te_jmap_aristocrats_lg_r = {
 	value = te_jmap_aristocrats_share
-	divide = te_jmap_aristocrats_lg_lo
+	multiply = 64
+	divide = te_jmap_aristocrats_hi
+	if = {
+		limit = { te_jmap_aristocrats_lo > te_jmap_aristocrats_lg_min }
+		value = te_jmap_aristocrats_share
+		divide = te_jmap_aristocrats_lo
+	}
 }
 te_jmap_aristocrats_lg_t = {
 	if = {
@@ -10111,8 +10259,12 @@ te_jmap_aristocrats_lg_t = {
 	}
 }
 te_jmap_aristocrats_lg_span_r = {
-	value = te_jmap_aristocrats_hi
-	divide = te_jmap_aristocrats_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_aristocrats_lo > te_jmap_aristocrats_lg_min }
+		value = te_jmap_aristocrats_hi
+		divide = te_jmap_aristocrats_lo
+	}
 }
 te_jmap_aristocrats_lg_top = {
 	if = {
@@ -10198,7 +10350,7 @@ te_jmap_aristocrats_lg_top = {
 	else = {
 		value = te_jmap_aristocrats_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_aristocrats_factor = {
 	if = {
@@ -10263,15 +10415,19 @@ te_jmap_clergy_d0 = {
 	value = te_jmap_clergy_span
 	multiply = 1
 }
-te_jmap_clergy_lg_lo = {
+te_jmap_clergy_lg_min = {
 	value = te_jmap_clergy_hi
 	divide = 64
-	min = te_jmap_clergy_lo
-	min = 0.00001
 }
 te_jmap_clergy_lg_r = {
 	value = te_jmap_clergy_share
-	divide = te_jmap_clergy_lg_lo
+	multiply = 64
+	divide = te_jmap_clergy_hi
+	if = {
+		limit = { te_jmap_clergy_lo > te_jmap_clergy_lg_min }
+		value = te_jmap_clergy_share
+		divide = te_jmap_clergy_lo
+	}
 }
 te_jmap_clergy_lg_t = {
 	if = {
@@ -10359,8 +10515,12 @@ te_jmap_clergy_lg_t = {
 	}
 }
 te_jmap_clergy_lg_span_r = {
-	value = te_jmap_clergy_hi
-	divide = te_jmap_clergy_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_clergy_lo > te_jmap_clergy_lg_min }
+		value = te_jmap_clergy_hi
+		divide = te_jmap_clergy_lo
+	}
 }
 te_jmap_clergy_lg_top = {
 	if = {
@@ -10446,7 +10606,7 @@ te_jmap_clergy_lg_top = {
 	else = {
 		value = te_jmap_clergy_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_clergy_factor = {
 	if = {
@@ -10520,15 +10680,19 @@ te_jmap_academics_d1 = {
 	value = te_jmap_academics_span
 	multiply = 1.6
 }
-te_jmap_academics_lg_lo = {
+te_jmap_academics_lg_min = {
 	value = te_jmap_academics_hi
 	divide = 64
-	min = te_jmap_academics_lo
-	min = 0.00001
 }
 te_jmap_academics_lg_r = {
 	value = te_jmap_academics_share
-	divide = te_jmap_academics_lg_lo
+	multiply = 64
+	divide = te_jmap_academics_hi
+	if = {
+		limit = { te_jmap_academics_lo > te_jmap_academics_lg_min }
+		value = te_jmap_academics_share
+		divide = te_jmap_academics_lo
+	}
 }
 te_jmap_academics_lg_t = {
 	if = {
@@ -10616,8 +10780,12 @@ te_jmap_academics_lg_t = {
 	}
 }
 te_jmap_academics_lg_span_r = {
-	value = te_jmap_academics_hi
-	divide = te_jmap_academics_lg_lo
+	value = 64
+	if = {
+		limit = { te_jmap_academics_lo > te_jmap_academics_lg_min }
+		value = te_jmap_academics_hi
+		divide = te_jmap_academics_lo
+	}
 }
 te_jmap_academics_lg_top = {
 	if = {
@@ -10703,7 +10871,7 @@ te_jmap_academics_lg_top = {
 	else = {
 		value = te_jmap_academics_lg_span_r divide = 1048576 add = 19
 	}
-	min = 1
+	min = 0.001
 }
 te_jmap_academics_factor = {
 	if = {
