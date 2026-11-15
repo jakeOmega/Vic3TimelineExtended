@@ -16,7 +16,7 @@
 # ungated first method, so no building is left without one. A new method
 # takes both lines, and its building joins te_ap_automatable_building;
 # test_automation_policy.py checks the two lines name the same methods, the
-# ladder, every group's fallback and the building list. The 41 methods:
+# ladder, every group's fallback and the building list. The 44 methods:
 #
 #   Factory automation, the robotic tier up (Robotics, era 8, and later):
 #     Tooling Workshop, Furniture Manufactory, Motor Industry: Robotic
@@ -44,7 +44,9 @@
 #     (Autonomous Vehicles) in Urban Centers; Autonomous Trains and Vactrain
 #     Freight (Vactrains), the
 #     Autonomous Highway and Automated Harvesters and Planters (Autonomous
-#     Vehicles).
+#     Vehicles); Robotic Barns in the Livestock Ranch (Internet of Things);
+#     Autonomous Harvesters in the plantations, the Vineyard and the Rubber
+#     Plantation (two copies, Autonomous Vehicles).
 #
 # Left out on purpose:
 #   - base methods that set what a building makes and from what, not who does
@@ -150,6 +152,18 @@ te_ap_automatable_building = {
 		is_building_type = building_maize_farm
 		is_building_type = building_millet_farm
 		is_building_type = building_rice_farm
+		is_building_type = building_livestock_ranch
+		is_building_type = building_banana_plantation
+		is_building_type = building_coffee_plantation
+		is_building_type = building_cotton_plantation
+		is_building_type = building_dye_plantation
+		is_building_type = building_opium_plantation
+		is_building_type = building_silk_plantation
+		is_building_type = building_sugar_plantation
+		is_building_type = building_tea_plantation
+		is_building_type = building_tobacco_plantation
+		is_building_type = building_vineyard
+		is_building_type = building_rubber_plantation
 		is_building_type = building_trade_center
 	}
 }

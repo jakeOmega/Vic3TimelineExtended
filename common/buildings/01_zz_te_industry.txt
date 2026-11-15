@@ -404,6 +404,7 @@ building_synthetics_plant_fruit = {
 
 	production_method_groups = {
 		pmg_synthetic_fruit
+		pmg_secondary_building_synthetics_plant_fruit
 		pmg_automation_building_chemical_plant
 		pmg_maintenance
 	}
