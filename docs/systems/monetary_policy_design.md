@@ -8,7 +8,7 @@
 
 > **A road off gold (2026-10-05):** a deep slump the peg is prolonging (a Downturn or Panic with the stance Tight or Very Tight) now drains Peg Confidence 3 a month whatever the vault holds, so `te_peg.1` comes about two years into it; a suspension of convertibility ends in a choice (`te_peg.3`: resume at 50, or Fiat Money); and the AI's currency weights favour fiat once it is on offer. See [§0.13](#013-a-road-off-gold--2026-10-05).
 
-> **What the Monetary Union hands its leader (2026-11-14):** the leader of a bloc whose common currency a member has adopted now carries what its adopters carry, earns seigniorage and a cut of *risk premium* (not credit standing, which its floor swallowed) in proportion to its currency's **reach**, runs up to four more banking interventions at once, and shares a common capital market with its adopters. The costs are unchanged, and nothing in it softens a downturn or a panic (the owner's ruling the same day). An overdrawn intervention budget now lifts the standing tools too. See [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14).
+> **What the Monetary Union hands its leader (2026-11-14):** the leader of a bloc whose common currency a member has adopted now carries what its adopters carry, earns seigniorage and a cut of *risk premium* (not credit standing, which its floor swallowed) in proportion to its currency's **reach**, runs up to four more banking interventions at once, and shares a common capital market with its adopters. The costs are unchanged, and nothing in it softens a downturn or a panic (the owner's ruling the same day). The seigniorage figures are **before the leader's minting bonuses**, which the engine applies to them (1.6 to 1.75 times for a mature leader), and reach needs an adopter at every tier (two more rulings, on the review). An overdrawn intervention budget now lifts the standing tools too, tells the player which, and waits a month after another step's lift. See [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14).
 
 > **Mandates set by law (2026-10-07, #799):** Price Stability is renamed the **Dual Mandate** (its rule unchanged) and a fourth mandate, **Inflation Targeting**, is the same rule with no cycle lean and +0.1 credibility. Under central bank independence the mandate is an act on the law (the Inflation Targeting Act or the Dual Mandate Act) that the bank follows after the 12-month delay, AI and player alike; `te_mandate.1` asks for one whenever the law has none. Without independence the dashboard switch stays but each change locks it for a year, and a looser rule raises expected inflation and the risk premium. See [§6](#6-delegation-mandates-independence-ai) and `docs/audits/banking_cycle_simulation.md` §26.
 
@@ -754,7 +754,11 @@ still open and are inherited, not repeated.
     0.25pp is too small against `te_inflation_noise` and the constant goes up. Watch the
     real-wage dividend arrive and depart with it (checklist 18 is the other half), and
     confirm the crisis still fires at exactly 50 on the way up.
-29. **Does `country_minting_mult` scale `country_minting_add`?** The §9.2 ladder's minting
+29. **Does `country_minting_mult` scale `country_minting_add`?** **Yes, script-added minting
+    included (a save, 2026-11-14; §0.14, L12): Singapore's minting line is its flat adds, the
+    currency boards' and the union's among them, times 1.75 to the pound.** So monetisation does
+    take the bands' penalty, and it also takes the law's and the technologies' bonuses. The
+    question as asked: the §9.2 ladder's minting
     penalty (−0.3 at *Very High*, −0.8 at *Hyper*) and `te_mon_dollarised_modifier`'s −0.75
     are all `_mult`, while §11's monetisation is `country_minting_add`. If the engine applies
     the mult only to the *base* minting and not to script-added minting, **monetisation is
@@ -1453,7 +1457,10 @@ peg confidence to 25, then "run the discovery" / "run one monthly update". Besid
   with **no** exit penalty.
 - **P5-12. §17 check 21** — does `.10`'s *Own flat minting* print a real figure for a subject
   with gold mines? If 0, `modifier:country_minting_add` is unreadable from script and the
-  fallback is counting gold-mine levels. The overlord's gain is GDP-blind by construction
+  fallback is counting gold-mine levels. **Answered from a save, 2026-11-14 (§0.14, L12): it
+  reads.** Singapore's `te_mon_board_seigniorage_pts` in the owner's 1957 save is 100,250, half of
+  one subject's 200,500 (the base 500 and the capped GDP term), so the read returns the whole flat
+  sum, base and GDP term included, not only gold mines. The overlord's gain is GDP-blind by construction
   and tiny for a colony without gold.
 - **P5-13. §19 5c** — a board subject held at band 1 or 5 for six months gains
   *The Overlord's Rate* (+0.15 liberty desire); it clears the month the band leaves the
@@ -2152,6 +2159,17 @@ The doubling was removed before the change merged, with no compensation, the str
 levers are seigniorage, trade advantage or an intervention point, never relief from the cycle's
 penalties.**
 
+**Two more rulings the same day, on the independent review of the change (PR #1810).** The review
+found that the seigniorage, a flat minting add, is multiplied by the leader's minting bonuses, so
+every figure in the tooltip, the guide and this section was 1.3 to 1.75 times too low. The
+recommendation put to the owner was to keep the bonuses and state them: "the text says 'before
+minting bonuses' and the sizing table is redone. It is stronger than what you approved, in the
+direction you said you'd prefer, and high inflation still cuts it." The owner: "I'm happy with your
+minting recommendation." That is L12. The review also found that a tier-5 leader with treaty
+peggers and no adopter was paid seigniorage and the cut, against "only once at least one member has
+adopted" above; requiring an adopter at tier 5 too was put to the owner, who did not object. That
+is L13. The review's other findings are L14 and L15.
+
 Built the same day on §0.11's five tiers. **Nothing below has been seen in a running game.**
 
 #### What the owner's game showed
@@ -2207,7 +2225,7 @@ Three things follow, and each changed the design.
 The leader of a bloc at tier 2 or above, with a currency it can issue and at least one member that
 has adopted, is the **issuer** (`te_mon_union_is_issuer`). Tiers do not stack; each row is the whole.
 
-| Tier | Shares with its adopters | Seigniorage, of own GDP a year, × reach | Risk premium, × reach | Interventions (the banking union's point included) | Common capital market (issuer and adopters) |
+| Tier | Shares with its adopters | Seigniorage, of own GDP a year, × reach, before minting bonuses (L12) | Risk premium, × reach | Interventions (the banking union's point included) | Common capital market (issuer and adopters) |
 |---|---|---|---|---|---|
 | 1 | — | — | — | — | — |
 | 2 | `te_mon_union_adopter` (+5% export and import advantage) | 0.5% | −0.5pp | +1 | capitalists' pool contribution +0.02 |
@@ -2216,7 +2234,8 @@ has adopted, is the **issuer** (`te_mon_union_is_issuer`). Tiers do not stack; e
 | 5 | + `te_mon_union_reserve` | 1.5% | −1.5pp | +4 | +0.05 |
 
 `reach = base ÷ (base + 15% of the leader's own GDP)`, where the base is the adopters' GDP and, at
-tier 5, everything anchored on the leader's money (treaty peggers too: ruling T4's base). The
+tier 5, everything anchored on the leader's money (treaty peggers too: ruling T4's base), and it is
+zero for anyone who is not the issuer, at every tier (L13). The
 credit is the same in every phase of the cycle (L11). Everything is script, applied in step 9b by
 `te_monetary_update_union` through managed modifiers (`te_mon_union_seigniorage`, and the new
 `te_mon_union_issuer_premium`, `te_mon_union_issuer_bank`, `te_mon_union_credit`); the principle's
@@ -2228,7 +2247,7 @@ credit is the same in every phase of the cycle (L11). Everything is script, appl
 |---|---|---|
 | **L1** | **The issuer carries the adopters' own three modifiers**, not copies: the three blocks in step 9b apply on `te_mon_uses_common_currency` (adopter or issuer) | one modifier, one set of figures, so the leader's can never drift from its adopters'. The adopters' −0.25pp of standing at tier 5 is not copied: the leader's own cut is L4's |
 | **L2** | **"At least one adopter" is a live walk of the members**, not the leader's stored count | each of the leader's own conditions (leading, the tier, the dial, the rule) then clears on its next pulse without waiting for a discovery. The count (`te_mon_union_adopters`) is for the panel |
-| **L3** | **Seigniorage and the cut are a tier's figure × reach**, a saturating share of the leader's *own* economy, not a rate on the adopters' GDP and not a share of the world's | a rate that paid a typical bloc's leader "a few percent of its income" (members 6% of its GDP) would pay a large bloc's (57%) a second treasury; the old world-share base pays a 2%-of-the-world leader nothing whatever its bloc does. Reach is 0.29 at 6%, a half at 15%, 0.77 at 50% and never 1: every adopter adds, the first ones most, and no union is worth more than the tier's figure. One number, shown on the leader's Monetary Union row |
+| **L3** | **Seigniorage and the cut are a tier's figure × reach**, a saturating share of the leader's *own* economy, not a rate on the adopters' GDP and not a share of the world's | a rate that paid a typical bloc's leader "a few percent of its income" (members 6% of its GDP) would pay a large bloc's (57%) a second treasury; the old world-share base pays a 2%-of-the-world leader nothing whatever its bloc does. Reach is 0.29 at 6%, a half at 15%, 0.77 at 50% and never 1: every adopter adds, the first ones most, and no union is worth more than the tier's figure (before minting bonuses: L12). One number, shown on the leader's Monetary Union row |
 | **L4** | **The cut is cyclical (`country_risk_premium_add`)**, a new managed modifier; the reserve-currency standing cut stays as it was | finding 1. G8 holds: it goes through a managed scaled modifier refreshed in the monthly update, and reaches step 5 a month late like every modifier-borne term |
 | **L5** | **Four interventions at tier 5, 1 / 2 / 3 / 4 by tier**, of which the banking union's own point (shared under L1) is the fourth step's | the table below. The cycle simulator (`banking_cycle_sim.py --points`, 150 runs a cell, fiat, price stability) finds no AI-side reason against either figure: under Free & Mutual 4 / 7 / 8 points give 10.5 / 7.4 / 6.8 crashes a century, Universal 5 / 8 / 9 gives 8.1 / 6.0 / 6.1, Directed Credit 6 / 9 / 10 gives 8.3 / 7.3 / 7.1, Prudential 8 / 11 / 12 gives 5.8 / 5.1 / 5.3, independence 8 / 11 / 12 gives 6.4 / 6.3 / 6.3, and the months in a slump halve at +3 and hold at +4 |
 | **L6** | **None of it under Unregulated Banking**: neither the leader's extra points nor its place in the banking union (which carries a point) | that law's budget is its identity. With the national bank a leader must have it holds 2, and its unlocked tools cost 3 (Bail-in Regime, whose trigger says "no law lock: the budget is below the cost already", Infrastructure and Armaments credit, Emergency Import Financing) and 4 (Open-Market Operations, the Deposit Guarantee, Emergency Liquidity, Heavy Industry credit). One point more hands it tools the law is meant to deny, and the banking union's stability would cancel the law's own +25% crash chance. Every other law (4, 5, 6, 8, 8 with the bank) can already afford every tool its locks leave open, so points there are concurrency only. A hard gate, because any softer shape still crosses the 3-point line |
@@ -2237,6 +2256,10 @@ credit is the same in every phase of the cycle (L11). Everything is script, appl
 | **L9** | **The principle prints figures, not prose**: `leader_modifier` carries four display fields (`country_te_mon_issuer_*`) | a static block cannot test an adopter, a dial, a banking law or the banking rule, and a mid-game switch to Simplified leaves the principle on its bloc, so real intervention points there would leak into a game with no monetary layer. Display fields print natively, rise by tier as the tier audit wants, and `test_monetary_union_leader.py` holds each to the script value |
 | **L10** | **AI weights**: tier 1 is 100 for a leader that could issue (50 on metal), tier 2 is 100 +50 where a member's money could adopt +50 at scaled debt 0.25, tier 3 is 100 +50 for an issuer; 4 and 5 keep 1000. The adoption score gains +5 for the capital market, except on a saturated pool | the low 5b numbers "exist because the principle is inert for most leaders" (T3); it no longer is. No `is_ai` test: the same weights serve any bloc |
 | **L11** | **Nothing in the group softens a downturn or a panic** (owner, 2026-11-14) | the capital market's bonus doubled in a slump as first built ("more stability for private investors" read as steadier funding), and was taken out on the owner's ruling quoted above: the pool's drop is the worst part of a slump and what makes one worth avoiding. What is left acts in every phase alike or on how often a crash comes, never on what a slump costs: the flat contribution; the cut in risk premium (a level, the same in a boom); the banking union's −25% crash chance and random momentum, which the leader now shares (fewer crashes, the same penalties); and the intervention points, which let the leader run more of the crisis tools the game already has. `test_monetary_union_leader.CapitalMarketTest` holds the bonus to one figure in all seven phases and fails if any value the leader is paid comes to read the cycle. **If the group tests weak, strengthen seigniorage, trade advantage or an intervention point** |
+| **L12** | **The seigniorage keeps the leader's minting bonuses, and every figure is stated as before them** (owner, 2026-11-14, on the review) | `te_mon_union_seigniorage` is a flat `country_minting_add`, and the engine multiplies every flat add by 1 + `country_minting_mult`. **Measured in the save**: Singapore's minting line read 526,476 a week, which is (500 base + 200,000 from the capped GDP term + 100,250 of currency-board seigniorage + 93.18 of the old union seigniorage) × 1.75 to the pound, and 1.75 is Digital Currency's +25% with the five finance technologies' +10% each. Of the 27 countries above the GDP term's cap, whose base is the same 200,500, eight read exactly 1.5 times it and eight exactly 1.6, one (a currency-board subject, +50% and −50%) exactly 1.0, and the other ten carry flat minting of their own; none reads 1.3 or 1.4, so the five technologies are general by 1957. That answers §17 check 29 (the multiplier does reach script-added minting) and check 21 (the 100,250 is half of one subject's 200,500, so `modifier:country_minting_add` reads from script). The bonuses an issuer can have: Fiat Money +10% or Digital Currency +25% (it must be on one), +10% each for Banking, Central Banking, Mutual Funds, International Exchange Standards and Modern Financial Instruments, −30% in the Very High inflation band and −80% in Hyperinflation, and +5% from the prosperity of the Shell or the basic gold-mining company and from Shell's Pernis refinery. So 1.6 times the figure on Fiat Money with every technology and 1.75 on Digital Currency: **at most 1.5% × 1.75 = 2.625% of GDP a year** from the law and the technologies, 5% of the figure more for each company bonus. Dividing the multiplier out would have kept the approved numbers; the owner preferred the stronger, honest version, and inflation still bites it. The tooltip's field is named "before Minting Bonuses", its description lists each bonus through the law's, technology's and band's own names, and the Monetary Union row gives the leader's seigniorage in pounds a week before the bonuses and with them. `test_monetary_union_leader.MintingBonusTest` holds the stated bonuses and the ceiling to the laws, the technologies and the bands |
+| **L13** | **Reach needs an adopter at every tier, tier 5 included** (put to the owner on the review, who did not object) | as first built reach asked for a leader at tier 2 or above with a currency it could issue and a base above zero, and the tier-5 base counts treaty peggers. A tier-5 leader with a pegger and no adopter was therefore paid seigniorage and the cut, and the last adopter's exit took neither off. `te_mon_union_reach` now asks `te_mon_union_is_issuer`, whose live walk (L2) finds the adopter. Peggers still count toward the base once the leader is an issuer. **Before this work such a leader earned the old capped seigniorage, at most 1,000 pounds a week; it now earns nothing until a member adopts.** The owner knows |
+| **L14** | **The overdraft chain does nothing in a month when another step has lifted a tool** (review, finding B) | the chain is the last step of the banking entry's monthly pulse, and a modifier removed in an effect is still read by the rest of it. The Emergency Liquidity wind-down, the Outflow Controls cleanup and the directed-credit cap run before it and give points back, which the chain could not see: after a downgrade from Directed Credit to Universal Banking the cap lifted Agriculture credit, the budget was +1, and the chain lifted Moral Suasion on the old −1; in the wind-down's month it could close Emergency Liquidity a second time and pay the refund twice. Each such step now sets a variable where it lifts (`banking_overdraft_wait_a_pulse`; a variable write is visible at once) and the chain clears it and waits for the next month's true sum. The monetary update's lifts of External & Currency tools, run from the country's monthly on_action the same day, mark too: whether a removal there has reached the sum the chain reads is not verified, and the mark costs at most a month. L8 made this reachable from a law downgrade; the class existed before for the crash responses |
+| **L15** | **A player is told which tool an overdraft lifted** (review, finding C) | the budget can now be cut from outside (an adopter leaves, the bloc drops a tier), and a tool that went with no word read as a bug. Every branch of the chain posts a feed notice naming the tool by its own name and the cause; the Emergency Liquidity branch adds its refund. The AI is told nothing |
 
 #### What four points buy, by banking law
 
@@ -2259,38 +2282,52 @@ regulated law gets both crisis programs together, and the strongest gets all thr
 #### Sizing
 
 Singapore, weekly, in millions (one point = 2.64M; income 821M). Before, the cut was 0.098pp of
-standing at the floor, worth nothing.
+standing at the floor, worth nothing. **Redone on 2026-11-14 with the minting bonuses (L12).** The
+table as first written gave the seigniorage before them and called it what the leader was paid.
+Singapore is on Digital Currency with all five technologies and no inflation penalty (6.7%), so it
+mints 1.75 times the figure; the "minted" column is what reaches its budget, and the net is on it.
 
-| Tier | Before: seigniorage | cost | **net** | After: reach | seigniorage | cut | cost | **net** | of income |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | 0 | 0.101pp = 0.27 | **−0.27** | — | 0 | 0 | 0.27 | **−0.27** | −0.03% |
-| 2 | 0 | 0.27 | **−0.27** | 0.22 | 2.75 | 0.11pp = 0.29 | 0.27 | **+2.78** | +0.34% |
-| 3 | 0 | 0.124pp = 0.33 | **−0.33** | 0.22 | 4.13 | 0.17pp = 0.44 | 0.33 | **+4.24** | +0.52% |
-| 4 | 0 | 0.135pp = 0.36 | **−0.36** | 0.22 | 5.51 | 0.22pp = 0.59 | 0.36 | **+5.74** | +0.70% |
-| 5 | 0.0001 | 0.36 | **−0.36** | 0.28 | 10.51 | 0.42pp = 1.12 | 0.36 | **+11.28** | +1.37% |
+| Tier | Before this work: seigniorage | cost | **net** | Now: reach | seigniorage before bonuses | **minted, × 1.75** | cut | cost | **net** | of income |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 0 | 0.101pp = 0.27 | **−0.27** | — | 0 | 0 | 0 | 0.27 | **−0.27** | −0.03% |
+| 2 | 0 | 0.27 | **−0.27** | 0.22 | 2.75 | 4.82 | 0.11pp = 0.29 | 0.27 | **+4.85** | +0.59% |
+| 3 | 0 | 0.124pp = 0.33 | **−0.33** | 0.22 | 4.13 | 7.23 | 0.17pp = 0.44 | 0.33 | **+7.34** | +0.89% |
+| 4 | 0 | 0.135pp = 0.36 | **−0.36** | 0.22 | 5.51 | 9.64 | 0.22pp = 0.59 | 0.36 | **+9.87** | +1.20% |
+| 5 | 0.0001 | 0.36 | **−0.36** | 0.28 | 10.51 | 18.40 | 0.42pp = 1.12 | 0.36 | **+19.17** | +2.33% |
 
-With the whole bloc adopted at tier 5: reach 0.60, seigniorage 22.4M a week (2.7% of income), cut
-0.9pp (2.4M). The cost by tier is an estimate from the save's 0.135 (cooperation 0.101, the
-backstop 0.023, supervision 0.011).
+(The "before this work" seigniorage is what the save's budget showed, bonuses included: 98 pounds
+a week of the old capped figure.) With the whole bloc adopted at tier 5: reach 0.60, seigniorage
+22.4M a week before bonuses and **39.2M minted (4.8% of income)**, cut 0.9pp (2.4M), net 41.3M
+(5.0%). The cost by tier is an estimate from the save's 0.135 (cooperation 0.101, the backstop
+0.023, supervision 0.011). The review's own estimate was 16.8M at tier 5 and about 36M with the
+whole bloc: it took 1.6, Fiat Money's multiplier, where the save shows Digital Currency's 1.75.
 
 Beside it, a rival group for the same country, which spends 395M a week on construction goods:
 Construction III's +10% efficiency is about 36M a week of construction it need not buy (4.4% of
 income), and Construction V's +15% with −10% goods cost about 91M (11%). **In money the union is now
-a gain where it was a loss, and still well short of Construction for a country that spends half
-its budget building.** What it adds beside the money, on Singapore's own economy: +10% export and
-import advantage, a quarter off crash chance and random momentum, and four intervention points on
-a budget of eight. The capital market pays Singapore nothing (finding 3).
+a gain where it was a loss: at tier V about half of Construction III for Singapore as its bloc
+stands, a little more than Construction III if the whole bloc adopted, and still well short of
+Construction V for a country that spends half its budget building.** What it adds beside the money,
+on Singapore's own economy: +10% export and import advantage, a quarter off crash chance and
+random momentum, and four intervention points on a budget of eight. The capital market pays
+Singapore nothing (finding 3).
 
 For a typical AI leader the money is larger beside its income, because it borrows: the same save's
 Germany (debt 82% of GDP, one point worth 4.4% of income, members 7% of its GDP) with all of them
-adopted has reach 0.32 and nets +1.4% of income at tier 2 and +4.3% at tier 5.
+adopted has reach 0.32. It is on Fiat Money, so it mints 1.6 times the figure if it has the five
+technologies. Its own minting line cannot show that (it reads 1.69 times base, so Germany has flat
+minting of its own, most likely gold mines), but no country above the cap reads less than five
+technologies' worth. On that it nets **+1.9% of income at tier 2** (seigniorage 0.15M minted, the cut
+0.08M, the cost 0.02M, on an income of 11.1M) **and +5.9% at tier 5** (0.46M, 0.23M, 0.04M); before
+the bonuses were counted the table said +1.4% and +4.3%.
 
-**One more adopter.** Per pound of an adopter's GDP a year, for a leader with debt at 60% of GDP: at
-tier 5 and reach 0.29 a typical adopter (scaled debt 0.4) brings about 5.1% in seigniorage and 3.1%
-in the cut against 0.4% of cost; at reach 0.77 it brings 0.5% and 0.3% against the same 0.4%, and a
-pressed, debt-heavy one (scaled debt 0.9, cost 1.5%) is a loss. A default still calls 5% to 15% of
-the ward's GDP. So the first adopters are worth pressing for, a large union gains little from a
-weak one, and the backstop is still what makes it expensive to lead.
+**One more adopter.** Per pound of an adopter's GDP a year, for a leader with debt at 60% of GDP
+that mints 1.6 times the figure: at tier 5 and reach 0.29 a typical adopter (scaled debt 0.4)
+brings about 8.1% in seigniorage (5.0% before bonuses) and 3.1% in the cut against 0.4% of cost; at
+reach 0.77 it brings 0.85% and 0.3% against the same 0.4%, and a pressed, debt-heavy one (scaled
+debt 0.9, cost 1.5%) is still a loss. A default still calls 5% to 15% of the ward's GDP. So the
+first adopters are worth pressing for, a large union gains little from a weak one, and the
+backstop is still what makes it expensive to lead.
 
 **The levers.** `te_mon_union_seigniorage_pct_N`, `te_mon_union_issuer_cut_max_N` and
 `te_mon_union_reach_half_share` in `te_monetary_union_script_values.txt`; the principle's display
@@ -2300,7 +2337,9 @@ fields and the loc follow by test.
 
 | Case | What bounds it |
 |---|---|
-| A small leader with huge adopters | reach saturates: no union pays more than the tier's figure, 1.5% of the leader's own GDP and 1.5pp at tier 5 (about 7% of a typical income) |
+| A small leader with huge adopters | reach saturates: no union pays more than the tier's figure, 1.5% of the leader's own GDP before minting bonuses and 1.5pp at tier 5. With the bonuses (L12) the most is 1.5% × 1.75 = 2.625% of GDP a year on Digital Currency with all five technologies, about 13% of a typical income of a fifth of GDP (7.5% before bonuses, 12% on Fiat Money), and a twentieth more of the figure for each company bonus |
+| A leader that stacks minting bonuses to raise it | they are the law and technologies every mature leader has anyway, and they raise all its minting alike; the only choice among them is Digital Currency over Fiat Money, +15% of the figure |
+| A tier-5 leader with treaty peggers and no adopter | paid nothing: L13 |
 | A giant leader with one tiny adopter | reach is near zero, so the money is too. The flat gains (trade, the banking union, the points, the credit) do arrive with a single adopter: the owner's ruling, and an AI minor in the leader's market adopts readily |
 | A leader with no debt | the cut is worth nothing and so are the costs, which are premium points; seigniorage is cash either way. The strongest case for the group as a whole, and bounded by the row above |
 | A bloc of puppets | cannot adopt: a currency board outranks the union (`te_mon_union_regime_fits`) |
@@ -2333,8 +2372,14 @@ fields and the loc follow by test.
 - **The standing reserve-currency cut is still paid in standing**, to treaty anchors and to leaders
   alike, and is still swallowed at the floor. The tier-5 line of the tooltip names it as credit
   standing.
-- **The seigniorage is minting**, so the leader's own `country_minting_mult` scales it: an issuer in
-  the Very High inflation band keeps 70% of it.
+- **The seigniorage is minting**, so the leader's own `country_minting_mult` scales it (L12): the
+  figures are stated before it. The Very High inflation band takes 30 points off the bonus (1.75
+  to 1.45, 1.6 to 1.3), not 30% off the seigniorage. The Monetary Union row's "with them" figure
+  reads the multiplier from script (`modifier:country_minting_mult`), which has not been seen in
+  game; the play-test list has the check and the fallback.
+- **Monetizing the Deficit is a flat minting add too** (`te_monetisation_minting`), so the same
+  bonuses multiply it, and its field "Money Created a Year, of GDP" is before them as well. Not
+  this work's; reported with it.
 - **The cut reaches the premium a month late**, like every modifier-borne term.
 - **Moral Suasion was stacked three times on Singapore's entry** in the save, holding 3 points. Not
   this work's: the dashboard's Enable tests "not already on" in `is_shown` only.
@@ -3995,7 +4040,8 @@ or the mod, so the slot is free.
 **What the leader gets (2026-11-14, [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14)).**
 The table above is the members' side and the leader's costs. Since 2026-11-14 the leader of a bloc
 at tier 2 or above whose currency a member has adopted (the issuer) also carries its adopters'
-three modifiers, earns seigniorage (0.5 / 0.75 / 1.0 / 1.5% of its own GDP a year by tier) and a
+three modifiers, earns seigniorage (0.5 / 0.75 / 1.0 / 1.5% of its own GDP a year by tier, before
+its minting bonuses, which multiply it by up to 1.75) and a
 cut of *risk premium* (0.5 / 0.75 / 1.0 / 1.5pp) in proportion to its currency's reach, and holds
 1 / 2 / 3 / 4 more banking intervention points; issuer and adopters share a common capital market
 (capitalists' pool contribution +0.02 / +0.02 / +0.03 / +0.05, the same in every phase of the cycle). The tier-5
@@ -5015,7 +5061,7 @@ Phases 4–5 (§15, §15A):
     trigger-loc entry exists. Does it evaluate, and what range does a closed economy / an
     entrepôt actually read? Sets §15.3's three band edges. Fallback: drop the banding (×1.0).
 21. Is `modifier:country_minting_add` readable in a subject's scope from script (§15A.4)?
-    Same family as check 5.
+    Same family as check 5. **Yes (a save, 2026-11-14; P5-12 above).**
 22. **(6a / H6, the one 6a is waiting on.)** Does the vanilla AI **withdraw on its own** from an
     in-force treaty whose article `inherent_accept_score` has turned negative for it, once the
     binding period allows? Read it on a debug guarantor whose ward's `te_mon_lolr_calls` is set

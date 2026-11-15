@@ -1197,11 +1197,21 @@ te_mon_union_state = {
 # What the Monetary Union row's tooltip adds for the leader of a common
 # currency (2026-11-14): how many members have adopted and its currency's
 # reach, the share of its tier's seigniorage and premium cut it is paid.
-# Nothing for anybody else: the second key is empty.
+# An issuer that is being paid also reads the seigniorage in pounds: before
+# its minting bonuses, and with them (the first text, which repeats the
+# second and adds the two figures). Nothing for anybody else: the last key
+# is empty.
 te_mon_union_issuer_note = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			te_mon_union_is_issuer = yes
+			te_mon_union_seigniorage_base_display > 0
+		}
+		localization_key = banking_dash_mon_union_issuer_note_paid
+	}
 	text = {
 		trigger = {
 			is_power_bloc_leader = yes

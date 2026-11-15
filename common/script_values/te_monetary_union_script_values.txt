@@ -254,9 +254,22 @@ te_mon_union_reach = {
 
 # --- Seigniorage, from tier 2 ------------------------------------------------
 # Percent of the LEADER'S OWN GDP a year at full reach, by tier: 0.5 / 0.75 /
-# 1.0 / 1.5. A government collects about a fifth of GDP, so at a typical bloc's
-# reach of 0.29 tier 5 is worth about 2% of the leader's income, and no union
-# however large more than about 7%. Until 2026-11-14 it was tier 5 only, the
+# 1.0 / 1.5, BEFORE THE LEADER'S MINTING BONUSES. It is a flat minting add, and
+# the engine multiplies those by 1 + country_minting_mult: Fiat Money +10% or
+# Digital Currency +25% (an issuer has one of them), the five finance
+# technologies +10% each, the Very High and Hyperinflation bands -30% and -80%.
+# So 1.6 times the figure for a leader on Fiat Money with every technology and
+# 1.75 on Digital Currency (the owner's Singapore in the 1957 save), and at
+# most 1.5% x 1.75 = 2.625% of GDP a year from those; a company's prosperity
+# bonus to minting adds 5% more. The owner kept the bonuses and had the text say
+# so (2026-11-14): the figure is stated as "before minting bonuses" wherever it
+# is given. test_monetary_union_leader.MintingBonusTest holds the stated
+# bonuses and the ceiling to the laws and technologies.
+#
+# A government collects about a fifth of GDP, so at a typical bloc's reach of
+# 0.29 tier 5 is worth about 2% of the leader's income before bonuses and 3.5%
+# with them, and no union however large more than about 7% before and 13%
+# with. Until 2026-11-14 it was tier 5 only, the
 # share of world GDP anchored x 2000 and capped at 1000 pounds a week: the
 # owner's Singapore, leading a tier-5 union of 153 members in 1957 on a weekly
 # income of 821 million, minted 98 pounds.
@@ -638,4 +651,34 @@ te_mon_union_adopters_display = {
 te_mon_union_reach_pct_display = {
 	value = te_mon_union_reach
 	multiply = 100
+}
+
+# The leader's seigniorage, pounds a week, as the Monetary Union row's tooltip
+# gives it (te_mon_union_issuer_note). TWO FIGURES, BECAUSE THE SEIGNIORAGE IS
+# MINTING (owner, 2026-11-14, on the review of PR #1810): te_mon_union_seigniorage
+# is a flat country_minting_add, and the engine multiplies every flat add by
+# 1 + country_minting_mult. Every per-tier figure in this file, the principle's
+# tooltip and the guide is the first of these, BEFORE the leader's minting
+# bonuses; the second is what the budget shows.
+#
+# _base: what the modifier carries (its multiplier, te_mon_union_seigniorage_applied).
+te_mon_union_seigniorage_base_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_seigniorage_applied }
+		value = var:te_mon_union_seigniorage_applied
+	}
+}
+
+# _paid: the same times 1 + the leader's country_minting_mult, floored at nothing
+# (a country whose penalties pass -100% mints nothing). A `modifier:` read of a
+# multiplier from script: the flat one reads (te_mon_board_seigniorage_from_subject,
+# Singapore's 100,250 a week in the 1957 save is half of one subject's 200,500), this
+# one has not been seen in game. docs/testing/banking-playtest.md has the check
+# and what to do if it reads nothing.
+te_mon_union_seigniorage_paid_display = {
+	value = modifier:country_minting_mult
+	add = 1
+	min = 0
+	multiply = te_mon_union_seigniorage_base_display
 }

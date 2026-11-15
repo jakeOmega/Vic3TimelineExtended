@@ -26,6 +26,20 @@ be taught to the test before it can go unseen.
 * step 9b applied end to end: the modifiers go on, follow the tier, and come
   off the pulse the leader stops qualifying;
 * the principle's display fields and the loc's figures against the script.
+
+After the independent review of PR #1810 (2026-11-14):
+
+* reach asks for the issuer at every tier: a tier V leader with treaty peggers
+  and no adopter is paid nothing, and the last adopter's exit takes seigniorage
+  and the cut off with a pegger still anchored;
+* each scaled modifier's one field and unit are literals here, and each has a
+  tracker no other modifier shares (three mutations had survived);
+* the self-check's mark is cleared when the leader stops qualifying, run with
+  the engine's rule that a pulse cannot see the modifiers it added;
+* the seigniorage is a flat minting add, so the leader's minting bonuses
+  multiply it: every stated figure is "before minting bonuses", and the bonuses
+  the text names and the ceiling it gives are the laws', the technologies' and
+  the inflation bands' own (``MintingBonusTest``).
 """
 
 import math
@@ -102,6 +116,7 @@ class Country:
         self.bloc = None
         self.vars = dict(variables)
         self.mods = {}              # managed modifier name -> multiplier (1 for a flat one)
+        self.sums = {}              # modifier:X totals a scenario fixes (the engine's, not ours)
         self.cycle_running = True
 
     def __repr__(self):
@@ -169,6 +184,8 @@ class Script:
             return self.number(value.split(".", 1)[1], self.saved["te_mon_arr_party"], root)
         if value == "gdp":
             return scope.gdp
+        if value.startswith("modifier:"):
+            return scope.sums[value[len("modifier:"):]]      # a scenario states the sum it reads
         if value == "scaled_debt":
             return scope.vars.get("scaled_debt", 0)
         if value in self.stub_values:
@@ -1197,6 +1214,154 @@ class TooltipTest(unittest.TestCase):
     def test_reach_as_a_percentage(self):
         leader = union(3, leader_gdp=1e10, adopters=(1.5e9,))
         self.assertTrue(math.isclose(self.s.number("te_mon_union_reach_pct_display", leader, leader), 50))
+
+
+class MintingBonusTest(unittest.TestCase):
+    """The seigniorage is a flat minting add, so the leader's minting bonuses multiply it
+    (owner, 2026-11-14: keep them, and say so). Every figure the game states is BEFORE those
+    bonuses, and the text that says so names each bonus with its size. The engine checks none
+    of it: a law or a technology that changes its bonus, or a sixth source, would leave the
+    tooltip, the guide and the design note quietly wrong again, as they were by 1.3 to 1.75
+    times when the review of PR #1810 found it."""
+
+    KEY = "country_minting_mult"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.s = Script()
+        cls.loc = english()
+        cls.desc = cls.loc["country_te_mon_issuer_seigniorage_gdp_add_desc"]
+
+    def grants(self, body):
+        return [float(v) for key, _, block in body if key == "modifier" for k, _, v in block if k == self.KEY]
+
+    def laws(self):
+        """{law: bonus} for every law that moves minting: the mod's files, and vanilla's as parsed."""
+        import json
+        out = {}
+        for path in sorted((ROOT / "common/laws").glob("*.txt")):
+            for name, body in definitions(str(path.relative_to(ROOT))).items():
+                if isinstance(body, list) and self.grants(body):
+                    out[name.split(":")[-1]] = sum(self.grants(body))
+        for name, (_, body) in json.loads((ROOT / "vanilla_parsed/common/laws.json").read_text(encoding="utf-8")).items():
+            if self.KEY in body.get("modifier", ["=", {}])[1]:
+                out.setdefault(name, float(body["modifier"][1][self.KEY][1]))
+        return out
+
+    def technologies(self):
+        """{technology: bonus}: vanilla's as parsed, then whatever the mod's files add or inject."""
+        import json
+        out = {}
+        parsed = json.loads((ROOT / "vanilla_parsed/common/technologies.json").read_text(encoding="utf-8"))
+        for name, (_, body) in parsed.items():
+            if self.KEY in body.get("modifier", ["=", {}])[1]:
+                out[name] = float(body["modifier"][1][self.KEY][1])
+        for path in sorted((ROOT / "common/technology/technologies").glob("*.txt")):
+            for name, _, body in parse_body(path.read_text(encoding="utf-8-sig")):
+                if isinstance(body, list) and self.grants(body):
+                    out[name.split(":")[-1]] = out.get(name.split(":")[-1], 0) + sum(self.grants(body))
+        return out
+
+    def test_the_seigniorage_is_a_flat_minting_add(self):
+        # The premise of "before minting bonuses": were it paid any other way, the text would be wrong.
+        effects = [(k, v) for k, _, v in definitions(MODIFIERS)["te_mon_union_seigniorage"] if k != "icon"]
+        self.assertEqual(effects, [("country_minting_add", "1")])
+
+    def test_every_figure_is_named_as_before_the_bonuses(self):
+        self.assertTrue(self.loc["country_te_mon_issuer_seigniorage_gdp_add"]
+                        .endswith(", before $country_minting_mult$ Bonuses"))
+        self.assertIn("before its bonuses to [concept_budget_minting]", self.desc)
+        self.assertIn("its bonuses to [concept_budget_minting] then apply to the seigniorage",
+                      self.loc["country_te_mon_issuer_bool"])
+        self.assertIn("before our bonuses to [concept_budget_minting]", self.loc["te_mon_union_seigniorage_desc"])
+        paid = self.loc["banking_dash_mon_union_issuer_note_paid"]
+        self.assertLess(paid.index("te_mon_union_seigniorage_base_display"), paid.index("before its bonuses"))
+        self.assertLess(paid.index("before its bonuses"), paid.index("te_mon_union_seigniorage_paid_display"))
+
+    def test_the_money_laws_bonuses_are_the_ones_stated(self):
+        laws = self.laws()
+        self.assertEqual(laws, {"law_fiat_currency": 0.1, "law_digital_currency": 0.25},
+                         "a law's minting bonus changed, or another law has one: the seigniorage text names them")
+        for law, bonus in laws.items():
+            self.assertIn(f"#G +{bonus * 100:g}%#! under ${law}$", self.desc)
+        # An issuer is on one of the two, never both: the test of who can lead.
+        lead = self.s.triggers["te_mon_can_lead_union"]
+        self.assertIn(("OR", "=", [("has_law_or_variant", "=", "law_type:law_fiat_currency"),
+                                   ("has_law_or_variant", "=", "law_type:law_digital_currency")]), lead)
+
+    def test_the_technologies_bonuses_are_the_ones_stated(self):
+        techs = self.technologies()
+        self.assertEqual(len(techs), 5, f"the technologies that move minting changed: {sorted(techs)}")
+        self.assertEqual(set(techs.values()), {0.1})
+        for tech in techs:
+            self.assertIn(f"${tech}$", self.desc)
+        self.assertIn("#G +10%#! for each of $", self.desc)
+        self.assertIn("all five technologies", self.desc)
+
+    def test_the_inflation_bands_cuts_are_the_ones_stated(self):
+        static = definitions(MODIFIERS)
+        bands = {name: float(v) for name, body in static.items() if name.startswith("te_inflation_band_")
+                 for k, _, v in body if k == self.KEY}
+        self.assertEqual(bands, {"te_inflation_band_very_high": -0.3, "te_inflation_band_hyper": -0.8})
+        for band, cut in bands.items():
+            self.assertIn(f"#R −{-cut * 100:g}%#! from ${band}$", self.desc)
+
+    def ceiling(self):
+        """The most the law and the technologies add: the dearer law and every technology."""
+        return max(self.laws().values()) + sum(self.technologies().values())
+
+    def test_the_stated_ceiling_is_the_sum(self):
+        top = self.ceiling()
+        self.assertAlmostEqual(top, 0.75)
+        self.assertIn(f"With $law_digital_currency$ and all five technologies the leader mints #v {top * 100:g}%#! more",
+                      self.desc)
+        self.assertEqual(max(self.laws(), key=self.laws().get), "law_digital_currency")
+
+    def test_the_guide_and_the_design_note_give_the_same_ceiling(self):
+        top = self.ceiling()
+        most = self.s.number("te_mon_union_seigniorage_pct_5", None, None) * (1 + top)
+        self.assertAlmostEqual(most, 2.625)
+        guide = " ".join((ROOT / "docs/player_guide/04-banking.md").read_text(encoding="utf-8").split())
+        self.assertIn("before minting bonuses", guide)
+        self.assertIn(f"up to {top * 100:g}% more", guide)
+        self.assertIn(f"about {most:.1f}% of its GDP a year", guide)
+        design = " ".join((ROOT / "docs/systems/monetary_policy_design.md").read_text(encoding="utf-8").split())
+        self.assertIn(f"1.5% × {1 + top:g} = {most:g}% of GDP a year", design)
+        values = " ".join((ROOT / UNION_VALUES).read_text(encoding="utf-8-sig").split())
+        self.assertIn(f"1.5% x {1 + top:g} = {most:g}% of GDP a year", values)
+
+    def test_what_the_dashboard_shows_before_and_with_the_bonuses(self):
+        leader = union(5)
+        self.assertEqual(self.s.number("te_mon_union_seigniorage_base_display", leader, leader), 0)
+        leader.vars["te_mon_union_seigniorage_applied"] = 1000
+        for bonus, paid in ((0.75, 1750), (0.6, 1600), (0, 1000), (-0.2, 800), (-1.3, 0)):
+            leader.sums = {self.KEY: bonus}
+            with self.subTest(bonus=bonus):
+                self.assertEqual(self.s.number("te_mon_union_seigniorage_base_display", leader, leader), 1000)
+                self.assertAlmostEqual(self.s.number("te_mon_union_seigniorage_paid_display", leader, leader), paid)
+
+    def test_the_owners_singapore_mints_what_the_save_shows(self):
+        # 1957: Digital Currency and all five technologies, +75%. Its minting line read 526,476 a
+        # week: 500, the GDP term's 200,000, 100,250 from currency boards and 93.18 of the old
+        # union seigniorage, times 1.75. The multiplier reaches a script-added flat add.
+        self.assertAlmostEqual((500 + 200_000 + 100_250 + 93.18) * (1 + self.ceiling()), 526_476, delta=1)
+        leader = union(5, leader_gdp=SGP_GDP, adopters=(SGP_ADOPTERS_M * 1e6,))
+        leader.vars["te_mon_anchored_gdp_m"] = SGP_ANCHORED_M
+        leader.vars["te_mon_union_seigniorage_applied"] = self.s.number("te_mon_union_seigniorage_value", leader, leader)
+        leader.sums = {self.KEY: self.ceiling()}
+        paid = self.s.number("te_mon_union_seigniorage_paid_display", leader, leader)
+        self.assertTrue(18.3e6 < paid < 18.5e6, paid)
+
+    def test_the_note_gives_both_figures_to_an_issuer_that_is_paid(self):
+        block = definitions("common/customizable_localization/banking_dash_custom_loc.txt")["te_mon_union_issuer_note"]
+        texts = [val for key, _, val in block if key == "text"]
+        self.assertEqual([field(t, "localization_key") for t in texts],
+                         ["banking_dash_mon_union_issuer_note_paid", "banking_dash_mon_union_issuer_note",
+                          "banking_dash_mon_union_issuer_note_none"])
+        self.assertEqual(field(texts[0], "trigger"), [("te_mon_union_is_issuer", "=", "yes"),
+                                                      ("te_mon_union_seigniorage_base_display", ">", "0")])
+        self.assertTrue(self.loc["banking_dash_mon_union_issuer_note_paid"]
+                        .startswith("$banking_dash_mon_union_issuer_note$"))
 
 
 if __name__ == "__main__":

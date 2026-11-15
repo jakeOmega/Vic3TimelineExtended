@@ -183,8 +183,11 @@ of the upper strata. If your intervention budget goes negative, for example
 after a law downgrade, the game switches off one crash response a month. Once
 those are gone, it lifts one of the five monetary interventions in External &
 Currency each month, and then your other tools, the cheapest first, until the
-budget balances. Lift a costlier tool yourself if you would rather keep a cheap
-one. A Bank Holiday is left to run out.
+budget balances. A notification names each tool as it goes. Lift a costlier
+tool yourself if you would rather keep a cheap one. A Bank Holiday is left to
+run out. In a month when something else has already lifted a tool, such as a
+new banking law's cap on credit sectors or Emergency Liquidity winding down,
+nothing more is lifted until the next month.
 
 ### Banking contagion
 
@@ -999,7 +1002,7 @@ The leader's column applies once at least one member has adopted its currency.
 | Tier | Principle | Members | The leader |
 |---|---|---|---|
 | I | Monetary Cooperation | Every member gets half a swap line from the leader | Nothing |
-| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate, +5% export and import advantage and 2 points more capitalists' investment-pool contribution | What its adopters get; seigniorage of up to 0.5% of its GDP a year; up to 0.5 points off its risk premium; 1 intervention point |
+| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate, +5% export and import advantage and 2 points more capitalists' investment-pool contribution | What its adopters get; seigniorage of up to 0.5% of its GDP a year before minting bonuses; up to 0.5 points off its risk premium; 1 intervention point |
 | III | Fiscal Backstop | The leader is lender of last resort to every adopter | Up to 0.75% and 0.75 points; 2 intervention points |
 | IV | Banking Union | Adopters get −25% crash likelihood and volatility, an intervention point and 1 point more pool contribution; needs Keynesian Economics | Up to 1% and 1 point; 3 intervention points |
 | V | Reserve Currency | Adopters gain 5% more trade advantage, better credit standing and 2 points more pool contribution; needs Globalization | Up to 1.5% and 1.5 points; 4 intervention points; countries pegged to its money by treaty count toward its reach |
@@ -1014,6 +1017,14 @@ in risk premium are the tier's figures times reach: at tier V with a reach of a
 half, the leader mints 0.75% of its GDP a year and pays 0.75 points less. The
 cut is risk premium, not credit standing, so it counts even for a country whose
 credit standing is already at its floor.
+
+The seigniorage figures are before minting bonuses, which raise it as they
+raise all your minting: 10% under Fiat Money or 25% under Digital Currency, and
+10% for each of the five finance technologies from Banking to Modern Financial
+Instruments, so up to 75% more. At tier V and full reach that is about 2.6% of
+its GDP a year. Very High inflation takes 30 points off the bonus and
+Hyperinflation 80. The Monetary Union row's tooltip gives the leader's
+seigniorage in pounds a week, before the bonuses and with them.
 
 The intervention points are room in [the intervention
 budget](#the-intervention-budget) for more tools at once: under Central Bank

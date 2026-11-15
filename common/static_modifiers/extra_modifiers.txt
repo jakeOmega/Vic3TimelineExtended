@@ -8604,6 +8604,9 @@ te_mon_union_reserve = {
 # privilege: everybody else holds balances in it, and issuing them is free. A
 # flat country_minting_add for the reason te_mon_board_seigniorage gives — a
 # _mult would scale the leader's own base and transfer nothing from anybody.
+# The engine multiplies it by 1 + the leader's country_minting_mult like every
+# flat minting add, so the multiplier here is the figure BEFORE minting bonuses
+# (te_monetary_union_script_values.txt, "Seigniorage, from tier 2").
 te_mon_union_seigniorage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_minting_add = 1

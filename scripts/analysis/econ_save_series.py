@@ -45,7 +45,7 @@ Budget 0x3171 (all fx / 1e5):
 | token  | name |
 |--------|------|
 | 0x55be | weekly_expenses (22 slots; slot 7 = construction goods; slot 10 = interest, which on a 1.15.1 autosave equals principal x rate paid / 52 for 17 of the 25 largest debtors and 0.79 to 0.93 of it for the rest, 2026-11-14) |
-| 0x55bd | weekly_income (16 slots; slot 7 = investment-pool transfer to construction) |
+| 0x55bd | weekly_income (16 slots; slot 7 = investment-pool transfer to construction; slot 8 = minting, which on a 1.15.1 autosave is (500 + GDP / 1000 capped at 200,000 + the flat minting adds) x (1 + the minting multiplier) to the pound for the 17 countries above the cap with no flat adds of their own, and for Singapore with two script-added ones, 2026-11-14) |
 | 0x3776 | base_wage |
 | 0x5b51 | average_productivity |
 | 0x2a38 | money |
