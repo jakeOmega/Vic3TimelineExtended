@@ -530,8 +530,10 @@ cheaper source of Drugs until Antibiotics brings the factory level with them;
 its later methods pull ahead. Pops buy Drugs for Intoxicants and, from wealth
 16, for the mod's Healthcare need ([Pop consumption at high
 wealth](03-economy.md#pop-consumption-at-high-wealth)), so in a rich country
-most Drugs are bought as medicine. The Ministry of Health and the Ministry of
-Consumer Protection cut the throughput of your own opium plantations, and a
+most Drugs are bought as medicine. Livestock ranches on their late methods buy
+some too (Antibiotic Growth Promoters, Recombinant Growth Hormones and
+Gene-Edited Livestock). The Ministry of Health and the Ministry of Consumer
+Protection cut the throughput of your own opium plantations, and a
 rich country whose market runs short of Drugs can get a medicine shortage, the
 event Half a Course. The base game's journal entry The Opium Trade is not offered after
 January 1912, and one still open then fails.
@@ -545,7 +547,9 @@ Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
 Farm and GMO Plantation, with Mechanical and then Autonomous Harvesters, which
 need fewer farmers; livestock ranches to Industrial Feedlots, Recombinant Growth
 Hormones (which buy Drugs) and Gene-Edited Livestock, with Mechanized Feeding
-Lines and Robotic Barns in Herd Management, the base game's Fencing; and
+Lines and Robotic Barns in Herd Management, the base game's Fencing, and
+Antibiotic Growth Promoters (which also buy Drugs) in a Feed Additives group of
+their own, on top of any wool method; and
 automation groups end in AI-managed methods such as AI Managed Fab. A few
 polluting buildings get pollution-control groups
 ([Pollution-control methods](15-climate.md#pollution-control-methods)), and many get a hidden maintenance
