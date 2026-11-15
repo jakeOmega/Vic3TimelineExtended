@@ -587,7 +587,8 @@ class DeepSeaMineMix(unittest.TestCase):
     BASE = "pm_ocean_mine"
     METALS = {"structural": "iron", "conductive": "copper", "tech_metals": "tech_metals"}
     ADD = re.compile(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}")
-    WEIGHT = re.compile(r"value\s*=\s*te_seabed_ai_(\w+)_premium\s+multiply\s*=\s*([\d.]+)")
+    WEIGHT = re.compile(r"value\s*=\s*te_seabed_ai_(\w+)_up\s+subtract\s*=\s*te_seabed_ai_\1_down"
+                        r"\s+multiply\s*=\s*([\d.]+)")
 
     def setUp(self):
         self.d = _DATA
@@ -616,6 +617,10 @@ class DeepSeaMineMix(unittest.TestCase):
                                 "common", "script_values", "te_global_commons_seabed_ai_values.txt")
         weights = {name: float(w) for name, w in self.WEIGHT.findall(body)}
         self.assertEqual(set(weights), set(self.METALS))
+        # Signed per metal and clamped once, so one metal above base can't open the
+        # AI's wills while the basket sells below it.
+        self.assertEqual(body.count("min = 0"), 1)
+        self.assertLess(body.rindex("multiply"), body.index("min = 0"))
         self.assertAlmostEqual(sum(weights.values()), 1.0)
         sales = {name: self.out[good] * self.d.prices[good] for name, good in self.METALS.items()}
         for name, weight in weights.items():

@@ -16,13 +16,22 @@
 # 5,000 in all (owner, 2026-11-15), five times the first estimates: the size of
 # the seabed's deposits against the mod's own land deposits of the same metals
 # (docs/systems/mod_systems/global_commons.md, Pools). What is counted in
-# licences moved with them: te_seabed_influence_per_claim here, and the AI's
-# per-claim pull, lease margin and licence bar.
+# licences moved with them: te_seabed_share_min and te_seabed_influence_per_claim
+# here, the AI's per-claim pull, lease margin and licence bar
+# (te_global_commons_seabed_ai_values.txt), and four figures in the lease
+# articles (122_seabed_lease.txt: the spare's pull, the claims asked above it,
+# maneuvers and infamy). test_seabed_script.py (CountedInLicencesTest) holds
+# each to the pools' total, so the next change of size moves them too.
 te_seabed_pool_pacific = 1500
 te_seabed_pool_atlantic = 1250
 te_seabed_pool_indian = 1000
 te_seabed_pool_arctic = 500
 te_seabed_pool_southern = 750
+# The smallest share of a basin that lists a country among its claimants
+# (te_seabed_rank_listed) and makes it a newcomer worth a notice
+# (te_seabed_claimant_notice): a thousandth of the five pools, one licence
+# while they were a fifth of this size.
+te_seabed_share_min = 5
 
 # The reserved half of each pool under the Regulated regime (§ 3.2), rounded
 # down; the open half is the rest.

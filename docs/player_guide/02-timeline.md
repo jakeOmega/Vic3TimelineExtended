@@ -390,7 +390,8 @@ outweighs a larger obsolete one.
 
 An event announces the seabed rush when the first coastal country researches
 Abyssal Plain Mining. After that, a notification tells you when a country wins
-its first share in a basin on your coast where you have one, and when a basin
+its first share of five licenses or more in a basin on your coast where you
+have as much, and when a basin
 you have coast or a share in has all its licenses held. Both can be muted in
 the message settings, under Seabed Licenses.
 
@@ -426,7 +427,7 @@ a quarter a year like any other, so the reserved half refills.
 Queuing a level turns a claim into a license at once, so you can hold a
 basin's claims by queuing far ahead. That costs a holding fee: a license on a
 level still unbuilt a year after it was queued pays 2% of a level's base output
-value a week (about 900), half the royalty, until the level is built. Building
+value a week (about 740), half the royalty, until the level is built. Building
 at a normal pace never pays it, whoever queued the level. Under the Regulated
 regime a party's fee goes to the same place as its royalties; anyone else's is
 simply an expense. The Budget Breakdown lists it under United Nations.
@@ -480,7 +481,8 @@ to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
 Weight is your share of the basin's claim weight; +1 license is about how much
 more naval power projection would win you one more license at the next sharing,
-a figure that is enough and often more than needed. Click a basin to see its claimants, largest
+a figure that is enough and often more than needed. Click a basin to see its claimants
+with a share of five licenses or more, largest
 share first, each with its mines, claims and share of the weight in columns,
 and your own row with its Relinquish button. A Seabed Licenses
 tile on each of your coastal states' panels shows that state's basin, the licenses its

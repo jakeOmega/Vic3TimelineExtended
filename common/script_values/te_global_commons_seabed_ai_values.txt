@@ -163,12 +163,12 @@ te_seabed_ai_projected = {
 	add = te_seabed_ai_projected_southern
 }
 
-# How far above base each of the Deep-Sea Mine's three metals sells in the
-# country's market, as a fraction (0 at or below base). The block form, as
-# vanilla reads market goods from country scope (scripting_best_practices.md,
-# market_goods_pricier); each is max(pricier, 0), since whether the read is
-# signed below base is unknown (the same section).
-te_seabed_ai_structural_premium = {
+# How far each of the Deep-Sea Mine's three metals sells above base in the
+# country's market (_up) or below it (_down), as fractions. The block form, as
+# vanilla reads market goods from country scope, and the two clamped halves, so
+# the difference is the signed premium whether or not the engine's reads are
+# signed (scripting_best_practices.md, market_goods_pricier).
+te_seabed_ai_structural_up = {
 	value = 0
 	market = {
 		mg:iron = { add = market_goods_pricier }
@@ -176,7 +176,15 @@ te_seabed_ai_structural_premium = {
 	min = 0
 }
 
-te_seabed_ai_conductive_premium = {
+te_seabed_ai_structural_down = {
+	value = 0
+	market = {
+		mg:iron = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+te_seabed_ai_conductive_up = {
 	value = 0
 	market = {
 		mg:copper = { add = market_goods_pricier }
@@ -184,7 +192,15 @@ te_seabed_ai_conductive_premium = {
 	min = 0
 }
 
-te_seabed_ai_tech_metals_premium = {
+te_seabed_ai_conductive_down = {
+	value = 0
+	market = {
+		mg:copper = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+te_seabed_ai_tech_metals_up = {
 	value = 0
 	market = {
 		mg:tech_metals = { add = market_goods_pricier }
@@ -192,24 +208,40 @@ te_seabed_ai_tech_metals_premium = {
 	min = 0
 }
 
-# The three, weighted by each metal's share of the base method's metal sales
-# at base prices (pm_ocean_mine: Structural 320 x 40, Conductive 230 x 40,
-# Tech-Critical 70 x 80, of 27,600; test_deep_sea_rebalance.py holds the
-# weights to the method). Until 2026-11-15 the AI read Tech-Critical Metals
-# alone, which were then nearly half the mine's sales and are now a seventh.
+te_seabed_ai_tech_metals_down = {
+	value = 0
+	market = {
+		mg:tech_metals = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+# The mine's basket: the three signed premiums weighted by each metal's share
+# of the base method's metal sales at base prices (pm_ocean_mine: Structural
+# 320 x 40, Conductive 230 x 40, Tech-Critical 70 x 80, of 27,600;
+# test_deep_sea_rebalance.py holds the weights to the method), 0 when the
+# basket is at or below base. One metal a little above base no longer opens
+# the wills on its own while the other two sell below it (review, 2026-11-15).
+# Until then the AI read Tech-Critical Metals alone, which were nearly half
+# the mine's sales and are now a seventh.
 te_seabed_ai_metals_premium = {
-	value = {
-		value = te_seabed_ai_structural_premium
+	value = 0
+	add = {
+		value = te_seabed_ai_structural_up
+		subtract = te_seabed_ai_structural_down
 		multiply = 0.46
 	}
 	add = {
-		value = te_seabed_ai_conductive_premium
+		value = te_seabed_ai_conductive_up
+		subtract = te_seabed_ai_conductive_down
 		multiply = 0.34
 	}
 	add = {
-		value = te_seabed_ai_tech_metals_premium
+		value = te_seabed_ai_tech_metals_up
+		subtract = te_seabed_ai_tech_metals_down
 		multiply = 0.20
 	}
+	min = 0
 }
 
 # ---- The wills ----

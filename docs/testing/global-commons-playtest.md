@@ -363,7 +363,9 @@ even in that save, and the scale comes from those lines.
     save's first sharing.** Load a save with Deep-Sea Mines from before the change and pass a January:
     every basin's pool on the Seabed tab reads five times what it did (Pacific 1,500, Atlantic 1,250,
     Indian 1,000, Southern 750, Arctic 500), our licenses are unchanged, and our claims and the
-    waiting shares are about five times larger. `seabed_cap` logs OK at that sharing. (b) **The cost of
+    waiting shares are about five times larger. No `TE_SELF_CHECK BROKEN seabed_cap` at that sharing
+    (its OK logs once a game, so a save that has passed a sharing before shows nothing). A standing
+    lease keeps its total: it is now a fifth of the share it was. (b) **The cost of
     a share.** On Sponsor Contractors the influence held is about what it was for the same share of
     a basin (50 + 0.1 a claim). (c) **Figures fit.** With four-digit pools, claims and licenses, no
     figure on the Seabed tab, the State Panel tile or the rivals' rows elides or wraps
@@ -374,7 +376,13 @@ even in that save, and the scale comes from those lines.
     times the claims, check they don't all sit on Sponsor Contractors for the protection term alone,
     or lease claims out and ask for them back every year. (f) **The market at scale.** With several
     countries building, watch Structural and Conductive Metals' prices: 5,000 levels on the era-12
-    methods make about 3.2M and 2.3M a week before throughput.
+    methods make about 3.2M and 2.3M a week before throughput. (g) **Small shares.** A claimant with
+    fewer than five licenses' share in a basin (`te_seabed_share_min`) is not in the basin's claimant
+    list and raises no New Claimant notice; the first sharing under the new pools in an existing save
+    should not bring a burst of those notices. With many claimants, check the list still shows the
+    largest (it holds 40 at most). (h) **AI on Sponsor Contractors in an existing save.** If AIs that
+    held Sponsor Contractors drop to Scientific Survey in the January the pools change, the yearly
+    country pulse ran before the sharing (`global_commons.md`, Pools).
 
 ### The Seabed tab after the GUI audit (2026-10-27)
 
