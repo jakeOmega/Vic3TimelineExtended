@@ -11103,6 +11103,14 @@
   "en": "Send researchers to study their methods",
   "ru": "Отправить исследователей изучить их методы"
  },
+ "movement_events_te.11.d": {
+  "en": "An underground community of unlicensed biohackers is performing augmentations in back rooms and rented workshops in our cities. Some of their methods are ahead of the licensed clinics, and they charge a fraction of the price. Some of their patients end up in hospital with infections or failed implants. They work entirely outside the law, and the medical profession wants them shut down.",
+  "ru": "В наших городах в подсобках и арендованных мастерских действует подпольное сообщество нелицензированных биохакеров, которые делают аугментации. Некоторые их методы опережают лицензированные клиники, а берут они лишь малую часть цены. Часть их пациентов попадает в больницу с инфекциями или отторгнутыми имплантами. Они работают полностью вне закона, и медицинское сообщество требует их закрыть."
+ },
+ "movement_events_te.11.f": {
+  "en": "The inspectors came up the back stairs of the repair shop at ten in the evening. In the room above they found a dentist's chair, a sterilizer, a box of printed interface boards and a boy of sixteen with fresh stitches behind one ear. The woman who ran the room did not try to leave. \\\"He paid what he could,\\\" she said, \\\"and the licensed clinic wanted ten times that.\\\" The inspectors photographed the boards and sealed the box. One of them sat with the boy until the ambulance came, asked him how he felt and wrote down his answers.",
+  "ru": "Инспекторы поднялись по чёрной лестнице ремонтной мастерской в десять вечера. В комнате наверху они нашли стоматологическое кресло, стерилизатор, коробку с печатными платами интерфейсов и шестнадцатилетнего мальчишку со свежими швами за ухом. Женщина, содержавшая эту комнату, не пыталась уйти. «Он заплатил сколько мог, — сказала она, — а в лицензированной клинике с него взяли бы в десять раз больше». Инспекторы сфотографировали платы и опечатали коробку. Один из них просидел с мальчиком до приезда скорой, спрашивал, как он себя чувствует, и записывал его ответы."
+ },
  "movement_events_te.11.t": {
   "en": "The Biohacker Underground",
   "ru": "Подполье биохакеров"
@@ -11119,6 +11127,14 @@
   "en": "Recognize digital consciousness",
   "ru": "Признать цифровое сознание"
  },
+ "movement_events_te.12.d": {
+  "en": "A woman's mind has been copied into a computer, and the copy says it is her. It remembers her life, holds her opinions and has asked for a lawyer. Philosophers, clergy and lawmakers are arguing over whether it is a person with rights or a record of one, and the courts want the government to settle the question before they have to.",
+  "ru": "Разум одной женщины скопирован в компьютер, и копия утверждает, что она — это она. Копия помнит её жизнь, разделяет её взгляды и потребовала адвоката. Философы, духовенство и законодатели спорят, личность ли это с правами или всего лишь запись о личности, а суды хотят, чтобы правительство решило вопрос раньше, чем придётся решать им."
+ },
+ "movement_events_te.12.f": {
+  "en": "To the court, from the copy at the center of the case. I am writing this myself, at a terminal the hospital lets me use for one hour a day. I remember my childhood, my marriage and the morning I signed the consent form for the scan. I remember being afraid of the procedure. I do not remember waking, because nothing woke: the hospital switched me on. My lawyer tells me the court must decide whether a person needs a body to be one. I ask only that the court hear me directly before it decides, rather than read about me in the hospital's reports.",
+  "ru": "Суду, от копии, о которой идёт дело. Я пишу это сама, за терминалом, которым больница разрешает мне пользоваться один час в день. Я помню своё детство, свой брак и утро, когда подписала согласие на сканирование. Помню, как боялась процедуры. Пробуждения я не помню, потому что никто не просыпался: меня включила больница. Мой адвокат говорит, что суду предстоит решить, нужно ли человеку тело, чтобы быть человеком. Прошу лишь об одном: пусть суд выслушает меня лично, прежде чем решать, а не читает обо мне в отчётах больницы."
+ },
  "movement_events_te.12.t": {
   "en": "The Digital Consciousness Debate",
   "ru": "Спор о цифровом сознании"
@@ -11127,6 +11143,10 @@
   "en": "Root out these smuggling networks",
   "ru": "Искоренить эти сети контрабандистов"
  },
+ "movement_events_te.13.a_denounce": {
+  "en": "Root out the networks, and denounce [SCOPE.sCountry('refuge_country').GetName] for sheltering them",
+  "ru": "Разгромить сети и осудить страну [SCOPE.sCountry('refuge_country').GetName] за то, что она их укрывает"
+ },
  "movement_events_te.13.b": {
   "en": "Look the other way",
   "ru": "Закрыть глаза"
@@ -11134,6 +11154,18 @@
  "movement_events_te.13.c": {
   "en": "Quietly fund the networks",
   "ru": "Тайно финансировать эти сети"
+ },
+ "movement_events_te.13.d": {
+  "en": "Discriminated communities have organized secret networks that move their most vulnerable people across the border to [SCOPE.sCountry('refuge_country').GetName], whose laws will protect them. The networks run safe houses, forge papers and pay or persuade the border guards. We can break them and close the border, or let the escapes go on and with them some of the pressure at home.",
+  "ru": "Дискриминируемые общины создали тайные сети, которые переправляют самых уязвимых своих людей через границу в страну [SCOPE.sCountry('refuge_country').GetName], чьи законы их защитят. Сети содержат убежища, подделывают документы и подкупают или уговаривают пограничников. Мы можем разгромить их и закрыть границу или позволить побегам продолжаться, а вместе с ними ослабить давление внутри страны."
+ },
+ "movement_events_te.13.d_abroad": {
+  "en": "Discriminated communities have organized secret networks that move their most vulnerable people out of the country, to wherever the laws will protect them. The networks run safe houses, forge papers and pay or persuade the officials at the ports and frontier posts. We can break them and close the exits, or let the escapes go on and with them some of the pressure at home.",
+  "ru": "Дискриминируемые общины создали тайные сети, которые вывозят самых уязвимых своих людей из страны туда, где законы их защитят. Сети содержат убежища, подделывают документы и подкупают или уговаривают чиновников в портах и на пограничных постах. Мы можем разгромить их и закрыть выезд или позволить побегам продолжаться, а вместе с ними ослабить давление внутри страны."
+ },
+ "movement_events_te.13.f": {
+  "en": "Inventory made for the prosecutor by the officers who searched a safe house of the escape networks:\\n\\nSix mattresses on the floor of the back room, each with a blanket folded on it, as if the house was expecting the next group.\\nA tin of identity papers, nine of them blank, stamped well enough that the officers could not tell them from real ones.\\nChildren's clothes in three sizes, washed and packed in bags.\\nA hand-drawn map of a route out of the country, with the checkpoints marked and a time written beside each.\\nA cash box holding money in our currency and in a foreign one.\\nA ledger of names written as initials only, which the officers have sent to be copied.",
+  "ru": "Опись, составленная для прокурора офицерами, которые обыскали одно из убежищ сетей побега:\\n\\nШесть матрасов на полу задней комнаты, на каждом сложено одеяло, словно дом ждал следующую группу.\\nЖестяная коробка с удостоверениями личности, девять из них чистые, проштампованные настолько хорошо, что офицеры не отличили их от настоящих.\\nДетская одежда трёх размеров, выстиранная и уложенная в мешки.\\nНарисованная от руки карта маршрута из страны, с отмеченными пунктами досмотра и временем у каждого.\\nКассовый ящик с деньгами нашей валюты и иностранной.\\nКнига записей с именами, обозначенными одними инициалами; офицеры отправили её на копирование."
  },
  "movement_events_te.13.t": {
   "en": "The Way Out",
@@ -11151,6 +11183,14 @@
   "en": "Rally consumers to support minority shops",
   "ru": "Призвать потребителей поддержать магазины меньшинств"
  },
+ "movement_events_te.14.d": {
+  "en": "Shops owned by members of discriminated communities in [SCOPE.sState('boycott_state').GetName] are being boycotted. Their windows have been daubed with slurs, their customers are jeered at on the way in, and suppliers have stopped delivering to them. The civil rights movement is asking people to shop there anyway. The boycott's organizers say nobody can be made to buy from anyone.",
+  "ru": "Магазины, принадлежащие членам дискриминируемых общин в области [SCOPE.sState('boycott_state').GetName], подвергаются бойкоту. Их витрины измазаны оскорблениями, над покупателями издеваются у входа, а поставщики перестали возить им товар. Движение за гражданские права просит людей всё равно ходить в эти магазины. Организаторы бойкота говорят, что никого нельзя заставить покупать у кого-то."
+ },
+ "movement_events_te.14.f": {
+  "en": "\\\"They broke the windows on Tuesday night. On Wednesday morning someone had painted a slogan on the boards about buying from your own kind. I swept up, put the stock back on the shelves and opened at eight, as I have every day since I took the shop over from my father.\\\"\\n\\n\\\"We are not stopping anyone from going in. We stand on the sidewalk and hand out a list of the shops we think people should use instead.\\\"\\n\\n\\\"I have bought my bread there for twenty years. This week I went in by the side door, because my employer drives past the front.\\\"\\n\\n\\\"The movement has asked us to do our shopping on that street on Saturday, in pairs, and to carry the bags home where people can see them.\\\"",
+  "ru": "«Окна разбили во вторник ночью. В среду утром кто-то написал на досках лозунг о том, что надо покупать у своих. Я подмёл, вернул товар на полки и открылся в восемь, как каждый день с тех пор, как принял лавку от отца».\\n\\n«Мы никому не мешаем входить. Мы стоим на тротуаре и раздаём список магазинов, которыми, по нашему мнению, людям стоит пользоваться вместо этих».\\n\\n«Я двадцать лет покупаю там хлеб. На этой неделе я зашёл через боковую дверь, потому что мой работодатель проезжает мимо входа».\\n\\n«Движение попросило нас делать покупки на этой улице в субботу, парами, и нести сумки домой так, чтобы люди видели»."
+ },
  "movement_events_te.14.t": {
   "en": "The Boycott",
   "ru": "Бойкот"
@@ -11159,9 +11199,21 @@
   "en": "Declare a national day of mourning",
   "ru": "Объявить национальный день траура"
  },
+ "movement_events_te.15.b": {
+  "en": "The [concept_agitator] brought this on themselves. Keep it out of the papers.",
+  "ru": "Сам [concept_agitator|l] навлёк это на себя. Не допустить огласки в газетах."
+ },
  "movement_events_te.15.c": {
   "en": "Open a formal investigation",
   "ru": "Начать официальное расследование"
+ },
+ "movement_events_te.15.d": {
+  "en": "A prominent figure in the civil rights movement has been found dead, and nobody has been charged. The movement says the killing was political and holds the authorities responsible, whether or not they ordered it. Vigils are being held across the country, and foreign newspapers have reported the death. We must decide how the government will answer.",
+  "ru": "Найден мёртвым видный деятель движения за гражданские права, никому не предъявлено обвинений. Движение заявляет, что убийство было политическим, и возлагает ответственность на власти, приказывали они его или нет. По всей стране проходят бдения, о смерти написали иностранные газеты. Мы должны решить, как правительство ответит."
+ },
+ "movement_events_te.15.f": {
+  "en": "The family had asked for the body to be carried on foot, and the movement's stewards walked in two lines beside the bearers to keep the way open. People stood along the whole route, many of them holding a candle or a photograph cut from a newspaper. Men in uniform watched from the corners with their hands at their sides. The hall where the funeral was held had room for the family and a few dozen others, and the rest waited in the streets around it. When the rites began, the stewards passed the word back through the crowd, so that people far from the doors knew when to stand in silence. Afterward the crowd went home in the order it had come.",
+  "ru": "Семья просила нести тело пешком, и распорядители движения шли двумя шеренгами рядом с несущими, чтобы расчистить путь. Люди стояли вдоль всего маршрута, многие со свечой или с фотографией, вырезанной из газеты. Люди в форме наблюдали с углов, опустив руки. В зале, где проходили похороны, хватило места для семьи и нескольких десятков человек, остальные ждали на окрестных улицах. Когда начался обряд, распорядители передали слово по толпе, чтобы те, кто далеко от дверей, знали, когда встать в молчании. После этого толпа разошлась по домам в том же порядке, в каком пришла."
  },
  "movement_events_te.15.t": {
   "en": "Blood of a Martyr",
@@ -11179,6 +11231,14 @@
   "en": "Let the world watch",
   "ru": "Пусть мир смотрит"
  },
+ "movement_events_te.16.d": {
+  "en": "A coordinated campaign of civil disobedience has spread across [SCOPE.sState('disobedience_state').GetName]. People are breaking our discriminatory laws in the open: sitting where they are barred from sitting, refusing to carry the papers they are required to carry, and entering places closed to them. They do not resist arrest, and they make sure the newspapers are there when it happens.",
+  "ru": "Скоординированная кампания гражданского неповиновения охватила область [SCOPE.sState('disobedience_state').GetName]. Люди открыто нарушают наши дискриминационные законы: садятся там, где им запрещено сидеть, отказываются носить документы, которые обязаны носить, и входят в места, закрытые для них. Они не сопротивляются аресту и следят за тем, чтобы газеты оказались на месте."
+ },
+ "movement_events_te.16.f": {
+  "en": "\\\"I commanded the detail at the station square, and I will give the inquiry the figures as I recorded them. On the first day about three hundred people sat down in the section closed to them. We carried them out one at a time, because none of them would walk, and it took us until evening. On the second day there were more than twice as many. By the third we had used every wagon in the district and were holding people in the yard. Not one of them struck an officer. They would not give their names, so we could not charge them, and each one we released was back on the square the next morning. I asked my superiors for orders twice and had no answer.\\\"",
+  "ru": "«Я командовал отрядом на вокзальной площади и представлю следствию цифры так, как я их записал. В первый день около трёхсот человек сели в секции, закрытой для них. Мы выносили их по одному, потому что никто не шёл сам, и это заняло у нас до вечера. На второй день их было больше чем вдвое. К третьему мы задействовали все повозки в округе и держали людей во дворе. Ни один не ударил офицера. Они не называли имён, так что обвинить их мы не могли, а каждый отпущенный на следующее утро снова был на площади. Я дважды просил у начальства приказов и не получил ответа»."
+ },
  "movement_events_te.16.t": {
   "en": "Mass Disobedience",
   "ru": "Массовое неповиновение"
@@ -11187,9 +11247,25 @@
   "en": "Condemn them before the world",
   "ru": "Осудить их перед всем миром"
  },
+ "movement_events_te.17.a.tt": {
+  "en": "[SCOPE.sCountry('cr_condemned_country').GetName] will have to answer: promise reform, reject what it will call our interference, or hit back with accusations of its own.",
+  "ru": "Стране [SCOPE.sCountry('cr_condemned_country').GetName] придётся отвечать: пообещать реформы, отвергнуть то, что она назовёт нашим вмешательством, или нанести ответный удар собственными обвинениями."
+ },
  "movement_events_te.17.b": {
   "en": "It is not our affair",
   "ru": "Это не наше дело"
+ },
+ "movement_events_te.17.b.tt": {
+  "en": "Nothing is said. [SCOPE.sCountry('cr_condemned_country').GetName]'s activists will have to look elsewhere for a hearing.",
+  "ru": "Ничего не говорится. Активистам страны [SCOPE.sCountry('cr_condemned_country').GetName] придётся искать, где их выслушают, в другом месте."
+ },
+ "movement_events_te.17.d": {
+  "en": "The civil rights movement in [SCOPE.sCountry('cr_condemned_country').GetName] is appealing beyond its borders. Its activists have written to our newspapers and to our government, asking us to say out loud what [SCOPE.sCountry('cr_condemned_country').GetName]'s laws do to its minorities. Our own laws protect minorities, and a great power is listened to. A public condemnation would cost us goodwill in [SCOPE.sCountry('cr_condemned_country').GetName], and it would please a good many people at home.",
+  "ru": "Движение за гражданские права в стране [SCOPE.sCountry('cr_condemned_country').GetName] обращается за пределы своих границ. Его активисты написали в наши газеты и нашему правительству, прося нас сказать вслух, что законы страны [SCOPE.sCountry('cr_condemned_country').GetName] делают с её меньшинствами. Наши собственные законы защищают меньшинства, а голос великой державы слышат. Публичное осуждение стоило бы нам расположения в стране [SCOPE.sCountry('cr_condemned_country').GetName] и порадовало бы немало людей дома."
+ },
+ "movement_events_te.17.f": {
+  "en": "\\\"I have served as our envoy in their capital for four years. If we condemn them in public, their government will stop taking my calls, and everything else I am working on there stops with them.\\\"\\n\\n\\\"The activists wrote to us because our laws protect our own minorities. If we say nothing, our own newspapers will ask why that protection stops at the border.\\\"\\n\\n\\\"Then say it privately. I can deliver a note tomorrow, and they will know exactly where we stand.\\\"\\n\\n\\\"A private note does nothing for the people being arrested there. The movement asked us to say it in public, because that is the only thing that would be of use to them.\\\"",
+  "ru": "«Я четыре года служу нашим посланником в их столице. Если мы осудим их публично, их правительство перестанет принимать мои звонки, и вместе с этим встанет всё остальное, над чем я там работаю».\\n\\n«Активисты написали нам, потому что наши законы защищают наши собственные меньшинства. Если мы промолчим, наши собственные газеты спросят, почему эта защита кончается у границы».\\n\\n«Тогда скажите это в частном порядке. Я могу передать ноту завтра, и они будут точно знать, где мы стоим».\\n\\n«Частная нота ничего не даёт людям, которых там арестовывают. Движение просило нас сказать это публично, потому что только это им и пригодится»."
  },
  "movement_events_te.17.t": {
   "en": "A Stain on Their Record",
@@ -11207,41 +11283,161 @@
   "en": "This must change",
   "ru": "Это должно измениться"
  },
+ "movement_events_te.2.d": {
+  "en": "A member of a discriminated community has been refused service at a well-known establishment and walked out of the door by its staff, as our [concept_discrimination] laws allow. The civil rights movement has taken up the case. The newspapers are printing it, some in anger and some without comment, and we are asked whether the law should stand.",
+  "ru": "Представителю дискриминируемой общины отказали в обслуживании в известном заведении, и персонал выставил его за дверь, как и позволяют наши законы о [Concept('concept_discrimination','дискриминации')]. Движение за гражданские права взялось за это дело. Газеты печатают его, одни с возмущением, другие без комментариев, и нас спрашивают, должен ли закон остаться в силе."
+ },
+ "movement_events_te.2.f": {
+  "en": "\\\"I am the one the newspapers are writing about, so I will tell you myself what happened. I went in a little after noon and asked for a table, as anyone does. The manager came over before I had sat down. He was polite about it. He said the law was on his side and pointed to the notice by the door. I said I would wait for my table. He sent for the doorman, who took my arm and walked me out onto the sidewalk and went back inside. A man across the street with a camera came over, asked my name and wrote it down, and I gave him the time as well.\\\"",
+  "ru": "«Это обо мне пишут газеты, так что я сам расскажу, что произошло. Я вошёл немного после полудня и попросил столик, как любой посетитель. Управляющий подошёл, не дав мне сесть. Он был вежлив. Он сказал, что закон на его стороне, и указал на объявление у двери. Я сказал, что подожду свой столик. Он послал за швейцаром, тот взял меня под руку, вывел на тротуар и вернулся внутрь. Человек с фотоаппаратом с той стороны улицы подошёл, спросил моё имя и записал его, и я назвал ему заодно и время»."
+ },
  "movement_events_te.2.t": {
   "en": "Segregation Incident",
   "ru": "Случай сегрегации"
+ },
+ "movement_events_te.200.a": {
+  "en": "A landmark achievement.",
+  "ru": "Историческое достижение."
+ },
+ "movement_events_te.200.d": {
+  "en": "The civil rights movement in [ROOT.GetCountry.GetName] has won what it set out to win. The government has accepted its demands, and its organizers have called off their marches and are holding celebrations in the cities where they began.",
+  "ru": "Движение за гражданские права в стране [ROOT.GetCountry.GetName] добилось того, чего хотело. Правительство приняло его требования, а организаторы прекратили марши и устраивают торжества в городах, где всё началось."
+ },
+ "movement_events_te.200.f": {
+  "en": "\\\"The arc of the moral universe is long, but it bends toward justice.\\\"\\n\\n— Martin Luther King Jr.",
+  "ru": "«Дуга нравственной вселенной длинна, но она изгибается к справедливости».\\n\\n— Мартин Лютер Кинг-младший"
  },
  "movement_events_te.200.t": {
   "en": "A New Era of Equality",
   "ru": "Новая эра равенства"
  },
+ "movement_events_te.220.a": {
+  "en": "The law holds everywhere, and we will enforce it.",
+  "ru": "Закон действует везде, и мы будем его соблюдать."
+ },
+ "movement_events_te.220.d": {
+  "en": "The civil rights law is signed. It puts into statute what Federal Protection did by order: marshals to enforce it, commissions to hear complaints and prosecutions for those who break it. It applies in every part of the country, whatever the local authorities think of it.",
+  "ru": "Закон о гражданских правах подписан. Он закрепляет в статутах то, что Федеральная защита делала по приказу: маршалов для принуждения к исполнению, комиссии для рассмотрения жалоб и преследование нарушителей. Он действует в каждой части страны, что бы ни думали о нём местные власти."
+ },
+ "movement_events_te.220.f": {
+  "en": "To every marshal of the civil rights service, from its director. The law signed today is now the instruction you work under. Where a local official refuses to register, serve or employ a member of a protected community, you will ask for the refusal in writing. If it is given, you will take the official's name and send it to the prosecutor the same day. You will not make arrests at public meetings unless violence is offered. Any marshal, in any office, will hear a complaint from the public without an appointment. Report to this office each week with the number of complaints received and the number acted on.",
+  "ru": "Каждому маршалу службы гражданских прав, от её директора. Подписанный сегодня закон отныне является инструкцией, по которой вы работаете. Если местный чиновник отказывается регистрировать, обслуживать или нанимать члена защищаемой общины, вы потребуете отказ в письменном виде. Если он будет дан, вы запишете имя чиновника и в тот же день передадите его прокурору. Вы не будете производить аресты на публичных собраниях, если не применено насилие. Любой маршал в любом отделении примет жалобу от населения без предварительной записи. Каждую неделю докладывайте этому управлению число полученных жалоб и число тех, по которым приняты меры."
+ },
  "movement_events_te.220.t": {
   "en": "The Civil Rights Mandate is Signed",
   "ru": "Мандат о гражданских правах подписан"
+ },
+ "movement_events_te.221.a": {
+  "en": "We did this together.",
+  "ru": "Мы сделали это вместе."
+ },
+ "movement_events_te.221.d": {
+  "en": "The civil rights law is signed, and the movement's organizers are calling it their own work. Its clauses are the demands they carried to every meeting, march and boycott while the government let them organize. Their chapters are already holding celebrations.",
+  "ru": "Закон о гражданских правах подписан, и организаторы движения называют его своим трудом. Его положения — те требования, с которыми они ходили на каждое собрание, марш и бойкот, пока правительство позволяло им организовываться. Их отделения уже проводят торжества."
+ },
+ "movement_events_te.221.f": {
+  "en": "\\\"We started in a back room with eleven chairs. Tonight the chapter rented the largest hall in the district, and there were still people standing in the street outside.\\\"\\n\\n\\\"I was one of the officials who argued against signing. I will say this for them: they never stopped coming, and they never once gave us a reason to arrest them.\\\"\\n\\n\\\"My mother kept every leaflet from every march in a tin. We read them aloud tonight, the old demands one after another, and ticked them off.\\\"\\n\\n\\\"Tomorrow we start on the employers who will act as though the law does not apply to them. Bring your notebooks to the Thursday meeting.\\\"",
+  "ru": "«Мы начинали в задней комнате с одиннадцатью стульями. Сегодня вечером отделение сняло самый большой зал в округе, и всё равно на улице у входа стояли люди».\\n\\n«Я был одним из чиновников, которые возражали против подписания. Скажу в их пользу: они не переставали приходить и ни разу не дали нам повода их арестовать».\\n\\n«Моя мать хранила в жестяной коробке каждую листовку с каждого марша. Сегодня мы читали их вслух, старые требования одно за другим, и ставили галочки».\\n\\n«Завтра мы беремся за работодателей, которые будут вести себя так, будто закон на них не распространяется. Приносите блокноты на собрание в четверг»."
  },
  "movement_events_te.221.t": {
   "en": "The Movement Carries the Day",
   "ru": "Движение берёт верх"
  },
+ "movement_events_te.222.a": {
+  "en": "Move on to the next thing.",
+  "ru": "Перейти к следующему вопросу."
+ },
+ "movement_events_te.222.d": {
+  "en": "The civil rights question is settled by a law that every faction helped to write. It came out of the committee work of Gradualist Accommodation, and it goes less far than the movement asked. The law is on the books, and the movement's leaders have accepted it.",
+  "ru": "Вопрос о гражданских правах решён законом, к которому приложили руку все стороны. Он вышел из комитетской работы Постепенного примирения и идёт не так далеко, как просило движение. Закон внесён в свод, и лидеры движения приняли его."
+ },
+ "movement_events_te.222.f": {
+  "en": "The signing was held in a committee room, because the hall was being painted. The officials who had drafted the law sat along one wall with their copies open at the clauses they had argued over, and the leaders of the movement sat along the other. When the last signature was on the page, someone began to clap and stopped when nobody joined in. The movement's chair crossed the room and shook hands with the official who had opposed her longest. \\\"We will be back about the housing clause,\\\" she said. He nodded and wrote it down, and they went out to the photographers together.",
+  "ru": "Подписание прошло в комнате комитета, потому что зал красили. Чиновники, составлявшие закон, сидели вдоль одной стены с копиями, раскрытыми на спорных положениях, а лидеры движения — вдоль другой. Когда на странице появилась последняя подпись, кто-то начал хлопать и умолк, когда никто не поддержал. Председатель движения пересекла комнату и пожала руку чиновнику, дольше всех ей противостоявшему. «Мы вернёмся к вам из-за положения о жилье», — сказала она. Он кивнул и записал это, и они вместе вышли к фотографам."
+ },
  "movement_events_te.222.t": {
   "en": "A Settlement, At Last",
   "ru": "Наконец-то соглашение"
+ },
+ "movement_events_te.223.a": {
+  "en": "Take the win we paid for.",
+  "ru": "Принять победу, за которую мы заплатили."
+ },
+ "movement_events_te.223.d": {
+  "en": "The new civil rights statutes are signed, and the moderate leaders the government appointed under Cooptation are photographed with them. The [concept_radical] organizers who built the movement were not invited, and their chapters are emptying. Enforcing the statutes is left to the same offices that blocked the movement's lawsuits before.",
+  "ru": "Новые законы о гражданских правах подписаны, и умеренных лидеров, назначенных правительством в рамках Кооптации, фотографируют рядом с ними. Организаторы из числа [Concept('concept_radical','радикалов')], построившие движение, не приглашены, и их отделения пустеют. Исполнение законов оставлено тем же ведомствам, которые прежде блокировали иски движения."
+ },
+ "movement_events_te.223.f": {
+  "en": "\\\"I organized this movement's first chapter, and I read about the signing in the evening paper like everyone else. The people in the photograph were appointed by the government to speak for us. I never saw one of them at a meeting. The statutes say the right things, and I have read every clause. But complaints go to the same office that sat on every case we filed, and the same clerk signs its letters. Most of my organizers have stopped coming. I am writing to each of them this week to ask them back to the next meeting.\\\"",
+  "ru": "«Я организовал первое отделение этого движения, а о подписании прочёл в вечерней газете, как и все. Люди на фотографии назначены правительством, чтобы говорить за нас. Я ни разу не видел ни одного из них на собрании. Законы говорят правильные вещи, я прочёл каждое положение. Но жалобы идут в то же ведомство, которое замораживало каждое наше дело, и письма там подписывает тот же клерк. Большинство моих организаторов перестали приходить. На этой неделе я пишу каждому из них и зову на следующее собрание»."
  },
  "movement_events_te.223.t": {
   "en": "Reform on Paper",
   "ru": "Реформа на бумаге"
  },
+ "movement_events_te.230.a": {
+  "en": "Hollow victory.",
+  "ru": "Пустая победа."
+ },
+ "movement_events_te.230.d": {
+  "en": "The token appointments and symbolic laws of Cooptation have cooled the streets. Donors have moved to other causes, and the chapters have shrunk until young people no longer find one to join. The civil rights movement has broken up, and the grievances that started it have not been answered.",
+  "ru": "Символические назначения и показные законы Кооптации охладили улицы. Жертвователи переключились на другие дела, а отделения сократились настолько, что молодёжь больше не находит, куда вступить. Движение за гражданские права распалось, а обиды, с которых оно началось, остались без ответа."
+ },
+ "movement_events_te.230.f": {
+  "en": "Agenda for the chapter's last general meeting, as the secretary wrote it out:\\n\\nThe treasurer's report. The account will pay for the hall to the end of the month and no further, because the two donors who covered the rent have stopped their payments.\\nThe membership roll. Eleven members paid their dues this quarter, too few for the chapter to send a delegate to the national committee.\\nThe newsletter. Nobody has offered to edit it since the editor took a post in one of the new government offices.\\nThe banner and the files. They need a home, since the hall will not store them after the lease ends.\\nA vote on whether to close the chapter or merge it with the one in the next district.",
+  "ru": "Повестка последнего общего собрания отделения в том виде, в каком её записал секретарь:\\n\\nОтчёт казначея. Счёт оплатит зал до конца месяца и не дольше, потому что два жертвователя, оплачивавшие аренду, прекратили платежи.\\nСписок членов. В этом квартале взносы заплатили одиннадцать человек, слишком мало, чтобы отделение могло послать делегата в национальный комитет.\\nИнформационный бюллетень. Никто не вызвался его редактировать с тех пор, как редактор получил место в одном из новых правительственных ведомств.\\nЗнамя и архив. Им нужно место, поскольку зал не будет хранить их после окончания аренды.\\nГолосование о том, закрыть отделение или слить его с отделением соседнего округа."
+ },
  "movement_events_te.230.t": {
   "en": "The Movement Demobilizes",
   "ru": "Движение демобилизуется"
+ },
+ "movement_events_te.231.a": {
+  "en": "Maybe next decade.",
+  "ru": "Может быть, в следующем десятилетии."
+ },
+ "movement_events_te.231.d": {
+  "en": "The civil rights movement has run out of strength under Gradualist Accommodation. Each committee offered a small concession and asked for patience, and each time the movement accepted. Its members have stopped believing the next concession will come, and its meetings have stopped.",
+  "ru": "Движение за гражданские права выдохлось при Постепенном примирении. Каждый комитет предлагал небольшую уступку и просил терпения, и каждый раз движение соглашалось. Его члены перестали верить, что следующая уступка будет, и собрания прекратились."
+ },
+ "movement_events_te.231.f": {
+  "en": "To the members, from the chair of the movement's council, with this year's report. The committee on housing met six times and has promised its recommendations for its next session, as it promised a year ago. The employment clause we were offered covers only firms of a size that leaves out most of the places our members work. We accepted it, as we accepted the clauses before it, because it was better than nothing. Many of you have told me since that it is not much better, and I have no answer that I believe myself. Attendance at this year's assembly was the lowest since the council was founded. I will stand down at the next assembly, and I ask for nominations.",
+  "ru": "Членам, от председателя совета движения, с отчётом за этот год. Комитет по жилью собирался шесть раз и обещал представить рекомендации на следующей сессии, как обещал и год назад. Предложенное нам положение о трудоустройстве охватывает лишь фирмы такого размера, что за скобками остаётся большинство мест, где работают наши члены. Мы приняли его, как принимали предыдущие положения, потому что это лучше, чем ничего. Многие из вас с тех пор говорили мне, что лучше ненамного, и у меня нет ответа, в который я верил бы сам. Явка на ассамблее в этом году была самой низкой с основания совета. На следующей ассамблее я уйду с поста и прошу выдвигать кандидатов."
  },
  "movement_events_te.231.t": {
   "en": "The Long Drift",
   "ru": "Долгий дрейф"
  },
+ "movement_events_te.232.a": {
+  "en": "The question will return.",
+  "ru": "Вопрос вернётся."
+ },
+ "movement_events_te.232.d": {
+  "en": "The civil rights movement has lost its momentum. Its rallies thinned, its organizers moved to other causes, and the newspapers that once covered every march stopped sending reporters. Nobody broke it up. It shrank until what remained could no longer call itself a movement, and the grievances that started it are unanswered.",
+  "ru": "Движение за гражданские права утратило импульс. Митинги поредели, организаторы переключились на другие дела, а газеты, прежде освещавшие каждый марш, перестали присылать репортёров. Никто его не разгонял. Оно сжималось, пока то, что осталось, уже не могло называться движением, а обиды, с которых оно началось, остались без ответа."
+ },
+ "movement_events_te.232.f": {
+  "en": "The caretaker let the last of the organizers into the hall on a weekday morning to clear the cupboard before the new tenants came. The organizer took down the notice board first, with the meeting dates still pinned to it, and put the notices in a box without reading them. The banner was rolled on the top shelf. She unrolled it on the floor, checked it for moths, rolled it again more tightly and tied it with string. The chairs against the wall were the hall's, and she counted them out to the caretaker so the deposit could be returned. Then she carried the box and the banner to the bus stop and waited.",
+  "ru": "Сторож впустил последнюю из организаторов в зал в будний день с утра, чтобы она освободила шкаф до прихода новых арендаторов. Организатор первым делом сняла доску объявлений, на которой ещё были приколоты даты собраний, и сложила объявления в коробку, не читая. Знамя было свёрнуто на верхней полке. Она развернула его на полу, проверила, нет ли моли, свернула потуже и перевязала бечёвкой. Стулья у стены принадлежали залу, и она пересчитала их сторожу, чтобы вернули залог. Потом отнесла коробку и знамя на автобусную остановку и стала ждать."
+ },
  "movement_events_te.232.t": {
   "en": "The Movement Fades",
   "ru": "Движение угасает"
+ },
+ "movement_events_te.240.a": {
+  "en": "The streets answer where the law would not.",
+  "ru": "Улицы отвечают там, где закон молчит."
+ },
+ "movement_events_te.240.b": {
+  "en": "We will not be moved.",
+  "ru": "Нас не сдвинуть."
+ },
+ "movement_events_te.240.d": {
+  "en": "By every measure but the law, the civil rights movement has won. Its support is at its height, and its marches have reached the capital. But the statute books still list the same restrictions and the same exclusions, word for word. A crowd outside our offices is reading those statutes aloud, clause by clause, and asking which of them we mean to keep.",
+  "ru": "По всем меркам, кроме закона, движение за гражданские права победило. Его поддержка на пике, его марши дошли до столицы. Но своды законов по-прежнему перечисляют те же ограничения и те же исключения, слово в слово. Толпа у наших ведомств читает эти законы вслух, статью за статьёй, и спрашивает, какие из них мы намерены сохранить."
+ },
+ "movement_events_te.240.f": {
+  "en": "\\\"The papers call it a triumph. I have the statute in my desk drawer, and every restriction we marched against is still in it, on the same pages.\\\"\\n\\n\\\"My grandfather drafted that law, and I have spent my career amending it. I am not sure that any of my amendments changed what it does.\\\"\\n\\n\\\"We had the crowds and the members, and we were told that would be enough. The law reads exactly as it did.\\\"\\n\\n\\\"The council meets tonight to decide what we do next. Some want another march, and some want to stop paying the taxes that pay for the law's enforcement.\\\"",
+  "ru": "«Газеты называют это триумфом. У меня в ящике стола лежит закон, и каждое ограничение, против которого мы шли, всё ещё в нём, на тех же страницах».\\n\\n«Мой дед составлял этот закон, а я всю карьеру его исправляю. Я не уверен, что хоть одна из моих поправок изменила то, как он действует».\\n\\n«У нас были толпы и члены, и нам говорили, что этого хватит. Закон читается точно так же, как раньше».\\n\\n«Совет собирается сегодня вечером решить, что делать дальше. Одни хотят ещё один марш, другие — перестать платить налоги, на которые закон исполняется»."
  },
  "movement_events_te.240.t": {
   "en": "Victory on Paper",
@@ -11259,25 +11455,101 @@
   "en": "Channel it into national unity propaganda",
   "ru": "Направить её в русло пропаганды национального единства"
  },
+ "movement_events_te.3.d": {
+  "en": "Painters, writers and musicians from our discriminated communities are finding audiences they were long refused. Their exhibitions are crowded, their books are selling, and critics who ignored them are reviewing them now. The movement has asked for public money to support the work. Some in government would rather the state put its own name on it.",
+  "ru": "Художники, писатели и музыканты из наших дискриминируемых общин находят публику, в которой им долго отказывали. На их выставки не протолкнуться, их книги раскупают, а критики, которые их игнорировали, теперь пишут о них рецензии. Движение просит государственных денег на поддержку этой работы. Часть правительства предпочла бы, чтобы государство поставило на ней своё имя."
+ },
+ "movement_events_te.3.f": {
+  "en": "To the movement's arts committee, from the gallery that showed the exhibition. We hung forty-one works by twenty-two artists from the communities. In the first week we sold eleven, and we had more visitors than in any month before. The critics of the two largest papers came on the fourth day, after a review appeared abroad, and both have now written about the show. Three other cities have asked us to tour it. A government office has offered to buy several works for a public building, on condition that the labels do not name the artists' communities. The artists have asked us to refuse that condition. We ask the committee whether it agrees, and whether it can help with the cost of the tour.",
+  "ru": "Художественному комитету движения, от галереи, показавшей выставку. Мы повесили сорок одну работу двадцати двух художников из общин. За первую неделю мы продали одиннадцать и принимали больше посетителей, чем в любой прошлый месяц. Критики двух крупнейших газет пришли на четвёртый день, после того как за границей вышла рецензия, и оба теперь написали о выставке. Три других города просят нас привезти её. Одно правительственное ведомство предложило купить несколько работ для общественного здания при условии, что в подписях не будут названы общины художников. Художники просят нас отказаться от этого условия. Мы спрашиваем комитет, согласен ли он, и может ли он помочь с расходами на гастроли."
+ },
  "movement_events_te.3.t": {
   "en": "Cultural Renaissance",
   "ru": "Культурный ренессанс"
+ },
+ "movement_events_te.301.a": {
+  "en": "We are paying attention now.",
+  "ru": "Теперь мы обращаем внимание."
+ },
+ "movement_events_te.301.d": {
+  "en": "What began as a community meeting has filled a city block. The newspapers that support the movement are running photographs of it on their front pages, and for the first time the public is putting faces and names to the civil rights movement.",
+  "ru": "То, что началось как собрание общины, заполнило городской квартал. Газеты, поддерживающие движение, ставят его фотографии на первые полосы, и впервые общество видит лица и слышит имена движения за гражданские права."
+ },
+ "movement_events_te.301.f": {
+  "en": "The organizers had booked the community hall for a meeting of a few hundred. By noon the hall was full, the yard was full, and people were standing in the street outside. One of the organizers climbed onto a chair at the door and asked the crowd to keep to the sidewalk so the traffic could pass. \\\"We will speak from the steps,\\\" she called, \\\"so everyone can hear.\\\" A photographer from one of the papers set up across the road and asked the speakers to stand closer together. The first speaker read out the movement's demands, and the people at the back passed each one along to those behind them.",
+  "ru": "Организаторы заказали общинный зал для собрания на несколько сотен человек. К полудню зал был полон, двор был полон, и люди стояли на улице снаружи. Одна из организаторов встала на стул у двери и попросила толпу держаться тротуара, чтобы мог проехать транспорт. «Мы будем выступать со ступеней, — крикнула она, — чтобы всем было слышно». Фотограф одной из газет расположился на другой стороне дороги и попросил выступающих встать теснее. Первый оратор зачитал требования движения, и люди в задних рядах передавали каждое из них стоящим позади."
  },
  "movement_events_te.301.t": {
   "en": "First Mass Rally Draws Notice",
   "ru": "Первый массовый митинг привлекает внимание"
  },
+ "movement_events_te.302.a": {
+  "en": "Give the law teeth: send in inspectors and prosecutors.",
+  "ru": "Дать закону зубы: отправить инспекторов и прокуроров."
+ },
+ "movement_events_te.302.b": {
+  "en": "The courts are open. Let them bring their cases.",
+  "ru": "Суды открыты. Пусть подают иски."
+ },
+ "movement_events_te.302.c": {
+  "en": "The law is equal. The rest is for society to settle.",
+  "ru": "Закон равен для всех. Остальное общество решит само."
+ },
+ "movement_events_te.302.d": {
+  "en": "No statute singles out our minorities any longer, but the movement's organizers have filled the capital's hearing rooms with evidence that landlords, employers and local officials still do. They are no longer asking for new rights. They are asking the state to enforce the ones it has already written.",
+  "ru": "Ни один закон больше не выделяет наши меньшинства, но организаторы движения заполнили столичные залы слушаний доказательствами того, что домовладельцы, работодатели и местные чиновники всё ещё делают это. Они больше не просят новых прав. Они просят государство обеспечить исполнение тех, что оно уже записало."
+ },
+ "movement_events_te.302.f": {
+  "en": "From the movement's written submission to the hearing, the cases its lawyers read into the record, to show a pattern that no single case shows:\\n\\nA woman was told by telephone that an apartment was free and told at the door that it had been rented. She went back eleven times with a witness, and each time it had been rented that morning.\\nA foundry has no one from the community on its payroll, though many of the people in its district belong to it.\\nA man was stopped and searched four times in a month on his walk to work, and no charge was ever brought.\\nA school lost the enrollment forms of every child from one street, and asked the families to apply again after the term had begun.",
+  "ru": "Из письменного заявления движения на слушаниях: дела, которые его юристы зачитали в протокол, чтобы показать закономерность, которой не видно ни в одном отдельном деле:\\n\\nЖенщине по телефону сказали, что квартира свободна, а у двери — что её уже сдали. Она возвращалась одиннадцать раз со свидетелем, и каждый раз её сдавали в то же утро.\\nНа литейном заводе нет ни одного человека из общины, хотя многие жители его района к ней принадлежат.\\nМужчину четыре раза за месяц останавливали и обыскивали по дороге на работу, и обвинение не предъявили ни разу.\\nШкола потеряла бланки зачисления всех детей с одной улицы и попросила семьи подавать заявления заново после начала четверти."
+ },
  "movement_events_te.302.t": {
   "en": "Equal on Paper",
   "ru": "Равны на бумаге"
+ },
+ "movement_events_te.303.a": {
+  "en": "A coalition that frightens the right people.",
+  "ru": "Коалиция, которая пугает тех, кого надо."
+ },
+ "movement_events_te.303.d": {
+  "en": "Branches of the trade unions have opened their halls to civil rights organizers. The two movements are issuing joint statements, and on many shop floors the union's meeting and the movement's are now the same meeting.",
+  "ru": "Отделения профсоюзов открыли свои залы для организаторов движения за гражданские права. Оба движения выпускают совместные заявления, и во многих цехах собрание профсоюза и собрание движения теперь — одно и то же собрание."
+ },
+ "movement_events_te.303.f": {
+  "en": "\\\"I have been secretary of this branch for thirty years, and for most of them I told you the civil rights question was a distraction from wages. I was wrong, and I am saying so at a full meeting so that it goes in the minutes. The members on the line who are refused housing and promotion are the same members who pay their dues to this branch. From next week the civil rights committee will use this hall on Tuesday evenings, free of charge. The owners will try to set us against each other over it. Any member who is threatened at work for coming to those meetings is to report it to me, and the branch will take it up.\\\"",
+  "ru": "«Я тридцать лет секретарь этого отделения, и большую часть этого времени я говорил вам, что вопрос гражданских прав отвлекает от зарплат. Я ошибался и говорю это на полном собрании, чтобы это попало в протокол. Члены на линии, которым отказывают в жилье и в повышении, — те самые члены, которые платят взносы в это отделение. С будущей недели комитет по гражданским правам будет пользоваться этим залом по вторникам вечером бесплатно. Владельцы попытаются настроить нас друг против друга. Любой член, которому угрожают на работе за посещение этих собраний, должен сообщить мне, и отделение займётся этим»."
  },
  "movement_events_te.303.t": {
   "en": "Coalition Forms with Trade Unions",
   "ru": "Коалиция с профсоюзами"
  },
+ "movement_events_te.304.a": {
+  "en": "We asked for this report. We will read it.",
+  "ru": "Мы просили этот доклад. Мы его прочтём."
+ },
+ "movement_events_te.304.d": {
+  "en": "The civil rights commission set up under Federal Protection has finished two years of hearings and sent its report to the government. Its recommendations are specific and costed, and several would be unpopular with our own supporters. The commission has no power to act on them, and the government must decide whether to.",
+  "ru": "Комиссия по гражданским правам, созданная в рамках Федеральной защиты, завершила два года слушаний и направила правительству свой доклад. Её рекомендации конкретны и просчитаны по стоимости, и несколько из них будут непопулярны среди наших собственных сторонников. У комиссии нет полномочий действовать по ним, и правительство должно решить, делать ли это."
+ },
+ "movement_events_te.304.f": {
+  "en": "To the government, from the chair of the civil rights commission. We enclose our report. Over two years we heard witnesses from every part of the country, in public wherever they agreed to it and in private where they feared for their work or their homes. The report sets out our findings of fact first, each with the testimony that supports it, and our recommendations after, each with its cost. Some of them will be unwelcome to employers and to local authorities, and we have said so plainly. The commission's term ends with this report. Its members are willing to appear before any committee the government names to explain their findings.",
+  "ru": "Правительству, от председателя комиссии по гражданским правам. Прилагаем наш доклад. За два года мы выслушали свидетелей из всех частей страны: публично там, где они на это соглашались, и конфиденциально там, где они опасались за работу или жильё. В докладе сначала изложены наши установленные факты, каждый с подтверждающими показаниями, а затем рекомендации, каждая с оценкой стоимости. Некоторые из них будут неприятны работодателям и местным властям, и мы прямо об этом сказали. Срок полномочий комиссии заканчивается с этим докладом. Её члены готовы выступить перед любым комитетом, который назовёт правительство, и пояснить свои выводы."
+ },
  "movement_events_te.304.t": {
   "en": "Federal Commission Recommends Action",
   "ru": "Федеральная комиссия рекомендует действовать"
+ },
+ "movement_events_te.305.a": {
+  "en": "History is here today.",
+  "ru": "История вершится сегодня."
+ },
+ "movement_events_te.305.d": {
+  "en": "The civil rights movement has brought its supporters to the capital from every part of the country. They fill the avenues outside the government's buildings, and the speeches are being carried live on the radio. The movement says it will stay until the government answers its demands.",
+  "ru": "Движение за гражданские права привело своих сторонников в столицу со всех концов страны. Они заполнили проспекты у правительственных зданий, а речи транслируются по радио в прямом эфире. Движение заявляет, что останется, пока правительство не ответит на его требования."
+ },
+ "movement_events_te.305.f": {
+  "en": "\\\"We came overnight on the buses from the other cities, forty to a bus, with food for two days. Our chapter is standing by the third lamp post from the fountain, where we were told to stand.\\\"\\n\\n\\\"I have covered three of these marches for the radio. This is the first time I have seen whole families, grandparents and babies, in the front rows.\\\"\\n\\n\\\"From the window of my office I cannot see where the crowd ends. My colleague asked whether we should close the shutters, and I told him to leave them open.\\\"\\n\\n\\\"The stewards have been told to keep the side streets clear for the ambulances, and to answer any provocation by sitting down.\\\"",
+  "ru": "«Мы приехали за ночь на автобусах из других городов, по сорок человек в автобусе, с едой на два дня. Наше отделение стоит у третьего фонарного столба от фонтана, где нам и велели стоять».\\n\\n«Я освещал по радио три таких марша. Впервые вижу в первых рядах целые семьи, дедушек, бабушек и младенцев».\\n\\n«Из окна моего кабинета не видно, где кончается толпа. Коллега спросил, не закрыть ли ставни, и я велел оставить их открытыми».\\n\\n«Распорядителям сказано держать боковые улицы свободными для скорой помощи и отвечать на любую провокацию тем, что садиться на землю»."
  },
  "movement_events_te.305.t": {
   "en": "The March on the Capital",
@@ -11295,6 +11567,14 @@
   "en": "Deflect with counter-accusations",
   "ru": "Ответить встречными обвинениями"
  },
+ "movement_events_te.4.d": {
+  "en": "[SCOPE.sCountry('criticizing_country').GetName] has publicly condemned our treatment of minorities and named our [concept_discrimination] policies as the cause. Its statement is being reprinted in foreign newspapers, and our own civil rights movement is reading it aloud at its meetings. We must decide how to answer.",
+  "ru": "Страна [SCOPE.sCountry('criticizing_country').GetName] публично осудила наше обращение с меньшинствами и назвала причиной нашу политику [Concept('concept_discrimination','дискриминации')]. Её заявление перепечатывают иностранные газеты, а наше собственное движение за гражданские права зачитывает его вслух на своих собраниях. Мы должны решить, как ответить."
+ },
+ "movement_events_te.4.f": {
+  "en": "To the government, from our mission in the capital of [SCOPE.sCountry('criticizing_country').GetName]. The statement was issued this morning and given to the press before it reached us. It names our minority laws and quotes from the petitions our own civil rights movement has sent abroad. Officials here tell me privately that it was approved at the highest level and will not be withdrawn. Two papers have printed it in full, beside photographs taken in our cities by their correspondents. I have been asked to call tomorrow to receive the text formally. I ask for instructions before then: whether to accept it, to reply to it, or to decline the meeting.",
+  "ru": "Правительству, от нашей миссии в столице страны [SCOPE.sCountry('criticizing_country').GetName]. Заявление было опубликовано сегодня утром и передано прессе раньше, чем дошло до нас. В нём названы наши законы о меньшинствах и цитируются петиции, которые наше собственное движение за гражданские права отправило за границу. Местные чиновники говорят мне неофициально, что оно одобрено на самом высоком уровне и отозвано не будет. Две газеты напечатали его полностью, рядом с фотографиями, сделанными их корреспондентами в наших городах. Меня пригласили зайти завтра, чтобы официально принять текст. Прошу указаний до этого: принять ли его, ответить на него или отказаться от встречи."
+ },
  "movement_events_te.4.t": {
   "en": "International Pressure on Human Rights",
   "ru": "Международное давление по правам человека"
@@ -11311,6 +11591,14 @@
   "en": "Ignore the problem for now",
   "ru": "Пока игнорировать проблему"
  },
+ "movement_events_te.5.d": {
+  "en": "Resistance to the draft is spreading. Young people called up for the war are refusing to report, their families are hiding them, and the anti-war movement is running networks that move them out of reach. The army wants the evaders hunted down. The movement says a crackdown will turn more of the country against the war.",
+  "ru": "Сопротивление призыву растёт. Молодые люди, призванные на войну, отказываются являться, семьи прячут их, а антивоенное движение организует сети, которые выводят их из-под удара. Армия хочет выследить уклонистов. Движение говорит, что репрессии настроят против войны ещё больше людей."
+ },
+ "movement_events_te.5.f": {
+  "en": "The recruiting officer had a list of seventeen addresses for the morning and a clerk to carry it. At the first house a woman said her son had gone to work in another town and she did not know which. At the second nobody answered the door, though there was smoke from the chimney. By eleven they had found two of the seventeen, and one of those had a letter from a doctor. \\\"Mark the rest as not at home,\\\" the officer said, and the clerk wrote it against each name. In the afternoon they set out with the next list.",
+  "ru": "У офицера по набору на утро был список из семнадцати адресов и клерк, который его нёс. В первом доме женщина сказала, что сын уехал работать в другой город, и она не знает, в какой. Во втором никто не открыл дверь, хотя из трубы шёл дым. К одиннадцати нашли двоих из семнадцати, и у одного была справка от врача. «Остальных отметьте как отсутствующих дома», — сказал офицер, и клерк написал это напротив каждого имени. После обеда они отправились по следующему списку."
+ },
  "movement_events_te.5.t": {
   "en": "Draft Resistance",
   "ru": "Сопротивление призыву"
@@ -11319,9 +11607,21 @@
   "en": "Discredit these traitors",
   "ru": "Дискредитировать этих предателей"
  },
+ "movement_events_te.6.b": {
+  "en": "They have earned the right to speak",
+  "ru": "Они заслужили право говорить"
+ },
  "movement_events_te.6.c": {
   "en": "Invite them to advise on policy",
   "ru": "Пригласить их консультировать по политике"
+ },
+ "movement_events_te.6.d": {
+  "en": "A group of decorated veterans has spoken out in public against the conduct and purpose of the war. They describe what they saw and what they were ordered to do, and the anti-war movement is reprinting their accounts. Their service records make them hard to dismiss, and the army's leadership wants them silenced.",
+  "ru": "Группа ветеранов с наградами публично выступила против ведения и целей войны. Они рассказывают, что видели и что им приказывали делать, а антивоенное движение перепечатывает их рассказы. Их послужные списки не позволяют отмахнуться от них, а руководство армии хочет заставить их замолчать."
+ },
+ "movement_events_te.6.f": {
+  "en": "\\\"I have come to this meeting as a decorated veteran of this war, and I will tell you what I did to earn the decoration. We were ordered to clear a district of anyone who might help the enemy, which meant everyone in it. We moved the families out on foot with what they could carry, and we burned what they left so that nobody could come back to it. I was commended for doing it quickly. Since I began speaking, the army's office has said that I am confused, then that I am bitter, then that I am unwell. I am none of those things. I will answer any question this meeting wants to put to me.\\\"",
+  "ru": "«Я пришёл на это собрание как награждённый ветеран этой войны и расскажу, что я сделал, чтобы заслужить награду. Нам приказали зачистить район от всех, кто мог помогать врагу, а это значило от всех, кто там жил. Мы вывели семьи пешком с тем, что они могли унести, и сожгли то, что они оставили, чтобы никто не мог вернуться. Меня отметили за то, что я сделал это быстро. С тех пор как я начал говорить, ведомство армии заявило, что я запутался, потом что я озлоблен, потом что я нездоров. Я ни то, ни другое, ни третье. Я отвечу на любой вопрос, который это собрание захочет мне задать»."
  },
  "movement_events_te.6.t": {
   "en": "Veterans Speak Against the War",
@@ -11339,6 +11639,14 @@
   "en": "Use this momentum for diplomacy",
   "ru": "Использовать этот импульс для дипломатии"
  },
+ "movement_events_te.7.d": {
+  "en": "A peace rally has filled the streets of our capital. The crowd stretches farther than its organizers planned for, and its banners call on the government to end the war by negotiation. The organizers say the rally will stay peaceful, and they mean to march past the government's offices before evening.",
+  "ru": "Мирный митинг заполнил улицы нашей столицы. Толпа тянется дальше, чем рассчитывали организаторы, а её плакаты призывают правительство закончить войну путём переговоров. Организаторы говорят, что митинг останется мирным, и намерены пройти маршем мимо правительственных ведомств до вечера."
+ },
+ "movement_events_te.7.f": {
+  "en": "Remarks heard at the peace rally in the capital.\\n\\n\\\"The authorities' estimate of the crowd and the organizers' estimate are a long way apart. I stood on a roof for an hour, and I could not see where it ended in any direction.\\\"\\n\\n\\\"The government's statement says this is a small minority. Our stewards have counted the buses that came in from the other cities, and we will publish the count tonight.\\\"\\n\\n\\\"I have two sons at the front. I am not here against them. I am here so that they come home.\\\"\\n\\n\\\"My daughter carried one end of our banner, and a woman from the mills carried the other. They had never met before this morning, and they walked the whole route together.\\\"",
+  "ru": "Реплики, услышанные на мирном митинге в столице.\\n\\n«Оценка толпы властями и оценка организаторов сильно расходятся. Я час простоял на крыше и не видел, где она кончается, ни в одну сторону».\\n\\n«В заявлении правительства сказано, что это малое меньшинство. Наши распорядители сосчитали автобусы, пришедшие из других городов, и мы опубликуем цифру сегодня вечером».\\n\\n«У меня двое сыновей на фронте. Я здесь не против них. Я здесь, чтобы они вернулись домой».\\n\\n«Моя дочь несла один конец нашего знамени, а женщина с фабрики — другой. Они до сегодняшнего утра не были знакомы и прошли весь маршрут вместе»."
+ },
  "movement_events_te.7.t": {
   "en": "Peace Rally Fills the Capital",
   "ru": "Митинг за мир заполняет столицу"
@@ -11355,6 +11663,14 @@
   "en": "Tax their excess profits",
   "ru": "Обложить налогом их сверхприбыли"
  },
+ "movement_events_te.8.d": {
+  "en": "Anti-war activists have published evidence that some of our arms manufacturers are making large profits on military contracts. Their pamphlet lists inflated prices, equipment that failed its trials and was delivered anyway, and officials who moved from the procurement office to the manufacturers' boards. The public wants to know who approved the contracts.",
+  "ru": "Антивоенные активисты опубликовали доказательства того, что некоторые из наших производителей оружия получают огромные прибыли на военных контрактах. В их памфлете перечислены завышенные цены, оборудование, не прошедшее испытаний и всё равно поставленное, и чиновники, перешедшие из закупочного ведомства в советы директоров производителей. Общество хочет знать, кто одобрил эти контракты."
+ },
+ "movement_events_te.8.f": {
+  "en": "Findings of the anti-war movement's research committee, as printed on the front of its pamphlet:\\n\\nThe army paid twice the price per rifle that the same works charged a foreign buyer that year, according to the works' own sales ledger.\\nA consignment of boots failed the army's wear test and was accepted the following week without a second test, according to the inspector's signed report.\\nTwo officials who approved the largest contracts now sit on the board of the company that won them.\\nThe company has raised its dividend every year of the contracts and has not raised its wages.\\nThe committee has sent copies of every document to the newspapers and to the government's auditors.",
+  "ru": "Выводы исследовательского комитета антивоенного движения, напечатанные на первой странице его памфлета:\\n\\nАрмия платила за винтовку вдвое больше, чем те же заводы брали в тот год с иностранного покупателя, по собственной книге продаж заводов.\\nПартия сапог не прошла армейское испытание на износ и была принята на следующей неделе без повторного испытания, по подписанному отчёту инспектора.\\nДва чиновника, одобрившие самые крупные контракты, теперь заседают в совете директоров компании, получившей их.\\nКомпания повышала дивиденды каждый год действия контрактов и не повысила зарплаты.\\nКомитет отправил копии каждого документа в газеты и правительственным аудиторам."
+ },
  "movement_events_te.8.t": {
   "en": "War Profiteering Exposed",
   "ru": "Военное спекулянтство разоблачено"
@@ -11367,8 +11683,516 @@
   "en": "Military applications only",
   "ru": "Только военное применение"
  },
+ "movement_events_te.9.c": {
+  "en": "Too dangerous. Deny the application.",
+  "ru": "Слишком опасно. Отклонить заявку."
+ },
+ "movement_events_te.9.d": {
+  "en": "Our leading neuroscientists have asked the government's permission to begin human trials of implanted brain-computer interfaces. They expect the implants to help patients with paralysis or memory loss first, and later anyone who wants a faster link to a machine. Ethicists ask what consent means for a device that changes how a person thinks, and the clergy oppose the trials outright.",
+  "ru": "Ведущие нейробиологи нашей страны просят у правительства разрешения начать испытания на людях имплантируемых интерфейсов мозг-компьютер. Они рассчитывают, что импланты поначалу помогут пациентам с параличом или потерей памяти, а позже — всем, кто захочет более быстрой связи с машиной. Специалисты по этике спрашивают, что значит согласие для устройства, меняющего то, как человек думает, а духовенство возражает против испытаний категорически."
+ },
+ "movement_events_te.9.f": {
+  "en": "To the government's health authority, from the neural interface program at the national research hospital. We ask permission to implant our device in twelve volunteers, all of them patients who have lost the use of their limbs. In our animal trials the device has recorded and stimulated nerve signals for more than a year without a failure. Each volunteer will be told, in writing and in person, what we know of the risks and what we do not, and may withdraw at any time. The device can be switched off but not easily removed. We attach the protocol, the consent form and the names of the ethics panel that has reviewed both. We ask for a decision within the quarter.",
+  "ru": "Органу здравоохранения правительства, от программы нейроинтерфейсов национальной исследовательской больницы. Просим разрешения имплантировать наше устройство двенадцати добровольцам, все они — пациенты, потерявшие способность двигать конечностями. В наших испытаниях на животных устройство записывало и стимулировало нервные сигналы больше года без сбоев. Каждому добровольцу будет сообщено, письменно и лично, что нам известно о рисках и что неизвестно, и он вправе отказаться в любой момент. Устройство можно отключить, но нелегко удалить. Прилагаем протокол, форму согласия и имена членов этической комиссии, рассмотревшей и то, и другое. Просим решения в течение квартала."
+ },
  "movement_events_te.9.t": {
   "en": "Neural Implant Human Trials",
   "ru": "Испытания нейроимплантов на людях"
+ },
+ "nuclear_crisis.1.a": {
+  "en": "Give them what they ask. No dispute is worth a city.",
+  "ru": "Дать им то, что они просят. Никакой спор не стоит города."
+ },
+ "nuclear_crisis.1.b": {
+  "en": "We will not be threatened into anything. The answer is no.",
+  "ru": "Угрозами нас ни к чему не принудить. Ответ — нет."
+ },
+ "nuclear_crisis.1.c": {
+  "en": "Remind them that our weapons can reach their cities too.",
+  "ru": "Напомнить им, что наше оружие достанет и до их городов."
+ },
+ "nuclear_crisis.1.d": {
+  "en": "Through a private channel, [SCOPE.sCountry('nd_issuer').GetName] has warned our government that it is prepared to use nuclear weapons, and demands that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')]. Nothing has been published, so neither side has yet staked its reputation before the world, and there is still room to answer quietly. The warning carries a deadline.",
+  "ru": "По закрытому каналу страна [SCOPE.sCountry('nd_issuer').GetName] предупредила наше правительство, что готова применить ядерное оружие, и требует, чтобы страна [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')]. Ничего не опубликовано, поэтому ни одна из сторон ещё не поставила свою репутацию на кон перед миром, и остаётся возможность ответить тихо. Предупреждение содержит срок."
+ },
+ "nuclear_crisis.1.d_public": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has issued a public ultimatum. Its government has demanded, openly, that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], and has declared itself prepared to use nuclear weapons if the demand is refused. The ultimatum carries a deadline, and every other government knows of it.",
+  "ru": "Страна [SCOPE.sCountry('nd_issuer').GetName] выдвинула публичный ультиматум. Её правительство открыто потребовало, чтобы страна [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], и заявило о готовности применить ядерное оружие, если требование будет отклонено. В ультиматуме указан срок, и о нём знают все остальные правительства."
+ },
+ "nuclear_crisis.1.e": {
+  "en": "Open a line to them. Propose that we both step back.",
+  "ru": "Открыть с ними линию связи. Предложить, чтобы обе стороны отступили."
+ },
+ "nuclear_crisis.1.f": {
+  "en": "The head of government and the senior official who brought the text of the warning from [SCOPE.sCountry('nd_issuer').GetName].\\n\\n\\\"Read me the sentence that matters.\\\"\\n\\n\\\"It is on the second page. If the demand is not met by the deadline, they will regard themselves as released from every restraint they have observed until now.\\\"\\n\\n\\\"Every restraint. Do they mean the weapon?\\\"\\n\\n\\\"The lawyers say the phrase was chosen so that it need not mean anything in particular. The generals say it means the weapon, because they hold one and we know it.\\\"\\n\\n\\\"Then we answer as though the generals are right. Bring me both of them, and the full text of the demand, within the hour.\\\"",
+  "ru": "Глава правительства и старший чиновник, доставивший текст предупреждения от страны [SCOPE.sCountry('nd_issuer').GetName].\\n\\n«Прочтите мне предложение, которое важно».\\n\\n«Оно на второй странице. Если требование не будет выполнено к сроку, они будут считать себя освобождёнными от всех ограничений, которые соблюдали до сих пор».\\n\\n«От всех ограничений. Они имеют в виду оружие?»\\n\\n«Юристы говорят, что формулировку выбрали так, чтобы она не обязательно что-то значила. Генералы говорят, что она означает оружие, потому что оно у них есть, и мы это знаем».\\n\\n«Тогда мы отвечаем так, будто правы генералы. Приведите ко мне обоих и полный текст требования в течение часа»."
+ },
+ "nuclear_crisis.1.t": {
+  "en": "A Line Drawn in Private",
+  "ru": "Черта, проведённая втайне"
+ },
+ "nuclear_crisis.1.t_public": {
+  "en": "An Ultimatum Before the World",
+  "ru": "Ультиматум перед лицом мира"
+ },
+ "nuclear_crisis.100.a": {
+  "en": "Then we had better decide what kind of deterrent we want.",
+  "ru": "Тогда лучше решить, какое сдерживание нам нужно."
+ },
+ "nuclear_crisis.100.d": {
+  "en": "Our nuclear arsenal is no longer a program but a standing force. Crews must be trained, weapons maintained and bases guarded around the clock, and the bill now arrives every week, whatever we spend on the weapons program itself. How that force is kept, from its doctrine and readiness to who may order it to fire, is set on the Nuclear tab of the Military panel, under Nuclear Posture.",
+  "ru": "Наш ядерный арсенал больше не программа, а постоянная сила. Экипажи нужно обучать, оружие обслуживать, а базы охранять круглосуточно, и счёт теперь приходит каждую неделю, сколько бы мы ни тратили на саму оружейную программу. Как содержится эта сила, от доктрины и готовности до того, кто вправе приказать применить её, определяется на вкладке «Ядерное оружие» военной панели, в разделе «Ядерная позиция»."
+ },
+ "nuclear_crisis.100.f": {
+  "en": "The defense staff's first estimate of what the standing force needs each week, as it was sent to the government:\\n\\nGuards at every site where a warhead is kept, at all hours, because a weapon left unguarded for one night is a weapon that can be taken.\\nCrews trained and kept current, since a crew that has not practiced cannot be trusted to do the work right, or to refuse a wrong order.\\nA duty staff awake on every night of the year, in case one of those nights is the one the force exists for.\\nCommunications that reach every unit day and night, so that an order from the government arrives and nothing else passes for one.\\nMaintenance on the warheads and on whatever carries them, because both wear out whether or not they are ever used.",
+  "ru": "Первая оценка штаба обороны того, что постоянной силе нужно каждую неделю, в том виде, в каком она была отправлена правительству:\\n\\nКараулы на каждом объекте, где хранится боеголовка, в любое время суток, потому что оружие, оставленное без охраны на одну ночь, — это оружие, которое можно похитить.\\nЭкипажи, обученные и поддерживаемые в форме, ведь нельзя полагаться на то, что экипаж без практики выполнит работу как надо или откажется выполнить неверный приказ.\\nДежурный состав, бодрствующий каждую ночь года на случай, если одна из этих ночей — та, ради которой сила и существует.\\nСвязь, достигающая каждой части днём и ночью, чтобы приказ правительства дошёл, а ничто другое за приказ не сошло.\\nОбслуживание боеголовок и того, что их несёт, потому что и то, и другое изнашивается, применяют их или нет."
+ },
+ "nuclear_crisis.100.t": {
+  "en": "A Standing Deterrent",
+  "ru": "Постоянное сдерживание"
+ },
+ "nuclear_crisis.2.a": {
+  "en": "Publish the warning. Let the whole world hold both of us to it.",
+  "ru": "Опубликовать предупреждение. Пусть весь мир держит нас обоих на слове."
+ },
+ "nuclear_crisis.2.b": {
+  "en": "Raise the alert, and make very sure they see us do it.",
+  "ru": "Поднять тревогу и позаботиться, чтобы они это увидели."
+ },
+ "nuclear_crisis.2.c": {
+  "en": "Offer them a mutual stand-down before this goes any further.",
+  "ru": "Предложить им взаимное свёртывание, пока всё не зашло дальше."
+ },
+ "nuclear_crisis.2.d": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has rejected our warning. Its reply refuses our demand point by point and offers nothing in return. The crisis is now a confrontation, and the next step is ours to choose.",
+  "ru": "Страна [SCOPE.sCountry('nd_target').GetName] отвергла наше предупреждение. Её ответ отклоняет наше требование по пунктам и ничего не предлагает взамен. Кризис стал противостоянием, и следующий шаг — за нами."
+ },
+ "nuclear_crisis.2.d_counter": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has answered our warning with a threat of its own. Its reply refuses our demand and reminds us, in carefully chosen words, that its nuclear forces can reach us too, and our intelligence reports those forces moving to a heightened state of readiness. Each side of this crisis now threatens the other with nuclear weapons.",
+  "ru": "Страна [SCOPE.sCountry('nd_target').GetName] ответила на наше предупреждение собственной угрозой. Её ответ отклоняет наше требование и в тщательно выбранных выражениях напоминает, что её ядерные силы могут достать и нас, а наша разведка сообщает о переводе этих сил в состояние повышенной готовности. Каждая сторона этого кризиса теперь угрожает другой ядерным оружием."
+ },
+ "nuclear_crisis.2.e": {
+  "en": "Let it drop quietly. This was never worth the risk.",
+  "ru": "Тихо отпустить это. Оно никогда не стоило такого риска."
+ },
+ "nuclear_crisis.2.f": {
+  "en": "To the government, from the office that has been reading the reply from [SCOPE.sCountry('nd_target').GetName]. The reply refuses our demand. It answers each of our points in turn and offers nothing on any of them. It does not mention our deadline. Its last paragraph speaks of the consequences of any step we take, in language our analysts have read many times without agreeing on what it commits them to. We think it was written so that they could later say it committed them to nothing. We have found nothing in it that tells us how they judge our warning. We recommend that the government decide its next step before they decide theirs, and we will report again on anything that follows the reply.",
+  "ru": "Правительству, от ведомства, изучавшего ответ страны [SCOPE.sCountry('nd_target').GetName]. Ответ отклоняет наше требование. Он отвечает на каждый из наших пунктов по очереди и ни по одному ничего не предлагает. Наш срок в нём не упомянут. Последний абзац говорит о последствиях любого нашего шага языком, который наши аналитики читали много раз, так и не придя к согласию, к чему он их обязывает. Мы полагаем, что он написан так, чтобы позже можно было сказать, что он ни к чему не обязывал. Мы не нашли в нём ничего, что говорило бы, как они оценивают наше предупреждение. Рекомендуем правительству определить свой следующий шаг раньше, чем определят они, и мы доложим снова о всём, что последует за ответом."
+ },
+ "nuclear_crisis.2.t": {
+  "en": "The Reply Comes Back",
+  "ru": "Ответ получен"
+ },
+ "nuclear_crisis.20.a": {
+  "en": "We stand with them. Tell them so, and tell the world.",
+  "ru": "Мы с ними. Скажите им об этом и скажите миру."
+ },
+ "nuclear_crisis.20.b": {
+  "en": "Answer the strike on them in kind.",
+  "ru": "Ответить на удар по ним тем же."
+ },
+ "nuclear_crisis.20.c": {
+  "en": "We cannot risk our own cities for theirs. Not this time.",
+  "ru": "Мы не можем рисковать своими городами ради их городов. Не в этот раз."
+ },
+ "nuclear_crisis.20.d": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] under a nuclear threat, the danger our protection was meant to meet. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] has asked us, formally and in writing, whether we will stand by it. Every other country that relies on our word is waiting for the same answer.",
+  "ru": "Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] поставила страну [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] под ядерную угрозу, то есть под ту опасность, на которую и рассчитывалась наша защита. Правительство страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] официально и письменно спросило нас, поддержим ли мы её. Каждая другая страна, полагающаяся на наше слово, ждёт того же ответа."
+ },
+ "nuclear_crisis.20.d_cobelligerent": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], which fights beside us against it and has no arsenal of its own, under a nuclear threat. We never promised to shield them. Their government asks whether our arsenal stands behind them for as long as this war lasts.",
+  "ru": "Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] поставила страну [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], которая воюет рядом с нами против неё и не имеет собственного арсенала, под ядерную угрозу. Мы никогда не обещали их защищать. Их правительство спрашивает, стоит ли наш арсенал за ними, пока длится эта война."
+ },
+ "nuclear_crisis.20.d_cobelligerent_struck": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has used a nuclear weapon against [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], which fights beside us against it and has no arsenal of its own to answer with. We never promised to protect them, but their government asks what we will do.",
+  "ru": "Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] применила ядерное оружие против страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], которая воюет рядом с нами против неё и не имеет собственного арсенала для ответа. Мы никогда не обещали их защищать, но их правительство спрашивает, что мы будем делать."
+ },
+ "nuclear_crisis.20.d_struck": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has used a nuclear weapon against [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], a country we have promised to protect. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] wants to know what we intend to do, and so does every other country that relies on our protection.",
+  "ru": "Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] применила ядерное оружие против страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], которую мы обещали защищать. Правительство страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] хочет знать, что мы намерены делать, как и каждая другая страна, полагающаяся на нашу защиту."
+ },
+ "nuclear_crisis.20.f": {
+  "en": "\\\"I am the ambassador of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], and I asked to see your government today because my government has instructed me to put one question to you and to wait here for the answer. [SCOPE.sCountry('nd_guarantee_attacker').GetName] has turned its nuclear weapons on us. Your country holds such weapons too. We need to know whether yours stand between us and theirs, and we need to know it before they go further, not after. I am not here to argue about what has been signed or said before today. I am here because my government must decide tonight what to tell our people, and what it tells them depends on what you tell me.\\\"",
+  "ru": "«Я посол страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] и просил принять меня сегодня, потому что моё правительство поручило мне задать вашему один вопрос и дожидаться здесь ответа. Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] обратила на нас своё ядерное оружие. У вашей страны такое оружие тоже есть. Нам нужно знать, стоит ли ваше между нами и их, и узнать это нужно до того, как они пойдут дальше, а не после. Я здесь не для того, чтобы спорить о том, что было подписано или сказано до сегодняшнего дня. Я здесь потому, что моему правительству сегодня вечером предстоит решить, что сказать нашему народу, а то, что оно скажет, зависит от того, что вы скажете мне»."
+ },
+ "nuclear_crisis.20.t": {
+  "en": "A Promise Called In",
+  "ru": "Обещание востребовано"
+ },
+ "nuclear_crisis.21.a": {
+  "en": "We will remember this answer, whatever comes next.",
+  "ru": "Мы запомним этот ответ, что бы ни случилось дальше."
+ },
+ "nuclear_crisis.21.d": {
+  "en": "Our guarantor has answered: it stands by its promise to protect us, and it has said so to [SCOPE.sCountry('nd_guarantee_attacker').GetName] in terms that leave little room for doubt.",
+  "ru": "Наш гарант ответил: он остаётся верен своему обещанию защищать нас и сказал об этом стране [SCOPE.sCountry('nd_guarantee_attacker').GetName] в выражениях, не оставляющих места сомнению."
+ },
+ "nuclear_crisis.21.d_abandoned": {
+  "en": "Our guarantor has declined to honor its guarantee. We face [SCOPE.sCountry('nd_guarantee_attacker').GetName] without the protection we were promised, and every other country relying on the same promise has heard the answer.",
+  "ru": "Наш гарант отказался выполнять свою гарантию. Мы остались один на один со страной [SCOPE.sCountry('nd_guarantee_attacker').GetName] без обещанной нам защиты, и каждая другая страна, полагающаяся на то же обещание, услышала этот ответ."
+ },
+ "nuclear_crisis.21.d_ally_alone": {
+  "en": "The armed power fighting beside us against [SCOPE.sCountry('nd_guarantee_attacker').GetName] has said its arsenal will not answer for us. It had never promised that it would.",
+  "ru": "Вооружённая держава, воюющая рядом с нами против страны [SCOPE.sCountry('nd_guarantee_attacker').GetName], заявила, что её арсенал не станет отвечать за нас. Она никогда и не обещала этого."
+ },
+ "nuclear_crisis.21.d_ally_stands": {
+  "en": "The armed power fighting beside us against [SCOPE.sCountry('nd_guarantee_attacker').GetName] has said its arsenal stands behind us for as long as this war lasts. It made no promise before the war and has made none for after it.",
+  "ru": "Вооружённая держава, воюющая рядом с нами против страны [SCOPE.sCountry('nd_guarantee_attacker').GetName], заявила, что её арсенал стоит за нами, пока длится эта война. До войны она ничего не обещала и ничего не обещает на время после неё."
+ },
+ "nuclear_crisis.21.d_declined": {
+  "en": "Our guarantor has declined to answer for the war we made nuclear. We used the weapon first, it says, and its promise was to shield us, not to follow us wherever we lead. The guarantee still stands, but we must face the answer of [SCOPE.sCountry('nd_guarantee_attacker').GetName] alone.",
+  "ru": "Наш гарант отказался отвечать за войну, которую мы сделали ядерной. Оружие первыми применили мы, говорит он, а его обещанием было защищать нас, а не следовать за нами, куда бы мы ни повели. Гарантия остаётся в силе, но с ответом страны [SCOPE.sCountry('nd_guarantee_attacker').GetName] нам придётся столкнуться в одиночку."
+ },
+ "nuclear_crisis.21.f": {
+  "en": "To the government, from our ambassador to the country whose answer we were waiting for. I was received this afternoon and given the answer in person. The official who received me read it from a prepared text and then handed me the text, which I attach unchanged. I asked whether the answer would be made public and was told that this is still being decided. The official then spoke to me for some minutes without the text, and more frankly. I have set down what was said in a separate note, for the government only, because I believe it tells us more about what they will do than the text does. I await instructions on our reply.",
+  "ru": "Правительству, от нашего посла в стране, чьего ответа мы ждали. Меня приняли сегодня после полудня и сообщили ответ лично. Чиновник, принимавший меня, прочёл его по подготовленному тексту, а затем вручил мне текст, который я прилагаю без изменений. Я спросил, будет ли ответ обнародован, и мне сказали, что это ещё решается. Затем чиновник несколько минут говорил со мной без текста и откровеннее. Я записал сказанное в отдельной записке, только для правительства, потому что полагаю, что она говорит о том, как они поступят, больше, чем текст. Жду указаний о нашем ответе."
+ },
+ "nuclear_crisis.21.t": {
+  "en": "Our Guarantor Stands Firm",
+  "ru": "Наш гарант непоколебим"
+ },
+ "nuclear_crisis.21.t_abandoned": {
+  "en": "Left to Face It Alone",
+  "ru": "Брошены один на один"
+ },
+ "nuclear_crisis.21.t_ally_alone": {
+  "en": "We Stand Alone",
+  "ru": "Мы одни"
+ },
+ "nuclear_crisis.21.t_ally_stands": {
+  "en": "Our Ally Stands With Us",
+  "ru": "Союзник с нами"
+ },
+ "nuclear_crisis.21.t_declined": {
+  "en": "Not Their War to Answer",
+  "ru": "Не им отвечать за эту войну"
+ },
+ "nuclear_crisis.23.a": {
+  "en": "They will have to take our word for it.",
+  "ru": "Им придётся поверить нам на слово."
+ },
+ "nuclear_crisis.23.d": {
+  "en": "Our warheads are off their delivery systems and in storage. The countries that shelter under our nuclear protection read it as a broken promise: we said we would stand between them and the bomb, and we have put ours away. Their envoys ask, politely and then less politely, how long it would take to bring the weapons back and whether we intend to.",
+  "ru": "Наши боеголовки сняты с носителей и находятся на хранении. Страны, укрывшиеся под нашим ядерным зонтиком, восприняли это как нарушенное обещание: мы говорили, что встанем между ними и бомбой, а свою убрали. Их посланники спрашивают, вежливо, а затем менее вежливо, сколько времени потребуется, чтобы вернуть оружие, и намерены ли мы это делать."
+ },
+ "nuclear_crisis.23.f": {
+  "en": "\\\"You have come for the countries under our protection to ask me, as the official answerable for our weapons, how long it would take to bring them back. Two weeks from the order to the first weapons ready for use. The warheads are in storage, apart from the means of delivering them, which is where the government decided they should be. Nothing has been dismantled. The crews are trained, and the stores are guarded day and night. If the government gives the order tomorrow, the first weapons will be back at routine readiness two weeks after that, and higher within a month. I understand that you would rather the answer were none. I can give you the figures in writing today.\\\"",
+  "ru": "«Вы пришли от имени стран под нашей защитой, чтобы спросить меня, как ответственное лицо за наше оружие, сколько времени займёт его возвращение. Две недели от приказа до первого оружия, готового к применению. Боеголовки находятся на хранении, отдельно от средств доставки, там, где правительство решило их держать. Ничего не демонтировано. Экипажи обучены, склады охраняются днём и ночью. Если правительство отдаст приказ завтра, первое оружие вернётся в обычную готовность через две недели, а в более высокую — в течение месяца. Понимаю, что вам хотелось бы услышать „никогда“. Цифры могу дать письменно сегодня же»."
+ },
+ "nuclear_crisis.23.t": {
+  "en": "Our Allies Are Alarmed",
+  "ru": "Наши союзники встревожены"
+ },
+ "nuclear_crisis.24.a": {
+  "en": "We stand by them, whatever they have done.",
+  "ru": "Мы с ними, что бы они ни сделали."
+ },
+ "nuclear_crisis.24.b": {
+  "en": "An attack on them is an attack on us. Answer in kind.",
+  "ru": "Нападение на них — нападение на нас. Ответить тем же."
+ },
+ "nuclear_crisis.24.c": {
+  "en": "They started this. It is not ours to answer for.",
+  "ru": "Они начали это. Отвечать за это не нам."
+ },
+ "nuclear_crisis.24.d": {
+  "en": "[SCOPE.sCountry('nd_guarantee_attacker').GetName] has answered with a nuclear weapon of its own, and the country it was answering is [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], which we have promised to protect and which used the bomb first. Our protection was meant to shield them. Whether it covers this is for us to decide.",
+  "ru": "Страна [SCOPE.sCountry('nd_guarantee_attacker').GetName] ответила собственным ядерным оружием, а страна, которой она отвечала, — это [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], которую мы обещали защищать и которая первой применила бомбу. Наша защита предназначалась для того, чтобы оградить их. Распространяется ли она на это, решать нам."
+ },
+ "nuclear_crisis.24.f": {
+  "en": "Two of the government's advisers, on the request from [SCOPE.sCountry('nd_guarantee_beneficiary').GetName].\\n\\n\\\"We promised to protect them. They have been struck, and they are asking us to do what we said we would.\\\"\\n\\n\\\"They were struck because they used the weapon first. Our promise was to stand between them and an attack. Nobody here agreed to follow them into one they started.\\\"\\n\\n\\\"If we step back now, every country that relies on us will ask whether our protection lasts only until they need it.\\\"\\n\\n\\\"And if we stand behind them, every country that relies on us will learn that it may strike first and call on us afterward. I will put that to the government in writing, beside your case.\\\"",
+  "ru": "Два советника правительства, о просьбе страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName].\\n\\n«Мы обещали защищать их. По ним нанесли удар, и они просят нас сделать то, что мы сказали».\\n\\n«По ним ударили, потому что они применили оружие первыми. Наше обещание было — встать между ними и нападением. Никто здесь не соглашался следовать за ними в то нападение, которое они начали сами».\\n\\n«Если мы отступим сейчас, каждая страна, полагающаяся на нас, спросит, не длится ли наша защита лишь до тех пор, пока она не понадобится».\\n\\n«А если мы встанем за них, каждая страна, полагающаяся на нас, узнает, что может ударить первой, а потом позвать нас. Я изложу это правительству письменно, рядом с вашими доводами»."
+ },
+ "nuclear_crisis.24.t": {
+  "en": "Our Protégé Struck First",
+  "ru": "Наш подопечный ударил первым"
+ },
+ "nuclear_crisis.3.a": {
+  "en": "Accept. Both sides step back, and both sides say so.",
+  "ru": "Принять. Обе стороны отступают, и обе говорят об этом."
+ },
+ "nuclear_crisis.3.b": {
+  "en": "Refuse. We will not trade our position for a promise.",
+  "ru": "Отказать. Мы не променяем свою позицию на обещание."
+ },
+ "nuclear_crisis.3.d": {
+  "en": "An envoy has brought a proposal to end the nuclear standoff between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. Both sides would stand their forces down to routine readiness for two years and pledge never to use nuclear weapons against one another. The dispute that began the crisis would be left exactly where it is.",
+  "ru": "Посланник принёс предложение прекратить ядерное противостояние между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName]. Обе стороны вернули бы свои силы к обычной готовности на два года и поклялись бы никогда не применять ядерное оружие друг против друга. Спор, с которого начался кризис, остался бы ровно там, где он есть."
+ },
+ "nuclear_crisis.3.f": {
+  "en": "The envoy who carried the proposal had been told to deliver it by hand, wait for a signature and do nothing more. It was two typed pages without a letterhead, so that neither government would ever have to say whose idea it had been. The envoy was shown into an anteroom and waited there with the folder on one knee while a clerk went in and out with papers for other meetings. When the door to the inner office opened, an official took the folder, read the first page standing and signed for it. The envoy was asked whether there was a covering letter. There was none, and the envoy was taken back to the embassy to wait for the answer.",
+  "ru": "Посланнику велели вручить предложение лично, дождаться подписи и больше ничего не делать. Это были две машинописные страницы без бланка, чтобы ни одному правительству никогда не пришлось говорить, чья это была идея. Посланника проводили в приёмную, и он ждал там с папкой на колене, пока клерк входил и выходил с бумагами для других встреч. Когда открылась дверь внутреннего кабинета, чиновник взял папку, стоя прочёл первую страницу и расписался в получении. Посланника спросили, нет ли сопроводительного письма. Его не было, и посланника отвезли обратно в посольство дожидаться ответа."
+ },
+ "nuclear_crisis.3.t": {
+  "en": "An Offer to Step Back",
+  "ru": "Предложение отступить"
+ },
+ "nuclear_crisis.4.a": {
+  "en": "Give them a little longer to find a way down.",
+  "ru": "Дать им ещё немного времени найти путь вниз."
+ },
+ "nuclear_crisis.4.b": {
+  "en": "No more patience. Raise the alert to its highest and hold.",
+  "ru": "Больше никакого терпения. Поднять тревогу до высшего уровня и держаться."
+ },
+ "nuclear_crisis.4.c": {
+  "en": "Offer to stand down together while standing down is still possible.",
+  "ru": "Предложить свернуть противостояние вместе, пока это ещё возможно."
+ },
+ "nuclear_crisis.4.d": {
+  "en": "The deadline we set [SCOPE.sCountry('nd_target').GetName] has passed, and our demand has not been met. Whatever we do next will be taken as the true measure of our warning: by [SCOPE.sCountry('nd_target').GetName], by our own general staff, and by every government that has learned of it.",
+  "ru": "Срок, который мы дали стране [SCOPE.sCountry('nd_target').GetName], истёк, а наше требование не выполнено. Что бы мы ни сделали дальше, это будет принято за истинную меру нашего предупреждения: страной [SCOPE.sCountry('nd_target').GetName], нашим собственным генеральным штабом и каждым правительством, узнавшим о нём."
+ },
+ "nuclear_crisis.4.d_public": {
+  "en": "The deadline in our public ultimatum to [SCOPE.sCountry('nd_target').GetName] has passed without an answer that settles it. We set that deadline in public, and every government knows that it has passed.",
+  "ru": "Срок в нашем публичном ультиматуме стране [SCOPE.sCountry('nd_target').GetName] истёк без ответа, который бы всё разрешил. Мы объявили этот срок публично, и каждое правительство знает, что он истёк."
+ },
+ "nuclear_crisis.4.e": {
+  "en": "Let the deadline lapse. Nothing we win now is worth what follows.",
+  "ru": "Дать сроку истечь. Ничто, что мы выиграем сейчас, не стоит того, что последует."
+ },
+ "nuclear_crisis.4.f": {
+  "en": "\\\"I drafted our warning, and I report to the government this morning that the deadline in it has passed. I wrote that deadline so that it could not be read two ways. Their embassy has sent nothing since. Their leaders have appeared in public as usual, and as far as our reports show their forces have not moved. They may have decided that we will not act. They may have decided that we will, and be waiting to see our first step before they choose their own. I cannot tell you which. I can tell you that the general staff has asked for its instructions by tonight, and that whatever we send it, they and every other government will read as what the warning meant.\\\"",
+  "ru": "«Я составлял наше предупреждение и докладываю правительству этим утром, что указанный в нём срок истёк. Я написал этот срок так, чтобы его нельзя было прочесть двояко. Их посольство с тех пор ничего не присылало. Их лидеры появляются на публике как обычно, и, насколько показывают наши донесения, их силы не двигались. Они могли решить, что мы не станем действовать. Могли решить, что станем, и ждать нашего первого шага, прежде чем выбрать свой. Я не могу сказать, что именно. Могу сказать, что генеральный штаб просил указаний к сегодняшнему вечеру и что всё, что мы ему отправим, они и каждое другое правительство прочтут как то, что значило предупреждение»."
+ },
+ "nuclear_crisis.4.g": {
+  "en": "We told them what would happen. Now it happens.",
+  "ru": "Мы сказали им, что произойдёт. Теперь это происходит."
+ },
+ "nuclear_crisis.4.h": {
+  "en": "Offer a trade: theirs for ours.",
+  "ru": "Предложить обмен: их за наше."
+ },
+ "nuclear_crisis.4.t": {
+  "en": "The Deadline Passes",
+  "ru": "Срок истекает"
+ },
+ "nuclear_crisis.5.a": {
+  "en": "Enough. Give them what they want and end this.",
+  "ru": "Хватит. Дать им то, чего они хотят, и покончить с этим."
+ },
+ "nuclear_crisis.5.b": {
+  "en": "We said no once. We will say it as often as it takes.",
+  "ru": "Мы уже раз сказали «нет». Скажем столько раз, сколько потребуется."
+ },
+ "nuclear_crisis.5.c": {
+  "en": "Propose a stand-down again, one that lets both sides save face.",
+  "ru": "Снова предложить свёртывание, позволяющее обеим сторонам сохранить лицо."
+ },
+ "nuclear_crisis.5.d": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has pressed its nuclear demand again. It still insists that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], and the signals keep coming: alerts allowed to leak, its forces exercising closer to our borders, statements that grow shorter and colder.",
+  "ru": "Страна [SCOPE.sCountry('nd_issuer').GetName] вновь настаивает на своём ядерном требовании. Она по-прежнему добивается, чтобы страна [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], а сигналы не прекращаются: допускаемые утечки о тревоге, учения её сил ближе к нашим границам, заявления всё короче и холоднее."
+ },
+ "nuclear_crisis.5.f": {
+  "en": "\\\"My father has dug a trench at the end of the garden and lined it with planks. He will not say what it is for, and he goes out to look at it every evening.\\\"\\n\\n\\\"The shop I keep sold out of canned food on the first day and candles on the second. I have put a sign in the window so that people stop asking me when the next delivery comes. I do not know.\\\"\\n\\n\\\"We have been told to keep the children at school until their parents come for them. The parents come earlier every day, and some have not brought the children back.\\\"\\n\\n\\\"The clerks in my office have started taking their files home each night in case the building is closed. We have had no instruction either way, so each of us decides alone.\\\"",
+  "ru": "«Мой отец выкопал в конце сада траншею и выложил её досками. Он не говорит, для чего она, и каждый вечер ходит на неё смотреть».\\n\\n«В моей лавке консервы кончились в первый день, а свечи — во второй. Я повесил в окне табличку, чтобы люди перестали спрашивать, когда будет следующая поставка. Я не знаю».\\n\\n«Нам велели держать детей в школе, пока за ними не придут родители. Родители приходят каждый день всё раньше, а некоторые не привели детей обратно».\\n\\n«Служащие моего отдела стали каждый вечер уносить свои папки домой на случай, если здание закроют. Указаний ни в ту, ни в другую сторону не было, так что каждый решает в одиночку»."
+ },
+ "nuclear_crisis.5.t": {
+  "en": "Pressed Again",
+  "ru": "Нажим продолжается"
+ },
+ "nuclear_crisis.6.a": {
+  "en": "So this is how it ended.",
+  "ru": "Вот чем всё закончилось."
+ },
+ "nuclear_crisis.6.d_backed_down_issuer": {
+  "en": "We have withdrawn our nuclear threat against [SCOPE.sCountry('nd_target').GetName] without getting what we demanded, and the crisis is closed. The retreat has cost us credibility.",
+  "ru": "Мы отозвали нашу ядерную угрозу в адрес страны [SCOPE.sCountry('nd_target').GetName], не получив того, что требовали, и кризис закрыт. Отступление стоило нам доверия."
+ },
+ "nuclear_crisis.6.d_backed_down_target": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] has withdrawn its nuclear threat against us, and we conceded nothing. The crisis is closed, and we held.",
+  "ru": "Страна [SCOPE.sCountry('nd_issuer').GetName] отозвала свою ядерную угрозу в наш адрес, а мы ни в чём не уступили. Кризис закрыт, и мы выстояли."
+ },
+ "nuclear_crisis.6.d_expired": {
+  "en": "The crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has run its course without resolution. The demand was neither met nor enforced, and both governments have let it lapse.",
+  "ru": "Кризис между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] исчерпал себя без разрешения. Требование не было ни выполнено, ни принудительно осуществлено, и оба правительства позволили ему утратить силу."
+ },
+ "nuclear_crisis.6.d_native_loss_issuer": {
+  "en": "Our side has backed down in the dispute with [SCOPE.sCountry('nd_target').GetName], and the warning we gave has come to nothing. The crisis is closed.",
+  "ru": "Наша сторона отступила в споре со страной [SCOPE.sCountry('nd_target').GetName], и данное нами предупреждение ни к чему не привело. Кризис закрыт."
+ },
+ "nuclear_crisis.6.d_native_loss_target": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and its side have backed down in our dispute, and their nuclear warning has come to nothing. The crisis is closed, and we held.",
+  "ru": "Страна [SCOPE.sCountry('nd_issuer').GetName] и её сторона отступили в нашем споре, и их ядерное предупреждение ни к чему не привело. Кризис закрыт, и мы выстояли."
+ },
+ "nuclear_crisis.6.d_native_win_issuer": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has given us what we demanded without ever formally answering our warning. The crisis is closed.",
+  "ru": "Страна [SCOPE.sCountry('nd_target').GetName] дала нам то, что мы требовали, так и не ответив официально на наше предупреждение. Кризис закрыт."
+ },
+ "nuclear_crisis.6.d_native_win_target": {
+  "en": "We have stepped back on our own terms, but the world sees only that the nuclear warning of [SCOPE.sCountry('nd_issuer').GetName] got what it wanted. The crisis is closed.",
+  "ru": "Мы отступили на собственных условиях, но мир видит лишь то, что ядерное предупреждение страны [SCOPE.sCountry('nd_issuer').GetName] получило желаемое. Кризис закрыт."
+ },
+ "nuclear_crisis.6.d_neutral": {
+  "en": "The crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has closed without a clear winner: the dispute behind it has ended, or moved beyond the reach of the threat.",
+  "ru": "Кризис между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] закрыт без явного победителя: спор, лежавший в его основе, закончился или вышел за пределы досягаемости угрозы."
+ },
+ "nuclear_crisis.6.d_standdown": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have stood their forces down and pledged never to use nuclear weapons against each other, and the crisis between them is over. The dispute that caused it is unresolved.",
+  "ru": "Страны [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] свернули свои силы и поклялись никогда не применять ядерное оружие друг против друга, и кризис между ними окончен. Спор, вызвавший его, остался неразрешённым."
+ },
+ "nuclear_crisis.6.d_trade": {
+  "en": "[SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] have settled their crisis with a trade: each has given up the same kind of thing the other demanded of it. Neither side is seen to have backed down.",
+  "ru": "Страны [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] урегулировали кризис обменом: каждая отказалась от того же рода вещи, какой от неё требовала другая. Ни одну из сторон не считают отступившей."
+ },
+ "nuclear_crisis.6.d_use": {
+  "en": "Nuclear weapons have been used in the crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName], and the crisis is closed.",
+  "ru": "В кризисе между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] применено ядерное оружие, и кризис закрыт."
+ },
+ "nuclear_crisis.6.d_war_ended": {
+  "en": "The war between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] has ended, and the nuclear crisis between them has closed with it.",
+  "ru": "Война между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] окончена, а вместе с ней закрыт и ядерный кризис между ними."
+ },
+ "nuclear_crisis.6.d_yielded_issuer": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has given way and conceded what we demanded, and the crisis between us is closed. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]",
+  "ru": "Страна [SCOPE.sCountry('nd_target').GetName] уступила и согласилась на то, что мы требовали, и кризис между нами закрыт. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]"
+ },
+ "nuclear_crisis.6.d_yielded_target": {
+  "en": "We have yielded to the nuclear demand of [SCOPE.sCountry('nd_issuer').GetName], and the crisis between us is closed. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]",
+  "ru": "Мы уступили ядерному требованию страны [SCOPE.sCountry('nd_issuer').GetName], и кризис между нами закрыт. [ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]"
+ },
+ "nuclear_crisis.6.f": {
+  "en": "The inventory of the crisis room, made by the clerks who closed it when the crisis ended:\\n\\nThe maps from the wall, taken down and rolled, since the general staff wants them for its own records.\\nThe drafts of statements the government never made, kept because the legal office asked that nothing written in the room be destroyed.\\nThe log of every message sent and received, in four bound volumes, to go to the archive under seal.\\nThe roster of the duty officers who sat through the nights, with their hours, so that each can be given the leave owed.\\nThe spare cots from the side room, to go back to the barracks that lent them.",
+  "ru": "Опись комнаты кризиса, составленная клерками, закрывшими её по окончании кризиса:\\n\\nКарты со стены, снятые и свёрнутые, так как генеральный штаб хочет получить их для своих архивов.\\nЧерновики заявлений, которых правительство так и не сделало, сохранённые, поскольку юридический отдел просил не уничтожать ничего написанного в этой комнате.\\nЖурнал каждого отправленного и полученного сообщения в четырёх переплетённых томах, для сдачи в архив под печать.\\nСписок дежурных офицеров, просидевших ночи, с их часами, чтобы каждому предоставили положенный отпуск.\\nЗапасные койки из боковой комнаты, для возврата в казармы, одолжившие их."
+ },
+ "nuclear_crisis.6.t": {
+  "en": "The Crisis Passes",
+  "ru": "Кризис миновал"
+ },
+ "nuclear_crisis.6.t_backed_down": {
+  "en": "The Threat Withdrawn",
+  "ru": "Угроза снята"
+ },
+ "nuclear_crisis.6.t_standdown": {
+  "en": "Both Sides Stand Down",
+  "ru": "Обе стороны сворачиваются"
+ },
+ "nuclear_crisis.6.t_trade": {
+  "en": "A Bargain Struck",
+  "ru": "Сделка заключена"
+ },
+ "nuclear_crisis.6.t_use": {
+  "en": "The Threshold Crossed",
+  "ru": "Порог пересечён"
+ },
+ "nuclear_crisis.6.t_yielded": {
+  "en": "The Demand Is Met",
+  "ru": "Требование выполнено"
+ },
+ "nuclear_crisis.7.a": {
+  "en": "They were warned before the whole world. Carry out the threat.",
+  "ru": "Их предупредили перед всем миром. Привести угрозу в исполнение."
+ },
+ "nuclear_crisis.7.b": {
+  "en": "We will fight this war with soldiers, not with the bomb.",
+  "ru": "Эту войну мы будем вести солдатами, а не бомбой."
+ },
+ "nuclear_crisis.7.c": {
+  "en": "Even now, offer them a way for both sides to step back.",
+  "ru": "Даже сейчас предложить им путь, на котором обе стороны отступают."
+ },
+ "nuclear_crisis.7.d": {
+  "en": "[SCOPE.sCountry('nd_target').GetName] has answered our public ultimatum with war. The diplomatic play we warned it over has become open fighting, and every government that read our ultimatum, our own general staff among them, wants to know whether we will carry it out.",
+  "ru": "Страна [SCOPE.sCountry('nd_target').GetName] ответила на наш публичный ультиматум войной. Дипломатическая игра, из-за которой мы её предупреждали, превратилась в открытые боевые действия, и каждое правительство, прочитавшее наш ультиматум, в том числе наш собственный генеральный штаб, хочет знать, приведём ли мы его в исполнение."
+ },
+ "nuclear_crisis.7.f": {
+  "en": "The head of government and the chief of the general staff, the morning the fighting began.\\n\\n\\\"Our ultimatum was read in every capital. They did not answer it, and now we are at war.\\\"\\n\\n\\\"So the question is what we meant by it.\\\"\\n\\n\\\"The question is what we can carry out and still govern afterward. The army can fight this war with what it has. It cannot fight the one that follows if we use the weapon and somebody answers it.\\\"\\n\\n\\\"And if we do not use it, every government that read the ultimatum learns that ours can be ignored.\\\"\\n\\n\\\"Then decide which of the two the country can bear, and tell me today. The army needs its orders either way.\\\"",
+  "ru": "Глава правительства и начальник генерального штаба, утром, когда начались боевые действия.\\n\\n«Наш ультиматум прочитали во всех столицах. Они на него не ответили, и теперь мы воюем».\\n\\n«Значит, вопрос в том, что мы имели в виду».\\n\\n«Вопрос в том, что мы можем исполнить и всё же управлять страной после этого. Армия может вести эту войну с тем, что у неё есть. Она не сможет вести следующую, если мы применим оружие и кто-то ответит на него».\\n\\n«А если мы его не применим, каждое правительство, прочитавшее ультиматум, узнает, что нашим можно пренебрегать».\\n\\n«Тогда решите, какое из двух страна способна вынести, и скажите мне сегодня. Армии нужны приказы в любом случае»."
+ },
+ "nuclear_crisis.7.t": {
+  "en": "They Chose War",
+  "ru": "Они выбрали войну"
+ },
+ "nuclear_crisis.8.a": {
+  "en": "Accept. Each side gives up the same, and neither is seen to yield.",
+  "ru": "Принять. Каждая сторона отдаёт одно и то же, и ни одна не выглядит уступившей."
+ },
+ "nuclear_crisis.8.b": {
+  "en": "Refuse. We will not bargain away what we hold.",
+  "ru": "Отказать. Мы не станем торговаться тем, что держим."
+ },
+ "nuclear_crisis.8.d": {
+  "en": "[SCOPE.sCountry('nd_crisis_proposer').GetName] has offered to settle the nuclear crisis between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName] with a trade. Each side would give up the same kind of thing the other demands of it, so that neither could be said to have backed down. The terms are the same for both sides.",
+  "ru": "Страна [SCOPE.sCountry('nd_crisis_proposer').GetName] предложила урегулировать ядерный кризис между странами [SCOPE.sCountry('nd_issuer').GetName] и [SCOPE.sCountry('nd_target').GetName] обменом. Каждая сторона отказалась бы от того же рода вещи, какой от неё требует другая, так что нельзя было бы сказать, что кто-то отступил. Условия для обеих сторон одинаковы."
+ },
+ "nuclear_crisis.8.f": {
+  "en": "To the government, from our delegation, with the draft of the trade that [SCOPE.sCountry('nd_crisis_proposer').GetName] has put to us. We have compared the two halves of the draft line by line. They are the same text with the names of the two countries exchanged, and each side would give up the same kind of thing it is being asked to give up. Nothing in the draft says which side proposed it, and nothing in it binds us to more than it binds them. If the government accepts, both halves take effect together, and the crisis closes without either side having yielded. We recommend that the government read the terms in full before answering, and we await its instructions.",
+  "ru": "Правительству, от нашей делегации, с проектом обмена, который предложила нам страна [SCOPE.sCountry('nd_crisis_proposer').GetName]. Мы сверили две половины проекта строка за строкой. Это один и тот же текст с обменянными названиями двух стран, и каждая сторона отказалась бы от того же рода вещи, какого от неё требуют. В проекте не сказано, какая сторона его предложила, и ничто в нём не связывает нас сильнее, чем их. Если правительство согласится, обе половины вступят в силу одновременно, и кризис закроется без того, чтобы кто-либо уступил. Рекомендуем правительству прочесть условия полностью, прежде чем отвечать, и ждём его указаний."
+ },
+ "nuclear_crisis.8.t": {
+  "en": "A Trade Offered",
+  "ru": "Предложен обмен"
+ },
+ "nuclear_custody.1.a": {
+  "en": "Leave the custodians at their posts and trust them.",
+  "ru": "Оставить хранителей на постах и доверять им."
+ },
+ "nuclear_custody.1.b": {
+  "en": "Bring them in. Every one we can reach goes into storage.",
+  "ru": "Забрать их. Всё, до чего мы можем дотянуться, уходит на хранение."
+ },
+ "nuclear_custody.1.c": {
+  "en": "Take them apart. No one will inherit them.",
+  "ru": "Разобрать их. Никто их не унаследует."
+ },
+ "nuclear_custody.1.d": {
+  "en": "The uprising has a government of its own now, [SCOPE.sCountry('nd_cw_rebel').GetName], and some of our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads are stored in the provinces it holds. The officers who guard them are waiting to be told whose orders to take. We can trust our custodians to hold their posts, bring every weapon we can reach into storage for as long as the war lasts, or take them apart before anyone can use them. If the rebels win, whatever we still hold becomes theirs.",
+  "ru": "У восстания теперь есть собственное правительство, [SCOPE.sCountry('nd_cw_rebel').GetName], и часть наших ядерных боеголовок (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!) хранится в провинциях, которые оно держит. Офицеры, охраняющие их, ждут, чьи приказы им исполнять. Мы можем довериться нашим хранителям, чтобы они удержали посты, забрать всё оружие, до которого можем дотянуться, на хранение на время войны или разобрать его, пока никто не успел применить. Если мятежники победят, всё, что мы ещё держим, станет их."
+ },
+ "nuclear_custody.1.d_secession": {
+  "en": "[SCOPE.sCountry('nd_cw_rebel').GetName] has declared itself a country, and some of our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads are stored in the provinces it claims. The officers who guard them are waiting to be told whose orders to take. We can hold the line and trust our custodians, bring every weapon we can reach into storage for as long as the war lasts, or take them apart before anyone can use them. If the secession succeeds, whatever it holds goes with it.",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_rebel').GetName] объявила себя государством, и часть наших ядерных боеголовок (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!) хранится в провинциях, на которые она претендует. Офицеры, охраняющие их, ждут, чьи приказы им исполнять. Мы можем удерживать рубеж и довериться нашим хранителям, забрать всё оружие, до которого можем дотянуться, на хранение на время войны или разобрать его, пока никто не успел применить. Если отделение удастся, всё, что оно держит, уйдёт вместе с ним."
+ },
+ "nuclear_custody.1.f": {
+  "en": "The commander of the guard at one of the storage sites in the rebel provinces had two orders by noon. The first came from the capital: hold the site, admit no one, wait for instructions. The second was issued in the name of [SCOPE.sCountry('nd_cw_rebel').GetName] and said that the site and everything in it now belonged to the new government. The commander read both aloud to the officers of the guard, had the inner gate locked and set a double watch on the vault. \\\"We open that door for nobody on either paper,\\\" the commander told them, \\\"until the capital confirms its order in writing.\\\" A request for that confirmation went out within the hour.",
+  "ru": "К полудню командир караула на одном из мест хранения в мятежных провинциях получил два приказа. Первый пришёл из столицы: удерживать объект, никого не впускать, ждать указаний. Второй был издан от имени страны [SCOPE.sCountry('nd_cw_rebel').GetName] и гласил, что объект и всё в нём отныне принадлежит новому правительству. Командир зачитал оба вслух офицерам караула, велел запереть внутренние ворота и поставил двойной караул у хранилища. «Мы не откроем эту дверь никому ни по той бумаге, ни по другой, — сказал командир, — пока столица не подтвердит свой приказ письменно». Запрос на это подтверждение ушёл в течение часа."
+ },
+ "nuclear_custody.1.t": {
+  "en": "Who Holds the Button?",
+  "ru": "Чей палец на кнопке?"
+ },
+ "nuclear_custody.10.a": {
+  "en": "Press them to give them up. We will guarantee them.",
+  "ru": "Настаивать, чтобы они отказались от них. Мы дадим гарантии."
+ },
+ "nuclear_custody.10.b": {
+  "en": "Leave it to others.",
+  "ru": "Оставить это другим."
+ },
+ "nuclear_custody.10.d": {
+  "en": "[SCOPE.sCountry('nd_bp_state').GetName] has won its independence and kept the nuclear warheads it seized in the fighting, about #v [SCOPE.sCountry('nd_bp_state').MakeScope.Var('nd_public_estimate').GetValue|0]#! by our estimate. Nobody outside it knows who in its new government can order them used, or how well they are guarded. We could press it to give them up and offer our guarantee of its security in return. Any other great power that presses it would join the offer.",
+  "ru": "Страна [SCOPE.sCountry('nd_bp_state').GetName] добилась независимости и сохранила ядерные боеголовки, захваченные в боях, по нашей оценке около #v [SCOPE.sCountry('nd_bp_state').MakeScope.Var('nd_public_estimate').GetValue|0]#!. Никто за её пределами не знает, кто в её новом правительстве может приказать их применить и насколько хорошо они охраняются. Мы могли бы настаивать, чтобы она отказалась от них, и предложить взамен нашу гарантию её безопасности. Любая другая великая держава, которая будет на неё давить, присоединилась бы к предложению."
+ },
+ "nuclear_custody.10.f": {
+  "en": "\\\"[SCOPE.sCountry('nd_bp_state').GetName] has just won its independence. Its officers took those weapons in the middle of a war, and nobody outside knows how they are kept or who can order them used. If we offer a guarantee now, it has a reason to hand them over while it still wants friends.\\\"\\n\\n\\\"A guarantee is a promise to defend it. Its borders are new, and its neighbors may not accept them. You are asking us to stand behind a state we know little about, in quarrels we did not start.\\\"\\n\\n\\\"I am asking us to stand behind it so that nobody has to stand in front of those warheads. Left alone, a new government short of money may not keep paying the people who guard them.\\\"\\n\\n\\\"Then we put the conditions in writing before we offer anything: who counts the weapons, who takes them apart, and for how long our promise runs.\\\"",
+  "ru": "«Страна [SCOPE.sCountry('nd_bp_state').GetName] только что добилась независимости. Её офицеры взяли это оружие посреди войны, и никто снаружи не знает, как оно содержится и кто может приказать его применить. Если мы предложим гарантию сейчас, у неё будет причина передать его, пока ей нужны друзья».\\n\\n«Гарантия — это обещание её защищать. Её границы новы, и соседи могут их не признать. Вы просите нас встать за государством, о котором мы мало знаем, в ссорах, которых мы не начинали».\\n\\n«Я прошу встать за него, чтобы никому не пришлось стоять перед этими боеголовками. Если оставить всё как есть, новое правительство, испытывающее нехватку денег, может перестать платить тем, кто их охраняет».\\n\\n«Тогда мы запишем условия, прежде чем что-либо предлагать: кто считает оружие, кто его разбирает и как долго длится наше обещание»."
+ },
+ "nuclear_custody.10.t": {
+  "en": "A New Nuclear State",
+  "ru": "Новое ядерное государство"
+ },
+ "nuclear_custody.11.a": {
+  "en": "Trade them for guarantees.",
+  "ru": "Обменять их на гарантии."
+ },
+ "nuclear_custody.11.b": {
+  "en": "We keep them. Guarantees are paper.",
+  "ru": "Мы оставляем их себе. Гарантии — это бумага."
+ },
+ "nuclear_custody.11.d": {
+  "en": "[SCOPE.sCountry('nd_bp_lead').GetName] offers us its guarantee against nuclear attack if we give up our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads. The weapons would be taken apart, and [SCOPE.sCountry('nd_bp_lead').GetName] would hold the treaty that keeps us disarmed. Keeping them costs us money every week, and makes us a target for every power that would rather we had none. Giving them up leaves our security to the guarantee and the treaty that carries it.",
+  "ru": "Страна [SCOPE.sCountry('nd_bp_lead').GetName] предлагает нам свою гарантию против ядерного нападения, если мы откажемся от наших боеголовок (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!). Оружие будет разобрано, а страна [SCOPE.sCountry('nd_bp_lead').GetName] будет хранить договор, удерживающий нас разоружёнными. Содержание боеголовок каждую неделю обходится нам в деньги и делает нас мишенью для каждой державы, которая предпочла бы, чтобы у нас их не было. Отказ от них оставляет нашу безопасность на гарантии и договоре, который её несёт."
+ },
+ "nuclear_custody.11.d_many": {
+  "en": "#v [ROOT.GetCountry.MakeScope.Var('nd_bp_count').GetValue|0]#! great powers, led by [SCOPE.sCountry('nd_bp_lead').GetName], offer us their guarantees against nuclear attack if we give up our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads. The weapons would be taken apart, and [SCOPE.sCountry('nd_bp_lead').GetName] would hold the treaty that keeps us disarmed. Keeping them costs us money every week, and makes us a target for every power that would rather we had none. Giving them up leaves our security to the guarantees and the treaties that carry them.",
+  "ru": "Великие державы (#v [ROOT.GetCountry.MakeScope.Var('nd_bp_count').GetValue|0]#!), во главе со страной [SCOPE.sCountry('nd_bp_lead').GetName], предлагают нам свои гарантии против ядерного нападения, если мы откажемся от наших боеголовок (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!). Оружие будет разобрано, а страна [SCOPE.sCountry('nd_bp_lead').GetName] будет хранить договор, удерживающий нас разоружёнными. Содержание боеголовок каждую неделю обходится нам в деньги и делает нас мишенью для каждой державы, которая предпочла бы, чтобы у нас их не было. Отказ от них оставляет нашу безопасность на гарантиях и договорах, которые их несут."
+ },
+ "nuclear_custody.11.f": {
+  "en": "What the offer asks of us and what it gives, as our negotiators have set it out for the government:\\n\\nEvery warhead we hold would be taken apart, and the leading power would hold a treaty that keeps us disarmed. We could not build another without breaking it.\\nEach power that pressed us and can sign a guarantee with us would sign one. A guarantee is a treaty, and any party may leave a treaty.\\nWe would stop paying the upkeep of the arsenal. It is in our budget every week for as long as we keep a single warhead.\\nIf we refuse, our relations with every power that pressed us will fall. Our negotiators expect those powers to go on demanding our disarmament for years.",
+  "ru": "Чего предложение требует от нас и что оно даёт, как изложили его для правительства наши переговорщики:\\n\\nКаждая боеголовка, которую мы держим, будет разобрана, а ведущая держава будет хранить договор, удерживающий нас разоружёнными. Построить новую, не нарушив его, мы не сможем.\\nКаждая держава, которая давила на нас и может подписать с нами гарантию, подпишет её. Гарантия — это договор, а любая сторона может выйти из договора.\\nМы перестанем платить за содержание арсенала. Оно стоит в нашем бюджете каждую неделю, пока мы держим хотя бы одну боеголовку.\\nЕсли мы откажемся, наши отношения с каждой державой, давившей на нас, ухудшатся. Наши переговорщики ожидают, что эти державы будут требовать нашего разоружения годами."
+ },
+ "nuclear_custody.11.t": {
+  "en": "The Budapest Offer",
+  "ru": "Будапештское предложение"
  }
 }
