@@ -9,7 +9,7 @@ grants loyalists on one switch radicalizes the same pops by the grant plus the
 friction on the other (`banking_toggle_paired_radicals_value`), so it nets the
 same. The command and cooperative economies follow the same rule, their
 1-point tools exempt for Moral Suasion's reason. The crisis programs keep a
-price of their own, which must still be a cost, and Capital Controls (Outflows)
+price of their own, which must still be a cost, and Capital Controls
 pays in infamy. Until then the five External & Currency tools and most of the
 planning and council tools were free both ways, the leaning tools cost 4% a
 round trip and the deposit guarantee 1%, and two council tools gained

@@ -602,6 +602,135 @@ te_seabed_room_shown = {
 	min = 0
 }
 
+# ---- Build only on local claims (te_seabed_local_only) ----
+# Country scope. Model: local_room. Room for a level in a basin's states when
+# the setting is on (te_seabed_gate): the basin's unused claims, less the
+# levels in its coastal states with no licence yet (as te_seabed_room counts
+# them), less the licences from other basins those states' levels hold. Each
+# of those swaps onto a freed local claim at the recording
+# (te_seabed_state_swap_local), maybe before a new level elsewhere in the
+# basin is reached, so a level built on that claim would leave the basin's
+# long-haul count unchanged. The distant term also holds the room below 0
+# after the gate's under-construction branch lets one level in at room 0 and
+# the recording gives it another basin's licence (the model's header).
+te_seabed_local_room_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 1
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_atlantic }
+		value = var:te_seabed_unbuilt_atlantic
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 2
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_indian }
+		value = var:te_seabed_unbuilt_indian
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 3
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_arctic }
+		value = var:te_seabed_unbuilt_arctic
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 4
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_southern }
+		value = var:te_seabed_unbuilt_southern
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 5
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+# State scope: its owner's local room in the state's own basin (0 for a state
+# with no basin yet, which te_seabed_local_open turns away first).
+te_seabed_state_local_room = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_basin }
+		if = {
+			limit = { var:te_seabed_basin = 1 }
+			owner = { add = te_seabed_local_room_pacific }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 2 }
+			owner = { add = te_seabed_local_room_atlantic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 3 }
+			owner = { add = te_seabed_local_room_indian }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 4 }
+			owner = { add = te_seabed_local_room_arctic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 5 }
+			owner = { add = te_seabed_local_room_southern }
+		}
+	}
+}
+
+# Country scope, display: 1 while the setting is on (the Seabed tab's checkbox).
+te_seabed_local_only_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_local_only }
+		value = 1
+	}
+}
+
 # Licences the country holds and is entitled to, all basins (the tile's
 # "34 / 40"), as of the last recording and sharing.
 te_seabed_held_total = {
