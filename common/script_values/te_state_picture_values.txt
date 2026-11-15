@@ -125,9 +125,9 @@ te_state_picture_affluent_floor = {
 }
 # A state leaves poor, or affluent, only this far past the floor, so one at a floor doesn't change
 # picture each year: half a point of standard of living at any floor, the owner's figure for the
-# fixed floors. The floors now move with the world's figure too, which rose 0.05 to 0.3 points a
-# year between saves of one game (1932 to 1957, 1978 to 2020); the keep is not meant to absorb
-# that: a state the world outgrows should change picture.
+# fixed floors. The floors now move with the world's figure too, which rose about 0.3 points a
+# year in the owner's Singapore game (1947 to 1957); the keep is not meant to absorb that: a state
+# the world outgrows should change picture.
 te_state_picture_k_means_keep = { value = 0.5 }
 te_state_picture_poor_floor_keep = {
 	value = te_state_picture_poor_floor
