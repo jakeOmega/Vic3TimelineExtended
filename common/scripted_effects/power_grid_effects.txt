@@ -1659,8 +1659,14 @@ te_grid_mix_record_effect = {
 # (te_grid_mix_add_member_effect) and its owner's count
 # (te_grid_mix_record_effect). From the production the run has just read: once
 # the orders are set, te_grid_local_production_value would divide last week's
-# Grid Power by this month's rate and delivery. A state that made nothing of its
-# own stores zeros without a walk. The balancing visits each member once a
+# Grid Power by this month's rate and delivery. A state that made under a tenth
+# of a unit of its own a week stores zeros without a walk: a receiver with no
+# plant reads a rounding residual there (its production less its station's
+# delivery), and walking it would walk it twice (no staffed plant, so the
+# full-staff fallback). The least a real plant makes is far above it: no
+# method's figure is under 25 a level (te_grid_mix_output_per_level_value) and
+# no carbon capture method takes more than 13 off, so a level makes 12 or more
+# at full staff, and 0.1 is under 1% staffing of one level. The balancing visits each member once a
 # month, on the 1st, so each is split once and at the moment its grid's supply
 # is read; a country's count runs on its own 30-day timer, out of step with the
 # 1st and with every other country's, so it can't sum a grid that spans
@@ -1668,7 +1674,7 @@ te_grid_mix_record_effect = {
 te_grid_mix_store_state_effect = {
 	set_local_variable = { name = te_grid_mix_gen value = var:te_grid_local_production }
 	if = {
-		limit = { var:te_grid_local_production > 0 }
+		limit = { var:te_grid_local_production >= 0.1 }
 		te_grid_mix_state_effect = yes
 	}
 	else = {

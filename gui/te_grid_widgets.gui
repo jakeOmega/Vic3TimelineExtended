@@ -197,8 +197,11 @@ types te_grid_widget_types
 		ignoreinvisible = yes
 
 		te_grid_panel = {
+			### ignoreinvisible: the Bloc partners line is hidden outside a bloc
+			### that joins grids, and must leave no gap.
 			flowcontainer = {
 				direction = vertical
+				ignoreinvisible = yes
 				spacing = 4
 				margin_top = 4
 				margin_bottom = 4

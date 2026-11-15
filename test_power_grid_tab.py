@@ -261,6 +261,51 @@ class StructureTest(unittest.TestCase):
         self.assertIn('blockoverride "tab_open_journal" {}', body)
         self.assertIn("te_window_power_grids_tab_sgui", body[body.index('blockoverride "tab_gate"'):])
 
+    def test_a_hidden_child_leaves_no_gap(self):
+        """Every flowcontainer with a child that can be hidden sets ignoreinvisible, so a hidden
+        line (the overview's Bloc partners outside a bloc, a source with no generation) leaves no
+        blank row (the review of 2026-11-14 found the overview's without it)."""
+        text = _no_comments(self.gui)
+
+        def block(s, at):
+            """(body, end) of the brace block opening at s[at] == '{'."""
+            depth = 0
+            for i in range(at, len(s)):
+                depth += {"{": 1, "}": -1}.get(s[i], 0)
+                if depth == 0:
+                    return s[at + 1:i], i
+            raise AssertionError("unbalanced")
+
+        def own_and_children(body):
+            """The body's own text at its top level, and its child blocks' bodies."""
+            own, children, i = [], [], 0
+            while i < len(body):
+                if body[i] == "{":
+                    inner, i = block(body, i)
+                    children.append(inner)
+                else:
+                    own.append(body[i])
+                i += 1
+            return "".join(own), children
+
+        def hideable(child):
+            # its own visible, or one its instance passes through a *visible block
+            return (re.search(r"\bvisible = ", own_and_children(child)[0])
+                    or re.search(r'(?m)^\s*blockoverride "\w*visible"', child))
+
+        checked = 0
+        for m in re.finditer(r"(?:\bflowcontainer = |= flowcontainer )\{", text):
+            own, children = own_and_children(block(text, m.end() - 1)[0])
+            if any(hideable(c) for c in children):
+                checked += 1
+                with self.subTest(line=text.count("\n", 0, m.start()) + 1):
+                    self.assertRegex(own, r"\bignoreinvisible = yes\b")
+        self.assertGreater(checked, 5)
+        # The overview's own, which holds the Bloc partners line.
+        overview = _type_body(self.gui, "te_grid_overview_panel")
+        inner = overview[overview.index("flowcontainer = {"):overview.index("te_grid_ov_cell = {")]
+        self.assertIn("ignoreinvisible = yes", inner)
+
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_grid_wide_sections",
                                              layout=("te_grid_tab_body", "te_grid_tab_layout"))
@@ -637,8 +682,10 @@ class GridGenerationTest(unittest.TestCase):
         store = self.block("te_grid_mix_store_state_effect")
         self.assertIn("set_local_variable = { name = te_grid_mix_gen value = var:te_grid_local_production }", store)
         self.assertNotIn("te_grid_local_production_value", store)
-        # A state that made nothing of its own stores zeros without walking its buildings.
-        self.assertRegex(store, r"if = \{\s*limit = \{ var:te_grid_local_production > 0 \}\s*"
+        # A state that made next to nothing of its own (a plantless receiver's rounding residual)
+        # stores zeros without walking its buildings, which the full-staff fallback would do twice;
+        # the threshold stays under 1% staffing of one level of the smallest plant (12 a week).
+        self.assertRegex(store, r"if = \{\s*limit = \{ var:te_grid_local_production >= 0\.1 \}\s*"
                                 r"te_grid_mix_state_effect = yes\s*\}\s*else = \{\s*te_grid_mix_clear_parts_effect = yes")
         self.assertEqual(tuple(re.findall(r"set_variable = \{ name = te_grid_state_mix_(\w+) "
                                           r"value = local_var:te_grid_mix_part_(\w+) \}", store)),
