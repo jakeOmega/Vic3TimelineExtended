@@ -901,7 +901,7 @@ the seabed policies).
 | Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all coastal countries, every navy counting double, and Sponsor Contractors protects no one's claims. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
 
 While the seabed is Regulated, a party pays royalties each week: 4% of its
-Deep-Sea Mines' base output value, about 1,800 a level. The money goes to the
+Deep-Sea Mines' base output value, about 1,500 a level. The money goes to the
 World Development Fund while it stands, otherwise to the UN budget. A party
 that switches to Unilateral Licensing while the convention governs the seabed
 defects: 10 infamy once, 5 standing and 10 case strength. It loses its place in

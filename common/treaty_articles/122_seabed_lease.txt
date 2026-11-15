@@ -121,9 +121,11 @@ te_seabed_lease_pacific = {  # REVIEWED 2026-11-03 (involvement): the leased cla
 				add = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_pacific
+					multiply = 0.2
 					max = 30
 				}
-				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# A spare claim pulls 0.2 and each claim asked beyond the spare weighs 1
+				# (1 and 5 while the pools were a fifth of this size; review I3): an AI
 				# never leases away the claims its own building will want.
 				if = {
 					limit = {
@@ -134,7 +136,6 @@ te_seabed_lease_pacific = {  # REVIEWED 2026-11-03 (involvement): the leased cla
 						value = scope:article.input_quantity
 						subtract = te_seabed_ai_lease_spare_pacific
 						min = 0
-						multiply = 5
 					}
 				}
 			}
@@ -203,7 +204,7 @@ te_seabed_lease_pacific = {  # REVIEWED 2026-11-03 (involvement): the leased cla
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 20
+					divide = 100
 					max = 10
 				}
 			}
@@ -222,7 +223,7 @@ te_seabed_lease_pacific = {  # REVIEWED 2026-11-03 (involvement): the leased cla
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 10
+					divide = 50
 					max = 15
 				}
 			}
@@ -334,9 +335,11 @@ te_seabed_lease_atlantic = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_atlantic
+					multiply = 0.2
 					max = 30
 				}
-				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# A spare claim pulls 0.2 and each claim asked beyond the spare weighs 1
+				# (1 and 5 while the pools were a fifth of this size; review I3): an AI
 				# never leases away the claims its own building will want.
 				if = {
 					limit = {
@@ -347,7 +350,6 @@ te_seabed_lease_atlantic = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 						value = scope:article.input_quantity
 						subtract = te_seabed_ai_lease_spare_atlantic
 						min = 0
-						multiply = 5
 					}
 				}
 			}
@@ -416,7 +418,7 @@ te_seabed_lease_atlantic = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 20
+					divide = 100
 					max = 10
 				}
 			}
@@ -435,7 +437,7 @@ te_seabed_lease_atlantic = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 10
+					divide = 50
 					max = 15
 				}
 			}
@@ -547,9 +549,11 @@ te_seabed_lease_indian = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_indian
+					multiply = 0.2
 					max = 30
 				}
-				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# A spare claim pulls 0.2 and each claim asked beyond the spare weighs 1
+				# (1 and 5 while the pools were a fifth of this size; review I3): an AI
 				# never leases away the claims its own building will want.
 				if = {
 					limit = {
@@ -560,7 +564,6 @@ te_seabed_lease_indian = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 						value = scope:article.input_quantity
 						subtract = te_seabed_ai_lease_spare_indian
 						min = 0
-						multiply = 5
 					}
 				}
 			}
@@ -629,7 +632,7 @@ te_seabed_lease_indian = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 20
+					divide = 100
 					max = 10
 				}
 			}
@@ -648,7 +651,7 @@ te_seabed_lease_indian = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 10
+					divide = 50
 					max = 15
 				}
 			}
@@ -760,9 +763,11 @@ te_seabed_lease_arctic = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_arctic
+					multiply = 0.2
 					max = 30
 				}
-				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# A spare claim pulls 0.2 and each claim asked beyond the spare weighs 1
+				# (1 and 5 while the pools were a fifth of this size; review I3): an AI
 				# never leases away the claims its own building will want.
 				if = {
 					limit = {
@@ -773,7 +778,6 @@ te_seabed_lease_arctic = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 						value = scope:article.input_quantity
 						subtract = te_seabed_ai_lease_spare_arctic
 						min = 0
-						multiply = 5
 					}
 				}
 			}
@@ -842,7 +846,7 @@ te_seabed_lease_arctic = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 20
+					divide = 100
 					max = 10
 				}
 			}
@@ -861,7 +865,7 @@ te_seabed_lease_arctic = {  # REVIEWED 2026-11-03 (involvement): the leased clai
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 10
+					divide = 50
 					max = 15
 				}
 			}
@@ -973,9 +977,11 @@ te_seabed_lease_southern = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_ai_lease_spare"
 					value = te_seabed_ai_lease_spare_southern
+					multiply = 0.2
 					max = 30
 				}
-				# Each claim asked beyond what it can spare weighs 5 (review I3): an AI
+				# A spare claim pulls 0.2 and each claim asked beyond the spare weighs 1
+				# (1 and 5 while the pools were a fifth of this size; review I3): an AI
 				# never leases away the claims its own building will want.
 				if = {
 					limit = {
@@ -986,7 +992,6 @@ te_seabed_lease_southern = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 						value = scope:article.input_quantity
 						subtract = te_seabed_ai_lease_spare_southern
 						min = 0
-						multiply = 5
 					}
 				}
 			}
@@ -1055,7 +1060,7 @@ te_seabed_lease_southern = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 20
+					divide = 100
 					max = 10
 				}
 			}
@@ -1074,7 +1079,7 @@ te_seabed_lease_southern = {  # REVIEWED 2026-11-03 (involvement): the leased cl
 				add = {
 					desc = "te_seabed_lease_war_claims"
 					value = scope:quantity
-					divide = 10
+					divide = 50
 					max = 15
 				}
 			}

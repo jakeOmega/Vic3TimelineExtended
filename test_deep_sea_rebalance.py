@@ -57,6 +57,8 @@ LOGISTICS = {
     "pmg_transport_in_space_building_space_mine": "compact_fusion_reactors",
 }
 LOGISTICS_MODIFIER = "goods_input_launch_capacity_mult"
+# The one good an Asteroid Mine level makes more of than a Deep-Sea Mine level.
+ASTEROIDS_LEAD = "tech_metals"
 LOGISTICS_CUT = -0.3
 LAND_TECH_METAL_MINE = "pm_smart_miners_building_tech_metals_mine"
 # The Deep-Sea Mine's support vessels: one free default and one upgrade, each costing one
@@ -244,7 +246,8 @@ def setUpModule():
 
 
 class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
-    """§ 1.1: better on every axis but scale until the era-12 logistics upgrades."""
+    """§ 1.1: better on every axis but scale until the era-12 logistics upgrades, and
+    since the deposit mix of 2026-11-15 but Tech-Critical Metals, where the asteroids lead."""
 
     def setUp(self):
         self.d = _DATA
@@ -277,7 +280,10 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
             with self.subTest(extraplanetary=space, throughput=best):
                 self.assertGreater(min(self.d.deep_profits(base[0]).values()), best * self.d.profit(space))
 
-    def test_era_11_outputs_each_at_least_the_asteroid_mine(self):
+    def test_era_11_outputs_each_at_least_the_asteroid_mine_but_tech_critical(self):
+        """Every good but one: the seabed's nodules are manganese, nickel and copper,
+        booked mostly as Structural and Conductive Metals (DeepSeaMineMix), and the
+        asteroids are where Tech-Critical Metals come from."""
         era_11 = [pm for pm in self.space if self.d.method_era(pm, SPACE) == 11]
         self.assertTrue(era_11)
         base = [pm for pm in self.deep if self.d.method_era(pm, DEEP_SEA) == 11]
@@ -286,7 +292,10 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
         for pm in era_11:
             for good, qty in self.d.goods(pm, "output").items():
                 with self.subTest(extraplanetary=pm, good=good):
-                    self.assertGreaterEqual(deep_out.get(good, 0.0), qty)
+                    if good == ASTEROIDS_LEAD:
+                        self.assertLess(deep_out.get(good, 0.0), qty)
+                    else:
+                        self.assertGreaterEqual(deep_out.get(good, 0.0), qty)
             with self.subTest(extraplanetary=pm, axis="input cost"):
                 dearest = max(self.d.value(t, "input") for t in self.d.tenders(base[0]))
                 self.assertLess(self.d.value(base[0], "input") + dearest,
@@ -464,8 +473,15 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
         self.assertIsInstance(definition, dict, f"{LOGISTICS_MODIFIER} is not registered")
         self.assertEqual(str(_unwrap(definition.get("percent"))), "yes")
 
-    def test_both_upgrades_flip_the_order_only_with_space_colonization(self):
-        upgrades = list(self.d.logistics_upgrades().values())
+    def test_both_upgrades_flip_the_order_for_space_colonization(self):
+        """Since the deposit mix of 2026-11-15 a Deep-Sea Mine level sells a sixth less
+        (the same 620 of its three metals, more of them at 40 than at 80), so the
+        Asteroid Mine stays behind the era-11 Deep-Sea Mine on the upgrade of the next
+        era (Fusion Tugs), no longer on the era-13 one as well."""
+        by_group = self.d.logistics_upgrades()
+        upgrades = list(by_group.values())
+        next_era = [pm for group, pm in by_group.items() if self.d.era(LOGISTICS[group]) <= 12]
+        self.assertEqual(len(next_era), 1)
         deep = self.d.group_methods(self.d.base_group(DEEP_SEA))
         space = self.d.group_methods(self.d.base_group(SPACE))
         best_deep = max(max(self.d.deep_profits(pm).values()) for pm in deep)
@@ -478,9 +494,9 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
                     # Space Colonization's methods: ahead of every Deep-Sea method with both.
                     self.assertGreater(self.d.profit(pm, upgrades), best_deep)
                 else:
-                    # The Asteroid Mine stays behind the Deep-Sea Mine of its era even with both.
+                    # The Asteroid Mine stays behind the Deep-Sea Mine of its era on Fusion Tugs.
                     same_era = [d for d in deep if self.d.method_era(d, DEEP_SEA) <= era]
-                    self.assertLess(self.d.profit(pm, upgrades),
+                    self.assertLess(self.d.profit(pm, next_era),
                                     max(min(self.d.deep_profits(d).values()) for d in same_era))
 
     def test_each_upgrade_only_cuts_launch_capacity(self):
@@ -556,6 +572,60 @@ class ExtraplanetaryBaseMix(unittest.TestCase):
                 conductive = self.d.goods(pm, "output")["copper"] * self.d.prices["copper"]
                 self.assertGreaterEqual(conductive / self.d.value(pm, "output"),
                                         self.MIN_CONDUCTIVE_SHARE)
+
+
+class DeepSeaMineMix(unittest.TestCase):
+    """The Deep-Sea Mine's metals follow the seabed's deposits (2026-11-15). Against the
+    land reserve base, one nodule zone holds 1.2 times the manganese, 1.8 times the
+    nickel, 3.4 times the cobalt and under a quarter of the copper (Hein et al. 2013, Ore
+    Geology Reviews 51, Table 5). Booked as the land Manganese, Nickel and Cobalt and
+    Copper Mines book theirs, over the mod's own deposits, that is about half Structural
+    Metals, three eighths Conductive and a ninth Tech-Critical: 320 / 230 / 70 of the
+    620 a level made before, when Tech-Critical was 260. Two figures elsewhere restate
+    the base method and must follow it."""
+
+    BASE = "pm_ocean_mine"
+    METALS = {"structural": "iron", "conductive": "copper", "tech_metals": "tech_metals"}
+    ADD = re.compile(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}")
+    WEIGHT = re.compile(r"value\s*=\s*te_seabed_ai_(\w+)_up\s+subtract\s*=\s*te_seabed_ai_\1_down"
+                        r"\s+multiply\s*=\s*([\d.]+)")
+
+    def setUp(self):
+        self.d = _DATA
+        self.out = self.d.goods(self.BASE, "output")
+
+    @staticmethod
+    def _value_body(name, *parts):
+        with open(os.path.join(REPO, *parts), encoding="utf-8-sig") as f:
+            text = f.read()
+        start = text.index(f"\n{name} = {{")
+        return text[start:text.index("\n}", start)]
+
+    def test_structural_then_conductive_then_tech_critical(self):
+        iron, copper, tech = (self.out[good] for good in self.METALS.values())
+        self.assertGreater(iron, copper)
+        self.assertGreater(copper, 3 * tech)
+
+    def test_the_royalty_s_output_value_is_the_base_method_s(self):
+        body = self._value_body("te_seabed_level_output_value",
+                                "common", "script_values", "te_global_commons_un_values.txt")
+        stated = sum(float(qty) * float(price) for qty, price in self.ADD.findall(body))
+        self.assertEqual(stated, self.d.value(self.BASE, "output"))
+
+    def test_the_ai_s_price_weights_are_the_metals_shares_of_sales(self):
+        body = self._value_body("te_seabed_ai_metals_premium",
+                                "common", "script_values", "te_global_commons_seabed_ai_values.txt")
+        weights = {name: float(w) for name, w in self.WEIGHT.findall(body)}
+        self.assertEqual(set(weights), set(self.METALS))
+        # Signed per metal and clamped once, so one metal above base can't open the
+        # AI's wills while the basket sells below it.
+        self.assertEqual(body.count("min = 0"), 1)
+        self.assertLess(body.rindex("multiply"), body.index("min = 0"))
+        self.assertAlmostEqual(sum(weights.values()), 1.0)
+        sales = {name: self.out[good] * self.d.prices[good] for name, good in self.METALS.items()}
+        for name, weight in weights.items():
+            with self.subTest(metal=name):
+                self.assertAlmostEqual(weight, sales[name] / sum(sales.values()), delta=0.01)
 
 
 class DeepSeaMineSupportVessels(unittest.TestCase):

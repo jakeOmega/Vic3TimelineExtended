@@ -57,7 +57,8 @@ class SeabedNoticeTest(unittest.TestCase):
 
     def test_new_claimant_notice_only_to_sharers(self):
         body = strip_comments(read(EFFECTS))
-        self.assertRegex(body, r"te_seabed_ent_\$B\$ > 0[\s\S]{0,400}post_notification = te_seabed_new_claimant_notice")
+        self.assertRegex(body, r"te_seabed_ent_\$B\$ >= te_seabed_share_min[\s\S]{0,400}"
+                               r"post_notification = te_seabed_new_claimant_notice")
 
     def test_new_claimant_receivers_had_a_share_before(self):
         """Told: every other country, not decentralized, with a share there
@@ -69,7 +70,7 @@ class SeabedNoticeTest(unittest.TestCase):
         self.assertIn("save_scope_as = te_seabed_newcomer", body)
         receivers = body[body.index("save_scope_as = te_seabed_newcomer"):]
         for term in ("NOT = { this = scope:te_seabed_newcomer }", "is_ai = no",
-                     "has_variable = te_seabed_claimed_$B$", "var:te_seabed_ent_$B$ > 0",
+                     "has_variable = te_seabed_claimed_$B$", "var:te_seabed_ent_$B$ >= te_seabed_share_min",
                      "post_notification = te_seabed_new_claimant_notice_$B$"):
             self.assertIn(term, receivers)
 
@@ -92,7 +93,7 @@ class SeabedNoticeTest(unittest.TestCase):
                                body.index(f"te_seabed_claimant_notice = {{ B = {b} }}"))
         self.assertIn("set_global_variable = te_seabed_claimed_seeded", body)
         mark = strip_comments(block(read(EFFECTS), "te_seabed_mark_claimed"))
-        self.assertIn("var:te_seabed_ent_$B$ > 0", mark)
+        self.assertIn("var:te_seabed_ent_$B$ >= te_seabed_share_min", mark)
         self.assertIn("set_variable = te_seabed_claimed_$B$", mark)
 
     def test_claimant_notices_follow_the_sharing(self):

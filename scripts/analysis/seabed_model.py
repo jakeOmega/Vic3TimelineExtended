@@ -95,9 +95,12 @@ swap takes it: the review's H1 at the scale of one basin, closed the same way
 (a plain count of unrecorded levels would let one more in every month; the
 model's builders then held about two fifths of the long-haul licences they
 hold with the setting off, and up to 34 in one basin). With the setting on
-from the start, a basin's states never hold more than one distant licence
-(test_seabed_local_only.py). The setting changes nothing already built or
-queued.
+from the start, a basin's states never held more than one distant licence
+at three levels a month (test_seabed_local_only.py, which keeps that pace).
+At build_pace() on the pools of 2026-11-15, fifteen a month, two turned up
+in 6 of 30 worlds: a country queues past its local room in two basins in
+one month and the first basin's extra level takes the second's last claim.
+The setting changes nothing already built or queued.
 
 SPONSOR CONTRACTORS' FLOORS (seabed claims spec § 2.2). At the year's first
 sharing (the one that finds te_seabed_pass_year below the current year:
@@ -194,7 +197,7 @@ from dataclasses import dataclass, field
 
 BASINS = ("pacific", "atlantic", "indian", "arctic", "southern")   # 1..5, gen_seabed_basins.BASINS
 # te_seabed_pool_<basin> (te_global_commons_seabed_values.txt)
-POOLS = {"pacific": 300, "atlantic": 250, "indian": 200, "arctic": 100, "southern": 150}
+POOLS = {"pacific": 1500, "atlantic": 1250, "indian": 1000, "arctic": 500, "southern": 750}
 OPEN, REGULATED, SCRAMBLE = 1, 2, 3
 SURVEY, SPONSOR, UNILATERAL = 1, 2, 3
 
@@ -1245,16 +1248,29 @@ def random_world(rng: random.Random, *, n_countries=8, n_states=48, regime=OPEN,
     return world
 
 
+def build_pace() -> int:
+    """The most levels a random world's builder queues in a month: three
+    thousandths of the five pools together (3 of 1,000, 15 of 5,000). The
+    pace is sized to the pools so that the builders fill them, and sit at room
+    0, within the tests' twenty years whatever the pools' size; at a fixed 3 a
+    month, pools five times the size never filled. Read from POOLS at each
+    call."""
+    return max(1, 3 * sum(POOLS.values()) // 1000)
+
+
 def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05,
-               annex=0.004, split=0.01, complete=0.5, cancel=0.02) -> None:
+               annex=0.004, split=0.01, complete=0.5, cancel=0.02, build=None) -> None:
     """One month: building, which queues a level wherever the gate is open
     (both branches, so a builder queues one more in a state already under
     construction at room 0, as the AI and private investment do; for a country
-    with Build only on local claims, wherever its local gate is open too), construction
+    with Build only on local claims, wherever its local gate is open too), up
+    to `build` levels a country (build_pace() if None), construction
     finishing or being cancelled, demolition of finished levels, a conquest
     landing between building and recording (its construction cancelled before
     the hook, after it, or not at all), the odd annexation and split, then each
     country's monthly recording in random order."""
+    if build is None:
+        build = build_pace()
     alive = [cid for cid in world.countries if world.alive(cid)]
     for cid in alive:
         c = world.countries[cid]
@@ -1263,7 +1279,7 @@ def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05
         coastal = [s for s in world.owned(cid) if s.coastal]
         free = room(world, cid)
         local = {b: local_room(world, cid, b) for b in BASINS}   # each queued level comes off its basin's
-        for _ in range(rng.randrange(4)):
+        for _ in range(rng.randrange(build + 1)):
             options = [s for s in coastal if gate_open(free, s)
                        and (not c.local_only or gate_open(local[s.basin], s))]
             if not options:
