@@ -26199,6 +26199,1186 @@
   "en": "Prohibition of Nuclear Weapons",
   "ru": "Запрещение ядерного оружия"
  },
+ "un_events.39.a": {
+  "en": "Table the Single Convention on Narcotic Drugs.",
+  "ru": "Вынести на рассмотрение Единую конвенцию о наркотических средствах."
+ },
+ "un_events.39.c": {
+  "en": "Our plantation trade must remain unrestricted.",
+  "ru": "Наша торговля плантационными культурами должна остаться свободной."
+ },
+ "un_events.39.d": {
+  "en": "Medical manufacture is changing the Drugs trade. Our delegation has been asked to table a convention that licenses production for medicine and imposes quotas on plantations. Its parties would support Pharmaceutical Industries while reducing plantation throughput, under the International Narcotics Control Board.",
+  "ru": "Медицинское производство меняет торговлю лекарствами. Нашу делегацию просят внести на рассмотрение конвенцию, которая лицензирует производство для медицины и вводит квоты для плантаций. Её участники поддерживали бы Фармацевтическую промышленность и сокращали бы объёмы плантаций под надзором Международного комитета по контролю над наркотиками."
+ },
+ "un_events.39.f": {
+  "en": "A plantation owner and a pharmacist gave evidence to our delegation before the convention was tabled.\\n\\n\\\"Part of my crop goes to the dealers, and I know what they do with it. The rest goes to the firms that make medicine from it, and they pay less. Under quotas I lose the part that pays.\\\"\\n\\n\\\"Under quotas the licensed firms will pay more for what you grow, because they will no longer be undercut by dealers. And I will stop seeing patients who bought something cheap from a dealer and cannot tell me what was in it.\\\"\\n\\n\\\"You will be fine either way. I have two hundred workers and a debt to the bank.\\\"\\n\\n\\\"Then grow for the licensed buyers and ask the board for a quota that covers them. I will support your application to the board if you support mine.\\\"",
+  "ru": "Владелец плантации и аптекарь дали показания нашей делегации до внесения конвенции.\\n\\n«Часть моего урожая уходит торговцам, и я знаю, что они с ним делают. Остальное идёт фирмам, которые делают из него лекарства, и платят они меньше. При квотах я теряю ту часть, которая приносит деньги».\\n\\n«При квотах лицензированные фирмы будут платить больше за то, что вы выращиваете, потому что торговцы перестанут сбивать им цену. А я перестану принимать пациентов, купивших что-то дешёвое у торговца и не способных сказать мне, что это было».\\n\\n«У вас всё будет в порядке в любом случае. У меня двести работников и долг банку».\\n\\n«Тогда выращивайте для лицензированных покупателей и просите комитет о квоте, которая их покрывает. Я поддержу вашу заявку в комитет, если вы поддержите мою»."
+ },
+ "un_events.39.t": {
+  "en": "Single Convention on Narcotic Drugs",
+  "ru": "Единая конвенция о наркотических средствах"
+ },
+ "un_events.4.a": {
+  "en": "Deploy a full peacekeeping force.",
+  "ru": "Направить полноценные миротворческие силы."
+ },
+ "un_events.4.b": {
+  "en": "Send observers only.",
+  "ru": "Направить только наблюдателей."
+ },
+ "un_events.4.c": {
+  "en": "We cannot spare the resources.",
+  "ru": "Мы не можем выделить ресурсы."
+ },
+ "un_events.4.d": {
+  "en": "Order has broken down in [SCOPE.sCountry('peacekeeping_target').GetName]. The General Assembly has put the collapse on its docket, and the Secretary-General has asked the powers able to help to send peacekeepers. [ROOT.GetCountry.GetName] is among them.",
+  "ru": "Порядок в стране [SCOPE.sCountry('peacekeeping_target').GetName] рухнул. Генеральная Ассамблея внесла этот крах в свою повестку, а Генеральный секретарь попросил державы, способные помочь, направить миротворцев. Страна [ROOT.GetCountry.GetName] — одна из них."
+ },
+ "un_events.4.f": {
+  "en": "What our general staff says a contingent for [SCOPE.sCountry('peacekeeping_target').GetName] would need:\\n\\nAt least two battalions, because one battalion cannot hold a district and rest its soldiers at the same time.\\nIts own transport and rations for the first months, because nothing can be bought where order has broken down.\\nInterpreters, if the people there speak a language our soldiers do not, because every patrol will have to talk its way past checkpoints.\\nWritten rules for opening fire, read to every soldier before departure, because a peacekeeper who fires first has joined the fighting.\\nA field hospital, because the hospitals in the worst districts are closed or full.\\nIf the government sends observers only, a few dozen unarmed officers, who can report what they see but cannot stop anything.",
+  "ru": "Что, по словам нашего генерального штаба, потребуется контингенту для страны [SCOPE.sCountry('peacekeeping_target').GetName]:\\n\\nНе менее двух батальонов, потому что один батальон не может одновременно удерживать район и давать отдых своим солдатам.\\nСвой транспорт и пайки на первые месяцы, потому что там, где рухнул порядок, ничего нельзя купить.\\nПереводчики, если местные говорят на языке, которого не знают наши солдаты, потому что каждому патрулю придётся объясняться на блокпостах.\\nПисаные правила открытия огня, зачитанные каждому солдату перед отправкой, потому что миротворец, выстреливший первым, уже вступил в бой.\\nПолевой госпиталь, потому что больницы в самых тяжёлых районах закрыты или переполнены.\\nЕсли правительство направит только наблюдателей — несколько десятков безоружных офицеров, которые могут сообщать о том, что видят, но не могут ничего остановить."
+ },
+ "un_events.4.t": {
+  "en": "A State Has Collapsed",
+  "ru": "Крах государства"
+ },
+ "un_events.40.a": {
+  "en": "Table the Antarctic Treaty.",
+  "ru": "Внести на рассмотрение Договор об Антарктике."
+ },
+ "un_events.40.c": {
+  "en": "The ice will not stay closed forever.",
+  "ru": "Лёд не останется закрытым вечно."
+ },
+ "un_events.40.d": {
+  "en": "Research stations winter on the Antarctic ice, and the delegates ask us to table a treaty that would keep the continent for research alone: no weapons, no claims pressed, no mining. Its parties would hold no new Southern seabed licenses, would share their stations' science, and would add to the UN's authority.",
+  "ru": "Исследовательские станции зимуют на антарктическом льду, и делегаты просят нас внести договор, который оставит континент только для науки: без оружия, без предъявления претензий, без добычи. Его участники не получали бы новых лицензий на морское дно Южного океана, делились бы наукой своих станций и повышали бы авторитет ООН."
+ },
+ "un_events.40.d_cause_station": {
+  "en": "A new research station winters on the Antarctic ice, and the Assembly is asked who the continent belongs to.\\n\\n",
+  "ru": "Новая исследовательская станция зимует на антарктическом льду, и Ассамблее задают вопрос, кому принадлежит континент.\\n\\n"
+ },
+ "un_events.40.d_station": {
+  "en": "Our own wintering party has seen what the ice holds for science. The delegates ask us to table a treaty that would keep the continent for research alone: no weapons, no claims pressed, no mining. Its parties would hold no new Southern seabed licenses, would share their stations' science, and would add to the UN's authority.",
+  "ru": "Наша собственная зимовка увидела, что лёд хранит для науки. Делегаты просят нас внести договор, который оставит континент только для науки: без оружия, без предъявления претензий, без добычи. Его участники не получали бы новых лицензий на морское дно Южного океана, делились бы наукой своих станций и повышали бы авторитет ООН."
+ },
+ "un_events.40.f": {
+  "en": "\\\"Antarctica shall be used for peaceful purposes only. There shall be prohibited, inter alia, any measures of a military nature, such as the establishment of military bases and fortifications, the carrying out of military maneuvers, as well as the testing of any type of weapons.\\\"\\n\\n— The Antarctic Treaty, Article I",
+  "ru": "«Антарктика используется исключительно в мирных целях. Запрещаются, в частности, любые меры военного характера, такие как создание военных баз и укреплений, проведение военных манёвров, а также испытание любых видов оружия».\\n\\n— Договор об Антарктике, статья I"
+ },
+ "un_events.40.t": {
+  "en": "The Antarctic Treaty",
+  "ru": "Договор об Антарктике"
+ },
+ "un_events.41.a": {
+  "en": "Table the moratorium.",
+  "ru": "Внести мораторий на рассмотрение."
+ },
+ "un_events.41.c": {
+  "en": "Keep the weapon in reserve.",
+  "ru": "Оставить оружие в резерве."
+ },
+ "un_events.41.d": {
+  "en": "The delegates ask us to table a moratorium on destructive anti-satellite tests. Its parties would pay twice the price for a strike of their own, gain standing in the world, and count their debris removal toward the UN's delivery.",
+  "ru": "Делегаты просят нас внести мораторий на разрушительные противоспутниковые испытания. Его участники платили бы вдвое больше за собственный удар, повышали бы свой вес в мире и засчитывали бы уборку мусора в результативность ООН."
+ },
+ "un_events.41.d_cause_strike": {
+  "en": "[GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName] has destroyed a satellite in orbit, and its debris now threatens every craft that shares the altitude.\\n\\n",
+  "ru": "Страна [GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName] уничтожила спутник на орбите, и его обломки теперь угрожают всем аппаратам на той же высоте.\\n\\n"
+ },
+ "un_events.41.f": {
+  "en": "At the shared tracking office the night shift had been plotting the new debris since the strike, one fragment at a time, from the radar returns. By morning the duty officer had several hundred pieces on the list, each with its orbit, and the list was still growing. She marked in red the altitudes the cloud now crossed and wrote beside them the names of the craft that flew there. \\\"Every craft at these heights passes through it twice a day,\\\" she told the director when he came in. \\\"Some of their operators can move them. Some have no fuel left to move.\\\" The director read the list, signed a warning to every operator on it, and asked for the figures to go to the delegations before the Assembly met.",
+  "ru": "В общем центре слежения ночная смена со времени удара наносила на карту новый мусор, обломок за обломком, по радиолокационным данным. К утру у дежурного офицера в списке было несколько сотен фрагментов, у каждого своя орбита, и список всё рос. Она отметила красным высоты, которые теперь пересекало облако, и написала рядом названия аппаратов, летавших там. «Каждый аппарат на этих высотах проходит через него дважды в сутки», — сказала она директору, когда тот пришёл. «Некоторые операторы могут их сместить. У некоторых не осталось топлива, чтобы сместиться». Директор прочёл список, подписал предупреждение каждому оператору из него и попросил передать цифры делегациям до заседания Ассамблеи."
+ },
+ "un_events.41.t": {
+  "en": "A Moratorium on Anti-Satellite Tests",
+  "ru": "Мораторий на противоспутниковые испытания"
+ },
+ "un_events.42.a": {
+  "en": "Table the convention.",
+  "ru": "Внести конвенцию на рассмотрение."
+ },
+ "un_events.42.c": {
+  "en": "Keep our fleets' hands free.",
+  "ru": "Не связывать руки нашим флотам."
+ },
+ "un_events.42.d": {
+  "en": "The delegates ask us to table a convention on the settlement of outer space. It would not forbid anything a fleet can do, but its parties would pay twice the price for destroying a colony or taking a free one by force, and gain standing in the world for their restraint.",
+  "ru": "Делегаты просят нас внести конвенцию о заселении космического пространства. Она не запретила бы ничего из того, на что способен флот, но её участники платили бы вдвое больше за уничтожение колонии или за захват свободной силой и повышали бы свой вес в мире за сдержанность."
+ },
+ "un_events.42.d_cause_seizure": {
+  "en": "Marines of [SCOPE.sCountry('un_dkt_subject').GetName] have taken a colony by force, or its fleet has left one in ruins, and the delegations with colonies of their own are asking whose colony will be next.\\n\\n",
+  "ru": "Морская пехота страны [SCOPE.sCountry('un_dkt_subject').GetName] захватила колонию силой, либо её флот оставил одну из них в руинах, и делегации, у которых есть собственные колонии, спрашивают, чья колония будет следующей.\\n\\n"
+ },
+ "un_events.42.f": {
+  "en": "\\\"Outer space, including the moon and other celestial bodies, is not subject to national appropriation by claim of sovereignty, by means of use or occupation, or by any other means.\\\"\\n\\n— The Outer Space Treaty, Article II",
+  "ru": "«Космическое пространство, включая Луну и другие небесные тела, не подлежит национальному присвоению ни путём провозглашения суверенитета, ни путём использования или оккупации, ни любыми другими средствами».\\n\\n— Договор о космосе, статья II"
+ },
+ "un_events.42.t": {
+  "en": "A Convention on the Settlement of Outer Space",
+  "ru": "Конвенция о заселении космического пространства"
+ },
+ "un_events.5.a": {
+  "en": "Enforce the sanctions strictly.",
+  "ru": "Строго обеспечивать санкции."
+ },
+ "un_events.5.b": {
+  "en": "Partial compliance: the letter of the law.",
+  "ru": "Частичное соблюдение: буква закона."
+ },
+ "un_events.5.c": {
+  "en": "Quietly profit from the gaps.",
+  "ru": "Тихо наживаться на лазейках."
+ },
+ "un_events.5.d": {
+  "en": "The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, and they work only if the members enforce them. Strict enforcement will cost our own traders. The alternative is to let goods slip quietly through a regime we ourselves asked the Assembly to impose.",
+  "ru": "[concept_un_sanctions] против страны [SCOPE.sCountry('sanctioned_country').GetName] теперь действуют, и работают они, только если члены их обеспечивают. Строгое исполнение обойдётся нашим торговцам. Альтернатива — позволить товарам тихо проскальзывать сквозь режим, который мы сами попросили Ассамблею ввести."
+ },
+ "un_events.5.d_founder": {
+  "en": "The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, and they work only if the members enforce them. Strict enforcement will cost our own traders. The alternative is to let goods slip quietly through sanctions we asked for, set by an institution we helped create.",
+  "ru": "[concept_un_sanctions] против страны [SCOPE.sCountry('sanctioned_country').GetName] теперь действуют, и работают они, только если члены их обеспечивают. Строгое исполнение обойдётся нашим торговцам. Альтернатива — позволить товарам тихо проскальзывать сквозь санкции, о которых мы просили, установленные институтом, который мы помогли создать."
+ },
+ "un_events.5.f": {
+  "en": "The customs officer at the border post kept the list of banned goods pinned above the desk, with the number of the Assembly's resolution written across the top. For each wagon that came through, the officer checked the papers against the list and then opened one crate of the officer's own choosing. The papers on the third wagon that morning named a buyer in a neutral country and a cargo of farm tools. The first crate held farm tools. The second, pulled from the bottom of the stack, held goods from the banned list under a layer of straw. The officer wrote the wagon's number in the post's book, sealed the crate with the post's stamp, and sent a clerk to tell the yard to hold the wagon.",
+  "ru": "Таможенник на пограничном посту держал список запрещённых товаров приколотым над столом, с номером резолюции Ассамблеи вверху. Для каждой проезжавшей телеги он сверял бумаги со списком, а затем вскрывал один ящик по собственному выбору. В бумагах на третью телегу тем утром значились покупатель в нейтральной стране и груз сельскохозяйственных орудий. В первом ящике были сельскохозяйственные орудия. Во втором, вытащенном со дна стопки, лежали товары из запретного списка под слоем соломы. Таможенник записал номер телеги в книгу поста, запечатал ящик печатью поста и послал клерка передать на двор, чтобы телегу задержали."
+ },
+ "un_events.5.t": {
+  "en": "Cargo Under Seal",
+  "ru": "Груз под пломбой"
+ },
+ "un_events.6.a": {
+  "en": "Table the reform. The UN must grow.",
+  "ru": "Внести реформу. ООН должна расти."
+ },
+ "un_events.6.b": {
+  "en": "Defend the Charter as it stands.",
+  "ru": "Защищать Устав в его нынешнем виде."
+ },
+ "un_events.6.d": {
+  "en": "For two years the United Nations has pressed against the ceiling its founders wrote into the Charter, and a coalition of delegations now demands the next reform. As a [concept_great_power], [ROOT.GetCountry.GetName] can table it or defend the Charter as it stands. A reform needs a two-thirds supermajority of every member, and no [concept_un_veto] from the permanent seats.",
+  "ru": "Уже два года Организация Объединённых Наций упирается в потолок, вписанный в Устав её основателями, и коалиция делегаций теперь требует следующей реформы. Как [Concept('concept_great_power','великая держава')], страна [ROOT.GetCountry.GetName] может внести её или защищать Устав в его нынешнем виде. Реформа требует квалифицированного большинства в две трети голосов всех членов и отсутствия [Concept('concept_un_veto','вето')] со стороны постоянных мест."
+ },
+ "un_events.6.d_authoritarian": {
+  "en": "The United Nations has outgrown its Charter, and a coalition demands the next reform. For [ROOT.GetCountry.GetName], a stronger Assembly is a stronger check on what we may do, and the second reform of the Charter would restrain the [concept_un_veto] itself. Championing the reform might earn us goodwill. Defending the Charter keeps our influence where it is.",
+  "ru": "Организация Объединённых Наций переросла свой Устав, и коалиция требует следующей реформы. Для страны [ROOT.GetCountry.GetName] более сильная Ассамблея — более сильное ограничение того, что нам позволено, а вторая реформа Устава ограничила бы само [Concept('concept_un_veto','вето')]. Поддержка реформы могла бы принести нам расположение. Защита Устава сохраняет наше влияние там, где оно есть."
+ },
+ "un_events.6.d_council": {
+  "en": "The United Nations has outgrown its Charter, and a coalition demands the next reform. As a council republic, [ROOT.GetCountry.GetName] can argue for a more democratic world order, one in which the [concept_un_veto] of a few [Concept('concept_great_power', 'great powers')] cannot overrule everyone else. A stronger Assembly would bind us as well.",
+  "ru": "Организация Объединённых Наций переросла свой Устав, и коалиция требует следующей реформы. Как Советская республика, страна [ROOT.GetCountry.GetName] может отстаивать более демократичный мировой порядок, при котором [Concept('concept_un_veto','вето')] нескольких [Concept('concept_great_power','великих держав')] не сможет отменить волю всех остальных. Более сильная Ассамблея связала бы и нас."
+ },
+ "un_events.6.d_hq": {
+  "en": "\\n\\nDelegates have gathered at the UN headquarters in [SCOPE.sState('un_hq_state').GetCityHubName], and the side rooms are full of delegations counting votes.",
+  "ru": "\\n\\nДелегаты собрались в штаб-квартире ООН в городе [SCOPE.sState('un_hq_state').GetCityHubName], и в боковых комнатах полно делегаций, считающих голоса."
+ },
+ "un_events.6.f": {
+  "en": "Two delegates had stayed behind in the reform committee's room after its session.\\n\\n\\\"The permanent seats were handed out when the charter was signed. Half the members in this room had no say in it. Every session we vote on resolutions that one of a few delegations can stop with a word.\\\"\\n\\n\\\"Those few delegations are the ones whose armies and treasuries carry out what the Assembly decides. Take away the veto and you will pass resolutions that nobody with the means to enforce them has agreed to.\\\"\\n\\n\\\"Then they will have to persuade the rest of us, as we have to persuade them.\\\"\\n\\n\\\"My government will not vote for a charter that turns its seat into a formality, and I have told every delegation that asked. Bring me a reform that adds seats and leaves the veto alone, and I will send it home with a recommendation.\\\"",
+  "ru": "Два делегата остались в зале комитета по реформе после заседания.\\n\\n«Постоянные места раздали при подписании устава. Половина членов в этом зале не имела к этому отношения. На каждой сессии мы голосуем за резолюции, которые одна из нескольких делегаций может остановить одним словом».\\n\\n«Эти несколько делегаций — те, чьи армии и казна исполняют то, что решает Ассамблея. Уберите вето, и вы будете принимать резолюции, с которыми не согласился никто, кто способен их обеспечить».\\n\\n«Тогда им придётся убеждать остальных, как нам приходится убеждать их».\\n\\n«Моё правительство не проголосует за устав, который превращает его место в формальность, и я сказал это каждой делегации, которая спрашивала. Принесите мне реформу, которая добавляет места и не трогает вето, и я отправлю её домой с рекомендацией»."
+ },
+ "un_events.7.a": {
+  "en": "Mount a major humanitarian relief effort.",
+  "ru": "Развернуть крупную гуманитарную помощь."
+ },
+ "un_events.7.b": {
+  "en": "Contribute what we can spare.",
+  "ru": "Внести то, что можем выделить."
+ },
+ "un_events.7.c": {
+  "en": "This is not our responsibility.",
+  "ru": "Это не наша ответственность."
+ },
+ "un_events.7.d": {
+  "en": "Famine has struck [SCOPE.sCountry('crisis_country').GetName]. Families are leaving the worst-hit districts in search of food, and the authorities cannot feed those who stay. The United Nations has appealed to its members for food, medicine and money.",
+  "ru": "Голод поразил страну [SCOPE.sCountry('crisis_country').GetName]. Семьи покидают самые пострадавшие районы в поисках еды, а власти не могут прокормить тех, кто остаётся. Организация Объединённых Наций обратилась к своим членам с просьбой о продовольствии, лекарствах и деньгах."
+ },
+ "un_events.7.d_place": {
+  "en": "\\n\\nThe worst of it is in [SCOPE.sState('crisis_state').GetName].",
+  "ru": "\\n\\nХуже всего положение в области [SCOPE.sState('crisis_state').GetName]."
+ },
+ "un_events.7.f": {
+  "en": "To the member delegations, from the United Nations relief office for [SCOPE.sCountry('crisis_country').GetName]. Our teams have reached the districts where the famine is worst. In each, the granaries are empty and the markets have stopped selling grain at any price. Families who can travel are walking to the towns, where the relief kitchens are already feeding more people than they were stocked for. We need grain and dried food first, then medicine for the sick and the very young, then money to hire transport and drivers to move it all. A pledge is of use to us only once it is delivered. We ask every delegation able to give to tell this office what it will send and when it will arrive.",
+  "ru": "Делегациям-членам от бюро помощи Организации Объединённых Наций для страны [SCOPE.sCountry('crisis_country').GetName]. Наши группы добрались до районов, где голод сильнее всего. Везде зернохранилища пусты, а рынки перестали продавать зерно по любой цене. Семьи, способные идти, идут в города, где пункты раздачи пищи уже кормят больше людей, чем рассчитывали. Нам нужны прежде всего зерно и сушёные продукты, затем лекарства для больных и самых маленьких, затем деньги, чтобы нанять транспорт и водителей для перевозки всего этого. Обещание полезно нам лишь тогда, когда оно доставлено. Просим каждую делегацию, способную дать, сообщить этому бюро, что она отправит и когда это прибудет."
+ },
+ "un_events.7.t": {
+  "en": "An Appeal for Relief",
+  "ru": "Призыв о помощи"
+ },
+ "un_events.8.a": {
+  "en": "Accept the ruling. We must uphold the law.",
+  "ru": "Принять решение. Мы обязаны соблюдать закон."
+ },
+ "un_events.8.b": {
+  "en": "Contest the court's jurisdiction.",
+  "ru": "Оспорить юрисдикцию суда."
+ },
+ "un_events.8.c": {
+  "en": "We do not recognize this verdict.",
+  "ru": "Мы не признаём этот вердикт."
+ },
+ "un_events.8.d": {
+  "en": "The International Court of Justice has ruled against [ROOT.GetCountry.GetName], finding that our forces broke international humanitarian law. No one can enforce the ruling, but every member of the Assembly has read it. Complying would mean accepting new limits on how our forces fight.",
+  "ru": "Международный суд ООН вынес решение против страны [ROOT.GetCountry.GetName], признав, что наши силы нарушили международное гуманитарное право. Никто не может обеспечить исполнение решения, но каждый член Ассамблеи его прочёл. Исполнение означало бы принять новые ограничения на то, как воюют наши силы."
+ },
+ "un_events.8.d_covert": {
+  "en": "The International Court of Justice has ruled against [ROOT.GetCountry.GetName], finding that a covert operation run by our intelligence services violated another state's sovereignty. No one can enforce the ruling, but every member of the Assembly has read it. Complying would mean accepting the court's findings in public.",
+  "ru": "Международный суд ООН вынес решение против страны [ROOT.GetCountry.GetName], признав, что тайная операция наших разведслужб нарушила суверенитет другого государства. Никто не может обеспечить исполнение решения, но каждый член Ассамблеи его прочёл. Исполнение означало бы публично принять выводы суда."
+ },
+ "un_events.8.d_plaintiff": {
+  "en": "\\n\\nThe case was brought by [SCOPE.sCountry('court_plaintiff').GetName].",
+  "ru": "\\n\\nДело возбуждено страной [SCOPE.sCountry('court_plaintiff').GetName]."
+ },
+ "un_events.8.f": {
+  "en": "\\\"The government has asked me, as its legal adviser, what the court's ruling means for us. The court has found against us on most of the counts, and it gives its reasons at length. I have read them twice. On two counts the judges divided, and the dissenting opinion is close to our own argument. We can cite it if we contest the court's jurisdiction, though I would not expect to win. No one can make us comply. What compliance keeps for us is the standing to bring our own cases before the same court and expect the other members to take its rulings seriously. Defiance gives that up. I have drafted a reply for each course, and all three are in the folder in front of you.\\\"",
+  "ru": "«Правительство спросило меня, как своего юрисконсульта, что решение суда значит для нас. Суд вынес решение против нас по большинству пунктов и подробно излагает свои доводы. Я прочёл их дважды. По двум пунктам судьи разошлись, и особое мнение близко к нашей собственной аргументации. Мы можем сослаться на него, если оспорим юрисдикцию суда, хотя победы я бы не ждал. Никто не может заставить нас подчиниться. Исполнение сохраняет за нами право предъявлять собственные дела в тот же суд и рассчитывать, что остальные члены отнесутся к его решениям всерьёз. Неповиновение этим правом жертвует. Я подготовил ответ для каждого варианта, и все три лежат в папке перед вами»."
+ },
+ "un_events.8.t": {
+  "en": "The Court Has Ruled",
+  "ru": "Суд вынес решение"
+ },
+ "un_events.9.a": {
+  "en": "Table a heritage convention before the Assembly.",
+  "ru": "Внести конвенцию о наследии на рассмотрение Ассамблеи."
+ },
+ "un_events.9.c": {
+  "en": "Culture is a domestic matter.",
+  "ru": "Культура — внутреннее дело."
+ },
+ "un_events.9.d": {
+  "en": "Delegations at the United Nations are pressing for a convention to protect sites of outstanding cultural and natural heritage, with a UN agency to keep watch over them. Nothing is before the General Assembly yet: we could table it. Its parties would gain [concept_prestige], and those with great monuments more visitors, at the price of slower building at home; and once it stands, carrying off another nation's monuments in war would cost twice the [concept_infamy].",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на конвенции о защите объектов выдающегося культурного и природного наследия под надзором учреждения ООН. Перед Генеральной Ассамблеей пока ничего нет: мы могли бы внести её сами. Её участники получали бы [concept_prestige|l], а те, у кого есть великие памятники, — больше посетителей, ценой более медленного строительства внутри страны; а когда она вступит в силу, вывоз памятников другого народа во время войны обходился бы вдвое дороже в [Concept('concept_infamy','дурной славе')]."
+ },
+ "un_events.9.f": {
+  "en": "\\\"I have looked after the old walls for thirty years, and I am glad the delegation from the heritage committee has come to see them. You will have noticed the scaffolding on the east side. That is where the stones began to fall, after the road below was widened. The town would rather have the road than the walls, and I understand why, because people use the road every day and come up to the walls only when there are visitors to show. If the convention lists this place, someone outside the town will have said that it matters, and the town will have to ask before it builds here. I have made a survey of every stone that has moved, and the committee may take a copy with it.\\\"",
+  "ru": "«Я присматриваю за старыми стенами тридцать лет и рад, что делегация комитета по наследию приехала на них посмотреть. Вы наверняка заметили леса с восточной стороны. Именно там начали падать камни после того, как расширили дорогу внизу. Городу дорога нужнее стен, и я понимаю почему: люди пользуются дорогой каждый день и поднимаются к стенам, только когда есть гости, которым их показывают. Если конвенция внесёт это место в список, кто-то за пределами города скажет, что оно важно, и городу придётся спрашивать разрешения, прежде чем строить здесь. Я составил опись каждого сдвинувшегося камня, и комитет может взять копию с собой»."
+ },
+ "un_events.9.t": {
+  "en": "Protecting World Heritage",
+  "ru": "Защита всемирного наследия"
+ },
+ "un_mandate.1.a": {
+  "en": "So it is recorded.",
+  "ru": "Пусть так и запишут."
+ },
+ "un_mandate.1.d_abandoned": {
+  "en": "We raised the play the Assembly authorized and then backed down from it. The mandate is void, and the censure of the organization falls on us. #R UN credibility −3#! (scaled by our weight in world affairs).",
+  "ru": "Мы начали дипломатическую игру, санкционированную Ассамблеей, а затем отступили. Мандат аннулирован, и осуждение организации ложится на нас. #R Доверие к ООН −3#! (с поправкой на наш вес в мировых делах)."
+ },
+ "un_mandate.1.d_complied": {
+  "en": "[AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] is ours, taken under the authority of the General Assembly and by the terms it set. The mandate is discharged. #G UN delivery +1#! (scaled by our weight in world affairs).",
+  "ru": "Под полномочием Генеральной Ассамблеи и на заданных ею условиях мы получили территорию: [AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)]. Мандат исполнен. #G Результативность ООН +1#! (с поправкой на наш вес в мировых делах)."
+ },
+ "un_mandate.1.d_complied_forfeit": {
+  "en": "The territory is ours, but we took it after leaving the organization whose authorization we were using. The Assembly does not recognize a mandate exercised by a country that has left it. #R UN credibility −3#! (scaled by our weight in world affairs), and the censure that would have gone to a violator falls on us instead.",
+  "ru": "Территория наша, но мы взяли её после выхода из организации, чьим полномочием пользовались. Ассамблея не признаёт мандат, осуществляемый страной, которая её покинула. #R Доверие к ООН −3#! (с поправкой на наш вес в мировых делах), а осуждение, которое досталось бы нарушителю, ложится на нас."
+ },
+ "un_mandate.1.d_expired": {
+  "en": "Five years have passed and the authorization has lapsed unused. Pressing the claim now would be an ordinary war, at the usual cost in [concept_infamy].",
+  "ru": "Прошло пять лет, и полномочие истекло неиспользованным. Предъявление претензии теперь стало бы обычной войной с обычной ценой в [Concept('concept_infamy','дурной славе')]."
+ },
+ "un_mandate.1.d_violated": {
+  "en": "We were authorized to recover one territory from [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)] and we demanded more than that. The mandate is void, and the authorized war goal is no longer ours to take. #R UN credibility −3#! (scaled by our weight in world affairs), and the censure of the organization falls on us.",
+  "ru": "Нас уполномочили вернуть одну территорию у страны [AddLocalizationIf(SCOPE.sCountry('un_mandate_closed_target').Exists, SCOPE.sCountry('un_mandate_closed_target').GetName)], а мы потребовали большего. Мандат аннулирован, и санкционированная цель войны больше не наша. #R Доверие к ООН −3#! (с поправкой на наш вес в мировых делах), а осуждение организации ложится на нас."
+ },
+ "un_mandate.1.d_void": {
+  "en": "The mandate can no longer be exercised on the terms the Assembly set: the territory changed hands, a party to it ceased to exist, or we are no longer a member of the body that issued it. No censure attaches.",
+  "ru": "Мандат больше нельзя осуществлять на условиях, заданных Ассамблеей: территория сменила владельца, одна из сторон перестала существовать или мы больше не члены органа, который его выдал. Осуждения не следует."
+ },
+ "un_mandate.1.f": {
+  "en": "The clerk who keeps the Assembly's register of authorized mandates opened the ledger at our country's entry. The columns were already filled in from the day the mandate was granted: the claimant, the state named, the region, the number of the resolution and its date. The last column, for how the mandate ended, was still blank. The clerk copied a line into it from the Secretariat's closing report, initialed it, and blotted the ink. Then the clerk sent a copy of the entry to our delegation, as the register's rules require, and closed the ledger.",
+  "ru": "Клерк, ведущий реестр санкционированных Ассамблеей мандатов, открыл книгу на записи нашей страны. Графы были уже заполнены со дня выдачи мандата: заявитель, названное государство, регион, номер резолюции и её дата. Последняя графа, о том, как мандат закончился, всё ещё была пуста. Клерк переписал в неё строку из заключительного доклада Секретариата, поставил инициалы и промокнул чернила. Затем клерк отправил копию записи нашей делегации, как требуют правила реестра, и закрыл книгу."
+ },
+ "un_mandate.1.t_abandoned": {
+  "en": "The Mandate Abandoned",
+  "ru": "Мандат оставлен"
+ },
+ "un_mandate.1.t_complied": {
+  "en": "The Mandate Discharged",
+  "ru": "Мандат исполнен"
+ },
+ "un_mandate.1.t_expired": {
+  "en": "The Mandate Lapses",
+  "ru": "Мандат истёк"
+ },
+ "un_mandate.1.t_violated": {
+  "en": "The Mandate Exceeded",
+  "ru": "Мандат превышен"
+ },
+ "un_mandate.1.t_void": {
+  "en": "The Mandate Falls Away",
+  "ru": "Мандат утратил силу"
+ },
+ "un_mandate.2.a": {
+  "en": "Understood.",
+  "ru": "Понятно."
+ },
+ "un_mandate.2.d": {
+  "en": "Our [concept_diplomatic_play] against [SCOPE.sCountry('un_mandate_notice_target').GetName] now carries the demand the [concept_un_general_assembly] authorized: the return of [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. That demand costs us no [concept_infamy], and the mandate is now bound to this play: it cannot be carried into another.\\n\\n#bold What the mandate does not cover:#! any other demand against that country for territory, subjugation, regime change or humiliation. Adding one to this play #R voids the mandate#!: the Assembly condemns us, [concept_un_authority] falls, and our standing benefits are suspended for ten years. Backing down from the play forfeits it in the same way.\\n\\nOther demands, such as war reparations or opening markets, are allowed at their normal price.",
+  "ru": "Наша [Concept('concept_diplomatic_play','дипломатическая игра')] против страны [SCOPE.sCountry('un_mandate_notice_target').GetName] теперь содержит требование, санкционированное [Concept('concept_un_general_assembly','Генеральной Ассамблеей')]: возврат территории «[SCOPE.sStateRegion('un_mandate_notice_region').GetName]». Это требование не стоит нам [Concept('concept_infamy','дурной славы')], и мандат теперь привязан к этой игре: перенести его в другую нельзя.\\n\\n#bold Чего мандат не охватывает:#! любых других требований к этой стране о территории, подчинении, смене режима или унижении. Добавление такого требования в эту игру #R аннулирует мандат#!: Ассамблея осудит нас, [concept_un_authority|l] упадёт, а выгоды нашего положения будут приостановлены на десять лет. Отступление от игры лишает мандата так же.\\n\\nДругие требования, такие как военные репарации или открытие рынков, допускаются по обычной цене."
+ },
+ "un_mandate.2.f": {
+  "en": "To our negotiators in the dispute with [SCOPE.sCountry('un_mandate_notice_target').GetName], from the government. The Assembly's mandate covers one demand only: [SCOPE.sStateRegion('un_mandate_notice_region').GetName]. You may ask for money or for trade terms as you see fit, at their usual price. You may not ask for any other land, for the other side to become our subject, for a change in its government or for its humiliation, and you may not accept any of these if they are offered as part of a settlement. Any one of them voids the mandate, and the Assembly's censure falls on us. If you are unsure whether a term is covered, send it to us before you raise it.",
+  "ru": "Нашим переговорщикам в споре со страной [SCOPE.sCountry('un_mandate_notice_target').GetName] от правительства. Мандат Ассамблеи охватывает только одно требование: «[SCOPE.sStateRegion('un_mandate_notice_region').GetName]». Деньги или торговые условия вы можете просить по своему усмотрению, по обычной цене. Нельзя просить никакой другой земли, подчинения другой стороны нам, смены её правительства или её унижения, и нельзя соглашаться на что-либо из этого, если это предложено в составе урегулирования. Любое из них аннулирует мандат, и осуждение Ассамблеи ляжет на нас. Если вы не уверены, охвачено ли условие, пришлите его нам, прежде чем выдвигать."
+ },
+ "un_mandate.2.t": {
+  "en": "The Mandate Invoked",
+  "ru": "Мандат задействован"
+ },
+ "un_referendum.1.a": {
+  "en": "Open the polling stations.",
+  "ru": "Открыть избирательные участки."
+ },
+ "un_referendum.1.b": {
+  "en": "We will not put our union to a vote.",
+  "ru": "Мы не станем выносить наш союз на голосование."
+ },
+ "un_referendum.1.d": {
+  "en": "The General Assembly has ordered us to let [SCOPE.sCountry('un_ref_subject').GetName] vote on its independence, under the chamber's supervision. We can open the polling stations and accept the count, whatever it says, or refuse and answer for it before the Assembly.",
+  "ru": "Генеральная Ассамблея приказала нам позволить стране [SCOPE.sCountry('un_ref_subject').GetName] проголосовать за независимость под надзором палаты. Мы можем открыть избирательные участки и принять результат подсчёта, каким бы он ни был, либо отказаться и ответить за это перед Ассамблеей."
+ },
+ "un_referendum.1.d_accepted": {
+  "en": "We voted for the Assembly's resolution, and it has carried: [SCOPE.sCountry('un_ref_subject').GetName] will vote on its independence under the chamber's supervision. Having accepted the order, we cannot refuse it now. All that is left is to open the polling stations and accept the count.",
+  "ru": "Мы проголосовали за резолюцию Ассамблеи, и она принята: страна [SCOPE.sCountry('un_ref_subject').GetName] проголосует за независимость под надзором палаты. Приняв приказ, мы не можем теперь отказаться. Остаётся лишь открыть избирательные участки и принять результат подсчёта."
+ },
+ "un_referendum.1.f": {
+  "en": "To the government, from the head of the Assembly's observer mission for the referendum in [SCOPE.sCountry('un_ref_subject').GetName]. We ask for four things before the vote. We need access to every polling station on the day, without notice, so that no station can be prepared for our visit. The question on the ballot must be agreed by both sides, so that neither can say afterwards it was misled. Each box must be counted where it was filled, in front of both sides' agents. And the papers must stay sealed in our keeping until the result is certified, so that any recount is of the same papers. We ask the government to name an official we may deal with, and to tell us whether the vote will be held.",
+  "ru": "Правительству от главы миссии наблюдателей Ассамблеи за референдумом в стране [SCOPE.sCountry('un_ref_subject').GetName]. Перед голосованием мы просим о четырёх вещах. Нам нужен доступ на каждый избирательный участок в день голосования, без предупреждения, чтобы ни один участок не успел подготовиться к нашему визиту. Вопрос в бюллетене должен быть согласован обеими сторонами, чтобы ни одна не могла потом сказать, что её ввели в заблуждение. Каждая урна должна считаться там, где её заполняли, в присутствии представителей обеих сторон. А бумаги должны оставаться опечатанными у нас до заверения результата, чтобы любой пересчёт шёл по тем же бумагам. Просим правительство назвать чиновника, с которым нам иметь дело, и сообщить, состоится ли голосование."
+ },
+ "un_referendum.1.t": {
+  "en": "A Referendum Ordered",
+  "ru": "Референдум назначен"
+ },
+ "un_referendum.2.a": {
+  "en": "A new flag on the map.",
+  "ru": "Новый флаг на карте."
+ },
+ "un_referendum.2.d_proposer": {
+  "en": "The referendum we moved in [SCOPE.sCountry('un_ref_subject').GetName] has been held under the Assembly's supervision, and its people voted to leave [SCOPE.sCountry('un_ref_overlord').GetName]. [SCOPE.sCountry('un_ref_subject').GetName] is independent.",
+  "ru": "Референдум, который мы предложили в стране [SCOPE.sCountry('un_ref_subject').GetName], прошёл под надзором Ассамблеи, и её народ проголосовал за выход из состава страны [SCOPE.sCountry('un_ref_overlord').GetName]. Страна [SCOPE.sCountry('un_ref_subject').GetName] независима."
+ },
+ "un_referendum.2.d_subject": {
+  "en": "The count is in, and the observers have signed it: we voted to leave [SCOPE.sCountry('un_ref_overlord').GetName]. We are independent.",
+  "ru": "Подсчёт завершён, и наблюдатели его подписали: мы проголосовали за выход из состава страны [SCOPE.sCountry('un_ref_overlord').GetName]. Мы независимы."
+ },
+ "un_referendum.2.f": {
+  "en": "In the counting hall in [SCOPE.sCountry('un_ref_subject').GetName]'s capital, the observers worked through the night beside the local clerks, one table to a district. Each box was opened in front of both sides' agents, and each pile was counted twice. The last district's sheet came in after dawn. The head of the mission added the columns herself and passed the total to the chief clerk, who read it to the hall: the vote was to leave, and by how much. The agents for the other side asked for copies of every district's sheet. The mission gave them copies and began packing the sealed papers into crates for its archive.",
+  "ru": "В зале подсчёта в столице страны [SCOPE.sCountry('un_ref_subject').GetName] наблюдатели работали всю ночь рядом с местными клерками, по одному столу на округ. Каждую урну вскрывали в присутствии представителей обеих сторон, и каждую стопку считали дважды. Ведомость последнего округа пришла после рассвета. Глава миссии сама сложила столбцы и передала итог старшему клерку, который зачитал его залу: голосовали за выход, и вот с каким перевесом. Представители другой стороны попросили копии ведомостей каждого округа. Миссия выдала им копии и начала укладывать опечатанные бумаги в ящики для своего архива."
+ },
+ "un_referendum.2.t": {
+  "en": "Independence by Referendum",
+  "ru": "Независимость по итогам референдума"
+ },
+ "un_referendum.3.a": {
+  "en": "The people have spoken.",
+  "ru": "Народ высказался."
+ },
+ "un_referendum.3.d_proposer": {
+  "en": "The referendum we moved in [SCOPE.sCountry('un_ref_subject').GetName] has been held under the Assembly's supervision, and its people voted to stay with [SCOPE.sCountry('un_ref_overlord').GetName]. The chamber counts the vote held as its order obeyed.",
+  "ru": "Референдум, который мы предложили в стране [SCOPE.sCountry('un_ref_subject').GetName], прошёл под надзором Ассамблеи, и её народ проголосовал за то, чтобы остаться в составе страны [SCOPE.sCountry('un_ref_overlord').GetName]. Палата считает проведённое голосование исполнением своего приказа."
+ },
+ "un_referendum.3.d_subject": {
+  "en": "The count is in, and the observers have signed it: we voted to stay with [SCOPE.sCountry('un_ref_overlord').GetName]. The question has been asked and answered, and our people's wish to leave has fallen with it.",
+  "ru": "Подсчёт завершён, и наблюдатели его подписали: мы проголосовали за то, чтобы остаться в составе страны [SCOPE.sCountry('un_ref_overlord').GetName]. Вопрос задан и решён, а желание нашего народа уйти рухнуло вместе с ним."
+ },
+ "un_referendum.3.f": {
+  "en": "\\\"I campaigned for leaving, and I was one of our side's agents at the count. I stood at the table where they opened our district's boxes, and I watched every paper go onto its pile. Nobody touched a paper who should not have. Across the country more of our neighbors voted to stay than to go, and I have seen the sheets for every district. I do not like the result. I came here to say so to the people who worked with me, and to say that I signed the sheet, because the observers asked both sides to sign and I promised at the start that I would.\\\"",
+  "ru": "«Я агитировал за выход и был одним из представителей нашей стороны при подсчёте. Я стоял у стола, где вскрывали урны нашего округа, и следил, как каждая бумага ложится в свою стопку. К бумагам не прикасался никто из тех, кому не следовало. По всей стране больше наших соседей проголосовало за то, чтобы остаться, чем за то, чтобы уйти, и я видел ведомости каждого округа. Мне не нравится результат. Я пришёл сказать это тем, кто работал со мной, и сказать, что я подписал ведомость, потому что наблюдатели попросили обе стороны подписать, а я в самом начале пообещал это»."
+ },
+ "un_referendum.3.t": {
+  "en": "The Union Holds",
+  "ru": "Союз устоял"
+ },
+ "un_referendum.4.a": {
+  "en": "The world has seen it.",
+  "ru": "Мир это видел."
+ },
+ "un_referendum.4.d_proposer": {
+  "en": "[SCOPE.sCountry('un_ref_overlord').GetName] has refused the referendum the General Assembly ordered in [SCOPE.sCountry('un_ref_subject').GetName]. The chamber records it as defiance of a binding order.",
+  "ru": "Страна [SCOPE.sCountry('un_ref_overlord').GetName] отказалась проводить референдум, который Генеральная Ассамблея приказала провести в стране [SCOPE.sCountry('un_ref_subject').GetName]. Палата фиксирует это как неповиновение обязательному приказу."
+ },
+ "un_referendum.4.d_subject": {
+  "en": "[SCOPE.sCountry('un_ref_overlord').GetName] has refused the vote the General Assembly ordered. There will be no polling stations and no observers. More of our people want to leave than before.",
+  "ru": "Страна [SCOPE.sCountry('un_ref_overlord').GetName] отказалась от голосования, которое приказала провести Генеральная Ассамблея. Ни избирательных участков, ни наблюдателей не будет. Среди нашего народа больше тех, кто хочет уйти, чем раньше."
+ },
+ "un_referendum.4.f": {
+  "en": "In [SCOPE.sCountry('un_ref_subject').GetName], on the day the refusal was announced, people talked in the queues and on their doorsteps.\\n\\n\\\"The list of voters was pinned up inside the school gate. Somebody has taken it down already.\\\"\\n\\n\\\"The Assembly ordered the vote. Everyone has heard that. So what is the Assembly, if a government can tell it no?\\\"\\n\\n\\\"My mother told me she would have voted to stay. This morning she says she would vote to leave, if anyone ever asks her.\\\"\\n\\n\\\"I had arranged to close the shop on polling day so that the staff could vote. I have told them they can have the day off anyway.\\\"",
+  "ru": "В стране [SCOPE.sCountry('un_ref_subject').GetName] в день, когда объявили об отказе, люди переговаривались в очередях и на порогах.\\n\\n«Список избирателей был приколот у школьных ворот. Кто-то уже его снял».\\n\\n«Ассамблея приказала провести голосование. Это все слышали. Так что такое Ассамблея, если правительство может ей отказать?»\\n\\n«Мать говорила мне, что проголосовала бы за то, чтобы остаться. Сегодня утром она говорит, что проголосовала бы за выход, если бы её кто-нибудь спросил».\\n\\n«Я договорился закрыть лавку в день голосования, чтобы работники могли проголосовать. Я сказал им, что выходной у них всё равно будет»."
+ },
+ "un_referendum.4.t": {
+  "en": "The Referendum Refused",
+  "ru": "Референдум отклонён"
+ },
+ "un_vote.1.a": {
+  "en": "We vote in favor.",
+  "ru": "Мы голосуем за."
+ },
+ "un_vote.1.a_target": {
+  "en": "We accept the resolution.",
+  "ru": "Мы принимаем резолюцию."
+ },
+ "un_vote.1.b": {
+  "en": "We vote against.",
+  "ru": "Мы голосуем против."
+ },
+ "un_vote.1.b_target": {
+  "en": "We refuse the resolution.",
+  "ru": "Мы отвергаем резолюцию."
+ },
+ "un_vote.1.d": {
+  "en": "A resolution has been proposed to the General Assembly. All member states are called upon to cast their vote.",
+  "ru": "Генеральной Ассамблее предложена резолюция. Всем государствам-членам предлагается отдать свой голос."
+ },
+ "un_vote.1.d_aid_request": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly for international humanitarian aid. A vote in favor commits member nations to provide aid and resources.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею о международной гуманитарной помощи. Голосование «за» обязывает государства-члены предоставить помощь и ресурсы."
+ },
+ "un_vote.1.d_antarctic": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed an Antarctic Treaty: the continent set aside for science, closed to weapons and to mining. A vote in favor commits our country to it: its parties hold no new Southern seabed licenses, share their stations' science, and add to the UN's authority.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Договор об Антарктике: континент отводится науке и закрыт для оружия и добычи. Голосование «за» обязывает нашу страну: его участники не получают новых лицензий на морское дно Южного океана, делятся наукой своих станций и повышают авторитет ООН."
+ },
+ "un_vote.1.d_arms_embargo": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to impose an arms embargo on [SCOPE.sCountry('un_vote_target').GetName]. Its record gives the Assembly grounds, and its wars are the reason: cut off from the world's rifles, shells and aircraft, it would find them harder to wage. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею ввести эмбарго на поставки оружия в страну [SCOPE.sCountry('un_vote_target').GetName]. Её послужной список даёт Ассамблее основания, а причина — её войны: отрезанной от мировых винтовок, снарядов и самолётов, ей было бы труднее их вести. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_arms_embargo_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to impose an arms embargo on us. If it carries, our trade in every military good will suffer for ten years and our armies will cost more to keep. We may fight the resolution, or vote for it and accept a voluntary embargo, at half the penalty and for half as long, in place of the full one.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею ввести против нас эмбарго на поставки оружия. Если оно будет принято, наша торговля всеми военными товарами пострадает на десять лет, а содержание наших армий подорожает. Мы можем бороться с резолюцией или проголосовать за неё и принять добровольное эмбарго — с половинным штрафом и вдвое короче — вместо полного."
+ },
+ "un_vote.1.d_asat": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a moratorium on destructive anti-satellite tests. A vote in favor commits our country to it: a strike of our own would cost us twice the infamy and twice the case, our standing in the world would rise, and our debris removal would count toward the UN's delivery.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила мораторий на разрушительные противоспутниковые испытания. Голосование «за» обязывает нашу страну: собственный удар обошёлся бы нам вдвое дороже по дурной славе и по весомости дела, наш вес в мире вырос бы, а наша уборка мусора засчитывалась бы в результативность ООН."
+ },
+ "un_vote.1.d_ceasefire": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire in the war it started against [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName], a member of this chamber. The order would bind: for two years, every month of fighting would cost the aggressor support for the war at home. No one would impose a peace. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приказать стране [SCOPE.sCountry('un_vote_target').GetName] прекратить огонь в войне, которую она начала против страны [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName], члена этой палаты. Приказ был бы обязательным: два года каждый месяц боёв стоил бы агрессору поддержки войны внутри страны. Мир никто навязывать не стал бы. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_ceasefire_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order us to cease fire in our war against [ROOT.GetCountry.MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName]. If it carries, every month we fight on will cost us support for the war at home. To vote against is to deny the charge. To vote in favor is to accept the verdict, and to be told to stop rather than censured.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приказать нам прекратить огонь в нашей войне против страны [ROOT.GetCountry.MakeScope.Var('un_cf_named_victim_capital').GetState.GetCountry.GetName]. Если приказ будет принят, каждый месяц, что мы продолжаем воевать, будет стоить нам поддержки войны внутри страны. Голосовать против — значит отрицать обвинение. Голосовать за — значит принять вердикт, и нам велят остановиться, а не осудят."
+ },
+ "un_vote.1.d_climate": {
+  "en": "The General Assembly has received a proposal for a binding Climate Accord from [SCOPE.sCountry('un_vote_proposer').GetName]. A vote in favor commits our country to its terms: the leaders of the markets that put out the most [concept_greenhouse_gas_emissions] must cut them, and the parties that lead no such market are helped to adapt.",
+  "ru": "Генеральная Ассамблея получила от страны [SCOPE.sCountry('un_vote_proposer').GetName] предложение об обязательном Климатическом соглашении. Голосование «за» обязывает нашу страну к его условиям: лидеры рынков с наибольшими [Concept('concept_greenhouse_gas_emissions','выбросами парниковых газов')] должны их сократить, а участникам, не возглавляющим такого рынка, помогут адаптироваться."
+ },
+ "un_vote.1.d_colony_protection": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a convention on the settlement of outer space. A vote in favor commits our country to it: destroying a colony, or closing in on a free one, would cost us twice the infamy and twice the case, and our standing in the world would rise.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила конвенцию о заселении космического пространства. Голосование «за» обязывает нашу страну: уничтожение колонии или посягательство на свободную обошлись бы нам вдвое дороже по дурной славе и по весомости дела, а наш вес в мире вырос бы."
+ },
+ "un_vote.1.d_condemn": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for the formal condemnation of [SCOPE.sCountry('un_vote_target').GetName] for its military aggression. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла в Генеральную Ассамблею резолюцию с призывом официально осудить страну [SCOPE.sCountry('un_vote_target').GetName] за военную агрессию. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_condemn_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for the formal condemnation of [ROOT.GetCountry.GetName] for our military aggression. We may vote against it and deny the charge. Or we may vote for it and accept the censure: if it carries, we escape the full condemnation, but accepting costs us prestige abroad and some approval at home.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла в Генеральную Ассамблею резолюцию с призывом официально осудить страну [ROOT.GetCountry.GetName] за нашу военную агрессию. Мы можем проголосовать против и отрицать обвинение. Или проголосовать за и принять порицание: если резолюция будет принята, мы избежим полного осуждения, но это обойдётся нам в престиже за рубежом и в некотором одобрении внутри страны."
+ },
+ "un_vote.1.d_court_referral": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to send its claim on [GetGlobalVariable('un_court_tabled_state').GetState.GetName], held by [SCOPE.sCountry('un_vote_target').GetName], to the [concept_un_world_court]. The court would weigh who lives in the state, whose homeland it is and whether it has been incorporated, and both parties' standing and records. Today it would find for the claimant with odds of #v [GetGlobalVariable('un_court_tabled_odds').GetValue|0]%#!. Its ruling would bind the loser: the holder to cede the state or defy the court, the claimant to give up its claim. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею передать её претензию на область [GetGlobalVariable('un_court_tabled_state').GetState.GetName], которой владеет страна [SCOPE.sCountry('un_vote_target').GetName], во [Concept('concept_un_world_court','Всемирный суд')]. Суд оценил бы, кто живёт в области, чья она историческая родина и включена ли она, а также авторитет и послужной список обеих сторон. Сегодня он вынес бы решение в пользу истца с вероятностью #v [GetGlobalVariable('un_court_tabled_odds').GetValue|0]%#!. Его решение обязало бы проигравшего: владельца — уступить область или бросить вызов суду, истца — отказаться от претензии. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_court_referral_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to send its claim on our state of [GetGlobalVariable('un_court_tabled_state').GetState.GetName] to the [concept_un_world_court]. If the referral carries, the court rules about a month after the vote, and today it would find against us with odds of #v [GetGlobalVariable('un_court_tabled_odds').GetValue|0]%#!. A ruling against us would leave two choices: cede the state, or defy the court before the world. A ruling for us would end the claim for twenty years.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею передать её претензию на нашу область [GetGlobalVariable('un_court_tabled_state').GetState.GetName] во [Concept('concept_un_world_court','Всемирный суд')]. Если передача будет принята, суд вынесет решение примерно через месяц после голосования, и сегодня он вынес бы решение против нас с вероятностью #v [GetGlobalVariable('un_court_tabled_odds').GetValue|0]%#!. Решение против нас оставило бы два пути: уступить область или бросить вызов суду на глазах у мира. Решение в нашу пользу закрыло бы претензию на двадцать лет."
+ },
+ "un_vote.1.d_credentials": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to suspend the credentials of [SCOPE.sCountry('un_vote_target').GetName]'s delegation. Its record gives the Assembly grounds. If two thirds of the members with a vote agree, [SCOPE.sCountry('un_vote_target').GetName] keeps its membership and its dues but loses its voice: no vote, no motions, no benefits of membership and no permanent seat, for five years or until its record improves. No veto can save it. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приостановить полномочия делегации страны [SCOPE.sCountry('un_vote_target').GetName]. Её послужной список даёт Ассамблее основания. Если две трети членов с правом голоса согласятся, страна [SCOPE.sCountry('un_vote_target').GetName] сохранит членство и взносы, но лишится голоса: ни голосования, ни предложений, ни выгод членства, ни постоянного места — на пять лет или пока её послужной список не улучшится. Вето её не спасёт. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_credentials_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] asks the General Assembly to suspend our delegation's credentials. If two thirds of the members with a vote agree, we stay a member and go on paying our dues, but we lose our voice: no vote, no motions, no benefits of membership and no permanent seat, for five years or until our record improves. No veto can save us. We may fight the motion, or vote for it and own the charge, which costs us half the standing.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приостановить полномочия нашей делегации. Если две трети членов с правом голоса согласятся, мы останемся членами и продолжим платить взносы, но лишимся голоса: ни голосования, ни предложений, ни выгод членства, ни постоянного места — на пять лет или пока наш послужной список не улучшится. Вето нас не спасёт. Мы можем бороться с предложением или проголосовать за него и признать обвинение, что обойдётся нам в половину потери авторитета."
+ },
+ "un_vote.1.d_cultural_diversity": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on Cultural Diversity. A vote in favor commits our country to protect the cultures of its minorities: they would assimilate more slowly and keep their homelands longer, and the world's leading culture would weigh less on our government. The leading power itself would give up part of its reach.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Конвенцию о культурном разнообразии. Голосование «за» обязывает нашу страну защищать культуры своих меньшинств: они ассимилировались бы медленнее и дольше сохраняли бы свою историческую родину, а ведущая культура мира меньше давила бы на наше правительство. Сама ведущая держава отказалась бы от части своего влияния."
+ },
+ "un_vote.1.d_decolonization": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a [concept_decolonization_system] resolution before the General Assembly, calling on all administering powers to take immediate steps to transfer power to the peoples of non-self-governing territories. A vote in favor declares our support for the right of all peoples to self-determination.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла в Генеральную Ассамблею резолюцию о [Concept('concept_decolonization_system','деколонизации')], призывающую все управляющие державы немедленно принять меры для передачи власти народам несамоуправляющихся территорий. Голосование «за» заявляет о нашей поддержке права всех народов на самоопределение."
+ },
+ "un_vote.1.d_development_fund": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has moved that the General Assembly found a World Development Fund, to pay the members whose GDP per head is furthest below the members' average, shared by their population, into their investment pools. It would pay out the members' contributions to UN development programs and, once the charter is reformed, a share of the UN budget: under the founding charter only the contributions, to members below a tenth of the average; after Charter Reform I, 5% of the budget as well, below a quarter; after Reform II, a quarter of the budget, below half. The poorer members would gain. The richer members pay most of the dues that fund it and would receive nothing back, and the lending facility would have less to lend.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Генеральной Ассамблее учредить Всемирный фонд развития, который выплачивал бы членам, у которых ВВП на душу населения дальше всего ниже среднего по членам, пропорционально их населению, средства в их инвестиционные пулы. Он выплачивал бы взносы членов в Программы развития ООН и, после реформы Устава, долю бюджета ООН: по учредительному Уставу — только взносы, членам с показателем ниже десятой части среднего; после Реформы Устава I — ещё и 5% бюджета, при показателе ниже четверти; после Реформы II — четверть бюджета, при показателе ниже половины. Бедные члены выиграли бы. Богатые члены платят большую часть взносов, которые его финансируют, и ничего бы не получили взамен, а у кредитного механизма осталось бы меньше средств для выдачи займов."
+ },
+ "un_vote.1.d_expulsion": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has put a motion before the General Assembly calling for the expulsion of [SCOPE.sCountry('un_vote_target').GetName] from the [concept_un_security_council]. The motion cites recent abuses of the [concept_un_veto] and demands that [SCOPE.sCountry('un_vote_target').GetName] forfeit its [concept_un_permanent_member] seat. As a non-vetoable [concept_un_resolution_recommendatory], the motion requires a #G 2/3 supermajority#! to pass.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла на рассмотрение Генеральной Ассамблеи предложение об исключении страны [SCOPE.sCountry('un_vote_target').GetName] из [Concept('concept_un_security_council','Совета Безопасности')]. В предложении приводятся недавние злоупотребления [Concept('concept_un_veto','вето')], и оно требует, чтобы страна [SCOPE.sCountry('un_vote_target').GetName] лишилась места [Concept('concept_un_permanent_member','постоянного члена')]. Как [Concept('concept_un_resolution_recommendatory','рекомендательная резолюция')], не подлежащая вето, предложение требует для принятия #G квалифицированного большинства в 2/3#!."
+ },
+ "un_vote.1.d_expulsion_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has put a motion before the General Assembly calling for our expulsion from the [concept_un_security_council], citing our use of the [concept_un_veto]. It needs a #G 2/3 supermajority#! of the members with a vote, and no member presumes in its favor: each weighs our veto record against our standing and our service to the United Nations. The General Assembly's Delegations list, on the UN tab of the Diplomacy panel, shows where they lean.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла на рассмотрение Генеральной Ассамблеи предложение об исключении нас из [Concept('concept_un_security_council','Совета Безопасности')], ссылаясь на наше использование [Concept('concept_un_veto','вето')]. Для него нужно #G квалифицированное большинство в 2/3#! членов с правом голоса, и ни один член заранее не исходит из его принятия: каждый взвешивает нашу историю вето против нашего авторитета и нашей службы Организации Объединённых Наций. Список делегаций Генеральной Ассамблеи на вкладке ООН панели «Дипломатия» показывает, к чему они склоняются."
+ },
+ "un_vote.1.d_food_reserve": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has moved that the General Assembly found a World Food Reserve. Members with a Strategic Reserve could pledge part of their grain to it, and every new UN aid mission would draw on the pledges to feed the state it serves. The UN would also answer for hunger: while the Reserve stands, famine among the members' people would weigh on its authority, and the absence of famine would add to it.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Генеральной Ассамблее учредить Всемирный продовольственный резерв. Члены со Стратегическим резервом могли бы пообещать ему часть своего зерна, и каждая новая миссия помощи ООН опиралась бы на эти обещания, чтобы кормить область, которой она служит. ООН также отвечала бы за голод: пока Резерв существует, голод среди людей членов ложился бы на её авторитет, а отсутствие голода повышало бы его."
+ },
+ "un_vote.1.d_heritage": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the establishment of an international cultural heritage program to protect and preserve sites of outstanding universal value. A vote in favor commits our country to participate in the conservation effort.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила создать международную программу культурного наследия для защиты и сохранения объектов выдающейся всемирной ценности. Голосование «за» обязывает нашу страну участвовать в работе по сохранению."
+ },
+ "un_vote.1.d_human_rights": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Universal Declaration of Human Rights to the General Assembly, establishing fundamental freedoms as the common standard for all peoples and nations. A vote in favor means our country ratifies the declaration and commits to upholding its principles. Parties that hold laws it condemns, or run coercive resettlement programs at home, will be penalized for it.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Генеральной Ассамблее Всеобщую декларацию прав человека, устанавливающую основные свободы как общий стандарт для всех народов и наций. Голосование «за» означает, что наша страна ратифицирует декларацию и обязуется соблюдать её принципы. Участники, у которых действуют осуждаемые ею законы или которые проводят принудительные программы переселения внутри страны, будут за это наказаны."
+ },
+ "un_vote.1.d_icc": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the Rome Statute establishing a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. A vote in favor submits our military and political leadership to international criminal jurisdiction.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Римский статут о создании постоянного Международного уголовного суда с юрисдикцией над геноцидом, военными преступлениями и преступлениями против человечности. Голосование «за» подчиняет наше военное и политическое руководство международной уголовной юрисдикции."
+ },
+ "un_vote.1.d_law_of_sea": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Law of the Sea, establishing territorial waters, exclusive economic zones, and international maritime law. A vote in favor commits our country to its terms: cheaper ports and readier relations for every party, and less glory from their fleets for the great powers.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Конвенцию по морскому праву, устанавливающую территориальные воды, исключительные экономические зоны и международное морское право. Голосование «за» обязывает нашу страну к её условиям: порты дешевле и отношения легче для каждого участника, а великие державы получают меньше славы от своих флотов."
+ },
+ "un_vote.1.d_lift_sanctions": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has petitioned the General Assembly to lift the international sanctions imposed on it. If the petition carries, the sanctions end, and so do the embargoes the Assembly imposed with them. A vote in favor says the sanctions have served their purpose; a vote against keeps the pressure on.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] обратилась к Генеральной Ассамблее с ходатайством отменить наложенные на неё международные санкции. Если ходатайство будет удовлетворено, санкции прекратятся, как и эмбарго, введённые Ассамблеей вместе с ними. Голосование «за» означает, что санкции достигли своей цели; голосование «против» сохраняет давление."
+ },
+ "un_vote.1.d_lift_sanctions_enforcer": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has petitioned the General Assembly to lift the international sanctions we enforce against it. If the petition carries, the sanctions end, our role as their enforcer ends with them, and we may table sanctions again. A vote against keeps the pressure on.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] обратилась к Генеральной Ассамблее с ходатайством отменить международные санкции против неё, которые обеспечиваем мы. Если ходатайство будет удовлетворено, санкции прекратятся, наша роль их исполнителя закончится вместе с ними, и мы снова сможем вносить санкции. Голосование «против» сохраняет давление."
+ },
+ "un_vote.1.d_military_mandate": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize it, by name, to take territory it claims from [SCOPE.sCountry('un_vote_target').GetName], a state whose record gives the Assembly grounds. The resolution is narrow: one [concept_state_region], one claimant, one war. If it carries, the claimant may press that one claim in one [concept_diplomatic_play] without [concept_infamy]. If it fails or is vetoed, the claim can still be pressed as an ordinary war. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею поимённо разрешить ей забрать территорию, на которую она претендует, у страны [SCOPE.sCountry('un_vote_target').GetName] — государства, чей послужной список даёт Ассамблее основания. Резолюция узкая: один [Concept('concept_state_region','регион')], один истец, одна война. Если она будет принята, истец сможет предъявить эту единственную претензию в одной [Concept('concept_diplomatic_play','дипломатической игре')] без [Concept('concept_infamy','дурной славы')]. Если она не пройдёт или будет отклонена вето, претензию всё равно можно предъявить в обычной войне. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_military_mandate_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to authorize it, in the organization's name, to take territory we hold. If the mandate carries, it may press that claim against us in one [concept_diplomatic_play] without [concept_infamy]. We may vote like any other member, but our vote is only a vote: voting in favor accepts nothing on our behalf, and a carried mandate applies to us in full however we cast it.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею разрешить ей от имени организации забрать территорию, которой мы владеем. Если мандат будет принят, она сможет предъявить эту претензию против нас в одной [Concept('concept_diplomatic_play','дипломатической игре')] без [Concept('concept_infamy','дурной славы')]. Мы можем голосовать, как любой другой член, но наш голос — лишь голос: голосование «за» ничего не принимает от нашего имени, а принятый мандат применяется к нам в полной мере, как бы мы ни проголосовали."
+ },
+ "un_vote.1.d_narcotics": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed the Single Convention on Narcotic Drugs. Parties would license medical production and impose plantation quotas: lower Opium Plantation throughput, higher Pharmaceutical Industries throughput, and greater prestige. The terms scale with [concept_un_enforcement].",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Единую конвенцию о наркотических средствах. Участники лицензировали бы медицинское производство и вводили бы квоты на плантации: ниже производительность опиумных плантаций, выше производительность Фармацевтической промышленности и больше престиж. Условия зависят от [Concept('concept_un_enforcement','принуждения ООН')]."
+ },
+ "un_vote.1.d_npt": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought the Nuclear Non-Proliferation Treaty before the General Assembly. A vote in favor commits [ROOT.GetCountry.GetName] to the treaty's terms: accepting international inspections of any nuclear program, in return for a security guarantee to those without the bomb.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла в Генеральную Ассамблею Договор о нераспространении ядерного оружия. Голосование «за» обязывает страну [ROOT.GetCountry.GetName] к условиям договора: принять международные инспекции любой ядерной программы взамен на гарантии безопасности для тех, у кого нет бомбы."
+ },
+ "un_vote.1.d_nuclear_ban": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Treaty on the Prohibition of Nuclear Weapons. A vote in favor commits our country to it: a party that holds warheads keeps a fifth fewer every five years until it holds none, and a party without them may never build one.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Договор о запрещении ядерного оружия. Голосование «за» обязывает нашу страну: участник, обладающий боезарядами, каждые пять лет имеет на пятую часть меньше, пока не останется ни одного, а участник без них никогда не сможет их создать."
+ },
+ "un_vote.1.d_observer_request": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to send observers to its next election. The observers would be paid from the UN's budget and would stay until an election campaign has run its course. Their presence would steady the government and make foreign meddling in the vote harder to hide. A vote in favor puts the Assembly's name behind the honesty of that election.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею направить наблюдателей на её следующие выборы. Наблюдателям платили бы из бюджета ООН, и они оставались бы, пока не завершится избирательная кампания. Их присутствие укрепило бы правительство и затруднило бы скрыть иностранное вмешательство в голосование. Голосование «за» ставит имя Ассамблеи за честность этих выборов."
+ },
+ "un_vote.1.d_pandemic": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a resolution on pandemics: members would share their research and help one another when an outbreak comes. A vote in favor commits our country to work with the World Health Organization, which makes our health system cheaper to run.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила резолюцию о пандемиях: члены делились бы исследованиями и помогали бы друг другу при вспышке. Голосование «за» обязывает нашу страну сотрудничать со Всемирной организацией здравоохранения, что удешевляет содержание нашей системы здравоохранения."
+ },
+ "un_vote.1.d_peacekeeping_request": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has requested the deployment of [concept_un_peacekeeping] forces to stabilize its territory. The General Assembly must vote on whether to authorize the mission. A vote in favor commits contributing nations to deploy forces and bear the costs of the operation.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] запросила размещение сил [Concept('concept_un_peacekeeping','миротворчества ООН')] для стабилизации её территории. Генеральная Ассамблея должна проголосовать, санкционировать ли миссию. Голосование «за» обязывает страны-участницы направить силы и нести расходы на операцию."
+ },
+ "un_vote.1.d_physical_protection": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Convention on the Physical Protection of Nuclear Material. A vote in favor commits our country to guard, count and report its nuclear material to a common standard, and to search for its own warheads that have gone missing.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Конвенцию о физической защите ядерного материала. Голосование «за» обязывает нашу страну охранять, учитывать и отчитываться о своём ядерном материале по общему стандарту и искать собственные пропавшие боезаряды."
+ },
+ "un_vote.1.d_referendum": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order [SCOPE.sCountry('un_vote_target').GetName] to let [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] vote on its independence, under the chamber's supervision. The order would bind: the overlord could hold the vote or refuse it, and refusing would cost it dearly. A vote in favor stands with the right of peoples to decide their own future. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приказать стране [SCOPE.sCountry('un_vote_target').GetName] позволить стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] проголосовать за независимость под надзором палаты. Приказ был бы обязательным: сюзерен мог бы провести голосование или отказаться, а отказ обошёлся бы ему дорого. Голосование «за» — в поддержку права народов самим решать своё будущее. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_referendum_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order us to let [ROOT.GetCountry.MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] vote on its independence. If it carries, we must hold the vote or refuse it before the whole world. To vote in favor is to accept the referendum now, and it will then be held.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею приказать нам позволить стране [ROOT.GetCountry.MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] проголосовать за независимость. Если приказ будет принят, мы должны провести голосование или отказаться перед всем миром. Проголосовать «за» — значит принять референдум сейчас, и тогда он состоится."
+ },
+ "un_vote.1.d_reform": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has tabled a reform of the [concept_un_charter] that would raise the ceiling on the United Nations' [concept_un_authority]. It needs a two-thirds supermajority of all members, and any [concept_un_permanent_member] may [concept_un_veto] it outright. A higher ceiling lets the UN's authority rise further, and the penalties its resolutions carry with it, for us as for every member.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла реформу [Concept('concept_un_charter','Устава ООН')], которая подняла бы потолок [Concept('concept_un_authority','авторитета ООН')]. Для неё нужно квалифицированное большинство в две трети всех членов, а любой [Concept('concept_un_permanent_member','постоянный член')] может полностью заблокировать её, наложив [Concept('concept_un_veto','вето')]. Более высокий потолок позволяет авторитету ООН расти дальше, а вместе с ним и штрафам, которые несут её резолюции, — для нас, как и для каждого члена."
+ },
+ "un_vote.1.d_refugee": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought a resolution before the General Assembly calling for a coordinated international response to the refugee crisis. A vote in favor commits our country to its terms: every party draws more migrants, the richest take in the most, and the poorest are relieved.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] внесла в Генеральную Ассамблею резолюцию с призывом к скоординированному международному ответу на кризис беженцев. Голосование «за» обязывает нашу страну к её условиям: каждый участник привлекает больше мигрантов, самые богатые принимают больше всех, а самым бедным становится легче."
+ },
+ "un_vote.1.d_sanctions": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed international sanctions against [SCOPE.sCountry('un_vote_target').GetName] before the General Assembly. If they carry, [SCOPE.sCountry('un_vote_target').GetName] faces trade and diplomatic penalties until they are lifted, and [SCOPE.sCountry('un_vote_proposer').GetName] enforces them. How shall [ROOT.GetCountry.GetName] vote?",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Генеральной Ассамблее ввести международные санкции против страны [SCOPE.sCountry('un_vote_target').GetName]. Если они будут приняты, страна [SCOPE.sCountry('un_vote_target').GetName] столкнётся с торговыми и дипломатическими ограничениями, пока они не будут сняты, а страна [SCOPE.sCountry('un_vote_proposer').GetName] будет их обеспечивать. Как проголосует страна [ROOT.GetCountry.GetName]?"
+ },
+ "un_vote.1.d_sanctions_target": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed international sanctions against [ROOT.GetCountry.GetName] before the General Assembly. If they carry, we face trade and diplomatic penalties until they are lifted. We may vote against them, or vote for them and accept the censure: if they then carry, no sanctions are imposed, but accepting costs us prestige abroad and some approval at home.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила Генеральной Ассамблее ввести международные санкции против страны [ROOT.GetCountry.GetName]. Если они будут приняты, мы столкнёмся с торговыми и дипломатическими ограничениями, пока они не будут сняты. Мы можем проголосовать против или проголосовать за и принять порицание: если санкции тогда будут приняты, они не вводятся, но принятие обойдётся нам в престиже за рубежом и в некотором одобрении внутри страны."
+ },
+ "un_vote.1.d_space": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed an international space cooperation agreement, pooling resources and sharing research for the peaceful exploration of outer space. A vote in favor commits our country to its terms: the leader of the space race shares its progress with those far behind, and an armed station in orbit is condemned.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] предложила международное соглашение о космическом сотрудничестве, объединяющее ресурсы и делящееся исследованиями ради мирного освоения космоса. Голосование «за» обязывает нашу страну к его условиям: лидер космической гонки делится успехами с теми, кто далеко позади, а вооружённая станция на орбите осуждается."
+ },
+ "un_vote.1.d_standing_force": {
+  "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to found a Standing UN Force: a body of troops under the UN flag, held ready and paid from the UN's budget, so that the Assembly's peacekeepers no longer depend on whichever members choose to send a contingent. Every peacekeeping and stabilization mission would count it as one of its contributors. At the Supranational tier a member could press no war goal on a country such a mission serves beyond the one its play opens with, and that one would cost it twice the usual infamy. The great powers lose some freedom of action; the countries the missions protect gain a guarantee. A [concept_un_permanent_member] can block it outright.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_proposer').GetName] просит Генеральную Ассамблею учредить Постоянные силы ООН: войска под флагом ООН, готовые к действию и оплачиваемые из бюджета ООН, чтобы миротворцы Ассамблеи больше не зависели от тех членов, что решат направить контингент. Каждая миротворческая и стабилизационная миссия считала бы их одним из своих участников. На уровне «Надгосударственный» член не мог бы выдвинуть цель войны против страны, которой служит такая миссия, кроме той, с которой начинается её игра, и эта цель стоила бы вдвое больше обычной дурной славы. Великие державы теряют часть свободы действий; страны, которых защищают миссии, получают гарантию. [Concept('concept_un_permanent_member','Постоянный член')] может полностью её заблокировать."
+ },
+ "un_vote.1.f": {
+  "en": "In the corridor outside the General Assembly's chamber, in the last months before the ballot closes, the delegates talk.\\n\\n\\\"The sponsors have been to see us twice this month. Both times they brought a copy of the text and asked whether we had our instructions yet. We still do not.\\\"\\n\\n\\\"Count the delegations that have said how they will vote and you are nowhere near a majority either way. Most are waiting to see who moves first.\\\"\\n\\n\\\"My government asks me every week how it will go. Every week I tell it which delegations I have spoken to and what each of them said, and it asks me again the next week.\\\"\\n\\n\\\"The interpreters had the text in every working language before the debate opened. The booths were full for the speeches and half empty by the afternoon, when the delegates had gone out to talk among themselves.\\\"",
+  "ru": "В коридоре у зала Генеральной Ассамблеи, в последние месяцы до закрытия голосования, делегаты разговаривают.\\n\\n«Авторы приходили к нам дважды за месяц. Оба раза приносили копию текста и спрашивали, получили ли мы уже инструкции. Мы всё ещё не получили».\\n\\n«Сосчитайте делегации, которые сказали, как будут голосовать, и вы далеки от большинства в любую сторону. Большинство ждёт, кто двинется первым».\\n\\n«Моё правительство каждую неделю спрашивает, как всё пойдёт. Каждую неделю я рассказываю ему, с какими делегациями говорил и что сказала каждая, а на следующей неделе оно спрашивает снова».\\n\\n«У переводчиков текст был на каждом рабочем языке до начала прений. Кабины были полны на выступлениях и наполовину пусты к полудню, когда делегаты вышли поговорить между собой»."
+ },
+ "un_vote.1.later": {
+  "en": "We will decide later.",
+  "ru": "Мы решим позже."
+ },
+ "un_vote.1.t": {
+  "en": "A Question for the Assembly",
+  "ru": "Вопрос для Ассамблеи"
+ },
+ "un_vote.1.t_aid_request": {
+  "en": "Humanitarian Aid Request Vote",
+  "ru": "Голосование о просьбе о гуманитарной помощи"
+ },
+ "un_vote.1.t_antarctic": {
+  "en": "Antarctic Treaty Vote",
+  "ru": "Голосование по Договору об Антарктике"
+ },
+ "un_vote.1.t_arms_embargo": {
+  "en": "Arms Embargo Vote",
+  "ru": "Голосование об оружейном эмбарго"
+ },
+ "un_vote.1.t_asat": {
+  "en": "Anti-Satellite Moratorium Vote",
+  "ru": "Голосование по Противоспутниковому мораторию"
+ },
+ "un_vote.1.t_ceasefire": {
+  "en": "Binding Ceasefire Vote",
+  "ru": "Голосование об обязательном прекращении огня"
+ },
+ "un_vote.1.t_climate": {
+  "en": "Climate Accord Vote",
+  "ru": "Голосование по Климатическому соглашению"
+ },
+ "un_vote.1.t_colony_protection": {
+  "en": "Outer Space Settlement Convention Vote",
+  "ru": "Голосование по Конвенции о заселении космоса"
+ },
+ "un_vote.1.t_condemn": {
+  "en": "Condemnation Resolution Vote",
+  "ru": "Голосование по резолюции об осуждении"
+ },
+ "un_vote.1.t_court_referral": {
+  "en": "Referral to the World Court",
+  "ru": "Передача во Всемирный суд"
+ },
+ "un_vote.1.t_credentials": {
+  "en": "Credentials Vote",
+  "ru": "Голосование по полномочиям"
+ },
+ "un_vote.1.t_cultural_diversity": {
+  "en": "Cultural Diversity Vote",
+  "ru": "Голосование по культурному разнообразию"
+ },
+ "un_vote.1.t_decolonization": {
+  "en": "Decolonization Resolution Vote",
+  "ru": "Голосование по Резолюции о деколонизации"
+ },
+ "un_vote.1.t_development_fund": {
+  "en": "World Development Fund Vote",
+  "ru": "Голосование по Всемирному фонду развития"
+ },
+ "un_vote.1.t_expulsion": {
+  "en": "Motion to Expel a Permanent Member",
+  "ru": "Предложение об исключении постоянного члена"
+ },
+ "un_vote.1.t_food_reserve": {
+  "en": "World Food Reserve Vote",
+  "ru": "Голосование по Всемирному продовольственному резерву"
+ },
+ "un_vote.1.t_heritage": {
+  "en": "Cultural Heritage Program Vote",
+  "ru": "Голосование по Программе культурного наследия"
+ },
+ "un_vote.1.t_human_rights": {
+  "en": "Human Rights Declaration Vote",
+  "ru": "Голосование по Декларации прав человека"
+ },
+ "un_vote.1.t_icc": {
+  "en": "International Criminal Court Vote",
+  "ru": "Голосование по Международному уголовному суду"
+ },
+ "un_vote.1.t_law_of_sea": {
+  "en": "Convention on the Law of the Sea Vote",
+  "ru": "Голосование по Конвенции по морскому праву"
+ },
+ "un_vote.1.t_lift_sanctions": {
+  "en": "Lifting Sanctions Vote",
+  "ru": "Голосование об отмене санкций"
+ },
+ "un_vote.1.t_military_mandate": {
+  "en": "Authorized Military Mandate Vote",
+  "ru": "Голосование о санкционированном военном мандате"
+ },
+ "un_vote.1.t_narcotics": {
+  "en": "Single Convention on Narcotic Drugs Vote",
+  "ru": "Голосование по Единой конвенции о наркотических средствах"
+ },
+ "un_vote.1.t_npt": {
+  "en": "Non-Proliferation Treaty Vote",
+  "ru": "Голосование по Договору о нераспространении"
+ },
+ "un_vote.1.t_nuclear_ban": {
+  "en": "Prohibition of Nuclear Weapons Vote",
+  "ru": "Голосование о запрещении ядерного оружия"
+ },
+ "un_vote.1.t_observer_request": {
+  "en": "Electoral Observers Vote",
+  "ru": "Голосование о наблюдателях на выборах"
+ },
+ "un_vote.1.t_pandemic": {
+  "en": "Pandemic Response Vote",
+  "ru": "Голосование об ответе на пандемию"
+ },
+ "un_vote.1.t_peacekeeping_request": {
+  "en": "Peacekeeping Deployment Vote",
+  "ru": "Голосование о размещении миротворцев"
+ },
+ "un_vote.1.t_physical_protection": {
+  "en": "Physical Protection of Nuclear Material Vote",
+  "ru": "Голосование по Физической защите ядерного материала"
+ },
+ "un_vote.1.t_referendum": {
+  "en": "Supervised Referendum Vote",
+  "ru": "Голосование о референдуме под надзором"
+ },
+ "un_vote.1.t_reform": {
+  "en": "Charter Reform Vote",
+  "ru": "Голосование по Реформе Устава"
+ },
+ "un_vote.1.t_refugee": {
+  "en": "International Refugee Resolution Vote",
+  "ru": "Голосование по Международной резолюции о беженцах"
+ },
+ "un_vote.1.t_sanctions": {
+  "en": "International Sanctions Vote",
+  "ru": "Голосование о международных санкциях"
+ },
+ "un_vote.1.t_space": {
+  "en": "Space Cooperation Resolution Vote",
+  "ru": "Голосование по Резолюции о космическом сотрудничестве"
+ },
+ "un_vote.1.t_standing_force": {
+  "en": "Standing UN Force Vote",
+  "ru": "Голосование по Постоянным силам ООН"
+ },
+ "un_vote.1.veto": {
+  "en": "Cast our [concept_un_veto] (block the binding form)",
+  "ru": "Наложить наше [Concept('concept_un_veto','вето')] (заблокировать обязательную форму)"
+ },
+ "un_vote.2.a": {
+  "en": "So it is decided.",
+  "ru": "Итак, решено."
+ },
+ "un_vote.2.d_aid_request_failed": {
+  "en": "The humanitarian aid request by [SCOPE.sCountry('un_vote_proposer').GetName] has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "ru": "Просьба страны [SCOPE.sCountry('un_vote_proposer').GetName] о гуманитарной помощи отклонена Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]."
+ },
+ "un_vote.2.d_aid_request_passed": {
+  "en": "The General Assembly has voted to authorize a humanitarian aid program for [SCOPE.sCountry('un_vote_proposer').GetName]. Member nations have committed to providing material assistance and resources. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "ru": "Генеральная Ассамблея проголосовала за программу гуманитарной помощи для страны [SCOPE.sCountry('un_vote_proposer').GetName]. Государства-члены обязались предоставить материальную помощь и ресурсы. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]."
+ },
+ "un_vote.2.d_antarctic_failed": {
+  "en": "The Antarctic Treaty has failed to pass the General Assembly. The Southern Ocean's seabed stays open to every claimant.",
+  "ru": "Договор об Антарктике не прошёл в Генеральной Ассамблее. Морское дно Южного океана остаётся открытым для всех претендентов."
+ },
+ "un_vote.2.d_antarctic_passed": {
+  "en": "The General Assembly has adopted the Antarctic Treaty and established the Antarctic Treaty Secretariat. Ratifying members keep the ice for science: no new Southern seabed licenses for any of them.",
+  "ru": "Генеральная Ассамблея приняла Договор об Антарктике и учредила Секретариат Договора об Антарктике. Ратифицировавшие члены оставляют лёд науке: ни у одного из них не будет новых лицензий на морское дно Южного океана."
+ },
+ "un_vote.2.d_arms_embargo_failed": {
+  "en": "The General Assembly has refused to embargo arms to [SCOPE.sCountry('un_vote_target').GetName]. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Its arsenals stay open to the world's sellers.",
+  "ru": "Генеральная Ассамблея отказалась вводить эмбарго на поставки оружия в страну [SCOPE.sCountry('un_vote_target').GetName]. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Её арсеналы остаются открытыми для мировых продавцов."
+ },
+ "un_vote.2.d_arms_embargo_passed": {
+  "en": "The General Assembly has imposed an arms embargo on [SCOPE.sCountry('un_vote_target').GetName], [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. For ten years its trade in arms and munitions is restricted, and every army it keeps costs more to supply.",
+  "ru": "Генеральная Ассамблея ввела эмбарго на поставки оружия в страну [SCOPE.sCountry('un_vote_target').GetName]: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Десять лет её торговля оружием и боеприпасами ограничена, а содержание каждой её армии обходится дороже."
+ },
+ "un_vote.2.d_arms_embargo_passed_vetoed": {
+  "en": "The Assembly carried the arms embargo, and a [concept_un_permanent_member] vetoed it in the [concept_un_security_council]. What remains is a voluntary embargo: [SCOPE.sCountry('un_vote_target').GetName]'s arms trade suffers half the penalty, for five years.",
+  "ru": "Ассамблея приняла эмбарго на поставки оружия, но [Concept('concept_un_permanent_member','постоянный член')] наложил на него вето в [Concept('concept_un_security_council','Совете Безопасности')]. Остаётся добровольное эмбарго: оружейная торговля страны [SCOPE.sCountry('un_vote_target').GetName] страдает вполовину меньше в течение пяти лет."
+ },
+ "un_vote.2.d_asat_failed": {
+  "en": "The Moratorium on Destructive Anti-Satellite Tests has failed to pass the General Assembly. Its terms do not take effect, and a destructive strike in orbit costs no more infamy than it did.",
+  "ru": "Мораторий на разрушительные противоспутниковые испытания не прошёл в Генеральной Ассамблее. Его условия не вступают в силу, и разрушительный удар на орбите стоит не больше дурной славы, чем прежде."
+ },
+ "un_vote.2.d_asat_passed": {
+  "en": "The General Assembly has adopted the Moratorium on Destructive Anti-Satellite Tests, under the UN Office for Disarmament Affairs. Ratifying members forswear the strikes that leave orbit strewn with debris.",
+  "ru": "Генеральная Ассамблея приняла Мораторий на разрушительные противоспутниковые испытания под началом Управления ООН по вопросам разоружения. Ратифицировавшие члены отказываются от ударов, после которых орбита усеяна обломками."
+ },
+ "un_vote.2.d_ceasefire_failed": {
+  "en": "The General Assembly has declined to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "ru": "Генеральная Ассамблея отказалась приказывать стране [SCOPE.sCountry('un_vote_target').GetName] прекратить огонь. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]."
+ },
+ "un_vote.2.d_ceasefire_passed": {
+  "en": "The General Assembly has ordered [SCOPE.sCountry('un_vote_target').GetName] to cease fire. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. For the next two years, every month it fights on against a member will cost it support for the war at home.",
+  "ru": "Генеральная Ассамблея приказала стране [SCOPE.sCountry('un_vote_target').GetName] прекратить огонь. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. В ближайшие два года каждый месяц её боёв против члена организации будет стоить ей поддержки войны внутри страны."
+ },
+ "un_vote.2.d_ceasefire_passed_vetoed": {
+  "en": "The General Assembly voted to order [SCOPE.sCountry('un_vote_target').GetName] to cease fire, but a [concept_un_veto] in the [concept_un_security_council] reduced the order to a call for one. The call binds no one: it lowers the aggressor's support for the war once, and nothing follows.",
+  "ru": "Генеральная Ассамблея проголосовала за приказ стране [SCOPE.sCountry('un_vote_target').GetName] прекратить огонь, но [Concept('concept_un_veto','вето')] в [Concept('concept_un_security_council','Совете Безопасности')] свело приказ к призыву. Призыв никого не обязывает: он один раз снижает поддержку войны у агрессора, и ничего больше не следует."
+ },
+ "un_vote.2.d_climate_failed": {
+  "en": "The proposed Climate Accord has failed to pass the General Assembly. Its terms do not take effect: no market leader is bound to cut its [concept_greenhouse_gas_emissions], and no party is helped to adapt.",
+  "ru": "Предложенное Климатическое соглашение не прошло в Генеральной Ассамблее. Его условия не вступают в силу: ни один лидер рынка не обязан сокращать свои [Concept('concept_greenhouse_gas_emissions','выбросы парниковых газов')], и никому не помогут адаптироваться."
+ },
+ "un_vote.2.d_climate_passed": {
+  "en": "The General Assembly has adopted the Climate Accord, and the UN Environment Programme is established. Its parties that lead the markets putting out the most [concept_greenhouse_gas_emissions] must cut them, and the parties that lead no such market are helped to adapt.",
+  "ru": "Генеральная Ассамблея приняла Климатическое соглашение, и учреждена Программа ООН по окружающей среде. Её участники, возглавляющие рынки с наибольшими [Concept('concept_greenhouse_gas_emissions','выбросами парниковых газов')], должны их сократить, а участникам, не возглавляющим такого рынка, помогут адаптироваться."
+ },
+ "un_vote.2.d_colony_protection_failed": {
+  "en": "The Convention on the Settlement of Outer Space has failed to pass the General Assembly. Its terms do not take effect, and destroying a colony costs no more infamy than it did.",
+  "ru": "Конвенция о заселении космического пространства не прошла в Генеральной Ассамблее. Её условия не вступают в силу, и уничтожение колонии стоит не больше дурной славы, чем прежде."
+ },
+ "un_vote.2.d_colony_protection_passed": {
+  "en": "The General Assembly has adopted the Convention on the Settlement of Outer Space, under the Committee on the Peaceful Uses of Outer Space. Ratifying members bind themselves to pay dearly for any colony their fleets destroy or any free colony they take.",
+  "ru": "Генеральная Ассамблея приняла Конвенцию о заселении космического пространства под началом Комитета по использованию космического пространства в мирных целях. Ратифицировавшие члены обязуются дорого платить за любую колонию, которую уничтожит их флот, или за любую свободную колонию, которую они захватят."
+ },
+ "un_vote.2.d_condemn_failed": {
+  "en": "The resolution to condemn [SCOPE.sCountry('un_vote_target').GetName] for its military aggression has failed to win a majority in the General Assembly. No condemnation is recorded against it.",
+  "ru": "Резолюция об осуждении страны [SCOPE.sCountry('un_vote_target').GetName] за военную агрессию не набрала большинства в Генеральной Ассамблее. Осуждение в её отношении не записано."
+ },
+ "un_vote.2.d_condemn_passed": {
+  "en": "The General Assembly has voted to formally condemn [SCOPE.sCountry('un_vote_target').GetName] for its military aggression. The condemnation goes on its record in the Assembly.",
+  "ru": "Генеральная Ассамблея проголосовала за официальное осуждение страны [SCOPE.sCountry('un_vote_target').GetName] за военную агрессию. Осуждение заносится в её послужной список в Ассамблее."
+ },
+ "un_vote.2.d_condemn_passed_vetoed": {
+  "en": "The General Assembly's condemnation of [SCOPE.sCountry('un_vote_target').GetName] carried by simple majority, but a [concept_un_veto] in the [concept_un_security_council] reduced it to a non-binding rebuke: a lighter mark on its record, which fades over five years.",
+  "ru": "Осуждение страны [SCOPE.sCountry('un_vote_target').GetName] Генеральной Ассамблеей принято простым большинством, но [Concept('concept_un_veto','вето')] в [Concept('concept_un_security_council','Совете Безопасности')] свело его к необязательному порицанию: более лёгкая отметка в её послужном списке, которая за пять лет стирается."
+ },
+ "un_vote.2.d_court_referral_failed": {
+  "en": "The General Assembly has refused to send our claim on [GetGlobalVariable('un_court_tabled_state').GetState.GetName] to the World Court. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The claim stands, and [SCOPE.sCountry('un_vote_target').GetName] keeps the state.",
+  "ru": "Генеральная Ассамблея отказалась передавать нашу претензию на область [GetGlobalVariable('un_court_tabled_state').GetState.GetName] во Всемирный суд. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Претензия остаётся в силе, а страна [SCOPE.sCountry('un_vote_target').GetName] сохраняет область."
+ },
+ "un_vote.2.d_court_referral_passed": {
+  "en": "The General Assembly has sent our claim on [GetGlobalVariable('un_court_tabled_state').GetState.GetName] to the World Court, [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. [SCOPE.sCountry('un_vote_target').GetName] must now answer to the judges, who will rule within a month.",
+  "ru": "Генеральная Ассамблея передала нашу претензию на область [GetGlobalVariable('un_court_tabled_state').GetState.GetName] во Всемирный суд: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Страна [SCOPE.sCountry('un_vote_target').GetName] теперь должна ответить перед судьями, которые вынесут решение в течение месяца."
+ },
+ "un_vote.2.d_court_referral_passed_vetoed": {
+  "en": "The Assembly carried the referral, and a [concept_un_permanent_member] vetoed it in the [concept_un_security_council]. The World Court will still hear the case, but its word will be an advisory opinion: whichever way it goes, [GetGlobalVariable('un_court_tabled_state').GetState.GetName] stays where it is.",
+  "ru": "Ассамблея приняла передачу, а [Concept('concept_un_permanent_member','постоянный член')] наложил на неё вето в [Concept('concept_un_security_council','Совете Безопасности')]. Всемирный суд всё же рассмотрит дело, но его слово будет консультативным заключением: чем бы оно ни закончилось, область [GetGlobalVariable('un_court_tabled_state').GetState.GetName] останется там, где была."
+ },
+ "un_vote.2.d_credentials_failed": {
+  "en": "The motion to suspend [SCOPE.sCountry('un_vote_target').GetName]'s credentials fell short of two thirds of the members with a vote: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] for, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against. Its delegation keeps its voice.",
+  "ru": "Предложение приостановить полномочия делегации страны [SCOPE.sCountry('un_vote_target').GetName] не набрало двух третей членов с правом голоса: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] за, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] против. Её делегация сохраняет голос."
+ },
+ "un_vote.2.d_credentials_passed": {
+  "en": "The General Assembly has voted to suspend the credentials of [SCOPE.sCountry('un_vote_target').GetName], [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Unless it has left the United Nations, or its record has already improved to a case strength below 30, its delegation keeps its chairs and pays its dues, but it will not vote or move a motion for five years, or until its record improves.",
+  "ru": "Генеральная Ассамблея проголосовала за приостановку полномочий страны [SCOPE.sCountry('un_vote_target').GetName]: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Если только она не вышла из Организации Объединённых Наций или её послужной список уже не улучшился до весомости дела ниже 30, её делегация сохраняет места и платит взносы, но пять лет или пока её послужной список не улучшится она не будет голосовать и вносить предложения."
+ },
+ "un_vote.2.d_cultural_diversity_failed": {
+  "en": "The Convention on Cultural Diversity has failed to pass the General Assembly. No country is bound by it to protect the cultures of its minorities.",
+  "ru": "Конвенция о культурном разнообразии не прошла в Генеральной Ассамблее. Ни одна страна не обязана ею защищать культуры своих меньшинств."
+ },
+ "un_vote.2.d_cultural_diversity_passed": {
+  "en": "The Convention on Cultural Diversity has been adopted by the General Assembly. Its parties will protect the languages and customs of their minorities, and the world's cultural hegemon, should it ratify, makes room for other cultures.",
+  "ru": "Конвенция о культурном разнообразии принята Генеральной Ассамблеей. Её участники будут защищать языки и обычаи своих меньшинств, а культурный гегемон мира, если ратифицирует её, уступит место другим культурам."
+ },
+ "un_vote.2.d_decolonization_failed": {
+  "en": "The [concept_decolonization_system] Resolution has failed to pass the General Assembly. The administering powers are under no new pressure from the Assembly to transfer power to the territories they hold.",
+  "ru": "Резолюция о [Concept('concept_decolonization_system','деколонизации')] не прошла в Генеральной Ассамблее. Управляющие державы не испытывают нового давления со стороны Ассамблеи, чтобы передать власть территориям, которыми владеют."
+ },
+ "un_vote.2.d_decolonization_passed": {
+  "en": "The General Assembly has adopted the [concept_decolonization_system] Resolution, declaring that power must pass to the peoples of non-self-governing territories. Every country that holds an overseas colony is now under pressure from the Assembly to let it go.",
+  "ru": "Генеральная Ассамблея приняла Резолюцию о [Concept('concept_decolonization_system','деколонизации')], объявив, что власть должна перейти к народам несамоуправляющихся территорий. Каждая страна, владеющая заморской колонией, теперь находится под давлением Ассамблеи, чтобы её отпустить."
+ },
+ "un_vote.2.d_development_fund_failed": {
+  "en": "The General Assembly has declined to found a World Development Fund. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The UN budget stays with the lending facility.",
+  "ru": "Генеральная Ассамблея отказалась учреждать Всемирный фонд развития. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Бюджет ООН остаётся за кредитным механизмом."
+ },
+ "un_vote.2.d_development_fund_passed": {
+  "en": "The General Assembly has founded the World Development Fund. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. From next month it pays the members furthest below the members' average GDP per head, from the members' contributions to UN development programs and, as the charter allows, a share of the UN budget. Under the charter as it stands, its line is #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the average, and each reform will raise it.",
+  "ru": "Генеральная Ассамблея учредила Всемирный фонд развития. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Со следующего месяца он выплачивает членам, у которых ВВП на душу населения дальше всего ниже среднего по членам, взносы членов в Программы развития ООН и, как позволяет Устав, долю бюджета ООН. По Уставу в нынешнем виде его порог составляет #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! от среднего, и каждая реформа будет его повышать."
+ },
+ "un_vote.2.d_expulsion_failed": {
+  "en": "The motion to expel [SCOPE.sCountry('un_vote_target').GetName] fell short of the required #G 2/3 supermajority#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] for, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against. [SCOPE.sCountry('un_vote_target').GetName] keeps its seat, and its relations with us have worsened.",
+  "ru": "Предложение об исключении страны [SCOPE.sCountry('un_vote_target').GetName] не набрало необходимого #G квалифицированного большинства в 2/3#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] за, [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] против. Страна [SCOPE.sCountry('un_vote_target').GetName] сохраняет место, а её отношения с нами ухудшились."
+ },
+ "un_vote.2.d_expulsion_passed": {
+  "en": "The motion has carried by [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0], the #G 2/3 supermajority#! it needed. [SCOPE.sCountry('un_vote_target').GetName] forfeits its [concept_un_permanent_member] seat on the [concept_un_security_council]. No eligible [Concept('concept_great_power', 'Great Power')] member outside the Council can take it, so the seat stands open until one can.",
+  "ru": "Предложение принято: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0], то есть #G квалифицированным большинством в 2/3#!, которое требовалось. Страна [SCOPE.sCountry('un_vote_target').GetName] лишается места [Concept('concept_un_permanent_member','постоянного члена')] в [Concept('concept_un_security_council','Совете Безопасности')]. Ни одна подходящая [Concept('concept_great_power','великая держава')] вне Совета не может его занять, так что место остаётся свободным, пока кто-то не сможет."
+ },
+ "un_vote.2.d_expulsion_passed_promoted": {
+  "en": "The motion has carried by [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0], the #G 2/3 supermajority#! it needed. [SCOPE.sCountry('un_vote_target').GetName] forfeits its [concept_un_permanent_member] seat on the [concept_un_security_council], and [SCOPE.sCountry('un_vote_promoted').GetName], the [Concept('concept_great_power', 'Great Power')] member with the most [concept_prestige] outside the Council, takes it.",
+  "ru": "Предложение принято: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0], то есть #G квалифицированным большинством в 2/3#!, которое требовалось. Страна [SCOPE.sCountry('un_vote_target').GetName] лишается места [Concept('concept_un_permanent_member','постоянного члена')] в [Concept('concept_un_security_council','Совете Безопасности')], и его занимает страна [SCOPE.sCountry('un_vote_promoted').GetName] — [Concept('concept_great_power','великая держава')] с наибольшим [Concept('concept_prestige','престижем')] вне Совета."
+ },
+ "un_vote.2.d_failed": {
+  "en": "The resolution we proposed has failed to win a majority in the General Assembly.",
+  "ru": "Предложенная нами резолюция не набрала большинства в Генеральной Ассамблее."
+ },
+ "un_vote.2.d_food_reserve_failed": {
+  "en": "The General Assembly has declined to found a World Food Reserve. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. UN aid missions go out with what their donors send and no more.",
+  "ru": "Генеральная Ассамблея отказалась учреждать Всемирный продовольственный резерв. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Миссии помощи ООН отправляются с тем, что пришлют их доноры, и не более."
+ },
+ "un_vote.2.d_food_reserve_passed": {
+  "en": "The General Assembly has founded the World Food Reserve. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Members may now pledge grain from their Strategic Reserves, and the next UN aid mission will draw on what they pledge.",
+  "ru": "Генеральная Ассамблея учредила Всемирный продовольственный резерв. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Члены теперь могут обещать зерно из своих Стратегических резервов, и следующая миссия помощи ООН будет опираться на то, что они пообещают."
+ },
+ "un_vote.2.d_heritage_failed": {
+  "en": "The Cultural Heritage Program has failed to win a majority in the General Assembly. Protecting the world's cultural sites stays a matter for each country alone.",
+  "ru": "Программа культурного наследия не набрала большинства в Генеральной Ассамблее. Защита культурных объектов мира остаётся делом каждой страны в отдельности."
+ },
+ "un_vote.2.d_heritage_passed": {
+  "en": "The Cultural Heritage Program has been adopted by the General Assembly. The United Nations Educational, Scientific and Cultural Organization is established to protect and preserve the world's cultural and natural heritage for future generations.",
+  "ru": "Программа культурного наследия принята Генеральной Ассамблеей. Учреждается Организация Объединённых Наций по вопросам образования, науки и культуры (ЮНЕСКО) для защиты и сохранения культурного и природного наследия мира для будущих поколений."
+ },
+ "un_vote.2.d_human_rights_failed": {
+  "en": "The proposed Universal Declaration of Human Rights has failed to win a majority in the General Assembly. The laws it would have condemned carry no penalty from the Assembly.",
+  "ru": "Предложенная Всеобщая декларация прав человека не набрала большинства в Генеральной Ассамблее. Законы, которые она осудила бы, не влекут никакого наказания со стороны Ассамблеи."
+ },
+ "un_vote.2.d_human_rights_passed": {
+  "en": "The General Assembly has adopted the Universal Declaration of Human Rights, and the UN Human Rights Council is established to monitor compliance. Parties that hold laws it condemns, or run coercive resettlement programs at home, will be penalized for it.",
+  "ru": "Генеральная Ассамблея приняла Всеобщую декларацию прав человека, и учреждён Совет ООН по правам человека для контроля за её соблюдением. Участники, у которых действуют осуждаемые ею законы или которые проводят принудительные программы переселения внутри страны, будут за это наказаны."
+ },
+ "un_vote.2.d_icc_failed": {
+  "en": "The Rome Statute establishing an International Criminal Court has been rejected by the General Assembly. No court is established, and no member's leaders answer to one.",
+  "ru": "Римский статут о создании Международного уголовного суда отклонён Генеральной Ассамблеей. Суд не учреждён, и ничьи лидеры не отвечают перед ним."
+ },
+ "un_vote.2.d_icc_passed": {
+  "en": "The General Assembly has adopted the Rome Statute, establishing the International Criminal Court (ICC) with permanent jurisdiction over genocide, war crimes and crimes against humanity.",
+  "ru": "Генеральная Ассамблея приняла Римский статут, учреждающий Международный уголовный суд (МУС) с постоянной юрисдикцией над геноцидом, военными преступлениями и преступлениями против человечности."
+ },
+ "un_vote.2.d_icc_passed_vetoed": {
+  "en": "The Rome Statute carried the General Assembly by simple majority and was vetoed in the [concept_un_security_council], so no court is established. Unless the UN is Moribund, the last permanent member to veto it is censured as having rejected the Statute.",
+  "ru": "Римский статут прошёл в Генеральной Ассамблее простым большинством и был заблокирован вето в [Concept('concept_un_security_council','Совете Безопасности')], поэтому суд не учреждён. Если авторитет ООН не на уровне «Угасающий», последний постоянный член, наложивший вето, осуждается как отвергший Статут."
+ },
+ "un_vote.2.d_law_of_sea_failed": {
+  "en": "The Convention on the Law of the Sea has failed to pass the General Assembly. Its terms, cheaper ports and readier relations for its parties, do not take effect.",
+  "ru": "Конвенция по морскому праву не прошла в Генеральной Ассамблее. Её условия — более дешёвые порты и более лёгкие отношения для участников — не вступают в силу."
+ },
+ "un_vote.2.d_law_of_sea_passed": {
+  "en": "The Convention on the Law of the Sea has been adopted by the General Assembly. The International Tribunal for the Law of the Sea (ITLOS) is established to watch over the new framework of territorial waters and exclusive economic zones.",
+  "ru": "Конвенция по морскому праву принята Генеральной Ассамблеей. Учреждается Международный трибунал по морскому праву (МТМП) для надзора за новой системой территориальных вод и исключительных экономических зон."
+ },
+ "un_vote.2.d_lift_sanctions_failed": {
+  "en": "The petition by [SCOPE.sCountry('un_vote_proposer').GetName] to lift the international sanctions on it has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The sanctions stay in force.",
+  "ru": "Ходатайство страны [SCOPE.sCountry('un_vote_proposer').GetName] об отмене международных санкций против неё отклонено Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Санкции остаются в силе."
+ },
+ "un_vote.2.d_lift_sanctions_passed": {
+  "en": "The General Assembly has voted to lift the international sanctions on [SCOPE.sCountry('un_vote_proposer').GetName], [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Unless they had already ended, the trade restrictions and diplomatic penalties are gone, and so are the embargoes the Assembly imposed with them.",
+  "ru": "Генеральная Ассамблея проголосовала за отмену международных санкций против страны [SCOPE.sCountry('un_vote_proposer').GetName]: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Если они уже не закончились, торговые ограничения и дипломатические меры сняты, как и эмбарго, введённые Ассамблеей вместе с ними."
+ },
+ "un_vote.2.d_lift_sanctions_passed_vetoed": {
+  "en": "The Assembly carried the petition and a [concept_un_permanent_member] struck it down. There is no lesser form of lifting sanctions, so it is blocked outright and the sanctions on [SCOPE.sCountry('un_vote_proposer').GetName] stay.",
+  "ru": "Ассамблея приняла ходатайство, но [Concept('concept_un_permanent_member','постоянный член')] его отклонил. У отмены санкций нет более мягкой формы, поэтому она заблокирована полностью, и санкции против страны [SCOPE.sCountry('un_vote_proposer').GetName] остаются."
+ },
+ "un_vote.2.d_military_mandate_failed": {
+  "en": "The General Assembly declined to authorize the mandate. The claim remains a claim, and pressing it would be an ordinary war, at the usual cost in [concept_infamy].",
+  "ru": "Генеральная Ассамблея отказалась санкционировать мандат. Претензия остаётся претензией, и её предъявление стало бы обычной войной с обычной ценой в [Concept('concept_infamy','дурной славе')]."
+ },
+ "un_vote.2.d_military_mandate_passed": {
+  "en": "The General Assembly has authorized the mandate. For the next five years we may pursue the named territory against the named state without incurring [concept_infamy], in one [concept_diplomatic_play], for that territory and nothing else. Any further territorial or subjugation demand we make against that state in the same war voids the authorization and calls the chamber's censure down on us instead.",
+  "ru": "Генеральная Ассамблея санкционировала мандат. В ближайшие пять лет мы можем добиваться названной территории от названного государства без [Concept('concept_infamy','дурной славы')], в одной [Concept('concept_diplomatic_play','дипломатической игре')], за эту территорию и ни за что другое. Любое дальнейшее территориальное требование или требование подчинения к этому государству в той же войне аннулирует разрешение и навлекает на нас осуждение палаты."
+ },
+ "un_vote.2.d_military_mandate_passed_vetoed": {
+  "en": "The Assembly carried the resolution and a [concept_un_permanent_member] struck it down. A license to use force has no lesser form, so the mandate is blocked outright.",
+  "ru": "Ассамблея приняла резолюцию, а [Concept('concept_un_permanent_member','постоянный член')] её отклонил. У лицензии на применение силы нет более мягкой формы, поэтому мандат заблокирован полностью."
+ },
+ "un_vote.2.d_narcotics_failed": {
+  "en": "The Single Convention on Narcotic Drugs has failed to pass the General Assembly. The proposed plantation quotas and support for licensed medical manufacture will not take effect.",
+  "ru": "Единая конвенция о наркотических средствах не прошла в Генеральной Ассамблее. Предложенные квоты для плантаций и поддержка лицензированного медицинского производства не вступят в силу."
+ },
+ "un_vote.2.d_narcotics_passed": {
+  "en": "The General Assembly has adopted the Single Convention on Narcotic Drugs and established the International Narcotics Control Board. Ratifying members accept plantation quotas and support licensed medical manufacture.",
+  "ru": "Генеральная Ассамблея приняла Единую конвенцию о наркотических средствах и учредила Международный комитет по контролю над наркотиками. Ратифицировавшие члены принимают квоты для плантаций и поддерживают лицензированное медицинское производство."
+ },
+ "un_vote.2.d_npt_failed": {
+  "en": "The Nuclear Non-Proliferation Treaty has failed to pass the General Assembly. No country is bound to accept inspections of its nuclear program.",
+  "ru": "Договор о нераспространении ядерного оружия не прошёл в Генеральной Ассамблее. Ни одна страна не обязана принимать инспекции своей ядерной программы."
+ },
+ "un_vote.2.d_npt_passed": {
+  "en": "The General Assembly has adopted the Nuclear Non-Proliferation Treaty, and the International Atomic Energy Agency is established to enforce its provisions. Its parties accept inspections of any nuclear program, and those without the bomb gain a guarantee of their security.",
+  "ru": "Генеральная Ассамблея приняла Договор о нераспространении ядерного оружия, и учреждено Международное агентство по атомной энергии (МАГАТЭ) для обеспечения его положений. Его участники принимают инспекции любой ядерной программы, а те, у кого нет бомбы, получают гарантию безопасности."
+ },
+ "un_vote.2.d_nuclear_ban_failed": {
+  "en": "The Treaty on the Prohibition of Nuclear Weapons has failed to pass the General Assembly. No country is bound by it to give up its warheads or to forgo building them.",
+  "ru": "Договор о запрещении ядерного оружия не прошёл в Генеральной Ассамблее. Ни одна страна не обязана им отказаться от своих боезарядов или от их создания."
+ },
+ "un_vote.2.d_nuclear_ban_passed": {
+  "en": "The Treaty on the Prohibition of Nuclear Weapons has been adopted by the General Assembly. Its parties renounce the bomb: those that hold it will take it apart over 25 years, and the rest will never build it. While the treaty is in force, the nuclear taboo grows stronger with the UN's authority.",
+  "ru": "Договор о запрещении ядерного оружия принят Генеральной Ассамблеей. Его участники отказываются от бомбы: те, у кого она есть, демонтируют её в течение 25 лет, а остальные никогда её не создадут. Пока договор действует, ядерное табу крепнет вместе с авторитетом ООН."
+ },
+ "un_vote.2.d_observer_request_failed": {
+  "en": "The request by [SCOPE.sCountry('un_vote_proposer').GetName] for electoral observers has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Its next election goes ahead without them.",
+  "ru": "Просьба страны [SCOPE.sCountry('un_vote_proposer').GetName] о наблюдателях на выборах отклонена Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Её следующие выборы пройдут без них."
+ },
+ "un_vote.2.d_observer_request_passed": {
+  "en": "The General Assembly has agreed to send observers to the next election in [SCOPE.sCountry('un_vote_proposer').GetName]. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The observers are paid from the UN's budget; no member is asked to send anyone.",
+  "ru": "Генеральная Ассамблея согласилась направить наблюдателей на следующие выборы в стране [SCOPE.sCountry('un_vote_proposer').GetName]. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Наблюдателям платят из бюджета ООН; от членов никого направлять не требуется."
+ },
+ "un_vote.2.d_pandemic_failed": {
+  "en": "The Pandemic Cooperation Resolution has failed to pass the General Assembly. Its shared research and mutual assistance do not take effect.",
+  "ru": "Резолюция о сотрудничестве при пандемиях не прошла в Генеральной Ассамблее. Общие исследования и взаимная помощь не вступают в силу."
+ },
+ "un_vote.2.d_pandemic_passed": {
+  "en": "The Pandemic Cooperation Resolution has been adopted by the General Assembly. The World Health Organization is established to coordinate international public health response, share medical research, and provide early warning of future outbreaks.",
+  "ru": "Резолюция о сотрудничестве при пандемиях принята Генеральной Ассамблеей. Учреждается Всемирная организация здравоохранения для координации международных мер общественного здравоохранения, обмена медицинскими исследованиями и раннего предупреждения о будущих вспышках."
+ },
+ "un_vote.2.d_passed": {
+  "en": "The resolution we proposed has passed the General Assembly.",
+  "ru": "Предложенная нами резолюция принята Генеральной Ассамблеей."
+ },
+ "un_vote.2.d_peacekeeping_request_failed": {
+  "en": "The request for [concept_un_peacekeeping] forces by [SCOPE.sCountry('un_vote_proposer').GetName] has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. No peacekeepers will deploy.",
+  "ru": "Просьба страны [SCOPE.sCountry('un_vote_proposer').GetName] о силах [Concept('concept_un_peacekeeping','миротворчества ООН')] отклонена Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Миротворцы размещены не будут."
+ },
+ "un_vote.2.d_peacekeeping_request_passed": {
+  "en": "The General Assembly has voted to authorize peacekeeping operations in [SCOPE.sCountry('un_vote_proposer').GetName]. Contributing nations will deploy forces under the UN flag. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0].",
+  "ru": "Генеральная Ассамблея проголосовала за санкционирование миротворческих операций в стране [SCOPE.sCountry('un_vote_proposer').GetName]. Страны-участницы направят силы под флагом ООН. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]."
+ },
+ "un_vote.2.d_peacekeeping_request_passed_vetoed": {
+  "en": "The peacekeeping deployment was vetoed in the [concept_un_security_council], but the General Assembly's simple majority authorized an [concept_un_peacekeeping] observer mission instead. Unarmed monitors will report on the situation; no contributing forces are deployed.",
+  "ru": "Размещение миротворцев заблокировано вето в [Concept('concept_un_security_council','Совете Безопасности')], но простое большинство Генеральной Ассамблеи вместо этого санкционировало наблюдательную миссию [Concept('concept_un_peacekeeping','миротворчества ООН')]. Безоружные наблюдатели будут докладывать о ситуации; силы-участники не размещаются."
+ },
+ "un_vote.2.d_peacekeeping_request_passed_weak": {
+  "en": "The General Assembly carried the request for peacekeepers, but an organization of so little authority cannot field a force: no member will put its soldiers under a flag the world does not yet respect. An [concept_un_peacekeeping] observer mission goes instead. Unarmed monitors will report on the situation; no contributing forces are deployed.",
+  "ru": "Генеральная Ассамблея приняла просьбу о миротворцах, но организация со столь малым авторитетом не может выставить силы: ни один член не поставит своих солдат под флаг, который мир пока не уважает. Вместо этого направляется наблюдательная миссия [Concept('concept_un_peacekeeping','миротворчества ООН')]. Безоружные наблюдатели будут докладывать о ситуации; силы-участники не размещаются."
+ },
+ "un_vote.2.d_physical_protection_failed": {
+  "en": "The Convention on the Physical Protection of Nuclear Material has failed to pass the General Assembly. No country is bound by it to guard, count and report its nuclear material to a common standard.",
+  "ru": "Конвенция о физической защите ядерного материала не прошла в Генеральной Ассамблее. Ни одна страна не обязана ею охранять, учитывать и отчитываться о своём ядерном материале по общему стандарту."
+ },
+ "un_vote.2.d_physical_protection_passed": {
+  "en": "The Convention on the Physical Protection of Nuclear Material has been adopted by the General Assembly. Its parties will guard, count and report their nuclear material to a common standard, and search for what each of them has lost.",
+  "ru": "Конвенция о физической защите ядерного материала принята Генеральной Ассамблеей. Её участники будут охранять, учитывать и отчитываться о своём ядерном материале по общему стандарту и искать то, что каждый из них потерял."
+ },
+ "un_vote.2.d_referendum_failed": {
+  "en": "The General Assembly has declined to order a referendum in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Its future stays a matter between it and [SCOPE.sCountry('un_vote_target').GetName].",
+  "ru": "Генеральная Ассамблея отказалась приказывать провести референдум в стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Её будущее остаётся делом между ней и страной [SCOPE.sCountry('un_vote_target').GetName]."
+ },
+ "un_vote.2.d_referendum_passed": {
+  "en": "The General Assembly has ordered [SCOPE.sCountry('un_vote_target').GetName] to hold a supervised referendum in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The overlord must now hold the vote or refuse it.",
+  "ru": "Генеральная Ассамблея приказала стране [SCOPE.sCountry('un_vote_target').GetName] провести референдум под надзором в стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Сюзерен теперь должен провести голосование или отказаться."
+ },
+ "un_vote.2.d_referendum_passed_vetoed": {
+  "en": "The General Assembly voted for a supervised referendum in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName], and a [concept_un_permanent_member] struck it down. A referendum has no lesser form, so it is blocked outright and no vote is held.",
+  "ru": "Генеральная Ассамблея проголосовала за референдум под надзором в стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName], а [Concept('concept_un_permanent_member','постоянный член')] его отклонил. У референдума нет более мягкой формы, поэтому он заблокирован полностью, и голосование не проводится."
+ },
+ "un_vote.2.d_reform_failed": {
+  "en": "The charter reform has failed to reach the two-thirds supermajority it needed. The Charter is unchanged, and so is the ceiling on the organization's [concept_un_authority].",
+  "ru": "Реформа Устава не набрала необходимых двух третей. Устав не изменился, как и потолок [Concept('concept_un_authority','авторитета ООН')]."
+ },
+ "un_vote.2.d_reform_passed": {
+  "en": "The Charter has been amended. A two-thirds supermajority of the General Assembly voted the reform through and no permanent member stood in its way: the ceiling on the United Nations' [concept_un_authority] is raised.",
+  "ru": "Устав изменён. Квалифицированное большинство в две трети Генеральной Ассамблеи провело реформу, и ни один постоянный член не встал на её пути: потолок [Concept('concept_un_authority','авторитета ООН')] поднят."
+ },
+ "un_vote.2.d_reform_passed_vetoed": {
+  "en": "The charter reform had its supermajority in the General Assembly, but a [concept_un_security_council] [concept_un_veto] blocks it outright. A change to the Charter needs the consent of every permanent member, and it has no lesser form.",
+  "ru": "У реформы Устава было квалифицированное большинство в Генеральной Ассамблее, но [Concept('concept_un_veto','вето')] в [Concept('concept_un_security_council','Совете Безопасности')] блокирует её полностью. Изменение Устава требует согласия каждого постоянного члена, и более мягкой формы у него нет."
+ },
+ "un_vote.2.d_refugee_failed": {
+  "en": "The International Refugee Resolution has failed to pass the General Assembly. No country is bound by its terms on taking in refugees.",
+  "ru": "Международная резолюция о беженцах не прошла в Генеральной Ассамблее. Ни одна страна не связана её условиями о приёме беженцев."
+ },
+ "un_vote.2.d_refugee_passed": {
+  "en": "The International Refugee Resolution has been adopted by the General Assembly. The UN High Commissioner for Refugees is established to coordinate international protection and assistance for displaced persons worldwide.",
+  "ru": "Международная резолюция о беженцах принята Генеральной Ассамблеей. Учреждается Управление Верховного комиссара ООН по делам беженцев для координации международной защиты и помощи перемещённым лицам во всём мире."
+ },
+ "un_vote.2.d_sanctions_failed": {
+  "en": "The proposed sanctions against [SCOPE.sCountry('un_vote_target').GetName] have been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The target nation escapes international censure.",
+  "ru": "Предложенные санкции против страны [SCOPE.sCountry('un_vote_target').GetName] отклонены Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Страна-мишень избегает международного осуждения."
+ },
+ "un_vote.2.d_sanctions_passed": {
+  "en": "The General Assembly has voted to impose international sanctions on [SCOPE.sCountry('un_vote_target').GetName]. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Trade restrictions and diplomatic penalties are now in effect.",
+  "ru": "Генеральная Ассамблея проголосовала за введение международных санкций против страны [SCOPE.sCountry('un_vote_target').GetName]. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Торговые ограничения и дипломатические меры теперь действуют."
+ },
+ "un_vote.2.d_sanctions_passed_vetoed": {
+  "en": "The sanctions resolution carried the General Assembly by simple majority and was vetoed in the [concept_un_security_council]. What remains is voluntary: members may apply measures of their own, nobody enforces them for the Assembly, and [SCOPE.sCountry('un_vote_target').GetName]'s trade and standing suffer less, for five years.",
+  "ru": "Резолюция о санкциях прошла в Генеральной Ассамблее простым большинством и была заблокирована вето в [Concept('concept_un_security_council','Совете Безопасности')]. Остаются добровольные меры: члены могут применять свои собственные, никто не обеспечивает их от имени Ассамблеи, и торговля и положение страны [SCOPE.sCountry('un_vote_target').GetName] страдают меньше, в течение пяти лет."
+ },
+ "un_vote.2.d_space_failed": {
+  "en": "The Space Cooperation Resolution has failed to pass the General Assembly. The leading power in space is under no obligation to share its progress.",
+  "ru": "Резолюция о космическом сотрудничестве не прошла в Генеральной Ассамблее. Ведущая космическая держава не обязана делиться своими успехами."
+ },
+ "un_vote.2.d_space_passed": {
+  "en": "The Space Cooperation Resolution has been adopted by the General Assembly. The UN Office for Outer Space Affairs is established to coordinate peaceful international cooperation in the exploration and use of outer space.",
+  "ru": "Резолюция о космическом сотрудничестве принята Генеральной Ассамблеей. Учреждается Управление ООН по вопросам космического пространства для координации мирного международного сотрудничества в исследовании и использовании космоса."
+ },
+ "un_vote.2.d_standing_force_failed": {
+  "en": "The proposal for a Standing UN Force has been rejected by the General Assembly. The vote failed [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The Assembly's missions still depend on the members willing to send troops.",
+  "ru": "Предложение о Постоянных силах ООН отклонено Генеральной Ассамблеей. Голосование провалилось: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Миссии Ассамблеи по-прежнему зависят от членов, готовых направить войска."
+ },
+ "un_vote.2.d_standing_force_passed": {
+  "en": "The General Assembly has founded the Standing UN Force. The vote carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. From now on every UN peacekeeping and stabilization mission has at least one contingent it can count on.",
+  "ru": "Генеральная Ассамблея учредила Постоянные силы ООН. Резолюция принята: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] против [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. Отныне у каждой миротворческой и стабилизационной миссии ООН есть по меньшей мере один контингент, на который можно рассчитывать."
+ },
+ "un_vote.2.d_standing_force_passed_vetoed": {
+  "en": "The Assembly carried the resolution and a [concept_un_permanent_member] struck it down. There is no lesser form of a standing force, so it is blocked outright.",
+  "ru": "Ассамблея приняла резолюцию, а [Concept('concept_un_permanent_member','постоянный член')] её отклонил. У постоянных сил нет более мягкой формы, поэтому они заблокированы полностью."
+ },
+ "un_vote.2.f_failed": {
+  "en": "Our delegate stayed in the seat after the count was read, while the chamber emptied around the delegation. The staff boxed the copies of the resolution that had not been handed out, the notes of who had been spoken to and when, and the speech the delegate had marked up for the debate. A few delegates who had voted with us came over to shake hands before they left. Most went straight out to the corridor. When the hall was nearly empty, the delegate asked for the tally sheet, read down both columns, and began a message to the government setting out how each delegation had voted.",
+  "ru": "Наш делегат остался на месте после оглашения подсчёта, пока зал пустел вокруг делегации. Сотрудники упаковали неразданные копии резолюции, записи о том, с кем и когда говорили, и речь, которую делегат отметил для прений. Несколько делегатов, голосовавших с нами, подошли пожать руки перед уходом. Большинство сразу вышли в коридор. Когда зал почти опустел, делегат попросил итоговую ведомость, прочёл оба столбца и начал сообщение правительству, излагая, как проголосовала каждая делегация."
+ },
+ "un_vote.2.f_passed": {
+  "en": "To the government, from our delegation to the General Assembly. The resolution we tabled carried when the count was read today. The tally and the record of each delegation's vote are enclosed. Several delegations that voted with us have since asked to meet us about business of their own before the chamber, and we expect to be asked for our votes on it in return. We have not yet answered any of them. We ask for the government's instructions before the meetings, and will report on each as it takes place.",
+  "ru": "Правительству от нашей делегации в Генеральной Ассамблее. Резолюция, которую мы внесли, прошла, когда сегодня зачитали подсчёт. Итоги и запись голосов каждой делегации прилагаются. Несколько делегаций, голосовавших с нами, с тех пор попросили о встрече по собственным делам, вынесенным на палату, и мы ожидаем, что в ответ у нас попросят голоса. Мы пока никому не ответили. Просим инструкций правительства до встреч и будем докладывать о каждой по мере её проведения."
+ },
+ "un_vote.2.t": {
+  "en": "The Count Is In",
+  "ru": "Подсчёт завершён"
+ },
+ "un_vote.3.a": {
+  "en": "Very well.",
+  "ru": "Очень хорошо."
+ },
+ "un_vote.3.b": {
+  "en": "Accept the resolution.",
+  "ru": "Принять резолюцию."
+ },
+ "un_vote.3.b_convention": {
+  "en": "Ratify it after all.",
+  "ru": "Всё же ратифицировать."
+ },
+ "un_vote.3.c_convention": {
+  "en": "Refuse to ratify it.",
+  "ru": "Отказаться ратифицировать."
+ },
+ "un_vote.3.c_convention_tt": {
+  "en": "#bold We stay outside the convention.#! Its party terms, and its benefits, do not apply to us; it binds every member that ratifies it, though whatever it does to every country still reaches us. The Assembly takes note of the refusal:",
+  "ru": "#bold Мы остаёмся вне конвенции.#! Её условия для участников и выгоды на нас не распространяются; она связывает каждого члена, который её ратифицирует, хотя всё, что она делает для каждой страны, всё равно затрагивает и нас. Ассамблея принимает отказ к сведению:"
+ },
+ "un_vote.3.c_decision": {
+  "en": "Denounce it and stand with [SCOPE.sCountry('un_vote_target').GetName].",
+  "ru": "Осудить её и встать на сторону страны [SCOPE.sCountry('un_vote_target').GetName]."
+ },
+ "un_vote.3.c_decision_tt": {
+  "en": "#bold This does not stop the resolution.#! It is a decision of the whole Assembly and stands whatever we say. Denouncing it puts us on the record beside [SCOPE.sCountry('un_vote_target').GetName], which will remember it, and it costs us with the Assembly:",
+  "ru": "#bold Это не останавливает резолюцию.#! Это решение всей Ассамблеи, и оно остаётся в силе, что бы мы ни говорили. Осуждение ставит нас в одном ряду со страной [SCOPE.sCountry('un_vote_target').GetName], которая это запомнит, и обходится нам в глазах Ассамблеи:"
+ },
+ "un_vote.3.c_pledge": {
+  "en": "Refuse to take part.",
+  "ru": "Отказаться участвовать."
+ },
+ "un_vote.3.c_pledge_tt": {
+  "en": "#bold We take no part.#! The effort goes ahead with the members who contribute, and we pay nothing toward it. The Assembly takes note of the refusal:",
+  "ru": "#bold Мы не участвуем.#! Усилия продолжаются с членами, которые вносят вклад, а мы ничего на них не платим. Ассамблея принимает отказ к сведению:"
+ },
+ "un_vote.3.c_vetoed_tt": {
+  "en": "#bold A veto has already blocked it or softened it into a form that binds no one,#! so denouncing it defies nothing and costs us no International Standing. It puts us on the record beside [SCOPE.sCountry('un_vote_target').GetName], and it still costs us:",
+  "ru": "#bold Вето уже заблокировало её или смягчило до формы, которая никого не обязывает,#! поэтому осуждение ничему не бросает вызов и не стоит нам международного авторитета. Оно ставит нас в одном ряду со страной [SCOPE.sCountry('un_vote_target').GetName], и всё же обходится нам:"
+ },
+ "un_vote.3.d_choice_convention": {
+  "en": "\\n\\nWe voted against it. A convention binds only the members that ratify it: we may ratify it after all, or stay outside it.",
+  "ru": "\\n\\nМы голосовали против. Конвенция связывает только тех членов, что её ратифицируют: мы можем всё же ратифицировать её или остаться вне её."
+ },
+ "un_vote.3.d_choice_decision": {
+  "en": "\\n\\nWe voted against it, but it is a decision of the whole Assembly and it stands whatever we answer. We may accept it, or denounce it on the record and stand with [SCOPE.sCountry('un_vote_target').GetName]. Denouncing it changes nothing about the decision itself: it earns us the goodwill of [SCOPE.sCountry('un_vote_target').GetName] and costs us for the defiance.",
+  "ru": "\\n\\nМы голосовали против, но это решение всей Ассамблеи, и оно остаётся в силе, что бы мы ни ответили. Мы можем принять его или осудить его публично и встать на сторону страны [SCOPE.sCountry('un_vote_target').GetName]. Осуждение ничего не меняет в самом решении: оно приносит нам расположение страны [SCOPE.sCountry('un_vote_target').GetName] и обходится нам за неповиновение."
+ },
+ "un_vote.3.d_choice_none": {
+  "en": "\\n\\nWe voted against it. It asks nothing of us, and it stands whatever we answer, so there is nothing for us to accept or refuse.",
+  "ru": "\\n\\nМы голосовали против. Она ничего от нас не требует и остаётся в силе, что бы мы ни ответили, так что нам нечего ни принимать, ни отвергать."
+ },
+ "un_vote.3.d_choice_pledge": {
+  "en": "\\n\\nWe voted against it. The Assembly now asks members of our rank to take part: we may join the effort after all, or refuse.",
+  "ru": "\\n\\nМы голосовали против. Теперь Ассамблея просит членов нашего ранга участвовать: мы можем всё же присоединиться к усилиям или отказаться."
+ },
+ "un_vote.3.d_choice_vetoed": {
+  "en": "\\n\\nWe voted against it, and a veto has blocked it or softened it into a form that binds no one. There is nothing left to comply with and nothing to defy: we may let it rest, or denounce it and stand with [SCOPE.sCountry('un_vote_target').GetName].",
+  "ru": "\\n\\nМы голосовали против, и вето заблокировало её или смягчило до формы, которая никого не обязывает. Исполнять больше нечего, и бросать вызов нечему: мы можем оставить это или осудить её и встать на сторону страны [SCOPE.sCountry('un_vote_target').GetName]."
+ },
+ "un_vote.3.d_failed": {
+  "en": "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #R failed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against.",
+  "ru": "Генеральная Ассамблея завершила голосование. Резолюция, предложенная страной [SCOPE.sCountry('un_vote_proposer').GetName], #R не прошла#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов «за» и [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] «против»."
+ },
+ "un_vote.3.d_passed": {
+  "en": "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #G passed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against.",
+  "ru": "Генеральная Ассамблея завершила голосование. Резолюция, предложенная страной [SCOPE.sCountry('un_vote_proposer').GetName], #G принята#!: [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] голосов «за» и [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] «против»."
+ },
+ "un_vote.3.t": {
+  "en": "The Assembly Has Voted",
+  "ru": "Ассамблея проголосовала"
+ },
  "un_vote.8.a": {
   "en": "We will remember who voted for this.",
   "ru": "Мы запомним, кто голосовал за это."
