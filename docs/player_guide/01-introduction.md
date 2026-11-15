@@ -119,7 +119,8 @@ over the whole world, on its own curve, whatever you set here.
 
 Map Default leaves each map on the curve drawn for its figure: straight for
 some, most of the color for the common figures on others, a doubling at a time
-for money and head counts. Linear runs the colors straight instead. Logarithmic gives each
+for money and head counts. Linear runs the colors straight instead.
+Logarithmic gives each
 doubling the same share of the color, so low figures spread apart; on a map
 with a meaningful middle it doubles by the distance from the middle on each
 side, and the middle keeps its color. Ranked colors each state by its place in

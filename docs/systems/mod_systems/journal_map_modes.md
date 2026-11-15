@@ -379,7 +379,11 @@ which is what the Map Room showed before it had options.
   be older than the options. The words come from four custom localizations
   (`common/customizable_localization/te_journal_map_custom_loc.txt`), a market's, a bloc's and a country's names
   from the viewer's scopes.
-- **Unverified** (play-test check 29): everything above. Script can tell success from failure in two places, each a
+- **Seen in game** (the owner, 2026-11-14, `main` at `5e1a5deb4`; play-test list, ninth session): asked to limit the
+  maps to a continent, the market, the power bloc and the country, the owner saw the states outside turn slate and
+  the colors stretch over what is left ("All looks good"; the answer doesn't say which of the four were tried).
+- **Unverified** (play-test check 29): the rest of the above, the hovers, the tooltips, the Outliers settings and a
+  system's own page among it. Script can tell success from failure in two places, neither read yet, each a
   once-a-game line from the global monthly pulse: `TE_SELF_CHECK OK|BROKEN area_mark` (`te_jmap_area_selfcheck`, the
   first month an area is set: BROKEN when the marking put every state on one side, or the viewer's own capital
   outside its market, bloc or country) and `TE_SELF_CHECK OK|BROKEN range_count` (`te_jmap_range_selfcheck`, the
@@ -469,7 +473,12 @@ Ranked.
   `te_jmap_scale_short`: "North America, Keep All, Default Scale" is the longest, 38 characters, about 256 px in
   the page's font where the header leaves about 296 beside its title), and
   the line at the top of the page names all three in full while any is off its default.
-- **Unverified** (play-test check 30). Script can tell success from failure in one place:
+- **Seen in game** (the owner, 2026-11-14, `main` at `5e1a5deb4`; play-test list, ninth session): asked to switch
+  GDP per Capita through the four scales, the owner saw each repaint, paused too, and Linear push most states toward
+  the low color; and under Logarithmic the midpoint stay cream on Fertility or Net Migration ("All looks good"). So
+  a factor's branch on `te_jmap_scale` is taken in a paint.
+- **Unverified** (play-test check 30): the rest, how Ranked spreads its colors and the tooltips under a scale among
+  it. Script can tell success from failure in one place, not read yet:
   `TE_SELF_CHECK OK|BROKEN rank_walk` (`te_jmap_rank_selfcheck`), once a game from the global monthly pulse whatever
   the Scale option, so a game answers it before anyone picks Ranked: it walks the states with a GDP per capita
   lowest first, as a rank's walk does, and is BROKEN when the walk visits fewer than a count of them or takes any
@@ -478,6 +487,26 @@ Ranked.
   Linear and Logarithmic against the generator's reference, in floats and in the engine's five decimals
   (`ScaleTest`), and the rank effects over made-up states, ties and midpoints included, against a plain sort
   (`RankRunTest`).
+
+### A stored factor, weighed and not built
+
+2026-11-14. The assessment that led to the Scale option offered a second design (its option B): store each state's
+factor, 0 to 1, on the state at each measure, and have every paint read that one number, as Ranked's does, in place
+of working the factor out as the map paints. Its one advantage was speed with the page open. Its price was a rebuilt
+paint and live maps that move only when measured.
+
+The owner read the game's debug frame counter on `main` at `5e1a5deb4` in four situations (the page closed; GDP per
+Capita on the map's own curve; the same map on Ranked; a three-color map such as Fertility on Logarithmic; each
+paused, then running at speed 5): "Paused: closed - ~100; GDP/c on Map's own - same; ranked - same; fertility [left
+blank]; unpaused - same" (the bracket marks a line that came back with no figure). So the open page does not pull
+the frame rate down, and the live factor, two twenty-piece ladders a state, reads as the stored one does. With no
+cost a player can see, a stored factor has nothing to give back, and it is not pursued.
+
+The caveat: this is a counter read by eye, not frame times, and if the game holds its frames near 100 a second a
+saving beneath that would not show. It says nothing of a three-color map under Logarithmic, which works four
+ladders out for each state, or of the length of a game day. A harness measurement meant to settle those never got
+its page open (play-test list, ninth session). If the page is ever felt to be slow, measure before rebuilding: the
+paint's 138 branches tried in order are as likely a cost as any factor, and a stored factor would not shorten them.
 
 ## The See-Through Page
 
