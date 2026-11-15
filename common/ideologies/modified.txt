@@ -15502,9 +15502,9 @@ REPLACE:ideology_communist_movement = {
 		law_open_weights = neutral
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = strongly_disapprove
-		law_robot_tax = neutral
-		law_human_labor_quotas = neutral
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = approve
 		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
@@ -15653,15 +15653,15 @@ REPLACE:ideology_anarchist_movement = {
 		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = strongly_disapprove
+		law_unrestricted_automation = neutral
 		law_robot_tax = neutral
-		law_human_labor_quotas = neutral
+		law_human_labor_quotas = approve
 		law_automation_dividend = strongly_approve
 	}
 	lawgroup_criminal_justice = {
-		law_punishment_focused_criminal_justice = disapprove
+		law_punishment_focused_criminal_justice = neutral
 		law_rehabilitation_focused_criminal_justice = strongly_approve
-		law_restorative_justice = neutral
+		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_antitrust = {
@@ -15791,9 +15791,9 @@ REPLACE:ideology_revolutionary_socialist_movement = {
 		law_open_weights = neutral
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = strongly_disapprove
-		law_robot_tax = neutral
-		law_human_labor_quotas = neutral
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = approve
 		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
@@ -15819,7 +15819,7 @@ REPLACE:ideology_revolutionary_socialist_movement = {
 		law_communal_child_rearing = strongly_approve
 	}
 	lawgroup_genetic_rights = {
-		law_traditional_heredity = disapprove
+		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = disapprove
 		law_corporate_genetic_licensing = neutral
 		law_open_source_genetics = approve
@@ -15914,7 +15914,7 @@ REPLACE:ideology_fascist_movement = {
 		law_prescribed_form = strongly_approve
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = disapprove
+		law_unrestricted_automation = neutral
 		law_robot_tax = approve
 		law_human_labor_quotas = strongly_approve
 		law_automation_dividend = neutral
@@ -16000,7 +16000,7 @@ REPLACE:ideology_fascist_movement = {
 		law_minority_rights_affirmative_action = strongly_disapprove
 	}
 	lawgroup_ministry_of_propaganda = {
-		law_no_ministry_of_propaganda = disapprove
+		law_no_ministry_of_propaganda = neutral
 		law_ministry_of_propaganda = strongly_approve
 	}
 	lawgroup_governance_principles = {
@@ -16143,9 +16143,9 @@ REPLACE:ideology_liberal_movement = {
 		law_algorithmic_jurisprudence = disapprove
 	}
 	lawgroup_criminal_justice = {
-		law_punishment_focused_criminal_justice = disapprove
+		law_punishment_focused_criminal_justice = neutral
 		law_rehabilitation_focused_criminal_justice = strongly_approve
-		law_restorative_justice = neutral
+		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_antitrust = {
@@ -16253,7 +16253,7 @@ REPLACE:ideology_radical_movement = {
 		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
-		law_unrestricted_automation = disapprove
+		law_unrestricted_automation = neutral
 		law_robot_tax = approve
 		law_human_labor_quotas = neutral
 		law_automation_dividend = approve
@@ -16275,9 +16275,9 @@ REPLACE:ideology_radical_movement = {
 		law_military_bureaucrats = disapprove
 	}
 	lawgroup_criminal_justice = {
-		law_punishment_focused_criminal_justice = disapprove
+		law_punishment_focused_criminal_justice = neutral
 		law_rehabilitation_focused_criminal_justice = strongly_approve
-		law_restorative_justice = neutral
+		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_antitrust = {
@@ -16391,9 +16391,9 @@ REPLACE:ideology_radical_movement = {
 REPLACE:ideology_liberal_republican_movement = {
 	icon = "gfx/interface/icons/ideology_icons/republican.dds"
 	lawgroup_criminal_justice = {
-		law_punishment_focused_criminal_justice = disapprove
+		law_punishment_focused_criminal_justice = neutral
 		law_rehabilitation_focused_criminal_justice = strongly_approve
-		law_restorative_justice = neutral
+		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
 	lawgroup_inheritance = {
@@ -16465,8 +16465,8 @@ REPLACE:ideology_liberal_republican_movement = {
 REPLACE:ideology_national_liberal_movement = {
 	icon = "gfx/interface/icons/ideology_icons/sovereignist.dds"
 	lawgroup_criminal_justice = {
-		law_punishment_focused_criminal_justice = disapprove
-		law_rehabilitation_focused_criminal_justice = neutral
+		law_punishment_focused_criminal_justice = neutral
+		law_rehabilitation_focused_criminal_justice = approve
 		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
@@ -16736,7 +16736,7 @@ REPLACE:ideology_reactionary_movement = {
 		law_ministry_of_the_environment = neutral
 	}
 	lawgroup_ministry_of_intelligence_and_security = {
-		law_no_ministry_of_intelligence_and_security = disapprove
+		law_no_ministry_of_intelligence_and_security = neutral
 		law_ministry_of_intelligence_and_security = strongly_approve
 	}
 	lawgroup_criminal_justice = {
@@ -16856,7 +16856,7 @@ REPLACE:ideology_traditionalist_movement = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_ministry_of_religion = {
-		law_no_ministry_of_religion = disapprove
+		law_no_ministry_of_religion = neutral
 		law_ministry_of_religion = strongly_approve
 	}
 	lawgroup_caste_hegemony = {
@@ -17024,7 +17024,7 @@ INJECT:ideology_pluralist_movement_4 = {
 		law_minority_rights_affirmative_action = strongly_approve
 	}
 	lawgroup_ministry_of_refugee_affairs = {
-		law_no_ministry_of_refugee_affairs = disapprove
+		law_no_ministry_of_refugee_affairs = neutral
 		law_ministry_of_refugee_affairs = strongly_approve
 	}
 }
