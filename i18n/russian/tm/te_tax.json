@@ -71,9 +71,533 @@
   "en": "Wage Tax",
   "ru": "Налог на заработную плату"
  },
+ "te_tax_ov_bill_short": {
+  "en": "#R Short of support#!",
+  "ru": "#R Не хватает поддержки#!"
+ },
+ "te_tax_ov_code_next": {
+  "en": "Next: #v [Country.MakeScope.ScriptValue('te_tax_view_next_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_next_month_mo')|0]#!",
+  "ru": "Следующее: #v [Country.MakeScope.ScriptValue('te_tax_view_next_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_next_month_mo')|0]#!"
+ },
+ "te_tax_ov_code_next_tt": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_next_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_next_month_mo')|0]#!, when [Country.GetCustom('te_tax_ov_next_what')]",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_next_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_next_month_mo')|0]#!, когда [Country.GetCustom('te_tax_ov_next_what')]"
+ },
+ "te_tax_ov_code_quiet": {
+  "en": "No change due",
+  "ru": "Изменений не ожидается"
+ },
+ "te_tax_ov_code_tt": {
+  "en": "The code's version rises by one at every change to it: a passed bill taking effect, a temporary rate expiring, the carry-over from the taxation law.\\n\\nNext change: [SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_code_next_tt', 'te_tax_ov_next_change_none' )]\\nLast change: [SelectLocalization( GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_last_change_value', 'te_tax_none' )]\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', 'te_tax_ov_snapshot_value_tt' )]",
+  "ru": "Версия кодекса растёт на единицу при каждом его изменении: когда вступает в силу принятый законопроект, истекает временная ставка или переносятся положения закона о налогообложении.\\n\\nСледующее изменение: [SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_code_next_tt', 'te_tax_ov_next_change_none' )]\\nПоследнее изменение: [SelectLocalization( GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_last_change_value', 'te_tax_none' )]\\n[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_ov_snapshot_none_tt', 'te_tax_ov_snapshot_value_tt' )]"
+ },
+ "te_tax_ov_code_word": {
+  "en": "Version #v [Country.MakeScope.ScriptValue('te_tax_view_code_version')|0]#!",
+  "ru": "Версия #v [Country.MakeScope.ScriptValue('te_tax_view_code_version')|0]#!"
+ },
+ "te_tax_ov_draft": {
+  "en": "Draft Reform",
+  "ru": "Проект реформы"
+ },
+ "te_tax_ov_draft_accept": {
+  "en": "#R [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0] to accept#!",
+  "ru": "#R К принятию: [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#!"
+ },
+ "te_tax_ov_draft_head_tt": {
+  "en": "The draft takes effect from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!.",
+  "ru": "Проект вступает в силу с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!."
+ },
+ "te_tax_ov_draft_none_tt": {
+  "en": "No draft is open. Draft a Reform starts one. A draft changes nothing until it is introduced as a [concept_tax_bill], passes and takes effect.",
+  "ru": "Проект не открыт. Чтобы открыть его, нажмите «Составить реформу». Проект ничего не меняет, пока его не внесут как [Concept('concept_tax_bill','налоговый законопроект')], он не будет принят и не вступит в силу."
+ },
+ "te_tax_ov_draft_ready": {
+  "en": "Ready",
+  "ru": "Готов"
+ },
+ "te_tax_ov_draft_ready_tt": {
+  "en": "The draft takes effect from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#! and is ready: introduce it as a [concept_tax_bill], or revise the bill under debate with it.",
+  "ru": "Проект вступает в силу с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#! и готов: внесите его как [Concept('concept_tax_bill','налоговый законопроект')] или пересмотрите с его помощью законопроект, который обсуждается."
+ },
+ "te_tax_ov_draft_rebase_tt": {
+  "en": "The draft takes effect from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!. #R Changed since drafted:#! a passed bill or an outside change moved #v [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#! of its changes. Accept each at the top of Draft Reform.",
+  "ru": "Проект вступает в силу с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!. #R С момента составления изменилось:#! принятый законопроект или внешнее изменение затронули #v [Country.MakeScope.ScriptValue('te_tax_view_dr_rebase_count')|0]#! его положений. Примите каждое из них в верхней части раздела «Проект реформы»."
+ },
+ "te_tax_ov_draft_soon": {
+  "en": "#R Too soon#!",
+  "ru": "#R Слишком рано#!"
+ },
+ "te_tax_ov_draft_value": {
+  "en": "From #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
+  "ru": "С #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!"
+ },
+ "te_tax_ov_next_change_none": {
+  "en": "None scheduled",
+  "ru": "Ничего не запланировано"
+ },
+ "te_tax_ov_next_what_bill": {
+  "en": "a passed bill takes effect",
+  "ru": "вступает в силу принятый законопроект"
+ },
+ "te_tax_ov_next_what_none": {
+  "en": "a scheduled change takes effect",
+  "ru": "вступает в силу запланированное изменение"
+ },
+ "te_tax_ov_next_what_sunset_cons": {
+  "en": "the temporary consumption tax rate expires",
+  "ru": "истекает временная ставка налога на потребление"
+ },
+ "te_tax_ov_next_what_sunset_div": {
+  "en": "the temporary dividend tax rate expires",
+  "ru": "истекает временная ставка налога на дивиденды"
+ },
+ "te_tax_ov_next_what_sunset_head": {
+  "en": "the temporary head tax expires",
+  "ru": "истекает временный подушный налог"
+ },
+ "te_tax_ov_next_what_sunset_land": {
+  "en": "the temporary rural assessment expires",
+  "ru": "истекает временный сельский сбор"
+ },
+ "te_tax_ov_next_what_sunset_wage": {
+  "en": "the temporary wage tax rate expires",
+  "ru": "истекает временная ставка налога на заработную плату"
+ },
+ "te_tax_ov_obl_binding": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#! binding",
+  "ru": "Действуют: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#!"
+ },
+ "te_tax_ov_obl_due": {
+  "en": "Due #v [Country.MakeScope.ScriptValue('te_tax_view_obl_next_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_obl_next_due_mo')|0]#!",
+  "ru": "Срок: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_next_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_obl_next_due_mo')|0]#!"
+ },
+ "te_tax_ov_obl_failing": {
+  "en": "#R [Country.MakeScope.ScriptValue('te_tax_view_obl_failing')|0] failing#!",
+  "ru": "#R Не выполняются: [Country.MakeScope.ScriptValue('te_tax_view_obl_failing')|0]#!"
+ },
+ "te_tax_ov_obl_ontrack": {
+  "en": "On track",
+  "ru": "По плану"
+ },
+ "te_tax_ov_obl_pending": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#! pending",
+  "ru": "Ожидают: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#!"
+ },
+ "te_tax_ov_obligations_tt": {
+  "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups|q$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.\\n\\nBinding: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#!. Pending: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#!. Failing a check: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_failing')|0]#!.",
+  "ru": "Обещания, которые правительство дало [Concept('concept_interest_group','группам интересов')] в обмен на принятие его налоговых законопроектов. Обещание в ожидании вступает в силу, только если его законопроект принят; действующее проверяется 1-го числа каждого месяца, пока не будет выполнено или нарушено.\\n\\nДействуют: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#!. Ожидают: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#!. Не прошли проверку: #v [Country.MakeScope.ScriptValue('te_tax_view_obl_failing')|0]#!."
+ },
+ "te_tax_ov_package_a_awaiting": {
+  "en": "From #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, awaiting",
+  "ru": "С #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, ожидает"
+ },
+ "te_tax_ov_package_a_conflict": {
+  "en": "From #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, #R held: conflict#!",
+  "ru": "С #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, #R задержан: конфликт#!"
+ },
+ "te_tax_ov_package_a_missed": {
+  "en": "From #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, #R held: missed#!",
+  "ru": "С #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, #R задержан: срок пропущен#!"
+ },
+ "te_tax_ov_package_awaiting_tt": {
+  "en": "Passed. It takes effect on the 1st of its month, all at once.",
+  "ru": "Принят. Вступает в силу 1-го числа своего месяца, целиком."
+ },
+ "te_tax_ov_package_conflict_tt": {
+  "en": "Held back, and none of it applied: before it could take effect, a change made outside legislation reached a provision it changes. It can only be dropped; to enact its terms, pass them again as a new bill.",
+  "ru": "Задержан, и ни одно его положение не применено: до вступления в силу внешнее изменение, не связанное с законодательством, затронуло положение, которое он меняет. Его можно только отменить; чтобы ввести его условия, примите их снова новым законопроектом."
+ },
+ "te_tax_ov_package_missed_tt": {
+  "en": "Held back, and none of it applied: its month went by before it could take effect. If it is at most #v [Country.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0]#! months late and no later bill has changed what it changes, it can be moved to next month; otherwise it can only be dropped.",
+  "ru": "Задержан, и ни одно его положение не применено: его месяц прошёл до вступления в силу. Если опоздание не более #v [Country.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0]#! мес. и ни один более поздний законопроект не изменил то, что он меняет, его можно перенести на следующий месяц; иначе его можно только отменить."
+ },
+ "te_tax_ov_passed": {
+  "en": "Passed Bills",
+  "ru": "Принятые законопроекты"
+ },
+ "te_tax_ov_passed_awaiting": {
+  "en": "Awaiting",
+  "ru": "Ожидает"
+ },
+ "te_tax_ov_passed_held": {
+  "en": "#R Held#!",
+  "ru": "#R Задержан#!"
+ },
+ "te_tax_ov_passed_held_tt": {
+  "en": "A passed bill is held back, and none of it applies. Passed Bills says why: one whose month went by can be moved to next month, one an outside change reached can only be dropped.",
+  "ru": "Принятый законопроект задержан, и ни одно его положение не применяется. Причина указана в разделе «Принятые законопроекты»: если его месяц прошёл, его можно перенести на следующий месяц; если его затронуло внешнее изменение, его можно только отменить."
+ },
+ "te_tax_ov_passed_none_tt": {
+  "en": "No passed bill is waiting to take effect.",
+  "ru": "Ни один принятый законопроект не ждёт вступления в силу."
+ },
+ "te_tax_ov_snapshot_none_tt": {
+  "en": "Economy snapshot: none yet. The first is taken the day after this country's taxes come under the code.",
+  "ru": "Снимок экономики: пока нет. Первый делается на следующий день после того, как налоги этой страны перейдут под действие кодекса."
+ },
+ "te_tax_ov_snapshot_stale": {
+  "en": ", #R out of date#!",
+  "ru": ", #R устарел#!"
+ },
+ "te_tax_ov_snapshot_value_tt": {
+  "en": "Economy snapshot: #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#![SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_empty', 'te_tax_ov_snapshot_stale' )], what the [concept_tax_static_estimate] measures against\\nNet fixed income: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_net_fixed')|+K]#! a week\\nNet total income: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_net_total')|+K]#! a week\\n[concept_gdp]: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_gdp')|K]#!",
+  "ru": "Снимок экономики: #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#![SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_empty', 'te_tax_ov_snapshot_stale' )], база для расчёта [Concept('concept_tax_static_estimate','статической оценки')]\\nЧистый фиксированный доход: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_net_fixed')|+K]#! в неделю\\nЧистый общий доход: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_net_total')|+K]#! в неделю\\n[concept_gdp]: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_snap_gdp')|K]#!"
+ },
+ "te_tax_pk_a_agrel_pct": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_agrel_pct')|0]%#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_agrel_pct')|0]%#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!"
+ },
+ "te_tax_pk_a_cons": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!"
+ },
+ "te_tax_pk_a_cons_conflict": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R held: conflict, will not take effect; drop it#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R задержан: конфликт, в силу не вступит; отмените его#!"
+ },
+ "te_tax_pk_a_cons_missed": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R held: missed#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R задержан: срок пропущен#!"
+ },
+ "te_tax_pk_a_cons_sun": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, until #v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_cons_exp_mo')|0]#!, then reverts to #v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_succ_rate')|%0]#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_rate')|%0]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, до #v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_cons_exp_mo')|0]#!, затем возвращается к #v [Country.MakeScope.ScriptValue('te_tax_view_pa_cons_succ_rate')|%0]#!"
+ },
+ "te_tax_pk_a_customs": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_customs_changed')|0]#! levels set from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "Уровней, заданных с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!: #v [Country.MakeScope.ScriptValue('te_tax_view_pa_customs_changed')|0]#!"
+ },
+ "te_tax_pk_a_goods": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_pa_goods_changed')|0]#! goods taxed or exempted from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "Товаров, облагаемых налогом или освобождённых от него с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!: #v [Country.MakeScope.ScriptValue('te_tax_view_pa_goods_changed')|0]#!"
+ },
+ "te_tax_pk_a_head": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!"
+ },
+ "te_tax_pk_a_head_conflict": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R held: conflict, will not take effect; drop it#!",
+  "ru": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R задержан: конфликт, в силу не вступит; отмените его#!"
+ },
+ "te_tax_pk_a_head_missed": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R held: missed#!",
+  "ru": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#! — #R задержан: срок пропущен#!"
+ },
+ "te_tax_pk_a_head_sun": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, until #v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_head_exp_mo')|0]#!, then reverts to @money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_succ_rate')|2]#!",
+  "ru": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_rate')|2]#! с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!, до #v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_head_exp_mo')|0]#!, затем возвращается к @money!#v [Country.MakeScope.ScriptValue('te_tax_view_pa_head_succ_rate')|2]#!"
+ },
+ "te_tax_pk_a_relief_none": {
+  "en": "None from #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!",
+  "ru": "Нет с #v [Country.MakeScope.ScriptValue('te_tax_view_pa_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_pa_due_mo')|0]#!"
+ },
+ "te_tax_pk_goods_exempt": {
+  "en": "Exempts",
+  "ru": "Освобождает"
+ },
+ "te_tax_pk_release": {
+  "en": "Drop",
+  "ru": "Отменить"
+ },
+ "te_tax_pk_reschedule": {
+  "en": "Move to Next Month",
+  "ru": "Перенести на следующий месяц"
+ },
+ "te_tax_pol_bar_tt": {
+  "en": "The [concept_clout] of interest groups committed to this revision of the bill (solid) and of those still persuadable (pale green), as a share of every group that is not marginal. Pale red is the share opposed or drawing a red line. The line marks the share passage must exceed.",
+  "ru": "По показателю «[concept_clout|l]»: группы интересов, поддержавшие эту редакцию законопроекта (сплошная заливка), и те, кого ещё можно убедить (бледно-зелёная), как доля от всех групп, не являющихся маргинальными. Бледно-красная — доля противников и тех, кто выдвинул красную линию. Линия отмечает долю, которую необходимо превысить для принятия."
+ },
+ "te_tax_pol_conditions": {
+  "en": "Conditions for Passage",
+  "ru": "Условия принятия"
+ },
+ "te_tax_pol_current": {
+  "en": "Outside Changes",
+  "ru": "Внешние изменения"
+ },
+ "te_tax_pol_current_changed": {
+  "en": "#R Altered since introduced#!",
+  "ru": "#R Изменено после внесения#!"
+ },
+ "te_tax_pol_current_tt": {
+  "en": "A change made outside legislation to a tax the bill changes, since the bill was introduced or last revised. Revise the bill to pass it over the new baseline.",
+  "ru": "Изменение налога, затронутого законопроектом, внесённое вне законодательства после внесения или последнего пересмотра законопроекта. Пересмотрите законопроект, чтобы принять его с учётом новой исходной величины."
+ },
+ "te_tax_pol_debate": {
+  "en": "Debate",
+  "ru": "Обсуждение"
+ },
+ "te_tax_pol_debate_done": {
+  "en": "Complete",
+  "ru": "Завершено"
+ },
+ "te_tax_pol_debate_tt": {
+  "en": "A bill is debated for #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#! days after its last revision before it can pass, #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! for a minor bill.",
+  "ru": "Законопроект обсуждается после последнего пересмотра в течение #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#! дн., прежде чем его можно принять; малый законопроект — #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! дн."
+ },
+ "te_tax_pol_debate_value": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left')|0]#! days left",
+  "ru": "Осталось дней: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left')|0]#!"
+ },
+ "te_tax_pol_due": {
+  "en": "Takes Effect",
+  "ru": "Вступление в силу"
+ },
+ "te_tax_pol_due_passed": {
+  "en": "#R [Country.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0] has come#!",
+  "ru": "#R Наступил месяц [Country.MakeScope.ScriptValue('te_tax_view_bl_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_bl_due_mo')|0]#!"
+ },
+ "te_tax_pol_due_tt": {
+  "en": "A bill can pass only before the month it takes effect. Once that month comes, move it to the next month.",
+  "ru": "Законопроект можно принять только до месяца его вступления в силу. Когда этот месяц наступит, перенесите его на следующий."
+ },
+ "te_tax_pol_est_note": {
+  "en": "Revenue figures on offers are a [concept_tax_static_estimate], against the snapshot of #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!.",
+  "ru": "Данные о доходах в предложениях — это [Concept('concept_tax_static_estimate','статическая оценка')] по снимку за #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!."
+ },
+ "te_tax_pol_est_note_stale": {
+  "en": "#R Estimate out of date:#! revenue figures on offers use the snapshot of #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!, from an earlier month, an earlier code or an earlier revision of the bill.",
+  "ru": "#R Оценка устарела:#! данные о доходах в предложениях основаны на снимке за #v [Country.MakeScope.ScriptValue('te_tax_view_snap_month_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_snap_month_mo')|0]#!, то есть на более раннем месяце, более раннем кодексе или более ранней редакции законопроекта."
+ },
+ "te_tax_pol_est_tt": {
+  "en": "A [concept_tax_static_estimate] of one step of the tax, against its rate at the economy snapshot. Relief and goods offers are not estimated.",
+  "ru": "[Concept('concept_tax_static_estimate','Статическая оценка')] одного шага налога относительно его ставки на момент снимка экономики. Предложения о льготах и товарах не оцениваются."
+ },
  "te_tax_pol_force": {
   "en": "Force Through",
   "ru": "Продавить"
+ },
+ "te_tax_pol_header": {
+  "en": "Bill Under Debate",
+  "ru": "Обсуждаемый законопроект"
+ },
+ "te_tax_pol_legitimacy": {
+  "en": "Legitimacy",
+  "ru": "Легитимность"
+ },
+ "te_tax_pol_legitimacy_tt": {
+  "en": "The government's [concept_legitimacy] must be at least this to pass a tax bill.",
+  "ru": "Чтобы принять налоговый законопроект, [concept_legitimacy] правительства должна быть не ниже этого значения."
+ },
+ "te_tax_pol_legitimacy_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_legitimacy')|0]#!, at least #v [Country.MakeScope.ScriptValue('te_tax_passage_legitimacy')|0]#! needed",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_legitimacy')|0]#!, нужно не менее #v [Country.MakeScope.ScriptValue('te_tax_passage_legitimacy')|0]#!"
+ },
+ "te_tax_pol_met": {
+  "en": "#G Met#!",
+  "ru": "#G Выполнено#!"
+ },
+ "te_tax_pol_pass": {
+  "en": "Pass",
+  "ru": "Принять"
+ },
+ "te_tax_pol_revise": {
+  "en": "Revise Bill",
+  "ru": "Пересмотреть законопроект"
+ },
+ "te_tax_pol_slot": {
+  "en": "Waiting Bills",
+  "ru": "Ожидающие законопроекты"
+ },
+ "te_tax_pol_slot_free": {
+  "en": "Room for this one",
+  "ru": "Для этого есть место"
+ },
+ "te_tax_pol_slot_full": {
+  "en": "#R Two already waiting#!",
+  "ru": "#R Уже ждут двое#!"
+ },
+ "te_tax_pol_slot_tt": {
+  "en": "At most two passed bills can wait to take effect at once.",
+  "ru": "Одновременно вступления в силу могут ждать не более двух принятых законопроектов."
+ },
+ "te_tax_pol_support": {
+  "en": "Committed Clout",
+  "ru": "Поддержавший вес"
+ },
+ "te_tax_pol_support_tt": {
+  "en": "Groups committed to this revision must hold more than this share of the [concept_clout] of every group that is not marginal.",
+  "ru": "Группы, поддержавшие эту редакцию, должны набирать по показателю «[concept_clout|l]» среди всех групп, не являющихся маргинальными, больше этой доли."
+ },
+ "te_tax_pol_unmet": {
+  "en": "#R Not met#!",
+  "ru": "#R Не выполнено#!"
+ },
+ "te_tax_pol_withdraw": {
+  "en": "Withdraw",
+  "ru": "Отозвать"
+ },
+ "te_tax_relief_ag_1": {
+  "en": "Agricultural Tax Relief 25%",
+  "ru": "Налоговые льготы для сельского хозяйства 25%"
+ },
+ "te_tax_relief_ag_1_desc": {
+  "en": "The tax code lowers the wage tax paid by workers in agricultural buildings by a quarter.",
+  "ru": "Налоговый кодекс снижает на четверть налог на заработную плату, который платят работники сельскохозяйственных зданий."
+ },
+ "te_tax_relief_ag_2": {
+  "en": "Agricultural Tax Relief 50%",
+  "ru": "Налоговые льготы для сельского хозяйства 50%"
+ },
+ "te_tax_relief_ag_2_desc": {
+  "en": "The tax code halves the wage tax paid by workers in agricultural buildings.",
+  "ru": "Налоговый кодекс вдвое снижает налог на заработную плату, который платят работники сельскохозяйственных зданий."
+ },
+ "te_tax_relief_region_1": {
+  "en": "Regional Tax Relief 25%",
+  "ru": "Региональные налоговые льготы 25%"
+ },
+ "te_tax_relief_region_1_desc": {
+  "en": "The tax code names this state for regional relief. Every tax collected from its pops is lowered by a quarter.",
+  "ru": "Налоговый кодекс назвал эту область получателем региональных льгот. Все налоги, собираемые с её населения, снижены на четверть."
+ },
+ "te_tax_relief_region_2": {
+  "en": "Regional Tax Relief 50%",
+  "ru": "Региональные налоговые льготы 50%"
+ },
+ "te_tax_relief_region_2_desc": {
+  "en": "The tax code names this state for regional relief. Every tax collected from its pops is halved.",
+  "ru": "Налоговый кодекс назвал эту область получателем региональных льгот. Все налоги, собираемые с её населения, снижены вдвое."
+ },
+ "te_tax_rv_agrel_benefit": {
+  "en": "Workers in agricultural buildings, on their wage tax only.",
+  "ru": "Работники сельскохозяйственных зданий, только в части налога на заработную плату."
+ },
+ "te_tax_rv_agrel_forgoes": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_pct')|0]%#! of the wage tax those workers would pay, against #v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct')|0]%#! under existing law.",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_pct')|0]%#! налога на заработную плату, который заплатили бы эти работники, против #v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct')|0]%#! по действующему закону."
+ },
+ "te_tax_rv_agrel_law": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct')|0]%#! in #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct')|0]%#! в #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!"
+ },
+ "te_tax_rv_bill": {
+  "en": "With This Bill",
+  "ru": "С этим законопроектом"
+ },
+ "te_tax_rv_bill_sun_cons": {
+  "en": "Expires #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_mo')|0]#!, then reverts to #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_succ_rate')|%0]#!",
+  "ru": "Истекает #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_mo')|0]#!, затем возвращается к #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_succ_rate')|%0]#!"
+ },
+ "te_tax_rv_bill_sun_head": {
+  "en": "Expires #v [Country.MakeScope.ScriptValue('te_tax_view_dr_head_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_head_exp_mo')|0]#!, then reverts to @money!#v [Country.MakeScope.ScriptValue('te_tax_view_dr_head_succ_rate')|2]#!",
+  "ru": "Истекает #v [Country.MakeScope.ScriptValue('te_tax_view_dr_head_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_head_exp_mo')|0]#!, затем возвращается к @money!#v [Country.MakeScope.ScriptValue('te_tax_view_dr_head_succ_rate')|2]#!"
+ },
+ "te_tax_rv_bill_tt": {
+  "en": "What the bill would make of the tax, from the month it takes effect; until then it changes nothing. A temporary change reverts to the rate beneath it: the rate existing law would then have.",
+  "ru": "Каким законопроект сделает налог с месяца вступления в силу; до тех пор он ничего не меняет. Временное изменение возвращается к ставке, которая лежит под ним, то есть к той, какую тогда имел бы действующий закон."
+ },
+ "te_tax_rv_cu_blocked_exp": {
+  "en": "Exports blocked by a treaty or the tariff cooldown: the level the code set did not take, and the code took the market's instead. The bill may meet the same block.",
+  "ru": "Экспорт заблокирован договором или паузой в изменении пошлин: заданный кодексом уровень не вступил в силу, и кодекс принял уровень рынка. Законопроект может столкнуться с той же блокировкой."
+ },
+ "te_tax_rv_cu_blocked_imp": {
+  "en": "Imports blocked by a treaty or the tariff cooldown: the level the code set did not take, and the code took the market's instead. The bill may meet the same block.",
+  "ru": "Импорт заблокирован договором или паузой в изменении пошлин: заданный кодексом уровень не вступил в силу, и кодекс принял уровень рынка. Законопроект может столкнуться с той же блокировкой."
+ },
+ "te_tax_rv_cu_exp": {
+  "en": "exports",
+  "ru": "экспорт"
+ },
+ "te_tax_rv_cu_imp": {
+  "en": "imports",
+  "ru": "импорт"
+ },
+ "te_tax_rv_customs_dropped": {
+  "en": "Customs changes dropped: the country no longer owns its market, so the market's owner sets every tariff level. The draft's other changes stand.",
+  "ru": "Изменения таможенных пошлин отброшены: страна больше не владеет своим рынком, поэтому все уровни пошлин задаёт владелец рынка. Остальные изменения проекта остаются в силе."
+ },
+ "te_tax_rv_customs_intro": {
+  "en": "Each level the bill changes: existing law's in the month the bill takes effect, then the bill's. The market's levels change from that month, when the code sets them.",
+  "ru": "Каждый уровень, который меняет законопроект: сначала по действующему закону в месяц вступления законопроекта в силу, затем по законопроекту. Уровни рынка меняются с этого месяца, когда их задаёт кодекс."
+ },
+ "te_tax_rv_good_taxed": {
+  "en": "Taxed from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
+  "ru": "Облагается налогом с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!"
+ },
+ "te_tax_rv_good_untaxed": {
+  "en": "Exempt from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
+  "ru": "Освобождён от налога с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!"
+ },
+ "te_tax_rv_goods_benefit": {
+  "en": "Pops who buy a good the bill stops taxing pay less for it; those who buy one it starts taxing pay more. Staples weigh most with the interest groups, luxuries least.",
+  "ru": "Группы населения, покупающие товар, который законопроект перестаёт облагать налогом, платят за него меньше; покупающие товар, который он начинает облагать, платят больше. Для групп интересов важнее всего предметы первой необходимости, меньше всего — предметы роскоши."
+ },
+ "te_tax_rv_goods_bill": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_goods_count')|0]#! goods taxed from #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!",
+  "ru": "Облагаемых товаров с #v [Country.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!: #v [Country.MakeScope.ScriptValue('te_tax_view_dr_goods_count')|0]#!"
+ },
+ "te_tax_rv_goods_forgoes": {
+  "en": "The consumption tax on each good the bill stops taxing, at the consumption tax rate in force.",
+  "ru": "Налог на потребление с каждого товара, который законопроект перестаёт облагать, по действующей ставке налога на потребление."
+ },
+ "te_tax_rv_goods_law": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_goods_base_count')|0]#! goods taxed",
+  "ru": "Облагаемых товаров: #v [Country.MakeScope.ScriptValue('te_tax_view_dr_goods_base_count')|0]#!"
+ },
+ "te_tax_rv_header": {
+  "en": "Review the Draft",
+  "ru": "Обзор проекта"
+ },
+ "te_tax_rv_law_tt": {
+  "en": "What the tax will be without this bill: its rate now, a temporary rate's expiry, and passed bills waiting to change it.",
+  "ru": "Каким будет налог без этого законопроекта: его ставка сейчас, срок окончания временной ставки и принятые законопроекты, ожидающие вступления в силу."
+ },
+ "te_tax_rv_nothing": {
+  "en": "The draft changes nothing yet.",
+  "ru": "Проект пока ничего не меняет."
+ },
+ "te_tax_rv_now_cons": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_en_cons_rate')|%0]#! now",
+  "ru": "Сейчас: #v [Country.MakeScope.ScriptValue('te_tax_view_en_cons_rate')|%0]#!"
+ },
+ "te_tax_rv_now_head": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('te_tax_view_en_head_rate')|2]#! now",
+  "ru": "Сейчас: @money!#v [Country.MakeScope.ScriptValue('te_tax_view_en_head_rate')|2]#!"
+ },
+ "te_tax_rv_passed": {
+  "en": "Passed Bill",
+  "ru": "Принятый законопроект"
+ },
+ "te_tax_rv_passed_tt": {
+  "en": "A passed bill. Unless its line says it is held back, it takes effect on the 1st of its month. One that takes effect in this bill's month or later loses its change to this tax to this bill when this bill passes.",
+  "ru": "Принятый законопроект. Если в его строке не сказано, что он задержан, он вступает в силу 1-го числа своего месяца. Законопроект, вступающий в силу в месяц этого законопроекта или позже, теряет своё изменение этого налога в пользу этого законопроекта, когда он будет принят."
+ },
+ "te_tax_rv_rebase_cons": {
+  "en": "A passed bill or a change made outside legislation has altered the $te_tax_inst_cons$ since the draft changed it. Accept the new baseline to introduce the draft; the draft keeps its own rate.",
+  "ru": "Принятый законопроект или внешнее изменение, не связанное с законодательством, изменили $te_tax_inst_cons$ после того, как проект его изменил. Примите новую исходную величину, чтобы внести проект; проект сохранит собственную ставку."
+ },
+ "te_tax_rv_rebase_customs": {
+  "en": "A passed bill or a market change moved the customs levels this draft changes.",
+  "ru": "Принятый законопроект или изменение рынка сдвинули уровни таможенных пошлин, которые меняет этот проект."
+ },
+ "te_tax_rv_rebase_goods": {
+  "en": "A passed bill or a change made outside legislation has altered the taxed goods since the draft changed them. Accept the new baseline to introduce the draft; the draft keeps its own goods.",
+  "ru": "Принятый законопроект или внешнее изменение, не связанное с законодательством, изменили список облагаемых товаров после того, как проект его изменил. Примите новую исходную величину, чтобы внести проект; проект сохранит собственный список товаров."
+ },
+ "te_tax_rv_rebase_header": {
+  "en": "Changed Since Drafted",
+  "ru": "Изменено после составления"
+ },
+ "te_tax_rv_rebase_relief": {
+  "en": "A passed bill or a change made outside legislation has altered relief since the draft changed it. Accept the new baseline to introduce the draft; the draft keeps its own relief.",
+  "ru": "Принятый законопроект или внешнее изменение, не связанное с законодательством, изменили льготы после того, как проект их изменил. Примите новую исходную величину, чтобы внести проект; проект сохранит собственные льготы."
+ },
+ "te_tax_rv_regrel_benefit": {
+  "en": "Every pop in the named states, on every tax collected from them.",
+  "ru": "Все группы населения в названных областях, по всем налогам, взимаемым с них."
+ },
+ "te_tax_rv_regrel_forgoes": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct')|0]%#! of all taxes collected in the named states, against #v [Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_base_pct')|0]%#! under existing law. Each state shows what it collects now.",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct')|0]%#! всех налогов, собираемых в названных областях, против #v [Country.MakeScope.ScriptValue('te_tax_view_dr_regrel_base_pct')|0]%#! по действующему закону. Для каждой области показано, сколько она собирает сейчас."
+ },
+ "te_tax_rv_regrel_state": {
+  "en": "[State.GetName]: [State.GetPopulationSize|Kv] pops, #variable @money![State.GetTaxationRevenue|K]#! a week in taxes",
+  "ru": "[State.GetName]: групп населения: [State.GetPopulationSize|Kv], налоги: #variable @money![State.GetTaxationRevenue|K]#! в неделю"
+ },
+ "te_tax_rv_regrel_state_est": {
+  "en": "[State.GetName]: [State.GetPopulationSize|Kv] pops, #variable @money![State.GetTaxationRevenue|K]#! a week in taxes, @money!#v [Multiply_CFixedPoint( State.GetTaxationRevenue, State.MakeScope.ScriptValue('te_tax_view_est_regrel_state') )|+K]#! with this bill (static estimate)",
+  "ru": "[State.GetName]: групп населения: [State.GetPopulationSize|Kv], налоги: #variable @money![State.GetTaxationRevenue|K]#! в неделю, @money!#v [Multiply_CFixedPoint( State.GetTaxationRevenue, State.MakeScope.ScriptValue('te_tax_view_est_regrel_state') )|+K]#! с этим законопроектом (статическая оценка)"
  },
  "te_tax_rv_relief_benefit": {
   "en": "Benefits",
@@ -83,8 +607,764 @@
   "en": "Forgoes",
   "ru": "Отказывается от"
  },
+ "te_tax_spectrum_auction_desc": {
+  "en": "Selling the airwaves to the highest bidders has cost the government public trust.",
+  "ru": "Продажа радиочастот тому, кто больше заплатит, стоила правительству доверия общества."
+ },
+ "te_tax_spectrum_auction_proceeds": {
+  "en": "Spectrum Auction Proceeds",
+  "ru": "Доходы от аукциона радиочастот"
+ },
+ "te_tax_spectrum_auction_proceeds_desc": {
+  "en": "Payments from the carriers that won the spectrum auction.",
+  "ru": "Платежи операторов, выигравших аукцион радиочастот."
+ },
+ "te_tax_sum_accept": {
+  "en": "Changes to Accept",
+  "ru": "Изменения к принятию"
+ },
+ "te_tax_sum_accept_tt": {
+  "en": "A passed bill or a change made outside legislation moved these provisions since the draft changed them. Accept each under Changed Since Drafted, at the top of Draft Reform, before the draft can be introduced; the draft keeps its own values.",
+  "ru": "Принятый законопроект или внешнее изменение, не связанное с законодательством, сдвинули эти положения после того, как проект их изменил. Чтобы проект можно было внести, примите каждое из них в разделе «Изменено после составления» в верхней части раздела «Проект реформы»; проект сохранит собственные значения."
+ },
+ "te_tax_sum_changes": {
+  "en": "Changes",
+  "ru": "Изменения"
+ },
+ "te_tax_sum_changes_tt": {
+  "en": "How many taxes, taxed goods and reliefs the draft changes.",
+  "ru": "Сколько налогов, облагаемых товаров и льгот меняет проект."
+ },
+ "te_tax_sum_changes_value": {
+  "en": "Taxes #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions')|0]#!, goods #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed')|0]#!, relief #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed')|0]#!",
+  "ru": "Налогов: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions')|0]#!, товаров: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed')|0]#!, льгот: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed')|0]#!"
+ },
+ "te_tax_sum_class": {
+  "en": "Bill Class",
+  "ru": "Класс законопроекта"
+ },
+ "te_tax_sum_class_tt": {
+  "en": "A minor bill changes at most two taxes, each by at most two steps, and no goods or relief. It is debated for #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! days instead of #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#!.",
+  "ru": "Малый законопроект меняет не более двух налогов, каждый не более чем на два шага, и не затрагивает товары и льготы. Он обсуждается #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_minor')|0]#! дн. вместо #v [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_major')|0]#!."
+ },
+ "te_tax_sum_customs": {
+  "en": "Customs Levels",
+  "ru": "Уровни таможенных пошлин"
+ },
+ "te_tax_sum_customs_tt": {
+  "en": "How many import and export levels the draft changes.",
+  "ru": "Сколько уровней импорта и экспорта меняет проект."
+ },
+ "te_tax_sum_discard": {
+  "en": "Discard",
+  "ru": "Отбросить"
+ },
+ "te_tax_sum_due_soon": {
+  "en": "#R A bill introduced today could not pass before this month. Choose a later month, or move the bill to the next month once this one comes.#!",
+  "ru": "#R Законопроект, внесённый сегодня, не успеет пройти до наступления этого месяца. Выберите более поздний месяц или перенесите законопроект на следующий месяц, когда этот наступит.#!"
+ },
+ "te_tax_sum_due_tt": {
+  "en": "The month the draft takes effect, and the earliest it can have if it is introduced today: a bill can pass only before its month comes, and only once its debate is over.",
+  "ru": "Месяц вступления проекта в силу и самый ранний месяц, который он может получить, если его внести сегодня: законопроект можно принять только до наступления его месяца и только после окончания обсуждения."
+ },
+ "te_tax_sum_due_value": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!, earliest #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_earliest_month_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_earliest_month_mo')|0]#!",
+  "ru": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_due_mo')|0]#!, не ранее #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_earliest_month_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_earliest_month_mo')|0]#!"
+ },
+ "te_tax_sum_introduce": {
+  "en": "Introduce",
+  "ru": "Внести"
+ },
+ "te_tax_sum_major": {
+  "en": "Major, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_debate_days')|0]#! days of debate",
+  "ru": "Крупный, обсуждение: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_debate_days')|0]#! дн."
+ },
+ "te_tax_sum_minor": {
+  "en": "Minor, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_debate_days')|0]#! days of debate",
+  "ru": "Малый, обсуждение: #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_debate_days')|0]#! дн."
+ },
+ "te_tax_sum_revenue": {
+  "en": "Revenue",
+  "ru": "Доходы"
+ },
+ "te_tax_sum_revenue_lines_tt": {
+  "en": "Change a week by Budget line, against existing law:\\n$te_tax_est_ch_income$: @money![Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') )|+=K]\\n$te_tax_est_ch_dividends$: @money![Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') )|+=K]\\n$te_tax_est_ch_poll$: @money![Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+=K][SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_sum_revenue_poll_hi', 'te_tax_empty' )]\\n$te_tax_est_ch_consumption$: @money![Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') )|+=K]\\nA line with no current base counts as no change.",
+  "ru": "Изменение в неделю по статьям бюджета относительно действующего закона:\\n$te_tax_est_ch_income$: @money![Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') )|+=K]\\n$te_tax_est_ch_dividends$: @money![Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') )|+=K]\\n$te_tax_est_ch_poll$: @money![Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') )|+=K][SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_sum_revenue_poll_hi', 'te_tax_empty' )]\\n$te_tax_est_ch_consumption$: @money![Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') )|+=K]\\nСтатья без текущей базы считается неизменной."
+ },
+ "te_tax_sum_revenue_none": {
+  "en": "Not estimated",
+  "ru": "Не оценивается"
+ },
+ "te_tax_sum_revenue_partial": {
+  "en": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] a week, in part",
+  "ru": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] в неделю, частично"
+ },
+ "te_tax_sum_revenue_poll_hi": {
+  "en": " to @money![Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') )|+=K]",
+  "ru": " до @money![Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') )|+=K]"
+ },
+ "te_tax_sum_revenue_range": {
+  "en": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] to @money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] a week",
+  "ru": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] — @money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_hi') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] в неделю"
+ },
+ "te_tax_sum_revenue_tt": {
+  "en": "What the draft does to the taxes collected each week: the sum of the review's Revenue Estimate, a [concept_tax_static_estimate] at today's economy.",
+  "ru": "Как проект повлияет на налоги, собираемые за неделю: сумма «Оценки доходов» из обзора, [Concept('concept_tax_static_estimate','статическая оценка')] при сегодняшней экономике."
+ },
+ "te_tax_sum_revenue_value": {
+  "en": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] a week",
+  "ru": "@money![Add_CFixedPoint( Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetIncomeTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_delta') ), Multiply_CFixedPoint( GetPlayer.PredictDividendsTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_delta') ) ), Add_CFixedPoint( Multiply_CFixedPoint( GetPlayer.GetPollTaxIncome, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_delta_lo') ), Multiply_CFixedPoint( GetPlayer.PredictConsumptionTaxes, GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_delta') ) ) )|+=K] в неделю"
+ },
+ "te_tax_sum_review": {
+  "en": "Review",
+  "ru": "Обзор"
+ },
+ "te_tax_sum_review_hide": {
+  "en": "Hide Review",
+  "ru": "Скрыть обзор"
+ },
+ "te_tax_sum_review_tt": {
+  "en": "Shows each change in the draft against the timeline of existing law.",
+  "ru": "Показывает каждое изменение проекта на фоне хронологии действующего закона."
+ },
  "te_tax_tab": {
   "en": "Tax Code",
   "ru": "Налоговый кодекс"
+ },
+ "te_tax_tab_full_tt": {
+  "en": "The enacted tax code, the bills that would change it and its history.",
+  "ru": "Действующий налоговый кодекс, законопроекты, которые могли бы его изменить, и его история."
+ },
+ "te_tax_tab_light_tt": {
+  "en": "The taxes in force and the range your taxation law allows each.",
+  "ru": "Действующие налоги и диапазон, который допускает ваш закон о налогообложении для каждого из них."
+ },
+ "te_tax_tt_bill_open": {
+  "en": "A tax bill is under debate.",
+  "ru": "Обсуждается налоговый законопроект."
+ },
+ "te_tax_tt_cmd_accept_offer": {
+  "en": "Accepts the offer. The bill becomes a new revision: debate starts again, every interest group's commitment is released and weighed afresh, and the promises already accepted under this bill stay on it.",
+  "ru": "Принимает предложение. Законопроект становится новой редакцией: обсуждение начинается заново, обязательства всех групп интересов снимаются и оцениваются вновь, а обещания, уже принятые по этому законопроекту, остаются за ним."
+ },
+ "te_tax_tt_cmd_draft_customs_down": {
+  "en": "Lowers this level by one step in the draft: a lower tariff, or a larger subsidy.",
+  "ru": "Понижает этот уровень на один шаг в проекте: пошлина ниже или субсидия больше."
+ },
+ "te_tax_tt_cmd_draft_customs_revert": {
+  "en": "Takes this level out of the draft. A bill made from it would leave the level as it is.",
+  "ru": "Убирает этот уровень из проекта. Законопроект на его основе оставит уровень без изменений."
+ },
+ "te_tax_tt_cmd_draft_customs_up": {
+  "en": "Raises this level by one step in the draft: a smaller subsidy, or a higher tariff.",
+  "ru": "Повышает этот уровень на один шаг в проекте: субсидия меньше или пошлина выше."
+ },
+ "te_tax_tt_cmd_draft_discard": {
+  "en": "Discards the draft and every change made in it, which cannot be recovered. The tax code and any bill under debate stay as they are.",
+  "ru": "Отбрасывает проект и все сделанные в нём изменения, восстановить которые нельзя. Налоговый кодекс и любой обсуждаемый законопроект остаются как есть."
+ },
+ "te_tax_tt_cmd_draft_due_earlier": {
+  "en": "Moves the month the draft takes effect one month earlier.",
+  "ru": "Сдвигает месяц вступления проекта в силу на месяц раньше."
+ },
+ "te_tax_tt_cmd_draft_due_later": {
+  "en": "Moves the month the draft takes effect one month later.",
+  "ru": "Сдвигает месяц вступления проекта в силу на месяц позже."
+ },
+ "te_tax_tt_cmd_draft_good": {
+  "en": "Changes whether the draft taxes this good. Pressed again, the draft leaves the good as it is.",
+  "ru": "Переключает, облагает ли проект этот товар налогом. При повторном нажатии проект оставляет товар как есть."
+ },
+ "te_tax_tt_cmd_draft_new": {
+  "en": "Opens a draft reform of the tax code, copied from the bill under debate if there is one. No tax changes until a bill passes and takes effect.",
+  "ru": "Открывает проект реформы налогового кодекса, скопированный из обсуждаемого законопроекта, если он есть. Ни один налог не меняется, пока законопроект не будет принят и не вступит в силу."
+ },
+ "te_tax_tt_cmd_draft_rebase": {
+  "en": "Accepts the change to this part of the code. The draft keeps its own value.",
+  "ru": "Принимает изменение этой части кодекса. Проект сохраняет собственное значение."
+ },
+ "te_tax_tt_cmd_draft_relief_choose": {
+  "en": "Takes regional relief into the draft as existing law has it, with the states it names, and lists your incorporated states to name from. Pressed again, it updates the list.",
+  "ru": "Включает в проект региональные льготы в том виде, как их задаёт действующий закон, с названными в нём областями и выводит список ваших включённых областей, из которых можно выбирать. При повторном нажатии список обновляется."
+ },
+ "te_tax_tt_cmd_draft_relief_down": {
+  "en": "Lowers this relief by 25% in the draft. At none, regional relief names no state.",
+  "ru": "Понижает эту льготу на 25% в проекте. При значении «нет» региональные льготы не называют ни одной области."
+ },
+ "te_tax_tt_cmd_draft_relief_max": {
+  "en": "Sets this relief to 50% in the draft.",
+  "ru": "Устанавливает эту льготу на 50% в проекте."
+ },
+ "te_tax_tt_cmd_draft_relief_none": {
+  "en": "Sets this relief to none in the draft. Regional relief then names no state.",
+  "ru": "Устанавливает эту льготу на «нет» в проекте. Тогда региональные льготы не называют ни одной области."
+ },
+ "te_tax_tt_cmd_draft_relief_revert": {
+  "en": "Takes this relief out of the draft. A bill made from it would leave the relief, and any states it names, as they are.",
+  "ru": "Убирает эту льготу из проекта. Законопроект на его основе оставит льготу и названные в ней области без изменений."
+ },
+ "te_tax_tt_cmd_draft_relief_state": {
+  "en": "Names this state for regional relief in the draft, or drops it if the draft names it already.",
+  "ru": "Называет эту область получателем региональных льгот в проекте или исключает её, если проект уже её называет."
+ },
+ "te_tax_tt_cmd_draft_relief_up": {
+  "en": "Raises this relief by 25% in the draft.",
+  "ru": "Повышает эту льготу на 25% в проекте."
+ },
+ "te_tax_tt_cmd_draft_step_down": {
+  "en": "Lowers this tax by one step in the draft.",
+  "ru": "Понижает этот налог на один шаг в проекте."
+ },
+ "te_tax_tt_cmd_draft_step_max": {
+  "en": "Sets this tax to its highest rate in the draft.",
+  "ru": "Устанавливает этот налог на высшую ставку в проекте."
+ },
+ "te_tax_tt_cmd_draft_step_min": {
+  "en": "Sets this tax to zero in the draft.",
+  "ru": "Устанавливает этот налог на ноль в проекте."
+ },
+ "te_tax_tt_cmd_draft_step_revert": {
+  "en": "Takes this tax out of the draft. A bill made from it would leave the tax as it is.",
+  "ru": "Убирает этот налог из проекта. Законопроект на его основе оставит налог без изменений."
+ },
+ "te_tax_tt_cmd_draft_step_up": {
+  "en": "Raises this tax by one step in the draft.",
+  "ru": "Повышает этот налог на один шаг в проекте."
+ },
+ "te_tax_tt_cmd_draft_sunset_down": {
+  "en": "Brings this change's expiry forward. Below 6 months it becomes permanent.",
+  "ru": "Приближает срок окончания этого изменения. Менее 6 мес. — оно становится постоянным."
+ },
+ "te_tax_tt_cmd_draft_sunset_up": {
+  "en": "Pushes this change's expiry back. A permanent change gets an expiry 6 months after it takes effect.",
+  "ru": "Отодвигает срок окончания этого изменения. Постоянное изменение получает срок окончания через 6 мес. после вступления в силу."
+ },
+ "te_tax_tt_cmd_force_through": {
+  "en": "Passes the bill by [concept_legislative_override_capacity], without a committed majority, and lowers [concept_judicial_independence] by 10.",
+  "ru": "Проводит законопроект за счёт [Concept('concept_legislative_override_capacity','возможности законодательного преодоления')], без поддержки обязавшегося большинства, и снижает [Concept('concept_judicial_independence','независимость судов')] на 10."
+ },
+ "te_tax_tt_cmd_introduce": {
+  "en": "Introduces the draft as a tax bill. Debate starts, and each interest group decides whether to commit to it. No tax changes until the bill passes and takes effect.",
+  "ru": "Вносит проект как налоговый законопроект. Начинается обсуждение, и каждая группа интересов решает, поддержать ли его. Ни один налог не меняется, пока законопроект не будет принят и не вступит в силу."
+ },
+ "te_tax_tt_cmd_obl_renegotiate": {
+  "en": "Releases the government from the promise. The group trusts the government a step less; nothing already done is undone.",
+  "ru": "Освобождает правительство от обещания. Группа доверяет правительству на ступень меньше; уже сделанное не отменяется."
+ },
+ "te_tax_tt_cmd_package_release": {
+  "en": "Drops the passed bill, making room for another to wait. Nothing it would have changed takes effect. To enact its terms, pass them again as a new bill.",
+  "ru": "Отменяет принятый законопроект, освобождая место для другого. Ничто из того, что он изменил бы, не вступает в силу. Чтобы ввести его условия, примите их снова новым законопроектом."
+ },
+ "te_tax_tt_cmd_package_reschedule": {
+  "en": "The passed bill takes effect next month instead. Its expiry dates stay as approved.",
+  "ru": "Принятый законопроект вступает в силу в следующем месяце. Сроки его окончания остаются утверждёнными."
+ },
+ "te_tax_tt_cmd_pass": {
+  "en": "Passes the bill. It takes effect on the 1st of its month ([concept_tax_commencement]) and replaces any change a passed bill had scheduled for the same provisions in or after that month.",
+  "ru": "Принимает законопроект. Он вступает в силу 1-го числа своего месяца ([Concept('concept_tax_commencement','вступление в силу')]) и заменяет любое изменение, которое принятый законопроект запланировал для тех же положений в этом месяце или позже."
+ },
+ "te_tax_tt_cmd_reschedule": {
+  "en": "Moves the month the bill takes effect to next month. Interest groups keep their commitments.",
+  "ru": "Переносит месяц вступления законопроекта в силу на следующий. Группы интересов сохраняют свои обязательства."
+ },
+ "te_tax_tt_cmd_revise": {
+  "en": "Replaces the bill with the draft. Every interest group's commitment is released and debate starts again.",
+  "ru": "Заменяет законопроект проектом. Обязательства всех групп интересов снимаются, и обсуждение начинается заново."
+ },
+ "te_tax_tt_cmd_withdraw": {
+  "en": "Withdraws the bill. Every interest group's commitment to it and every day of its debate are lost; a bill introduced later starts over. An open draft is kept. The tax code and the bills already passed stay as they are.",
+  "ru": "Отзывает законопроект. Обязательства всех групп интересов по нему и все дни его обсуждения теряются; законопроект, внесённый позже, начнёт всё с нуля. Открытый проект сохраняется. Налоговый кодекс и уже принятые законопроекты остаются как есть."
+ },
+ "te_tax_tt_code_in_force": {
+  "en": "The tax code is in force.",
+  "ru": "Налоговый кодекс действует."
+ },
+ "te_tax_tt_counts_as_graduated": {
+  "en": "The tax code taxes wages at 10% or more and dividends at least as heavily, as #b $law_graduated_taxation$#! does.",
+  "ru": "Налоговый кодекс облагает заработную плату по ставке от 10% и выше, а дивиденды — не меньше, как закон #b $law_graduated_taxation$#!."
+ },
+ "te_tax_tt_counts_as_per_capita": {
+  "en": "The tax code levies both a wage tax and a head tax, as #b $law_per_capita_based_taxation$#! does.",
+  "ru": "Налоговый кодекс взимает и налог на заработную плату, и подушный налог, как закон #b $law_per_capita_based_taxation$#!."
+ },
+ "te_tax_tt_counts_as_proportional": {
+  "en": "The tax code taxes wages at 10% or more and taxes dividends, as #b $law_proportional_taxation$#! does.",
+  "ru": "Налоговый кодекс облагает заработную плату по ставке от 10% и выше и облагает дивиденды, как закон #b $law_proportional_taxation$#!."
+ },
+ "te_tax_tt_customs_authority": {
+  "en": "The tax code sets this country's tariffs: it owns its market, under the customs option of the tax code rule.",
+  "ru": "Пошлины этой страны задаёт налоговый кодекс: она владеет своим рынком, при таможенном варианте правила налогового кодекса."
+ },
+ "te_tax_tt_customs_room_down": {
+  "en": "The draft's level is above the largest subsidy.",
+  "ru": "Уровень проекта выше самой большой субсидии."
+ },
+ "te_tax_tt_customs_room_up": {
+  "en": "The draft's level is below the highest tariff.",
+  "ru": "Уровень проекта ниже самой высокой пошлины."
+ },
+ "te_tax_tt_customs_touched": {
+  "en": "The draft changes this level.",
+  "ru": "Проект меняет этот уровень."
+ },
+ "te_tax_tt_draft_baseline": {
+  "en": "No provision the draft changes has been altered since the draft changed it. Accept each such change under Changed Since Drafted, at the top of Draft Reform, first.",
+  "ru": "Ни одно положение, которое меняет проект, не было изменено после того, как проект его изменил. Сначала примите каждое такое изменение в разделе «Изменено после составления» в верхней части раздела «Проект реформы»."
+ },
+ "te_tax_tt_draft_changes": {
+  "en": "The draft changes at least one provision.",
+  "ru": "Проект меняет хотя бы одно положение."
+ },
+ "te_tax_tt_draft_differs": {
+  "en": "The draft differs from the bill.",
+  "ru": "Проект отличается от законопроекта."
+ },
+ "te_tax_tt_draft_due_range": {
+  "en": "The draft takes effect between next month and #v [GetPlayer.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! months from now.",
+  "ru": "Проект вступает в силу в период от следующего месяца до #v [GetPlayer.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! мес. от сегодняшнего дня."
+ },
+ "te_tax_tt_draft_good_known": {
+  "en": "The tax code can tax this good.",
+  "ru": "Налоговый кодекс может облагать налогом этот товар."
+ },
+ "te_tax_tt_draft_open": {
+  "en": "A draft reform is open.",
+  "ru": "Проект реформы открыт."
+ },
+ "te_tax_tt_draft_traditionalism": {
+  "en": "Under #b $law_traditionalism$#!, the draft leaves no wage tax and no dividend tax.",
+  "ru": "При законе #b $law_traditionalism$#! проект не оставляет ни налога на заработную плату, ни налога на дивиденды."
+ },
+ "te_tax_tt_due_room_earlier": {
+  "en": "The draft takes effect later than next month.",
+  "ru": "Проект вступает в силу позже следующего месяца."
+ },
+ "te_tax_tt_due_room_later": {
+  "en": "The draft takes effect sooner than #v [GetPlayer.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! months from now.",
+  "ru": "Проект вступает в силу раньше, чем через #v [GetPlayer.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! мес. от сегодняшнего дня."
+ },
+ "te_tax_tt_force_authority": {
+  "en": "[concept_authority] produced is above the override's cost of [GetPlayer.MakeScope.ScriptValue('forced_law_through_event_authority_cost_medium')|0].",
+  "ru": "Вырабатываемый [concept_authority|l] превышает стоимость преодоления, равную [GetPlayer.MakeScope.ScriptValue('forced_law_through_event_authority_cost_medium')|0]."
+ },
+ "te_tax_tt_force_capacity": {
+  "en": "[concept_legislative_override_capacity] is at least 2.",
+  "ru": "[concept_legislative_override_capacity] не менее 2."
+ },
+ "te_tax_tt_force_short": {
+  "en": "The bill lacks the committed support to pass on its own.",
+  "ru": "У законопроекта нет достаточной поддержки обязавшихся групп, чтобы пройти самостоятельно."
+ },
+ "te_tax_tt_native_locked_goods": {
+  "en": "Set by the [concept_tax_code]. The taxed goods change by a bill on the Tax Code tab.",
+  "ru": "Задаётся [Concept('concept_tax_code','налоговым кодексом')]. Облагаемые товары меняются законопроектом на вкладке «Налоговый кодекс»."
+ },
+ "te_tax_tt_native_locked_level_full": {
+  "en": "Set by the [concept_tax_code], which holds the tax level at Medium. Its rates change by a bill on the Tax Code tab.",
+  "ru": "Задаётся [Concept('concept_tax_code','налоговым кодексом')], который удерживает уровень налогов на среднем. Его ставки меняются законопроектом на вкладке «Налоговый кодекс»."
+ },
+ "te_tax_tt_native_locked_level_light": {
+  "en": "Set by your heaviest tax under the light [concept_tax_code]. Change the rates on the Tax Code tab.",
+  "ru": "Задаётся вашим самым тяжёлым налогом при облегчённом [Concept('concept_tax_code','налоговом кодексе')]. Меняйте ставки на вкладке «Налоговый кодекс»."
+ },
+ "te_tax_tt_native_locked_tariff": {
+  "en": "Set by the [concept_tax_code]. Import and export levels change by a bill on the Tax Code tab.",
+  "ru": "Задаётся [Concept('concept_tax_code','налоговым кодексом')]. Уровни импорта и экспорта меняются законопроектом на вкладке «Налоговый кодекс»."
+ },
+ "te_tax_tt_no_bill": {
+  "en": "No tax bill is under debate.",
+  "ru": "Ни один налоговый законопроект не обсуждается."
+ },
+ "te_tax_tt_no_draft": {
+  "en": "No draft reform is open.",
+  "ru": "Ни один проект реформы не открыт."
+ },
+ "te_tax_tt_obl_active": {
+  "en": "The promise is in force: its bill has taken effect.",
+  "ru": "Обещание действует: его законопроект вступил в силу."
+ },
+ "te_tax_tt_obl_inst_cap": {
+  "en": "The promised level is no higher than the institution can reach now.",
+  "ru": "Обещанный уровень не выше того, которого институт может достичь сейчас."
+ },
+ "te_tax_tt_obl_inst_reach": {
+  "en": "The promised level can be reached within #v [GetPlayer.MakeScope.ScriptValue('te_tax_obl_horizon')|0]#! months of the bill taking effect.",
+  "ru": "Обещанного уровня можно достичь в течение #v [GetPlayer.MakeScope.ScriptValue('te_tax_obl_horizon')|0]#! мес. после вступления законопроекта в силу."
+ },
+ "te_tax_tt_obl_not_duplicate": {
+  "en": "No pending or binding promise already covers the same thing.",
+  "ru": "Ни одно ожидающее или действующее обещание не покрывает то же самое."
+ },
+ "te_tax_tt_obl_slot_free": {
+  "en": "Fewer than four promises are pending or binding.",
+  "ru": "Ожидающих или действующих обещаний меньше четырёх."
+ },
+ "te_tax_tt_obl_wages_above": {
+  "en": "Military wages are above the promised level now.",
+  "ru": "Военные зарплаты сейчас выше обещанного уровня."
+ },
+ "te_tax_tt_offer_agrel": {
+  "en": "The bill and the draft add a band of agricultural relief.",
+  "ru": "Законопроект и проект добавляют полосу льгот для сельского хозяйства."
+ },
+ "te_tax_tt_offer_commits": {
+  "en": "The group is persuadable: it commits to the new revision.",
+  "ru": "Группу ещё можно убедить: она поддерживает новую редакцию."
+ },
+ "te_tax_tt_offer_cut_cons": {
+  "en": "The bill and the draft raise the $te_tax_inst_cons$ one step less.",
+  "ru": "Законопроект и проект повышают $te_tax_inst_cons$ на один шаг меньше."
+ },
+ "te_tax_tt_offer_draft": {
+  "en": "Your draft takes the same value, replacing any change you made there to it.",
+  "ru": "Ваш проект принимает то же значение, заменяя любое сделанное вами там изменение."
+ },
+ "te_tax_tt_offer_feasible": {
+  "en": "The offer can still be carried out: the tax or relief has room to move, or the promise can still be delivered and no promise already covers the same thing.",
+  "ru": "Предложение всё ещё можно выполнить: у налога или льготы есть запас для изменения, либо обещание ещё можно исполнить, и ни одно обещание не покрывает то же самое."
+ },
+ "te_tax_tt_offer_made": {
+  "en": "The group has made an offer for this revision.",
+  "ru": "Группа сделала предложение по этой редакции."
+ },
+ "te_tax_tt_offer_no_commit": {
+  "en": "The group opposes the bill: it takes the offer and opposes the bill less, and commits only if its new score reaches #v [GetPlayer.MakeScope.ScriptValue('te_tax_commit_threshold')|0]#!.",
+  "ru": "Группа против законопроекта: она принимает предложение и меньше возражает против законопроекта, но поддержит его, только если её новая оценка достигнет #v [GetPlayer.MakeScope.ScriptValue('te_tax_commit_threshold')|0]#!."
+ },
+ "te_tax_tt_offer_not_committed": {
+  "en": "The group has not committed to this revision.",
+  "ru": "Группа не поддержала эту редакцию."
+ },
+ "te_tax_tt_offer_not_marginal": {
+  "en": "The group is not marginal.",
+  "ru": "Группа не является маргинальной."
+ },
+ "te_tax_tt_offer_promise": {
+  "en": "The promise is recorded on the bill. It binds only if the bill passes, and a revision from the draft drops it.",
+  "ru": "Обещание записывается в законопроект. Оно действует, только если законопроект принят, а пересмотр на основе проекта его отменяет."
+ },
+ "te_tax_tt_package_delay": {
+  "en": "The delay since the approved month is at most [GetPlayer.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0] months. A longer delay needs a new bill.",
+  "ru": "Задержка относительно утверждённого месяца составляет не более [GetPlayer.MakeScope.ScriptValue('te_tax_reschedule_max_delay')|0] мес. Более долгая задержка требует нового законопроекта."
+ },
+ "te_tax_tt_package_held": {
+  "en": "This passed bill is held back from taking effect.",
+  "ru": "Этот принятый законопроект задержан и не вступает в силу."
+ },
+ "te_tax_tt_package_missed": {
+  "en": "This passed bill's month went by without it taking effect.",
+  "ru": "Месяц этого принятого законопроекта прошёл, а он так и не вступил в силу."
+ },
+ "te_tax_tt_package_unsuperseded": {
+  "en": "No bill passed since has changed a provision this one changes.",
+  "ru": "Ни один принятый с тех пор законопроект не менял положение, которое меняет этот."
+ },
+ "te_tax_tt_pass_changes": {
+  "en": "The bill changes something in existing law.",
+  "ru": "Законопроект что-то меняет в действующем законе."
+ },
+ "te_tax_tt_pass_current": {
+  "en": "Nothing outside legislation has changed a provision the bill changes since the bill was introduced.",
+  "ru": "Со времени внесения законопроекта ничто вне законодательства не изменило положение, которое он меняет."
+ },
+ "te_tax_tt_pass_debate": {
+  "en": "The bill has been debated for [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_required')|0] days since its last revision ([GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_left')|0] days left).",
+  "ru": "Законопроект обсуждается [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_required')|0] дн. после последнего пересмотра (осталось дней: [GetPlayer.MakeScope.ScriptValue('te_tax_debate_days_left')|0])."
+ },
+ "te_tax_tt_pass_due": {
+  "en": "The bill's month has not yet come. If it has, move the bill to next month.",
+  "ru": "Месяц законопроекта ещё не наступил. Если он наступил, перенесите законопроект на следующий месяц."
+ },
+ "te_tax_tt_pass_slot": {
+  "en": "Fewer than two passed bills are waiting to take effect.",
+  "ru": "Вступления в силу ждут менее двух принятых законопроектов."
+ },
+ "te_tax_tt_pass_store": {
+  "en": "The bill meets the scheduler's rules for a passed bill.",
+  "ru": "Законопроект соответствует правилам планировщика для принятого законопроекта."
+ },
+ "te_tax_tt_pass_sunsets": {
+  "en": "Every expiry in the bill falls at least one month after the bill takes effect.",
+  "ru": "Каждый срок окончания в законопроекте наступает не раньше чем через месяц после его вступления в силу."
+ },
+ "te_tax_tt_rebase_needed": {
+  "en": "A passed bill or an outside change altered this part of the code after the draft changed it.",
+  "ru": "Принятый законопроект или внешнее изменение затронули эту часть кодекса после того, как проект её изменил."
+ },
+ "te_tax_tt_relief_depth_set": {
+  "en": "The draft's regional relief is at least 25%.",
+  "ru": "Региональные льготы в проекте составляют не менее 25%."
+ },
+ "te_tax_tt_relief_not_max": {
+  "en": "The draft does not already set this relief to 50%.",
+  "ru": "Проект ещё не устанавливает эту льготу на 50%."
+ },
+ "te_tax_tt_relief_not_none": {
+  "en": "The draft does not already set this relief to none.",
+  "ru": "Проект ещё не устанавливает эту льготу на «нет»."
+ },
+ "te_tax_tt_relief_regional_in_draft": {
+  "en": "The draft changes regional relief (Choose States takes it into the draft).",
+  "ru": "Проект меняет региональные льготы («Выбрать области» включает их в проект)."
+ },
+ "te_tax_tt_relief_room_down": {
+  "en": "The draft grants this relief.",
+  "ru": "Проект предоставляет эту льготу."
+ },
+ "te_tax_tt_relief_room_up": {
+  "en": "The draft's relief is below 50%.",
+  "ru": "Льгота в проекте ниже 50%."
+ },
+ "te_tax_tt_relief_state_eligible": {
+  "en": "The state is incorporated and this country's own.",
+  "ru": "Область включена в состав страны и принадлежит ей."
+ },
+ "te_tax_tt_relief_state_given": {
+  "en": "A state is chosen.",
+  "ru": "Область выбрана."
+ },
+ "te_tax_tt_relief_states_at_most": {
+  "en": "The draft names at most three states for regional relief.",
+  "ru": "Проект называет для региональных льгот не более трёх областей."
+ },
+ "te_tax_tt_relief_states_max": {
+  "en": "The draft names fewer than three states for regional relief.",
+  "ru": "Проект называет для региональных льгот менее трёх областей."
+ },
+ "te_tax_tt_relief_states_named": {
+  "en": "The draft's regional relief names at least one state.",
+  "ru": "Региональные льготы в проекте называют хотя бы одну область."
+ },
+ "te_tax_tt_relief_states_own": {
+  "en": "Every state the draft names for regional relief is still this country's own and incorporated.",
+  "ru": "Каждая область, названная в проекте для региональных льгот, по-прежнему принадлежит этой стране и включена в её состав."
+ },
+ "te_tax_tt_relief_touched": {
+  "en": "The draft changes this relief.",
+  "ru": "Проект меняет эту льготу."
+ },
+ "te_tax_tt_reschedule_due_passed": {
+  "en": "The bill's month has come or passed.",
+  "ru": "Месяц законопроекта наступил или прошёл."
+ },
+ "te_tax_tt_step_not_max": {
+  "en": "The draft does not already set this tax to its highest rate.",
+  "ru": "Проект ещё не устанавливает этот налог на высшую ставку."
+ },
+ "te_tax_tt_step_not_min": {
+  "en": "The draft does not already set this tax to zero.",
+  "ru": "Проект ещё не устанавливает этот налог на ноль."
+ },
+ "te_tax_tt_step_room_down": {
+  "en": "The draft rate is above zero.",
+  "ru": "Ставка в проекте выше нуля."
+ },
+ "te_tax_tt_step_room_up": {
+  "en": "The draft rate is below the highest the code allows.",
+  "ru": "Ставка в проекте ниже высшей, которую допускает кодекс."
+ },
+ "te_tax_tt_step_touched": {
+  "en": "The draft changes this tax.",
+  "ru": "Проект меняет этот налог."
+ },
+ "te_tax_tt_sunset_room_down": {
+  "en": "The change has an expiry.",
+  "ru": "У изменения есть срок окончания."
+ },
+ "te_tax_tt_sunset_room_up": {
+  "en": "The change expires sooner than 60 months after it takes effect.",
+  "ru": "Изменение истекает раньше чем через 60 мес. после вступления в силу."
+ },
+ "te_tax_tt_unlock_code": {
+  "en": "Your taxation law has been carried over into a tax code",
+  "ru": "Ваш закон о налогообложении перенесён в налоговый кодекс"
+ },
+ "te_tax_tt_vanilla_law_replaced": {
+  "en": "Not replaced by the $rule_te_tax_code_rule$ game rule",
+  "ru": "Не заменён правилом игры $rule_te_tax_code_rule$"
+ },
+ "te_tax_wb_col_draft": {
+  "en": "Draft",
+  "ru": "Проект"
+ },
+ "te_tax_wb_col_law": {
+  "en": "Law",
+  "ru": "Закон"
+ },
+ "te_tax_wb_col_law_tt": {
+  "en": "The rate existing law will have in the month the draft takes effect: today's rate, unless a temporary rate expires or a passed bill takes effect before then. A tax the draft leaves alone keeps it, and the change is measured from it.",
+  "ru": "Ставка, которую будет иметь действующий закон в месяц вступления проекта в силу: сегодняшняя ставка, если до тех пор не истечёт временная ставка и не вступит в силу принятый законопроект. Налог, которого проект не касается, сохраняет её, и изменение отсчитывается от неё."
+ },
+ "te_tax_wb_cu_cat_industrial": {
+  "en": "Industrial Goods",
+  "ru": "Промышленные товары"
+ },
+ "te_tax_wb_cu_cat_luxury": {
+  "en": "Luxuries",
+  "ru": "Предметы роскоши"
+ },
+ "te_tax_wb_cu_cat_military": {
+  "en": "Military Goods",
+  "ru": "Военные товары"
+ },
+ "te_tax_wb_cu_cat_staple": {
+  "en": "Staples",
+  "ru": "Предметы первой необходимости"
+ },
+ "te_tax_wb_cu_col_exp_tt": {
+  "en": "The good's export level: [concept_tariffs] above none, [concept_subventions] below.",
+  "ru": "Уровень экспорта товара: выше нуля — [concept_tariffs|l], ниже — [concept_subventions|l]."
+ },
+ "te_tax_wb_cu_col_imp_tt": {
+  "en": "The good's import level: [concept_tariffs] above none, [concept_subventions] below.",
+  "ru": "Уровень импорта товара: выше нуля — [concept_tariffs|l], ниже — [concept_subventions|l]."
+ },
+ "te_tax_wb_customs_intro": {
+  "en": "Each good has an import and an export level, [concept_subventions] below none and [concept_tariffs] above. Click a step; right-click to take a level out of the draft.",
+  "ru": "У каждого товара есть уровень импорта и уровень экспорта: ниже нуля — [concept_subventions|l], выше — [concept_tariffs|l]. Щёлкните шаг; щелчок правой кнопкой убирает уровень из проекта."
+ },
+ "te_tax_wb_customs_member": {
+  "en": "Set by [Country.GetMarket.GetOwner.GetName]: this country trades in a market it does not own, and only the market's owner sets its tariffs and subsidies. The levels below are the market's; a bill here cannot change them.",
+  "ru": "Задаётся страной [Country.GetMarket.GetOwner.GetName]: эта страна торгует на рынке, которым не владеет, и только владелец рынка задаёт его пошлины и субсидии. Уровни ниже принадлежат рынку; законопроект здесь не может их изменить."
+ },
+ "te_tax_wb_customs_native": {
+  "en": "Under this rule tariffs and subsidies are set in the Market panel, not by the tax code.",
+  "ru": "При этом правиле пошлины и субсидии задаются на панели рынка, а не налоговым кодексом."
+ },
+ "te_tax_wb_customs_pending": {
+  "en": "Customs come under the code next month: this country owns its market, and its tariff levels are carried over at the start of the month. Until then they are shown as the market has them.",
+  "ru": "Таможня перейдёт под действие кодекса в следующем месяце: страна владеет своим рынком, и её уровни пошлин переносятся в начале месяца. До тех пор они показаны такими, какими их имеет рынок."
+ },
+ "te_tax_wb_due_tt": {
+  "en": "The month the reform takes effect, on the 1st: its [concept_tax_commencement]. From next month to #v [Country.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! months ahead. The bill must pass before that month comes.",
+  "ru": "Месяц, когда реформа вступает в силу, 1-го числа: её [Concept('concept_tax_commencement','вступление в силу')]. От следующего месяца до #v [Country.MakeScope.ScriptValue('te_tax_max_due_offset')|0]#! мес. вперёд. Законопроект должен быть принят до наступления этого месяца."
+ },
+ "te_tax_wb_good_tax": {
+  "en": "Tax",
+  "ru": "Облагать"
+ },
+ "te_tax_wb_good_taxed": {
+  "en": "Taxed",
+  "ru": "Облагается"
+ },
+ "te_tax_wb_good_taxed_changed": {
+  "en": "#v Taxed#!",
+  "ru": "#v Облагается#!"
+ },
+ "te_tax_wb_good_undo": {
+  "en": "Undo",
+  "ru": "Отменить"
+ },
+ "te_tax_wb_good_untax": {
+  "en": "Exempt",
+  "ru": "Освободить"
+ },
+ "te_tax_wb_good_untaxed_changed": {
+  "en": "#v Exempt#!",
+  "ru": "#v Освобождён#!"
+ },
+ "te_tax_wb_goods_tt": {
+  "en": "How many goods are on the taxed goods list under existing law in the draft's month, and in the draft. Open the catalog to add or exempt goods.",
+  "ru": "Сколько товаров входит в список облагаемых по действующему закону в месяц проекта и в самом проекте. Откройте каталог, чтобы добавить товары или освободить их от налога."
+ },
+ "te_tax_wb_intro": {
+  "en": "Click − or + for one step, shift-click for zero or the highest rate, right-click to leave the tax as it is.",
+  "ru": "Щёлкните − или + для одного шага, щёлкните с Shift для нуля или высшей ставки, щёлкните правой кнопкой, чтобы оставить налог как есть."
+ },
+ "te_tax_wb_new": {
+  "en": "Draft a Reform",
+  "ru": "Составить реформу"
+ },
+ "te_tax_wb_new_revision": {
+  "en": "Draft a Revision",
+  "ru": "Составить редакцию"
+ },
+ "te_tax_wb_none": {
+  "en": "No draft is open.",
+  "ru": "Проект не открыт."
+ },
+ "te_tax_wb_none_bill": {
+  "en": "No draft is open. To change the bill under debate, draft a revision of it, edit the draft and revise the bill.",
+  "ru": "Проект не открыт. Чтобы изменить обсуждаемый законопроект, составьте его редакцию, отредактируйте проект и пересмотрите законопроект."
+ },
+ "te_tax_wb_relief_choose": {
+  "en": "Choose States",
+  "ru": "Выбрать области"
+ },
+ "te_tax_wb_relief_choose_again": {
+  "en": "Update the State List",
+  "ru": "Обновить список областей"
+ },
+ "te_tax_wb_relief_state_dropped": {
+  "en": "Dropped",
+  "ru": "Исключена"
+ },
+ "te_tax_wb_relief_state_name_it": {
+  "en": "Name",
+  "ru": "Назвать"
+ },
+ "te_tax_wb_relief_state_named": {
+  "en": "Named",
+  "ru": "Названа"
+ },
+ "te_tax_wb_relief_state_pop_tt": {
+  "en": "The state's population: every pop here would pay less of every tax under regional relief.",
+  "ru": "Население области: все группы населения здесь платили бы меньше по каждому налогу при региональных льготах."
+ },
+ "te_tax_wb_relief_state_tax_tt": {
+  "en": "The taxes collected from the state's pops each week. Regional relief forgoes a quarter or half of them.",
+  "ru": "Налоги, собираемые с населения области за неделю. Региональные льготы отказываются от четверти или половины этой суммы."
+ },
+ "te_tax_wb_relief_states": {
+  "en": "States named for regional relief:",
+  "ru": "Области, названные для региональных льгот:"
+ },
+ "te_tax_wb_row_agrel_tt": {
+  "en": "$te_tax_en_agrel_tt$ One step: 25%, up to 50%.",
+  "ru": "$te_tax_en_agrel_tt$ Один шаг: 25%, до 50%."
+ },
+ "te_tax_wb_row_cons_tt": {
+  "en": "$te_tax_inst_cons_tt$ One step: #v [Country.MakeScope.ScriptValue('te_tax_pct_step_cons')|0]%#!.",
+  "ru": "$te_tax_inst_cons_tt$ Один шаг: #v [Country.MakeScope.ScriptValue('te_tax_pct_step_cons')|0]%#!."
+ },
+ "te_tax_wb_row_head_tt": {
+  "en": "$te_tax_inst_head_tt$ One step: @money!#v [Country.MakeScope.ScriptValue('te_tax_step_head')|2]#!.",
+  "ru": "$te_tax_inst_head_tt$ Один шаг: @money!#v [Country.MakeScope.ScriptValue('te_tax_step_head')|2]#!."
+ },
+ "te_tax_wb_row_regrel_tt": {
+  "en": "$te_tax_en_regrel_tt$ One step: 25%, up to 50%. Right-click leaves it, and the states it names, as existing law has them.",
+  "ru": "$te_tax_en_regrel_tt$ Один шаг: 25%, до 50%. Щелчок правой кнопкой оставляет её и названные в ней области как есть по действующему закону."
+ },
+ "te_tax_wb_sub_dates": {
+  "en": "Dates",
+  "ru": "Даты"
+ },
+ "te_tax_wb_sub_goods": {
+  "en": "Goods Catalog",
+  "ru": "Каталог товаров"
+ },
+ "te_tax_wb_sub_land": {
+  "en": "Land and Head",
+  "ru": "Сельский сбор и подушный налог"
+ },
+ "te_tax_wb_sub_relief": {
+  "en": "Relief",
+  "ru": "Льготы"
+ },
+ "te_tax_wb_sub_relief_states": {
+  "en": "Incorporated States",
+  "ru": "Включённые области"
+ },
+ "te_tax_wb_sun_cons": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_sun')|0]#! months, to #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_mo')|0]#!",
+  "ru": "#v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_sun')|0]#! мес., до #v [Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_y')|0].[Country.MakeScope.ScriptValue('te_tax_view_dr_cons_exp_mo')|0]#!"
+ },
+ "te_tax_wb_sun_permanent": {
+  "en": "Permanent",
+  "ru": "Постоянно"
+ },
+ "te_tax_wb_sunset_none": {
+  "en": "Change a tax above to give it an expiry.",
+  "ru": "Измените налог выше, чтобы задать ему срок окончания."
  }
 }

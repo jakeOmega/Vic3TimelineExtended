@@ -3,705 +3,1413 @@
   "en": "Intercontinental Ballistic Missiles",
   "ru": "Межконтинентальные баллистические ракеты"
  },
+ "ICBMs_desc": {
+  "en": "What's the point of having the most powerful weapons in the world if you can't use them on anyone you want? By mounting our most devastating creations on top of rockets, no corner of the globe is safe from our righteous fury.",
+  "ru": "Какой смысл в самом мощном оружии в мире, если нельзя применить его против кого угодно? Установив наши самые разрушительные творения на ракеты, мы не оставим на земном шаре ни одного уголка, безопасного от нашего праведного гнева."
+ },
  "LGBTQ_rights_movement": {
   "en": "LGBTQ+ Rights Movement",
   "ru": "Движение за права ЛГБТК+"
+ },
+ "LGBTQ_rights_movement_desc": {
+  "en": "A social movement advocating for the rights and acceptance of individuals with diverse sexual orientations and gender identities, challenging traditional norms and pushing for legal and social reform.",
+  "ru": "Общественное движение, выступающее за права и признание людей с разной сексуальной ориентацией и гендерной идентичностью, бросающее вызов традиционным нормам и добивающееся правовых и социальных реформ."
  },
  "abyssal_plain_mining": {
   "en": "Abyssal Plain Mining",
   "ru": "Добыча на абиссальных равнинах"
  },
+ "abyssal_plain_mining_desc": {
+  "en": "By mining the deep ocean floor, we can access valuable minerals and resources that are otherwise out of reach. This could be a game-changer for industries like electronics and renewable energy.",
+  "ru": "Добывая полезные ископаемые и ресурсы со дна океана, мы получаем доступ к тому, что иначе недостижимо. Это может стать переломным моментом для таких отраслей, как электроника и возобновляемая энергетика."
+ },
  "additive_manufacturing": {
   "en": "Additive Manufacturing",
   "ru": "Аддитивное производство"
+ },
+ "additive_manufacturing_desc": {
+  "en": "Also known as 3D printing, this process builds objects layer-by-layer. Now we can create complex and customized items on demand, transforming everything from healthcare to making trinkets for the home.",
+  "ru": "Этот процесс, известный как 3D-печать, строит предметы слой за слоем. Теперь мы можем создавать сложные индивидуальные изделия по требованию, преображая всё: от здравоохранения до безделушек для дома."
  },
  "advanced_agricultural_statistics": {
   "en": "Advanced Agricultural Statistics",
   "ru": "Передовая сельскохозяйственная статистика"
  },
+ "advanced_agricultural_statistics_desc": {
+  "en": "By applying modern statistical methods to farming, we can make agriculture more efficient. This means bigger harvests and fatter livestock, all thanks to the magic of numbers.",
+  "ru": "Применяя современные статистические методы к земледелию, мы можем сделать сельское хозяйство эффективнее. Это означает больше урожая и жирнее скот, и всё благодаря магии цифр."
+ },
  "advanced_assembly_lines": {
   "en": "Advanced Assembly Lines",
   "ru": "Передовые сборочные линии"
+ },
+ "advanced_assembly_lines_desc": {
+  "en": "Further refining the assembly line with modular components and just-in-time production makes our factories even more efficient. We can now produce a wider variety of goods at lower costs, which is good for the economy, I suppose.",
+  "ru": "Дальнейшее совершенствование конвейера с модульными компонентами и производством «точно в срок» делает наши фабрики ещё эффективнее. Теперь мы можем выпускать более широкий ассортимент товаров с меньшими затратами, что, полагаю, хорошо для экономики."
  },
  "advanced_body_armor": {
   "en": "Advanced Body Armor",
   "ru": "Передовая бронезащита"
  },
+ "advanced_body_armor_desc": {
+  "en": "With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.",
+  "ru": "Благодаря новым материалам, таким как лёгкие композиты, и даже экзоскелетам, наши солдаты лучше защищены и более подвижны. Это должно повысить их шансы пережить неприятности боя."
+ },
  "advanced_fission": {
   "en": "Advanced Fission",
   "ru": "Передовое деление ядер"
+ },
+ "advanced_fission_desc": {
+  "en": "Molten-salt and thorium reactors run hotter, waste less of their fuel and cannot melt down the way the old light-water designs could. Our existing nuclear plants can be rebuilt around them for far more power from every level, if we can find the specialized alloys to keep the salt from eating through the pipes.",
+  "ru": "Реакторы на расплавленных солях и на тории работают при более высокой температуре, лучше используют топливо и не могут расплавиться так, как старые водо-водяные конструкции. Наши существующие атомные электростанции можно перестроить под них, получив гораздо больше энергии с каждого уровня, если нам удастся найти специальные сплавы, чтобы соль не проела трубы."
  },
  "advanced_materials_armor": {
   "en": "Advanced Materials Armor",
   "ru": "Броня из передовых материалов"
  },
+ "advanced_materials_armor_desc": {
+  "en": "The use of advanced materials like Composite and Reactive Armor makes our military vehicles tougher. Hopefully, this will keep them from blowing up so easily.",
+  "ru": "Применение передовых материалов, таких как композитная и реактивная броня, делает нашу военную технику прочнее. Надеемся, это убережёт её от слишком лёгкого взрыва."
+ },
  "advanced_military_aircraft": {
   "en": "Advanced Military Aircraft",
   "ru": "Передовая военная авиация"
+ },
+ "advanced_military_aircraft_desc": {
+  "en": "The latest military aircraft are faster, can fly farther, and carry more firepower. This makes them much better at the business of aerial combat and spying.",
+  "ru": "Новейшие военные самолёты быстрее, летят дальше и несут больше огневой мощи. Это делает их гораздо лучше в деле воздушного боя и шпионажа."
  },
  "advanced_nanofabrication": {
   "en": "Advanced Nanofabrication",
   "ru": "Передовое нанопроизводство"
  },
+ "advanced_nanofabrication_desc": {
+  "en": "We can now create incredibly small and precise structures. This level of control at the nanoscale is set to revolutionize everything from electronics to medicine.",
+  "ru": "Теперь мы можем создавать невероятно малые и точные структуры. Такой контроль на наноуровне призван перевернуть всё: от электроники до медицины."
+ },
  "advanced_structural_engineering": {
   "en": "Advanced Structural Engineering",
   "ru": "Передовая конструкционная инженерия"
+ },
+ "advanced_structural_engineering_desc": {
+  "en": "By combining high-strength composites, new welding techniques, and tougher concrete, we can build things that are lighter, stronger, and last longer. A boon for all industries, really.",
+  "ru": "Сочетая высокопрочные композиты, новые методы сварки и более стойкий бетон, мы можем строить сооружения легче, прочнее и долговечнее. Благо для всех отраслей, право слово."
  },
  "advanced_submarine_technology": {
   "en": "Advanced Submarine Technology",
   "ru": "Передовые подводные технологии"
  },
+ "advanced_submarine_technology_desc": {
+  "en": "Thanks to things like nuclear power, our new submarines can go farther, faster, and are much harder to detect. A useful tool for sneaking around underwater.",
+  "ru": "Благодаря таким вещам, как ядерная энергия, наши новые подводные лодки идут дальше и быстрее, и обнаружить их гораздо труднее. Полезное средство для скрытного плавания под водой."
+ },
  "advanced_workflow_optimization": {
   "en": "Advanced Workflow Optimization",
   "ru": "Передовая оптимизация рабочих процессов"
+ },
+ "advanced_workflow_optimization_desc": {
+  "en": "Using the latest technology and data analysis, we can make our business processes more streamlined and automated. This cuts down on waste and should, in theory, make everyone more productive.",
+  "ru": "Используя новейшие технологии и анализ данных, мы можем сделать наши бизнес-процессы более упорядоченными и автоматизированными. Это сокращает потери и, в теории, должно сделать всех производительнее."
  },
  "ai_agents": {
   "en": "AI Agents",
   "ru": "ИИ-агенты"
  },
+ "ai_agents_desc": {
+  "en": "Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.",
+  "ru": "Программы, которые не просто отвечают на вопросы, а делают дело: планируют шаги, пользуются инструментами, проверяют собственную работу и возвращаются, когда задача выполнена. Целые отделы теперь надзирают за агентами вместо того, чтобы работать самим, а некоторые обнаруживают, что надзирать почти не за чем."
+ },
  "ai_tutors": {
   "en": "AI Tutors",
   "ru": "ИИ-репетиторы"
+ },
+ "ai_tutors_desc": {
+  "en": "Every child gets a tutor of their own: endlessly patient, awake at midnight before the exam, and able to explain fractions a fourth way when the first three failed. Adults use them too, to learn a new trade in months rather than years. Whoever writes what the tutors teach now has the ear of a whole generation, and not everyone who wants that job is a teacher.",
+  "ru": "У каждого ребёнка свой репетитор: бесконечно терпеливый, бодрствующий в полночь перед экзаменом и способный объяснить дроби в четвёртый раз, когда три первых не помогли. Взрослые тоже пользуются ими, чтобы освоить новое ремесло за месяцы, а не годы. Тот, кто пишет, чему учат репетиторы, теперь владеет вниманием целого поколения, и не всякий, кто хочет этой работы, — учитель."
  },
  "aluminum_mass_production": {
   "en": "Aluminum Mass Production",
   "ru": "Массовое производство алюминия"
  },
+ "aluminum_mass_production_desc": {
+  "en": "We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.",
+  "ru": "Мы научились получать алюминий в больших масштабах. Этот лёгкий металл полезен во всевозможных отраслях, так что ждите его повсюду."
+ },
  "aneutronic_fusion": {
   "en": "Aneutronic Fusion",
   "ru": "Безнейтронный термоядерный синтез"
+ },
+ "aneutronic_fusion_desc": {
+  "en": "Fusing protons with boron releases its energy as charged particles instead of neutrons, so the current can be drawn straight from the plasma with no boiler and no turbine. The reactors barely irradiate their own walls and leave no radioactive waste behind, though the fuel has to burn at temperatures that make an ordinary fusion plant look lukewarm.",
+  "ru": "При слиянии протонов с бором энергия выделяется в виде заряженных частиц, а не нейтронов, поэтому ток можно снимать прямо с плазмы без котла и турбины. Реакторы почти не облучают собственные стены и не оставляют радиоактивных отходов, хотя топливо должно гореть при температурах, рядом с которыми обычная термоядерная станция кажется едва тёплой."
  },
  "animation": {
   "en": "Animation",
   "ru": "Анимация"
  },
+ "animation_desc": {
+  "en": "By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse.",
+  "ru": "Заставив рисунки двигаться, мы создали новую форму развлечения. Это популярный способ рассказывать истории и выражать художественные идеи, к добру или к худу."
+ },
  "anti_sub_warfare": {
   "en": "Anti-Submarine Warfare",
   "ru": "Противолодочная война"
+ },
+ "anti_sub_warfare_desc": {
+  "en": "With better sonar and torpedoes that can find their own way, we've gotten much better at hunting down enemy submarines. Our waters are now a little safer.",
+  "ru": "Благодаря лучшим гидролокаторам и торпедам, находящим цель сами, мы стали гораздо успешнее охотиться на вражеские подводные лодки. Наши воды теперь немного безопаснее."
  },
  "anti_war_movement": {
   "en": "Anti-War Movement",
   "ru": "Антивоенное движение"
  },
+ "anti_war_movement_desc": {
+  "en": "It turns out that not everyone is a fan of war. These movements have a knack for shaping public opinion and can sometimes even force politicians to reconsider their military adventures.",
+  "ru": "Оказывается, не все любят войну. Эти движения умеют формировать общественное мнение и порой даже вынуждают политиков пересмотреть свои военные авантюры."
+ },
  "antibiotic_mass_production": {
   "en": "Antibiotic Mass Production",
   "ru": "Массовое производство антибиотиков"
+ },
+ "antibiotic_mass_production_desc": {
+  "en": "Now that we can produce antibiotics in large quantities, bacterial infections are no longer a death sentence. This has done wonders for public health and makes surgery a bit less of a gamble.",
+  "ru": "Теперь, когда антибиотики можно производить в больших количествах, бактериальные инфекции больше не приговор. Это творит чудеса для общественного здоровья и делает хирургию чуть менее рискованной."
  },
  "antimatter_production": {
   "en": "Antimatter Production",
   "ru": "Производство антиматерии"
  },
+ "antimatter_production_desc": {
+  "en": "We can now create antimatter on a large scale, a fuel source with an incredible energy density. This unlocks unprecedented power for our spacecraft and military hardware, revolutionizing how we operate.",
+  "ru": "Теперь мы можем создавать антиматерию в больших масштабах — топливо с невероятной плотностью энергии. Это открывает беспрецедентные возможности для наших космических аппаратов и военной техники, меняя то, как мы действуем."
+ },
  "art_deco_architecture": {
   "en": "Art Deco Architecture",
   "ru": "Архитектура ар-деко"
+ },
+ "art_deco_architecture_desc": {
+  "en": "A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.",
+  "ru": "Стиль, определяемый смелыми геометрическими формами и роскошными деталями. Его часто используют, чтобы продемонстрировать богатство и [concept_prestige|l], делая наши города немного эффектнее."
  },
  "artificial_intelligence": {
   "en": "Artificial General Intelligence",
   "ru": "Общий искусственный интеллект"
  },
+ "artificial_intelligence_desc": {
+  "en": "We're creating machines that can think and reason like humans. While this could transform industries from healthcare to finance, it does raise some rather tricky questions about our new creations.",
+  "ru": "Мы создаём машины, способные мыслить и рассуждать как люди. Хотя это может преобразить отрасли от здравоохранения до финансов, оно ставит довольно непростые вопросы о наших новых творениях."
+ },
  "asteroid_mining": {
   "en": "Asteroid Mining",
   "ru": "Добыча на астероидах"
+ },
+ "asteroid_mining_desc": {
+  "en": "Why limit ourselves to the resources on Earth? By mining asteroids, we could find valuable metals and minerals, fuel our space missions, and maybe even get rich in the process.",
+  "ru": "Зачем ограничиваться ресурсами Земли? Добывая астероиды, мы могли бы находить ценные металлы и минералы, заправлять наши космические миссии и, возможно, даже разбогатеть."
  },
  "augmented_reality_warfare": {
   "en": "Augmented Reality Warfare",
   "ru": "Война с дополненной реальностью"
  },
+ "augmented_reality_warfare_desc": {
+  "en": "By overlaying digital information onto a soldier's view of the world, we can give them better situational awareness and targeting. It's a whole new way to experience the battlefield.",
+  "ru": "Накладывая цифровую информацию на то, что видит солдат, мы можем дать ему лучшую обстановочную осведомлённость и наведение. Это совершенно новый способ воспринимать поле боя."
+ },
  "automated_surveillance": {
   "en": "Automated Surveillance",
   "ru": "Автоматизированное наблюдение"
+ },
+ "automated_surveillance_desc": {
+  "en": "With ground sensors and aerial drones, we can keep an eye on things without having to send people out. This makes our military operations more effective, if a bit intrusive.",
+  "ru": "С помощью наземных датчиков и воздушных беспилотников мы можем следить за обстановкой, не посылая людей. Это делает наши военные операции эффективнее, пусть и немного навязчивее."
  },
  "autonomous_vehicles": {
   "en": "Autonomous Vehicles",
   "ru": "Автономные транспортные средства"
  },
+ "autonomous_vehicles_desc": {
+  "en": "Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.",
+  "ru": "Машины, способные ездить сами, больше не фантазия. Они могут совершить переворот в транспорте, сделать наши дороги безопаснее и, возможно, даже покончить с пробками."
+ },
  "autonomous_weapons": {
   "en": "Autonomous Weapons",
   "ru": "Автономное оружие"
+ },
+ "autonomous_weapons_desc": {
+  "en": "Machines that find, select and engage their targets without waiting for a human to approve each shot. They react faster than any soldier and never tire, and the debate over who answers for their mistakes has not slowed their spread.",
+  "ru": "Машины, которые находят, выбирают и поражают цели, не дожидаясь, пока человек одобрит каждый выстрел. Они реагируют быстрее любого солдата и не устают, а споры о том, кто отвечает за их ошибки, не замедлили их распространения."
  },
  "barcodes_and_scanners": {
   "en": "Barcodes and Scanners",
   "ru": "Штрихкоды и сканеры"
  },
+ "barcodes_and_scanners_desc": {
+  "en": "Those little black and white lines have changed the face of retail and logistics. Now we can track products and sales with a simple scan, making everything much more efficient.",
+  "ru": "Эти маленькие чёрно-белые полоски изменили лицо торговли и логистики. Теперь мы можем отслеживать товары и продажи простым сканированием, и всё становится гораздо эффективнее."
+ },
  "bergius_process": {
   "en": "Bergius Process",
   "ru": "Процесс Бергиуса"
+ },
+ "bergius_process_desc": {
+  "en": "By hydrogenating coal at high temperatures and pressures, we can create synthetic fuel. A useful trick to have up our sleeve when oil is scarce.",
+  "ru": "Гидрируя уголь при высоких температуре и давлении, мы можем получать синтетическое топливо. Полезный козырь в рукаве, когда нефти не хватает."
  },
  "bioenhanced_soldiers": {
   "en": "Bioenhanced Soldiers",
   "ru": "Биоусиленные солдаты"
  },
+ "bioenhanced_soldiers_desc": {
+  "en": "Through biotechnology and genetic engineering, we can make our soldiers stronger and smarter. This does, however, open up a rather unsettling debate about the limits of human augmentation.",
+  "ru": "С помощью биотехнологий и генной инженерии мы можем сделать наших солдат сильнее и умнее. Однако это открывает довольно тревожный спор о пределах аугментации человека."
+ },
  "biohacking_and_human_augmentation": {
   "en": "Human Augmentation",
   "ru": "Аугментация человека"
+ },
+ "biohacking_and_human_augmentation_desc": {
+  "en": "From gene editing to neuroprosthetics, we're pushing the boundaries of what it means to be human. This raises all sorts of ethical questions about who gets to be augmented and what we're becoming.",
+  "ru": "От редактирования генов до нейропротезов — мы раздвигаем границы того, что значит быть человеком. Это порождает всевозможные этические вопросы о том, кому дано улучшаться и кем мы становимся."
  },
  "biological_immortality": {
   "en": "Biological Immortality",
   "ru": "Биологическое бессмертие"
  },
+ "biological_immortality_desc": {
+  "en": "The idea of living forever is no longer just a dream. Through advancements in medicine and genetic engineering, we might just be able to cheat death itself.",
+  "ru": "Идея вечной жизни — уже не просто мечта. Благодаря достижениям медицины и генной инженерии мы, возможно, сумеем обмануть саму смерть."
+ },
  "biotechnology": {
   "en": "Biotechnology",
   "ru": "Биотехнологии"
+ },
+ "biotechnology_desc": {
+  "en": "With technologies like CRISPR, we can now edit genes with incredible precision. This is leading to breakthroughs in agriculture, medicine, and who knows what else.",
+  "ru": "С такими технологиями, как CRISPR, мы теперь можем редактировать гены с невероятной точностью. Это ведёт к прорывам в сельском хозяйстве, медицине и бог знает в чём ещё."
  },
  "bombing_aircraft": {
   "en": "Bombing Aircraft",
   "ru": "Бомбардировочная авиация"
  },
+ "bombing_aircraft_desc": {
+  "en": "These aircraft have changed the face of warfare. Now we can drop bombs on enemy targets and [concept_infrastructure] from a great distance, which is a very effective way to make a point.",
+  "ru": "Эти самолёты изменили лицо войны. Теперь мы можем сбрасывать бомбы на вражеские цели и [Concept('concept_infrastructure','инфраструктуру')] с большого расстояния, что очень эффективный способ донести свою мысль."
+ },
  "brain_computer_interfaces": {
   "en": "Brain-Computer Interfaces",
   "ru": "Интерфейсы мозг-компьютер"
+ },
+ "brain_computer_interfaces_desc": {
+  "en": "We can now connect human brains directly to computers. This opens up amazing new possibilities for medicine, communication, and even enhancing our own abilities.",
+  "ru": "Теперь мы можем напрямую соединять человеческий мозг с компьютерами. Это открывает потрясающие новые возможности для медицины, связи и даже усиления наших собственных способностей."
  },
  "carbon_capture_and_storage": {
   "en": "Carbon Capture and Storage",
   "ru": "Улавливание и хранение углерода"
  },
+ "carbon_capture_and_storage_desc": {
+  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
+  "ru": "Улавливание углерода на стационарных источниках и его хранение или извлечение прямо из атмосферы. Открывает 50% улавливания на источнике, Завод переработки углерода с прямым улавливанием из воздуха и технологическое требование для «Управляемого отказа от ископаемого топлива»."
+ },
  "cellular_networks": {
   "en": "Cellular Networks",
   "ru": "Сотовые сети"
+ },
+ "cellular_networks_desc": {
+  "en": "The rise of cellular networks has meant we can now make phone calls from almost anywhere. This has changed the way we live and do business, for better or worse.",
+  "ru": "Появление сотовых сетей означает, что мы теперь можем звонить почти откуда угодно. Это изменило то, как мы живём и ведём дела, к лучшему или к худшему."
  },
  "cislunar_infrastructure": {
   "en": "Cislunar Infrastructure",
   "ru": "Окололунная инфраструктура"
  },
+ "cislunar_infrastructure_desc": {
+  "en": "Relay satellites, orbital stations and landers that fly again and again turn the space between the Earth and the Moon into a working neighborhood. With them, settling other worlds becomes a question of cost rather than of daring.",
+  "ru": "Спутники-ретрансляторы, орбитальные станции и посадочные аппараты многоразового использования превращают пространство между Землёй и Луной в обжитую окрестность. С ними заселение других миров становится вопросом стоимости, а не дерзости."
+ },
  "civil_rights_movement": {
   "en": "Civil Rights Movement",
   "ru": "Движение за гражданские права"
+ },
+ "civil_rights_movement_desc": {
+  "en": "A movement aimed at ending racial segregation and [concept_discrimination]. It has fought for equal rights and opportunities for all, shaking the very foundations of society.",
+  "ru": "Движение, нацеленное на прекращение расовой сегрегации и [Concept('concept_discrimination','дискриминации')]. Оно боролось за равные права и возможности для всех, потрясая самые основы общества."
  },
  "clean_energy_technologies": {
   "en": "Clean Energy Technologies",
   "ru": "Чистые энергетические технологии"
  },
+ "clean_energy_technologies_desc": {
+  "en": "With solar panels and wind turbines, we can generate electricity without burning fossil fuels. This should help reduce our impact on the environment, assuming we can build enough of them.",
+  "ru": "С солнечными панелями и ветряными турбинами мы можем вырабатывать электричество, не сжигая ископаемого топлива. Это должно помочь снизить наше воздействие на окружающую среду, если мы сумеем построить их достаточно."
+ },
  "cloud_computing": {
   "en": "Cloud Computing",
   "ru": "Облачные вычисления"
+ },
+ "cloud_computing_desc": {
+  "en": "By delivering computing services over the internet, we can now store and process data on a massive scale. It's a flexible and powerful tool for businesses and individuals alike.",
+  "ru": "Предоставляя вычислительные услуги через интернет, мы можем теперь хранить и обрабатывать данные в огромных масштабах. Это гибкий и мощный инструмент и для бизнеса, и для частных лиц."
  },
  "combined_arms": {
   "en": "Combined Arms",
   "ru": "Общевойсковые операции"
  },
+ "combined_arms_desc": {
+  "en": "By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.",
+  "ru": "Заставив разные рода войск действовать сообща, мы можем быть гораздо эффективнее в бою. Каждый армейский генерал, в соединении которого есть не менее двух разных групп подразделений — пехота, артиллерия, кавалерия, танки или авиация, — причём каждая составляет не менее 5% соединения, получает уникальные черты [Concept('concept_combined_arms','общевойскового боя')], дающие боевые бонусы. Если в одном соединении выставлены все пять групп, открывается высший бонус «Полное доминирование»."
+ },
  "commercial_aviation": {
   "en": "Commercial Aviation",
   "ru": "Коммерческая авиация"
+ },
+ "commercial_aviation_desc": {
+  "en": "The widespread use of airplanes for travel and cargo has made the world a much smaller place. Now we can get to the other side of the globe in a matter of hours, for a price.",
+  "ru": "Широкое использование самолётов для перевозки пассажиров и грузов сделало мир гораздо меньше. Теперь мы можем добраться до другого конца света за считаные часы, за определённую цену."
  },
  "compact_fusion_reactors": {
   "en": "Compact Fusion Reactors",
   "ru": "Компактные термоядерные реакторы"
  },
+ "compact_fusion_reactors_desc": {
+  "en": "These smaller, more efficient fusion reactors could be a game-changer. They promise to provide clean, cheap energy, if we can ever get them to work properly.",
+  "ru": "Эти меньшие и более эффективные термоядерные реакторы могут изменить всё. Они обещают чистую и дешёвую энергию, если нам когда-нибудь удастся заставить их работать как следует."
+ },
  "computer_aided_design": {
   "en": "Computer-Aided Design",
   "ru": "Автоматизированное проектирование"
+ },
+ "computer_aided_design_desc": {
+  "en": "CAD has revolutionized engineering and manufacturing. Now we can create more complex and accurate designs, all with the help of a computer.",
+  "ru": "САПР совершила переворот в инженерии и производстве. Теперь мы можем создавать более сложные и точные проекты с помощью компьютера."
  },
  "computer_networks": {
   "en": "Computer Networks",
   "ru": "Компьютерные сети"
  },
+ "computer_networks_desc": {
+  "en": "By connecting computers together, we can share data and resources. This simple idea laid the groundwork for the modern internet and all that comes with it.",
+  "ru": "Соединяя компьютеры вместе, мы можем делиться данными и ресурсами. Эта простая идея заложила основу современного интернета и всего, что с ним связано."
+ },
  "computing_machines": {
   "en": "Computing Machines",
   "ru": "Вычислительные машины"
+ },
+ "computing_machines_desc": {
+  "en": "Early computers and calculating devices have changed the way we process information. They've automated all sorts of tasks and led to huge advancements in many fields.",
+  "ru": "Ранние компьютеры и вычислительные устройства изменили то, как мы обрабатываем информацию. Они автоматизировали всевозможные задачи и привели к огромному прогрессу во многих областях."
  },
  "consumer_credit": {
   "en": "Consumer Credit",
   "ru": "Потребительский кредит"
  },
+ "consumer_credit_desc": {
+  "en": "A system that lets people buy things they can't afford. It's great for the economy, as long as everyone remembers to pay their bills.",
+  "ru": "Система, позволяющая людям покупать то, что им не по карману. Это замечательно для экономики, пока все не забывают оплачивать счета."
+ },
  "containerization": {
   "en": "Containerization",
   "ru": "Контейнеризация"
+ },
+ "containerization_desc": {
+  "en": "The simple act of putting goods in standardized containers has revolutionized global trade. Now we can move things around the world much more efficiently and cheaply.",
+  "ru": "Простой акт помещения грузов в стандартные контейнеры совершил переворот в мировой торговле. Теперь мы можем перемещать вещи по миру гораздо эффективнее и дешевле."
  },
  "contraceptive_pill": {
   "en": "Contraceptive Pill",
   "ru": "Противозачаточные таблетки"
  },
+ "contraceptive_pill_desc": {
+  "en": "This little pill has had a huge impact on society. By giving women more control over their fertility, it has played a key role in family planning and women's liberation.",
+  "ru": "Эта маленькая таблетка оказала огромное влияние на общество. Давая женщинам больше контроля над плодовитостью, она сыграла ключевую роль в планировании семьи и освобождении женщин."
+ },
  "cryptography": {
   "en": "Cryptography",
   "ru": "Криптография"
+ },
+ "cryptography_desc": {
+  "en": "The art of writing and solving codes. It's a crucial tool for keeping our communications secret and for breaking into the enemy's.",
+  "ru": "Искусство писать и разгадывать шифры. Важнейший инструмент для сохранения наших сообщений в тайне и для вскрытия чужих."
  },
  "cyber_warfare": {
   "en": "Cyber Warfare",
   "ru": "Кибервойна"
  },
+ "cyber_warfare_desc": {
+  "en": "As our world becomes more digital, so does warfare. We're now developing the tools to attack and defend in cyberspace, a new and invisible battlefield.",
+  "ru": "По мере того как наш мир становится цифровым, цифровой становится и война. Мы разрабатываем средства нападения и защиты в киберпространстве, новом и невидимом поле боя."
+ },
  "cybersecurity": {
   "en": "Cybersecurity",
   "ru": "Кибербезопасность"
+ },
+ "cybersecurity_desc": {
+  "en": "With our increasing reliance on digital technologies, we need new ways to protect ourselves from new threats. Cybersecurity is all about keeping our information and systems safe.",
+  "ru": "С нашей растущей зависимостью от цифровых технологий нам нужны новые способы защиты от новых угроз. Кибербезопасность — это сохранность наших сведений и систем."
  },
  "decline_of_organized_religion": {
   "en": "Decline of Organized Religion",
   "ru": "Упадок организованной религии"
  },
+ "decline_of_organized_religion_desc": {
+  "en": "It seems that fewer people are finding solace in organized religion these days. This trend towards secularism is changing our social norms, values, and even how we see ourselves.",
+  "ru": "Похоже, в наши дни всё меньше людей находит утешение в организованной религии. Эта тенденция к секуляризму меняет наши общественные нормы, ценности и даже то, как мы видим самих себя."
+ },
+ "decolonization_desc": {
+  "en": "The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.",
+  "ru": "Распад колониальных империй привёл к рождению новых наций и перекройке карты мира. Беспорядочный, но необходимый процесс перемен."
+ },
  "digital_education": {
   "en": "Digital Education",
   "ru": "Цифровое образование"
+ },
+ "digital_education_desc": {
+  "en": "With online learning and multimedia resources, education is going digital. This could make learning more accessible and collaborative, if you have a good internet connection.",
+  "ru": "С онлайн-обучением и мультимедийными ресурсами образование становится цифровым. Это может сделать обучение доступнее и совместнее, если у вас хороший интернет."
  },
  "digital_entertainment": {
   "en": "Digital Entertainment",
   "ru": "Цифровые развлечения"
  },
+ "digital_entertainment_desc": {
+  "en": "From video games to streaming services, digital entertainment is reshaping how we spend our leisure time. There are now more ways than ever to be entertained, or distracted.",
+  "ru": "От видеоигр до стриминговых сервисов — цифровые развлечения меняют то, как мы проводим досуг. Способов развлечься, или отвлечься, стало больше, чем когда-либо."
+ },
  "digital_telecommunications": {
   "en": "Digital Telecommunications",
   "ru": "Цифровая связь"
+ },
+ "digital_telecommunications_desc": {
+  "en": "The switch from analog to digital has made our communication systems much more efficient and versatile. Now we can enjoy clearer calls and faster data, most of the time.",
+  "ru": "Переход от аналоговой связи к цифровой сделал наши системы связи гораздо эффективнее и разностороннее. Теперь мы можем наслаждаться более чёткими звонками и быстрой передачей данных, большую часть времени."
  },
  "directed_energy_defenses": {
   "en": "Directed Energy Defenses",
   "ru": "Оборона направленной энергией"
  },
+ "directed_energy_defenses_desc": {
+  "en": "By using high-energy lasers, we can now shoot down incoming missiles and drones. It's a futuristic way to defend ourselves, and it looks impressive too.",
+  "ru": "С помощью мощных лазеров мы теперь можем сбивать приближающиеся ракеты и беспилотники. Это футуристический способ защиты, к тому же он выглядит впечатляюще."
+ },
  "directed_energy_weapons": {
   "en": "Directed Energy Weapons",
   "ru": "Оружие направленной энергии"
+ },
+ "directed_energy_weapons_desc": {
+  "en": "We can now use high-energy lasers and microwaves as weapons. They offer a new level of precision for targeting and neutralizing threats.",
+  "ru": "Мы теперь можем применять мощные лазеры и микроволны как оружие. Они дают новый уровень точности для поражения и нейтрализации угроз."
  },
  "e-commerce": {
   "en": "E-Commerce",
   "ru": "Электронная коммерция"
  },
+ "e-commerce_desc": {
+  "en": "Thanks to the internet, we can now buy and sell goods from anywhere in the world. It's a convenient way to shop, and a great way for businesses to reach new customers.",
+  "ru": "Благодаря интернету мы можем покупать и продавать товары из любой точки мира. Это удобный способ делать покупки и отличный способ для бизнеса найти новых клиентов."
+ },
  "early_nanotechnology": {
   "en": "Early Nanotechnology",
   "ru": "Ранние нанотехнологии"
+ },
+ "early_nanotechnology_desc": {
+  "en": "We're just beginning to manipulate materials at the atomic level. This early work in nanotechnology could lead to some incredible breakthroughs in the future.",
+  "ru": "Мы только начинаем манипулировать материалами на атомном уровне. Эти ранние работы в области нанотехнологий могут привести к невероятным прорывам в будущем."
  },
  "electric_vehicles": {
   "en": "Electric Vehicles",
   "ru": "Электромобили"
  },
+ "electric_vehicles_desc": {
+  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
+  "ru": "Аккумуляторные электрические силовые установки обгоняют двигатели внутреннего сгорания в пассажирских перевозках. Зарядная инфраструктура, рекуперативное торможение и цепочки поставок редкоземельных металлов меняют автомобильное производство."
+ },
  "electronic_warfare": {
   "en": "Electronic Warfare",
   "ru": "Радиоэлектронная борьба"
+ },
+ "electronic_warfare_desc": {
+  "en": "By disrupting enemy communications and radar, we can gain a significant advantage in battle. Electronic warfare is a new and subtle way to fight.",
+  "ru": "Нарушая вражескую связь и радиолокацию, мы можем получить значительное преимущество в бою. Радиоэлектронная борьба — новый и тонкий способ воевать."
  },
  "environmental_movement": {
   "en": "Environmental Movement",
   "ru": "Экологическое движение"
  },
+ "environmental_movement_desc": {
+  "en": "A movement dedicated to protecting our planet. It raises awareness about ecological issues and pushes for more sustainable ways of living.",
+  "ru": "Движение, посвящённое защите нашей планеты. Оно привлекает внимание к экологическим проблемам и добивается более устойчивого образа жизни."
+ },
  "fiber_optics": {
   "en": "Fiber Optics",
   "ru": "Оптоволокно"
+ },
+ "fiber_optics_desc": {
+  "en": "By sending data as pulses of light through thin glass strands, we can have faster and more efficient communication networks. It's the backbone of our modern digital world.",
+  "ru": "Передавая данные световыми импульсами по тонким стеклянным нитям, мы можем создавать более быстрые и эффективные сети связи. Это основа нашего современного цифрового мира."
  },
  "fluorescent_lamps": {
   "en": "Fluorescent Lamps",
   "ru": "Люминесцентные лампы"
  },
+ "fluorescent_lamps_desc": {
+  "en": "These new lamps are much more efficient than the old arc lamps. They've made electrical lighting more widespread, and our cities a lot brighter.",
+  "ru": "Эти новые лампы гораздо эффективнее старых дуговых. Они сделали электрическое освещение более распространённым, а наши города гораздо ярче."
+ },
  "fusion_batteries": {
   "en": "Microfusion Cells",
   "ru": "Микротермоядерные элементы"
+ },
+ "fusion_batteries_desc": {
+  "en": "Imagine a battery that never needs recharging, because it isn't a battery at all. Microfusion cells are fusion reactors made small and safe enough to sit where a battery once did, running our vehicles, motors and appliances for years on a sip of fuel.",
+  "ru": "Представьте батарею, которую не нужно заряжать, потому что это вовсе не батарея. Микротермоядерные элементы — это термоядерные реакторы, уменьшенные и сделанные достаточно безопасными, чтобы стоять там, где раньше стояла батарея, и годами питать наши машины, двигатели и приборы от глотка топлива."
  },
  "fusion_power": {
   "en": "Fusion Power",
   "ru": "Термоядерная энергетика"
  },
+ "fusion_power_desc": {
+  "en": "If we can harness the power of nuclear fusion, we could have a nearly limitless source of clean energy. It's the holy grail of energy production, but it's not quite here yet.",
+  "ru": "Если мы сумеем обуздать энергию термоядерного синтеза, у нас может появиться почти безграничный источник чистой энергии. Это Святой Грааль энергетики, но его ещё нет."
+ },
  "gene_splicing": {
   "en": "Gene Splicing",
   "ru": "Сплайсинг генов"
+ },
+ "gene_splicing_desc": {
+  "en": "By cutting and pasting DNA, we can now manipulate the very building blocks of life. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas.",
+  "ru": "Вырезая и вставляя ДНК, мы теперь можем манипулировать самими кирпичиками жизни. Это открыло новые возможности для медицины и сельского хозяйства, а также множество этических дилемм."
  },
  "generative_ai": {
   "en": "Generative AI",
   "ru": "Генеративный ИИ"
  },
+ "generative_ai_desc": {
+  "en": "We now have AI that can create original content, from images to music to text. It's a powerful new tool for creativity, and it's getting better all the time.",
+  "ru": "Теперь у нас есть ИИ, способный создавать оригинальный контент: от изображений до музыки и текста. Это мощный новый инструмент для творчества, и он становится всё лучше."
+ },
  "genetic_engineering": {
   "en": "Genetic Engineering",
   "ru": "Генная инженерия"
+ },
+ "genetic_engineering_desc": {
+  "en": "By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.",
+  "ru": "Манипулируя генами организмов, мы можем разрабатывать новые методы лечения и улучшать наши культуры. Это мощная технология, но обращаться с ней нужно осторожно."
  },
  "geoengineering": {
   "en": "Geoengineering",
   "ru": "Геоинженерия"
  },
+ "geoengineering_desc": {
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
+  "ru": "Два столетия мы меняли климат случайно. Ничто, кроме нашей решимости, не мешает делать это намеренно: самолёты могли бы разбрасывать в стратосфере сульфатные аэрозоли и затмить солнце за год, по цене, которую потянет любая крупная экономика. Дымка скроет потепление, но не устранит его, и поддерживать её придётся, пока углерод остаётся в воздухе. С этим приходят и малые искусства: засев облаков, чтобы вызвать дождь в засуху, и превращение града в дождь до падения. Открывает климатическую политику «Стратосферный аэрозольный впрыск»."
+ },
  "globalization": {
   "en": "Globalization",
   "ru": "Глобализация"
+ },
+ "globalization_desc": {
+  "en": "The world is becoming more and more interconnected. This acceleration of trade, communication, and cultural exchange is bringing us closer together, for better or for worse.",
+  "ru": "Мир становится всё более взаимосвязанным. Это ускорение торговли, коммуникаций и культурного обмена сближает нас, к добру или к худу."
  },
  "green_revolution": {
   "en": "Green Revolution",
   "ru": "Зелёная революция"
  },
+ "green_revolution_desc": {
+  "en": "A series of technological innovations in agriculture that have led to a huge increase in food production. It has helped to feed a growing world, but not without its own set of problems.",
+  "ru": "Ряд технологических новшеств в сельском хозяйстве, приведших к огромному росту производства продовольствия. Они помогли прокормить растущий мир, но не без собственных проблем."
+ },
  "guided_missiles": {
   "en": "Guided Missiles",
   "ru": "Управляемые ракеты"
+ },
+ "guided_missiles_desc": {
+  "en": "Now our missiles can find their own way to the target. This makes them much more accurate and effective, which is bad news for the enemy.",
+  "ru": "Теперь наши ракеты находят цель сами. Это делает их гораздо точнее и эффективнее, что плохая новость для противника."
  },
  "humanoid_robotics": {
   "en": "Humanoid Robotics",
   "ru": "Человекоподобная робототехника"
  },
+ "humanoid_robotics_desc": {
+  "en": "Robots built in our own shape can work in a world built for people: they climb stairs, open doors, stock shelves and fold laundry. Shops, warehouses and homes fill with tireless helpers, and the question of what the clerk and the porter will do next is no longer theoretical.",
+  "ru": "Роботы нашего собственного облика могут работать в мире, построенном для людей: они поднимаются по лестницам, открывают двери, расставляют товары на полках и складывают бельё. Магазины, склады и дома наполняются неутомимыми помощниками, и вопрос о том, чем займутся продавец и грузчик, больше не теоретический."
+ },
  "hydraulic_fracturing": {
   "en": "Hydraulic Fracturing",
   "ru": "Гидроразрыв пласта"
+ },
+ "hydraulic_fracturing_desc": {
+  "en": "A controversial but effective way to extract natural gas and oil from underground. It's a boon for the energy industry, but not so much for the environment.",
+  "ru": "Спорный, но эффективный способ добычи природного газа и нефти из-под земли. Благо для энергетики, но не столь для окружающей среды."
  },
  "hypersonic_weapons": {
   "en": "Hypersonic Weapons",
   "ru": "Гиперзвуковое оружие"
  },
+ "hypersonic_weapons_desc": {
+  "en": "Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems.",
+  "ru": "Оружие, способное двигаться со скоростью более чем в пять раз выше скорости звука. Оно невероятно быстрое и точное и настоящая головная боль для наших существующих систем обороны."
+ },
  "in_situ_resource_utilization": {
   "en": "In-Situ Resource Utilization",
   "ru": "Использование местных ресурсов"
+ },
+ "in_situ_resource_utilization_desc": {
+  "en": "Every kilogram lifted from Earth is expensive. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.",
+  "ru": "Каждый килограмм, поднятый с Земли, стоит дорого. Добывая кислород, металлы и стекло из пыли и камня там, где садятся наши экипажи, мы можем строить и снабжать базы за пределами Земли из уже имеющихся материалов."
  },
  "inertial_navigation_systems": {
   "en": "Inertial Navigation Systems",
   "ru": "Инерциальные навигационные системы"
  },
+ "inertial_navigation_systems_desc": {
+  "en": "Using gyroscopes and accelerometers, these systems can guide vehicles with incredible accuracy. They're especially useful for planes and ships, helping them to stay on course.",
+  "ru": "С помощью гироскопов и акселерометров эти системы способны вести транспорт с невероятной точностью. Они особенно полезны для самолётов и кораблей, помогая им держать курс."
+ },
  "infrared_night_vision": {
   "en": "Infrared Night Vision",
   "ru": "Инфракрасное ночное видение"
+ },
+ "infrared_night_vision_desc": {
+  "en": "This technology allows us to see in the dark. It has changed the way we conduct military and security operations, turning night into day.",
+  "ru": "Эта технология позволяет видеть в темноте. Она изменила то, как мы проводим военные операции и операции безопасности, превращая ночь в день."
  },
  "integrated_circuits": {
   "en": "Integrated Circuits",
   "ru": "Интегральные схемы"
  },
+ "integrated_circuits_desc": {
+  "en": "By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.",
+  "ru": "Размещая множество электронных компонентов на одном кристалле, мы можем делать наши устройства меньше, быстрее и мощнее. Это секрет нашей современной электроники."
+ },
  "intergovernmental_organizations": {
   "en": "Intergovernmental Organizations",
   "ru": "Межправительственные организации"
+ },
+ "intergovernmental_organizations_desc": {
+  "en": "Formal organizations where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.",
+  "ru": "Формальные организации, где страны могут сотрудничать по конкретным вопросам. Они призваны развивать сотрудничество и повышать эффективность, хотя так бывает не всегда."
  },
  "internet_of_things": {
   "en": "Internet of Things",
   "ru": "Интернет вещей"
  },
+ "internet_of_things_desc": {
+  "en": "Embedded sensors and connected devices weave a digital layer over physical [concept_infrastructure], generating continuous telemetry on factories, farms, transport, and homes.",
+  "ru": "Встроенные датчики и подключённые устройства плетут цифровой слой поверх физической [Concept('concept_infrastructure','инфраструктуры')], непрерывно передавая телеметрию о фабриках, фермах, транспорте и домах."
+ },
  "isoprene": {
   "en": "Isoprene",
   "ru": "Изопрен"
+ },
+ "isoprene_desc": {
+  "en": "A key ingredient in the production of synthetic rubber. It's a versatile material that's used in everything from tires to footwear.",
+  "ru": "Ключевой компонент производства синтетического каучука. Универсальный материал, который используют везде: от шин до обуви."
  },
  "jadc2": {
   "en": "Joint All-Domain Command and Control (JADC2)",
   "ru": "Объединённое командование и управление во всех сферах (JADC2)"
  },
+ "jadc2_desc": {
+  "en": "A military concept that aims to connect all of our forces across every domain. It's designed to improve our situational awareness and decision-making, making us a more effective fighting force.",
+  "ru": "Военная концепция, цель которой — связать все наши силы во всех сферах. Она призвана улучшить нашу обстановочную осведомлённость и принятие решений, делая нас более эффективной боевой силой."
+ },
  "jet_engine_technology": {
   "en": "Jet Engine Technology",
   "ru": "Реактивные двигатели"
+ },
+ "jet_engine_technology_desc": {
+  "en": "The jet engine has revolutionized aviation. It has allowed us to fly faster, farther, and higher than ever before, changing the face of both military and commercial air travel.",
+  "ru": "Реактивный двигатель совершил переворот в авиации. Он позволил нам летать быстрее, дальше и выше, чем прежде, изменив лицо и военной, и гражданской авиации."
  },
  "keynesian_economics": {
   "en": "Keynesian Economics",
   "ru": "Кейнсианская экономика"
  },
+ "keynesian_economics_desc": {
+  "en": "An economic theory that advocates for government intervention to manage the economy. It's all about using public spending to stimulate growth and reduce unemployment, a popular idea in times of crisis.",
+  "ru": "Экономическая теория, выступающая за вмешательство государства в управление экономикой. Она предлагает использовать государственные расходы для стимулирования роста и сокращения безработицы, популярная идея во времена кризиса."
+ },
  "knowledge_economy": {
   "en": "Knowledge Economy",
   "ru": "Экономика знаний"
+ },
+ "knowledge_economy_desc": {
+  "en": "In this new economy, knowledge is the most valuable commodity. The creation and use of information are now the main drivers of growth, which means we all need to be a bit smarter.",
+  "ru": "В этой новой экономике знание — самый ценный товар. Создание и использование информации теперь главные двигатели роста, а значит, всем нам нужно быть немного умнее."
  },
  "lab-grown_food": {
   "en": "Lab-Grown Food",
   "ru": "Лабораторно выращенная еда"
  },
+ "lab-grown_food_desc": {
+  "en": "We can now grow food in a lab, from cultured meat to other synthetic products. It could be a more sustainable and ethical way to feed the world, if people are willing to eat it.",
+  "ru": "Теперь мы можем выращивать еду в лаборатории, от культивированного мяса до других синтетических продуктов. Это мог бы быть более устойчивый и этичный способ накормить мир, если люди согласятся это есть."
+ },
  "laser_technology": {
   "en": "Laser Technology",
   "ru": "Лазерные технологии"
+ },
+ "laser_technology_desc": {
+  "en": "The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses.",
+  "ru": "Лазер нашёл применение во всевозможных областях: от связи до медицины и производства. Точный и мощный инструмент с, казалось бы, бесконечным числом применений."
  },
  "liquid_democracy": {
   "en": "Liquid Democracy",
   "ru": "Жидкая демократия"
  },
+ "liquid_democracy_desc": {
+  "en": "With a secure digital identity for every citizen, a vote can be counted on any question at any time. Each voter decides an issue directly or lends the vote to someone they trust, and can take it back whenever they like. Trust still pools around a few popular delegates, but none of them keeps it a day longer than people allow.",
+  "ru": "Когда у каждого гражданина есть надёжная цифровая идентичность, голос можно подсчитать по любому вопросу в любое время. Каждый избиратель решает вопрос напрямую или одалживает свой голос тому, кому доверяет, и может забрать его обратно, когда пожелает. Доверие по-прежнему собирается вокруг нескольких популярных делегатов, но ни один из них не удерживает его ни на день дольше, чем позволяют люди."
+ },
  "machine_learning": {
   "en": "Machine Learning",
   "ru": "Машинное обучение"
+ },
+ "machine_learning_desc": {
+  "en": "We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.",
+  "ru": "Теперь мы можем создавать компьютеры, способные учиться на данных. Это породило множество новых технологий и приложений, и они лишь станут мощнее."
  },
  "mainframe_computers": {
   "en": "Mainframe Computers",
   "ru": "Мейнфреймы"
  },
+ "mainframe_computers_desc": {
+  "en": "These large, powerful computers are the workhorses of big business and government. They're reliable and can handle massive amounts of data, making them essential for large-scale operations.",
+  "ru": "Эти большие и мощные компьютеры — рабочие лошадки крупного бизнеса и государства. Они надёжны и справляются с огромными объёмами данных, что делает их незаменимыми для масштабных операций."
+ },
  "marketing_research": {
   "en": "Marketing Research",
   "ru": "Маркетинговые исследования"
+ },
+ "marketing_research_desc": {
+  "en": "By studying what consumers want, businesses can create more effective advertising and better products. It's all about understanding people's desires, and then selling them back to them.",
+  "ru": "Изучая, чего хотят потребители, бизнес может создавать более эффективную рекламу и лучшие продукты. Всё дело в понимании желаний людей, а затем в продаже им их же желаний."
  },
  "mass_media": {
   "en": "Mass Media",
   "ru": "Массмедиа"
  },
+ "mass_media_desc": {
+  "en": "Through various platforms, we can now spread information, entertainment, and news to a massive audience. This gives the media a powerful influence over public opinion and culture.",
+  "ru": "С помощью разных платформ мы теперь можем распространять информацию, развлечения и новости на огромную аудиторию. Это даёт СМИ мощное влияние на общественное мнение и культуру."
+ },
  "mental_health_awareness": {
   "en": "Mental Health Awareness",
   "ru": "Осведомлённость о психическом здоровье"
+ },
+ "mental_health_awareness_desc": {
+  "en": "We're finally starting to understand the importance of mental well-being. This increased awareness is leading to better care, less stigma, and new ways to support those who are struggling.",
+  "ru": "Мы наконец начинаем понимать важность психического благополучия. Эта растущая осведомлённость ведёт к лучшей помощи, меньшей стигме и новым способам поддержать тех, кому трудно."
  },
  "microprocessor": {
   "en": "Microprocessor",
   "ru": "Микропроцессор"
  },
+ "microprocessor_desc": {
+  "en": "This tiny chip is the brain of our modern computers and electronic devices. Its invention has led to an explosion of technological innovation, changing the world in countless ways.",
+  "ru": "Этот крошечный чип — мозг наших современных компьютеров и электронных устройств. Его изобретение привело к взрыву технологических инноваций, изменив мир бесчисленным множеством способов."
+ },
  "military_grade_cybersecurity": {
   "en": "Military-Grade Cybersecurity",
   "ru": "Кибербезопасность военного уровня"
+ },
+ "military_grade_cybersecurity_desc": {
+  "en": "We're developing advanced techniques to protect our most sensitive information and systems from cyber threats. In the digital age, a strong defense is more important than ever.",
+  "ru": "Мы разрабатываем передовые методы защиты наших самых секретных сведений и систем от киберугроз. В цифровую эпоху сильная оборона важнее, чем когда-либо."
  },
  "mind_backups": {
   "en": "Mind Backups",
   "ru": "Резервное копирование сознания"
  },
+ "mind_backups_desc": {
+  "en": "The ability to store our memories and consciousness in digital form. It's a path to a kind of immortality, allowing us to live on long after our physical bodies have failed.",
+  "ru": "Возможность хранить наши воспоминания и сознание в цифровом виде. Это путь к своего рода бессмертию, позволяющий жить дальше задолго после того, как наши физические тела откажут."
+ },
  "missile_defense_systems": {
   "en": "Missile Defense Systems",
   "ru": "Системы противоракетной обороны"
+ },
+ "missile_defense_systems_desc": {
+  "en": "With anti-ballistic missiles and laser interceptors, we can now defend against incoming missile attacks. This should improve our security and strategic stability, in theory.",
+  "ru": "С противоракетами и лазерными перехватчиками мы теперь можем защищаться от ракетных атак. Это должно повысить нашу безопасность и стратегическую стабильность, теоретически."
  },
  "modern_automotive_technology": {
   "en": "Advanced Automotive Production Techniques",
   "ru": "Передовые методы автомобилестроения"
  },
+ "modern_automotive_technology_desc": {
+  "en": "By combining precision machining with modern features like coil spring suspension and electric starters, we're making our cars more comfortable and reliable than ever before.",
+  "ru": "Сочетая точную механическую обработку с современными решениями вроде пружинной подвески и электрических стартёров, мы делаем наши автомобили удобнее и надёжнее, чем когда-либо."
+ },
  "modern_chemical_processes": {
   "en": "Modern Chemical Processes",
   "ru": "Современные химические процессы"
+ },
+ "modern_chemical_processes_desc": {
+  "en": "New processes like the Ostwald and Haber methods have revolutionized the chemical industry. We can now produce important chemicals and synthetic materials on a massive scale.",
+  "ru": "Новые процессы, такие как методы Оствальда и Габера, совершили переворот в химической промышленности. Теперь мы можем производить важные химикаты и синтетические материалы в огромных масштабах."
  },
  "modern_management_techniques": {
   "en": "Modern Management Techniques",
   "ru": "Современные методы управления"
  },
+ "modern_management_techniques_desc": {
+  "en": "New ways of organizing and managing our businesses and institutions are leading to greater efficiency and productivity. It's all about working smarter, not harder.",
+  "ru": "Новые способы организации и управления нашими предприятиями и учреждениями ведут к большей эффективности и производительности. Всё дело в том, чтобы работать умнее, а не усерднее."
+ },
  "modern_material_science": {
   "en": "Modern Material Science",
   "ru": "Современное материаловедение"
+ },
+ "modern_material_science_desc": {
+  "en": "From graphene to metamaterials, we're creating new substances with unique properties. These advanced materials are set to revolutionize everything from electronics to aerospace.",
+  "ru": "От графена до метаматериалов — мы создаём новые вещества с уникальными свойствами. Эти передовые материалы призваны совершить переворот во всём: от электроники до аэрокосмической отрасли."
  },
  "modern_materials": {
   "en": "Modern Materials",
   "ru": "Современные материалы"
  },
+ "modern_materials_desc": {
+  "en": "New materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what we had before. They've changed the way we build and manufacture things.",
+  "ru": "Новые материалы вроде стекловолокна, нейлона и тефлона прочнее, легче и универсальнее, чем то, что было у нас прежде. Они изменили то, как мы строим и производим вещи."
+ },
  "modern_pharmaceuticals": {
   "en": "Modern Pharmaceuticals",
   "ru": "Современная фармацевтика"
+ },
+ "modern_pharmaceuticals_desc": {
+  "en": "With new drugs and vaccines, we've made huge strides in public health. People are living longer, healthier lives, all thanks to the miracles of modern medicine.",
+  "ru": "С новыми лекарствами и вакцинами мы совершили огромный шаг вперёд в общественном здравоохранении. Люди живут дольше и здоровее, и всё благодаря чудесам современной медицины."
  },
  "modern_skyscrapers": {
   "en": "Modern Skyscrapers",
   "ru": "Современные небоскрёбы"
  },
+ "modern_skyscrapers_desc": {
+  "en": "Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.",
+  "ru": "Благодаря новым архитектурным решениям и материалам мы можем строить более высокие и впечатляющие здания. Эти небоскрёбы стали символами нашего современного городского мира."
+ },
  "modern_tools": {
   "en": "Modern Tools",
   "ru": "Современные инструменты"
+ },
+ "modern_tools_desc": {
+  "en": "Tools like forklifts have made our workplaces more efficient and safer. They've improved productivity and reduced the number of accidents, which is good for everyone.",
+  "ru": "Инструменты вроде вилочных погрузчиков сделали наши рабочие места эффективнее и безопаснее. Они повысили производительность и сократили число несчастных случаев, что хорошо для всех."
  },
  "modern_urban_planning": {
   "en": "Modern Urban Planning",
   "ru": "Современное градостроительство"
  },
+ "modern_urban_planning_desc": {
+  "en": "By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.",
+  "ru": "Планируя наши города более системно, мы можем создавать более эффективные, устойчивые и приятные места для жизни. Это способ навести хоть какой-то порядок в хаосе городского роста."
+ },
  "modern_vaccines": {
   "en": "Modern Vaccines",
   "ru": "Современные вакцины"
+ },
+ "modern_vaccines_desc": {
+  "en": "Vaccines for diseases like diphtheria, tetanus, and tuberculosis have saved countless lives. They're a cornerstone of public health, protecting us from some of the world's most deadly diseases.",
+  "ru": "Вакцины от таких болезней, как дифтерия, столбняк и туберкулёз, спасли бесчисленное множество жизней. Они — краеугольный камень общественного здравоохранения, защищающий нас от некоторых самых смертоносных болезней мира."
  },
  "molecular_assemblers": {
   "en": "Molecular Assemblers",
   "ru": "Молекулярные сборщики"
  },
+ "molecular_assemblers_desc": {
+  "en": "Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.",
+  "ru": "Представьте машины, способные собирать вещи атом за атомом. Эти молекулярные сборщики могли бы создавать узкоспециализированные товары с невероятной точностью, меняя саму природу производства."
+ },
  "morphological_freedom": {
   "en": "Morphological Freedom",
   "ru": "Морфологическая свобода"
+ },
+ "morphological_freedom_desc": {
+  "en": "Gene therapy and grown tissue can now change how a body looks as readily as a tailor alters a coat: skin and hair in any color, sex characteristics remade, fur and tails grown from a person's own cells. None of it makes anyone stronger or cleverer. It changes how people present themselves to the world, and that makes it a question for the law.",
+  "ru": "Генная терапия и выращенные ткани теперь могут менять облик тела так же легко, как портной перешивает пальто: кожа и волосы любого цвета, переделанные половые признаки, мех и хвосты, выращенные из собственных клеток человека. Ничто из этого не делает никого сильнее или умнее. Это меняет то, как люди предстают перед миром, и потому становится вопросом закона."
  },
  "motorized_artillery": {
   "en": "Motorized Artillery",
   "ru": "Моторизованная артиллерия"
  },
+ "motorized_artillery_desc": {
+  "en": "By putting our artillery on wheels, we've made it much more mobile and effective. Now our big guns can keep up with the rest of our ground forces.",
+  "ru": "Поставив нашу артиллерию на колёса, мы сделали её гораздо подвижнее и эффективнее. Теперь наши большие орудия могут поспевать за остальными сухопутными силами."
+ },
  "mrna_therapeutics": {
   "en": "mRNA Therapeutics",
   "ru": "мРНК-терапия"
+ },
+ "mrna_therapeutics_desc": {
+  "en": "Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.",
+  "ru": "Доставка синтетической мРНК в липидных наночастицах позволяет быстро создавать вакцины и генную терапию. Сроки реагирования на вспышки сокращаются с лет до месяцев."
  },
  "naval_convoy_defense": {
   "en": "Naval Convoy Defense",
   "ru": "Защита морских конвоев"
  },
+ "naval_convoy_defense_desc": {
+  "en": "New strategies and technologies are making our naval convoys safer. It's all about protecting the ships that carry our vital goods and personnel across the seas.",
+  "ru": "Новые стратегии и технологии делают наши морские конвои безопаснее. Всё дело в защите кораблей, везущих через моря наши жизненно важные грузы и людей."
+ },
  "naval_fire_control_systems": {
   "en": "Naval Fire Control Systems",
   "ru": "Системы управления огнём флота"
+ },
+ "naval_fire_control_systems_desc": {
+  "en": "Advanced systems for targeting and coordinating naval gunfire. They make our ships' weapons more accurate and deadly, which is always a plus in a [concept_naval_battle].",
+  "ru": "Передовые системы наведения и координации корабельного огня. Они делают оружие наших кораблей точнее и смертоноснее, что всегда плюс в [Concept('concept_naval_battle','морском сражении')]."
  },
  "network_centric_warfare": {
   "en": "Network Centric Warfare",
   "ru": "Сетецентрическая война"
  },
+ "network_centric_warfare_desc": {
+  "en": "By connecting all of our forces through advanced communication systems, we can improve our situational awareness and decision-making. It's a new way of fighting that leverages the power of information.",
+  "ru": "Соединяя все наши силы передовыми системами связи, мы можем улучшить нашу обстановочную осведомлённость и принятие решений. Это новый способ воевать, использующий силу информации."
+ },
  "neural_lace": {
   "en": "Neural Lace",
   "ru": "Нейронное кружево"
+ },
+ "neural_lace_desc": {
+  "en": "A brain-computer interface that allows for a seamless connection between our minds and digital devices. It could enhance our cognitive abilities and give us direct control over technology.",
+  "ru": "Интерфейс «мозг–компьютер», обеспечивающий бесшовную связь между нашим разумом и цифровыми устройствами. Он мог бы усилить наши когнитивные способности и дать нам прямой контроль над технологиями."
  },
  "nuclear_energy": {
   "en": "Nuclear Energy",
   "ru": "Ядерная энергия"
  },
+ "nuclear_energy_desc": {
+  "en": "By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.",
+  "ru": "Обуздав энергию ядерных реакций, мы нашли новый и мощный источник энергии. Он питает нашу промышленность и снижает зависимость от ископаемого топлива, но несёт собственные риски."
+ },
  "nuclear_thermal_propulsion": {
   "en": "Nuclear Thermal Propulsion",
   "ru": "Ядерная тепловая тяга"
+ },
+ "nuclear_thermal_propulsion_desc": {
+  "en": "A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. A colony fleet that leaves outside its launch window pays a much smaller premium for it.",
+  "ru": "Реактор нагревает водород до скорости истечения вдвое выше, чем у лучших химических ракет, поэтому тому же манёвру нужно гораздо меньше топлива. Колониальный флот, отправляющийся вне стартового окна, платит за это гораздо меньшую надбавку."
  },
  "nuclear_weapons": {
   "en": "Nuclear Weapons",
   "ru": "Ядерное оружие"
  },
+ "nuclear_weapons_desc": {
+  "en": "The atomic bomb has changed the world forever. These incredibly powerful weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics.",
+  "ru": "Атомная бомба изменила мир навсегда. Это невероятно мощное оружие в корне изменило природу войны и открыло новую эру мировой политики."
+ },
  "orbital_manufacturing": {
   "en": "Orbital Manufacturing",
   "ru": "Орбитальное производство"
+ },
+ "orbital_manufacturing_desc": {
+  "en": "The unique environment of space allows us to create materials and products that are impossible to make on Earth. Orbital manufacturing could be the key to our future in space.",
+  "ru": "Уникальные условия космоса позволяют создавать материалы и продукты, которые невозможно сделать на Земле. Орбитальное производство может стать ключом к нашему будущему в космосе."
  },
  "orbital_weapon_platforms": {
   "en": "Orbital Weapon Platforms",
   "ru": "Орбитальные оружейные платформы"
  },
+ "orbital_weapon_platforms_desc": {
+  "en": "By placing weapons in space, we can have a global strike capability and a constant eye on our enemies. It's the ultimate high ground in modern warfare.",
+  "ru": "Размещая оружие в космосе, мы получаем возможность глобального удара и постоянный присмотр за врагами. Это высшая господствующая высота в современной войне."
+ },
  "personal_appliances": {
   "en": "Personal Appliances",
   "ru": "Бытовые приборы"
+ },
+ "personal_appliances_desc": {
+  "en": "Refrigerators, washing machines, and air conditioners have made our lives much more comfortable and efficient. They've automated many of our daily chores, giving us more time for other things.",
+  "ru": "Холодильники, стиральные машины и кондиционеры сделали нашу жизнь гораздо удобнее и эффективнее. Они автоматизировали многие повседневные дела, оставив нам больше времени на другое."
  },
  "personal_computers": {
   "en": "Personal Computers",
   "ru": "Персональные компьютеры"
  },
+ "personal_computers_desc": {
+  "en": "The personal computer has brought the power of digital technology to the masses. It has changed the way we work, learn, and communicate, opening up a world of new possibilities.",
+  "ru": "Персональный компьютер принёс мощь цифровых технологий массам. Он изменил то, как мы работаем, учимся и общаемся, открыв мир новых возможностей."
+ },
  "personalized_medicine": {
   "en": "Personalized Medicine",
   "ru": "Персонализированная медицина"
+ },
+ "personalized_medicine_desc": {
+  "en": "By tailoring medical treatments to individual patients, we can make them more effective. It's a new approach to healthcare that takes into account our unique genetic and lifestyle factors.",
+  "ru": "Подбирая лечение под конкретных пациентов, мы можем сделать его эффективнее. Это новый подход к здравоохранению, учитывающий наши уникальные генетические особенности и образ жизни."
  },
  "photocopiers": {
   "en": "Photocopiers",
   "ru": "Копировальные аппараты"
  },
+ "photocopiers_desc": {
+  "en": "The ability to quickly and easily make copies of documents has streamlined office work and improved productivity. It's a simple but essential tool in the modern workplace.",
+  "ru": "Возможность быстро и легко копировать документы упорядочила работу офисов и повысила производительность. Простой, но необходимый инструмент на современном рабочем месте."
+ },
  "plastic_mass_production": {
   "en": "Plastic Mass Production",
   "ru": "Массовое производство пластмасс"
+ },
+ "plastic_mass_production_desc": {
+  "en": "The mass production of plastic has given us a wide range of new, lightweight, and durable products. It has also given us a massive environmental problem to deal with.",
+  "ru": "Массовое производство пластика дало нам множество новых лёгких и прочных изделий. Оно также подарило нам огромную экологическую проблему, с которой нужно справляться."
  },
  "pollution_control": {
   "en": "Pollution Control",
   "ru": "Контроль загрязнения"
  },
+ "pollution_control_desc": {
+  "en": "We're finally starting to clean up our act. By managing [concept_pollution_system] from our industries and cars, we can improve our air and water quality and protect public health.",
+  "ru": "Мы наконец начинаем наводить порядок. Управляя [Concept('concept_pollution_system','загрязнением')] от нашей промышленности и автомобилей, мы можем улучшить качество воздуха и воды и защитить здоровье населения."
+ },
  "pop_culture": {
   "en": "Pop Culture",
   "ru": "Поп-культура"
+ },
+ "pop_culture_desc": {
+  "en": "From music and movies to fashion and fads, pop culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.",
+  "ru": "От музыки и кино до моды и увлечений — поп-культура оказывает мощное влияние на наше общество. Она формирует наши тенденции, наши ценности и даже то, как мы видим мир."
  },
  "post-scarcity_economy": {
   "en": "Post-Scarcity Economy",
   "ru": "Экономика постдефицита"
  },
+ "post-scarcity_economy_desc": {
+  "en": "What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.",
+  "ru": "Что, если бы мы жили в мире, где всего хватает на всех? Экономика постдефицита, ставшая возможной благодаря передовым технологиям, могла бы устранить материальную нужду и переопределить само значение труда."
+ },
  "post_work_society": {
   "en": "Post-Work Society",
   "ru": "Посттрудовое общество"
+ },
+ "post_work_society_desc": {
+  "en": "Machines now do most of the work that once paid the bills, and a basic income covers the rest. For the first time, most people choose how to spend their days: making art, studying, caring for others or arguing about politics. Not everyone knows what to do with the freedom.",
+  "ru": "Машины теперь делают большую часть работы, которая когда-то оплачивала счета, а базовый доход покрывает остальное. Впервые большинство людей само выбирает, как проводить дни: заниматься искусством, учиться, заботиться о других или спорить о политике. Не все знают, что делать со свободой."
  },
  "precision_guided_munitions": {
   "en": "Precision Guided Munitions",
   "ru": "Высокоточные боеприпасы"
  },
+ "precision_guided_munitions_desc": {
+  "en": "Smart bombs and cruise missiles can now hit their targets with incredible accuracy. This makes our military strikes more effective and reduces collateral damage, at least in theory.",
+  "ru": "Умные бомбы и крылатые ракеты теперь могут поражать цели с невероятной точностью. Это делает наши военные удары эффективнее и сокращает побочный ущерб, по крайней мере в теории."
+ },
  "predictive_logistics": {
   "en": "Predictive Logistics",
   "ru": "Предиктивная логистика"
+ },
+ "predictive_logistics_desc": {
+  "en": "By using data to forecast our supply chain needs, we can make our logistics more efficient and less costly. It's a smarter way to get things where they need to go.",
+  "ru": "Используя данные для прогнозирования потребностей нашей цепочки поставок, мы можем сделать логистику эффективнее и дешевле. Это более разумный способ доставить всё, что нужно, туда, где нужно."
  },
  "prefabricated_construction": {
   "en": "Prefabricated Construction",
   "ru": "Сборное строительство"
  },
+ "prefabricated_construction_desc": {
+  "en": "Standardized prefab building components - concrete panels, steel-frame modules, modular bathroom pods - slash construction time for housing, hospitals, and military bases. Postwar reconstruction speed defines the era.",
+  "ru": "Стандартные сборные строительные компоненты — бетонные панели, модули со стальным каркасом, модульные санитарные кабины — сокращают сроки строительства жилья, больниц и военных баз. Скорость послевоенного восстановления определяет эпоху."
+ },
  "programmable_matter": {
   "en": "Programmable Matter",
   "ru": "Программируемая материя"
+ },
+ "programmable_matter_desc": {
+  "en": "Imagine materials that can change their shape, color, or texture on command. Programmable matter could be the next great leap in materials science, with endless possibilities.",
+  "ru": "Представьте материалы, способные по команде менять форму, цвет или фактуру. Программируемая материя могла бы стать следующим великим скачком в материаловедении, с бесконечными возможностями."
  },
  "public_works_programs": {
   "en": "Public Works Programs",
   "ru": "Программы общественных работ"
  },
+ "public_works_programs_desc": {
+  "en": "Government-funded projects to build [concept_infrastructure] and improve public utilities. They're a way to stimulate the economy and create jobs, especially in tough times.",
+  "ru": "Финансируемые государством проекты по строительству [Concept('concept_infrastructure','инфраструктуры')] и улучшению коммунальных услуг. Это способ стимулировать экономику и создавать рабочие места, особенно в трудные времена."
+ },
  "quantum_communications": {
   "en": "Quantum Communications",
   "ru": "Квантовая связь"
+ },
+ "quantum_communications_desc": {
+  "en": "Quantum technology can provide us with unbreakable channels for communication. It's the ultimate in secure messaging, protecting our most sensitive information from prying eyes.",
+  "ru": "Квантовая технология может дать нам неподдающиеся взлому каналы связи. Вершина защищённой связи, оберегающая наши самые секретные сведения от посторонних глаз."
  },
  "quantum_computing": {
   "en": "Quantum Computing",
   "ru": "Квантовые вычисления"
  },
+ "quantum_computing_desc": {
+  "en": "By harnessing the strange principles of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.",
+  "ru": "Используя странные принципы квантовой механики, мы можем создавать компьютеры, гораздо мощнее всего, что у нас есть сегодня. Они могли бы решить некоторые из самых сложных мировых проблем."
+ },
  "quantum_materials": {
   "en": "Quantum Materials",
   "ru": "Квантовые материалы"
+ },
+ "quantum_materials_desc": {
+  "en": "Engineered substances with unique quantum properties. These materials could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it.",
+  "ru": "Созданные человеком вещества с уникальными квантовыми свойствами. Эти материалы могут привести к прорывам в энергетике, вычислениях и связи, изменив мир, каким мы его знаем."
  },
  "radar": {
   "en": "Radar",
   "ru": "Радар"
  },
+ "radar_desc": {
+  "en": "This technology allows us to detect objects at a great distance, even when we can't see them. It has been a crucial tool in military aviation and many other fields.",
+  "ru": "Эта технология позволяет обнаруживать объекты на большом расстоянии, даже когда мы их не видим. Она стала важнейшим инструментом в военной авиации и многих других областях."
+ },
  "rapid_deployment_forces": {
   "en": "Rapid Deployment Forces",
   "ru": "Силы быстрого развёртывания"
+ },
+ "rapid_deployment_forces_desc": {
+  "en": "Highly trained and specialized units that can be sent anywhere in the world at a moment's notice. They give us a flexible and effective way to respond to crises.",
+  "ru": "Высокоподготовленные специализированные части, которые можно отправить в любую точку мира в любой момент. Они дают нам гибкий и эффективный способ реагировать на кризисы."
  },
  "recon_satellites": {
   "en": "Reconnaissance Satellites",
   "ru": "Разведывательные спутники"
  },
+ "recon_satellites_desc": {
+  "en": "With satellites, we can now spy on any part of the world from space. This has revolutionized intelligence gathering, giving us an unprecedented view of our adversaries.",
+  "ru": "С помощью спутников мы теперь можем шпионить за любой частью мира из космоса. Это совершило переворот в сборе разведданных, дав нам беспрецедентный обзор действий противников."
+ },
  "rejuvenation_therapies": {
   "en": "Rejuvenation Therapies",
   "ru": "Омолаживающая терапия"
+ },
+ "rejuvenation_therapies_desc": {
+  "en": "Senolytic drugs clear out worn-out cells, partial reprogramming winds others back, and failing organs are regrown rather than replaced. Those who can afford the treatments now age at half the old pace. It isn't immortality, but it buys a great deal of time.",
+  "ru": "Сенолитики выводят изношенные клетки, частичное перепрограммирование отматывает назад другие, а отказывающие органы выращивают заново, а не заменяют. Те, кто может позволить себе лечение, теперь стареют вдвое медленнее. Это не бессмертие, но выигрывает очень много времени."
  },
  "reusable_rocketry": {
   "en": "Reusable Rocketry",
   "ru": "Многоразовые ракеты"
  },
+ "reusable_rocketry_desc": {
+  "en": "By making our rockets reusable, we can dramatically reduce the cost of space travel. This could open up a new era of exploration and commercial activity in space.",
+  "ru": "Сделав ракеты многоразовыми, мы можем резко сократить стоимость космических полётов. Это могло бы открыть новую эру исследований и коммерческой деятельности в космосе."
+ },
  "robotics": {
   "en": "Industrial Robotics",
   "ru": "Промышленная робототехника"
+ },
+ "robotics_desc": {
+  "en": "Industrial robots have transformed our factories. They can perform complex tasks with incredible precision and efficiency, making our production lines safer and more productive.",
+  "ru": "Промышленные роботы преобразили наши фабрики. Они могут выполнять сложные задачи с невероятной точностью и эффективностью, делая наши производственные линии безопаснее и производительнее."
  },
  "rocketry": {
   "en": "Rocketry",
   "ru": "Ракетостроение"
  },
+ "rocketry_desc": {
+  "en": "The development of rockets has given us powerful new weapons and the ability to explore space. It has been a key technology of the 20th century, with a profound impact on warfare and science.",
+  "ru": "Разработка ракет дала нам мощное новое оружие и возможность исследовать космос. Это была ключевая технология XX века, глубоко повлиявшая на войну и науку."
+ },
  "rural_electrification": {
   "en": "Rural Electrification",
   "ru": "Электрификация села"
+ },
+ "rural_electrification_desc": {
+  "en": "Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. It's a key step in modernizing a nation.",
+  "ru": "Электричество в сельской местности улучшило качество жизни и создало новые экономические возможности для сельского населения. Это ключевой шаг на пути к модернизации страны."
  },
  "satellite_communications": {
   "en": "Satellite Communications",
   "ru": "Спутниковая связь"
  },
+ "satellite_communications_desc": {
+  "en": "Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.",
+  "ru": "Спутники дали нам глобальную сеть связи. Теперь мы можем мгновенно передавать информацию по всему миру, делая нашу планету гораздо более связанной."
+ },
  "second_wave_feminism": {
   "en": "Second Wave Feminism",
   "ru": "Феминизм второй волны"
+ },
+ "second_wave_feminism_desc": {
+  "en": "This wave of feminism has fought for equality and personal rights for women. It has had a significant impact on our society, changing gender roles and legal norms.",
+  "ru": "Эта волна феминизма боролась за равенство и личные права женщин. Она оказала значительное влияние на наше общество, изменив гендерные роли и правовые нормы."
  },
  "self_directed_evolution": {
   "en": "Self-Directed Evolution",
   "ru": "Самонаправляемая эволюция"
  },
+ "self_directed_evolution_desc": {
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
+  "ru": "Редактирование генов зашло далеко за пределы поверхности. Люди выращивают новые чувства, обзаводятся сконструированным обменом веществ, а своим детям дают тела, приспособленные к океанским глубинам, полярному холоду, слабой гравитации или жёсткому вакууму. За два поколения семья может стать существами иного рода, и избранного ими самими."
+ },
  "self_driving_laboratories": {
   "en": "Self-Driving Laboratories",
   "ru": "Самоуправляемые лаборатории"
+ },
+ "self_driving_laboratories_desc": {
+  "en": "Robotic labs run by AI design an experiment, carry it out, read the results and choose the next one, around the clock. A search that once took a team of graduate students a decade can finish over a long weekend, provided someone remembers to restock the reagents.",
+  "ru": "Роботизированные лаборатории под управлением ИИ проектируют эксперимент, проводят его, читают результаты и выбирают следующий, круглые сутки. Поиск, на который раньше уходило десять лет у команды аспирантов, может завершиться за долгие выходные, при условии что кто-нибудь не забудет пополнить запас реагентов."
  },
  "semiautomatic_rifle": {
   "en": "Semi-Automatic Rifle",
   "ru": "Самозарядная винтовка"
  },
+ "semiautomatic_rifle_desc": {
+  "en": "Semi-automatic rifles like the M1 Garand give our infantry a much higher rate of fire. This improves their firepower and makes them more effective in a firefight.",
+  "ru": "Самозарядные винтовки вроде M1 Garand дают нашей пехоте гораздо более высокую скорострельность. Это повышает их огневую мощь и делает их эффективнее в перестрелке."
+ },
  "sexual_revolution": {
   "en": "Sexual Revolution",
   "ru": "Сексуальная революция"
+ },
+ "sexual_revolution_desc": {
+  "en": "A social movement that has challenged traditional ideas about sexuality and relationships. It has led to greater acceptance of premarital sex, contraception, and different family structures.",
+  "ru": "Общественное движение, бросившее вызов традиционным представлениям о сексуальности и отношениях. Оно привело к большему принятию добрачных связей, контрацепции и разных семейных укладов."
  },
  "smart_grids": {
   "en": "Smart Grids",
   "ru": "Умные сети"
  },
+ "smart_grids_desc": {
+  "en": "By incorporating advanced technology into our electrical grids, we can make them more efficient, reliable, and sustainable. It's a smarter way to manage our power.",
+  "ru": "Внедряя передовые технологии в наши электросети, мы можем сделать их эффективнее, надёжнее и устойчивее. Это более разумный способ управлять нашей энергией."
+ },
  "social_justice_movements": {
   "en": "Social Justice Movements",
   "ru": "Движения за социальную справедливость"
+ },
+ "social_justice_movements_desc": {
+  "en": "Movements that fight for equality, fairness, and human rights. They tackle issues like racial [concept_discrimination] and economic inequality, pushing for social change through activism and advocacy.",
+  "ru": "Движения, борющиеся за равенство, справедливость и права человека. Они берутся за такие проблемы, как расовая [Concept('concept_discrimination','дискриминация')] и экономическое неравенство, добиваясь социальных перемен активизмом и пропагандой."
  },
  "social_media": {
   "en": "Social Media",
   "ru": "Социальные сети"
  },
+ "social_media_desc": {
+  "en": "Social media platforms have changed the way we communicate and share information. They've given everyone a voice, for better or for worse, and have had a huge impact on our culture and politics.",
+  "ru": "Платформы социальных сетей изменили то, как мы общаемся и делимся информацией. Они дали голос каждому, к добру или к худу, и оказали огромное влияние на нашу культуру и политику."
+ },
  "sonar": {
   "en": "Sonar",
   "ru": "Гидролокатор"
+ },
+ "sonar_desc": {
+  "en": "By using sound to detect objects underwater, sonar has become an essential tool for naval defense. It helps us to find submarines and other underwater threats.",
+  "ru": "Используя звук для обнаружения подводных объектов, гидролокатор стал важнейшим инструментом морской обороны. Он помогает находить подводные лодки и другие подводные угрозы."
  },
  "space_based_solar_power": {
   "en": "Space-Based Solar Power",
   "ru": "Космическая солнечная энергетика"
  },
+ "space_based_solar_power_desc": {
+  "en": "By putting massive solar collectors in orbit, we could have a reliable and abundant source of clean energy. It's an ambitious idea, but one that could solve our energy problems for good.",
+  "ru": "Разместив на орбите огромные солнечные коллекторы, мы могли бы получить надёжный и обильный источник чистой энергии. Амбициозная идея, но она могла бы решить наши энергетические проблемы раз и навсегда."
+ },
  "space_colonization": {
   "en": "Space Colonization",
   "ru": "Колонизация космоса"
+ },
+ "space_colonization_desc": {
+  "en": "As our own planet becomes more crowded, we may need to look to the stars for new places to live. Space colonization could be the next great chapter in human history.",
+  "ru": "По мере того как наша планета становится всё теснее, нам, возможно, придётся искать новые места для жизни среди звёзд. Колонизация космоса могла бы стать следующей великой главой в истории человечества."
  },
  "space_elevator": {
   "en": "Space Elevator",
   "ru": "Космический лифт"
  },
+ "space_elevator_desc": {
+  "en": "A hypothetical structure that would allow us to travel between Earth and space with ease. It would make space travel much cheaper and could accelerate our exploration of the cosmos.",
+  "ru": "Гипотетическое сооружение, которое позволило бы с лёгкостью перемещаться между Землёй и космосом. Оно сделало бы космические полёты гораздо дешевле и могло бы ускорить наше исследование космоса."
+ },
  "space_exploration": {
   "en": "Space Exploration",
   "ru": "Освоение космоса"
+ },
+ "space_exploration_desc": {
+  "en": "Advancements in rocketry and satellite technology have allowed us to explore space. This has been a new era of scientific discovery and a testament to human ingenuity.",
+  "ru": "Достижения в ракетной технике и спутниковых технологиях позволили нам исследовать космос. Это стало новой эрой научных открытий и свидетельством человеческой изобретательности."
  },
  "space_militarization": {
   "en": "Space Militarization",
   "ru": "Милитаризация космоса"
  },
+ "space_militarization_desc": {
+  "en": "As space becomes more important strategically, we're seeing a push to develop and deploy military capabilities there. This raises concerns about the weaponization of space and the need for new rules of engagement.",
+  "ru": "По мере того как космос приобретает стратегическое значение, мы видим стремление развивать и размещать там военные возможности. Это вызывает опасения по поводу вооружения космоса и необходимости новых правил применения силы."
+ },
  "stainless_steel_mass_production": {
   "en": "Stainless Steel Mass Production",
   "ru": "Массовое производство нержавеющей стали"
+ },
+ "stainless_steel_mass_production_desc": {
+  "en": "We can now produce stainless steel in large quantities. This corrosion-resistant and durable material is useful in a wide range of applications.",
+  "ru": "Теперь мы можем производить нержавеющую сталь в больших количествах. Этот коррозионностойкий и прочный материал полезен в самых разных областях."
  },
  "stealth_technology": {
   "en": "Stealth Technology",
   "ru": "Технологии малозаметности"
  },
+ "stealth_technology_desc": {
+  "en": "By using special materials and designs, we can make our military assets nearly invisible to radar and other [concept_detection] systems. It's a powerful advantage in modern warfare.",
+  "ru": "Используя особые материалы и конструкции, мы можем сделать нашу военную технику почти невидимой для радаров и других систем [Concept('concept_detection','обнаружения')]. Это мощное преимущество в современной войне."
+ },
  "supersonic_aircraft": {
   "en": "Supersonic Aircraft",
   "ru": "Сверхзвуковая авиация"
+ },
+ "supersonic_aircraft_desc": {
+  "en": "Aircraft that can travel faster than the speed of sound. They've made air travel faster and have enhanced our military aviation capabilities.",
+  "ru": "Самолёты, способные двигаться быстрее скорости звука. Они сделали воздушные перевозки быстрее и усилили возможности нашей военной авиации."
  },
  "supply_chain_management": {
   "en": "Supply Chain Management",
   "ru": "Управление цепями поставок"
  },
+ "supply_chain_management_desc": {
+  "en": "By using technology and data to optimize our supply chains, we can make them more efficient and less costly. It's all about getting the right things to the right place at the right time.",
+  "ru": "Используя технологии и данные для оптимизации наших цепочек поставок, мы можем сделать их эффективнее и дешевле. Всё дело в том, чтобы нужные вещи оказались в нужном месте в нужное время."
+ },
  "swarm_technology": {
   "en": "Swarm Technology",
   "ru": "Роевые технологии"
+ },
+ "swarm_technology_desc": {
+  "en": "By coordinating large groups of autonomous systems, we can create powerful new tools for reconnaissance, defense, and attack. The whole is truly greater than the sum of its parts.",
+  "ru": "Координируя большие группы автономных систем, мы можем создать мощные новые средства разведки, обороны и нападения. Целое поистине больше суммы своих частей."
  },
  "synthetic_biology": {
   "en": "Synthetic Biology",
   "ru": "Синтетическая биология"
  },
+ "synthetic_biology_desc": {
+  "en": "By designing and building new biological parts and systems, we can create solutions to some of the world's most pressing problems. It's a field with enormous potential, and some significant risks.",
+  "ru": "Проектируя и создавая новые биологические детали и системы, мы можем найти решения некоторых из самых насущных проблем мира. Это область с огромным потенциалом и серьёзными рисками."
+ },
  "tactical_nuclear_weapons": {
   "en": "Tactical Nuclear Weapons",
   "ru": "Тактическое ядерное оружие"
+ },
+ "tactical_nuclear_weapons_desc": {
+  "en": "Smaller, more versatile nuclear weapons that can be used on the battlefield. They expand our strategic options, but also make the use of nuclear weapons a more thinkable proposition.",
+  "ru": "Менее мощное и более универсальное ядерное оружие, которое можно применять на поле боя. Оно расширяет наши стратегические возможности, но делает применение ядерного оружия более допустимым."
  },
  "telemedicine": {
   "en": "Telemedicine",
   "ru": "Телемедицина"
  },
+ "telemedicine_desc": {
+  "en": "By delivering healthcare services remotely, we can improve access to care for people in underserved areas. It's a more efficient way to use our medical resources, and it's becoming more common all the time.",
+  "ru": "Оказывая медицинские услуги дистанционно, мы можем улучшить доступ к помощи для людей в недостаточно обслуживаемых районах. Это более эффективный способ использовать наши медицинские ресурсы, и он становится всё привычнее."
+ },
  "telepathic_communities": {
   "en": "Telepathic Communities",
   "ru": "Телепатические сообщества"
+ },
+ "telepathic_communities_desc": {
+  "en": "What if we could communicate directly from mind to mind? Telepathic communities, connected by brain-computer interfaces, could foster a new level of empathy and understanding.",
+  "ru": "А что, если бы мы могли общаться напрямую, от разума к разуму? Телепатические сообщества, связанные интерфейсами «мозг–компьютер», могли бы породить новый уровень эмпатии и понимания."
  },
  "television": {
   "en": "Television",
@@ -711,52 +1419,108 @@
   "en": "Television Broadcasting",
   "ru": "Телевещание"
  },
+ "television_broadcasting_desc": {
+  "en": "The rise of television has changed the way we get our news and entertainment. It has become a powerful force in shaping public opinion, for better or for worse.",
+  "ru": "Появление телевидения изменило то, как мы получаем новости и развлечения. Оно стало мощной силой, формирующей общественное мнение, к добру или к худу."
+ },
+ "television_desc": {
+  "en": "Television has revolutionized entertainment and communication. It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time.",
+  "ru": "Телевидение совершило переворот в развлечениях и связи. Оно стало мощным средством распространения информации и формирования общественного мнения, мерцающий экран за экраном."
+ },
  "terraforming": {
   "en": "Terraforming",
   "ru": "Терраформирование"
+ },
+ "terraforming_desc": {
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
+  "ru": "Геоинженерия доказала, что климат планеты можно изменить намеренно. Терраформирование обращает то же ремесло на другие миры: зеркала на орбите, чтобы согреть Марс, заводы, чтобы сгустить его воздух, солнцезащитный экран, чтобы охладить Венеру. Работа занимает десятилетия, а награда — века, и первые дети, которые пройдут под марсианским небом без шлема, ещё не родились. Открывает колониальный модуль «Терраформирование»."
  },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",
   "ru": "Терроризм и борьба с ним"
  },
+ "terrorism_and_anti_terrorism_desc": {
+  "en": "The rise of terrorism has forced us to develop new strategies to protect ourselves. This has redefined our national security priorities and led to a new era of global cooperation and conflict.",
+  "ru": "Рост терроризма заставил нас разрабатывать новые стратегии самозащиты. Это переопределило наши приоритеты национальной безопасности и привело к новой эре глобального сотрудничества и конфликта."
+ },
  "transistors": {
   "en": "Transistor Technology",
   "ru": "Транзисторные технологии"
+ },
+ "transistors_desc": {
+  "en": "The transistor is the tiny switch that makes all of our modern electronics possible. Its invention has led to a revolution in computing and communication, changing the world in countless ways.",
+  "ru": "Транзистор — крошечный переключатель, делающий возможной всю нашу современную электронику. Его изобретение привело к революции в вычислениях и связи, изменив мир бесчисленным множеством способов."
  },
  "universal_basic_income": {
   "en": "Universal Basic Income",
   "ru": "Универсальный базовый доход"
  },
+ "universal_basic_income_desc": {
+  "en": "The idea of giving everyone a basic income is gaining traction as a way to address economic inequality and automation. It's a bold idea, but one that could reshape our society for the better.",
+  "ru": "Идея гарантировать каждому базовый доход набирает силу как способ справиться с экономическим неравенством и автоматизацией. Смелая идея, но способная изменить наше общество к лучшему."
+ },
  "universal_digital_identity": {
   "en": "Universal Digital Identity",
   "ru": "Универсальная цифровая идентичность"
+ },
+ "universal_digital_identity_desc": {
+  "en": "State-issued digital identity becomes the substrate for voting, banking, healthcare, and movement. Privacy collapses into a binary: state-trusted or state-suspect.",
+  "ru": "Выдаваемая государством цифровая идентичность становится основой для голосования, банковских услуг, здравоохранения и передвижения. Частная жизнь сводится к двоичному выбору: доверенный государством или подозреваемый государством."
  },
  "unmanned_aerial_vehicles": {
   "en": "Unmanned Aerial Vehicles",
   "ru": "Беспилотные летательные аппараты"
  },
+ "unmanned_aerial_vehicles_desc": {
+  "en": "Drones have changed the face of warfare. They allow us to conduct surveillance and precision strikes without risking the lives of our pilots, giving us a powerful new tool in our military arsenal.",
+  "ru": "Беспилотники изменили лицо войны. Они позволяют вести наблюдение и наносить точные удары, не рискуя жизнями наших пилотов, давая нам мощный новый инструмент в военном арсенале."
+ },
  "vactrains": {
   "en": "Vactrains",
   "ru": "Вакуумные поезда"
+ },
+ "vactrains_desc": {
+  "en": "Pump the air out of a sealed tube and a maglev capsule inside meets almost nothing to slow it down. Superconducting magnets carry it at an airliner's speed for a fraction of the energy, and freight pods share the tubes around the clock. Cities five hundred miles apart are now less than an hour apart.",
+  "ru": "Откачайте воздух из герметичной трубы, и магнитолевитационная капсула внутри почти не встретит сопротивления. Сверхпроводящие магниты несут её со скоростью авиалайнера при малой доле затрат энергии, а грузовые капсулы делят трубы круглосуточно. Города в пятистах милях друг от друга теперь разделяет меньше часа пути."
  },
  "video_games": {
   "en": "Video Games",
   "ru": "Видеоигры"
  },
+ "video_games_desc": {
+  "en": "Video games have become a massive new form of entertainment and art. They've had a huge influence on popular culture, and they're only getting more immersive and complex.",
+  "ru": "Видеоигры стали огромной новой формой развлечения и искусства. Они оказали большое влияние на популярную культуру и становятся всё более захватывающими и сложными."
+ },
  "virtual_reality": {
   "en": "Virtual Reality",
   "ru": "Виртуальная реальность"
+ },
+ "virtual_reality_desc": {
+  "en": "Virtual reality technologies can create incredibly immersive experiences for entertainment, education, and training. It's a new way to interact with the digital world, and it's full of potential.",
+  "ru": "Технологии виртуальной реальности могут создавать невероятно захватывающие впечатления для развлечения, обучения и тренировки. Это новый способ взаимодействия с цифровым миром, полный потенциала."
  },
  "von_neumann_machines": {
   "en": "Von Neumann Machines",
   "ru": "Машины фон Неймана"
  },
+ "von_neumann_machines_desc": {
+  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.",
+  "ru": "Джон фон Нейман спросил, может ли машина построить собственную копию. Наша может: фабрика-зародыш сама добывает руду, делает детали и собирает вторую фабрику, а две делают четыре. Строительные бригады теперь в основном решают, куда поставить следующую копию, а пояс астероидов наполняется шахтёрами, которых никто не запускал."
+ },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",
   "ru": "Беспроводной интернет (Wi-Fi)"
  },
+ "wireless_internet_desc": {
+  "en": "Wi-Fi has made it possible to connect to the internet without cables. It has made our lives more convenient and has revolutionized the way we work, communicate, and entertain ourselves.",
+  "ru": "Wi-Fi позволил подключаться к интернету без проводов. Он сделал нашу жизнь удобнее и совершил переворот в том, как мы работаем, общаемся и развлекаемся."
+ },
  "world_wide_web": {
   "en": "World Wide Web",
   "ru": "Всемирная паутина"
+ },
+ "world_wide_web_desc": {
+  "en": "The World Wide Web has transformed the way we access and share information. It has created a global platform for collaboration and innovation, connecting us all in a vast network of knowledge.",
+  "ru": "Всемирная паутина изменила то, как мы получаем доступ к информации и делимся ею. Она создала глобальную платформу для сотрудничества и инноваций, связав всех нас в обширную сеть знаний."
  }
 }
