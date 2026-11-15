@@ -9895,6 +9895,1150 @@
   "en": "Up or Out",
   "ru": "Вверх или вширь"
  },
+ "ministry_law_events.56.a": {
+  "en": "The state religion keeps its privileges under the ministry.",
+  "ru": "Государственная религия сохраняет свои привилегии при министерстве."
+ },
+ "ministry_law_events.56.b": {
+  "en": "Every faith registers on the same terms.",
+  "ru": "Все вероисповедания регистрируются на равных условиях."
+ },
+ "ministry_law_events.56.d": {
+  "en": "The drafters of [SCOPE.sLaw('current_law_scope').GetName] have not yet settled how the new ministry of religion treats the country's faiths. The leaders of the state religion want its privileges written into the ministry's charter: its holy days, its schools, its place at state occasions. The intelligentsia want every faith registered and treated alike.",
+  "ru": "Составители закона [SCOPE.sLaw('current_law_scope').GetName] ещё не решили, как новое министерство по делам религий будет относиться к вероисповеданиям страны. Лидеры государственной религии хотят закрепить её привилегии в уставе министерства: праздничные дни, школы, место на государственных церемониях. Интеллигенция требует зарегистрировать все вероисповедания и относиться ко всем одинаково."
+ },
+ "ministry_law_events.56.f": {
+  "en": "\\\"I speak for the smaller faiths, and the committee has given me ten minutes. We do not ask for the privileges of the state religion. We have lived without them for as long as anyone in our communities can remember. We ask that the new ministry, when it registers our places of worship, use the same forms and charge the same fees as it does for everyone else, and that our children not be marked absent from school on our own holy days. If the charter gives the state religion its privileges, we ask that it also say in plain words what the rest of us may do, so that no official has to guess. I have brought a list of our communities and their meeting places for the ministry's records.\\\"",
+  "ru": "«Я говорю от имени малых конфессий, и комитет дал мне десять минут. Мы не просим привилегий государственной религии. Мы жили без них столько, сколько помнят наши общины. Мы просим, чтобы новое министерство, регистрируя наши места молитвы, применяло те же формы и брало те же сборы, что и со всеми остальными, и чтобы наших детей не отмечали прогульщиками в школе в наши собственные праздничные дни. Если устав даст государственной религии её привилегии, мы просим, чтобы он также прямо сказал, что позволено остальным, и чиновникам не пришлось гадать. Я принёс список наших общин и мест их собраний для архива министерства.»"
+ },
+ "ministry_law_events.56.t": {
+  "en": "One Faith Among Many",
+  "ru": "Одна вера из многих"
+ },
+ "ministry_law_events.57.a": {
+  "en": "Aid goes where it serves our interests abroad.",
+  "ru": "Помощь идёт туда, где она служит нашим интересам за рубежом."
+ },
+ "ministry_law_events.57.b": {
+  "en": "Aid goes where the need is greatest.",
+  "ru": "Помощь идёт туда, где нужда больше всего."
+ },
+ "ministry_law_events.57.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say how the new ministry decides who receives our aid. Senior officers want it given where it wins friends who matter to us. The intelligentsia want it given by need, wherever the need is greatest and whoever governs there.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен определить, как новое министерство решает, кто получает нашу помощь. Старшие офицеры хотят давать её там, где она приобретает нам важных друзей. Интеллигенция хочет давать её по нужде, где бы нужда ни была больше и кто бы там ни правил."
+ },
+ "ministry_law_events.57.f": {
+  "en": "Questions the drafting committee has put to the government before it writes the aid ministry's rules for choosing recipients:\\n\\nWhether aid may go to a government we have no agreement with. Under a strategic rule it could not, and some of the poorest countries would receive nothing.\\nWhether aid continues when the receiving government acts against us abroad. The officers say it should stop, and the intelligentsia say that makes relief a bargaining counter.\\nWhether relief after a famine, flood or earthquake is counted apart from the rest. If it is, the ministry could send it under either rule.\\nWho draws up each year's list of recipients: the ministry alone, or the ministry with the agreement of the army and our envoys.",
+  "ru": "Вопросы, которые редакционный комитет поставил перед правительством, прежде чем писать правила министерства помощи по выбору получателей:\\n\\nМожет ли помощь идти правительству, с которым у нас нет соглашения. При стратегическом правиле не могла бы, и беднейшие страны остались бы ни с чем.\\nПродолжается ли помощь, если правительство-получатель действует против нас за рубежом. Офицеры говорят, что она должна прекращаться, а интеллигенция — что тогда помощь становится разменной монетой.\\nУчитывается ли помощь после голода, наводнения или землетрясения отдельно от прочей. Если да, министерство могло бы направлять её при любом из правил.\\nКто составляет ежегодный список получателей: одно министерство или министерство с согласия армии и наших посланников."
+ },
+ "ministry_law_events.57.t": {
+  "en": "Where the Aid Goes",
+  "ru": "Куда идёт помощь"
+ },
+ "ministry_law_events.58.a": {
+  "en": "Grant existing works a ten-year phase-in.",
+  "ru": "Дать действующим предприятиям десять лет на переход."
+ },
+ "ministry_law_events.58.b": {
+  "en": "The standards apply to everyone, from the first day.",
+  "ru": "Нормы действуют для всех с первого дня."
+ },
+ "ministry_law_events.58.d": {
+  "en": "While [SCOPE.sLaw('current_law_scope').GetName] is being enacted, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have come with a proposal instead of a protest. They accept that a Ministry of the Environment is coming. They ask that works already built be given ten years to meet its standards in full, so that owners can rebuild on their own schedule and the country is spared a run of closures. Conservationists say ten years of exemption means ten more years of the same smoke and the same rivers.",
+  "ru": "Пока принимается закон [SCOPE.sLaw('current_law_scope').GetName], группа интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] пришла не с протестом, а с предложением. Они признают, что Министерство окружающей среды неизбежно. Они просят дать уже построенным предприятиям десять лет, чтобы полностью выполнить его нормы: владельцы смогут перестроиться по собственному графику, а стране не придётся пережить волну закрытий. Защитники природы отвечают, что десять лет льгот — это ещё десять лет того же дыма и тех же рек."
+ },
+ "ministry_law_events.58.f": {
+  "en": "\\\"We are not asking you to drop the ministry. We are asking you not to close every foundry that was built before its inspectors were trained. Give the old works ten years. By then they will have been rebuilt or shut, and your inspectors will find nothing to object to.\\\"\\n\\n\\\"Some will have been rebuilt. Some will have run for nine years and eleven months without a coin spent on them, and then closed. What do I tell the towns that live beside them?\\\"\\n\\n\\\"Tell them the clause is written down, with a date on it. If you want a schedule of improvements before the date, put it in the clause and we will sign it.\\\"\\n\\n\\\"I will put your offer to the government, with the conservationists' answer beside it.\\\"",
+  "ru": "«Мы не просим вас отказаться от министерства. Мы просим не закрывать каждую литейную, построенную до того, как обучили ваших инспекторов. Дайте старым заводам десять лет. К тому времени их перестроят или закроют, и вашим инспекторам не к чему будет придраться.»\\n\\n«Кое-что перестроят. Кое-что проработает девять лет и одиннадцать месяцев без единой потраченной монеты и тогда закроется. Что мне сказать городам, которые живут рядом с ними?»\\n\\n«Скажите им, что оговорка записана, и в ней стоит дата. Если вы хотите график улучшений до этой даты, внесите его в оговорку, и мы подпишем.»\\n\\n«Я передам ваше предложение правительству, вместе с ответом защитников природы.»"
+ },
+ "ministry_law_events.58.t": {
+  "en": "The Grandfather Clause",
+  "ru": "Оговорка о прежних правах"
+ },
+ "ministry_law_events.59.a": {
+  "en": "Make the grandfather clause permanent.",
+  "ru": "Сделать оговорку о прежних правах постоянной."
+ },
+ "ministry_law_events.59.b": {
+  "en": "The phase-in is over. Let it lapse.",
+  "ru": "Переходный период окончен. Пусть оговорка истечёт."
+ },
+ "ministry_law_events.59.d": {
+  "en": "The ten-year grandfather clause attached to [SCOPE.sLaw('sunset_law').GetName] has expired, and works that were spared the ministry's full standards must now meet them. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] have come back to say that ten years was not long enough, and ask that the exemption be made permanent. The conservationists, and the ministry's own inspectors, want the clause to lapse as written.",
+  "ru": "Десятилетняя оговорка о прежних правах, прилагавшаяся к закону [SCOPE.sLaw('sunset_law').GetName], истекла, и предприятия, избавленные от полных норм министерства, теперь должны их выполнять. Группа интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] вернулась с заявлением, что десяти лет было мало, и просит сделать льготу постоянной. Защитники природы и собственные инспекторы министерства хотят, чтобы оговорка истекла, как и записано."
+ },
+ "ministry_law_events.59.f": {
+  "en": "Notice to the owners and managers of works built before the ministry was founded, from its inspectorate. The exemption granted to your works ten years ago has expired. From today they are subject to the ministry's standards for smoke, waste water and ash on the same terms as any other works. Inspectors will visit each works in the coming months, in the order of the register, and will give notice before each visit. A works found in breach will be given a period to correct it before any fine is levied. Owners who have asked the government for an extension must meet the standards while their request is considered. Questions should be addressed to the inspectorate's regional offices.",
+  "ru": "Уведомление инспекции министерства владельцам и управляющим предприятий, построенных до основания министерства. Льгота, предоставленная вашим предприятиям десять лет назад, истекла. С сегодняшнего дня на них распространяются нормы министерства по дыму, сточным водам и золе на тех же условиях, что и на любые другие предприятия. В ближайшие месяцы инспекторы посетят каждое предприятие в порядке реестра и предупредят о каждом визите. Предприятию, у которого обнаружено нарушение, будет дан срок на исправление до наложения какого-либо штрафа. Владельцы, просившие у правительства отсрочку, обязаны соблюдать нормы, пока рассматривается их просьба. Вопросы следует направлять в региональные отделения инспекции."
+ },
+ "ministry_law_events.59.t": {
+  "en": "The Phase-In Ends",
+  "ru": "Конец переходного периода"
+ },
+ "ministry_law_events.6.a": {
+  "en": "This debacle proves we need a proper ministry!",
+  "ru": "Этот провал доказывает, что нам нужно настоящее министерство!"
+ },
+ "ministry_law_events.6.b": {
+  "en": "Use the incident to build a careful consensus.",
+  "ru": "Использовать случай, чтобы осторожно выстроить согласие."
+ },
+ "ministry_law_events.6.d": {
+  "en": "Our envoys have mishandled a meeting with a foreign government's representatives. An invitation went to the wrong office, the ceremony was done out of order, and our apology arrived after the guests had left. Their government has lodged a complaint. Supporters of [SCOPE.sLaw('current_law_scope').GetName] say this would not have happened if one ministry handled all our dealings abroad.",
+  "ru": "Наши посланники провалили встречу с представителями иностранного правительства. Приглашение ушло не в то ведомство, церемонию провели в неверном порядке, а наши извинения пришли, когда гости уже уехали. Их правительство подало жалобу. Сторонники закона [SCOPE.sLaw('current_law_scope').GetName] говорят, что этого бы не случилось, если бы все наши дела за рубежом вело одно министерство."
+ },
+ "ministry_law_events.6.f": {
+  "en": "\\\"I was the junior secretary of our delegation, and the government's inquiry has asked me to explain what went wrong. The invitation came to the delegation. The reply was written by the trade office, because the visit was about trade, and the seating was arranged by a third office that had seen neither. Each office followed its own rules, and none of them knew what the others had done. Their envoy was seated below the representative of a country their government is quarreling with, and left before the meal began. I wrote the apology that evening, but it went out with the trade office's courier and arrived two days late. I have written down each step and who took it, and I will give the list to whoever is asked to put this right.\\\"",
+  "ru": "«Я был младшим секретарём нашей делегации, и правительственное расследование попросило меня объяснить, что пошло не так. Приглашение пришло в делегацию. Ответ написало торговое ведомство, потому что визит был торговым, а рассадкой занималось третье ведомство, не видевшее ни того ни другого. Каждое ведомство следовало своим правилам, и никто не знал, что сделали остальные. Их посланника посадили ниже представителя страны, с которой их правительство в ссоре, и он ушёл до начала трапезы. Извинения я написал в тот же вечер, но их отправили с курьером торгового ведомства, и они опоздали на два дня. Я записал каждый шаг и кто его сделал и передам список тому, кому поручат это исправить.»"
+ },
+ "ministry_law_events.6.t": {
+  "en": "The Ambassador's Dilemma",
+  "ru": "Дилемма посла"
+ },
+ "ministry_law_events.7.a": {
+  "en": "Commerce needs one office. Push it through!",
+  "ru": "Торговле нужно одно ведомство. Провести закон!"
+ },
+ "ministry_law_events.7.b": {
+  "en": "Design the ministry to address merchant concerns.",
+  "ru": "Построить министерство с учётом забот купцов."
+ },
+ "ministry_law_events.7.d": {
+  "en": "Merchants and manufacturers led by members of the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have petitioned the government in support of [SCOPE.sLaw('current_law_scope').GetName]. They say that permits, tariffs and inspections are handled by several offices that do not consult one another, and that one ministry should handle them all.",
+  "ru": "Купцы и промышленники во главе с членами группы интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] подали правительству петицию в поддержку закона [SCOPE.sLaw('current_law_scope').GetName]. Они говорят, что разрешениями, пошлинами и проверками занимаются несколько ведомств, не советующихся друг с другом, и заниматься всем этим должно одно министерство."
+ },
+ "ministry_law_events.7.f": {
+  "en": "To the government, from the undersigned merchants and manufacturers. To send one crate of goods abroad, each of us must apply to three offices. The first issues a permit to export. The second requires a certificate of the goods' origin. The third collects the duty and inspects the crate, often after the buyer's deadline has passed. None of the three accepts the others' papers, and none will tell us in advance what it will charge. We attach the forms each office requires and the time each took to answer us last season. We ask that the new ministry take over the work of all three, and that it publish its rules and its fees before it begins to collect them.",
+  "ru": "Правительству от нижеподписавшихся купцов и промышленников. Чтобы отправить за границу один ящик товара, каждому из нас приходится обращаться в три ведомства. Первое выдаёт разрешение на вывоз. Второе требует свидетельство о происхождении товара. Третье взимает пошлину и осматривает ящик, часто уже после истечения срока покупателя. Ни одно из трёх не принимает бумаги других, и ни одно не скажет заранее, сколько возьмёт. Прилагаем формы, которые требует каждое ведомство, и время, за которое каждое ответило нам в прошлом сезоне. Просим, чтобы новое министерство взяло на себя работу всех трёх и опубликовало свои правила и сборы до того, как начнёт их взимать."
+ },
+ "ministry_law_events.7.t": {
+  "en": "The Merchant's Petition",
+  "ru": "Петиция купцов"
+ },
+ "ministry_law_events.8.a": {
+  "en": "A great nation deserves a Ministry of Culture.",
+  "ru": "Великой нации подобает Министерство культуры."
+ },
+ "ministry_law_events.8.b": {
+  "en": "Let the artists help draw it up, and win their support.",
+  "ru": "Пусть художники помогут составить его устав, и мы получим их поддержку."
+ },
+ "ministry_law_events.8.d": {
+  "en": "[SCOPE.sLaw('current_law_scope').GetName] has divided the country's writers, painters and musicians. Some in the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] welcome a ministry that would pay for theaters, galleries and commissions. Others expect that what the state pays for, it will also judge, and they have said so in print.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] расколол писателей, художников и музыкантов страны. Одни в группе интересов [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] приветствуют министерство, которое оплатит театры, галереи и заказы. Другие ожидают, что государство будет судить о том, за что платит, и заявили об этом в печати."
+ },
+ "ministry_law_events.8.f": {
+  "en": "Remarks heard among the country's artists in the week the plans for the ministry were made public.\\n\\n\\\"I have applied for a grant. If the terms say anything about what I may paint, I will withdraw the application and publish the terms.\\\"\\n\\n\\\"They will begin with grants and end with a list of approved subjects. I have watched what happens to a writer who needs a license renewed every year.\\\"\\n\\n\\\"Nobody has asked us what we need. We need rooms to work in and somewhere to show the work, and a committee of officials will now decide what kind of work that is.\\\"\\n\\n\\\"I have taught music for thirty years on what my pupils' parents can pay. If the state wants to build a concert hall in this town, I will play in it, and I will play what I choose.\\\"",
+  "ru": "Высказывания, услышанные среди художников страны на той неделе, когда обнародовали планы министерства.\\n\\n«Я подал заявку на грант. Если в условиях хоть слово о том, что мне писать, я возьму заявку назад и опубликую условия.»\\n\\n«Начнут с грантов, а кончат списком одобренных тем. Я видел, что бывает с писателем, которому каждый год нужно продлевать лицензию.»\\n\\n«Никто не спросил, что нужно нам. Нам нужны помещения для работы и место, где её показать, а теперь комитет чиновников будет решать, какая это работа.»\\n\\n«Я тридцать лет преподаю музыку на то, что могут заплатить родители моих учеников. Если государство построит в нашем городе концертный зал, я сыграю в нём, и сыграю то, что выберу сам.»"
+ },
+ "ministry_law_events.8.t": {
+  "en": "The Artist's Subsidy",
+  "ru": "Субсидия для художников"
+ },
+ "ministry_law_events.9.a": {
+  "en": "The ministry will serve the whole nation. Press forward!",
+  "ru": "Министерство будет служить всей нации. Вперёд!"
+ },
+ "ministry_law_events.9.b": {
+  "en": "Proceed carefully to minimize opposition.",
+  "ru": "Действовать осторожно, чтобы свести оппозицию к минимуму."
+ },
+ "ministry_law_events.9.c": {
+  "en": "Let the side this ministry favors help write its rules.",
+  "ru": "Пусть сторона, которой выгодно это министерство, поможет написать его правила."
+ },
+ "ministry_law_events.9.d": {
+  "en": "[SCOPE.sLaw('current_law_scope').GetName] has set factory owners and workers' representatives against each other. Each side is campaigning to decide whose interests the new ministry will look after, and the question has become the main political argument of the season.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] противопоставил владельцев фабрик и представителей рабочих. Каждая сторона добивается, чтобы новое министерство отстаивало именно её интересы, и этот вопрос стал главным политическим спором сезона."
+ },
+ "ministry_law_events.9.f": {
+  "en": "A factory owner and a union official, at a public hearing on the law.\\n\\n\\\"Every rule this ministry writes will be paid for out of my wage bill. If the rules make it cheaper to close than to run, I will close, and the ministry can explain that to my workers.\\\"\\n\\n\\\"You employ them at what the market lets you pay, and when there is an accident you send a clerk to the family. We are asking for inspectors who can come in without your leave. That costs you nothing if your floor is safe.\\\"\\n\\n\\\"Safe by whose measure? An inspector who has never run a machine will write the rules for one. Put people in this ministry who have run a factory floor, and I will sit at the same table as you.\\\"\\n\\n\\\"Then we will want our own people at that table, and as many seats as yours.\\\"",
+  "ru": "Владелец фабрики и профсоюзный деятель на публичных слушаниях по закону.\\n\\n«Каждое правило этого министерства будет оплачено из моего фонда зарплаты. Если из-за правил закрыть будет дешевле, чем держать, я закрою, и министерство объяснит это моим рабочим.»\\n\\n«Вы нанимаете их за то, что позволяет платить рынок, а когда случается несчастье, посылаете к семье клерка. Мы просим инспекторов, которые смогут входить без вашего разрешения. Если ваш цех безопасен, вам это ничего не стоит.»\\n\\n«Безопасен по чьей мерке? Инспектор, ни разу не стоявший у станка, напишет правила для станка. Посадите в министерство людей, которые руководили цехом, и я сяду с вами за один стол.»\\n\\n«Тогда и нам понадобятся за тем столом свои люди, и мест столько же, сколько у вас.»"
+ },
+ "ministry_law_events.9.t": {
+  "en": "Capital vs. Labor",
+  "ru": "Капитал против труда"
+ },
+ "minor_events_timelineextended.10.a": {
+  "en": "We govern what is left.",
+  "ru": "Мы управляем тем, что осталось."
+ },
+ "minor_events_timelineextended.10.d": {
+  "en": "Our people's average [concept_sol] has stayed below #v 4#! for a year, and the state has stopped working. Every institution and ministry we kept is abolished. Whatever barracks, naval bases, ports, railways, universities and government offices stood in our states are abandoned and lost. If living standards stay this low, it will happen again in a year.",
+  "ru": "Средний [concept_sol|l] нашего населения год держался ниже #v 4#!, и государство перестало работать. Все сохранённые нами институты и министерства упразднены. Все казармы, военно-морские базы, порты, железные дороги, университеты и учреждения власти в наших областях заброшены и потеряны. Если уровень жизни останется столь низким, это повторится через год."
+ },
+ "minor_events_timelineextended.10.f": {
+  "en": "The clerk came in at the usual hour, past the watchman's post at the end of the street, which had been empty all week, and found the office door standing open. The lamps were gone and the desks had been carried off. The registers lay on the floor where the shelves had been. She gathered the ones that were whole, tied them with cord, and took them home under her arm.",
+  "ru": "Клерк пришла в обычный час мимо поста сторожа в конце улицы, пустовавшего всю неделю, и увидела, что дверь конторы распахнута. Ламп не было, столы вынесли. Реестры лежали на полу там, где раньше стояли полки. Она собрала уцелевшие, перевязала шнуром и унесла домой под мышкой."
+ },
+ "minor_events_timelineextended.10.t": {
+  "en": "The State Collapses",
+  "ru": "Крах государства"
+ },
+ "minor_events_timelineextended.2.a": {
+  "en": "Let the law take its usual course.",
+  "ru": "Пусть закон идёт обычным порядком."
+ },
+ "minor_events_timelineextended.2.b": {
+  "en": "Expedite the process with minimal intervention",
+  "ru": "Ускорить процесс при минимальном вмешательстве"
+ },
+ "minor_events_timelineextended.2.c": {
+  "en": "Push the law forward decisively",
+  "ru": "Решительно протолкнуть закон"
+ },
+ "minor_events_timelineextended.2.d": {
+  "en": "A law has begun its passage. Our advisors ask whether we should set aside some of the usual steps so that it takes effect sooner, at a cost in [concept_authority] and in the goodwill of those who oppose it.\\n\\n#bold [concept_legislative_override_capacity]:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]\\n#bold [concept_authority] Cost Reduction:#! #G [ROOT.GetCountry.MakeScope.ScriptValue('forced_law_override_discount_pct_display')|0]%#!",
+  "ru": "Закон начал своё прохождение. Наши советники спрашивают, не отступить ли от некоторых обычных этапов, чтобы он вступил в силу скорее — ценой [concept_authority|l] и расположения тех, кто ему противится.\\n\\n#bold [concept_legislative_override_capacity]:#! [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]\\n#bold Снижение стоимости [Concept('concept_authority', 'авторитета')]:#! #G [ROOT.GetCountry.MakeScope.ScriptValue('forced_law_override_discount_pct_display')|0]%#!"
+ },
+ "minor_events_timelineextended.2.e": {
+  "en": "Force the law through, consequences be damned",
+  "ru": "Протолкнуть закон, и будь что будет"
+ },
+ "minor_events_timelineextended.2.f": {
+  "en": "\\\"The law has support today. If it takes the usual course, those who oppose it have months to organize, and every month it waits, it loses friends.\\\"\\n\\n\\\"And if we push it past the usual steps, everyone who loses by it will say it was done to them and not with them. We will need some of those people for the next law, and the one after that.\\\"\\n\\n\\\"Then we spend some of their goodwill now, while the law is worth it.\\\"\\n\\n\\\"Some, yes. I am asking how much, because this is not the last law we will want to pass.\\\"",
+  "ru": "«Сегодня у закона есть поддержка. Если он пойдёт обычным порядком, у его противников будут месяцы на организацию, и с каждым месяцем он теряет друзей.»\\n\\n«А если мы обойдём обычные этапы, все, кто от него потеряет, скажут, что это сделали с ними, а не вместе с ними. Нам понадобятся некоторые из этих людей для следующего закона и для того, что за ним.»\\n\\n«Тогда мы потратим часть их расположения сейчас, пока закон того стоит.»\\n\\n«Часть — да. Я спрашиваю, сколько, потому что это не последний закон, который мы захотим принять.»"
+ },
+ "minor_events_timelineextended.2.t": {
+  "en": "Forceful Legislation",
+  "ru": "Законодательный напор"
+ },
+ "minor_events_timelineextended.3.a": {
+  "en": "We will build this country ourselves.",
+  "ru": "Мы построим эту страну сами."
+ },
+ "minor_events_timelineextended.3.b": {
+  "en": "Seek support from the international community.",
+  "ru": "Искать поддержки международного сообщества."
+ },
+ "minor_events_timelineextended.3.d": {
+  "en": "The colonial administration has withdrawn, and [ROOT.GetCountry.GetName] is independent. Crowds are celebrating in the capital. The departing officials have left us their buildings but few of their records and almost none of their trained staff. We must decide whether to build the state from our own resources or to ask other countries for help.",
+  "ru": "Колониальная администрация ушла, и страна [ROOT.GetCountry.GetName] независима. В столице ликуют толпы. Уходящие чиновники оставили нам свои здания, но мало документов и почти никого из обученных работников. Нам предстоит решить, строить ли государство своими силами или просить помощи у других стран."
+ },
+ "minor_events_timelineextended.3.f": {
+  "en": "On the first morning of independence a clerk of the new government walked through the offices the colonial administration had left. The desks and chairs were still there, but most of the cabinets were empty. The departing officials had taken their files with them. In a back room he found a run of land registers that nobody had packed, and he carried them down to the hall, where the people who would run the new government sat on packing cases. \\\"These say who owns what,\\\" he said, setting them on the table. \\\"They are most of what we have.\\\" Someone fetched a lamp, and they began to go through them page by page.",
+  "ru": "В первое утро независимости служащий нового правительства обошёл конторы, оставленные колониальной администрацией. Столы и стулья были на месте, но большинство шкафов пустовали. Уходя, чиновники забрали свои дела. В задней комнате он нашёл связку земельных реестров, которые никто не упаковал, и отнёс их в зал, где на ящиках сидели те, кому предстояло управлять новым правительством. «Здесь написано, кто чем владеет», — сказал он, кладя их на стол. «Это почти всё, что у нас есть.» Кто-то принёс лампу, и они стали просматривать реестры страницу за страницей."
+ },
+ "minor_events_timelineextended.3.t": {
+  "en": "A Flag of Our Own",
+  "ru": "Свой флаг"
+ },
+ "minor_events_timelineextended.6.a": {
+  "en": "Let the losses fall where they fall.",
+  "ru": "Пусть потери лягут туда, куда лягут."
+ },
+ "minor_events_timelineextended.6.correspondent_liquidity": {
+  "en": "Inject liquidity through correspondent banks",
+  "ru": "Влить ликвидность через банки-корреспонденты"
+ },
+ "minor_events_timelineextended.6.d_correction": {
+  "en": "Prices on our exchanges have fallen sharply over a few days of heavy selling. Some of those who borrowed to buy shares have taken losses, and lenders are asking for more security on new loans. Most of our banks have come through without trouble, and the speculation of recent months has gone out of the market.",
+  "ru": "Цены на наших биржах резко упали за несколько дней массовых продаж. Некоторые из тех, кто брал в долг ради покупки акций, понесли убытки, а кредиторы требуют больше обеспечения по новым займам. Большинство наших банков прошло через это без затруднений, и спекуляция последних месяцев покинула рынок."
+ },
+ "minor_events_timelineextended.6.d_crash": {
+  "en": "Our exchanges have lost much of their value in a few days of panic selling, and the [concept_banking_cycle] has fallen with them. Firms that borrowed against their shares cannot repay, and several have closed. Depositors are queuing to withdraw from the banks they trust least, and people who lost their savings are asking what the government will do.",
+  "ru": "Наши биржи потеряли значительную часть стоимости за несколько дней панических продаж, и вместе с ними упал [concept_banking_cycle|l]. Фирмы, занимавшие под залог акций, не могут расплатиться, и несколько закрылись. Вкладчики стоят в очередях, чтобы забрать деньги из банков, которым доверяют меньше всего, а люди, потерявшие сбережения, спрашивают, что сделает правительство."
+ },
+ "minor_events_timelineextended.6.d_downturn": {
+  "en": "Prices on our exchanges have fallen for weeks and have not recovered. Banks are calling in loans they made when prices were high, and they will lend little against the shares that remain. Businesses that counted on fresh credit to pay for stock and wages are cutting both.",
+  "ru": "Цены на наших биржах падали несколько недель и не восстановились. Банки требуют возврата займов, выданных при высоких ценах, и почти не кредитуют под оставшиеся акции. Предприятия, рассчитывавшие на новый кредит для закупки товара и выплаты зарплат, сокращают и то и другое."
+ },
+ "minor_events_timelineextended.6.d_panic": {
+  "en": "Our banks have stopped lending to anyone, each other included. Trading on the exchange has been halted to stop the losses, and crowds stand outside credit houses that did not open this morning. Every lender is calling in what it is owed, and few borrowers can pay, because the money owed to them is also unpaid.",
+  "ru": "Наши банки перестали кредитовать кого бы то ни было, в том числе друг друга. Торги на бирже остановлены, чтобы прекратить потери, а у кредитных контор, не открывшихся сегодня утром, стоят толпы. Каждый кредитор требует вернуть долги, и мало кто из заёмщиков может заплатить, потому что и им не возвращают долги."
+ },
+ "minor_events_timelineextended.6.d_systemic": {
+  "en": "Several of our largest banks cannot pay their depositors, and the banks that can are keeping every coin they hold. No loans are being made at any price. Businesses that pay wages and buy stock on credit are shutting, sound ones among them, and the losses pass from bank to bank through what each owes the others.",
+  "ru": "Несколько крупнейших банков не могут расплатиться с вкладчиками, а те, что могут, держат у себя каждую монету. Займов не выдают ни по какой цене. Предприятия, которые платят зарплаты и закупают товар в кредит, закрываются, и здоровые среди них тоже, а потери переходят от банка к банку через взаимные долги."
+ },
+ "minor_events_timelineextended.6.deposit_guarantee": {
+  "en": "Activate the deposit guarantee scheme",
+  "ru": "Ввести схему гарантирования вкладов"
+ },
+ "minor_events_timelineextended.6.dev_bank_lending": {
+  "en": "Direct development banks to crisis lending",
+  "ru": "Направить банки развития на кризисное кредитование"
+ },
+ "minor_events_timelineextended.6.discount_window": {
+  "en": "Open the emergency discount window",
+  "ru": "Открыть экстренное учётное окно"
+ },
+ "minor_events_timelineextended.6.f_correction": {
+  "en": "From the head office of a bank, to the managers of its branches. Share prices fell sharply this week, and several borrowers who bought shares with our money have asked for more time. Grant it where the borrower has other security, and refuse it where they do not. Make no new loans against shares until this office says otherwise. Depositors who ask are to be told that the bank's reserves are unchanged. Report every withdrawal larger than usual to this office at the end of each day.",
+  "ru": "Из головного офиса банка управляющим его отделений. На этой неделе цены на акции резко упали, и несколько заёмщиков, купивших акции на наши деньги, просят отсрочки. Давайте её там, где у заёмщика есть другое обеспечение, и отказывайте там, где его нет. Не выдавайте новых займов под акции, пока этот офис не распорядится иначе. Вкладчикам, которые спросят, сообщайте, что резервы банка не изменились. О каждом снятии суммы больше обычной сообщайте в этот офис в конце дня."
+ },
+ "minor_events_timelineextended.6.f_crash": {
+  "en": "The cashier opened his window at the usual hour, and the queue already reached the street door. Every customer wanted the whole balance. He counted it out, wrote the sum in the book, and passed it under the grille. At midday the manager brought down another box from the strongroom and stood behind him for an hour, watching the queue. In the afternoon the cashier began paying in the smallest notes he had, so that the cash would go further. He closed the window at the usual hour with people still waiting outside, and wrote the day's total at the foot of the page.",
+  "ru": "Кассир открыл окошко в обычный час, а очередь уже тянулась до уличной двери. Каждый клиент хотел получить весь остаток. Он отсчитывал деньги, записывал сумму в книгу и подавал под решётку. В полдень управляющий принёс из хранилища ещё один ящик и час стоял за его спиной, наблюдая за очередью. После полудня кассир стал выдавать самыми мелкими купюрами, чтобы наличности хватило дольше. В обычный час он закрыл окошко, когда на улице ещё ждали люди, и записал итог дня внизу страницы."
+ },
+ "minor_events_timelineextended.6.f_downturn": {
+  "en": "\\\"You are the manager of this branch, so I will say it to you. I have banked here as long as I have been in business, and I have never missed a payment. Last spring your own clerk came to my shop and asked me to borrow more, to buy stock while prices were rising. I did. Now prices have fallen, the stock is worth less than the loan, and you want the loan repaid by the end of the quarter. I cannot pay it from what I sell, and you know that, because you have my books. Give me a year and you will have all of it, with the interest.\\\"",
+  "ru": "«Вы управляющий этого отделения, поэтому скажу вам. Я держу счёт здесь столько, сколько веду дело, и ни разу не просрочил платёж. Прошлой весной ваш же клерк пришёл ко мне в лавку и уговорил занять больше, чтобы закупить товар, пока цены росли. Я занял. Теперь цены упали, товар стоит меньше займа, а вы хотите вернуть заём до конца квартала. Я не смогу выплатить его с продаж, и вы это знаете, потому что у вас мои книги. Дайте мне год, и вы получите всё, с процентами.»"
+ },
+ "minor_events_timelineextended.6.f_panic": {
+  "en": "\\\"They told me at the door that the bank is closed today. They told the man ahead of me in the line the same thing yesterday.\\\"\\n\\n\\\"My wages were paid in notes drawn on the company's bank. The baker would not take them, and neither would the landlord.\\\"\\n\\n\\\"Every house I owe money to sent a clerk this morning, and each wants to be paid by the end of the week. I am owed money by six others, and none of them can pay me either.\\\"\\n\\n\\\"We are lending to no one: not to customers, not to the other banks. Until I know who is still solvent, I will hold what we have.\\\"",
+  "ru": "«У дверей мне сказали, что банк сегодня закрыт. Тому, кто стоял передо мной, вчера сказали то же самое.»\\n\\n«Мне заплатили банкнотами банка компании. Пекарь их не взял, и хозяин жилья тоже.»\\n\\n«Все дома, которым я должен, сегодня утром прислали клерка, и каждому нужно получить к концу недели. Мне должны шестеро других, и ни один из них тоже не может мне заплатить.»\\n\\n«Мы не кредитуем никого: ни клиентов, ни другие банки. Пока я не узнаю, кто ещё платёжеспособен, я придержу то, что у нас есть.»"
+ },
+ "minor_events_timelineextended.6.f_systemic": {
+  "en": "Items for the government from the finance office's morning report:\\n\\nThree of the largest banks did not open today. Their managers say they cannot pay their depositors and have asked the government for instructions.\\nThe banks that did open are paying out only part of each withdrawal, so that their cash will last the day.\\nNo bank will lend to another. Each holds debts owed by the others and cannot tell what they are worth.\\nFirms that pay wages from credit could not pay them this week, and many have closed their gates until they can.\\nPayments between banks have stopped, so a sum drawn on one bank cannot be collected at another.",
+  "ru": "Пункты для правительства из утреннего доклада финансового ведомства:\\n\\nТри крупнейших банка сегодня не открылись. Их управляющие говорят, что не могут расплатиться с вкладчиками, и просят у правительства указаний.\\nБанки, которые открылись, выдают лишь часть каждого снятия, чтобы наличности хватило на день.\\nНи один банк не кредитует другой. Каждый держит долги остальных и не может определить, сколько они стоят.\\nФирмы, платящие зарплаты из кредита, не смогли выплатить их на этой неделе, и многие закрыли ворота, пока не смогут.\\nПлатежи между банками прекратились, поэтому сумму, выписанную на один банк, нельзя получить в другом."
+ },
+ "minor_events_timelineextended.6.keynesian_stimulus": {
+  "en": "Launch a Keynesian fiscal stimulus package",
+  "ru": "Запустить пакет кейнсианского фискального стимулирования"
+ },
+ "minor_events_timelineextended.6.mutual_clearing": {
+  "en": "Convene a mutual clearing-house bailout",
+  "ru": "Созвать взаимное спасение через клиринговую палату"
+ },
+ "minor_events_timelineextended.6.nationalize": {
+  "en": "Nationalize failing institutions",
+  "ru": "Национализировать несостоятельные учреждения"
+ },
+ "minor_events_timelineextended.6.open_market": {
+  "en": "Open-market operations and discount window",
+  "ru": "Операции на открытом рынке и учётное окно"
+ },
+ "minor_events_timelineextended.6.suspend_convertibility": {
+  "en": "Suspend convertibility and declare a bank holiday",
+  "ru": "Приостановить обмен на золото и объявить банковские каникулы"
+ },
+ "minor_events_timelineextended.6.swap_lines": {
+  "en": "Coordinate international swap lines",
+  "ru": "Согласовать международные линии валютного свопа"
+ },
+ "minor_events_timelineextended.6.t_correction": {
+  "en": "Market Correction",
+  "ru": "Рыночная коррекция"
+ },
+ "minor_events_timelineextended.6.t_crash": {
+  "en": "Financial Crash",
+  "ru": "Финансовый крах"
+ },
+ "minor_events_timelineextended.6.t_panic": {
+  "en": "Banking Panic",
+  "ru": "Банковская паника"
+ },
+ "minor_events_timelineextended.6.t_systemic": {
+  "en": "Systemic Collapse",
+  "ru": "Системный коллапс"
+ },
+ "minor_events_timelineextended.7.a": {
+  "en": "Restrict foreign trade and capital to protect our banks.",
+  "ru": "Ограничить внешнюю торговлю и движение капитала, чтобы защитить наши банки."
+ },
+ "minor_events_timelineextended.7.b": {
+  "en": "Maintain open markets",
+  "ru": "Сохранить открытые рынки"
+ },
+ "minor_events_timelineextended.7.capital_controls": {
+  "en": "Impose targeted capital controls",
+  "ru": "Ввести точечный контроль капитала"
+ },
+ "minor_events_timelineextended.7.confidence_messaging": {
+  "en": "Issue statements of financial confidence",
+  "ru": "Выступить с заявлениями об уверенности в финансах"
+ },
+ "minor_events_timelineextended.7.d": {
+  "en": "Trouble in [SCOPE.sCountry('banking_crash_origin_country').GetName] has caused nervousness in our own markets. Banks with exposure to [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] assets are reviewing their positions, and some investors are pulling back from riskier ventures.",
+  "ru": "Неприятности в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] вызвали нервозность на наших рынках. Банки, вложившиеся в [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] рынок, пересматривают свои позиции, а некоторые инвесторы отказываются от рискованных предприятий."
+ },
+ "minor_events_timelineextended.7.d_cascade": {
+  "en": "The financial trouble in [SCOPE.sCountry('banking_crash_origin_country').GetName] has set off a crash in our own markets. Prices here had been rising on borrowed money, and when the news of the losses abroad arrived, lenders called in their loans at once. Our own exchanges have fallen as theirs did.",
+  "ru": "Финансовые неприятности в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] вызвали крах на наших собственных рынках. Цены здесь росли на заёмные деньги, и когда пришли вести о потерях за рубежом, кредиторы разом потребовали вернуть займы. Наши биржи упали так же, как и их."
+ },
+ "minor_events_timelineextended.7.d_cascade_severe": {
+  "en": "The panic in [SCOPE.sCountry('banking_crash_origin_country').GetName] has set off a crash in our own financial system. Our markets were already carrying more borrowed money than they could bear, and when the news came, our banks began calling in loans and refusing new ones. Credit has stopped.",
+  "ru": "Паника в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] вызвала крах в нашей собственной финансовой системе. Наши рынки и так несли больше заёмных денег, чем могли выдержать, и когда пришли вести, наши банки начали требовать возврата займов и отказывать в новых. Кредит остановился."
+ },
+ "minor_events_timelineextended.7.d_cascade_systemic": {
+  "en": "The collapse of the banks in [SCOPE.sCountry('banking_crash_origin_country').GetName] has spread through every market that lent to them or borrowed from them, ours among them. Our bankers had told us that their foreign holdings were a manageable risk. Within days our own markets crashed, and our banks are failing alongside theirs.",
+  "ru": "Крах банков в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] прокатился по всем рынкам, которые им одалживали или у них занимали, и по нашим тоже. Наши банкиры уверяли нас, что их зарубежные вложения — управляемый риск. За несколько дней наши рынки рухнули, и наши банки разоряются вместе с их банками."
+ },
+ "minor_events_timelineextended.7.d_crash": {
+  "en": "The crash in [SCOPE.sCountry('banking_crash_origin_country').GetName] has reached our own financial system through trade and credit. Banks with exposure to [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] assets are counting their losses, and depositors and investors here are withdrawing from anything that looks risky.",
+  "ru": "Крах в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] добрался до нашей финансовой системы через торговлю и кредит. Банки, вложившиеся в [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] рынок, подсчитывают потери, а вкладчики и инвесторы у нас уходят от всего, что выглядит рискованным."
+ },
+ "minor_events_timelineextended.7.d_panic": {
+  "en": "Banks in [SCOPE.sCountry('banking_crash_origin_country').GetName] have stopped lending, and the panic there has reached every market that trades with them. None of our banks has failed. But they hold [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] debts they cannot now sell, and the foreign lenders they borrow from want their money back, so they are short of cash.",
+  "ru": "Банки в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] перестали кредитовать, и паника там дошла до всех рынков, торгующих с ними. Ни один из наших банков не обанкротился. Но они держат [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] долг, который теперь не продать, а иностранные кредиторы, у которых они занимают, требуют деньги назад, так что наличности не хватает."
+ },
+ "minor_events_timelineextended.7.d_systemic": {
+  "en": "Banks in [SCOPE.sCountry('banking_crash_origin_country').GetName] are failing one after another, and lenders everywhere have stopped trusting each other. Depositors are withdrawing their money from our own banks, which so far have paid them by selling whatever they can.",
+  "ru": "Банки в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] рушатся один за другим, и кредиторы повсюду перестали доверять друг другу. Вкладчики забирают деньги из наших банков, которые пока расплачивались, продавая всё, что могли."
+ },
+ "minor_events_timelineextended.7.f": {
+  "en": "To the government, from the inspector of banks. Since the news from [SCOPE.sCountry('banking_crash_origin_country').GetName] arrived, I have visited each of our six largest banks. None is in difficulty. All of them hold some [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] debts, and all have stopped making new loans until they know what those debts are worth. Two are selling their foreign holdings at a loss to be rid of them. Depositors have not withdrawn more than usual. I recommend no action for the present and will report again at the end of the month.",
+  "ru": "Правительству от инспектора банков. С тех пор как пришли вести из страны [SCOPE.sCountry('banking_crash_origin_country').GetName], я посетил каждый из шести наших крупнейших банков. Ни один не в затруднении. У всех есть некоторый [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] долг, и все прекратили новые займы, пока не узнают, сколько он стоит. Два банка продают зарубежные активы в убыток, чтобы от них избавиться. Вкладчики снимают не больше обычного. Пока что я рекомендую не вмешиваться и отчитаюсь снова в конце месяца."
+ },
+ "minor_events_timelineextended.7.f_cascade": {
+  "en": "\\\"I am here as chairman of one of the banks that failed, and I will answer the inquiry as plainly as I can. We held [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] paper because it paid better than our own and because everyone told us it was safe. When the banks in [SCOPE.sCountry('banking_crash_origin_country').GetName] failed, that paper became unsellable within a week, and our depositors heard of it before we had finished counting our losses. We had lent most of their money against shares that were falling too. I do not say we were the only careless ones. Every bank in the country held the same paper. I have brought our books for the inquiry to examine.\\\"",
+  "ru": "«Я здесь как председатель одного из обанкротившихся банков и отвечу на вопросы следствия как можно прямее. Мы держали [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] долг, потому что он платил лучше нашего и потому что все говорили, что он надёжен. Когда банки в стране [SCOPE.sCountry('banking_crash_origin_country').GetName] рухнули, этот долг за неделю стал непродаваемым, и наши вкладчики узнали об этом раньше, чем мы закончили считать потери. Большую часть их денег мы выдали под акции, которые тоже падали. Не скажу, что только мы были беспечны. Каждый банк страны держал тот же долг. Я принёс наши книги для изучения следствием.»"
+ },
+ "minor_events_timelineextended.7.f_severe": {
+  "en": "\\\"The news from [SCOPE.sCountry('banking_crash_origin_country').GetName] came in before our exchange opened, and within the first hour every price on it was down.\\\"\\n\\n\\\"Head office has told us to make no loans this week and to keep extra cash at every counter.\\\"\\n\\n\\\"I sold my [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] bonds at a loss this morning. I would rather lose a fifth of the money than wait and lose the rest.\\\"\\n\\n\\\"My brother-in-law works on the exchange. He says three brokers have shut their offices and sent their clerks home.\\\"",
+  "ru": "«Вести из страны [SCOPE.sCountry('banking_crash_origin_country').GetName] пришли до открытия нашей биржи, и в первый же час на ней упали все цены.»\\n\\n«Головной офис велел нам на этой неделе не выдавать займов и держать лишнюю наличность у каждой кассы.»\\n\\n«Сегодня утром я продал свой [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] заём в убыток. Лучше потерять пятую часть денег, чем ждать и потерять остальное.»\\n\\n«Мой шурин работает на бирже. Он говорит, что три брокера закрыли конторы и отправили клерков по домам.»"
+ },
+ "minor_events_timelineextended.7.monetary_intervention": {
+  "en": "Deploy central bank stabilization",
+  "ru": "Задействовать стабилизацию центрального банка"
+ },
+ "minor_events_timelineextended.7.t": {
+  "en": "Contagion from Abroad",
+  "ru": "Заражение из-за рубежа"
+ },
+ "minor_events_timelineextended.7.t_cascade": {
+  "en": "Their Crash Becomes Ours",
+  "ru": "Их крах становится нашим"
+ },
+ "minor_events_timelineextended.7.t_severe": {
+  "en": "Panic Abroad",
+  "ru": "Паника за рубежом"
+ },
+ "minor_events_timelineextended.8.a": {
+  "en": "We will have to live through this.",
+  "ru": "Нам придётся пережить это."
+ },
+ "minor_events_timelineextended.8.b": {
+  "en": "Being less tied to world markets has spared us the worst.",
+  "ru": "Слабая связь с мировыми рынками уберегла нас от худшего."
+ },
+ "minor_events_timelineextended.8.c": {
+  "en": "Brace for the global downturn.",
+  "ru": "Приготовиться к мировому спаду."
+ },
+ "minor_events_timelineextended.8.d": {
+  "en": "Banks have failed and markets have crashed in one major economy after another, until most of the world's trade is with countries in crisis. Our own banks are standing, but the countries we sell to are buying less, and lenders everywhere are holding back. Every economy open to world markets will feel the contraction for years.",
+  "ru": "Банки разорялись и рынки рушились в одной крупной экономике за другой, пока большая часть мировой торговли не оказалась со странами в кризисе. Наши банки держатся, но страны, которым мы продаём, покупают меньше, а кредиторы повсюду осторожничают. Каждая экономика, открытая мировым рынкам, будет ощущать сжатие годами."
+ },
+ "minor_events_timelineextended.8.d_crashed": {
+  "en": "Our banks failed in the wave of crashes that has now passed through most of the world's major economies. Credit is scarce at home and abroad, the countries we sell to are buying less, and foreign lenders have losses of their own to cover. We must prepare for a long depression.",
+  "ru": "Наши банки разорились в волне крахов, прошедшей теперь по большинству крупных экономик мира. Кредит дефицитен дома и за рубежом, страны, которым мы продаём, покупают меньше, а у иностранных кредиторов хватает собственных потерь. Мы должны готовиться к долгой депрессии."
+ },
+ "minor_events_timelineextended.8.d_isolated": {
+  "en": "Banks have failed and markets have crashed across most of the world's trading nations. Our economy has few ties to international finance and has been spared the worst of it. The countries we trade with are poorer than they were, however, and we will feel that in what they buy from us.",
+  "ru": "Банки разорялись и рынки рушились в большинстве торговых стран мира. У нашей экономики мало связей с международными финансами, и худшее нас миновало. Однако страны, с которыми мы торгуем, обеднели, и мы почувствуем это в том, сколько они у нас покупают."
+ },
+ "minor_events_timelineextended.8.d_scare": {
+  "en": "Banks have failed and markets have crashed in one major economy after another. When the panic reached our own markets, our banks were shaken, and they held. That does not protect us from what follows: the countries we sell to are buying less, lenders everywhere are holding back, and the contraction will weigh on our economy for years.",
+  "ru": "Банки разорялись и рынки рушились в одной крупной экономике за другой. Когда паника дошла до наших рынков, наши банки пошатнулись, но выстояли. Это не защищает нас от того, что последует: страны, которым мы продаём, покупают меньше, кредиторы повсюду осторожничают, и сжатие будет давить на нашу экономику годами."
+ },
+ "minor_events_timelineextended.8.f": {
+  "en": "From the financial page of a newspaper in our capital: The list of foreign banks that have closed their doors grew again this week, and merchants report that orders from abroad have fallen further. Shipping agents say that cargoes booked months ago are being canceled, and that buyers who still take delivery are asking for longer credit. Writers on this page who called the trouble a correction in its first weeks are now using the word depression. Prices for nearly every export fell again this week.",
+  "ru": "Из финансовой страницы газеты нашей столицы: список иностранных банков, закрывших двери, снова вырос на этой неделе, а купцы сообщают, что заказы из-за рубежа упали ещё сильнее. Судовые агенты говорят, что грузы, заказанные месяцы назад, отменяют, а покупатели, которые всё ещё принимают поставки, просят более долгий кредит. Авторы этой страницы, называвшие неприятности коррекцией в первые недели, теперь употребляют слово «депрессия». Цены почти на весь экспорт на этой неделе снова упали."
+ },
+ "minor_events_timelineextended.8.f_crashed": {
+  "en": "The foreman read the list at the works gate at seven: the names of the men kept on for the week, and no others. He read it twice, for those at the back. \\\"The bank has stopped our credit and the buyers have stopped their orders,\\\" he told them when he had finished. \\\"I do not know which came first, and it makes no difference to the wages.\\\" A few of the men whose names he had not read asked him whether there would be a list next week. He said there would, folded the paper into his coat, and went inside to set the week's shifts.",
+  "ru": "Мастер прочёл список у ворот завода в семь: имена людей, оставленных на неделю, и никого больше. Он прочёл его дважды, для тех, кто стоял сзади. «Банк прекратил нам кредит, а покупатели прекратили заказы», — сказал он, закончив. «Не знаю, что было раньше, и для зарплат это не имеет значения.» Несколько человек, чьих имён он не прочёл, спросили, будет ли список на следующей неделе. Он ответил, что будет, сложил бумагу в пальто и пошёл внутрь расписывать смены."
+ },
+ "minor_events_timelineextended.8.t": {
+  "en": "The Great Depression",
+  "ru": "Великая депрессия"
+ },
+ "modern_election_events.1.a": {
+  "en": "Ride the wave — amplify our message.",
+  "ru": "Оседлать волну — усилить наше послание."
+ },
+ "modern_election_events.1.b": {
+  "en": "Let the opposition have their say.",
+  "ru": "Пусть оппозиция выскажется."
+ },
+ "modern_election_events.1.c": {
+  "en": "Call for digital decorum in our campaigns.",
+  "ru": "Призвать к цифровой пристойности в наших кампаниях."
+ },
+ "modern_election_events.1.d": {
+  "en": "A post from one of the government's campaigners has spread across every platform in [ROOT.GetCountry.GetName] within a day. The news programs are discussing it on the hour, and the opposition is still preparing its reply. We must decide whether to push it further.",
+  "ru": "Пост одного из агитаторов правительства за день разлетелся по всем платформам страны [ROOT.GetCountry.GetName]. Новостные программы обсуждают его каждый час, а оппозиция всё ещё готовит ответ. Нам нужно решить, продвигать ли его дальше."
+ },
+ "modern_election_events.1.f": {
+  "en": "\\\"My sister sent it to me at breakfast and my neighbor sent it again at lunch. I don't follow politics. I watched it four times on the bus.\\\"\\n\\n\\\"Reporters have been calling the campaign office since seven. Most of them want to know whether it is genuine before they ask what it means.\\\"\\n\\n\\\"We put it on the screen in the staff room and the whole shift stopped to watch. Half of them liked it and the other half said it was a disgrace, and we argued about it until the manager sent us back to work.\\\"\\n\\n\\\"The candidate wants a statement out by noon. There are two drafts on the table, one that welcomes it and one that keeps our distance, and nobody has chosen yet.\\\"",
+  "ru": "«Сестра прислала мне это за завтраком, а сосед прислал снова за обедом. Я не слежу за политикой. Я посмотрел это четыре раза в автобусе.»\\n\\n«Репортёры звонят в штаб с семи утра. Большинство хочет знать, подлинная ли запись, прежде чем спросить, что она значит.»\\n\\n«Мы включили её на экране в комнате отдыха, и вся смена остановилась смотреть. Половине понравилось, другая половина сказала, что это позор, и мы спорили, пока управляющий не отправил нас работать.»\\n\\n«Кандидат хочет, чтобы заявление вышло к полудню. На столе два черновика: один приветствует запись, другой держит дистанцию, и никто ещё не выбрал.»"
+ },
+ "modern_election_events.1.t": {
+  "en": "Viral Firestorm",
+  "ru": "Вирусный пожар"
+ },
+ "modern_election_events.10.a": {
+  "en": "Embrace the star power.",
+  "ru": "Принять силу звёздного влияния."
+ },
+ "modern_election_events.10.b": {
+  "en": "Celebrities should stay in their lane.",
+  "ru": "Знаменитостям следует заниматься своим делом."
+ },
+ "modern_election_events.10.c": {
+  "en": "Two can play that game — find our own champion.",
+  "ru": "В эту игру можно играть вдвоём — найти собственного чемпиона."
+ },
+ "modern_election_events.10.d": {
+  "en": "A well-known performer has publicly endorsed one of the parties, and the endorsement has led the news for two days. Some voters who rarely follow politics are paying attention for the first time. Others resent being told how to vote by a celebrity.",
+  "ru": "Известная исполнительница публично поддержала одну из партий, и эта поддержка два дня возглавляет новости. Некоторые избиратели, редко следящие за политикой, впервые обратили на неё внимание. Другим не нравится, что знаменитость указывает им, как голосовать."
+ },
+ "modern_election_events.10.f": {
+  "en": "\\\"Half the country follows her. If she says your name from the stage on Saturday, you will reach more young voters in an evening than in a month of speeches.\\\"\\n\\n\\\"And lose them the first time she says something I have to answer for. I did not spend twenty years in politics to be a singer's candidate.\\\"\\n\\n\\\"You are the candidate of whoever votes for you. She is offering, and the other side has already called her agent twice.\\\"\\n\\n\\\"Then tell her agent I will meet her. I will not promise anything more until I have heard what she wants to say about us.\\\"",
+  "ru": "«За ней следит полстраны. Если она назовёт ваше имя со сцены в субботу, вы охватите больше молодых избирателей за вечер, чем за месяц речей.»\\n\\n«И потеряю их в первый раз, когда она скажет что-то, за что мне придётся отвечать. Я не провёл двадцать лет в политике, чтобы быть кандидатом певицы.»\\n\\n«Вы кандидат тех, кто за вас голосует. Она предлагает, а другая сторона уже дважды звонила её агенту.»\\n\\n«Тогда передайте её агенту, что я с ней встречусь. Я ничего больше не обещаю, пока не услышу, что она хочет сказать о нас.»"
+ },
+ "modern_election_events.10.t": {
+  "en": "Star Power",
+  "ru": "Сила звёзд"
+ },
+ "modern_election_events.11.a": {
+  "en": "Replay it on every station!",
+  "ru": "Повторить на каждой станции!"
+ },
+ "modern_election_events.11.b": {
+  "en": "Dismiss it as propaganda.",
+  "ru": "Отмахнуться как от пропаганды."
+ },
+ "modern_election_events.11.c": {
+  "en": "Follow it with a calmer broadcast of our own.",
+  "ru": "Следом выпустить более спокойную собственную передачу."
+ },
+ "modern_election_events.11.d": {
+  "en": "A radio address by a fiery speaker on the government's side has been heard in households across [ROOT.GetCountry.GetNameNoFlag]. Its admirers have printed it as a pamphlet, and the opposition has demanded that the government disown it. The newspapers are reprinting it in full, and we must decide whether to stand behind it.",
+  "ru": "Радиообращение пылкого оратора на стороне правительства прозвучало в домах по всей стране [ROOT.GetCountry.GetNameNoFlag]. Его почитатели напечатали его брошюрой, а оппозиция требует, чтобы правительство от него отреклось. Газеты перепечатывают его целиком, и нам нужно решить, поддержать ли его."
+ },
+ "modern_election_events.11.f": {
+  "en": "The broadcast began after supper. In the kitchen the set was turned up so it could be heard in the yard, and two neighbors came across to stand by the door. The speaker went on for forty minutes. When he named the officials he wanted gone, the older neighbor said, \\\"Well, that's true enough,\\\" and the younger one said nothing and lit another cigarette. When it ended, the neighbors stayed another half hour arguing about it on the step, and the grandmother washed the cups and put them away.",
+  "ru": "Передача началась после ужина. На кухне приёмник включили погромче, чтобы слышно было во дворе, и двое соседей пришли постоять у двери. Оратор говорил сорок минут. Когда он назвал чиновников, которых хотел убрать, старший сосед сказал: «Ну, это правда», а младший ничего не сказал и закурил ещё одну сигарету. Когда передача кончилась, соседи ещё полчаса спорили о ней на крыльце, а бабушка перемыла чашки и убрала их."
+ },
+ "modern_election_events.11.t": {
+  "en": "Voice of the Nation",
+  "ru": "Голос нации"
+ },
+ "modern_election_events.12.a": {
+  "en": "Welcome the hero into our ranks.",
+  "ru": "Принять героя в наши ряды."
+ },
+ "modern_election_events.12.b": {
+  "en": "Question their fitness for civilian office.",
+  "ru": "Усомниться в его пригодности к гражданской должности."
+ },
+ "modern_election_events.12.c": {
+  "en": "Challenge them to a policy debate.",
+  "ru": "Бросить ему вызов на дебатах о политике."
+ },
+ "modern_election_events.12.d": {
+  "en": "A decorated officer, known to the public from newsreels, has announced that they will stand in the election. The armed forces are delighted. Nobody yet knows what the officer would do in civilian office, and the other candidates must decide how to run against them.",
+  "ru": "Заслуженный офицер, знакомый публике по кинохронике, объявил, что будет баллотироваться на выборах. Вооружённые силы в восторге. Никто пока не знает, что офицер будет делать на гражданской должности, и другим кандидатам нужно решить, как с ним соперничать."
+ },
+ "modern_election_events.12.f": {
+  "en": "\\\"I served under the general. Not near; there were a great many of us between me and headquarters. But we all knew the name, and we knew this was an officer who came up to the line when others sent a message. Today our old commander stood on that platform in a plain coat with the medals on and spoke for ten minutes about duty and very little else. I do not know what the general thinks about taxes or schools. I will cast my vote for the general all the same, and so will most of the people I came here with, because this is someone who did what was promised once before.\\\"",
+  "ru": "«Я служил под началом генерала. Не рядом: между мной и штабом было очень много людей. Но мы все знали это имя и знали, что это офицер, который выходил на передовую, когда другие слали записки. Сегодня наш старый командир стоял на той трибуне в простом пальто, с орденами, и десять минут говорил о долге и почти ни о чём больше. Я не знаю, что генерал думает о налогах или школах. Я всё равно отдам голос за генерала, и так же поступит большинство людей, с которыми я пришёл, потому что это тот, кто однажды уже сделал обещанное.»"
+ },
+ "modern_election_events.12.t": {
+  "en": "The War Hero Steps Up",
+  "ru": "Герой войны выходит вперёд"
+ },
+ "modern_election_events.13.a": {
+  "en": "Let the papers print what they like.",
+  "ru": "Пусть газеты печатают что хотят."
+ },
+ "modern_election_events.13.b": {
+  "en": "Reject the press baron's influence.",
+  "ru": "Отвергнуть влияние газетного барона."
+ },
+ "modern_election_events.13.c": {
+  "en": "Negotiate editorial independence.",
+  "ru": "Договориться о редакционной независимости."
+ },
+ "modern_election_events.13.d": {
+  "en": "The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has put every one of their papers behind the [SCOPE.sParty('press_party').GetName]. The morning editions carried the endorsement on their front pages, and the editorial columns have followed. The few papers the magnate does not own are struggling to be heard.",
+  "ru": "Самый влиятельный газетный [concept_magnate|l] страны [ROOT.GetCountry.GetNameNoFlag] поставил все свои газеты на сторону партии [SCOPE.sParty('press_party').GetName]. Утренние выпуски поместили поддержку на первых полосах, а следом подтянулись редакционные колонки. Немногие газеты, которыми магнат не владеет, с трудом пробиваются к читателю."
+ },
+ "modern_election_events.13.f": {
+  "en": "To all editors, from the managing editor. From tomorrow's edition until polling day, this paper supports the [SCOPE.sParty('press_party').GetName]. The front page will carry the party's leading candidate or its program every morning. Letters criticizing the party are to be held for my approval. Columnists who cannot write in support may write on other subjects or take the leave they are owed. The same instruction has gone to our other titles. The proprietor has asked that this be done without announcement, and I ask the same of you. Questions to my office before the evening meeting.",
+  "ru": "Всем редакторам от выпускающего редактора. Со следующего выпуска и до дня голосования эта газета поддерживает партию [SCOPE.sParty('press_party').GetName]. На первой полосе каждое утро будет главный кандидат партии или её программа. Письма с критикой партии задерживать до моего одобрения. Обозреватели, не способные писать в поддержку, могут писать на другие темы или взять положенный отпуск. Та же инструкция ушла в наши остальные издания. Владелец просил сделать это без объявлений, и я прошу того же от вас. Вопросы — в мою контору до вечернего совещания."
+ },
+ "modern_election_events.13.t": {
+  "en": "The Morning Editions",
+  "ru": "Утренние выпуски"
+ },
+ "modern_election_events.14.a": {
+  "en": "Stoke the red scare.",
+  "ru": "Раздуть красную угрозу."
+ },
+ "modern_election_events.14.b": {
+  "en": "Defend civil liberties.",
+  "ru": "Защитить гражданские свободы."
+ },
+ "modern_election_events.14.c": {
+  "en": "Propose a cross-party anti-extremism commission.",
+  "ru": "Предложить межпартийную комиссию по борьбе с экстремизмом."
+ },
+ "modern_election_events.14.d": {
+  "en": "Accusations of communist sympathies now lead every day of the campaign. Candidates are competing to prove their loyalty, lists of suspected sympathizers are being passed around, and any past link to the left, however slight, can end a career. Teachers, civil servants and union officers are being asked to sign declarations.",
+  "ru": "Обвинения в симпатиях к коммунизму теперь возглавляют каждый день кампании. Кандидаты состязаются, доказывая свою лояльность, по рукам ходят списки подозреваемых в сочувствии, и любая прошлая связь с левыми, пусть самая слабая, может погубить карьеру. Учителей, чиновников и профсоюзных деятелей просят подписывать декларации."
+ },
+ "modern_election_events.14.f": {
+  "en": "\\\"It is one page. You sign that you are not and have never been a member of a communist organization, and you go back to your class.\\\"\\n\\n\\\"I am not and have never been. That is not the point. Who wrote this form, and who reads the ones that come back?\\\"\\n\\n\\\"The school board, after the election. If you refuse, they will read yours first, and I will not be able to tell them I don't know why you refused.\\\"\\n\\n\\\"Then tell them I asked who reads the forms. If asking that is enough to cost me my post, I want them to say so in writing.\\\"",
+  "ru": "«Это одна страница. Вы подписываете, что не состоите и никогда не состояли в коммунистической организации, и возвращаетесь в класс.»\\n\\n«Я не состою и никогда не состоял. Дело не в этом. Кто составил эту форму и кто читает те, что возвращаются?»\\n\\n«Школьный совет, после выборов. Если вы откажетесь, они прочтут вашу первой, и я не смогу сказать им, что не знаю, почему вы отказались.»\\n\\n«Тогда скажите им, что я спросил, кто читает формы. Если одного этого вопроса довольно, чтобы лишить меня места, я хочу, чтобы они сказали это письменно.»"
+ },
+ "modern_election_events.14.t": {
+  "en": "Red Menace",
+  "ru": "Красная угроза"
+ },
+ "modern_election_events.15.a": {
+  "en": "Take credit for the boom.",
+  "ru": "Приписать себе заслугу в буме."
+ },
+ "modern_election_events.15.b": {
+  "en": "Warn that bubbles always burst.",
+  "ru": "Предупредить, что пузыри всегда лопаются."
+ },
+ "modern_election_events.15.c": {
+  "en": "Promise to share the wealth.",
+  "ru": "Пообещать поделиться богатством."
+ },
+ "modern_election_events.15.d": {
+  "en": "The governing parties have made the economy the center of their campaign, pointing to new factories, more people in work and rising wages. The opposition says the growth is borrowed and will not last. The argument over who deserves the credit, and who will pay if it ends, now runs through every debate.",
+  "ru": "Правящие партии сделали экономику центром своей кампании, указывая на новые фабрики, рост занятости и зарплат. Оппозиция говорит, что рост взят в долг и долго не продлится. Спор о том, кому принадлежит заслуга и кто заплатит, если рост кончится, теперь проходит через каждые дебаты."
+ },
+ "modern_election_events.15.f": {
+  "en": "Notes from the government's campaign office, for its candidates' speeches this week:\\n\\nBegin with the new factories. If one has opened near the town where you are speaking, name it, because the audience will know someone who works there.\\nSay that more people are in work than when we took office, but give no number. The opposition has figures of its own and would sooner argue about ours than answer the point.\\nSpeak about wages before you speak about prices. Both have risen, and we want the audience thinking about the first.\\nThe opposition has been saying that a boom always ends in a bust. Do not use the word boom; say growth.\\nIf you are asked about the debt, say that a growing economy can carry it, and take the next question.\\nKeep to twenty minutes, so that there is time for questions from the floor.",
+  "ru": "Заметки из штаба правительственной кампании для выступлений кандидатов на этой неделе:\\n\\nНачинайте с новых фабрик. Если одна открылась рядом с городом, где вы выступаете, назовите её: слушатели знают кого-то, кто там работает.\\nСкажите, что занятых больше, чем когда мы пришли к власти, но цифр не называйте. У оппозиции есть свои цифры, и она скорее поспорит о наших, чем ответит по существу.\\nГоворите о зарплатах раньше, чем о ценах. Выросло и то и другое, а мы хотим, чтобы слушатели думали о первом.\\nОппозиция твердит, что бум всегда кончается крахом. Не употребляйте слово «бум»; говорите «рост».\\nЕсли спросят о долге, скажите, что растущая экономика его выдержит, и берите следующий вопрос.\\nУкладывайтесь в двадцать минут, чтобы осталось время на вопросы из зала."
+ },
+ "modern_election_events.15.t": {
+  "en": "Economic Miracle",
+  "ru": "Экономическое чудо"
+ },
+ "modern_election_events.16.a": {
+  "en": "Champion equal rights.",
+  "ru": "Отстаивать равные права."
+ },
+ "modern_election_events.16.b": {
+  "en": "Defend tradition and the status quo.",
+  "ru": "Защищать традицию и статус-кво."
+ },
+ "modern_election_events.16.c": {
+  "en": "Propose gradual, measured reform.",
+  "ru": "Предложить постепенную, взвешенную реформу."
+ },
+ "modern_election_events.16.d": {
+  "en": "Marchers from the civil rights movement are in the streets demanding equal treatment under the law, and every candidate is being asked where they stand. The movement's leaders say the marches will continue until the vote.",
+  "ru": "Участники Движения за гражданские права вышли на улицы, требуя равного отношения перед законом, и у каждого кандидата спрашивают, на чьей он стороне. Лидеры движения говорят, что шествия продолжатся до самого голосования."
+ },
+ "modern_election_events.16.f": {
+  "en": "The marshals wore white armbands and walked backward at the head of the march, keeping the front rank level. One of them, a schoolteacher, carried the route on a card and a whistle she did not use. Where the route passed the offices of the parties the march stopped, and a speaker read the demands through a loudhailer: \\\"Equal treatment in hiring. Equal treatment in housing. Equal treatment in the courts.\\\" At each stop someone at an upper window wrote them down. At the last one a campaign worker came down to the door and took a printed copy, and the march moved on toward the square.",
+  "ru": "Распорядители носили белые повязки и шли спиной вперёд во главе колонны, выравнивая первый ряд. Одна из них, школьная учительница, несла маршрут на карточке и свисток, которым не пользовалась. У контор партий, мимо которых шёл маршрут, колонна останавливалась, и оратор через рупор зачитывал требования: «Равное отношение при найме. Равное отношение в жилье. Равное отношение в судах.» На каждой остановке кто-то в верхнем окне их записывал. У последней вниз к двери спустился сотрудник кампании и взял печатный экземпляр, и колонна двинулась дальше к площади."
+ },
+ "modern_election_events.16.t": {
+  "en": "A Question of Equality",
+  "ru": "Вопрос равенства"
+ },
+ "modern_election_events.17.a": {
+  "en": "Promise to expand the space program.",
+  "ru": "Пообещать расширить космическую программу."
+ },
+ "modern_election_events.17.b": {
+  "en": "Redirect funds to earthbound problems.",
+  "ru": "Перенаправить средства на земные проблемы."
+ },
+ "modern_election_events.17.c": {
+  "en": "Frame it as national [concept_prestige].",
+  "ru": "Подать это как национальный [concept_prestige|l]."
+ },
+ "modern_election_events.17.d": {
+  "en": "Our space program has become a campaign issue. The government's speakers point to each launch as proof of what the country can do. Its critics ask what the money could do on the ground. Every candidate is being asked whether the program should grow or shrink.",
+  "ru": "Наша космическая программа стала темой кампании. Ораторы правительства указывают на каждый запуск как на доказательство того, на что способна страна. Критики спрашивают, что можно было бы сделать с этими деньгами на земле. У каждого кандидата спрашивают, расти ли программе или сокращаться."
+ },
+ "modern_election_events.17.f": {
+  "en": "\\\"We took the children out of class for the launch. They counted down with the announcer and then cheered for a full minute.\\\"\\n\\n\\\"Ask the candidates what comes next. Every one of them was photographed at the launch, and not one has said what the program should be doing in five years.\\\"\\n\\n\\\"My son works at the launch site. He has not slept at home for two weeks, and he has never been happier in his life.\\\"\\n\\n\\\"That rocket cost more than this hospital spends in ten years. I am proud of it. I would also like the elevator on the fourth floor repaired.\\\"",
+  "ru": "«Мы вывели детей с уроков на запуск. Они считали вместе с диктором, а потом целую минуту кричали от радости.»\\n\\n«Спросите кандидатов, что дальше. Каждого сфотографировали на запуске, и ни один не сказал, чем программа должна заниматься через пять лет.»\\n\\n«Мой сын работает на стартовой площадке. Он две недели не ночевал дома и никогда в жизни не был так счастлив.»\\n\\n«Эта ракета стоила больше, чем эта больница тратит за десять лет. Я ею горжусь. Но я хотел бы, чтобы починили лифт на четвёртом этаже.»"
+ },
+ "modern_election_events.17.t": {
+  "en": "The Space Card",
+  "ru": "Космическая карта"
+ },
+ "modern_election_events.18.a": {
+  "en": "Crack down on the [Concept('concept_agitator', 'agitators')].",
+  "ru": "Подавить [Concept('concept_agitator', 'агитаторов')]."
+ },
+ "modern_election_events.18.b": {
+  "en": "Embrace the youth movement.",
+  "ru": "Принять молодёжное движение."
+ },
+ "modern_election_events.18.c": {
+  "en": "Open a dialogue with student leaders.",
+  "ru": "Начать диалог с лидерами студентов."
+ },
+ "modern_election_events.18.d": {
+  "en": "Students at the universities of [ROOT.GetCountry.GetNameNoFlag] have walked out of their classes in protest against government policy. They hold teach-ins on the lawns, march with banners to the government's offices, and say they will not leave until the candidates answer them. Every campaign is being asked what it would do about them.",
+  "ru": "Студенты университетов страны [ROOT.GetCountry.GetNameNoFlag] ушли с занятий в знак протеста против политики правительства. Они проводят семинары на газонах, шествуют с плакатами к зданиям правительства и говорят, что не уйдут, пока кандидаты им не ответят. У каждой кампании спрашивают, что она сделает с ними."
+ },
+ "modern_election_events.18.f": {
+  "en": "\\\"We are here because nobody in this campaign has said a word about us except to complain about the noise. We have asked for three things: that the university stop expelling students for what they print, that the police leave the campus, and that the candidates come here and answer questions in person. Two of them have sent statements. We read the statements aloud on the library steps this morning. We will stay on this lawn until one of them comes. We have food for a week, blankets for the nights, and a rota so that the people with exams can still get to them.\\\"",
+  "ru": "«Мы здесь потому, что никто в этой кампании не сказал о нас ни слова, кроме жалоб на шум. Мы просим трёх вещей: чтобы университет перестал исключать студентов за то, что они печатают, чтобы полиция покинула кампус, и чтобы кандидаты пришли сюда и лично ответили на вопросы. Двое прислали заявления. Сегодня утром мы зачитали их вслух на ступенях библиотеки. Мы останемся на этом газоне, пока кто-нибудь из них не придёт. У нас еды на неделю, одеяла на ночи и график, чтобы у тех, у кого экзамены, была возможность на них попасть.»"
+ },
+ "modern_election_events.18.t": {
+  "en": "Campus Uprising",
+  "ru": "Восстание в кампусе"
+ },
+ "modern_election_events.19.a": {
+  "en": "Go on the offensive with policy attacks.",
+  "ru": "Перейти в наступление с атаками на политику."
+ },
+ "modern_election_events.19.b": {
+  "en": "Present a calm, statesmanlike image.",
+  "ru": "Показать спокойный, государственный образ."
+ },
+ "modern_election_events.19.c": {
+  "en": "Make a bold live policy announcement.",
+  "ru": "Сделать смелое заявление о политике прямо в эфире."
+ },
+ "modern_election_events.19.d": {
+  "en": "The leading candidates will face each other in a debate broadcast live on television. Viewers will judge their composure and their looks as much as their policies, and nobody in the campaigns knows how much that will count. Our candidate's advisers are arguing over how to play it.",
+  "ru": "Ведущие кандидаты встретятся в дебатах, которые покажут в прямом эфире по телевидению. Зрители будут судить об их выдержке и внешности не меньше, чем о политике, и никто в кампаниях не знает, насколько это будет весомо. Советники нашего кандидата спорят, как сыграть."
+ },
+ "modern_election_events.19.f": {
+  "en": "\\\"The medium is the message.\\\"\\n— Marshall McLuhan",
+  "ru": "«Средство — это и есть сообщение.»\\n— Маршалл Маклюэн"
+ },
+ "modern_election_events.19.t": {
+  "en": "The Great Debate",
+  "ru": "Великие дебаты"
+ },
+ "modern_election_events.2.a": {
+  "en": "A useful fiction. Let it circulate.",
+  "ru": "Полезная выдумка. Пусть ходит."
+ },
+ "modern_election_events.2.b": {
+  "en": "Expose the forgery — truth still matters.",
+  "ru": "Разоблачить подделку — правда всё ещё важна."
+ },
+ "modern_election_events.2.c": {
+  "en": "Ban AI-generated content in campaigning.",
+  "ru": "Запретить контент, созданный ИИ, в кампаниях."
+ },
+ "modern_election_events.2.d": {
+  "en": "A video has appeared showing an opposition leader making inflammatory remarks they never made. It was produced with generative software and is convincing enough that it was shared widely before anyone questioned it. The opposition calls it a forgery, and our own experts agree. We must decide how to respond before the story settles.",
+  "ru": "Появилось видео, где лидер оппозиции делает подстрекательские заявления, которых он не делал. Оно создано генеративным ПО и настолько убедительно, что им делились повсюду, прежде чем кто-либо усомнился. Оппозиция называет его подделкой, и наши эксперты согласны. Нам нужно решить, как ответить, пока история не устоялась."
+ },
+ "modern_election_events.2.f": {
+  "en": "\\\"It is a forgery. Our technicians found the joins in the audio within an hour. If we say nothing, we are as good as running it ourselves.\\\"\\n\\n\\\"If we say something, we put it in front of everyone who has not seen it yet. A denial travels half as far as the video and reminds people of every word in it.\\\"\\n\\n\\\"Then whatever we do costs us something, and I would rather pay for having told the truth.\\\"\\n\\n\\\"I am not asking you to lie. I am telling you that a press conference tomorrow puts the clip on every bulletin for another day, and that the vote is close enough for one day to matter.\\\"",
+  "ru": "«Это подделка. Наши техники нашли швы в звуке за час. Если мы промолчим, это всё равно что выпустить её самим.»\\n\\n«Если мы что-то скажем, мы покажем её всем, кто её ещё не видел. Опровержение разлетается вполовину так далеко, как видео, и напоминает людям каждое слово из него.»\\n\\n«Значит, что бы мы ни сделали, это нам чего-то стоит, и я предпочту заплатить за правду.»\\n\\n«Я не прошу вас лгать. Я говорю, что пресс-конференция завтра выведет ролик в каждый выпуск ещё на день, а голосование настолько близко, что один день имеет значение.»"
+ },
+ "modern_election_events.2.t": {
+  "en": "The Uncanny Candidate",
+  "ru": "Жуткий кандидат"
+ },
+ "modern_election_events.20.a": {
+  "en": "Back the trailblazer.",
+  "ru": "Поддержать первопроходца."
+ },
+ "modern_election_events.20.b": {
+  "en": "Appeal to traditional values.",
+  "ru": "Апеллировать к традиционным ценностям."
+ },
+ "modern_election_events.20.c": {
+  "en": "Adopt women's rights as a core platform.",
+  "ru": "Сделать права женщин основой платформы."
+ },
+ "modern_election_events.20.d": {
+  "en": "A woman candidate has risen to [concept_prominence] in the campaign, and her meetings draw larger crowds each week. Her supporters see her as the start of a change in who governs. Her opponents say some traditions should not bend. Whether women belong in politics at all has become a question every candidate must answer.",
+  "ru": "Кандидат-женщина поднялась до [Concept('concept_prominence', 'известности')] в кампании, и её встречи собирают всё больше людей с каждой неделей. Её сторонники видят в ней начало перемен в том, кто правит. Её противники говорят, что некоторые традиции не должны гнуться. Вопрос о том, есть ли у женщин место в политике вообще, стал таким, на который должен ответить каждый кандидат."
+ },
+ "modern_election_events.20.f": {
+  "en": "The hall was full by seven, and the stewards opened the side doors so the people outside could hear. She spoke from notes on two cards and stopped looking at them after the first minute. Twice a man near the front stood up to shout, and twice she waited until he had finished and answered the subject he had raised: childcare the first time, wages the second. At the end a woman at the back, still in her work clothes, asked how she would vote on equal pay. \\\"For it,\\\" the candidate said, and wrote the woman's question on the back of one of the cards.",
+  "ru": "К семи зал был полон, и распорядители открыли боковые двери, чтобы люди снаружи могли слышать. Она говорила по заметкам на двух карточках и после первой минуты перестала в них смотреть. Дважды мужчина у сцены вставал и кричал, и дважды она ждала, пока он закончит, и отвечала на поднятую им тему: сначала об уходе за детьми, потом о зарплатах. В конце женщина в глубине зала, ещё в рабочей одежде, спросила, как она проголосует за равную оплату. «За», — сказала кандидат и записала вопрос женщины на обороте одной из карточек."
+ },
+ "modern_election_events.20.t": {
+  "en": "A Woman's Place",
+  "ru": "Место женщины"
+ },
+ "modern_election_events.21.a": {
+  "en": "Pledge an industrial cleanup.",
+  "ru": "Пообещать очистку промышленности."
+ },
+ "modern_election_events.21.b": {
+  "en": "Defend jobs over the environment.",
+  "ru": "Защищать рабочие места, а не окружающую среду."
+ },
+ "modern_election_events.21.c": {
+  "en": "Invest in green technology.",
+  "ru": "Инвестировать в зелёные технологии."
+ },
+ "modern_election_events.21.d": {
+  "en": "A spill from an industrial plant has fouled a river, and people living downstream report illnesses their doctors cannot explain. The plant's managers deny responsibility. In the middle of the campaign [concept_pollution_system] has become the issue no candidate can avoid, and each is being asked whether a cleanup will cost jobs.",
+  "ru": "Выброс с промышленного предприятия загрязнил реку, и жители ниже по течению сообщают о болезнях, которые врачи не могут объяснить. Управляющие предприятия отрицают ответственность. Посреди кампании [concept_pollution_system] стало вопросом, которого не избежать ни одному кандидату, и у каждого спрашивают, будет ли очистка стоить рабочих мест."
+ },
+ "modern_election_events.21.f": {
+  "en": "To each of the candidates for this district, from the residents of the streets below the works. Since the spill, the water from our taps has run brown in the mornings, and the doctor at the clinic has seen more children with rashes and coughs this season than she can remember. The plant's managers say the discharge has stopped. Nobody has come to test the river, so we cannot say whether it has. Many of us work at the plant and want to go on working there. We ask each of you to say, before the vote, who will pay for the cleanup and whether the plant will stay open while it is done. We will post your answers on the board outside the clinic.",
+  "ru": "Каждому из кандидатов по этому округу от жителей улиц ниже заводов. После выброса вода из наших кранов по утрам идёт бурой, и врач в поликлинике видела за этот сезон больше детей с сыпью и кашлем, чем может припомнить. Управляющие предприятия говорят, что сброс прекратился. Реку никто не приходил проверять, поэтому мы не можем сказать, прекратился ли он. Многие из нас работают на предприятии и хотят продолжать там работать. Мы просим каждого из вас сказать до голосования, кто заплатит за очистку и будет ли предприятие работать, пока её проводят. Мы вывесим ваши ответы на доске у поликлиники."
+ },
+ "modern_election_events.21.t": {
+  "en": "Toxic Legacy",
+  "ru": "Токсичное наследие"
+ },
+ "modern_election_events.22.a": {
+  "en": "Mock their lack of experience.",
+  "ru": "Высмеять отсутствие у него опыта."
+ },
+ "modern_election_events.22.b": {
+  "en": "Embrace their populist appeal.",
+  "ru": "Принять его популистскую привлекательность."
+ },
+ "modern_election_events.22.c": {
+  "en": "Challenge them on policy substance.",
+  "ru": "Бросить ему вызов по существу политики."
+ },
+ "modern_election_events.22.d": {
+  "en": "A well-known entertainer with no political experience has entered the race. Their fame guarantees coverage, their crowds are large, and they ignore the habits of campaigning that professional politicians rely on. The other candidates have not found a way to debate them.",
+  "ru": "Известный артист без политического опыта вступил в гонку. Его слава гарантирует освещение, его толпы велики, и он игнорирует приёмы кампании, на которые полагаются профессиональные политики. Другие кандидаты не нашли способа с ним спорить."
+ },
+ "modern_election_events.22.f": {
+  "en": "\\\"He has never sat on a committee or read a budget. Last night they asked him about taxes and he talked for five minutes about his mother's shop.\\\"\\n\\n\\\"And the people watching understood every word of it, which is more than they do when you talk about taxes.\\\"\\n\\n\\\"So we lose to a man from the television because he is easier to listen to?\\\"\\n\\n\\\"We lose to him if we keep telling people he is unqualified, because they know that already and are choosing him anyway. Find out what they liked in the story about the shop, and say something true about it in our own words.\\\"",
+  "ru": "«Он ни разу не сидел в комитете и не читал бюджет. Вчера вечером его спросили о налогах, и он пять минут говорил о лавке своей матери.»\\n\\n«И люди, которые смотрели, поняли каждое слово, а это больше, чем они понимают, когда о налогах говорите вы.»\\n\\n«Значит, мы проигрываем человеку с телевидения потому, что его проще слушать?»\\n\\n«Мы проиграем ему, если будем твердить, что он не подходит, потому что люди это уже знают и всё равно выбирают его. Узнайте, что им понравилось в рассказе о лавке, и скажите об этом что-то правдивое своими словами.»"
+ },
+ "modern_election_events.22.t": {
+  "en": "The Outsider Candidate",
+  "ru": "Кандидат со стороны"
+ },
+ "modern_election_events.23.a": {
+  "en": "Endorse genetic research.",
+  "ru": "Поддержать генетические исследования."
+ },
+ "modern_election_events.23.b": {
+  "en": "Call for a moratorium.",
+  "ru": "Призвать к мораторию."
+ },
+ "modern_election_events.23.c": {
+  "en": "Establish a genetics ethics commission.",
+  "ru": "Создать комиссию по этике генетики."
+ },
+ "modern_election_events.23.d": {
+  "en": "Advances in genetic engineering have become a campaign issue. Researchers promise cures for hereditary disease and hardier crops. Religious leaders and others warn against altering human beings. Voters are divided, and every candidate is being asked where the line should be drawn.",
+  "ru": "Успехи генной инженерии стали темой кампании. Исследователи обещают лекарства от наследственных болезней и более выносливые культуры. Религиозные лидеры и другие предостерегают от изменения человека. Избиратели разделились, и у каждого кандидата спрашивают, где должна пройти черта."
+ },
+ "modern_election_events.23.f": {
+  "en": "\\\"My daughter has the disease her grandfather had. The doctors told us when she was two that there is no cure, and that each of her children would have an even chance of having it too. Now there is a treatment, tried abroad, that corrects the gene before birth, and the candidates are arguing about whether to allow it here. I have heard one say it is against nature and another say it will make the country rich. Neither of them asked what it is like in our house. I am not asking anyone to allow everything. I am asking that the people who decide come and meet the families first.\\\"",
+  "ru": "«У моей дочери болезнь, которой болел её дед. Врачи сказали нам, когда ей было два года, что лекарства нет и у каждого из её детей будет равный шанс унаследовать её. Теперь есть лечение, опробованное за рубежом, которое исправляет ген до рождения, а кандидаты спорят, разрешить ли его здесь. Я слышал, как один говорил, что это против природы, а другой — что это обогатит страну. Ни один не спросил, как это у нас дома. Я не прошу никого разрешить всё. Я прошу, чтобы те, кто решает, сначала пришли и встретились с семьями.»"
+ },
+ "modern_election_events.23.t": {
+  "en": "The Genome Question",
+  "ru": "Вопрос генома"
+ },
+ "modern_election_events.24.a": {
+  "en": "Demand a security crackdown.",
+  "ru": "Потребовать силового подавления."
+ },
+ "modern_election_events.24.b": {
+  "en": "Warn against eroding civil liberties.",
+  "ru": "Предостеречь от размывания гражданских свобод."
+ },
+ "modern_election_events.24.c": {
+  "en": "Propose measured, cross-party reform.",
+  "ru": "Предложить взвешенную межпартийную реформу."
+ },
+ "modern_election_events.24.d": {
+  "en": "An attack in [ROOT.GetCountry.GetNameNoFlag] has changed the campaign overnight, and the ordinary disputes have been set aside. Some candidates want a hard crackdown. Others say that giving up civil liberties is what the attackers want. Every party is being asked what it would do.",
+  "ru": "Нападение в стране [ROOT.GetCountry.GetNameNoFlag] за одну ночь изменило кампанию, и обычные споры отложены. Некоторые кандидаты хотят жёсткого подавления. Другие говорят, что отказ от гражданских свобод — как раз то, чего добиваются нападавшие. У каждой партии спрашивают, что она сделает."
+ },
+ "modern_election_events.24.f": {
+  "en": "The morning after the attack, the campaign office took down its posters. A volunteer worked along the window with a scraper, lifting the candidate's face off the glass in strips, while another sat at the phones and canceled the rallies one by one from a list. The television in the corner showed the same pictures of the cordon every quarter hour. Around noon the manager came in with a single sheet from party headquarters, read it twice, pinned it to the board and called everyone over to read it. In the afternoon the volunteers began calling the halls again to ask which dates were still free.",
+  "ru": "На следующее утро после нападения штаб кампании снял плакаты. Волонтёр шёл вдоль окна со скребком, снимая лицо кандидата со стекла полосами, а другой сидел у телефонов и отменял митинги один за другим по списку. Телевизор в углу каждую четверть часа показывал одни и те же кадры оцепления. Около полудня управляющий вошёл с единственным листом из штаб-квартиры партии, дважды прочёл его, приколол к доске и позвал всех прочесть. После полудня волонтёры снова стали обзванивать залы, спрашивая, какие даты ещё свободны."
+ },
+ "modern_election_events.24.t": {
+  "en": "Rally 'Round the Flag",
+  "ru": "Сплотиться вокруг флага"
+ },
+ "modern_election_events.25.a": {
+  "en": "Justify it as necessary for security.",
+  "ru": "Оправдать это необходимостью для безопасности."
+ },
+ "modern_election_events.25.b": {
+  "en": "Condemn the surveillance program.",
+  "ru": "Осудить программу слежки."
+ },
+ "modern_election_events.25.c": {
+  "en": "Pass transparency legislation.",
+  "ru": "Принять закон о прозрачности."
+ },
+ "modern_election_events.25.d": {
+  "en": "A whistleblower has exposed a large classified surveillance program run by the government of [ROOT.GetCountry.GetNameNoFlag]. The documents show citizens watched without warrants, private messages read in bulk and dissidents followed. The campaign has turned into an argument over how much of this the voters will accept.",
+  "ru": "Информатор раскрыл крупную секретную программу слежки, которую ведёт правительство страны [ROOT.GetCountry.GetNameNoFlag]. Документы показывают, что за гражданами следили без ордеров, личные сообщения читали массово, а за диссидентами ходили по пятам. Кампания превратилась в спор о том, сколько из этого примут избиратели."
+ },
+ "modern_election_events.25.f": {
+  "en": "\\\"Four hundred pages. The names of the programs, the budget lines, the list of offices that hand over their records. We can print all of it on Sunday.\\\"\\n\\n\\\"We can print what we have checked. How much of it have we checked?\\\"\\n\\n\\\"Enough to know it is real. The ministry has not denied a single page. They have asked us to hold it until after the vote.\\\"\\n\\n\\\"Then we have a week to check the rest. If one page turns out to be wrong, the government's campaign will talk about that page until polling day, and the other pages will not get a hearing.\\\"",
+  "ru": "«Четыреста страниц. Названия программ, строки бюджета, список учреждений, передающих свои записи. Мы можем напечатать всё это в воскресенье.»\\n\\n«Мы можем напечатать то, что проверили. Много ли мы проверили?»\\n\\n«Достаточно, чтобы знать, что это правда. Министерство не отрицало ни одной страницы. Они попросили нас придержать материал до конца голосования.»\\n\\n«Тогда у нас неделя, чтобы проверить остальное. Если одна страница окажется неверной, кампания правительства будет говорить об этой странице до самого дня голосования, а остальных страниц никто не услышит.»"
+ },
+ "modern_election_events.25.t": {
+  "en": "The Leak",
+  "ru": "Утечка"
+ },
+ "modern_election_events.26.a": {
+  "en": "Promise tariffs and protectionism.",
+  "ru": "Пообещать пошлины и протекционизм."
+ },
+ "modern_election_events.26.b": {
+  "en": "Champion free trade.",
+  "ru": "Отстаивать свободную торговлю."
+ },
+ "modern_election_events.26.c": {
+  "en": "Propose fair trade reforms.",
+  "ru": "Предложить реформы справедливой торговли."
+ },
+ "modern_election_events.26.d": {
+  "en": "Trade has become the campaign's dividing line. Candidates speak in front of closed factories and promise to bring the work home. Exporters and economists warn that tariffs will be answered in kind and leave everyone poorer. Every party has to say whether it stands for protection or for open markets.",
+  "ru": "Торговля стала водоразделом кампании. Кандидаты выступают перед закрытыми фабриками и обещают вернуть работу домой. Экспортёры и экономисты предупреждают, что на пошлины ответят тем же, и все обеднеют. Каждой партии приходится сказать, за защиту она или за открытые рынки."
+ },
+ "modern_election_events.26.f": {
+  "en": "\\\"The plant made washing machines for forty years. The last ones came off the line in the spring, and the work has gone abroad.\\\"\\n\\n\\\"Both candidates gave their speeches at the gates of the old plant. I would like one of them to say what they would put inside it.\\\"\\n\\n\\\"I drive a delivery truck from the border crossing to the warehouses. Nearly everything in the back is made somewhere else, and I would be out of work without it.\\\"\\n\\n\\\"I sell twice what I did ten years ago, and most of it goes to buyers in other countries. If we put up tariffs, they put up theirs, and I lay people off.\\\"",
+  "ru": "«Завод сорок лет делал стиральные машины. Последние сошли с конвейера весной, а работа ушла за границу.»\\n\\n«Оба кандидата выступали у ворот старого завода. Я хотел бы, чтобы один из них сказал, что они поставят внутри.»\\n\\n«Я вожу грузовик с доставкой от пограничного пункта до складов. Почти всё в кузове сделано где-то ещё, и без этого я остался бы без работы.»\\n\\n«Я продаю вдвое больше, чем десять лет назад, и большая часть уходит покупателям в других странах. Если мы поднимем пошлины, они поднимут свои, и мне придётся увольнять людей.»"
+ },
+ "modern_election_events.26.t": {
+  "en": "Bring the Work Home",
+  "ru": "Вернуть работу домой"
+ },
+ "modern_election_events.27.a": {
+  "en": "Welcome refugees with open arms.",
+  "ru": "Принять беженцев с распростёртыми объятиями."
+ },
+ "modern_election_events.27.b": {
+  "en": "Secure our borders first.",
+  "ru": "Сначала обезопасить наши границы."
+ },
+ "modern_election_events.27.c": {
+  "en": "Invest in climate solutions at the source.",
+  "ru": "Инвестировать в климатические решения у истока."
+ },
+ "modern_election_events.27.d": {
+  "en": "As the world warms, people are leaving the regions that heat and drought have made hardest to live in, and many are seeking refuge abroad. Whether [ROOT.GetCountry.GetNameNoFlag] should take them in has become one of the most divisive questions of the campaign. Candidates are being asked how many, at what cost, and on what terms.",
+  "ru": "Пока мир теплеет, люди покидают регионы, где жара и засуха сделали жизнь тяжелее всего, и многие ищут убежища за границей. Принимать ли их в стране [ROOT.GetCountry.GetNameNoFlag], стало одним из самых разделяющих вопросов кампании. У кандидатов спрашивают, сколько, какой ценой и на каких условиях."
+ },
+ "modern_election_events.27.f": {
+  "en": "\\\"I have knocked on three hundred doors this month, and at most of them the first question is not about taxes. It is about the people leaving the places that have grown too hot or too dry to farm, and whether we will take them in. Some ask how many. Some ask where they would live and whether the schools could cope. One woman told me her own grandparents came here with nothing, and asked what the party would do. One man shut the door before I had finished. I write each answer on the card for the street, and the cards go to the office every night.\\\"",
+  "ru": "«За этот месяц я постучал в триста дверей, и у большинства первый вопрос не о налогах. Он о людях, покидающих места, где стало слишком жарко или сухо для земледелия, и о том, примем ли мы их. Кто-то спрашивает, сколько. Кто-то — где они будут жить и справятся ли школы. Одна женщина сказала, что её собственные дедушка и бабушка приехали сюда ни с чем, и спросила, что сделает партия. Один мужчина закрыл дверь, не дослушав. Я записываю каждый ответ на карточку улицы, и карточки каждую ночь уходят в штаб.»"
+ },
+ "modern_election_events.27.t": {
+  "en": "Room for the Displaced",
+  "ru": "Место для перемещённых"
+ },
+ "modern_election_events.28.a": {
+  "en": "Let the algorithm run the show.",
+  "ru": "Пусть алгоритм ведёт дело."
+ },
+ "modern_election_events.28.b": {
+  "en": "Reject machine politics entirely.",
+  "ru": "Полностью отвергнуть машинную политику."
+ },
+ "modern_election_events.28.c": {
+  "en": "Disclose AI use and campaign transparently.",
+  "ru": "Раскрыть использование ИИ и вести кампанию открыто."
+ },
+ "modern_election_events.28.d": {
+  "en": "It has come to light that a major party's campaign is being run not by its staff but by a machine learning system. The system reads the polling, writes the messages, decides where the candidates go and drafts their speeches. The rival parties are outraged and ask whether the voters were ever told.",
+  "ru": "Выяснилось, что кампанией крупной партии руководят не её сотрудники, а система машинного обучения. Система читает опросы, пишет сообщения, решает, куда ехать кандидатам, и составляет их речи. Соперничающие партии возмущены и спрашивают, говорили ли об этом избирателям."
+ },
+ "modern_election_events.28.d_named": {
+  "en": "It has come to light that the campaign of the [SCOPE.sParty('govt_party').GetName] is being run not by its staff but by a machine learning system. The system reads the polling, writes the messages, decides where the candidates go and drafts their speeches. The rival parties are outraged and ask whether the voters were ever told.",
+  "ru": "Выяснилось, что кампанией партии [SCOPE.sParty('govt_party').GetName] руководят не её сотрудники, а система машинного обучения. Система читает опросы, пишет сообщения, решает, куда ехать кандидатам, и составляет их речи. Соперничающие партии возмущены и спрашивают, говорили ли об этом избирателям."
+ },
+ "modern_election_events.28.f": {
+  "en": "The candidate's day, as the campaign system issued it at five this morning:\\n\\nSix o'clock: interview on farm policy. Wear the gray jacket.\\nNine o'clock: visit the bakery on the north side and mention the opponent's record on small-business tax.\\nEleven o'clock: no speech in the eastern district. Send the leaflet with the hospital photograph instead.\\nTwo o'clock: speech to the retired teachers, cut to eight minutes.\\nFour o'clock: the evening statement, text attached, not to be changed.\\nSeven o'clock: dinner with the donors. Topics are listed on the second page.",
+  "ru": "День кандидата в том виде, в каком выдала его система кампании в пять утра:\\n\\nШесть часов: интервью о сельскохозяйственной политике. Надеть серый пиджак.\\nДевять часов: посетить пекарню на северной стороне и упомянуть послужной список соперника по налогу для малого бизнеса.\\nОдиннадцать часов: в восточном округе речи не будет. Вместо неё отправить листовку с фотографией больницы.\\nДва часа: речь перед пенсионерами-учителями, сократить до восьми минут.\\nЧетыре часа: вечернее заявление, текст приложен, не менять.\\nСемь часов: ужин с донорами. Темы указаны на второй странице."
+ },
+ "modern_election_events.28.t": {
+  "en": "The Machine Behind the Curtain",
+  "ru": "Машина за кулисами"
+ },
+ "modern_election_events.29.a": {
+  "en": "Campaign on universal basic income.",
+  "ru": "Вести кампанию за универсальный базовый доход."
+ },
+ "modern_election_events.29.b": {
+  "en": "Denounce it as fiscal irresponsibility.",
+  "ru": "Заклеймить его как фискальную безответственность."
+ },
+ "modern_election_events.29.c": {
+  "en": "Propose a limited pilot program.",
+  "ru": "Предложить ограниченную пилотную программу."
+ },
+ "modern_election_events.29.d": {
+  "en": "Universal basic income has become the most argued-over proposal of the campaign. Its supporters promise a payment to every citizen, enough that nobody falls below a floor. Its opponents bring projections of the cost and warn that people will stop working. Every candidate is being asked whether they would pay it.",
+  "ru": "Универсальный базовый доход стал самым оспариваемым предложением кампании. Его сторонники обещают выплату каждому гражданину, достаточную, чтобы никто не опускался ниже черты. Его противники приводят расчёты стоимости и предупреждают, что люди перестанут работать. У каждого кандидата спрашивают, стал бы он это выплачивать."
+ },
+ "modern_election_events.29.d_enacted": {
+  "en": "Universal basic income is already law in [ROOT.GetCountry.GetNameNoFlag], and the campaign has turned into an argument over whether to keep it. Its defenders say it keeps every citizen above a floor. Its opponents bring figures on the cost and warn that people are working less. Every candidate is being asked whether they would go on paying it.",
+  "ru": "Универсальный базовый доход уже стал законом в стране [ROOT.GetCountry.GetNameNoFlag], и кампания превратилась в спор о том, сохранять ли его. Его защитники говорят, что он удерживает каждого гражданина выше черты. Его противники приводят цифры стоимости и предупреждают, что люди стали меньше работать. У каждого кандидата спрашивают, стал бы он продолжать выплаты."
+ },
+ "modern_election_events.29.f": {
+  "en": "The canvasser had the party's leaflet on the basic income folded in her pocket and a clipboard with the street on it. At the first door a woman in a nurse's uniform read the leaflet on the step and asked whether it would be paid to people who kept working nights. \\\"Yes, to everyone,\\\" the canvasser said. At the second, a man told her he had worked for forty years and did not see why anyone should be paid for nothing, and took the leaflet anyway. Nobody answered at the third. She made a mark against each house on the clipboard and went on along the row.",
+  "ru": "У агитатора в кармане лежала сложенная листовка партии о базовом доходе и планшет со списком улицы. У первой двери женщина в форме медсестры прочла листовку на пороге и спросила, будут ли это платить тем, кто продолжает работать в ночные смены. «Да, всем», — ответила агитатор. У второй мужчина сказал, что работал сорок лет и не понимает, почему кому-то должны платить ни за что, но листовку всё же взял. У третьей никто не открыл. Она отметила каждый дом на планшете и пошла дальше по ряду."
+ },
+ "modern_election_events.29.t": {
+  "en": "Free Money?",
+  "ru": "Деньги даром?"
+ },
+ "modern_election_events.3.a": {
+  "en": "Pledge a green transition.",
+  "ru": "Пообещать зелёный переход."
+ },
+ "modern_election_events.3.b": {
+  "en": "The economy must come first.",
+  "ru": "Экономика прежде всего."
+ },
+ "modern_election_events.3.c": {
+  "en": "Form a cross-party climate task force.",
+  "ru": "Создать межпартийную рабочую группу по климату."
+ },
+ "modern_election_events.3.d": {
+  "en": "The world has warmed by #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C above pre-industrial levels, and reports of failed harvests and flooded cities abroad have made [concept_climate_policy] the issue voters in [ROOT.GetCountry.GetNameNoFlag] raise most often. Every party is being asked what it would do and who would pay for it.",
+  "ru": "Мир потеплел на #v [SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]#! °C по сравнению с доиндустриальным уровнем, а сообщения о погибших урожаях и затопленных городах за рубежом сделали [concept_climate_policy|l] вопросом, который избиратели страны [ROOT.GetCountry.GetNameNoFlag] поднимают чаще всего. У каждой партии спрашивают, что она сделает и кто за это заплатит."
+ },
+ "modern_election_events.3.f": {
+  "en": "\\\"Every party has a climate page in its platform this year. I have read all of them, standing here at this table. One promises new wind and solar plants, one promises to protect the jobs we already have while it studies the question, and one promises a commission. They quote the same report, and none of them says the report is wrong. What they disagree about is who pays, and that is what people ask me here: whether their power bill goes up, whether the plant where their son works stays open. I write the questions down and give them to the candidate's office every evening.\\\"",
+  "ru": "«В этом году в платформе каждой партии есть страница о климате. Я прочёл их все, стоя здесь за этим столом. Одна обещает новые ветровые и солнечные станции, другая — защитить рабочие места, которые у нас уже есть, пока изучает вопрос, а третья обещает комиссию. Они цитируют один и тот же доклад, и ни одна не говорит, что он неверен. Расходятся они в том, кто платит, а это то, о чём меня здесь спрашивают: вырастет ли счёт за электричество, останется ли открытым завод, где работает сын. Я записываю вопросы и каждый вечер передаю в штаб кандидата.»"
+ },
+ "modern_election_events.3.t": {
+  "en": "Scorched Ballots",
+  "ru": "Выжженные бюллетени"
+ },
+ "modern_election_events.30.a": {
+  "en": "Blame foreign adversaries.",
+  "ru": "Обвинить внешних противников."
+ },
+ "modern_election_events.30.b": {
+  "en": "Demand an election integrity review.",
+  "ru": "Потребовать проверки целостности выборов."
+ },
+ "modern_election_events.30.c": {
+  "en": "Deploy military cyber countermeasures.",
+  "ru": "Задействовать военные киберконтрмеры."
+ },
+ "modern_election_events.30.d": {
+  "en": "Failures have struck the election systems of [ROOT.GetCountry.GetNameNoFlag] one after another: voter rolls showing errors, counting machines that will not start, and an election office whose public systems have gone dark. Some are already calling it a cyberattack. Nobody can yet say whether it is the work of foreign adversaries, saboteurs at home or old equipment, and confidence in the vote is falling.",
+  "ru": "Сбои один за другим поражают избирательные системы страны [ROOT.GetCountry.GetNameNoFlag]: в списках избирателей ошибки, счётные машины не запускаются, а публичные системы избирательной комиссии погасли. Некоторые уже называют это кибератакой. Пока никто не может сказать, дело ли это внешних противников, диверсантов внутри страны или старого оборудования, а доверие к голосованию падает."
+ },
+ "modern_election_events.30.f": {
+  "en": "Incident log of the election office, opened at six this morning:\\n\\nThe voter roll will not load at eleven registration offices.\\nAt two others it loads but shows every voter as registered somewhere else.\\nOne counting machine in three fails its startup test at the northern depot.\\nThe office's public information service has been unreachable since a quarter past six.\\nThe backup generators at the central count were tested at noon and did not start.\\nThe director has asked for every fault report to be on her desk by evening.",
+  "ru": "Журнал происшествий избирательной комиссии, открытый в шесть часов утра:\\n\\nСписок избирателей не загружается в одиннадцати регистрационных пунктах.\\nВ двух других он загружается, но показывает каждого избирателя зарегистрированным в другом месте.\\nОдна счётная машина из трёх не проходит стартовый тест на северной базе.\\nПубличная информационная служба комиссии недоступна с четверти седьмого.\\nРезервные генераторы центрального подсчёта проверили в полдень, и они не запустились.\\nДиректор просит, чтобы все отчёты о неисправностях лежали у неё на столе к вечеру."
+ },
+ "modern_election_events.30.t": {
+  "en": "Lights Out",
+  "ru": "Свет погас"
+ },
+ "modern_election_events.31.a": {
+  "en": "Embrace human enhancement.",
+  "ru": "Принять улучшение человека."
+ },
+ "modern_election_events.31.b": {
+  "en": "Demand only natural-born candidates.",
+  "ru": "Требовать только рождённых естественным путём кандидатов."
+ },
+ "modern_election_events.31.c": {
+  "en": "Regulate enhancement but allow candidacy.",
+  "ru": "Регулировать улучшение, но допускать кандидатуры."
+ },
+ "modern_election_events.31.d": {
+  "en": "A candidate who has openly undergone genetic enhancement has entered the race and speaks freely of what it gave them: memory, health and stamina. Supporters call the candidate the first of a new kind of citizen. Opponents ask what equal opportunity means if such advantages can be bought before birth, and the campaign has become an argument about it.",
+  "ru": "Кандидат, открыто прошедший генетическое улучшение, вступил в гонку и свободно говорит о том, что оно дало: память, здоровье и выносливость. Сторонники называют кандидата первым из нового рода граждан. Противники спрашивают, что значит равенство возможностей, если такие преимущества можно купить до рождения, и кампания превратилась в спор об этом."
+ },
+ "modern_election_events.31.f": {
+  "en": "\\\"She can recite the budget from memory. My son has the same teachers she had and still struggles with fractions. That is not her fault, but it is not a fair race either.\\\"\\n\\n\\\"If she loses because of how she was born, I want to know what else they will hold against people for the same reason.\\\"\\n\\n\\\"I don't care what was done to her before she was born. I care what she will do about the hospital on our side of town.\\\"\\n\\n\\\"My doctor says the treatment she had will be cheap in ten years. I would like to know whether it will be cheap for my grandchildren.\\\"",
+  "ru": "«Она может цитировать бюджет по памяти. У моего сына те же учителя, что были у неё, а он всё ещё мучается с дробями. Это не её вина, но это и не честная гонка.»\\n\\n«Если она проиграет из-за того, как родилась, я хочу знать, что ещё поставят людям в вину по той же причине.»\\n\\n«Мне всё равно, что с ней сделали до рождения. Мне важно, что она сделает с больницей в нашей части города.»\\n\\n«Мой врач говорит, что лечение, которое она получила, через десять лет станет дешёвым. Я хотел бы знать, будет ли оно дешёвым для моих внуков.»"
+ },
+ "modern_election_events.31.t": {
+  "en": "Designer Candidate",
+  "ru": "Кандидат по заказу"
+ },
+ "modern_election_events.32.a": {
+  "en": "Grant colonial representation.",
+  "ru": "Предоставить колониальное представительство."
+ },
+ "modern_election_events.32.b": {
+  "en": "They left our soil — no representation.",
+  "ru": "Они покинули нашу землю — представительства не будет."
+ },
+ "modern_election_events.32.c": {
+  "en": "Offer nonvoting observer status.",
+  "ru": "Предложить статус наблюдателя без права голоса."
+ },
+ "modern_election_events.32.d": {
+  "en": "Citizens of [ROOT.GetCountry.GetNameNoFlag] living in our settlements beyond Earth have sent a formal demand for the vote. They hold citizenship and pay taxes, but no ballot cast off-world is counted. Every party must now say whether they should vote, and how.",
+  "ru": "Граждане страны [ROOT.GetCountry.GetNameNoFlag], живущие в наших поселениях за пределами Земли, прислали официальное требование права голоса. У них есть гражданство, они платят налоги, но ни один бюллетень, поданный за пределами планеты, не учитывается. Каждой партии теперь нужно сказать, следует ли им голосовать и как."
+ },
+ "modern_election_events.32.f": {
+  "en": "To the government of [ROOT.GetCountry.GetNameNoFlag], from its citizens in the settlement beyond Earth. We hold the same papers as you. We pay tax on what we earn here, and our children sit the same examinations over the link from home. In this campaign we have heard every party talk about us and none talk to us, because no ballot cast here is counted. We ask that each party say, before polling day, whether it will give us a vote, a representative of our own, or neither, and why. We will read your answers to the whole settlement at the evening meeting.",
+  "ru": "Правительству страны [ROOT.GetCountry.GetNameNoFlag] от её граждан в поселении за пределами Земли. У нас те же документы, что и у вас. Мы платим налог с того, что зарабатываем здесь, и наши дети сдают те же экзамены по связи с родины. В этой кампании мы слышали, как каждая партия говорит о нас и ни одна не говорит с нами, потому что ни один бюллетень, поданный здесь, не учитывается. Мы просим каждую партию сказать до дня голосования, дадут ли нам голос, собственного представителя или ни то ни другое, и почему. Мы зачитаем ваши ответы всему поселению на вечернем собрании."
+ },
+ "modern_election_events.32.t": {
+  "en": "One Small Vote for Man",
+  "ru": "Один маленький голос за человека"
+ },
+ "modern_election_events.33.a": {
+  "en": "Endorse neural direct democracy.",
+  "ru": "Поддержать нейронную прямую демократию."
+ },
+ "modern_election_events.33.b": {
+  "en": "Defend traditional elections.",
+  "ru": "Защищать традиционные выборы."
+ },
+ "modern_election_events.33.c": {
+  "en": "Propose voluntary neural polling.",
+  "ru": "Предложить добровольный нейронный опрос."
+ },
+ "modern_election_events.33.d": {
+  "en": "A movement has made neural-interface voting a campaign issue: replacing elections with a system in which citizens register their views on each question directly, through brain-computer interfaces, as often as questions arise. Its supporters call it the most direct democracy possible. Its critics warn of manipulation and coercion, and of decisions made without debate.",
+  "ru": "Движение сделало голосование через нейроинтерфейсы темой кампании: выборы предлагается заменить системой, в которой граждане выражают мнение по каждому вопросу прямо, через интерфейсы мозг-компьютер, так часто, как возникают вопросы. Её сторонники называют это самой прямой демократией из возможных. Критики предупреждают о манипуляции и принуждении и о решениях, принятых без обсуждения."
+ },
+ "modern_election_events.33.f": {
+  "en": "\\\"Every few years you are handed a ballot with a few names on it, and in the years between nobody asks you anything. We propose something else. When the interfaces are ready and have been shown to be safe, every citizen who wants one will be able to give a view on each question that comes before the government, from home, as often as questions come. Nobody will be made to take part. The count will be public. The old elections will run alongside it until people can see which of the two they trust. That is the proposal, and we will publish every detail of it before the vote.\\\"",
+  "ru": "«Раз в несколько лет вам вручают бюллетень с несколькими именами, а в годы между ними никто ни о чём вас не спрашивает. Мы предлагаем иное. Когда интерфейсы будут готовы и их безопасность будет доказана, каждый гражданин, который захочет, сможет высказать мнение по каждому вопросу, стоящему перед правительством, из дома, так часто, как будут возникать вопросы. Никого не заставят участвовать. Подсчёт будет публичным. Прежние выборы будут идти параллельно, пока люди не увидят, какой из двух способов вызывает больше доверия. Таково предложение, и мы опубликуем каждую его деталь до голосования.»"
+ },
+ "modern_election_events.33.t": {
+  "en": "Thought Made Manifest",
+  "ru": "Мысль, ставшая явью"
+ },
+ "modern_election_events.34.a": {
+  "en": "Champion synthetic agriculture.",
+  "ru": "Отстаивать синтетическое сельское хозяйство."
+ },
+ "modern_election_events.34.b": {
+  "en": "Defend traditional farming.",
+  "ru": "Защищать традиционное земледелие."
+ },
+ "modern_election_events.34.c": {
+  "en": "Promise coexistence of both.",
+  "ru": "Пообещать сосуществование того и другого."
+ },
+ "modern_election_events.34.d": {
+  "en": "Laboratory-grown food has become a campaign issue in [ROOT.GetCountry.GetNameNoFlag]. Industrial interests say it will feed the country more cheaply and should have the state's backing. Farmers' groups say it would end their way of life and want it held back. Every candidate is being asked which side they are on.",
+  "ru": "Выращенная в лаборатории еда стала темой кампании в стране [ROOT.GetCountry.GetNameNoFlag]. Промышленные круги говорят, что она накормит страну дешевле и заслуживает поддержки государства. Объединения фермеров говорят, что она покончит с их образом жизни, и хотят её сдержать. У каждого кандидата спрашивают, на чьей он стороне."
+ },
+ "modern_election_events.34.f": {
+  "en": "At the meeting in the market square the farmer waited through the speeches with his cap in his hands, and when the candidate asked for questions he was the first on his feet. His family had worked the same land for four generations, he said, and the candidate's program talked about food grown in tanks. \\\"What is my son supposed to grow?\\\" The candidate said there would be work in the new plants and support for farms that changed what they grew, and began to give figures. The farmer heard them out, thanked him and sat down, and the candidate took the next question.",
+  "ru": "На собрании на рыночной площади фермер всю очередь речей простоял с шапкой в руках, и когда кандидат попросил задавать вопросы, он первым вскочил на ноги. Его семья возделывала ту же землю четыре поколения, сказал он, а в программе кандидата говорится о еде, выращенной в чанах. «Что мой сын должен выращивать?» Кандидат ответил, что будет работа на новых заводах и поддержка хозяйствам, сменившим то, что они выращивают, и начал называть цифры. Фермер выслушал, поблагодарил и сел, а кандидат взял следующий вопрос."
+ },
+ "modern_election_events.34.t": {
+  "en": "Harvest of Votes",
+  "ru": "Жатва голосов"
+ },
+ "modern_election_events.35.a": {
+  "en": "Accelerate automation for prosperity.",
+  "ru": "Ускорить автоматизацию ради процветания."
+ },
+ "modern_election_events.35.b": {
+  "en": "Protect human workers.",
+  "ru": "Защитить рабочих-людей."
+ },
+ "modern_election_events.35.c": {
+  "en": "Phase in automation with retraining.",
+  "ru": "Вводить автоматизацию поэтапно, с переобучением."
+ },
+ "modern_election_events.35.d": {
+  "en": "Automated systems that can do the work of drivers, clerks and factory hands have become the campaign's central question. Industrial interests want the state to speed their adoption. Workers who fear for their jobs want limits. Every candidate is being asked what they would do for the people whose work is replaced.",
+  "ru": "Автоматические системы, способные заменить водителей, клерков и чернорабочих, стали центральным вопросом кампании. Промышленные круги хотят, чтобы государство ускорило их внедрение. Рабочие, опасающиеся за места, хотят ограничений. У каждого кандидата спрашивают, что он сделает для тех, чью работу заменят."
+ },
+ "modern_election_events.35.f": {
+  "en": "At shift change the gate of the distribution center opens for eleven people. They pass the turnstiles, collect their tablets from the rack and spread out across a floor built for three hundred, where the carts run on their own between the shelves and stop when someone steps in front of them. One of the eleven walks the aisles with a checklist, clearing jams. Another sits at the screens in the control room and approves the night's orders in batches. A third mops the loading bay. At seven in the morning they hand their tablets back, and the gate opens for the day shift.",
+  "ru": "В смену дежурств ворота распределительного центра открываются для одиннадцати человек. Они проходят турникеты, берут планшеты с стойки и расходятся по залу, построенному на триста человек, где тележки сами ездят между стеллажами и останавливаются, когда кто-то встаёт перед ними. Один из одиннадцати обходит проходы с контрольным списком, устраняя заторы. Другой сидит у экранов в диспетчерской и пакетами утверждает ночные заказы. Третий моет пол в погрузочной зоне. В семь утра они сдают планшеты, и ворота открываются для дневной смены."
+ },
+ "modern_election_events.35.t": {
+  "en": "The Autonomous Question",
+  "ru": "Вопрос об автономных системах"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "ru": "Пусть маршируют мирно"
