@@ -2944,6 +2944,21 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_programmable_paper": {"subject": "a sheet of paper half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_programmable_plastics": {"subject": "a plastic bottle half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_programmable_sweetness": {"subject": "a lollipop half dissolved into a cloud of small cubes", "seed": 1},
+        # Ranch and plantation methods (#1828), on other methods' icons until now. The ranch's
+        # meat ladder is bronze as vanilla's slaughterhouses are, Herd Management green as its
+        # fences are, and the Cultured Produce Facility's secondary purple as the farms' are.
+        # Robotic Barns' seed drew stray grass tufts along the ground; they are retouched out of its
+        # raw, so the committed DDS is the record. The side views of the bull and the cow left the
+        # animal too small to read at 52 px, so both are head-on.
+        "pm_industrial_feedlots": {"subject": "two cows side by side with their heads lowered, eating from one long low feed trough heaped with grain, seen from the side", "seed": 1},
+        "pm_recombinant_growth_hormones": {"subject": "the head of a big bull seen from the front with wide curved horns, a large syringe standing upright beside it", "seed": 1},
+        "pm_gene_edited_livestock": {"subject": "the head of a cow seen from the front, a tall DNA double helix standing upright beside it", "seed": 2},
+        "pm_mechanized_feeding_lines": {"subject": "a long raised conveyor belt on legs pouring grain down into a long feed trough, a cow's head eating at the trough", "seed": 0,
+                                        "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_barns": {"subject": "a low round dome-shaped robot on small wheels pushing a heap of hay toward a cow that stands eating from the heap, seen from the side", "seed": 1,
+                             "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_cultured_tobacco_leaf": {"subject": "a broad tobacco leaf growing up out of a round laboratory flask", "seed": 2,
+                                     "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
     },
     "carbon_capture": {
         "carbon_capture_none": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p0.dds", "subject": "a factory chimney with a capture hood on top inside a thick round ring with one thick diagonal bar across it", "seed": 4},
