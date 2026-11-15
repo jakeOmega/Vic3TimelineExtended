@@ -191,6 +191,22 @@ game, in English.
   Once the entry runs, read its bar tooltip every few years and note the date and outcome: the three 1.15 games
   read in the 2026-11-15 save study all ended in revolution (about 1856, 1888 and 1890), and no game without the
   mod has been measured.
+- **Movements on laws no country can leave (#1832, 2026-11-15).** Fourteen movement ideologies are neutral now
+  on a law a country holds from 1836 and can't replace until after the movement forms
+  (`ideology_modifications.NEUTRAL_ON_LOCKED_DEFAULT`). In any game, open the predicted-activism breakdown:
+  - Of a liberal, liberal republican, radical, anarchist or national liberal movement: no line from
+    Punishment-Focused Criminal Justice. Of an anarchist, communist, revolutionary socialist, fascist or radical movement: none from
+    Unrestricted Automation. Of a fascist one: none from Traditional Heredity or No Ministry of Propaganda.
+  - Of the Environmental Movement in a country without the Ministry of the Environment: one "no institution" line
+    (0.05 per level of the technologies' part of the maximum) and no line from the No Ministry of the Environment
+    law or from Unrestricted Extraction. Before, the law line added 0.10 more.
+  - Count the Environmental Movement's "could adopt" climate-policy lines (+0.10 each) in an AI country with the
+    Global Warming entry open, and note the country's activism. The 2026-11-15 save read found most AI countries
+    holding none of the seven policies those lines count. If most such movements sit at full activism from these
+    lines alone, that confirms the open question in #1832's PR.
+  - In an observer run, note whether movement civil wars come later or fewer than in the runs before #1832.
+    Estimated from four saves: a fifth to a half fewer movements reach 0.75 activism from the law, radical and
+    loyalist terms alone (26→16, 36→23, 28→15, 38→30).
 - **Stalemates (#1449).** In a long world war, `world_war_events.31` (The Same Line) should also arrive for a
   war leader whose war is in the engine's stalemate countdown (both leaders at minimum war support, the war
   panel's stalemate timer running), whatever its age and battle count; its co-belligerents should not get it
