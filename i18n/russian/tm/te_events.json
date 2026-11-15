@@ -23322,5 +23322,1045 @@
  "un_ceasefire.4.t": {
   "en": "The Ceasefire Order Runs Out",
   "ru": "Приказ о прекращении огня истекает"
+ },
+ "un_ceasefire.5.a": {
+  "en": "A dark day for the Assembly.",
+  "ru": "Мрачный день для Ассамблеи."
+ },
+ "un_ceasefire.5.d_aggressor": {
+  "en": "Our war is over. The country the General Assembly ordered us to stop fighting no longer exists. The chamber does not count a conquest as a ceasefire, and it records its order as defied.",
+  "ru": "Наша война окончена. Страны, с которой Генеральная Ассамблея приказала нам прекратить воевать, больше не существует. Зал не считает завоевание прекращением огня и заносит свой приказ в протокол как нарушенный."
+ },
+ "un_ceasefire.5.d_aggressor_gained": {
+  "en": "Our war against [SCOPE.sCountry('un_cf_victim_scope').GetName] is over, and we came out of it with its land or its sovereignty in our hands. The General Assembly had ordered us to cease fire. It does not count a war won as an order obeyed, and it records its order as defied.",
+  "ru": "Наша война против страны [SCOPE.sCountry('un_cf_victim_scope').GetName] окончена, и мы вышли из неё, получив её земли или её суверенитет. Генеральная Ассамблея приказала нам прекратить огонь. Выигранную войну она не считает выполненным приказом и заносит свой приказ в протокол как нарушенный."
+ },
+ "un_ceasefire.5.d_proposer": {
+  "en": "The country the Assembly ordered [SCOPE.sCountry('un_cf_aggressor').GetName] to stop fighting no longer exists. The war ended in conquest while the ceasefire order we moved still stood, and the chamber records the order as defied.",
+  "ru": "Страны, которой Ассамблея приказала прекратить воевать со страной [SCOPE.sCountry('un_cf_aggressor').GetName], больше не существует. Война закончилась завоеванием, пока приказ о прекращении огня, внесённый нами, ещё действовал, и зал заносит приказ в протокол как нарушенный."
+ },
+ "un_ceasefire.5.d_proposer_gained": {
+  "en": "The war [SCOPE.sCountry('un_cf_aggressor').GetName] fought against [SCOPE.sCountry('un_cf_victim_scope').GetName] is over, and the aggressor came out of it with its victim's land or sovereignty in its hands while the ceasefire order we moved still stood. The chamber does not count a war won as an order obeyed, and it records the order as defied.",
+  "ru": "Война, которую страна [SCOPE.sCountry('un_cf_aggressor').GetName] вела против страны [SCOPE.sCountry('un_cf_victim_scope').GetName], окончена, и агрессор вышел из неё, получив земли или суверенитет своей жертвы, пока приказ о прекращении огня, внесённый нами, ещё действовал. Зал не считает выигранную войну выполненным приказом и заносит приказ в протокол как нарушенный."
+ },
+ "un_ceasefire.5.d_victim": {
+  "en": "The war [SCOPE.sCountry('un_cf_aggressor').GetName] fought against us is over, and it ended in the aggressor's favor: it took our land or our sovereignty while the Assembly's ceasefire order stood. The chamber records the order as defied.",
+  "ru": "Война, которую страна [SCOPE.sCountry('un_cf_aggressor').GetName] вела против нас, окончена, и закончилась она в пользу агрессора: он отнял наши земли или наш суверенитет, пока приказ Ассамблеи о прекращении огня ещё действовал. Зал заносит приказ в протокол как нарушенный."
+ },
+ "un_ceasefire.5.f": {
+  "en": "After the afternoon session, a clerk of the Assembly's Secretariat came into the empty chamber with a cardboard box. The country whose seat stood at the end of the row no longer existed, and the clerk had been told to clear it before the next sitting. The nameplate came off its bracket with two screws. The clerk wrapped it in a sheet of paper and laid it in the box, then emptied the desk drawer: a copy of the ceasefire order, a list of interpreters' booths and a pencil. The chair stayed where it was. The clerk wrote the country's name and the day's date on the lid of the box, carried it down to the archive and signed it in.",
+  "ru": "После дневного заседания служащий секретариата Ассамблеи вошёл в пустой зал с картонной коробкой. Страны, чьё место стояло в конце ряда, больше не существовало, и служащему велели освободить его до следующего заседания. Табличка снялась с кронштейна двумя винтами. Служащий завернул её в лист бумаги и уложил в коробку, затем опустошил ящик стола: копия приказа о прекращении огня, список кабин переводчиков и карандаш. Кресло осталось на месте. Служащий написал название страны и сегодняшнюю дату на крышке коробки, отнёс её в архив и расписался в приёме."
+ },
+ "un_ceasefire.5.f_gained": {
+  "en": "\\\"Members of the Assembly, I speak for the country your ceasefire order was passed to protect. The order was in force when the war ended, and the war ended on our attacker's terms. We signed the peace because we could not go on fighting, and we have given up what it took from us. We do not ask the Assembly to undo that today. We ask that its record say plainly what happened: that the order was defied, and by whom. And we ask the members who voted for the order to remember it the next time our attacker asks this chamber for anything.\\\"",
+  "ru": "«Члены Ассамблеи, я говорю от имени страны, которую должен был защитить ваш приказ о прекращении огня. Приказ действовал, когда война закончилась, и закончилась она на условиях нашего агрессора. Мы подписали мир, потому что не могли больше сражаться, и отказались от того, что у нас отняли. Мы не просим Ассамблею отменить это сегодня. Мы просим, чтобы её протокол прямо сказал, что произошло: что приказ был нарушен и кем. И мы просим членов, голосовавших за приказ, помнить об этом, когда наш агрессор в следующий раз о чём-нибудь попросит этот зал.»"
+ },
+ "un_ceasefire.5.t": {
+  "en": "Conquered Under a Ceasefire Order",
+  "ru": "Завоёвана вопреки приказу о прекращении огня"
+ },
+ "un_ceasefire.5.t_gained": {
+  "en": "Victory Under a Ceasefire Order",
+  "ru": "Победа вопреки приказу о прекращении огня"
+ },
+ "un_court.2.a": {
+  "en": "We abide by the ruling.",
+  "ru": "Мы подчиняемся решению."
+ },
+ "un_court.2.b": {
+  "en": "The court has no say over our soil.",
+  "ru": "Суд не вправе решать судьбу нашей земли."
+ },
+ "un_court.2.d": {
+  "en": "The [concept_un_world_court] has ruled on the dispute the General Assembly sent it, and found for [SCOPE.sCountry('un_crt_claimant').GetName]: the state we hold in [SCOPE.sStateRegion('un_crt_region').GetName] should pass to them. The judges weighed the case at #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! for the claimant. The ruling binds us. We can cede the state, or keep it and defy the court.",
+  "ru": "[concept_un_world_court] вынес решение по спору, переданному ему Генеральной Ассамблеей, и признал правоту страны [SCOPE.sCountry('un_crt_claimant').GetName]: область, которой мы владеем, [SCOPE.sStateRegion('un_crt_region').GetName], должна перейти к ней. Судьи оценили дело в #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! в пользу истца. Решение обязательно для нас. Мы можем уступить область или оставить её себе, не подчинившись суду."
+ },
+ "un_court.2.d_accepted": {
+  "en": "The [concept_un_world_court] has ruled on the dispute the General Assembly sent it, and found for [SCOPE.sCountry('un_crt_claimant').GetName]: the state we hold in [SCOPE.sStateRegion('un_crt_region').GetName] should pass to them. The judges weighed the case at #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! for the claimant. We voted for the referral ourselves, and so accepted the court's judgment before it was given. We cannot defy it now. All that is left is to cede the state.",
+  "ru": "[concept_un_world_court] вынес решение по спору, переданному ему Генеральной Ассамблеей, и признал правоту страны [SCOPE.sCountry('un_crt_claimant').GetName]: область, которой мы владеем, [SCOPE.sStateRegion('un_crt_region').GetName], должна перейти к ней. Судьи оценили дело в #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! в пользу истца. Мы сами голосовали за передачу дела и тем самым признали решение суда до его вынесения. Теперь мы не можем его оспорить. Остаётся лишь уступить область."
+ },
+ "un_court.2.f": {
+  "en": "To the government, from our agent before the World Court. The court gave its judgment on [SCOPE.sStateRegion('un_crt_region').GetName] this morning, and it has found for [SCOPE.sCountry('un_crt_claimant').GetName]. The judgment is binding under the referral the Assembly carried. The court has no means of its own to enforce it. If we keep the state, our defiance goes on the Assembly's record against us, and for ten years [SCOPE.sCountry('un_crt_claimant').GetName] may ask the Assembly to authorize a war for the region without the case it would otherwise need. If we cede it, we are counted as having complied with a binding decision. I enclose the full text of the judgment. I ask for the government's instructions before the court's registry asks for our answer.",
+  "ru": "Правительству, от нашего представителя во Всемирном суде. Сегодня утром суд вынес решение по области [SCOPE.sStateRegion('un_crt_region').GetName] и признал правоту страны [SCOPE.sCountry('un_crt_claimant').GetName]. Решение обязательно в силу передачи дела, одобренной Ассамблеей. У суда нет собственных средств, чтобы добиться его исполнения. Если мы оставим область себе, наше неповиновение будет занесено в протокол Ассамблеи, и в течение десяти лет страна [SCOPE.sCountry('un_crt_claimant').GetName] сможет просить Ассамблею санкционировать войну за этот регион, не приводя доводов, которые иначе ей понадобились бы. Если мы уступим её, нас сочтут подчинившимися обязательному решению. Прилагаю полный текст решения. Прошу указаний правительства, прежде чем канцелярия суда потребует нашего ответа."
+ },
+ "un_court.2.f_accepted": {
+  "en": "To the government, from our agent before the World Court. The court gave its judgment on [SCOPE.sStateRegion('un_crt_region').GetName] this morning, and it has found for [SCOPE.sCountry('un_crt_claimant').GetName]. The judgment is binding under the referral the Assembly carried, and our own delegation voted for that referral. The registry has asked when the state will be handed over, not whether. Once we cede it, we are counted as having complied with a binding decision. I enclose the full text of the judgment.",
+  "ru": "Правительству, от нашего представителя во Всемирном суде. Сегодня утром суд вынес решение по области [SCOPE.sStateRegion('un_crt_region').GetName] и признал правоту страны [SCOPE.sCountry('un_crt_claimant').GetName]. Решение обязательно в силу передачи дела, одобренной Ассамблеей, а наша собственная делегация голосовала за эту передачу. Канцелярия спрашивает, когда область будет передана, а не передавать ли её. Как только мы её уступим, нас сочтут подчинившимися обязательному решению. Прилагаю полный текст решения."
+ },
+ "un_court.2.t": {
+  "en": "The World Court Rules Against Us",
+  "ru": "Всемирный суд выносит решение против нас"
+ },
+ "un_court.3.a": {
+  "en": "So the court has spoken.",
+  "ru": "Итак, суд высказался."
+ },
+ "un_court.3.d_advisory_claimant_lost": {
+  "en": "The [concept_un_world_court] has given its advisory opinion on our claim to [SCOPE.sStateRegion('un_crt_region').GetName], and it is for [SCOPE.sCountry('un_crt_holder').GetName]. The judges gave our case #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! and still found the holder's title the stronger. The referral was vetoed, so the opinion binds no one, and our claim stands.",
+  "ru": "[concept_un_world_court] вынес консультативное заключение по нашим притязаниям на область [SCOPE.sStateRegion('un_crt_region').GetName], и оно в пользу страны [SCOPE.sCountry('un_crt_holder').GetName]. Судьи оценили наше дело в #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! и всё же сочли право владельца более весомым. Передача дела была заблокирована вето, поэтому заключение никого не связывает, и наши притязания остаются в силе."
+ },
+ "un_court.3.d_advisory_claimant_won": {
+  "en": "The [concept_un_world_court] has given its advisory opinion on our claim to [SCOPE.sStateRegion('un_crt_region').GetName], and it is for us: the judges, who gave our case #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#!, hold that the state should be ours. A veto took the force out of the opinion, so nothing changes hands, but [SCOPE.sCountry('un_crt_holder').GetName]'s standing in the Assembly suffers for it.",
+  "ru": "[concept_un_world_court] вынес консультативное заключение по нашим притязаниям на область [SCOPE.sStateRegion('un_crt_region').GetName], и оно в нашу пользу: судьи, оценившие наше дело в #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#!, полагают, что область должна принадлежать нам. Вето лишило заключение силы, поэтому ничто не переходит из рук в руки, но положение страны [SCOPE.sCountry('un_crt_holder').GetName] в Ассамблее от этого страдает."
+ },
+ "un_court.3.d_advisory_holder_lost": {
+  "en": "The [concept_un_world_court] has given its advisory opinion on [SCOPE.sCountry('un_crt_claimant').GetName]'s claim to [SCOPE.sStateRegion('un_crt_region').GetName], and it is against us. A veto in the [concept_un_security_council] means it binds no one and the state stays ours, but the opinion is on the record and our standing suffers for it.",
+  "ru": "[concept_un_world_court] вынес консультативное заключение по притязаниям страны [SCOPE.sCountry('un_crt_claimant').GetName] на область [SCOPE.sStateRegion('un_crt_region').GetName], и оно против нас. Из-за вето в [concept_un_security_council|l] заключение никого не связывает, и область остаётся за нами, но заключение внесено в протокол, и наше положение от этого страдает."
+ },
+ "un_court.3.d_advisory_holder_won": {
+  "en": "The [concept_un_world_court] has given its advisory opinion on [SCOPE.sCountry('un_crt_claimant').GetName]'s claim to [SCOPE.sStateRegion('un_crt_region').GetName], and it is for us. The referral was vetoed, so the opinion binds no one, but the claim has been heard and found wanting.",
+  "ru": "[concept_un_world_court] вынес консультативное заключение по притязаниям страны [SCOPE.sCountry('un_crt_claimant').GetName] на область [SCOPE.sStateRegion('un_crt_region').GetName], и оно в нашу пользу. Передача дела была заблокирована вето, поэтому заключение никого не связывает, но притязания были выслушаны и признаны несостоятельными."
+ },
+ "un_court.3.d_claimant_lost": {
+  "en": "The [concept_un_world_court] has found for [SCOPE.sCountry('un_crt_holder').GetName]. The judges gave our case #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! and hold that [SCOPE.sStateRegion('un_crt_region').GetName] stays where it is. Our claim on the region is withdrawn, and for twenty years any war goal we add there will cost us extra [concept_infamy].",
+  "ru": "[concept_un_world_court] признал правоту страны [SCOPE.sCountry('un_crt_holder').GetName]. Судьи оценили наше дело в #v [GetGlobalVariable('un_court_ruled_odds').GetValue|0]%#! и постановили, что область [SCOPE.sStateRegion('un_crt_region').GetName] остаётся там, где она есть. Наши притязания на регион сняты, и в течение двадцати лет любая цель войны, которую мы добавим там, будет стоить нам дополнительной [Concept('concept_infamy','дурной славы')]."
+ },
+ "un_court.3.d_defied": {
+  "en": "[SCOPE.sCountry('un_crt_holder').GetName] has defied the [concept_un_world_court]. The judges found that [SCOPE.sStateRegion('un_crt_region').GetName] should be ours, and [SCOPE.sCountry('un_crt_holder').GetName] refuses to hand it over. The defiance is on the Assembly's record, and for ten years we may move for a military mandate over the region against them without first making the case against their record that a mandate usually needs.",
+  "ru": "Страна [SCOPE.sCountry('un_crt_holder').GetName] не подчинилась [Concept('concept_un_world_court','Всемирному суду')]. Судьи постановили, что область [SCOPE.sStateRegion('un_crt_region').GetName] должна принадлежать нам, а страна [SCOPE.sCountry('un_crt_holder').GetName] отказывается её передать. Неповиновение занесено в протокол Ассамблеи, и в течение десяти лет мы можем добиваться военного мандата на этот регион против неё, не доказывая сначала её вину, как обычно требуется для мандата."
+ },
+ "un_court.3.d_holder_won": {
+  "en": "The [concept_un_world_court] has found for us. [SCOPE.sCountry('un_crt_claimant').GetName]'s claim on [SCOPE.sStateRegion('un_crt_region').GetName] is struck down and withdrawn, and for twenty years a war goal it adds against that region costs it extra [concept_infamy].",
+  "ru": "[concept_un_world_court] признал нашу правоту. Притязания страны [SCOPE.sCountry('un_crt_claimant').GetName] на область [SCOPE.sStateRegion('un_crt_region').GetName] отклонены и сняты, и в течение двадцати лет любая цель войны, добавленная ею против этого региона, будет стоить ей дополнительной [Concept('concept_infamy','дурной славы')]."
+ },
+ "un_court.3.d_moot_claimant": {
+  "en": "The [concept_un_world_court] has struck our case over [SCOPE.sStateRegion('un_crt_region').GetName] off its list. [SCOPE.sCountry('un_crt_holder').GetName] no longer holds the state, or has since made it its capital, which the court will not hand over, so the judges have nothing left to rule on.",
+  "ru": "[concept_un_world_court] исключил наше дело об области [SCOPE.sStateRegion('un_crt_region').GetName] из списка. Страна [SCOPE.sCountry('un_crt_holder').GetName] больше не владеет областью или с тех пор сделала её своей столицей, которую суд не передаёт, так что судьям больше нечего решать."
+ },
+ "un_court.3.d_moot_claimant_gone": {
+  "en": "The [concept_un_world_court] has struck our case over [SCOPE.sStateRegion('un_crt_region').GetName] off its list. The country we brought it against no longer exists, so the judges have nothing left to rule on.",
+  "ru": "[concept_un_world_court] исключил наше дело об области [SCOPE.sStateRegion('un_crt_region').GetName] из списка. Страны, против которой мы его возбудили, больше не существует, так что судьям больше нечего решать."
+ },
+ "un_court.3.d_moot_holder": {
+  "en": "The [concept_un_world_court] has struck [SCOPE.sCountry('un_crt_claimant').GetName]'s case over [SCOPE.sStateRegion('un_crt_region').GetName] off its list. We no longer hold the state, or it has since become our capital, which the court will not hand over, so the judges have nothing left to rule on.",
+  "ru": "[concept_un_world_court] исключил из списка дело страны [SCOPE.sCountry('un_crt_claimant').GetName] об области [SCOPE.sStateRegion('un_crt_region').GetName]. Мы больше не владеем областью, или она с тех пор стала нашей столицей, которую суд не передаёт, так что судьям больше нечего решать."
+ },
+ "un_court.3.d_obeyed": {
+  "en": "[SCOPE.sCountry('un_crt_holder').GetName] has complied with the [concept_un_world_court]'s ruling over [SCOPE.sStateRegion('un_crt_region').GetName] and handed the state to us.",
+  "ru": "Страна [SCOPE.sCountry('un_crt_holder').GetName] подчинилась решению [Concept('concept_un_world_court','Всемирного суда')] по области [SCOPE.sStateRegion('un_crt_region').GetName] и передала её нам."
+ },
+ "un_court.3.f": {
+  "en": "In the World Court's registry, a clerk packed the papers of the case concerning [SCOPE.sStateRegion('un_crt_region').GetName] into archive boxes, in the order the registry keeps them. First went the Assembly's letter of referral, then each party's written pleadings with their maps and census tables, then the court's correspondence with both governments. The court's own last paper on the case went in on top. The clerk numbered each box, wrote the case's name and number on every spine, and entered the boxes in the register before sending them down to the archive on a cart.",
+  "ru": "В канцелярии Всемирного суда служащий укладывал бумаги дела об области [SCOPE.sStateRegion('un_crt_region').GetName] в архивные коробки в том порядке, в каком их хранит канцелярия. Первым легло письмо Ассамблеи о передаче дела, затем письменные доводы каждой стороны с их картами и таблицами переписи, затем переписка суда с обоими правительствами. Последняя бумага суда по делу легла сверху. Служащий пронумеровал каждую коробку, написал название и номер дела на каждом корешке, внёс коробки в реестр и отправил их в архив на тележке."
+ },
+ "un_court.3.t": {
+  "en": "The World Court Has Ruled",
+  "ru": "Всемирный суд вынес решение"
+ },
+ "un_court.3.t_advisory": {
+  "en": "The Court's Advisory Opinion",
+  "ru": "Консультативное заключение суда"
+ },
+ "un_court.3.t_moot": {
+  "en": "A Case Struck Off",
+  "ru": "Дело снято"
+ },
+ "un_events.1.a": {
+  "en": "Sign the Charter. We believe in this vision.",
+  "ru": "Подписать Устав. Мы верим в это начинание."
+ },
+ "un_events.1.a_pending_tt": {
+  "en": "We become a founding member of the United Nations. Our membership takes effect when our United Nations [concept_journal_entry] opens.",
+  "ru": "Мы становимся государством-основателем Организации Объединённых Наций. Наше членство вступит в силу, когда откроется наша [concept_journal_entry|l] Организации Объединённых Наций."
+ },
+ "un_events.1.b": {
+  "en": "We shall observe, but not yet commit.",
+  "ru": "Мы понаблюдаем, но пока не возьмём обязательств."
+ },
+ "un_events.1.c": {
+  "en": "This undermines our sovereignty.",
+  "ru": "Это подрывает наш суверенитет."
+ },
+ "un_events.1.d": {
+  "en": "The United Nations has been founded, and [ROOT.GetCountry.GetName] has been invited to sign its charter as a founding member. Membership gives us a vote in the General Assembly from its first session. It also binds us to the charter's obligations: international courts, collective security, and decisions taken by the members together that we may not have wanted.",
+  "ru": "Организация Объединённых Наций основана, и страна [ROOT.GetCountry.GetName] приглашена подписать её устав в числе государств-основателей. Членство даёт нам голос в Генеральной Ассамблее с первой же сессии. Оно также связывает нас обязательствами устава: международные суды, коллективная безопасность и решения, принимаемые членами сообща, которых мы, возможно, не хотели."
+ },
+ "un_events.1.d_authoritarian": {
+  "en": "The United Nations has been established, and its charter is open for signature. For [ROOT.GetCountry.GetName], a seat in the Assembly means influence. It also means obligations, among them international courts, collective security, and the right of lesser powers to raise our affairs in open session.",
+  "ru": "Организация Объединённых Наций учреждена, и её устав открыт для подписания. Для страны [ROOT.GetCountry.GetName] место в Ассамблее означает влияние. Оно также означает обязательства, среди них международные суды, коллективная безопасность и право малых держав поднимать наши дела на открытых заседаниях."
+ },
+ "un_events.1.d_council": {
+  "en": "The United Nations has been founded to keep the peace between nations. By signing its charter, [ROOT.GetCountry.GetName] would have a voice in shaping it in the interest of the working class. The capitalist powers mean to use the same organization for their own ends, and our delegation would have to argue against them in every session.",
+  "ru": "Организация Объединённых Наций основана, чтобы сохранять мир между народами. Подписав её устав, страна [ROOT.GetCountry.GetName] получила бы голос в формировании организации в интересах рабочего класса. Капиталистические державы намерены использовать ту же организацию в своих целях, и нашей делегации пришлось бы спорить с ними на каждой сессии."
+ },
+ "un_events.1.d_founder": {
+  "en": "\\n\\nThe invitation comes from [SCOPE.sCountry('un_charter_founder').GetName], which founded the organization.",
+  "ru": "\\n\\nПриглашение исходит от страны [SCOPE.sCountry('un_charter_founder').GetName], основавшей организацию."
+ },
+ "un_events.1.d_refounded": {
+  "en": "\\n\\nThis is not the world's first United Nations. The last one dissolved when its authority ran out. [SCOPE.sCountry('un_charter_founder').GetName] convened the conference that founded its successor, and now invites us to sign the new charter.",
+  "ru": "\\n\\nЭто не первая Организация Объединённых Наций в мире. Прежняя распалась, когда иссяк её авторитет. Страна [SCOPE.sCountry('un_charter_founder').GetName] созвала конференцию, основавшую её преемницу, и теперь приглашает нас подписать новый устав."
+ },
+ "un_events.1.d_theocratic": {
+  "en": "The United Nations has been founded, and its charter awaits our signature. For [ROOT.GetCountry.GetName], guided by divine law, membership would give us a place to speak for that law among the nations. It would also mean accepting as equals states whose laws offend the divine order, in an assembly whose decisions answer to no faith.",
+  "ru": "Организация Объединённых Наций основана, и её устав ждёт нашей подписи. Для страны [ROOT.GetCountry.GetName], руководствующейся божественным законом, членство дало бы место, где можно говорить среди народов в защиту этого закона. Оно также означало бы признание равными государств, чьи законы оскорбляют божественный порядок, в ассамблее, чьи решения не подотчётны никакой вере."
+ },
+ "un_events.1.f": {
+  "en": "To the government, from the legal advisers to our delegation at the signing. We have read the charter in full, as instructed. Signing now would make us a founding member, with a vote in the General Assembly from its first session. In return we would accept the charter's procedures for settling disputes, including cases brought against us before its court, and we would be expected to take part in measures the members agree on together. The charter can be amended later, but only by the members acting together, never by one member alone. We have marked the articles that touch our existing treaties and attach them with our notes. We ask the government for its decision before the signing period closes.",
+  "ru": "Правительству, от юридических советников нашей делегации на подписании. Мы прочли устав целиком, как было велено. Подписание сейчас сделало бы нас государством-основателем с голосом в Генеральной Ассамблее с первой же сессии. Взамен мы приняли бы процедуры устава по урегулированию споров, включая дела, возбуждённые против нас в его суде, и от нас ждали бы участия в мерах, о которых члены договорятся сообща. Устав можно изменить позже, но только членами, действующими сообща, и никогда одним членом. Мы отметили статьи, затрагивающие наши действующие договоры, и прилагаем их с нашими примечаниями. Просим правительство принять решение до закрытия периода подписания."
+ },
+ "un_events.1.t": {
+  "en": "The United Nations Charter",
+  "ru": "Устав Организации Объединённых Наций"
+ },
+ "un_events.10.a": {
+  "en": "Stand by the organization.",
+  "ru": "Поддержать организацию."
+ },
+ "un_events.10.a_tt": {
+  "en": "We spend influence to shore up the UN's credibility. Championing the order from the UN tab of the Diplomacy panel would count for more, for as long as we keep it up.",
+  "ru": "Мы тратим влияние на укрепление доверия к ООН. Отстаивание этого порядка на вкладке ООН панели дипломатии будет весить больше, пока мы его продолжаем."
+ },
+ "un_events.10.b": {
+  "en": "Wait and see.",
+  "ru": "Подождать и посмотреть."
+ },
+ "un_events.10.b_tt": {
+  "en": "We do nothing, for good or ill. The crisis runs its course.",
+  "ru": "Мы не делаем ничего, ни во благо, ни во вред. Кризис идёт своим чередом."
+ },
+ "un_events.10.c": {
+  "en": "The UN has failed. Let it go.",
+  "ru": "ООН потерпела неудачу. Пусть уходит."
+ },
+ "un_events.10.d": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy]. Its [concept_un_authority] has fallen below 10: resolutions are ignored, great powers act as they please, and members wonder aloud what the institution is for. As a [concept_great_power], [ROOT.GetCountry.GetName] is one of the few powers whose choice can still matter.",
+  "ru": "Организация Объединённых Наций переживает кризис [Concept('concept_legitimacy','легитимности')]. Её [concept_un_authority|l] упал ниже 10: резолюции игнорируются, великие державы действуют как хотят, а члены вслух спрашивают, зачем нужен этот институт. Как [Concept('concept_great_power','великая держава')], страна [ROOT.GetCountry.GetName] — одна из немногих держав, чей выбор всё ещё может иметь значение."
+ },
+ "un_events.10.d_authoritarian": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy]. Its [concept_un_authority] is below 10, its resolutions are flouted, and its chamber has become a platform for speeches about morality. For [ROOT.GetCountry.GetName], the question is whether to prop up an institution that constrains us, or let it wither.",
+  "ru": "Организация Объединённых Наций переживает кризис [Concept('concept_legitimacy','легитимности')]. Её [concept_un_authority|l] ниже 10, её резолюции попираются, а зал превратился в площадку для речей о морали. Для страны [ROOT.GetCountry.GetName] вопрос в том, поддерживать ли институт, который нас сдерживает, или дать ему увянуть."
+ },
+ "un_events.10.d_clock": {
+  "en": "\\n\\n#R The world has given up on it.#! Its target is below 5, so its authority is falling at least a quarter point a month: at this rate it #R dissolves in about [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_months_to_collapse')|0] months#!, taking its headquarters, agencies, conventions and mandates with it.",
+  "ru": "\\n\\n#R Мир махнул на неё рукой.#! Её целевое значение ниже 5, поэтому авторитет падает не менее чем на четверть пункта в месяц: при таких темпах она #R распадётся примерно через [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_months_to_collapse')|0] мес.#!, а вместе с ней исчезнут штаб-квартира, агентства, конвенции и мандаты."
+ },
+ "un_events.10.d_council": {
+  "en": "The United Nations faces a crisis of [concept_legitimacy], its [concept_un_authority] below 10. For [ROOT.GetCountry.GetName], the crisis shows what the institution always was: an instrument built to preserve a capitalist world order, failing as that order fails. The question is whether to salvage it or hasten its collapse.",
+  "ru": "Организация Объединённых Наций переживает кризис [Concept('concept_legitimacy','легитимности')], её [concept_un_authority|l] ниже 10. Для страны [ROOT.GetCountry.GetName] кризис показывает, чем этот институт был всегда: орудием сохранения капиталистического мирового порядка, которое рушится вместе с этим порядком. Вопрос в том, спасать ли его или ускорить его крах."
+ },
+ "un_events.10.d_linger": {
+  "en": "\\n\\nIts target is still 5 or more, so it will linger in crisis rather than collapse, unless the world turns further against it. The crisis ends if its authority climbs back above 20.",
+  "ru": "\\n\\nЕё целевое значение всё ещё не ниже 5, поэтому она будет тянуться в кризисе, а не рухнет, если только мир не отвернётся от неё ещё сильнее. Кризис закончится, если её авторитет вновь поднимется выше 20."
+ },
+ "un_events.10.d_member": {
+  "en": "\\n\\nWe are a member. Standing by it now would add to its credibility in proportion to our weight in world affairs (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!); championing the order from the UN tab of the Diplomacy panel would lift its target by about #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!.",
+  "ru": "\\n\\nМы её член. Поддержка сейчас повысит доверие к ней пропорционально нашему весу в мировых делах (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!); отстаивание этого порядка на вкладке ООН панели дипломатии поднимет её целевое значение примерно на #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!."
+ },
+ "un_events.10.d_outsider": {
+  "en": "\\n\\nWe stand outside it. Joining now would bring our share of world power in with us and lift its target by about #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!.",
+  "ru": "\\n\\nМы остаёмся вне её. Вступление сейчас принесло бы с собой нашу долю мировой мощи и подняло бы её целевое значение примерно на #v [ROOT.GetCountry.MakeScope.ScriptValue('un_crisis_rescue_gain')|1]#!."
+ },
+ "un_events.10.e": {
+  "en": "Join it, and save it.",
+  "ru": "Вступить и спасти её."
+ },
+ "un_events.10.e_tt": {
+  "en": "We join the United Nations now, bound by every convention it has ratified. Our share of world power counts toward its participation pillar from next month.",
+  "ru": "Мы вступаем в Организацию Объединённых Наций сейчас и связываем себя каждой ратифицированной ею конвенцией. Наша доля мировой мощи идёт в счёт опоры участия со следующего месяца."
+ },
+ "un_events.10.f": {
+  "en": "\\\"I sell newspapers at the corner opposite the main gate. The delegates used to buy three or four each in the morning. Now most of them walk straight past, and the ones who stop ask me whether the building will still be open next year.\\\"\\n\\n\\\"I interpret in the Assembly hall. Last week I put one speech into three languages, and the hall was half empty for all of them. The delegations that came had sent their juniors.\\\"\\n\\n\\\"My government's instructions are to support the organization in principle and commit to nothing. I have had the same instructions since the spring, and the other delegations tell me theirs say the same.\\\"\\n\\n\\\"I work in the Secretariat's budget office. We have been told to finish the reports already started and to begin no new ones until the members settle what they owe.\\\"",
+  "ru": "«Я продаю газеты на углу напротив главных ворот. Раньше делегаты брали у меня по три-четыре утром. Теперь большинство проходят мимо, а те, кто останавливается, спрашивают, будет ли здание открыто в следующем году.»\\n\\n«Я перевожу в зале Ассамблеи. На прошлой неделе я перевёл одну речь на три языка, и зал был наполовину пуст для каждого из них. Делегации, которые пришли, прислали младших сотрудников.»\\n\\n«Инструкции моего правительства — поддерживать организацию в принципе и ни к чему не обязываться. Те же инструкции у меня с весны, и другие делегации говорят, что у них такие же.»\\n\\n«Я работаю в бюджетном отделе секретариата. Нам велели закончить уже начатые отчёты и не начинать новых, пока члены не рассчитаются по долгам.»"
+ },
+ "un_events.101.a": {
+  "en": "We are grateful for this generosity.",
+  "ru": "Мы благодарны за эту щедрость."
+ },
+ "un_events.101.b": {
+  "en": "We accept the aid, but we are not a charity case.",
+  "ru": "Мы принимаем помощь, но мы не объект благотворительности."
+ },
+ "un_events.101.d": {
+  "en": "[SCOPE.sCountry('aid_donor').GetName] has mounted a major relief effort for [ROOT.GetCountry.GetName] through the United Nations. Food, medicine and emergency supplies are arriving in the districts where the famine is worst.",
+  "ru": "Страна [SCOPE.sCountry('aid_donor').GetName] организовала через Организацию Объединённых Наций крупную операцию помощи для страны [ROOT.GetCountry.GetName]. Продовольствие, лекарства и предметы первой необходимости поступают в районы, где голод тяжелее всего."
+ },
+ "un_events.101.f": {
+  "en": "At the district depot the storekeeper counted the sacks off the first convoy and chalked the totals on the door: grain, rice, dried milk, and two crates of medicine for the clinic. The district officer had walked over from the office to watch it come in. \\\"How long will it last?\\\" the officer asked. \\\"A month for the villages on the list, if we ration it,\\\" the storekeeper said. \\\"The relief people say the next convoy comes in three weeks. I have asked them to send seed with it, so the farmers can plant.\\\" Then he went back to the sacks and began stacking them by village, with the nearest villages at the front of the store.",
+  "ru": "На районном складе кладовщик пересчитал мешки с первой колонны и записал итоги мелом на двери: зерно, рис, сухое молоко и два ящика лекарств для клиники. Районный чиновник пришёл из конторы посмотреть, как это разгружают. «Надолго хватит?» — спросил чиновник. «На месяц для деревень из списка, если выдавать по норме, — ответил кладовщик. — Люди из помощи говорят, что следующая колонна придёт через три недели. Я попросил прислать с ней семена, чтобы крестьяне могли сеять». Потом он вернулся к мешкам и стал складывать их по деревням, ближайшие деревни — в передней части склада."
+ },
+ "un_events.101.t": {
+  "en": "The First Convoy",
+  "ru": "Первая колонна"
+ },
+ "un_events.102.a": {
+  "en": "Welcome the peacekeepers. Stability comes first.",
+  "ru": "Приветствовать миротворцев. Стабильность прежде всего."
+ },
+ "un_events.102.b": {
+  "en": "This is an affront to our sovereignty.",
+  "ru": "Это оскорбление нашего суверенитета."
+ },
+ "un_events.102.d": {
+  "en": "[SCOPE.sCountry('peacekeeping_donor').GetName] has deployed a peacekeeping force to [ROOT.GetCountry.GetName] as part of a United Nations stabilization mission. Foreign soldiers in blue helmets now patrol the districts where order broke down.",
+  "ru": "Страна [SCOPE.sCountry('peacekeeping_donor').GetName] направила миротворческие силы в страну [ROOT.GetCountry.GetName] в рамках стабилизационной миссии Организации Объединённых Наций. Иностранные солдаты в голубых касках теперь патрулируют районы, где рухнул порядок."
+ },
+ "un_events.102.f": {
+  "en": "\\\"I keep a stall at the crossroads market, and since the peacekeepers came I have opened it every day, which I could not do before. They stand at the corner in pairs, in their blue helmets, and most of them do not speak our language, so they point and we point back. They buy bread from me in the mornings and pay for it. My son will not look at them. He says a country that needs foreign soldiers to keep its streets is no country at all, and perhaps he is right, but he did not have to keep the stall when the shooting was at the end of the road. I open at dawn now and close at dusk, as I used to.\\\"",
+  "ru": "«У меня лоток на рынке у перекрёстка, и с тех пор как пришли миротворцы, я открываю его каждый день, чего раньше не мог. Они стоят на углу парами, в голубых касках, и большинство не говорит на нашем языке, так что они показывают, и мы показываем в ответ. По утрам они покупают у меня хлеб и платят за него. Мой сын на них не смотрит. Он говорит, что страна, которой нужны иностранные солдаты, чтобы держать улицы, — вообще не страна, и, может быть, он прав, но ему не пришлось держать лоток, когда стреляли в конце дороги. Теперь я открываюсь на рассвете и закрываюсь на закате, как раньше.»"
+ },
+ "un_events.102.t": {
+  "en": "Foreign Peacekeepers on Our Soil",
+  "ru": "Иностранные миротворцы на нашей земле"
+ },
+ "un_events.103.a": {
+  "en": "We are grateful for the assistance.",
+  "ru": "Мы благодарны за помощь."
+ },
+ "un_events.103.b": {
+  "en": "Our people belong here, not in exile.",
+  "ru": "Наши люди принадлежат этой земле, а не изгнанию."
+ },
+ "un_events.103.d": {
+  "en": "The General Assembly has adopted the refugee convention [SCOPE.sCountry('resettlement_host').GetName] tabled, and with it [SCOPE.sCountry('resettlement_host').GetName] has secured a UN resettlement program for the displaced of [ROOT.GetCountry.GetName]. Many of our people are being offered new homes abroad. For the families who go, it is a way out of displacement. For our country, it means losing people we will need when we rebuild.",
+  "ru": "Генеральная Ассамблея приняла конвенцию о беженцах, внесённую страной [SCOPE.sCountry('resettlement_host').GetName], и вместе с ней страна [SCOPE.sCountry('resettlement_host').GetName] добилась программы переселения ООН для перемещённых лиц из страны [ROOT.GetCountry.GetName]. Многим нашим людям предлагают новый дом за границей. Для уезжающих семей это выход из вынужденного скитания. Для нашей страны это потеря людей, которые понадобятся нам при восстановлении."
+ },
+ "un_events.103.f": {
+  "en": "Outside the resettlement office the families waited with their belongings in cases and tied bundles. A clerk from the United Nations read names from a list, and each family went forward to collect its papers and the passes for the journey. An old woman showed the clerk a photograph of a house, and the clerk copied the address from the back of it into the margin of her file. In the line a boy asked his father whether they would come back. \\\"When there is something to come back to,\\\" his father said, and lifted him onto his shoulders so that he could see the front of the queue. When their name was called they went forward together.",
+  "ru": "Перед пунктом переселения семьи ждали с вещами в чемоданах и узлах. Служащий Организации Объединённых Наций читал фамилии по списку, и каждая семья подходила за бумагами и пропусками в дорогу. Старая женщина показала служащему фотографию дома, и тот переписал адрес с её оборота на поля её дела. В очереди мальчик спросил отца, вернутся ли они. «Когда будет, куда возвращаться», — сказал отец и поднял его на плечи, чтобы тот видел начало очереди. Когда назвали их фамилию, они пошли вперёд вместе."
+ },
+ "un_events.103.t": {
+  "en": "New Homes Abroad",
+  "ru": "Новый дом за границей"
+ },
+ "un_events.11.a": {
+  "en": "Denounce this obstruction publicly.",
+  "ru": "Публично осудить это препятствие."
+ },
+ "un_events.11.b": {
+  "en": "The [concept_un_veto] is legitimate procedure.",
+  "ru": "[concept_un_veto] — законная процедура."
+ },
+ "un_events.11.c": {
+  "en": "Propose abolishing the [concept_un_veto] entirely.",
+  "ru": "Предложить полностью отменить [concept_un_veto|l]."
+ },
+ "un_events.11.d": {
+  "en": "[SCOPE.sCountry('veto_power').GetName] has cast its [concept_un_veto] in the Security Council against the resolution we tabled.",
+  "ru": "Страна [SCOPE.sCountry('veto_power').GetName] использовала своё [concept_un_veto|l] в Совете Безопасности против резолюции, которую мы внесли."
+ },
+ "un_events.11.d_after_mandate": {
+  "en": "\\n\\nThe vote is still open, but a military mandate has no weaker form: the authorization is dead, whatever the Assembly votes.",
+  "ru": "\\n\\nГолосование ещё не закрыто, но у военного мандата нет более слабой формы: санкция мертва, как бы ни проголосовала Ассамблея."
+ },
+ "un_events.11.d_after_open": {
+  "en": "\\n\\nThe vote is still open, but the resolution's binding form is dead. If the Assembly still carries it, only a weaker, non-binding form will pass.",
+  "ru": "\\n\\nГолосование ещё не закрыто, но обязательная форма резолюции мертва. Если Ассамблея всё же примет её, пройдёт лишь более слабая, необязательная форма."
+ },
+ "un_events.11.d_after_override": {
+  "en": "\\n\\nThe vote is still open. Under the reformed Charter, if two-thirds of the members with a vote carry the resolution, the veto is overridden and it passes in full.",
+  "ru": "\\n\\nГолосование ещё не закрыто. По реформированному Уставу, если две трети членов с правом голоса примут резолюцию, вето преодолевается и она проходит полностью."
+ },
+ "un_events.11.d_after_reform": {
+  "en": "\\n\\nA charter reform needs the consent of every permanent member: the reform is dead, whatever the Assembly votes.",
+  "ru": "\\n\\nРеформа устава требует согласия каждого постоянного члена: реформа мертва, как бы ни проголосовала Ассамблея."
+ },
+ "un_events.11.d_authoritarian": {
+  "en": "[SCOPE.sCountry('veto_power').GetName] has cast its [concept_un_veto] in the Security Council against the resolution we tabled. The [SCOPE.sCountry('veto_power').GetAdjective] delegation gave no reason for its vote.",
+  "ru": "Страна [SCOPE.sCountry('veto_power').GetName] использовала своё [concept_un_veto|l] в Совете Безопасности против резолюции, которую мы внесли. [SCOPE.sCountry('veto_power').GetAdjective] представитель не назвал причин своего голоса."
+ },
+ "un_events.11.d_council": {
+  "en": "The council republic of [SCOPE.sCountry('veto_power').GetName] has wielded its [concept_un_veto] in the Security Council against the resolution we tabled. The [SCOPE.sCountry('veto_power').GetAdjective] delegation invoked the right of sovereign nations to resist imperialist coercion.",
+  "ru": "Советская республика страны [SCOPE.sCountry('veto_power').GetName] применила своё [concept_un_veto|l] в Совете Безопасности против резолюции, которую мы внесли. [SCOPE.sCountry('veto_power').GetAdjective] посол сослался на право суверенных наций противостоять империалистическому принуждению."
+ },
+ "un_events.11.d_theocratic": {
+  "en": "The theocratic government of [SCOPE.sCountry('veto_power').GetName] has exercised its [concept_un_veto] in the Security Council against the resolution we tabled, on moral grounds rooted in their interpretation of divine law.",
+  "ru": "Теократическое правительство страны [SCOPE.sCountry('veto_power').GetName] воспользовалось своим [concept_un_veto|l] в Совете Безопасности против резолюции, которую мы внесли, по моральным соображениям, коренящимся в его толковании божественного закона."
+ },
+ "un_events.11.f": {
+  "en": "Back in the delegation's office, the junior secretary put the draft resolution on the shelf with the others, in the same blue folder it had arrived in. The head of the delegation stood at the window and read the Secretariat's notice of the veto aloud. \\\"Find out by tonight which delegations are still with us,\\\" he said, \\\"and which of them want the text weakened before they will say so.\\\" The secretary took the list of members down from the wall, spread it on the desk and began going through it in pencil, a mark beside each name, starting with the delegations that had spoken for the resolution in the debate.",
+  "ru": "В кабинете делегации младший секретарь поставил проект резолюции на полку к остальным, в той же синей папке, в какой он пришёл. Глава делегации стоял у окна и вслух читал уведомление секретариата о вето. «К вечеру выясните, какие делегации ещё с нами, — сказал он, — и какие из них хотят смягчить текст, прежде чем сказать об этом». Секретарь снял со стены список членов, разложил его на столе и принялся просматривать карандашом, отмечая каждое имя, начиная с делегаций, высказавшихся за резолюцию в прениях."
+ },
+ "un_events.11.t": {
+  "en": "One Hand Raised",
+  "ru": "Одна поднятая рука"
+ },
+ "un_events.12.a": {
+  "en": "Champion [concept_decolonization_system]. Free all peoples!",
+  "ru": "Отстаивать [Concept('concept_decolonization_system','деколонизацию')]. Свободу всем народам!"
+ },
+ "un_events.12.b": {
+  "en": "Development takes time. We will not table this.",
+  "ru": "Развитие требует времени. Мы не станем это вносить."
+ },
+ "un_events.12.d": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a declaration calling for an immediate end to colonialism in all its forms, and for the [Concept('concept_great_power', 'great powers')] to give up their overseas territories. Nothing has been tabled yet: we could table it.",
+  "ru": "Недавно получившие независимость нации настаивают, чтобы Генеральная Ассамблея рассмотрела декларацию, призывающую к немедленному прекращению колониализма во всех его формах и к тому, чтобы [Concept('concept_great_power','великие державы')] отказались от своих заморских территорий. Пока ничего не внесено: мы могли бы это сделать."
+ },
+ "un_events.12.d_cause_collapse": {
+  "en": "The colonial empire of [SCOPE.sCountry('un_dkt_subject').GetName] has collapsed, and every delegation is asking which will be next.\\n\\n",
+  "ru": "Колониальная империя страны [SCOPE.sCountry('un_dkt_subject').GetName] рухнула, и каждая делегация спрашивает, чья будет следующей.\\n\\n"
+ },
+ "un_events.12.d_colonial": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a declaration calling for an immediate end to colonialism. [ROOT.GetCountry.GetName] holds dependencies of its own, and the declaration would be aimed at us among others. Its sponsors hold that every colonial relationship is exploitation. Nothing has been tabled yet.",
+  "ru": "Недавно получившие независимость нации настаивают, чтобы Генеральная Ассамблея рассмотрела декларацию, призывающую к немедленному прекращению колониализма. У страны [ROOT.GetCountry.GetName] есть собственные зависимые территории, и декларация была бы направлена в том числе против нас. Её авторы считают, что любые колониальные отношения — это эксплуатация. Пока ничего не внесено."
+ },
+ "un_events.12.d_council": {
+  "en": "Newly independent nations are pressing for the General Assembly to take up a declaration on the end of colonialism, a cause our revolutionary [Concept('concept_power_bloc_principle', 'principles')] have always upheld. Nothing has been tabled yet. Our delegation could table it, and make the colonial powers answer for what they took.",
+  "ru": "Недавно получившие независимость нации настаивают, чтобы Генеральная Ассамблея рассмотрела декларацию о прекращении колониализма — дело, которое всегда отстаивали наши революционные [Concept('concept_power_bloc_principle','принципы')]. Пока ничего не внесено. Наша делегация могла бы внести её и заставить колониальные державы ответить за то, что они забрали."
+ },
+ "un_events.12.f": {
+  "en": "\\\"I speak in this hall for the first time, for a country that until recently was governed from abroad. For as long as anyone in my family remembers, our taxes were set by foreign officials, and our schools taught a history in which we appeared as a province of someone else's. We were told that all of this was preparation for self-government. Nobody told us when the preparation would end, and in the end we decided that for ourselves. I ask the Assembly to declare what every delegation here already knows: that no people should be governed without its consent, and that every territory still held in this way should be given a date for its independence.\\\"",
+  "ru": "«Я впервые выступаю в этом зале от имени страны, которой до недавнего времени управляли из-за границы. Сколько помнит моя семья, наши налоги устанавливали иностранные чиновники, а в наших школах преподавали историю, где мы выступали провинцией чужой страны. Нам говорили, что всё это подготовка к самоуправлению. Никто не сказал нам, когда подготовка закончится, и в конце концов мы решили это сами. Я прошу Ассамблею объявить то, что уже знает каждая делегация в этом зале: что ни один народ не должен управляться без своего согласия и что каждой территории, которую ещё так удерживают, должна быть назначена дата независимости.»"
+ },
+ "un_events.12.t": {
+  "en": "An End to Empire",
+  "ru": "Конец империям"
+ },
+ "un_events.14.a": {
+  "en": "Table the treaty before the General Assembly.",
+  "ru": "Внести договор на рассмотрение Генеральной Ассамблеи."
+ },
+ "un_events.14.c": {
+  "en": "We will not give up the right to the bomb.",
+  "ru": "Мы не откажемся от права на бомбу."
+ },
+ "un_events.14.d": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, a binding agreement to stop the spread of nuclear weapons and to work toward disarmament. Nothing is before the General Assembly yet: we could table it. [ROOT.GetCountry.GetName] has no nuclear arsenal, and the treaty would protect us from rivals who might build one.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на Договоре о нераспространении ядерного оружия — обязательном соглашении, чтобы остановить распространение ядерного оружия и работать над разоружением. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести договор. У страны [ROOT.GetCountry.GetName] нет ядерного арсенала, и договор защитил бы нас от соперников, которые могли бы его создать."
+ },
+ "un_events.14.d_aspiring": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. Our [concept_nuclear_program] is underway but not yet complete. The treaty's parties have their programs inspected and slowed, and once the United Nations grows strong, no member without the bomb, party or not, may keep one at all.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на Договоре о нераспространении ядерного оружия, и Генеральной Ассамблее пока ничего не представлено. Наша [concept_nuclear_program|l] идёт, но ещё не завершена. Программы участников договора инспектируются и замедляются, а когда Организация Объединённых Наций окрепнет, ни один член без бомбы, участник договора или нет, не сможет держать её вовсе."
+ },
+ "un_events.14.d_cause_other": {
+  "en": "[SCOPE.sCountry('un_dkt_subject').GetName] has built its first nuclear weapon, and the Assembly means to stop the next.\\n\\n",
+  "ru": "Страна [SCOPE.sCountry('un_dkt_subject').GetName] создала своё первое ядерное оружие, и Ассамблея намерена не допустить следующего.\\n\\n"
+ },
+ "un_events.14.d_cause_self": {
+  "en": "Our first nuclear weapon has the whole Assembly talking, and the talk is of making sure there is never another new nuclear power.\\n\\n",
+  "ru": "Наше первое ядерное оружие занимает всю Ассамблею, и разговор идёт о том, чтобы больше никогда не появилось новой ядерной державы.\\n\\n"
+ },
+ "un_events.14.d_nuclear": {
+  "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. [ROOT.GetCountry.GetName] holds nuclear weapons. The treaty would recognize our arsenal and hold rivals back from building their own, and it would bind us to its terms.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на Договоре о нераспространении ядерного оружия, и Генеральной Ассамблее пока ничего не представлено. Страна [ROOT.GetCountry.GetName] обладает ядерным оружием. Договор признал бы наш арсенал и удержал бы соперников от создания собственного, но связал бы нас своими условиями."
+ },
+ "un_events.14.f": {
+  "en": "Our delegation's summary of the draft treaty, for the government:\\n\\nStates that hold nuclear weapons may not give them, or the means to make them, to any other state.\\nStates that do not hold them undertake never to build or acquire them, and open their reactors and laboratories to inspection so that the other parties can see the promise kept.\\nEvery party may use nuclear energy for peaceful purposes, and parties with the knowledge are to share it with the rest.\\nStates that hold weapons undertake to negotiate in good faith toward disarmament, though the draft sets no date by which it must be done.\\nA party may withdraw on three months' notice if it judges its supreme interests to be in danger, and must give its reasons.",
+  "ru": "Резюме проекта договора от нашей делегации для правительства:\\n\\nГосударства, обладающие ядерным оружием, не могут передавать его или средства его изготовления никакому другому государству.\\nГосударства, не обладающие им, обязуются никогда не создавать и не приобретать его и открывают свои реакторы и лаборатории для инспекций, чтобы другие участники видели выполнение обещания.\\nКаждый участник вправе использовать ядерную энергию в мирных целях, а участники, обладающие знаниями, должны делиться ими с остальными.\\nГосударства, обладающие оружием, обязуются добросовестно вести переговоры о разоружении, хотя проект не назначает срока, к которому оно должно быть завершено.\\nУчастник может выйти из договора с уведомлением за три месяца, если сочтёт, что его высшим интересам грозит опасность, и обязан изложить свои причины."
+ },
+ "un_events.14.t": {
+  "en": "Nuclear Non-Proliferation Treaty",
+  "ru": "Договор о нераспространении ядерного оружия"
+ },
+ "un_events.15.a": {
+  "en": "Accept international arbitration.",
+  "ru": "Принять международный арбитраж."
+ },
+ "un_events.15.b": {
+  "en": "Negotiate a bilateral deal.",
+  "ru": "Договориться на двусторонней основе."
+ },
+ "un_events.15.c": {
+  "en": "Impose unilateral tariffs.",
+  "ru": "Ввести односторонние пошлины."
+ },
+ "un_events.15.d": {
+  "en": "A trade dispute between [ROOT.GetCountry.GetName] and [SCOPE.sCountry('trade_rival').GetName] has come before the United Nations for arbitration. Each side accuses the other of unfair practice: selling goods below cost, subsidizing its industries, and keeping out the other's goods by rules written for the purpose.",
+  "ru": "Торговый спор между страной [ROOT.GetCountry.GetName] и страной [SCOPE.sCountry('trade_rival').GetName] передан на арбитраж в Организацию Объединённых Наций. Каждая сторона обвиняет другую в недобросовестной практике: продаже товаров ниже себестоимости, субсидировании своей промышленности и недопуске чужих товаров правилами, написанными для этой цели."
+ },
+ "un_events.15.d_command": {
+  "en": "A trade dispute with [SCOPE.sCountry('trade_rival').GetName] has come before the United Nations. Under our command economy the state sets prices, and to a free-market eye our prices look like dumping. Our rivals call the whole arrangement unfair.",
+  "ru": "Торговый спор со страной [SCOPE.sCountry('trade_rival').GetName] передан в Организацию Объединённых Наций. При нашей командной экономике цены устанавливает государство, и взгляду сторонника свободного рынка наши цены кажутся демпингом. Наши соперники называют несправедливым весь этот порядок."
+ },
+ "un_events.15.d_embargo": {
+  "en": "\\n\\nAt the heart of the dispute is an embargo between us and [SCOPE.sCountry('trade_rival').GetName], both members of the United Nations, and the General Assembly has put it on its docket.",
+  "ru": "\\n\\nВ основе спора лежит эмбарго между нами и страной [SCOPE.sCountry('trade_rival').GetName], обеими членами Организации Объединённых Наций, и Генеральная Ассамблея внесла его в свою повестку."
+ },
+ "un_events.15.d_protectionist": {
+  "en": "A trade dispute with [SCOPE.sCountry('trade_rival').GetName] has come before the United Nations. Our protective tariffs, meant to shelter our own industry while it grows, are being argued against as a breach of free trade.",
+  "ru": "Торговый спор со страной [SCOPE.sCountry('trade_rival').GetName] передан в Организацию Объединённых Наций. Наши защитные пошлины, призванные укрыть нашу промышленность, пока она растёт, оспариваются как нарушение свободной торговли."
+ },
+ "un_events.15.f": {
+  "en": "Before the hearing, our trade attaché met the manufacturers who had asked the government to bring the case.\\n\\n\\\"Their goods sell here for less than ours cost to make. No factory of ours can match that price and still pay its workers.\\\"\\n\\n\\\"Their workers are paid a fraction of what yours are, and that is most of the difference. The arbitrators will ask whether that is unfair or only cheaper, and I do not know what they will answer.\\\"\\n\\n\\\"Their government pays part of the freight and lends to their firms at no interest. I have the shipping invoices and the loan papers to show it.\\\"\\n\\n\\\"Then that is the case we bring. Leave the wages out of it, send me the invoices and the loan papers by tomorrow, and I will put them before the panel.\\\"",
+  "ru": "Перед слушанием наш торговый атташе встретился с производителями, которые просили правительство возбудить дело.\\n\\n«Их товары продаются здесь дешевле, чем нам стоит их производство. Ни одна наша фабрика не выдержит такой цены и при этом будет платить рабочим.»\\n\\n«Их рабочим платят долю того, что получают ваши, и это большая часть разницы. Арбитры спросят, несправедливо это или просто дешевле, и я не знаю, что они ответят.»\\n\\n«Их правительство оплачивает часть фрахта и кредитует их фирмы без процентов. У меня есть накладные на перевозку и кредитные бумаги, которые это доказывают.»\\n\\n«Тогда это и есть наше дело. Оставьте зарплаты в стороне, пришлите мне накладные и кредитные бумаги к завтрашнему дню, и я представлю их коллегии.»"
+ },
+ "un_events.15.t": {
+  "en": "A Quarrel Over Trade",
+  "ru": "Торговая распря"
+ },
+ "un_events.16.a": {
+  "en": "Table a pandemic preparedness convention.",
+  "ru": "Внести конвенцию о готовности к пандемиям."
+ },
+ "un_events.16.c": {
+  "en": "Our people come first.",
+  "ru": "Наши люди прежде всего."
+ },
+ "un_events.16.d": {
+  "en": "Public-health experts warn that modern travel could carry a new disease across continents within weeks, and delegations at the United Nations are pressing for a pandemic preparedness convention: shared medical data, pooled research, a global stockpile of treatments, and a world health agency to coordinate them. Nothing is before the General Assembly yet: we could table it.",
+  "ru": "Эксперты по общественному здравоохранению предупреждают, что современные поездки могут за недели разнести новую болезнь по континентам, и делегации в Организации Объединённых Наций настаивают на конвенции о готовности к пандемиям: общие медицинские данные, совместные исследования, мировой запас средств лечения и всемирное агентство здравоохранения для их координации. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию."
+ },
+ "un_events.16.d_authoritarian": {
+  "en": "Delegations at the United Nations are pressing for a pandemic preparedness convention and a world health agency to coordinate it. For [ROOT.GetCountry.GetName], our centralized system already lets us impose quarantines and direct production faster than most democracies can, and sharing our data would mean showing others where we are weak. Nothing is before the General Assembly yet: we could table it.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на конвенции о готовности к пандемиям и всемирном агентстве здравоохранения для её координации. Для страны [ROOT.GetCountry.GetName] наша централизованная система уже позволяет вводить карантин и направлять производство быстрее, чем большинство демократий, а обмен нашими данными означал бы показать другим, где мы слабы. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию."
+ },
+ "un_events.16.d_liberal": {
+  "en": "Delegations at the United Nations are pressing for a pandemic preparedness convention and a world health agency to coordinate it. In [ROOT.GetCountry.GetName] the question is already being debated in public, and voters expect us to act before the next outbreak, not after it. Nothing is before the General Assembly yet: we could table it.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на конвенции о готовности к пандемиям и всемирном агентстве здравоохранения для её координации. В стране [ROOT.GetCountry.GetName] вопрос уже публично обсуждается, и избиратели ждут, что мы будем действовать до следующей вспышки, а не после неё. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию."
+ },
+ "un_events.16.f": {
+  "en": "To the government, from the physicians who ran the outbreak exercise. We modeled a new disease arriving with a traveler from abroad. In our model it had reached three other countries before a laboratory here confirmed the first case, because the early cases looked like an ordinary fever and were treated as one. By the time it was confirmed it was in every large city. The countries that saw it first held what we most needed: how it spread, how long it lay hidden, and which treatments failed. None of it reached us, because no agreement required it to be shared. We recommend that the government support a convention that makes such sharing routine. Our full report and the model's figures are attached.",
+  "ru": "Правительству, от врачей, проводивших учения по вспышке болезни. Мы смоделировали новую болезнь, прибывшую с путешественником из-за границы. В нашей модели она добралась до трёх других стран, прежде чем здешняя лаборатория подтвердила первый случай, потому что первые случаи выглядели как обычная лихорадка и лечились как она. К моменту подтверждения болезнь была в каждом большом городе. Страны, увидевшие её первыми, располагали самым нужным нам: как она распространялась, как долго оставалась скрытой и какие методы лечения не помогали. Ничто из этого до нас не дошло, потому что никакое соглашение не требовало этим делиться. Рекомендуем правительству поддержать конвенцию, делающую такой обмен обычным делом. Наш полный отчёт и цифры модели прилагаются."
+ },
+ "un_events.16.t": {
+  "en": "Before the Next Outbreak",
+  "ru": "Перед следующей вспышкой"
+ },
+ "un_events.17.a": {
+  "en": "Propose binding targets to the General Assembly.",
+  "ru": "Предложить Генеральной Ассамблее обязательные цели."
+ },
+ "un_events.17.c": {
+  "en": "Economic growth comes first.",
+  "ru": "Экономический рост прежде всего."
+ },
+ "un_events.17.d": {
+  "en": "Delegations at the United Nations are pressing for a binding climate accord that would commit member states to set cuts in their emissions. The science behind it is settled, and the cost to industry would be high. Nothing is before the General Assembly yet: we could table it.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на обязательном климатическом соглашении, которое обязало бы государства-члены к определённым сокращениям выбросов. Научные основания у него неоспоримы, а цена для промышленности была бы высока. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести соглашение."
+ },
+ "un_events.17.d_cause_threshold": {
+  "en": "The world has warmed past another threshold, and the delegations of low-lying nations will not let the Assembly look away.\\n\\n",
+  "ru": "Мир потеплел сверх очередного порога, и делегации низинных стран не позволят Ассамблее отвернуться.\\n\\n"
+ },
+ "un_events.17.d_command": {
+  "en": "Delegations at the United Nations are pressing for binding climate targets, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], where the state directs production, compliance would mean rewriting our industrial plans from the top down. It would be a large undertaking, and one our planners are able to carry out.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на обязательных климатических целях, и Генеральной Ассамблее пока ничего не представлено. Для страны [ROOT.GetCountry.GetName], где производством руководит государство, соблюдение означало бы переписать наши промышленные планы сверху донизу. Это большое предприятие, но наши плановики способны его осуществить."
+ },
+ "un_events.17.d_laissez": {
+  "en": "Delegations at the United Nations are pressing for binding emissions targets that would require [ROOT.GetCountry.GetName] to change how its economy runs, and nothing is before the General Assembly yet. Industrialists are already lobbying against them, arguing that the targets would make our goods too expensive to compete.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на обязательных целях по выбросам, которые потребовали бы от страны [ROOT.GetCountry.GetName] изменить работу её экономики, и Генеральной Ассамблее пока ничего не представлено. Промышленники уже лоббируют против них, утверждая, что цели сделают наши товары слишком дорогими для конкуренции."
+ },
+ "un_events.17.f": {
+  "en": "\\\"I represent an island whose highest point is a few meters above the sea. My grandmother's house stood well back from the beach. The beach reaches its door now, and at the spring tides the water comes into the garden and kills what grows there. We have moved the school once and the burial ground once. We cannot move the island. I have heard the delegations in this Assembly say that they sympathize, and that their economies cannot change faster than they are changing. I am asking them to write a number into this accord and keep to it, because a number is the one thing my people can hold them to.\\\"",
+  "ru": "«Я представляю остров, высшая точка которого лишь на несколько метров поднимается над морем. Дом моей бабушки стоял далеко от пляжа. Теперь пляж подступает к его порогу, а при весенних приливах вода заходит в сад и губит всё, что там растёт. Мы уже один раз переносили школу и один раз кладбище. Остров перенести нельзя. Я слышал, как делегации в этой Ассамблее говорят, что сочувствуют и что их экономики не могут меняться быстрее, чем меняются. Я прошу их вписать в это соглашение число и держаться его, потому что число — единственное, чем мой народ может их связать.»"
+ },
+ "un_events.17.t": {
+  "en": "Binding Targets",
+  "ru": "Обязательные цели"
+ },
+ "un_events.18.a": {
+  "en": "Table a refugee convention before the Assembly.",
+  "ru": "Внести на рассмотрение Ассамблеи конвенцию о беженцах."
+ },
+ "un_events.18.c": {
+  "en": "Close the borders. Not our problem.",
+  "ru": "Закрыть границы. Это не наша проблема."
+ },
+ "un_events.18.d": {
+  "en": "\\n\\nDelegations at the United Nations are pressing for an international refugee convention: resettlement shared among the members, run by a UN refugee agency. Nothing is before the General Assembly yet. We could table it.",
+  "ru": "\\n\\nДелегации в Организации Объединённых Наций настаивают на международной конвенции о беженцах: переселение распределяется между членами и осуществляется агентством ООН по делам беженцев. Генеральной Ассамблее пока ничего не представлено. Мы могли бы внести конвенцию."
+ },
+ "un_events.18.d_closed": {
+  "en": "\\n\\nDelegations at the United Nations are pressing for a convention that would open the richest members to the displaced. For [ROOT.GetCountry.GetName], with our closed borders, that is unwelcome. Nothing is before the General Assembly yet: we could table it ourselves, leave it to another delegation, or make our position plain.",
+  "ru": "\\n\\nДелегации в Организации Объединённых Наций настаивают на конвенции, которая открыла бы богатейшие государства-члены для перемещённых лиц. Для страны [ROOT.GetCountry.GetName] с её закрытыми границами это нежелательно. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию сами, оставить это другой делегации или ясно изложить свою позицию."
+ },
+ "un_events.18.d_famine": {
+  "en": "Famine in [SCOPE.sCountry('refugee_source').GetName] has driven a great many people from their homes, and the camps along its borders are filling faster than aid can reach them.",
+  "ru": "Голод в стране [SCOPE.sCountry('refugee_source').GetName] выгнал из домов множество людей, и лагеря вдоль её границ заполняются быстрее, чем туда доходит помощь."
+ },
+ "un_events.18.d_hardship": {
+  "en": "Hardship in [SCOPE.sCountry('refugee_source').GetName] is driving its people abroad in growing numbers, and its neighbors are straining to receive them.",
+  "ru": "Лишения в стране [SCOPE.sCountry('refugee_source').GetName] гонят её людей за границу во всё большем числе, а её соседи с трудом их принимают."
+ },
+ "un_events.18.d_open": {
+  "en": "\\n\\nWith our open borders, [ROOT.GetCountry.GetName] is already a destination for many of them, and their numbers are testing our towns' means to house them. Delegations at the United Nations are pressing for a convention that would share resettlement among the members under a UN refugee agency. Nothing is before the General Assembly yet. We could table it.",
+  "ru": "\\n\\nПри наших открытых границах страна [ROOT.GetCountry.GetName] уже стала местом назначения для многих из них, и их число испытывает возможности наших городов по их размещению. Делегации в Организации Объединённых Наций настаивают на конвенции, которая распределила бы переселение между членами под началом агентства ООН по делам беженцев. Генеральной Ассамблее пока ничего не представлено. Мы могли бы внести конвенцию."
+ },
+ "un_events.18.d_war": {
+  "en": "The war in [SCOPE.sCountry('refugee_source').GetName] has driven a great many people from their homes, and the camps along its borders are filling faster than aid can reach them.",
+  "ru": "Война в стране [SCOPE.sCountry('refugee_source').GetName] выгнала из домов множество людей, и лагеря вдоль её границ заполняются быстрее, чем туда доходит помощь."
+ },
+ "un_events.18.f": {
+  "en": "At the registration table by the camp gate, the clerk wrote each family's name in the ledger, the number of people in it, and the place they had come from. Few had papers. Where there were none, the clerk wrote down what the eldest of the family said and marked the line with a cross, so that someone could check it later. The queue ran back past the water tanks and around the last row of tents. At noon a second clerk arrived with another ledger and took the half of the queue nearest the road. Each family left the table with a card bearing its number and the row where it would sleep, and went to wait outside the food tent.",
+  "ru": "За регистрационным столом у ворот лагеря служащий записывал в журнал фамилию каждой семьи, число людей в ней и место, откуда они пришли. Бумаги были у немногих. Где их не было, служащий записывал слова старшего в семье и ставил на строке крест, чтобы кто-нибудь мог проверить позже. Очередь тянулась мимо водяных цистерн и огибала последний ряд палаток. В полдень появился второй служащий с другим журналом и взял половину очереди, ближайшую к дороге. Каждая семья уходила от стола с карточкой, на которой были её номер и ряд, где она будет спать, и шла ждать у палатки с едой."
+ },
+ "un_events.18.t": {
+  "en": "No Way Home",
+  "ru": "Нет пути домой"
+ },
+ "un_events.19.a": {
+  "en": "Table a space cooperation treaty. To the stars together.",
+  "ru": "Внести договор о космическом сотрудничестве. К звёздам вместе."
+ },
+ "un_events.19.c": {
+  "en": "Space serves national interests.",
+  "ru": "Космос служит национальным интересам."
+ },
+ "un_events.19.d": {
+  "en": "Delegations at the United Nations are pressing for an international space cooperation treaty, under which the leading spacefaring nations would share their progress with those far behind, and weapons in orbit would be condemned. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], it is a chance to lead the work of every nation that goes into space.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на международном договоре о космическом сотрудничестве, по которому ведущие космические державы делились бы своими достижениями с теми, кто далеко позади, а оружие на орбите было бы осуждено. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести договор. Для страны [ROOT.GetCountry.GetName] это шанс возглавить работу каждой нации, выходящей в космос."
+ },
+ "un_events.19.d_authoritarian": {
+  "en": "Delegations at the United Nations are pressing for an international space cooperation treaty, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], space is as much a military and [concept_prestige] asset as a scientific one. Sharing it would compromise strategic advantages.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на международном договоре о космическом сотрудничестве, и Генеральной Ассамблее пока ничего не представлено. Для страны [ROOT.GetCountry.GetName] космос — столько же военный ресурс и ресурс [Concept('concept_prestige','престижа')], сколько научный. Делиться им значило бы поставить под угрозу стратегические преимущества."
+ },
+ "un_events.19.d_cause_world": {
+  "en": "Humanity has reached another world, and the question of who may claim the heavens can no longer wait.\\n\\n",
+  "ru": "Человечество достигло другого мира, и вопрос о том, кому позволено претендовать на небеса, больше не может ждать.\\n\\n"
+ },
+ "un_events.19.d_council": {
+  "en": "Delegations at the United Nations are pressing for international space cooperation, and nothing is before the General Assembly yet. For [ROOT.GetCountry.GetName], our progress in space shows what collective planning can do, and we will not easily share it with the bourgeois powers.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на международном космическом сотрудничестве, и Генеральной Ассамблее пока ничего не представлено. Для страны [ROOT.GetCountry.GetName] наш прогресс в космосе показывает, на что способно коллективное планирование, и мы нелегко поделимся им с буржуазными державами."
+ },
+ "un_events.19.f": {
+  "en": "From the joint planning group of the national space agencies, to the delegations considering the cooperation treaty. We were asked what the agencies represented here could build together that none could build alone. A station in orbit, assembled from modules that several countries launch in turn, is within reach if the parties agree on common docking fittings and a shared schedule of launches. The countries furthest behind would supply crews, scientists and tracking stations from the start, and would receive the designs as the work proceeds. We have not settled who would command the station or whose law would apply aboard it. Those are questions for the treaty, not for engineers. Our technical annex is attached.",
+  "ru": "От совместной группы планирования национальных космических агентств делегациям, рассматривающим договор о сотрудничестве. Нас спросили, что могли бы построить вместе представленные здесь агентства, чего не построило бы ни одно из них в одиночку. Орбитальная станция, собранная из модулей, которые по очереди запускают несколько стран, вполне достижима, если стороны согласуют общие стыковочные узлы и единый график запусков. Страны, отставшие больше всех, с самого начала предоставляли бы экипажи, учёных и станции слежения и получали бы чертежи по ходу работы. Мы не решили, кто будет командовать станцией и чьи законы будут действовать на её борту. Это вопросы для договора, а не для инженеров. Наше техническое приложение прилагается."
+ },
+ "un_events.19.t": {
+  "en": "Together in Orbit",
+  "ru": "Вместе на орбите"
+ },
+ "un_events.2.a": {
+  "en": "Table a resolution condemning [SCOPE.sCountry('condemned_country').GetName].",
+  "ru": "Внести резолюцию с осуждением страны [SCOPE.sCountry('condemned_country').GetName]."
+ },
+ "un_events.2.b": {
+  "en": "Call for sanctions against [SCOPE.sCountry('condemned_country').GetName].",
+  "ru": "Призвать к санкциям против страны [SCOPE.sCountry('condemned_country').GetName]."
+ },
+ "un_events.2.c": {
+  "en": "Ask the Assembly for peacekeepers.",
+  "ru": "Просить Ассамблею о миротворцах."
+ },
+ "un_events.2.court": {
+  "en": "Bring a case before the World Court.",
+  "ru": "Возбудить дело во Всемирном суде."
+ },
+ "un_events.2.court_tt": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] will be summoned before the World Court. No vote is held and no grounds are needed.",
+  "ru": "Страна [SCOPE.sCountry('condemned_country').GetName] будет вызвана во Всемирный суд. Голосования не проводится, оснований не требуется."
+ },
+ "un_events.2.d": {
+  "en": "The General Assembly has put the conduct of [SCOPE.sCountry('condemned_country').GetName] on its docket, and it has fallen to us to decide whether the Assembly acts.",
+  "ru": "Генеральная Ассамблея внесла в свою повестку поведение страны [SCOPE.sCountry('condemned_country').GetName], и нам предстоит решить, будет ли Ассамблея действовать."
+ },
+ "un_events.2.d_covert": {
+  "en": "An operation run by [SCOPE.sCountry('condemned_country').GetAdjective] intelligence has been exposed. The affair is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "ru": "Раскрыта операция, за которой стоит [SCOPE.sCountry('condemned_country').GetAdjective] шпионаж. Дело внесено в повестку Генеральной Ассамблеи, и нам, как члену, заинтересованному в этом вопросе, предстоит решить, будет ли Ассамблея действовать."
+ },
+ "un_events.2.d_covert_ours": {
+  "en": "An operation run against us by [SCOPE.sCountry('condemned_country').GetAdjective] intelligence has been exposed. The General Assembly has put the affair on its docket, and as the injured party we have the first word: we may ask the members to condemn it, call for sanctions, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "ru": "Раскрыта операция против нас, за которой стоит [SCOPE.sCountry('condemned_country').GetAdjective] шпионаж. Генеральная Ассамблея внесла дело в свою повестку, и как пострадавшая сторона мы имеем первое слово: мы можем просить членов осудить его, призвать к санкциям, привлечь страну [SCOPE.sCountry('condemned_country').GetName] к ответу во Всемирном суде или оставить вопрос Совету."
+ },
+ "un_events.2.d_grounds": {
+  "en": "\\n\\nThe Assembly's file on [SCOPE.sCountry('condemned_country').GetName] gives a case of #v [SCOPE.sCountry('condemned_country').MakeScope.ScriptValue('un_case_strength')|0]#! out of 100. A condemnation needs 30, sanctions 50. A case before the World Court needs no grounds, but the accused must be a member.",
+  "ru": "\\n\\nДосье Ассамблеи на страну [SCOPE.sCountry('condemned_country').GetName] оценивает дело в #v [SCOPE.sCountry('condemned_country').MakeScope.ScriptValue('un_case_strength')|0]#! из 100. Для осуждения нужно 30, для санкций 50. Для дела во Всемирном суде оснований не требуется, но обвиняемый должен быть членом."
+ },
+ "un_events.2.d_nuclear": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has used a nuclear weapon. The strike is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "ru": "Страна [SCOPE.sCountry('condemned_country').GetName] применила ядерное оружие. Удар внесён в повестку Генеральной Ассамблеи, и нам, как члену, заинтересованному в этом вопросе, предстоит решить, будет ли Ассамблея действовать."
+ },
+ "un_events.2.d_nuclear_ours": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has used a nuclear weapon against us. The General Assembly has put the strike on its docket, and as the injured party we have the first word: we may ask the members to condemn it, call for sanctions, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "ru": "Страна [SCOPE.sCountry('condemned_country').GetName] применила ядерное оружие против нас. Генеральная Ассамблея внесла удар в свою повестку, и как пострадавшая сторона мы имеем первое слово: мы можем просить членов осудить его, призвать к санкциям, привлечь страну [SCOPE.sCountry('condemned_country').GetName] к ответу во Всемирном суде или оставить вопрос Совету."
+ },
+ "un_events.2.d_place": {
+  "en": "\\n\\nThe worst of the devastation is in [SCOPE.sState('un_dkt_place').GetName].",
+  "ru": "\\n\\nСамые тяжёлые разрушения — в области [SCOPE.sState('un_dkt_place').GetName]."
+ },
+ "un_events.2.d_war": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has waged a war of aggression on a member of the United Nations for months, and left devastation behind it. The war is on the General Assembly's docket, and it has fallen to us, as a member with a stake in the matter, to decide whether the Assembly acts.",
+  "ru": "Страна [SCOPE.sCountry('condemned_country').GetName] месяцами ведёт агрессивную войну против члена Организации Объединённых Наций и оставляет за собой разруху. Война внесена в повестку Генеральной Ассамблеи, и нам, как члену, заинтересованному в этом вопросе, предстоит решить, будет ли Ассамблея действовать."
+ },
+ "un_events.2.d_war_ours": {
+  "en": "[SCOPE.sCountry('condemned_country').GetName] has waged war on us for months, and parts of our country lie in ruins. The General Assembly has put the war on its docket, and as the member attacked we have the first word: we may ask the members to condemn the aggression, call for sanctions, ask for peacekeepers, take [SCOPE.sCountry('condemned_country').GetName] before the World Court, or leave the matter to the Council.",
+  "ru": "Страна [SCOPE.sCountry('condemned_country').GetName] месяцами воюет с нами, и части нашей страны лежат в руинах. Генеральная Ассамблея внесла войну в свою повестку, и как нападению подвергшийся член мы имеем первое слово: мы можем просить членов осудить агрессию, призвать к санкциям, просить о миротворцах, привлечь страну [SCOPE.sCountry('condemned_country').GetName] к ответу во Всемирном суде или оставить вопрос Совету."
+ },
+ "un_events.2.e": {
+  "en": "Leave the matter to the Council.",
+  "ru": "Оставить вопрос Совету."
+ },
+ "un_events.2.f": {
+  "en": "\\\"I run the documents desk outside the chamber. We made copies of the Assembly's file on the accused for every delegation, and by ten o'clock they were gone. The clerks are copying more by hand.\\\"\\n\\n\\\"I am the most junior member of my delegation. My instructions are to listen, take notes and say nothing until the vote is called. I have read the file twice, and I have written to ask whether I may say something.\\\"\\n\\n\\\"The accused's delegation is in the lounge, shaking hands with anyone who will stop. Some of the other delegations walk past them. Others sit down and ask what they are offering.\\\"\\n\\n\\\"I have covered this Assembly for my newspaper for years. A condemnation needs grounds, and the file has some. I am writing up what is in it for tomorrow's paper.\\\"",
+  "ru": "«Я заведую столом документов у зала. Мы сделали копии досье Ассамблеи на обвиняемого для каждой делегации, и к десяти часам они кончились. Служащие переписывают ещё от руки.»\\n\\n«Я самый младший член своей делегации. Мои инструкции — слушать, делать заметки и молчать, пока не объявят голосование. Я прочёл досье дважды и написал с просьбой разрешить мне высказаться.»\\n\\n«Делегация обвиняемого сидит в холле и жмёт руки всем, кто остановится. Некоторые другие делегации проходят мимо. Другие садятся и спрашивают, что те предлагают.»\\n\\n«Я много лет освещаю эту Ассамблею для своей газеты. Для осуждения нужны основания, и в досье они есть. Я пишу, что там содержится, для завтрашнего номера.»"
+ },
+ "un_events.2.g": {
+  "en": "It is not our quarrel.",
+  "ru": "Это не наша ссора."
+ },
+ "un_events.2.pass_tt": {
+  "en": "The matter passes to a member with a stake in it, which may take it up in our place.",
+  "ru": "Вопрос переходит к члену, заинтересованному в нём, который может взяться за него вместо нас."
+ },
+ "un_events.2.t": {
+  "en": "An Appeal to the Assembly",
+  "ru": "Обращение к Ассамблее"
+ },
+ "un_events.2.t_ours": {
+  "en": "We Appeal to the Assembly",
+  "ru": "Мы обращаемся к Ассамблее"
+ },
+ "un_events.20.a": {
+  "en": "Condemn the walkout. Rally the members who stayed.",
+  "ru": "Осудить демарш. Сплотить оставшихся членов."
+ },
+ "un_events.20.b": {
+  "en": "Call for dialogue and reconciliation.",
+  "ru": "Призвать к диалогу и примирению."
+ },
+ "un_events.20.c": {
+  "en": "Stand with them, though we keep our seat.",
+  "ru": "Встать на их сторону, хотя мы сохраним своё место."
+ },
+ "un_events.20.d": {
+  "en": "The delegation of [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations and renounced its membership, accusing the Assembly of bias and hypocrisy. The other great powers that remain must decide how to answer it.",
+  "ru": "Делегация страны [SCOPE.sCountry('walkout_leader').GetName] демонстративно покинула Организацию Объединённых Наций и отказалась от членства, обвинив Ассамблею в предвзятости и лицемерии. Остальным великим державам предстоит решить, как ответить."
+ },
+ "un_events.20.d_authoritarian": {
+  "en": "The regime in [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations altogether, accusing the institution of meddling in sovereign affairs.",
+  "ru": "Режим страны [SCOPE.sCountry('walkout_leader').GetName] демонстративно покинул Организацию Объединённых Наций, обвинив институт во вмешательстве в суверенные дела."
+ },
+ "un_events.20.d_council": {
+  "en": "The council republic of [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations. On the way out, the [SCOPE.sCountry('walkout_leader').GetAdjective] ambassador denounced the institution as a tool of capitalist hegemony.",
+  "ru": "Советская республика страны [SCOPE.sCountry('walkout_leader').GetName] демонстративно покинула Организацию Объединённых Наций. Уходя, [SCOPE.sCountry('walkout_leader').GetAdjective] посол заклеймил институт как орудие капиталистической гегемонии."
+ },
+ "un_events.20.d_hq": {
+  "en": "\\n\\nThe walkout took place at the UN headquarters in [SCOPE.sState('un_hq_state').GetCityHubName], and the delegation's seats in the hall are empty.",
+  "ru": "\\n\\nДемарш произошёл в штаб-квартире ООН в городе [SCOPE.sState('un_hq_state').GetCityHubName], и места делегации в зале пусты."
+ },
+ "un_events.20.d_theocratic": {
+  "en": "[SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations, condemning the institution for promoting values incompatible with divine law.",
+  "ru": "Страна [SCOPE.sCountry('walkout_leader').GetName] демонстративно покинула Организацию Объединённых Наций, осудив институт за продвижение ценностей, несовместимых с божественным законом."
+ },
+ "un_events.20.f": {
+  "en": "\\\"I clean the hall after the evening session. Their name cards were still on the desks, so I asked the Secretariat what to do with them. They told me to leave them where they are for now.\\\"\\n\\n\\\"We were in the middle of a vote on the agenda when their delegation stood up. They did not say anything. They picked up their papers and went out by the side door, and the vote went on without them.\\\"\\n\\n\\\"My instructions came an hour later: condemn it, call for talks, or side with them, as the capital decides tonight. I have a draft of each in my case.\\\"\\n\\n\\\"Their staff were still in the building at closing time, packing the archive into boxes. One of them told me they had orders to keep paying the rent on their offices until the end of the year.\\\"",
+  "ru": "«Я убираю зал после вечернего заседания. Их именные таблички всё ещё стояли на столах, и я спросил секретариат, что с ними делать. Мне сказали пока оставить как есть.»\\n\\n«Мы были посреди голосования по повестке, когда их делегация встала. Они ничего не сказали. Они взяли бумаги и вышли через боковую дверь, а голосование продолжилось без них.»\\n\\n«Через час пришли мои инструкции: осудить, призвать к переговорам или встать на их сторону — как решит сегодня вечером столица. В портфеле у меня заготовка на каждый случай.»\\n\\n«Их сотрудники ещё были в здании в час закрытия и укладывали архив в коробки. Один из них сказал мне, что им приказано продолжать платить за аренду их офисов до конца года.»"
+ },
+ "un_events.20.t": {
+  "en": "Empty Seats",
+  "ru": "Пустые места"
+ },
+ "un_events.21.a": {
+  "en": "Propose the Convention to the General Assembly.",
+  "ru": "Внести Конвенцию на рассмотрение Генеральной Ассамблеи."
+ },
+ "un_events.21.c": {
+  "en": "We will not hand our disputes to a foreign tribunal.",
+  "ru": "Мы не передадим свои споры иностранному трибуналу."
+ },
+ "un_events.21.d": {
+  "en": "The United Nations is drafting a convention to codify the law of the sea: territorial waters, exclusive economic zones and freedom of navigation. For [ROOT.GetCountry.GetName], it could mean secure trade routes and disputes at sea settled by arbitration. It would also mean giving an international tribunal the last word in those disputes.",
+  "ru": "Организация Объединённых Наций разрабатывает конвенцию, кодифицирующую морское право: территориальные воды, исключительные экономические зоны и свободу судоходства. Для страны [ROOT.GetCountry.GetName] она могла бы означать надёжные торговые пути и споры на море, разрешаемые арбитражем. Она также означала бы, что последнее слово в этих спорах остаётся за международным трибуналом."
+ },
+ "un_events.21.d_naval": {
+  "en": "As a [concept_great_power], [ROOT.GetCountry.GetName] has much at stake in the proposed Convention on the Law of the Sea. It would protect trade routes and set out exclusive economic zones, and it would also limit what any one power may do at sea on its own authority.",
+  "ru": "Как [Concept('concept_great_power','великая держава')], страна [ROOT.GetCountry.GetName] многим рискует в предлагаемой Конвенции по морскому праву. Она защитила бы торговые пути и установила бы исключительные экономические зоны, но и ограничила бы то, что любая держава может делать на море по собственной воле."
+ },
+ "un_events.21.f": {
+  "en": "Two delegates were waiting outside the committee room where the chart of the proposed zones hung on the wall.\\n\\n\\\"Two hundred nautical miles from every coast. Draw that around every island on the chart and half the sea our fishing fleets work becomes somebody else's zone.\\\"\\n\\n\\\"Half of it was ours already in all but name, and your fleets fished it anyway. Our coast has been fished out by boats flying every flag on that chart. A zone at least tells us whose boats we may stop.\\\"\\n\\n\\\"And then every quarrel over a boat becomes a quarrel between governments.\\\"\\n\\n\\\"That is what the tribunal is for. I would rather argue with your fleets before judges than at sea, and I expect your government would too. Put your objection in writing and I will take it to the drafting committee.\\\"",
+  "ru": "Два делегата ждали у зала комитета, где на стене висела карта предлагаемых зон.\\n\\n«Двести морских миль от каждого берега. Проведите это вокруг каждого острова на карте, и половина моря, где работают наши рыболовные флоты, станет чьей-то чужой зоной.»\\n\\n«Половина её и так была нашей во всём, кроме названия, а ваши флоты всё равно там ловили. Наш берег выловлен лодками под всеми флагами на этой карте. Зона по крайней мере говорит нам, чьи лодки мы можем останавливать.»\\n\\n«А тогда каждая ссора из-за лодки становится ссорой между правительствами.»\\n\\n«Для этого и нужен трибунал. Я лучше поспорю с вашими флотами перед судьями, чем в море, и думаю, ваше правительство тоже. Изложите своё возражение письменно, и я передам его редакционному комитету.»"
+ },
+ "un_events.22.a": {
+  "en": "Propose the Rome Statute to the General Assembly.",
+  "ru": "Внести Римский статут на рассмотрение Генеральной Ассамблеи."
+ },
+ "un_events.22.c": {
+  "en": "We will not submit our soldiers to foreign courts.",
+  "ru": "Мы не отдадим наших солдат иностранным судам."
+ },
+ "un_events.22.d": {
+  "en": "Delegates at the United Nations have drafted a statute for a permanent International Criminal Court with jurisdiction over genocide, war crimes and crimes against humanity. For [ROOT.GetCountry.GetName], joining would show that we accept such justice for ourselves. It would also mean that our citizens, soldiers among them, could be tried before a foreign court.",
+  "ru": "Делегаты в Организации Объединённых Наций подготовили статут постоянного Международного уголовного суда с юрисдикцией над геноцидом, военными преступлениями и преступлениями против человечности. Для страны [ROOT.GetCountry.GetName] присоединение показало бы, что мы принимаем такое правосудие для самих себя. Оно также означало бы, что наших граждан, в том числе солдат, могут судить в иностранном суде."
+ },
+ "un_events.22.d_atwar": {
+  "en": "[ROOT.GetCountry.GetName] is at war, and delegates at the United Nations have proposed a permanent International Criminal Court. Joining now would expose our commanders to investigation by a foreign tribunal for the conduct of this war.",
+  "ru": "Страна [ROOT.GetCountry.GetName] находится в состоянии войны, а делегаты в Организации Объединённых Наций предложили постоянный Международный уголовный суд. Присоединение сейчас подвергло бы наших командиров расследованию иностранным трибуналом за ведение этой войны."
+ },
+ "un_events.22.d_authoritarian": {
+  "en": "The United Nations has proposed an International Criminal Court to prosecute war crimes and crimes against humanity. For [ROOT.GetCountry.GetName], it would be a foreign court sitting in judgment on matters our own courts decide.",
+  "ru": "Организация Объединённых Наций предложила Международный уголовный суд для преследования военных преступлений и преступлений против человечности. Для страны [ROOT.GetCountry.GetName] это был бы иностранный суд, выносящий приговор по делам, которые решают наши собственные суды."
+ },
+ "un_events.22.f": {
+  "en": "\\\"The general staff has asked me, as the army's senior legal officer, what the statute would mean for our soldiers. It would reach a soldier of ours only if our own courts failed to try them for a crime the statute lists, or tried them only to clear them. That is the whole of its reach over a country that keeps its own courts in order. It cannot try a soldier for fighting in a war, only for killing prisoners or civilians, and for ordering it done. Our officers already swear to obey the laws of war, and the statute asks us to show that we enforce them. I have marked the articles on the responsibility of commanders, which bear on the general staff itself.\\\"",
+  "ru": "«Генеральный штаб спросил меня, старшего юриста армии, что статут будет значить для наших солдат. Он коснулся бы нашего солдата, только если бы наши собственные суды не судили его за преступление, которое перечисляет статут, или судили лишь для того, чтобы оправдать. Вот и весь его охват в отношении страны, которая держит свои суды в порядке. Он не может судить солдата за участие в войне, только за убийство пленных или гражданских лиц и за приказ об этом. Наши офицеры уже клянутся соблюдать законы войны, а статут просит нас показать, что мы их исполняем. Я отметил статьи об ответственности командиров, которые касаются самого генерального штаба.»"
+ },
+ "un_events.22.t": {
+  "en": "International Criminal Court",
+  "ru": "Международный уголовный суд"
+ },
+ "un_events.23.c": {
+  "en": "Our depots are our own business.",
+  "ru": "Наши склады — наше дело."
+ },
+ "un_events.23.d": {
+  "en": "Nuclear warheads have gone missing in the world, lost when arsenals changed hands, and the United Nations is drafting a convention to stop it happening again: every party would guard, count and report its nuclear material to a common standard, and search for what it has already lost. For [ROOT.GetCountry.GetName], that would mean a common standard applied in our own depots, and fewer warheads loose in the world.",
+  "ru": "В мире пропали ядерные боезаряды, потерянные при переходе арсеналов из рук в руки, и Организация Объединённых Наций разрабатывает конвенцию, чтобы этого не повторилось: каждый участник охранял бы, учитывал и сообщал о своих ядерных материалах по общему стандарту и искал бы то, что уже потеряно. Для страны [ROOT.GetCountry.GetName] это означало бы общий стандарт на наших собственных складах и меньше боезарядов, ходящих по миру без присмотра."
+ },
+ "un_events.23.d_struck": {
+  "en": "A stolen nuclear warhead has already been turned on [ROOT.GetCountry.GetName]. The United Nations is drafting a convention to make it the last: every party would guard, count and report its nuclear material to a common standard, and search for what it has already lost. Our delegation has been asked to table it.",
+  "ru": "Украденный ядерный боезаряд уже был направлен против страны [ROOT.GetCountry.GetName]. Организация Объединённых Наций разрабатывает конвенцию, чтобы это было в последний раз: каждый участник охранял бы, учитывал и сообщал о своих ядерных материалах по общему стандарту и искал бы то, что уже потеряно. Нашу делегацию попросили внести её."
+ },
+ "un_events.23.f": {
+  "en": "To the delegations, from the Secretariat's working group on nuclear material. Our inquiries have traced several of the warheads lost when arsenals changed hands. In each case we examined, the material left its store through a gap in the records rather than a breach in the fence: a transfer signed for and never received, or a count skipped when the guard changed. The draft convention asks every party to count its material to one standard, to report each count to the agency, and to treat a missing item as an emergency to be reported within days. It also asks the parties to help search for material already lost. We attach the draft and the cases on which it rests, and ask delegations to send their comments before the session.",
+  "ru": "Делегациям, от рабочей группы секретариата по ядерным материалам. Наши расследования проследили несколько боезарядов, потерянных при переходе арсеналов из рук в руки. В каждом изученном случае материал покидал хранилище через пробел в записях, а не через брешь в ограде: передача, подписанная, но не принятая, или пропущенный пересчёт при смене караула. Проект конвенции требует, чтобы каждый участник вёл учёт своих материалов по единому стандарту, сообщал о каждом пересчёте в агентство и считал пропажу любой единицы чрезвычайной ситуацией, о которой нужно сообщить в течение нескольких дней. Он также просит участников помогать в поисках уже потерянных материалов. Прилагаем проект и дела, на которых он основан, и просим делегации прислать замечания до сессии."
+ },
+ "un_events.23.t": {
+  "en": "Physical Protection of Nuclear Material",
+  "ru": "Физическая защита ядерного материала"
+ },
+ "un_events.3.a": {
+  "en": "Propose the declaration to the General Assembly.",
+  "ru": "Внести декларацию на рассмотрение Генеральной Ассамблеи."
+ },
+ "un_events.3.c": {
+  "en": "We will not be bound by this.",
+  "ru": "Мы не будем этим связаны."
+ },
+ "un_events.3.d": {
+  "en": "Delegations at the United Nations are pressing for a Universal Declaration of Human Rights, setting out the freedoms every state should guarantee to its people. Nothing is before the General Assembly yet: we could table the declaration ourselves. Some of its provisions may conflict with our own laws. Parties that run coercive resettlement programs at home would be penalized for it.",
+  "ru": "Делегации в Организации Объединённых Наций настаивают на Всеобщей декларации прав человека, излагающей свободы, которые каждое государство должно гарантировать своему народу. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести декларацию сами. Некоторые её положения могут противоречить нашим законам. Участники, проводящие у себя принудительные программы переселения, были бы за это наказаны."
+ },
+ "un_events.3.d_authoritarian": {
+  "en": "A committee has drafted a Universal Declaration of Human Rights, and delegations are pressing for someone to table it before the General Assembly. For [ROOT.GetCountry.GetName], where the state keeps order, many of these rights would be used by those who want to overturn the state. Opposing the declaration outright would cost us standing with most of the Assembly.",
+  "ru": "Комитет подготовил Всеобщую декларацию прав человека, и делегации настаивают, чтобы кто-нибудь внёс её в Генеральную Ассамблею. Для страны [ROOT.GetCountry.GetName], где порядок поддерживает государство, многими из этих прав воспользовались бы те, кто хочет государство свергнуть. Открытое выступление против декларации стоило бы нам авторитета среди большинства Ассамблеи."
+ },
+ "un_events.3.d_cause_war": {
+  "en": "The war between the great powers has only just ended, and the chamber is full of delegates who mean never to see another.\\n\\n",
+  "ru": "Война между великими державами только что закончилась, и зал полон делегатов, которые не хотят видеть другую.\\n\\n"
+ },
+ "un_events.3.d_council": {
+  "en": "Delegations are pressing for a Universal Declaration of Human Rights to be tabled before the General Assembly. For [ROOT.GetCountry.GetName], it affirms rights our revolution was fought to secure: work, education, social security. It also enshrines the civil liberties of the bourgeois order, which have long served to protect the property of the exploiting class.",
+  "ru": "Делегации настаивают, чтобы Всеобщая декларация прав человека была внесена в Генеральную Ассамблею. Для страны [ROOT.GetCountry.GetName] она подтверждает права, ради которых велась наша революция: на труд, образование, социальное обеспечение. Она также закрепляет гражданские свободы буржуазного порядка, давно служившие защите собственности эксплуататорского класса."
+ },
+ "un_events.3.d_theocratic": {
+  "en": "Delegations are pressing for a Universal Declaration of Human Rights to be tabled before the General Assembly. For [ROOT.GetCountry.GetName], where law derives from divine authority, some of its provisions agree with sacred teaching, such as the dignity of the person and the prohibition of torture. Others contradict it, above all the freedom to change one's religion.",
+  "ru": "Делегации настаивают, чтобы Всеобщая декларация прав человека была внесена в Генеральную Ассамблею. Для страны [ROOT.GetCountry.GetName], где закон происходит от божественной власти, одни её положения согласуются со священным учением, например достоинство личности и запрет пыток. Другие ему противоречат, прежде всего свобода менять религию."
+ },
+ "un_events.3.f": {
+  "en": "\\\"All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.\\\"\\n\\n— Universal Declaration of Human Rights, Article 1",
+  "ru": "«Все люди рождаются свободными и равными в своём достоинстве и правах. Они наделены разумом и совестью и должны поступать в отношении друг друга в духе братства.»\\n\\n— Всеобщая декларация прав человека, статья 1"
+ },
+ "un_events.3.t": {
+  "en": "Free and Equal",
+  "ru": "Свободные и равные"
+ },
+ "un_events.30.a": {
+  "en": "A dark day for the world.",
+  "ru": "Мрачный день для мира."
+ },
+ "un_events.30.b": {
+  "en": "Good riddance.",
+  "ru": "Скатертью дорога."
+ },
+ "un_events.30.d": {
+  "en": "Its [concept_un_authority] exhausted and its members gone their own ways, the United Nations has been dissolved. Its headquarters is being demolished, its agencies have lapsed, its conventions bind no one, and every mandate it issued is void.\\n\\nNo new organization can be founded for twenty years, and then only if the world's leading power does not stand in the way.",
+  "ru": "Её [concept_un_authority|l] исчерпан, а члены разошлись каждый своей дорогой: Организация Объединённых Наций распущена. Её штаб-квартира сносится, её агентства прекратили существование, её конвенции никого не связывают, а все выданные ею мандаты недействительны.\\n\\nНовая организация не может быть основана в течение двадцати лет, и тогда только если ведущая держава мира не станет на пути."
+ },
+ "un_events.30.f": {
+  "en": "The porters began on the top floor of the Secretariat building and worked their way down. They took the files from each office in the order the archivist had marked, tied each bundle with string and labeled it with the office's name and a number. The furniture went to a dealer who had bought it by the room. In the Assembly hall the name plates were unscrewed from the desks and packed into crates in the order the delegations had sat. By the end of the week only the archivist was left in the building, with a ledger saying where every crate had gone. The archivist locked the main doors at dusk and took the keys to the city offices.",
+  "ru": "Грузчики начали с верхнего этажа здания секретариата и спускались вниз. Они забирали папки из каждого кабинета в порядке, отмеченном архивариусом, связывали каждую стопку бечёвкой и подписывали названием кабинета и номером. Мебель ушла торговцу, купившему её комнатами. В зале Ассамблеи таблички отвинтили от столов и уложили в ящики в том порядке, в каком сидели делегации. К концу недели в здании остался только архивариус с журналом, где было записано, куда ушёл каждый ящик. На закате архивариус запер главные двери и отнёс ключи в городские службы."
+ },
+ "un_events.30.t": {
+  "en": "The United Nations Dissolves",
+  "ru": "Организация Объединённых Наций распускается"
+ },
+ "un_events.31.a": {
+  "en": "Join as a founding member.",
+  "ru": "Вступить в число основателей."
+ },
+ "un_events.31.a_tt": {
+  "en": "When the conference concludes, we join the new United Nations as a founding member and, as a [concept_great_power], stand for a permanent seat. Seats go to the great power members with the most [concept_prestige] when the signing period closes, a year after the founding.",
+  "ru": "Когда конференция завершится, мы вступим в новую Организацию Объединённых Наций как государство-основатель и, как [Concept('concept_great_power','великая держава')], будем претендовать на постоянное место. Места получают великие державы-члены с наибольшим [Concept('concept_prestige','престижем')] на момент закрытия периода подписания, через год после основания."
+ },
+ "un_events.31.b": {
+  "en": "Stay out, but let it be founded.",
+  "ru": "Остаться в стороне, но позволить основать её."
+ },
+ "un_events.31.b_tt": {
+  "en": "The new organization will be founded without us. We may join it later, as any country may.",
+  "ru": "Новая организация будет основана без нас. Мы сможем вступить в неё позже, как любая страна."
+ },
+ "un_events.31.c": {
+  "en": "Oppose the refounding.",
+  "ru": "Выступить против воссоздания."
+ },
+ "un_events.31.c_tt": {
+  "en": "#R The conference collapses.#! No new United Nations may be convened for ten years, and the world will remember who stopped it.",
+  "ru": "#R Конференция терпит крах.#! Новую Организацию Объединённых Наций нельзя созвать в течение десяти лет, и мир запомнит, кто этому помешал."
+ },
+ "un_events.31.d": {
+  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations, and every delegation is watching us. As the world's leading power, [ROOT.GetCountry.GetName] can join the new organization as a founding member or stay out of it. We could also oppose the refounding outright, which would end the conference and bar another for ten years.\\n\\nIf the conference goes ahead, the new UN is founded in a year: weak, under the founding charter, with no reforms and no agencies.",
+  "ru": "Страна [SCOPE.sCountry('un_conference_convener').GetName] созвала учредительную конференцию новой Организации Объединённых Наций, и каждая делегация смотрит на нас. Как ведущая держава мира, страна [ROOT.GetCountry.GetName] может вступить в новую организацию как государство-основатель или остаться вне её. Мы также можем открыто выступить против воссоздания, что прекратит конференцию и закроет путь для другой на десять лет.\\n\\nЕсли конференция состоится, новая ООН будет основана через год: слабая, на основании учредительного устава, без реформ и без агентств."
+ },
+ "un_events.31.f": {
+  "en": "Two of our senior diplomats sat over the convener's invitation late into the evening.\\n\\n\\\"Without our signature the other delegations will not sign, and they know it. We could ask for almost anything in the charter.\\\"\\n\\n\\\"We could, and they would remember what we asked while the organization was weak and we were not. A charter we bargained for at their expense is one they will spend the next twenty years trying to rewrite.\\\"\\n\\n\\\"Then we join and ask for nothing, and sit in an Assembly where the smallest state has the same vote as we do.\\\"\\n\\n\\\"Or we stay out, as we are entitled to, and join later on whatever terms they have written by then. I would rather be in the room while the terms are written, and I will say so to the government in the morning.\\\"",
+  "ru": "Два наших старших дипломата допоздна сидели над приглашением организатора.\\n\\n«Без нашей подписи другие делегации не подпишут, и они это знают. Мы могли бы потребовать в уставе почти что угодно.»\\n\\n«Могли бы, и они запомнили бы, что мы требовали, пока организация была слаба, а мы нет. Устав, выторгованный за их счёт, они потом двадцать лет будут пытаться переписать.»\\n\\n«Тогда мы вступим и ничего не попросим, и будем сидеть в Ассамблее, где у самого малого государства такой же голос, как у нас.»\\n\\n«Или останемся в стороне, как имеем право, и вступим позже на тех условиях, которые к тому времени будут написаны. Я бы предпочёл быть в комнате, пока пишутся условия, и скажу об этом правительству утром.»"
+ },
+ "un_events.32.a": {
+  "en": "They will regret this.",
+  "ru": "Они об этом пожалеют."
+ },
+ "un_events.32.d": {
+  "en": "Our founding conference is over before it began. [SCOPE.sCountry('un_conference_wrecker').GetName], the world's leading power, has come out against a new United Nations, and without it the delegations will not sign. No new conference may be convened for ten years.",
+  "ru": "Наша учредительная конференция закончилась, не начавшись. Страна [SCOPE.sCountry('un_conference_wrecker').GetName], ведущая держава мира, выступила против новой Организации Объединённых Наций, и без неё делегации не подпишут. Новую конференцию нельзя созвать в течение десяти лет."
+ },
+ "un_events.32.f": {
+  "en": "The conference staff had set the chairs out in a semicircle the night before, each with a small flag and a card bearing a delegation's name. In the morning the convener's secretary waited by the door with the list of delegations and a pen. By noon there were ticks beside a handful of names. The rest of the delegations sent their regrets by messenger, one after another through the afternoon, and the secretary filed each note in the folder behind the list. In the evening the porters stacked the chairs against the wall and folded the flags into a box, and the secretary carried the folder back to the government offices across the square.",
+  "ru": "Сотрудники конференции накануне вечером расставили стулья полукругом, у каждого — маленький флажок и карточка с названием делегации. Утром секретарь организатора ждал у двери со списком делегаций и ручкой. К полудню галочки стояли у горстки названий. Остальные делегации присылали свои сожаления с посыльными, одну за другой в течение всего дня, и секретарь подшивал каждую записку в папку за списком. Вечером грузчики сложили стулья у стены и убрали флажки в коробку, а секретарь отнёс папку в правительственные учреждения через площадь."
+ },
+ "un_events.32.t": {
+  "en": "The Conference Collapses",
+  "ru": "Конференция терпит крах"
+ },
+ "un_events.33.a": {
+  "en": "Hand the accused to the court",
+  "ru": "Выдать обвиняемого суду"
+ },
+ "un_events.33.a_tt": {
+  "en": "[SCOPE.sCharacter('un_icc_accused').GetFullName] is handed to the International Criminal Court and goes into exile. The next in line takes power.",
+  "ru": "[SCOPE.sCharacter('un_icc_accused').GetFullName] передаётся Международному уголовному суду и уходит в изгнание. К власти приходит следующий в очереди."
+ },
+ "un_events.33.b": {
+  "en": "The court has no authority here",
+  "ru": "У суда здесь нет власти"
+ },
+ "un_events.33.b_tt": {
+  "en": "[SCOPE.sCharacter('un_icc_accused').GetFullName] stays. The court's indictment stands, and the Assembly remembers who refused it.",
+  "ru": "[SCOPE.sCharacter('un_icc_accused').GetFullName] остаётся. Обвинительное заключение суда остаётся в силе, и Ассамблея запомнит, кто его отверг."
+ },
+ "un_events.33.d_jurisdiction": {
+  "en": " [ROOT.GetCountry.GetName] never ratified the court's statute, but the Assembly now claims the court's jurisdiction over every nation, and the world is watching to see whether we submit to it.",
+  "ru": " Страна [ROOT.GetCountry.GetName] никогда не ратифицировала статут суда, но теперь Ассамблея распространяет юрисдикцию суда на все государства, и мир наблюдает, подчинимся ли мы ей."
+ },
+ "un_events.33.d_nuclear": {
+  "en": "The prosecutor of the International Criminal Court has unsealed an indictment of [SCOPE.sCharacter('un_icc_accused').GetFullName] for the nuclear strike launched by [ROOT.GetCountry.GetAdjective] forces. The court asks that the accused be handed over to answer the charge.",
+  "ru": "Прокурор Международного уголовного суда рассекретил обвинительное заключение в отношении [SCOPE.sCharacter('un_icc_accused').GetFullName] за ядерный удар: его нанёс [ROOT.GetCountry.GetAdjective] контингент. Суд просит выдать обвиняемого, чтобы он ответил на обвинение."
+ },
+ "un_events.33.d_ratified": {
+  "en": " The world is watching to see whether [ROOT.GetCountry.GetName] honors a court it swore to recognize.",
+  "ru": " Мир наблюдает, будет ли страна [ROOT.GetCountry.GetName] уважать суд, который она поклялась признавать."
+ },
+ "un_events.33.d_regime_change": {
+  "en": "The prosecutor of the International Criminal Court has unsealed an indictment of [SCOPE.sCharacter('un_icc_accused').GetFullName] for the exposed plot to overthrow a foreign government. The court asks that the accused be handed over to answer the charge.",
+  "ru": "Прокурор Международного уголовного суда рассекретил обвинительное заключение в отношении [SCOPE.sCharacter('un_icc_accused').GetFullName] за раскрытый заговор с целью свержения иностранного правительства. Суд просит выдать обвиняемого, чтобы он ответил на обвинение."
+ },
+ "un_events.33.f": {
+  "en": "To the government of [ROOT.GetCountry.GetName], from the Registry of the International Criminal Court. The Prosecutor has applied for, and a chamber of three judges has issued, a warrant for the arrest of [SCOPE.sCharacter('un_icc_accused').GetFullName], who is to answer the charges set out in the attached indictment. The court asks the government to arrest the accused, to surrender them into the court's custody, and to inform the Registry within thirty days of what it has done. The accused will be entitled to counsel of their own choosing, to see the evidence against them, and to a public trial. If the government holds that the court lacks jurisdiction, it may say so to the court, which will hear the argument before any trial begins.",
+  "ru": "Правительству страны [ROOT.GetCountry.GetName], от канцелярии Международного уголовного суда. Прокурор запросил, а палата из трёх судей выдала ордер на арест: [SCOPE.sCharacter('un_icc_accused').GetFullName]. Обвинения, на которые обвиняемому предстоит ответить, изложены в прилагаемом обвинительном заключении. Суд просит правительство арестовать обвиняемого, передать его под стражу суда и в течение тридцати дней уведомить канцелярию о предпринятых действиях. Обвиняемый вправе иметь защитника по собственному выбору, знакомиться с доказательствами против него и на открытое судебное разбирательство. Если правительство считает, что суд не обладает юрисдикцией, оно может заявить об этом суду, который выслушает доводы до начала любого разбирательства."
+ },
+ "un_events.33.t": {
+  "en": "The Court Indicts Our Leader",
+  "ru": "Суд предъявляет обвинение нашему лидеру"
+ },
+ "un_events.34.a": {
+  "en": "They are right. We will leave.",
+  "ru": "Они правы. Мы выйдем."
+ },
+ "un_events.34.b": {
+  "en": "Buy their patience with concessions",
+  "ru": "Купить их терпение уступками"
+ },
+ "un_events.34.c": {
+  "en": "We stay, whatever they say",
+  "ru": "Мы остаёмся, что бы они ни говорили"
+ },
+ "un_events.34.d": {
+  "en": "The United Nations now enforces its resolutions, its embargoes are felt, and its dues are a levy on our wealth. To [SCOPE.gsInterestGroup('un_sov_ig').GetName] it is a foreign government in all but name. They are holding rallies and pressing their case at every level of government, demanding that [ROOT.GetCountry.GetName] take back its sovereignty and leave.",
+  "ru": "Организация Объединённых Наций теперь принуждает к исполнению своих резолюций, её эмбарго ощутимы, а её взносы ложатся налогом на наше богатство. Для группы интересов [SCOPE.gsInterestGroup('un_sov_ig').GetName] это иностранное правительство во всём, кроме названия. Её сторонники проводят митинги и отстаивают свою позицию на всех уровнях власти, требуя, чтобы страна [ROOT.GetCountry.GetName] вернула себе суверенитет и вышла."
+ },
+ "un_events.34.f": {
+  "en": "\\\"I have been asked to speak for everyone in this square who wants our country out of the United Nations. When we joined, we were told it was a place where nations could talk. Now it sets the dues we pay out of our taxes, tells us whom we may trade with, and passes resolutions we are expected to carry out whether we voted for them or not. Our government signed one charter, and the foreign delegations in that Assembly have been adding to it ever since. We have nothing against talking to other nations. We are asking our government for one thing: to give notice that we are leaving, and to bring our delegation home.\\\"",
+  "ru": "«Меня попросили выступить от имени каждого на этой площади, кто хочет, чтобы наша страна вышла из Организации Объединённых Наций. Когда мы вступали, нам говорили, что это место, где нации могут разговаривать. Теперь она устанавливает взносы, которые мы платим из наших налогов, указывает, с кем нам торговать, и принимает резолюции, которые мы обязаны выполнять, голосовали мы за них или нет. Наше правительство подписало один устав, а иностранные делегации в этой Ассамблее с тех пор ему дописывают. Мы ничего не имеем против разговоров с другими нациями. Мы просим наше правительство об одном: уведомить о выходе и вернуть нашу делегацию домой.»"
+ },
+ "un_events.34.t": {
+  "en": "Sovereignty First",
+  "ru": "Суверенитет прежде всего"
+ },
+ "un_events.35.a": {
+  "en": "Accept the facility and its conditions",
+  "ru": "Принять кредит и его условия"
+ },
+ "un_events.35.a_confidence_tt": {
+  "en": "#G Confidence in our banking system recovers somewhat#! (the financial cycle rises by 10).",
+  "ru": "#G Доверие к нашей банковской системе несколько восстанавливается#! (финансовый цикл растёт на 10)."
+ },
+ "un_events.35.a_tt": {
+  "en": "We receive @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! at once, and repay #v 110%#! of it over five years as a weekly expense. The conditions hold for as long.",
+  "ru": "Мы сразу получаем @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D]#! и возвращаем #v 110%#! этой суммы в течение пяти лет как еженедельный расход. Условия действуют столько же."
+ },
+ "un_events.35.b_tt": {
+  "en": "We refuse the facility and face the crisis with what we have.",
+  "ru": "Мы отказываемся от кредита и встречаем кризис с тем, что имеем."
+ },
+ "un_events.35.d": {
+  "en": "A financial crisis is running through the world's banks, and [ROOT.GetCountry.GetName] is caught in it: lenders will not lend to us at any rate the treasury can pay. The United Nations offers an emergency loan from the budget its members' dues provide: @money![ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D] now, repaid with interest over five years. The money comes with conditions written by the creditors, and they will cost the government support at home.",
+  "ru": "Финансовый кризис прокатывается по банкам мира, и страна [ROOT.GetCountry.GetName] попала в него: кредиторы не дадут нам взаймы ни под какой процент, который казна способна заплатить. Организация Объединённых Наций предлагает экстренный кредит из бюджета, формируемого взносами её членов: @money![ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D] сейчас, с возвратом с процентами в течение пяти лет. Деньги даются на условиях, написанных кредиторами, и они обойдутся правительству в поддержку внутри страны."
+ },
+ "un_events.35.f": {
+  "en": "The mission from the United Nations lending facility came to the treasury with four people and a single case of papers. Its head laid the conditions on the table one sheet at a time: spending to be cut by a fixed share, subsidies to end, and the books to be opened to the facility's auditors every quarter. Our most senior treasury official read each sheet and passed it to the clerk beside him. \\\"And if our people will not bear the cuts?\\\" he asked. \\\"Then the next payment waits until the cuts are made,\\\" the head of the mission said. \\\"The terms are the same for every borrower.\\\" The clerk made a copy of each sheet for the government, and the official began reading them again from the first.",
+  "ru": "Миссия кредитного механизма Организации Объединённых Наций пришла в казначейство с четырьмя людьми и одним портфелем бумаг. Её глава выкладывал условия на стол по одному листу: сокращение расходов на фиксированную долю, прекращение субсидий и открытие книг аудиторам механизма каждый квартал. Наш старший чиновник казначейства читал каждый лист и передавал его служащему рядом. «А если наши люди не вынесут сокращений?» — спросил он. «Тогда следующий платёж подождёт, пока сокращения не будут сделаны, — ответил глава миссии. — Условия одинаковы для каждого заёмщика». Служащий сделал копию каждого листа для правительства, а чиновник начал читать их снова с первого."
+ },
+ "un_events.35.t": {
+  "en": "An Emergency Lending Facility",
+  "ru": "Экстренный кредитный механизм"
+ },
+ "un_events.36.a": {
+  "en": "Ratify them",
+  "ru": "Ратифицировать их"
+ },
+ "un_events.36.b": {
+  "en": "Stay outside them",
+  "ru": "Остаться вне их"
+ },
+ "un_events.36.b_tt": {
+  "en": "We stay outside the conventions passed in our absence. We will not be asked again; a convention binds only the members that ratify it.",
+  "ru": "Мы остаёмся вне конвенций, принятых в наше отсутствие. Нас больше не спросят; конвенция связывает только тех членов, которые её ратифицируют."
+ },
+ "un_events.36.d": {
+  "en": "Our delegation has taken its seat in the General Assembly again. While our foreign policy was not our own, the Assembly passed conventions we were never asked to ratify. The other members decided on each convention when it passed. We decide on all of them now, and only once.",
+  "ru": "Наша делегация снова заняла своё место в Генеральной Ассамблее. Пока наша внешняя политика нам не принадлежала, Ассамблея приняла конвенции, которые нас не просили ратифицировать. Другие члены решали по каждой конвенции, когда она принималась. Мы решаем по всем сразу, и только один раз."
+ },
+ "un_events.36.f": {
+  "en": "To the delegation of [ROOT.GetCountry.GetName], from the treaty office of the Secretariat. While your delegation's seat stood empty, the General Assembly adopted conventions that were opened for ratification to the members then seated. Your government was not asked to ratify them and is bound by none of them. We enclose each instrument, with the record of its vote and the obligations it places on its parties. Under the rules for a member whose representation is restored, your government may now ratify them, all together, or remain outside them, and the offer is made only once. This office will enter the government's decision in the register on the day the delegation sends it.",
+  "ru": "Делегации страны [ROOT.GetCountry.GetName], от договорного отдела секретариата. Пока место вашей делегации пустовало, Генеральная Ассамблея приняла конвенции, открытые для ратификации тем членам, что тогда присутствовали. Ваше правительство не просили их ратифицировать, и оно не связано ни одной из них. Прилагаем каждый документ с протоколом голосования и обязательствами, которые он налагает на участников. По правилам для члена, чьё представительство восстановлено, ваше правительство теперь может ратифицировать их все вместе или остаться вне их, и предложение делается лишь один раз. Этот отдел внесёт решение правительства в реестр в день, когда делегация его пришлёт."
+ },
+ "un_events.36.t": {
+  "en": "Conventions Passed in Our Absence",
+  "ru": "Конвенции, принятые в наше отсутствие"
+ },
+ "un_events.37.c": {
+  "en": "Our nation has one culture.",
+  "ru": "У нашей нации одна культура."
+ },
+ "un_events.37.d": {
+  "en": "Delegations at the United Nations are drafting a convention to protect the world's minority cultures: their languages, their schools, their customs and the homelands they live in. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName] it would mean minorities who assimilate more slowly and keep their homelands longer, and a shield against the leading power's culture crowding out our own.",
+  "ru": "Делегации в Организации Объединённых Наций разрабатывают конвенцию о защите культур меньшинств мира: их языков, школ, обычаев и земель, где они живут. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию. Для страны [ROOT.GetCountry.GetName] она означала бы меньшинства, которые ассимилируются медленнее и дольше сохраняют свои земли, и защиту от вытеснения нашей культуры культурой ведущей державы."
+ },
+ "un_events.37.d_benchmark": {
+  "en": "The world's leading culture weighs on [ROOT.GetCountry.GetName]: our people measure our government against it, and our legitimacy suffers. Delegations at the United Nations are drafting a convention to protect the world's cultures, our own minorities' among them, and to restrain the hegemon's reach. Nothing is before the General Assembly yet: we could table it.",
+  "ru": "Ведущая культура мира давит на страну [ROOT.GetCountry.GetName]: наши люди сравнивают с ней наше правительство, и наша легитимность страдает. Делегации в Организации Объединённых Наций разрабатывают конвенцию о защите культур мира, в том числе наших собственных меньшинств, и об ограничении влияния гегемона. Генеральной Ассамблее пока ничего не представлено: мы могли бы внести конвенцию."
+ },
+ "un_events.37.f": {
+  "en": "Every Thursday evening the manager of the cinema on the main square changed the posters, standing on a stool with a bucket of paste. This week there were five new films. Four had come from abroad, and the distributor had sent them with posters already printed and a schedule of evening showings. The fifth had been made at home, by a studio that finished two or three films a year, and came with a note asking for an afternoon slot. The manager wrote the times on the board below each poster, pasted the last one at the end of the row nearest the door, then climbed down, folded the stool and carried the bucket back inside to wash it.",
+  "ru": "Каждый четверг вечером управляющий кинотеатра на главной площади менял афиши, стоя на табурете с ведром клея. На этой неделе вышло пять новых фильмов. Четыре пришли из-за границы, и прокатчик прислал их с уже напечатанными афишами и расписанием вечерних сеансов. Пятый был снят дома студией, выпускавшей два-три фильма в год, и пришёл с запиской с просьбой о дневном сеансе. Управляющий написал время на доске под каждой афишей, наклеил последнюю в конце ряда ближе к двери, затем слез, сложил табурет и отнёс ведро внутрь, чтобы вымыть."
+ },
+ "un_events.37.t": {
+  "en": "Cultural Diversity",
+  "ru": "Культурное разнообразие"
+ },
+ "un_events.38.a": {
+  "en": "Propose the Treaty to the General Assembly.",
+  "ru": "Внести Договор на рассмотрение Генеральной Ассамблеи."
+ },
+ "un_events.38.c": {
+  "en": "Not while others keep theirs.",
+  "ru": "Не пока другие сохраняют своё."
+ },
+ "un_events.38.d": {
+  "en": "The Non-Proliferation Treaty stopped the bomb from spreading, but the powers that already held it kept it. Delegations at the United Nations are drafting a treaty to ban nuclear weapons outright: its parties that hold them would take them apart over 25 years, and the rest would never build them. Nothing is before the General Assembly yet. [ROOT.GetCountry.GetName] holds none, and could table it.",
+  "ru": "Договор о нераспространении остановил распространение бомбы, но державы, которые уже имели её, сохранили её. Делегации в Организации Объединённых Наций разрабатывают договор о полном запрещении ядерного оружия: его участники, обладающие им, разобрали бы его за 25 лет, а остальные никогда бы его не создавали. Генеральной Ассамблее пока ничего не представлено. У страны [ROOT.GetCountry.GetName] его нет, и она могла бы внести договор."
+ },
+ "un_events.38.d_used": {
+  "en": "Nuclear weapons have been used, and the world has seen what they do. Delegations at the United Nations are drafting a treaty to ban them outright: its parties that hold them would take them apart over 25 years, and the rest would never build them. Nothing is before the General Assembly yet. [ROOT.GetCountry.GetName] holds none, and could table it.",
+  "ru": "Ядерное оружие применено, и мир увидел, что оно делает. Делегации в Организации Объединённых Наций разрабатывают договор о его полном запрещении: его участники, обладающие им, разобрали бы его за 25 лет, а остальные никогда бы его не создавали. Генеральной Ассамблее пока ничего не представлено. У страны [ROOT.GetCountry.GetName] его нет, и она могла бы внести договор."
+ },
+ "un_events.38.f": {
+  "en": "\\\"Each of the Parties to the Treaty undertakes to pursue negotiations in good faith on effective measures relating to cessation of the nuclear arms race at an early date and to nuclear disarmament, and on a treaty on general and complete disarmament under strict and effective international control.\\\"\\n\\n— Treaty on the Non-Proliferation of Nuclear Weapons, Article VI",
+  "ru": "«Каждый участник настоящего Договора обязуется в духе добросовестности вести переговоры об эффективных мерах по прекращению гонки ядерных вооружений в ближайшем будущем и ядерному разоружению, а также о договоре о всеобщем и полном разоружении под строгим и эффективным международным контролем.»\\n\\n— Договор о нераспространении ядерного оружия, статья VI"
+ },
+ "un_events.38.t": {
+  "en": "Prohibition of Nuclear Weapons",
+  "ru": "Запрещение ядерного оружия"
  }
 }
