@@ -7,6 +7,10 @@
   "en": "Advanced Material Fabricator [concept_throughput]",
   "ru": "Фабрикатор передовых материалов: [concept_throughput]"
  },
+ "building_advanced_material_fabricator_throughput_add_desc": {
+  "en": "Advanced Material Fabricator [concept_throughput]",
+  "ru": "Фабрикатор передовых материалов: [concept_throughput]"
+ },
  "building_aerospace_industry": {
   "en": "Aerospace Industry",
   "ru": "Аэрокосмическая промышленность"
@@ -26,6 +30,10 @@
  "building_ajinomoto_kawasaki_plant": {
   "en": "Ajinomoto Kawasaki Plant",
   "ru": "Завод Адзиномото в Кавасаки"
+ },
+ "building_ajinomoto_kawasaki_plant_desc": {
+  "en": "Ajinomoto's works on the Kawasaki waterfront, opened in 1914 to make monosodium glutamate. Its fermentation tanks now turn out amino acids, sweeteners and seasonings by the shipload.",
+  "ru": "Завод компании «Адзиномото» на набережной Кавасаки, открытый в 1914 году для производства глутамата натрия. Теперь в его ферментационных чанах готовят аминокислоты, подсластители и приправы целыми судовыми партиями."
  },
  "building_aker_oslo_shipyard": {
   "en": "Aker Oslo Shipyard",
@@ -63,29 +71,57 @@
   "en": "Annual [concept_antimatter_facility] Progress",
   "ru": "[concept_antimatter_facility]: ежегодный прогресс"
  },
+ "building_annual_antimatter_facility_progress_desc": {
+  "en": "[concept_antimatter_facility] Progress",
+  "ru": "[concept_antimatter_facility]: прогресс"
+ },
  "building_annual_consciousness_network_progress": {
   "en": "Annual Consciousness Network Progress",
   "ru": "Сеть сознания: ежегодный прогресс"
+ },
+ "building_annual_consciousness_network_progress_desc": {
+  "en": "Consciousness Network Progress",
+  "ru": "Сеть сознания: прогресс"
  },
  "building_annual_mind_upload_nexus_progress": {
   "en": "Annual Mind Upload Nexus Progress",
   "ru": "Узел загрузки сознания: ежегодный прогресс"
  },
+ "building_annual_mind_upload_nexus_progress_desc": {
+  "en": "Mind Upload Nexus Progress",
+  "ru": "Узел загрузки сознания: прогресс"
+ },
  "building_annual_nanofabrication_center_progress": {
   "en": "Annual Nanofabrication Center Progress",
   "ru": "Центр нанопроизводства: ежегодный прогресс"
+ },
+ "building_annual_nanofabrication_center_progress_desc": {
+  "en": "Nanofabrication Center Progress",
+  "ru": "Центр нанопроизводства: прогресс"
  },
  "building_annual_orbital_battlestation_progress": {
   "en": "Annual Orbital Battlestation Progress",
   "ru": "Орбитальная боевая станция: ежегодный прогресс"
  },
+ "building_annual_orbital_battlestation_progress_desc": {
+  "en": "Orbital Battlestation Progress",
+  "ru": "Орбитальная боевая станция: прогресс"
+ },
  "building_annual_solar_collector_progress": {
   "en": "Annual Solar Collector Progress",
   "ru": "Солнечный коллектор: ежегодный прогресс"
  },
+ "building_annual_solar_collector_progress_desc": {
+  "en": "Solar Collector Progress",
+  "ru": "Солнечный коллектор: прогресс"
+ },
  "building_annual_space_elevator_progress": {
   "en": "Annual Space Elevator Progress",
   "ru": "Космический лифт: ежегодный прогресс"
+ },
+ "building_annual_space_elevator_progress_desc": {
+  "en": "Space Elevator Progress",
+  "ru": "Космический лифт: прогресс"
  },
  "building_ansaldo_sestri_ponente_works": {
   "en": "Ansaldo Sestri Ponente Works",
@@ -102,6 +138,10 @@
  "building_antimatter_facility_construction_site": {
   "en": "Antimatter Facility Construction Site",
   "ru": "Хранилище антиматерии: стройплощадка"
+ },
+ "building_antimatter_sub_slots_tt": {
+  "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "ru": "Свободный слот для [Concept('concept_antimatter_facility','установки по производству антиматерии')]: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! свободно по стране (уровни в состоянии «[concept_under_construction|l]» считаются занятыми)"
  },
  "building_antimatter_warhead_plant": {
   "en": "Antimatter Warhead Plant",
@@ -167,9 +207,17 @@
   "en": "$building_bauxite_mine$ building [concept_throughput]",
   "ru": "$building_bauxite_mine$: [concept_throughput]"
  },
+ "building_bauxite_mine_throughput_add_desc": {
+  "en": "$building_bauxite_mine$ building [concept_throughput]",
+  "ru": "$building_bauxite_mine$: [concept_throughput]"
+ },
  "building_bayer_leverkusen_plant": {
   "en": "Bayer Leverkusen Plant",
   "ru": "Завод Байер в Леверкузене"
+ },
+ "building_bayer_leverkusen_plant_desc": {
+  "en": "Bayer's Leverkusen works, marrying industrial chemistry with pharmaceutical research.",
+  "ru": "Заводы «Байер» в Леверкузене, где промышленная химия сочетается с фармацевтическими исследованиями."
  },
  "building_bengal_coal_raniganj_mine": {
   "en": "Bengal Coal Raniganj Mine",
@@ -179,9 +227,17 @@
   "en": "BGI National GeneBank",
   "ru": "Национальный генный банк BGI"
  },
+ "building_bgi_national_genebank_desc": {
+  "en": "The China National GeneBank, which BGI runs for the state in Shenzhen: banks of sequencers, a bioinformatics data center, and frozen vaults of seeds, cells and DNA from across the living world.",
+  "ru": "Китайский национальный генный банк, которым BGI управляет от имени государства в Шэньчжэне: ряды секвенаторов, центр данных по биоинформатике и замороженные хранилища семян, клеток и ДНК со всего живого мира."
+ },
  "building_bhp_broken_hill_mine": {
   "en": "BHP Broken Hill Mine",
   "ru": "Рудник BHP Брокен-Хилл"
+ },
+ "building_bhp_broken_hill_mine_desc": {
+  "en": "The silver, lead and zinc workings on the Line of Lode at Broken Hill, whose riches paid for BHP's move into steelmaking at Newcastle.",
+  "ru": "Серебряно-свинцово-цинковые разработки на жиле Лайн-оф-Лоуд в Брокен-Хилле, чьи богатства оплатили выход BHP в сталеплавильное дело в Ньюкасле."
  },
  "building_bhp_mount_whaleback_mine": {
   "en": "Mount Whaleback Mine",
@@ -191,9 +247,17 @@
   "en": "Biocon Park",
   "ru": "Парк Biocon"
  },
+ "building_biocon_park_desc": {
+  "en": "Biocon's campus at Bommasandra, outside Bengaluru, where biosimilar insulins and antibodies are made for a fraction of the price of the branded drugs they copy.",
+  "ru": "Кампус Biocon в Боммасандре близ Бангалура, где биоподобные инсулины и антитела производят за малую долю цены тех фирменных препаратов, которые они копируют."
+ },
  "building_biontech_mainz_campus": {
   "en": "BioNTech Mainz Campus",
   "ru": "Кампус BioNTech в Майнце"
+ },
+ "building_biontech_mainz_campus_desc": {
+  "en": "BioNTech's headquarters and plant on An der Goldgrube in Mainz. The company writes messenger RNA to order: a vaccine against a new virus in weeks, or a cancer therapy matched to one patient's tumor.",
+  "ru": "Штаб-квартира и завод BioNTech на улице Ан-дер-Гольдгрубе в Майнце. Компания пишет матричную РНК на заказ: вакцину против нового вируса за недели или противораковую терапию, подобранную под опухоль одного пациента."
  },
  "building_blackberry_rim_campus": {
   "en": "RIM Campus",
@@ -202,6 +266,10 @@
  "building_boeing_everett_factory": {
   "en": "Boeing Everett Factory",
   "ru": "Завод Boeing в Эверетте"
+ },
+ "building_boeing_everett_factory_desc": {
+  "en": "Boeing's Everett assembly hall, among the largest buildings on earth, where airframes take shape.",
+  "ru": "Сборочный цех «Боинга» в Эверетте, одно из крупнейших зданий на Земле, где обретают форму планеры самолётов."
  },
  "building_bolckow_eston_ironworks": {
   "en": "Bolckow Vaughan Eston Ironworks",
@@ -223,6 +291,14 @@
   "en": "BP Refinery Complex",
   "ru": "Нефтеперерабатывающий комплекс BP"
  },
+ "building_bp_refinery_complex_desc": {
+  "en": "A sprawling British Petroleum refinery turning crude into fertilizer feedstock and explosives precursors.",
+  "ru": "Обширный нефтеперерабатывающий комплекс «Бритиш Петролеум», превращающий сырую нефть в сырьё для удобрений и прекурсоры взрывчатых веществ."
+ },
+ "building_bunge_born_buenos_aires_grain_silo": {
+  "en": "Bunge & Born Buenos Aires Grain Silo",
+  "ru": "Зерновой элеватор «Бунге и Борн» в Буэнос-Айресе"
+ },
  "building_bytedance_data_fortress": {
   "en": "TikTok Data Fortress",
   "ru": "Дата-крепость TikTok"
@@ -238,6 +314,10 @@
  "building_carnegie_homestead_mill": {
   "en": "Carnegie Homestead Mill",
   "ru": "Завод Карнеги в Хомстеде"
+ },
+ "building_carnegie_homestead_mill_desc": {
+  "en": "The massive Homestead steelworks on the Monongahela River, forging the steel that built America's railways and skyscrapers.",
+  "ru": "Огромный сталелитейный завод в Хоумстеде на реке Мононгахела, где выковывали сталь, из которой построены железные дороги и небоскрёбы Америки."
  },
  "building_catl_gigafactory": {
   "en": "CATL Gigafactory",
@@ -283,6 +363,14 @@
   "en": "Colt Hartford Armory",
   "ru": "Оружейный завод Кольта в Хартфорде"
  },
+ "building_company_one_site_tt": {
+  "en": "No other state of ours has this building, standing or [concept_under_construction]",
+  "ru": "Ни в одной другой нашей области нет этого здания — ни построенного, ни в состоянии «[concept_under_construction|l]»"
+ },
+ "building_company_own_states_tt": {
+  "en": "Built in our own states only, never through [concept_foreign_investment]",
+  "ru": "Строится только в наших собственных областях, но не через [Concept('concept_foreign_investment','иностранные инвестиции')]"
+ },
  "building_consciousness_network": {
   "en": "Consciousness Network",
   "ru": "Сеть сознания"
@@ -310,6 +398,10 @@
  "building_de_beers_sorting_office": {
   "en": "De Beers Sorting Office",
   "ru": "Сортировочная контора De Beers"
+ },
+ "building_de_beers_sorting_office_desc": {
+  "en": "The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets.",
+  "ru": "Сортировочная и оценочная контора «Де Бирс», контролирующая мировой поток необработанных алмазов из южноафриканских шахт на мировые рынки."
  },
  "building_disney_world": {
   "en": "Disney World",
@@ -343,6 +435,10 @@
   "en": "East India Company Trading House",
   "ru": "Торговый дом Ост-Индской компании"
  },
+ "building_eic_trading_house_desc": {
+  "en": "A grand trading house coordinating the vast commercial empire of the East India Company across the subcontinent and beyond.",
+  "ru": "Величественный торговый дом, управляющий обширной торговой империей Ост-Индской компании на всём субконтиненте и за его пределами."
+ },
  "building_el_aguila_tampico_refinery": {
   "en": "El Águila Tampico Refinery",
   "ru": "Нефтезавод «Эль-Агила» в Тампико"
@@ -359,6 +455,10 @@
   "en": "Appliances [concept_throughput]",
   "ru": "Бытовая техника: [concept_throughput]"
  },
+ "building_electrics_industry_appliances_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Appliance Industry buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Производство бытовой техники»"
+ },
  "building_electrics_industry_radio": {
   "en": "Wireless Telecommunications Industries",
   "ru": "Отрасли беспроводной связи"
@@ -371,6 +471,10 @@
   "en": "Electronic Components and Semiconductor Industry [concept_throughput] Multiplier",
   "ru": "Электронные компоненты и полупроводники: множитель [concept_throughput]"
  },
+ "building_electronic_components_and_semiconductor_industry_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Electronics & Semiconductor Industry buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Электроника и полупроводниковая промышленность»"
+ },
  "building_elso_budapesti_steam_mill": {
   "en": "Első Budapesti Steam Mill",
   "ru": "Паровая мельница Первого Будапештского общества"
@@ -378,6 +482,10 @@
  "building_employment_deportee_add": {
   "en": "Deportee Labor Positions",
   "ru": "Рабочие места для депортированных"
+ },
+ "building_employment_deportee_add_desc": {
+  "en": "Additional employment positions for deportee laborers in this building",
+  "ru": "Дополнительные рабочие места для депортированных работников в этом здании"
  },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
@@ -423,6 +531,10 @@
   "en": "Ferranti Hollinwood Works",
   "ru": "Заводы Ферранти в Холлинвуде"
  },
+ "building_ferranti_hollinwood_works_desc": {
+  "en": "The Oldham works to which Sebastian de Ferranti moved his business in 1896, turning out transformers, meters and switchgear and, in time, radios.",
+  "ru": "Завод в Олдеме, куда Себастьян де Ферранти перенёс своё дело в 1896 году, выпускавший трансформаторы, счётчики и распределительные устройства, а со временем и радиоприёмники."
+ },
  "building_ferrari_maranello_factory": {
   "en": "Ferrari Maranello Factory",
   "ru": "Завод Ferrari в Маранелло"
@@ -431,6 +543,10 @@
   "en": "FIAT Lingotto Factory",
   "ru": "Завод FIAT «Линготто»"
  },
+ "building_fiat_lingotto_factory_desc": {
+  "en": "The iconic FIAT Lingotto factory in Turin, with its revolutionary rooftop test track: a cathedral of Italian automobile manufacturing.",
+  "ru": "Легендарный завод FIAT «Линготто» в Турине с революционной испытательной трассой на крыше: собор итальянского автомобилестроения."
+ },
  "building_foochow_mawei_dockyard": {
   "en": "Foochow Mawei Dockyard",
   "ru": "Верфь Мавэй в Фучжоу"
@@ -438,6 +554,10 @@
  "building_ford_rouge_plant": {
   "en": "Ford Rouge Plant",
   "ru": "Завод Ford «Ривер-Руж»"
+ },
+ "building_ford_rouge_plant_desc": {
+  "en": "The River Rouge Complex: the world's largest integrated factory, where raw materials enter one end and finished automobiles emerge from the other.",
+  "ru": "Комплекс «Ривер-Руж» — крупнейший в мире интегрированный завод: сырьё поступает с одного конца, а готовые автомобили выходят с другого."
  },
  "building_franco_belge_raismes_works": {
   "en": "Franco-Belge Raismes Works",
@@ -459,6 +579,10 @@
   "en": "Fusion Plant [concept_throughput]",
   "ru": "Термоядерная станция: [concept_throughput]"
  },
+ "building_fusion_plant_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Fusion Plant buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Термоядерная станция»"
+ },
  "building_galician_boryslaw_oil_field": {
   "en": "Galician Borysław Oil Field",
   "ru": "Галицийское нефтяное месторождение Борислав"
@@ -475,29 +599,57 @@
   "en": "GE Schenectady Works",
   "ru": "Заводы GE в Скенектади"
  },
+ "building_ge_schenectady_works_desc": {
+  "en": "General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.",
+  "ru": "Раскинувшийся комплекс «Дженерал Электрик» в Скенектади, где замысел Томаса Эдисона превратился в империю электротехнических инноваций и производства."
+ },
  "building_genentech_dna_way_campus": {
   "en": "Genentech DNA Way Campus",
   "ru": "Кампус Genentech «ДНК-Вэй»"
+ },
+ "building_genentech_dna_way_campus_desc": {
+  "en": "Genentech's laboratories at 1 DNA Way in South San Francisco. In 1978, two years after its founding, the company made human insulin in bacteria and turned recombinant DNA into an industry.",
+  "ru": "Лаборатории Genentech по адресу 1 DNA Way в Южном Сан-Франциско. В 1978 году, через два года после основания, компания получила человеческий инсулин в бактериях и превратила рекомбинантную ДНК в индустрию."
  },
  "building_generic_arsenal": {
   "en": "Arsenal",
   "ru": "Арсенал"
  },
+ "building_generic_arsenal_desc": {
+  "en": "An arms depot and proving ground where weapons are manufactured, tested, and stored for military use.",
+  "ru": "Склад оружия и полигон, где вооружение изготавливают, испытывают и хранят для военных нужд."
+ },
  "building_generic_assay_office": {
   "en": "Assay Office",
   "ru": "Пробирная палата"
+ },
+ "building_generic_assay_office_desc": {
+  "en": "A facility for testing precious metal purity and facilitating bullion trade.",
+  "ru": "Учреждение для проверки чистоты драгоценных металлов и содействия торговле слитками."
  },
  "building_generic_chem_works": {
   "en": "Chemical Works",
   "ru": "Химические заводы"
  },
+ "building_generic_chem_works_desc": {
+  "en": "A chemical processing campus producing fertilizers, explosives, and industrial chemicals from raw materials.",
+  "ru": "Химический комплекс, производящий удобрения, взрывчатые вещества и промышленные химикаты из сырья."
+ },
  "building_generic_cold_storage": {
   "en": "Cold Storage Facility",
   "ru": "Холодильный склад"
  },
+ "building_generic_cold_storage_desc": {
+  "en": "An industrial cold storage and food preservation center that reduces spoilage and extends the reach of perishable goods.",
+  "ru": "Промышленный центр холодного хранения и консервации продуктов, сокращающий порчу и расширяющий охват скоропортящихся товаров."
+ },
  "building_generic_colonial_depot": {
   "en": "Colonial Depot",
   "ru": "Колониальный склад"
+ },
+ "building_generic_colonial_depot_desc": {
+  "en": "A central depot for consolidating and distributing colonial commodities such as tea and opium.",
+  "ru": "Центральный склад для консолидации и распределения колониальных товаров, таких как чай и опиум."
  },
  "building_generic_corporate_university": {
   "en": "Corporate University",
@@ -511,13 +663,25 @@
   "en": "Dry Dock",
   "ru": "Сухой док"
  },
+ "building_generic_dry_dock_desc": {
+  "en": "A large ship repair and construction facility that keeps the merchant and military fleet in fighting condition.",
+  "ru": "Крупное предприятие по ремонту и строительству кораблей, поддерживающее торговый и военный флот в боеготовом состоянии."
+ },
  "building_generic_dye_fiber_park": {
   "en": "Dye & Fiber Research Park",
   "ru": "Научный парк красителей и волокон"
  },
+ "building_generic_dye_fiber_park_desc": {
+  "en": "A campus of laboratories and pilot plants where chemists develop new synthetic dyes and artificial fibers, from the first aniline colors to rayon and nylon, before the company's plants take them into production.",
+  "ru": "Комплекс лабораторий и опытных заводов, где химики разрабатывают новые синтетические красители и искусственные волокна — от первых анилиновых красок до вискозы и нейлона, — прежде чем заводы компании запускают их в производство."
+ },
  "building_generic_electronics_lab": {
   "en": "Electronics Laboratory",
   "ru": "Электронная лаборатория"
+ },
+ "building_generic_electronics_lab_desc": {
+  "en": "A research and testing laboratory for electrical components and consumer electronics.",
+  "ru": "Исследовательская и испытательная лаборатория электрических компонентов и бытовой электроники."
  },
  "building_generic_exhibition_centre": {
   "en": "National Exhibition Center",
@@ -527,6 +691,10 @@
   "en": "Export Warehouse",
   "ru": "Экспортный склад"
  },
+ "building_generic_export_warehouse_desc": {
+  "en": "A bonded warehouse for sorting, grading, and re-exporting colonial cash crops.",
+  "ru": "Таможенный склад для сортировки, классификации и реэкспорта колониальных товарных культур."
+ },
  "building_generic_financial_center": {
   "en": "International Financial Center",
   "ru": "Международный финансовый центр"
@@ -535,17 +703,33 @@
   "en": "Fish Market",
   "ru": "Рыбный рынок"
  },
+ "building_generic_fish_market_desc": {
+  "en": "A wholesale fish market and distribution center that brings fresh seafood from the docks to the population.",
+  "ru": "Оптовый рыбный рынок и распределительный центр, доставляющий свежие морепродукты с причалов населению."
+ },
  "building_generic_foundry_complex": {
   "en": "Foundry Complex",
   "ru": "Литейный комплекс"
+ },
+ "building_generic_foundry_complex_desc": {
+  "en": "A sprawling steel and iron smelting campus that feeds the insatiable demand for construction materials.",
+  "ru": "Обширный комплекс по выплавке стали и железа, удовлетворяющий ненасытный спрос на строительные материалы."
  },
  "building_generic_furniture_showroom": {
   "en": "Furniture Showroom",
   "ru": "Мебельный салон"
  },
+ "building_generic_furniture_showroom_desc": {
+  "en": "A flagship homewares emporium fronting a fabrication workshop, where carpenters, glaziers, and shopkeepers turn timber and glass into the furnishings of the modern home.",
+  "ru": "Флагманский магазин товаров для дома с производственной мастерской, где плотники, стекольщики и торговцы превращают древесину и стекло в обстановку современного дома."
+ },
  "building_generic_granary_complex": {
   "en": "Granary Complex",
   "ru": "Зернохранилищный комплекс"
+ },
+ "building_generic_granary_complex_desc": {
+  "en": "A large-scale grain storage and distribution hub that ensures reliable food supply across the region.",
+  "ru": "Крупный центр хранения и распределения зерна, обеспечивающий надёжное снабжение продовольствием по всему региону."
  },
  "building_generic_hq_skyscraper": {
   "en": "Corporate Headquarters Skyscraper",
@@ -567,9 +751,17 @@
   "en": "Lumber Yard",
   "ru": "Лесной склад"
  },
+ "building_generic_lumber_yard_desc": {
+  "en": "An industrial sawmill and timber yard where harvested logs are cut, dried, and graded into framing wood and pulpwood for paper.",
+  "ru": "Промышленная лесопилка и лесной склад, где заготовленные брёвна распиливают, сушат и сортируют на строительный пиломатериал и целлюлозную древесину для бумаги."
+ },
  "building_generic_machine_shop": {
   "en": "Machine Shop",
   "ru": "Механический цех"
+ },
+ "building_generic_machine_shop_desc": {
+  "en": "A precision engineering workshop producing tools, machine parts, and specialized equipment for heavy industry.",
+  "ru": "Мастерская точного машиностроения, производящая инструменты, детали машин и специальное оборудование для тяжёлой промышленности."
  },
  "building_generic_materials_lab": {
   "en": "Advanced Materials Laboratory",
@@ -587,6 +779,10 @@
   "en": "Mineral Refinery",
   "ru": "Минеральный перерабатывающий завод"
  },
+ "building_generic_mineral_refinery_desc": {
+  "en": "A refinery converting raw minerals into industrial chemicals and fertilizers.",
+  "ru": "Предприятие, перерабатывающее сырые минералы в промышленные химикаты и удобрения."
+ },
  "building_generic_monument_to_industry": {
   "en": "Monument to Industry",
   "ru": "Памятник индустрии"
@@ -595,17 +791,33 @@
   "en": "Motor Works",
   "ru": "Моторный завод"
  },
+ "building_generic_motor_works_desc": {
+  "en": "An engine and vehicle assembly plant producing motors, machinery, and transport equipment.",
+  "ru": "Завод по сборке двигателей и транспортных средств, выпускающий моторы, машины и транспортное оборудование."
+ },
  "building_generic_ordnance_depot": {
   "en": "Ordnance Depot",
   "ru": "Артиллерийский склад"
+ },
+ "building_generic_ordnance_depot_desc": {
+  "en": "A munitions storage and testing facility that keeps the nation's military well-supplied with ammunition.",
+  "ru": "Склад боеприпасов и испытательная база, хорошо обеспечивающая армию страны боеприпасами."
  },
  "building_generic_ore_processing": {
   "en": "Ore Processing Plant",
   "ru": "Рудоперерабатывающий завод"
  },
+ "building_generic_ore_processing_desc": {
+  "en": "A central facility for crushing, smelting, and refining metallic ores.",
+  "ru": "Центральное предприятие по дроблению, плавке и обогащению металлических руд."
+ },
  "building_generic_paper_mill_complex": {
   "en": "Paper Mill Complex",
   "ru": "Бумажный комбинат"
+ },
+ "building_generic_paper_mill_complex_desc": {
+  "en": "An integrated pulp and paper complex that turns timber into paper stock and the clerical backbone of modern commerce.",
+  "ru": "Интегрированный целлюлозно-бумажный комплекс, превращающий древесину в бумажное сырьё и канцелярскую основу современной торговли."
  },
  "building_generic_pipeline_terminus": {
   "en": "Cross-Continental Pipeline Terminus",
@@ -643,6 +855,10 @@
   "en": "Silk Exchange",
   "ru": "Шёлковая биржа"
  },
+ "building_generic_silk_exchange_desc": {
+  "en": "A trading house for sorting, grading, and auctioning raw silk and dyed textiles.",
+  "ru": "Торговый дом для сортировки, классификации и продажи с аукциона шёлка-сырца и крашеных тканей."
+ },
  "building_generic_spaceport": {
   "en": "Spaceport",
   "ru": "Космодром"
@@ -651,13 +867,25 @@
   "en": "Tank Farm",
   "ru": "Резервуарный парк"
  },
+ "building_generic_tank_farm_desc": {
+  "en": "An oil storage and refining depot with rows of massive tanks feeding petroleum products to industry and transport.",
+  "ru": "Нефтехранилище и перерабатывающая база с рядами огромных резервуаров, подающая нефтепродукты промышленности и транспорту."
+ },
  "building_generic_textile_depot": {
   "en": "Textile Depot",
   "ru": "Текстильный склад"
  },
+ "building_generic_textile_depot_desc": {
+  "en": "A centralized fabric warehousing and dyeing facility that streamlines textile production and distribution.",
+  "ru": "Центральный склад тканей и красильное предприятие, упрощающее производство и распределение текстиля."
+ },
  "building_generic_vintner_hall": {
   "en": "Vintner's Hall",
   "ru": "Зал виноделов"
+ },
+ "building_generic_vintner_hall_desc": {
+  "en": "A facility for aging, blending, and bottling wine and processing fruit into preserves.",
+  "ru": "Предприятие по выдержке, купажированию и розливу вина и переработке фруктов в консервы."
  },
  "building_getzner_bludenz_textile_works": {
   "en": "Getzner Bludenz Textile Works",
@@ -683,9 +911,17 @@
   "en": "Grand Monument",
   "ru": "Великий монумент"
  },
+ "building_grand_monument_desc": {
+  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favor of like-minded interest groups while what it honors still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
+  "ru": "Монумент, который правительство воздвигает тому, за что оно стоит: короне, республике, революции, вождю, вере или нации. Он строится как «$building_grand_monument_site$» и завершается торжественным освящением, с [Concept('concept_grandeur','величием')], соответствующим числу построенных уровней. Он придаёт престиж, а также легитимность и расположение единомышленных групп интересов, пока то, чему он посвящён, остаётся. Когда оно падает, следующему правительству придётся решать, что с ним делать. См. вкладку «Великие памятники» окна Timeline Extended."
+ },
  "building_grand_monument_site": {
   "en": "Grand Monument (Under Construction)",
   "ru": "Великий монумент (строится)"
+ },
+ "building_grand_monument_site_desc": {
+  "en": "A Grand Monument being built. Each level adds to the monument it will be; it has no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.",
+  "ru": "Строящийся великий монумент. Каждый уровень добавляет к будущему монументу; пока он не освящён, эффектов у него нет. Освятить его можно с его карточки в обзоре области или на вкладке «Великие памятники», когда здесь больше ничего не строится. Освящение завершает монумент с построенными уровнями."
  },
  "building_graphite_mine": {
   "en": "Graphite Mine",
@@ -703,21 +939,41 @@
   "en": "HVDC Undersea Interconnector",
   "ru": "Подводный межсистемный кабель HVDC"
  },
+ "building_grid_hvdc_interconnector_desc": {
+  "en": "Lays a high-voltage direct-current cable across the sea from this state's $building_grid_transfer_station$. It joins the station's [concept_power_grid] to that of any station with a cable of its own within reach, counted in [Concept('concept_sea_node', '$concept_sea_nodes|q$')] by its $building_grid_undersea_cable_range_add$: one of ours, or one of a country we have a $grid_interconnection_agreement$ with or share a [concept_power_bloc] with that holds $principle_group_market_unification$ or $principle_group_internal_trade$ IV or V. Two cables join when either one's range reaches the other. Needs a $building_grid_transfer_station$ in the state, and joins nothing without one. One per state, on a coast.",
+  "ru": "Прокладывает высоковольтный кабель постоянного тока через море от «$building_grid_transfer_station$» этой области. Он соединяет [Concept('concept_power_grid','энергосеть')] станции с энергосетью любой станции, у которой есть собственный кабель в пределах досягаемости, измеряемой в [Concept('concept_sea_node','морских узлах')] параметром «$building_grid_undersea_cable_range_add$»: нашей, либо страны, с которой у нас есть «$grid_interconnection_agreement$» или которая состоит с нами в одном [Concept('concept_power_bloc','силовом блоке')], где действует «$principle_group_market_unification$» или «$principle_group_internal_trade$» IV или V уровня. Два кабеля соединяются, если дальность любого из них достаёт до другого. Требуется «$building_grid_transfer_station$» в области, без неё кабель ничего не соединяет. Один на область, на побережье."
+ },
  "building_grid_transfer_station": {
   "en": "Grid Transfer Station",
   "ru": "Станция передачи энергосети"
+ },
+ "building_grid_transfer_station_desc": {
+  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$ or a [concept_power_bloc] that joins its members' grids. Each month the grid moves $electricity$ from states where it is cheap to states where it is expensive, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
+  "ru": "Подключает эту область к её [Concept('concept_power_grid','энергосети')]: к нашим прочим станциям на том же [Concept('concept_market_area','рыночном районе')] и к станциям, до которых она дотягивается по подводному кабелю («$building_grid_hvdc_interconnector$»), через «$grid_interconnection_agreement$» или [Concept('concept_power_bloc','силовой блок')], объединяющий сети своих членов. Каждый месяц сеть перемещает $electricity$ из областей, где она дешева, в области, где она дорога, пока она не продаётся по единой цене в точке отправки и по этой цене, делённой на #b Эффективность передачи в сети#!, в точке получения. Станция, отправляющая $electricity$, получает оплату в @grid_power! $grid_power$, а принимающая платит в $grid_power$, каждая по цене сети, так что станция примерно покрывает стоимость своих товаров. Часть энергии теряется в пути. Сеть отдаёт столько, сколько получила. Одна на область. Первая наша станция в рыночном районе может стоять в любой нашей области там; каждая следующая должна граничить с нашей областью, где она уже есть. Всегда субсидируется."
  },
  "building_grid_undersea_cable_range_add": {
   "en": "Undersea Cable Range",
   "ru": "Дальность подводного кабеля"
  },
+ "building_grid_undersea_cable_range_add_desc": {
+  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
+  "ru": "Сколько [Concept('concept_sea_node','морских узлов')] может пересечь кабель «$building_grid_hvdc_interconnector$». При значении 1 кабель достигает прибрежных областей у того же объекта ($concept_sea_node$), которого касается эта область. Каждое следующее очко позволяет пересечь ещё один такой объект ($concept_sea_node$) и выйти на побережье, которого касаются оба. Учитывается только у «$building_grid_hvdc_interconnector$»: технология удлиняет кабель, но не прокладывает его."
+ },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
   "ru": "$bg_arts$: [concept_sol] работников"
  },
+ "building_group_bg_arts_standard_of_living_add_desc": {
+  "en": "A bonus or penalty to the [concept_sol] of employees in $bg_arts$",
+  "ru": "Бонус или штраф к [Concept('concept_sol','уровню жизни')] работников отрасли «$bg_arts$»"
+ },
  "building_group_bg_biotechnology_throughput_add": {
   "en": "Biotechnology [concept_throughput]",
   "ru": "Биотехнологии: [concept_throughput]"
+ },
+ "building_group_bg_biotechnology_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $bg_biotechnology$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$bg_biotechnology$»"
  },
  "building_group_bg_bureaucracy_throughput_add": {
   "en": "Government Administration [concept_throughput] Modifier",
@@ -727,25 +983,49 @@
   "en": "$bg_clean_power$ Construction Efficiency",
   "ru": "$bg_clean_power$: эффективность строительства"
  },
+ "building_group_bg_clean_power_construction_efficiency_add_desc": {
+  "en": "An increase or decrease to the weekly [concept_construction] progress for $bg_clean_power$ buildings: hydro, nuclear, fusion and renewable plants",
+  "ru": "Увеличение или снижение еженедельного прогресса [Concept('concept_construction','строительства')] зданий группы «$bg_clean_power$»: гидро-, атомных, термоядерных и возобновляемых станций"
+ },
  "building_group_bg_construction_throughput_add": {
   "en": "Construction Building [concept_throughput]",
   "ru": "Строительные здания: [concept_throughput]"
+ },
+ "building_group_bg_construction_throughput_add_desc": {
+  "en": "Increases the [concept_throughput] of all construction buildings",
+  "ru": "Повышение: [concept_throughput|l] всех строительных зданий"
  },
  "building_group_bg_heavy_industry_infrastructure_usage_mult": {
   "en": "[concept_infrastructure_usage] of $bg_heavy_industry$ buildings",
   "ru": "$bg_heavy_industry$: [concept_infrastructure_usage]"
  },
+ "building_group_bg_heavy_industry_infrastructure_usage_mult_desc": {
+  "en": "A bonus or penalty to the [concept_infrastructure_usage] of $bg_heavy_industry$ buildings",
+  "ru": "Бонус или штраф. $bg_heavy_industry$: [concept_infrastructure_usage]"
+ },
  "building_group_bg_high_tech_construction_efficiency_add": {
   "en": "$bg_high_tech$ Construction Efficiency",
   "ru": "$bg_high_tech$: эффективность строительства"
+ },
+ "building_group_bg_high_tech_construction_efficiency_add_desc": {
+  "en": "An increase or decrease to the weekly [concept_construction] progress for $bg_high_tech$ buildings",
+  "ru": "Увеличение или снижение еженедельного прогресса [Concept('concept_construction','строительства')] зданий группы «$bg_high_tech$»"
  },
  "building_group_bg_military_standard_of_living_add": {
   "en": "Soldiers’ [concept_ch_sol]",
   "ru": "Солдаты: [concept_ch_sol]"
  },
+ "building_group_bg_military_standard_of_living_add_desc": {
+  "en": "A bonus or penalty to the [concept_sol] of [Concept('concept_pop', '$concept_pops|q$')] working in $bg_military$ buildings",
+  "ru": "Бонус или штраф к [Concept('concept_sol','уровню жизни')] [Concept('concept_pop', 'групп населения')], работающих в зданиях группы «$bg_military$»"
+ },
  "building_group_bg_power_construction_efficiency_add": {
   "en": "$bg_power$ Construction Efficiency",
   "ru": "$bg_power$: эффективность строительства"
+ },
+ "building_group_bg_power_construction_efficiency_add_desc": {
+  "en": "An increase or decrease to the weekly [concept_construction] progress for $bg_power$",
+  "ru": "Увеличение или снижение еженедельного прогресса [Concept('concept_construction','строительства')] для группы «$bg_power$»"
  },
  "building_group_bg_power_infrastructure_usage_mult": {
   "en": "[concept_infrastructure_usage] of $bg_power$ buildings",
@@ -755,6 +1035,10 @@
   "en": "Power Plant [concept_throughput]",
   "ru": "Электростанции: [concept_throughput]"
  },
+ "building_group_bg_power_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Power Plant buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Электростанция»"
+ },
  "building_group_bg_ship_construction_construction_efficiency_add": {
   "en": "$bg_ship_construction$ Construction Efficiency",
   "ru": "$bg_ship_construction$: эффективность строительства"
@@ -762,6 +1046,10 @@
  "building_group_bg_trade_employee_mult": {
   "en": "Trade Employee Multiplier",
   "ru": "Торговля: множитель работников"
+ },
+ "building_group_bg_trade_employee_mult_desc": {
+  "en": "A percentage change to the number of employees in $bg_trade$ buildings",
+  "ru": "Процентное изменение числа работников в зданиях группы «$bg_trade$»"
  },
  "building_group_bg_urban_facilities_employee_mult": {
   "en": "Urban Facilities Employee Multiplier",
@@ -778,6 +1066,10 @@
  "building_guthrie_singapore_agency": {
   "en": "Guthrie Singapore Agency House",
   "ru": "Сингапурское агентство Гатри"
+ },
+ "building_guthrie_singapore_agency_desc": {
+  "en": "The Singapore head office of Guthrie & Co., founded in 1821 and the oldest of the Straits agency houses, which traded British cloth and machinery for the produce of the region and went on to manage plantation estates across Malaya.",
+  "ru": "Сингапурская штаб-квартира «Гатри и К°», основанная в 1821 году и старейшая из агентских домов Стрейтс, торговавшая британским сукном и машинами в обмен на продукцию региона и затем взявшая под управление плантационные поместья по всей Малайе."
  },
  "building_gwr_swindon_works": {
   "en": "GWR Swindon Works",
@@ -807,6 +1099,10 @@
   "en": "Highway [concept_throughput]",
   "ru": "Автомагистраль: [concept_throughput]"
  },
+ "building_highway_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Highway buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Автомагистраль»"
+ },
  "building_hispano_suiza_barcelona_factory": {
   "en": "Hispano-Suiza Barcelona Factory",
   "ru": "Завод Испано-Суиза в Барселоне"
@@ -828,6 +1124,10 @@
   "ru": "Гидроэлектростанция"
  },
  "building_hydro_plant_throughput_add": {
+  "en": "Hydro Plant [concept_throughput]",
+  "ru": "Гидроэлектростанция: [concept_throughput]"
+ },
+ "building_hydro_plant_throughput_add_desc": {
   "en": "Hydro Plant [concept_throughput]",
   "ru": "Гидроэлектростанция: [concept_throughput]"
  },
@@ -871,6 +1171,10 @@
   "en": "InGen Biological Preserve",
   "ru": "Биологический заповедник InGen"
  },
+ "building_ingen_biological_preserve_desc": {
+  "en": "InGen's island preserve, stocked with animals that were extinct until the company rebuilt their DNA. Visitors cross the world to see them from behind electrified fences, and the same laboratories breed hardier livestock for the mainland.",
+  "ru": "Островной заповедник InGen, населённый животными, вымершими до тех пор, пока компания не восстановила их ДНК. Посетители со всего мира приезжают смотреть на них из-за ограждений под током, а в тех же лабораториях выводят более выносливый скот для материка."
+ },
  "building_ingolstadt_power_station": {
   "en": "Ingolstadt Power Station",
   "ru": "Электростанция Ингольштадт"
@@ -890,6 +1194,10 @@
  "building_jardine_princeps_house": {
   "en": "Jardine Princeps House",
   "ru": "Дом Принсепс компании «Жардин»"
+ },
+ "building_jardine_princeps_house_desc": {
+  "en": "Jardine, Matheson & Co.'s Hong Kong head office, nerve center of a sprawling China-coast trading empire.",
+  "ru": "Гонконгская штаб-квартира «Джардин, Мэтисон и К°», нервный центр раскинувшейся торговой империи на побережье Китая."
  },
  "building_jiangnan_nanjing_brocade_hall": {
   "en": "Jiangnan Nanjing Brocade Hall",
@@ -946,6 +1254,10 @@
  "building_krupp_essen_works": {
   "en": "Krupp Essen Works",
   "ru": "Заводы Круппа в Эссене"
+ },
+ "building_krupp_essen_works_desc": {
+  "en": "The legendary Krupp steelworks in Essen, producing the finest steel and armaments in the world.",
+  "ru": "Легендарный сталелитейный завод Круппа в Эссене, производивший лучшую в мире сталь и вооружение."
  },
  "building_la_rosada_buenos_aires_arsenal": {
   "en": "La Rosada Buenos Aires Arsenal",
@@ -1011,6 +1323,10 @@
   "en": "Markwald Bangkok Rice Mill",
   "ru": "Рисовая мельница Марквальд в Бангкоке"
  },
+ "building_markwald_bangkok_rice_mill_desc": {
+  "en": "The steam rice mill and riverside godowns of A. Markwald & Co., one of the German trading houses that milled and shipped Siam's rice.",
+  "ru": "Паровая рисовая мельница и речные склады «А. Маркальд и К°», одного из германских торговых домов, перерабатывавших и вывозивших сиамский рис."
+ },
  "building_massey_harris_toronto_implement_works": {
   "en": "Massey-Harris Toronto Implement Works",
   "ru": "Завод сельхозтехники Мэсси-Харрис в Торонто"
@@ -1031,9 +1347,17 @@
   "en": "MFO Oerlikon Works",
   "ru": "Заводы MFO в Эрликоне"
  },
+ "building_mfo_oerlikon_works_desc": {
+  "en": "The engineering works at Oerlikon outside Zürich whose machines carried three-phase current from Lauffen to Frankfurt in 1891, the first long-distance transmission of its kind.",
+  "ru": "Машиностроительный завод в Эрликоне под Цюрихом, чьи машины передали трёхфазный ток из Лауфена во Франкфурт в 1891 году — первая подобная передача на большое расстояние."
+ },
  "building_michelin_clermont_ferrand": {
   "en": "Michelin Clermont-Ferrand Works",
   "ru": "Заводы Michelin в Клермон-Ферране"
+ },
+ "building_michelin_clermont_ferrand_desc": {
+  "en": "Michelin's Clermont-Ferrand tire works, putting the automobile age on pneumatic rubber.",
+  "ru": "Шинный завод «Мишлен» в Клермон-Ферране, поставивший век автомобиля на пневматическую резину."
  },
  "building_microsoft_redmond_campus": {
   "en": "Microsoft Redmond Campus",
@@ -1042,6 +1366,10 @@
  "building_military_base": {
   "en": "Military Base",
   "ru": "Военная база"
+ },
+ "building_military_base_desc": {
+  "en": "A permanent military installation providing state-level [concept_infrastructure] and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders.",
+  "ru": "Постоянное военное сооружение, обеспечивающее [Concept('concept_infrastructure','инфраструктуру')] уровня области и оборонительные бонусы [Concept('concept_fortification_system','укреплений')]. Расширение базы и улучшение её [Concept('concept_production_method', 'методов производства')] повышает [Concept('concept_fortification_level','уровень укреплений')], открывая всё более сильные [Concept('concept_battle_condition', 'условия боя')] для обороняющихся."
  },
  "building_mind_upload_nexus": {
   "en": "Mind Upload Nexus",
@@ -1059,9 +1387,17 @@
   "en": "Mitsubishi Nagasaki Shipyard",
   "ru": "Верфь Mitsubishi в Нагасаки"
  },
+ "building_mitsubishi_nagasaki_shipyard_desc": {
+  "en": "Mitsubishi's massive Nagasaki shipyard, constructing warships and merchant vessels that project Japan's industrial might across the Pacific.",
+  "ru": "Огромная верфь «Мицубиси» в Нагасаки, строящая военные и торговые суда, которые проецируют промышленную мощь Японии через Тихий океан."
+ },
  "building_mitsui_trading_house": {
   "en": "Mitsui Trading House",
   "ru": "Торговый дом Mitsui"
+ },
+ "building_mitsui_trading_house_desc": {
+  "en": "The Mitsui [glossary_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.",
+  "ru": "Центральный торговый дом [glossary_zaibatsu|l] «Мицуи», координирующий обширную сеть банковских, торговых и судоходных операций по всей Восточной Азии и за её пределами."
  },
  "building_mokta_el_hadid_beni_saf_mine": {
   "en": "Mokta el Hadid Beni Saf Mine",
@@ -1070,6 +1406,10 @@
  "building_monsanto_chesterfield_center": {
   "en": "Monsanto Chesterfield Research Center",
   "ru": "Исследовательский центр Monsanto в Честерфилде"
+ },
+ "building_monsanto_chesterfield_center_desc": {
+  "en": "Monsanto's life-sciences laboratories at Chesterfield, outside St. Louis. Its plant biologists bred the herbicide-tolerant and insect-resistant crops that by the 2010s made up most of the soy, maize and cotton grown in the United States.",
+  "ru": "Лаборатории наук о жизни «Монсанто» в Честерфилде близ Сент-Луиса. Её биологи-растениеводы вывели устойчивые к гербицидам и насекомым культуры, к 2010-м годам составлявшие большую часть сои, кукурузы и хлопка, выращиваемых в США."
  },
  "building_morozov_orekhovo_zuevo_mills": {
   "en": "Morozov Orekhovo-Zuevo Mills",
@@ -1119,6 +1459,10 @@
   "en": "Network [concept_infrastructure] [concept_throughput]",
   "ru": "[concept_infrastructure] сети: [concept_throughput]"
  },
+ "building_network_infrastructure_throughput_add_desc": {
+  "en": "Network [concept_infrastructure] [concept_throughput]",
+  "ru": "[concept_infrastructure] сети: [concept_throughput]"
+ },
  "building_neurovault_hq": {
   "en": "Neurovault Research Complex",
   "ru": "Исследовательский комплекс Neurovault"
@@ -1126,6 +1470,10 @@
  "building_nhm_factorij_batavia": {
   "en": "NHM Factorij Batavia",
   "ru": "Фактория НХМ в Батавии"
+ },
+ "building_nhm_factorij_batavia_desc": {
+  "en": "The Batavia head office of the Netherlands Trading Society, the Factorij, through which the coffee and sugar of Java's forced-cultivation system reached the Amsterdam auctions.",
+  "ru": "Батавийская контора Нидерландского торгового общества — «Факторей», через которую кофе и сахар яванской системы принудительных культур доходили до амстердамских аукционов."
  },
  "building_nickel_cobalt_mine": {
   "en": "Nickel and Cobalt Mine",
@@ -1147,9 +1495,17 @@
   "en": "Nobel Baku Refinery",
   "ru": "Нефтезавод Нобеля в Баку"
  },
+ "building_nobel_baku_refinery_desc": {
+  "en": "The Nobel Brothers' pioneering petroleum refinery in Baku, processing Caspian crude oil into kerosene, explosives, and industrial chemicals.",
+  "ru": "Новаторский нефтеперерабатывающий завод братьев Нобель в Баку, перерабатывавший каспийскую сырую нефть в керосин, взрывчатые вещества и промышленные химикаты."
+ },
  "building_noda_shoyu_goyogura": {
   "en": "Noda Shoyu Goyōgura",
   "ru": "Соевый соус Нода «Гёёгура»"
+ },
+ "building_noda_shoyu_goyogura_desc": {
+  "en": "The brewery built at Noda in 1939 to make soy sauce for the Imperial Household in wooden vats by the old, slow method, the showpiece of the brewers of the Kikkoman mark.",
+  "ru": "Завод, построенный в Ноде в 1939 году для производства соевого соуса для Императорского двора в деревянных чанах по старому медленному способу, образцовое предприятие пивоваров соуса марки «Киккоман»."
  },
  "building_nokia_cable_works": {
   "en": "Nokia Cable Works",
@@ -1163,11 +1519,19 @@
   "en": "Novo Nordisk Kalundborg Plant",
   "ru": "Завод Novo Nordisk в Калундборге"
  },
+ "building_novo_nordisk_kalundborg_plant_desc": {
+  "en": "Novo Nordisk's insulin works at Kalundborg on Zealand, the largest in the world. It belongs to the Kalundborg Symbiosis, in which the town's power station, refinery and factories trade steam, water and by-products, so that one plant's waste is another's feedstock.",
+  "ru": "Инсулиновый завод «Ново Нордиск» в Калуннборге на Зеландии, крупнейший в мире. Он входит в «Калуннборгский симбиоз», где городская электростанция, нефтеперерабатывающий завод и фабрики обмениваются паром, водой и побочными продуктами, так что отходы одного предприятия становятся сырьём другого."
+ },
  "building_nuclear_plant": {
   "en": "Nuclear Plant",
   "ru": "Атомная электростанция"
  },
  "building_nuclear_plant_throughput_add": {
+  "en": "Nuclear Plant [concept_throughput]",
+  "ru": "Атомная электростанция: [concept_throughput]"
+ },
+ "building_nuclear_plant_throughput_add_desc": {
   "en": "Nuclear Plant [concept_throughput]",
   "ru": "Атомная электростанция: [concept_throughput]"
  },
@@ -1186,6 +1550,10 @@
  "building_ocmc_unsan_gold_mines": {
   "en": "OCMC Unsan Gold Mines",
   "ru": "Золотые рудники OCMC в Унсане"
+ },
+ "building_ocmc_unsan_gold_mines_desc": {
+  "en": "The gold concession at Unsan in northern Korea, bought by American investors in 1897 and worked by the Oriental Consolidated Mining Company until its sale to Nippon Mining in 1939.",
+  "ru": "Золотая концессия в Унсане на севере Кореи, купленная американскими инвесторами в 1897 году и разрабатывавшаяся «Ориентал консолидейтед майнинг компани» до продажи «Ниппон майнинг» в 1939 году."
  },
  "building_ocp_khouribga_mine": {
   "en": "OCP Khouribga Phosphate Mine",
@@ -1219,9 +1587,17 @@
   "en": "Orbital Battlestation Construction Site",
   "ru": "Орбитальная боевая станция: стройплощадка"
  },
+ "building_orbital_battlestation_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «$building_orbital_battlestation$» и к военным бонусам, которые они дают"
+ },
  "building_orbital_defense_battery": {
   "en": "Ground-to-Orbit Battery",
   "ru": "Наземно-орбитальная батарея"
+ },
+ "building_orbital_defense_battery_desc": {
+  "en": "Interceptor silos, and later lasers, aimed at the sky over our own territory. Each level fires on every enemy fleet in Earth orbit every month, by its production method, from states we control. Ground lasers also sweep small debris out of low orbit while we are at peace.",
+  "ru": "Ракеты-перехватчики, а позднее лазеры, нацеленные в небо над нашей территорией. Каждый уровень ежемесячно поражает каждый вражеский флот на околоземной орбите, в зависимости от метода производства, из подконтрольных нам областей. Наземные лазеры также расчищают мелкий мусор на низкой орбите, пока мы живём в мире."
  },
  "building_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
@@ -1283,6 +1659,10 @@
   "en": "Pirelli Bicocca Plant",
   "ru": "Завод Pirelli в Бикокке"
  },
+ "building_pirelli_bicocca_plant_desc": {
+  "en": "Pirelli's Bicocca works in Milan, producing tires and the insulated cables wiring the modern world.",
+  "ru": "Завод «Пирелли» в Бикокке в Милане, производящий шины и изолированные кабели, которыми опутан современный мир."
+ },
  "building_platinum_group_metals_mine": {
   "en": "Platinum Group Metals Mine",
   "ru": "Шахта металлов платиновой группы"
@@ -1323,9 +1703,17 @@
   "en": "Public Housing",
   "ru": "Социальное жильё"
  },
+ "building_public_housing_desc": {
+  "en": "Dwellings the state builds and runs, so a city can grow without [concept_migration_crowding] turning migrants away. Each staffed level adds [concept_urban_engineering] to its [concept_state], more on each later method, and each point houses #v 1,000#! more people before crowding sets in, multiplied by the state's $state_migration_crowding_density_mult$. Technology sets how many levels a state can hold. A state below its crowding threshold gains nothing from it.",
+  "ru": "Жильё, которое строит и содержит государство, чтобы город мог расти, а [concept_migration_crowding|l] не отпугивала мигрантов. Каждый укомплектованный уровень добавляет [Concept('concept_urban_engineering','городскую инженерию')] её [Concept('concept_state','области')], тем больше на каждом следующем методе, а каждое очко вмещает на #v 1 000#! человек больше до наступления тесноты, умноженное на показатель области «$state_migration_crowding_density_mult$». Технология определяет, сколько уровней может быть в области. Область ниже порога тесноты ничего от него не получает."
+ },
  "building_putilov_works": {
   "en": "Putilov Works",
   "ru": "Путиловский завод"
+ },
+ "building_putilov_works_desc": {
+  "en": "The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire.",
+  "ru": "Путиловский сталелитейный завод в Санкт-Петербурге, производивший тяжёлое оборудование, железнодорожную технику и артиллерию для Российской империи."
  },
  "building_rac_sitka_trading_post": {
   "en": "Russian-American Company Sitka Trading Post",
@@ -1339,6 +1727,10 @@
   "en": "Ramirez Vila Real Cannery",
   "ru": "Консервный завод Рамиреса в Вила-Реал"
  },
+ "building_ramirez_vila_real_cannery_desc": {
+  "en": "The fish-salting house at Vila Real de Santo António that Sebastian Ramirez opened in 1853 and turned over to tins in 1865, the cradle of the oldest canning firm still in business.",
+  "ru": "Рыбозасолочное предприятие в Вила-Реал-де-Санту-Антониу, которое Себастьян Рамирес открыл в 1853 году и перевёл на консервирование в жестяных банках в 1865-м, колыбель старейшей действующей консервной фирмы."
+ },
  "building_rare_earth_metals_mine": {
   "en": "Rare Earth Metals Mine",
   "ru": "Шахта редкоземельных металлов"
@@ -1350,6 +1742,10 @@
  "building_rejoovenesense_compound": {
   "en": "RejoovenEsense Compound",
   "ru": "Комплекс RejoovenEsense"
+ },
+ "building_rejoovenesense_compound_desc": {
+  "en": "RejoovenEsense's walled campus, where its staff live and work under guard. Its clinics sell treatments that halt aging and wind the body back toward its prime to anyone who can pay, and its laboratories work on a pill that promises the same to everyone.",
+  "ru": "Огороженный кампус RejoovenEsense, где сотрудники живут и работают под охраной. Его клиники продают всем, кто может заплатить, процедуры, останавливающие старение и возвращающие тело к расцвету, а лаборатории работают над таблеткой, обещающей то же самое всем."
  },
  "building_rekal_hq": {
   "en": "Rekal Memory Center",
@@ -1363,6 +1759,10 @@
   "en": "Renault Billancourt Plant",
   "ru": "Завод Renault в Бийанкуре"
  },
+ "building_renault_billancourt_plant_desc": {
+  "en": "Renault's Boulogne-Billancourt works on the Seine, a cathedral of French mass-production.",
+  "ru": "Завод «Рено» в Булонь-Бийанкур на Сене, собор французского массового производства."
+ },
  "building_renewable_energy_plant": {
   "en": "Renewable Energy Plant",
   "ru": "Станция возобновляемой энергии"
@@ -1371,17 +1771,33 @@
   "en": "Renewable Energy Plant [concept_throughput]",
   "ru": "Станция возобновляемой энергии: [concept_throughput]"
  },
+ "building_renewable_energy_plant_throughput_add_desc": {
+  "en": "Renewable Energy Plant [concept_throughput]",
+  "ru": "Станция возобновляемой энергии: [concept_throughput]"
+ },
  "building_resettlement_arrivals_add": {
   "en": "Settlers arrived last month",
   "ru": "Прибыло поселенцев в прошлом месяце"
+ },
+ "building_resettlement_arrivals_add_desc": {
+  "en": "People this Settlement Authority brought here last month.",
+  "ru": "Люди, которых это Управление по заселению привезло сюда в прошлом месяце."
  },
  "building_resettlement_colony": {
   "en": "Settlement Authority",
   "ru": "Управление по заселению"
  },
+ "building_resettlement_colony_desc": {
+  "en": "A [concept_internal_resettlement] office that recruits settlers across the country and brings them to this frontier. Its program decides who is recruited and how; its settlement plan decides what they build here. It can be founded only on an open frontier and closes when the region fills up; its build requirements show the numbers.",
+  "ru": "Офис программы [Concept('concept_internal_resettlement','внутреннего переселения')], который вербует поселенцев по всей стране и перевозит их на этот фронтир. Его программа определяет, кого и как вербуют; его план заселения — что они здесь строят. Основать его можно только на открытом фронтире, и он закрывается, когда регион заполняется; цифры показаны в требованиях к строительству."
+ },
  "building_resettlement_transit_deaths_add": {
   "en": "Died in transit last month",
   "ru": "Погибло в пути в прошлом месяце"
+ },
+ "building_resettlement_transit_deaths_add_desc": {
+  "en": "People recruited for this Settlement Authority last month who died before they arrived.",
+  "ru": "Люди, завербованные этим Управлением по заселению в прошлом месяце и умершие до прибытия."
  },
  "building_rheinmetall_unterluss_proving_ground": {
   "en": "Rheinmetall Unterlüss Proving Ground",
@@ -1395,11 +1811,19 @@
   "en": "Robotic or AI-Managed",
   "ru": "Роботизированное или под управлением ИИ"
  },
+ "building_robotic_or_ai_managed_bool_desc": {
+  "en": "Robots or AI do the work people did in this building. Its levels count toward our automated share, on which $law_robot_tax$ and $law_automation_dividend$ pay out, and $law_human_labor_quotas$ withdraws the [concept_production_method].",
+  "ru": "Работу, которую в этом здании выполняли люди, выполняют роботы или ИИ. Его уровни входят в нашу долю автоматизации, от которой действуют законы «$law_robot_tax$» и «$law_automation_dividend$», а «$law_human_labor_quotas$» снимает [concept_production_method|l]."
+ },
  "building_robotics_industry": {
   "en": "Robotics Industry",
   "ru": "Робототехническая промышленность"
  },
  "building_robotics_industry_throughput_add": {
+  "en": "Robotics Industry [concept_throughput]",
+  "ru": "Робототехническая промышленность: [concept_throughput]"
+ },
+ "building_robotics_industry_throughput_add_desc": {
   "en": "Robotics Industry [concept_throughput]",
   "ru": "Робототехническая промышленность: [concept_throughput]"
  },
@@ -1414,6 +1838,10 @@
  "building_rolls_royce_derby_works": {
   "en": "Rolls-Royce Derby Works",
   "ru": "Заводы Rolls-Royce в Дерби"
+ },
+ "building_rolls_royce_derby_works_desc": {
+  "en": "Rolls-Royce's Derby works, where master craftsmen build the world's finest aero-engines and motorcars by hand.",
+  "ru": "Завод «Роллс-Ройс» в Дерби, где мастера вручную строят лучшие в мире авиадвигатели и автомобили."
  },
  "building_romanian_star_ploiesti_refinery": {
   "en": "Romanian Star Ploiești Refinery",
@@ -1430,6 +1858,10 @@
  "building_rosen_association_hq": {
   "en": "Rosen Association Headquarters",
   "ru": "Штаб-квартира ассоциации Розена"
+ },
+ "building_rosen_association_hq_desc": {
+  "en": "The Rosen Association's Seattle headquarters. Its vats grow android workers who can pass for human, and artificial animals for households that can no longer find real ones.",
+  "ru": "Штаб-квартира Rosen Association в Сиэтле. В её чанах выращивают андроидов-рабочих, неотличимых от людей, и искусственных животных для домов, которые больше не могут найти настоящих."
  },
  "building_rossi_sao_leopoldo_arms_factory": {
   "en": "Rossi São Leopoldo Arms Factory",
@@ -1479,6 +1911,10 @@
   "en": "Schneider Le Creusot Works",
   "ru": "Заводы Шнейдер в Ле-Крезо"
  },
+ "building_schneider_le_creusot_desc": {
+  "en": "The great Schneider-Creusot industrial complex, France's premier producer of steel, artillery, and armaments since the Napoleonic era.",
+  "ru": "Огромный промышленный комплекс «Шнейдер-Крезо», ведущий французский производитель стали, артиллерии и вооружений со времён Наполеона."
+ },
  "building_secn_ferrol_shipyard": {
   "en": "SECN Ferrol Shipyard",
   "ru": "Верфь SECN в Ферроле"
@@ -1486,6 +1922,10 @@
  "building_sfct_hon_gai_collieries": {
   "en": "SFCT Hòn Gai Collieries",
   "ru": "Угольные копи SFCT в Хонгае"
+ },
+ "building_sfct_hon_gai_collieries_desc": {
+  "en": "The anthracite pits of the Hòn Gai concession on Hạ Long Bay, worked by the Société française des charbonnages du Tonkin from 1889 and linked by rail to the company's own coaling port.",
+  "ru": "Антрацитовые шахты концессии Хонгай на заливе Халонг, которые с 1889 года разрабатывало Французское общество угольных копей Тонкина и которые связаны железной дорогой с собственным угольным портом компании."
  },
  "building_shell_pernis_refinery": {
   "en": "Shell Pernis Refinery",
@@ -1507,6 +1947,10 @@
   "en": "Siam Electricity Wat Liab Power Station",
   "ru": "Электростанция Ват Лиаб компании «Сиам Электрисити»"
  },
+ "building_siam_electric_wat_liab_station_desc": {
+  "en": "Siam's first power station, at Wat Liab beside the Chao Phraya, where the Danish-run Siam Electricity Company made the current for Bangkok's lamps and trams.",
+  "ru": "Первая электростанция Сиама в Ват-Лиаб у реки Чаопхрая, где датская «Сиамская электрическая компания» вырабатывала ток для бангкокских ламп и трамваев."
+ },
  "building_sibur_tobolsk_complex": {
   "en": "Sibur Tobolsk Petrochemical Complex",
   "ru": "Нефтехимический комплекс «Сибур» в Тобольске"
@@ -1514,6 +1958,10 @@
  "building_siemens_erlangen_campus": {
   "en": "Siemens Erlangen Campus",
   "ru": "Кампус Siemens в Эрлангене"
+ },
+ "building_siemens_erlangen_campus_desc": {
+  "en": "The Siemens research and manufacturing campus, pioneering telegraph systems, electrical generators, and communications technology.",
+  "ru": "Исследовательский и производственный кампус «Сименс», пионер телеграфных систем, электрогенераторов и связи."
  },
  "building_skoda_pilsen_works": {
   "en": "Škoda Pilsen Works",
@@ -1531,6 +1979,10 @@
   "en": "Software Industries [concept_throughput]",
   "ru": "Программная индустрия: [concept_throughput]"
  },
+ "building_software_industry_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Software Industry buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Программная индустрия»"
+ },
  "building_solar_collector": {
   "en": "Orbital Solar Collector",
   "ru": "Орбитальный солнечный коллектор"
@@ -1543,9 +1995,17 @@
   "en": "Solar Collector [concept_throughput]",
   "ru": "Солнечный коллектор: [concept_throughput]"
  },
+ "building_solar_collector_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of Solar Collector buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий «Солнечный коллектор»"
+ },
  "building_solar_receiver": {
   "en": "Solar Power Receiver",
   "ru": "Приёмник солнечной энергии"
+ },
+ "building_solar_receiver_slots_tt": {
+  "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
+  "ru": "Свободный слот солнечного приёмника: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! свободно по стране (уровни в состоянии «[concept_under_construction|l]» считаются занятыми)"
  },
  "building_sony_pictures_studios": {
   "en": "Sony Pictures Studios",
@@ -1554,6 +2014,10 @@
  "building_space_command": {
   "en": "Space Command",
   "ru": "Космическое командование"
+ },
+ "building_space_command_desc": {
+  "en": "The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep multiplies its maintenance goods.",
+  "ru": "Верфи, экипажи и штабы, строящие и содержащие военные корабли нации в космосе. Каждый уровень ежемесячно наращивает силу флота в зависимости от метода производства, а содержание флотов умножает его товары для обслуживания."
  },
  "building_space_elevator": {
   "en": "Space Elevator",
@@ -1575,6 +2039,10 @@
   "en": "Space Program [concept_throughput]",
   "ru": "Космическая программа: [concept_throughput]"
  },
+ "building_space_program_throughput_add_desc": {
+  "en": "Space Program [concept_throughput]",
+  "ru": "Космическая программа: [concept_throughput]"
+ },
  "building_spacex_starbase": {
   "en": "Starbase",
   "ru": "Старбейс"
@@ -1590,6 +2058,10 @@
  "building_sr_site_amalthea": {
   "en": "$sr_site_name_amalthea$ Colony",
   "ru": "Колония: $sr_site_name_amalthea$"
+ },
+ "building_sr_site_amalthea_desc": {
+  "en": "The colony on $sr_site_name_amalthea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_amalthea$»: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_arcadia_planitia": {
   "en": "$sr_site_name_arcadia_planitia$ Colony",
@@ -1610,6 +2082,10 @@
  "building_sr_site_daedalus": {
   "en": "$sr_site_name_daedalus$ Colony",
   "ru": "Колония: $sr_site_name_daedalus$"
+ },
+ "building_sr_site_daedalus_desc": {
+  "en": "The colony at $sr_site_name_daedalus$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "ru": "Колония «$sr_site_name_daedalus$» на Луне: упомянута здесь, чтобы статья договора «Уступить колонию» могла передать её от одной страны другой. Она никогда не строится."
  },
  "building_sr_site_enceladus": {
   "en": "$sr_site_name_enceladus$ Colony",
@@ -1751,6 +2227,10 @@
   "en": "Standard Oil Refinery",
   "ru": "Нефтезавод Standard Oil"
  },
+ "building_standard_oil_refinery_desc": {
+  "en": "A sprawling refinery complex that dominates the petroleum industry, refining crude oil into fuel and chemicals.",
+  "ru": "Обширный нефтеперерабатывающий комплекс, господствующий в нефтяной промышленности и перерабатывающий сырую нефть в топливо и химикаты."
+ },
  "building_state_youth_centers": {
   "en": "State Youth Centers",
   "ru": "Государственные молодёжные центры"
@@ -1767,9 +2247,17 @@
   "en": "Strategic Reserve Hub",
   "ru": "Узел стратегического резерва"
  },
+ "building_strategic_reserve_hub_desc": {
+  "en": "A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, chemicals, and conductive metals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.",
+  "ru": "Национальное хранилище зерна, боеприпасов, нефти, стрелкового оружия, артиллерии, самолётов, танков, химикатов и проводниковых металлов. Каждый уровень даёт +5000 ёмкости на каждый резервный товар и позволяет каждому товару перемещаться в резерв или из него до 1000 ед. в неделю; предел задаётся отдельно для каждого товара на вкладке «Резерв» панели «Рынок». Его нельзя снести, и он всегда стоит в столице: если столица переезжает, узел бесплатно отстраивается там. Иностранная держава, захватившая его область, уничтожает его."
+ },
  "building_strategic_reserve_silo": {
   "en": "Strategic Reserve Silo",
   "ru": "Силос стратегического резерва"
+ },
+ "building_strategic_reserve_silo_desc": {
+  "en": "A distributed storage depot that adds +1000 capacity per level for each reserve good and raises each good's weekly flow limit by 100 per level. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.",
+  "ru": "Распределённый склад, добавляющий +1000 ёмкости на уровень для каждого резервного товара и повышающий недельный предел потока каждого товара на 100 за уровень. Пассивное здание: чтобы перемещать товары в запас или из него, по-прежнему нужен «Узел стратегического резерва»."
  },
  "building_stt_haskoy_shipyard": {
   "en": "STT Hasköy Shipyard",
@@ -1787,6 +2275,10 @@
   "en": "Sumitomo Besshi Mine",
   "ru": "Рудник Сумитомо в Бесси"
  },
+ "building_sumitomo_besshi_mine_desc": {
+  "en": "The Besshi copper mine and smelter, the industrial cradle of the Sumitomo [glossary_zaibatsu].",
+  "ru": "Медный рудник и плавильня Бесси — промышленная колыбель [glossary_zaibatsu|l] «Сумитомо»."
+ },
  "building_sunhwaguk_seoul_tobacco_factory": {
   "en": "Sunhwaguk Seoul Tobacco Factory",
   "ru": "Табачная фабрика Сунхваго в Сеуле"
@@ -1795,9 +2287,17 @@
   "en": "Integrated Biorefinery",
   "ru": "Интегрированный биоперерабатывающий завод"
  },
+ "building_synthetics_plant_biomass_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_biomass$",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам предприятия «$building_synthetics_plant_biomass$»"
+ },
  "building_synthetics_plant_coal": {
   "en": "Carbon Conversion Works",
   "ru": "Завод переработки углерода"
+ },
+ "building_synthetics_plant_coal_throughput_add_desc": {
+  "en": "Increases the throughput of Carbon Conversion Works, including atmospheric removal and their goods inputs.",
+  "ru": "Повышает производительность завода переработки углерода, включая удаление из атмосферы и расход входящих товаров."
  },
  "building_synthetics_plant_drinks": {
   "en": "Beverage Concentrates Plant",
@@ -1819,6 +2319,10 @@
   "en": "Synthetics Fuel Works [concept_throughput]",
   "ru": "Завод синтетического топлива: [concept_throughput]"
  },
+ "building_synthetics_plant_oil_throughput_add_desc": {
+  "en": "Synthetic Fuel Works [concept_throughput]",
+  "ru": "Завод синтетического топлива: [concept_throughput]"
+ },
  "building_synthetics_plant_opium": {
   "en": "Pharmaceutical Industries",
   "ru": "Фармацевтическая промышленность"
@@ -1829,6 +2333,10 @@
  },
  "building_synthetics_plant_rubber_throughput_add": {
   "en": "Synthetics Works Rubber [concept_throughput]",
+  "ru": "Завод синтетического каучука: [concept_throughput]"
+ },
+ "building_synthetics_plant_rubber_throughput_add_desc": {
+  "en": "Synthetic Rubber Works [concept_throughput]",
   "ru": "Завод синтетического каучука: [concept_throughput]"
  },
  "building_synthetics_plant_silk": {
@@ -1855,6 +2363,10 @@
   "en": "Tata Jamshedpur Works",
   "ru": "Заводы Tata в Джамшедпуре"
  },
+ "building_tata_jamshedpur_works_desc": {
+  "en": "The Tata Iron and Steel Company works at Jamshedpur, India's first integrated steel plant and symbol of indigenous industrialization.",
+  "ru": "Завод Tata Iron and Steel Company в Джамшедпуре, первое в Индии интегрированное сталелитейное предприятие и символ отечественной индустриализации."
+ },
  "building_tencent_seafront_towers": {
   "en": "Tencent Seafront Towers",
   "ru": "Приморские башни Tencent"
@@ -1871,6 +2383,10 @@
   "en": "Thyssen Steelworks",
   "ru": "Сталелитейный завод Тиссен"
  },
+ "building_thyssen_steelworks_desc": {
+  "en": "August Thyssen's vast Ruhr steelworks, a pillar of German heavy industry.",
+  "ru": "Огромный сталелитейный завод Августа Тиссена в Руре, опора немецкой тяжёлой промышленности."
+ },
  "building_tobacco_regie_cibali_factory": {
   "en": "Tobacco Régie Cibali Factory",
   "ru": "Фабрика Табачной регии в Джибали"
@@ -1878,6 +2394,10 @@
  "building_tokyo_electric_asakusa_station": {
   "en": "Tokyo Electric Asakusa Power Station",
   "ru": "Электростанция Асакуса компании «Токио Электрик»"
+ },
+ "building_tokyo_electric_asakusa_station_desc": {
+  "en": "Tokyo Electric Light's coal-fired station at Asakusa, opened in 1895 with German AEG generators whose 50-hertz current still sets the frequency of eastern Japan.",
+  "ru": "Угольная станция «Токио электрик лайт» в Асакусе, открытая в 1895 году с германскими генераторами AEG, чей ток частотой 50 герц до сих пор задаёт частоту в восточной Японии."
  },
  "building_total_antimatter_facility_progress": {
   "en": "Antimatter Facility Progress",
@@ -1910,6 +2430,14 @@
  "building_tourism_industry": {
   "en": "Tourism Industry",
   "ru": "Туристическая индустрия"
+ },
+ "building_tourism_industry_desc": {
+  "en": "A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal.",
+  "ru": "Совокупность гостиниц, курортов и услуг для гостей, приносящая доход от [Concept('concept_tourism_system','туризма')] за счёт природной и культурной привлекательности области."
+ },
+ "building_tourism_industry_throughput_add_desc": {
+  "en": "A multiplier affecting the efficiency of $building_tourism_industry$ in this state, influenced by its spare infrastructure, art and parks.",
+  "ru": "Множитель, влияющий на эффективность «$building_tourism_industry$» в этой области; на него влияют свободная инфраструктура, искусство и парки."
  },
  "building_toyota_kaikan_plant": {
   "en": "Toyota Kaikan Museum & Plant",
@@ -1963,6 +2491,10 @@
   "en": "Van Vlissingen Oostenburg Works",
   "ru": "Заводы Ван Флиссингена в Остенбурге"
  },
+ "building_van_vlissingen_oostenburg_works_desc": {
+  "en": "The steam-engine factory opened in 1827 in a former Dutch East India Company smokehouse on Amsterdam's Oostenburg island, building engines for ships and sugar mills, bridges and rolling stock.",
+  "ru": "Фабрика паровых двигателей, открытая в 1827 году в бывшей коптильне Голландской Ост-Индской компании на острове Остенбург в Амстердаме; здесь строили двигатели для судов и сахарных заводов, мосты и подвижной состав."
+ },
  "building_verizon_building": {
   "en": "The Verizon Building",
   "ru": "Здание Verizon"
@@ -1986,6 +2518,10 @@
  "building_white_star_albion_house": {
   "en": "White Star Albion House",
   "ru": "Олбион-хаус компании «Уайт Стар»"
+ },
+ "building_white_star_albion_house_desc": {
+  "en": "The White Star Line's banded brick-and-stone head office on James Street in Liverpool, facing the Pier Head, from whose balcony the names of the Titanic's lost were read out in 1912.",
+  "ru": "Головной офис компании «Уайт Стар Лайн» из полосатого кирпича и камня на Джеймс-стрит в Ливерпуле напротив Пир-Хед, с балкона которого в 1912 году зачитывали имена погибших на «Титанике»."
  },
  "building_witkowitzer_ostrava_ironworks": {
   "en": "Witkowitzer Ostrava Ironworks",
@@ -2146,6 +2682,10 @@
  "building_yasuda_atosanupuri_mine": {
   "en": "Yasuda Atosanupuri Sulfur Mine",
   "ru": "Серный рудник Ясуда в Атосануполи"
+ },
+ "building_yasuda_atosanupuri_mine_desc": {
+  "en": "The sulfur mine on the slopes of Mount Atosanupuri in eastern Hokkaido, bought by Yasuda Zenjirō in 1887 and served by the Kushiro Railway he built that year to carry its sulfur to the refinery at Shibecha.",
+  "ru": "Серная шахта на склонах горы Атосануэпури на востоке Хоккайдо, купленная Ясудой Дзэндзиро в 1887 году и обслуживавшаяся построенной им в тот же год железной дорогой Кусиро, которая вывозила серу на завод в Сибэтя."
  },
  "building_ynchausti_manila_trading_house": {
   "en": "Ynchausti Manila Trading House",

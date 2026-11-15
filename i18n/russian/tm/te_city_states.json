@@ -1,0 +1,158 @@
+{
+ "ADN": {
+  "en": "Aden",
+  "ru": "Аден"
+ },
+ "ADN_ADJ": {
+  "en": "Adeni",
+  "ru": "аденский"
+ },
+ "BOM": {
+  "en": "Bombay",
+  "ru": "Бомбей"
+ },
+ "BUE": {
+  "en": "Buenos Aires",
+  "ru": "Буэнос-Айрес"
+ },
+ "BUE_ADJ": {
+  "en": "Porteño",
+  "ru": "буэнос-айресский"
+ },
+ "CST": {
+  "en": "Constantinople",
+  "ru": "Константинополь"
+ },
+ "CST_ADJ": {
+  "en": "Constantinopolitan",
+  "ru": "константинопольский"
+ },
+ "CTG": {
+  "en": "Cartagena",
+  "ru": "Картахена"
+ },
+ "CTG_ADJ": {
+  "en": "Cartagenero",
+  "ru": "картахенский"
+ },
+ "DJI": {
+  "en": "Djibouti",
+  "ru": "Джибути"
+ },
+ "DJI_ADJ": {
+  "en": "Djiboutian",
+  "ru": "джибутийский"
+ },
+ "DKR": {
+  "en": "Dakar",
+  "ru": "Дакар"
+ },
+ "DKR_ADJ": {
+  "en": "Dakarois",
+  "ru": "дакарский"
+ },
+ "DXB": {
+  "en": "Dubai",
+  "ru": "Дубай"
+ },
+ "FIU": {
+  "en": "Fiume",
+  "ru": "Фиуме"
+ },
+ "FIU_ADJ": {
+  "en": "Fiuman",
+  "ru": "фиумский"
+ },
+ "GOA": {
+  "en": "Goa",
+  "ru": "Гоа"
+ },
+ "GOA_ADJ": {
+  "en": "Goan",
+  "ru": "гоанский"
+ },
+ "GYE": {
+  "en": "Guayaquil",
+  "ru": "Гуаякиль"
+ },
+ "GYE_ADJ": {
+  "en": "Guayaquileño",
+  "ru": "гуаякильский"
+ },
+ "HKG": {
+  "en": "Hong Kong",
+  "ru": "Гонконг"
+ },
+ "KUW": {
+  "en": "Kuwait",
+  "ru": "Кувейт"
+ },
+ "KUW_ADJ": {
+  "en": "Kuwaiti",
+  "ru": "кувейтский"
+ },
+ "LAG": {
+  "en": "Lagos",
+  "ru": "Лагос"
+ },
+ "LAG_ADJ": {
+  "en": "Lagosian",
+  "ru": "лагосский"
+ },
+ "MCU": {
+  "en": "Macau",
+  "ru": "Макао"
+ },
+ "MCU_ADJ": {
+  "en": "Macanese",
+  "ru": "макаоский"
+ },
+ "NYC": {
+  "en": "New York",
+  "ru": "Нью-Йорк"
+ },
+ "OCL": {
+  "en": "Calabar",
+  "ru": "Калабар"
+ },
+ "PDY": {
+  "en": "Pondicherry",
+  "ru": "Пондишери"
+ },
+ "PDY_ADJ": {
+  "en": "Pondicherrian",
+  "ru": "пондишерийский"
+ },
+ "SFO": {
+  "en": "San Francisco",
+  "ru": "Сан-Франциско"
+ },
+ "SFO_ADJ": {
+  "en": "San Franciscan",
+  "ru": "сан-францисский"
+ },
+ "SGP": {
+  "en": "Singapore",
+  "ru": "Сингапур"
+ },
+ "SGP_ADJ": {
+  "en": "Singaporean",
+  "ru": "сингапурский"
+ },
+ "SHG": {
+  "en": "Shanghai",
+  "ru": "Шанхай"
+ },
+ "SHG_ADJ": {
+  "en": "Shanghainese",
+  "ru": "шанхайский"
+ },
+ "TAN": {
+  "en": "Tangier",
+  "ru": "Танжер"
+ },
+ "TAN_ADJ": {
+  "en": "Tangerine",
+  "ru": "танжерский"
+ }
+}

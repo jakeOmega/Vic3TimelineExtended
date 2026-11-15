@@ -1,7 +1,43 @@
 {
+ "ARTICLE_DRAFT_WAR_GOAL_SOURCE_MODIFIERS_TITLE": {
+  "en": "#title [WarGoal.GetTarget.GetAdjective] modifiers:#!",
+  "ru": "#title Модификаторы: [WarGoal.GetTarget.GetAdjective] противник#!"
+ },
+ "CAN_EXPAND_BUILDING_TOOLTIP": {
+  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
+  "ru": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] в области [STATE.GetName]#! (Размер: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Прогноз: [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / нед.\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! [concept_construction]: $REQUIRED_CONSTRUCTION|v0$ ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nДоступная рабочая сила: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
+ },
+ "CULTURAL_COMMUNITY_DECAYING_ACCEPTANCE_DELTA_DESC": {
+  "en": "$VALUE|0+=$ from Cultural Integration (will increase by [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] per year)",
+  "ru": "$VALUE|0+=$ от культурной интеграции (будет расти на [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] в год)"
+ },
+ "EXPANSION_PROFIT_IMPACT": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages|q$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
+  "ru": "#header Прогноз: [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] нового уровня#!\\n#v @money!$VAL|K+=$#! Прогноз: [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / нед.\\n(Без учёта [Concept('concept_building_wage','зарплат')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
+ },
+ "GOODS_PRICE_DESC_FIXED": {
+  "en": "[GOODS.GetName] has a fixed price of @money![GOODS.GetBasePrice|1v] that will never change.",
+  "ru": "У товара «[GOODS.GetName]» фиксированная цена @money![GOODS.GetBasePrice|1v], которая никогда не изменится."
+ },
  "POP_BROWSER": {
   "en": "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]National Info",
   "ru": "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]Национальный обзор"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_3_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 3#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "ru": "Доступно, когда у вашего [Concept('concept_power_bloc','силового блока')] есть #v 3#! слота [Concept('concept_power_bloc_principle','принципов')]. Изначально их #v 2#!, ещё #v 1#! добавляется при [Concept('concept_power_bloc_rank','ранге')] #v ##5#! или выше и не менее чем #v 5#! [Concept('concept_power_bloc_member', 'членах')] и ещё #v 1#! — при ранге #v ##3#! или выше и не менее чем #v 10#! членах.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 4#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "ru": "Доступно, когда у вашего [Concept('concept_power_bloc','силового блока')] есть #v 4#! слота [Concept('concept_power_bloc_principle','принципов')]. Изначально их #v 2#!, ещё #v 1#! добавляется при [Concept('concept_power_bloc_rank','ранге')] #v ##5#! или выше и не менее чем #v 5#! [Concept('concept_power_bloc_member', 'членах')] и ещё #v 1#! — при ранге #v ##3#! или выше и не менее чем #v 10#! членах.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_DURING_FORMATION": {
+  "en": "More [concept_power_bloc_principle] slots will become available as your [concept_power_bloc] achieves a higher [concept_power_bloc_rank] and acquires more [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "ru": "Больше слотов [Concept('concept_power_bloc_principle','принципов')] станет доступно, когда ваш [concept_power_bloc|l] достигнет более высокого [Concept('concept_power_bloc_rank','ранга')] и приобретёт больше [Concept('concept_power_bloc_member','членов')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "academics_desc": {
+  "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
+  "ru": "Научные работники, врачи, юристы и другие образованные специалисты, особенно те, кто учится и преподаёт в академических учреждениях. В политике они — авангард интеллигенции."
  },
  "building_art_academy": {
   "en": "Creative Industry",
@@ -39,6 +75,10 @@
   "en": "Local Condition",
   "ru": "Местное условие"
  },
+ "concept_harvest_condition_desc": {
+  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive|q$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short|q$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states|q$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings|q$')], but they can also have an effect on your [Concept('concept_pop','$concept_population|q$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
+  "ru": "$concept_harvest_condition$ — это явление, влияющее на местную экономику [Concept('concept_country','страны')]; его [Concept('concept_harvest_condition_intensity','интенсивность')], продолжительность и охват меняются. Как правило, это природное явление, которое может оказывать как #g положительное#!, так и #r отрицательное#! воздействие на затронутые [Concept('concept_state','области')]. $concept_harvest_conditions$ в основном влияют на [concept_throughput|l] сельскохозяйственных [Concept('concept_building','зданий')], но могут воздействовать и на ваши [Concept('concept_pop','группы населения')] и $concept_states$ иными способами, например снижая доступную [concept_infrastructure|l].\\n\\n$concept_harvest_conditions$ часто затрагивают $concept_states$ вокруг своего #b эпицентра#!. В таком случае [concept_harvest_condition_intensity|l] обычно убывает по мере удаления от #b эпицентра#!.\\n\\n#title Возможные $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
+ },
  "concept_harvest_condition_intensity": {
   "en": "Intensity",
   "ru": "Интенсивность"
@@ -47,6 +87,14 @@
   "en": "Local Conditions",
   "ru": "Местные условия"
  },
+ "concept_migration_target_desc": {
+  "en": "A [concept_state] selected as a suitable target for a [concept_mass_migration]. Surrounding $concept_states$ may also see some degree of $concept_immigration$ from a $concept_mass_migration$.\\n\\nTo be $concept_mass_migration_eligible$ for $concept_mass_migrations$ a state needs to be [Concept('concept_incorporated_state', '$concept_incorporated|q$')] and have at least #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access]. Additionally, the $concept_state$ cannot already be the target of a different $concept_mass_migration$ and the $concept_country$'s [GetLawGroup('lawgroup_migration').GetName] and [GetLawGroup('lawgroup_citizenship').GetName] [Concept('concept_law', '$concept_laws|q$')] need to allow $concept_migration$ to happen. A harsh [concept_local_climate] makes a state a less likely target.",
+  "ru": "[concept_state] — подходящая цель для [Concept('concept_mass_migration','массовой миграции')]. Окружающие $concept_states$ также могут принять некоторую $concept_immigration$ (событие: $concept_mass_migration$).\\n\\nТребование «$concept_mass_migration_eligible$» для событий ($concept_mass_migrations$): область должна быть [Concept('concept_incorporated_state', 'включённой')] и иметь не менее #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [Concept('concept_market_access','доступа к рынку')]. Кроме того, $concept_state$ не должна быть целью другого такого события ($concept_mass_migration$), а [Concept('concept_law', 'законы')] ([GetLawGroup('lawgroup_migration').GetName], [GetLawGroup('lawgroup_citizenship').GetName]) страны ($concept_country$) должны быть такими, чтобы $concept_migration$ была возможна. Суровый [concept_local_climate|l] снижает вероятность того, что область станет целью."
+ },
+ "concept_power_bloc_principle_group_desc": {
+  "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')] that support the same theme.",
+  "ru": "Группы из пяти ступеней [Concept('concept_power_bloc_principle','принципов')], объединённых одной темой."
+ },
  "copper": {
   "en": "Conductive Metals",
   "ru": "Проводниковые металлы"
@@ -54,6 +102,10 @@
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
   "ru": "@bur![Nbsp][concept_bureaucracy]: затраты на институт [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "country_institution_cost_institution_home_affairs_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]",
+  "ru": "Увеличение или снижение затрат @bur![Nbsp][Concept('concept_bureaucracy','бюрократии')] на [Concept('concept_institution','институт')] [GetInstitutionType('institution_home_affairs').GetName]"
  },
  "cultural_erasure": {
   "en": "Latent Hostility",
@@ -75,109 +127,217 @@
   "en": "@coal! $coal$ input",
   "ru": "@coal! $coal$: расход"
  },
+ "goods_input_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @coal! $coal$"
+ },
  "goods_input_copper_add": {
   "en": "@copper! $copper$ input",
   "ru": "@copper! $copper$: расход"
+ },
+ "goods_input_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @copper! $copper$"
  },
  "goods_input_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Input",
   "ru": "@fertilizer! $fertilizer$: расход"
  },
+ "goods_input_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @fertilizer! $fertilizer$"
+ },
  "goods_input_glass_add": {
   "en": "@glass! $glass$ input",
   "ru": "@glass! $glass$: расход"
+ },
+ "goods_input_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @glass! $glass$"
  },
  "goods_input_iron_add": {
   "en": "@iron! $iron$ input",
   "ru": "@iron! $iron$: расход"
  },
+ "goods_input_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @iron! $iron$"
+ },
  "goods_input_lead_add": {
   "en": "@lead! $lead$ input",
   "ru": "@lead! $lead$: расход"
+ },
+ "goods_input_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @lead! $lead$"
  },
  "goods_input_opium_add": {
   "en": "@opium! $opium$ input",
   "ru": "@opium! $opium$: расход"
  },
+ "goods_input_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @opium! $opium$"
+ },
  "goods_input_radios_add": {
   "en": "@radios! $radios$ input",
   "ru": "@radios! $radios$: расход"
+ },
+ "goods_input_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @radios! $radios$"
  },
  "goods_input_radios_mult": {
   "en": "@radios![Nbsp]$radios$ input",
   "ru": "@radios![Nbsp]$radios$: расход"
  },
+ "goods_input_radios_mult_desc": {
+  "en": "The amount of @radios![Nbsp]$radios$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @radios![Nbsp]$radios$"
+ },
  "goods_input_sulfur_add": {
   "en": "@sulfur! $sulfur$ input",
   "ru": "@sulfur! $sulfur$: расход"
+ },
+ "goods_input_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @sulfur! $sulfur$"
  },
  "goods_input_telephones_add": {
   "en": "@telephones! $telephones$ input",
   "ru": "@telephones! $telephones$: расход"
  },
+ "goods_input_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @telephones! $telephones$"
+ },
  "goods_input_transportation_add": {
   "en": "@transportation! $transportation$ input",
   "ru": "@transportation! $transportation$: расход"
+ },
+ "goods_input_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ consumed by buildings",
+  "ru": "Количество, потребляемое зданиями: @transportation! $transportation$"
  },
  "goods_output_coal_add": {
   "en": "@coal! $coal$ output",
   "ru": "@coal! $coal$: выпуск"
  },
+ "goods_output_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @coal! $coal$"
+ },
  "goods_output_copper_add": {
   "en": "@copper! $copper$ output",
   "ru": "@copper! $copper$: выпуск"
+ },
+ "goods_output_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @copper! $copper$"
  },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Output",
   "ru": "@fertilizer! $fertilizer$: выпуск"
  },
+ "goods_output_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @fertilizer! $fertilizer$"
+ },
  "goods_output_fertilizer_mult": {
   "en": "Building @fertilizer! $fertilizer$ output",
   "ru": "@fertilizer! $fertilizer$: выпуск зданий"
+ },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "ru": "Бонус или штраф к количеству, производимому зданиями: @fertilizer! $fertilizer$"
  },
  "goods_output_fine_art_add": {
   "en": "@fine_art! $fine_art$ output",
   "ru": "@fine_art! $fine_art$: выпуск"
  },
+ "goods_output_fine_art_add_desc": {
+  "en": "The amount of @fine_art! $fine_art$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @fine_art! $fine_art$"
+ },
  "goods_output_fine_art_mult": {
   "en": "Building @fine_art! $fine_art$ output",
   "ru": "@fine_art! $fine_art$: выпуск зданий"
+ },
+ "goods_output_fine_art_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings",
+  "ru": "Бонус или штраф к количеству, производимому зданиями: @fine_art! $fine_art$"
  },
  "goods_output_glass_add": {
   "en": "@glass! $glass$ output",
   "ru": "@glass! $glass$: выпуск"
  },
+ "goods_output_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @glass! $glass$"
+ },
  "goods_output_iron_add": {
   "en": "@iron! $iron$ output",
   "ru": "@iron! $iron$: выпуск"
+ },
+ "goods_output_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @iron! $iron$"
  },
  "goods_output_lead_add": {
   "en": "@lead! $lead$ output",
   "ru": "@lead! $lead$: выпуск"
  },
+ "goods_output_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @lead! $lead$"
+ },
  "goods_output_opium_add": {
   "en": "@opium! $opium$ output",
   "ru": "@opium! $opium$: выпуск"
+ },
+ "goods_output_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @opium! $opium$"
  },
  "goods_output_radios_add": {
   "en": "@radios! $radios$ output",
   "ru": "@radios! $radios$: выпуск"
  },
+ "goods_output_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @radios! $radios$"
+ },
  "goods_output_radios_mult": {
   "en": "Building @radios! $radios$ output",
   "ru": "@radios! $radios$: выпуск зданий"
+ },
+ "goods_output_radios_mult_desc": {
+  "en": "A bonus or penalty to the amount of @radios! $radios$ produced by buildings",
+  "ru": "Бонус или штраф к количеству, производимому зданиями: @radios! $radios$"
  },
  "goods_output_sulfur_add": {
   "en": "@sulfur! $sulfur$ output",
   "ru": "@sulfur! $sulfur$: выпуск"
  },
+ "goods_output_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @sulfur! $sulfur$"
+ },
  "goods_output_telephones_add": {
   "en": "@telephones! $telephones$ output",
   "ru": "@telephones! $telephones$: выпуск"
  },
+ "goods_output_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @telephones! $telephones$"
+ },
  "goods_output_transportation_add": {
   "en": "@transportation! $transportation$ output",
   "ru": "@transportation! $transportation$: выпуск"
+ },
+ "goods_output_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ produced by buildings",
+  "ru": "Количество, производимое зданиями: @transportation! $transportation$"
  },
  "institution_health_system": {
   "en": "Ministry of Health",
@@ -186,6 +346,10 @@
  "institution_police": {
   "en": "Ministry of Public Safety",
   "ru": "Министерство общественной безопасности"
+ },
+ "institution_police_desc": {
+  "en": "The public agencies that police the country or, under [GetLawType('law_private_policing').GetName], license the private firms that do and back them up.",
+  "ru": "Государственные ведомства, поддерживающие порядок в стране или, при законе «[GetLawType('law_private_policing').GetName]», лицензирующие и подстраховывающие частные фирмы, которые этим занимаются."
  },
  "institution_schools": {
   "en": "Ministry of Education",
@@ -199,25 +363,69 @@
   "en": "Assimilatory Citizenship",
   "ru": "Ассимилирующее гражданство"
  },
+ "law_cultural_exclusion_desc": {
+  "en": "The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.",
+  "ru": "Государство открыто для всех, кто готов слиться с национальной идентичностью. Натурализация — это культурное усвоение, требующее отказа от чужих традиций."
+ },
+ "law_dedicated_police_desc": {
+  "en": "A national police force of career officers with standardized training and a professional chain of command, paid from the national budget and answerable to the government.",
+  "ru": "Национальная полиция из кадровых офицеров со стандартизованной подготовкой и профессиональной цепочкой командования, финансируемая из государственного бюджета и подотчётная правительству."
+ },
  "law_ethnostate": {
   "en": "Ancestral Citizenship",
   "ru": "Родовое гражданство"
+ },
+ "law_ethnostate_desc": {
+  "en": "Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.",
+  "ru": "Гражданство — неизменный признак, вытекающий из «права крови». Законными членами нации признаются лишь те, кто принадлежит к основной родовой линии."
+ },
+ "law_local_police_desc": {
+  "en": "Towns and counties raise their own constables and watchmen, paid from local rates and overseen by magistrates and local notables. The force is public, but local elites decide what it does.",
+  "ru": "Города и графства содержат собственных констеблей и стражников, оплачиваемых из местных сборов и находящихся под надзором магистратов и местной знати. Силы эти публичные, но что им делать, решают местные элиты."
+ },
+ "law_militarized_police_desc": {
+  "en": "A national police organized along military lines, with military ranks, equipment and training. It answers to the government as an instrument of its will, which it carries out more effectively and more violently.",
+  "ru": "Национальная полиция, организованная по военному образцу: с воинскими званиями, снаряжением и подготовкой. Она подчиняется правительству как орудие его воли, которую исполняет эффективнее и жёстче."
  },
  "law_multicultural": {
   "en": "Universal Citizenship",
   "ru": "Всеобщее гражданство"
  },
+ "law_multicultural_desc": {
+  "en": "Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.",
+  "ru": "Гражданство определяется местом проживания и «правом почвы». Каждый житель, рождённый в границах страны, — полноправный член нации независимо от происхождения или вероисповедания."
+ },
  "law_national_supremacy": {
   "en": "Cultural Citizenship",
   "ru": "Культурное гражданство"
+ },
+ "law_national_supremacy_desc": {
+  "en": "Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.",
+  "ru": "Принадлежность к нации определяется приверженностью её главному духу. Гражданство закреплено за теми, кто разделяет язык, традиции и наследие господствующей культуры."
+ },
+ "law_no_police_desc": {
+  "en": "No structured police force exists. Communities, landlords and, in the last resort, the army keep what order there is.",
+  "ru": "Организованной полиции нет. Тот порядок, что есть, поддерживают общины, землевладельцы и, в крайнем случае, армия."
  },
  "law_racial_segregation": {
   "en": "Racialized Citizenship",
   "ru": "Расовое гражданство"
  },
+ "law_racial_segregation_desc": {
+  "en": "Citizenship is stratified based on perceived racial or ancestral proximity. Preference is given to specific lineages regardless of their cultural or linguistic adoption.",
+  "ru": "Гражданство распределяется по слоям в зависимости от предполагаемой расовой или родовой близости. Предпочтение отдаётся определённым родовым линиям независимо от их культурного или языкового усвоения."
+ },
  "law_subjecthood": {
   "en": "Sovereign Subjecthood",
   "ru": "Суверенное подданство"
+ },
+ "law_subjecthood_desc": {
+  "en": "The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.",
+  "ru": "Государство видит свой народ прежде всего как подданных суверена. Правовая принадлежность определяется местной традицией и верностью общине, а не единым национальным статусом."
+ },
+ "lawgroup_policing_desc": {
+  "en": "Who provides ordinary law enforcement, who pays for it, and to whom it answers.",
+  "ru": "Кто обеспечивает обычное поддержание правопорядка, кто за него платит и перед кем отчитывается."
  },
  "lead": {
   "en": "Base Metals",
@@ -279,6 +487,18 @@
   "en": "Precision Wireless Gear",
   "ru": "Прецизионное беспроводное оборудование"
  },
+ "principle_advanced_research_1_desc": {
+  "en": "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states.",
+  "ru": "Блок взращивает класс инженеров и научных мыслителей, привлекая интеллигенцию в государства-члены."
+ },
+ "principle_advanced_research_2_desc": {
+  "en": "Research output picks up: innovation capacity grows and engineers gain political weight.",
+  "ru": "Исследования набирают ход: растёт потенциал инноваций, а инженеры обретают политический вес."
+ },
+ "principle_advanced_research_3_desc": {
+  "en": "Directed research accelerates across all tech trees, with academics gaining visible political influence.",
+  "ru": "Целенаправленные исследования ускоряются во всех ветвях технологий, а учёные заметно повышают своё политическое влияние."
+ },
  "radios": {
   "en": "Wireless Telecommunication Gear",
   "ru": "Оборудование беспроводной связи"
@@ -291,9 +511,21 @@
   "en": "No Effect",
   "ru": "Без эффекта"
  },
+ "setting_free_construction_scaled_player_exemption_desc": {
+  "en": "Does nothing in Timeline Extended, which removes the base [concept_construction] this rule scales. Base construction comes from the $rule_free_market_construction_rule$ rule instead: a flat 10 a week with it disabled. With it enabled, construction is bought on the market.",
+  "ru": "Не действует в Timeline Extended, который убирает базовое [concept_construction|l], масштабируемое этим правилом. Вместо этого базовое строительство задаёт правило «$rule_free_market_construction_rule$»: при его отключении — фиксированные 10 в неделю. При включённом правиле строительство закупается на рынке."
+ },
+ "state_building_construction_sector_max_level_add_desc": {
+  "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",
+  "ru": "Каждое очко позволяет [Concept('concept_state','области')] вместить на #v 1 000#! человек больше, прежде чем [concept_migration_crowding|l] снизит её [Concept('concept_migration_pull','миграционную привлекательность')], как бы мало [Concept('concept_arable_land','пахотной земли')] у неё ни было. Показатель области «$state_migration_crowding_density_mult$» умножает это число людей так же, как и её землю."
+ },
  "stockpile_navy_requirement_coal_add": {
   "en": "Navy @coal! $coal$ Consumption",
   "ru": "@coal! $coal$: потребление флотом"
+ },
+ "stockpile_navy_requirement_coal_add_desc": {
+  "en": "Increases how much @coal! $coal$ the navy consumes",
+  "ru": "Увеличивает потребление флотом: @coal! $coal$"
  },
  "sulfur": {
   "en": "Chemical and Industrial Minerals",
