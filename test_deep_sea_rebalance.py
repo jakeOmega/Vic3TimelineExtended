@@ -533,9 +533,11 @@ class SelfReplicatingMiners(unittest.TestCase):
 
 class ExtraplanetaryBaseMix(unittest.TestCase):
     """The three mining methods share one mix, and Conductive Metals are a real part of
-    it (owner, 2026-11-15). At 15 a level, 1.6% of its sales, a country fed by its bases
-    covered its Tech-Critical demand one and a half times over and a ninth of its
-    Conductive, in a late game with Conductive Metals at the price cap."""
+    it: 95 / 380 / 475 a level (the figures: owner, 2026-11-15). At 15 a level, 1.6% of
+    its sales, a country fed by its bases covered its Tech-Critical demand one and a half
+    times over and a ninth of its Conductive, in a late game with Conductive Metals at
+    the price cap. The tenth-of-sales floor and the four-times rule are this test's own,
+    read off those figures, so a later edit can't thin the share back out unnoticed."""
 
     ASTEROID, COLONY = "pm_space_mine", "pm_space_colony_mining"
     MIN_CONDUCTIVE_SHARE = 0.10
