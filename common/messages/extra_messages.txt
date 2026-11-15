@@ -2512,3 +2512,31 @@ banking_eliq_wound_down_notice = {
 	notification_type = feed
 	color = good
 }
+
+# Culture merges: another country has begun a merge (te_cm_tell_start), or a merge has
+# completed (te_cmg_<m>_tell), and the merge does not reach this human country: none of
+# its cultures is a primary culture here and no state here is one of their homelands.
+# A country the merge reaches gets te_culture_merge.2 or .4 instead. The text names the
+# starter and the result from scope:te_cm_ev_starter and scope:te_cm_ev_result.
+te_cm_merge_started_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# The same start, for a country in the starter's sphere (its subject, or a member of the bloc it leads) that the merge
+# does not reach: its pops of a joined culture convert each year, as the plain notice would not say.
+te_cm_merge_started_sphere_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_cm_merge_complete_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}

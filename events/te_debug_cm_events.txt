@@ -50,11 +50,17 @@ te_debug_cm.1 = { # REVIEWED 2026-11-07: console-only test event (event te_debug
 		te_cmg_yearly_country = yes
 	}
 
-	# The dominance step, and the switch of every joined part at or over the threshold.
+	# The dominance step, and the switch of every joined part at or over the threshold. Click-only like A: the step's
+	# tells send events and notices to the other human countries (te_cmg_<m>_tell), which a tooltip walk must not reach.
 	option = {
 		name = te_debug_cm.1.c
 		trigger = { te_cm_system_enabled = yes }
-		te_cmg_dominance_all = yes
+		set_variable = te_dbg_click # click-only: the option's tooltip walk writes nothing
+		if = {
+			limit = { has_variable = te_dbg_click }
+			remove_variable = te_dbg_click
+			te_cmg_dominance_all = yes
+		}
 	}
 
 	# Every te_cm_ variable of this country's merges, to debug.log.
