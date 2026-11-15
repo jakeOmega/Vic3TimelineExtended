@@ -42,3 +42,23 @@ The audit's findings GW-3 to GW-16 (`docs/audits/gui_audit/climate_reserve_marke
 | **Hidden in-force condition.** Hover Adopt and Repeal on any policy. | The first line is a real condition, not "The policy is (not) already in force". | The `hidden_trigger` did not hide it. |
 | **Type sizes.** Read the policy rows, the emissions table and Top Emitters at 1080p. | Rows and values at 17, subheadings at 20; nothing ends in "...". | Note the cell and its text; the width tests' budget is wrong for that face. |
 | **GW-12's icons (icon batch 7).** Look at the Fossil-Fuel Tariffs and Carbon Removal Support rows. | Fossil-Fuel Tariffs shows a striped barrier gate over a coal wagon, Carbon Removal Support a pale intake tower with a blue hose coiled into a mound of earth, each dimmed while out of force and unlike its neighbors. | A magenta square: the texture path is wrong or the DDS is missing (`docs/systems/global_warming_gui_icons.md`). |
+
+## The AI answers the Environmental Movement (2026-11-15)
+
+The movement's activism now pulls an AI country toward the climate policies its "could adopt" lines count: from 50%
+activism (protesting) to 75% (militant), up to 30 points on the one policy the country can carry now and is nearest
+to adopting anyway, at most one answer a year (`gw_ai_movement_pressure` in `global_warming_ai_values.txt`).
+Offline, `test_gw_ai_movement_pressure.py` holds the wiring and a weekly model of activism and the buttons with no
+adopt-repeal cycle. No self-check: the engine facts it rests on are already used elsewhere (a movement's activism
+read as a value, `min =` over named script values, a timed variable).
+
+**Bench.** An AI-observer run to about 2017, from `main` before this change (the R2 run of 2026-11-07,
+`/mnt/d/vic3te-data/demog-runaway-sign5-2026-11-07/saves/`) and after it. `event te_debug_gw.1` option **l** writes
+three `GW_AI_WILL` lines a country to `debug.log`; the third is the movement's.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Holders in 2017.** Count the AI countries holding each of the seven in a 2017 save. | Before (R2, 2017.1.1, 205 AI countries with the entry): Climate Adaptation 23, Reforestation 31, Public Transit 3, Carbon Tax 1, the rest 0. After: more Climate Adaptation, Reforestation and Renewable Investment. The estimate from the R2 save is up to 25 more countries holding one if every authority and technology gate is open, and 9 if only the Carbon Tax is in reach. | None more: read the third line for pressing movements. `pressure` 0 at 50% activism or more: the movement's activism is not read in country scope. `nearest_margin` -1000: no policy passes `gw_ai_can_answer_*` (authority, technology). |
+| **Activism falls.** The median activism of AI countries' Environmental Movements, 2017 save. | Before: 0.52, with 27 of 52 movements at 50% or more and 9 at 75% or more. After: lower, and few left at 75%. | Activism unchanged with more holders: the policies' -10% radicalism lines are not reaching the movement (the Radicalism line check above). |
+| **No back and forth.** Pick three AI countries that adopted a policy after 50% activism; watch them ten years (the journal entry's policy rows, or the save). | Each keeps what it adopted while the movement is present. | A policy repealed within a few years of its adoption with warming unchanged: on the third line `unmasked` (the pressure with what the policies in force hold back added back) should sit above `pressure` while a policy is held. If the two are equal, the repeal reads the masked pressure and the policy is repealed for having worked. |
+| **Once a year.** The third line for a country with a pressing movement, the month after an adoption. | `answered_this_year=1` for 365 days, and no second adoption from the movement in that time. | Two adoptions inside a year: `gw_ai_movement_answered` is not set by the button's effect, or a timed variable doesn't expire as written. |
