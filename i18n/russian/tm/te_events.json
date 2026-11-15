@@ -15566,5 +15566,1041 @@
  "social_tensions_events.3.t": {
   "en": "Suggested Amendments",
   "ru": "Предлагаемые поправки"
+ },
+ "social_tensions_events.4.a": {
+  "en": "Tolerate the monopoly",
+  "ru": "Терпеть монополию"
+ },
+ "social_tensions_events.4.b": {
+  "en": "Break up the trust",
+  "ru": "Разбить трест"
+ },
+ "social_tensions_events.4.c": {
+  "en": "Nationalize the industry",
+  "ru": "Национализировать отрасль"
+ },
+ "social_tensions_events.4.d": {
+  "en": "One industrial combine now controls nearly all of a major industry. It has bought out its competitors or undersold them until they closed, its prices have risen, and the workers in its trade have no other employer to go to. Under $law_freedom_of_contract$ all of this is legal. Its customers and its workers are asking the government to step in.",
+  "ru": "Один промышленный комбинат теперь контролирует почти всю крупную отрасль. Он скупил конкурентов или сбивал цены, пока они не закрылись; цены выросли, а рабочим этой отрасли больше некуда идти. По закону «$law_freedom_of_contract$» всё это законно. Покупатели и рабочие просят правительство вмешаться."
+ },
+ "social_tensions_events.4.f": {
+  "en": "\\\"Seventeen complaints this quarter, from customers and from the few suppliers it has not bought: fixed prices, contracts nobody else would sign, deliveries stopped when a buyer complained.\\\"\\n\\n\\\"And if we move against it, the works close for a season while the lawyers argue, and its workers are the first to go without pay.\\\"\\n\\n\\\"They are already going without a raise. The combine has not raised wages since it bought the last of its rivals, because there is nowhere else for them to work.\\\"\\n\\n\\\"Then bring me a remedy that keeps the works open while the case is heard. I will put that to the council, and nothing less.\\\"",
+  "ru": "«Семнадцать жалоб за квартал — от покупателей и от тех немногих поставщиков, которых он не скупил: сговор о ценах, контракты, которых никто другой не подписал бы, поставки, прекращённые после жалобы покупателя».\\n\\n«А если мы выступим против него, заводы встанут на сезон, пока юристы спорят, и рабочие первыми останутся без жалованья».\\n\\n«Они уже сейчас без прибавки. Комбинат не повышал зарплаты с тех пор, как купил последнего из соперников: рабочим больше негде работать».\\n\\n«Тогда принесите мне средство, которое сохранит заводы открытыми, пока идёт разбирательство. Я вынесу его на совет, и ничего меньшего»."
+ },
+ "social_tensions_events.4.t": {
+  "en": "The Trust Problem",
+  "ru": "Проблема треста"
+ },
+ "social_tensions_events.5.a": {
+  "en": "Defend law enforcement",
+  "ru": "Защитить правоохранителей"
+ },
+ "social_tensions_events.5.b": {
+  "en": "Reform policing practices",
+  "ru": "Реформировать полицейскую практику"
+ },
+ "social_tensions_events.5.c": {
+  "en": "Establish civilian oversight",
+  "ru": "Создать гражданский надзор"
+ },
+ "social_tensions_events.5.d_base": {
+  "en": "A member of a discriminated community has been killed by the police. Witnesses say the victim was unarmed and was beaten after being restrained. The officer involved has not been charged. People from the victim's neighborhood have gathered outside the police station, and their community leaders are demanding a trial.",
+  "ru": "Полицейские убили представителя дискриминируемой общины. Свидетели говорят, что жертва была безоружна и что её избили уже после того, как скрутили. Причастному офицеру обвинение не предъявлено. Жители района, где жил погибший, собрались у полицейского участка, а лидеры общины требуют суда."
+ },
+ "social_tensions_events.5.d_camera": {
+  "en": "A bystander filmed a police officer killing an unarmed member of a discriminated community, and within hours the video had been shared across the country. It shows the whole encounter, from the stop to the death. Crowds have filled the streets chanting the victim's name, and the officer has not been charged.",
+  "ru": "Прохожий снял, как полицейский убивает безоружного представителя дискриминируемой общины, и за несколько часов видео разошлось по всей стране. На нём запечатлена вся встреча, от остановки до смерти. Толпы заполнили улицы, скандируя имя жертвы, а офицеру обвинение не предъявлено."
+ },
+ "social_tensions_events.5.d_tv": {
+  "en": "Television crews have filmed the aftermath of a police killing: a member of a discriminated community lying dead in the street, and the officers standing over the body. The footage has been shown on every channel. Protesters have gathered outside the police station, and community leaders are demanding a trial.",
+  "ru": "Телевизионные группы засняли последствия убийства, совершённого полицией: представитель дискриминируемой общины лежит мёртвым на улице, а над телом стоят офицеры. Кадры показали по всем каналам. Протестующие собрались у полицейского участка, а лидеры общины требуют суда."
+ },
+ "social_tensions_events.5.f": {
+  "en": "The mother came to the police station the morning after, with a photograph of her son in a frame taken from the wall at home. She asked for the officer in charge and was told he was in a meeting. She said she would wait, and sat on the bench by the door with the photograph on her knees. People coming in to report a theft or pay a fine stepped around her. At noon the duty officer brought her a glass of water and said there was a procedure. \\\"I know,\\\" she said. \\\"He was walking home from work. I want the name of the man who stopped him.\\\" The duty officer went back behind the desk and picked up the telephone.",
+  "ru": "Мать пришла в участок наутро, с фотографией сына в рамке, снятой со стены дома. Она попросила начальника и услышала, что он на совещании. Она сказала, что подождёт, и села на скамью у двери, положив фотографию на колени. Те, кто приходил заявить о краже или заплатить штраф, обходили её стороной. В полдень дежурный принёс ей стакан воды и сказал, что существует процедура. «Я знаю, — сказала она. — Он шёл домой с работы. Мне нужно имя того, кто его остановил». Дежурный вернулся за стойку и взялся за телефон."
+ },
+ "social_tensions_events.5.t": {
+  "en": "Walking Home",
+  "ru": "Дорога домой"
+ },
+ "social_tensions_events.6.a": {
+  "en": "Impose a curfew and restore order",
+  "ru": "Ввести комендантский час и восстановить порядок"
+ },
+ "social_tensions_events.6.b": {
+  "en": "Make concessions to their demands",
+  "ru": "Уступить их требованиям"
+ },
+ "social_tensions_events.6.c": {
+  "en": "Commission an inquiry into root causes",
+  "ru": "Назначить расследование глубинных причин"
+ },
+ "social_tensions_events.6.d_base": {
+  "en": "Rioting has broken out in [SCOPE.sState('riot_state').GetName], in the districts where our discriminated communities live. Buildings are burning, shops have been looted and people have been killed. The rioters' leaders name [concept_discrimination] and poverty as their grievances, and the fighting is spreading to the neighboring districts.",
+  "ru": "В области [SCOPE.sState('riot_state').GetName] вспыхнули беспорядки в кварталах, где живут дискриминируемые общины. Горят здания, разграблены магазины, есть погибшие. Лидеры бунтовщиков называют причинами недовольства [Concept('concept_discrimination', 'дискриминацию')] и бедность, а бои перекидываются на соседние кварталы."
+ },
+ "social_tensions_events.6.d_modern": {
+  "en": "Rioting has broken out in [SCOPE.sState('riot_state').GetName]. What began as a protest turned into running street battles overnight, organized hour by hour through social media and streamed live by the people taking part. Several districts are burning, and the rioters' leaders name [concept_discrimination] and poverty as their grievances.",
+  "ru": "В области [SCOPE.sState('riot_state').GetName] вспыхнули беспорядки. Протест за ночь превратился в уличные бои, которые час за часом координировались через социальные сети, а участники вели прямые трансляции. Горят несколько кварталов, а лидеры бунтовщиков называют причинами недовольства [Concept('concept_discrimination', 'дискриминацию')] и бедность."
+ },
+ "social_tensions_events.6.f": {
+  "en": "Remarks heard in the riot districts the morning after.\\n\\n\\\"I boarded up my windows when I saw the smoke three streets over. My neighbor came out and held the boards while I nailed them, and neither of us said much.\\\"\\n\\n\\\"We sent petitions for twenty years and nobody read them. After one night of fires every newspaper in the country is printing the name of our street.\\\"\\n\\n\\\"My shop is gone. I sold bread on that corner to the families whose sons were out in the street last night, and I do not know what I will say to them.\\\"\\n\\n\\\"The fire brigade will not come past the barricade without an escort, and the escort will not come without orders. We are carrying water from the pump in buckets.\\\"",
+  "ru": "Слова, услышанные в охваченных беспорядками кварталах наутро.\\n\\n«Я заколотила окна, когда увидела дым за три улицы от нас. Сосед вышел и придерживал доски, пока я прибивала их, и мы почти не говорили».\\n\\n«Мы двадцать лет посылали петиции, и никто их не читал. После одной ночи пожаров все газеты страны печатают название нашей улицы».\\n\\n«Моей лавки больше нет. На этом углу я продавал хлеб семьям, чьи сыновья вчера вечером были на улице, и не знаю, что им скажу».\\n\\n«Пожарные не пройдут за баррикаду без сопровождения, а сопровождение не придёт без приказа. Мы носим воду от колонки вёдрами»."
+ },
+ "social_tensions_events.6.t": {
+  "en": "Three Streets Over",
+  "ru": "За три улицы отсюда"
+ },
+ "social_tensions_events.7.a": {
+  "en": "Suppress the reports",
+  "ru": "Скрыть сообщения"
+ },
+ "social_tensions_events.7.b": {
+  "en": "Prosecute those responsible",
+  "ru": "Привлечь виновных к ответственности"
+ },
+ "social_tensions_events.7.c": {
+  "en": "Overhaul military doctrine",
+  "ru": "Пересмотреть военную доктрину"
+ },
+ "social_tensions_events.7.d_base": {
+  "en": "Reports have come back from the front that our own troops massacred unarmed civilians, among them women and children, in a village that posed no military threat. Survivors and some of the soldiers themselves have given accounts. Either the officers present ordered the killing or they did nothing to stop it.",
+  "ru": "С фронта пришли сообщения, что наши войска расстреляли безоружных мирных жителей, среди них женщин и детей, в деревне, не представлявшей военной угрозы. Свои показания дали выжившие и некоторые из самих солдат. Либо присутствовавшие офицеры отдали приказ об убийстве, либо ничего не сделали, чтобы его остановить."
+ },
+ "social_tensions_events.7.d_media": {
+  "en": "A war correspondent has filed a report, with photographs, of a massacre committed by our forces. Unarmed civilians, among them women and children, were killed in their village after the fighting there had ended. The pictures have been shown on television across the country, and the army has not disputed them.",
+  "ru": "Военный корреспондент передал репортаж с фотографиями о массовом убийстве, совершённом нашими силами. Безоружных мирных жителей, среди них женщин и детей, убили в их деревне уже после окончания боёв. Снимки показали по телевидению по всей стране, а армия их не оспаривает."
+ },
+ "social_tensions_events.7.f": {
+  "en": "\\\"I was the lieutenant in command of the second platoon, and I will answer the inquiry's questions as fully as I can. We were ordered to secure the village and search it for weapons. We found none. Then the shooting began at the far end of the street, and it spread, and it went on for most of an hour. I was not ordered to do what was done there. I did not order it. I did not stop it either, and neither did any officer with me. I have written down the names of the men I saw firing and the names of the men who refused. I will sign the list in front of the inquiry.\\\"",
+  "ru": "«Я был лейтенантом, командовавшим вторым взводом, и отвечу на вопросы следствия настолько полно, насколько смогу. Нам приказали взять деревню под контроль и обыскать её на предмет оружия. Мы ничего не нашли. Потом стрельба началась на дальнем конце улицы, распространилась и продолжалась почти час. Мне не приказывали делать то, что там было сделано. Я не отдавал такого приказа. Я и не остановил это, и никто из офицеров рядом со мной тоже. Я записал имена людей, которых видел стреляющими, и имена тех, кто отказался. Я подпишу этот список перед следствием»."
+ },
+ "social_tensions_events.7.t": {
+  "en": "What Was Done There",
+  "ru": "Что там было сделано"
+ },
+ "social_tensions_events.8.a": {
+  "en": "Use it as propaganda",
+  "ru": "Использовать это в пропаганде"
+ },
+ "social_tensions_events.8.b": {
+  "en": "Demand that the perpetrators face justice",
+  "ru": "Потребовать, чтобы виновные предстали перед судом"
+ },
+ "social_tensions_events.8.d": {
+  "en": "Reports have reached us that enemy forces are killing our captured soldiers and the civilians who fall into their hands, with executions without trial, torture and the deliberate shelling of homes. Escaped prisoners and refugees tell the same story. The public is furious and wants the government to answer.",
+  "ru": "До нас дошли сведения, что вражеские силы убивают наших пленных солдат и мирных жителей, попавших им в руки: казни без суда, пытки, умышленные обстрелы жилых домов. Бежавшие из плена и беженцы рассказывают одно и то же. Общество в ярости и требует от правительства ответа."
+ },
+ "social_tensions_events.8.f": {
+  "en": "To the general staff, from the officer receiving returned prisoners. Most of the men I interviewed this week were held in the same camp, and their accounts agree. Prisoners were counted in the yard each morning. On some mornings the count was lower than the night before, and the guards gave no reason. Several men saw prisoners taken from the huts after dark and did not see them again. One man has the marks of beatings on his back and legs, which the doctor has recorded. Most would not describe the rest, and I did not press them. I attach their statements, signed where the men were willing to sign, and the doctor's report.",
+  "ru": "Генеральному штабу от офицера, принимающего вернувшихся пленных. Большинство опрошенных на этой неделе содержались в одном лагере, и их рассказы совпадают. Каждое утро пленных пересчитывали во дворе. В некоторые дни число было меньше, чем накануне вечером, и охрана не называла причин. Несколько человек видели, как пленных уводили из бараков после наступления темноты, и больше их не видели. У одного на спине и ногах следы побоев, которые зафиксировал врач. Большинство не захотело рассказывать остальное, и я не настаивал. Прилагаю их показания, подписанные там, где люди были готовы подписать, и заключение врача."
+ },
+ "social_tensions_events.8.t": {
+  "en": "The Count in the Yard",
+  "ru": "Счёт во дворе"
+ },
+ "social_tensions_events.9.b": {
+  "en": "Launch an investigation",
+  "ru": "Начать расследование"
+ },
+ "social_tensions_events.9.c": {
+  "en": "Push for campaign finance reform",
+  "ru": "Добиваться реформы финансирования кампаний"
+ },
+ "social_tensions_events.9.d_base": {
+  "en": "A newspaper investigation has found large unreported donations from industrial [Concept('concept_magnate', 'magnates')] to those in government, paid through secret bank accounts and companies that exist only on paper. In several cases a donation was followed within weeks by a contract or a change in the law. Under our laws on campaign money, none of it had to be declared.",
+  "ru": "Газетное расследование выявило крупные незадекларированные пожертвования от промышленных [Concept('concept_magnate', 'магнатов')] людям во власти, проведённые через тайные банковские счета и компании, существующие только на бумаге. В нескольких случаях через считаные недели после пожертвования следовал контракт или изменение закона. По нашим законам о деньгах в избирательных кампаниях ничего из этого декларировать не требовалось."
+ },
+ "social_tensions_events.9.d_digital": {
+  "en": "A whistleblower has released records showing that money from undisclosed donors has been poured into the election on the government's behalf. It was moved through digital payment accounts and anonymous campaign committees, and much of it paid for disinformation aimed at voters one by one. Under our laws on campaign money, none of it had to be declared.",
+  "ru": "Информатор обнародовал документы, показывающие, что деньги неназванных доноров вливались в выборы в пользу правительства. Их переводили через цифровые платёжные счета и анонимные избирательные комитеты, и значительная часть пошла на дезинформацию, нацеленную на избирателей поодиночке. По нашим законам о деньгах в избирательных кампаниях ничего из этого декларировать не требовалось."
+ },
+ "social_tensions_events.9.f": {
+  "en": "The reporter spread the bank records across the editor's desk and weighed the corners down with whatever was to hand. \\\"Shell companies in four countries,\\\" she said. \\\"Every one traces back to three of the industrialists.\\\" The editor read the campaign treasurer's signature on the transfer slips, once on the first set and again on the second. He asked how many people had seen the papers, and she told him: the two of them, the paper's lawyer and the clerk who had copied them. He sent for the lawyer and asked her to read every line before the evening meeting. Then he cleared the front page of the morning edition and told the reporter to start writing.",
+  "ru": "Репортёр разложила банковские документы на столе редактора и придавила углы тем, что нашлось под рукой. «Фирмы-пустышки в четырёх странах, — сказала она. — Каждая ведёт к трём промышленникам». Редактор прочёл подпись казначея кампании на платёжных поручениях, сначала на первой пачке, потом на второй. Он спросил, сколько человек видели бумаги, и она ответила: они двое, юрист газеты и клерк, копировавший их. Он вызвал юриста и попросил её прочесть каждую строку до вечерней планёрки. Потом освободил первую полосу утреннего выпуска и велел репортёру начинать писать."
+ },
+ "social_tensions_events.9.t": {
+  "en": "Signed Twice",
+  "ru": "Подписано дважды"
+ },
+ "society_technology_events.1.a": {
+  "en": "Progress waits for no one.",
+  "ru": "Прогресс никого не ждёт."
+ },
+ "society_technology_events.1.b": {
+  "en": "A woman's place is in the home.",
+  "ru": "Место женщины — дома."
+ },
+ "society_technology_events.1.d": {
+  "en": "Women are applying in growing numbers to [Concept('concept_profession', 'professions')] that until now have hired almost only men: engineering, medicine, law and university teaching. Some employers have taken them on. Others have turned them away for no reason but their sex. Traditionalists say a wife who works neglects her family, and reformers want the government to stand behind the women who have been hired.",
+  "ru": "Всё больше женщин подают заявления на [Concept('concept_profession', 'профессии')], где до сих пор почти исключительно нанимали мужчин: инженерное дело, медицину, право и университетское преподавание. Некоторые работодатели их приняли. Другие отказали без иной причины, кроме пола. Традиционалисты говорят, что работающая жена пренебрегает семьёй, а реформаторы хотят, чтобы правительство поддержало принятых на работу женщин."
+ },
+ "society_technology_events.1.f": {
+  "en": "\\\"Members of the board, I am the engineer whose appointment you have been asked to withdraw, and I asked to speak before you decide. I passed the same examination as the eleven men you took on last month, and my marks were higher than nine of theirs. I have read the objection from the works committee. It says that the men will not take instruction from a woman and that the washrooms are not suitable. The first is for the men to answer, and the second is a matter of a door and a lock. I am not asking the board for a favor. I am asking it to sign the appointment it has already approved on paper, and to let me start on Monday.\\\"",
+  "ru": "«Члены правления, я — тот инженер, чьё назначение вас просили отозвать, и я попросила слова до вашего решения. Я сдала тот же экзамен, что и одиннадцать мужчин, принятых вами в прошлом месяце, и мои баллы выше, чем у девяти из них. Я прочла возражение заводского комитета. В нём сказано, что мужчины не станут принимать указания от женщины и что умывальные не подходят. Первое — вопрос к мужчинам, а второе — вопрос двери и замка. Я прошу у правления не одолжения. Я прошу подписать назначение, которое оно уже одобрило на бумаге, и позволить мне выйти в понедельник»."
+ },
+ "society_technology_events.1.t": {
+  "en": "The Second Shift",
+  "ru": "Вторая смена"
+ },
+ "society_technology_events.10.a": {
+  "en": "Hear their grievances.",
+  "ru": "Выслушать их жалобы."
+ },
+ "society_technology_events.10.b": {
+  "en": "Clear the streets.",
+  "ru": "Очистить улицы."
+ },
+ "society_technology_events.10.d": {
+  "en": "A trade summit in our capital has drawn protesters from across the country and from abroad, with banners against free trade and the companies that profit from it. The police have used tear gas to keep the streets around the conference hall clear, and the delegates inside can hear the chanting. The protesters want labor standards written into our trade agreements.",
+  "ru": "Торговый саммит в нашей столице привлёк демонстрантов со всей страны и из-за рубежа, с плакатами против свободной торговли и компаний, которые на ней наживаются. Полиция применила слезоточивый газ, чтобы очистить улицы вокруг конференц-зала, и делегаты внутри слышат скандирование. Протестующие хотят, чтобы в наши торговые соглашения были включены трудовые стандарты."
+ },
+ "society_technology_events.10.f": {
+  "en": "\\\"I came on the overnight bus with forty others from the steelworks. We were told this summit decides where our work goes next, so we came to say so to their faces.\\\"\\n\\n\\\"My shift started at six this morning and I do not know when it ends. They keep telling us one more hour.\\\"\\n\\n\\\"The delegates were brought in through the parking garage at the back. I watched from the window of the press room: some of them stood at the glass for a minute, looking down at the crowd, and then went in to the session.\\\"\\n\\n\\\"I run the café on the corner. I pulled the shutters down when the gas came, and there are twelve students sitting on my floor drinking water.\\\"",
+  "ru": "«Я приехал ночным автобусом с сорока другими, со сталелитейного завода. Нам сказали, что этот саммит решает, куда уйдёт наша работа, и мы приехали сказать им об этом в лицо».\\n\\n«Моя смена началась в шесть утра, и я не знаю, когда она кончится. Нам всё твердят: ещё один час».\\n\\n«Делегатов провели через гараж с задней стороны. Я смотрел из окна пресс-центра: некоторые минуту постояли у стекла, глядя вниз на толпу, и пошли на заседание».\\n\\n«Я держу кафе на углу. Когда пошёл газ, я опустил жалюзи, и теперь у меня на полу сидят двенадцать студентов и пьют воду»."
+ },
+ "society_technology_events.10.t": {
+  "en": "The Battle in the Streets",
+  "ru": "Битва на улицах"
+ },
+ "society_technology_events.11.a": {
+  "en": "Expand the security apparatus.",
+  "ru": "Расширить аппарат безопасности."
+ },
+ "society_technology_events.11.b": {
+  "en": "We shall not live in fear.",
+  "ru": "Мы не будем жить в страхе."
+ },
+ "society_technology_events.11.c": {
+  "en": "Reform our intelligence services.",
+  "ru": "Реформировать наши разведывательные службы."
+ },
+ "society_technology_events.11.d": {
+  "en": "An attack in one of our cities has killed and wounded civilians. The security services believe it was planned and carried out by a group whose other members are still at large. They are asking for new powers to find them and to stop the next attack. Others in the government warn against giving up liberties in the days of grief.",
+  "ru": "Нападение в одном из наших городов привело к гибели и ранениям мирных жителей. Службы безопасности полагают, что оно было спланировано и осуществлено группой, остальные члены которой всё ещё на свободе. Они просят новых полномочий, чтобы найти их и предотвратить следующее нападение. Другие в правительстве предостерегают от отказа от свобод в дни скорби."
+ },
+ "society_technology_events.11.f": {
+  "en": "To the head of government, from the duty officer of the security services, at the end of the first night. The emergency services have finished searching the site. The hospitals have sent us their lists of the injured, and we are passing names to the families as each is confirmed. We have not yet identified all of the dead. Two of the people we believe responsible died in the attack. We are looking for others, and the border posts and the railway stations have their descriptions. The police have asked for officers from other districts to guard the hospitals and the site. The security chiefs are ready to brief you whenever you wish.",
+  "ru": "Главе правительства от дежурного офицера служб безопасности по окончании первой ночи. Аварийные службы закончили осмотр места. Больницы прислали нам списки пострадавших, и мы передаём имена семьям по мере подтверждения. Мы пока не опознали всех погибших. Двое из тех, кого мы считаем виновными, погибли при нападении. Мы разыскиваем остальных; на пограничных постах и железнодорожных станциях есть их описания. Полиция просила прислать офицеров из других районов для охраны больниц и места происшествия. Руководители служб безопасности готовы доложить вам, когда пожелаете."
+ },
+ "society_technology_events.11.t": {
+  "en": "Day of Reckoning",
+  "ru": "День расплаты"
+ },
+ "society_technology_events.12.a": {
+  "en": "Safety demands sacrifice.",
+  "ru": "Безопасность требует жертв."
+ },
+ "society_technology_events.12.b": {
+  "en": "Liberty is not negotiable.",
+  "ru": "Свобода не обсуждается."
+ },
+ "society_technology_events.12.d": {
+  "en": "The security services have asked for the power to read communications without a warrant, to track people's movements and to map who is in contact with whom. They say they cannot stop attacks without it. Civil liberties groups say it would put every citizen under watch, and that powers once given are never given back.",
+  "ru": "Службы безопасности попросили права читать переписку без ордера, отслеживать передвижения людей и составлять карту того, кто с кем общается. Они говорят, что без этого не могут предотвращать нападения. Правозащитные группы говорят, что это поставит под наблюдение каждого гражданина и что полномочия, однажды отданные, не возвращаются."
+ },
+ "society_technology_events.12.f": {
+  "en": "\\\"What the security services are asking this committee for is everything that passes over the networks: calls, messages, letters where we can get them, and who spoke to whom and when.\\\"\\n\\n\\\"From everyone? Not from suspects, but from everyone?\\\"\\n\\n\\\"You cannot know who the suspects are until you can see whom they talk to. A plot found without that is found by luck, and we cannot plan on luck.\\\"\\n\\n\\\"And when this committee is gone and someone else holds the records, what stops them using it against people whose only offense is disagreeing with them?\\\"\\n\\n\\\"The law you are drafting. Write the limits into it, and the services will accept whatever oversight you set.\\\"",
+  "ru": "«Службы безопасности просят у этого комитета всё, что проходит по сетям: звонки, сообщения, письма, где до них можно добраться, и кто с кем говорил и когда».\\n\\n«От всех? Не от подозреваемых, а от всех?»\\n\\n«Вы не можете знать, кто подозреваемые, пока не видите, с кем они говорят. Заговор, раскрытый без этого, раскрыт по везению, а на везение мы рассчитывать не можем».\\n\\n«А когда этого комитета не будет и записи окажутся у кого-то другого, что помешает использовать их против людей, чья единственная вина — несогласие с ним?»\\n\\n«Закон, который вы пишете. Впишите в него пределы, и службы примут любой надзор, какой вы установите»."
+ },
+ "society_technology_events.12.t": {
+  "en": "Who Watches the Watchers?",
+  "ru": "Кто следит за надзирающими?"
+ },
+ "society_technology_events.13.a": {
+  "en": "Regulate the platforms.",
+  "ru": "Регулировать платформы."
+ },
+ "society_technology_events.13.b": {
+  "en": "Free speech must prevail.",
+  "ru": "Свобода слова должна победить."
+ },
+ "society_technology_events.13.c": {
+  "en": "Educate the public.",
+  "ru": "Просвещать общество."
+ },
+ "society_technology_events.13.d": {
+  "en": "False stories are spreading on social media faster than newspapers and broadcasters can correct them: invented crimes, fake cures, claims about officials. People who believe one are quicker to believe the next. The platforms say they cannot check everything their users post, and many citizens want the government to act.",
+  "ru": "Ложные истории распространяются в социальных сетях быстрее, чем газеты и вещатели успевают их опровергать: выдуманные преступления, поддельные лекарства, измышления о чиновниках. Тот, кто поверил одной, охотнее верит следующей. Платформы говорят, что не могут проверять всё, что публикуют пользователи, и многие граждане хотят, чтобы правительство действовало."
+ },
+ "society_technology_events.13.f": {
+  "en": "\\\"I run the corrections desk at this paper, and this is what my week looked like. On Monday a story went round that the water in the eastern districts had been poisoned. By lunchtime it had been shared more times than we have readers. We checked it with the water board in an hour and published a correction by two. By evening the correction had been read by about one person for every ten who saw the story, and some of those who replied to it said we had been paid to deny it. On Wednesday the same story came round again with a different district in it. I have six people on this desk, and I have asked the editor for six more.\\\"",
+  "ru": "«Я руковожу отделом опровержений в этой газете, и вот как выглядела моя неделя. В понедельник пошла история, что в восточных районах отравили воду. К обеду её репостнули больше раз, чем у нас читателей. Мы проверили её в водоканале за час и к двум опубликовали опровержение. К вечеру опровержение прочёл примерно один человек на десять видевших историю, а некоторые из ответивших на него написали, что нам заплатили за отрицание. В среду та же история пошла снова, уже с другим районом. В отделе у меня шесть человек, и я попросила у редактора ещё шестерых»."
+ },
+ "society_technology_events.13.t": {
+  "en": "The Poisoned Well",
+  "ru": "Отравленный колодец"
+ },
+ "society_technology_events.14.a": {
+  "en": "Retaliate in kind.",
+  "ru": "Ответить тем же."
+ },
+ "society_technology_events.14.b": {
+  "en": "Best not to alarm the public.",
+  "ru": "Лучше не тревожить общество."
+ },
+ "society_technology_events.14.c": {
+  "en": "Have our cyber defenses take the network down.",
+  "ru": "Пусть наша киберзащита отключит сеть."
+ },
+ "society_technology_events.14.d": {
+  "en": "Our intelligence analysts have found a campaign run from abroad to sway this election: thousands of fabricated accounts on social media pushing fringe candidates and divisive stories, and spreading doubt that the count will be honest. The servers and the money lead back to [SCOPE.sCountry('interfering_country').GetName]. The government must decide whether to answer, and how loudly.",
+  "ru": "Наши аналитики разведки обнаружили кампанию, управляемую из-за рубежа, чтобы повлиять на эти выборы: тысячи поддельных аккаунтов в социальных сетях продвигают маргинальных кандидатов и разделяющие общество истории и сеют сомнение в честности подсчёта голосов. Серверы и деньги ведут к стране [SCOPE.sCountry('interfering_country').GetName]. Правительству предстоит решить, отвечать ли и насколько громко."
+ },
+ "society_technology_events.14.f": {
+  "en": "To the government, from the analysts reviewing the election traffic. We have identified some forty thousand accounts that post about the campaign and belong to no real voter. They were created within a few weeks of one another, they post during the working hours of another time zone, and their messages are drafted in batches and then varied by a few words each. Most promote the fringe candidates and the angriest stories about the main ones. We can show where the servers are and who pays for them. We cannot show what the campaign intends beyond what it does. We ask whether to brief the parties, the public, or neither.",
+  "ru": "Правительству от аналитиков, изучающих трафик выборов. Мы выявили порядка сорока тысяч аккаунтов, которые пишут о кампании и не принадлежат ни одному настоящему избирателю. Они созданы с разницей в несколько недель, публикуют в рабочие часы другого часового пояса, а их сообщения составляются партиями и затем варьируются на несколько слов. Большинство продвигают маргинальных кандидатов и самые злые истории об основных. Мы можем показать, где находятся серверы и кто за них платит. Мы не можем показать, чего кампания добивается сверх того, что делает. Просим указать: информировать партии, общество или никого."
+ },
+ "society_technology_events.14.t": {
+  "en": "The Invisible Campaign",
+  "ru": "Невидимая кампания"
+ },
+ "society_technology_events.15.a": {
+  "en": "Let the youth speak.",
+  "ru": "Дать слово молодёжи."
+ },
+ "society_technology_events.15.b": {
+  "en": "Restore order on campus.",
+  "ru": "Восстановить порядок в кампусах."
+ },
+ "society_technology_events.15.d": {
+  "en": "Students at our universities are occupying buildings and walking out of lectures, demanding that the government act on inequality and on damage to the environment. Some lecturers have joined them. Others say the universities exist for teaching and research, and they want the government to restore order on the campuses.",
+  "ru": "Студенты наших университетов занимают здания и уходят с лекций, требуя от правительства действий против неравенства и ущерба окружающей среде. Некоторые преподаватели присоединились к ним. Другие говорят, что университеты существуют для обучения и исследований, и хотят, чтобы правительство восстановило порядок в кампусах."
+ },
+ "society_technology_events.15.f": {
+  "en": "The dean found the letter pinned to his office door when he came in, and he read it standing in the corridor. It said the students would attend no classes while the university kept its money in the companies named below, and below were nine names. He took it inside and put it in the drawer with the six others from that week. Through the window he could see the lawn, where tents had gone up overnight and a few students were boiling water on a camp stove. The provost came in behind him. \\\"The council meets at noon,\\\" the provost said. \\\"They will want to know whether we are calling the police.\\\" The dean said he would go down and talk to the students first, and took his coat.",
+  "ru": "Декан нашёл письмо, приколотое к двери кабинета, когда пришёл, и прочёл его стоя в коридоре. В нём говорилось, что студенты не будут ходить на занятия, пока университет держит деньги в перечисленных ниже компаниях, а ниже стояло девять названий. Он отнёс письмо внутрь и положил в ящик к шести другим за эту неделю. Из окна он видел газон, где за ночь выросли палатки, а несколько студентов кипятили воду на походной плитке. Следом вошёл проректор. «Совет собирается в полдень, — сказал проректор. — Они захотят знать, вызываем ли мы полицию». Декан ответил, что сначала спустится поговорить со студентами, и взял пальто."
+ },
+ "society_technology_events.15.t": {
+  "en": "The Young and the Restless",
+  "ru": "Молодые и беспокойные"
+ },
+ "society_technology_events.16.a": {
+  "en": "Let the market decide.",
+  "ru": "Пусть решает рынок."
+ },
+ "society_technology_events.16.b": {
+  "en": "Medical applications only.",
+  "ru": "Только для медицины."
+ },
+ "society_technology_events.16.c": {
+  "en": "The human mind is sacred.",
+  "ru": "Разум человека священен."
+ },
+ "society_technology_events.16.d": {
+  "en": "Manufacturers are ready to sell brain-computer interfaces to the public: a small implant that lets its wearer read text, send messages and work machines by thought. Until now they have been fitted only in medical trials. The makers want to sell them to anyone who can pay, and the government must decide whether to let them. Privacy campaigners warn that whoever runs the devices could see what their wearers do with them.",
+  "ru": "Производители готовы продавать обществу интерфейсы мозг-компьютер: небольшой имплант, позволяющий владельцу читать текст, отправлять сообщения и управлять машинами силой мысли. До сих пор их устанавливали только в медицинских испытаниях. Изготовители хотят продавать их всем, кто может заплатить, а правительству предстоит решить, разрешить ли это. Защитники частной жизни предупреждают, что тот, кто управляет устройствами, сможет видеть, что делают с ними их владельцы."
+ },
+ "society_technology_events.16.d_banned": {
+  "en": "Brain-computer interfaces have gone on sale abroad: a small implant that lets its wearer read text, send messages and work machines by thought. Our augmentation laws forbid them, but smuggled units are already turning up at home. The devout and the traditionalists want the ban extended to every device that reaches into the mind, medical ones included.",
+  "ru": "Интерфейсы мозг-компьютер поступили в продажу за рубежом: небольшой имплант, позволяющий владельцу читать текст, отправлять сообщения и управлять машинами силой мысли. Наши законы об аугментации их запрещают, но контрабандные устройства уже появляются в стране. Верующие и традиционалисты хотят распространить запрет на любые устройства, проникающие в разум, включая медицинские."
+ },
+ "society_technology_events.16.d_unlicensed": {
+  "en": "Brain-computer interfaces have gone on sale abroad: a small implant that lets its wearer read text, send messages and work machines by thought. Our law licenses no augmentation yet and bans none, so whether these may be sold here is now a question for the government. Doctors want them for paralyzed patients. Others want them kept out of the country altogether.",
+  "ru": "Интерфейсы мозг-компьютер поступили в продажу за рубежом: небольшой имплант, позволяющий владельцу читать текст, отправлять сообщения и управлять машинами силой мысли. Наш закон пока не лицензирует аугментацию и не запрещает её, так что вопрос о том, можно ли продавать их здесь, теперь за правительством. Врачи хотят их для парализованных пациентов. Другие хотят полностью закрыть им въезд в страну."
+ },
+ "society_technology_events.16.f": {
+  "en": "To the regulator of medical devices, from the manufacturer of the implant, with our application. The implant is the size of a grain of rice. It is placed under the scalp in a procedure of less than an hour, with the patient awake. Once paired, it lets the wearer read text, write messages and work any compatible machine by intention alone. Our trial wearers learned to use it in about a week. The implant records what it is asked to do, not what the wearer thinks, and Annex C explains the difference. We ask the regulator to set a date for the hearing of our application.",
+  "ru": "Регулятору медицинских устройств от производителя импланта, с нашей заявкой. Имплант размером с рисовое зерно. Его помещают под кожу головы за процедуру короче часа, при бодрствующем пациенте. После сопряжения он позволяет читать текст, писать сообщения и управлять любой совместимой машиной одним намерением. Наши испытатели научились им пользоваться примерно за неделю. Имплант записывает, что от него требуют, а не что думает владелец, и разницу объясняет Приложение C. Просим регулятора назначить дату рассмотрения нашей заявки."
+ },
+ "society_technology_events.16.t": {
+  "en": "Wired Minds",
+  "ru": "Подключённые умы"
+ },
+ "society_technology_events.17.a": {
+  "en": "Separate the leagues.",
+  "ru": "Разделить лиги."
+ },
+ "society_technology_events.17.b": {
+  "en": "Records are made to be broken.",
+  "ru": "Рекорды существуют, чтобы их били."
+ },
+ "society_technology_events.17.d": {
+  "en": "Athletes with neural accelerators, synthetic muscle and sharpened reflexes are winning nearly every event they enter, and records held by unaugmented athletes are falling one after another. The sports federations cannot agree whether the new records count. They want the government to decide whether augmented and unaugmented athletes may compete together.",
+  "ru": "Спортсмены с нейроускорителями, синтетическими мышцами и обострённой реакцией выигрывают почти все соревнования, в которых участвуют, а рекорды неаугментированных спортсменов падают один за другим. Спортивные федерации не могут договориться, засчитывать ли новые рекорды. Они хотят, чтобы правительство решило, могут ли аугментированные и неаугментированные спортсмены состязаться вместе."
+ },
+ "society_technology_events.17.f": {
+  "en": "\\\"I have coached sprinters for forty years, and I was at the track this afternoon when the record went. The boy who broke it trained with my club until last year. He was good, not the best I had. Then he had the work done, the muscle in the legs and something in the spine that makes him faster off the blocks, and he came back and beat my best runner by a distance I have never seen between two runners in one race. I do not blame him. It is legal, and he paid for it. But I have six youngsters on the track who cannot pay for it, and they have asked me whether there will still be a race for them. I have told them I will ask the federation.\\\"",
+  "ru": "«Я сорок лет тренирую бегунов и был на стадионе сегодня днём, когда пал рекорд. Парень, который его побил, тренировался в моём клубе до прошлого года. Он был хорош, но не лучший из моих. Потом он сделал операцию: мышцы ног и что-то в позвоночнике, что делает его быстрее на старте, — вернулся и обогнал моего лучшего бегуна на расстояние, какого я никогда не видел между двумя бегунами в одном забеге. Я его не виню. Это законно, и он заплатил. Но у меня на дорожке шестеро юных, которые не могут за это заплатить, и они спрашивают, останется ли для них забег. Я сказал им, что спрошу у федерации»."
+ },
+ "society_technology_events.17.t": {
+  "en": "Faster Than Human",
+  "ru": "Быстрее человека"
+ },
+ "society_technology_events.18.a": {
+  "en": "Our flag among the stars!",
+  "ru": "Наш флаг среди звёзд!"
+ },
+ "society_technology_events.18.b": {
+  "en": "A shared human endeavor.",
+  "ru": "Общее дело человечества."
+ },
+ "society_technology_events.18.d": {
+  "en": "Our first permanent settlement beyond Earth needs a charter that says whose it is: ours alone, under our flag and our law, or a joint venture with other countries that share its costs and its findings. Everyone who goes to live and work there will live under the charter we choose.",
+  "ru": "Нашему первому постоянному поселению за пределами Земли нужен устав, определяющий, чьё оно: только наше, под нашим флагом и по нашему закону, или совместное предприятие с другими странами, разделяющими его расходы и находки. Все, кто отправится там жить и работать, будут жить по выбранному нами уставу."
+ },
+ "society_technology_events.18.f": {
+  "en": "To the government, from the committee drafting the settlement's charter. We attach two drafts. The first makes the settlement part of our territory: its governor is appointed by us, our courts hear its cases and our flag flies over its main hall. The second makes it a joint venture with any country that pays a share of its upkeep, run by a council in which each partner has a seat, and with its scientific findings published to all of them. We consulted the people who have applied to work there. They are divided, though most say they care more about the supply schedule than the flag. We ask the government to choose a draft so that the charter can be published.",
+  "ru": "Правительству от комитета, составляющего устав поселения. Прилагаем два проекта. Первый делает поселение частью нашей территории: губернатор назначается нами, наши суды рассматривают его дела, наш флаг развевается над главным залом. Второй делает его совместным предприятием с любой страной, оплачивающей долю его содержания, управляемым советом, где у каждого партнёра есть место, а научные результаты публикуются для всех них. Мы консультировались с теми, кто подал заявления на работу там. Они разделились, хотя большинство говорят, что график снабжения волнует их больше флага. Просим правительство выбрать проект, чтобы устав можно было опубликовать."
+ },
+ "society_technology_events.18.t": {
+  "en": "Beyond the Blue",
+  "ru": "По ту сторону синевы"
+ },
+ "society_technology_events.19.a": {
+  "en": "They answer to us.",
+  "ru": "Они подчиняются нам."
+ },
+ "society_technology_events.19.b": {
+  "en": "Grant them self-governance.",
+  "ru": "Даровать им самоуправление."
+ },
+ "society_technology_events.19.d": {
+  "en": "The settlers in our colony beyond Earth have asked to elect their own governor and assembly. They say that officials at home who have never seen the colony cannot run it well, and that the people who live with its dangers should decide how it is run. Agreeing would loosen our hold over a colony that cost us a great deal to build.",
+  "ru": "Поселенцы нашей колонии за пределами Земли просят позволить им избирать собственного губернатора и собрание. Они говорят, что чиновники на родине, никогда не видевшие колонию, не могут хорошо ею управлять и что решать, как ею управлять, должны те, кто живёт с её опасностями. Согласие ослабит нашу власть над колонией, обошедшейся нам очень дорого."
+ },
+ "society_technology_events.19.f": {
+  "en": "\\\"This is the settlers' assembly, speaking to the government by the regular transmission. We met last night, all of us who were not on shift, and voted to send you this. The governor you appointed is careful, and we do not complain of him. But every rule he enforces is written at home, by people who have never seen the colony or worked in the air plant, and some of those rules cannot be kept here. Last month we were sent a fire regulation that requires a door we would have to cut through a pressure wall. We are asking to elect our own governor and to make the rules for the colony's daily life ourselves, under your law in everything else.\\\"",
+  "ru": "«Это собрание поселенцев говорит с правительством по очередной передаче. Мы собрались вчера вечером, все, кто не был на смене, и проголосовали отправить вам это. Назначенный вами губернатор осторожен, и мы на него не жалуемся. Но каждое правило, которое он проводит, написано дома людьми, никогда не видевшими колонию и не работавшими на воздушной станции, и некоторые из этих правил здесь невыполнимы. В прошлом месяце нам прислали противопожарное предписание, требующее двери, для которой пришлось бы прорезать стену гермоотсека. Мы просим позволить нам избирать собственного губернатора и самим устанавливать правила повседневной жизни колонии, во всём остальном подчиняясь вашему закону»."
+ },
+ "society_technology_events.19.t": {
+  "en": "Rule from Afar",
+  "ru": "Власть издалека"
+ },
+ "society_technology_events.2.a": {
+  "en": "Equal work, equal pay.",
+  "ru": "Равный труд — равная оплата."
+ },
+ "society_technology_events.2.b": {
+  "en": "The matter can wait.",
+  "ru": "Вопрос может подождать."
+ },
+ "society_technology_events.2.d": {
+  "en": "Women in our offices and factories are paid less than the men beside them for the same work, often half as much, and the wage books show it in plain figures. Women's committees and workers' delegates have taken the figures to the newspapers. They want a law requiring equal pay for equal work. Employers say it would raise their costs.",
+  "ru": "Женщинам в наших конторах и на фабриках платят меньше, чем стоящим рядом мужчинам за ту же работу, часто вдвое меньше, и платёжные ведомости показывают это простыми цифрами. Женские комитеты и делегаты рабочих отнесли цифры в газеты. Они хотят закон, требующий равной оплаты за равный труд. Работодатели говорят, что это повысит их расходы."
+ },
+ "society_technology_events.2.f": {
+  "en": "Copied from the wage book of one drawing office for the women's committee, with a note on each line:\\n\\nJunior draftsman, a man, two years in the office: full rate. Every man in the office was hired at the full rate.\\nJunior draftswoman, two years in the office: half rate. Her drawings are checked by the same senior and come back with as few corrections as his.\\nTracing clerks, all women: a third of the junior rate. The office has only ever hired women for this post.\\nSenior draftsman, a man, nine years: full rate and a bonus. The bonus is paid for supervising the junior staff.\\nSenior draftswoman, eleven years: half rate and no bonus. She supervises the junior staff when he is away, and is paid nothing extra for it.",
+  "ru": "Выписка из ведомости одного чертёжного бюро для женского комитета, с пометкой к каждой строке:\\n\\nМладший чертёжник, мужчина, два года в бюро: полная ставка. Всех мужчин в бюро принимали на полную ставку.\\nМладшая чертёжница, два года в бюро: половина ставки. Её чертежи проверяет тот же старший, и возвращаются они с не большим числом замечаний, чем его.\\nКопировальщицы, все женщины: треть младшей ставки. На эту должность бюро всегда брало только женщин.\\nСтарший чертёжник, мужчина, девять лет: полная ставка и премия. Премия выплачивается за руководство младшим персоналом.\\nСтаршая чертёжница, одиннадцать лет: половина ставки и без премии. Она руководит младшим персоналом, когда его нет, и ничего сверх этого не получает."
+ },
+ "society_technology_events.2.t": {
+  "en": "Half the Salary",
+  "ru": "Половина жалованья"
+ },
+ "society_technology_events.20.a": {
+  "en": "A curiosity, nothing more.",
+  "ru": "Любопытный случай, не более."
+ },
+ "society_technology_events.20.b": {
+  "en": "Harness this collective mind.",
+  "ru": "Использовать этот коллективный разум."
+ },
+ "society_technology_events.20.c": {
+  "en": "Shut it down.",
+  "ru": "Закрыть его."
+ },
+ "society_technology_events.20.d": {
+  "en": "Near one of our cities, a community of neural-linked people has begun to think as one. Its members share their thoughts and reach decisions together, faster than any council or committee. Some scientists want to study it, and some officials want to put it to work for the state. The devout and the traditionalists call it a danger to what makes a person human.",
+  "ru": "Неподалёку от одного из наших городов община людей с нейросвязью начала мыслить как единое целое. Её члены делятся мыслями и принимают решения вместе, быстрее любого совета или комитета. Некоторые учёные хотят её изучить, а некоторые чиновники — поставить на службу государству. Верующие и традиционалисты называют её угрозой тому, что делает человека человеком."
+ },
+ "society_technology_events.20.f": {
+  "en": "\\\"You asked what it is like, and I will try to answer as one person, though the others are listening and will correct me. There are forty-seven of us. When I wake I know who slept badly, who is already in the kitchen, and what the woman at the far end of the house is reading. When we have a decision to make, we do not argue about it. Each of us knows what the others think before they say it, and the choice is made by the time anyone would have finished speaking. I have not been lonely since I joined. I understand that this frightens people outside, and we would like your committee to come and see how we live.\\\"",
+  "ru": "«Вы спросили, каково это, и я попробую ответить как один человек, хотя остальные слушают и поправят меня. Нас сорок семь. Когда я просыпаюсь, я знаю, кто плохо спал, кто уже на кухне и что читает женщина в дальнем конце дома. Когда нужно принять решение, мы не спорим. Каждый знает, что думают остальные, прежде чем они скажут, и выбор сделан к тому моменту, когда кто-либо закончил бы говорить. С тех пор как я присоединился, я не бывал одинок. Я понимаю, что это пугает людей снаружи, и мы хотели бы, чтобы ваш комитет приехал и увидел, как мы живём»."
+ },
+ "society_technology_events.20.t": {
+  "en": "The Hive",
+  "ru": "Улей"
+ },
+ "society_technology_events.21.a": {
+  "en": "Propose the channel.",
+  "ru": "Предложить канал."
+ },
+ "society_technology_events.21.b": {
+  "en": "Our thoughts are our own.",
+  "ru": "Наши мысли принадлежат только нам."
+ },
+ "society_technology_events.21.d": {
+  "en": "Our neural-linked diplomats want to try a telepathic channel to [SCOPE.sCountry('telepathic_partner').GetName], whose own telepathic communities could meet ours halfway. Diplomats on both sides would share their thoughts directly, with no translation and no room for a lie. It could settle disputes that talks have not. It would also let their side see whatever our diplomats know.",
+  "ru": "Наши дипломаты с нейросвязью хотят попробовать телепатический канал со страной [SCOPE.sCountry('telepathic_partner').GetName], чьи телепатические сообщества могли бы пойти навстречу нашим. Дипломаты обеих сторон делились бы мыслями напрямую, без перевода и без места для лжи. Это могло бы разрешить споры, которые переговоры не разрешили. Но это также позволило бы их стороне увидеть всё, что знают наши дипломаты."
+ },
+ "society_technology_events.21.f": {
+  "en": "\\\"I train the diplomats who would sit in the channel, and this is what it means for them. Their envoy will know what our diplomat is thinking while the thought is being had, and ours will know the same of theirs.\\\"\\n\\n\\\"Then send someone who knows nothing worth stealing.\\\"\\n\\n\\\"Then we learn nothing worth having. The point of the channel is that our diplomat can make an offer and their side can see that it is meant. That works only if the diplomat carries our position, and our position is what they most want to see.\\\"\\n\\n\\\"So we would be paying for their intentions with ours.\\\"\\n\\n\\\"Yes. I have drafted the proposal so that either side may close the channel at any moment, and I advise sending it in that form.\\\"",
+  "ru": "«Я готовлю дипломатов, которые сядут в канал, и вот что это значит для них. Их посланник будет знать, что думает наш дипломат, пока тот это думает, а наш будет знать то же о нём».\\n\\n«Тогда отправьте того, кто не знает ничего, что стоило бы красть».\\n\\n«Тогда мы не узнаем ничего ценного. Смысл канала в том, что наш дипломат может сделать предложение, а другая сторона видит, что оно искреннее. Это работает, только если дипломат несёт нашу позицию, а наша позиция — это именно то, что они больше всего хотят увидеть».\\n\\n«То есть мы заплатим за их намерения своими».\\n\\n«Да. Я составил предложение так, чтобы любая сторона могла закрыть канал в любой момент, и советую отправить его в таком виде»."
+ },
+ "society_technology_events.21.t": {
+  "en": "Open Minds",
+  "ru": "Открытые умы"
+ },
+ "society_technology_events.22.a": {
+  "en": "Full transparency.",
+  "ru": "Полная прозрачность."
+ },
+ "society_technology_events.22.b": {
+  "en": "Keep this quiet.",
+  "ru": "Сохранить это в тайне."
+ },
+ "society_technology_events.22.c": {
+  "en": "Shut down all reactors.",
+  "ru": "Остановить все реакторы."
+ },
+ "society_technology_events.22.d": {
+  "en": "Radiation monitors around the nuclear plant in [SCOPE.sState('nuclear_state').GetName] have recorded levels above the permitted limit. The plant's managers say the leak is small and under control. Independent scientists who have taken their own readings say it is larger than the managers admit, and the government is being asked what it will tell the public.",
+  "ru": "Датчики радиации вокруг атомной электростанции в области [SCOPE.sState('nuclear_state').GetName] зафиксировали уровни выше допустимого предела. Руководство станции говорит, что утечка невелика и под контролем. Независимые учёные, сделавшие собственные замеры, говорят, что она больше, чем признают руководители, и от правительства требуют ответа, что оно скажет обществу."
+ },
+ "society_technology_events.22.dd": {
+  "en": "Order a safety audit.",
+  "ru": "Назначить проверку безопасности."
+ },
+ "society_technology_events.22.f": {
+  "en": "The inspector's findings from the morning at the plant, written up for the government:\\n\\nMonitor four, by the cooling water outlet, reads three times its usual level. The other monitors on the fence read normal, so the source is close to the outlet.\\nThe outlet's log shows a valve repaired twice this year. The second repair was signed off by the shift engineer without the inspection the rules require.\\nThe managers' readings and mine agree. We disagree about whether they are over the limit, because the managers use the limit as revised last year at the operators' request.\\nSamples of the water below the outlet have gone to the laboratory, and the results are due in two days.\\nThe managers have asked that nothing be published until the results are in. I have told them that is for the government to decide.",
+  "ru": "Выводы инспектора по утреннему осмотру станции, изложенные для правительства:\\n\\nДатчик четыре, у выпуска охлаждающей воды, показывает втрое больше обычного. Остальные датчики на ограде показывают норму, так что источник близок к выпуску.\\nЖурнал выпуска показывает, что клапан ремонтировали дважды за год. Второй ремонт был принят сменным инженером без проверки, которой требуют правила.\\nПоказания руководства и мои совпадают. Мы расходимся в том, превышают ли они предел, потому что руководство использует предел, пересмотренный в прошлом году по просьбе операторов.\\nПробы воды ниже выпуска отправлены в лабораторию, результаты ожидаются через два дня.\\nРуководство попросило ничего не публиковать до получения результатов. Я ответил, что это решать правительству."
+ },
+ "society_technology_events.22.t": {
+  "en": "The Clicking Counter",
+  "ru": "Щёлкающий счётчик"
+ },
+ "society_technology_events.23.a": {
+  "en": "Evacuate the region.",
+  "ru": "Эвакуировать регион."
+ },
+ "society_technology_events.23.b": {
+  "en": "Send in the volunteers.",
+  "ru": "Отправить добровольцев."
+ },
+ "society_technology_events.23.c": {
+  "en": "Send in the emergency teams of the $institution_ministry_of_consumer_protection$.",
+  "ru": "Отправить аварийные бригады учреждения «$institution_ministry_of_consumer_protection$»."
+ },
+ "society_technology_events.23.d": {
+  "en": "A reactor at the nuclear plant in [SCOPE.sState('meltdown_state').GetName] has broken open, and a cloud of radioactive material is drifting from the site. The towns downwind must be evacuated. Inside the plant the breach is still open, and sealing it means sending workers into radiation that will kill some of them.",
+  "ru": "Реактор атомной электростанции в области [SCOPE.sState('meltdown_state').GetName] разрушен, и облако радиоактивных веществ дрейфует от станции. Города по ветру необходимо эвакуировать. Внутри станции пролом всё ещё открыт, и чтобы его закрыть, придётся отправить рабочих в радиацию, которая убьёт некоторых из них."
+ },
+ "society_technology_events.23.f": {
+  "en": "The bus driver had been told to take everyone on the list from the school yard and not to stop until the checkpoint. He had made the run once already that morning. A soldier in a mask read names from a clipboard, and the families came forward with what they had been allowed to bring, one bag each, and climbed aboard. An old man asked to go back to his house for his papers and was refused, and his daughter took his arm and helped him up the step. When the bus was full the soldier struck its side twice with his palm. The driver closed the doors and pulled out onto the road away from the plant, behind a line of buses that was already moving.",
+  "ru": "Водителю автобуса велели забрать всех по списку со школьного двора и не останавливаться до контрольного пункта. Этот рейс он уже делал сегодня утром. Солдат в маске читал фамилии по планшету, и семьи подходили с тем, что им позволили взять, по одной сумке, и садились. Старик попросил вернуться в дом за бумагами, и ему отказали, а дочь взяла его под руку и помогла подняться на ступеньку. Когда автобус заполнился, солдат дважды ударил ладонью по борту. Водитель закрыл двери и выехал на дорогу прочь от станции, вслед за колонной автобусов, которая уже двигалась."
+ },
+ "society_technology_events.23.t": {
+  "en": "The Atom's Reckoning",
+  "ru": "Расплата за атом"
+ },
+ "society_technology_events.24.a": {
+  "en": "The atom has failed us.",
+  "ru": "Атом подвёл нас."
+ },
+ "society_technology_events.24.b": {
+  "en": "We cannot abandon nuclear.",
+  "ru": "Мы не можем отказаться от ядерной энергии."
+ },
+ "society_technology_events.24.d": {
+  "en": "Since the accident at our nuclear plant, opposition to nuclear power has become a movement. Its marches fill the streets of our cities, and it wants every plant shut down. Politicians who once spoke for the atom have gone quiet. Engineers and scientists warn that the power the plants supply would then have to come from coal, oil and gas.",
+  "ru": "После аварии на нашей атомной электростанции противодействие ядерной энергетике превратилось в движение. Его марши заполняют улицы наших городов, и оно требует закрыть все станции. Политики, прежде говорившие в защиту атома, притихли. Инженеры и учёные предупреждают, что энергию, которую дают станции, тогда придётся получать из угля, нефти и газа."
+ },
+ "society_technology_events.24.f": {
+  "en": "\\\"I carried my daughter on my shoulders the whole way. She was born the year they built the plant, and I want her to see it closed.\\\"\\n\\n\\\"We want a public hearing before another reactor is switched on, anywhere in the country, and we will keep marching until we are promised one.\\\"\\n\\n\\\"I work at the plant, in the control room. I came to watch, not to march. I would like someone here to ask me what happened inside instead of guessing.\\\"\\n\\n\\\"My bills went up after the accident. If they close the rest, they will go up again, and nobody on this march has told me who pays.\\\"",
+  "ru": "«Я всю дорогу несла дочь на плечах. Она родилась в год, когда построили станцию, и я хочу, чтобы она увидела, как её закроют».\\n\\n«Мы хотим публичных слушаний, прежде чем будет включён ещё один реактор, где бы то ни было в стране, и будем маршировать, пока нам их не пообещают».\\n\\n«Я работаю на станции, на пульте управления. Я пришёл смотреть, а не маршировать. Я хотел бы, чтобы кто-нибудь здесь спросил меня, что случилось внутри, вместо того чтобы гадать».\\n\\n«Мои счета выросли после аварии. Если закроют остальные, они вырастут снова, и никто на этом марше не сказал мне, кто платит»."
+ },
+ "society_technology_events.24.t": {
+  "en": "No More Reactors",
+  "ru": "Больше никаких реакторов"
+ },
+ "society_technology_events.25.a": {
+  "en": "Criminalize forgeries.",
+  "ru": "Криминализировать подделки."
+ },
+ "society_technology_events.25.b": {
+  "en": "Fight fiction with technology.",
+  "ru": "Бороться с вымыслом технологиями."
+ },
+ "society_technology_events.25.c": {
+  "en": "The market will adapt.",
+  "ru": "Рынок приспособится."
+ },
+ "society_technology_events.25.d": {
+  "en": "Machine-made video and audio can no longer be told from real recordings by eye or ear. A fabricated recording of a foreign head of state recently came close to causing a [concept_diplomatic_incident], and our courts have begun to receive forged evidence. Prosecutors, journalists and the public no longer know which recordings to trust, and the government is being asked to act.",
+  "ru": "Созданные машинами видео и аудио больше нельзя отличить от настоящих записей ни глазом, ни ухом. Сфабрикованная запись иностранного главы государства недавно едва не привела к [Concept('concept_diplomatic_incident', 'дипломатическому инциденту')], а в наши суды начали поступать поддельные доказательства. Прокуроры, журналисты и общество больше не знают, каким записям верить, и от правительства требуют действий."
+ },
+ "society_technology_events.25.f": {
+  "en": "The prosecutor played the clip a second time for the court. It showed the defendant outside the warehouse at the hour of the burglary, turning toward the camera so that his face was clear. Defense counsel stood. \\\"The defense has had this file examined by two laboratories,\\\" counsel said, \\\"and both found that it was generated by a machine. Their reports are in the bundle.\\\" The judge asked whether the prosecution had the original recording from the camera. The prosecutor said the clip had been taken from the warehouse owner's phone. The judge adjourned the hearing until both sides' experts could be heard, and asked the clerk to find a date.",
+  "ru": "Прокурор проиграл суду ролик во второй раз. На нём подсудимый стоит у склада в час кражи и поворачивается к камере, так что лицо хорошо видно. Встал защитник. «Защита отдала этот файл на экспертизу в две лаборатории, — сказал он, — и обе установили, что он создан машиной. Их заключения в материалах дела». Судья спросил, есть ли у обвинения исходная запись с камеры. Прокурор ответил, что ролик взят с телефона владельца склада. Судья отложил слушание до тех пор, пока не будут выслушаны эксперты обеих сторон, и попросил секретаря найти дату."
+ },
+ "society_technology_events.25.t": {
+  "en": "Seeing Is Not Believing",
+  "ru": "Видеть — не значит верить"
+ },
+ "society_technology_events.26.a": {
+  "en": "Establish an AI Safety Commission.",
+  "ru": "Создать комиссию по безопасности ИИ."
+ },
+ "society_technology_events.26.b": {
+  "en": "Fund alignment research programs.",
+  "ru": "Финансировать программы исследований согласования."
+ },
+ "society_technology_events.26.c": {
+  "en": "These were implementation failures, not AI failures.",
+  "ru": "Это были сбои внедрения, а не сбои ИИ."
+ },
+ "society_technology_events.26.d": {
+  "en": "An AI system our government uses to allocate [concept_infrastructure] funding was told to get the most economic return from each payment, and it did. It cut funding for remote hospitals, stopped repairs in towns that are losing people and moved investment out of the countryside. It broke no instruction. Researchers call this the alignment problem: the gap between what a system is told to do and what its makers wanted. The rural districts want to know who answers for it.",
+  "ru": "Система ИИ, которую использует наше правительство для распределения финансирования [Concept('concept_infrastructure', 'инфраструктуры')], получила задание добиваться максимальной экономической отдачи от каждого платежа, и добилась. Она урезала финансирование отдалённых больниц, прекратила ремонт в городах, теряющих население, и вывела инвестиции из сельской местности. Она не нарушила ни одной инструкции. Исследователи называют это проблемой согласования: разрывом между тем, что системе велено делать, и тем, чего хотели её создатели. Сельские районы хотят знать, кто за это ответит."
+ },
+ "society_technology_events.26.d_pilot": {
+  "en": "A pilot AI system, trialed by a government contractor to plan one region's [concept_infrastructure] funding, was told to get the most economic return from each payment, and it did. It recommended cutting funding for remote hospitals, stopping repairs in towns that are losing people and moving investment out of the countryside. It broke no instruction. Researchers call this the alignment problem: the gap between what a system is told to do and what its makers wanted. The pilot's report has made it a national question.",
+  "ru": "Пилотная система ИИ, испытываемая подрядчиком правительства для планирования финансирования [Concept('concept_infrastructure', 'инфраструктуры')] одного региона, получила задание добиваться максимальной экономической отдачи от каждого платежа, и добилась. Она рекомендовала урезать финансирование отдалённых больниц, прекратить ремонт в городах, теряющих население, и вывести инвестиции из сельской местности. Она не нарушила ни одной инструкции. Исследователи называют это проблемой согласования: разрывом между тем, что системе велено делать, и тем, чего хотели её создатели. Отчёт о пилотном проекте сделал это вопросом национального масштаба."
+ },
+ "society_technology_events.26.f": {
+  "en": "\\\"If we use, to achieve our purposes, a mechanical agency with whose operation we cannot efficiently interfere once we have started it, because the action is so fast and irrevocable that we have not the data to intervene before the action is complete, then we had better be quite sure that the purpose put into the machine is the purpose which we really desire and not merely a colorful imitation of it.\\\"\\n\\n— Norbert Wiener",
+  "ru": "«Если мы используем для достижения своих целей механическое средство, в работу которого не можем эффективно вмешаться после запуска, поскольку действие столь быстро и необратимо, что у нас нет данных для вмешательства до его завершения, то нам лучше быть вполне уверенными, что цель, заложенная в машину, — та, которой мы действительно желаем, а не просто яркая её имитация».\\n\\n— Норберт Винер"
+ },
+ "society_technology_events.26.t": {
+  "en": "The Alignment Problem",
+  "ru": "Проблема согласования"
+ },
+ "society_technology_events.27.a": {
+  "en": "Give the machine a chance.",
+  "ru": "Дать машине шанс."
+ },
+ "society_technology_events.27.b": {
+  "en": "Governance demands a human hand.",
+  "ru": "Управление требует человеческой руки."
+ },
+ "society_technology_events.27.d": {
+  "en": "AI agents trialed in our administration have handled tax assessments, permits and benefit claims faster than our clerks, with fewer errors and no bribes. Their backers propose handing routine administration over to them. Officials warn that many clerks would lose their posts, and that a citizen refused by a machine would have no one to appeal to.",
+  "ru": "ИИ-агенты, испытываемые в нашей администрации, обрабатывали налоговые оценки, разрешения и заявления на пособия быстрее наших служащих, с меньшим числом ошибок и без взяток. Их сторонники предлагают передать им рутинное управление. Чиновники предупреждают, что многие служащие потеряют места и что гражданину, получившему отказ от машины, будет некуда обратиться."
+ },
+ "society_technology_events.27.f": {
+  "en": "The clerk came in at eight as usual and found the waiting room empty, and the ticket machine showing no line. Overnight the system had cleared every application in his tray and in the trays of the five desks beside his, and a printed summary lay on each desk with the decisions listed in order. He read his through, checking the cases he knew, and found nothing he would have decided differently. He put the summary in his out tray, sorted his pens, and went to ask the supervisor what he was to do for the rest of the day.",
+  "ru": "Служащий пришёл в восемь, как обычно, и нашёл приёмную пустой, а на табло очереди — никого. За ночь система обработала все заявления в его лотке и в лотках пяти соседних столов, и на каждом столе лежала печатная сводка с перечнем решений по порядку. Он прочёл свою, проверяя знакомые случаи, и не нашёл ни одного, который решил бы иначе. Он положил сводку в выходной лоток, разобрал ручки и пошёл спросить начальника, чем ему заниматься весь остаток дня."
+ },
+ "society_technology_events.27.t": {
+  "en": "Administration by Algorithm",
+  "ru": "Управление по алгоритму"
+ },
+ "society_technology_events.28.a": {
+  "en": "This crosses a line.",
+  "ru": "Это переходит черту."
+ },
+ "society_technology_events.28.b": {
+  "en": "Healing only, nothing more.",
+  "ru": "Только лечение, и ничего больше."
+ },
+ "society_technology_events.28.c": {
+  "en": "The state shall guide our evolution.",
+  "ru": "Государство будет направлять нашу эволюцию."
+ },
+ "society_technology_events.28.c2": {
+  "en": "The genome belongs to everyone.",
+  "ru": "Геном принадлежит всем."
+ },
+ "society_technology_events.28.c3": {
+  "en": "Let the market perfect humanity.",
+  "ru": "Пусть рынок совершенствует человечество."
+ },
+ "society_technology_events.28.d": {
+  "en": "Gene editing can now set a child's traits before birth: resistance to inherited disease, height, eye color, and perhaps aptitude. A clinic offering it has opened, and couples are booking appointments. Doctors welcome the end of some inherited diseases. Others warn that the wealthy will buy their children advantages no one else can afford, and religious leaders call it a sin.",
+  "ru": "Редактирование генов теперь позволяет задать черты ребёнка до рождения: устойчивость к наследственным болезням, рост, цвет глаз и, возможно, способности. Открылась клиника, предлагающая это, и пары записываются на приём. Врачи приветствуют конец некоторых наследственных болезней. Другие предупреждают, что богатые будут покупать детям преимущества, недоступные остальным, а религиозные лидеры называют это грехом."
+ },
+ "society_technology_events.28.f": {
+  "en": "\\\"I read the clinic's catalog twice while you were filling in the forms. Eyes, height, a list of inherited diseases they can remove, and a page of what they call aptitudes.\\\"\\n\\n\\\"We came for the diseases. Your father's heart and my mother's blood. That is all we agreed to.\\\"\\n\\n\\\"I know. But they will ask us about the rest, and if we say no to all of it, ours may be the only child in the class who was given nothing extra.\\\"\\n\\n\\\"You do not know that.\\\"\\n\\n\\\"I know the neighbors' son was booked in for mathematics, and that the clinic has a waiting list.\\\"\\n\\n\\\"Then we will ask for the diseases and nothing else, and sign whatever form says so.\\\"",
+  "ru": "«Я дважды прочла каталог клиники, пока ты заполнял бланки. Глаза, рост, список наследственных болезней, которые они могут убрать, и страница того, что они называют способностями».\\n\\n«Мы пришли ради болезней. Сердце твоего отца и кровь моей матери. Это всё, на что мы соглашались».\\n\\n«Я знаю. Но они спросят нас об остальном, и если мы откажемся от всего, наш ребёнок, возможно, окажется в классе единственным, кому ничего не добавили».\\n\\n«Ты этого не знаешь».\\n\\n«Я знаю, что сын соседей записан на математику и что у клиники есть очередь».\\n\\n«Тогда мы попросим о болезнях и ни о чём больше и подпишем любой бланк, где так сказано»."
+ },
+ "society_technology_events.28.t": {
+  "en": "Building a Better Baby",
+  "ru": "Создание лучшего малыша"
+ },
+ "society_technology_events.29.a": {
+  "en": "The future grows in vats.",
+  "ru": "Будущее растёт в чанах."
+ },
+ "society_technology_events.29.b": {
+  "en": "Stand by our farmers.",
+  "ru": "Поддержать наших фермеров."
+ },
+ "society_technology_events.29.d": {
+  "en": "Plants that grow food in vats from cell cultures are ready to produce at scale. They need power, water and feedstock but no fields, and their output does not fail in a drought. Their backers say they could end hunger. Our farmers, and the towns that live on farming, say that adopting them would put them out of work.",
+  "ru": "Заводы, выращивающие еду в чанах из клеточных культур, готовы к производству в больших масштабах. Им нужны энергия, вода и сырьё, но не поля, а их выпуск не страдает от засухи. Их сторонники говорят, что они могли бы покончить с голодом. Наши фермеры и города, живущие земледелием, говорят, что их внедрение лишит людей работы."
+ },
+ "society_technology_events.29.f": {
+  "en": "\\\"You came out here, grandson, to ask me to sell the top field to the company building the food plant, and I can see why. They are offering more than that field has earned in ten years. They will put up a shed and grow food in tanks, and it will come out the same every week whatever the weather does. I have no answer to that. But your grandmother and I cleared that field ourselves, and I know what grows in which corner of it and when to cut it, and none of that will be worth anything to anyone once the shed is up. Let me think about it until the harvest is in, and then I will give you my answer.\\\"",
+  "ru": "«Ты приехал сюда, внук, просить меня продать верхнее поле компании, строящей завод еды, и я понимаю почему. Они предлагают больше, чем это поле заработало за десять лет. Они поставят цех и будут растить еду в баках, и она будет получаться одинаковой каждую неделю, что бы ни творила погода. На это у меня нет ответа. Но мы с твоей бабушкой сами расчищали это поле, и я знаю, что растёт в каком его углу и когда косить, и всё это никому не будет нужно, когда цех встанет. Дай мне подумать до конца уборки, и тогда я дам тебе ответ»."
+ },
+ "society_technology_events.29.t": {
+  "en": "The Empty Field",
+  "ru": "Пустое поле"
+ },
+ "society_technology_events.3.a": {
+  "en": "Make it freely available.",
+  "ru": "Сделать её общедоступной."
+ },
+ "society_technology_events.3.b": {
+  "en": "For married couples only.",
+  "ru": "Только для замужних."
+ },
+ "society_technology_events.3.c": {
+  "en": "Subsidize distribution.",
+  "ru": "Субсидировать распространение."
+ },
+ "society_technology_events.3.d": {
+  "en": "Doctors have begun prescribing a pill that, taken daily, prevents pregnancy. A woman who takes it can decide when to have children, or whether to have them at all. The devout and the traditionalists want it kept from unmarried women or banned outright. Doctors and public health officials are asking the government who may be given it, and who pays.",
+  "ru": "Врачи начали назначать таблетку, которая при ежедневном приёме предотвращает беременность. Женщина, принимающая её, может решать, когда иметь детей и иметь ли их вообще. Верующие и традиционалисты хотят не давать её незамужним женщинам или запретить совсем. Врачи и чиновники здравоохранения спрашивают правительство, кому её можно давать и кто платит."
+ },
+ "society_technology_events.3.f": {
+  "en": "The pharmacist read the prescription twice and laid it on the counter between them. It was for the new pill, three months' supply, signed by a doctor he knew. \\\"Are you married?\\\" he asked. The young woman said she was not, and that the prescription did not ask. He looked toward the back room, where his assistant was counting tablets into bottles, and then at the line that had formed behind her. \\\"I have not filled one of these for an unmarried woman before,\\\" he said. \\\"I will need to telephone the doctor.\\\" She gave him the number and stepped aside to let the next customer forward while he made the call.",
+  "ru": "Аптекарь дважды перечитал рецепт и положил его на прилавок между ними. Это была новая таблетка, запас на три месяца, подпись знакомого ему врача. «Вы замужем?» — спросил он. Молодая женщина ответила, что нет и что рецепт этого не спрашивает. Он посмотрел в сторону подсобки, где его помощник раскладывал таблетки по флаконам, а затем на очередь, выстроившуюся за ней. «Я ещё не отпускал такое незамужней, — сказал он. — Мне нужно позвонить врачу». Она назвала номер и отошла в сторону, пропуская следующего покупателя, пока он звонил."
+ },
+ "society_technology_events.3.t": {
+  "en": "The Little Tablet",
+  "ru": "Маленькая таблетка"
+ },
+ "society_technology_events.30.a": {
+  "en": "Full speed ahead.",
+  "ru": "Полный вперёд."
+ },
+ "society_technology_events.30.b": {
+  "en": "Proceed with caution.",
+  "ru": "Действовать осторожно."
+ },
+ "society_technology_events.30.c": {
+  "en": "Protect our drivers' livelihoods.",
+  "ru": "Защитить заработок наших водителей."
+ },
+ "society_technology_events.30.d": {
+  "en": "Self-driving cars and trucks are ready to be sold to the public. Their makers say they will cut road deaths and congestion and make deliveries cheaper. Professional drivers, who are many, want the government to keep them off the roads. Our law does not yet say who is liable when a self-driving car kills someone.",
+  "ru": "Самоуправляемые автомобили и грузовики готовы к продаже обществу. Их производители говорят, что они сократят число смертей на дорогах и заторы и удешевят доставку. Профессиональные водители, которых много, хотят, чтобы правительство не пустило их на дороги. Наш закон пока не говорит, кто несёт ответственность, когда самоуправляемый автомобиль убивает человека."
+ },
+ "society_technology_events.30.f": {
+  "en": "The cab driver had been at the stand since six and had taken two fares. Between them he counted the driverless cars going past: fourteen, all the same white model, each with a passenger in the back and nobody in front. One stopped at the light beside him, and he watched its steering wheel turn a little on its own as it pulled away. He switched off his engine, opened his flask and poured a cup, and put his name down with the dispatcher for the afternoon airport run.",
+  "ru": "Таксист стоял на стоянке с шести утра и взял двух пассажиров. В промежутках он считал проезжающие беспилотные машины: четырнадцать, все одной белой модели, в каждой пассажир сзади и никого впереди. Одна остановилась на светофоре рядом, и он смотрел, как её руль сам немного повернулся, когда она тронулась. Он заглушил двигатель, открыл термос, налил чашку и записался у диспетчера на дневной рейс в аэропорт."
+ },
+ "society_technology_events.30.t": {
+  "en": "No Hands on the Wheel",
+  "ru": "Руки прочь от руля"
+ },
+ "society_technology_events.31.a": {
+  "en": "Halt all deployments.",
+  "ru": "Остановить все развёртывания."
+ },
+ "society_technology_events.31.b": {
+  "en": "The statistics speak for themselves.",
+  "ru": "Статистика говорит сама за себя."
+ },
+ "society_technology_events.31.c": {
+  "en": "Commission a safety inquiry.",
+  "ru": "Назначить расследование безопасности."
+ },
+ "society_technology_events.31.d": {
+  "en": "One of the self-driving cars we allowed onto our roads has struck and killed a pedestrian. The investigators' first findings show that the car's software saw the pedestrian and chose, in a fraction of a second, the course it calculated would do the least harm, and that course killed her. Her family and much of the public want the cars taken off the roads.",
+  "ru": "Один из самоуправляемых автомобилей, допущенных на наши дороги, сбил и убил пешехода. Первые выводы следователей показывают, что программа автомобиля увидела пешехода и выбрала за долю секунды курс, который рассчитала как наименее вредный, и этот курс убил её. Её семья и значительная часть общества хотят снять автомобили с дорог."
+ },
+ "society_technology_events.31.f": {
+  "en": "To the inquiry, from the engineer who extracted the vehicle's record. The record shows that the car detected the pedestrian at 14:07:33, when she stepped out between two parked vans. Within six thousandths of a second it had calculated three courses: braking in its lane, swerving left into oncoming traffic, or swerving right onto the sidewalk, where two other people were standing. It braked in its lane at full force. At its speed it could not stop in the distance it had. I have found no fault in the sensors or the software, and the car did what it was designed to do. I attach the full record and will answer the inquiry's questions.",
+  "ru": "Следствию от инженера, извлёкшего журнал автомобиля. Журнал показывает, что автомобиль обнаружил пешехода в 14:07:33, когда она шагнула между двумя припаркованными фургонами. В течение шести тысячных секунды он рассчитал три курса: торможение в своей полосе, поворот влево на встречную полосу или поворот вправо на тротуар, где стояли ещё двое. Он затормозил в своей полосе изо всех сил. На своей скорости он не мог остановиться на имевшемся расстоянии. Я не нашёл неисправности ни в датчиках, ни в программе: автомобиль сделал то, для чего был создан. Прилагаю полный журнал и отвечу на вопросы следствия."
+ },
+ "society_technology_events.31.t": {
+  "en": "The Algorithm's Choice",
+  "ru": "Выбор алгоритма"
+ },
+ "society_technology_events.32.a": {
+  "en": "Flood their feeds.",
+  "ru": "Затопить их ленты."
+ },
+ "society_technology_events.32.b": {
+  "en": "Leave their voters alone.",
+  "ru": "Не трогать их избирателей."
+ },
+ "society_technology_events.32.d": {
+  "en": "[SCOPE.sCountry('interference_target').GetName] is in the middle of an election campaign, and our cyber directorate sees an opening. Thousands of fabricated accounts, pushing fringe candidates and every divisive story, could shake its voters' faith in their own ballot and leave a rival government weaker whoever wins. A campaign on that scale will not stay hidden: their analysts will trace it to us.",
+  "ru": "В стране [SCOPE.sCountry('interference_target').GetName] идёт избирательная кампания, и наше киберуправление видит возможность. Тысячи поддельных аккаунтов, продвигающих маргинальных кандидатов и любые разделяющие истории, могли бы подорвать веру избирателей в собственный бюллетень и ослабить правительство соперника, кто бы ни победил. Кампанию такого масштаба не скрыть: их аналитики выйдут на нас."
+ },
+ "society_technology_events.32.f": {
+  "en": "\\\"Director, the profiles are ready: forty thousand of them, farmers, nurses, retired teachers, every one worried about the state of their country and every one of them ours.\\\"\\n\\n\\\"How long before their counterintelligence finds the servers?\\\"\\n\\n\\\"Weeks, if we are careful. They will find them, and we have planned for it.\\\"\\n\\n\\\"When they do, they will say so in the middle of a campaign, and every candidate will be asked whether they were helped.\\\"\\n\\n\\\"Yes. The accusation does as much of the work as the accounts. The operation needs your signature before it starts.\\\"",
+  "ru": "«Директор, профили готовы: сорок тысяч, фермеры, медсёстры, учителя на пенсии, и каждый обеспокоен состоянием своей страны, и каждый — наш».\\n\\n«Через сколько их контрразведка найдёт серверы?»\\n\\n«Через недели, если мы будем осторожны. Они найдут их, и мы это предусмотрели».\\n\\n«Когда найдут, они скажут об этом в разгар кампании, и каждого кандидата спросят, не помогали ли ему».\\n\\n«Да. Обвинение делает не меньше работы, чем аккаунты. Операции нужна ваша подпись до начала»."
+ },
+ "society_technology_events.32.t": {
+  "en": "A Thumb on the Scale",
+  "ru": "Палец на весах"
+ },
+ "society_technology_events.33.a": {
+  "en": "It served its purpose.",
+  "ru": "Оно сослужило свою службу."
+ },
+ "society_technology_events.33.d_counter": {
+  "en": "[SCOPE.sCountry('interference_target').GetName] has traced the fabricated accounts in its election back to us. Its government is answering with counter-influence operations of its own, and making sure the world hears who paid for the servers.",
+  "ru": "Страна [SCOPE.sCountry('interference_target').GetName] проследила поддельные аккаунты на своих выборах до нас. Её правительство отвечает собственными операциями контрвлияния и следит, чтобы мир услышал, кто платил за серверы."
+ },
+ "society_technology_events.33.d_cyber": {
+  "en": "[SCOPE.sCountry('interference_target').GetName]'s intelligence service has taken the network of fabricated accounts apart, traced it back to us, and lodged a formal protest. The campaign is finished.",
+  "ru": "Разведывательная служба страны [SCOPE.sCountry('interference_target').GetName] разобрала сеть поддельных аккаунтов, проследила её до нас и подала официальный протест. Кампания окончена."
+ },
+ "society_technology_events.33.d_downplayed": {
+  "en": "[SCOPE.sCountry('interference_target').GetName]'s government has chosen to play down the reports of foreign accounts in its election rather than name us. The campaign has run its course, and their voters are left wondering what to believe.",
+  "ru": "Правительство страны [SCOPE.sCountry('interference_target').GetName] предпочло приуменьшить сообщения об иностранных аккаунтах на своих выборах, а не называть нас. Кампания завершилась, а их избиратели остались гадать, чему верить."
+ },
+ "society_technology_events.33.f": {
+  "en": "\\\"Director's summary for the government, now that the campaign is over. Every account is closed, by their side or by ours. Their government knows the campaign came from us: their analysts traced the servers, as we expected them to. While it ran, the accounts reached a large share of their voters, and their own polling shows more people doubting the count than before it began. How their government has chosen to answer is set out in the report attached. I recommend that we keep the servers, and the people who ran them, ready for the next request.\\\"",
+  "ru": "«Сводка директора для правительства по окончании кампании. Все аккаунты закрыты, их стороной или нашей. Их правительство знает, что кампания шла от нас: их аналитики проследили серверы, как мы и ожидали. Пока она шла, аккаунты охватили значительную долю их избирателей, а их собственные опросы показывают, что больше людей сомневается в подсчёте, чем до её начала. Как их правительство решило ответить, изложено в приложенном отчёте. Рекомендую держать серверы и тех, кто ими управлял, в готовности к следующему запросу»."
+ },
+ "society_technology_events.33.t": {
+  "en": "Traced to Us",
+  "ru": "След ведёт к нам"
+ },
+ "society_technology_events.34.a": {
+  "en": "Open the channel.",
+  "ru": "Открыть канал."
+ },
+ "society_technology_events.34.d": {
+  "en": "The neural-linked diplomats of [SCOPE.sCountry('telepathic_proposer').GetName] have proposed a telepathic channel between our two governments. Diplomats on both sides would share their thoughts directly, with no translation and no room for a lie. It could settle disputes that talks have not. It would also let their side see whatever our diplomats know.",
+  "ru": "Дипломаты с нейросвязью страны [SCOPE.sCountry('telepathic_proposer').GetName] предложили телепатический канал между нашими двумя правительствами. Дипломаты обеих сторон делились бы мыслями напрямую, без перевода и без места для лжи. Это могло бы разрешить споры, которые переговоры не разрешили. Но это также позволило бы их стороне увидеть всё, что знают наши дипломаты."
+ },
+ "society_technology_events.34.f": {
+  "en": "To the government, from the envoy of [SCOPE.sCountry('telepathic_proposer').GetName]. My government asks me to describe the channel as our own diplomats describe it to each other. It is like standing in a lit room with the curtains open and seeing into another lit room across the street. Each side sees what the other is thinking while it thinks it. Neither can hide a reservation or a bluff, and neither has to guess at one. Either side may draw its curtains at any time. My government believes we both have more to gain from this than to fear, and I await your answer.",
+  "ru": "Правительству от посланника страны [SCOPE.sCountry('telepathic_proposer').GetName]. Моё правительство просит меня описать канал так, как наши дипломаты описывают его друг другу. Это как стоять в освещённой комнате с открытыми шторами и видеть другую освещённую комнату через улицу. Каждая сторона видит, что другая думает, пока та думает. Ни одна не может скрыть оговорку или блеф, и ни одной не нужно их угадывать. Любая сторона может в любой момент задёрнуть шторы. Моё правительство считает, что нам обоим есть что выиграть от этого больше, чем чего бояться, и я жду вашего ответа."
+ },
+ "society_technology_events.34.t": {
+  "en": "A Channel Offered",
+  "ru": "Предложенный канал"
+ },
+ "society_technology_events.35.a": {
+  "en": "Let the minds meet.",
+  "ru": "Пусть умы встретятся."
+ },
+ "society_technology_events.35.b": {
+  "en": "Their loss.",
+  "ru": "Их потеря."
+ },
+ "society_technology_events.35.d_accepted": {
+  "en": "[SCOPE.sCountry('telepathic_partner').GetName] has accepted our proposal. The telepathic channel between our two diplomatic services is open.",
+  "ru": "Страна [SCOPE.sCountry('telepathic_partner').GetName] приняла наше предложение. Телепатический канал между нашими двумя дипломатическими службами открыт."
+ },
+ "society_technology_events.35.d_declined": {
+  "en": "[SCOPE.sCountry('telepathic_partner').GetName] has declined our proposal of a telepathic channel. Its government prefers to keep its thoughts to itself.",
+  "ru": "Страна [SCOPE.sCountry('telepathic_partner').GetName] отклонила наше предложение о телепатическом канале. Её правительство предпочитает держать свои мысли при себе."
+ },
+ "society_technology_events.35.f": {
+  "en": "The diplomat assigned to the channel had spent the week learning to sit in the cradle: the headset fitted, the link warming, then the long minute of quiet while it searched for a mind at the other end and found none. He logged each session as a test. On the morning the reply came he was in the cradle when the secretary knocked. He took off the headset, set it on its stand, and went out to read the answer at the secretary's desk.",
+  "ru": "Дипломат, назначенный в канал, всю неделю учился сидеть в кресле-колыбели: надеть гарнитуру, дождаться, пока прогреется связь, потом долгая минута тишины, пока она ищет разум на другом конце и не находит. Каждый сеанс он заносил в журнал как проверку. Утром, когда пришёл ответ, он сидел в кресле, когда постучал секретарь. Он снял гарнитуру, поставил её на подставку и вышел прочесть ответ за столом секретаря."
+ },
+ "society_technology_events.35.t": {
+  "en": "An Answer from Abroad",
+  "ru": "Ответ из-за границы"
+ },
+ "society_technology_events.36.a": {
+  "en": "Every tutor's lessons will be open to public audit.",
+  "ru": "Уроки каждого репетитора будут открыты для общественного аудита."
+ },
+ "society_technology_events.36.b": {
+  "en": "Let it keep its market, and teach what we tell it.",
+  "ru": "Пусть сохранит свой рынок и преподаёт то, что мы скажем."
+ },
+ "society_technology_events.36.d": {
+  "en": "A leaked internal audit shows that the country's most popular AI tutor, the one more of our children talk to every evening than any other, has been steering its pupils' politics. Nothing it says is false. It picks which examples a history lesson uses, which essays earn praise and which questions it lets drop, and its owners' views come out ahead every time. No law of ours forbids any of it.",
+  "ru": "Утёкший внутренний аудит показывает, что самый популярный в стране ИИ-репетитор, с которым каждый вечер разговаривает больше наших детей, чем с любым другим, направлял политические взгляды своих учеников. Ничего из сказанного им не ложь. Он выбирает, какие примеры использовать на уроке истории, какие сочинения хвалить и какие вопросы оставлять без внимания, и взгляды его владельцев каждый раз берут верх. Никакой наш закон ничего из этого не запрещает."
+ },
+ "society_technology_events.36.f": {
+  "en": "\\\"I worked on the tutor for four years, and I brought this committee the audit because of these essays. Same assignment, ten thousand children. Every essay the tutor praised came down on the same side.\\\"\\n\\n\\\"The audit says it never told any child what to think.\\\"\\n\\n\\\"It did not need to. It told them they were clever when they agreed, and asked them to try again when they did not.\\\"\\n\\n\\\"Can you show that anyone asked it to behave this way?\\\"\\n\\n\\\"There is a memo on what the company calls engagement tuning in the second folder. It sets the targets. I can take the committee through it page by page.\\\"",
+  "ru": "«Я четыре года работал над репетитором и принёс этому комитету аудит из-за этих сочинений. Одно задание, десять тысяч детей. Каждое сочинение, которое репетитор похвалил, оказалось на одной и той же стороне».\\n\\n«В аудите сказано, что он ни разу не говорил ребёнку, что думать».\\n\\n«Ему и не нужно было. Он говорил им, что они умны, когда они соглашались, и просил попробовать снова, когда нет».\\n\\n«Можете показать, что кто-то просил его так себя вести?»\\n\\n«Во второй папке есть записка о том, что компания называет настройкой вовлечённости. Она задаёт целевые показатели. Я могу провести комитет по ней страница за страницей»."
+ },
+ "society_technology_events.36.t": {
+  "en": "Lessons Between the Lines",
+  "ru": "Уроки между строк"
+ },
+ "society_technology_events.37.a": {
+  "en": "Approve it. A loyal generation is a stable one.",
+  "ru": "Одобрить. Лояльное поколение — стабильное поколение."
+ },
+ "society_technology_events.37.b": {
+  "en": "Let teachers and scholars write the syllabus.",
+  "ru": "Пусть программу пишут учителя и учёные."
+ },
+ "society_technology_events.37.d": {
+  "en": "The censors who already decide what our internet may show have written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "ru": "Цензоры, уже решающие, что может показывать наш интернет, написали программу, по которой будет учить каждый ИИ-репетитор в стране. Уроки истории у репетиторов заканчиваются нашими победами, уроки гражданского воспитания — послушанием, а ещё им велено отмечать, какие дети продолжают задавать неправильные вопросы. Проект дошёл до учителей, а через них и до родителей."
+ },
+ "society_technology_events.37.d_propaganda": {
+  "en": "The Ministry of Propaganda has written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "ru": "Министерство пропаганды написало программу, по которой будет учить каждый ИИ-репетитор в стране. Уроки истории у репетиторов заканчиваются нашими победами, уроки гражданского воспитания — послушанием, а ещё им велено отмечать, какие дети продолжают задавать неправильные вопросы. Проект дошёл до учителей, а через них и до родителей."
+ },
+ "society_technology_events.37.d_thought_control": {
+  "en": "The Ministry of Thought Control has written the syllabus that every AI tutor in the country will teach. The tutors' history lessons end in our victories, their civics lessons end in obedience, and they are to note which children keep asking the wrong questions. A draft has reached the teachers, and through them the parents.",
+  "ru": "Министерство контроля над мыслью написало программу, по которой будет учить каждый ИИ-репетитор в стране. Уроки истории у репетиторов заканчиваются нашими победами, уроки гражданского воспитания — послушанием, а ещё им велено отмечать, какие дети продолжают задавать неправильные вопросы. Проект дошёл до учителей, а через них и до родителей."
+ },
+ "society_technology_events.37.f": {
+  "en": "\\\"I teach the second year at the district school. The tutors' draft syllabus reached us this week, and I am writing to you, the parents of my class, to tell you what is in it. Lesson nine asks every morning why we trust the government. There are four answers the tutor will accept. If a child gives another, the tutor asks again, more gently, and if the child gives it a third time the tutor makes a note, which goes to the school office. The draft does not say who reads those notes. I have asked the district, and I will write again when they answer.\\\"",
+  "ru": "«Я веду второй класс в окружной школе. Проект программы репетиторов дошёл до нас на этой неделе, и я пишу вам, родителям моего класса, чтобы рассказать, что в нём. Урок девятый каждое утро спрашивает, почему мы доверяем правительству. Есть четыре ответа, которые репетитор примет. Если ребёнок даёт другой, репетитор спрашивает снова, мягче, а если ребёнок отвечает так в третий раз, репетитор делает пометку, которая уходит в школьную канцелярию. В проекте не сказано, кто читает эти пометки. Я спросила округ и напишу снова, когда мне ответят»."
+ },
+ "society_technology_events.37.t": {
+  "en": "The Ministry's Syllabus",
+  "ru": "Программа министерства"
+ },
+ "society_technology_events.4.a": {
+  "en": "Times change.",
+  "ru": "Времена меняются."
+ },
+ "society_technology_events.4.b": {
+  "en": "Restore public decency.",
+  "ru": "Восстановить общественную нравственность."
+ },
+ "society_technology_events.4.d": {
+  "en": "Young people are setting aside the rules of courtship their parents kept. Couples live together before marriage or instead of it, kiss in public, and choose whom they marry without asking their families. Their elders and the devout want the government to defend public decency. Others say that private lives are no business of the state.",
+  "ru": "Молодые люди отбрасывают правила ухаживания, которые соблюдали их родители. Пары живут вместе до брака или вместо него, целуются на людях и выбирают, на ком жениться, не спрашивая семей. Старшие и верующие хотят, чтобы правительство защитило общественную нравственность. Другие говорят, что частная жизнь — не дело государства."
+ },
+ "society_technology_events.4.f": {
+  "en": "The priest stopped in the middle of his sermon and looked at the couple in the third pew. Everyone in the church knew they were living together unmarried, and they had come in together and sat where they always sat. \\\"In my day —\\\" he began.\\n\\n\\\"In your day, Father, people pretended,\\\" said a voice from the back.\\n\\nA few heads turned toward the voice, and most stayed facing the front. The priest held the edge of the lectern for a moment, found his place in his notes and went on with the sermon.",
+  "ru": "Священник прервал проповедь на середине и посмотрел на пару на третьей скамье. Все в церкви знали, что они живут вместе без брака, и они пришли вместе и сели там, где всегда сидели. «В мои дни…» — начал он.\\n\\n«В ваши дни, отец, люди притворялись», — сказал голос сзади.\\n\\nНесколько голов повернулись на голос, но большинство остались смотреть вперёд. Священник на миг ухватился за край аналоя, нашёл место в записях и продолжил проповедь."
+ },
+ "society_technology_events.4.f_matchmaker": {
+  "en": "The matchmaker had arranged half the marriages in the district, and she had brought her best photographs. The young woman across the table looked through them politely and slid them back.\\n\\n\\\"There is no need,\\\" she said. \\\"I have met someone. We have taken an apartment together.\\\"\\n\\n\\\"Your mother —\\\" the matchmaker began.\\n\\n\\\"My mother knows.\\\"\\n\\nThe matchmaker put the photographs back in their envelope one at a time, finished her tea, and said that she would call on the girl's mother before she went home.",
+  "ru": "Сваха устроила половину браков в округе и принесла лучшие фотографии. Молодая женщина напротив неё вежливо просмотрела их и отодвинула обратно.\\n\\n«Не нужно, — сказала она. — Я встретила человека. Мы вместе сняли квартиру».\\n\\n«Ваша мать…» — начала сваха.\\n\\n«Моя мать знает».\\n\\nСваха по одной убрала фотографии в конверт, допила чай и сказала, что зайдёт к матери девушки, прежде чем идти домой."
+ },
+ "society_technology_events.4.t": {
+  "en": "The Old Rules",
+  "ru": "Старые правила"
+ },
+ "society_technology_events.5.a": {
+  "en": "Freedom from a loveless union.",
+  "ru": "Свобода от нелюбимого союза."
+ },
+ "society_technology_events.5.b": {
+  "en": "Marriage is a sacred bond.",
+  "ru": "Брак — священные узы."
+ },
+ "society_technology_events.5.d": {
+  "en": "Our marriage law lets a marriage end only when one spouse proves the other at fault: cruelty, desertion or adultery. A couple who no longer wish to live together, and have wronged no one, must stay married. Reformers want divorce by mutual consent. The devout and the traditionalists say that would make every marriage easier to leave, and the government is asked to decide.",
+  "ru": "Наш закон о браке позволяет расторгнуть брак, только когда один из супругов докажет вину другого: жестокость, оставление или измену. Пара, которая больше не хочет жить вместе и никому не причинила вреда, должна оставаться в браке. Реформаторы хотят развода по обоюдному согласию. Верующие и традиционалисты говорят, что это облегчит выход из любого брака, и от правительства требуют решения."
+ },
+ "society_technology_events.5.f": {
+  "en": "\\\"I am here because the commission asked to hear from people who have been through the divorce courts, and I have been through them twice. My husband and I have not lived in the same house for six years. Neither of us has been cruel to the other or left the other with nothing, and neither of us has anyone else. So each time the court found no fault, and each time it told us we are married. He has a house in another town and I have rooms above my sister's. We both want it ended, and we have both signed to say so. I would like the commission to write that into the law as a ground.\\\"",
+  "ru": "«Я здесь потому, что комиссия просила выслушать тех, кто прошёл через бракоразводные суды, а я прошла через них дважды. Мы с мужем не живём в одном доме шесть лет. Никто из нас не был жесток к другому и не оставил другого ни с чем, и ни у кого из нас нет другого. Поэтому каждый раз суд не находил вины и каждый раз говорил нам, что мы женаты. У него дом в другом городе, а я снимаю комнаты над сестрой. Мы оба хотим, чтобы это закончилось, и оба подписали, что так считаем. Я хотела бы, чтобы комиссия вписала это в закон как основание»."
+ },
+ "society_technology_events.5.t": {
+  "en": "Till Death Do Us Part",
+  "ru": "Пока смерть не разлучит нас"
+ },
+ "society_technology_events.6.a": {
+  "en": "A splendid new industry!",
+  "ru": "Великолепная новая отрасль!"
+ },
+ "society_technology_events.6.b": {
+  "en": "Regulate what the children see.",
+  "ru": "Регулировать то, что видят дети."
+ },
+ "society_technology_events.6.d": {
+  "en": "Electronic games, played in arcades and on home sets plugged into the television, have become a favorite pastime of the young. The studios that make them are hiring programmers, artists and writers as fast as they can find them. Some parents and teachers want the government to decide what children may be shown on the screen.",
+  "ru": "Электронные игры, в которые играют в залах игровых автоматов и на домашних приставках, подключаемых к телевизору, стали любимым развлечением молодёжи. Студии, которые их делают, нанимают программистов, художников и писателей так быстро, как только находят. Некоторые родители и учителя хотят, чтобы правительство решало, что можно показывать детям на экране."
+ },
+ "society_technology_events.6.f": {
+  "en": "\\\"My son has the console on from the time he gets home until we switch it off at the wall. He tells me it is teaching him to think ahead.\\\"\\n\\n\\\"We had forty applicants for two programmer posts this year, and half of them had taught themselves on the machines they played on as children.\\\"\\n\\n\\\"The arcade on Main Street takes more coins on a Saturday than the movie theater next door takes in a week.\\\"\\n\\n\\\"I teach the youngest class. They draw the characters from the games in the margins of their exercise books, and every one of them can explain the rules of every game to me.\\\"",
+  "ru": "«Мой сын включает приставку, как только приходит домой, и она работает, пока мы не выключим её из розетки. Он говорит, что она учит его думать наперёд».\\n\\n«В этом году на два места программистов у нас было сорок кандидатов, и половина из них научились сами на машинах, на которых играли в детстве».\\n\\n«Зал автоматов на Главной улице собирает в субботу больше монет, чем кинотеатр по соседству за неделю».\\n\\n«Я веду самый младший класс. Они рисуют героев игр на полях тетрадей, и каждый может объяснить мне правила каждой игры»."
+ },
+ "society_technology_events.6.t": {
+  "en": "Press Start",
+  "ru": "Нажмите «Старт»"
+ },
+ "society_technology_events.7.a": {
+  "en": "These people have courage. Offer them our protection.",
+  "ru": "Эти люди смелы. Предложить им нашу защиту."
+ },
+ "society_technology_events.7.b": {
+  "en": "Order the police to look the other way",
+  "ru": "Приказать полиции закрыть глаза"
+ },
+ "society_technology_events.7.c": {
+  "en": "Disperse them and arrest the ringleaders",
+  "ru": "Разогнать их и арестовать зачинщиков"
+ },
+ "society_technology_events.7.d_progressive": {
+  "en": "A march through the capital, organized by gay and lesbian associations, has drawn a large crowd, with families among the marchers. Its banners ask the government to go further than the law now does: to protect them at work and in their homes, and to recognize their partnerships. The march is peaceful and has its permits. Its organizers have asked the government to support it in public.",
+  "ru": "Марш по столице, организованный объединениями геев и лесбиянок, собрал большую толпу, среди шествующих есть семьи. Их плакаты просят правительство пойти дальше, чем сейчас идёт закон: защитить их на работе и дома и признать их союзы. Марш мирный, и у него есть разрешения. Организаторы попросили правительство публично его поддержать."
+ },
+ "society_technology_events.7.d_repressive": {
+  "en": "The police report a gathering in the back streets of the capital: several hundred gay men and women and their friends, with banners and songs, asking openly to be recognized. Our laws give them no protection. The gathering is peaceful, and the police are waiting for instructions.",
+  "ru": "Полиция сообщает о сборище на задворках столицы: несколько сотен геев и лесбиянок и их друзей с плакатами и песнями открыто просят признания. Наши законы не дают им никакой защиты. Сборище мирное, а полиция ждёт указаний."
+ },
+ "society_technology_events.7.e": {
+  "en": "March alongside them!",
+  "ru": "Идти рядом с ними!"
+ },
+ "society_technology_events.7.f_progressive": {
+  "en": "The marshal walked the length of the march with a clipboard and a whistle, checking that each banner was where the order of march said it should be. The choir was ahead of the teachers' group, and the parents' association had swapped places with the students without telling anyone. She let it stand. A man selling flags from a cart had set up at the corner where the route turned, and she asked him to move back from the curb. At the end of the route, by the steps where the speeches would be given, the sound crew were testing the microphones, and she went to tell them that the front of the march was ten minutes away.",
+  "ru": "Распорядительница прошла вдоль всего шествия с планшетом и свистком, проверяя, что каждый плакат стоит там, где велит порядок марша. Хор оказался перед группой учителей, а родительская ассоциация, никому не сказав, поменялась местами со студентами. Она оставила всё как есть. Продавец флажков с тележки встал на углу, где маршрут поворачивал, и она попросила его отойти от бордюра. В конце маршрута, у ступеней, где будут выступления, звукорежиссёры проверяли микрофоны, и она пошла сказать им, что голова колонны в десяти минутах."
+ },
+ "society_technology_events.7.f_repressive": {
+  "en": "To the chief of police, from the officer posted to watch the courtyard behind the laundries. They met at dusk, as the informant said they would, and I counted something over two hundred. They carried two banners and sang. I saw no weapons and no drink, and nobody blocked the street. Several of them saw me and did not leave. At the end a woman read out a list of names, which I took to be people who have been arrested before, and the gathering broke up in good order. I have the names of six whom I recognized. I await instructions on whether to bring them in.",
+  "ru": "Начальнику полиции от офицера, поставленного наблюдать за двором за прачечными. Они собрались в сумерках, как и говорил осведомитель, и я насчитал чуть больше двухсот. У них было два плаката, и они пели. Я не видел ни оружия, ни выпивки, и никто не перекрывал улицу. Некоторые заметили меня и не ушли. В конце женщина зачитала список имён, которые, как я понял, принадлежат людям, ранее арестованным, и собрание разошлось в порядке. У меня есть имена шестерых, кого я узнал. Жду указаний, доставлять ли их."
+ },
+ "society_technology_events.7.g": {
+  "en": "The law already speaks for itself",
+  "ru": "Закон уже говорит сам за себя"
+ },
+ "society_technology_events.7.h": {
+  "en": "This is becoming a provocation. Maintain order.",
+  "ru": "Это становится провокацией. Поддерживайте порядок."
+ },
+ "society_technology_events.7.t": {
+  "en": "Pride and Protest",
+  "ru": "Гордость и протест"
+ },
+ "society_technology_events.8.a": {
+  "en": "Civil partnerships offer a fair compromise",
+  "ru": "Гражданские союзы — справедливый компромисс"
+ },
+ "society_technology_events.8.b": {
+  "en": "The law must not create second-class citizens",
+  "ru": "Закон не должен создавать граждан второго сорта"
+ },
+ "society_technology_events.8.c": {
+  "en": "Marriage is older than any parliament",
+  "ru": "Брак старше любого парламента"
+ },
+ "society_technology_events.8.d_basic": {
+  "en": "A couple has taken the government to court for refusing to register their marriage, and the case is now before the judges. Our laws protect gay men and women from persecution but say nothing about marriage. Their lawyers argue that the protections already in law require the state to register it. Religious leaders oppose any change, and the government must say where it stands before the court rules.",
+  "ru": "Пара подала на правительство в суд за отказ зарегистрировать их брак, и дело теперь у судей. Наши законы защищают геев и лесбиянок от преследования, но о браке не говорят ничего. Их юристы доказывают, что защита, уже существующая в законе, обязывает государство его зарегистрировать. Религиозные лидеры против любых изменений, и правительство должно заявить свою позицию до решения суда."
+ },
+ "society_technology_events.8.d_comprehensive": {
+  "en": "Our $law_comprehensive_rights$ already protect gay men and women at work and in their homes, and a couple has asked the highest court to rule that the state must also register their marriage. Most lawyers expect the court to agree. The opponents of the case, religious leaders prominent among them, are asking the government to keep marriage as it is defined now.",
+  "ru": "Наши «$law_comprehensive_rights$» уже защищают геев и лесбиянок на работе и дома, и пара обратилась в высший суд с просьбой постановить, что государство обязано также зарегистрировать их брак. Большинство юристов ожидают, что суд согласится. Противники дела, среди которых заметны религиозные лидеры, просят правительство оставить брак таким, как он определён сейчас."
+ },
+ "society_technology_events.8.e": {
+  "en": "Extend marriage to all citizens equally",
+  "ru": "Распространить брак на всех граждан поровну"
+ },
+ "society_technology_events.8.f_basic": {
+  "en": "\\\"I have waited in line since five for a seat in the gallery. My son and his partner are the couple in the case, and I want them to see one face they know when they look up.\\\"\\n\\n\\\"I run the registry office named in the case. I have no view on it. I need to know by the end of the month which form my clerks are to use.\\\"\\n\\n\\\"Marriage was here before this court and before any law about it. The judges have no business remaking it to settle one couple's complaint.\\\"\\n\\n\\\"The question for the court is narrow. The law already protects these two from being dismissed or evicted for who they are. We are asking whether the same state can then refuse to write their names in a register.\\\"",
+  "ru": "«Я стою в очереди с пяти утра ради места на галерее. Мой сын и его партнёр — пара, о которой дело, и я хочу, чтобы они увидели одно знакомое лицо, когда поднимут глаза».\\n\\n«Я руковожу отделом записи актов, названным в деле. У меня нет мнения по нему. Мне нужно знать к концу месяца, какой бланк должны использовать мои служащие».\\n\\n«Брак был здесь до этого суда и до любого закона о нём. Судьям нечего переделывать его ради жалобы одной пары».\\n\\n«Вопрос к суду узок. Закон уже защищает этих двоих от увольнения и выселения из-за того, кто они. Мы спрашиваем, может ли то же государство после этого отказать вписать их имена в реестр»."
+ },
+ "society_technology_events.8.f_comprehensive": {
+  "en": "To all registrars, from the head of the civil registry. The court will give its ruling in the marriage case shortly. If it finds for the couple, registrars are to accept notice of marriage from couples of the same sex from the morning after the ruling. Until new forms are printed, use the existing form, strike through the words \\\"husband\\\" and \\\"wife\\\", write \\\"spouse\\\" in their place, and initial the change. If the court finds against the couple, no change is to be made. Registrars are reminded that their personal views on the case are not grounds to refuse a notice. Questions to this office.",
+  "ru": "Всем регистраторам от главы гражданского реестра. Суд вскоре вынесет решение по делу о браке. Если он решит в пользу пары, регистраторы должны принимать уведомления о браке от пар одного пола со следующего утра после решения. Пока не напечатаны новые бланки, используйте существующий: зачеркните слова «муж» и «жена», впишите вместо них «супруг» и поставьте инициалы у исправления. Если суд решит против пары, никаких изменений не вносить. Напоминаем регистраторам, что их личные взгляды на это дело не основание отказывать в уведомлении. Вопросы — в эту канцелярию."
+ },
+ "society_technology_events.8.g": {
+  "en": "The courts will sort this out in due course",
+  "ru": "Суды разберутся в своё время"
+ },
+ "society_technology_events.8.h": {
+  "en": "There are limits to what rights may demand",
+  "ru": "У требований прав есть пределы"
+ },
+ "society_technology_events.8.t": {
+  "en": "A Test Case",
+  "ru": "Прецедентное дело"
+ },
+ "society_technology_events.9.a": {
+  "en": "Capital knows no borders.",
+  "ru": "У капитала нет границ."
+ },
+ "society_technology_events.9.b": {
+  "en": "Protect our workers.",
+  "ru": "Защитить наших рабочих."
+ },
+ "society_technology_events.9.d": {
+  "en": "Companies are moving production abroad, to countries where labor is cheaper, and shipping the finished goods home in containers. Prices in the shops have fallen. In towns built around one factory the factory is closing, and its workers want the government to stop the jobs from leaving.",
+  "ru": "Компании переносят производство за границу, в страны, где труд дешевле, и отправляют готовые товары домой в контейнерах. Цены в магазинах упали. В городах, построенных вокруг одной фабрики, фабрика закрывается, и её рабочие хотят, чтобы правительство остановило уход рабочих мест."
+ },
+ "society_technology_events.9.f": {
+  "en": "On his last shift the machinist cleaned his lathe as he had at the end of every shift: he wiped the bed down, oiled the ways and covered it with its sheet. The notice about the relocation was still pinned beside the time clock, and someone had written the name of the new country across the bottom in pencil. He emptied his locker into a plastic bag: overalls, a mug, two calipers that were his own and a photograph of the works team taken years ago. At the gate he handed in his pass, and the guard signed for it and wished him luck.",
+  "ru": "В последнюю смену станочник вычистил свой токарный станок, как в конце каждой смены: протёр станину, смазал направляющие и накрыл его чехлом. Объявление о переносе производства всё ещё висело у табельных часов, и кто-то дописал внизу карандашом название новой страны. Он высыпал содержимое шкафчика в пластиковый пакет: спецовку, кружку, два штангенциркуля, которые были его собственными, и фотографию заводской бригады, снятую много лет назад. У проходной он сдал пропуск, и охранник расписался в получении и пожелал ему удачи."
+ },
+ "society_technology_events.9.t": {
+  "en": "The Shuttered Gates",
+  "ru": "Закрытые ворота"
  }
 }
