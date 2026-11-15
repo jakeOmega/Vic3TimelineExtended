@@ -237,9 +237,8 @@ already on its way to another star pause instead, and carry on when the rule is
 turned back on. Turned back on, the Banking Cycle, Monuments, Colonial Empire,
 Covert Warfare, Cultural Hegemony and space race entries come back within a
 month or two wherever their conditions are met (Covert Warfare with no
-operations or agent networks), and so does a great power's open World War entry
-once it has the technology. The other systems' entries don't return in that
-campaign.
+operations or agent networks). The other systems' entries, World War's
+included, don't return in that campaign.
 
 The mod is balanced with its default systems on, and switching one off removes
 its costs along with its benefits. A choice whose drawback lives in a disabled
