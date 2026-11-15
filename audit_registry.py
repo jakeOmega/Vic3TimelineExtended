@@ -239,6 +239,19 @@ AUDITS: tuple[Audit, ...] = (
         where=VALUE_LINE,
     ),
     Audit(
+        "trigger_range_audit",
+        "A comparison whose number lies outside the range the value can take, so it never passes or always "
+        "passes: activism, turmoil, radical and loyalist fractions, literacy, clout and the other shares run 0 to "
+        "1 (`political_movement_radicalism >= 25` never passes, #1829). The ranges and the evidence for each are "
+        "the audit's `RANGES` table.",
+        where="trailing on the comparison's line; for the block form `x = { value … }`, the `value` line or the "
+              "block's opening line",
+        tags=("trigger_range",),
+        note="Judges numbers and script values defined as a constant; a define, `$X$`, variable or computed value "
+             "on the right is counted in the report, not judged. `--root <game>/game` runs it over vanilla, which "
+             "flags vanilla's two such bugs (`vanilla_known_bugs.md`); `--write` writes the report offline.",
+    ),
+    Audit(
         "change_variable_clamp_audit",
         "A `min =` / `max =` inside `change_variable`, where which way it clamps is a guess.",
         where="trailing on the `min =` / `max =` line or the `change_variable = {` line",
