@@ -308,11 +308,11 @@ class CovertEarlyUnlockTest(EntryNetShape, unittest.TestCase):
         self.assertIn("set_variable = iw_reopen_at_gate", outcome)
         self.assertNotIn("limit = { te_covert_warfare_on = yes } set_variable = iw_reopen_at_gate", outcome)
 
-    def test_the_net_adds_the_entry_wherever_it_is_due_and_never_one_that_would_end(self):
+    def test_the_net_adds_the_entry_wherever_it_is_due_and_reads_the_outcomes_trigger(self):
         """Off then on again, or a game begun with the rule off: a country with no record of the entry gets it
         once the rule is on and the setting's gate is met, not only one whose entry ended early to late
-        (2026-11-15, a Workshop report). The net reads the outcome's own trigger, so it can't add an entry the
-        outcome ends on its next update."""
+        (2026-11-15, a Workshop report). The net reads the outcome's own trigger, so the two conditions can't
+        drift apart; a loop from a rule read that differs between them is the self-check's to catch and hold."""
         due = words(braced(self.triggers, r"^covert_warfare_entry_due = \{"))
         for part in ("te_covert_warfare_on = yes", "NOT = { has_journal_entry = je_covert_warfare }",
                      "NOT = { has_inactive_journal_entry = je_covert_warfare }",
@@ -800,7 +800,7 @@ class CulturalHegemonyEarlyUnlockTest(EntryNetShape, unittest.TestCase):
         self.assertIn("set_variable = ch_reopen_at_gate", outcome)
         self.assertNotIn("limit = { te_cultural_hegemony_on = yes } set_variable = ch_reopen_at_gate", outcome)
 
-    def test_the_net_adds_the_entry_wherever_it_is_due_and_never_one_that_would_end(self):
+    def test_the_net_adds_the_entry_wherever_it_is_due_and_reads_the_outcomes_trigger(self):
         """As Covert Warfare's: off then on again, or a game begun with the rule off, every country with no record
         gets the entry once the gate is met (2026-11-15)."""
         due = words(braced(self.triggers, r"^ch_entry_due = \{"))
