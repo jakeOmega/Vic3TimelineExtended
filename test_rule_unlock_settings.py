@@ -413,8 +413,13 @@ class WorldWarEarlyUnlockTest(unittest.TestCase):
         self.assertEqual(len(outcomes), 3)
         invalid = words(self.je[self.je.index("flags = { hidden invalid_outcome }"):])
         self.assertIn("OR = { NOT = { te_world_war_on = yes } NOT = { ww_era_reached = yes } }", invalid)
-        # Set with the rule off too, so an entry ended on the rule comes back when the rule does (2026-11-15).
-        self.assertIn("effect = { ww_stop_for_rule = yes set_variable = ww_reopen_at_gate }", invalid)
+        # The marker only with the rule on, so an entry ended on the rule switched off does not come back.
+        # Set with the rule off too, it would bring the entry back at the leadup after an off-and-on during or
+        # after a world war: the teardown and the monthly sweep clear every power's phase variables, so
+        # world_war_conditions_met finds no ww_active_phase, the net finds no ww_peace_concluded, and two
+        # opposed observer powers could start a second world war under the late unlock (review of #1823).
+        self.assertIn("effect = { ww_stop_for_rule = yes if = { limit = { te_world_war_on = yes } "
+                      "set_variable = ww_reopen_at_gate } }", invalid)
         net = words(braced(code(WW_ON_ACTIONS), r"^world_war_events_on_action = \{"))
         self.assertIn("te_world_war_on = yes ww_era_reached = yes NOT = { ww_resting_after_early_war = yes }", net)
         self.assertIn("add_journal_entry = { type = je_world_war }", net)

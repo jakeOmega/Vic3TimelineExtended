@@ -3293,9 +3293,8 @@ free_port_tariff_update_on_action = {
 world_war_events_on_action = {
 	effect = {
 		# The entry back for a country that waited for its gate: one closed when
-		# the rule was switched off, or when the early unlock was switched to the
-		# late one before Combined Arms (ww_reopen_at_gate, the invalid outcome,
-		# back once the rule is on again), and one whose world war under
+		# the early unlock was switched to the late one before Combined Arms
+		# (ww_reopen_at_gate, the invalid outcome), and one whose world war under
 		# the early unlock is over (ww_early_war_resolved), at Combined Arms (at
 		# once for a power that already has it, ww_mark_entry_resolved). A
 		# concluded entry doesn't come back on its own; add_journal_entry brings
