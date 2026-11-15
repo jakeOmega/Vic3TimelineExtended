@@ -416,8 +416,8 @@ te_monetary_update_union = {
 	set_variable = { name = te_mon_union_issuer_bank_pts value = te_mon_union_issuer_bank_value }
 
 	# --- [2026-11-14] the common capital market, on ADOPTERS and the issuer -
-	# Capitalists' investment pool contribution, in hundredths; twice as much
-	# in a downturn or panic; nothing where the pool cannot be spent.
+	# Capitalists' investment pool contribution, in hundredths, the same in
+	# every phase of the cycle; nothing where the pool cannot be spent.
 	set_variable = { name = te_mon_union_credit_pts value = te_mon_union_credit_value }
 	if = {
 		limit = { root ?= this }

@@ -50,10 +50,10 @@
 #   te_mon_union_issuer_bank_applied    ...what te_mon_union_issuer_bank was
 #                             0-3       last applied at. BACKS A MULTIPLIER,
 #                                       and banking_display_points_total reads it
-#   te_mon_union_credit_pts   0-10      the common capital market's credit, in
+#   te_mon_union_credit_pts   0-5       the common capital market's credit, in
 #                                       hundredths of capitalists' pool
 #                                       contribution, and...
-#   te_mon_union_credit_applied 0-10    ...what te_mon_union_credit was last
+#   te_mon_union_credit_applied 0-5     ...what te_mon_union_credit was last
 #                                       applied at. BACKS A MULTIPLIER
 # ============================================================================
 
@@ -413,11 +413,19 @@ te_mon_union_issuer_bank_value = {
 # expansion, -0.10 in a downturn, -0.25 in a panic) and so does a loose stance
 # band (+0.02 / +0.04).
 #
-# EASIER CREDIT: 2 at tiers 2 and 3, 3 under the banking union, 5 under the
-# reserve currency (an expansion phase's worth, on capitalists' base of 30).
-# STEADIER CREDIT: doubled in a downturn or panic, when the home banks stop
-# lending and the rest of the currency area has not. At tier 5 that cancels a
-# downturn's -0.10 outright and two fifths of a panic's -0.25.
+# 2 at tiers 2 and 3, 3 under the banking union, 5 under the reserve currency
+# (an expansion phase's worth, on capitalists' base of 30).
+#
+# THE SAME IN EVERY PHASE OF THE CYCLE, AND IT MUST STAY SO (owner, 2026-11-14).
+# As first built it doubled in a downturn or panic ("steadier credit"). The
+# owner had it taken out before it shipped: "The investment pool contribution
+# decrease is the worst part of downturns and panics. I worry this would make
+# them less painful and so make you not need to avoid them as much." A flat
+# figure lifts the pool in every phase alike and leaves the whole of a slump's
+# own drop (-0.10, -0.25) standing against the good times. If the group tests
+# weak, the owner's levers are seigniorage, trade advantage or an intervention
+# point, never relief from the cycle's penalties. test_monetary_union_leader.py
+# holds the value to the same figure in every phase.
 #
 # NOT WHERE THE POOL CANNOT BE SPENT (te_mon_union_pool_is_saturated). Singapore
 # in the 1957 save held a pool of 357 billion against 281 million a week of
@@ -428,7 +436,6 @@ te_mon_union_credit_points_2 = { value = 2 }
 te_mon_union_credit_points_3 = { value = 2 }
 te_mon_union_credit_points_4 = { value = 3 }
 te_mon_union_credit_points_5 = { value = 5 }
-te_mon_union_credit_slump_factor = { value = 2 }
 
 te_mon_union_credit_value = {
 	value = 0
@@ -451,15 +458,6 @@ te_mon_union_credit_value = {
 		}
 		else = {
 			value = te_mon_union_credit_points_2
-		}
-		# te_banking_cycle_running first: banking_cycle_is_recession reads the
-		# cycle's variables unguarded, and a dormant entry has none.
-		if = {
-			limit = {
-				te_banking_cycle_running = yes
-				banking_cycle_is_recession = yes
-			}
-			multiply = te_mon_union_credit_slump_factor
 		}
 	}
 }

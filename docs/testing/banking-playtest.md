@@ -399,8 +399,9 @@ bloc leader on Fiat Money with a national bank, take Monetary Union to tier II o
    overdrawn budget; now they are lifted one a month as in 5. The same for a command economy's planning tools and a
    cooperative's council tools after a law that cuts the budget.
 7. **The adopter's side.** An adopter's entry lists Common Capital Market, with "+2%" capitalists' investment pool
-   contribution at tiers II and III, +3% at IV, +5% at V. In a Downturn or Panic the figure is doubled the next
-   month and halves again when the slump ends. A country under Excess Private Construction has no such modifier.
+   contribution at tiers II and III, +3% at IV, +5% at V. The figure is the same in a Downturn or a Panic as in a
+   boom, so a slump still takes its whole 10 or 25 points off capitalists' contribution beside it. A country under
+   Excess Private Construction has no such modifier.
 8. **Unregulated Banking.** A leader under it has neither Central Bank of the Union nor Banking Union, at any tier,
    and keeps the rest. An adopter under it still has Banking Union.
 9. **The last adopter leaves.** Within a month the leader's entry has lost every modifier in 2, and 5 follows if
@@ -411,6 +412,13 @@ bloc leader on Fiat Money with a national bank, take Monetary Union to tier II o
 11. **The AI.** In an observer game, count the blocs whose leader is on Fiat Money or Digital Currency with a
     national bank and that hold a Monetary Union principle, against none before. A leader on gold should not take
     tier II. Leaders at tier III should go on to IV and V when the technologies land (T-10 in § 0.11).
+12. **Is it strong enough?** The owner judged the strength "about right - good enough to test in-game at least"
+    (2026-11-14). Lead a union for a decade and compare it with the group you gave up for it. **If it tests weak,
+    the levers are more seigniorage, more trade advantage or another intervention point, never relief from the
+    cycle's penalties**: the owner had a doubling of the pool bonus in a Downturn or Panic removed because "the
+    investment pool contribution decrease is the worst part of downturns and panics. I worry this would make them
+    less painful and so make you not need to avoid them as much." A downturn or a panic should hurt a union's
+    leader and its adopters as much as anyone.
 
 ## Five timed monetary modifiers survive a revolution (2026-11-12, #470)
 

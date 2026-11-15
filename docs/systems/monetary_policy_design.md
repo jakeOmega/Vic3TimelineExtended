@@ -8,7 +8,7 @@
 
 > **A road off gold (2026-10-05):** a deep slump the peg is prolonging (a Downturn or Panic with the stance Tight or Very Tight) now drains Peg Confidence 3 a month whatever the vault holds, so `te_peg.1` comes about two years into it; a suspension of convertibility ends in a choice (`te_peg.3`: resume at 50, or Fiat Money); and the AI's currency weights favour fiat once it is on offer. See [§0.13](#013-a-road-off-gold--2026-10-05).
 
-> **What the Monetary Union hands its leader (2026-11-14):** the leader of a bloc whose common currency a member has adopted now carries what its adopters carry, earns seigniorage and a cut of *risk premium* (not credit standing, which its floor swallowed) in proportion to its currency's **reach**, runs up to four more banking interventions at once, and shares a common capital market with its adopters. The costs are unchanged. An overdrawn intervention budget now lifts the standing tools too. See [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14).
+> **What the Monetary Union hands its leader (2026-11-14):** the leader of a bloc whose common currency a member has adopted now carries what its adopters carry, earns seigniorage and a cut of *risk premium* (not credit standing, which its floor swallowed) in proportion to its currency's **reach**, runs up to four more banking interventions at once, and shares a common capital market with its adopters. The costs are unchanged, and nothing in it softens a downturn or a panic (the owner's ruling the same day). An overdrawn intervention budget now lifts the standing tools too. See [§0.14](#014-what-the-monetary-union-hands-its-leader--2026-11-14).
 
 > **Mandates set by law (2026-10-07, #799):** Price Stability is renamed the **Dual Mandate** (its rule unchanged) and a fourth mandate, **Inflation Targeting**, is the same rule with no cycle lean and +0.1 credibility. Under central bank independence the mandate is an act on the law (the Inflation Targeting Act or the Dual Mandate Act) that the bank follows after the 12-month delay, AI and player alike; `te_mandate.1` asks for one whenever the law has none. Without independence the dashboard switch stays but each change locks it for a year, and a looser rule raises expected inflation and the risk premium. See [§6](#6-delegation-mandates-independence-ai) and `docs/audits/banking_cycle_simulation.md` §26.
 
@@ -2138,6 +2138,20 @@ requirements at once, to pull harder against a bubble"); the investment pool ben
 currency's users, the leader and the adopters, not to every member; and the leader gets the
 adopters' benefits only once at least one member has adopted.
 
+**The owner's verdict on the build, the same day:** "I like the monetary union as is. I think the
+strength is about right - good enough to test in-game at least. And the shedding is an improvement,
+thanks!" That approves reach-based seigniorage (L3), four points at tier 5 (L5), the Unregulated
+Banking exception (L6), no pool bonus under Excess Private Construction (L7) and the wider
+overdraft shedding (L8). **One thing came out.** As first built, the capital market's bonus doubled
+in a downturn or panic. The owner: "This is the only part that worries me. The investment pool
+contribution decrease is the worst part of downturns and panics. I worry this would make them less
+painful and so make you not need to avoid them as much. Maybe we remove this - I'd rather give an
+extra intervention point, more trade advantage, more seigniorage, etc. if we want to strengthen it."
+The doubling was removed before the change merged, with no compensation, the strength being
+"about right" for a first test. **The rule this leaves (L11): if the group tests weak in game, the
+levers are seigniorage, trade advantage or an intervention point, never relief from the cycle's
+penalties.**
+
 Built the same day on §0.11's five tiers. **Nothing below has been seen in a running game.**
 
 #### What the owner's game showed
@@ -2203,7 +2217,7 @@ has adopted, is the **issuer** (`te_mon_union_is_issuer`). Tiers do not stack; e
 
 `reach = base ÷ (base + 15% of the leader's own GDP)`, where the base is the adopters' GDP and, at
 tier 5, everything anchored on the leader's money (treaty peggers too: ruling T4's base). The
-credit doubles in a downturn or panic. Everything is script, applied in step 9b by
+credit is the same in every phase of the cycle (L11). Everything is script, applied in step 9b by
 `te_monetary_update_union` through managed modifiers (`te_mon_union_seigniorage`, and the new
 `te_mon_union_issuer_premium`, `te_mon_union_issuer_bank`, `te_mon_union_credit`); the principle's
 `leader_modifier` carries display fields that print the tier's figures.
@@ -2218,10 +2232,11 @@ credit doubles in a downturn or panic. Everything is script, applied in step 9b 
 | **L4** | **The cut is cyclical (`country_risk_premium_add`)**, a new managed modifier; the reserve-currency standing cut stays as it was | finding 1. G8 holds: it goes through a managed scaled modifier refreshed in the monthly update, and reaches step 5 a month late like every modifier-borne term |
 | **L5** | **Four interventions at tier 5, 1 / 2 / 3 / 4 by tier**, of which the banking union's own point (shared under L1) is the fourth step's | the table below. The cycle simulator (`banking_cycle_sim.py --points`, 150 runs a cell, fiat, price stability) finds no AI-side reason against either figure: under Free & Mutual 4 / 7 / 8 points give 10.5 / 7.4 / 6.8 crashes a century, Universal 5 / 8 / 9 gives 8.1 / 6.0 / 6.1, Directed Credit 6 / 9 / 10 gives 8.3 / 7.3 / 7.1, Prudential 8 / 11 / 12 gives 5.8 / 5.1 / 5.3, independence 8 / 11 / 12 gives 6.4 / 6.3 / 6.3, and the months in a slump halve at +3 and hold at +4 |
 | **L6** | **None of it under Unregulated Banking**: neither the leader's extra points nor its place in the banking union (which carries a point) | that law's budget is its identity. With the national bank a leader must have it holds 2, and its unlocked tools cost 3 (Bail-in Regime, whose trigger says "no law lock: the budget is below the cost already", Infrastructure and Armaments credit, Emergency Import Financing) and 4 (Open-Market Operations, the Deposit Guarantee, Emergency Liquidity, Heavy Industry credit). One point more hands it tools the law is meant to deny, and the banking union's stability would cancel the law's own +25% crash chance. Every other law (4, 5, 6, 8, 8 with the bank) can already afford every tool its locks leave open, so points there are concurrency only. A hard gate, because any softer shape still crosses the 3-point line |
-| **L7** | **The capital market is capitalists' pool contribution, doubled in a slump, and withheld under Excess Private Construction** | that key is what credit is to private investors in the cycle: the phases move it (+0.05 expansion, −0.10 downturn, −0.25 panic) and a loose stance band adds 0.02 / 0.04. "Easier credit" is the standing figure; "more stability" is the doubling, when the home banks stop lending and the rest of the currency area has not (at tier 5 it cancels a downturn's cut). Finding 3 is the gate |
+| **L7** | **The capital market is capitalists' pool contribution, the same in every phase of the cycle, and withheld under Excess Private Construction** | that key is what credit is to private investors in the cycle: the phases move it (+0.05 expansion, −0.10 downturn, −0.25 panic) and a loose stance band adds 0.02 / 0.04. A flat figure is "easier access to credit" and lifts the pool in every phase alike, so a slump's own drop stands in full against the good times (L11). Finding 3 is the gate |
 | **L8** | **An overdrawn intervention budget lifts the standing tools too**, one a month, cheapest first, after the crash interventions and the External & Currency tools; the Bank Holiday is left to expire | until now the chain ended at the external tools, so a budget cut left every other tool running on points the country no longer had: enact Prudential Banking, switch the tools on, go back to Unregulated and keep them. The issuer's points come and go with the bloc, so they would have run through the same hole. **This changes a law downgrade too**, for market, command and cooperative economies alike. Each is lifted as a law lifts it (`banking_strip_tool`: the history marker, none of the Disable's reactions); Emergency Liquidity through its own Disable, for the refund |
 | **L9** | **The principle prints figures, not prose**: `leader_modifier` carries four display fields (`country_te_mon_issuer_*`) | a static block cannot test an adopter, a dial, a banking law or the banking rule, and a mid-game switch to Simplified leaves the principle on its bloc, so real intervention points there would leak into a game with no monetary layer. Display fields print natively, rise by tier as the tier audit wants, and `test_monetary_union_leader.py` holds each to the script value |
 | **L10** | **AI weights**: tier 1 is 100 for a leader that could issue (50 on metal), tier 2 is 100 +50 where a member's money could adopt +50 at scaled debt 0.25, tier 3 is 100 +50 for an issuer; 4 and 5 keep 1000. The adoption score gains +5 for the capital market, except on a saturated pool | the low 5b numbers "exist because the principle is inert for most leaders" (T3); it no longer is. No `is_ai` test: the same weights serve any bloc |
+| **L11** | **Nothing in the group softens a downturn or a panic** (owner, 2026-11-14) | the capital market's bonus doubled in a slump as first built ("more stability for private investors" read as steadier funding), and was taken out on the owner's ruling quoted above: the pool's drop is the worst part of a slump and what makes one worth avoiding. What is left acts in every phase alike or on how often a crash comes, never on what a slump costs: the flat contribution; the cut in risk premium (a level, the same in a boom); the banking union's −25% crash chance and random momentum, which the leader now shares (fewer crashes, the same penalties); and the intervention points, which let the leader run more of the crisis tools the game already has. `test_monetary_union_leader.CapitalMarketTest` holds the bonus to one figure in all seven phases and fails if any value the leader is paid comes to read the cycle. **If the group tests weak, strengthen seigniorage, trade advantage or an intervention point** |
 
 #### What four points buy, by banking law
 
@@ -3983,7 +3998,7 @@ at tier 2 or above whose currency a member has adopted (the issuer) also carries
 three modifiers, earns seigniorage (0.5 / 0.75 / 1.0 / 1.5% of its own GDP a year by tier) and a
 cut of *risk premium* (0.5 / 0.75 / 1.0 / 1.5pp) in proportion to its currency's reach, and holds
 1 / 2 / 3 / 4 more banking intervention points; issuer and adopters share a common capital market
-(capitalists' pool contribution +0.02 / +0.02 / +0.03 / +0.05, doubled in a slump). The tier-5
+(capitalists' pool contribution +0.02 / +0.02 / +0.03 / +0.05, the same in every phase of the cycle). The tier-5
 seigniorage in the table's last row (world-GDP share × 2000, capped 1000 a week) is superseded:
 that formula paid the owner's Singapore 98 pounds a week.
 

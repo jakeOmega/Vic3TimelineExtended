@@ -20,8 +20,9 @@ be taught to the test before it can go unseen.
 * reach, seigniorage and the premium cut against worked figures, the owner's
   1957 Singapore among them, and their limits;
 * the interventions and the banking union stop at Unregulated Banking;
-* the common capital market by tier, in a slump and on a pool that cannot be
-  spent;
+* the common capital market by tier, the same in every phase of the cycle
+  (owner, 2026-11-14: nothing here may soften a downturn or a panic), and
+  nothing on a pool that cannot be spent;
 * step 9b applied end to end: the modifiers go on, follow the tier, and come
   off the pulse the leader stops qualifying;
 * the principle's display fields and the loc's figures against the script.
@@ -102,7 +103,6 @@ class Country:
         self.vars = dict(variables)
         self.mods = {}              # managed modifier name -> multiplier (1 for a flat one)
         self.cycle_running = True
-        self.recession = False
 
     def __repr__(self):
         return self.name
@@ -131,7 +131,10 @@ class Script:
         for path in ("common/script_values/te_monetary_script_values.txt",
                      "common/script_values/te_monetary_arrangement_script_values.txt", UNION_VALUES):
             self.values.update(definitions(path))
-        self.triggers = definitions("common/scripted_triggers/te_monetary_arrangement_triggers.txt")
+        # The cycle's phase triggers (banking_cycle_is_*), so a value that asked for one would
+        # be run for real, not stubbed; then the monetary files, which win a clash of names.
+        self.triggers = definitions("common/scripted_triggers/market_triggers.txt")
+        self.triggers.update(definitions("common/scripted_triggers/te_monetary_arrangement_triggers.txt"))
         self.triggers.update(definitions(UNION_TRIGGERS))
         self.effects = definitions("common/scripted_effects/te_monetary_fx_effects.txt")
         self.effects.update(definitions(UNION_EFFECTS))
@@ -217,8 +220,6 @@ class Script:
             return val in self.globals
         if key == "te_banking_cycle_running":
             return scope.cycle_running == yes
-        if key == "banking_cycle_is_recession":
-            return scope.recession == yes
         if (key == "root" and op == "?=" and val == "this") or (key == "this" and val == "root"):
             return scope is root
         if key == "te_mon_mod_has":
@@ -558,8 +559,12 @@ class CentralBankTest(unittest.TestCase):
 
 
 class CapitalMarketTest(unittest.TestCase):
-    """te_mon_union_credit_value: adopters and the issuer, by tier, doubled in a slump, and
-    nothing where the pool cannot be spent."""
+    """te_mon_union_credit_value: adopters and the issuer, by tier, the same in every phase of
+    the cycle, and nothing where the pool cannot be spent."""
+
+    # One cycle value in each phase (market_triggers.txt: 10 / 25 / 40 / 60 / 75 / 88).
+    PHASES = {"panic": 5, "downturn": 15, "stagnation": 30, "stable": 50, "expansion": 65, "boom": 80,
+              "frenzy": 95}
 
     def setUp(self):
         self.s = Script()
@@ -579,23 +584,88 @@ class CapitalMarketTest(unittest.TestCase):
         self.assertEqual(self.credit(leader.bloc.members[-1]), 0)
         self.assertEqual(self.credit(union(5, adopters=())), 0)
 
-    def test_twice_as_much_in_a_downturn_or_panic(self):
-        leader = union(5)
-        leader.recession = True
-        self.assertEqual(self.credit(leader), 10)
-        # A dormant banking entry has no cycle to be in a slump: the guard comes first.
-        leader.cycle_running = False
-        self.assertEqual(self.credit(leader), 5)
+    def test_the_phases_are_the_cycles_own(self):
+        # The grid below means nothing unless each cycle value lands in the phase it is named for.
+        country = Country("c", 1e9)
+        for phase, value in self.PHASES.items():
+            country.vars["finance_cycle_value"] = value
+            holds = [name for name in self.PHASES
+                     if self.s.check(self.s.triggers[f"banking_cycle_is_{name}"], country, country)]
+            with self.subTest(phase=phase):
+                self.assertEqual(holds, [phase])
+        country.vars["finance_cycle_value"] = self.PHASES["downturn"]
+        self.assertTrue(self.s.check(self.s.triggers["banking_cycle_is_recession"], country, country))
 
-    def test_at_tier_five_a_slump_cancels_the_downturns_cut(self):
-        # financial_cycle_phase_downturn takes 0.10 off capitalists' contribution.
-        downturn = dict((k, v) for k, _, v in definitions(MODIFIERS)["financial_cycle_phase_downturn"])
+    def test_the_same_in_every_phase_of_the_cycle(self):
+        # Owner, 2026-11-14: "The investment pool contribution decrease is the worst part of
+        # downturns and panics. I worry this would make them less painful." As first built the
+        # bonus doubled in a downturn or panic; it is flat now, and this holds it there.
+        for tier, points in ((2, 2), (3, 2), (4, 3), (5, 5)):
+            for phase, value in self.PHASES.items():
+                for momentum, bubble in ((-5, 0), (0, 40), (5, 95)):
+                    for running in (True, False):
+                        leader = union(tier)
+                        member = leader.bloc.members[1]
+                        for country in (leader, member):
+                            country.cycle_running = running
+                            country.vars.update(finance_cycle_value=value, finance_cycle_momentum=momentum,
+                                                bubble_pressure=bubble)
+                        with self.subTest(tier=tier, phase=phase, momentum=momentum, bubble=bubble,
+                                          running=running):
+                            self.assertEqual(self.credit(leader), points)
+                            self.assertEqual(self.credit(member), points)
+
+    def test_a_slump_keeps_its_whole_drop_in_the_pool(self):
+        # The downturn's and the panic's own cut to capitalists' contribution stands in full
+        # against the good times: the bonus is the same on both sides of the comparison.
         unit = float(dict((k, v) for k, _, v in definitions(MODIFIERS)["te_mon_union_credit"])
                      ["state_capitalists_investment_pool_contribution_add"])
-        leader = union(5)
-        leader.recession = True
-        self.assertAlmostEqual(self.credit(leader) * unit,
-                               -float(downturn["state_capitalists_investment_pool_contribution_add"]))
+        key = "state_capitalists_investment_pool_contribution_add"
+        for phase in ("downturn", "panic"):
+            cut = float(dict((k, v) for k, _, v in definitions(MODIFIERS)[f"financial_cycle_phase_{phase}"])[key])
+            self.assertLess(cut, 0)
+            for tier in (2, 3, 4, 5):
+                leader = union(tier)
+                leader.vars["finance_cycle_value"] = self.PHASES["stable"]
+                good = self.credit(leader) * unit
+                leader.vars["finance_cycle_value"] = self.PHASES[phase]
+                bad = self.credit(leader) * unit + cut
+                with self.subTest(phase=phase, tier=tier):
+                    self.assertAlmostEqual(bad - good, cut)
+
+    def test_nothing_the_leader_is_paid_reads_the_cycle(self):
+        # Not the capital market, and not reach, the seigniorage, the cut or the points either:
+        # none of them may come to depend on the phase, the momentum or the bubble.
+        cycle_words = ("cycle", "recession", "panic", "downturn", "stagnation", "slump", "bubble", "momentum",
+                       "frenzy", "boom")
+
+        def words(node):
+            if isinstance(node, list):
+                for key, _, val in node:
+                    yield key
+                    yield from words(val)
+            elif isinstance(node, str):
+                yield node
+
+        seen, queue = set(), ["te_mon_union_credit_value", "te_mon_union_reach", "te_mon_union_seigniorage_value",
+                              "te_mon_union_issuer_cut_value", "te_mon_union_issuer_bank_value"]
+        while queue:
+            name = queue.pop()
+            if name in seen:
+                continue
+            seen.add(name)
+            body = self.s.values.get(name) or self.s.triggers.get(name)
+            for word in words(body):
+                with self.subTest(value=name, token=word):
+                    self.assertFalse(any(w in word for w in cycle_words), f"{name} reads the cycle: {word}")
+                if word in self.s.values or (word.startswith("te_mon_") and word in self.s.triggers):
+                    queue.append(word)
+        self.assertGreater(len(seen), 20, "the walk did not follow the values' references")
+        for name in ("te_mon_union_credit", "te_mon_union_issuer_premium", "te_mon_union_issuer_bank",
+                     "te_mon_union_seigniorage"):
+            fields = [k for k, _, _ in definitions(MODIFIERS)[name]]
+            self.assertFalse([f for f in fields if any(w in f for w in ("crash", "momentum", "bubble", "finance_"))],
+                             f"{name} carries a line that acts on the cycle")
 
     def test_none_where_the_pool_cannot_be_spent(self):
         # Excess Private Construction: more deposits would deepen its construction penalty.
@@ -940,9 +1010,15 @@ class TooltipTest(unittest.TestCase):
                             ("power_bloc_reserve_currency_bool", points[5] - points[4])):
             with self.subTest(key=key):
                 self.assertIn(f"#G +{figure:g}%#! {cap}", self.loc[key])
-        self.assertEqual(self.s.number("te_mon_union_credit_slump_factor", None, None), 2)
-        self.assertIn("twice that in a downturn or panic", self.loc["power_bloc_shared_currency_bool"])
         self.assertIn("$too_much_private_construction$", self.loc["power_bloc_shared_currency_bool"])
+        # No text promises more in a slump: the doubling was taken out (owner, 2026-11-14).
+        self.assertNotIn("te_mon_union_credit_slump_factor", self.s.values)
+        for key in ("power_bloc_shared_currency_bool", "power_bloc_banking_union_bool",
+                    "power_bloc_reserve_currency_bool", "te_mon_union_adopt_effect_tt", "te_mon_union_credit_desc",
+                    "country_te_mon_issuer_bool"):
+            with self.subTest(key=key):
+                for phrase in ("downturn", "panic", "slump", "twice that", "pull back"):
+                    self.assertNotIn(phrase, self.loc[key].lower())
 
     def test_the_adopters_trade_figure_in_the_text(self):
         edge = float(dict((k, v) for k, _, v in definitions(MODIFIERS)["te_mon_union_adopter"])

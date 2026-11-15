@@ -1010,8 +1010,8 @@ Independence, two of them keep the three leaning tools on beside Expand Deposit
 Guarantee. A leader under Unregulated Banking gets none, and its banks stay
 outside the banking union. If the points go, because the last adopter leaves,
 the bloc loses the tier or you stop leading, the tools your budget no longer
-covers are lifted one a month. The extra pool contribution doubles in a Downturn
-or Panic, and a country under Excess Private Construction gets none of it.
+covers are lifted one a month. A country under Excess Private Construction gets
+none of the extra pool contribution.
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
 within 3 points of the leader's and debt under half your credit limit. Leaving

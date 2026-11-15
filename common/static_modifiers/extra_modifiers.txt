@@ -8630,9 +8630,11 @@ te_mon_union_issuer_bank = {
 }
 
 # MANAGED, scaled; on ADOPTERS and the issuer: the common capital market.
-# multiplier = hundredths (te_mon_union_credit_applied; 2 to 5 by tier, doubled
-# in a downturn or panic, 0 under Excess Private Construction). The key the
-# cycle's phases and the stance bands move: what credit is to private investors.
+# multiplier = hundredths (te_mon_union_credit_applied; 2 to 5 by tier, the same
+# in every phase of the cycle, 0 under Excess Private Construction). The key
+# the cycle's phases and the stance bands move: what credit is to private
+# investors. Never scaled up in a slump (owner, 2026-11-14): the pool's drop is
+# what a downturn is for.
 te_mon_union_credit = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_capitalists_investment_pool_contribution_add = 0.01
