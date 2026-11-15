@@ -1958,6 +1958,8 @@ class PickTooltipTest(_RoomBranches, unittest.TestCase):
         self.assertEqual([limit for limit in stripes if "te_jmap_hq_regional" in stripes[limit]],
                          ["te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n te_jmap_color < 2"])
         self.assertIn("regional headquarters are not marked", self.values["te_jmap_color_text_hq_grey"])
+        # and the hover's line names them without the stripes, which aren't always there
+        self.assertTrue(self.values["te_jmap_tt_hq_regional"].startswith("Regional headquarters here: "))
 
     def test_each_kind_of_map_has_its_scale_s_words(self):
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")

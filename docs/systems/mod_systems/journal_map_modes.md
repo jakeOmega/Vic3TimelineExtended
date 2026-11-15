@@ -491,7 +491,8 @@ the game (play-test check 31).
 - **Shared branches, not a branch a map.** A `lerp`'s colors are literal names, so another palette can't be
   swapped into a map's own branch, and a branch per map per palette would more than double the paint. Eleven
   branches open `map_color` instead, after the area's slate and before any map's own, each taken only while the
-  option is off its default, so a default paint pays one comparison a branch. They color whatever fitted map is
+  option is off its default and asks for it first, so a default paint pays one comparison a branch if a limit
+  stops at its first false line (an assumption: see Cost). They color whatever fitted map is
   picked from one ramp, and ask the generated values file two things about the state: `te_jmap_pick_ramp` (0 the
   pick's own lerp wouldn't paint it, 1 it would and the pick runs one way, 2 it would and the pick runs both ways
   from a midpoint) and `te_jmap_pick_factor`, the picked map's factor, under the Scale option as every factor is.
@@ -529,7 +530,8 @@ the game (play-test check 31).
   figure, none, a loss, a removal) is the "no data" grey with light stripes (`map_color_second`'s first branch,
   `te_jmap_grey_stripe`): grey is a figure, striped is not on the scale, slate is outside the area. The ramp's
   dark end is 25 lighter than slate. The regional headquarters' gold stripes stand down under Grayscale, so a
-  stripe says one thing. **A midpoint is not marked under Grayscale**: the ramp runs one way, and the midpoint
+  stripe says one thing (this pass's own choice, not an ask; the hover's line, which said "in the stripes", now
+  says "Regional headquarters here"). **A midpoint is not marked under Grayscale**: the ramp runs one way, and the midpoint
   sits at the middle grey, as the tooltip says. It is the one place the option loses the midpoint; marking it
   would take a second pattern or a step in the ramp (check 31 names the fallback).
 - **Where it doesn't apply.** A map of categories or on a fixed scale keeps its colors: the two buttons are greyed
@@ -558,7 +560,9 @@ the game (play-test check 31).
   title at full size and 338 with the title at its smallest. `ColorTest` runs both lines over all sixteen
   combinations. A custom localization's text here reads another's two levels down; the
   precedent in the mod, the Grand Monuments' trophy names, goes one (check 31 has the fallback).
-- **Cost.** A default paint: eleven more comparisons a state, each a read of one global. Off the default: the
+- **Cost.** A default paint: eleven more comparisons a state, each a read of one global, assuming a limit stops
+  at its first false line; if it reads every line, each of the eleven also works out the pick's ramp or factor.
+  Nothing has measured which. Off the default: the
   shared branches work `te_jmap_pick_ramp` and the factor out up to four times a state, each a ladder on the
   pick (35 rows at most) before the map's own factor. The owner's frame reading (below) saw no cost in the
   default paint; this has not been read.

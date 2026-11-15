@@ -84,7 +84,8 @@ te_jmap_scale = {
 
 # The colors a fitted map is painted in (2026-11-14, the fourteenth pass): 0 the map's own, 1 the colorblind-safe
 # ramps, 2 greyscale. The Map Room's paint opens with branches on this (te_journal_maps.txt), each taken only while it
-# is off 0, so a default paint pays one comparison a branch and the maps' own branches are untouched.
+# is off 0 and asks for it first, so a default paint pays one comparison a branch (if a limit stops at its first
+# false line, which nothing has measured) and the maps' own branches are untouched.
 te_jmap_color = {
 	value = 0
 	if = {

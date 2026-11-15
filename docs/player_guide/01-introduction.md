@@ -55,11 +55,12 @@ colors run from the fifth lowest state in the world to the fifth highest, the
 few beyond each end at its colors' limits, unless Map Options (below) sets
 another area or trim. The button's tooltip gives the range and what it was
 measured over. The range is measured when you pick a map and again each month. A map
-with a meaningful middle keeps it: Fertility is cream at replacement, Natural
-Change, Net Migration and Population Growth at none, Sex Balance at even and the
-comfort maps at no penalty, and each side's colors run to the world's extreme on that side.
-Where every state is on one side, the colors run over the states there, cream
-at the one nearest the middle. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
+with a meaningful middle keeps it: Fertility's is replacement, Natural
+Change's, Net Migration's and Population Growth's none, Sex Balance's even and the
+comfort maps' no penalty, cream in each map's own colors, and each side's colors
+run to the world's extreme on that side.
+Where every state is on one side, the colors run over the states there, the
+middle's color at the one nearest it. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
 The two comfort maps show what a
 state's Local Climate does to its migration attraction: Base Comfort before any
 technology eases it, Current Comfort after its owner's, in the same colors so
@@ -68,8 +69,9 @@ Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
 game's first month. City Rank shows the world's city ranking that tourism's
 Cities bonus reads: the 20 largest cities amber to crimson, the rest in blue
 that pales as the rank falls. Company HQs colors each state that holds a
-company's headquarters by their weekly profit, red at a loss, and leaves every
-other state gray; gold stripes mark a company's regional headquarters.
+company's headquarters by their weekly profit, sets a loss apart (red in the
+map's own colors), and leaves every other state gray; gold stripes mark a
+company's regional headquarters.
 Ownership colors a state by who holds most of its buildings, private owners
 gold, their own workers green and the state red, paler where the lead is
 narrow. Population Growth counts land changing hands as well as births, deaths
@@ -138,8 +140,9 @@ blue-yellow color blindness. A map with a meaningful middle runs orange below
 it and purple above, near white at it. A state its map sets apart below its
 scale, such as a company headquarters at a loss, is blue. Grayscale runs light
 gray at the low end to dark gray at the high, with a meaningful middle at the
-middle gray; a state with no figure, with none, or off the scale is striped,
-since a gray of its own would read as a figure.
+middle gray; a state with no figure, with none, or off the scale is striped
+where the other colors leave it gray or pale, since a gray of its own would
+read as a figure, and Company HQs' gold stripes are not drawn.
 
 A map's tooltip follows the options: it says what the map shows, its range
 now, the scale in force and the colors in force, so it tells you which color

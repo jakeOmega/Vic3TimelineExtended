@@ -9296,7 +9296,7 @@
  te_jmap_tt_hq:0 "#b [THIS.GetState.GetName]#!\nCompany headquarters: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\nTheir weekly profit: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!"
  te_jmap_tt_hq_loss:0 "#b [THIS.GetState.GetName]#!\nCompany headquarters: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_count')|0]#!\nTheir weekly profit: #R @money![THIS.GetState.MakeScope.ScriptValue('te_jmap_hq_profit')|K]#!"
  te_jmap_tt_hq_none:0 "#b [THIS.GetState.GetName]#!\nNo company headquarters."
- te_jmap_tt_hq_regional:0 "Regional headquarters, in the stripes: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!"
+ te_jmap_tt_hq_regional:0 "Regional headquarters here: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!"
  te_jmap_tt_infant_mortality:0 "#b [THIS.GetState.GetName]#!\nInfant mortality: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! deaths in the first year per 1,000 births"
  te_jmap_tt_invest:0 "#b [THIS.GetState.GetName]#!\nPaid into the [concept_investment_pool] each week, estimated: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_value')|K]#!\nFrom financial districts and company headquarters: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_cap')|K]#!\nFrom manor houses: @money!#v [THIS.GetState.MakeScope.ScriptValue('te_jmap_invest_ari')|K]#!"
  te_jmap_tt_invest_none:0 "#b [THIS.GetState.GetName]#!\nIts owners pay nothing into the [concept_investment_pool]."
