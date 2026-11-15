@@ -177,31 +177,104 @@ class TestPoliticalStrategies(unittest.TestCase):
 
 
 class TestSelfCheck(unittest.TestCase):
-    def test_once_a_game_with_all_verdicts(self):
-        text = SELFCHECK.read_text(encoding="utf-8-sig")
-        body = _strip_comments(text)
-        self.assertRegex(body, r"on_monthly_pulse\s*=\s*\{\s*on_actions\s*=\s*\{\s*te_ai_law_cadence_selfcheck_settle"
-                               r"\s+te_ai_law_cadence_selfcheck\s*\}")
-        self.assertNotRegex(body, r"on_monthly_pulse\s*=\s*\{[^}]*\beffect\b", "a sub-action, never a vanilla effect")
-        self.assertIn("NOT = { has_global_variable = te_alc_checked }", body)
-        self.assertIn("set_global_variable = te_alc_checked", body)
+    @classmethod
+    def setUpClass(cls):
+        cls.body = _strip_comments(SELFCHECK.read_text(encoding="utf-8-sig"))
+        cls.verdict = _block(cls.body, "te_ai_law_cadence_selfcheck")
+        cls.trigger = _block(cls.verdict, "trigger")
+        cls.effect = _block(cls.verdict, "effect")
+        cls.values = _strip_comments(SELFCHECK_VALUES.read_text(encoding="utf-8-sig"))
+
+    def branches(self):
+        """(limit, log line) of the if / else_if / else under random_country, in order."""
+        chain = _block(self.effect, "random_country")
+        out = []
+        for m in re.finditer(r"(?m)^\t{3}(if|else_if|else) = \{", chain):
+            body = _block(chain[m.start():], m.group(1))
+            line = re.search(r'debug_log = "(TE_SELF_CHECK \w+ ai_law_cadence[^"]*)"', body).group(1)
+            out.append((m.group(1), _norm(_block(body, "limit") or ""), line))
+        return out
+
+    def test_once_a_game_from_a_sub_action(self):
+        self.assertRegex(self.body, r"on_monthly_pulse\s*=\s*\{\s*on_actions\s*=\s*\{\s*"
+                                    r"te_ai_law_cadence_selfcheck_settle\s+te_ai_law_cadence_selfcheck\s*\}")
+        self.assertNotRegex(self.body, r"on_monthly_pulse\s*=\s*\{[^}]*\beffect\b", "a sub-action, never an effect")
+        # the latch: in the verdict's own trigger, and the first thing its effect sets
+        self.assertIn("NOT = { has_global_variable = te_alc_checked }", self.trigger)
+        self.assertTrue(self.effect.strip().startswith("set_global_variable = te_alc_checked"))
 
     def test_a_save_from_the_build_before_settles_first(self):
-        # A save begun before this build would otherwise read the old world's share at its first pulse past 1850.
-        body = _strip_comments(SELFCHECK.read_text(encoding="utf-8-sig"))
-        settle = _block(body, "te_ai_law_cadence_selfcheck_settle")
+        # A save begun before this build would otherwise read the old world's share at its first pulse past 1890.
+        settle = _block(self.body, "te_ai_law_cadence_selfcheck_settle")
         self.assertIn("change_global_variable = { name = te_alc_months add = 1 }", settle)
         self.assertRegex(settle, r"global_var:te_alc_months\s*<\s*36\b")
-        verdict = _block(_block(body, "te_ai_law_cadence_selfcheck"), "trigger")
-        self.assertRegex(verdict, r"has_global_variable = te_alc_months\s+global_var:te_alc_months\s*>=\s*36\b")
-        self.assertRegex(verdict, r"game_date\s*>=\s*1850\.1\.1")
-        for verdict in ("OK", "BROKEN", "NO_VERDICT"):
-            self.assertIn("TE_SELF_CHECK %s ai_law_cadence" % verdict, body)
-        self.assertRegex(body, r"te_alc_chk_share\s*>=\s*0\.35")
-        self.assertRegex(body, r"te_alc_chk_share\s*<\s*0\.30")
-        values = _strip_comments(SELFCHECK_VALUES.read_text(encoding="utf-8-sig"))
-        for name in ("te_alc_chk_countries_g", "te_alc_chk_enacting_g", "te_alc_chk_share"):
-            self.assertRegex(values, r"(?m)^%s\s*=" % name)
+        self.assertRegex(self.trigger, r"has_global_variable = te_alc_months\s+global_var:te_alc_months\s*>=\s*36\b")
+        # late enough that most AI countries have a law to start (conservatives read 0.09-0.10 in 1849 and 1867)
+        self.assertRegex(self.trigger, r"game_date\s*>=\s*1890\.1\.1")
+
+    def test_counts_ai_countries_not_decentralized_and_conservatives_among_them(self):
+        loop = _block(self.effect, "every_country")
+        self.assertEqual(_norm(_block(loop, "limit")), "is_ai = yes NOT = { is_country_type = decentralized }")
+        for name in ("te_alc_chk_countries", "te_alc_chk_enacting", "te_alc_chk_cons", "te_alc_chk_cons_enacting"):
+            with self.subTest(counter=name):
+                self.assertIn("set_global_variable = { name = %s value = 0 }" % name, self.effect)
+                self.assertIn("change_global_variable = { name = %s add = 1 }" % name, loop)
+        self.assertIn("if = { limit = { enacting_any_law = yes } change_global_variable = { name = te_alc_chk_enacting "
+                      "add = 1 } }", _norm(loop))
+        cons = _norm(loop[loop.index("has_strategy = ai_strategy_conservative_agenda"):])
+        self.assertTrue(cons.startswith("has_strategy = ai_strategy_conservative_agenda } change_global_variable = { "
+                                        "name = te_alc_chk_cons add = 1 } if = { limit = { enacting_any_law = yes } "
+                                        "change_global_variable = { name = te_alc_chk_cons_enacting add = 1 }"))
+
+    def test_shares_are_enacting_over_counted(self):
+        cons = _norm(_block(self.values, "te_alc_chk_cons_share"))
+        self.assertEqual(cons, "value = 0 if = { limit = { global_var:te_alc_chk_cons > 0 } "
+                               "value = global_var:te_alc_chk_cons_enacting divide = global_var:te_alc_chk_cons }")
+        rest = _norm(_block(self.values, "te_alc_chk_rest_share"))
+        self.assertEqual(rest, "value = 0 if = { limit = { global_var:te_alc_chk_countries > global_var:te_alc_chk_cons } "
+                               "value = global_var:te_alc_chk_enacting subtract = global_var:te_alc_chk_cons_enacting "
+                               "divide = te_alc_chk_rest_g }")
+        self.assertEqual(_norm(_block(self.values, "te_alc_chk_rest_g")),
+                         "value = global_var:te_alc_chk_countries subtract = global_var:te_alc_chk_cons")
+
+    def test_ok_needs_conservatives_well_above_the_build_before(self):
+        # The build before: conservatives at most 0.26 from 1890, the rest at most 0.43 (ai.md § Law-Change Cadence).
+        kinds = [(kind, limit, line.split()[1]) for kind, limit, line in self.branches()]
+        self.assertEqual(kinds, [
+            ("if", "te_alc_chk_cons_g >= 40 te_alc_chk_cons_share >= 0.40", "OK"),
+            ("else_if", "te_alc_chk_cons_g >= 40 te_alc_chk_cons_share < 0.30 te_alc_chk_rest_share < 0.55", "BROKEN"),
+            ("else", "", "NO_VERDICT"),
+        ])
+
+    def test_broken_names_its_three_causes_and_no_line_sends_to_the_replace_alone(self):
+        lines = {line.split()[1]: line for _, _, line in self.branches()}
+        broken = lines["BROKEN"]
+        for cause in ("the INJECT is ignored", "does not add to an agenda's own", "no law to start",
+                      "not grounds for the REPLACE alone"):
+            self.assertIn(cause, broken)
+        for verdict, line in lines.items():
+            with self.subTest(verdict=verdict):
+                self.assertIn("cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/", line)
+                self.assertIn("rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/", line)
+                # log_triage.py shows a line's first 400 characters: the figures and, for BROKEN, the causes fit
+                shown = re.sub(r"\[[^\]]*\]", "0000", line)[:400]
+                self.assertIn("date=0000 (", shown)
+                if verdict == "BROKEN":
+                    self.assertIn("not grounds for the REPLACE alone", shown)
+
+    def test_a_plain_marker_comes_before_the_templated_verdict(self):
+        start = re.search(r'debug_log = "(TE_SELF_CHECK START ai_law_cadence[^"]*)"', self.effect)
+        self.assertIsNotNone(start)
+        self.assertNotIn("[", start.group(1))
+        self.assertLess(start.start(), self.effect.index("random_country"))
+        self.assertGreater(start.start(), self.effect.index("every_country"))
+
+    def test_every_value_the_lines_read_is_defined(self):
+        used = set(re.findall(r"te_alc_chk_\w+_g\b|te_alc_chk_\w+_share\b", self.effect))
+        self.assertTrue(used)
+        for name in sorted(used):
+            with self.subTest(value=name):
+                self.assertRegex(self.values, r"(?m)^%s\s*=" % name)
 
     def test_the_play_test_list_and_the_doc_carry_it(self):
         playtest = PLAYTEST.read_text(encoding="utf-8")

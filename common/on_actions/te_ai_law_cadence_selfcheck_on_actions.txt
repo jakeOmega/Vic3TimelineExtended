@@ -4,18 +4,32 @@
 # script value reads an AI strategy's value, and before this change the INJECT read 1 in normal times either way, so
 # nothing has shown that an INJECT reaches this field (the one AI-strategy read, a subsidies block, kept vanilla's
 # value: scripting_best_practices.md). This check reads the effect instead: the share of AI countries in the middle
-# of a law enactment.
+# of a law enactment, conservatives (has_strategy = ai_strategy_conservative_agenda, only which strategy a country
+# holds) apart from the rest. Conservatives are where the rate moves most, 3.5% a roll to 42.5%, twelvefold.
 #
-# ai_law_cadence, once, at the first global monthly pulse on or after 1850.1.1 that is also at least 36 months after
+# ai_law_cadence, once, at the first global monthly pulse on or after 1890.1.1 that is also at least 36 months after
 # the first pulse this build ran (te_alc_months counts them), over AI countries that are not decentralized nations
 # (those never change a law: 121 of the 123 AI countries in an 1864 save that had changed none). The 36 months let a
 # save begun on the build before settle at the new rate first: enactments under way then take a median 17 months to
-# end, and the share read at once would be the old one. A new game gives its verdict in 1850.
-# No line yet: the game hasn't reached 1850, or 36 months since this build was first loaded.
-#   OK          at least 35% are enacting a law: the raised rate is in force (expected 35-65%).
-#   BROKEN      under 30%: the rate is vanilla's. Eleven saves of four games on the build before (1864-2020) read
-#               22-31%, 24% in 1864. The INJECT is ignored; see the fallback in the play-test list.
-#   NO_VERDICT  30-35%, or fewer than 50 such AI countries (nothing to judge).
+# end. 1890, because early in a game few AI countries have a law to start: conservatives read 0.09-0.10 in 1849 and
+# 1867 on the build before, and a working change could read as low.
+#
+# The margin, from 20 saves of six games on the build before (1849-2054), counted as this check counts: conservatives
+# 0.00-0.26, 0.06-0.26 from 1890 (the highest 25 of 96, 1958); the rest 0.21-0.47, 0.26-0.43 from 1890. At about 100
+# countries a share's sampling error is about 0.045: OK's 0.40 is three errors above the conservatives' highest (two
+# at the 40-country floor), and the rest's 0.55 is 2.3 above theirs. With the change working, three ways of modelling
+# "has a law to start" put conservatives at 0.23-0.42 / 0.47-0.65 / 0.69-0.77 (idle stretch after each enactment /
+# fixed share of countries / each roll on its own, from before-shares of 0.14-0.19), the rest at 0.47-0.62 /
+# 0.58-0.70 / 0.73-0.79. So only OK settles anything; BROKEN and NO_VERDICT can come with the change working.
+# No line yet: the game hasn't reached 1890, or 36 months since this build was first loaded.
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          conservatives at 0.40 or more (40 or more counted): the raised rate is in force.
+#   BROKEN      conservatives under 0.30 (40 or more counted) and the rest under 0.55: nothing rose. Three causes fit:
+#               (a) the INJECT is ignored; (b) the default's rate does not add to an agenda's own (every agenda
+#               declares one); (c) these countries have no law they would start. Not grounds for the REPLACE alone:
+#               docs/testing/ai-economy-playtest.md § AI law cadence says how to tell them apart.
+#   NO_VERDICT  fewer than 40 conservatives counted; conservatives at 0.30-0.40; or conservatives under 0.30 with the
+#               rest at 0.55 or more (the rate looks in force; conservatives have nothing to start).
 # With another mod that raises the agendas' own rates (kai_political_strategies.txt), OK can come from that mod alone.
 #
 # Play-test row: docs/testing/ai-economy-playtest.md § AI law cadence. Delete this file and
@@ -50,12 +64,14 @@ te_ai_law_cadence_selfcheck = {
 		NOT = { has_global_variable = te_alc_checked }
 		has_global_variable = te_alc_months
 		global_var:te_alc_months >= 36
-		game_date >= 1850.1.1
+		game_date >= 1890.1.1
 	}
 	effect = {
 		set_global_variable = te_alc_checked
 		set_global_variable = { name = te_alc_chk_countries value = 0 }
 		set_global_variable = { name = te_alc_chk_enacting value = 0 }
+		set_global_variable = { name = te_alc_chk_cons value = 0 }
+		set_global_variable = { name = te_alc_chk_cons_enacting value = 0 }
 		every_country = {
 			limit = {
 				is_ai = yes
@@ -66,22 +82,34 @@ te_ai_law_cadence_selfcheck = {
 				limit = { enacting_any_law = yes }
 				change_global_variable = { name = te_alc_chk_enacting add = 1 }
 			}
+			if = {
+				limit = { has_strategy = ai_strategy_conservative_agenda }
+				change_global_variable = { name = te_alc_chk_cons add = 1 }
+				if = {
+					limit = { enacting_any_law = yes }
+					change_global_variable = { name = te_alc_chk_cons_enacting add = 1 }
+				}
+			}
 		}
+		debug_log = "TE_SELF_CHECK START ai_law_cadence (the verdict line follows; none after this one means the engine dropped the templated line)"
 		random_country = {
 			if = {
-				limit = { te_alc_chk_countries_g < 50 }
-				debug_log = "TE_SELF_CHECK NO_VERDICT ai_law_cadence countries=[SCOPE.ScriptValue('te_alc_chk_countries_g')|0] enacting=[SCOPE.ScriptValue('te_alc_chk_enacting_g')|0] (fewer than 50 AI countries that are not decentralized: nothing to judge) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = {
+					te_alc_chk_cons_g >= 40
+					te_alc_chk_cons_share >= 0.40
+				}
+				debug_log = "TE_SELF_CHECK OK ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (AI conservatives mid-enactment, against at most 0.26 from 1890 on the build before: the default strategy's raised change_law_chance is in force)"
 			}
 			else_if = {
-				limit = { te_alc_chk_share >= 0.35 }
-				debug_log = "TE_SELF_CHECK OK ai_law_cadence share=[SCOPE.ScriptValue('te_alc_chk_share')|2] enacting=[SCOPE.ScriptValue('te_alc_chk_enacting_g')|0] countries=[SCOPE.ScriptValue('te_alc_chk_countries_g')|0] (AI countries mid-enactment, against 0.22-0.31 on the build before: the default strategy's raised change_law_chance is in force) date=[TimeKeeper.GetCurrentDate.GetString]"
-			}
-			else_if = {
-				limit = { te_alc_chk_share < 0.30 }
-				debug_log = "TE_SELF_CHECK BROKEN ai_law_cadence share=[SCOPE.ScriptValue('te_alc_chk_share')|2] enacting=[SCOPE.ScriptValue('te_alc_chk_enacting_g')|0] countries=[SCOPE.ScriptValue('te_alc_chk_countries_g')|0] (AI countries mid-enactment, within the 0.22-0.31 of the build before: the INJECT into ai_strategy_default's change_law_chance looks ignored; take the fallback in docs/testing/ai-economy-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = {
+					te_alc_chk_cons_g >= 40
+					te_alc_chk_cons_share < 0.30
+					te_alc_chk_rest_share < 0.55
+				}
+				debug_log = "TE_SELF_CHECK BROKEN ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (nothing rose above the build before's 0.26 and 0.43; three causes fit: the INJECT is ignored, the default's rate does not add to an agenda's own, or these countries have no law to start; not grounds for the REPLACE alone: docs/testing/ai-economy-playtest.md)"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK NO_VERDICT ai_law_cadence share=[SCOPE.ScriptValue('te_alc_chk_share')|2] enacting=[SCOPE.ScriptValue('te_alc_chk_enacting_g')|0] countries=[SCOPE.ScriptValue('te_alc_chk_countries_g')|0] (between 0.30 and 0.35: read the saves as docs/testing/ai-economy-playtest.md says) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (fewer than 40 conservatives, conservatives at 0.30-0.40, or the rest at 0.55 or more with conservatives low, which says the rate is in force and conservatives have nothing to start: read the saves as docs/testing/ai-economy-playtest.md says)"
 			}
 		}
 	}

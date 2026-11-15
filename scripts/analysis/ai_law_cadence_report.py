@@ -8,8 +8,10 @@ Read-only; binary (non-ironman) saves only. Run from the repo root with the venv
 Shares. For each political strategy, the AI countries holding it and how many are enacting a law. "Active" counts only
 countries that have changed a law since the game's first month or are enacting one, which leaves out the
 decentralized nations: in an 1864 save, 121 of the 123 AI countries that had changed none were decentralized. The
-self-check TE_SELF_CHECK ai_law_cadence reads the same share in game over AI countries that are not decentralized.
-Baselines and what to expect: docs/testing/ai-economy-playtest.md § AI law cadence.
+self-check TE_SELF_CHECK ai_law_cadence counts differently, over every AI country that is not decentralized, so
+countries that never changed a law stay in; each save's "self-check count" line gives its figures (conservatives and
+the rest) so a save can be read against the log line. Baselines and what to expect: docs/testing/ai-economy-playtest.md
+§ AI law cadence.
 
 Period. A country's law-change starts fall on a fixed phase of its law-update period, so across several saves of one
 game every pair of one country's starts is a whole number of periods apart. The report prints, for candidate periods,
@@ -23,10 +25,13 @@ Save layout (worked out 2026-11-15 on 1.15.1 saves; save_country_probe.py's BINA
                                         administrative, political, diplomatic)  ... } ... } }
                 A dead country's record stays (451 records, 257 countries). Found from the first political strategy
                 string: the token stream is aligned on it and the open blocks walked back to the 0x2c28 key.
+  Country type  0x31f7 = "<type>" (decentralized, unrecognized, recognized, colonial, company) inside the country's
+                record: the first such string after its header.
   Enactments    the law record's 0x56fc, "being enacted since" (save_country_probe.law_records' `enacting`). The
                 start hours are multiples of 6: the tick.
 """
 
+import bisect
 import collections
 import itertools
 import re
@@ -45,6 +50,8 @@ KEY_STRATEGY = 0x3007
 KEY_STRATEGY_NAME = 0x00E1
 POLITICAL = re.compile(r"^ai_strategy_\w*(agenda|reforms|restoration|mandate_of_heaven)$")
 FIRST_MONTH_HOURS = 31 * 24
+COUNTRY_TYPE = re.compile(rb"\xf7\x31\x01\x00\x0f\x00(.)\x00", re.S)
+COUNTRY_TYPES = (b"decentralized", b"unrecognized", b"recognized", b"colonial", b"company")
 PERIODS = (240, 400, 600, 800, 1200, 1800, 2400, 3600)
 
 
@@ -91,21 +98,39 @@ def ai_strategies(blob):
     return out
 
 
+def country_types(blob, heads):
+    """{country id: type} from each country's first 0x31f7 type string after its header ((offset, id, ...) rows)."""
+    offsets = [h[0] for h in heads]
+    ids = [h[1] for h in heads]
+    out = {}
+    for m in COUNTRY_TYPE.finditer(blob):
+        word = blob[m.end():m.end() + m.group(1)[0]]
+        if word not in COUNTRY_TYPES:
+            continue
+        i = bisect.bisect_right(offsets, m.start()) - 1
+        if i >= 0 and ids[i] not in out:
+            out[ids[i]] = word.decode()
+    return out
+
+
 def political(names):
     return next((n for n in names if POLITICAL.match(n)), None)
 
 
 def shares(path):
-    """(date, {agenda: [countries, enacting, active countries, active enacting]}, warning)."""
+    """(date, {agenda: [countries, enacting, active countries, active enacting, not decentralized,
+    not decentralized enacting]}, warning)."""
     blob = read_gamestate(path)
-    alive = {cid for _, cid, _, _ in country_headers(blob)}
+    heads = country_headers(blob)
+    alive = {cid for _, cid, _, _ in heads}
+    types = country_types(blob, heads)
     records, warning = law_records(blob)
     first = min(r["since"] for r in records if r["since"])
     enacting = {r["country"] for r in records if r["enacting"] is not None}
     active = enacting | {
         r["country"] for r in records if r["replaced"] and r["since"] and r["since"] > first + FIRST_MONTH_HOURS
     }
-    table = collections.defaultdict(lambda: [0, 0, 0, 0])
+    table = collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0])
     for cid, names in ai_strategies(blob).items():
         agenda = political(names)
         if cid not in alive or agenda is None:
@@ -116,6 +141,9 @@ def shares(path):
         if cid in active:
             row[2] += 1
             row[3] += cid in enacting
+        if types.get(cid) != "decentralized":
+            row[4] += 1
+            row[5] += cid in enacting
     return fmt_hours(gamestate_hours(blob)), dict(table), warning
 
 
@@ -140,6 +168,14 @@ def same_phase_share(by_country, period):
     return same / pairs if pairs else None
 
 
+def self_check_line(table):
+    """The self-check's figures for one save: AI countries that are not decentralized, conservatives and the rest."""
+    cons = table.get("conservative_agenda", [0] * 6)
+    rest = [sum(row[i] for agenda, row in table.items() if agenda != "conservative_agenda") for i in (4, 5)]
+    return (f"self-check count: conservative {cons[5]}/{cons[4]} = {cons[5] / max(cons[4], 1):.2f}   "
+            f"rest {rest[1]}/{rest[0]} = {rest[1] / max(rest[0], 1):.2f}")
+
+
 def main(argv):
     if not argv:
         print(__doc__)
@@ -151,21 +187,22 @@ def main(argv):
             share = same_phase_share(by_country, period)
             print(f"  {period:5} h ({period / 24:5.1f} days)  same phase {share:.3f}  (chance alone {6 / period:.4f})")
         return 0
-    pooled = collections.defaultdict(lambda: [0, 0, 0, 0])
+    pooled = collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0])
     for path in argv:
         date, table, warning = shares(path)
         print(f"== {Path(path).name}  {date}")
         if warning:
             print("  WARNING", warning)
-        total = [0, 0, 0, 0]
+        total = [0, 0, 0, 0, 0, 0]
         for agenda, row in sorted(table.items(), key=lambda kv: -kv[1][0]):
             print(f"  {agenda:28} enacting {row[1]:4}/{row[0]:4}   active {row[3]:4}/{row[2]:4} = "
                   f"{row[3] / max(row[2], 1):4.0%}")
-            for i in range(4):
+            for i in range(6):
                 total[i] += row[i]
                 pooled[agenda][i] += row[i]
         print(f"  {'ALL':28} enacting {total[1]:4}/{total[0]:4}   active {total[3]:4}/{total[2]:4} = "
               f"{total[3] / max(total[2], 1):4.0%}")
+        print("  " + self_check_line(table))
     if len(argv) > 1:
         print("== pooled")
         for agenda, row in sorted(pooled.items(), key=lambda kv: -kv[1][0]):

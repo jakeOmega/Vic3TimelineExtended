@@ -37,5 +37,28 @@ class TestSamePhaseShare(unittest.TestCase):
         self.assertIn(2400, report.PERIODS)
 
 
+def type_string(word):
+    return b"\xf7\x31\x01\x00\x0f\x00" + bytes([len(word), 0]) + word
+
+
+class TestCountryTypes(unittest.TestCase):
+    def test_each_country_takes_the_first_type_after_its_header(self):
+        blob = (b"head-of-7 " + type_string(b"decentralized") + type_string(b"recognized")
+                + b" head-of-9 " + type_string(b"other_word") + type_string(b"colonial"))
+        heads = [(0, 7, None, None), (blob.index(b"head-of-9"), 9, None, None)]
+        self.assertEqual(report.country_types(blob, heads), {7: "decentralized", 9: "colonial"})
+
+
+class TestSelfCheckLine(unittest.TestCase):
+    def test_conservatives_against_the_rest_over_countries_not_decentralized(self):
+        table = {"conservative_agenda": [120, 20, 90, 20, 100, 20], "nationalist_agenda": [50, 20, 45, 20, 40, 20],
+                 "egalitarian_agenda": [30, 10, 25, 10, 20, 9]}
+        self.assertEqual(report.self_check_line(table),
+                         "self-check count: conservative 20/100 = 0.20   rest 29/60 = 0.48")
+
+    def test_no_conservatives(self):
+        self.assertIn("conservative 0/0 = 0.00", report.self_check_line({"nationalist_agenda": [1, 0, 1, 0, 1, 0]}))
+
+
 if __name__ == "__main__":
     unittest.main()
