@@ -3603,6 +3603,10 @@
   "en": "The colonization of the solar system represents the next great chapter for our civilization, establishing permanent settlements beyond Earth.",
   "ru": "Колонизация Солнечной системы — следующая великая глава для нашей цивилизации: создание постоянных поселений за пределами Земли."
  },
+ "je_space_race_solar_colonization_status": {
+  "en": "Permanent settlements, one site at a time, across the solar system. Each colony fleet departs in its site's launch window and claims the site for good; progress past a colony waits in orbit for the next window.",
+  "ru": "Постоянные поселения, одно место за другим, по всей Солнечной системе. Каждый колониальный флот отправляется в стартовое окно своего места и закрепляет его навсегда; прогресс сверх одной колонии ждёт на орбите следующего окна."
+ },
  "je_space_race_solar_colonization_status_complete": {
   "en": "#bold Solar System Colonization Complete#!\\nEvery colony across the solar system has been established. Our civilization's presence spans from Mercury to the Kuiper Belt.",
   "ru": "#bold Колонизация Солнечной системы завершена#!\\nОснованы все колонии по всей Солнечной системе. Присутствие нашей цивилизации простирается от Меркурия до пояса Койпера."
@@ -8855,6 +8859,10 @@
   "en": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R No warheads#!#!: we may hold or build none.",
   "ru": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Без боезарядов#!#!: мы не можем ни держать их, ни создавать."
  },
+ "je_un_chamber_regime_nuclear_ban_tt": {
+  "en": "The Treaty on the Prohibition of Nuclear Weapons holds us to the #v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#! warheads we held when we ratified it, a fifth less every five years and none after 25 years. Warheads above the ceiling are taken apart, a tenth of the excess a month, and our program builds nothing while our arsenal is at or above the ceiling, which is for as long as we are a party. The ceiling is not scaled by [concept_un_enforcement], but it does not step down while the UN is Moribund. Leaving the United Nations ends it, and the world counts that as walking out of an arms-control treaty.",
+  "ru": "Договор о запрещении ядерного оружия ограничивает нас числом боезарядов, которое было у нас при ратификации (#v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#!), на пятую часть меньше каждые пять лет и ни одним после 25 лет. Боезаряды сверх предела разбираются, по десятой части излишка в месяц, и наша программа ничего не создаёт, пока арсенал на уровне предела или выше, то есть пока мы остаёмся участником. Предел не масштабируется [Concept('concept_un_enforcement','принуждением ООН')], но и не снижается, пока авторитет ООН на уровне «Угасающий». Выход из Организации Объединённых Наций прекращает его, и мир расценивает это как уход из договора о контроле над вооружениями."
+ },
  "je_un_chamber_regime_refugee_host": {
   "en": "    #tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_regime_refugee_host_tt #R Host#!#!: as one of the richest, we take in refugees.",
   "ru": "    #tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_regime_refugee_host_tt #R Принимающая сторона#!#!: как одно из богатейших государств, мы принимаем беженцев."
@@ -10426,6 +10434,10 @@
  "je_un_preview_membership_benefits_header": {
   "en": "If our authority earns us membership benefits",
   "ru": "Если наш авторитет приносит нам выгоды членства"
+ },
+ "je_un_preview_membership_benefits_tt": {
+  "en": "From the Contested tier ([concept_un_authority] 20+) an active member receives the membership benefits modifier, scaled by authority ÷ 50. A Moribund UN pays nothing.",
+  "ru": "С уровня «Оспариваемый» ([concept_un_authority|l] от 20) действующий член получает модификатор выгод членства, масштабируемый как авторитет ÷ 50. ООН уровня «Угасающий» ничего не платит."
  },
  "je_un_preview_npt_header": {
   "en": "If the United Nations enforces non-proliferation",

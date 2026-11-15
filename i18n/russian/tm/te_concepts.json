@@ -695,6 +695,10 @@
   "en": "Contribute to Peacekeeping",
   "ru": "Внести вклад в миротворчество"
  },
+ "UN_PEACEKEEPING_DESC": {
+  "en": "Commit forces to [concept_un_peacekeeping], at a running cost scaled to our [Concept('concept_gdp', 'GDP')]. While it runs it counts toward the UN's #bold Funding#! pillar, in proportion to our [concept_un_weight].",
+  "ru": "Выделить силы для [Concept('concept_un_peacekeeping','миротворчества ООН')] с текущими расходами, масштабируемыми по нашему [Concept('concept_gdp', 'ВВП')]. Пока оно действует, оно засчитывается в опору ООН #bold Финансирование#! пропорционально нашему [Concept('concept_un_weight','весу')]."
+ },
  "UN_PROPOSE_CEASEFIRE": {
   "en": "Propose a Binding Ceasefire",
   "ru": "Предложить обязывающее прекращение огня"
@@ -4267,6 +4271,10 @@
   "en": "Unlocks advanced Solar System Colonization stages (stages 3-5: Mercury & Saturn, Uranus & Neptune, Kuiper Belt).",
   "ru": "Открывает продвинутые этапы Колонизации Солнечной системы (этапы 3–5: Меркурий и Сатурн, Уран и Нептун, пояс Койпера)."
  },
+ "country_sr_drive_antimatter_bool_desc": {
+  "en": "With an $building_antimatter_facility$ to fill its tanks, our [concept_sr_colony_fleet]s fly an antimatter drive, the fastest of the four, and leave any month.",
+  "ru": "Когда баки заполняет здание $building_antimatter_facility$, наши [Concept('concept_sr_colony_fleet','колониальные флоты')] летают на антиматерийном двигателе, самом быстром из четырёх, и уходят в любой месяц."
+ },
  "country_sr_drive_fusion_bool_desc": {
   "en": "Our [concept_sr_colony_fleet]s fly a fusion drive, faster than a chemical rocket, so they reach every destination sooner. They still wait for a launch window.",
   "ru": "Наши [Concept('concept_sr_colony_fleet','колониальные флоты')] летают на термоядерном двигателе, быстрее химической ракеты, поэтому достигают каждого пункта назначения раньше. Им всё равно приходится ждать стартового окна."
@@ -4523,6 +4531,10 @@
   "en": "[INITIATOR_COUNTRY.GetName] has launched an industrial espionage operation.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] начала операцию промышленного шпионажа."
  },
+ "covert_industrial_espionage_action_desc": {
+  "en": "Steal production [concept_technology] from a foreign nation. Requires the target to have researched a production [concept_technology] that we could research now, and ends on its own once there is none.\\n$iw_exposure_tier_mild_note$",
+  "ru": "Красть производственные [Concept('concept_technology','технологии')] у иностранной нации. Требует, чтобы цель изучила производственную [Concept('concept_technology','технологию')], которую мы могли бы изучить сейчас, и заканчивается сама, когда таких не остаётся.\\n$iw_exposure_tier_mild_note$"
+ },
  "covert_industrial_espionage_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert industrial espionage against [TARGET_COUNTRY.GetName]",
   "ru": "[COUNTRY.GetAdjectiveNoFlag] разведывательный аппарат начинает тайный промышленный шпионаж против страны [TARGET_COUNTRY.GetName]"
@@ -4598,6 +4610,10 @@
  "covert_military_espionage_action_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has launched a military espionage operation.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] начала операцию военного шпионажа."
+ },
+ "covert_military_espionage_action_desc": {
+  "en": "Steal military [concept_technology] from a foreign nation. Requires the target to have researched a military [concept_technology] that we could research now, and ends on its own once there is none.\\n$iw_exposure_tier_mild_note$",
+  "ru": "Красть военные [Concept('concept_technology','технологии')] у иностранной нации. Требует, чтобы цель изучила военную [Concept('concept_technology','технологию')], которую мы могли бы изучить сейчас, и заканчивается сама, когда таких не остаётся.\\n$iw_exposure_tier_mild_note$"
  },
  "covert_military_espionage_action_effect_desc_first": {
   "en": "[COUNTRY.GetAdjectiveNoFlag] launches covert military espionage against [TARGET_COUNTRY.GetName]",
@@ -4690,6 +4706,10 @@
  "covert_space_espionage_action_action_notification_desc": {
   "en": "[INITIATOR_COUNTRY.GetName] has launched a space-program espionage operation.",
   "ru": "Страна [INITIATOR_COUNTRY.GetName] начала операцию шпионажа за космической программой."
+ },
+ "covert_space_espionage_action_desc": {
+  "en": "Steal the designs of a foreign space program that is ahead of ours. Our space race milestones progress faster and are less likely to fail. Requires the target to have completed a milestone we have not.\\n$iw_exposure_tier_mild_note$",
+  "ru": "Красть проекты иностранной космической программы, которая опережает нашу. Наши вехи космической гонки продвигаются быстрее и реже проваливаются. Требует, чтобы цель завершила веху, которой нет у нас.\\n$iw_exposure_tier_mild_note$"
  },
  "covert_space_espionage_desc": {
   "en": "Our intelligence services are passing us the designs of a foreign space program: our milestones progress faster and fail less often.",
@@ -12010,6 +12030,10 @@
  "un_regime_naval_curb_modifier_desc": {
   "en": "This great power's fleets are held to the Convention on the Law of the Sea, and it earns less prestige from projecting naval power. Scaled by UN enforcement.",
   "ru": "Флоты этой великой державы ограничены Конвенцией по морскому праву, и она получает меньше престижа от демонстрации военно-морской мощи. Масштабируется принуждением ООН."
+ },
+ "un_regime_npt_guarantee_modifier_desc": {
+  "en": "This country has no nuclear weapons. The Non-Proliferation Treaty's security guarantee makes a nuclear strike on it harder to carry through. Scaled by UN enforcement.",
+  "ru": "У этой страны нет ядерного оружия. Гарантия безопасности по Договору о нераспространении затрудняет осуществление ядерного удара по ней. Масштабируется принуждением ООН."
  },
  "un_regime_npt_inspection_modifier_desc": {
   "en": "This country is running a nuclear program without the bomb. The Non-Proliferation Treaty's inspectors slow it. Scaled by UN enforcement.",

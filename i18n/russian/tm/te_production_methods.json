@@ -1483,6 +1483,10 @@
   "en": "Managed Retreat",
   "ru": "Управляемое отступление"
  },
+ "pm_resettlement_managed_retreat_desc": {
+  "en": "Moving people out of harm's way, with compensation. Recruits every free person from coastal states while we suffer coastal flooding, and from states contaminated by a nuclear strike or accident.$resettlement_programme_bonus_pm_line$",
+  "ru": "Вывод людей из опасных мест с компенсацией. Набирает всех свободных жителей прибрежных областей, пока мы страдаем от прибрежных наводнений, и областей, загрязнённых в результате ядерного удара или аварии.$resettlement_programme_bonus_pm_line$"
+ },
  "pm_resettlement_military_colonies_desc": {
   "en": "Soldier-settlers who farm the frontier and hold it. Recruits the unemployed and peasants of the lower strata who are fully accepted. Turmoil in this state has less effect.$resettlement_programme_bonus_pm_line$",
   "ru": "Солдаты-поселенцы, которые обрабатывают пограничье и удерживают его. Набирает безработных и крестьян низших слоёв, полностью принятых в обществе. Беспорядки в этой области действуют слабее.$resettlement_programme_bonus_pm_line$"

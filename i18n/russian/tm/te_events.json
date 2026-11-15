@@ -12251,6 +12251,10 @@
   "en": "Raise it to our leader",
   "ru": "Воздвигнуть нашему вождю"
  },
+ "monument_events.2.o.tt": {
+  "en": "A monument to our head of state, raised while they rule. While they rule and the country still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur] and #v $country_authority_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_leader')|0]#! for each step of its own kind. The leader's own interest group approves; the strongest group outside the government objects. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_leader')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\\n\\nWhen they are gone, dead, deposed or retired, it becomes #R contested#!, and their successor decides what to do with it.\\n\\n$monument_events.2.common_tt$",
+  "ru": "Памятник нашему главе государства, воздвигнутый при его правлении. Пока он правит, а страна владеет памятником, тот даёт #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! за каждую ступень [Concept('concept_grandeur','величия')] режима и #v $country_authority_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_leader')|0]#! за каждую ступень величия этого вида. Одобряет собственная группа интересов лидера; возражает сильнейшая группа вне правительства. В области [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_leader')|%0]#! $state_loyalists_from_political_movements_mult$ за каждую его собственную ступень.\\n\\nКогда его не станет — умрёт, будет свергнут или уйдёт в отставку, — памятник станет #R спорным#!, и преемник решит, что с ним делать.\\n\\n$monument_events.2.common_tt$"
+ },
  "monument_events.2.opp": {
   "en": "As the opportunity asks: [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]",
   "ru": "Как просит возможность: [SCOPE.sCountry('gm_com_country').GetCustom('gm_com_dedication_name')]"
@@ -18667,6 +18671,10 @@
   "en": "Proteus orbits close to Neptune and is about as large as a body of ice and rock can be without its own gravity pulling it round. It is dark and irregular. From here our instruments can study Neptune's atmosphere, its ring arcs and its magnetic field at close range. Radiation is a hazard, though far milder than around Jupiter.",
   "ru": "Протей обращается близко к Нептуну и примерно настолько велик, насколько может быть тело из льда и породы, чтобы собственная гравитация не стягивала его в шар. Он тёмный и неправильный. Отсюда наши приборы могут изучать атмосферу Нептуна, дуги его колец и магнитное поле с близкого расстояния. Радиация представляет опасность, хотя и гораздо мягче, чем вокруг Юпитера."
  },
+ "space_race_colony_events.29.f": {
+  "en": "\\\"I am the administrator, and I will say plainly what this outpost is. Proteus is a dark lump of ice and rock with no geysers and no air, and nothing about the ground is worth a photograph. What it has is a view. Neptune fills a wide part of the outpost's sky, and the instruments on the ridge can watch its storms and its rings from closer than any telescope at home. The choice in front of us is whether to send people to run those instruments or to hand the outpost to machines and mine it. Either way, the machines already there will keep the instruments running until the government decides.\\\"",
+  "ru": "«Я администратор и скажу прямо, чем является этот форпост. Протей — тёмный ком льда и породы без гейзеров и воздуха, и в его грунте нет ничего, что стоило бы фотографировать. Зато у него есть вид. Нептун занимает широкую часть неба над форпостом, и приборы на хребте могут наблюдать его бури и кольца ближе, чем любой телескоп дома. Выбор перед нами в том, отправить ли людей управлять этими приборами или передать форпост машинам и добывать. В любом случае машины, уже находящиеся там, будут поддерживать работу приборов, пока правительство не примет решение»."
+ },
  "space_race_colony_events.29.t": {
   "en": "The Neptune Watch",
   "ru": "Вахта у Нептуна"
@@ -24382,6 +24390,10 @@
  "te_judiciary_events.31.b": {
   "en": "Give them the sentence they demand.",
   "ru": "Вынести тот приговор, которого они требуют."
+ },
+ "te_judiciary_events.31.d": {
+  "en": "A guard has attacked a visiting envoy of [SCOPE.sCountry('te_jud_pressing_power').GetName], and its government demands his execution. Our ministers are afraid of what [SCOPE.sCountry('te_jud_pressing_power').GetName] will do if it doesn't get it. Our code does not allow a death sentence for the crime, and the chief judge has said so.",
+  "ru": "Стражник напал на посетившего нас посланника страны [SCOPE.sCountry('te_jud_pressing_power').GetName], и её правительство требует его казни. Наши министры боятся того, что предпримет страна [SCOPE.sCountry('te_jud_pressing_power').GetName], если не получит желаемого. Наш кодекс не допускает смертного приговора за это преступление, о чём заявил и председатель суда."
  },
  "te_judiciary_events.31.f": {
   "en": "In 1891 a Japanese policeman assigned to guard the visiting Russian tsarevich drew his sword at Ōtsu and wounded him in the head. The cabinet, afraid of what Russia would do, wanted the policeman tried under the article for attacks on the imperial family, which carried a death sentence. Kojima Iken, the chief justice, held that the article meant Japan's own imperial family and no other. The court tried the policeman for attempted murder and sentenced him to life imprisonment.",

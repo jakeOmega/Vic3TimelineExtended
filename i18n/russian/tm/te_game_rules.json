@@ -83,6 +83,10 @@
   "en": "Banking System Simplified",
   "ru": "Банковская система упрощена"
  },
+ "setting_banking_system_simplified_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active, without monetary policy: no policy rate to set, no inflation, no exchange rate, and no currency pegs, swap lines or shared currency. Your government still borrows at the world reference rate plus its own risk premium.",
+  "ru": "[concept_journal_entry] о [Concept('concept_banking_cycle','банковском цикле')] активна, но без денежной политики: нет ключевой ставки, инфляции, обменного курса, привязок валют, линий валютного свопа и общей валюты. Ваше правительство по-прежнему занимает по мировой референсной ставке плюс собственная премия за риск."
+ },
  "setting_covert_warfare_disabled": {
   "en": "Covert Warfare Disabled",
   "ru": "Тайная война отключена"

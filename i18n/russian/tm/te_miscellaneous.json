@@ -3111,6 +3111,10 @@
   "en": "#bold A General Assembly vote has been called#! to found the World Development Fund. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
   "ru": "#bold Назначено голосование Генеральной Ассамблеи#! об учреждении Всемирного фонда развития. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
  },
+ "UN_PROPOSE_EXPULSION_DESC": {
+  "en": "Call a two-thirds vote of the [concept_un_general_assembly] to strip a [concept_un_permanent_member] that has used its [concept_un_veto] in the last five years, and is not our ally, our overlord or our subject, of its [concept_un_security_council] seat. No veto can stop it, and no member presumes in its favor: each weighs the case for expulsion, the target's veto record (5 for each veto cast while the UN is not Moribund, fading by 5% a year) less its standing (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and its service (−5 each for hosting the headquarters, running the development program, and running the peacekeeping program or serving in a mission; −10 at most). If it carries, the target loses its seat and cannot be seated again for ten years, and the [concept_great_power] member with the most [concept_prestige] that holds no seat takes it, which may be us. Members hold that against a proposer a little (−5).",
+  "ru": "Созвать голосование [Concept('concept_un_general_assembly','Генеральной Ассамблеи')], требующее двух третей, чтобы лишить места в [concept_un_security_council] [concept_un_permanent_member|l], который использовал своё [concept_un_veto|l] за последние пять лет и не является нашим союзником, сюзереном или зависимым государством. Никакое вето не может её остановить, и никто из членов не предполагает решения в его пользу: каждый взвешивает довод за исключение — историю вето цели (5 за каждое вето, наложенное, пока уровень ООН не «Угасающий», затухающую на 5% в год) за вычетом её международного авторитета (Образцовая −10, Уважаемая −5, Плохая +5, Опозоренная +10) и заслуг (−5 за каждое из: размещение штаб-квартиры, ведение программы развития, ведение программы миротворчества или служба в миссии; не более −10). Если она принята, цель теряет место и не может быть возвращена на него десять лет, а его занимает [concept_great_power|l] с наибольшим [concept_prestige|l], не имеющая места, — возможно, мы. Члены немного ставят это в вину инициатору (−5)."
+ },
  "UN_PROPOSE_EXPULSION_TT": {
   "en": "We will propose a motion in the [concept_un_general_assembly] calling for the expulsion of a [concept_un_permanent_member] who has recently abused the [concept_un_veto]. As a [concept_un_resolution_recommendatory] motion against the Council itself, it requires a #G 2/3 supermajority#! to pass.",
   "ru": "Мы внесём в [concept_un_general_assembly] предложение об исключении [Concept('concept_un_permanent_member', 'постоянного члена')], недавно злоупотребившего [Concept('concept_un_veto', 'вето')]. Как [Concept('concept_un_resolution_recommendatory', 'рекомендательная резолюция')] против самого Совета, она требует #G большинства в 2/3#! для принятия."
@@ -14218,6 +14222,10 @@
  "iw_op_name_unknown": {
   "en": "an unidentified operation",
   "ru": "неопознанная операция"
+ },
+ "iw_priority_3_needs_tradecraft_tt": {
+  "en": "Priority #v 3#! needs an agency of at least #bold Established#! Tradecraft (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]#!)",
+  "ru": "Приоритету #v 3#! нужно агентство с шпионским ремеслом не ниже уровня #bold Состоявшийся#! (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]#!)"
  },
  "iw_priority_cultivate_fixed_tt": {
   "en": "$iw_op_name_cultivate_assets$ has nothing for priority to multiply: it stays at priority #v 1#!",
@@ -26255,6 +26263,10 @@
   "en": "Countries:",
   "ru": "Страны:"
  },
+ "te_grid_card_countries_tt": {
+  "en": "#b Countries#!\\nThe countries with stations on this grid: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!, joined by Grid Interconnection Agreements or by a [concept_power_bloc] whose principles join its members' grids.",
+  "ru": "#b Страны#!\\nСтраны со станциями в этой сети: #v [State.MakeScope.ScriptValue('te_grid_rec_countries_disp')|0]#!; они объединены через соглашения о межсетевом соединении или через [Concept('concept_power_bloc','силовой блок')], принципы которого объединяют сети его членов."
+ },
  "te_grid_card_delivered": {
   "en": "Delivered: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!",
   "ru": "Доставлено: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!"
@@ -26614,6 +26626,10 @@
  "te_grid_st_staff_tt": {
   "en": "#b Staff#!\\nThis station is #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#! staffed. A station moves power in proportion to its staff, so the grid orders a short-staffed one to move more to make up the gap, as far down as a fifth staffed. A station with no staff moves nothing until it hires.",
   "ru": "#b Персонал#!\\nЭта станция укомплектована на #v [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#!. Станция перемещает энергию пропорционально своему персоналу, поэтому сеть заказывает у станции с нехваткой персонала перемещать больше, чтобы восполнить разницу, вплоть до укомплектованности на пятую часть. Станция без персонала ничего не перемещает, пока не наймёт его."
+ },
+ "te_grid_station_adjacent_tt": {
+  "en": "Borders a state of ours with a $building_grid_transfer_station$, or would be our first in this market area",
+  "ru": "Граничит с нашей областью со зданием «$building_grid_transfer_station$» или была бы нашей первой в этой рыночной области"
  },
  "te_grid_stations_none": {
   "en": "None yet. A station joins this table at the first monthly balancing after it is built.",
