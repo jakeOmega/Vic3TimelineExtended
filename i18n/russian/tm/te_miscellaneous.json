@@ -779,69 +779,1309 @@
   "en": "Suppression / Crackdown",
   "ru": "Подавление / репрессии"
  },
+ "decol_stance_take_anti_tt": {
+  "en": "We #bold condemn colonialism#!. While we are a [concept_great_power], every colonial empire's [concept_colonial_stability] weighs our condemnation against it. Our stance can change again in #bold 24#! months.",
+  "ru": "Мы #bold осуждаем колониализм#!. Пока мы — [concept_great_power|l], наше осуждение снижает [Concept('concept_colonial_stability','колониальную стабильность')] каждой колониальной империи. Позицию можно будет изменить снова через #bold 24#! мес."
+ },
+ "decol_stance_take_neutral_tt": {
+  "en": "We #bold stand aside#!: no stance, no cost, and no weight on any colonial empire. Our stance can change again in #bold 24#! months.",
+  "ru": "Мы #bold остаёмся в стороне#!: без позиции, без затрат и без давления на колониальные империи. Позицию можно будет изменить снова через #bold 24#! мес."
+ },
+ "decol_stance_take_pro_tt": {
+  "en": "We #bold back the colonial powers#!. While we are a [concept_great_power], every colonial empire's [concept_colonial_stability] counts our support in its favor. Our stance can change again in #bold 24#! months.",
+  "ru": "Мы #bold поддерживаем колониальные державы#!. Пока мы — [concept_great_power|l], наша поддержка засчитывается в пользу [Concept('concept_colonial_stability','колониальной стабильности')] каждой колониальной империи. Позицию можно будет изменить снова через #bold 24#! мес."
+ },
+ "decol_stance_un_vote_tt": {
+  "en": "Having voted for it, we #bold condemn colonialism#!: while we are a [concept_great_power] the stance weighs on every colonial empire and holds #bold 150#! [concept_influence], and it cannot change for #bold 24#! months.",
+  "ru": "Проголосовав за это, мы #bold осуждаем колониализм#!: пока мы — [concept_great_power|l], эта позиция давит на каждую колониальную империю и удерживает #bold 150#! [concept_influence|l], а изменить её нельзя в течение #bold 24#! мес."
+ },
+ "decolonization_confirm_planned_tt_header": {
+  "en": "The following overseas colonial territories will be released as independent nations:",
+  "ru": "Следующие заморские колониальные территории станут независимыми государствами:"
+ },
+ "decolonization_form_country_tt": {
+  "en": "Form a new independent nation. The metropole's heritage shapes the new state, and its flag color is assigned at random.",
+  "ru": "Образовать новое независимое государство. Наследие метрополии определяет облик нового государства, а цвет его флага выбирается случайно."
+ },
+ "digital_consciousness_commission_modifier": {
+  "en": "Digital Consciousness Commission",
+  "ru": "Комиссия по цифровому сознанию"
+ },
+ "digital_property_ruling_modifier": {
+  "en": "Digital Entities as Property",
+  "ru": "Цифровые сущности как собственность"
+ },
+ "digital_rights_debate_active_modifier": {
+  "en": "Digital Rights Debate",
+  "ru": "Дебаты о цифровых правах"
+ },
+ "digital_rights_recognition_modifier": {
+  "en": "Digital Rights Recognition",
+  "ru": "Признание цифровых прав"
+ },
+ "digital_rights_stagnation_modifier": {
+  "en": "Digital Rights Stagnation",
+  "ru": "Застой в цифровых правах"
+ },
+ "digital_rights_triumph_modifier": {
+  "en": "Digital Rights Triumph",
+  "ru": "Триумф цифровых прав"
+ },
+ "discriminated_pops_loyalty_effect_tt": {
+  "en": "Loyalists rise in [Concept('concept_culture', 'cultures')] whose country-wide [concept_acceptance] is below @acceptance_status_4! $second_rate_citizen$",
+  "ru": "Растёт число лоялистов в [Concept('concept_culture', 'культурах')], чьё общенациональное [concept_acceptance|l] ниже @acceptance_status_4! $second_rate_citizen$"
+ },
+ "discriminated_pops_radicalism_effect_tt": {
+  "en": "Radicals rise in [Concept('concept_culture', 'cultures')] whose country-wide [concept_acceptance] is below @acceptance_status_4! $second_rate_citizen$",
+  "ru": "Растёт число радикалов в [Concept('concept_culture', 'культурах')], чьё общенациональное [concept_acceptance|l] ниже @acceptance_status_4! $second_rate_citizen$"
+ },
+ "disestablishment_religious_movement_modifier": {
+  "en": "Disestablishment Pressure",
+  "ru": "Давление за отделение церкви от государства"
+ },
+ "drugs_shortage_pharma_drive": {
+  "en": "Pharmaceutical Production Drive",
+  "ru": "Рывок фармацевтического производства"
+ },
+ "drugs_shortage_poppy_relief": {
+  "en": "Poppy Growers’ Reprieve",
+  "ru": "Отсрочка для маководов"
+ },
+ "eco_reform_env_movement_modifier": {
+  "en": "Environmental Reform Momentum",
+  "ru": "Импульс экологической реформы"
+ },
+ "eco_reform_justification_modifier": {
+  "en": "Environmental Reform Justified",
+  "ru": "Экологическая реформа обоснована"
+ },
+ "eco_terrorism_crackdown_modifier": {
+  "en": "Eco-Terrorism Crackdown",
+  "ru": "Борьба с экотерроризмом"
+ },
+ "education_technical_focus_modifier": {
+  "en": "Technical Education Focus",
+  "ru": "Упор на техническое образование"
+ },
+ "ele_amend_bilingualism_tt": {
+  "en": "This [concept_amendment] is available when enacting #bold State-Led Language Reform#! or #bold Multilingual Federalism#!.",
+  "ru": "Эта [concept_amendment|l] доступна при принятии закона #bold Государственная языковая реформа#! или #bold Многоязычный федерализм#!."
+ },
+ "ele_amend_community_service_tt": {
+  "en": "This [concept_amendment] is available when enacting #bold Punishment-Focused Criminal Justice#!.",
+  "ru": "Эта [concept_amendment|l] доступна при принятии закона #bold Уголовное правосудие, ориентированное на наказание#!."
+ },
+ "ele_amend_mandatory_minimums_tt": {
+  "en": "This [concept_amendment] is available when enacting #bold Restorative Justice#! or #bold Rehabilitation-Focused Criminal Justice#!.",
+  "ru": "Эта [concept_amendment|l] доступна при принятии закона #bold Восстановительное правосудие#! или #bold Уголовное правосудие, ориентированное на реабилитацию#!."
+ },
+ "ele_amend_military_necessity_tt": {
+  "en": "This [concept_amendment] is available when enacting #bold War Crimes Forbidden#! or #bold Humanitarian Regulations#!.",
+  "ru": "Эта [concept_amendment|l] доступна при принятии закона #bold Военные преступления запрещены#! или #bold Гуманитарное регулирование#!."
+ },
+ "ele_amend_minority_script_tt": {
+  "en": "This [concept_amendment] is available when enacting #bold State-Led Language Reform#! or #bold Civic Monolingualism#!.",
+  "ru": "Эта [concept_amendment|l] доступна при принятии закона #bold Государственная языковая реформа#! или #bold Гражданский монолингвизм#!."
+ },
+ "ele_amend_no_first_strike_tt": {
+  "en": "This [concept_amendment] is available when we have researched #bold Nuclear Weapons#! and are enacting #bold Humanitarian Regulations#! or #bold Limited War#!.\\n\\nOnce the law passes, it binds our nuclear doctrine to #v No First Use#!, whatever we hold now, and an arsenal we build later starts under it. Abandoning No First Use while it is on our laws repudiates the pledge and strikes the amendment.",
+  "ru": "Эта [concept_amendment|l] доступна, когда мы изучили #bold Ядерное оружие#! и принимаем закон #bold Гуманитарное регулирование#! или #bold Ограниченная война#!.\\n\\nПосле принятия закона наша ядерная доктрина закрепляется на уровне #v Неприменение первым#!, каковы бы ни были наши нынешние установки, а арсенал, который мы построим позже, создаётся уже под ней. Отказ от неприменения первым, пока оно записано в наших законах, означает отречение от обязательства и отменяет поправку."
+ },
+ "electfin_donor_scandal_advance": {
+  "en": "Electoral Finance: Donor Scandal Advance",
+  "ru": "Финансирование выборов: скандал с донорами, продвижение"
+ },
+ "electfin_donor_scandal_cautious": {
+  "en": "Electoral Finance: Donor Scandal Cautious Advance",
+  "ru": "Финансирование выборов: скандал с донорами, осторожное продвижение"
+ },
+ "electfin_donor_scandal_stall": {
+  "en": "Electoral Finance: Donor Scandal Stall",
+  "ru": "Финансирование выборов: скандал с донорами, пробуксовка"
+ },
+ "emergency_climate_spending_modifier": {
+  "en": "Emergency Climate Spending",
+  "ru": "Чрезвычайные климатические расходы"
+ },
+ "emergency_income_support_modifier": {
+  "en": "Emergency Income Support",
+  "ru": "Чрезвычайная поддержка доходов"
+ },
+ "enemy_war_crime_rage_modifier": {
+  "en": "Righteous Fury",
+  "ru": "Праведная ярость"
+ },
+ "enemy_war_crime_tribunal_modifier": {
+  "en": "Justice Demanded",
+  "ru": "Требование правосудия"
+ },
+ "environmental_greenwash_intl_modifier": {
+  "en": "International Greenwashing",
+  "ru": "Международный гринвошинг"
+ },
+ "environmentalist_leader_pull_modifier": {
+  "en": "Green Leadership Drift",
+  "ru": "Дрейф к зелёному лидерству"
+ },
+ "environmentalist_momentum_movement_modifier": {
+  "en": "Environmentalist Movement Attraction",
+  "ru": "Притяжение экологического движения"
+ },
+ "equal_pay_mandate_modifier": {
+  "en": "Equal Pay Mandate",
+  "ru": "Обязательство равной оплаты"
+ },
+ "equal_pay_suppressed_modifier": {
+  "en": "Equal Pay Strikes Suppressed",
+  "ru": "Забастовки за равную оплату подавлены"
+ },
  "espionage_agent_exposed_modifier": {
   "en": "Intelligence Network Exposed",
   "ru": "Разведывательная сеть раскрыта"
+ },
+ "espionage_prisoner_exchange_modifier": {
+  "en": "Prisoner Exchange",
+  "ru": "Обмен пленными"
+ },
+ "factory_farm_building_banana_plantation": {
+  "en": "Mechanized Farm",
+  "ru": "Механизированная ферма"
+ },
+ "famrep_birth_rate_boost": {
+  "en": "Pronatalist Mood",
+  "ru": "Настрой на рождаемость"
+ },
+ "famrep_demographic_debate_advance": {
+  "en": "Family Policy: Demographic Debate Advance",
+  "ru": "Семейная политика: демографические дебаты, продвижение"
+ },
+ "famrep_demographic_debate_concession": {
+  "en": "Family Policy: Demographic Debate Concession",
+  "ru": "Семейная политика: демографические дебаты, уступка"
+ },
+ "famrep_demographic_debate_stall": {
+  "en": "Family Policy: Demographic Debate Stall",
+  "ru": "Семейная политика: демографические дебаты, пробуксовка"
+ },
+ "feminist_literature_banned_modifier": {
+  "en": "Feminist Literature Banned",
+  "ru": "Феминистская литература запрещена"
+ },
+ "feminist_literature_funded_modifier": {
+  "en": "Feminist Literature Subsidized",
+  "ru": "Феминистская литература субсидируется"
+ },
+ "financial_cycle_government_fiscal_policy_effect": {
+  "en": "Government Fiscal Policy Effect",
+  "ru": "Эффект бюджетной политики правительства"
+ },
+ "financial_cycle_phase_boom": {
+  "en": "Financial Cycle: Boom",
+  "ru": "Финансовый цикл: подъём"
+ },
+ "financial_cycle_phase_boom_cmd": {
+  "en": "Planning Cycle: Boom",
+  "ru": "Плановый цикл: подъём"
+ },
+ "financial_cycle_phase_boom_coop": {
+  "en": "Cooperative Cycle: Boom",
+  "ru": "Кооперативный цикл: подъём"
+ },
+ "financial_cycle_phase_downturn": {
+  "en": "Financial Cycle: Downturn",
+  "ru": "Финансовый цикл: спад"
+ },
+ "financial_cycle_phase_downturn_cmd": {
+  "en": "Planning Cycle: Downturn",
+  "ru": "Плановый цикл: спад"
+ },
+ "financial_cycle_phase_downturn_coop": {
+  "en": "Cooperative Cycle: Downturn",
+  "ru": "Кооперативный цикл: спад"
+ },
+ "financial_cycle_phase_expansion": {
+  "en": "Financial Cycle: Expansion",
+  "ru": "Финансовый цикл: расширение"
+ },
+ "financial_cycle_phase_expansion_cmd": {
+  "en": "Planning Cycle: Expansion",
+  "ru": "Плановый цикл: расширение"
+ },
+ "financial_cycle_phase_expansion_coop": {
+  "en": "Cooperative Cycle: Expansion",
+  "ru": "Кооперативный цикл: расширение"
+ },
+ "financial_cycle_phase_frenzy": {
+  "en": "Financial Cycle: Frenzy",
+  "ru": "Финансовый цикл: ажиотаж"
+ },
+ "financial_cycle_phase_frenzy_cmd": {
+  "en": "Planning Cycle: Frenzy",
+  "ru": "Плановый цикл: ажиотаж"
+ },
+ "financial_cycle_phase_frenzy_coop": {
+  "en": "Cooperative Cycle: Frenzy",
+  "ru": "Кооперативный цикл: ажиотаж"
+ },
+ "financial_cycle_phase_panic": {
+  "en": "Financial Cycle: Panic",
+  "ru": "Финансовый цикл: паника"
+ },
+ "financial_cycle_phase_panic_cmd": {
+  "en": "Planning Cycle: Panic",
+  "ru": "Плановый цикл: паника"
+ },
+ "financial_cycle_phase_panic_coop": {
+  "en": "Cooperative Cycle: Panic",
+  "ru": "Кооперативный цикл: паника"
+ },
+ "financial_cycle_phase_stagnation": {
+  "en": "Financial Cycle: Stagnation",
+  "ru": "Финансовый цикл: стагнация"
+ },
+ "financial_cycle_phase_stagnation_cmd": {
+  "en": "Planning Cycle: Stagnation",
+  "ru": "Плановый цикл: стагнация"
+ },
+ "financial_cycle_phase_stagnation_coop": {
+  "en": "Cooperative Cycle: Stagnation",
+  "ru": "Кооперативный цикл: стагнация"
+ },
+ "finreg_bank_panic_advance": {
+  "en": "[concept_financial_regulation]: Bank Panic Advance",
+  "ru": "[concept_financial_regulation]: банковская паника, продвижение"
+ },
+ "finreg_bank_panic_cautious": {
+  "en": "[concept_financial_regulation]: Bank Panic Cautious Advance",
+  "ru": "[concept_financial_regulation]: банковская паника, осторожное продвижение"
+ },
+ "finreg_bank_panic_stall": {
+  "en": "[concept_financial_regulation]: Bank Panic Stall",
+  "ru": "[concept_financial_regulation]: банковская паника, пробуксовка"
+ },
+ "finreg_bankers_lobby_advance": {
+  "en": "[concept_financial_regulation]: Bankers’ Lobby Advance",
+  "ru": "[concept_financial_regulation]: лобби банкиров, продвижение"
+ },
+ "finreg_bankers_lobby_concession": {
+  "en": "[concept_financial_regulation]: Bankers’ Lobby Concession",
+  "ru": "[concept_financial_regulation]: лобби банкиров, уступка"
+ },
+ "finreg_bankers_lobby_stall": {
+  "en": "[concept_financial_regulation]: Bankers’ Lobby Stall",
+  "ru": "[concept_financial_regulation]: лобби банкиров, пробуксовка"
+ },
+ "finreg_interest_rate_hike": {
+  "en": "Bankers’ Premium",
+  "ru": "Премия банкирам"
+ },
+ "force_cultural_acceptance_action_notification_name": {
+  "en": "Cultural Acceptance Forced",
+  "ru": "Принятие культуры навязано"
+ },
+ "force_cultural_adoption_action_notification_name": {
+  "en": "Cultural Adoption Forced",
+  "ru": "Перенятие культуры навязано"
+ },
+ "foreign_investment_dependency_modifier": {
+  "en": "[concept_foreign_investment] Dependency",
+  "ru": "Зависимость от [Concept('concept_foreign_investment','иностранных инвестиций')]"
+ },
+ "foreign_property_protected_modifier": {
+  "en": "Foreign Property Protected",
+  "ru": "Иностранная собственность защищена"
+ },
+ "foreign_terror_retaliation_modifier": {
+  "en": "Retaliatory Sanctions",
+  "ru": "Ответные санкции"
+ },
+ "foreign_threat_surveillance_modifier": {
+  "en": "Foreign Threat Surveillance",
+  "ru": "Слежка за внешней угрозой"
+ },
+ "fossil_fuel_divestment_modifier": {
+  "en": "Fossil Fuel Divestment",
+  "ru": "Отказ от инвестиций в ископаемое топливо"
+ },
+ "fossil_lobby_concessions_modifier": {
+  "en": "Fossil Fuel Lobby Concessions",
+  "ru": "Уступки лобби ископаемого топлива"
+ },
+ "free_port_state_modifier": {
+  "en": "Free Port",
+  "ru": "Свободный порт"
+ },
+ "free_port_tariff_export_modifier": {
+  "en": "Free Port (Export Tariff Reduction)",
+  "ru": "Свободный порт (снижение экспортных пошлин)"
+ },
+ "free_port_tariff_import_modifier": {
+  "en": "Free Port (Import Tariff Reduction)",
+  "ru": "Свободный порт (снижение импортных пошлин)"
+ },
+ "from_more_than_three_prior_members": {
+  "en": "More than three other party members",
+  "ru": "Более трёх других членов партии"
+ },
+ "from_petit_bourgeois_anxiety": {
+  "en": "Petite Bourgeoisie Interest Group",
+  "ru": "Группа интересов мелкой буржуазии"
+ },
+ "from_strong_green_movement": {
+  "en": "Stronger Environmentalist Interest Group",
+  "ru": "Более сильная группа интересов экологов"
+ },
+ "from_strong_populist_movement": {
+  "en": "Stronger Ethno-Nationalist Interest Group",
+  "ru": "Более сильная группа интересов этнонационалистов"
+ },
+ "from_three_prior_members": {
+  "en": "Three other party members",
+  "ru": "Трое других членов партии"
+ },
+ "genetics_ethics_debate_advance": {
+  "en": "Genetics: Ethics Debate Advance",
+  "ru": "Генетика: этические дебаты, продвижение"
+ },
+ "genetics_ethics_debate_concession": {
+  "en": "Genetics: Ethics Debate Concession",
+  "ru": "Генетика: этические дебаты, уступка"
+ },
+ "genetics_ethics_debate_stall": {
+  "en": "Genetics: Ethics Debate Stall",
+  "ru": "Генетика: этические дебаты, пробуксовка"
+ },
+ "genetics_religious_carve_outs": {
+  "en": "Genetics: Religious Carve-Outs",
+  "ru": "Генетика: религиозные исключения"
+ },
+ "glass_ceiling_broken_modifier": {
+  "en": "Glass Ceiling Broken",
+  "ru": "Стеклянный потолок разбит"
  },
  "global_warming_high_latitudes": {
   "en": "High-Latitude Warming",
   "ru": "Потепление в высоких широтах"
  },
+ "gm_arch_article_sponsor_tech_concession_tt": {
+  "en": "The country that would dig has researched Romanticism",
+  "ru": "Страна, желающая вести раскопки, изучила романтизм"
+ },
+ "gm_arch_article_sponsor_tech_permit_tt": {
+  "en": "The country that would dig has researched Empiricism",
+  "ru": "Страна, желающая вести раскопки, изучила эмпиризм"
+ },
+ "gm_arch_dig_ground_tt": {
+  "en": "We hold a part of the ground it lies under, or the right to dig there by treaty",
+  "ru": "Мы владеем частью земли, под которой он лежит, или имеем право вести там раскопки по договору"
+ },
+ "gm_arch_dig_innovation_antiquarian_tt": {
+  "en": "We make at least [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_antiquarian')|0] weekly [concept_innovation]: what an Antiquarian dig diverts, and what digs begun in the past two weeks divert",
+  "ru": "Мы вырабатываем не менее [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_antiquarian')|0] [Concept('concept_innovation','инноваций')] в неделю: столько отвлекают антикварные раскопки, плюс то, что отвлекают раскопки, начатые за последние две недели"
+ },
+ "gm_arch_dig_innovation_forensic_tt": {
+  "en": "We make at least [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_forensic')|0] weekly [concept_innovation]: what a Forensic dig diverts, and what digs begun in the past two weeks divert",
+  "ru": "Мы вырабатываем не менее [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_forensic')|0] [Concept('concept_innovation','инноваций')] в неделю: столько отвлекают криминалистические раскопки, плюс то, что отвлекают раскопки, начатые за последние две недели"
+ },
+ "gm_arch_dig_innovation_systematic_tt": {
+  "en": "We make at least [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_systematic')|0] weekly [concept_innovation]: what a Systematic dig diverts, and what digs begun in the past two weeks divert",
+  "ru": "Мы вырабатываем не менее [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_systematic')|0] [Concept('concept_innovation','инноваций')] в неделю: столько отвлекают систематические раскопки, плюс то, что отвлекают раскопки, начатые за последние две недели"
+ },
+ "gm_arch_dig_open_tt": {
+  "en": "The site is open to excavation",
+  "ru": "Участок открыт для раскопок"
+ },
+ "gm_arch_dig_tech_tt": {
+  "en": "We have the technology that opens it",
+  "ru": "У нас есть технология, которая его открывает"
+ },
+ "gm_arch_diversion": {
+  "en": "Scholars in the Field",
+  "ru": "Учёные на местах"
+ },
+ "gm_arch_diversion_desc": {
+  "en": "The universities have sent their philologists, chemists and engineers to dig instead of to research.",
+  "ru": "Университеты отправили филологов, химиков и инженеров на раскопки вместо исследований."
+ },
  "gm_arch_history_lead": {
   "en": "Historical note:",
   "ru": "Историческая справка:"
+ },
+ "gm_arch_launch_antiquarian": {
+  "en": "Antiquarian",
+  "ru": "Антикварные"
+ },
+ "gm_arch_launch_antiquarian_tooltip": {
+  "en": "#b Antiquarian and Dynamite#!\\nQuick and the cheapest, but hasty: about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_antiquarian')|0]#! months here, with a #R [GetPlayer.MakeScope.ScriptValue('gm_arch_destruction_chance')|0]%#! chance it destroys half of what it finds. Diverts #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_antiquarian')|0]#! weekly [concept_innovation] while it runs.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Антикварные раскопки и динамит#!\\nБыстро и дешевле всего, но наспех: около #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_antiquarian')|0]#! мес. на этом участке, и с вероятностью #R [GetPlayer.MakeScope.ScriptValue('gm_arch_destruction_chance')|0]%#! будет уничтожена половина находок. Пока идут раскопки, отвлекает #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_antiquarian')|0]#! [Concept('concept_innovation','инноваций')] в неделю.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_arch_launch_antiquarian_tt": {
+  "en": "Begin an Antiquarian dig at this site",
+  "ru": "Начать антикварные раскопки на этом участке"
+ },
+ "gm_arch_launch_forensic": {
+  "en": "Forensic",
+  "ru": "Криминалистические"
+ },
+ "gm_arch_launch_forensic_tooltip": {
+  "en": "#b Forensic and Remote Sensing#!\\nWith radar and radiocarbon dating: about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! months here, the most expensive, and the monument comes out with #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! more levels. Diverts #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! weekly [concept_innovation] while it runs.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Криминалистика и дистанционное зондирование#!\\nС радаром и радиоуглеродным анализом: около #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_forensic')|0]#! мес. на этом участке, дороже всего, зато памятник поднимается на #G [GetPlayer.MakeScope.ScriptValue('gm_arch_forensic_bonus')|0]#! уровней больше. Пока идут раскопки, отвлекает #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_forensic')|0]#! [Concept('concept_innovation','инноваций')] в неделю.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_arch_launch_forensic_tt": {
+  "en": "Begin a Forensic dig at this site",
+  "ru": "Начать криминалистические раскопки на этом участке"
+ },
+ "gm_arch_launch_systematic": {
+  "en": "Systematic",
+  "ru": "Систематические"
+ },
+ "gm_arch_launch_systematic_tooltip": {
+  "en": "#b Systematic Stratigraphy#!\\nSlow and careful: about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_systematic')|0]#! months here, and the monument comes out whole. Diverts #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_systematic')|0]#! weekly [concept_innovation] while it runs.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]",
+  "ru": "#b Систематическая стратиграфия#!\\nМедленно и тщательно: около #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_months_systematic')|0]#! мес. на этом участке, и памятник поднимается целым. Пока идут раскопки, отвлекает #R [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_systematic')|0]#! [Concept('concept_innovation','инноваций')] в неделю.\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+ },
+ "gm_arch_launch_systematic_tt": {
+  "en": "Begin a Systematic dig at this site",
+  "ru": "Начать систематические раскопки на этом участке"
+ },
+ "gm_arch_method_antiquarian": {
+  "en": "an Antiquarian dig",
+  "ru": "антикварные раскопки"
+ },
+ "gm_arch_method_forensic": {
+  "en": "a Forensic dig",
+  "ru": "криминалистические раскопки"
+ },
+ "gm_arch_method_none": {
+  "en": "a dig",
+  "ru": "раскопки"
+ },
+ "gm_arch_method_systematic": {
+  "en": "a Systematic dig",
+  "ru": "систематические раскопки"
+ },
+ "gm_arch_row_abroad_concession": {
+  "en": "Abroad, by an Excavation Concession: half the levels would come home as a trophy",
+  "ru": "За рубежом, по Концессии на раскопки: половина уровней вернётся домой как трофей"
+ },
+ "gm_arch_row_abroad_concession_tt": {
+  "en": "#b $archaeological_concession$#!\\nA treaty article with the state's owner: half the levels a dig raises come home as a trophy, and the rest stand there.",
+  "ru": "#b $archaeological_concession$#!\\nСтатья договора с владельцем области: половина уровней, поднятых раскопками, возвращается домой как трофей, остальные остаются на месте."
+ },
+ "gm_arch_row_abroad_permit": {
+  "en": "Abroad, by an Excavation Permit: the finds would stay there, and the dig would earn Foreign Scholarship",
+  "ru": "За рубежом, по Разрешению на раскопки: находки останутся там, а раскопки принесут Зарубежную науку"
+ },
+ "gm_arch_row_abroad_permit_tt": {
+  "en": "#b $excavation_permit$#!\\nA treaty article with the state's owner: every find stays there, and the dig earns Foreign Scholarship:\\n[GetStaticModifier('gm_arch_scholarship').GetDesc]",
+  "ru": "#b $excavation_permit$#!\\nСтатья договора с владельцем области: все находки остаются там, а раскопки приносят Зарубежную науку:\\n[GetStaticModifier('gm_arch_scholarship').GetDesc]"
+ },
+ "gm_arch_row_dig_concession": {
+  "en": "Abroad, by an Excavation Concession from [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetOwner.GetName]: half the levels will come home as a trophy",
+  "ru": "За рубежом, по Концессии на раскопки от страны [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetOwner.GetName]: половина уровней вернётся домой как трофей"
+ },
+ "gm_arch_row_dig_detail": {
+  "en": "In [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetName]: [ScriptContainer.GetCustom('gm_arch_method_name')], #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#! done, about #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_months_left')|0]#! months to go",
+  "ru": "В области [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetName]: [ScriptContainer.GetCustom('gm_arch_method_name')], выполнено #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#!, осталось около #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_months_left')|0]#! мес."
+ },
+ "gm_arch_row_dig_innovation": {
+  "en": "Diverts #R [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_innovation')|0]#! weekly [concept_innovation]",
+  "ru": "Отвлекает #R [ScriptContainer.MakeScope.ScriptValue('gm_arch_site_innovation')|0]#! [Concept('concept_innovation','инноваций')] в неделю"
+ },
+ "gm_arch_row_dig_permit": {
+  "en": "Abroad, by an Excavation Permit from [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetOwner.GetName]: the finds stay there, and the dig earns Foreign Scholarship",
+  "ru": "За рубежом, по Разрешению на раскопки от страны [ScriptContainer.MakeScope.Var('gm_site_view_state').GetState.GetOwner.GetName]: находки остаются там, а раскопки приносят Зарубежную науку"
+ },
+ "gm_arch_row_open_detail": {
+  "en": "Open to dig: raises #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_levels')|0]#! levels, #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_grandeur')|0]#! [concept_grandeur]",
+  "ru": "Открыто для раскопок: поднимет уровней — #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_levels')|0]#!, [concept_grandeur|l] — #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_grandeur')|0]#!"
+ },
+ "gm_arch_row_resume": {
+  "en": "Work paused at #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#!",
+  "ru": "Работы приостановлены на #v [ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress')|0]%#!"
+ },
+ "gm_arch_scholarship": {
+  "en": "Foreign Scholarship",
+  "ru": "Зарубежная наука"
+ },
+ "gm_arch_scholarship_desc": {
+  "en": "Our expedition dug abroad and left the finds with the host. The site reports, the lectures and the name on the excavation are ours.",
+  "ru": "Наша экспедиция вела раскопки за рубежом и оставила находки принимающей стороне. Отчёты с места работ, лекции и имя на раскопках остаются за нами."
+ },
+ "gm_arch_site_antikythera_mechanism_dug": {
+  "en": "Divers working in turns over $gm_arch_site_antikythera_mechanism_place$, south of [SCOPE.sState('gm_arch_ev_antikythera_mechanism').GetName], have brought up bronze and marble statues, glassware and amphorae from a ship that sank in the first century BC. Among the corroded lumps lifted from the wreck is a box of bronze gearwheels, at least thirty of them, finely toothed and inscribed: an instrument for reckoning the motions of the Sun, the Moon and the planets.\\n\\n$gm_arch_history_lead$ $gm_arch_site_antikythera_mechanism_history$",
+  "ru": "Водолазы, работающие посменно у места ($gm_arch_site_antikythera_mechanism_place$) к югу от области [SCOPE.sState('gm_arch_ev_antikythera_mechanism').GetName], подняли бронзовые и мраморные статуи, стеклянную посуду и амфоры с корабля, затонувшего в I веке до н. э. Среди изъеденных коррозией глыб, поднятых с места крушения, — ящик с бронзовыми шестернями, не менее тридцати, с мелкими зубцами и надписями: прибор для расчёта движения Солнца, Луны и планет.\\n\\n$gm_arch_history_lead$ $gm_arch_site_antikythera_mechanism_history$"
+ },
+ "gm_arch_site_antikythera_mechanism_found": {
+  "en": "Sponge divers sheltering from a storm, south of [SCOPE.sState('gm_arch_ev_antikythera_mechanism').GetName], have dived on $gm_arch_site_antikythera_mechanism_place$ and come up with a bronze arm. They report statues on the seabed, half buried in sand, deeper than any diver works for long.\\n\\n$gm_arch_history_lead$ $gm_arch_site_antikythera_mechanism_history$",
+  "ru": "Ловцы губок, укрывшиеся от шторма к югу от области [SCOPE.sState('gm_arch_ev_antikythera_mechanism').GetName], нырнули у места ($gm_arch_site_antikythera_mechanism_place$) и подняли бронзовую руку. Они сообщают о статуях на морском дне, наполовину занесённых песком, на глубине, где ни один водолаз не может долго работать.\\n\\n$gm_arch_history_lead$ $gm_arch_site_antikythera_mechanism_history$"
+ },
+ "gm_arch_site_antikythera_mechanism_history": {
+  "en": "Greek sponge divers found the wreck in 1900, and the salvage of 1900-1901 for the Greek government was the first great underwater excavation: one diver died and two were paralyzed. The mechanism, noticed in 1902, was understood only through Derek de Solla Price's work and X-ray and CT scans in the late twentieth century; it predicted eclipses and the four-year cycle of the Games. It is in the National Archaeological Museum in Athens.",
+  "ru": "Греческие ловцы губок нашли обломки в 1900 году, и спасательные работы 1900–1901 годов по заказу греческого правительства стали первыми крупными подводными раскопками: один водолаз погиб, двое остались парализованными. Механизм, замеченный в 1902 году, удалось понять лишь благодаря трудам Дерека де Солла Прайса, а также рентгеновским и КТ-снимкам конца XX века; он предсказывал затмения и четырёхлетний цикл Игр. Сегодня он хранится в Национальном археологическом музее в Афинах."
+ },
+ "gm_arch_site_antikythera_mechanism_place": {
+  "en": "a Roman-era wreck at the foot of a cliff off the island of Antikythera",
+  "ru": "затонувший в римскую эпоху корабль у подножия скалы близ острова Антикитера"
+ },
+ "gm_arch_site_bust_of_nefertiti_dug": {
+  "en": "In a house and workshop in $gm_arch_site_bust_of_nefertiti_place$, in [SCOPE.sState('gm_arch_ev_bust_of_nefertiti').GetName], the excavators have found a sculptor's studio, its owner named Thutmose on an ivory horse blinker, with plaster casts and unfinished heads of the royal family. Among them lay a bust of painted limestone of Queen Nefertiti, with the tall blue crown and the long neck, its colors almost untouched and one eye never inlaid.\\n\\n$gm_arch_history_lead$ $gm_arch_site_bust_of_nefertiti_history$",
+  "ru": "В доме с мастерской на участке ($gm_arch_site_bust_of_nefertiti_place$) в области [SCOPE.sState('gm_arch_ev_bust_of_nefertiti').GetName] археологи нашли студию скульптора, чьё имя, Тутмос, значилось на костяном наглазнике для коня, с гипсовыми слепками и неоконченными головами членов царской семьи. Среди них лежал раскрашенный известняковый бюст царицы Нефертити в высокой синей короне, с длинной шеей, с почти нетронутыми красками и одним неинкрустированным глазом.\\n\\n$gm_arch_history_lead$ $gm_arch_site_bust_of_nefertiti_history$"
+ },
+ "gm_arch_site_bust_of_nefertiti_found": {
+  "en": "Akhenaten built a new capital in the desert, and the pharaohs who followed abandoned it; its boundary stelae still stand in the cliffs. Our scholars believe $gm_arch_site_bust_of_nefertiti_place$, in [SCOPE.sState('gm_arch_ev_bust_of_nefertiti').GetName], have hardly been disturbed since, and that its houses and workshops lie as their owners left them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_bust_of_nefertiti_history$",
+  "ru": "Эхнатон выстроил новую столицу в пустыне, а фараоны после него покинули её; её пограничные стелы всё ещё стоят в скалах. Наши учёные полагают, что на участке ($gm_arch_site_bust_of_nefertiti_place$) в области [SCOPE.sState('gm_arch_ev_bust_of_nefertiti').GetName] с тех пор почти ничего не тревожили, а дома и мастерские лежат такими, какими их оставили хозяева.\\n\\n$gm_arch_history_lead$ $gm_arch_site_bust_of_nefertiti_history$"
+ },
+ "gm_arch_site_bust_of_nefertiti_history": {
+  "en": "Ludwig Borchardt's German expedition found the bust on 6 December 1912. In the division of finds of January 1913 with Gustave Lefebvre of the Antiquities Service it went to the German side, and it has been in Berlin ever since, now in the Neues Museum. Egypt has asked for its return since the 1920s.",
+  "ru": "Немецкая экспедиция Людвига Борхардта нашла бюст 6 декабря 1912 года. При разделе находок в январе 1913 года с Гюставом Лефевром из Службы древностей он достался немецкой стороне и с тех пор находится в Берлине, ныне в Новом музее. Египет требует его возвращения с 1920-х годов."
+ },
+ "gm_arch_site_bust_of_nefertiti_place": {
+  "en": "the ruins of Akhetaten at Amarna, on the east bank of the Nile",
+  "ru": "руины Ахетатона в Амарне, на восточном берегу Нила"
+ },
+ "gm_arch_site_caral_supe_dug": {
+  "en": "On $gm_arch_site_caral_supe_place$, in [SCOPE.sState('gm_arch_ev_caral_supe').GetName], the excavators have uncovered a planned city of six platform pyramids, sunken circular plazas, houses and workshops, with no pottery, no weapons and no walls. Its builders traded cotton for fish with the coast and played flutes of pelican and condor bone; the reed bags of stones in the pyramids' fill, dated by radiocarbon, put the city at about 2600 BC.\\n\\n$gm_arch_history_lead$ $gm_arch_site_caral_supe_history$",
+  "ru": "На участке ($gm_arch_site_caral_supe_place$) в области [SCOPE.sState('gm_arch_ev_caral_supe').GetName] археологи раскопали спланированный город из шести платформенных пирамид, утопленных круглых площадей, домов и мастерских — без керамики, без оружия и без стен. Его строители обменивали хлопок на рыбу с побережья и играли на флейтах из костей пеликана и кондора; тростниковые мешки с камнями в насыпях пирамид, датированные радиоуглеродным методом, относят город примерно к 2600 году до н. э.\\n\\n$gm_arch_history_lead$ $gm_arch_site_caral_supe_history$"
+ },
+ "gm_arch_site_caral_supe_found": {
+  "en": "The low mounds on $gm_arch_site_caral_supe_place$, in [SCOPE.sState('gm_arch_ev_caral_supe').GetName], have long been taken for hills, or for the ruins of some late and minor town. Our archaeologists have noticed that they are built, that they are pyramids, and that the pottery that dates every other Andean site is missing.\\n\\n$gm_arch_history_lead$ $gm_arch_site_caral_supe_history$",
+  "ru": "Низкие холмы на участке ($gm_arch_site_caral_supe_place$) в области [SCOPE.sState('gm_arch_ev_caral_supe').GetName] давно принимали за обычные возвышенности или за руины какого-нибудь позднего захудалого городка. Наши археологи заметили, что они рукотворные, что это пирамиды и что здесь нет керамики, по которой датируют все остальные андские памятники.\\n\\n$gm_arch_history_lead$ $gm_arch_site_caral_supe_history$"
+ },
+ "gm_arch_site_caral_supe_history": {
+  "en": "Paul Kosok noted the site in 1948, but only when Ruth Shady Solís began digging in 1994 was it understood; radiocarbon dates published in 2001 made Caral the oldest city then known in the Americas, as old as the pyramids of Giza. It became a World Heritage Site in 2009.",
+  "ru": "Пол Косок отметил это место в 1948 году, но понять его удалось лишь тогда, когда Рут Шейди Солис начала раскопки в 1994 году; радиоуглеродные даты, опубликованные в 2001 году, сделали Карал самым древним из известных тогда городов Америки, ровесником пирамид Гизы. В 2009 году он стал объектом Всемирного наследия."
+ },
+ "gm_arch_site_caral_supe_place": {
+  "en": "the desert terraces above the Supe valley at Caral",
+  "ru": "пустынные террасы над долиной Супе близ Карала"
+ },
+ "gm_arch_site_chichen_itza_dug": {
+  "en": "Restorers have rebuilt the stepped pyramid of El Castillo at $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], and cleared the Temple of the Warriors with its hall of a thousand columns, the great ball court and the round observatory. Divers dredging the Sacred Cenote have brought up jade, gold and copper discs, copal incense and the bones of those thrown into it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$",
+  "ru": "Реставраторы восстановили ступенчатую пирамиду Эль-Кастильо на участке ($gm_arch_site_chichen_itza_place$) в области [SCOPE.sState('gm_arch_ev_chichen_itza').GetName] и расчистили Храм воинов с залом тысячи колонн, великую площадку для игры в мяч и круглую обсерваторию. Водолазы, обследовавшие Священный сенот, подняли нефритовые, золотые и медные диски, благовония копал и кости тех, кого туда бросили.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$"
+ },
+ "gm_arch_site_chichen_itza_found": {
+  "en": "Travelers have drawn the great pyramid and the ball court of $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], and the scholars who read them are sure the scrub hides far more: temples, colonnades, and the well into which the Maya threw offerings to the rain god.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$",
+  "ru": "Путешественники зарисовали великую пирамиду и площадку для игры в мяч на участке ($gm_arch_site_chichen_itza_place$) в области [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], а учёные, изучавшие эти рисунки, уверены, что кустарник скрывает гораздо больше: храмы, колоннады и колодец, в который майя бросали дары богу дождя.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$"
+ },
+ "gm_arch_site_chichen_itza_history": {
+  "en": "John Lloyd Stephens and Frederick Catherwood described the ruins in 1843. Edward Thompson, who bought the hacienda, dredged the cenote from 1904 and sent its finds to Harvard; the Carnegie Institution restored the city from 1924, and it became the most visited site in Mexico.",
+  "ru": "Джон Ллойд Стивенс и Фредерик Казервуд описали руины в 1843 году. Эдвард Томпсон, купивший гасиенду, с 1904 года вёл драгирование сенота и отправлял находки в Гарвард; Институт Карнеги реставрировал город с 1924 года, и он стал самым посещаемым памятником Мексики."
+ },
+ "gm_arch_site_chichen_itza_place": {
+  "en": "the dry scrub of central Yucatán around the Sacred Cenote",
+  "ru": "сухой кустарник центрального Юкатана вокруг Священного сенота"
+ },
+ "gm_arch_site_chogha_zanbil_dug": {
+  "en": "On $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], the excavators have cleared the ziggurat of the Elamite king Untash-Napirisha, a stepped tower more than a hundred meters square at its base, its bricks stamped with the king's inscriptions, standing inside three rings of walls with temples, palaces and the royal tombs.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$",
+  "ru": "На участке ($gm_arch_site_chogha_zanbil_place$) в области [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName] археологи расчистили зиккурат эламского царя Унташ-Напириши — ступенчатую башню со стороной основания более ста метров, чьи кирпичи проштампованы царскими надписями; она стоит внутри трёх колец стен с храмами, дворцами и царскими гробницами.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$"
+ },
+ "gm_arch_site_chogha_zanbil_found": {
+  "en": "Geologists flying over $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], to look for oil have photographed a great square mound inside rings of walls. Our scholars think it a temple tower of the Elamites, a people of Susa older than Persia.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$",
+  "ru": "Геологи, пролетавшие в поисках нефти над участком ($gm_arch_site_chogha_zanbil_place$) в области [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], сфотографировали огромный квадратный холм внутри колец стен. Наши учёные считают его храмовой башней эламитов — народа Суз, более древнего, чем Персия.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$"
+ },
+ "gm_arch_site_chogha_zanbil_history": {
+  "en": "Geologists of the Anglo-Persian Oil Company spotted the mound from the air in 1935. Roman Ghirshman excavated it from 1951 to 1962; it was built around 1250 BC and sacked by the Assyrians in 640 BC.",
+  "ru": "Геологи Англо-персидской нефтяной компании заметили холм с воздуха в 1935 году. Роман Гиршман раскапывал его с 1951 по 1962 год; он построен около 1250 года до н. э. и разграблен ассирийцами в 640 году до н. э."
+ },
+ "gm_arch_site_chogha_zanbil_place": {
+  "en": "the plain above the Dez river southeast of Susa",
+  "ru": "равнина над рекой Дез к юго-востоку от Суз"
+ },
+ "gm_arch_site_cyrene_dug": {
+  "en": "On $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], the excavators have cleared the sanctuary of Apollo at the sacred spring, the Temple of Zeus, larger than the Parthenon, the agora and the theater, and found among the ruins marble statues of gods and athletes lying where they fell.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$",
+  "ru": "На участке ($gm_arch_site_cyrene_place$) в области [SCOPE.sState('gm_arch_ev_cyrene').GetName] археологи расчистили святилище Аполлона у священного источника, храм Зевса, больше Парфенона, агору и театр, а среди руин нашли мраморные статуи богов и атлетов, лежащие там, где упали.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$"
+ },
+ "gm_arch_site_cyrene_found": {
+  "en": "On $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], travelers have walked past thousands of rock-cut tombs and the fallen columns of temples. Our scholars place there the city founded by colonists from Thera, which gave the world the philosopher Aristippus and the silphium plant.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$",
+  "ru": "На участке ($gm_arch_site_cyrene_place$) в области [SCOPE.sState('gm_arch_ev_cyrene').GetName] путешественники проходили мимо тысяч высеченных в скалах гробниц и упавших колонн храмов. Наши учёные помещают здесь город, основанный колонистами с Феры, который подарил миру философа Аристиппа и растение сильфий.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$"
+ },
+ "gm_arch_site_cyrene_history": {
+  "en": "Robert Murdoch Smith and Edwin Porcher dug at Cyrene in 1860 and 1861 and sent its statues to the British Museum. American and then Italian excavations followed from 1910, and the Venus of Cyrene, found by Italian soldiers in 1913, went back to Libya in 2008.",
+  "ru": "Роберт Мердок Смит и Эдвин Порчер вели раскопки в Кирене в 1860 и 1861 годах и отправили её статуи в Британский музей. С 1910 года последовали американские, а затем итальянские раскопки, и Венера Киренская, найденная итальянскими солдатами в 1913 году, вернулась в Ливию в 2008 году."
+ },
+ "gm_arch_site_cyrene_place": {
+  "en": "the terraced plateau of the Jebel Akhdar above the sea",
+  "ru": "террасированное плато Джебель-Ахдар над морем"
+ },
+ "gm_arch_site_dead_sea_scrolls_dug": {
+  "en": "In eleven of $gm_arch_site_dead_sea_scrolls_place$, in [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], and in the ruins of the settlement below, the searchers have recovered the remains of about nine hundred manuscripts, most in fragments, from the third century BC to the first century AD: every book of the Hebrew Bible except Esther, a complete scroll of Isaiah, and the rules, hymns and calendars of a sect awaiting the end of days.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$",
+  "ru": "В одиннадцати из пещер на участке ($gm_arch_site_dead_sea_scrolls_place$) в области [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], а также в руинах поселения внизу, поисковики извлекли остатки около девятисот рукописей, в основном фрагментарных, от III века до н. э. до I века н. э.: все книги еврейской Библии, кроме Книги Есфири, полный свиток Исайи, а также уставы, гимны и календари секты, ожидавшей конца времён.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$"
+ },
+ "gm_arch_site_dead_sea_scrolls_found": {
+  "en": "A Bedouin shepherd looking for a stray goat in $gm_arch_site_dead_sea_scrolls_place$, in [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], threw a stone into a cave and heard pottery break. Inside were tall jars holding rolls of leather, wrapped in linen and written in Hebrew, which a dealer in Bethlehem has bought for a few pounds.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$",
+  "ru": "Бедуин-пастух, искавший заблудившуюся козу на участке ($gm_arch_site_dead_sea_scrolls_place$) в области [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], бросил камень в пещеру и услышал звон разбитой керамики. Внутри стояли высокие кувшины со свитками из кожи, завёрнутыми в полотно и написанными на иврите; торговец из Вифлеема купил их за несколько фунтов.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$"
+ },
+ "gm_arch_site_dead_sea_scrolls_history": {
+  "en": "Muhammad edh-Dhib found the first cave in 1946 or 1947. Bedouin and archaeologists, Roland de Vaux among them, searched the other caves until 1956. The great Isaiah scroll is about a thousand years older than any manuscript of the Hebrew Bible known before. The large scrolls are in the Shrine of the Book in Jerusalem, and the Copper Scroll is in Amman.",
+  "ru": "Мухаммад эд-Диб нашёл первую пещеру в 1946 или 1947 году. Бедуины и археологи, среди них Ролан де Во, обыскивали остальные пещеры до 1956 года. Большой свиток Исайи примерно на тысячу лет древнее любой известной ранее рукописи еврейской Библии. Большие свитки хранятся в Храме книги в Иерусалиме, а Медный свиток — в Аммане."
+ },
+ "gm_arch_site_dead_sea_scrolls_place": {
+  "en": "the caves in the cliffs above Khirbet Qumran, on the northwest shore of the Dead Sea",
+  "ru": "пещеры в скалах над Хирбет-Кумраном на северо-западном берегу Мёртвого моря"
+ },
+ "gm_arch_site_deir_el_bahari_cache_dug": {
+  "en": "From $gm_arch_site_deir_el_bahari_cache_place$, in [SCOPE.sState('gm_arch_ev_deir_el_bahari_cache').GetName], a corridor opens into chambers crowded with coffins: some fifty royal and noble mummies, Seqenenre Tao, Ahmose, Thutmose III, Seti I and Ramesses II among them, hidden there by priests of the Twenty-first Dynasty to save them from tomb robbers, with their coffins, canopic jars and funerary goods.\\n\\n$gm_arch_history_lead$ $gm_arch_site_deir_el_bahari_cache_history$",
+  "ru": "С участка ($gm_arch_site_deir_el_bahari_cache_place$) в области [SCOPE.sState('gm_arch_ev_deir_el_bahari_cache').GetName] коридор ведёт в камеры, забитые гробами: около пятидесяти царских и знатных мумий, среди них Секененра Таа, Яхмос, Тутмос III, Сети I и Рамсес II, спрятанные жрецами XXI династии от грабителей гробниц, вместе с их гробами, канопами и погребальной утварью.\\n\\n$gm_arch_history_lead$ $gm_arch_site_deir_el_bahari_cache_history$"
+ },
+ "gm_arch_site_deir_el_bahari_cache_found": {
+  "en": "Royal scarabs, papyri and funerary figures of pharaohs have been turning up in the antiquities shops of Luxor, in [SCOPE.sState('gm_arch_ev_deir_el_bahari_cache').GetName], for years. Our inspectors have traced them to a family of the village of Gurna, who have at last led them to $gm_arch_site_deir_el_bahari_cache_place$.\\n\\n$gm_arch_history_lead$ $gm_arch_site_deir_el_bahari_cache_history$",
+  "ru": "Царские скарабеи, папирусы и погребальные статуэтки фараонов годами всплывали в лавках древностей Луксора в области [SCOPE.sState('gm_arch_ev_deir_el_bahari_cache').GetName]. Наши инспекторы проследили их до семьи из деревни Гурна, которая в конце концов привела их к месту: $gm_arch_site_deir_el_bahari_cache_place$.\\n\\n$gm_arch_history_lead$ $gm_arch_site_deir_el_bahari_cache_history$"
+ },
+ "gm_arch_site_deir_el_bahari_cache_history": {
+  "en": "The Abd el-Rassul brothers found the tomb, now called DB320, around 1871 and sold its contents for a decade. In 1881, after one brother confessed, Émile Brugsch of the Antiquities Service emptied it in a few days, and as the mummies went downriver to Cairo, villagers along the banks mourned them. They are in the National Museum of Egyptian Civilization.",
+  "ru": "Братья Абд эль-Рассул нашли гробницу, ныне называемую DB320, около 1871 года и десять лет продавали её содержимое. В 1881 году, после признания одного из братьев, Эмиль Бругш из Службы древностей опустошил её за несколько дней, и когда мумии плыли вниз по реке в Каир, жители прибрежных деревень оплакивали их. Сегодня они хранятся в Национальном музее египетской цивилизации."
+ },
+ "gm_arch_site_deir_el_bahari_cache_place": {
+  "en": "a shaft in the cliffs south of Hatshepsut's temple at Deir el-Bahari, on the west bank at Thebes",
+  "ru": "шахта в скалах к югу от храма Хатшепсут в Дейр-эль-Бахри, на западном берегу в Фивах"
+ },
+ "gm_arch_site_delphi_dug": {
+  "en": "With the houses of $gm_arch_site_delphi_place$ moved to a new site, the excavators have uncovered, in [SCOPE.sState('gm_arch_ev_delphi').GetName], the sanctuary of Apollo: the Sacred Way climbing past the treasuries of the cities, the Temple of Apollo where the Pythia prophesied, the theater and the stadium above it, and a life-sized bronze charioteer cast about 475 BC, with eyes of glass and stone and eyelashes of copper.\\n\\n$gm_arch_history_lead$ $gm_arch_site_delphi_history$",
+  "ru": "После того как дома с участка ($gm_arch_site_delphi_place$) перенесли на новое место, археологи раскопали в области [SCOPE.sState('gm_arch_ev_delphi').GetName] святилище Аполлона: Священную дорогу, поднимающуюся мимо сокровищниц городов, храм Аполлона, где пророчествовала Пифия, театр и стадион над ним, а также бронзового возничего в натуральную величину, отлитого около 475 года до н. э., с глазами из стекла и камня и медными ресницами.\\n\\n$gm_arch_history_lead$ $gm_arch_site_delphi_history$"
+ },
+ "gm_arch_site_delphi_found": {
+  "en": "The houses of $gm_arch_site_delphi_place$, in [SCOPE.sState('gm_arch_ev_delphi').GetName], stand on the sanctuary of Apollo at Delphi: they are built of the oracle's stones, and inscriptions turn up in their walls. Our scholars want the village moved, so that the sanctuary beneath it can be dug.\\n\\n$gm_arch_history_lead$ $gm_arch_site_delphi_history$",
+  "ru": "Дома на участке ($gm_arch_site_delphi_place$) в области [SCOPE.sState('gm_arch_ev_delphi').GetName] стоят на святилище Аполлона в Дельфах: они построены из камней оракула, а в их стенах встречаются надписи. Наши учёные хотят перенести деревню, чтобы раскопать святилище под ней.\\n\\n$gm_arch_history_lead$ $gm_arch_site_delphi_history$"
+ },
+ "gm_arch_site_delphi_history": {
+  "en": "The French School at Athens won the right to dig Delphi in 1891, paying to move the villagers, and its Great Excavation ran from 1892 to 1903 under Théophile Homolle; the Charioteer was found in 1896. The finds stayed in Greece, in the museum at Delphi.",
+  "ru": "Французская школа в Афинах получила право вести раскопки в Дельфах в 1891 году, заплатив за переселение жителей, и её Великие раскопки шли с 1892 по 1903 год под руководством Теофиля Омоля; Возничий был найден в 1896 году. Находки остались в Греции, в музее Дельф."
+ },
+ "gm_arch_site_delphi_place": {
+  "en": "the village of Kastri, on the slopes of Mount Parnassus",
+  "ru": "деревня Кастри на склонах горы Парнас"
+ },
+ "gm_arch_site_ephesus_dug": {
+  "en": "Following an inscription that named the gate the processions of Artemis passed through, the excavators have traced the sacred way across $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], and found the Temple of Artemis six meters under the silt: drums of its columns carved with figures, and the platform of the temple Croesus paid for and of the one built after Herostratus burned it. The theater, the baths and the marble streets of the city have been cleared around it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$",
+  "ru": "Следуя надписи, называвшей ворота, через которые проходили процессии Артемиды, археологи проследили священную дорогу через участок ($gm_arch_site_ephesus_place$) в области [SCOPE.sState('gm_arch_ev_ephesus').GetName] и нашли храм Артемиды в шести метрах под илом: барабаны его колонн с резными фигурами, фундамент храма, оплаченного Крезом, и храма, построенного после того, как Герострат сжёг прежний. Вокруг расчищены театр, бани и мраморные улицы города.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$"
+ },
+ "gm_arch_site_ephesus_found": {
+  "en": "Travelers know the theater and the broken walls of Ephesus, where Saint Paul preached against the silversmiths of Artemis, but no one has found the goddess's temple, one of the Seven Wonders of the world. Our scholars think it lies under $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], and an English engineer building the railway to Smyrna has offered to look for it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$",
+  "ru": "Путешественники знают театр и разрушенные стены Эфеса, где святой Павел проповедовал против серебряников Артемиды, но храма богини, одного из семи чудес света, никто не нашёл. Наши учёные думают, что он лежит под участком ($gm_arch_site_ephesus_place$) в области [SCOPE.sState('gm_arch_ev_ephesus').GetName], а английский инженер, строящий железную дорогу в Смирну, предложил поискать его.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$"
+ },
+ "gm_arch_site_ephesus_history": {
+  "en": "John Turtle Wood, an architect on the Smyrna and Aidin railway, searched for the temple from 1863 and found it on the last day of 1869; its carved column drums went to the British Museum. Austrian excavations cleared the city from 1895, and the facade of the Library of Celsus was set up again in the 1970s.",
+  "ru": "Джон Тёртл Вуд, архитектор Смирно-Айдынской железной дороги, искал храм с 1863 года и нашёл его в последний день 1869 года; резные барабаны колонн отправились в Британский музей. Австрийские раскопки расчищали город с 1895 года, а фасад библиотеки Цельса был восстановлен в 1970-х годах."
  },
  "gm_arch_site_ephesus_place": {
   "en": "the silted plain of the Cayster below Ayasuluk",
   "ru": "заиленная равнина Каистра под Аясулуком"
  },
+ "gm_arch_site_gobekli_tepe_dug": {
+  "en": "On $gm_arch_site_gobekli_tepe_place$, in [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName], the excavators have uncovered rings of T-shaped limestone pillars up to five meters tall, carved with foxes, boars, snakes, vultures and scorpions, some with arms and hands as if they were figures. They were raised about 9500 BC by hunters and gatherers, before farming, pottery or the wheel, and later filled in.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$",
+  "ru": "На участке ($gm_arch_site_gobekli_tepe_place$) в области [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName] археологи раскопали кольца Т-образных известняковых столпов высотой до пяти метров, украшенных резными лисами, кабанами, змеями, грифами и скорпионами, а у некоторых есть руки и кисти, как у фигур. Их воздвигли около 9500 года до н. э. охотники и собиратели ещё до земледелия, керамики и колеса, а позднее засыпали.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$"
+ },
+ "gm_arch_site_gobekli_tepe_found": {
+  "en": "A survey in the 1960s recorded $gm_arch_site_gobekli_tepe_place$, in [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName], as a medieval cemetery on a natural hill strewn with broken limestone slabs. Our archaeologists have looked again: the slabs are the tops of carved pillars, and the flint scattered across the hill is far older than any cemetery.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$",
+  "ru": "Обследование 1960-х годов записало участок ($gm_arch_site_gobekli_tepe_place$) в области [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName] как средневековое кладбище на естественном холме, усыпанном обломками известняковых плит. Наши археологи взглянули ещё раз: плиты — это верхушки резных столпов, а кремень, рассыпанный по холму, намного старше любого кладбища.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$"
+ },
+ "gm_arch_site_gobekli_tepe_history": {
+  "en": "Klaus Schmidt of the German Archaeological Institute recognized the site in 1994 and dug it from 1995 until Schmidt's death in 2014. It is about six thousand years older than Stonehenge, and has turned the old story around: here the temple may have come before the farm. It became a World Heritage Site in 2018.",
+  "ru": "Клаус Шмидт из Германского археологического института распознал памятник в 1994 году и вёл раскопки с 1995 года до своей смерти в 2014 году. Он примерно на шесть тысяч лет старше Стоунхенджа и перевернул прежнюю картину: здесь храм, возможно, возник раньше поля. В 2018 году он стал объектом Всемирного наследия."
+ },
+ "gm_arch_site_gobekli_tepe_place": {
+  "en": "the hill of Göbekli Tepe, on a ridge above the Harran plain near Şanlıurfa",
+  "ru": "холм Гёбекли-Тепе на гребне над равниной Харран близ Шанлыурфы"
+ },
+ "gm_arch_site_hampi_dug": {
+  "en": "The surveyors have mapped the ruins among $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName]: the Virupaksha temple still in worship, the Vitthala temple with its musical pillars and stone chariot, the royal enclosure with its great platform, the elephant stables, bazaars a kilometer long and the channels and tanks that watered the capital of Vijayanagara.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$",
+  "ru": "Топографы нанесли на карту руины среди участка ($gm_arch_site_hampi_place$) в области [SCOPE.sState('gm_arch_ev_hampi').GetName]: храм Вирупакши, где всё ещё молятся, храм Виттхалы с поющими колоннами и каменной колесницей, царский двор с большой платформой, слоновьи конюшни, базары длиной в километр, а также каналы и водоёмы, питавшие столицу Виджаянагара.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$"
+ },
+ "gm_arch_site_hampi_found": {
+  "en": "Among $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName], lie the ruins of a city once larger than any in India: Vijayanagara, capital of the last great Hindu empire of the south, sacked in 1565 and never lived in again. Our scholars want it surveyed.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$",
+  "ru": "Среди участка ($gm_arch_site_hampi_place$) в области [SCOPE.sState('gm_arch_ev_hampi').GetName] лежат руины города, некогда крупнее любого в Индии: Виджаянагара, столицы последней великой индуистской империи юга, разграбленной в 1565 году и больше не заселённой. Наши учёные хотят, чтобы его обследовали.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$"
+ },
+ "gm_arch_site_hampi_history": {
+  "en": "Colin Mackenzie mapped the ruins in 1800, and Alexander Greenlaw photographed them in 1856. The empire's army was routed at Talikota in 1565, and the city was looted for months after.",
+  "ru": "Колин Маккензи нанёс руины на карту в 1800 году, а Александр Гринло сфотографировал их в 1856 году. Армия империи была разбита при Таликоте в 1565 году, и город грабили ещё несколько месяцев."
+ },
  "gm_arch_site_hampi_place": {
   "en": "the boulder hills on the Tungabhadra around Hampi",
   "ru": "валунные холмы на Тунгабхадре вокруг Хампи"
+ },
+ "gm_arch_site_hattusa_dug": {
+  "en": "Above $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], the excavators have traced six kilometers of walls with the Lion Gate and the King's Gate, the great temple of the storm god and the royal citadel, where they have found an archive of thousands of clay tablets: the letters and treaties of the Hittite kings, their peace with Ramesses II among them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$",
+  "ru": "Над участком ($gm_arch_site_hattusa_place$) в области [SCOPE.sState('gm_arch_ev_hattusa').GetName] археологи проследили шесть километров стен с Львиными и Царскими воротами, большой храм бога бури и царскую цитадель, где нашли архив из тысяч глиняных табличек: письма и договоры хеттских царей, в том числе их мир с Рамсесом II.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$"
+ },
+ "gm_arch_site_hattusa_found": {
+  "en": "Travelers have drawn the walls and carved gates above $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], and the rock sanctuary nearby where gods march in procession. Our scholars now think it was the capital of the Hittites, a people the Bible names and the Egyptians fought.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$",
+  "ru": "Путешественники зарисовали стены и резные ворота над участком ($gm_arch_site_hattusa_place$) в области [SCOPE.sState('gm_arch_ev_hattusa').GetName] и скальное святилище неподалёку, где шествуют боги. Наши учёные теперь считают, что здесь была столица хеттов — народа, упомянутого в Библии, с которым воевали египтяне.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$"
+ },
+ "gm_arch_site_hattusa_history": {
+  "en": "Charles Texier saw the ruins in 1834. Hugo Winckler dug there from 1906 and found the royal archive, and Bedřich Hrozný deciphered the Hittite language from its tablets in 1915. The city was abandoned around 1180 BC.",
+  "ru": "Шарль Тексье увидел руины в 1834 году. Гуго Винклер раскапывал их с 1906 года и нашёл царский архив, а Бедржих Грозный расшифровал хеттский язык по его табличкам в 1915 году. Город был покинут около 1180 года до н. э."
  },
  "gm_arch_site_hattusa_place": {
   "en": "the hills above Boğazköy, east of Ankara",
   "ru": "холмы над Богазкёем к востоку от Анкары"
  },
+ "gm_arch_site_ishtar_gate_babylon_dug": {
+  "en": "Under $gm_arch_site_ishtar_gate_babylon_place$, in [SCOPE.sState('gm_arch_ev_ishtar_gate_babylon').GetName], the excavators have followed the Processional Way of Babylon to the Ishtar Gate: a double gateway of brick glazed in deep blue, with rows of yellow and white bulls and dragons in relief, its lower courses standing where the floods left them. Thousands of glazed fragments of the lions that lined the road lie in the debris.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ishtar_gate_babylon_history$",
+  "ru": "Под участком ($gm_arch_site_ishtar_gate_babylon_place$) в области [SCOPE.sState('gm_arch_ev_ishtar_gate_babylon').GetName] археологи проследили Дорогу процессий Вавилона до ворот Иштар: двойного проёма из кирпича в тёмно-синей глазури, с рельефными рядами жёлтых и белых быков и драконов; нижние ряды стоят там, где их оставили наводнения. Тысячи глазурованных фрагментов львов, что выстраивались вдоль дороги, лежат в обломках.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ishtar_gate_babylon_history$"
+ },
+ "gm_arch_site_ishtar_gate_babylon_found": {
+  "en": "Builders have quarried bricks from $gm_arch_site_ishtar_gate_babylon_place$, in [SCOPE.sState('gm_arch_ev_ishtar_gate_babylon').GetName], for centuries, and the bricks are stamped with the name of Nebuchadnezzar. Our scholars are sure the city of Babylon lies beneath, and that the fragments of blue glazed brick that come out of the Kasr belong to its great gate.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ishtar_gate_babylon_history$",
+  "ru": "Строители веками добывали кирпичи на участке ($gm_arch_site_ishtar_gate_babylon_place$) в области [SCOPE.sState('gm_arch_ev_ishtar_gate_babylon').GetName], а на кирпичах стоит имя Навуходоносора. Наши учёные уверены, что под ними лежит город Вавилон и что осколки синего глазурованного кирпича, выходящие из Каср, принадлежат его великим воротам.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ishtar_gate_babylon_history$"
+ },
+ "gm_arch_site_ishtar_gate_babylon_history": {
+  "en": "Robert Koldewey's expedition for the German Oriental Society dug Babylon from 1899 to 1917. The glazed fragments went to Berlin under a division of finds agreed with Iraq in 1926, and the gate and part of the Processional Way were rebuilt in the Pergamon Museum, first shown in 1930. The gate's unglazed lower courses still stand in Babylon.",
+  "ru": "Экспедиция Роберта Кольдевея для Германского восточного общества вела раскопки Вавилона с 1899 по 1917 год. Глазурованные фрагменты отправились в Берлин по разделу находок, согласованному с Ираком в 1926 году, а ворота и часть Дороги процессий были заново собраны в Пергамском музее и впервые показаны в 1930 году. Неглазурованные нижние ряды ворот по-прежнему стоят в Вавилоне."
+ },
+ "gm_arch_site_ishtar_gate_babylon_place": {
+  "en": "the mounds of Babil and Kasr by the Euphrates, near Hillah",
+  "ru": "курганы Бабиль и Каср у Евфрата близ Хиллы"
+ },
+ "gm_arch_site_khajuraho_dug": {
+  "en": "In $gm_arch_site_khajuraho_place$, in [SCOPE.sState('gm_arch_ev_khajuraho').GetName], the jungle has been cut back from more than twenty temples of the Chandela kings, built around 1000, their towers rising like mountain peaks and their walls carved with gods, nymphs, musicians, warriors and lovers in thousands of figures.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$",
+  "ru": "На участке ($gm_arch_site_khajuraho_place$) в области [SCOPE.sState('gm_arch_ev_khajuraho').GetName] джунгли отступили от более чем двадцати храмов царей Чандела, построенных около 1000 года; их башни вздымаются, как горные пики, а стены покрыты тысячами фигур богов, нимф, музыкантов, воинов и влюблённых.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$"
+ },
+ "gm_arch_site_khajuraho_found": {
+  "en": "Our surveyors in [SCOPE.sState('gm_arch_ev_khajuraho').GetName] report temples overgrown in $gm_arch_site_khajuraho_place$, carved from plinth to spire with gods and dancers. The people of the village still worship at one of them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$",
+  "ru": "Наши топографы в области [SCOPE.sState('gm_arch_ev_khajuraho').GetName] сообщают о заросших храмах на участке ($gm_arch_site_khajuraho_place$), покрытых от цоколя до шпиля резными богами и танцовщицами. Жители деревни до сих пор молятся в одном из них.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$"
+ },
+ "gm_arch_site_khajuraho_history": {
+  "en": "T. S. Burt, a British army engineer, was guided to the temples in 1838, and Alexander Cunningham surveyed them in the 1850s. Of some 85 temples, about 25 survive.",
+  "ru": "Т. С. Бёрт, британский армейский инженер, был приведён к храмам в 1838 году, а Александр Каннингем обследовал их в 1850-х годах. Из примерно 85 храмов уцелело около 25."
+ },
  "gm_arch_site_khajuraho_place": {
   "en": "the jungle around the village of Khajuraho",
   "ru": "джунгли вокруг деревни Каджурахо"
+ },
+ "gm_arch_site_lascaux_caves_dug": {
+  "en": "The surveyors have mapped $gm_arch_site_lascaux_caves_place$, in [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName]: chamber after chamber painted some seventeen thousand years ago with about six hundred animals, aurochs five meters long, horses, stags, ibex, and a wounded bison facing a man with a bird's head, and some fifteen hundred engravings, with the painters' lamps, pigments and flint tools still on the floor.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$",
+  "ru": "Топографы нанесли на карту участок ($gm_arch_site_lascaux_caves_place$) в области [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName]: зал за залом, расписанные около семнадцати тысяч лет назад примерно шестьюстами животных, туры длиной пять метров, лошади, олени, козероги и раненый бизон напротив человека с птичьей головой, а также около полутора тысяч гравировок; на полу всё ещё лежат лампы, пигменты и кремнёвые орудия художников.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$"
+ },
+ "gm_arch_site_lascaux_caves_found": {
+  "en": "Four teenagers from Montignac, in [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName], following their dog into a hole left by a fallen tree, have slid down into $gm_arch_site_lascaux_caves_place$. They went back with a lamp, and say the walls are covered with painted animals.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$",
+  "ru": "Четверо подростков из Монтиньяка в области [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName], последовав за собакой в яму, оставленную упавшим деревом, соскользнули на участок ($gm_arch_site_lascaux_caves_place$). Они вернулись с лампой и говорят, что стены покрыты нарисованными животными.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$"
+ },
+ "gm_arch_site_lascaux_caves_history": {
+  "en": "Marcel Ravidat and three friends found the cave in September 1940, and the Abbé Henri Breuil studied it. Opened to the public in 1948, it drew so many visitors that their breath brought algae and mold, and it was closed in 1963. Visitors now see copies: Lascaux II, opened in 1983, and Lascaux IV in 2016.",
+  "ru": "Марсель Равида и трое друзей нашли пещеру в сентябре 1940 года, а аббат Анри Брейль изучал её. Открытая для публики в 1948 году, она привлекла столько посетителей, что их дыхание принесло водоросли и плесень, и в 1963 году её закрыли. Теперь посетители видят копии: Ласко II, открытую в 1983 году, и Ласко IV в 2016 году."
+ },
+ "gm_arch_site_lascaux_caves_place": {
+  "en": "a cave in the hillside above Montignac, in the valley of the Vézère",
+  "ru": "пещера в склоне холма над Монтиньяком, в долине Везера"
+ },
+ "gm_arch_site_leptis_magna_dug": {
+  "en": "Clearing the sand from $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], the excavators have uncovered the city Septimius Severus rebuilt for his birthplace: a four-way arch carved with his triumphs, the Severan forum and basilica, a theater, the baths of Hadrian and a harbor with its quays and the base of its lighthouse, almost as they were left.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$",
+  "ru": "Расчищая песок на участке ($gm_arch_site_leptis_magna_place$) в области [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], археологи раскопали город, который Септимий Север перестроил для своей родины: четырёхсторонняя арка с рельефами его побед, форум и базилика Северов, театр, бани Адриана и гавань с причалами и основанием маяка, почти такие, какими их оставили.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$"
+ },
+ "gm_arch_site_leptis_magna_found": {
+  "en": "Sand has buried $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], almost to the tops of the columns, and for centuries travelers have carried off its marble: some of its columns stand at Versailles. Our scholars say a whole Roman city lies beneath, the home town of an emperor.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$",
+  "ru": "Песок почти до верхушек колонн засыпал участок ($gm_arch_site_leptis_magna_place$) в области [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], и столетиями путешественники увозили его мрамор: некоторые его колонны стоят в Версале. Наши учёные говорят, что под ним лежит целый римский город, родной город императора.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$"
+ },
+ "gm_arch_site_leptis_magna_history": {
+  "en": "The French consul Claude Le Maire took columns from the site for Louis XIV in the 1690s. Italian archaeologists dug it from 1920 under the colonial government, and most of the city now stands cleared; Septimius Severus was born there in 145.",
+  "ru": "Французский консул Клод Ле Мер вывез колонны с участка для Людовика XIV в 1690-х годах. Итальянские археологи вели там раскопки с 1920 года при колониальном правительстве, и теперь большая часть города расчищена; Септимий Север родился там в 145 году."
+ },
+ "gm_arch_site_leptis_magna_place": {
+  "en": "the dunes of the Libyan coast at the mouth of the Wadi Lebda",
+  "ru": "дюны ливийского побережья в устье вади Лебда"
+ },
+ "gm_arch_site_machu_picchu_dug": {
+  "en": "On $gm_arch_site_machu_picchu_place$, in [SCOPE.sState('gm_arch_ev_machu_picchu').GetName], the expedition has cut away the forest and laid bare a city of granite: temples, palaces and houses of fitted stone, terraces stepping down the mountain, fountains, and the Intihuatana, a carved stone for the sun. In its burial caves and middens lie pottery, bronze tools, ornaments and the bones of the people who lived there.\\n\\n$gm_arch_history_lead$ $gm_arch_site_machu_picchu_history$",
+  "ru": "На участке ($gm_arch_site_machu_picchu_place$) в области [SCOPE.sState('gm_arch_ev_machu_picchu').GetName] экспедиция вырубила лес и обнажила город из гранита: храмы, дворцы и дома из пригнанного камня, террасы, ступенями спускающиеся по горе, фонтаны и Интиуатану — резной камень для наблюдения за солнцем. В погребальных пещерах и мусорных кучах лежат керамика, бронзовые орудия, украшения и кости людей, которые там жили.\\n\\n$gm_arch_history_lead$ $gm_arch_site_machu_picchu_history$"
+ },
+ "gm_arch_site_machu_picchu_found": {
+  "en": "Muleteers and farmers of the Urubamba valley speak of old stone buildings far above the river. Our scholars, searching for the last refuges of the Inca, believe $gm_arch_site_machu_picchu_place$, in [SCOPE.sState('gm_arch_ev_machu_picchu').GetName], hides a royal city the Spaniards never found.\\n\\n$gm_arch_history_lead$ $gm_arch_site_machu_picchu_history$",
+  "ru": "Погонщики мулов и земледельцы долины Урубамба рассказывают о старых каменных постройках высоко над рекой. Наши учёные, ищущие последние убежища инков, полагают, что участок ($gm_arch_site_machu_picchu_place$) в области [SCOPE.sState('gm_arch_ev_machu_picchu').GetName] скрывает царский город, которого испанцы так и не нашли.\\n\\n$gm_arch_history_lead$ $gm_arch_site_machu_picchu_history$"
+ },
+ "gm_arch_site_machu_picchu_history": {
+  "en": "Built for the Inca emperor Pachacuti around 1450 and abandoned after the Spanish conquest, the city was known to local farmers. Hiram Bingham of Yale was guided there in 1911 by Melchor Arteaga and made it famous. Yale shipped thousands of artifacts to New Haven and returned them to Peru only in 2011 and 2012, after a long dispute.",
+  "ru": "Построенный для инкского императора Пачакути около 1450 года и покинутый после испанского завоевания, город был известен местным земледельцам. Хайрам Бингем из Йеля был приведён туда в 1911 году Мельчором Артеагой и прославил его. Йель отправил тысячи артефактов в Нью-Хейвен и вернул их Перу лишь в 2011 и 2012 годах после долгого спора."
+ },
+ "gm_arch_site_machu_picchu_place": {
+  "en": "a ridge high above the Urubamba gorge, beneath the peak of Huayna Picchu",
+  "ru": "хребет высоко над ущельем Урубамба, под вершиной Уайна-Пикчу"
+ },
+ "gm_arch_site_mawangdui_tombs_dug": {
+  "en": "Under $gm_arch_site_mawangdui_tombs_place$, in [SCOPE.sState('gm_arch_ev_mawangdui_tombs').GetName], the excavators have opened three Han tombs of the family of Li Cang, Marquis of Dai, sealed in charcoal and clay in the second century BC. In nested lacquer coffins lay the marquis's wife, Xin Zhui, the body so well kept that the joints still bend, with a painted silk banner of heaven, earth and the underworld, robes of gauze, lacquerware, food, and a library written on silk: the Laozi, the Book of Changes, medical recipes and maps.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mawangdui_tombs_history$",
+  "ru": "Под участком ($gm_arch_site_mawangdui_tombs_place$) в области [SCOPE.sState('gm_arch_ev_mawangdui_tombs').GetName] археологи вскрыли три гробницы эпохи Хань семьи Ли Цана, маркиза Дай, запечатанные углём и глиной во II веке до н. э. Во вложенных друг в друга лаковых гробах покоилась жена маркиза Синь Чжуй, тело которой сохранилось так хорошо, что суставы всё ещё сгибаются, с расписным шёлковым знаменем неба, земли и подземного мира, одеждами из газа, лаковой утварью, едой и библиотекой на шёлке: «Лао-цзы», «Книга перемен», медицинские рецепты и карты.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mawangdui_tombs_history$"
+ },
+ "gm_arch_site_mawangdui_tombs_found": {
+  "en": "Workers digging air-raid shelters for a military hospital in $gm_arch_site_mawangdui_tombs_place$, in [SCOPE.sState('gm_arch_ev_mawangdui_tombs').GetName], have hit a pocket of gas that burned blue when it was lit, and beneath it white clay and charcoal sealing a tomb.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mawangdui_tombs_history$",
+  "ru": "Рабочие, копавшие бомбоубежища для военного госпиталя на участке ($gm_arch_site_mawangdui_tombs_place$) в области [SCOPE.sState('gm_arch_ev_mawangdui_tombs').GetName], наткнулись на карман газа, горевший синим пламенем при поджоге, а под ним — белая глина и уголь, запечатывающие гробницу.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mawangdui_tombs_history$"
+ },
+ "gm_arch_site_mawangdui_tombs_history": {
+  "en": "The tombs were opened from 1972 to 1974. The autopsy of Xin Zhui found type A blood in the veins and melon seeds in the stomach; Xin Zhui died about 163 BC. The silk manuscripts include the oldest known copies of several classics and some of the oldest maps found in China. The finds are in the Hunan Museum.",
+  "ru": "Гробницы вскрывали с 1972 по 1974 год. Вскрытие Синь Чжуй показало кровь группы A в венах и семена дыни в желудке; Синь Чжуй умерла около 163 года до н. э. Среди шёлковых рукописей — древнейшие из известных списков нескольких классических трудов и одни из старейших карт, найденных в Китае. Находки хранятся в Музее провинции Хунань."
+ },
+ "gm_arch_site_mawangdui_tombs_place": {
+  "en": "two low hills at Mawangdui, on the eastern edge of Changsha",
+  "ru": "два низких холма в Мавандуе на восточной окраине Чанши"
+ },
+ "gm_arch_site_merida_theatre_dug": {
+  "en": "The excavators have dug out the theater the colony of Emerita Augusta built on $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName]: its tiers of seats for six thousand, its orchestra floored with marble, and the two stories of Corinthian columns of its stage front, with statues of emperors and gods in their niches, and the amphitheater beside it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$",
+  "ru": "Археологи раскопали театр, который колония Эмерита Августа построила на участке ($gm_arch_site_merida_theatre_place$) в области [SCOPE.sState('gm_arch_ev_merida_theatre').GetName]: ряды на шесть тысяч мест, орхестру с мраморным полом и двухъярусные коринфские колонны фасада сцены со статуями императоров и богов в нишах, а рядом амфитеатр.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$"
+ },
+ "gm_arch_site_merida_theatre_found": {
+  "en": "Above ground on $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName], only the top tiers of a Roman theater show, which the townspeople call the seven chairs. Our scholars say the rest of it, its stage and colonnades, lies buried beneath.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$",
+  "ru": "На участке ($gm_arch_site_merida_theatre_place$) в области [SCOPE.sState('gm_arch_ev_merida_theatre').GetName] над землёй видны лишь верхние ряды римского театра, которые горожане называют «семью стульями». Наши учёные говорят, что остальное, сцена и колоннады, лежит под землёй.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$"
+ },
+ "gm_arch_site_merida_theatre_history": {
+  "en": "José Ramón Mélida began the excavation in 1910, and the stage front was raised again in the 1960s. Marcus Agrippa paid for the theater around 16 BC, and the classical theater festival held in it began in 1933.",
+  "ru": "Хосе Рамон Мелида начал раскопки в 1910 году, а фасад сцены был воздвигнут заново в 1960-х годах. Марк Агриппа оплатил театр около 16 года до н. э., а фестиваль классического театра, проходящий в нём, начался в 1933 году."
+ },
+ "gm_arch_site_merida_theatre_place": {
+  "en": "the slope of the San Albín hill in Mérida",
+  "ru": "склон холма Сан-Альбин в Мериде"
+ },
+ "gm_arch_site_mogao_caves_dug": {
+  "en": "The sealed chamber at $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], held some fifty thousand manuscripts in Chinese, Tibetan, Sanskrit, Uighur and Hebrew, with paintings on silk and banners: sutras, contracts, letters and calendars put away around 1000, and a printed Diamond Sutra dated 868, the oldest dated printed book.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$",
+  "ru": "В запечатанной камере на участке ($gm_arch_site_mogao_caves_place$) в области [SCOPE.sState('gm_arch_ev_mogao_caves').GetName] хранилось около пятидесяти тысяч рукописей на китайском, тибетском, санскрите, уйгурском и иврите, с картинами на шёлке и знамёнами: сутры, договоры, письма и календари, убранные около 1000 года, и печатная Алмазная сутра, датированная 868 годом, древнейшая датированная печатная книга.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$"
+ },
+ "gm_arch_site_mogao_caves_found": {
+  "en": "A Taoist priest keeping the caves at $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], has broken through a painted wall and found a hidden room stacked to the ceiling with scrolls. He has shown a few to the local officials, who have told him to seal it again.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$",
+  "ru": "Даосский жрец, хранитель пещер на участке ($gm_arch_site_mogao_caves_place$) в области [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], пробил расписную стену и нашёл потайную комнату, набитую свитками до потолка. Он показал несколько местным чиновникам, которые велели ему снова её замуровать.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$"
+ },
+ "gm_arch_site_mogao_caves_history": {
+  "en": "Wang Yuanlu found the cave in 1900. Aurel Stein bought thousands of its scrolls from him in 1907 for the British Museum, and Paul Pelliot and Japanese and Russian expeditions followed; what was left went to Beijing in 1910.",
+  "ru": "Ван Юаньлу нашёл пещеру в 1900 году. Аурел Стейн купил у него тысячи свитков в 1907 году для Британского музея, затем последовали Поль Пеллио и японские и русские экспедиции; всё оставшееся отправили в Пекин в 1910 году."
  },
  "gm_arch_site_mogao_caves_place": {
   "en": "the cliff of the Mogao grottoes near Dunhuang",
   "ru": "утёс с гротами Могао близ Дуньхуана"
  },
+ "gm_arch_site_mohenjo_daro_dug": {
+  "en": "Around and beneath $gm_arch_site_mohenjo_daro_place$, in [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName], the excavators have uncovered a city laid out on a grid about 2500 BC: streets with covered drains, houses of baked brick with wells and bathrooms, a granary, and a great bath on the citadel. They have found carved seals by the hundred, a bronze statuette of a dancing girl, and a bearded figure in steatite they call the Priest-King.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$",
+  "ru": "Вокруг и под участком ($gm_arch_site_mohenjo_daro_place$) в области [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName] археологи раскопали город с прямоугольной планировкой около 2500 года до н. э.: улицы с крытыми стоками, дома из обожжённого кирпича с колодцами и ванными, зернохранилище и большая купальня на цитадели. Найдены сотни резных печатей, бронзовая статуэтка танцовщицы и бородатая фигура из стеатита, прозванная Жрецом-царём.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$"
+ },
+ "gm_arch_site_mohenjo_daro_found": {
+  "en": "Brick robbers working $gm_arch_site_mohenjo_daro_place$, in [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName], have brought out baked bricks and small square seals carved with animals and with a script nobody can read. The surveyors took the site for a Buddhist monastery a few centuries old; the seals look far older.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$",
+  "ru": "Грабители кирпича, работающие на участке ($gm_arch_site_mohenjo_daro_place$) в области [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName], вынесли обожжённые кирпичи и небольшие квадратные печати с изображениями животных и письменами, которых никто не может прочесть. Топографы приняли памятник за буддийский монастырь возрастом в несколько веков; печати выглядят гораздо древнее.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$"
+ },
+ "gm_arch_site_mohenjo_daro_history": {
+  "en": "R. D. Banerji of the Archaeological Survey of India dug the mound in 1922, while Daya Ram Sahni dug Harappa, and in 1924 John Marshall announced a civilization older than any then known in India. Its script is still undeciphered. The Priest-King is in Karachi and the Dancing Girl in New Delhi, divided between Pakistan and India after 1947.",
+  "ru": "Р. Д. Банерджи из Археологической службы Индии раскопал холм в 1922 году, пока Дая Рам Сахни копал Хараппу, а в 1924 году Джон Маршалл объявил о цивилизации, более древней, чем любая тогда известная в Индии. Её письменность до сих пор не расшифрована. Жрец-царь находится в Карачи, а Танцовщица — в Нью-Дели: после 1947 года их разделили между Пакистаном и Индией."
+ },
+ "gm_arch_site_mohenjo_daro_place": {
+  "en": "a mound by the Indus near Larkana, crowned by a ruined Buddhist stupa",
+  "ru": "холм у Инда близ Ларкана, увенчанный руинами буддийской ступы"
+ },
+ "gm_arch_site_monte_alban_dug": {
+  "en": "On $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], the excavators have cleared the Great Plaza with its palaces, its ball court and the carved stones of the Danzantes, and opened a tomb the Mixtecs reused, Tomb 7, filled with jewelry of gold, silver, turquoise and rock crystal, carved jaguar bones and pearls: the richest burial yet found in the Americas.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$",
+  "ru": "На участке ($gm_arch_site_monte_alban_place$) в области [SCOPE.sState('gm_arch_ev_monte_alban').GetName] археологи расчистили Большую площадь с дворцами, площадкой для игры в мяч и резными камнями Данцантес и вскрыли гробницу, повторно использованную миштеками, Гробницу 7, полную украшений из золота, серебра, бирюзы и горного хрусталя, резных костей ягуара и жемчуга: самое богатое погребение, найденное в Америке к этому времени.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$"
+ },
+ "gm_arch_site_monte_alban_found": {
+  "en": "Mounds and terraces cover $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], where the Zapotec lords ruled for a thousand years before the Mixtecs reused their tombs. Our scholars believe some of the tombs are still sealed.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$",
+  "ru": "Курганы и террасы покрывают участок ($gm_arch_site_monte_alban_place$) в области [SCOPE.sState('gm_arch_ev_monte_alban').GetName], где сапотекские правители правили тысячу лет, прежде чем миштеки повторно использовали их гробницы. Наши учёные полагают, что некоторые гробницы всё ещё запечатаны.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$"
+ },
+ "gm_arch_site_monte_alban_history": {
+  "en": "Alfonso Caso began digging Monte Albán in 1931 and opened Tomb 7 in January 1932; its treasure is in the museum of Oaxaca. The city was founded around 500 BC and was the Zapotec capital until about 800.",
+  "ru": "Альфонсо Касо начал раскопки Монте-Альбана в 1931 году и вскрыл Гробницу 7 в январе 1932 года; её сокровища хранятся в музее Оахаки. Город основан около 500 года до н. э. и был столицей сапотеков примерно до 800 года."
+ },
  "gm_arch_site_monte_alban_place": {
   "en": "the leveled mountaintop above the valley of Oaxaca",
   "ru": "срезанная вершина горы над долиной Оахаки"
+ },
+ "gm_arch_site_mount_nemrut_dug": {
+  "en": "On $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], the expedition has found a mound of broken stone fifty meters high, and on terraces east and west of it the colossal seated statues of King Antiochus I among Zeus, Apollo, Heracles and the goddess of Commagene, their heads, each two meters tall, fallen at their feet beside reliefs of his Persian and Greek ancestors.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$",
+  "ru": "На участке ($gm_arch_site_mount_nemrut_place$) в области [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName] экспедиция нашла курган из битого камня высотой пятьдесят метров, а на террасах к востоку и западу от него — колоссальные сидящие статуи царя Антиоха I среди Зевса, Аполлона, Геракла и богини Коммагены; их головы, каждая высотой два метра, упали к их ногам рядом с рельефами его персидских и греческих предков.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$"
+ },
+ "gm_arch_site_mount_nemrut_found": {
+  "en": "Shepherds speak of stone giants on $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], and an engineer surveying roads has climbed up to see them. Our scholars place there the tomb of a king of Commagene, a small kingdom between Rome and Persia.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$",
+  "ru": "Пастухи рассказывают о каменных великанах на участке ($gm_arch_site_mount_nemrut_place$) в области [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], и инженер, обследовавший дороги, поднялся посмотреть на них. Наши учёные помещают здесь гробницу царя Коммагены, небольшого царства между Римом и Персией.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$"
+ },
+ "gm_arch_site_mount_nemrut_history": {
+  "en": "The German engineer Karl Sester came on the statues in 1881, and Osman Hamdi Bey surveyed them in 1883. Antiochus I built the sanctuary around 62 BC; his tomb has never been found inside the mound.",
+  "ru": "Немецкий инженер Карл Зестер наткнулся на статуи в 1881 году, а Осман Хамди-бей обследовал их в 1883 году. Антиох I построил святилище около 62 года до н. э.; его гробницу внутри кургана так и не нашли."
  },
  "gm_arch_site_mount_nemrut_place": {
   "en": "the summit of Mount Nemrut in the Taurus",
   "ru": "вершина горы Немрут в Тавре"
  },
+ "gm_arch_site_mycenae_grave_circle_dug": {
+  "en": "Inside the walls of $gm_arch_site_mycenae_grave_circle_place$, in [SCOPE.sState('gm_arch_ev_mycenae_grave_circle').GetName], just beyond the Lion Gate and beneath a ring of upright slabs, the excavators have opened five deep shaft graves holding nineteen bodies and a great weight of gold: masks beaten from sheet gold, cups, bronze daggers inlaid with hunting scenes, diadems, and hundreds of gold discs once sewn on burial clothes. The finest mask, bearded and calm, the diggers call the Mask of Agamemnon.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mycenae_grave_circle_history$",
+  "ru": "Внутри стен участка ($gm_arch_site_mycenae_grave_circle_place$) в области [SCOPE.sState('gm_arch_ev_mycenae_grave_circle').GetName], сразу за Львиными воротами и под кольцом вертикальных плит, археологи вскрыли пять глубоких шахтных могил с девятнадцатью телами и огромным количеством золота: маски, выбитые из листового золота, чаши, бронзовые кинжалы с инкрустированными сценами охоты, диадемы и сотни золотых дисков, некогда нашитых на погребальные одежды. Лучшую маску, бородатую и спокойную, раскопщики называют Маской Агамемнона.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mycenae_grave_circle_history$"
+ },
+ "gm_arch_site_mycenae_grave_circle_found": {
+  "en": "Pausanias wrote that Agamemnon and the companions murdered with the king lay buried inside the walls of Mycenae. Our scholars trust Pausanias and point to $gm_arch_site_mycenae_grave_circle_place$, in [SCOPE.sState('gm_arch_ev_mycenae_grave_circle').GetName], where the Lion Gate still stands half buried in its own rubble.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mycenae_grave_circle_history$",
+  "ru": "Павсаний писал, что Агамемнон и убитые вместе с царём спутники погребены внутри стен Микен. Наши учёные доверяют Павсанию и указывают на участок ($gm_arch_site_mycenae_grave_circle_place$) в области [SCOPE.sState('gm_arch_ev_mycenae_grave_circle').GetName], где Львиные ворота всё ещё стоят, наполовину погребённые в собственных обломках.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mycenae_grave_circle_history$"
+ },
+ "gm_arch_site_mycenae_grave_circle_history": {
+  "en": "Heinrich Schliemann dug Grave Circle A in 1876 and is said to have claimed to have gazed on the face of Agamemnon. The graves are in fact some three centuries older than any Trojan War, from about 1550 BC. The finds are in the National Archaeological Museum in Athens. A second circle, Grave Circle B, was found outside the walls in 1951.",
+  "ru": "Генрих Шлиман раскопал Круг А могил в 1876 году и, как говорят, заявил, что смотрел в лицо Агамемнону. На деле могилы примерно на три века старше любой Троянской войны, они относятся примерно к 1550 году до н. э. Находки хранятся в Национальном археологическом музее в Афинах. Второй круг, Круг Б могил, нашли за стенами в 1951 году."
+ },
+ "gm_arch_site_mycenae_grave_circle_place": {
+  "en": "the citadel of Mycenae, in the hills above the plain of Argos",
+  "ru": "цитадель Микен в холмах над равниной Аргоса"
+ },
+ "gm_arch_site_nag_hammadi_library_dug": {
+  "en": "From the farmers who dug at $gm_arch_site_nag_hammadi_library_place$, in [SCOPE.sState('gm_arch_ev_nag_hammadi_library').GetName], and the dealers they sold to, our scholars have gathered thirteen leather-bound papyrus books of the fourth century holding some fifty texts in Coptic: Gnostic gospels, among them the Gospel of Thomas and the Gospel of Philip, apocalypses and treatises, and a piece of Plato's Republic, books the early Church had condemned and someone buried to save.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nag_hammadi_library_history$",
+  "ru": "От земледельцев, копавших на участке ($gm_arch_site_nag_hammadi_library_place$) в области [SCOPE.sState('gm_arch_ev_nag_hammadi_library').GetName], и торговцев, которым те продавали, наши учёные собрали тринадцать папирусных книг IV века в кожаных переплётах, содержащих около пятидесяти текстов на коптском: гностические евангелия, в том числе Евангелие от Фомы и Евангелие от Филиппа, апокалипсисы и трактаты, а также фрагмент «Государства» Платона — книги, которые ранняя церковь осудила и которые кто-то закопал, чтобы спасти.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nag_hammadi_library_history$"
+ },
+ "gm_arch_site_nag_hammadi_library_found": {
+  "en": "Farmers digging for nitrate fertilizer at $gm_arch_site_nag_hammadi_library_place$, in [SCOPE.sState('gm_arch_ev_nag_hammadi_library').GetName], have unearthed a sealed red clay jar. Fearing a jinn and hoping for gold, they broke it open and found old books bound in leather; some have already been sold, and pages of one were burned in a kitchen oven.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nag_hammadi_library_history$",
+  "ru": "Земледельцы, копавшие нитратное удобрение на участке ($gm_arch_site_nag_hammadi_library_place$) в области [SCOPE.sState('gm_arch_ev_nag_hammadi_library').GetName], откопали запечатанный кувшин из красной глины. Боясь джинна и надеясь на золото, они разбили его и нашли старые книги в кожаных переплётах; часть уже продана, а страницы одной сожгли в кухонной печи.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nag_hammadi_library_history$"
+ },
+ "gm_arch_site_nag_hammadi_library_history": {
+  "en": "Muhammad Ali al-Samman and brothers found the jar in December 1945. The books passed through dealers, and one reached the Jung Institute in Zurich, before nearly all were gathered in the Coptic Museum in Cairo. A facsimile edition published from 1972 to 1977 made the texts available, and they changed the study of early Christianity.",
+  "ru": "Мухаммад Али ас-Самман с братьями нашли кувшин в декабре 1945 года. Книги ходили по рукам торговцев, и одна попала в Институт Юнга в Цюрихе, прежде чем почти все были собраны в Коптском музее в Каире. Факсимильное издание, выходившее с 1972 по 1977 год, сделало тексты доступными и изменило изучение раннего христианства."
+ },
+ "gm_arch_site_nag_hammadi_library_place": {
+  "en": "the foot of the Jabal al-Tarif cliffs near Nag Hammadi",
+  "ru": "подножие скал Джебель-эт-Тариф близ Наг-Хаммади"
+ },
+ "gm_arch_site_nineveh_library_dug": {
+  "en": "The excavators have tunneled into $gm_arch_site_nineveh_library_place$, in [SCOPE.sState('gm_arch_ev_nineveh_library').GetName], and found the palaces of Sennacherib and Ashurbanipal: room after room of carved reliefs of sieges, lion hunts and deportations, gateways guarded by winged bulls, and in the archive rooms tens of thousands of clay tablets in cuneiform, the library of Ashurbanipal, with the Epic of Gilgamesh among them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nineveh_library_history$",
+  "ru": "Археологи прорыли туннели в участок ($gm_arch_site_nineveh_library_place$) в области [SCOPE.sState('gm_arch_ev_nineveh_library').GetName] и нашли дворцы Синаххериба и Ашшурбанипала: зал за залом с резными рельефами осад, охоты на львов и депортаций, ворота, охраняемые крылатыми быками, а в архивных помещениях — десятки тысяч клинописных глиняных табличек, библиотеку Ашшурбанипала, среди которых «Эпос о Гильгамеше».\\n\\n$gm_arch_history_lead$ $gm_arch_site_nineveh_library_history$"
+ },
+ "gm_arch_site_nineveh_library_found": {
+  "en": "Our scholars have read the Bible and the classical historians against the map, and they place Nineveh, the capital of the Assyrian kings, under $gm_arch_site_nineveh_library_place$, in [SCOPE.sState('gm_arch_ev_nineveh_library').GetName]. The villagers who dig there for building stone turn up carved slabs, and beneath them, the scholars believe, lie palaces.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nineveh_library_history$",
+  "ru": "Наши учёные сверили Библию и античных историков с картой и помещают Ниневию, столицу ассирийских царей, под участком ($gm_arch_site_nineveh_library_place$) в области [SCOPE.sState('gm_arch_ev_nineveh_library').GetName]. Селяне, копающие там строительный камень, находят резные плиты, а под ними, по мнению учёных, лежат дворцы.\\n\\n$gm_arch_history_lead$ $gm_arch_site_nineveh_library_history$"
+ },
+ "gm_arch_site_nineveh_library_history": {
+  "en": "Paul-Émile Botta, the French consul at Mosul, dug at Kuyunjik in 1842 before moving to Khorsabad. Austen Henry Layard tunneled into Sennacherib's palace from 1847, and Hormuzd Rassam found Ashurbanipal's North Palace in 1853. The reliefs and tablets went to the British Museum, where in 1872 George Smith read the story of a great flood on one of them.",
+  "ru": "Поль-Эмиль Ботта, французский консул в Мосуле, вёл раскопки в Куюнджике в 1842 году, а затем перебрался в Хорсабад. Остин Генри Лэйард прорывал туннели в дворец Синаххериба с 1847 года, а Хормузд Рассам нашёл Северный дворец Ашшурбанипала в 1853 году. Рельефы и таблички попали в Британский музей, где в 1872 году Джордж Смит прочёл на одной из них рассказ о великом потопе."
+ },
+ "gm_arch_site_nineveh_library_place": {
+  "en": "the mounds of Kuyunjik and Nebi Yunus on the east bank of the Tigris",
+  "ru": "курганы Куюнджик и Неби-Юнус на восточном берегу Тигра"
+ },
+ "gm_arch_site_olympia_dug": {
+  "en": "Out of the silt of $gm_arch_site_olympia_place$, in [SCOPE.sState('gm_arch_ev_olympia').GetName], the excavators have uncovered the sanctuary of Zeus: the foundations of the god's temple and the sculptures of its pediments, the Temple of Hera, the treasuries of the Greek cities, the tunnel to the stadium and the workshop of Pheidias, and in the ruins of the Temple of Hera the marble Hermes carrying the infant Dionysus that Pausanias said was by Praxiteles.\\n\\n$gm_arch_history_lead$ $gm_arch_site_olympia_history$",
+  "ru": "Из ила на участке ($gm_arch_site_olympia_place$) в области [SCOPE.sState('gm_arch_ev_olympia').GetName] археологи извлекли святилище Зевса: фундаменты храма бога и скульптуры его фронтонов, храм Геры, сокровищницы греческих городов, туннель к стадиону и мастерскую Фидия, а в руинах храма Геры — мраморного Гермеса с младенцем Дионисом, которого, по словам Павсания, создал Пракситель.\\n\\n$gm_arch_history_lead$ $gm_arch_site_olympia_history$"
+ },
+ "gm_arch_site_olympia_found": {
+  "en": "Pausanias described the sanctuary of Zeus at Olympia, where the Games were held for a thousand years, statue by statue. Floods and landslides have buried it under meters of silt, but our scholars place it in $gm_arch_site_olympia_place$, in [SCOPE.sState('gm_arch_ev_olympia').GetName], and French surveyors have already found the floor of its temple.\\n\\n$gm_arch_history_lead$ $gm_arch_site_olympia_history$",
+  "ru": "Павсаний описал святилище Зевса в Олимпии, где тысячу лет проводились Игры, статую за статуей. Наводнения и оползни погребли его под метрами ила, но наши учёные помещают его на участке ($gm_arch_site_olympia_place$) в области [SCOPE.sState('gm_arch_ev_olympia').GetName], а французские топографы уже нашли пол его храма.\\n\\n$gm_arch_history_lead$ $gm_arch_site_olympia_history$"
+ },
+ "gm_arch_site_olympia_history": {
+  "en": "The French Expédition scientifique de Morée found the Temple of Zeus in 1829. The German excavation under Ernst Curtius from 1875 to 1881 was the first to agree with Greece that every find would stay in the country, a model for many after it; the Hermes was found in 1877. The Olympic flame is lit at the Temple of Hera for every modern Games.",
+  "ru": "Французская научная экспедиция в Морею нашла храм Зевса в 1829 году. Немецкие раскопки под руководством Эрнста Курциуса с 1875 по 1881 год первыми согласились с Грецией, что каждая находка останется в стране, — образец для многих последующих; Гермес найден в 1877 году. Олимпийский огонь зажигают у храма Геры для каждых современных Игр."
+ },
+ "gm_arch_site_olympia_place": {
+  "en": "the valley of the Alpheios below the hill of Kronos",
+  "ru": "долина Алфея под холмом Кроноса"
+ },
+ "gm_arch_site_oseberg_ship_dug": {
+  "en": "Under the turf and blue clay of $gm_arch_site_oseberg_ship_place$, in [SCOPE.sState('gm_arch_ev_oseberg_ship').GetName], the excavators have laid bare a Viking ship of oak twenty-one meters long, its prow and stern carved with interlaced beasts, buried with two women, a burial chamber, a cart, sledges, beds, tapestries and the bones of horses and dogs. Grave robbers took the jewelry long ago; the wood they left is the finest carving of the Viking age.\\n\\n$gm_arch_history_lead$ $gm_arch_site_oseberg_ship_history$",
+  "ru": "Под дёрном и синей глиной на участке ($gm_arch_site_oseberg_ship_place$) в области [SCOPE.sState('gm_arch_ev_oseberg_ship').GetName] археологи обнажили дубовый корабль викингов длиной двадцать один метр, с носом и кормой в резных переплетённых зверях, захороненный с двумя женщинами, погребальной камерой, повозкой, санями, кроватями, гобеленами и костями лошадей и собак. Грабители давно унесли украшения; оставленное ими дерево — лучшая резьба эпохи викингов.\\n\\n$gm_arch_history_lead$ $gm_arch_site_oseberg_ship_history$"
+ },
+ "gm_arch_site_oseberg_ship_found": {
+  "en": "A farmer digging into $gm_arch_site_oseberg_ship_place$, in [SCOPE.sState('gm_arch_ev_oseberg_ship').GetName], has struck carved timbers. The blue clay and turf have kept them sound, and the antiquaries of the university say they belong to a ship.\\n\\n$gm_arch_history_lead$ $gm_arch_site_oseberg_ship_history$",
+  "ru": "Земледелец, копавший участок ($gm_arch_site_oseberg_ship_place$) в области [SCOPE.sState('gm_arch_ev_oseberg_ship').GetName], наткнулся на резные брёвна. Синяя глина и дёрн сохранили их в целости, и университетские антиквары говорят, что они принадлежат кораблю.\\n\\n$gm_arch_history_lead$ $gm_arch_site_oseberg_ship_history$"
+ },
+ "gm_arch_site_oseberg_ship_history": {
+  "en": "Knut Rom, who farmed Oseberg, found the ship in 1903, and Gabriel Gustafson of the University of Kristiania dug it in 1904. Tree rings date the burial to 834. The ship, cart and sledges took two decades to restore and are shown at Bygdøy in Oslo.",
+  "ru": "Кнут Ром, державший хутор Осеберг, нашёл корабль в 1903 году, а Габриэль Густафсон из Университета Кристиании раскопал его в 1904 году. Годичные кольца датируют погребение 834 годом. Реставрация корабля, повозки и саней заняла два десятилетия; их показывают на Бюгдёй в Осло."
+ },
+ "gm_arch_site_oseberg_ship_place": {
+  "en": "the great burial mound on the Oseberg farm near Tønsberg",
+  "ru": "большой погребальный курган на хуторе Осеберг близ Тёнсберга"
+ },
+ "gm_arch_site_otzi_the_iceman_dug": {
+  "en": "From $gm_arch_site_otzi_the_iceman_place$, on the edge of [SCOPE.sState('gm_arch_ev_otzi_the_iceman').GetName], the recovery team has freed a man who died about 3300 BC, mummified by the cold, with clothes of hide and grass, a bearskin cap, a copper axe hafted in yew, an unfinished longbow, a quiver of arrows, a flint dagger, birch-bark cases for embers and a kit of medicinal fungi. An arrowhead lodged in the left shoulder shows how the Iceman died.\\n\\n$gm_arch_history_lead$ $gm_arch_site_otzi_the_iceman_history$",
+  "ru": "С участка ($gm_arch_site_otzi_the_iceman_place$) на границе области [SCOPE.sState('gm_arch_ev_otzi_the_iceman').GetName] группа спасателей освободила человека, умершего около 3300 года до н. э., мумифицированного холодом, в одежде из шкур и травы, меховой шапке из медвежьей шкуры, с медным топором на тисовой рукояти, неоконченным длинным луком, колчаном со стрелами, кремнёвым кинжалом, берестяными футлярами для углей и набором лекарственных грибов. Наконечник стрелы в левом плече показывает, как умер Ледяной человек.\\n\\n$gm_arch_history_lead$ $gm_arch_site_otzi_the_iceman_history$"
+ },
+ "gm_arch_site_otzi_the_iceman_found": {
+  "en": "Two hikers coming down from the Finail peak have found a body melting out of the ice in $gm_arch_site_otzi_the_iceman_place$, on the edge of [SCOPE.sState('gm_arch_ev_otzi_the_iceman').GetName]. The police took it for a lost climber, but the axe beside it has a copper blade.\\n\\n$gm_arch_history_lead$ $gm_arch_site_otzi_the_iceman_history$",
+  "ru": "Двое туристов, спускавшихся с пика Финайль, нашли тело, таявшее из льда на участке ($gm_arch_site_otzi_the_iceman_place$) на границе области [SCOPE.sState('gm_arch_ev_otzi_the_iceman').GetName]. Полиция приняла его за пропавшего альпиниста, но топор рядом с ним имеет медное лезвие.\\n\\n$gm_arch_history_lead$ $gm_arch_site_otzi_the_iceman_history$"
+ },
+ "gm_arch_site_otzi_the_iceman_history": {
+  "en": "Erika and Helmut Simon found the body on 19 September 1991, a few meters inside Italy; the first, careless recovery broke its hip with a pneumatic drill. Austria and Italy settled where the body lay, and since 1998 the Iceman has lain in a cold cell in the South Tyrol Museum of Archaeology in Bolzano. The arrowhead was found in 2001; the body carries sixty-one tattoos.",
+  "ru": "Эрика и Гельмут Симон нашли тело 19 сентября 1991 года в нескольких метрах за итальянской границей; при первой, небрежной попытке извлечения пневматическим буром ему сломали бедро. Австрия и Италия установили, где лежало тело, и с 1998 года Ледяной человек покоится в холодной камере Музея археологии Южного Тироля в Больцано. Наконечник стрелы нашли в 2001 году; на теле шестьдесят одна татуировка."
+ },
+ "gm_arch_site_otzi_the_iceman_place": {
+  "en": "a hollow in the rock at the Tisenjoch pass, high in the Ötztal Alps",
+  "ru": "углубление в скале на перевале Тизенйох высоко в Эцтальских Альпах"
+ },
+ "gm_arch_site_palace_of_knossos_dug": {
+  "en": "On $gm_arch_site_palace_of_knossos_place$, in [SCOPE.sState('gm_arch_ev_palace_of_knossos').GetName], the excavators have uncovered a palace of some thirteen hundred rooms around a great court: storerooms of jars as tall as a man, light wells, staircases, a stone throne, drains and bathrooms, and walls painted with bull-leapers, lilies and dolphins. Thousands of clay tablets in two unknown scripts lie where a fire baked them hard.\\n\\n$gm_arch_history_lead$ $gm_arch_site_palace_of_knossos_history$",
+  "ru": "На участке ($gm_arch_site_palace_of_knossos_place$) в области [SCOPE.sState('gm_arch_ev_palace_of_knossos').GetName] археологи раскопали дворец из примерно тринадцати сотен комнат вокруг большого двора: кладовые с кувшинами ростом с человека, световые колодцы, лестницы, каменный трон, стоки и ванные, а также стены с росписью прыгунов через быков, лилий и дельфинов. Тысячи глиняных табличек на двух неизвестных письменностях лежат там, где пожар обжёг их до твёрдости.\\n\\n$gm_arch_history_lead$ $gm_arch_site_palace_of_knossos_history$"
+ },
+ "gm_arch_site_palace_of_knossos_found": {
+  "en": "A merchant of Heraklion, Minos Kalokairinos, dug trial trenches on $gm_arch_site_palace_of_knossos_place$, in [SCOPE.sState('gm_arch_ev_palace_of_knossos').GetName], and found storerooms full of great clay jars before the Ottoman authorities stopped the work. Our scholars believe a palace older than Homer's heroes lies under the olive groves, perhaps the labyrinth of the legendary King Minos.\\n\\n$gm_arch_history_lead$ $gm_arch_site_palace_of_knossos_history$",
+  "ru": "Торговец из Ираклиона Минос Калокайринос заложил пробные траншеи на участке ($gm_arch_site_palace_of_knossos_place$) в области [SCOPE.sState('gm_arch_ev_palace_of_knossos').GetName] и нашёл кладовые, полные больших глиняных кувшинов, пока османские власти не остановили работы. Наши учёные полагают, что под оливковыми рощами лежит дворец, более древний, чем герои Гомера, возможно, лабиринт легендарного царя Миноса.\\n\\n$gm_arch_history_lead$ $gm_arch_site_palace_of_knossos_history$"
+ },
+ "gm_arch_site_palace_of_knossos_history": {
+  "en": "Arthur Evans bought the site and dug it from 1900, naming the civilization Minoan after the legendary king. Evans rebuilt parts of the palace in reinforced concrete and restored frescoes from fragments, which still divides archaeologists. One of the scripts, Linear B, was deciphered by Michael Ventris in 1952 as an early form of Greek; the other, Linear A, is still unread.",
+  "ru": "Артур Эванс купил участок и вёл раскопки с 1900 года, назвав цивилизацию минойской по имени легендарного царя. Эванс перестроил части дворца в железобетоне и восстановил фрески по фрагментам, что до сих пор вызывает разногласия среди археологов. Одну из письменностей, линейное письмо Б, расшифровал Майкл Вентрис в 1952 году как раннюю форму греческого; другая, линейное письмо А, по-прежнему не прочитана."
+ },
  "gm_arch_site_palace_of_knossos_place": {
   "en": "the hill of Kephala, south of Heraklion",
   "ru": "холм Кефала к югу от Ираклиона"
+ },
+ "gm_arch_site_pergamon_altar_dug": {
+  "en": "The excavators have pulled down the Byzantine walls on $gm_arch_site_pergamon_altar_place$, in [SCOPE.sState('gm_arch_ev_pergamon_altar').GetName], which were built of the altar's own stones, and gathered the frieze of the Great Altar: more than a hundred meters of high relief in which the Olympian gods fight the giants, snake-legged and winged, carved about 170 BC. The altar's foundations still stand on their terrace.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pergamon_altar_history$",
+  "ru": "Археологи разобрали византийские стены на участке ($gm_arch_site_pergamon_altar_place$) в области [SCOPE.sState('gm_arch_ev_pergamon_altar').GetName], построенные из камней самого алтаря, и собрали фриз Большого алтаря: более ста метров высокого рельефа, в котором олимпийские боги сражаются с гигантами, змееногими и крылатыми, высеченного около 170 года до н. э. Фундамент алтаря по-прежнему стоит на своей террасе.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pergamon_altar_history$"
+ },
+ "gm_arch_site_pergamon_altar_found": {
+  "en": "For generations lime-burners have broken the marble of $gm_arch_site_pergamon_altar_place$, in [SCOPE.sState('gm_arch_ev_pergamon_altar').GetName], into their kilns. Our scholars have seen fragments of reliefs built into the old Byzantine walls on the hill, and believe a great altar of the Attalid kings lies under it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pergamon_altar_history$",
+  "ru": "Поколениями известковые обжигальщики бросали мрамор участка ($gm_arch_site_pergamon_altar_place$) в области [SCOPE.sState('gm_arch_ev_pergamon_altar').GetName] в свои печи. Наши учёные видели фрагменты рельефов, вмурованные в старые византийские стены на холме, и полагают, что под ним лежит великий алтарь царей Аттал.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pergamon_altar_history$"
+ },
+ "gm_arch_site_pergamon_altar_history": {
+  "en": "Carl Humann, a German engineer building roads for the Ottoman government, saw the lime kilns in the 1860s and dug the altar for the Berlin Museums from 1878 to 1886; by agreement with the Ottoman government, the frieze went to Berlin. The altar was rebuilt in the Pergamon Museum, opened in 1930. The Soviet Union took it in 1945 and returned it in 1958.",
+  "ru": "Карл Хуман, немецкий инженер, строивший дороги для османского правительства, увидел известковые печи в 1860-х годах и раскапывал алтарь для Берлинских музеев с 1878 по 1886 год; по соглашению с османским правительством фриз отправился в Берлин. Алтарь был заново собран в Пергамском музее, открытом в 1930 году. Советский Союз вывез его в 1945 году и вернул в 1958 году."
+ },
+ "gm_arch_site_pergamon_altar_place": {
+  "en": "the acropolis of Pergamon, above the town of Bergama",
+  "ru": "акрополь Пергама над городом Бергама"
+ },
+ "gm_arch_site_pompeii_dug": {
+  "en": "The excavators have cleared the streets of $gm_arch_site_pompeii_place$, in [SCOPE.sState('gm_arch_ev_pompeii').GetName], to the walls: the forum and the basilica, temples, two theaters and an amphitheater, bakeries with loaves still in the ovens, taverns and fulleries, and the painted houses of the rich, the Villa of the Mysteries among them, with the Alexander Mosaic in the House of the Faun. Hollows in the ash, filled with plaster, give back the shapes of the people who died there.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pompeii_history$",
+  "ru": "Археологи расчистили улицы участка ($gm_arch_site_pompeii_place$) в области [SCOPE.sState('gm_arch_ev_pompeii').GetName] до стен: форум и базилику, храмы, два театра и амфитеатр, пекарни с хлебами, всё ещё лежащими в печах, таверны и сукновальни, а также расписные дома богачей, в том числе Виллу Мистерий и Мозаику Александра в Доме Фавна. Полости в пепле, залитые гипсом, возвращают формы людей, погибших там.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pompeii_history$"
+ },
+ "gm_arch_site_pompeii_found": {
+  "en": "Royal excavators have been clearing $gm_arch_site_pompeii_place$, in [SCOPE.sState('gm_arch_ev_pompeii').GetName], for generations, lifting frescoes, bronzes and mosaics for the museum at Naples. The work has stopped, and a third of the town or more still lies under the ash, its streets running on beneath the vineyards.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pompeii_history$",
+  "ru": "Королевские землекопы поколениями расчищали участок ($gm_arch_site_pompeii_place$) в области [SCOPE.sState('gm_arch_ev_pompeii').GetName], вынимая фрески, бронзу и мозаики для музея в Неаполе. Работы остановлены, а треть города или больше всё ещё лежит под пеплом, и его улицы продолжаются под виноградниками.\\n\\n$gm_arch_history_lead$ $gm_arch_site_pompeii_history$"
+ },
+ "gm_arch_site_pompeii_history": {
+  "en": "Bourbon engineers began digging Pompeii in 1748, more for treasure than knowledge, and the Alexander Mosaic came out of the House of the Faun in 1831. Giuseppe Fiorelli, director from 1863, dug house by house, recorded what came out of each, and poured plaster into the hollows the bodies had left. About a third of the town is still unexcavated, and the dig goes on today.",
+  "ru": "Инженеры Бурбонов начали раскопки Помпей в 1748 году, больше ради сокровищ, чем ради знаний, и Мозаика Александра вышла из Дома Фавна в 1831 году. Джузеппе Фьорелли, директор с 1863 года, раскапывал дом за домом, записывал всё, что выходило из каждого, и заливал гипс в полости, оставленные телами. Около трети города по-прежнему не раскопано, и раскопки продолжаются сегодня."
+ },
+ "gm_arch_site_pompeii_place": {
+  "en": "the ash-buried Roman town at the foot of Vesuvius, by the mouth of the Sarno",
+  "ru": "засыпанный пеплом римский город у подножия Везувия, в устье Сарно"
+ },
+ "gm_arch_site_royal_cemetery_at_ur_dug": {
+  "en": "Beside the ziggurat of $gm_arch_site_royal_cemetery_at_ur_place$, in [SCOPE.sState('gm_arch_ev_royal_cemetery_at_ur').GetName], the excavators have opened some eighteen hundred graves, sixteen of them royal: stone tombs with rows of attendants who died to follow their masters, with gold helmets and daggers, lyres inlaid with shell and lapis lazuli, Queen Puabi's golden headdress, the goat called the Ram in a Thicket, and the Standard of Ur, whose panels show war and peace in shell and lapis.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_cemetery_at_ur_history$",
+  "ru": "У зиккурата на участке ($gm_arch_site_royal_cemetery_at_ur_place$) в области [SCOPE.sState('gm_arch_ev_royal_cemetery_at_ur').GetName] археологи вскрыли около тысячи восьмисот могил, шестнадцать из них царские: каменные гробницы с рядами слуг, умерших вслед за господами, с золотыми шлемами и кинжалами, лирами, инкрустированными раковиной и лазуритом, золотым головным убором царицы Пуаби, козлом, прозванным Бараном в зарослях, и Штандартом Ура, панели которого показывают войну и мир в раковине и лазурите.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_cemetery_at_ur_history$"
+ },
+ "gm_arch_site_royal_cemetery_at_ur_found": {
+  "en": "The bricks of $gm_arch_site_royal_cemetery_at_ur_place$, in [SCOPE.sState('gm_arch_ev_royal_cemetery_at_ur').GetName], are stamped with the name of Ur, the city of Abraham in the Bible. Trial trenches beside the ziggurat have turned up gold beads in the rubbish, and our scholars believe the early kings of Sumer are buried there.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_cemetery_at_ur_history$",
+  "ru": "Кирпичи участка ($gm_arch_site_royal_cemetery_at_ur_place$) в области [SCOPE.sState('gm_arch_ev_royal_cemetery_at_ur').GetName] проштампованы именем Ура, города Авраама из Библии. Пробные траншеи у зиккурата выбросили золотые бусины в мусоре, и наши учёные полагают, что там погребены ранние цари Шумера.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_cemetery_at_ur_history$"
+ },
+ "gm_arch_site_royal_cemetery_at_ur_history": {
+  "en": "Leonard Woolley dug Ur for the British Museum and the University of Pennsylvania from 1922 to 1934, and opened the royal tombs from 1926. The finds were divided three ways, between Baghdad, London and Philadelphia. A deep flood layer under the city made Woolley famous as the finder of Noah's Flood.",
+  "ru": "Леонард Вулли вёл раскопки Ура для Британского музея и Пенсильванского университета с 1922 по 1934 год и с 1926 года вскрывал царские гробницы. Находки были разделены на три части между Багдадом, Лондоном и Филадельфией. Глубокий слой наводнения под городом сделал Вулли знаменитым как первооткрывателя Всемирного потопа Ноя."
  },
  "gm_arch_site_royal_cemetery_at_ur_place": {
   "en": "Tell al-Muqayyar, the mound of Ur, near Nasiriyah",
   "ru": "Телль-эль-Мукайир, курган Ура близ Насирии"
  },
+ "gm_arch_site_royal_tombs_of_sipan_dug": {
+  "en": "Inside $gm_arch_site_royal_tombs_of_sipan_place$, in [SCOPE.sState('gm_arch_ev_royal_tombs_of_sipan').GetName], below the looters' tunnels, the excavators have found the unrobbed tombs of the Moche lords. A warrior-priest of about AD 250 lay in a plank coffin among attendants and guards, one with the feet cut off, with a dog and llamas, wearing gold and silver masks, a crescent headdress, a necklace of gold and silver peanuts, and ear ornaments of gold and turquoise showing tiny warriors.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_tombs_of_sipan_history$",
+  "ru": "Внутри участка ($gm_arch_site_royal_tombs_of_sipan_place$) в области [SCOPE.sState('gm_arch_ev_royal_tombs_of_sipan').GetName], ниже туннелей грабителей, археологи нашли неразграбленные гробницы владык моче. Воин-жрец примерно 250 года н. э. лежал в дощатом гробу среди слуг и стражей, у одного из которых отрезаны ступни, с собакой и ламами, в золотых и серебряных масках, полумесяцевидном головном уборе, ожерелье из золотых и серебряных арахисовых орехов и золото-бирюзовых серьгах с крошечными воинами.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_tombs_of_sipan_history$"
+ },
+ "gm_arch_site_royal_tombs_of_sipan_found": {
+  "en": "Gold ornaments finer than any the dealers have seen are being sold in the towns of the north coast, in [SCOPE.sState('gm_arch_ev_royal_tombs_of_sipan').GetName], and the police have traced them to looters tunneling into $gm_arch_site_royal_tombs_of_sipan_place$. One looter has been killed in a raid, and the villagers say the mound is theirs to dig.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_tombs_of_sipan_history$",
+  "ru": "Золотые украшения тоньше всех, что видели торговцы, продают в городках северного побережья в области [SCOPE.sState('gm_arch_ev_royal_tombs_of_sipan').GetName], и полиция проследила их до грабителей, копающих туннели в участок ($gm_arch_site_royal_tombs_of_sipan_place$). Один грабитель убит при облаве, а жители деревни говорят, что курган им копать.\\n\\n$gm_arch_history_lead$ $gm_arch_site_royal_tombs_of_sipan_history$"
+ },
+ "gm_arch_site_royal_tombs_of_sipan_history": {
+  "en": "Looters broke into a tomb in 1987, and Walter Alva of the Brüning Museum stepped in under police guard. The tomb of the Lord of Sipán, found that year, was the richest unlooted tomb then found in the Americas, and others followed, among them the Old Lord of Sipán. The finds are in the Royal Tombs of Sipán Museum in Lambayeque.",
+  "ru": "Грабители проникли в гробницу в 1987 году, и Вальтер Альва из Музея Брюнинга вмешался под охраной полиции. Гробница Властелина Сипана, найденная в том же году, была самой богатой неразграбленной гробницей, найденной тогда в Америке, а за ней последовали другие, в том числе Старый Властелин Сипана. Находки хранятся в Музее царских гробниц Сипана в Ламбайеке."
+ },
  "gm_arch_site_royal_tombs_of_sipan_place": {
   "en": "Huaca Rajada, the eroded adobe pyramids at Sipán",
   "ru": "Уака-Раяда, размытые глинобитные пирамиды в Сипане"
+ },
+ "gm_arch_site_sanxingdui_pits_dug": {
+  "en": "Two pits in $gm_arch_site_sanxingdui_pits_place$, in [SCOPE.sState('gm_arch_ev_sanxingdui_pits').GetName], hold the offerings of a kingdom no chronicle names: bronze heads and masks with bulging eyes and great ears, some covered in gold leaf, a bronze figure taller than a man, a bronze tree four meters high hung with birds, and dozens of elephant tusks, all deliberately broken and burned about 1200 BC.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sanxingdui_pits_history$",
+  "ru": "Две ямы на участке ($gm_arch_site_sanxingdui_pits_place$) в области [SCOPE.sState('gm_arch_ev_sanxingdui_pits').GetName] хранят дары царства, о котором молчат все хроники: бронзовые головы и маски с выпученными глазами и огромными ушами, некоторые покрыты листовым золотом, бронзовая фигура выше человека, бронзовое дерево высотой четыре метра с развешанными птицами и десятки слоновьих бивней, всё намеренно сломано и сожжено около 1200 года до н. э.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sanxingdui_pits_history$"
+ },
+ "gm_arch_site_sanxingdui_pits_found": {
+  "en": "A farmer cutting an irrigation ditch in $gm_arch_site_sanxingdui_pits_place$, in [SCOPE.sState('gm_arch_ev_sanxingdui_pits').GetName], has struck a cache of jade and stone: discs, blades and rings of a kind nobody in the province has seen. Collectors in Chengdu are already buying them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sanxingdui_pits_history$",
+  "ru": "Земледелец, прорывавший оросительную канаву на участке ($gm_arch_site_sanxingdui_pits_place$) в области [SCOPE.sState('gm_arch_ev_sanxingdui_pits').GetName], наткнулся на тайник из нефрита и камня: диски, лезвия и кольца, каких никто в провинции не видел. Коллекционеры в Чэнду уже скупают их.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sanxingdui_pits_history$"
+ },
+ "gm_arch_site_sanxingdui_pits_history": {
+  "en": "Yan Daocheng, a farmer, found a jade cache in 1929; the two great sacrificial pits were found by brickworks laborers in 1986. They belong to the Shu culture of the Sichuan basin, independent of the Shang dynasty of the north. Six more pits, opened from 2020, have yielded more gold masks. The finds are in the Sanxingdui Museum.",
+  "ru": "Янь Даочэн, земледелец, нашёл нефритовый тайник в 1929 году; две большие жертвенные ямы нашли рабочие кирпичного завода в 1986 году. Они принадлежат культуре Шу в бассейне Сычуани, независимой от северной династии Шан. Шесть новых ям, вскрытых с 2020 года, дали ещё больше золотых масок. Находки хранятся в Музее Саньсиндуя."
+ },
+ "gm_arch_site_sanxingdui_pits_place": {
+  "en": "the fields beside the Mamuhe river at Sanxingdui, near Guanghan",
+  "ru": "поля у реки Мамухэ в Саньсиндуе близ Гуанхана"
+ },
+ "gm_arch_site_sidon_necropolis_dug": {
+  "en": "In the shafts and chambers of $gm_arch_site_sidon_necropolis_place$, in [SCOPE.sState('gm_arch_ev_sidon_necropolis').GetName], the excavators have found the sarcophagi of the kings of Sidon: Egyptian-style coffins of dark stone, one inscribed for King Eshmunazar II, and marble ones carved by Greek sculptors, the finest showing Alexander the Great at war and at the hunt, its paint still on the stone.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sidon_necropolis_history$",
+  "ru": "В шахтах и камерах участка ($gm_arch_site_sidon_necropolis_place$) в области [SCOPE.sState('gm_arch_ev_sidon_necropolis').GetName] археологи нашли саркофаги царей Сидона: гробы египетского типа из тёмного камня, один с надписью для царя Эшмуназара II, и мраморные, вырезанные греческими скульпторами; лучший из них показывает Александра Македонского на войне и на охоте, с краской, сохранившейся на камне.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sidon_necropolis_history$"
+ },
+ "gm_arch_site_sidon_necropolis_found": {
+  "en": "Quarrymen in $gm_arch_site_sidon_necropolis_place$, in [SCOPE.sState('gm_arch_ev_sidon_necropolis').GetName], keep breaking into chambers holding stone coffins, and a black sarcophagus with a long Phoenician inscription has come out of one. Our scholars believe the kings of Sidon are buried there.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sidon_necropolis_history$",
+  "ru": "Каменотёсы на участке ($gm_arch_site_sidon_necropolis_place$) в области [SCOPE.sState('gm_arch_ev_sidon_necropolis').GetName] то и дело вскрывают камеры с каменными гробами, и из одной вынесли чёрный саркофаг с длинной финикийской надписью. Наши учёные полагают, что там погребены цари Сидона.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sidon_necropolis_history$"
+ },
+ "gm_arch_site_sidon_necropolis_history": {
+  "en": "The sarcophagus of Eshmunazar II was found in 1855 and went to the Louvre, and Ernest Renan's mission dug at Sidon in 1860 and 1861. In 1887 Osman Hamdi Bey, the Ottoman archaeologist, excavated the royal necropolis and brought the Alexander Sarcophagus to Istanbul, where the Imperial Museum, now the Istanbul Archaeology Museums, was built to house it.",
+  "ru": "Саркофаг Эшмуназара II нашли в 1855 году, и он попал в Лувр, а миссия Эрнеста Ренана вела раскопки в Сидоне в 1860 и 1861 годах. В 1887 году Осман Хамди-бей, османский археолог, раскопал царский некрополь и привёз Саркофаг Александра в Стамбул, где для него построили Императорский музей, ныне Стамбульские музеи археологии."
+ },
+ "gm_arch_site_sidon_necropolis_place": {
+  "en": "the rock-cut burial grounds in the orchards around Sidon",
+  "ru": "скальные места погребений в садах вокруг Сидона"
+ },
+ "gm_arch_site_sutton_hoo_dug": {
+  "en": "In the great mound among $gm_arch_site_sutton_hoo_place$, in [SCOPE.sState('gm_arch_ev_sutton_hoo').GetName], the outline of a ship twenty-seven meters long lies traced in rivets in the sand, the wood long rotted away. In its burial chamber lay the treasure of an Anglo-Saxon king: a crested iron helmet with a face mask, a great gold buckle, shoulder clasps of gold and garnet, a purse lid, silver bowls from Byzantium, a sword, a shield and a whetstone scepter.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sutton_hoo_history$",
+  "ru": "В большом кургане на участке ($gm_arch_site_sutton_hoo_place$) в области [SCOPE.sState('gm_arch_ev_sutton_hoo').GetName] контур корабля длиной двадцать семь метров прорисован заклёпками в песке, дерево давно истлело. В погребальной камере лежало сокровище англосаксонского короля: железный гребенчатый шлем с маской, большая золотая пряжка, наплечные застёжки из золота и граната, крышка кошеля, серебряные чаши из Византии, меч, щит и скипетр-точило.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sutton_hoo_history$"
+ },
+ "gm_arch_site_sutton_hoo_found": {
+  "en": "The owner of the Sutton Hoo estate, in [SCOPE.sState('gm_arch_ev_sutton_hoo').GetName], curious about the old mounds on the estate, has hired a local excavator to open them. In the largest of $gm_arch_site_sutton_hoo_place$ the excavator has found rows of iron rivets in the sand where the timbers of a ship once lay.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sutton_hoo_history$",
+  "ru": "Владелец поместья Саттон-Ху в области [SCOPE.sState('gm_arch_ev_sutton_hoo').GetName], заинтересовавшись старыми курганами в своих землях, нанял местного землекопа вскрыть их. В самом большом из участка ($gm_arch_site_sutton_hoo_place$) землекоп нашёл ряды железных заклёпок в песке там, где некогда лежали брёвна корабля.\\n\\n$gm_arch_history_lead$ $gm_arch_site_sutton_hoo_history$"
+ },
+ "gm_arch_site_sutton_hoo_history": {
+  "en": "Edith Pretty, the landowner, hired Basil Brown, who found the ship in 1939; Charles Phillips's team cleared the chamber weeks before the Second World War began. The grave is probably that of King Rædwald of East Anglia, who died about 624. An inquest ruled the treasure Mrs Pretty's, and Mrs Pretty gave it to the British Museum.",
+  "ru": "Эдит Претти, владелица земли, наняла Бэзила Брауна, нашедшего корабль в 1939 году; команда Чарльза Филлипса расчистила камеру за недели до начала Второй мировой войны. Могила, вероятно, принадлежит королю Восточной Англии Рэдвальду, умершему около 624 года. Следствие постановило, что сокровище принадлежит миссис Претти, и миссис Претти передала его Британскому музею."
+ },
+ "gm_arch_site_sutton_hoo_place": {
+  "en": "the burial mounds of the Sutton Hoo estate, above the river Deben near Woodbridge",
+  "ru": "погребальные курганы поместья Саттон-Ху над рекой Дебен близ Вудбриджа"
+ },
+ "gm_arch_site_teotihuacan_dug": {
+  "en": "The excavators have stripped the earth from the Pyramid of the Sun in $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName], rebuilt its stepped terraces, and cleared the Avenue of the Dead between it and the Pyramid of the Moon. At the avenue's far end they found a great walled court and a temple faced with carved serpent heads, the Feathered Serpent among them, still painted.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$",
+  "ru": "Археологи сняли землю с Пирамиды Солнца на участке ($gm_arch_site_teotihuacan_place$) в области [SCOPE.sState('gm_arch_ev_teotihuacan').GetName], воссоздали её ступенчатые террасы и расчистили Аллею мёртвых между ней и Пирамидой Луны. На дальнем конце аллеи они нашли большой обнесённый стеной двор и храм, облицованный резными змеиными головами, в том числе Пернатого змея, всё ещё раскрашенными.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$"
+ },
+ "gm_arch_site_teotihuacan_found": {
+  "en": "Two great mounds rise from the fields of $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName]. The Aztecs called them the Pyramids of the Sun and the Moon, and the place the city of the gods. Our scholars hold that they are true pyramids buried in their own rubble, along an avenue of lesser mounds.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$",
+  "ru": "Два больших кургана поднимаются из полей участка ($gm_arch_site_teotihuacan_place$) в области [SCOPE.sState('gm_arch_ev_teotihuacan').GetName]. Ацтеки называли их Пирамидами Солнца и Луны, а место — городом богов. Наши учёные считают, что это настоящие пирамиды, погребённые в собственных обломках, вдоль аллеи меньших курганов.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$"
+ },
+ "gm_arch_site_teotihuacan_history": {
+  "en": "Leopoldo Batres restored the Pyramid of the Sun for the centenary of independence in 1910, cutting away several meters of its outer face. Manuel Gamio dug the Temple of the Feathered Serpent from 1917; the city is now thought to have burned around 550.",
+  "ru": "Леопольдо Батрес восстановил Пирамиду Солнца к столетию независимости в 1910 году, срезав несколько метров её внешней стороны. Мануэль Гамио раскапывал Храм Пернатого змея с 1917 года; ныне считается, что город сгорел около 550 года."
+ },
+ "gm_arch_site_teotihuacan_place": {
+  "en": "the valley of San Juan Teotihuacan, northeast of the capital",
+  "ru": "долина Сан-Хуан-Теотиуакан к северо-востоку от столицы"
+ },
+ "gm_arch_site_terracotta_army_dug": {
+  "en": "In pits in $gm_arch_site_terracotta_army_place$, in [SCOPE.sState('gm_arch_ev_terracotta_army').GetName], the excavators have laid bare an army in battle order: thousands of life-sized warriors of fired clay, each face different, archers, infantry and generals, with horses, wooden chariots and real bronze weapons still sharp, made to guard the tomb of Qin Shi Huang, who unified China and died in 210 BC.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$",
+  "ru": "В ямах на участке ($gm_arch_site_terracotta_army_place$) в области [SCOPE.sState('gm_arch_ev_terracotta_army').GetName] археологи обнажили армию в боевом порядке: тысячи воинов из обожжённой глины в натуральную величину, у каждого своё лицо, лучники, пехотинцы и генералы, с лошадьми, деревянными колесницами и настоящим бронзовым оружием, до сих пор острым, созданную для охраны гробницы Цинь Шихуана, объединившего Китай и умершего в 210 году до н. э.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$"
+ },
+ "gm_arch_site_terracotta_army_found": {
+  "en": "Farmers digging a well during a drought in $gm_arch_site_terracotta_army_place$, in [SCOPE.sState('gm_arch_ev_terracotta_army').GetName], have brought up pieces of fired clay: a head with a topknot, an arm, bronze arrowheads. A local museum worker has bought the fragments and fitted them together into a life-sized soldier.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$",
+  "ru": "Земледельцы, копавшие колодец во время засухи на участке ($gm_arch_site_terracotta_army_place$) в области [SCOPE.sState('gm_arch_ev_terracotta_army').GetName], подняли куски обожжённой глины: голову с пучком волос, руку, бронзовые наконечники стрел. Работник местного музея выкупил обломки и собрал из них солдата в натуральную величину.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$"
+ },
+ "gm_arch_site_terracotta_army_history": {
+  "en": "Yang Zhifa and neighbors struck the first pit in March 1974, and Zhao Kangmin, a local museum worker, recognized the pieces. Three pits have yielded some two thousand figures of an estimated eight thousand. The emperor's own mound, which the historian Sima Qian said held rivers of mercury, has never been opened.",
+  "ru": "Ян Чжифа с соседями наткнулся на первую яму в марте 1974 года, а Чжао Канмин, работник местного музея, распознал обломки. Три ямы дали около двух тысяч фигур из предполагаемых восьми тысяч. Курган самого императора, в котором, по словам историка Сыма Цяня, текли реки ртути, так и не вскрыт."
+ },
+ "gm_arch_site_terracotta_army_place": {
+  "en": "the fields east of the burial mound of the First Emperor of Qin, near Lintong",
+  "ru": "поля к востоку от погребального кургана Первого императора Цинь близ Линьтуна"
+ },
+ "gm_arch_site_tikal_dug": {
+  "en": "Cutting through the forest of $gm_arch_site_tikal_place$, in [SCOPE.sState('gm_arch_ev_tikal').GetName], the expedition has cleared the Great Plaza of a Maya city. Two temple pyramids face each other across it, the tallest of the temples crowned by a roof comb some seventy meters above the ground, with carved stelae of its kings, palaces and ball courts around it and causeways leading off into the forest to other temples.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$",
+  "ru": "Прорубив лес на участке ($gm_arch_site_tikal_place$) в области [SCOPE.sState('gm_arch_ev_tikal').GetName], экспедиция расчистила Большую площадь города майя. Две храмовые пирамиды смотрят друг на друга через неё, самый высокий из храмов увенчан гребнем кровли примерно в семидесяти метрах над землёй, вокруг — резные стелы царей, дворцы и площадки для игры в мяч, а дороги-насыпи уходят в лес к другим храмам.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$"
+ },
+ "gm_arch_site_tikal_found": {
+  "en": "Chicle gatherers and the governor's men in [SCOPE.sState('gm_arch_ev_tikal').GetName] speak of stone temples standing above the trees of $gm_arch_site_tikal_place$, nameless and abandoned. Our scholars have read their reports and believe they mark a city of the ancient Maya greater than any yet known.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$",
+  "ru": "Сборщики чикле и люди губернатора в области [SCOPE.sState('gm_arch_ev_tikal').GetName] рассказывают о каменных храмах над деревьями участка ($gm_arch_site_tikal_place$), безымянных и заброшенных. Наши учёные прочли их донесения и полагают, что это указывает на город древних майя, больше любого известного ныне.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$"
+ },
+ "gm_arch_site_tikal_history": {
+  "en": "Modesto Méndez, governor of Petén, and Ambrosio Tut reached the ruins in 1848 and published the first account. Alfred Maudslay photographed them in the 1880s, and the University of Pennsylvania excavated from 1956 to 1970; its glyphs have since been read to name the city's kings and its wars with Calakmul.",
+  "ru": "Модесто Мендес, губернатор Петена, и Амбросио Тут добрались до руин в 1848 году и опубликовали первый отчёт. Альфред Модсли сфотографировал их в 1880-х годах, а Пенсильванский университет вёл раскопки с 1956 по 1970 год; с тех пор прочитанные иероглифы называют имена царей города и его войны с Калакмулем."
+ },
+ "gm_arch_site_tikal_place": {
+  "en": "the forest of Petén, north of Lake Petén Itzá",
+  "ru": "лес Петена к северу от озера Петен-Ица"
+ },
+ "gm_arch_site_tomb_of_alexander_dug": {
+  "en": "Beneath $gm_arch_site_tomb_of_alexander_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_alexander').GetName], the excavators have broken into a vaulted tomb of alabaster and marble, its walls painted, its corridors lined with the burials of later Ptolemies, and in its central chamber an empty pedestal and the fragments of a coffin of glass, which the Ptolemies put in place of the golden one: the tomb, the scholars are sure, of Alexander the Great.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_alexander_history$",
+  "ru": "Под участком ($gm_arch_site_tomb_of_alexander_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_alexander').GetName] археологи пробили свод гробницы из алебастра и мрамора с расписными стенами и коридорами, выстланными погребениями поздних Птолемеев, а в центральной камере нашли пустой постамент и фрагменты стеклянного гроба, который Птолемеи поставили вместо золотого: гробницу, как уверены учёные, Александра Македонского.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_alexander_history$"
+ },
+ "gm_arch_site_tomb_of_alexander_found": {
+  "en": "Ancient writers say the Ptolemies laid Alexander the Great in a mausoleum, the Soma, at the crossroads of their capital. Our archaeologists, mapping with ground radar under $gm_arch_site_tomb_of_alexander_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_alexander').GetName], have found a great vaulted hollow where the old streets crossed.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_alexander_history$",
+  "ru": "Античные авторы говорят, что Птолемеи поместили Александра Македонского в мавзолей, Сому, на перекрёстке своей столицы. Наши археологи, ведущие георадарную съёмку под участком ($gm_arch_site_tomb_of_alexander_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_alexander').GetName], нашли большую сводчатую полость там, где пересекались древние улицы.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_alexander_history$"
+ },
+ "gm_arch_site_tomb_of_alexander_history": {
+  "en": "Alexander died in Babylon in 323 BC. Ptolemy I diverted the body to Egypt, and it lay in Alexandria, visited by Julius Caesar and Augustus, until the tomb drops out of the record in the late fourth century AD. More than a hundred and forty official searches have failed to find it. This find is speculative: the tomb has never been located.",
+  "ru": "Александр умер в Вавилоне в 323 году до н. э. Птолемей I направил тело в Египет, и оно лежало в Александрии, где его посещали Юлий Цезарь и Август, пока гробница не исчезла из источников в конце IV века н. э. Более ста сорока официальных поисков не нашли её. Эта находка гипотетическая: гробница так и не обнаружена."
+ },
+ "gm_arch_site_tomb_of_alexander_place": {
+  "en": "the old royal quarter of Alexandria, near the Nabi Daniel mosque",
+  "ru": "старый царский квартал Александрии близ мечети Наби-Даниэль"
+ },
+ "gm_arch_site_tomb_of_marquis_yi_dug": {
+  "en": "Under $gm_arch_site_tomb_of_marquis_yi_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_marquis_yi').GetName], the excavators have pumped the water out of a wooden tomb of four chambers, sealed about 433 BC for Yi, Marquis of Zeng: the marquis's nested lacquered coffins, the coffins of twenty-one young women, weapons, chariot fittings, bronze vessels, and a set of sixty-five bronze bells still hanging on their lacquered rack, each bell sounding two notes.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_marquis_yi_history$",
+  "ru": "Под участком ($gm_arch_site_tomb_of_marquis_yi_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_marquis_yi').GetName] археологи откачали воду из деревянной гробницы с четырьмя камерами, запечатанной около 433 года до н. э. для И, маркиза Цзэн: вложенные лаковые гробы маркиза, гробы двадцати одной молодой женщины, оружие, детали колесниц, бронзовые сосуды и набор из шестидесяти пяти бронзовых колоколов, всё ещё висящих на лаковой стойке, каждый колокол звучит на двух нотах.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_marquis_yi_history$"
+ },
+ "gm_arch_site_tomb_of_marquis_yi_found": {
+  "en": "An army unit leveling $gm_arch_site_tomb_of_marquis_yi_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_marquis_yi').GetName], for a factory has blasted into reddish-brown earth unlike the rock around it, and stopped. The experts of the provincial museum say it is the fill of a great tomb.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_marquis_yi_history$",
+  "ru": "Армейская часть, выравнивавшая участок ($gm_arch_site_tomb_of_marquis_yi_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_marquis_yi').GetName] под завод, взорвала красновато-бурую землю, не похожую на окружающую породу, и остановилась. Эксперты провинциального музея говорят, что это засыпка большой гробницы.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_marquis_yi_history$"
+ },
+ "gm_arch_site_tomb_of_marquis_yi_history": {
+  "en": "A People's Liberation Army unit found the tomb in 1977, and it was dug in 1978 under Tan Weisi of the Hubei Provincial Museum. The bells, inscribed with the names of the notes they sound, showed that musicians of the fifth century BC tuned to a twelve-note scale. They are in the Hubei Provincial Museum in Wuhan.",
+  "ru": "Часть Народно-освободительной армии нашла гробницу в 1977 году, а раскопки проводились в 1978 году под руководством Тань Вэйсы из Провинциального музея Хубэя. Колокола с надписями названий звучащих нот показали, что музыканты V века до н. э. настраивали инструменты по двенадцатизвучному строю. Они хранятся в Провинциальном музее Хубэя в Ухане."
  },
  "gm_arch_site_tomb_of_marquis_yi_place": {
   "en": "Leigudun hill outside Suizhou",
   "ru": "холм Лэйгудунь близ Суйчжоу"
  },
+ "gm_arch_site_tomb_of_pakal_dug": {
+  "en": "Under the floor of $gm_arch_site_tomb_of_pakal_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_pakal').GetName], the excavators have cleared a stair choked with rubble, down past the bones of sacrificed attendants, to a vaulted crypt at ground level. In a great stone sarcophagus under a carved lid lay a king in a mask of jade mosaic, with jade collars, rings and ear spools: K'inich Janaab' Pakal, who ruled Palenque for sixty-eight years and died in 683.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_pakal_history$",
+  "ru": "Под полом участка ($gm_arch_site_tomb_of_pakal_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_pakal').GetName] археологи расчистили лестницу, забитую обломками, вниз мимо костей принесённых в жертву слуг, до сводчатой крипты на уровне земли. В большом каменном саркофаге под резной крышкой лежал царь в маске из нефритовой мозаики, с нефритовыми ожерельями, кольцами и ушными дисками: К'инич Ханааб-Пакаль, правивший Паленке шестьдесят восемь лет и умерший в 683 году.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_pakal_history$"
+ },
+ "gm_arch_site_tomb_of_pakal_found": {
+  "en": "Our archaeologists have noticed that one floor slab in $gm_arch_site_tomb_of_pakal_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_pakal').GetName], has holes for lifting, and that the temple's walls run on below the floor. They believe a stair, filled with rubble by the Maya themselves, leads down into the pyramid.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_pakal_history$",
+  "ru": "Наши археологи заметили, что в одной плите пола на участке ($gm_arch_site_tomb_of_pakal_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_pakal').GetName] есть отверстия для подъёма и что стены храма продолжаются под полом. Они полагают, что лестница, заполненная обломками самими майя, ведёт вниз в пирамиду.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_pakal_history$"
+ },
+ "gm_arch_site_tomb_of_pakal_history": {
+  "en": "Alberto Ruz Lhuillier lifted the slab in 1948 and spent four seasons clearing the stair before reaching the crypt on 15 June 1952, overturning the belief that Maya pyramids were never tombs. The jade mask was stolen from the National Museum of Anthropology in Mexico City in 1985 and recovered in 1989.",
+  "ru": "Альберто Рус Луилье поднял плиту в 1948 году и четыре сезона расчищал лестницу, прежде чем 15 июня 1952 года добрался до крипты, опровергнув убеждение, что пирамиды майя никогда не были гробницами. Нефритовую маску украли из Национального музея антропологии в Мехико в 1985 году и вернули в 1989 году."
+ },
+ "gm_arch_site_tomb_of_pakal_place": {
+  "en": "the Temple of the Inscriptions, the tallest pyramid at Palenque",
+  "ru": "Храм Надписей, самая высокая пирамида в Паленке"
+ },
+ "gm_arch_site_tomb_of_philip_ii_dug": {
+  "en": "Under $gm_arch_site_tomb_of_philip_ii_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_philip_ii').GetName], the excavators have found royal tombs, two of them unrobbed: a vaulted tomb with a painted hunting frieze on its facade, and inside it a marble sarcophagus holding a gold chest stamped with a sixteen-rayed star, the burned bones of a man wrapped in purple and gold, a gold oak wreath, armor and small ivory portrait heads; in the antechamber, a second gold chest held a woman's bones.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_philip_ii_history$",
+  "ru": "Под участком ($gm_arch_site_tomb_of_philip_ii_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_philip_ii').GetName] археологи нашли царские гробницы, две из них неразграбленные: сводчатую гробницу с расписным фризом охоты на фасаде, а внутри — мраморный саркофаг с золотым ларцом, отмеченным шестнадцатилучевой звездой, сожжёнными костями человека, завёрнутыми в пурпур и золото, золотым дубовым венком, доспехами и небольшими слоновыми головками-портретами; в передней камере второй золотой ларец содержал кости женщины.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_philip_ii_history$"
+ },
+ "gm_arch_site_tomb_of_philip_ii_found": {
+  "en": "Our archaeologists believe the village of Vergina, in [SCOPE.sState('gm_arch_ev_tomb_of_philip_ii').GetName], stands on Aigai, the first capital of the Macedonian kings and the place where they were buried. Probes into $gm_arch_site_tomb_of_philip_ii_place$, a mound of earth twelve meters high and more than a hundred across, have struck the fill of tombs.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_philip_ii_history$",
+  "ru": "Наши археологи полагают, что деревня Вергина в области [SCOPE.sState('gm_arch_ev_tomb_of_philip_ii').GetName] стоит на Эгах, первой столице македонских царей и месте их погребения. Зондирование участка ($gm_arch_site_tomb_of_philip_ii_place$), земляного кургана высотой двенадцать метров и более ста в поперечнике, наткнулось на засыпку гробниц.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_philip_ii_history$"
+ },
+ "gm_arch_site_tomb_of_philip_ii_history": {
+  "en": "Manolis Andronikos opened the tombs in November 1977. Andronikos held Tomb II to be that of Philip II of Macedon, Alexander the Great's father, murdered in 336 BC; some scholars argue it is Philip III Arrhidaeus's instead. The finds stay at Vergina, in a museum built inside the mound itself.",
+  "ru": "Манолис Андроникос вскрыл гробницы в ноябре 1977 года. Андроникос считал Гробницу II гробницей Филиппа II Македонского, отца Александра Македонского, убитого в 336 году до н. э.; некоторые учёные утверждают, что это скорее гробница Филиппа III Арридея. Находки остаются в Вергине, в музее, построенном внутри самого кургана."
+ },
  "gm_arch_site_tomb_of_philip_ii_place": {
   "en": "the Great Tumulus at Vergina",
   "ru": "Великий курган в Вергине"
  },
+ "gm_arch_site_tomb_of_tutankhamun_dug": {
+  "en": "Below the entrance to the tomb of Ramesses VI, on $gm_arch_site_tomb_of_tutankhamun_place$ in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName], sixteen steps lead down to a sealed door. Beyond it lie four crowded rooms the robbers barely touched: gilded shrines nested one inside the other, chariots, couches, statues, chests and jewelry, some five thousand objects, and in a stone sarcophagus three coffins, the innermost of solid gold, around the mummy of Tutankhamun in a mask of gold.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$",
+  "ru": "Под входом в гробницу Рамсеса VI, на участке ($gm_arch_site_tomb_of_tutankhamun_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName], шестнадцать ступеней ведут вниз к запечатанной двери. За ней лежат четыре тесные комнаты, которых грабители почти не коснулись: позолоченные святилища, вложенные одно в другое, колесницы, ложа, статуи, ларцы и украшения, около пяти тысяч предметов, а в каменном саркофаге — три гроба, самый внутренний из цельного золота, вокруг мумии Тутанхамона в золотой маске.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
+ },
+ "gm_arch_site_tomb_of_tutankhamun_found": {
+  "en": "Every royal tomb found at Thebes was robbed in antiquity, and most scholars say the valley of the royal tombs has given up all it had. Our Egyptologists disagree: objects bearing the name of an obscure boy king, Tutankhamun, have turned up nearby, and they believe the boy king's tomb lies somewhere under the rubble of $gm_arch_site_tomb_of_tutankhamun_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName].\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$",
+  "ru": "Каждая царская гробница, найденная в Фивах, была ограблена ещё в древности, и большинство учёных говорят, что Долина царей отдала всё, что имела. Наши египтологи не согласны: предметы с именем малоизвестного юного царя Тутанхамона всплывали неподалёку, и они полагают, что гробница юного царя лежит где-то под обломками участка ($gm_arch_site_tomb_of_tutankhamun_place$) в области [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName].\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
+ },
+ "gm_arch_site_tomb_of_tutankhamun_history": {
+  "en": "Howard Carter, paid by Lord Carnarvon, found the steps on 4 November 1922; asked what could be seen through the first hole, Carter answered 'Wonderful things.' Clearing the tomb took ten years. Egypt kept every object, refusing the customary division of finds; they are in the Grand Egyptian Museum, while the mummy still lies in the tomb.",
+  "ru": "Говард Картер, получавший средства от лорда Карнарвона, нашёл ступени 4 ноября 1922 года; на вопрос, что видно через первое отверстие, Картер ответил: «Чудесные вещи». Расчистка гробницы заняла десять лет. Египет оставил себе все предметы, отказавшись от обычного раздела находок; они хранятся в Большом Египетском музее, а мумия по-прежнему лежит в гробнице."
+ },
+ "gm_arch_site_tomb_of_tutankhamun_place": {
+  "en": "the floor of the Valley of the Kings, on the west bank at Thebes",
+  "ru": "дно Долины царей на западном берегу в Фивах"
+ },
+ "gm_arch_site_troy_hisarlik_dug": {
+  "en": "The excavators have cut down through $gm_arch_site_troy_hisarlik_place$, in [SCOPE.sState('gm_arch_ev_troy_hisarlik').GetName], and found not one city but nine, each built on the ruins of the last: walls, gates and ramps, burned levels and rebuilt ones. Near the walls of the second city lay a hoard of gold and silver, diadems of thousands of gold leaves, earrings, cups and bracelets, which the diggers call Priam's Treasure.\\n\\n$gm_arch_history_lead$ $gm_arch_site_troy_hisarlik_history$",
+  "ru": "Археологи прорезали участок ($gm_arch_site_troy_hisarlik_place$) в области [SCOPE.sState('gm_arch_ev_troy_hisarlik').GetName] и нашли не один город, а девять, каждый построен на руинах предыдущего: стены, ворота и пандусы, сожжённые и перестроенные слои. У стен второго города лежал клад из золота и серебра: диадемы из тысяч золотых листочков, серьги, чаши и браслеты, которые раскопщики называют Сокровищем Приама.\\n\\n$gm_arch_history_lead$ $gm_arch_site_troy_hisarlik_history$"
+ },
+ "gm_arch_site_troy_hisarlik_found": {
+  "en": "Our scholars have set Homer beside the map. Against those who look for Troy at Pınarbaşı, they place it under $gm_arch_site_troy_hisarlik_place$, in [SCOPE.sState('gm_arch_ev_troy_hisarlik').GetName]: a hill of rubble and ash where the farmer of part of the hill has already found ancient walls.\\n\\n$gm_arch_history_lead$ $gm_arch_site_troy_hisarlik_history$",
+  "ru": "Наши учёные сопоставили Гомера с картой. В споре с теми, кто ищет Трою у Пынарбашы, они помещают её под участком ($gm_arch_site_troy_hisarlik_place$) в области [SCOPE.sState('gm_arch_ev_troy_hisarlik').GetName]: холм из обломков и пепла, где хозяин части холма уже нашёл древние стены.\\n\\n$gm_arch_history_lead$ $gm_arch_site_troy_hisarlik_history$"
+ },
+ "gm_arch_site_troy_hisarlik_history": {
+  "en": "Frank Calvert, who owned part of the hill, dug trial trenches in the 1860s. Heinrich Schliemann dug there from 1871 and found the treasure in 1873; Schliemann smuggled it to Athens and later gave it to Berlin. The Red Army carried it off in 1945, and it is in the Pushkin Museum in Moscow. The city of the Trojan War is now thought to be Troy VI or VIIa, far above the treasure's layer.",
+  "ru": "Фрэнк Калверт, владевший частью холма, закладывал пробные траншеи в 1860-х годах. Генрих Шлиман вёл там раскопки с 1871 года и нашёл сокровище в 1873 году; Шлиман тайно вывез его в Афины, а позднее передал Берлину. Красная армия увезла его в 1945 году, и оно находится в Музее имени Пушкина в Москве. Город Троянской войны теперь считают Троей VI или VIIa, расположенной намного выше слоя сокровища."
+ },
+ "gm_arch_site_troy_hisarlik_place": {
+  "en": "the mound of Hisarlik, above the plain of the Scamander near the Dardanelles",
+  "ru": "холм Гиссарлык над равниной Скамандра близ Дарданелл"
+ },
+ "gm_arch_site_villa_of_the_papyri_dug": {
+  "en": "Down through twenty meters of volcanic rock at $gm_arch_site_villa_of_the_papyri_place$, in [SCOPE.sState('gm_arch_ev_villa_of_the_papyri').GetName], the excavators have opened the villa's lower floors, buried by Vesuvius in AD 79, and found more of its library: cases of scrolls burned to charcoal, which scanners now read letter by letter. Among them, the scholars hope, are books of Greek and Latin lost for two thousand years.\\n\\n$gm_arch_history_lead$ $gm_arch_site_villa_of_the_papyri_history$",
+  "ru": "Сквозь двадцать метров вулканической породы на участке ($gm_arch_site_villa_of_the_papyri_place$) в области [SCOPE.sState('gm_arch_ev_villa_of_the_papyri').GetName] археологи вскрыли нижние этажи виллы, погребённой Везувием в 79 году н. э., и нашли ещё часть её библиотеки: шкафы со свитками, обугленными до угля, которые теперь сканеры читают буква за буквой. Среди них, надеются учёные, есть греческие и латинские книги, потерянные две тысячи лет.\\n\\n$gm_arch_history_lead$ $gm_arch_site_villa_of_the_papyri_history$"
+ },
+ "gm_arch_site_villa_of_the_papyri_found": {
+  "en": "Eighteenth-century tunnelers found a library of carbonized scrolls in $gm_arch_site_villa_of_the_papyri_place$, in [SCOPE.sState('gm_arch_ev_villa_of_the_papyri').GetName], and gave up when the tunnels filled with gas. Our archaeologists believe the villa's lower floors were never reached, and that more of its library lies there, under twenty meters of volcanic rock.\\n\\n$gm_arch_history_lead$ $gm_arch_site_villa_of_the_papyri_history$",
+  "ru": "Туннельщики XVIII века нашли библиотеку обугленных свитков на участке ($gm_arch_site_villa_of_the_papyri_place$) в области [SCOPE.sState('gm_arch_ev_villa_of_the_papyri').GetName] и бросили работу, когда туннели наполнились газом. Наши археологи полагают, что до нижних этажей виллы так и не добрались и что там под двадцатью метрами вулканической породы лежит ещё часть её библиотеки.\\n\\n$gm_arch_history_lead$ $gm_arch_site_villa_of_the_papyri_history$"
+ },
+ "gm_arch_site_villa_of_the_papyri_history": {
+  "en": "Karl Weber's tunnels found the villa in 1750 and about eighteen hundred scrolls, most of them works of the Epicurean philosopher Philodemus. Its lower levels were found in the 1990s but have not been dug. Since 2023, X-ray scans read by machine learning have begun to recover text from scrolls too fragile to unroll. Whether a lost library lies below is not known: this find is speculative.",
+  "ru": "Туннели Карла Вебера нашли виллу в 1750 году вместе с примерно тысячей восьмьюстами свитков, в основном трудов философа-эпикурейца Филодема. Её нижние уровни обнаружили в 1990-х годах, но не раскапывали. С 2023 года рентгеновские сканы, прочитанные машинным обучением, начали извлекать текст из свитков, слишком хрупких, чтобы их развернуть. Лежит ли внизу утраченная библиотека, неизвестно: эта находка гипотетическая."
+ },
  "gm_arch_site_villa_of_the_papyri_place": {
   "en": "the buried Roman villa outside Herculaneum",
   "ru": "погребённая римская вилла близ Геркуланума"
+ },
+ "gm_arch_site_vindolanda_tablets_dug": {
+  "en": "Below $gm_arch_site_vindolanda_tablets_place$, in [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName], the dig has gone down through waterlogged layers that kept what the garrison threw away: shoes, cloth and tools, and above all more than a thousand thin wooden leaf tablets written in ink: duty rosters, accounts, requests for leave and for beer, and a birthday invitation from one officer's wife to another.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$",
+  "ru": "Под участком ($gm_arch_site_vindolanda_tablets_place$) в области [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName] раскопки прошли сквозь заболоченные слои, сохранившие всё, что выбрасывал гарнизон: обувь, ткань и орудия, а главное — более тысячи тонких деревянных табличек, написанных чернилами: списки нарядов, счета, просьбы об отпуске и о пиве и приглашение на день рождения от жены одного офицера жене другого.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$"
+ },
+ "gm_arch_site_vindolanda_tablets_found": {
+  "en": "Drainage work below $gm_arch_site_vindolanda_tablets_place$, in [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName], has struck a layer of black, airless earth. The laborers have brought up leather shoes, a wooden comb, and thin slivers of wood that look, under a lens, as if they were once written on.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$",
+  "ru": "Дренажные работы под участком ($gm_arch_site_vindolanda_tablets_place$) в области [SCOPE.sState('gm_arch_ev_vindolanda_tablets').GetName] вскрыли слой чёрной бескислородной земли. Рабочие подняли кожаную обувь, деревянный гребень и тонкие дощечки, которые под лупой выглядят так, будто на них когда-то писали.\\n\\n$gm_arch_history_lead$ $gm_arch_site_vindolanda_tablets_history$"
  },
  "gm_arch_site_vindolanda_tablets_place": {
   "en": "the Roman fort of Vindolanda, behind Hadrian's Wall",
