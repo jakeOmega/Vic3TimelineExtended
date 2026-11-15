@@ -14518,5 +14518,1053 @@
  "nuclear_taboo.4.t": {
   "en": "Beyond the Pale",
   "ru": "За гранью допустимого"
+ },
+ "religious_revival_events.3.a": {
+  "en": "The faithful speak for the oppressed.",
+  "ru": "Верующие говорят от имени угнетённых."
+ },
+ "religious_revival_events.3.b": {
+  "en": "Channel this energy constructively.",
+  "ru": "Направить эту энергию в конструктивное русло."
+ },
+ "religious_revival_events.3.c": {
+  "en": "Religion should stay out of politics.",
+  "ru": "Религии не место в политике."
+ },
+ "religious_revival_events.3.d": {
+  "en": "Religious leaders in the poorest districts have begun to argue that the faithful must do more than feed the hungry: they must ask why there is hunger and press the government to end it. They have organized tenants, laborers and the unemployed into associations that meet in houses of worship. The [SCOPE.gsInterestGroup('devout_ig').GetName] have gained a cause and new members, and landlords and employers have begun to complain about the meetings.",
+  "ru": "Религиозные лидеры в беднейших районах начали утверждать, что верующие должны не только кормить голодных, но и спрашивать, почему существует голод, и требовать от правительства покончить с ним. Они объединили арендаторов, рабочих и безработных в союзы, которые собираются в молитвенных домах. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] обрела цель и новых членов, а домовладельцы и работодатели начали жаловаться на эти собрания."
+ },
+ "religious_revival_events.3.d_atheism": {
+  "en": "The state recognizes no religion, but believers still meet in private houses, and in the poorest districts those meetings have become a center of help for the poor: food for families in need, nursing for the sick, advice for tenants facing eviction. The organizers say their faith demands it. Our officials report that the groups grow each month, and that people who do not believe come to them for help.",
+  "ru": "Государство не признаёт никакой религии, но верующие по-прежнему собираются в частных домах, и в беднейших районах эти встречи стали центром помощи неимущим: еда для нуждающихся семей, уход за больными, советы арендаторам, которым грозит выселение. Организаторы говорят, что этого требует их вера. Наши чиновники сообщают, что группы растут с каждым месяцем и что за помощью к ним обращаются даже неверующие."
+ },
+ "religious_revival_events.3.d_dharmic": {
+  "en": "Monks, swamis and lay activists have begun to challenge the place of caste among the faithful. They hold that devotion knows no distinction of birth, open temples and kitchens to everyone, and organize the lowest castes to demand their rights. The [SCOPE.gsInterestGroup('devout_ig').GetName] have found a cause and new members in the movement, and high-caste families in many districts have protested against it.",
+  "ru": "Монахи, свами и миряне-активисты начали оспаривать место касты среди верующих. Они считают, что преданность не знает различий по рождению, открывают храмы и кухни для всех и организуют низшие касты на борьбу за свои права. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] нашла в этом движении цель и новых членов, а семьи высших каст во многих районах выступили против него."
+ },
+ "religious_revival_events.3.d_islamic": {
+  "en": "Scholars and activists have begun to argue that Islam's commands on zakat and on justice for the poor require political action as well as charity. They organize the poor of the cities into associations that run clinics and press the government over wages and rents. The [SCOPE.gsInterestGroup('devout_ig').GetName] are gaining members through them, and the wealthy have begun asking the government to restrain them.",
+  "ru": "Учёные и активисты начали доказывать, что заповеди ислама о закяте и справедливости к бедным требуют не только милосердия, но и политических действий. Они объединяют городскую бедноту в союзы, которые содержат клиники и требуют от правительства решения вопросов о зарплатах и аренде. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] пополняется через них новыми членами, а состоятельные люди начали просить правительство обуздать эти союзы."
+ },
+ "religious_revival_events.3.f": {
+  "en": "\\\"When I give food to the poor, they call me a saint. When I ask why the poor have no food, they call me a communist.\\\"\\n\\n— Hélder Câmara",
+  "ru": "«Когда я раздаю еду бедным, меня называют святым. Когда я спрашиваю, почему у бедных нет еды, меня называют коммунистом.»\\n\\n— Эльдер Камара"
+ },
+ "religious_revival_events.3.f_atheism": {
+  "en": "\\\"We meet in my sister's apartment because it is on the top floor and nobody passes the door. There are eleven of us on a good night. We do not sing, because the neighbors would hear. We read a page, we pray, and then we talk about who needs what: the widow on the second floor whose son is in prison, the boy who was put out of school, the family whose rent is three months behind. Each of us takes one name home and comes back the next week to say what was done.\\\"",
+  "ru": "«Мы собираемся в квартире моей сестры, потому что она на верхнем этаже и никто не проходит мимо двери. В удачный вечер нас одиннадцать. Мы не поём, потому что услышали бы соседи. Мы читаем страницу, молимся, а потом говорим о том, кому что нужно: о вдове со второго этажа, чей сын в тюрьме, о мальчике, которого исключили из школы, о семье, задолжавшей за аренду за три месяца. Каждый из нас уносит домой одно имя и на следующей неделе возвращается рассказать, что было сделано.»"
+ },
+ "religious_revival_events.3.f_dharmic": {
+  "en": "The organizer stood on the outer step of the village temple, where the families from the lower end of the road had always had to stop. She read the verse slowly, twice: \\\"Whoever offers me with devotion a leaf, a flower, a fruit or water, that I accept.\\\" Then she asked who among them had brought water, and nearly every hand went up. A boy ran to fetch the priest from his house. When the priest came, she showed him the verse in his own book, and asked him to open the inner door.",
+  "ru": "Организатор стояла на внешней ступени деревенского храма, у которой семьям с нижнего конца дороги всегда приходилось останавливаться. Она медленно, дважды прочла стих: «Кто с преданностью принесёт мне лист, цветок, плод или воду, то я приму». Потом спросила, кто из них принёс воду, и почти все подняли руки. Мальчик побежал за жрецом к нему домой. Когда жрец пришёл, она показала ему этот стих в его собственной книге и попросила открыть внутреннюю дверь."
+ },
+ "religious_revival_events.3.f_islamic": {
+  "en": "After the evening prayer the young scholar stayed in the courtyard with the men who had found no work that day. \\\"The Prophet said that none of you believes while he eats his fill and his neighbor goes hungry,\\\" he told them. \\\"So tell me who in this street is hungry.\\\" They gave him names, and he wrote them down on the back of a sermon: a widow, two families whose fathers were sick, a porter who had hurt his back. Then he sent two of the men to the grocer and one to the landlord, to ask what each would give and what each was owed.",
+  "ru": "После вечерней молитвы молодой учёный остался во дворе с мужчинами, не нашедшими в тот день работы. «Пророк сказал, что никто из вас не верует, пока наедается досыта, а сосед его голоден», — сказал он им. «Так назовите мне, кто на этой улице голоден». Они назвали имена, и он записал их на обороте проповеди: вдова, две семьи с больными отцами, носильщик, повредивший спину. Потом он послал двоих мужчин к бакалейщику, а одного к домовладельцу, чтобы узнать, что каждый готов дать и что каждому должны."
+ },
+ "religious_revival_events.3.t": {
+  "en": "Bread and Justice",
+  "ru": "Хлеб и справедливость"
+ },
+ "religious_revival_events.3.t_atheism": {
+  "en": "Faith in the Underground",
+  "ru": "Вера в подполье"
+ },
+ "religious_revival_events.3.t_dharmic": {
+  "en": "Dharma and Justice",
+  "ru": "Дхарма и справедливость"
+ },
+ "religious_revival_events.3.t_islamic": {
+  "en": "Justice of the Faithful",
+  "ru": "Справедливость верующих"
+ },
+ "religious_revival_events.4.a": {
+  "en": "Our nation's soul is bound to its faith.",
+  "ru": "Душа нашей нации неразрывна с её верой."
+ },
+ "religious_revival_events.4.b": {
+  "en": "Civic nationalism, beyond creed.",
+  "ru": "Гражданский национализм, вне вероисповедания."
+ },
+ "religious_revival_events.4.c": {
+  "en": "We are a secular state.",
+  "ru": "Мы светское государство."
+ },
+ "religious_revival_events.4.d": {
+  "en": "As trade and travel tie the country more closely to the rest of the world, a movement has grown that says our nation cannot be separated from its faith. It wants religious teaching in the schools, the faith's holy days kept as public holidays, and laws written to match its morals. The [SCOPE.gsInterestGroup('devout_ig').GetName] are its organizers and stand to gain the most from it.",
+  "ru": "По мере того как торговля и путешествия теснее связывают страну с остальным миром, выросло движение, утверждающее, что наша нация неотделима от своей веры. Оно требует религиозного обучения в школах, праздничных дней веры в качестве государственных праздников и законов, написанных в согласии с её нравственностью. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] — его организатор и больше всех выигрывает от него."
+ },
+ "religious_revival_events.4.d_dharmic": {
+  "en": "A Hindu nationalist movement holds that the nation and Hindu civilization are one and the same. Its volunteers run schools and youth camps, its speakers describe other religions as having come from outside, and it asks that the law protect Hindu custom. The [SCOPE.gsInterestGroup('devout_ig').GetName] are rallying to it under saffron flags.",
+  "ru": "Индуистское националистическое движение считает, что нация и индуистская цивилизация — одно и то же. Его добровольцы содержат школы и молодёжные лагеря, его ораторы изображают другие религии пришлыми, и оно требует, чтобы закон защищал индуистские обычаи. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] сплачивается вокруг него под шафрановыми флагами."
+ },
+ "religious_revival_events.4.d_islamic": {
+  "en": "An Islamist movement argues that the nation should be governed by Sharia, and that secular government is a foreign import that has failed the country. It runs schools and clinics alongside its political work, and its preachers call on the faithful to join it. The [SCOPE.gsInterestGroup('devout_ig').GetName] demand that the state make Islamic law the law of the land.",
+  "ru": "Исламистское движение доказывает, что нацией должна править шариат, а светское правление — чужеземный импорт, подведший страну. Наряду с политической работой оно содержит школы и клиники, а его проповедники призывают верующих вступать в него. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] требует, чтобы государство сделало исламское право законом страны."
+ },
+ "religious_revival_events.4.d_jewish": {
+  "en": "A religious Zionist movement holds that the state is the fulfillment of a divine promise, and that settling and keeping the land is a religious duty. Its rabbis and youth movements call for religious law to shape public life. The [SCOPE.gsInterestGroup('devout_ig').GetName] are its organizers, and its following is growing.",
+  "ru": "Религиозное сионистское движение считает, что государство — исполнение божественного обещания, а заселение и удержание земли — религиозный долг. Его раввины и молодёжные движения призывают, чтобы религиозный закон определял общественную жизнь. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] — его организатор, и число его сторонников растёт."
+ },
+ "religious_revival_events.4.f": {
+  "en": "To every family in the district, from the committee for faith and nation. We are not against anyone. We ask that our children learn in school the faith their grandparents kept, that the public holidays remain the ones this country has always kept, and that the laws on marriage and the family be written by people who share our values. We are told that the world has changed and that we must change with it, but nobody has asked us what we would keep. We meet on the first evening of each month at the community hall, and we ask you to come and to bring your neighbors.",
+  "ru": "Каждой семье района от комитета за веру и нацию. Мы не против кого бы то ни было. Мы просим, чтобы наши дети изучали в школе веру, которую хранили их дедушки и бабушки, чтобы государственными праздниками оставались те, что эта страна всегда соблюдала, и чтобы законы о браке и семье писали люди, разделяющие наши ценности. Нам говорят, что мир изменился и мы должны меняться вместе с ним, но никто не спросил нас, что бы мы хотели сохранить. Мы собираемся в первый вечер каждого месяца в общинном зале и просим вас прийти и привести соседей."
+ },
+ "religious_revival_events.4.f_dharmic": {
+  "en": "\\\"Every river in this country has a goddess and every hill has a story, and when they call us backward, that is what they mean. The movement is the first thing in my life to say that it is nothing to be ashamed of.\\\"\\n\\n\\\"Nobody wants you ashamed of it, Grandmother. But at the camp they told us that families of other faiths came from outside, and the family next door has lived on our street as long as we have.\\\"\\n\\n\\\"I have never said a word against the family next door.\\\"\\n\\n\\\"You haven't. The man who runs the camp did, and he told me to stop asking him about it in front of the younger boys. I am not going back.\\\"\\n\\n\\\"Then don't go back. But come with me to the temple at the full moon, as you always have.\\\"",
+  "ru": "«В этой стране у каждой реки есть богиня, а у каждого холма своя история, и когда нас называют отсталыми, имеют в виду именно это. Движение — первое в моей жизни, что говорит: стыдиться тут нечего.»\\n\\n«Никто не хочет, чтобы ты стыдилась, бабушка. Но в лагере нам говорили, что семьи других вер пришли извне, а семья по соседству живёт на нашей улице так же давно, как и мы.»\\n\\n«Я ни слова не сказала против соседской семьи.»\\n\\n«Не сказала. Сказал тот, кто руководит лагерем, и велел мне перестать расспрашивать его об этом при младших мальчиках. Я туда больше не вернусь.»\\n\\n«Тогда не возвращайся. Но пойдём со мной в храм в полнолуние, как ты всегда ходила.»"
+ },
+ "religious_revival_events.4.f_islamic": {
+  "en": "The points the movement's speakers read out at the close of every meeting:\\n\\nThat the courts judge by Sharia, because the law of God does not change with the government of the day.\\nThat the schools teach the Quran to every child, so that no child grows up unable to read it.\\nThat lending at interest be forbidden, as the faith forbids it, and the banks be given a law to follow in its place.\\nThat the government keep its distance from foreign powers, whose films and advertisements carry their morals into our homes.\\nThat the government answer these points before the next meeting, which will be held in the same place.",
+  "ru": "Пункты, которые ораторы движения зачитывают в конце каждого собрания:\\n\\nЧтобы суды судили по шариату, потому что закон Бога не меняется вместе с правительством дня.\\nЧтобы школы учили Корану каждого ребёнка, и ни один не вырос неспособным прочесть его.\\nЧтобы ссуды под процент были запрещены, как их запрещает вера, а банкам дали закон, которому следовать вместо них.\\nЧтобы правительство держалось на расстоянии от иностранных держав, чьи фильмы и реклама несут их нравы в наши дома.\\nЧтобы правительство ответило на эти пункты до следующего собрания, которое пройдёт на том же месте."
+ },
+ "religious_revival_events.4.t": {
+  "en": "Faith and Flag",
+  "ru": "Вера и флаг"
+ },
+ "religious_revival_events.4.t_dharmic": {
+  "en": "One Civilization, One Dharma",
+  "ru": "Одна цивилизация, одна дхарма"
+ },
+ "religious_revival_events.4.t_islamic": {
+  "en": "One Ummah, One Law",
+  "ru": "Одна умма, один закон"
+ },
+ "religious_revival_events.4.t_jewish": {
+  "en": "The Promised Land",
+  "ru": "Земля обетованная"
+ },
+ "religious_revival_events.5.a": {
+  "en": "Let faith flourish in the digital age.",
+  "ru": "Пусть вера процветает в цифровую эпоху."
+ },
+ "religious_revival_events.5.b": {
+  "en": "Moderate the online message.",
+  "ru": "Смягчить послание в сети."
+ },
+ "religious_revival_events.5.c": {
+  "en": "Monitor for extremism.",
+  "ru": "Следить за экстремизмом."
+ },
+ "religious_revival_events.5.d": {
+  "en": "Religious teachers have found large followings online. Their talks are shared far beyond the communities that first heard them, prayer and study groups meet online every day, and some teachers with no institution behind them have more followers than the established religious bodies. The [SCOPE.gsInterestGroup('devout_ig').GetName] are reaching people the old institutions never reached.",
+  "ru": "Религиозные наставники обрели большую аудиторию в сети. Их проповеди расходятся далеко за пределы общин, где их услышали впервые, группы молитвы и изучения собираются онлайн каждый день, а у некоторых наставников без всякого учреждения за спиной больше последователей, чем у признанных религиозных организаций. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] достигает людей, до которых старые институты так и не добрались."
+ },
+ "religious_revival_events.5.d_dharmic": {
+  "en": "Hindu teachers have taken to social media in large numbers. Recorded discourses, devotional songs and short clips of gurus are passed from one messaging group to the next, and online groups for daily prayer and scripture study draw members who have never met. The [SCOPE.gsInterestGroup('devout_ig').GetName] are building followings online that no temple committee could have organized.",
+  "ru": "Индуистские наставники массово пришли в социальные сети. Записанные беседы, духовные песнопения и короткие ролики с гуру передаются из одной группы в мессенджере в другую, а онлайн-группы ежедневной молитвы и изучения писаний привлекают участников, никогда не встречавшихся лично. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] собирает в сети последователей, каких не смог бы организовать ни один храмовый комитет."
+ },
+ "religious_revival_events.5.d_islamic": {
+  "en": "A new generation of scholars and preachers has built large followings on social media. Their lectures, Quran recitations and short answers to followers' questions are shared across the country, and online study circles form around preachers who hold no post at any mosque. The [SCOPE.gsInterestGroup('devout_ig').GetName] find their message reaching far beyond the congregations they had.",
+  "ru": "Новое поколение учёных и проповедников собрало большую аудиторию в социальных сетях. Их лекции, чтение Корана и короткие ответы на вопросы последователей расходятся по всей стране, а вокруг проповедников, не занимающих никакого поста в мечетях, возникают онлайн-кружки изучения. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] видит, что её послание доходит далеко за пределы прежних общин."
+ },
+ "religious_revival_events.5.f": {
+  "en": "Notes for the volunteers who run the community's pages online, pinned up in the office:\\n\\nPost the talk the same evening it is given. People share what is new, and by the next morning someone else's talk is new.\\nAnswer every question in the comments, even the rude ones. Most of the people who ask have never come through our door and will judge us by the answer.\\nDo not argue about the government in the comments. The elders have said that anything on politics will come from them, so that we speak with one voice.\\nWrite down the towns people say they are writing from. We now have followers in places where we have no community, and the elders want to know where to send teachers.",
+  "ru": "Заметки для добровольцев, ведущих страницы общины в сети, приколотые в канцелярии:\\n\\nВыкладывайте беседу в тот же вечер, когда она прозвучала. Люди делятся новым, а к утру новой становится чья-то другая беседа.\\nОтвечайте на каждый вопрос в комментариях, даже грубый. Большинство спрашивающих никогда не переступали наш порог и будут судить о нас по ответу.\\nНе спорьте о правительстве в комментариях. Старейшины сказали, что всё о политике будет исходить от них, чтобы мы говорили одним голосом.\\nЗаписывайте города, из которых, по словам людей, они пишут. У нас теперь есть последователи там, где нет общины, и старейшины хотят знать, куда посылать наставников."
+ },
+ "religious_revival_events.5.f_christian": {
+  "en": "The bishop had the video played for him twice in his study: a young preacher from no church he knew of, standing in a kitchen, talking for twelve minutes about debt and prayer. More people had watched it overnight than came to every church in the diocese in a month. His secretary read out some of the comments underneath, from people who said they had not prayed in years. \\\"Find out who he is,\\\" the bishop said when she had finished, \\\"and ask him to come and see me. I would like to know how he does it, and whether he would do it for one of our parishes.\\\"",
+  "ru": "Епископ дважды велел показать ему видео в своём кабинете: молодой проповедник, не принадлежащий ни к одной известной ему церкви, стоит на кухне и двенадцать минут говорит о долгах и молитве. За ночь его посмотрело больше людей, чем приходит во все церкви епархии за месяц. Секретарь прочла несколько комментариев под ним, от людей, писавших, что не молились уже много лет. «Выясни, кто он, — сказал епископ, когда она закончила, — и попроси его зайти ко мне. Я хотел бы знать, как у него это получается и стал бы он делать это для одного из наших приходов.»"
+ },
+ "religious_revival_events.5.f_islamic": {
+  "en": "\\\"Uncle, the lecture you gave on patience has been shared all over the country. People are asking in the comments where they can hear you.\\\"\\n\\n\\\"They can hear me here, after the evening prayer, where I have taught for twenty years. Tonight there were eleven men.\\\"\\n\\n\\\"They want to hear you on their screens, at work and on the bus. Let me film the lessons every week. It costs nothing.\\\"\\n\\n\\\"It costs something. A man who listens on the bus does not come to the mosque, and a mosque is more than a lesson. Film the lessons if you must, but say at the end of each one where we are and when we pray, so that whoever is listening knows the door is open.\\\"",
+  "ru": "«Дядя, лекцию о терпении, которую вы читали, разослали по всей стране. В комментариях люди спрашивают, где можно вас послушать.»\\n\\n«Они могут послушать меня здесь, после вечерней молитвы, где я преподаю уже двадцать лет. Сегодня было одиннадцать человек.»\\n\\n«Они хотят слушать вас на экранах, на работе и в автобусе. Позвольте мне снимать уроки каждую неделю. Это ничего не стоит.»\\n\\n«Кое-что это стоит. Тот, кто слушает в автобусе, не приходит в мечеть, а мечеть — больше чем урок. Снимай уроки, если нужно, но в конце каждого говори, где мы находимся и когда молимся, чтобы каждый слушающий знал, что дверь открыта.»"
+ },
+ "religious_revival_events.5.t": {
+  "en": "Faith Online",
+  "ru": "Вера в сети"
+ },
+ "religious_revival_events.6.a": {
+  "en": "Stand with tradition.",
+  "ru": "Встать на сторону традиции."
+ },
+ "religious_revival_events.6.b": {
+  "en": "Seek theological reform.",
+  "ru": "Искать богословской реформы."
+ },
+ "religious_revival_events.6.c": {
+  "en": "Society has changed, and our laws will not go back.",
+  "ru": "Общество изменилось, и наши законы не повернут назад."
+ },
+ "religious_revival_events.6.d": {
+  "en": "New freedoms in dress, sex, marriage and divorce have provoked an organized religious answer. Conservative believers have formed associations to defend the family as they understand it, and are campaigning against the changes in the schools, in print and in the streets. The [SCOPE.gsInterestGroup('devout_ig').GetName] ask the government to stand with them.",
+  "ru": "Новые свободы в одежде, сексуальной жизни, браке и разводе вызвали организованный религиозный отпор. Консервативные верующие создали объединения для защиты семьи в их понимании и ведут кампанию против перемен в школах, в печати и на улицах. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] просит правительство встать на их сторону."
+ },
+ "religious_revival_events.6.d_dharmic": {
+  "en": "Hindu traditionalists have organized against what they call foreign values: marriages across caste and community, couples living together unmarried, the new fashions in dress. Activists and sadhus lead processions against them and ask the government to protect the family as tradition defines it. The [SCOPE.gsInterestGroup('devout_ig').GetName] say they will accept no compromise.",
+  "ru": "Индуистские традиционалисты организовались против того, что называют чуждыми ценностями: браков между кастами и общинами, сожительства без брака, новой моды в одежде. Активисты и садху ведут против них шествия и просят правительство защитить семью в том виде, как её определяет традиция. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] заявляет, что не пойдёт ни на какой компромисс."
+ },
+ "religious_revival_events.6.d_islamic": {
+  "en": "Conservative scholars and preachers have organized against what they call Western morals in dress, in marriage and in public life. Scholars issue rulings against them, preachers condemn them from the minbar, and local associations campaign in defense of the family. The [SCOPE.gsInterestGroup('devout_ig').GetName] will not yield on these questions.",
+  "ru": "Консервативные учёные и проповедники организовались против того, что называют западными нравами в одежде, браке и общественной жизни. Учёные выносят против них постановления, проповедники осуждают их с минбара, а местные объединения ведут кампанию в защиту семьи. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] не уступит в этих вопросах."
+ },
+ "religious_revival_events.6.f": {
+  "en": "\\\"I am not a political person. I have never stood up at a meeting before tonight. My daughter came home from school with a pamphlet about things I would not have talked to her about for another five years, and when I asked her teacher who had chosen it, she said it came from the government. Nobody asked us. I was married in the faith, my parents were married in the faith, and I want my children to be. I am asking everyone in this room to sign the letter on the table at the back, and I am asking the government to give parents a say in what is taught to their children.\\\"",
+  "ru": "«Я не политик. До сегодняшнего вечера я ни разу не выступал на собрании. Моя дочь пришла из школы с брошюрой о вещах, о которых я не стал бы говорить с ней ещё лет пять, а когда я спросил её учительницу, кто это выбрал, она ответила, что это пришло от правительства. Нас никто не спросил. Я венчался в вере, мои родители венчались в вере, и я хочу того же для моих детей. Я прошу каждого в этом зале подписать письмо на столе в глубине и прошу правительство дать родителям право голоса в том, чему учат их детей.»"
+ },
+ "religious_revival_events.6.f_dharmic": {
+  "en": "\\\"I came because my son married a girl from outside the community without telling us, and I did not know whom else to talk to. The women here understood.\\\"\\n\\n\\\"The sadhus walked at the front, barefoot, and we followed with the flags. More people joined us at the market than had set out with us from the temple.\\\"\\n\\n\\\"My shop is on the route. I lowered the shutters when they passed, as I would for any procession, and raised them again when they had gone.\\\"\\n\\n\\\"I walked beside the banner the whole way, as the inspector ordered, and read it at every corner. It said nothing the law forbids, and that is what I wrote in my report.\\\"",
+  "ru": "«Я пришла, потому что мой сын женился на девушке из чужой общины, не сказав нам, и я не знала, с кем ещё поговорить. Здешние женщины меня поняли.»\\n\\n«Садху шли впереди, босиком, а мы за ними с флагами. На рынке к нам присоединилось больше людей, чем вышло с нами от храма.»\\n\\n«Моя лавка на пути шествия. Я опустил ставни, когда они проходили, как для любой процессии, и поднял снова, когда они ушли.»\\n\\n«Я шёл рядом со знаменем всю дорогу, как приказал инспектор, и читал его на каждом углу. На нём не было ничего, что запрещает закон, так я и написал в рапорте.»"
+ },
+ "religious_revival_events.6.f_islamic": {
+  "en": "To the government, from the council of scholars of the city. We have watched the changes of these years in dress, in public entertainments and in the conduct of young men and women in the street, and we kept silent while we could. We can do so no longer. The family is the foundation God set for society, and laws that weaken it weaken the country. We ask the government to stop the sale of the magazines named in the attached list, to keep the law on marriage as Islam sets it down, and to receive a delegation of this council within the month. We will tell the faithful of the government's answer at the Friday prayer.",
+  "ru": "Правительству от совета учёных города. Мы наблюдали перемены последних лет в одежде, в общественных развлечениях и в поведении молодых мужчин и женщин на улице и молчали, пока могли. Больше мы не можем. Семья — основа общества, заложенная Богом, и законы, ослабляющие её, ослабляют страну. Мы просим правительство прекратить продажу журналов, названных в прилагаемом списке, сохранить закон о браке таким, каким его устанавливает ислам, и принять делегацию этого совета в течение месяца. Об ответе правительства мы сообщим верующим на пятничной молитве."
+ },
+ "religious_revival_events.6.t": {
+  "en": "The Culture War",
+  "ru": "Культурная война"
+ },
+ "religious_revival_events.7.a": {
+  "en": "Fund faith-based institutions.",
+  "ru": "Финансировать религиозные учреждения."
+ },
+ "religious_revival_events.7.b": {
+  "en": "Partner with faith organizations.",
+  "ru": "Сотрудничать с религиозными организациями."
+ },
+ "religious_revival_events.7.c": {
+  "en": "Expand secular state welfare instead.",
+  "ru": "Вместо этого расширить светскую государственную помощь."
+ },
+ "religious_revival_events.7.d": {
+  "en": "Religious organizations are running more of the country's kitchens, clinics, schools and shelters each year, many of them in districts the state's services do not reach. Their volunteers ask the government for nothing but permission. The [SCOPE.gsInterestGroup('devout_ig').GetName] point to this work as proof that the country needs them.",
+  "ru": "Религиозные организации с каждым годом ведут всё больше столовых, клиник, школ и приютов страны, многие из них в районах, куда не дотягиваются службы государства. Их добровольцы просят у правительства лишь разрешения. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] указывает на эту работу как на доказательство того, что стране нужны они."
+ },
+ "religious_revival_events.7.d_atheism": {
+  "en": "The state recognizes no religion, but believers have built a network of help it can no longer overlook: kitchens in private apartments, medicine passed from hand to hand, lessons for children after school. Our officials report that closing these groups would leave many families without food, and that tolerating them may bring on a [concept_religious_revival].",
+  "ru": "Государство не признаёт никакой религии, но верующие создали сеть помощи, которую оно уже не может не замечать: столовые в частных квартирах, лекарства из рук в руки, уроки для детей после школы. Наши чиновники сообщают, что закрытие этих групп оставило бы многие семьи без еды, а терпимость к ним может вызвать [concept_religious_revival]."
+ },
+ "religious_revival_events.7.d_dharmic": {
+  "en": "Hindu religious bodies have greatly enlarged their charitable work. Temple trusts run hospitals, temple kitchens serve free meals to anyone who comes, and ashrams run schools in villages the state has never reached. The [SCOPE.gsInterestGroup('devout_ig').GetName] say that seva, service without reward, is what holds the country together.",
+  "ru": "Индуистские религиозные организации значительно расширили благотворительную работу. Храмовые фонды содержат больницы, храмовые кухни бесплатно кормят каждого пришедшего, а ашрамы содержат школы в деревнях, куда государство никогда не добиралось. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] говорит, что сева, служение без награды, — то, что скрепляет страну."
+ },
+ "religious_revival_events.7.d_islamic": {
+  "en": "Islamic charities, paid for by the zakat and voluntary gifts of the faithful, now run hospitals, orphanages, schools and food banks across the country, and in many districts they are the first place the poor go for help. The [SCOPE.gsInterestGroup('devout_ig').GetName] argue that this charity is a religious duty, and that the government should leave it in religious hands.",
+  "ru": "Исламские благотворительные организации, существующие на закят и добровольные пожертвования верующих, содержат больницы, приюты, школы и продовольственные банки по всей стране, а во многих районах бедные обращаются за помощью прежде всего к ним. Группа интересов [SCOPE.gsInterestGroup('devout_ig').GetName] доказывает, что эта благотворительность — религиозный долг, и правительству следует оставить её в религиозных руках."
+ },
+ "religious_revival_events.7.f": {
+  "en": "The first volunteer unlocked the kitchen at five and put the big pots on to boil. By six there were nine of them chopping vegetables at the long table, under the board where the week's rota was pinned. Nobody asked the people in the queue where they lived or what they believed. The woman at the door wrote down only how many were in each family. The doors opened at seven. When the food ran out a little after nine, she sent the last families on to the clinic next door, which the same volunteers ran in the afternoons.",
+  "ru": "Первый доброволец открыл кухню в пять и поставил кипятиться большие котлы. К шести девять человек уже резали овощи за длинным столом под доской, где висел график дежурств. Никто не спрашивал стоящих в очереди, где они живут и во что верят. Женщина у двери записывала только, сколько человек в каждой семье. Двери открылись в семь. Когда еда кончилась чуть позже девяти, она отправила последние семьи в соседнюю клинику, которую те же добровольцы содержали по вечерам."
+ },
+ "religious_revival_events.7.f_atheism": {
+  "en": "To the district committee, from the inspector for public order. As instructed, I visited the address where an unregistered kitchen was reported. I found an apartment of two rooms in which four women cook for between forty and sixty people a day. Those fed include old people living alone, two families from a factory that has closed, and several men out of work. The women said they do it out of conscience, and some of them pray before serving. I found no literature and no money changing hands. I have not closed the kitchen, because the people it feeds have nowhere else to go at present, and I await instructions.",
+  "ru": "Окружному комитету от инспектора по общественному порядку. По указанию я посетил адрес, где сообщали о незарегистрированной кухне. Я обнаружил двухкомнатную квартиру, где четыре женщины готовят для сорока-шестидесяти человек в день. Среди накормленных — одинокие старики, две семьи с закрывшейся фабрики и несколько безработных мужчин. Женщины сказали, что делают это по совести, а некоторые молятся перед раздачей. Литературы я не нашёл, денег никто не передавал. Я не закрыл кухню, потому что людям, которых она кормит, сейчас некуда больше идти, и жду указаний."
+ },
+ "religious_revival_events.7.f_islamic": {
+  "en": "The committee met in the back room of the mosque on the last evening of the month, with the ledger open on the table. The treasurer read out what had come in: zakat from the merchants, and the smaller gifts left in the box by the door. The secretary read out the names of those who had asked for help: widows, a man whose shop had burned, students whose families could not pay their fees. Each name was discussed and a sum written beside it. When the money was gone, the names that remained were carried over to the next month, and the treasurer locked the ledger in the cupboard.",
+  "ru": "Комитет собрался в задней комнате мечети в последний вечер месяца, с открытой на столе книгой учёта. Казначей зачитал поступления: закят от торговцев и мелкие пожертвования из ящика у двери. Секретарь зачитал имена просивших о помощи: вдовы, человек, у которого сгорела лавка, студенты, чьи семьи не могли оплатить обучение. Каждое имя обсудили и написали рядом сумму. Когда деньги кончились, оставшиеся имена перенесли на следующий месяц, а казначей запер книгу в шкаф."
+ },
+ "religious_revival_events.7.t": {
+  "en": "The Faithful Hand",
+  "ru": "Рука верующих"
+ },
+ "repeatable_events.10.a": {
+  "en": "Hold an open debate",
+  "ru": "Провести открытые дебаты"
+ },
+ "repeatable_events.10.b": {
+  "en": "Stage-manage the debate",
+  "ru": "Срежиссировать дебаты"
+ },
+ "repeatable_events.10.c": {
+  "en": "Run microtargeted ads",
+  "ru": "Запустить таргетированную рекламу"
+ },
+ "repeatable_events.10.d_neural": {
+  "en": "The debate will go out over neural links, carrying the candidates' words and the audience's mood with them: each viewer feels the room's approval or doubt as it happens. Campaign staff are working out how to use that, and critics want it forbidden.",
+  "ru": "Дебаты пойдут по нейросвязи и донесут не только слова кандидатов, но и настроение зала: каждый зритель почувствует одобрение или сомнение зала в тот же миг. Штабы думают, как это использовать, а критики требуют запретить."
+ },
+ "repeatable_events.10.d_tv": {
+  "en": "[concept_party_leaders] have agreed to a debate carried live across the country. Their staff are arguing over the format, the questions and who stands where, and the candidates are rehearsing their answers.",
+  "ru": "[concept_party_leaders] согласились на дебаты в прямом эфире на всю страну. Их штабы спорят о формате, вопросах и расстановке, а кандидаты репетируют ответы."
+ },
+ "repeatable_events.10.d_vr": {
+  "en": "The debate will be held in mixed-reality halls that join living rooms and public squares into one audience. Voters can stand beside the candidates. They can also be shown filtered images and altered avatars, and many are asking whether what they see will be what was said.",
+  "ru": "Дебаты пройдут в залах смешанной реальности, соединяющих гостиные и площади в единую аудиторию. Избиратели смогут стоять рядом с кандидатами. Им также могут показывать отфильтрованные образы и изменённые аватары, и многие спрашивают, будет ли увиденное тем, что было сказано."
+ },
+ "repeatable_events.10.f": {
+  "en": "Notes from the campaign office to the candidate, for the night of the debate:\\n\\nAnswer the question you were asked before you make your own point. Viewers remember who dodged more clearly than anything that was said.\\nHave one figure ready on prices and one on wages, and no more. Voters remember one number and confuse three.\\nKeep your hands still and away from your face. On a close picture every gesture looks larger than it is.\\nDo not look at the clock. Viewers take it as a sign that you want to leave.\\nWhen the other side is speaking, listen and do not shake your head. The picture may cut to you at any moment.",
+  "ru": "Заметки из штаба кандидату на ночь дебатов:\\n\\nСначала отвечайте на заданный вопрос, потом переходите к своему. Зрители лучше запоминают, кто увильнул, чем всё сказанное.\\nДержите наготове одну цифру о ценах и одну о зарплатах, не больше. Избиратель помнит одну цифру и путает три.\\nДержите руки спокойно и подальше от лица. На крупном плане каждый жест кажется больше, чем есть.\\nНе смотрите на часы. Зрители воспринимают это как желание уйти.\\nКогда говорит другая сторона, слушайте и не качайте головой. Камера может переключиться на вас в любой миг."
+ },
+ "repeatable_events.10.t": {
+  "en": "Face to Face",
+  "ru": "Лицом к лицу"
+ },
+ "repeatable_events.100.a": {
+  "en": "Fast-track new capacity",
+  "ru": "Ускоренно ввести новые мощности"
+ },
+ "repeatable_events.100.b": {
+  "en": "Mandate safety audits",
+  "ru": "Предписать проверки безопасности"
+ },
+ "repeatable_events.100.c": {
+  "en": "Prioritize strategic workloads",
+  "ru": "Отдать приоритет стратегическим нагрузкам"
+ },
+ "repeatable_events.100.d_ai": {
+  "en": "Forecasting, design and logistics software all need more computing capacity than our data centers have, and power, cooling and trained staff are running short. We can build faster, inspect more carefully, or decide which users come first.",
+  "ru": "Программам прогнозирования, проектирования и логистики нужно больше вычислительных мощностей, чем есть в наших центрах обработки данных, а электропитания, охлаждения и обученных кадров не хватает. Мы можем строить быстрее, проверять тщательнее или решить, чьи задачи идут первыми."
+ },
+ "repeatable_events.100.d_quantum": {
+  "en": "Quantum computers have not ended the demand for computing time. Government offices, firms and laboratories are queuing for time on machines that are never idle, and each says its work cannot wait.",
+  "ru": "Квантовые компьютеры не покончили со спросом на вычислительное время. Государственные ведомства, фирмы и лаборатории стоят в очереди за временем на машинах, которые никогда не простаивают, и каждый говорит, что его работа не терпит отлагательств."
+ },
+ "repeatable_events.100.f": {
+  "en": "Requests for the coming quarter, as the data center's manager sent them to the government:\\n\\nThe army asks for a fifth more capacity for its logistics models. It says its present share leaves exercises waiting overnight for results.\\nThe weather service asks for fifteen percent more. Its long-range forecasts are the first runs cut when time is short.\\nThe universities ask for a third more. Their projects queue for weeks, and several research groups have moved abroad, where time is cheaper.\\nThree firms ask to rent time on any terms. They would pay more than any government user and would come first if price decided.\\nThe center is running at ninety-six percent of capacity. It could add a hall of machines within a year if the power and cooling for it are found.",
+  "ru": "Заявки на предстоящий квартал, как их направил правительству управляющий центра обработки данных:\\n\\nАрмия просит на пятую часть больше мощности для моделей логистики. Она говорит, что при нынешней доле учения за ночь простаивают в ожидании результатов.\\nМетеослужба просит на пятнадцать процентов больше. Её долгосрочные прогнозы первыми отменяют, когда времени не хватает.\\nУниверситеты просят на треть больше. Их проекты стоят в очереди неделями, и несколько исследовательских групп уехали за границу, где время дешевле.\\nТри фирмы просят сдать им время на любых условиях. Они платили бы больше любого государственного пользователя и шли бы первыми, если бы решала цена.\\nЦентр загружен на девяносто шесть процентов. За год он мог бы добавить зал с машинами, если найдутся электропитание и охлаждение для него."
+ },
+ "repeatable_events.100.t": {
+  "en": "Compute Cluster Crunch",
+  "ru": "Нехватка вычислительных мощностей"
+ },
+ "repeatable_events.20.a": {
+  "en": "Subsidize emergency freight",
+  "ru": "Субсидировать экстренные перевозки"
+ },
+ "repeatable_events.20.b": {
+  "en": "Prioritize key inputs",
+  "ru": "Отдать приоритет ключевому сырью"
+ },
+ "repeatable_events.20.c": {
+  "en": "Fast-track port upgrades",
+  "ru": "Ускорить модернизацию портов"
+ },
+ "repeatable_events.20.d": {
+  "en": "Imports we depend on are held up in ports and at border crossings, at home and abroad: closures, too few ships and freight cars, broken cranes, strikes. Factories are short of parts and shops of goods. We can pay to move freight faster, give the scarce inputs to the industries that need them most, or spend on faster handling at the ports our trade uses.",
+  "ru": "Импорт, от которого мы зависим, застрял в портах и на пограничных переходах, у нас и за рубежом: закрытия, нехватка судов и вагонов, сломанные краны, забастовки. Фабрикам не хватает деталей, а лавкам — товаров. Мы можем платить за ускоренную перевозку, отдать дефицитное сырьё отраслям, которым оно нужнее всего, или вложиться в более быструю обработку грузов в портах, которыми пользуется наша торговля."
+ },
+ "repeatable_events.20.dd": {
+  "en": "Activate ministry logistics coordination",
+  "ru": "Включить логистическую координацию министерств"
+ },
+ "repeatable_events.20.f": {
+  "en": "\\\"I book freight and you buy for a factory, and neither of us can make a ship dock. You have come about this order three times this week, so here is everything I know. Your order is on a ship anchored outside the harbor, waiting for a berth. The berth is waiting for a crane, and the crane is waiting for a part that comes from the same place your order does. I can have your crates landed at another port and brought in by truck, and it will cost you four times the usual rate. Or you can wait, and I cannot tell you how long. I have forty customers asking me the same thing. Tell me which you want by tonight and I will book it.\\\"",
+  "ru": "«Я заказываю перевозки, а вы закупаете для фабрики, и ни один из нас не может заставить судно пришвартоваться. Вы приходили по этому заказу три раза на этой неделе, так что вот всё, что я знаю. Ваш заказ на судне, стоящем на якоре за гаванью в ожидании причала. Причал ждёт кран, а кран ждёт деталь, которая идёт оттуда же, откуда и ваш заказ. Я могу выгрузить ваши ящики в другом порту и привезти грузовиком, это обойдётся вам в четыре раза дороже обычного. Или вы можете подождать, и я не скажу, сколько. У меня сорок клиентов спрашивают то же самое. Скажите до вечера, что выбираете, и я оформлю.»"
+ },
+ "repeatable_events.20.t": {
+  "en": "Supply Chain Snarl",
+  "ru": "Затор в цепочках поставок"
+ },
+ "repeatable_events.30.a": {
+  "en": "Lay off workers and ramp output",
+  "ru": "Уволить рабочих и нарастить выпуск"
+ },
+ "repeatable_events.30.b": {
+  "en": "Retrain and redeploy",
+  "ru": "Переобучить и перевести на другие места"
+ },
+ "repeatable_events.30.c": {
+  "en": "Put the machines under the workers' own control.",
+  "ru": "Передать машины под контроль самих рабочих."
+ },
+ "repeatable_events.30.d_ai": {
+  "en": "Software now schedules the shifts, orders the parts and checks the work in many of our factories, and it does the jobs of many supervisors, clerks and inspectors. Managers want to cut those posts. The people who hold them want to know what will happen to them.",
+  "ru": "Программы теперь составляют графики смен, заказывают детали и проверяют работу на многих наших фабриках и выполняют труд многих надсмотрщиков, клерков и контролёров. Управляющие хотят сократить эти должности. Те, кто их занимает, хотят знать, что с ними будет."
+ },
+ "repeatable_events.30.d_robotics": {
+  "en": "Robot arms in our motor works and other factories now do much of the welding, painting and assembly that people used to do, and they run through the night. Output per worker has risen. Managers want to lay off the workers they no longer need, and those workers want to know what will happen to them.",
+  "ru": "Роботы-манипуляторы на нашем Моторном заводе и других фабриках выполняют значительную часть сварки, покраски и сборки, которую прежде делали люди, и работают всю ночь. Выработка на одного рабочего выросла. Управляющие хотят уволить ставших ненужными рабочих, а те хотят знать, что с ними будет."
+ },
+ "repeatable_events.30.f": {
+  "en": "The machinist came in on his day off to watch the new line run. The engineer who had installed it walked him along it. An arm lifted a door panel, turned it and held it while a second arm welded the seam, then set it on the belt, once every forty seconds. \\\"It does your station and the one next to it,\\\" the engineer said. \\\"We still need someone to watch it and clear it when it jams.\\\" The machinist asked how many people that would be. \\\"One a shift, for the whole line.\\\" He stood a while longer, counting panels as they came off, and then went to find the others from his shift.",
+  "ru": "Станочник пришёл в свой выходной посмотреть на работу новой линии. Инженер, установивший её, провёл его вдоль неё. Манипулятор поднял дверную панель, повернул и удержал, пока второй сваривал шов, затем поставил на ленту, и так каждые сорок секунд. «Он делает ваше место и соседнее, — сказал инженер. — Нужен ещё кто-то, чтобы следить и устранять заторы.» Станочник спросил, сколько это человек. «Один на смену на всю линию.» Он постоял ещё немного, считая сходящие панели, а потом пошёл искать других из своей смены."
+ },
+ "repeatable_events.30.t": {
+  "en": "Automation Shock",
+  "ru": "Шок автоматизации"
+ },
+ "repeatable_events.40.a": {
+  "en": "Ignore it",
+  "ru": "Не обращать внимания"
+ },
+ "repeatable_events.40.b": {
+  "en": "Brief the public",
+  "ru": "Проинформировать общественность"
+ },
+ "repeatable_events.40.c": {
+  "en": "Require the outlets to correct false reports.",
+  "ru": "Потребовать от изданий исправить ложные сообщения."
+ },
+ "repeatable_events.40.d": {
+  "en": "Have the propaganda ministry take charge of the story.",
+  "ru": "Поручить министерству пропаганды взять эту историю под контроль."
+ },
+ "repeatable_events.40.d_mass": {
+  "en": "A story has been on the front of every newspaper for days, and every commentator has an opinion on it. Moralists want something banned, reformers want it explained, and the papers are selling more copies than they have in months. It may pass in a week, or it may become the issue the government is judged on.",
+  "ru": "Одна история уже несколько дней на первых полосах всех газет, и у каждого обозревателя есть о ней мнение. Моралисты хотят что-то запретить, реформаторы хотят объяснений, а газеты продаются лучше, чем за последние месяцы. Всё может утихнуть за неделю, а может стать вопросом, по которому будут судить правительство."
+ },
+ "repeatable_events.40.d_neural": {
+  "en": "A rumor is moving through the neural channels faster than any correction can follow it, carried as a feeling as much as a claim. People who have never heard the story feel uneasy about it, and the outlets that try to correct it are accused of hiding something.",
+  "ru": "Слух распространяется по нейроканалам быстрее, чем за ним поспевает любое опровержение, и передаётся как чувство не меньше, чем как утверждение. Люди, не слышавшие этой истории, испытывают из-за неё тревогу, а издания, пытающиеся её опровергнуть, обвиняют в сокрытии чего-то."
+ },
+ "repeatable_events.40.d_social": {
+  "en": "A post has grown overnight into a boycott, and a second boycott has started against the first. Every feed is full of it, and each side is sure the other is lying. We can wait for it to pass, put out a plain statement of the facts, or step in.",
+  "ru": "Одна запись за ночь выросла в бойкот, а против него начался второй бойкот. Все ленты полны этим, и каждая сторона уверена, что другая лжёт. Мы можем ждать, пока всё утихнет, выпустить простое изложение фактов или вмешаться."
+ },
+ "repeatable_events.40.f": {
+  "en": "\\\"I have read four versions of it this morning, and they cannot all be true.\\\"\\n\\n\\\"Our readers write in about nothing else. The editor wants it on the front again tomorrow, whatever we learn tonight.\\\"\\n\\n\\\"My children came home from school talking about it. I had to ask them what it was.\\\"\\n\\n\\\"The government's spokesman has been asked about it at every briefing this week, and he has given the same short answer each time.\\\"",
+  "ru": "«Сегодня утром я прочёл четыре версии этого, и все они не могут быть правдой.»\\n\\n«Наши читатели пишут только об этом. Редактор хочет снова поставить это на первую полосу завтра, что бы мы ни узнали сегодня вечером.»\\n\\n«Мои дети пришли из школы и говорили об этом. Мне пришлось спросить их, что это такое.»\\n\\n«Представителя правительства спрашивали об этом на каждом брифинге на этой неделе, и он каждый раз давал один и тот же короткий ответ.»"
+ },
+ "repeatable_events.40.t": {
+  "en": "Media Panic of the Week",
+  "ru": "Медиапаника недели"
+ },
+ "repeatable_events.50.a": {
+  "en": "Settle quietly and patch systems",
+  "ru": "Тихо урегулировать и залатать системы"
+ },
+ "repeatable_events.50.b": {
+  "en": "Launch public forensics",
+  "ru": "Начать публичную экспертизу"
+ },
+ "repeatable_events.50.c": {
+  "en": "Impose emergency security standards",
+  "ru": "Ввести чрезвычайные стандарты безопасности"
+ },
+ "repeatable_events.50.d": {
+  "en": "Deploy intelligence-assisted forensics",
+  "ru": "Задействовать криминалистику с поддержкой разведки"
+ },
+ "repeatable_events.50.d_cyber": {
+  "en": "Intruders have broken into networks that our government offices and firms rely on, locked their records and left a demand for payment. We can pay quietly and repair the systems, investigate in public and name those responsible, or force every operator in the sector up to a stricter standard, whether or not they are ready.",
+  "ru": "Злоумышленники проникли в сети, на которые полагаются наши ведомства и фирмы, заблокировали их данные и оставили требование выкупа. Мы можем тихо заплатить и починить системы, провести публичное расследование и назвать виновных или заставить всех операторов отрасли перейти на более строгий стандарт, готовы они или нет."
+ },
+ "repeatable_events.50.d_quantum": {
+  "en": "Quantum computers can now break the ciphers that our banks and government offices still use to protect their records and payments. Some payments are being held while the banks check them, and people are asking whether the balances they see can be trusted.",
+  "ru": "Квантовые компьютеры теперь способны взламывать шифры, которыми наши банки и ведомства всё ещё защищают свои записи и платежи. Некоторые платежи задерживаются, пока банки их проверяют, и люди спрашивают, можно ли доверять остаткам на их счетах."
+ },
+ "repeatable_events.50.f": {
+  "en": "To the director, from the security team on duty overnight. We have confirmed that intruders were inside the records network for at least six weeks before the alarm. They entered on an engineer's account and copied whatever that account could read, which under the permissions we set was most of the system. We have closed the account and cut the network off from outside connections. We cannot recall what was copied. We need a decision by morning on whether to tell the people whose records were taken.",
+  "ru": "Директору от ночной дежурной группы безопасности. Мы установили, что злоумышленники находились внутри сети записей не менее шести недель до срабатывания тревоги. Они вошли через учётную запись инженера и скопировали всё, что она могла читать, а при заданных нами правах это была большая часть системы. Мы закрыли учётную запись и отрезали сеть от внешних подключений. Что именно было скопировано, мы установить не можем. К утру нам нужно решение, сообщать ли людям, чьи записи были похищены."
+ },
+ "repeatable_events.50.t": {
+  "en": "Network Compromised",
+  "ru": "Сеть взломана"
+ },
+ "repeatable_events.60.a": {
+  "en": "Auction fresh bandwidth",
+  "ru": "Продать с аукциона новую полосу частот"
+ },
+ "repeatable_events.60.b": {
+  "en": "Reserve a public service grid",
+  "ru": "Зарезервировать сеть общественного назначения"
+ },
+ "repeatable_events.60.c": {
+  "en": "Lease foreign relay capacity",
+  "ru": "Арендовать мощности иностранных ретрансляторов"
+ },
+ "repeatable_events.60.d_quantum": {
+  "en": "The rollout of quantum relays has reopened every old dispute over who may use which frequencies. Each agency and carrier claims the new channels as its own, and the regulator has been asked to rule on all of them at once.",
+  "ru": "Развёртывание квантовых ретрансляторов вновь открыло все старые споры о том, кому какие частоты использовать. Каждое ведомство и каждый оператор объявляет новые каналы своими, а регулятору предложено рассудить всех сразу."
+ },
+ "repeatable_events.60.d_sat": {
+  "en": "Satellite links, emergency services and civilian networks all use the same radio frequencies, and there are not enough to go around. The carriers want the bands auctioned, planners want them assigned by rule, and foreign carriers are offering to lease us capacity on their own relays.",
+  "ru": "Спутниковые каналы, экстренные службы и гражданские сети используют одни и те же радиочастоты, и на всех их не хватает. Операторы хотят пустить диапазоны с аукциона, плановики — распределить их по правилам, а иностранные операторы предлагают нам аренду мощностей на их собственных ретрансляторах."
+ },
+ "repeatable_events.60.f": {
+  "en": "\\\"I run the emergency services. During the last big fire my crews could not hear each other on the radio for an hour, because the band was full of other traffic. I want a band that is ours and nobody else's.\\\"\\n\\n\\\"I run the largest phone network. Most of the people who called you during that fire called on my network. If you take half my band, their calls drop, and some of them will be calling you.\\\"\\n\\n\\\"Then give way to us when we need it.\\\"\\n\\n\\\"Giving way means a switch someone has to throw in the middle of an emergency. I would rather build you a band of your own, if the regulator gives us room for it.\\\"",
+  "ru": "«Я руковожу экстренными службами. Во время последнего большого пожара мои бригады час не слышали друг друга по радио, потому что диапазон был забит чужим трафиком. Мне нужен диапазон, который будет нашим и ничьим больше.»\\n\\n«Я руковожу крупнейшей телефонной сетью. Большинство звонивших вам во время того пожара звонили по моей сети. Если вы заберёте половину моего диапазона, их звонки оборвутся, и некоторые из них будут звонить вам.»\\n\\n«Тогда уступайте нам, когда нужно.»\\n\\n«Уступить — значит, что кому-то придётся переключать рычаг посреди чрезвычайной ситуации. Я бы лучше построил вам отдельный диапазон, если регулятор выделит для него место.»"
+ },
+ "repeatable_events.60.t": {
+  "en": "Spectrum Crunch",
+  "ru": "Нехватка частот"
+ },
+ "repeatable_events.70.a": {
+  "en": "Perform debris-avoidance maneuvers",
+  "ru": "Выполнить манёвры уклонения от обломков"
+ },
+ "repeatable_events.70.b": {
+  "en": "Conduct a laser sweep",
+  "ru": "Провести лазерную очистку"
+ },
+ "repeatable_events.70.c": {
+  "en": "Press on and accept risk",
+  "ru": "Продолжать и принять риск"
+ },
+ "repeatable_events.70.d": {
+  "en": "Our trackers have found a chain of near-misses between debris and our satellites due in the coming days. The operators want time to move the satellites out of the way, and the military warns that every move leaves a gap in coverage. Clearing the lanes will cost us, and so may doing nothing.",
+  "ru": "Наши системы слежения обнаружили цепочку опасных сближений обломков с нашими спутниками в ближайшие дни. Операторы просят времени, чтобы увести спутники с пути, а военные предупреждают, что каждый манёвр оставляет брешь в охвате. Расчистка орбит обойдётся нам дорого, как, возможно, и бездействие."
+ },
+ "repeatable_events.70.f": {
+  "en": "The tracking officer on the night shift ran the conjunction forecast three times, with the latest positions each time. She drew a circle around each of the three objects on the screen and wrote down the time and distance of its closest pass. Then she opened the platform's fuel log and worked out what a move would cost: most of the fuel set aside for the rest of the year. She wrote both figures in the handover note, left it on the commander's desk, and started the forecast again.",
+  "ru": "Офицер слежения ночной смены трижды прогнала прогноз сближений с последними положениями. Она обвела на экране каждый из трёх объектов кругом и записала время и расстояние его наибольшего сближения. Затем открыла журнал топлива платформы и подсчитала, во что обойдётся манёвр: в большую часть топлива, отложенного на остаток года. Она записала обе цифры в передаточную записку, оставила её на столе командира и запустила прогноз снова."
+ },
+ "repeatable_events.70.t": {
+  "en": "A Crowded Orbit",
+  "ru": "Тесная орбита"
+ },
+ "repeatable_events.80.a": {
+  "en": "Draw from reserves",
+  "ru": "Использовать резервы"
+ },
+ "repeatable_events.80.b": {
+  "en": "Order rolling blackouts",
+  "ru": "Ввести поочерёдные отключения электричества"
+ },
+ "repeatable_events.80.c": {
+  "en": "Buy power from abroad.",
+  "ru": "Купить электроэнергию за рубежом."
+ },
+ "repeatable_events.80.d": {
+  "en": "Damage from micrometeoroids and overdue maintenance has cut the output of our orbital collectors, and the receivers on the ground are delivering less power than the grid needs. We can draw on our reserves, cut power to districts in turn, or buy power from abroad.",
+  "ru": "Повреждения от микрометеороидов и запоздалое обслуживание снизили выработку наших орбитальных коллекторов, и наземные приёмники дают меньше энергии, чем требует сеть. Мы можем задействовать резервы, поочерёдно отключать электричество в районах или купить энергию за рубежом."
+ },
+ "repeatable_events.80.f": {
+  "en": "\\\"This is the duty officer at the grid control room, for the government's energy office. Collector seven stopped sending at ten past four this morning. The ground station reports micrometeoroid damage to its panels and says repairs will take three weeks. We are covering the gap from reserve, and at today's demand the reserve lasts about four days. After that I have to choose which districts go without power for part of each day, and I would rather the government chose them. Send me the districts and the hours by Thursday, and I will draw up the schedule.\\\"",
+  "ru": "«Это дежурный диспетчерской сети для энергетического ведомства правительства. Коллектор номер семь перестал передавать в десять минут пятого сегодня утром. Наземная станция сообщает о повреждении панелей микрометеороидами и говорит, что ремонт займёт три недели. Мы покрываем разрыв из резерва, и при сегодняшнем спросе его хватит примерно на четыре дня. После этого мне придётся выбирать, какие районы будут оставаться без электричества часть дня, и я бы предпочёл, чтобы их выбрало правительство. Пришлите мне районы и часы к четвергу, и я составлю график.»"
+ },
+ "repeatable_events.80.t": {
+  "en": "Dark Collectors",
+  "ru": "Тёмные коллекторы"
+ },
+ "repeatable_events.90.a": {
+  "en": "Subsidize priority output",
+  "ru": "Субсидировать приоритетный выпуск"
+ },
+ "repeatable_events.90.b": {
+  "en": "Open a patent pool",
+  "ru": "Открыть патентный пул"
+ },
+ "repeatable_events.90.c": {
+  "en": "Ration premium allotments",
+  "ru": "Нормировать премиальные квоты"
+ },
+ "repeatable_events.90.d_orbital": {
+  "en": "Our orbital factories have made many difficult products routine. A shortage of one specialized feedstock now holds up work everywhere it is used, from the clean rooms on the ground to the launch schedule.",
+  "ru": "Наши орбитальные фабрики сделали многие сложные изделия привычными. Нехватка одного специального сырья теперь тормозит работу везде, где оно применяется, от чистых комнат на земле до графика запусков."
+ },
+ "repeatable_events.90.d_quantum": {
+  "en": "Our fabricators and research laboratories need the same rare substrates, and there is not enough to supply them all. Producers want subsidies, researchers want the patents pooled, and every buyer wants to be served first.",
+  "ru": "Нашим фабрикам микросхем и исследовательским лабораториям нужны одни и те же редкие подложки, и на всех их не хватает. Производители хотят субсидий, исследователи — объединения патентов, а каждый покупатель хочет, чтобы обслужили его первым."
+ },
+ "repeatable_events.90.f": {
+  "en": "To the materials board, from the office that buys for our fabricators. We have three suppliers of the substrate. One is under export restrictions at home and can sell to us only in small lots. One is six months behind on its deliveries. The third has doubled its price since our last order. Substitutes exist, but parts made from them fail our tests more often than they pass. We recommend paying the third supplier's price for this quarter's needs while the laboratories test the substitutes further, and we ask the board to approve the expense.",
+  "ru": "Совету по материалам от отдела закупок для наших фабрик микросхем. У нас три поставщика подложки. Один находится под экспортными ограничениями у себя дома и может продавать нам только небольшие партии. Другой на шесть месяцев отстаёт с поставками. Третий удвоил цену со времени нашего последнего заказа. Заменители существуют, но изготовленные из них детали чаще не проходят наши испытания, чем проходят. Мы рекомендуем заплатить цену третьего поставщика за потребности этого квартала, пока лаборатории дальше испытывают заменители, и просим совет утвердить расход."
+ },
+ "repeatable_events.90.t": {
+  "en": "Scarce Substrates",
+  "ru": "Дефицитные подложки"
+ },
+ "resettlement.1.a": {
+  "en": "Open the land at once.",
+  "ru": "Немедленно открыть землю."
+ },
+ "resettlement.1.b": {
+  "en": "Survey it first.",
+  "ru": "Сначала провести межевание."
+ },
+ "resettlement.1.d": {
+  "en": "Word that the government is giving land away in [SCOPE.sState('rs_event_state').GetName] has spread faster than our surveyors can work. Crowds of would-be settlers are camped at the boundary markers, waiting for the signal to stake their claims.",
+  "ru": "Слух о том, что правительство раздаёт землю в области [SCOPE.sState('rs_event_state').GetName], разошёлся быстрее, чем успевают работать наши землемеры. Толпы желающих поселиться стоят лагерем у межевых знаков в ожидании сигнала, чтобы закрепить свои участки."
+ },
+ "resettlement.1.f": {
+  "en": "The surveyor reached the boundary marker an hour after dawn and found the camp already there: tents, bundles, tools, and families sitting in rows facing the line. A man at the front asked him when the land would open. \\\"When the survey is filed,\\\" the surveyor told him, \\\"and not before. Anyone who crosses before then loses the claim.\\\" He set up his instrument and began to take the first bearing, and the people nearest the marker stood up to watch him do it.",
+  "ru": "Землемер добрался до межевого знака через час после рассвета и обнаружил, что лагерь уже там: палатки, узлы, инструменты и семьи, сидящие рядами лицом к черте. Мужчина в первом ряду спросил его, когда откроют землю. «Когда будет подана съёмка, — ответил землемер, — и не раньше. Кто перейдёт черту до этого, лишится участка». Он установил инструмент и начал снимать первый пеленг, а стоявшие ближе всех к знаку поднялись, чтобы наблюдать."
+ },
+ "resettlement.1.t": {
+  "en": "Land Rush in [SCOPE.sState('rs_event_state').GetName]",
+  "ru": "Земельная лихорадка в области [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.2.a": {
+  "en": "Send in the inspectors.",
+  "ru": "Послать инспекторов."
+ },
+ "resettlement.2.b": {
+  "en": "The market will sort it out.",
+  "ru": "Рынок сам всё расставит."
+ },
+ "resettlement.2.d": {
+  "en": "Agents of land companies are filing claims in [SCOPE.sState('rs_event_state').GetName] in the names of settlers who do not exist, and reselling the best plots at a profit. Genuine settlers arrive to find the land already taken.",
+  "ru": "Агенты земельных компаний подают заявки на землю в области [SCOPE.sState('rs_event_state').GetName] от имени несуществующих поселенцев и с выгодой перепродают лучшие участки. Настоящие поселенцы приезжают и обнаруживают, что земля уже занята."
+ },
+ "resettlement.2.f": {
+  "en": "To the land office, from a settler and his family, who came to claim the plot advertised by number in the district notice. We arrived on the date set and found the plot fenced, and a man on it who showed us a deed in another name. The clerk at the office tells us that the claimant filed a month before the land opened, and has filed for eleven other plots along the same road, each in a different name. We have spent what we had on the journey. We ask the office to examine these claims, and in the meantime to tell us where we may lawfully camp.",
+  "ru": "Земельной конторе от поселенца и его семьи, приехавших занять участок, объявленный по номеру в окружном извещении. Мы прибыли в назначенный день и нашли участок огороженным, а на нём человека, показавшего нам купчую на другое имя. Чиновник конторы говорит, что заявитель подал заявку за месяц до открытия земли и подал ещё на одиннадцать участков вдоль той же дороги, каждый на другое имя. Всё, что у нас было, мы потратили на дорогу. Мы просим контору рассмотреть эти заявки, а пока подсказать, где нам законно разбить лагерь."
+ },
+ "resettlement.2.t": {
+  "en": "The Speculators",
+  "ru": "Спекулянты"
+ },
+ "resettlement.20.a": {
+  "en": "We accept the cost.",
+  "ru": "Мы принимаем эту цену."
+ },
+ "resettlement.20.b": {
+  "en": "End the coercive programs.",
+  "ru": "Прекратить принудительные программы."
+ },
+ "resettlement.20.d": {
+  "en": "We are a party to the Universal Declaration of Human Rights, and we have begun a coercive resettlement program. Our treaty partners will hold it against us: we suffer #N Violating the Declaration#!, which grows with the number of people the program moves and fades over the following years once it stops.",
+  "ru": "Мы участвуем во Всеобщей декларации прав человека, а сами начали программу принудительного переселения. Наши партнёры по договорам поставят нам это в вину: мы страдаем от эффекта «#N Нарушение Декларации#!», который растёт вместе с числом переселяемых программой людей и ослабевает в последующие годы после её прекращения."
+ },
+ "resettlement.20.f": {
+  "en": "\\\"Everyone has the right to freedom of movement and residence within the borders of each State.\\\"\\n\\n— Universal Declaration of Human Rights, Article 13",
+  "ru": "«Каждый человек имеет право свободно передвигаться и выбирать себе местожительство в пределах каждого государства.»\\n\\n— Всеобщая декларация прав человека, статья 13"
+ },
+ "resettlement.20.t": {
+  "en": "The Declaration and Our Settlements",
+  "ru": "Декларация и наши поселения"
+ },
+ "resettlement.3.a": {
+  "en": "Send relief.",
+  "ru": "Отправить помощь."
+ },
+ "resettlement.3.d": {
+  "en": "The first winter has caught the settlers of [SCOPE.sState('rs_event_state').GetName] in tents, dugouts and half-built houses. Fuel is short, the roads are closed, and the new arrivals are falling sick.",
+  "ru": "Первая зима застала поселенцев области [SCOPE.sState('rs_event_state').GetName] в палатках, землянках и недостроенных домах. Топлива не хватает, дороги закрыты, а прибывшие заболевают."
+ },
+ "resettlement.3.d_season": {
+  "en": "The first season has gone badly for the settlers of [SCOPE.sState('rs_event_state').GetName]. Their shelters are unfinished, the stores they brought are running out before the first harvest, the roads in are hard to travel, and the new arrivals are falling sick.",
+  "ru": "Первый сезон прошёл плохо для поселенцев области [SCOPE.sState('rs_event_state').GetName]. Их жилища не достроены, привезённые запасы кончаются до первого урожая, дороги туда трудны для проезда, а прибывшие заболевают."
+ },
+ "resettlement.3.f": {
+  "en": "\\\"You are the relief officer, so I will tell you how we stand. We came in the autumn and built what we could before the ground froze: two dugouts, a shed for the animals and half a house. The snow came early and has not stopped. We burn what we can find, and it is not enough to keep both dugouts warm, so we have all moved into one. Three of the children have the cough, and my wife's mother has not got up for a week. We need fuel, food and a doctor, in that order, and we need them before the road closes again.\\\"",
+  "ru": "«Вы чиновник по оказанию помощи, поэтому я расскажу, как мы живём. Мы пришли осенью и построили, что смогли, пока не промёрзла земля: две землянки, сарай для скота и полдома. Снег выпал рано и не прекращается. Мы жжём, что находим, но этого не хватает, чтобы согреть обе землянки, так что мы все перебрались в одну. У троих детей кашель, а мать моей жены уже неделю не встаёт. Нам нужны топливо, еда и врач, именно в таком порядке, и нужны до того, как дорога закроется снова.»"
+ },
+ "resettlement.3.f_season": {
+  "en": "The relief officer reached the new settlement on the third day of his journey and walked the length of it with the settlers' committee before he wrote anything down. Half the shelters had roofs. The store shed held a few sacks and some tools, and the committee's ledger showed the rations cut twice since the last delivery. In the shelter at the end of the row a woman was nursing three sick children at once. The officer counted the people, the sacks and the sick, then sat on an upturned crate to write his report while the committee waited.",
+  "ru": "Чиновник по оказанию помощи добрался до нового поселения на третий день пути и прошёл вдоль него с комитетом поселенцев, прежде чем что-либо записал. Половина жилищ имела крыши. В складском сарае лежало несколько мешков и немного инструментов, а в книге комитета значилось, что пайки урезали дважды с последней поставки. В жилище в конце ряда женщина ухаживала сразу за тремя больными детьми. Чиновник пересчитал людей, мешки и больных, затем сел на перевёрнутый ящик писать доклад, а комитет ждал."
+ },
+ "resettlement.3.t": {
+  "en": "A Frontier Winter",
+  "ru": "Зима на границе"
+ },
+ "resettlement.3.t_season": {
+  "en": "A Hard First Season",
+  "ru": "Тяжёлый первый сезон"
+ },
+ "resettlement.4.a": {
+  "en": "Fund a conservation program.",
+  "ru": "Профинансировать программу охраны земель."
+ },
+ "resettlement.4.b": {
+  "en": "Keep plowing.",
+  "ru": "Продолжать пахать."
+ },
+ "resettlement.4.d": {
+  "en": "Years of plowing have stripped the grass and the old cover from the land of [SCOPE.sState('rs_event_state').GetName], and the soil is going with them. In dry weather the wind lifts it off in clouds of dust, and in heavy rain it washes into the streams. Fields that gave good crops in the first years give less each season.",
+  "ru": "Годы вспашки сорвали с земли области [SCOPE.sState('rs_event_state').GetName] траву и старый покров, и вместе с ними уходит почва. В сухую погоду ветер поднимает её облаками пыли, а в сильные дожди её смывает в ручьи. Поля, дававшие хорошие урожаи в первые годы, с каждым сезоном дают меньше."
+ },
+ "resettlement.4.f": {
+  "en": "\\\"I have farmed this claim since the first year of the program, and I came to the meeting to say what the agronomist will not say in front of the land office. When we broke this ground, the soil was dark down to a spade's depth. On the high fields it is half that now. In dry weather the wind takes it, and in wet weather it runs off into the creek. My neighbors and I plowed every acre the grant allowed, because that is what the grant asked of us. If the office wants the land to last, it will have to pay us to leave some of it in grass, and send someone to show us how.\\\"",
+  "ru": "«Я веду хозяйство на этом участке с первого года программы и пришёл на собрание сказать то, чего агроном не скажет при земельной конторе. Когда мы распахали эту землю, почва была тёмной на глубину лопаты. На высоких полях сейчас вдвое меньше. В сухую погоду её уносит ветер, а в сырую она стекает в ручей. Мы с соседями вспахали каждый акр, который позволяла субсидия, потому что этого от нас требовала субсидия. Если контора хочет, чтобы земля сохранилась, ей придётся платить нам за то, чтобы часть оставалась под травой, и прислать кого-то показать, как это делать.»"
+ },
+ "resettlement.4.t": {
+  "en": "The Topsoil of [SCOPE.sState('rs_event_state').GetName]",
+  "ru": "Верхний слой почвы области [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.5.b": {
+  "en": "These accounts are exaggerated.",
+  "ru": "Эти рассказы преувеличены."
+ },
+ "resettlement.5.d": {
+  "en": "A campaign against our coercive resettlement has caught the public's attention. Writers and reformers have published accounts of conditions in the settlements of [SCOPE.sState('rs_event_state').GetName], and they are demanding that the program end.",
+  "ru": "Кампания против нашего принудительного переселения привлекла внимание общества. Писатели и реформаторы опубликовали рассказы об условиях в поселениях области [SCOPE.sState('rs_event_state').GetName] и требуют прекратить программу."
+ },
+ "resettlement.5.f": {
+  "en": "\\\"I read the reporter's account aloud to my reading circle. Nobody spoke for a while afterward, and then we wrote to the government, all of us, the same evening.\\\"\\n\\n\\\"The officials at the settlement office say the reports are exaggerated. They have not invited anyone from the newspapers to go and see for themselves.\\\"\\n\\n\\\"My brother was sent there. We have had one letter from him since he went, and the reformers have asked our permission to print it.\\\"\\n\\n\\\"I was a guard in one of those settlements for two years. What the papers print is true, and I have said so to the reformers' committee under my own name.\\\"",
+  "ru": "«Я прочла рассказ репортёра вслух своему читательскому кружку. Какое-то время после никто не говорил, а потом мы все написали правительству в тот же вечер.»\\n\\n«Чиновники поселенческой конторы говорят, что сообщения преувеличены. Они не пригласили никого из газет поехать и убедиться самим.»\\n\\n«Моего брата отправили туда. С тех пор, как он уехал, мы получили от него одно письмо, и реформаторы спросили у нас разрешения его напечатать.»\\n\\n«Я два года был охранником в одном из этих поселений. То, что печатают газеты, правда, и я сказал это комитету реформаторов под своим именем.»"
+ },
+ "resettlement.5.t": {
+  "en": "The Reform Campaign",
+  "ru": "Кампания за реформы"
+ },
+ "resettlement.6.a": {
+  "en": "Send grain and tools.",
+  "ru": "Отправить зерно и инструменты."
+ },
+ "resettlement.6.b": {
+  "en": "Let the settlements fend for themselves.",
+  "ru": "Пусть поселения справляются сами."
+ },
+ "resettlement.6.d": {
+  "en": "The deportees sent to [SCOPE.sState('rs_event_state').GetName] were set down without tools or seed. Now the settlements are starving.",
+  "ru": "Депортированных, отправленных в область [SCOPE.sState('rs_event_state').GetName], высадили без инструментов и семян. Теперь поселения голодают."
+ },
+ "resettlement.6.f": {
+  "en": "The settlement commandant's inventory of stores, sent to the Settlement Authority with his request for supplies:\\n\\nFlour, two sacks. The deportees arrived with none, and these came from the guards' own ration.\\nSeed grain, none. None was sent with the deportees, so nothing has been planted.\\nTools, eleven spades and four axes for the whole settlement. The rest were promised with the second transport, which has not come.\\nShelter, none built. The people sleep in the open and in holes they have dug, because there are no tools to cut timber with.\\nThe sick, more each day. There is no doctor, and the guards will not go among them.",
+  "ru": "Опись запасов, отправленная комендантом поселения в Управление по заселению вместе с запросом о снабжении:\\n\\nМука, два мешка. Депортированные прибыли без неё, и эти взяты из пайка самих охранников.\\nПосевное зерно, нет. С депортированными его не прислали, поэтому ничего не посеяно.\\nИнструменты, одиннадцать лопат и четыре топора на всё поселение. Остальные были обещаны со вторым транспортом, который не пришёл.\\nЖилища, ни одного не построено. Люди спят под открытым небом и в вырытых ими ямах, потому что нет инструментов, чтобы рубить лес.\\nБольные, с каждым днём больше. Врача нет, а охранники не идут к ним."
+ },
+ "resettlement.6.t": {
+  "en": "Famine in the Settlements",
+  "ru": "Голод в поселениях"
+ },
+ "resettlement.7.a": {
+  "en": "Let them go home, and end the program here.",
+  "ru": "Отпустить их домой и прекратить здесь программу."
+ },
+ "resettlement.7.b": {
+  "en": "The program continues.",
+  "ru": "Программа продолжается."
+ },
+ "resettlement.7.d": {
+  "en": "Many of the people we resettled in [SCOPE.sState('rs_event_state').GetName] have signed a petition asking to go home to [SCOPE.sState('rs_return_state').GetName]. Some are refusing to work, and some have already left without permission.",
+  "ru": "Многие из людей, которых мы переселили в область [SCOPE.sState('rs_event_state').GetName], подписали петицию с просьбой вернуться домой, в область [SCOPE.sState('rs_return_state').GetName]. Некоторые отказываются работать, а некоторые уже ушли без разрешения."
+ },
+ "resettlement.7.f": {
+  "en": "To the government, from the people resettled in [SCOPE.sState('rs_event_state').GetName], who sign below. We were brought here under the resettlement program and have done the work we were set. We have built the houses we live in and cleared the land we were given. Our families are still in [SCOPE.sState('rs_return_state').GetName], and many of us have parents there who are old and have no one else to look after them. We ask to be allowed to return to them. We ask also that those who have already gone home without permission not be punished, since they went to their families and not to make trouble.",
+  "ru": "Правительству от людей, переселённых в область [SCOPE.sState('rs_event_state').GetName], подписавшихся ниже. Нас привезли сюда по программе переселения, и мы выполнили порученную работу. Мы построили дома, в которых живём, и расчистили выделенную нам землю. Наши семьи по-прежнему в области [SCOPE.sState('rs_return_state').GetName], и у многих из нас там остались старые родители, которым больше некому помочь. Мы просим позволить нам вернуться к ним. Мы просим также не наказывать тех, кто уже ушёл домой без разрешения, ведь они пошли к семьям, а не чтобы устраивать беспорядки."
+ },
+ "resettlement.7.t": {
+  "en": "A Petition to Return",
+  "ru": "Петиция о возвращении"
+ },
+ "resettlement.8.a": {
+  "en": "Negotiate reserves for them.",
+  "ru": "Выторговать для них резервации."
+ },
+ "resettlement.8.b": {
+  "en": "Back the settlers' claims.",
+  "ru": "Поддержать притязания поселенцев."
+ },
+ "resettlement.8.d": {
+  "en": "The people we are settling in [SCOPE.sState('rs_event_state').GetName] are fencing land that others have farmed, hunted and grazed for generations. The people who were here first are appealing to the government.",
+  "ru": "Люди, которых мы селим в области [SCOPE.sState('rs_event_state').GetName], огораживают землю, на которой поколениями пахали, охотились и пасли скот другие. Те, кто был здесь первыми, обращаются к правительству."
+ },
+ "resettlement.8.f": {
+  "en": "\\\"You have fenced the spring where my family has watered its animals since before your people came to this land. I am asking you to take the fence down.\\\"\\n\\n\\\"The settlement office gave me this plot with the spring on it, and I have the paper. I cannot feed my family here without water.\\\"\\n\\n\\\"Your paper was written by people who had never seen this land, and who never asked anyone who used it.\\\"\\n\\n\\\"Then come with me to the settlement office, and we will ask them together whose it is. Until they answer, I will leave the gate open in the mornings for your animals.\\\"",
+  "ru": "«Вы огородили источник, где моя семья поила скот ещё до того, как ваши люди пришли в эту землю. Я прошу вас убрать ограду.»\\n\\n«Поселенческая контора выдала мне этот участок вместе с источником, и у меня есть бумага. Без воды я не могу прокормить здесь семью.»\\n\\n«Вашу бумагу писали люди, никогда не видевшие этой земли и не спросившие никого из тех, кто ею пользовался.»\\n\\n«Тогда пойдёмте со мной в поселенческую контору, и мы вместе спросим у них, чей он. Пока они не ответят, я буду по утрам оставлять ворота открытыми для вашего скота.»"
+ },
+ "resettlement.8.t": {
+  "en": "Land Disputes in [SCOPE.sState('rs_event_state').GetName]",
+  "ru": "Земельные споры в области [SCOPE.sState('rs_event_state').GetName]"
+ },
+ "resettlement.9.a": {
+  "en": "The frontier has done its work.",
+  "ru": "Граница сделала своё дело."
+ },
+ "resettlement.9.d": {
+  "en": "[SCOPE.sState('rs_closed_state').GetName] is a frontier no longer. Its farms and towns are as settled as the rest of the country, and the Settlement Authority there has been wound up. If we want more settlers, we will have to find another frontier.",
+  "ru": "Область [SCOPE.sState('rs_closed_state').GetName] больше не граница. Её фермы и города заселены так же, как и остальная страна, а Управление по заселению там упразднено. Если нам нужны новые поселенцы, придётся искать другую границу."
+ },
+ "resettlement.9.f": {
+  "en": "\\\"The existence of an area of free land, its continuous recession, and the advance of American settlement westward, explain American development.\\\"\\n\\n— Frederick Jackson Turner, The Significance of the Frontier in American History",
+  "ru": "«Существование области свободной земли, её непрерывное сокращение и продвижение американского заселения на запад объясняют американское развитие.»\\n\\n— Фредерик Джексон Тёрнер, «Значение границы в американской истории»"
+ },
+ "resettlement.9.t": {
+  "en": "The Frontier Is Closed",
+  "ru": "Граница закрыта"
+ },
+ "social_tensions_events.1.a": {
+  "en": "Launch a security crackdown",
+  "ru": "Начать силовое подавление"
+ },
+ "social_tensions_events.1.b": {
+  "en": "Rally national resilience",
+  "ru": "Сплотить нацию в стойкости"
+ },
+ "social_tensions_events.1.c": {
+  "en": "Expand the surveillance net",
+  "ru": "Расширить сеть слежки"
+ },
+ "social_tensions_events.1.d": {
+  "en": "Intelligence-led preemption",
+  "ru": "Упреждение по данным разведки"
+ },
+ "social_tensions_events.1.d_base": {
+  "en": "A bomb has exploded in a crowded market street in one of our cities, killing and wounding people who were doing their shopping. The attackers have been identified as [Concept('concept_radical', 'radicals')] acting for a cause of their own. The public wants the government to act, and our security officials disagree about how.",
+  "ru": "В одном из наших городов на людной торговой улице взорвалась бомба, убив и ранив людей, делавших покупки. Нападавших опознали как [Concept('concept_radical', 'радикалов')], действовавших ради собственной цели. Общество требует от правительства действий, а наши чиновники безопасности расходятся во мнениях о том, каких."
+ },
+ "social_tensions_events.1.d_cyber": {
+  "en": "A bombing in one of our cities was timed with an attack on the networks of the emergency services. While the dispatch systems were down, ambulances and fire crews could not be sent where they were needed, and more people died waiting for them. The attackers have published their demands through accounts they took over.",
+  "ru": "Взрыв в одном из наших городов был приурочен к нападению на сети экстренных служб. Пока диспетчерские системы не работали, машины скорой помощи и пожарные расчёты нельзя было направить туда, где они были нужны, и больше людей погибло в ожидании. Нападавшие опубликовали свои требования через захваченные ими учётные записи."
+ },
+ "social_tensions_events.1.d_modern": {
+  "en": "Bombs have gone off on several trains and buses in one of our cities during the morning rush. Photographs from the stations were published within the hour. Our intelligence services are trying to trace the network behind the attack before it can strike again.",
+  "ru": "В одном из наших городов во время утреннего часа пик взорвались бомбы в нескольких поездах и автобусах. Фотографии со станций опубликовали в течение часа. Наши разведывательные службы пытаются выследить сеть, стоящую за нападением, прежде чем она ударит снова."
+ },
+ "social_tensions_events.1.f": {
+  "en": "The owner of the eating house on the street where the bomb went off came back at dusk, when the cordon was lifted. The windows had come in across the tables. She found the till where it had been, with the morning's takings in it, and the cups still on their saucers where her customers had left them. She swept the glass into a pile by the door, then into sacks, and carried the sacks to the curb. A man from the next shop came over with boards and nails, and together they covered the window frames. When they had finished she wrote the names of her two waiters on a card and went to the hospital to look for them.",
+  "ru": "Хозяйка закусочной на улице, где взорвалась бомба, вернулась в сумерках, когда сняли оцепление. Окна влетели внутрь через столы. Она нашла кассу на прежнем месте с утренней выручкой и чашки на блюдцах там, где их оставили посетители. Она смела стекло в кучу у двери, затем в мешки и вынесла мешки к бордюру. Мужчина из соседней лавки пришёл с досками и гвоздями, и вдвоём они закрыли оконные проёмы. Когда они закончили, она записала на карточке имена двух своих официантов и пошла в больницу искать их."
+ },
+ "social_tensions_events.1.t": {
+  "en": "After the Blast",
+  "ru": "После взрыва"
+ },
+ "social_tensions_events.10.a": {
+  "en": "Let the money flow",
+  "ru": "Пусть деньги текут"
+ },
+ "social_tensions_events.10.b": {
+  "en": "Launch a grassroots counter-campaign",
+  "ru": "Начать народную контркампанию"
+ },
+ "social_tensions_events.10.d": {
+  "en": "With no limits on campaign donations, the Industrialists are spending heavily on this election. Their candidates' posters and advertisements are everywhere, and candidates without wealthy backers cannot buy the space to answer them. Those candidates say the election is being bought.",
+  "ru": "Поскольку на пожертвования в кампании ограничений нет, Промышленники щедро тратятся на эти выборы. Плакаты и реклама их кандидатов повсюду, а кандидаты без богатых покровителей не могут купить место, чтобы ответить. Эти кандидаты говорят, что выборы покупаются."
+ },
+ "social_tensions_events.10.f": {
+  "en": "\\\"I manage the independent candidate's campaign in this district, and I am writing to our volunteers so that you know where we stand. Our opponent's backers have bought every poster site on the main roads and every advertising column in the two papers until polling day. We have a hall booked for three evenings, our own leaflets and as many of you as can walk. Our candidate has the better argument, and I believe it. But people have to hear an argument before they can weigh it, so from tomorrow we knock on every door in the district, twice where we can. The rota is pinned up in the office, and the leaflets will be ready by eight.\\\"",
+  "ru": "«Я руковожу кампанией независимого кандидата в этом округе и пишу нашим добровольцам, чтобы вы знали, где мы стоим. Покровители нашего соперника скупили все места для плакатов на главных дорогах и все рекламные столбы в двух газетах до дня голосования. У нас снят зал на три вечера, свои листовки и столько вас, сколько способно ходить. У нашего кандидата аргумент лучше, и я в это верю. Но людям нужно услышать довод, прежде чем его взвесить, поэтому с завтрашнего дня мы стучимся в каждую дверь округа, где можно — дважды. График вывешен в штабе, а листовки будут готовы к восьми.»"
+ },
+ "social_tensions_events.10.t": {
+  "en": "Every Wall in the District",
+  "ru": "Каждая стена в округе"
+ },
+ "social_tensions_events.11.a": {
+  "en": "Welcome the newcomers",
+  "ru": "Приветствовать новоприбывших"
+ },
+ "social_tensions_events.11.b": {
+  "en": "Restrict the flow",
+  "ru": "Ограничить поток"
+ },
+ "social_tensions_events.11.c": {
+  "en": "Fund integration programs",
+  "ru": "Финансировать программы интеграции"
+ },
+ "social_tensions_events.11.d_base": {
+  "en": "Newcomers from abroad are arriving in our cities faster than the public services can take them in. Schools have more pupils than places, clinics have long queues, and established residents complain that their neighborhoods have changed. The newcomers meet suspicion and hostility as they look for work and housing.",
+  "ru": "Приезжие из-за рубежа прибывают в наши города быстрее, чем общественные службы успевают их принять. В школах больше учеников, чем мест, в клиниках длинные очереди, а старожилы жалуются, что их кварталы изменились. Приезжие встречают подозрительность и враждебность, когда ищут работу и жильё."
+ },
+ "social_tensions_events.11.d_modern": {
+  "en": "Disruption in the global economy has sent many more migrants to our country, and with no controls on entry they are all arriving. The newspapers print the stories of families who fled ruin beside warnings of a cultural invasion. Our schools, clinics and housing offices say they cannot keep up.",
+  "ru": "Сбои в мировой экономике направили в нашу страну гораздо больше мигрантов, а поскольку въезд ничем не ограничен, прибывают все. Газеты печатают истории семей, бежавших от разорения, рядом с предупреждениями о культурном вторжении. Наши школы, клиники и жилищные конторы говорят, что не справляются."
+ },
+ "social_tensions_events.11.f": {
+  "en": "To the district school office, from the head teacher of the primary school on the market road. This term we have thirty-eight children in our first class, where last year we had twenty-two. Six of the new pupils speak none of the language we teach in, and two of them had never been to school before. We have no spare room and one teacher for the class. I have seated the youngest beside older pupils who can translate for them, which helps them and holds the older children back. In my last letter I asked for a second teacher and for books in the children's own languages. I ask again, and I would be glad of a visit from the office to see the class.",
+  "ru": "Окружной школьной конторе от директора начальной школы на рыночной дороге. В этом семестре у нас в первом классе тридцать восемь детей, а в прошлом году было двадцать два. Шестеро новых учеников не знают ни слова на языке, на котором мы преподаём, а двое никогда не ходили в школу. Свободных комнат у нас нет, на класс один учитель. Самых маленьких я посадила рядом со старшими учениками, которые могут переводить для них, что помогает им, но тормозит старших детей. В прошлом письме я просила второго учителя и книги на родных языках детей. Прошу снова и буду рада, если контора приедет посмотреть на класс."
+ },
+ "social_tensions_events.11.t": {
+  "en": "A Crowded Classroom",
+  "ru": "Переполненный класс"
+ },
+ "social_tensions_events.12.a": {
+  "en": "Appease the nativists",
+  "ru": "Умиротворить нативистов"
+ },
+ "social_tensions_events.12.b": {
+  "en": "Counter with pro-diversity messaging",
+  "ru": "Ответить пропагандой разнообразия"
+ },
+ "social_tensions_events.12.c": {
+  "en": "Host a national dialogue on identity",
+  "ru": "Провести национальный диалог об идентичности"
+ },
+ "social_tensions_events.12.d_base": {
+  "en": "A nativist movement is growing. Its rallies draw large crowds who blame foreigners for unemployment, crime and the decline of the national character, and its pamphlets call for keeping the nation pure. Foreigners have been attacked in the street, and our discriminated communities are asking the government for protection.",
+  "ru": "Растёт нативистское движение. Его митинги собирают большие толпы, винящие иностранцев в безработице, преступности и упадке национального характера, а его брошюры призывают сохранять нацию чистой. На иностранцев нападают на улицах, а наши дискриминируемые общины просят правительство о защите."
+ },
+ "social_tensions_events.12.d_social_media": {
+  "en": "A nativist movement is growing fast online. Its videos blame immigrants for every hardship and are shared far beyond the people who make them, and more of its followers turn up at its rallies each time. Attacks on foreigners have risen, and the leaders of our discriminated communities say they fear for their people's safety.",
+  "ru": "Нативистское движение быстро растёт в сети. Его видеоролики винят иммигрантов во всех бедах и расходятся далеко за пределы тех, кто их делает, а на его митинги с каждым разом приходит больше сторонников. Нападения на иностранцев участились, а лидеры наших дискриминируемых общин говорят, что опасаются за безопасность своих людей."
+ },
+ "social_tensions_events.12.f": {
+  "en": "He had worked at the mill for twenty years before it closed, and on the evening of the rally he stood at the back of the crowd with his wife beside him. The man on the platform spoke for an hour about foreigners: who had taken the jobs, who was filling the hospitals, who was to blame. The crowd answered him at the end of each sentence. His wife pulled at his sleeve twice, and the second time she said quietly that the mill had closed because the owners sold it. He nodded. He stayed until the speech was over, took a leaflet at the gate and walked home with her.",
+  "ru": "Он проработал на фабрике двадцать лет, прежде чем её закрыли, и в вечер митинга стоял в конце толпы, а рядом с ним жена. Человек на трибуне час говорил об иностранцах: кто отнял рабочие места, кто заполняет больницы, кто виноват. Толпа отвечала ему в конце каждой фразы. Жена дважды дёрнула его за рукав, и во второй раз тихо сказала, что фабрику закрыли, потому что владельцы её продали. Он кивнул. Он дослушал речь до конца, взял листовку у ворот и пошёл домой вместе с ней."
+ },
+ "social_tensions_events.12.t": {
+  "en": "The Man on the Platform",
+  "ru": "Человек на трибуне"
+ },
+ "social_tensions_events.13.a": {
+  "en": "Embrace the revival",
+  "ru": "Принять возрождение"
+ },
+ "social_tensions_events.13.b": {
+  "en": "Maintain secular governance",
+  "ru": "Сохранить светское управление"
+ },
+ "social_tensions_events.13.c": {
+  "en": "Channel it into charitable works",
+  "ru": "Направить его на благотворительность"
+ },
+ "social_tensions_events.13.d_base": {
+  "en": "A religious revival is spreading through the country. A popular religious teacher draws crowds wherever they speak, new groups of worshippers are forming in the cities, and houses of worship that stood half empty are full again. The Devout, who have been on the margins of our politics, are drawing new members, and secular politicians are alarmed.",
+  "ru": "По стране распространяется религиозное возрождение. Популярный религиозный наставник собирает толпы повсюду, где выступает, в городах образуются новые группы верующих, а молитвенные дома, стоявшие наполовину пустыми, снова полны. Духовенство, находившееся на обочине нашей политики, привлекает новых членов, а светские политики встревожены."
+ },
+ "social_tensions_events.13.d_social": {
+  "en": "A religious revival is spreading online. Teachers of the faith are drawing large followings with devotional videos and online prayer groups, and their content reaches people of every class and region. The Devout, who have been on the margins of our politics, are drawing new members from among their followers.",
+  "ru": "Религиозное возрождение распространяется в сети. Наставники веры собирают большие аудитории духовными видеороликами и онлайн-группами молитвы, а их материалы достигают людей всех классов и регионов. Духовенство, находившееся на обочине нашей политики, привлекает новых членов из числа их последователей."
+ },
+ "social_tensions_events.13.d_tv": {
+  "en": "A religious teacher with a television program has become a national figure. The broadcasts draw a large audience every week, and the teacher's appearances fill stadiums. The Devout, who have been on the margins of our politics, are drawing new members from the audience, and secular politicians are alarmed.",
+  "ru": "Религиозный наставник с телевизионной программой стал национальной фигурой. Передачи собирают большую аудиторию каждую неделю, а выступления наставника заполняют стадионы. Духовенство, находившееся на обочине нашей политики, привлекает новых членов из этой аудитории, а светские политики встревожены."
+ },
+ "social_tensions_events.13.f": {
+  "en": "\\\"The hall stood nearly empty for years. Last week we opened the side rooms and still had to put the overflow on benches in the yard.\\\"\\n\\n\\\"I am a reporter, and I asked a woman in the queue why she had come. She said the teacher had told her that her suffering had a purpose. She had come every evening that week, and on the last she brought her sister.\\\"\\n\\n\\\"My son brought me. I had not been since I was a girl, and I still knew the words of every prayer.\\\"\\n\\n\\\"I have been to six of the gatherings so far, and I have taken notes at each for a paper the university has asked me to write.\\\"",
+  "ru": "«Зал годами стоял почти пустым. На прошлой неделе мы открыли боковые комнаты, и всё равно пришлось сажать лишних на скамьи во дворе.»\\n\\n«Я репортёр и спросил женщину в очереди, зачем она пришла. Она ответила, что наставник сказал ей, что её страдания имеют смысл. Она ходила каждый вечер той недели, а в последний привела сестру.»\\n\\n«Меня привёл сын. Я не была с детства, но всё равно знала слова каждой молитвы.»\\n\\n«Я побывал на шести из этих собраний и на каждом делал записи для статьи, которую меня попросил написать университет.»"
+ },
+ "social_tensions_events.13.t": {
+  "en": "[concept_religious_revival] Sweeps the Nation",
+  "ru": "[concept_religious_revival] охватывает нацию"
+ },
+ "social_tensions_events.14.a": {
+  "en": "Side with tradition",
+  "ru": "Встать на сторону традиции"
+ },
+ "social_tensions_events.14.b": {
+  "en": "Prioritize modernization",
+  "ru": "Отдать приоритет модернизации"
+ },
+ "social_tensions_events.14.c": {
+  "en": "Seek a theological compromise",
+  "ru": "Искать богословский компромисс"
+ },
+ "social_tensions_events.14.d": {
+  "en": "Religious leaders have come out against the direction our laws and our society are taking, calling it an offense against sacred tradition. They are urging the faithful to resist and naming, at their services, the officials who supported the changes. The Devout are organizing to reverse them, and we must decide where the government stands.",
+  "ru": "Религиозные лидеры выступили против направления, в котором движутся наши законы и общество, назвав его оскорблением священной традиции. Они призывают верующих к сопротивлению и на богослужениях называют поимённо чиновников, поддержавших перемены. Духовенство организуется, чтобы отменить их, и нам предстоит решить, на чьей стороне правительство."
+ },
+ "social_tensions_events.14.f": {
+  "en": "\\\"I have come as the government's representative, and with respect, the law has already been passed. I am here to explain it, not to argue over whether it should have been.\\\"\\n\\n\\\"Then explain this. Before you took office you came to our elders and asked for their blessing. Now you pass a law they told you was against our teaching, and you expect them to keep quiet about it at prayers.\\\"\\n\\n\\\"I expect them to obey the law, as everyone else must. Your followers are not the only people I answer to.\\\"\\n\\n\\\"They are a great many of the people you answer to, and they will ask me what you said. I will tell them word for word, and I will tell them I asked you to come and speak to them yourself.\\\"",
+  "ru": "«Я пришёл как представитель правительства и, при всём уважении, закон уже принят. Я здесь, чтобы объяснить его, а не спорить, нужно ли было его принимать.»\\n\\n«Тогда объясните вот что. До вступления в должность вы приходили к нашим старейшинам и просили их благословения. Теперь вы принимаете закон, который, как они вам сказали, противоречит нашему учению, и ждёте, что они промолчат об этом на молитве.»\\n\\n«Я жду, что они будут соблюдать закон, как и все остальные. Ваши последователи — не единственные, перед кем я отвечаю.»\\n\\n«Они очень многие из тех, перед кем вы отвечаете, и они спросят меня, что вы сказали. Я передам им слово в слово и скажу, что просил вас прийти и поговорить с ними самому.»"
+ },
+ "social_tensions_events.14.t": {
+  "en": "Faith Against Modernity",
+  "ru": "Вера против современности"
+ },
+ "social_tensions_events.15.a": {
+  "en": "Embrace free trade",
+  "ru": "Принять свободную торговлю"
+ },
+ "social_tensions_events.15.b": {
+  "en": "Impose protective tariffs",
+  "ru": "Ввести защитные пошлины"
+ },
+ "social_tensions_events.15.c": {
+  "en": "Fund worker retraining programs",
+  "ru": "Финансировать программы переобучения рабочих"
+ },
+ "social_tensions_events.15.d_base": {
+  "en": "Cheap imports are taking our home market from local producers, who cannot match foreign labor costs. Factories are closing and laying off their workers, and towns that lived on one industry are emptying. The trade unions are demanding protection. The industrialists say the cheaper goods make the whole country richer.",
+  "ru": "Дешёвый импорт отнимает у местных производителей внутренний рынок, ведь они не могут тягаться с зарубежными затратами на труд. Фабрики закрываются и увольняют рабочих, а города, жившие одной отраслью, пустеют. Профсоюзы требуют защиты. Промышленники говорят, что более дешёвые товары делают богаче всю страну."
+ },
+ "social_tensions_events.15.d_internet": {
+  "en": "With the web, goods, services and money cross our borders as easily as they move within them, and a buyer can compare every supplier in the world. The towns whose industries could not compete have lost their factories and their young people. Politicians who promise to bring the work back are drawing large crowds there.",
+  "ru": "С появлением сети товары, услуги и деньги пересекают наши границы так же легко, как перемещаются внутри них, а покупатель может сравнить всех поставщиков мира. Города, чьи отрасли не смогли выдержать конкуренцию, потеряли фабрики и молодёжь. Политики, обещающие вернуть работу, собирают там большие толпы."
+ },
+ "social_tensions_events.15.f": {
+  "en": "From the trade union branch's report to its district council, listing this year's closures in the town:\\n\\nThe shirt factory closed in the first quarter, after its largest buyer moved its orders to a supplier abroad that charges a quarter of the price.\\nThe dye works, which supplied the shirt factory, cut two shifts in the second quarter and closed the last one in the fourth.\\nThe bus company has dropped the early route to the industrial park, because the park no longer runs an early shift.\\nThe machine shop has stayed open by taking repair work from across the region, and it has asked the branch to accept lower rates.\\nThe branch has asked the council for a meeting on retraining before the end of the year.",
+  "ru": "Из доклада отделения профсоюза окружному совету с перечнем закрытий этого года в городе:\\n\\nШвейная фабрика закрылась в первом квартале, после того как её крупнейший покупатель перенёс заказы заграничному поставщику, берущему четверть цены.\\nКрасильня, снабжавшая швейную фабрику, сократила две смены во втором квартале и закрыла последнюю в четвёртом.\\nАвтобусная компания отменила ранний маршрут в промышленный парк, потому что парк больше не работает в раннюю смену.\\nМеханический цех остаётся открытым, беря ремонтные заказы со всего региона, и просил отделение согласиться на более низкие ставки.\\nОтделение просило совет о встрече по переобучению до конца года."
+ },
+ "social_tensions_events.15.t": {
+  "en": "A Quarter of the Price",
+  "ru": "Четверть цены"
+ },
+ "social_tensions_events.16.a": {
+  "en": "Embrace cultural exchange",
+  "ru": "Принять культурный обмен"
+ },
+ "social_tensions_events.16.b": {
+  "en": "Protect local culture",
+  "ru": "Защитить местную культуру"
+ },
+ "social_tensions_events.16.c": {
+  "en": "Encourage a blend of ours and theirs",
+  "ru": "Поощрять смесь нашего и чужого"
+ },
+ "social_tensions_events.16.d_base": {
+  "en": "Foreign music, fashion, food and films are filling our shops and theaters, carried in by global trade. Our artisans are losing their customers, fewer young people speak the old dialects, and many prefer foreign customs to their own. A growing movement wants the government to protect our cultural heritage.",
+  "ru": "Иностранные музыка, мода, еда и фильмы заполняют наши лавки и театры, занесённые глобальной торговлей. Наши ремесленники теряют покупателей, всё меньше молодёжи говорит на старых диалектах, и многие предпочитают чужие обычаи своим. Растущее движение хочет, чтобы правительство защитило наше культурное наследие."
+ },
+ "social_tensions_events.16.d_streaming": {
+  "en": "Streaming services carry the same programs, music and celebrities to every screen in the world, and the foreign ones have far larger budgets than ours. Our own artists and broadcasters are losing their audiences. The Devout and the Rural Folk are the most alarmed, and they want the government to protect our culture.",
+  "ru": "Стриминговые сервисы доставляют одни и те же передачи, музыку и знаменитостей на каждый экран мира, а у иностранных бюджеты намного больше наших. Наши художники и телерадиокомпании теряют аудиторию. Больше всех встревожены Духовенство и Сельское население, и они хотят, чтобы правительство защитило нашу культуру."
+ },
+ "social_tensions_events.16.f": {
+  "en": "The grandmother sang the first verse of the old harvest song while she washed the dishes, the way her own mother had sung it to her. Her granddaughter sat at the table with her homework and a pair of headphones around her neck. \\\"Do you know the next verse?\\\" the grandmother asked. The girl shook her head. \\\"Nobody sings that anymore,\\\" she said, not unkindly, and put the headphones back on. The grandmother sang the second verse anyway, more quietly, and then the third, and went on with the dishes.",
+  "ru": "Бабушка пела первый куплет старой жатвенной песни, пока мыла посуду, так, как пела её собственная мать. Внучка сидела за столом с уроками и наушниками на шее. «Ты знаешь следующий куплет?» — спросила бабушка. Девочка покачала головой. «Этого уже никто не поёт», — сказала она, не со зла, и надела наушники обратно. Бабушка всё равно спела второй куплет, тише, потом третий и продолжила мыть посуду."
+ },
+ "social_tensions_events.16.t": {
+  "en": "The Old Song",
+  "ru": "Старая песня"
+ },
+ "social_tensions_events.17.a": {
+  "en": "Fund them.",
+  "ru": "Профинансировать их."
+ },
+ "social_tensions_events.17.b": {
+  "en": "We will not bankroll terror.",
+  "ru": "Мы не будем спонсировать террор."
+ },
+ "social_tensions_events.17.d": {
+  "en": "Militant exiles from [SCOPE.sCountry('terror_cell_target').GetName] have come to our intelligence service with a proposal: money and training from us, in exchange for a campaign of violence against the government that drove them out. It would keep a rival busy at home. If their cell is uncovered, the documents in it will lead back to us.",
+  "ru": "Воинствующие изгнанники из страны [SCOPE.sCountry('terror_cell_target').GetName] обратились к нашей разведке с предложением: деньги и обучение от нас в обмен на кампанию насилия против изгнавшего их правительства. Это занимало бы соперника дома. Если их ячейка будет раскрыта, найденные в ней документы приведут к нам."
+ },
+ "social_tensions_events.17.f": {
+  "en": "\\\"Their leader speaks our language badly and his own very well. He wants money, weapons and two safe houses, and he says his people know their capital better than its own security service does.\\\"\\n\\n\\\"And if they are caught, they lead the other side straight to us.\\\"\\n\\n\\\"He says they would say nothing. I do not believe him, and I told him so. But a rival busy with bombs at home has less time for us.\\\"\\n\\n\\\"Then write me the plan with every risk in it, including the one where they talk. I will put it to the government, and the decision will be the government's.\\\"",
+  "ru": "«Их лидер плохо говорит на нашем языке и очень хорошо на своём. Ему нужны деньги, оружие и две конспиративные квартиры, и он говорит, что его люди знают их столицу лучше, чем её собственная служба безопасности.»\\n\\n«А если их поймают, они приведут другую сторону прямо к нам.»\\n\\n«Он говорит, что они ничего не скажут. Я ему не верю и так и сказал. Но у соперника, занятого бомбами дома, меньше времени на нас.»\\n\\n«Тогда напишите мне план со всеми рисками, включая тот, где они заговорят. Я представлю его правительству, и решение будет за правительством.»"
+ },
+ "social_tensions_events.17.t": {
+  "en": "Friends in Exile",
+  "ru": "Друзья в изгнании"
+ },
+ "social_tensions_events.18.a": {
+  "en": "Burn the files.",
+  "ru": "Сжечь документы."
+ },
+ "social_tensions_events.18.d_blamed": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell and made the evidence public: money, training and documents that lead straight back to us. Its government has named us as the cell's sponsor and is imposing sanctions.",
+  "ru": "Страна [SCOPE.sCountry('terror_cell_target').GetName] раскрыла ячейку боевиков и обнародовала доказательства: деньги, обучение и документы, ведущие прямо к нам. Её правительство назвало нас спонсором ячейки и вводит санкции."
+ },
+ "social_tensions_events.18.d_defense": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell. Its government has said nothing in public about who paid for it, and is hardening its own defenses instead.",
+  "ru": "Страна [SCOPE.sCountry('terror_cell_target').GetName] раскрыла ячейку боевиков. Её правительство публично ничего не сказало о том, кто за неё платил, и вместо этого укрепляет собственную оборону."
+ },
+ "social_tensions_events.18.d_quiet": {
+  "en": "[SCOPE.sCountry('terror_cell_target').GetName] has rolled up the militant cell and traced it back to us, but has chosen not to go public. Instead its intelligence service has let ours know what it found, and proposes that the two services cooperate quietly from now on.",
+  "ru": "Страна [SCOPE.sCountry('terror_cell_target').GetName] раскрыла ячейку боевиков и проследила её связь с нами, но решила не обнародовать это. Вместо этого её разведка сообщила нашей о своих находках и предлагает отныне тихо сотрудничать двум службам."
+ },
+ "social_tensions_events.18.f": {
+  "en": "To headquarters, from our station in [SCOPE.sCountry('terror_cell_target').GetName]. The safe house in the old quarter was raided in the early hours, and everyone inside was taken. We have lost contact with the courier and with both men who held the accounts. Our own people in the city are untouched so far, but at least two of those arrested knew the names of the officers they met. I have moved the remaining staff out of the apartments known to the cell and destroyed the local copies of the payment records. I ask whether to bring the officers home, and for instructions on the rest of the files.",
+  "ru": "В центр от нашей резидентуры в стране [SCOPE.sCountry('terror_cell_target').GetName]. Конспиративную квартиру в старом квартале взяли штурмом в предрассветные часы, и всех, кто был внутри, арестовали. Мы потеряли связь с курьером и с обоими, кто держал счета. Наши люди в городе пока не затронуты, но как минимум двое из арестованных знали имена встречавшихся с ними офицеров. Я вывел остальной персонал из квартир, известных ячейке, и уничтожил местные копии платёжных записей. Прошу указаний, возвращать ли офицеров домой, и инструкций по остальным документам."
+ },
+ "social_tensions_events.18.t": {
+  "en": "The Cell Is Blown",
+  "ru": "Ячейка раскрыта"
+ },
+ "social_tensions_events.2.a": {
+  "en": "Blame and sanction them",
+  "ru": "Обвинить их и ввести санкции"
+ },
+ "social_tensions_events.2.b": {
+  "en": "Pursue quiet intelligence cooperation",
+  "ru": "Добиваться тихого сотрудничества разведок"
+ },
+ "social_tensions_events.2.c": {
+  "en": "Focus on domestic defense",
+  "ru": "Сосредоточиться на обороне внутри страны"
+ },
+ "social_tensions_events.2.d": {
+  "en": "Our security services have broken up a militant cell and found that it was paid and trained by agents of [SCOPE.sCountry('terror_linked_country').GetName]. The documents seized with it leave little doubt. We must decide whether to accuse [SCOPE.sCountry('terror_linked_country').GetName] in public, and what the accusation would cost us.",
+  "ru": "Наши службы безопасности разгромили ячейку боевиков и выяснили, что её содержали и обучали агенты страны [SCOPE.sCountry('terror_linked_country').GetName]. Изъятые вместе с ней документы почти не оставляют сомнений. Нам предстоит решить, обвинять ли страну [SCOPE.sCountry('terror_linked_country').GetName] публично и чего нам будет стоить обвинение."
+ },
+ "social_tensions_events.2.f": {
+  "en": "To the government, from the director of the security service. The cell we took had five members, all exiles who had left this country and come back in secret, and a sixth we have not found. In their house we recovered the money they were paid, in notes of [SCOPE.sCountry('terror_linked_country').GetName]'s currency, and training notes in the hand of an officer we know to work for its intelligence service. Our sources inside that service confirm the payments. If we publish this, those sources will be identified and lost, and we will not hear of the next plot in advance. If we keep it quiet, we keep the sources. I ask the government to decide which it prefers before the trial begins.",
+  "ru": "Правительству от директора службы безопасности. Захваченная нами ячейка насчитывала пять человек, все изгнанники, покинувшие эту страну и тайно вернувшиеся, и шестого мы не нашли. В их доме мы обнаружили выплаченные им деньги в банкнотах валюты страны [SCOPE.sCountry('terror_linked_country').GetName] и учебные записи рукой офицера, о котором мы знаем, что он работает на её разведку. Наши источники в этой службе подтверждают выплаты. Если мы опубликуем это, источники будут опознаны и потеряны, и мы не узнаем заранее о следующем заговоре. Если промолчим, источники сохраним. Прошу правительство решить, что оно предпочитает, до начала суда."
+ },
+ "social_tensions_events.2.t": {
+  "en": "A Cell with Sponsors",
+  "ru": "Ячейка со спонсорами"
+ },
+ "social_tensions_events.3.a": {
+  "en": "Accept their input",
+  "ru": "Принять их вклад"
+ },
+ "social_tensions_events.3.b": {
+  "en": "Restrict lobbyist access",
+  "ru": "Ограничить доступ лоббистов"
+ },
+ "social_tensions_events.3.c": {
+  "en": "Let journalists expose it all",
+  "ru": "Позволить журналистам всё раскрыть"
+ },
+ "social_tensions_events.3.d_base": {
+  "en": "A leaked memorandum shows that representatives of industry are drafting the regulations that govern their own firms, and that the officials who adopt the drafts are paid consulting fees by the same firms. The Industrialists in government call this ordinary consultation. The financial press has printed the memorandum in full.",
+  "ru": "Утёкшая служебная записка показывает, что представители промышленности пишут регламенты, которые управляют их же фирмами, а чиновникам, принимающим эти проекты, те же фирмы платят консультационные гонорары. Промышленники в правительстве называют это обычной консультацией. Финансовая пресса напечатала записку целиком."
+ },
+ "social_tensions_events.3.d_digital": {
+  "en": "A leak of a lobbying firm's files shows how industry works on the government: a profile of each official it means to influence, payments routed through shell companies, and a list of regulators who have been promised seats on corporate boards. The files are being shared across social media, and the firm's clients are refusing to comment.",
+  "ru": "Утечка файлов лоббистской фирмы показывает, как промышленность работает с правительством: досье на каждого чиновника, на которого она намерена влиять, платежи через фиктивные компании и список регуляторов, которым обещаны места в советах директоров корпораций. Файлы расходятся по социальным сетям, а клиенты фирмы отказываются от комментариев."
+ },
+ "social_tensions_events.3.f": {
+  "en": "\\\"I was a clerk in the department that writes the industrial regulations, and I am the one who sent the memorandum to the papers. Every draft that came to my desk this year had come from the industry associations first, with their letterhead cut off. My superiors called them [Concept('concept_amendment', 'amendments')] and changed the dates. When I asked why our own engineers had not been consulted, I was told the associations understood the industry better. The same superiors were paid as consultants by the firms whose drafts they adopted, and the receipts are in the department's own files. I do not expect to keep my post. I have kept copies of everything, and I will give them to whoever holds the inquiry.\\\"",
+  "ru": "«Я был клерком в департаменте, пишущем промышленные регламенты, и именно я отправил записку в газеты. Каждый проект, попадавший ко мне на стол в этом году, сначала приходил от отраслевых объединений, с отрезанным фирменным бланком. Мои начальники называли их [Concept('concept_amendment', 'поправками')] и меняли даты. Когда я спросил, почему не консультировались с нашими собственными инженерами, мне ответили, что объединения лучше понимают отрасль. Те же начальники получали консультационные гонорары от фирм, чьи проекты принимали, и расписки лежат в делах самого департамента. Я не рассчитываю сохранить должность. Я сохранил копии всего и отдам их тому, кто проведёт расследование.»"
+ },
+ "social_tensions_events.3.t": {
+  "en": "Suggested Amendments",
+  "ru": "Предлагаемые поправки"
  }
 }
