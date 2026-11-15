@@ -425,3 +425,73 @@ te_jmap_set_color = {
 		localization_key = te_jmap_set_color_first
 	}
 }
+
+# What the colors in force are, for a fitted pick's tooltip under any colors but the map's own (the last line of
+# te_jmap_pick_<map>_desc, which shows the map's own colors' words in its place under Map Default). As with the
+# scale, a custom localization can't know which button is hovered, so each pick's key names the one for what its
+# map can show besides its ramp: nothing else, a state with none, a headquarters at a loss, a net removal, or a
+# midpoint. Read only while the option is off its default, so the last entry is Greyscale's.
+te_jmap_color_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_text_safe
+	}
+	text = {
+		localization_key = te_jmap_color_text_grey
+	}
+}
+
+te_jmap_color_text_none = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_text_none_safe
+	}
+	text = {
+		localization_key = te_jmap_color_text_none_grey
+	}
+}
+
+te_jmap_color_text_hq = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_text_hq_safe
+	}
+	text = {
+		localization_key = te_jmap_color_text_hq_grey
+	}
+}
+
+te_jmap_color_text_gw = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_text_gw_safe
+	}
+	text = {
+		localization_key = te_jmap_color_text_gw_grey
+	}
+}
+
+te_jmap_color_text_mid = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_jmap_color = 1 }
+		localization_key = te_jmap_color_text_mid_safe
+	}
+	text = {
+		localization_key = te_jmap_color_text_mid_grey
+	}
+}

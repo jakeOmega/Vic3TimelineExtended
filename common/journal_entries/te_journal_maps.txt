@@ -1561,6 +1561,7 @@ je_te_map_room = {
 				te_jmap_selector = 34
 				te_jmap_in_area = yes
 				has_variable = te_jmap_rhq_n
+				te_jmap_color < 2	# under Greyscale a stripe says one thing: not on the scale
 			}
 			value = "te_jmap_hq_regional"
 		}

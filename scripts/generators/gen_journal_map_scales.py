@@ -448,6 +448,58 @@ def ramp_lerp(factor):
     return n + 1, min(max(factor * RAMP_LERPS - n, 0), 1)
 
 
+# A share of a range, or of the color, that has a plain name: a pick's tooltip uses the name, and a percentage for
+# any other (te_jmap_curve_*, localization/english; test_journal_map_modes.py holds each to curve_words).
+_SHARES = ((1 / 2, "half"), (1 / 3, "a third"), (2 / 3, "two-thirds"), (1 / 4, "a quarter"), (1 / 5, "a fifth"))
+
+
+def _share(x, first=False):
+    """A share in a tooltip's words; `first` is the form after "the first" (fifth, two-thirds, 38%)."""
+    for share, words in _SHARES:
+        if abs(x - share) < 0.004:
+            return words[2:] if first and words.startswith("a ") else words
+    return f"{round(x * 100)}%"
+
+
+def _knee(knots):
+    """A curve's knee (the share of its span, the share of its color by then), or None for a straight one."""
+    assert len(knots) in (2, 3), "a tooltip can describe a straight curve or one knee"
+    return knots[1] if len(knots) == 3 else None
+
+
+def curve_key(scale):
+    """The localization key that describes a fitted map's own curve, shared by every map of the same shape."""
+    w = scale["world"]
+    code = lambda knots: "s" if _knee(knots) is None else "_".join(str(round(v * 100)) for v in _knee(knots))
+    if w["kind"] == "doubling":
+        return "te_jmap_curve_doubling"
+    if w["kind"] == "mid":
+        low, up = code(w["lower"]), code(w["upper"])
+        return "te_jmap_curve_mid" if low == up == "s" else f"te_jmap_curve_mid_{low}_{up}"
+    return "te_jmap_curve_straight" if _knee(w["knots"]) is None else f"te_jmap_curve_knee_{code(w['knots'])}"
+
+
+def curve_words(scale):
+    """A fitted map's own curve in a tooltip's words, from the knots the curve itself is written from."""
+    w = scale["world"]
+    if w["kind"] == "doubling":
+        return "Each doubling of the figure takes the same share of the color, from the range's low to its high."
+    if w["kind"] == "mid":
+        low, up = _knee(w["lower"]), _knee(w["upper"])
+        if low is None and up is None:
+            return "The colors run straight on each side of the midpoint, to the range's end on that side."
+        side = lambda knee, end, color: (f"the colors run straight to {end}" if knee is None else
+                                         f"{_share(knee[1])}{color} goes to the first {_share(knee[0], True)} of the way to {end}")
+        return (f"Below the midpoint, {side(low, 'the range' + chr(39) + 's low', ' of the color')}; "
+                f"above it, {side(up, 'its high', ' of the color' if low is None else '')}.")
+    knee = _knee(w["knots"])
+    if knee is None:
+        return "The colors run straight from the range's low to its high."
+    share = _share(knee[1])
+    return (f"{share[0].upper() + share[1:]} of the color goes to the first {_share(knee[0], True)} of the range, "
+            "and the rest to what is left of it.")
+
+
 def trim_most(n):
     """The most states an end can leave out of n and still have two left to span."""
     return max(0, (n - 2) // 2)

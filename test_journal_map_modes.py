@@ -258,7 +258,8 @@ class CauseColorsTest(unittest.TestCase):
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(others, [ColorTest.GREY_STRIPES,     # Greyscale's, first (the Color option)
                                   "te_jmap_selector = 31 te_jmap_in_area = yes te_jmap_grid_hub = yes",
-                                  "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n"])
+                                  "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n "
+                                  "te_jmap_color < 2"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -857,7 +858,8 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
 
     def test_regional_headquarters_stripe_and_are_named(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertIn(("te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n",
+        # (not under Greyscale, where a stripe says one thing: PickTooltipTest)
+        self.assertIn(("te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n te_jmap_color < 2",
                        'value = "te_jmap_hq_regional"'), stripes)
         self.assertIn("custom_tooltip_no_bullet = te_jmap_tt_hq_regional", block(self.room, "map_tooltip"))
         body = block(code(VALUES), "te_jmap_rhq_walk_count")
@@ -1381,7 +1383,9 @@ class OptionsTest(unittest.TestCase):
             wanted |= set(re.findall(r"'(te_jmap_\w+_tt)'", reason))
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
         named = set(re.findall(r"localization_key\s*=\s*(\w+)", custom))
-        texts = ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_color_name", "te_jmap_color_short", "te_jmap_now",
+        texts = ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_color_name", "te_jmap_color_short",
+                 "te_jmap_color_text", "te_jmap_color_text_gw", "te_jmap_color_text_hq", "te_jmap_color_text_mid",
+                 "te_jmap_color_text_none", "te_jmap_now",
                  "te_jmap_now_area", "te_jmap_now_color", "te_jmap_now_scale", "te_jmap_now_trim",
                  "te_jmap_scale_name", "te_jmap_scale_short", "te_jmap_scale_text", "te_jmap_scale_text_doubling",
                  "te_jmap_scale_text_mid", "te_jmap_scaled_range_lead", "te_jmap_set_color", "te_jmap_set_scale",
@@ -1802,16 +1806,22 @@ class ColorTest(_RoomBranches, unittest.TestCase):
         self.assertNotIn("te_jmap_trim_short_default", values)
 
 
-class ScaleTooltipTest(unittest.TestCase):
-    """No tooltip describes a curve that isn't the one in force (owner, 2026-11-14). A fitted pick's own description
-    describes the map's own curve, so its button shows it only under that; under any other scale it shows
-    te_jmap_pick_<map>_scaled: the pick's name, the scale in force and the range, and nothing of the own curve."""
+class PickTooltipTest(_RoomBranches, unittest.TestCase):
+    """No tooltip describes a curve or a color that isn't the one in force (owner, 2026-11-14). A fitted pick's
+    tooltip is four lines: what the map shows, with no word of a curve, a color or a range; the range now; the
+    scale, in the map's own curve's words under Map Default and the scale in force's otherwise; and the colors, the
+    map's own under Map Default and the palette in force's otherwise. The own curve's words are the generator's,
+    from the knots the curve is written from."""
 
-    # words the own-curve descriptions use for their shapes
-    CURVE = ("half the color", "two-thirds", "most of the color", "most of them", "halfway", "first fifth",
-             "first third", "for each doubling", "of that span")
+    # words for a curve's shape, and for a color: none belongs in what a map shows
+    CURVE = ("half the color", "two-thirds", "most of the color", "halfway", "first fifth", "first third",
+             "for each doubling", "of that span", "of the color", "straight")
+    COLORS = ("red", "green", "blue", "yellow", "orange", "purple", "violet", "brown", "cream", "rust", "teal", "plum",
+              "rose", "magenta", "amber", "oxblood", "gray", "grey", "pale", "gold", "navy", "khaki", "olive", "straw",
+              "sand", "bronze", "lilac", "aqua", "aubergine", "brick", "white", "dark", "light", "striped", "stripes")
 
     def setUp(self):
+        super().setUp()
         import importlib.util
         spec = importlib.util.spec_from_file_location(
             "gen_journal_map_scales", os.path.join(REPO, "scripts", "generators", "gen_journal_map_scales.py"))
@@ -1831,38 +1841,118 @@ class ScaleTooltipTest(unittest.TestCase):
                 out[m.group(1)] = scale
         return out
 
-    def test_a_fitted_pick_shows_its_own_description_only_under_its_own_curve(self):
+    @staticmethod
+    def select(option, own, other):
+        return (f"[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{option}'), "
+                f"'(CFixedPoint)0' ), '{own}', '{other}' )]")
+
+    def variant(self, scale):
+        """Which of the palette-in-force texts a map takes, by what its paint can show besides its ramp."""
+        if scale["world"]["kind"] == "mid":
+            return "_mid"
+        flat = {c for _limit, body in self.of(self.colors, scale["sel"]) for c in re.findall(r'^value = "(\w+)"$', body)}
+        if "te_jmap_hq_loss" in flat:
+            return "_hq"
+        if "te_jmap_gw_removal" in flat:
+            return "_gw"
+        return "_none" if "te_jmap_none" in flat else ""
+
+    def test_every_pick_has_one_tooltip(self):
         picks = self.picks()
         self.assertEqual(len(picks), 35)
-        everything = set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))
-        for key in sorted(everything):
-            plain = f'tooltip = "{key}_desc"'
-            with self.subTest(pick=key):
-                if key in picks:
-                    self.assertNotIn(plain, self.row)
-                    self.assertIn(f"'{key}_desc', '{key}_scaled' )]\"", self.row)
-                else:
-                    # a map of categories or on a fixed scale: the option can't change it, and its text stands
-                    self.assertIn(plain, self.row)
-                    self.assertNotIn(f"{key}_scaled", self.values)
+        for key in sorted(set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))):
+            self.assertIn(f'tooltip = "{key}_desc"', self.row, key)
+        self.assertNotIn("SelectLocalization", self.row, "a pick's tooltip chooses its own parts")
+        self.assertEqual([k for k in self.values if re.fullmatch(r"te_jmap_pick_\w+_scaled", k)], [])
 
-    def test_the_scaled_tooltip_names_the_scale_in_force_and_the_range(self):
-        kinds = {"frac": "$te_jmap_scale_in_force$", "doubling": "$te_jmap_scale_in_force_doubling$",
-                 "mid": "$te_jmap_scale_in_force_mid$"}
+    def test_a_fitted_pick_s_tooltip_is_true_under_every_scale_and_color(self):
+        kinds = {"frac": "te_jmap_scale_in_force", "doubling": "te_jmap_scale_in_force_doubling",
+                 "mid": "te_jmap_scale_in_force_mid"}
         for key, scale in self.picks().items():
-            text, n = self.values[f"{key}_scaled"], scale["name"]
+            lines, n = self.values[f"{key}_desc"].split("\\n"), scale["name"]
             with self.subTest(pick=key):
-                self.assertTrue(text.startswith(f"#b ${key}$#!\\n{kinds[scale['world']['kind']]}\\n"
-                                                "$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), text)
-                # the same two figures as its own description, in the same formats
-                own = self.values[f"{key}_desc"]
-                for end in ("lo", "hi"):
-                    figure = re.search(r"\[GetPlayer\.MakeScope\.ScriptValue\('te_jmap_" + n + "_" + end +
-                                       r"'\)\|[^\]]*\]", own).group(0)
-                    self.assertIn(figure, text)
-                self.assertTrue(text.endswith("$te_jmap_measured_trim$"))
+                self.assertEqual(len(lines), 4)
+                what, rng, curve, colors = lines
+                # what it shows: nothing a scale or a palette could make untrue
                 for words in self.CURVE:
-                    self.assertNotIn(words, text, "a curve the scale in force doesn't draw")
+                    self.assertNotIn(words, what)
+                for word in self.COLORS:
+                    self.assertNotRegex(what, r"(?i)\b" + word + r"\b")
+                self.assertNotIn("ScriptValue", what, "the range has its own line")
+                self.assertTrue(what.startswith("Color each state "), what)
+                # the range now: the two figures, what leads them (Ranked reads no range) and what is left out
+                self.assertTrue(rng.startswith("$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), rng)
+                self.assertTrue(rng.endswith("$te_jmap_measured_trim$"), rng)
+                for end in ("lo", "hi"):
+                    self.assertIn(f"ScriptValue('te_jmap_{n}_{end}')", rng)
+                # the scale: the map's own curve under Map Default, the scale in force otherwise
+                self.assertEqual(curve, self.select("te_jmap_scale", self.gen.curve_key(scale), kinds[scale["world"]["kind"]]))
+                # the colors: the map's own under Map Default, the palette in force otherwise
+                self.assertEqual(colors, self.select("te_jmap_color", f"{key}_colors",
+                                                     "te_jmap_color_in_force" + self.variant(scale)))
+                own = self.values[f"{key}_colors"]
+                self.assertTrue(own.startswith("$te_jmap_color_text_own$ "), own)
+                if scale["world"]["kind"] == "mid":
+                    self.assertNotIn("low end", own, "a midpoint map's colors are told by the midpoint")
+                else:
+                    self.assertRegex(own, r"From [a-z -]+ at the low end (through [a-z]+ halfway )?to [a-z -]+ at the high\.")
+                    self.assertEqual("halfway" in own, scale["three"], "a three-color map names its middle color")
+                for mark, word in (("_none", " is pale."), ("_hq", "A loss is red"), ("_gw", "is green")):
+                    self.assertEqual(word in own, self.variant(scale) == mark, f"{word!r} in {own!r}")
+        self.assertEqual(self.values["te_jmap_color_text_own"], "$te_jmap_color$: #b $te_jmap_color_own$#!.")
+        self.assertEqual(self.values["te_jmap_scale_text_own"], "$te_jmap_scale$: #b $te_jmap_scale_own$#!.")
+
+    def test_the_own_curve_s_words_are_the_generator_s(self):
+        rows = list(self.picks().values())
+        keys = {self.gen.curve_key(s): self.gen.curve_words(s) for s in rows}
+        self.assertEqual(sorted(k for k in self.values if k.startswith("te_jmap_curve_")), sorted(keys))
+        for key, words in keys.items():
+            self.assertEqual(self.values[key], "$te_jmap_scale_text_own$ " + words, key)
+        # and the knots mean what the words say: the color a curve has reached at its knee, on its default range
+        for scale in rows:
+            w = scale["world"]
+            lo, hi = w["default"]
+            with self.subTest(map=scale["name"]):
+                if w["kind"] == "frac" and len(w["knots"]) == 3:
+                    x, y = w["knots"][1]
+                    self.assertAlmostEqual(self.gen.world_factor(scale, lo, hi, lo + x * (hi - lo)), y, places=6)
+                    self.assertIn(f"first {self.gen._share(x, True)} of the range", self.gen.curve_words(scale))
+                elif w["kind"] == "mid":
+                    for side, end, sign in (("lower", lo, -1), ("upper", hi, 1)):
+                        if len(w[side]) == 3:
+                            x, y = w[side][1]
+                            at = w["mid"] + x * (end - w["mid"])
+                            self.assertAlmostEqual(self.gen.world_factor(scale, lo, hi, at), 0.5 + sign * y / 2, places=6)
+        self.assertEqual(self.gen._share(0.2, True), "fifth")
+        self.assertEqual((self.gen._share(0.5), self.gen._share(2 / 3), self.gen._share(0.3684)), ("half", "two-thirds", "37%"))
+
+    def test_each_kind_of_map_has_its_palette_s_words(self):
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        for variant in ("", "_none", "_hq", "_gw", "_mid"):
+            body = " ".join(block(custom, f"te_jmap_color_text{variant}").split())
+            self.assertIn(f"trigger = {{ te_jmap_color = 1 }} localization_key = te_jmap_color_text{variant}_safe", body)
+            self.assertTrue(body.endswith(f"text = {{ localization_key = te_jmap_color_text{variant}_grey }}"), body)
+            self.assertEqual(self.values[f"te_jmap_color_in_force{variant}"],
+                             f"[GetPlayer.GetCustom('te_jmap_color_text{variant}')]")
+            safe, grey = self.values[f"te_jmap_color_text{variant}_safe"], self.values[f"te_jmap_color_text{variant}_grey"]
+            self.assertTrue(safe.startswith("$te_jmap_color$: #b $te_jmap_color_safe$#!. "), safe)
+            self.assertTrue(grey.startswith("$te_jmap_color$: #b $te_jmap_color_grey$#!. "), grey)
+            # the ramps as the colors file has them, and what Greyscale stripes
+            if variant == "_mid":
+                self.assertIn("Orange below the midpoint, near white at it, purple above", safe)
+                self.assertIn("The midpoint sits at the middle gray", grey)
+            else:
+                self.assertIn("Pale yellow at the low end to brown at the high.", safe)
+            self.assertIn("Light gray at the low end to dark gray at the high.", grey)
+            self.assertIn("striped", grey)
+            self.assertNotIn("striped", safe)
+            self.assertEqual("is blue" in safe, variant in ("_hq", "_gw"), "a loss and a net removal are blue")
+            self.assertEqual("with none" in safe + grey, variant == "_none")
+        # under Greyscale a stripe says one thing, so the regional headquarters' gold stripes stand down
+        stripes = dict(branches_of(block(self.room, "map_color_second")))
+        self.assertEqual([limit for limit in stripes if "te_jmap_hq_regional" in stripes[limit]],
+                         ["te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n te_jmap_color < 2"])
+        self.assertIn("regional headquarters are not marked", self.values["te_jmap_color_text_hq_grey"])
 
     def test_each_kind_of_map_has_its_scale_s_words(self):
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
