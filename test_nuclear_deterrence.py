@@ -49,6 +49,7 @@ LOOSE_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_loose_triggers.txt"
 LOOSE_VALUES = ROOT / "common/script_values/nuclear_loose_values.txt"
 LOOSE_EVENTS = ROOT / "events/nuclear_loose_events.txt"
 SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_actions.txt"
+SOCIAL_TENSIONS_EVENTS = ROOT / "events/social_tensions_events.txt"
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
 EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
@@ -3628,6 +3629,14 @@ class TestLooseWarheads(unittest.TestCase):
                      "global_var:nd_loose_warheads > 0",
                      "NOT = { has_global_variable = nd_loose_plot_cooldown }"):
             self.assertIn(gate, possible)
+
+    def test_the_plot_shares_the_terror_attacks_movement_gate(self):
+        # Activism runs 0 to 1; the owner set both gates at 0.5, vanilla's
+        # protesting threshold, on 2026-11-15 (#1829). They move together.
+        gate = r"any_political_movement = \{ political_movement_radicalism >= ([\d.]+) \}"
+        attack = block(strip_comments(read(SOCIAL_TENSIONS_EVENTS)), "social_tensions_events.1")
+        self.assertEqual(re.findall(gate, attack), ["0.5"])
+        self.assertEqual(re.findall(gate, block(self.lt, "nd_loose_plot_possible")), ["0.5"])
 
     def test_cooldown_only_once_a_device_exists(self):
         self.assertNotIn("nd_loose_plot_cooldown", block(self.le, "nd_loose_plot"))

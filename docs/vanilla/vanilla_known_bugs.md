@@ -42,6 +42,15 @@ Most bugs in this file are left to vanilla. A few hurt play enough that the mod 
 |---|---|---|---|
 | Caesaropapism, a variant of State Religion, doesn't count as State Religion where vanilla lists only `law_state_religion`: the state-church Urban Center method (`unlocking_laws`), and the Free Churches, secular bureaucrats and secular academia methods and the Public and Private Schools laws (`disallowing_laws`). The engine doesn't read a variant as its parent there: a Caesaropapist Russia was kept on Free Churches and ran Public Schools (Workshop report, 2026-11-08). The mod fixes five of the six; Public Schools stays allowed under Caesaropapism by design (owner, 2026-11-08, on a second Workshop comment: the state that runs the church runs the schools too), and the test fails if vanilla starts disallowing it. Vanilla's other two variants, the Millet System and People of the Book, have the same gaps and are left as they are (tolerant variants, perhaps meant to allow these). The sweep that found these, every vanilla list naming a parent law without its variants, also turned up Manorialism, Bakufu, Neo-Absolutism, Sakoku, the Canton System, Homesteading and Colonial Administration; each may be intended, and none is fixed | `common/production_methods/te_vanilla_caesaropapism_fix.txt`, `common/laws/te_vanilla_caesaropapism_fix.txt` (Private Schools only): each list restated with `law_caesaropapism`; `gen_law_consistency.py` reads Private Schools' | Vanilla lists `law_caesaropapism` in them | `test_vanilla_caesaropapism_fix.py` |
 
+## Comparisons that can never pass, or always pass
+
+A trigger that compares a bounded value against a literal outside its range is constant, and the engine logs nothing. Vanilla has two, both on a 0-to-1 value compared against 25 (`scripting_best_practices.md` § "Activism, Turmoil and Their Kin Run 0 to 1"). The mod doesn't patch them. `trigger_range_audit.py --root <game>` finds them; `test_trigger_range_audit.py` holds `vanilla_parsed/` to the one it can see, since the snapshot has no events. No `###` heading: this section holds no log signatures.
+
+| Where | Comparison | What it does |
+|---|---|---|
+| `movement_events.6` (A Rally in the City), option a, at `events/movement_events.txt:968` | `scope:relevant_movement.political_movement_radicalism <= 25` | Always true: the option adds loyalists in the state whatever the movement's activism. It reads as meant for 0.25. |
+| `invoke_doctrine_of_lapse`, the AI's `propose_score`, at `common/diplomatic_actions/46_doctrine_of_lapse.txt:151` | `scope:target_country.capital = { turmoil > 25 }` | Never true: the +10 for a target whose capital is in turmoil never applies. The mod's three aid articles made the same test until 2026-11-15 (#1829). |
+
 ## Script errors observed
 
 ### `common/ai_strategies/00_default_strategy.txt:5065` — invalid `region` event target
