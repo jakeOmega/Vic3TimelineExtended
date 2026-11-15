@@ -113,9 +113,116 @@ te_seabed_state_has_data = {
 
 # State scope. The next Deep-Sea Mine level here would take a licence from the
 # state's own basin (the owner has unbuilt share there); otherwise a distant
-# one, at the long-haul penalty. For the gate's tooltip only.
+# one, at the long-haul penalty. Under Build only on local claims it also
+# needs local room there: a level let in at local room 0 (the
+# under-construction branch) ends on a distant licence, its own or a swapped
+# one. For the gate's tooltip only.
 te_seabed_state_next_local = {
 	te_seabed_state_owner_local_unbuilt > 0
+	trigger_if = {
+		limit = { te_seabed_local_only_on = yes }
+		te_seabed_state_local_room > 0
+	}
+}
+
+# State scope. Build only on local claims (te_seabed_local_only, the Seabed
+# tab's checkbox) is on for the state's owner. A variable, so a revolution's
+# winner keeps it; absent = off. Only a player sets it (the scripted GUI's
+# ai_is_valid is no), and it binds only while the owner isn't AI, so an AI
+# country's building is never changed by it, a former player's included.
+te_seabed_local_only_on = {
+	owner = {
+		has_variable = te_seabed_local_only
+		is_ai = no
+	}
+}
+
+# State scope. Model: local_gate_open. Under Build only on local claims, the
+# national gate's two branches over the state's own basin's local room
+# (te_seabed_local_room_<basin>): above 0, or at 0 in a state with a level
+# already under construction, so construction under way isn't halted by its
+# own queued level. At local room 0 that branch lets one more level in, which
+# the recording gives another basin's licence; that licence holds the room
+# below 0 (its distant term) until a local claim frees up and the swap takes
+# it, so the branch lets in one such level a basin, not one a month. A state
+# with no basin yet passes neither. Each room read sits behind a cheap test:
+# the owner's unused claims in the basin, or a Deep-Sea Mine under
+# construction here.
+te_seabed_local_open = {
+	has_variable = te_seabed_basin
+	OR = {
+		AND = {
+			te_seabed_state_owner_local_unbuilt > 0
+			te_seabed_state_local_room > 0
+		}
+		AND = {
+			any_scope_building = {
+				is_building_type = building_ocean_mine
+				is_under_construction = yes
+			}
+			te_seabed_state_local_room >= 0
+		}
+	}
+}
+
+# State scope: the gate's line for Build only on local claims, naming the
+# state's basin: its local claims to spare, or (failing) that none are left
+# and the setting is what stops the level, so the player knows to untick it
+# to build here on another basin's licence.
+te_seabed_gate_local = {
+	trigger_if = {
+		limit = { NOT = { has_variable = te_seabed_basin } }
+		custom_tooltip = {
+			text = te_seabed_gate_local_unknown_tt
+			always = no
+		}
+	}
+	trigger_else_if = {
+		limit = { te_seabed_local_open = yes }
+		te_seabed_gate_local_line = { KIND = room OK = yes }
+	}
+	trigger_else = {
+		te_seabed_gate_local_line = { KIND = none OK = no }
+	}
+}
+
+# State scope, with a basin: one line of te_seabed_gate_local for the state's
+# basin, te_seabed_gate_local_$KIND$_<basin>_tt, passing when $OK$ = yes.
+te_seabed_gate_local_line = {
+	trigger_if = {
+		limit = { var:te_seabed_basin = 1 }
+		custom_tooltip = {
+			text = te_seabed_gate_local_$KIND$_pacific_tt
+			always = $OK$
+		}
+	}
+	trigger_else_if = {
+		limit = { var:te_seabed_basin = 2 }
+		custom_tooltip = {
+			text = te_seabed_gate_local_$KIND$_atlantic_tt
+			always = $OK$
+		}
+	}
+	trigger_else_if = {
+		limit = { var:te_seabed_basin = 3 }
+		custom_tooltip = {
+			text = te_seabed_gate_local_$KIND$_indian_tt
+			always = $OK$
+		}
+	}
+	trigger_else_if = {
+		limit = { var:te_seabed_basin = 4 }
+		custom_tooltip = {
+			text = te_seabed_gate_local_$KIND$_arctic_tt
+			always = $OK$
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = te_seabed_gate_local_$KIND$_southern_tt
+			always = $OK$
+		}
+	}
 }
 
 # State scope: building_ocean_mine's licence gate (§ 2.6), read from its
@@ -128,8 +235,13 @@ te_seabed_state_next_local = {
 # branches shut until a share pays for it. Whether the engine re-checks
 # possible on construction under way at all is unread
 # (docs/testing/global-commons-playtest.md): if it doesn't, the branch can go.
-# The second and third lines are information: which licence the next level
-# would take. Every room read sits behind a cheap test first (review M1): the
+# With Build only on local claims on (te_seabed_local_only_on, the Seabed
+# tab's checkbox), a level also needs local room in the state's own basin
+# (te_seabed_local_open), and its line names the basin; the setting stops new
+# levels only, and the recording's rules don't change with it.
+# The last lines are information: which licence the next level would take,
+# shown while the level can be queued (not when the setting is what stops
+# it). Every room read sits behind a cheap test first (review M1): the
 # unbuilt shares (a variable sum), or a Deep-Sea Mine under construction here,
 # since te_seabed_room walks every building of every coastal state.
 te_seabed_gate = {
@@ -152,10 +264,18 @@ te_seabed_gate = {
 			}
 		}
 		trigger_if = {
+			limit = { te_seabed_local_only_on = yes }
+			te_seabed_gate_local = yes
+		}
+		trigger_if = {
 			limit = {
 				owner = {
 					te_seabed_unbuilt_total > 0
 					te_seabed_room > 0
+				}
+				OR = {
+					NOT = { te_seabed_local_only_on = yes }
+					te_seabed_local_open = yes
 				}
 			}
 			trigger_if = {
