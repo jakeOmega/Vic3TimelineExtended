@@ -102,7 +102,7 @@ off its default.
 |---|---|---|
 | Area | World, Continent, Market, Power Bloc, Country | Limits every map to one continent, your market, your power bloc or your own country. States outside turn slate and show no figure, and a map of figures runs its colors over the states inside. |
 | Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
-| Scale | Map's Own, Linear, Logarithmic, Ranked | Sets how the colors run between the range's ends: on the curve drawn for the map, straight, by doublings, or by each state's place in line. |
+| Scale | Map Default, Linear, Logarithmic, Ranked | Sets how the colors run between the range's ends: on the curve drawn for the map, straight, by doublings, or by each state's place in line. |
 
 Limit GDP per Capita to Europe and its colors run over Europe's states alone,
 so you see how they differ where the world map shows them all as rich.
@@ -117,9 +117,10 @@ such as Leading Cause or City Rank, and their buttons are grayed there. The
 options apply to the Map Room only: a system's own journal entry draws its map
 over the whole world, on its own curve, whatever you set here.
 
-Each map's own curve is drawn for its figure: straight for some, most of the
-color for the common figures on others, a doubling at a time for money and
-head counts. Linear runs the colors straight instead. Logarithmic gives each
+Map Default leaves each map on the curve drawn for its figure: straight for
+some, most of the color for the common figures on others, a doubling at a time
+for money and head counts. Linear runs the colors straight instead.
+Logarithmic gives each
 doubling the same share of the color, so low figures spread apart; on a map
 with a meaningful middle it doubles by the distance from the middle on each
 side, and the middle keeps its color. Ranked colors each state by its place in
@@ -128,8 +129,8 @@ no outlier matters and the Outliers buttons are grayed. A map with a
 meaningful middle ranks each side outward from it. A Ranked map takes its
 places when it is measured, so it can be a month old: Turmoil under Ranked
 moves at the turn of the month, not from week to week. Under any scale but
-its own, a map's tooltip gives the scale in force and the range in place of
-its usual description.
+Map Default, a map's tooltip gives the scale in force and the range in place
+of its usual description.
 
 Those nine systems' tabs, and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the nine (all but Ocean
