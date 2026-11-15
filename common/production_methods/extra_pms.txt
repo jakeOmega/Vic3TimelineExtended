@@ -17259,6 +17259,14 @@ pm_regolith_processing = {
 	required_input_goods = digital_access
 }
 
+# The three mining methods share one mix: the Mining Colony is four Asteroid Mines, and
+# Self-Replicating Miners a quarter above the Mining Colony. Conductive Metals are a
+# tenth of a level's sales since 2026-11-15 (95 / 380 / 475, taken out of Tech-Critical
+# Metals at equal value, so no profit figure moved). The 15 before was a 60/40 split of
+# the old Conductive and Base Metals figure: in a late hand-played game a country fed by
+# its bases covered its Tech-Critical demand one and a half times over and a ninth of its
+# Conductive, at the price cap. The Asteroid Mine stays under the Deep-Sea Mine's 100
+# (test_deep_sea_rebalance.py, ExtraplanetaryBaseMix).
 pm_space_mine = {
 	texture = "gfx/interface/icons/production_method_icons/picks_and_shovels.dds"
 
@@ -17276,10 +17284,10 @@ pm_space_mine = {
 			# Output goods
 			goods_output_gold_add = 50                           # Price:  100, Total cost:  5000.0 (13.42%)
 			goods_output_iron_add = 250                          # Price:   40, Total cost: 10000.0 (26.85%)
-			goods_output_copper_add = 15                         # Price:   40, Total cost:   600.0 (1.61%)
+			goods_output_copper_add = 95                         # Price:   40, Total cost:  3800.0 (10.20%)
 			goods_output_lead_add = 10                           # Price:   40, Total cost:   400.0 (1.07%)
 			goods_output_sulfur_add = 25                         # Price:   50, Total cost:  1250.0 (3.36%)
-			goods_output_tech_metals_add = 250                   # Price:   80, Total cost: 20000.0 (53.69%)
+			goods_output_tech_metals_add = 210                   # Price:   80, Total cost: 16800.0 (45.10%)
 			# Total input cost: 30000.0
 			# Total output cost: 37250.0
 			# Profit: 7250.0
@@ -17320,10 +17328,10 @@ pm_space_colony_mining = {
 			# Output goods
 			goods_output_gold_add = 200                          # Price:  100, Total cost: 20000.0 (13.42%)
 			goods_output_iron_add = 1000                         # Price:   40, Total cost: 40000.0 (26.85%)
-			goods_output_copper_add = 60                         # Price:   40, Total cost:  2400.0 (1.61%)
+			goods_output_copper_add = 380                        # Price:   40, Total cost: 15200.0 (10.20%)
 			goods_output_lead_add = 40                           # Price:   40, Total cost:  1600.0 (1.07%)
 			goods_output_sulfur_add = 100                        # Price:   50, Total cost:  5000.0 (3.36%)
-			goods_output_tech_metals_add = 1000                  # Price:   80, Total cost: 80000.0 (53.69%)
+			goods_output_tech_metals_add = 840                   # Price:   80, Total cost: 67200.0 (45.10%)
 			# Total input cost: 112000.0
 			# Total output cost: 149000.0
 			# Profit: 37000.0
@@ -17411,10 +17419,10 @@ pm_self_replicating_miners = {
 			# Output goods
 			goods_output_gold_add = 250                          # Price:  100, Total cost: 25000.0 (13.42%)
 			goods_output_iron_add = 1250                         # Price:   40, Total cost: 50000.0 (26.85%)
-			goods_output_copper_add = 75                         # Price:   40, Total cost:  3000.0 (1.61%)
+			goods_output_copper_add = 475                        # Price:   40, Total cost: 19000.0 (10.20%)
 			goods_output_lead_add = 50                           # Price:   40, Total cost:  2000.0 (1.07%)
 			goods_output_sulfur_add = 125                        # Price:   50, Total cost:  6250.0 (3.36%)
-			goods_output_tech_metals_add = 1250                  # Price:   80, Total cost: 100000.0 (53.69%)
+			goods_output_tech_metals_add = 1050                  # Price:   80, Total cost: 84000.0 (45.10%)
 			# Total input cost: 82200.0
 			# Total output cost: 186250.0
 			# Profit: 104050.0
