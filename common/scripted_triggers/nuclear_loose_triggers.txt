@@ -11,7 +11,7 @@
 # has surfaced anywhere in the last year, the country has reached the
 # terrorism era and has a city worth the attempt, and it has the unrest the
 # domestic terror attack needs (social_tensions_events.1: radicals, a war, or
-# a movement at half activism or more; change the two together). Country scope.
+# a movement at 25% activism or more; change the two together). Country scope.
 nd_loose_plot_possible = {
 	has_game_rule = nuclear_weapons_enabled
 	has_global_variable = nd_loose_warheads
@@ -26,7 +26,7 @@ nd_loose_plot_possible = {
 	OR = {
 		radical_fraction = { value >= 0.1 }
 		is_at_war = yes
-		any_political_movement = { political_movement_radicalism >= 0.5 }
+		any_political_movement = { political_movement_radicalism >= 0.25 }
 	}
 }
 

@@ -44,13 +44,12 @@ social_tensions_events.1 = {
 			has_intelligence_ministry_5 = yes
 		}
 		# More likely in countries with political turmoil. Activism runs 0 to 1;
-		# 0.5 is where the engine starts turning a movement's supporters radical
-		# (MOVEMENT_MONTHLY_RADICALS_THRESHOLD). nd_loose_plot_possible repeats
-		# this gate: change both together.
+		# 0.25 is vanilla's agitating threshold (the mod's is 0.1).
+		# nd_loose_plot_possible repeats this gate: change both together.
 		OR = {
 			radical_fraction = { value >= 0.1 }
 			is_at_war = yes
-			any_political_movement = { political_movement_radicalism >= 0.5 }
+			any_political_movement = { political_movement_radicalism >= 0.25 }
 		}
 	}
 

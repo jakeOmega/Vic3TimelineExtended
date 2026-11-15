@@ -22,7 +22,7 @@ _None._
 - total flags: 0
 - unreviewed: 0
 - exempted: 0
-- comparisons judged: 1064
+- comparisons judged: 1068
 
 ## Not judged
 

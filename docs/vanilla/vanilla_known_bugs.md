@@ -49,7 +49,7 @@ A trigger that compares a bounded value against a literal outside its range is c
 | Where | Comparison | What it does |
 |---|---|---|
 | `movement_events.6` (A Rally in the City), option a, at `events/movement_events.txt:968` | `scope:relevant_movement.political_movement_radicalism <= 25` | Always true: the option adds loyalists in the state whatever the movement's activism. It reads as meant for 0.25. |
-| `invoke_doctrine_of_lapse`, the AI's `propose_score`, at `common/diplomatic_actions/46_doctrine_of_lapse.txt:151` | `scope:target_country.capital = { turmoil > 25 }` | Never true: the +10 for a target whose capital is in turmoil never applies. The mod's three aid articles copied it until 2026-11-15 (#1829). |
+| `invoke_doctrine_of_lapse`, the AI's `propose_score`, at `common/diplomatic_actions/46_doctrine_of_lapse.txt:151` | `scope:target_country.capital = { turmoil > 25 }` | Never true: the +10 for a target whose capital is in turmoil never applies. The mod's three aid articles made the same test until 2026-11-15 (#1829). |
 
 ## Script errors observed
 

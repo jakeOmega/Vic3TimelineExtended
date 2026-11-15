@@ -136,9 +136,9 @@ Two engine behaviours the 2026-10 event sweep rests on, with no vanilla preceden
 
 ## The unrest gate's movement branch (2026-11-15, #1829)
 
-The terror pool's unrest gate (`social_tensions_events.1`, and the loose-warhead plot's `nd_loose_plot_possible`) now passes on a political movement at 50% activism or more. Before, it compared activism, which runs 0 to 1, against 25, so only radicals and war opened it. 50% is the threshold chosen here, not the author's 25%, and is the owner's call (PR #1829's body has the figures).
+The terror pool's unrest gate (`social_tensions_events.1`, and the loose-warhead plot's `nd_loose_plot_possible`) now passes on a political movement at 25% activism or more, the value its author meant. Before, it compared activism, which runs 0 to 1, against 25, so only radicals and war opened it. At 25% the branch admits most countries; whether to narrow it to 50% or 75% is the owner's call (PR #1831's body has the figures).
 
-74. **A calm major power with a protesting movement.** Play a major power at peace with radicals under 10% and a movement the movements panel shows at 50% activism or more. `event social_tensions_events.1` fires, where before this change its trigger was false. With every movement under 50%, no radicals and no war, the trigger is false.
+74. **A calm major power with an agitating movement.** Play a major power at peace with radicals under 10% and a movement the movements panel shows at 25% activism or more. `event social_tensions_events.1` fires, where before this change its trigger was false. With every movement under 25%, no radicals and no war, the trigger is false.
 75. **The loose plot.** With warheads loose (`global_var:nd_loose_warheads` above 0) and the terrorism era reached, a country that passes only on its movement now draws `nuclear_loose.1` from the yearly pool. Record how many plots a world draws a decade, against the same run before this change, if one is at hand.
 
 ## Self-checks

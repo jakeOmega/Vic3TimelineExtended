@@ -88,6 +88,14 @@ class ScanTest(unittest.TestCase):
         self.assertEqual([(f.name, f.outcome) for f in r.unreviewed],
                          [("turmoil", "never"), ("political_movement_radicalism", "always")])
 
+    def test_a_quoted_call_on_the_left(self):
+        r = _run('\t\t"owner.pop_type_percent_country(pop_type:peasants)" >= 25\n'
+                 '\t\t"owner.pop_type_percent_country(pop_type:peasants)" < 0.25\n'
+                 '\t\t"unknown_call(x)" > 25')
+        self.assertEqual([(f.name, f.form, f.outcome) for f in r.unreviewed],
+                         [("pop_type_percent_country", "call", "never")])
+        self.assertIn('`"pop_type_percent_country(…)" >= 25`', r.unreviewed[0].message)
+
     def test_the_block_forms_value(self):
         r = _run("\t\tradical_fraction = {\n\t\t\tstrata = lower\n\t\t\tvalue >= 10\n\t\t}\n"
                  "\t\tculture_percent_country = { target = cu:x value > 0 }")

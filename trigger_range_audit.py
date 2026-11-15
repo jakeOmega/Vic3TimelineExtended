@@ -6,7 +6,7 @@ the engine takes `political_movement_radicalism >= 25` without a word: it is
 simply never true. Eight of the mod's comparisons read that way until
 2026-11-15 (#1829): five on activism (the terror pool's unrest gate, the loose
 warhead plot, Population Transfer's three cultural-unrest tiers) and three on
-`turmoil > 25`, copied from vanilla's Doctrine of Lapse. Vanilla has two of its
+`turmoil > 25`, the same test as vanilla's Doctrine of Lapse. Vanilla has two of its
 own (`docs/vanilla/vanilla_known_bugs.md`). The engine's trigger documentation
 itself prints `political_movement_radicalism > 50` as its example, which is
 likely where the mod's came from, so a doc example is no evidence of scale.
@@ -25,6 +25,8 @@ passes at 100. Read in `common/` and `events/`:
   (`scope:x.capital.turmoil > 25`: the last segment names the value);
 * the block form, `radical_fraction = { value >= 0.1 strata = lower }`: the
   block's own `value` child;
+* a quoted call, `"owner.pop_type_percent_country(pop_type:x)" >= 0.25`: the
+  name before the parenthesis;
 * a named script value on the right whose definition is a constant (`name = N`
   or `name = { value = N }` with nothing else): the mod's
   `common/script_values/` first, then vanilla's from `vanilla_parsed/`.
@@ -240,6 +242,7 @@ _WORD = r"""[^\s={}<>!?#"]+"""
 # bare token (a list item).
 _TOKEN_RE = re.compile(
     r"(?P<close>\})"
+    rf"|(?P<qkey>\"[^\"\n]*\")\s*(?P<qop>\?=|[!<>=]=|[<>])\s*(?P<qvalue>{_WORD})"
     rf"|(?P<key>{_WORD})\s*(?P<op>\?=|[!<>=]=|[=<>])\s*"
     rf"(?:(?P<open>\{{)|(?P<value>{_WORD}|\"[^\"\n]*\"))"
     r"|(?P<anon>\{)"
@@ -247,6 +250,9 @@ _TOKEN_RE = re.compile(
 )
 _NUMBER_RE = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)")
 _NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+# A quoted call on the left, `"owner.pop_type_percent_country(pop_type:x)" >= 0.25`:
+# the value is the name before the parenthesis, after the last dot.
+_CALL_RE = re.compile(r'^"(?:[^"(]*\.)?(?P<name>[A-Za-z_][A-Za-z0-9_]*)\(')
 _DEFINE_RE = re.compile(r"^[ \t]*(?P<name>[A-Z][A-Z0-9_]*)[ \t]*=[ \t]*(?P<value>[-+]?\d+(?:\.\d+)?)", re.M)
 _TOP_VALUE_RE = re.compile(
     r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*)[ \t]*=[ \t]*"
@@ -288,14 +294,18 @@ class Flag:
     outcome: str  # never / always
     lo: float
     hi: float
-    form: str = "inline"  # inline / block
+    form: str = "inline"  # inline / block / call
     exemption: dict | None = None
 
     @property
     def message(self) -> str:
         via = "" if self.written == _fmt(self.value) else f" (`{self.written}` = {_fmt(self.value)})"
-        target = f"{self.name} = {{ value {self.op} {self.written} }}" if self.form == "block" \
-            else f"{self.name} {self.op} {self.written}"
+        if self.form == "block":
+            target = f"{self.name} = {{ value {self.op} {self.written} }}"
+        elif self.form == "call":
+            target = f'"{self.name}(…)" {self.op} {self.written}'
+        else:
+            target = f"{self.name} {self.op} {self.written}"
         return (f"`{target}`{via} {self.outcome} passes: `{self.name}` runs {_fmt(self.lo)} to "
                 f"{_fmt(self.hi)}")
 
@@ -442,6 +452,14 @@ def scan_text(text: str, rel: str, ranges: dict[str, Range], constants: dict[str
         result.flags.append(Flag(rel, line, name, op, written, value, verdict, r.lo, r.hi, form, exemption))
 
     for m in _TOKEN_RE.finditer(clean):
+        if m.group("qkey"):
+            # The blanking keeps a string's length, so the raw text at the same
+            # offsets holds the call.
+            call = _CALL_RE.match(text[m.start("qkey"):m.end("qkey")])
+            if call and call.group("name") in ranges:
+                judge(call.group("name"), m.group("qop"), m.group("qvalue"),
+                      bisect_right(starts, m.start()), "call", None)
+            continue
         if m.group("close"):
             if stack:
                 stack.pop()
@@ -516,7 +534,8 @@ def scan_parsed(node, path: tuple = (), ranges: dict[str, Range] | None = None):
                 yield from scan_parsed(value, path, ranges)
         return
     for key, field_ in node.items():
-        name = value_name(key)
+        call = _CALL_RE.match(key) if key.startswith('"') else None
+        name = call.group("name") if call else value_name(key)
         for op, value in _pairs(field_):
             if name in ranges and isinstance(value, str) and _NUMBER_RE.fullmatch(value):
                 r = ranges[name]

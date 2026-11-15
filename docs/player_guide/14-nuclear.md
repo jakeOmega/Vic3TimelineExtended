@@ -882,7 +882,7 @@ counts those from your arsenal.
 
 Once warheads are loose, a plot can come up in the yearly terror events of a
 country with the Terrorism and Antiterrorism technology and at least 10%
-radicals, a war, or a movement at 50% activism or more. It is real with a
+radicals, a war, or a movement at 25% activism or more. It is real with a
 20% chance per loose warhead in the world (at most 80%), using another country's
 lost warheads. Your security services seize it first with a 10% chance, plus 5%
 per Ministry of Intelligence and Security level and 15% with the Nuclear Weapons
