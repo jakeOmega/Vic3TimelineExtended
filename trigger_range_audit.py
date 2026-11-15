@@ -86,11 +86,19 @@ VANILLA_VALUES = os.path.join("vanilla_parsed", "common", "script_values.json")
 
 @dataclass(frozen=True)
 class Range:
+    """A value's range. `lo` and `hi` as written in `RANGES` are vanilla's.
+    Where `lo_define` or `hi_define` names a define, the audited tree's own
+    value of it replaces the literal when the tree's `common/defines/` sets
+    one (`applied_ranges`): the mod sets `MAX_INSTITUTION_INVESTMENT` = 9, so
+    the mod is judged against 9, and a `--root` run over vanilla's files reads
+    vanilla's 5 there. `moved` names each bound the tree's defines changed
+    from vanilla's, for the report."""
     lo: float
     hi: float
     evidence: str
-    lo_define: str | None = None  # a define whose value replaces `lo` when the tree sets it
+    lo_define: str | None = None
     hi_define: str | None = None
+    moved: str = ""
 
 
 def _fraction(evidence: str) -> Range:
@@ -99,11 +107,11 @@ def _fraction(evidence: str) -> Range:
 
 _SHARE = "a share of the population; the doc's examples are 0.2 and 0.8"
 _LEVELS = "the doc's fraction of a building's levels"
-_ACCEPTANCE = Range(0.0, 100.0, "acceptance: `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (0 / 100), "
-                    "\"the minimum / maximum acceptance value a pop can have\"",
+_ACCEPTANCE = Range(0.0, 100.0, "acceptance; follows `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (vanilla "
+                    "0 / 100), \"the minimum / maximum acceptance value a pop can have\"",
                     lo_define="MIN_ACCEPTANCE_VALUE", hi_define="MAX_ACCEPTANCE_VALUE")
-_FERVOR = Range(0.0, 100.0, "fervor: `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (0 / 100); vanilla's 38 "
-                "literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale",
+_FERVOR = Range(0.0, 100.0, "fervor; follows `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (vanilla 0 / 100); "
+                "vanilla's 38 literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale",
                 lo_define="CULTURAL_FERVOR_MIN", hi_define="CULTURAL_FERVOR_MAX")
 _OUT_OF_100 = "no define states it; the game shows it out of 100"
 
@@ -144,7 +152,8 @@ RANGES: dict[str, Range] = {
     "political_strength_share": _fraction("a share of political strength; vanilla's literal is 0.2"),
     "wealth_share": _fraction("a share of wealth political strength"),
     "ig_approval": Range(
-        -20.0, 20.0, "`MIN_IG_APPROVAL` / `MAX_IG_APPROVAL` (-20 / 20); vanilla's 199 literals run -10 to 10",
+        -20.0, 20.0, "follows `MIN_IG_APPROVAL` / `MAX_IG_APPROVAL` (vanilla -20 / 20); vanilla's 199 literals "
+        "run -10 to 10",
         lo_define="MIN_IG_APPROVAL", hi_define="MAX_IG_APPROVAL"),
     # --- population shares -----------------------------------------------------
     "literacy_rate": _fraction("a rate; vanilla's 55 literals run 0.1-0.95"),
@@ -173,8 +182,11 @@ RANGES: dict[str, Range] = {
         0.0, 100.0, f"{_OUT_OF_100}; the defines read it at 25-90 (`WAR_GOAL_INDEPENDENCE_MIN_LIBERTY_DESIRE` = "
         "90); vanilla's 139 literals run 0-80"),
     "institution_investment_level": Range(
-        0.0, 5.0, "levels up to `MAX_INSTITUTION_INVESTMENT` (vanilla 5; the mod sets 9); vanilla's 129 literals "
-        "run 0-5", hi_define="MAX_INSTITUTION_INVESTMENT"),
+        0.0, 5.0, "the maximum follows `MAX_INSTITUTION_INVESTMENT` (vanilla 5; the mod's `extra_defines.txt` sets "
+        "9, and the mod tests levels 6-9). The minimum follows no define: `MIN_INSTITUTION_INVESTMENT` = 1 is the "
+        "lowest level of an active institution, and vanilla tests `value < 1` and `value > 0`, so a country without "
+        "one reads 0. Vanilla's 129 literals run 0-5",
+        hi_define="MAX_INSTITUTION_INVESTMENT"),
     # --- states, war, blocs ----------------------------------------------------
     "market_access": _fraction("the doc's example is 0.8; vanilla's literals are 0 and 1"),
     "incorporation_progress": _fraction("the doc's example is 0.25; vanilla's literals are 0 and 1"),
@@ -184,7 +196,8 @@ RANGES: dict[str, Range] = {
         "vanilla's 19 literals run 0-0.5. The doc's example, `> 5`, is wrong; `add_devastation` takes points "
         "(`DEVASTATION_MAX` 100). `scripting_best_practices.md` § \"Devastation\""),
     "pollution_amount": Range(
-        0.0, 255.0, "`POLLUTION_MAX` = 255; vanilla's literals run 50-100, and the mod tests up to 200",
+        0.0, 255.0, "follows `POLLUTION_MAX` (vanilla 255); vanilla's literals run 50-100, and the mod tests up to "
+        "200",
         hi_define="POLLUTION_MAX"),
     "civil_war_progress": _fraction("the doc's example is 0.50; vanilla's 65 literals run 0-1"),
     "highest_secession_progress": _fraction("the doc's example is 0.7; vanilla's 7 literals run 0.3-0.5"),
@@ -358,7 +371,11 @@ def applied_ranges(defines: dict[str, float]) -> dict[str, Range]:
     for name, r in RANGES.items():
         lo = defines.get(r.lo_define, r.lo) if r.lo_define else r.lo
         hi = defines.get(r.hi_define, r.hi) if r.hi_define else r.hi
-        out[name] = Range(lo, hi, r.evidence, r.lo_define, r.hi_define)
+        moved = "; ".join(
+            f"{side} from this tree's `{define}`, vanilla's {_fmt(baked)}"
+            for side, define, baked in (("min", r.lo_define, r.lo), ("max", r.hi_define, r.hi))
+            if define and defines.get(define, baked) != baked)
+        out[name] = Range(lo, hi, r.evidence, r.lo_define, r.hi_define, moved)
     return out
 
 
@@ -578,7 +595,8 @@ def render_report(result: AuditResult) -> str:
             "| Value | Range | Evidence |", "|---|---|---|"]
     for name in sorted(result.ranges):
         r = result.ranges[name]
-        out.append(f"| `{name}` | {_fmt(r.lo)} to {_fmt(r.hi)} | {r.evidence} |")
+        moved = f" ({r.moved})" if r.moved else ""
+        out.append(f"| `{name}` | {_fmt(r.lo)} to {_fmt(r.hi)}{moved} | {r.evidence} |")
     out += ["", "## Left out", "", "| Value | Why |", "|---|---|"]
     out += [f"| `{name}` | {why} |" for name, why in sorted(LEFT_OUT.items())]
     out.append("")

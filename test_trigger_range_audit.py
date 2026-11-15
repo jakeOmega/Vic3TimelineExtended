@@ -141,6 +141,20 @@ class ScanTest(unittest.TestCase):
         vanilla_default = _run("\t\tinstitution_investment_level = { institution = i value >= 9 }")
         self.assertEqual([f.hi for f in vanilla_default.unreviewed], [5.0])
 
+    def test_institution_levels_follow_the_mods_own_defines_file(self):
+        # The mod's extra_defines.txt sets MAX_INSTITUTION_INVESTMENT = 9, so a
+        # level above vanilla's 5 is a real level here, and only a number above 9
+        # is out. A number at the bound (`> 9`) is left alone, as at every bound.
+        with open(os.path.join(REPO, "common", "defines", "extra_defines.txt"), encoding="utf-8-sig") as fh:
+            files = {"common/defines/extra_defines.txt": fh.read()}
+        for test in ("> 5", ">= 6", ">= 9", "< 9", "> 9"):
+            r = _run(f"\t\tinstitution_investment_level = {{ institution = i value {test} }}", **files)
+            self.assertEqual(r.flags, [], test)
+        bad = _run("\t\tinstitution_investment_level = { institution = i value > 10 }", **files)
+        self.assertEqual([(f.hi, f.outcome) for f in bad.unreviewed], [(9.0, "never")])
+        self.assertIn("max from this tree's `MAX_INSTITUTION_INVESTMENT`, vanilla's 5",
+                      bad.ranges["institution_investment_level"].moved)
+
 
 class SuppressionTest(unittest.TestCase):
     def test_a_tag_on_the_line_suppresses(self):
@@ -196,11 +210,49 @@ class TableTest(unittest.TestCase):
         self.assertNotIn("value", RANGES)
 
 
+def _defines_set_by_the_mod() -> dict[str, str]:
+    """{name: value as written} for every uncommented `NAME = value` line in the
+    mod's common/defines/, read line by line rather than through read_defines."""
+    out: dict[str, str] = {}
+    for path in sorted(glob.glob(os.path.join(REPO, "common", "defines", "*.txt"))):
+        with open(path, encoding="utf-8-sig") as fh:
+            for line in fh:
+                m = re.match(r"\s*([A-Z][A-Z0-9_]*)\s*=\s*(\S+)", line.split("#", 1)[0])
+                if m:
+                    out[m.group(1)] = m.group(2)
+    return out
+
+
 class ModTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.result = audit(REPO)
+
     def test_the_mod_is_clean(self):
-        result = audit(REPO)
-        self.assertEqual([(f.file, f.line, f.message) for f in result.failing], [])
-        self.assertGreater(result.judged, 500)
+        self.assertEqual([(f.file, f.line, f.message) for f in self.result.failing], [])
+        self.assertGreater(self.result.judged, 500)
+
+    def test_define_backed_bounds_agree_with_the_mods_defines(self):
+        # A bound a row takes from a define is the mod's value of it where the
+        # mod sets one, else vanilla's literal. A define the mod sets through an
+        # `@` constant or an expression, which read_defines skips, fails here.
+        set_by_mod = _defines_set_by_the_mod()
+        moved = []
+        for name, r in RANGES.items():
+            for side, define, baked in (("lo", r.lo_define, r.lo), ("hi", r.hi_define, r.hi)):
+                if not define:
+                    continue
+                want = baked
+                if define in set_by_mod:
+                    try:
+                        want = float(set_by_mod[define])
+                    except ValueError:
+                        self.fail(f"the mod sets {define} = {set_by_mod[define]}, which the audit can't read; "
+                                  f"`{name}` would keep vanilla's {baked}")
+                    moved.append(define)
+                self.assertEqual(getattr(self.result.ranges[name], side), want, f"{name} {side}: {define}")
+        # The mod sets this one today; without it the test would check only vanilla's literals.
+        self.assertIn("MAX_INSTITUTION_INVESTMENT", moved)
 
 
 class VanillaTest(unittest.TestCase):

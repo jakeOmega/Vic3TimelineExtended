@@ -44,13 +44,13 @@ Comparisons of a ranged value with something other than a number or a constant s
 | `cash_reserves_ratio` | 0 to 1 | the doc's reserves over their maximum, 1 with no maximum; vanilla's 43 literals run 0.25-0.95 |
 | `civil_war_progress` | 0 to 1 | the doc's example is 0.50; vanilla's 65 literals run 0-1 |
 | `country_army_unit_type_fraction` | 0 to 1 | the doc's share of units, example 0.2; vanilla's literals run 0.2-0.5 |
-| `country_average_culture_pop_acceptance` | 0 to 100 | acceptance: `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (0 / 100), "the minimum / maximum acceptance value a pop can have" |
-| `country_fervor_primary_culture` | 0 to 100 | fervor: `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (0 / 100); vanilla's 38 literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale |
+| `country_average_culture_pop_acceptance` | 0 to 100 | acceptance; follows `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (vanilla 0 / 100), "the minimum / maximum acceptance value a pop can have" |
+| `country_fervor_primary_culture` | 0 to 100 | fervor; follows `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (vanilla 0 / 100); vanilla's 38 literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale |
 | `country_ownership_fraction` | 0 to 1 | the doc's fraction of a building's levels |
 | `country_ship_type_fraction` | 0 to 1 | the doc's fraction of ships, example 0.2; vanilla's literals are 0.1 |
 | `country_turmoil` | 0 to 1 | the doc's population-weighted turmoil; its example is 0.2 |
 | `crew_percent` | 0 to 1 | the doc's example is 0.1; vanilla's literal is 0.5 |
-| `culture_current_fervor` | 0 to 100 | fervor: `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (0 / 100); vanilla's 38 literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale |
+| `culture_current_fervor` | 0 to 100 | fervor; follows `CULTURAL_FERVOR_MIN` / `CULTURAL_FERVOR_MAX` (vanilla 0 / 100); vanilla's 38 literals run 0-100. The doc's example, `> 0.2`, is on the wrong scale |
 | `culture_percent_country` | 0 to 1 | a share of the population; the doc's examples are 0.2 and 0.8; vanilla's 20 literals run 0-0.1 |
 | `culture_percent_state` | 0 to 1 | a share of the population; the doc's examples are 0.2 and 0.8; vanilla's 46 literals run 0-0.6 |
 | `culture_secession_progress` | 0 to 1 | the doc's "progress percentage", example 0.5; vanilla's literals are 0 |
@@ -64,12 +64,12 @@ Comparisons of a ranged value with something other than a number or a constant s
 | `government_legitimacy` | 0 to 100 | no define states it; the game shows it out of 100; vanilla's 51 literals run 25-95 |
 | `highest_secession_progress` | 0 to 1 | the doc's example is 0.7; vanilla's 7 literals run 0.3-0.5 |
 | `hit_points_percent` | 0 to 1 | the doc's example is 0.1 |
-| `ig_approval` | -20 to 20 | `MIN_IG_APPROVAL` / `MAX_IG_APPROVAL` (-20 / 20); vanilla's 199 literals run -10 to 10 |
+| `ig_approval` | -20 to 20 | follows `MIN_IG_APPROVAL` / `MAX_IG_APPROVAL` (vanilla -20 / 20); vanilla's 199 literals run -10 to 10 |
 | `ig_clout` | 0 to 1 | an interest group's share of clout; defines `POWERFUL_IG_THRESHOLD` 0.20, `MARGINAL_IG_THRESHOLD` 0.05; vanilla's 12 literals run 0.01-0.25 |
 | `ig_government_power_share` | 0 to 1 | the doc's political strength divided by the government's total |
 | `ig_state_pol_strength_share` | 0 to 1 | a share of a state's political strength; the doc's example is 0.3 |
 | `incorporation_progress` | 0 to 1 | the doc's example is 0.25; vanilla's literals are 0 and 1 |
-| `institution_investment_level` | 0 to 9 | levels up to `MAX_INSTITUTION_INVESTMENT` (vanilla 5; the mod sets 9); vanilla's 129 literals run 0-5 |
+| `institution_investment_level` | 0 to 9 (max from this tree's `MAX_INSTITUTION_INVESTMENT`, vanilla's 5) | the maximum follows `MAX_INSTITUTION_INVESTMENT` (vanilla 5; the mod's `extra_defines.txt` sets 9, and the mod tests levels 6-9). The minimum follows no define: `MIN_INSTITUTION_INVESTMENT` = 1 is the lowest level of an active institution, and vanilla tests `value < 1` and `value > 0`, so a country without one reads 0. Vanilla's 129 literals run 0-5 |
 | `legitimacy` | 0 to 100 | no define states it; the game shows it out of 100; vanilla's 28 literals run 50-75 |
 | `liberty_desire` | 0 to 100 | no define states it; the game shows it out of 100; the defines read it at 25-90 (`WAR_GOAL_INDEPENDENCE_MIN_LIBERTY_DESIRE` = 90); vanilla's 139 literals run 0-80 |
 | `literacy_rate` | 0 to 1 | a rate; vanilla's 55 literals run 0.1-0.95 |
@@ -87,8 +87,8 @@ Comparisons of a ranged value with something other than a number or a constant s
 | `political_movement_radicalism` | 0 to 1 | a movement's activism. Defines: a civil war starts at `MIN_RADICALISM_FOR_CIVIL_WAR_START` = 1.0 and organizes from 0.75; the agitating, protesting and militant thresholds are 0.25, 0.5 and 0.75. Vanilla's law-enactment tooltip prints it with `|0%` and turns it red at 1. 169 of vanilla's 170 literals run 0.1-0.9 (the 170th is a bug). Saves store 0 to 1. The doc's example, `> 50`, is wrong |
 | `political_movement_support` | 0 to 1 | the share of the population behind a movement; the doc's example is `> 0.5`; vanilla's 137 literals run 0.05-0.5 |
 | `political_strength_share` | 0 to 1 | a share of political strength; vanilla's literal is 0.2 |
-| `pollution_amount` | 0 to 255 | `POLLUTION_MAX` = 255; vanilla's literals run 50-100, and the mod tests up to 200 |
-| `pop_acceptance` | 0 to 100 | acceptance: `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (0 / 100), "the minimum / maximum acceptance value a pop can have" |
+| `pollution_amount` | 0 to 255 | follows `POLLUTION_MAX` (vanilla 255); vanilla's literals run 50-100, and the mod tests up to 200 |
+| `pop_acceptance` | 0 to 100 | acceptance; follows `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (vanilla 0 / 100), "the minimum / maximum acceptance value a pop can have" |
 | `pop_loyalist_fraction` | 0 to 1 | the doc's loyalists in a pop over its size |
 | `pop_neutral_fraction` | 0 to 1 | the doc's neutrals in a pop over its size |
 | `pop_radical_fraction` | 0 to 1 | the doc's radicals in a pop over its size; vanilla's literal is 0.25 |
@@ -104,8 +104,8 @@ Comparisons of a ranged value with something other than a number or a constant s
 | `self_ownership_fraction` | 0 to 1 | the doc's fraction of a building's levels |
 | `size_weighted_lost_battles_fraction` | 0 to 1 | the doc's fraction of battles |
 | `size_weighted_won_battles_fraction` | 0 to 1 | the doc's fraction of battles |
-| `state_average_culture_pop_acceptance` | 0 to 100 | acceptance: `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (0 / 100), "the minimum / maximum acceptance value a pop can have" |
-| `state_cultural_acceptance` | 0 to 100 | acceptance: `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (0 / 100), "the minimum / maximum acceptance value a pop can have" |
+| `state_average_culture_pop_acceptance` | 0 to 100 | acceptance; follows `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (vanilla 0 / 100), "the minimum / maximum acceptance value a pop can have" |
+| `state_cultural_acceptance` | 0 to 100 | acceptance; follows `MIN_ACCEPTANCE_VALUE` / `MAX_ACCEPTANCE_VALUE` (vanilla 0 / 100), "the minimum / maximum acceptance value a pop can have" |
 | `state_unemployment_rate` | 0 to 1 | the doc's example is 0.1; vanilla's 8 literals run 0.1-0.2 |
 | `target_cohesion_percentage` | 0 to 1 | the doc's cohesion as a share of the maximum, example 0.5 |
 | `total_population_including_subjects_share` | 0 to 1 | the doc's share of the global population |
