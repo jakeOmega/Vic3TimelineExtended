@@ -1,0 +1,58 @@
+{
+ "principle_group_artistic_expression": {
+  "en": "Artistic Expression",
+  "ru": "Художественное самовыражение"
+ },
+ "principle_group_cultural_plurality": {
+  "en": "Cultural Plurality",
+  "ru": "Культурный плюрализм"
+ },
+ "principle_group_cultural_unity": {
+  "en": "Cultural Unity",
+  "ru": "Культурное единство"
+ },
+ "principle_group_education": {
+  "en": "Education",
+  "ru": "Образование"
+ },
+ "principle_group_engineering_and_logistics": {
+  "en": "Engineering and Logistics",
+  "ru": "Инженерия и логистика"
+ },
+ "principle_group_environmental_sustainability": {
+  "en": "Environmental Sustainability",
+  "ru": "Экологическая устойчивость"
+ },
+ "principle_group_global_security": {
+  "en": "Global Security",
+  "ru": "Глобальная безопасность"
+ },
+ "principle_group_healthcare": {
+  "en": "Healthcare",
+  "ru": "Здравоохранение"
+ },
+ "principle_group_military_training": {
+  "en": "Military Training",
+  "ru": "Военная подготовка"
+ },
+ "principle_group_monetary_union": {
+  "en": "Monetary Union",
+  "ru": "Валютный союз"
+ },
+ "principle_group_multilateral_institutions": {
+  "en": "Multilateral Institutions",
+  "ru": "Многосторонние институты"
+ },
+ "principle_group_rural": {
+  "en": "Rural Development",
+  "ru": "Развитие сельских районов"
+ },
+ "principle_group_urban_planning": {
+  "en": "Urban Planning",
+  "ru": "Градостроительство"
+ },
+ "principle_group_welfare": {
+  "en": "Welfare",
+  "ru": "Социальное обеспечение"
+ }
+}

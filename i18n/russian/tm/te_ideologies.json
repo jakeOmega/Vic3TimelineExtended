@@ -1,0 +1,134 @@
+{
+ "ideology_anti_colonialist": {
+  "en": "Anti-Colonialist",
+  "ru": "Антиколониалист"
+ },
+ "ideology_anti_colonialist_leader": {
+  "en": "Anti-Colonialist",
+  "ru": "Антиколониалист"
+ },
+ "ideology_corporate": {
+  "en": "Corpocrat",
+  "ru": "Корпократ"
+ },
+ "ideology_custom_religion_aristocratic_governance": {
+  "en": "Aristocracy",
+  "ru": "Аристократия"
+ },
+ "ideology_custom_religion_corporate_governance": {
+  "en": "Corporate Rule",
+  "ru": "Корпоративное правление"
+ },
+ "ideology_custom_religion_exploitative_outlook": {
+  "en": "Exploitation",
+  "ru": "Эксплуатация"
+ },
+ "ideology_custom_religion_free_market_economy": {
+  "en": "Divine Wealth",
+  "ru": "Божественное богатство"
+ },
+ "ideology_custom_religion_imperial_cult_economy": {
+  "en": "Enlightened Imperial Economy",
+  "ru": "Просвещённая имперская экономика"
+ },
+ "ideology_custom_religion_imperial_cult_governance": {
+  "en": "Imperial Cult",
+  "ru": "Имперский культ"
+ },
+ "ideology_custom_religion_imperial_cult_society": {
+  "en": "Imperial Society",
+  "ru": "Имперское общество"
+ },
+ "ideology_custom_religion_imperialist_outlook": {
+  "en": "Imperialism",
+  "ru": "Империализм"
+ },
+ "ideology_custom_religion_inclusive_society": {
+  "en": "Inclusive Society",
+  "ru": "Инклюзивное общество"
+ },
+ "ideology_custom_religion_isolationist_outlook": {
+  "en": "Isolationism",
+  "ru": "Изоляционизм"
+ },
+ "ideology_custom_religion_meritocratic_society": {
+  "en": "Meritocracy",
+  "ru": "Меритократия"
+ },
+ "ideology_custom_religion_militarist_outlook": {
+  "en": "Militarism",
+  "ru": "Милитаризм"
+ },
+ "ideology_custom_religion_pacifist_outlook": {
+  "en": "Pacifism",
+  "ru": "Пацифизм"
+ },
+ "ideology_custom_religion_republican_governance": {
+  "en": "Republicanism",
+  "ru": "Республиканизм"
+ },
+ "ideology_custom_religion_social_democratic_economy": {
+  "en": "Social Welfare",
+  "ru": "Социальное обеспечение"
+ },
+ "ideology_custom_religion_socialist_economy": {
+  "en": "Divine Command Economy",
+  "ru": "Экономика божественных предписаний"
+ },
+ "ideology_custom_religion_technocratic_governance": {
+  "en": "Technocracy",
+  "ru": "Технократия"
+ },
+ "ideology_custom_religion_theocratic_economy": {
+  "en": "Theocratic Economy",
+  "ru": "Теократическая экономика"
+ },
+ "ideology_custom_religion_theocratic_governance": {
+  "en": "Theocracy",
+  "ru": "Теократия"
+ },
+ "ideology_custom_religion_theocratic_outlook": {
+  "en": "Theocratic Expansion",
+  "ru": "Теократическая экспансия"
+ },
+ "ideology_custom_religion_theocratic_society": {
+  "en": "Theocratic Society",
+  "ru": "Теократическое общество"
+ },
+ "ideology_custom_religion_totalitarian_society": {
+  "en": "Totalitarianism",
+  "ru": "Тоталитаризм"
+ },
+ "ideology_custom_religion_traditionalist_economy": {
+  "en": "Traditionalism",
+  "ru": "Традиционализм"
+ },
+ "ideology_custom_religion_traditionalist_society": {
+  "en": "Social Orthodoxy",
+  "ru": "Социальная ортодоксия"
+ },
+ "ideology_environmentalists": {
+  "en": "Environmentalist",
+  "ru": "Эколог"
+ },
+ "ideology_islamic_inheritance": {
+  "en": "Islamic Inheritance",
+  "ru": "Исламское наследование"
+ },
+ "ideology_multicultural": {
+  "en": "Multiculturalist",
+  "ru": "Мультикультуралист"
+ },
+ "ideology_multicultural_ig": {
+  "en": "Multiculturalist",
+  "ru": "Мультикультуралист"
+ },
+ "ideology_multicultural_inclusive": {
+  "en": "Inclusive Multiculturalist",
+  "ru": "Инклюзивный мультикультуралист"
+ },
+ "ideology_optimist_transhumanist": {
+  "en": "Optimist Transhumanist",
+  "ru": "Оптимист-трансгуманист"
+ }
+}

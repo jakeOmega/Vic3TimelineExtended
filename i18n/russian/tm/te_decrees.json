@@ -1,0 +1,66 @@
+{
+ "decree_antiterrorism_campaign": {
+  "en": "Anti-Terrorism Campaign",
+  "ru": "Кампания по борьбе с терроризмом"
+ },
+ "decree_bureaucracy_reform": {
+  "en": "Bureaucratic Reform",
+  "ru": "Бюрократическая реформа"
+ },
+ "decree_cultural_emigration_initiative": {
+  "en": "Cultural Emigration Initiative",
+  "ru": "Инициатива культурной эмиграции"
+ },
+ "decree_cultural_integration": {
+  "en": "Cultural Integration",
+  "ru": "Культурная интеграция"
+ },
+ "decree_encourage_emigration": {
+  "en": "Encourage Emigration",
+  "ru": "Поощрение эмиграции"
+ },
+ "decree_greenest_grass_campaign": {
+  "en": "Greenest Grass Campaign",
+  "ru": "Кампания «Трава зеленее»"
+ },
+ "decree_medical_outreach": {
+  "en": "Medical Outreach",
+  "ru": "Медицинский охват"
+ },
+ "decree_natalism_initiative": {
+  "en": "Natalism Initiative",
+  "ru": "Инициатива по повышению рождаемости"
+ },
+ "decree_political_patronage": {
+  "en": "Political Patronage",
+  "ru": "Политическое покровительство"
+ },
+ "decree_pollution_control": {
+  "en": "Pollution Control",
+  "ru": "Контроль загрязнения"
+ },
+ "decree_promote_tourism": {
+  "en": "Promote Tourism",
+  "ru": "Развитие туризма"
+ },
+ "decree_resettlement_recruitment_drive": {
+  "en": "Resettlement Recruitment Drive",
+  "ru": "Набор переселенцев"
+ },
+ "decree_subsidize_immigration": {
+  "en": "Subsidize Immigration",
+  "ru": "Субсидирование иммиграции"
+ },
+ "decree_tax_breaks": {
+  "en": "Tax Breaks",
+  "ru": "Налоговые льготы"
+ },
+ "decree_trade_reform": {
+  "en": "Trade Reform",
+  "ru": "Торговая реформа"
+ },
+ "decree_war_propaganda": {
+  "en": "War Propaganda",
+  "ru": "Военная пропаганда"
+ }
+}

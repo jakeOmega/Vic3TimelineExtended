@@ -1,0 +1,710 @@
+{
+ "amendment_cb_dual_mandate": {
+  "en": "Dual Mandate Act",
+  "ru": "Закон о двойном мандате"
+ },
+ "amendment_cb_inflation_targeting": {
+  "en": "Inflation Targeting Act",
+  "ru": "Закон о таргетировании инфляции"
+ },
+ "amendment_civilian_police_oversight": {
+  "en": "Civilian Oversight",
+  "ru": "Гражданский надзор"
+ },
+ "amendment_corporate_data_exemption": {
+  "en": "Corporate Data Access Exemption",
+  "ru": "Исключение для корпоративного доступа к данным"
+ },
+ "amendment_corporate_security_powers": {
+  "en": "Corporate Security Powers",
+  "ru": "Полномочия корпоративной охраны"
+ },
+ "amendment_env_grandfather_clause": {
+  "en": "Environmental Grandfather Clause",
+  "ru": "Экологическая оговорка о сохранении прав"
+ },
+ "amendment_first_past_the_post": {
+  "en": "First Past the Post",
+  "ru": "Мажоритарная система"
+ },
+ "amendment_habeas_corpus_suspension": {
+  "en": "Suspension of Habeas Corpus",
+  "ru": "Приостановка хабеас корпус"
+ },
+ "amendment_human_in_the_loop": {
+  "en": "Human-in-the-Loop Appeals",
+  "ru": "Обжалование с участием человека"
+ },
+ "amendment_langreform_advisory_panel": {
+  "en": "Language Advisory Panel",
+  "ru": "Языковой консультативный совет"
+ },
+ "amendment_langreform_minority_protection": {
+  "en": "Minority Language Protection",
+  "ru": "Защита языков меньшинств"
+ },
+ "amendment_langreform_national_focus": {
+  "en": "National Language Priority",
+  "ru": "Приоритет национального языка"
+ },
+ "amendment_langreform_powerful_academy": {
+  "en": "Language Academy Established",
+  "ru": "Создание языковой академии"
+ },
+ "amendment_langreform_revived_arabic": {
+  "en": "Classical Arabic Revival",
+  "ru": "Возрождение классического арабского"
+ },
+ "amendment_langreform_revived_aramaic": {
+  "en": "Aramaic Revival",
+  "ru": "Возрождение арамейского"
+ },
+ "amendment_langreform_revived_avestan": {
+  "en": "Avestan Revival",
+  "ru": "Возрождение авестийского"
+ },
+ "amendment_langreform_revived_chinese": {
+  "en": "Literary Chinese Revival",
+  "ru": "Возрождение литературного китайского"
+ },
+ "amendment_langreform_revived_coptic": {
+  "en": "Coptic Revival",
+  "ru": "Возрождение коптского"
+ },
+ "amendment_langreform_revived_geez": {
+  "en": "Ge'ez Revival",
+  "ru": "Возрождение геэза"
+ },
+ "amendment_langreform_revived_gothic": {
+  "en": "Gothic Revival",
+  "ru": "Возрождение готского"
+ },
+ "amendment_langreform_revived_greek": {
+  "en": "Classical Greek Revival",
+  "ru": "Возрождение древнегреческого"
+ },
+ "amendment_langreform_revived_hebrew": {
+  "en": "Hebrew Revival",
+  "ru": "Возрождение иврита"
+ },
+ "amendment_langreform_revived_irish": {
+  "en": "Classical Irish Revival",
+  "ru": "Возрождение классического ирландского"
+ },
+ "amendment_langreform_revived_latin": {
+  "en": "Latin Revival",
+  "ru": "Возрождение латыни"
+ },
+ "amendment_langreform_revived_mayan": {
+  "en": "Classic Mayan Revival",
+  "ru": "Возрождение классического майя"
+ },
+ "amendment_langreform_revived_nahuatl": {
+  "en": "Classical Nahuatl Revival",
+  "ru": "Возрождение классического науатля"
+ },
+ "amendment_langreform_revived_norse": {
+  "en": "Old Norse Revival",
+  "ru": "Возрождение древнескандинавского"
+ },
+ "amendment_langreform_revived_pali": {
+  "en": "Pali Revival",
+  "ru": "Возрождение пали"
+ },
+ "amendment_langreform_revived_prussian": {
+  "en": "Old Prussian Revival",
+  "ru": "Возрождение древнепрусского"
+ },
+ "amendment_langreform_revived_sanskrit": {
+  "en": "Sanskrit Revival",
+  "ru": "Возрождение санскрита"
+ },
+ "amendment_langreform_revived_slavonic": {
+  "en": "Old Church Slavonic Revival",
+  "ru": "Возрождение церковнославянского"
+ },
+ "amendment_language_naturalization_requirement": {
+  "en": "Language Requirement for Naturalization",
+  "ru": "Языковое требование для натурализации"
+ },
+ "amendment_military_necessity_clause": {
+  "en": "Military Necessity Clause",
+  "ru": "Оговорка о военной необходимости"
+ },
+ "amendment_minority_script_preservation": {
+  "en": "Minority Script Preservation",
+  "ru": "Сохранение письменности меньшинств"
+ },
+ "amendment_mixed_commercial_courts": {
+  "en": "Mixed Commercial Courts",
+  "ru": "Смешанные коммерческие суды"
+ },
+ "amendment_national_champion_exemption": {
+  "en": "National Champion Exemption",
+  "ru": "Исключение для национальных чемпионов"
+ },
+ "amendment_no_first_strike": {
+  "en": "No-First-Strike Pledge",
+  "ru": "Обязательство не наносить первый удар"
+ },
+ "amendment_small_donor_matching": {
+  "en": "Small Donor Matching",
+  "ru": "Софинансирование мелких пожертвований"
+ },
+ "amendment_undivided_farm_succession": {
+  "en": "Undivided Farm Succession",
+  "ru": "Неделимое наследование ферм"
+ },
+ "banking_dash_mon_mandate_dual": {
+  "en": "Dual Mandate",
+  "ru": "Двойной мандат"
+ },
+ "banking_dash_mon_mandate_growth": {
+  "en": "Growth",
+  "ru": "Рост"
+ },
+ "banking_dash_mon_mandate_inflation": {
+  "en": "Inflation Targeting",
+  "ru": "Таргетирование инфляции"
+ },
+ "banking_dash_mon_mandate_peg": {
+  "en": "Peg Defense",
+  "ru": "Защита привязки"
+ },
+ "bg_megastructure_capped_private": {
+  "en": "Private Megastructure Facility",
+  "ru": "Частный мегаструктурный объект"
+ },
+ "bg_sr_colony_sites": {
+  "en": "Solar System Colonies",
+  "ru": "Колонии Солнечной системы"
+ },
+ "concept_asset_relief_program": {
+  "en": "Asset Relief Program",
+  "ru": "Программа помощи активам"
+ },
+ "concept_banking_asset_purchases": {
+  "en": "Asset Purchases",
+  "ru": "Покупка активов"
+ },
+ "concept_banking_bank_gold": {
+  "en": "Bank's Gold",
+  "ru": "Золото банка"
+ },
+ "concept_banking_borrowed_gold": {
+  "en": "Borrowed Gold",
+  "ru": "Заёмное золото"
+ },
+ "concept_banking_common_currency": {
+  "en": "Common Currency",
+  "ru": "Общая валюта"
+ },
+ "concept_banking_credit_standing": {
+  "en": "Credit Standing",
+  "ru": "Кредитоспособность"
+ },
+ "concept_banking_currency_reach": {
+  "en": "Currency Reach",
+  "ru": "Охват валюты"
+ },
+ "concept_banking_exchange_rate": {
+  "en": "Exchange Rate Index",
+  "ru": "Индекс обменного курса"
+ },
+ "concept_banking_expected_inflation": {
+  "en": "Expected Inflation",
+  "ru": "Ожидаемая инфляция"
+ },
+ "concept_banking_gold_flow": {
+  "en": "Gold Flow",
+  "ru": "Поток золота"
+ },
+ "concept_banking_inflation_anchoring": {
+  "en": "Inflation Anchoring",
+  "ru": "Закрепление инфляции"
+ },
+ "concept_banking_intervention_budget": {
+  "en": "Intervention Budget",
+  "ru": "Бюджет интервенций"
+ },
+ "concept_banking_monetary_anchor": {
+  "en": "Monetary Anchor",
+  "ru": "Денежный якорь"
+ },
+ "concept_banking_monetary_union": {
+  "en": "Monetary Union",
+  "ru": "Валютный союз"
+ },
+ "concept_banking_peg_confidence": {
+  "en": "Peg Confidence",
+  "ru": "Доверие к привязке"
+ },
+ "concept_banking_policy_rate": {
+  "en": "Policy Rate",
+  "ru": "Ключевая ставка"
+ },
+ "concept_banking_policy_stance": {
+  "en": "Policy Stance",
+  "ru": "Курс политики"
+ },
+ "concept_banking_price_pressure": {
+  "en": "Price Pressure",
+  "ru": "Ценовое давление"
+ },
+ "concept_banking_rate_paid": {
+  "en": "Rate Paid",
+  "ru": "Выплачиваемая ставка"
+ },
+ "concept_banking_rate_target": {
+  "en": "Rate Target",
+  "ru": "Целевая ставка"
+ },
+ "concept_banking_reference_rate": {
+  "en": "Reference Rate",
+  "ru": "Референсная ставка"
+ },
+ "concept_banking_risk_premium": {
+  "en": "Risk Premium",
+  "ru": "Премия за риск"
+ },
+ "concept_banking_wage_pressure": {
+  "en": "Wage Pressure",
+  "ru": "Давление на зарплаты"
+ },
+ "concept_banking_world_rate": {
+  "en": "World Rate",
+  "ru": "Мировая ставка"
+ },
+ "concept_ch_art_diminishing_returns": {
+  "en": "Diminishing Returns",
+  "ru": "Убывающая отдача"
+ },
+ "concept_ch_art_production": {
+  "en": "Art Production",
+  "ru": "Производство искусства"
+ },
+ "concept_ch_exported_model": {
+  "en": "Exported Model",
+  "ru": "Экспортируемая модель"
+ },
+ "concept_ch_influence_tier": {
+  "en": "Influence Tier",
+  "ru": "Уровень влияния"
+ },
+ "concept_ch_modifier_bonus": {
+  "en": "Modifier Bonus",
+  "ru": "Бонус модификатора"
+ },
+ "concept_ch_tech_leadership": {
+  "en": "Tech Leadership",
+  "ru": "Технологическое лидерство"
+ },
+ "concept_civil_rights_movement": {
+  "en": "Civil Rights Movement",
+  "ru": "Движение за гражданские права"
+ },
+ "concept_construction_cost_scaling": {
+  "en": "Construction Cost Scaling",
+  "ru": "Масштабирование стоимости строительства"
+ },
+ "concept_covert_warfare_system": {
+  "en": "Covert Warfare",
+  "ru": "Тайная война"
+ },
+ "concept_cultural_hegemony_system": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "concept_cultural_pull_components": {
+  "en": "[concept_cultural_pull] Components",
+  "ru": "Составляющие [Concept('concept_cultural_pull','культурного притяжения')]"
+ },
+ "concept_cultural_pull_raw_score": {
+  "en": "Raw Score",
+  "ru": "Исходная оценка"
+ },
+ "concept_cultural_pull_share": {
+  "en": "Cultural Share",
+  "ru": "Культурная доля"
+ },
+ "concept_custom_treaty_articles": {
+  "en": "Custom Treaty Articles",
+  "ru": "Особые статьи договора"
+ },
+ "concept_digital_rights_system": {
+  "en": "Digital Rights",
+  "ru": "Цифровые права"
+ },
+ "concept_emissions_reduction_treaty": {
+  "en": "Emissions Reduction",
+  "ru": "Сокращение выбросов"
+ },
+ "concept_export_credit_facility": {
+  "en": "Export Credit Facility",
+  "ru": "Экспортное кредитование"
+ },
+ "concept_foreign_cultural_benchmark": {
+  "en": "Foreign Cultural Benchmark",
+  "ru": "Иностранный культурный ориентир"
+ },
+ "concept_fx_swap_lines": {
+  "en": "Swap Lines",
+  "ru": "Линии валютного свопа"
+ },
+ "concept_global_warming_system": {
+  "en": "Global Warming",
+  "ru": "Глобальное потепление"
+ },
+ "concept_greenhouse_gas_emissions": {
+  "en": "Greenhouse Gas Emissions",
+  "ru": "Выбросы парниковых газов"
+ },
+ "concept_health_care_access": {
+  "en": "Health Care Access",
+  "ru": "Доступ к здравоохранению"
+ },
+ "concept_heir_education_system": {
+  "en": "Heir Education",
+  "ru": "Образование наследника"
+ },
+ "concept_human_augmentation_system": {
+  "en": "Human Augmentation",
+  "ru": "Аугментация человека"
+ },
+ "concept_legislative_override_capacity": {
+  "en": "Legislative Override Capacity",
+  "ru": "Возможность законодательного преодоления"
+ },
+ "concept_lgbtq_rights_movement": {
+  "en": "LGBTQ+",
+  "ru": "ЛГБТК+"
+ },
+ "concept_mental_health_crisis": {
+  "en": "Mental Health Crisis",
+  "ru": "Кризис психического здоровья"
+ },
+ "concept_open_market_operations": {
+  "en": "Open Market Operations",
+  "ru": "Операции на открытом рынке"
+ },
+ "concept_post_scarcity_system": {
+  "en": "Post-Scarcity",
+  "ru": "Постдефицит"
+ },
+ "concept_rules_of_war_system": {
+  "en": "Rules of War",
+  "ru": "Правила войны"
+ },
+ "concept_solar_collector_array": {
+  "en": "Solar Collector",
+  "ru": "Солнечный коллектор"
+ },
+ "concept_sr_base_grade": {
+  "en": "Base Grade",
+  "ru": "Класс базы"
+ },
+ "concept_sr_colony_autonomy": {
+  "en": "Colony Autonomy",
+  "ru": "Автономия колонии"
+ },
+ "concept_sr_colony_fleet": {
+  "en": "Colony Fleet",
+  "ru": "Колониальный флот"
+ },
+ "concept_sr_free_colony": {
+  "en": "Free Colony",
+  "ru": "Свободная колония"
+ },
+ "concept_sr_launch_window": {
+  "en": "Launch Window",
+  "ru": "Стартовое окно"
+ },
+ "concept_sr_role_carrier": {
+  "en": "Assault Carrier",
+  "ru": "Штурмовой носитель"
+ },
+ "concept_sr_role_rapid": {
+  "en": "Rapid Response Ship",
+  "ru": "Корабль быстрого реагирования"
+ },
+ "concept_sr_role_siege": {
+  "en": "Siege Ship",
+  "ru": "Осадный корабль"
+ },
+ "concept_sr_role_tender": {
+  "en": "Tender",
+  "ru": "Судно снабжения"
+ },
+ "concept_sr_role_warship": {
+  "en": "Warship",
+  "ru": "Боевой корабль"
+ },
+ "concept_sr_setback_risk": {
+  "en": "Setback Risk",
+  "ru": "Риск неудачи"
+ },
+ "concept_sr_ship_role": {
+  "en": "Ship Role",
+  "ru": "Роль корабля"
+ },
+ "concept_sr_space_command": {
+  "en": "Space Command",
+  "ru": "Космическое командование"
+ },
+ "concept_sr_space_fleet": {
+  "en": "Space Fleet",
+  "ru": "Космический флот"
+ },
+ "concept_st_res_active_rate": {
+  "en": "Active",
+  "ru": "Активная"
+ },
+ "concept_st_res_adjustment_step": {
+  "en": "Adjustment Step",
+  "ru": "Шаг корректировки"
+ },
+ "concept_st_res_flow_cap": {
+  "en": "Flow Cap",
+  "ru": "Предел потока"
+ },
+ "concept_st_res_policy": {
+  "en": "Reserve Policy",
+  "ru": "Политика резерва"
+ },
+ "concept_st_res_rate_setting": {
+  "en": "Rate Setting",
+  "ru": "Настройка нормы"
+ },
+ "concept_state_collapse_system": {
+  "en": "State Collapse",
+  "ru": "Распад государства"
+ },
+ "concept_tax_static_estimate": {
+  "en": "Static Estimate",
+  "ru": "Статическая оценка"
+ },
+ "concept_te_construction_market": {
+  "en": "Construction Market",
+  "ru": "Рынок строительства"
+ },
+ "concept_te_construction_queue_cap": {
+  "en": "Queue Cap",
+  "ru": "Предел очереди"
+ },
+ "concept_tourism_base_appeal": {
+  "en": "Base Appeal",
+  "ru": "Базовая привлекательность"
+ },
+ "concept_un_arms_embargo": {
+  "en": "UN Arms Embargo",
+  "ru": "Оружейное эмбарго ООН"
+ },
+ "concept_un_authority_cap": {
+  "en": "Authority Cap",
+  "ru": "Предел авторитета"
+ },
+ "concept_un_development_fund": {
+  "en": "World Development Fund",
+  "ru": "Всемирный фонд развития"
+ },
+ "concept_un_food_reserve": {
+  "en": "World Food Reserve",
+  "ru": "Всемирный продовольственный резерв"
+ },
+ "concept_un_general_assembly": {
+  "en": "General Assembly",
+  "ru": "Генеральная Ассамблея"
+ },
+ "concept_un_mission_aid": {
+  "en": "Aid Mission",
+  "ru": "Миссия помощи"
+ },
+ "concept_un_mission_electoral": {
+  "en": "Electoral Observer Mission",
+  "ru": "Миссия избирательных наблюдателей"
+ },
+ "concept_un_mission_peacekeeping": {
+  "en": "Peacekeeping Mission",
+  "ru": "Миротворческая миссия"
+ },
+ "concept_un_mission_stabilisation": {
+  "en": "Stabilization Mission",
+  "ru": "Стабилизационная миссия"
+ },
+ "concept_un_passage_majority": {
+  "en": "Majority",
+  "ru": "Большинство"
+ },
+ "concept_un_passage_two_thirds": {
+  "en": "Two-Thirds",
+  "ru": "Две трети"
+ },
+ "concept_un_permanent_member": {
+  "en": "Permanent Member",
+  "ru": "Постоянный член"
+ },
+ "concept_un_resolution_binding": {
+  "en": "Binding Resolution",
+  "ru": "Обязательная резолюция"
+ },
+ "concept_un_resolution_recommendatory": {
+  "en": "Recommendatory Resolution",
+  "ru": "Рекомендательная резолюция"
+ },
+ "concept_un_security_council": {
+  "en": "Security Council",
+  "ru": "Совет Безопасности"
+ },
+ "concept_un_specialized_agencies": {
+  "en": "UN Specialized Agencies",
+  "ru": "Специализированные учреждения ООН"
+ },
+ "concept_un_standing_force": {
+  "en": "Standing UN Force",
+  "ru": "Постоянные силы ООН"
+ },
+ "concept_un_suspended_representation": {
+  "en": "Suspended Representation",
+  "ru": "Приостановленное представительство"
+ },
+ "concept_un_tier_contested": {
+  "en": "Contested",
+  "ru": "Оспариваемый"
+ },
+ "concept_un_tier_established": {
+  "en": "Established",
+  "ru": "Устоявшийся"
+ },
+ "concept_un_tier_moribund": {
+  "en": "Moribund",
+  "ru": "Угасающий"
+ },
+ "concept_un_tier_strong": {
+  "en": "Strong",
+  "ru": "Сильный"
+ },
+ "concept_un_tier_supranational": {
+  "en": "Supranational",
+  "ru": "Надгосударственный"
+ },
+ "concept_un_world_court": {
+  "en": "World Court",
+  "ru": "Всемирный суд"
+ },
+ "concept_united_nations_system": {
+  "en": "United Nations",
+  "ru": "Организация Объединённых Наций"
+ },
+ "concept_world_war_system": {
+  "en": "World War",
+  "ru": "Мировая война"
+ },
+ "ig_approval_negative_modifier": {
+  "en": "Disapproves of Policy",
+  "ru": "Не одобряет политику"
+ },
+ "ig_approval_positive_modifier": {
+  "en": "Approves of Policy",
+  "ru": "Одобряет политику"
+ },
+ "ig_approval_very_negative_modifier": {
+  "en": "Strongly Disapproves of Policy",
+  "ru": "Решительно не одобряет политику"
+ },
+ "principle_monetary_union_1": {
+  "en": "Monetary Cooperation",
+  "ru": "Денежное сотрудничество"
+ },
+ "principle_monetary_union_2": {
+  "en": "Common Currency",
+  "ru": "Общая валюта"
+ },
+ "principle_monetary_union_3": {
+  "en": "Fiscal Backstop",
+  "ru": "Бюджетная страховка"
+ },
+ "principle_monetary_union_4": {
+  "en": "Banking Union",
+  "ru": "Банковский союз"
+ },
+ "principle_monetary_union_5": {
+  "en": "Reserve Currency",
+  "ru": "Резервная валюта"
+ },
+ "st_res_policy_buy_cheap": {
+  "en": "Buy When Cheap",
+  "ru": "Покупать, когда дёшево"
+ },
+ "st_res_policy_label_budget": {
+  "en": "Weekly purchase budget (@money!)",
+  "ru": "Недельный бюджет закупок (@money!)"
+ },
+ "st_res_policy_label_buy_thr": {
+  "en": "Buy below (% of base price)",
+  "ru": "Покупать ниже (% базовой цены)"
+ },
+ "st_res_policy_label_ceil_pct": {
+  "en": "Target stockpile (% full)",
+  "ru": "Целевой запас (% заполнения)"
+ },
+ "st_res_policy_label_floor_pct": {
+  "en": "Protected stockpile (% full)",
+  "ru": "Неприкосновенный запас (% заполнения)"
+ },
+ "st_res_policy_label_max_flow": {
+  "en": "Maximum weekly flow (units)",
+  "ru": "Максимальный поток в неделю (ед.)"
+ },
+ "st_res_policy_label_price_memory": {
+  "en": "Price memory (weeks averaged)",
+  "ru": "Память о цене (недель усреднения)"
+ },
+ "st_res_policy_label_ramp": {
+  "en": "Response ramp (points)",
+  "ru": "Нарастание реакции (пункты)"
+ },
+ "st_res_policy_label_sell_thr": {
+  "en": "Release above (% of base price)",
+  "ru": "Продавать выше (% базовой цены)"
+ },
+ "st_res_policy_manual": {
+  "en": "Manual",
+  "ru": "Ручная"
+ },
+ "st_res_policy_range_possible": {
+  "en": "Stays within this setting's range",
+  "ru": "Остаётся в пределах этой настройки"
+ },
+ "st_res_policy_release_high": {
+  "en": "Release When Expensive",
+  "ru": "Продавать, когда дорого"
+ },
+ "st_res_policy_short_buy_cheap": {
+  "en": "Buy Cheap",
+  "ru": "Покупка дёшево"
+ },
+ "st_res_policy_short_manual": {
+  "en": "Manual",
+  "ru": "Ручная"
+ },
+ "st_res_policy_short_release_high": {
+  "en": "Release High",
+  "ru": "Продажа дорого"
+ },
+ "st_res_policy_short_stabilize": {
+  "en": "Stabilize",
+  "ru": "Стабилизация"
+ },
+ "st_res_policy_short_stockpile": {
+  "en": "Stockpile",
+  "ru": "Накопление"
+ },
+ "st_res_policy_stabilize": {
+  "en": "Stabilize Prices",
+  "ru": "Стабилизировать цены"
+ },
+ "st_res_policy_stockpile": {
+  "en": "Stockpile",
+  "ru": "Накопление"
+ }
+}

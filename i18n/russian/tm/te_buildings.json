@@ -1,0 +1,2162 @@
+{
+ "building_advanced_material_fabricator": {
+  "en": "Advanced Material Fabricator",
+  "ru": "Фабрикатор передовых материалов"
+ },
+ "building_advanced_material_fabricator_throughput_add": {
+  "en": "Advanced Material Fabricator [concept_throughput]",
+  "ru": "Фабрикатор передовых материалов: [concept_throughput]"
+ },
+ "building_aerospace_industry": {
+  "en": "Aerospace Industry",
+  "ru": "Аэрокосмическая промышленность"
+ },
+ "building_afghan_nassaji_kabul_mills": {
+  "en": "Afghan Nassaji Kabul Mills",
+  "ru": "Кабульские фабрики Афган Нассаджи"
+ },
+ "building_airbus_lagardere_plant": {
+  "en": "Jean-Luc Lagardère Plant",
+  "ru": "Завод Жан-Люка Лагардера"
+ },
+ "building_airport": {
+  "en": "Airport",
+  "ru": "Аэропорт"
+ },
+ "building_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "ru": "Завод Адзиномото в Кавасаки"
+ },
+ "building_aker_oslo_shipyard": {
+  "en": "Aker Oslo Shipyard",
+  "ru": "Верфь Акер в Осло"
+ },
+ "building_alibaba_cainiao_park": {
+  "en": "Cainiao Logistics Park",
+  "ru": "Логистический парк Цайняо"
+ },
+ "building_allatini_thessaloniki_flour_mill": {
+  "en": "Allatini Thessaloniki Flour Mill",
+  "ru": "Мельница Аллатини в Салониках"
+ },
+ "building_alpine_donawitz_steelworks": {
+  "en": "Alpine Donawitz Steelworks",
+  "ru": "Сталелитейный завод Альпине в Донавице"
+ },
+ "building_altos_hornos_baracaldo_furnaces": {
+  "en": "Altos Hornos Baracaldo Furnaces",
+  "ru": "Доменные печи Альтос Орнос в Баракальдо"
+ },
+ "building_amazon_fulfillment_center": {
+  "en": "Automated Fulfillment Center",
+  "ru": "Автоматизированный центр комплектации заказов"
+ },
+ "building_anglo_persian_abadan_refinery": {
+  "en": "Anglo-Persian Abadan Refinery",
+  "ru": "Англо-персидский нефтезавод в Абадане"
+ },
+ "building_anglo_sicilian_licata_wharf": {
+  "en": "Anglo-Sicilian Licata Wharf",
+  "ru": "Англо-сицилийская верфь в Личате"
+ },
+ "building_annual_antimatter_facility_progress": {
+  "en": "Annual [concept_antimatter_facility] Progress",
+  "ru": "[concept_antimatter_facility]: ежегодный прогресс"
+ },
+ "building_annual_consciousness_network_progress": {
+  "en": "Annual Consciousness Network Progress",
+  "ru": "Сеть сознания: ежегодный прогресс"
+ },
+ "building_annual_mind_upload_nexus_progress": {
+  "en": "Annual Mind Upload Nexus Progress",
+  "ru": "Узел загрузки сознания: ежегодный прогресс"
+ },
+ "building_annual_nanofabrication_center_progress": {
+  "en": "Annual Nanofabrication Center Progress",
+  "ru": "Центр нанопроизводства: ежегодный прогресс"
+ },
+ "building_annual_orbital_battlestation_progress": {
+  "en": "Annual Orbital Battlestation Progress",
+  "ru": "Орбитальная боевая станция: ежегодный прогресс"
+ },
+ "building_annual_solar_collector_progress": {
+  "en": "Annual Solar Collector Progress",
+  "ru": "Солнечный коллектор: ежегодный прогресс"
+ },
+ "building_annual_space_elevator_progress": {
+  "en": "Annual Space Elevator Progress",
+  "ru": "Космический лифт: ежегодный прогресс"
+ },
+ "building_ansaldo_sestri_ponente_works": {
+  "en": "Ansaldo Sestri Ponente Works",
+  "ru": "Заводы Ансальдо в Сестри-Поненте"
+ },
+ "building_antimatter_engine": {
+  "en": "Antimatter Engine",
+  "ru": "Двигатель на антиматерии"
+ },
+ "building_antimatter_facility": {
+  "en": "Antimatter Containment Facility",
+  "ru": "Хранилище антиматерии"
+ },
+ "building_antimatter_facility_construction_site": {
+  "en": "Antimatter Facility Construction Site",
+  "ru": "Хранилище антиматерии: стройплощадка"
+ },
+ "building_antimatter_warhead_plant": {
+  "en": "Antimatter Warhead Plant",
+  "ru": "Завод боезарядов на антиматерии"
+ },
+ "building_anzin_colliery": {
+  "en": "Mines d'Anzin Colliery",
+  "ru": "Угольные копи Анзена"
+ },
+ "building_ap_moller_copenhagen_wharf": {
+  "en": "A.P. Møller Copenhagen Wharf",
+  "ru": "Верфь А. П. Мёллера в Копенгагене"
+ },
+ "building_apple_park": {
+  "en": "Apple Park",
+  "ru": "Apple Park"
+ },
+ "building_argentinian_wine_mendoza_bodega": {
+  "en": "Argentine Wine Mendoza Bodega",
+  "ru": "Аргентинская винодельня в Мендосе"
+ },
+ "building_armstrong_elswick_works": {
+  "en": "Armstrong Elswick Works",
+  "ru": "Заводы Армстронга в Элсвике"
+ },
+ "building_asml_veldhoven_campus": {
+  "en": "ASML Veldhoven Campus",
+  "ru": "Кампус ASML в Велдховене"
+ },
+ "building_assam_company_nazira_tea_estate": {
+  "en": "Assam Company Nazira Tea Estate",
+  "ru": "Чайная плантация Назира компании «Ассам»"
+ },
+ "building_axiom_space_hq": {
+  "en": "Axiom Space Station",
+  "ru": "Космическая станция Axiom"
+ },
+ "building_b_grimm_bangkok_warehouse": {
+  "en": "B. Grimm Bangkok Warehouse",
+  "ru": "Склад Б. Гримм в Бангкоке"
+ },
+ "building_bacardi_santiago_distillery": {
+  "en": "Bacardí Santiago Distillery",
+  "ru": "Винокурня Бакарди в Сантьяго"
+ },
+ "building_bae_samlesbury_aerodrome": {
+  "en": "BAE Systems Samlesbury Aerodrome",
+  "ru": "Аэродром BAE Systems в Сэмлсбери"
+ },
+ "building_basf_ludwigshafen_plant": {
+  "en": "BASF Ludwigshafen Works",
+  "ru": "Заводы BASF в Людвигсхафене"
+ },
+ "building_basileiades_piraeus_works": {
+  "en": "Basileiades Piraeus Works",
+  "ru": "Заводы Василиадиса в Пирее"
+ },
+ "building_bauxite_mine": {
+  "en": "Bauxite Mine",
+  "ru": "Бокситовая шахта"
+ },
+ "building_bauxite_mine_throughput_add": {
+  "en": "$building_bauxite_mine$ building [concept_throughput]",
+  "ru": "$building_bauxite_mine$: [concept_throughput]"
+ },
+ "building_bayer_leverkusen_plant": {
+  "en": "Bayer Leverkusen Plant",
+  "ru": "Завод Байер в Леверкузене"
+ },
+ "building_bengal_coal_raniganj_mine": {
+  "en": "Bengal Coal Raniganj Mine",
+  "ru": "Бенгальская угольная шахта Раниганж"
+ },
+ "building_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "ru": "Национальный генный банк BGI"
+ },
+ "building_bhp_broken_hill_mine": {
+  "en": "BHP Broken Hill Mine",
+  "ru": "Рудник BHP Брокен-Хилл"
+ },
+ "building_bhp_mount_whaleback_mine": {
+  "en": "Mount Whaleback Mine",
+  "ru": "Рудник Маунт-Уэйлбэк"
+ },
+ "building_biocon_park": {
+  "en": "Biocon Park",
+  "ru": "Парк Biocon"
+ },
+ "building_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "ru": "Кампус BioNTech в Майнце"
+ },
+ "building_blackberry_rim_campus": {
+  "en": "RIM Campus",
+  "ru": "Кампус RIM"
+ },
+ "building_boeing_everett_factory": {
+  "en": "Boeing Everett Factory",
+  "ru": "Завод Boeing в Эверетте"
+ },
+ "building_bolckow_eston_ironworks": {
+  "en": "Bolckow Vaughan Eston Ironworks",
+  "ru": "Железоделательный завод Болкоу Воэн в Эстоне"
+ },
+ "building_bombay_burmah_rangoon_timber_depot": {
+  "en": "Bombay Burmah Rangoon Timber Depot",
+  "ru": "Лесной склад «Бомбей Бирма» в Рангуне"
+ },
+ "building_bombay_dyeing_spring_mills": {
+  "en": "Bombay Dyeing Spring Mills",
+  "ru": "Фабрики Бомбей Дайинг в Спринге"
+ },
+ "building_boston_dynamics_ai_institute": {
+  "en": "Boston Dynamics AI Institute",
+  "ru": "Институт ИИ Boston Dynamics"
+ },
+ "building_bp_refinery_complex": {
+  "en": "BP Refinery Complex",
+  "ru": "Нефтеперерабатывающий комплекс BP"
+ },
+ "building_bytedance_data_fortress": {
+  "en": "TikTok Data Fortress",
+  "ru": "Дата-крепость TikTok"
+ },
+ "building_calcutta_electric_victoria_house": {
+  "en": "Calcutta Electric Victoria House",
+  "ru": "Дом Виктории Калькуттской электрической компании"
+ },
+ "building_caribbean_petroleum_maracaibo_depot": {
+  "en": "Caribbean Petroleum Maracaibo Depot",
+  "ru": "Нефтяной склад Карибской нефтяной компании в Маракайбо"
+ },
+ "building_carnegie_homestead_mill": {
+  "en": "Carnegie Homestead Mill",
+  "ru": "Завод Карнеги в Хомстеде"
+ },
+ "building_catl_gigafactory": {
+  "en": "CATL Gigafactory",
+  "ru": "Гигафабрика CATL"
+ },
+ "building_ccci_leopoldville_depot": {
+  "en": "CCCI Léopoldville Rubber Depot",
+  "ru": "Каучуковый склад CCCI в Леопольдвиле"
+ },
+ "building_cfr_bucharest_railway_works": {
+  "en": "CFR Bucharest Railway Works",
+  "ru": "Железнодорожные мастерские CFR в Бухаресте"
+ },
+ "building_cgv_haut_brion_estate": {
+  "en": "CGV Haut-Brion Estate",
+  "ru": "Поместье О-Брион (CGV)"
+ },
+ "building_chr_hansen_copenhagen_laboratory": {
+  "en": "Chr. Hansen Copenhagen Laboratory",
+  "ru": "Копенгагенская лаборатория Chr. Hansen"
+ },
+ "building_chromium_mine": {
+  "en": "Chromium Mine",
+  "ru": "Хромовая шахта"
+ },
+ "building_chromium_mine_throughput_add": {
+  "en": "$building_chromium_mine$ building [concept_throughput]",
+  "ru": "$building_chromium_mine$: [concept_throughput]"
+ },
+ "building_coats_ferguslie_mills": {
+  "en": "J&P Coats Ferguslie Thread Mills",
+  "ru": "Ниточные фабрики J&P Coats в Фергуслии"
+ },
+ "building_cochlear_global_hq": {
+  "en": "Cochlear Global Headquarters",
+  "ru": "Глобальная штаб-квартира Cochlear"
+ },
+ "building_cockerill_seraing_works": {
+  "en": "Cockerill Seraing Works",
+  "ru": "Заводы Коккерилл в Серене"
+ },
+ "building_colt_hartford_armory": {
+  "en": "Colt Hartford Armory",
+  "ru": "Оружейный завод Кольта в Хартфорде"
+ },
+ "building_consciousness_network": {
+  "en": "Consciousness Network",
+  "ru": "Сеть сознания"
+ },
+ "building_consciousness_network_construction_site": {
+  "en": "Consciousness Network Construction Site",
+  "ru": "Сеть сознания: стройплощадка"
+ },
+ "building_cordoba_railway_alta_gracia_works": {
+  "en": "Córdoba Railway Alta Gracia Works",
+  "ru": "Заводы Кордовской железной дороги в Альта-Грасии"
+ },
+ "building_cramp_philadelphia_shipyard": {
+  "en": "Cramp Philadelphia Shipyard",
+  "ru": "Верфь Крампа в Филадельфии"
+ },
+ "building_csfa_sicilian_sulfur_depot": {
+  "en": "CSFA Sicilian Sulfur Depot",
+  "ru": "Сицилийский серный склад CSFA"
+ },
+ "building_dassault_merignac_plant": {
+  "en": "Dassault Merignac Plant",
+  "ru": "Завод Dassault в Мериньяке"
+ },
+ "building_de_beers_sorting_office": {
+  "en": "De Beers Sorting Office",
+  "ru": "Сортировочная контора De Beers"
+ },
+ "building_disney_world": {
+  "en": "Disney World",
+  "ru": "Disney World"
+ },
+ "building_dmc_mulhouse_mills": {
+  "en": "DMC Mulhouse Thread Mills",
+  "ru": "Ниточные фабрики DMC в Мюлузе"
+ },
+ "building_douro_wine_lodge": {
+  "en": "Douro Wine Lodge",
+  "ru": "Винный склад Дору"
+ },
+ "building_dupont_experimental_station": {
+  "en": "DuPont Experimental Station",
+  "ru": "Опытная станция DuPont"
+ },
+ "building_duro_la_felguera_steelworks": {
+  "en": "Duro La Felguera Steelworks",
+  "ru": "Сталелитейный завод Дуро Ла-Фелгера"
+ },
+ "building_eea_dock_sud_power_station": {
+  "en": "EEA Dock Sud Power Station",
+  "ru": "Электростанция EEA в Док-Суд"
+ },
+ "building_egyptian_rail_cairo_central": {
+  "en": "Egyptian Railway Cairo Central Station",
+  "ru": "Центральный вокзал Каира (Египетская железная дорога)"
+ },
+ "building_eic_trading_house": {
+  "en": "East India Company Trading House",
+  "ru": "Торговый дом Ост-Индской компании"
+ },
+ "building_el_aguila_tampico_refinery": {
+  "en": "El Águila Tampico Refinery",
+  "ru": "Нефтезавод «Эль-Агила» в Тампико"
+ },
+ "building_electricidad_caracas_power_house": {
+  "en": "Electricidad de Caracas Power House",
+  "ru": "Электростанция «Электрисидад де Каракас»"
+ },
+ "building_electrics_industry_appliances": {
+  "en": "Consumer Appliance Industries",
+  "ru": "Отрасли бытовой техники"
+ },
+ "building_electrics_industry_appliances_throughput_add": {
+  "en": "Appliances [concept_throughput]",
+  "ru": "Бытовая техника: [concept_throughput]"
+ },
+ "building_electrics_industry_radio": {
+  "en": "Wireless Telecommunications Industries",
+  "ru": "Отрасли беспроводной связи"
+ },
+ "building_electronic_components_and_semiconductor_industry": {
+  "en": "Electronic Components and Semiconductor Industry",
+  "ru": "Электронные компоненты и полупроводники"
+ },
+ "building_electronic_components_and_semiconductor_industry_throughput_add": {
+  "en": "Electronic Components and Semiconductor Industry [concept_throughput] Multiplier",
+  "ru": "Электронные компоненты и полупроводники: множитель [concept_throughput]"
+ },
+ "building_elso_budapesti_steam_mill": {
+  "en": "Első Budapesti Steam Mill",
+  "ru": "Паровая мельница Первого Будапештского общества"
+ },
+ "building_employment_deportee_add": {
+  "en": "Deportee Labor Positions",
+  "ru": "Рабочие места для депортированных"
+ },
+ "building_eni_palazzo": {
+  "en": "Palazzo ENI",
+  "ru": "Палаццо ENI"
+ },
+ "building_ericsson_telefonplan": {
+  "en": "Ericsson Telefonplan",
+  "ru": "Эрикссон Телефонплан"
+ },
+ "building_erste_brunner_maschinenwerk": {
+  "en": "Erste Brünner Maschinenwerk",
+  "ru": "Первый Брюнский машиностроительный завод"
+ },
+ "building_espana_industrial_sants_mills": {
+  "en": "España Industrial Sants Mills",
+  "ru": "Фабрики «Эспанья Индустриаль» в Сантсе"
+ },
+ "building_estaleiro_maua_niteroi_dockyard": {
+  "en": "Estaleiro Mauá Niterói Dockyard",
+  "ru": "Верфь Мауа в Нитерое"
+ },
+ "building_estanifera_llallagua_tin_concentrator": {
+  "en": "Estannífera Llallagua Tin Concentrator",
+  "ru": "Оловообогатительная фабрика Эстанифера в Льяльягуа"
+ },
+ "building_ethiopian_railway_dire_dawa_depot": {
+  "en": "Ethiopian Railway Dire Dawa Depot",
+  "ru": "Депо Эфиопской железной дороги в Дыре-Дауа"
+ },
+ "building_famae_santiago_arsenal": {
+  "en": "FAMAE Santiago Arsenal",
+  "ru": "Арсенал FAMAE в Сантьяго"
+ },
+ "building_fanuc_forest": {
+  "en": "The FANUC Forest",
+  "ru": "Лес FANUC"
+ },
+ "building_fcm_la_seyne_shipyard": {
+  "en": "FCM La Seyne Shipyard",
+  "ru": "Верфь FCM в Ла-Сене"
+ },
+ "building_ferranti_hollinwood_works": {
+  "en": "Ferranti Hollinwood Works",
+  "ru": "Заводы Ферранти в Холлинвуде"
+ },
+ "building_ferrari_maranello_factory": {
+  "en": "Ferrari Maranello Factory",
+  "ru": "Завод Ferrari в Маранелло"
+ },
+ "building_fiat_lingotto_factory": {
+  "en": "FIAT Lingotto Factory",
+  "ru": "Завод FIAT «Линготто»"
+ },
+ "building_foochow_mawei_dockyard": {
+  "en": "Foochow Mawei Dockyard",
+  "ru": "Верфь Мавэй в Фучжоу"
+ },
+ "building_ford_rouge_plant": {
+  "en": "Ford Rouge Plant",
+  "ru": "Завод Ford «Ривер-Руж»"
+ },
+ "building_franco_belge_raismes_works": {
+  "en": "Franco-Belge Raismes Works",
+  "ru": "Заводы Франко-Бельж в Реме"
+ },
+ "building_fundicao_ipanema_sorocaba_foundry": {
+  "en": "Fundição Ipanema Sorocaba Foundry",
+  "ru": "Литейный завод Ипанема в Сорокабе"
+ },
+ "building_fundidora_monterrey_blast_furnace": {
+  "en": "Fundidora Monterrey Blast Furnace",
+  "ru": "Доменная печь Фундидора в Монтеррее"
+ },
+ "building_fusion_plant": {
+  "en": "Fusion Plant",
+  "ru": "Термоядерная станция"
+ },
+ "building_fusion_plant_throughput_add": {
+  "en": "Fusion Plant [concept_throughput]",
+  "ru": "Термоядерная станция: [concept_throughput]"
+ },
+ "building_galician_boryslaw_oil_field": {
+  "en": "Galician Borysław Oil Field",
+  "ru": "Галицийское нефтяное месторождение Борислав"
+ },
+ "building_gavrilovic_petrinja_meatworks": {
+  "en": "Gavrilović Petrinja Meatworks",
+  "ru": "Мясокомбинат Гавриловича в Петрине"
+ },
+ "building_gazprom_lakhta_center": {
+  "en": "The Lakhta Center",
+  "ru": "Лахта-центр"
+ },
+ "building_ge_schenectady_works": {
+  "en": "GE Schenectady Works",
+  "ru": "Заводы GE в Скенектади"
+ },
+ "building_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "ru": "Кампус Genentech «ДНК-Вэй»"
+ },
+ "building_generic_arsenal": {
+  "en": "Arsenal",
+  "ru": "Арсенал"
+ },
+ "building_generic_assay_office": {
+  "en": "Assay Office",
+  "ru": "Пробирная палата"
+ },
+ "building_generic_chem_works": {
+  "en": "Chemical Works",
+  "ru": "Химические заводы"
+ },
+ "building_generic_cold_storage": {
+  "en": "Cold Storage Facility",
+  "ru": "Холодильный склад"
+ },
+ "building_generic_colonial_depot": {
+  "en": "Colonial Depot",
+  "ru": "Колониальный склад"
+ },
+ "building_generic_corporate_university": {
+  "en": "Corporate University",
+  "ru": "Корпоративный университет"
+ },
+ "building_generic_data_fortress": {
+  "en": "National Data Fortress",
+  "ru": "Национальная дата-крепость"
+ },
+ "building_generic_dry_dock": {
+  "en": "Dry Dock",
+  "ru": "Сухой док"
+ },
+ "building_generic_dye_fiber_park": {
+  "en": "Dye & Fiber Research Park",
+  "ru": "Научный парк красителей и волокон"
+ },
+ "building_generic_electronics_lab": {
+  "en": "Electronics Laboratory",
+  "ru": "Электронная лаборатория"
+ },
+ "building_generic_exhibition_centre": {
+  "en": "National Exhibition Center",
+  "ru": "Национальный выставочный центр"
+ },
+ "building_generic_export_warehouse": {
+  "en": "Export Warehouse",
+  "ru": "Экспортный склад"
+ },
+ "building_generic_financial_center": {
+  "en": "International Financial Center",
+  "ru": "Международный финансовый центр"
+ },
+ "building_generic_fish_market": {
+  "en": "Fish Market",
+  "ru": "Рыбный рынок"
+ },
+ "building_generic_foundry_complex": {
+  "en": "Foundry Complex",
+  "ru": "Литейный комплекс"
+ },
+ "building_generic_furniture_showroom": {
+  "en": "Furniture Showroom",
+  "ru": "Мебельный салон"
+ },
+ "building_generic_granary_complex": {
+  "en": "Granary Complex",
+  "ru": "Зернохранилищный комплекс"
+ },
+ "building_generic_hq_skyscraper": {
+  "en": "Corporate Headquarters Skyscraper",
+  "ru": "Небоскрёб корпоративной штаб-квартиры"
+ },
+ "building_generic_industrial_city": {
+  "en": "Private Industrial City",
+  "ru": "Частный промышленный город"
+ },
+ "building_generic_industrial_zone": {
+  "en": "Specialized Industrial Zone",
+  "ru": "Специализированная промышленная зона"
+ },
+ "building_generic_logistics_hub": {
+  "en": "National Logistics Hub",
+  "ru": "Национальный логистический узел"
+ },
+ "building_generic_lumber_yard": {
+  "en": "Lumber Yard",
+  "ru": "Лесной склад"
+ },
+ "building_generic_machine_shop": {
+  "en": "Machine Shop",
+  "ru": "Механический цех"
+ },
+ "building_generic_materials_lab": {
+  "en": "Advanced Materials Laboratory",
+  "ru": "Лаборатория передовых материалов"
+ },
+ "building_generic_media_hq": {
+  "en": "Global Media Headquarters",
+  "ru": "Глобальная медиа-штаб-квартира"
+ },
+ "building_generic_mega_factory": {
+  "en": "Mega-Factory Complex",
+  "ru": "Комплекс мегазавода"
+ },
+ "building_generic_mineral_refinery": {
+  "en": "Mineral Refinery",
+  "ru": "Минеральный перерабатывающий завод"
+ },
+ "building_generic_monument_to_industry": {
+  "en": "Monument to Industry",
+  "ru": "Памятник индустрии"
+ },
+ "building_generic_motor_works": {
+  "en": "Motor Works",
+  "ru": "Моторный завод"
+ },
+ "building_generic_ordnance_depot": {
+  "en": "Ordnance Depot",
+  "ru": "Артиллерийский склад"
+ },
+ "building_generic_ore_processing": {
+  "en": "Ore Processing Plant",
+  "ru": "Рудоперерабатывающий завод"
+ },
+ "building_generic_paper_mill_complex": {
+  "en": "Paper Mill Complex",
+  "ru": "Бумажный комбинат"
+ },
+ "building_generic_pipeline_terminus": {
+  "en": "Cross-Continental Pipeline Terminus",
+  "ru": "Конечный пункт трансконтинентального трубопровода"
+ },
+ "building_generic_power_hub": {
+  "en": "High-Efficiency Power Hub",
+  "ru": "Высокоэффективный энергоузел"
+ },
+ "building_generic_proving_grounds": {
+  "en": "Strategic Proving Grounds",
+  "ru": "Стратегический полигон"
+ },
+ "building_generic_rail_nexus": {
+  "en": "Intercontinental Rail Nexus",
+  "ru": "Межконтинентальный железнодорожный узел"
+ },
+ "building_generic_rd_complex": {
+  "en": "Central R&D Complex",
+  "ru": "Центральный комплекс НИОКР"
+ },
+ "building_generic_resource_depository": {
+  "en": "National Resource Depository",
+  "ru": "Национальное хранилище ресурсов"
+ },
+ "building_generic_robotics_institute": {
+  "en": "Automation & Robotics Institute",
+  "ru": "Институт автоматизации и робототехники"
+ },
+ "building_generic_shipping_terminal": {
+  "en": "Global Shipping Terminal",
+  "ru": "Глобальный морской терминал"
+ },
+ "building_generic_silk_exchange": {
+  "en": "Silk Exchange",
+  "ru": "Шёлковая биржа"
+ },
+ "building_generic_spaceport": {
+  "en": "Spaceport",
+  "ru": "Космодром"
+ },
+ "building_generic_tank_farm": {
+  "en": "Tank Farm",
+  "ru": "Резервуарный парк"
+ },
+ "building_generic_textile_depot": {
+  "en": "Textile Depot",
+  "ru": "Текстильный склад"
+ },
+ "building_generic_vintner_hall": {
+  "en": "Vintner's Hall",
+  "ru": "Зал виноделов"
+ },
+ "building_getzner_bludenz_textile_works": {
+  "en": "Getzner Bludenz Textile Works",
+  "ru": "Текстильные заводы Гецнер в Блуденце"
+ },
+ "building_gm_name_carrier_anchor": {
+  "en": "Monument Name Placeholder",
+  "ru": "Заглушка названия монумента"
+ },
+ "building_googleplex": {
+  "en": "The Googleplex",
+  "ru": "Googleplex"
+ },
+ "building_gotaverken_gothenburg_shipyard": {
+  "en": "Götaverken Gothenburg Shipyard",
+  "ru": "Верфь Гётаверкен в Гётеборге"
+ },
+ "building_gran_azucarera_aranjuez_refinery": {
+  "en": "Gran Azucarera Aranjuez Refinery",
+  "ru": "Сахарный завод Гран Асукарера в Аранхуэсе"
+ },
+ "building_grand_monument": {
+  "en": "Grand Monument",
+  "ru": "Великий монумент"
+ },
+ "building_grand_monument_site": {
+  "en": "Grand Monument (Under Construction)",
+  "ru": "Великий монумент (строится)"
+ },
+ "building_graphite_mine": {
+  "en": "Graphite Mine",
+  "ru": "Графитовая шахта"
+ },
+ "building_graphite_mine_throughput_add": {
+  "en": "$building_graphite_mine$ building [concept_throughput]",
+  "ru": "$building_graphite_mine$: [concept_throughput]"
+ },
+ "building_great_indian_railway_jamalpur_works": {
+  "en": "Great Indian Railway Jamalpur Works",
+  "ru": "Заводы Великой индийской железной дороги в Джамалпуре"
+ },
+ "building_grid_hvdc_interconnector": {
+  "en": "HVDC Undersea Interconnector",
+  "ru": "Подводный межсистемный кабель HVDC"
+ },
+ "building_grid_transfer_station": {
+  "en": "Grid Transfer Station",
+  "ru": "Станция передачи энергосети"
+ },
+ "building_grid_undersea_cable_range_add": {
+  "en": "Undersea Cable Range",
+  "ru": "Дальность подводного кабеля"
+ },
+ "building_group_bg_arts_standard_of_living_add": {
+  "en": "$bg_arts$ Employee [concept_sol]",
+  "ru": "$bg_arts$: [concept_sol] работников"
+ },
+ "building_group_bg_biotechnology_throughput_add": {
+  "en": "Biotechnology [concept_throughput]",
+  "ru": "Биотехнологии: [concept_throughput]"
+ },
+ "building_group_bg_bureaucracy_throughput_add": {
+  "en": "Government Administration [concept_throughput] Modifier",
+  "ru": "Государственное управление: модификатор [concept_throughput]"
+ },
+ "building_group_bg_clean_power_construction_efficiency_add": {
+  "en": "$bg_clean_power$ Construction Efficiency",
+  "ru": "$bg_clean_power$: эффективность строительства"
+ },
+ "building_group_bg_construction_throughput_add": {
+  "en": "Construction Building [concept_throughput]",
+  "ru": "Строительные здания: [concept_throughput]"
+ },
+ "building_group_bg_heavy_industry_infrastructure_usage_mult": {
+  "en": "[concept_infrastructure_usage] of $bg_heavy_industry$ buildings",
+  "ru": "$bg_heavy_industry$: [concept_infrastructure_usage]"
+ },
+ "building_group_bg_high_tech_construction_efficiency_add": {
+  "en": "$bg_high_tech$ Construction Efficiency",
+  "ru": "$bg_high_tech$: эффективность строительства"
+ },
+ "building_group_bg_military_standard_of_living_add": {
+  "en": "Soldiers’ [concept_ch_sol]",
+  "ru": "Солдаты: [concept_ch_sol]"
+ },
+ "building_group_bg_power_construction_efficiency_add": {
+  "en": "$bg_power$ Construction Efficiency",
+  "ru": "$bg_power$: эффективность строительства"
+ },
+ "building_group_bg_power_infrastructure_usage_mult": {
+  "en": "[concept_infrastructure_usage] of $bg_power$ buildings",
+  "ru": "$bg_power$: [concept_infrastructure_usage]"
+ },
+ "building_group_bg_power_throughput_add": {
+  "en": "Power Plant [concept_throughput]",
+  "ru": "Электростанции: [concept_throughput]"
+ },
+ "building_group_bg_ship_construction_construction_efficiency_add": {
+  "en": "$bg_ship_construction$ Construction Efficiency",
+  "ru": "$bg_ship_construction$: эффективность строительства"
+ },
+ "building_group_bg_trade_employee_mult": {
+  "en": "Trade Employee Multiplier",
+  "ru": "Торговля: множитель работников"
+ },
+ "building_group_bg_urban_facilities_employee_mult": {
+  "en": "Urban Facilities Employee Multiplier",
+  "ru": "Городские объекты: множитель работников"
+ },
+ "building_group_te_construction_market_bg_employee_mult": {
+  "en": "Construction Site [concept_workforce]",
+  "ru": "Стройплощадки: [concept_workforce]"
+ },
+ "building_guinness_st_james_gate_brewery": {
+  "en": "Guinness St. James's Gate Brewery",
+  "ru": "Пивоварня Гиннесс «Сент-Джеймс-Гейт»"
+ },
+ "building_guthrie_singapore_agency": {
+  "en": "Guthrie Singapore Agency House",
+  "ru": "Сингапурское агентство Гатри"
+ },
+ "building_gwr_swindon_works": {
+  "en": "GWR Swindon Works",
+  "ru": "Заводы GWR в Суиндоне"
+ },
+ "building_hanka_precision_hq": {
+  "en": "Hanka Precision Laboratory",
+  "ru": "Лаборатория точной механики Ханка"
+ },
+ "building_hanseong_jeongi_gwanghwamun_station": {
+  "en": "Hanseong Electric Gwanghwamun Station",
+  "ru": "Станция Кванхвамун Хансонской электрической компании"
+ },
+ "building_hanyang_arsenal_iron_works": {
+  "en": "Hanyang Arsenal Iron Works",
+  "ru": "Ханьянский арсенал и железоделательный завод"
+ },
+ "building_hbc_york_factory": {
+  "en": "Hudson's Bay York Factory",
+  "ru": "Фактория Йорк Компании Гудзонова залива"
+ },
+ "building_highway": {
+  "en": "Highway",
+  "ru": "Автомагистраль"
+ },
+ "building_highway_throughput_add": {
+  "en": "Highway [concept_throughput]",
+  "ru": "Автомагистраль: [concept_throughput]"
+ },
+ "building_hispano_suiza_barcelona_factory": {
+  "en": "Hispano-Suiza Barcelona Factory",
+  "ru": "Завод Испано-Суиза в Барселоне"
+ },
+ "building_hp_labs": {
+  "en": "HP Labs",
+  "ru": "Лаборатории HP"
+ },
+ "building_huawei_ox_horn_campus": {
+  "en": "Huawei Ox Horn Campus",
+  "ru": "Кампус Huawei «Бычий рог»"
+ },
+ "building_hughes_yuzovka_steelworks": {
+  "en": "Hughes Yuzovka Steelworks",
+  "ru": "Сталелитейный завод Хьюза в Юзовке"
+ },
+ "building_hydro_plant": {
+  "en": "Hydro Plant",
+  "ru": "Гидроэлектростанция"
+ },
+ "building_hydro_plant_throughput_add": {
+  "en": "Hydro Plant [concept_throughput]",
+  "ru": "Гидроэлектростанция: [concept_throughput]"
+ },
+ "building_hyundai_ulsan_factory": {
+  "en": "Hyundai Ulsan Factory",
+  "ru": "Завод Hyundai в Ульсане"
+ },
+ "building_ig_farben_buna_werke": {
+  "en": "IG Farben Buna-Werke",
+  "ru": "Заводы «Буна» IG Farben"
+ },
+ "building_ikea_almhult_campus": {
+  "en": "IKEA Älmhult Campus",
+  "ru": "Кампус IKEA в Эльмхульте"
+ },
+ "building_ilva_bagnoli_steelworks": {
+  "en": "ILVA Bagnoli Steelworks",
+  "ru": "Сталелитейный завод ИЛВА в Баньоли"
+ },
+ "building_imperial_arsenal_golden_horn": {
+  "en": "Imperial Arsenal Golden Horn",
+  "ru": "Императорский арсенал Золотого Рога"
+ },
+ "building_imperial_tobacco_wills_factory": {
+  "en": "Imperial Tobacco Wills Factory",
+  "ru": "Фабрика Уиллса «Империал Тобакко»"
+ },
+ "building_industrial_mineral_salt_mine": {
+  "en": "Industrial Mineral and Salt Mine",
+  "ru": "Шахта промышленных минералов и соли"
+ },
+ "building_industrial_mineral_salt_mine_throughput_add": {
+  "en": "$building_industrial_mineral_salt_mine$ building [concept_throughput]",
+  "ru": "$building_industrial_mineral_salt_mine$: [concept_throughput]"
+ },
+ "building_infosys_mysore_campus": {
+  "en": "Infosys Mysore Campus",
+  "ru": "Кампус Infosys в Майсуре"
+ },
+ "building_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "ru": "Биологический заповедник InGen"
+ },
+ "building_ingolstadt_power_station": {
+  "en": "Ingolstadt Power Station",
+  "ru": "Электростанция Ингольштадт"
+ },
+ "building_intel_ronler_acres": {
+  "en": "Intel Ronler Acres Campus",
+  "ru": "Кампус Intel «Ронлер-Эйкрс»"
+ },
+ "building_iranian_state_railway_veresk_station": {
+  "en": "Iranian State Railway Veresk Station",
+  "ru": "Станция Вереск Государственной железной дороги Ирана"
+ },
+ "building_izhevsk_arms_factory": {
+  "en": "Izhevsk Arms Factory",
+  "ru": "Ижевский оружейный завод"
+ },
+ "building_jardine_princeps_house": {
+  "en": "Jardine Princeps House",
+  "ru": "Дом Принсепс компании «Жардин»"
+ },
+ "building_jiangnan_nanjing_brocade_hall": {
+  "en": "Jiangnan Nanjing Brocade Hall",
+  "ru": "Нанкинский парчовый зал Цзяннаня"
+ },
+ "building_jingdezhen_imperial_kiln": {
+  "en": "Jingdezhen Imperial Kiln",
+  "ru": "Императорская печь Цзиндэчжэня"
+ },
+ "building_john_brown_clydebank_yard": {
+  "en": "John Brown Clydebank Shipyard",
+  "ru": "Верфь Джона Брауна в Клайдбанке"
+ },
+ "building_john_holt_lagos_trading_house": {
+  "en": "John Holt Lagos Trading House",
+  "ru": "Торговый дом Джона Холта в Лагосе"
+ },
+ "building_jsr_yokkaichi_complex": {
+  "en": "JSR Yokkaichi Complex",
+  "ru": "Комплекс JSR в Йоккаити"
+ },
+ "building_jsw_vijayanagar_works": {
+  "en": "JSW Vijayanagar Works",
+  "ru": "Заводы JSW в Виджаянагаре"
+ },
+ "building_kablin_zarate_paper_mill": {
+  "en": "Kablín Zárate Paper Mill",
+  "ru": "Бумажная фабрика Кабалин в Сарате"
+ },
+ "building_kaiping_tangshan_colliery": {
+  "en": "Kaiping Tangshan Colliery",
+  "ru": "Угольная шахта Кайпин в Таншане"
+ },
+ "building_kinkozan_kiyomizu_kiln": {
+  "en": "Kinkozan Kiyomizu Kiln",
+  "ru": "Печь Кинкодзан в Киёмидзу"
+ },
+ "building_kirgizian_copper_smelter": {
+  "en": "Kirgizian Copper Smelter",
+  "ru": "Киргизская медеплавильня"
+ },
+ "building_klanicko_belgrade_slaughterhouse": {
+  "en": "Klanično Belgrade Slaughterhouse",
+  "ru": "Бойня Кланичко в Белграде"
+ },
+ "building_klein_galician_paper_mill": {
+  "en": "Klein Galician Paper Mill",
+  "ru": "Галицийская бумажная фабрика Кляйна"
+ },
+ "building_kouppas_piraeus_foundry": {
+  "en": "Kouppas Piraeus Foundry",
+  "ru": "Литейный завод Купаса в Пирее"
+ },
+ "building_krupp_essen_works": {
+  "en": "Krupp Essen Works",
+  "ru": "Заводы Круппа в Эссене"
+ },
+ "building_la_rosada_buenos_aires_arsenal": {
+  "en": "La Rosada Buenos Aires Arsenal",
+  "ru": "Арсенал Ла-Росада в Буэнос-Айресе"
+ },
+ "building_lanfang_pontianak_kongsi_house": {
+  "en": "Lanfang Pontianak Kongsi House",
+  "ru": "Дом конгси Ланфан в Понтианаке"
+ },
+ "building_lee_wilson_plantation_depot": {
+  "en": "Lee Wilson Plantation Depot",
+  "ru": "Плантационный склад Ли Уилсона"
+ },
+ "building_lilpop_warsaw_metalworks": {
+  "en": "Lilpop Warsaw Metalworks",
+  "ru": "Металлообрабатывающий завод Лильпоп в Варшаве"
+ },
+ "building_lithium_mine": {
+  "en": "Lithium Mine",
+  "ru": "Литиевая шахта"
+ },
+ "building_lithium_mine_throughput_add": {
+  "en": "$building_lithium_mine$ building [concept_throughput]",
+  "ru": "$building_lithium_mine$: [concept_throughput]"
+ },
+ "building_lkab_kiruna_mine": {
+  "en": "LKAB Kiruna Iron Mine",
+  "ru": "Железный рудник LKAB в Кируне"
+ },
+ "building_lockheed_skunk_works": {
+  "en": "Skunk Works",
+  "ru": "Skunk Works"
+ },
+ "building_madura_mills_madurai_complex": {
+  "en": "Madura Mills Madurai Complex",
+  "ru": "Комплекс фабрик Мадура в Мадурае"
+ },
+ "building_manfred_weiss_csepel_works": {
+  "en": "Manfred Weiss Csepel Works",
+  "ru": "Заводы Манфреда Вейса в Чепеле"
+ },
+ "building_manganese_mine": {
+  "en": "Manganese Mine",
+  "ru": "Марганцевая шахта"
+ },
+ "building_manganese_mine_throughput_add": {
+  "en": "$building_manganese_mine$ building [concept_throughput]",
+  "ru": "$building_manganese_mine$: [concept_throughput]"
+ },
+ "building_mantero_como_silk_mill": {
+  "en": "Mantero Como Silk Mill",
+  "ru": "Шёлковая фабрика Мантеро в Комо"
+ },
+ "building_mantetsu_dalian_railway_hub": {
+  "en": "Mantetsu Dalian Railway Hub",
+  "ru": "Железнодорожный узел Мантэцу в Даляне"
+ },
+ "building_maple_tottenham_court_showroom": {
+  "en": "Maple & Co Tottenham Court Road",
+  "ru": "Магазин «Мейпл и К°» на Тоттенхэм-Корт-роуд"
+ },
+ "building_markwald_bangkok_rice_mill": {
+  "en": "Markwald Bangkok Rice Mill",
+  "ru": "Рисовая мельница Марквальд в Бангкоке"
+ },
+ "building_massey_harris_toronto_implement_works": {
+  "en": "Massey-Harris Toronto Implement Works",
+  "ru": "Завод сельхозтехники Мэсси-Харрис в Торонто"
+ },
+ "building_mav_budapest_locomotive_works": {
+  "en": "MÁV Budapest Locomotive Works",
+  "ru": "Паровозостроительный завод MÁV в Будапеште"
+ },
+ "building_megastructure_consortium_hq": {
+  "en": "Megastructure Consortium HQ",
+  "ru": "Штаб-квартира консорциума мегаструктур"
+ },
+ "building_meissen_porcelain_manufactory": {
+  "en": "Meissen Porcelain Manufactory",
+  "ru": "Мейсенская фарфоровая мануфактура"
+ },
+ "building_mfo_oerlikon_works": {
+  "en": "MFO Oerlikon Works",
+  "ru": "Заводы MFO в Эрликоне"
+ },
+ "building_michelin_clermont_ferrand": {
+  "en": "Michelin Clermont-Ferrand Works",
+  "ru": "Заводы Michelin в Клермон-Ферране"
+ },
+ "building_microsoft_redmond_campus": {
+  "en": "Microsoft Redmond Campus",
+  "ru": "Кампус Microsoft в Редмонде"
+ },
+ "building_military_base": {
+  "en": "Military Base",
+  "ru": "Военная база"
+ },
+ "building_mind_upload_nexus": {
+  "en": "Mind Upload Nexus",
+  "ru": "Узел загрузки сознания"
+ },
+ "building_mind_upload_nexus_construction_site": {
+  "en": "Mind Upload Nexus Construction Site",
+  "ru": "Узел загрузки сознания: стройплощадка"
+ },
+ "building_misr_mahalla_textile_complex": {
+  "en": "Misr Mahalla Textile Complex",
+  "ru": "Текстильный комплекс «Миср» в Махалле"
+ },
+ "building_mitsubishi_nagasaki_shipyard": {
+  "en": "Mitsubishi Nagasaki Shipyard",
+  "ru": "Верфь Mitsubishi в Нагасаки"
+ },
+ "building_mitsui_trading_house": {
+  "en": "Mitsui Trading House",
+  "ru": "Торговый дом Mitsui"
+ },
+ "building_mokta_el_hadid_beni_saf_mine": {
+  "en": "Mokta el Hadid Beni Saf Mine",
+  "ru": "Рудник Мокта-эль-Хадид в Бени-Сафе"
+ },
+ "building_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "ru": "Исследовательский центр Monsanto в Честерфилде"
+ },
+ "building_morozov_orekhovo_zuevo_mills": {
+  "en": "Morozov Orekhovo-Zuevo Mills",
+  "ru": "Фабрики Морозова в Орехово-Зуеве"
+ },
+ "building_moscow_irrigation_cotton_depot": {
+  "en": "Moscow Irrigation Cotton Depot",
+  "ru": "Склад хлопка Московского ирригационного общества"
+ },
+ "building_moser_karlsbad_glass_works": {
+  "en": "Moser Karlsbad Glass Works",
+  "ru": "Стекольный завод Мозер в Карлсбаде"
+ },
+ "building_mozambique_company_beira_concession": {
+  "en": "Mozambique Company Beira Concession",
+  "ru": "Концессия Мозамбикской компании в Бейре"
+ },
+ "building_nam_dinh_textile_plant": {
+  "en": "Nam Định Textile Plant",
+  "ru": "Текстильная фабрика Намдинь"
+ },
+ "building_nanofabrication_center": {
+  "en": "Nanofabrication Center",
+  "ru": "Центр нанопроизводства"
+ },
+ "building_nanofabrication_center_construction_site": {
+  "en": "Nanofabrication Center Construction Site",
+  "ru": "Центр нанопроизводства: стройплощадка"
+ },
+ "building_national_park": {
+  "en": "National Park",
+  "ru": "Национальный парк"
+ },
+ "building_nederlandse_petroleum_pangkalan_depot": {
+  "en": "NedPetroleum Pangkalan Brandan Depot",
+  "ru": "Склад NedPetroleum в Пангкалан-Брандане"
+ },
+ "building_netflix_animation_studios": {
+  "en": "Netflix Animation Studios",
+  "ru": "Анимационные студии Netflix"
+ },
+ "building_network_infrastructure": {
+  "en": "Network Infrastructure",
+  "ru": "Сетевая инфраструктура"
+ },
+ "building_network_infrastructure_throughput_add": {
+  "en": "Network [concept_infrastructure] [concept_throughput]",
+  "ru": "[concept_infrastructure] сети: [concept_throughput]"
+ },
+ "building_neurovault_hq": {
+  "en": "Neurovault Research Complex",
+  "ru": "Исследовательский комплекс Neurovault"
+ },
+ "building_nhm_factorij_batavia": {
+  "en": "NHM Factorij Batavia",
+  "ru": "Фактория НХМ в Батавии"
+ },
+ "building_nickel_cobalt_mine": {
+  "en": "Nickel and Cobalt Mine",
+  "ru": "Никель-кобальтовая шахта"
+ },
+ "building_nickel_cobalt_mine_throughput_add": {
+  "en": "$building_nickel_cobalt_mine$ building [concept_throughput]",
+  "ru": "$building_nickel_cobalt_mine$: [concept_throughput]"
+ },
+ "building_nintendo_development_center": {
+  "en": "Nintendo Development Center",
+  "ru": "Центр разработки Nintendo"
+ },
+ "building_nioc_masjed_soleyman_field": {
+  "en": "NIOC Masjed Soleyman Oil Field",
+  "ru": "Нефтяное месторождение NIOC в Масджеде-Солеймане"
+ },
+ "building_nobel_baku_refinery": {
+  "en": "Nobel Baku Refinery",
+  "ru": "Нефтезавод Нобеля в Баку"
+ },
+ "building_noda_shoyu_goyogura": {
+  "en": "Noda Shoyu Goyōgura",
+  "ru": "Соевый соус Нода «Гёёгура»"
+ },
+ "building_nokia_cable_works": {
+  "en": "Nokia Cable Works",
+  "ru": "Кабельный завод Nokia"
+ },
+ "building_norsk_hydro_rjukan_plant": {
+  "en": "Norsk Hydro Rjukan Plant",
+  "ru": "Завод Norsk Hydro в Рьюкане"
+ },
+ "building_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "ru": "Завод Novo Nordisk в Калундборге"
+ },
+ "building_nuclear_plant": {
+  "en": "Nuclear Plant",
+  "ru": "Атомная электростанция"
+ },
+ "building_nuclear_plant_throughput_add": {
+  "en": "Nuclear Plant [concept_throughput]",
+  "ru": "Атомная электростанция: [concept_throughput]"
+ },
+ "building_nvidia_endeavor_campus": {
+  "en": "Nvidia Endeavor Campus",
+  "ru": "Кампус Nvidia «Эндевор»"
+ },
+ "building_ocean_mine": {
+  "en": "Deep-Sea Mine",
+  "ru": "Глубоководная шахта"
+ },
+ "building_ocean_mine_throughput_add": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "ru": "$building_ocean_mine$: [concept_throughput]"
+ },
+ "building_ocmc_unsan_gold_mines": {
+  "en": "OCMC Unsan Gold Mines",
+  "ru": "Золотые рудники OCMC в Унсане"
+ },
+ "building_ocp_khouribga_mine": {
+  "en": "OCP Khouribga Phosphate Mine",
+  "ru": "Фосфатный рудник OCP в Хурибге"
+ },
+ "building_oevg_steyr_arms_works": {
+  "en": "OEVG Steyr Arms Works",
+  "ru": "Оружейный завод OEVG в Штайре"
+ },
+ "building_ong_lung_sheng_tea_warehouse": {
+  "en": "Ong Lung Sheng Tea Warehouse",
+  "ru": "Чайный склад Он Лунг Шэн"
+ },
+ "building_openai_research_lab": {
+  "en": "OpenAI Research Laboratory",
+  "ru": "Исследовательская лаборатория OpenAI"
+ },
+ "building_opium_ghazipur_factory": {
+  "en": "Opium Ghazipur Factory",
+  "ru": "Опиумная фабрика в Газипуре"
+ },
+ "building_oracle_cloud_data_center": {
+  "en": "Oracle Cloud Data Center",
+  "ru": "Дата-центр Oracle Cloud"
+ },
+ "building_orbital_battlestation": {
+  "en": "Orbital Battlestation",
+  "ru": "Орбитальная боевая станция"
+ },
+ "building_orbital_battlestation_construction_site": {
+  "en": "Orbital Battlestation Construction Site",
+  "ru": "Орбитальная боевая станция: стройплощадка"
+ },
+ "building_orbital_defense_battery": {
+  "en": "Ground-to-Orbit Battery",
+  "ru": "Наземно-орбитальная батарея"
+ },
+ "building_orient_express_sirkeci_terminal": {
+  "en": "Orient Express Sirkeci Terminal",
+  "ru": "Терминал «Восточного экспресса» Сиркеджи"
+ },
+ "building_oriental_dev_kunsan_granary": {
+  "en": "Oriental Development Kunsan Granary",
+  "ru": "Зернохранилище «Ориентал Девелопмент» в Кунсане"
+ },
+ "building_panama_company_culebra_cut": {
+  "en": "Panama Company Culebra Cut",
+  "ru": "Выемка Кулебра компании «Панама»"
+ },
+ "building_paradox_kvarnholmen_studio": {
+  "en": "Paradox Kvarnholmen Studio",
+  "ru": "Студия Paradox в Кварнхольмене"
+ },
+ "building_pedro_domecq_jerez_bodega": {
+  "en": "Pedro Domecq Jerez Bodega",
+  "ru": "Бодега Педро Домек в Хересе"
+ },
+ "building_pernambuco_recife_cotton_mill": {
+  "en": "Pernambuco Recife Cotton Mill",
+  "ru": "Хлопкопрядильная фабрика Пернамбуку в Ресифи"
+ },
+ "building_perskhlopok_cotton_combines": {
+  "en": "Perskhlopok Cotton Combines",
+  "ru": "Хлопковые комбайны «Персхлопок»"
+ },
+ "building_persshelk_silk_reeling_house": {
+  "en": "Persshelk Silk Reeling House",
+  "ru": "Шелкомотальная фабрика «Персшёлк»"
+ },
+ "building_peruvian_amazon_iquitos_depot": {
+  "en": "Peruvian Amazon Iquitos Rubber Depot",
+  "ru": "Каучуковый склад Перуанской Амазонки в Икитосе"
+ },
+ "building_petrobras_cenpes_center": {
+  "en": "Cenpes Research Center",
+  "ru": "Исследовательский центр Cenpes"
+ },
+ "building_pfizer_rd_campus": {
+  "en": "Pfizer Global R&D Campus",
+  "ru": "Глобальный исследовательский кампус Pfizer"
+ },
+ "building_philips_eindhoven_natlab": {
+  "en": "Philips Eindhoven NatLab",
+  "ru": "Лаборатория NatLab Philips в Эйндховене"
+ },
+ "building_phosphate_mine": {
+  "en": "Phosphate Mine",
+  "ru": "Фосфатная шахта"
+ },
+ "building_phosphate_mine_throughput_add": {
+  "en": "$building_phosphate_mine$ building [concept_throughput]",
+  "ru": "$building_phosphate_mine$: [concept_throughput]"
+ },
+ "building_pirelli_bicocca_plant": {
+  "en": "Pirelli Bicocca Plant",
+  "ru": "Завод Pirelli в Бикокке"
+ },
+ "building_platinum_group_metals_mine": {
+  "en": "Platinum Group Metals Mine",
+  "ru": "Шахта металлов платиновой группы"
+ },
+ "building_platinum_group_metals_mine_throughput_add": {
+  "en": "$building_platinum_group_metals_mine$ building [concept_throughput]",
+  "ru": "$building_platinum_group_metals_mine$: [concept_throughput]"
+ },
+ "building_portalis_lyon_silk_house": {
+  "en": "Portalis Lyon Silk House",
+  "ru": "Шёлковый дом Порталис в Лионе"
+ },
+ "building_potash_mine": {
+  "en": "Potash Mine",
+  "ru": "Калийная шахта"
+ },
+ "building_potash_mine_throughput_add": {
+  "en": "$building_potash_mine$ building [concept_throughput]",
+  "ru": "$building_potash_mine$: [concept_throughput]"
+ },
+ "building_power_bloc_hq": {
+  "en": "Power Bloc Headquarters",
+  "ru": "Штаб-квартира силового блока"
+ },
+ "building_precious_minor_base_metal_mine": {
+  "en": "Precious and Minor Base Metal Mine",
+  "ru": "Шахта драгоценных и малых цветных металлов"
+ },
+ "building_precious_minor_base_metal_mine_throughput_add": {
+  "en": "$building_precious_minor_base_metal_mine$ building [concept_throughput]",
+  "ru": "$building_precious_minor_base_metal_mine$: [concept_throughput]"
+ },
+ "building_prussian_railway_directorate": {
+  "en": "Prussian Railway Directorate",
+  "ru": "Дирекция прусских железных дорог"
+ },
+ "building_public_housing": {
+  "en": "Public Housing",
+  "ru": "Социальное жильё"
+ },
+ "building_putilov_works": {
+  "en": "Putilov Works",
+  "ru": "Путиловский завод"
+ },
+ "building_rac_sitka_trading_post": {
+  "en": "Russian-American Company Sitka Trading Post",
+  "ru": "Торговый пост Российско-американской компании в Ситке"
+ },
+ "building_ralli_odessa_grain_elevator": {
+  "en": "Ralli Odessa Grain Elevator",
+  "ru": "Зерновой элеватор Ралли в Одессе"
+ },
+ "building_ramirez_vila_real_cannery": {
+  "en": "Ramirez Vila Real Cannery",
+  "ru": "Консервный завод Рамиреса в Вила-Реал"
+ },
+ "building_rare_earth_metals_mine": {
+  "en": "Rare Earth Metals Mine",
+  "ru": "Шахта редкоземельных металлов"
+ },
+ "building_rare_earth_metals_mine_throughput_add": {
+  "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
+  "ru": "$building_rare_earth_metals_mine$: [concept_throughput]"
+ },
+ "building_rejoovenesense_compound": {
+  "en": "RejoovenEsense Compound",
+  "ru": "Комплекс RejoovenEsense"
+ },
+ "building_rekal_hq": {
+  "en": "Rekal Memory Center",
+  "ru": "Центр памяти Rekal"
+ },
+ "building_reliance_jamnagar_refinery": {
+  "en": "Jamnagar Refinery",
+  "ru": "Нефтезавод в Джамнагаре"
+ },
+ "building_renault_billancourt_plant": {
+  "en": "Renault Billancourt Plant",
+  "ru": "Завод Renault в Бийанкуре"
+ },
+ "building_renewable_energy_plant": {
+  "en": "Renewable Energy Plant",
+  "ru": "Станция возобновляемой энергии"
+ },
+ "building_renewable_energy_plant_throughput_add": {
+  "en": "Renewable Energy Plant [concept_throughput]",
+  "ru": "Станция возобновляемой энергии: [concept_throughput]"
+ },
+ "building_resettlement_arrivals_add": {
+  "en": "Settlers arrived last month",
+  "ru": "Прибыло поселенцев в прошлом месяце"
+ },
+ "building_resettlement_colony": {
+  "en": "Settlement Authority",
+  "ru": "Управление по заселению"
+ },
+ "building_resettlement_transit_deaths_add": {
+  "en": "Died in transit last month",
+  "ru": "Погибло в пути в прошлом месяце"
+ },
+ "building_rheinmetall_unterluss_proving_ground": {
+  "en": "Rheinmetall Unterlüss Proving Ground",
+  "ru": "Полигон Rheinmetall в Унтерлюссе"
+ },
+ "building_ricordi_galleria_vittorio_emanuele": {
+  "en": "Ricordi Galleria Publishing House",
+  "ru": "Издательский дом Рикорди в галерее Виттория Эммануэле"
+ },
+ "building_robotic_or_ai_managed_bool": {
+  "en": "Robotic or AI-Managed",
+  "ru": "Роботизированное или под управлением ИИ"
+ },
+ "building_robotics_industry": {
+  "en": "Robotics Industry",
+  "ru": "Робототехническая промышленность"
+ },
+ "building_robotics_industry_throughput_add": {
+  "en": "Robotics Industry [concept_throughput]",
+  "ru": "Робототехническая промышленность: [concept_throughput]"
+ },
+ "building_roche_tower": {
+  "en": "The Roche Tower",
+  "ru": "Башня Рош"
+ },
+ "building_rodriguez_arguelles_havana_tobacco_house": {
+  "en": "Rodríguez Argüelles Havana Tobacco House",
+  "ru": "Гаванский табачный дом Родригеса Аргуэльеса"
+ },
+ "building_rolls_royce_derby_works": {
+  "en": "Rolls-Royce Derby Works",
+  "ru": "Заводы Rolls-Royce в Дерби"
+ },
+ "building_romanian_star_ploiesti_refinery": {
+  "en": "Romanian Star Ploiești Refinery",
+  "ru": "Нефтезавод «Румынская звезда» в Плоешти"
+ },
+ "building_rosatom_mayak_association": {
+  "en": "Mayak Production Association",
+  "ru": "Производственное объединение «Маяк»"
+ },
+ "building_roscosmos_vostochny_cosmodrome": {
+  "en": "Vostochny Cosmodrome",
+  "ru": "Космодром Восточный"
+ },
+ "building_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "ru": "Штаб-квартира ассоциации Розена"
+ },
+ "building_rossi_sao_leopoldo_arms_factory": {
+  "en": "Rossi São Leopoldo Arms Factory",
+  "ru": "Оружейный завод Росси в Сан-Леопольду"
+ },
+ "building_saint_etienne_arms_manufactory": {
+  "en": "Saint-Étienne Arms Manufactory",
+  "ru": "Оружейная мануфактура в Сент-Этьене"
+ },
+ "building_samsung_digital_city": {
+  "en": "Samsung Digital City",
+  "ru": "Цифровой город Samsung"
+ },
+ "building_san_miguel_manila_brewery": {
+  "en": "San Miguel Manila Brewery",
+  "ru": "Пивоварня Сан-Мигель в Маниле"
+ },
+ "building_sandford_newcastle_natal_ironworks": {
+  "en": "Sandford Newcastle-Natal Ironworks",
+  "ru": "Железоделательный завод Сэндфорда в Ньюкасле (Наталь)"
+ },
+ "building_sansinena_avellaneda_frigorifico": {
+  "en": "Sansinena Avellaneda Frigorífico",
+  "ru": "Фригорифико Сансинена в Авельянеде"
+ },
+ "building_sao_paulo_railway_paranapiacaba_workshop": {
+  "en": "São Paulo Railway Paranapiacaba Workshop",
+  "ru": "Мастерские железной дороги Сан-Паулу в Параньяпиакабе"
+ },
+ "building_sap_headquarters": {
+  "en": "SAP SE Headquarters",
+  "ru": "Штаб-квартира SAP SE"
+ },
+ "building_sassoon_bombay_docks": {
+  "en": "Sassoon Bombay Docks",
+  "ru": "Доки Сассуна в Бомбее"
+ },
+ "building_saudi_aramco_abqaiq_plant": {
+  "en": "Abqaiq Plant",
+  "ru": "Завод в Абкайке"
+ },
+ "building_schichau_elbing_shipyard": {
+  "en": "Schichau-Werke Elbing",
+  "ru": "Верфь Шихау в Эльбинге"
+ },
+ "building_schneider_le_creusot": {
+  "en": "Schneider Le Creusot Works",
+  "ru": "Заводы Шнейдер в Ле-Крезо"
+ },
+ "building_secn_ferrol_shipyard": {
+  "en": "SECN Ferrol Shipyard",
+  "ru": "Верфь SECN в Ферроле"
+ },
+ "building_sfct_hon_gai_collieries": {
+  "en": "SFCT Hòn Gai Collieries",
+  "ru": "Угольные копи SFCT в Хонгае"
+ },
+ "building_shell_pernis_refinery": {
+  "en": "Shell Pernis Refinery",
+  "ru": "Нефтезавод Shell в Перниси"
+ },
+ "building_sherkat_shemali_cotton_gin": {
+  "en": "Sherkat-e Shemali Cotton Gin",
+  "ru": "Хлопкоочистительный завод «Шеркат-е Шемали»"
+ },
+ "building_sherkate_eslamiya_isfahan_mill": {
+  "en": "Sherkat-e Eslāmiyyeh Isfahan Mill",
+  "ru": "Фабрика «Шеркат-е Эслямийе» в Исфахане"
+ },
+ "building_shopify_fulfillment_hub": {
+  "en": "Shopify Fulfillment Network Hub",
+  "ru": "Узел сети комплектации заказов Shopify"
+ },
+ "building_siam_electric_wat_liab_station": {
+  "en": "Siam Electricity Wat Liab Power Station",
+  "ru": "Электростанция Ват Лиаб компании «Сиам Электрисити»"
+ },
+ "building_sibur_tobolsk_complex": {
+  "en": "Sibur Tobolsk Petrochemical Complex",
+  "ru": "Нефтехимический комплекс «Сибур» в Тобольске"
+ },
+ "building_siemens_erlangen_campus": {
+  "en": "Siemens Erlangen Campus",
+  "ru": "Кампус Siemens в Эрлангене"
+ },
+ "building_skoda_pilsen_works": {
+  "en": "Škoda Pilsen Works",
+  "ru": "Заводы Škoda в Пльзене"
+ },
+ "building_softbank_vision_fund_hq": {
+  "en": "The Vision Fund Headquarters",
+  "ru": "Штаб-квартира Vision Fund"
+ },
+ "building_software_industry": {
+  "en": "Software Industry",
+  "ru": "Программная индустрия"
+ },
+ "building_software_industry_throughput_add": {
+  "en": "Software Industries [concept_throughput]",
+  "ru": "Программная индустрия: [concept_throughput]"
+ },
+ "building_solar_collector": {
+  "en": "Orbital Solar Collector",
+  "ru": "Орбитальный солнечный коллектор"
+ },
+ "building_solar_collector_construction_site": {
+  "en": "Solar Collector Construction Site",
+  "ru": "Солнечный коллектор: стройплощадка"
+ },
+ "building_solar_collector_throughput_add": {
+  "en": "Solar Collector [concept_throughput]",
+  "ru": "Солнечный коллектор: [concept_throughput]"
+ },
+ "building_solar_receiver": {
+  "en": "Solar Power Receiver",
+  "ru": "Приёмник солнечной энергии"
+ },
+ "building_sony_pictures_studios": {
+  "en": "Sony Pictures Studios",
+  "ru": "Студии Sony Pictures"
+ },
+ "building_space_command": {
+  "en": "Space Command",
+  "ru": "Космическое командование"
+ },
+ "building_space_elevator": {
+  "en": "Space Elevator",
+  "ru": "Космический лифт"
+ },
+ "building_space_elevator_construction_site": {
+  "en": "Space Elevator Construction Site",
+  "ru": "Космический лифт: стройплощадка"
+ },
+ "building_space_mine": {
+  "en": "Extraplanetary Base",
+  "ru": "Внепланетная база"
+ },
+ "building_space_program": {
+  "en": "Space Program",
+  "ru": "Космическая программа"
+ },
+ "building_space_program_throughput_add": {
+  "en": "Space Program [concept_throughput]",
+  "ru": "Космическая программа: [concept_throughput]"
+ },
+ "building_spacex_starbase": {
+  "en": "Starbase",
+  "ru": "Старбейс"
+ },
+ "building_specialty_alloy_metal_mine": {
+  "en": "Specialty Alloy Metal Mine",
+  "ru": "Шахта специальных сплавов"
+ },
+ "building_specialty_alloy_metal_mine_throughput_add": {
+  "en": "$building_specialty_alloy_metal_mine$ building [concept_throughput]",
+  "ru": "$building_specialty_alloy_metal_mine$: [concept_throughput]"
+ },
+ "building_sr_site_amalthea": {
+  "en": "$sr_site_name_amalthea$ Colony",
+  "ru": "Колония: $sr_site_name_amalthea$"
+ },
+ "building_sr_site_arcadia_planitia": {
+  "en": "$sr_site_name_arcadia_planitia$ Colony",
+  "ru": "Колония: $sr_site_name_arcadia_planitia$"
+ },
+ "building_sr_site_ariel": {
+  "en": "$sr_site_name_ariel$ Colony",
+  "ru": "Колония: $sr_site_name_ariel$"
+ },
+ "building_sr_site_callisto": {
+  "en": "$sr_site_name_callisto$ Colony",
+  "ru": "Колония: $sr_site_name_callisto$"
+ },
+ "building_sr_site_ceres": {
+  "en": "$sr_site_name_ceres$ Colony",
+  "ru": "Колония: $sr_site_name_ceres$"
+ },
+ "building_sr_site_daedalus": {
+  "en": "$sr_site_name_daedalus$ Colony",
+  "ru": "Колония: $sr_site_name_daedalus$"
+ },
+ "building_sr_site_enceladus": {
+  "en": "$sr_site_name_enceladus$ Colony",
+  "ru": "Колония: $sr_site_name_enceladus$"
+ },
+ "building_sr_site_eris": {
+  "en": "$sr_site_name_eris$ Colony",
+  "ru": "Колония: $sr_site_name_eris$"
+ },
+ "building_sr_site_europa": {
+  "en": "$sr_site_name_europa$ Colony",
+  "ru": "Колония: $sr_site_name_europa$"
+ },
+ "building_sr_site_ganymede": {
+  "en": "$sr_site_name_ganymede$ Colony",
+  "ru": "Колония: $sr_site_name_ganymede$"
+ },
+ "building_sr_site_haumea": {
+  "en": "$sr_site_name_haumea$ Colony",
+  "ru": "Колония: $sr_site_name_haumea$"
+ },
+ "building_sr_site_hellas_planitia": {
+  "en": "$sr_site_name_hellas_planitia$ Colony",
+  "ru": "Колония: $sr_site_name_hellas_planitia$"
+ },
+ "building_sr_site_himalia": {
+  "en": "$sr_site_name_himalia$ Colony",
+  "ru": "Колония: $sr_site_name_himalia$"
+ },
+ "building_sr_site_hygiea": {
+  "en": "$sr_site_name_hygiea$ Colony",
+  "ru": "Колония: $sr_site_name_hygiea$"
+ },
+ "building_sr_site_iapetus": {
+  "en": "$sr_site_name_iapetus$ Colony",
+  "ru": "Колония: $sr_site_name_iapetus$"
+ },
+ "building_sr_site_imbrium": {
+  "en": "$sr_site_name_imbrium$ Colony",
+  "ru": "Колония: $sr_site_name_imbrium$"
+ },
+ "building_sr_site_io": {
+  "en": "$sr_site_name_io$ Colony",
+  "ru": "Колония: $sr_site_name_io$"
+ },
+ "building_sr_site_makemake": {
+  "en": "$sr_site_name_makemake$ Colony",
+  "ru": "Колония: $sr_site_name_makemake$"
+ },
+ "building_sr_site_marius_hills": {
+  "en": "$sr_site_name_marius_hills$ Colony",
+  "ru": "Колония: $sr_site_name_marius_hills$"
+ },
+ "building_sr_site_mercury": {
+  "en": "$sr_site_name_mercury$ Colony",
+  "ru": "Колония: $sr_site_name_mercury$"
+ },
+ "building_sr_site_mimas": {
+  "en": "$sr_site_name_mimas$ Colony",
+  "ru": "Колония: $sr_site_name_mimas$"
+ },
+ "building_sr_site_miranda": {
+  "en": "$sr_site_name_miranda$ Colony",
+  "ru": "Колония: $sr_site_name_miranda$"
+ },
+ "building_sr_site_oberon": {
+  "en": "$sr_site_name_oberon$ Colony",
+  "ru": "Колония: $sr_site_name_oberon$"
+ },
+ "building_sr_site_olympus_mons": {
+  "en": "$sr_site_name_olympus_mons$ Colony",
+  "ru": "Колония: $sr_site_name_olympus_mons$"
+ },
+ "building_sr_site_pallas": {
+  "en": "$sr_site_name_pallas$ Colony",
+  "ru": "Колония: $sr_site_name_pallas$"
+ },
+ "building_sr_site_peary": {
+  "en": "$sr_site_name_peary$ Colony",
+  "ru": "Колония: $sr_site_name_peary$"
+ },
+ "building_sr_site_pluto": {
+  "en": "$sr_site_name_pluto$ Colony",
+  "ru": "Колония: $sr_site_name_pluto$"
+ },
+ "building_sr_site_proteus": {
+  "en": "$sr_site_name_proteus$ Colony",
+  "ru": "Колония: $sr_site_name_proteus$"
+ },
+ "building_sr_site_psyche": {
+  "en": "$sr_site_name_psyche$ Colony",
+  "ru": "Колония: $sr_site_name_psyche$"
+ },
+ "building_sr_site_rhea": {
+  "en": "$sr_site_name_rhea$ Colony",
+  "ru": "Колония: $sr_site_name_rhea$"
+ },
+ "building_sr_site_sedna": {
+  "en": "$sr_site_name_sedna$ Colony",
+  "ru": "Колония: $sr_site_name_sedna$"
+ },
+ "building_sr_site_shackleton": {
+  "en": "$sr_site_name_shackleton$ Colony",
+  "ru": "Колония: $sr_site_name_shackleton$"
+ },
+ "building_sr_site_titan": {
+  "en": "$sr_site_name_titan$ Colony",
+  "ru": "Колония: $sr_site_name_titan$"
+ },
+ "building_sr_site_titania": {
+  "en": "$sr_site_name_titania$ Colony",
+  "ru": "Колония: $sr_site_name_titania$"
+ },
+ "building_sr_site_tranquility": {
+  "en": "$sr_site_name_tranquility$ Colony",
+  "ru": "Колония: $sr_site_name_tranquility$"
+ },
+ "building_sr_site_triton": {
+  "en": "$sr_site_name_triton$ Colony",
+  "ru": "Колония: $sr_site_name_triton$"
+ },
+ "building_sr_site_utopia_planitia": {
+  "en": "$sr_site_name_utopia_planitia$ Colony",
+  "ru": "Колония: $sr_site_name_utopia_planitia$"
+ },
+ "building_sr_site_valles_marineris": {
+  "en": "$sr_site_name_valles_marineris$ Colony",
+  "ru": "Колония: $sr_site_name_valles_marineris$"
+ },
+ "building_sr_site_venus": {
+  "en": "$sr_site_name_venus$ Colony",
+  "ru": "Колония: $sr_site_name_venus$"
+ },
+ "building_sr_site_vesta": {
+  "en": "$sr_site_name_vesta$ Colony",
+  "ru": "Колония: $sr_site_name_vesta$"
+ },
+ "building_standard_oil_refinery": {
+  "en": "Standard Oil Refinery",
+  "ru": "Нефтезавод Standard Oil"
+ },
+ "building_state_youth_centers": {
+  "en": "State Youth Centers",
+  "ru": "Государственные молодёжные центры"
+ },
+ "building_steel_brothers_syriam_depot": {
+  "en": "Steel Brothers Syriam Depot",
+  "ru": "Склад «Стил Бразерс» в Сириаме"
+ },
+ "building_stf_fiume_torpedo_works": {
+  "en": "STF Fiume Torpedo Works",
+  "ru": "Торпедный завод STF в Фиуме"
+ },
+ "building_strategic_reserve_hub": {
+  "en": "Strategic Reserve Hub",
+  "ru": "Узел стратегического резерва"
+ },
+ "building_strategic_reserve_silo": {
+  "en": "Strategic Reserve Silo",
+  "ru": "Силос стратегического резерва"
+ },
+ "building_stt_haskoy_shipyard": {
+  "en": "STT Hasköy Shipyard",
+  "ru": "Верфь STT в Хаскёе"
+ },
+ "building_sudamericana_valparaiso_pier": {
+  "en": "Sudamericana Valparaíso Pier",
+  "ru": "Пирс Судамерикана в Вальпараисо"
+ },
+ "building_suez_company_ismailia_hq": {
+  "en": "Suez Company Ismailia Headquarters",
+  "ru": "Штаб-квартира Суэцкой компании в Исмаилии"
+ },
+ "building_sumitomo_besshi_mine": {
+  "en": "Sumitomo Besshi Mine",
+  "ru": "Рудник Сумитомо в Бесси"
+ },
+ "building_sunhwaguk_seoul_tobacco_factory": {
+  "en": "Sunhwaguk Seoul Tobacco Factory",
+  "ru": "Табачная фабрика Сунхваго в Сеуле"
+ },
+ "building_synthetics_plant_biomass": {
+  "en": "Integrated Biorefinery",
+  "ru": "Интегрированный биоперерабатывающий завод"
+ },
+ "building_synthetics_plant_coal": {
+  "en": "Carbon Conversion Works",
+  "ru": "Завод переработки углерода"
+ },
+ "building_synthetics_plant_drinks": {
+  "en": "Beverage Concentrates Plant",
+  "ru": "Завод концентратов напитков"
+ },
+ "building_synthetics_plant_fruit": {
+  "en": "Cultured Produce Facility",
+  "ru": "Предприятие культивируемых продуктов"
+ },
+ "building_synthetics_plant_meat": {
+  "en": "Cultured Meat Plant",
+  "ru": "Завод культивируемого мяса"
+ },
+ "building_synthetics_plant_oil": {
+  "en": "Synthetic Fuel Works",
+  "ru": "Завод синтетического топлива"
+ },
+ "building_synthetics_plant_oil_throughput_add": {
+  "en": "Synthetics Fuel Works [concept_throughput]",
+  "ru": "Завод синтетического топлива: [concept_throughput]"
+ },
+ "building_synthetics_plant_opium": {
+  "en": "Pharmaceutical Industries",
+  "ru": "Фармацевтическая промышленность"
+ },
+ "building_synthetics_plant_rubber": {
+  "en": "Synthetic Rubber Works",
+  "ru": "Завод синтетического каучука"
+ },
+ "building_synthetics_plant_rubber_throughput_add": {
+  "en": "Synthetics Works Rubber [concept_throughput]",
+  "ru": "Завод синтетического каучука: [concept_throughput]"
+ },
+ "building_synthetics_plant_silk": {
+  "en": "Synthetic Clothes Industries",
+  "ru": "Отрасли синтетической одежды"
+ },
+ "building_synthetics_plant_silk_throughput_add": {
+  "en": "$building_synthetics_plant_silk$ building [concept_throughput]",
+  "ru": "$building_synthetics_plant_silk$: [concept_throughput]"
+ },
+ "building_synthetics_plant_sugar": {
+  "en": "Artificial Sweeteners Plant",
+  "ru": "Завод искусственных подсластителей"
+ },
+ "building_synthetics_plant_wood": {
+  "en": "Phenolic Resin Panels Plant",
+  "ru": "Завод фенольных смоляных панелей"
+ },
+ "building_tashkent_railroad_workshops": {
+  "en": "Tashkent Railroad Workshops",
+  "ru": "Ташкентские железнодорожные мастерские"
+ },
+ "building_tata_jamshedpur_works": {
+  "en": "Tata Jamshedpur Works",
+  "ru": "Заводы Tata в Джамшедпуре"
+ },
+ "building_tencent_seafront_towers": {
+  "en": "Tencent Seafront Towers",
+  "ru": "Приморские башни Tencent"
+ },
+ "building_tessier_ashpool_hq": {
+  "en": "Tessier-Ashpool Orbital",
+  "ru": "Орбитальная станция «Тессье-Эшпул»"
+ },
+ "building_thonet_bystrice_bentwood_factory": {
+  "en": "Thonet Bystřice Bentwood Factory",
+  "ru": "Фабрика гнутой мебели Тонет в Быстржице"
+ },
+ "building_thyssen_steelworks": {
+  "en": "Thyssen Steelworks",
+  "ru": "Сталелитейный завод Тиссен"
+ },
+ "building_tobacco_regie_cibali_factory": {
+  "en": "Tobacco Régie Cibali Factory",
+  "ru": "Фабрика Табачной регии в Джибали"
+ },
+ "building_tokyo_electric_asakusa_station": {
+  "en": "Tokyo Electric Asakusa Power Station",
+  "ru": "Электростанция Асакуса компании «Токио Электрик»"
+ },
+ "building_total_antimatter_facility_progress": {
+  "en": "Antimatter Facility Progress",
+  "ru": "Хранилище антиматерии: прогресс"
+ },
+ "building_total_consciousness_network_progress": {
+  "en": "Consciousness Network Progress",
+  "ru": "Сеть сознания: прогресс"
+ },
+ "building_total_mind_upload_nexus_progress": {
+  "en": "Mind Upload Nexus Progress",
+  "ru": "Узел загрузки сознания: прогресс"
+ },
+ "building_total_nanofabrication_center_progress": {
+  "en": "Nanofabrication Center Progress",
+  "ru": "Центр нанопроизводства: прогресс"
+ },
+ "building_total_orbital_battlestation_progress": {
+  "en": "Orbital Battlestation Progress",
+  "ru": "Орбитальная боевая станция: прогресс"
+ },
+ "building_total_solar_collector_progress": {
+  "en": "Solar Collector Progress",
+  "ru": "Солнечный коллектор: прогресс"
+ },
+ "building_total_space_elevator_progress": {
+  "en": "Space Elevator Progress",
+  "ru": "Космический лифт: прогресс"
+ },
+ "building_tourism_industry": {
+  "en": "Tourism Industry",
+  "ru": "Туристическая индустрия"
+ },
+ "building_toyota_kaikan_plant": {
+  "en": "Toyota Kaikan Museum & Plant",
+  "ru": "Музей и завод Toyota «Кайкан»"
+ },
+ "building_trubia_cannon_foundry": {
+  "en": "Trubia Cannon Foundry",
+  "ru": "Пушечный литейный завод в Трубии"
+ },
+ "building_tsmc_fab_18": {
+  "en": "TSMC Fab 18",
+  "ru": "Фабрика TSMC Fab 18"
+ },
+ "building_turkish_petroleum_kirkuk_depot": {
+  "en": "Turkish Petroleum Kirkuk Depot",
+  "ru": "Склад Турецкой нефтяной компании в Киркуке"
+ },
+ "building_tycho_manufacturing_hq": {
+  "en": "Tycho Orbital Works",
+  "ru": "Орбитальные заводы «Тихо»"
+ },
+ "building_un_headquarters": {
+  "en": "United Nations Headquarters",
+  "ru": "Штаб-квартира Организации Объединённых Наций"
+ },
+ "building_uniao_fabril_barreiro_plant": {
+  "en": "União Fabril Barreiro Plant",
+  "ru": "Завод «Униан Фабрил» в Барейру"
+ },
+ "building_united_fruit_great_white_fleet_terminal": {
+  "en": "United Fruit Terminal",
+  "ru": "Терминал United Fruit"
+ },
+ "building_united_tobacco_moscow_plant": {
+  "en": "United Tobacco Moscow Plant",
+  "ru": "Московский завод «Юнайтед Тобакко»"
+ },
+ "building_universal_studios_hollywood": {
+  "en": "Universal Studios Hollywood",
+  "ru": "Universal Studios Hollywood"
+ },
+ "building_ursus_warsaw_tractor_plant": {
+  "en": "Ursus Warsaw Tractor Plant",
+  "ru": "Варшавский тракторный завод «Урсус»"
+ },
+ "building_vale_carajas_mine": {
+  "en": "Carajás Mine",
+  "ru": "Рудник Карахас"
+ },
+ "building_van_vlissingen_oostenburg_works": {
+  "en": "Van Vlissingen Oostenburg Works",
+  "ru": "Заводы Ван Флиссингена в Остенбурге"
+ },
+ "building_verizon_building": {
+  "en": "The Verizon Building",
+  "ru": "Здание Verizon"
+ },
+ "building_vodka_monopoly_warehouse": {
+  "en": "State Vodka Monopoly Warehouse",
+  "ru": "Склад государственной водочной монополии"
+ },
+ "building_volkswagen_autostadt": {
+  "en": "Volkswagen Autostadt",
+  "ru": "Автоштадт Volkswagen"
+ },
+ "building_wadia_bombay_dockyard": {
+  "en": "Wadia Bombay Dockyard",
+  "ru": "Верфь Вадиа в Бомбее"
+ },
+ "building_west_ural_oil_depot": {
+  "en": "West Ural Oil Depot",
+  "ru": "Западно-Уральский нефтяной склад"
+ },
+ "building_white_star_albion_house": {
+  "en": "White Star Albion House",
+  "ru": "Олбион-хаус компании «Уайт Стар»"
+ },
+ "building_witkowitzer_ostrava_ironworks": {
+  "en": "Witkowitzer Ostrava Ironworks",
+  "ru": "Железоделательный завод Витковице в Остраве"
+ },
+ "building_wonder_abraj_al_bait": {
+  "en": "Abraj Al-Bait Clock Tower",
+  "ru": "Часовая башня Абрадж аль-Бейт"
+ },
+ "building_wonder_aswan_high_dam": {
+  "en": "Aswan High Dam",
+  "ru": "Асуанская плотина"
+ },
+ "building_wonder_azadi_tower": {
+  "en": "Azadi Tower",
+  "ru": "Башня Азади"
+ },
+ "building_wonder_basilica_of_our_lady_of_peace": {
+  "en": "Basilica of Our Lady of Peace",
+  "ru": "Базилика Богоматери Мира"
+ },
+ "building_wonder_berlin_tv_tower": {
+  "en": "Berlin TV Tower",
+  "ru": "Берлинская телебашня"
+ },
+ "building_wonder_burj_khalifa": {
+  "en": "Burj Khalifa",
+  "ru": "Бурдж-Халифа"
+ },
+ "building_wonder_channel_tunnel": {
+  "en": "Channel Tunnel",
+  "ru": "Тоннель под Ла-Маншем"
+ },
+ "building_wonder_cn_tower": {
+  "en": "CN Tower",
+  "ru": "Си-Эн Тауэр"
+ },
+ "building_wonder_continental_union_hq": {
+  "en": "Continental Union Headquarters",
+  "ru": "Штаб-квартира Континентального союза"
+ },
+ "building_wonder_empire_state_building": {
+  "en": "Empire State Building",
+  "ru": "Эмпайр-стейт-билдинг"
+ },
+ "building_wonder_fast_telescope": {
+  "en": "FAST Telescope",
+  "ru": "Телескоп FAST"
+ },
+ "building_wonder_gardens_by_the_bay": {
+  "en": "Gardens by the Bay",
+  "ru": "Сады у залива"
+ },
+ "building_wonder_golden_bridge": {
+  "en": "Golden Bridge",
+  "ru": "Золотой мост"
+ },
+ "building_wonder_golden_gate_bridge": {
+  "en": "Golden Gate Bridge",
+  "ru": "Мост Золотые Ворота"
+ },
+ "building_wonder_hoover_dam": {
+  "en": "Hoover Dam",
+  "ru": "Плотина Гувера"
+ },
+ "building_wonder_international_space_station": {
+  "en": "International Space Station",
+  "ru": "Международная космическая станция"
+ },
+ "building_wonder_itaipu_dam": {
+  "en": "Itaipu Dam",
+  "ru": "Плотина Итайпу"
+ },
+ "building_wonder_iter": {
+  "en": "ITER Fusion Reactor",
+  "ru": "Термоядерный реактор ИТЭР"
+ },
+ "building_wonder_kennedy_space_center": {
+  "en": "Kennedy Space Center",
+  "ru": "Космический центр Кеннеди"
+ },
+ "building_wonder_kenyatta_icc": {
+  "en": "Kenyatta International Convention Centre",
+  "ru": "Международный конференц-центр имени Кеньятты"
+ },
+ "building_wonder_large_hadron_collider": {
+  "en": "Large Hadron Collider",
+  "ru": "Большой адронный коллайдер"
+ },
+ "building_wonder_ligo": {
+  "en": "LIGO Observatory",
+  "ru": "Обсерватория LIGO"
+ },
+ "building_wonder_lotte_world_tower": {
+  "en": "Lotte World Tower",
+  "ru": "Башня Lotte World"
+ },
+ "building_wonder_lotus_temple": {
+  "en": "Lotus Temple",
+  "ru": "Храм Лотоса"
+ },
+ "building_wonder_moscow_state_university": {
+  "en": "Moscow State University",
+  "ru": "Московский государственный университет"
+ },
+ "building_wonder_palais_des_nations": {
+  "en": "Palais des Nations",
+  "ru": "Дворец Наций"
+ },
+ "building_wonder_peace_palace": {
+  "en": "Peace Palace",
+  "ru": "Дворец мира"
+ },
+ "building_wonder_pentagon": {
+  "en": "The Pentagon",
+  "ru": "Пентагон"
+ },
+ "building_wonder_petronas_towers": {
+  "en": "Petronas Towers",
+  "ru": "Башни Петронас"
+ },
+ "building_wonder_shanghai_tower": {
+  "en": "Shanghai Tower",
+  "ru": "Шанхайская башня"
+ },
+ "building_wonder_statue_of_unity": {
+  "en": "Statue of Unity",
+  "ru": "Статуя Единства"
+ },
+ "building_wonder_svalbard_seed_vault": {
+  "en": "Svalbard Global Seed Vault",
+  "ru": "Всемирное семенохранилище на Шпицбергене"
+ },
+ "building_wonder_sydney_opera_house": {
+  "en": "Sydney Opera House",
+  "ru": "Сиднейский оперный театр"
+ },
+ "building_wonder_taipei_101": {
+  "en": "Taipei 101",
+  "ru": "Тайбэй 101"
+ },
+ "building_wonder_three_gorges_dam": {
+  "en": "Three Gorges Dam",
+  "ru": "Плотина «Три ущелья»"
+ },
+ "building_wonder_tokyo_tower": {
+  "en": "Tokyo Tower",
+  "ru": "Токийская башня"
+ },
+ "building_wonder_world_trade_center": {
+  "en": "World Trade Center",
+  "ru": "Всемирный торговый центр"
+ },
+ "building_worth_rue_de_la_paix_atelier": {
+  "en": "Worth Rue de la Paix Atelier",
+  "ru": "Ателье Ворта на улице Мира"
+ },
+ "building_yasuda_atosanupuri_mine": {
+  "en": "Yasuda Atosanupuri Sulfur Mine",
+  "ru": "Серный рудник Ясуда в Атосануполи"
+ },
+ "building_ynchausti_manila_trading_house": {
+  "en": "Ynchausti Manila Trading House",
+  "ru": "Торговый дом Инчаусти в Маниле"
+ },
+ "building_yoyodyne_propulsion_hq": {
+  "en": "Yoyodyne Propulsion Lab",
+  "ru": "Лаборатория двигателей «Йойодайн»"
+ },
+ "building_zastava_kragujevac_arsenal": {
+  "en": "Zastava Kragujevac Arsenal",
+  "ru": "Арсенал «Застава» в Крагуеваце"
+ }
+}

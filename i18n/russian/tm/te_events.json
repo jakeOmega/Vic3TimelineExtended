@@ -1,0 +1,442 @@
+{
+ "amendment_petition_events.1.t": {
+  "en": "The Old Letters",
+  "ru": "Старые письма"
+ },
+ "amendment_petition_events.10.t": {
+  "en": "Never the First",
+  "ru": "Никогда первыми"
+ },
+ "amendment_petition_events.11.t": {
+  "en": "Necessity Knows No Law",
+  "ru": "Нужда закона не знает"
+ },
+ "amendment_petition_events.12.t": {
+  "en": "Pennies Against Millions",
+  "ru": "Гроши против миллионов"
+ },
+ "amendment_petition_events.13.t": {
+  "en": "An Exemption for Faith",
+  "ru": "Исключение для веры"
+ },
+ "amendment_petition_events.14.t": {
+  "en": "Rotation in Office",
+  "ru": "Ротация в должностях"
+ },
+ "amendment_petition_events.15.t": {
+  "en": "Company Men",
+  "ru": "Люди компании"
+ },
+ "amendment_petition_events.16.t": {
+  "en": "Complaints Against the Force",
+  "ru": "Жалобы на полицию"
+ },
+ "amendment_petition_events.17.t": {
+  "en": "What the Dead Owe",
+  "ru": "Что должны мёртвые"
+ },
+ "amendment_petition_events.18.t": {
+  "en": "Dynasty Trusts",
+  "ru": "Династические трасты"
+ },
+ "amendment_petition_events.19.t": {
+  "en": "The Duty and the Stake",
+  "ru": "Долг и ставка"
+ },
+ "amendment_petition_events.2.t": {
+  "en": "Spoken Like a Citizen",
+  "ru": "Слова гражданина"
+ },
+ "amendment_petition_events.21.t": {
+  "en": "The Writ Suspended",
+  "ru": "Приостановленный приказ"
+ },
+ "amendment_petition_events.22.t": {
+  "en": "Let the People Choose Their Judges",
+  "ru": "Пусть народ выбирает судей"
+ },
+ "amendment_petition_events.23.t": {
+  "en": "Courts for the Merchants",
+  "ru": "Суды для купцов"
+ },
+ "amendment_petition_events.24.t": {
+  "en": "Twelve Good Citizens",
+  "ru": "Двенадцать добрых граждан"
+ },
+ "amendment_petition_events.25.t": {
+  "en": "Courts-Martial for Rebels",
+  "ru": "Военные трибуналы для мятежников"
+ },
+ "amendment_petition_events.26.t": {
+  "en": "Justice of the Party",
+  "ru": "Партийное правосудие"
+ },
+ "amendment_petition_events.27.t": {
+  "en": "A Human Signature",
+  "ru": "Подпись человека"
+ },
+ "amendment_petition_events.28.t": {
+  "en": "Two Parties Are Enough",
+  "ru": "Двух партий достаточно"
+ },
+ "amendment_petition_events.3.t": {
+  "en": "A Second Official Tongue",
+  "ru": "Второй официальный язык"
+ },
+ "amendment_petition_events.4.t": {
+  "en": "Too Large to Break",
+  "ru": "Слишком велики, чтобы рухнуть"
+ },
+ "amendment_petition_events.5.t": {
+  "en": "The Workers' Own Firms",
+  "ru": "Фирмы самих рабочих"
+ },
+ "amendment_petition_events.6.t": {
+  "en": "Order in the Courts",
+  "ru": "Порядок в судах"
+ },
+ "amendment_petition_events.7.t": {
+  "en": "The Cost of Cells",
+  "ru": "Цена камер"
+ },
+ "amendment_petition_events.8.t": {
+  "en": "The Data Lobby",
+  "ru": "Лобби данных"
+ },
+ "amendment_petition_events.9.t": {
+  "en": "Those Who Speak Up",
+  "ru": "Те, кто заговорил"
+ },
+ "movement_events_te.1.a": {
+  "en": "Let them march in peace",
+  "ru": "Пусть маршируют мирно"
+ },
+ "movement_events_te.1.b": {
+  "en": "Disperse the crowds",
+  "ru": "Разогнать толпу"
+ },
+ "movement_events_te.1.c": {
+  "en": "We march alongside them",
+  "ru": "Мы идём вместе с ними"
+ },
+ "movement_events_te.1.t": {
+  "en": "Civil Rights March",
+  "ru": "Марш за гражданские права"
+ },
+ "movement_events_te.10.a": {
+  "en": "Subsidize augmentations for all",
+  "ru": "Субсидировать аугментации для всех"
+ },
+ "movement_events_te.10.b": {
+  "en": "Regulate pricing",
+  "ru": "Регулировать цены"
+ },
+ "movement_events_te.10.c": {
+  "en": "Let the market decide",
+  "ru": "Пусть решает рынок"
+ },
+ "movement_events_te.10.t": {
+  "en": "The Augmentation Divide",
+  "ru": "Пропасть аугментации"
+ },
+ "movement_events_te.100.a": {
+  "en": "Order has been restored",
+  "ru": "Порядок восстановлен"
+ },
+ "movement_events_te.100.b": {
+  "en": "Accelerate the [concept_assimilation] program",
+  "ru": "Ускорить программу [Concept('concept_assimilation','ассимиляции')]"
+ },
+ "movement_events_te.100.c": {
+  "en": "Enforce strict separation",
+  "ru": "Ввести строгое разделение"
+ },
+ "movement_events_te.100.e": {
+  "en": "They are no longer welcome here",
+  "ru": "Им здесь больше не рады"
+ },
+ "movement_events_te.100.t": {
+  "en": "The Movement Broken",
+  "ru": "Движение подавлено"
+ },
+ "movement_events_te.11.a": {
+  "en": "Shut them down",
+  "ru": "Закрыть их"
+ },
+ "movement_events_te.11.b": {
+  "en": "License and regulate them",
+  "ru": "Лицензировать и регулировать"
+ },
+ "movement_events_te.11.c": {
+  "en": "Send researchers to study their methods",
+  "ru": "Отправить исследователей изучить их методы"
+ },
+ "movement_events_te.11.t": {
+  "en": "The Biohacker Underground",
+  "ru": "Подполье биохакеров"
+ },
+ "movement_events_te.12.a": {
+  "en": "Digital copies are property",
+  "ru": "Цифровые копии — это собственность"
+ },
+ "movement_events_te.12.b": {
+  "en": "Form an ethics commission",
+  "ru": "Создать комиссию по этике"
+ },
+ "movement_events_te.12.c": {
+  "en": "Recognize digital consciousness",
+  "ru": "Признать цифровое сознание"
+ },
+ "movement_events_te.12.t": {
+  "en": "The Digital Consciousness Debate",
+  "ru": "Спор о цифровом сознании"
+ },
+ "movement_events_te.13.a": {
+  "en": "Root out these smuggling networks",
+  "ru": "Искоренить эти сети контрабандистов"
+ },
+ "movement_events_te.13.b": {
+  "en": "Look the other way",
+  "ru": "Закрыть глаза"
+ },
+ "movement_events_te.13.c": {
+  "en": "Quietly fund the networks",
+  "ru": "Тайно финансировать эти сети"
+ },
+ "movement_events_te.13.t": {
+  "en": "The Way Out",
+  "ru": "Выход"
+ },
+ "movement_events_te.14.a": {
+  "en": "Protect the targeted businesses",
+  "ru": "Защитить пострадавшие предприятия"
+ },
+ "movement_events_te.14.b": {
+  "en": "A lesson in loyalty",
+  "ru": "Урок верности"
+ },
+ "movement_events_te.14.c": {
+  "en": "Rally consumers to support minority shops",
+  "ru": "Призвать потребителей поддержать магазины меньшинств"
+ },
+ "movement_events_te.14.t": {
+  "en": "The Boycott",
+  "ru": "Бойкот"
+ },
+ "movement_events_te.15.a": {
+  "en": "Declare a national day of mourning",
+  "ru": "Объявить национальный день траура"
+ },
+ "movement_events_te.15.c": {
+  "en": "Open a formal investigation",
+  "ru": "Начать официальное расследование"
+ },
+ "movement_events_te.15.t": {
+  "en": "Blood of a Martyr",
+  "ru": "Кровь мученика"
+ },
+ "movement_events_te.16.a": {
+  "en": "Arrest them all",
+  "ru": "Арестовать всех"
+ },
+ "movement_events_te.16.b": {
+  "en": "Offer limited concessions",
+  "ru": "Предложить ограниченные уступки"
+ },
+ "movement_events_te.16.c": {
+  "en": "Let the world watch",
+  "ru": "Пусть мир смотрит"
+ },
+ "movement_events_te.16.t": {
+  "en": "Mass Disobedience",
+  "ru": "Массовое неповиновение"
+ },
+ "movement_events_te.17.a": {
+  "en": "Condemn them before the world",
+  "ru": "Осудить их перед всем миром"
+ },
+ "movement_events_te.17.b": {
+  "en": "It is not our affair",
+  "ru": "Это не наше дело"
+ },
+ "movement_events_te.17.t": {
+  "en": "A Stain on Their Record",
+  "ru": "Пятно на их репутации"
+ },
+ "movement_events_te.2.a": {
+  "en": "The law is the law",
+  "ru": "Закон есть закон"
+ },
+ "movement_events_te.2.b": {
+  "en": "Make an exception this time",
+  "ru": "На этот раз сделать исключение"
+ },
+ "movement_events_te.2.c": {
+  "en": "This must change",
+  "ru": "Это должно измениться"
+ },
+ "movement_events_te.2.t": {
+  "en": "Segregation Incident",
+  "ru": "Случай сегрегации"
+ },
+ "movement_events_te.200.t": {
+  "en": "A New Era of Equality",
+  "ru": "Новая эра равенства"
+ },
+ "movement_events_te.220.t": {
+  "en": "The Civil Rights Mandate is Signed",
+  "ru": "Мандат о гражданских правах подписан"
+ },
+ "movement_events_te.221.t": {
+  "en": "The Movement Carries the Day",
+  "ru": "Движение берёт верх"
+ },
+ "movement_events_te.222.t": {
+  "en": "A Settlement, At Last",
+  "ru": "Наконец-то соглашение"
+ },
+ "movement_events_te.223.t": {
+  "en": "Reform on Paper",
+  "ru": "Реформа на бумаге"
+ },
+ "movement_events_te.230.t": {
+  "en": "The Movement Demobilizes",
+  "ru": "Движение демобилизуется"
+ },
+ "movement_events_te.231.t": {
+  "en": "The Long Drift",
+  "ru": "Долгий дрейф"
+ },
+ "movement_events_te.232.t": {
+  "en": "The Movement Fades",
+  "ru": "Движение угасает"
+ },
+ "movement_events_te.240.t": {
+  "en": "Victory on Paper",
+  "ru": "Победа на бумаге"
+ },
+ "movement_events_te.3.a": {
+  "en": "Fund a state cultural program",
+  "ru": "Профинансировать государственную культурную программу"
+ },
+ "movement_events_te.3.b": {
+  "en": "Let it flourish on its own",
+  "ru": "Пусть расцветает сама"
+ },
+ "movement_events_te.3.c": {
+  "en": "Channel it into national unity propaganda",
+  "ru": "Направить её в русло пропаганды национального единства"
+ },
+ "movement_events_te.3.t": {
+  "en": "Cultural Renaissance",
+  "ru": "Культурный ренессанс"
+ },
+ "movement_events_te.301.t": {
+  "en": "First Mass Rally Draws Notice",
+  "ru": "Первый массовый митинг привлекает внимание"
+ },
+ "movement_events_te.302.t": {
+  "en": "Equal on Paper",
+  "ru": "Равны на бумаге"
+ },
+ "movement_events_te.303.t": {
+  "en": "Coalition Forms with Trade Unions",
+  "ru": "Коалиция с профсоюзами"
+ },
+ "movement_events_te.304.t": {
+  "en": "Federal Commission Recommends Action",
+  "ru": "Федеральная комиссия рекомендует действовать"
+ },
+ "movement_events_te.305.t": {
+  "en": "The March on the Capital",
+  "ru": "Марш на столицу"
+ },
+ "movement_events_te.4.a": {
+  "en": "We reject foreign interference",
+  "ru": "Мы отвергаем иностранное вмешательство"
+ },
+ "movement_events_te.4.b": {
+  "en": "We will work toward reform",
+  "ru": "Мы будем добиваться реформ"
+ },
+ "movement_events_te.4.c": {
+  "en": "Deflect with counter-accusations",
+  "ru": "Ответить встречными обвинениями"
+ },
+ "movement_events_te.4.t": {
+  "en": "International Pressure on Human Rights",
+  "ru": "Международное давление по правам человека"
+ },
+ "movement_events_te.5.a": {
+  "en": "Hunt down the deserters",
+  "ru": "Выследить дезертиров"
+ },
+ "movement_events_te.5.b": {
+  "en": "Allow alternative service",
+  "ru": "Разрешить альтернативную службу"
+ },
+ "movement_events_te.5.c": {
+  "en": "Ignore the problem for now",
+  "ru": "Пока игнорировать проблему"
+ },
+ "movement_events_te.5.t": {
+  "en": "Draft Resistance",
+  "ru": "Сопротивление призыву"
+ },
+ "movement_events_te.6.a": {
+  "en": "Discredit these traitors",
+  "ru": "Дискредитировать этих предателей"
+ },
+ "movement_events_te.6.c": {
+  "en": "Invite them to advise on policy",
+  "ru": "Пригласить их консультировать по политике"
+ },
+ "movement_events_te.6.t": {
+  "en": "Veterans Speak Against the War",
+  "ru": "Ветераны выступают против войны"
+ },
+ "movement_events_te.7.a": {
+  "en": "Let them have their say",
+  "ru": "Пусть выскажутся"
+ },
+ "movement_events_te.7.b": {
+  "en": "This threatens national security",
+  "ru": "Это угрожает национальной безопасности"
+ },
+ "movement_events_te.7.c": {
+  "en": "Use this momentum for diplomacy",
+  "ru": "Использовать этот импульс для дипломатии"
+ },
+ "movement_events_te.7.t": {
+  "en": "Peace Rally Fills the Capital",
+  "ru": "Митинг за мир заполняет столицу"
+ },
+ "movement_events_te.8.a": {
+  "en": "Investigate and prosecute",
+  "ru": "Расследовать и преследовать"
+ },
+ "movement_events_te.8.b": {
+  "en": "Dismiss as baseless propaganda",
+  "ru": "Отвергнуть как беспочвенную пропаганду"
+ },
+ "movement_events_te.8.c": {
+  "en": "Tax their excess profits",
+  "ru": "Обложить налогом их сверхприбыли"
+ },
+ "movement_events_te.8.t": {
+  "en": "War Profiteering Exposed",
+  "ru": "Военное спекулянтство разоблачено"
+ },
+ "movement_events_te.9.a": {
+  "en": "Approve the civilian trials",
+  "ru": "Одобрить гражданские испытания"
+ },
+ "movement_events_te.9.b": {
+  "en": "Military applications only",
+  "ru": "Только военное применение"
+ },
+ "movement_events_te.9.t": {
+  "en": "Neural Implant Human Trials",
+  "ru": "Испытания нейроимплантов на людях"
+ }
+}

@@ -1,0 +1,642 @@
+{
+ "amendment_birthright_endowment": {
+  "en": "Birthright Endowment",
+  "ru": "Капитал по праву рождения"
+ },
+ "amendment_collective_administration": {
+  "en": "Collegial Administration",
+  "ru": "Коллегиальное управление"
+ },
+ "amendment_collective_algorithmic_commons": {
+  "en": "Algorithmic Commons",
+  "ru": "Алгоритмическое общее достояние"
+ },
+ "amendment_collective_direct_democracy": {
+  "en": "Direct Democracy",
+  "ru": "Прямая демократия"
+ },
+ "amendment_collective_free_federation": {
+  "en": "Free Federation",
+  "ru": "Свободная федерация"
+ },
+ "amendment_collective_leadership": {
+  "en": "Collective Leadership",
+  "ru": "Коллективное руководство"
+ },
+ "amendment_collective_patrician_council": {
+  "en": "Patrician Council",
+  "ru": "Совет патрициев"
+ },
+ "amendment_community_service": {
+  "en": "Community Service Alternative",
+  "ru": "Общественные работы вместо службы"
+ },
+ "amendment_compromise_modifier": {
+  "en": "Compromise Amendment",
+  "ru": "Компромиссная поправка"
+ },
+ "amendment_cooperative_preference": {
+  "en": "Worker Cooperative Preference",
+  "ru": "Приоритет рабочих кооперативов"
+ },
+ "amendment_estate_duties": {
+  "en": "Estate Duties",
+  "ru": "Наследственные пошлины"
+ },
+ "amendment_judicial_elections": {
+  "en": "Judicial Elections",
+  "ru": "Выборность судей"
+ },
+ "amendment_jury_trials": {
+  "en": "Jury Trials",
+  "ru": "Суд присяжных"
+ },
+ "amendment_langreform_constructed": {
+  "en": "Constructed Language",
+  "ru": "Искусственный язык"
+ },
+ "amendment_langreform_revival": {
+  "en": "Classical Language Revival",
+  "ru": "Возрождение классического языка"
+ },
+ "amendment_langreform_simplification": {
+  "en": "Language Simplification",
+  "ru": "Упрощение языка"
+ },
+ "amendment_mandatory_minimums": {
+  "en": "Mandatory Minimum Sentences",
+  "ru": "Обязательные минимальные сроки"
+ },
+ "amendment_military_tribunals": {
+  "en": "Military Tribunals for Civilians",
+  "ru": "Военные трибуналы для гражданских"
+ },
+ "amendment_official_bilingualism": {
+  "en": "Official Bilingualism",
+  "ru": "Официальное двуязычие"
+ },
+ "amendment_peoples_tribunals": {
+  "en": "People’s Tribunals",
+  "ru": "Народные трибуналы"
+ },
+ "amendment_perpetual_trusts": {
+  "en": "Perpetual Dynastic Trusts",
+  "ru": "Бессрочные династические фонды"
+ },
+ "amendment_purist_modifier": {
+  "en": "Unamended Bill",
+  "ru": "Законопроект без поправок"
+ },
+ "amendment_religious_exemption": {
+  "en": "Religious Exemption Clause",
+  "ru": "Оговорка о религиозных исключениях"
+ },
+ "amendment_spoils_system": {
+  "en": "Spoils System",
+  "ru": "Система патронажа"
+ },
+ "amendment_whistleblower_shield": {
+  "en": "Whistleblower Protection Act",
+  "ru": "Закон о защите информаторов"
+ },
+ "bg_biotechnology": {
+  "en": "Biotechnology",
+  "ru": "Биотехнологии"
+ },
+ "bg_clean_power": {
+  "en": "Clean Power",
+  "ru": "Чистая энергетика"
+ },
+ "bg_company_buildings": {
+  "en": "Company Buildings",
+  "ru": "Здания компаний"
+ },
+ "bg_discoverable_mining": {
+  "en": "Discoverable Mining",
+  "ru": "Поисковая добыча"
+ },
+ "bg_exotic": {
+  "en": "Exotic Infrastructure",
+  "ru": "Экзотическая инфраструктура"
+ },
+ "bg_grand_monuments": {
+  "en": "Grand Monuments",
+  "ru": "Великие памятники"
+ },
+ "bg_high_tech": {
+  "en": "High-Tech Industry",
+  "ru": "Высокотехнологичная промышленность"
+ },
+ "bg_parks": {
+  "en": "Parks",
+  "ru": "Парки"
+ },
+ "bg_resettlement": {
+  "en": "Resettlement",
+  "ru": "Переселение"
+ },
+ "concept_agent_network": {
+  "en": "Agent Network",
+  "ru": "Агентурная сеть"
+ },
+ "concept_antimatter_facility": {
+  "en": "Antimatter Facility",
+  "ru": "Установка по производству антиматерии"
+ },
+ "concept_asat_strike": {
+  "en": "Anti-Satellite Strike",
+  "ru": "Противоспутниковый удар"
+ },
+ "concept_banking_backstops": {
+  "en": "Backstops",
+  "ru": "Страховочные механизмы"
+ },
+ "concept_banking_contagion": {
+  "en": "Banking Contagion",
+  "ru": "Банковская зараза"
+ },
+ "concept_banking_crash": {
+  "en": "Banking Crash",
+  "ru": "Банковский крах"
+ },
+ "concept_banking_cycle": {
+  "en": "Banking Cycle",
+  "ru": "Банковский цикл"
+ },
+ "concept_banking_delegation": {
+  "en": "Delegation",
+  "ru": "Делегирование"
+ },
+ "concept_banking_inflation": {
+  "en": "Inflation",
+  "ru": "Инфляция"
+ },
+ "concept_banking_mandate": {
+  "en": "Mandate",
+  "ru": "Мандат"
+ },
+ "concept_banking_momentum": {
+  "en": "Banking Momentum",
+  "ru": "Банковский импульс"
+ },
+ "concept_banking_monetisation": {
+  "en": "Monetizing the Deficit",
+  "ru": "Монетизация дефицита"
+ },
+ "concept_bubble_pressure": {
+  "en": "Bubble Pressure",
+  "ru": "Давление пузыря"
+ },
+ "concept_capital_controls": {
+  "en": "Capital Controls",
+  "ru": "Контроль капитала"
+ },
+ "concept_ch_infamy": {
+  "en": "Infamy",
+  "ru": "Дурная слава"
+ },
+ "concept_ch_instability": {
+  "en": "Instability",
+  "ru": "Нестабильность"
+ },
+ "concept_ch_megaprojects": {
+  "en": "Megaprojects",
+  "ru": "Мегапроекты"
+ },
+ "concept_ch_modifiers": {
+  "en": "Other Modifiers",
+  "ru": "Прочие модификаторы"
+ },
+ "concept_ch_monuments": {
+  "en": "Monuments",
+  "ru": "Памятники"
+ },
+ "concept_ch_prestige": {
+  "en": "Prestige",
+  "ru": "Престиж"
+ },
+ "concept_ch_sol": {
+  "en": "Standard of Living",
+  "ru": "Уровень жизни"
+ },
+ "concept_climate_policy": {
+  "en": "Climate Policy",
+  "ru": "Климатическая политика"
+ },
+ "concept_colonial_band": {
+  "en": "Stability Band",
+  "ru": "Диапазон стабильности"
+ },
+ "concept_colonial_overreach": {
+  "en": "Imperial Overreach",
+  "ru": "Имперское перенапряжение"
+ },
+ "concept_colonial_stability": {
+  "en": "Colonial Stability",
+  "ru": "Колониальная стабильность"
+ },
+ "concept_colonial_subject": {
+  "en": "Colonial Subject",
+  "ru": "Колониальное зависимое государство"
+ },
+ "concept_colonial_territory": {
+  "en": "Colonial Territory",
+  "ru": "Колониальная территория"
+ },
+ "concept_combined_arms": {
+  "en": "Combined Arms",
+  "ru": "Общевойсковой бой"
+ },
+ "concept_contested_monument": {
+  "en": "Contested Monument",
+  "ru": "Спорный памятник"
+ },
+ "concept_covert_efficiency": {
+  "en": "Efficiency Factor",
+  "ru": "Коэффициент эффективности"
+ },
+ "concept_covert_funding": {
+  "en": "Covert Funding",
+  "ru": "Тайное финансирование"
+ },
+ "concept_covert_operations": {
+  "en": "Covert Operations",
+  "ru": "Тайные операции"
+ },
+ "concept_cultural_pull": {
+  "en": "Cultural Pull",
+  "ru": "Культурное притяжение"
+ },
+ "concept_currency_devaluation": {
+  "en": "Currency Devaluation",
+  "ru": "Девальвация валюты"
+ },
+ "concept_decolonization_system": {
+  "en": "Decolonization",
+  "ru": "Деколонизация"
+ },
+ "concept_directed_credit": {
+  "en": "Directed Credit",
+  "ru": "Целевое кредитование"
+ },
+ "concept_environmental_crisis": {
+  "en": "Environmental Crisis",
+  "ru": "Экологический кризис"
+ },
+ "concept_feminism_movement": {
+  "en": "Second-Wave Feminism",
+  "ru": "Феминизм второй волны"
+ },
+ "concept_financial_regulation": {
+  "en": "Financial Regulation",
+  "ru": "Финансовое регулирование"
+ },
+ "concept_fortification_level": {
+  "en": "Fortification Level",
+  "ru": "Уровень укреплений"
+ },
+ "concept_fortification_system": {
+  "en": "Fortifications",
+  "ru": "Укрепления"
+ },
+ "concept_fortified_bastion": {
+  "en": "Fortified Bastion",
+  "ru": "Укреплённый бастион"
+ },
+ "concept_fortified_position": {
+  "en": "Fortified Position",
+  "ru": "Укреплённая позиция"
+ },
+ "concept_fortified_stronghold": {
+  "en": "Fortified Stronghold",
+  "ru": "Укреплённый оплот"
+ },
+ "concept_fossil_transition": {
+  "en": "Fossil Transition",
+  "ru": "Отказ от ископаемого топлива"
+ },
+ "concept_funding_stealth": {
+  "en": "Funding Stealth",
+  "ru": "Скрытность финансирования"
+ },
+ "concept_grandeur": {
+  "en": "Grandeur",
+  "ru": "Величие"
+ },
+ "concept_heritage_monument": {
+  "en": "Heritage Monument",
+  "ru": "Памятник наследия"
+ },
+ "concept_homeland_dynamics": {
+  "en": "Homeland Dynamics",
+  "ru": "Динамика исторической родины"
+ },
+ "concept_impregnable_fortress": {
+  "en": "Impregnable Fortress",
+  "ru": "Неприступная крепость"
+ },
+ "concept_inheritance_concentration": {
+  "en": "Dynastic Wealth",
+  "ru": "Династическое богатство"
+ },
+ "concept_intelligence_capacity": {
+  "en": "Intelligence Capacity",
+  "ru": "Разведывательный потенциал"
+ },
+ "concept_internal_resettlement": {
+  "en": "Internal Resettlement",
+  "ru": "Внутреннее переселение"
+ },
+ "concept_judicial_independence": {
+  "en": "Judicial Independence",
+  "ru": "Независимость судов"
+ },
+ "concept_launch_authority": {
+  "en": "Launch Authority",
+  "ru": "Право на запуск"
+ },
+ "concept_local_climate": {
+  "en": "Local Climate",
+  "ru": "Местный климат"
+ },
+ "concept_migration_crowding": {
+  "en": "Migration Crowding",
+  "ru": "Миграционная теснота"
+ },
+ "concept_ministry_system": {
+  "en": "Ministry System",
+  "ru": "Система министерств"
+ },
+ "concept_nuclear_credibility": {
+  "en": "Nuclear Credibility",
+  "ru": "Ядерная убедительность"
+ },
+ "concept_nuclear_doctrine": {
+  "en": "Nuclear Doctrine",
+  "ru": "Ядерная доктрина"
+ },
+ "concept_nuclear_program": {
+  "en": "Nuclear Program",
+  "ru": "Ядерная программа"
+ },
+ "concept_nuclear_readiness": {
+  "en": "Nuclear Readiness",
+  "ru": "Ядерная готовность"
+ },
+ "concept_nuclear_stockpile": {
+  "en": "Nuclear Stockpile",
+  "ru": "Ядерный арсенал"
+ },
+ "concept_nuclear_strike": {
+  "en": "Nuclear Strike",
+  "ru": "Ядерный удар"
+ },
+ "concept_nuclear_taboo": {
+  "en": "Nuclear Taboo",
+  "ru": "Ядерное табу"
+ },
+ "concept_operation_detection": {
+  "en": "Detection Risk",
+  "ru": "Риск обнаружения"
+ },
+ "concept_operation_phase": {
+  "en": "Operation Phase",
+  "ru": "Фаза операции"
+ },
+ "concept_operation_slots": {
+  "en": "Operation Slots",
+  "ru": "Слоты операций"
+ },
+ "concept_orbital_debris": {
+  "en": "Orbital Debris",
+  "ru": "Орбитальный мусор"
+ },
+ "concept_overseas_colony": {
+  "en": "Overseas Colony",
+  "ru": "Заморская колония"
+ },
+ "concept_pollution_system": {
+  "en": "Pollution",
+  "ru": "Загрязнение"
+ },
+ "concept_posture_business": {
+  "en": "Business View",
+  "ru": "Позиция бизнеса"
+ },
+ "concept_posture_militarist": {
+  "en": "Militarist View",
+  "ru": "Позиция милитаристов"
+ },
+ "concept_posture_officers": {
+  "en": "Officers' View",
+  "ru": "Позиция офицеров"
+ },
+ "concept_posture_restraint": {
+  "en": "Restraint View",
+  "ru": "Позиция сдержанности"
+ },
+ "concept_power_grid": {
+  "en": "Power Grid",
+  "ru": "Энергосеть"
+ },
+ "concept_religious_revival": {
+  "en": "Religious Revival",
+  "ru": "Религиозное возрождение"
+ },
+ "concept_reserve_battalions": {
+  "en": "Reserve Battalions",
+  "ru": "Резервные батальоны"
+ },
+ "concept_seabed_claim": {
+  "en": "Seabed Claim",
+  "ru": "Претензия на морское дно"
+ },
+ "concept_seabed_licence": {
+  "en": "Seabed License",
+  "ru": "Лицензия на морское дно"
+ },
+ "concept_seabed_regime": {
+  "en": "Seabed Regime",
+  "ru": "Режим морского дна"
+ },
+ "concept_sol_expectations": {
+  "en": "Adaptive SoL Expectations",
+  "ru": "Адаптивные ожидания уровня жизни"
+ },
+ "concept_solar_colonization": {
+  "en": "Solar Colonization",
+  "ru": "Солнечная колонизация"
+ },
+ "concept_space_milestone": {
+  "en": "Space Milestone",
+  "ru": "Космическая веха"
+ },
+ "concept_space_race": {
+  "en": "Space Race",
+  "ru": "Космическая гонка"
+ },
+ "concept_sr_approach": {
+  "en": "Approach",
+  "ru": "Подход"
+ },
+ "concept_sr_blockade": {
+  "en": "Blockade",
+  "ru": "Блокада"
+ },
+ "concept_sr_drive": {
+  "en": "Drive",
+  "ru": "Двигатель"
+ },
+ "concept_sr_estimate": {
+  "en": "Program Estimate",
+  "ru": "Оценка программы"
+ },
+ "concept_sr_funding": {
+  "en": "Program Funding",
+  "ru": "Финансирование программы"
+ },
+ "concept_sr_integrity": {
+  "en": "Colony Integrity",
+  "ru": "Целостность колонии"
+ },
+ "concept_sr_marines": {
+  "en": "Marines",
+  "ru": "Морпехи"
+ },
+ "concept_sr_module": {
+  "en": "Colony Module",
+  "ru": "Колониальный модуль"
+ },
+ "concept_subjugation_strength": {
+  "en": "Subjugation Strength",
+  "ru": "Сила подчинения"
+ },
+ "concept_target_defenses": {
+  "en": "Target's Defenses",
+  "ru": "Оборонительные сооружения цели"
+ },
+ "concept_tax_bill": {
+  "en": "Tax Bill",
+  "ru": "Налоговый законопроект"
+ },
+ "concept_tax_code": {
+  "en": "Tax Code",
+  "ru": "Налоговый кодекс"
+ },
+ "concept_tax_commencement": {
+  "en": "Commencement",
+  "ru": "Вступление в силу"
+ },
+ "concept_temperature_anomaly": {
+  "en": "Temperature Anomaly",
+  "ru": "Температурная аномалия"
+ },
+ "concept_tourism_art": {
+  "en": "Art",
+  "ru": "Искусство"
+ },
+ "concept_tourism_cities": {
+  "en": "Cities",
+  "ru": "Города"
+ },
+ "concept_tourism_infrastructure": {
+  "en": "Excess Infrastructure",
+  "ru": "Избыточная инфраструктура"
+ },
+ "concept_tourism_monuments": {
+  "en": "Monuments",
+  "ru": "Памятники"
+ },
+ "concept_tourism_output": {
+  "en": "Tourism Output",
+  "ru": "Туристический продукт"
+ },
+ "concept_tourism_parks": {
+  "en": "Parks",
+  "ru": "Парки"
+ },
+ "concept_tourism_system": {
+  "en": "Tourism",
+  "ru": "Туризм"
+ },
+ "concept_tourism_throughput": {
+  "en": "Tourism Throughput",
+  "ru": "Пропускная способность туризма"
+ },
+ "concept_tradecraft": {
+  "en": "Tradecraft",
+  "ru": "Шпионское ремесло"
+ },
+ "concept_un_authority": {
+  "en": "UN Authority",
+  "ru": "Авторитет ООН"
+ },
+ "concept_un_case": {
+  "en": "Case Strength",
+  "ru": "Весомость дела"
+ },
+ "concept_un_charter": {
+  "en": "UN Charter",
+  "ru": "Устав ООН"
+ },
+ "concept_un_credentials": {
+  "en": "Credentials",
+  "ru": "Полномочия делегации"
+ },
+ "concept_un_docket": {
+  "en": "Docket",
+  "ru": "Повестка"
+ },
+ "concept_un_dues": {
+  "en": "UN Dues",
+  "ru": "Взносы в ООН"
+ },
+ "concept_un_enforcement": {
+  "en": "UN Enforcement",
+  "ru": "Принуждение ООН"
+ },
+ "concept_un_lean": {
+  "en": "Lean",
+  "ru": "Склонность"
+ },
+ "concept_un_mission": {
+  "en": "UN Mission",
+  "ru": "Миссия ООН"
+ },
+ "concept_un_peacekeeping": {
+  "en": "UN Peacekeeping",
+  "ru": "Миротворчество ООН"
+ },
+ "concept_un_represented": {
+  "en": "Represented",
+  "ru": "Представлены"
+ },
+ "concept_un_resolution": {
+  "en": "Resolution",
+  "ru": "Резолюция"
+ },
+ "concept_un_sanctions": {
+  "en": "UN Sanctions",
+  "ru": "Санкции ООН"
+ },
+ "concept_un_standing": {
+  "en": "International Standing",
+  "ru": "Международный авторитет"
+ },
+ "concept_un_veto": {
+  "en": "Veto",
+  "ru": "Вето"
+ },
+ "concept_un_weight": {
+  "en": "Weight",
+  "ru": "Вес"
+ },
+ "concept_urban_engineering": {
+  "en": "Urban Engineering",
+  "ru": "Городская инженерия"
+ },
+ "concept_wonder_building": {
+  "en": "Wonder Building",
+  "ru": "Здание-чудо"
+ }
+}

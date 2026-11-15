@@ -1,0 +1,82 @@
+{
+ "concept_custom_religion": {
+  "en": "Custom Religion",
+  "ru": "Собственная религия"
+ },
+ "concept_decline_of_religion": {
+  "en": "Decline of Religion",
+  "ru": "Упадок религии"
+ },
+ "ig_trait_custom_religion_imperial_cult_happy": {
+  "en": "Imperial Glory",
+  "ru": "Имперская слава"
+ },
+ "ig_trait_custom_religion_imperial_cult_loyal": {
+  "en": "Loyalty to the Empire",
+  "ru": "Верность империи"
+ },
+ "ig_trait_custom_religion_imperial_cult_unhappy": {
+  "en": "Militarism and Conquest",
+  "ru": "Милитаризм и завоевания"
+ },
+ "ig_trait_custom_religion_market_liberal_happy": {
+  "en": "Prosperity Doctrine",
+  "ru": "Доктрина процветания"
+ },
+ "ig_trait_custom_religion_market_liberal_loyal": {
+  "en": "Investing for the Afterlife",
+  "ru": "Инвестиции в загробную жизнь"
+ },
+ "ig_trait_custom_religion_market_liberal_unhappy": {
+  "en": "Opulence and Greed",
+  "ru": "Роскошь и алчность"
+ },
+ "ig_trait_custom_religion_social_democrat_happy": {
+  "en": "Secular Service",
+  "ru": "Светское служение"
+ },
+ "ig_trait_custom_religion_social_democrat_loyal": {
+  "en": "Social Harmony",
+  "ru": "Социальная гармония"
+ },
+ "ig_trait_custom_religion_social_democrat_unhappy": {
+  "en": "Inequality and Injustice",
+  "ru": "Неравенство и несправедливость"
+ },
+ "ig_trait_custom_religion_theocratic_happy": {
+  "en": "Ecumenism",
+  "ru": "Экуменизм"
+ },
+ "ig_trait_custom_religion_theocratic_loyal": {
+  "en": "Divine Law",
+  "ru": "Божественный закон"
+ },
+ "ig_trait_custom_religion_theocratic_unhappy": {
+  "en": "Religious Persecution",
+  "ru": "Религиозные преследования"
+ },
+ "ig_trait_custom_religion_totalitarian_happy": {
+  "en": "Unity and Conformity",
+  "ru": "Единство и единообразие"
+ },
+ "ig_trait_custom_religion_totalitarian_loyal": {
+  "en": "Order and Obedience",
+  "ru": "Порядок и послушание"
+ },
+ "ig_trait_custom_religion_totalitarian_unhappy": {
+  "en": "Repression of Dissent",
+  "ru": "Подавление инакомыслия"
+ },
+ "ig_trait_custom_religion_traditionalist_happy": {
+  "en": "Divine Right",
+  "ru": "Божественное право"
+ },
+ "ig_trait_custom_religion_traditionalist_loyal": {
+  "en": "Encourage Natalism",
+  "ru": "Поощрение рождаемости"
+ },
+ "ig_trait_custom_religion_traditionalist_unhappy": {
+  "en": "Obscurantism",
+  "ru": "Мракобесие"
+ }
+}

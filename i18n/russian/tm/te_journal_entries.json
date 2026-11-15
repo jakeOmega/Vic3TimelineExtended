@@ -1,0 +1,4130 @@
+{
+ "je_banking_cycle_command_economy": {
+  "en": "Logistics & Allocation Gauge",
+  "ru": "Показатель логистики и распределения"
+ },
+ "je_banking_cycle_cooperative_ownership": {
+  "en": "Cooperative Finance Dashboard",
+  "ru": "Панель кооперативных финансов"
+ },
+ "je_banking_cycle_title_market": {
+  "en": "Boom & Bust Cycle",
+  "ru": "Цикл подъёмов и спадов"
+ },
+ "je_ch_board_head_change": {
+  "en": "Change",
+  "ru": "Изменение"
+ },
+ "je_ch_board_head_country": {
+  "en": "Country",
+  "ru": "Страна"
+ },
+ "je_ch_board_head_model": {
+  "en": "Model",
+  "ru": "Модель"
+ },
+ "je_ch_how_header": {
+  "en": "How Cultural Hegemony Works",
+  "ru": "Как работает культурная гегемония"
+ },
+ "je_ch_how_sub_benchmark": {
+  "en": "Foreign Cultural Benchmark",
+  "ru": "Иностранный культурный ориентир"
+ },
+ "je_ch_how_sub_board": {
+  "en": "Top Cultural Powers",
+  "ru": "Ведущие культурные державы"
+ },
+ "je_ch_how_sub_bonus": {
+  "en": "Hegemony Bonus",
+  "ru": "Бонус гегемонии"
+ },
+ "je_ch_how_sub_models": {
+  "en": "Political Models of the World",
+  "ru": "Политические модели мира"
+ },
+ "je_ch_how_sub_programmes": {
+  "en": "Cultural Programs",
+  "ru": "Культурные программы"
+ },
+ "je_ch_how_sub_pull": {
+  "en": "Where Our Pull Comes From",
+  "ru": "Источники нашего притяжения"
+ },
+ "je_ch_how_sub_share": {
+  "en": "Cultural Share and Tiers",
+  "ru": "Культурная доля и уровни"
+ },
+ "je_ch_ov_bonus_active": {
+  "en": "Active",
+  "ru": "Действует"
+ },
+ "je_ch_ov_bonus_from": {
+  "en": "From 1% Share",
+  "ru": "От доли в 1%"
+ },
+ "je_ch_ov_bonus_label": {
+  "en": "Hegemony Bonus",
+  "ru": "Бонус гегемонии"
+ },
+ "je_ch_ov_bonus_none": {
+  "en": "None",
+  "ru": "Нет"
+ },
+ "je_ch_ov_leaders_label": {
+  "en": "Leading Powers",
+  "ru": "Ведущие державы"
+ },
+ "je_ch_ov_model_anarchist": {
+  "en": "Anarchist",
+  "ru": "Анархистская"
+ },
+ "je_ch_ov_model_communist": {
+  "en": "Communist",
+  "ru": "Коммунистическая"
+ },
+ "je_ch_ov_model_corporatist": {
+  "en": "Corporatist",
+  "ru": "Корпоративистская"
+ },
+ "je_ch_ov_model_developmentalist_junta": {
+  "en": "Dev. Junta",
+  "ru": "Хунта развития"
+ },
+ "je_ch_ov_model_fascist": {
+  "en": "Fascist",
+  "ru": "Фашистская"
+ },
+ "je_ch_ov_model_liberal": {
+  "en": "Liberal",
+  "ru": "Либеральная"
+ },
+ "je_ch_ov_model_military_junta": {
+  "en": "Military Junta",
+  "ru": "Военная хунта"
+ },
+ "je_ch_ov_model_other": {
+  "en": "Mixed",
+  "ru": "Смешанная"
+ },
+ "je_ch_ov_model_reactionary": {
+  "en": "Reactionary",
+  "ru": "Реакционная"
+ },
+ "je_ch_ov_model_religious": {
+  "en": "Theocratic",
+  "ru": "Теократическая"
+ },
+ "je_ch_ov_model_republican": {
+  "en": "Republican",
+  "ru": "Республиканская"
+ },
+ "je_ch_ov_model_royalist_absolutist": {
+  "en": "Absolutist",
+  "ru": "Абсолютистская"
+ },
+ "je_ch_ov_model_royalist_constitutional": {
+  "en": "Constitutional",
+  "ru": "Конституционная"
+ },
+ "je_ch_ov_model_socialist": {
+  "en": "Socialist",
+  "ru": "Социалистическая"
+ },
+ "je_ch_ov_model_technocratic": {
+  "en": "Technocratic",
+  "ru": "Технократическая"
+ },
+ "je_ch_ov_prog_funding": {
+  "en": "Funding [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]",
+  "ru": "Финансирование [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]"
+ },
+ "je_ch_ov_prog_label": {
+  "en": "Programs",
+  "ru": "Программы"
+ },
+ "je_ch_ov_prog_running": {
+  "en": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! of 4 Running",
+  "ru": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! из 4 запущено"
+ },
+ "je_ch_ov_rank_label": {
+  "en": "World Rank",
+  "ru": "Место в мире"
+ },
+ "je_ch_ov_tier_0": {
+  "en": "Negligible",
+  "ru": "Ничтожный"
+ },
+ "je_ch_ov_tier_1": {
+  "en": "Minor",
+  "ru": "Малый"
+ },
+ "je_ch_ov_tier_2": {
+  "en": "Moderate",
+  "ru": "Умеренный"
+ },
+ "je_ch_ov_tier_3": {
+  "en": "Significant",
+  "ru": "Значительный"
+ },
+ "je_ch_ov_tier_4": {
+  "en": "Major",
+  "ru": "Крупный"
+ },
+ "je_ch_ov_tier_5": {
+  "en": "Hegemon",
+  "ru": "Гегемон"
+ },
+ "je_ch_ov_tier_next": {
+  "en": "Next: #v [Country.GetCustom('ch_next_tier_name')]#! from #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#! share",
+  "ru": "Далее: #v [Country.GetCustom('ch_next_tier_name')]#! при доле от #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#!"
+ },
+ "je_ch_widget_board_header": {
+  "en": "Top Cultural Powers",
+  "ru": "Ведущие культурные державы"
+ },
+ "je_ch_widget_board_us_ours": {
+  "en": "Our Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "ru": "Наше место: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! из [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ },
+ "je_ch_widget_board_us_theirs": {
+  "en": "Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "ru": "Место: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! из [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ },
+ "je_ch_widget_breakdown_header_ours": {
+  "en": "Where Our Pull Comes From",
+  "ru": "Источники нашего притяжения"
+ },
+ "je_ch_widget_breakdown_header_theirs": {
+  "en": "Where Its Pull Comes From",
+  "ru": "Источники его притяжения"
+ },
+ "je_ch_widget_funding_label": {
+  "en": "Program Funding",
+  "ru": "Финансирование программ"
+ },
+ "je_ch_widget_history_header": {
+  "en": "History",
+  "ru": "История"
+ },
+ "je_ch_widget_models_header": {
+  "en": "Political Models of the World",
+  "ru": "Политические модели мира"
+ },
+ "je_ch_widget_prog_institutes": {
+  "en": "Cultural Institutes",
+  "ru": "Культурные институты"
+ },
+ "je_ch_widget_prog_media": {
+  "en": "Global Media Campaign",
+  "ru": "Глобальная медиакампания"
+ },
+ "je_ch_widget_prog_outreach": {
+  "en": "International Outreach",
+  "ru": "Международная работа"
+ },
+ "je_ch_widget_prog_protectionism": {
+  "en": "Cultural Protectionism",
+  "ru": "Культурный протекционизм"
+ },
+ "je_ch_widget_programmes_header": {
+  "en": "Cultural Programs",
+  "ru": "Культурные программы"
+ },
+ "je_civil_rights": {
+  "en": "Civil Rights Movement",
+  "ru": "Движение за гражданские права"
+ },
+ "je_civil_rights_broken_header": {
+  "en": "The Movement Broken",
+  "ru": "Движение сломлено"
+ },
+ "je_civil_rights_coopted_header": {
+  "en": "Reform on Paper",
+  "ru": "Реформа на бумаге"
+ },
+ "je_civil_rights_demobilized_header": {
+  "en": "The Movement Demobilizes",
+  "ru": "Движение распускается"
+ },
+ "je_civil_rights_drift_header": {
+  "en": "The Long Drift",
+  "ru": "Долгий дрейф"
+ },
+ "je_civil_rights_equality_header": {
+  "en": "A New Era of Equality",
+  "ru": "Новая эра равенства"
+ },
+ "je_civil_rights_faded_header": {
+  "en": "The Movement Fades",
+  "ru": "Движение угасает"
+ },
+ "je_civil_rights_federal_header": {
+  "en": "The Civil Rights Mandate is Signed",
+  "ru": "Мандат о гражданских правах подписан"
+ },
+ "je_civil_rights_gradualist_header": {
+  "en": "A Settlement, At Last",
+  "ru": "Наконец-то компромисс"
+ },
+ "je_civil_rights_grassroots_header": {
+  "en": "The Movement Carries the Day",
+  "ru": "Движение берёт верх"
+ },
+ "je_civil_rights_hollow_header": {
+  "en": "Victory on Paper",
+  "ru": "Победа на бумаге"
+ },
+ "je_civil_rights_months_line": {
+  "en": "\\n#bold Months run:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]",
+  "ru": "\\n#bold Прошло месяцев:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]"
+ },
+ "je_colonial_empire": {
+  "en": "Colonial Empire",
+  "ru": "Колониальная империя"
+ },
+ "je_colonial_empire_bloc_member_line": {
+  "en": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people",
+  "ru": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! чел."
+ },
+ "je_colonial_empire_btn_accords": {
+  "en": "Accords Signed",
+  "ru": "Соглашения подписаны"
+ },
+ "je_colonial_empire_btn_dominion": {
+  "en": "Dominion",
+  "ru": "Доминион"
+ },
+ "je_colonial_empire_btn_in_talks": {
+  "en": "In Talks",
+  "ru": "Идут переговоры"
+ },
+ "je_colonial_empire_btn_open_choice": {
+  "en": "Review Options",
+  "ru": "Рассмотреть варианты"
+ },
+ "je_colonial_empire_btn_open_talks": {
+  "en": "Open Talks",
+  "ru": "Начать переговоры"
+ },
+ "je_colonial_empire_btn_release": {
+  "en": "Release",
+  "ru": "Освободить"
+ },
+ "je_colonial_empire_decision_planned": {
+  "en": "Planned Full Decolonization",
+  "ru": "Запланированная полная деколонизация"
+ },
+ "je_colonial_empire_drift_acceptance": {
+  "en": "Colonial [concept_acceptance]",
+  "ru": "Колониальное [concept_acceptance|l]"
+ },
+ "je_colonial_empire_drift_base": {
+  "en": "Base decline",
+  "ru": "Базовый спад"
+ },
+ "je_colonial_empire_drift_cap": {
+  "en": "Monthly limit",
+  "ru": "Месячный предел"
+ },
+ "je_colonial_empire_drift_domestic": {
+  "en": "War and [concept_turmoil]",
+  "ru": "Война и [concept_turmoil|l]"
+ },
+ "je_colonial_empire_drift_gp": {
+  "en": "[concept_great_power|E] pressure",
+  "ru": "Давление [Concept('concept_great_power','великих держав')]"
+ },
+ "je_colonial_empire_drift_laws": {
+  "en": "Laws and events",
+  "ru": "Законы и события"
+ },
+ "je_colonial_empire_drift_policies": {
+  "en": "Programs",
+  "ru": "Программы"
+ },
+ "je_colonial_empire_drift_rank": {
+  "en": "Rank",
+  "ru": "Ранг"
+ },
+ "je_colonial_empire_gp_effect": {
+  "en": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/mo",
+  "ru": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/мес."
+ },
+ "je_colonial_empire_gp_head_effect": {
+  "en": "Monthly",
+  "ru": "В месяц"
+ },
+ "je_colonial_empire_gp_head_name": {
+  "en": "Great Power",
+  "ru": "Великая держава"
+ },
+ "je_colonial_empire_gp_head_share": {
+  "en": "Share",
+  "ru": "Доля"
+ },
+ "je_colonial_empire_gp_head_stance": {
+  "en": "Stance",
+  "ru": "Позиция"
+ },
+ "je_colonial_empire_history_header": {
+  "en": "History",
+  "ru": "История"
+ },
+ "je_colonial_empire_holdings_header": {
+  "en": "Colonial Holdings",
+  "ru": "Колониальные владения"
+ },
+ "je_colonial_empire_holdings_whole": {
+  "en": "The Whole Empire",
+  "ru": "Вся империя"
+ },
+ "je_colonial_empire_how_header": {
+  "en": "How the Colonial Empire Works",
+  "ru": "Как работает колониальная империя"
+ },
+ "je_colonial_empire_how_sub_bar": {
+  "en": "Colonial Stability",
+  "ru": "Колониальная стабильность"
+ },
+ "je_colonial_empire_how_sub_decolonization": {
+  "en": "Decolonization",
+  "ru": "Деколонизация"
+ },
+ "je_colonial_empire_how_sub_moves": {
+  "en": "What Moves Stability",
+  "ru": "Что двигает стабильность"
+ },
+ "je_colonial_empire_how_sub_pressure": {
+  "en": "Great-Power Pressure",
+  "ru": "Давление великих держав"
+ },
+ "je_colonial_empire_how_sub_programmes": {
+  "en": "Colonial Programs",
+  "ru": "Колониальные программы"
+ },
+ "je_colonial_empire_how_sub_stance": {
+  "en": "Our Stance on Colonialism",
+  "ru": "Наша позиция по колониализму"
+ },
+ "je_colonial_empire_ov_act": {
+  "en": "Months Solidified: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
+  "ru": "Месяцев закрепления: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
+ },
+ "je_colonial_empire_ov_gp_calm": {
+  "en": "No escalation",
+  "ru": "Без обострения"
+ },
+ "je_colonial_empire_ov_gp_net": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/мес."
+ },
+ "je_colonial_empire_ov_held_label": {
+  "en": "Holdings",
+  "ru": "Владения"
+ },
+ "je_colonial_empire_ov_hold": {
+  "en": "Months at 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
+  "ru": "Месяцев на отметке 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
+ },
+ "je_colonial_empire_ov_programmes_label": {
+  "en": "Programs",
+  "ru": "Программы"
+ },
+ "je_colonial_empire_ov_programmes_net": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]/мес."
+ },
+ "je_colonial_empire_ov_programmes_running": {
+  "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! of 3 running",
+  "ru": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! из 3 действуют"
+ },
+ "je_colonial_empire_ov_stability_value": {
+  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "ru": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/мес.)"
+ },
+ "je_colonial_empire_ov_stability_value_ni": {
+  "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/мес.)"
+ },
+ "je_colonial_empire_power_head_name": {
+  "en": "Colonial Power",
+  "ru": "Колониальная держава"
+ },
+ "je_colonial_empire_power_head_people": {
+  "en": "People",
+  "ru": "Население"
+ },
+ "je_colonial_empire_power_head_stability": {
+  "en": "Stability",
+  "ru": "Стабильность"
+ },
+ "je_colonial_empire_powers_header": {
+  "en": "The Colonial Powers",
+  "ru": "Колониальные державы"
+ },
+ "je_colonial_empire_pressure_consensus_value": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/мес."
+ },
+ "je_colonial_empire_pressure_header": {
+  "en": "International Pressure",
+  "ru": "Международное давление"
+ },
+ "je_colonial_empire_pressure_isolation_value": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/мес."
+ },
+ "je_colonial_empire_programmes_header": {
+  "en": "Colonial Programs",
+  "ru": "Колониальные программы"
+ },
+ "je_colonial_empire_row_assimilation_short": {
+  "en": "Cultural Assimilation",
+  "ru": "Культурная ассимиляция"
+ },
+ "je_colonial_empire_row_garrison_short": {
+  "en": "Military Garrison",
+  "ru": "Военный гарнизон"
+ },
+ "je_colonial_empire_row_invest_short": {
+  "en": "Development Investment",
+  "ru": "Инвестиции в развитие"
+ },
+ "je_colonial_empire_stability_header": {
+  "en": "Why Stability Is Moving",
+  "ru": "Почему меняется стабильность"
+ },
+ "je_colonial_empire_stance_anti": {
+  "en": "Condemns colonialism",
+  "ru": "Осуждает колониализм"
+ },
+ "je_colonial_empire_stance_btn_anti": {
+  "en": "Condemn",
+  "ru": "Осудить"
+ },
+ "je_colonial_empire_stance_btn_neutral": {
+  "en": "Stay Neutral",
+  "ru": "Сохранять нейтралитет"
+ },
+ "je_colonial_empire_stance_btn_pro": {
+  "en": "Support",
+  "ru": "Поддержать"
+ },
+ "je_colonial_empire_stance_force_dormant": {
+  "en": "#o Dormant#!: not a great power",
+  "ru": "#o Неактивна#!: не великая держава"
+ },
+ "je_colonial_empire_stance_force_label": {
+  "en": "In force",
+  "ru": "Действует"
+ },
+ "je_colonial_empire_stance_force_yes": {
+  "en": "#G Yes#!, for #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence]",
+  "ru": "#G Да#!, цена: #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence|l]"
+ },
+ "je_colonial_empire_stance_header_ours": {
+  "en": "Our Stance on Colonialism",
+  "ru": "Наша позиция по колониализму"
+ },
+ "je_colonial_empire_stance_header_theirs": {
+  "en": "Stance on Colonialism",
+  "ru": "Позиция по колониализму"
+ },
+ "je_colonial_empire_stance_label": {
+  "en": "Stance",
+  "ru": "Позиция"
+ },
+ "je_colonial_empire_stance_neutral": {
+  "en": "Neutral",
+  "ru": "Нейтралитет"
+ },
+ "je_colonial_empire_stance_next_label": {
+  "en": "Next change",
+  "ru": "Следующая смена"
+ },
+ "je_colonial_empire_stance_next_wait": {
+  "en": "In #v [Country.MakeScope.ScriptValue('decol_stance_disp_months_left')|0]#! months",
+  "ru": "Через #v [Country.MakeScope.ScriptValue('decol_stance_disp_months_left')|0]#! мес."
+ },
+ "je_colonial_empire_stance_pro": {
+  "en": "Backs the colonial powers",
+  "ru": "Поддерживает колониальные державы"
+ },
+ "je_colonial_empire_stance_share": {
+  "en": "#v [Country.MakeScope.ScriptValue('decol_stance_disp_gp_share')|%0]#! of great-power prestige",
+  "ru": "#v [Country.MakeScope.ScriptValue('decol_stance_disp_gp_share')|%0]#! престижа великих держав"
+ },
+ "je_colonial_empire_stance_share_label": {
+  "en": "Prestige share",
+  "ru": "Доля престижа"
+ },
+ "je_colonial_empire_stance_share_none": {
+  "en": "#lore None#!: not a great power",
+  "ru": "#lore Нет#!: не великая держава"
+ },
+ "je_colonial_empire_subject_head_gdp": {
+  "en": "GDP",
+  "ru": "ВВП"
+ },
+ "je_colonial_empire_subject_head_kind": {
+  "en": "Kind",
+  "ru": "Тип"
+ },
+ "je_colonial_empire_subject_head_name": {
+  "en": "Subject",
+  "ru": "Зависимое государство"
+ },
+ "je_colonial_empire_term_assimilation": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/мес."
+ },
+ "je_colonial_empire_term_garrison": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]/мес."
+ },
+ "je_colonial_empire_term_invest": {
+  "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/mo",
+  "ru": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/мес."
+ },
+ "je_colonial_empire_territory_head_gdp": {
+  "en": "GDP",
+  "ru": "ВВП"
+ },
+ "je_colonial_empire_territory_head_name": {
+  "en": "Territory",
+  "ru": "Территория"
+ },
+ "je_colonial_empire_territory_head_primary": {
+  "en": "Ours",
+  "ru": "Наши"
+ },
+ "je_colonial_empire_territory_head_sol": {
+  "en": "SoL",
+  "ru": "Ур. жизни"
+ },
+ "je_colonial_empire_war_head_backers": {
+  "en": "Backers",
+  "ru": "Союзники"
+ },
+ "je_colonial_empire_war_head_months": {
+  "en": "Months",
+  "ru": "Месяцы"
+ },
+ "je_colonial_empire_war_head_name_ours": {
+  "en": "Fighting us",
+  "ru": "Воюют с нами"
+ },
+ "je_colonial_empire_war_head_name_theirs": {
+  "en": "Rebels",
+  "ru": "Повстанцы"
+ },
+ "je_covert_warfare": {
+  "en": "Covert Warfare",
+  "ru": "Тайная война"
+ },
+ "je_create_new_religion": {
+  "en": "Create New Religion",
+  "ru": "Создание новой религии"
+ },
+ "je_cultural_hegemony": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "je_digital_rights": {
+  "en": "Digital Rights & Surveillance",
+  "ru": "Цифровые права и слежка"
+ },
+ "je_global_warming": {
+  "en": "Global Warming",
+  "ru": "Глобальное потепление"
+ },
+ "je_global_warming_progress": {
+  "en": "#bold Global Temperature:#! #v [ROOT.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C - [ROOT.GetCountry.GetCustom('gw_severity_short')]",
+  "ru": "#bold Глобальная температура:#! #v [ROOT.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C - [ROOT.GetCountry.GetCustom('gw_severity_short')]"
+ },
+ "je_grand_monuments": {
+  "en": "Monuments",
+  "ru": "Памятники"
+ },
+ "je_group_te_rights_and_society": {
+  "en": "Rights and Society",
+  "ru": "Права и общество"
+ },
+ "je_group_te_systems": {
+  "en": "Timeline Extended Systems",
+  "ru": "Системы Timeline Extended"
+ },
+ "je_heir_education": {
+  "en": "Heir Education",
+  "ru": "Образование наследника"
+ },
+ "je_human_augmentation": {
+  "en": "Human Augmentation Debate",
+  "ru": "Дебаты об аугментации человека"
+ },
+ "je_iw_catch_policy_label": {
+  "en": "Caught foreign operations",
+  "ru": "Пойманные иностранные операции"
+ },
+ "je_iw_ci_economic_label": {
+  "en": "Economic defense",
+  "ru": "Экономическая защита"
+ },
+ "je_iw_ci_funding_label": {
+  "en": "Funding bonus",
+  "ru": "Бонус финансирования"
+ },
+ "je_iw_ci_ideological_label": {
+  "en": "Ideological defense",
+  "ru": "Идеологическая защита"
+ },
+ "je_iw_ci_military_label": {
+  "en": "Military defense",
+  "ru": "Военная защита"
+ },
+ "je_iw_ci_slots_label": {
+  "en": "Unused slots redirected",
+  "ru": "Неиспользованные слоты перенаправлены"
+ },
+ "je_iw_ci_sub_caught": {
+  "en": "Last Caught",
+  "ru": "Последний пойманный"
+ },
+ "je_iw_defense_header": {
+  "en": "Counterintelligence",
+  "ru": "Контрразведка"
+ },
+ "je_iw_detection_base": {
+  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_detection_base_display')|0]%#! a month",
+  "ru": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_detection_base_display')|0]%#! в месяц"
+ },
+ "je_iw_detection_base_label": {
+  "en": "Base risk",
+  "ru": "Базовый риск"
+ },
+ "je_iw_detection_funding": {
+  "en": "#G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_ops_funding_detection_reduction_display')|0]#! points",
+  "ru": "#G -[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_ops_funding_detection_reduction_display')|0]#! п.п."
+ },
+ "je_iw_fund_tbl_head_cost": {
+  "en": "Cost/week",
+  "ru": "Стоимость/нед."
+ },
+ "je_iw_fund_tbl_head_level": {
+  "en": "Level",
+  "ru": "Уровень"
+ },
+ "je_iw_funding_header": {
+  "en": "Funding",
+  "ru": "Финансирование"
+ },
+ "je_iw_funding_stepper_label": {
+  "en": "Level",
+  "ru": "Уровень"
+ },
+ "je_iw_funding_sub_levels": {
+  "en": "Funding Levels",
+  "ru": "Уровни финансирования"
+ },
+ "je_iw_how_header": {
+  "en": "How Covert Warfare Works",
+  "ru": "Как работает тайная война"
+ },
+ "je_iw_how_sub_ci": {
+  "en": "Counterintelligence",
+  "ru": "Контрразведка"
+ },
+ "je_iw_how_sub_detection": {
+  "en": "Detection",
+  "ru": "Обнаружение"
+ },
+ "je_iw_how_sub_funding": {
+  "en": "Funding",
+  "ru": "Финансирование"
+ },
+ "je_iw_how_sub_networks": {
+  "en": "Agent Networks",
+  "ru": "Агентурные сети"
+ },
+ "je_iw_how_sub_ops": {
+  "en": "Operations",
+  "ru": "Операции"
+ },
+ "je_iw_how_sub_standing": {
+  "en": "Intelligence Standing",
+  "ru": "Положение разведки"
+ },
+ "je_iw_how_sub_tradecraft": {
+  "en": "Tradecraft",
+  "ru": "Шпионское ремесло"
+ },
+ "je_iw_how_sub_watching": {
+  "en": "Watching",
+  "ru": "Наблюдение"
+ },
+ "je_iw_known_expose_button": {
+  "en": "Expose",
+  "ru": "Разоблачить"
+ },
+ "je_iw_known_header": {
+  "en": "Known Foreign Operations",
+  "ru": "Известные иностранные операции"
+ },
+ "je_iw_net_head_country": {
+  "en": "Country",
+  "ru": "Страна"
+ },
+ "je_iw_net_head_ops": {
+  "en": "Ops",
+  "ru": "Опер."
+ },
+ "je_iw_net_head_report": {
+  "en": "Report",
+  "ru": "Отчёт"
+ },
+ "je_iw_net_head_start": {
+  "en": "Head Start",
+  "ru": "Фора"
+ },
+ "je_iw_net_head_strength": {
+  "en": "Strength",
+  "ru": "Сила"
+ },
+ "je_iw_net_header": {
+  "en": "Agent Networks",
+  "ru": "Агентурные сети"
+ },
+ "je_iw_net_row_catch": {
+  "en": "Catching their operations: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! detection risk",
+  "ru": "Перехват их операций: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! к риску обнаружения"
+ },
+ "je_iw_net_row_head_start_many": {
+  "en": "#v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! months",
+  "ru": "#v [ScriptContainer.GetVariableValue('iw_net_head_start_offer')|0]#! мес."
+ },
+ "je_iw_net_row_head_start_one": {
+  "en": "#v 1#! month",
+  "ru": "#v 1#! мес."
+ },
+ "je_iw_net_row_intel_ops": {
+  "en": "Their operations against us: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! running",
+  "ru": "Их операции против нас: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! ведутся"
+ },
+ "je_iw_net_row_report_0": {
+  "en": "None",
+  "ru": "Нет"
+ },
+ "je_iw_net_row_report_1": {
+  "en": "Partial",
+  "ru": "Частичный"
+ },
+ "je_iw_net_row_report_2": {
+  "en": "Full",
+  "ru": "Полный"
+ },
+ "je_iw_net_row_title": {
+  "en": "Network in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "ru": "Сеть в стране [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_net_row_trend_decaying": {
+  "en": "#R Decaying#!: no operations running there",
+  "ru": "#R Распадается#!: операций там нет"
+ },
+ "je_iw_net_row_trend_growing": {
+  "en": "#G Growing#! while operations run there",
+  "ru": "#G Растёт#! пока там идут операции"
+ },
+ "je_iw_no_operations": {
+  "en": "No operations running",
+  "ru": "Операций нет"
+ },
+ "je_iw_op_row_comms_disruption": {
+  "en": "$iw_op_name_comms_disruption$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_comms_disruption$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_counterintel_support": {
+  "en": "$iw_op_name_counterintel_support$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_counterintel_support$ в стране [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_cultivate_assets": {
+  "en": "$iw_op_name_cultivate_assets$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_cultivate_assets$ в стране [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_destabilization": {
+  "en": "$iw_op_name_destabilization$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_destabilization$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_detection": {
+  "en": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! a month",
+  "ru": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! в месяц"
+ },
+ "je_iw_op_row_detection_none": {
+  "en": "[concept_operation_detection]: #G none#!, an open arrangement",
+  "ru": "[concept_operation_detection]: #G нет#!, открытая договорённость"
+ },
+ "je_iw_op_row_election_interference": {
+  "en": "$iw_op_name_election_interference$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_election_interference$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_financial_subversion": {
+  "en": "$iw_op_name_financial_subversion$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_financial_subversion$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_ideological_subversion": {
+  "en": "$iw_op_name_ideological_subversion$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_ideological_subversion$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_incite_autonomy": {
+  "en": "$iw_op_name_incite_autonomy$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_incite_autonomy$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_industrial_espionage": {
+  "en": "$iw_op_name_industrial_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_industrial_espionage$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_influence_campaign": {
+  "en": "$iw_op_name_influence_campaign$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_influence_campaign$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_infrastructure_sabotage": {
+  "en": "$iw_op_name_infrastructure_sabotage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_infrastructure_sabotage$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_military_espionage": {
+  "en": "$iw_op_name_military_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_military_espionage$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_nuclear_sabotage": {
+  "en": "$iw_op_name_nuclear_sabotage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_nuclear_sabotage$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_phase_prep": {
+  "en": "[Concept('concept_operation_phase','Phase')]: #R Preparatory#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Establishing",
+  "ru": "[Concept('concept_operation_phase','Фаза')]: #R подготовительная#!, до закрепления: [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] мес."
+ },
+ "je_iw_op_row_regime_change": {
+  "en": "$iw_op_name_regime_change$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_regime_change$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_sabotage_colony": {
+  "en": "$iw_op_name_sabotage_colony$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_sabotage_colony$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_secure_material": {
+  "en": "$iw_op_name_secure_material$ in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_secure_material$ в стране [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_space_espionage": {
+  "en": "$iw_op_name_space_espionage$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_space_espionage$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_survey_defences": {
+  "en": "$iw_op_name_survey_defences$ vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]",
+  "ru": "$iw_op_name_survey_defences$ против страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetNameNoFlag]"
+ },
+ "je_iw_op_row_tech_stolen_none": {
+  "en": "[concept_technology] stolen: nothing yet",
+  "ru": "Похищено [Concept('concept_technology','технологий')]: пока ничего"
+ },
+ "je_iw_ov_caught_label": {
+  "en": "Spy Caught",
+  "ru": "Шпион пойман"
+ },
+ "je_iw_ov_funding_label": {
+  "en": "Funding [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display')|0]",
+  "ru": "Финансирование [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display')|0]"
+ },
+ "je_iw_ov_standing_0": {
+  "en": "Vulnerable",
+  "ru": "Уязвима"
+ },
+ "je_iw_ov_standing_1": {
+  "en": "Exposed",
+  "ru": "Раскрыта"
+ },
+ "je_iw_ov_standing_2": {
+  "en": "Defended",
+  "ru": "Защищена"
+ },
+ "je_iw_ov_standing_3": {
+  "en": "Hardened",
+  "ru": "Закалена"
+ },
+ "je_iw_ov_standing_4": {
+  "en": "Fortress",
+  "ru": "Крепость"
+ },
+ "je_iw_priority_stepper_label": {
+  "en": "Priority",
+  "ru": "Приоритет"
+ },
+ "je_iw_sec_ops_header": {
+  "en": "Operations",
+  "ru": "Операции"
+ },
+ "je_iw_slots_detail": {
+  "en": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display')|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! in use",
+  "ru": "[concept_operation_slots]: используется #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_used_display')|0]#! из #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#!"
+ },
+ "je_iw_stand_down_button": {
+  "en": "Stand down",
+  "ru": "Свернуть"
+ },
+ "je_iw_tradecraft_line_next": {
+  "en": "· next [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_floor')|0]",
+  "ru": "· далее [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_floor')|0]"
+ },
+ "je_iw_tradecraft_line_top": {
+  "en": "· top tier",
+  "ru": "· высший уровень"
+ },
+ "je_mental_health_crisis": {
+  "en": "Mental Health Crisis",
+  "ru": "Кризис психического здоровья"
+ },
+ "je_morphological_freedom": {
+  "en": "Morphological Freedom Debate",
+  "ru": "Дебаты о морфологической свободе"
+ },
+ "je_nuclear_how_header": {
+  "en": "How Nuclear Weapons Work",
+  "ru": "Как работает ядерное оружие"
+ },
+ "je_nuclear_how_sub_crisis": {
+  "en": "Crises",
+  "ru": "Кризисы"
+ },
+ "je_nuclear_how_sub_delivery": {
+  "en": "Delivery and Defense",
+  "ru": "Доставка и оборона"
+ },
+ "je_nuclear_how_sub_home": {
+  "en": "At Home",
+  "ru": "Внутри страны"
+ },
+ "je_nuclear_how_sub_posture": {
+  "en": "Posture and Forces",
+  "ru": "Позиция и силы"
+ },
+ "je_nuclear_how_sub_powers": {
+  "en": "Nuclear Powers",
+  "ru": "Ядерные державы"
+ },
+ "je_nuclear_how_sub_programme": {
+  "en": "The Program",
+  "ru": "Программа"
+ },
+ "je_nuclear_how_sub_reputation": {
+  "en": "Reputation",
+  "ru": "Репутация"
+ },
+ "je_nuclear_how_sub_strike": {
+  "en": "Strikes",
+  "ru": "Удары"
+ },
+ "je_nuclear_how_sub_taboo": {
+  "en": "The Nuclear Taboo",
+  "ru": "Ядерное табу"
+ },
+ "je_nuclear_ov_authority_change_in": {
+  "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! mo",
+  "ru": "Смена через #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! мес."
+ },
+ "je_nuclear_ov_change_now": {
+  "en": "Can change now",
+  "ru": "Можно сменить сейчас"
+ },
+ "je_nuclear_ov_credibility_label": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#! of 100",
+  "ru": "#v [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#! из 100"
+ },
+ "je_nuclear_ov_crisis_caption": {
+  "en": "Nuclear Crisis",
+  "ru": "Ядерный кризис"
+ },
+ "je_nuclear_ov_crisis_deadline": {
+  "en": "Deadline: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! wk",
+  "ru": "Срок: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! нед."
+ },
+ "je_nuclear_ov_doctrine_change_in": {
+  "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! mo",
+  "ru": "Смена через #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! мес."
+ },
+ "je_nuclear_ov_guarantees_caption": {
+  "en": "Guarantees",
+  "ru": "Гарантии"
+ },
+ "je_nuclear_ov_prog_0": {
+  "en": "Unfunded",
+  "ru": "Без финансирования"
+ },
+ "je_nuclear_ov_prog_1": {
+  "en": "Developing",
+  "ru": "Разработка"
+ },
+ "je_nuclear_ov_prog_2": {
+  "en": "Producing",
+  "ru": "Производство"
+ },
+ "je_nuclear_ov_prog_3": {
+  "en": "Frozen",
+  "ru": "Заморожена"
+ },
+ "je_nuclear_ov_prog_4": {
+  "en": "At Ceiling",
+  "ru": "На пределе"
+ },
+ "je_nuclear_ov_prog_5": {
+  "en": "Dismantling",
+  "ru": "Демонтаж"
+ },
+ "je_nuclear_ov_prog_6": {
+  "en": "No Program",
+  "ru": "Нет программы"
+ },
+ "je_nuclear_ov_prog_7": {
+  "en": "Renounced",
+  "ru": "Отказ от оружия"
+ },
+ "je_nuclear_ov_prog_8": {
+  "en": "Disarmed",
+  "ru": "Разоружена"
+ },
+ "je_nuclear_ov_public_none": {
+  "en": "None known",
+  "ru": "Неизвестно"
+ },
+ "je_nuclear_ov_readiness_upkeep": {
+  "en": "@money!#v [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#! a week",
+  "ru": "@money!#v [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#! в неделю"
+ },
+ "je_nuclear_ov_taboo_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/мес.)"
+ },
+ "je_nuclear_program": {
+  "en": "Nuclear Weapons",
+  "ru": "Ядерное оружие"
+ },
+ "je_nuclear_program_status_line": {
+  "en": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Warheads held: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]",
+  "ru": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Боезарядов: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]"
+ },
+ "je_nuclear_program_widget_defence_label": {
+  "en": "Home defense",
+  "ru": "Оборона страны"
+ },
+ "je_nuclear_program_widget_delivery_label": {
+  "en": "Delivery capability",
+  "ru": "Средства доставки"
+ },
+ "je_nuclear_program_widget_first_device_label": {
+  "en": "First device",
+  "ru": "Первое устройство"
+ },
+ "je_nuclear_program_widget_funding_label": {
+  "en": "Program funding",
+  "ru": "Финансирование программы"
+ },
+ "je_nuclear_program_widget_funding_value": {
+  "en": "Step #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
+  "ru": "Шаг #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/нед."
+ },
+ "je_nuclear_program_widget_next_label": {
+  "en": "Next warhead in",
+  "ru": "Следующий боезаряд через"
+ },
+ "je_nuclear_program_widget_odds_header": {
+  "en": "Delivery and Defense",
+  "ru": "Доставка и оборона"
+ },
+ "je_nuclear_program_widget_powers_head_country": {
+  "en": "Country",
+  "ru": "Страна"
+ },
+ "je_nuclear_program_widget_powers_head_warheads": {
+  "en": "Warheads",
+  "ru": "Боезаряды"
+ },
+ "je_nuclear_program_widget_powers_header": {
+  "en": "Nuclear Powers",
+  "ru": "Ядерные державы"
+ },
+ "je_nuclear_program_widget_programme_header": {
+  "en": "The Program",
+  "ru": "Программа"
+ },
+ "je_nuclear_program_widget_rate_label": {
+  "en": "Warhead production",
+  "ru": "Производство боезарядов"
+ },
+ "je_nuclear_program_widget_rate_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
+  "ru": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / мес."
+ },
+ "je_nuclear_program_widget_taboo_burden_label": {
+  "en": "Burden of our arsenal",
+  "ru": "Бремя нашего арсенала"
+ },
+ "je_nuclear_program_widget_taboo_burden_value": {
+  "en": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
+  "ru": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! престижа · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! рычагов влияния"
+ },
+ "je_nuclear_program_widget_taboo_header": {
+  "en": "The Nuclear Taboo",
+  "ru": "Ядерное табу"
+ },
+ "je_nuclear_program_widget_taboo_history_header": {
+  "en": "The Taboo Over Time",
+  "ru": "Табу с течением времени"
+ },
+ "je_nuclear_program_widget_taboo_score_label": {
+  "en": "Nuclear taboo",
+  "ru": "Ядерное табу"
+ },
+ "je_nuclear_program_widget_taboo_strategic_label": {
+  "en": "First use on a city",
+  "ru": "Первое применение по городу"
+ },
+ "je_nuclear_program_widget_taboo_tactical_label": {
+  "en": "First use in battle",
+  "ru": "Первое применение в бою"
+ },
+ "je_nuclear_program_widget_taboo_threat_label": {
+  "en": "A public ultimatum",
+  "ru": "Публичный ультиматум"
+ },
+ "je_nuclear_program_widget_taboo_threat_value": {
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
+  "ru": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! дурной славы"
+ },
+ "je_post_scarcity": {
+  "en": "Post-Scarcity Transition",
+  "ru": "Переход к постдефициту"
+ },
+ "je_space_race_interstellar_probe": {
+  "en": "Interstellar Probe",
+  "ru": "Межзвёздный зонд"
+ },
+ "je_space_race_interstellar_probe_completion_header": {
+  "en": "Probe Leaves the Solar System",
+  "ru": "Зонд покидает Солнечную систему"
+ },
+ "je_space_race_interstellar_probe_failure_header": {
+  "en": "Interstellar Program Suspended",
+  "ru": "Межзвёздная программа приостановлена"
+ },
+ "je_space_race_interstellar_probe_first_outcome_header": {
+  "en": "First Probe Beyond the Sun",
+  "ru": "Первый зонд за пределами Солнца"
+ },
+ "je_space_race_interstellar_probe_on_completion_header": {
+  "en": "Our probe sails beyond the Sun",
+  "ru": "Наш зонд уходит за пределы Солнца"
+ },
+ "je_space_race_interstellar_probe_on_failure_header": {
+  "en": "Our interstellar mission is on hold",
+  "ru": "Наша межзвёздная миссия отложена"
+ },
+ "je_space_race_interstellar_probe_setback_header": {
+  "en": "If the interstellar program is canceled",
+  "ru": "Если межзвёздная программа будет закрыта"
+ },
+ "je_space_race_interstellar_results": {
+  "en": "Interstellar Probe: Awaiting Data",
+  "ru": "Межзвёздный зонд: ожидание данных"
+ },
+ "je_space_race_interstellar_results_completion_header": {
+  "en": "Signal From the Stars",
+  "ru": "Сигнал от звёзд"
+ },
+ "je_space_race_interstellar_results_on_completion_header": {
+  "en": "Our probe sends back its findings",
+  "ru": "Наш зонд присылает результаты"
+ },
+ "je_space_race_mars_landing": {
+  "en": "Mars Landing",
+  "ru": "Высадка на Марс"
+ },
+ "je_space_race_mars_landing_completion_header": {
+  "en": "Boots on Mars",
+  "ru": "Люди на Марсе"
+ },
+ "je_space_race_mars_landing_failure_header": {
+  "en": "Mars Program Suspended",
+  "ru": "Марсианская программа приостановлена"
+ },
+ "je_space_race_mars_landing_first_outcome_header": {
+  "en": "First on Mars",
+  "ru": "Первые на Марсе"
+ },
+ "je_space_race_mars_landing_on_completion_header": {
+  "en": "Humanity walks on Mars",
+  "ru": "Человечество ступает на Марс"
+ },
+ "je_space_race_mars_landing_on_failure_header": {
+  "en": "Our Mars ambitions are on hold",
+  "ru": "Наши марсианские планы отложены"
+ },
+ "je_space_race_mars_landing_setback_header": {
+  "en": "If the Mars program is canceled",
+  "ru": "Если марсианская программа будет закрыта"
+ },
+ "je_space_race_moon_landing": {
+  "en": "Moon Landing",
+  "ru": "Высадка на Луну"
+ },
+ "je_space_race_moon_landing_completion_header": {
+  "en": "Boots on the Moon",
+  "ru": "Люди на Луне"
+ },
+ "je_space_race_moon_landing_failure_header": {
+  "en": "Lunar Program Suspended",
+  "ru": "Лунная программа приостановлена"
+ },
+ "je_space_race_moon_landing_first_outcome_header": {
+  "en": "First on the Moon",
+  "ru": "Первые на Луне"
+ },
+ "je_space_race_moon_landing_on_completion_header": {
+  "en": "Humanity walks on the Moon",
+  "ru": "Человечество ступает на Луну"
+ },
+ "je_space_race_moon_landing_on_failure_header": {
+  "en": "Our lunar ambitions are on hold",
+  "ru": "Наши лунные планы отложены"
+ },
+ "je_space_race_moon_landing_setback_header": {
+  "en": "If the Moon program is grounded",
+  "ru": "Если лунная программа будет свёрнута"
+ },
+ "je_space_race_orbital": {
+  "en": "Orbital Flight",
+  "ru": "Орбитальный полёт"
+ },
+ "je_space_race_orbital_completion_header": {
+  "en": "Earth Orbit Achieved",
+  "ru": "Околоземная орбита достигнута"
+ },
+ "je_space_race_orbital_failure_header": {
+  "en": "Orbital Program Suspended",
+  "ru": "Орбитальная программа приостановлена"
+ },
+ "je_space_race_orbital_first_outcome_header": {
+  "en": "First in Orbit",
+  "ru": "Первые на орбите"
+ },
+ "je_space_race_orbital_on_completion_header": {
+  "en": "Our spacecraft circles the Earth",
+  "ru": "Наш корабль облетает Землю"
+ },
+ "je_space_race_orbital_on_failure_header": {
+  "en": "Our orbital ambitions are on hold",
+  "ru": "Наши орбитальные планы отложены"
+ },
+ "je_space_race_orbital_setback_header": {
+  "en": "If the orbital program is grounded",
+  "ru": "Если орбитальная программа будет свёрнута"
+ },
+ "je_space_race_probe": {
+  "en": "Deep-Space Probe",
+  "ru": "Зонд дальнего космоса"
+ },
+ "je_space_race_probe_completion_header": {
+  "en": "Probe Reaches Its Target",
+  "ru": "Зонд достигает цели"
+ },
+ "je_space_race_probe_failure_header": {
+  "en": "Probe Program Suspended",
+  "ru": "Программа зондов приостановлена"
+ },
+ "je_space_race_probe_first_outcome_header": {
+  "en": "First Probe at Its Target",
+  "ru": "Первый зонд у цели"
+ },
+ "je_space_race_probe_on_failure_header": {
+  "en": "Our planetary probe is on hold",
+  "ru": "Наш планетарный зонд отложен"
+ },
+ "je_space_race_probe_setback_header": {
+  "en": "If the probe program is canceled",
+  "ru": "Если программа зондов будет закрыта"
+ },
+ "je_space_race_solar_colonization": {
+  "en": "Solar System Colonization",
+  "ru": "Колонизация Солнечной системы"
+ },
+ "je_space_race_suborbital": {
+  "en": "Suborbital Flight",
+  "ru": "Суборбитальный полёт"
+ },
+ "je_space_race_suborbital_completion_header": {
+  "en": "Edge of Space Reached",
+  "ru": "Граница космоса достигнута"
+ },
+ "je_space_race_suborbital_failure_header": {
+  "en": "Suborbital Program Suspended",
+  "ru": "Суборбитальная программа приостановлена"
+ },
+ "je_space_race_suborbital_first_outcome_header": {
+  "en": "First into Space",
+  "ru": "Первые в космосе"
+ },
+ "je_space_race_suborbital_on_failure_header": {
+  "en": "Our suborbital ambitions are on hold",
+  "ru": "Наши суборбитальные планы отложены"
+ },
+ "je_space_race_suborbital_setback_header": {
+  "en": "If the program is grounded",
+  "ru": "Если программа будет свёрнута"
+ },
+ "je_space_race_widget_ambitious_label": {
+  "en": "Ambitious",
+  "ru": "Амбициозный"
+ },
+ "je_space_race_widget_autonomy_abandon": {
+  "en": "Abandon",
+  "ru": "Отказаться"
+ },
+ "je_space_race_widget_autonomy_status_both": {
+  "en": "Both",
+  "ru": "Оба"
+ },
+ "je_space_race_widget_autonomy_status_charter": {
+  "en": "Charter",
+  "ru": "Хартия"
+ },
+ "je_space_race_widget_autonomy_status_garrison": {
+  "en": "Garrison",
+  "ru": "Гарнизон"
+ },
+ "je_space_race_widget_autonomy_status_none": {
+  "en": "Ruled",
+  "ru": "Под управлением"
+ },
+ "je_space_race_widget_band_interstellar_probe": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#! цели"
+ },
+ "je_space_race_widget_band_mars_landing": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#! цели"
+ },
+ "je_space_race_widget_band_moon_landing": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#! цели"
+ },
+ "je_space_race_widget_band_orbital": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#! цели"
+ },
+ "je_space_race_widget_band_probe": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#! цели"
+ },
+ "je_space_race_widget_band_solar_colonization": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#! цели"
+ },
+ "je_space_race_widget_band_suborbital": {
+  "en": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#! of the goal",
+  "ru": "#v [GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#! цели"
+ },
+ "je_space_race_widget_cf_change": {
+  "en": "Change",
+  "ru": "Сменить"
+ },
+ "je_space_race_widget_cf_choose": {
+  "en": "Choose",
+  "ru": "Выбрать"
+ },
+ "je_space_race_widget_cf_in_flight_figure": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] of 6",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] из 6"
+ },
+ "je_space_race_widget_cf_in_flight_label": {
+  "en": "[Concept('concept_sr_colony_fleet','Colony fleets')] in flight",
+  "ru": "[Concept('concept_sr_colony_fleet','Колониальные флоты')] в полёте"
+ },
+ "je_space_race_widget_cf_next_auto": {
+  "en": "chosen at launch",
+  "ru": "выбирается при запуске"
+ },
+ "je_space_race_widget_cf_next_label": {
+  "en": "Next fleet",
+  "ru": "Следующий флот"
+ },
+ "je_space_race_widget_cf_slot_1_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_2_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_3_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_4_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_5_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_6_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])",
+  "ru": "через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! мес. ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])"
+ },
+ "je_space_race_widget_cf_target_label": {
+  "en": "Our target",
+  "ru": "Наша цель"
+ },
+ "je_space_race_widget_ch_autonomy": {
+  "en": "Autonomy",
+  "ru": "Автономия"
+ },
+ "je_space_race_widget_ch_build": {
+  "en": "Building",
+  "ru": "Строительство"
+ },
+ "je_space_race_widget_ch_crews": {
+  "en": "Crews",
+  "ru": "Экипажи"
+ },
+ "je_space_race_widget_ch_defences": {
+  "en": "Defenses",
+  "ru": "Оборонительные сооружения"
+ },
+ "je_space_race_widget_ch_drift": {
+  "en": "Drift",
+  "ru": "Дрейф"
+ },
+ "je_space_race_widget_ch_integrity": {
+  "en": "Integrity",
+  "ru": "Целостность"
+ },
+ "je_space_race_widget_ch_marines": {
+  "en": "Marines",
+  "ru": "Морпехи"
+ },
+ "je_space_race_widget_ch_people": {
+  "en": "People",
+  "ru": "Население"
+ },
+ "je_space_race_widget_colonies_header": {
+  "en": "Colonies",
+  "ru": "Колонии"
+ },
+ "je_space_race_widget_colonies_held_label": {
+  "en": "Colonies Held",
+  "ru": "Колонии под контролем"
+ },
+ "je_space_race_widget_colonies_stage_0": {
+  "en": "Stage 0: The Moon",
+  "ru": "Этап 0: Луна"
+ },
+ "je_space_race_widget_colonies_stage_1": {
+  "en": "Stage 1: Mars & Asteroids",
+  "ru": "Этап 1: Марс и астероиды"
+ },
+ "je_space_race_widget_colonies_stage_2": {
+  "en": "Stage 2: Jupiter System & Venus",
+  "ru": "Этап 2: Система Юпитера и Венера"
+ },
+ "je_space_race_widget_colonies_stage_3": {
+  "en": "Stage 3: Mercury & Saturn System",
+  "ru": "Этап 3: Меркурий и система Сатурна"
+ },
+ "je_space_race_widget_colonies_stage_4": {
+  "en": "Stage 4: Uranus & Neptune Systems",
+  "ru": "Этап 4: Системы Урана и Нептуна"
+ },
+ "je_space_race_widget_colonies_stage_5": {
+  "en": "Stage 5: Kuiper Belt & Beyond",
+  "ru": "Этап 5: Пояс Койпера и дальше"
+ },
+ "je_space_race_widget_control_header": {
+  "en": "Mission Control",
+  "ru": "Центр управления полётами"
+ },
+ "je_space_race_widget_cv_autonomy": {
+  "en": "Autonomy",
+  "ru": "Автономия"
+ },
+ "je_space_race_widget_cv_back": {
+  "en": "Back",
+  "ru": "Назад"
+ },
+ "je_space_race_widget_cv_defences": {
+  "en": "Defenses",
+  "ru": "Оборонительные сооружения"
+ },
+ "je_space_race_widget_cv_modules": {
+  "en": "Modules",
+  "ru": "Модули"
+ },
+ "je_space_race_widget_cv_people": {
+  "en": "People",
+  "ru": "Население"
+ },
+ "je_space_race_widget_def_status_calm": {
+  "en": "Calm",
+  "ru": "Спокойно"
+ },
+ "je_space_race_widget_dp_choose": {
+  "en": "Choose",
+  "ru": "Выбрать"
+ },
+ "je_space_race_widget_dp_chosen": {
+  "en": "Chosen",
+  "ru": "Выбрано"
+ },
+ "je_space_race_widget_dp_col_dv": {
+  "en": "km/s",
+  "ru": "км/с"
+ },
+ "je_space_race_widget_dp_col_enemy": {
+  "en": "Enemy",
+  "ru": "Враг"
+ },
+ "je_space_race_widget_dp_col_inbound": {
+  "en": "Inbound",
+  "ru": "Летят к нам"
+ },
+ "je_space_race_widget_dp_col_months": {
+  "en": "Months",
+  "ru": "Месяцы"
+ },
+ "je_space_race_widget_dp_col_ours": {
+  "en": "Ours",
+  "ru": "Наши"
+ },
+ "je_space_race_widget_dp_col_where": {
+  "en": "Location",
+  "ru": "Место"
+ },
+ "je_space_race_widget_dp_col_window": {
+  "en": "Window",
+  "ru": "Окно"
+ },
+ "je_space_race_widget_dp_title": {
+  "en": "Fleet Destination",
+  "ru": "Пункт назначения флота"
+ },
+ "je_space_race_widget_ebase_label": {
+  "en": "Extraplanetary Base levels / room",
+  "ru": "Уровни внепланетных баз / места"
+ },
+ "je_space_race_widget_ebase_queued_label": {
+  "en": "Extraplanetary Base levels queued",
+  "ru": "Уровни внепланетных баз в очереди"
+ },
+ "je_space_race_widget_emig_label": {
+  "en": "Emigration",
+  "ru": "Эмиграция"
+ },
+ "je_space_race_widget_emig_level_0": {
+  "en": "Off",
+  "ru": "Выкл."
+ },
+ "je_space_race_widget_emig_level_1": {
+  "en": "Low",
+  "ru": "Низкая"
+ },
+ "je_space_race_widget_emig_level_2": {
+  "en": "Steady",
+  "ru": "Стабильная"
+ },
+ "je_space_race_widget_emig_level_3": {
+  "en": "High",
+  "ru": "Высокая"
+ },
+ "je_space_race_widget_emig_month_label": {
+  "en": "Settlers a month",
+  "ru": "Поселенцев в месяц"
+ },
+ "je_space_race_widget_emig_prio_0": {
+  "en": "Closed",
+  "ru": "Закрыта"
+ },
+ "je_space_race_widget_emig_prio_1": {
+  "en": "Low",
+  "ru": "Низкая"
+ },
+ "je_space_race_widget_emig_prio_2": {
+  "en": "Normal",
+  "ru": "Обычная"
+ },
+ "je_space_race_widget_emig_prio_3": {
+  "en": "High",
+  "ru": "Высокая"
+ },
+ "je_space_race_widget_eta_interstellar_probe": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] мес."
+ },
+ "je_space_race_widget_eta_label": {
+  "en": "Estimate",
+  "ru": "Оценка"
+ },
+ "je_space_race_widget_eta_mars_landing": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] мес."
+ },
+ "je_space_race_widget_eta_moon_landing": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] мес."
+ },
+ "je_space_race_widget_eta_orbital": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_orbital')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_orbital')|0] мес."
+ },
+ "je_space_race_widget_eta_probe": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_probe')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_probe')|0] мес."
+ },
+ "je_space_race_widget_eta_solar_colonization": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_solar_colonization')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_solar_colonization')|0] мес."
+ },
+ "je_space_race_widget_eta_suborbital": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_suborbital')|0] months",
+  "ru": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_suborbital')|0] мес."
+ },
+ "je_space_race_widget_fab_label": {
+  "en": "Fabrication a month / in stock",
+  "ru": "Производство в месяц / на складе"
+ },
+ "je_space_race_widget_fl_col_dv": {
+  "en": "km/s",
+  "ru": "км/с"
+ },
+ "je_space_race_widget_fl_col_marines": {
+  "en": "Marines",
+  "ru": "Морпехи"
+ },
+ "je_space_race_widget_fl_col_strength": {
+  "en": "Strength",
+  "ru": "Сила"
+ },
+ "je_space_race_widget_fl_col_supply": {
+  "en": "Supply",
+  "ru": "Снабжение"
+ },
+ "je_space_race_widget_fl_col_where": {
+  "en": "Where",
+  "ru": "Где"
+ },
+ "je_space_race_widget_fl_destroy": {
+  "en": "Destroy",
+  "ru": "Уничтожить"
+ },
+ "je_space_race_widget_fl_embark": {
+  "en": "Embark",
+  "ru": "Погрузить"
+ },
+ "je_space_race_widget_fl_go": {
+  "en": "Go",
+  "ru": "Вперёд"
+ },
+ "je_space_race_widget_fl_land": {
+  "en": "Land",
+  "ru": "Высадить"
+ },
+ "je_space_race_widget_fl_posture_1": {
+  "en": "Station",
+  "ru": "Дежурство"
+ },
+ "je_space_race_widget_fl_posture_2": {
+  "en": "Stand off",
+  "ru": "Удержание дистанции"
+ },
+ "je_space_race_widget_fl_posture_3": {
+  "en": "Close in",
+  "ru": "Сближение"
+ },
+ "je_space_race_widget_fl_posture_4": {
+  "en": "Interdict",
+  "ru": "Перехват"
+ },
+ "je_space_race_widget_fl_refit": {
+  "en": "Refit",
+  "ru": "Переоснастить"
+ },
+ "je_space_race_widget_fl_role_carrier": {
+  "en": "Carriers",
+  "ru": "Штурмовые носители"
+ },
+ "je_space_race_widget_fl_role_rapid": {
+  "en": "Rapid",
+  "ru": "Быстрые"
+ },
+ "je_space_race_widget_fl_role_siege": {
+  "en": "Siege",
+  "ru": "Осадные"
+ },
+ "je_space_race_widget_fl_role_tender": {
+  "en": "Tenders",
+  "ru": "Тендеры"
+ },
+ "je_space_race_widget_fl_role_war": {
+  "en": "Warships",
+  "ru": "Боевые корабли"
+ },
+ "je_space_race_widget_fl_seize": {
+  "en": "Seize",
+  "ru": "Захватить"
+ },
+ "je_space_race_widget_fl_transfer": {
+  "en": "Transfer",
+  "ru": "Передать"
+ },
+ "je_space_race_widget_fleets_header": {
+  "en": "Colony Fleets",
+  "ru": "Колониальные флоты"
+ },
+ "je_space_race_widget_free_header": {
+  "en": "Free Colonies",
+  "ru": "Свободные колонии"
+ },
+ "je_space_race_widget_free_stop": {
+  "en": "Stop",
+  "ru": "Остановить"
+ },
+ "je_space_race_widget_free_supply": {
+  "en": "Supply",
+  "ru": "Снабжение"
+ },
+ "je_space_race_widget_free_trade_label": {
+  "en": "Free colony trade",
+  "ru": "Торговля свободных колоний"
+ },
+ "je_space_race_widget_ft_targeted": {
+  "en": "Targeted",
+  "ru": "Цель выбрана"
+ },
+ "je_space_race_widget_ft_title": {
+  "en": "Fleet Target",
+  "ru": "Цель флота"
+ },
+ "je_space_race_widget_how_header": {
+  "en": "How the Space Race Works",
+  "ru": "Как работает космическая гонка"
+ },
+ "je_space_race_widget_how_sub_approach": {
+  "en": "Approach and Pace",
+  "ru": "Подход и темп"
+ },
+ "je_space_race_widget_how_sub_first": {
+  "en": "The First",
+  "ru": "Первые"
+ },
+ "je_space_race_widget_how_sub_funding": {
+  "en": "Funding",
+  "ru": "Финансирование"
+ },
+ "je_space_race_widget_how_sub_orbit": {
+  "en": "Satellites and Debris",
+  "ru": "Спутники и мусор"
+ },
+ "je_space_race_widget_how_sub_powers": {
+  "en": "Space Powers",
+  "ru": "Космические державы"
+ },
+ "je_space_race_widget_how_sub_programme": {
+  "en": "The Program",
+  "ru": "Программа"
+ },
+ "je_space_race_widget_how_sub_rivals": {
+  "en": "Rivals",
+  "ru": "Соперники"
+ },
+ "je_space_race_widget_how_sub_setbacks": {
+  "en": "Setbacks",
+  "ru": "Неудачи"
+ },
+ "je_space_race_widget_howc_header": {
+  "en": "How Solar Colonization Works",
+  "ru": "Как работает солнечная колонизация"
+ },
+ "je_space_race_widget_howc_sub_autonomy": {
+  "en": "Autonomy and Free Colonies",
+  "ru": "Автономия и свободные колонии"
+ },
+ "je_space_race_widget_howc_sub_defences": {
+  "en": "Defenses and Seizure",
+  "ru": "Оборона и захват"
+ },
+ "je_space_race_widget_howc_sub_fleets": {
+  "en": "Colony Fleets and Targets",
+  "ru": "Колониальные флоты и цели"
+ },
+ "je_space_race_widget_howc_sub_modules": {
+  "en": "Modules",
+  "ru": "Модули"
+ },
+ "je_space_race_widget_howc_sub_settlers": {
+  "en": "Settlers and Crews",
+  "ru": "Поселенцы и экипажи"
+ },
+ "je_space_race_widget_howc_sub_space_command": {
+  "en": "Space Command and Fleets",
+  "ru": "Космическое командование и флоты"
+ },
+ "je_space_race_widget_howc_sub_windows": {
+  "en": "Launch Windows",
+  "ru": "Стартовые окна"
+ },
+ "je_space_race_widget_loc_col_ours": {
+  "en": "Ours",
+  "ru": "Наши"
+ },
+ "je_space_race_widget_locations_header": {
+  "en": "Locations",
+  "ru": "Местоположения"
+ },
+ "je_space_race_widget_mod_name_admin": {
+  "en": "Administration",
+  "ru": "Администрация"
+ },
+ "je_space_race_widget_mod_name_black": {
+  "en": "Black Site",
+  "ru": "Секретный объект"
+ },
+ "je_space_race_widget_mod_name_bunker": {
+  "en": "Nuclear Command Center",
+  "ru": "Ядерный командный центр"
+ },
+ "je_space_race_widget_mod_name_culture": {
+  "en": "Cultural Center",
+  "ru": "Культурный центр"
+ },
+ "je_space_race_widget_mod_name_def": {
+  "en": "Defenses",
+  "ru": "Оборонительные сооружения"
+ },
+ "je_space_race_widget_mod_name_foundry": {
+  "en": "Materials Foundry",
+  "ru": "Материаловедческая литейная"
+ },
+ "je_space_race_widget_mod_name_hab": {
+  "en": "Habitat",
+  "ru": "Жилой отсек"
+ },
+ "je_space_race_widget_mod_name_lab": {
+  "en": "Research Station",
+  "ru": "Исследовательская станция"
+ },
+ "je_space_race_widget_mod_name_mine": {
+  "en": "Mining Complex",
+  "ru": "Добывающий комплекс"
+ },
+ "je_space_race_widget_mod_name_port": {
+  "en": "Spaceport",
+  "ru": "Космодром"
+ },
+ "je_space_race_widget_mod_name_resort": {
+  "en": "Off-World Resort",
+  "ru": "Внеземной курорт"
+ },
+ "je_space_race_widget_mod_name_terra": {
+  "en": "Terraforming",
+  "ru": "Терраформирование"
+ },
+ "je_space_race_widget_mod_name_train": {
+  "en": "Training Ground",
+  "ru": "Учебный полигон"
+ },
+ "je_space_race_widget_mod_name_yard": {
+  "en": "Orbital Yard",
+  "ru": "Орбитальная верфь"
+ },
+ "je_space_race_widget_mod_upkeep_label": {
+  "en": "Module upkeep (throughput)",
+  "ru": "Содержание модулей (пропускная способность)"
+ },
+ "je_space_race_widget_modules_col_admin": {
+  "en": "Gov",
+  "ru": "Упр."
+ },
+ "je_space_race_widget_modules_col_b": {
+  "en": "II",
+  "ru": "II"
+ },
+ "je_space_race_widget_modules_col_bases": {
+  "en": "Bases",
+  "ru": "Базы"
+ },
+ "je_space_race_widget_modules_col_black": {
+  "en": "Spy",
+  "ru": "Шпион"
+ },
+ "je_space_race_widget_modules_col_bunker": {
+  "en": "Nuke",
+  "ru": "Ядер."
+ },
+ "je_space_race_widget_modules_col_culture": {
+  "en": "Arts",
+  "ru": "Иск."
+ },
+ "je_space_race_widget_modules_col_def": {
+  "en": "Def",
+  "ru": "Обор."
+ },
+ "je_space_race_widget_modules_col_foundry": {
+  "en": "Mat",
+  "ru": "Мат."
+ },
+ "je_space_race_widget_modules_col_hab": {
+  "en": "Hab",
+  "ru": "Жил."
+ },
+ "je_space_race_widget_modules_col_lab": {
+  "en": "Lab",
+  "ru": "Лаб."
+ },
+ "je_space_race_widget_modules_col_mine": {
+  "en": "Mine",
+  "ru": "Добыч."
+ },
+ "je_space_race_widget_modules_col_port": {
+  "en": "Port",
+  "ru": "Порт"
+ },
+ "je_space_race_widget_modules_col_resort": {
+  "en": "Tour",
+  "ru": "Тур."
+ },
+ "je_space_race_widget_modules_col_slots": {
+  "en": "Slots",
+  "ru": "Слоты"
+ },
+ "je_space_race_widget_modules_col_staffing": {
+  "en": "Crew",
+  "ru": "Экип."
+ },
+ "je_space_race_widget_modules_col_terra": {
+  "en": "Terr",
+  "ru": "Терр."
+ },
+ "je_space_race_widget_modules_col_terraformed": {
+  "en": "Terraformed",
+  "ru": "Терраформировано"
+ },
+ "je_space_race_widget_modules_col_train": {
+  "en": "Camp",
+  "ru": "Лагерь"
+ },
+ "je_space_race_widget_modules_col_yard": {
+  "en": "Yard",
+  "ru": "Верфь"
+ },
+ "je_space_race_widget_mq_header": {
+  "en": "Queue ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])",
+  "ru": "Очередь ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])"
+ },
+ "je_space_race_widget_mq_next_full": {
+  "en": "slots full",
+  "ru": "слоты заполнены"
+ },
+ "je_space_race_widget_mq_next_label": {
+  "en": "Next module",
+  "ru": "Следующий модуль"
+ },
+ "je_space_race_widget_mq_next_months": {
+  "en": "in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] mo",
+  "ru": "через [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_months')|0] мес."
+ },
+ "je_space_race_widget_offworld_label": {
+  "en": "People off Earth",
+  "ru": "Люди вне Земли"
+ },
+ "je_space_race_widget_orbit_header": {
+  "en": "Orbit",
+  "ru": "Орбита"
+ },
+ "je_space_race_widget_orbit_moratorium_label": {
+  "en": "Anti-Satellite Moratorium",
+  "ru": "Противоспутниковый мораторий"
+ },
+ "je_space_race_widget_orbit_satellites_label": {
+  "en": "Our Satellites",
+  "ru": "Наши спутники"
+ },
+ "je_space_race_widget_orbit_satellites_ni_label": {
+  "en": "Satellites",
+  "ru": "Спутники"
+ },
+ "je_space_race_widget_orbit_strike_label": {
+  "en": "Our Anti-Satellite Strike",
+  "ru": "Наш противоспутниковый удар"
+ },
+ "je_space_race_widget_orbit_strikes_label": {
+  "en": "Anti-Satellite Strikes So Far",
+  "ru": "Противоспутниковых ударов до сих пор"
+ },
+ "je_space_race_widget_ov_ambitious_interstellar_probe": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_mars_landing": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_moon_landing": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_orbital": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_probe": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_solar_colonization": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0] в неделю"
+ },
+ "je_space_race_widget_ov_ambitious_suborbital": {
+  "en": "Ambitious\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0] a week",
+  "ru": "Амбициозный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0] в неделю"
+ },
+ "je_space_race_widget_ov_colony_label": {
+  "en": "Next Colony",
+  "ru": "Следующая колония"
+ },
+ "je_space_race_widget_ov_idle": {
+  "en": "Idle",
+  "ru": "Простой"
+ },
+ "je_space_race_widget_ov_progress_label": {
+  "en": "Progress",
+  "ru": "Прогресс"
+ },
+ "je_space_race_widget_ov_safe_interstellar_probe": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0] в неделю"
+ },
+ "je_space_race_widget_ov_safe_mars_landing": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0] в неделю"
+ },
+ "je_space_race_widget_ov_safe_moon_landing": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0] в неделю"
+ },
+ "je_space_race_widget_ov_safe_orbital": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1] в неделю"
+ },
+ "je_space_race_widget_ov_safe_probe": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0] в неделю"
+ },
+ "je_space_race_widget_ov_safe_solar_colonization": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0] в неделю"
+ },
+ "je_space_race_widget_ov_safe_suborbital": {
+  "en": "Safe\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0] a week",
+  "ru": "Безопасный\\n−[Country.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0] в неделю"
+ },
+ "je_space_race_widget_ov_stage": {
+  "en": "Stage: [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
+  "ru": "Этап: [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] из 5"
+ },
+ "je_space_race_widget_ov_stage_moon": {
+  "en": "Stage: the Moon",
+  "ru": "Этап: Луна"
+ },
+ "je_space_race_widget_ov_staged_label": {
+  "en": "Staged in Orbit",
+  "ru": "Подготовлено на орбите"
+ },
+ "je_space_race_widget_ov_staged_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
+  "ru": "Флотов: #v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#!"
+ },
+ "je_space_race_widget_ov_transit_label": {
+  "en": "Transit",
+  "ru": "В пути"
+ },
+ "je_space_race_widget_ov_worlds": {
+  "en": "Sites: [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] / [Country.MakeScope.ScriptValue('sr_sites_world_count')|0]",
+  "ru": "Объекты: [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] / [Country.MakeScope.ScriptValue('sr_sites_world_count')|0]"
+ },
+ "je_space_race_widget_ovc_colonies_cap": {
+  "en": "Colonies",
+  "ru": "Колонии"
+ },
+ "je_space_race_widget_ovc_colonies_fig_calm": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_colonies_held')|0]#! of [Country.MakeScope.ScriptValue('sr_sites_world_count')|0] held",
+  "ru": "под контролем: #v [Country.MakeScope.ScriptValue('sr_disp_colonies_held')|0]#! из [Country.MakeScope.ScriptValue('sr_sites_world_count')|0]"
+ },
+ "je_space_race_widget_ovc_colonies_fig_more": {
+  "en": "+[Country.MakeScope.ScriptValue('sr_disp_aut_restless_more')|0] more want it",
+  "ru": "ещё +[Country.MakeScope.ScriptValue('sr_disp_aut_restless_more')|0] хотят того же"
+ },
+ "je_space_race_widget_ovc_colonies_fig_one": {
+  "en": "wants self-rule",
+  "ru": "хочет самоуправления"
+ },
+ "je_space_race_widget_ovc_colonies_word_calm": {
+  "en": "Loyal",
+  "ru": "Лояльны"
+ },
+ "je_space_race_widget_ovc_def_fig_calm": {
+  "en": "colonies secure",
+  "ru": "колонии в безопасности"
+ },
+ "je_space_race_widget_ovc_def_fig_earth": {
+  "en": "launches stopped",
+  "ru": "запуски остановлены"
+ },
+ "je_space_race_widget_ovc_def_word_calm": {
+  "en": "Calm",
+  "ru": "Спокойно"
+ },
+ "je_space_race_widget_ovc_defense_cap": {
+  "en": "Defense",
+  "ru": "Оборона"
+ },
+ "je_space_race_widget_ovc_earth_cap": {
+  "en": "Hostile Fleet",
+  "ru": "Враждебный флот"
+ },
+ "je_space_race_widget_ovc_earth_fig": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#! vs [Country.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#! против [Country.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]"
+ },
+ "je_space_race_widget_ovc_earth_word": {
+  "en": "Earth in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! mo",
+  "ru": "До Земли: #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! мес."
+ },
+ "je_space_race_widget_ovc_ebase_cap": {
+  "en": "Base Room",
+  "ru": "Место для баз"
+ },
+ "je_space_race_widget_ovc_modules_cap": {
+  "en": "Modules",
+  "ru": "Модули"
+ },
+ "je_space_race_widget_ovc_modules_fig": {
+  "en": "stock #v [Country.MakeScope.ScriptValue('sr_disp_fab_stock')|D]#! / [Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap')|0]",
+  "ru": "запас #v [Country.MakeScope.ScriptValue('sr_disp_fab_stock')|D]#! / [Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap')|0]"
+ },
+ "je_space_race_widget_ovc_modules_word_empty": {
+  "en": "Queue empty",
+  "ru": "Очередь пуста"
+ },
+ "je_space_race_widget_ovc_modules_word_queued": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! queued",
+  "ru": "в очереди: #v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#!"
+ },
+ "je_space_race_widget_ovc_sc_rate_cap": {
+  "en": "Built a month",
+  "ru": "Строится в месяц"
+ },
+ "je_space_race_widget_ovc_sc_rate_word_paused": {
+  "en": "Paused",
+  "ru": "Приостановлено"
+ },
+ "je_space_race_widget_ovc_sc_reserve_cap": {
+  "en": "Reserve",
+  "ru": "Резерв"
+ },
+ "je_space_race_widget_ovc_sc_strength_cap": {
+  "en": "Fleet strength",
+  "ru": "Сила флота"
+ },
+ "je_space_race_widget_ovc_sc_upkeep_cap": {
+  "en": "Upkeep",
+  "ru": "Содержание"
+ },
+ "je_space_race_widget_ovc_window_cap": {
+  "en": "Next Window",
+  "ru": "Следующее окно"
+ },
+ "je_space_race_widget_ovc_window_fig": {
+  "en": "stage [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
+  "ru": "этап [Country.MakeScope.ScriptValue('sr_current_colonization_stage')|0] из 5"
+ },
+ "je_space_race_widget_ovc_window_fig_mars": {
+  "en": "no $je_space_race_mars_landing$",
+  "ru": "нет: $je_space_race_mars_landing$"
+ },
+ "je_space_race_widget_ovc_window_fig_moon": {
+  "en": "the Moon",
+  "ru": "Луна"
+ },
+ "je_space_race_widget_ovc_window_word_any": {
+  "en": "Any month",
+  "ru": "Любой месяц"
+ },
+ "je_space_race_widget_ovc_window_word_in": {
+  "en": "in #v [Country.MakeScope.ScriptValue('sr_window_disp_next')|0]#! months",
+  "ru": "через #v [Country.MakeScope.ScriptValue('sr_window_disp_next')|0]#! мес."
+ },
+ "je_space_race_widget_ovc_window_word_none": {
+  "en": "No site left",
+  "ru": "Объектов не осталось"
+ },
+ "je_space_race_widget_page_bases": {
+  "en": "Base Room",
+  "ru": "Место для баз"
+ },
+ "je_space_race_widget_page_settlers": {
+  "en": "Settlers",
+  "ru": "Поселенцы"
+ },
+ "je_space_race_widget_page_staffing": {
+  "en": "Modules Crewed",
+  "ru": "Модули с экипажем"
+ },
+ "je_space_race_widget_page_terraformed": {
+  "en": "Terraformed",
+  "ru": "Терраформировано"
+ },
+ "je_space_race_widget_power_lead_none": {
+  "en": "Nothing under way",
+  "ru": "Ничего не ведётся"
+ },
+ "je_space_race_widget_power_prog_interstellar": {
+  "en": "#bold Interstellar Probe#! — [State.GetCountry.GetCustom('sr_power_prog_interstellar')]",
+  "ru": "#bold Межзвёздный зонд#! — [State.GetCountry.GetCustom('sr_power_prog_interstellar')]"
+ },
+ "je_space_race_widget_power_prog_mars_landing": {
+  "en": "#bold Mars Landing#! — [State.GetCountry.GetCustom('sr_power_prog_mars_landing')]",
+  "ru": "#bold Высадка на Марс#! — [State.GetCountry.GetCustom('sr_power_prog_mars_landing')]"
+ },
+ "je_space_race_widget_power_prog_moon_base": {
+  "en": "#bold Lunar Colony#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]",
+  "ru": "#bold Лунная колония#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]"
+ },
+ "je_space_race_widget_power_prog_moon_landing": {
+  "en": "#bold Moon Landing#! — [State.GetCountry.GetCustom('sr_power_prog_moon_landing')]",
+  "ru": "#bold Высадка на Луну#! — [State.GetCountry.GetCustom('sr_power_prog_moon_landing')]"
+ },
+ "je_space_race_widget_power_prog_orbital": {
+  "en": "#bold Orbital Flight#! — [State.GetCountry.GetCustom('sr_power_prog_orbital')]",
+  "ru": "#bold Орбитальный полёт#! — [State.GetCountry.GetCustom('sr_power_prog_orbital')]"
+ },
+ "je_space_race_widget_power_prog_probe": {
+  "en": "#bold Deep-Space Probe#! — [State.GetCountry.GetCustom('sr_power_prog_probe')]",
+  "ru": "#bold Зонд дальнего космоса#! — [State.GetCountry.GetCustom('sr_power_prog_probe')]"
+ },
+ "je_space_race_widget_power_prog_solar_colonization": {
+  "en": "#bold Solar System Colonization#! — [State.GetCountry.GetCustom('sr_power_prog_solar_colonization')]",
+  "ru": "#bold Колонизация Солнечной системы#! — [State.GetCountry.GetCustom('sr_power_prog_solar_colonization')]"
+ },
+ "je_space_race_widget_power_prog_suborbital": {
+  "en": "#bold Suborbital Flight#! — [State.GetCountry.GetCustom('sr_power_prog_suborbital')]",
+  "ru": "#bold Суборбитальный полёт#! — [State.GetCountry.GetCustom('sr_power_prog_suborbital')]"
+ },
+ "je_space_race_widget_powers_header": {
+  "en": "Space Powers",
+  "ru": "Космические державы"
+ },
+ "je_space_race_widget_powers_others": {
+  "en": "Other Powers",
+  "ru": "Другие державы"
+ },
+ "je_space_race_widget_profile_header": {
+  "en": "Mission Profile",
+  "ru": "Профиль миссии"
+ },
+ "je_space_race_widget_prog_interstellar_0": {
+  "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_prog_interstellar_probe')]",
+  "ru": "#bold Межзвёздный зонд#! — [Country.GetCustom('sr_prog_interstellar_probe')]"
+ },
+ "je_space_race_widget_prog_interstellar_0_ni": {
+  "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_power_prog_interstellar')]",
+  "ru": "#bold Межзвёздный зонд#! — [Country.GetCustom('sr_power_prog_interstellar')]"
+ },
+ "je_space_race_widget_prog_interstellar_3": {
+  "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
+  "ru": "#bold Межзвёздный зонд#! — $sr_prog_state_signal_received$"
+ },
+ "je_space_race_widget_prog_interstellar_3_ni": {
+  "en": "#bold Interstellar Probe#! — $sr_power_state_data_received$",
+  "ru": "#bold Межзвёздный зонд#! — $sr_power_state_data_received$"
+ },
+ "je_space_race_widget_prog_mars_landing": {
+  "en": "#bold Mars Landing#! — [Country.GetCustom('sr_prog_mars_landing')]",
+  "ru": "#bold Высадка на Марс#! — [Country.GetCustom('sr_prog_mars_landing')]"
+ },
+ "je_space_race_widget_prog_mars_landing_ni": {
+  "en": "#bold Mars Landing#! — [Country.GetCustom('sr_power_prog_mars_landing')]",
+  "ru": "#bold Высадка на Марс#! — [Country.GetCustom('sr_power_prog_mars_landing')]"
+ },
+ "je_space_race_widget_prog_moon_base": {
+  "en": "#bold Lunar Colony#! — [Country.GetCustom('sr_prog_moon_base')]",
+  "ru": "#bold Лунная колония#! — [Country.GetCustom('sr_prog_moon_base')]"
+ },
+ "je_space_race_widget_prog_moon_base_ni": {
+  "en": "#bold Lunar Colony#! — [Country.GetCustom('sr_power_prog_moon_base')]",
+  "ru": "#bold Лунная колония#! — [Country.GetCustom('sr_power_prog_moon_base')]"
+ },
+ "je_space_race_widget_prog_moon_landing": {
+  "en": "#bold Moon Landing#! — [Country.GetCustom('sr_prog_moon_landing')]",
+  "ru": "#bold Высадка на Луну#! — [Country.GetCustom('sr_prog_moon_landing')]"
+ },
+ "je_space_race_widget_prog_moon_landing_ni": {
+  "en": "#bold Moon Landing#! — [Country.GetCustom('sr_power_prog_moon_landing')]",
+  "ru": "#bold Высадка на Луну#! — [Country.GetCustom('sr_power_prog_moon_landing')]"
+ },
+ "je_space_race_widget_prog_orbital": {
+  "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_prog_orbital')]",
+  "ru": "#bold Орбитальный полёт#! — [Country.GetCustom('sr_prog_orbital')]"
+ },
+ "je_space_race_widget_prog_orbital_ni": {
+  "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_power_prog_orbital')]",
+  "ru": "#bold Орбитальный полёт#! — [Country.GetCustom('sr_power_prog_orbital')]"
+ },
+ "je_space_race_widget_prog_probe": {
+  "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_prog_probe')]",
+  "ru": "#bold Зонд дальнего космоса#! — [Country.GetCustom('sr_prog_probe')]"
+ },
+ "je_space_race_widget_prog_probe_ni": {
+  "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_power_prog_probe')]",
+  "ru": "#bold Зонд дальнего космоса#! — [Country.GetCustom('sr_power_prog_probe')]"
+ },
+ "je_space_race_widget_prog_solar_colonization": {
+  "en": "#bold Solar System Colonization#! — [Country.GetCustom('sr_prog_solar_colonization')]",
+  "ru": "#bold Колонизация Солнечной системы#! — [Country.GetCustom('sr_prog_solar_colonization')]"
+ },
+ "je_space_race_widget_prog_suborbital": {
+  "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_prog_suborbital')]",
+  "ru": "#bold Суборбитальный полёт#! — [Country.GetCustom('sr_prog_suborbital')]"
+ },
+ "je_space_race_widget_prog_suborbital_ni": {
+  "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_power_prog_suborbital')]",
+  "ru": "#bold Суборбитальный полёт#! — [Country.GetCustom('sr_power_prog_suborbital')]"
+ },
+ "je_space_race_widget_programme_header": {
+  "en": "Program",
+  "ru": "Программа"
+ },
+ "je_space_race_widget_progress_interstellar_probe": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_interstellar_results": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 мес."
+ },
+ "je_space_race_widget_progress_mars_landing": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_moon_landing": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [Country.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_orbital": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_orbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_probe": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [Country.MakeScope.ScriptValue('sr_probe_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_solar_colonization": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [Country.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/мес.)"
+ },
+ "je_space_race_widget_progress_suborbital": {
+  "en": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo)",
+  "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/мес.)"
+ },
+ "je_space_race_widget_risk_interstellar_probe": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/мес."
+ },
+ "je_space_race_widget_risk_mars_landing": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/мес."
+ },
+ "je_space_race_widget_risk_moon_landing": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/мес."
+ },
+ "je_space_race_widget_risk_orbital": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/мес."
+ },
+ "je_space_race_widget_risk_probe": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/мес."
+ },
+ "je_space_race_widget_risk_solar_colonization": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/мес."
+ },
+ "je_space_race_widget_risk_suborbital": {
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
+  "ru": "Риск: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/мес."
+ },
+ "je_space_race_widget_rivals_header": {
+  "en": "Rivals",
+  "ru": "Соперники"
+ },
+ "je_space_race_widget_safe_label": {
+  "en": "Safe",
+  "ru": "Безопасный"
+ },
+ "je_space_race_widget_sc_auto_off": {
+  "en": "Auto: off",
+  "ru": "Авто: выкл."
+ },
+ "je_space_race_widget_sc_auto_on": {
+  "en": "Auto: on",
+  "ru": "Авто: вкл."
+ },
+ "je_space_race_widget_sc_header": {
+  "en": "Space Command",
+  "ru": "Космическое командование"
+ },
+ "je_space_race_widget_sc_launch": {
+  "en": "Launch",
+  "ru": "Запуск"
+ },
+ "je_space_race_widget_sc_mix_header": {
+  "en": "Build mix",
+  "ru": "Состав постройки"
+ },
+ "je_space_race_widget_sc_pause": {
+  "en": "Pause",
+  "ru": "Приостановить"
+ },
+ "je_space_race_widget_sc_resume": {
+  "en": "Resume",
+  "ru": "Возобновить"
+ },
+ "je_space_race_widget_sc_resuming": {
+  "en": "Resuming",
+  "ru": "Возобновляется"
+ },
+ "je_space_race_widget_setbacks_label": {
+  "en": "Setbacks So Far",
+  "ru": "Неудач до сих пор"
+ },
+ "je_space_race_widget_settlers_agi": {
+  "en": "AGI",
+  "ru": "AGI"
+ },
+ "je_space_race_widget_shipments_label": {
+  "en": "Shipments waiting / in flight",
+  "ru": "Грузы в ожидании / в пути"
+ },
+ "je_space_race_widget_solar_system_header": {
+  "en": "Solar System",
+  "ru": "Солнечная система"
+ },
+ "je_space_race_widget_space_fleets_header": {
+  "en": "Space Fleets",
+  "ru": "Космические флоты"
+ },
+ "je_space_race_widget_ss_all": {
+  "en": "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "ru": "Показаны все объекты: [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0]"
+ },
+ "je_space_race_widget_ss_filtered": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "ru": "Показано объектов: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! из [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0]"
+ },
+ "je_space_race_widget_ss_free": {
+  "en": "Free",
+  "ru": "Свободна"
+ },
+ "je_space_race_widget_ss_loc_asteroids": {
+  "en": "The Asteroid Belt",
+  "ru": "Пояс астероидов"
+ },
+ "je_space_race_widget_ss_loc_earth": {
+  "en": "The Moon",
+  "ru": "Луна"
+ },
+ "je_space_race_widget_ss_loc_inner": {
+  "en": "Mercury and Venus",
+  "ru": "Меркурий и Венера"
+ },
+ "je_space_race_widget_ss_loc_jupiter": {
+  "en": "Jupiter",
+  "ru": "Юпитер"
+ },
+ "je_space_race_widget_ss_loc_kuiper": {
+  "en": "The Kuiper Belt and Beyond",
+  "ru": "Пояс Койпера и дальше"
+ },
+ "je_space_race_widget_ss_loc_mars": {
+  "en": "Mars",
+  "ru": "Марс"
+ },
+ "je_space_race_widget_ss_loc_neptune": {
+  "en": "Neptune",
+  "ru": "Нептун"
+ },
+ "je_space_race_widget_ss_loc_saturn": {
+  "en": "Saturn",
+  "ru": "Сатурн"
+ },
+ "je_space_race_widget_ss_loc_uranus": {
+  "en": "Uranus",
+  "ru": "Уран"
+ },
+ "je_space_race_widget_ss_ours": {
+  "en": "Ours",
+  "ru": "Наши"
+ },
+ "je_space_race_widget_ss_show_all": {
+  "en": "Show all",
+  "ru": "Показать все"
+ },
+ "je_space_race_widget_ss_show_fewer": {
+  "en": "Show fewer",
+  "ru": "Показать меньше"
+ },
+ "je_space_race_widget_ss_target": {
+  "en": "Our target",
+  "ru": "Наша цель"
+ },
+ "je_space_race_widget_ss_target_button": {
+  "en": "Target",
+  "ru": "Цель"
+ },
+ "je_space_race_widget_ss_target_clear": {
+  "en": "Clear",
+  "ru": "Сбросить"
+ },
+ "je_space_race_widget_ss_unclaimed": {
+  "en": "Unclaimed",
+  "ru": "Не занято"
+ },
+ "je_space_race_widget_ss_unknown": {
+  "en": "Another power",
+  "ru": "Другая держава"
+ },
+ "je_space_race_widget_standard_label": {
+  "en": "Standard",
+  "ru": "Стандартный"
+ },
+ "je_space_race_widget_tab_fleets": {
+  "en": "Fleets",
+  "ru": "Флоты"
+ },
+ "je_space_race_widget_terra_finished": {
+  "en": "finished",
+  "ru": "завершено"
+ },
+ "je_space_race_widget_terra_idle": {
+  "en": "no work under way",
+  "ru": "работ нет"
+ },
+ "je_space_race_widget_terra_years_left": {
+  "en": "years to go",
+  "ru": "лет осталось"
+ },
+ "je_space_race_widget_tp_all": {
+  "en": "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
+  "ru": "Показаны все объекты: [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0]"
+ },
+ "je_space_race_widget_tp_count": {
+  "en": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_tp_count')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites can be targeted",
+  "ru": "Целью могут быть #v [GetPlayer.MakeScope.ScriptValue('sr_disp_tp_count')|0]#! из [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] объектов"
+ },
+ "je_space_race_widget_tp_title": {
+  "en": "Colony Target",
+  "ru": "Цель колонии"
+ },
+ "je_space_race_widget_win_any": {
+  "en": "Any month",
+  "ru": "Любой месяц"
+ },
+ "je_space_race_widget_win_col_dest": {
+  "en": "Destination",
+  "ru": "Назначение"
+ },
+ "je_space_race_widget_win_col_transit": {
+  "en": "Transit",
+  "ru": "В пути"
+ },
+ "je_space_race_widget_win_col_window": {
+  "en": "Next Window",
+  "ru": "Следующее окно"
+ },
+ "je_space_race_widget_win_paid_ceres": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_ceres')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_hygiea": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_hygiea')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_jupiter": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_jupiter')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_kuiper": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_kuiper')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_mars": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_mars')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_neptune": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_neptune')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_pallas": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_pallas')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_psyche": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_psyche')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_saturn": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_saturn')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_uranus": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_uranus')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_venus": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_venus')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! мес."
+ },
+ "je_space_race_widget_win_paid_vesta": {
+  "en": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! now, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! mo",
+  "ru": "#v +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_win_premium_vesta')|%0]#! сейчас, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_ceres": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_ceres')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_ceres')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_hygiea": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_hygiea')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_hygiea')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_jupiter": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_jupiter')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_jupiter')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_kuiper": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_kuiper')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_kuiper')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_mars": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mars')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mars')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_mercury": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mercury')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_mercury')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_neptune": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_neptune')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_neptune')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_pallas": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_pallas')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_pallas')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_psyche": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_psyche')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_psyche')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_saturn": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_saturn')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_saturn')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_uranus": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_uranus')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_uranus')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_venus": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_venus')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_venus')|0]#! мес."
+ },
+ "je_space_race_widget_win_transit_vesta": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_vesta')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_transit_months_vesta')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_ceres": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_ceres')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_hygiea": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_hygiea')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_jupiter": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_jupiter')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_kuiper": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_kuiper')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_mars": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_mars')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_neptune": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_neptune')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_pallas": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_pallas')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_psyche": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_psyche')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_saturn": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_saturn')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_uranus": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_uranus')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_venus": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_venus')|0]#! мес."
+ },
+ "je_space_race_widget_win_wait_vesta": {
+  "en": "In #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! months",
+  "ru": "Через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_wait_months_vesta')|0]#! мес."
+ },
+ "je_space_race_widget_windows_header": {
+  "en": "Next Windows",
+  "ru": "Следующие окна"
+ },
+ "je_space_race_widget_xf_col_move": {
+  "en": "Move",
+  "ru": "Переместить"
+ },
+ "je_space_race_widget_xf_col_now": {
+  "en": "Now",
+  "ru": "Сейчас"
+ },
+ "je_space_race_widget_xf_col_stay": {
+  "en": "Stays",
+  "ru": "Остаётся"
+ },
+ "je_space_race_widget_xf_col_there": {
+  "en": "Other fleet",
+  "ru": "Другой флот"
+ },
+ "je_space_race_widget_xf_go": {
+  "en": "Transfer",
+  "ru": "Передать"
+ },
+ "je_space_race_widget_xf_new": {
+  "en": "New fleet",
+  "ru": "Новый флот"
+ },
+ "je_space_race_widget_xf_role_carrier": {
+  "en": "Assault carriers",
+  "ru": "Штурмовые носители"
+ },
+ "je_space_race_widget_xf_role_marines": {
+  "en": "Marines",
+  "ru": "Морпехи"
+ },
+ "je_space_race_widget_xf_role_rapid": {
+  "en": "Rapid response",
+  "ru": "Быстрое реагирование"
+ },
+ "je_space_race_widget_xf_role_siege": {
+  "en": "Siege ships",
+  "ru": "Осадные корабли"
+ },
+ "je_space_race_widget_xf_role_strength": {
+  "en": "Strength",
+  "ru": "Сила"
+ },
+ "je_space_race_widget_xf_role_tender": {
+  "en": "Tenders",
+  "ru": "Тендеры"
+ },
+ "je_space_race_widget_xf_role_war": {
+  "en": "Warships",
+  "ru": "Боевые корабли"
+ },
+ "je_space_race_widget_xf_title": {
+  "en": "Transfer",
+  "ru": "Передача"
+ },
+ "je_space_race_widget_xf_to_label": {
+  "en": "Into",
+  "ru": "В"
+ },
+ "je_state_collapse": {
+  "en": "State Collapse",
+  "ru": "Распад государства"
+ },
+ "je_strategic_reserve": {
+  "en": "Strategic Reserve",
+  "ru": "Стратегический резерв"
+ },
+ "je_strategic_reserve_how_header": {
+  "en": "How the Strategic Reserve Works",
+  "ru": "Как работает стратегический резерв"
+ },
+ "je_strategic_reserve_how_sub_decay": {
+  "en": "Decay",
+  "ru": "Порча"
+ },
+ "je_strategic_reserve_how_sub_history": {
+  "en": "Fill History",
+  "ru": "История заполнения"
+ },
+ "je_strategic_reserve_how_sub_hub": {
+  "en": "The Hub and Silos",
+  "ru": "Хаб и хранилища"
+ },
+ "je_strategic_reserve_how_sub_income": {
+  "en": "Sales Income",
+  "ru": "Доход от продаж"
+ },
+ "je_strategic_reserve_how_sub_policies": {
+  "en": "Reserve Policies",
+  "ru": "Политика резерва"
+ },
+ "je_strategic_reserve_how_sub_presets": {
+  "en": "Presets and Settings",
+  "ru": "Пресеты и настройки"
+ },
+ "je_strategic_reserve_how_sub_rates": {
+  "en": "Rates",
+  "ru": "Нормы"
+ },
+ "je_strategic_reserve_inv_col_good": {
+  "en": "Good",
+  "ru": "Товар"
+ },
+ "je_strategic_reserve_inv_col_rate": {
+  "en": "Rate",
+  "ru": "Норма"
+ },
+ "je_strategic_reserve_inv_col_stock": {
+  "en": "Stock",
+  "ru": "Запас"
+ },
+ "je_strategic_reserve_inv_header": {
+  "en": "Reserve Inventory",
+  "ru": "Запасы резерва"
+ },
+ "je_strategic_reserve_ov_cap_value": {
+  "en": "Cap [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
+  "ru": "Предел [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/нед."
+ },
+ "je_strategic_reserve_ov_held_caption": {
+  "en": "Blocked",
+  "ru": "Заблокировано"
+ },
+ "je_strategic_reserve_ov_held_third": {
+  "en": "and [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full",
+  "ru": "и заполнено: [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0]"
+ },
+ "je_strategic_reserve_ov_hub_caption": {
+  "en": "Hub",
+  "ru": "Хаб"
+ },
+ "je_strategic_reserve_ov_hub_staffed": {
+  "en": "Hub Operating",
+  "ru": "Хаб работает"
+ },
+ "je_strategic_reserve_ov_income_label": {
+  "en": "Sales Income",
+  "ru": "Доход от продаж"
+ },
+ "je_strategic_reserve_ov_income_value": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
+  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/нед."
+ },
+ "je_strategic_reserve_ov_spend_label": {
+  "en": "Purchases",
+  "ru": "Закупки"
+ },
+ "je_strategic_reserve_ov_spend_value": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/wk",
+  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/нед."
+ },
+ "je_te_map_room": {
+  "en": "Map Room",
+  "ru": "Зал карт"
+ },
+ "je_un_act_champion_label": {
+  "en": "Champion the Order",
+  "ru": "Отстаивать порядок"
+ },
+ "je_un_act_convene_label": {
+  "en": "Convene a Conference",
+  "ru": "Созвать конференцию"
+ },
+ "je_un_act_defund_development_label": {
+  "en": "Withdraw",
+  "ru": "Отозвать"
+ },
+ "je_un_act_food_pledge_label": {
+  "en": "Pledge Grain",
+  "ru": "Пообещать зерно"
+ },
+ "je_un_act_food_withdraw_label": {
+  "en": "Withdraw Our Pledge",
+  "ru": "Отозвать обещание"
+ },
+ "je_un_act_found_label": {
+  "en": "Found the United Nations",
+  "ru": "Основать Организацию Объединённых Наций"
+ },
+ "je_un_act_found_league_label": {
+  "en": "Found the League",
+  "ru": "Основать Лигу"
+ },
+ "je_un_act_fund_development_label": {
+  "en": "Fund Development",
+  "ru": "Финансировать развитие"
+ },
+ "je_un_act_join_label": {
+  "en": "Join the United Nations",
+  "ru": "Вступить в Организацию Объединённых Наций"
+ },
+ "je_un_act_leave_cancel_label": {
+  "en": "Think Again",
+  "ru": "Передумать"
+ },
+ "je_un_act_leave_confirm_label": {
+  "en": "Confirm: Leave the UN",
+  "ru": "Подтвердить: выйти из ООН"
+ },
+ "je_un_act_leave_label": {
+  "en": "Leave the UN…",
+  "ru": "Выйти из ООН…"
+ },
+ "je_un_act_lift_sanctions_label": {
+  "en": "Lift Ours",
+  "ru": "Снять наши"
+ },
+ "je_un_act_pay_dues_label": {
+  "en": "Pay Our Dues",
+  "ru": "Уплатить взносы"
+ },
+ "je_un_act_prog_join_label": {
+  "en": "Join",
+  "ru": "Присоединиться"
+ },
+ "je_un_act_prog_leave_label": {
+  "en": "Leave",
+  "ru": "Выйти"
+ },
+ "je_un_act_raise_development_label": {
+  "en": "Raise",
+  "ru": "Повысить"
+ },
+ "je_un_act_reduce_development_label": {
+  "en": "Reduce",
+  "ru": "Снизить"
+ },
+ "je_un_act_stop_championing_label": {
+  "en": "Stop Championing",
+  "ru": "Прекратить отстаивание"
+ },
+ "je_un_act_stop_undermining_label": {
+  "en": "Stop Undermining",
+  "ru": "Прекратить подрыв"
+ },
+ "je_un_act_undermine_label": {
+  "en": "Undermine the Order",
+  "ru": "Подорвать порядок"
+ },
+ "je_un_act_withhold_dues_label": {
+  "en": "Withhold Our Dues",
+  "ru": "Удержать взносы"
+ },
+ "je_un_assembly_header": {
+  "en": "General Assembly",
+  "ru": "Генеральная Ассамблея"
+ },
+ "je_un_auth_header_history": {
+  "en": "UN Authority History",
+  "ru": "История авторитета ООН"
+ },
+ "je_un_auth_header_why": {
+  "en": "Why UN Authority Is Moving",
+  "ru": "Почему меняется авторитет ООН"
+ },
+ "je_un_auth_power_line": {
+  "en": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! of world prestige)",
+  "ru": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! мирового престижа)"
+ },
+ "je_un_auth_sub_ladder": {
+  "en": "Tier and Charter",
+  "ru": "Уровень и Устав"
+ },
+ "je_un_auth_sub_log": {
+  "en": "Recent Entries",
+  "ru": "Недавние записи"
+ },
+ "je_un_auth_sub_pillars": {
+  "en": "Authority and Its Pillars",
+  "ru": "Авторитет и его опоры"
+ },
+ "je_un_auth_sub_powers": {
+  "en": "Champions, Underminers and Outsiders",
+  "ru": "Защитники, подрывники и сторонние"
+ },
+ "je_un_auth_tbl_base_label": {
+  "en": "Base",
+  "ru": "Основа"
+ },
+ "je_un_auth_tbl_commitment_detail": {
+  "en": "champions minus underminers, by power",
+  "ru": "защитники минус подрывники, по державам"
+ },
+ "je_un_auth_tbl_commitment_label": {
+  "en": "Commitment",
+  "ru": "Приверженность"
+ },
+ "je_un_auth_tbl_credibility_detail": {
+  "en": "the Assembly's record, fading over years",
+  "ru": "история Ассамблеи, со временем забывается"
+ },
+ "je_un_auth_tbl_credibility_label": {
+  "en": "Credibility",
+  "ru": "Доверие"
+ },
+ "je_un_auth_tbl_delivery_detail": {
+  "en": "the ledger, fading over years$je_un_auth_tbl_delivery_hunger_detail$",
+  "ru": "учётная книга, со временем забывается$je_un_auth_tbl_delivery_hunger_detail$"
+ },
+ "je_un_auth_tbl_delivery_label": {
+  "en": "Delivery",
+  "ru": "Результативность"
+ },
+ "je_un_auth_tbl_funding_label": {
+  "en": "Funding",
+  "ru": "Финансирование"
+ },
+ "je_un_auth_tbl_order_label": {
+  "en": "Peace and order",
+  "ru": "Мир и порядок"
+ },
+ "je_un_auth_tbl_participation_label": {
+  "en": "Participation",
+  "ru": "Участие"
+ },
+ "je_un_auth_tbl_policy_label": {
+  "en": "Policy",
+  "ru": "Политика"
+ },
+ "je_un_auth_tier_contested": {
+  "en": "#bold Tier:#! [concept_un_tier_contested]",
+  "ru": "#bold Уровень:#! [concept_un_tier_contested]"
+ },
+ "je_un_auth_tier_established": {
+  "en": "#bold Tier:#! [concept_un_tier_established]",
+  "ru": "#bold Уровень:#! [concept_un_tier_established]"
+ },
+ "je_un_auth_tier_moribund": {
+  "en": "#bold Tier:#! [concept_un_tier_moribund]",
+  "ru": "#bold Уровень:#! [concept_un_tier_moribund]"
+ },
+ "je_un_auth_tier_strong": {
+  "en": "#bold Tier:#! [concept_un_tier_strong]",
+  "ru": "#bold Уровень:#! [concept_un_tier_strong]"
+ },
+ "je_un_auth_tier_supranational": {
+  "en": "#bold Tier:#! [concept_un_tier_supranational]",
+  "ru": "#bold Уровень:#! [concept_un_tier_supranational]"
+ },
+ "je_un_budget_arrears_label": {
+  "en": "Members' GDP in arrears",
+  "ru": "ВВП членов в задолженности"
+ },
+ "je_un_budget_dues_label": {
+  "en": "All members' [concept_un_dues], a week",
+  "ru": "[concept_un_dues] всех членов, в неделю"
+ },
+ "je_un_budget_lending_label": {
+  "en": "Left for emergency loans",
+  "ru": "Остаётся на экстренные займы"
+ },
+ "je_un_chamber_conseq_fail": {
+  "en": "  #bold If it falls:#! $un_vote_failed_tt$",
+  "ru": "  #bold В случае провала:#! $un_vote_failed_tt$"
+ },
+ "je_un_chamber_conseq_fail_expulsion": {
+  "en": "  #bold If it falls:#! $un_vote_expulsion_failed_tt$",
+  "ru": "  #bold В случае провала:#! $un_vote_expulsion_failed_tt$"
+ },
+ "je_un_chamber_council_member_entry": {
+  "en": "#v Permanent member#! — [THIS.GetCountry.GetName]",
+  "ru": "#v Постоянный член#! — [THIS.GetCountry.GetName]"
+ },
+ "je_un_chamber_country_gone": {
+  "en": "a former member",
+  "ru": "бывший член"
+ },
+ "je_un_chamber_deleg_bulk_against_label": {
+  "en": "Against",
+  "ru": "Против"
+ },
+ "je_un_chamber_deleg_bulk_for_label": {
+  "en": "For",
+  "ru": "За"
+ },
+ "je_un_chamber_deleg_firm_against_entry": {
+  "en": "#R Firmly against#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#R Решительно против#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_deleg_firm_for_entry": {
+  "en": "#G Firmly for#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#G Решительно за#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_deleg_header": {
+  "en": "Delegations",
+  "ru": "Делегации"
+ },
+ "je_un_chamber_deleg_lobby_against_label": {
+  "en": "Against",
+  "ru": "Против"
+ },
+ "je_un_chamber_deleg_lobby_for_label": {
+  "en": "For",
+  "ru": "За"
+ },
+ "je_un_chamber_deleg_lobby_word": {
+  "en": "Lobby",
+  "ru": "Лоббирование"
+ },
+ "je_un_chamber_deleg_pledge_against_label": {
+  "en": "Against",
+  "ru": "Против"
+ },
+ "je_un_chamber_deleg_pledge_for_label": {
+  "en": "For",
+  "ru": "За"
+ },
+ "je_un_chamber_deleg_pledge_word": {
+  "en": "Pledge",
+  "ru": "Обязательство"
+ },
+ "je_un_chamber_deleg_pledged_against": {
+  "en": "  #v Pledged#! to vote #R against#!, to [SCOPE.sCountry('un_deleg_pledgee').GetName]",
+  "ru": "  #v Обещано#! голосовать #R против#! перед страной [SCOPE.sCountry('un_deleg_pledgee').GetName]"
+ },
+ "je_un_chamber_deleg_stop_label": {
+  "en": "Stop Lobbying",
+  "ru": "Прекратить лоббирование"
+ },
+ "je_un_chamber_details_header": {
+  "en": "Voting Details",
+  "ru": "Подробности голосования"
+ },
+ "je_un_chamber_exposure_header": {
+  "en": "Our Record",
+  "ru": "Наш послужной список"
+ },
+ "je_un_chamber_history_header": {
+  "en": "Resolutions on the Record",
+  "ru": "Резолюции в протоколе"
+ },
+ "je_un_chamber_mandate_actor": {
+  "en": "  Authorized: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_actor').Exists, SCOPE.sCountry('un_chamber_mnd_actor').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_actor').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Уполномочена: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_actor').Exists, SCOPE.sCountry('un_chamber_mnd_actor').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_actor').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandate_beneficiary": {
+  "en": "  To be restored to [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists, SCOPE.sCountry('un_chamber_mnd_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Получатель возврата: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists, SCOPE.sCountry('un_chamber_mnd_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandate_propose_label": {
+  "en": "Propose the Mandate",
+  "ru": "Предложить мандат"
+ },
+ "je_un_chamber_mandate_target": {
+  "en": "  Against: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_target').Exists, SCOPE.sCountry('un_chamber_mnd_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_target').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Против: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_target').Exists, SCOPE.sCountry('un_chamber_mnd_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandates_header": {
+  "en": "Mandates in Force",
+  "ru": "Действующие мандаты"
+ },
+ "je_un_chamber_mission_aid": {
+  "en": "#bold [concept_un_mission_aid]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold [concept_un_mission_aid]#! в области [SCOPE.sState('un_chamber_msn_state').GetName], для: [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_electoral": {
+  "en": "#bold [concept_un_mission_electoral]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold [concept_un_mission_electoral]#! в области [SCOPE.sState('un_chamber_msn_state').GetName], для: [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_force": {
+  "en": "    the [concept_un_standing_force]",
+  "ru": "    [concept_un_standing_force]"
+ },
+ "je_un_chamber_mission_join_label": {
+  "en": "Send a Contingent",
+  "ru": "Направить контингент"
+ },
+ "je_un_chamber_mission_peacekeeping": {
+  "en": "#bold [concept_un_mission_peacekeeping]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold [concept_un_mission_peacekeeping]#! в области [SCOPE.sState('un_chamber_msn_state').GetName], для: [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_stabilisation": {
+  "en": "#bold [concept_un_mission_stabilisation]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold [concept_un_mission_stabilisation]#! в области [SCOPE.sState('un_chamber_msn_state').GetName], для: [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_withdraw_label": {
+  "en": "Withdraw Contingent",
+  "ru": "Отозвать контингент"
+ },
+ "je_un_chamber_missions_header": {
+  "en": "Missions in the Field",
+  "ru": "Миссии на местах"
+ },
+ "je_un_chamber_obligations_header": {
+  "en": "Our Obligations",
+  "ru": "Наши обязательства"
+ },
+ "je_un_chamber_propose_button_label": {
+  "en": "Propose",
+  "ru": "Предложить"
+ },
+ "je_un_chamber_propose_header_plain": {
+  "en": "Propose a Resolution",
+  "ru": "Предложить резолюцию"
+ },
+ "je_un_chamber_propose_header_ready": {
+  "en": "Propose a Resolution (#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_ready_count')|0] ready#!)",
+  "ru": "Предложить резолюцию (#G готово: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_ready_count')|0]#!)"
+ },
+ "je_un_chamber_propose_nearest_arms_embargo": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_arms_embargo')|0]#! needed",
+  "ru": "#bold Ближайшая:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','весомость дела')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! из необходимых #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_arms_embargo')|0]#!"
+ },
+ "je_un_chamber_propose_nearest_ceasefire": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_ceasefire')|0]#! needed",
+  "ru": "#bold Ближайшая:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','весомость дела')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! из необходимых #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_ceasefire')|0]#!"
+ },
+ "je_un_chamber_propose_nearest_condemn": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_condemn')|0]#! needed",
+  "ru": "#bold Ближайшая:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','весомость дела')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! из необходимых #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_condemn')|0]#!"
+ },
+ "je_un_chamber_propose_nearest_credentials": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_credentials')|0]#! needed",
+  "ru": "#bold Ближайшая:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','весомость дела')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! из необходимых #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_credentials')|0]#!"
+ },
+ "je_un_chamber_propose_nearest_sanctions": {
+  "en": "#bold Nearest:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','case strength')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! of the #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#! needed",
+  "ru": "#bold Ближайшая:#! [SCOPE.sCountry('un_chamber_nearest').GetName], [Concept('concept_un_case','весомость дела')] #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_strength')|0]#! из необходимых #v [SCOPE.sCountry('un_chamber_nearest').MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#!"
+ },
+ "je_un_chamber_propose_need_development_fund": {
+  "en": "The [concept_un_development_fund] does not already stand",
+  "ru": "[concept_un_development_fund] ещё не создан"
+ },
+ "je_un_chamber_propose_need_food_reserve": {
+  "en": "The [concept_un_food_reserve] does not already stand",
+  "ru": "[concept_un_food_reserve] ещё не создан"
+ },
+ "je_un_chamber_propose_need_lift_sanctions": {
+  "en": "We are under [concept_un_sanctions]",
+  "ru": "Мы под [Concept('concept_un_sanctions','санкциями ООН')]"
+ },
+ "je_un_chamber_propose_need_observer_request_seated": {
+  "en": "Our delegation is seated",
+  "ru": "Наша делегация допущена"
+ },
+ "je_un_chamber_propose_need_reform": {
+  "en": "The [concept_un_charter] has room for another reform",
+  "ru": "В [Concept('concept_un_charter','Уставе ООН')] есть место для новой реформы"
+ },
+ "je_un_chamber_propose_need_standing_force": {
+  "en": "The [concept_un_standing_force] has not been founded yet",
+  "ru": "[concept_un_standing_force] ещё не созданы"
+ },
+ "je_un_chamber_propose_preview_lift_sanctions": {
+  "en": "#bold Enforced by:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], for #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! months",
+  "ru": "#bold Исполняет:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], срок: #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! мес."
+ },
+ "je_un_chamber_propose_preview_observer_request": {
+  "en": "#bold Observers to:#! [SCOPE.sState('un_observer_request_state').GetName]",
+  "ru": "#bold Наблюдатели в области:#! [SCOPE.sState('un_observer_request_state').GetName]"
+ },
+ "je_un_chamber_propose_target_arms_embargo": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_ceasefire": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetName)]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetName)]"
+ },
+ "je_un_chamber_propose_target_ceasefire_victim": {
+  "en": ", at war with ",
+  "ru": ", в войне с государством "
+ },
+ "je_un_chamber_propose_target_condemn": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_condemn_target').Exists, SCOPE.sCountry('un_propose_condemn_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_condemn_target').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_condemn_target').Exists, SCOPE.sCountry('un_propose_condemn_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_condemn_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_credentials": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_credentials_pick').Exists, SCOPE.sCountry('un_credentials_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_credentials_pick').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_credentials_pick').Exists, SCOPE.sCountry('un_credentials_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_credentials_pick').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_expulsion": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_expulsion_target').Exists, SCOPE.sCountry('un_propose_expulsion_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_expulsion_target').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_expulsion_target').Exists, SCOPE.sCountry('un_propose_expulsion_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_expulsion_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_mandate": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_mandate_case_target').Exists, SCOPE.sCountry('un_mandate_case_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_mandate_case_target').Exists), 'je_un_chamber_country_gone')] (#bold [SCOPE.sStateRegion('un_chamber_case_region').GetName]#!)",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_mandate_case_target').Exists, SCOPE.sCountry('un_mandate_case_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_mandate_case_target').Exists), 'je_un_chamber_country_gone')] (#bold [SCOPE.sStateRegion('un_chamber_case_region').GetName]#!)"
+ },
+ "je_un_chamber_propose_target_sanctions": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_sanctions_target').Exists, SCOPE.sCountry('un_propose_sanctions_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_sanctions_target').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#bold Цель:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_sanctions_target').Exists, SCOPE.sCountry('un_propose_sanctions_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_sanctions_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_proposer": {
+  "en": "  Proposed by [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Автор предложения: [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_res_mandate_beneficiary": {
+  "en": "  To be restored to [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Получатель возврата: [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_rule_majority": {
+  "en": "#bold Passage Rule:#! [concept_un_passage_majority]",
+  "ru": "#bold Правило принятия:#! [concept_un_passage_majority]"
+ },
+ "je_un_chamber_sub_ballot": {
+  "en": "The Ballot",
+  "ru": "Бюллетень"
+ },
+ "je_un_chamber_sub_docket": {
+  "en": "The [Concept('concept_un_docket','Docket')]",
+  "ru": "[Concept('concept_un_docket','Повестка')]"
+ },
+ "je_un_chamber_sub_dues": {
+  "en": "Dues",
+  "ru": "Взносы"
+ },
+ "je_un_chamber_sub_mandate_case": {
+  "en": "Our Case",
+  "ru": "Наше дело"
+ },
+ "je_un_chamber_sub_mandate_register": {
+  "en": "The Register",
+  "ru": "Реестр"
+ },
+ "je_un_chamber_sub_missions_active": {
+  "en": "In the Field",
+  "ru": "На местах"
+ },
+ "je_un_chamber_sub_missions_ended": {
+  "en": "Ended",
+  "ru": "Завершены"
+ },
+ "je_un_chamber_sub_propose_ready": {
+  "en": "Ready to Table",
+  "ru": "Готово к внесению"
+ },
+ "je_un_chamber_sub_propose_shelved": {
+  "en": "No Case Now",
+  "ru": "Дела пока нет"
+ },
+ "je_un_chamber_sub_reach": {
+  "en": "The UN's Reach",
+  "ru": "Охват ООН"
+ },
+ "je_un_chamber_sub_regimes": {
+  "en": "Conventions",
+  "ru": "Конвенции"
+ },
+ "je_un_chamber_sub_session": {
+  "en": "Before the Assembly",
+  "ru": "Перед Ассамблеей"
+ },
+ "je_un_chamber_target": {
+  "en": "  Directed at [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  Направлено против: [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_topic_aid_request": {
+  "en": "#bold Humanitarian Aid Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Запрос гуманитарной помощи#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_antarctic": {
+  "en": "#bold Antarctic Treaty#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Договор об Антарктике#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_arms_embargo": {
+  "en": "#bold [concept_un_arms_embargo]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold [concept_un_arms_embargo]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_ceasefire": {
+  "en": "#bold Binding Ceasefire#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Обязательное прекращение огня#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_climate": {
+  "en": "#bold Climate Accord#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Климатическое соглашение#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_condemn": {
+  "en": "#bold Condemnation of Aggression#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Осуждение агрессии#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_court_referral": {
+  "en": "#bold Referral to the [concept_un_world_court]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Передача дела во [Concept('concept_un_world_court','Всемирный суд')]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_credentials": {
+  "en": "#bold Suspension of [concept_un_credentials]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Приостановка [Concept('concept_un_credentials','полномочий делегации')]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_cultural_diversity": {
+  "en": "#bold Cultural Diversity#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Культурное разнообразие#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_decolonization": {
+  "en": "#bold [Concept('concept_decolonization_system', 'Decolonization')] Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Резолюция о [Concept('concept_decolonization_system', 'деколонизации')]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_development_fund": {
+  "en": "#bold World Development Fund#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Всемирный фонд развития#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_food_reserve": {
+  "en": "#bold World Food Reserve#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Всемирный продовольственный резерв#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_heritage": {
+  "en": "#bold Cultural Heritage Program#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Программа культурного наследия#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_icc": {
+  "en": "#bold International Criminal Court#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Международный уголовный суд#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_lift_sanctions": {
+  "en": "#bold Lift the [concept_un_sanctions]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Снятие [Concept('concept_un_sanctions','санкций ООН')]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_military_mandate": {
+  "en": "#bold Authorized Military Mandate#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Санкционированный военный мандат#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_npt": {
+  "en": "#bold Nuclear Non-Proliferation Treaty#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Договор о нераспространении ядерного оружия#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_observer_request": {
+  "en": "#bold Electoral Observers Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Запрос избирательных наблюдателей#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_pandemic": {
+  "en": "#bold Global Pandemic Response#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Глобальный ответ на пандемию#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_peacekeeping_request": {
+  "en": "#bold [concept_un_peacekeeping] Deployment#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Развёртывание: [concept_un_peacekeeping]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_referendum": {
+  "en": "#bold Supervised Self-Determination Referendum#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Референдум о самоопределении под надзором#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_reform": {
+  "en": "#bold Charter Reform#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Реформа Устава#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_refugee": {
+  "en": "#bold International Refugee Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Международная резолюция о беженцах#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_sanctions": {
+  "en": "#bold [concept_un_sanctions]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold [concept_un_sanctions]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_space": {
+  "en": "#bold International Space Cooperation#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold Международное космическое сотрудничество#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_standing_force": {
+  "en": "#bold [concept_un_standing_force]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "ru": "#bold [concept_un_standing_force]#! (резолюция № [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_vetoed_by": {
+  "en": "  #R [concept_un_veto] cast by#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]",
+  "ru": "  #R [concept_un_veto] наложено:#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_vote_no_label": {
+  "en": "Vote Against",
+  "ru": "Голосовать против"
+ },
+ "je_un_chamber_vote_veto_cancel_label": {
+  "en": "Think Again",
+  "ru": "Передумать"
+ },
+ "je_un_chamber_vote_veto_confirm_label": {
+  "en": "Confirm the Veto",
+  "ru": "Подтвердить вето"
+ },
+ "je_un_chamber_vote_veto_label": {
+  "en": "Veto…",
+  "ru": "Вето…"
+ },
+ "je_un_chamber_vote_yes_label": {
+  "en": "Vote in Favor",
+  "ru": "Голосовать за"
+ },
+ "je_un_chamber_voter_entry_no": {
+  "en": "#R Opposed#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#R Против#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_voter_entry_yes": {
+  "en": "#G In favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "ru": "#G За#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_votes_header": {
+  "en": "Recorded Ballot",
+  "ru": "Поимённое голосование"
+ },
+ "je_un_conv_name_antarctic": {
+  "en": "Antarctic Treaty",
+  "ru": "Договор об Антарктике"
+ },
+ "je_un_conv_name_asat": {
+  "en": "Moratorium on Destructive Anti-Satellite Tests",
+  "ru": "Мораторий на разрушительные противоспутниковые испытания"
+ },
+ "je_un_conv_name_climate": {
+  "en": "Climate Accord",
+  "ru": "Климатическое соглашение"
+ },
+ "je_un_conv_name_cultural_diversity": {
+  "en": "Convention on Cultural Diversity",
+  "ru": "Конвенция о культурном разнообразии"
+ },
+ "je_un_conv_name_decolonization": {
+  "en": "Decolonization Resolution",
+  "ru": "Резолюция о деколонизации"
+ },
+ "je_un_conv_name_heritage": {
+  "en": "Cultural Heritage Program",
+  "ru": "Программа культурного наследия"
+ },
+ "je_un_conv_name_human_rights": {
+  "en": "Universal Declaration of Human Rights",
+  "ru": "Всеобщая декларация прав человека"
+ },
+ "je_un_conv_name_icc": {
+  "en": "International Criminal Court",
+  "ru": "Международный уголовный суд"
+ },
+ "je_un_conv_name_narcotics": {
+  "en": "Single Convention on Narcotic Drugs",
+  "ru": "Единая конвенция о наркотических средствах"
+ },
+ "je_un_conv_name_npt": {
+  "en": "Nuclear Non-Proliferation Treaty",
+  "ru": "Договор о нераспространении ядерного оружия"
+ },
+ "je_un_conv_name_pandemic": {
+  "en": "Global Pandemic Response",
+  "ru": "Глобальный ответ на пандемию"
+ },
+ "je_un_conv_name_refugee": {
+  "en": "International Refugee Resolution",
+  "ru": "Международная резолюция о беженцах"
+ },
+ "je_un_conv_name_space": {
+  "en": "International Space Cooperation",
+  "ru": "Международное космическое сотрудничество"
+ },
+ "je_un_dev_fund_avg_label": {
+  "en": "Members' average (GDP per head)",
+  "ru": "Среднее по членам (ВВП на душу)"
+ },
+ "je_un_dev_fund_eligible_label": {
+  "en": "Members qualifying",
+  "ru": "Подходящие члены"
+ },
+ "je_un_dev_fund_line_label": {
+  "en": "Cutoff (GDP per head)",
+  "ru": "Порог (ВВП на душу)"
+ },
+ "je_un_dev_fund_paid_label": {
+  "en": "Paid out a week",
+  "ru": "Выплачивается в неделю"
+ },
+ "je_un_dev_fund_recipient": {
+  "en": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "ru": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! в неделю (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] на душу)"
+ },
+ "je_un_dev_fund_recipient_us": {
+  "en": "#bold [THIS.GetCountry.GetName] (us):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "ru": "#bold [THIS.GetCountry.GetName] (мы):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! в неделю (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] на душу)"
+ },
+ "je_un_dev_fund_sub_recipients": {
+  "en": "Recipients",
+  "ru": "Получатели"
+ },
+ "je_un_how_header": {
+  "en": "How the UN Works",
+  "ru": "Как работает ООН"
+ },
+ "je_un_how_sub_authority": {
+  "en": "UN Authority",
+  "ru": "Авторитет ООН"
+ },
+ "je_un_how_sub_delegations": {
+  "en": "Delegations and Lobbying",
+  "ru": "Делегации и лоббирование"
+ },
+ "je_un_how_sub_dues": {
+  "en": "Dues and Obligations",
+  "ru": "Взносы и обязательства"
+ },
+ "je_un_how_sub_missions": {
+  "en": "Missions",
+  "ru": "Миссии"
+ },
+ "je_un_how_sub_record": {
+  "en": "Our Record",
+  "ru": "Наш послужной список"
+ },
+ "je_un_how_sub_standing": {
+  "en": "International Standing",
+  "ru": "Международный авторитет"
+ },
+ "je_un_led_actor_credibility": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: credibility [THIS.Var('un_led_value').GetValue|+2]",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: доверие [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_actor_delivery": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: delivery [THIS.Var('un_led_value').GetValue|+2]",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: результативность [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_actor_direct": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: authority [THIS.Var('un_led_value').GetValue|+2] at once",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: авторитет [THIS.Var('un_led_value').GetValue|+2] сразу"
+ },
+ "je_un_led_actor_order": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: peace and order [THIS.Var('un_led_value').GetValue|+2]",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: мир и порядок [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_assembly_credibility": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: credibility [THIS.Var('un_led_value').GetValue|+2]",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — Генеральная Ассамблея: доверие [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_assembly_delivery": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: delivery [THIS.Var('un_led_value').GetValue|+2]",
+  "ru": "#bold [THIS.Var('un_led_year').GetValue|0]#! — Генеральная Ассамблея: результативность [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_reason_1043": {
+  "en": "      #lore refused to help restore order in#! $je_un_led_subject_country$",
+  "ru": "      #lore отказ помочь восстановить порядок в стране#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1053": {
+  "en": "      #lore quietly traded through the sanctions on#! $je_un_led_subject_country$",
+  "ru": "      #lore тайная торговля в обход санкций против страны#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1073": {
+  "en": "      #lore refused aid for the famine in#! $je_un_led_subject_country$",
+  "ru": "      #lore отказ в помощи при голоде в стране#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1111": {
+  "en": "      #lore publicly denounced the [concept_un_veto] cast by#! $je_un_led_subject_country$",
+  "ru": "      #lore публичное осуждение [Concept('concept_un_veto','вето')], наложенного страной#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_18_on": {
+  "en": "      #lore an emergency loan delivered to#! $je_un_led_subject_country$",
+  "ru": "      #lore экстренный заём, выданный стране#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_33_on": {
+  "en": "      #lore a supervised self-determination referendum held in#! $je_un_led_subject_country$",
+  "ru": "      #lore референдум о самоопределении под надзором, проведённый в стране#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_8_on": {
+  "en": "      #lore launched a nuclear first strike on#! $je_un_led_subject_state$",
+  "ru": "      #lore ядерный первый удар по области#! $je_un_led_subject_state$"
+ },
+ "je_un_led_reason_9_on": {
+  "en": "      #lore used a tactical nuclear weapon in#! $je_un_led_subject_state$",
+  "ru": "      #lore применение тактического ядерного оружия в области#! $je_un_led_subject_state$"
+ },
+ "je_un_led_topic_aid_request": {
+  "en": "        Humanitarian Aid Request",
+  "ru": "        Запрос гуманитарной помощи"
+ },
+ "je_un_led_topic_antarctic": {
+  "en": "        Antarctic Treaty",
+  "ru": "        Договор об Антарктике"
+ },
+ "je_un_led_topic_asat": {
+  "en": "        Moratorium on Destructive Anti-Satellite Tests",
+  "ru": "        Мораторий на разрушительные противоспутниковые испытания"
+ },
+ "je_un_led_topic_ceasefire": {
+  "en": "        Binding Ceasefire",
+  "ru": "        Обязательное прекращение огня"
+ },
+ "je_un_led_topic_climate": {
+  "en": "        Climate Accord",
+  "ru": "        Климатическое соглашение"
+ },
+ "je_un_led_topic_condemn": {
+  "en": "        Condemnation of Aggression",
+  "ru": "        Осуждение агрессии"
+ },
+ "je_un_led_topic_court_referral": {
+  "en": "        Referral to the World Court",
+  "ru": "        Передача дела во Всемирный суд"
+ },
+ "je_un_led_topic_credentials": {
+  "en": "        Suspension of Credentials",
+  "ru": "        Приостановка полномочий делегации"
+ },
+ "je_un_led_topic_cultural_diversity": {
+  "en": "        Convention on Cultural Diversity",
+  "ru": "        Конвенция о культурном разнообразии"
+ },
+ "je_un_led_topic_decolonization": {
+  "en": "        [Concept('concept_decolonization_system', 'Decolonization')] Resolution",
+  "ru": "        Резолюция о [Concept('concept_decolonization_system', 'деколонизации')]"
+ },
+ "je_un_led_topic_development_fund": {
+  "en": "        World Development Fund",
+  "ru": "        Всемирный фонд развития"
+ },
+ "je_un_led_topic_expulsion": {
+  "en": "        Motion to Expel a [concept_un_permanent_member]",
+  "ru": "        Предложение исключить [Concept('concept_un_permanent_member','постоянного члена')]"
+ },
+ "je_un_led_topic_food_reserve": {
+  "en": "        World Food Reserve",
+  "ru": "        Всемирный продовольственный резерв"
+ },
+ "je_un_led_topic_heritage": {
+  "en": "        Cultural Heritage Program",
+  "ru": "        Программа культурного наследия"
+ },
+ "je_un_led_topic_human_rights": {
+  "en": "        Universal Declaration of Human Rights",
+  "ru": "        Всеобщая декларация прав человека"
+ },
+ "je_un_led_topic_icc": {
+  "en": "        International Criminal Court",
+  "ru": "        Международный уголовный суд"
+ },
+ "je_un_led_topic_lift_sanctions": {
+  "en": "        Petition to Lift [concept_un_sanctions]",
+  "ru": "        Ходатайство о снятии [Concept('concept_un_sanctions','санкций ООН')]"
+ },
+ "je_un_led_topic_military_mandate": {
+  "en": "        Authorized Military Mandate",
+  "ru": "        Санкционированный военный мандат"
+ },
+ "je_un_led_topic_narcotics": {
+  "en": "        Single Convention on Narcotic Drugs",
+  "ru": "        Единая конвенция о наркотических средствах"
+ },
+ "je_un_led_topic_npt": {
+  "en": "        Nuclear Non-Proliferation Treaty",
+  "ru": "        Договор о нераспространении ядерного оружия"
+ },
+ "je_un_led_topic_observer_request": {
+  "en": "        Electoral Observers Request",
+  "ru": "        Запрос избирательных наблюдателей"
+ },
+ "je_un_led_topic_pandemic": {
+  "en": "        Global Pandemic Response",
+  "ru": "        Глобальный ответ на пандемию"
+ },
+ "je_un_led_topic_peacekeeping_request": {
+  "en": "        [concept_un_peacekeeping] Deployment",
+  "ru": "        Развёртывание: [concept_un_peacekeeping]"
+ },
+ "je_un_led_topic_physical_protection": {
+  "en": "        Physical Protection of Nuclear Material",
+  "ru": "        Физическая защита ядерного материала"
+ },
+ "je_un_led_topic_referendum": {
+  "en": "        Supervised Self-Determination Referendum",
+  "ru": "        Референдум о самоопределении под надзором"
+ },
+ "je_un_led_topic_reform": {
+  "en": "        Charter Reform",
+  "ru": "        Реформа Устава"
+ },
+ "je_un_led_topic_refugee": {
+  "en": "        International Refugee Resolution",
+  "ru": "        Международная резолюция о беженцах"
+ },
+ "je_un_led_topic_space": {
+  "en": "        International Space Cooperation",
+  "ru": "        Международное космическое сотрудничество"
+ },
+ "je_un_led_topic_standing_force": {
+  "en": "        Standing UN Force",
+  "ru": "        Постоянные силы ООН"
+ },
+ "je_un_our_vote_1": {
+  "en": "in favor",
+  "ru": "за"
+ },
+ "je_un_our_vote_2": {
+  "en": "against",
+  "ru": "против"
+ },
+ "je_un_our_vote_3": {
+  "en": "veto",
+  "ru": "вето"
+ },
+ "je_un_our_vote_4": {
+  "en": "our motion: it counts in favor",
+  "ru": "наше предложение: засчитывается как «за»"
+ },
+ "je_un_our_vote_5": {
+  "en": "none",
+  "ru": "нет"
+ },
+ "je_un_our_vote_line": {
+  "en": "#bold Our Vote:#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' ), 'je_un_our_vote_0', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' ), 'je_un_our_vote_1', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' ), 'je_un_our_vote_2', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' ), 'je_un_our_vote_3', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' ), 'je_un_our_vote_4', 'je_un_our_vote_5' ) ) ) ) )]",
+  "ru": "#bold Наш голос:#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' ), 'je_un_our_vote_0', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' ), 'je_un_our_vote_1', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' ), 'je_un_our_vote_2', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' ), 'je_un_our_vote_3', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' ), 'je_un_our_vote_4', 'je_un_our_vote_5' ) ) ) ) )]"
+ },
+ "je_un_ov_authority_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/mo)",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/мес.)"
+ },
+ "je_un_ov_council_label": {
+  "en": "Security Council",
+  "ru": "Совет Безопасности"
+ },
+ "je_un_ov_crisis_fig": {
+  "en": "For #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_crisis_months')|0]#! months",
+  "ru": "В течение #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_crisis_months')|0]#! мес."
+ },
+ "je_un_ov_dues_fig_3": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct')|1]%#! of GDP",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct')|1]%#! ВВП"
+ },
+ "je_un_ov_member_conference": {
+  "en": "Opens in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! mo",
+  "ru": "Откроется через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_conference_months_left')|0]#! мес."
+ },
+ "je_un_ov_motions_caption": {
+  "en": "Our Motions",
+  "ru": "Наши предложения"
+ },
+ "je_un_ov_motions_free_fig": {
+  "en": "Floor free",
+  "ru": "Слово свободно"
+ },
+ "je_un_ov_motions_held_fig": {
+  "en": "Until the vote",
+  "ru": "До голосования"
+ },
+ "je_un_ov_motions_wait_fig": {
+  "en": "Next in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! mo",
+  "ru": "Следующее через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! мес."
+ },
+ "je_un_ov_motions_wait_unknown": {
+  "en": "On cooldown",
+  "ru": "На перезарядке"
+ },
+ "je_un_ov_record_fig": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! of 100",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! из 100"
+ },
+ "je_un_ov_standing_fig": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! of 100",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! из 100"
+ },
+ "je_un_ov_stats": {
+  "en": "[Concept('concept_un_represented','Represented')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_members')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_eligible')|0] · [Concept('concept_great_power','Great Powers')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gp_members')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gps')|0]",
+  "ru": "[Concept('concept_un_represented','Представлены')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_members')|0]#! из [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_eligible')|0] · [Concept('concept_great_power','Великие державы')]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gp_members')|0]#! из [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_stat_gps')|0]"
+ },
+ "je_un_preview_dues_header": {
+  "en": "If we are a member",
+  "ru": "Если мы состоим в ООН"
+ },
+ "je_un_preview_npt_header": {
+  "en": "If the United Nations enforces non-proliferation",
+  "ru": "Если Организация Объединённых Наций обеспечит нераспространение"
+ },
+ "je_un_prog_arms": {
+  "en": "Arms control",
+  "ru": "Контроль над вооружениями"
+ },
+ "je_un_prog_climate": {
+  "en": "Climate Accord",
+  "ru": "Климатическое соглашение"
+ },
+ "je_un_prog_development": {
+  "en": "Development Programs",
+  "ru": "Программы развития"
+ },
+ "je_un_prog_head_count": {
+  "en": "Count",
+  "ru": "Число"
+ },
+ "je_un_prog_head_label": {
+  "en": "Program or convention",
+  "ru": "Программа или конвенция"
+ },
+ "je_un_prog_head_ours": {
+  "en": "Ours",
+  "ru": "Наши"
+ },
+ "je_un_prog_heritage": {
+  "en": "Cultural Heritage Program",
+  "ru": "Программа культурного наследия"
+ },
+ "je_un_prog_hr_champions": {
+  "en": "Human rights champions",
+  "ru": "Защитники прав человека"
+ },
+ "je_un_prog_hr_signatories": {
+  "en": "Declaration of Human Rights",
+  "ru": "Декларация прав человека"
+ },
+ "je_un_prog_npt": {
+  "en": "Non-Proliferation Treaty",
+  "ru": "Договор о нераспространении"
+ },
+ "je_un_prog_ours_no": {
+  "en": "No",
+  "ru": "Нет"
+ },
+ "je_un_prog_sanctions": {
+  "en": "Under [concept_un_sanctions]",
+  "ru": "Под [Concept('concept_un_sanctions','санкциями ООН')]"
+ },
+ "je_un_programmes_header": {
+  "en": "Programs and Conventions",
+  "ru": "Программы и конвенции"
+ },
+ "je_un_record_aggression": {
+  "en": "Aggression",
+  "ru": "Агрессия"
+ },
+ "je_un_record_asat": {
+  "en": "Anti-satellite strikes",
+  "ru": "Противоспутниковые удары"
+ },
+ "je_un_record_council_header": {
+  "en": "Our Permanent Seat",
+  "ru": "Наше постоянное место"
+ },
+ "je_un_record_covert": {
+  "en": "Covert operations",
+  "ru": "Тайные операции"
+ },
+ "je_un_record_defiance": {
+  "en": "Defiance",
+  "ru": "Неповиновение"
+ },
+ "je_un_record_expulsion": {
+  "en": "Case for expelling us",
+  "ru": "Дело об исключении нас"
+ },
+ "je_un_record_infamy": {
+  "en": "Infamy",
+  "ru": "Дурная слава"
+ },
+ "je_un_record_nuclear": {
+  "en": "Nuclear weapons",
+  "ru": "Ядерное оружие"
+ },
+ "je_un_record_space": {
+  "en": "Hostile acts in space",
+  "ru": "Враждебные действия в космосе"
+ },
+ "je_un_record_standing": {
+  "en": "Standing case",
+  "ru": "Общая весомость дела"
+ },
+ "je_un_record_supports_header": {
+  "en": "Would Support",
+  "ru": "Поддержали бы"
+ },
+ "je_un_record_veto": {
+  "en": "Veto record",
+  "ru": "История вето"
+ },
+ "je_un_record_violation": {
+  "en": "Violated mandates",
+  "ru": "Нарушенные мандаты"
+ },
+ "je_un_session_months": {
+  "en": "Month #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months')|0]#! of 12",
+  "ru": "Месяц #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months')|0]#! из 12"
+ },
+ "je_un_standing_effects_disgraced": {
+  "en": "  In force: #R $un_standing_disgraced_modifier$#!\\n[GetStaticModifier('un_standing_disgraced_modifier').GetDesc]",
+  "ru": "  Действует: #R $un_standing_disgraced_modifier$#!\\n[GetStaticModifier('un_standing_disgraced_modifier').GetDesc]"
+ },
+ "je_un_standing_effects_exemplary": {
+  "en": "  In force: #G $un_standing_exemplary_modifier$#!\\n[GetStaticModifier('un_standing_exemplary_modifier').GetDesc]",
+  "ru": "  Действует: #G $un_standing_exemplary_modifier$#!\\n[GetStaticModifier('un_standing_exemplary_modifier').GetDesc]"
+ },
+ "je_un_standing_effects_poor": {
+  "en": "  In force: #R $un_standing_poor_modifier$#!\\n[GetStaticModifier('un_standing_poor_modifier').GetDesc]",
+  "ru": "  Действует: #R $un_standing_poor_modifier$#!\\n[GetStaticModifier('un_standing_poor_modifier').GetDesc]"
+ },
+ "je_un_standing_effects_respected": {
+  "en": "  In force: #G $un_standing_respected_modifier$#!\\n[GetStaticModifier('un_standing_respected_modifier').GetDesc]",
+  "ru": "  Действует: #G $un_standing_respected_modifier$#!\\n[GetStaticModifier('un_standing_respected_modifier').GetDesc]"
+ },
+ "je_un_tally_counts": {
+  "en": "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0] for#! · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0] against#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]",
+  "ru": "#G за: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0]#! · #R против: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0]#! из [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]"
+ },
+ "je_un_tally_rule_simple": {
+  "en": "#bold Passage Rule:#! [concept_un_passage_majority]",
+  "ru": "#bold Правило принятия:#! [concept_un_passage_majority]"
+ },
+ "je_un_tally_rule_super": {
+  "en": "#bold Passage Rule:#! [concept_un_passage_two_thirds] (the line)",
+  "ru": "#bold Правило принятия:#! [concept_un_passage_two_thirds] (порог)"
+ },
+ "je_world_climate": {
+  "en": "World Climate",
+  "ru": "Мировой климат"
+ },
+ "je_world_war": {
+  "en": "The Gathering Storm",
+  "ru": "Сгущающиеся тучи"
+ },
+ "je_world_war_ideology_authoritarian": {
+  "en": "\\n#bold Our Ideology:#! Authoritarian",
+  "ru": "\\n#bold Наша идеология:#! Авторитарная"
+ },
+ "je_world_war_ideology_communist": {
+  "en": "\\n#bold Our Ideology:#! Communist",
+  "ru": "\\n#bold Наша идеология:#! Коммунистическая"
+ },
+ "je_world_war_ideology_democratic": {
+  "en": "\\n#bold Our Ideology:#! Democratic",
+  "ru": "\\n#bold Наша идеология:#! Демократическая"
+ },
+ "je_world_war_ideology_fascist": {
+  "en": "\\n#bold Our Ideology:#! Fascist",
+  "ru": "\\n#bold Наша идеология:#! Фашистская"
+ },
+ "je_world_war_ideology_nonaligned": {
+  "en": "\\n#bold Our Ideology:#! Non-Aligned",
+  "ru": "\\n#bold Наша идеология:#! Неприсоединившаяся"
+ }
+}

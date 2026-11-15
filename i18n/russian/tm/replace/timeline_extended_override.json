@@ -1,0 +1,326 @@
+{
+ "POP_BROWSER": {
+  "en": "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]National Info",
+  "ru": "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]Национальный обзор"
+ },
+ "building_art_academy": {
+  "en": "Creative Industry",
+  "ru": "Творческая индустрия"
+ },
+ "building_chemical_plant": {
+  "en": "Chemical Plants",
+  "ru": "Химические заводы"
+ },
+ "building_electrics_industry": {
+  "en": "Wired Telecommunications Industries",
+  "ru": "Отрасли проводной связи"
+ },
+ "building_synthetics_plant": {
+  "en": "Synthetic Dyes Industries",
+  "ru": "Отрасли синтетических красителей"
+ },
+ "coal": {
+  "en": "Energy and Carbon Minerals",
+  "ru": "Энергетические и углеродные ископаемые"
+ },
+ "company_basic_electrics": {
+  "en": "Telecommunications",
+  "ru": "Телекоммуникации"
+ },
+ "company_basic_electrics_dynamic_name_tag_plural": {
+  "en": "Telecommunications",
+  "ru": "Телекоммуникации"
+ },
+ "company_basic_electrics_dynamic_name_tag_singular": {
+  "en": "Telecommunication",
+  "ru": "Телекоммуникация"
+ },
+ "concept_harvest_condition": {
+  "en": "Local Condition",
+  "ru": "Местное условие"
+ },
+ "concept_harvest_condition_intensity": {
+  "en": "Intensity",
+  "ru": "Интенсивность"
+ },
+ "concept_harvest_conditions": {
+  "en": "Local Conditions",
+  "ru": "Местные условия"
+ },
+ "copper": {
+  "en": "Conductive Metals",
+  "ru": "Проводниковые металлы"
+ },
+ "country_institution_cost_institution_home_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
+  "ru": "@bur![Nbsp][concept_bureaucracy]: затраты на институт [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "cultural_erasure": {
+  "en": "Latent Hostility",
+  "ru": "Скрытая враждебность"
+ },
+ "fertilizer": {
+  "en": "Chemicals",
+  "ru": "Химикаты"
+ },
+ "fine_art": {
+  "en": "Art and Entertainment",
+  "ru": "Искусство и развлечения"
+ },
+ "glass": {
+  "en": "Glass and Plastics",
+  "ru": "Стекло и пластмассы"
+ },
+ "goods_input_coal_add": {
+  "en": "@coal! $coal$ input",
+  "ru": "@coal! $coal$: расход"
+ },
+ "goods_input_copper_add": {
+  "en": "@copper! $copper$ input",
+  "ru": "@copper! $copper$: расход"
+ },
+ "goods_input_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Input",
+  "ru": "@fertilizer! $fertilizer$: расход"
+ },
+ "goods_input_glass_add": {
+  "en": "@glass! $glass$ input",
+  "ru": "@glass! $glass$: расход"
+ },
+ "goods_input_iron_add": {
+  "en": "@iron! $iron$ input",
+  "ru": "@iron! $iron$: расход"
+ },
+ "goods_input_lead_add": {
+  "en": "@lead! $lead$ input",
+  "ru": "@lead! $lead$: расход"
+ },
+ "goods_input_opium_add": {
+  "en": "@opium! $opium$ input",
+  "ru": "@opium! $opium$: расход"
+ },
+ "goods_input_radios_add": {
+  "en": "@radios! $radios$ input",
+  "ru": "@radios! $radios$: расход"
+ },
+ "goods_input_radios_mult": {
+  "en": "@radios![Nbsp]$radios$ input",
+  "ru": "@radios![Nbsp]$radios$: расход"
+ },
+ "goods_input_sulfur_add": {
+  "en": "@sulfur! $sulfur$ input",
+  "ru": "@sulfur! $sulfur$: расход"
+ },
+ "goods_input_telephones_add": {
+  "en": "@telephones! $telephones$ input",
+  "ru": "@telephones! $telephones$: расход"
+ },
+ "goods_input_transportation_add": {
+  "en": "@transportation! $transportation$ input",
+  "ru": "@transportation! $transportation$: расход"
+ },
+ "goods_output_coal_add": {
+  "en": "@coal! $coal$ output",
+  "ru": "@coal! $coal$: выпуск"
+ },
+ "goods_output_copper_add": {
+  "en": "@copper! $copper$ output",
+  "ru": "@copper! $copper$: выпуск"
+ },
+ "goods_output_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Output",
+  "ru": "@fertilizer! $fertilizer$: выпуск"
+ },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "ru": "@fertilizer! $fertilizer$: выпуск зданий"
+ },
+ "goods_output_fine_art_add": {
+  "en": "@fine_art! $fine_art$ output",
+  "ru": "@fine_art! $fine_art$: выпуск"
+ },
+ "goods_output_fine_art_mult": {
+  "en": "Building @fine_art! $fine_art$ output",
+  "ru": "@fine_art! $fine_art$: выпуск зданий"
+ },
+ "goods_output_glass_add": {
+  "en": "@glass! $glass$ output",
+  "ru": "@glass! $glass$: выпуск"
+ },
+ "goods_output_iron_add": {
+  "en": "@iron! $iron$ output",
+  "ru": "@iron! $iron$: выпуск"
+ },
+ "goods_output_lead_add": {
+  "en": "@lead! $lead$ output",
+  "ru": "@lead! $lead$: выпуск"
+ },
+ "goods_output_opium_add": {
+  "en": "@opium! $opium$ output",
+  "ru": "@opium! $opium$: выпуск"
+ },
+ "goods_output_radios_add": {
+  "en": "@radios! $radios$ output",
+  "ru": "@radios! $radios$: выпуск"
+ },
+ "goods_output_radios_mult": {
+  "en": "Building @radios! $radios$ output",
+  "ru": "@radios! $radios$: выпуск зданий"
+ },
+ "goods_output_sulfur_add": {
+  "en": "@sulfur! $sulfur$ output",
+  "ru": "@sulfur! $sulfur$: выпуск"
+ },
+ "goods_output_telephones_add": {
+  "en": "@telephones! $telephones$ output",
+  "ru": "@telephones! $telephones$: выпуск"
+ },
+ "goods_output_transportation_add": {
+  "en": "@transportation! $transportation$ output",
+  "ru": "@transportation! $transportation$: выпуск"
+ },
+ "institution_health_system": {
+  "en": "Ministry of Health",
+  "ru": "Министерство здравоохранения"
+ },
+ "institution_police": {
+  "en": "Ministry of Public Safety",
+  "ru": "Министерство общественной безопасности"
+ },
+ "institution_schools": {
+  "en": "Ministry of Education",
+  "ru": "Министерство образования"
+ },
+ "iron": {
+  "en": "Structural Metals",
+  "ru": "Конструкционные металлы"
+ },
+ "law_cultural_exclusion": {
+  "en": "Assimilatory Citizenship",
+  "ru": "Ассимилирующее гражданство"
+ },
+ "law_ethnostate": {
+  "en": "Ancestral Citizenship",
+  "ru": "Родовое гражданство"
+ },
+ "law_multicultural": {
+  "en": "Universal Citizenship",
+  "ru": "Всеобщее гражданство"
+ },
+ "law_national_supremacy": {
+  "en": "Cultural Citizenship",
+  "ru": "Культурное гражданство"
+ },
+ "law_racial_segregation": {
+  "en": "Racialized Citizenship",
+  "ru": "Расовое гражданство"
+ },
+ "law_subjecthood": {
+  "en": "Sovereign Subjecthood",
+  "ru": "Суверенное подданство"
+ },
+ "lead": {
+  "en": "Base Metals",
+  "ru": "Базовые металлы"
+ },
+ "no_veterancy": {
+  "en": "Recruit",
+  "ru": "Новобранец"
+ },
+ "opium": {
+  "en": "Drugs",
+  "ru": "Наркотики"
+ },
+ "pm_artificial_fertilizers": {
+  "en": "Basic Chemical Production",
+  "ru": "Базовое химическое производство"
+ },
+ "pm_film_art": {
+  "en": "Moving Pictures",
+  "ru": "Кинематограф"
+ },
+ "pm_improved_fertilizer": {
+  "en": "Refined Chemical Processes",
+  "ru": "Усовершенствованные химические процессы"
+ },
+ "pm_nitrogen_fixation": {
+  "en": "Synthetic Nitrogen Production",
+  "ru": "Производство синтетического азота"
+ },
+ "pm_no_maintenance": {
+  "en": "No Maintenance",
+  "ru": "Без обслуживания"
+ },
+ "pm_photographic_art": {
+  "en": "Photography",
+  "ru": "Фотография"
+ },
+ "pmg_fertilizer_production": {
+  "en": "Chemicals Production",
+  "ru": "Производство химикатов"
+ },
+ "pmg_passenger_trains": {
+  "en": "Rolling Stock",
+  "ru": "Подвижной состав"
+ },
+ "prestige_good_brunn_type_engines": {
+  "en": "High-Performance Engines",
+  "ru": "Высокопроизводительные двигатели"
+ },
+ "prestige_good_generic_fertilizer": {
+  "en": "Specialty Reagents",
+  "ru": "Специальные реагенты"
+ },
+ "prestige_good_generic_opium": {
+  "en": "Potent Formulations",
+  "ru": "Сильнодействующие составы"
+ },
+ "prestige_good_radiola_radios": {
+  "en": "Precision Wireless Gear",
+  "ru": "Прецизионное беспроводное оборудование"
+ },
+ "radios": {
+  "en": "Wireless Telecommunication Gear",
+  "ru": "Оборудование беспроводной связи"
+ },
+ "second_rate_citizen": {
+  "en": "Provisional Acceptance",
+  "ru": "Условное принятие"
+ },
+ "setting_free_construction_scaled_player_exemption": {
+  "en": "No Effect",
+  "ru": "Без эффекта"
+ },
+ "stockpile_navy_requirement_coal_add": {
+  "en": "Navy @coal! $coal$ Consumption",
+  "ru": "@coal! $coal$: потребление флотом"
+ },
+ "sulfur": {
+  "en": "Chemical and Industrial Minerals",
+  "ru": "Химические и промышленные минералы"
+ },
+ "telephones": {
+  "en": "Wired Telecommunication Gear",
+  "ru": "Оборудование проводной связи"
+ },
+ "veterancy0": {
+  "en": "Green",
+  "ru": "Необстрелянный"
+ },
+ "veterancy1": {
+  "en": "Regular",
+  "ru": "Регулярный"
+ },
+ "veterancy2": {
+  "en": "Disciplined",
+  "ru": "Дисциплинированный"
+ },
+ "veterancy3": {
+  "en": "Hardened",
+  "ru": "Закалённый"
+ },
+ "veterancy4": {
+  "en": "Seasoned",
+  "ru": "Опытный"
+ }
+}

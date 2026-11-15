@@ -1,0 +1,10 @@
+{
+ "je_tax_code": {
+  "en": "Tax Code",
+  "ru": "Налоговый кодекс"
+ },
+ "law_te_tax_code": {
+  "en": "Legislated Tax Code",
+  "ru": "Законодательно установленный налоговый кодекс"
+ }
+}

@@ -1,0 +1,762 @@
+{
+ "ICBMs": {
+  "en": "Intercontinental Ballistic Missiles",
+  "ru": "Межконтинентальные баллистические ракеты"
+ },
+ "LGBTQ_rights_movement": {
+  "en": "LGBTQ+ Rights Movement",
+  "ru": "Движение за права ЛГБТК+"
+ },
+ "abyssal_plain_mining": {
+  "en": "Abyssal Plain Mining",
+  "ru": "Добыча на абиссальных равнинах"
+ },
+ "additive_manufacturing": {
+  "en": "Additive Manufacturing",
+  "ru": "Аддитивное производство"
+ },
+ "advanced_agricultural_statistics": {
+  "en": "Advanced Agricultural Statistics",
+  "ru": "Передовая сельскохозяйственная статистика"
+ },
+ "advanced_assembly_lines": {
+  "en": "Advanced Assembly Lines",
+  "ru": "Передовые сборочные линии"
+ },
+ "advanced_body_armor": {
+  "en": "Advanced Body Armor",
+  "ru": "Передовая бронезащита"
+ },
+ "advanced_fission": {
+  "en": "Advanced Fission",
+  "ru": "Передовое деление ядер"
+ },
+ "advanced_materials_armor": {
+  "en": "Advanced Materials Armor",
+  "ru": "Броня из передовых материалов"
+ },
+ "advanced_military_aircraft": {
+  "en": "Advanced Military Aircraft",
+  "ru": "Передовая военная авиация"
+ },
+ "advanced_nanofabrication": {
+  "en": "Advanced Nanofabrication",
+  "ru": "Передовое нанопроизводство"
+ },
+ "advanced_structural_engineering": {
+  "en": "Advanced Structural Engineering",
+  "ru": "Передовая конструкционная инженерия"
+ },
+ "advanced_submarine_technology": {
+  "en": "Advanced Submarine Technology",
+  "ru": "Передовые подводные технологии"
+ },
+ "advanced_workflow_optimization": {
+  "en": "Advanced Workflow Optimization",
+  "ru": "Передовая оптимизация рабочих процессов"
+ },
+ "ai_agents": {
+  "en": "AI Agents",
+  "ru": "ИИ-агенты"
+ },
+ "ai_tutors": {
+  "en": "AI Tutors",
+  "ru": "ИИ-репетиторы"
+ },
+ "aluminum_mass_production": {
+  "en": "Aluminum Mass Production",
+  "ru": "Массовое производство алюминия"
+ },
+ "aneutronic_fusion": {
+  "en": "Aneutronic Fusion",
+  "ru": "Безнейтронный термоядерный синтез"
+ },
+ "animation": {
+  "en": "Animation",
+  "ru": "Анимация"
+ },
+ "anti_sub_warfare": {
+  "en": "Anti-Submarine Warfare",
+  "ru": "Противолодочная война"
+ },
+ "anti_war_movement": {
+  "en": "Anti-War Movement",
+  "ru": "Антивоенное движение"
+ },
+ "antibiotic_mass_production": {
+  "en": "Antibiotic Mass Production",
+  "ru": "Массовое производство антибиотиков"
+ },
+ "antimatter_production": {
+  "en": "Antimatter Production",
+  "ru": "Производство антиматерии"
+ },
+ "art_deco_architecture": {
+  "en": "Art Deco Architecture",
+  "ru": "Архитектура ар-деко"
+ },
+ "artificial_intelligence": {
+  "en": "Artificial General Intelligence",
+  "ru": "Общий искусственный интеллект"
+ },
+ "asteroid_mining": {
+  "en": "Asteroid Mining",
+  "ru": "Добыча на астероидах"
+ },
+ "augmented_reality_warfare": {
+  "en": "Augmented Reality Warfare",
+  "ru": "Война с дополненной реальностью"
+ },
+ "automated_surveillance": {
+  "en": "Automated Surveillance",
+  "ru": "Автоматизированное наблюдение"
+ },
+ "autonomous_vehicles": {
+  "en": "Autonomous Vehicles",
+  "ru": "Автономные транспортные средства"
+ },
+ "autonomous_weapons": {
+  "en": "Autonomous Weapons",
+  "ru": "Автономное оружие"
+ },
+ "barcodes_and_scanners": {
+  "en": "Barcodes and Scanners",
+  "ru": "Штрихкоды и сканеры"
+ },
+ "bergius_process": {
+  "en": "Bergius Process",
+  "ru": "Процесс Бергиуса"
+ },
+ "bioenhanced_soldiers": {
+  "en": "Bioenhanced Soldiers",
+  "ru": "Биоусиленные солдаты"
+ },
+ "biohacking_and_human_augmentation": {
+  "en": "Human Augmentation",
+  "ru": "Аугментация человека"
+ },
+ "biological_immortality": {
+  "en": "Biological Immortality",
+  "ru": "Биологическое бессмертие"
+ },
+ "biotechnology": {
+  "en": "Biotechnology",
+  "ru": "Биотехнологии"
+ },
+ "bombing_aircraft": {
+  "en": "Bombing Aircraft",
+  "ru": "Бомбардировочная авиация"
+ },
+ "brain_computer_interfaces": {
+  "en": "Brain-Computer Interfaces",
+  "ru": "Интерфейсы мозг-компьютер"
+ },
+ "carbon_capture_and_storage": {
+  "en": "Carbon Capture and Storage",
+  "ru": "Улавливание и хранение углерода"
+ },
+ "cellular_networks": {
+  "en": "Cellular Networks",
+  "ru": "Сотовые сети"
+ },
+ "cislunar_infrastructure": {
+  "en": "Cislunar Infrastructure",
+  "ru": "Окололунная инфраструктура"
+ },
+ "civil_rights_movement": {
+  "en": "Civil Rights Movement",
+  "ru": "Движение за гражданские права"
+ },
+ "clean_energy_technologies": {
+  "en": "Clean Energy Technologies",
+  "ru": "Чистые энергетические технологии"
+ },
+ "cloud_computing": {
+  "en": "Cloud Computing",
+  "ru": "Облачные вычисления"
+ },
+ "combined_arms": {
+  "en": "Combined Arms",
+  "ru": "Общевойсковые операции"
+ },
+ "commercial_aviation": {
+  "en": "Commercial Aviation",
+  "ru": "Коммерческая авиация"
+ },
+ "compact_fusion_reactors": {
+  "en": "Compact Fusion Reactors",
+  "ru": "Компактные термоядерные реакторы"
+ },
+ "computer_aided_design": {
+  "en": "Computer-Aided Design",
+  "ru": "Автоматизированное проектирование"
+ },
+ "computer_networks": {
+  "en": "Computer Networks",
+  "ru": "Компьютерные сети"
+ },
+ "computing_machines": {
+  "en": "Computing Machines",
+  "ru": "Вычислительные машины"
+ },
+ "consumer_credit": {
+  "en": "Consumer Credit",
+  "ru": "Потребительский кредит"
+ },
+ "containerization": {
+  "en": "Containerization",
+  "ru": "Контейнеризация"
+ },
+ "contraceptive_pill": {
+  "en": "Contraceptive Pill",
+  "ru": "Противозачаточные таблетки"
+ },
+ "cryptography": {
+  "en": "Cryptography",
+  "ru": "Криптография"
+ },
+ "cyber_warfare": {
+  "en": "Cyber Warfare",
+  "ru": "Кибервойна"
+ },
+ "cybersecurity": {
+  "en": "Cybersecurity",
+  "ru": "Кибербезопасность"
+ },
+ "decline_of_organized_religion": {
+  "en": "Decline of Organized Religion",
+  "ru": "Упадок организованной религии"
+ },
+ "digital_education": {
+  "en": "Digital Education",
+  "ru": "Цифровое образование"
+ },
+ "digital_entertainment": {
+  "en": "Digital Entertainment",
+  "ru": "Цифровые развлечения"
+ },
+ "digital_telecommunications": {
+  "en": "Digital Telecommunications",
+  "ru": "Цифровая связь"
+ },
+ "directed_energy_defenses": {
+  "en": "Directed Energy Defenses",
+  "ru": "Оборона направленной энергией"
+ },
+ "directed_energy_weapons": {
+  "en": "Directed Energy Weapons",
+  "ru": "Оружие направленной энергии"
+ },
+ "e-commerce": {
+  "en": "E-Commerce",
+  "ru": "Электронная коммерция"
+ },
+ "early_nanotechnology": {
+  "en": "Early Nanotechnology",
+  "ru": "Ранние нанотехнологии"
+ },
+ "electric_vehicles": {
+  "en": "Electric Vehicles",
+  "ru": "Электромобили"
+ },
+ "electronic_warfare": {
+  "en": "Electronic Warfare",
+  "ru": "Радиоэлектронная борьба"
+ },
+ "environmental_movement": {
+  "en": "Environmental Movement",
+  "ru": "Экологическое движение"
+ },
+ "fiber_optics": {
+  "en": "Fiber Optics",
+  "ru": "Оптоволокно"
+ },
+ "fluorescent_lamps": {
+  "en": "Fluorescent Lamps",
+  "ru": "Люминесцентные лампы"
+ },
+ "fusion_batteries": {
+  "en": "Microfusion Cells",
+  "ru": "Микротермоядерные элементы"
+ },
+ "fusion_power": {
+  "en": "Fusion Power",
+  "ru": "Термоядерная энергетика"
+ },
+ "gene_splicing": {
+  "en": "Gene Splicing",
+  "ru": "Сплайсинг генов"
+ },
+ "generative_ai": {
+  "en": "Generative AI",
+  "ru": "Генеративный ИИ"
+ },
+ "genetic_engineering": {
+  "en": "Genetic Engineering",
+  "ru": "Генная инженерия"
+ },
+ "geoengineering": {
+  "en": "Geoengineering",
+  "ru": "Геоинженерия"
+ },
+ "globalization": {
+  "en": "Globalization",
+  "ru": "Глобализация"
+ },
+ "green_revolution": {
+  "en": "Green Revolution",
+  "ru": "Зелёная революция"
+ },
+ "guided_missiles": {
+  "en": "Guided Missiles",
+  "ru": "Управляемые ракеты"
+ },
+ "humanoid_robotics": {
+  "en": "Humanoid Robotics",
+  "ru": "Человекоподобная робототехника"
+ },
+ "hydraulic_fracturing": {
+  "en": "Hydraulic Fracturing",
+  "ru": "Гидроразрыв пласта"
+ },
+ "hypersonic_weapons": {
+  "en": "Hypersonic Weapons",
+  "ru": "Гиперзвуковое оружие"
+ },
+ "in_situ_resource_utilization": {
+  "en": "In-Situ Resource Utilization",
+  "ru": "Использование местных ресурсов"
+ },
+ "inertial_navigation_systems": {
+  "en": "Inertial Navigation Systems",
+  "ru": "Инерциальные навигационные системы"
+ },
+ "infrared_night_vision": {
+  "en": "Infrared Night Vision",
+  "ru": "Инфракрасное ночное видение"
+ },
+ "integrated_circuits": {
+  "en": "Integrated Circuits",
+  "ru": "Интегральные схемы"
+ },
+ "intergovernmental_organizations": {
+  "en": "Intergovernmental Organizations",
+  "ru": "Межправительственные организации"
+ },
+ "internet_of_things": {
+  "en": "Internet of Things",
+  "ru": "Интернет вещей"
+ },
+ "isoprene": {
+  "en": "Isoprene",
+  "ru": "Изопрен"
+ },
+ "jadc2": {
+  "en": "Joint All-Domain Command and Control (JADC2)",
+  "ru": "Объединённое командование и управление во всех сферах (JADC2)"
+ },
+ "jet_engine_technology": {
+  "en": "Jet Engine Technology",
+  "ru": "Реактивные двигатели"
+ },
+ "keynesian_economics": {
+  "en": "Keynesian Economics",
+  "ru": "Кейнсианская экономика"
+ },
+ "knowledge_economy": {
+  "en": "Knowledge Economy",
+  "ru": "Экономика знаний"
+ },
+ "lab-grown_food": {
+  "en": "Lab-Grown Food",
+  "ru": "Лабораторно выращенная еда"
+ },
+ "laser_technology": {
+  "en": "Laser Technology",
+  "ru": "Лазерные технологии"
+ },
+ "liquid_democracy": {
+  "en": "Liquid Democracy",
+  "ru": "Жидкая демократия"
+ },
+ "machine_learning": {
+  "en": "Machine Learning",
+  "ru": "Машинное обучение"
+ },
+ "mainframe_computers": {
+  "en": "Mainframe Computers",
+  "ru": "Мейнфреймы"
+ },
+ "marketing_research": {
+  "en": "Marketing Research",
+  "ru": "Маркетинговые исследования"
+ },
+ "mass_media": {
+  "en": "Mass Media",
+  "ru": "Массмедиа"
+ },
+ "mental_health_awareness": {
+  "en": "Mental Health Awareness",
+  "ru": "Осведомлённость о психическом здоровье"
+ },
+ "microprocessor": {
+  "en": "Microprocessor",
+  "ru": "Микропроцессор"
+ },
+ "military_grade_cybersecurity": {
+  "en": "Military-Grade Cybersecurity",
+  "ru": "Кибербезопасность военного уровня"
+ },
+ "mind_backups": {
+  "en": "Mind Backups",
+  "ru": "Резервное копирование сознания"
+ },
+ "missile_defense_systems": {
+  "en": "Missile Defense Systems",
+  "ru": "Системы противоракетной обороны"
+ },
+ "modern_automotive_technology": {
+  "en": "Advanced Automotive Production Techniques",
+  "ru": "Передовые методы автомобилестроения"
+ },
+ "modern_chemical_processes": {
+  "en": "Modern Chemical Processes",
+  "ru": "Современные химические процессы"
+ },
+ "modern_management_techniques": {
+  "en": "Modern Management Techniques",
+  "ru": "Современные методы управления"
+ },
+ "modern_material_science": {
+  "en": "Modern Material Science",
+  "ru": "Современное материаловедение"
+ },
+ "modern_materials": {
+  "en": "Modern Materials",
+  "ru": "Современные материалы"
+ },
+ "modern_pharmaceuticals": {
+  "en": "Modern Pharmaceuticals",
+  "ru": "Современная фармацевтика"
+ },
+ "modern_skyscrapers": {
+  "en": "Modern Skyscrapers",
+  "ru": "Современные небоскрёбы"
+ },
+ "modern_tools": {
+  "en": "Modern Tools",
+  "ru": "Современные инструменты"
+ },
+ "modern_urban_planning": {
+  "en": "Modern Urban Planning",
+  "ru": "Современное градостроительство"
+ },
+ "modern_vaccines": {
+  "en": "Modern Vaccines",
+  "ru": "Современные вакцины"
+ },
+ "molecular_assemblers": {
+  "en": "Molecular Assemblers",
+  "ru": "Молекулярные сборщики"
+ },
+ "morphological_freedom": {
+  "en": "Morphological Freedom",
+  "ru": "Морфологическая свобода"
+ },
+ "motorized_artillery": {
+  "en": "Motorized Artillery",
+  "ru": "Моторизованная артиллерия"
+ },
+ "mrna_therapeutics": {
+  "en": "mRNA Therapeutics",
+  "ru": "мРНК-терапия"
+ },
+ "naval_convoy_defense": {
+  "en": "Naval Convoy Defense",
+  "ru": "Защита морских конвоев"
+ },
+ "naval_fire_control_systems": {
+  "en": "Naval Fire Control Systems",
+  "ru": "Системы управления огнём флота"
+ },
+ "network_centric_warfare": {
+  "en": "Network Centric Warfare",
+  "ru": "Сетецентрическая война"
+ },
+ "neural_lace": {
+  "en": "Neural Lace",
+  "ru": "Нейронное кружево"
+ },
+ "nuclear_energy": {
+  "en": "Nuclear Energy",
+  "ru": "Ядерная энергия"
+ },
+ "nuclear_thermal_propulsion": {
+  "en": "Nuclear Thermal Propulsion",
+  "ru": "Ядерная тепловая тяга"
+ },
+ "nuclear_weapons": {
+  "en": "Nuclear Weapons",
+  "ru": "Ядерное оружие"
+ },
+ "orbital_manufacturing": {
+  "en": "Orbital Manufacturing",
+  "ru": "Орбитальное производство"
+ },
+ "orbital_weapon_platforms": {
+  "en": "Orbital Weapon Platforms",
+  "ru": "Орбитальные оружейные платформы"
+ },
+ "personal_appliances": {
+  "en": "Personal Appliances",
+  "ru": "Бытовые приборы"
+ },
+ "personal_computers": {
+  "en": "Personal Computers",
+  "ru": "Персональные компьютеры"
+ },
+ "personalized_medicine": {
+  "en": "Personalized Medicine",
+  "ru": "Персонализированная медицина"
+ },
+ "photocopiers": {
+  "en": "Photocopiers",
+  "ru": "Копировальные аппараты"
+ },
+ "plastic_mass_production": {
+  "en": "Plastic Mass Production",
+  "ru": "Массовое производство пластмасс"
+ },
+ "pollution_control": {
+  "en": "Pollution Control",
+  "ru": "Контроль загрязнения"
+ },
+ "pop_culture": {
+  "en": "Pop Culture",
+  "ru": "Поп-культура"
+ },
+ "post-scarcity_economy": {
+  "en": "Post-Scarcity Economy",
+  "ru": "Экономика постдефицита"
+ },
+ "post_work_society": {
+  "en": "Post-Work Society",
+  "ru": "Посттрудовое общество"
+ },
+ "precision_guided_munitions": {
+  "en": "Precision Guided Munitions",
+  "ru": "Высокоточные боеприпасы"
+ },
+ "predictive_logistics": {
+  "en": "Predictive Logistics",
+  "ru": "Предиктивная логистика"
+ },
+ "prefabricated_construction": {
+  "en": "Prefabricated Construction",
+  "ru": "Сборное строительство"
+ },
+ "programmable_matter": {
+  "en": "Programmable Matter",
+  "ru": "Программируемая материя"
+ },
+ "public_works_programs": {
+  "en": "Public Works Programs",
+  "ru": "Программы общественных работ"
+ },
+ "quantum_communications": {
+  "en": "Quantum Communications",
+  "ru": "Квантовая связь"
+ },
+ "quantum_computing": {
+  "en": "Quantum Computing",
+  "ru": "Квантовые вычисления"
+ },
+ "quantum_materials": {
+  "en": "Quantum Materials",
+  "ru": "Квантовые материалы"
+ },
+ "radar": {
+  "en": "Radar",
+  "ru": "Радар"
+ },
+ "rapid_deployment_forces": {
+  "en": "Rapid Deployment Forces",
+  "ru": "Силы быстрого развёртывания"
+ },
+ "recon_satellites": {
+  "en": "Reconnaissance Satellites",
+  "ru": "Разведывательные спутники"
+ },
+ "rejuvenation_therapies": {
+  "en": "Rejuvenation Therapies",
+  "ru": "Омолаживающая терапия"
+ },
+ "reusable_rocketry": {
+  "en": "Reusable Rocketry",
+  "ru": "Многоразовые ракеты"
+ },
+ "robotics": {
+  "en": "Industrial Robotics",
+  "ru": "Промышленная робототехника"
+ },
+ "rocketry": {
+  "en": "Rocketry",
+  "ru": "Ракетостроение"
+ },
+ "rural_electrification": {
+  "en": "Rural Electrification",
+  "ru": "Электрификация села"
+ },
+ "satellite_communications": {
+  "en": "Satellite Communications",
+  "ru": "Спутниковая связь"
+ },
+ "second_wave_feminism": {
+  "en": "Second Wave Feminism",
+  "ru": "Феминизм второй волны"
+ },
+ "self_directed_evolution": {
+  "en": "Self-Directed Evolution",
+  "ru": "Самонаправляемая эволюция"
+ },
+ "self_driving_laboratories": {
+  "en": "Self-Driving Laboratories",
+  "ru": "Самоуправляемые лаборатории"
+ },
+ "semiautomatic_rifle": {
+  "en": "Semi-Automatic Rifle",
+  "ru": "Самозарядная винтовка"
+ },
+ "sexual_revolution": {
+  "en": "Sexual Revolution",
+  "ru": "Сексуальная революция"
+ },
+ "smart_grids": {
+  "en": "Smart Grids",
+  "ru": "Умные сети"
+ },
+ "social_justice_movements": {
+  "en": "Social Justice Movements",
+  "ru": "Движения за социальную справедливость"
+ },
+ "social_media": {
+  "en": "Social Media",
+  "ru": "Социальные сети"
+ },
+ "sonar": {
+  "en": "Sonar",
+  "ru": "Гидролокатор"
+ },
+ "space_based_solar_power": {
+  "en": "Space-Based Solar Power",
+  "ru": "Космическая солнечная энергетика"
+ },
+ "space_colonization": {
+  "en": "Space Colonization",
+  "ru": "Колонизация космоса"
+ },
+ "space_elevator": {
+  "en": "Space Elevator",
+  "ru": "Космический лифт"
+ },
+ "space_exploration": {
+  "en": "Space Exploration",
+  "ru": "Освоение космоса"
+ },
+ "space_militarization": {
+  "en": "Space Militarization",
+  "ru": "Милитаризация космоса"
+ },
+ "stainless_steel_mass_production": {
+  "en": "Stainless Steel Mass Production",
+  "ru": "Массовое производство нержавеющей стали"
+ },
+ "stealth_technology": {
+  "en": "Stealth Technology",
+  "ru": "Технологии малозаметности"
+ },
+ "supersonic_aircraft": {
+  "en": "Supersonic Aircraft",
+  "ru": "Сверхзвуковая авиация"
+ },
+ "supply_chain_management": {
+  "en": "Supply Chain Management",
+  "ru": "Управление цепями поставок"
+ },
+ "swarm_technology": {
+  "en": "Swarm Technology",
+  "ru": "Роевые технологии"
+ },
+ "synthetic_biology": {
+  "en": "Synthetic Biology",
+  "ru": "Синтетическая биология"
+ },
+ "tactical_nuclear_weapons": {
+  "en": "Tactical Nuclear Weapons",
+  "ru": "Тактическое ядерное оружие"
+ },
+ "telemedicine": {
+  "en": "Telemedicine",
+  "ru": "Телемедицина"
+ },
+ "telepathic_communities": {
+  "en": "Telepathic Communities",
+  "ru": "Телепатические сообщества"
+ },
+ "television": {
+  "en": "Television",
+  "ru": "Телевидение"
+ },
+ "television_broadcasting": {
+  "en": "Television Broadcasting",
+  "ru": "Телевещание"
+ },
+ "terraforming": {
+  "en": "Terraforming",
+  "ru": "Терраформирование"
+ },
+ "terrorism_and_anti_terrorism": {
+  "en": "Terrorism and Antiterrorism",
+  "ru": "Терроризм и борьба с ним"
+ },
+ "transistors": {
+  "en": "Transistor Technology",
+  "ru": "Транзисторные технологии"
+ },
+ "universal_basic_income": {
+  "en": "Universal Basic Income",
+  "ru": "Универсальный базовый доход"
+ },
+ "universal_digital_identity": {
+  "en": "Universal Digital Identity",
+  "ru": "Универсальная цифровая идентичность"
+ },
+ "unmanned_aerial_vehicles": {
+  "en": "Unmanned Aerial Vehicles",
+  "ru": "Беспилотные летательные аппараты"
+ },
+ "vactrains": {
+  "en": "Vactrains",
+  "ru": "Вакуумные поезда"
+ },
+ "video_games": {
+  "en": "Video Games",
+  "ru": "Видеоигры"
+ },
+ "virtual_reality": {
+  "en": "Virtual Reality",
+  "ru": "Виртуальная реальность"
+ },
+ "von_neumann_machines": {
+  "en": "Von Neumann Machines",
+  "ru": "Машины фон Неймана"
+ },
+ "wireless_internet": {
+  "en": "Wireless Internet (Wi-Fi)",
+  "ru": "Беспроводной интернет (Wi-Fi)"
+ },
+ "world_wide_web": {
+  "en": "World Wide Web",
+  "ru": "Всемирная паутина"
+ }
+}

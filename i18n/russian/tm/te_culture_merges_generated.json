@@ -1,0 +1,130 @@
+{
+ "je_te_cm_american": {
+  "en": "Cultural Merge: $cm_american$",
+  "ru": "Слияние культур: $cm_american$"
+ },
+ "je_te_cm_andean": {
+  "en": "Cultural Merge: $cm_andean$",
+  "ru": "Слияние культур: $cm_andean$"
+ },
+ "je_te_cm_anglophone": {
+  "en": "Cultural Merge: $cm_anglophone$",
+  "ru": "Слияние культур: $cm_anglophone$"
+ },
+ "je_te_cm_arab": {
+  "en": "Cultural Merge: $cm_arab$",
+  "ru": "Слияние культур: $cm_arab$"
+ },
+ "je_te_cm_brazilian": {
+  "en": "Cultural Merge: $brazilian$",
+  "ru": "Слияние культур: $brazilian$"
+ },
+ "je_te_cm_british": {
+  "en": "Cultural Merge: $british$",
+  "ru": "Слияние культур: $british$"
+ },
+ "je_te_cm_chinese": {
+  "en": "Cultural Merge: $han$",
+  "ru": "Слияние культур: $han$"
+ },
+ "je_te_cm_czechoslovak": {
+  "en": "Cultural Merge: $cm_czechoslovak$",
+  "ru": "Слияние культур: $cm_czechoslovak$"
+ },
+ "je_te_cm_dravidian": {
+  "en": "Cultural Merge: $cm_dravidian$",
+  "ru": "Слияние культур: $cm_dravidian$"
+ },
+ "je_te_cm_dutch": {
+  "en": "Cultural Merge: $dutch$",
+  "ru": "Слияние культур: $dutch$"
+ },
+ "je_te_cm_east_african": {
+  "en": "Cultural Merge: $cm_east_african$",
+  "ru": "Слияние культур: $cm_east_african$"
+ },
+ "je_te_cm_east_slavic": {
+  "en": "Cultural Merge: $cm_east_slavic$",
+  "ru": "Слияние культур: $cm_east_slavic$"
+ },
+ "je_te_cm_filipino": {
+  "en": "Cultural Merge: $filipino$",
+  "ru": "Слияние культур: $filipino$"
+ },
+ "je_te_cm_finnish": {
+  "en": "Cultural Merge: $finnish$",
+  "ru": "Слияние культур: $finnish$"
+ },
+ "je_te_cm_french": {
+  "en": "Cultural Merge: $french$",
+  "ru": "Слияние культур: $french$"
+ },
+ "je_te_cm_german": {
+  "en": "Cultural Merge: $cm_german$",
+  "ru": "Слияние культур: $cm_german$"
+ },
+ "je_te_cm_gran_colombian": {
+  "en": "Cultural Merge: $cm_gran_colombian$",
+  "ru": "Слияние культур: $cm_gran_colombian$"
+ },
+ "je_te_cm_hindustani": {
+  "en": "Cultural Merge: $hindustani$",
+  "ru": "Слияние культур: $hindustani$"
+ },
+ "je_te_cm_hungarian": {
+  "en": "Cultural Merge: $hungarian$",
+  "ru": "Слияние культур: $hungarian$"
+ },
+ "je_te_cm_indonesian": {
+  "en": "Cultural Merge: $cm_indonesian$",
+  "ru": "Слияние культур: $cm_indonesian$"
+ },
+ "je_te_cm_italian": {
+  "en": "Cultural Merge: $cm_italian$",
+  "ru": "Слияние культур: $cm_italian$"
+ },
+ "je_te_cm_japanese": {
+  "en": "Cultural Merge: $japanese$",
+  "ru": "Слияние культур: $japanese$"
+ },
+ "je_te_cm_latin": {
+  "en": "Cultural Merge: $cm_latin$",
+  "ru": "Слияние культур: $cm_latin$"
+ },
+ "je_te_cm_nguni": {
+  "en": "Cultural Merge: $cm_nguni$",
+  "ru": "Слияние культур: $cm_nguni$"
+ },
+ "je_te_cm_oghuz_turkic": {
+  "en": "Cultural Merge: $cm_oghuz_turkic$",
+  "ru": "Слияние культур: $cm_oghuz_turkic$"
+ },
+ "je_te_cm_pan_malay": {
+  "en": "Cultural Merge: $cm_pan_malay$",
+  "ru": "Слияние культур: $cm_pan_malay$"
+ },
+ "je_te_cm_pan_slavic": {
+  "en": "Cultural Merge: $cm_pan_slavic$",
+  "ru": "Слияние культур: $cm_pan_slavic$"
+ },
+ "je_te_cm_pan_turkic": {
+  "en": "Cultural Merge: $cm_pan_turkic$",
+  "ru": "Слияние культур: $cm_pan_turkic$"
+ },
+ "je_te_cm_persian": {
+  "en": "Cultural Merge: $persian$",
+  "ru": "Слияние культур: $persian$"
+ },
+ "je_te_cm_platine": {
+  "en": "Cultural Merge: $cm_platine$",
+  "ru": "Слияние культур: $cm_platine$"
+ },
+ "je_te_cm_scandinavian": {
+  "en": "Cultural Merge: $cm_scandinavian$",
+  "ru": "Слияние культур: $cm_scandinavian$"
+ },
+ "je_te_cm_yugoslav": {
+  "en": "Cultural Merge: $cm_yugoslav$",
+  "ru": "Слияние культур: $cm_yugoslav$"
+ }
+}

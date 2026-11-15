@@ -1,0 +1,814 @@
+{
+ "law_active_persecution": {
+  "en": "Active Persecution",
+  "ru": "Активные преследования"
+ },
+ "law_algorithmic_governance": {
+  "en": "Algorithmic Governance",
+  "ru": "Алгоритмическое управление"
+ },
+ "law_algorithmic_jurisprudence": {
+  "en": "Algorithmic Jurisprudence",
+  "ru": "Алгоритмическая юриспруденция"
+ },
+ "law_automated_bureaucracy": {
+  "en": "Automated Bureaucracy",
+  "ru": "Автоматизированная бюрократия"
+ },
+ "law_automation_dividend": {
+  "en": "Automation Dividend",
+  "ru": "Дивиденд от автоматизации"
+ },
+ "law_auxiliary_fleet": {
+  "en": "Auxiliary Fleet",
+  "ru": "Вспомогательный флот"
+ },
+ "law_ban_on_genetic_modification": {
+  "en": "Ban on Genetic Modification",
+  "ru": "Запрет генетических модификаций"
+ },
+ "law_basic_protections": {
+  "en": "Basic Protections",
+  "ru": "Базовая защита"
+ },
+ "law_central_bank_independence": {
+  "en": "Central Bank Independence",
+  "ru": "Независимость центрального банка"
+ },
+ "law_civic_monolingualism": {
+  "en": "Civic Monolingualism",
+  "ru": "Гражданский монолингвизм"
+ },
+ "law_clade_citizenship": {
+  "en": "Clade Citizenship",
+  "ru": "Гражданство по кладе"
+ },
+ "law_command_cooperative_economy": {
+  "en": "Command/Cooperative Economy",
+  "ru": "Командно-кооперативная экономика"
+ },
+ "law_commodity_money": {
+  "en": "Commodity Money",
+  "ru": "Товарные деньги"
+ },
+ "law_communal_child_rearing": {
+  "en": "Communal Child-Rearing",
+  "ru": "Общинное воспитание детей"
+ },
+ "law_comprehensive_rights": {
+  "en": "Anti-Discrimination Laws",
+  "ru": "Законы против дискриминации"
+ },
+ "law_constitutional_review": {
+  "en": "Constitutional Review",
+  "ru": "Конституционный контроль"
+ },
+ "law_contracted_administration": {
+  "en": "Contracted Administration",
+  "ru": "Управление по контракту"
+ },
+ "law_corporate_genetic_licensing": {
+  "en": "Corporate Genetic Licensing",
+  "ru": "Корпоративное лицензирование генов"
+ },
+ "law_creative_commons": {
+  "en": "Creative Commons",
+  "ru": "Creative Commons"
+ },
+ "law_decentralized_cryptocurrency": {
+  "en": "Decentralized Cryptocurrency",
+  "ru": "Децентрализованная криптовалюта"
+ },
+ "law_devolution": {
+  "en": "Devolved Administration",
+  "ru": "Делегированное управление"
+ },
+ "law_digital_currency": {
+  "en": "Digital Currency",
+  "ru": "Цифровая валюта"
+ },
+ "law_direct_democracy": {
+  "en": "Collective Governance",
+  "ru": "Коллективное управление"
+ },
+ "law_directed_credit_development_banks": {
+  "en": "Directed Credit & Development Banks",
+  "ru": "Направленное кредитование и банки развития"
+ },
+ "law_dirigisme": {
+  "en": "Dirigiste Policy",
+  "ru": "Дирижистская политика"
+ },
+ "law_donation_limits": {
+  "en": "Donation Limits",
+  "ru": "Ограничения пожертвований"
+ },
+ "law_equal_inheritance": {
+  "en": "Forced Heirship",
+  "ru": "Обязательная доля наследства"
+ },
+ "law_executive_tribunals": {
+  "en": "Executive Tribunals",
+  "ru": "Исполнительные трибуналы"
+ },
+ "law_federal_system": {
+  "en": "Federal System",
+  "ru": "Федеративная система"
+ },
+ "law_feudal_contracts": {
+  "en": "Traditional Vassalage",
+  "ru": "Традиционный вассалитет"
+ },
+ "law_fiat_currency": {
+  "en": "Fiat Money",
+  "ru": "Необеспеченные деньги"
+ },
+ "law_fossil_expansion_moratorium": {
+  "en": "Fossil Expansion Moratorium",
+  "ru": "Мораторий на расширение добычи ископаемого топлива"
+ },
+ "law_free_mutual_banking": {
+  "en": "Free & Mutual Banking",
+  "ru": "Свободный и взаимный банкинг"
+ },
+ "law_free_testation": {
+  "en": "Freedom of Testation",
+  "ru": "Свобода завещания"
+ },
+ "law_freedom_of_contract": {
+  "en": "Freedom of Contract",
+  "ru": "Свобода контрактов"
+ },
+ "law_freedom_of_information": {
+  "en": "Freedom of Information",
+  "ru": "Свобода информации"
+ },
+ "law_full_equality_and_protection": {
+  "en": "Full Equality and Protection",
+  "ru": "Полное равенство и защита"
+ },
+ "law_gold_standard": {
+  "en": "Gold Standard",
+  "ru": "Золотой стандарт"
+ },
+ "law_guilds_chartered_monopolies": {
+  "en": "Guilds and Chartered Monopolies",
+  "ru": "Гильдии и привилегированные монополии"
+ },
+ "law_human_labor_quotas": {
+  "en": "Human Labor Quotas",
+  "ru": "Квоты на человеческий труд"
+ },
+ "law_human_purity": {
+  "en": "Human Purity",
+  "ru": "Чистота человека"
+ },
+ "law_humanitarian_regulations": {
+  "en": "Humanitarian Regulations",
+  "ru": "Гуманитарное регулирование"
+ },
+ "law_informal_government_secrecy": {
+  "en": "Informal Government Secrecy",
+  "ru": "Неформальная секретность правительства"
+ },
+ "law_international_ai_oversight": {
+  "en": "International Oversight",
+  "ru": "Международный надзор"
+ },
+ "law_intrusive_surveillance": {
+  "en": "Intrusive Surveillance System",
+  "ru": "Система тотальной слежки"
+ },
+ "law_judicial_supremacy": {
+  "en": "Judicial Supremacy",
+  "ru": "Верховенство судов"
+ },
+ "law_legal_limbo": {
+  "en": "Legal Limbo",
+  "ru": "Правовая неопределённость"
+ },
+ "law_licensed_modification": {
+  "en": "Licensed Modification",
+  "ru": "Лицензированные модификации"
+ },
+ "law_limited_war": {
+  "en": "Limited War",
+  "ru": "Ограниченная война"
+ },
+ "law_linguistic_purity": {
+  "en": "Linguistic Purity",
+  "ru": "Языковая чистота"
+ },
+ "law_liquid_democracy": {
+  "en": "Liquid Democracy",
+  "ru": "Жидкая демократия"
+ },
+ "law_littoral_defense": {
+  "en": "Littoral Defense",
+  "ru": "Прибрежная оборона"
+ },
+ "law_local_vernacular": {
+  "en": "Local Vernacular",
+  "ru": "Местные наречия"
+ },
+ "law_managed_fossil_phaseout": {
+  "en": "Managed Fossil Phaseout",
+  "ru": "Управляемый отказ от ископаемого топлива"
+ },
+ "law_mandatory_augmentation": {
+  "en": "Mandatory Augmentation",
+  "ru": "Обязательная аугментация"
+ },
+ "law_medical_augmentation_only": {
+  "en": "Medical Augmentation Only",
+  "ru": "Только медицинская аугментация"
+ },
+ "law_minimal_privacy_protection": {
+  "en": "Minimal Privacy Protection",
+  "ru": "Минимальная защита частной жизни"
+ },
+ "law_ministry_of_commerce": {
+  "en": "Ministry of Commerce Established",
+  "ru": "Министерство торговли учреждено"
+ },
+ "law_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection Established",
+  "ru": "Министерство защиты прав потребителей учреждено"
+ },
+ "law_ministry_of_culture": {
+  "en": "Ministry of Culture Established",
+  "ru": "Министерство культуры учреждено"
+ },
+ "law_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs Established",
+  "ru": "Министерство иностранных дел учреждено"
+ },
+ "law_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security Established",
+  "ru": "Министерство разведки и безопасности учреждено"
+ },
+ "law_ministry_of_international_aid": {
+  "en": "Ministry of International Aid Established",
+  "ru": "Министерство международной помощи учреждено"
+ },
+ "law_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda Established",
+  "ru": "Министерство пропаганды учреждено"
+ },
+ "law_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs Established",
+  "ru": "Министерство по делам беженцев учреждено"
+ },
+ "law_ministry_of_religion": {
+  "en": "Ministry of Religion Established",
+  "ru": "Министерство по делам религий учреждено"
+ },
+ "law_ministry_of_science": {
+  "en": "Ministry of Science Established",
+  "ru": "Министерство науки учреждено"
+ },
+ "law_ministry_of_the_environment": {
+  "en": "Ministry of the Environment Established",
+  "ru": "Министерство окружающей среды учреждено"
+ },
+ "law_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control Established",
+  "ru": "Министерство контроля над мыслью учреждено"
+ },
+ "law_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning Established",
+  "ru": "Министерство градостроительства учреждено"
+ },
+ "law_ministry_of_war": {
+  "en": "Ministry of War Established",
+  "ru": "Военное министерство учреждено"
+ },
+ "law_minority_rights_affirmative_action": {
+  "en": "Affirmative Action",
+  "ru": "Позитивная дискриминация"
+ },
+ "law_minority_rights_cultural_assimilation": {
+  "en": "Cultural Assimilation",
+  "ru": "Культурная ассимиляция"
+ },
+ "law_minority_rights_discrimination": {
+  "en": "Discrimination",
+  "ru": "Дискриминация"
+ },
+ "law_minority_rights_ghettoization": {
+  "en": "Ghettoization",
+  "ru": "Геттоизация"
+ },
+ "law_minority_rights_indifference": {
+  "en": "Indifference",
+  "ru": "Безразличие"
+ },
+ "law_minority_rights_protection": {
+  "en": "Protection",
+  "ru": "Защита"
+ },
+ "law_minority_rights_violent_hostility": {
+  "en": "Violent Hostility",
+  "ru": "Насильственная враждебность"
+ },
+ "law_moderate_data_privacy": {
+  "en": "Moderate Data Privacy",
+  "ru": "Умеренная защита данных"
+ },
+ "law_morphological_freedom": {
+  "en": "Morphological Freedom",
+  "ru": "Морфологическая свобода"
+ },
+ "law_multilingual_federalism": {
+  "en": "Multilingual Federalism",
+  "ru": "Многоязычный федерализм"
+ },
+ "law_national_ai_licensing": {
+  "en": "National Licensing",
+  "ru": "Национальное лицензирование"
+ },
+ "law_national_bank": {
+  "en": "National Bank Established",
+  "ru": "Национальный банк учреждён"
+ },
+ "law_natural_form": {
+  "en": "Natural Form",
+  "ru": "Естественная форма"
+ },
+ "law_neocameralism": {
+  "en": "Neocameralism",
+  "ru": "Неокамерализм"
+ },
+ "law_neocolonialism": {
+  "en": "Neocolonialism",
+  "ru": "Неоколониализм"
+ },
+ "law_net_neutrality": {
+  "en": "Net Neutrality",
+  "ru": "Сетевой нейтралитет"
+ },
+ "law_no_augmentation": {
+  "en": "No Augmentation",
+  "ru": "Без аугментации"
+ },
+ "law_no_campaign_finance_laws": {
+  "en": "No Campaign Finance Laws",
+  "ru": "Без законов о финансировании кампаний"
+ },
+ "law_no_frontier_ai_policy": {
+  "en": "No Frontier AI Policy",
+  "ru": "Без политики в отношении передового ИИ"
+ },
+ "law_no_internet_policy": {
+  "en": "No Internet Policy",
+  "ru": "Без интернет-политики"
+ },
+ "law_no_ip_protection": {
+  "en": "No IP Protection",
+  "ru": "Без защиты интеллектуальной собственности"
+ },
+ "law_no_ministry_of_commerce": {
+  "en": "No Ministry of Commerce",
+  "ru": "Без министерства торговли"
+ },
+ "law_no_ministry_of_consumer_protection": {
+  "en": "No Ministry of Consumer Protection",
+  "ru": "Без министерства защиты прав потребителей"
+ },
+ "law_no_ministry_of_culture": {
+  "en": "No Ministry of Culture",
+  "ru": "Без министерства культуры"
+ },
+ "law_no_ministry_of_foreign_affairs": {
+  "en": "No Ministry of Foreign Affairs",
+  "ru": "Без министерства иностранных дел"
+ },
+ "law_no_ministry_of_intelligence_and_security": {
+  "en": "No Ministry of Intelligence and Security",
+  "ru": "Без министерства разведки и безопасности"
+ },
+ "law_no_ministry_of_international_aid": {
+  "en": "No Ministry of International Aid",
+  "ru": "Без министерства международной помощи"
+ },
+ "law_no_ministry_of_labor": {
+  "en": "No Ministry of Labor",
+  "ru": "Без министерства труда"
+ },
+ "law_no_ministry_of_propaganda": {
+  "en": "No Ministry of Propaganda",
+  "ru": "Без министерства пропаганды"
+ },
+ "law_no_ministry_of_refugee_affairs": {
+  "en": "No Ministry of Refugee Affairs",
+  "ru": "Без министерства по делам беженцев"
+ },
+ "law_no_ministry_of_religion": {
+  "en": "No Ministry of Religion",
+  "ru": "Без министерства по делам религий"
+ },
+ "law_no_ministry_of_science": {
+  "en": "No Ministry of Science",
+  "ru": "Без министерства науки"
+ },
+ "law_no_ministry_of_the_environment": {
+  "en": "No Ministry of the Environment",
+  "ru": "Без министерства окружающей среды"
+ },
+ "law_no_ministry_of_thought_control": {
+  "en": "No Ministry of Thought Control",
+  "ru": "Без министерства контроля над мыслью"
+ },
+ "law_no_ministry_of_urban_planning": {
+  "en": "No Ministry of Urban Planning",
+  "ru": "Без министерства градостроительства"
+ },
+ "law_no_ministry_of_war": {
+  "en": "No Ministry of War",
+  "ru": "Без военного министерства"
+ },
+ "law_no_national_bank": {
+  "en": "No National Bank",
+  "ru": "Без национального банка"
+ },
+ "law_non_inheritable_usage_rights": {
+  "en": "Possession by Use",
+  "ru": "Владение по использованию"
+ },
+ "law_open_government": {
+  "en": "Open Government",
+  "ru": "Открытое правительство"
+ },
+ "law_open_source_genetics": {
+  "en": "Open-Source Genetics",
+  "ru": "Генетика с открытым кодом"
+ },
+ "law_open_source_innovation": {
+  "en": "Open Source Innovation",
+  "ru": "Инновации с открытым кодом"
+ },
+ "law_open_weights": {
+  "en": "Open Weights",
+  "ru": "Открытые веса"
+ },
+ "law_partible": {
+  "en": "Customary Inheritance",
+  "ru": "Обычное наследование"
+ },
+ "law_penal_labor_camps": {
+  "en": "Penal Labor Camps",
+  "ru": "Исправительно-трудовые лагеря"
+ },
+ "law_population_control_measures": {
+  "en": "Population Control Measures",
+  "ru": "Меры по контролю населения"
+ },
+ "law_post-scarcity": {
+  "en": "Post-Scarcity Economy",
+  "ru": "Экономика постдефицита"
+ },
+ "law_prescribed_form": {
+  "en": "Prescribed Form",
+  "ru": "Предписанная форма"
+ },
+ "law_primogeniture": {
+  "en": "Primogeniture & Entail",
+  "ru": "Майорат и заповедное имущество"
+ },
+ "law_private_ai_labs": {
+  "en": "Private Labs",
+  "ru": "Частные лаборатории"
+ },
+ "law_private_military_contractors": {
+  "en": "Private Military Contractors",
+  "ru": "Частные военные подрядчики"
+ },
+ "law_private_policing": {
+  "en": "Private Policing",
+  "ru": "Частная полиция"
+ },
+ "law_pro_capital_ministry_of_labor": {
+  "en": "Pro-Capital Ministry of Labor Established",
+  "ru": "Министерство труда в интересах капитала учреждено"
+ },
+ "law_pro_labor_ministry_of_labor": {
+  "en": "Pro-Labor Ministry of Labor Established",
+  "ru": "Министерство труда в интересах рабочих учреждено"
+ },
+ "law_pro_natalist_subsidies": {
+  "en": "Pro-Natalist Policy",
+  "ru": "Политика стимулирования рождаемости"
+ },
+ "law_protected_class": {
+  "en": "Protected Class",
+  "ru": "Защищённый класс"
+ },
+ "law_prudential_narrow_banking": {
+  "en": "Prudential / Narrow Banking",
+  "ru": "Пруденциальный/узкий банкинг"
+ },
+ "law_publicly_funded_elections": {
+  "en": "Publicly Funded Elections",
+  "ru": "Выборы за счёт государства"
+ },
+ "law_punishment_focused_criminal_justice": {
+  "en": "Punishment-Focused Criminal Justice",
+  "ru": "Уголовное правосудие, ориентированное на наказание"
+ },
+ "law_regulated_augmentation_market": {
+  "en": "Regulated Augmentation Market",
+  "ru": "Регулируемый рынок аугментаций"
+ },
+ "law_regulated_utilities": {
+  "en": "Regulated Utilities",
+  "ru": "Регулируемые коммунальные услуги"
+ },
+ "law_rehabilitation_focused_criminal_justice": {
+  "en": "Rehabilitation-Focused Criminal Justice",
+  "ru": "Уголовное правосудие, ориентированное на реабилитацию"
+ },
+ "law_religious_courts": {
+  "en": "Religious Courts",
+  "ru": "Религиозные суды"
+ },
+ "law_restorative_justice": {
+  "en": "Restorative Justice",
+  "ru": "Восстановительное правосудие"
+ },
+ "law_robot_tax": {
+  "en": "Robot Tax",
+  "ru": "Налог на роботов"
+ },
+ "law_state_ai_monopoly": {
+  "en": "State Monopoly",
+  "ru": "Государственная монополия"
+ },
+ "law_state_controlled_internet": {
+  "en": "State-Controlled Internet",
+  "ru": "Интернет под контролем государства"
+ },
+ "law_state_eugenics_program": {
+  "en": "State Eugenics Program",
+  "ru": "Государственная программа евгеники"
+ },
+ "law_state_intellectual_property": {
+  "en": "State Intellectual Property",
+  "ru": "Государственная интеллектуальная собственность"
+ },
+ "law_state_led_language_reform": {
+  "en": "State-Led Language Reform",
+  "ru": "Государственная языковая реформа"
+ },
+ "law_state_owned_banking": {
+  "en": "State-Owned Banking",
+  "ru": "Государственный банкинг"
+ },
+ "law_state_secrets": {
+  "en": "State Secrets",
+  "ru": "Государственная тайна"
+ },
+ "law_state_sponsored_family_planning": {
+  "en": "State-Sponsored Family Planning",
+  "ru": "Государственное планирование семьи"
+ },
+ "law_state_universal_heir": {
+  "en": "State as Universal Heir",
+  "ru": "Государство как универсальный наследник"
+ },
+ "law_statutory_courts": {
+  "en": "Statutory Courts",
+  "ru": "Статутные суды"
+ },
+ "law_strict_ip_protection": {
+  "en": "Strict IP Protection",
+  "ru": "Строгая защита интеллектуальной собственности"
+ },
+ "law_strong_privacy_rights": {
+  "en": "Strong Privacy Rights",
+  "ru": "Сильная защита частной жизни"
+ },
+ "law_total_war": {
+  "en": "Total War",
+  "ru": "Тотальная война"
+ },
+ "law_traditional_family_structure": {
+  "en": "Traditional Family Structure",
+  "ru": "Традиционная структура семьи"
+ },
+ "law_traditional_heredity": {
+  "en": "Traditional Heredity",
+  "ru": "Традиционная наследственность"
+ },
+ "law_traditional_ip_protection": {
+  "en": "Traditional IP Protection",
+  "ru": "Традиционная защита интеллектуальной собственности"
+ },
+ "law_traditional_rules_of_war": {
+  "en": "Traditional Rules of War",
+  "ru": "Традиционные правила войны"
+ },
+ "law_trust_busting": {
+  "en": "Antitrust Enforcement",
+  "ru": "Антимонопольное принуждение"
+ },
+ "law_ubiquitous_translation": {
+  "en": "Ubiquitous Translation",
+  "ru": "Повсеместный перевод"
+ },
+ "law_unitary_state": {
+  "en": "Unitary State",
+  "ru": "Унитарное государство"
+ },
+ "law_universal_banking_light_prudence": {
+  "en": "Universal Banking (Light Prudence)",
+  "ru": "Универсальный банкинг (лёгкая осмотрительность)"
+ },
+ "law_universal_basic_income": {
+  "en": "Universal Basic Income",
+  "ru": "Универсальный базовый доход"
+ },
+ "law_unregulated_banking": {
+  "en": "Unregulated Banking",
+  "ru": "Нерегулируемый банкинг"
+ },
+ "law_unregulated_donations": {
+  "en": "Unregulated Donations",
+  "ru": "Нерегулируемые пожертвования"
+ },
+ "law_unregulated_internet": {
+  "en": "Unregulated Internet",
+  "ru": "Нерегулируемый интернет"
+ },
+ "law_unrestricted_augmentation": {
+  "en": "Unrestricted Augmentation",
+  "ru": "Неограниченная аугментация"
+ },
+ "law_unrestricted_automation": {
+  "en": "Unrestricted Automation",
+  "ru": "Неограниченная автоматизация"
+ },
+ "law_unrestricted_extraction": {
+  "en": "Unrestricted Extraction",
+  "ru": "Неограниченная добыча"
+ },
+ "law_war_crimes_forbidden": {
+  "en": "War Crimes Forbidden",
+  "ru": "Военные преступления запрещены"
+ },
+ "lawgroup_LGBTQ_rights": {
+  "en": "LGBTQ+ Rights",
+  "ru": "Права ЛГБТК+"
+ },
+ "lawgroup_antitrust": {
+  "en": "Antitrust & Market Structure",
+  "ru": "Антимонопольная политика и структура рынка"
+ },
+ "lawgroup_automation_policy": {
+  "en": "Automation Policy",
+  "ru": "Политика автоматизации"
+ },
+ "lawgroup_bodily_autonomy": {
+  "en": "Bodily Autonomy",
+  "ru": "Телесная автономия"
+ },
+ "lawgroup_criminal_justice": {
+  "en": "Criminal Justice",
+  "ru": "Уголовное правосудие"
+ },
+ "lawgroup_electoral_finance": {
+  "en": "Electoral Finance",
+  "ru": "Финансирование выборов"
+ },
+ "lawgroup_family_reproductive_policy": {
+  "en": "Family & Reproductive Policy",
+  "ru": "Семейная и репродуктивная политика"
+ },
+ "lawgroup_financial_regulation": {
+  "en": "Financial Regulation",
+  "ru": "Финансовое регулирование"
+ },
+ "lawgroup_frontier_ai_control": {
+  "en": "Frontier AI Control",
+  "ru": "Контроль передового ИИ"
+ },
+ "lawgroup_genetic_rights": {
+  "en": "Genetic Rights",
+  "ru": "Генетические права"
+ },
+ "lawgroup_human_augmentation": {
+  "en": "Human Augmentation",
+  "ru": "Аугментация человека"
+ },
+ "lawgroup_inheritance": {
+  "en": "Inheritance Laws",
+  "ru": "Законы о наследовании"
+ },
+ "lawgroup_intellectual_property": {
+  "en": "Intellectual Property",
+  "ru": "Интеллектуальная собственность"
+ },
+ "lawgroup_internet_governance": {
+  "en": "Internet Governance",
+  "ru": "Управление интернетом"
+ },
+ "lawgroup_judiciary": {
+  "en": "Judiciary",
+  "ru": "Судебная система"
+ },
+ "lawgroup_language_policy": {
+  "en": "Language Policy",
+  "ru": "Языковая политика"
+ },
+ "lawgroup_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "ru": "Министерство торговли"
+ },
+ "lawgroup_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "ru": "Министерство защиты прав потребителей"
+ },
+ "lawgroup_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "ru": "Министерство культуры"
+ },
+ "lawgroup_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "ru": "Министерство иностранных дел"
+ },
+ "lawgroup_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "ru": "Министерство разведки и безопасности"
+ },
+ "lawgroup_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "ru": "Министерство международной помощи"
+ },
+ "lawgroup_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "ru": "Министерство труда"
+ },
+ "lawgroup_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "ru": "Министерство пропаганды"
+ },
+ "lawgroup_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "ru": "Министерство по делам беженцев"
+ },
+ "lawgroup_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "ru": "Министерство по делам религий"
+ },
+ "lawgroup_ministry_of_science": {
+  "en": "Ministry of Science",
+  "ru": "Министерство науки"
+ },
+ "lawgroup_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "ru": "Министерство окружающей среды"
+ },
+ "lawgroup_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "ru": "Министерство контроля над мыслью"
+ },
+ "lawgroup_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "ru": "Министерство градостроительства"
+ },
+ "lawgroup_ministry_of_war": {
+  "en": "Ministry of War",
+  "ru": "Военное министерство"
+ },
+ "lawgroup_minority_rights": {
+  "en": "Minority Rights",
+  "ru": "Права меньшинств"
+ },
+ "lawgroup_monetary_policy": {
+  "en": "Monetary Policy",
+  "ru": "Денежная политика"
+ },
+ "lawgroup_national_bank": {
+  "en": "National Bank",
+  "ru": "Национальный банк"
+ },
+ "lawgroup_privacy_rights": {
+  "en": "Privacy Rights",
+  "ru": "Права на частную жизнь"
+ },
+ "lawgroup_resource_transition": {
+  "en": "Resource Transition",
+  "ru": "Ресурсный переход"
+ },
+ "lawgroup_right_to_information": {
+  "en": "Right to Information",
+  "ru": "Право на информацию"
+ },
+ "lawgroup_rules_of_war": {
+  "en": "Rules of War",
+  "ru": "Правила войны"
+ },
+ "lawgroup_state_power": {
+  "en": "State Power",
+  "ru": "Государственная власть"
+ }
+}
