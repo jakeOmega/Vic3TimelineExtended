@@ -111,6 +111,7 @@ POST_LOAD_AUDITS = [
     ("faith_scene_audit",             "faith_scene_audit"),
     ("sol_fraction_audit",            "sol_fraction_audit"),
     ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
+    ("trigger_range_audit",           "trigger_range_audit"),
 ]
 
 
