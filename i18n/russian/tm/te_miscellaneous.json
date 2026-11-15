@@ -14947,6 +14947,1074 @@
   "en": "An Unsettled Question",
   "ru": "Нерешённый вопрос"
  },
+ "nation_building_controversy_modifier": {
+  "en": "Nation-Building Controversy",
+  "ru": "Споры вокруг национального строительства"
+ },
+ "nation_building_investment_modifier": {
+  "en": "Nation Building Investment",
+  "ru": "Инвестиции в национальное строительство"
+ },
+ "nation_building_unity_modifier": {
+  "en": "Nation-Building Unity",
+  "ru": "Единство благодаря национальному строительству"
+ },
+ "natural_form_enforced_modifier": {
+  "en": "Natural Form Enforced",
+  "ru": "Принуждение к естественной форме"
+ },
+ "natural_form_tolerated_modifier": {
+  "en": "Back-Street Clinics",
+  "ru": "Клиники на задворках"
+ },
+ "nd_ai_armed_rival": {
+  "en": "A rival of ours holds nuclear weapons",
+  "ru": "У нашего соперника есть ядерное оружие"
+ },
+ "nd_ai_beneficiary_at_war": {
+  "en": "They are at war: we would be taking on a live commitment",
+  "ru": "Они воюют: мы взяли бы на себя действующее обязательство"
+ },
+ "nd_ai_host_holds_warheads": {
+  "en": "We hold nuclear weapons of our own",
+  "ru": "У нас есть собственное ядерное оружие"
+ },
+ "nd_ai_host_taboo": {
+  "en": "The nuclear taboo is strong: our people would not welcome the weapons",
+  "ru": "Ядерное табу сильно: наш народ не примет это оружие"
+ },
+ "nd_ai_rival_near_host": {
+  "en": "One of our rivals is within reach of their territory",
+  "ru": "Один из наших соперников находится в досягаемости их территории"
+ },
+ "nd_ai_warheads_next_door": {
+  "en": "Their warheads are next door",
+  "ru": "Их боеголовки по соседству"
+ },
+ "nd_ai_warheads_unaccounted_for": {
+  "en": "Warheads from their arsenal are unaccounted for",
+  "ru": "Боеголовки из их арсенала числятся неучтёнными"
+ },
+ "nd_ai_we_are_unarmed": {
+  "en": "We have no nuclear weapons of our own",
+  "ru": "У нас нет собственного ядерного оружия"
+ },
+ "nd_authority_1": {
+  "en": "Central Authorization",
+  "ru": "Централизованное разрешение"
+ },
+ "nd_authority_2": {
+  "en": "Conditional Delegation",
+  "ru": "Условное делегирование"
+ },
+ "nd_authority_3": {
+  "en": "Launch on Warning",
+  "ru": "Пуск по предупреждению"
+ },
+ "nd_authority_4": {
+  "en": "Automatic Retaliation",
+  "ru": "Автоматическое возмездие"
+ },
+ "nd_authority_short_1": {
+  "en": "Central",
+  "ru": "Центральное"
+ },
+ "nd_authority_short_3": {
+  "en": "On Warning",
+  "ru": "По предупреждению"
+ },
+ "nd_authority_short_4": {
+  "en": "Automatic",
+  "ru": "Автоматическое"
+ },
+ "nd_authority_terms_1": {
+  "en": "Launch Authority: Central Authorization",
+  "ru": "Право на запуск: Централизованное разрешение"
+ },
+ "nd_authority_terms_2": {
+  "en": "Launch Authority: Conditional Delegation",
+  "ru": "Право на запуск: Условное делегирование"
+ },
+ "nd_authority_terms_3": {
+  "en": "Launch Authority: Launch on Warning",
+  "ru": "Право на запуск: Пуск по предупреждению"
+ },
+ "nd_authority_terms_4": {
+  "en": "Launch Authority: Automatic Retaliation",
+  "ru": "Право на запуск: Автоматическое возмездие"
+ },
+ "nd_cd_backed_line": {
+  "en": "#v [THIS.Var('nd_cd_backed').GetValue|+0]#!  A protector has declared for the threatened side",
+  "ru": "#v [THIS.Var('nd_cd_backed').GetValue|+0]#!  Покровитель встал на сторону того, кому угрожают"
+ },
+ "nd_cd_counter_line": {
+  "en": "#v [THIS.Var('nd_cd_counter').GetValue|+0]#!  It was answered with a counter-threat",
+  "ru": "#v [THIS.Var('nd_cd_counter').GetValue|+0]#!  Ответом стала встречная угроза"
+ },
+ "nd_cd_dampened_line": {
+  "en": "#v ×0.7#!  The threatened side has no arsenal and no armed protector",
+  "ru": "#v ×0,7#!  У стороны, которой угрожают, нет ни арсенала, ни вооружённого покровителя"
+ },
+ "nd_cd_exercise_line": {
+  "en": "#v [THIS.Var('nd_cd_exercise').GetValue|+0]#!  An exercise is under way",
+  "ru": "#v [THIS.Var('nd_cd_exercise').GetValue|+0]#!  Идут учения"
+ },
+ "nd_cd_issuer_readiness_line": {
+  "en": "#v [THIS.Var('nd_cd_issuer_readiness').GetValue|+0]#!  The threatening side's readiness",
+  "ru": "#v [THIS.Var('nd_cd_issuer_readiness').GetValue|+0]#!  Готовность стороны, которая угрожает"
+ },
+ "nd_cd_public_line": {
+  "en": "#v [THIS.Var('nd_cd_public').GetValue|+0]#!  The threat is public",
+  "ru": "#v [THIS.Var('nd_cd_public').GetValue|+0]#!  Угроза публичная"
+ },
+ "nd_cd_reliability_line": {
+  "en": "#v [THIS.Var('nd_cd_reliability').GetValue|+0]#!  The threatening side's command reliability",
+  "ru": "#v [THIS.Var('nd_cd_reliability').GetValue|+0]#!  Надёжность командования стороны, которая угрожает"
+ },
+ "nd_cd_stage_line": {
+  "en": "#v [THIS.Var('nd_cd_stage').GetValue|+0]#!  The stage",
+  "ru": "#v [THIS.Var('nd_cd_stage').GetValue|+0]#!  Стадия"
+ },
+ "nd_cd_talks_line": {
+  "en": "#v [THIS.Var('nd_cd_talks').GetValue|+0]#!  Talks are open",
+  "ru": "#v [THIS.Var('nd_cd_talks').GetValue|+0]#!  Переговоры открыты"
+ },
+ "nd_cd_target_readiness_line": {
+  "en": "#v [THIS.Var('nd_cd_target_readiness').GetValue|+0]#!  The threatened side's readiness",
+  "ru": "#v [THIS.Var('nd_cd_target_readiness').GetValue|+0]#!  Готовность стороны, которой угрожают"
+ },
+ "nd_cd_total_line": {
+  "en": "#v = [THIS.ScriptValue('nd_display_crisis_danger')|0]#!  (held between 0 and 100)",
+  "ru": "#v = [THIS.ScriptValue('nd_display_crisis_danger')|0]#!  (удерживается между 0 и 100)"
+ },
+ "nd_cd_vulnerability_line": {
+  "en": "#v [THIS.Var('nd_cd_vulnerability').GetValue|+0]#!  The more vulnerable side's forces: a reason to strike first, and to fear it",
+  "ru": "#v [THIS.Var('nd_cd_vulnerability').GetValue|+0]#!  Силы более уязвимой стороны: повод ударить первой и повод этого бояться"
+ },
+ "nd_cd_weeks_line": {
+  "en": "#v [THIS.Var('nd_cd_weeks').GetValue|+0]#!  How long it has run",
+  "ru": "#v [THIS.Var('nd_cd_weeks').GetValue|+0]#!  Как долго это длится"
+ },
+ "nd_concession_long_1": {
+  "en": "The side that concedes backs down in the diplomatic play, and the other side wins it — war goals and all.",
+  "ru": "Уступающая сторона отступает в дипломатической игре, и другая сторона выигрывает её — вместе со всеми целями войны."
+ },
+ "nd_concession_long_10": {
+  "en": "The side that concedes tears down its Orbital Battlestation construction site, losing the progress, and starts no new site for #v 10#! years. Levels already finished stay.",
+  "ru": "Уступающая сторона сносит стройплощадку орбитальной боевой станции, теряя прогресс, и #v 10#! лет не начинает новую. Уже достроенные уровни остаются."
+ },
+ "nd_concession_long_2": {
+  "en": "The side that concedes loses #R 15#! war support in the war, and if it leads its side, the side drops its war goals against the other side.",
+  "ru": "Уступающая сторона теряет #R 15#! поддержки войны в этой войне, а если она возглавляет свою сторону, эта сторона отказывается от целей войны против другой стороны."
+ },
+ "nd_concession_long_3": {
+  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or in a war loses #R 15#! war support and, if it leads its side, drops the side's goals against it.",
+  "ru": "Уступающая сторона оставляет защищаемую страну в покое: отступает в игре, а в войне теряет #R 15#! поддержки войны и, если возглавляет свою сторону, отказывается от целей этой стороны против неё."
+ },
+ "nd_concession_long_4": {
+  "en": "The side that concedes has its weapons program frozen for #v 10#! years.",
+  "ru": "Программа вооружений уступающей стороны замораживается на #v 10#! лет."
+ },
+ "nd_concession_long_5": {
+  "en": "The side that concedes stands its forces down to Routine, held there for #v 24#! months.",
+  "ru": "Уступающая сторона понижает свои силы до обычной готовности и удерживает их там #v 24#! мес."
+ },
+ "nd_concession_long_6": {
+  "en": "The side that concedes pays reparations for its nuclear strike, about a tenth of a year's income, and opens its arsenal to inspection for #v 20#! years, taking Custody Inspections (#R −5#! legitimacy, fading over ten years).",
+  "ru": "Уступающая сторона выплачивает репарации за свой ядерный удар — около десятой части годового дохода — и на #v 20#! лет открывает свой арсенал для инспекций, получая «Инспекции хранения» (#R −5#! легитимности, ослабевает в течение десяти лет)."
+ },
+ "nd_concession_long_7": {
+  "en": "The side that concedes leaves every treaty holding its #v Nuclear Basing#! article in, or its nuclear guarantee over, a country next to the other side, switches off its missile defense in states bordering the other side's, and makes none of these again for #v 10#! years. A treaty is left whole, so its other articles end too; leaving it carries no penalty for breaking it.",
+  "ru": "Уступающая сторона выходит из каждого договора, где действует её статья #v Ядерное базирование#! или её ядерная гарантия над страной, граничащей с другой стороной, отключает свою противоракетную оборону в областях, граничащих с областями другой стороны, и #v 10#! лет не возобновляет ничего из этого. Договор покидается целиком, поэтому прекращают действовать и его остальные статьи; выход не влечёт штрафов за нарушение договора."
+ },
+ "nd_concession_long_8": {
+  "en": "The side that concedes renounces every claim it holds on the other side's incorporated states. A claim covers a whole state region, so one on a region shared with a third country goes for all of it.",
+  "ru": "Уступающая сторона отказывается от всех притязаний на включённые области другой стороны. Притязание охватывает весь регион области, поэтому притязание на регион, общий с третьей страной, снимается целиком."
+ },
+ "nd_concession_long_9": {
+  "en": "The side that concedes ends every covert operation against the other side that the other side has caught, and launches no hostile operation against it for #v 10#! years. Operations it hasn't caught go on.",
+  "ru": "Уступающая сторона прекращает все тайные операции против другой стороны, которые та вскрыла, и #v 10#! лет не начинает против неё враждебных операций. Нераскрытые операции продолжаются."
+ },
+ "nd_concession_past_they_1": {
+  "en": "They backed down in the diplomatic play, and our side won it.",
+  "ru": "Они отступили в дипломатической игре, и наша сторона выиграла её."
+ },
+ "nd_concession_past_they_10": {
+  "en": "They tore down their battlestation site and froze new ones for ten years.",
+  "ru": "Они снесли стройплощадку своей боевой станции и на десять лет заморозили новые."
+ },
+ "nd_concession_past_they_2": {
+  "en": "Their war support in our war fell by #R 15#!, and if they led their side, it dropped its war goals against us.",
+  "ru": "Их поддержка войны в нашей войне упала на #R 15#!, а если они возглавляли свою сторону, она отказалась от целей войны против нас."
+ },
+ "nd_concession_past_they_3": {
+  "en": "They left the country we protect alone: they backed down in the play, or their war support fell by #R 15#! and, if they led their side, it dropped its goals against it.",
+  "ru": "Они оставили в покое страну, которую мы защищаем: отступили в игре, или их поддержка войны упала на #R 15#! и, если они возглавляли свою сторону, она отказалась от своих целей против неё."
+ },
+ "nd_concession_past_they_4": {
+  "en": "Their weapons program is frozen for #v 10#! years.",
+  "ru": "Их программа вооружений заморожена на #v 10#! лет."
+ },
+ "nd_concession_past_they_5": {
+  "en": "Their forces stood down to #v Routine#!, and are held there for #v 24#! months.",
+  "ru": "Их силы понижены до уровня #v обычной#! готовности и удерживаются там #v 24#! мес."
+ },
+ "nd_concession_past_they_6": {
+  "en": "They paid reparations for their nuclear strike and opened their arsenal to inspection.",
+  "ru": "Они выплатили репарации за свой ядерный удар и открыли свой арсенал для инспекций."
+ },
+ "nd_concession_past_they_7": {
+  "en": "They pulled back their deployments next to us and agreed to make none for ten years.",
+  "ru": "Они отвели свои развёртывания рядом с нами и согласились десять лет не делать новых."
+ },
+ "nd_concession_past_they_8": {
+  "en": "They renounced their claims on our states.",
+  "ru": "Они отказались от притязаний на наши области."
+ },
+ "nd_concession_past_they_9": {
+  "en": "They ended the covert operations we had caught and agreed to start none against us for ten years.",
+  "ru": "Они прекратили тайные операции, которые мы вскрыли, и согласились десять лет не начинать их против нас."
+ },
+ "nd_concession_past_we_1": {
+  "en": "We backed down in the diplomatic play, and their side won it.",
+  "ru": "Мы отступили в дипломатической игре, и их сторона выиграла её."
+ },
+ "nd_concession_past_we_10": {
+  "en": "We tore down our battlestation site and froze new ones for ten years.",
+  "ru": "Мы снесли стройплощадку нашей боевой станции и на десять лет заморозили новые."
+ },
+ "nd_concession_past_we_2": {
+  "en": "Our war support in the war with them fell by #R 15#!, and if we led our side, it dropped its war goals against them.",
+  "ru": "Наша поддержка войны в войне с ними упала на #R 15#!, а если мы возглавляли свою сторону, она отказалась от целей войны против них."
+ },
+ "nd_concession_past_we_3": {
+  "en": "We left the country they protect alone: we backed down in the play, or our war support fell by #R 15#! and, if we led our side, it dropped its goals against it.",
+  "ru": "Мы оставили в покое страну, которую они защищают: отступили в игре, или наша поддержка войны упала на #R 15#! и, если мы возглавляли свою сторону, она отказалась от своих целей против неё."
+ },
+ "nd_concession_past_we_4": {
+  "en": "Our weapons program is frozen for #v 10#! years.",
+  "ru": "Наша программа вооружений заморожена на #v 10#! лет."
+ },
+ "nd_concession_past_we_5": {
+  "en": "Our forces stood down to #v Routine#!, and are held there for #v 24#! months.",
+  "ru": "Наши силы понижены до уровня #v обычной#! готовности и удерживаются там #v 24#! мес."
+ },
+ "nd_concession_past_we_6": {
+  "en": "We paid reparations for our nuclear strike and opened our arsenal to inspection.",
+  "ru": "Мы выплатили репарации за наш ядерный удар и открыли наш арсенал для инспекций."
+ },
+ "nd_concession_past_we_7": {
+  "en": "We pulled back our deployments next to them and agreed to make none for ten years.",
+  "ru": "Мы отвели наши развёртывания рядом с ними и согласились десять лет не делать новых."
+ },
+ "nd_concession_past_we_8": {
+  "en": "We renounced our claims on their states.",
+  "ru": "Мы отказались от притязаний на их области."
+ },
+ "nd_concession_past_we_9": {
+  "en": "We ended the covert operations they had caught and agreed to start none against them for ten years.",
+  "ru": "Мы прекратили тайные операции, которые они вскрыли, и согласились десять лет не начинать их против них."
+ },
+ "nd_concession_short_1": {
+  "en": "Loses the play",
+  "ru": "Проигрывает игру"
+ },
+ "nd_concession_short_10": {
+  "en": "Orbital freeze",
+  "ru": "Заморозка орбиты"
+ },
+ "nd_concession_short_2": {
+  "en": "Drops war goals",
+  "ru": "Отказ от целей войны"
+ },
+ "nd_concession_short_3": {
+  "en": "Stops protecting",
+  "ru": "Прекращает защиту"
+ },
+ "nd_concession_short_4": {
+  "en": "Frozen for #v 10#! years",
+  "ru": "Заморозка на #v 10#! лет"
+ },
+ "nd_concession_short_5": {
+  "en": "Stands down #v 2#! years",
+  "ru": "Свёртывание на #v 2#! года"
+ },
+ "nd_concession_short_7": {
+  "en": "Pull back",
+  "ru": "Отвод сил"
+ },
+ "nd_concession_short_8": {
+  "en": "Renounce claims",
+  "ru": "Отказ от притязаний"
+ },
+ "nd_concession_short_9": {
+  "en": "End operations",
+  "ru": "Конец операций"
+ },
+ "nd_crisis_coercive_success": {
+  "en": "Nuclear Brinkmanship Rewarded",
+  "ru": "Ядерное балансирование на грани вознаграждено"
+ },
+ "nd_crisis_deadline_who_them": {
+  "en": "Then they decide",
+  "ru": "Затем решают они"
+ },
+ "nd_crisis_deadline_who_us": {
+  "en": "Then we decide",
+  "ru": "Затем решаем мы"
+ },
+ "nd_crisis_demand_1": {
+  "en": "back down in the diplomatic play between them",
+  "ru": "отступить в дипломатической игре между ними"
+ },
+ "nd_crisis_demand_10": {
+  "en": "tear down its battlestation site and build none for ten years",
+  "ru": "снести стройплощадку боевой станции и десять лет не строить новую"
+ },
+ "nd_crisis_demand_2": {
+  "en": "give up the war",
+  "ru": "прекратить войну"
+ },
+ "nd_crisis_demand_3": {
+  "en": "leave the country it protects alone",
+  "ru": "оставить в покое страну, которую она защищает"
+ },
+ "nd_crisis_demand_4": {
+  "en": "freeze its nuclear weapons program",
+  "ru": "заморозить свою программу создания ядерного оружия"
+ },
+ "nd_crisis_demand_5": {
+  "en": "stand its nuclear forces down",
+  "ru": "понизить готовность своих ядерных сил"
+ },
+ "nd_crisis_demand_6": {
+  "en": "pay for its nuclear strike and open its arsenal to inspection",
+  "ru": "заплатить за свой ядерный удар и открыть арсенал для инспекций"
+ },
+ "nd_crisis_demand_7": {
+  "en": "pull its nuclear basing, guarantees and missile defense back from the threatening power's borders, and deploy none there for ten years",
+  "ru": "отвести ядерное базирование, гарантии и противоракетную оборону от границ угрожающей державы и десять лет не развёртывать там ничего"
+ },
+ "nd_crisis_demand_8": {
+  "en": "renounce its claims on the threatening power's states",
+  "ru": "отказаться от притязаний на области угрожающей державы"
+ },
+ "nd_crisis_demand_9": {
+  "en": "end the covert operations the threatening power has caught, and start none against it for ten years",
+  "ru": "прекратить тайные операции, которые вскрыла угрожающая держава, и десять лет не начинать новых против неё"
+ },
+ "nd_crisis_dispute_1": {
+  "en": "A diplomatic play",
+  "ru": "Дипломатическая игра"
+ },
+ "nd_crisis_dispute_10": {
+  "en": "Orbital weapons",
+  "ru": "Орбитальное оружие"
+ },
+ "nd_crisis_dispute_2": {
+  "en": "A war",
+  "ru": "Война"
+ },
+ "nd_crisis_dispute_3": {
+  "en": "A guarantee",
+  "ru": "Гарантия"
+ },
+ "nd_crisis_dispute_4": {
+  "en": "Their program",
+  "ru": "Их программа"
+ },
+ "nd_crisis_dispute_5": {
+  "en": "Forces on alert",
+  "ru": "Силы в боевой готовности"
+ },
+ "nd_crisis_dispute_6": {
+  "en": "A nuclear strike",
+  "ru": "Ядерный удар"
+ },
+ "nd_crisis_dispute_7": {
+  "en": "Forward deployment",
+  "ru": "Передовое развёртывание"
+ },
+ "nd_crisis_dispute_8": {
+  "en": "Territorial claims",
+  "ru": "Территориальные притязания"
+ },
+ "nd_crisis_dispute_9": {
+  "en": "Covert operations",
+  "ru": "Тайные операции"
+ },
+ "nd_crisis_dispute_phrase_1": {
+  "en": "over a diplomatic play",
+  "ru": "из-за дипломатической игры"
+ },
+ "nd_crisis_dispute_phrase_10": {
+  "en": "over an orbital battlestation",
+  "ru": "из-за орбитальной боевой станции"
+ },
+ "nd_crisis_dispute_phrase_2": {
+  "en": "over a war",
+  "ru": "из-за войны"
+ },
+ "nd_crisis_dispute_phrase_3": {
+  "en": "over a guarantee",
+  "ru": "из-за гарантии"
+ },
+ "nd_crisis_dispute_phrase_4": {
+  "en": "over a weapons program",
+  "ru": "из-за программы вооружений"
+ },
+ "nd_crisis_dispute_phrase_5": {
+  "en": "over forces on alert",
+  "ru": "из-за сил в боевой готовности"
+ },
+ "nd_crisis_dispute_phrase_6": {
+  "en": "over a nuclear strike",
+  "ru": "из-за ядерного удара"
+ },
+ "nd_crisis_dispute_phrase_7": {
+  "en": "over forward deployment",
+  "ru": "из-за передового развёртывания"
+ },
+ "nd_crisis_dispute_phrase_8": {
+  "en": "over territorial claims",
+  "ru": "из-за территориальных притязаний"
+ },
+ "nd_crisis_dispute_phrase_9": {
+  "en": "over covert operations",
+  "ru": "из-за тайных операций"
+ },
+ "nd_crisis_mutual_restraint": {
+  "en": "Mutual Nuclear Restraint",
+  "ru": "Взаимная ядерная сдержанность"
+ },
+ "nd_crisis_pressure_band_1": {
+  "en": "Firm",
+  "ru": "Твёрдость"
+ },
+ "nd_crisis_pressure_band_2": {
+  "en": "Wavering",
+  "ru": "Колебания"
+ },
+ "nd_crisis_pressure_band_3": {
+  "en": "Yielding",
+  "ru": "Готовность уступить"
+ },
+ "nd_crisis_pressure_band_4": {
+  "en": "Breaking",
+  "ru": "Слом"
+ },
+ "nd_crisis_programme_freeze": {
+  "en": "Weapons Program Frozen",
+  "ru": "Программа вооружений заморожена"
+ },
+ "nd_crisis_public_phrase_0": {
+  "en": "in private",
+  "ru": "в частном порядке"
+ },
+ "nd_crisis_public_phrase_1": {
+  "en": "in public",
+  "ru": "публично"
+ },
+ "nd_crisis_role_phrase_1": {
+  "en": "we made the threat",
+  "ru": "мы выдвинули угрозу"
+ },
+ "nd_crisis_role_phrase_2": {
+  "en": "we are the target",
+  "ru": "мы — цель"
+ },
+ "nd_crisis_stage_1": {
+  "en": "Warning",
+  "ru": "Предупреждение"
+ },
+ "nd_crisis_stage_2": {
+  "en": "Confrontation",
+  "ru": "Противостояние"
+ },
+ "nd_crisis_stage_3": {
+  "en": "#R Acute#!",
+  "ru": "#R Острая#!"
+ },
+ "nd_crisis_stood_firm": {
+  "en": "Faced Down a Nuclear Threat",
+  "ru": "Отражена ядерная угроза"
+ },
+ "nd_danger_word_0": {
+  "en": "#G Contained#!",
+  "ru": "#G под контролем#!"
+ },
+ "nd_danger_word_1": {
+  "en": "#Y Tense#!",
+  "ru": "#Y напряжённая#!"
+ },
+ "nd_danger_word_2": {
+  "en": "#R Dangerous#!",
+  "ru": "#R опасная#!"
+ },
+ "nd_danger_word_3": {
+  "en": "#R Critical#!",
+  "ru": "#R критическая#!"
+ },
+ "nd_doctrine_1": {
+  "en": "No First Use",
+  "ru": "Неприменение первым"
+ },
+ "nd_doctrine_2": {
+  "en": "Existential Deterrence",
+  "ru": "Экзистенциальное сдерживание"
+ },
+ "nd_doctrine_3": {
+  "en": "Flexible First Use",
+  "ru": "Гибкое первое применение"
+ },
+ "nd_doctrine_4": {
+  "en": "Nuclear Compellence",
+  "ru": "Ядерное принуждение"
+ },
+ "nd_doctrine_5": {
+  "en": "Nuclear Warfighting",
+  "ru": "Ведение ядерной войны"
+ },
+ "nd_doctrine_mod_1": {
+  "en": "Doctrine: No First Use",
+  "ru": "Доктрина: Неприменение первым"
+ },
+ "nd_doctrine_mod_2": {
+  "en": "Doctrine: Existential Deterrence",
+  "ru": "Доктрина: Экзистенциальное сдерживание"
+ },
+ "nd_doctrine_mod_3": {
+  "en": "Doctrine: Flexible First Use",
+  "ru": "Доктрина: Гибкое первое применение"
+ },
+ "nd_doctrine_mod_4": {
+  "en": "Doctrine: Nuclear Compellence",
+  "ru": "Доктрина: Ядерное принуждение"
+ },
+ "nd_doctrine_mod_5": {
+  "en": "Doctrine: Nuclear Warfighting",
+  "ru": "Доктрина: Ведение ядерной войны"
+ },
+ "nd_doctrine_short_2": {
+  "en": "Existential",
+  "ru": "Экзистенциальная"
+ },
+ "nd_doctrine_short_3": {
+  "en": "Flexible",
+  "ru": "Гибкая"
+ },
+ "nd_doctrine_short_4": {
+  "en": "Compellence",
+  "ru": "Принуждение"
+ },
+ "nd_doctrine_short_5": {
+  "en": "Warfighting",
+  "ru": "Ведение войны"
+ },
+ "nd_ft_reason_1": {
+  "en": "Backed: the threatening side's doctrine permits a nuclear strike in this war now. Pressure to concede +10.",
+  "ru": "Подкреплено: доктрина угрожающей стороны сейчас допускает ядерный удар в этой войне. Давление с целью уступки +10."
+ },
+ "nd_ft_reason_2": {
+  "en": "Backed: under Nuclear Compellence or Warfighting, a threat that is defied licenses a strike. Pressure to concede +10.",
+  "ru": "Подкреплено: при ядерном принуждении или ведении ядерной войны отвергнутая угроза даёт право на удар. Давление с целью уступки +10."
+ },
+ "nd_ft_reason_3": {
+  "en": "Uncertain: Flexible First Use would allow a strike only if this became a war that went badly or reached core territory.",
+  "ru": "Неопределённо: гибкое первое применение допустило бы удар, только если это переросло бы в войну, которая пошла плохо или дошла до ключевых территорий."
+ },
+ "nd_ft_reason_4": {
+  "en": "Uncertain: Existential Deterrence covers what is at stake here — survival, core territory, or a protected country — if this becomes a war.",
+  "ru": "Неопределённо: экзистенциальное сдерживание охватывает то, что здесь поставлено на карту — выживание, ключевую территорию или защищаемую страну, — если это перерастёт в войну."
+ },
+ "nd_ft_reason_5": {
+  "en": "A bluff: the threatening side's doctrine does not allow a first strike here. Pressure to concede -25.",
+  "ru": "Блеф: доктрина угрожающей стороны не допускает здесь первого удара. Давление с целью уступки -25."
+ },
+ "nd_ft_reason_6": {
+  "en": "A bluff: the threatening side's Rules of War law forbids a nuclear strike. Pressure to concede -25.",
+  "ru": "Блеф: закон «Правила войны» угрожающей стороны запрещает ядерный удар. Давление с целью уступки -25."
+ },
+ "nd_ft_reason_7": {
+  "en": "A bluff: the threatening side has pledged No First Use. Pressure to concede -35.",
+  "ru": "Блеф: угрожающая сторона дала обязательство «Неприменение первым». Давление с целью уступки -35."
+ },
+ "nd_ft_reason_8": {
+  "en": "A bluff: the threatening side's weapons can't reach the threatened country. Pressure to concede -25.",
+  "ru": "Блеф: оружие угрожающей стороны не достаёт до страны, которой угрожают. Давление с целью уступки -25."
+ },
+ "nd_ft_reason_unknown": {
+  "en": "Not yet assessed: the figures update each week.",
+  "ru": "Пока не оценено: показатели обновляются каждую неделю."
+ },
+ "nd_ft_word_backed": {
+  "en": "#G Backed#!",
+  "ru": "#G Подкреплено#!"
+ },
+ "nd_ft_word_bluff": {
+  "en": "#R A bluff#!",
+  "ru": "#R Блеф#!"
+ },
+ "nd_ft_word_uncertain": {
+  "en": "#Y Uncertain#!",
+  "ru": "#Y Неопределённо#!"
+ },
+ "nd_home_list_none": {
+  "en": "#lore No interest group holds a view on our posture.#!",
+  "ru": "#lore Ни одна группа интересов не имеет мнения о нашей позиции.#!"
+ },
+ "nd_home_list_not_reviewed": {
+  "en": "#lore Not reviewed yet: the interest groups judge our posture at the start of each month.#!",
+  "ru": "#lore Пока не рассмотрено: группы интересов оценивают нашу позицию в начале каждого месяца.#!"
+ },
+ "nd_home_list_reviewed": {
+  "en": "#lore Reviewed monthly.#!",
+  "ru": "#lore Рассматривается ежемесячно.#!"
+ },
+ "nd_home_list_waiting": {
+  "en": "#lore Opinions of our doctrine and readiness start in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! months; the Industrialists' business concerns count already.#!",
+  "ru": "#lore Мнения о нашей доктрине и готовности появятся через #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! мес.; деловые опасения Промышленников учитываются уже сейчас.#!"
+ },
+ "nd_home_row_approval_tt": {
+  "en": "#tooltip_header Approval#!\\n$TOOLTIP_DELIMITER$\\nWhat our posture adds to this group's approval or takes from it: the rows below added up, capped at 2 (1 for a mild group). A \\\"Held to the cap\\\" row shows what the cap cut. The group's approval breakdown shows the same number.",
+  "ru": "#tooltip_header Одобрение#!\\n$TOOLTIP_DELIMITER$\\nСколько наша позиция добавляет к одобрению этой группы или отнимает от него: сумма строк ниже, не более 2 (1 для умеренной группы). Строка «Ограничено потолком» показывает, сколько отсекло ограничение. То же число видно в разбивке одобрения группы."
+ },
+ "nd_home_row_authority": {
+  "en": "Launch authority",
+  "ru": "Право на запуск"
+ },
+ "nd_home_row_authority_tt": {
+  "en": "#tooltip_header Launch Authority#!\\n$TOOLTIP_DELIMITER$\\nRestraint-minded groups object to Launch on Warning and to Automatic Retaliation.",
+  "ru": "#tooltip_header Право на запуск#!\\n$TOOLTIP_DELIMITER$\\nГруппы, настроенные на сдержанность, возражают против «Пуска по предупреждению» и «Автоматического возмездия»."
+ },
+ "nd_home_row_business": {
+  "en": "Alerts and crises",
+  "ru": "Тревоги и кризисы"
+ },
+ "nd_home_row_business_tt": {
+  "en": "#tooltip_header Long Alerts and Open Crises#!\\n$TOOLTIP_DELIMITER$\\nBusiness dislikes High Alert kept up for three months or more, and a crisis past its Warning stage.",
+  "ru": "#tooltip_header Долгие тревоги и открытые кризисы#!\\n$TOOLTIP_DELIMITER$\\nБизнес не любит «Повышенную готовность», которая держится три месяца и дольше, и кризис, вышедший за стадию «Предупреждение»."
+ },
+ "nd_home_row_cap": {
+  "en": "Held to the cap",
+  "ru": "Ограничено потолком"
+ },
+ "nd_home_row_cap_tt": {
+  "en": "#tooltip_header Held to the Cap#!\\n$TOOLTIP_DELIMITER$\\nThe rows above add up to more than a group can move its approval. Our posture adds at most 2 to a group's approval or takes at most 2 from it (1 for a mild militarist or restraint group); this row is what the cap cut.",
+  "ru": "#tooltip_header Ограничено потолком#!\\n$TOOLTIP_DELIMITER$\\nСтроки выше в сумме дают больше, чем группа может изменить своё одобрение. Наша позиция добавляет к одобрению группы не более 2 или отнимает не более 2 (1 для умеренной группы милитаристов или сдержанности); эта строка показывает, сколько отсекло ограничение."
+ },
+ "nd_home_row_doctrine": {
+  "en": "Doctrine",
+  "ru": "Доктрина"
+ },
+ "nd_home_row_doctrine_tt": {
+  "en": "#tooltip_header Doctrine#!\\n$TOOLTIP_DELIMITER$\\nHow this group judges our [concept_nuclear_doctrine].",
+  "ru": "#tooltip_header Доктрина#!\\n$TOOLTIP_DELIMITER$\\nКак эта группа оценивает нашу [Concept('concept_nuclear_doctrine','ядерную доктрину')]."
+ },
+ "nd_home_row_possession": {
+  "en": "The arsenal itself",
+  "ru": "Сам арсенал"
+ },
+ "nd_home_row_possession_tt": {
+  "en": "#tooltip_header The Arsenal Itself#!\\n$TOOLTIP_DELIMITER$\\nRestraint-minded groups object to holding the bomb at all once the nuclear taboo makes it a burden, and more to a large arsenal.",
+  "ru": "#tooltip_header Сам арсенал#!\\n$TOOLTIP_DELIMITER$\\nГруппы, настроенные на сдержанность, возражают против самого обладания бомбой, как только ядерное табу делает его бременем, и сильнее — против большого арсенала."
+ },
+ "nd_home_row_readiness": {
+  "en": "Readiness",
+  "ru": "Готовность"
+ },
+ "nd_home_row_readiness_tt": {
+  "en": "#tooltip_header Readiness#!\\n$TOOLTIP_DELIMITER$\\nHow this group judges our [concept_nuclear_readiness].",
+  "ru": "#tooltip_header Готовность#!\\n$TOOLTIP_DELIMITER$\\nКак эта группа оценивает нашу [Concept('concept_nuclear_readiness','ядерную готовность')]."
+ },
+ "nd_home_row_strain": {
+  "en": "Crew strain",
+  "ru": "Нагрузка на расчёты"
+ },
+ "nd_home_row_strain_tt": {
+  "en": "#tooltip_header Crew Strain#!\\n$TOOLTIP_DELIMITER$\\nOfficers object to crews kept at High Alert once their strain reaches 50.",
+  "ru": "#tooltip_header Нагрузка на расчёты#!\\n$TOOLTIP_DELIMITER$\\nОфицеры возражают против того, чтобы расчёты держали на «Повышенной готовности», когда их нагрузка достигает 50."
+ },
+ "nd_home_view_2": {
+  "en": "[Concept('concept_posture_militarist', 'militarist')] (mild)",
+  "ru": "[Concept('concept_posture_militarist', 'позиция милитаристов')] (умеренная)"
+ },
+ "nd_home_view_5": {
+  "en": "[Concept('concept_posture_officers', 'officers')], hawkish",
+  "ru": "[Concept('concept_posture_officers', 'позиция офицеров')], ястребиная"
+ },
+ "nd_home_view_6": {
+  "en": "[Concept('concept_posture_officers', 'officers')], restrained",
+  "ru": "[Concept('concept_posture_officers', 'позиция офицеров')], сдержанная"
+ },
+ "nd_host_accident_silence": {
+  "en": "Silence over a Weapons Accident",
+  "ru": "Молчание об аварии с оружием"
+ },
+ "nd_incident_coverup_exposed": {
+  "en": "Nuclear Cover-Up Exposed",
+  "ru": "Ядерное сокрытие раскрыто"
+ },
+ "nd_last_crisis_line": {
+  "en": "#lore Last crisis:#! [THIS.GetCountry.GetName]",
+  "ru": "#lore Последний кризис:#! [THIS.GetCountry.GetName]"
+ },
+ "nd_last_outcome_backed_down": {
+  "en": "#R The threat was abandoned.#!",
+  "ru": "#R Угроза отозвана.#!"
+ },
+ "nd_last_outcome_conceded": {
+  "en": "#R We conceded.#!",
+  "ru": "#R Мы уступили.#!"
+ },
+ "nd_last_outcome_expired": {
+  "en": "It lapsed with nothing settled.",
+  "ru": "Срок истёк, ничего не решено."
+ },
+ "nd_last_outcome_neutral": {
+  "en": "The dispute ended without a clear winner.",
+  "ru": "Спор закончился без явного победителя."
+ },
+ "nd_last_outcome_standdown": {
+  "en": "Both sides stood down together.",
+  "ru": "Обе стороны понизили готовность одновременно."
+ },
+ "nd_last_outcome_stood_firm": {
+  "en": "#G We faced the threat down.#!",
+  "ru": "#G Мы отразили угрозу.#!"
+ },
+ "nd_last_outcome_trade": {
+  "en": "Each side gave up the same.",
+  "ru": "Каждая сторона отказалась от одного и того же."
+ },
+ "nd_last_outcome_use": {
+  "en": "#R It ended in nuclear use.#!",
+  "ru": "#R Всё закончилось ядерным применением.#!"
+ },
+ "nd_last_outcome_war_ended": {
+  "en": "The war it was about has ended.",
+  "ru": "Война, из-за которой всё началось, закончилась."
+ },
+ "nd_last_outcome_win": {
+  "en": "#G Our objective was achieved.#!",
+  "ru": "#G Наша цель достигнута.#!"
+ },
+ "nd_next_pressure_none": {
+  "en": "After a Confrontation",
+  "ru": "После Противостояния"
+ },
+ "nd_next_pressure_paused": {
+  "en": "Paused: talks are open",
+  "ru": "Приостановлено: переговоры открыты"
+ },
+ "nd_next_pressure_weeks": {
+  "en": "In #v [THIS.ScriptValue('nd_display_next_pressure_weeks')|0]#! weeks",
+  "ru": "Через #v [THIS.ScriptValue('nd_display_next_pressure_weeks')|0]#! нед."
+ },
+ "nd_nuclear_ultimatum_action": {
+  "en": "Public Nuclear Ultimatum",
+  "ru": "Публичный ядерный ультиматум"
+ },
+ "nd_nuclear_ultimatum_action_action_notification_name": {
+  "en": "Nuclear Ultimatum",
+  "ru": "Ядерный ультиматум"
+ },
+ "nd_nuclear_ultimatum_action_action_notification_third_party_name": {
+  "en": "Nuclear Ultimatum from [INITIATOR_COUNTRY.GetName]",
+  "ru": "Ядерный ультиматум: [INITIATOR_COUNTRY.GetName]"
+ },
+ "nd_nuclear_ultimatum_action_action_propose_name": {
+  "en": "Issue a Public Nuclear Ultimatum",
+  "ru": "Выдвинуть публичный ядерный ультиматум"
+ },
+ "nd_nuclear_warning_action": {
+  "en": "Private Nuclear Warning",
+  "ru": "Закрытое ядерное предупреждение"
+ },
+ "nd_nuclear_warning_action_action_propose_name": {
+  "en": "Issue a Private Nuclear Warning",
+  "ru": "Выдвинуть закрытое ядерное предупреждение"
+ },
+ "nd_pledge_broken_mod": {
+  "en": "Broken Nuclear Pledge",
+  "ru": "Нарушенное ядерное обязательство"
+ },
+ "nd_pledge_state_broken": {
+  "en": "#R We broke a pledge#!",
+  "ru": "#R Мы нарушили обязательство#!"
+ },
+ "nd_pledge_state_holding": {
+  "en": "#G Our non-use pledges hold#!",
+  "ru": "#G Наши обязательства о неприменении действуют#!"
+ },
+ "nd_pledge_state_none": {
+  "en": "No pledges given",
+  "ru": "Обязательств не давали"
+ },
+ "nd_posture_approval_minus_1": {
+  "en": "Nuclear Posture: Uneasy",
+  "ru": "Ядерная позиция: Обеспокоены"
+ },
+ "nd_posture_approval_minus_2": {
+  "en": "Nuclear Posture: Opposed",
+  "ru": "Ядерная позиция: Против"
+ },
+ "nd_posture_approval_plus_1": {
+  "en": "Nuclear Posture: Approving",
+  "ru": "Ядерная позиция: Одобряют"
+ },
+ "nd_posture_approval_plus_2": {
+  "en": "Nuclear Posture: Enthusiastic",
+  "ru": "Ядерная позиция: Воодушевлены"
+ },
+ "nd_public_guarantee_figure_none": {
+  "en": "#lore No treaty#!",
+  "ru": "#lore Нет договора#!"
+ },
+ "nd_public_guarantee_figure_treaty": {
+  "en": "#lore By treaty#!",
+  "ru": "#lore По договору#!"
+ },
+ "nd_public_guarantee_figure_under": {
+  "en": "#lore Under umbrella#!",
+  "ru": "#lore Под зонтиком#!"
+ },
+ "nd_public_guarantee_line_both": {
+  "en": "The country guarantees others against nuclear attack, and is itself under a nuclear guarantee.",
+  "ru": "Страна гарантирует другим защиту от ядерного нападения и сама находится под ядерной гарантией."
+ },
+ "nd_public_guarantee_line_gives": {
+  "en": "The country guarantees others against nuclear attack, by treaty or under its nuclear umbrella.",
+  "ru": "Страна гарантирует другим защиту от ядерного нападения — по договору или своим ядерным зонтиком."
+ },
+ "nd_public_guarantee_line_holds": {
+  "en": "The country is under a nuclear guarantee: another country's arsenal covers it.",
+  "ru": "Страна находится под ядерной гарантией: её прикрывает арсенал другой страны."
+ },
+ "nd_public_guarantee_line_none": {
+  "en": "The country neither gives nor holds a nuclear guarantee.",
+  "ru": "Страна не даёт и не имеет ядерных гарантий."
+ },
+ "nd_public_guarantee_word_both": {
+  "en": "Gives and holds",
+  "ru": "Даёт и имеет"
+ },
+ "nd_public_guarantee_word_gives": {
+  "en": "Guarantor",
+  "ru": "Гарант"
+ },
+ "nd_public_guarantee_word_holds": {
+  "en": "Guaranteed",
+  "ru": "Под гарантией"
+ },
+ "nd_readiness_0": {
+  "en": "Recessed",
+  "ru": "Пониженная"
+ },
+ "nd_readiness_1": {
+  "en": "Routine",
+  "ru": "Обычная"
+ },
+ "nd_readiness_2": {
+  "en": "Heightened",
+  "ru": "Усиленная"
+ },
+ "nd_readiness_3": {
+  "en": "High Alert",
+  "ru": "Повышенная готовность"
+ },
+ "nd_readiness_mod_2": {
+  "en": "Heightened Nuclear Readiness",
+  "ru": "Усиленная ядерная готовность"
+ },
+ "nd_readiness_mod_3": {
+  "en": "Nuclear Forces on High Alert",
+  "ru": "Ядерные силы в повышенной готовности"
+ },
+ "nd_readiness_moving_0": {
+  "en": " #lore → Recessed#!",
+  "ru": " #lore → Пониженная#!"
+ },
+ "nd_readiness_moving_1": {
+  "en": " #lore → Routine#!",
+  "ru": " #lore → Обычная#!"
+ },
+ "nd_readiness_moving_2": {
+  "en": " #lore → Heightened#!",
+  "ru": " #lore → Усиленная#!"
+ },
+ "nd_readiness_moving_3": {
+  "en": " #lore → High Alert#!",
+  "ru": " #lore → Повышенная готовность#!"
+ },
+ "nd_readiness_terms_0": {
+  "en": "Readiness: Recessed",
+  "ru": "Готовность: Пониженная"
+ },
+ "nd_readiness_terms_1": {
+  "en": "Readiness: Routine",
+  "ru": "Готовность: Обычная"
+ },
+ "nd_readiness_terms_2": {
+  "en": "Readiness: Heightened",
+  "ru": "Готовность: Усиленная"
+ },
+ "nd_readiness_terms_3": {
+  "en": "Readiness: High Alert",
+  "ru": "Готовность: Повышенная готовность"
+ },
+ "nd_repudiate_pledge_action": {
+  "en": "Repudiate Non-Use Pledge",
+  "ru": "Отказ от обязательства о неприменении"
+ },
+ "nd_repudiate_pledge_action_action_notification_name": {
+  "en": "Non-Use Pledge Repudiated",
+  "ru": "Обязательство о неприменении отвергнуто"
+ },
+ "nd_repudiate_pledge_action_action_notification_third_party_name": {
+  "en": "[INITIATOR_COUNTRY.GetName] Repudiates Non-Use Pledge",
+  "ru": "[INITIATOR_COUNTRY.GetName] отвергает обязательство о неприменении"
+ },
+ "nd_repudiate_pledge_action_action_propose_name": {
+  "en": "Repudiate the Pledge",
+  "ru": "Отвергнуть обязательство"
+ },
+ "nd_risk_band_0": {
+  "en": "#G Very low#!",
+  "ru": "#G Очень низкий#!"
+ },
+ "nd_risk_band_1": {
+  "en": "#G Low#!",
+  "ru": "#G Низкий#!"
+ },
+ "nd_risk_band_2": {
+  "en": "#Y Elevated#!",
+  "ru": "#Y Повышенный#!"
+ },
+ "nd_risk_band_3": {
+  "en": "#R High#!",
+  "ru": "#R Высокий#!"
+ },
+ "nd_risk_band_4": {
+  "en": "#R Extreme#!",
+  "ru": "#R Крайний#!"
+ },
+ "nd_risk_factor_crisis": {
+  "en": "Our crisis adds misreadings of its own: its danger is [THIS.GetCountry.GetCustom('nd_crisis_danger_word')]",
+  "ru": "Наш кризис порождает собственные ошибки восприятия: его опасность — [THIS.GetCountry.GetCustom('nd_crisis_danger_word')]"
+ },
+ "nd_risk_factor_doctrine": {
+  "en": "#v ×[THIS.ScriptValue('nd_incident_doctrine_multiplier')|2]#!  Doctrine",
+  "ru": "#v ×[THIS.ScriptValue('nd_incident_doctrine_multiplier')|2]#!  Доктрина"
+ },
+ "nd_risk_factor_readiness": {
+  "en": "#v ×[THIS.ScriptValue('nd_incident_base_monthly_permille')|1]#!  Readiness, against Routine",
+  "ru": "#v ×[THIS.ScriptValue('nd_incident_base_monthly_permille')|1]#!  Готовность по сравнению с обычной"
+ },
+ "nd_risk_factor_reliability": {
+  "en": "#v ×[THIS.ScriptValue('nd_disp_incident_reliability_factor')|2]#!  Command reliability",
+  "ru": "#v ×[THIS.ScriptValue('nd_disp_incident_reliability_factor')|2]#!  Надёжность командования"
+ },
+ "nd_risk_factor_strain": {
+  "en": "#v ×[THIS.ScriptValue('nd_disp_incident_strain_factor')|2]#!  Crew strain",
+  "ru": "#v ×[THIS.ScriptValue('nd_disp_incident_strain_factor')|2]#!  Нагрузка на расчёты"
+ },
+ "nd_risk_factor_war": {
+  "en": "Our war with an armed enemy adds misreadings of its own, as a dangerous crisis would",
+  "ru": "Наша война с вооружённым противником порождает собственные ошибки восприятия — как опасный кризис"
+ },
+ "nd_safeguards_slow_launch": {
+  "en": "Safeguards: A Slower Launch",
+  "ru": "Меры безопасности: более медленный пуск"
+ },
+ "nd_stage_next_1": {
+  "en": "Now a private #v Warning#!. It becomes a #v Confrontation#! if the threat is refused or answered with a counter-threat, made public, or backed by an exercise.",
+  "ru": "Сейчас это закрытое #v Предупреждение#!. Оно становится #v Противостоянием#!, если угрозу отвергают или отвечают на неё встречной угрозой, если её делают публичной или подкрепляют учениями."
+ },
+ "nd_stage_next_2": {
+  "en": "Now a #v Confrontation#!. It turns #R Acute#! at danger #v 70#!, when the threatening side holds firm at its deadline, when it is at High Alert while the other side is at Heightened or higher, if the play becomes a war, or after an intercepted launch.",
+  "ru": "Сейчас это #v Противостояние#!. Оно становится #R острым#! при опасности #v 70#!, когда угрожающая сторона остаётся тверда к своему сроку, когда она в повышенной готовности, а другая сторона — в усиленной или выше, если игра превращается в войну или после перехваченного пуска."
+ },
+ "nd_stage_next_3": {
+  "en": "Now #R Acute#!, the last stage. From here it ends only in an outcome.",
+  "ru": "Теперь #R острая#! стадия, последняя. Дальше всё заканчивается только исходом."
+ },
+ "nd_stakes_long_private": {
+  "en": "If they concede, our credibility rises by 10. If we back down it falls by 5. A mutual stand-down raises it by 5.",
+  "ru": "Если они уступят, наша убедительность вырастет на 10. Если отступим мы, она упадёт на 5. Взаимное понижение готовности повышает её на 5."
+ },
+ "nd_stakes_long_public": {
+  "en": "If they concede, our credibility rises by 15. If we back down it falls by 15, and by 5 more if our doctrine made it a bluff; if the deadline lapses, by 10. A mutual stand-down costs 5, unless we were defending.",
+  "ru": "Если они уступят, наша убедительность вырастет на 15. Если отступим мы, она упадёт на 15, а ещё на 5, если из-за нашей доктрины это был блеф; если срок истечёт — на 10. Взаимное понижение готовности стоит 5, если только мы не оборонялись."
+ },
+ "nd_stakes_long_target": {
+  "en": "If we concede, our credibility falls by 5. If they back down, ours rises by 10. A mutual stand-down raises it by 5.",
+  "ru": "Если уступим мы, наша убедительность упадёт на 5. Если они отступят, наша вырастет на 10. Взаимное понижение готовности повышает её на 5."
+ },
+ "nd_struck_own_people": {
+  "en": "Nuclear Weapons Used on Our Own People",
+  "ru": "Ядерное оружие применено против собственного народа"
+ },
+ "nd_system_outcome_held": {
+  "en": "An officer at the relay station refused to pass the order on until the capital answered. Nothing flew.",
+  "ru": "Офицер на ретрансляционной станции отказался передавать приказ, пока не ответит столица. Ничего не взлетело."
+ },
+ "nd_system_outcome_recalled": {
+  "en": "The system did what it was built to do — and the capital caught it with seconds left. The launch was recalled, but the country it took for the attacker saw every step of it.",
+  "ru": "Система сделала то, для чего была создана, — и столица остановила её за считаные секунды до конца. Пуск был отозван, но страна, принятая за нападавшего, видела каждый его шаг."
+ },
+ "nd_system_outcome_struck": {
+  "en": "The system did what it was built to do. By the time the capital understood, the missiles had struck the country it took for the attacker.",
+  "ru": "Система сделала то, для чего была создана. К тому времени, как столица всё поняла, ракеты уже ударили по стране, принятой за нападавшего."
+ },
+ "nd_taboo_ai_accept_burden": {
+  "en": "The burden of our arsenal",
+  "ru": "Бремя нашего арсенала"
+ },
+ "nd_taboo_ai_accept_taboo": {
+  "en": "The world's horror of the bomb",
+  "ru": "Ужас мира перед бомбой"
+ },
+ "nd_taboo_ai_arms_base": {
+  "en": "An arms-control commitment",
+  "ru": "Обязательство по контролю над вооружениями"
+ },
+ "nd_taboo_ai_arms_growth": {
+  "en": "The ceiling forbids the arsenal we want",
+  "ru": "Потолок запрещает арсенал, который нам нужен"
+ },
+ "nd_taboo_ai_arms_militarist": {
+  "en": "Our government would never accept limits on the bomb",
+  "ru": "Наше правительство никогда не примет ограничений на бомбу"
+ },
+ "nd_taboo_ai_arms_parity": {
+  "en": "We would give up more warheads than they would",
+  "ru": "Мы отдали бы больше боеголовок, чем они"
+ },
+ "nd_taboo_arms_other_party_tt": {
+  "en": "They hold nuclear weapons or run a program to build them",
+  "ru": "У них есть ядерное оружие или они ведут программу его создания"
+ },
+ "nd_taboo_arms_party_tt": {
+  "en": "We hold nuclear weapons or run a program to build them",
+  "ru": "У нас есть ядерное оружие или мы ведём программу его создания"
+ },
+ "nd_taboo_arms_quantity_tt": {
+  "en": "A ceiling of at least one warhead is set",
+  "ru": "Установлен потолок не менее одной боеголовки"
+ },
+ "nd_taboo_arsenal_ban": {
+  "en": " · UN ban: #v [Country.MakeScope.ScriptValue('nd_disp_ban_ceiling')|0]#!",
+  "ru": " · запрет ООН: #v [Country.MakeScope.ScriptValue('nd_disp_ban_ceiling')|0]#!"
+ },
+ "nd_taboo_arsenal_dismantling": {
+  "en": " · #R dismantling#!",
+  "ru": " · #R демонтаж#!"
+ },
+ "nd_taboo_arsenal_treaty": {
+  "en": " · treaty: #v [Country.MakeScope.ScriptValue('nd_disp_treaty_ceiling')|0]#!",
+  "ru": " · договор: #v [Country.MakeScope.ScriptValue('nd_disp_treaty_ceiling')|0]#!"
+ },
  "nd_taboo_band_1": {
   "en": "Normalized",
   "ru": "Нормализованное"
@@ -14967,6 +16035,70 @@
   "en": "Absolute",
   "ru": "Абсолютное"
  },
+ "nd_taboo_bd_base": {
+  "en": "#v [GetGlobalVariable('nd_tb_base').GetValue|+0]#!  Where every nuclear age begins",
+  "ru": "#v [GetGlobalVariable('nd_tb_base').GetValue|+0]#!  С чего начинается любая ядерная эпоха"
+ },
+ "nd_taboo_bd_ledger": {
+  "en": "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  What the world has done lately — uses, threats, renunciations — halving every four years",
+  "ru": "#v [GetGlobalVariable('nd_tb_ledger').GetValue|+1]#!  Что мир сделал за последнее время — применения, угрозы, отказы; вес вдвое снижается каждые четыре года"
+ },
+ "nd_taboo_bd_postures": {
+  "en": "#v [GetGlobalVariable('nd_tb_postures').GetValue|+1]#!  The nuclear powers' doctrines: No First Use and warheads in storage raise it, compellence and warfighting lower it",
+  "ru": "#v [GetGlobalVariable('nd_tb_postures').GetValue|+1]#!  Доктрины ядерных держав: «Неприменение первым» и боеголовки на хранении повышают его, принуждение и ведение войны понижают"
+ },
+ "nd_taboo_bd_restraint": {
+  "en": "#v [GetGlobalVariable('nd_tb_restraint').GetValue|+1]#!  Restraint: non-use pledges, arms-control treaties, and states that gave the bomb up",
+  "ru": "#v [GetGlobalVariable('nd_tb_restraint').GetValue|+1]#!  Сдержанность: обязательства о неприменении, договоры о контроле над вооружениями и государства, отказавшиеся от бомбы"
+ },
+ "nd_taboo_bd_target": {
+  "en": "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Drift alone reaches 55 at most; beyond that takes cooperation",
+  "ru": "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Один дрейф доходит самое большее до 55; дальше нужно сотрудничество"
+ },
+ "nd_taboo_bd_tradition": {
+  "en": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  The tradition of non-use: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! years' worth, full at #v [SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')|0]#!",
+  "ru": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  Традиция неприменения: лет без применения — #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#!, полный вес при #v [SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')|0]#!"
+ },
+ "nd_taboo_bd_un": {
+  "en": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  The United Nations: the Non-Proliferation Treaty, the Physical Protection convention and the Prohibition Treaty, as strong as the organization's authority",
+  "ru": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  Организация Объединённых Наций: Договор о нераспространении, конвенция о физической защите и Договор о запрещении действуют настолько сильно, насколько силён авторитет организации"
+ },
+ "nd_taboo_burden_hint_cut": {
+  "en": "\\n\\nOur restraint groups would ease at #v [Country.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! warheads or fewer.",
+  "ru": "\\n\\nНаши группы сторонников сдержанности смягчатся, если боеголовок будет не больше #v [Country.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#!."
+ },
+ "nd_taboo_burden_hint_only_dismantling": {
+  "en": "\\n\\nOnly giving up the arsenal would ease our restraint groups now.",
+  "ru": "\\n\\nСейчас смягчить наши группы сторонников сдержанности может только отказ от арсенала."
+ },
+ "nd_taboo_ceiling_none": {
+  "en": "#v None#!",
+  "ru": "#v Нет#!"
+ },
+ "nd_taboo_ceiling_set": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads",
+  "ru": "Боеголовок: #v [Country.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#!"
+ },
+ "nd_taboo_civil_defence": {
+  "en": "Civil Defense",
+  "ru": "Гражданская оборона"
+ },
+ "nd_taboo_civil_defence_desc": {
+  "en": "Shelters, sirens and drills. For ten years an enemy's arsenal drains our war support half as fast.",
+  "ru": "Убежища, сирены, учения. В течение десяти лет арсенал врага подтачивает нашу поддержку войны вдвое медленнее."
+ },
+ "nd_taboo_dismantle_note_on": {
+  "en": "\\n\\nDismantling: #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! months left, #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! warheads taken apart this month.",
+  "ru": "\\n\\nДемонтаж: осталось #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_months_left')|0]#! мес.; разобрано в этом месяце: #v [Country.MakeScope.ScriptValue('nd_disp_dismantle_per_month')|0]#! боеголовок."
+ },
+ "nd_taboo_hist_legend": {
+  "en": "#lore 0-100, sampled monthly#!",
+  "ru": "#lore 0-100, замеры раз в месяц#!"
+ },
+ "nd_taboo_hist_target_legend": {
+  "en": "#lore where the world's state was pulling it, 0-100#!",
+  "ru": "#lore куда тянуло мир в этот момент, 0-100#!"
+ },
  "nd_taboo_hist_target_title": {
   "en": "Where the Taboo Was Heading",
   "ru": "Куда шло табу"
@@ -14974,6 +16106,1674 @@
  "nd_taboo_hist_title": {
   "en": "The Nuclear Taboo",
   "ru": "Ядерное табу"
+ },
+ "nd_taboo_last_use_before": {
+  "en": "Nuclear weapons have been used in war.",
+  "ru": "Ядерное оружие применялось на войне."
+ },
+ "nd_taboo_last_use_never": {
+  "en": "No nuclear weapon has ever been used in war.",
+  "ru": "Ядерное оружие на войне никогда не применялось."
+ },
+ "nd_taboo_last_use_year_known": {
+  "en": "The last nuclear weapon used in war fell in #v [GetGlobalVariable('nd_taboo_last_use_year').GetValue|0]#!.",
+  "ru": "Последнее ядерное оружие на войне было применено в #v [GetGlobalVariable('nd_taboo_last_use_year').GetValue|0]#! г."
+ },
+ "nd_taboo_norm_champion": {
+  "en": "Champion of the Taboo",
+  "ru": "Борец за табу"
+ },
+ "nd_taboo_norm_champion_desc": {
+  "en": "We speak for the world's horror of the bomb, and the world listens.",
+  "ru": "Мы говорим от имени мирового ужаса перед бомбой, и мир слушает."
+ },
+ "nd_taboo_opt_champion": {
+  "en": "Champion the norm abroad",
+  "ru": "Отстаивать норму за рубежом"
+ },
+ "nd_taboo_opt_cut": {
+  "en": "Cut our arsenal in half",
+  "ru": "Сократить арсенал вдвое"
+ },
+ "nd_taboo_opt_dismantle": {
+  "en": "Take our arsenal apart",
+  "ru": "Разобрать наш арсенал"
+ },
+ "nd_taboo_opt_firm": {
+  "en": "Our deterrent is not negotiable",
+  "ru": "Наше сдерживание не обсуждается"
+ },
+ "nd_taboo_opt_hold": {
+  "en": "Say publicly that nothing has changed",
+  "ru": "Публично заявить, что ничего не изменилось"
+ },
+ "nd_taboo_opt_modernise": {
+  "en": "Modernize the arsenal",
+  "ru": "Модернизировать арсенал"
+ },
+ "nd_taboo_opt_nfu": {
+  "en": "Pledge never to use it first",
+  "ru": "Обязаться не применять его первыми"
+ },
+ "nd_taboo_opt_programme": {
+  "en": "Put more into our own program",
+  "ru": "Вложить больше в собственную программу"
+ },
+ "nd_taboo_opt_protector": {
+  "en": "Seek the shelter of a friendly nuclear power",
+  "ru": "Искать защиты дружественной ядерной державы"
+ },
+ "nd_taboo_opt_quiet": {
+  "en": "Keep out of the powers' quarrel",
+  "ru": "Не вмешиваться в ссору держав"
+ },
+ "nd_taboo_opt_shelters": {
+  "en": "Build shelters and civil defense",
+  "ru": "Построить убежища и систему гражданской обороны"
+ },
+ "nd_taboo_possession_cost": {
+  "en": "The Burden of the Bomb",
+  "ru": "Бремя бомбы"
+ },
+ "nd_taboo_possession_cost_desc": {
+  "en": "The world holds nuclear weapons in horror, and it holds that horror against those who keep them. The weight grows with the nuclear taboo above 40 and with our arsenal up to fifty warheads: a small deterrent is tolerated far more than a large one.",
+  "ru": "Мир с ужасом относится к ядерному оружию и ставит этот ужас в вину тем, кто его держит. Бремя растёт вместе с ядерным табу выше 40 и с нашим арсеналом до пятидесяти боеголовок: малое средство сдерживания терпят куда охотнее, чем большое."
+ },
+ "nd_taboo_programme_held": {
+  "en": "Program Held",
+  "ru": "Программа приостановлена"
+ },
+ "nd_taboo_programme_held_desc": {
+  "en": "We are at our arsenal ceiling, set by us, by an arms-control treaty or by the UN's Prohibition Treaty, or taking our arsenal apart: the program builds nothing and cannot be funded.",
+  "ru": "Мы достигли потолка арсенала, установленного нами, договором о контроле над вооружениями или Договором ООН о запрещении, либо разбираем арсенал: программа ничего не строит и не может финансироваться."
+ },
+ "nd_taboo_renounced": {
+  "en": "Renounced the Bomb",
+  "ru": "Отречение от бомбы"
+ },
+ "nd_taboo_renounced_desc": {
+  "en": "We took our own nuclear arsenal apart. We have no program and are counted as a non-nuclear state; taking the bomb up again is a decision, and the world would see it as a breakout.",
+  "ru": "Мы сами разобрали свой ядерный арсенал. У нас нет программы, и нас считают неядерным государством; вернуться к бомбе — это решение, и мир увидит в нём прорыв."
+ },
+ "nd_taboo_renunciation_prestige": {
+  "en": "The Bomb Renounced",
+  "ru": "Бомба отвергнута"
+ },
+ "nd_taboo_renunciation_prestige_desc": {
+  "en": "The world honors a state that gave up the bomb of its own accord — the more, the more it has come to fear the weapon.",
+  "ru": "Мир чтит государство, добровольно отказавшееся от бомбы, — тем больше, чем сильнее он научился бояться этого оружия."
+ },
+ "nd_taboo_resume_programme": {
+  "en": "Resume the Nuclear Program",
+  "ru": "Возобновить ядерную программу"
+ },
+ "nd_taboo_resume_programme_desc": {
+  "en": "We gave up the bomb. We can end our renunciation — at a price in the world's regard that grows with the nuclear taboo, and the day we are armed again the world will call it a breakout.",
+  "ru": "Мы отказались от бомбы. Мы можем прекратить отказ — ценой уважения мира, которая растёт вместе с ядерным табу, а в день, когда мы снова вооружимся, мир назовёт это прорывом."
+ },
+ "nd_taboo_status_1": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_1$#!: the bomb is treated as one weapon among others.\\n",
+  "ru": "Ядерное табу на отметке #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_1$#!: бомба считается одним из видов оружия.\\n"
+ },
+ "nd_taboo_status_2": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_2$#!: the bomb is feared, but its use is still argued for.\\n",
+  "ru": "Ядерное табу на отметке #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_2$#!: бомбы боятся, но о её применении всё ещё спорят.\\n"
+ },
+ "nd_taboo_status_3": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_3$#!: using the bomb is widely held to be wrong.\\n",
+  "ru": "Ядерное табу на отметке #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_3$#!: применение бомбы повсеместно считается неправильным.\\n"
+ },
+ "nd_taboo_status_4": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_4$#!: the bomb is seen as unusable, and even holding one draws censure.\\n",
+  "ru": "Ядерное табу на отметке #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_4$#!: бомба считается неприменимой, и даже её наличие вызывает осуждение.\\n"
+ },
+ "nd_taboo_status_5": {
+  "en": "The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_5$#!: the bomb is beyond the pale, and holding one marks a state apart.\\n",
+  "ru": "Ядерное табу на отметке #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, #bold $nd_taboo_band_5$#!: бомба недопустима, а обладание ею выделяет государство среди прочих.\\n"
+ },
+ "nd_taboo_tt_already_dismantling": {
+  "en": "We are already taking our arsenal apart",
+  "ru": "Мы уже разбираем свой арсенал"
+ },
+ "nd_taboo_tt_ceiling_at_floor": {
+  "en": "The ceiling cannot go below one warhead; to go further, dismantle the arsenal",
+  "ru": "Потолок не может быть ниже одной боеголовки; чтобы идти дальше, нужно разобрать арсенал"
+ },
+ "nd_taboo_tt_ceiling_lift": {
+  "en": "Lift the arsenal ceiling we set: the program may build again, up to any ceiling a treaty still holds us to",
+  "ru": "Снять установленный нами потолок арсенала: программа сможет строить снова, вплоть до потолка, которым нас всё ещё связывает договор"
+ },
+ "nd_taboo_tt_ceiling_lower": {
+  "en": "Hold our arsenal to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_lowered_value')|0]#! warheads; those above it are taken apart, a tenth of the excess a month, and each strengthens the nuclear taboo a little",
+  "ru": "Ограничить арсенал: боеголовок не более #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_lowered_value')|0]#!; то, что выше, разбирается — по десятой части излишка в месяц, и каждая разобранная боеголовка немного укрепляет ядерное табу"
+ },
+ "nd_taboo_tt_ceiling_raise": {
+  "en": "Allow up to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_raised_value')|0]#! warheads",
+  "ru": "Разрешить боеголовок до #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_ceiling_raised_value')|0]#!"
+ },
+ "nd_taboo_tt_champion_relations": {
+  "en": "The great powers that hold nuclear weapons take it as a lecture: relations #R -5#! with each",
+  "ru": "Великие державы с ядерным оружием воспринимают это как нравоучение: отношения #R -5#! с каждой"
+ },
+ "nd_taboo_tt_condemn_open": {
+  "en": "No condemnation has come before the Assembly within the cooldown, or this is a nuclear use, which it can always take up",
+  "ru": "За время паузы в Ассамблею не поступало осуждений, либо это ядерное применение, которым она может заняться всегда"
+ },
+ "nd_taboo_tt_dismantle_start": {
+  "en": "Take our #v [GetPlayer.MakeScope.ScriptValue('nd_stockpile')|0]#! warheads apart over #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_dismantle_months_value')|0]#! months. Until the last is gone they stay in storage, the program builds nothing, and we can halt at a price. When it is done we renounce the bomb: the world's regard grows with the nuclear taboo, and taking it up again would be a breakout",
+  "ru": "Разобрать все наши боеголовки (#v [GetPlayer.MakeScope.ScriptValue('nd_stockpile')|0]#!) за #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_dismantle_months_value')|0]#! мес. Пока не разобрана последняя, они остаются на хранении, программа ничего не строит, а остановиться мы можем лишь за определённую цену. Когда всё завершится, мы отрекаемся от бомбы: уважение мира растёт вместе с ядерным табу, а возвращение к бомбе станет прорывом"
+ },
+ "nd_taboo_tt_dismantling_owns_it": {
+  "en": "While we dismantle the arsenal, the dismantling sets its size",
+  "ru": "Пока мы разбираем арсенал, его размер задаёт демонтаж"
+ },
+ "nd_taboo_tt_halt": {
+  "en": "Halt the dismantling: what is taken apart stays gone. Our credibility falls by #R 10#!, and the nuclear taboo weakens",
+  "ru": "Остановить демонтаж: разобранное остаётся разобранным. Наша убедительность падает на #R 10#!, а ядерное табу слабеет"
+ },
+ "nd_taboo_tt_modernise": {
+  "en": "Reliability #G +10#!, survivability #G +5#!",
+  "ru": "Надёжность #G +10#!, живучесть #G +5#!"
+ },
+ "nd_taboo_tt_need_no_civil_war": {
+  "en": "Not while we are fighting a civil war",
+  "ru": "Не во время гражданской войны"
+ },
+ "nd_taboo_tt_need_no_crisis": {
+  "en": "Not while we are in a nuclear crisis",
+  "ru": "Не во время ядерного кризиса"
+ },
+ "nd_taboo_tt_need_peace": {
+  "en": "Not while we are at war",
+  "ru": "Не во время войны"
+ },
+ "nd_taboo_tt_no_ceiling": {
+  "en": "We have set no arsenal ceiling",
+  "ru": "Потолок арсенала не установлен"
+ },
+ "nd_taboo_tt_not_dismantling": {
+  "en": "We are not dismantling our arsenal",
+  "ru": "Мы не разбираем свой арсенал"
+ },
+ "nd_taboo_tt_opt_cut": {
+  "en": "Hold our arsenal to #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_half_arsenal_value')|0]#! warheads: those above it are taken apart, a tenth of the excess a month",
+  "ru": "Ограничить арсенал: боеголовок не более #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_half_arsenal_value')|0]#!; то, что выше, разбирается по десятой части излишка в месяц"
+ },
+ "nd_taboo_tt_protector": {
+  "en": "Relations #G +15#! with a friendly nuclear power",
+  "ru": "Отношения #G +15#! с дружественной ядерной державой"
+ },
+ "nd_taboo_tt_quiet_relations": {
+  "en": "The great powers that hold nuclear weapons appreciate our silence: relations #G +5#! with each",
+  "ru": "Великие державы с ядерным оружием ценят наше молчание: отношения #G +5#! с каждой"
+ },
+ "nd_taboo_tt_readiness_dismantling": {
+  "en": "Our warheads stay in storage until the last is taken apart",
+  "ru": "Наши боеголовки остаются на хранении, пока не будет разобрана последняя"
+ },
+ "nd_taboo_tt_renounce_relations": {
+  "en": "Relations improve by #G [GetPlayer.MakeScope.ScriptValue('nd_taboo_renounce_relations_value')|0]#! with every country",
+  "ru": "Отношения улучшаются на #G [GetPlayer.MakeScope.ScriptValue('nd_taboo_renounce_relations_value')|0]#! со всеми странами"
+ },
+ "nd_taboo_tt_resume_no_standing": {
+  "en": "We lack the standing to run a weapons program: resuming only ends our renunciation. A program needs great-power standing, a major power's missiles, or a patron's aid",
+  "ru": "Нам не хватает веса, чтобы вести программу вооружений: возобновление лишь прекращает наш отказ. Для программы нужен статус великой державы, ракеты крупной державы или помощь покровителя"
+ },
+ "nd_taboo_tt_resume_relations": {
+  "en": "Relations worsen by #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_resume_relations_value')|0]#! with every country",
+  "ru": "Отношения ухудшаются на #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_resume_relations_value')|0]#! со всеми странами"
+ },
+ "nd_taboo_tt_shelters_war_support": {
+  "en": "For ten years, an enemy's arsenal drains our war support half as fast",
+  "ru": "Десять лет арсенал врага подтачивает нашу поддержку войны вдвое медленнее"
+ },
+ "nd_taboo_tt_strike_answer": {
+  "en": "An answer to a nuclear strike: #G no#! [concept_infamy]. The nuclear taboo, now #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!, still falls — by half what a first use would cost it.",
+  "ru": "Ответ на ядерный удар: #G без#! [Concept('concept_infamy','дурной славы')]. Ядерное табу (сейчас #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!) всё равно падает — на половину того, во сколько обошлось бы первое применение."
+ },
+ "nd_taboo_tt_strike_first_use": {
+  "en": "If it gets through: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! [concept_infamy], and relations #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#! with every country but theirs. The nuclear taboo stands at #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: the higher it stands, the more the world recoils.",
+  "ru": "Если удар пройдёт: #R +[GetPlayer.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! [Concept('concept_infamy','дурной славы')], а отношения #R [GetPlayer.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#! со всеми странами, кроме их. Ядерное табу на уровне #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_value')|0]#!: чем оно выше, тем сильнее мир ужаснётся."
+ },
+ "nd_taboo_tt_verdict_failed": {
+  "en": "The nuclear taboo #R weakens#!: the world let a nuclear use pass. #R -3#! on the ledger of what the world remembers",
+  "ru": "Ядерное табу #R слабеет#!: мир позволил ядерному применению пройти. #R -3#! в журнале того, что помнит мир"
+ },
+ "nd_taboo_tt_verdict_passed": {
+  "en": "The nuclear taboo #G strengthens#!: the world said no. #G +2#! at once, and #G +3#! on the ledger of what the world remembers",
+  "ru": "Ядерное табу #G крепнет#!: мир сказал «нет». #G +2#! сразу и #G +3#! в журнале того, что помнит мир"
+ },
+ "nd_taboo_w_arsenal_sub": {
+  "en": "Arsenal Size",
+  "ru": "Размер арсенала"
+ },
+ "nd_taboo_w_btn_halt": {
+  "en": "Halt",
+  "ru": "Остановить"
+ },
+ "nd_taboo_w_btn_lift": {
+  "en": "Lift",
+  "ru": "Снять"
+ },
+ "nd_taboo_w_ceiling_label": {
+  "en": "Arsenal ceiling",
+  "ru": "Потолок арсенала"
+ },
+ "nd_taboo_w_ceiling_tt": {
+  "en": "#tooltip_header Arsenal Ceiling#!\\n$TOOLTIP_DELIMITER$\\nThe most warheads we will hold. Those above it are taken apart, a tenth of the excess a month, and the program builds nothing while we are at or above it. Every warhead retired strengthens the nuclear taboo a little. Raising or lifting the ceiling costs nothing. Additional warheads add less and less to deterrence, and cost upkeep all the same.[Country.GetCustom('nd_taboo_burden_hint')]",
+  "ru": "#tooltip_header Потолок арсенала#!\\n$TOOLTIP_DELIMITER$\\nНаибольшее число боеголовок, которое мы готовы держать. То, что выше, разбирается — по десятой части излишка в месяц, и пока мы на потолке или выше, программа ничего не строит. Каждая выведенная боеголовка немного укрепляет ядерное табу. Повышение или снятие потолка ничего не стоит. Каждая дополнительная боеголовка всё меньше прибавляет сдерживанию, а содержание стоит всё так же.[Country.GetCustom('nd_taboo_burden_hint')]"
+ },
+ "nd_taboo_w_dismantle_label": {
+  "en": "Dismantle the arsenal",
+  "ru": "Разобрать арсенал"
+ },
+ "nd_taboo_w_dismantle_tt": {
+  "en": "#tooltip_header Dismantle the Arsenal#!\\n$TOOLTIP_DELIMITER$\\nTake every warhead apart and renounce the bomb, as South Africa did in 1989. It takes a year, and longer for a large arsenal. The world's regard for it grows with the nuclear taboo.",
+  "ru": "#tooltip_header Разобрать арсенал#!\\n$TOOLTIP_DELIMITER$\\nРазобрать каждую боеголовку и отречься от бомбы, как сделала Южная Африка в 1989 году. Это занимает год, а для большого арсенала — дольше. Уважение мира к такому шагу растёт вместе с ядерным табу."
+ },
+ "nd_taboo_w_halt_label": {
+  "en": "Halt the dismantling",
+  "ru": "Остановить демонтаж"
+ },
+ "nd_taboo_w_halt_tt": {
+  "en": "#tooltip_header Halt the Dismantling#!\\n$TOOLTIP_DELIMITER$\\nStop taking the arsenal apart. What is gone stays gone, and a reversal made in public costs credibility.",
+  "ru": "#tooltip_header Остановить демонтаж#!\\n$TOOLTIP_DELIMITER$\\nПрекратить разборку арсенала. Разобранное остаётся разобранным, а публичный разворот стоит убедительности."
+ },
+ "nd_taboo_w_lift_label": {
+  "en": "Lift the arsenal ceiling",
+  "ru": "Снять потолок арсенала"
+ },
+ "nd_taboo_w_lift_tt": {
+  "en": "#tooltip_header Lift the Ceiling#!\\n$TOOLTIP_DELIMITER$\\nNo limit on our arsenal but what the program can build.",
+  "ru": "#tooltip_header Снять потолок#!\\n$TOOLTIP_DELIMITER$\\nНикаких пределов нашему арсеналу, кроме того, что способна построить программа."
+ },
+ "nd_tt_act_accept_standdown": {
+  "en": "We accept, and the crisis ends:",
+  "ru": "Мы соглашаемся, и кризис заканчивается:"
+ },
+ "nd_tt_act_accept_trade": {
+  "en": "We accept the trade, and the crisis ends:",
+  "ru": "Мы принимаем обмен, и кризис заканчивается:"
+ },
+ "nd_tt_act_back_down": {
+  "en": "We abandon the threat, and the crisis ends",
+  "ru": "Мы отказываемся от угрозы, и кризис заканчивается"
+ },
+ "nd_tt_act_counter": {
+  "en": "We answer threat with threat",
+  "ru": "Мы отвечаем угрозой на угрозу"
+ },
+ "nd_tt_act_execute": {
+  "en": "#R We carry out the threat: a nuclear strike on them.#!",
+  "ru": "#R Мы исполняем угрозу: ядерный удар по ним.#!"
+ },
+ "nd_tt_act_exercise": {
+  "en": "An exercise they can see — and could mistake for the real thing",
+  "ru": "Учения, которые они видят и могут принять за настоящее дело"
+ },
+ "nd_tt_act_extend": {
+  "en": "We give them #v 6#! more weeks. Hesitation is noticed",
+  "ru": "Мы даём им ещё #v 6#! нед. Колебания не остаются незамеченными"
+ },
+ "nd_tt_act_fight_conventional": {
+  "en": "We fight without nuclear weapons. The threat was not carried out, everyone saw, and our [Concept('concept_nuclear_credibility','credibility')] falls",
+  "ru": "Мы воюем без ядерного оружия. Угроза не исполнена, все это видели, и наша [Concept('concept_nuclear_credibility','убедительность')] падает"
+ },
+ "nd_tt_act_go_public": {
+  "en": "The threat becomes a public ultimatum",
+  "ru": "Угроза становится публичным ультиматумом"
+ },
+ "nd_tt_act_hold": {
+  "en": "We hold firm: the crisis turns #R Acute#!",
+  "ru": "Мы стоим на своём: кризис переходит в #R острую#! стадию"
+ },
+ "nd_tt_act_refuse_talks": {
+  "en": "We refuse to stand down, and talks close",
+  "ru": "Мы отказываемся понижать готовность, и переговоры закрываются"
+ },
+ "nd_tt_act_refuse_trade": {
+  "en": "We refuse the trade, and talks close",
+  "ru": "Мы отказываемся от обмена, и переговоры закрываются"
+ },
+ "nd_tt_act_reject": {
+  "en": "We refuse, and leave them to decide what their threat meant",
+  "ru": "Мы отказываем и оставляем им решать, что означала их угроза"
+ },
+ "nd_tt_act_stand_firm": {
+  "en": "We do not bend. Nothing changes: they press again in #v 6#! weeks, and the deadline is theirs to act on",
+  "ru": "Мы не уступаем. Ничего не меняется: через #v 6#! нед. они надавят снова, а действовать по истечении срока предстоит им"
+ },
+ "nd_tt_act_talks": {
+  "en": "We propose a mutual stand-down",
+  "ru": "Мы предлагаем взаимное понижение готовности"
+ },
+ "nd_tt_act_trade": {
+  "en": "We offer a trade: each side gives up the same kind of thing the other demands of it",
+  "ru": "Мы предлагаем обмен: каждая сторона отказывается от того же, чего другая требует от неё"
+ },
+ "nd_tt_act_yield": {
+  "en": "We give them what they demand, and the crisis ends:",
+  "ru": "Мы даём им то, чего они требуют, и кризис заканчивается:"
+ },
+ "nd_tt_alert_held": {
+  "en": "Our readiness stays where it is, and we ask [SCOPE.sCountry('nd_exerciser').GetName] through the usual channels what it thinks it is doing",
+  "ru": "Наша готовность остаётся прежней, и мы спрашиваем страну [SCOPE.sCountry('nd_exerciser').GetName] по обычным каналам, что она, по её мнению, делает"
+ },
+ "nd_tt_allies_alarmed": {
+  "en": "Every country we protect: relations #R -10#!. Every subject under our nuclear umbrella: #R +5#! liberty desire. A crisis against any of them now weighs our arsenal at half while our warheads stay in storage",
+  "ru": "Каждая страна под нашей защитой: отношения #R -10#!. Каждое зависимое государство под нашим ядерным зонтиком: #R +5#! к стремлению к свободе. Кризис против любой из них теперь учитывает наш арсенал вполовину, пока наши боеголовки на хранении"
+ },
+ "nd_tt_already_current": {
+  "en": "This is not already our choice",
+  "ru": "Это ещё не наш выбор"
+ },
+ "nd_tt_already_public": {
+  "en": "The threat is still private",
+  "ru": "Угроза всё ещё закрытая"
+ },
+ "nd_tt_already_under_umbrella": {
+  "en": "They are not our direct subject — a subject is already under our nuclear umbrella",
+  "ru": "Они не наше прямое зависимое государство — зависимое государство уже находится под нашим ядерным зонтиком"
+ },
+ "nd_tt_assemble_for_retaliation": {
+  "en": "Our warheads are put back on their delivery systems (readiness #v Routine#!, two weeks away). When they are ready, and if the war or peacetime nuclear exchange with the country that struck us is still open, we decide how to answer",
+  "ru": "Наши боеголовки возвращаются на носители (готовность #v обычная#!, две недели). Когда они будут готовы и если война или мирный ядерный обмен со страной, ударившей по нам, ещё не закончены, мы решаем, как ответить"
+ },
+ "nd_tt_assistance_provider_armed": {
+  "en": "The country paying must hold nuclear warheads of its own: it needs the expertise",
+  "ru": "Платящая страна должна сама иметь ядерные боеголовки: ей нужен опыт"
+ },
+ "nd_tt_assistance_target_eligible": {
+  "en": "The other country must hold nuclear warheads, or have warheads from its arsenal unaccounted for",
+  "ru": "У другой страны должны быть ядерные боеголовки или пропавшие боеголовки из её арсенала"
+ },
+ "nd_tt_authority_adopted_1": {
+  "en": "Launch authority becomes #v Central Authorization#!. It can next be changed in a year.",
+  "ru": "Право на запуск: #v Централизованное разрешение#!. Изменить его снова можно через год."
+ },
+ "nd_tt_authority_adopted_2": {
+  "en": "Launch authority becomes #v Conditional Delegation#!. It can next be changed in a year.",
+  "ru": "Право на запуск: #v Условное делегирование#!. Изменить его снова можно через год."
+ },
+ "nd_tt_authority_adopted_3": {
+  "en": "Launch authority becomes #v Launch on Warning#!. It can next be changed in a year.",
+  "ru": "Право на запуск: #v Пуск по предупреждению#!. Изменить его снова можно через год."
+ },
+ "nd_tt_authority_adopted_4": {
+  "en": "Launch authority becomes #v Automatic Retaliation#!. It can next be changed in a year.",
+  "ru": "Право на запуск: #v Автоматическое возмездие#!. Изменить его снова можно через год."
+ },
+ "nd_tt_authority_consequence": {
+  "en": "#R An incident can now end in a launch without further approval from us.#! The chance that someone in the chain halts it is shown in the Forces section.",
+  "ru": "#R Теперь инцидент может закончиться пуском без дополнительного одобрения с нашей стороны.#! Вероятность того, что кто-то в цепочке остановит его, показана в разделе «Силы»."
+ },
+ "nd_tt_authority_consequence_automatic": {
+  "en": "#R A nuclear strike on our cities will be answered in full, up to three warheads, without a decision from us,#! and a weapons accident at home during war, an acute crisis or high alert against a plausible attacker can be read as an attack. Upkeep rises by @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_automatic_step')|D]#!/week",
+  "ru": "#R Ядерный удар по нашим городам будет отражён в полной мере — до трёх боеголовок — без нашего решения,#! а авария с оружием дома во время войны, острого кризиса или повышенной готовности против вероятного нападавшего может быть принята за нападение. Содержание дорожает на @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_automatic_step')|D]#!/нед."
+ },
+ "nd_tt_authority_tenure": {
+  "en": "Our launch authority has been in force at least a year",
+  "ru": "Наше право на запуск действует не менее года"
+ },
+ "nd_tt_basing_not_our_subject": {
+  "en": "They are not our direct subject: our weapons already reach from a subject's territory",
+  "ru": "Они не наше прямое зависимое государство: наше оружие уже достаёт с территории зависимого государства"
+ },
+ "nd_tt_basing_order_out": {
+  "en": "We leave the treaty that holds [SCOPE.sCountry('nd_accident_guest').GetName]'s #v Nuclear Basing#! article in our country. A treaty is left whole, so every other article in it ends too. We may leave it even while it binds, and no penalties for breaking a treaty apply.",
+  "ru": "Мы выходим из договора, по которому статья #v Ядерное базирование#! страны [SCOPE.sCountry('nd_accident_guest').GetName] действует в нашей стране. Договор покидается целиком, поэтому прекращают действовать и все его остальные статьи. Мы можем выйти, даже пока он связывает нас, и штрафы за нарушение договора не применяются."
+ },
+ "nd_tt_bp_accept": {
+  "en": "Our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads are taken apart. [SCOPE.sCountry('nd_bp_lead').GetName] holds a treaty that keeps us disarmed, and every great power that pressed us guarantees us against nuclear attack, binding for ten years",
+  "ru": "Наши боеголовки (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!) разбираются. Страна [SCOPE.sCountry('nd_bp_lead').GetName] держит договор, по которому мы остаёмся без оружия, а каждая великая держава, давившая на нас, гарантирует нам защиту от ядерного нападения на десять лет"
+ },
+ "nd_tt_bp_accept_relations": {
+  "en": "Every great power that pressed us: relations with us #G +20#!",
+  "ru": "Каждая великая держава, давившая на нас: отношения с нами #G +20#!"
+ },
+ "nd_tt_bp_press": {
+  "en": "We join the powers pressing [SCOPE.sCountry('nd_bp_state').GetName] to give up its warheads. If it accepts, we guarantee it against nuclear attack for at least ten years (a #R 100#! influence upkeep), and the power with the largest economy among us also holds its disarmament (#R 200#! more). If it refuses, relations with us #R -20#!",
+  "ru": "Мы присоединяемся к державам, требующим от страны [SCOPE.sCountry('nd_bp_state').GetName] отказаться от боеголовок. Если она согласится, мы гарантируем ей защиту от ядерного нападения не менее десяти лет (содержание влияния #R 100#!), а держава с крупнейшей экономикой среди нас также следит за её разоружением (ещё #R 200#!). Если откажется, отношения с нами #R -20#!"
+ },
+ "nd_tt_bp_refuse": {
+  "en": "We keep our warheads, and their upkeep. Every great power that pressed us: relations with us #R -20#!, and for ten years the great powers are readier to demand our disarmament",
+  "ru": "Мы сохраняем боеголовки и расходы на них. Каждая великая держава, давившая на нас: отношения с нами #R -20#!, а десять лет великие державы охотнее будут требовать нашего разоружения"
+ },
+ "nd_tt_capital_in_reach": {
+  "en": "Our weapons can reach their capital, where every #v Leadership#! warhead falls",
+  "ru": "Наше оружие достаёт до их столицы, где падает каждая боеголовка миссии #v Руководство#!"
+ },
+ "nd_tt_cobelligerent_abandon": {
+  "en": "We will not answer for them with our arsenal. We never promised to, so it costs us little",
+  "ru": "Мы не будем отвечать за них своим арсеналом. Мы никогда не обещали этого, так что это обходится нам недорого"
+ },
+ "nd_tt_command_intact": {
+  "en": "Our command is not cut off: no strike on our capital has severed the chain of authorization",
+  "ru": "Наше командование не отрезано: удар по нашей столице не разорвал цепочку разрешений"
+ },
+ "nd_tt_cooldown_clear": {
+  "en": "We have not had a nuclear crisis with them in the last two years (waived in war)",
+  "ru": "За последние два года у нас не было ядерного кризиса с ними (на войне не требуется)"
+ },
+ "nd_tt_counter_danger": {
+  "en": "The crisis danger rises by #R 10#! while our counter-threat stands",
+  "ru": "Опасность кризиса растёт на #R 10#!, пока действует наша встречная угроза"
+ },
+ "nd_tt_covert_conceded": {
+  "en": "We agreed in a nuclear crisis to run no hostile operation against them for ten years",
+  "ru": "В ядерном кризисе мы согласились десять лет не вести против них враждебных операций"
+ },
+ "nd_tt_credibility_down_10": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls by #R 10#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 10#!"
+ },
+ "nd_tt_credibility_down_15": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls by #R 15#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 15#!"
+ },
+ "nd_tt_credibility_down_20": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls by #R 20#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 20#!"
+ },
+ "nd_tt_credibility_down_3": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls by #R 3#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 3#!"
+ },
+ "nd_tt_credibility_down_5": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls by #R 5#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 5#!"
+ },
+ "nd_tt_credibility_down_5_bluff": {
+  "en": "Every government knew our doctrine did not allow this: our [Concept('concept_nuclear_credibility','credibility')] falls by #R 5#! more",
+  "ru": "Все правительства знали, что наша доктрина этого не допускает: наша [Concept('concept_nuclear_credibility','убедительность')] падает ещё на #R 5#!"
+ },
+ "nd_tt_credibility_up_10": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] rises by #G 10#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] растёт на #G 10#!"
+ },
+ "nd_tt_credibility_up_15": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] rises by #G 15#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] растёт на #G 15#!"
+ },
+ "nd_tt_credibility_up_3": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] rises by #G 3#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] растёт на #G 3#!"
+ },
+ "nd_tt_credibility_up_5": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] rises by #G 5#!",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] растёт на #G 5#!"
+ },
+ "nd_tt_crisis_stale": {
+  "en": "#lore This crisis has ended or changed. Nothing happens.#!",
+  "ru": "#lore Этот кризис закончился или изменился. Ничего не происходит.#!"
+ },
+ "nd_tt_crisis_turns_acute": {
+  "en": "Our crisis with them turns #R acute#!",
+  "ru": "Наш кризис с ними переходит в #R острую#! стадию"
+ },
+ "nd_tt_cw_custodian_accept": {
+  "en": "[SCOPE.sCountry('nd_cw_helper').GetName] secures our custody for as long as this civil war lasts: #G half#! as many of our warheads go missing whenever they change hands, and we may let it take them apart without losing one",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_helper').GetName] обеспечивает сохранность нашего арсенала, пока длится эта гражданская война: #G вдвое#! меньше наших боеголовок пропадает при каждой передаче, и мы можем позволить ей разобрать их, не потеряв ни одной"
+ },
+ "nd_tt_cw_deny_custodian_relations": {
+  "en": "[SCOPE.sCountry('nd_cw_helper').GetName]: relations with us #G +15#!",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_helper').GetName]: отношения с нами #G +15#!"
+ },
+ "nd_tt_cw_deny_hurried": {
+  "en": "Taken apart in haste, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_deny_lost').GetValue|0]#! of our warheads go missing before they can be counted",
+  "ru": "Разбираются наспех: до подсчёта пропадает #R [ROOT.GetCountry.MakeScope.Var('nd_cw_deny_lost').GetValue|0]#! наших боеголовок"
+ },
+ "nd_tt_cw_deny_keep": {
+  "en": "Nothing changes now. If [SCOPE.sCountry('nd_cw_rebel').GetName] wins, it inherits the #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads we still hold, less those that go missing as they change hands",
+  "ru": "Пока ничего не меняется. Если страна [SCOPE.sCountry('nd_cw_rebel').GetName] победит, ей достанутся наши боеголовки (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!), которые у нас ещё есть, за вычетом тех, что пропадут при передаче"
+ },
+ "nd_tt_cw_deny_rest": {
+  "en": "The rest are dismantled: nothing is left for [SCOPE.sCountry('nd_cw_rebel').GetName] to inherit, but we have no warheads either, and the world stops believing we are armed",
+  "ru": "Остальные разбираются: стране [SCOPE.sCountry('nd_cw_rebel').GetName] нечего наследовать, но и у нас боеголовок нет, и мир перестаёт верить, что мы вооружены"
+ },
+ "nd_tt_cw_deny_supervised": {
+  "en": "All #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! of our warheads are taken apart under [SCOPE.sCountry('nd_cw_helper').GetName]'s supervision: none go missing, nothing is left for [SCOPE.sCountry('nd_cw_rebel').GetName] to inherit, and the world stops believing we are armed",
+  "ru": "Все наши боеголовки (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!) разбираются под надзором страны [SCOPE.sCountry('nd_cw_helper').GetName]: ни одна не пропадает, стране [SCOPE.sCountry('nd_cw_rebel').GetName] нечего наследовать, и мир перестаёт верить, что мы вооружены"
+ },
+ "nd_tt_cw_dismantle": {
+  "en": "All #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! of our warheads are dismantled: none go to the rebels and none go missing, but we have none left, and the world stops believing we are armed",
+  "ru": "Все наши боеголовки (#v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#!) разбираются: ни одна не достаётся мятежникам и ни одна не пропадает, но у нас не остаётся ни одной, и мир перестаёт верить, что мы вооружены"
+ },
+ "nd_tt_cw_dismantle_relations": {
+  "en": "Every other country: relations with us #G +10#!",
+  "ru": "Все остальные страны: отношения с нами #G +10#!"
+ },
+ "nd_tt_cw_split_hold": {
+  "en": "The rebels seize #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_taken').GetValue|0]#! of our warheads, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_lost').GetValue|0]#! more go missing in the confusion, and we keep #v [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_kept').GetValue|0]#!",
+  "ru": "Боеголовки: мятежники захватывают #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_taken').GetValue|0]#!, ещё #R [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_lost').GetValue|0]#! пропадают в неразберихе, у нас остаётся #v [ROOT.GetCountry.MakeScope.Var('nd_cw_hold_kept').GetValue|0]#!"
+ },
+ "nd_tt_cw_split_pull": {
+  "en": "Only commanders who hold launch authority can take weapons over with them: the rebels seize #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_taken').GetValue|0]#!, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_lost').GetValue|0]#! go missing, and we keep #v [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_kept').GetValue|0]#!",
+  "ru": "Забрать оружие с собой могут только командиры, обладающие правом на запуск. Боеголовки: мятежники захватывают #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_taken').GetValue|0]#!, #R [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_lost').GetValue|0]#! пропадают, у нас остаётся #v [ROOT.GetCountry.MakeScope.Var('nd_cw_pull_kept').GetValue|0]#!"
+ },
+ "nd_tt_cw_withdrawn": {
+  "en": "Our warheads go into storage at once (readiness #v Recessed#!) and stay there until every civil war of ours is over: we cannot use them in this war, answer a strike with them, or raise our readiness",
+  "ru": "Наши боеголовки сразу уходят на хранение (готовность #v Пониженная#!) и остаются там, пока не закончатся все наши гражданские войны: мы не можем использовать их в этой войне, отвечать ими на удар или повышать нашу готовность"
+ },
+ "nd_tt_cwr_back_gov": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName]'s war support in its civil war #G +5#!",
+  "ru": "Поддержка войны страны [SCOPE.sCountry('nd_cwr_gov').GetName] в её гражданской войне #G +5#!"
+ },
+ "nd_tt_cwr_offer": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName] is offered our technicians and money to guard and count its warheads for as long as the war lasts. If it accepts, #G half#! as many of its warheads go missing whenever they change hands, and it may let us take them apart without losing one",
+  "ru": "Стране [SCOPE.sCountry('nd_cwr_gov').GetName] предлагаются наши техники и деньги, чтобы охранять и учитывать её боеголовки, пока длится война. Если она согласится, #G вдвое#! меньше её боеголовок пропадает при каждой передаче, и она может позволить нам разобрать их, не потеряв ни одной"
+ },
+ "nd_tt_deploy_barred": {
+  "en": "The deploying country conceded in a nuclear crisis: for ten years it makes no #v Nuclear Basing#! article or nuclear guarantee in a country next to the one it conceded to",
+  "ru": "Развёртывающая страна уступила в ядерном кризисе: десять лет она не заключает ни статьи #v Ядерное базирование#!, ни ядерной гарантии в стране, граничащей с той, которой уступила"
+ },
+ "nd_tt_disavow_already_off": {
+  "en": "We disavow our strikes",
+  "ru": "Мы отрекаемся от своих ударов"
+ },
+ "nd_tt_disavow_already_on": {
+  "en": "We do not already disavow our strikes",
+  "ru": "Мы пока не отрекаемся от своих ударов"
+ },
+ "nd_tt_disavow_needs_arsenal": {
+  "en": "We hold nuclear weapons",
+  "ru": "У нас есть ядерное оружие"
+ },
+ "nd_tt_disavow_off": {
+  "en": "We stop disavowing our strikes",
+  "ru": "Мы перестаём отрекаться от своих ударов"
+ },
+ "nd_tt_disavow_on": {
+  "en": "From now on, when we strike a city first, we tell its country that the launch was unauthorized",
+  "ru": "Отныне, когда мы первыми наносим удар по городу, мы сообщаем его стране, что пуск был несанкционированным"
+ },
+ "nd_tt_dispute_proliferation": {
+  "en": "Their weapons program is running, and they are our rival or we are antagonistic towards them",
+  "ru": "Их программа вооружений идёт, и они наш соперник или мы враждебны к ним"
+ },
+ "nd_tt_doctrine_adopted_1": {
+  "en": "Our doctrine becomes #v No First Use#!:\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]\\nIt can next be changed in two years.",
+  "ru": "Наша доктрина — #v Неприменение первым#!:\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]\\nИзменить её снова можно через два года."
+ },
+ "nd_tt_doctrine_adopted_2": {
+  "en": "Our doctrine becomes #v Existential Deterrence#!:\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]\\nIt can next be changed in two years.",
+  "ru": "Наша доктрина — #v Экзистенциальное сдерживание#!:\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]\\nИзменить её снова можно через два года."
+ },
+ "nd_tt_doctrine_adopted_3": {
+  "en": "Our doctrine becomes #v Flexible First Use#!:\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]\\nIt can next be changed in two years.",
+  "ru": "Наша доктрина — #v Гибкое первое применение#!:\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]\\nИзменить её снова можно через два года."
+ },
+ "nd_tt_doctrine_adopted_4": {
+  "en": "Our doctrine becomes #v Nuclear Compellence#!:\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]\\nIt can next be changed in two years.",
+  "ru": "Наша доктрина — #v Ядерное принуждение#!:\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]\\nИзменить её снова можно через два года."
+ },
+ "nd_tt_doctrine_adopted_5": {
+  "en": "Our doctrine becomes #v Nuclear Warfighting#!:\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]\\nIt can next be changed in two years.",
+  "ru": "Наша доктрина — #v Ведение ядерной войны#!:\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]\\nИзменить её снова можно через два года."
+ },
+ "nd_tt_doctrine_alarms_rivals": {
+  "en": "Our rivals' opinion of us worsens by #R 10#!",
+  "ru": "Мнение о нас наших соперников ухудшается на #R 10#!"
+ },
+ "nd_tt_doctrine_permits_strike": {
+  "en": "Our nuclear doctrine permits using them against this enemy now",
+  "ru": "Наша ядерная доктрина сейчас допускает применение его против этого врага"
+ },
+ "nd_tt_doctrine_tenure": {
+  "en": "Our doctrine has been in force at least two years",
+  "ru": "Наша доктрина действует не менее двух лет"
+ },
+ "nd_tt_exchange_accept": {
+  "en": "If both governments stand down, the nuclear exchange ends without a conventional war and a #v five-year#! truce binds us both. If either refuses, war follows. Another launch cancels these decisions and restarts the quiet period",
+  "ru": "Если оба правительства понизят готовность, ядерный обмен заканчивается без обычной войны, и нас обоих связывает #v пятилетнее#! перемирие. Если кто-то откажется, начнётся война. Новый пуск отменяет эти решения и заново начинает период затишья"
+ },
+ "nd_tt_exchange_refuse": {
+  "en": "Once both governments have answered, a refusal starts a conventional war. Accepting on the other side cannot prevent it",
+  "ru": "Когда оба правительства ответят, отказ начинает обычную войну. Согласие другой стороны не может этому помешать"
+ },
+ "nd_tt_exchange_stale": {
+  "en": "Another launch or the end of this exchange has withdrawn this offer. This decision has no effect",
+  "ru": "Новый пуск или конец этого обмена отозвал это предложение. Это решение не имеет действия"
+ },
+ "nd_tt_exercise_continued": {
+  "en": "The exercise continues for six more weeks, and so does their alarm",
+  "ru": "Учения продолжаются ещё шесть недель, как и их тревога"
+ },
+ "nd_tt_exercise_effect": {
+  "en": "For #v 6#! weeks the crisis danger rises by #R 10#!, and if we made the threat, their pressure to concede rises by #G 10#!",
+  "ru": "В течение #v 6#! нед. опасность кризиса растёт на #R 10#!, а если угрозу выдвинули мы, давление на них с целью уступки растёт на #G 10#!"
+ },
+ "nd_tt_exercise_exploited": {
+  "en": "We press our demands while they believe we might strike: more pressure, more danger",
+  "ru": "Мы давим своими требованиями, пока они считают, что мы можем ударить: больше давления, больше опасности"
+ },
+ "nd_tt_exercise_invitation_accepted": {
+  "en": "Talks open for #v 6#! weeks: the danger eases, and we stop pressing them while the talks last",
+  "ru": "Переговоры открыты на #v 6#! нед.: опасность снижается, и мы перестаём давить на них, пока идут переговоры"
+ },
+ "nd_tt_exercise_invitation_declined": {
+  "en": "Nothing changes: the crisis goes on as it was",
+  "ru": "Ничего не меняется: кризис идёт, как шёл"
+ },
+ "nd_tt_exercise_invited": {
+  "en": "They are told in advance and invited to observe. Whether that opens talks is for [SCOPE.sCountry('nd_issuer').GetName] to decide",
+  "ru": "Их предупреждают заранее и приглашают понаблюдать. Откроет ли это переговоры, решать стране [SCOPE.sCountry('nd_issuer').GetName]"
+ },
+ "nd_tt_exercise_notified": {
+  "en": "They are told in advance and invited to observe: talks open for #v 6#! weeks, and the danger eases",
+  "ru": "Их предупреждают заранее и приглашают понаблюдать: переговоры открыты на #v 6#! нед., опасность снижается"
+ },
+ "nd_tt_exercise_notified_talks_open": {
+  "en": "They are told in advance and invited to observe. Talks are already open",
+  "ru": "Их предупреждают заранее и приглашают понаблюдать. Переговоры уже открыты"
+ },
+ "nd_tt_exercise_running": {
+  "en": "No exercise is already under way",
+  "ru": "Учения уже не идут"
+ },
+ "nd_tt_false_claim_marked": {
+  "en": "Our next claim that a strike was unauthorized will be harder to believe",
+  "ru": "Нашему следующему заявлению о несанкционированном ударе будет труднее поверить"
+ },
+ "nd_tt_forces_assembled": {
+  "en": "Our warheads are mated to their delivery systems (readiness #v Routine#! or higher; from #v Recessed#! that is two weeks away)",
+  "ru": "Наши боеголовки состыкованы с носителями (готовность #v обычная#! или выше; из #v Пониженной#! это две недели)"
+ },
+ "nd_tt_go_public_terms": {
+  "en": "The crisis becomes a #v Confrontation#! with a new deadline #v 8#! weeks from now. From here, backing down costs #R 15#! credibility instead of #R 5#!, and letting the deadline lapse costs #R 10#!",
+  "ru": "Кризис становится #v Противостоянием#! с новым сроком через #v 8#! нед. Отныне отступление стоит #R 15#! убедительности вместо #R 5#!, а истечение срока — #R 10#!"
+ },
+ "nd_tt_guarantee_abandon": {
+  "en": "We walk away from our guarantee. Our [Concept('concept_nuclear_credibility','credibility')] collapses and every country we protect takes note",
+  "ru": "Мы отворачиваемся от своей гарантии. Наша [Concept('concept_nuclear_credibility','убедительность')] рушится, и каждая страна под нашей защитой это замечает"
+ },
+ "nd_tt_guarantee_decline": {
+  "en": "We decline to answer for a war they made nuclear. It does not count as walking away: no [Concept('concept_nuclear_credibility','credibility')] lost, and the other countries we protect do not take it as a broken promise. The guarantee stands",
+  "ru": "Мы отказываемся отвечать за войну, которую они сделали ядерной. Это не считается уходом от гарантии: [Concept('concept_nuclear_credibility','убедительность')] не теряется, и другие страны под нашей защитой не видят в этом нарушенного обещания. Гарантия остаётся в силе"
+ },
+ "nd_tt_guarantee_honour": {
+  "en": "We stand with them publicly: their attacker faces our guarantee, and our [Concept('concept_nuclear_credibility','credibility')] rises",
+  "ru": "Мы публично встаём на их сторону: их нападавший сталкивается с нашей гарантией, и наша [Concept('concept_nuclear_credibility','убедительность')] растёт"
+ },
+ "nd_tt_guarantee_join_war": {
+  "en": "#R We enter the war#! against [SCOPE.sCountry('nd_guarantee_attacker').GetName] on [SCOPE.sCountry('nd_guarantee_beneficiary').GetName]'s side: they used the bomb on a country we protect",
+  "ru": "#R Мы вступаем в войну#! против страны [SCOPE.sCountry('nd_guarantee_attacker').GetName] на стороне страны [SCOPE.sCountry('nd_guarantee_beneficiary').GetName]: они применили бомбу против страны под нашей защитой"
+ },
+ "nd_tt_guarantee_retaliate": {
+  "en": "#R We answer the strike on them with a nuclear strike of our own.#! Our [Concept('concept_nuclear_credibility','credibility')] rises",
+  "ru": "#R Мы отвечаем на удар по ним собственным ядерным ударом.#! Наша [Concept('concept_nuclear_credibility','убедительность')] растёт"
+ },
+ "nd_tt_guarantor_answer_strike": {
+  "en": "#R A day from now, if we are at war with [SCOPE.sCountry('nd_guarantee_attacker').GetName], one of our warheads falls on their most important city.#! It is retaliation for a country we cover, not a first strike, under any doctrine",
+  "ru": "#R Через день, если мы воюем со страной [SCOPE.sCountry('nd_guarantee_attacker').GetName], одна из наших боеголовок падает на их важнейший город.#! Это возмездие за страну, которую мы прикрываем, а не первый удар — при любой доктрине"
+ },
+ "nd_tt_guarantor_armed": {
+  "en": "The guarantor holds nuclear weapons",
+  "ru": "У гаранта есть ядерное оружие"
+ },
+ "nd_tt_has_dispute": {
+  "en": "There is a dispute to threaten over: a diplomatic play they lead against us, a war with them, an attack on a country we guarantee, their nuclear strike outside a war on us or a country we guarantee, a weapons program of a rival, forces deployed next to us, claims on our states, covert operations against us that we have caught, an orbital battlestation going up, or a rival's forces on alert",
+  "ru": "Есть повод для угрозы: дипломатическая игра, которую они ведут против нас, война с ними, нападение на страну, которой мы даём гарантии, их ядерный удар вне войны по нам или по стране, которой мы даём гарантии, программа вооружений соперника, силы, развёрнутые рядом с нами, притязания на наши области, вскрытые нами тайные операции против нас, строящаяся орбитальная боевая станция или силы соперника в боевой готовности"
+ },
+ "nd_tt_has_pledge_with_target": {
+  "en": "We have pledged not to use nuclear weapons against them",
+  "ru": "Мы обязались не применять против них ядерное оружие"
+ },
+ "nd_tt_hold_alert_2w": {
+  "en": "Our forces reach #v High Alert#! in #v 2#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident",
+  "ru": "Наши силы достигают #v повышенной готовности#! через #v 2#! нед. При повышенной готовности давление на них с целью уступки растёт на #G 10#!, как и наши расходы на содержание и риск аварии"
+ },
+ "nd_tt_hold_alert_4w": {
+  "en": "Our forces reach #v High Alert#! in #v 4#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident",
+  "ru": "Наши силы достигают #v повышенной готовности#! через #v 4#! нед. При повышенной готовности давление на них с целью уступки растёт на #G 10#!, как и наши расходы на содержание и риск аварии"
+ },
+ "nd_tt_hold_alert_6w": {
+  "en": "Our forces reach #v High Alert#! in #v 6#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident",
+  "ru": "Наши силы достигают #v повышенной готовности#! через #v 6#! нед. При повышенной готовности давление на них с целью уступки растёт на #G 10#!, как и наши расходы на содержание и риск аварии"
+ },
+ "nd_tt_hold_deadline": {
+  "en": "Their new deadline is #v 6#! weeks from now, and they are pressed again next week",
+  "ru": "Их новый срок — через #v 6#! нед., а на следующей неделе на них давят снова"
+ },
+ "nd_tt_in_crisis": {
+  "en": "We are in a nuclear crisis",
+  "ru": "Мы в ядерном кризисе"
+ },
+ "nd_tt_in_reach": {
+  "en": "Our weapons can reach them: they are within our bombers' range, we have #v $ICBMs$#!, or our missile submarines reach their coast",
+  "ru": "Наше оружие достаёт до них: они в радиусе действия наших бомбардировщиков, у нас есть технология #v $ICBMs$#! или наши ракетные подводные лодки достают до их побережья"
+ },
+ "nd_tt_inquiry_conceal": {
+  "en": "Nothing is made public. Command reliability suffers while the secret is kept, and it may still come out",
+  "ru": "Ничего не обнародуется. Пока тайна хранится, надёжность командования страдает, но она всё равно может выйти наружу"
+ },
+ "nd_tt_inquiry_punish": {
+  "en": "Future officers will think twice before questioning an order: a delegated launch sequence becomes less likely to be halted",
+  "ru": "Будущие офицеры дважды подумают, прежде чем ставить приказ под сомнение: делегированный пуск реже будет остановлен"
+ },
+ "nd_tt_inquiry_reward": {
+  "en": "Command reliability improves and those who questioned the warning are honored — but the story becomes public",
+  "ru": "Надёжность командования улучшается, а тех, кто усомнился в предупреждении, чествуют — но история становится публичной"
+ },
+ "nd_tt_investment_max": {
+  "en": "Not already at the highest level",
+  "ru": "Ещё не на высшем уровне"
+ },
+ "nd_tt_investment_min": {
+  "en": "Not already at zero",
+  "ru": "Ещё не на нуле"
+ },
+ "nd_tt_launch_or_intercept": {
+  "en": "#R A weapon is launched.#! It can strike even at peace. The victim may answer with nuclear weapons; after the exchange falls quiet, both governments decide whether to stand down. A refusal leads to conventional war",
+  "ru": "#R Оружие запущено.#! Оно может ударить даже в мирное время. Пострадавший может ответить ядерным оружием; когда обмен утихнет, оба правительства решают, понижать ли готовность. Отказ ведёт к обычной войне"
+ },
+ "nd_tt_launch_under_attack_context": {
+  "en": "We are at war with them, or our crisis with them is Acute",
+  "ru": "Мы воюем с ними, или наш кризис с ними в острой стадии"
+ },
+ "nd_tt_launch_under_attack_doctrine": {
+  "en": "Our doctrine is not No First Use, or they have already struck us",
+  "ru": "Наша доктрина — не «Неприменение первым», или они уже ударили по нам"
+ },
+ "nd_tt_loose_ask_suspects": {
+  "en": "Each country on the list is asked, privately, to open its custody to our inspectors or refuse",
+  "ru": "Каждую страну из списка в частном порядке просят открыть своё хранение для наших инспекторов или отказаться"
+ },
+ "nd_tt_loose_blame_rival": {
+  "en": "[SCOPE.sCountry('nd_loose_rival').GetName] is accused in public, and told so",
+  "ru": "Страну [SCOPE.sCountry('nd_loose_rival').GetName] публично обвиняют, и ей об этом сообщают"
+ },
+ "nd_tt_loose_first_search": {
+  "en": "Their first search has a #v 50%#! chance to find one of the #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads from our arsenal that are unaccounted for",
+  "ru": "Их первый поиск с вероятностью #v 50%#! найдёт одну из неучтённых боеголовок нашего арсенала (их #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#!)"
+ },
+ "nd_tt_loose_hold_to_account": {
+  "en": "[SCOPE.sCountry('nd_loose_accused').GetName] is told the warhead was its own and asked to answer for losing it: compensation, its custody opened to our inspectors, or a denial",
+  "ru": "Стране [SCOPE.sCountry('nd_loose_accused').GetName] сообщают, что боеголовка была её собственной, и просят ответить за потерю: компенсация, открытие её хранения для наших инспекторов или отказ"
+ },
+ "nd_tt_loose_inspection": {
+  "en": "Foreign inspectors count and guard our warheads for twenty years: #G half#! as many go missing whenever they change hands",
+  "ru": "Иностранные инспекторы считают и охраняют наши боеголовки двадцать лет: #G вдвое#! меньше пропадает при каждой передаче"
+ },
+ "nd_tt_loose_investigation": {
+  "en": "Our investigators report in a month on where the device came from",
+  "ru": "Наши следователи через месяц доложат, откуда взялось устройство"
+ },
+ "nd_tt_loose_name_suspects": {
+  "en": "Every country on the list is accused in public: relations with each #R -25#!",
+  "ru": "Каждая страна из списка публично обвиняется: отношения с каждой #R -25#!"
+ },
+ "nd_tt_monopoly_first_use": {
+  "en": "#R We authorize the first use of a nuclear weapon against them.#!",
+  "ru": "#R Мы санкционируем первое применение ядерного оружия против них.#!"
+ },
+ "nd_tt_nd_hardening_add": {
+  "en": "Hardening rises one level: survivability climbs faster. Costs @money!#R [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! more per week",
+  "ru": "Укрепление растёт на один уровень: живучесть растёт быстрее. Стоит на @money!#R [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! больше в неделю"
+ },
+ "nd_tt_nd_hardening_subtract": {
+  "en": "Hardening falls one level, saving @money!#G [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! per week; survivability grows more slowly, or erodes",
+  "ru": "Укрепление падает на один уровень, экономя @money!#G [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! в неделю; живучесть растёт медленнее или снижается"
+ },
+ "nd_tt_nd_safeguards_add": {
+  "en": "Safeguards rise one level: command reliability improves over the coming months. Costs @money!#R [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! more per week",
+  "ru": "Меры безопасности растут на один уровень: надёжность командования улучшается в ближайшие месяцы. Стоит на @money!#R [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! больше в неделю"
+ },
+ "nd_tt_nd_safeguards_subtract": {
+  "en": "Safeguards fall one level, saving @money!#G [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! per week; command reliability declines over the coming months",
+  "ru": "Меры безопасности падают на один уровень, экономя @money!#G [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! в неделю; надёжность командования снижается в ближайшие месяцы"
+ },
+ "nd_tt_need_arsenal": {
+  "en": "We hold at least one nuclear warhead",
+  "ru": "У нас есть хотя бы одна ядерная боеголовка"
+ },
+ "nd_tt_need_computers": {
+  "en": "We have researched $radar$, $ICBMs$ and $mainframe_computers$",
+  "ru": "Мы изучили технологии: $radar$, $ICBMs$ и $mainframe_computers$"
+ },
+ "nd_tt_need_icbms": {
+  "en": "We have researched $radar$ and $ICBMs$",
+  "ru": "Мы изучили технологии: $radar$ и $ICBMs$"
+ },
+ "nd_tt_need_radar": {
+  "en": "We have researched $radar$",
+  "ru": "Мы изучили технологию $radar$"
+ },
+ "nd_tt_nfu_amendment_struck": {
+  "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is struck from our laws",
+  "ru": "[concept_amendment] #bold Обязательство не наносить первый удар#! вычёркивается из наших законов"
+ },
+ "nd_tt_nfu_reaffirmed": {
+  "en": "We tell the world that #v No First Use#! remains our doctrine",
+  "ru": "Мы заявляем миру, что #v Неприменение первым#! остаётся нашей доктриной"
+ },
+ "nd_tt_no_pledge": {
+  "en": "We have not pledged not to use nuclear weapons against them",
+  "ru": "Мы не обязывались не применять против них ядерное оружие"
+ },
+ "nd_tt_not_disarmed": {
+  "en": "Our arsenal is not bound by a disarmament settlement or by the Non-Proliferation Treaty's disarmament terms",
+  "ru": "Наш арсенал не связан соглашением о разоружении или условиями разоружения Договора о нераспространении"
+ },
+ "nd_tt_only_issuer": {
+  "en": "We made the threat",
+  "ru": "Угрозу выдвинули мы"
+ },
+ "nd_tt_only_target": {
+  "en": "We are the target of the threat",
+  "ru": "Мы — цель угрозы"
+ },
+ "nd_tt_open_backed": {
+  "en": "#G Backed:#! our doctrine lets us carry this out if they defy it. Their pressure to concede #G +10#!",
+  "ru": "#G Подкреплено:#! наша доктрина позволяет исполнить угрозу, если они её отвергнут. Давление на них с целью уступки #G +10#!"
+ },
+ "nd_tt_open_bluff_existential": {
+  "en": "#R A bluff:#! #v Existential Deterrence#! permits a first strike only when they threaten our survival, or our territory while we are losing. They know our doctrine: their pressure to concede #R -25#!",
+  "ru": "#R Блеф:#! #v Экзистенциальное сдерживание#! допускает первый удар, только если они угрожают нашему выживанию или нашей территории, пока мы проигрываем. Они знают нашу доктрину: давление на них с целью уступки #R -25#!"
+ },
+ "nd_tt_open_bluff_flexible": {
+  "en": "#R A bluff:#! #v Flexible First Use#! permits a strike only when we are losing to them or they threaten our territory. They know our doctrine: their pressure to concede #R -25#!",
+  "ru": "#R Блеф:#! #v Гибкое первое применение#! допускает удар, только если мы проигрываем им или они угрожают нашей территории. Они знают нашу доктрину: давление на них с целью уступки #R -25#!"
+ },
+ "nd_tt_open_bluff_law": {
+  "en": "#R A bluff:#! our #v Rules of War#! law forbids a nuclear strike. Their pressure to concede #R -25#!",
+  "ru": "#R Блеф:#! наш закон #v Правила войны#! запрещает ядерный удар. Давление на них с целью уступки #R -25#!"
+ },
+ "nd_tt_open_bluff_nfu": {
+  "en": "#R A bluff:#! we have pledged #v No First Use#!. Their pressure to concede #R -35#!",
+  "ru": "#R Блеф:#! мы дали обязательство #v Неприменение первым#!. Давление на них с целью уступки #R -35#!"
+ },
+ "nd_tt_open_bluff_reach": {
+  "en": "#R A bluff:#! our weapons can't reach them. They are beyond our bombers' range, and we have neither #v $ICBMs$#! nor missile submarines on their coast. Their pressure to concede #R -25#!",
+  "ru": "#R Блеф:#! наше оружие до них не достаёт. Они вне радиуса действия наших бомбардировщиков, и у нас нет ни технологии #v $ICBMs$#!, ни ракетных подводных лодок у их побережья. Давление на них с целью уступки #R -25#!"
+ },
+ "nd_tt_open_f_aggressive": {
+  "en": "  Their ruler is aggressive: #R -15#!",
+  "ru": "  Их правитель агрессивен: #R -15#!"
+ },
+ "nd_tt_open_f_alert": {
+  "en": "  Our forces are at #v High Alert#!: #G +10#!",
+  "ru": "  Наши силы в #v повышенной готовности#!: #G +10#!"
+ },
+ "nd_tt_open_f_armed": {
+  "en": "  They have an arsenal, but fewer than three of its warheads would survive our first strike: between 0 and #R -25#!",
+  "ru": "  У них есть арсенал, но менее трёх его боеголовок пережили бы наш первый удар: от 0 до #R -25#!"
+ },
+ "nd_tt_open_f_cautious": {
+  "en": "  Their ruler is cautious: #G +10#!",
+  "ru": "  Их правитель осторожен: #G +10#!"
+ },
+ "nd_tt_open_f_credibility": {
+  "en": "  Our [Concept('concept_nuclear_credibility','credibility')]: #v [THIS.ScriptValue('nd_credibility_pressure_term')|+0]#!",
+  "ru": "  Наша [Concept('concept_nuclear_credibility','убедительность')]: #v [THIS.ScriptValue('nd_credibility_pressure_term')|+0]#!"
+ },
+ "nd_tt_open_f_existence": {
+  "en": "  We threaten their very existence: #R -15#!",
+  "ru": "  Мы угрожаем самому их существованию: #R -15#!"
+ },
+ "nd_tt_open_f_exposed": {
+  "en": "  Their arsenal could disarm ours first: up to #R -15#!",
+  "ru": "  Их арсенал мог бы обезвредить наш первым: до #R -15#!"
+ },
+ "nd_tt_open_f_losing": {
+  "en": "  They are losing the war to us: #G +15#!",
+  "ru": "  Они проигрывают нам войну: #G +15#!"
+ },
+ "nd_tt_open_f_protector": {
+  "en": "  An armed power guarantees them: #R -20#!",
+  "ru": "  Их гарантирует вооружённая держава: #R -20#!"
+ },
+ "nd_tt_open_f_survivable": {
+  "en": "  Their arsenal would survive our first strike to answer it: up to #R -25#!",
+  "ru": "  Их арсенал пережил бы наш первый удар и ответил бы: до #R -25#!"
+ },
+ "nd_tt_open_f_unarmed": {
+  "en": "  They cannot answer in kind: #G +20#!",
+  "ru": "  Они не могут ответить тем же: #G +20#!"
+ },
+ "nd_tt_open_factors_header": {
+  "en": "What else weighs on them, from a starting point of #v 30#! (the crisis's danger adds more once it opens; the #v Nuclear#! tab of the Military panel shows the running total):",
+  "ru": "Что ещё давит на них, начиная с #v 30#! (опасность кризиса добавляет ещё, когда он открывается; вкладка #v Ядерные#! военной панели показывает текущий итог):"
+ },
+ "nd_tt_open_next_private": {
+  "en": "The crisis opens as a private #v Warning#!. They answer now; if they refuse, they are pressed every #v 6#! weeks. Our deadline is #v 10#! weeks. Follow it on the #v Nuclear#! tab of the Military panel",
+  "ru": "Кризис начинается как закрытое #v Предупреждение#!. Они отвечают сейчас; если откажутся, на них давят каждые #v 6#! нед. Наш срок — #v 10#! нед. Следите за этим на вкладке #v Ядерные#! военной панели"
+ },
+ "nd_tt_open_next_public": {
+  "en": "The crisis opens at #v Confrontation#!. They answer now, and are pressed again every #v 6#! weeks; our deadline is #v 8#! weeks. Follow it on the #v Nuclear#! tab of the Military panel",
+  "ru": "Кризис начинается с #v Противостояния#!. Они отвечают сейчас, и на них давят снова каждые #v 6#! нед.; наш срок — #v 8#! нед. Следите за этим на вкладке #v Ядерные#! военной панели"
+ },
+ "nd_tt_open_over_alert": {
+  "en": "Over: #v their forces on alert#!. If they concede, they stand down to #v Routine#! and are held there for #v 24#! months",
+  "ru": "Повод: #v их силы в боевой готовности#!. Если они уступят, их силы понижаются до #v обычной#! готовности и удерживаются там #v 24#! мес."
+ },
+ "nd_tt_open_over_claims": {
+  "en": "Over: #v their claims on our states#!. If they concede, they renounce every claim on our incorporated states, each on its whole state region",
+  "ru": "Повод: #v их притязания на наши области#!. Если они уступят, они отказываются от всех притязаний на наши включённые области, каждое — на весь его регион области"
+ },
+ "nd_tt_open_over_covert_ops": {
+  "en": "Over: #v their covert operations against us that we have caught#!. If they concede, they end them and launch no hostile operation against us for #v 10#! years",
+  "ru": "Повод: #v их тайные операции против нас, которые мы вскрыли#!. Если они уступят, они прекращают их и #v 10#! лет не начинают против нас враждебных операций"
+ },
+ "nd_tt_open_over_deployment": {
+  "en": "Over: #v their forces next to us#!: weapons based or a guarantee in a country next to us, or missile defense on our border. If they concede, they pull all of it back and make none of it again for #v 10#! years",
+  "ru": "Повод: #v их силы рядом с нами#!: базируемое оружие или гарантия в стране рядом с нами, либо противоракетная оборона на нашей границе. Если они уступят, они отводят всё это и #v 10#! лет не возобновляют ничего из этого"
+ },
+ "nd_tt_open_over_guarantee": {
+  "en": "Over: #v the country we protect#!. If they concede, they leave it alone: they back down in the play, or in a war their war support falls by #R 15#! and, if they lead their side, it drops its goals against it",
+  "ru": "Повод: #v страна, которую мы защищаем#!. Если они уступят, они оставляют её в покое: отступают в игре, а в войне их поддержка войны падает на #R 15#! и, если они возглавляют свою сторону, она отказывается от своих целей против неё"
+ },
+ "nd_tt_open_over_orbital": {
+  "en": "Over: #v their Orbital Battlestation under construction#!. If they concede, they tear the site down, lose its progress and start no new one for #v 10#! years",
+  "ru": "Повод: #v их строящаяся орбитальная боевая станция#!. Если они уступят, они сносят площадку, теряют прогресс и #v 10#! лет не начинают новую"
+ },
+ "nd_tt_open_over_peacetime_strike": {
+  "en": "Over: #v their nuclear strike outside a war#!. If they concede, they pay reparations and open their arsenal to inspection for #v 20#! years, taking Custody Inspections (#R −5#! legitimacy, fading over ten years)",
+  "ru": "Повод: #v их ядерный удар вне войны#!. Если они уступят, они выплачивают репарации и на #v 20#! лет открывают свой арсенал для инспекций, получая «Инспекции хранения» (#R −5#! легитимности, ослабевает в течение десяти лет)"
+ },
+ "nd_tt_open_over_play": {
+  "en": "Over: #v the diplomatic play#!. If they concede, they back down and our side wins it",
+  "ru": "Повод: #v дипломатическая игра#!. Если они уступят, они отступают, и наша сторона выигрывает её"
+ },
+ "nd_tt_open_over_proliferation": {
+  "en": "Over: #v their weapons program#!. If they concede, it is frozen for #v 10#! years",
+  "ru": "Повод: #v их программа вооружений#!. Если они уступят, она замораживается на #v 10#! лет"
+ },
+ "nd_tt_open_over_war": {
+  "en": "Over: #v our war with them#!. If they concede, their war support falls by #R 15#!, and if they lead their side, it drops its war goals against us",
+  "ru": "Повод: #v наша война с ними#!. Если они уступят, их поддержка войны падает на #R 15#!, а если они возглавляют свою сторону, она отказывается от целей войны против нас"
+ },
+ "nd_tt_open_stakes_bluff": {
+  "en": "If this bluff is called, every government will know it: #R 5#! more credibility lost",
+  "ru": "Если этот блеф вскроется, все правительства будут знать об этом: потеряно ещё #R 5#! убедительности"
+ },
+ "nd_tt_open_stakes_private": {
+  "en": "Stakes: if they concede, our [Concept('concept_nuclear_credibility','credibility')] rises by #G 10#!. If we back down it falls by #R 5#!",
+  "ru": "Ставки: если они уступят, наша [Concept('concept_nuclear_credibility','убедительность')] вырастет на #G 10#!. Если отступим мы, она упадёт на #R 5#!"
+ },
+ "nd_tt_open_stakes_public": {
+  "en": "Stakes: if they concede, our [Concept('concept_nuclear_credibility','credibility')] rises by #G 15#!. If we back down it falls by #R 15#!; if the deadline lapses, by #R 10#!",
+  "ru": "Ставки: если они уступят, наша [Concept('concept_nuclear_credibility','убедительность')] вырастет на #G 15#!. Если отступим мы, она упадёт на #R 15#!; если срок истечёт — на #R 10#!"
+ },
+ "nd_tt_open_uncertain": {
+  "en": "#Y Uncertain:#! our doctrine would let us carry this out only if this became a war that threatened what it protects. No effect on their pressure",
+  "ru": "#Y Неопределённо:#! наша доктрина позволит исполнить угрозу, только если это перерастёт в войну, угрожающую тому, что она защищает. На давление на них не влияет"
+ },
+ "nd_tt_orbital_frozen": {
+  "en": "We agreed in a nuclear crisis to build no Orbital Battlestation for ten years",
+  "ru": "В ядерном кризисе мы согласились десять лет не строить орбитальную боевую станцию"
+ },
+ "nd_tt_outcome_already_settled": {
+  "en": "#lore This outcome was already settled when a later crisis closed. Nothing more happens.#!",
+  "ru": "#lore Этот исход уже определился, когда закрылся более поздний кризис. Больше ничего не происходит.#!"
+ },
+ "nd_tt_outcome_cooldown": {
+  "en": "No new crisis with them for #v 24#! months, unless we are at war",
+  "ru": "Новых кризисов с ними не будет #v 24#! мес., если только мы не воюем"
+ },
+ "nd_tt_outcome_doves_approve": {
+  "en": "Our advocates of restraint approve (a decaying approval bonus)",
+  "ru": "Наши сторонники сдержанности одобряют (затухающий бонус к одобрению)"
+ },
+ "nd_tt_outcome_hawks_approve": {
+  "en": "Our militarists and officers approve (a decaying approval bonus)",
+  "ru": "Наши милитаристы и офицеры одобряют (затухающий бонус к одобрению)"
+ },
+ "nd_tt_outcome_hawks_disapprove": {
+  "en": "Our militarists and officers disapprove (a decaying approval penalty)",
+  "ru": "Наши милитаристы и офицеры не одобряют (затухающий штраф к одобрению)"
+ },
+ "nd_tt_parties_free": {
+  "en": "Neither country is already in a nuclear crisis",
+  "ru": "Ни одна из стран ещё не в ядерном кризисе"
+ },
+ "nd_tt_plan_mission_1": {
+  "en": "The salvo aims at their cities",
+  "ru": "Залп нацелен на их города"
+ },
+ "nd_tt_plan_mission_2": {
+  "en": "The salvo aims at their nuclear forces",
+  "ru": "Залп нацелен на их ядерные силы"
+ },
+ "nd_tt_plan_mission_3": {
+  "en": "The salvo aims at their capital",
+  "ru": "Залп нацелен на их столицу"
+ },
+ "nd_tt_plan_no_enemy": {
+  "en": "There is a country we could strike",
+  "ru": "Есть страна, по которой мы могли бы ударить"
+ },
+ "nd_tt_plan_order": {
+  "en": "We are asked to confirm the order before anything flies",
+  "ru": "У нас просят подтвердить приказ, прежде чем что-либо взлетит"
+ },
+ "nd_tt_plan_size_add": {
+  "en": "One warhead more",
+  "ru": "Одной боеголовкой больше"
+ },
+ "nd_tt_plan_size_at_least_one": {
+  "en": "The salvo fires more than one warhead",
+  "ru": "В залпе больше одной боеголовки"
+ },
+ "nd_tt_plan_size_at_most": {
+  "en": "We hold more warheads than the salvo fires, and it fires fewer than 25",
+  "ru": "У нас больше боеголовок, чем в залпе, а в залпе меньше 25"
+ },
+ "nd_tt_plan_size_subtract": {
+  "en": "One warhead fewer",
+  "ru": "Одной боеголовкой меньше"
+ },
+ "nd_tt_plan_step_enemy": {
+  "en": "Aim at another country we could strike",
+  "ru": "Нацелиться на другую страну, по которой мы могли бы ударить"
+ },
+ "nd_tt_plan_two_enemies": {
+  "en": "There is more than one country we could strike",
+  "ru": "Есть более одной страны, по которой мы могли бы ударить"
+ },
+ "nd_tt_pledge_broken": {
+  "en": "Our [Concept('concept_nuclear_credibility','credibility')] falls, and the broken pledge is remembered for ten years",
+  "ru": "Наша [Concept('concept_nuclear_credibility','убедительность')] падает, а нарушенное обязательство помнят десять лет"
+ },
+ "nd_tt_pledge_permits_strike": {
+  "en": "No non-use pledge with this enemy stands in the way",
+  "ru": "Никакое обязательство о неприменении против этого врага не мешает"
+ },
+ "nd_tt_readiness_locked": {
+  "en": "No stand-down agreement or concession holds our readiness at Routine or below",
+  "ru": "Никакое соглашение о понижении готовности или уступка не удерживают нашу готовность на обычной или ниже"
+ },
+ "nd_tt_readiness_step_down": {
+  "en": "Our forces step down one level of readiness",
+  "ru": "Наши силы понижают готовность на одну ступень"
+ },
+ "nd_tt_readiness_step_up": {
+  "en": "Our forces step up one level of readiness",
+  "ru": "Наши силы повышают готовность на одну ступень"
+ },
+ "nd_tt_readiness_target_0": {
+  "en": "Our warheads are taken off their delivery systems and put into storage: #v Recessed#!, one step every two weeks. Nothing can be launched until they are back at #v Routine#!. Upkeep at this level: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_0')|D]#!/week",
+  "ru": "Наши боеголовки снимаются с носителей и уходят на хранение: #v Пониженная#!, одна ступень в две недели. Ничего нельзя пустить, пока они не вернутся к #v обычной#!. Содержание на этом уровне: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_0')|D]#!/нед."
+ },
+ "nd_tt_readiness_target_1": {
+  "en": "Our forces move to #v Routine#!, one step every two weeks. Upkeep at this level: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_1')|D]#!/week",
+  "ru": "Наши силы переходят к #v обычной#! готовности, одна ступень в две недели. Содержание на этом уровне: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_1')|D]#!/нед."
+ },
+ "nd_tt_readiness_target_2": {
+  "en": "Our forces move to #v Heightened#!, one step every two weeks. Upkeep at this level: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_2')|D]#!/week",
+  "ru": "Наши силы переходят к #v усиленной#! готовности, одна ступень в две недели. Содержание на этом уровне: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_2')|D]#!/нед."
+ },
+ "nd_tt_readiness_target_3": {
+  "en": "Our forces move to #v High Alert#!, one step every two weeks. Upkeep at this level: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_3')|D]#!/week",
+  "ru": "Наши силы переходят к #v повышенной готовности#!, одна ступень в две недели. Содержание на этом уровне: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_3')|D]#!/нед."
+ },
+ "nd_tt_readiness_withdrawn": {
+  "en": "No civil war holds our warheads in storage",
+  "ru": "Никакая гражданская война не удерживает наши боеголовки на хранении"
+ },
+ "nd_tt_recessed_alarms_allies": {
+  "en": "#R The countries we protect will be alarmed#! when our warheads reach storage: [Concept('concept_nuclear_credibility','credibility')] #R -5#!, relations #R -10#! with each of them, #R +5#! liberty desire for each subject under our umbrella — every time we go to Recessed",
+  "ru": "#R Страны под нашей защитой встревожатся,#! когда наши боеголовки уйдут на хранение: [Concept('concept_nuclear_credibility','убедительность')] #R -5#!, отношения #R -10#! с каждой из них, #R +5#! к стремлению к свободе у каждого зависимого государства под нашим зонтиком — каждый раз, когда мы переходим на пониженную готовность"
+ },
+ "nd_tt_refuse_talks_no_pressure_yet": {
+  "en": "There is no pressure before a #v Confrontation#!",
+  "ru": "До #v Противостояния#! давления нет"
+ },
+ "nd_tt_refuse_talks_resume": {
+  "en": "The pressure events resume in #v 6#! weeks",
+  "ru": "События давления возобновятся через #v 6#! нед."
+ },
+ "nd_tt_reject_defiance": {
+  "en": "The threat was public, so our refusal is recorded as #R defiance#!: under #v Nuclear Compellence#!, that licenses them to strike us in a war",
+  "ru": "Угроза была публичной, поэтому наш отказ записывается как #R неповиновение#!: при #v Ядерном принуждении#! это даёт им право ударить по нам в войне"
+ },
+ "nd_tt_reliability_down_15": {
+  "en": "#v Command reliability#! falls by #R 15#! now, then recovers over the following months to the level our safeguards and crew strain support",
+  "ru": "#v Надёжность командования#! падает на #R 15#! сейчас, затем восстанавливается в последующие месяцы до уровня, который поддерживают наши меры безопасности и нагрузка на расчёты"
+ },
+ "nd_tt_reliability_down_2": {
+  "en": "#v Command reliability#! falls by #R 2#! now, then recovers over the following months to the level our safeguards and crew strain support",
+  "ru": "#v Надёжность командования#! падает на #R 2#! сейчас, затем восстанавливается в последующие месяцы до уровня, который поддерживают наши меры безопасности и нагрузка на расчёты"
+ },
+ "nd_tt_reliability_up_10": {
+  "en": "#v Command reliability#! rises by #G 10#! now, then drifts back over the following months to the level our safeguards and crew strain support",
+  "ru": "#v Надёжность командования#! растёт на #G 10#! сейчас, затем возвращается в последующие месяцы к уровню, который поддерживают наши меры безопасности и нагрузка на расчёты"
+ },
+ "nd_tt_reliability_up_3": {
+  "en": "#v Command reliability#! rises by #G 3#! now, then drifts back over the following months to the level our safeguards and crew strain support",
+  "ru": "#v Надёжность командования#! растёт на #G 3#! сейчас, затем возвращается в последующие месяцы к уровню, который поддерживают наши меры безопасности и нагрузка на расчёты"
+ },
+ "nd_tt_salvo_candidate": {
+  "en": "We are at war with them, or in a peacetime nuclear exchange with them, they still hold land, and our weapons can reach them",
+  "ru": "Мы воюем с ними или находимся с ними в мирном ядерном обмене, у них ещё есть земля, и наше оружие достаёт до них"
+ },
+ "nd_tt_stage_to_confrontation": {
+  "en": "The crisis becomes a #v Confrontation#!: from now on they press us every #v 6#! weeks",
+  "ru": "Кризис становится #v Противостоянием#!: отныне они давят на нас каждые #v 6#! нед."
+ },
+ "nd_tt_standdown_signal": {
+  "en": "The other side sees us standing down at once",
+  "ru": "Другая сторона видит, что мы сразу понижаем готовность"
+ },
+ "nd_tt_standdown_terms": {
+  "en": "Both sides stand down to #v Routine#!, held there for #v 24#! months, and pledge never to use nuclear weapons on each other; renouncing that pledge later costs #R 15#! credibility and #R 5#! infamy. The war or play goes on",
+  "ru": "Обе стороны понижают готовность до #v обычной#! и удерживают её #v 24#! мес., обязуясь никогда не применять ядерное оружие друг против друга; отказ от этого обязательства позже стоит #R 15#! убедительности и #R 5#! дурной славы. Война или игра продолжаются"
+ },
+ "nd_tt_strain_down_20": {
+  "en": "#v Crew strain#! falls by #G 20#!",
+  "ru": "#v Нагрузка на расчёты#! падает на #G 20#!"
+ },
+ "nd_tt_strain_down_30": {
+  "en": "#v Crew strain#! falls by #G 30#!",
+  "ru": "#v Нагрузка на расчёты#! падает на #G 30#!"
+ },
+ "nd_tt_strain_up_10": {
+  "en": "#v Crew strain#! rises by #R 10#!",
+  "ru": "#v Нагрузка на расчёты#! растёт на #R 10#!"
+ },
+ "nd_tt_strain_up_5": {
+  "en": "#v Crew strain#! rises by #R 5#!",
+  "ru": "#v Нагрузка на расчёты#! растёт на #R 5#!"
+ },
+ "nd_tt_talks_cred_plus": {
+  "en": "A stand-down raises our [Concept('concept_nuclear_credibility','credibility')] by #G 5#!",
+  "ru": "Понижение готовности повышает нашу [Concept('concept_nuclear_credibility','убедительность')] на #G 5#!"
+ },
+ "nd_tt_talks_cred_public_demand": {
+  "en": "Trading a public demand for a stand-down costs our [Concept('concept_nuclear_credibility','credibility')] #R 5#!",
+  "ru": "Обмен публичного требования на понижение готовности стоит нам #R 5#! [Concept('concept_nuclear_credibility','убедительности')]"
+ },
+ "nd_tt_talks_meanwhile": {
+  "en": "While they consider it, the pressure events stop and the crisis danger falls by #G 15#!",
+  "ru": "Пока они обдумывают, события давления прекращаются, а опасность кризиса падает на #G 15#!"
+ },
+ "nd_tt_talks_pending": {
+  "en": "No proposal, to stand down or to trade, is already waiting for an answer",
+  "ru": "Ни одно предложение — понизить готовность или обменяться — ещё не ждёт ответа"
+ },
+ "nd_tt_talks_terms": {
+  "en": "If they accept, both sides stand down to #v Routine#!, held there for #v 24#! months, and pledge never to use nuclear weapons on each other; renouncing that pledge later costs #R 15#! credibility and #R 5#! infamy. The war or play goes on",
+  "ru": "Если они согласятся, обе стороны понижают готовность до #v обычной#! и удерживают её #v 24#! мес., обязуясь никогда не применять ядерное оружие друг против друга; отказ от этого обязательства позже стоит #R 15#! убедительности и #R 5#! дурной славы. Война или игра продолжаются"
+ },
+ "nd_tt_then_back_down_private": {
+  "en": "The outcome notice that follows settles our reputation: our [Concept('concept_nuclear_credibility','credibility')] falls by #R 5#!. Nothing was public, so nothing else",
+  "ru": "Итоговое уведомление сразу определяет нашу репутацию: наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 5#!. Ничего публичного не было, поэтому больше ничего"
+ },
+ "nd_tt_then_back_down_public": {
+  "en": "The outcome notice that follows settles our reputation: our [Concept('concept_nuclear_credibility','credibility')] falls by #R 15#!, the climb-down is remembered, and our militarists and officers turn on us",
+  "ru": "Итоговое уведомление сразу определяет нашу репутацию: наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 15#!, отступление помнят, а наши милитаристы и офицеры поворачиваются против нас"
+ },
+ "nd_tt_then_bluff_called": {
+  "en": "Our doctrine never allowed this, and every government knew it: #R 5#! more",
+  "ru": "Наша доктрина никогда этого не допускала, и все правительства это знали: ещё #R 5#!"
+ },
+ "nd_tt_then_yield": {
+  "en": "The outcome notice that follows settles our reputation: our [Concept('concept_nuclear_credibility','credibility')] falls by #R 5#!, and our militarists and officers resent it",
+  "ru": "Итоговое уведомление сразу определяет нашу репутацию: наша [Concept('concept_nuclear_credibility','убедительность')] падает на #R 5#!, а наши милитаристы и офицеры негодуют"
+ },
+ "nd_tt_trade_claims": {
+  "en": "Each side renounces every claim it holds on the other's incorporated states. A claim covers a whole state region, so one on a region shared with another country goes for all of it",
+  "ru": "Каждая сторона отказывается от всех притязаний на включённые области другой. Притязание охватывает весь регион области, поэтому притязание на регион, общий с другой страной, снимается целиком"
+ },
+ "nd_tt_trade_covert_ops": {
+  "en": "Each side ends every covert operation against the other that the other has caught, and launches no hostile operation against it for #v 10#! years. Operations not caught go on",
+  "ru": "Каждая сторона прекращает все тайные операции против другой, которые та вскрыла, и #v 10#! лет не начинает против неё враждебных операций. Нераскрытые операции продолжаются"
+ },
+ "nd_tt_trade_cred": {
+  "en": "A trade ends the crisis, and each side's [Concept('concept_nuclear_credibility','credibility')] rises by #G 5#!: neither is seen to back down",
+  "ru": "Обмен заканчивает кризис, и [Concept('concept_nuclear_credibility','убедительность')] каждой стороны растёт на #G 5#!: никто не выглядит отступившим"
+ },
+ "nd_tt_trade_deployment": {
+  "en": "Each side leaves every treaty holding its #v Nuclear Basing#! article in, or its nuclear guarantee over, a country next to the other, switches off its missile defense in states bordering the other's, and makes none of these again for #v 10#! years. A treaty is left whole, so its other articles end too; leaving it carries no penalty for breaking it",
+  "ru": "Каждая сторона выходит из каждого договора, где действует её статья #v Ядерное базирование#! или её ядерная гарантия над страной, граничащей с другой, отключает свою противоракетную оборону в областях, граничащих с областями другой, и #v 10#! лет не возобновляет ничего из этого. Договор покидается целиком, поэтому прекращают действовать и его остальные статьи; выход не влечёт штрафов за нарушение договора"
+ },
+ "nd_tt_trade_kind": {
+  "en": "The crisis is over forces deployed next to a country, claims on its states, covert operations or orbital weapons",
+  "ru": "Кризис из-за сил, развёрнутых рядом со страной, притязаний на её области, тайных операций или орбитального оружия"
+ },
+ "nd_tt_trade_lapsed": {
+  "en": "The trade no longer matches: one side no longer holds what it offered to give up. The offer lapses as if refused, and the crisis goes on",
+  "ru": "Обмен больше не подходит: одна сторона уже не имеет того, от чего предлагала отказаться. Предложение утрачивает силу, как будто его отвергли, и кризис продолжается"
+ },
+ "nd_tt_trade_matching": {
+  "en": "Each side holds the same against the other, so each has the same to give up, and neither is bound by an earlier crisis's ten-year bar of that kind",
+  "ru": "Каждая сторона держит против другой одно и то же, поэтому каждой есть от чего отказаться, и ни одну не связывает десятилетний запрет такого рода из прежнего кризиса"
+ },
+ "nd_tt_trade_orbital": {
+  "en": "Each side tears down its Orbital Battlestation construction site, losing its progress, and starts no new site for #v 10#! years. Levels already finished stay",
+  "ru": "Каждая сторона сносит стройплощадку орбитальной боевой станции, теряя прогресс, и #v 10#! лет не начинает новую. Уже достроенные уровни остаются"
+ },
+ "nd_tt_umbrella_needs_arsenal": {
+  "en": "We have tested a nuclear weapon",
+  "ru": "Мы испытали ядерное оружие"
+ },
+ "nd_tt_umbrella_withdrawn": {
+  "en": "They are no longer under our nuclear umbrella: our arsenal no longer lifts the nuclear shadow from their war support or weighs in a crisis against them, and we are no longer asked to answer threats against them. While this stands their #v liberty desire#! grows by #R 0.1#! a week",
+  "ru": "Они больше не под нашим ядерным зонтиком: наш арсенал уже не снимает с их поддержки войны ядерную тень и не учитывается в кризисе против них, и от нас больше не ждут ответа на угрозы в их адрес. Пока это так, их #v стремление к свободе#! растёт на #R 0,1#! в неделю"
+ },
+ "nd_tt_war_law_permits_strike": {
+  "en": "No law of ours forbids a strategic nuclear strike (#v $law_humanitarian_regulations$#! and #v $law_limited_war$#! do) — unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting",
+  "ru": "Никакой наш закон не запрещает стратегический ядерный удар (запрещают законы #v $law_humanitarian_regulations$#! и #v $law_limited_war$#!) — если только не ударили по нам или по стране под нашей защитой, или нам не грозят аннексия или порабощение в войне, которую мы ведём"
+ },
+ "nd_tt_war_law_permits_tactical_strike": {
+  "en": "No law of ours forbids a tactical nuclear strike (#v $law_limited_war$#! does) — unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting",
+  "ru": "Никакой наш закон не запрещает тактический ядерный удар (запрещает закон #v $law_limited_war$#!) — если только не ударили по нам или по стране под нашей защитой, или нам не грозят аннексия или порабощение в войне, которую мы ведём"
+ },
+ "nd_tt_withdrawn_no_answer": {
+  "en": "Our warheads are held in storage for the civil war: we cannot answer with them until it is over",
+  "ru": "Наши боеголовки хранятся из-за гражданской войны: ответить ими мы не можем, пока она не закончится"
+ },
+ "nd_tt_yield_alert": {
+  "en": "Our forces stand down to #v Routine#! and are held there for #v 24#! months",
+  "ru": "Наши силы понижают готовность до #v обычной#! и удерживаются там #v 24#! мес."
+ },
+ "nd_tt_yield_claims": {
+  "en": "We renounce every claim we hold on their incorporated states. A claim covers a whole state region, so one on a region they share with another country goes for all of it",
+  "ru": "Мы отказываемся от всех притязаний на их включённые области. Притязание охватывает весь регион области, поэтому притязание на регион, общий у них с другой страной, снимается целиком"
+ },
+ "nd_tt_yield_covert_ops": {
+  "en": "We end every covert operation against them that they have caught, and launch no hostile operation against them for #v 10#! years. Operations they haven't caught go on",
+  "ru": "Мы прекращаем все тайные операции против них, которые они вскрыли, и #v 10#! лет не начинаем против них враждебных операций. Нераскрытые операции продолжаются"
+ },
+ "nd_tt_yield_deployment": {
+  "en": "We leave every treaty holding our #v Nuclear Basing#! article in, or our nuclear guarantee over, a country next to them, switch off our missile defense in states bordering theirs, and make none of these again for #v 10#! years. A treaty is left whole, so its other articles end too; leaving it carries no penalty for breaking it",
+  "ru": "Мы выходим из каждого договора, где действует наша статья #v Ядерное базирование#! или наша ядерная гарантия над страной, граничащей с ними, отключаем свою противоракетную оборону в областях, граничащих с их областями, и #v 10#! лет не возобновляем ничего из этого. Договор покидается целиком, поэтому прекращают действовать и его остальные статьи; выход не влечёт штрафов за нарушение договора"
+ },
+ "nd_tt_yield_freeze": {
+  "en": "Our weapons program is frozen for #v 10#! years",
+  "ru": "Наша программа вооружений заморожена на #v 10#! лет"
+ },
+ "nd_tt_yield_guarantee": {
+  "en": "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and, if we lead our side, we drop our goals against it",
+  "ru": "Мы оставляем в покое страну, которую они защищают: отступаем в игре, а в войне наша поддержка войны падает на #R 15#! и, если мы возглавляем свою сторону, мы отказываемся от своих целей против неё"
+ },
+ "nd_tt_yield_orbital": {
+  "en": "We tear down our Orbital Battlestation construction site, losing its progress, and start no new site for #v 10#! years. Levels already finished stay",
+  "ru": "Мы сносим стройплощадку нашей орбитальной боевой станции, теряя прогресс, и #v 10#! лет не начинаем новую. Уже достроенные уровни остаются"
+ },
+ "nd_tt_yield_play": {
+  "en": "We back down in the diplomatic play: their side wins it",
+  "ru": "Мы отступаем в дипломатической игре: их сторона выигрывает её"
+ },
+ "nd_tt_yield_reparations": {
+  "en": "We pay reparations for our nuclear strike, about a tenth of a year's income, and open our arsenal to inspection for #v 20#! years, taking Custody Inspections (#R −5#! legitimacy, fading over ten years)",
+  "ru": "Мы выплачиваем репарации за свой ядерный удар — около десятой части годового дохода — и на #v 20#! лет открываем свой арсенал для инспекций, получая «Инспекции хранения» (#R −5#! легитимности, ослабевает в течение десяти лет)"
+ },
+ "nd_tt_yield_war": {
+  "en": "Our war support in the war falls by #R 15#!. If we lead our side, we drop our war goals against them, and any of the same kind our side holds in that war",
+  "ru": "Наша поддержка войны в этой войне падает на #R 15#!. Если мы возглавляем свою сторону, мы отказываемся от целей войны против них и от всех таких же целей, которые наша сторона держит в этой войне"
+ },
+ "nd_w_arsenal_label": {
+  "en": "Warheads held",
+  "ru": "Боеголовок на руках"
+ },
+ "nd_w_arsenal_tt": {
+  "en": "#tooltip_header Warheads#!\\n$TOOLTIP_DELIMITER$\\nOur [concept_nuclear_stockpile], and in brackets the world's estimate of it. After them comes any ceiling tighter than our own that an arms-control treaty or the UN ban sets, or the dismantling under way. A smaller arsenal is cheaper to hold in a world that fears the bomb.[Country.GetCustom('nd_taboo_dismantle_note')][Country.GetCustom('nd_taboo_burden_hint')]",
+  "ru": "#tooltip_header Боеголовки#!\\n$TOOLTIP_DELIMITER$\\nНаш [concept_nuclear_stockpile|l], а в скобках — оценка мира. После них идёт любой потолок строже нашего, установленный договором о контроле над вооружениями или запретом ООН, либо идущий демонтаж. Меньший арсенал дешевле держать в мире, который боится бомбы.[Country.GetCustom('nd_taboo_dismantle_note')][Country.GetCustom('nd_taboo_burden_hint')]"
+ },
+ "nd_w_arsenal_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! #lore (est. [Country.MakeScope.ScriptValue('nd_display_public_estimate')|0])#![Country.GetCustom('nd_taboo_arsenal_status')]",
+  "ru": "#v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! #lore (оц. [Country.MakeScope.ScriptValue('nd_display_public_estimate')|0])#![Country.GetCustom('nd_taboo_arsenal_status')]"
+ },
+ "nd_w_authority_change_later": {
+  "en": "Launch authority can be changed again in #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! months.",
+  "ru": "Право на запуск можно изменить снова через #v [Country.MakeScope.ScriptValue('nd_display_authority_months_left')|0]#! мес."
+ },
+ "nd_w_authority_change_now": {
+  "en": "Launch authority can be changed now, and then not for a year.",
+  "ru": "Право на запуск можно изменить сейчас, а затем — лишь через год."
+ },
+ "nd_w_authority_choice_1_tt": {
+  "en": "#tooltip_header Central Authorization#!\\n$TOOLTIP_DELIMITER$\\nThe strongest political control and the lowest risk of unauthorized use; the most vulnerable to a disrupted chain of command. An issuer believed to hold more warheads than our command can absorb on the capital counts our answer at three quarters. A salvo on our capital can cut the chain of command for two to four weeks, and nobody can order our warheads until it is restored.\\n\\n[GetStaticModifier('nd_authority_terms_1').GetDesc]",
+  "ru": "#tooltip_header Централизованное разрешение#!\\n$TOOLTIP_DELIMITER$\\nСильнейший политический контроль и наименьший риск несанкционированного применения; больше всего уязвимо при нарушении цепочки командования. Угрожающая сторона, которая, по общему мнению, держит больше боеголовок, чем наше командование способно принять на столицу, засчитывает наш ответ в три четверти. Залп по нашей столице может прервать цепочку командования на две-четыре недели, и никто не сможет отдать приказ нашим боеголовкам, пока её не восстановят.\\n\\n[GetStaticModifier('nd_authority_terms_1').GetDesc]"
+ },
+ "nd_w_authority_choice_2_tt": {
+  "en": "#tooltip_header Conditional Delegation#!\\n$TOOLTIP_DELIMITER$\\nCommanders may use their weapons if they believe the conditions are met and the capital cannot be reached: retaliation stays credible when communications fail, and a commander cut off in a war can misread what is happening. A strike on our capital cannot cut off our command.\\n\\n[GetStaticModifier('nd_authority_terms_2').GetDesc]",
+  "ru": "#tooltip_header Условное делегирование#!\\n$TOOLTIP_DELIMITER$\\nКомандиры могут применять своё оружие, если считают, что условия выполнены и до столицы не добраться: возмездие остаётся убедительным при нарушении связи, а командир, отрезанный на войне, может неверно понять происходящее. Удар по нашей столице не может отрезать наше командование.\\n\\n[GetStaticModifier('nd_authority_terms_2').GetDesc]"
+ },
+ "nd_w_authority_choice_3_tt": {
+  "en": "#tooltip_header Launch on Warning#!\\n$TOOLTIP_DELIMITER$\\nOur missiles fly on warning, before the enemy's arrive: the most credible response for vulnerable forces, and a false warning can become a launch under standing orders. Against a salvo aimed at our forces, up to three of the warheads that get away may answer before it lands, if a launch is open to us. A strike on our capital cannot cut off our command.\\n\\n[GetStaticModifier('nd_authority_terms_3').GetDesc]",
+  "ru": "#tooltip_header Пуск по предупреждению#!\\n$TOOLTIP_DELIMITER$\\nНаши ракеты летят по предупреждению, до того как прилетят вражеские: самый убедительный ответ для уязвимых сил, а ложное предупреждение по действующим приказам может обернуться пуском. Против залпа по нашим силам до трёх боеголовок из тех, что уцелели, могут ответить до его падения, если пуск нам открыт. Удар по нашей столице не может отрезать наше командование.\\n\\n[GetStaticModifier('nd_authority_terms_3').GetDesc]"
+ },
+ "nd_w_authority_choice_4_tt": {
+  "en": "#tooltip_header Automatic Retaliation#!\\n$TOOLTIP_DELIMITER$\\nA system that answers a nuclear strike on our territory by itself, up to three warheads, whether or not anyone is left to give the order. An early warning still goes to the government, which can wait for proof. A strike on our capital cannot cut off our command.\\n\\n[GetStaticModifier('nd_authority_terms_4').GetDesc]",
+  "ru": "#tooltip_header Автоматическое возмездие#!\\n$TOOLTIP_DELIMITER$\\nСистема, которая сама отвечает на ядерный удар по нашей территории, до трёх боеголовок, остался бы кто-то отдать приказ или нет. Раннее предупреждение всё равно идёт правительству, которое может дождаться доказательств. Удар по нашей столице не может отрезать наше командование.\\n\\n[GetStaticModifier('nd_authority_terms_4').GetDesc]"
+ },
+ "nd_w_authority_tt": {
+  "en": "#tooltip_header Launch Authority: [Country.GetCustom('nd_authority_name')]#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_authority_effects')]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_months_left'), '(CFixedPoint)0' ), 'nd_w_authority_change_later', 'nd_w_authority_change_now' )]",
+  "ru": "#tooltip_header Право на запуск: [Country.GetCustom('nd_authority_name')]#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_authority_effects')]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_months_left'), '(CFixedPoint)0' ), 'nd_w_authority_change_later', 'nd_w_authority_change_now' )]"
+ },
+ "nd_w_btn_change": {
+  "en": "Change",
+  "ru": "Изменить"
+ },
+ "nd_w_btn_choose": {
+  "en": "Choose",
+  "ru": "Выбрать"
+ },
+ "nd_w_btn_disavow": {
+  "en": "Disavow",
+  "ru": "Отречься"
+ },
+ "nd_w_btn_hide": {
+  "en": "Hide",
+  "ru": "Скрыть"
+ },
+ "nd_w_btn_order": {
+  "en": "Order",
+  "ru": "Приказ"
+ },
+ "nd_w_btn_own_strikes": {
+  "en": "Own them",
+  "ru": "Взять на себя"
+ },
+ "nd_w_capabilities_header": {
+  "en": "Forces",
+  "ru": "Силы"
+ },
+ "nd_w_credibility_tt": {
+  "en": "#tooltip_header Credibility: [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#!\\n$TOOLTIP_DELIMITER$\\nOur [concept_nuclear_credibility], from 0 to 100: [Country.GetCustom('nd_credibility_band')]. In a crisis we start, it puts #v [Country.MakeScope.ScriptValue('nd_credibility_pressure_term')|+0]#! on the pressure to concede.",
+  "ru": "#tooltip_header Убедительность: [Country.MakeScope.ScriptValue('nd_display_credibility')|0]#!\\n$TOOLTIP_DELIMITER$\\nНаша [concept_nuclear_credibility|l] от 0 до 100: [Country.GetCustom('nd_credibility_band')]. В кризисе, который начинаем мы, она даёт #v [Country.MakeScope.ScriptValue('nd_credibility_pressure_term')|+0]#! к давлению с целью уступки."
+ },
+ "nd_w_crisis_act_back_down": {
+  "en": "Back down from the threat",
+  "ru": "Отступить от угрозы"
+ },
+ "nd_w_crisis_act_back_down_btn": {
+  "en": "Back down",
+  "ru": "Отступить"
+ },
+ "nd_w_crisis_act_exercise": {
+  "en": "Hold an exercise they can see",
+  "ru": "Провести учения, которые они видят"
+ },
+ "nd_w_crisis_act_exercise_btn": {
+  "en": "Exercise",
+  "ru": "Учения"
+ },
+ "nd_w_crisis_act_public": {
+  "en": "Make the threat public",
+  "ru": "Сделать угрозу публичной"
+ },
+ "nd_w_crisis_act_public_btn": {
+  "en": "Go public",
+  "ru": "Огласить"
+ },
+ "nd_w_crisis_act_talks": {
+  "en": "Propose a mutual stand-down",
+  "ru": "Предложить взаимное понижение готовности"
+ },
+ "nd_w_crisis_act_talks_btn": {
+  "en": "Propose",
+  "ru": "Предложить"
+ },
+ "nd_w_crisis_act_trade": {
+  "en": "Offer a trade",
+  "ru": "Предложить обмен"
+ },
+ "nd_w_crisis_act_trade_btn": {
+  "en": "Offer",
+  "ru": "Предложить"
+ },
+ "nd_w_crisis_act_yield": {
+  "en": "Give them what they demand",
+  "ru": "Дать им то, чего они требуют"
+ },
+ "nd_w_crisis_act_yield_btn": {
+  "en": "Concede",
+  "ru": "Уступить"
+ },
+ "nd_w_crisis_actions_legend": {
+  "en": "Each side makes its own moves: ours are the buttons under Our Moves, and the other side answers through its own decisions. A crisis also ends if the war or play it is about ends, and it lapses after a year. A crisis is over a diplomatic play, a war, a guarantee, a nuclear strike outside a war, a weapons program, forces deployed next to the other side, claims on the other's land, covert operations, an orbital battlestation or forces on alert; the side that concedes backs down in the play, loses 15 war support (and if it leads its side, drops the side's goals), leaves the protected country alone, pays reparations and opens its arsenal to inspection, has its program frozen for ten years, pulls its forces back, renounces its claims, ends the operations it was caught running, tears down its battlestation site (the forces, operations and site each barred for ten years) or stands its forces down for two. Stages are not a ladder to war: a crisis can be settled at any of them. Over deployment, claims, covert operations or a battlestation, when each side holds the same against the other, either side may offer a trade instead: each gives up the same, and neither is seen to back down.",
+  "ru": "Каждая сторона делает собственные ходы: наши — это кнопки под заголовком «Наши ходы», а другая сторона отвечает своими решениями. Кризис также заканчивается, если заканчивается война или игра, из-за которых он возник, и истекает через год. Кризис возникает из-за дипломатической игры, войны, гарантии, ядерного удара вне войны, программы вооружений, сил, развёрнутых рядом с другой стороной, притязаний на землю другой стороны, тайных операций, орбитальной боевой станции или сил в боевой готовности; уступающая сторона отступает в игре, теряет 15 поддержки войны (а если она возглавляет свою сторону, та отказывается от своих целей), оставляет защищаемую страну в покое, выплачивает репарации и открывает свой арсенал для инспекций, получает заморозку программы на десять лет, отводит свои силы, отказывается от притязаний, прекращает операции, на которых её поймали, сносит стройплощадку боевой станции (силам, операциям и площадке запрещено возвращаться на десять лет) или на два года понижает готовность своих сил. Стадии — не лестница к войне: кризис можно урегулировать на любой из них. Когда из-за развёртывания, притязаний, тайных операций или боевой станции каждая сторона держит против другой одно и то же, любая сторона может предложить обмен вместо этого: каждая отказывается от одного и того же, и никто не выглядит отступившим."
+ },
+ "nd_w_crisis_backdown_effect": {
+  "en": "Threat dropped",
+  "ru": "Угроза снята"
+ },
+ "nd_w_crisis_backdown_label_them": {
+  "en": "They back down",
+  "ru": "Они отступают"
+ },
+ "nd_w_crisis_backdown_label_us": {
+  "en": "We back down",
+  "ru": "Мы отступаем"
+ },
+ "nd_w_crisis_concede_label_them": {
+  "en": "They concede",
+  "ru": "Они уступают"
+ },
+ "nd_w_crisis_concede_label_us": {
+  "en": "We concede",
+  "ru": "Мы уступаем"
+ },
+ "nd_w_crisis_concession_tt": {
+  "en": "#tooltip_header What Conceding Costs#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_concession_long')]",
+  "ru": "#tooltip_header Во что обходится уступка#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_concession_long')]"
+ },
+ "nd_w_crisis_danger_figure": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_crisis_danger')|0]#! of 100",
+  "ru": "#v [Country.MakeScope.ScriptValue('nd_display_crisis_danger')|0]#! из 100"
+ },
+ "nd_w_crisis_danger_label": {
+  "en": "Danger",
+  "ru": "Опасность"
+ },
+ "nd_w_crisis_danger_tt": {
+  "en": "#tooltip_header Danger#!\\n$TOOLTIP_DELIMITER$\\nHow easily this could go wrong. As it rises, accidents and misreadings grow likelier on both sides, and at #v 70#! a Confrontation turns Acute. It fires nothing by itself.\\n$TOOLTIP_DELIMITER$\\n",
+  "ru": "#tooltip_header Опасность#!\\n$TOOLTIP_DELIMITER$\\nНасколько легко всё может пойти не так. Чем она выше, тем вероятнее аварии и ошибки восприятия с обеих сторон, а при #v 70#! Противостояние становится острым. Сама по себе она ничего не запускает.\\n$TOOLTIP_DELIMITER$\\n"
+ },
+ "nd_w_crisis_deadline_label": {
+  "en": "Deadline",
+  "ru": "Срок"
+ },
+ "nd_w_crisis_deadline_tt": {
+  "en": "#tooltip_header Deadline#!\\n$TOOLTIP_DELIMITER$\\nWhen the deadline passes, the country that made the threat must decide what it meant. A crisis older than a year lapses.",
+  "ru": "#tooltip_header Срок#!\\n$TOOLTIP_DELIMITER$\\nКогда срок истекает, страна, выдвинувшая угрозу, должна решить, что она имела в виду. Кризис старше года истекает."
+ },
+ "nd_w_crisis_deadline_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! weeks",
+  "ru": "#v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#! нед."
+ },
+ "nd_w_crisis_ft_label_them": {
+  "en": "Can they carry it out?",
+  "ru": "Смогут ли они это исполнить?"
+ },
+ "nd_w_crisis_ft_label_us": {
+  "en": "Can we carry it out?",
+  "ru": "Сможем ли мы это исполнить?"
+ },
+ "nd_w_crisis_ft_tt": {
+  "en": "#tooltip_header Follow-through#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_ft_reason')]\\n\\nDoctrine is public: every government knows whether a threat can be carried out, and weighs it.",
+  "ru": "#tooltip_header Исполнимость#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_ft_reason')]\\n\\nДоктрина публична: каждое правительство знает, можно ли исполнить угрозу, и учитывает это."
+ },
+ "nd_w_crisis_header": {
+  "en": "Nuclear Crisis",
+  "ru": "Ядерный кризис"
+ },
+ "nd_w_crisis_headline_tt": {
+  "en": "#tooltip_header The Dispute#!\\n$TOOLTIP_DELIMITER$\\nThe country that made the threat runs the crisis: its deadline, its stage, and whether it is public. A public ultimatum is a commitment: abandoning it is noticed at home and abroad.",
+  "ru": "#tooltip_header Спор#!\\n$TOOLTIP_DELIMITER$\\nСтрана, выдвинувшая угрозу, ведёт кризис: её срок, её стадия и публичность. Публичный ультиматум — это обязательство: отказ от него заметят и дома, и за рубежом."
+ },
+ "nd_w_crisis_moves_sub": {
+  "en": "Our Moves",
+  "ru": "Наши ходы"
+ },
+ "nd_w_crisis_next_pressure_label": {
+  "en": "Next pressure",
+  "ru": "Следующее давление"
+ },
+ "nd_w_crisis_next_pressure_tt": {
+  "en": "#tooltip_header Next Pressure#!\\n$TOOLTIP_DELIMITER$\\nFrom the Confrontation stage on, the threatened government is asked again every #v 6#! weeks whether to concede. Open talks pause it.",
+  "ru": "#tooltip_header Следующее давление#!\\n$TOOLTIP_DELIMITER$\\nНачиная со стадии Противостояния, правительство, которому угрожают, каждые #v 6#! нед. снова должно решать, уступать ли. Открытые переговоры приостанавливают это."
+ },
+ "nd_w_crisis_outcomes_head_effect": {
+  "en": "What happens",
+  "ru": "Что происходит"
+ },
+ "nd_w_crisis_outcomes_head_outcome": {
+  "en": "Outcome",
+  "ru": "Исход"
+ },
+ "nd_w_crisis_outcomes_sub": {
+  "en": "Outcomes",
+  "ru": "Исходы"
+ },
+ "nd_w_crisis_pressure_label": {
+  "en": "Pressure on the target",
+  "ru": "Давление на цель"
+ },
+ "nd_w_crisis_pressure_label_us": {
+  "en": "Pressure on us",
+  "ru": "Давление на нас"
+ },
+ "nd_w_crisis_pressure_tt": {
+  "en": "#tooltip_header Pressure to Concede#!\\n$TOOLTIP_DELIMITER$\\nWhat pushes the threatened government to give way, part by part. When it is pressed, below #v 50#! it does not concede; from #v 70#! it concedes about half the time, and from #v 85#! about two times in three. A human government in its place sees the same figure.\\n$TOOLTIP_DELIMITER$\\n",
+  "ru": "#tooltip_header Давление с целью уступки#!\\n$TOOLTIP_DELIMITER$\\nЧто подталкивает правительство, которому угрожают, уступить, по частям. Когда на него давят, ниже #v 50#! оно не уступает; начиная с #v 70#! уступает примерно в половине случаев, а с #v 85#! — примерно в двух из трёх. Правительство игрока на его месте видит то же число.\\n$TOOLTIP_DELIMITER$\\n"
+ },
+ "nd_w_crisis_stage_figure": {
+  "en": "#lore Week [Country.MakeScope.ScriptValue('nd_display_crisis_week')|0] of [Country.MakeScope.ScriptValue('nd_crisis_max_weeks')|0]#!",
+  "ru": "#lore Неделя [Country.MakeScope.ScriptValue('nd_display_crisis_week')|0] из [Country.MakeScope.ScriptValue('nd_crisis_max_weeks')|0]#!"
+ },
+ "nd_w_crisis_stage_label": {
+  "en": "Stage",
+  "ru": "Стадия"
+ },
+ "nd_w_crisis_stage_tt": {
+  "en": "#tooltip_header Stage#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_stage_next')]",
+  "ru": "#tooltip_header Стадия#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_stage_next')]"
+ },
+ "nd_w_crisis_stakes_tt": {
+  "en": "#tooltip_header Credibility at Stake#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_stakes_long')]",
+  "ru": "#tooltip_header Убедительность на кону#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_stakes_long')]"
+ },
+ "nd_w_crisis_standdown_effect": {
+  "en": "Both at Routine",
+  "ru": "Обе на обычной"
+ },
+ "nd_w_crisis_standdown_label": {
+  "en": "Both stand down",
+  "ru": "Обе понижают готовность"
+ },
+ "nd_w_crisis_standdown_tt": {
+  "en": "#tooltip_header Mutual Stand-Down#!\\n$TOOLTIP_DELIMITER$\\nIf both governments agree, both stand down to Routine, held there for two years, and pledge never to use nuclear weapons on each other. The war or play it was about goes on.",
+  "ru": "#tooltip_header Взаимное понижение готовности#!\\n$TOOLTIP_DELIMITER$\\nЕсли оба правительства согласны, обе стороны понижают готовность до обычной и удерживают её два года, обязуясь никогда не применять ядерное оружие друг против друга. Война или игра, из-за которых всё началось, продолжаются."
+ },
+ "nd_w_crisis_trade_effect": {
+  "en": "Each gives the same",
+  "ru": "Каждая отдаёт одно и то же"
+ },
+ "nd_w_crisis_trade_label": {
+  "en": "Trade",
+  "ru": "Обмен"
+ },
+ "nd_w_crisis_trade_tt": {
+  "en": "#tooltip_header Trade#!\\n$TOOLTIP_DELIMITER$\\nIf each side holds the same against the other, either may offer to give up its own in return: a base for a base, a claim for a claim. Accepted, it ends the crisis, and neither side is seen to back down.",
+  "ru": "#tooltip_header Обмен#!\\n$TOOLTIP_DELIMITER$\\nЕсли каждая сторона держит против другой одно и то же, любая может предложить отказаться от своего взамен: база за базу, притязание за притязание. Если обмен принят, он заканчивает кризис, и никто не выглядит отступившим."
+ },
+ "nd_w_disavow_off_label": {
+  "en": "We own our strikes",
+  "ru": "Мы признаём свои удары"
+ },
+ "nd_w_disavow_tt": {
+  "en": "#tooltip_header Disavow Our Strikes#!\\n$TOOLTIP_DELIMITER$\\nWhile on, when we strike a city first, we tell its country that the launch was unauthorized. A country that believes it may hold back its answer. The truth comes out within eighteen months, and a lie found out costs credibility, infamy and relations, and makes our next claim harder to believe.",
+  "ru": "#tooltip_header Отречься от наших ударов#!\\n$TOOLTIP_DELIMITER$\\nПока включено, когда мы первыми наносим удар по городу, мы сообщаем его стране, что пуск был несанкционированным. Страна, которая этому верит, может воздержаться от ответа. Правда выходит наружу в течение восемнадцати месяцев, а раскрытая ложь стоит убедительности, дурной славы и отношений и делает наше следующее заявление менее правдоподобным."
+ },
+ "nd_w_doctrine_change_later": {
+  "en": "Doctrine can be changed again in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! months.",
+  "ru": "Доктрину можно изменить снова через #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! мес."
+ },
+ "nd_w_doctrine_change_now": {
+  "en": "Doctrine can be changed now, and then not for two years.",
+  "ru": "Доктрину можно изменить сейчас, а затем — лишь через два года."
+ },
+ "nd_w_doctrine_choice_1_tt": {
+  "en": "#tooltip_header No First Use#!\\n$TOOLTIP_DELIMITER$\\nWe will use nuclear weapons only in retaliation. Reassuring to neighbors and weak for coercion. Leaving it later is a repudiation.\\n\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]",
+  "ru": "#tooltip_header Неприменение первым#!\\n$TOOLTIP_DELIMITER$\\nМы применим ядерное оружие только в ответ. Успокаивает соседей и слабо для принуждения. Выход из доктрины позже — это отказ от обязательства.\\n\\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]"
+ },
+ "nd_w_doctrine_choice_2_tt": {
+  "en": "#tooltip_header Existential Deterrence#!\\n$TOOLTIP_DELIMITER$\\nWe will use them if our survival is at stake: an enemy that means to annex or subjugate us, or takes our core while we are losing. The default.\\n\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]",
+  "ru": "#tooltip_header Экзистенциальное сдерживание#!\\n$TOOLTIP_DELIMITER$\\nМы применим его, если на кону наше выживание: враг, намеренный нас аннексировать или покорить, либо захвативший наше ядро, пока мы проигрываем. По умолчанию.\\n\\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]"
+ },
+ "nd_w_doctrine_choice_3_tt": {
+  "en": "#tooltip_header Flexible First Use#!\\n$TOOLTIP_DELIMITER$\\nWe may use them first in a war we are losing, or when our core is threatened — a check on a stronger conventional attacker. Limited use never guarantees a limited answer.\\n\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]",
+  "ru": "#tooltip_header Гибкое первое применение#!\\n$TOOLTIP_DELIMITER$\\nМы можем применить его первыми в войне, которую проигрываем, или когда под угрозой наше ядро, — сдерживание более сильного обычного нападающего. Ограниченное применение никогда не гарантирует ограниченного ответа.\\n\\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]"
+ },
+ "nd_w_doctrine_choice_4_tt": {
+  "en": "#tooltip_header Nuclear Compellence#!\\n$TOOLTIP_DELIMITER$\\nOur threats are meant: a public ultimatum that is defied licenses a strike in the war that follows. Stronger bargaining, worse reputation.\\n\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]",
+  "ru": "#tooltip_header Ядерное принуждение#!\\n$TOOLTIP_DELIMITER$\\nНаши угрозы всерьёз: публичный ультиматум, который отвергнут, даёт право на удар в последующей войне. Сильнее торг, хуже репутация.\\n\\n[GetStaticModifier('nd_doctrine_mod_4').GetDesc]"
+ },
+ "nd_w_doctrine_choice_5_tt": {
+  "en": "#tooltip_header Nuclear Warfighting#!\\n$TOOLTIP_DELIMITER$\\nNuclear weapons are an instrument of any war we fight. There is no survival test — only retaliation, military sense and the price the world will make us pay.\\n\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]",
+  "ru": "#tooltip_header Ведение ядерной войны#!\\n$TOOLTIP_DELIMITER$\\nЯдерное оружие — орудие любой нашей войны. Нет проверки на выживание — только возмездие, военный смысл и цена, которую заставит заплатить мир.\\n\\n[GetStaticModifier('nd_doctrine_mod_5').GetDesc]"
+ },
+ "nd_w_doctrine_legend": {
+  "en": "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_months_left'), '(CFixedPoint)0' ), 'nd_w_doctrine_change_later', 'nd_w_doctrine_change_now' )] Leaving No First Use repudiates a public pledge.",
+  "ru": "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_months_left'), '(CFixedPoint)0' ), 'nd_w_doctrine_change_later', 'nd_w_doctrine_change_now' )] Выход из «Неприменения первым» означает отказ от публичного обязательства."
+ },
+ "nd_w_doctrine_tt": {
+  "en": "#tooltip_header Doctrine: [Country.GetCustom('nd_doctrine_name')]#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_doctrine_effects')]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_months_left'), '(CFixedPoint)0' ), 'nd_w_doctrine_change_later', 'nd_w_doctrine_change_now' )]",
+  "ru": "#tooltip_header Доктрина: [Country.GetCustom('nd_doctrine_name')]#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_doctrine_effects')]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_months_left'), '(CFixedPoint)0' ), 'nd_w_doctrine_change_later', 'nd_w_doctrine_change_now' )]"
+ },
+ "nd_w_hardening_label": {
+  "en": "Hardening",
+  "ru": "Укрепление"
+ },
+ "nd_w_hardening_tt": {
+  "en": "#tooltip_header Hardening#!\\n$TOOLTIP_DELIMITER$\\nDispersal, silos, submarines at sea. Each level makes survivability climb faster toward its ceiling; without it, survivability slowly erodes. Each level costs money every week.",
+  "ru": "#tooltip_header Укрепление#!\\n$TOOLTIP_DELIMITER$\\nРассредоточение, шахты, подводные лодки в море. Каждый уровень заставляет живучесть быстрее расти к своему потолку; без него живучесть медленно снижается. Каждый уровень стоит денег каждую неделю."
+ },
+ "nd_w_hardening_value": {
+  "en": "Level #v [Country.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! a level",
+  "ru": "Уровень #v [Country.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! за уровень"
+ },
+ "nd_w_hold_label": {
+  "en": "Chance of a halt",
+  "ru": "Шанс остановки"
+ },
+ "nd_w_hold_tt": {
+  "en": "#tooltip_header Chance of a Halt#!\\n$TOOLTIP_DELIMITER$\\nThe chance that someone in the chain stops a launch the government never ordered. Reliability and safeguards raise it, as do open crisis talks and a suspect whose warheads are in storage. Launch on Warning, punished doubters, a suspect at High Alert and our own vulnerable forces lower it. It is at most #v 97%#! at peace, #v 92%#! in a Warning or Confrontation and #v 85%#! in an Acute crisis or a war.",
+  "ru": "#tooltip_header Шанс остановки#!\\n$TOOLTIP_DELIMITER$\\nШанс того, что кто-то в цепочке остановит пуск, которого правительство не приказывало. Его повышают надёжность и меры безопасности, а также открытые переговоры в кризисе и подозреваемый, чьи боеголовки на хранении. Снижают «Пуск по предупреждению», наказанные сомневающиеся, подозреваемый в повышенной готовности и наши собственные уязвимые силы. В мирное время он не выше #v 97%#!, при Предупреждении или Противостоянии — #v 92%#!, в остром кризисе или на войне — #v 85%#!."
+ },
+ "nd_w_hold_value_central": {
+  "en": "#lore not delegated#!",
+  "ru": "#lore не делегировано#!"
+ },
+ "nd_w_home_header": {
+  "en": "At Home",
+  "ru": "Внутри страны"
+ },
+ "nd_w_home_legend": {
+  "en": "How each interest group receives our posture. The Armed Forces judge it as [Concept('concept_posture_officers', 'officers')] and the Industrialists as [Concept('concept_posture_business', 'business')]; every other group by its stance on the Rules of War — #v Total War#! makes it [Concept('concept_posture_militarist', 'militarist')], #v Limited War#! makes it [Concept('concept_posture_restraint', 'restraint')]. Hover a name for what that view likes and dislikes. Their leader's politics can make the Armed Forces or the Industrialists #v hawkish#! or #v restrained#! about doctrine too. Totals are capped at ±2, or ±1 for a mild view; the number is the one in the group's approval breakdown.",
+  "ru": "Как каждая группа интересов воспринимает нашу позицию. Вооружённые силы оценивают её как [Concept('concept_posture_officers', 'позицию офицеров')], Промышленники — как [Concept('concept_posture_business', 'позицию бизнеса')]; каждая другая группа — по своему отношению к Правилам войны: #v Тотальная война#! делает её [Concept('concept_posture_militarist', 'позицией милитаристов')], #v Ограниченная война#! — [Concept('concept_posture_restraint', 'позицией сдержанности')]. Наведите на название, чтобы увидеть, что нравится и не нравится этому взгляду. Политика лидера может сделать Вооружённые силы или Промышленников #v ястребиными#! или #v сдержанными#! и в вопросах доктрины. Итог ограничен ±2, или ±1 для умеренного взгляда; число совпадает с тем, что в разбивке одобрения группы."
+ },
+ "nd_w_investment_sub": {
+  "en": "Investment",
+  "ru": "Инвестиции"
+ },
+ "nd_w_loose_label": {
+  "en": "Unaccounted for",
+  "ru": "Неучтённые"
+ },
+ "nd_w_loose_tt": {
+  "en": "#tooltip_header Warheads Unaccounted For#!\\n$TOOLTIP_DELIMITER$\\nWarheads from our arsenal that went missing when they changed hands — in a civil war, or when an arsenal passed to us. Somewhere, someone has them: in the terrorism era a plot can turn one against a city, and investigators may trace it back to us.\\n\\n#v [Country.MakeScope.ScriptValue('nd_display_loose_warheads')|0]#! are unaccounted for the world over.\\n\\nThey can be found and secured by inspectors, a covert operation, a security assistance treaty or the physical-protection convention.",
+  "ru": "#tooltip_header Неучтённые боеголовки#!\\n$TOOLTIP_DELIMITER$\\nБоеголовки из нашего арсенала, пропавшие при передаче — в гражданской войне или когда арсенал достался нам. Где-то они у кого-то есть: в эпоху терроризма заговор может обратить одну из них против города, а следователи могут отследить её до нас.\\n\\nНеучтено во всём мире: #v [Country.MakeScope.ScriptValue('nd_display_loose_warheads')|0]#!.\\n\\nИх могут найти и обезопасить инспекторы, тайная операция, договор о содействии безопасности или конвенция о физической защите."
+ },
+ "nd_w_loose_value": {
+  "en": "#R [Country.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads",
+  "ru": "Боеголовок: #R [Country.MakeScope.ScriptValue('nd_display_our_loose')|0]#!"
+ },
+ "nd_w_pledge_label": {
+  "en": "Pledges",
+  "ru": "Обязательства"
+ },
+ "nd_w_pledge_tt": {
+  "en": "#tooltip_header Pledges#!\\n$TOOLTIP_DELIMITER$\\nNon-use pledges come from mutual stand-downs. A strike on a country we have pledged not to strike is only possible after repudiating the pledge — unless it struck us first. A broken pledge is remembered for ten years.",
+  "ru": "#tooltip_header Обязательства#!\\n$TOOLTIP_DELIMITER$\\nОбязательства о неприменении возникают из взаимного понижения готовности. Удар по стране, против которой мы обязались не бить, возможен лишь после отказа от обязательства — если только она не ударила первой. Нарушенное обязательство помнят десять лет."
+ },
+ "nd_w_posture_header": {
+  "en": "Nuclear Posture",
+  "ru": "Ядерная позиция"
  },
  "nd_withdraw_umbrella_action": {
   "en": "Withdraw Nuclear Umbrella",
