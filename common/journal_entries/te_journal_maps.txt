@@ -67,6 +67,99 @@ je_te_map_room = {
 			limit = { has_variable = te_jmap_out }
 			value = "te_jmap_outside"
 		}
+		# The Color option (2026-11-14, the fourteenth pass; te_jmap_color). A lerp's colors are literal names, so
+		# another palette can't be swapped into a map's own branch. These eleven branches come first instead, each
+		# taken only while the option is off its default, and paint whatever map is picked from one shared ramp:
+		# te_jmap_pick_ramp says whether the pick's own lerp branch would paint this state (1 on a map that runs
+		# one way, 2 on one that runs both ways from a midpoint, 0 otherwise) and te_jmap_pick_factor is its factor
+		# (te_journal_map_scales_generated.txt). The engine mixes two colors at a time, so a ramp of five stops is
+		# four lerps, the factor read a quarter at a time (te_jmap_pick_q1 to _q4). A state the ramp doesn't take
+		# falls through to its map's own branches: no data, none, a category.
+		# Colorblind-safe, a map that runs one way: ColorBrewer's YlOrBr, pale yellow to brown.
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.25 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_0"
+				max_color = "te_jmap_cb_seq_1"
+				factor = te_jmap_pick_q1
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.5 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_1"
+				max_color = "te_jmap_cb_seq_2"
+				factor = te_jmap_pick_q2
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.75 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_2"
+				max_color = "te_jmap_cb_seq_3"
+				factor = te_jmap_pick_q3
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_3"
+				max_color = "te_jmap_cb_seq_4"
+				factor = te_jmap_pick_q4
+			}
+		}
+		# Colorblind-safe, a map with a meaningful midpoint: ColorBrewer's PuOr, orange below it, near white at it, purple above.
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.25 }
+			lerp = {
+				min_color = "te_jmap_cb_div_0"
+				max_color = "te_jmap_cb_div_1"
+				factor = te_jmap_pick_q1
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.5 }
+			lerp = {
+				min_color = "te_jmap_cb_div_1"
+				max_color = "te_jmap_cb_div_mid_low"
+				factor = te_jmap_pick_q2
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.75 }
+			lerp = {
+				min_color = "te_jmap_cb_div_mid_high"
+				max_color = "te_jmap_cb_div_3"
+				factor = te_jmap_pick_q3
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 }
+			lerp = {
+				min_color = "te_jmap_cb_div_3"
+				max_color = "te_jmap_cb_div_4"
+				factor = te_jmap_pick_q4
+			}
+		}
+		# Colorblind-safe: a headquarters at a loss, a state that removes more than it emits (the maps' own red and green).
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_below = yes }
+			value = "te_jmap_cb_below"
+		}
+		# Greyscale: light to dark, one lerp, on every fitted map (a midpoint sits at the middle grey). Any other state of
+		# a fitted map (no figure, none, off the scale) is the "no data" grey, striped by map_color_second below.
+		else_if = {
+			limit = { te_jmap_color = 2 te_jmap_pick_ramp > 0 }
+			lerp = {
+				min_color = "te_jmap_grey_low"
+				max_color = "te_jmap_grey_high"
+				factor = te_jmap_pick_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 2 te_jmap_pick_fitted = 1 }
+			value = "te_jmap_no_data"
+		}
 		# 1. Turmoil.
 		else_if = {
 			limit = { te_jmap_selector = 1 }
@@ -1443,9 +1536,19 @@ je_te_map_room = {
 	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none
 	# (Trade Capacity striped its Trade Centers while it painted the owner's trade, until 2026-11-11). A state outside
 	# the Map Room's area has none either (te_jmap_in_area, in every branch: a first branch of its own would have to
-	# name a color to stripe with).
+	# name a color to stripe with). Under the Color option's Greyscale (2026-11-14) a fitted map stripes every state
+	# its ramp doesn't take, first: a grey for "no data" would be a grey on the ramp, so the pattern says it instead.
 	map_color_second = {
 		if = {
+			limit = {
+				te_jmap_color = 2
+				te_jmap_pick_fitted = 1
+				te_jmap_in_area = yes
+				te_jmap_pick_ramp = 0
+			}
+			value = "te_jmap_grey_stripe"
+		}
+		else_if = {
 			limit = {
 				te_jmap_selector = 31
 				te_jmap_in_area = yes
@@ -1458,6 +1561,7 @@ je_te_map_room = {
 				te_jmap_selector = 34
 				te_jmap_in_area = yes
 				has_variable = te_jmap_rhq_n
+				te_jmap_color < 2	# under Greyscale a stripe says one thing: not on the scale
 			}
 			value = "te_jmap_hq_regional"
 		}

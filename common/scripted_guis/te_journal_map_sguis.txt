@@ -745,6 +745,38 @@ te_jmap_scale_ranked_sgui = {
 	}
 }
 
+# Color (the fourteenth pass, 2026-11-14): the map's own colors, the colorblind-safe ramps or greyscale
+# (te_jmap_color). The map's own is always there, to go back to; the other two are greyed while the pick has no
+# range (te_jmap_pick_fitted): a map of categories has a color for each, and no ramp to swap.
+te_jmap_color_own_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	effect = {
+		te_jmap_set_color = { COLOR = 0 }
+	}
+}
+
+te_jmap_color_safe_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_color = { COLOR = 1 }
+	}
+}
+
+te_jmap_color_grey_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_fitted = 1 }
+	effect = {
+		te_jmap_set_color = { COLOR = 2 }
+	}
+}
+
 # A map button that opens a page without picking (the Timeline Extended window's, and each system tab's): notes the
 # player as the maps' viewer first (te_jmap_note_viewer).
 te_jmap_note_viewer_sgui = {

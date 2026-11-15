@@ -5729,6 +5729,15 @@ Seen in game on 2026-11-05:
   of 14 days). There is no `remove_journal_entry` effect either: an entry leaves the journal by concluding, or by
   `can_deactivate = yes` with its `possible` failing and `is_shown_when_inactive` false (that worked).
 
+- **A `lerp`'s colors are literal names, so a palette the player picks is branches, not a swap** (the Map Room's
+  Color option, 2026-11-14; not seen in game). No script value or variable can stand in `min_color` or `max_color`.
+  For one palette over many maps, put a few shared branches before the maps' own, each guarded by the option
+  first so a default paint pays one comparison a branch (if a limit stops at its first false line: not measured),
+  and have them ask script values that dispatch on the pick:
+  whether the map's own lerp would paint this state, and its factor. A ramp of N stops is N - 1 lerps, each taking
+  the factor over its own stretch (`te_jmap_pick_q<n>`). Nothing records how the engine mixes a lerp's two colors,
+  so check a ramp's in-between colors in RGB and in hue, saturation and value, and write a near-white or grey stop
+  with its neighbour's hue: a grey's hue is arbitrary, and a mix in hue would sweep from it.
 - **A map of "your" country needs the player in a global variable.** The Map Room's Nuclear Weapons and Agent
   Networks maps compare each state's owner with `global_var:te_jmap_viewer` (saved as a temporary scope, then
   `this = scope:…`), which every pick and map button and a player's monthly pulse set to the player's country. One

@@ -492,7 +492,9 @@ class RangesTest(unittest.TestCase):
                 self.assertIsNotNone(line)
                 self.assertIn(f"ScriptValue('te_jmap_{n}_lo')", line.group(1))
                 self.assertIn(f"ScriptValue('te_jmap_{n}_hi')", line.group(1))
-                self.assertTrue(line.group(1).endswith("$te_jmap_measured_trim$"), "what the range leaves out")
+                # the range's line is the tooltip's second, and ends on what the range leaves out
+                self.assertTrue(line.group(1).split("\\n")[1].endswith("$te_jmap_measured_trim$"),
+                                "what the range leaves out")
                 self.assertNotRegex(line.group(1), r"\bthe world as it is now|the world's extreme now",
                                     "the area is the Map Room's, which may not be the world")
                 if n != "comfort":    # Current Comfort's range is Base Comfort's, which says so

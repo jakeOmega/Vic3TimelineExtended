@@ -46,6 +46,16 @@ paint itself doesn't change, and neither do the factors a system's own entry rea
   color. One variable for every map: te_jmap_refresh_range clears it before any measure. Each map is ranked by its
   own figure, though Current Comfort shares Base Comfort's range.
 
+**The Color option** (owner, 2026-11-14, the fourteenth pass: te_jmap_color, te_journal_map_values.txt). A paint's
+colors are literal names, so another palette can't be swapped into a map's own branches. Instead the Map Room's
+paint opens with a few shared branches, taken only while the option is off its default, that color whatever map is
+picked from one shared ramp. They ask this file two things about the state being painted, each a ladder on the pick:
+whether the pick's own lerp branch would paint it and on which kind of ramp (te_jmap_pick_ramp: 0 no, 1 the
+sequential ramp, 2 the diverging one, for a map with a meaningful midpoint), and its factor (te_jmap_pick_factor).
+A ramp of RAMP_LERPS lerps reads the factor a quarter at a time (te_jmap_pick_q1 to _q4). A row's `paint` is its
+lerp branch's limit where that isn't the `where` its range is measured over; test_journal_map_modes.py reads the
+paint in ladder order and holds each row to it.
+
 **Fitted to the world** (owner, 2026-11-07: "people are not going to it to see that the world GDP/c average has gone
 up, they want to see the regional differences"). Nearly every map's colors run from the world's low to its high as
 it stands: the fifth lowest and the fifth highest of the states the map paints (TRIM states left out at each end, so
@@ -128,6 +138,14 @@ LOG_FLOOR = 0.00002
 LOG_KNEE_PART = 2
 # The most states a rank's walk visits (ordered_state's max is a literal here; a game holds far fewer states).
 RANK_MAX = 5000
+# The Color option's settings (te_jmap_color, te_journal_map_values.txt; unset is the map's own colors).
+COLOR_OWN, COLOR_SAFE, COLOR_GREY = 0, 1, 2
+# What te_jmap_pick_ramp answers for the state being painted: not on the pick's ramp, on it and the pick runs one
+# way (the sequential ramp), on it and the pick runs both ways from a midpoint (the diverging ramp).
+RAMP_NONE, RAMP_SEQ, RAMP_DIV = 0, 1, 2
+# The lerps a shared ramp is painted in: the engine mixes two colors at a time, so a ramp of five published stops
+# is four mixes end to end, and a diverging one two a side.
+RAMP_LERPS = 4
 
 
 def linear(lo, hi):
@@ -257,6 +275,7 @@ TABLE = [
     # The systems' maps, each on its own entry too (te_journal_map_triggers.txt).
     dict(name="gw", input="te_jmap_gw_share", guards=["gw_state_emis"], three=False, sel=18, entry=True,
          where=["has_variable = gw_state_emis", "te_jmap_gw_world > 0", "te_jmap_gw_state_emis >= 0"],
+         paint=["te_jmap_gw_no_data = no", "te_jmap_gw_removal = no"],     # the same states, as the paint asks
          world=rel(soft_cap(0, 0.01, 0.05)), min_span=0.005,
          note="Global Warming: the state's share of the world's emissions last year (a share, owner 2026-11-06): "
               "half the color by a fifth of the world's range; a thousand-odd states average 0.1%"),
@@ -281,10 +300,12 @@ TABLE = [
               "at none"),
     dict(name="comfort", input="var:te_climate_penalty_applied", guards=["te_climate_penalty_applied"], three=True,
          sel=28, range_of="comfort_base", where=["has_variable = te_climate_base_penalty"],
+         paint=["has_variable = te_climate_penalty_applied"],     # the yearly refresh stores the two together
          world=rel_mid(diverging(-10.8, 0, (30, 80)), 0, 3), min_span=3,
          note="Local Climate's penalty in force, after the relief its owner's technologies give (stored yearly), "
               "split at none, on Base Comfort's range"),
     dict(name="gdppc", input="gdp_per_capita", guards=[], three=False, sel=29, where=["gdp_per_capita > 0"],
+         paint=[],     # a state with no GDP per capita is painted at the low end, and left out of the range
          world=rel_doubling(0.25, 256, 4, 0.01), min_span=4,
          note="GDP per capita, a year's GDP per person in pounds: the same share of the color for each doubling "
               "from the world's low to its high (a rich country about 1 in 1836, 8 in 1917, 60 today)"),
@@ -406,6 +427,77 @@ def in_room(scale):
     """The Map Room paints with this scale (a map's only scale, or an entry map's twin): its range follows the Map
     Room's options. An entry's own scale is measured over the whole world on the default trim, whatever they are."""
     return not scale.get("entry")
+
+
+def painted(scale):
+    """The trigger lines under which the Map Room's paint puts a state on this map's ramp: the limit of its lerp
+    branch, less the pick itself. The states its range is measured over unless the row says otherwise."""
+    return scale.get("paint", scale["where"])
+
+
+def pick_ramp(scale):
+    """The shared ramp a fitted map takes under the Color option: the diverging one where its midpoint means
+    something, the sequential one otherwise (a three-color map with no such midpoint included)."""
+    return RAMP_DIV if scale["world"]["kind"] == "mid" else RAMP_SEQ
+
+
+def ramp_lerp(factor):
+    """Which of a shared ramp's RAMP_LERPS lerps paints a factor, and how far along it (0-1): the reference for
+    te_jmap_pick_q<n> and the paint's `te_jmap_pick_factor < n/4` ladder."""
+    n = min(int(factor * RAMP_LERPS), RAMP_LERPS - 1)
+    return n + 1, min(max(factor * RAMP_LERPS - n, 0), 1)
+
+
+# A share of a range, or of the color, that has a plain name: a pick's tooltip uses the name, and a percentage for
+# any other (te_jmap_curve_*, localization/english; test_journal_map_modes.py holds each to curve_words).
+_SHARES = ((1 / 2, "half"), (1 / 3, "a third"), (2 / 3, "two-thirds"), (1 / 4, "a quarter"), (1 / 5, "a fifth"))
+
+
+def _share(x, first=False):
+    """A share in a tooltip's words; `first` is the form after "the first" (fifth, two-thirds, 38%)."""
+    for share, words in _SHARES:
+        if abs(x - share) < 0.004:
+            return words[2:] if first and words.startswith("a ") else words
+    return f"{round(x * 100)}%"
+
+
+def _knee(knots):
+    """A curve's knee (the share of its span, the share of its color by then), or None for a straight one."""
+    assert len(knots) in (2, 3), "a tooltip can describe a straight curve or one knee"
+    return knots[1] if len(knots) == 3 else None
+
+
+def curve_key(scale):
+    """The localization key that describes a fitted map's own curve, shared by every map of the same shape."""
+    w = scale["world"]
+    code = lambda knots: "s" if _knee(knots) is None else "_".join(str(round(v * 100)) for v in _knee(knots))
+    if w["kind"] == "doubling":
+        return "te_jmap_curve_doubling"
+    if w["kind"] == "mid":
+        low, up = code(w["lower"]), code(w["upper"])
+        return "te_jmap_curve_mid" if low == up == "s" else f"te_jmap_curve_mid_{low}_{up}"
+    return "te_jmap_curve_straight" if _knee(w["knots"]) is None else f"te_jmap_curve_knee_{code(w['knots'])}"
+
+
+def curve_words(scale):
+    """A fitted map's own curve in a tooltip's words, from the knots the curve itself is written from."""
+    w = scale["world"]
+    if w["kind"] == "doubling":
+        return "Each doubling of the figure takes the same share of the color, from the range's low to its high."
+    if w["kind"] == "mid":
+        low, up = _knee(w["lower"]), _knee(w["upper"])
+        if low is None and up is None:
+            return "The colors run straight on each side of the midpoint, to the range's end on that side."
+        side = lambda knee, end, color: (f"the colors run straight to {end}" if knee is None else
+                                         f"{_share(knee[1])}{color} goes to the first {_share(knee[0], True)} of the way to {end}")
+        return (f"Below the midpoint, {side(low, 'the range' + chr(39) + 's low', ' of the color')}; "
+                f"above it, {side(up, 'its high', ' of the color' if low is None else '')}.")
+    knee = _knee(w["knots"])
+    if knee is None:
+        return "The colors run straight from the range's low to its high."
+    share = _share(knee[1])
+    return (f"{share[0].upper() + share[1:]} of the color goes to the first {_share(knee[0], True)} of the range, "
+            "and the rest to what is left of it.")
 
 
 def trim_most(n):
@@ -870,6 +962,43 @@ def option_values():
     return lines
 
 
+def color_values():
+    """What the Color option's shared branches ask about the state being painted (state scope): whether the pick's
+    own lerp branch would paint it and on which ramp, and its factor, whole and a quarter at a time."""
+    rows = sorted((s for s in SCALES if fitted(s) and in_room(s)), key=lambda s: s["sel"])
+    lines = ["", "# ---- The Color option (the generator's header): the pick's ramp and factor, for the shared branches ----",
+             f"# {RAMP_NONE} where the pick's own lerp branch wouldn't paint this state (no figure, none, off the scale, or a",
+             f"# pick with no range), {RAMP_SEQ} where it would and the pick runs one way, {RAMP_DIV} where it would and the "
+             "pick runs both",
+             "# ways from a midpoint. Each row repeats its lerp branch's limit; a figure is read only inside its",
+             "# has_variable guard."]
+    body = ["value = 0"]
+    for i, scale in enumerate(rows):
+        guards = [ln for ln in painted(scale) if ln.startswith("has_variable = ")]
+        rest = [ln for ln in painted(scale) if not ln.startswith("has_variable = ")]
+        limit = " ".join([f"te_jmap_selector = {scale['sel']}"] + guards)
+        body += ["if = {" if i == 0 else "else_if = {", f"\tlimit = {{ {limit} }}"]
+        if rest:
+            body += ["\tif = {", f"\t\tlimit = {{ {' '.join(rest)} }}", f"\t\tvalue = {pick_ramp(scale)}", "\t}"]
+        else:
+            body += [f"\tvalue = {pick_ramp(scale)}"]
+        body += ["}"]
+    lines += _sv("te_jmap_pick_ramp", body)
+    lines += ["# The picked map's factor, 0-1, under the Scale option as every factor is (each tree guards its own read)."]
+    body = ["value = 0"]
+    for i, scale in enumerate(rows):
+        body += ["if = {" if i == 0 else "else_if = {", f"\tlimit = {{ te_jmap_selector = {scale['sel']} }}",
+                 f"\tvalue = te_jmap_{scale['name']}_factor", "}"]
+    lines += _sv("te_jmap_pick_factor", body)
+    lines += [f"# The factor along each of a shared ramp's {RAMP_LERPS} lerps: the paint takes the first whose end the factor is",
+              "# under (te_jmap_pick_factor < 0.25, 0.5, 0.75; the last takes the rest)."]
+    for n in range(1, RAMP_LERPS + 1):
+        start = (n - 1) / RAMP_LERPS
+        lines += _sv(f"te_jmap_pick_q{n}", ["value = te_jmap_pick_factor"] + ([f"subtract = {num(start)}"] if start else []) +
+                     [f"multiply = {RAMP_LERPS}", "min = 0", "max = 1"])
+    return lines
+
+
 def render():
     lines = [
         "# AUTO-GENERATED by scripts/generators/gen_journal_map_scales.py — do not edit manually.",
@@ -905,6 +1034,7 @@ def render():
             lines += [f"{name}_upper = {{", f"\tvalue = {name}", "\tmultiply = 2", "\tsubtract = 1", "\tmin = 0",
                       "\tmax = 1", "}"]
     lines += option_values()
+    lines += color_values()
     return "\n".join(lines) + "\n"
 
 

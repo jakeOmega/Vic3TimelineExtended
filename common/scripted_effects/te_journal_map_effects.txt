@@ -99,6 +99,14 @@ te_jmap_set_scale = {
 	debug_log = "TE_JMAP scale $SCALE$ date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
+# COLOR: 0 the map's own colors (the default), 1 the colorblind-safe ramps, 2 greyscale. Only the paint reads it
+# (te_journal_maps.txt's first branches), so nothing is marked or measured again: the button's repaint reopens the
+# page on the new colors.
+te_jmap_set_color = {
+	set_global_variable = { name = te_jmap_opt_color value = $COLOR$ }
+	debug_log = "TE_JMAP color $COLOR$ date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
 # An option changed. Country scope: the player's, who becomes the viewer the area is drawn around.
 te_jmap_apply_options = {
 	te_jmap_note_viewer = yes

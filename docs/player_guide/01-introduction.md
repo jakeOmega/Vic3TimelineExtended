@@ -55,11 +55,12 @@ colors run from the fifth lowest state in the world to the fifth highest, the
 few beyond each end at its colors' limits, unless Map Options (below) sets
 another area or trim. The button's tooltip gives the range and what it was
 measured over. The range is measured when you pick a map and again each month. A map
-with a meaningful middle keeps it: Fertility is cream at replacement, Natural
-Change, Net Migration and Population Growth at none, Sex Balance at even and the
-comfort maps at no penalty, and each side's colors run to the world's extreme on that side.
-Where every state is on one side, the colors run over the states there, cream
-at the one nearest the middle. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
+with a meaningful middle keeps it: Fertility's is replacement, Natural
+Change's, Net Migration's and Population Growth's none, Sex Balance's even and the
+comfort maps' no penalty, cream in each map's own colors, and each side's colors
+run to the world's extreme on that side.
+Where every state is on one side, the colors run over the states there, the
+middle's color at the one nearest it. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
 The two comfort maps show what a
 state's Local Climate does to its migration attraction: Base Comfort before any
 technology eases it, Current Comfort after its owner's, in the same colors so
@@ -68,8 +69,9 @@ Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
 game's first month. City Rank shows the world's city ranking that tourism's
 Cities bonus reads: the 20 largest cities amber to crimson, the rest in blue
 that pales as the rank falls. Company HQs colors each state that holds a
-company's headquarters by their weekly profit, red at a loss, and leaves every
-other state gray; gold stripes mark a company's regional headquarters.
+company's headquarters by their weekly profit, sets a loss apart (red in the
+map's own colors), and leaves every other state gray; gold stripes mark a
+company's regional headquarters.
 Ownership colors a state by who holds most of its buildings, private owners
 gold, their own workers green and the state red, paler where the lead is
 narrow. Population Growth counts land changing hands as well as births, deaths
@@ -94,15 +96,16 @@ state's first full census year, and Population Growth its second yearly count,
 so they start gray.
 
 Map Options, below the groups, changes where the Map Room draws its maps,
-how a map of figures measures its range and the scale its colors run on. Its
-header shows what is set, and the page says so at the top while anything is
-off its default.
+how a map of figures measures its range, the scale its colors run on and the
+colors themselves. Its header names whatever is off its default, and the page
+says so at the top.
 
 | Option | Settings | What it does |
 |---|---|---|
 | Area | World, Continent, Market, Power Bloc, Country | Limits every map to one continent, your market, your power bloc or your own country. States outside turn slate and show no figure, and a map of figures runs its colors over the states inside. |
 | Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
 | Scale | Map Default, Linear, Logarithmic, Ranked | Sets how the colors run between the range's ends: on the curve drawn for the map, straight, by doublings, or by each state's place in line. |
+| Color | Map Default, Colorblind-Safe, Grayscale | Sets the colors a map of figures is painted in: the map's own, a ramp that stays readable with color blindness, or grays. |
 
 Limit GDP per Capita to Europe and its colors run over Europe's states alone,
 so you see how they differ where the world map shows them all as rich.
@@ -112,10 +115,11 @@ Siberia count as Asia, Mexico and the Caribbean as North America. Market,
 Power Bloc and Country follow your country, a month behind at most; if you
 leave your bloc, the area goes back to the world. In an area smaller than the
 world, Trim 4 Each End leaves out at most a tenth of the area's states at each
-end. Outliers and Scale do nothing to a map of categories or on a fixed scale,
-such as Leading Cause or City Rank, and their buttons are grayed there. The
-options apply to the Map Room only: a system's own journal entry draws its map
-over the whole world, on its own curve, whatever you set here.
+end. Outliers, Scale and Color do nothing to a map of categories or on a fixed
+scale, such as Leading Cause or City Rank, and their buttons are grayed there.
+The options apply to the Map Room only: a system's own journal entry draws its
+map over the whole world, on its own curve and in its own colors, whatever you
+set here.
 
 Map Default leaves each map on the curve drawn for its figure: straight for
 some, most of the color for the common figures on others, a doubling at a time
@@ -128,9 +132,21 @@ line, lowest to highest, with states that share a figure sharing a place, so
 no outlier matters and the Outliers buttons are grayed. A map with a
 meaningful middle ranks each side outward from it. A Ranked map takes its
 places when it is measured, so it can be a month old: Turmoil under Ranked
-moves at the turn of the month, not from week to week. Under any scale but
-Map Default, a map's tooltip gives the scale in force and the range in place
-of its usual description.
+moves at the turn of the month, not from week to week.
+
+Colorblind-Safe paints every map of figures from one ramp, pale yellow at the
+low end to brown at the high, which stays readable with red-green or
+blue-yellow color blindness. A map with a meaningful middle runs orange below
+it and purple above, near white at it. A state its map sets apart below its
+scale, such as a company headquarters at a loss, is blue. Grayscale runs light
+gray at the low end to dark gray at the high, with a meaningful middle at the
+middle gray; a state with no figure, with none, or off the scale is striped
+where the other colors leave it gray or pale, since a gray of its own would
+read as a figure, and Company HQs' gold stripes are not drawn.
+
+A map's tooltip follows the options: it says what the map shows, its range
+now, the scale in force and the colors in force, so it tells you which color
+is the low end whatever you have set.
 
 Those nine systems' tabs, and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the nine (all but Ocean

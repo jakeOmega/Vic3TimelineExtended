@@ -256,8 +256,10 @@ class CauseColorsTest(unittest.TestCase):
         # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters (Trade Capacity
         # striped its Trade Centers only while it painted the owner's trade)
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
-        self.assertEqual(others, ["te_jmap_selector = 31 te_jmap_in_area = yes te_jmap_grid_hub = yes",
-                                  "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n"])
+        self.assertEqual(others, [ColorTest.GREY_STRIPES,     # Greyscale's, first (the Color option)
+                                  "te_jmap_selector = 31 te_jmap_in_area = yes te_jmap_grid_hub = yes",
+                                  "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n "
+                                  "te_jmap_color < 2"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -856,7 +858,8 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
 
     def test_regional_headquarters_stripe_and_are_named(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertIn(("te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n",
+        # (not under Greyscale, where a stripe says one thing: PickTooltipTest)
+        self.assertIn(("te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n te_jmap_color < 2",
                        'value = "te_jmap_hq_regional"'), stripes)
         self.assertIn("custom_tooltip_no_bullet = te_jmap_tt_hq_regional", block(self.room, "map_tooltip"))
         body = block(code(VALUES), "te_jmap_rhq_walk_count")
@@ -1080,7 +1083,8 @@ def option_buttons():
 
 
 class OptionsTest(unittest.TestCase):
-    """The Map Room's options (owner, 2026-11-14): Area, Outliers and, since the thirteenth pass, Scale."""
+    """The Map Room's options (owner, 2026-11-14): Area, Outliers, since the thirteenth pass Scale, and since the
+    fourteenth Color (ColorTest, below, has its paint)."""
 
     # scripted GUI -> (the effect it runs, its argument, the script value its button draws pressed from)
     OPTIONS = {
@@ -1102,6 +1106,9 @@ class OptionsTest(unittest.TestCase):
         "te_jmap_scale_linear_sgui": ("te_jmap_set_scale", "SCALE", 1, "te_jmap_scale"),
         "te_jmap_scale_log_sgui": ("te_jmap_set_scale", "SCALE", 2, "te_jmap_scale"),
         "te_jmap_scale_ranked_sgui": ("te_jmap_set_scale", "SCALE", 3, "te_jmap_scale"),
+        "te_jmap_color_own_sgui": ("te_jmap_set_color", "COLOR", 0, "te_jmap_color"),
+        "te_jmap_color_safe_sgui": ("te_jmap_set_color", "COLOR", 1, "te_jmap_color"),
+        "te_jmap_color_grey_sgui": ("te_jmap_set_color", "COLOR", 2, "te_jmap_color"),
     }
     # Outliers is greyed on a map with no range and under the Ranked scale, which reads none: one reason each
     TRIM_VALID = "te_jmap_pick_fitted = 1 NOT = { te_jmap_scale = 3 }"
@@ -1117,6 +1124,9 @@ class OptionsTest(unittest.TestCase):
         "te_jmap_scale_linear_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
         "te_jmap_scale_log_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
         "te_jmap_scale_ranked_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_scale_no_range_tt'"),
+        # and so are the map's own colors
+        "te_jmap_color_safe_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_color_no_range_tt'"),
+        "te_jmap_color_grey_sgui": ("te_jmap_pick_fitted = 1", "'te_jmap_color_no_range_tt'"),
     }
 
     def setUp(self):
@@ -1147,8 +1157,11 @@ class OptionsTest(unittest.TestCase):
 
     def test_no_stripes_and_no_second_line_outside_the_area(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertEqual(len(stripes), 9)
+        self.assertEqual(len(stripes), 10)
+        self.assertEqual(stripes[0][0], ColorTest.GREY_STRIPES)
         for limit, _body in stripes:
+            self.assertIn(" te_jmap_in_area = yes ", limit)
+        for limit, _body in stripes[1:]:
             self.assertRegex(limit, r"^te_jmap_selector = \d+ te_jmap_in_area = yes ", limit)
         # the hover's second chain starts at the second top-level `if`
         hover = block(self.room, "map_tooltip")
@@ -1232,19 +1245,21 @@ class OptionsTest(unittest.TestCase):
     def test_the_options_default_to_what_the_map_room_showed(self):
         values = code(VALUES)
         for value, var in (("te_jmap_area", "te_jmap_opt_area"), ("te_jmap_continent", "te_jmap_opt_cont"),
-                           ("te_jmap_trim", "te_jmap_opt_trim"), ("te_jmap_scale", "te_jmap_opt_scale")):
+                           ("te_jmap_trim", "te_jmap_opt_trim"), ("te_jmap_scale", "te_jmap_opt_scale"),
+                           ("te_jmap_color", "te_jmap_opt_color")):
             self.assertEqual(" ".join(block(values, value).split()),
                              f"value = 0 if = {{ limit = {{ has_global_variable = {var} }} value = global_var:{var} }}")
         # globals, as the pick: they survive a save, and nothing else writes them
         for effect, arg, var in (("te_jmap_set_area", "AREA", "te_jmap_opt_area"),
                                  ("te_jmap_set_continent", "CONT", "te_jmap_opt_cont"),
                                  ("te_jmap_set_trim", "TRIM", "te_jmap_opt_trim"),
-                                 ("te_jmap_set_scale", "SCALE", "te_jmap_opt_scale")):
+                                 ("te_jmap_set_scale", "SCALE", "te_jmap_opt_scale"),
+                                 ("te_jmap_set_color", "COLOR", "te_jmap_opt_color")):
             self.assertRegex(block(self.effects, effect),
                              r"^\s*set_global_variable = \{ name = " + var + r" value = \$" + arg + r"\$ \}")
 
     def test_each_option_runs_its_effect_as_the_player(self):
-        found = set(re.findall(r"^(te_jmap_(?:area|continent|trim|scale)_\w+_sgui)\s*=\s*\{", self.sguis, re.M))
+        found = set(re.findall(r"^(te_jmap_(?:area|continent|trim|scale|color)_\w+_sgui)\s*=\s*\{", self.sguis, re.M))
         self.assertEqual(found, set(self.OPTIONS))
         for name, (effect, arg, number, _value) in self.OPTIONS.items():
             body = block(self.sguis, name)
@@ -1317,36 +1332,19 @@ class OptionsTest(unittest.TestCase):
         self.assertIn("visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_options_set'), "
                       "'(CFixedPoint)1' )]\"", notice)
         self.assertEqual(" ".join(block(code(VALUES), "te_jmap_options_set").split()),
-                         "value = 0 if = { limit = { OR = { te_jmap_area > 0 te_jmap_trim > 0 te_jmap_scale > 0 } } "
-                         "value = 1 }")
-        # the header has room for little beside its title: the area, and the other two in a word or two
-        values = loc_values()
-        self.assertEqual(values["te_jmap_options_now"], "[GetPlayer.GetCustom('te_jmap_area_name')], "
-                         "[GetPlayer.GetCustom('te_jmap_trim_short')], [GetPlayer.GetCustom('te_jmap_scale_short')]")
-        # 38 characters at its longest, "North America, Keep All, Default Scale": about 256 px in the page's font
-        # (EBGaramond 17) where the 470-wide header leaves about 296 beside its title at full size (measured
-        # 2026-11-14 against the game's font files; not seen in game)
-        longest = max(len(", ".join((a, t, c))) for a in ("North America", "South America", "Power Bloc")
-                      for t in ("Trim 4", "Keep All", "Trim 5%") for c in ("Default Scale", "Linear", "Log", "Ranked"))
-        self.assertLessEqual(longest, 38, "the header's summary, at its longest")
-        self.assertEqual((values["te_jmap_trim_short_default"], values["te_jmap_scale_short_own"],
-                          values["te_jmap_scale_short_log"]), ("Trim 4", "Default Scale", "Log"))
-        # the default scale's name (the owner, 2026-11-14, of "Map's Own": "I might call it map default or similar,
-        # it sounds odd as is"), and the doubling maps' line under Logarithmic, which says that scale is their default
-        self.assertEqual(values["te_jmap_scale_own"], "Map Default")
-        self.assertIn("which is this map's default.", values["te_jmap_scale_text_log_doubling"])
-        # the line at the top names all three in full
-        for text in ("te_jmap_area_name", "te_jmap_trim_name", "te_jmap_scale_name"):
-            self.assertIn(f"[GetPlayer.GetCustom('{text}')]", values["te_jmap_options_in_use"])
+                         "value = 0 if = { limit = { OR = { te_jmap_area > 0 te_jmap_trim > 0 te_jmap_scale > 0 "
+                         "te_jmap_color > 0 } } value = 1 }")
+        # what the two lines say is ColorTest's (test_the_header_and_the_line_name_only_what_is_off_its_default)
 
     def test_the_scale_row_and_what_the_page_says_of_a_ranked_map(self):
         section = block(code(WIDGETS), "te_jmap_options")
         body = enclosing(section, re.search(r"\bte_jmap_category\s*=\s*\{", section).end())
         # Area, Outliers, Scale, then the line on what the map was measured over
         order = [body.index(f'text = "{key}"') for key in ("te_jmap_options_area", "te_jmap_options_outliers",
-                                                           "te_jmap_options_scale", "te_jmap_options_measured")]
+                                                           "te_jmap_options_scale", "te_jmap_options_color",
+                                                           "te_jmap_options_measured")]
         self.assertEqual(order, sorted(order))
-        row = body[body.index('text = "te_jmap_options_scale"'):body.index('text = "te_jmap_options_measured"')]
+        row = body[body.index('text = "te_jmap_options_scale"'):body.index('text = "te_jmap_options_color"')]
         self.assertEqual(re.findall(r'text = "te_jmap_scale_(\w+)"', row), ["own", "linear", "log", "ranked"])
         widths = [int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", row)]
         self.assertEqual(len(widths), 4)
@@ -1385,9 +1383,13 @@ class OptionsTest(unittest.TestCase):
             wanted |= set(re.findall(r"'(te_jmap_\w+_tt)'", reason))
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
         named = set(re.findall(r"localization_key\s*=\s*(\w+)", custom))
-        texts = ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_scale_name", "te_jmap_scale_short",
-                 "te_jmap_scale_text", "te_jmap_scale_text_doubling", "te_jmap_scale_text_mid",
-                 "te_jmap_scaled_range_lead", "te_jmap_trim_name", "te_jmap_trim_short", "te_jmap_trim_text"]
+        texts = ["te_jmap_area_name", "te_jmap_area_text", "te_jmap_color_name", "te_jmap_color_short",
+                 "te_jmap_color_text", "te_jmap_color_text_gw", "te_jmap_color_text_hq", "te_jmap_color_text_mid",
+                 "te_jmap_color_text_none", "te_jmap_now",
+                 "te_jmap_now_area", "te_jmap_now_color", "te_jmap_now_scale", "te_jmap_now_trim",
+                 "te_jmap_scale_name", "te_jmap_scale_short", "te_jmap_scale_text", "te_jmap_scale_text_doubling",
+                 "te_jmap_scale_text_mid", "te_jmap_scaled_range_lead", "te_jmap_set_color", "te_jmap_set_scale",
+                 "te_jmap_trim_name", "te_jmap_trim_text"]
         self.assertEqual(sorted(re.findall(r"^(\w+)\s*=\s*\{", custom, re.M)), texts)
         self.assertEqual((wanted | named) - keys, set(), "loc keys missing")
         # every custom text is read somewhere, as [GetPlayer.GetCustom('<key>')]
@@ -1448,16 +1450,383 @@ class OptionsTest(unittest.TestCase):
             self.assertNotIn("selfcheck", block(self.effects, caller), caller)
 
 
-class ScaleTooltipTest(unittest.TestCase):
-    """No tooltip describes a curve that isn't the one in force (owner, 2026-11-14). A fitted pick's own description
-    describes the map's own curve, so its button shows it only under that; under any other scale it shows
-    te_jmap_pick_<map>_scaled: the pick's name, the scale in force and the range, and nothing of the own curve."""
+class ColorTest(_RoomBranches, unittest.TestCase):
+    """The Map Room's Color option (owner, 2026-11-14, the fourteenth pass): the map's own colors, colorblind-safe
+    ramps or greyscale. A lerp's colors are literal names, so the option can't reach into a map's own branch: eleven
+    shared branches open the paint instead, each taken only while the option is off its default, and color whatever
+    fitted map is picked from one ramp. Nothing here has been seen in the game (play-test check 31)."""
 
-    # words the own-curve descriptions use for their shapes
-    CURVE = ("half the color", "two-thirds", "most of the color", "most of them", "halfway", "first fifth",
-             "first third", "for each doubling", "of that span")
+    GREY_STRIPES = "te_jmap_color = 2 te_jmap_pick_fitted = 1 te_jmap_in_area = yes te_jmap_pick_ramp = 0"
+    # The published stops, and the named colors that carry them (the colors file's comment has the sources):
+    # ColorBrewer 2.0's five-class YlOrBr and PuOr, its nine-class Greys (classes 2 and 6), and the first color of
+    # Tableau's Color Blind 10.
+    SEQ = (("te_jmap_cb_seq_0", "#FFFFD4"), ("te_jmap_cb_seq_1", "#FED98E"), ("te_jmap_cb_seq_2", "#FE9929"),
+           ("te_jmap_cb_seq_3", "#D95F0E"), ("te_jmap_cb_seq_4", "#993404"))
+    DIV_LOW = (("te_jmap_cb_div_0", "#E66101"), ("te_jmap_cb_div_1", "#FDB863"), ("te_jmap_cb_div_mid_low", "#F7F7F7"))
+    DIV_HIGH = (("te_jmap_cb_div_mid_high", "#F7F7F7"), ("te_jmap_cb_div_3", "#B2ABD2"), ("te_jmap_cb_div_4", "#5E3C99"))
+    GREY = (("te_jmap_grey_low", "#F0F0F0"), ("te_jmap_grey_high", "#737373"))
+    BELOW = ("te_jmap_cb_below", "#006BA4")
+    # What a color looks like with no working L, M or S cones: Machado, Oliveira and Fernandes (2009), "A
+    # Physiologically-based Model for Simulation of Color Vision Deficiency", doi 10.1109/TVCG.2009.113, the
+    # paper's matrices at severity 1.0, applied to linear RGB (as the colorspacious package, 1.1.2, carries them).
+    VISION = {
+        "normal": ((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+        "protan": ((0.152286, 1.052583, -0.204868), (0.114503, 0.786281, 0.099216), (-0.003882, -0.048116, 1.051998)),
+        "deutan": ((0.367322, 0.860646, -0.227968), (0.280085, 0.672501, 0.047413), (-0.011820, 0.042940, 0.968881)),
+        "tritan": ((1.255528, -0.076749, -0.178779), (-0.078411, 0.930809, 0.147602), (0.004733, 0.691367, 0.303900)),
+    }
 
     def setUp(self):
+        super().setUp()
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "gen_journal_map_scales", os.path.join(REPO, "scripts", "generators", "gen_journal_map_scales.py"))
+        self.gen = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.gen)
+        self.rows = sorted((s for s in self.gen.SCALES if self.gen.fitted(s) and self.gen.in_room(s)),
+                           key=lambda s: s["sel"])
+        self.generated = code(SCALES)
+        self.named = {name: tuple(float(x) for x in hsv.split()) for name, hsv in
+                      re.findall(r"^\s*([a-z0-9_]+)\s*=\s*hsv360\s*\{\s*([\d. ]+?)\s*\}", code(COLORS), re.M)}
+
+    # ---- color arithmetic (sRGB, D65) ----
+    @staticmethod
+    def hex_rgb(text):
+        return tuple(int(text[i:i + 2], 16) / 255 for i in (1, 3, 5))
+
+    def rgb(self, name):
+        import colorsys
+        h, s, v = self.named[name]
+        return colorsys.hsv_to_rgb(h / 360, s / 100, v / 100)
+
+    @classmethod
+    def lab(cls, rgb, vision="normal"):
+        """CIELAB of an sRGB color as `vision` sees it."""
+        lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+        lin = [min(max(sum(m * c for m, c in zip(row, lin)), 0), 1) for row in cls.VISION[vision]]
+        xyz = (0.4124564 * lin[0] + 0.3575761 * lin[1] + 0.1804375 * lin[2],
+               0.2126729 * lin[0] + 0.7151522 * lin[1] + 0.0721750 * lin[2],
+               0.0193339 * lin[0] + 0.1191920 * lin[1] + 0.9503041 * lin[2])
+        f = [t ** (1 / 3) if t > 216 / 24389 else (24389 / 27 * t + 16) / 116
+             for t in (xyz[0] / 0.95047, xyz[1], xyz[2] / 1.08883)]
+        return 116 * f[1] - 16, 500 * (f[0] - f[1]), 200 * (f[1] - f[2])
+
+    @staticmethod
+    def apart(a, b):
+        return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5
+
+    @staticmethod
+    def mixes(a, b, steps=8):
+        """The colors between two stops as a lerp would mix them, in RGB and in HSV: nothing records which the
+        engine's does, so a ramp has to hold under both."""
+        import colorsys
+        ha, hb = colorsys.rgb_to_hsv(*a), colorsys.rgb_to_hsv(*b)
+        turn = hb[0] - ha[0]
+        turn = turn - 1 if turn > 0.5 else turn + 1 if turn < -0.5 else turn
+        out = {"rgb": [], "hsv": []}
+        for i in range(steps + 1):
+            t = i / steps
+            out["rgb"].append(tuple(x + (y - x) * t for x, y in zip(a, b)))
+            out["hsv"].append(colorsys.hsv_to_rgb((ha[0] + turn * t) % 1, ha[1] + (hb[1] - ha[1]) * t,
+                                                  ha[2] + (hb[2] - ha[2]) * t))
+        return out
+
+    def run_of(self, stops, mix):
+        """Every color a run of lerps through `stops` can show, under one way of mixing."""
+        out = []
+        for (a, _), (b, _) in zip(stops, stops[1:]):
+            out += self.mixes(self.rgb(a), self.rgb(b))[mix]
+        return out
+
+    # ---- the option ----
+    def test_only_the_paint_reads_the_option(self):
+        effects = code(EFFECTS)
+        body = " ".join(block(effects, "te_jmap_set_color").split())
+        # a color changes nothing a range or a rank is measured over: no marking, no measure, only the global
+        self.assertEqual(body, "set_global_variable = { name = te_jmap_opt_color value = $COLOR$ } debug_log = "
+                         "\"TE_JMAP color $COLOR$ date=[TimeKeeper.GetCurrentDate.GetString]\"")
+        room = self.room
+        for key in ("map_tooltip",):
+            self.assertNotIn("te_jmap_color", block(room, key), "the hover is the map's own under every color")
+        # no factor branches on it, and no system's own entry reads it: an entry's page keeps its own colors
+        factors = self.generated[:self.generated.index("te_jmap_pick_ramp = {")]
+        self.assertNotIn("te_jmap_color", factors)
+        for rel, name in SYSTEM_ENTRIES + ((BANKING, "je_banking_cycle"),):
+            self.assertNotIn("te_jmap_color", entry(rel, name), name)
+            self.assertNotIn("te_jmap_pick_", entry(rel, name), name)
+
+    def test_the_shared_branches_open_the_paint(self):
+        limits = [limit for limit, _ in self.colors]
+        self.assertEqual(limits[0], "has_variable = te_jmap_out", "outside the area first, whatever the colors")
+        shared = self.colors[1:12]
+        seq, div_low, div_high = [n for n, _ in self.SEQ], [n for n, _ in self.DIV_LOW], [n for n, _ in self.DIV_HIGH]
+        pairs = list(zip(seq, seq[1:])) + list(zip(div_low, div_low[1:])) + list(zip(div_high, div_high[1:]))
+        want = []
+        for ramp, base in ((1, 0), (2, 4)):
+            for n in range(4):
+                under = f" te_jmap_pick_factor < {0.25 * (n + 1):g}" if n < 3 else ""
+                lo, hi = pairs[base + n]
+                want.append((f"te_jmap_color = 1 te_jmap_pick_ramp = {ramp}{under}",
+                             f'lerp = {{ min_color = "{lo}" max_color = "{hi}" factor = te_jmap_pick_q{n + 1} }}'))
+        want.append(("te_jmap_color = 1 te_jmap_pick_below = yes", 'value = "te_jmap_cb_below"'))
+        want.append(("te_jmap_color = 2 te_jmap_pick_ramp > 0",
+                     'lerp = { min_color = "te_jmap_grey_low" max_color = "te_jmap_grey_high" factor = te_jmap_pick_factor }'))
+        want.append(("te_jmap_color = 2 te_jmap_pick_fitted = 1", 'value = "te_jmap_no_data"'))
+        self.assertEqual(shared, want)
+        # each asks for the option first, so a default paint pays one comparison a branch; no other branch asks
+        for limit in limits[1:12]:
+            self.assertRegex(limit, r"^te_jmap_color = [12] ")
+        for limit, body in self.colors[12:]:
+            self.assertNotIn("te_jmap_color", limit + body)
+            self.assertNotIn("te_jmap_pick_", limit + body)
+        self.assertEqual(self.gen.RAMP_LERPS, 4)
+        self.assertEqual((self.gen.COLOR_OWN, self.gen.COLOR_SAFE, self.gen.COLOR_GREY), (0, 1, 2))
+
+    def test_greyscale_stripes_what_its_ramp_leaves(self):
+        # a grey for "no data" would be a grey on the ramp, so under Greyscale a fitted map's other states (no
+        # figure, none, off the scale) are one flat grey with stripes; outside the area stays slate, unstriped
+        stripes = branches_of(block(self.room, "map_color_second"))
+        self.assertEqual(stripes[0], (self.GREY_STRIPES, 'value = "te_jmap_grey_stripe"'))
+        self.assertEqual(self.colors[11][0], "te_jmap_color = 2 te_jmap_pick_fitted = 1")
+        self.assertLess(self.apart(self.lab(self.rgb("te_jmap_grey_stripe")), self.lab(self.rgb("te_jmap_no_data"))) * -1, -40,
+                        "the stripes stand out of the grey under them")
+
+    # ---- what the shared branches ask ----
+    @staticmethod
+    def lines(limit):
+        return re.findall(r"\S+ (?:=|>=|<=|>|<) \S+", limit)
+
+    def own_condition(self, scale):
+        """The limit under which the map's own lerp paints a state, read from the paint in ladder order: the lerp
+        branch's lines (less the pick, and less a three-color map's split) and the opposite of every branch of the
+        same pick before it."""
+        before, found = [], None
+        for limit, body in self.of(self.colors[12:], scale["sel"]):
+            lines = [ln for ln in self.lines(limit) if ln != f"te_jmap_selector = {scale['sel']}"]
+            if body.startswith("lerp"):
+                found = [ln for ln in lines if not re.fullmatch(r"te_jmap_\w+_factor < 0\.5", ln)]
+                break
+            self.assertEqual(len(lines), 1, f"{scale['name']}: an earlier branch of one line can be turned round")
+            self.assertTrue(lines[0].endswith(" = yes"), lines[0])
+            before.append(lines[0][:-len("yes")] + "no")
+        self.assertIsNotNone(found, scale["name"])
+        return before + found
+
+    def test_a_ramp_takes_the_states_the_map_s_own_lerp_would(self):
+        for scale in self.rows:
+            with self.subTest(map=scale["name"]):
+                self.assertEqual(sorted(self.own_condition(scale)), sorted(self.gen.painted(scale)))
+        # where a row's lerp isn't limited by what its range is measured over, the row says so
+        differ = sorted(s["name"] for s in self.rows if "paint" in s)
+        self.assertEqual(differ, ["comfort", "gdppc", "gw_room"])
+        # te_jmap_pick_ramp repeats each: the pick and its has_variable guards, then the rest inside them
+        ramp = " ".join(block(self.generated, "te_jmap_pick_ramp").split())
+        for scale in self.rows:
+            guards = [ln for ln in self.gen.painted(scale) if ln.startswith("has_variable = ")]
+            rest = [ln for ln in self.gen.painted(scale) if not ln.startswith("has_variable = ")]
+            kind = 2 if scale["world"]["kind"] == "mid" else 1
+            limit = " ".join([f"te_jmap_selector = {scale['sel']}"] + guards)
+            inner = f"if = {{ limit = {{ {' '.join(rest)} }} value = {kind} }}" if rest else f"value = {kind}"
+            with self.subTest(map=scale["name"]):
+                self.assertIn(f"if = {{ limit = {{ {limit} }} {inner} }}", ramp)
+        self.assertEqual(ramp.count("te_jmap_selector = "), len(self.rows))
+        self.assertEqual(sorted(s["name"] for s in self.rows if self.gen.pick_ramp(s) == self.gen.RAMP_DIV),
+                         ["comfort", "comfort_base", "growth", "mig", "natural", "sex", "tfr", "wc"])
+
+    def test_the_ramp_reads_the_factor_the_map_s_own_lerp_reads(self):
+        pick = " ".join(block(self.generated, "te_jmap_pick_factor").split())
+        for scale in self.rows:
+            own = {re.sub(r"_(lower|upper)$", "", f) for _limit, body in self.of(self.colors[12:], scale["sel"])
+                   for f in re.findall(r"factor = (\w+)", body)}
+            with self.subTest(map=scale["name"]):
+                self.assertEqual(own, {f"te_jmap_{scale['name']}_factor"})
+                self.assertIn(f"if = {{ limit = {{ te_jmap_selector = {scale['sel']} }} value = "
+                              f"te_jmap_{scale['name']}_factor }}", pick)
+        self.assertEqual(pick.count("te_jmap_selector = "), len(self.rows))
+
+    def test_a_factor_is_read_a_quarter_at_a_time(self):
+        for n in range(1, 5):
+            start = (n - 1) / 4
+            want = "value = te_jmap_pick_factor " + (f"subtract = {start:g} " if start else "") + "multiply = 4 min = 0 max = 1"
+            self.assertEqual(" ".join(block(self.generated, f"te_jmap_pick_q{n}").split()), want)
+        # the paint's ladder and the quarters, against the generator's reference, the midpoint included
+        for i in range(0, 1001):
+            f = i / 1000
+            branch = next((n + 1 for n in range(3) if f < 0.25 * (n + 1)), 4)
+            along = min(max((f - (branch - 1) / 4) * 4, 0), 1)
+            self.assertEqual((branch, round(along, 9)), tuple(round(x, 9) for x in self.gen.ramp_lerp(f)), f)
+        # a map with a meaningful midpoint: just under it the last of the lower side's color, at it the upper side's
+        # first, and the two are the same near white
+        self.assertEqual(self.gen.ramp_lerp(0.5), (3, 0))
+        self.assertLess(self.apart(self.lab(self.rgb("te_jmap_cb_div_mid_low")), self.lab(self.rgb("te_jmap_cb_div_mid_high"))), 3)
+
+    def test_a_state_painted_below_its_scale_is_one_color_off_the_ramp(self):
+        # every flat color a fitted map's own branches paint is "none", "no data", or below the scale; the last
+        # are what te_jmap_pick_below gathers, each in its map's own ladder order
+        below = {}
+        for scale in self.rows:
+            before = []
+            for limit, body in self.of(self.colors[12:], scale["sel"]):
+                lines = [ln for ln in self.lines(limit) if ln != f"te_jmap_selector = {scale['sel']}"]
+                color = re.fullmatch(r'value = "(\w+)"', body)
+                if color and color.group(1) not in ("te_jmap_none", "te_jmap_no_data"):
+                    below[scale["sel"]] = (color.group(1), before + lines)
+                before += [f"NOT = {{ {ln} }}" if not ln.endswith(" = yes") else ln[:-3] + "no" for ln in lines
+                           if not ln.startswith("has_variable = ") and not re.fullmatch(r"te_jmap_\w+_factor < 0\.5", ln)]
+        self.assertEqual({sel: color for sel, (color, _) in below.items()}, {18: "te_jmap_gw_removal", 34: "te_jmap_hq_loss"})
+        trigger = " ".join(block(code(TRIGGERS), "te_jmap_pick_below").split())
+        self.assertEqual(trigger, "OR = { AND = { te_jmap_selector = 34 has_variable = te_jmap_hq_n NOT = { te_jmap_hq_profit > 0 } } "
+                         "AND = { te_jmap_selector = 18 te_jmap_gw_no_data = no te_jmap_gw_removal = yes } }")
+        self.assertEqual(below[34][1], ["NOT = { te_jmap_hq_profit > 0 }", "has_variable = te_jmap_hq_n"])
+        self.assertEqual(below[18][1], ["te_jmap_gw_no_data = no", "te_jmap_gw_removal = yes"])
+
+    # ---- the ramps ----
+    def test_the_stops_are_the_published_ones(self):
+        for name, published in self.SEQ + self.DIV_LOW + self.DIV_HIGH + self.GREY + (self.BELOW,):
+            with self.subTest(color=name):
+                for mine, theirs in zip(self.rgb(name), self.hex_rgb(published)):
+                    self.assertLessEqual(abs(mine - theirs), 3 / 255, "a whole hsv360 within a step or two of the hex")
+        # the diverging ramp's middle is written once a side, with that side's hue, so a mix in HSV doesn't sweep
+        for stops in (self.DIV_LOW, self.DIV_HIGH):
+            self.assertEqual(self.named[stops[1][0]][0], self.named[stops[0 if stops is self.DIV_HIGH else 2][0]][0])
+        self.assertEqual(len({self.named[name][0] for name, _ in self.GREY}), 1)
+        text = read(COLORS)
+        for source in ("ColorBrewer 2.0", "YlOrBr", "PuOr", "Greys", "Tableau's Color Blind 10", "colorbrewer2.org"):
+            self.assertIn(source, text)
+
+    def test_the_ramps_hold_under_each_color_vision_and_in_grey(self):
+        special = {name: self.rgb(name) for name in ("te_jmap_outside", "te_jmap_no_data", "te_jmap_none")}
+        for mix in ("rgb", "hsv"):
+            runs = {"seq": self.run_of(self.SEQ, mix), "low": self.run_of(self.DIV_LOW, mix),
+                    "high": self.run_of(self.DIV_HIGH, mix), "grey": self.run_of(self.GREY, mix)}
+            for vision in self.VISION:
+                labs = {key: [self.lab(c, vision) for c in run] for key, run in runs.items()}
+                near = lambda run, name: min(self.apart(p, self.lab(special[name], vision)) for p in labs[run])
+                with self.subTest(mix=mix, vision=vision):
+                    # lightness never turns: low to high darkens, and each side of a midpoint darkens away from it
+                    for key, down in (("seq", True), ("low", False), ("high", True), ("grey", True)):
+                        steps = [b[0] - a[0] for a, b in zip(labs[key], labs[key][1:])]
+                        self.assertTrue(all(s < 0.5 for s in steps) if down else all(s > -0.5 for s in steps), key)
+                    # a stop is told from the next (9 mixes a lerp: every 8th point is a stop)
+                    for key in ("seq", "low", "high"):
+                        self.assertGreaterEqual(min(self.apart(a, b) for a, b in zip(labs[key][::9], labs[key][9::9])), 15)
+                    # nothing on a ramp is taken for slate, for "no data" or for "none"
+                    self.assertGreaterEqual(near("seq", "te_jmap_outside"), 40)
+                    self.assertGreaterEqual(near("seq", "te_jmap_no_data"), 40)
+                    self.assertGreaterEqual(near("seq", "te_jmap_none"), 12)
+                    for side in ("low", "high"):     # a midpoint map has no "none"
+                        self.assertGreaterEqual(near(side, "te_jmap_outside"), 18)
+                        self.assertGreaterEqual(near(side, "te_jmap_no_data"), 10)
+                    # the two sides of a midpoint are told apart, the same distance out (from each end to three
+                    # quarters of the way in: at the midpoint itself they are one color)
+                    arms = min(self.apart(a, b) for a, b in zip(labs["low"][:-4], labs["high"][::-1][:-4]))
+                    self.assertGreaterEqual(arms, 19)
+                    # a loss and a removal: the maps' own red and green sit too near the ramp for some eyes, the
+                    # one color they take instead far from it and from every other flat color
+                    below = self.lab(self.rgb("te_jmap_cb_below"), vision)
+                    self.assertGreaterEqual(min(self.apart(p, below) for p in labs["seq"]), 50)
+                    for name in special:
+                        self.assertGreaterEqual(self.apart(below, self.lab(special[name], vision)), 25, name)
+            # (the own red at a loss is within 5 of the ramp for an eye with no S cones, within 13 with no M)
+            loss = self.rgb("te_jmap_hq_loss")
+            self.assertLess(min(self.apart(self.lab(c, "tritan"), self.lab(loss, "tritan")) for c in runs["seq"]), 6)
+        # Greyscale stops well short of slate, in lightness alone
+        dark = self.lab(self.rgb("te_jmap_grey_high"))[0]
+        self.assertGreaterEqual(dark - self.lab(self.rgb("te_jmap_outside"))[0], 25)
+        self.assertEqual(self.named["te_jmap_grey_high"][1], 0)
+
+    # ---- the rows and the two lines ----
+    def test_the_color_row(self):
+        section = block(code(WIDGETS), "te_jmap_options")
+        body = enclosing(section, re.search(r"\bte_jmap_category\s*=\s*\{", section).end())
+        row = body[body.index('text = "te_jmap_options_color"'):body.index('text = "te_jmap_options_measured"')]
+        self.assertEqual(re.findall(r'text = "te_jmap_color_(\w+)"', row), ["own", "safe", "grey"])
+        self.assertEqual(row.count("te_jmap_option_button = {"), 3)
+        self.assertNotIn("size = {", row, "the option button's own 150")
+        self.assertLessEqual(3 * 150 + 2 * 4, 470)
+        values = loc_values()
+        # the default has one name, whichever row it is on
+        self.assertEqual(values["te_jmap_color_own"], "$te_jmap_scale_own$")
+        self.assertEqual(values["te_jmap_scale_own"], "Map Default")
+        self.assertEqual((values["te_jmap_color_safe"], values["te_jmap_color_grey"]), ("Colorblind-Safe", "Grayscale"))
+        # nothing of the look can be checked here: the play-test list says what to look at, and what to do instead
+        check = next(line for line in read(PLAYTEST).splitlines() if line.startswith("| 31 | Map Options: Color"))
+        for words in ("Colorblind-Safe", "Grayscale", "GDP per Capita", "Fertility", "Company HQs", "All defaults",
+                      "Odd hues between two stops", "Stripes missing under Grayscale", "Grayscale should mark the midpoint"):
+            self.assertIn(words, check)
+
+    def custom_text(self, name, options, depth=0):
+        """A custom localization's text under `options`, its own splices and custom localizations resolved."""
+        self.assertLess(depth, 6)
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        values = loc_values()
+        for text in re.finditer(r"text\s*=\s*\{", block(custom, name)):
+            entry_body = enclosing(block(custom, name), text.end())
+            trigger = block(entry_body, "trigger")
+            if trigger is None or self.holds(" ".join(trigger.split()), options):
+                key = re.search(r"localization_key\s*=\s*(\w+)", entry_body).group(1)
+                return self.resolve(values[key], options, depth)
+        self.fail(f"{name}: no text")
+
+    def resolve(self, text, options, depth):
+        values = loc_values()
+        text = re.sub(r"\$(te_jmap_\w+)\$", lambda m: self.resolve(values[m.group(1)], options, depth + 1), text)
+        return re.sub(r"\[GetPlayer\.GetCustom\('(\w+)'\)\]", lambda m: self.custom_text(m.group(1), options, depth + 1), text)
+
+    def holds(self, trigger, options):
+        m = re.fullmatch(r"OR = \{ (.*) \}", trigger)
+        parts = re.findall(r"(te_jmap_\w+) (=|>) (\d+)", m.group(1) if m else trigger)
+        self.assertTrue(parts, trigger)
+        results = [(options[name] == int(n)) if op == "=" else (options[name] > int(n)) for name, op, n in parts]
+        return any(results) if m else all(results)
+
+    def test_the_header_and_the_line_name_only_what_is_off_its_default(self):
+        values = loc_values()
+        self.assertEqual(values["te_jmap_options_now"], "[GetPlayer.GetCustom('te_jmap_now')]")
+        short = {"te_jmap_area": "Market", "te_jmap_trim": "Keep All", "te_jmap_scale": "Log", "te_jmap_color": "Colorblind"}
+        full = dict(short, te_jmap_scale="Logarithmic", te_jmap_color="Colorblind-Safe")
+        names = dict(values)
+        for area, trim, scale, color in __import__("itertools").product((0, 2), (0, 1), (0, 2), (0, 1)):
+            options = {"te_jmap_area": area, "te_jmap_trim": trim, "te_jmap_scale": scale, "te_jmap_color": color,
+                       "te_jmap_continent": 0}
+            options["te_jmap_options_set"] = int(any((area, trim, scale, color)))
+            on = [key for key in ("te_jmap_area", "te_jmap_trim", "te_jmap_scale", "te_jmap_color") if options[key]]
+            header = self.resolve(values["te_jmap_options_now"], options, 0).replace("$concept_market$", "Market")
+            line = self.resolve(values["te_jmap_options_in_use"], options, 0).replace("$concept_market$", "Market")
+            with self.subTest(set=on):
+                self.assertEqual(header, ", ".join(short[key] for key in on) if on else "All defaults")
+                # the line shows only while something is set, and names the same options in full
+                self.assertEqual(line, "Map options in use: #b " + ", ".join(full[key] for key in on) + "#!")
+        del names
+        # at its longest the header's summary is 43 characters, "North America, Keep All, Ranked, Colorblind": about
+        # 302 px in the page's font (EBGaramond 17) where the 470-wide header leaves about 296 beside its title at
+        # full size and about 338 with the title at its smallest (measured against the game's fonts, 2026-11-14)
+        longest = max(len(", ".join((a, t, c, k))) for a in ("North America", "South America", "Power Bloc")
+                      for t in ("Keep All", "Trim 5%") for c in ("Linear", "Log", "Ranked") for k in ("Colorblind", "Gray"))
+        self.assertLessEqual(longest, 43)
+        self.assertEqual((values["te_jmap_scale_short_log"], values["te_jmap_color_short_safe"],
+                          values["te_jmap_color_short_grey"], values["te_jmap_now_none"]),
+                         ("Log", "Colorblind", "Gray", "All defaults"))
+        self.assertNotIn("te_jmap_scale_short_own", values)
+        self.assertNotIn("te_jmap_trim_short_default", values)
+
+
+class PickTooltipTest(_RoomBranches, unittest.TestCase):
+    """No tooltip describes a curve or a color that isn't the one in force (owner, 2026-11-14). A fitted pick's
+    tooltip is four lines: what the map shows, with no word of a curve, a color or a range; the range now; the
+    scale, in the map's own curve's words under Map Default and the scale in force's otherwise; and the colors, the
+    map's own under Map Default and the palette in force's otherwise. The own curve's words are the generator's,
+    from the knots the curve is written from."""
+
+    # words for a curve's shape, and for a color: none belongs in what a map shows
+    CURVE = ("half the color", "two-thirds", "most of the color", "halfway", "first fifth", "first third",
+             "for each doubling", "of that span", "of the color", "straight")
+    COLORS = ("red", "green", "blue", "yellow", "orange", "purple", "violet", "brown", "cream", "rust", "teal", "plum",
+              "rose", "magenta", "amber", "oxblood", "gray", "grey", "pale", "gold", "navy", "khaki", "olive", "straw",
+              "sand", "bronze", "lilac", "aqua", "aubergine", "brick", "white", "dark", "light", "striped", "stripes")
+
+    def setUp(self):
+        super().setUp()
         import importlib.util
         spec = importlib.util.spec_from_file_location(
             "gen_journal_map_scales", os.path.join(REPO, "scripts", "generators", "gen_journal_map_scales.py"))
@@ -1477,38 +1846,120 @@ class ScaleTooltipTest(unittest.TestCase):
                 out[m.group(1)] = scale
         return out
 
-    def test_a_fitted_pick_shows_its_own_description_only_under_its_own_curve(self):
+    @staticmethod
+    def select(option, own, other):
+        return (f"[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{option}'), "
+                f"'(CFixedPoint)0' ), '{own}', '{other}' )]")
+
+    def variant(self, scale):
+        """Which of the palette-in-force texts a map takes, by what its paint can show besides its ramp."""
+        if scale["world"]["kind"] == "mid":
+            return "_mid"
+        flat = {c for _limit, body in self.of(self.colors, scale["sel"]) for c in re.findall(r'^value = "(\w+)"$', body)}
+        if "te_jmap_hq_loss" in flat:
+            return "_hq"
+        if "te_jmap_gw_removal" in flat:
+            return "_gw"
+        return "_none" if "te_jmap_none" in flat else ""
+
+    def test_every_pick_has_one_tooltip(self):
         picks = self.picks()
         self.assertEqual(len(picks), 35)
-        everything = set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))
-        for key in sorted(everything):
-            plain = f'tooltip = "{key}_desc"'
-            with self.subTest(pick=key):
-                if key in picks:
-                    self.assertNotIn(plain, self.row)
-                    self.assertIn(f"'{key}_desc', '{key}_scaled' )]\"", self.row)
-                else:
-                    # a map of categories or on a fixed scale: the option can't change it, and its text stands
-                    self.assertIn(plain, self.row)
-                    self.assertNotIn(f"{key}_scaled", self.values)
+        for key in sorted(set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))):
+            self.assertIn(f'tooltip = "{key}_desc"', self.row, key)
+        self.assertNotIn("SelectLocalization", self.row, "a pick's tooltip chooses its own parts")
+        self.assertEqual([k for k in self.values if re.fullmatch(r"te_jmap_pick_\w+_scaled", k)], [])
 
-    def test_the_scaled_tooltip_names_the_scale_in_force_and_the_range(self):
-        kinds = {"frac": "$te_jmap_scale_in_force$", "doubling": "$te_jmap_scale_in_force_doubling$",
-                 "mid": "$te_jmap_scale_in_force_mid$"}
+    def test_a_fitted_pick_s_tooltip_is_true_under_every_scale_and_color(self):
+        kinds = {"frac": "te_jmap_scale_in_force", "doubling": "te_jmap_scale_in_force_doubling",
+                 "mid": "te_jmap_scale_in_force_mid"}
         for key, scale in self.picks().items():
-            text, n = self.values[f"{key}_scaled"], scale["name"]
+            lines, n = self.values[f"{key}_desc"].split("\\n"), scale["name"]
             with self.subTest(pick=key):
-                self.assertTrue(text.startswith(f"#b ${key}$#!\\n{kinds[scale['world']['kind']]}\\n"
-                                                "$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), text)
-                # the same two figures as its own description, in the same formats
-                own = self.values[f"{key}_desc"]
-                for end in ("lo", "hi"):
-                    figure = re.search(r"\[GetPlayer\.MakeScope\.ScriptValue\('te_jmap_" + n + "_" + end +
-                                       r"'\)\|[^\]]*\]", own).group(0)
-                    self.assertIn(figure, text)
-                self.assertTrue(text.endswith("$te_jmap_measured_trim$"))
+                self.assertEqual(len(lines), 4)
+                what, rng, curve, colors = lines
+                # what it shows: nothing a scale or a palette could make untrue
                 for words in self.CURVE:
-                    self.assertNotIn(words, text, "a curve the scale in force doesn't draw")
+                    self.assertNotIn(words, what)
+                for word in self.COLORS:
+                    self.assertNotRegex(what, r"(?i)\b" + word + r"\b")
+                self.assertNotIn("ScriptValue", what, "the range has its own line")
+                self.assertTrue(what.startswith("Color each state "), what)
+                # the range now: the two figures, what leads them (Ranked reads no range) and what is left out
+                self.assertTrue(rng.startswith("$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), rng)
+                self.assertTrue(rng.endswith("$te_jmap_measured_trim$"), rng)
+                for end in ("lo", "hi"):
+                    self.assertIn(f"ScriptValue('te_jmap_{n}_{end}')", rng)
+                # the scale: the map's own curve under Map Default, the scale in force otherwise
+                self.assertEqual(curve, self.select("te_jmap_scale", self.gen.curve_key(scale), kinds[scale["world"]["kind"]]))
+                # the colors: the map's own under Map Default, the palette in force otherwise
+                self.assertEqual(colors, self.select("te_jmap_color", f"{key}_colors",
+                                                     "te_jmap_color_in_force" + self.variant(scale)))
+                own = self.values[f"{key}_colors"]
+                self.assertTrue(own.startswith("$te_jmap_color_text_own$ "), own)
+                if scale["world"]["kind"] == "mid":
+                    self.assertNotIn("low end", own, "a midpoint map's colors are told by the midpoint")
+                else:
+                    self.assertRegex(own, r"From [a-z -]+ at the low end (through [a-z]+ halfway )?to [a-z -]+ at the high\.")
+                    self.assertEqual("halfway" in own, scale["three"], "a three-color map names its middle color")
+                for mark, word in (("_none", " is pale."), ("_hq", "A loss is red"), ("_gw", "is green")):
+                    self.assertEqual(word in own, self.variant(scale) == mark, f"{word!r} in {own!r}")
+        self.assertEqual(self.values["te_jmap_color_text_own"], "$te_jmap_color$: #b $te_jmap_color_own$#!.")
+        self.assertEqual(self.values["te_jmap_scale_text_own"], "$te_jmap_scale$: #b $te_jmap_scale_own$#!.")
+
+    def test_the_own_curve_s_words_are_the_generator_s(self):
+        rows = list(self.picks().values())
+        keys = {self.gen.curve_key(s): self.gen.curve_words(s) for s in rows}
+        self.assertEqual(sorted(k for k in self.values if k.startswith("te_jmap_curve_")), sorted(keys))
+        for key, words in keys.items():
+            self.assertEqual(self.values[key], "$te_jmap_scale_text_own$ " + words, key)
+        # and the knots mean what the words say: the color a curve has reached at its knee, on its default range
+        for scale in rows:
+            w = scale["world"]
+            lo, hi = w["default"]
+            with self.subTest(map=scale["name"]):
+                if w["kind"] == "frac" and len(w["knots"]) == 3:
+                    x, y = w["knots"][1]
+                    self.assertAlmostEqual(self.gen.world_factor(scale, lo, hi, lo + x * (hi - lo)), y, places=6)
+                    self.assertIn(f"first {self.gen._share(x, True)} of the range", self.gen.curve_words(scale))
+                elif w["kind"] == "mid":
+                    for side, end, sign in (("lower", lo, -1), ("upper", hi, 1)):
+                        if len(w[side]) == 3:
+                            x, y = w[side][1]
+                            at = w["mid"] + x * (end - w["mid"])
+                            self.assertAlmostEqual(self.gen.world_factor(scale, lo, hi, at), 0.5 + sign * y / 2, places=6)
+        self.assertEqual(self.gen._share(0.2, True), "fifth")
+        self.assertEqual((self.gen._share(0.5), self.gen._share(2 / 3), self.gen._share(0.3684)), ("half", "two-thirds", "37%"))
+
+    def test_each_kind_of_map_has_its_palette_s_words(self):
+        custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")
+        for variant in ("", "_none", "_hq", "_gw", "_mid"):
+            body = " ".join(block(custom, f"te_jmap_color_text{variant}").split())
+            self.assertIn(f"trigger = {{ te_jmap_color = 1 }} localization_key = te_jmap_color_text{variant}_safe", body)
+            self.assertTrue(body.endswith(f"text = {{ localization_key = te_jmap_color_text{variant}_grey }}"), body)
+            self.assertEqual(self.values[f"te_jmap_color_in_force{variant}"],
+                             f"[GetPlayer.GetCustom('te_jmap_color_text{variant}')]")
+            safe, grey = self.values[f"te_jmap_color_text{variant}_safe"], self.values[f"te_jmap_color_text{variant}_grey"]
+            self.assertTrue(safe.startswith("$te_jmap_color$: #b $te_jmap_color_safe$#!. "), safe)
+            self.assertTrue(grey.startswith("$te_jmap_color$: #b $te_jmap_color_grey$#!. "), grey)
+            # the ramps as the colors file has them, and what Greyscale stripes
+            if variant == "_mid":
+                self.assertIn("Orange below the midpoint, near white at it, purple above", safe)
+                self.assertIn("The midpoint sits at the middle gray", grey)
+            else:
+                self.assertIn("Pale yellow at the low end to brown at the high.", safe)
+            self.assertIn("Light gray at the low end to dark gray at the high.", grey)
+            self.assertIn("striped", grey)
+            self.assertNotIn("striped", safe)
+            self.assertEqual("is blue" in safe, variant in ("_hq", "_gw"), "a loss and a net removal are blue")
+            self.assertEqual("with none" in safe + grey, variant == "_none")
+        # under Greyscale a stripe says one thing, so the regional headquarters' gold stripes stand down
+        stripes = dict(branches_of(block(self.room, "map_color_second")))
+        self.assertEqual([limit for limit in stripes if "te_jmap_hq_regional" in stripes[limit]],
+                         ["te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n te_jmap_color < 2"])
+        self.assertIn("regional headquarters are not marked", self.values["te_jmap_color_text_hq_grey"])
+        # and the hover's line names them without the stripes, which aren't always there
+        self.assertTrue(self.values["te_jmap_tt_hq_regional"].startswith("Regional headquarters here: "))
 
     def test_each_kind_of_map_has_its_scale_s_words(self):
         custom = code("common/customizable_localization/te_journal_map_custom_loc.txt")

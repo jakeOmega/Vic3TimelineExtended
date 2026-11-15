@@ -29,6 +29,25 @@ te_jmap_in_area = {
 	NOT = { has_variable = te_jmap_out }
 }
 
+# The Color option (2026-11-14): a state its map paints apart from its scale, because its figure is below any the
+# scale holds: Company Headquarters at a loss (the map's own red) and Emissions where a state takes more out of the
+# air than it puts in (its own green). Under the colorblind-safe colors both take one color off the ramp. State
+# scope; each line is its map's own branch, in the paint's order.
+te_jmap_pick_below = {
+	OR = {
+		AND = {
+			te_jmap_selector = 34
+			has_variable = te_jmap_hq_n
+			NOT = { te_jmap_hq_profit > 0 }
+		}
+		AND = {
+			te_jmap_selector = 18
+			te_jmap_gw_no_data = no
+			te_jmap_gw_removal = yes
+		}
+	}
+}
+
 # The continents, each a list of strategic regions, every land region in exactly one (test_journal_map_modes.py,
 # AreaTest, holds every state region to one continent). They follow vanilla's regions, so: the Middle East, the
 # Caucasus south of the main ridge, Siberia and New Guinea are in Asia; Russia west of the Urals, Iceland and Greenland
