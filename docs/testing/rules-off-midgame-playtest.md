@@ -75,19 +75,37 @@ Setup: a dedicated monument and a construction site.
 
 Setup: the Ministry of Culture, program funding raised, one program (World Exposition) running.
 
-1. **The entry closes** within a week; the hegemony and program modifiers are gone.
+1. **The entry closes** within a week; the hegemony and program modifiers are gone. Its concluded page names both
+   reasons (switched off, or to Late Unlock before any country had Mass Media) and says it comes back, wrapped in full.
 2. **Programs are shut down** (funding 0, no program variable), and no movement carries the hegemon's model pressure
    (`ch_remove_hegemon_model_pressure`).
-3. **Switched back on**, the entry does not return in this game (nothing re-adds it).
+3. **Switched back on**, the entry is back within two months for every country with Romanticism once some country
+   has Mass Media (the Electric Telegraph under *Early Unlock*), programs at 0 (2026-11-15; before then it did not
+   return). The net waits a month first (`ch_entry_net_waiting`), so the first month after the switch shows nothing.
+   `debug.log` then has a `TE_CH_ENTRY adding … ended_before=yes on=1 …` line for each, written just before the add,
+   and a month later `TE_SELF_CHECK OK ch_entry_return` (Self-checks).
 
 ## World War
 
 Setup: World War on, two great powers of opposed ideologies, the entry in its leadup or a world war under way.
 
-1. **The entry closes** within a week; Rising Tensions and the button modifiers are gone.
+1. **The entry closes** within a week; Rising Tensions and the button modifiers are gone. Its concluded page names both
+   reasons (switched off, or to Late Unlock before Combined Arms), says it won't return after a switch off and returns
+   at Combined Arms after a switch to Late Unlock, wrapped in full.
 2. **Variables clear** within a month on every belligerent, the war's target and late joiners included
    (`world_war_events_on_action`).
 3. **A war under way** carries on as an ordinary war; no peace-conference event fires.
+4. **Switched back on**, the entry does not return in this game (nothing re-adds an entry ended on the rule; a return
+   was tried for #1823 and taken out, since after a world war it would restart the leadup: `game_rules.md`, the nets
+   note; #1826).
+5. **A quick off and on** during a world war or its three-year aftermath: switch the rule off, then on again before a
+   month has passed. The monthly sweep clears the war's variables from a country without the entry (the war's target,
+   late joiners) only on that country's pulse while the rule reads off. A month later, no country should still hold
+   `ww_peace_concluded` or `ww_active_phase` (`scripts/analysis/save_country_probe.py <save> --var "^ww_"`). One left
+   over blocks something for the rest of the game without a log line: a stale `ww_peace_concluded` stops every later
+   return through `world_war_events_on_action` (a great power switched early to late waiting for Combined Arms), and a
+   stale `ww_active_phase` stops every later world war (`world_war_conditions_met`). Not seen yet in a game; whether
+   such entry-less holders occur in ordinary play is unknown.
 
 ## Colonial Empire (Decolonization)
 
@@ -105,10 +123,32 @@ Setup: a great power with colonies, the entry running, a pressure band reached (
 
 Setup: funding at 1 or more, two operations running (one hostile), an agent network built.
 
-1. **The entry closes** within a week; funding reads 0.
+1. **The entry closes** within a week; funding reads 0. Its concluded page reads, in full and wrapped, not cut off:
+   "The journal entry ended, and every operation with it, when the Covert Warfare game rule was switched off, or was
+   switched to Late Unlock before Mainframe Computers, Cyber Warfare or the … law. It comes back within two months once
+   the rule is on and the conditions to open it are met." (reworded 2026-11-15: the old line was wrong on the
+   early-to-late branch).
 2. **Operations end** within days, each by its pact breaking (no infamy, no exposure event).
 3. **Networks are gone**: the agent-network map is empty, and the Space Race's intelligence tier reads none.
-4. **Switched back on**, the entry does not return in this game.
+4. **Switched back on** (2026-11-15; before then it did not return), within two months the entry is back for every
+   country whose setting's gate is met (Mainframe Computers, Cyber Warfare or the ministry law under *Late Unlock*,
+   Central Archives under *Early Unlock*): funding 0, no operations, no networks, Tradecraft as it was. The net waits a
+   month first (`iw_entry_net_waiting`), so the first month after the switch shows nothing. `debug.log` has one
+   `TE_COVERT_ENTRY ended branch=rule_off` line per country from the switch off, then one
+   `TE_COVERT_ENTRY adding … ended_before=yes on=1 …` line per country, written just before the add. A month after the
+   adds, `TE_SELF_CHECK OK covert_entry_return` (Self-checks).
+5. **Not back every month.** Play two more months after item 4: no further `TE_COVERT_ENTRY ended` line, and the
+   journal holds one running Covert Warfare entry, not a new one each month (the Workshop report of 2026-11-15:
+   `covert_warfare.md`, Coming back). An `ended` / `adding` pair for one country, then a BROKEN line, is the report's loop:
+   copy those lines, with their `branch=` and `on=`/`late=`/`early=`/`off=` fields, into the report.
+6. **A game begun with the rule off**, switched to *Late Unlock* later: within two months every country with a late
+   source holds the entry (`ended_before=no` on its line).
+7. **A double switch inside a month.** In a game begun with the rule off, switch to *Early Unlock*. Just after the
+   net's `adding` lines for the countries with Central Archives, switch to *Late Unlock* (those entries end,
+   `branch=early_to_late`), then back to *Early Unlock* before the next monthly pulse. At that pulse: one
+   `TE_SELF_CHECK BROKEN covert_entry_return … strike=1` line per such country, and no hold; a month later the entry is
+   back for each, with a second `adding` line, and the month after that one OK line (once a game). A `strike=2` line
+   here would mean the escalation is not working (Self-checks).
 
 ## Nuclear Weapons
 
@@ -209,4 +249,6 @@ under its "Switched off mid-game" note.
 
 | Self-check | OK means | BROKEN means, and the fallback |
 |---|---|---|
+| `covert_entry_return` (Covert Warfare, items 4 to 7; per add, OK once a game, logged by the monthly pass after the net added the entry) | the entry the net added last month is running: `add_journal_entry` brought it back and the outcome did not end it again | the entry is not running though the country is still due it: it ended at once (read the `TE_COVERT_ENTRY ended` line before it, whose `branch=` and `on=`/`late=`/`early=`/`off=` fields say what the outcome read; `branch=neither`, or `on=0` beside the BROKEN line's `on=1`, is a rule read that differs between an outcome and an on_action, and two settings at 1 a setting name no rule file defines), or the add failed (no `ended` line between the `adding` line and BROKEN). A first BROKEN (`strike=1`) marks the country for 400 days (`iw_entry_net_strike`) and the net tries again; a second while the mark stands (`strike=2`) holds the net off it for a year (`iw_entry_net_hold`), so the loop the Workshop player saw slows from monthly to twice in sixteen months, and a player's quick double switch (item 7) gives one `strike=1` and no hold. The fallback is the owner's: what the fields show decides it (`covert_warfare.md`, Coming back) |
+| `ch_entry_return` (Cultural Hegemony, item 3; as above) | the entry the net added last month is running | as `covert_entry_return`, for `je_cultural_hegemony` (`ch_entry_net_strike`, `ch_entry_net_hold`), with the same `strike=` and `on=`/`late=`/`early=`/`off=` fields and `late_gate` (some country has Mass Media); its outcome writes no line of its own, so the BROKEN line's fields are the reading |
 | `mon_rule_switch_treaties` (Banking: Full to Simplified, row 6; logged once a game, one to two months after the switch, by a country that held a swap line, guarantee or receivership on its last Full pulse) | the country stands in none of the three articles any more: the `te_mon_full_system` requirement ended it | the article is still in force: the engine does not end an in-force article on a failed requirement, or not this soon. Script has no penalty-free way to end one article (`withdraw` is a treaty effect, and inside the binding period it is a break), so the fallback is the owner's: withdraw the treaty from `te_monetary_leave_full_system` (step 4) and accept what that charges, or leave the articles in force with their mechanics stopped, as before #1507. The same if row 6 shows a penalty |

@@ -38,8 +38,12 @@ Central Archives early.
 6. **The cap lifts at the late gate.** Console-research Mainframe Computers (or enact the Ministry of Intelligence and
    Security): the stepper goes past 2, and the AI's great powers fund at 3 again within a month.
 7. **Early to late, mid-game.** With an early entry running two operations and no late source, switch the rule to *Late
-   Unlock*: within a week the entry is gone, the operations end (funding 0) and the agent networks are cleared. Research
-   Mainframe Computers: within a month the entry is back, at funding 0, Tradecraft kept.
+   Unlock*: within a week the entry is gone, the operations end (funding 0) and the agent networks are cleared, and
+   `debug.log` has `TE_COVERT_ENTRY ended branch=early_to_late … on=1 late=1 early=0 off=0 opened_early=1 late_source=0`.
+   Research Mainframe Computers: within two months the entry is back (the net waits a month first), at funding 0,
+   Tradecraft kept, with a `TE_COVERT_ENTRY adding … ended_before=yes` line just before. Before Mainframe Computers it
+   does not come back at all, not once a month: the late setting's gate, `covert_warfare_entry_unlocked`, holds it back
+   until a late source.
 8. **Late to early, mid-game.** In a game started on *Late Unlock*, switch to *Early Unlock*: countries with Central
    Archives open the entry within a week, capped as in 2. A country that had the entry before keeps it uncapped while
    it still holds a late source.
@@ -49,7 +53,11 @@ Central Archives early.
    Professional needs …", and operations keep running at the lower level. With one of the four technologies as well,
    nothing changes.
 9. **Late unlock is unchanged.** A game on *Late Unlock* (or a save from before this change, which reads as it): no
-   entry before Mainframe Computers or the Ministry, and funding goes to 5.
+   entry before Mainframe Computers or the Ministry, and funding goes to 5. *Settled offline for what the save holds
+   (2026-11-15): a save names each rule's setting, not its position. The owner's Singapore campaign, begun under the
+   two-setting rule, still names `covert_warfare_enabled` and `world_war_disabled` in saves written under the
+   three-setting file (1947, 1958), with 241 to 249 active entries and no `iw_opened_early` anywhere. So a save from
+   before keeps Late Unlock, and World War stays off where it was off.*
 
 ## World War
 
@@ -141,7 +149,7 @@ Electric Telegraph for any country.
    No event about radio, film or broadcasts fires before Mass Media; The World Is Watching (`.8`) and The Touring
    Collection (`.10`) can.
 3. **Early to late, mid-game.** With the entry open and no country holding Mass Media, switch to *Late Unlock*: within
-   a week the entry is gone and its programs end. Console-research Mass Media for some country: within a month the entry
-   is back.
+   a week the entry is gone and its programs end. Console-research Mass Media for some country: within two months the
+   entry is back (the net waits a month first), with a `TE_CH_ENTRY adding … ended_before=yes` line just before.
 4. **Late unlock is unchanged.** On *Late Unlock* (or a save from before this change): no entry before some country has
    Mass Media, and International Cultural Outreach needs Mass Media.
