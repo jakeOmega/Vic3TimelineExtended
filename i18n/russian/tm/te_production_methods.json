@@ -3,13 +3,113 @@
   "en": "3D Printed Buildings",
   "ru": "Здания, напечатанные на 3D-принтере"
  },
+ "pm_3d_printed_porcelain": {
+  "en": "3D Printed Porcelain",
+  "ru": "Фарфор, напечатанный на 3D-принтере"
+ },
+ "pm_ablative_rockets": {
+  "en": "Ablative Rockets",
+  "ru": "Абляционные ракеты"
+ },
+ "pm_academic_computing": {
+  "en": "Academic Computing",
+  "ru": "Академические вычисления"
+ },
+ "pm_active_protection_systems": {
+  "en": "Active Protection Systems",
+  "ru": "Системы активной защиты"
+ },
+ "pm_advanced_am_fabrication": {
+  "en": "Advanced AM Fabrication",
+  "ru": "Передовое аддитивное производство"
+ },
+ "pm_advanced_assembly_lines_building_arms_industry": {
+  "en": "Advanced Assembly",
+  "ru": "Передовая сборка"
+ },
+ "pm_advanced_assembly_lines_building_furniture_manufactory": {
+  "en": "Advanced Assembly Lines",
+  "ru": "Передовые сборочные линии"
+ },
+ "pm_advanced_company_shipbuilding": {
+  "en": "Advanced Shipbuilding",
+  "ru": "Передовое судостроение"
+ },
+ "pm_advanced_company_shipbuilding_desc": {
+  "en": "The yard adopts magnetic drive shipbuilding methods, producing the most advanced ships afloat. Heavy electrification and electronic-component supply chains are required.",
+  "ru": "Верфь осваивает методы постройки судов с магнитным приводом, выпуская самые передовые корабли на плаву. Требуются мощная электрификация и цепочки поставок электронных компонентов."
+ },
+ "pm_advanced_composite_armor": {
+  "en": "Advanced Composite Armor",
+  "ru": "Передовая композитная броня"
+ },
  "pm_advanced_construction": {
   "en": "Advanced Construction",
   "ru": "Передовое строительство"
  },
+ "pm_advanced_emissions_control": {
+  "en": "Advanced Emissions Control",
+  "ru": "Передовой контроль выбросов"
+ },
+ "pm_advanced_material_fibers": {
+  "en": "Advanced Material Fibers",
+  "ru": "Волокна из передовых материалов"
+ },
+ "pm_advanced_metamaterials_shipbuilding": {
+  "en": "Advanced Metamaterials Shipbuilding",
+  "ru": "Судостроение на передовых метаматериалах"
+ },
  "pm_advanced_ocean_mine": {
   "en": "Advanced Deep-Sea Mining",
   "ru": "Передовая глубоководная добыча"
+ },
+ "pm_advanced_process_control": {
+  "en": "Advanced Process Control",
+  "ru": "Передовое управление процессами"
+ },
+ "pm_advanced_research_no_effect": {
+  "en": "No Research Mandate",
+  "ru": "Без исследовательского мандата"
+ },
+ "pm_advanced_self_replicating_assemblers": {
+  "en": "Advanced Self-Replicating Assemblers",
+  "ru": "Передовые самовоспроизводящиеся сборщики"
+ },
+ "pm_advanced_workflow_optimization": {
+  "en": "Advanced Workflow Optimization",
+  "ru": "Передовая оптимизация рабочих процессов"
+ },
+ "pm_aeroplane_production_2": {
+  "en": "Advanced Aeroplane Production",
+  "ru": "Передовое производство самолётов"
+ },
+ "pm_aeroplane_production_3": {
+  "en": "Modern Aeroplane Production",
+  "ru": "Современное производство самолётов"
+ },
+ "pm_afghan_nassaji_kabul_mills": {
+  "en": "Afghan Nassaji Kabul Mills",
+  "ru": "Кабульские фабрики Афган Нассаджи"
+ },
+ "pm_ai_assisted_research": {
+  "en": "AI Assisted Research",
+  "ru": "Исследования с помощью ИИ"
+ },
+ "pm_ai_governance": {
+  "en": "AI Agent Networks",
+  "ru": "Сети ИИ-агентов"
+ },
+ "pm_ai_managed_building_arms_industry": {
+  "en": "AI-Managed Arms Industry",
+  "ru": "Оружейная промышленность под управлением ИИ"
+ },
+ "pm_ai_managed_building_artillery_foundry": {
+  "en": "AI-Managed $building_artillery_foundry$",
+  "ru": "$building_artillery_foundry$ под управлением ИИ"
+ },
+ "pm_ai_managed_building_furniture_manufactory": {
+  "en": "AI-Managed Furniture Manufactories",
+  "ru": "Мебельные мануфактуры под управлением ИИ"
  },
  "pm_ai_managed_building_motor_industry": {
   "en": "AI Managed Factory",
@@ -23,9 +123,65 @@
   "en": "AI-Managed Tooling Workshops",
   "ru": "Инструментальные мастерские под управлением ИИ"
  },
+ "pm_ai_managed_chemical_plant": {
+  "en": "AI Managed Chemical Plant",
+  "ru": "Химический завод под управлением ИИ"
+ },
+ "pm_ai_managed_explosives_factory": {
+  "en": "AI Managed Explosives Factory",
+  "ru": "Завод взрывчатки под управлением ИИ"
+ },
+ "pm_ai_managed_fab": {
+  "en": "AI Managed Fab",
+  "ru": "Полупроводниковый завод под управлением ИИ"
+ },
  "pm_ai_managed_power_plant": {
   "en": "AI Managed Power Plant",
   "ru": "Электростанция под управлением ИИ"
+ },
+ "pm_ai_managed_textile_factory": {
+  "en": "AI-Managed Textile Factory",
+  "ru": "Текстильная фабрика под управлением ИИ"
+ },
+ "pm_ai_mediated_mind_sharing": {
+  "en": "AI-Mediated Mind Sharing",
+  "ru": "Обмен разумом при посредничестве ИИ"
+ },
+ "pm_ai_optimized_operations": {
+  "en": "AI-Optimized Operations",
+  "ru": "Операции, оптимизированные ИИ"
+ },
+ "pm_airbus_lagardere_plant": {
+  "en": "Jean-Luc Lagardère Plant",
+  "ru": "Завод Жан-Люка Лагардера"
+ },
+ "pm_airport": {
+  "en": "Airport",
+  "ru": "Аэропорт"
+ },
+ "pm_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "ru": "Завод Адзиномото в Кавасаки"
+ },
+ "pm_aker_oslo_shipyard": {
+  "en": "Aker Oslo Shipyard",
+  "ru": "Верфь Акер в Осло"
+ },
+ "pm_alibaba_cainiao_park": {
+  "en": "Cainiao Logistics Park",
+  "ru": "Логистический парк Цайняо"
+ },
+ "pm_allatini_thessaloniki_flour_mill": {
+  "en": "Allatini Thessaloniki Flour Mill",
+  "ru": "Мельница Аллатини в Салониках"
+ },
+ "pm_aluminum_substitution": {
+  "en": "Aluminum Substitution",
+  "ru": "Замена алюминия"
+ },
+ "pm_amazon_fulfillment_center": {
+  "en": "Automated Fulfillment Center",
+  "ru": "Автоматизированный центр комплектации заказов"
  },
  "pm_ammonium_nitrate_building_coal_mine": {
   "en": "Ammonium Nitrate",
@@ -43,13 +199,733 @@
   "en": "Ammonium Nitrate",
   "ru": "Аммиачная селитра"
  },
+ "pm_ammonium_nitrate_explosives": {
+  "en": "Ammonium Nitrate Explosives",
+  "ru": "Взрывчатка на аммиачной селитре"
+ },
+ "pm_anglo_persian_abadan_refinery": {
+  "en": "Anglo-Persian Abadan Refinery",
+  "ru": "Англо-персидский нефтезавод в Абадане"
+ },
+ "pm_anglo_sicilian_licata_wharf": {
+  "en": "Anglo-Sicilian Licata Wharf",
+  "ru": "Англо-сицилийская верфь в Личате"
+ },
+ "pm_ansaldo_sestri_ponente_works": {
+  "en": "Ansaldo Sestri Ponente Works",
+  "ru": "Заводы Ансальдо в Сестри-Поненте"
+ },
+ "pm_antibiotic_growth_promoters": {
+  "en": "Antibiotic Growth Promoters",
+  "ru": "Антибиотики — стимуляторы роста"
+ },
+ "pm_antimatter_engine": {
+  "en": "Antimatter Engine",
+  "ru": "Двигатель на антиматерии"
+ },
+ "pm_antimatter_facility": {
+  "en": "Antimatter Containment Facility",
+  "ru": "Хранилище антиматерии"
+ },
+ "pm_antimatter_facility_construction_fast": {
+  "en": "[concept_antimatter_facility] Construction (1 year)",
+  "ru": "Строительство: [concept_antimatter_facility] (1 год)"
+ },
+ "pm_antimatter_facility_construction_medium": {
+  "en": "[concept_antimatter_facility] Construction (2 years)",
+  "ru": "Строительство: [concept_antimatter_facility] (2 года)"
+ },
+ "pm_antimatter_facility_construction_paused": {
+  "en": "[concept_antimatter_facility] Construction (Paused)",
+  "ru": "Строительство: [concept_antimatter_facility] (приостановлено)"
+ },
+ "pm_antimatter_facility_construction_slow": {
+  "en": "[concept_antimatter_facility] Construction (4 years)",
+  "ru": "Строительство: [concept_antimatter_facility] (4 года)"
+ },
+ "pm_antimatter_warhead_plant": {
+  "en": "Antimatter Warhead Plant",
+  "ru": "Завод боезарядов на антиматерии"
+ },
+ "pm_anzin_colliery": {
+  "en": "Anzin Colliery",
+  "ru": "Угольная шахта Анзен"
+ },
+ "pm_ap_moller_copenhagen_wharf": {
+  "en": "A.P. Møller Copenhagen Wharf",
+  "ru": "Верфь А. П. Мёллера в Копенгагене"
+ },
+ "pm_apple_park": {
+  "en": "Apple Park",
+  "ru": "Apple Park"
+ },
+ "pm_argentinian_wine_mendoza_bodega": {
+  "en": "Argentine Wine Mendoza Bodega",
+  "ru": "Аргентинская винодельня в Мендосе"
+ },
+ "pm_armstrong_elswick_works": {
+  "en": "Armstrong Elswick Works",
+  "ru": "Заводы Армстронга в Элсвике"
+ },
+ "pm_artificial_personalities": {
+  "en": "Artificial Personalities",
+  "ru": "Искусственные личности"
+ },
+ "pm_asml_veldhoven_campus": {
+  "en": "ASML Veldhoven Campus",
+  "ru": "Кампус ASML в Велдховене"
+ },
+ "pm_assam_company_nazira_tea_estate": {
+  "en": "Assam Company Nazira Tea Estate",
+  "ru": "Чайная плантация Назира компании «Ассам»"
+ },
+ "pm_assisted_postnatal_care": {
+  "en": "Assisted Postnatal Care",
+  "ru": "Поддерживаемый послеродовой уход"
+ },
+ "pm_automated_am_fabrication": {
+  "en": "Automated AM Fabrication",
+  "ru": "Автоматизированное аддитивное производство"
+ },
+ "pm_automated_assembly_lines": {
+  "en": "Automated Assembly Lines",
+  "ru": "Автоматизированные сборочные линии"
+ },
+ "pm_automated_casework": {
+  "en": "Automated Casework",
+  "ru": "Автоматизированная обработка дел"
+ },
+ "pm_automated_chemical_reactors": {
+  "en": "Automated Chemical Reactors",
+  "ru": "Автоматизированные химические реакторы"
+ },
+ "pm_automated_harvesters_and_planters": {
+  "en": "Automated Harvesters and Planters",
+  "ru": "Автоматизированные комбайны и сеялки"
+ },
+ "pm_automated_labs": {
+  "en": "Automated Labs",
+  "ru": "Автоматизированные лаборатории"
+ },
+ "pm_automated_loading_and_unloading": {
+  "en": "Automated Loading and Unloading",
+  "ru": "Автоматизированная погрузка и разгрузка"
+ },
+ "pm_automated_mechanical_harvesters": {
+  "en": "Automated Mechanical Harvesters",
+  "ru": "Автоматизированные механические комбайны"
+ },
  "pm_automated_ocean_mine": {
   "en": "Automated Deep-Sea Mining",
   "ru": "Автоматизированная глубоководная добыча"
  },
+ "pm_automated_routing_protocols": {
+  "en": "Automated Routing Protocols",
+  "ru": "Автоматизированные протоколы маршрутизации"
+ },
+ "pm_automated_trading": {
+  "en": "Automated Trading",
+  "ru": "Автоматизированная торговля"
+ },
+ "pm_autonomous_highway": {
+  "en": "Autonomous Highway",
+  "ru": "Автономное шоссе"
+ },
+ "pm_autonomous_networks": {
+  "en": "Autonomous Networks",
+  "ru": "Автономные сети"
+ },
+ "pm_autonomous_trains": {
+  "en": "Autonomous Trains",
+  "ru": "Автономные поезда"
+ },
+ "pm_axiom_space_hq": {
+  "en": "Axiom Station Operations",
+  "ru": "Эксплуатация станции Axiom"
+ },
+ "pm_b_grimm_bangkok_warehouse": {
+  "en": "B. Grimm Bangkok Warehouse",
+  "ru": "Склад Б. Гримм в Бангкоке"
+ },
+ "pm_bacardi_santiago_distillery": {
+  "en": "Bacardí Santiago Distillery",
+  "ru": "Винокурня Бакарди в Сантьяго"
+ },
+ "pm_bae_samlesbury_aerodrome": {
+  "en": "BAE Systems Samlesbury Aerodrome",
+  "ru": "Аэродром BAE Systems в Сэмлсбери"
+ },
+ "pm_base_building_advanced_fission_power": {
+  "en": "Generation IV Reactors",
+  "ru": "Реакторы IV поколения"
+ },
+ "pm_base_building_advanced_renewable_power": {
+  "en": "Advanced Renewable Power",
+  "ru": "Передовая возобновляемая энергетика"
+ },
+ "pm_base_building_aneutronic_fusion_power": {
+  "en": "Aneutronic Fusion Power",
+  "ru": "Безнейтронная термоядерная энергетика"
+ },
+ "pm_base_building_aneutronic_fusion_power_desc": {
+  "en": "Proton-boron reactors release charged particles instead of neutrons, and their current is drawn straight from the plasma. With no turbines to drive and almost nothing to shield, they need few engines, little lead and a smaller crew, and they leave no radioactive waste.",
+  "ru": "Протон-борные реакторы выделяют заряженные частицы вместо нейтронов, а ток снимается прямо с плазмы. Не нужно вращать турбины, а защищать почти нечего, поэтому им требуется мало двигателей, мало свинца и меньший штат, и они не оставляют радиоактивных отходов."
+ },
+ "pm_base_building_compact_modular_fusion_power": {
+  "en": "Compact Fusion Power",
+  "ru": "Компактная термоядерная энергетика"
+ },
+ "pm_base_building_hydro_power": {
+  "en": "Hydro Power",
+  "ru": "Гидроэнергетика"
+ },
+ "pm_base_building_inertial_fusion_power": {
+  "en": "Inertial Fusion Power",
+  "ru": "Инерциальная термоядерная энергетика"
+ },
+ "pm_base_building_renewable_power": {
+  "en": "Renewable Power",
+  "ru": "Возобновляемая энергетика"
+ },
+ "pm_base_building_tokamak_fusion_power": {
+  "en": "Tokamak Fusion Power",
+  "ru": "Термоядерная энергетика на токамаках"
+ },
+ "pm_basic_am_fabrication": {
+  "en": "Basic AM Fabrication",
+  "ru": "Базовое аддитивное производство"
+ },
+ "pm_basic_emissions_control": {
+  "en": "Basic Emissions Control",
+  "ru": "Базовый контроль выбросов"
+ },
+ "pm_basic_fume_scrubbers": {
+  "en": "Basic Fume Scrubbers",
+  "ru": "Базовые газоочистные скрубберы"
+ },
+ "pm_basic_production": {
+  "en": "Basic Production",
+  "ru": "Базовое производство"
+ },
+ "pm_basileiades_piraeus_works": {
+  "en": "Basileiades Piraeus Works",
+  "ru": "Заводы Василиадиса в Пирее"
+ },
+ "pm_bayer_leverkusen_plant": {
+  "en": "Bayer Leverkusen Plant",
+  "ru": "Завод Байер в Леверкузене"
+ },
+ "pm_behavioral_conditioning": {
+  "en": "Behavioral Conditioning",
+  "ru": "Поведенческое кондиционирование"
+ },
+ "pm_bengal_coal_raniganj_mine": {
+  "en": "Bengal Coal Raniganj Mine",
+  "ru": "Бенгальская угольная шахта Раниганж"
+ },
+ "pm_bespoke_alloys": {
+  "en": "Bespoke Alloys",
+  "ru": "Сплавы на заказ"
+ },
+ "pm_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "ru": "Национальный генный банк BGI"
+ },
+ "pm_bhp_mount_whaleback_mine": {
+  "en": "Mount Whaleback Mine",
+  "ru": "Рудник Маунт-Уэйлбэк"
+ },
+ "pm_biocon_park": {
+  "en": "Biocon Park",
+  "ru": "Парк Biocon"
+ },
+ "pm_bioelectronic_implants": {
+  "en": "Bioelectronic Implants",
+  "ru": "Биоэлектронные импланты"
+ },
+ "pm_bioengineered_rubber": {
+  "en": "Bioengineered Rubber",
+  "ru": "Биоинженерный каучук"
+ },
+ "pm_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "ru": "Кампус BioNTech в Майнце"
+ },
+ "pm_bioplastics": {
+  "en": "Bioplastics",
+  "ru": "Биопластики"
+ },
+ "pm_biotech_dyes": {
+  "en": "Biotech Dyes",
+  "ru": "Биотехнологические красители"
+ },
+ "pm_blackberry_rim_campus": {
+  "en": "RIM Campus",
+  "ru": "Кампус RIM"
+ },
+ "pm_blow_molding": {
+  "en": "Blow Molding",
+  "ru": "Выдувное формование"
+ },
+ "pm_boeing_everett_factory": {
+  "en": "Boeing Everett Factory",
+  "ru": "Завод Boeing в Эверетте"
+ },
+ "pm_bombay_burmah_rangoon_timber_depot": {
+  "en": "Bombay Burmah Rangoon Timber Depot",
+  "ru": "Лесной склад «Бомбей Бирма» в Рангуне"
+ },
+ "pm_bombay_dyeing_spring_mills": {
+  "en": "Bombay Dyeing Spring Mills",
+  "ru": "Фабрики Бомбей Дайинг в Спринге"
+ },
+ "pm_boston_dynamics_ai_institute": {
+  "en": "Boston Dynamics AI Institute",
+  "ru": "Институт ИИ Boston Dynamics"
+ },
+ "pm_bp_refinery_complex": {
+  "en": "BP Refinery Complex",
+  "ru": "Нефтеперерабатывающий комплекс BP"
+ },
+ "pm_broadcast_television": {
+  "en": "Broadcast Television",
+  "ru": "Эфирное телевидение"
+ },
+ "pm_bullet_trains": {
+  "en": "Bullet Trains",
+  "ru": "Скоростные поезда"
+ },
+ "pm_bytedance_data_fortress": {
+  "en": "TikTok Data Fortress",
+  "ru": "Дата-крепость TikTok"
+ },
+ "pm_calendered_and_coated_paper": {
+  "en": "Calendered & Coated Paper",
+  "ru": "Каландрированная и мелованная бумага"
+ },
+ "pm_carbon_capture_1_aeroplanes_coal0_oil10": {
+  "en": "Partial Carbon Capture (10 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 10)"
+ },
+ "pm_carbon_capture_1_aeroplanes_coal0_oil10_desc": {
+  "en": "Captures 25.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "ru": "Улавливает 25,00% выбросов от сжигания топлива в этой производственной группе. Штат и пропускная способность определяют затраты на удаление и эксплуатацию."
+ },
+ "pm_carbon_capture_1_alpine_donawitz_steelworks_coal15_oil0": {
+  "en": "Partial Carbon Capture (15 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 15)"
+ },
+ "pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5": {
+  "en": "Partial Carbon Capture (5 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 5)"
+ },
+ "pm_carbon_capture_1_automation_building_arms_industry_coal10_oil0": {
+  "en": "Partial Carbon Capture (10 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 10)"
+ },
+ "pm_carbon_capture_1_automation_building_furniture_manufactory_coal5_oil0": {
+  "en": "Partial Carbon Capture (5 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 5)"
+ },
+ "pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Partial Carbon Capture (9 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 9)"
+ },
+ "pm_carbon_capture_1_base_building_motor_industry_coal0_oil40": {
+  "en": "Partial Carbon Capture (40 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 40)"
+ },
+ "pm_carbon_capture_1_base_building_motor_industry_coal0_oil50": {
+  "en": "Partial Carbon Capture (50 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 50)"
+ },
+ "pm_carbon_capture_1_base_building_motor_industry_coal20_oil0": {
+  "en": "Partial Carbon Capture (20 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 20)"
+ },
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil20": {
+  "en": "Partial Carbon Capture (20 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 20)"
+ },
+ "pm_carbon_capture_1_base_building_power_plant_coal0_oil30": {
+  "en": "Partial Carbon Capture (30 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 30)"
+ },
+ "pm_carbon_capture_1_base_building_shipyard_coal0_oil35": {
+  "en": "Partial Carbon Capture (35 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 35)"
+ },
+ "pm_carbon_capture_1_explosives_building_chemical_plant_coal30_oil0": {
+  "en": "Partial Carbon Capture (30 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 30)"
+ },
+ "pm_carbon_capture_1_fertilizer_production_coal0_oil120": {
+  "en": "Partial Carbon Capture (120 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 120)"
+ },
+ "pm_carbon_capture_1_fertilizer_production_coal0_oil160": {
+  "en": "Partial Carbon Capture (160 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 160)"
+ },
+ "pm_carbon_capture_1_fertilizer_production_coal0_oil180": {
+  "en": "Partial Carbon Capture (180 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 180)"
+ },
+ "pm_carbon_capture_1_fertilizer_production_coal0_oil220": {
+  "en": "Partial Carbon Capture (220 Oil)",
+  "ru": "Частичное улавливание углерода (нефть: 220)"
+ },
+ "pm_carbon_capture_1_refinement_building_sugar_plantation_coal1_oil0": {
+  "en": "Partial Carbon Capture (1 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 1)"
+ },
+ "pm_carbon_capture_1_refinement_building_sugar_plantation_coal2_oil0": {
+  "en": "Partial Carbon Capture (2 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 2)"
+ },
+ "pm_carbon_capture_1_refinement_building_sugar_plantation_coal4_oil0": {
+  "en": "Partial Carbon Capture (4 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 4)"
+ },
+ "pm_carbon_capture_1_steam_automation_building_coal_mine_coal3_oil0": {
+  "en": "Partial Carbon Capture (3 Coal)",
+  "ru": "Частичное улавливание углерода (уголь: 3)"
+ },
+ "pm_carbon_capture_2_aeroplanes_coal0_oil10": {
+  "en": "Carbon Capture and Storage (10 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 10)"
+ },
+ "pm_carbon_capture_2_aeroplanes_coal0_oil10_desc": {
+  "en": "Captures 50.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "ru": "Улавливает 50,00% выбросов от сжигания топлива в этой производственной группе. Штат и пропускная способность определяют затраты на удаление и эксплуатацию."
+ },
+ "pm_carbon_capture_2_alpine_donawitz_steelworks_coal15_oil0": {
+  "en": "Carbon Capture and Storage (15 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 15)"
+ },
+ "pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5": {
+  "en": "Carbon Capture and Storage (5 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 5)"
+ },
+ "pm_carbon_capture_2_automation_building_arms_industry_coal10_oil0": {
+  "en": "Carbon Capture and Storage (10 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 10)"
+ },
+ "pm_carbon_capture_2_automation_building_furniture_manufactory_coal5_oil0": {
+  "en": "Carbon Capture and Storage (5 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 5)"
+ },
+ "pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Carbon Capture and Storage (9 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 9)"
+ },
+ "pm_carbon_capture_2_base_building_motor_industry_coal0_oil40": {
+  "en": "Carbon Capture and Storage (40 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 40)"
+ },
+ "pm_carbon_capture_2_base_building_motor_industry_coal0_oil50": {
+  "en": "Carbon Capture and Storage (50 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 50)"
+ },
+ "pm_carbon_capture_2_base_building_motor_industry_coal20_oil0": {
+  "en": "Carbon Capture and Storage (20 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 20)"
+ },
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil20": {
+  "en": "Carbon Capture and Storage (20 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 20)"
+ },
+ "pm_carbon_capture_2_base_building_power_plant_coal0_oil30": {
+  "en": "Carbon Capture and Storage (30 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 30)"
+ },
+ "pm_carbon_capture_2_base_building_shipyard_coal0_oil35": {
+  "en": "Carbon Capture and Storage (35 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 35)"
+ },
+ "pm_carbon_capture_2_explosives_building_chemical_plant_coal30_oil0": {
+  "en": "Carbon Capture and Storage (30 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 30)"
+ },
+ "pm_carbon_capture_2_fertilizer_production_coal0_oil120": {
+  "en": "Carbon Capture and Storage (120 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 120)"
+ },
+ "pm_carbon_capture_2_fertilizer_production_coal0_oil160": {
+  "en": "Carbon Capture and Storage (160 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 160)"
+ },
+ "pm_carbon_capture_2_fertilizer_production_coal0_oil180": {
+  "en": "Carbon Capture and Storage (180 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 180)"
+ },
+ "pm_carbon_capture_2_fertilizer_production_coal0_oil220": {
+  "en": "Carbon Capture and Storage (220 Oil)",
+  "ru": "Улавливание и хранение углерода (нефть: 220)"
+ },
+ "pm_carbon_capture_2_refinement_building_sugar_plantation_coal1_oil0": {
+  "en": "Carbon Capture and Storage (1 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 1)"
+ },
+ "pm_carbon_capture_2_refinement_building_sugar_plantation_coal2_oil0": {
+  "en": "Carbon Capture and Storage (2 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 2)"
+ },
+ "pm_carbon_capture_2_refinement_building_sugar_plantation_coal4_oil0": {
+  "en": "Carbon Capture and Storage (4 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 4)"
+ },
+ "pm_carbon_capture_2_steam_automation_building_coal_mine_coal3_oil0": {
+  "en": "Carbon Capture and Storage (3 Coal)",
+  "ru": "Улавливание и хранение углерода (уголь: 3)"
+ },
+ "pm_carbon_capture_3_aeroplanes_coal0_oil10": {
+  "en": "Advanced Carbon Capture (10 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 10)"
+ },
+ "pm_carbon_capture_3_aeroplanes_coal0_oil10_desc": {
+  "en": "Captures 75.00% of this production group's fuel emissions. Staffing and throughput scale removal and operating costs.",
+  "ru": "Улавливает 75,00% выбросов от сжигания топлива в этой производственной группе. Штат и пропускная способность определяют затраты на удаление и эксплуатацию."
+ },
+ "pm_carbon_capture_3_alpine_donawitz_steelworks_coal15_oil0": {
+  "en": "Advanced Carbon Capture (15 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 15)"
+ },
+ "pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5": {
+  "en": "Advanced Carbon Capture (5 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 5)"
+ },
+ "pm_carbon_capture_3_automation_building_arms_industry_coal10_oil0": {
+  "en": "Advanced Carbon Capture (10 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 10)"
+ },
+ "pm_carbon_capture_3_automation_building_furniture_manufactory_coal5_oil0": {
+  "en": "Advanced Carbon Capture (5 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 5)"
+ },
+ "pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil9": {
+  "en": "Advanced Carbon Capture (9 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 9)"
+ },
+ "pm_carbon_capture_3_base_building_motor_industry_coal0_oil40": {
+  "en": "Advanced Carbon Capture (40 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 40)"
+ },
+ "pm_carbon_capture_3_base_building_motor_industry_coal0_oil50": {
+  "en": "Advanced Carbon Capture (50 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 50)"
+ },
+ "pm_carbon_capture_3_base_building_motor_industry_coal20_oil0": {
+  "en": "Advanced Carbon Capture (20 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 20)"
+ },
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil20": {
+  "en": "Advanced Carbon Capture (20 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 20)"
+ },
+ "pm_carbon_capture_3_base_building_power_plant_coal0_oil30": {
+  "en": "Advanced Carbon Capture (30 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 30)"
+ },
+ "pm_carbon_capture_3_base_building_shipyard_coal0_oil35": {
+  "en": "Advanced Carbon Capture (35 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 35)"
+ },
+ "pm_carbon_capture_3_explosives_building_chemical_plant_coal30_oil0": {
+  "en": "Advanced Carbon Capture (30 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 30)"
+ },
+ "pm_carbon_capture_3_fertilizer_production_coal0_oil120": {
+  "en": "Advanced Carbon Capture (120 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 120)"
+ },
+ "pm_carbon_capture_3_fertilizer_production_coal0_oil160": {
+  "en": "Advanced Carbon Capture (160 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 160)"
+ },
+ "pm_carbon_capture_3_fertilizer_production_coal0_oil180": {
+  "en": "Advanced Carbon Capture (180 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 180)"
+ },
+ "pm_carbon_capture_3_fertilizer_production_coal0_oil220": {
+  "en": "Advanced Carbon Capture (220 Oil)",
+  "ru": "Усовершенствованное улавливание углерода (нефть: 220)"
+ },
+ "pm_carbon_capture_3_refinement_building_sugar_plantation_coal1_oil0": {
+  "en": "Advanced Carbon Capture (1 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 1)"
+ },
+ "pm_carbon_capture_3_refinement_building_sugar_plantation_coal2_oil0": {
+  "en": "Advanced Carbon Capture (2 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 2)"
+ },
+ "pm_carbon_capture_3_refinement_building_sugar_plantation_coal4_oil0": {
+  "en": "Advanced Carbon Capture (4 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 4)"
+ },
+ "pm_carbon_capture_3_steam_automation_building_coal_mine_coal3_oil0": {
+  "en": "Advanced Carbon Capture (3 Coal)",
+  "ru": "Усовершенствованное улавливание углерода (уголь: 3)"
+ },
+ "pm_carbon_capture_na_aeroplanes": {
+  "en": "Capture Not Applicable",
+  "ru": "Улавливание неприменимо"
+ },
+ "pm_carbon_capture_na_aeroplanes_desc": {
+  "en": "This production method has no eligible stationary fuel emissions to capture.",
+  "ru": "Для этого метода производства нет подходящих стационарных выбросов от топлива, которые можно было бы улавливать."
+ },
+ "pm_caribbean_petroleum_maracaibo_depot": {
+  "en": "Caribbean Petroleum Maracaibo Depot",
+  "ru": "Нефтяной склад Карибской нефтяной компании в Маракайбо"
+ },
+ "pm_catalytic_cracking": {
+  "en": "Catalytic Cracking",
+  "ru": "Каталитический крекинг"
+ },
+ "pm_catl_gigafactory": {
+  "en": "CATL Gigafactory",
+  "ru": "Гигафабрика CATL"
+ },
+ "pm_ccci_leopoldville_depot": {
+  "en": "CCCI Léopoldville Depot",
+  "ru": "Склад CCCI в Леопольдвиле"
+ },
+ "pm_cellulosic_hydrolysis": {
+  "en": "Cellulosic Hydrolysis",
+  "ru": "Целлюлозный гидролиз"
+ },
+ "pm_centralized_traffic_control": {
+  "en": "Centralized Traffic Control",
+  "ru": "Централизованное управление движением"
+ },
+ "pm_cfr_bucharest_railway_works": {
+  "en": "CFR Bucharest Railway Works",
+  "ru": "Железнодорожные мастерские CFR в Бухаресте"
+ },
+ "pm_cgv_haut_brion_estate": {
+  "en": "CGV Haut-Brion Estate",
+  "ru": "Поместье О-Брион (CGV)"
+ },
+ "pm_chemical_launch_building_space_mine": {
+  "en": "Chemical Launch",
+  "ru": "Химический запуск"
+ },
+ "pm_chemical_launch_building_space_mine_desc": {
+  "en": "Crews, habitats and equipment ride chemical rockets to orbit, and the base pays for every tonne in Launch Capacity.",
+  "ru": "Экипажи, жилые модули и оборудование поднимаются на орбиту на химических ракетах, и база расплачивается за каждую тонну пусковой мощностью."
+ },
+ "pm_chemical_rockets": {
+  "en": "Chemical Rockets",
+  "ru": "Химические ракеты"
+ },
+ "pm_chemical_tugs_building_space_mine": {
+  "en": "Chemical Tugs",
+  "ru": "Химические буксиры"
+ },
+ "pm_chemical_tugs_building_space_mine_desc": {
+  "en": "Chemical tugs haul ore and supplies between the asteroids and Earth orbit, and every tonne of their propellant is launched from Earth.",
+  "ru": "Химические буксиры перевозят руду и припасы между астероидами и околоземной орбитой, а каждая тонна их топлива запускается с Земли."
+ },
+ "pm_chromium_substitution": {
+  "en": "Chromium Substitution",
+  "ru": "Замена хрома"
+ },
+ "pm_civil_highway": {
+  "en": "Civil Highway",
+  "ru": "Гражданское шоссе"
+ },
+ "pm_cleanroom_fabs": {
+  "en": "Cleanroom Fabs",
+  "ru": "Фабрики с чистыми помещениями"
+ },
+ "pm_cloning_vats": {
+  "en": "Cloning Vats",
+  "ru": "Чаны для клонирования"
+ },
+ "pm_closed_loop_synthesis": {
+  "en": "Closed-Loop Synthesis",
+  "ru": "Синтез с замкнутым циклом"
+ },
+ "pm_cloud_computing": {
+  "en": "Cloud Computing",
+  "ru": "Облачные вычисления"
+ },
+ "pm_coats_ferguslie_mills": {
+  "en": "Coats Ferguslie Mills",
+  "ru": "Фабрики Коутс в Фергуслии"
+ },
+ "pm_cochlear_global_hq": {
+  "en": "Cochlear Global Headquarters",
+  "ru": "Глобальная штаб-квартира Cochlear"
+ },
+ "pm_colt_hartford_armory": {
+  "en": "Colt Hartford Armory",
+  "ru": "Оружейный завод Кольта в Хартфорде"
+ },
+ "pm_communal_child_rearing": {
+  "en": "Communal Child-Rearing",
+  "ru": "Общинное воспитание детей"
+ },
+ "pm_computer_aided_design": {
+  "en": "Computer-Aided Design",
+  "ru": "Автоматизированное проектирование"
+ },
+ "pm_concrete_bunkers": {
+  "en": "Concrete Bunkers",
+  "ru": "Бетонные бункеры"
+ },
  "pm_condensing_engine_pump_building_tech_metals_mine": {
   "en": "Condensing Engine Pump",
   "ru": "Насос с конденсационной машиной"
+ },
+ "pm_consciousness_network": {
+  "en": "Consciousness Network",
+  "ru": "Сеть сознания"
+ },
+ "pm_consciousness_network_construction_fast": {
+  "en": "Consciousness Network Construction (1 year)",
+  "ru": "Строительство сети сознания (1 год)"
+ },
+ "pm_consciousness_network_construction_medium": {
+  "en": "Consciousness Network Construction (2 years)",
+  "ru": "Строительство сети сознания (2 года)"
+ },
+ "pm_consciousness_network_construction_paused": {
+  "en": "Consciousness Network Construction (Paused)",
+  "ru": "Строительство сети сознания (приостановлено)"
+ },
+ "pm_consciousness_network_construction_slow": {
+  "en": "Consciousness Network Construction (4 years)",
+  "ru": "Строительство сети сознания (4 года)"
+ },
+ "pm_consciousness_network_open": {
+  "en": "Open Network",
+  "ru": "Открытая сеть"
+ },
+ "pm_consciousness_network_social_control": {
+  "en": "Social Control Network",
+  "ru": "Сеть социального контроля"
+ },
+ "pm_construction_principle_2": {
+  "en": "Construction Principle 2",
+  "ru": "Принцип строительства 2"
+ },
+ "pm_consumer_appliances": {
+  "en": "Consumer Appliances Production",
+  "ru": "Производство бытовой техники"
+ },
+ "pm_container_ports": {
+  "en": "Container Ports",
+  "ru": "Контейнерные порты"
+ },
+ "pm_containerized_cargo": {
+  "en": "Containerized Cargo",
+  "ru": "Контейнерные грузы"
+ },
+ "pm_continuous_bleaching": {
+  "en": "Continuous Bleaching",
+  "ru": "Непрерывная отбелка"
  },
  "pm_continuous_miners_building_coal_mine": {
   "en": "Continuous Miners",
@@ -67,21 +943,177 @@
   "en": "Continuous Miners",
   "ru": "Проходческие комбайны"
  },
+ "pm_continuous_processing": {
+  "en": "Continuous Processing",
+  "ru": "Непрерывная обработка"
+ },
+ "pm_cordoba_railway_alta_gracia_works": {
+  "en": "Córdoba Railway Alta Gracia Works",
+  "ru": "Заводы Кордовской железной дороги в Альта-Грасии"
+ },
+ "pm_cramp_philadelphia_shipyard": {
+  "en": "Cramp Philadelphia Shipyard",
+  "ru": "Верфь Крампа в Филадельфии"
+ },
+ "pm_csfa_sicilian_sulfur_depot": {
+  "en": "CSFA Sicilian Sulfur Depot",
+  "ru": "Сицилийский серный склад CSFA"
+ },
+ "pm_customized_clothing": {
+  "en": "Customized Clothing",
+  "ru": "Одежда на заказ"
+ },
+ "pm_dassault_merignac_plant": {
+  "en": "Dassault Merignac Plant",
+  "ru": "Завод Dassault в Мериньяке"
+ },
+ "pm_de_beers_sorting_office": {
+  "en": "De Beers Sorting Office",
+  "ru": "Сортировочная контора De Beers"
+ },
+ "pm_debarkers_and_chippers": {
+  "en": "Debarkers and Chippers",
+  "ru": "Окорочные станки и рубительные машины"
+ },
+ "pm_debris_active_removal": {
+  "en": "Active Debris Removal",
+  "ru": "Активное удаление мусора"
+ },
+ "pm_debris_active_removal_desc": {
+  "en": "Servicer spacecraft rendezvous with dead satellites and spent stages, grapple them and drag them down to burn up. Slow and costly, one object at a time.",
+  "ru": "Космические аппараты-сервисеры сближаются с неработающими спутниками и отработанными ступенями, захватывают их и сводят с орбиты, чтобы они сгорели. Медленно и дорого — по одному объекту."
+ },
+ "pm_debris_fusion_sweepers": {
+  "en": "Fusion Sweepers",
+  "ru": "Термоядерные уборщики"
+ },
+ "pm_debris_fusion_sweepers_desc": {
+  "en": "Fusion-driven tugs sweep whole orbital shells, gathering debris by the tonne for re-entry or for salvage.",
+  "ru": "Буксиры с термоядерным приводом зачищают целые орбитальные оболочки, собирая мусор тоннами для входа в атмосферу или для утилизации."
+ },
+ "pm_debris_laser_broom": {
+  "en": "Laser Broom",
+  "ru": "Лазерная метла"
+ },
+ "pm_debris_laser_broom_desc": {
+  "en": "Ground and orbital lasers ablate the surface of small fragments, nudging them into lower orbits where the air drags them down.",
+  "ru": "Наземные и орбитальные лазеры испаряют поверхность мелких фрагментов, подталкивая их на более низкие орбиты, где их тормозит атмосфера."
+ },
+ "pm_debris_removal_none": {
+  "en": "No Debris Removal",
+  "ru": "Без удаления мусора"
+ },
+ "pm_debris_removal_none_desc": {
+  "en": "The program flies its missions and leaves the debris to others.",
+  "ru": "Программа выполняет свои полёты, а мусор оставляет другим."
+ },
+ "pm_decentralized_religious_structures": {
+  "en": "Decentralized Religious Structures",
+  "ru": "Децентрализованные религиозные структуры"
+ },
  "pm_deep_space_exploration": {
   "en": "Deep Space Exploration",
   "ru": "Исследование дальнего космоса"
+ },
+ "pm_deep_well": {
+  "en": "Deep Well",
+  "ru": "Глубокая скважина"
+ },
+ "pm_department_stores": {
+  "en": "Department Stores",
+  "ru": "Универмаги"
+ },
+ "pm_designed_apple_orchards": {
+  "en": "Designed Apple Orchards",
+  "ru": "Селекционные яблоневые сады"
+ },
+ "pm_designed_citrus_orchards": {
+  "en": "Designed Citrus Orchards",
+  "ru": "Селекционные цитрусовые сады"
+ },
+ "pm_designed_crops": {
+  "en": "Designed Crops",
+  "ru": "Селекционные культуры"
+ },
+ "pm_designed_crops_rice_farm": {
+  "en": "Designed Crops Rice Farm",
+  "ru": "Селекционные культуры: рисовая ферма"
+ },
+ "pm_designed_fig_orchards": {
+  "en": "Designed Fig Orchards",
+  "ru": "Селекционные инжирные сады"
+ },
+ "pm_designed_potatoes": {
+  "en": "Designed Potatoes",
+  "ru": "Селекционный картофель"
+ },
+ "pm_diesel_electric_ferries": {
+  "en": "Diesel-Electric Ferries",
+  "ru": "Дизель-электрические паромы"
  },
  "pm_diesel_pump_building_tech_metals_mine": {
   "en": "Diesel Pump",
   "ru": "Дизельный насос"
  },
+ "pm_diesel_shipbuilding": {
+  "en": "Diesel-Powered Shipbuilding",
+  "ru": "Судостроение на дизелях"
+ },
+ "pm_diesel_shipbuilding_desc": {
+  "en": "Heavy diesel and turbine-driven oceangoing ships displace coal-fired steamers as the workhorses of trade and transport.",
+  "ru": "Тяжёлые океанские суда с дизельным и турбинным приводом вытесняют угольные пароходы как рабочих лошадок торговли и перевозок."
+ },
+ "pm_digital_creation_tools": {
+  "en": "Digital Creation Tools",
+  "ru": "Цифровые инструменты творчества"
+ },
+ "pm_digital_streaming": {
+  "en": "Digital Streaming",
+  "ru": "Цифровой стриминг"
+ },
+ "pm_digital_trading": {
+  "en": "Digital Trading",
+  "ru": "Цифровая торговля"
+ },
  "pm_direct_air_capture": {
   "en": "Direct Air Capture",
   "ru": "Прямое улавливание из воздуха"
  },
+ "pm_direct_air_capture_desc": {
+  "en": "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no salable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions.",
+  "ru": "Удаляет углекислый газ из атмосферы и хранит его постоянно. Не производит товаров для продажи и нуждается в субсидиях. Выработка электроэнергии по-прежнему вносит вклад в выбросы рынка."
+ },
+ "pm_directed_energy_point_defense": {
+  "en": "Directed Energy Point Defense",
+  "ru": "Точечная защита направленной энергией"
+ },
+ "pm_directed_energy_point_defense_desc": {
+  "en": "High-energy lasers that burn incoming warheads out of the sky, raising this [Concept('concept_state','$concept_state|q$')]'s chance of stopping a [concept_nuclear_strike] further than interceptor missiles can.",
+  "ru": "Мощные лазеры сжигают летящие боеголовки в небе, повышая шансы остановить [concept_nuclear_strike|l] сильнее, чем это могут ракеты-перехватчики: эта [Concept('concept_state','$concept_state|q$')|l] защищена лучше."
+ },
+ "pm_directional_drilling_rigs": {
+  "en": "Directional Drilling Rigs",
+  "ru": "Установки направленного бурения"
+ },
  "pm_disney_world": {
   "en": "Disney World",
   "ru": "Диснейуорлд"
+ },
+ "pm_distributed_control_systems": {
+  "en": "Distributed Control Systems",
+  "ru": "Распределённые системы управления"
+ },
+ "pm_dmc_mulhouse_mills": {
+  "en": "DMC Mulhouse Mills",
+  "ru": "Фабрики DMC в Мюлузе"
+ },
+ "pm_double-decker_passenger_carriages": {
+  "en": "Double-Decker Passenger Carriages",
+  "ru": "Двухэтажные пассажирские вагоны"
+ },
+ "pm_douro_wine_lodge": {
+  "en": "Douro Wine Lodge",
+  "ru": "Винный склад в Дору"
  },
  "pm_dragline_excavators_coal_mine": {
   "en": "Dragline Excavators",
@@ -99,25 +1131,457 @@
   "en": "Dragline Excavators",
   "ru": "Драглайны"
  },
+ "pm_drone_delivery_systems": {
+  "en": "Drone Delivery Systems",
+  "ru": "Системы доставки дронами"
+ },
+ "pm_dupont_experimental_station": {
+  "en": "DuPont Experimental Station",
+  "ru": "Опытная станция DuPont"
+ },
  "pm_dynamite_building_tech_metals_mine": {
   "en": "Dynamite",
   "ru": "Динамит"
+ },
+ "pm_e-commerce": {
+  "en": "E-Commerce",
+  "ru": "Электронная коммерция"
  },
  "pm_earth_orbit": {
   "en": "Earth Orbit",
   "ru": "Околоземная орбита"
  },
+ "pm_earthwork_fortifications": {
+  "en": "Earthwork Fortifications",
+  "ru": "Земляные укрепления"
+ },
+ "pm_ectogenesis": {
+  "en": "Ectogenesis",
+  "ru": "Эктогенез"
+ },
+ "pm_education_no_effect": {
+  "en": "No Cultural Mandate",
+  "ru": "Без культурного мандата"
+ },
+ "pm_effluent_filtration": {
+  "en": "Effluent Filtration",
+  "ru": "Фильтрация стоков"
+ },
+ "pm_egyptian_rail_cairo_central": {
+  "en": "Egyptian Rail Cairo Central",
+  "ru": "Центральный вокзал Каира (Египетские железные дороги)"
+ },
+ "pm_eic_trading_house": {
+  "en": "East India Company Trading House",
+  "ru": "Торговый дом Ост-Индской компании"
+ },
+ "pm_el_aguila_tampico_refinery": {
+  "en": "El Águila Tampico Refinery",
+  "ru": "Нефтезавод «Эль-Агила» в Тампико"
+ },
+ "pm_elastomeric_blends": {
+  "en": "Elastomeric Blends",
+  "ru": "Эластомерные смеси"
+ },
+ "pm_electric_cars": {
+  "en": "Electric Car Production",
+  "ru": "Производство электромобилей"
+ },
+ "pm_electric_civil_highway": {
+  "en": "Electric Civil Highway",
+  "ru": "Электрическое гражданское шоссе"
+ },
+ "pm_electric_industrial_highway": {
+  "en": "Electric Industrial Highway",
+  "ru": "Электрическое промышленное шоссе"
+ },
+ "pm_electrified_rotary_drilling_rigs": {
+  "en": "Electrified Rotary Drilling Rigs",
+  "ru": "Электрифицированные роторные буровые установки"
+ },
+ "pm_electrochemical_machining": {
+  "en": "Electrochemical Machining",
+  "ru": "Электрохимическая обработка"
+ },
+ "pm_electroenzymatic_synthesis": {
+  "en": "Electroenzymatic Synthesis",
+  "ru": "Электроэнзиматический синтез"
+ },
+ "pm_electromagnetic_projectors": {
+  "en": "Electromagnetic Projectors",
+  "ru": "Электромагнитные метатели"
+ },
+ "pm_electronic_brokerage": {
+  "en": "Electronic Brokerage",
+  "ru": "Электронный брокеридж"
+ },
+ "pm_elso_budapesti_steam_mill": {
+  "en": "Első Budapesti Steam Mill",
+  "ru": "Паровая мельница Первого Будапештского общества"
+ },
  "pm_engineering_and_logistics_no_effect": {
   "en": "No Effect",
   "ru": "Без эффекта"
+ },
+ "pm_eni_palazzo": {
+  "en": "Palazzo ENI",
+  "ru": "Палаццо ENI"
+ },
+ "pm_ericsson_telefonplan": {
+  "en": "Ericsson Telefonplan",
+  "ru": "Эрикссон Телефонплан"
+ },
+ "pm_erste_brunner_maschinenwerk": {
+  "en": "Erste Brünner Maschinenwerk",
+  "ru": "Первый Брюнский машиностроительный завод"
+ },
+ "pm_espana_industrial_sants_mills": {
+  "en": "España Industrial Sants Mills",
+  "ru": "Фабрики «Эспанья Индустриаль» в Сантсе"
+ },
+ "pm_estaleiro_maua_niteroi_dockyard": {
+  "en": "Estaleiro Mauá Niterói Dockyard",
+  "ru": "Верфь Мауа в Нитерое"
+ },
+ "pm_estanifera_llallagua_tin_concentrator": {
+  "en": "Estañífera Llallagua Tin Concentrator",
+  "ru": "Оловообогатительная фабрика Эстаньифера в Льяльягуа"
+ },
+ "pm_ethiopian_railway_dire_dawa_depot": {
+  "en": "Ethiopian Railway Dire Dawa Depot",
+  "ru": "Депо Эфиопской железной дороги в Дыре-Дауа"
+ },
+ "pm_eugenics_programs": {
+  "en": "Eugenics Programs",
+  "ru": "Евгенические программы"
+ },
+ "pm_expeditionary_logistics": {
+  "en": "Expeditionary Logistics",
+  "ru": "Экспедиционная логистика"
+ },
+ "pm_extreme_bandwidth": {
+  "en": "Extreme Bandwidth",
+  "ru": "Экстремальная пропускная способность"
+ },
+ "pm_famae_santiago_arsenal": {
+  "en": "FAMAE Santiago Arsenal",
+  "ru": "Арсенал FAMAE в Сантьяго"
+ },
+ "pm_fanuc_forest": {
+  "en": "The FANUC Forest",
+  "ru": "Лес FANUC"
+ },
+ "pm_fcm_la_seyne_shipyard": {
+  "en": "FCM La Seyne Shipyard",
+  "ru": "Верфь FCM в Ла-Сене"
+ },
+ "pm_ferranti_hollinwood_works": {
+  "en": "Ferranti Hollinwood Works",
+  "ru": "Заводы Ферранти в Холлинвуде"
+ },
+ "pm_ferrari_maranello_factory": {
+  "en": "Ferrari Maranello Factory",
+  "ru": "Завод Ferrari в Маранелло"
+ },
+ "pm_fiat_lingotto_factory": {
+  "en": "FIAT Lingotto Factory",
+  "ru": "Завод FIAT «Линготто»"
+ },
+ "pm_fiber_optics": {
+  "en": "Fiber Optics",
+  "ru": "Оптоволокно"
+ },
+ "pm_flexible_packaging": {
+  "en": "Flexible Packaging",
+  "ru": "Гибкая упаковка"
+ },
+ "pm_flow_chemistry_production": {
+  "en": "Flow Chemistry Production",
+  "ru": "Проточное химическое производство"
+ },
+ "pm_focus_balanced_production": {
+  "en": "Balanced Production",
+  "ru": "Сбалансированное производство"
+ },
+ "pm_focus_balanced_production_desc": {
+  "en": "Civilian and military orders are worked in parallel without prioritization. No change to civilian output or naval construction capacity.",
+  "ru": "Гражданские и военные заказы выполняются параллельно без приоритетов. Гражданский выпуск и мощность военного кораблестроения не меняются."
+ },
+ "pm_focus_civilian_production": {
+  "en": "Civilian Hull Production",
+  "ru": "Производство гражданских корпусов"
+ },
+ "pm_focus_civilian_production_desc": {
+  "en": "Concentrate dockyard labor and slipways on merchant hulls. Civilian shipping output rises sharply, but national naval construction capacity is reduced as warship orders go to the back of the queue.",
+  "ru": "Рабочая сила верфи и стапели сосредоточены на корпусах торговых судов. Выпуск гражданских судов резко растёт, но национальная мощность военного кораблестроения снижается, так как заказы на боевые корабли уходят в конец очереди."
+ },
+ "pm_focus_naval_production": {
+  "en": "Naval Priority",
+  "ru": "Приоритет флота"
+ },
+ "pm_focus_naval_production_desc": {
+  "en": "Shift slipway allocation toward warships. National naval construction capacity rises, with a corresponding cut to civilian hull output.",
+  "ru": "Распределение стапелей смещается в пользу боевых кораблей. Национальная мощность военного кораблестроения растёт, а выпуск гражданских корпусов соответственно снижается."
+ },
+ "pm_focus_wartime_mobilization": {
+  "en": "Wartime Mobilization",
+  "ru": "Военная мобилизация"
+ },
+ "pm_focus_wartime_mobilization_desc": {
+  "en": "Mobilize the dockyard for all-out naval production. Civilian shipping is heavily curtailed in exchange for a major boost to national naval construction capacity. Requires Total War.",
+  "ru": "Верфь мобилизуется для всеобщего выпуска военных кораблей. Гражданское судоходство резко сокращается в обмен на значительный рост национальной мощности военного кораблестроения. Требуется «Тотальная война»."
+ },
+ "pm_foochow_mawei_dockyard": {
+  "en": "Foochow Mawei Dockyard",
+  "ru": "Верфь Мавэй в Фучжоу"
+ },
+ "pm_food_additives": {
+  "en": "Food Additives",
+  "ru": "Пищевые добавки"
+ },
+ "pm_ford_rouge_plant": {
+  "en": "Ford Rouge Plant",
+  "ru": "Завод Ford «Ривер-Руж»"
+ },
+ "pm_fracking": {
+  "en": "Fracking",
+  "ru": "Гидроразрыв пласта"
+ },
+ "pm_franco_belge_raismes_works": {
+  "en": "Franco-Belge Raismes Works",
+  "ru": "Заводы Франко-Бельж в Реме"
+ },
+ "pm_fully_automated_content_creation": {
+  "en": "Fully Automated Content Creation",
+  "ru": "Полностью автоматизированное создание контента"
+ },
+ "pm_fusion_battery_appliances": {
+  "en": "Microfusion Appliances",
+  "ru": "Микротермоядерные приборы"
+ },
+ "pm_fusion_battery_motors": {
+  "en": "Microfusion Motors",
+  "ru": "Микротермоядерные двигатели"
+ },
+ "pm_fusion_battery_vehicles": {
+  "en": "Microfusion Vehicles",
+  "ru": "Микротермоядерные транспортные средства"
+ },
+ "pm_fusion_ssto_craft": {
+  "en": "Fusion SSTO Craft",
+  "ru": "Термоядерные одноступенчатые аппараты"
+ },
+ "pm_fusion_torch_reclamation": {
+  "en": "Fusion Torch Reclamation",
+  "ru": "Рекуперация термоядерным факелом"
+ },
+ "pm_fusion_torch_reclamation_desc": {
+  "en": "A fusion torch, first proposed in 1969, turns scrap and waste into a plasma hot enough to break it back into its elements. Our mills recover most of their iron from what we throw away, for a great deal of electricity.",
+  "ru": "Термоядерный факел, впервые предложенный в 1969 году, превращает лом и отходы в плазму, достаточно горячую, чтобы разложить их обратно на элементы. Наши заводы получают большую часть железа из того, что мы выбрасываем, ценой огромного количества электроэнергии."
+ },
+ "pm_fusion_tugs_building_space_mine": {
+  "en": "Fusion Tugs",
+  "ru": "Термоядерные буксиры"
+ },
+ "pm_fusion_tugs_building_space_mine_desc": {
+  "en": "Fusion-driven tugs make the same transfers on a fraction of the propellant, so less of it has to be launched from Earth.",
+  "ru": "Буксиры с термоядерным приводом выполняют те же перелёты, расходуя лишь долю топлива, поэтому с Земли нужно запускать его меньше."
+ },
+ "pm_galician_boryslaw_oil_field": {
+  "en": "Galician Borysław Oil Field",
+  "ru": "Галицийское нефтяное месторождение Борислав"
+ },
+ "pm_garrison_duty": {
+  "en": "Garrison Duty",
+  "ru": "Гарнизонная служба"
+ },
+ "pm_gas_turbine_engines": {
+  "en": "Gas Turbine Engines",
+  "ru": "Газотурбинные двигатели"
+ },
+ "pm_gavrilovic_petrinja_meatworks": {
+  "en": "Gavrilović Petrinja Meatworks",
+  "ru": "Мясокомбинат Гавриловича в Петрине"
+ },
+ "pm_gazprom_lakhta_center": {
+  "en": "The Lakhta Center",
+  "ru": "Лахта-центр"
+ },
+ "pm_ge_schenectady_works": {
+  "en": "GE Schenectady Works",
+  "ru": "Заводы GE в Скенектади"
+ },
+ "pm_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "ru": "Кампус Genentech «ДНК-Вэй»"
+ },
+ "pm_generic_arsenal": {
+  "en": "Arsenal",
+  "ru": "Арсенал"
+ },
+ "pm_generic_assay_office": {
+  "en": "Precious Metal Assaying",
+  "ru": "Пробирный анализ драгоценных металлов"
+ },
+ "pm_generic_chem_works": {
+  "en": "Chemical Works",
+  "ru": "Химические заводы"
+ },
+ "pm_generic_cold_storage": {
+  "en": "Cold Storage",
+  "ru": "Холодильные склады"
+ },
+ "pm_generic_colonial_depot": {
+  "en": "Colonial Commodity Trade",
+  "ru": "Торговля колониальными товарами"
+ },
+ "pm_generic_corporate_university": {
+  "en": "Corporate University",
+  "ru": "Корпоративный университет"
+ },
+ "pm_generic_data_fortress": {
+  "en": "National Data Fortress",
+  "ru": "Национальная дата-крепость"
+ },
+ "pm_generic_dry_dock": {
+  "en": "Dry Dock",
+  "ru": "Сухой док"
+ },
+ "pm_generic_dye_fiber_park": {
+  "en": "Dye & Fiber Research",
+  "ru": "Исследования красителей и волокон"
+ },
+ "pm_generic_electronics_lab": {
+  "en": "Electronics Research",
+  "ru": "Исследования в электронике"
+ },
+ "pm_generic_exhibition_centre": {
+  "en": "National Exhibition Center",
+  "ru": "Национальный выставочный центр"
+ },
+ "pm_generic_export_warehouse": {
+  "en": "Cash Crop Export",
+  "ru": "Экспорт товарных культур"
+ },
+ "pm_generic_financial_center": {
+  "en": "International Financial Center",
+  "ru": "Международный финансовый центр"
+ },
+ "pm_generic_fish_market": {
+  "en": "Fish Market",
+  "ru": "Рыбный рынок"
+ },
+ "pm_generic_furniture_showroom": {
+  "en": "Furniture Showroom",
+  "ru": "Мебельный салон"
+ },
+ "pm_generic_granary_complex": {
+  "en": "Granary Complex",
+  "ru": "Зернохранилищный комплекс"
+ },
+ "pm_generic_hq_skyscraper": {
+  "en": "Corporate Headquarters Skyscraper",
+  "ru": "Небоскрёб корпоративной штаб-квартиры"
  },
  "pm_generic_industrial_city": {
   "en": "Private Industrial City",
   "ru": "Частный промышленный город"
  },
+ "pm_generic_industrial_zone": {
+  "en": "Specialized Industrial Zone",
+  "ru": "Специализированная промышленная зона"
+ },
+ "pm_generic_logistics_hub": {
+  "en": "National Logistics Hub",
+  "ru": "Национальный логистический узел"
+ },
+ "pm_generic_lumber_yard": {
+  "en": "Lumber Yard",
+  "ru": "Лесной склад"
+ },
+ "pm_generic_machine_shop": {
+  "en": "Machine Shop",
+  "ru": "Механический цех"
+ },
+ "pm_generic_materials_lab": {
+  "en": "Advanced Materials Laboratory",
+  "ru": "Лаборатория передовых материалов"
+ },
+ "pm_generic_media_hq": {
+  "en": "Global Media Headquarters",
+  "ru": "Глобальная медиа-штаб-квартира"
+ },
+ "pm_generic_mega_factory": {
+  "en": "Mega-Factory Complex",
+  "ru": "Комплекс мегазавода"
+ },
+ "pm_generic_mineral_refinery": {
+  "en": "Mineral Refining",
+  "ru": "Обогащение минералов"
+ },
  "pm_generic_monument_to_industry": {
   "en": "Monument to Industry",
   "ru": "Памятник индустрии"
+ },
+ "pm_generic_motor_works": {
+  "en": "Motor Works",
+  "ru": "Моторный завод"
+ },
+ "pm_generic_ordnance_depot": {
+  "en": "Ordnance Depot",
+  "ru": "Склад вооружений"
+ },
+ "pm_generic_ore_processing": {
+  "en": "Ore Smelting",
+  "ru": "Выплавка руды"
+ },
+ "pm_generic_paper_mill_complex": {
+  "en": "Paper Mill Complex",
+  "ru": "Бумажный комбинат"
+ },
+ "pm_generic_pipeline_terminus": {
+  "en": "Cross-Continental Pipeline Terminus",
+  "ru": "Конечный пункт трансконтинентального трубопровода"
+ },
+ "pm_generic_proving_grounds": {
+  "en": "Strategic Proving Grounds",
+  "ru": "Стратегический полигон"
+ },
+ "pm_generic_rail_nexus": {
+  "en": "Intercontinental Rail Nexus",
+  "ru": "Межконтинентальный железнодорожный узел"
+ },
+ "pm_generic_rd_complex": {
+  "en": "Central R&D Complex",
+  "ru": "Центральный комплекс НИОКР"
+ },
+ "pm_generic_resource_depository": {
+  "en": "National Resource Depository",
+  "ru": "Национальное хранилище ресурсов"
+ },
+ "pm_generic_robotics_institute": {
+  "en": "Automation & Robotics Institute",
+  "ru": "Институт автоматизации и робототехники"
+ },
+ "pm_generic_shipping_terminal": {
+  "en": "Global Shipping Terminal",
+  "ru": "Глобальный морской терминал"
+ },
+ "pm_generic_silk_exchange": {
+  "en": "Silk and Dye Trade",
+  "ru": "Торговля шёлком и красителями"
+ },
+ "pm_generic_tank_farm": {
+  "en": "Tank Farm",
+  "ru": "Резервуарный парк"
+ },
+ "pm_generic_textile_depot": {
+  "en": "Textile Depot",
+  "ru": "Текстильный склад"
+ },
+ "pm_generic_vintner_hall": {
+  "en": "Wine and Fruit Processing",
+  "ru": "Переработка вина и фруктов"
  },
  "pm_geophysical_survey_techniques_coal_mine": {
   "en": "Geophysical Survey Techniques",
@@ -135,6 +1599,110 @@
   "en": "Geophysical Survey Techniques",
   "ru": "Методы геофизической разведки"
  },
+ "pm_getzner_bludenz_textile_works": {
+  "en": "Getzner Bludenz Textile Works",
+  "ru": "Текстильные заводы Гецнер в Блуденце"
+ },
+ "pm_glassworks_closed_loop_recycling": {
+  "en": "Closed-Loop Recycling",
+  "ru": "Переработка с замкнутым циклом"
+ },
+ "pm_glassworks_fume_extraction": {
+  "en": "Fume Extraction",
+  "ru": "Вытяжка дыма"
+ },
+ "pm_global_ports": {
+  "en": "Global Ports",
+  "ru": "Глобальные порты"
+ },
+ "pm_gm_name_carrier_anchor": {
+  "en": "Monument Name Placeholder",
+  "ru": "Заглушка названия монумента"
+ },
+ "pm_googleplex": {
+  "en": "The Googleplex",
+  "ru": "Googleplex"
+ },
+ "pm_gotaverken_gothenburg_shipyard": {
+  "en": "Götaverken Gothenburg Shipyard",
+  "ru": "Верфь Гётаверкен в Гётеборге"
+ },
+ "pm_gran_azucarera_aranjuez_refinery": {
+  "en": "Gran Azucarera Aranjuez Refinery",
+  "ru": "Сахарный завод Гран Асукарера в Аранхуэсе"
+ },
+ "pm_grand_monument_site": {
+  "en": "Under Construction",
+  "ru": "Строится"
+ },
+ "pm_grand_monument_site_desc": {
+  "en": "The monument is being built. It has no effects until it is dedicated.",
+  "ru": "Монумент строится. Пока он не открыт торжественно, он не оказывает никаких эффектов."
+ },
+ "pm_graphene_electric_motors": {
+  "en": "Graphene Electric Motors",
+  "ru": "Графеновые электродвигатели"
+ },
+ "pm_great_indian_railway_jamalpur_works": {
+  "en": "Great Indian Railway Jamalpur Works",
+  "ru": "Заводы Великой индийской железной дороги в Джамалпуре"
+ },
+ "pm_green_assembly": {
+  "en": "Green Assembly",
+  "ru": "Зелёная сборка"
+ },
+ "pm_grid_hvdc_interconnector": {
+  "en": "HVDC Cable",
+  "ru": "Кабель HVDC"
+ },
+ "pm_grid_hvdc_interconnector_desc": {
+  "en": "Converter valves and a high-voltage direct-current cable to the far shore, with a range of one [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), which $smart_grids$ and $quantum_materials$ lengthen.",
+  "ru": "Преобразовательные вентили и кабель постоянного тока высокого напряжения до дальнего берега с дальностью в один [concept_sea_node|l] (#b $building_grid_undersea_cable_range_add$#!), которую увеличивают $smart_grids$ и $quantum_materials$."
+ },
+ "pm_grid_transfer_base": {
+  "en": "Substation",
+  "ru": "Подстанция"
+ },
+ "pm_grid_transfer_base_desc": {
+  "en": "Moves $electricity$ between this state and its grid. The grid's monthly balancing decides which way and how much.",
+  "ru": "Перемещает товар «$electricity$» между этой областью и её сетью. Ежемесячная балансировка сети определяет, в какую сторону и сколько."
+ },
+ "pm_guinness_st_james_gate_brewery": {
+  "en": "Guinness St. James's Gate Brewery",
+  "ru": "Пивоварня Гиннесс «Сент-Джеймс-Гейт»"
+ },
+ "pm_guthrie_singapore_agency": {
+  "en": "Guthrie Singapore Agency House",
+  "ru": "Сингапурское агентство Гатри"
+ },
+ "pm_gwr_swindon_works": {
+  "en": "GWR Swindon Works",
+  "ru": "Заводы GWR в Суиндоне"
+ },
+ "pm_hanka_precision_hq": {
+  "en": "Hanka Cybernetics Division",
+  "ru": "Кибернетическое подразделение Hanka"
+ },
+ "pm_hanyang_arsenal_iron_works": {
+  "en": "Hanyang Arsenal Iron Works",
+  "ru": "Ханьянский арсенал и железоделательный завод"
+ },
+ "pm_hardened_positions": {
+  "en": "Hardened Positions",
+  "ru": "Укреплённые позиции"
+ },
+ "pm_hbc_york_factory": {
+  "en": "HBC York Factory",
+  "ru": "Фактория Йорк компании HBC"
+ },
+ "pm_high_bandwidth": {
+  "en": "High Bandwidth",
+  "ru": "Высокая пропускная способность"
+ },
+ "pm_high_fructose_syrup": {
+  "en": "High-Fructose Syrup",
+  "ru": "Фруктозный сироп"
+ },
  "pm_high_pressure_hydraulic_pump_building_coal_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "ru": "Гидравлический насос высокого давления"
@@ -150,6 +1718,122 @@
  "pm_high_pressure_hydraulic_pump_building_tech_metals_mine": {
   "en": "High-Pressure Hydraulic Pump",
   "ru": "Гидравлический насос высокого давления"
+ },
+ "pm_high_pressure_sodium_streetlights": {
+  "en": "High Pressure Sodium Streetlights",
+  "ru": "Натриевые уличные фонари высокого давления"
+ },
+ "pm_hispano_suiza_barcelona_factory": {
+  "en": "Hispano-Suiza Barcelona Factory",
+  "ru": "Завод Испано-Суиза в Барселоне"
+ },
+ "pm_hobbyist_ownership": {
+  "en": "Hobbyist Management",
+  "ru": "Любительское управление"
+ },
+ "pm_hp_labs": {
+  "en": "HP Labs",
+  "ru": "Лаборатории HP"
+ },
+ "pm_hq_cultural_coalition": {
+  "en": "World Cultural Center",
+  "ru": "Всемирный культурный центр"
+ },
+ "pm_hq_diplomatic_framework": {
+  "en": "Palace of Nations",
+  "ru": "Дворец Наций"
+ },
+ "pm_hq_ideological_union": {
+  "en": "Central Committee Headquarters",
+  "ru": "Штаб-квартира Центрального комитета"
+ },
+ "pm_hq_military_treaty": {
+  "en": "Alliance Command",
+  "ru": "Командование альянса"
+ },
+ "pm_hq_religious_convocation": {
+  "en": "Seat of the Faith",
+  "ru": "Престол веры"
+ },
+ "pm_hq_sovereign_empire": {
+  "en": "Seat of the Empire",
+  "ru": "Престол империи"
+ },
+ "pm_hq_trade_league": {
+  "en": "Global Trade Center",
+  "ru": "Глобальный торговый центр"
+ },
+ "pm_huawei_ox_horn_campus": {
+  "en": "Huawei Ox Horn Campus",
+  "ru": "Кампус Huawei «Бычий рог»"
+ },
+ "pm_hydraulic_equipment": {
+  "en": "Hydraulic Equipment",
+  "ru": "Гидравлическое оборудование"
+ },
+ "pm_hydrogen_fuel_cell_engines": {
+  "en": "Hydrogen Fuel Cell Engines",
+  "ru": "Двигатели на водородных топливных элементах"
+ },
+ "pm_hyundai_ulsan_factory": {
+  "en": "Hyundai Ulsan Factory",
+  "ru": "Завод Hyundai в Ульсане"
+ },
+ "pm_ig_farben_buna_werke": {
+  "en": "IG Farben Buna-Werke",
+  "ru": "Заводы «Буна» IG Farben"
+ },
+ "pm_ikea_almhult_campus": {
+  "en": "IKEA Älmhult Campus",
+  "ru": "Кампус IKEA в Эльмхульте"
+ },
+ "pm_imperial_arsenal_golden_horn": {
+  "en": "Imperial Arsenal Golden Horn",
+  "ru": "Императорский арсенал Золотого Рога"
+ },
+ "pm_imperial_tobacco_wills_factory": {
+  "en": "Imperial Tobacco Wills' Factory",
+  "ru": "Фабрика Уиллса компании Imperial Tobacco"
+ },
+ "pm_improved_crop_rotation": {
+  "en": "Improved Crop Rotation",
+  "ru": "Улучшенный севооборот"
+ },
+ "pm_industrial_highway": {
+  "en": "Industrial Highway",
+  "ru": "Промышленное шоссе"
+ },
+ "pm_industrial_robotics": {
+  "en": "Industrial Robotics",
+  "ru": "Промышленная робототехника"
+ },
+ "pm_influencers_and_content_creators": {
+  "en": "Decentralized Digital Media",
+  "ru": "Децентрализованные цифровые медиа"
+ },
+ "pm_infosys_mysore_campus": {
+  "en": "Infosys Mysore Campus",
+  "ru": "Кампус Infosys в Майсуре"
+ },
+ "pm_ingen_biological_preserve": {
+  "en": "InGen Biological Preserve",
+  "ru": "Биологический заповедник InGen"
+ },
+ "pm_injection_molding": {
+  "en": "Injection Molding",
+  "ru": "Литьё под давлением"
+ },
+ "pm_integrated_circuits": {
+  "en": "Integrated Circuits",
+  "ru": "Интегральные схемы"
+ },
+ "pm_integrated_optical_chip_networks": {
+  "en": "Integrated Optical Chip Networks",
+  "ru": "Интегральные оптические чиповые сети"
+ },
+ "pm_intel_ronler_acres": {
+  "en": "Intel Ronler Acres Campus",
+  "ru": "Кампус Intel «Ронлер-Эйкрс»"
  },
  "pm_intelligent_drilling_rigs": {
   "en": "Intelligent Drilling Rigs",

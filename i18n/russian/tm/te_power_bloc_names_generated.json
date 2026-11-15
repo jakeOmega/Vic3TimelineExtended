@@ -1,0 +1,10 @@
+{
+ "te_pb_name_league_STATE_ABRUZZO": {
+  "en": "League of $HUB_NAME_STATE_ABRUZZO_city$",
+  "ru": "Лига $HUB_NAME_STATE_ABRUZZO_city$"
+ },
+ "te_pb_name_pact_STATE_ABRUZZO": {
+  "en": "$HUB_NAME_STATE_ABRUZZO_city$ Pact",
+  "ru": "Пакт $HUB_NAME_STATE_ABRUZZO_city$"
+ }
+}
