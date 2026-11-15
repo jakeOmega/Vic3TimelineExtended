@@ -17,12 +17,12 @@ loans more expensive and a sound currency makes them cheaper.
 
 ## The Banking Cycle journal entry
 
-The cycle lives in a journal entry in the Domestic Affairs group. Its title
-follows your economic system: Boom & Bust Cycle in a market economy, Logistics &
-Allocation Gauge under Command Economy, and Cooperative Finance Dashboard under
-Cooperative Ownership. Its description changes with the title and explains what
-the readings mean in that economy. The model is the same in all three; the phase
-effects and the tools differ.
+The cycle lives in a journal entry in the Timeline Extended Systems section of
+the journal. Its title follows your economic system: Boom & Bust Cycle in a
+market economy, Logistics & Allocation Gauge under Command Economy, and
+Cooperative Finance Dashboard under Cooperative Ownership. Its description
+changes with the title and explains what the readings mean in that economy. The
+model is the same in all three; the phase effects and the tools differ.
 
 Every country has the entry from the start of the game, but its financial
 cycle starts only once you have researched Stock Exchange and own an Urban
@@ -297,8 +297,8 @@ other way round: 2% of pops turn loyalist when you expand it and 2.5% radicalize
 when you withdraw it, so a round trip nets the same 0.5%. Moral Suasion costs
 nothing either way. The four crisis tools (Bank Holiday, Emergency Liquidity,
 Asset Relief and Bail-in) have a larger price of their own, and Capital Controls
-(Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
-Emergency Import Financing also add a weekly government expense while they run,
+costs infamy and great-power relations. Sterilization and Emergency Import
+Financing also add a weekly government expense while they run,
 a quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
 Budget panel under Banking, and their tooltips show the current weekly cost.
 
@@ -447,21 +447,35 @@ climbs back to Stable and beyond.
 
 ### Managing foreign capital and import credit
 
-External & Currency groups export lending and outflow controls with five
-monetary interventions. These five appear only under the full Banking System.
-Each holds 2 points while it runs (Emergency Import Financing 3), leaving fewer
-for deposit guarantees, domestic credit or crisis relief. Restrict Speculative
-Inflows needs your own policy rate; Sterilize Capital Inflows and the surrender
+External & Currency groups Export Credit Facility and Capital Controls with
+five monetary interventions. These five appear only under the full Banking
+System. Each holds 2 points while it runs (Emergency Import Financing 3),
+leaving fewer for deposit guarantees, domestic credit or crisis relief. Restrict
+Speculative Inflows needs your own policy rate; Sterilization and the surrender
 requirement need a convertible Gold Standard with your own policy rate; Limit
 Foreign-Currency Borrowing and Emergency Import Financing need National Bank
 Established. The tooltips show their current costs and restrictions.
 
+What the exchange tools do depends on your currency. On a convertible Gold
+Standard with National Bank Established, the gap between your policy rate and
+the World Rate moves gold in and out of the central bank's vault. On a floating
+currency (Fiat Money or Digital Currency with a national bank, or a Gold
+Standard whose convertibility is suspended) it moves the target your Exchange
+Rate Index heads for instead (see
+[The exchange-rate index and capital controls](#the-exchange-rate-index-and-capital-controls)).
+On Commodity Money no rate of yours moves money across the border, so Capital
+Controls and Restrict Speculative Inflows do nothing there beyond their
+modifiers. Each tool's tooltip has an "On this currency" line that says what it
+does on the currency you have, with the figure it changes now and with the
+tool.
+
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|
-| Restrict Speculative Inflows | Halves incoming speculative gold and the upward exchange-rate pressure from a positive real-rate gap. Gold can still leave at its usual speed. | Slower reserve accumulation, −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. |
-| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
-| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a weak currency, reaching half that component after about 24 months. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
-| Foreign Exchange Surrender Requirement | Buys gold for the central bank with treasury cash, without adding Borrowed Gold that foreign lenders can withdraw. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
+| Capital Controls | Your interest rate moves a quarter as much money across the border, in or out. On gold the World Rate Gap counts at a quarter, both for the gold it moves and for the Peg Confidence a low rate drains; on a floating currency the rate's push on the exchange rate falls to a quarter. Under a treaty peg, an overvalued peg loses a quarter as much Peg Confidence. | Infamy and great-power relations when imposed, and a step of Trapped Capital for each peacetime year it stays on. It does nothing for a currency distrusted for its inflation or its debts. |
+| Restrict Speculative Inflows | Money drawn in by a rate above the world's arrives at half speed, and money leaving is not slowed. On gold it halves the gold, and so the Borrowed Gold, that a high rate brings in; on a floating currency it halves the rise a high real rate gives the exchange rate. | −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. On gold the vault fills more slowly. |
+| Sterilization | Removes 75% of the inflation pressure from incoming gold. Gold Standard only. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a currency below par, reaching half that component after about 24 months. On metal your currency stays at par unless you devalue, so there is nothing for it to reduce. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
+| Foreign Exchange Surrender Requirement | Exporters must sell what they earn abroad to the central bank. The treasury buys gold for the bank with it, without adding Borrowed Gold that foreign lenders can withdraw. Gold Standard only. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
 | Emergency Import Financing | +15% import advantage while a financial crisis lasts. | A weekly government expense of a quarter of the monthly rate: initially 0.05% of annual GDP a month, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
 
 Surrender purchases depend on your market's exports. The monthly cap is 0.05%
@@ -477,14 +491,14 @@ ships through a blockade. The tool ends when the crisis passes or you cannot
 fund it. Each inactive month removes one month of its accumulated surcharge;
 switching it off and back on does not reset the cost.
 
-Sterilize Capital Inflows ends if the treasury cannot cover a month of it. The
-surrender requirement's purchases stay monthly: the treasury pays the same day,
-and the same sum, as the vault receives. Both it and Foreign
-Exchange Surrender Requirement end when you lose the conditions for convertible
-gold flows, including a suspension of convertibility. Other tools are lifted
-when their law or monetary requirements no longer hold. Restrict Speculative
-Inflows and the surrender requirement share the outflow control's wartime
-exception to restrictive financial regulation laws.
+Sterilization ends if the treasury cannot cover a month of it. The surrender
+requirement's purchases stay monthly: the treasury pays the same day, and the
+same sum, as the vault receives. Sterilization and the surrender requirement
+end when you lose the conditions for convertible gold flows, including a
+suspension of convertibility. Other tools are lifted when their law or monetary
+requirements no longer hold. Restrict Speculative Inflows and the surrender
+requirement share Capital Controls' wartime exception to restrictive financial
+regulation laws.
 
 The AI restricts inflows when positive rate pressure accompanies an Expansion
 or hotter cycle, and sterilizes when gold is arriving during those phases. It
@@ -541,13 +555,13 @@ may use and which response the crash event offers.
 
 | Law | Unlocked by | Points | Volatility | Crash likelihood | Locks |
 |---|---|---|---|---|---|
-| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls (Outflows), Asset Relief Program |
-| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls (Outflows), Asset Relief Program |
-| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls (Outflows), Asset Relief Program |
+| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls, Asset Relief Program |
+| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls, Asset Relief Program |
+| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls, Asset Relief Program |
 | Prudential / Narrow Banking | Modern Financial Instruments | 7 | −60% | −50% | Open-Market Operations, all directed credit, Export Credit Facility |
 | Directed Credit & Development Banks | Central Planning | 5 | −20% | −20% | none (two credit sectors) |
-| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls (Outflows), Asset Relief Program |
-| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls (Outflows) |
+| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls, Asset Relief Program |
+| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls |
 
 The capital-controls locks in the table also apply to Restrict Speculative
 Inflows and Foreign Exchange Surrender Requirement. All three are allowed in
@@ -897,9 +911,10 @@ gives +1.25% export advantage and −1.25% import advantage, and above par the
 reverse. A weak currency adds risk premium, and a fall below its three-year
 average raises prices for a while.
 
-Capital Controls (Outflows), an External & Currency tool for 2 points, cut the
-effect of the gap between your rate and the world's on your exchange rate, gold
-and peg to a quarter. Each peacetime year
+Capital Controls, an External & Currency tool for 2 points, cut to a quarter
+how far the gap between your rate and the world's moves money across the
+border, in or out: the exchange rate on a floating currency, gold and Peg
+Confidence on the Gold Standard. Each peacetime year
 they stay on adds a step of Trapped Capital, up to five, costing Industrialist
 and Petite Bourgeoisie approval and investment efficiency. The count freezes in
 a war or crisis and fades after the controls come off.
@@ -1012,7 +1027,7 @@ a quarter full and the treasury is flush.
 rescue appeals, the Great Depression, the seventeen cycle tools and the
 financial regulation laws. The five additional monetary interventions in
 External & Currency are unavailable; Export Credit Facility and Capital
-Controls (Outflows) remain. It drops the monetary layer: no rate target or
+Controls remain. It drops the monetary layer: no rate target or
 mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.

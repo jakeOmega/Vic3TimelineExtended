@@ -217,8 +217,19 @@ or Spanish game.
   monument still gets the entry active within weeks.
 - Banking: momentum and stance draw as two-pole bars with a sliding marker, in the panel and in the `te_banking_bars`
   overlays.
-- Art: the Soft Power and Covert Warfare groups show their illustrations, Global Warming sits in Internal Affairs,
-  and the training mobilization group shows its background card in the military panel.
+- Art: the training mobilization group shows its background card in the military panel.
+- **Journal sections** (2026-11-14, `00_a_te_journal_entry_groups.txt`). The journal list opens with two sections of
+  the mod's: Timeline Extended Systems (vanilla's Development picture, an engine hall), then Rights and Society
+  (vanilla's Domestic Affairs picture), each a card with its name over its entries, above vanilla's themed sections
+  such as The Socialist Movement. No system entry is left under Additional Journal Entries. Check with a country that
+  has several systems open (Banking, Tax Code, Global Warming, the Space Race) and a culture merge candidate, under
+  each of the Active, Potential and Concluded filters: how long the Systems card runs once its potential and
+  concluded entries are listed in it (concluded space race milestones, a candidate's inactive merges), and whether
+  World Climate, a contextless entry, shows in the card as it did in the list. Each member's page header shows its
+  section's picture. If the mod's sections sit below vanilla's: the themed list isn't in database order; record what
+  decides it in `scripting_best_practices.md` § "A Journal Entry Group Is a Section of the Journal Only with
+  `themed = yes`". If a card is too long to use: consider `highlight = yes` on the entries a player opens most, or
+  a third section; both are the owner's call.
 - The Opium Trade isn't offered after 1912-01-23, and one still open then fails with the mod's text. Turtle Island
   is hidden for a North American union and goes invalid, with its cleanup, if one forms. The three vanilla tax
   entries complete under the Tax Code rule.

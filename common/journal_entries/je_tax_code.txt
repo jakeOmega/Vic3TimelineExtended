@@ -41,7 +41,7 @@
 
 je_tax_code = {
 	icon = "gfx/interface/icons/event_icons/je_tax_code.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
 	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
 	# always = yes is vanilla's own default, in 369 of its 449 entries.

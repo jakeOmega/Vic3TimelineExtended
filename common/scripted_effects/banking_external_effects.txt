@@ -60,7 +60,7 @@ banking_external_monthly_update = {
 }
 
 # THE TWO BILLS ARE WEEKLY EXPENSES (owner, 2026-10-27, GUI audit BNK-14):
-# Sterilize Capital Inflows and Emergency Import Financing were paid once a
+# Sterilization and Emergency Import Financing were paid once a
 # month with add_treasury, which no weekly figure includes, so neither the
 # Overview nor the Breakdown showed them. Each is now a charge modifier on the
 # entry (`country_expenses_add = 1` with the Breakdown's mirror field) at the

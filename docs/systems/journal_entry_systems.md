@@ -2,12 +2,14 @@
 
 Reference for all custom journal entry systems added by the Vic3TimelineExtended mod.
 
+**Journal sections** (`common/journal_entry_groups/00_a_te_journal_entry_groups.txt`, 2026-11-14). Every entry the player works through with its own panel, tab, bar or buttons is in Timeline Extended Systems (`je_group_te_systems`), the culture merges included; the social debates and the Post-Scarcity Transition are in Rights and Society (`je_group_te_rights_and_society`). Both are themed, so each is a section of the journal list with its own picture; an entry of a group that isn't themed (Domestic Affairs, Foreign Affairs) is listed under Additional Journal Entries. The Gathering Storm, State Collapse, Create New Religion, the Map Room and the vanilla entries the mod replaces or injects into keep their groups. `test_journal_entry_groups.py` pins the members, so a new entry is placed on purpose; the fields and the order are explained in the group file's header.
+
 ---
 
 ## Banking Cycle (`je_banking_cycle`)
 
 **File:** `common/journal_entries/je_banking.txt`
-**Group:** `je_group_internal_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Every country under the rule holds the entry from the game's first fortnight (not the rebels of a running revolution); its financial cycle starts once the country has `stock_exchange` tech and an urban center of level 5+, and until then the entry is dormant: no readings, its tools greyed, Monetary Policy read-only (`docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md`).
@@ -137,7 +139,7 @@ Persistent journal entry (always active once unlocked).
 ## Civil Rights (`je_civil_rights`)
 
 **File:** `common/journal_entries/je_civil_rights.txt`
-**Group:** `je_group_internal_affairs`
+**Group:** `je_group_te_rights_and_society` (Rights and Society)
 
 ### Purpose
 Tracks a civil rights movement for minority populations. Activates when a country has Civil Rights tech and incorporated states with low-acceptance pops. Redesigned away from a passive 20-year timer into a bar-and-buttons system structurally modeled on `je_colonial_empire`.
@@ -203,7 +205,7 @@ Mod JEs of this family bundle two kinds of modifiers in the same `extra_modifier
 ## Colonial Empire (`je_colonial_empire`)
 
 **File:** `common/journal_entries/je_colonial_empire.txt`
-**Group:** `je_group_foreign_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Models the challenge of maintaining overseas colonies after decolonization tech. Countries balance stability through investment, military presence, or cultural assimilation — or accept planned decolonization.
@@ -379,7 +381,7 @@ One 1.15 outcome per ending (#1432), so the journal panel lists every ending and
 ## Covert Warfare (`je_covert_warfare`)
 
 **File:** `common/journal_entries/je_covert_warfare.txt` (buttons: `common/scripted_buttons/covert_warfare_scripted_buttons.txt`)
-**Group:** `je_group_covert_warfare`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Command centre for the covert-operations layer: intelligence capacity, operation slots, funding level and detection risk. Operations themselves are launched as diplomatic actions (`common/diplomatic_actions/covert_operations.txt`), not from this entry. Mechanics, files and AI behaviour are documented in `mod_systems/covert_warfare.md` § Covert Warfare System.
@@ -453,7 +455,7 @@ Persistent journal entry.
 ## Cultural Hegemony (`je_cultural_hegemony`)
 
 **File:** `common/journal_entries/je_cultural_hegemony.txt` (buttons: `common/scripted_buttons/cultural_hegemony_buttons.txt`)
-**Group:** `je_group_soft_power`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 The player's window into the cultural-hegemony system: the country's share of global cultural pull, its component breakdown, the yearly top-10 leaderboard and the cultural policy controls. All computation runs from on-actions and scripted effects; the entry displays it and owns the JE-scoped policy modifiers. Mechanics, files and hooks are documented in `mod_systems/cultural_hegemony.md` § Cultural Hegemony System.
@@ -557,7 +559,7 @@ Persistent journal entry.
 ## Global Warming (`je_global_warming`)
 
 **File:** `common/journal_entries/je_global_warming.txt` (buttons: `common/scripted_buttons/global_warming_buttons.txt`)
-**Group:** `je_group_internal_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Persistent environmental tracker that applies scaled penalties based on global temperature rise. Uses `temperature_anomaly_display` script value against a 4°C threshold.
@@ -668,7 +670,7 @@ Persistent journal entry. `can_deactivate = no`, so once the world has warmed th
 ## Heir Education (`je_heir_education`)
 
 **File:** `common/journal_entries/je_heir_education.txt`
-**Group:** `je_group_internal_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Allows monarchies to shape their heir's education through active focus choices. The heir gains attribute traits (admin/diplo/military), ideological leanings, and IG affiliation based on selected focuses until the heir comes of age (an 18-year safety timeout).
@@ -720,7 +722,7 @@ Allows monarchies to shape their heir's education through active focus choices. 
 > **Redesign in progress:** see [`un_redesign_design.md`](un_redesign_design.md). Phase 1 (the authority model), phase 2 (tiers, the charter, the crisis, dissolution and refounding) and phase 3 (the dossier and grounds, the itemised vote lean, AI voting in script, the recess), phase 4 (the docket and the event rewrite), phase 5 (dues, resolutions with teeth, convention regimes, sovereignty and intelligence, the lending facility), phase 6 (missions) and phase 7 (the charter's new business) have shipped and are described under *Authority*, *The ladder, the ceiling and the floor*, *Grounds, votes and the recess*, *The docket*, *Dues, teeth and regimes*, *Missions* and *The charter's new business* below. Everything else in this section is the system as it stands.
 
 **File:** `common/journal_entries/je_united_nations.txt`
-**Group:** `je_group_foreign_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 **Switched off mid-game** (2026-11-08). A game rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only inactive records, so after the rule was switched off membership, the 53 declared modifiers and the pulse ran on, and the global pulse would have let a memberless UN decline into a dissolution, events and all. The entry now ends through a hidden invalid outcome on the rule, and `un_stop_for_rule` (from that outcome and monthly from `un_global_authority_on_action` while the rule is off) ends the organisation quietly: `un_dissolve_quiet`, the second half of `un_dissolve` (business, missions, mandates voided with the holder's notice as the rule-off sweep always did, every country stripped by `un_dissolve_strip_country`, the headquarters, the agencies, the charter, the globals), with no dissolution record, refounding cooldown, `un_events.30` or bloc vacuum. A founding conference breaks up, and a vacuum modifier left from an earlier dissolution comes off. The global pulse's ladder, docket and conference run only with the rule. Timed penalties and costs run out as after a dissolution. Switched back on, the entry doesn't return. Play-test: `docs/testing/rules-off-midgame-playtest.md`.
 
@@ -1505,7 +1507,7 @@ Persistent. Revolution inheritable.
 ## Nuclear Weapons (`je_nuclear_program`)
 
 **File:** `common/journal_entries/je_nuclear_program.txt` (buttons: `common/scripted_buttons/nuclear_program_buttons.txt`)
-**Group:** `je_group_foreign_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 The whole nuclear system in one entry, shown as "Nuclear Weapons": the programme that builds warheads, and — since 2026-09-25, when the separate `je_nuclear_deterrence` was folded in to save a journal slot — the posture and crises of **Nuclear Deterrence Widget** below. The key stays `je_nuclear_program` so existing saves keep the entry.
@@ -1784,7 +1786,7 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 ## Space Race (`je_space_race_*`)
 
 **File:** `common/journal_entries/je_space_race.txt`
-**Group:** `je_group_foreign_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 
 ### Purpose
 Multi-stage competitive space race system across eight journal entries — six milestones with a bar (a seventh, the Moon Base, retired 2026-10-29 and removed with vanilla 1.15), the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
@@ -1902,7 +1904,7 @@ Traced scenarios: fresh activation (Standard: the programme's pace, base risk, n
 ## Tax Code (`je_tax_code`)
 
 **File:** `common/journal_entries/je_tax_code.txt`
-**Group:** `je_group_internal_affairs`
+**Group:** `je_group_te_systems` (Timeline Extended Systems)
 **Game rule:** `te_tax_code_rule` (`te_tax_code_enabled`, `te_tax_code_enabled_customs`, `te_tax_code_light`; default `te_tax_code_disabled`)
 
 ### Purpose

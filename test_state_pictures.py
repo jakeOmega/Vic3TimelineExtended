@@ -13,7 +13,7 @@ import struct
 import subprocess
 import unittest
 
-from test_demographics_registry import ROOT, _Engine, _raw_blocks
+from test_demographics_registry import ROOT, _Engine, _find, _raw_blocks
 
 REGISTRY_PATH = ROOT / "scripts" / "image_pipeline" / "state_picture_registry.py"
 GENERATOR_PATH = ROOT / "scripts" / "generators" / "gen_state_pictures.py"
@@ -52,6 +52,72 @@ try:
     import convert_state_picture as converter
 except ImportError:  # CI installs numpy but not Pillow
     converter = None
+
+
+class _WorldEngine(_Engine):
+    """_Engine with global variables (`globals_`, read as global_var:X and has_global_variable, written by
+    set_global_variable and remove_global_variable) and every_state over `world`: each state a dict of the reads
+    it gives inside the walk (state_population, average_sol, and `exists:owner` False for one with no owner). The calendar year is the fixture `year`, 1950 unless
+    given. The pass's self-checks write debug_log lines, which the script parser doesn't read: their text is tested
+    on its own (test_the_world_self_checks_can_fail)."""
+
+    OWN = ("set_global_variable", "remove_global_variable", "every_state")
+
+    def __init__(self, fixtures, world=(), globals_=None, **kw):
+        super().__init__({"year": 1950.0, **fixtures}, **kw)
+        self.globals = dict(globals_ or {})
+        self.world = [dict(s) for s in world]
+        self.walks = 0
+        self.effects.update({"te_state_picture_world_selfcheck": "", "te_state_picture_world_year_selfcheck": ""})
+
+    def number(self, tok):
+        if tok.startswith("global_var:"):
+            assert tok[11:] in self.globals, f"read of missing global {tok}"
+            return self.globals[tok[11:]]
+        return super().number(tok)
+
+    def _test(self, key, op, arg):
+        if key == "has_global_variable":
+            return arg in self.globals
+        if key == "exists":
+            # a state of the walk says `exists:owner: False` when it has no owner
+            return bool(self.fixtures.get(f"exists:{arg}", True))
+        return super()._test(key, op, arg)
+
+    def run(self, items):
+        # these keys end an if / else_if / else chain as any effect does, so the items between them run as before
+        plain = []
+        for key, op, arg in items:
+            if key not in self.OWN:
+                plain.append((key, op, arg))
+                continue
+            super().run(plain)
+            plain = []
+            if key == "set_global_variable":
+                got = _find(arg, "value")
+                self.globals[_find(arg, "name")] = 1.0 if got == "yes" else self._q(self.value(got))
+            elif key == "remove_global_variable":
+                self.globals.pop(arg, None)
+            else:
+                self.walks += 1
+                limit = next((v for k, _, v in arg if k == "limit"), [])
+                rest = [i for i in arg if i[0] != "limit"]
+                for state in self.world:
+                    saved_vars, saved_fixtures = self.vars, self.fixtures
+                    self.vars, self.fixtures = {}, {**self.fixtures, **state}
+                    try:
+                        if self.holds(limit):
+                            self.run(rest)
+                    finally:
+                        self.vars, self.fixtures = saved_vars, saved_fixtures
+        super().run(plain)
+
+
+def _value_literal(name):
+    """The number a one-line script value of the values file holds (`name = { value = N }`)."""
+    m = re.fullmatch(r"\s*value = (-?[\d.]+)\s*", _raw_blocks([VALUES])[name])
+    assert m, f"{name} is not a one-line value"
+    return float(m.group(1))
 
 
 def _vanilla_terrains():
@@ -551,24 +617,34 @@ class TestYearlyPass(unittest.TestCase):
         self.assertNotIn("te_sp_resort", self.city(levels=1000, tour=17, state={"te_sp_resort": 1}))
 
     def test_a_boomtown_needs_several_years_of_growth(self):
-        self.assertNotIn("te_sp_boom", self.years([0.06]))                 # one good year: 1.2% smoothed
-        self.assertNotIn("te_sp_boom", self.years([0.06] * 3))             # three: 2.9%
-        self.assertNotIn("te_sp_boom", self.years([0.05] * 4))             # 5% a year: 2.95% after four
-        self.assertIn("te_sp_boom", self.years([0.05] * 5))                # and 3.4% after five
-        self.assertNotIn("te_sp_boom", self.years([0.02] * 20))            # steady 2% never gets there
+        # the owner (2026-11-14): a boomtown from about 5% a year. The stored figure after n years of a steady rate
+        # r is r x (1 - 0.8^n), so it nears r from below: the years the floor takes, as the values file says
+        self.assertEqual((_value_literal("te_state_picture_k_boom"), _value_literal("te_state_picture_k_boom_keep")),
+                         (0.05, 0.045))
+        self.assertNotIn("te_sp_boom", self.years([0.06] * 8))             # 6% a year: 4.99% after eight
+        self.assertIn("te_sp_boom", self.years([0.06] * 9))                # and 5.2% after nine
+        self.assertNotIn("te_sp_boom", self.years([0.07] * 5))
+        self.assertIn("te_sp_boom", self.years([0.07] * 6))
+        self.assertNotIn("te_sp_boom", self.years([0.08] * 4))
+        self.assertIn("te_sp_boom", self.years([0.08] * 5))
+        self.assertNotIn("te_sp_boom", self.years([0.15] * 3))             # the cap: 10% a year, 4.9% after three
+        self.assertIn("te_sp_boom", self.years([0.15] * 4))
+        self.assertNotIn("te_sp_boom", self.years([0.05] * 30))            # steady 5% never gets there
+        self.assertNotIn("te_sp_boom", self.years([0.04] * 30))
         # a single year's leap counts as a tenth at most: a migration wave is not a trend
         self.assertAlmostEqual(self.years([3.0])["te_sp_growth"], 0.02, places=4)
         # a town is no boomtown however it grows
-        self.assertNotIn("te_sp_boom", self.years([0.05] * 6, size=1))
+        self.assertNotIn("te_sp_boom", self.years([0.08] * 6, size=1))
 
     def test_a_boomtown_cools_and_a_city_declines(self):
-        boom = self.years([0.05] * 6)
+        boom = self.years([0.08] * 6)                                      # 5.9%
         self.assertIn("te_sp_boom", boom)
-        self.assertNotIn("te_sp_boom", self.years([0.05] * 6 + [0.0] * 3))
+        self.assertIn("te_sp_boom", self.years([0.08] * 6 + [0.0]))        # 4.7%: kept down to 4.5%
+        self.assertNotIn("te_sp_boom", self.years([0.08] * 6 + [0.0] * 2))  # 3.8%
         self.assertIn("te_sp_decline", self.years([-0.02] * 4))
         self.assertNotIn("te_sp_decline", self.years([-0.005] * 20))
         self.assertNotIn("te_sp_decline", self.years([-0.02] * 4 + [0.01] * 3))
-        both = self.years([0.05] * 6 + [-0.03] * 8)
+        both = self.years([0.08] * 6 + [-0.03] * 8)
         self.assertEqual({"te_sp_boom" in both, "te_sp_decline" in both}, {False, True})
 
     def test_a_year_of_border_changes_is_left_out_of_the_growth(self):
@@ -601,38 +677,149 @@ class TestYearlyPass(unittest.TestCase):
         digits = [registry.CHARACTERS[name][1] for name in order]
         self.assertEqual(digits, sorted(digits, reverse=True))
 
-    def prosperity(self, rung, sol, expected=None, state=None):
-        """The means (1 poor, 2 ordinary, 3 affluent) and whether run-down, after a pass in a state of that
-        standard of living whose owner is on that city rung."""
-        eng = _Engine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol),
-                       "average_expected_sol": float(sol if expected is None else expected)},
-                      effects=_raw_blocks([EFFECTS]))
+    def judge(self, rung, sol, expected=None, state=None, world=20.0, world_year=1950, year=1950, states=()):
+        """The engine after a prosperity pass in a state of that standard of living whose owner is on that city
+        rung: the world's average stood at `world` (None: never measured), last measured in `world_year`, and
+        `states` (state_population, average_sol) are the world a new measure walks."""
+        globals_ = {} if world is None else {"te_sp_world_sol": float(world), "te_sp_world_year": float(world_year)}
+        eng = _WorldEngine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol), "year": float(year),
+                            "average_expected_sol": float(sol if expected is None else expected)},
+                           world=[{"state_population": float(p), "average_sol": float(s)} for p, s in states],
+                           globals_=globals_, effects=_raw_blocks([EFFECTS]))
         eng.values.update(_raw_blocks([VALUES]))
+        eng.triggers.update(_raw_blocks([TRIGGERS]))
         eng.vars.update({k: float(v) for k, v in (state or {}).items()})
         eng.call("te_state_picture_refresh_prosperity")
+        return eng
+
+    def prosperity(self, rung, sol, expected=None, state=None, world=20.0):
+        """The means (1 poor, 2 ordinary, 3 affluent) and whether run-down, after a pass (judge)."""
+        eng = self.judge(rung, sol, expected, state, world)
         return eng.vars.get("te_sp_means", 2.0), "te_sp_rundown" in eng.vars
 
-    def test_means_follow_the_owners_floors_by_rung(self):
-        # the owner's first-pass figures (2026-11-11), at the era of each city rung
-        floors = {1: (12, 20), 2: (14, 22), 3: (18, 28), 4: (26, 36), 5: (35, 45)}
-        for rung, (poor, rich) in floors.items():
-            with self.subTest(rung=rung):
-                self.assertEqual(self.prosperity(rung, poor - 0.1)[0], 1)
-                self.assertEqual(self.prosperity(rung, poor)[0], 2)
-                self.assertEqual(self.prosperity(rung, rich - 0.1)[0], 2)
-                self.assertEqual(self.prosperity(rung, rich)[0], 3)
-        # the same standard of living is ordinary in 1930 and poor in 1990
-        self.assertEqual((self.prosperity(1, 15)[0], self.prosperity(3, 15)[0]), (2, 1))
+    def test_means_follow_the_world_average(self):
+        # the owner (2026-11-14): poor and affluent are the world's average times a ratio, one line each
+        poor, rich = _value_literal("te_state_picture_k_poor_ratio"), _value_literal("te_state_picture_k_affluent_ratio")
+        self.assertLess(poor, 1)
+        self.assertGreater(rich, 1)
+        for rung in (1, 3, 5):
+            for world in (12.0, 20.0, 41.6):
+                with self.subTest(rung=rung, world=world):
+                    self.assertEqual(self.prosperity(rung, world * poor - 0.1, world=world)[0], 1)
+                    self.assertEqual(self.prosperity(rung, world * poor, world=world)[0], 2)
+                    self.assertEqual(self.prosperity(rung, world, world=world)[0], 2)
+                    self.assertEqual(self.prosperity(rung, world * rich - 0.1, world=world)[0], 2)
+                    self.assertEqual(self.prosperity(rung, world * rich, world=world)[0], 3)
+        # the same standard of living is ordinary in a poor world and poor in a rich one, whatever the rung
+        sol = 30 * poor - 1
+        self.assertEqual((self.prosperity(3, sol, world=sol)[0], self.prosperity(3, sol, world=30)[0]), (2, 1))
         # before the first city technology there is nothing to tag, and a tag is taken away
         self.assertEqual(self.prosperity(0, 3, expected=30), (2, False))
-        self.assertEqual(self.prosperity(0, 3, expected=30, state={"te_sp_means": 1, "te_sp_rundown": 1}), (2, False))
+        eng = self.judge(0, 3, expected=30, state={"te_sp_means": 1, "te_sp_rundown": 1, "te_sp_world": 20})
+        self.assertFalse({"te_sp_means", "te_sp_rundown", "te_sp_world"} & set(eng.vars))
+        self.assertEqual(eng.walks, 0)                                      # and no measure for it
 
     def test_a_means_tag_is_kept_half_a_point_past_its_floor(self):
-        self.assertEqual(self.prosperity(1, 12.3, state={"te_sp_means": 1})[0], 1)     # poor until 12.5
-        self.assertEqual(self.prosperity(1, 12.5, state={"te_sp_means": 1})[0], 2)
-        self.assertEqual(self.prosperity(1, 19.6, state={"te_sp_means": 3})[0], 3)     # affluent down to 19.5
-        self.assertEqual(self.prosperity(1, 19.4, state={"te_sp_means": 3})[0], 2)
-        self.assertEqual(self.prosperity(1, 25, state={"te_sp_means": 1})[0], 3)       # straight from poor to rich
+        # world 20 with the shipped ratios' floors, whatever they are: kept half a point past each
+        poor = 20 * _value_literal("te_state_picture_k_poor_ratio")
+        rich = 20 * _value_literal("te_state_picture_k_affluent_ratio")
+        self.assertEqual(_value_literal("te_state_picture_k_means_keep"), 0.5)
+        self.assertEqual(self.prosperity(1, poor + 0.3, state={"te_sp_means": 1})[0], 1)     # poor until +0.5
+        self.assertEqual(self.prosperity(1, poor + 0.5, state={"te_sp_means": 1})[0], 2)
+        self.assertEqual(self.prosperity(1, rich - 0.4, state={"te_sp_means": 3})[0], 3)     # affluent down to -0.5
+        self.assertEqual(self.prosperity(1, rich - 0.6, state={"te_sp_means": 3})[0], 2)
+        self.assertEqual(self.prosperity(1, rich + 5, state={"te_sp_means": 1})[0], 3)       # straight from poor to rich
+
+    def test_no_world_figure_no_means(self):
+        # a world of no people has no average to stand on: no tag, and a stored one is taken away; upkeep still counts
+        # never measured, or measured last year, and the walk finds no people; or this year's figure is 0
+        for world, world_year, states in ((None, 1949, ()), (17.0, 1949, [(0, 10)]), (0.0, 1950, [(1000, 10)])):
+            with self.subTest(world=world, world_year=world_year, states=states):
+                eng = self.judge(3, 1, expected=30, world=world, world_year=world_year, states=states,
+                                 state={"te_sp_means": 1, "te_sp_world": 20})
+                self.assertFalse({"te_sp_means", "te_sp_world"} & set(eng.vars))
+                self.assertIn("te_sp_rundown", eng.vars)
+                self.assertFalse(eng.globals.get("te_sp_world_sol"))
+
+    def test_the_world_average_counts_each_state_once(self):
+        # the owner (2026-11-14): one rich, populous country shouldn't move every state's floors. 1,000 people at 10
+        # and 3,000 at 30 average 20, not the people-weighted 25; a state with no people is left out
+        eng = self.judge(3, 24, world=None, states=[(1000, 10), (3000, 30), (0, 80)])
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], 20.0)
+        self.assertEqual(eng.globals["te_sp_world_year"], 1950)
+        # the state is judged against it, and keeps it for its hover
+        self.assertEqual(eng.vars["te_sp_world"], eng.globals["te_sp_world_sol"])
+        self.assertEqual(eng.number("te_state_picture_hover_world"), 20.0)
+        # and a state with no owner is left out too
+        eng = _WorldEngine({}, world=[{"state_population": 1000.0, "average_sol": 10.0},
+                                      {"state_population": 3000.0, "average_sol": 30.0},
+                                      {"state_population": 500.0, "average_sol": 90.0, "exists:owner": False}],
+                           effects=_raw_blocks([EFFECTS]))
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.call("te_state_picture_world_walk")
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], 20.0)
+        self.assertEqual(eng.locals["te_sp_w_states"], 2)
+
+    def test_the_world_is_measured_once_a_calendar_year(self):
+        world = [(1000, 10), (3000, 30)]
+        # this year's figure stands: no second walk, though the world has moved since
+        eng = self.judge(3, 24, world=17.0, world_year=1950, year=1950, states=world)
+        self.assertEqual((eng.walks, eng.globals["te_sp_world_sol"], eng.vars["te_sp_world"]), (0, 17.0, 17.0))
+        # last year's is measured again by the first state judged this year, before it is judged
+        rich = 17 * _value_literal("te_state_picture_k_affluent_ratio")    # affluent against 17
+        eng = self.judge(3, rich, world=17.0, world_year=1949, year=1950, states=world)
+        self.assertEqual((eng.walks, eng.globals["te_sp_world_year"]), (1, 1950))
+        self.assertAlmostEqual(eng.vars["te_sp_world"], 20.0)
+        self.assertEqual(eng.vars.get("te_sp_means", 2.0), 2)               # but judged against 20: ordinary
+        # the first measure of a game always runs
+        self.assertEqual(self.judge(3, 24, world=None, states=world).walks, 1)
+
+    def test_a_judged_state_keeps_the_figure_it_was_judged_against(self):
+        # judged against 20 in December; the world is measured at 40 in January: its hover still gives 20's floors
+        eng = self.judge(3, 9, world=20.0)
+        poor = eng.number("te_state_picture_poor_floor")
+        eng.globals["te_sp_world_sol"] = 40.0
+        self.assertEqual(eng.number("te_state_picture_poor_floor"), poor)
+        self.assertEqual(eng.number("te_state_picture_hover_world"), 20.0)
+
+    def test_the_world_average_in_fixed_point(self):
+        # the engine's five decimals: a mixed world's average is its float average to the fifth decimal, and the walk
+        # keeps its least and greatest for the self-check
+        mixed = [(123_456_789, 7.25), (4_321, 63.5), (98_765_432, 31.125), (5_000_000, 12.0), (77, 18.33333)]
+        eng = _WorldEngine({}, world=[{"state_population": float(p), "average_sol": s} for p, s in mixed],
+                           truncate=True, effects=_raw_blocks([EFFECTS]))
+        eng.values.update(_raw_blocks([VALUES]))
+        eng.call("te_state_picture_world_walk")
+        self.assertAlmostEqual(eng.globals["te_sp_world_sol"], sum(s for _, s in mixed) / len(mixed), delta=2e-5)
+        self.assertEqual((eng.locals["te_sp_w_min"], eng.locals["te_sp_w_max"], eng.locals["te_sp_w_states"]),
+                         (7.25, 63.5, 5))
+
+    def test_the_world_self_checks_can_fail(self):
+        text = EFFECTS.read_text(encoding="utf-8-sig")
+        blocks = _raw_blocks([EFFECTS])
+        world = blocks["te_state_picture_world_selfcheck"]
+        ok = world.index('debug_log = "TE_SELF_CHECK OK state_picture_world ')
+        gate = world[world.rindex("limit = {", 0, ok):ok]
+        # OK can't pass on degenerate reads: no state counted, a year that isn't one, every read the measuring state's
+        for cond in ("te_state_picture_year >= 1836", "local_var:te_sp_w_states > 0",
+                     "local_var:te_sp_w_min < local_var:te_sp_w_max",
+                     "te_state_picture_world_sol >= local_var:te_sp_w_min",
+                     "te_state_picture_world_sol <= local_var:te_sp_w_max"):
+            self.assertIn(cond, gate)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN state_picture_world ', world[ok:])
+        self.assertIn("te_state_picture_world_selfcheck = yes", blocks["te_state_picture_world_walk"])
+        year = blocks["te_state_picture_world_year_selfcheck"]
+        ok = year.index('debug_log = "TE_SELF_CHECK OK state_picture_world_year ')
+        self.assertIn("global_var:te_sp_chk_w_gap = 1", year[year.rindex("limit = {", 0, ok):ok])
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN state_picture_world_year ', year[ok:])
+        # the year check reads the last measure's year, so it runs before the year is stored again
+        measure = blocks["te_state_picture_world_measure"]
+        self.assertLess(measure.index("te_state_picture_world_year_selfcheck = yes"),
+                        measure.index("set_global_variable = { name = te_sp_world_year"))
+        self.assertNotIn("THIS.MakeScope", text)
+        # the console's pass measures afresh: it clears the year before the pass
+        self.assertRegex(DEBUG_EVENTS.read_text(encoding="utf-8-sig"),
+                         r"remove_global_variable = te_sp_world_year\s*every_state = \{\s*te_state_picture_refresh = yes")
 
     def test_run_down_is_the_standard_of_living_against_expectations(self):
         self.assertFalse(self.prosperity(3, 20, expected=21.9)[1])
@@ -641,8 +828,10 @@ class TestYearlyPass(unittest.TestCase):
         self.assertFalse(self.prosperity(3, 20, expected=21.4, state={"te_sp_rundown": 1})[1])
         # the owner's split: a poor state that never had more is poor and kept; a rich one in decline is
         # affluent and run-down
-        self.assertEqual(self.prosperity(3, 10, expected=10), (1, False))
-        self.assertEqual(self.prosperity(3, 30, expected=34), (3, True))
+        poor = 20 * _value_literal("te_state_picture_k_poor_ratio") - 1          # world 20's floors
+        rich = 20 * _value_literal("te_state_picture_k_affluent_ratio") + 1
+        self.assertEqual(self.prosperity(3, poor, expected=poor), (1, False))
+        self.assertEqual(self.prosperity(3, rich, expected=rich + 4), (3, True))
 
     def test_a_reword_reaches_the_prompt_of_a_table_variant(self):
         # a reword of a field its variant's sentence does not use, or of a pilot picture written by
@@ -872,6 +1061,59 @@ class TestBannerHover(unittest.TestCase):
         self.assertRegex(values["te_state_picture_k_smog"], rf"value = {registry.SMOG_POLLUTION}\b")
         self.assertRegex(values["te_state_picture_k_ruins"], rf"value = {registry.RUINS_DEVASTATION}\b")
 
+    def test_the_means_lines_give_the_world_average_the_state_was_judged_against(self):
+        # the hover agrees with the picture: each line gives the world's average as the state stored it at its count,
+        # and the floor derived from it, never the world's live figure or the owner's rung
+        values = _raw_blocks([VALUES])
+        for kind in ("poor", "affluent"):
+            at, kept = self.loc[f"te_sp_tt_why_{kind}_at"], self.loc[f"te_sp_tt_why_{kind}_kept"]
+            with self.subTest(kind):
+                for line in (at, kept):
+                    self.assertIn("ScriptValue('te_state_picture_hover_world')|1", line)
+                    self.assertIn("ScriptValue('te_state_picture_hover_sol')|1", line)
+                    self.assertNotIn("GetGlobalVariable", line)
+                self.assertIn(f"ScriptValue('te_state_picture_{kind}_floor')|1", at)
+                self.assertIn(f"ScriptValue('te_state_picture_k_{kind}_ratio')|%0", at)
+                self.assertIn(f"ScriptValue('te_state_picture_{kind}_floor_keep')|1", kept)
+                self.assertIn("te_state_picture_hover_world", values[f"te_state_picture_{kind}_floor"])
+                self.assertNotRegex(values[f"te_state_picture_{kind}_floor"], r"global_var|city_rung")
+        self.assertIn("var:te_sp_world", values["te_state_picture_hover_world"])
+        # the boomtown lines read the floor and its keep from the values, so a new figure needs no loc change
+        self.assertIn("ScriptValue('te_state_picture_k_boom')", self.loc["te_sp_tt_why_boomtown_at"])
+        self.assertIn("ScriptValue('te_state_picture_k_boom_keep')", self.loc["te_sp_tt_why_boomtown_kept"])
+
+    def chosen(self, key, eng):
+        """The line the hover shows for `key` in the state `eng` holds: each SelectLocalization on a value over 0
+        followed to the line it picks, as the GUI picks it."""
+        sel = re.compile(r"^\[SelectLocalization\(GreaterThan_CFixedPoint\(State\.MakeScope\.ScriptValue\('(\w+)'\), "
+                         r"'\(CFixedPoint\)0'\), '(\w+)', '(\w+)'\)\]$")
+        seen = [key]
+        while (m := sel.match(self.loc[key])):
+            key = m.group(2) if eng.number(m.group(1)) > 0 else m.group(3)
+            seen.append(key)
+        return seen
+
+    def test_a_state_not_yet_judged_against_the_world_gives_no_world_figure(self):
+        # an existing save: a state keeps the old rule's tag, and has no stored world figure, until its next count;
+        # its hover then gives its standard of living and no average or floor, not "a world average of 0.0"
+        values = _raw_blocks([VALUES])
+        for kind, tag in (("poor", 1), ("affluent", 3)):
+            with self.subTest(kind):
+                old = _WorldEngine({})
+                old.values.update(values)
+                old.vars.update({"te_sp_means": float(tag), "te_sp_sol": 9.0 if tag == 1 else 60.0})
+                line = self.chosen(f"te_sp_tt_why_{kind}", old)[-1]
+                self.assertEqual(line, "te_sp_tt_why_means_unmeasured")
+                self.assertNotRegex(self.loc[line], r"hover_world|_floor|_ratio")
+                self.assertIn("ScriptValue('te_state_picture_hover_sol')|1", self.loc[line])
+                # judged against the world: the line with the figure, at or kept as before
+                for sol, kept in ((5.0, "at"), (10.3, "kept")) if tag == 1 else ((40.0, "at"), (31.8, "kept")):
+                    judged = _WorldEngine({})
+                    judged.values.update(values)
+                    judged.vars.update({"te_sp_means": float(tag), "te_sp_sol": sol, "te_sp_world": 20.0})
+                    self.assertEqual(self.chosen(f"te_sp_tt_why_{kind}", judged)[1:],
+                                     [f"te_sp_tt_why_{kind}_judged", f"te_sp_tt_why_{kind}_{kept}"])
+
     def test_the_banner_finds_its_text_by_the_overlay_and_a_vanilla_picture_has_none(self):
         panel = STATES_PANEL.read_text(encoding="utf-8-sig")
         banner = panel[panel.index("### STATE IMAGE"):panel.index("### FACTION")]
@@ -904,15 +1146,16 @@ class TestBannerHover(unittest.TestCase):
         self.assertEqual(min(p["rung"] for p in registry.wired().values() if p["terrain"] == ["urban"]), 1)
 
     def stored(self, people=None, sol=None, esol=None, rung=3, levels=0, oil=0, mines=0, coal=0, heavy=0, tour=0,
-               state=None):
-        """The state's variables after a whole pass, the walk's sums stubbed in."""
+               state=None, world=30.0):
+        """The state's variables after a whole pass, the walk's sums stubbed in, against this year's world average."""
         sums = {"te_sp_all": levels, "te_sp_oil_lv": oil, "te_sp_mine": mines, "te_sp_coal_lv": coal,
                 "te_sp_heavy_lv": heavy, "te_sp_tour_lv": tour}
         stub = "\n".join(f"set_local_variable = {{ name = {k} value = {v} }}" for k, v in sums.items())
-        eng = _Engine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol or 0),
-                       "average_expected_sol": float(esol if esol is not None else (sol or 0))},
-                      effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
-                               "te_state_picture_land_selfcheck": "", "te_state_picture_selfcheck": ""})
+        eng = _WorldEngine({"te_state_picture_city_rung": float(rung), "average_sol": float(sol or 0),
+                            "average_expected_sol": float(esol if esol is not None else (sol or 0))},
+                           globals_={"te_sp_world_sol": world, "te_sp_world_year": 1950.0},
+                           effects={**_raw_blocks([EFFECTS]), "te_state_picture_land_sums": stub,
+                                    "te_state_picture_land_selfcheck": "", "te_state_picture_selfcheck": ""})
         eng.values.update(_raw_blocks([VALUES]))
         eng.triggers.update(_raw_blocks([TRIGGERS]))
         if people is not None:
@@ -922,9 +1165,9 @@ class TestBannerHover(unittest.TestCase):
         return eng
 
     def test_the_pass_stores_the_figures_each_tag_was_judged_on(self):
-        eng = self.stored(people=950_000, sol=9, esol=12)
+        eng = self.stored(people=950_000, sol=9, esol=12, world=23.1)
         self.assertEqual(eng.vars["te_sp_people"], 950_000)
-        self.assertEqual((eng.vars["te_sp_sol"], eng.vars["te_sp_esol"]), (9, 12))
+        self.assertEqual((eng.vars["te_sp_sol"], eng.vars["te_sp_esol"], eng.vars["te_sp_world"]), (9, 12, 23.1))
         self.assertNotIn("te_sp_people", self.stored(people=None, sol=9).vars)       # no walk yet, no count
         self.assertNotIn("te_sp_sol", self.stored(people=1000, sol=9, rung=0).vars)  # before the first city rung
         eng = self.stored(people=1000, levels=200, oil=14, mines=40, coal=25, heavy=60, tour=6, sol=9)
@@ -944,9 +1187,12 @@ class TestBannerHover(unittest.TestCase):
         self.assertEqual(kept("metropolis", people=1_200_000, sol=20), 0)
         self.assertEqual(kept("metropolis", people=950_000, sol=20, state={"te_sp_size": 3}), 1)
         self.assertEqual(kept("megacity", people=9_500_000, sol=20, state={"te_sp_size": 4}), 1)
-        self.assertEqual(kept("poor", people=1000, sol=17, rung=3), 0)                # under 18
-        self.assertEqual(kept("poor", people=1000, sol=18.3, rung=3, state={"te_sp_means": 1}), 1)
-        self.assertEqual(kept("affluent", people=1000, sol=27.7, rung=3, state={"te_sp_means": 3}), 1)
+        poor = 30 * _value_literal("te_state_picture_k_poor_ratio")                   # world 30's floors
+        rich = 30 * _value_literal("te_state_picture_k_affluent_ratio")
+        self.assertEqual(kept("poor", people=1000, sol=poor - 1, rung=3), 0)
+        self.assertEqual(kept("poor", people=1000, sol=poor + 0.3, rung=3, state={"te_sp_means": 1}), 1)
+        self.assertEqual(kept("affluent", people=1000, sol=rich + 1, rung=3), 0)
+        self.assertEqual(kept("affluent", people=1000, sol=rich - 0.3, rung=3, state={"te_sp_means": 3}), 1)
         self.assertEqual(kept("rundown", people=1000, sol=10, esol=13), 0)
         self.assertEqual(kept("rundown", people=1000, sol=10, esol=11.7, state={"te_sp_rundown": 1}), 1)
         self.assertEqual(kept("oil", people=1000, levels=1000, oil=46, sol=9, state={"te_sp_oil": 1}), 1)

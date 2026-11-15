@@ -898,6 +898,17 @@ te_mon_fx_is_devalued = {
 	var:te_fx_devalued_months > 0
 }
 
+# Is the index held at par, so it can add no weak-currency premium
+# (te_mon_premium_fx)? Metal that is neither anchored (an anchored index is the
+# anchor's, te_monetary_update_fx's first branch) nor devalued. The
+# "On this currency" line of Limit Foreign-Currency Borrowing reads it
+# (banking_ext_now_fx_borrowing).
+te_mon_fx_pinned_at_par = {
+	te_mon_is_metallic = yes
+	te_mon_is_anchored = no
+	te_mon_fx_is_devalued = no
+}
+
 # Is overvaluation past the tolerance at which it drains a gold peg? Also read
 # by step 10's heal, so that the +1 a healthy peg earns holds instead of netting
 # the drain away (ruling Q10's "under pressure", extended).

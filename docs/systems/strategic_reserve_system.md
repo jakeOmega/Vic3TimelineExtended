@@ -373,7 +373,7 @@ Besides choosing Manual (in a good's Policy Settings, or **All: Manual** for eve
 
 ## 5. Journal Entry — Control Panel
 
-`je_strategic_reserve` (group: `je_group_internal_affairs`) carries the UI, and the Market panel's Reserve tab shows the same panel (below). Its panel is [gui/journal_entry_widgets/strategic_reserve_widget.gui](../../gui/journal_entry_widgets/strategic_reserve_widget.gui), built to the house style ([`gui_style_guide.md`](../guides/gui_style_guide.md)): each section is a type, one composer (`te_st_res_status_sections`) and the overview set their order, and the entry attaches two named roots.
+`je_strategic_reserve` (group: `je_group_te_systems`, Timeline Extended Systems) carries the UI, and the Market panel's Reserve tab shows the same panel (below). Its panel is [gui/journal_entry_widgets/strategic_reserve_widget.gui](../../gui/journal_entry_widgets/strategic_reserve_widget.gui), built to the house style ([`gui_style_guide.md`](../guides/gui_style_guide.md)): each section is a type, one composer (`te_st_res_status_sections`) and the overview set their order, and the entry attaches two named roots.
 
 | Container | Root | Shows | Default |
 |---|---|---|---|

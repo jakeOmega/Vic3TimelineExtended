@@ -2395,7 +2395,7 @@ banking_medium_radicals_value = 0.03
 # Exempt, since switching them is free by design: Moral Suasion and the other economies' 1-point
 # tools (Coordination Protocol, Solidarity Campaign, Council Directive). The crisis programs
 # keep a price of their own (Asset Relief, Bail-in, the Bank Holiday, Emergency Liquidity), and
-# Capital Controls (Outflows) pays in infamy and relations. test_banking_toggle_costs.py holds
+# Capital Controls pays in infamy and relations. test_banking_toggle_costs.py holds
 # every tool to this.
 banking_toggle_radicals_value = 0.005
 banking_toggle_paired_radicals_value = {

@@ -11,12 +11,13 @@ keeps the taxation laws and lets you set each tax within your law's range
 directly, without bills (see the [Introduction](01-introduction.md)). Choose it
 when you set up the campaign; it can't be switched later.
 
-Everything happens in the Tax Code journal entry, in the Domestic Affairs group,
-and in the Budget panel's Tax Code tab. Both show the same panels. Under the two
-legislated settings AI countries legislate through the same bills and the same
-rules (see [How AI countries legislate taxes](#how-ai-countries-legislate-taxes)).
-The next section covers the light setting; the rest of the chapter covers the
-legislated ones.
+Everything happens in the Tax Code journal entry, in the Timeline Extended
+Systems section of the journal, and in the Budget panel's Tax Code tab. Both
+show the same panels. Under the two legislated settings AI countries legislate
+through the same bills and the same rules (see
+[How AI countries legislate taxes](#how-ai-countries-legislate-taxes)). The next
+section covers the light setting; the rest of the chapter covers the legislated
+ones.
 
 ## Setting taxes within your taxation law
 
