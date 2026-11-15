@@ -15654,7 +15654,7 @@ REPLACE:ideology_anarchist_movement = {
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
-		law_robot_tax = approve
+		law_robot_tax = neutral
 		law_human_labor_quotas = approve
 		law_automation_dividend = strongly_approve
 	}
@@ -15821,7 +15821,7 @@ REPLACE:ideology_revolutionary_socialist_movement = {
 	lawgroup_genetic_rights = {
 		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = disapprove
-		law_corporate_genetic_licensing = approve
+		law_corporate_genetic_licensing = neutral
 		law_open_source_genetics = approve
 		law_state_eugenics_program = approve
 	}
@@ -15917,7 +15917,7 @@ REPLACE:ideology_fascist_movement = {
 		law_unrestricted_automation = neutral
 		law_robot_tax = approve
 		law_human_labor_quotas = strongly_approve
-		law_automation_dividend = approve
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -15957,9 +15957,9 @@ REPLACE:ideology_fascist_movement = {
 		law_communal_child_rearing = strongly_disapprove
 	}
 	lawgroup_genetic_rights = {
-		law_traditional_heredity = neutral
-		law_ban_on_genetic_modification = approve
-		law_corporate_genetic_licensing = approve
+		law_traditional_heredity = disapprove
+		law_ban_on_genetic_modification = neutral
+		law_corporate_genetic_licensing = neutral
 		law_open_source_genetics = disapprove
 		law_state_eugenics_program = strongly_approve
 	}
@@ -16165,9 +16165,9 @@ REPLACE:ideology_liberal_movement = {
 		law_ubiquitous_translation = approve
 	}
 	lawgroup_financial_regulation = {
-		law_unregulated_banking = neutral
-		law_free_mutual_banking = approve
-		law_universal_banking_light_prudence = approve
+		law_unregulated_banking = disapprove
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = neutral
 		law_prudential_narrow_banking = approve
 		law_directed_credit_development_banks = disapprove
 		law_central_bank_independence = strongly_approve
@@ -16255,7 +16255,7 @@ REPLACE:ideology_radical_movement = {
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
 		law_robot_tax = approve
-		law_human_labor_quotas = approve
+		law_human_labor_quotas = neutral
 		law_automation_dividend = approve
 	}
 	lawgroup_policing = {
@@ -16818,7 +16818,7 @@ INJECT:ideology_modernizer_movement_2 = {
 		law_ministry_of_science = approve
 	}
 	lawgroup_national_bank = {
-		law_no_national_bank = neutral
+		law_no_national_bank = disapprove
 		law_national_bank = strongly_approve
 	}
 }

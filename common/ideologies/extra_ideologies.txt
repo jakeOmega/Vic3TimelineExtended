@@ -20,7 +20,7 @@
 	# ministry, INSTITUTION_FUNDING_LEVEL_ per level not funded). Without the
 	# law that maximum is the technologies' part alone, 0 until Environmental
 	# Movement (era 8), so from Pollution Control until then a missing ministry
-	# adds nothing (owner's call in #1832's PR). The stance on the law in force
+	# adds nothing (the owner kept this, 2026-11-15). The stance on the law in force
 	# is neutral; the ministry itself is still strongly approved, so the
 	# movement backs enacting it. This ideology is also a leader's, so an
 	# interest group led by an environmentalist no longer loses approval to the
@@ -32,12 +32,10 @@
 
 	# Unrestricted Extraction is every country's law from 1836, and the
 	# moratorium opens at Environmental Movement (era 8), an era after the
-	# movement forms at Pollution Control: neutral, as the movement-stance guard
-	# asks (#1832; test_movement_stance_guard.py). Both other laws still rate
-	# above it. An interest group led by an environmentalist no longer loses
-	# approval to it either.
+	# movement forms at Pollution Control: within the movement-stance guard's
+	# one era of grace (#1832; the owner kept this stance, 2026-11-15).
 	lawgroup_resource_transition = {
-		law_unrestricted_extraction = neutral
+		law_unrestricted_extraction = disapprove
 		law_fossil_expansion_moratorium = approve
 		law_managed_fossil_phaseout = strongly_approve
 	}

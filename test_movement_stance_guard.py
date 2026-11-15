@@ -10,10 +10,11 @@ found the law term the largest part of the activism behind 34 of 42 civil
 wars, a third of it from the mod's own law groups.
 
 The rule: a movement may disapprove of a law a country can hold from 1836 only
-if it rates higher a law of the same group that a country can enact by the era
-in which the movement can first exist. `movement_stances.standing_grievances`
-reads both sides (its section comment says how, and what it does with a
-condition it can't place in time); the resolution is an era.
+if it rates higher a law of the same group that a country can enact within one
+era (movement_stances.GRACE_ERAS, the owner's grace) of the era in which the
+movement can first exist. `movement_stances.standing_grievances` reads both
+sides (its section comment says how, and what it does with a condition it
+can't place in time); the resolution is an era.
 
 These tests hold the rule for every movement and every ideology it can hold
 (`set_core_ideology` switches included), on the mod's data, for every row the
@@ -22,7 +23,8 @@ vanilla's. A grievance that is meant goes in REVIEWED with a date and a
 reason; a law whose gate the guard can't read, but a person has, goes in
 OPEN_GATES. Both fail when an entry stops being needed. The stances moved to
 neutral are in ideology_modifications.NEUTRAL_ON_LOCKED_DEFAULT, and the last
-tests hold how they were moved.
+tests hold how they were moved: each law rated between the old stance and
+approve is lifted to approve or tied at neutral by hand, with a reason.
 
 Run: python3 -m pytest test_movement_stance_guard.py -q
 """
@@ -61,10 +63,18 @@ OPEN_GATES = {
 }
 
 # Vanilla's own standing grievances, left to vanilla: (movement, ideology, law).
-# The modernizer's second-tier ideology disapproves of Child Labor Allowed, and
-# Restricted Child Labor opens an era after Academia.
-VANILLA_STANDING = {
-    ("movement_modernizer", "ideology_modernizer_movement_2", "law_child_labor_allowed"),
+# None under the grace: the one without it, the modernizer's second-tier
+# ideology on Child Labor Allowed (Restricted Child Labor an era after
+# Academia), is within it.
+VANILLA_STANDING = set()
+
+# The owner's grace (2026-11-15) keeps these stances: an answer opens one era
+# after the movement can first exist. {(ideology, law): stance}.
+KEPT_BY_GRACE = {
+    ("ideology_liberal_movement", "law_unregulated_banking"): "disapprove",
+    ("ideology_modernizer_movement_2", "law_no_national_bank"): "disapprove",
+    ("ideology_fascist_movement", "law_traditional_heredity"): "disapprove",
+    ("ideology_environmentalists", "law_unrestricted_extraction"): "disapprove",
 }
 
 
@@ -137,7 +147,7 @@ class MovementStanceGuardTest(unittest.TestCase):
         used = set()
         for row in mvs.new_grievances(self.data["merged_unreviewed"], self.data["vanilla_unreviewed"]):
             if row["verdict"] == "unread":
-                used |= {a["law"] for a in row["answers"] if a["era"] <= row["first_era"]}
+                used |= {a["law"] for a in row["answers"] if a["era"] <= row["first_era"] + mvs.GRACE_ERAS}
         self.assertEqual(sorted(set(OPEN_GATES) - used), [], "OPEN_GATES entries that answer nothing")
         for law, why in OPEN_GATES.items():
             self.assertRegex(why, r"^\d{4}-\d{2}-\d{2}: \S", law)
@@ -147,6 +157,29 @@ class MovementStanceGuardTest(unittest.TestCase):
         own = {(r["movement"], r["ideology"], r["law"]) for r in self.data["vanilla"]["rows"]
                if r["verdict"] == "standing"}
         self.assertEqual(own, VANILLA_STANDING)
+
+    def test_the_grace_is_one_era(self):
+        """The owner's word (2026-11-15): "grace", one era."""
+        self.assertEqual(mvs.GRACE_ERAS, 1)
+
+    def test_the_grace_keeps_four_stances(self):
+        """Each stance the grace keeps is in the game's files, and the guard
+        reads it as answered within the grace and standing without it."""
+        texts = []
+        for name in ("modified.txt", "extra_ideologies.txt"):
+            with open(os.path.join(REPO, "common", "ideologies", name), encoding="utf-8-sig") as f:
+                texts.append(f.read())
+        text = "\n".join(texts)
+        rows = {(r["ideology"], r["law"]): r for r in self.data["merged"]["rows"]}
+        for (ideology, law), stance in KEPT_BY_GRACE.items():
+            with self.subTest(ideology=ideology, law=law):
+                m = re.search(rf"(?m)^(?:REPLACE:|INJECT:)?{ideology} = \{{", text)
+                self.assertIsNotNone(m)
+                body = text[m.end():text.find("\n}", m.end())]
+                self.assertRegex(body, rf"\b{law} = {stance}\b")
+                row = rows[(ideology, law)]
+                self.assertEqual(row["verdict"], "answered")
+                self.assertEqual(min(a["era"] for a in row["answers"] if not a["unread"]), row["first_era"] + 1)
 
     def test_every_movement_is_read(self):
         """Every movement the mod and vanilla define, and every ideology it can
@@ -166,7 +199,7 @@ class MovementStanceGuardTest(unittest.TestCase):
 class GateReadingTest(unittest.TestCase):
     """How the guard reads gates, on small hand-made data."""
 
-    ERAS = {"tech_a": 2, "tech_b": 4, "tech_c": 6}
+    ERAS = {"tech_a": 2, "tech_n": 3, "tech_b": 4, "tech_c": 6}
 
     def test_a_movement_needs_every_technology_of_a_block_and_one_of_an_or(self):
         body = {"creation_trigger": {"has_technology_researched": "tech_a",
@@ -198,15 +231,17 @@ class GateReadingTest(unittest.TestCase):
         self.assertEqual((gates["law_tagged"]["era"], gates["law_tagged"]["unread"]), (1, ["c:RUS"]))
         self.assertEqual(gates["law_excepted"]["unread"], [])
 
-    def _rows(self, stances, laws, first="tech_a", carriers=frozenset(), open_gates=frozenset()):
+    def _rows(self, stances, laws, first="tech_a", carriers=frozenset(), open_gates=frozenset(),
+              grace=mvs.GRACE_ERAS):
         movements = {"movement_m": {"ideology": "ideology_m",
                                     "creation_trigger": {"has_technology_researched": first}}}
         ideologies = {"ideology_m": {"lawgroup_g": stances}}
         return mvs.standing_grievances(movements, ideologies, laws, {k: {"era": f"era_{v}"} for k, v in
                                                                      self.ERAS.items()},
-                                       carriers, frozenset(), open_gates)["rows"]
+                                       carriers, frozenset(), open_gates, grace)["rows"]
 
     GATES = {
+        "law_next": {"unlocking_technologies": ["tech_n"]},
         "law_later": {"unlocking_technologies": ["tech_b"]},
         "law_now": {"unlocking_technologies": ["tech_a"]},
         "law_tagged": {"is_visible": {"c:RUS": "this"}},
@@ -228,6 +263,9 @@ class GateReadingTest(unittest.TestCase):
         self.assertEqual(self._verdicts("law_now", carriers=frozenset({"law_now"})), ["standing"])
         # a movement of the later era meets the later law in time
         self.assertEqual(self._verdicts("law_later", first="tech_b"), ["answered"])
+        # one era later is within the grace, two are not; with no grace, one isn't
+        self.assertEqual(self._verdicts("law_next"), ["answered"])
+        self.assertEqual(self._verdicts("law_next", grace=0), ["standing"])
 
     def test_a_law_the_block_leaves_out_is_a_neutral_answer(self):
         laws = {"law_default": {"group": "lawgroup_g"}, "law_now": {"group": "lawgroup_g", **self.GATES["law_now"]}}
@@ -251,24 +289,42 @@ class NeutralOnLockedDefaultTest(unittest.TestCase):
         cls.im = im
         cls.rank = im._STANCE_RANK
 
-    def test_the_lift_keeps_every_preference_over_the_default(self):
-        """Neutral on the default; every law strictly above it before is
-        strictly above it after; no two other laws change order."""
+    def test_each_law_between_is_decided_by_hand(self):
+        """Neutral on the default; each law that rated above it but below
+        approve is named in the choices, lifted to approve or tied at neutral,
+        with a reason; every other law keeps its stance, so no two other laws
+        change order, and nothing that rated above the default falls below it."""
         for (ideology, law), before in self.im.LOCKED_DEFAULT_SOURCES.items():
             group = self.im.LOCKED_DEFAULT_GROUPS[law]
+            choices = self.im.NEUTRAL_ON_LOCKED_DEFAULT[ideology][law]
             after = dict(self.im.modifications[ideology][group])
             before = dict(before)
+            floor = self.rank[before[law]]
             with self.subTest(ideology=ideology, law=law):
-                self.assertLess(self.rank[before[law]], 0)
+                self.assertLess(floor, 0)
                 self.assertEqual(after[law], "neutral")
                 self.assertEqual(list(after), list(before))
+                between = {o for o in before if o != law and floor < self.rank[before[o]] < 1}
+                self.assertEqual(set(choices), between)
                 for other in before:
-                    if other != law and self.rank[before[other]] > self.rank[before[law]]:
-                        self.assertGreater(self.rank[after[other]], 0, other)
-                for a in before:
-                    for b in before:
-                        if law not in (a, b) and self.rank[before[a]] > self.rank[before[b]]:
-                            self.assertGreaterEqual(self.rank[after[a]], self.rank[after[b]], (a, b))
+                    if other == law:
+                        continue
+                    if other in choices:
+                        stance, why = choices[other]
+                        self.assertIn(stance, ("approve", "neutral"))
+                        self.assertGreater(len(why), 10, other)
+                        self.assertEqual(after[other], stance, other)
+                    else:
+                        self.assertEqual(after[other], before[other], other)
+                    if self.rank[before[other]] > floor:
+                        self.assertGreaterEqual(self.rank[after[other]], 0, other)
+
+    def test_the_owners_ties(self):
+        """The owner's ruling (2026-11-15): the revolutionary socialists don't
+        approve Corporate Genetic Licensing; it ties with Traditional Heredity."""
+        group = dict(self.im.modifications["ideology_revolutionary_socialist_movement"]["lawgroup_genetic_rights"])
+        self.assertEqual(group["law_traditional_heredity"], "neutral")
+        self.assertEqual(group["law_corporate_genetic_licensing"], "neutral")
 
     def test_only_movement_ideologies_move(self):
         """The interest groups' ideologies keep the shared lists: the Trade
@@ -296,8 +352,10 @@ class NeutralOnLockedDefaultTest(unittest.TestCase):
             m = re.search(rf"(?m)^(?:REPLACE:|INJECT:)?{ideology} = \{{", text)
             self.assertIsNotNone(m, ideology)
             body = text[m.end():text.find("\n}", m.end())]
-            for law in laws:
+            for law, choices in laws.items():
                 self.assertRegex(body, rf"\b{law} = neutral\b", (ideology, law))
+                for other, (stance, _) in choices.items():
+                    self.assertRegex(body, rf"\b{other} = {stance}\b", (ideology, other))
 
 
 class EnvironmentalMinistryTest(unittest.TestCase):

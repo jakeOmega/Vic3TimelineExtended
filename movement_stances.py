@@ -304,8 +304,9 @@ def stance_gaps(movements: dict, ideologies: dict, laws: dict, carriers=frozense
 # nothing the movement rates higher can be enacted, is activism no government
 # can answer. The rule (test_movement_stance_guard.py): a movement may
 # disapprove of a law a country can hold from 1836 only if it rates higher a
-# law of the same group that a country can enact by the era in which the
-# movement can first exist. The resolution is an era (about 25 years).
+# law of the same group that a country can enact within GRACE_ERAS (one) of
+# the era in which the movement can first exist. The resolution is an era
+# (about 25 years); the grace is the owner's (2026-11-15).
 #
 # How each side is read:
 # - When a movement can first exist: the technologies its `creation_trigger`
@@ -331,6 +332,9 @@ def stance_gaps(movements: dict, ideologies: dict, laws: dict, carriers=frozense
 #   Donations needs a voting law, which bars No Campaign Finance Laws).
 
 _ERA_NEVER = None
+# How many eras after the movement's first an answer may open and still count
+# (the owner, 2026-11-15: "grace").
+GRACE_ERAS = 1
 _SCOPE_FREE_KEYS = frozenset({"AND", "hidden_trigger", "custom_tooltip", "limit"})
 
 
@@ -478,7 +482,8 @@ def law_gates(laws: dict, eras: dict) -> tuple[dict, set]:
 
 
 def standing_grievances(movements: dict, ideologies: dict, laws: dict, technologies: dict,
-                        carriers=frozenset(), seeded=frozenset(), open_gates=frozenset()) -> dict:
+                        carriers=frozenset(), seeded=frozenset(), open_gates=frozenset(),
+                        grace: int = GRACE_ERAS) -> dict:
     """Every (movement, ideology, law it disapproves of that a country can hold
     from 1836), with the laws it rates higher and its verdict (see the section
     comment above):
@@ -487,8 +492,8 @@ def standing_grievances(movements: dict, ideologies: dict, laws: dict, technolog
                answers: [{law, stance, era, unread}], verdict}],
      "unknown_technologies": [...]}
 
-    `verdict` is "answered" (an answer opens by `first_era` with nothing
-    unread, or its unread conditions are in `open_gates`), "unread" (every
+    `verdict` is "answered" (an answer opens by `first_era` + `grace` with
+    nothing unread, or its unread conditions are in `open_gates`), "unread" (every
     answer in time has a condition the guard can't place) or "standing" (no
     answer opens in time)."""
     eras = technology_eras(technologies)
@@ -529,7 +534,7 @@ def standing_grievances(movements: dict, ideologies: dict, laws: dict, technolog
                         and gates[other]["era"] is not _ERA_NEVER
                         and not (needs and needs <= set(gates[other]["barred_by"]))
                     ]
-                    in_time = [a for a in answers if a["era"] <= first_era]
+                    in_time = [a for a in answers if a["era"] <= first_era + grace]
                     verdict = ("answered" if any(not a["unread"] for a in in_time)
                                else "unread" if in_time else "standing")
                     rows.append({
