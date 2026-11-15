@@ -1,0 +1,33 @@
+﻿# TE_SELF_CHECK ai_law_cadence (common/on_actions/te_ai_law_cadence_selfcheck_on_actions.txt): the counts it stores,
+# read back for its verdict and its log line. Delete with that file.
+te_alc_chk_cons_g = { value = global_var:te_alc_chk_cons }
+te_alc_chk_cons_enacting_g = { value = global_var:te_alc_chk_cons_enacting }
+
+# Every AI country counted, less the conservatives.
+te_alc_chk_rest_g = {
+	value = global_var:te_alc_chk_countries
+	subtract = global_var:te_alc_chk_cons
+}
+te_alc_chk_rest_enacting_g = {
+	value = global_var:te_alc_chk_enacting
+	subtract = global_var:te_alc_chk_cons_enacting
+}
+
+# The share of each group enacting a law: enacting over counted (0 with none counted).
+te_alc_chk_cons_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alc_chk_cons > 0 }
+		value = global_var:te_alc_chk_cons_enacting
+		divide = global_var:te_alc_chk_cons
+	}
+}
+te_alc_chk_rest_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alc_chk_countries > global_var:te_alc_chk_cons }
+		value = global_var:te_alc_chk_enacting
+		subtract = global_var:te_alc_chk_cons_enacting
+		divide = te_alc_chk_rest_g
+	}
+}
