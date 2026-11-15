@@ -43,11 +43,14 @@ social_tensions_events.1 = {
 		NOT = {
 			has_intelligence_ministry_5 = yes
 		}
-		# More likely in countries with political turmoil
+		# More likely in countries with political turmoil. Activism runs 0 to 1;
+		# 0.5 is where the engine starts turning a movement's supporters radical
+		# (MOVEMENT_MONTHLY_RADICALS_THRESHOLD). nd_loose_plot_possible repeats
+		# this gate: change both together.
 		OR = {
 			radical_fraction = { value >= 0.1 }
 			is_at_war = yes
-			any_political_movement = { political_movement_radicalism >= 25 }
+			any_political_movement = { political_movement_radicalism >= 0.5 }
 		}
 	}
 

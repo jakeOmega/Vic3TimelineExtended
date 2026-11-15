@@ -134,6 +134,13 @@ Two engine behaviours the 2026-10 event sweep rests on, with no vanilla preceden
 72. **The pledge struck from a law still being enacted.** Armed, at No First Use, enact Humanitarian Regulations or Limited War with the No-First-Strike Pledge amendment, and leave No First Use while the law is still being enacted. The amendment is gone from the enacting law at once (`remove_amendment` on `currently_enacting_law`, in `nd_strike_nfu_amendment`). If it is still there, the fallback marker (`nd_nfu_amendment_repudiated`) must catch it: within a week of the law passing, `nd_weekly_update` strikes it from the passed law, and the doctrine is not pulled back to No First Use. If the law passes with the pledge and the doctrine snaps back to No First Use, neither removal took.
 73. **The referral (`.18` option d with the treaty in force).** With the Non-Proliferation Treaty in force, as a UN member, take d on A Bomb Nearly Built: the proliferator's Our Record → Nuclear weapons gains 20 (30 when it ratified the treaty). A second recipient of the same alert sees d's "already before the General Assembly" line, and the record does not grow again. The tooltip's line with no record added: `un_dossier_record` did not run inside the `custom_tooltip`.
 
+## The unrest gate's movement branch (2026-11-15, #1829)
+
+The terror pool's unrest gate (`social_tensions_events.1`, and the loose-warhead plot's `nd_loose_plot_possible`) now passes on a political movement at 50% activism or more. Before, it compared activism, which runs 0 to 1, against 25, so only radicals and war opened it. 50% is the threshold chosen here, not the author's 25%, and is the owner's call (PR #1829's body has the figures).
+
+74. **A calm major power with a protesting movement.** Play a major power at peace with radicals under 10% and a movement the movements panel shows at 50% activism or more. `event social_tensions_events.1` fires, where before this change its trigger was false. With every movement under 50%, no radicals and no war, the trigger is false.
+75. **The loose plot.** With warheads loose (`global_var:nd_loose_warheads` above 0) and the terrorism era reached, a country that passes only on its movement now draws `nuclear_loose.1` from the yearly pool. Record how many plots a world draws a decade, against the same run before this change, if one is at hand.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |

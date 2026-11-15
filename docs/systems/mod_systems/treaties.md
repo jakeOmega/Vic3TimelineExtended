@@ -56,6 +56,8 @@ Every `can_be_enforced` article tells the AI where a demand buys nothing, throug
 | Debt Receivership | the source isn't already under a receivership or a lender-of-last-resort guarantee |
 | Nuclear Program Freeze, Nuclear Disarmament | `docs/systems/mod_systems/nuclear.md` |
 | Population Transfer | it would move at least 100,000 people (`docs/systems/mod_systems/pops_and_migration.md`) |
+
+**Aid and turmoil.** The AI's score for Crisis Resolution and Security Aid gains +20, and for Development Assistance +15, when the country receiving the aid has a state above 25% turmoil (`AI_TARGET_TURMOIL`). Until 2026-11-15 the three tests read `turmoil > 25`, copied from vanilla's Doctrine of Lapse; turmoil runs 0 to 1, so none ever applied (#1829).
 | Lease Seabed Claims, Cede Colony | the source has claims to lease, or a colony |
 
 Reviewed exemptions: Money Transfer (vanilla's, which has neither field; money is worth having from anyone), Corporate Concessions (hidden while WIP, and the demander's gain is the same whoever concedes), and Return Cultural Property, Surrender a Monument and Excavation Concession, whose `possible` already makes the demand impossible where it would buy nothing.
