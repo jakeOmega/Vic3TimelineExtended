@@ -3724,6 +3724,8 @@ ordered_scope_state = {
 
 Not seen in game yet: play-test check 29 of `docs/testing/journal-map-modes-playtest.md` and `TE_SELF_CHECK range_count` cover it. Not tried: `min = 0  max = <script value>` with a counter in the body, stopping at the kth, which the signature allows and which would need no ladder.
 
+Where every element needs its place, not one element at a place, walk the whole list instead: `min = 0  max = <a literal past any length>  check_range_bounds = no`, with the place kept as a count in the body. The Map Room's Ranked scale does (`te_jmap_rank_<map>`, 2026-11-14): the count steps only when the figure moves on from the element before (kept in a global, read through a guarded script value), so equal figures share a place, and a second pass divides each stored place by the last. A rank by index would give hundreds of states at exactly 0 hundreds of different places, in whatever order the engine walks them. Not seen in game on `ordered_state` or at this length: `TE_SELF_CHECK rank_walk` and play-test check 30 cover it.
+
 ## Conditional `debug_log` for Trustworthy Scope Diagnostics
 
 `debug_log = "... [SCOPE.sState('name').GetName] ..."` can render `NULL_STATE`-style placeholder strings even when the underlying scope IS set — particularly for scopes saved inside the same scripted effect or inside an inner iterator scope. Don't take a `NULL` rendering as proof the scope is missing; use a conditional trip-wire instead:

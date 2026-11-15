@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Twelfth pass, 2026-11-14 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Thirteenth pass, 2026-11-14 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -18,8 +18,10 @@ Health Care and Fighting-Age Men. The tenth (2026-11-11, the owner's ask) adds f
 Academics and Trade Volume, and puts the picks in seven collapsible categories (§ Buttons). The eleventh (the same
 day, the owner's ask) turns Trade Volume into Trade Capacity, each state's own, and adds Investment. The twelfth
 (2026-11-14, the owner's ask: "a section below the mode selection where you can change some aspects of the plotting")
-gives the Map Room two options, Area and Outliers (§ The Map Room's Options); the scale and the colors, the other two
-the owner named, are not built.
+gives the Map Room two options, Area and Outliers (§ The Map Room's Options). The thirteenth (the same day, the
+owner's pick of the assessment that followed: "I'll go with your recommendation", and of the eight maps that run both
+ways from a midpoint, "What about symlog?") adds a third, Scale: the map's own curve, Linear, Logarithmic or Ranked
+(§ The Map Room's Options, Scale). The colors, the last the owner named, are not built.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -279,15 +281,16 @@ Twelfth pass (2026-11-14). The owner: "a section below the mode selection where 
 plotting - for example, if it is on a linear or (different kinds of) nonlinear scale, the color, maybe excluding
 outliers, maybe limiting where we draw it (e.g. if Europe in 1900 is much richer than Africa, but you want to see the
 variation within Europe, you could limit it to Europe - or maybe to your country, your power bloc, etc?)". Two of the
-four are built, the two that live in a range's measurement: **Area**, where the maps are drawn and measured, and
-**Outliers**, how many states each end of a fitted map's range leaves out. The scale and the colors are not: a paint
-evaluates each map's factor and can pass it no argument, so each would multiply every map's tree unless the paint
-were rebuilt.
+four were built that day, the two that live in a range's measurement: **Area**, where the maps are drawn and
+measured, and **Outliers**, how many states each end of a fitted map's range leaves out. **Scale** followed in the
+thirteenth pass (below). The colors are not built: a paint names its two colors outright, so a palette is more
+branches in the paint, not a branch in a factor.
 
 The options are global variables, as the pick is and for the same reason (`te_jmap_opt_area`, `te_jmap_opt_cont`,
-`te_jmap_opt_trim`, read through the root-free `te_jmap_area`, `te_jmap_continent` and `te_jmap_trim`,
-`te_journal_map_values.txt`): every player in a multiplayer game shares them, a save keeps them, and unset is the
-default, the world and four states left out at each end, which is what the Map Room showed before it had options.
+`te_jmap_opt_trim`, `te_jmap_opt_scale`, read through the root-free `te_jmap_area`, `te_jmap_continent`,
+`te_jmap_trim` and `te_jmap_scale`, `te_journal_map_values.txt`): every player in a multiplayer game shares them, a
+save keeps them, and unset is the default, the world, four states left out at each end and each map's own curve,
+which is what the Map Room showed before it had options.
 
 - **Area.** 0 the world, 1 a continent, 2 the viewer's market, 3 its power bloc, 4 its country. A state outside the
   area is painted slate (`te_jmap_outside`, darker and bluer than the "no data" grey), hovers as "Outside the area the
@@ -376,12 +379,95 @@ default, the world and four states left out at each end, which is what the Map R
   be older than the options. The words come from four custom localizations
   (`common/customizable_localization/te_journal_map_custom_loc.txt`), a market's, a bloc's and a country's names
   from the viewer's scopes.
-- **Unverified** (play-test check 29): everything here. Script can tell success from failure in two places, each a
+- **Unverified** (play-test check 29): everything above. Script can tell success from failure in two places, each a
   once-a-game line from the global monthly pulse: `TE_SELF_CHECK OK|BROKEN area_mark` (`te_jmap_area_selfcheck`, the
   first month an area is set: BROKEN when the marking put every state on one side, or the viewer's own capital
   outside its market, bloc or country) and `TE_SELF_CHECK OK|BROKEN range_count` (`te_jmap_range_selfcheck`, the
   first month under the default options: GDP per capita's range through the count and the ladder against
   `position = 4` taken outright). The check names each fallback.
+
+### Scale
+
+Thirteenth pass (2026-11-14). `te_jmap_scale`: 0 the map's own curve (the default), 1 Linear, 2 Logarithmic, 3
+Ranked.
+
+- **A branch in the factor, not in the paint.** A factor is a script value, and a script value can read a global
+  (the trees already read the range's two), so each `te_jmap_<map>_factor` the Map Room reads takes one of four
+  branches on `te_jmap_scale`. The map's own curve is the first, so a default paint pays one comparison, and
+  `map_color` is untouched. The factors a system's own entry reads (`te_jmap_gw_factor`, `te_jmap_gm_factor`) and
+  the five fixed curves have no branch: the Scale buttons other than Map's Own are greyed, with the reason, while the
+  pick has no range (`te_jmap_pick_fitted`), and an entry's page is the map's own curve whatever is set. The
+  generated values file went from 3,567 lines to 11,562: a logarithm is a ladder of twenty straight pieces, and
+  Logarithmic needs two for a straight map and four for a midpoint map.
+- **Linear**: straight from the range's low to its high; on a map with a meaningful midpoint, straight on each side
+  of it, to the range's end on that side, so the midpoint stays the neutral color.
+- **Logarithmic**: the same share of the color for each doubling. A map already on a doubling scale (GDP per
+  Capita, Armed Forces, Company HQs, War Dead, Trade Capacity, Investment) keeps its tree: Logarithmic is its own
+  curve, and its tooltip says so. A straight map starts at its range's low, or at a 64th of its high where the low
+  is smaller (`LOG_RATIO`: a low of 0 has no logarithm, and the engine's five decimals can't hold a smaller share
+  of the Capitalists' 0.2% range), so it spans six doublings at most; the figure over the start is worked out as
+  the smaller of figure / low and figure × 64 / high, never by dividing by the small start. Where the range is
+  under one doubling wide (Gini's 0.43 to 0.60, say) Logarithmic is Linear: the log is read in straight pieces
+  between powers of two.
+- **Logarithmic around a midpoint** (the owner: "What about symlog?"). The eight maps that run both ways from a
+  midpoint (Fertility, Natural Change, Net Migration, Sex Balance, Population Growth, the two comfort maps, Dynastic
+  Wealth) are logarithmic on each side of it by the distance from it, and straight within `min_half` of it, where a
+  logarithm has no start: the knee is `min_half` / 2 (`LOG_KNEE_PART`), the side's share is 1 + log2 of the
+  distance in knees over the same of the side's span, and since the first piece of the log, from one knee to two,
+  is straight, the scale is straight from the midpoint to `min_half`. Each doubling of the distance past that takes
+  half the color the straight band does. The midpoint is exactly 0.5 in the engine's fixed point, as `map_color`'s
+  split needs. `min_half` because it is already the map's own measure of the smallest difference worth showing: no
+  side is ever spread over less. How much that bends a map depends on how many doublings lie between `min_half` and
+  the side's end: on the default ranges 2.3 for Dynastic Wealth, 3 or more for Natural Change, Net Migration and
+  Population Growth, 2 and 2.6 for Sex Balance, 4.7 for a comfort penalty; Fertility below replacement (1.1) and a
+  comfort draw (1.8) stay close to Linear. No text calls it by name: the tooltips say what it does.
+- **Ranked**: each state's place in line among the states the map measures (those it paints with a figure, in the
+  Map Room's area), 0 to 1. A paint can't sort, so the place is stored on the state (`te_jmap_rank`) and the
+  factor's Ranked branch reads it, guarded. `te_jmap_rank_<map>` (generated, one per fitted pick) walks the states
+  lowest figure first (`ordered_state`, `min = 0`, `max = 5000`), keeping the place as a count: it steps only when
+  the figure moves on from the state before, so **equal figures share a place** and each distinct figure is one
+  even step. Peacetime Devastation is hundreds of states at exactly 0; an index would smear them across the
+  palette in whatever order the engine walks them. A second pass divides each place by the last. A midpoint map is
+  ranked on each side of the midpoint, outward (0.5 down to 0 below, 0.5 up to 1 above, a state at the midpoint
+  itself 0.5), so cream stays at replacement and not at the median state. Each map is ranked by its own figure:
+  Current Comfort shares Base Comfort's range, not its order.
+- **One rank variable for every map.** `te_jmap_refresh_range` clears every stored place first
+  (`te_jmap_clear_ranks`, which walks nothing unless `te_jmap_ranks` says some are stored), measures the pick's
+  range, then, under Ranked, runs the pick's `te_jmap_rank_<map>` (`te_jmap_refresh_rank`). So no place outlives
+  the pick or the setting it was taken under, and a range's own effect stores none (the once-a-game range check
+  measures GDP per capita whatever the pick). A state the map paints but the last measure didn't walk (made since)
+  has no place and paints the low color, or the midpoint's on a three-color map, until the next.
+- **How old a Ranked map can be.** Places are taken where the range is: at a pick, at an option click and from the
+  global monthly pulse. A month at most, the age the range already had. What changes is that a Ranked map of a live
+  figure (Turmoil, Devastation, GDP per Capita, Crowding Penalty, Trade Capacity) stops moving between measures,
+  where the other three scales still repaint it as the game runs. The open section says so in place of the
+  measured-over line (`te_jmap_options_measured_ranked`), and so do the Ranked button's tooltip and every pick's
+  tooltip under Ranked.
+- **Outliers under Ranked** has nothing to act on (a place is no outlier's to move), so its three buttons are greyed
+  with that reason (`te_jmap_trim_ranked_tt`); the range is still measured, and the tooltip prints it as "not read
+  by this scale".
+- **No tooltip describes a curve that isn't in force.** Each of the 35 fitted picks' own descriptions describes the
+  map's own curve ("half the color in the first fifth of that span"), so its button shows it only under the map's
+  own curve. Under any other scale the button shows `te_jmap_pick_<map>_scaled`
+  (`SelectLocalization` on `te_jmap_scale` in the button's `tooltip`): the pick's name, the scale in force and
+  what it does, and the range's two figures in the formats its own description gives them. What the scale does
+  comes from one of three custom localizations, named in each pick's key since a custom localization can't know
+  which button is hovered: a straight map (`te_jmap_scale_text`), a doubling map (`_doubling`: Logarithmic "is
+  this map's own") and a midpoint map (`_mid`). The 35 own descriptions are untouched, so their German and Spanish
+  stand; rewriting them into parts is the colors' pass.
+- **On the page**: a Scale row under Outliers in Map Options (Map's Own, Linear, Logarithmic, Ranked); the header
+  names the three options in force, the trim and the scale in a word or two (`te_jmap_trim_short`,
+  `te_jmap_scale_short`: "North America, Keep All, Own Scale" is the longest, 34 characters beside the title), and
+  the line at the top of the page names all three in full while any is off its default.
+- **Unverified** (play-test check 30). Script can tell success from failure in one place:
+  `TE_SELF_CHECK OK|BROKEN rank_walk` (`te_jmap_rank_selfcheck`), once a game from the global monthly pulse whatever
+  the Scale option, so a game answers it before anyone picks Ranked: it walks the states with a GDP per capita
+  lowest first, as a rank's walk does, and is BROKEN when the walk visits fewer than a count of them or takes any
+  out of order. The mod walks other ordered lists from `min` to `max` (`ordered_scope_state`, `ordered_in_list`),
+  never `ordered_state`, and never thousands long. `test_journal_map_scales.py` runs every committed factor under
+  Linear and Logarithmic against the generator's reference, in floats and in the engine's five decimals
+  (`ScaleTest`), and the rank effects over made-up states, ties and midpoints included, against a plain sort
+  (`RankRunTest`).
 
 ## The See-Through Page
 
@@ -486,13 +572,15 @@ Every map button clears the see-through flag before it opens a page.
   the picks' form, mounted below `te_jmap_pick_row` on the page (`te_map_room_widget.gui`) and closed at first
   (`te_jmap_options_open`), with the options in force at the header's right. Open: an Area row of five buttons
   (World, Continent, Market, Power Bloc, Country, each as wide as its label, 450 in all inside the header's 470);
-  under Continent, two rows of three continents; an Outliers row (Keep All, Trim 4 Each End, Trim 5%); and a line
-  saying what the map on the page was measured over. Each is a `te_jmap_option_button` on a scripted GUI
-  (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`), then the picks' repaint. Unlike a
-  pick, an option draws pressed from its script value (`down` on `te_jmap_area`, `te_jmap_continent`,
-  `te_jmap_trim`), not from `is_valid`, which is kept for what greys it (`enabled`): Power Bloc with no bloc, and
-  Outliers on a map with no range, each with its reason in the tooltip (`SelectLocalization` on the same
-  `IsValid`). A click on the option already in force measures and repaints again. `OptionsTest` holds each button to
+  under Continent, two rows of three continents; an Outliers row (Keep All, Trim 4 Each End, Trim 5%); since the
+  thirteenth pass a Scale row (Map's Own, Linear, Logarithmic, Ranked, 112 each); and a line saying what the map on
+  the page was measured over, or under Ranked how old its places can be. Each is a `te_jmap_option_button` on a
+  scripted GUI (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`, `te_jmap_scale_*_sgui`),
+  then the picks' repaint. Unlike a pick, an option draws pressed from its script value (`down` on `te_jmap_area`,
+  `te_jmap_continent`, `te_jmap_trim`, `te_jmap_scale`), not from `is_valid`, which is kept for what greys it
+  (`enabled`): Power Bloc with no bloc; Outliers on a map with no range or under Ranked; Linear, Logarithmic and
+  Ranked on a map with no range; each with its reason in the tooltip (`SelectLocalization` on the same `IsValid`,
+  nested where there are two reasons). A click on the option already in force measures and repaints again. `OptionsTest` holds each button to
   its scripted GUI, its number and the repaint.
 
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
@@ -506,8 +594,12 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    re-run it (`test_journal_map_scales.py` checks the trees and that the map reads no factor the table lacks). Fit it
    to the world unless its numbers mean something fixed (a row with `sel`, `where` and a `rel*` shape: the range
    effect, the dispatcher's branch and the trees come with it, and so do the Map Room's options: the range keeps to
-   its area and takes its trim). Give its pick's tooltip the range (`te_jmap_<map>_lo` / `_hi`), the area in place of
-   "the world" (`$te_jmap_measured_area$`) and, last, what the range leaves out (`$te_jmap_measured_trim$`). Mark it
+   its area and takes its trim, the factor branches on the scale, and a rank effect stores its places). Give its
+   pick's tooltip the range (`te_jmap_<map>_lo` / `_hi`), the area in place of "the world"
+   (`$te_jmap_measured_area$`) and, last, what the range leaves out (`$te_jmap_measured_trim$`); give it a second
+   key, `te_jmap_pick_<map>_scaled`, for every scale but its own (the name, `$te_jmap_scale_in_force$` or its
+   `_doubling` or `_mid` form by the map's kind, `$te_jmap_scaled_lead$` and the same two figures), and have its
+   button choose between the two on `te_jmap_scale` as the others do (`ScaleTooltipTest`). Mark it
    `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
    and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
