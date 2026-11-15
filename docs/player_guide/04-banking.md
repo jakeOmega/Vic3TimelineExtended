@@ -17,12 +17,12 @@ loans more expensive and a sound currency makes them cheaper.
 
 ## The Banking Cycle journal entry
 
-The cycle lives in a journal entry in the Domestic Affairs group. Its title
-follows your economic system: Boom & Bust Cycle in a market economy, Logistics &
-Allocation Gauge under Command Economy, and Cooperative Finance Dashboard under
-Cooperative Ownership. Its description changes with the title and explains what
-the readings mean in that economy. The model is the same in all three; the phase
-effects and the tools differ.
+The cycle lives in a journal entry in the Timeline Extended Systems section of
+the journal. Its title follows your economic system: Boom & Bust Cycle in a
+market economy, Logistics & Allocation Gauge under Command Economy, and
+Cooperative Finance Dashboard under Cooperative Ownership. Its description
+changes with the title and explains what the readings mean in that economy. The
+model is the same in all three; the phase effects and the tools differ.
 
 Every country has the entry from the start of the game, but its financial
 cycle starts only once you have researched Stock Exchange and own an Urban

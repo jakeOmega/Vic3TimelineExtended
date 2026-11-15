@@ -2353,6 +2353,8 @@ def render_government_types(inventory: dict | None = None) -> str:
 
 # Vanilla's waving flag, the icon Russification and the cultural renaissances use.
 JE_ICON = "gfx/interface/icons/event_icons/waving_flag.dds"
+# The journal section (common/journal_entry_groups/00_a_te_journal_entry_groups.txt).
+JE_GROUP = "je_group_te_systems"
 # The technology that opens each tier (te_cm_tier_tech_<tier> in te_culture_merge_triggers.txt).
 TIER_TECH = {1: "pan-nationalism", 2: "mass_media", 3: "television"}
 
@@ -2741,7 +2743,7 @@ def render_journal_entries(vanilla: dict, merges: tuple[cfg.Merge, ...] | None =
         out.line("# ---- %s (%s) ----" % (key, ", ".join("/".join(p.cultures) for p in merge.core)))
         with out.block(entry):
             out.line('icon = "%s"' % JE_ICON)
-            out.line("group = je_group_internal_affairs")
+            out.line("group = %s" % JE_GROUP)
             out.line()
             out.line("# 1.15 asks every entry for this; always = yes is vanilla's own default.")
             with out.block("activation_description"):
