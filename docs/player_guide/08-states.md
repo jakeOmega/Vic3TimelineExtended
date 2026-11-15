@@ -91,7 +91,10 @@ technologies give, that is between half and nearly all of the world's largest
 rich city of the time.
 
 Its upkeep comes out of your budget, so build it where crowding bites: in a
-state below its threshold it does nothing.
+state below its threshold it does nothing. When you pick Public Housing to
+build, the list of states shows each one's crowding penalty where other
+buildings show productivity, 0% where there is none; the column can't be
+sorted.
 
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points

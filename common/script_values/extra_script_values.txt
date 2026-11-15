@@ -3671,6 +3671,43 @@ arable_land_mult_pct = {
 	multiply = 100
 }
 
+#==================================================
+# GUI Display Script Values — Construction List
+#==================================================
+# The construction list's Electricity column for Carbon Conversion Works
+# (gui/00_te_build_list_columns.gui): each staffed level buys 1,200
+# Electricity a week on both its methods, nearly all of its running cost, and
+# Electricity is a local good, priced state by state.
+
+# Electricity's base price, vanilla's goods cost (test_build_list_columns.py
+# holds it to common/goods).
+te_electricity_base_price = 30
+
+# State scope. The state's Electricity price over its base (1 = base), read as
+# 1 + pricier - cheaper with each floored at 0, as the power grid's
+# te_grid_chk_price_now_value reads it (its grid_price self-check matched the
+# engine's price in game, 2026-10-30). 1 where the state has no Electricity
+# market at all.
+te_build_list_electricity_price_ratio = {
+	value = 1
+	sg:electricity ?= {
+		add = {
+			value = state_goods_pricier
+			min = 0
+		}
+		subtract = {
+			value = state_goods_cheaper
+			min = 0
+		}
+	}
+}
+
+# State scope. The state's Electricity price.
+te_build_list_electricity_price = {
+	value = te_build_list_electricity_price_ratio
+	multiply = te_electricity_base_price
+}
+
 # Country scope. Subjugation strength: read by force_become_subject's possible
 # clause. Score >= 1.0 lets the actor subjugate scope:target_country (which
 # must be a fellow bloc member; the action's potential clause guarantees that).
