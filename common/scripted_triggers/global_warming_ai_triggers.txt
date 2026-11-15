@@ -6,22 +6,29 @@
 # and the movement's "could adopt" lines) plus the authority its adopt button
 # asks (global_warming_buttons.txt; test_gw_ai_movement_pressure.py holds the
 # two equal). Renewable Investment costs 0.5% of GDP a year instead, so as an
-# answer it also needs a treasury that can carry it
-# (gw_ai_can_carry_renewable_investment, below). The policy's own will can
+# answer it also needs a treasury that can take it on
+# (gw_ai_can_take_on_renewable_investment, below). The policy's own will can
 # still adopt it without: this gate is only on the movement's push.
 #
 # Scope: country.
 
-# A treasury that can carry Renewable Investment's 0.5% of GDP a year: not in
-# default and debt under a quarter of the ceiling, the demographic measures'
-# test for taking on a money upkeep (te_demog_ms_ai_money_start). The one gate
-# for both halves of the movement's pull on the policy: its answer, and its
-# hold against repeal (gw_ai_movement_hold_points_renewable_investment), so
-# the movement never keeps a country paying where it wouldn't have it start.
-# A hold without this gate was a gap the owner closed (2026-11-15, PR #1841).
-gw_ai_can_carry_renewable_investment = {
+# A treasury that can take on and keep Renewable Investment's 0.5% of GDP a
+# year, the demographic measures' pair for a money upkeep
+# (te_demog_ms_ai_money_start / _keep): to take it on as the movement's answer,
+# not in default and debt under a quarter of the ceiling; for the movement to
+# hold it against repeal, not in default and debt under half. One threshold for
+# both would adopt and repeal it yearly in a country whose debt sits near the
+# line (repealing it saves the 0.5%, the debt dips, the movement answers
+# again). A hold the treasury can't carry was a gap the owner closed
+# (2026-11-15, PR #1841).
+gw_ai_can_take_on_renewable_investment = {
 	in_default = no
 	scaled_debt < 0.25
+}
+
+gw_ai_can_keep_renewable_investment = {
+	in_default = no
+	scaled_debt < 0.5
 }
 
 gw_ai_can_answer_climate_adaptation = {
@@ -36,7 +43,7 @@ gw_ai_can_answer_reforestation = {
 
 gw_ai_can_answer_renewable_investment = {
 	gw_possible_renewable_investment = yes
-	gw_ai_can_carry_renewable_investment = yes
+	gw_ai_can_take_on_renewable_investment = yes
 }
 
 gw_ai_can_answer_public_transit = {

@@ -140,19 +140,22 @@ te_debug_gw_repeal_all = {
 }
 
 # Write every country's AI climate wills, part by part, to debug.log -- three
-# GW_AI_WILL lines per country with the journal entry, player included: the
+# GW_AI_WILL lines per country with the journal entry, player included (four
+# while the movement's points go to a policy): the
 # shared core and the five signals with its policy count and how much policy
 # cost its authority covers, then the nine per-policy wills (compare each with
 # its threshold in global_warming_ai_values.txt), then the Environmental
-# Movement's pressure: as it is and with what the policies in force hold back,
-# the largest will less threshold among the seven it asks for that the country
-# can take up now (-1000 for none), and whether this year's answer is spent. A header line gives the
+# Movement's pressure: as it is and without one policy (what each of the seven
+# is held by), the largest will less threshold among the seven it asks for that
+# the country can take up now (-1000 for none), which policy the points go to
+# (none, or the policy and the points), and whether this year's answer and this
+# year's lapse are spent. A header line gives the
 # temperature and the world mean standard of living. This is how the table in
 # that file is checked against a real save: grep debug.log for GW_AI_WILL.
 #
 # The world mean is refreshed first, so the wealth signal is current even on a
 # save whose monthly sweep has not run since the update. The te_dbg_gw_*
-# variables exist only for the length of the two log lines.
+# variables exist only for the length of the log lines.
 # Scope: country (the player)
 te_debug_gw_log_ai_will = {
 	gw_refresh_global_counts_effect = yes
@@ -177,12 +180,17 @@ te_debug_gw_log_ai_will = {
 		set_variable = { name = te_dbg_gw_w_aerosol value = gw_ai_will_aerosol_injection }
 		set_variable = { name = te_dbg_gw_policies value = gw_policies_active_count_display }
 		set_variable = { name = te_dbg_gw_press value = gw_ai_movement_pressure }
-		set_variable = { name = te_dbg_gw_press_held value = gw_ai_movement_pressure_unmasked }
+		set_variable = { name = te_dbg_gw_press_held value = gw_ai_movement_pressure_without_one }
 		set_variable = { name = te_dbg_gw_answer value = gw_ai_movement_answer }
 		set_variable = { name = te_dbg_gw_answered value = 0 }
 		if = {
 			limit = { has_variable = gw_ai_movement_answered }
 			set_variable = { name = te_dbg_gw_answered value = 1 }
+		}
+		set_variable = { name = te_dbg_gw_lapsed value = 0 }
+		if = {
+			limit = { has_variable = gw_ai_movement_lapsed }
+			set_variable = { name = te_dbg_gw_lapsed value = 1 }
 		}
 		set_variable = { name = te_dbg_gw_leader value = 0 }
 		if = {
@@ -215,7 +223,14 @@ te_debug_gw_log_ai_will = {
 		}
 		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] shared=[THIS.Var('te_dbg_gw_shared').GetValue|2] lf=[THIS.Var('te_dbg_gw_lf').GetValue|2] ind=[THIS.Var('te_dbg_gw_ind').GetValue|2] mov=[THIS.Var('te_dbg_gw_mov').GetValue|2] wealth=[THIS.Var('te_dbg_gw_wealth').GetValue|2] fossil=[THIS.Var('te_dbg_gw_fossil').GetValue|2] policies=[THIS.Var('te_dbg_gw_policies').GetValue|0] market_leader=[THIS.Var('te_dbg_gw_leader').GetValue|0] authority_covers=[THIS.Var('te_dbg_gw_auth').GetValue|0]"
 		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] wills adapt=[THIS.Var('te_dbg_gw_w_adapt').GetValue|2] refor=[THIS.Var('te_dbg_gw_w_refor').GetValue|2] renew=[THIS.Var('te_dbg_gw_w_renew').GetValue|2] transit=[THIS.Var('te_dbg_gw_w_transit').GetValue|2] codes=[THIS.Var('te_dbg_gw_w_codes').GetValue|2] standards=[THIS.Var('te_dbg_gw_w_standards').GetValue|2] carbon=[THIS.Var('te_dbg_gw_w_carbon').GetValue|2] divest=[THIS.Var('te_dbg_gw_w_divest').GetValue|2] removal=[THIS.Var('te_dbg_gw_w_removal').GetValue|2] aerosol=[THIS.Var('te_dbg_gw_w_aerosol').GetValue|2]"
-		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] movement pressure=[THIS.Var('te_dbg_gw_press').GetValue|2] unmasked=[THIS.Var('te_dbg_gw_press_held').GetValue|2] nearest_margin=[THIS.Var('te_dbg_gw_answer').GetValue|2] answered_this_year=[THIS.Var('te_dbg_gw_answered').GetValue|0]"
+		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] movement pressure=[THIS.Var('te_dbg_gw_press').GetValue|2] without_one=[THIS.Var('te_dbg_gw_press_held').GetValue|2] nearest_margin=[THIS.Var('te_dbg_gw_answer').GetValue|2] answered_this_year=[THIS.Var('te_dbg_gw_answered').GetValue|0] lapsed_this_year=[THIS.Var('te_dbg_gw_lapsed').GetValue|0]"
+		te_debug_gw_log_movement_answer = { POLICY = climate_adaptation }
+		te_debug_gw_log_movement_answer = { POLICY = reforestation }
+		te_debug_gw_log_movement_answer = { POLICY = renewable_investment }
+		te_debug_gw_log_movement_answer = { POLICY = public_transit }
+		te_debug_gw_log_movement_answer = { POLICY = emission_standards }
+		te_debug_gw_log_movement_answer = { POLICY = carbon_tax }
+		te_debug_gw_log_movement_answer = { POLICY = fossil_fuel_divestment }
 		remove_variable = te_dbg_gw_shared
 		remove_variable = te_dbg_gw_lf
 		remove_variable = te_dbg_gw_ind
@@ -237,8 +252,21 @@ te_debug_gw_log_ai_will = {
 		remove_variable = te_dbg_gw_press_held
 		remove_variable = te_dbg_gw_answer
 		remove_variable = te_dbg_gw_answered
+		remove_variable = te_dbg_gw_lapsed
 		remove_variable = te_dbg_gw_leader
 		remove_variable = te_dbg_gw_auth
+	}
+}
+
+# The fourth GW_AI_WILL line, only for the one policy the movement's points go
+# to this pass: its name and the points (gw_ai_movement_answer_points_*).
+# Scope: country. $POLICY$: one of the seven the movement asks for.
+te_debug_gw_log_movement_answer = {
+	if = {
+		limit = { gw_ai_movement_answer_points_$POLICY$ > 0 }
+		set_variable = { name = te_dbg_gw_points value = gw_ai_movement_answer_points_$POLICY$ }
+		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] movement answer=$POLICY$ points=[THIS.Var('te_dbg_gw_points').GetValue|2]"
+		remove_variable = te_dbg_gw_points
 	}
 }
 

@@ -32,8 +32,10 @@
 #
 # The seven adopt buttons of the policies the Environmental Movement asks for
 # set gw_ai_movement_answered for a year: the movement's pressure carries at
-# most one of them a year (global_warming_ai_values.txt). Keep that bookkeeping
-# here, not in the gw_effect_* helpers the player's widget shares.
+# most one of them a year. Their seven repeal buttons set gw_ai_movement_lapsed
+# for a year: while a movement exists at most one of them lapses a year
+# (global_warming_ai_values.txt). Keep that bookkeeping here, not in the
+# gw_effect_* helpers the player's widget shares.
 # ----------------------------------------------------------------------------
 gw_carbon_tax_button = {
 	name = "GW_CARBON_TAX"
@@ -91,7 +93,11 @@ gw_remove_carbon_tax_button = {
 
 	possible = { gw_possible_remove_carbon_tax = yes }
 
-	effect = { gw_effect_remove_carbon_tax = yes }
+	effect = {
+		gw_effect_remove_carbon_tax = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_renewable_investment_button = {
@@ -150,7 +156,11 @@ gw_remove_renewable_investment_button = {
 
 	possible = { gw_possible_remove_renewable_investment = yes }
 
-	effect = { gw_effect_remove_renewable_investment = yes }
+	effect = {
+		gw_effect_remove_renewable_investment = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_climate_adaptation_button = {
@@ -214,7 +224,11 @@ gw_remove_climate_adaptation_button = {
 
 	possible = { gw_possible_remove_climate_adaptation = yes }
 
-	effect = { gw_effect_remove_climate_adaptation = yes }
+	effect = {
+		gw_effect_remove_climate_adaptation = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_emission_standards_button = {
@@ -280,7 +294,11 @@ gw_remove_emission_standards_button = {
 
 	possible = { gw_possible_remove_emission_standards = yes }
 
-	effect = { gw_effect_remove_emission_standards = yes }
+	effect = {
+		gw_effect_remove_emission_standards = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_reforestation_button = {
@@ -346,7 +364,11 @@ gw_remove_reforestation_button = {
 
 	possible = { gw_possible_remove_reforestation = yes }
 
-	effect = { gw_effect_remove_reforestation = yes }
+	effect = {
+		gw_effect_remove_reforestation = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_public_transit_button = {
@@ -411,7 +433,11 @@ gw_remove_public_transit_button = {
 
 	possible = { gw_possible_remove_public_transit = yes }
 
-	effect = { gw_effect_remove_public_transit = yes }
+	effect = {
+		gw_effect_remove_public_transit = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_fossil_fuel_divestment_button = {
@@ -476,7 +502,11 @@ gw_remove_fossil_fuel_divestment_button = {
 
 	possible = { gw_possible_remove_fossil_fuel_divestment = yes }
 
-	effect = { gw_effect_remove_fossil_fuel_divestment = yes }
+	effect = {
+		gw_effect_remove_fossil_fuel_divestment = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_green_building_codes_button = {

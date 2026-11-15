@@ -73,9 +73,9 @@
 #
 # THE MOVEMENT'S PRESSURE sits outside the wills: on the seven policies the
 # Environmental Movement asks for, a pressing movement adds points to the one
-# the country is nearest to adopting, and keeps the ones that hold it calm (its
-# section below the thresholds). Their margins are gw_ai_base_margin_* (will
-# less threshold) plus those points.
+# the country is nearest to adopting, and holds each one it would press for
+# again without it (its section below the thresholds). Their margins are
+# gw_ai_base_margin_* (will less threshold) plus those points.
 #
 # Scope: country, throughout.
 # ============================================================================
@@ -347,92 +347,64 @@ gw_ai_authority_deficit_repeal_weight = 15
 # would sit at gw_ai_max_weight on all of them and lose that order. At most one
 # such answer a year (gw_ai_movement_answered, set by the seven adopt buttons):
 # activism drifts 0.01 a week, so the 0.2 an answer takes off has shown before
-# the next. Lapsing reads the pressure the movement would be under without the
-# policies in force (gw_ai_movement_pressure_unmasked), as the will reads the
-# warming beneath the haze: a policy that keeps the movement calm isn't
-# repealed for having worked, and once the movement goes (the ministry fully
-# funded), each policy falls back to its own will and band. Renewable
-# Investment's hold also needs the treasury its answer needs
-# (gw_ai_can_carry_renewable_investment): a country that can't carry the 0.5%
-# of GDP falls back to its own will and band, like a calm one.
+# the next. Lapsing reads the pressure the movement would be under without
+# that one policy (gw_ai_movement_pressure_without_one), as the will reads the
+# warming beneath the haze: a policy the movement would press for again isn't
+# repealed for having worked. Each policy is held on its own: the movement's
+# activism plus one policy's swing, never the swing of all of them, so a
+# movement at 0 holds nothing however many policies are in force (the hold as
+# first built, PR #1841, added back every policy in force and kept four or more
+# for good whatever the movement's state). While a movement exists at most one
+# of the seven lapses a year (gw_ai_movement_lapsed, set by the seven repeal
+# buttons): activism moves 0.01 a week, so several policies falling below
+# their bands together would all go before the movement's reading caught up,
+# and two of them come back. Once the movement goes (the ministry fully
+# funded), each policy falls back to its own will and band, all at once as
+# before. Renewable Investment's hold also needs a treasury that can keep its
+# 0.5% of GDP (gw_ai_can_keep_renewable_investment, half the debt ceiling,
+# against a quarter to take it on): a country that can't falls back to its own
+# will and band, like a calm one.
 #
 # Aerosol Injection stirs the movement and isn't among the seven, and neither
 # are Green Building Codes, Fossil-Fuel Tariffs or Carbon Removal Support, which
 # the movement's lines don't count.
 
-# 0 below vanilla's protesting threshold (RADICALISM_PROTESTING_THRESHOLD 0.5),
-# 1 at its militant threshold (RADICALISM_MILITANT_THRESHOLD 0.75), where a civil
-# war starts organizing (MIN_RADICALISM_FOR_CIVIL_WAR_PROGRESSION). A country has
-# one environmental movement at most.
-gw_ai_movement_pressure = {
+# The movement's activism, 0 with no movement. A country has one
+# environmental movement at most.
+gw_ai_movement_activism = {
 	value = 0
 	every_political_movement = {
 		limit = { is_political_movement_type = movement_environmental }
 		add = this.political_movement_radicalism
 	}
+}
+
+# 0 below vanilla's protesting threshold (RADICALISM_PROTESTING_THRESHOLD 0.5),
+# 1 at its militant threshold (RADICALISM_MILITANT_THRESHOLD 0.75), where a civil
+# war starts organizing (MIN_RADICALISM_FOR_CIVIL_WAR_PROGRESSION).
+gw_ai_movement_pressure = {
+	value = gw_ai_movement_activism
 	subtract = 0.5
 	divide = 0.25
 	min = 0
 	max = 1
 }
 
-# The same, with what the policies in force hold back added back: each of the
-# seven's 0.1 "could adopt" line and every policy's own line (the seven and
-# Carbon Removal Support calm it, Aerosol Injection stirs it). 0 with no
-# movement.
-gw_ai_movement_pressure_unmasked = {
-	value = 0
-	if = {
-		limit = {
-			any_political_movement = { is_political_movement_type = movement_environmental }
-		}
-		every_political_movement = {
-			limit = { is_political_movement_type = movement_environmental }
-			add = this.political_movement_radicalism
-		}
-		subtract = modifier:country_environmental_movement_radicalism_add
-		add = {
-			value = gw_ai_wants_policies_held
-			multiply = 0.1
-		}
-		subtract = 0.5
-		divide = 0.25
-	}
+# What one of the seven in force holds back: its own -0.1 radicalism and the
+# +0.1 "could adopt" line it would show again once repealed.
+gw_ai_movement_policy_swing = 0.2
+
+# The pressure the movement would be under without one policy of the seven:
+# its activism plus that policy's swing, on the same ramp. Read in the hold,
+# so it is the same for each of the seven, and 0 with no movement or below
+# 0.3 activism.
+gw_ai_movement_pressure_without_one = {
+	value = gw_ai_movement_activism
+	add = gw_ai_movement_policy_swing
+	subtract = 0.5
+	divide = 0.25
 	min = 0
 	max = 1
-}
-
-# How many of the seven are in force.
-gw_ai_wants_policies_held = {
-	value = 0
-	if = {
-		limit = { gw_policy_climate_adaptation_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_reforestation_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_renewable_investment_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_public_transit_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_emission_standards_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_carbon_tax_active = yes }
-		add = 1
-	}
-	if = {
-		limit = { gw_policy_fossil_fuel_divestment_active = yes }
-		add = 1
-	}
 }
 
 # Points at full pressure: a militant movement is worth a degree and a half of
@@ -442,19 +414,32 @@ gw_ai_wants_policies_held = {
 # a third of the countries that lack the authority for anything else.
 gw_ai_movement_pressure_weight = 30
 
-# What keeping a policy is worth while the movement would press without it.
+# What keeping a policy is worth while the movement would press without it,
+# and the lock on a second lapse in a year while a movement exists.
 gw_ai_movement_hold_points = {
-	value = gw_ai_movement_pressure_unmasked
+	value = gw_ai_movement_pressure_without_one
 	multiply = gw_ai_movement_pressure_weight
+	if = {
+		limit = {
+			has_variable = gw_ai_movement_lapsed
+			any_political_movement = { is_political_movement_type = movement_environmental }
+		}
+		add = gw_ai_movement_lapse_lock_points
+	}
 }
 
-# Renewable Investment's, only while the treasury can carry its running cost:
-# the same gate as its answer, so the movement never holds the policy where it
-# wouldn't have the country take it up.
+# Larger than any repeal margin: no second of the seven lapses that year. A
+# repeal for an authority deficit is scored outside the margin, so it still
+# goes through (gw_ai_authority_deficit_repeal_weight).
+gw_ai_movement_lapse_lock_points = 1000
+
+# Renewable Investment's, only while the treasury can keep its running cost
+# (gw_ai_can_keep_renewable_investment): a country in default, or past half its
+# debt ceiling, falls back to its own will and band, lock or not.
 gw_ai_movement_hold_points_renewable_investment = {
 	value = 0
 	if = {
-		limit = { gw_ai_can_carry_renewable_investment = yes }
+		limit = { gw_ai_can_keep_renewable_investment = yes }
 		add = gw_ai_movement_hold_points
 	}
 }
