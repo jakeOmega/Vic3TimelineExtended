@@ -660,9 +660,10 @@ theocracy and the Ministry of Information in a parliamentary or presidential
 republic. The laws keep their names.
 
 The Environmental Movement radicalizes while your Ministry of the Environment is
-missing or funded below its cap, and the Anti-War Movement does the same over
-the foreign affairs, international aid and refugee ministries (see [New
-political movements](#new-political-movements)).
+funded below its cap, or missing once you have researched the Environmental
+Movement technology. The Anti-War Movement does the same over the foreign
+affairs, international aid and refugee ministries (see [New political
+movements](#new-political-movements)).
 
 The mod also adds one institution that isn't a ministry: the base game's
 Migration Controls law now sets up a Migration Controls institution in place of

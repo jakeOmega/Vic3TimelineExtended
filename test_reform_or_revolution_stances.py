@@ -19,6 +19,8 @@ each one every law the lists they came from rated above it, the mod leaves the
 define to vanilla (so another mod can set it), the figures above rest on
 vanilla's value and multiplier, and no 1836 law either movement disapproves
 lacks a law it rates higher that a country holding it can enact before era 6.
+The same rule for every movement, by the era each can first exist in, is
+test_movement_stance_guard.py's (#1832).
 
 Run: python3 test_reform_or_revolution_stances.py
 """
@@ -156,9 +158,13 @@ class NeutralOnLockedDefaultsTest(unittest.TestCase):
         import ideology_modifications as im
 
         for ideology, shared in (("ideology_labor_movement", "labor"), ("ideology_socialist_movement", "socialist")):
-            self.assertEqual(im.AUTOMATION_STANCES[ideology], shared + "_movement")
+            # Since #1832 the lift is ideology_modifications.NEUTRAL_ON_LOCKED_DEFAULT's,
+            # applied to the shared list (test_movement_stance_guard.py holds it for
+            # every movement).
+            self.assertEqual(im.AUTOMATION_STANCES[ideology], shared)
+            self.assertIn(UNRESTRICTED, im.NEUTRAL_ON_LOCKED_DEFAULT[ideology])
             before = {law: STANCE[s] for law, s in im.AUTOMATION_LISTS[shared]}
-            after = {law: STANCE[s] for law, s in im.AUTOMATION_LISTS[shared + "_movement"]}
+            after = {law: STANCE[s] for law, s in im.modifications[ideology][AUTOMATION]}
             for law in before:
                 if before[law] > before[UNRESTRICTED]:
                     self.assertGreater(after[law], after[UNRESTRICTED], (ideology, law))
