@@ -239,17 +239,21 @@ te_mon_fx_target_value = {
 	add = te_mon_fx_term_rate
 	add = te_mon_fx_term_confidence
 	add = te_mon_fx_term_premium
+	# Foreign Exchange Surrender on a float (2026-11-14): 0 everywhere else.
+	add = banking_external_surrender_fx_term
 	if = {
 		limit = { has_variable = te_fx_shock }
 		add = var:te_fx_shock
 	}
 }
 
-# One month's move of the shadow toward its target.
+# One month's move of the shadow toward its target. Sterilization on a float
+# halves it (banking_external_fx_adjust_factor, 1 everywhere else, 2026-11-14).
 te_mon_fx_shadow_step = {
 	value = te_mon_fx_target_value
 	subtract = var:te_fx_shadow
 	multiply = te_mon_fx_adjust_speed
+	multiply = banking_external_fx_adjust_factor
 }
 
 # One month's walk of a devalued metallic index back toward par.

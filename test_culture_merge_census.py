@@ -875,6 +875,8 @@ class TriggerShapeTest(unittest.TestCase):
                 for suffix in (
                     "is_candidate", "core_ok", "census_wanted", "is_starter", "has_other_starter", "can_start",
                     "starter_gone", "all_switched", "core_switched", "result_switched",
+                    # The notices (2026-11-14): does the merge reach this country.
+                    "involves",
                 )
             )
             if any(part.wait_for for part in merge.core):

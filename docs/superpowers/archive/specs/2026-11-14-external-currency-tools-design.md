@@ -7,6 +7,13 @@ four and Limit Foreign-Currency Borrowing) clearer to players, abstracting their
 effects where that helps but staying faithful to each policy. Two PRs: the first
 changes only what the player reads, the second the mechanics.
 
+**Built** in jakeOmega/Vic3TimelineExtended#1800 (PR 1) and
+jakeOmega/Vic3TimelineExtended#1807 (PR 2), as written here. Two things the build added: the panel's
+text is in its neutral voice ("On this currency", "the country's"), since the
+banking panel can show another country; and the label is "On this currency"
+throughout. How it works now: `docs/systems/mod_systems/banking_cycle.md`
+§ External & Currency tools.
+
 ## Why
 
 The five tools sit in one menu but act on two different models of the external
@@ -162,8 +169,9 @@ No change to any script value, trigger or effect a pulse runs.
   new requirement. The script scenarios in `test_banking_external_tools.py` test
   the floating versions instead.
 - **Exchange-rate tooltip** (`banking_dash_mon_fx_tt`): a line for the surrender
-  term while it is on, and "a 24th" in its first sentence while sterilization
-  slows the index.
+  term while it adds one, and a line saying the index closes a twenty-fourth of
+  the distance while sterilization slows it (`te_mon_fx_surrender_note`,
+  `te_mon_fx_sterilized_note`).
 
 ## Out of scope
 

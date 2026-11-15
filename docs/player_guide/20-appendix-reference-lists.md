@@ -65,10 +65,10 @@ the sections after it.
 | Directed Credit | Directed Credit to Electrification | 1 | Rural Electrification |
 | External & Currency | Export Credit Facility | 2 | Corporate Governance |
 | External & Currency | Capital Controls | 2 | a law that allows it, or war |
-| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
-| External & Currency | Sterilization | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
-| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
-| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
+| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; a law that allows capital controls, or war |
+| External & Currency | Sterilization | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; treasury cash |
+| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established; a currency that is not held at par on metal |
+| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; exports (on gold also cash and room in the vault); a law that allows capital controls, or war |
 | External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
 | Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
 | Crisis Response | Emergency Liquidity Program | 4 | Investment Banks; Downturn or Panic |
