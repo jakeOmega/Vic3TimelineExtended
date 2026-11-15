@@ -310,6 +310,30 @@ te_cmg_german_core_switched = {
 	}
 }
 
+# Country scope. Does the german merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_german_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_german_involves = {
+	OR = {
+		country_has_primary_culture = cu:north_german
+		country_has_primary_culture = cu:south_german
+		country_has_primary_culture = cu:alemannic
+		country_has_primary_culture = cu:east_german
+		country_has_primary_culture = cu:cm_german
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_german
+					is_homeland = cu:south_german
+					is_homeland = cu:alemannic
+					is_homeland = cu:east_german
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the german merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -641,6 +665,28 @@ te_cmg_italian_core_switched = {
 		AND = {
 			global_var:te_cm_joined_italian_south_italian ?= 1
 			NOT = { has_global_variable = te_cm_switched_south_italian }
+		}
+	}
+}
+
+# Country scope. Does the italian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_italian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_italian_involves = {
+	OR = {
+		country_has_primary_culture = cu:north_italian
+		country_has_primary_culture = cu:south_italian
+		country_has_primary_culture = cu:corsican
+		country_has_primary_culture = cu:cm_italian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_italian
+					is_homeland = cu:south_italian
+					is_homeland = cu:corsican
+				}
+			}
 		}
 	}
 }
@@ -1028,6 +1074,30 @@ te_cmg_scandinavian_core_switched = {
 	}
 }
 
+# Country scope. Does the scandinavian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_scandinavian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_scandinavian_involves = {
+	OR = {
+		country_has_primary_culture = cu:swedish
+		country_has_primary_culture = cu:danish
+		country_has_primary_culture = cu:norwegian
+		country_has_primary_culture = cu:icelandic
+		country_has_primary_culture = cu:cm_scandinavian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:swedish
+					is_homeland = cu:danish
+					is_homeland = cu:norwegian
+					is_homeland = cu:icelandic
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the scandinavian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -1398,6 +1468,28 @@ te_cmg_east_slavic_core_switched = {
 		AND = {
 			global_var:te_cm_joined_east_slavic_byelorussian ?= 1
 			NOT = { has_global_variable = te_cm_switched_byelorussian }
+		}
+	}
+}
+
+# Country scope. Does the east_slavic merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_east_slavic_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_east_slavic_involves = {
+	OR = {
+		country_has_primary_culture = cu:russian
+		country_has_primary_culture = cu:ukrainian
+		country_has_primary_culture = cu:byelorussian
+		country_has_primary_culture = cu:cm_east_slavic
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:russian
+					is_homeland = cu:ukrainian
+					is_homeland = cu:byelorussian
+				}
+			}
 		}
 	}
 }
@@ -1887,6 +1979,32 @@ te_cmg_yugoslav_core_switched = {
 	}
 }
 
+# Country scope. Does the yugoslav merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_yugoslav_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_yugoslav_involves = {
+	OR = {
+		country_has_primary_culture = cu:serb
+		country_has_primary_culture = cu:croat
+		country_has_primary_culture = cu:bosniak
+		country_has_primary_culture = cu:slovene
+		country_has_primary_culture = cu:bulgarian
+		country_has_primary_culture = cu:cm_yugoslav
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:serb
+					is_homeland = cu:croat
+					is_homeland = cu:bosniak
+					is_homeland = cu:slovene
+					is_homeland = cu:bulgarian
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the yugoslav merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -2234,6 +2352,28 @@ te_cmg_czechoslovak_core_switched = {
 	}
 }
 
+# Country scope. Does the czechoslovak merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_czechoslovak_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_czechoslovak_involves = {
+	OR = {
+		country_has_primary_culture = cu:czech
+		country_has_primary_culture = cu:slovak
+		country_has_primary_culture = cu:sorb
+		country_has_primary_culture = cu:cm_czechoslovak
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:czech
+					is_homeland = cu:slovak
+					is_homeland = cu:sorb
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the czechoslovak merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -2491,6 +2631,25 @@ te_cmg_hungarian_core_switched = {
 	}
 }
 
+# Country scope. Does the hungarian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_hungarian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_hungarian_involves = {
+	OR = {
+		country_has_primary_culture = cu:hungarian
+		country_has_primary_culture = cu:szekely
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:hungarian
+					is_homeland = cu:szekely
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the hungarian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -2733,6 +2892,25 @@ te_cmg_dutch_core_switched = {
 	}
 }
 
+# Country scope. Does the dutch merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_dutch_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_dutch_involves = {
+	OR = {
+		country_has_primary_culture = cu:dutch
+		country_has_primary_culture = cu:flemish
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:dutch
+					is_homeland = cu:flemish
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the dutch merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -2971,6 +3149,25 @@ te_cmg_finnish_core_switched = {
 		AND = {
 			global_var:te_cm_joined_finnish_karelian ?= 1
 			NOT = { has_global_variable = te_cm_switched_karelian }
+		}
+	}
+}
+
+# Country scope. Does the finnish merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_finnish_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_finnish_involves = {
+	OR = {
+		country_has_primary_culture = cu:finnish
+		country_has_primary_culture = cu:karelian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:finnish
+					is_homeland = cu:karelian
+				}
+			}
 		}
 	}
 }
@@ -3317,6 +3514,29 @@ te_cmg_french_core_switched = {
 	}
 }
 
+# Country scope. Does the french merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_french_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_french_involves = {
+	OR = {
+		country_has_primary_culture = cu:french
+		country_has_primary_culture = cu:occitan
+		country_has_primary_culture = cu:wallonian
+		country_has_primary_culture = cu:catalan
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:french
+					is_homeland = cu:occitan
+					is_homeland = cu:wallonian
+					is_homeland = cu:catalan
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the french merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -3579,6 +3799,25 @@ te_cmg_british_core_switched = {
 		AND = {
 			global_var:te_cm_joined_british_scottish ?= 1
 			NOT = { has_global_variable = te_cm_switched_scottish }
+		}
+	}
+}
+
+# Country scope. Does the british merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_british_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_british_involves = {
+	OR = {
+		country_has_primary_culture = cu:british
+		country_has_primary_culture = cu:scottish
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:british
+					is_homeland = cu:scottish
+				}
+			}
 		}
 	}
 }
@@ -3955,6 +4194,28 @@ te_cmg_american_core_switched = {
 		AND = {
 			global_var:te_cm_joined_american_dixie ?= 1
 			NOT = { has_global_variable = te_cm_switched_dixie }
+		}
+	}
+}
+
+# Country scope. Does the american merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_american_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_american_involves = {
+	OR = {
+		country_has_primary_culture = cu:yankee
+		country_has_primary_culture = cu:dixie
+		country_has_primary_culture = cu:afro_american
+		country_has_primary_culture = cu:cm_american
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:yankee
+					is_homeland = cu:dixie
+					is_homeland = cu:afro_american
+				}
+			}
 		}
 	}
 }
@@ -4597,6 +4858,38 @@ te_cmg_anglophone_core_switched = {
 	}
 }
 
+# Country scope. Does the anglophone merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_anglophone_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_anglophone_involves = {
+	OR = {
+		country_has_primary_culture = cu:british
+		country_has_primary_culture = cu:yankee
+		country_has_primary_culture = cu:cm_american
+		country_has_primary_culture = cu:anglo_canadian
+		country_has_primary_culture = cu:australian
+		country_has_primary_culture = cu:scottish
+		country_has_primary_culture = cu:dixie
+		country_has_primary_culture = cu:afro_american
+		country_has_primary_culture = cu:cm_anglophone
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:british
+					is_homeland = cu:yankee
+					is_homeland = cu:cm_american
+					is_homeland = cu:anglo_canadian
+					is_homeland = cu:australian
+					is_homeland = cu:scottish
+					is_homeland = cu:dixie
+					is_homeland = cu:afro_american
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the anglophone merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -5077,6 +5370,33 @@ te_cmg_brazilian_core_switched = {
 	}
 }
 
+# Country scope. Does the brazilian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_brazilian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_brazilian_involves = {
+	OR = {
+		country_has_primary_culture = cu:brazilian
+		country_has_primary_culture = cu:nordestino
+		country_has_primary_culture = cu:paulista
+		country_has_primary_culture = cu:amazonic
+		country_has_primary_culture = cu:sulista
+		country_has_primary_culture = cu:afro_brazilian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:brazilian
+					is_homeland = cu:nordestino
+					is_homeland = cu:paulista
+					is_homeland = cu:amazonic
+					is_homeland = cu:sulista
+					is_homeland = cu:afro_brazilian
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Everything the brazilian merge needs to start except its waits on vanilla entries
 # (each condition its own custom_tooltip). The census adds a wait year while this holds and an entry is open.
 te_cmg_brazilian_start_basics = {
@@ -5533,6 +5853,30 @@ te_cmg_platine_core_switched = {
 	}
 }
 
+# Country scope. Does the platine merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_platine_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_platine_involves = {
+	OR = {
+		country_has_primary_culture = cu:platinean
+		country_has_primary_culture = cu:argentine
+		country_has_primary_culture = cu:uruguayan
+		country_has_primary_culture = cu:paraguayan
+		country_has_primary_culture = cu:cm_platine
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:platinean
+					is_homeland = cu:argentine
+					is_homeland = cu:uruguayan
+					is_homeland = cu:paraguayan
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the platine merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -5944,6 +6288,30 @@ te_cmg_andean_core_switched = {
 	}
 }
 
+# Country scope. Does the andean merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_andean_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_andean_involves = {
+	OR = {
+		country_has_primary_culture = cu:north_andean
+		country_has_primary_culture = cu:south_andean
+		country_has_primary_culture = cu:peruvian
+		country_has_primary_culture = cu:bolivian
+		country_has_primary_culture = cu:cm_andean
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:north_andean
+					is_homeland = cu:south_andean
+					is_homeland = cu:peruvian
+					is_homeland = cu:bolivian
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the andean merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -6296,6 +6664,28 @@ te_cmg_gran_colombian_core_switched = {
 		AND = {
 			global_var:te_cm_joined_gran_colombian_ecuadorian ?= 1
 			NOT = { has_global_variable = te_cm_switched_ecuadorian }
+		}
+	}
+}
+
+# Country scope. Does the gran_colombian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_gran_colombian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_gran_colombian_involves = {
+	OR = {
+		country_has_primary_culture = cu:colombian
+		country_has_primary_culture = cu:venezuelan
+		country_has_primary_culture = cu:ecuadorian
+		country_has_primary_culture = cu:cm_gran_colombian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:colombian
+					is_homeland = cu:venezuelan
+					is_homeland = cu:ecuadorian
+				}
+			}
 		}
 	}
 }
@@ -6669,6 +7059,29 @@ te_cmg_chinese_core_switched = {
 	}
 }
 
+# Country scope. Does the chinese merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_chinese_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_chinese_involves = {
+	OR = {
+		country_has_primary_culture = cu:han
+		country_has_primary_culture = cu:yue
+		country_has_primary_culture = cu:min
+		country_has_primary_culture = cu:hakka
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:han
+					is_homeland = cu:yue
+					is_homeland = cu:min
+					is_homeland = cu:hakka
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the chinese merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -6936,6 +7349,25 @@ te_cmg_japanese_core_switched = {
 		AND = {
 			global_var:te_cm_joined_japanese_ryukyuan ?= 1
 			NOT = { has_global_variable = te_cm_switched_ryukyuan }
+		}
+	}
+}
+
+# Country scope. Does the japanese merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_japanese_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_japanese_involves = {
+	OR = {
+		country_has_primary_culture = cu:japanese
+		country_has_primary_culture = cu:ryukyuan
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:japanese
+					is_homeland = cu:ryukyuan
+				}
+			}
 		}
 	}
 }
@@ -7510,6 +7942,38 @@ te_cmg_arab_core_switched = {
 	}
 }
 
+# Country scope. Does the arab merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_arab_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_arab_involves = {
+	OR = {
+		country_has_primary_culture = cu:maghrebi
+		country_has_primary_culture = cu:misri
+		country_has_primary_culture = cu:mashriqi
+		country_has_primary_culture = cu:bedouin
+		country_has_primary_culture = cu:yemenite
+		country_has_primary_culture = cu:sudanese
+		country_has_primary_culture = cu:haratin
+		country_has_primary_culture = cu:bidan
+		country_has_primary_culture = cu:cm_arab
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:maghrebi
+					is_homeland = cu:misri
+					is_homeland = cu:mashriqi
+					is_homeland = cu:bedouin
+					is_homeland = cu:yemenite
+					is_homeland = cu:sudanese
+					is_homeland = cu:haratin
+					is_homeland = cu:bidan
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the arab merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -7957,6 +8421,33 @@ te_cmg_persian_core_switched = {
 	}
 }
 
+# Country scope. Does the persian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_persian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_persian_involves = {
+	OR = {
+		country_has_primary_culture = cu:persian
+		country_has_primary_culture = cu:luri
+		country_has_primary_culture = cu:tajik
+		country_has_primary_culture = cu:hazara
+		country_has_primary_culture = cu:mazanderani
+		country_has_primary_culture = cu:baluchi
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:persian
+					is_homeland = cu:luri
+					is_homeland = cu:tajik
+					is_homeland = cu:hazara
+					is_homeland = cu:mazanderani
+					is_homeland = cu:baluchi
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the persian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -8275,6 +8766,28 @@ te_cmg_oghuz_turkic_core_switched = {
 		AND = {
 			global_var:te_cm_joined_oghuz_turkic_azerbaijani ?= 1
 			NOT = { has_global_variable = te_cm_switched_azerbaijani }
+		}
+	}
+}
+
+# Country scope. Does the oghuz_turkic merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_oghuz_turkic_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_oghuz_turkic_involves = {
+	OR = {
+		country_has_primary_culture = cu:turkish
+		country_has_primary_culture = cu:azerbaijani
+		country_has_primary_culture = cu:turkmen
+		country_has_primary_culture = cu:cm_oghuz_turkic
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:turkish
+					is_homeland = cu:azerbaijani
+					is_homeland = cu:turkmen
+				}
+			}
 		}
 	}
 }
@@ -8691,6 +9204,31 @@ te_cmg_hindustani_core_switched = {
 	}
 }
 
+# Country scope. Does the hindustani merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_hindustani_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_hindustani_involves = {
+	OR = {
+		country_has_primary_culture = cu:hindustani
+		country_has_primary_culture = cu:avadhi
+		country_has_primary_culture = cu:bundeli
+		country_has_primary_culture = cu:chhattisgarhi
+		country_has_primary_culture = cu:bageli
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:hindustani
+					is_homeland = cu:avadhi
+					is_homeland = cu:bundeli
+					is_homeland = cu:chhattisgarhi
+					is_homeland = cu:bageli
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the hindustani merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -9090,6 +9628,30 @@ te_cmg_dravidian_core_switched = {
 		AND = {
 			global_var:te_cm_joined_dravidian_malayalam ?= 1
 			NOT = { has_global_variable = te_cm_switched_malayalam }
+		}
+	}
+}
+
+# Country scope. Does the dravidian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_dravidian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_dravidian_involves = {
+	OR = {
+		country_has_primary_culture = cu:tamil
+		country_has_primary_culture = cu:kannada
+		country_has_primary_culture = cu:malayalam
+		country_has_primary_culture = cu:telegu
+		country_has_primary_culture = cu:cm_dravidian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:tamil
+					is_homeland = cu:kannada
+					is_homeland = cu:malayalam
+					is_homeland = cu:telegu
+				}
+			}
 		}
 	}
 }
@@ -9543,6 +10105,32 @@ te_cmg_indonesian_core_switched = {
 	}
 }
 
+# Country scope. Does the indonesian merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_indonesian_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_indonesian_involves = {
+	OR = {
+		country_has_primary_culture = cu:javan
+		country_has_primary_culture = cu:malay
+		country_has_primary_culture = cu:sumatran
+		country_has_primary_culture = cu:bornean
+		country_has_primary_culture = cu:balinese
+		country_has_primary_culture = cu:cm_indonesian
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:javan
+					is_homeland = cu:malay
+					is_homeland = cu:sumatran
+					is_homeland = cu:bornean
+					is_homeland = cu:balinese
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the indonesian merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -9933,6 +10521,29 @@ te_cmg_filipino_core_switched = {
 	}
 }
 
+# Country scope. Does the filipino merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_filipino_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_filipino_involves = {
+	OR = {
+		country_has_primary_culture = cu:filipino
+		country_has_primary_culture = cu:visayan
+		country_has_primary_culture = cu:tagalog
+		country_has_primary_culture = cu:ilocano
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:filipino
+					is_homeland = cu:visayan
+					is_homeland = cu:tagalog
+					is_homeland = cu:ilocano
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the filipino merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -10273,6 +10884,28 @@ te_cmg_nguni_core_switched = {
 		AND = {
 			global_var:te_cm_joined_nguni_xhosa ?= 1
 			NOT = { has_global_variable = te_cm_switched_xhosa }
+		}
+	}
+}
+
+# Country scope. Does the nguni merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_nguni_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_nguni_involves = {
+	OR = {
+		country_has_primary_culture = cu:nguni
+		country_has_primary_culture = cu:zulu
+		country_has_primary_culture = cu:xhosa
+		country_has_primary_culture = cu:cm_nguni
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:nguni
+					is_homeland = cu:zulu
+					is_homeland = cu:xhosa
+				}
+			}
 		}
 	}
 }
@@ -11011,6 +11644,42 @@ te_cmg_latin_core_switched = {
 	}
 }
 
+# Country scope. Does the latin merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_latin_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_latin_involves = {
+	OR = {
+		country_has_primary_culture = cu:french
+		country_has_primary_culture = cu:cm_italian
+		country_has_primary_culture = cu:spanish
+		country_has_primary_culture = cu:portuguese
+		country_has_primary_culture = cu:romanian
+		country_has_primary_culture = cu:platinean
+		country_has_primary_culture = cu:cm_platine
+		country_has_primary_culture = cu:argentine
+		country_has_primary_culture = cu:uruguayan
+		country_has_primary_culture = cu:chilean
+		country_has_primary_culture = cu:cm_latin
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:french
+					is_homeland = cu:cm_italian
+					is_homeland = cu:spanish
+					is_homeland = cu:portuguese
+					is_homeland = cu:romanian
+					is_homeland = cu:platinean
+					is_homeland = cu:cm_platine
+					is_homeland = cu:argentine
+					is_homeland = cu:uruguayan
+					is_homeland = cu:chilean
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the latin merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -11563,6 +12232,34 @@ te_cmg_pan_slavic_core_switched = {
 		AND = {
 			global_var:te_cm_joined_pan_slavic_cm_yugoslav ?= 1
 			NOT = { has_global_variable = te_cm_switched_cm_yugoslav }
+		}
+	}
+}
+
+# Country scope. Does the pan_slavic merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_pan_slavic_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_pan_slavic_involves = {
+	OR = {
+		country_has_primary_culture = cu:cm_east_slavic
+		country_has_primary_culture = cu:cm_czechoslovak
+		country_has_primary_culture = cu:cm_yugoslav
+		country_has_primary_culture = cu:polish
+		country_has_primary_culture = cu:slovene
+		country_has_primary_culture = cu:bulgarian
+		country_has_primary_culture = cu:cm_pan_slavic
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:cm_east_slavic
+					is_homeland = cu:cm_czechoslovak
+					is_homeland = cu:cm_yugoslav
+					is_homeland = cu:polish
+					is_homeland = cu:slovene
+					is_homeland = cu:bulgarian
+				}
+			}
 		}
 	}
 }
@@ -12242,6 +12939,40 @@ te_cmg_pan_turkic_core_switched = {
 	}
 }
 
+# Country scope. Does the pan_turkic merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_pan_turkic_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_pan_turkic_involves = {
+	OR = {
+		country_has_primary_culture = cu:cm_oghuz_turkic
+		country_has_primary_culture = cu:uzbek
+		country_has_primary_culture = cu:kazak
+		country_has_primary_culture = cu:tatar
+		country_has_primary_culture = cu:kirgiz
+		country_has_primary_culture = cu:bashkir
+		country_has_primary_culture = cu:crimean_tatar
+		country_has_primary_culture = cu:caucasian_turk
+		country_has_primary_culture = cu:uighur
+		country_has_primary_culture = cu:cm_pan_turkic
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:cm_oghuz_turkic
+					is_homeland = cu:uzbek
+					is_homeland = cu:kazak
+					is_homeland = cu:tatar
+					is_homeland = cu:kirgiz
+					is_homeland = cu:bashkir
+					is_homeland = cu:crimean_tatar
+					is_homeland = cu:caucasian_turk
+					is_homeland = cu:uighur
+				}
+			}
+		}
+	}
+}
+
 # Country scope. Can this country start the pan_turkic merge now? The merge is idle, a core culture is
 # primary, the technology is known, every core slot is met, the standard-of-living gap is closed, the
 # component merges are complete and no vanilla entry on a core part is still open in any country (or the wait ran its course).
@@ -12601,6 +13332,26 @@ te_cmg_pan_malay_core_switched = {
 		AND = {
 			global_var:te_cm_joined_pan_malay_filipino ?= 1
 			NOT = { has_global_variable = te_cm_switched_filipino }
+		}
+	}
+}
+
+# Country scope. Does the pan_malay merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_pan_malay_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_pan_malay_involves = {
+	OR = {
+		country_has_primary_culture = cu:cm_indonesian
+		country_has_primary_culture = cu:filipino
+		country_has_primary_culture = cu:cm_pan_malay
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:cm_indonesian
+					is_homeland = cu:filipino
+				}
+			}
 		}
 	}
 }
@@ -13162,6 +13913,36 @@ te_cmg_east_african_core_switched = {
 		AND = {
 			global_var:te_cm_joined_east_african_sukuma ?= 1
 			NOT = { has_global_variable = te_cm_switched_sukuma }
+		}
+	}
+}
+
+# Country scope. Does the east_african merge reach this country? One of its primary cultures is a culture of the merge (a
+# core or optional culture, any alternative of a slot, or the result), or it owns a state that is a homeland of a
+# core or optional culture. The notices send such a country an event and any other a feed notice (te_cm_tell_start,
+# te_cmg_east_african_tell). Read only when the merge starts, a culture switches or the merge completes, for human countries.
+te_cmg_east_african_involves = {
+	OR = {
+		country_has_primary_culture = cu:swahili
+		country_has_primary_culture = cu:nyamwezi
+		country_has_primary_culture = cu:sukuma
+		country_has_primary_culture = cu:yao
+		country_has_primary_culture = cu:makua
+		country_has_primary_culture = cu:lacustrine_bantu
+		country_has_primary_culture = cu:kikuyu
+		country_has_primary_culture = cu:cm_east_african
+		any_scope_state = {
+			state_region = {
+				OR = {
+					is_homeland = cu:swahili
+					is_homeland = cu:nyamwezi
+					is_homeland = cu:sukuma
+					is_homeland = cu:yao
+					is_homeland = cu:makua
+					is_homeland = cu:lacustrine_bantu
+					is_homeland = cu:kikuyu
+				}
+			}
 		}
 	}
 }

@@ -578,7 +578,7 @@ IMAGES = {
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
             "extra_law_events.73", "extra_law_events.88",
-            "amendment_petition_events.1", "te_culture_merge.1",
+            "amendment_petition_events.1", "te_culture_merge.1", "te_culture_merge.3",
         ],
     },
     "digital_privacy_screen": {
@@ -893,7 +893,7 @@ IMAGES = {
     "minor_event_generic": {
         "prompt": "A 19th-century newspaper office: editors reviewing galley proofs, compositors setting type, a boy running in with a telegram. The smell of ink and the urgency of breaking news in the age before radio.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.6"],
+        "events": ["minor_events_timelineextended.6", "te_culture_merge.2"],
     },
 
     # =========================================================================
@@ -2540,7 +2540,7 @@ IMAGES = {
     "referendum_ballot_count": {
         "prompt": "At the left of the frame, officials in shirtsleeves sort paper ballots into piles on a long trestle table in a school hall, watched closely by two observers in plain blue armbands standing at the table's end; open wooden ballot boxes sit on the floor beside them. The right of the frame is the hall's tall windows and evening light.",
         "style": "oil painting, social realism, warm evening lamplight",
-        "events": ["un_referendum.3"],
+        "events": ["un_referendum.3", "te_culture_merge.4"],
     },
 }
 
