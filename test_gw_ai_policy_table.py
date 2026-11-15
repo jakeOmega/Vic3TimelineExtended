@@ -151,17 +151,29 @@ class GwAiPolicyTableTest(unittest.TestCase):
                 self.assertNotIn("temperature_anomaly_display", chance)
 
     def test_repeal_margin_is_derived_from_the_adopt_margin(self):
+        """One threshold per policy, written once. The seven policies the
+        Environmental Movement asks for keep it in gw_ai_base_margin_<p>: their
+        adopt margin adds the movement's answer points and their repeal
+        subtracts the points of the pressure the policies hold back
+        (test_gw_ai_movement_pressure.py); the others' adopt margin holds it."""
+        wants = set(re.findall(r"(?m)^gw_ai_movement_answer_points_(\w+) = \{", _text(VALUES)))
+        self.assertEqual(len(wants), 7, wants)
         for p in _policies():
             with self.subTest(policy=p):
-                adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
-                self.assertEqual(adopt["value"][1], f"gw_ai_will_{p}")
-                int(adopt["subtract"][1])  # the threshold, written once, here
+                margin = f"gw_ai_base_margin_{p}" if p in wants else f"gw_ai_adopt_margin_{p}"
+                threshold = _body(self.values[margin])
+                self.assertEqual(threshold["value"][1], f"gw_ai_will_{p}")
+                int(threshold["subtract"][1])  # the threshold, written once, here
                 repeal = _body(self.values[f"gw_ai_repeal_margin_{p}"])
                 self.assertEqual(repeal["value"][1], "0")
                 subtracted = [s[1] for s in _items(repeal["subtract"])]
-                self.assertEqual(
-                    subtracted, [f"gw_ai_adopt_margin_{p}", "gw_ai_repeal_band"]
-                )
+                if p in wants:
+                    adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
+                    self.assertEqual(adopt["value"][1], margin)
+                    self.assertEqual(adopt["add"][1], f"gw_ai_movement_answer_points_{p}")
+                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band", "gw_ai_movement_hold_points"])
+                else:
+                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band"])
 
     def test_each_will_is_the_shared_core_plus_every_signal(self):
         for p in _policies():

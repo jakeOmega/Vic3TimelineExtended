@@ -1,0 +1,49 @@
+﻿# Global Warming: which of the seven policies the Environmental Movement asks
+# for an AI country can take up now as its answer to the movement
+# (global_warming_ai_values.txt, "The Environmental Movement's pressure").
+#
+# Each is the policy's own adoption test (gw_possible_*, shared with the widget
+# and the movement's "could adopt" lines) plus the authority its adopt button
+# asks (global_warming_buttons.txt; test_gw_ai_movement_pressure.py holds the
+# two equal). Renewable Investment costs 0.5% of GDP a year instead, so as an
+# answer it also needs a treasury that can carry it: not in default and debt
+# under a quarter of the ceiling, the demographic measures' test for taking on
+# a money upkeep (te_demog_ms_ai_money_start). The policy's own will can still
+# adopt it without: this gate is only on the movement's push.
+#
+# Scope: country.
+
+gw_ai_can_answer_climate_adaptation = {
+	gw_possible_climate_adaptation = yes
+	authority >= 250
+}
+
+gw_ai_can_answer_reforestation = {
+	gw_possible_reforestation = yes
+	authority >= 100
+}
+
+gw_ai_can_answer_renewable_investment = {
+	gw_possible_renewable_investment = yes
+	in_default = no
+	scaled_debt < 0.25
+}
+
+gw_ai_can_answer_public_transit = {
+	gw_possible_public_transit = yes
+	authority >= 150
+}
+
+gw_ai_can_answer_emission_standards = {
+	gw_possible_emission_standards = yes
+	authority >= 200
+}
+
+gw_ai_can_answer_carbon_tax = {
+	gw_possible_carbon_tax = yes
+}
+
+gw_ai_can_answer_fossil_fuel_divestment = {
+	gw_possible_fossil_fuel_divestment = yes
+	authority >= 200
+}

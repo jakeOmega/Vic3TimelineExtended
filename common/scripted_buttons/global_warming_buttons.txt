@@ -29,6 +29,11 @@
 # below it. Keep adopt and repeal on the same policy's margins
 # (test_gw_ai_policy_table.py), and never give an adopt button a weight with no
 # repeal counterweight -- that is what made every AI hold every policy.
+#
+# The seven adopt buttons of the policies the Environmental Movement asks for
+# set gw_ai_movement_answered for a year: the movement's pressure carries at
+# most one of them a year (global_warming_ai_values.txt). Keep that bookkeeping
+# here, not in the gw_effect_* helpers the player's widget shares.
 # ----------------------------------------------------------------------------
 gw_carbon_tax_button = {
 	name = "GW_CARBON_TAX"
@@ -55,7 +60,11 @@ gw_carbon_tax_button = {
 
 	possible = { gw_possible_carbon_tax = yes }
 
-	effect = { gw_effect_carbon_tax = yes }
+	effect = {
+		gw_effect_carbon_tax = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_carbon_tax_button = {
@@ -110,7 +119,11 @@ gw_renewable_investment_button = {
 
 	possible = { gw_possible_renewable_investment = yes }
 
-	effect = { gw_effect_renewable_investment = yes }
+	effect = {
+		gw_effect_renewable_investment = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_renewable_investment_button = {
@@ -167,7 +180,11 @@ gw_climate_adaptation_button = {
 
 	possible = { gw_possible_climate_adaptation = yes }
 
-	effect = { gw_effect_climate_adaptation = yes }
+	effect = {
+		gw_effect_climate_adaptation = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_climate_adaptation_button = {
@@ -228,7 +245,11 @@ gw_emission_standards_button = {
 
 	possible = { gw_possible_emission_standards = yes }
 
-	effect = { gw_effect_emission_standards = yes }
+	effect = {
+		gw_effect_emission_standards = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_emission_standards_button = {
@@ -290,7 +311,11 @@ gw_reforestation_button = {
 
 	possible = { gw_possible_reforestation = yes }
 
-	effect = { gw_effect_reforestation = yes }
+	effect = {
+		gw_effect_reforestation = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_reforestation_button = {
@@ -351,7 +376,11 @@ gw_public_transit_button = {
 
 	possible = { gw_possible_public_transit = yes }
 
-	effect = { gw_effect_public_transit = yes }
+	effect = {
+		gw_effect_public_transit = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_public_transit_button = {
@@ -412,7 +441,11 @@ gw_fossil_fuel_divestment_button = {
 
 	possible = { gw_possible_fossil_fuel_divestment = yes }
 
-	effect = { gw_effect_fossil_fuel_divestment = yes }
+	effect = {
+		gw_effect_fossil_fuel_divestment = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_fossil_fuel_divestment_button = {
