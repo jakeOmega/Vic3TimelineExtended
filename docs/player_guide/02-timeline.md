@@ -98,7 +98,8 @@ Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
 Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
 Advanced Fission a second, more productive base method for the Nuclear Plant.
 Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
-the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
+the Cultured Meat Plant and Cultured Produce Facility (which can culture tobacco
+leaf too), and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
 Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
 the AI that works on its own: AI Agents (the Automated Bureaucracy law and
@@ -541,8 +542,12 @@ Most base-game buildings gain production methods through the new eras, so a
 building you built in 1850 keeps upgrading. Mines move on to Continuous Miners,
 Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
-Farm and GMO Plantation; and automation groups end in AI-managed methods such as
-AI Managed Fab. A few polluting buildings get pollution-control groups
+Farm and GMO Plantation, with Mechanical and then Autonomous Harvesters, which
+need fewer farmers; livestock ranches to Industrial Feedlots, Recombinant Growth
+Hormones (which buy Drugs) and Gene-Edited Livestock, with Mechanized Feeding
+Lines and Robotic Barns in Herd Management, the base game's Fencing; and
+automation groups end in AI-managed methods such as AI Managed Fab. A few
+polluting buildings get pollution-control groups
 ([Pollution-control methods](15-climate.md#pollution-control-methods)), and many get a hidden maintenance
 group used by the construction market ([Construction maintenance and
 retooling](03-economy.md#construction-maintenance-and-retooling)).
