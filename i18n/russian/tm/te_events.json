@@ -7783,6 +7783,1138 @@
   "en": "The Trust That Never Ends",
   "ru": "Траст без конца"
  },
+ "inheritance_events.12.a": {
+  "en": "A stake for every young adult.",
+  "ru": "Доля каждому молодому человеку."
+ },
+ "inheritance_events.12.b": {
+  "en": "The estates are not a welfare fund.",
+  "ru": "Поместья — не фонд социальной помощи."
+ },
+ "inheritance_events.12.d": {
+  "en": "The [SCOPE.gsInterestGroup('endowment_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to carry Thomas Paine's old plan: a duty on estates that pays every young adult a capital stake. It would replace any plain estate duty, since the duty is what pays for the stake.",
+  "ru": "Группа интересов [SCOPE.gsInterestGroup('endowment_ig').GetName] хочет, чтобы закон [SCOPE.sLaw('current_law_scope').GetName] воплотил старый план Томаса Пейна: пошлину на наследство, из которой каждому молодому человеку выплачивается капитал. Она заменила бы любую обычную пошлину на наследство, ведь именно пошлина оплачивает эту долю."
+ },
+ "inheritance_events.12.d_carry": {
+  "en": "The law in force pays a Birthright Endowment, and it will lapse with the law. The [SCOPE.gsInterestGroup('endowment_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to carry it over, duty and stake together.",
+  "ru": "Действующий закон предусматривает выплату капитала по праву рождения, и вместе с законом это правило утратит силу. Группа интересов [SCOPE.gsInterestGroup('endowment_ig').GetName] хочет, чтобы закон [SCOPE.sLaw('current_law_scope').GetName] сохранил его, и пошлину, и выплату."
+ },
+ "inheritance_events.12.f": {
+  "en": "\\\"It is not charity but a right, not bounty but justice, that I am pleading for.\\\"\\n\\n— Thomas Paine, Agrarian Justice",
+  "ru": "«Я прошу не о милости, а о праве, не о подачке, а о справедливости».\\n\\n— Томас Пейн, «Аграрная справедливость»"
+ },
+ "inheritance_events.12.t": {
+  "en": "A Stake at Twenty-One",
+  "ru": "Доля к двадцати одному году"
+ },
+ "inheritance_events.13.d": {
+  "en": "The [SCOPE.gsInterestGroup('rural_folk_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to let one heir take the family farm whole and pay the others out, as the farms of Westphalia and Hanover have long done by custom. Smallholders would no longer have to divide their fields, or limit their families, to keep a farm alive.",
+  "ru": "Группа интересов [SCOPE.gsInterestGroup('rural_folk_ig').GetName] хочет, чтобы закон [SCOPE.sLaw('current_law_scope').GetName] позволял одному наследнику получать семейную ферму целиком и выплачивать остальным их доли, как издавна по обычаю поступают в Вестфалии и Ганновере. Мелким хозяевам больше не пришлось бы делить поля или ограничивать семью, чтобы сохранить ферму."
+ },
+ "inheritance_events.13.d_carry": {
+  "en": "The law in force lets one heir take the farm whole, and the rule will lapse with it. The [SCOPE.gsInterestGroup('rural_folk_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to carry it over.",
+  "ru": "Действующий закон позволяет одному наследнику получить ферму целиком, и вместе с ним это правило утратит силу. Группа интересов [SCOPE.gsInterestGroup('rural_folk_ig').GetName] хочет, чтобы закон [SCOPE.sLaw('current_law_scope').GetName] сохранил его."
+ },
+ "inheritance_events.13.f": {
+  "en": "The family sat at the kitchen table with the deed between them, and the eldest daughter read out what their father had wanted: the farm to her brother whole, and the rest of them paid out of its earnings over fifteen years.\\n\\n\\\"The law they are passing won't allow it,\\\" said the youngest. \\\"The lawyer told me. Every child takes a share of the land itself.\\\"\\n\\n\\\"Then we will each have a field too small to work, and we will sell them to the neighbor,\\\" the brother said.\\n\\nThe eldest put the deed back in its envelope. She said she would take it to the farmers' meeting on Saturday, where the delegates were drafting a request to the government to let one heir keep a farm whole.",
+  "ru": "Семья сидела за кухонным столом, положив между собой документ на землю, и старшая дочь зачитала, чего хотел отец: ферму целиком брату, а остальным — выплаты из её доходов в течение пятнадцати лет.\\n\\n«Закон, который сейчас принимают, этого не допустит, — сказала младшая. — Мне сказал юрист. Каждый ребёнок получает долю самой земли».\\n\\n«Тогда у каждого из нас будет поле слишком маленькое, чтобы его обрабатывать, и мы продадим их соседу», — сказал брат.\\n\\nСтаршая убрала документ обратно в конверт. Она сказала, что отнесёт его на собрание фермеров в субботу, где делегаты составляли обращение к правительству с просьбой позволить одному наследнику сохранять ферму целиком."
+ },
+ "inheritance_events.13.t": {
+  "en": "One Heir to the Farm",
+  "ru": "Одному наследнику — ферму"
+ },
+ "inheritance_events.14.a": {
+  "en": "Audit every official's estate.",
+  "ru": "Проверить имущество каждого чиновника."
+ },
+ "inheritance_events.14.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 3#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области снижается на #v 3#!."
+ },
+ "inheritance_events.14.b": {
+  "en": "Look away.",
+  "ru": "Отвернуться."
+ },
+ "inheritance_events.14.b.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области растёт на #v 5#!."
+ },
+ "inheritance_events.14.d": {
+  "en": "Under [GetLawType('law_state_universal_heir').GetName] every estate passes to the state when its owner dies. A generation on, the officials who administer those estates have found their own ways around the law: a country house in a cousin's name, an apartment that was always the son's, an account abroad. Anonymous letters about them have begun to reach the estates office.",
+  "ru": "По закону [GetLawType('law_state_universal_heir').GetName] всё имущество переходит государству после смерти владельца. Спустя поколение чиновники, управляющие этим имуществом, нашли собственные лазейки: загородный дом на имя двоюродного брата, квартира, которая «всегда была сыновней», счёт за границей. Анонимные письма о них начали поступать в ведомство по делам имений."
+ },
+ "inheritance_events.14.f": {
+  "en": "To the inspectorate of state estates, unsigned and delivered by hand. Your registers will show that the estate of the late deputy director of the housing office passed to the state in full when he died: his furniture, his savings and nothing else. They will not show the country house where he spent his summers, because it is registered to his wife's cousin, who has never been there. They will not show the apartment his son lives in, because it was put in the boy's name when he was twelve. The account abroad I cannot prove. I ask you to look, and I have not signed this because I still work in his office.",
+  "ru": "В инспекцию государственных имений, без подписи, доставлено с нарочным. Ваши реестры покажут, что имущество покойного заместителя директора жилищного управления перешло государству полностью: его мебель, его сбережения и ничего более. Они не покажут загородного дома, где он проводил лето, потому что тот записан на двоюродного брата его жены, который никогда там не был. Они не покажут квартиры, в которой живёт его сын, потому что её оформили на мальчика, когда ему было двенадцать. Счёт за границей я доказать не могу. Прошу вас проверить, и письмо я не подписал, потому что всё ещё служу в его ведомстве."
+ },
+ "inheritance_events.14.t": {
+  "en": "The Hidden Estates",
+  "ru": "Скрытые имения"
+ },
+ "inheritance_events.15.a": {
+  "en": "The commune gives the land to whoever will work it.",
+  "ru": "Община отдаёт землю тому, кто будет её обрабатывать."
+ },
+ "inheritance_events.15.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 2#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области снижается на #v 2#!."
+ },
+ "inheritance_events.15.b": {
+  "en": "The family keeps working it.",
+  "ru": "Семья продолжает её обрабатывать."
+ },
+ "inheritance_events.15.d": {
+  "en": "Under [GetLawType('law_non_inheritable_usage_rights').GetName] land belongs to whoever uses it, and when a holder dies the holding goes back to the commune. One has just fallen empty. The dead holder's children have worked it since they could walk, and they say that continuing to use it is all the title anyone needs. The commune's assembly says that if the children keep it, the holding has been inherited, which the law forbids.",
+  "ru": "По закону [GetLawType('law_non_inheritable_usage_rights').GetName] земля принадлежит тому, кто ею пользуется, а когда владелец умирает, надел возвращается общине. Один надел только что опустел. Дети умершего обрабатывали его с тех пор, как научились ходить, и говорят, что продолжать пользоваться землёй — все права, какие кому-либо нужны. Собрание общины заявляет, что если дети оставят надел себе, он будет унаследован, а закон это запрещает."
+ },
+ "inheritance_events.15.f": {
+  "en": "\\\"Property is theft!\\\"\\n\\n— Pierre-Joseph Proudhon, What Is Property?",
+  "ru": "«Собственность — это кража!»\\n\\n— Пьер-Жозеф Прудон, «Что такое собственность?»"
+ },
+ "inheritance_events.15.t": {
+  "en": "The Empty Holding",
+  "ru": "Опустевший надел"
+ },
+ "inheritance_events.16.a": {
+  "en": "The stake may go only to schooling and training.",
+  "ru": "Капитал можно тратить только на учёбу и обучение."
+ },
+ "inheritance_events.16.b": {
+  "en": "Encourage them to found businesses.",
+  "ru": "Поощрять их к основанию предприятий."
+ },
+ "inheritance_events.16.c": {
+  "en": "It is theirs to spend as they choose.",
+  "ru": "Пусть тратят, как сочтут нужным."
+ },
+ "inheritance_events.16.c.tt": {
+  "en": "Much of the money ends up with whoever sold the goods: every state's [concept_inheritance_concentration] rises by #v 3#!.",
+  "ru": "Значительная часть денег оказывается у продавцов товаров: [concept_inheritance_concentration|l] в каждой области растёт на #v 3#!."
+ },
+ "inheritance_events.16.d": {
+  "en": "The first young adults to receive the $amendment_birthright_endowment$'s capital stake have had it for a few years now. Some paid for an apprenticeship or a degree, some opened a shop, and a good many spent it. The duty on the great estates pays for every stake, and the people who pay that duty want to know what it is buying.",
+  "ru": "Первые молодые люди, получившие капитал в рамках поправки $amendment_birthright_endowment$, владеют им уже несколько лет. Кто-то оплатил обучение ремеслу или учёбу в университете, кто-то открыл лавку, а многие просто потратили. Пошлина на крупные имения оплачивает каждую долю, и те, кто платит эту пошлину, хотят знать, на что она идёт."
+ },
+ "inheritance_events.16.f": {
+  "en": "What the first holders of the stake did with it, from the survey the endowment office sent to some of them:\\n\\nMany paid for an apprenticeship or a course of study that their families could not have afforded, and about a third of those who answered did nothing else with it.\\nA good many spent it on a wedding, a move to the city, furniture or a long journey, and most of them said they did not regret it.\\nSome opened or bought into a shop, a workshop or a small firm, usually with a partner from the same district.\\nSome paid off debts, most of them owed to family or to a landlord and taken on before the stake arrived.",
+  "ru": "Что первые получатели капитала сделали с ним, по опросу, который ведомство по выплатам разослало некоторым из них:\\n\\nМногие оплатили обучение ремеслу или курс наук, которые их семьи не могли себе позволить, и около трети ответивших больше ничего с ним не делали.\\nМногие потратили его на свадьбу, переезд в город, мебель или долгое путешествие, и большинство сказало, что не жалеет об этом.\\nНекоторые открыли или купили долю в лавке, мастерской или небольшой фирме, обычно с партнёром из того же округа.\\nНекоторые погасили долги, в основном перед семьёй или домовладельцем, взятые до получения капитала."
+ },
+ "inheritance_events.16.t": {
+  "en": "The First Cohort",
+  "ru": "Первые получатели"
+ },
+ "inheritance_events.2.a": {
+  "en": "Buy them commissions in the army.",
+  "ru": "Купить им офицерские патенты в армии."
+ },
+ "inheritance_events.2.b": {
+  "en": "Find them places among the clergy.",
+  "ru": "Найти им места среди духовенства."
+ },
+ "inheritance_events.2.c": {
+  "en": "Send them out to the colonies.",
+  "ru": "Отправить их в колонии."
+ },
+ "inheritance_events.2.d": {
+  "en": "Another generation has come of age on the great estates. As always, the eldest will have the land and the rest will have their name and an allowance. The younger sons of the old families need a living, and where they go, their families' connections follow.",
+  "ru": "В крупных имениях выросло ещё одно поколение. Как всегда, старший получит землю, а остальным достанутся имя и содержание. Младшим сыновьям старинных семей нужно на что-то жить, и куда бы они ни отправились, за ними последуют связи их семей."
+ },
+ "inheritance_events.2.e": {
+  "en": "Let them go into trade and the professions.",
+  "ru": "Пусть идут в торговлю и свободные профессии."
+ },
+ "inheritance_events.2.f": {
+  "en": "\\\"You asked me once, when we were at school together, what I would do when I came of age, and now I can tell you. The estate is my brother's, and so is the house, the stables and the family's place at every gathering in the district. I am the second son. I have an allowance, my name and a letter of introduction. Father says this is how the family lasts: one heir keeps the land whole, and the rest of us go out and make the name useful wherever there is a place for us. He is writing letters this week to find one, and I will go where he finds it.\\\"",
+  "ru": "«Ты однажды спросил меня, когда мы учились вместе, что я буду делать, когда повзрослею, и теперь я могу ответить. Имение принадлежит моему брату, как и дом, конюшни и место нашей семьи на каждом собрании в округе. Я — второй сын. У меня есть содержание, имя и рекомендательное письмо. Отец говорит, что так семья и сохраняется: один наследник держит землю целой, а остальные уходят в мир и делают имя полезным везде, где для нас найдётся место. На этой неделе он пишет письма, чтобы найти такое место, и я поеду туда, где он его найдёт»."
+ },
+ "inheritance_events.2.t": {
+  "en": "The Cadet Sons",
+  "ru": "Младшие сыновья"
+ },
+ "inheritance_events.3.a": {
+  "en": "Fewer children: the French path.",
+  "ru": "Меньше детей: французский путь."
+ },
+ "inheritance_events.3.b": {
+  "en": "Let the younger ones emigrate.",
+  "ru": "Позволить младшим эмигрировать."
+ },
+ "inheritance_events.3.c": {
+  "en": "Let them sell to a neighbor.",
+  "ru": "Позволить им продать землю соседу."
+ },
+ "inheritance_events.3.d": {
+  "en": "The reserved shares have divided the family farms of a district once too often. A field that fed one household in the grandfathers' day now feeds four, and another division would leave plots too small to plow. The peasants are deciding what to do about it, and the state can lean one way or the other.",
+  "ru": "Обязательные доли раз за разом дробили семейные фермы в округе. Поле, которое во времена дедов кормило одну семью, теперь кормит четыре, а ещё одно деление оставит участки слишком малыми для вспашки. Крестьяне решают, как быть, и государство может склониться в ту или иную сторону."
+ },
+ "inheritance_events.3.e": {
+  "en": "Legislate undivided succession.",
+  "ru": "Законодательно закрепить неделимое наследование."
+ },
+ "inheritance_events.3.f": {
+  "en": "The surveyor came out with the family the morning after the funeral, and they walked the field together while he paced it. It was the third time his office had divided this field. The grandfather's holding had gone to four sons, and one son's share to four again, and the strip the family stood on now was to be cut once more for the dead man's three children. The surveyor drove in the stakes where the shares would meet. The middle share came out narrower than the room a plow and its team need to turn at the headland. He wrote the width in his book and read it out to the eldest son.",
+  "ru": "Землемер пришёл с семьёй наутро после похорон, и они обошли поле вместе, пока он отмерял шагами. Его контора делила это поле уже в третий раз. Надел деда достался четырём сыновьям, доля каждого сына снова делилась на четыре, и полоса, на которой стояла семья, теперь должна была быть разрезана ещё раз для троих детей покойного. Землемер вбил колья там, где должны были сойтись доли. Средняя доля вышла уже, чем нужно плугу с упряжкой, чтобы развернуться на краю поля. Он записал ширину в книгу и зачитал её старшему сыну."
+ },
+ "inheritance_events.3.t": {
+  "en": "The Last Division",
+  "ru": "Последний раздел"
+ },
+ "inheritance_events.4.a": {
+  "en": "The fortune endows a foundation.",
+  "ru": "Состояние идёт на основание фонда."
+ },
+ "inheritance_events.4.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 5#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области снижается на #v 5#!."
+ },
+ "inheritance_events.4.b": {
+  "en": "The fortune founds a dynasty.",
+  "ru": "Состояние закладывает основу династии."
+ },
+ "inheritance_events.4.c": {
+  "en": "The heirs contest it in court.",
+  "ru": "Наследники оспаривают его в суде."
+ },
+ "inheritance_events.4.c.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 10#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области снижается на #v 10#!."
+ },
+ "inheritance_events.4.d": {
+  "en": "The founder of one of the nation's great fortunes has died, and the will is about to be read. Under [GetLawType('law_free_testation').GetName] the fortune goes where the will says. The family, the firm's board and half the nation's charities are waiting to hear where that is.",
+  "ru": "Основатель одного из крупнейших состояний нации умер, и вот-вот будет зачитано завещание. По закону [GetLawType('law_free_testation').GetName] состояние достаётся тому, кого назовёт завещание. Семья, совет директоров фирмы и половина благотворительных организаций страны ждут, кому именно."
+ },
+ "inheritance_events.4.f": {
+  "en": "\\\"The man who dies thus rich dies disgraced.\\\"\\n\\n— Andrew Carnegie, The Gospel of Wealth",
+  "ru": "«Человек, умирающий богатым, умирает опозоренным».\\n\\n— Эндрю Карнеги, «Евангелие богатства»"
+ },
+ "inheritance_events.4.t": {
+  "en": "The Founder's Will",
+  "ru": "Завещание основателя"
+ },
+ "inheritance_events.5.a": {
+  "en": "The state buys the land for smallholders.",
+  "ru": "Государство выкупает землю для мелких хозяев."
+ },
+ "inheritance_events.5.b": {
+  "en": "The market takes them, and the duty is paid.",
+  "ru": "Рынок забирает её, и пошлина уплачена."
+ },
+ "inheritance_events.5.b.tt": {
+  "en": "Other fortunes buy most of the estates: every state's [concept_inheritance_concentration] falls by #v 2#!.",
+  "ru": "Другие состояния скупают большую часть имений: [concept_inheritance_concentration|l] в каждой области снижается на #v 2#!."
+ },
+ "inheritance_events.5.c": {
+  "en": "Exempt working farms from the duty.",
+  "ru": "Освободить действующие фермы от пошлины."
+ },
+ "inheritance_events.5.c.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 3#!.",
+  "ru": "[concept_inheritance_concentration] в каждой области растёт на #v 3#!."
+ },
+ "inheritance_events.5.d": {
+  "en": "A generation of estate duty has come due on the great houses. Heirs who cannot pay it are selling: whole districts of farmland, the houses on them and the pictures on their walls are on the market at once.",
+  "ru": "Поколение пошлин на наследство пришло к оплате в знатных домах. Наследники, которым нечем платить, продают: сразу целые округа пахотных земель, дома на них и картины на стенах выставлены на рынок."
+ },
+ "inheritance_events.5.f": {
+  "en": "\\\"England is changing hands.\\\"\\n\\n— The Times",
+  "ru": "«Англия переходит из рук в руки».\\n\\n— «Таймс»"
+ },
+ "inheritance_events.5.t": {
+  "en": "The Great Estates for Sale",
+  "ru": "Великие имения на продажу"
+ },
+ "inheritance_events.6.a": {
+  "en": "Recognize continuity of title.",
+  "ru": "Признать непрерывность права собственности."
+ },
+ "inheritance_events.6.a.tt": {
+  "en": "The target of the [concept_inheritance_concentration] is pinned where the score stands: nobody's estate passes on.",
+  "ru": "Целевое значение показателя [Concept('concept_inheritance_concentration', 'династического богатства')] остаётся на текущем уровне: ничьё имущество не переходит по наследству."
+ },
+ "inheritance_events.6.b": {
+  "en": "Declare legal death; the estate passes.",
+  "ru": "Объявить юридическую смерть; имущество переходит."
+ },
+ "inheritance_events.6.d_backup": {
+  "en": "A probate court has an applicant it was never designed for: the backed-up mind of the deceased, running on leased hardware, contesting the reading of its own will. Its lawyers argue that nothing has died but a body. Its children argue that their father is dead and the estate is theirs. The court has asked the government for a ruling.",
+  "ru": "Перед судом по делам о наследстве предстал заявитель, для которого он не был создан: резервная копия сознания умершего, работающая на арендованном оборудовании и оспаривающая трактовку собственного завещания. Её юристы доказывают, что умерло только тело. Её дети доказывают, что их отец мёртв, а имущество принадлежит им. Суд попросил правительство вынести решение."
+ },
+ "inheritance_events.6.d_immortal": {
+  "en": "With treatments that stop aging now within reach of the rich, the old no longer die, and nothing passes on. The heirs of the great fortunes have begun to ask the courts when, if ever, they will inherit. The government must say whether a person can outlive their own estate.",
+  "ru": "Теперь, когда лечение, останавливающее старение, доступно богатым, старики больше не умирают, и ничто не переходит по наследству. Наследники крупных состояний стали спрашивать суды, когда и получат ли они вообще наследство. Правительство должно сказать, может ли человек пережить собственное имущество."
+ },
+ "inheritance_events.6.f": {
+  "en": "\\\"The probate courts have one question to answer before they do anything else: has the owner died? For as long as there have been courts, the answer has come sooner or later.\\\"\\n\\n\\\"And now it does not. I have a petition here from a family whose father, as he and his lawyers see it, has not died and does not intend to. They want to know when the house will be theirs.\\\"\\n\\n\\\"Never, if he says so. It is his.\\\"\\n\\n\\\"Then the law has to say whether property can stay with one person forever, or whether there comes a point when a long enough life counts as an estate passing. Either way, the courts want the answer from us in writing.\\\"",
+  "ru": "«Прежде чем делать что-либо ещё, суды по делам о наследстве должны ответить на один вопрос: умер ли владелец? Пока существуют суды, ответ рано или поздно был положительным».\\n\\n«А теперь это не так. У меня здесь прошение от семьи, чей отец, как он и его юристы полагают, не умер и не собирается. Они хотят знать, когда дом станет их».\\n\\n«Никогда, если он так скажет. Дом его».\\n\\n«Тогда закон должен определить, может ли имущество оставаться у одного человека навечно или наступает момент, когда достаточно долгая жизнь считается переходом имущества. Так или иначе, суды хотят получить от нас ответ в письменном виде»."
+ },
+ "inheritance_events.6.t": {
+  "en": "Posthumous Title",
+  "ru": "Право после смерти"
+ },
+ "inheritance_events.7.a": {
+  "en": "The courts hold the line.",
+  "ru": "Суды стоят на своём."
+ },
+ "inheritance_events.7.b": {
+  "en": "Pay every heir a stake from the treasury.",
+  "ru": "Выплатить каждому наследнику долю из казны."
+ },
+ "inheritance_events.7.c": {
+  "en": "Reverse the ruling.",
+  "ru": "Отменить решение."
+ },
+ "inheritance_events.7.c.tt": {
+  "en": "Continuity of title ends, and the [concept_inheritance_concentration] moves again.",
+  "ru": "Непрерывность права собственности прекращается, и [concept_inheritance_concentration|l] снова приходит в движение."
+ },
+ "inheritance_events.7.d": {
+  "en": "A generation has grown up knowing it will never inherit: the property its parents would have left it is held by minds that do not die. The young have organized, and their meetings fill the squares under banners saying that the dead must let go.",
+  "ru": "Выросло поколение, знающее, что оно никогда ничего не унаследует: имущество, которое оставили бы им родители, принадлежит сознаниям, которые не умирают. Молодёжь организовалась, и её собрания заполняют площади под лозунгами о том, что мёртвые должны отпустить своё."
+ },
+ "inheritance_events.7.f": {
+  "en": "\\\"My grandmother still owns the apartment we live in. She is kind about it, and she charges us rent.\\\"\\n\\n\\\"We are not asking anyone to die. We are asking for a date: an age, or a number of years of ownership, after which property passes on whether the owner is gone or not.\\\"\\n\\n\\\"My father took over the shop at twenty-five, when his own father retired. I am thirty-eight and still work there for a wage, and he has told me he expects to be running it in a hundred years.\\\"\\n\\n\\\"I came to the square because my union told us to come. I stayed because the man next to me was saying what I had been thinking for ten years.\\\"",
+  "ru": "«Моя бабушка всё ещё владеет квартирой, в которой мы живём. Она добра в этом и берёт с нас арендную плату».\\n\\n«Мы не просим никого умирать. Мы просим назвать срок: возраст или число лет владения, после которых имущество переходит дальше, ушёл владелец или нет».\\n\\n«Мой отец принял лавку в двадцать пять, когда его собственный отец ушёл на покой. Мне тридцать восемь, и я всё ещё работаю там за жалованье, а он говорит, что рассчитывает руководить ею и через сто лет».\\n\\n«Я пришёл на площадь, потому что так велел мой профсоюз. Я остался, потому что человек рядом со мной говорил то, о чём я думал десять лет»."
+ },
+ "inheritance_events.7.t": {
+  "en": "The Heirs Who Never Inherit",
+  "ru": "Наследники, которые не наследуют"
+ },
+ "international_relations_events.1.a": {
+  "en": "Steel must answer steel.",
+  "ru": "На сталь надо отвечать сталью."
+ },
+ "international_relations_events.1.b": {
+  "en": "Send the diplomats.",
+  "ru": "Послать дипломатов."
+ },
+ "international_relations_events.1.c": {
+  "en": "Let them waste their treasury.",
+  "ru": "Пусть тратят свою казну."
+ },
+ "international_relations_events.1.d": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] has begun a large expansion of its armed forces, and our intelligence service reports that it is aimed at us. New divisions are in training there, and orders for aircraft and artillery have gone to its arms works. Our generals want us to answer with a buildup of our own.",
+  "ru": "Страна [SCOPE.sCountry('arms_race_rival').GetName] начала масштабное расширение своих вооружённых сил, и наша разведка сообщает, что оно направлено против нас. Там обучаются новые дивизии, а заказы на самолёты и артиллерию отправлены на её оружейные заводы. Наши генералы хотят, чтобы мы ответили собственным наращиванием."
+ },
+ "international_relations_events.1.f": {
+  "en": "To the government, from the intelligence service, on the military expansion in [SCOPE.sCountry('arms_race_rival').GetName]. The orders its arms works have taken this season are the largest we have on record for that country, and its factories are hiring for night shifts. New training camps have opened. Reservists have been called up for courses that used to last weeks and now last months. The staff plans we have been able to read assign the new formations to a war with us. We cannot yet say how long its treasury can pay for this. We will report again when the next figures are in.",
+  "ru": "Правительству от разведывательной службы о военном расширении в стране [SCOPE.sCountry('arms_race_rival').GetName]. Заказы, принятые её оружейными заводами в этом сезоне, самые крупные из известных нам для этой страны, а её фабрики набирают людей в ночные смены. Открылись новые учебные лагеря. Резервистов призвали на сборы, которые раньше длились недели, а теперь длятся месяцы. Штабные планы, которые нам удалось прочесть, назначают новые формирования для войны с нами. Мы пока не можем сказать, как долго её казна способна это оплачивать. Мы доложим снова, когда поступят следующие данные."
+ },
+ "international_relations_events.1.t": {
+  "en": "The Gathering Storm",
+  "ru": "Сгущающиеся тучи"
+ },
+ "international_relations_events.101.a": {
+  "en": "They will answer for this.",
+  "ru": "Они ответят за это."
+ },
+ "international_relations_events.101.d": {
+  "en": "[SCOPE.sCountry('proxy_instigator').GetName] has been secretly paying and arming opposition movements in our subject countries. The governments there that answer to us are under pressure from movements far better supplied than we knew, and our officials have traced the money back to [SCOPE.sCountry('proxy_instigator').GetName].",
+  "ru": "Страна [SCOPE.sCountry('proxy_instigator').GetName] тайно платит и вооружает оппозиционные движения в наших зависимых государствах. Подчинённые нам правительства там находятся под давлением движений, снабжаемых гораздо лучше, чем мы знали, а наши чиновники проследили деньги до страны [SCOPE.sCountry('proxy_instigator').GetName]."
+ },
+ "international_relations_events.101.f": {
+  "en": "To the government, from our representative in one of our subject countries. The opposition here is paying its men with money it did not have last year. Through a dealer we have bought two of the rifles it carries, and they are of a pattern made in [SCOPE.sCountry('proxy_instigator').GetName]. A courier we arrested carried letters of credit drawn on its banks, and he has named the man who gave them to him. The local government has asked us for troops and for money of its own. I attach the courier's statement and the rifles' serial numbers, and I ask for instructions.",
+  "ru": "Правительству от нашего представителя в одном из зависимых государств. Оппозиция здесь платит своим людям деньгами, которых у неё не было в прошлом году. Через торговца мы купили две винтовки из тех, что у неё на вооружении, и они принадлежат к образцу, выпускаемому в стране [SCOPE.sCountry('proxy_instigator').GetName]. Арестованный нами курьер вёз аккредитивы, выписанные на её банки, и назвал человека, который их ему передал. Местное правительство просит у нас войска и собственные деньги. Прилагаю показания курьера и серийные номера винтовок и прошу указаний."
+ },
+ "international_relations_events.101.t": {
+  "en": "Foreign Meddling",
+  "ru": "Иностранное вмешательство"
+ },
+ "international_relations_events.102.a": {
+  "en": "We shall endure.",
+  "ru": "Мы выстоим."
+ },
+ "international_relations_events.102.d": {
+  "en": "[SCOPE.sCountry('embargo_instigator').GetName] has restricted its trade with us. Our merchants report contracts canceled and goods turned back unsold, and buyers in [SCOPE.sCountry('embargo_instigator').GetName] have stopped answering their letters.",
+  "ru": "Страна [SCOPE.sCountry('embargo_instigator').GetName] ограничила торговлю с нами. Наши купцы сообщают об отменённых контрактах и нераспроданных товарах, возвращённых назад, а покупатели в стране [SCOPE.sCountry('embargo_instigator').GetName] перестали отвечать на письма."
+ },
+ "international_relations_events.102.f": {
+  "en": "\\\"Three of my buyers there have written to cancel, all in the same week and in nearly the same words. Their own government told them to.\\\"\\n\\n\\\"The parts we bought from them, we cannot get anywhere else for six months. I have told the men we go on short shifts from Monday.\\\"\\n\\n\\\"We have a warehouse full of goods packed for [SCOPE.sCountry('embargo_instigator').GetName], with their labels on and the customs forms filled in. I can sell them here at a loss, or wait and pay the rent on the warehouse.\\\"\\n\\n\\\"Prices in the market moved twice this morning, and the traders are holding back their stock until they see where it settles.\\\"",
+  "ru": "«Трое моих покупателей там написали, что отказываются, все на одной неделе и почти теми же словами. Им так велело их правительство».\\n\\n«Детали, которые мы у них покупали, мы больше нигде не достанем полгода. Я сказал людям, что с понедельника мы работаем сокращённые смены».\\n\\n«У нас склад, полный товаров, упакованных для страны [SCOPE.sCountry('embargo_instigator').GetName], с их ярлыками и заполненными таможенными бумагами. Я могу продать их здесь в убыток или ждать и платить за аренду склада».\\n\\n«Цены на рынке сегодня утром менялись дважды, и торговцы придерживают товар, пока не увидят, где всё устоится»."
+ },
+ "international_relations_events.102.t": {
+  "en": "Markets Closed",
+  "ru": "Рынки закрыты"
+ },
+ "international_relations_events.103.a": {
+  "en": "A regrettable setback.",
+  "ru": "Досадная неудача."
+ },
+ "international_relations_events.103.d": {
+  "en": "[SCOPE.sCountry('espionage_catcher').GetName] has arrested the clerk we recruited in the office that buys its weapons, along with the officer of ours who met the clerk, and has made the arrests public. The clerk's reports have stopped. [SCOPE.sCountry('espionage_catcher').GetName] is now asking what else we have been told, and by whom.",
+  "ru": "Страна [SCOPE.sCountry('espionage_catcher').GetName] арестовала завербованного нами клерка из ведомства, закупающего её оружие, вместе с нашим офицером, встречавшимся с ним, и обнародовала аресты. Донесения клерка прекратились. Теперь страна [SCOPE.sCountry('espionage_catcher').GetName] выясняет, что ещё нам известно и от кого."
+ },
+ "international_relations_events.103.f": {
+  "en": "The officer who ran the operation, reporting to the head of the intelligence service: \\\"Nightingale missed the meeting on the fourth, and the officer we sent to look was arrested at the same table. Their newspapers had photographs of both of them the next morning, so they had been watching for some time. Everything Nightingale gave us must now be treated as known to them. I have stopped every other meeting in that city until I know how they found out. If it was the money, two other people we pay there were paid the same way, and I would bring them out now, before they are taken too.\\\"",
+  "ru": "Офицер, руководивший операцией, докладывает начальнику разведывательной службы: «Соловей не явился на встречу четвёртого числа, а посланный нами офицер был арестован за тем же столом. Их газеты на следующее утро напечатали фотографии обоих, значит, они наблюдали уже давно. Всё, что дал нам Соловей, теперь следует считать известным им. Я прекратил все остальные встречи в этом городе, пока не выясню, как они узнали. Если дело в деньгах, двое других людей, которым мы там платим, получали их таким же образом, и я бы вывел их сейчас, пока их тоже не взяли»."
+ },
+ "international_relations_events.103.t": {
+  "en": "The Burned Agent",
+  "ru": "Сгоревший агент"
+ },
+ "international_relations_events.104.a": {
+  "en": "We will keep our nerve.",
+  "ru": "Мы сохраним самообладание."
+ },
+ "international_relations_events.104.a_tension": {
+  "en": "Keep the shelters stocked.",
+  "ru": "Пополнять запасы в убежищах."
+ },
+ "international_relations_events.104.b_relief": {
+  "en": "Maintain readiness, but breathe.",
+  "ru": "Сохранять готовность, но выдохнуть."
+ },
+ "international_relations_events.104.c_terror": {
+  "en": "Hold steady, and hope it ends here.",
+  "ru": "Держаться и надеяться, что на этом всё закончится."
+ },
+ "international_relations_events.104.d": {
+  "en": "[SCOPE.sCountry('nuclear_opponent').GetName], which holds nuclear weapons as we do, stands against us in a dispute that has not yet come to war. Our cities are within reach of its weapons, and our people want to know what the government means to do.",
+  "ru": "Страна [SCOPE.sCountry('nuclear_opponent').GetName], обладающая, как и мы, ядерным оружием, выступает против нас в споре, который ещё не дошёл до войны. Наши города находятся в пределах досягаемости её оружия, и наши люди хотят знать, что намерено делать правительство."
+ },
+ "international_relations_events.104.d_relief": {
+  "en": "Through unofficial channels, [SCOPE.sCountry('nuclear_opponent').GetName] has sent word that it wants to settle the dispute between us without a war. Both countries' weapons are still ready for use, but there is now a way to talk, and the country is calmer for it.",
+  "ru": "По неофициальным каналам страна [SCOPE.sCountry('nuclear_opponent').GetName] передала, что хочет урегулировать спор между нами без войны. Оружие обеих стран по-прежнему готово к применению, но теперь есть возможность говорить, и страна от этого спокойнее."
+ },
+ "international_relations_events.104.d_tension": {
+  "en": "[SCOPE.sCountry('nuclear_opponent').GetName] has said in public that it will not give way in the dispute between us. Both our countries hold nuclear weapons, and our people know it: the civil defense offices have queues at the door, and the shops are running short of canned food and medicine.",
+  "ru": "Страна [SCOPE.sCountry('nuclear_opponent').GetName] публично заявила, что не уступит в споре между нами. У обеих наших стран есть ядерное оружие, и наши люди это знают: у отделений гражданской обороны стоят очереди, а в магазинах заканчиваются консервы и лекарства."
+ },
+ "international_relations_events.104.d_terror": {
+  "en": "[SCOPE.sCountry('nuclear_opponent').GetName] has mobilized its armed forces in the dispute between us. Prices in the markets jumped overnight. Families are deciding whether to leave the cities that would be targets, and the civil defense offices cannot answer all their questions.",
+  "ru": "Страна [SCOPE.sCountry('nuclear_opponent').GetName] мобилизовала свои вооружённые силы в споре между нами. Цены на рынках подскочили за ночь. Семьи решают, стоит ли покидать города, которые могут стать целями, а отделения гражданской обороны не в силах ответить на все вопросы."
+ },
+ "international_relations_events.104.f": {
+  "en": "At noon the warden on the roof of the post office tested the siren, as the notice had said he would. It ran for a full minute. Below him the street stopped: a woman with her shopping set it down, a man unloading a delivery stood with a crate in his arms, and the children in the school yard across the road were already lined up at the door, as they had practiced. When the siren wound down, the street started again. The warden noted the time and the length on his card and climbed back down the ladder.",
+  "ru": "В полдень дежурный на крыше почты проверил сирену, как и сообщалось в объявлении. Она звучала целую минуту. Внизу улица замерла: женщина с покупками поставила их на землю, мужчина, разгружавший товар, остановился с ящиком в руках, а дети во дворе школы через дорогу уже выстроились у двери, как их учили. Когда сирена стихла, улица ожила снова. Дежурный записал время и длительность в свою карточку и спустился обратно по лестнице."
+ },
+ "international_relations_events.104.f_relief": {
+  "en": "The aide came out of the signals room holding the message form in both hands and read it to the room standing up. \\\"They will talk. Through the same people as before, at the same place. No conditions given yet.\\\" For a moment nobody spoke. Then the general at the end of the table asked what time it had been sent, and an officer went to the signals room to find out.",
+  "ru": "Адъютант вышел из комнаты связи, держа бланк сообщения обеими руками, и зачитал его стоя. «Они будут говорить. Через тех же людей, что и раньше, в том же месте. Условий пока не названо». Какое-то время никто не произнёс ни слова. Затем генерал на другом конце стола спросил, в какое время его отправили, и офицер пошёл в комнату связи выяснить это."
+ },
+ "international_relations_events.104.f_tension": {
+  "en": "\\\"They said it again tonight, the same sentence as last week. I wrote it down so that I would know if a word changed.\\\"\\n\\n\\\"I have had no canned food to sell since Tuesday. The wholesaler says he can send more when his own deliveries come, and he does not know when that will be.\\\"\\n\\n\\\"My mother wants us to go to her village. My husband says the government would tell us if we needed to leave. I told him they would tell us after they had left themselves.\\\"\\n\\n\\\"We are filling the cellar with jars of water, as the leaflet says, and taping the windows.\\\"",
+  "ru": "«Сегодня вечером они сказали это снова, ту же фразу, что и на прошлой неделе. Я записал её, чтобы заметить, если изменится хоть одно слово».\\n\\n«Консервов для продажи у меня нет со вторника. Оптовик говорит, что пришлёт ещё, когда придут его собственные поставки, и не знает когда».\\n\\n«Мама хочет, чтобы мы уехали в её деревню. Муж говорит, что правительство предупредило бы нас, если бы надо было уезжать. Я сказала ему, что нас предупредят после того, как уедут сами».\\n\\n«Мы наполняем погреб банками с водой, как сказано в листовке, и заклеиваем окна»."
+ },
+ "international_relations_events.104.f_terror": {
+  "en": "The station hall was full by six in the morning. Families sat on their cases along the walls, and the queue for tickets ran out through the doors and along the front of the building. The trains leaving the city were full before they were called. The station master had chalked the departures on a board by hand, since the printed timetable no longer meant anything, and every few minutes he rubbed one out and wrote another. A railway policeman walked the length of the hall, stepping over bags and telling people which platform to wait on.",
+  "ru": "К шести утра вокзал был полон. Семьи сидели на чемоданах вдоль стен, а очередь за билетами тянулась через двери и вдоль фасада здания. Поезда, уходившие из города, были заполнены ещё до объявления. Начальник станции от руки писал мелом отправления на доске, ведь печатное расписание больше ничего не значило, и каждые несколько минут стирал одно и писал другое. Железнодорожный полицейский шёл вдоль зала, переступая через сумки и указывая людям, на какой платформе ждать."
+ },
+ "international_relations_events.104.t": {
+  "en": "On the Brink",
+  "ru": "На грани"
+ },
+ "international_relations_events.105.a": {
+  "en": "Then the race is on.",
+  "ru": "Тогда гонка началась."
+ },
+ "international_relations_events.105.d": {
+  "en": "[SCOPE.sCountry('arms_race_instigator').GetName] has answered our military expansion with one of its own. Its orders for weapons now match ours, and new formations are training there. Our generals warn that keeping our lead will cost more each year.",
+  "ru": "Страна [SCOPE.sCountry('arms_race_instigator').GetName] ответила на наше военное расширение собственным. Её заказы на оружие теперь равны нашим, и там обучаются новые формирования. Наши генералы предупреждают, что сохранение преимущества будет с каждым годом обходиться дороже."
+ },
+ "international_relations_events.105.f": {
+  "en": "To the government, from the procurement office of our army. Since [SCOPE.sCountry('arms_race_instigator').GetName] began its own buildup, our suppliers have raised their prices, because the same steel, engines and machine tools are now wanted by both countries at once. Delivery times on artillery have doubled. Two firms have asked to renegotiate contracts signed before the buildup began. We can hold the present schedule only with a larger budget next year, or by buying fewer of everything. We ask the government to say which.",
+  "ru": "Правительству от закупочного ведомства нашей армии. С тех пор как страна [SCOPE.sCountry('arms_race_instigator').GetName] начала собственное наращивание, наши поставщики подняли цены, потому что одни и те же сталь, двигатели и станки теперь нужны обеим странам одновременно. Сроки поставки артиллерии удвоились. Две фирмы просят пересмотреть контракты, подписанные до начала наращивания. Нынешний график мы сможем выдержать лишь при большем бюджете в следующем году или закупая меньше всего. Просим правительство сказать, что выбрать."
+ },
+ "international_relations_events.105.t": {
+  "en": "The Rival Rearms",
+  "ru": "Соперник вооружается"
+ },
+ "international_relations_events.106.a": {
+  "en": "Then we must steady the line.",
+  "ru": "Тогда нужно удержать позиции."
+ },
+ "international_relations_events.106.d": {
+  "en": "[SCOPE.sCountry('propaganda_instigator').GetName] has answered our campaign with one of its own. Newspapers abroad that printed our charges against it now print its charges against us, and some print both side by side. Our press office reports that foreign editors have begun to ask it for proof.",
+  "ru": "Страна [SCOPE.sCountry('propaganda_instigator').GetName] ответила на нашу кампанию собственной. Зарубежные газеты, напечатавшие наши обвинения против неё, теперь печатают её обвинения против нас, а некоторые печатают оба рядом. Наше пресс-бюро сообщает, что иностранные редакторы начали просить у него доказательства."
+ },
+ "international_relations_events.106.f": {
+  "en": "The foreign press this week, as summarized for the government by our press office:\\n\\nThree papers that ran our account of [SCOPE.sCountry('propaganda_instigator').GetName]'s prisons have now run its account of ours, laid out the same way and with the same kind of photographs.\\nOne paper has printed both accounts on facing pages under a single headline asking which government is lying.\\nOur correspondent in one capital reports that the embassy of [SCOPE.sCountry('propaganda_instigator').GetName] is giving lunches for editors, as ours has been doing.\\nTwo editors have written asking for the documents behind our claims, which we cannot release without naming our sources.\\nThe papers that never printed our material are not printing any of theirs either.",
+  "ru": "Иностранная пресса на этой неделе в изложении нашего пресс-бюро для правительства:\\n\\nТри газеты, опубликовавшие наш рассказ о тюрьмах страны [SCOPE.sCountry('propaganda_instigator').GetName], теперь опубликовали её рассказ о наших, оформленный так же и с такими же фотографиями.\\nОдна газета напечатала оба рассказа на соседних полосах под одним заголовком с вопросом, какое правительство лжёт.\\nНаш корреспондент в одной из столиц сообщает, что посольство страны [SCOPE.sCountry('propaganda_instigator').GetName] устраивает завтраки для редакторов, как это делало наше.\\nДва редактора написали с просьбой предоставить документы, на которых основаны наши утверждения, а мы не можем их раскрыть, не назвав источников.\\nГазеты, которые никогда не печатали наши материалы, не печатают и ничего из их материалов."
+ },
+ "international_relations_events.106.t": {
+  "en": "The Narrative Turns",
+  "ru": "Повествование меняется"
+ },
+ "international_relations_events.107.a": {
+  "en": "Seal the breach and carry on.",
+  "ru": "Закрыть брешь и продолжать."
+ },
+ "international_relations_events.107.d": {
+  "en": "[SCOPE.sCountry('espionage_catcher').GetName] has quietly returned the officer of ours it arrested, through an unofficial exchange, and nothing about it has been made public. The clerk we recruited in its weapons office stays in its hands, and its counterintelligence has had time to learn whatever the two of them knew of our service.",
+  "ru": "Страна [SCOPE.sCountry('espionage_catcher').GetName] тихо вернула арестованного ею нашего офицера через неофициальный обмен, и ничего из этого не было обнародовано. Завербованный нами клерк из её оружейного ведомства остаётся у неё, а её контрразведка успела выяснить всё, что эти двое знали о нашей службе."
+ },
+ "international_relations_events.107.f": {
+  "en": "The exchange was made in a freight yard after dark, between two groups of men standing thirty yards apart. Our officer walked across first, slowly, with a coat over his arm that was not his own. The handler met him halfway and walked him the rest of the way to the yard office. Inside, the officer said that he had been fed and not beaten, and that they had asked him the same questions every day. \\\"Which questions?\\\" the handler asked. The officer began to list them, and the handler took out a notebook and wrote them down.",
+  "ru": "Обмен состоялся на грузовой станции после наступления темноты, между двумя группами людей, стоявших в тридцати ярдах друг от друга. Наш офицер шёл первым, медленно, с чужим пальто на руке. Куратор встретил его на полпути и проводил остаток пути до конторы станции. Внутри офицер сказал, что его кормили и не били и что каждый день ему задавали одни и те же вопросы. «Какие?» — спросил куратор. Офицер начал перечислять, а куратор достал блокнот и записал их."
+ },
+ "international_relations_events.107.t": {
+  "en": "The Quiet Exchange",
+  "ru": "Тихий обмен"
+ },
+ "international_relations_events.2.a": {
+  "en": "Fund the operation.",
+  "ru": "Профинансировать операцию."
+ },
+ "international_relations_events.2.b": {
+  "en": "We shall not meddle in their affairs.",
+  "ru": "Мы не станем вмешиваться в их дела."
+ },
+ "international_relations_events.2.d": {
+  "en": "Our intelligence service reports that opposition movements in the subject countries of [SCOPE.sCountry('proxy_rival').GetName] would take money and weapons from us. Funding them would weaken [SCOPE.sCountry('proxy_rival').GetName]'s hold over its subjects. It would also be hard to hide for long, and [SCOPE.sCountry('proxy_rival').GetName] would learn who had paid.",
+  "ru": "Наша разведка сообщает, что оппозиционные движения в зависимых государствах страны [SCOPE.sCountry('proxy_rival').GetName] приняли бы от нас деньги и оружие. Их финансирование ослабило бы власть страны [SCOPE.sCountry('proxy_rival').GetName] над её подданными. Но это трудно долго скрывать, и страна [SCOPE.sCountry('proxy_rival').GetName] узнает, кто платил."
+ },
+ "international_relations_events.2.f": {
+  "en": "\\\"I drew up this plan, and I will put it to the government myself. There are three groups we would work with. Two of them have fought each other in the past and will again, so each would be paid separately, through traders who already carry goods for them. The weapons would be old stock of ours with the markings filed off. The first payments could go out within the month. I will not pretend we can keep this quiet for long. Money leaves a trail, and the men who carry it talk. When the trail is found, it will lead to us. For the first year I need the government's authority and the funds.\\\"",
+  "ru": "«Этот план составил я и сам представлю его правительству. Есть три группы, с которыми мы стали бы работать. Две из них воевали друг с другом в прошлом и будут воевать снова, поэтому каждой платили бы отдельно, через торговцев, которые уже возят для них товары. Оружием были бы наши старые запасы со стёртой маркировкой. Первые платежи могли бы уйти в течение месяца. Не стану делать вид, что мы сможем долго держать это в тайне. Деньги оставляют след, а люди, которые их возят, болтают. Когда след найдут, он приведёт к нам. На первый год мне нужны полномочия от правительства и средства»."
+ },
+ "international_relations_events.2.t": {
+  "en": "The Shadow War",
+  "ru": "Теневая война"
+ },
+ "international_relations_events.201.a": {
+  "en": "Build the divisions.",
+  "ru": "Создать дивизии."
+ },
+ "international_relations_events.201.b": {
+  "en": "Shelve the plans.",
+  "ru": "Отложить планы."
+ },
+ "international_relations_events.201.d": {
+  "en": "Our generals have proposed an expansion of the armed forces large enough to outmatch [SCOPE.sCountry('arms_race_instigator').GetName]: new divisions, new aircraft and more artillery, paid for over several years. A buildup of this size cannot be hidden. [SCOPE.sCountry('arms_race_instigator').GetName] will learn of it and decide how to answer.",
+  "ru": "Наши генералы предложили расширение вооружённых сил, достаточное, чтобы превзойти страну [SCOPE.sCountry('arms_race_instigator').GetName]: новые дивизии, новые самолёты и больше артиллерии, оплачиваемые в течение нескольких лет. Наращивание такого размера невозможно скрыть. Страна [SCOPE.sCountry('arms_race_instigator').GetName] узнает о нём и решит, как ответить."
+ },
+ "international_relations_events.201.f": {
+  "en": "The chief of the general staff and an official from the treasury put their cases to the government in turn.\\n\\n\\\"If we begin this year, the new divisions are ready in three, and for some years after that [SCOPE.sCountry('arms_race_instigator').GetName] cannot match them. A war we are known to win is a war nobody starts.\\\"\\n\\n\\\"And if they match us anyway, we pay for an army twice the size to stand where we stand today. The bill falls on the years in which we meant to build railways and schools.\\\"\\n\\n\\\"Then we stand there with twice the army, and they have paid as much as we have for theirs.\\\"\\n\\n\\\"I am asking you what we stop paying for. Name it, and I will cost it.\\\"",
+  "ru": "Начальник генерального штаба и чиновник казначейства по очереди изложили свои доводы правительству.\\n\\n«Если мы начнём в этом году, новые дивизии будут готовы через три, и несколько лет после этого страна [SCOPE.sCountry('arms_race_instigator').GetName] не сможет с ними сравниться. Войну, которую мы заведомо выиграем, никто не начинает».\\n\\n«А если они всё равно нас догонят, мы платим за армию вдвое больше, чтобы остаться там, где мы стоим сегодня. Счёт лягет на те годы, когда мы собирались строить железные дороги и школы».\\n\\n«Тогда мы будем стоять там с армией вдвое больше, а они заплатят за свою столько же, сколько мы».\\n\\n«Я спрашиваю вас, за что мы перестанем платить. Назовите, и я посчитаю»."
+ },
+ "international_relations_events.201.t": {
+  "en": "Plans on the Table",
+  "ru": "Планы на столе"
+ },
+ "international_relations_events.202.a": {
+  "en": "Take the fight to their newspapers.",
+  "ru": "Перенести борьбу в их газеты."
+ },
+ "international_relations_events.202.b": {
+  "en": "We have better uses for our writers.",
+  "ru": "У наших писателей есть занятия получше."
+ },
+ "international_relations_events.202.d": {
+  "en": "Our press office proposes a campaign against [SCOPE.sCountry('propaganda_instigator').GetName] in the world's newspapers, through pamphlets, films and journalists friendly to us abroad, all aimed at the credibility of its institutions. It would raise our standing abroad. [SCOPE.sCountry('propaganda_instigator').GetName] would know where it came from, and might answer in kind.",
+  "ru": "Наше пресс-бюро предлагает кампанию против страны [SCOPE.sCountry('propaganda_instigator').GetName] в газетах мира: памфлеты, фильмы и дружественные нам журналисты за рубежом, всё это направлено на доверие к её институтам. Это повысило бы наш авторитет за рубежом. Страна [SCOPE.sCountry('propaganda_instigator').GetName] поймёт, откуда это исходит, и может ответить тем же."
+ },
+ "international_relations_events.202.f": {
+  "en": "The press office's plan for the campaign, as put to the government:\\n\\nThree editors abroad have taken our money before and would print our material again, since their papers are losing readers and need it.\\nA two-reel film on the prisons of [SCOPE.sCountry('propaganda_instigator').GetName] can be finished in six weeks, because most of it was shot for another purpose and never used.\\nThe pamphlets would be printed outside the country and carried in by travelers, so that none can be traced to our own presses.\\nThe charges should be ones that the opposition in [SCOPE.sCountry('propaganda_instigator').GetName] already makes, since a foreign reader believes a charge more readily from two sources than from one.\\nThe whole campaign can run for a year on the present press budget, if nothing else is added to it.",
+  "ru": "План кампании пресс-бюро в изложении правительству:\\n\\nТри зарубежных редактора уже брали наши деньги и напечатали бы наши материалы снова, поскольку их газеты теряют читателей и нуждаются в этом.\\nДвухчастный фильм о тюрьмах страны [SCOPE.sCountry('propaganda_instigator').GetName] можно закончить за шесть недель, потому что большая часть его была снята для другой цели и осталась неиспользованной.\\nПамфлеты печатались бы за пределами страны и ввозились путешественниками, чтобы ни один нельзя было проследить до наших типографий.\\nОбвинения должны быть такими, какие оппозиция в стране [SCOPE.sCountry('propaganda_instigator').GetName] уже выдвигает, поскольку иностранный читатель охотнее верит обвинению из двух источников, чем из одного.\\nВся кампания может идти год на нынешний бюджет пресс-бюро, если ничего к нему не добавлять."
+ },
+ "international_relations_events.202.t": {
+  "en": "The War of Words",
+  "ru": "Война слов"
+ },
+ "international_relations_events.203.a": {
+  "en": "Recruit the clerk.",
+  "ru": "Завербовать клерка."
+ },
+ "international_relations_events.203.b": {
+  "en": "The risk is too great.",
+  "ru": "Риск слишком велик."
+ },
+ "international_relations_events.203.d": {
+  "en": "Our intelligence service has found a possible source in the office that buys the weapons of [SCOPE.sCountry('espionage_catcher').GetName]: a clerk with debts, access to the designs, and no love for the employer. Recruited, the clerk could pass those designs to our engineers for as long as nobody notices. If [SCOPE.sCountry('espionage_catcher').GetName]'s counterintelligence does notice, it will make the arrest public, and the trail will lead to us.",
+  "ru": "Наша разведка нашла возможный источник в ведомстве, закупающем оружие страны [SCOPE.sCountry('espionage_catcher').GetName]: клерка с долгами, доступом к чертежам и неприязнью к нанимателю. Будучи завербован, он мог бы передавать эти чертежи нашим инженерам, пока никто не заметит. Если контрразведка страны [SCOPE.sCountry('espionage_catcher').GetName] заметит, она обнародует арест, и след приведёт к нам."
+ },
+ "international_relations_events.203.f": {
+  "en": "From the case officer's file on the candidate, for the head of the intelligence service. Clerk in the weapons office for eleven years, and passed over for promotion three times, each time for a younger colleague. Owes money to two lenders and has missed payments to both. Copies drawings for the engineers' meetings as part of the work, and is trusted to take them home. Eats lunch alone, and speaks of the office with contempt to the one friend of the clerk's we have talked to. No approach has yet been made. If the service agrees, I propose a first meeting through the friend, with a loan offered in place of a fee.",
+  "ru": "Из дела на кандидата от куратора для начальника разведывательной службы. Одиннадцать лет клерк в оружейном ведомстве, трижды обойдён при повышении, каждый раз в пользу более молодого коллеги. Должен двум кредиторам и пропустил платежи обоим. В рамках работы копирует чертежи для совещаний инженеров, и ему доверяют брать их домой. Обедает один и с презрением говорит о ведомстве единственному другу клерка, с которым мы беседовали. Подхода пока не было. Если служба согласна, предлагаю первую встречу через друга, с предложением займа вместо вознаграждения."
+ },
+ "international_relations_events.203.t": {
+  "en": "An Agent in Place",
+  "ru": "Агент на месте"
+ },
+ "international_relations_events.3.a": {
+  "en": "We shall host it ourselves.",
+  "ru": "Мы примем его у себя."
+ },
+ "international_relations_events.3.b": {
+  "en": "We shall attend, on our terms.",
+  "ru": "Мы приедем на своих условиях."
+ },
+ "international_relations_events.3.c": {
+  "en": "We have nothing to discuss with them.",
+  "ru": "Нам нечего с ними обсуждать."
+ },
+ "international_relations_events.3.d": {
+  "en": "Several governments have proposed a summit to settle the disputes between them, and [ROOT.GetCountry.GetName] has been asked to host it. As host we would set the agenda and bear the cost of running it. We could instead attend as a guest and press our own case, or stay away.",
+  "ru": "Несколько правительств предложили провести саммит для урегулирования споров между ними, и страну [ROOT.GetCountry.GetName] попросили принять его. Как хозяева мы определяли бы повестку и несли бы расходы на проведение. Мы также можем приехать гостями и отстаивать собственную позицию или остаться в стороне."
+ },
+ "international_relations_events.3.f": {
+  "en": "What the delegations have asked of the summit's hosts so far, as listed by our protocol office:\\n\\nTwo delegations want rooms on different floors and separate entrances, because their governments do not receive each other's envoys.\\nNo two delegations have sent the same draft agenda, and each has asked that its own be circulated as the basis for discussion.\\nOne delegation has refused a round table, because its head of government expects a seat that is plainly the first.\\nEvery delegation wants its own interpreters in the room, because none of them will rely on another's translation of what is said.\\nSeveral delegations want their own guards at their doors, and the city police have asked whose orders those guards will follow.",
+  "ru": "О чём делегации просили хозяев саммита до сих пор, по списку нашего протокольного отдела:\\n\\nДве делегации хотят номера на разных этажах и отдельные входы, потому что их правительства не принимают посланников друг друга.\\nНет двух делегаций, приславших одинаковый проект повестки, и каждая просит разослать именно её проект как основу для обсуждения.\\nОдна делегация отказалась от круглого стола, потому что глава её правительства рассчитывает на место, которое было бы очевидно первым.\\nКаждая делегация хочет иметь в зале своих переводчиков, потому что никто не станет полагаться на чужой перевод сказанного.\\nНесколько делегаций хотят поставить у своих дверей собственную охрану, и городская полиция спрашивает, чьим приказам эта охрана будет подчиняться."
+ },
+ "international_relations_events.3.t": {
+  "en": "International Summit",
+  "ru": "Международный саммит"
+ },
+ "international_relations_events.4.a": {
+  "en": "Answer them in their own papers.",
+  "ru": "Ответить им в их же газетах."
+ },
+ "international_relations_events.4.b": {
+  "en": "Words cannot harm us.",
+  "ru": "Слова нам не повредят."
+ },
+ "international_relations_events.4.d": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] has begun a campaign against [ROOT.GetCountry.GetAdjectiveNoFormatting] institutions in the press abroad, through pamphlets, films and journalists friendly to it. They say that our government lies to its own people and threatens the peace. Newspapers in other countries have begun to reprint the charges, and our own reprint them in order to deny them.",
+  "ru": "Страна [SCOPE.sCountry('propaganda_rival').GetName] начала кампанию против [ROOT.GetCountry.GetAdjectiveNoFormatting] институтов в зарубежной прессе: памфлеты, фильмы и дружественные ей журналисты. Они утверждают, что наше правительство лжёт собственному народу и угрожает миру. Газеты других стран начали перепечатывать обвинения, а наши перепечатывают их, чтобы опровергнуть."
+ },
+ "international_relations_events.4.f": {
+  "en": "\\\"My cousin abroad sent me one of their pamphlets. It says our schools teach children to hate foreigners. My children are in our schools, I have read their books, and I do not know where they got that.\\\"\\n\\n\\\"We are not running their story, we are running our denial of it, and to deny it we have to print it first. The editor knows that as well as I do.\\\"\\n\\n\\\"Four foreign correspondents have asked us for comment this week, all on the same three charges and in the same order. Somebody gave them a list.\\\"\\n\\n\\\"The film is well made. It was shot in our capital, in streets I walk every day, and it shows them as if there were police on every corner.\\\"",
+  "ru": "«Мой двоюродный брат за границей прислал мне один из их памфлетов. В нём сказано, что в наших школах детей учат ненавидеть иностранцев. Мои дети учатся в наших школах, я читала их учебники и не знаю, откуда это взялось».\\n\\n«Мы печатаем не их рассказ, а наше опровержение, а чтобы опровергнуть, надо сначала напечатать. Редактор знает это не хуже меня».\\n\\n«На этой неделе четыре иностранных корреспондента просили у нас комментарий, все по одним и тем же трём обвинениям и в одном и том же порядке. Кто-то дал им список».\\n\\n«Фильм хорошо сделан. Его сняли в нашей столице, на улицах, по которым я хожу каждый день, и он показывает их так, будто на каждом углу стоит полицейский»."
+ },
+ "international_relations_events.4.t": {
+  "en": "Hearts and Minds",
+  "ru": "Сердца и умы"
+ },
+ "international_relations_events.5.a": {
+  "en": "Shut them out.",
+  "ru": "Закрыть перед ними рынки."
+ },
+ "international_relations_events.5.b": {
+  "en": "Trade is preferable to tantrums.",
+  "ru": "Торговля лучше истерик."
+ },
+ "international_relations_events.5.d": {
+  "en": "Our strategists want to restrict trade with [SCOPE.sCountry('embargo_rival').GetName], our rival, as the pressure most likely to move it short of war. Our industrialists warn that the restrictions would cost them buyers and suppliers too. [SCOPE.sCountry('embargo_rival').GetName] would feel the loss within weeks, and would know who had imposed it.",
+  "ru": "Наши стратеги хотят ограничить торговлю с соперником, страной [SCOPE.sCountry('embargo_rival').GetName], как давление, которое скорее всего подействует и не дойдёт до войны. Наши промышленники предупреждают, что ограничения лишат покупателей и поставщиков и их самих. Страна [SCOPE.sCountry('embargo_rival').GetName] ощутит потерю в течение нескольких недель и узнает, кто её ввёл."
+ },
+ "international_relations_events.5.f": {
+  "en": "Two officials argued the restrictions in front of the government. \\\"Some of our firms sell most of what they make to [SCOPE.sCountry('embargo_rival').GetName], and others buy parts from it that nobody else makes,\\\" said the official from the trade office. \\\"Close that trade and some of them will close with it.\\\"\\n\\n\\\"Their firms need us as much as ours need them,\\\" said the strategist. \\\"That is why it would work. Pressure that costs us nothing would not move them.\\\"\\n\\n\\\"Then tell me which of our firms you are prepared to lose, and I will write to them.\\\"\\n\\n\\\"None of them, if it goes as it should. I want their firms frightened enough to go to their own government, and we can lift the restrictions the day it gives way.\\\"",
+  "ru": "Два чиновника спорили об ограничениях перед правительством. «Некоторые наши фирмы продают большую часть своей продукции в страну [SCOPE.sCountry('embargo_rival').GetName], а другие покупают у неё детали, которых больше никто не делает, — сказал чиновник торгового ведомства. — Закройте эту торговлю, и часть из них закроется вместе с ней».\\n\\n«Их фирмам мы нужны не меньше, чем нашим они, — сказал стратег. — Поэтому это и сработает. Давление, которое ничего нам не стоит, их не сдвинет».\\n\\n«Тогда назовите, какими нашими фирмами вы готовы пожертвовать, и я им напишу».\\n\\n«Никакими, если всё пойдёт как должно. Я хочу, чтобы их фирмы испугались настолько, чтобы пойти к собственному правительству, а мы снимем ограничения в тот день, когда оно уступит»."
+ },
+ "international_relations_events.5.t": {
+  "en": "The Iron Purse",
+  "ru": "Железный кошелёк"
+ },
+ "international_relations_events.6.a": {
+  "en": "Expel their diplomats!",
+  "ru": "Выслать их дипломатов!"
+ },
+ "international_relations_events.6.b": {
+  "en": "Arrange a quiet exchange.",
+  "ru": "Организовать тихий обмен."
+ },
+ "international_relations_events.6.c": {
+  "en": "Put the wretch on trial for the world to see.",
+  "ru": "Судить мерзавца на глазах у всего мира."
+ },
+ "international_relations_events.6.d": {
+  "en": "Our counterintelligence has arrested a clerk from the office that buys our army's weapons at a meeting with an agent of [SCOPE.sCountry('espionage_rival').GetName], with copies of our weapon designs on the table. The agent was taken too. Word of the arrests is already out in the capital, and people want to know what we will do about [SCOPE.sCountry('espionage_rival').GetName].",
+  "ru": "Наша контрразведка арестовала клерка из ведомства, закупающего оружие для нашей армии, на встрече с агентом страны [SCOPE.sCountry('espionage_rival').GetName], с копиями чертежей нашего оружия на столе. Агента тоже взяли. Весть об арестах уже разошлась по столице, и люди хотят знать, что мы предпримем в отношении страны [SCOPE.sCountry('espionage_rival').GetName]."
+ },
+ "international_relations_events.6.f": {
+  "en": "The officer watched through the small window in the door. The agent sat at the table with his hands folded and had not asked for water in four hours. He had given a name at the start, and the officer had sent it off to be checked. The clerk was in the next room, crying on and off, and had already told them everything about the meetings and nothing about who else might have been paid. The officer wrote the time on his sheet, added a line about the agent's hands, and went to see whether the name had come back.",
+  "ru": "Офицер наблюдал через маленькое окошко в двери. Агент сидел за столом, сложив руки, и за четыре часа не попросил воды. В начале он назвал имя, и офицер отправил его на проверку. Клерк был в соседней комнате, то и дело плакал и уже рассказал им всё о встречах и ничего о том, кому ещё могли платить. Офицер записал время на своём листе, добавил строку о руках агента и пошёл выяснять, пришёл ли ответ по имени."
+ },
+ "international_relations_events.6.t": {
+  "en": "The Spy Who Was Caught",
+  "ru": "Пойманный шпион"
+ },
+ "international_relations_events.7.a": {
+  "en": "Fund the next launch, and a larger one after it.",
+  "ru": "Профинансировать следующий запуск и более крупный после него."
+ },
+ "international_relations_events.7.b": {
+  "en": "Our people need bread, not rockets.",
+  "ru": "Людям нужен хлеб, а не ракеты."
+ },
+ "international_relations_events.7.d": {
+  "en": "A rocket from our space program has put a satellite into orbit, and our tracking stations are receiving its signal. [ROOT.GetCountry.GetAdjectiveNoFormatting] newspapers have printed little else since the launch, and the program's engineers are asking for the money to try something larger.",
+  "ru": "Ракета нашей космической программы вывела на орбиту спутник, и наши станции слежения принимают его сигнал. [ROOT.GetCountry.GetAdjectiveNoFormatting] газеты со времени запуска почти ни о чём другом не пишут, а инженеры программы просят денег, чтобы попробовать что-то более крупное."
+ },
+ "international_relations_events.7.f": {
+  "en": "The radio shop on the corner had put a set in its window and turned it up, and by noon the crowd outside reached across the street. Every few minutes the announcer stopped talking and the satellite's signal came through, a thin repeated beep, and each time the crowd went quiet to listen. A boy on his father's shoulders asked where it was now. \\\"Over the ocean,\\\" his father said, and then, \\\"I think.\\\" A woman beside them said it would come round again in an hour and a half, and several people looked at their watches.",
+  "ru": "Радиомагазин на углу выставил приёмник в витрину и включил погромче, и к полудню толпа снаружи заняла всю улицу. Каждые несколько минут диктор умолкал, и пробивался сигнал спутника, тонкий повторяющийся писк, и каждый раз толпа замирала, слушая. Мальчик на плечах у отца спросил, где он сейчас. «Над океаном, — сказал отец и добавил: — Наверное». Женщина рядом сказала, что он снова пролетит над ними через полтора часа, и несколько человек посмотрели на часы."
+ },
+ "international_relations_events.7.t": {
+  "en": "The Heavens Beckon",
+  "ru": "Небеса манят"
+ },
+ "international_relations_events.8.a": {
+  "en": "We shall not blink.",
+  "ru": "Мы не дрогнем."
+ },
+ "international_relations_events.8.b": {
+  "en": "Open the back channels.",
+  "ru": "Открыть неофициальные каналы."
+ },
+ "international_relations_events.8.c": {
+  "en": "Sound the alarm.",
+  "ru": "Объявить тревогу."
+ },
+ "international_relations_events.8.d": {
+  "en": "[SCOPE.sCountry('nuclear_rival').GetName] stands against us in the dispute now under way, and like us it holds nuclear weapons. Neither side has gone to war. Our commanders are waiting to learn how hard we mean to press, and [SCOPE.sCountry('nuclear_rival').GetName] will be watching for the same.",
+  "ru": "Страна [SCOPE.sCountry('nuclear_rival').GetName] выступает против нас в идущем сейчас споре, и, как и у нас, у неё есть ядерное оружие. Ни одна из сторон не пошла на войну. Наши командиры ждут, насколько сильно мы намерены давить, а страна [SCOPE.sCountry('nuclear_rival').GetName] будет следить за тем же."
+ },
+ "international_relations_events.8.f": {
+  "en": "The duty officer read the message twice before he woke anyone. The government of [SCOPE.sCountry('nuclear_rival').GetName] had repeated in public, in the same words as before, that it would not give way. He put the message on the general's desk, squared it with the edge, and went back to the operations room, where two clerks were moving markers on the wall map. The line to the weapons command was open and silent. He sat down with the log sheet and wrote the time the message had come in and the time he had passed it on.",
+  "ru": "Дежурный офицер прочитал сообщение дважды, прежде чем кого-либо будить. Правительство страны [SCOPE.sCountry('nuclear_rival').GetName] публично повторило теми же словами, что не уступит. Он положил сообщение на стол генерала, выровнил его по краю и вернулся в оперативный зал, где двое клерков переставляли отметки на настенной карте. Линия связи с командованием ядерных сил была открыта и молчала. Он сел с журналом и записал время, когда сообщение пришло, и время, когда он передал его дальше."
+ },
+ "irredentism.1.a": {
+  "en": "Lay claim to more of our homeland in their lands.",
+  "ru": "Заявить права на большую часть нашей исторической родины в их землях."
+ },
+ "irredentism.1.b": {
+  "en": "Pay for their schools, presses and libraries.",
+  "ru": "Оплатить их школы, типографии и библиотеки."
+ },
+ "irredentism.1.b.tt": {
+  "en": "Builds a cultural bond that makes [SCOPE.sCountry('target_country').GetName] more willing to accept a future voluntary union",
+  "ru": "Создаёт культурную связь, из-за которой страна [SCOPE.sCountry('target_country').GetName] охотнее согласится на добровольное объединение в будущем"
+ },
+ "irredentism.1.bide": {
+  "en": "Not yet. We will bide our time.",
+  "ru": "Пока нет. Мы подождём своего часа."
+ },
+ "irredentism.1.c": {
+  "en": "Demand the return of [SCOPE.sState('irr_demanded_state').GetName]",
+  "ru": "Потребовать возвращения области [SCOPE.sState('irr_demanded_state').GetName]"
+ },
+ "irredentism.1.c.tt": {
+  "en": "[SCOPE.sCountry('target_country').GetName] will be asked to return [SCOPE.sState('irr_demanded_state').GetName]. If they refuse, we will open a diplomatic play to take it by force",
+  "ru": "Страну [SCOPE.sCountry('target_country').GetName] попросят вернуть область [SCOPE.sState('irr_demanded_state').GetName]. Если она откажется, мы начнём дипломатическую игру, чтобы взять её силой"
+ },
+ "irredentism.1.d": {
+  "en": "[SCOPE.sCulture('irr_shared_culture').GetName] communities in [SCOPE.sCountry('target_country').GetName] have been asking for closer ties with us. They live in lands we claim as part of our homeland, and their petitions reach our government more often each month. Some ask only for schools and books in their own language. Others ask what we would do for them if it came to a quarrel with [SCOPE.sCountry('target_country').GetName].",
+  "ru": "Общины культуры [SCOPE.sCulture('irr_shared_culture').GetName] в стране [SCOPE.sCountry('target_country').GetName] просят о более тесных связях с нами. Они живут на землях, которые мы считаем частью своей исторической родины, и их прошения доходят до нашего правительства всё чаще с каждым месяцем. Одни просят лишь о школах и книгах на их языке. Другие спрашивают, что мы сделаем для них, если дойдёт до ссоры со страной [SCOPE.sCountry('target_country').GetName]."
+ },
+ "irredentism.1.f": {
+  "en": "A teacher from the [SCOPE.sCulture('irr_shared_culture').GetName] community in [SCOPE.sCountry('target_country').GetName], speaking to the envoy we had sent to hear them: \\\"We have kept the language in our houses and in two schools that we pay for ourselves. The government here allows the schools and does nothing else for them. Our children learn the history of this country in the day, and then they come home and learn ours. Some of the young men want more than you can give, and I cannot speak for them. What the rest of us ask of you is books, and teachers, and that you say in public that we are your people.\\\"",
+  "ru": "Учитель из общины культуры [SCOPE.sCulture('irr_shared_culture').GetName] в стране [SCOPE.sCountry('target_country').GetName] говорит посланнику, которого мы отправили их выслушать: «Мы сохранили язык в своих домах и в двух школах, которые сами оплачиваем. Местное правительство разрешает эти школы и больше ничего для них не делает. Днём наши дети учат историю этой страны, а потом приходят домой и учат нашу. Некоторые из молодых людей хотят большего, чем вы можете дать, и я не могу говорить за них. Остальные просят у вас книг, учителей и чтобы вы публично сказали, что мы — ваш народ»."
+ },
+ "irredentism.1.t": {
+  "en": "The Diaspora Calls",
+  "ru": "Зов диаспоры"
+ },
+ "irredentism.10.a": {
+  "en": "The way is open",
+  "ru": "Путь открыт"
+ },
+ "irredentism.10.a.tt": {
+  "en": "For #v 5 years#!, our [concept_power_bloc] will not stand in the way of a war to reunify [SCOPE.sCountry('target_country').GetName] with us. Every other requirement of the reunification [concept_war_goal] still applies, above all enough [Concept('concept_claim', 'claims')] on their [concept_homeland] states and a government that champions the cause",
+  "ru": "В течение #v 5 лет#! наш [concept_power_bloc|l] не будет препятствовать войне за воссоединение страны [SCOPE.sCountry('target_country').GetName] с нами. Все остальные требования [Concept('concept_war_goal', 'цели войны')] воссоединения по-прежнему действуют, прежде всего достаточное число [Concept('concept_claim', 'претензий')] на области их [Concept('concept_homeland', 'исторической родины')] и правительство, поддерживающее это дело"
+ },
+ "irredentism.10.d": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] has blessed our claim against [SCOPE.sCountry('target_country').GetName]. For the next five years our [Concept('concept_power_bloc_leader', 'bloc leader')] will not stand in the way of a war to bring our people home. Whether we fight it, and when, is now our decision alone.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] одобрила наши притязания к стране [SCOPE.sCountry('target_country').GetName]. В течение следующих пяти лет наш [Concept('concept_power_bloc_leader', 'лидер блока')] не будет препятствовать войне за возвращение нашего народа домой. Вести ли её и когда, теперь решаем только мы."
+ },
+ "irredentism.10.f": {
+  "en": "Our envoy to [SCOPE.sCountry('irr_bloc_leader').GetName] came back with the reply in a sealed case and read it to the government standing. It was short. [SCOPE.sCountry('irr_bloc_leader').GetName] had considered our request and would not oppose a war to reunify our people with those under the government of [SCOPE.sCountry('target_country').GetName], for five years from the date of the letter. \\\"Did they say anything else?\\\" someone asked. \\\"They asked to be told before we act, not after,\\\" the envoy said, \\\"and nothing about joining us.\\\" Then he handed the letter to a clerk to be copied for the record.",
+  "ru": "Наш посланник к стране [SCOPE.sCountry('irr_bloc_leader').GetName] вернулся с ответом в запечатанном футляре и зачитал его правительству стоя. Ответ был коротким. Страна [SCOPE.sCountry('irr_bloc_leader').GetName] рассмотрела нашу просьбу и не будет возражать против войны за воссоединение нашего народа с теми, кто находится под властью правительства страны [SCOPE.sCountry('target_country').GetName], в течение пяти лет со дня письма. «Они сказали что-нибудь ещё?» — спросил кто-то. «Они просили предупредить их до того, как мы начнём, а не после, — сказал посланник, — и ничего о том, чтобы присоединиться к нам». Затем он передал письмо клерку для копирования в архив."
+ },
+ "irredentism.10.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Blesses Our Claim",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] благословляет наши притязания"
+ },
+ "irredentism.11.a": {
+  "en": "We will wait",
+  "ru": "Мы подождём"
+ },
+ "irredentism.11.a.tt": {
+  "en": "Our [Concept('concept_power_bloc_leader', 'bloc leader')] will not bless a war against [SCOPE.sCountry('target_country').GetName]. Our [concept_relations] with it fall by #N 10#!; for #v 5 years#! we cannot ask again, and the refusal stirs up radicals at home.",
+  "ru": "Наш [Concept('concept_power_bloc_leader', 'лидер блока')] не станет одобрять войну против страны [SCOPE.sCountry('target_country').GetName]. Наши [Concept('concept_relations', 'отношения')] с ним ухудшаются на #N 10#!; в течение #v 5 лет#! мы не можем просить снова, а отказ вызывает радикалов в стране."
+ },
+ "irredentism.11.d": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] has refused to bless our claim against [SCOPE.sCountry('target_country').GetName]. Our [Concept('concept_power_bloc_leader', 'bloc leader')] says the timing is wrong. Those at home who pressed for the war say that a bloc leader which will not back its own members' causes is of no use to them.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] отказалась одобрить наши притязания к стране [SCOPE.sCountry('target_country').GetName]. Наш [Concept('concept_power_bloc_leader', 'лидер блока')] говорит, что время неподходящее. Те, кто дома настаивал на войне, говорят, что лидер блока, не поддерживающий дела собственных членов, им бесполезен."
+ },
+ "irredentism.11.f": {
+  "en": "\\\"I went to [SCOPE.sCountry('irr_bloc_leader').GetName] with our delegation, and I owe a report to all of you who pressed for this war. They received us with every courtesy and listened to all of it. Then they told us that the timing was wrong, and that they would gladly hear us again in five years. I asked what would be different in five years, and they could not say. Our people in [SCOPE.sCountry('target_country').GetName] are still living under another government, and they will be for as long as we wait. I am angry, and I will not pretend otherwise. I ask that the delegation's notes be read out in full at the next meeting, so that everyone here can judge what was said.\\\"",
+  "ru": "«Я ездил к стране [SCOPE.sCountry('irr_bloc_leader').GetName] с нашей делегацией и обязан отчитаться перед всеми вами, кто настаивал на этой войне. Нас приняли со всей учтивостью и выслушали до конца. Затем нам сказали, что время неподходящее и что они охотно выслушают нас снова через пять лет. Я спросил, что изменится через пять лет, и ответа не получил. Наши люди в стране [SCOPE.sCountry('target_country').GetName] по-прежнему живут под чужим правительством и будут жить, пока мы ждём. Я зол и не стану этого скрывать. Прошу зачитать записи делегации целиком на следующем собрании, чтобы каждый здесь мог судить о том, что было сказано»."
+ },
+ "irredentism.11.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Withholds Its Blessing",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] отказывает в благословении"
+ },
+ "irredentism.12.a": {
+  "en": "Then the talks can go on.",
+  "ru": "Тогда переговоры могут продолжаться."
+ },
+ "irredentism.12.a.tt": {
+  "en": "For #v 5 years#!, the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName] will not stand in the way of a voluntary union between [SCOPE.sCountry('irr_proposed_target').GetName] and [SCOPE.sCountry('irr_unifier').GetName]. Every other requirement of the union still applies.",
+  "ru": "В течение #v 5 лет#! [concept_power_bloc|l] страны [SCOPE.sCountry('irr_proposed_target').GetName] не будет препятствовать добровольному объединению стран [SCOPE.sCountry('irr_proposed_target').GetName] и [SCOPE.sCountry('irr_unifier').GetName]. Все остальные требования объединения по-прежнему действуют."
+ },
+ "irredentism.12.d_target": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName], our [Concept('concept_power_bloc_leader', 'bloc leader')], has given its blessing to a voluntary union between us and [SCOPE.sCountry('irr_unifier').GetName]. For the next five years our [concept_power_bloc] will not stand in the way if we accept the proposal. Whether we accept is ours to decide.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName], наш [Concept('concept_power_bloc_leader', 'лидер блока')], благословила добровольное объединение нас со страной [SCOPE.sCountry('irr_unifier').GetName]. В течение следующих пяти лет наш [concept_power_bloc|l] не будет препятствовать, если мы примем предложение. Принимать ли его, решать нам."
+ },
+ "irredentism.12.d_unifier": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName], which leads the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName], has given its blessing to the voluntary union we proposed. For the next five years that bloc will not stand in the way if [SCOPE.sCountry('irr_proposed_target').GetName] accepts.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName], возглавляющая [concept_power_bloc|l] страны [SCOPE.sCountry('irr_proposed_target').GetName], благословила предложенное нами добровольное объединение. В течение следующих пяти лет этот блок не будет препятствовать, если страна [SCOPE.sCountry('irr_proposed_target').GetName] примет его."
+ },
+ "irredentism.12.f": {
+  "en": "To the governments of [SCOPE.sCountry('irr_proposed_target').GetName] and [SCOPE.sCountry('irr_unifier').GetName], from the government of [SCOPE.sCountry('irr_bloc_leader').GetName]. We have read the proposal of union between you and heard the envoys of both on it. We raise no objection. What [SCOPE.sCountry('irr_proposed_target').GetName] has undertaken as a member of our bloc is for the two of you to settle before any union is concluded, and we ask to be told how it will be met. This assurance stands for five years.",
+  "ru": "Правительствам стран [SCOPE.sCountry('irr_proposed_target').GetName] и [SCOPE.sCountry('irr_unifier').GetName] от правительства страны [SCOPE.sCountry('irr_bloc_leader').GetName]. Мы прочли предложение об объединении между вами и выслушали по нему посланников обеих сторон. Мы не возражаем. То, что страна [SCOPE.sCountry('irr_proposed_target').GetName] приняла на себя как член нашего блока, вам обеим предстоит уладить до заключения любого объединения, и мы просим сообщить нам, как это будет выполнено. Это заверение действует пять лет."
+ },
+ "irredentism.12.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Blesses the Union",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] благословляет объединение"
+ },
+ "irredentism.13.a": {
+  "en": "So be it, for now.",
+  "ru": "Пусть так, пока что."
+ },
+ "irredentism.13.a.tt": {
+  "en": "For #v 5 years#!, [SCOPE.sCountry('irr_proposed_target').GetName] cannot ask its [Concept('concept_power_bloc_leader', 'bloc leader')] again, and cannot accept a voluntary union with [SCOPE.sCountry('irr_unifier').GetName] while it stays in the bloc.",
+  "ru": "В течение #v 5 лет#! страна [SCOPE.sCountry('irr_proposed_target').GetName] не может снова обратиться к своему [Concept('concept_power_bloc_leader', 'лидеру блока')] и не может принять добровольное объединение со страной [SCOPE.sCountry('irr_unifier').GetName], пока остаётся в блоке."
+ },
+ "irredentism.13.d_target": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName], our [Concept('concept_power_bloc_leader', 'bloc leader')], has forbidden a voluntary union between us and [SCOPE.sCountry('irr_unifier').GetName]. For the next five years we cannot accept the proposal while we remain in the bloc.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName], наш [Concept('concept_power_bloc_leader', 'лидер блока')], запретила добровольное объединение нас со страной [SCOPE.sCountry('irr_unifier').GetName]. В течение следующих пяти лет мы не можем принять предложение, пока остаёмся в блоке."
+ },
+ "irredentism.13.d_unifier": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName], which leads the [concept_power_bloc] of [SCOPE.sCountry('irr_proposed_target').GetName], has forbidden the voluntary union we proposed. For the next five years [SCOPE.sCountry('irr_proposed_target').GetName] cannot accept while it remains in that bloc.",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName], возглавляющая [concept_power_bloc|l] страны [SCOPE.sCountry('irr_proposed_target').GetName], запретила предложенное нами добровольное объединение. В течение следующих пяти лет страна [SCOPE.sCountry('irr_proposed_target').GetName] не может его принять, пока остаётся в этом блоке."
+ },
+ "irredentism.13.f": {
+  "en": "The envoy of [SCOPE.sCountry('irr_bloc_leader').GetName] read the reply to both delegations in the same room: \\\"My government has considered the proposal and cannot agree to it. [SCOPE.sCountry('irr_proposed_target').GetName] is a member of our bloc, and a member does not leave it by becoming part of another country. We do not question the kinship between your peoples. We ask both governments to let the matter rest, and we are willing to hear it again in five years.\\\"",
+  "ru": "Посланник страны [SCOPE.sCountry('irr_bloc_leader').GetName] зачитал ответ обеим делегациям в одной комнате: «Моё правительство рассмотрело предложение и не может с ним согласиться. Страна [SCOPE.sCountry('irr_proposed_target').GetName] — член нашего блока, а член не покидает его, становясь частью другой страны. Мы не ставим под сомнение родство ваших народов. Мы просим оба правительства оставить этот вопрос и готовы выслушать его снова через пять лет»."
+ },
+ "irredentism.13.t": {
+  "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Forbids the Union",
+  "ru": "Страна [SCOPE.sCountry('irr_bloc_leader').GetName] запрещает объединение"
+ },
+ "irredentism.2.a": {
+  "en": "Refuse. They will have to take it by force.",
+  "ru": "Отказать. Им придётся взять её силой."
+ },
+ "irredentism.2.a.tt": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] will open a diplomatic play to seize [SCOPE.sState('irr_demanded_state').GetName] by force",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName] начнёт дипломатическую игру, чтобы силой захватить область [SCOPE.sState('irr_demanded_state').GetName]"
+ },
+ "irredentism.2.b": {
+  "en": "Cede [SCOPE.sState('irr_demanded_state').GetName] peacefully",
+  "ru": "Мирно уступить область [SCOPE.sState('irr_demanded_state').GetName]"
+ },
+ "irredentism.2.d": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName], which shares a culture with us, has formally demanded that we hand over [SCOPE.sState('irr_demanded_state').GetName], where people of that culture live. If we cede the state, it passes to [SCOPE.sCountry('irr_unifier').GetName] without a war. If we refuse, [SCOPE.sCountry('irr_unifier').GetName] will open a diplomatic play to take it.",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName], разделяющая с нами культуру, официально потребовала, чтобы мы передали область [SCOPE.sState('irr_demanded_state').GetName], где живут люди этой культуры. Если мы уступим область, она перейдёт к стране [SCOPE.sCountry('irr_unifier').GetName] без войны. Если откажем, страна [SCOPE.sCountry('irr_unifier').GetName] начнёт дипломатическую игру, чтобы её взять."
+ },
+ "irredentism.2.f": {
+  "en": "To the government of [ROOT.GetCountry.GetName], from the government of [SCOPE.sCountry('irr_unifier').GetName]. The people of [SCOPE.sState('irr_demanded_state').GetName] are of our nation. They speak our language and keep our customs, and the land they live on is part of our homeland. We ask that [SCOPE.sState('irr_demanded_state').GetName] be transferred to our government by agreement, and we are ready to discuss the terms of the transfer and the rights of those who live there who are not of our nation. If it is not transferred by agreement, we will press our claim by other means. We await your reply.",
+  "ru": "Правительству страны [ROOT.GetCountry.GetName] от правительства страны [SCOPE.sCountry('irr_unifier').GetName]. Жители области [SCOPE.sState('irr_demanded_state').GetName] принадлежат к нашей нации. Они говорят на нашем языке и хранят наши обычаи, а земля, на которой они живут, — часть нашей исторической родины. Мы просим передать область [SCOPE.sState('irr_demanded_state').GetName] нашему правительству по соглашению, и мы готовы обсудить условия передачи и права тех, кто там живёт и не принадлежит к нашей нации. Если она не будет передана по соглашению, мы будем добиваться своих притязаний иными средствами. Ожидаем вашего ответа."
+ },
+ "irredentism.2.t": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] Demands [SCOPE.sState('irr_demanded_state').GetName]",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName] требует область [SCOPE.sState('irr_demanded_state').GetName]"
+ },
+ "irredentism.3.a": {
+  "en": "Propose voluntary union to [SCOPE.sCountry('target_country').GetName]",
+  "ru": "Предложить добровольное объединение стране [SCOPE.sCountry('target_country').GetName]"
+ },
+ "irredentism.3.b": {
+  "en": "Not yet. Keep their goodwill for now.",
+  "ru": "Пока нет. Сохраним их расположение."
+ },
+ "irredentism.3.d": {
+  "en": "Our relations with [SCOPE.sCountry('target_country').GetName] are warm, and in both countries people have begun to speak of a voluntary union. [SCOPE.sCountry('target_country').GetName] shares our culture, and it holds lands we count as part of our homeland, where our people still live. We could propose the union now, or wait and keep the goodwill we have.",
+  "ru": "Наши отношения со страной [SCOPE.sCountry('target_country').GetName] тёплые, и в обеих странах заговорили о добровольном объединении. Страна [SCOPE.sCountry('target_country').GetName] разделяет с нами культуру и владеет землями, которые мы считаем частью своей исторической родины и где всё ещё живёт наш народ. Мы можем предложить объединение сейчас или подождать и сохранить нынешнее расположение."
+ },
+ "irredentism.3.f": {
+  "en": "Two of our officials argued over the proposal in front of the government.\\n\\n\\\"Relations have never been warmer, and their government has said in private that it would listen. If we wait, a change of government there could close the door for years.\\\"\\n\\n\\\"If we ask and they refuse, we cannot ask again soon without looking foolish, and their people will have refused us in public. I would rather know first what their own officials would say.\\\"\\n\\n\\\"They will not tell us that until there is something on the table to answer.\\\"\\n\\n\\\"Then we should put it on the table in a way that lets them say no quietly, through envoys, before anything is announced.\\\"",
+  "ru": "Два наших чиновника спорили о предложении перед правительством.\\n\\n«Отношения никогда не были теплее, и их правительство в частном порядке сказало, что выслушает нас. Если мы подождём, смена правительства там может закрыть дверь на годы».\\n\\n«Если мы попросим, а они откажут, мы не сможем скоро просить снова, не выглядя глупо, а их народ откажет нам публично. Я предпочёл бы сперва узнать, что скажут их собственные чиновники».\\n\\n«Они не скажут этого, пока не появится что-то, на что можно ответить».\\n\\n«Тогда мы должны положить это на стол так, чтобы они могли тихо отказаться через посланников, прежде чем что-либо объявят»."
+ },
+ "irredentism.3.t": {
+  "en": "An Opportunity for Union",
+  "ru": "Возможность объединения"
+ },
+ "irredentism.4.a": {
+  "en": "We are open to it. Let the talks go on.",
+  "ru": "Мы открыты к этому. Пусть переговоры продолжаются."
+ },
+ "irredentism.4.b": {
+  "en": "We will remain a free nation",
+  "ru": "Мы останемся свободной нацией"
+ },
+ "irredentism.4.d": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName], which shares our culture, has formally proposed that we join it in a voluntary union. If the union is concluded, we will no longer be a country of our own: our lands and our people will become part of [SCOPE.sCountry('irr_unifier').GetName]. Saying that we are open to it concludes nothing yet.",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName], разделяющая нашу культуру, официально предложила нам присоединиться к ней в добровольном объединении. Если объединение состоится, мы перестанем быть самостоятельной страной: наши земли и наш народ станут частью страны [SCOPE.sCountry('irr_unifier').GetName]. Заявление о том, что мы открыты к этому, пока ничего не завершает."
+ },
+ "irredentism.4.f": {
+  "en": "\\\"My grandfather always said we were one people cut in two by somebody else's treaty. He would have signed it tonight.\\\"\\n\\n\\\"Within a year our capital would be one town among many of theirs, and every decision about it would be made somewhere else.\\\"\\n\\n\\\"Our soldiers swear an oath to this flag. Nobody has told me what they would swear to afterward.\\\"\\n\\n\\\"We speak the same language. I read their newspapers more than ours. I hardly know what would change for me.\\\"",
+  "ru": "«Мой дед всегда говорил, что мы один народ, разрезанный пополам чужим договором. Он подписал бы его сегодня же вечером».\\n\\n«Через год наша столица стала бы одним из многих их городов, и все решения о ней принимались бы где-то в другом месте».\\n\\n«Наши солдаты присягают этому флагу. Никто не сказал мне, чему они присягнут потом».\\n\\n«Мы говорим на одном языке. Я читаю их газеты чаще, чем наши. Я едва понимаю, что изменится для меня»."
+ },
+ "irredentism.4.t": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] Asks Us to Join",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName] просит нас присоединиться"
+ },
+ "irredentism.6.a": {
+  "en": "We take note",
+  "ru": "Принять к сведению"
+ },
+ "irredentism.6.d.peaceful": {
+  "en": "[SCOPE.sCountry('irr_annexed_country').GetName] has joined [SCOPE.sCountry('irr_unifier').GetName] in a voluntary union and is now part of it. The two countries shared a culture, and the union was made without a war. We hold interests in the region where [SCOPE.sCountry('irr_annexed_country').GetName] lay.",
+  "ru": "Страна [SCOPE.sCountry('irr_annexed_country').GetName] присоединилась к стране [SCOPE.sCountry('irr_unifier').GetName] в добровольном объединении и теперь является её частью. Две страны имели общую культуру, и объединение прошло без войны. У нас есть интересы в регионе, где находилась страна [SCOPE.sCountry('irr_annexed_country').GetName]."
+ },
+ "irredentism.6.d.warlike": {
+  "en": "[SCOPE.sCountry('irr_unifier').GetName] has annexed [SCOPE.sCountry('irr_annexed_country').GetName] at the end of a war fought to reunify a people the two countries shared. We hold interests in the region where [SCOPE.sCountry('irr_annexed_country').GetName] lay.",
+  "ru": "Страна [SCOPE.sCountry('irr_unifier').GetName] аннексировала страну [SCOPE.sCountry('irr_annexed_country').GetName] в конце войны за воссоединение народа, общего для двух стран. У нас есть интересы в регионе, где находилась страна [SCOPE.sCountry('irr_annexed_country').GetName]."
+ },
+ "irredentism.6.f": {
+  "en": "In the map room of our foreign service, a draftsman scraped the old border off the plate with a blade, working along it from one end to the other. The name of [SCOPE.sCountry('irr_annexed_country').GetName] had to come off as well, and its color, and the small star that marked its capital. His assistant read the dispatch aloud: \\\"From today, [SCOPE.sCountry('irr_annexed_country').GetName] is part of [SCOPE.sCountry('irr_unifier').GetName], within the borders it had.\\\" The draftsman nodded, scraped out the star, and asked for the ink in the color of [SCOPE.sCountry('irr_unifier').GetName]. Then he began to fill the space in from the edge.",
+  "ru": "В зале карт нашей дипломатической службы чертёжник соскабливал лезвием старую границу с пластины, проходя вдоль неё от одного конца до другого. Название страны [SCOPE.sCountry('irr_annexed_country').GetName] тоже следовало снять, как и её цвет, и маленькую звёздочку, отмечавшую столицу. Его помощник зачитал депешу: «С сегодняшнего дня страна [SCOPE.sCountry('irr_annexed_country').GetName] — часть страны [SCOPE.sCountry('irr_unifier').GetName] в прежних границах». Чертёжник кивнул, соскоблил звёздочку и попросил тушь цвета страны [SCOPE.sCountry('irr_unifier').GetName]. Затем он начал заполнять пространство от края."
+ },
+ "irredentism.6.t": {
+  "en": "[SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]",
+  "ru": "Страна [SCOPE.sCountry('irr_annexed_country').GetName] поглощена страной [SCOPE.sCountry('irr_unifier').GetName]"
+ },
+ "irredentism.7.a": {
+  "en": "Give them our blessing.",
+  "ru": "Дать им наше благословение."
+ },
+ "irredentism.7.b": {
+  "en": "Withhold our blessing. The timing is wrong.",
+  "ru": "Отказать в благословении. Время неподходящее."
+ },
+ "irredentism.7.d": {
+  "en": "[SCOPE.sCountry('irr_requester').GetName], a [Concept('concept_power_bloc_member', 'member')] of our bloc, asks for our blessing to go to war with [SCOPE.sCountry('target_country').GetName] and reunify a people the two countries share. If we give it, for five years our bloc will not stand in the way of that war. If we refuse, [SCOPE.sCountry('irr_requester').GetName] cannot ask again for five years, and its relations with us will suffer.",
+  "ru": "Страна [SCOPE.sCountry('irr_requester').GetName], [Concept('concept_power_bloc_member', 'член')] нашего блока, просит нашего благословения на войну со страной [SCOPE.sCountry('target_country').GetName] ради воссоединения народа, общего для двух стран. Если мы дадим его, в течение пяти лет наш блок не будет препятствовать этой войне. Если откажем, страна [SCOPE.sCountry('irr_requester').GetName] не сможет просить снова пять лет, а её отношения с нами ухудшатся."
+ },
+ "irredentism.7.f": {
+  "en": "To the government of [ROOT.GetCountry.GetName], from the government of [SCOPE.sCountry('irr_requester').GetName]. As a member of the bloc you lead, we ask your consent before we act. A part of our nation lives under the government of [SCOPE.sCountry('target_country').GetName], on land that we hold to be ours. We intend to bring them home, by force if it must be done, and we will not do it against your wishes. We do not ask you to fight beside us. We ask only that the bloc not stand in our way, and we ask for your answer.",
+  "ru": "Правительству страны [ROOT.GetCountry.GetName] от правительства страны [SCOPE.sCountry('irr_requester').GetName]. Как член блока, который вы возглавляете, мы просим вашего согласия, прежде чем действовать. Часть нашей нации живёт под властью правительства страны [SCOPE.sCountry('target_country').GetName], на земле, которую мы считаем своей. Мы намерены вернуть их домой, силой, если иначе нельзя, и не сделаем этого против вашей воли. Мы не просим вас сражаться рядом с нами. Мы просим лишь, чтобы блок не стоял у нас на пути, и ждём вашего ответа."
+ },
+ "irredentism.7.t": {
+  "en": "[SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War",
+  "ru": "Страна [SCOPE.sCountry('irr_requester').GetName] просит нас благословить войну"
+ },
+ "irredentism.8.a": {
+  "en": "Bless the union. It is theirs to make.",
+  "ru": "Благословить объединение. Решать им."
+ },
+ "irredentism.8.b": {
+  "en": "Forbid it. We cannot spare them from the bloc.",
+  "ru": "Запретить. Мы не можем обойтись без них в блоке."
+ },
+ "irredentism.8.d": {
+  "en": "Our [Concept('concept_power_bloc_member', 'bloc member')] [SCOPE.sCountry('irr_proposed_target').GetName] has received a proposal of voluntary union from [SCOPE.sCountry('irr_unifier').GetName] and has said it is open to it. If we bless the union, our bloc will not stand in the way for five years. If we forbid it, [SCOPE.sCountry('irr_proposed_target').GetName] cannot accept while it stays in our bloc.",
+  "ru": "Страна [SCOPE.sCountry('irr_proposed_target').GetName], наш [Concept('concept_power_bloc_member', 'член блока')], получила от страны [SCOPE.sCountry('irr_unifier').GetName] предложение добровольного объединения и заявила, что открыта к нему. Если мы благословим объединение, наш блок не будет препятствовать пять лет. Если запретим, страна [SCOPE.sCountry('irr_proposed_target').GetName] не сможет согласиться, пока остаётся в нашем блоке."
+ },
+ "irredentism.8.f": {
+  "en": "Points prepared for the government by the officials who handle our bloc's affairs:\\n\\nIf the union goes ahead, the lands and people of [SCOPE.sCountry('irr_proposed_target').GetName] become part of [SCOPE.sCountry('irr_unifier').GetName], and the bloc keeps them only if [SCOPE.sCountry('irr_unifier').GetName] is one of our members.\\nThe government of [SCOPE.sCountry('irr_proposed_target').GetName] has told us it is open to the proposal, so a refusal from us would overrule its own wish.\\nA blessing lasts five years, and after that [SCOPE.sCountry('irr_proposed_target').GetName] would have to ask us again.\\nA refusal also lasts five years, and for that time [SCOPE.sCountry('irr_proposed_target').GetName] may not accept the union while it remains in the bloc.\\nThe other members will read our answer as a sign of how we would answer them in the same position.",
+  "ru": "Тезисы, подготовленные для правительства чиновниками, ведающими делами нашего блока:\\n\\nЕсли объединение состоится, земли и народ страны [SCOPE.sCountry('irr_proposed_target').GetName] станут частью страны [SCOPE.sCountry('irr_unifier').GetName], и блок сохранит их, только если страна [SCOPE.sCountry('irr_unifier').GetName] входит в число наших членов.\\nПравительство страны [SCOPE.sCountry('irr_proposed_target').GetName] сообщило нам, что открыто к предложению, поэтому наш отказ пошёл бы вразрез с его собственным желанием.\\nБлагословение действует пять лет, а затем стране [SCOPE.sCountry('irr_proposed_target').GetName] пришлось бы просить нас снова.\\nОтказ также действует пять лет, и всё это время страна [SCOPE.sCountry('irr_proposed_target').GetName] не вправе принимать объединение, пока остаётся в блоке.\\nДругие члены прочтут наш ответ как знак того, как мы ответили бы им в том же положении."
+ },
+ "irredentism.8.t": {
+  "en": "[SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union",
+  "ru": "Страна [SCOPE.sCountry('irr_proposed_target').GetName] рассматривает добровольное объединение"
+ },
+ "irredentism.9.d": {
+  "en": "[SCOPE.sCountry('irr_dc_annexer').GetName] has taken the lands of [SCOPE.sCountry('irr_dc_target').GetName], a decentralized power, into its own territory without a war. Its rule now reaches into a region where we hold interests of our own.",
+  "ru": "Страна [SCOPE.sCountry('irr_dc_annexer').GetName] без войны включила в свою территорию земли децентрализованной державы [SCOPE.sCountry('irr_dc_target').GetName]. Её власть теперь простирается на регион, где у нас есть собственные интересы."
+ },
+ "irredentism.9.f": {
+  "en": "The trader had come in with the news a day before any dispatch. Our agent in the region wrote it out as the trader told it: that officials of [SCOPE.sCountry('irr_dc_annexer').GetName] had arrived in the market towns of [SCOPE.sCountry('irr_dc_target').GetName] with flags and a list of the local leaders, that the leaders had been given letters to sign, and that most of them had signed. The agent asked which had not, and wrote those names down separately. Then he sealed the page in the bag for the capital and went to ask whether the trader would carry a second message on the way back.",
+  "ru": "Торговец пришёл с новостью на день раньше любой депеши. Наш агент в регионе записал её так, как рассказал торговец: что чиновники страны [SCOPE.sCountry('irr_dc_annexer').GetName] прибыли в торговые города страны [SCOPE.sCountry('irr_dc_target').GetName] с флагами и списком местных вождей, что вождям дали письма на подпись и что большинство подписало. Агент спросил, кто не подписал, и записал эти имена отдельно. Затем он запечатал страницу в мешок для столицы и пошёл спросить, не отвезёт ли торговец второе сообщение на обратном пути."
+ },
+ "irredentism.9.t": {
+  "en": "[SCOPE.sCountry('irr_dc_target').GetName] Integrated by [SCOPE.sCountry('irr_dc_annexer').GetName]",
+  "ru": "Страна [SCOPE.sCountry('irr_dc_target').GetName] включена в состав страны [SCOPE.sCountry('irr_dc_annexer').GetName]"
+ },
+ "mental_health_events.1.a": {
+  "en": "Mandate mental health leave",
+  "ru": "Ввести оплачиваемый отпуск по психическому здоровью"
+ },
+ "mental_health_events.1.b": {
+  "en": "Encourage resilience programs",
+  "ru": "Поощрять программы устойчивости"
+ },
+ "mental_health_events.1.c": {
+  "en": "It's not our problem",
+  "ru": "Это не наша проблема"
+ },
+ "mental_health_events.1.d": {
+  "en": "Doctors are signing more sick notes for exhaustion than for any illness of the body, and employers report whole departments working below strength. Long hours and the expectation of answering messages at any hour are named again and again in the notes. The medical associations have asked the government to treat it as a matter of public health.",
+  "ru": "Врачи выписывают больше больничных по истощению, чем по любым телесным болезням, а работодатели сообщают, что целые отделы работают не в полную силу. Долгие часы и ожидание ответа на сообщения в любое время суток снова и снова названы в заключениях. Медицинские ассоциации просят правительство рассматривать это как вопрос общественного здоровья."
+ },
+ "mental_health_events.1.f": {
+  "en": "The reasons a company doctor wrote on the sick notes she signed in one week, with her own remarks:\\n\\nExhaustion, a clerk in the accounts office. She has not taken a day off in two years, because there is no one to cover her desk.\\nChest pains, a warehouse supervisor, no heart trouble found. He works the night shift and then the morning meeting, and sleeps four hours.\\nMigraine, a sales manager, his third note this year. The migraines come at the end of each quarter, when the targets are counted.\\nExhaustion, a junior engineer. He wept in my office and apologized for it, and asked me not to write that down.\\nBack pain, a bus driver. The pain is real, but she also told me she dreads each morning, and I have written down both.",
+  "ru": "Причины, которые заводской врач записала в больничных листах, подписанных за одну неделю, и её собственные замечания:\\n\\nИстощение, служащая бухгалтерии. Уже два года не брала ни одного выходного, потому что некому заменить её за столом.\\nБоли в груди, начальник склада, болезни сердца не найдено. Он работает в ночную смену, потом идёт на утреннее совещание и спит четыре часа.\\nМигрень, менеджер по продажам, третий больничный за год. Мигрени приходят в конце каждого квартала, когда подсчитывают планы.\\nИстощение, младший инженер. Он плакал у меня в кабинете и извинялся за это и просил не записывать.\\nБоль в спине, водитель автобуса. Боль настоящая, но она ещё сказала, что с ужасом ждёт каждого утра, и я записала и то и другое."
+ },
+ "mental_health_events.1.t": {
+  "en": "The Burnout Epidemic",
+  "ru": "Эпидемия выгорания"
+ },
+ "mental_health_events.100.a": {
+  "en": "The system works fine",
+  "ru": "Система работает нормально"
+ },
+ "mental_health_events.100.b": {
+  "en": "Personal responsibility",
+  "ru": "Личная ответственность"
+ },
+ "mental_health_events.100.desc": {
+  "en": "Ten years after the mental health crisis was first raised, our courts still send the addicted and the ill to prison, and the care that would keep them out has not been built. The debate has ended without reform. Doctors and teachers who asked for more care have been told there will be none.",
+  "ru": "Через десять лет после того, как кризис психического здоровья был впервые поднят, наши суды по-прежнему отправляют зависимых и больных в тюрьмы, а помощь, которая удержала бы их от этого, не создана. Споры закончились без реформы. Врачам и учителям, просившим больше помощи, сказали, что её не будет."
+ },
+ "mental_health_events.100.f": {
+  "en": "\\\"The request for more counselors has been turned down again. What do I write to the schools?\\\"\\n\\n\\\"Write that the budget did not allow it. That is true.\\\"\\n\\n\\\"It was true the first time. Since then the waiting lists have doubled, and the courts go on sending people to prison who should have gone to a hospital, because the law still tells them to.\\\"\\n\\n\\\"The law is not ours to change. Our job is to spend what we are given, and we were given less. If you want to tell the schools the government is wrong, put your own name to the letter.\\\"\\n\\n\\\"Then I will write what you said, and I will send the waiting-list figures with it.\\\"",
+  "ru": "«В просьбе о дополнительных консультантах снова отказали. Что мне писать школам?»\\n\\n«Пишите, что бюджет не позволил. Это правда».\\n\\n«В первый раз это была правда. С тех пор списки ожидания удвоились, а суды продолжают отправлять в тюрьму тех, кому место в больнице, потому что закон всё ещё так велит».\\n\\n«Закон менять не нам. Наша работа — тратить то, что нам дали, а нам дали меньше. Если хотите сказать школам, что правительство неправо, поставьте под письмом своё имя».\\n\\n«Тогда я напишу то, что вы сказали, и приложу цифры по спискам ожидания»."
+ },
+ "mental_health_events.100.t": {
+  "en": "A Crisis Ignored",
+  "ru": "Проигнорированный кризис"
+ },
+ "mental_health_events.2.a": {
+  "en": "Fund youth services",
+  "ru": "Финансировать молодёжные службы"
+ },
+ "mental_health_events.2.b": {
+  "en": "Regulate social media",
+  "ru": "Регулировать социальные сети"
+ },
+ "mental_health_events.2.c": {
+  "en": "Blame the parents",
+  "ru": "Винить родителей"
+ },
+ "mental_health_events.2.d": {
+  "en": "More young people are harming themselves or attempting suicide than doctors have seen before, and the schools' counselors have waiting lists of weeks. Doctors and teachers point to social media and to the pressure of examinations. Parents want the government to pay for care and to do something about the platforms.",
+  "ru": "Больше молодых людей наносят себе вред или пытаются покончить с собой, чем врачи видели раньше, а у школьных консультантов списки ожидания на недели. Врачи и учителя указывают на социальные сети и давление экзаменов. Родители хотят, чтобы правительство оплачивало помощь и что-то сделало с платформами."
+ },
+ "mental_health_events.2.f": {
+  "en": "\\\"I am the only counselor for the schools in this district, and the board asked me to say in person what I put in my report. There are forty-three children on my waiting list. A child who asks to see me today will see me in about six weeks. Most of them come in saying they are worried about a friend, and most of the time the friend is them, and it takes the first half hour to get there. I can see six children a day if I do nothing else, and I have stopped doing anything else. Parents message me in the evenings and I answer, because I do not know who else they would ask. I am asking the board for two more counselors.\\\"",
+  "ru": "«Я единственный консультант для школ этого округа, и совет попросил меня лично рассказать то, что я изложил в отчёте. В моём списке ожидания сорок три ребёнка. Ребёнок, который просит о встрече сегодня, попадёт ко мне примерно через шесть недель. Большинство приходят и говорят, что беспокоятся за друга, и чаще всего друг — это они сами, и на то, чтобы к этому подойти, уходит первые полчаса. Я могу принимать шестерых детей в день, если больше ничем не заниматься, и я перестал заниматься чем-либо ещё. Родители пишут мне по вечерам, и я отвечаю, потому что не знаю, к кому им ещё обратиться. Я прошу совет о двух дополнительных консультантах»."
+ },
+ "mental_health_events.2.t": {
+  "en": "The Waiting List",
+  "ru": "Список ожидания"
+ },
+ "mental_health_events.200.a": {
+  "en": "Investing in minds pays dividends.",
+  "ru": "Вложения в умы приносят дивиденды."
+ },
+ "mental_health_events.200.d": {
+  "en": "[ROOT.GetCountry.GetName] now treats mental illness and addiction as matters for doctors rather than prisons. Clinics and counselors are paid for out of our social security, and the courts send the addicted to treatment rather than to a cell.",
+  "ru": "Страна [ROOT.GetCountry.GetName] теперь рассматривает психические болезни и зависимость как дело врачей, а не тюрем. Клиники и консультанты оплачиваются из нашего социального обеспечения, а суды направляют зависимых на лечение, а не в камеру."
+ },
+ "mental_health_events.200.f": {
+  "en": "The counselor unlocked the clinic at eight and turned the sign on the door. The building had been a shoe shop, and there were still marks on the floor where the shelves had stood. The first appointment was a bus driver whose employer had sent him after he stopped his bus in the middle of a bridge and could not drive on. The second was a woman a court had sent here instead of to prison. She arrived early and sat in her coat. \\\"You can take your coat off if you like,\\\" the counselor told her. \\\"We have an hour, and nobody is going to rush you.\\\" The woman kept it on and began, slowly, with the night she was arrested.",
+  "ru": "Консультант отпер клинику в восемь и перевернул табличку на двери. Здание было обувным магазином, и на полу ещё остались следы от стеллажей. Первым был водитель автобуса, которого прислал работодатель после того, как тот остановил автобус посреди моста и не смог ехать дальше. Второй была женщина, которую суд направил сюда вместо тюрьмы. Она пришла рано и сидела в пальто. «Можете снять пальто, если хотите, — сказал ей консультант. — У нас есть час, и никто вас не торопит». Женщина осталась в пальто и начала, медленно, с ночи, когда её арестовали."
+ },
+ "mental_health_events.200.t": {
+  "en": "A Healthier Nation",
+  "ru": "Здоровая нация"
+ },
+ "mental_health_events.3.a": {
+  "en": "Treat addiction as a public health issue",
+  "ru": "Рассматривать зависимость как вопрос общественного здоровья"
+ },
+ "mental_health_events.3.b": {
+  "en": "War on drugs",
+  "ru": "Война с наркотиками"
+ },
+ "mental_health_events.3.c": {
+  "en": "It's a personal choice",
+  "ru": "Это личный выбор"
+ },
+ "mental_health_events.3.d": {
+  "en": "Addiction is rising in every part of the country and in every class. Painkillers prescribed for injuries are being resold, and new synthetic drugs reach the cities faster than the police can name them. Doctors are also treating young people who cannot put down their screens. Emergency wards report more overdoses each month.",
+  "ru": "Зависимость растёт во всех частях страны и во всех классах. Обезболивающие, выписанные при травмах, перепродаются, а новые синтетические наркотики попадают в города быстрее, чем полиция успевает их назвать. Врачи также лечат молодых людей, которые не могут оторваться от экранов. Отделения неотложной помощи сообщают о всё большем числе передозировок каждый месяц."
+ },
+ "mental_health_events.3.f": {
+  "en": "\\\"I work the counter at a pharmacy. The same people come in with the same prescriptions from different doctors. I am supposed to notice, and I do, and then I have to decide what to do with what I have noticed.\\\"\\n\\n\\\"My son stopped coming down for dinner. He is in his room with the game until four in the morning, and when I took the screen away he put his fist through the door.\\\"\\n\\n\\\"We had three overdoses on the night shift. One was a boy of sixteen and one was a man in a good suit who gave us a false name. We brought all three round, and two of them left before morning.\\\"\\n\\n\\\"I have been clean for eleven months. The group I go to meets in the back of a community hall on Thursdays, and there are more chairs set out every week.\\\"",
+  "ru": "«Я работаю за прилавком в аптеке. Одни и те же люди приходят с одними и теми же рецептами от разных врачей. Я должна замечать, и я замечаю, а потом мне нужно решить, что делать с тем, что я заметила».\\n\\n«Мой сын перестал спускаться к ужину. Он сидит у себя в комнате с игрой до четырёх утра, а когда я забрала экран, он пробил кулаком дверь».\\n\\n«У нас было три передозировки за ночную смену. Одним был шестнадцатилетний мальчик, другим — мужчина в хорошем костюме, назвавший вымышленное имя. Мы привели в чувство всех троих, и двое ушли до утра».\\n\\n«Я чист уже одиннадцать месяцев. Группа, на которую я хожу, собирается по четвергам в задней комнате общинного зала, и стульев каждую неделю ставят всё больше»."
+ },
+ "mental_health_events.3.t": {
+  "en": "The Addiction Crisis",
+  "ru": "Кризис зависимостей"
+ },
+ "mental_health_events.4.a": {
+  "en": "Fund veteran mental health programs",
+  "ru": "Финансировать программы психического здоровья ветеранов"
+ },
+ "mental_health_events.4.b": {
+  "en": "The military handles its own",
+  "ru": "Армия справится сама"
+ },
+ "mental_health_events.4.c": {
+  "en": "Deny the problem exists",
+  "ru": "Отрицать существование проблемы"
+ },
+ "mental_health_events.4.d": {
+  "en": "Soldiers home from the fighting are coming to the hospitals with sleeplessness and panic, and the waiting lists for treatment run to months. Families say the people they took back are not the ones who left. The army's doctors say their services were never built for this many.",
+  "ru": "Солдаты, вернувшиеся домой с войны, приходят в больницы с бессонницей и паникой, а списки ожидания лечения растянулись на месяцы. Семьи говорят, что вернувшиеся не те, кто уходил. Армейские врачи говорят, что их службы никогда не создавались для такого числа."
+ },
+ "mental_health_events.4.f": {
+  "en": "The veteran's wife woke at three and found his side of the bed empty again. She found him where she usually did, in the garage with the light on, cleaning tools that were already clean and hanging them back on the board in the same order. She stood in the doorway for a while. He did not look up. She did not ask him to come back to bed, because the last time she asked he had not spoken to her for a day. She went back upstairs and lay awake, and a little before five she heard the garage light click off and his steps on the stairs.",
+  "ru": "Жена ветерана проснулась в три и снова нашла его сторону кровати пустой. Она нашла его там, где обычно, в гараже при включённом свете: он чистил инструменты, уже чистые, и развешивал их на доске в том же порядке. Она постояла в дверях. Он не поднял глаз. Она не попросила его вернуться в постель, потому что в прошлый раз, когда она попросила, он не говорил с ней весь день. Она поднялась обратно и лежала без сна, а незадолго до пяти услышала, как щёлкнул выключатель в гараже и по лестнице зазвучали его шаги."
+ },
+ "mental_health_events.4.t": {
+  "en": "Home from the Fighting",
+  "ru": "Домой с войны"
+ },
+ "mental_health_events.5.a": {
+  "en": "Reform to community-based care",
+  "ru": "Реформа в сторону общинной помощи"
+ },
+ "mental_health_events.5.b": {
+  "en": "Increase oversight and funding",
+  "ru": "Усилить надзор и финансирование"
+ },
+ "mental_health_events.5.c": {
+  "en": "Suppress the story",
+  "ru": "Замять историю"
+ },
+ "mental_health_events.5.d": {
+  "en": "A newspaper has published photographs from inside our state psychiatric hospitals: patients tied to their beds for whole shifts, and wards that have not been cleaned in days. Readers are writing in to demand that the hospitals be reformed or closed, and the staff say they have asked for more nurses for years.",
+  "ru": "Газета опубликовала фотографии из наших государственных психиатрических больниц: пациенты, привязанные к кроватям на целые смены, и палаты, которые не убирали несколько дней. Читатели пишут с требованием реформировать больницы или закрыть их, а персонал говорит, что годами просил больше медсестёр."
+ },
+ "mental_health_events.5.f": {
+  "en": "To the editor, from a night nurse at one of the hospitals in your report. Everything your photographs showed is true, and I want your readers to know how it happens. On my ward there are two of us at night for forty patients. When a patient becomes violent there is no one to call, so we use the restraints, and then there is no one free to take them off when the patient is calm. The rule says an hour. Some nights it has been the whole shift. We have written to the director about it more than once and were told there was no money for more staff. I am not signing my name, because I need this job. I ask you to print this beside your next report.",
+  "ru": "Редактору от ночной медсестры одной из больниц из вашего репортажа. Всё, что показали ваши фотографии, правда, и я хочу, чтобы ваши читатели знали, как это происходит. В моём отделении ночью нас двое на сорок пациентов. Когда пациент становится буйным, звать некого, поэтому мы используем ремни, а потом некому освободить пациента, когда он успокоился. Правило гласит: час. В некоторые ночи это была вся смена. Мы не раз писали об этом директору и получали ответ, что денег на дополнительный персонал нет. Своего имени я не ставлю, потому что мне нужна эта работа. Прошу вас напечатать это рядом со следующим репортажем."
+ },
+ "mental_health_events.5.t": {
+  "en": "The Photographs",
+  "ru": "Фотографии"
+ },
+ "ministry_law_events.1.a": {
+  "en": "Fill every desk now. We can weed them out later.",
+  "ru": "Заполнить все места сейчас. Отсеять лишних можно потом."
+ },
+ "ministry_law_events.1.b": {
+  "en": "Staff it gradually to ensure quality.",
+  "ru": "Набирать постепенно, чтобы обеспечить качество."
+ },
+ "ministry_law_events.1.d": {
+  "en": "While we are enacting [SCOPE.sLaw('current_law_scope').GetName], the government has begun hiring the new ministry's staff. Notices for clerks, administrators and heads of department have gone up wherever the government posts its notices. Applications are arriving faster than they can be sorted, from people who have run an office and from many who have never worked in one.",
+  "ru": "Пока мы вводим закон [SCOPE.sLaw('current_law_scope').GetName], правительство начало набирать штат нового министерства. Объявления о клерках, администраторах и начальниках отделов появились везде, где правительство вывешивает свои объявления. Заявления поступают быстрее, чем их успевают разбирать, от тех, кто руководил учреждением, и от многих, кто никогда не работал ни в одном."
+ },
+ "ministry_law_events.1.f": {
+  "en": "Positions the new ministry must fill before it opens, from the circular sent to every office of the government:\\n\\nSenior administrators, to take charge of its divisions. Applicants should have run an office of the state before, since the ministry will open with work already waiting for it.\\nHeads of department, one for each section of the law. Each section gives the ministry a duty, and each duty needs someone to answer for it.\\nA doorkeeper and porters, to keep the building and carry files between it and the other offices.\\nClerks, as many as the budget allows. Every letter the ministry receives must be registered, answered and filed, and other offices have already begun sending theirs.\\nCopyists, for the first year at least. Until the ministry has records of its own, everything it needs must be copied from the files of the offices that did the work before it.",
+  "ru": "Должности, которые новое министерство должно заполнить до открытия, из циркуляра, разосланного во все учреждения правительства:\\n\\nСтаршие администраторы, чтобы возглавить его отделы. Кандидаты должны ранее руководить государственным учреждением, поскольку министерство откроется с уже ожидающей его работой.\\nНачальники отделов, по одному на каждый раздел закона. Каждый раздел возлагает на министерство обязанность, и за каждую обязанность должен отвечать кто-то.\\nПривратник и носильщики, чтобы содержать здание и носить дела между ним и другими учреждениями.\\nКлерки, сколько позволит бюджет. Каждое письмо, поступающее в министерство, должно быть зарегистрировано, получить ответ и быть подшито, а другие учреждения уже начали присылать свои.\\nПереписчики, по крайней мере на первый год. Пока у министерства нет собственных архивов, всё необходимое должно переписываться из дел учреждений, выполнявших эту работу до него."
+ },
+ "ministry_law_events.1.t": {
+  "en": "Staffing the New Ministry",
+  "ru": "Набор штата нового министерства"
+ },
+ "ministry_law_events.10.a": {
+  "en": "Industry will have to adapt. The environment cannot wait.",
+  "ru": "Промышленности придётся приспособиться. Природа ждать не может."
+ },
+ "ministry_law_events.10.b": {
+  "en": "Offer industry a seat at the table.",
+  "ru": "Предложить промышленности место за столом."
+ },
+ "ministry_law_events.10.d": {
+  "en": "The [SCOPE.gsInterestGroup('industrialists_ig').GetName] are campaigning against [SCOPE.sLaw('current_law_scope').GetName]. They say limits on smoke and waste will raise costs and close plants, and that jobs will go with them. Reports of fouled water and of smoke hanging over the factory towns have brought the law's supporters out in turn.",
+  "ru": "Группа интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] ведёт кампанию против закона [SCOPE.sLaw('current_law_scope').GetName]. Она утверждает, что ограничения на дым и отходы повысят издержки и закроют заводы, а вместе с ними уйдут рабочие места. Сообщения о загрязнённой воде и дыме, висящем над фабричными городами, в свою очередь, подняли сторонников закона."
+ },
+ "ministry_law_events.10.f": {
+  "en": "\\\"I farm the fields beside the factory, and I have come to tell the officials drafting this law what the works have done to my land. My family farmed that ground before the works were built. When they came, the owners told us there would be work for our sons, and there was. Now the well water tastes of the works, the cabbages come up spotted, and my grandchildren cough through the night. I do not want the factory closed. Half my village works in it. I want someone with the authority to go inside and tell them where to put their waste, and I want that person not to be paid by the owner.\\\"",
+  "ru": "«Я обрабатываю поля рядом с фабрикой и пришёл рассказать чиновникам, составляющим этот закон, что заводы сделали с моей землёй. Моя семья пахала эту землю до постройки заводов. Когда они пришли, владельцы сказали нам, что будет работа для наших сыновей, и она была. Теперь вода в колодце на вкус как завод, капуста растёт в пятнах, а мои внуки кашляют всю ночь. Я не хочу, чтобы фабрику закрыли. Там работает полдеревни. Я хочу, чтобы кто-то с полномочиями вошёл внутрь и сказал им, куда девать свои отходы, и чтобы этому человеку платил не владелец»."
+ },
+ "ministry_law_events.10.t": {
+  "en": "The Smokestack Question",
+  "ru": "Вопрос о дымовых трубах"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "ru": "Пусть маршируют мирно"
