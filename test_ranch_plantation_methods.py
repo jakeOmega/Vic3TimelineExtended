@@ -9,8 +9,9 @@ tobacco. The mod answers with (docs/systems/mod_systems/production_methods.md
   Hormones, era 9; Gene-Edited Livestock, era 11), which Intensive Wool Gathering and
   Antibiotic Growth Promoters unlock on;
 - Antibiotic Growth Promoters moved out of vanilla's Wool Production into a Feed Additives group
-  of its own (owner, 2026-11-15), adding what it added over Intensive Wool Gathering, and a
-  Drugs input;
+  of its own, adding what it added over Intensive Wool Gathering, and a Drugs input (PR #1828:
+  the owner asked for the Drugs and found the old placement odd; the group and the 2 Drugs are
+  the PR's choices);
 - two tiers in the ranch's Herd Management group, vanilla's Fencing (Mechanized Feeding Lines,
   era 7; Robotic Barns, era 10, robotic, so Human Labor Quotas withdraws it);
 - a Harvesting Process group on every plantation-type building (Hand Harvesting, Mechanical
@@ -290,7 +291,7 @@ class RanchTest(unittest.TestCase):
 
 
 class FeedAdditivesTest(unittest.TestCase):
-    """Antibiotic Growth Promoters in a group of its own (owner, 2026-11-15)."""
+    """Antibiotic Growth Promoters in a group of its own (PR #1828)."""
 
     def test_the_promoters_have_a_group_of_their_own_and_wool_production_is_vanillas(self):
         data = _data()

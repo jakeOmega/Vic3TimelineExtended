@@ -14953,15 +14953,17 @@ pm_metamaterial_explosives = {
 	required_input_goods = electricity
 }
 
-# Feed Additives (pmg_feed_additives_building_livestock_ranch; owner,
-# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
-# ranches and plantations"). Antibiotic Growth Promoters was the top method of
-# vanilla's Wool Production, in place of Intensive Wool Gathering. In a group
+# Feed Additives (pmg_feed_additives_building_livestock_ranch;
+# docs/systems/mod_systems/production_methods.md § "Livestock ranches and
+# plantations"). Antibiotic Growth Promoters was the top method of vanilla's
+# Wool Production, in place of Intensive Wool Gathering, a placement the owner
+# found odd (PR #1828); the group of its own is that PR's answer. In a group
 # of its own it adds what it added over that method: 15 wool and 35 meat for
 # 25 grain and 10 Chemicals, plus 7.5 grain for the 5 Chemicals (manure)
 # Intensive Wool Gathering keeps making beside it, so a ranch on both earns
-# what it earned on the promoters alone. The antibiotic itself is 2 Drugs a
-# level (owner, 2026-11-15), about the hormone tier's share of its input cost.
+# what it earned on the promoters alone. The antibiotic itself is Drugs, as
+# the owner asked (PR #1828); the 2 a level is the PR's figure, about the
+# hormone tier's share of its input cost.
 pm_plain_feed = {
 	texture = "gfx/interface/icons/production_method_icons/simple_farming.dds"
 }

@@ -318,7 +318,8 @@ INJECT:pmg_fencing = {
 }
 # Feed Additives: Antibiotic Growth Promoters, which sat in vanilla's Wool
 # Production (pmg_sheep_ranch) as its top tier although it adds meat too, in a
-# group of its own (owner, 2026-11-15), so it stacks on any wool method and
+# group of its own (PR #1828, after the owner found the placement odd), so it
+# stacks on any wool method and
 # Wool Production is vanilla's again. Its wool is the 15 it added over
 # Intensive Wool Gathering, so the two make what it made alone. Attached in
 # common/buildings/extra_buildings.txt.

@@ -671,7 +671,7 @@ INJECT:building_millet_farm = {
 }
 
 # Feed Additives for the Livestock Ranch, Antibiotic Growth Promoters' group of
-# its own (owner, 2026-11-15; docs/systems/mod_systems/production_methods.md
+# its own (PR #1828; docs/systems/mod_systems/production_methods.md
 # § "Livestock ranches and plantations"). Group in extra_pm_groups.txt.
 INJECT:building_livestock_ranch = {
 	production_method_groups = {
