@@ -979,17 +979,68 @@ class InstitutionHookTest(unittest.TestCase):
         for o in (1, 2, 3, 4):
             self.assertIn(f"var:te_tax_o{o}_kind = 1", owes)
 
+    # vanilla 1.15.1's 03_political_strategies.txt, every strategy in it
+    POLITICAL_STRATEGIES = {
+        "ai_strategy_conservative_agenda", "ai_strategy_reactionary_agenda", "ai_strategy_progressive_agenda",
+        "ai_strategy_egalitarian_agenda", "ai_strategy_nationalist_agenda", "ai_strategy_maintain_mandate_of_heaven",
+        "ai_strategy_tanzimat_reforms", "ai_strategy_meiji_restoration", "ai_strategy_great_reforms",
+        "ai_strategy_consolidation_agenda", "ai_strategy_confrontation_agenda",
+    }
+
+    @classmethod
+    def political_institution_touches(cls, text):
+        """Each political strategy a REPLACE of any form names, and each one an INJECT of any form (TRY_INJECT,
+        INJECT_OR_CREATE) gives an institution_scores block, every match read on its own body."""
+        text = re.sub(r"#[^\n]*", "", text)
+        found = []
+        for m in re.finditer(r"(?m)^((?:TRY_)?(?:INJECT|REPLACE)(?:_OR_CREATE)?):(ai_strategy_\w+)\s*=\s*\{", text):
+            directive, name = m.groups()
+            if name not in cls.POLITICAL_STRATEGIES:
+                continue
+            if "REPLACE" in directive or "institution_scores" in text[m.end():close(text, m.end() - 1)]:
+                found.append(f"{directive}:{name}")
+        return found
+
     def test_no_political_strategy_institution_scores_are_touched(self):
-        # The agendas score schools and health themselves, and whether an INJECT into their nested institution_scores
-        # sums or replaces is unread (spec §2.8). An agenda INJECT of another field (the AI law cadence's
+        # The political strategies score schools and health themselves, and whether an INJECT into their nested
+        # institution_scores sums or replaces is unread (spec §2.8). An INJECT of another field (the AI law cadence's
         # revolution_aversion, edited_political_strategies.txt) leaves them alone; a REPLACE would restate them.
-        import pathlib
-        for f in pathlib.Path(__file__).parent.glob("common/ai_strategies/*.txt"):
-            text = re.sub(r"#[^\n]*", "", f.read_text(encoding="utf-8-sig"))
+        for f in sorted((ROOT / "common/ai_strategies").glob("*.txt")):
             with self.subTest(file=f.name):
-                self.assertNotRegex(text, r"REPLACE\w*:ai_strategy_\w+_agenda")
-                for m in re.finditer(r"(?m)^INJECT:(ai_strategy_\w+_agenda)\s*=", text):
-                    self.assertNotIn("institution_scores", block(text, "INJECT:" + m.group(1)), m.group(1))
+                self.assertEqual(self.political_institution_touches(f.read_text(encoding="utf-8-sig")), [])
+
+    def test_the_political_strategy_list_is_the_game_files(self):
+        try:
+            from path_constants import base_game_path
+        except Exception:
+            self.skipTest("no path_constants")
+        path = Path(base_game_path) / "game/common/ai_strategies/03_political_strategies.txt"
+        if not path.is_file():
+            self.skipTest("no Victoria 3 install")
+        names = set(re.findall(r"(?m)^(ai_strategy_\w+)\s*=\s*\{", path.read_text(encoding="utf-8-sig")))
+        self.assertEqual(names, self.POLITICAL_STRATEGIES)
+
+    def test_the_political_strategy_guard_catches_each_form(self):
+        aversion = "INJECT:ai_strategy_egalitarian_agenda = {\n\trevolution_aversion = { value = 35 }\n}\n"
+        scores = "{\n\tinstitution_scores = {\n\t\tinstitution_schools = { value = 10 }\n\t}\n}\n"
+        cases = {
+            "a second INJECT of one agenda": (aversion + "INJECT:ai_strategy_egalitarian_agenda = " + scores,
+                                              ["INJECT:ai_strategy_egalitarian_agenda"]),
+            "TRY_INJECT": ("TRY_INJECT:ai_strategy_progressive_agenda = " + scores,
+                           ["TRY_INJECT:ai_strategy_progressive_agenda"]),
+            "INJECT_OR_CREATE": ("INJECT_OR_CREATE:ai_strategy_nationalist_agenda = " + scores,
+                                 ["INJECT_OR_CREATE:ai_strategy_nationalist_agenda"]),
+            "Mandate of Heaven": ("INJECT:ai_strategy_maintain_mandate_of_heaven = " + scores,
+                                  ["INJECT:ai_strategy_maintain_mandate_of_heaven"]),
+            "a REPLACE of any field": (aversion.replace("INJECT:", "REPLACE:"),
+                                       ["REPLACE:ai_strategy_egalitarian_agenda"]),
+            "an aversion INJECT alone": (aversion, []),
+            "the default strategy's own scores": ("INJECT:ai_strategy_default = " + scores, []),
+            "a commented-out INJECT": ("# INJECT:ai_strategy_great_reforms = " + scores.replace("\n", "\n# "), []),
+        }
+        for label, (text, expected) in cases.items():
+            with self.subTest(label):
+                self.assertEqual(self.political_institution_touches(text), expected)
 
     # -- beyond the brief's sample ------------------------------------------
 
