@@ -3,6 +3,18 @@
   "en": "American",
   "ru": "Американская"
  },
+ "cm_american_cultural_acceptance_modifier_negative": {
+  "en": "$cm_american$ Cultural Acceptance",
+  "ru": "Культурное принятие: $cm_american$"
+ },
+ "cm_american_fervor_target_modifier_negative": {
+  "en": "$cm_american$ Fervor Target",
+  "ru": "Целевой пыл: $cm_american$"
+ },
+ "cm_american_standard_of_living_modifier_negative": {
+  "en": "$cm_american$ Standard of Living",
+  "ru": "Уровень жизни: $cm_american$"
+ },
  "cm_andean": {
   "en": "Andean",
   "ru": "Андская"
@@ -87,37 +99,169 @@
   "en": "Cultural Merge: $cm_american$",
   "ru": "Слияние культур: $cm_american$"
  },
+ "je_te_cm_american_complete_conclusion_desc": {
+  "en": "The merge is complete. $cm_american$ is the national culture across the sphere, and the cultures it brought in are one people.",
+  "ru": "Слияние завершено. Культура $cm_american$ стала национальной во всей сфере, а вошедшие в неё культуры — единый народ."
+ },
+ "je_te_cm_american_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $yankee$ and $dixie$. Over the decades their pops become $cm_american$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $afro_american$ pops can join once they qualify as well, and only once the $law_slavery_banned$ law is in force. The merge begins only once slavery is settled one way or the other, and any civil war over it has ended: the $law_slavery_banned$ law with $je_acw_countdown$ over, or slavery legal in every state under $law_slave_trade$ or $law_debt_slavery$. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $yankee$ и $dixie$. Со временем их население переходит в культуру «$cm_american$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $afro_american$ тоже может присоединиться, когда будет соответствовать условиям, но только при действующем законе «$law_slavery_banned$». Слияние начнётся, только когда вопрос рабства будет так или иначе решён и закончится любая гражданская война из-за него: либо действует закон «$law_slavery_banned$» и завершилась «$je_acw_countdown$», либо рабство легально во всех областях по закону «$law_slave_trade$» или «$law_debt_slavery$». Слияние приостанавливается, как только это перестаёт выполняться."
+ },
+ "je_te_cm_american_status_accept_dixie": {
+  "en": "$dixie$ pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
+  "ru": "Население культуры $dixie$ принято не полностью там, где живут многие из них: его принятие в нашей сфере ниже уровня «$full_acceptance$» ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), а «$second_rate_citizen$» недостаточно."
+ },
+ "je_te_cm_american_status_busy_1": {
+  "en": "$yankee$ pops are already part of another merge, which has to finish with them first.",
+  "ru": "Население культуры $yankee$ уже участвует в другом слиянии, которое должно сначала завершиться для него."
+ },
+ "je_te_cm_american_status_complete": {
+  "en": "The merge is complete: $cm_american$ is the national culture across the sphere. Cultures that qualify later can still join.",
+  "ru": "Слияние завершено: культура $cm_american$ стала национальной во всей сфере. Культуры, которые соответствуют условиям позже, всё равно смогут присоединиться."
+ },
+ "je_te_cm_american_status_gate": {
+  "en": "A house divided against itself cannot stand. While slavery is legal in some states and not in others, these peoples stay apart. The merge begins once slavery is banned and $je_acw_countdown$ is over, or once it is legal in every state under $law_slave_trade$ or $law_debt_slavery$, and any civil war over it has ended.",
+  "ru": "Дом, разделённый в себе, не устоит. Пока рабство легально в одних областях и запрещено в других, эти народы остаются порознь. Слияние начнётся, когда рабство будет запрещено и завершится «$je_acw_countdown$», либо когда оно станет легальным во всех областях по закону «$law_slave_trade$» или «$law_debt_slavery$», а любая гражданская война из-за него закончится."
+ },
+ "je_te_cm_american_status_hold_dixie": {
+  "en": "$dixie$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
+  "ru": "Население культуры $dixie$ вне досягаемости: наша сфера удерживает лишь [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] его в исторической родине, а требуется [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0]."
+ },
+ "je_te_cm_american_status_late": {
+  "en": "The merge is complete for its core cultures, and $cm_american$ is their national culture. A culture that joined later is still converting: in its homeland $cm_american$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_american_lowest_dom_all')|%0] of the pops, and at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
+  "ru": "Слияние завершено для основных культур, и $cm_american$ — их национальная культура. Культура, присоединившаяся позже, всё ещё переходит: в её исторической родине культура $cm_american$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_american_lowest_dom_all')|%0] населения, а при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
+ },
+ "je_te_cm_american_status_paused": {
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. Slavery is settled one way or the other, and any civil war over it has ended: the $law_slavery_banned$ law with $je_acw_countdown$ over, or slavery legal in every state under $law_slave_trade$ or $law_debt_slavery$.",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Вопрос рабства решён так или иначе, а любая гражданская война из-за него закончилась: либо действует закон «$law_slavery_banned$» и завершилась «$je_acw_countdown$», либо рабство легально во всех областях по закону «$law_slave_trade$» или «$law_debt_slavery$»."
+ },
+ "je_te_cm_american_status_running": {
+  "en": "The merge is running. In the homeland of the least converted constituent culture, $cm_american$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_american_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
+  "ru": "Слияние идёт. В исторической родине наименее перешедшей составляющей культуры культура $cm_american$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_american_lowest_dom')|%0] населения; при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
+ },
+ "je_te_cm_american_status_sol_close": {
+  "en": "The core cultures' standards of living are close enough now: the gap between the best and the worst off is [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1], under [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_sol_gap_open')|0]. The next yearly census will count it.",
+  "ru": "Уровень жизни основных культур теперь достаточно сближен: разрыв между самой благополучной и самой бедной составляет [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1], что меньше [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_sol_gap_open')|0]. Его учтёт следующая ежегодная перепись населения."
+ },
+ "je_te_cm_american_status_sol_wide": {
+  "en": "The core cultures live at standards of living too far apart: [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_american').GetCulture.GetName] pops are the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_american').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_american').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_american').GetValue|1]. The gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1] must be under [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin.",
+  "ru": "Уровень жизни основных культур слишком различен: население культуры [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_american').GetCulture.GetName] живёт лучше всего ([ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_american').GetValue|1]), а население культуры [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_american').GetCulture.GetName] — хуже всего ([ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_american').GetValue|1]). Чтобы слияние началось, разрыв в [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1] должен быть меньше [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_sol_gap_open')|0]."
+ },
+ "je_te_cm_american_status_wait_dixie": {
+  "en": "The merge waits while a country still has $je_acw_reincorporate$ open. It goes ahead after [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_wait_cap_years')|0] years at most.",
+  "ru": "Слияние ждёт, пока в какой-либо стране открыта «$je_acw_reincorporate$». Максимальное ожидание: [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_wait_cap_years')|0] г."
+ },
  "je_te_cm_andean": {
   "en": "Cultural Merge: $cm_andean$",
   "ru": "Слияние культур: $cm_andean$"
+ },
+ "je_te_cm_andean_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $north_andean$, $south_andean$, $peruvian$ and $bolivian$. Over the decades their pops become $cm_andean$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once we have formed $PBC$ or $FND$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $north_andean$, $south_andean$, $peruvian$ и $bolivian$. Со временем их население переходит в культуру «$cm_andean$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда мы образуем государство $PBC$ или $FND$."
+ },
+ "je_te_cm_andean_status_gate": {
+  "en": "Peru and Bolivia were one confederation until war split them, and only a union can undo what separate statehood made. The merge begins once we have formed $PBC$ or $FND$.",
+  "ru": "Перу и Боливия были единой конфедерацией, пока война не разделила их, и исправить то, что создала отдельная государственность, может лишь союз. Слияние начнётся, когда мы образуем государство $PBC$ или $FND$."
  },
  "je_te_cm_anglophone": {
   "en": "Cultural Merge: $cm_anglophone$",
   "ru": "Слияние культур: $cm_anglophone$"
  },
+ "je_te_cm_anglophone_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $british$ and $yankee$ (or $cm_american$). Over the decades their pops become $cm_anglophone$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $anglo_canadian$, $australian$, $scottish$, $dixie$ and $afro_american$ pops can join once they qualify as well. The merge begins only once the $law_slavery_banned$ law is in force. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $british$ и $yankee$ (или культура $cm_american$). Со временем их население переходит в культуру «$cm_anglophone$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $anglo_canadian$, $australian$, $scottish$, $dixie$ и $afro_american$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда действует закон «$law_slavery_banned$». Оно приостанавливается, как только это перестаёт выполняться."
+ },
+ "je_te_cm_anglophone_status_accept_british": {
+  "en": "$british$ pops are not accepted highly enough where many of them live: their acceptance in our sphere is below [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_high_open')|0], beyond the $full_acceptance$ a more closely related culture needs.",
+  "ru": "Население культуры $british$ принято недостаточно высоко там, где живут многие из них: его принятие в нашей сфере ниже [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_high_open')|0], то есть выше уровня «$full_acceptance$», который требуется более близкой культуре."
+ },
+ "je_te_cm_anglophone_status_busy_1": {
+  "en": "$british$ is still forming in its own merge, which has to finish first.",
+  "ru": "Культура $british$ ещё формируется в собственном слиянии, которое должно завершиться первым."
+ },
+ "je_te_cm_anglophone_status_busy_2": {
+  "en": "$yankee$ or $cm_american$ pops are already part of another merge, which has to finish with them first.",
+  "ru": "Население культур $yankee$ или $cm_american$ уже участвует в другом слиянии, которое должно сначала завершиться для него."
+ },
+ "je_te_cm_anglophone_status_gate": {
+  "en": "No common identity was ever on offer between a free country and a slaveholding one. The merge begins once the $law_slavery_banned$ law is in force.",
+  "ru": "Общей идентичности между свободной страной и страной рабовладельцев никогда не предлагалось. Слияние начнётся, когда будет действовать закон «$law_slavery_banned$»."
+ },
+ "je_te_cm_anglophone_status_paused": {
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_slavery_banned$ law is in force.",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Действует закон «$law_slavery_banned$»."
+ },
+ "je_te_cm_anglophone_status_years_british": {
+  "en": "$british$ pops have not been held and accepted together long enough: [ROOT.GetCountry.MakeScope.Var('te_cm_years_anglophone_british').GetValue|0] of [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_years_tier2')|0] years.",
+  "ru": "Население культуры $british$ ещё недостаточно долго удерживается и принимается вместе: [ROOT.GetCountry.MakeScope.Var('te_cm_years_anglophone_british').GetValue|0] из [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_years_tier2')|0] г."
+ },
  "je_te_cm_arab": {
   "en": "Cultural Merge: $cm_arab$",
   "ru": "Слияние культур: $cm_arab$"
+ },
+ "je_te_cm_arab_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$. Over the decades their pops become $cm_arab$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $sudanese$, $haratin$ and $bidan$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$. Со временем их население переходит в культуру «$cm_arab$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $sudanese$, $haratin$ и $bidan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться."
+ },
+ "je_te_cm_arab_status_gate": {
+  "en": "The shared standard language spread through the schools and broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.",
+  "ru": "Общий литературный язык распространился через школы и вещание независимых государств, а не под иностранной властью. Слияние начнётся, когда мы не будем зависимым государством другой страны и будет действовать закон «$law_public_schools$»."
+ },
+ "je_te_cm_arab_status_paused": {
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force.",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
  },
  "je_te_cm_brazilian": {
   "en": "Cultural Merge: $brazilian$",
   "ru": "Слияние культур: $brazilian$"
  },
+ "je_te_cm_brazilian_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $nordestino$, $paulista$, $amazonic$ and $sulista$ pops would become part of the existing $brazilian$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $afro_brazilian$ pops can join once they qualify as well, and only once the $law_slavery_banned$ law is in force.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $nordestino$, $paulista$, $amazonic$ и $sulista$ вольётся в существующую культуру $brazilian$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $afro_brazilian$ тоже может присоединиться, когда будет соответствовать условиям, но только при действующем законе «$law_slavery_banned$»."
+ },
  "je_te_cm_british": {
   "en": "Cultural Merge: $british$",
   "ru": "Слияние культур: $british$"
+ },
+ "je_te_cm_british_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $scottish$ pops would become part of the existing $british$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $scottish$ вольётся в существующую культуру $british$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры."
  },
  "je_te_cm_chinese": {
   "en": "Cultural Merge: $han$",
   "ru": "Слияние культур: $han$"
  },
+ "je_te_cm_chinese_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $yue$, $min$ and $hakka$ pops would become part of the existing $han$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once the $law_public_schools$ law is in force. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $yue$, $min$ и $hakka$ вольётся в существующую культуру $han$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться."
+ },
+ "je_te_cm_chinese_status_gate": {
+  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. The merge begins once the $law_public_schools$ law is in force.",
+  "ru": "Столь разные разговорные языки уступили единому лишь тогда, когда школы стали учить национальному стандарту в каждой деревне. Слияние начнётся, когда будет действовать закон «$law_public_schools$»."
+ },
  "je_te_cm_czechoslovak": {
   "en": "Cultural Merge: $cm_czechoslovak$",
   "ru": "Слияние культур: $cm_czechoslovak$"
  },
+ "je_te_cm_czechoslovak_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $czech$ and $slovak$. Over the decades their pops become $cm_czechoslovak$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $sorb$ pops can join once they qualify as well. The merge begins only once we have formed $CZH$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $czech$ и $slovak$. Со временем их население переходит в культуру «$cm_czechoslovak$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $sorb$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы образуем государство $CZH$."
+ },
+ "je_te_cm_czechoslovak_status_gate": {
+  "en": "One people was ruled from Vienna and the other from Budapest. A single nation was the doctrine of the republic they founded together. The merge begins once we have formed $CZH$.",
+  "ru": "Один народ управлялся из Вены, другой — из Будапешта. Единая нация была доктриной основанной ими вместе республики. Слияние начнётся, когда мы образуем государство $CZH$."
+ },
  "je_te_cm_dravidian": {
   "en": "Cultural Merge: $cm_dravidian$",
   "ru": "Слияние культур: $cm_dravidian$"
+ },
+ "je_te_cm_dravidian_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $tamil$, $kannada$ and $malayalam$. Over the decades their pops become $cm_dravidian$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $telegu$ pops can join once they qualify as well. The merge begins only once we have formed $DRA$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $tamil$, $kannada$ и $malayalam$. Со временем их население переходит в культуру «$cm_dravidian$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $telegu$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы образуем государство $DRA$."
+ },
+ "je_te_cm_dravidian_status_gate": {
+  "en": "Four literary languages divide the south, and each won a state of its own. Only the movement for a southern nation ever claimed them as one people. The merge begins once we have formed $DRA$.",
+  "ru": "Четыре литературных языка делят юг, и каждый обрёл собственное государство. Лишь движение за южную нацию когда-либо считало их единым народом. Слияние начнётся, когда мы образуем государство $DRA$."
  },
  "je_te_cm_dutch": {
   "en": "Cultural Merge: $dutch$",
@@ -127,13 +271,33 @@
   "en": "Cultural Merge: $cm_east_african$",
   "ru": "Слияние культур: $cm_east_african$"
  },
+ "je_te_cm_east_african_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $swahili$, $nyamwezi$ and $sukuma$. Over the decades their pops become $cm_east_african$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $yao$, $makua$, $lacustrine_bantu$ and $kikuyu$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $swahili$, $nyamwezi$ и $sukuma$. Со временем их население переходит в культуру «$cm_east_african$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $yao$, $makua$, $lacustrine_bantu$ и $kikuyu$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться."
+ },
  "je_te_cm_east_slavic": {
   "en": "Cultural Merge: $cm_east_slavic$",
   "ru": "Слияние культур: $cm_east_slavic$"
  },
+ "je_te_cm_east_slavic_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $russian$, $ukrainian$ and $byelorussian$. Over the decades their pops become $cm_east_slavic$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $russian$, $ukrainian$ и $byelorussian$. Со временем их население переходит в культуру «$cm_east_slavic$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры."
+ },
  "je_te_cm_filipino": {
   "en": "Cultural Merge: $filipino$",
   "ru": "Слияние культур: $filipino$"
+ },
+ "je_te_cm_filipino_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $visayan$, $tagalog$ and $ilocano$ pops would become part of the existing $filipino$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once we are not a subject of another country. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $visayan$, $tagalog$ и $ilocano$ вольётся в существующую культуру $filipino$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда мы не являемся зависимым государством другой страны. Оно приостанавливается, как только это перестаёт выполняться."
+ },
+ "je_te_cm_filipino_status_gate": {
+  "en": "A national culture here was the work of the independence movement and the state it won, not of foreign rule. The merge begins once we are not a subject of another country.",
+  "ru": "Национальная культура здесь была делом движения за независимость и завоёванного им государства, а не иностранного господства. Слияние начнётся, когда мы не будем зависимым государством другой страны."
+ },
+ "je_te_cm_filipino_status_paused": {
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country.",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны."
  },
  "je_te_cm_finnish": {
   "en": "Cultural Merge: $finnish$",
@@ -143,17 +307,41 @@
   "en": "Cultural Merge: $french$",
   "ru": "Слияние культур: $french$"
  },
+ "je_te_cm_french_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $occitan$ pops would become part of the existing $french$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $wallonian$ and $catalan$ pops can join once they qualify as well. The merge begins only once the $law_public_schools$ law is in force. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $occitan$ вольётся в существующую культуру $french$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $wallonian$ и $catalan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться."
+ },
  "je_te_cm_german": {
   "en": "Cultural Merge: $cm_german$",
   "ru": "Слияние культур: $cm_german$"
+ },
+ "je_te_cm_german_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $north_german$ and $south_german$. Over the decades their pops become $cm_german$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $alemannic$ and $east_german$ pops can join once they qualify as well. The merge begins only once we have formed $GER$ or $HRE$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $north_german$ и $south_german$. Со временем их население переходит в культуру «$cm_german$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $alemannic$ и $east_german$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы образуем государство $GER$ или $HRE$."
+ },
+ "je_te_cm_german_status_gate": {
+  "en": "Princes and confessions kept the north and the south apart, and a nation-state of their own is what joined them. The merge begins once we have formed $GER$ or $HRE$.",
+  "ru": "Князья и конфессии удерживали север и юг порознь, а соединило их национальное государство. Слияние начнётся, когда мы образуем государство $GER$ или $HRE$."
  },
  "je_te_cm_gran_colombian": {
   "en": "Cultural Merge: $cm_gran_colombian$",
   "ru": "Слияние культур: $cm_gran_colombian$"
  },
+ "je_te_cm_gran_colombian_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $colombian$, $venezuelan$ and $ecuadorian$. Over the decades their pops become $cm_gran_colombian$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once we have formed $GCO$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $colombian$, $venezuelan$ и $ecuadorian$. Со временем их население переходит в культуру «$cm_gran_colombian$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда мы образуем государство $GCO$."
+ },
+ "je_te_cm_gran_colombian_status_gate": {
+  "en": "Bolívar's republic broke into three, each building an identity of its own, and only their union can undo it. The merge begins once we have formed $GCO$.",
+  "ru": "Республика Боливара распалась на три, и каждая выстроила собственную идентичность; исправить это может лишь их союз. Слияние начнётся, когда мы образуем государство $GCO$."
+ },
  "je_te_cm_hindustani": {
   "en": "Cultural Merge: $hindustani$",
   "ru": "Слияние культур: $hindustani$"
+ },
+ "je_te_cm_hindustani_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$ pops would become part of the existing $hindustani$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once we are not a subject of another country. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $avadhi$, $bundeli$, $chhattisgarhi$ и $bageli$ вольётся в существующую культуру $hindustani$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда мы не являемся зависимым государством другой страны. Оно приостанавливается, как только это перестаёт выполняться."
  },
  "je_te_cm_hungarian": {
   "en": "Cultural Merge: $hungarian$",
@@ -163,17 +351,45 @@
   "en": "Cultural Merge: $cm_indonesian$",
   "ru": "Слияние культур: $cm_indonesian$"
  },
+ "je_te_cm_indonesian_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $javan$, $malay$, $sumatran$ and $bornean$. Over the decades their pops become $cm_indonesian$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $balinese$ pops can join once they qualify as well. The merge begins only once we have formed $IDN$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $javan$, $malay$, $sumatran$ и $bornean$. Со временем их население переходит в культуру «$cm_indonesian$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $balinese$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы образуем государство $IDN$."
+ },
+ "je_te_cm_indonesian_status_gate": {
+  "en": "A common national language came with the independence movement and the republic it founded. The merge begins once we have formed $IDN$.",
+  "ru": "Общий национальный язык пришёл вместе с движением за независимость и основанной им республикой. Слияние начнётся, когда мы образуем государство $IDN$."
+ },
  "je_te_cm_italian": {
   "en": "Cultural Merge: $cm_italian$",
   "ru": "Слияние культур: $cm_italian$"
+ },
+ "je_te_cm_italian_status_gate": {
+  "en": "Unification came first and the nation after it: once the country was made, its people still had to be made one. The merge begins once we have formed $ITA$.",
+  "ru": "Сначала пришло объединение, а за ним — нация: когда страна была создана, её народ ещё предстояло сделать единым. Слияние начнётся, когда мы образуем государство $ITA$."
  },
  "je_te_cm_japanese": {
   "en": "Cultural Merge: $japanese$",
   "ru": "Слияние культур: $japanese$"
  },
+ "je_te_cm_japanese_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $ryukyuan$ pops would become part of the existing $japanese$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once the restoration crisis is over: $je_meiji_restoration$ has concluded, or the $law_bakufu$ law is gone.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $ryukyuan$ вольётся в существующую культуру $japanese$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда кризис Реставрации закончится: завершилась «$je_meiji_restoration$» либо закон «$law_bakufu$» отменён."
+ },
+ "je_te_cm_japanese_status_gate": {
+  "en": "The shogunate kept Ryukyu nominally foreign to protect its trade with China. The modern state that followed annexed it and schooled its people in the standard language. The merge begins once $je_meiji_restoration$ has concluded, or the $law_bakufu$ law is gone.",
+  "ru": "Сёгунат номинально держал Рюкю чужой землёй, чтобы защитить свою торговлю с Китаем. Последовавшее современное государство присоединило его и обучило его народ стандартному языку. Слияние начнётся, когда завершится «$je_meiji_restoration$» либо закон «$law_bakufu$» будет отменён."
+ },
  "je_te_cm_latin": {
   "en": "Cultural Merge: $cm_latin$",
   "ru": "Слияние культур: $cm_latin$"
+ },
+ "je_te_cm_latin_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $french$, $cm_italian$, $spanish$ and $portuguese$. Over the decades their pops become $cm_latin$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $romanian$, $platinean$ (or $cm_platine$), $argentine$, $uruguayan$ and $chilean$ pops can join once they qualify as well.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $french$, культура $cm_italian$, $spanish$ и $portuguese$. Со временем их население переходит в культуру «$cm_latin$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $romanian$, $platinean$ (или культура $cm_platine$), $argentine$, $uruguayan$ и $chilean$ тоже может присоединиться, когда будет соответствовать условиям."
+ },
+ "je_te_cm_latin_status_component_french": {
+  "en": "The $french$ merge has to finish first.",
+  "ru": "Слияние $french$ должно сначала завершиться."
  },
  "je_te_cm_nguni": {
   "en": "Cultural Merge: $cm_nguni$",
@@ -183,32 +399,280 @@
   "en": "Cultural Merge: $cm_oghuz_turkic$",
   "ru": "Слияние культур: $cm_oghuz_turkic$"
  },
+ "je_te_cm_oghuz_turkic_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $turkish$ and $azerbaijani$. Over the decades their pops become $cm_oghuz_turkic$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $turkmen$ pops can join once they qualify as well.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $turkish$ и $azerbaijani$. Со временем их население переходит в культуру «$cm_oghuz_turkic$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культуры $turkmen$ тоже может присоединиться, когда будет соответствовать условиям."
+ },
  "je_te_cm_pan_malay": {
   "en": "Cultural Merge: $cm_pan_malay$",
   "ru": "Слияние культур: $cm_pan_malay$"
+ },
+ "je_te_cm_pan_malay_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $cm_indonesian$ and $filipino$. Over the decades their pops become $cm_pan_malay$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — культура $cm_indonesian$ и $filipino$. Со временем их население переходит в культуру «$cm_pan_malay$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры."
  },
  "je_te_cm_pan_slavic": {
   "en": "Cultural Merge: $cm_pan_slavic$",
   "ru": "Слияние культур: $cm_pan_slavic$"
  },
+ "je_te_cm_pan_slavic_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$. Over the decades their pops become $cm_pan_slavic$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $polish$, $slovene$ and $bulgarian$ pops can join once they qualify as well.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — культура $cm_east_slavic$, культура $cm_czechoslovak$ и культура $cm_yugoslav$. Со временем их население переходит в культуру «$cm_pan_slavic$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $polish$, $slovene$ и $bulgarian$ тоже может присоединиться, когда будет соответствовать условиям."
+ },
  "je_te_cm_pan_turkic": {
   "en": "Cultural Merge: $cm_pan_turkic$",
   "ru": "Слияние культур: $cm_pan_turkic$"
+ },
+ "je_te_cm_pan_turkic_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$. Over the decades their pops become $cm_pan_turkic$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $bashkir$, $crimean_tatar$, $caucasian_turk$ and $uighur$ pops can join once they qualify as well.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — культура $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ и $kirgiz$. Со временем их население переходит в культуру «$cm_pan_turkic$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $bashkir$, $crimean_tatar$, $caucasian_turk$ и $uighur$ тоже может присоединиться, когда будет соответствовать условиям."
+ },
+ "je_te_cm_pan_turkic_status_tech_kazak": {
+  "en": "$kazak$ pops need $pan-nationalism$ as well.",
+  "ru": "Населению культуры $kazak$ также нужна технология $pan-nationalism$."
  },
  "je_te_cm_persian": {
   "en": "Cultural Merge: $persian$",
   "ru": "Слияние культур: $persian$"
  },
+ "je_te_cm_persian_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. Here $luri$ pops would become part of the existing $persian$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $tajik$, $hazara$, $mazanderani$ and $baluchi$ pops can join once they qualify as well.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $luri$ вольётся в существующую культуру $persian$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $tajik$, $hazara$, $mazanderani$ и $baluchi$ тоже может присоединиться, когда будет соответствовать условиям."
+ },
  "je_te_cm_platine": {
   "en": "Cultural Merge: $cm_platine$",
   "ru": "Слияние культур: $cm_platine$"
+ },
+ "je_te_cm_platine_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $platinean$, $argentine$, $uruguayan$ and $paraguayan$. Over the decades their pops become $cm_platine$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once we have formed $PLT$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $platinean$, $argentine$, $uruguayan$ и $paraguayan$. Со временем их население переходит в культуру «$cm_platine$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда мы образуем государство $PLT$."
+ },
+ "je_te_cm_platine_status_gate": {
+  "en": "The provinces of the River Plate broke apart into rival republics, and only their union can undo what separate statehood made. The merge begins once we have formed $PLT$.",
+  "ru": "Провинции Ла-Платы распались на соперничающие республики, и исправить то, что создала отдельная государственность, может лишь их союз. Слияние начнётся, когда мы образуем государство $PLT$."
  },
  "je_te_cm_scandinavian": {
   "en": "Cultural Merge: $cm_scandinavian$",
   "ru": "Слияние культур: $cm_scandinavian$"
  },
+ "je_te_cm_scandinavian_status_gate": {
+  "en": "The northern kingdoms shared a heritage but never a state, and their union movement faded once each went its own way. The merge begins once we have formed $SCA$.",
+  "ru": "Северные королевства делили наследие, но не государство, а их движение за объединение угасло, когда каждое пошло своим путём. Слияние начнётся, когда мы образуем государство $SCA$."
+ },
  "je_te_cm_yugoslav": {
   "en": "Cultural Merge: $cm_yugoslav$",
   "ru": "Слияние культур: $cm_yugoslav$"
+ },
+ "je_te_cm_yugoslav_reason": {
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $serb$, $croat$ and $bosniak$. Over the decades their pops become $cm_yugoslav$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $slovene$ and $bulgarian$ pops can join once they qualify as well. The merge begins only once we have formed $YUG$.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $serb$, $croat$ и $bosniak$. Со временем их население переходит в культуру «$cm_yugoslav$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $slovene$ и $bulgarian$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы образуем государство $YUG$."
+ },
+ "je_te_cm_yugoslav_status_gate": {
+  "en": "Three faiths and two empires divided the South Slavs, and only a kingdom of their own set out to make one nation of them. The merge begins once we have formed $YUG$.",
+  "ru": "Три веры и две империи разделяли южных славян, и лишь собственное королевство попыталось сделать из них одну нацию. Слияние начнётся, когда мы образуем государство $YUG$."
+ },
+ "te_cmg_american_core_1_tt": {
+  "en": "$yankee$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
+  "ru": "Население культуры $yankee$ удерживается и принято: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, предоставляют им «$full_acceptance$»."
+ },
+ "te_cmg_american_core_names": {
+  "en": "$yankee$ and $dixie$",
+  "ru": "$yankee$ и $dixie$"
+ },
+ "te_cmg_american_core_switched": {
+  "en": "$yankee$ and $dixie$ have all switched",
+  "ru": "$yankee$ и $dixie$: все перешли"
+ },
+ "te_cmg_american_done_core_tt": {
+  "en": "$yankee$ and $dixie$ pops have all switched to $cm_american$.",
+  "ru": "Всё население, принадлежавшее к $yankee$ и $dixie$, перешло в культуру «$cm_american$»."
+ },
+ "te_cmg_american_gate_tt": {
+  "en": "Slavery is settled one way or the other, and any civil war over it has ended: the $law_slavery_banned$ law with $je_acw_countdown$ over, or slavery legal in every state under $law_slave_trade$ or $law_debt_slavery$.",
+  "ru": "Вопрос рабства решён так или иначе, а любая гражданская война из-за него закончилась: либо действует закон «$law_slavery_banned$» и завершилась «$je_acw_countdown$», либо рабство легально во всех областях по закону «$law_slave_trade$» или «$law_debt_slavery$»."
+ },
+ "te_cmg_american_primary_tt": {
+  "en": "A core culture of the merge, or its result, is a primary culture here: $yankee$, $dixie$ or $cm_american$.",
+  "ru": "Здесь основной культурой является культура ядра слияния или его результат: $yankee$, $dixie$ или культура $cm_american$."
+ },
+ "te_cmg_american_sol_tt": {
+  "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_american').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_american').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_american').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_american').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1].",
+  "ru": "Основные культуры живут при сходном уровне жизни: разрыв между самой благополучной и самой бедной должен быть меньше [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0], чтобы слияние началось (считается, когда все основные культуры удерживаются и приняты), а идущее слияние останавливается, когда он превысит [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. По последней переписи населения лучше всего жило население культуры [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_american').GetCulture.GetName] ([ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_american').GetValue|1]), а хуже всего — население культуры [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_american').GetCulture.GetName] ([ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_american').GetValue|1]): разрыв составляет [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_american').GetValue|1]."
+ },
+ "te_cmg_american_wait_dixie_tt": {
+  "en": "No country has $je_acw_reincorporate$ open, or the merge has already waited [GetPlayer.MakeScope.ScriptValue('te_cm_wait_cap_years')|0] years for it to end.",
+  "ru": "Ни в одной стране не открыта «$je_acw_reincorporate$», либо слияние уже ждало её окончания [GetPlayer.MakeScope.ScriptValue('te_cm_wait_cap_years')|0] г."
+ },
+ "te_cmg_andean_core_names": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$",
+  "ru": "$north_andean$, $south_andean$, $peruvian$ и $bolivian$"
+ },
+ "te_cmg_andean_core_switched": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ have all switched",
+  "ru": "$north_andean$, $south_andean$, $peruvian$ и $bolivian$: все перешли"
+ },
+ "te_cmg_andean_done_core_tt": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ pops have all switched to $cm_andean$.",
+  "ru": "Всё население, принадлежавшее к $north_andean$, $south_andean$, $peruvian$ и $bolivian$, перешло в культуру «$cm_andean$»."
+ },
+ "te_cmg_andean_gate_tt": {
+  "en": "We have formed $PBC$ or $FND$.",
+  "ru": "Мы образовали государство $PBC$ или $FND$."
+ },
+ "te_cmg_andean_primary_tt": {
+  "en": "A core culture of the merge, or its result, is a primary culture here: $north_andean$, $south_andean$, $peruvian$, $bolivian$ or $cm_andean$.",
+  "ru": "Здесь основной культурой является культура ядра слияния или его результат: $north_andean$, $south_andean$, $peruvian$, $bolivian$ или культура $cm_andean$."
+ },
+ "te_cmg_anglophone_core_1_tt": {
+  "en": "$british$ pops are held and very highly accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live accept them at [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] or more, beyond $full_acceptance$.",
+  "ru": "Население культуры $british$ удерживается и очень высоко принято на протяжении [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] г.: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, принимают их на уровне [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] и выше, за пределами «$full_acceptance$»."
+ },
+ "te_cmg_anglophone_core_2_tt": {
+  "en": "$yankee$ or $cm_american$ pops are held and very highly accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live accept them at [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] or more, beyond $full_acceptance$.",
+  "ru": "Население культур $yankee$ или $cm_american$ удерживается и очень высоко принято на протяжении [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] г.: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, принимают их на уровне [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] и выше, за пределами «$full_acceptance$»."
+ },
+ "te_cmg_anglophone_core_names": {
+  "en": "$british$ and $yankee$ (or $cm_american$)",
+  "ru": "$british$ и $yankee$ (или культура $cm_american$)"
+ },
+ "te_cmg_anglophone_core_switched": {
+  "en": "$british$ and $yankee$ (or $cm_american$) have all switched",
+  "ru": "$british$ и $yankee$ (или культура $cm_american$): все перешли"
+ },
+ "te_cmg_anglophone_done_core_tt": {
+  "en": "$british$ and $yankee$ (or $cm_american$) pops have all switched to $cm_anglophone$.",
+  "ru": "Всё население, принадлежавшее к $british$ и $yankee$ (или культуре $cm_american$), перешло в культуру «$cm_anglophone$»."
+ },
+ "te_cmg_anglophone_gate_tt": {
+  "en": "The $law_slavery_banned$ law is in force.",
+  "ru": "Действует закон «$law_slavery_banned$»."
+ },
+ "te_cmg_anglophone_primary_tt": {
+  "en": "A core culture of the merge, or its result, is a primary culture here: $british$, $yankee$, $cm_american$ or $cm_anglophone$.",
+  "ru": "Здесь основной культурой является культура ядра слияния или его результат: $british$, $yankee$, культура $cm_american$ или культура $cm_anglophone$."
+ },
+ "te_cmg_arab_core_names": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$",
+  "ru": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$"
+ },
+ "te_cmg_arab_core_switched": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ have all switched",
+  "ru": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$: все перешли"
+ },
+ "te_cmg_arab_done_core_tt": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ pops have all switched to $cm_arab$.",
+  "ru": "Всё население, принадлежавшее к $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$, перешло в культуру «$cm_arab$»."
+ },
+ "te_cmg_arab_gate_tt": {
+  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force.",
+  "ru": "Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
+ },
+ "te_cmg_arab_primary_tt": {
+  "en": "A core culture of the merge, or its result, is a primary culture here: $maghrebi$, $misri$, $mashriqi$, $bedouin$, $yemenite$ or $cm_arab$.",
+  "ru": "Здесь основной культурой является культура ядра слияния или его результат: $maghrebi$, $misri$, $mashriqi$, $bedouin$, $yemenite$ или культура $cm_arab$."
+ },
+ "te_cmg_british_core_switched": {
+  "en": "$scottish$ has switched",
+  "ru": "$scottish$: все перешли"
+ },
+ "te_cmg_british_done_core_tt": {
+  "en": "$scottish$ pops have all switched to $british$.",
+  "ru": "Всё население, принадлежавшее к $scottish$, перешло в культуру $british$."
+ },
+ "te_cmg_british_primary_tt": {
+  "en": "A core culture of the merge, or its result, is a primary culture here: $british$ or $scottish$.",
+  "ru": "Здесь основной культурой является культура ядра слияния или его результат: $british$ или $scottish$."
+ },
+ "te_cmg_chinese_core_names": {
+  "en": "$yue$, $min$ and $hakka$",
+  "ru": "$yue$, $min$ и $hakka$"
+ },
+ "te_cmg_chinese_core_switched": {
+  "en": "$yue$, $min$ and $hakka$ have all switched",
+  "ru": "$yue$, $min$ и $hakka$: все перешли"
+ },
+ "te_cmg_chinese_done_core_tt": {
+  "en": "$yue$, $min$ and $hakka$ pops have all switched to $han$.",
+  "ru": "Всё население, принадлежавшее к $yue$, $min$ и $hakka$, перешло в культуру $han$."
+ },
+ "te_cmg_core_names_none": {
+  "en": "its constituent cultures",
+  "ru": "его составляющие культуры"
+ },
+ "te_cmg_core_switched_none": {
+  "en": "its constituent cultures have all switched",
+  "ru": "его составляющие культуры: все перешли"
+ },
+ "te_cmg_czechoslovak_gate_tt": {
+  "en": "We have formed $CZH$.",
+  "ru": "Мы образовали государство $CZH$."
+ },
+ "te_cmg_east_african_core_1_tt": {
+  "en": "$swahili$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
+  "ru": "Население культуры $swahili$ удерживается и принято на протяжении [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] г.: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, предоставляют им «$full_acceptance$»."
+ },
+ "te_cmg_filipino_gate_tt": {
+  "en": "We are not a subject of another country.",
+  "ru": "Мы не являемся зависимым государством другой страны."
+ },
+ "te_cmg_japanese_gate_tt": {
+  "en": "The restoration crisis is over: $je_meiji_restoration$ has concluded, or the $law_bakufu$ law is gone.",
+  "ru": "Кризис Реставрации закончился: завершилась «$je_meiji_restoration$» либо закон «$law_bakufu$» отменён."
+ },
+ "te_cmg_latin_comp_french_tt": {
+  "en": "The $french$ merge is complete.",
+  "ru": "Слияние $french$ завершено."
+ },
+ "te_cmg_pan_turkic_core_3_tt": {
+  "en": "$kazak$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$. They also need $pan-nationalism$.",
+  "ru": "Население культуры $kazak$ удерживается и принято: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, предоставляют им «$full_acceptance$». Им также нужна технология $pan-nationalism$."
+ },
+ "te_cmg_pan_turkic_core_4_tt": {
+  "en": "$tatar$ pops are held and very highly accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live accept them at [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] or more, beyond $full_acceptance$. They also need $mass_media$.",
+  "ru": "Население культуры $tatar$ удерживается и очень высоко принято на протяжении [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] г.: наша сфера держит большую часть населения их исторической родины, а страны, где живут многие из них, принимают их на уровне [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] и выше, за пределами «$full_acceptance$». Им также нужна технология $mass_media$."
+ },
+ "te_cmg_start_american_button": {
+  "en": "Begin the $cm_american$ Merge",
+  "ru": "Начать слияние: $cm_american$"
+ },
+ "te_cmg_start_american_button_desc": {
+  "en": "Starts the merge of $yankee$ and $dixie$. $cm_american$ becomes a primary culture here. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $cm_american$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $yankee$ и $dixie$. Культура $cm_american$ становится здесь основной. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $cm_american$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_american_effect_tt": {
+  "en": "$cm_american$ becomes a primary culture here and the merge begins. Each constituent culture we hold that qualifies starts to assimilate into it.",
+  "ru": "Культура $cm_american$ становится здесь основной, и слияние начинается. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё."
+ },
+ "te_cmg_start_andean_button_desc": {
+  "en": "Starts the merge of $north_andean$, $south_andean$, $peruvian$ and $bolivian$. $cm_andean$ becomes a primary culture here. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $cm_andean$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $north_andean$, $south_andean$, $peruvian$ и $bolivian$. Культура $cm_andean$ становится здесь основной. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $cm_andean$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_anglophone_button_desc": {
+  "en": "Starts the merge of $british$ and $yankee$ (or $cm_american$). $cm_anglophone$ becomes a primary culture here. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $cm_anglophone$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $british$ и $yankee$ (или культура $cm_american$). Культура $cm_anglophone$ становится здесь основной. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $cm_anglophone$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_arab_button_desc": {
+  "en": "Starts the merge of $maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$. $cm_arab$ becomes a primary culture here. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $cm_arab$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$. Культура $cm_arab$ становится здесь основной. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $cm_arab$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_brazilian_button_desc": {
+  "en": "Starts the merge of $brazilian$, $nordestino$, $paulista$, $amazonic$ and $sulista$. $brazilian$ becomes a primary culture here if it isn't one already. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $brazilian$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $brazilian$, $nordestino$, $paulista$, $amazonic$ и $sulista$. Культура $brazilian$ становится здесь основной, если ещё не является ею. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $brazilian$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_brazilian_effect_tt": {
+  "en": "$brazilian$ becomes a primary culture here if it isn't one already and the merge begins. Each constituent culture we hold that qualifies starts to assimilate into it.",
+  "ru": "Культура $brazilian$ становится здесь основной, если ещё не является ею, и слияние начинается. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё."
+ },
+ "te_cmg_start_british_button_desc": {
+  "en": "Starts the merge of $british$ and $scottish$. $british$ becomes a primary culture here if it isn't one already. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $british$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $british$ и $scottish$. Культура $british$ становится здесь основной, если ещё не является ею. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $british$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_chinese_button_desc": {
+  "en": "Starts the merge of $han$, $yue$, $min$ and $hakka$. $han$ becomes a primary culture here if it isn't one already. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $han$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $han$, $yue$, $min$ и $hakka$. Культура $han$ становится здесь основной, если ещё не является ею. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $han$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
+ },
+ "te_cmg_start_dravidian_button_desc": {
+  "en": "Starts the merge of $tamil$, $kannada$ and $malayalam$. $cm_dravidian$ becomes a primary culture here. Each constituent culture we hold that qualifies begins to assimilate into it: a slice of its pops each year, those in subjects and bloc members more slowly. A culture that qualifies later joins then. Once $cm_dravidian$ holds [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture switches at once.",
+  "ru": "Запускает слияние $tamil$, $kannada$ и $malayalam$. Культура $cm_dravidian$ становится здесь основной. Каждая удерживаемая нами составляющая культура, отвечающая условиям, начинает ассимилироваться в неё: каждый год — часть её населения, в зависимых государствах и среди членов блока — медленнее. Культура, которая начнёт отвечать условиям позже, присоединится тогда. Как только культура $cm_dravidian$ охватывает [GetPlayer.MakeScope.ScriptValue('te_cm_switch_share')|%0] исторической родины культуры, всё оставшееся население этой культуры переходит сразу."
  }
 }

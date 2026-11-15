@@ -1,39 +1,367 @@
 {
+ "agricultural_diffusion_events.1.a": {
+  "en": "Our agriculture will adapt.",
+  "ru": "Наше сельское хозяйство приспособится."
+ },
+ "agricultural_diffusion_events.1.a_first": {
+  "en": "Put the process to work on our farms.",
+  "ru": "Пустить процесс в дело на наших фермах."
+ },
+ "agricultural_diffusion_events.1.d": {
+  "en": "Reports reach us that [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetName] is making ammonia from the nitrogen in the air on an industrial scale. The method has been published, and engineering firms abroad are licensing it. Ammonia plants, and the fertilizer they make, will soon be open to any country that can pay to build them.",
+  "ru": "До нас доходят сведения, что страна [GetGlobalVariable('first_nitrogen_fixation_country').GetCountry.GetName] получает аммиак из азота воздуха в промышленных масштабах. Метод опубликован, и инженерные фирмы за рубежом продают на него лицензии. Аммиачные заводы и производимые ими удобрения вскоре станут доступны любой стране, которая сможет оплатить их строительство."
+ },
+ "agricultural_diffusion_events.1.d_first": {
+  "en": "Our chemists have made ammonia from the nitrogen in the air on an industrial scale. Until now the world's fertilizer has come from manure, compost and mined deposits of guano and saltpeter, all of them limited. Nitrogen fertilizer can now be made from air and fuel in any chemical plant we choose to build.",
+  "ru": "Наши химики получили аммиак из азота воздуха в промышленных масштабах. До сих пор мировые удобрения давали навоз, компост и добываемые залежи гуано и селитры, все ограниченные. Теперь азотные удобрения можно делать из воздуха и топлива на любом химическом заводе, который мы решим построить."
+ },
+ "agricultural_diffusion_events.1.f": {
+  "en": "\\\"I am from the agricultural station, and I am saying the same thing in every district hall this month. You will hear that chemists abroad have found a way to make fertilizer out of the air. That is true, and you do not have to understand it to use it. What matters to you is that the sacks will soon come by the cartload, at a price you can pay, and that a field worn out by the same crop year after year can be brought back with them. Come to the station after the harvest and I will show you how much to use, because too much will burn the crop.\\\"",
+  "ru": "«Я с сельскохозяйственной станции и в этом месяце говорю одно и то же в каждом районном зале. Вы услышите, что химики за границей нашли способ делать удобрения из воздуха. Это правда, и понимать это вам не нужно, чтобы пользоваться. Важно другое: мешки скоро будут приходить телегами по цене, которую вы можете платить, и поле, истощённое одной и той же культурой год за годом, с их помощью можно вернуть к жизни. Приходите на станцию после жатвы, я покажу, сколько вносить, потому что лишнее сожжёт посев.»"
+ },
+ "agricultural_diffusion_events.1.f_first": {
+  "en": "To the government, from the chemists who ran the trial. The trial plant has now run for thirty days without a stop, and it makes ammonia at a cost below the price of mined nitrate. We have sent samples to the agricultural stations for field trials on the commonest crops. The process needs high pressure and a steady supply of hydrogen, and its steel vessels must be built to a standard few works can meet today. We ask for funds to build a full-size plant, and for the patents to be registered at once.",
+  "ru": "Правительству от химиков, проводивших испытание. Опытная установка работает уже тридцать дней без остановки и производит аммиак по цене ниже цены добываемой селитры. Мы отправили образцы на сельскохозяйственные станции для полевых испытаний на самых распространённых культурах. Процессу нужны высокое давление и стабильные поставки водорода, а стальные сосуды для него должны быть построены по стандарту, который сегодня выдерживают лишь немногие заводы. Мы просим средств на строительство полноразмерного завода и немедленной регистрации патентов."
+ },
+ "agricultural_diffusion_events.1.t": {
+  "en": "Nitrogen Fixation Goes Global",
+  "ru": "Азотная фиксация выходит на мировой уровень"
+ },
+ "agricultural_diffusion_events.1.t_first": {
+  "en": "Nitrogen from the Air",
+  "ru": "Азот из воздуха"
+ },
+ "agricultural_diffusion_events.2.a": {
+  "en": "Adopt the new inputs.",
+  "ru": "Принять новые вещества."
+ },
+ "agricultural_diffusion_events.2.a_first": {
+  "en": "We will industrialize the soil.",
+  "ru": "Мы индустриализируем почву."
+ },
+ "agricultural_diffusion_events.2.d": {
+  "en": "Chemists in [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetName] have shown the next generation of synthetic fertilizers: ammonium nitrate, urea and superphosphates, made by catalytic processes from oil and gas. The methods are spreading through engineering firms and trade fairs.",
+  "ru": "Химики страны [GetGlobalVariable('first_modern_chemical_processes_country').GetCountry.GetName] показали следующее поколение синтетических удобрений: аммиачную селитру, мочевину и суперфосфаты, получаемые каталитическими процессами из нефти и газа. Методы распространяются через инженерные фирмы и торговые ярмарки."
+ },
+ "agricultural_diffusion_events.2.d_first": {
+  "en": "Our chemical industry can now make ammonium nitrate, urea, concentrated phosphates and mixed fertilizers by catalytic processes, more cheaply and in larger amounts than before. The same processes make pesticides, herbicides and the additives that keep processed food fresh and fortify it.",
+  "ru": "Наша химическая промышленность теперь может производить аммиачную селитру, мочевину, концентрированные фосфаты и смешанные удобрения каталитическими процессами дешевле и в больших количествах, чем раньше. Те же процессы дают пестициды, гербициды и добавки, которые сохраняют свежесть переработанных продуктов питания и обогащают их."
+ },
+ "agricultural_diffusion_events.2.f": {
+  "en": "Instructions from the agricultural office to its district agents, on the new fertilizers:\\n\\nShow each farmer the fertilizer on a strip of their own field beside an untreated strip. Farmers believe what they see on their own land before anything an agent tells them.\\nTell them how much to use on each field and write it down for them. The new compounds are stronger than the old, and too much will scorch the crop.\\nKeep the sacks dry and off the ground. Ammonium nitrate draws water and cakes, and in a fire it can explode.\\nReport each district's prices to this office every month. The price at the works has been falling, and we want to know where the dealers are not passing that on.",
+  "ru": "Указания сельскохозяйственной конторы районным агентам о новых удобрениях:\\n\\nПокажите каждому земледельцу удобрение на полосе его собственного поля рядом с необработанной полосой. Земледельцы верят увиденному на своей земле больше, чем всему, что говорит агент.\\nСкажите им, сколько вносить на каждое поле, и запишите это для них. Новые соединения сильнее прежних, и лишнее сожжёт посев.\\nХраните мешки сухими и не на земле. Аммиачная селитра тянет воду и слёживается, а при пожаре может взорваться.\\nКаждый месяц присылайте в эту контору цены по своему району. Цена на заводе падает, и мы хотим знать, где торговцы не передают это покупателям."
+ },
+ "agricultural_diffusion_events.2.f_first": {
+  "en": "At the end of the shift the foreman of the new fertilizer works walked the length of the bagging hall. The granules came off the cooling drum white and dry and ran down the chute into the bags, and the bags went onto pallets four high. He took a handful from an open bag, rubbed it between his fingers the way his father had once tested soil, and let it fall back. Outside, a line of carriers' wagons stood empty by the gate, waiting for the morning's loading.",
+  "ru": "В конце смены мастер нового завода удобрений прошёл по всей длине фасовочного зала. Гранулы сходили с охлаждающего барабана белыми и сухими и по желобу ссыпались в мешки, а мешки шли на поддоны по четыре в высоту. Он взял горсть из открытого мешка, растёр между пальцами, как когда-то отец пробовал почву, и высыпал обратно. Снаружи у ворот пустыми стояла вереница повозок перевозчиков, ожидая утренней погрузки."
+ },
+ "agricultural_diffusion_events.2.t": {
+  "en": "The New Fertilizers Spread",
+  "ru": "Новые удобрения распространяются"
+ },
+ "agricultural_diffusion_events.2.t_first": {
+  "en": "Petrochemicals Transform Agriculture",
+  "ru": "Нефтехимия преображает сельское хозяйство"
+ },
+ "agricultural_diffusion_events.3.a": {
+  "en": "Distribute the seed.",
+  "ru": "Раздать семена."
+ },
+ "agricultural_diffusion_events.3.a_first": {
+  "en": "Feed the world.",
+  "ru": "Накормить мир."
+ },
+ "agricultural_diffusion_events.3.d": {
+  "en": "Plant breeders backed by [GetGlobalVariable('first_green_revolution_country').GetCountry.GetName] and by international research institutes have bred high-yielding, short-stemmed varieties of the staple cereals. Seed, demonstration plots and visiting advisers are arriving in our country, and our own agronomists are setting up trials with them.",
+  "ru": "Селекционеры при поддержке страны [GetGlobalVariable('first_green_revolution_country').GetCountry.GetName] и международных научно-исследовательских институтов вывели высокоурожайные низкорослые сорта основных зерновых. В нашу страну прибывают семена, демонстрационные участки и приезжие консультанты, а наши агрономы закладывают с ними опыты."
+ },
+ "agricultural_diffusion_events.3.d_first": {
+  "en": "Plant breeders at our research institutes have produced short-stemmed varieties of the staple grains that can carry far heavier heads without falling over. Given fertilizer, irrigation and pest control, they yield two or three times as much as the old varieties. The first field trials have done better than the breeders predicted.",
+  "ru": "Селекционеры наших научно-исследовательских институтов вывели низкорослые сорта основных зерновых, которые держат гораздо более тяжёлые колосья и не полегают. При удобрениях, орошении и защите от вредителей они дают в два-три раза больше, чем старые сорта. Первые полевые испытания прошли лучше, чем предсказывали селекционеры."
+ },
+ "agricultural_diffusion_events.3.f": {
+  "en": "At the demonstration plot the visiting adviser had sown two strips side by side, the old variety and the new, with the same fertilizer and water on both. The farmers who came to look stood along the boundary between them. The old crop stood taller and had begun to lean; the new was shorter, and its heads hung heavy. An old farmer pulled a head from each and counted the kernels in his palm. \\\"What does the seed cost?\\\" he asked. \\\"And the fertilizer it needs, and the water?\\\" The adviser had the figures written on a card, and read them out one by one.",
+  "ru": "На демонстрационном участке приезжий консультант посеял две полосы рядом, старый сорт и новый, с одинаковыми удобрениями и водой. Земледельцы, пришедшие посмотреть, стояли вдоль границы между ними. Старый посев был выше и уже начал полегать; новый ниже, а колосья его висели тяжело. Старый земледелец сорвал по колосу с каждой полосы и пересчитал зёрна на ладони. «Сколько стоит семя? — спросил он. — И удобрение, которое оно требует, и вода?» У консультанта цифры были записаны на карточке, и он зачитал их одну за другой."
+ },
+ "agricultural_diffusion_events.3.f_first": {
+  "en": "\\\"We have offered the seed to every country that asks for it, on condition that each plants it beside its own. The first requests came in the week the trial results were published.\\\"\\n\\n\\\"The new seed wants fertilizer every season and water at the right time. A farmer who cannot pay for both does worse with it than without it, and our offer should say so.\\\"\\n\\n\\\"Our diplomats want our breeders sent abroad to run the trials themselves. They say that seed opens doors that treaties do not.\\\"\\n\\n\\\"My father's village lost a harvest to hunger when he was a boy. I have sent the village the first sacks we could spare.\\\"",
+  "ru": "«Мы предложили семена каждой стране, которая о них просит, при условии, что она посадит их рядом со своими. Первые просьбы пришли на той неделе, когда были опубликованы результаты испытаний.»\\n\\n«Новому семени нужно удобрение каждый сезон и вода в нужное время. Земледелец, который не может оплатить и то и другое, получает с ним меньше, чем без него, и наше предложение должно об этом говорить.»\\n\\n«Наши дипломаты хотят, чтобы наших селекционеров послали за границу проводить испытания самим. Они говорят, что семя открывает двери, которых не открывают договоры.»\\n\\n«Деревня моего отца потеряла урожай от голода, когда он был мальчиком. Я отправил в деревню первые мешки, которые мы могли выделить.»"
+ },
+ "agricultural_diffusion_events.3.t": {
+  "en": "The Green Revolution Reaches Us",
+  "ru": "Зелёная революция приходит к нам"
+ },
+ "agricultural_diffusion_events.3.t_first": {
+  "en": "We Launch the Green Revolution",
+  "ru": "Мы начинаем Зелёную революцию"
+ },
+ "agricultural_diffusion_events.4.a": {
+  "en": "Permit and regulate the new seed.",
+  "ru": "Разрешить и регулировать новое семя."
+ },
+ "agricultural_diffusion_events.4.a_first": {
+  "en": "License the technology globally.",
+  "ru": "Лицензировать технологию по всему миру."
+ },
+ "agricultural_diffusion_events.4.d": {
+  "en": "Seed companies in [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetName] are selling transgenic varieties abroad: insect-resistant cotton, soybeans and maize that tolerate herbicide, and vegetables bred to resist pests. Many countries are licensing them, although the public argument over them has not ended.",
+  "ru": "Семенные компании страны [GetGlobalVariable('first_gene_splicing_country').GetCountry.GetName] продают за границу трансгенные сорта: хлопок, устойчивый к насекомым, сою и кукурузу, переносящие гербициды, и овощи, выведенные устойчивыми к вредителям. Многие страны покупают на них лицензии, хотя общественный спор вокруг них не утих."
+ },
+ "agricultural_diffusion_events.4.d_first": {
+  "en": "Our molecular biologists have produced crop varieties that carry genes from unrelated species: cotton that makes a bacterial toxin against insects, soybeans and maize that tolerate broad-spectrum herbicides, and varieties that resist particular viruses and fungi. The field trials are complete, and the first commercial planting has begun.",
+  "ru": "Наши молекулярные биологи вывели сорта культур, несущие гены неродственных видов: хлопок, вырабатывающий бактериальный токсин против насекомых, сою и кукурузу, переносящие гербициды широкого спектра, и сорта, устойчивые к определённым вирусам и грибкам. Полевые испытания завершены, началась первая коммерческая посадка."
+ },
+ "agricultural_diffusion_events.4.f": {
+  "en": "\\\"The seed at this counter costs twice what I pay now, and I have to buy it fresh every year instead of keeping some back. That is in the contract.\\\"\\n\\n\\\"And you spray half as often and lose less to the worm. Work it out by the field, not by the sack.\\\"\\n\\n\\\"I have worked it out. In a good year I come out ahead. In a bad year I owe the company for seed that failed along with everyone else's.\\\"\\n\\n\\\"Then plant half your land with it and half with your own seed, and see at the harvest which half you would rather have.\\\"",
+  "ru": "«Семена на этом прилавке стоят вдвое дороже, чем я плачу сейчас, и покупать их приходится каждый год заново, а не оставлять часть. Так написано в договоре.»\\n\\n«Зато опрыскивать вы будете вдвое реже и меньше терять от червя. Считайте по полю, а не по мешку.»\\n\\n«Я посчитал. В хороший год я в выигрыше. В плохой год я должен компании за семена, которые подвели вместе со всеми остальными.»\\n\\n«Тогда посадите им половину своей земли, а половину — своим семенем, и увидите на жатве, какую половину вы бы предпочли.»"
+ },
+ "agricultural_diffusion_events.4.f_first": {
+  "en": "To the government, from the institute that bred the seed. The first commercial plantings are in the ground. Seed houses abroad have asked us for licenses, and we ask the government to decide the terms: what royalty to charge, whether farmers may save seed from their own crop, and whether countries that cannot pay the full price may have it for less. Some governments have asked to test the seed themselves before they admit it, and we have offered them our trial data. We ask for a decision before the seed houses place their orders for next season.",
+  "ru": "Правительству от института, который вывел семена. Первые коммерческие посадки в земле. Семенные дома за границей просят у нас лицензии, и мы просим правительство определить условия: какую плату взимать, вправе ли земледельцы оставлять семена со своего урожая и могут ли страны, не способные платить полную цену, получить их дешевле. Некоторые правительства просили испытать семена самим, прежде чем допустить их, и мы предложили им данные наших испытаний. Мы просим решения до того, как семенные дома разместят заказы на следующий сезон."
+ },
+ "agricultural_diffusion_events.4.t": {
+  "en": "Seed from the Laboratory",
+  "ru": "Семена из лаборатории"
+ },
+ "agricultural_diffusion_events.4.t_first": {
+  "en": "Genes Across Species",
+  "ru": "Гены между видами"
+ },
+ "agricultural_diffusion_events.5.a": {
+  "en": "Adopt the new varieties.",
+  "ru": "Принять новые сорта."
+ },
+ "agricultural_diffusion_events.5.a_first": {
+  "en": "Designed crops, designed nutrition.",
+  "ru": "Культуры по замыслу, питание по замыслу."
+ },
+ "agricultural_diffusion_events.5.d": {
+  "en": "Plant scientists backed by [GetGlobalVariable('first_biotechnology_country').GetCountry.GetName] have produced a new generation of crops: staples enriched with vitamins and minerals, cereals that tolerate salt and drought, and lines that resist disease, bred with genetic markers and targeted gene editing. Aid foundations and seed companies are distributing them abroad.",
+  "ru": "Растениеводы при поддержке страны [GetGlobalVariable('first_biotechnology_country').GetCountry.GetName] вывели новое поколение культур: основные продукты, обогащённые витаминами и минералами, зерновые, переносящие соль и засуху, и линии, устойчивые к болезням, выведенные с помощью генетических маркеров и точечного редактирования генов. Благотворительные фонды и семенные компании распространяют их за границей."
+ },
+ "agricultural_diffusion_events.5.d_first": {
+  "en": "Our research institutes now combine genetic markers, genomic selection and targeted gene editing in a single breeding program. Rice enriched with beta-carotene, salt-tolerant cereals, drought-tolerant maize and fortified staples are coming out of it faster than any breeding program has produced new varieties before.",
+  "ru": "Наши научно-исследовательские институты теперь объединяют генетические маркеры, геномную селекцию и точечное редактирование генов в одной селекционной программе. Рис, обогащённый бета-каротином, солеустойчивые зерновые, засухоустойчивая кукуруза и обогащённые основные продукты выходят из неё быстрее, чем любая селекционная программа когда-либо создавала новые сорта."
+ },
+ "agricultural_diffusion_events.5.f": {
+  "en": "\\\"You are the aid workers who brought the seed, so you should hear this from me. I know what they say about this seed in the cities. My nephew read it to me from the paper. I planted the drought variety on my lower field, where nothing came up two seasons out of three, and this year there is a crop on it. I will plant it again next season. My sister wants to plant it too, on the land beside mine, if you have enough seed for both of us.\\\"",
+  "ru": "«Вы — помощники, которые привезли семена, так что услышьте это от меня. Я знаю, что говорят об этом семени в городах. Племянник прочёл мне это из газеты. Я посадил засухоустойчивый сорт на нижнем поле, где два сезона из трёх ничего не всходило, и в этом году на нём урожай. Я посажу его снова в следующем сезоне. Сестра тоже хочет посадить, на земле рядом с моей, если у вас хватит семян на нас обоих.»"
+ },
+ "agricultural_diffusion_events.5.f_first": {
+  "en": "The breeding program's first releases, as its directors listed them for the government:\\n\\nA rice enriched with beta-carotene, for places where children lose their sight for lack of vitamin A.\\nA wheat that tolerates salt, for irrigated land where the water has left salt in the soil.\\nA maize that still yields in dry years, for farms that cannot irrigate.\\nA cassava that resists the viruses that destroy it, for farmers who depend on it as their staple.\\nA bean bred to carry more iron, for diets with little meat in them.",
+  "ru": "Первые выпуски селекционной программы в том виде, как их перечислили правительству её руководители:\\n\\nРис, обогащённый бета-каротином, для мест, где дети теряют зрение из-за нехватки витамина A.\\nПшеница, переносящая соль, для орошаемых земель, где вода оставила соль в почве.\\nКукуруза, дающая урожай даже в сухие годы, для хозяйств, которые не могут орошать.\\nМаниок, устойчивый к вирусам, которые его губят, для земледельцев, зависящих от него как от основного продукта.\\nФасоль, выведенная так, чтобы содержать больше железа, для рационов, в которых мало мяса."
+ },
+ "agricultural_diffusion_events.5.t": {
+  "en": "Biotech Cultivars Cross Borders",
+  "ru": "Биотехнологические сорта пересекают границы"
+ },
+ "agricultural_diffusion_events.5.t_first": {
+  "en": "We Master Agricultural Biotechnology",
+  "ru": "Мы овладеваем сельскохозяйственной биотехнологией"
+ },
+ "amendment_petition_events.1.a": {
+  "en": "Let the old letters stay on the schoolroom wall.",
+  "ru": "Пусть старые письмена остаются на стене школьного класса."
+ },
+ "amendment_petition_events.1.b": {
+  "en": "One nation, one script. The children will thank us.",
+  "ru": "Одна нация, одна письменность. Дети скажут нам спасибо."
+ },
+ "amendment_petition_events.1.d": {
+  "en": "Schoolmasters and clergy from our minority communities have sent a petition to the capital: under [SCOPE.sLaw('petition_law').GetName] their children learn only the national script, and the village records their grandparents kept will soon be unreadable. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] have taken up their request for an [concept_amendment] that keeps the minority scripts in schools and local offices, warning that every closed village school is a recruiting office for the separatists.",
+  "ru": "Школьные учителя и священники наших меньшинств направили в столицу петицию: по закону «[SCOPE.sLaw('petition_law').GetName]» их дети учатся только национальной письменности, а деревенские записи, которые вели их деды, скоро станут нечитаемыми. Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» подхватила их просьбу о [Concept('concept_amendment','поправке')], сохраняющей письменности меньшинств в школах и местных учреждениях, и предупреждает, что каждая закрытая деревенская школа — вербовочный пункт для сепаратистов."
+ },
+ "amendment_petition_events.1.f": {
+  "en": "\\\"My grandmother's letters to her sister are written in this script,\\\" the schoolmaster said. \\\"So is the deed to her farm, and the register of every birth in this district for as long as anyone has kept one.\\\"\\n\\n\\\"No one is asking you to burn anything.\\\"\\n\\n\\\"No. Only to stop teaching the children to read them.\\\"\\n\\nThe inspector closed his folder. \\\"In a generation, nobody will need to.\\\"\\n\\n\\\"In a generation the deeds will still be in this script,\\\" the schoolmaster said. \\\"Every family here that has to prove it owns its land will pay a clerk from the capital to read the deed aloud. That is what we have written in our petition, and I would like you to take it back with you.\\\"",
+  "ru": "«Письма моей бабушки к сестре написаны этой письменностью, — сказал учитель. — И купчая на её ферму, и книга записи каждого рождения в этом районе за всё время, что их вели.»\\n\\n«Никто не просит вас что-либо сжигать.»\\n\\n«Нет. Просят только перестать учить детей их читать.»\\n\\nИнспектор закрыл папку. «Через поколение в этом не будет нужды.»\\n\\n«Через поколение купчие всё ещё будут написаны этой письменностью, — сказал учитель. — Каждая здешняя семья, которой придётся доказывать право на землю, будет платить писарю из столицы, чтобы тот прочёл купчую вслух. Это мы и записали в петиции, и я прошу вас увезти её с собой.»"
+ },
  "amendment_petition_events.1.t": {
   "en": "The Old Letters",
   "ru": "Старые письма"
+ },
+ "amendment_petition_events.10.a": {
+  "en": "We will never be the first to use them.",
+  "ru": "Мы никогда не применим его первыми."
+ },
+ "amendment_petition_events.10.a.tt": {
+  "en": "While the pledge is in force, it holds our nuclear doctrine at #v No First Use#!, and an arsenal we build later starts under it. Abandoning No First Use repudiates the pledge and strikes the [concept_amendment] from our laws.",
+  "ru": "Пока обязательство действует, оно удерживает нашу ядерную доктрину на уровне #v Неприменение первым#!, и арсенал, который мы создадим позже, начинает под ней. Отказ от этого принципа отменяет обязательство и вычёркивает [Concept('concept_amendment','поправку')] из наших законов."
+ },
+ "amendment_petition_events.10.b": {
+  "en": "No promise that ties our hands in advance.",
+  "ru": "Никаких обещаний, связывающих нам руки заранее."
+ },
+ "amendment_petition_events.10.d": {
+  "en": "As fear of nuclear war grows, the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] have asked for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName]: a pledge, written into law, that we will never be the first to use nuclear weapons. A pledge in law, its supporters say, reassures the world in a way no speech can. The general staff say it tells every enemy exactly how far it can go.",
+  "ru": "С ростом страха перед ядерной войной группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» попросила о [Concept('concept_amendment','поправке')] к закону «[SCOPE.sLaw('petition_law').GetName]»: обязательстве, закреплённом в законе, что мы никогда не применим ядерное оружие первыми. Обязательство, закреплённое в законе, по словам его сторонников, успокаивает мир так, как не может ни одна речь. Генеральный штаб говорит, что оно сообщает каждому врагу, как далеко тот может зайти."
+ },
+ "amendment_petition_events.10.f": {
+  "en": "\\\"A pledge,\\\" the general said, \\\"is a promise to an enemy. Name me one enemy in history who believed a promise.\\\"\\n\\n\\\"I can name a great many cities that are still standing because nobody wanted to go first,\\\" the professor said.\\n\\n\\\"Because nobody knew who would go first. You want to settle the question for them.\\\"\\n\\n\\\"I want to settle it for us.\\\" The professor folded her hands. \\\"Whoever has to decide such things in the middle of the night should know, before they are woken, what the law already says.\\\"",
+  "ru": "«Обязательство, — сказал генерал, — это обещание врагу. Назовите мне хоть одного врага в истории, поверившего обещанию.»\\n\\n«Я могу назвать множество городов, которые до сих пор стоят, потому что никто не хотел идти первым», — сказал профессор.\\n\\n«Потому что никто не знал, кто пойдёт первым. Вы хотите закрыть этот вопрос за них.»\\n\\n«Я хочу закрыть его для нас.» Профессор сложила руки. «Тот, кому придётся решать такие вещи посреди ночи, должен знать ещё до пробуждения, что уже говорит закон.»"
  },
  "amendment_petition_events.10.t": {
   "en": "Never the First",
   "ru": "Никогда первыми"
  },
+ "amendment_petition_events.11.a": {
+  "en": "Our soldiers must be free to win this war.",
+  "ru": "Наши солдаты должны быть свободны выиграть эту войну."
+ },
+ "amendment_petition_events.11.b": {
+  "en": "The law holds in war as it does in peace.",
+  "ru": "Закон действует на войне так же, как в мире."
+ },
+ "amendment_petition_events.11.d": {
+  "en": "With the war under way, the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] have asked for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] allowing commanders to set its protections aside where military necessity requires. Officers at the front, they say, cannot fight with a lawyer at each elbow. The humanitarian societies reply that the protections were written for exactly such cases.",
+  "ru": "С началом войны группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» попросила о [Concept('concept_amendment','поправке')] к закону «[SCOPE.sLaw('petition_law').GetName]», позволяющей командирам отступать от его защитных норм, где этого требует военная необходимость. Офицеры на фронте, говорят они, не могут воевать, когда юрист стоит у каждого локтя. Гуманитарные общества отвечают, что эти нормы писались именно для таких случаев."
+ },
+ "amendment_petition_events.11.f": {
+  "en": "To headquarters, from the officer commanding at the crossing. The bridge must be destroyed before the enemy can use it. The village beside it shelters enemy riflemen. Under the regulations I must give the inhabitants six hours' warning and safe passage before I fire on the houses. In six hours the riflemen will also have left, with their rifles, and will be waiting for us at the next bridge. I ask for permission to dispense with the warning in this case, and for a ruling on whether the regulation is meant to bind us in cases like it. I will hold my position until I have an answer.",
+  "ru": "В штаб от командира на переправе. Мост необходимо уничтожить, прежде чем враг сможет им воспользоваться. В деревне рядом с ним прячутся вражеские стрелки. По уставу я должен за шесть часов предупредить жителей и дать им безопасный выход, прежде чем открывать огонь по домам. За шесть часов стрелки тоже уйдут с винтовками и будут ждать нас у следующего моста. Прошу разрешения обойтись без предупреждения в этом случае и разъяснения, должен ли устав связывать нас в подобных случаях. Я буду удерживать позицию, пока не получу ответ."
+ },
  "amendment_petition_events.11.t": {
   "en": "Necessity Knows No Law",
   "ru": "Нужда закона не знает"
+ },
+ "amendment_petition_events.12.a": {
+  "en": "Let every small coin count for more.",
+  "ru": "Пусть каждая мелкая монета значит больше."
+ },
+ "amendment_petition_events.12.b": {
+  "en": "Campaigns can pay their own way.",
+  "ru": "Кампании могут окупать себя сами."
+ },
+ "amendment_petition_events.12.d": {
+  "en": "The election campaign is under way, and the largest donors are outspending everyone else. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] propose an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] under which public funds would match each small donation several times over, so that many small gifts could stand against a few large ones. The treasury would pay the difference.",
+  "ru": "Идёт избирательная кампания, и крупнейшие жертвователи тратят больше всех остальных. Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» предлагает [Concept('concept_amendment','поправку')] к закону «[SCOPE.sLaw('petition_law').GetName]», по которой государственные средства многократно дополняли бы каждое небольшое пожертвование, чтобы множество малых даров могло противостоять нескольким крупным. Разницу заплатила бы казна."
+ },
+ "amendment_petition_events.12.f": {
+  "en": "The canvasser kept a tin with a slot in the lid, and by the end of the evening it was heavy enough to rattle.\\n\\n\\\"How much?\\\" asked the organizer.\\n\\n\\\"Eleven and a half. From forty-three people. One old man gave me his fare home and walked.\\\"\\n\\nThe organizer wrote it in the ledger under the evening's date and the name of the street, below the totals from the other streets the canvassers had worked that week.",
+  "ru": "У сборщика была жестяная банка с прорезью в крышке, и к вечеру она стала достаточно тяжёлой, чтобы греметь.\\n\\n«Сколько?» — спросил организатор.\\n\\n«Одиннадцать с половиной. От сорока трёх человек. Один старик отдал мне деньги на дорогу домой и пошёл пешком.»\\n\\nОрганизатор записал это в книгу под датой вечера и названием улицы, ниже итогов с других улиц, которые сборщики обошли за неделю."
  },
  "amendment_petition_events.12.t": {
   "en": "Pennies Against Millions",
   "ru": "Гроши против миллионов"
  },
+ "amendment_petition_events.13.a": {
+  "en": "Let the faithful keep their own counsel.",
+  "ru": "Пусть верующие сами решают свои дела."
+ },
+ "amendment_petition_events.13.b": {
+  "en": "The law protects everyone, inside a house of worship or out.",
+  "ru": "Закон защищает всех, внутри дома молитвы и вне его."
+ },
+ "amendment_petition_events.13.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] have grown restless under [SCOPE.sLaw('petition_law').GetName], and their leaders have brought a petition to the capital asking for an [concept_amendment]: houses of worship, religious schools and religious charities should not be bound by its protections where they conflict with doctrine. Advocates of the law warn that an exemption for faith will soon cover every employer who claims one.",
+  "ru": "Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» всё сильнее недовольна законом «[SCOPE.sLaw('petition_law').GetName]», и её лидеры привезли в столицу петицию с просьбой о [Concept('concept_amendment','поправке')]: дома молитвы, религиозные школы и религиозные благотворительные организации не должны быть связаны его защитными нормами там, где они противоречат вероучению. Сторонники закона предупреждают, что исключение для веры вскоре охватит каждого работодателя, который на него сошлётся."
+ },
+ "amendment_petition_events.13.f": {
+  "en": "The bishop had prepared his remarks carefully, and he delivered them to the committee in a soft, reasonable voice.\\n\\n\\\"We are not asking the state to change its laws. We are asking it to leave the inside of our churches alone: our schools, our hospitals, our choice of those who teach our faith.\\\"\\n\\n\\\"Your hospitals treat half the poor of this city,\\\" a member of the committee said. \\\"Your schools teach a third of its children. Where does the inside of your church end?\\\"\\n\\nThe bishop said that the church had always drawn that line for itself, and that he had brought a list of the institutions the exemption would cover. He passed it along the table.",
+  "ru": "Епископ тщательно подготовил выступление и произнёс его перед комитетом мягким, рассудительным голосом.\\n\\n«Мы не просим государство менять свои законы. Мы просим оставить в покое то, что внутри наших церквей: наши школы, наши больницы, наш выбор тех, кто учит нашей вере.»\\n\\n«Ваши больницы лечат половину городской бедноты, — сказал член комитета. — Ваши школы учат треть его детей. Где кончается то, что внутри вашей церкви?»\\n\\nЕпископ сказал, что церковь всегда проводила эту черту сама и что он принёс список учреждений, которые охватит исключение. Он передал его по столу."
+ },
+ "amendment_petition_events.13.f_neutral": {
+  "en": "\\\"I speak for the councils of our faith, and I will say plainly to this committee what we ask. We do not ask the state to change its law. We ask it to leave the inside of our houses of worship to us: our schools, our hospitals, and the people we choose to teach our children the faith. As the law stands, an inspector may tell a religious school whom it must hire to teach doctrine. We taught it in our own way long before this law was written, and we ask to be allowed to go on. I have brought a list of the institutions the exemption would cover.\\\"",
+  "ru": "«Я говорю от лица советов нашей веры и скажу этому комитету прямо, чего мы просим. Мы не просим государство менять свой закон. Мы просим оставить нам то, что внутри наших домов молитвы: наши школы, наши больницы и людей, которых мы выбираем учить наших детей вере. По нынешнему закону инспектор может указывать религиозной школе, кого ей нанимать для преподавания вероучения. Мы учили этому по-своему задолго до того, как этот закон был написан, и просим позволить нам продолжать. Я принёс список учреждений, которые охватит исключение.»"
+ },
  "amendment_petition_events.13.t": {
   "en": "An Exemption for Faith",
   "ru": "Исключение для веры"
+ },
+ "amendment_petition_events.14.a": {
+  "en": "Those who carried us to power have earned their share.",
+  "ru": "Те, кто вознёс нас к власти, заслужили свою долю."
+ },
+ "amendment_petition_events.14.b": {
+  "en": "Posts go to the capable, whoever they voted for.",
+  "ru": "Должности достаются способным, кто бы за кого ни голосовал."
+ },
+ "amendment_petition_events.14.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] dominate the government, and their supporters want the rewards of victory: an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] that would let the governing faction fill ordinary administrative posts with its own people. Rotation in office, they say, keeps the administration answerable to the government of the day rather than to itself. The career clerks who would lose their posts have written to object.",
+  "ru": "Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» доминирует в правительстве, и её сторонники хотят плодов победы: [Concept('concept_amendment','поправки')] к закону «[SCOPE.sLaw('petition_law').GetName]», позволяющей правящей фракции заполнять рядовые административные должности своими людьми. Ротация в должностях, говорят они, делает администрацию подотчётной правительству дня, а не самой себе. Штатные писари, которые потеряют места, написали с возражениями."
+ },
+ "amendment_petition_events.14.f": {
+  "en": "A government secretary's notes on the posts that rotation in office would open and the letters asking for them:\\n\\nThe letters number over two thousand so far. Most come from our supporters in the districts, and many carry a second letter from someone recommending the writer.\\nThe customs service has about two hundred posts below the rank of inspector. Most of the letters ask for these, because they pay well and need no examination.\\nThe post office has about a hundred and fifty posts, nearly all at the counter or in the sorting rooms. Our district organizers want these for their own people, since there is a post office in every town.\\nThe land registry has about fifty posts, and only the clerks now in them can read the older registers. The registrar asks that some of them be kept on, whoever else is appointed.",
+  "ru": "Заметки секретаря правительства о должностях, которые откроет ротация в должностях, и о письмах с просьбами о них:\\n\\nПисем уже больше двух тысяч. Большинство от наших сторонников в районах, и во многих есть второе письмо от человека, рекомендующего автора.\\nВ таможенной службе около двухсот должностей ниже ранга инспектора. Большинство писем просят именно их, потому что они хорошо оплачиваются и не требуют экзамена.\\nВ почтовом ведомстве около ста пятидесяти должностей, почти все за прилавком или в сортировочных. Наши районные организаторы хотят их для своих людей, поскольку почта есть в каждом городе.\\nВ земельном реестре около пятидесяти должностей, и старые книги читать могут только нынешние писари. Регистратор просит оставить некоторых из них, кого бы ни назначили на остальные места."
  },
  "amendment_petition_events.14.t": {
   "en": "Rotation in Office",
   "ru": "Ротация в должностях"
  },
+ "amendment_petition_events.15.a": {
+  "en": "A company has the right to guard its property.",
+  "ru": "Компания вправе охранять свою собственность."
+ },
+ "amendment_petition_events.15.b": {
+  "en": "Only the state may carry the law's weapons.",
+  "ru": "Оружие закона вправе носить лишь государство."
+ },
+ "amendment_petition_events.15.d": {
+  "en": "Labor unrest is spreading, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] say the police cannot be everywhere. They ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] letting companies commission armed guards of their own to keep order on company property, at company expense. Union organizers say the guards would be the owners' private army.",
+  "ru": "Рабочие волнения растут, и группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» говорит, что полиция не может быть везде. Она просит о [Concept('concept_amendment','поправке')] к закону «[SCOPE.sLaw('petition_law').GetName]», позволяющей компаниям нанимать собственную вооружённую охрану для поддержания порядка на территории компании за счёт компании. Профсоюзные организаторы говорят, что эта охрана станет частной армией владельцев."
+ },
+ "amendment_petition_events.15.f": {
+  "en": "The new men arrived at the works gate with the Monday shift, in gray coats with brass badges that named no public authority. They carried rifles and did not go in to work.\\n\\n\\\"Who pays them?\\\" one of the workers asked the foreman.\\n\\n\\\"The company.\\\"\\n\\n\\\"And who do they answer to?\\\"\\n\\n\\\"The company,\\\" the foreman said, and went inside.\\n\\nBy Wednesday the meeting at the union hall had doubled in size. The organizers sent a letter to the government asking under what law armed men who were not police could stop people at a gate.",
+  "ru": "Новые люди пришли к воротам завода с понедельничной сменой, в серых куртках с медными значками, где не значилось никакой государственной власти. Они были с винтовками и на работу не пошли.\\n\\n«Кто им платит?» — спросил один из рабочих у мастера.\\n\\n«Компания.»\\n\\n«А перед кем они отвечают?»\\n\\n«Перед компанией», — сказал мастер и вошёл внутрь.\\n\\nК среде собрание в профсоюзном зале выросло вдвое. Организаторы послали правительству письмо с вопросом, по какому закону вооружённые люди, не являющиеся полицией, могут останавливать людей у ворот."
+ },
  "amendment_petition_events.15.t": {
   "en": "Company Men",
   "ru": "Люди компании"
+ },
+ "amendment_petition_events.16.a": {
+  "en": "Let the public hear complaints against its police.",
+  "ru": "Пусть общество слушает жалобы на свою полицию."
+ },
+ "amendment_petition_events.16.b": {
+  "en": "The force disciplines its own officers.",
+  "ru": "Силы сами наказывают своих офицеров."
+ },
+ "amendment_petition_events.16.d": {
+  "en": "Complaints against the police go unanswered, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] propose an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName]: civilian review boards with the power to hear complaints against officers and discipline them. The marchers in the streets, they argue, are the price of a force that answers only to itself. Police chiefs warn that their officers will hesitate where hesitation gets people killed.",
+  "ru": "Жалобы на полицию остаются без ответа, и группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» предлагает [Concept('concept_amendment','поправку')] к закону «[SCOPE.sLaw('petition_law').GetName]»: гражданские наблюдательные советы с правом разбирать жалобы на офицеров и наказывать их. Марши на улицах, по их словам, — цена за силу, отвечающую только перед собой. Начальники полиции предупреждают, что их офицеры станут колебаться там, где колебание стоит людям жизни."
+ },
+ "amendment_petition_events.16.f": {
+  "en": "The complaint form ran to two pages, and the woman at the station counter filled in both sides before the desk sergeant looked up.\\n\\n\\\"What's this for?\\\"\\n\\n\\\"My son. He was stopped on the bridge on Friday night, and he came home with his arm in a sling.\\\"\\n\\nThe sergeant read it, folded it once and put it on a spike with the others. The spike was nearly full.\\n\\n\\\"Someone will be in touch,\\\" he said.\\n\\nShe asked him who, and he said he did not know. She asked for a receipt instead. He wrote one on the back of a blank form, and she folded it into her bag and went out to her son, who was waiting on the steps.",
+  "ru": "Бланк жалобы занимал две страницы, и женщина у стойки участка заполнила обе стороны, пока дежурный сержант не поднял глаза.\\n\\n«Это зачем?»\\n\\n«Мой сын. Его остановили на мосту в пятницу вечером, и домой он пришёл с рукой на перевязи.»\\n\\nСержант прочитал, сложил один раз и нанизал на спицу к остальным. Спица была почти полной.\\n\\n«С вами свяжутся», — сказал он.\\n\\nОна спросила, кто, и он ответил, что не знает. Тогда она попросила расписку. Он написал её на обороте чистого бланка, она сложила её в сумку и вышла к сыну, который ждал на ступенях."
  },
  "amendment_petition_events.16.t": {
   "en": "Complaints Against the Force",
   "ru": "Жалобы на полицию"
  },
+ "amendment_petition_events.17.a": {
+  "en": "The great estates will pay their share.",
+  "ru": "Крупные имения заплатят свою долю."
+ },
+ "amendment_petition_events.17.b": {
+  "en": "An estate passes to the heirs, not to the treasury.",
+  "ru": "Имение переходит к наследникам, а не в казну."
+ },
+ "amendment_petition_events.17.d": {
+  "en": "Great fortunes pass from one generation to the next without paying anything to the state. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] levying a progressive duty on great estates as they pass. Within a generation, they argue, the duty would break up the great houses that the law in force lets stand.",
+  "ru": "Огромные состояния переходят от поколения к поколению, ничего не платя государству. Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» просит о [Concept('concept_amendment','поправке')] к закону «[SCOPE.sLaw('petition_law').GetName]», вводящей прогрессивный сбор на крупные имения при их передаче. За поколение, доказывают они, этот сбор разобьёт великие дома, которые действующий закон оставляет нетронутыми."
+ },
+ "amendment_petition_events.17.f": {
+  "en": "To the government, from the committee for a duty on great estates. Over the past year we have gone through the probate notices and the court registers. Of the estates that passed in that year, the largest dozen were together worth more than all the rest combined. None of them paid anything to the state as it passed. Each went whole to one heir or a few, with its farms, its houses and the rents that come with them. We ask for a duty that rises with the size of the estate and falls due when it passes. We attach the list of the estates we counted.",
+  "ru": "Правительству от комитета за сбор на крупные имения. За прошедший год мы изучили уведомления о наследстве и судебные реестры. Из имений, перешедших за этот год, крупнейшая дюжина вместе стоила больше всех остальных, вместе взятых. Ни одно из них ничего не заплатило государству при передаче. Каждое целиком перешло к одному наследнику или к немногим, вместе с фермами, домами и рентой с них. Мы просим сбор, растущий с размером имения и подлежащий уплате при его передаче. Прилагаем список подсчитанных нами имений."
+ },
  "amendment_petition_events.17.t": {
   "en": "What the Dead Owe",
   "ru": "Что должны мёртвые"
+ },
+ "amendment_petition_events.18.a": {
+  "en": "Let the trusts run forever.",
+  "ru": "Пусть трасты действуют вечно."
+ },
+ "amendment_petition_events.18.b": {
+  "en": "Every fortune passes through an estate.",
+  "ru": "Каждое состояние проходит через наследство."
+ },
+ "amendment_petition_events.18.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] abolishing the rule against perpetuities, so that a family trust may run forever. A fortune placed in such a trust would never pass through an estate again. The unions say it would let a family keep a fortune out of reach of any duty for good.",
+  "ru": "Группа интересов «[SCOPE.gsInterestGroup('petition_sponsor_ig').GetName]» просит о [Concept('concept_amendment','поправке')] к закону «[SCOPE.sLaw('petition_law').GetName]», отменяющей правило о предельном сроке доверительной собственности, чтобы семейный траст мог существовать вечно. Состояние, помещённое в такой траст, больше никогда не пройдёт через наследство. Профсоюзы говорят, что это позволит семье навсегда уберечь состояние от любого сбора."
+ },
+ "amendment_petition_events.18.f": {
+  "en": "\\\"I manage trusts for families, and this is what I tell a new client who asks why the amendment matters. Under the rule as it stands, a trust must end within a fixed time after the deaths of the people named in it. When it ends, the money comes out into somebody's estate, and an estate can be taxed, divided and argued over in court. Take the rule away and the trust need never end. The great-grandchildren of your great-grandchildren draw the income, and the capital never passes through anyone's hands at all. My firm has written to the government in support of the amendment, and I have told my clients that we have.\\\"",
+  "ru": "«Я управляю трастами для семей и вот что говорю новому клиенту, который спрашивает, чем важна эта поправка. По действующему правилу траст должен закончиться через установленный срок после смерти названных в нём людей. Когда он заканчивается, деньги переходят в чьё-то наследство, а наследство можно обложить налогом, разделить и оспаривать в суде. Уберите правило, и траст может не кончаться никогда. Правнуки ваших правнуков получают доход, а капитал вообще не проходит через чьи-либо руки. Моя фирма написала правительству в поддержку поправки, и я сказал своим клиентам, что мы это сделали.»"
  },
  "amendment_petition_events.18.t": {
   "en": "Dynasty Trusts",

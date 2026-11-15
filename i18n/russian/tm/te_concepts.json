@@ -1,131 +1,875 @@
 {
+ "adopt_local_culture": {
+  "en": "Adopt Local Culture",
+  "ru": "Принять местную культуру"
+ },
+ "adopt_local_culture_desc": {
+  "en": "Our state exists entirely outside of the [Concept('concept_homeland', 'homelands')] of our primary culture. Perhaps it is time for the local culture to become our primary culture.",
+  "ru": "Наша область целиком находится за пределами [Concept('concept_homeland', 'исторических родин')] нашей основной культуры. Возможно, пора сделать местную культуру основной."
+ },
  "advanced_materials": {
   "en": "Advanced Materials",
   "ru": "Передовые материалы"
+ },
+ "aerosol_injection_cost_modifier_desc": {
+  "en": "What Stratospheric Aerosol Injection costs each week: one percent of GDP a year, paid for as long as the policy is in force.",
+  "ru": "Еженедельные расходы на стратосферные аэрозольные инъекции: один процент ВВП в год, выплачивается, пока действует эта политика."
+ },
+ "aerosol_injection_modifier": {
+  "en": "Stratospheric Aerosol Injection",
+  "ru": "Стратосферные аэрозольные инъекции"
+ },
+ "aerosol_injection_modifier_desc": {
+  "en": "Aircraft fly sulfate aerosols into the stratosphere, where they reflect a little sunlight back into space. What it does to the climate shows in the world's [concept_temperature_anomaly], held down by the aerosol mask, not here. Paid for by a standing government expense of one percent of GDP a year.",
+  "ru": "Самолёты распыляют в стратосфере сульфатные аэрозоли, которые отражают в космос немного солнечного света. Влияние на климат видно в мировой [Concept('concept_temperature_anomaly', 'температурной аномалии')], сдерживаемой аэрозольной завесой, а не здесь. Оплачивается постоянным расходом правительства в размере одного процента ВВП в год."
+ },
+ "agdiff_biotechnology": {
+  "en": "Agricultural Biotechnology Diffusion",
+  "ru": "Распространение сельскохозяйственной биотехнологии"
+ },
+ "agdiff_biotechnology_desc": {
+  "en": "Micronutrient-enriched cultivars, salt-tolerant varieties, and marker-assisted breeding programs have spread internationally through foundation-led humanitarian deployment and commercial licensing.",
+  "ru": "Сорта, обогащённые микроэлементами, солеустойчивые сорта и программы селекции с маркерной поддержкой распространились по миру благодаря гуманитарным поставкам при участии фондов и коммерческому лицензированию."
+ },
+ "agdiff_first_mover_prestige_desc": {
+  "en": "We were the first to develop and deploy a transformative agricultural technology, and the world has taken notice.",
+  "ru": "Мы первыми разработали и внедрили революционную сельскохозяйственную технологию, и мир это заметил."
+ },
+ "agdiff_gene_splicing": {
+  "en": "Transgenic Crop Diffusion",
+  "ru": "Распространение трансгенных культур"
+ },
+ "agdiff_gene_splicing_desc": {
+  "en": "Insect-resistant and herbicide-tolerant transgenic seed lines have entered the international commercial seed trade. Even nations without indigenous biotech research now have access to higher-yielding cultivars.",
+  "ru": "Трансгенные линии семян, устойчивые к насекомым и гербицидам, вышли на международный коммерческий рынок семян. Даже страны без собственных биотехнологических исследований теперь имеют доступ к более урожайным сортам."
+ },
+ "agdiff_green_revolution": {
+  "en": "Green Revolution Diffusion",
+  "ru": "Распространение Зелёной революции"
+ },
+ "agdiff_green_revolution_desc": {
+  "en": "Semi-dwarf high-yield cereal varieties, integrated fertilizer-irrigation packages, and the agronomic extension services that deploy them have crossed borders. Norman Borlaug and the international agricultural research centers (CIMMYT, IRRI) have ensured the techniques reach even the nations that did not pioneer them.",
+  "ru": "Полукарликовые высокоурожайные сорта зерновых, комплексные пакеты удобрений и орошения и агрономические службы, которые их внедряют, пересекли границы. Норман Борлоуг и международные центры сельскохозяйственных исследований (CIMMYT, IRRI) позаботились о том, чтобы эти методы дошли даже до стран, не создававших их."
+ },
+ "agdiff_modern_chemical_processes_desc": {
+  "en": "Ammonium nitrate, urea, and phosphate fertilizers, along with the catalytic and process control techniques that produce them, are now available on the global market regardless of who first industrialized them.",
+  "ru": "Аммиачная селитра, мочевина и фосфатные удобрения, а также каталитические методы и методы управления процессами, которыми их производят, теперь доступны на мировом рынке, независимо от того, кто первым развил у себя эту промышленность."
+ },
+ "agdiff_nitrogen_fixation": {
+  "en": "Synthetic Fertilizer Diffusion",
+  "ru": "Распространение синтетических удобрений"
+ },
+ "agdiff_nitrogen_fixation_desc": {
+  "en": "The Haber-Bosch process — industrial synthesis of ammonia from atmospheric nitrogen — has propagated beyond its inventors. Even nations that did not develop the technique benefit as the techniques and equipment become commercially available.",
+  "ru": "Процесс Габера — Боша — промышленный синтез аммиака из атмосферного азота — вышел за пределы страны-изобретателя. Даже государства, не разрабатывавшие этот метод, получают выгоду, поскольку методы и оборудование становятся коммерчески доступными."
+ },
+ "ai_assisted_governance_modifier_desc": {
+  "en": "AI assists human bureaucrats rather than replacing them, improving efficiency while maintaining employment.",
+  "ru": "ИИ помогает чиновникам-людям, а не заменяет их: эффективность растёт, а занятость сохраняется."
+ },
+ "ai_bureaucracy_modifier": {
+  "en": "AI Bureaucratic Automation",
+  "ru": "Автоматизация бюрократии с помощью ИИ"
+ },
+ "ai_bureaucracy_modifier_desc": {
+  "en": "AI systems have replaced much of the traditional [concept_bureaucracy], dramatically improving efficiency but causing unemployment.",
+  "ru": "Системы ИИ заменили значительную часть традиционной [Concept('concept_bureaucracy', 'бюрократии')], что резко повысило эффективность, но привело к безработице."
+ },
+ "ai_policing_banned_modifier_desc": {
+  "en": "Our government has ordered the police to stop using software that predicts who will commit a crime.",
+  "ru": "Наше правительство приказало полиции прекратить использование программ, предсказывающих, кто совершит преступление."
+ },
+ "ai_strategy_irredentist": {
+  "en": "Irredentist Pressure",
+  "ru": "Ирредентистское давление"
+ },
+ "ai_strategy_irredentist_desc": {
+  "en": "Pursue reunification with same-culture neighbors whose home states we hold claims on. Government ideology shapes whether the path is warlike or peaceful, but both paths remain available.",
+  "ru": "Добиваться воссоединения с соседями той же культуры, на чьи исторические области мы предъявляем претензии. Идеология правительства определяет, будет ли путь воинственным или мирным, но оба остаются доступными."
+ },
+ "ai_strategy_un_mandate_desc": {
+  "en": "Exercise an authorization the [concept_un_general_assembly] has granted us: recover the named [concept_state_region] from the named state, and take nothing else from it.",
+  "ru": "Использовать полномочия, предоставленные нам [Concept('concept_un_general_assembly', 'Генеральной Ассамблеей')]: вернуть названный [Concept('concept_state_region', 'стратегический регион')] у названного государства и ничего больше у него не брать."
  },
  "algorithmic_mandate": {
   "en": "Algorithmic Mandate",
   "ru": "Алгоритмический мандат"
  },
+ "algorithmic_mandate_desc": {
+  "en": "The algorithm's authority rests on its results. [concept_legitimacy] rises while living standards run ahead of what people expect and falls while they lag behind, returning to nothing once [concept_sol_expectations] catch up. It comes on top of the base [concept_legitimacy] the law itself gives.",
+  "ru": "Власть алгоритма держится на его результатах. [concept_legitimacy] растёт, пока уровень жизни опережает ожидания людей, и падает, пока отстаёт от них, сходя на нет, когда [Concept('concept_sol_expectations', 'адаптивные ожидания уровня жизни')] догоняют его. Это добавляется к базовой [Concept('concept_legitimacy', 'легитимности')], которую даёт сам закон."
+ },
+ "allied_war_council": {
+  "en": "Allied War Council",
+  "ru": "Союзный военный совет"
+ },
+ "alternative_service_modifier": {
+  "en": "Alternative Service Program",
+  "ru": "Программа альтернативной службы"
+ },
+ "alternative_service_modifier_desc": {
+  "en": "An alternative service program for conscientious objectors has reduced military manpower but eased social tensions.",
+  "ru": "Программа альтернативной службы для отказников по убеждениям сократила военные людские ресурсы, но смягчила социальную напряжённость."
+ },
  "amendment_birthright_endowment": {
   "en": "Birthright Endowment",
   "ru": "Капитал по праву рождения"
+ },
+ "amendment_birthright_endowment_desc": {
+  "en": "An [concept_amendment] in which a duty on estates pays every young adult a capital stake, as Thomas Paine proposed in 1797. It levies the duty itself, so it replaces Estate Duties. Since the duty is set to pay the stakes, it lowers the target of the [concept_inheritance_concentration] by #v 20#!, less than Estate Duties.",
+  "ru": "[concept_amendment] — пошлина на наследство, из которой каждому молодому взрослому выплачивается капитал, как предлагал Томас Пейн в 1797 году. Она сама взимает пошлину, поэтому заменяет Наследственные пошлины. Так как пошлина рассчитана на выплату капитала, она снижает целевой уровень показателя [Concept('concept_inheritance_concentration', 'династического богатства')] на #v 20#!, что меньше, чем Наследственные пошлины."
+ },
+ "amendment_cb_dual_mandate_desc": {
+  "en": "An [concept_amendment] making the independent central bank answer for jobs as well as prices, as the Federal Reserve has since 1978. The bank moves to the $banking_dash_mon_mandate_dual$ 12 months after the act passes, and leans against booms and slumps as they come. On a convertible gold standard it defends the peg instead.",
+  "ru": "[concept_amendment], по которой независимый центральный банк отвечает и за занятость, и за цены, как Федеральная резервная система с 1978 года. Через 12 месяцев после принятия акта банк переходит на $banking_dash_mon_mandate_dual$ и сглаживает подъёмы и спады по мере их появления. При конвертируемом золотом стандарте он вместо этого защищает привязку."
+ },
+ "amendment_cb_inflation_targeting_desc": {
+  "en": "An [concept_amendment] giving the independent central bank a narrow mandate: it answers for prices alone, as the Bundesbank did. The bank moves to $banking_dash_mon_mandate_inflation$ 12 months after the act passes, and lenders come to believe it more than any other rule. On a convertible gold standard it defends the peg instead.",
+  "ru": "[concept_amendment], дающая независимому центральному банку узкий мандат: он отвечает только за цены, как Бундесбанк. Через 12 месяцев после принятия акта банк переходит на $banking_dash_mon_mandate_inflation$, и кредиторы верят ему больше, чем любому другому правилу. При конвертируемом золотом стандарте он вместо этого защищает привязку."
+ },
+ "amendment_civilian_police_oversight_desc": {
+  "en": "An [concept_amendment] creating civilian review boards that hear complaints against police officers and licensed security firms, and can discipline them. Minorities' complaints get a hearing before they turn to radicalism, and order rests more on consent, but the boards cost money and officers now answer to the public as well as to their superiors.",
+  "ru": "[concept_amendment], создающая гражданские наблюдательные советы, которые рассматривают жалобы на полицейских и лицензированные охранные фирмы и могут применять к ним дисциплинарные меры. Жалобы меньшинств выслушиваются до того, как те обратятся к радикализму, и порядок больше держится на согласии, но советы стоят денег, а полицейские теперь отчитываются и перед обществом, и перед начальством."
  },
  "amendment_collective_administration": {
   "en": "Collegial Administration",
   "ru": "Коллегиальное управление"
  },
+ "amendment_collective_administration_desc": {
+  "en": "The institutions govern as equal bureaus, each in its own field. They adapt quickly, but decrees cost more with no one executive to issue them.",
+  "ru": "Институты правят как равные ведомства, каждое в своей области. Они быстро приспосабливаются, но указы обходятся дороже, поскольку некому их издавать единолично."
+ },
  "amendment_collective_algorithmic_commons": {
   "en": "Algorithmic Commons",
   "ru": "Алгоритмическое общее достояние"
+ },
+ "amendment_collective_algorithmic_commons_desc": {
+  "en": "The algorithm is held in common and answers to no Director. Every citizen's feedback weighs the same in it, whatever their wealth, and because grievances reach it directly, political movements are less active.",
+  "ru": "Алгоритм находится в общем владении и не подчиняется никакому директору. Отзывы каждого гражданина весят в нём одинаково, каким бы ни было его богатство, а поскольку жалобы доходят до него напрямую, политические движения менее активны."
  },
  "amendment_collective_direct_democracy": {
   "en": "Direct Democracy",
   "ru": "Прямая демократия"
  },
+ "amendment_collective_direct_democracy_desc": {
+  "en": "The voters decide directly. A law without a political movement behind it has no mandate and passes less often.",
+  "ru": "Избиратели решают напрямую. Закон без политического движения за ним не имеет мандата и принимается реже."
+ },
  "amendment_collective_free_federation": {
   "en": "Free Federation",
   "ru": "Свободная федерация"
+ },
+ "amendment_collective_free_federation_desc": {
+  "en": "Delegates act on mandates from below. A law without a political movement behind it passes less often, and one a movement carries wins its supporters over to the federation.",
+  "ru": "Делегаты действуют по мандатам снизу. Закон без политического движения за ним принимается реже, а закон, который несёт движение, привлекает его сторонников на сторону федерации."
  },
  "amendment_collective_leadership": {
   "en": "Collective Leadership",
   "ru": "Коллективное руководство"
  },
+ "amendment_collective_leadership_desc": {
+  "en": "The party's presidium governs together. With no single leader for a coup to remove, the country gains +25% [concept_coup_resistance], an effect the amendment's modifier list does not show.",
+  "ru": "Президиум партии правит сообща. Раз нет единого лидера, которого мог бы убрать переворот, страна получает +25% к [Concept('concept_coup_resistance', 'сопротивлению переворотам')]; этот эффект не показан в списке модификаторов поправки."
+ },
  "amendment_collective_patrician_council": {
   "en": "Patrician Council",
   "ru": "Совет патрициев"
+ },
+ "amendment_collective_patrician_council_desc": {
+  "en": "The powerful govern as peers, and aristocrats and capitalists hold more of the country's political strength.",
+  "ru": "Могущественные правят как равные, и аристократы и капиталисты получают больше политической силы в стране."
  },
  "amendment_community_service": {
   "en": "Community Service Alternative",
   "ru": "Общественные работы вместо службы"
  },
+ "amendment_community_service_desc": {
+  "en": "An [concept_amendment] allowing community service as an alternative to incarceration for non-violent offenses, introducing a restorative element to an otherwise punishment-focused system.",
+  "ru": "[concept_amendment], допускающая общественные работы как альтернативу тюремному заключению за ненасильственные преступления и вводящая восстановительный элемент в систему, ориентированную в остальном на наказание."
+ },
  "amendment_compromise_modifier": {
   "en": "Compromise Amendment",
   "ru": "Компромиссная поправка"
+ },
+ "amendment_compromise_modifier_desc": {
+  "en": "Accepting an [concept_amendment] has broadened the coalition in favor of the law, easing its passage.",
+  "ru": "Принятие [Concept('concept_amendment', 'поправки')] расширило коалицию в поддержку закона, облегчив его прохождение."
  },
  "amendment_cooperative_preference": {
   "en": "Worker Cooperative Preference",
   "ru": "Приоритет рабочих кооперативов"
  },
+ "amendment_cooperative_preference_desc": {
+  "en": "An [concept_amendment] giving worker-owned cooperatives preferential treatment in antitrust enforcement, encouraging democratic ownership of industry.",
+  "ru": "[concept_amendment], дающая кооперативам, принадлежащим работникам, преференции при антимонопольном принуждении и поощряющая демократическое владение промышленностью."
+ },
+ "amendment_corporate_data_exemption_desc": {
+  "en": "An [concept_amendment] carving out an exception that allows businesses to collect and use personal data for commercial purposes under privacy law.",
+  "ru": "[concept_amendment], вводящая исключение, по которому предприятия могут собирать и использовать персональные данные в коммерческих целях вопреки закону о конфиденциальности."
+ },
+ "amendment_corporate_security_powers_desc": {
+  "en": "An [concept_amendment] commissioning company guards with police powers in their own mines, mills and company towns. The companies pay for the guards and direct them, strikes included, while the public force polices everywhere else.",
+  "ru": "[concept_amendment], наделяющая охрану компаний полицейскими полномочиями в их собственных шахтах, на фабриках и в рабочих посёлках. Компании сами платят охране и командуют ею, в том числе при забастовках, а государственные силы поддерживают порядок во всех остальных местах."
+ },
+ "amendment_env_grandfather_clause_desc": {
+  "en": "An [concept_amendment] exempting existing industrial works from part of the Ministry of the Environment's standards, softening its pollution and emissions reductions while industry adapts.",
+  "ru": "[concept_amendment], освобождающая действующие промышленные предприятия от части стандартов Министерства окружающей среды, смягчая сокращение загрязнения и выбросов, пока промышленность приспосабливается."
+ },
  "amendment_estate_duties": {
   "en": "Estate Duties",
   "ru": "Наследственные пошлины"
+ },
+ "amendment_estate_duties_desc": {
+  "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
+  "ru": "[concept_amendment], вводящая прогрессивную пошлину на крупные имения при их передаче. Она не приносит постоянного дохода; она снижает целевой уровень показателя [Concept('concept_inheritance_concentration', 'династического богатства')] на #v 30#!. Несовместима с Капиталом по праву рождения, который сам взимает пошлину."
+ },
+ "amendment_first_past_the_post_desc": {
+  "en": "An [concept_amendment] giving each seat to whoever tops the poll. A vote for a party that can't win is wasted, so interest groups crowd into the two largest parties, which become broad coalitions. Disagreement inside the government costs less [concept_legitimacy], but the voters left without a winning party cost it some.",
+  "ru": "[concept_amendment], отдающая каждое место тому, кто лидирует по числу голосов. Голос за партию, которая не может победить, пропадает, поэтому группы интересов стекаются в две крупнейшие партии, превращающиеся в широкие коалиции. Разногласия внутри правительства стоят меньше [Concept('concept_legitimacy', 'легитимности')], но избиратели, оставшиеся без партии-победителя, отнимают у неё часть."
+ },
+ "amendment_habeas_corpus_suspension_desc": {
+  "en": "An [concept_amendment] letting the government hold people without trial for the duration of a war. Dissent is cheaper to suppress, and the courts, which can't free a prisoner, earn less [concept_judicial_independence]. Only in wartime, and it lapses when the war ends.",
+  "ru": "[concept_amendment], позволяющая правительству удерживать людей без суда на время войны. Подавлять инакомыслие дешевле, а суды, не способные освободить заключённого, получают меньше [Concept('concept_judicial_independence', 'независимости судов')]. Только в военное время, и теряет силу с окончанием войны."
+ },
+ "amendment_human_in_the_loop_desc": {
+  "en": "An [concept_amendment] giving everyone a right to appeal a machine's ruling to a human judge. The public trusts rulings a person can review, at the cost of half the law's administrative saving, and under Algorithmic Governance a human signature ends the captured court's override.",
+  "ru": "[concept_amendment], дающая каждому право обжаловать решение машины перед судьёй-человеком. Общество доверяет решениям, которые может пересмотреть человек, ценой половины административной экономии от закона, а при Алгоритмическом управлении подпись человека прекращает самовольство захваченного суда."
  },
  "amendment_judicial_elections": {
   "en": "Judicial Elections",
   "ru": "Выборность судей"
  },
+ "amendment_judicial_elections_desc": {
+  "en": "An [concept_amendment] putting judges on the ballot. Voters trust judges they chose, but judges who face the voters defer to them, so the courts can earn less [concept_judicial_independence]. Only under an elected government.",
+  "ru": "[concept_amendment], выносящая судей на бюллетень. Избиратели доверяют судьям, которых выбрали, но судьи, зависящие от избирателей, уступают им, поэтому суды могут получать меньше [Concept('concept_judicial_independence', 'независимости судов')]. Только при выборном правительстве."
+ },
  "amendment_jury_trials": {
   "en": "Jury Trials",
   "ru": "Суд присяжных"
+ },
+ "amendment_jury_trials_desc": {
+  "en": "An [concept_amendment] sending serious cases to a jury of citizens. The courts earn more [concept_judicial_independence] and the public more say, but juries acquit the government's enemies, so suppression costs more.",
+  "ru": "[concept_amendment], передающая серьёзные дела суду присяжных из граждан. Суды получают больше [Concept('concept_judicial_independence', 'независимости судов')], а общество — больше голоса, но присяжные оправдывают врагов правительства, поэтому подавление обходится дороже."
+ },
+ "amendment_langreform_advisory_panel_desc": {
+  "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
+  "ru": "Совет учёных публикует авторитетные рекомендации по употреблению языка, обладающие моральным весом, но не силой закона."
  },
  "amendment_langreform_constructed": {
   "en": "Constructed Language",
   "ru": "Искусственный язык"
  },
+ "amendment_langreform_constructed_desc": {
+  "en": "The state has adopted an entirely new constructed language designed for logical grammar and universal accessibility, accelerating technological exchange at the cost of traditional cultural bonds.",
+  "ru": "Государство приняло совершенно новый искусственный язык с логичной грамматикой и всеобщей доступностью, что ускоряет обмен технологиями ценой традиционных культурных связей."
+ },
+ "amendment_langreform_minority_protection_desc": {
+  "en": "The state language reform includes protections and revival programs for minority and regional languages, reducing separatist sentiment.",
+  "ru": "Реформа государственного языка включает защиту и программы возрождения языков меньшинств и регионов, снижая сепаратистские настроения."
+ },
+ "amendment_langreform_national_focus_desc": {
+  "en": "The state language reform concentrates all resources on promoting the national language, accelerating [concept_assimilation] but fueling minority resentment.",
+  "ru": "Реформа государственного языка направляет все ресурсы на продвижение национального языка, ускоряя [Concept('concept_assimilation', 'ассимиляцию')], но подпитывая обиды меньшинств."
+ },
+ "amendment_langreform_powerful_academy_desc": {
+  "en": "A powerful state language academy has been established with authority to regulate terminology, grammar, and orthography.",
+  "ru": "Учреждена влиятельная государственная языковая академия с полномочиями регулировать терминологию, грамматику и орфографию."
+ },
  "amendment_langreform_revival": {
   "en": "Classical Language Revival",
   "ru": "Возрождение классического языка"
+ },
+ "amendment_langreform_revival_desc": {
+  "en": "The state is reviving a classical or ancestral language as the modern national standard, inspiring cultural pride and religious fervor.",
+  "ru": "Государство возрождает классический или древний язык как современный национальный стандарт, вдохновляя культурную гордость и религиозный пыл."
+ },
+ "amendment_langreform_revived_arabic_desc": {
+  "en": "The state has chosen to revive Classical Arabic as the literary and administrative standard, building on its [concept_prestige] as the language of the Quran, of philosophy, mathematics, and poetry.",
+  "ru": "Государство решило возродить классический арабский как литературный и административный стандарт, опираясь на его [concept_prestige|l] как языка Корана, философии, математики и поэзии."
+ },
+ "amendment_langreform_revived_aramaic_desc": {
+  "en": "The state has chosen to revive Aramaic, the ancient lingua franca of the Near East and the language of the Talmud and early Christianity, as the foundation for a modern national standard.",
+  "ru": "Государство решило возродить арамейский — древний лингва франка Ближнего Востока и язык Талмуда и раннего христианства — как основу современного национального стандарта."
+ },
+ "amendment_langreform_revived_avestan_desc": {
+  "en": "The state has chosen to revive Avestan, the sacred tongue of the Zoroastrian Gathas, as the foundation for a national language rooted in the deepest antiquity.",
+  "ru": "Государство решило возродить авестийский — священный язык зороастрийских Гат — как основу национального языка, уходящего корнями в глубочайшую древность."
+ },
+ "amendment_langreform_revived_chinese_desc": {
+  "en": "The state has chosen to revive Literary Chinese as the national written standard, drawing on the classical tradition shared across centuries of East Asian scholarship, law, and governance.",
+  "ru": "Государство решило возродить литературный китайский как национальный письменный стандарт, опираясь на классическую традицию, общую для столетий восточноазиатской учёности, права и управления."
+ },
+ "amendment_langreform_revived_coptic_desc": {
+  "en": "The state has chosen to revive Coptic, the last descendant of the language of the pharaohs, preserved through centuries of Christian liturgy as the foundation for a modern literary standard.",
+  "ru": "Государство решило возродить коптский — последний потомок языка фараонов, сохранённый столетиями христианской литургии, — как основу современного литературного стандарта."
+ },
+ "amendment_langreform_revived_geez_desc": {
+  "en": "The state has chosen to revive Ge'ez, the ancient liturgical tongue preserved through centuries of monastic manuscript tradition, as the basis for a modern literary standard.",
+  "ru": "Государство решило возродить геэз — древний литургический язык, сохранённый столетиями монастырской рукописной традиции, — как основу современного литературного стандарта."
+ },
+ "amendment_langreform_revived_gothic_desc": {
+  "en": "The state has chosen to revive Gothic, the earliest attested Germanic language, known through Wulfila's fourth-century Bible translation, as the scholarly foundation for a modern standard.",
+  "ru": "Государство решило возродить готский — древнейший засвидетельствованный германский язык, известный по переводу Библии, сделанному Вульфилой в IV веке, — как научную основу современного стандарта."
+ },
+ "amendment_langreform_revived_greek_desc": {
+  "en": "The state has chosen to revive Classical Greek as the national scholarly standard, harnessing the language of philosophy, democracy, and the sciences.",
+  "ru": "Государство решило возродить классический греческий как национальный научный стандарт, взяв на вооружение язык философии, демократии и наук."
+ },
+ "amendment_langreform_revived_hebrew_desc": {
+  "en": "The state has chosen to revive Hebrew as the modern national language, transforming an ancient scriptural tongue into a living vehicle for law, commerce, and science.",
+  "ru": "Государство решило возродить иврит как современный национальный язык, превратив древний язык Писания в живое средство права, торговли и науки."
+ },
+ "amendment_langreform_revived_irish_desc": {
+  "en": "The state has chosen to revive Classical Irish as the national literary standard, drawing on the oldest vernacular literature in Western Europe and centuries of Gaelic legal, poetic, and monastic tradition.",
+  "ru": "Государство решило возродить классический ирландский как национальный литературный стандарт, опираясь на старейшую народную литературу Западной Европы и столетия гэльской правовой, поэтической и монастырской традиции."
+ },
+ "amendment_langreform_revived_latin_desc": {
+  "en": "The state has chosen to revive Latin as the national scholarly and administrative standard, drawing on centuries of Western legal, diplomatic, and ecclesiastical tradition.",
+  "ru": "Государство решило возродить латынь как национальный научный и административный стандарт, опираясь на столетия западной правовой, дипломатической и церковной традиции."
+ },
+ "amendment_langreform_revived_mayan_desc": {
+  "en": "The state has chosen to revive Classic Mayan as the national literary standard, restoring the courtly language of Tikal, Palenque, and Copán and its intricate hieroglyphic script.",
+  "ru": "Государство решило возродить классический язык майя как национальный литературный стандарт, восстанавливая придворный язык Тикаля, Паленке и Копана и его замысловатую иероглифическую письменность."
+ },
+ "amendment_langreform_revived_nahuatl_desc": {
+  "en": "The state has chosen to revive Classical Nahuatl, the courtly language of the Aztec Triple Alliance, renowned for its poetry, legal codes, and philosophical discourse.",
+  "ru": "Государство решило возродить классический науатль — придворный язык Тройственного союза ацтеков, известный своей поэзией, сводами законов и философской прозой."
+ },
+ "amendment_langreform_revived_norse_desc": {
+  "en": "The state has chosen to revive Old Norse as the national standard, drawing on the language of the Eddas, the sagas, and the oldest parliamentary tradition in Europe.",
+  "ru": "Государство решило возродить древнескандинавский как национальный стандарт, опираясь на язык Эдд, саг и старейшей парламентской традиции Европы."
+ },
+ "amendment_langreform_revived_pali_desc": {
+  "en": "The state has chosen to revive Pali, the canonical language of Theravada Buddhism, as the national scholarly standard - a tongue of elegant simplicity and monastic discipline.",
+  "ru": "Государство решило возродить пали — канонический язык буддизма тхеравады — как национальный научный стандарт: язык изящной простоты и монастырской дисциплины."
+ },
+ "amendment_langreform_revived_prussian_desc": {
+  "en": "The state has chosen to revive Old Prussian, the extinct Baltic tongue prized by linguists for its extraordinary archaism, in an unprecedented act of cultural resurrection.",
+  "ru": "Государство решило возродить древнепрусский — вымерший балтийский язык, ценимый лингвистами за необычайную архаичность, — в беспрецедентном акте культурного воскрешения."
+ },
+ "amendment_langreform_revived_sanskrit_desc": {
+  "en": "The state has chosen to revive Sanskrit as the foundation of the national language, harnessing its unmatched grammatical precision and vast philosophical-scientific literature.",
+  "ru": "Государство решило возродить санскрит как основу национального языка, взяв на вооружение его непревзойдённую грамматическую точность и обширную философскую и научную литературу."
+ },
+ "amendment_langreform_revived_slavonic_desc": {
+  "en": "The state has chosen to revive Old Church Slavonic as a pan-Slavic literary standard, drawing on its centuries of use as the sacred language of Orthodox Slavic civilization.",
+  "ru": "Государство решило возродить старославянский как общеславянский литературный стандарт, опираясь на столетия его использования как священного языка православной славянской цивилизации."
  },
  "amendment_langreform_simplification": {
   "en": "Language Simplification",
   "ru": "Упрощение языка"
  },
+ "amendment_langreform_simplification_desc": {
+  "en": "The state is standardizing and simplifying the national language, making it more accessible to learners and boosting education.",
+  "ru": "Государство стандартизирует и упрощает национальный язык, делая его доступнее для изучающих и повышая уровень образования."
+ },
+ "amendment_language_naturalization_requirement_desc": {
+  "en": "An [concept_amendment] requiring proficiency in the national language as a condition for citizenship, linking language policy to immigration law.",
+  "ru": "[concept_amendment], требующая владения национальным языком как условия получения гражданства и связывающая языковую политику с иммиграционным правом."
+ },
  "amendment_mandatory_minimums": {
   "en": "Mandatory Minimum Sentences",
   "ru": "Обязательные минимальные сроки"
+ },
+ "amendment_mandatory_minimums_desc": {
+  "en": "An [concept_amendment] establishing mandatory minimum prison terms for certain offenses, introduced as a compromise to pass rehabilitation-focused justice reform.",
+  "ru": "[concept_amendment], устанавливающая обязательные минимальные сроки тюремного заключения за отдельные преступления; введена как компромисс ради принятия юридической реформы, ориентированной на перевоспитание."
+ },
+ "amendment_military_necessity_clause_desc": {
+  "en": "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation.",
+  "ru": "[concept_amendment], вводящая исключения по «военной необходимости» в гуманитарное регулирование; она умиротворяет Вооружённые силы ценой международной репутации."
  },
  "amendment_military_tribunals": {
   "en": "Military Tribunals for Civilians",
   "ru": "Военные трибуналы для гражданских"
  },
+ "amendment_military_tribunals_desc": {
+  "en": "An [concept_amendment] sending civilians accused of rebellion or sedition before courts-martial, in peace as in war. Suppression is cheaper and the Armed Forces stronger, and the courts earn less [concept_judicial_independence].",
+  "ru": "[concept_amendment], отправляющая гражданских, обвиняемых в мятеже или подстрекательстве, под военные трибуналы, в мирное время так же, как в военное. Подавление обходится дешевле, а Вооружённые силы становятся сильнее, но суды получают меньше [Concept('concept_judicial_independence', 'независимости судов')]."
+ },
+ "amendment_minority_script_preservation_desc": {
+  "en": "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used.",
+  "ru": "[concept_amendment], требующая преподавать письменности меньшинств наряду с реформированной национальной письменностью в регионах, где они традиционно используются."
+ },
+ "amendment_mixed_commercial_courts_desc": {
+  "en": "An [concept_amendment] sending merchants' disputes with foreigners to courts with foreign and local judges, beside the religious or executive courts. Lenders charge less, the courts can earn a little more [concept_judicial_independence], and the clergy lose cases to them.",
+  "ru": "[concept_amendment], передающая споры купцов с иностранцами судам с иностранными и местными судьями наряду с религиозными или исполнительными судами. Кредиторы берут меньше, суды могут получать немного больше [Concept('concept_judicial_independence', 'независимости судов')], а духовенство проигрывает им дела."
+ },
+ "amendment_national_champion_exemption_desc": {
+  "en": "An [concept_amendment] exempting the nation's largest company from antitrust breakup, preserving a 'national champion' capable of competing internationally.",
+  "ru": "[concept_amendment], освобождающая крупнейшую компанию страны от антимонопольного дробления и сохраняющая «национального чемпиона», способного конкурировать на международной арене."
+ },
+ "amendment_no_first_strike_desc": {
+  "en": "An [concept_amendment] formally committing the nation never to initiate the use of nuclear weapons, enhancing diplomatic standing. While it is in force, our nuclear doctrine is held at #v No First Use#!; abandoning that doctrine repudiates the pledge and strikes this amendment from our laws.",
+  "ru": "[concept_amendment], формально обязывающая страну никогда не применять ядерное оружие первой и повышающая дипломатический вес. Пока она действует, наша ядерная доктрина удерживается на уровне #v Неприменение первым#!; отказ от этой доктрины отменяет обязательство и вычёркивает эту поправку из наших законов."
+ },
  "amendment_official_bilingualism": {
   "en": "Official Bilingualism",
   "ru": "Официальное двуязычие"
+ },
+ "amendment_official_bilingualism_desc": {
+  "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
+  "ru": "[concept_amendment], делающая самый распространённый язык меньшинства официальным наряду с национальным; все государственные услуги становятся доступны на обоих."
  },
  "amendment_peoples_tribunals": {
   "en": "People’s Tribunals",
   "ru": "Народные трибуналы"
  },
+ "amendment_peoples_tribunals_desc": {
+  "en": "An [concept_amendment] setting up the ruling party's own courts, which judge by its idea of justice. Suppression is cheaper and movements breed loyalists, and lenders charge for justice that follows the party line. Only under a Single-Party State, and it lapses if the party loses its monopoly.",
+  "ru": "[concept_amendment], учреждающая собственные суды правящей партии, которые судят по её понятиям о справедливости. Подавление обходится дешевле, а движения порождают лоялистов, но кредиторы берут плату за правосудие, следующее партийной линии. Только при однопартийном государстве; теряет силу, если партия лишается монополии."
+ },
  "amendment_perpetual_trusts": {
   "en": "Perpetual Dynastic Trusts",
   "ru": "Бессрочные династические фонды"
+ },
+ "amendment_perpetual_trusts_desc": {
+  "en": "An [concept_amendment] letting a family trust run for ever, so a fortune held in one never passes through an estate or pays a duty on it. Raises the target of the [concept_inheritance_concentration] by #v 30#!.",
+  "ru": "[concept_amendment], позволяющая семейному трасту существовать вечно, так что состояние в нём никогда не переходит через наследство и не облагается пошлиной. Повышает целевой уровень показателя [Concept('concept_inheritance_concentration', 'династического богатства')] на #v 30#!."
  },
  "amendment_purist_modifier": {
   "en": "Unamended Bill",
   "ru": "Законопроект без поправок"
  },
+ "amendment_purist_modifier_desc": {
+  "en": "Rejecting the proposed [Concept('concept_amendment', 'amendments')] keeps the bill as written, but the groups that wanted them hold back their support and its passage slows.",
+  "ru": "Отклонение предложенных [Concept('concept_amendment', 'поправок')] сохраняет законопроект в первоначальном виде, но группы, которые их хотели, сдерживают поддержку, и его прохождение замедляется."
+ },
  "amendment_religious_exemption": {
   "en": "Religious Exemption Clause",
   "ru": "Оговорка о религиозных исключениях"
+ },
+ "amendment_religious_exemption_desc": {
+  "en": "An [concept_amendment] exempting religious institutions from LGBTQ protections, a compromise that gets the devout on board but limits the law's reach.",
+  "ru": "[concept_amendment], освобождающая религиозные учреждения от защиты прав ЛГБТК; компромисс привлекает верующих, но ограничивает охват закона."
+ },
+ "amendment_small_donor_matching_desc": {
+  "en": "An [concept_amendment] requiring the government to match small individual campaign donations, boosting grassroots political participation.",
+  "ru": "[concept_amendment], обязывающая правительство дополнять мелкие индивидуальные пожертвования на кампании и повышающая участие граждан в политике на низовом уровне."
  },
  "amendment_spoils_system": {
   "en": "Spoils System",
   "ru": "Система патронажа"
  },
+ "amendment_spoils_system_desc": {
+  "en": "An [concept_amendment] letting the governing faction fill ordinary administrative posts with its own supporters. Loyalty is rewarded, but partisans rather than trained officials run the offices.",
+  "ru": "[concept_amendment], позволяющая правящей фракции замещать обычные административные должности своими сторонниками. Лояльность вознаграждается, но ведомствами руководят партийцы, а не обученные чиновники."
+ },
+ "amendment_undivided_farm_succession_desc": {
+  "en": "An [concept_amendment] letting one heir take the family farm whole and pay the others out. Under Forced Heirship, peasants no longer have fewer children to keep the plot whole, and in farming states the siblings who do not inherit leave the land: migration up, scaled by the state's share of Peasants and Farmers and refreshed at each state's yearly update. Raises the target of the [concept_inheritance_concentration] by #v 10#!.",
+  "ru": "[concept_amendment], позволяющая одному наследнику получить семейную ферму целиком и выплатить остальным их доли. При Обязательной доле наследства крестьяне больше не рожают меньше детей, чтобы сохранить участок целым, а в земледельческих областях не наследующие братья и сёстры покидают землю: миграция растёт пропорционально доле Крестьян и Фермеров в области и обновляется при ежегодном обновлении каждой области. Повышает целевой уровень показателя [Concept('concept_inheritance_concentration', 'династического богатства')] на #v 10#!."
+ },
  "amendment_whistleblower_shield": {
   "en": "Whistleblower Protection Act",
   "ru": "Закон о защите информаторов"
+ },
+ "amendment_whistleblower_shield_desc": {
+  "en": "An [concept_amendment] protecting government employees who expose malfeasance from prosecution, boosting transparency at the cost of state authority.",
+  "ru": "[concept_amendment], защищающая от преследования государственных служащих, разоблачающих злоупотребления; повышает прозрачность ценой государственного авторитета."
+ },
+ "anglo_union": {
+  "en": "Anglosphere",
+  "ru": "Англосфера"
+ },
+ "anti_colonial_momentum_modifier_desc": {
+  "en": "The crackdown on anti-colonial intellectuals has only strengthened their movement.",
+  "ru": "Расправа над антиколониальными интеллектуалами лишь укрепила их движение."
+ },
+ "anti_minority_boycott_modifier_desc": {
+  "en": "State-encouraged boycotts of minority businesses are deepening social divisions and breeding resentment.",
+  "ru": "Поощряемые государством бойкоты предприятий меньшинств углубляют социальные расколы и порождают обиду."
+ },
+ "antimatter_facility_progress_desc": {
+  "en": "Tracks accumulated progress toward completing the Antimatter Containment Facility.",
+  "ru": "Отслеживает накопленный прогресс в строительстве Хранилища антиматерии."
+ },
+ "antitrust_public_outrage_advance_desc": {
+  "en": "A strong positive boost to law enactment progress from a recent event.",
+  "ru": "Сильное положительное ускорение прогресса принятия закона из-за недавнего события."
+ },
+ "antitrust_public_outrage_concession_desc": {
+  "en": "The bill went back for redrafting to answer its critics, which slows law enactment progress.",
+  "ru": "Законопроект отправлен на доработку, чтобы ответить на критику, что замедляет прогресс принятия закона."
+ },
+ "antitrust_strict_enforcement": {
+  "en": "Antitrust: Strict Enforcement",
+  "ru": "Антимонопольное регулирование: строгое принуждение"
+ },
+ "appeasement_covert_spying_exposed_desc": {
+  "en": "Being caught running [concept_covert_operations] against them",
+  "ru": "Разоблачение [Concept('concept_covert_operations', 'тайных операций')], проводимых против них"
+ },
+ "arabic_union": {
+  "en": "Arabic Union",
+  "ru": "Арабский союз"
  },
  "archaeological_concession": {
   "en": "Excavation Concession",
   "ru": "Концессия на раскопки"
  },
+ "archaeological_concession_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] lets [TARGET_COUNTRY.GetNameNoFormatting] dig the buried sites around [SCOPE.sArticleOption('article_option').GetInputState.GetName] and keep half of what it finds",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] позволяет стране [TARGET_COUNTRY.GetNameNoFormatting] раскапывать погребённые памятники вокруг области [SCOPE.sArticleOption('article_option').GetInputState.GetName] и забирать половину находок"
+ },
+ "archaeological_concession_desc": {
+  "en": "A country grants another the right to dig the buried sites in one of its states, and to carry half of what it finds home.",
+  "ru": "Одна страна даёт другой право раскапывать погребённые памятники в одной из своих областей и увозить домой половину находок."
+ },
+ "archaeological_concession_effects_desc": {
+  "en": "• The receiver may dig any buried site in the named state's region that is open to it, diverting the dig's [concept_innovation] as it would at home.\\n• When a dig finishes, the finds are divided: half its levels, rounded down, go to the receiver's capital as a trophy, and the rest stand in the named state as its monument. A rock-cut site has nothing to carry: it stays whole, and the receiver gains Foreign Scholarship (+10 [concept_prestige] and +1 [concept_cultural_pull] for ten years).\\n• The grantor may still dig its own sites. If the treaty ends, a dig under it stops with its progress kept, and the grantor may take it up.",
+  "ru": "• Получатель может раскапывать любой доступный ему погребённый памятник в регионе названной области, направляя [Concept('concept_innovation', 'инновации')] раскопок так же, как у себя дома.\\n• Когда раскопки завершены, находки делятся: половина их уровней, с округлением вниз, отправляется в столицу получателя как трофей, а остальное остаётся в названной области как её памятник. У памятника, высеченного в скале, нечего увозить: он остаётся целым, а получатель получает Зарубежную науку (+10 [concept_prestige|l] и +1 [Concept('concept_cultural_pull', 'культурного притяжения')] на десять лет).\\n• Даритель по-прежнему может вести раскопки на своих памятниках. Если договор прекращается, начатые по нему раскопки останавливаются с сохранением прогресса, и даритель может продолжить их."
+ },
+ "arctic_adaptation_modifier": {
+  "en": "Arctic Adaptation Research",
+  "ru": "Исследования арктической адаптации"
+ },
+ "arctic_adaptation_modifier_desc": {
+  "en": "Having accepted the inevitability of polar ice loss, we are redirecting resources from futile coastal defense into adaptation research. Our [concept_prestige] suffers but our scientists find new opportunities.",
+  "ru": "Признав неизбежность потери полярных льдов, мы перенаправляем ресурсы с бесполезной береговой обороны на исследования адаптации. Наш [concept_prestige|l] страдает, но наши учёные находят новые возможности."
+ },
+ "arctic_melting_modifier": {
+  "en": "Melting Ice Caps",
+  "ru": "Таяние ледяных шапок"
+ },
+ "arctic_melting_modifier_desc": {
+  "en": "The polar ice caps are melting at an alarming rate, disrupting [Concept('concept_shipping_lane', 'shipping lanes')], devastating fishing grounds, and raising sea levels across all coastal regions.",
+  "ru": "Полярные ледяные шапки тают угрожающими темпами, нарушая [Concept('concept_shipping_lane', 'морские пути')], разоря рыбные угодья и повышая уровень моря во всех прибрежных регионах."
+ },
+ "arms_race_escalation_modifier_desc": {
+  "en": "Our nation is engaged in a dangerous arms race, pouring resources into military expansion to match a rival power's buildup.",
+  "ru": "Наша страна втянута в опасную гонку вооружений и вкладывает ресурсы в военное расширение, чтобы не уступить наращиванию сил соперника."
+ },
+ "arms_race_ignored_modifier_desc": {
+  "en": "We chose not to match our rival's military buildup, saving resources but weakening our deterrent posture.",
+  "ru": "Мы решили не отвечать на военное наращивание соперника: ресурсы сэкономлены, но позиция сдерживания ослаблена."
+ },
+ "arms_race_rival_pressure_modifier_desc": {
+  "en": "A rival power is matching our military expansion, forcing increased defense spending.",
+  "ru": "Держава-соперник отвечает на наше военное расширение, вынуждая увеличивать расходы на оборону."
+ },
+ "art_renaissance_funded_modifier_desc": {
+  "en": "Government funding for the arts provides meaning and purpose in a post-scarcity society, boosting [concept_prestige].",
+  "ru": "Государственное финансирование искусств придаёт жизни смысл и цель в обществе постдефицита и повышает [concept_prestige|l]."
+ },
+ "assassinate_domestic": {
+  "en": "Assassinate",
+  "ru": "Убить"
+ },
+ "assassinate_domestic_desc": {
+  "en": "Assassinate a domestic target.",
+  "ru": "Убить цель внутри страны."
+ },
+ "assassinate_foreign_desc": {
+  "en": "Assassinate a foreign target.",
+  "ru": "Убить цель за рубежом."
+ },
+ "assimilation_legacy_modifier": {
+  "en": "Cultural Assimilation Legacy",
+  "ru": "Наследие культурной ассимиляции"
+ },
+ "assimilation_legacy_modifier_desc": {
+  "en": "This country's former ruler schooled a few of its people in the ruler's own language and culture, and they now run the state.",
+  "ru": "Прежний правитель этой страны обучил часть её жителей своему языку и культуре, и теперь они управляют государством."
+ },
+ "atlantic_charter": {
+  "en": "Atlantic Charter",
+  "ru": "Атлантическая хартия"
+ },
+ "augment_health_panic": {
+  "en": "Augmentation Health Scare",
+  "ru": "Паника из-за здоровья аугментированных"
+ },
+ "augment_permissive_ethics": {
+  "en": "Augmentation: Permissive Ethics",
+  "ru": "Аугментация: либеральная этика"
+ },
+ "augment_restrictive_ethics": {
+  "en": "Augmentation: Restrictive Ethics",
+  "ru": "Аугментация: строгая этика"
+ },
+ "augmentation_ban_modifier": {
+  "en": "Augmentation Ban",
+  "ru": "Запрет аугментации"
+ },
+ "augmentation_ban_modifier_desc": {
+  "en": "The augmentation ban reduces social tension but stifles innovation.",
+  "ru": "Запрет аугментации снижает социальную напряжённость, но сдерживает инновации."
+ },
+ "augmentation_crackdown_modifier": {
+  "en": "Augmentation Crackdown",
+  "ru": "Борьба с аугментацией"
+ },
+ "augmentation_crackdown_modifier_desc": {
+  "en": "The crackdown on black market implants restores order at bureaucratic cost.",
+  "ru": "Борьба с имплантами с чёрного рынка восстанавливает порядок ценой бюрократических затрат."
+ },
+ "augmentation_crime_ban_modifier_desc": {
+  "en": "Banning augmentation for convicted criminals has reduced recidivism but drawn criticism from civil rights advocates.",
+  "ru": "Запрет аугментации для осуждённых преступников снизил рецидивизм, но вызвал критику защитников гражданских прав."
+ },
+ "augmentation_debate_active_modifier_desc": {
+  "en": "The augmentation debate drives innovation but creates social disruption.",
+  "ru": "Споры об аугментации стимулируют инновации, но порождают социальные потрясения."
+ },
+ "augmentation_devout_victory_modifier_desc": {
+  "en": "Religious authorities have won major concessions on augmentation restrictions, boosting their influence.",
+  "ru": "Религиозные власти добились крупных уступок в ограничениях аугментации, усилив своё влияние."
+ },
+ "augmentation_divide_modifier": {
+  "en": "Augmentation Divide",
+  "ru": "Пропасть аугментации"
+ },
+ "augmentation_divide_modifier_desc": {
+  "en": "The divide between augmented and natural citizens creates ongoing social tension.",
+  "ru": "Разрыв между аугментированными и обычными гражданами создаёт постоянную социальную напряжённость."
+ },
+ "augmentation_divide_permanent_modifier_desc": {
+  "en": "Exempting the already-augmented has written the divide into law. The tension it breeds fades over a decade.",
+  "ru": "Освобождение уже аугментированных закрепило разрыв в законе. Порождаемая им напряжённость спадает в течение десятилетия."
+ },
+ "augmentation_ethics_board_modifier_desc": {
+  "en": "An ethics board provides oversight of augmentation technology, building trust at bureaucratic cost.",
+  "ru": "Этический совет надзирает за технологиями аугментации, укрепляя доверие ценой бюрократических затрат."
+ },
+ "augmentation_integrated_modifier": {
+  "en": "Augmentation Integrated",
+  "ru": "Интеграция аугментации"
+ },
+ "augmentation_integrated_modifier_desc": {
+  "en": "Augmentation technology has been equitably integrated into society.",
+  "ru": "Технологии аугментации справедливо интегрированы в общество."
+ },
+ "augmentation_kill_switch_modifier_desc": {
+  "en": "Mandatory kill switches in all augmentation implants deter criminal use but reduce their effectiveness.",
+  "ru": "Обязательные аварийные выключатели во всех имплантах аугментации сдерживают преступное использование, но снижают их эффективность."
+ },
+ "augmentation_market_efficiency_modifier_desc": {
+  "en": "Allowing companies to prefer augmented workers has increased productivity but deepened the augmentation divide.",
+  "ru": "Разрешение компаниям отдавать предпочтение аугментированным работникам повысило производительность, но углубило пропасть аугментации."
+ },
+ "augmentation_market_forces_modifier_desc": {
+  "en": "Unregulated augmentation markets benefit the wealthy elite while the unaugmented working class falls further behind.",
+  "ru": "Нерегулируемые рынки аугментации приносят пользу богатой элите, а неаугментированный рабочий класс отстаёт всё сильнее."
+ },
+ "augmentation_regulation_modifier": {
+  "en": "Augmentation Regulation",
+  "ru": "Регулирование аугментации"
+ },
+ "augmentation_regulation_modifier_desc": {
+  "en": "Augmentation regulation balances safety with innovation.",
+  "ru": "Регулирование аугментации уравновешивает безопасность и инновации."
+ },
+ "augmentation_religious_anger_modifier_desc": {
+  "en": "Religious authorities are furious over the government's permissive stance on human augmentation.",
+  "ru": "Религиозные власти в ярости из-за попустительской позиции правительства к аугментации человека."
+ },
+ "augmentation_subsidies_modifier": {
+  "en": "Augmentation Subsidies",
+  "ru": "Субсидии на аугментацию"
+ },
+ "augmentation_subsidies_modifier_desc": {
+  "en": "Government subsidies make augmentation accessible, driving innovation at a cost.",
+  "ru": "Государственные субсидии делают аугментацию доступной и стимулируют инновации, но недёшево."
+ },
+ "augmentation_subsidy_modifier_desc": {
+  "en": "Government subsidies for human augmentation have improved [concept_sol] across all strata but strain the [concept_bureaucracy].",
+  "ru": "Государственные субсидии на аугментацию человека повысили [concept_sol|l] во всех слоях, но нагружают [Concept('concept_bureaucracy', 'бюрократию')]."
+ },
+ "augmentation_workplace_protection_modifier_desc": {
+  "en": "Legal protections for unaugmented workers prevent workplace [concept_discrimination] and maintain social stability.",
+  "ru": "Правовая защита неаугментированных работников предотвращает [Concept('concept_discrimination', 'дискриминацию')] на рабочем месте и поддерживает социальную стабильность."
+ },
+ "augmented_police_modifier": {
+  "en": "Augmented Police Force",
+  "ru": "Аугментированная полиция"
+ },
+ "augmented_police_modifier_desc": {
+  "en": "Deploying augmented officers in law enforcement has dramatically reduced crime at the cost of civil liberties concerns.",
+  "ru": "Использование аугментированных сотрудников в правоохранительных органах резко снизило преступность, но вызвало опасения за гражданские свободы."
+ },
+ "automation_slowdown_modifier": {
+  "en": "Automation Slowdown",
+  "ru": "Замедление автоматизации"
+ },
+ "automation_slowdown_modifier_desc": {
+  "en": "The government has slowed automation to address public concerns, maintaining employment at the cost of productivity.",
+  "ru": "Правительство замедлило автоматизацию, чтобы ответить на опасения общества: занятость сохраняется ценой производительности."
+ },
+ "banking_asset_relief_program_desc": {
+  "en": "Applies the effects of the Asset Relief Program banking policy.",
+  "ru": "Применяет эффекты банковской политики «Программа помощи активам»."
+ },
+ "banking_bail_in_regime_desc": {
+  "en": "Applies the effects of the Bail-in Regime banking policy.",
+  "ru": "Применяет эффекты банковской политики «Режим внутренней рекапитализации»."
+ },
  "banking_bank_holiday": {
   "en": "Bank Holiday",
   "ru": "Банковские каникулы"
+ },
+ "banking_bank_holiday_desc": {
+  "en": "Applies the effects of the Bank Holiday banking policy.",
+  "ru": "Применяет эффекты банковской политики «Банковские каникулы»."
+ },
+ "banking_capital_controls_out_desc": {
+  "en": "We have restricted the movement of money across our borders, in both directions.",
+  "ru": "Мы ограничили движение денег через наши границы в обе стороны."
+ },
+ "banking_countercyclical_capital_buffer_desc": {
+  "en": "Applies the effects of the Counter-cyclical Capital Buffer banking policy.",
+  "ru": "Применяет эффекты банковской политики «Контрциклический буфер капитала»."
+ },
+ "banking_crash_intervention_capital_controls_desc": {
+  "en": "Cross-border capital movements have been restricted by emergency decree. The bleeding stops; foreign trade and influence both suffer.",
+  "ru": "Трансграничное движение капитала ограничено чрезвычайным указом. Кровотечение остановлено; страдают и внешняя торговля, и влияние."
+ },
+ "banking_crash_intervention_correspondent_liquidity_desc": {
+  "en": "Established correspondent banks are channeling emergency liquidity to weaker institutions, holding the system together at the cost of latent inflation.",
+  "ru": "Крупные банки-корреспонденты направляют экстренную ликвидность более слабым учреждениям, удерживая систему от распада ценой скрытой инфляции."
+ },
+ "banking_crash_intervention_deposit_guarantee_desc": {
+  "en": "All deposits at chartered banks are now formally insured. Bank runs subside; the contingent liability sits on the public balance sheet.",
+  "ru": "Все вклады в лицензированных банках теперь официально застрахованы. Набеги вкладчиков стихают; условное обязательство ложится на государственный баланс."
+ },
+ "banking_crash_intervention_dev_bank_lending_desc": {
+  "en": "State development banks are extending emergency credit to viable firms, modestly boosting [concept_infrastructure] capacity at fiscal cost.",
+  "ru": "Государственные банки развития выдают экстренные кредиты жизнеспособным фирмам, умеренно повышая мощности [Concept('concept_infrastructure', 'инфраструктуры')] ценой бюджетных расходов."
+ },
+ "banking_crash_intervention_discount_window_desc": {
+  "en": "The central bank is lending freely against good collateral at a penalty rate. Liquidity is restored at the cost of mild bubble-pressure regrowth.",
+  "ru": "Центральный банк свободно кредитует под хорошее обеспечение по штрафной ставке. Ликвидность восстанавливается ценой слабого возобновления роста давления пузыря."
+ },
+ "banking_crash_intervention_keynesian_stimulus_desc": {
+  "en": "Aggressive deficit spending is sustaining demand through the slump. Manufacturing [concept_throughput] holds up, with sustained fiscal cost and latent overheating risk.",
+  "ru": "Агрессивные дефицитные расходы поддерживают спрос во время спада. [Concept('concept_throughput', 'Пропускная способность')] обрабатывающей промышленности держится, но при устойчивых бюджетных расходах и скрытом риске перегрева."
+ },
+ "banking_crash_intervention_mutual_clearing_desc": {
+  "en": "Banks are pooling reserves to backstop one another. Counterparty trust slowly returns, but industrialists resent the cost-sharing.",
+  "ru": "Банки объединяют резервы, чтобы страховать друг друга. Доверие между контрагентами медленно возвращается, но промышленники недовольны разделением расходов."
+ },
+ "banking_crash_intervention_nationalize_desc": {
+  "en": "Failing institutions have been taken into state hands. Capitalists are furious; the labor movement applauds; the public purse bleeds.",
+  "ru": "Разорившиеся учреждения переданы в руки государства. Капиталисты в ярости; рабочее движение рукоплещет; казна истекает кровью."
+ },
+ "banking_crash_intervention_open_market_desc": {
+  "en": "The central bank is conducting aggressive open-market operations and lender-of-last-resort lending. Confidence rebuilds, with mild inflationary pressure as the price.",
+  "ru": "Центральный банк проводит агрессивные операции на открытом рынке и кредитует как кредитор последней инстанции. Доверие восстанавливается, а цена — умеренное инфляционное давление."
+ },
+ "banking_crash_intervention_suspend_convertibility_desc": {
+  "en": "A bank holiday and freeze on currency convertibility have steadied the panic, but exporters and creditors are paying the price.",
+  "ru": "Банковские каникулы и заморозка конвертируемости валюты успокоили панику, но расплачиваются экспортёры и кредиторы."
+ },
+ "banking_crash_intervention_swap_lines_desc": {
+  "en": "Foreign central banks are providing emergency currency swaps. Imports are easier and contagion risk falls — but our diplomatic bargaining position is constrained.",
+  "ru": "Иностранные центральные банки предоставляют экстренные валютные свопы. Импорт облегчается, а риск заразы падает, но наши дипломатические переговорные позиции стеснены."
+ },
+ "banking_crash_response_cost_desc": {
+  "en": "Emergency outlays from the treasury to contain the financial crisis.",
+  "ru": "Чрезвычайные расходы из казны на сдерживание финансового кризиса."
+ },
+ "banking_crisis_protectionism_modifier_desc": {
+  "en": "Emergency capital controls and trade restrictions imposed to contain financial contagion.",
+  "ru": "Экстренный контроль капитала и торговые ограничения, введённые для сдерживания финансовой заразы."
+ },
+ "banking_cycle_value_bar_desc": {
+  "en": "[concept_banking_cycle] Value — panic",
+  "ru": "Значение [Concept('concept_banking_cycle', 'банковского цикла')] — паника"
+ },
+ "banking_directed_credit_agriculture_desc": {
+  "en": "Applies the effects of the Directed Credit to Agriculture banking policy.",
+  "ru": "Применяет эффекты банковской политики «Целевое кредитование сельского хозяйства»."
+ },
+ "banking_directed_credit_armaments_desc": {
+  "en": "Applies the effects of the Directed Credit to Armaments banking policy.",
+  "ru": "Применяет эффекты банковской политики «Целевое кредитование вооружений»."
+ },
+ "banking_directed_credit_electrification_desc": {
+  "en": "Applies the effects of the Directed Credit to Electrification banking policy.",
+  "ru": "Применяет эффекты банковской политики «Целевое кредитование электрификации»."
+ },
+ "banking_directed_credit_heavy_industry_desc": {
+  "en": "Applies the effects of the Directed Credit to Heavy Industry banking policy.",
+  "ru": "Применяет эффекты банковской политики «Целевое кредитование тяжёлой промышленности»."
+ },
+ "banking_directed_credit_infrastructure_desc": {
+  "en": "Applies the effects of the Directed Credit for [concept_infrastructure] banking policy.",
+  "ru": "Применяет эффекты банковской политики «Целевое кредитование [Concept('concept_infrastructure', 'инфраструктуры')]»."
+ },
+ "banking_emergency_liquidity_program_desc": {
+  "en": "Applies the effects of the Emergency Liquidity Program banking policy.",
+  "ru": "Применяет эффекты банковской политики «Программа экстренной ликвидности»."
+ },
+ "banking_expand_deposit_guarantee_desc": {
+  "en": "Applies the effects of the Expand Deposit Guarantee banking policy.",
+  "ru": "Применяет эффекты банковской политики «Расширение гарантий по вкладам»."
+ },
+ "banking_export_credit_facility_desc": {
+  "en": "Applies the effects of the Export Credit Facility banking policy.",
+  "ru": "Применяет эффекты банковской политики «Экспортное кредитование»."
+ },
+ "banking_moral_suasion_desc": {
+  "en": "Applies the effects of the Moral Suasion banking policy.",
+  "ru": "Применяет эффекты банковской политики «Моральное воздействие»."
+ },
+ "banking_open_market_ops_desc": {
+  "en": "Applies the effects of the Open Market Operations banking policy.",
+  "ru": "Применяет эффекты банковской политики «Операции на открытом рынке»."
+ },
+ "banking_raise_margin_requirements_desc": {
+  "en": "Speculation on credit has become too common among the [concept_middle_strata]. By requiring higher upfront collateral for loans, we ensure that only stable ventures proceed, protecting the economy.",
+  "ru": "Спекуляции в кредит стали слишком обычными среди [Concept('concept_middle_strata', 'средних слоёв')]. Требуя более высокого первоначального залога по кредитам, мы добиваемся, чтобы шли только устойчивые предприятия, и защищаем экономику."
+ },
+ "banking_rescue_programme": {
+  "en": "Rescue Program",
+  "ru": "Программа спасения"
+ },
+ "banking_rescue_programme_desc": {
+  "en": "A foreign government is lending us money on conditions. The markets trust its backing; our voters resent its terms.",
+  "ru": "Иностранное правительство даёт нам деньги на условиях. Рынки доверяют его поддержке; наши избиратели возмущены его условиями."
+ },
+ "banking_rescue_programme_suspended_desc": {
+  "en": "Our rescue program was suspended for breaking its conditions, and lenders charge for the broken promise.",
+  "ru": "Наша программа спасения приостановлена из-за нарушения её условий, и кредиторы берут плату за нарушенное обещание."
  },
  "banking_reserve_requirements": {
   "en": "Raised Reserve Requirements",
   "ru": "Повышенные резервные требования"
  },
+ "banking_reserve_requirements_desc": {
+  "en": "Applies the effects of the Raise Reserve Requirements banking policy.",
+  "ru": "Применяет эффекты банковской политики «Повышение резервных требований»."
+ },
  "banking_restrict_inflows": {
   "en": "Speculative Inflow Restrictions",
   "ru": "Ограничения спекулятивных притоков"
  },
+ "banking_restructuring_deep_default_desc": {
+  "en": "The government made its creditors accept half of what it owed them. Lenders charge heavily for the risk that it will do so again, and its standing abroad has collapsed.",
+  "ru": "Правительство заставило кредиторов принять половину того, что оно им должно. Кредиторы берут высокую плату за риск, что оно сделает это снова, а его положение за рубежом рухнуло."
+ },
+ "banking_restructuring_reprofiled": {
+  "en": "Reprofiled Debt",
+  "ru": "Пересмотренный долг"
+ },
+ "banking_restructuring_reprofiled_desc": {
+  "en": "The government has stretched its debts and written part of them off. Lenders charge a little more for the risk that it will do so again.",
+  "ru": "Правительство растянуло свои долги и списало часть из них. Кредиторы берут чуть больше за риск, что оно сделает это снова."
+ },
+ "banking_restructuring_shut_out_desc": {
+  "en": "After the government's deep default, banks and firms hold far less cash at home, and the government's credit limit has shrunk with it.",
+  "ru": "После глубокого дефолта правительства банки и фирмы держат дома гораздо меньше наличных, а кредитный лимит правительства сократился вместе с ними."
+ },
+ "banking_restructuring_wary_lenders_desc": {
+  "en": "After the government's haircut, banks and firms hold less cash at home, and the government can borrow less against it.",
+  "ru": "После списания части долга правительством банки и фирмы держат дома меньше наличных, а правительство может занять под них меньше."
+ },
  "banking_sterilize_inflows": {
   "en": "Sterilization",
   "ru": "Стерилизация"
+ },
+ "bantu_union": {
+  "en": "Bantu Union",
+  "ru": "Союз банту"
  },
  "bg_biotechnology": {
   "en": "Biotechnology",
@@ -163,9 +907,349 @@
   "en": "Resettlement",
   "ru": "Переселение"
  },
+ "big_money_election_modifier_desc": {
+  "en": "Wealthy interests dominate the election, boosting business confidence but undermining democratic [concept_legitimacy].",
+  "ru": "Богатые интересы доминируют на выборах, повышая деловую уверенность, но подрывая демократическую [concept_legitimacy|l]."
+ },
+ "biohacker_crackdown_modifier": {
+  "en": "Biohackers Suppressed",
+  "ru": "Биохакеры подавлены"
+ },
+ "biohacker_legalized_modifier": {
+  "en": "Licensed Biohacking",
+  "ru": "Лицензированный биохакинг"
+ },
+ "biohacker_legalized_modifier_desc": {
+  "en": "Formerly underground biohackers now operate under license, contributing to research while requiring regulatory oversight.",
+  "ru": "Прежде подпольные биохакеры теперь работают по лицензии и вносят вклад в исследования, но требуют регуляторного надзора."
+ },
+ "biohacker_research_modifier": {
+  "en": "Biohacker Research Program",
+  "ru": "Программа исследований биохакеров"
+ },
+ "biohacker_research_modifier_desc": {
+  "en": "Academic researchers studying underground biohacking techniques have made breakthroughs in human augmentation technology.",
+  "ru": "Учёные, изучающие подпольные методы биохакинга, совершили прорывы в технологии аугментации человека."
+ },
+ "bloody_decolonization_legacy_modifier_desc": {
+  "en": "This country's former ruler held it by force to the end, and the people who took over govern the same way.",
+  "ru": "Прежний правитель этой страны удерживал её силой до самого конца, и те, кто пришёл ему на смену, управляют так же."
+ },
+ "border_dispute_active_modifier_desc": {
+  "en": "A territorial dispute with a neighboring nation over colonial-era borders is causing diplomatic tension.",
+  "ru": "Территориальный спор с соседней страной из-за границ колониальной эпохи вызывает дипломатическую напряжённость."
+ },
+ "border_dispute_resolved_modifier_desc": {
+  "en": "The resolution of a border dispute has brought stability and improved relations with our neighbors.",
+  "ru": "Разрешение пограничного спора принесло стабильность и улучшило отношения с соседями."
+ },
+ "bubble_inertia_extreme": {
+  "en": "Speculative Euphoria",
+  "ru": "Спекулятивная эйфория"
+ },
+ "bubble_inertia_extreme_coop_desc": {
+  "en": "Federations race to match each other's payouts, and the commitments feed on one another faster than earnings can cover them.",
+  "ru": "Федерации стараются перещеголять выплаты друг друга, и обязательства питают друг друга быстрее, чем их способна покрыть прибыль."
+ },
+ "bubble_inertia_extreme_desc": {
+  "en": "Rampant speculation drives a powerful feedback loop — prices rise because prices are rising.",
+  "ru": "Безудержные спекуляции запускают мощную петлю обратной связи: цены растут, потому что цены растут."
+ },
+ "bubble_inertia_high": {
+  "en": "Speculative Feedback",
+  "ru": "Спекулятивная обратная связь"
+ },
+ "bubble_inertia_high_coop_desc": {
+  "en": "Councils are committing payouts and projects ahead of earnings, and every commitment invites the next.",
+  "ru": "Советы берут на себя выплаты и проекты в счёт будущей прибыли, и каждое обязательство влечёт следующее."
+ },
+ "bubble_inertia_high_desc": {
+  "en": "Elevated speculation creates a self-reinforcing cycle of rising prices and investor confidence.",
+  "ru": "Повышенная спекуляция создаёт самоподдерживающийся цикл роста цен и уверенности инвесторов."
+ },
+ "bubble_inertia_moderate": {
+  "en": "Speculative Inertia",
+  "ru": "Спекулятивная инерция"
+ },
+ "bubble_inertia_moderate_coop_desc": {
+  "en": "Payouts and projects are being committed against surpluses still to come, which keeps reinvestment climbing.",
+  "ru": "Выплаты и проекты берутся в расчёте на будущие излишки, что поддерживает рост реинвестиций."
+ },
+ "bubble_inertia_moderate_desc": {
+  "en": "Rising asset prices attract further speculation, maintaining market momentum.",
+  "ru": "Растущие цены на активы привлекают новые спекуляции, поддерживая рыночный импульс."
+ },
+ "bull_market": {
+  "en": "Bull Market",
+  "ru": "Бычий рынок"
+ },
+ "bull_market_desc": {
+  "en": "A period of rising stock prices and investor confidence, often leading to increased economic activity.",
+  "ru": "Период роста цен на акции и уверенности инвесторов, который часто ведёт к оживлению экономики."
+ },
+ "bureaucracy_gain_medium": {
+  "en": "Moderate Bureaucratic Boost",
+  "ru": "Умеренный бюрократический подъём"
+ },
+ "bureaucracy_gain_small": {
+  "en": "Small Bureaucratic Boost",
+  "ru": "Небольшой бюрократический подъём"
+ },
+ "bureaucracy_gain_tiny": {
+  "en": "Tiny Bureaucratic Boost",
+  "ru": "Крошечный бюрократический подъём"
+ },
+ "bureaucracy_loss_medium": {
+  "en": "Moderate Bureaucratic Strain",
+  "ru": "Умеренная бюрократическая нагрузка"
+ },
+ "bureaucracy_loss_small": {
+  "en": "Small Bureaucratic Strain",
+  "ru": "Небольшая бюрократическая нагрузка"
+ },
+ "bureaucracy_loss_tiny": {
+  "en": "Tiny Bureaucratic Strain",
+  "ru": "Крошечная бюрократическая нагрузка"
+ },
+ "campaign_scandal_ignored_modifier_desc": {
+  "en": "A campaign finance scandal has been ignored by the ruling party, eroding public trust.",
+  "ru": "Правящая партия проигнорировала скандал с финансированием кампании, подрывая доверие общества."
+ },
+ "campaign_scandal_investigation_modifier_desc": {
+  "en": "An official investigation into campaign finance irregularities is underway.",
+  "ru": "Ведётся официальное расследование нарушений в финансировании кампании."
+ },
+ "campaign_scandal_reform_modifier_desc": {
+  "en": "Public pressure has created momentum for meaningful campaign finance reform.",
+  "ru": "Давление общества создало импульс для настоящей реформы финансирования кампаний."
+ },
+ "carbon_removal_modifier": {
+  "en": "Carbon Removal Support",
+  "ru": "Поддержка удаления углерода"
+ },
+ "carbon_removal_modifier_desc": {
+  "en": "Public funding supports permanent atmospheric carbon storage in Carbon Conversion Works.",
+  "ru": "Государственное финансирование поддерживает постоянное хранение атмосферного углерода на объектах Завода переработки углерода."
+ },
+ "carbon_tax_modifier": {
+  "en": "Carbon Tax",
+  "ru": "Углеродный налог"
+ },
+ "carbon_tax_modifier_desc": {
+  "en": "A levy on fossil fuel industries that reduces coal and oil output while raising taxes on manufacturing and oil extraction. Directly reduces the nation's greenhouse gas emissions by 20%.",
+  "ru": "Сбор с отраслей ископаемого топлива, сокращающий добычу угля и нефти и повышающий налоги на производство и нефтедобычу. Напрямую сокращает выбросы парниковых газов в стране на 20%."
+ },
+ "central_commission": {
+  "en": "Central Commission",
+  "ru": "Центральная комиссия"
+ },
+ "ch_adopted_education": {
+  "en": "Foreign Education Model",
+  "ru": "Иностранная модель образования"
+ },
+ "ch_adopted_education_desc": {
+  "en": "Adoption of the hegemon's education system is boosting research and [concept_education_access], but foreign ideology seeps through the curricula.",
+  "ru": "Принятие системы образования гегемона ускоряет исследования и повышает [concept_education_access|l], но иностранная идеология просачивается в учебные программы."
+ },
+ "ch_art_commercialization": {
+  "en": "Art Commercialization",
+  "ru": "Коммерциализация искусства"
+ },
+ "ch_art_commercialization_desc": {
+  "en": "Our cultural treasures are generating commercial revenue, though the commodification of art undermines artistic [concept_prestige].",
+  "ru": "Наши культурные сокровища приносят коммерческий доход, хотя коммодификация искусства подрывает художественный [concept_prestige|l]."
+ },
+ "ch_brain_drain_remittances_desc": {
+  "en": "The exodus of talent weakens our research capacity, though remittances provide some economic benefit.",
+  "ru": "Отток талантов ослабляет наш исследовательский потенциал, хотя денежные переводы дают некоторую экономическую выгоду."
+ },
+ "ch_cultural_adaptation": {
+  "en": "Cultural Adaptation",
+  "ru": "Культурная адаптация"
+ },
+ "ch_cultural_adaptation_desc": {
+  "en": "Modest investment in domestic cultural institutions provides a small boost to cultural relevance.",
+  "ru": "Скромные вложения во внутренние культурные институты немного повышают культурную значимость."
+ },
+ "ch_cultural_exchange": {
+  "en": "Cultural Exchange",
+  "ru": "Культурный обмен"
+ },
+ "ch_cultural_exchange_desc": {
+  "en": "An openness to foreign ideas is stimulating intellectual exchange and accelerating research.",
+  "ru": "Открытость иностранным идеям стимулирует интеллектуальный обмен и ускоряет исследования."
+ },
+ "ch_cultural_institutes_program_desc": {
+  "en": "The state is funding museums, academies, and scholarship networks to turn domestic culture into a durable source of international influence, at a cost of 150 [concept_influence] while it runs.",
+  "ru": "Государство финансирует музеи, академии и научные сети, чтобы превратить отечественную культуру в прочный источник международного влияния; пока программа идёт, она стоит 150 [Concept('concept_influence', 'влияния')]."
+ },
+ "ch_cultural_investment": {
+  "en": "Cultural Investment",
+  "ru": "Культурные инвестиции"
+ },
+ "ch_cultural_investment_desc": {
+  "en": "Investment in cultural institutions is boosting our creative output and research capabilities.",
+  "ru": "Инвестиции в культурные институты повышают наш творческий выпуск и исследовательские возможности."
+ },
+ "ch_cultural_program_funding_cost_desc": {
+  "en": "State patronage for cultural programs carries a recurring financial cost for each funding level, scaled to the size of the economy.",
+  "ru": "Государственное меценатство в сфере культурных программ несёт повторяющиеся финансовые расходы за каждый уровень финансирования, пропорционально размеру экономики."
+ },
+ "ch_cultural_program_funding_desc": {
+  "en": "The state is directly funding cultural production, creating a flat increase in [concept_cultural_pull] that scales with the chosen funding level.",
+  "ru": "Государство напрямую финансирует культурное производство, давая фиксированный прирост [Concept('concept_cultural_pull', 'культурного притяжения')], который растёт с выбранным уровнем финансирования."
+ },
+ "ch_cultural_protectionism_program_desc": {
+  "en": "The government is shielding domestic culture from foreign competition, strengthening [concept_cultural_pull] and authority at the cost of openness (fewer migrants) and intellectual exchange (slower society research).",
+  "ru": "Правительство защищает отечественную культуру от иностранной конкуренции, усиливая [Concept('concept_cultural_pull', 'культурное притяжение')] и авторитет ценой открытости (меньше мигрантов) и интеллектуального обмена (медленнее исследования общества)."
+ },
+ "ch_cultural_renaissance": {
+  "en": "Cultural Renaissance",
+  "ru": "Культурный ренессанс"
+ },
+ "ch_cultural_renaissance_desc": {
+  "en": "A flowering of domestic creativity is boosting our cultural influence and research output.",
+  "ru": "Расцвет отечественного творчества повышает наше культурное влияние и научную отдачу."
+ },
+ "ch_cultural_renaissance_ig_desc": {
+  "en": "The intelligentsia thrives during this period of cultural flourishing.",
+  "ru": "Интеллигенция процветает в этот период культурного подъёма."
+ },
+ "ch_cultural_resistance_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from leading the resistance against foreign cultural influence.",
+  "ru": "[concept_interest_group] черпает силу в том, что возглавляет сопротивление иностранному культурному влиянию."
+ },
+ "ch_domestic_consolidation": {
+  "en": "Domestic Consolidation",
+  "ru": "Внутренняя консолидация"
+ },
+ "ch_domestic_consolidation_desc": {
+  "en": "Investment in domestic institutions strengthens the state apparatus, improves bureaucratic efficiency, and boosts education rather than projecting cultural influence abroad.",
+  "ru": "Инвестиции во внутренние институты укрепляют государственный аппарат, повышают бюрократическую эффективность и развивают образование, вместо того чтобы проецировать культурное влияние за рубеж."
+ },
+ "ch_domestic_education_defense_desc": {
+  "en": "A renewed commitment to domestic educational traditions strengthens state authority and cultural identity.",
+  "ru": "Обновлённая приверженность отечественным образовательным традициям укрепляет государственный авторитет и культурную идентичность."
+ },
+ "ch_domestic_university_focus_desc": {
+  "en": "Exclusive focus on domestic students strengthens our own education system but misses the opportunity to attract foreign talent.",
+  "ru": "Исключительное внимание к отечественным студентам укрепляет нашу систему образования, но упускает возможность привлечь иностранные таланты."
+ },
+ "ch_entertainment_adaptation_desc": {
+  "en": "A creative blending of foreign and domestic entertainment traditions is producing something uniquely our own.",
+  "ru": "Творческое сочетание иностранных и отечественных традиций развлечения рождает нечто по-настоящему своё."
+ },
+ "ch_entertainment_embrace": {
+  "en": "Foreign Entertainment Embrace",
+  "ru": "Принятие иностранных развлечений"
+ },
+ "ch_entertainment_embrace_desc": {
+  "en": "Foreign entertainment enriches daily life, but traditional cultural authorities view the trend with alarm.",
+  "ru": "Иностранные развлечения обогащают повседневную жизнь, но традиционные культурные авторитеты с тревогой смотрят на эту тенденцию."
+ },
+ "ch_entertainment_restriction": {
+  "en": "Entertainment Import Restrictions",
+  "ru": "Ограничения на импорт развлечений"
+ },
+ "ch_entertainment_restriction_desc": {
+  "en": "Restrictions on foreign entertainment protect domestic cultural production and strengthen state authority.",
+  "ru": "Ограничения на иностранные развлечения защищают отечественное культурное производство и укрепляют государственный авторитет."
+ },
+ "ch_foreign_ideas_embrace_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from embracing cosmopolitan foreign influences.",
+  "ru": "[concept_interest_group] черпает силу в принятии космополитических иностранных влияний."
+ },
+ "ch_foreign_ideological_influence_ig_desc": {
+  "en": "Foreign cultural influence is boosting the [concept_political_strength] and appeal of this [concept_interest_group].",
+  "ru": "Иностранное культурное влияние повышает [Concept('concept_political_strength', 'политическую силу')] и привлекательность этой [Concept('concept_interest_group', 'группы интересов')]."
+ },
+ "ch_foreign_influence_crackdown_desc": {
+  "en": "A heavy-handed suppression of foreign cultural influence bolsters state authority but damages cultural relevance and [concept_legitimacy].",
+  "ru": "Жёсткое подавление иностранного культурного влияния укрепляет государственный авторитет, но вредит культурной значимости и [Concept('concept_legitimacy', 'легитимности')]."
+ },
+ "ch_global_media_campaign_desc": {
+  "en": "The state is deliberately projecting its films, broadcasts, and press abroad, trading 200 [concept_influence] for faster growth in [concept_prestige] and cultural reach.",
+  "ru": "Государство намеренно продвигает за рубежом свои фильмы, передачи и прессу, обменивая 200 [Concept('concept_influence', 'влияния')] на более быстрый рост [Concept('concept_prestige', 'престижа')] и культурного охвата."
+ },
+ "ch_hegemon_ideological_pressure_desc": {
+  "en": "The cultural hegemon's political ideology is fueling this movement, attracting supporters and radicalizing existing members.",
+  "ru": "Политическая идеология культурного гегемона подпитывает это движение, привлекая сторонников и радикализируя нынешних участников."
+ },
+ "ch_hegemon_ideological_pressure_weak_desc": {
+  "en": "The cultural hegemon's political ideology is lending modest fuel to this movement.",
+  "ru": "Политическая идеология культурного гегемона слегка подпитывает это движение."
+ },
+ "ch_hegemon_model_pressure_desc": {
+  "en": "The world's leading cultural power runs the kind of state this movement wants. The more of the world's culture comes from countries sharing that model, the steadier the stream of converts.",
+  "ru": "Ведущая культурная держава мира управляет государством такого типа, какого хочет это движение. Чем больше мировой культуры исходит от стран с такой моделью, тем стабильнее поток новообращённых."
+ },
+ "ch_hegemon_model_pressure_weak_desc": {
+  "en": "The world's leading cultural power runs a state this movement finds close enough to its own ideals, and lends it steady, modest support.",
+  "ru": "Ведущая культурная держава мира управляет государством, которое это движение считает достаточно близким к своим идеалам, и оказывает ему постоянную, умеренную поддержку."
+ },
+ "ch_hegemonic_law_adopted_desc": {
+  "en": "Adopting laws under foreign cultural pressure has weakened the [concept_legitimacy] of the government in the eyes of its own people.",
+  "ru": "Принятие законов под иностранным культурным давлением ослабило [Concept('concept_legitimacy', 'легитимность')] правительства в глазах собственного народа."
+ },
+ "ch_hegemonic_law_resistance_desc": {
+  "en": "The government's refusal to align with the cultural hegemon's political model has provoked unrest and damaged trade relations with countries that follow the prevailing international norms.",
+  "ru": "Отказ правительства согласовать свою политику с политической моделью культурного гегемона вызвал волнения и повредил торговым отношениям со странами, следующими господствующим международным нормам."
+ },
+ "ch_ideological_cordon": {
+  "en": "Ideological Cordon",
+  "ru": "Идеологический кордон"
+ },
+ "ch_ideological_cordon_desc": {
+  "en": "Customs officers, censors and police are stretched along the border to keep a neighbor's political example out.",
+  "ru": "Таможенники, цензоры и полиция растянуты вдоль границы, чтобы не пустить политический пример соседа."
+ },
+ "ch_international_university": {
+  "en": "International University Programs",
+  "ru": "Международные университетские программы"
+ },
+ "ch_international_university_desc": {
+  "en": "International scholarship programs attract the world's brightest minds to our universities, boosting research and migration at significant administrative cost.",
+  "ru": "Международные стипендиальные программы привлекают в наши университеты лучшие умы мира, повышая научную отдачу и миграцию ценой значительных административных затрат."
+ },
+ "ch_language_academies": {
+  "en": "Language Academies Abroad",
+  "ru": "Языковые академии за рубежом"
+ },
+ "ch_language_academies_desc": {
+  "en": "State-sponsored language academies in foreign capitals formalize our linguistic dominance, extending cultural and diplomatic influence at considerable administrative cost.",
+  "ru": "Государственные языковые академии в иностранных столицах закрепляют наше языковое господство, расширяя культурное и дипломатическое влияние ценой значительных административных затрат."
+ },
+ "ch_media_dominance": {
+  "en": "Media Dominance",
+  "ru": "Господство в медиа"
+ },
+ "ch_media_dominance_desc": {
+  "en": "Our media apparatus dominates international discourse, granting exceptional cultural influence and political authority.",
+  "ru": "Наш медийный аппарат доминирует в международном дискурсе, обеспечивая исключительное культурное влияние и политический авторитет."
+ },
+ "ch_media_freedom": {
+  "en": "Media Freedom",
+  "ru": "Свобода СМИ"
+ },
+ "ch_media_freedom_desc": {
+  "en": "A free and open press attracts immigrants and enhances our [concept_legitimacy] and cultural [concept_prestige].",
+  "ru": "Свободная и открытая пресса привлекает иммигрантов и повышает нашу [Concept('concept_legitimacy', 'легитимность')] и культурный [Concept('concept_prestige', 'престиж')]."
+ },
+ "ch_media_freedom_ig_desc": {
+  "en": "The intelligentsia appreciates the commitment to a free press.",
+  "ru": "Интеллигенция ценит приверженность свободной прессе."
+ },
  "ch_model_anarchist": {
   "en": "Anarchist",
   "ru": "Анархистская"
+ },
+ "ch_model_champion": {
+  "en": "Champion of Our Model",
+  "ru": "Поборник нашей модели"
+ },
+ "ch_model_champion_desc": {
+  "en": "We fund cultural attachés, translations and friendly newspapers abroad to spread our political model, which ties up [concept_influence]. Every country that trails us feels its pull more strongly while this lasts.",
+  "ru": "Мы финансируем культурных атташе, переводы и дружественные газеты за рубежом, чтобы распространять нашу политическую модель, что связывает [Concept('concept_influence', 'влияние')]. Пока это длится, каждая страна, отстающая от нас, острее ощущает её притяжение."
  },
  "ch_model_communist": {
   "en": "Communist / Vanguardist",
@@ -175,6 +1259,14 @@
   "en": "Corporatist",
   "ru": "Корпоративистская"
  },
+ "ch_model_exemplar": {
+  "en": "A Model at Home",
+  "ru": "Образец дома"
+ },
+ "ch_model_exemplar_desc": {
+  "en": "We let our political model speak for itself through the way we govern at home.",
+  "ru": "Мы позволяем нашей политической модели говорить самой за себя через то, как мы управляем у себя дома."
+ },
  "ch_model_fascist": {
   "en": "Fascist / Ethnonationalist",
   "ru": "Фашистская / этнонационалистическая"
@@ -182,6 +1274,14 @@
  "ch_model_liberal": {
   "en": "Liberal / Progressive Democratic",
   "ru": "Либеральная / прогрессивно-демократическая"
+ },
+ "ch_model_orphaned": {
+  "en": "A Model Without a Champion",
+  "ru": "Модель без поборника"
+ },
+ "ch_model_orphaned_desc": {
+  "en": "The world's leading cultural power no longer runs a state like ours, and our critics at home say our model's time has passed.",
+  "ru": "Ведущая культурная держава мира больше не управляет государством, подобным нашему, и наши критики дома говорят, что время нашей модели прошло."
  },
  "ch_model_other": {
   "en": "Mixed / Other",
@@ -207,109 +1307,793 @@
   "en": "Technocratic",
   "ru": "Технократическая"
  },
+ "ch_model_unknown": {
+  "en": "#lore not yet established#!",
+  "ru": "#lore пока не установлено#!"
+ },
+ "ch_narrative_control": {
+  "en": "State Narrative Control",
+  "ru": "Государственный контроль над повествованием"
+ },
+ "ch_narrative_control_desc": {
+  "en": "State censors are controlling the narrative, limiting foreign cultural influence at the cost of some authority and cultural relevance.",
+  "ru": "Государственные цензоры контролируют повествование, ограничивая иностранное культурное влияние ценой части авторитета и культурной значимости."
+ },
+ "ch_nationalist_rally_ig_desc": {
+  "en": "The [concept_interest_group] draws strength from a surge of nationalist sentiment against foreign cultural influence.",
+  "ru": "[concept_interest_group] черпает силу из всплеска националистических настроений против иностранного культурного влияния."
+ },
+ "ch_natural_lingua_franca_desc": {
+  "en": "Our language spreads organically through commerce and scholarship, opening new trade routes without the costs of formal promotion.",
+  "ru": "Наш язык распространяется естественно через торговлю и науку, открывая новые торговые пути без затрат на официальное продвижение."
+ },
+ "ch_non_aligned_stance_desc": {
+  "en": "We have refused to choose between the leading cultural powers, and our people take pride in it.",
+  "ru": "Мы отказались выбирать между ведущими культурными державами, и наш народ гордится этим."
+ },
+ "ch_selective_education": {
+  "en": "Selective Education Adoption",
+  "ru": "Выборочное принятие образования"
+ },
+ "ch_selective_education_desc": {
+  "en": "A pragmatic approach to foreign educational practices — adopting what works while preserving domestic traditions.",
+  "ru": "Прагматичный подход к иностранным образовательным практикам: принимать то, что работает, и сохранять отечественные традиции."
+ },
+ "ch_soft_power_dividend_desc": {
+  "en": "Our cultural [concept_prestige] is paying dividends in international influence and immigration.",
+  "ru": "Наш культурный [concept_prestige|l] приносит дивиденды в виде международного влияния и иммиграции."
+ },
+ "ch_state_propaganda": {
+  "en": "State Propaganda",
+  "ru": "Государственная пропаганда"
+ },
+ "ch_state_propaganda_desc": {
+  "en": "Cultural output has been redirected toward state messaging, boosting national [concept_prestige] and authority.",
+  "ru": "Культурная продукция переориентирована на государственные послания, повышая национальный [concept_prestige|l] и авторитет."
+ },
+ "ch_state_propaganda_ig_desc": {
+  "en": "The intelligentsia chafes under the restrictions of state-directed cultural policy.",
+  "ru": "Интеллигенция тяготится ограничениями государственной культурной политики."
+ },
+ "ch_talent_retention": {
+  "en": "Talent Retention Program",
+  "ru": "Программа удержания талантов"
+ },
+ "ch_talent_retention_desc": {
+  "en": "Funding for universities and research institutions helps retain our brightest minds.",
+  "ru": "Финансирование университетов и научных учреждений помогает удержать наши лучшие умы."
+ },
+ "ch_tier_hegemon": {
+  "en": "#G Cultural Hegemon#!",
+  "ru": "#G Культурный гегемон#!"
+ },
+ "ch_tier_major": {
+  "en": "#G Major Cultural Power#!",
+  "ru": "#G Крупная культурная держава#!"
+ },
+ "ch_tier_minor": {
+  "en": "Minor Cultural Influence",
+  "ru": "Малое культурное влияние"
+ },
+ "ch_tier_moderate": {
+  "en": "#Y Moderate Cultural Influence#!",
+  "ru": "#Y Умеренное культурное влияние#!"
+ },
+ "ch_tier_negligible": {
+  "en": "#R Negligible Cultural Influence#!",
+  "ru": "#R Ничтожное культурное влияние#!"
+ },
+ "ch_tier_significant": {
+  "en": "#Y Significant Cultural Presence#!",
+  "ru": "#Y Значительное культурное присутствие#!"
+ },
+ "ch_touring_exhibition": {
+  "en": "Touring Exhibition",
+  "ru": "Гастрольная выставка"
+ },
+ "ch_touring_exhibition_desc": {
+  "en": "An internationally touring art exhibition showcases our cultural achievements, boosting [concept_prestige] and cultural influence at the cost of administrative attention.",
+  "ru": "Международная гастрольная выставка демонстрирует наши культурные достижения, повышая [Concept('concept_prestige', 'престиж')] и культурное влияние ценой административного внимания."
+ },
+ "ch_tourism_exploitation": {
+  "en": "Tourism Exploitation",
+  "ru": "Эксплуатация туризма"
+ },
+ "ch_tourism_exploitation_desc": {
+  "en": "Aggressive monetization of the tourist trade squeezes more revenue from [concept_tourism_output] but damages our international reputation and cultural appeal.",
+  "ru": "Агрессивная монетизация туристической торговли выжимает больше дохода из [Concept('concept_tourism_output', 'туристического продукта')], но вредит нашей международной репутации и культурной привлекательности."
+ },
+ "ch_tourism_infrastructure": {
+  "en": "Tourism Infrastructure",
+  "ru": "Туристическая инфраструктура"
+ },
+ "ch_tourism_infrastructure_desc": {
+  "en": "Investment in [concept_tourism_system] [concept_infrastructure] boosts the tourism industry and enhances cultural appeal, though it ties up significant [concept_authority].",
+  "ru": "Вложения в [Concept('concept_infrastructure', 'инфраструктуру')] [Concept('concept_tourism_system', 'туризма')] развивают туристическую индустрию и повышают культурную привлекательность, но связывают значительный [Concept('concept_authority', 'авторитет')]."
+ },
  "ch_world_exposition": {
   "en": "International Cultural Outreach",
   "ru": "Международная культурная работа"
+ },
+ "ch_world_exposition_cost_desc": {
+  "en": "Sustained spending on touring shows, foreign cultural centers, and sponsored translations.",
+  "ru": "Постоянные расходы на гастрольные выставки, зарубежные культурные центры и спонсируемые переводы."
+ },
+ "ch_world_exposition_desc": {
+  "en": "Active state-sponsored projection of our culture abroad — touring exhibitions, foreign cultural centers, sponsored translations — drawing international attention, migration, and prestige while it runs.",
+  "ru": "Активное государственное продвижение нашей культуры за рубежом — гастрольные выставки, зарубежные культурные центры, спонсируемые переводы — привлекает международное внимание, миграцию и престиж, пока идёт."
+ },
+ "cheaty": {
+  "en": "Debug Boost",
+  "ru": "Отладочный бонус"
+ },
+ "cheaty_desc": {
+  "en": "A powerful temporary modifier used for testing or special scripted effects.",
+  "ru": "Мощный временный модификатор для тестирования или особых скриптовых эффектов."
+ },
+ "chinese_union": {
+  "en": "Chinese Union",
+  "ru": "Китайский союз"
+ },
+ "civil_disobedience_concessions_modifier_desc": {
+  "en": "Limited concessions to civil disobedience campaigners have defused immediate tensions.",
+  "ru": "Ограниченные уступки участникам кампаний гражданского неповиновения сняли сиюминутную напряжённость."
+ },
+ "civil_disobedience_crackdown_modifier_desc": {
+  "en": "Mass arrests of civil disobedience participants have restored immediate authority but at great cost to our reputation.",
+  "ru": "Массовые аресты участников гражданского неповиновения вернули немедленный авторитет, но ценой серьёзного урона нашей репутации."
+ },
+ "civil_disobedience_movement_galvanized_desc": {
+  "en": "The spectacle of peaceful protesters being arrested has galvanized the civil rights movement and attracted international attention.",
+  "ru": "Зрелище арестов мирных протестующих воодушевило движение за гражданские права и привлекло международное внимание."
+ },
+ "civil_rights_government_endorsement_modifier_desc": {
+  "en": "The government's bold endorsement of the civil rights march has energized [Concept('concept_political_movement', 'political movements')] and given voice to those demanding change.",
+  "ru": "Решительная поддержка правительством марша за гражданские права воодушевила [Concept('concept_political_movement', 'политические движения')] и дала голос тем, кто требует перемен."
+ },
+ "civil_rights_hollow_victory_modifier_desc": {
+  "en": "The movement reached its peak. The law did not move. International observers and our own [GetInterestGroupVariant('ig_intelligentsia', GetPlayer).GetName] noticed.",
+  "ru": "Движение достигло пика. Закон не сдвинулся. Международные наблюдатели и наша собственная группа «[GetInterestGroupVariant('ig_intelligentsia', GetPlayer).GetName]» это заметили."
+ },
+ "civil_rights_investigation_modifier_desc": {
+  "en": "A formal investigation into the killing of a civil rights figure has earned some goodwill.",
+  "ru": "Официальное расследование убийства борца за гражданские права снискало некоторое расположение."
+ },
+ "civil_rights_march_calming_desc": {
+  "en": "The government's concessions to marchers have calmed the civil rights movement, reducing the urgency of their demands.",
+  "ru": "Уступки правительства участникам марша успокоили движение за гражданские права, снизив остроту их требований."
+ },
+ "civil_rights_march_momentum_modifier_desc": {
+  "en": "The peaceful civil rights march has generated positive momentum for reform and raised our nation's profile as a beacon of democracy.",
+  "ru": "Мирный марш за гражданские права создал положительный импульс для реформ и поднял репутацию нашей страны как маяка демократии."
+ },
+ "civil_rights_martyrdom_modifier_desc": {
+  "en": "The death of a civil rights figure has galvanized the movement and shifted public sympathy toward reform.",
+  "ru": "Гибель борца за гражданские права воодушевила движение и сместила общественные симпатии в сторону реформ."
+ },
+ "civil_rights_phase_active_modifier_desc": {
+  "en": "The movement actively radicalizes oppressed [Concept('concept_pop', 'pops')] while disturbing public order.",
+  "ru": "Движение активно радикализирует угнетённые [Concept('concept_pop', 'группы населения')], нарушая общественный порядок."
+ },
+ "civil_rights_phase_growing_modifier_desc": {
+  "en": "Marches and chapters spread; modest unrest tracks the movement.",
+  "ru": "Марши и отделения множатся; умеренные волнения сопровождают движение."
+ },
+ "civil_rights_phase_imminent_modifier_desc": {
+  "en": "Reform proposals dominate the legislative agenda; passing rights legislation has become noticeably easier.",
+  "ru": "Предложения реформ доминируют в законодательной повестке; принять законы о правах стало заметно легче."
+ },
+ "civil_rights_phase_marginal_modifier_desc": {
+  "en": "The movement is too weak to attract organized [Concept('concept_radical', 'radicals')].",
+  "ru": "Движение слишком слабо, чтобы привлекать организованных [Concept('concept_radical', 'радикалов')]."
+ },
+ "civil_rights_phase_pressuring_modifier_desc": {
+  "en": "Mass mobilization sharpens unrest; the political class scrambles to position itself.",
+  "ru": "Массовая мобилизация обостряет волнения; политический класс спешно определяет свою позицию."
+ },
+ "civil_rights_suppression_modifier_desc": {
+  "en": "The suppression of civil rights demonstrators has damaged our reputation and increased social unrest.",
+  "ru": "Подавление демонстраций за гражданские права повредило нашей репутации и усилило социальные волнения."
+ },
+ "civil_rights_triumph_coopted_modifier_desc": {
+  "en": "On paper a victory. In practice, the moderates were promoted and the [Concept('concept_radical', 'radicals')] went quiet.",
+  "ru": "На бумаге победа. На деле умеренных повысили, а [Concept('concept_radical', 'радикалы')] затихли."
+ },
+ "civil_rights_triumph_federal_modifier_desc": {
+  "en": "Federal civil rights legislation, signed at the capital, marks a new constitutional baseline.",
+  "ru": "Федеральный закон о гражданских правах, подписанный в столице, закладывает новую конституционную основу."
+ },
+ "civil_rights_triumph_gradualist_modifier_desc": {
+  "en": "A negotiated settlement closes the question with broad institutional buy-in.",
+  "ru": "Договорённость закрывает вопрос при широкой поддержке институтов."
+ },
+ "civil_rights_triumph_grassroots_modifier_desc": {
+  "en": "Mass mobilization carried the day. The movement remains organized and proud.",
+  "ru": "Массовая мобилизация одержала верх. Движение остаётся организованным и гордым."
+ },
+ "civil_rights_triumph_modifier_desc": {
+  "en": "Our nation's embrace of civil rights has earned us [concept_prestige] and goodwill.",
+  "ru": "Наше принятие гражданских прав принесло нам [concept_prestige|l] и добрую волю."
+ },
+ "climate_accord_rejection_modifier": {
+  "en": "Climate Accord Rejected",
+  "ru": "Климатическое соглашение отвергнуто"
+ },
+ "climate_accord_rejection_modifier_desc": {
+  "en": "By rejecting the international climate accord, our fossil fuel industries operate without the constraints accepted by other nations, boosting coal and oil output at the cost of increased emissions.",
+  "ru": "Отвергнув международное климатическое соглашение, наша отрасль ископаемого топлива работает без ограничений, принятых другими странами, увеличивая добычу угля и нефти ценой роста выбросов."
+ },
+ "climate_adaptation_modifier": {
+  "en": "Climate Adaptation Program",
+  "ru": "Программа адаптации к климату"
+ },
+ "climate_adaptation_modifier_desc": {
+  "en": "Government spending on climate resilience infrastructure - flood defenses, heat-resistant crops, cooling centers. Lowers mortality and raises local standards of living, but carries a large political authority cost.",
+  "ru": "Государственные расходы на устойчивую к климату инфраструктуру — защиту от наводнений, жаростойкие культуры, центры охлаждения. Снижает смертность и повышает местный уровень жизни, но несёт большие затраты политического авторитета."
+ },
+ "climate_awareness_modifier": {
+  "en": "Climate Awareness Initiative",
+  "ru": "Инициатива климатической осведомлённости"
+ },
+ "climate_awareness_modifier_desc": {
+  "en": "Scientists and academics have raised awareness of the changing climate. The government is funding preliminary studies into environmental protection, making it easier to establish environmental [Concept('concept_institution', 'institutions')].",
+  "ru": "Учёные и академики повысили осведомлённость об изменении климата. Правительство финансирует предварительные исследования в области охраны окружающей среды, что облегчает создание экологических [Concept('concept_institution', 'институтов')]."
+ },
+ "climate_carrying_on_modifier": {
+  "en": "Carrying On",
+  "ru": "Всё как прежде"
+ },
+ "climate_carrying_on_modifier_desc": {
+  "en": "At four degrees of warming we have launched no program and diverted nothing from industry. The factories keep running while the heat kills and the harvests fail.",
+  "ru": "При потеплении на четыре градуса мы не запустили никакой программы и ничего не отвели от промышленности. Фабрики работают, пока жара убивает, а урожаи гибнут."
+ },
+ "climate_crisis_emergency_modifier": {
+  "en": "Climate Crisis Emergency Response",
+  "ru": "Чрезвычайные меры по климатическому кризису"
+ },
+ "climate_crisis_emergency_modifier_desc": {
+  "en": "A massive emergency response to the climate crisis, diverting enormous resources to protect the population and rapidly build environmental [Concept('concept_institution', 'institutions')].",
+  "ru": "Масштабный чрезвычайный ответ на климатический кризис: огромные ресурсы направлены на защиту населения и быстрое создание экологических [Concept('concept_institution', 'институтов')]."
+ },
+ "climate_deregulation_modifier": {
+  "en": "Climate Deregulation",
+  "ru": "Климатическая дерегуляция"
+ },
+ "climate_deregulation_modifier_desc": {
+  "en": "With the climate threat receding, we are rolling back environmental regulations. Industry benefits from reduced compliance costs and freed bureaucratic capacity, though emissions are creeping back up.",
+  "ru": "С отступлением климатической угрозы мы сворачиваем экологическое регулирование. Промышленность выигрывает от сниженных расходов на соблюдение норм и освободившихся бюрократических мощностей, хотя выбросы снова ползут вверх."
+ },
+ "climate_dismissal_boost_modifier": {
+  "en": "Business as Usual",
+  "ru": "Всё идёт своим чередом"
+ },
+ "climate_dismissal_boost_modifier_desc": {
+  "en": "By dismissing climate warnings, our industries continue to operate without environmental restrictions. [concept_throughput] is higher, but so are greenhouse gas emissions.",
+  "ru": "Отмахнувшись от климатических предупреждений, наша промышленность продолжает работать без экологических ограничений. [concept_throughput] выше, как и выбросы парниковых газов."
+ },
+ "climate_fortress_modifier": {
+  "en": "Fortress Nation",
+  "ru": "Страна-крепость"
+ },
+ "climate_fortress_modifier_desc": {
+  "en": "At four degrees of warming we keep our harvest at home and our borders shut. Our fields still feed us, but the heat kills, the factories falter, and the rest of the world will remember who closed the door.",
+  "ru": "При потеплении на четыре градуса мы оставляем урожай дома и держим границы закрытыми. Наши поля по-прежнему кормят нас, но жара убивает, заводы дают сбои, а остальной мир запомнит, кто закрыл дверь."
+ },
+ "climate_inaction_savings_modifier": {
+  "en": "Crisis Funds Diverted",
+  "ru": "Кризисные средства перенаправлены"
+ },
+ "climate_inaction_savings_modifier_desc": {
+  "en": "Rather than spending on costly climate adaptation, we are redirecting those resources to keep government operations running smoothly. The population suffers, but the treasury is better for it.",
+  "ru": "Вместо дорогостоящей адаптации к климату мы направляем эти ресурсы на бесперебойную работу правительства. Население страдает, но казна от этого в выигрыше."
+ },
+ "climate_measures_sunset_modifier": {
+  "en": "Climate Safeguards Lifted",
+  "ru": "Климатические меры сняты"
+ },
+ "climate_measures_sunset_modifier_desc": {
+  "en": "With temperatures returning to manageable levels, emergency climate regulations have been dismantled. Industry is thriving without environmental compliance costs, though emissions are rising again.",
+  "ru": "Когда температуры вернулись к приемлемому уровню, чрезвычайное климатическое регулирование было демонтировано. Промышленность процветает без расходов на соблюдение экологических норм, хотя выбросы снова растут."
+ },
+ "climate_political_turmoil_modifier": {
+  "en": "Climate Political Turmoil",
+  "ru": "Климатические политические беспорядки"
+ },
+ "climate_political_turmoil_modifier_desc": {
+  "en": "The clash between environmental and industrial interests has radicalized [Concept('concept_political_movement', 'political movements')] across the country.",
+  "ru": "Столкновение экологических и промышленных интересов радикализировало [Concept('concept_political_movement', 'политические движения')] по всей стране."
+ },
+ "climate_refugee_rejection_modifier": {
+  "en": "Closed Borders to Climate Refugees",
+  "ru": "Границы закрыты для климатических беженцев"
+ },
+ "climate_refugee_rejection_modifier_desc": {
+  "en": "The nation has closed its borders to climate refugees, drawing international condemnation but avoiding the strain of [concept_mass_migration].",
+  "ru": "Страна закрыла границы для климатических беженцев, вызвав международное осуждение, но избежав нагрузки от [Concept('concept_mass_migration', 'массовой миграции')]."
+ },
+ "climate_refugee_welcome_modifier": {
+  "en": "Climate Refugee Welcome Program",
+  "ru": "Программа приёма климатических беженцев"
+ },
+ "climate_refugee_welcome_modifier_desc": {
+  "en": "The nation has opened its borders to climate refugees, gaining international [concept_prestige] but straining local resources.",
+  "ru": "Страна открыла границы для климатических беженцев, получив международный [concept_prestige|l], но перегрузив местные ресурсы."
+ },
+ "climate_summit_leader_modifier": {
+  "en": "Climate Summit Leadership",
+  "ru": "Лидерство на климатическом саммите"
+ },
+ "climate_summit_leader_modifier_desc": {
+  "en": "Our nation took the lead at an international climate summit, gaining enormous [concept_prestige] and demonstrating commitment to reducing emissions.",
+  "ru": "Наша страна взяла на себя лидерство на международном климатическом саммите, получив огромный [concept_prestige|l] и продемонстрировав приверженность сокращению выбросов."
+ },
+ "climate_summit_pledge_modifier": {
+  "en": "Climate Summit Signatory",
+  "ru": "Подписант климатического саммита"
+ },
+ "climate_summit_pledge_modifier_desc": {
+  "en": "Our nation signed an international climate accord, pledging to reduce emissions in solidarity with the global community.",
+  "ru": "Наша страна подписала международное климатическое соглашение, пообещав сокращать выбросы в солидарности с мировым сообществом."
+ },
+ "climate_survival_footing_modifier": {
+  "en": "Survival Footing",
+  "ru": "Режим выживания"
+ },
+ "climate_survival_footing_modifier_desc": {
+  "en": "At four degrees of warming the state has taken over cooling, water and food distribution, and the administration can do little else. Our people are spared the worst of the heat; our fields and factories are not.",
+  "ru": "При потеплении на четыре градуса государство взяло на себя охлаждение, водоснабжение и распределение продовольствия, и администрация почти ни на что другое не способна. Наших людей пощадили от худшей жары; наши поля и фабрики — нет."
+ },
+ "climate_turmoil_movement_radicalism": {
+  "en": "Climate Turmoil (Environmental)",
+  "ru": "Климатические беспорядки (экологическое движение)"
+ },
+ "climate_turmoil_movement_radicalism_desc": {
+  "en": "Political [concept_turmoil] over climate change is radicalizing the environmental movement, pushing activists toward more extreme demands.",
+  "ru": "Политические [Concept('concept_turmoil', 'беспорядки')] из-за изменения климата радикализируют экологическое движение, толкая активистов к более крайним требованиям."
+ },
+ "climate_victory_dividend_modifier": {
+  "en": "Climate Victory Dividend",
+  "ru": "Дивиденд климатической победы"
+ },
+ "climate_victory_dividend_modifier_desc": {
+  "en": "Having declared victory over climate change, our nation basks in [concept_prestige] and channels former climate spending into economic growth. Some worry this complacency may prove premature.",
+  "ru": "Объявив о победе над изменением климата, наша страна наслаждается [concept_prestige|l] и направляет бывшие климатические расходы на экономический рост. Некоторые опасаются, что это самодовольство окажется преждевременным."
+ },
+ "coastal_flood_defense_modifier_desc": {
+  "en": "Ministry-coordinated engineering projects have constructed flood barriers and drainage systems, reducing port disruption and improving [concept_infrastructure].",
+  "ru": "Инженерные проекты под руководством министерства построили защитные дамбы и дренажные системы, сократив сбои в портах и улучшив [Concept('concept_infrastructure', 'инфраструктуру')]."
+ },
+ "coastal_flooding_modifier": {
+  "en": "Coastal Flooding",
+  "ru": "Прибрежные наводнения"
+ },
+ "coastal_flooding_modifier_desc": {
+  "en": "Rising sea levels have flooded coastal areas, disrupting ports, fishing, and lowering the [concept_sol].",
+  "ru": "Повышение уровня моря затопило прибрежные районы, нарушив работу портов и рыболовства и снизив [Concept('concept_sol', 'уровень жизни')]."
+ },
+ "coastal_relocation_modifier": {
+  "en": "Coastal Population Relocation",
+  "ru": "Переселение прибрежного населения"
+ },
+ "coastal_relocation_modifier_desc": {
+  "en": "We are relocating coastal populations inland to escape rising sea levels. The disruption to daily life is severe, but reduced port dependency and new migration patterns may prove beneficial.",
+  "ru": "Мы переселяем прибрежное население вглубь страны, спасая его от повышения уровня моря. Нарушение повседневной жизни серьёзно, но сокращение зависимости от портов и новые миграционные потоки могут оказаться полезными."
+ },
+ "colonial_assimilation_disruption_modifier_desc": {
+  "en": "The colonial power that rules here is running its $colonial_cultural_assimilation_modifier$, and forced conversion keeps people from skilled work. This lasts while the program runs.",
+  "ru": "Правящая здесь колониальная держава проводит «$colonial_cultural_assimilation_modifier$», и принудительное обращение отвлекает людей от квалифицированного труда. Это длится, пока идёт программа."
+ },
+ "colonial_crackdown_modifier": {
+  "en": "Colonial Crackdown",
+  "ru": "Колониальные репрессии"
+ },
+ "colonial_crackdown_modifier_desc": {
+  "en": "The government has committed to military suppression of independence movements in our colonies. Garrison forces operate with hardened resolve, but the protracted war drives up the cost of military goods at home and the anti-war intelligentsia is gaining political momentum.",
+  "ru": "Правительство взяло курс на военное подавление движений за независимость в наших колониях. Гарнизоны действуют с ожесточённой решимостью, но затяжная война поднимает цены на военные товары дома, а антивоенная интеллигенция набирает политический вес."
+ },
+ "colonial_crumbling_movement_radicalism_desc": {
+  "en": "The disintegration of our colonial empire has emboldened the civil rights movement, whose demands grow ever more urgent.",
+  "ru": "Распад нашей колониальной империи ободрил движение за гражданские права, требования которого становятся всё настойчивее."
+ },
+ "colonial_cultural_assimilation_modifier_desc": {
+  "en": "A government program is promoting cultural [concept_assimilation] of colonial populations, accelerating acceptance growth.",
+  "ru": "Государственная программа продвигает культурную [Concept('concept_assimilation', 'ассимиляцию')] колониального населения, ускоряя рост принятия."
+ },
+ "colonial_culture_change": {
+  "en": "Colonial Culture Change",
+  "ru": "Смена колониальной культуры"
+ },
+ "colonial_culture_change_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has changed the culture and religion of [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] изменила культуру и религию страны [TARGET_COUNTRY.GetName]."
+ },
+ "colonial_culture_change_desc": {
+  "en": "Colonial Culture Change is a [concept_diplomatic_action] that allows a country to change the culture and religion of a colonial subject.",
+  "ru": "Смена колониальной культуры — это [concept_diplomatic_action|l], позволяющее стране изменить культуру и религию колониального зависимого государства."
+ },
+ "colonial_development_investment_expense_modifier_desc": {
+  "en": "Weekly upkeep of the Colonial Development Investment program: a share of our colonies' [concept_gdp] for each level it runs at. Appears as a line item in the budget.",
+  "ru": "Еженедельное содержание программы «Инвестиции в колониальное развитие»: доля [concept_gdp] наших колоний за каждый уровень, на котором она работает. Отображается отдельной строкой в бюджете."
+ },
+ "colonial_development_investment_modifier_desc": {
+  "en": "The government is investing in [concept_infrastructure] and [Concept('concept_institution', 'institutions')] in colonial territories, draining bureaucratic resources.",
+  "ru": "Правительство инвестирует в [Concept('concept_infrastructure', 'инфраструктуру')] и [Concept('concept_institution', 'институты')] в колониальных территориях, истощая бюрократические ресурсы."
+ },
+ "colonial_empire_collapsed_modifier_desc": {
+  "en": "Our colonial empire has collapsed. The loss of overseas territories has dealt a severe blow to national [concept_prestige] and living standards.",
+  "ru": "Наша колониальная империя рухнула. Потеря заморских территорий нанесла тяжёлый удар по национальному [Concept('concept_prestige', 'престижу')] и уровню жизни."
+ },
+ "colonial_empire_crumbling_modifier_desc": {
+  "en": "Our colonial empire is on the verge of collapse. Widespread unrest and radical movements threaten to tear our overseas territories away.",
+  "ru": "Наша колониальная империя на грани краха. Повсеместные волнения и радикальные движения грозят оторвать наши заморские территории."
+ },
+ "colonial_empire_solidified_modifier_desc": {
+  "en": "Our colonial territories have been fully integrated into the nation. Cultural acceptance is high and the overseas lands are now permanent parts of our country.",
+  "ru": "Наши колониальные территории полностью интегрированы в страну. Культурное принятие высоко, и заморские земли теперь — постоянные части нашей страны."
+ },
+ "colonial_empire_under_pressure_modifier_desc": {
+  "en": "Our colonial empire is crumbling. International pressure and local unrest make every territory costlier to hold.",
+  "ru": "Наша колониальная империя рушится. Международное давление и местные волнения делают удержание каждой территории дороже."
+ },
+ "colonial_integration_progress_modifier_desc": {
+  "en": "A colonial territory has reached a milestone in integration, with high cultural acceptance among the local population.",
+  "ru": "Колониальная территория достигла рубежа в интеграции: среди местного населения высокое культурное принятие."
+ },
+ "colonial_military_garrison_modifier_desc": {
+  "en": "Military forces are stationed in colonial territories to maintain order, reducing our available military projection.",
+  "ru": "Войска расквартированы в колониальных территориях для поддержания порядка, что сокращает нашу доступную проекцию военной силы."
+ },
+ "colonial_overreach_tt": {
+  "en": "Imperial overreach (colonies vs. metropole size)",
+  "ru": "Имперское перенапряжение (колонии и размер метрополии)"
+ },
+ "colonial_pressure_movement_radicalism_desc": {
+  "en": "Colonial [concept_ch_instability] is radicalizing civil rights advocates, who see the empire's weakness as an opportunity for change.",
+  "ru": "Колониальная [Concept('concept_ch_instability', 'нестабильность')] радикализирует борцов за гражданские права, видящих в слабости империи возможность перемен."
+ },
+ "colonial_reparations_modifier": {
+  "en": "Colonial Reparations Paid",
+  "ru": "Выплачены колониальные репарации"
+ },
+ "colonial_reparations_modifier_desc": {
+  "en": "The government is paying reparations to a former colony, acknowledging past wrongs at significant financial cost.",
+  "ru": "Правительство выплачивает репарации бывшей колонии, признавая прошлые несправедливости ценой значительных финансовых затрат."
+ },
+ "colonial_stability_bar_desc": {
+  "en": "Colonial Stability: collapse at 0",
+  "ru": "Колониальная стабильность: крах при 0"
+ },
+ "colonial_unrest_suppressed_modifier_desc": {
+  "en": "Military force has been used to suppress unrest in a colonial territory, at the cost of our international reputation.",
+  "ru": "Военная сила была применена для подавления волнений в колониальной территории ценой нашей международной репутации."
+ },
+ "colonial_war_exhaustion_modifier_desc": {
+  "en": "We have withdrawn from a costly colonial war. The retreat has damaged our reputation and the credibility of our military projection abroad.",
+  "ru": "Мы вышли из дорогостоящей колониальной войны. Отступление повредило нашей репутации и доверию к нашей военной проекции за рубежом."
+ },
+ "commonwealth_legacy_modifier": {
+  "en": "Commonwealth Legacy",
+  "ru": "Наследие Содружества"
+ },
+ "commonwealth_legacy_modifier_desc": {
+  "en": "This country's former ruler left it a trained civil service of its own people.",
+  "ru": "Прежний правитель этой страны оставил ей обученную гражданскую службу из её же людей."
+ },
+ "commonwealth_path_modifier": {
+  "en": "The Commonwealth Path",
+  "ru": "Путь Содружества"
  },
  "concept_agent_network": {
   "en": "Agent Network",
   "ru": "Агентурная сеть"
  },
+ "concept_agent_network_desc": {
+  "en": "Your agents inside a country you have run [concept_covert_operations] against, rated 0 to 100. A network grows while operations against that country run there, decays once they stop, and outlives them; an exposed operation costs it 25. A strong network lowers the [concept_operation_detection] of every operation in that country and gives a new one there a head start. It also raises the detection risk of that country's operations against you, because your agents inside its service hear of them. From strength 50 it reports that country's [concept_intelligence_capacity] and technology, and from 75 how many operations it runs against you.",
+  "ru": "Ваши агенты в стране, против которой вы вели [Concept('concept_covert_operations', 'тайные операции')], по шкале от 0 до 100. Сеть растёт, пока там идут операции против этой страны, слабеет, когда они прекращаются, и переживает их; разоблачённая операция стоит ей 25. Сильная сеть снижает [Concept('concept_operation_detection', 'риск обнаружения')] каждой операции в этой стране и даёт новой операции там фору. Она также повышает риск обнаружения операций этой страны против вас, потому что ваши агенты в её службе слышат о них. Начиная с силы 50 она сообщает о [Concept('concept_intelligence_capacity', 'разведывательном потенциале')] этой страны и её технологиях, а начиная с 75 — о том, сколько операций она ведёт против вас."
+ },
  "concept_antimatter_facility": {
   "en": "Antimatter Facility",
   "ru": "Установка по производству антиматерии"
+ },
+ "concept_antimatter_facility_desc": {
+  "en": "A high-energy particle physics complex that produces antimatter for civilian and military use. Each level provides 5 sub-building slots for Antimatter Engines (power generation) and Antimatter Warhead Plants (weapons production).",
+  "ru": "Комплекс физики высоких энергий, производящий антиматерию для гражданского и военного применения. Каждый уровень даёт 5 слотов подзданий для Антиматериальных двигателей (производство энергии) и Заводов антиматериальных боеголовок (производство оружия)."
  },
  "concept_asat_strike": {
   "en": "Anti-Satellite Strike",
   "ru": "Противоспутниковый удар"
  },
+ "concept_asat_strike_desc": {
+  "en": "A hostile diplomatic action, from the Diplomacy panel, against a country at war with the striker. The striker needs Guided Missiles and a Space Program; the target needs a Space Program or an orbital megaproject, and must not have been struck by anyone in the last 12 months. It disrupts the target's orbital network for a year (six months from the Mars Mission on, half as badly with an Orbital Battlestation), adds [concept_orbital_debris] that every country in orbit flies through, and costs the striker infamy, relations and case strength at the UN: twice the infamy and case strength for a party to the Moratorium on Destructive Anti-Satellite Tests.",
+  "ru": "Враждебное дипломатическое действие, выполняемое с панели дипломатии, против страны, воюющей с нападающим. Нападающему нужны Управляемые ракеты и Космическая программа; цели нужна Космическая программа или орбитальный мегапроект, и по ней никто не должен был наносить удар за последние 12 месяцев. Оно выводит из строя орбитальную сеть цели на год (на шесть месяцев начиная с Марсианской миссии, вдвое слабее при наличии Орбитальной боевой станции), добавляет [Concept('concept_orbital_debris', 'орбитальный мусор')], сквозь который летят все страны на орбите, и стоит нападающему дурной славы, отношений и весомости дела в ООН: вдвое больше дурной славы и весомости дела для стороны Моратория на разрушительные противоспутниковые испытания."
+ },
+ "concept_asset_relief_program_desc": {
+  "en": "Government purchase of distressed financial assets from private banks during a [concept_banking_crash], intended to restore solvency and confidence. Politically toxic — taxpayers fund what is widely perceived as a bailout of the financial sector.",
+  "ru": "Государственная покупка проблемных финансовых активов у частных банков во время [Concept('concept_banking_crash', 'банковского краха')] с целью восстановить платёжеспособность и доверие. Политически токсично — налогоплательщики оплачивают то, что многие считают спасением финансового сектора."
+ },
+ "concept_banking_asset_purchases_desc": {
+  "en": "What your central bank adds to inflation by buying assets with money it creates: the [concept_open_market_operations] program you switch on, and the bank's own purchases when its [concept_banking_mandate] asks for a lower rate than its floor allows. Counted on its own rather than as a modifier, so [concept_banking_inflation_anchoring] does not absorb it.",
+  "ru": "То, что ваш центральный банк добавляет к инфляции, скупая активы на деньги, которые сам создаёт: программа [Concept('concept_open_market_operations', 'операций на открытом рынке')], которую вы включаете, и собственные покупки банка, когда его [Concept('concept_banking_mandate', 'мандат')] требует более низкой ставки, чем позволяет его нижний предел. Учитывается отдельно, а не как модификатор, поэтому [Concept('concept_banking_inflation_anchoring', 'закрепление инфляции')] её не поглощает."
+ },
  "concept_banking_backstops": {
   "en": "Backstops",
   "ru": "Страховочные механизмы"
+ },
+ "concept_banking_backstops_desc": {
+  "en": "Swap lines and guarantees in your monetary treaties move [concept_banking_risk_premium]: they take points off the premium of the country they support, and add points to the premium of the one that extends them.",
+  "ru": "Линии валютного свопа и гарантии в ваших валютных договорах меняют [Concept('concept_banking_risk_premium', 'премию за риск')]: они снимают пункты с премии поддерживаемой страны и добавляют пункты к премии той, что их предоставляет."
+ },
+ "concept_banking_bank_gold_desc": {
+  "en": "The gold your central bank holds against its notes. It is the bank's, not the treasury's: the government cannot spend it, and nothing that happens to it shows in your budget. It is what a gold standard rests on.",
+  "ru": "Золото, которое ваш центральный банк держит в обеспечение своих банкнот. Оно принадлежит банку, а не казне: правительство не может его тратить, и ничто, что с ним происходит, не отражается в вашем бюджете. На нём держится золотой стандарт."
+ },
+ "concept_banking_borrowed_gold_desc": {
+  "en": "The part of the [concept_banking_bank_gold] that came in chasing a high rate and is owed, not earned. It grows every month the rate is held high, and it is the first gold to leave once your rate is no longer above the world's.",
+  "ru": "Часть [Concept('concept_banking_bank_gold', 'золота банка')], пришедшая в погоне за высокой ставкой и являющаяся долгом, а не заработанным. Она растёт каждый месяц, пока ставка остаётся высокой, и это первое золото, которое уйдёт, как только ваша ставка перестанет быть выше мировой."
+ },
+ "concept_banking_common_currency_desc": {
+  "en": "A power bloc leader's money, which any member may adopt once the bloc's [concept_banking_monetary_union] reaches its second tier. An adopter has no dial: it takes the leader's policy rate with no spread, its exchange rate and most of its credibility, and can no longer monetize its deficit. With no peg to break, an overvalued adopter pays more [concept_banking_risk_premium] instead. Once a member has adopted, the leader uses the currency too, and gains what its adopters gain from the bloc's principle except the backstop on their debts and the cuts to their premium. Each country's cycle and debts stay its own. Its [concept_banking_inflation] stays its own too, except that goods traded in one money sell at one price: each point an adopter's inflation sits above or below the leader's, short swings in goods prices aside, counts as a point of [concept_banking_price_pressure] pulling it back.",
+  "ru": "Деньги лидера силового блока, которые может принять любой член, когда [Concept('concept_banking_monetary_union', 'валютный союз')] блока достигнет второго уровня. У принявшего нет рычага: он берёт ключевую ставку лидера без спреда, его валютный курс и большую часть его доверия и больше не может монетизировать свой дефицит. Раз нет привязки, которую можно разорвать, переоценённая валюта принявшего вместо этого платит бо́льшую [Concept('concept_banking_risk_premium', 'премию за риск')]. Как только член принял валюту, лидер тоже использует её и получает то, что получают принявшие от принципа блока, кроме поддержки их долгов и снижения их премии. Цикл и долги каждой страны остаются её собственными. Её [Concept('concept_banking_inflation', 'инфляция')] тоже остаётся своей, за исключением того, что товары, торгуемые в одной валюте, продаются по одной цене: каждый пункт, на который инфляция принявшего выше или ниже инфляции лидера, помимо коротких колебаний цен на товары, считается пунктом [Concept('concept_banking_price_pressure', 'ценового давления')], тянущего её назад."
  },
  "concept_banking_contagion": {
   "en": "Banking Contagion",
   "ru": "Банковская зараза"
  },
+ "concept_banking_contagion_desc": {
+  "en": "When a major economy experiences a [concept_banking_crash], the financial shock can spread to other countries through trade links and capital flows. Countries with larger trade exposure to the crash source are more vulnerable to contagion effects.",
+  "ru": "Когда крупная экономика переживает [Concept('concept_banking_crash', 'банковский крах')], финансовый шок может перейти на другие страны через торговые связи и потоки капитала. Страны с большей торговой зависимостью от источника краха более уязвимы к эффектам заразы."
+ },
  "concept_banking_crash": {
   "en": "Banking Crash",
   "ru": "Банковский крах"
+ },
+ "concept_banking_crash_desc": {
+  "en": "A sudden financial collapse triggered when [concept_bubble_pressure] is high. A crash dramatically reduces the financial cycle value, wipes out bubble pressure, and can trigger [concept_banking_contagion] that spreads to other countries with interlinked economies. The probability of a crash depends on bubble pressure and is scaled by the [concept_banking_crash] Likelihood modifier from [concept_financial_regulation] laws.",
+  "ru": "Внезапный финансовый коллапс, вызываемый высоким [Concept('concept_bubble_pressure', 'давлением пузыря')]. Крах резко снижает значение финансового цикла, обнуляет давление пузыря и может вызвать [Concept('concept_banking_contagion', 'банковскую заразу')], которая перейдёт на другие страны со связанными экономиками. Вероятность краха зависит от давления пузыря и масштабируется модификатором вероятности [Concept('concept_banking_crash', 'банковского краха')] в законах о [Concept('concept_financial_regulation', 'финансовом регулировании')]."
+ },
+ "concept_banking_credit_standing_desc": {
+  "en": "The permanent half of your borrowing premium: what lenders think your country is, rather than what is happening to it this year. Access to capital markets, your standing among the powers, your institutions and the credibility of your monetary arrangements sit here. It has a floor, and standing earned past it buys nothing.",
+  "ru": "Постоянная половина вашей премии за заимствование: то, чем кредиторы считают вашу страну, а не то, что с ней происходит в этом году. Сюда входят доступ к рынкам капитала, ваше положение среди держав, ваши институты и доверие к вашим денежным механизмам. У неё есть нижний предел, а положение выше него ничего не даёт."
+ },
+ "concept_banking_currency_reach_desc": {
+  "en": "How far a [concept_banking_common_currency] goes beyond the economy that issues it, from 0 toward 1: the GDP of the countries using it, divided by that GDP plus #v 15%#! of the leader's own. It is a half when they come to 15% of the leader's GDP and three quarters at 45%, and never reaches 1, so the first adopters count most. The leader's seigniorage and cut in risk premium are the principle's figures times its reach. Under $principle_monetary_union_5$, once a member has adopted, every country anchored on the money counts, treaty peggers included. The Monetary Union row of the Banking tab shows the leader's reach.",
+  "ru": "Как далеко идёт [Concept('concept_banking_common_currency', 'общая валюта')] за пределы выпускающей её экономики, от 0 к 1: ВВП стран, использующих её, делённый на этот ВВП плюс #v 15%#! собственного ВВП лидера. Это половина, когда они достигают 15% ВВП лидера, и три четверти при 45%, и никогда не достигает 1, поэтому первые принявшие значат больше всего. Сеньораж лидера и снижение его премии за риск равны цифрам принципа, умноженным на охват. При принципе «$principle_monetary_union_5$», как только член принял валюту, учитывается каждая страна, привязанная к этим деньгам, включая привязанные по договору. Строка «Валютный союз» на вкладке «Банки» показывает охват лидера."
  },
  "concept_banking_cycle": {
   "en": "Banking Cycle",
   "ru": "Банковский цикл"
  },
+ "concept_banking_cycle_desc": {
+  "en": "A financial cycle simulation tracking three key variables: [concept_banking_cycle] value (0–100, representing economic phase from bust to boom), [concept_banking_momentum] (rate and direction of change), and [concept_bubble_pressure]. The cycle drives periodic booms, busts, and crashes that affect the entire economy. Market economies experience this as a traditional financial cycle, while command economies see it as administrative strain and coordination pressure, and cooperative economies track it as overextension of worker commitments. [concept_financial_regulation] laws control volatility and crash risk.",
+  "ru": "Симуляция финансового цикла, отслеживающая три ключевые переменные: значение [concept_banking_cycle|l] (0–100, фаза экономики от спада до подъёма), [Concept('concept_banking_momentum', 'банковский импульс')] (скорость и направление изменения) и [Concept('concept_bubble_pressure', 'давление пузыря')]. Цикл порождает периодические подъёмы, спады и крахи, затрагивающие всю экономику. Рыночные экономики переживают это как традиционный финансовый цикл, командные — как административное напряжение и давление координации, а кооперативные — как перенапряжение обязательств работников. Законы о [Concept('concept_financial_regulation', 'финансовом регулировании')] управляют волатильностью и риском краха."
+ },
  "concept_banking_delegation": {
   "en": "Delegation",
   "ru": "Делегирование"
+ },
+ "concept_banking_delegation_desc": {
+  "en": "Hand the dial to the central bank and it sets the [concept_banking_rate_target] from its [concept_banking_mandate] every month, instead of leaving it wherever you last put it. It is free to switch either way, and when you take the dial back the target stays where the bank left it.",
+  "ru": "Передайте рычаг центральному банку, и он будет каждый месяц задавать [Concept('concept_banking_rate_target', 'целевую ставку')] из своего [Concept('concept_banking_mandate', 'мандата')], а не оставлять её там, где вы её оставили. Переключаться можно свободно в любую сторону, и когда вы забираете рычаг назад, цель остаётся там, где её оставил банк."
+ },
+ "concept_banking_exchange_rate_desc": {
+  "en": "What your currency is worth to foreigners, in real terms: 100 is par, lower is a weak currency, higher a strong one. Nobody sets it. On metal it is the parity and stays at par; otherwise it drifts toward a target each month. Where it stands moves your trade and your prices.",
+  "ru": "Сколько стоит ваша валюта для иностранцев в реальном выражении: 100 — паритет, ниже — слабая валюта, выше — сильная. Никто её не задаёт. При металлическом стандарте это паритет, и она остаётся на нём; иначе она каждый месяц дрейфует к цели. Её положение влияет на вашу торговлю и цены."
+ },
+ "concept_banking_expected_inflation_desc": {
+  "en": "What your lenders and your workers assume prices are going to do. It is the expensive half: inflation nobody saw coming erodes a debt, and inflation everybody expects is simply priced in.",
+  "ru": "Что, по мнению ваших кредиторов и работников, будет с ценами. Это дорогая половина: неожиданная инфляция разъедает долг, а инфляция, которую все ожидают, просто заложена в цены."
+ },
+ "concept_banking_gold_flow_desc": {
+  "en": "Gold entering or leaving your central bank's reserve each month because of the gap between your [concept_banking_policy_rate] and the [concept_banking_world_rate]. It moves the [concept_banking_bank_gold], never your treasury.",
+  "ru": "Золото, входящее в резерв вашего центрального банка или покидающее его каждый месяц из-за разницы между вашей [Concept('concept_banking_policy_rate', 'ключевой ставкой')] и [Concept('concept_banking_world_rate', 'мировой ставкой')]. Оно меняет [Concept('concept_banking_bank_gold', 'золото банка')], но никогда не вашу казну."
  },
  "concept_banking_inflation": {
   "en": "Inflation",
   "ru": "Инфляция"
  },
+ "concept_banking_inflation_desc": {
+  "en": "What the prices your people actually pay did over the last year. It is a reading, not a lever: you reach it through the [concept_banking_policy_rate], through what you print, and through the laws that set what labor costs. Where it stands on a ladder of six price bands, from Deflation through Stable prices to Hyperinflation, puts a modifier on your country.",
+  "ru": "Что сделали за последний год цены, которые ваши люди реально платят. Это показание, а не рычаг: вы влияете на неё через [Concept('concept_banking_policy_rate', 'ключевую ставку')], через то, что печатаете, и через законы, определяющие стоимость труда. Положение на лестнице из шести ценовых полос, от дефляции через стабильные цены к гиперинфляции, накладывает модификатор на вашу страну."
+ },
+ "concept_banking_intervention_budget_desc": {
+  "en": "Points to spend on interventions in the [concept_banking_cycle]: banking tools, a command economy's planning tools or a cooperative's council mandates. Every active policy holds its cost for as long as it stays enabled, so disabling one frees its points again. Your [concept_financial_regulation] law sets most of the budget, a national bank and a power bloc's banking union add a point each, and the leader of a common currency a member has adopted gains up to three more. A budget cut below what the active policies hold lifts them one a month until the rest fit.",
+  "ru": "Очки для вмешательств в [Concept('concept_banking_cycle', 'банковский цикл')]: банковские инструменты, инструменты планирования командной экономики или мандаты советов кооперативной. Каждая действующая политика удерживает свою стоимость, пока включена, поэтому отключение одной освобождает её очки. Ваш закон о [Concept('concept_financial_regulation', 'финансовом регулировании')] задаёт большую часть бюджета, национальный банк и банковский союз силового блока добавляют по очку, а лидер общей валюты, принятой членом, получает до трёх дополнительных. Если бюджет урезан ниже того, что удерживают действующие политики, они отключаются по одной в месяц, пока остальные не поместятся."
+ },
  "concept_banking_mandate": {
   "en": "Mandate",
   "ru": "Мандат"
+ },
+ "concept_banking_mandate_desc": {
+  "en": "The rule a delegated or independent central bank follows when it sets the target each month: Inflation Targeting, the Dual Mandate, Growth, or, on a gold standard, Peg Defense. It does nothing while you hold the dial yourself. Under $law_central_bank_independence$ it is an act of law rather than your choice.",
+  "ru": "Правило, которому следует делегированный или независимый центральный банк, задавая цель каждый месяц: Таргетирование инфляции, Двойной мандат, Рост или, при золотом стандарте, Защита привязки. Оно ничего не делает, пока вы держите рычаг сами. При законе «$law_central_bank_independence$» это акт закона, а не ваш выбор."
  },
  "concept_banking_momentum": {
   "en": "Banking Momentum",
   "ru": "Банковский импульс"
  },
+ "concept_banking_momentum_desc": {
+  "en": "The rate and direction of change in the [concept_banking_cycle]. Positive momentum pushes the cycle toward expansion, negative momentum toward contraction. Momentum is influenced by random nudges (scaled by banking volatility modifiers), fiscal policy, and mean-reversion forces that pull the cycle back toward equilibrium. In command economies this reflects coordination speed; in cooperative economies, reinvestment pace.",
+  "ru": "Скорость и направление изменения [Concept('concept_banking_cycle', 'банковского цикла')]. Положительный импульс толкает цикл к расширению, отрицательный — к сжатию. На импульс влияют случайные толчки (масштабируются модификаторами банковской волатильности), фискальная политика и силы возврата к среднему, возвращающие цикл к равновесию. В командных экономиках это отражает скорость координации, в кооперативных — темп реинвестиций."
+ },
+ "concept_banking_monetary_anchor_desc": {
+  "en": "Whether your money is tied to another country's. An anchored country has no dial: it takes its anchor's policy rate, plus a spread, and its anchor's exchange rate, and it cannot monetize its deficit.",
+  "ru": "Привязаны ли ваши деньги к деньгам другой страны. У привязанной страны нет рычага: она берёт ключевую ставку своего якоря с надбавкой и его валютный курс и не может монетизировать свой дефицит."
+ },
+ "concept_banking_monetary_union_desc": {
+  "en": "Your power bloc's monetary principle, and where you stand in it. Its tiers do not stack; each includes the one before.",
+  "ru": "Денежный принцип вашего силового блока и ваше место в нём. Его уровни не накапливаются: каждый включает предыдущий."
+ },
  "concept_banking_monetisation": {
   "en": "Monetizing the Deficit",
   "ru": "Монетизация дефицита"
+ },
+ "concept_banking_monetisation_desc": {
+  "en": "How much of your spending your central bank simply creates the money for, instead of your government borrowing it. It is the oldest way to pay for a war, and the reason wars end in inflation.",
+  "ru": "Какую долю ваших расходов центральный банк просто покрывает созданием денег, а не заимствованием правительством. Это древнейший способ оплатить войну и причина, по которой войны кончаются инфляцией."
+ },
+ "concept_banking_peg_confidence_desc": {
+  "en": "How far the world believes your currency's parity will hold, from 0 to 100. On a gold standard it falls when the central bank has almost no gold left to pay with, when the currency is overvalued, and in a deep slump the peg is prolonging; under a treaty peg it moves on how overvalued your currency is. When it falls far enough, there is a run on the currency.",
+  "ru": "Насколько мир верит, что паритет вашей валюты удержится, от 0 до 100. При золотом стандарте он падает, когда у центрального банка почти не осталось золота для выплат, когда валюта переоценена и в глубоком спаде, который привязка затягивает; при договорной привязке он меняется в зависимости от переоценённости вашей валюты. Когда он падает достаточно низко, начинается набег на валюту."
+ },
+ "concept_banking_policy_rate_desc": {
+  "en": "The price of short-term credit in your country, and the floor every other borrowing cost is built on. Where there is a central bank to set it, it closes on the [concept_banking_rate_target] a little each month, so changing course takes seasons rather than weeks.",
+  "ru": "Цена краткосрочного кредита в вашей стране и нижний предел, на котором строится любая другая стоимость заимствования. Где есть центральный банк, который её задаёт, она понемногу каждый месяц сближается с [Concept('concept_banking_rate_target', 'целевой ставкой')], поэтому смена курса занимает сезоны, а не недели."
+ },
+ "concept_banking_policy_stance_desc": {
+  "en": "Whether your [concept_banking_policy_rate] is loose or tight against what your economy can bear right now, as your central bank reads it. A loose stance adds to the [concept_banking_cycle]'s [concept_banking_momentum] and builds [concept_bubble_pressure]; a tight one drains both. This is how the rate reaches the cycle at all.",
+  "ru": "Мягка или жёстка ваша [Concept('concept_banking_policy_rate', 'ключевая ставка')] по сравнению с тем, что ваша экономика сейчас способна выдержать, по оценке вашего центрального банка. Мягкая позиция добавляет к [Concept('concept_banking_momentum', 'импульсу')] [Concept('concept_banking_cycle', 'банковского цикла')] и наращивает [Concept('concept_bubble_pressure', 'давление пузыря')]; жёсткая истощает и то, и другое. Именно так ставка вообще достигает цикла."
+ },
+ "concept_banking_rate_paid_desc": {
+  "en": "The yearly interest on your government's debt: the market yield, your [concept_banking_credit_standing] and your [concept_banking_risk_premium], less the inflation that actually happened. It never falls below 0.5%.",
+  "ru": "Годовой процент по долгу вашего правительства: рыночная доходность, ваша [Concept('concept_banking_credit_standing', 'кредитоспособность')] и ваша [Concept('concept_banking_risk_premium', 'премия за риск')] за вычетом инфляции, которая действительно была. Никогда не опускается ниже 0,5%."
+ },
+ "concept_banking_rate_target_desc": {
+  "en": "Where you want the [concept_banking_policy_rate] to end up. Stepping it does not move the rate today: the rate closes the gap a little each month. There is no fee and no cooldown for changing it.",
+  "ru": "Где вы хотите, чтобы оказалась [Concept('concept_banking_policy_rate', 'ключевая ставка')]. Изменение цели не сдвигает ставку сегодня: ставка понемногу каждый месяц сокращает разрыв. За изменение нет платы и перезарядки."
+ },
+ "concept_banking_reference_rate_desc": {
+  "en": "The long-run price of capital in the world at large. It is the same figure for every country, and it falls as the world's great powers reach later eras and capital grows plentiful.",
+  "ru": "Долгосрочная цена капитала в мире в целом. Это одно и то же число для каждой страны, и оно падает по мере того, как великие державы мира достигают более поздних эпох, а капитала становится больше."
+ },
+ "concept_banking_risk_premium_desc": {
+  "en": "The half of your borrowing premium that moves: where the [concept_banking_cycle] stands, which crisis tools you have reached for, and how far you are already borrowed. It is charged on top of the [concept_banking_credit_standing] floor, so a panic bites a great power as hard as anyone.",
+  "ru": "Подвижная половина вашей премии за заимствование: где находится [Concept('concept_banking_cycle', 'банковский цикл')], к каким антикризисным инструментам вы прибегли и насколько вы уже в долгах. Она взимается сверх нижнего предела [Concept('concept_banking_credit_standing', 'кредитоспособности')], поэтому паника бьёт по великой державе так же сильно, как по любой другой."
+ },
+ "concept_banking_world_rate_desc": {
+  "en": "What capital actually earns in the world this month: the policy rates of the great powers that set their own, each net of the inflation its lenders expect, weighted by the size of its economy. It is a real rate: a great power at 13% with 10% inflation is offering 3%.",
+  "ru": "Сколько капитал на самом деле зарабатывает в мире в этом месяце: ключевые ставки великих держав, которые задают их сами, каждая за вычетом инфляции, которую ожидают её кредиторы, взвешенные по размеру её экономики. Это реальная ставка: великая держава при 13% и инфляции 10% предлагает 3%."
  },
  "concept_bubble_pressure": {
   "en": "Bubble Pressure",
   "ru": "Давление пузыря"
  },
+ "concept_bubble_pressure_desc": {
+  "en": "A measure of speculative excess building up in the financial system (0–100). [concept_bubble_pressure] accumulates during boom phases when [concept_banking_momentum] is positive and cycle value is high. When bubble pressure is high, the risk of a [concept_banking_crash] increases dramatically. In command economies, this manifests as administrative strain; in cooperative economies, as overextension of commitments. Bubble pressure decays slowly over time and drops sharply after a crash.",
+  "ru": "Мера спекулятивного избытка, накапливающегося в финансовой системе (0–100). [concept_bubble_pressure] накапливается в фазы подъёма, когда [Concept('concept_banking_momentum', 'банковский импульс')] положителен, а значение цикла высоко. Когда давление пузыря велико, риск [Concept('concept_banking_crash', 'банковского краха')] резко растёт. В командных экономиках оно проявляется как административное напряжение, в кооперативных — как перенапряжение обязательств. Давление пузыря медленно убывает со временем и резко падает после краха."
+ },
  "concept_capital_controls": {
   "en": "Capital Controls",
   "ru": "Контроль капитала"
+ },
+ "concept_capital_controls_desc": {
+  "en": "Restrictions on cross-border movement of financial capital. A country cannot have a fixed exchange rate, free movement of capital and an interest rate of its own all at once; controls give up the second to keep the other two. While they hold, a gap between the policy rate and the world rate moves the exchange rate, the gold reserve and confidence in a peg only a quarter as much. They signal distress, damage relations with the great powers, and — kept on in peacetime — turn the owners of the trapped capital against the government.",
+  "ru": "Ограничения на трансграничное движение финансового капитала. У страны не может быть сразу фиксированного валютного курса, свободного движения капитала и собственной процентной ставки; контроль отказывается от второго, чтобы сохранить два других. Пока он действует, разрыв между ключевой и мировой ставкой влияет на валютный курс, золотой запас и доверие к привязке лишь на четверть так сильно. Он сигнализирует о бедствии, портит отношения с великими державами и, если сохраняется в мирное время, настраивает владельцев запертого капитала против правительства."
+ },
+ "concept_ch_art_diminishing_returns_desc": {
+  "en": "Above 33% of global $fine_art$ production, each additional point of share counts for less. 50% global share scores about 43 instead of 50, 75% scores about 48 instead of 75, and even total dominance (100%) caps at 50. This keeps a single runaway producer from automatically winning cultural hegemony, while still rewarding gains in the contested 33–60% range.",
+  "ru": "Выше 33% мирового производства «$fine_art$» каждый дополнительный пункт доли значит меньше. Мировая доля 50% даёт около 43 вместо 50, 75% — около 48 вместо 75, и даже полное господство (100%) упирается в 50. Это не даёт одному ушедшему вперёд производителю автоматически выиграть культурную гегемонию, но всё же вознаграждает рост в оспариваемом диапазоне 33–60%."
+ },
+ "concept_ch_art_production_desc": {
+  "en": "[concept_cultural_pull] from $fine_art$ goods production. Scored as the minimum of absolute output and global [concept_market_share] percentage — early on you're limited by volume, later by your share of global production. Above 33% global share, the share cap is shaped by [concept_ch_art_diminishing_returns]. Boosted by the $country_cultural_hegemony_art_mult$ modifier. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от производства товаров «$fine_art$». Оценивается как минимум из абсолютного выпуска и процента мировой [Concept('concept_market_share', 'доли рынка')]: сначала вас ограничивает объём, потом ваша доля мирового производства. Выше 33% мировой доли предел доли определяется [Concept('concept_ch_art_diminishing_returns', 'убывающей отдачей')]. Усиливается модификатором «$country_cultural_hegemony_art_mult$». Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
+ "concept_ch_exported_model_desc": {
+  "en": "The political model of the world's leading cultural power: one of fifteen families, sorted by its laws at each recount. In every country that carries the [concept_foreign_cultural_benchmark], the political movements matching it grow more active and attract more pops. The push is nothing while the model's share of world culture is small, and grows with it.",
+  "ru": "Политическая модель ведущей культурной державы мира: одно из пятнадцати семейств, определяемое её законами при каждом пересчёте. В каждой стране, где есть [Concept('concept_foreign_cultural_benchmark', 'иностранный культурный ориентир')], соответствующие ей политические движения становятся активнее и привлекают больше групп населения. Давление равно нулю, пока доля модели в мировой культуре мала, и растёт вместе с ней."
  },
  "concept_ch_infamy": {
   "en": "Infamy",
   "ru": "Дурная слава"
  },
+ "concept_ch_infamy_desc": {
+  "en": "[concept_cultural_pull] penalty from high [concept_infamy]. Each point of infamy reduces cultural pull by 0.1 (10 infamy = -1.0, 50 infamy = -5.0). Aggressive wars and treaty violations tarnish your nation's cultural image. Always a negative contribution — reduce infamy to remove this penalty. Part of [concept_cultural_pull_components].",
+  "ru": "Штраф к [Concept('concept_cultural_pull', 'культурному притяжению')] от высокой [Concept('concept_infamy', 'дурной славы')]. Каждый пункт дурной славы снижает культурное притяжение на 0,1 (10 дурной славы = -1,0, 50 = -5,0). Агрессивные войны и нарушения договоров портят культурный образ вашей страны. Всегда отрицательный вклад — снизьте дурную славу, чтобы убрать этот штраф. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
+ "concept_ch_influence_tier_desc": {
+  "en": "How far our [concept_cultural_pull_share] carries, from Negligible Cultural Influence (under [GetPlayer.MakeScope.ScriptValue('ch_tier_1_floor')|0]%) through Minor ([GetPlayer.MakeScope.ScriptValue('ch_tier_1_floor')|0]%), Moderate ([GetPlayer.MakeScope.ScriptValue('ch_tier_2_floor')|0]%), Significant ([GetPlayer.MakeScope.ScriptValue('ch_tier_3_floor')|0]%) and Major ([GetPlayer.MakeScope.ScriptValue('ch_tier_4_floor')|0]%) up to Cultural Hegemon ([GetPlayer.MakeScope.ScriptValue('ch_tier_5_floor')|0]% or more). It follows the share month by month.",
+  "ru": "Как далеко простирается наша [Concept('concept_cultural_pull_share', 'культурная доля')]: от ничтожного культурного влияния (менее [GetPlayer.MakeScope.ScriptValue('ch_tier_1_floor')|0]%) через малое ([GetPlayer.MakeScope.ScriptValue('ch_tier_1_floor')|0]%), умеренное ([GetPlayer.MakeScope.ScriptValue('ch_tier_2_floor')|0]%), значительное ([GetPlayer.MakeScope.ScriptValue('ch_tier_3_floor')|0]%) и крупное ([GetPlayer.MakeScope.ScriptValue('ch_tier_4_floor')|0]%) до культурного гегемона ([GetPlayer.MakeScope.ScriptValue('ch_tier_5_floor')|0]% или более). Оно следует за долей месяц за месяцем."
+ },
  "concept_ch_instability": {
   "en": "Instability",
   "ru": "Нестабильность"
+ },
+ "concept_ch_instability_desc": {
+  "en": "[concept_cultural_pull] penalty from domestic [concept_turmoil] and [concept_civil_war]. Average turmoil (0–100%) is multiplied by -10, so 50% turmoil costs -5.0 points. An active civil war adds an additional -20 penalty. Internal chaos makes your nation a cautionary tale rather than a cultural beacon. Part of [concept_cultural_pull_components].",
+  "ru": "Штраф к [Concept('concept_cultural_pull', 'культурному притяжению')] от внутренних [Concept('concept_turmoil', 'беспорядков')] и [Concept('concept_civil_war', 'гражданской войны')]. Средние беспорядки (0–100%) умножаются на -10, так что 50% беспорядков стоят -5,0 пункта. Действующая гражданская война добавляет ещё штраф -20. Внутренний хаос делает вашу страну поучительным примером, а не культурным маяком. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
  },
  "concept_ch_megaprojects": {
   "en": "Megaprojects",
   "ru": "Мегапроекты"
  },
+ "concept_ch_megaprojects_desc": {
+  "en": "[concept_cultural_pull] from advanced megastructures. Each megaproject contributes +3 points. Qualifying [concept_ch_megaprojects] include space elevators, solar collectors, orbital battlestations, mind upload nexuses, antimatter facilities, nanofabrication centers, and consciousness networks. Maximum contribution: 21 points (7 megaprojects × 3). Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от передовых мегасооружений. Каждый мегапроект даёт +3 пункта. К подходящим [Concept('concept_ch_megaprojects', 'мегапроектам')] относятся космические лифты, солнечные коллекторы, орбитальные боевые станции, узлы загрузки сознания, антиматериальные комплексы, центры нанофабрикации и сети сознания. Максимальный вклад: 21 пункт (7 мегапроектов × 3). Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
+ "concept_ch_modifier_bonus_desc": {
+  "en": "$country_cultural_pull_mult$ modifier. Applied after all [concept_cultural_pull_components] are summed. Bonuses from technologies like Mass Media, events, and government policies contribute here. Shown as a percentage increase above base.",
+  "ru": "Модификатор «$country_cultural_pull_mult$». Применяется после суммирования всех [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]. Сюда вносят вклад бонусы от технологий вроде Массмедиа, событий и государственной политики. Показывается как процентная надбавка к базовому значению."
+ },
  "concept_ch_modifiers": {
   "en": "Other Modifiers",
   "ru": "Прочие модификаторы"
+ },
+ "concept_ch_modifiers_desc": {
+  "en": "[concept_cultural_pull] from the $country_cultural_pull_add$ modifier. This is a catch-all for bonuses granted by events, cultural program funding, [concept_power_bloc] principles, diplomatic treaties such as a cultural exchange, and other game mechanics. Check your country's modifier tooltip to see what is contributing. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от модификатора «$country_cultural_pull_add$». Это универсальная статья для бонусов от событий, финансирования культурных программ, принципов [Concept('concept_power_bloc', 'силового блока')], дипломатических договоров вроде культурного обмена и других игровых механик. Подсказка модификатора вашей страны покажет, что именно вносит вклад. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
  },
  "concept_ch_monuments": {
   "en": "Monuments",
   "ru": "Памятники"
  },
+ "concept_ch_monuments_desc": {
+  "en": "[concept_cultural_pull] from wonder buildings. Each monument or wonder in your nation contributes +3 points. Monuments are unique buildings that represent iconic landmarks, architectural achievements, and cultural treasures. Build more monuments to increase your cultural influence. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от зданий-чудес. Каждый монумент или чудо в вашей стране даёт +3 пункта. Монументы — уникальные здания, представляющие знаковые достопримечательности, архитектурные достижения и культурные сокровища. Стройте больше монументов, чтобы повысить культурное влияние. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
  "concept_ch_prestige": {
   "en": "Prestige",
   "ru": "Престиж"
+ },
+ "concept_ch_prestige_desc": {
+  "en": "[concept_cultural_pull] from national [concept_prestige]. Uses the same min(absolute, share) formula as [concept_ch_art_production]: your prestige divided by 5, capped at your percentage of world prestige. High prestige from military victories, diplomatic achievements, and national projects all contribute. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от национального [Concept('concept_prestige', 'престижа')]. Использует ту же формулу min(абсолютное значение, доля), что и [Concept('concept_ch_art_production', 'производство искусства')]: ваш престиж, делённый на 5, не более вашего процента мирового престижа. Вклад вносит высокий престиж от военных побед, дипломатических достижений и национальных проектов. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
  },
  "concept_ch_sol": {
   "en": "Standard of Living",
   "ru": "Уровень жизни"
  },
+ "concept_ch_sol_desc": {
+  "en": "[concept_cultural_pull] from quality of life. Equals your average [concept_sol] minus the population-weighted global average, clamped to the range -5 to +20. Nations with higher living standards than the world average gain cultural influence; those below lose it. Great powers count it in full, major powers at half, minor powers at a quarter and other countries not at all. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от качества жизни. Равно вашему среднему [Concept('concept_sol', 'уровню жизни')] за вычетом среднемирового значения, взвешенного по населению, с ограничением от -5 до +20. Страны с уровнем жизни выше среднемирового получают культурное влияние, ниже — теряют его. Великие державы учитываются полностью, крупные — наполовину, малые — на четверть, остальные страны — не учитываются. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
+ "concept_ch_tech_leadership_desc": {
+  "en": "[concept_cultural_pull] from being first in the world to research technologies. When a country researches a technology that no other country has yet discovered, it earns +2 tech leadership points (capped at 30). These points decay by 10% each year, so sustained technological innovation is needed to maintain this bonus. Part of [concept_cultural_pull_components].",
+  "ru": "[Concept('concept_cultural_pull', 'Культурное притяжение')] от первенства в мире по изучению технологий. Когда страна изучает технологию, которую ещё не открыла ни одна другая страна, она получает +2 очка технологического лидерства (максимум 30). Эти очки убывают на 10% в год, так что для сохранения бонуса нужны постоянные технологические инновации. Одна из [Concept('concept_cultural_pull_components', 'составляющих культурного притяжения')]."
+ },
+ "concept_civil_rights_movement_desc": {
+  "en": "A movement for equal rights and an end to [concept_discrimination]. Tracked as a [concept_journal_entry] that drives progress on minority rights laws, from Violent Hostility through Ghettoization, Discrimination, Indifference, Protection, to Affirmative Action.",
+  "ru": "Движение за равные права и конец [Concept('concept_discrimination', 'дискриминации')]. Отслеживается как [Concept('concept_journal_entry', 'запись журнала')], определяющая прогресс законов о правах меньшинств: от «Насильственной враждебности» через «Геттоизацию», «Дискриминацию», «Безразличие», «Защиту» до «Позитивной дискриминации»."
+ },
  "concept_climate_policy": {
   "en": "Climate Policy",
   "ru": "Климатическая политика"
+ },
+ "concept_climate_policy_desc": {
+  "en": "Actions adopted and repealed from the Global Warming [concept_journal_entry]'s dashboard. Ten policies are national: every country can use its own Carbon Tax, Renewable Investment and Emission Standards to cut its industrial [concept_greenhouse_gas_emissions] by 20%, 15% and 10% respectively. Green Building Codes, divestment and renewable investment together eliminate its estimated household fossil-heating footprint. Adaptation and reforestation soften damage; Carbon Removal Support funds capture works; Stratospheric Aerosol Injection hides part of the world's warming for as long as someone keeps it up. Fossil-Fuel Tariffs is market-leader only and raises coal and oil import and export tariffs by 2.5, 5 or 10 percentage points at Low, High or Maximum; None stays tariff-free. It has no automatic emissions cut.",
+  "ru": "Действия, принимаемые и отменяемые на панели [Concept('concept_journal_entry', 'записи журнала')] «Глобальное потепление». Десять политик национальные: каждая страна может использовать собственные Углеродный налог, Инвестиции в возобновляемые источники и Стандарты выбросов, чтобы сократить свои промышленные [Concept('concept_greenhouse_gas_emissions', 'выбросы парниковых газов')] на 20%, 15% и 10% соответственно. Строительные нормы экологичности, отказ от инвестиций и инвестиции в возобновляемые источники вместе устраняют расчётный углеродный след бытового отопления ископаемым топливом. Адаптация и лесовосстановление смягчают ущерб; Поддержка удаления углерода финансирует установки улавливания; Стратосферные аэрозольные инъекции скрывают часть глобального потепления, пока кто-то их поддерживает. Тарифы на ископаемое топливо доступны только лидеру рынка и повышают импортные и экспортные пошлины на уголь и нефть на 2,5, 5 или 10 процентных пунктов на уровнях Низкий, Высокий и Максимальный; уровень «Нет» остаётся без пошлин. Автоматического сокращения выбросов у неё нет."
  },
  "concept_colonial_band": {
   "en": "Stability Band",
   "ru": "Диапазон стабильности"
  },
+ "concept_colonial_band_desc": {
+  "en": "Where [concept_colonial_stability] stands puts a colonial empire in one of five bands: Solidified, Stable, Strained, Crumbling or Collapsing. Each band puts its own modifier on the Colonial Empire [concept_journal_entry]. In the lower three bands our colonial subjects gain [concept_liberty_desire], and in the lowest two civil rights movements radicalize.",
+  "ru": "Положение [Concept('concept_colonial_stability', 'колониальной стабильности')] относит колониальную империю к одной из пяти полос: Упрочнённая, Стабильная, Напряжённая, Рушащаяся или Разваливающаяся. Каждая полоса накладывает свой модификатор на [Concept('concept_journal_entry', 'запись журнала')] «Колониальная империя». В нижних трёх полосах наши колониальные зависимые государства получают [Concept('concept_liberty_desire', 'стремление к свободе')], а в нижних двух движения за гражданские права радикализируются."
+ },
  "concept_colonial_overreach": {
   "en": "Imperial Overreach",
   "ru": "Имперское перенапряжение"
  },
+ "concept_colonial_overreach_desc": {
+  "en": "The strain of holding more overseas colonies than the metropole can support. Once our colonial states outnumber our other states by too wide a margin, the excess drains [concept_colonial_stability] every month. A larger metropole can hold a larger empire.",
+  "ru": "Напряжение от удержания большего числа заморских колоний, чем способна поддержать метрополия. Как только наши колониальные области слишком намного превосходят числом остальные, избыток каждый месяц истощает [Concept('concept_colonial_stability', 'колониальную стабильность')]. Более крупная метрополия может удерживать более крупную империю."
+ },
  "concept_colonial_stability": {
   "en": "Colonial Stability",
   "ru": "Колониальная стабильность"
+ },
+ "concept_colonial_stability_desc": {
+  "en": "A measure of how effectively a colonial power maintains control over its colonies (0–100). High stability indicates firm control; low stability risks colonial collapse. Stability is affected by colonial policy choices, global trends toward self-determination, and the relative military and economic power of the colonizer.",
+  "ru": "Мера того, насколько эффективно колониальная держава удерживает контроль над колониями (0–100). Высокая стабильность означает твёрдый контроль; низкая грозит колониальным крахом. На стабильность влияют выбор колониальной политики, мировые тенденции к самоопределению и относительная военная и экономическая мощь колонизатора."
  },
  "concept_colonial_subject": {
   "en": "Colonial Subject",
@@ -319,25 +2103,53 @@
   "en": "Colonial Territory",
   "ru": "Колониальная территория"
  },
+ "concept_colonial_territory_desc": {
+  "en": "A state of ours that a decolonization decision can release: separated from our capital by sea (not joined to it over land through our own states), not a [concept_homeland] of our cultures, with at least #v [GetPlayer.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and not settled land: no more than #v [GetPlayer.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. One release takes with it every neighboring state of ours where the same people are at home.",
+  "ru": "Наша область, которую может освободить решение о деколонизации: отделённая от нашей столицы морем (не соединённая с ней по суше через наши же области), не являющаяся [Concept('concept_homeland', 'исторической родиной')] наших культур, с населением не менее #v [GetPlayer.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! человек, более #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! из которых — народ, не разделяющий с нашим ни одной [Concept('concept_heritage_trait', 'черты наследия')], и не заселённая земля: не более #v [GetPlayer.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! её жителей принадлежат к нашим основным культурам. Одно освобождение захватывает каждую соседнюю нашу область, где тот же народ живёт у себя дома."
+ },
  "concept_combined_arms": {
   "en": "Combined Arms",
   "ru": "Общевойсковой бой"
+ },
+ "concept_combined_arms_desc": {
+  "en": "A military doctrine bonus based on [Concept('concept_combat_unit_type', 'unit type')] diversity in formations. Armies that field a mix of infantry, cavalry, artillery, and other unit types receive combat bonuses. Encourages balanced military composition rather than single-type spam.",
+  "ru": "Бонус военной доктрины, основанный на разнообразии [Concept('concept_combat_unit_type', 'типов частей')] в соединениях. Армии, выставляющие смесь пехоты, кавалерии, артиллерии и других типов частей, получают боевые бонусы. Поощряет сбалансированный военный состав вместо однотипной массы."
+ },
+ "concept_construction_cost_scaling_desc": {
+  "en": "A mechanic where construction costs rise with [Concept('concept_gdp_per_capita', 'GDP per capita')], reflecting higher labor costs and land prices, as far as the country's workforce is in use. The more of its workers are peasants or unemployed, the less of the increase applies, until none does. Rich countries at full employment can't outbuild their population; developing nations, and rich ones with workers to spare, build cheaply.",
+  "ru": "Механика, при которой стоимость строительства растёт с [Concept('concept_gdp_per_capita', 'ВВП на душу населения')], отражая более высокие затраты на труд и цены на землю, поскольку рабочая сила страны задействована. Чем больше её работников — крестьяне или безработные, тем меньше применяется увеличение, пока не исчезает совсем. Богатые страны при полной занятости не могут строить больше, чем позволяет население; развивающиеся страны и богатые, у которых есть свободные работники, строят дёшево."
  },
  "concept_contested_monument": {
   "en": "Contested Monument",
   "ru": "Спорный памятник"
  },
+ "concept_contested_monument_desc": {
+  "en": "A $building_grand_monument$ that honors something the government is not: a crown, a republic, a revolution, a leader or a faith that has fallen, or the regime or ruler of another country when its state changes hands. It keeps its tourism and its effect in its state, but gives no prestige, legitimacy or approval, and the interest group that objected to its message resents it every month it stands undecided. Pull it down, rededicate it or keep it as [concept_heritage_monument] from its row on the Grand Monuments tab of the Timeline Extended window.",
+  "ru": "Здание «$building_grand_monument$», чтящее то, чем правительство не является: корону, республику, революцию, лидера или веру, павшие, либо режим или правителя другой страны, когда её государство переходит из рук в руки. Он сохраняет свой туризм и эффект в своей области, но не даёт ни престижа, ни легитимности, ни одобрения, а группа интересов, возражавшая против его послания, негодует каждый месяц, пока он остаётся нерешённым. Снесите его, посвятите заново или оставьте как [Concept('concept_heritage_monument', 'памятник наследия')] из его строки на вкладке «Великие памятники» окна Timeline Extended."
+ },
  "concept_covert_efficiency": {
   "en": "Efficiency Factor",
   "ru": "Коэффициент эффективности"
+ },
+ "concept_covert_efficiency_desc": {
+  "en": "Your espionage efficiency reduces the [concept_operation_detection] of every operation. A higher [concept_covert_efficiency] means your agents are better trained and harder to detect. Efficiency is determined by the $country_covert_operation_efficiency_mult$ modifier, which can be improved through technologies, laws, and institutional investment. The efficiency percentage shown is the reduction applied to the raw detection chance.",
+  "ru": "Эффективность вашего шпионажа снижает [Concept('concept_operation_detection', 'риск обнаружения')] каждой операции. Более высокий [concept_covert_efficiency|l] означает, что ваши агенты лучше обучены и их труднее заметить. Эффективность определяется модификатором «$country_covert_operation_efficiency_mult$», который можно улучшить технологиями, законами и институциональными вложениями. Показанный процент эффективности — это снижение, применяемое к исходному шансу обнаружения."
  },
  "concept_covert_funding": {
   "en": "Covert Funding",
   "ru": "Тайное финансирование"
  },
+ "concept_covert_funding_desc": {
+  "en": "What your intelligence agency spends, from level 0 (Dormant) to 5 (Deep State). Every operation needs level 1 or more, so level 0 ends them all. Each level from 2 up adds [concept_funding_stealth], which cuts every operation's [concept_operation_detection], and adds [concept_intelligence_capacity]. The weekly cost grows with your [Concept('concept_gdp', 'GDP')], the level and the operations running.",
+  "ru": "Сколько тратит ваша разведка, от уровня 0 («Бездействие») до 5 («Глубинное государство»). Каждой операции нужен уровень 1 или выше, так что уровень 0 прекращает их все. Каждый уровень начиная со 2-го добавляет [Concept('concept_funding_stealth', 'скрытность финансирования')], которая снижает [Concept('concept_operation_detection', 'риск обнаружения')] каждой операции, и добавляет [Concept('concept_intelligence_capacity', 'разведывательный потенциал')]. Еженедельная стоимость растёт с вашим [Concept('concept_gdp', 'ВВП')], уровнем и числом идущих операций."
+ },
  "concept_covert_operations": {
   "en": "Covert Operations",
   "ru": "Тайные операции"
+ },
+ "concept_covert_operations_desc": {
+  "en": "[concept_covert_operations] launched against rival nations, or in support of a friend, via [Concept('concept_diplomatic_action', 'diplomatic actions')]. Eighteen types are available:\\n• #bold Election Interference#! — Reduces target [concept_legitimacy] (requires [GetTechnology('television_broadcasting').GetName]; target must hold elections: a voting law, or Anarchy)\\n• #bold Financial Subversion#! — Increases target [concept_bubble_pressure], risking a [concept_banking_crash] (requires [GetTechnology('computer_networks').GetName])\\n• #bold Industrial Espionage#! — Steals production technology (target must have researched a production technology you could research; ends once there is none)\\n• #bold Military Espionage#! — Steals military technology (target must have researched a military technology you could research; ends once there is none)\\n• #bold Influence Campaign#! — Reduces target leverage resistance (requires [GetTechnology('mass_media').GetName] and [concept_power_bloc] leadership; target outside your bloc)\\n• #bold Ideological Subversion#! — Boosts movements matching your ideology in target (requires [GetTechnology('pop_culture').GetName]; target must have a political movement)\\n• #bold Destabilization#! — Boosts separatist movements and general radicalism in target (requires [GetTechnology('social_media').GetName]; target must have a political movement)\\n• #bold Regime Change#! — Erodes target [concept_legitimacy] and coup resistance, and pushes any coup under way there (requires [GetTechnology('satellite_communications').GetName], a [concept_rivalry] and #bold Seasoned#! Tradecraft; not against your own subject)\\n• #bold Nuclear Program Sabotage#! — Slows the target's nuclear weapons program (requires a funded program and #bold Seasoned#! Tradecraft)\\n• #bold Space Program Espionage#! — Speeds your [concept_space_race] milestones and lowers their risk (target must be ahead of you)\\n• #bold Incite Colonial Autonomy#! — Raises the autonomy of every colony the target holds in the solar system; one that reaches 100 breaks away (target must hold a colony)\\n• #bold Sabotage Colony#! — Kills a share of the people of the target's most populous colony and raises its autonomy (target must hold a colony; #bold Seasoned#! Tradecraft)\\n• #bold Survey Colony Defenses#! — Our fleets fire harder on the defenses of the target's colonies, and we see their Defenses, integrity and marines (target must hold a colony; Full Colonies)\\n• #bold Cultivate Assets#! — No effect on the target; builds your network there faster than any other operation (not against your own subject)\\n• #bold Secure Loose Material#! — No effect on the target; may find and destroy nuclear warheads missing from its arsenal (target must have lost warheads)\\n• #bold Counterintelligence Support#! — Raises a friend's economic, military and ideological covert defenses; open, never exposed, and gives you nothing in return (target must be a friend; one supporting country per target)\\n• #bold [concept_infrastructure] Sabotage#! — Reduces target infrastructure and [concept_throughput] (war, or a [concept_diplomatic_play] against them)\\n• #bold Communications Disruption#! — Reduces target military offense and defense (requires [GetTechnology('cryptography').GetName]; war, or a [concept_diplomatic_play] against them)\\nOnly Infrastructure Sabotage and Communications Disruption need a war, or a [concept_diplomatic_play] against the target; the rest run in peace or war. A truce or an Intelligence Sharing Pact with the target blocks every operation against it. Good relations do not, but a friend (cordial relations together with an [concept_alliance], a [concept_defensive_pact], a shared [concept_power_bloc] or a subject tie, or amicable relations alone) is a costly target: the launch tooltip says so, and an exposed operation costs you at home. Only Regime Change requires a [concept_rivalry]. Seven operations need a [concept_technology] first, the ones that can bring down a great power the latest.\\nEach operation occupies a slot and requires funding. Each operation against a country carries a monthly [concept_operation_detection]. Unused slots provide a domestic intelligence bonus.",
+  "ru": "[Concept('concept_covert_operations', 'Тайные операции')], запускаемые против соперников или в поддержку друга через [Concept('concept_diplomatic_action', 'дипломатические действия')]. Доступно восемнадцать типов:\\n• #bold Вмешательство в выборы#! — снижает [Concept('concept_legitimacy', 'легитимность')] цели (нужна технология [GetTechnology('television_broadcasting').GetName]; в цели должны проходить выборы: закон о голосовании или Анархия)\\n• #bold Финансовая диверсия#! — повышает [Concept('concept_bubble_pressure', 'давление пузыря')] цели, рискуя [Concept('concept_banking_crash', 'банковским крахом')] (нужна технология [GetTechnology('computer_networks').GetName])\\n• #bold Промышленный шпионаж#! — крадёт производственную технологию (цель должна изучить производственную технологию, которую можете изучить вы; прекращается, когда таких нет)\\n• #bold Военный шпионаж#! — крадёт военную технологию (цель должна изучить военную технологию, которую можете изучить вы; прекращается, когда таких нет)\\n• #bold Кампания влияния#! — снижает сопротивление рычагам влияния цели (нужны технология [GetTechnology('mass_media').GetName] и лидерство в [Concept('concept_power_bloc', 'силовом блоке')]; цель вне вашего блока)\\n• #bold Идеологическая диверсия#! — усиливает в цели движения, соответствующие вашей идеологии (нужна технология [GetTechnology('pop_culture').GetName]; в цели должно быть политическое движение)\\n• #bold Дестабилизация#! — усиливает в цели сепаратистские движения и общий радикализм (нужна технология [GetTechnology('social_media').GetName]; в цели должно быть политическое движение)\\n• #bold Смена режима#! — подтачивает [Concept('concept_legitimacy', 'легитимность')] цели и её сопротивление переворотам и подталкивает любой готовящийся там переворот (нужны технология [GetTechnology('satellite_communications').GetName], [Concept('concept_rivalry', 'соперничество')] и шпионское ремесло уровня #bold Опытный#!; не против вашего зависимого государства)\\n• #bold Саботаж ядерной программы#! — замедляет ядерную программу цели (нужны финансируемая программа и шпионское ремесло уровня #bold Опытный#!)\\n• #bold Шпионаж за космической программой#! — ускоряет ваши вехи [Concept('concept_space_race', 'космической гонки')] и снижает их риск (цель должна опережать вас)\\n• #bold Разжигать колониальную автономию#! — повышает автономию каждой колонии цели в Солнечной системе; достигшая 100 отделяется (у цели должна быть колония)\\n• #bold Саботировать колонию#! — убивает долю жителей самой населённой колонии цели и повышает её автономию (у цели должна быть колония; шпионское ремесло уровня #bold Опытный#!)\\n• #bold Разведать оборону колонии#! — наши флоты стреляют точнее по обороне колоний цели, и мы видим их оборонительные сооружения, целостность и морских пехотинцев (у цели должна быть колония; полноценные колонии)\\n• #bold Вербовать агентуру#! — не действует на цель; строит вашу сеть там быстрее любой другой операции (не против вашего зависимого государства)\\n• #bold Обезопасить бесхозный материал#! — не действует на цель; может найти и уничтожить ядерные боеголовки, пропавшие из её арсенала (цель должна потерять боеголовки)\\n• #bold Контрразведывательная поддержка#! — повышает экономическую, военную и идеологическую тайную защиту друга; открыта, никогда не разоблачается и ничего вам не даёт взамен (цель должна быть другом; одна поддерживающая страна на цель)\\n• #bold Саботаж [Concept('concept_infrastructure', 'инфраструктуры')]#! — снижает инфраструктуру цели и её [Concept('concept_throughput', 'пропускную способность')] (война или [Concept('concept_diplomatic_play', 'дипломатическая игра')] против неё)\\n• #bold Нарушение связи#! — снижает военное нападение и оборону цели (нужна технология [GetTechnology('cryptography').GetName]; война или [Concept('concept_diplomatic_play', 'дипломатическая игра')] против неё)\\nТолько Саботаж инфраструктуры и Нарушение связи требуют войны или [Concept('concept_diplomatic_play', 'дипломатической игры')] против цели; остальные идут и в мире, и на войне. Перемирие или Пакт об обмене разведданными с целью блокирует любую операцию против неё. Хорошие отношения не блокируют, но друг (дружеские отношения вместе с [Concept('concept_alliance', 'союзом')], [Concept('concept_defensive_pact', 'оборонительным пактом')], общим [Concept('concept_power_bloc', 'силовым блоком')] или связью зависимого государства либо одни только дружеские отношения) — дорогая цель: подсказка запуска сообщает об этом, а разоблачённая операция стоит вам дома. Только Смена режима требует [Concept('concept_rivalry', 'соперничества')]. Семи операциям сначала нужна [Concept('concept_technology', 'технология')], а тем, что могут свергнуть великую державу, — самая поздняя.\\nКаждая операция занимает слот и требует финансирования. Каждая операция против страны несёт ежемесячный [Concept('concept_operation_detection', 'риск обнаружения')]. Неиспользованные слоты дают внутренний разведывательный бонус."
  },
  "concept_cultural_pull": {
   "en": "Cultural Pull",
@@ -4830,5 +6642,197 @@
  "un_headquarters_modifier": {
   "en": "UN Headquarters Host",
   "ru": "Хозяин штаб-квартиры ООН"
+ },
+ "we_se_milestone_focus_desc": {
+  "en": "All attention is focused on completing the space elevator as quickly as possible.",
+  "ru": "Всё внимание направлено на то, чтобы как можно скорее завершить строительство космического лифта."
+ },
+ "we_se_shared_access_desc": {
+  "en": "A cooperative governance framework for orbital infrastructure enhances international cooperation.",
+  "ru": "Совместная система управления орбитальной инфраструктурой укрепляет международное сотрудничество."
+ },
+ "we_se_sovereignty": {
+  "en": "Orbital Sovereignty Asserted",
+  "ru": "Орбитальный суверенитет утверждён"
+ },
+ "we_se_sovereignty_desc": {
+  "en": "The nation has asserted sovereign control over its orbital infrastructure against international pressure.",
+  "ru": "Страна утвердила суверенный контроль над своей орбитальной инфраструктурой вопреки международному давлению."
+ },
+ "we_se_structural_halt_desc": {
+  "en": "Space elevator construction has been paused while engineers investigate structural anomalies.",
+  "ru": "Строительство космического лифта приостановлено, пока инженеры изучают структурные аномалии."
+ },
+ "we_se_structural_reinforce_desc": {
+  "en": "Resources are being diverted to reinforce the space elevator tether against oscillation.",
+  "ru": "Ресурсы направляются на укрепление троса космического лифта против колебаний."
+ },
+ "we_se_trade_auction_desc": {
+  "en": "Auctioned orbital launch slots are generating unprecedented trade volumes.",
+  "ru": "Стартовые слоты, проданные с аукциона, обеспечивают небывалые объёмы торговли."
+ },
+ "we_se_trade_national_desc": {
+  "en": "Domestic industries receive priority access to orbital launch capacity.",
+  "ru": "Отечественная промышленность получает приоритетный доступ к орбитальным пусковым мощностям."
+ },
+ "welfare_investment_chill": {
+  "en": "Investor Caution",
+  "ru": "Осторожность инвесторов"
+ },
+ "welfare_retraining_first": {
+  "en": "Welfare: Retraining First",
+  "ru": "Соцзащита: сначала переподготовка"
+ },
+ "welfare_ubi_first": {
+  "en": "Welfare: UBI Safety Net First",
+  "ru": "Соцзащита: сначала безусловный базовый доход"
+ },
+ "whistleblower_prosecuted_modifier": {
+  "en": "Whistleblower Prosecuted",
+  "ru": "Разоблачитель под судом"
+ },
+ "whistleblower_prosecuted_modifier_desc": {
+  "en": "The prosecution of the whistleblower sends a chilling message but strengthens state authority.",
+  "ru": "Преследование разоблачителя пугает общество, но укрепляет власть государства."
+ },
+ "whistleblower_reform_modifier": {
+  "en": "Whistleblower Reforms",
+  "ru": "Реформы защиты разоблачителей"
+ },
+ "whistleblower_reform_modifier_desc": {
+  "en": "Whistleblower protections have been enacted, reducing state authority but earning [concept_prestige].",
+  "ru": "Введена защита разоблачителей: власть государства ослабла, но принесла [concept_prestige|l]."
+ },
+ "whistleblower_suppressed_modifier": {
+  "en": "Whistleblower Story Suppressed",
+  "ru": "История разоблачителя замята"
+ },
+ "whistleblower_suppressed_modifier_desc": {
+  "en": "The press was gagged before the story spread past its first reports. The surveillance program carries on, and its critics know it.",
+  "ru": "Прессе заткнули рот, не дав истории выйти за пределы первых сообщений. Программа слежки продолжается, и её критики это знают."
+ },
+ "women_combat_roles_modifier_desc": {
+  "en": "Opening combat roles to women has expanded our military manpower pool and boosted morale among progressive citizens.",
+  "ru": "Открытие боевых должностей для женщин расширило наш мобилизационный ресурс и подняло боевой дух среди прогрессивных граждан."
+ },
+ "workforce_retraining_modifier": {
+  "en": "Workforce Retraining",
+  "ru": "Переподготовка рабочей силы"
+ },
+ "workforce_retraining_modifier_desc": {
+  "en": "workforce retraining programs help workers adapt to automation.",
+  "ru": "Программы переподготовки рабочей силы помогают работникам приспособиться к автоматизации."
+ },
+ "ww_air_raid_relief_modifier_desc": {
+  "en": "After enemy bombers struck our cities, we gave the city authorities first call on men and supplies.",
+  "ru": "После налётов вражеских бомбардировщиков на наши города мы дали городским властям первоочередное право на людей и снабжение."
+ },
+ "ww_appeasement_modifier": {
+  "en": "Policy of Appeasement",
+  "ru": "Политика умиротворения"
+ },
+ "ww_appeasement_modifier_desc": {
+  "en": "We are pursuing diplomatic accommodation with hostile powers, hoping to preserve peace through concessions.",
+  "ru": "Мы идём на дипломатические уступки враждебным державам, надеясь сохранить мир ценой компромиссов."
+ },
+ "ww_arsenal_of_democracy_modifier_desc": {
+  "en": "As a late-entering democratic power, our industrial might fuels the war effort of the entire alliance.",
+  "ru": "Как поздно вступившая в войну демократическая держава, мы своей промышленной мощью питаем военные усилия всего союза."
+ },
+ "ww_defeated_modifier": {
+  "en": "Defeated Power",
+  "ru": "Побеждённая держава"
+ },
+ "ww_defeated_modifier_desc": {
+  "en": "Our nation lies defeated in the great war. Our military is broken, our [concept_prestige] shattered.",
+  "ru": "Наша страна потерпела поражение в великой войне. Армия разбита, наш [concept_prestige|l] подорван."
+ },
+ "ww_devastation_modifier": {
+  "en": "War Devastation",
+  "ru": "Военная разруха"
+ },
+ "ww_devastation_modifier_desc": {
+  "en": "This state has been ravaged by the world war. [concept_infrastructure] lies in ruins and the population suffers.",
+  "ru": "Эта область опустошена мировой войной. [concept_infrastructure] лежит в руинах, население страдает."
+ },
+ "ww_fresh_forces_modifier_desc": {
+  "en": "Our troops enter the war rested and well-supplied, giving us a significant temporary advantage over the exhausted belligerents.",
+  "ru": "Наши войска вступают в войну отдохнувшими и хорошо снабжёнными, что даёт нам существенное временное преимущество над измотанными противниками."
+ },
+ "ww_ground_offensive_modifier_desc": {
+  "en": "All available forces have been committed to a decisive ground offensive, boosting combat effectiveness at a heavy cost to the home front.",
+  "ru": "Все доступные силы брошены в решающее наступление на суше: боевая эффективность растёт, но тыл несёт тяжёлые потери."
+ },
+ "ww_home_front_strain_modifier_desc": {
+  "en": "The prolonged war is taking a terrible toll on the civilian population. Unrest grows.",
+  "ru": "Затянувшаяся война тяжело отражается на гражданском населении. Недовольство растёт."
+ },
+ "ww_late_entry_cooldown_desc": {
+  "en": "We have recently made a decision regarding intervention in the world war.",
+  "ru": "Недавно мы приняли решение о вмешательстве в мировую войну."
+ },
+ "ww_lend_lease_modifier_desc": {
+  "en": "We are supplying military equipment and resources to allied belligerents without committing our own forces.",
+  "ru": "Мы поставляем военное снаряжение и ресурсы воюющим союзникам, не вводя собственные войска."
+ },
+ "ww_liberation_hero_modifier_desc": {
+  "en": "Our nation is celebrated as a champion of freedom and justice in the aftermath of the great war.",
+  "ru": "Нашу страну чествуют как защитницу свободы и справедливости после великой войны."
+ },
+ "ww_occupation_duties_modifier_desc": {
+  "en": "Maintaining order in occupied territories demands significant military resources and administrative effort.",
+  "ru": "Поддержание порядка на оккупированных территориях требует значительных военных ресурсов и административных усилий."
+ },
+ "ww_prolonged_war_exhaustion_modifier_desc": {
+  "en": "Years of total war have pushed our nation to the breaking point. Casualties mount, the economy groans, and revolution threatens.",
+  "ru": "Годы тотальной войны довели страну до предела. Потери растут, экономика стонет, а революция уже на пороге."
+ },
+ "ww_rearmament_modifier": {
+  "en": "Rearmament Program",
+  "ru": "Программа перевооружения"
+ },
+ "ww_rearmament_modifier_desc": {
+  "en": "A major military buildup is underway in response to the ideological threat posed by rival [Concept('concept_great_power', 'great powers')].",
+  "ru": "Идёт масштабное военное строительство в ответ на идеологическую угрозу со стороны соперничающих [Concept('concept_great_power', 'великих держав')]."
+ },
+ "ww_reconstruction_modifier": {
+  "en": "Post-War Reconstruction",
+  "ru": "Послевоенное восстановление"
+ },
+ "ww_reconstruction_modifier_desc": {
+  "en": "A massive reconstruction effort is underway, rebuilding what was destroyed in the great war.",
+  "ru": "Идёт масштабное восстановление разрушенного в великой войне."
+ },
+ "ww_regime_change_modifier_desc": {
+  "en": "The victorious powers have imposed a new political system. The transition is turbulent.",
+  "ru": "Державы-победительницы навязали новую политическую систему. Переход проходит бурно."
+ },
+ "ww_rising_tensions_modifier_desc": {
+  "en": "Ideological rivalries between the [Concept('concept_great_power', 'great powers')] are intensifying. Arms races and diplomatic crises are becoming more frequent.",
+  "ru": "Идеологическое соперничество между [Concept('concept_great_power', 'великими державами')] обостряется. Гонки вооружений и дипломатические кризисы становятся всё чаще."
+ },
+ "ww_total_war_economy_modifier_desc": {
+  "en": "The entire national economy has been redirected toward the war effort. Military production soars, but civilian life suffers enormously.",
+  "ru": "Вся национальная экономика перестроена на нужды войны. Военное производство взлетает, но гражданская жизнь страдает неимоверно."
+ },
+ "ww_victors_peace_modifier_desc": {
+  "en": "We have emerged victorious from the greatest conflict in human history. Our [concept_prestige] and influence are at their zenith.",
+  "ru": "Мы вышли победителями из величайшего конфликта в истории человечества. Наш [concept_prestige|l] и влияние достигли зенита."
+ },
+ "ww_war_crimes_exposed_modifier_desc": {
+  "en": "Evidence of terrible atrocities committed during the war has come to light, damaging our international reputation.",
+  "ru": "Вскрылись свидетельства ужасных зверств, совершённых в ходе войны, что вредит нашей международной репутации."
+ },
+ "ww_war_propaganda_modifier_desc": {
+  "en": "The government has mobilized the press and media to maintain public support for the war effort.",
+  "ru": "Правительство задействовало прессу и СМИ, чтобы поддерживать общественную поддержку военных усилий."
+ },
+ "ww_wartime_rationing_modifier_desc": {
+  "en": "Strict rationing has been imposed to ensure the military has the supplies it needs. Civilian consumption suffers.",
+  "ru": "Введено строгое нормирование, чтобы армия получала всё необходимое. Гражданское потребление сокращается."
+ },
+ "youth_mental_health_funding_modifier_desc": {
+  "en": "Youth mental health services reduce mortality among young people.",
+  "ru": "Службы психического здоровья молодёжи снижают смертность среди молодых людей."
  }
 }
