@@ -1,4 +1,12 @@
 {
+ "advanced_materials": {
+  "en": "Advanced Materials",
+  "ru": "Передовые материалы"
+ },
+ "algorithmic_mandate": {
+  "en": "Algorithmic Mandate",
+  "ru": "Алгоритмический мандат"
+ },
  "amendment_birthright_endowment": {
   "en": "Birthright Endowment",
   "ru": "Капитал по праву рождения"
@@ -99,6 +107,26 @@
   "en": "Whistleblower Protection Act",
   "ru": "Закон о защите информаторов"
  },
+ "archaeological_concession": {
+  "en": "Excavation Concession",
+  "ru": "Концессия на раскопки"
+ },
+ "banking_bank_holiday": {
+  "en": "Bank Holiday",
+  "ru": "Банковские каникулы"
+ },
+ "banking_reserve_requirements": {
+  "en": "Raised Reserve Requirements",
+  "ru": "Повышенные резервные требования"
+ },
+ "banking_restrict_inflows": {
+  "en": "Speculative Inflow Restrictions",
+  "ru": "Ограничения спекулятивных притоков"
+ },
+ "banking_sterilize_inflows": {
+  "en": "Sterilization",
+  "ru": "Стерилизация"
+ },
  "bg_biotechnology": {
   "en": "Biotechnology",
   "ru": "Биотехнологии"
@@ -134,6 +162,54 @@
  "bg_resettlement": {
   "en": "Resettlement",
   "ru": "Переселение"
+ },
+ "ch_model_anarchist": {
+  "en": "Anarchist",
+  "ru": "Анархистская"
+ },
+ "ch_model_communist": {
+  "en": "Communist / Vanguardist",
+  "ru": "Коммунистическая / авангардистская"
+ },
+ "ch_model_corporatist": {
+  "en": "Corporatist",
+  "ru": "Корпоративистская"
+ },
+ "ch_model_fascist": {
+  "en": "Fascist / Ethnonationalist",
+  "ru": "Фашистская / этнонационалистическая"
+ },
+ "ch_model_liberal": {
+  "en": "Liberal / Progressive Democratic",
+  "ru": "Либеральная / прогрессивно-демократическая"
+ },
+ "ch_model_other": {
+  "en": "Mixed / Other",
+  "ru": "Смешанная / иная"
+ },
+ "ch_model_reactionary": {
+  "en": "Reactionary / Authoritarian",
+  "ru": "Реакционная / авторитарная"
+ },
+ "ch_model_religious": {
+  "en": "Theocratic / Religious",
+  "ru": "Теократическая / религиозная"
+ },
+ "ch_model_republican": {
+  "en": "Republican",
+  "ru": "Республиканская"
+ },
+ "ch_model_socialist": {
+  "en": "Socialist / Cooperative",
+  "ru": "Социалистическая / кооперативная"
+ },
+ "ch_model_technocratic": {
+  "en": "Technocratic",
+  "ru": "Технократическая"
+ },
+ "ch_world_exposition": {
+  "en": "International Cultural Outreach",
+  "ru": "Международная культурная работа"
  },
  "concept_agent_network": {
   "en": "Agent Network",
@@ -638,5 +714,181 @@
  "concept_wonder_building": {
   "en": "Wonder Building",
   "ru": "Здание-чудо"
+ },
+ "construction_cost_scaling": {
+  "en": "Development Cost Scaling",
+  "ru": "Масштабирование стоимости развития"
+ },
+ "consumer_appliances": {
+  "en": "Consumer Appliances",
+  "ru": "Бытовая техника"
+ },
+ "cultural_exchange_program": {
+  "en": "Cultural Exchange Program",
+  "ru": "Программа культурного обмена"
+ },
+ "cultural_hegemony_effect": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "currency_peg": {
+  "en": "Currency Peg",
+  "ru": "Привязка валюты"
+ },
+ "digital_access": {
+  "en": "Digital Access",
+  "ru": "Цифровой доступ"
+ },
+ "digital_assets": {
+  "en": "Software",
+  "ru": "Программное обеспечение"
+ },
+ "education_aid": {
+  "en": "Education Aid",
+  "ru": "Помощь образованию"
+ },
+ "electronic_components": {
+  "en": "Electronic Components",
+  "ru": "Электронные компоненты"
+ },
+ "excavation_permit": {
+  "en": "Excavation Permit",
+  "ru": "Разрешение на раскопки"
+ },
+ "global_technological_development": {
+  "en": "Global Technological Development",
+  "ru": "Глобальное технологическое развитие"
+ },
+ "global_warming": {
+  "en": "Climate Warming",
+  "ru": "Потепление климата"
+ },
+ "global_warming_tropics": {
+  "en": "Tropical Warming",
+  "ru": "Тропическое потепление"
+ },
+ "grid_interconnection_agreement": {
+  "en": "Grid Interconnection Agreement",
+  "ru": "Соглашение об объединении сетей"
+ },
+ "grid_power": {
+  "en": "Grid Power",
+  "ru": "Сетевая энергия"
+ },
+ "inh_concentrated_property": {
+  "en": "Concentrated Property",
+  "ru": "Сосредоточенная собственность"
+ },
+ "inh_dispersed_property": {
+  "en": "Dispersed Property",
+  "ru": "Раздробленная собственность"
+ },
+ "inh_dispersed_wealth": {
+  "en": "Dispersed Wealth",
+  "ru": "Рассредоточенное богатство"
+ },
+ "inh_great_fortunes": {
+  "en": "Great Family Fortunes",
+  "ru": "Крупные семейные состояния"
+ },
+ "inh_land_hunger": {
+  "en": "Land Hunger",
+  "ru": "Земельный голод"
+ },
+ "inh_primogeniture_rural": {
+  "en": "Cadet Sons Leave the Land",
+  "ru": "Младшие сыновья покидают землю"
+ },
+ "joint_military_exercises": {
+  "en": "Joint Military Exercises",
+  "ru": "Совместные военные учения"
+ },
+ "launch_capacity": {
+  "en": "Launch Capacity",
+  "ru": "Пусковые мощности"
+ },
+ "lender_of_last_resort": {
+  "en": "Lender of Last Resort",
+  "ru": "Кредитор последней инстанции"
+ },
+ "magnetic_drive_ships": {
+  "en": "Magnetic Drive Ships",
+  "ru": "Корабли с магнитным приводом"
+ },
+ "minority_protection": {
+  "en": "Minority Protection",
+  "ru": "Защита меньшинств"
+ },
+ "motor_ships": {
+  "en": "Motor Ships",
+  "ru": "Моторные суда"
+ },
+ "nuclear_disarmament": {
+  "en": "Nuclear Disarmament",
+  "ru": "Ядерное разоружение"
+ },
+ "nuclear_guarantee": {
+  "en": "Nuclear Guarantee",
+  "ru": "Ядерные гарантии"
+ },
+ "nuclear_power": {
+  "en": "Nuclear Power",
+  "ru": "Ядерная энергетика"
+ },
+ "nuclear_program_aid": {
+  "en": "Nuclear Program Aid",
+  "ru": "Помощь ядерной программе"
+ },
+ "nuclear_program_pause": {
+  "en": "Nuclear Program Freeze",
+  "ru": "Заморозка ядерной программы"
+ },
+ "re_spectrum_auction": {
+  "en": "Spectrum Auction",
+  "ru": "Аукцион частот"
+ },
+ "security_aid": {
+  "en": "Security Aid",
+  "ru": "Помощь в сфере безопасности"
+ },
+ "swap_line": {
+  "en": "Swap Line",
+  "ru": "Валютный своп"
+ },
+ "te_automation_displacement": {
+  "en": "Displaced Workers",
+  "ru": "Вытесненные работники"
+ },
+ "te_continuous_vote": {
+  "en": "Continuous Vote",
+  "ru": "Непрерывное голосование"
+ },
+ "te_jmap_area": {
+  "en": "Area",
+  "ru": "Площадь"
+ },
+ "te_jmap_color": {
+  "en": "Color",
+  "ru": "Цвет"
+ },
+ "te_jmap_outliers": {
+  "en": "Outliers",
+  "ru": "Выбросы"
+ },
+ "te_jmap_scale": {
+  "en": "Scale",
+  "ru": "Масштаб"
+ },
+ "tech_metals": {
+  "en": "Tech-Critical Metals",
+  "ru": "Критические для технологий металлы"
+ },
+ "tourism": {
+  "en": "Tourism",
+  "ru": "Туризм"
+ },
+ "un_headquarters_modifier": {
+  "en": "UN Headquarters Host",
+  "ru": "Хозяин штаб-квартиры ООН"
  }
 }

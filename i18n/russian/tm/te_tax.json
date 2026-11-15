@@ -6,5 +6,85 @@
  "law_te_tax_code": {
   "en": "Legislated Tax Code",
   "ru": "Законодательно установленный налоговый кодекс"
+ },
+ "rule_te_tax_code_rule": {
+  "en": "Legislated Tax Code",
+  "ru": "Законодательно установленный налоговый кодекс"
+ },
+ "te_tax_est_ch_consumption": {
+  "en": "Consumption",
+  "ru": "Потребление"
+ },
+ "te_tax_est_ch_dividends": {
+  "en": "Dividends",
+  "ru": "Дивиденды"
+ },
+ "te_tax_est_ch_income": {
+  "en": "Income",
+  "ru": "Доходы"
+ },
+ "te_tax_est_ch_poll": {
+  "en": "Poll",
+  "ru": "Подушный налог"
+ },
+ "te_tax_ig_fisc": {
+  "en": "State of the Budget",
+  "ru": "Состояние бюджета"
+ },
+ "te_tax_ig_gov": {
+  "en": "In Government",
+  "ru": "В правительстве"
+ },
+ "te_tax_ig_ideo": {
+  "en": "Views on Taxation",
+  "ru": "Взгляды на налогообложение"
+ },
+ "te_tax_ig_mat": {
+  "en": "Cost to Members",
+  "ru": "Бремя для членов"
+ },
+ "te_tax_ig_prom": {
+  "en": "Promises",
+  "ru": "Обещания"
+ },
+ "te_tax_ig_trust": {
+  "en": "Trust",
+  "ru": "Доверие"
+ },
+ "te_tax_inst_cons": {
+  "en": "Consumption Tax",
+  "ru": "Налог на потребление"
+ },
+ "te_tax_inst_div": {
+  "en": "Dividend Tax",
+  "ru": "Налог на дивиденды"
+ },
+ "te_tax_inst_head": {
+  "en": "Head Tax",
+  "ru": "Подушный налог"
+ },
+ "te_tax_inst_land": {
+  "en": "Rural Assessment",
+  "ru": "Сельский сбор"
+ },
+ "te_tax_inst_wage": {
+  "en": "Wage Tax",
+  "ru": "Налог на заработную плату"
+ },
+ "te_tax_pol_force": {
+  "en": "Force Through",
+  "ru": "Продавить"
+ },
+ "te_tax_rv_relief_benefit": {
+  "en": "Benefits",
+  "ru": "Пособия"
+ },
+ "te_tax_rv_relief_forgoes": {
+  "en": "Forgoes",
+  "ru": "Отказывается от"
+ },
+ "te_tax_tab": {
+  "en": "Tax Code",
+  "ru": "Налоговый кодекс"
  }
 }

@@ -179,6 +179,10 @@
   "en": "Next: #v [Country.GetCustom('ch_next_tier_name')]#! from #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#! share",
   "ru": "Далее: #v [Country.GetCustom('ch_next_tier_name')]#! при доле от #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#!"
  },
+ "je_ch_prog_needs_ministry": {
+  "en": "Funding and every program require [GetLawType('law_ministry_of_culture').GetName].",
+  "ru": "Для финансирования и каждой программы требуется [GetLawType('law_ministry_of_culture').GetName]."
+ },
  "je_ch_widget_board_header": {
   "en": "Top Cultural Powers",
   "ru": "Ведущие культурные державы"
@@ -279,9 +283,33 @@
   "en": "\\n#bold Months run:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]",
   "ru": "\\n#bold Прошло месяцев:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]"
  },
+ "je_civil_rights_progress_lines": {
+  "en": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold If it wins now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold If it collapses now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]",
+  "ru": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold Если победит сейчас:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold Если потерпит крах сейчас:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]"
+ },
  "je_colonial_empire": {
   "en": "Colonial Empire",
   "ru": "Колониальная империя"
+ },
+ "je_colonial_empire_band_collapsing": {
+  "en": "#R Collapsing#!",
+  "ru": "#R Разваливается#!"
+ },
+ "je_colonial_empire_band_crumbling": {
+  "en": "#R Crumbling#!",
+  "ru": "#R Рушится#!"
+ },
+ "je_colonial_empire_band_solidified": {
+  "en": "#G Solidified#!",
+  "ru": "#G Упрочена#!"
+ },
+ "je_colonial_empire_band_stable": {
+  "en": "#G Stable#!",
+  "ru": "#G Стабильна#!"
+ },
+ "je_colonial_empire_band_strained": {
+  "en": "#o Strained#!",
+  "ru": "#o Напряжена#!"
  },
  "je_colonial_empire_bloc_member_line": {
   "en": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people",
@@ -479,13 +507,25 @@
   "en": "Colonial Programs",
   "ru": "Колониальные программы"
  },
+ "je_colonial_empire_row_assimilation": {
+  "en": "#bold Cultural Assimilation Program#!",
+  "ru": "#bold Программа культурной ассимиляции#!"
+ },
  "je_colonial_empire_row_assimilation_short": {
   "en": "Cultural Assimilation",
   "ru": "Культурная ассимиляция"
  },
+ "je_colonial_empire_row_garrison": {
+  "en": "#bold Military Garrison#!",
+  "ru": "#bold Военный гарнизон#!"
+ },
  "je_colonial_empire_row_garrison_short": {
   "en": "Military Garrison",
   "ru": "Военный гарнизон"
+ },
+ "je_colonial_empire_row_invest": {
+  "en": "#bold Colonial Development Investment#!",
+  "ru": "#bold Инвестиции в колониальное развитие#!"
  },
  "je_colonial_empire_row_invest_short": {
   "en": "Development Investment",
@@ -810,6 +850,10 @@
  "je_iw_net_row_intel_ops": {
   "en": "Their operations against us: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! running",
   "ru": "Их операции против нас: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! ведутся"
+ },
+ "je_iw_net_row_intel_service": {
+  "en": "Their service: #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! [concept_intelligence_capacity] (ours [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_total')|0]), #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! technologies (ours [GetPlayer.MakeScope.ScriptValue('covert_techs_researched_display')|0])",
+  "ru": "Их служба: [concept_intelligence_capacity|l] — #v [ScriptContainer.GetVariableValue('iw_net_intel_ic')|0]#! (у нас [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_total')|0]), технологий — #v [ScriptContainer.GetVariableValue('iw_net_intel_techs')|0]#! (у нас [GetPlayer.MakeScope.ScriptValue('covert_techs_researched_display')|0])"
  },
  "je_iw_net_row_report_0": {
   "en": "None",
@@ -3119,9 +3163,17 @@
   "en": "Funding",
   "ru": "Финансирование"
  },
+ "je_un_auth_tbl_order_detail": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_at_war_pct')|0]% of world prestige at war with members",
+  "ru": "Доля мирового престижа в войне с членами: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_at_war_pct')|0]%"
+ },
  "je_un_auth_tbl_order_label": {
   "en": "Peace and order",
   "ru": "Мир и порядок"
+ },
+ "je_un_auth_tbl_participation_detail": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_power_pct')|0]% of world prestige is in the UN",
+  "ru": "Доля мирового престижа в ООН: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_power_pct')|0]%"
  },
  "je_un_auth_tbl_participation_label": {
   "en": "Participation",
@@ -3130,6 +3182,10 @@
  "je_un_auth_tbl_policy_label": {
   "en": "Policy",
   "ru": "Политика"
+ },
+ "je_un_auth_tbl_target_detail": {
+  "en": "the sum, held under the [concept_un_charter]'s ceiling of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_charter_cap')|0]",
+  "ru": "сумма, не выше предела [Concept('concept_un_charter','Устава ООН')]: [JournalEntry.GetCountry.MakeScope.ScriptValue('un_charter_cap')|0]"
  },
  "je_un_auth_tier_contested": {
   "en": "#bold Tier:#! [concept_un_tier_contested]",
@@ -3611,6 +3667,10 @@
   "en": "Climate Accord",
   "ru": "Климатическое соглашение"
  },
+ "je_un_conv_name_colony_protection": {
+  "en": "Convention on the Settlement of Outer Space",
+  "ru": "Конвенция о заселении космического пространства"
+ },
  "je_un_conv_name_cultural_diversity": {
   "en": "Convention on Cultural Diversity",
   "ru": "Конвенция о культурном разнообразии"
@@ -3631,6 +3691,10 @@
   "en": "International Criminal Court",
   "ru": "Международный уголовный суд"
  },
+ "je_un_conv_name_law_of_sea": {
+  "en": "Convention on the Law of the Sea",
+  "ru": "Конвенция по морскому праву"
+ },
  "je_un_conv_name_narcotics": {
   "en": "Single Convention on Narcotic Drugs",
   "ru": "Единая конвенция о наркотических средствах"
@@ -3639,9 +3703,17 @@
   "en": "Nuclear Non-Proliferation Treaty",
   "ru": "Договор о нераспространении ядерного оружия"
  },
+ "je_un_conv_name_nuclear_ban": {
+  "en": "Treaty on the Prohibition of Nuclear Weapons",
+  "ru": "Договор о запрещении ядерного оружия"
+ },
  "je_un_conv_name_pandemic": {
   "en": "Global Pandemic Response",
   "ru": "Глобальный ответ на пандемию"
+ },
+ "je_un_conv_name_physical_protection": {
+  "en": "Convention on the Physical Protection of Nuclear Material",
+  "ru": "Конвенция о физической защите ядерного материала"
  },
  "je_un_conv_name_refugee": {
   "en": "International Refugee Resolution",
@@ -3947,6 +4019,10 @@
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! of 100",
   "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength')|1]#! из 100"
  },
+ "je_un_ov_standing_0": {
+  "en": "#v Frozen#!",
+  "ru": "#v Заморожен#!"
+ },
  "je_un_ov_standing_fig": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! of 100",
   "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! из 100"
@@ -4098,6 +4174,10 @@
  "je_un_tally_rule_super": {
   "en": "#bold Passage Rule:#! [concept_un_passage_two_thirds] (the line)",
   "ru": "#bold Правило принятия:#! [concept_un_passage_two_thirds] (порог)"
+ },
+ "je_un_terms_scaled": {
+  "en": "#lore Shown at ×1; terms marked scaled follow [concept_un_enforcement].#!",
+  "ru": "#lore Показано при ×1; условия с пометкой «масштаб» определяет [concept_un_enforcement|l].#!"
  },
  "je_world_climate": {
   "en": "World Climate",

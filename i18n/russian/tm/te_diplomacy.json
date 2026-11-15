@@ -1,6 +1,26 @@
 {
+ "colonial_collapse_subject_unrest_modifier": {
+  "en": "Imperial Collapse Aftershock",
+  "ru": "Отголоски имперского краха"
+ },
+ "identity_diplomatic": {
+  "en": "Diplomatic Framework",
+  "ru": "Дипломатические рамки"
+ },
+ "intelligence_sharing_pact": {
+  "en": "Intelligence Sharing Pact",
+  "ru": "Пакт об обмене разведданными"
+ },
  "principle_group_diplomacy": {
   "en": "Foreign Service",
   "ru": "Дипломатическая служба"
+ },
+ "ste_telepathic_diplomacy": {
+  "en": "Telepathic Diplomacy",
+  "ru": "Телепатическая дипломатия"
+ },
+ "te_diplomacy_tab_un": {
+  "en": "UN",
+  "ru": "ООН"
  }
 }

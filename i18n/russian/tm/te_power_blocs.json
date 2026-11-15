@@ -19,6 +19,10 @@
   "en": "Engineering and Logistics",
   "ru": "Инженерия и логистика"
  },
+ "principle_group_engineering_and_logistics_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "ru": "[concept_power_bloc] поощряет развитие военной инженерии и логистики."
+ },
  "principle_group_environmental_sustainability": {
   "en": "Environmental Sustainability",
   "ru": "Экологическая устойчивость"

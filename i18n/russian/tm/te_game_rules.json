@@ -1,0 +1,26 @@
+{
+ "rule_cultural_hegemony_rule": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "rule_culture_merges_rule": {
+  "en": "Culture Merges",
+  "ru": "Слияния культур"
+ },
+ "rule_free_market_construction_rule": {
+  "en": "Free Market Construction",
+  "ru": "Рыночное строительство"
+ },
+ "rule_te_principle_slots_rule": {
+  "en": "Power Bloc Principle Slots",
+  "ru": "Ячейки принципов силового блока"
+ },
+ "rule_te_small_economy_construction_rule": {
+  "en": "Small-Economy Construction",
+  "ru": "Строительство в малых экономиках"
+ },
+ "setting_te_principle_slots_four": {
+  "en": "Four (Base Game)",
+  "ru": "Четыре (базовая игра)"
+ }
+}

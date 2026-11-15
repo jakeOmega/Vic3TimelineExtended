@@ -1,0 +1,482 @@
+{
+ "pm_3d_printed_buildings": {
+  "en": "3D Printed Buildings",
+  "ru": "Здания, напечатанные на 3D-принтере"
+ },
+ "pm_advanced_construction": {
+  "en": "Advanced Construction",
+  "ru": "Передовое строительство"
+ },
+ "pm_advanced_ocean_mine": {
+  "en": "Advanced Deep-Sea Mining",
+  "ru": "Передовая глубоководная добыча"
+ },
+ "pm_ai_managed_building_motor_industry": {
+  "en": "AI Managed Factory",
+  "ru": "Фабрика под управлением ИИ"
+ },
+ "pm_ai_managed_building_munition_plant": {
+  "en": "AI-Managed Munition Plants",
+  "ru": "Заводы боеприпасов под управлением ИИ"
+ },
+ "pm_ai_managed_building_tooling_workshop": {
+  "en": "AI-Managed Tooling Workshops",
+  "ru": "Инструментальные мастерские под управлением ИИ"
+ },
+ "pm_ai_managed_power_plant": {
+  "en": "AI Managed Power Plant",
+  "ru": "Электростанция под управлением ИИ"
+ },
+ "pm_ammonium_nitrate_building_coal_mine": {
+  "en": "Ammonium Nitrate",
+  "ru": "Аммиачная селитра"
+ },
+ "pm_ammonium_nitrate_building_iron_mine": {
+  "en": "Ammonium Nitrate",
+  "ru": "Аммиачная селитра"
+ },
+ "pm_ammonium_nitrate_building_lead_mine": {
+  "en": "Ammonium Nitrate",
+  "ru": "Аммиачная селитра"
+ },
+ "pm_ammonium_nitrate_building_tech_metals_mine": {
+  "en": "Ammonium Nitrate",
+  "ru": "Аммиачная селитра"
+ },
+ "pm_automated_ocean_mine": {
+  "en": "Automated Deep-Sea Mining",
+  "ru": "Автоматизированная глубоководная добыча"
+ },
+ "pm_condensing_engine_pump_building_tech_metals_mine": {
+  "en": "Condensing Engine Pump",
+  "ru": "Насос с конденсационной машиной"
+ },
+ "pm_continuous_miners_building_coal_mine": {
+  "en": "Continuous Miners",
+  "ru": "Проходческие комбайны"
+ },
+ "pm_continuous_miners_building_iron_mine": {
+  "en": "Continuous Miners",
+  "ru": "Проходческие комбайны"
+ },
+ "pm_continuous_miners_building_lead_mine": {
+  "en": "Continuous Miners",
+  "ru": "Проходческие комбайны"
+ },
+ "pm_continuous_miners_building_tech_metals_mine": {
+  "en": "Continuous Miners",
+  "ru": "Проходческие комбайны"
+ },
+ "pm_deep_space_exploration": {
+  "en": "Deep Space Exploration",
+  "ru": "Исследование дальнего космоса"
+ },
+ "pm_diesel_pump_building_tech_metals_mine": {
+  "en": "Diesel Pump",
+  "ru": "Дизельный насос"
+ },
+ "pm_direct_air_capture": {
+  "en": "Direct Air Capture",
+  "ru": "Прямое улавливание из воздуха"
+ },
+ "pm_disney_world": {
+  "en": "Disney World",
+  "ru": "Диснейуорлд"
+ },
+ "pm_dragline_excavators_coal_mine": {
+  "en": "Dragline Excavators",
+  "ru": "Драглайны"
+ },
+ "pm_dragline_excavators_iron_mine": {
+  "en": "Dragline Excavators",
+  "ru": "Драглайны"
+ },
+ "pm_dragline_excavators_lead_mine": {
+  "en": "Dragline Excavators",
+  "ru": "Драглайны"
+ },
+ "pm_dragline_excavators_tech_metals_mine": {
+  "en": "Dragline Excavators",
+  "ru": "Драглайны"
+ },
+ "pm_dynamite_building_tech_metals_mine": {
+  "en": "Dynamite",
+  "ru": "Динамит"
+ },
+ "pm_earth_orbit": {
+  "en": "Earth Orbit",
+  "ru": "Околоземная орбита"
+ },
+ "pm_engineering_and_logistics_no_effect": {
+  "en": "No Effect",
+  "ru": "Без эффекта"
+ },
+ "pm_generic_industrial_city": {
+  "en": "Private Industrial City",
+  "ru": "Частный промышленный город"
+ },
+ "pm_generic_monument_to_industry": {
+  "en": "Monument to Industry",
+  "ru": "Памятник индустрии"
+ },
+ "pm_geophysical_survey_techniques_coal_mine": {
+  "en": "Geophysical Survey Techniques",
+  "ru": "Методы геофизической разведки"
+ },
+ "pm_geophysical_survey_techniques_iron_mine": {
+  "en": "Geophysical Survey Techniques",
+  "ru": "Методы геофизической разведки"
+ },
+ "pm_geophysical_survey_techniques_lead_mine": {
+  "en": "Geophysical Survey Techniques",
+  "ru": "Методы геофизической разведки"
+ },
+ "pm_geophysical_survey_techniques_tech_metals_mine": {
+  "en": "Geophysical Survey Techniques",
+  "ru": "Методы геофизической разведки"
+ },
+ "pm_high_pressure_hydraulic_pump_building_coal_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "ru": "Гидравлический насос высокого давления"
+ },
+ "pm_high_pressure_hydraulic_pump_building_iron_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "ru": "Гидравлический насос высокого давления"
+ },
+ "pm_high_pressure_hydraulic_pump_building_lead_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "ru": "Гидравлический насос высокого давления"
+ },
+ "pm_high_pressure_hydraulic_pump_building_tech_metals_mine": {
+  "en": "High-Pressure Hydraulic Pump",
+  "ru": "Гидравлический насос высокого давления"
+ },
+ "pm_interstellar_mission": {
+  "en": "Interstellar Mission",
+  "ru": "Межзвёздная миссия"
+ },
+ "pm_large_scale_earth_movers_coal_mine": {
+  "en": "Large Scale Earth Movers",
+  "ru": "Крупногабаритная землеройная техника"
+ },
+ "pm_large_scale_earth_movers_iron_mine": {
+  "en": "Large Scale Earth Movers",
+  "ru": "Крупногабаритная землеройная техника"
+ },
+ "pm_large_scale_earth_movers_lead_mine": {
+  "en": "Large Scale Earth Movers",
+  "ru": "Крупногабаритная землеройная техника"
+ },
+ "pm_large_scale_earth_movers_tech_metals_mine": {
+  "en": "Large-Scale Earth Movers",
+  "ru": "Крупногабаритная землеройная техника"
+ },
+ "pm_laser_excavation_technology_coal_mine": {
+  "en": "Laser Excavation Technology",
+  "ru": "Технология лазерной выемки"
+ },
+ "pm_laser_excavation_technology_iron_mine": {
+  "en": "Laser Excavation Technology",
+  "ru": "Технология лазерной выемки"
+ },
+ "pm_laser_excavation_technology_lead_mine": {
+  "en": "Laser Excavation Technology",
+  "ru": "Технология лазерной выемки"
+ },
+ "pm_laser_excavation_technology_tech_metals_mine": {
+  "en": "Laser Excavation Technology",
+  "ru": "Технология лазерной выемки"
+ },
+ "pm_mars_mission": {
+  "en": "Mars Mission",
+  "ru": "Марсианская миссия"
+ },
+ "pm_metamaterial_explosives_building_coal_mine": {
+  "en": "Metamaterial Explosives",
+  "ru": "Метаматериальные взрывчатые вещества"
+ },
+ "pm_metamaterial_explosives_building_iron_mine": {
+  "en": "Metamaterial Explosives",
+  "ru": "Метаматериальные взрывчатые вещества"
+ },
+ "pm_metamaterial_explosives_building_lead_mine": {
+  "en": "Metamaterial Explosives",
+  "ru": "Метаматериальные взрывчатые вещества"
+ },
+ "pm_metamaterial_explosives_building_tech_metals_mine": {
+  "en": "Metamaterial Explosives",
+  "ru": "Метаматериальные взрывчатые вещества"
+ },
+ "pm_monument_athletic": {
+  "en": "Grand Stadium",
+  "ru": "Большой стадион"
+ },
+ "pm_monument_civic": {
+  "en": "To the Nation",
+  "ru": "Во славу нации"
+ },
+ "pm_monument_historic": {
+  "en": "To History",
+  "ru": "Во славу истории"
+ },
+ "pm_monument_undedicated": {
+  "en": "Undedicated",
+  "ru": "Без посвящения"
+ },
+ "pm_monument_war_memorial": {
+  "en": "War Memorial",
+  "ru": "Военный мемориал"
+ },
+ "pm_moon_mission": {
+  "en": "Moon Mission",
+  "ru": "Лунная миссия"
+ },
+ "pm_nanomaterial_buildings": {
+  "en": "Nanomaterial Buildings",
+  "ru": "Здания из наноматериалов"
+ },
+ "pm_ocean_mine": {
+  "en": "Deep-Sea Mining",
+  "ru": "Глубоководная добыча"
+ },
+ "pm_officer_academies": {
+  "en": "Officer Academies",
+  "ru": "Офицерские академии"
+ },
+ "pm_ore_sorting_and_separation_technology_coal_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "ru": "Технология сортировки и разделения руды"
+ },
+ "pm_ore_sorting_and_separation_technology_iron_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "ru": "Технология сортировки и разделения руды"
+ },
+ "pm_ore_sorting_and_separation_technology_lead_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "ru": "Технология сортировки и разделения руды"
+ },
+ "pm_ore_sorting_and_separation_technology_tech_metals_mine": {
+  "en": "Ore Sorting and Separation Technology",
+  "ru": "Технология сортировки и разделения руды"
+ },
+ "pm_political_commissars": {
+  "en": "Political Commissars",
+  "ru": "Политкомиссары"
+ },
+ "pm_principle_engineering_and_logistics": {
+  "en": "Engineering and Logistics [concept_power_bloc_principle] 1",
+  "ru": "Инженерия и логистика: [concept_power_bloc_principle|l] 1"
+ },
+ "pm_reinforced_concrete_buildings": {
+  "en": "Reinforced Concrete Buildings",
+  "ru": "Здания из железобетона"
+ },
+ "pm_reserve_cadre": {
+  "en": "Reserve Cadre",
+  "ru": "Кадровый резерв"
+ },
+ "pm_resettlement_planned_towns": {
+  "en": "Planned Towns",
+  "ru": "Планируемые города"
+ },
+ "pm_robotic_food_processing": {
+  "en": "Robotic Food Processing",
+  "ru": "Роботизированная переработка пищи"
+ },
+ "pm_self_replicating_construction": {
+  "en": "Self-Replicating Construction",
+  "ru": "Самовоспроизводящееся строительство"
+ },
+ "pm_smart_miners_building_coal_mine": {
+  "en": "Smart Miners",
+  "ru": "Интеллектуальные горные машины"
+ },
+ "pm_smart_miners_building_iron_mine": {
+  "en": "Smart Miners",
+  "ru": "Интеллектуальные горные машины"
+ },
+ "pm_smart_miners_building_lead_mine": {
+  "en": "Smart Miners",
+  "ru": "Интеллектуальные горные машины"
+ },
+ "pm_smart_miners_building_tech_metals_mine": {
+  "en": "Smart Miners",
+  "ru": "Интеллектуальные горные машины"
+ },
+ "pm_solar_colonization": {
+  "en": "Solar Colonization",
+  "ru": "Колонизация Солнечной системы"
+ },
+ "pm_sr_fabrication_fusion_shipyards": {
+  "en": "Fusion Shipyards",
+  "ru": "Термоядерные верфи"
+ },
+ "pm_sr_fabrication_lunar_foundries": {
+  "en": "Orbital Foundries",
+  "ru": "Орбитальные литейные"
+ },
+ "pm_sr_fabrication_orbital_assembly": {
+  "en": "Orbital Assembly",
+  "ru": "Орбитальная сборка"
+ },
+ "pmg_alpine_donawitz_steelworks": {
+  "en": "Alpine Donawitz Steelworks",
+  "ru": "Сталелитейный завод Альпине Донавиц"
+ },
+ "pmg_altos_hornos_baracaldo_furnaces": {
+  "en": "Altos Hornos de Baracaldo Furnaces",
+  "ru": "Печи Альтос-Орнос-де-Баракальдо"
+ },
+ "pmg_basf_ludwigshafen_plant": {
+  "en": "BASF Ludwigshafen Plant",
+  "ru": "Завод BASF в Людвигсхафене"
+ },
+ "pmg_bhp_broken_hill_mine": {
+  "en": "BHP Broken Hill Mine",
+  "ru": "Рудник BHP Брокен-Хилл"
+ },
+ "pmg_bolckow_eston_ironworks": {
+  "en": "Bolckow Eston Ironworks",
+  "ru": "Металлургический завод Болков Эстон"
+ },
+ "pmg_calcutta_electric_victoria_house": {
+  "en": "Calcutta Electric Victoria House",
+  "ru": "Калькутта Электрик, Виктория-хаус"
+ },
+ "pmg_carnegie_homestead_mill": {
+  "en": "Carnegie Homestead Mill",
+  "ru": "Завод Карнеги в Хомстеде"
+ },
+ "pmg_chr_hansen_copenhagen_laboratory": {
+  "en": "Chr. Hansen Copenhagen Laboratory",
+  "ru": "Копенгагенская лаборатория Chr. Hansen"
+ },
+ "pmg_cockerill_seraing_works": {
+  "en": "Cockerill Seraing Works",
+  "ru": "Заводы Коккериль в Серене"
+ },
+ "pmg_duro_la_felguera_steelworks": {
+  "en": "Duro La Felguera Steelworks",
+  "ru": "Сталелитейный завод Дуро Ла-Фельгера"
+ },
+ "pmg_eea_dock_sud_power_station": {
+  "en": "EEA Dock Sud Power Station",
+  "ru": "Электростанция EEA Док-Суд"
+ },
+ "pmg_electricidad_caracas_power_house": {
+  "en": "Electricidad de Caracas Power House",
+  "ru": "Электростанция Электрисидад де Каракас"
+ },
+ "pmg_explosives_building_tech_metals_mine": {
+  "en": "Explosives",
+  "ru": "Взрывчатые вещества"
+ },
+ "pmg_fundicao_ipanema_sorocaba_foundry": {
+  "en": "Fundição Ipanema Sorocaba Foundry",
+  "ru": "Литейный завод Фундисан Ипанема в Сорокабе"
+ },
+ "pmg_fundidora_monterrey_blast_furnace": {
+  "en": "Fundidora Monterrey Blast Furnace",
+  "ru": "Доменная печь Фундидора Монтеррей"
+ },
+ "pmg_generic_foundry_complex": {
+  "en": "Foundry Complex",
+  "ru": "Литейный комплекс"
+ },
+ "pmg_generic_mineral_refinery": {
+  "en": "Mineral Refinery Operations",
+  "ru": "Переработка минерального сырья"
+ },
+ "pmg_generic_power_hub": {
+  "en": "High-Efficiency Power Hub",
+  "ru": "Высокоэффективный энергоузел"
+ },
+ "pmg_hanseong_jeongi_gwanghwamun_station": {
+  "en": "Hanseong Jeongi Gwanghwamun Station",
+  "ru": "Станция Хансон Чонги Кванхвамун"
+ },
+ "pmg_hughes_yuzovka_steelworks": {
+  "en": "Hughes Yuzovka Steelworks",
+  "ru": "Сталелитейный завод Хьюза в Юзовке"
+ },
+ "pmg_ilva_bagnoli_steelworks": {
+  "en": "ILVA Bagnoli Steelworks",
+  "ru": "Сталелитейный завод ILVA в Баньоли"
+ },
+ "pmg_ingolstadt_power_station": {
+  "en": "Ingolstadt Power Station",
+  "ru": "Электростанция Ингольштадт"
+ },
+ "pmg_lilpop_warsaw_metalworks": {
+  "en": "Lilpop Warsaw Metalworks",
+  "ru": "Варшавский металлообрабатывающий завод Лилпоп"
+ },
+ "pmg_markwald_bangkok_rice_mill": {
+  "en": "Markwald Bangkok Rice Mill",
+  "ru": "Рисовая мельница Марквальд в Бангкоке"
+ },
+ "pmg_mfo_oerlikon_works": {
+  "en": "MFO Oerlikon Works",
+  "ru": "Заводы MFO в Эрликоне"
+ },
+ "pmg_mining_equipment_building_tech_metals_mine": {
+  "en": "Mining Equipment",
+  "ru": "Горное оборудование"
+ },
+ "pmg_norsk_hydro_rjukan_plant": {
+  "en": "Norsk Hydro Rjukan Plant",
+  "ru": "Завод Норск Хюдро в Рьюкане"
+ },
+ "pmg_sandford_newcastle_natal_ironworks": {
+  "en": "Sandford Newcastle Natal Ironworks",
+  "ru": "Металлургический завод Сэндфорд в Ньюкасле, Наталь"
+ },
+ "pmg_schneider_le_creusot": {
+  "en": "Schneider Le Creusot Works",
+  "ru": "Заводы Шнейдер в Ле-Крезо"
+ },
+ "pmg_siam_electric_wat_liab_station": {
+  "en": "Siam Electricity Wat Liab Power Station",
+  "ru": "Электростанция Сиамской электрической компании Ват Лиаб"
+ },
+ "pmg_steam_automation_building_tech_metals_mine": {
+  "en": "Automation",
+  "ru": "Автоматизация"
+ },
+ "pmg_sumitomo_besshi_mine": {
+  "en": "Sumitomo Besshi Mine",
+  "ru": "Рудник Сумитомо Бесси"
+ },
+ "pmg_synthetic_opium": {
+  "en": "Pharmaceuticals",
+  "ru": "Фармацевтика"
+ },
+ "pmg_tata_jamshedpur_works": {
+  "en": "Tata Jamshedpur Works",
+  "ru": "Заводы Тата в Джамшедпуре"
+ },
+ "pmg_thyssen_steelworks": {
+  "en": "Thyssen Steelworks",
+  "ru": "Сталелитейный завод Тиссен"
+ },
+ "pmg_tokyo_electric_asakusa_station": {
+  "en": "Tokyo Electric Asakusa Power Station",
+  "ru": "Электростанция Токио Электрик в Асакусе"
+ },
+ "pmg_uniao_fabril_barreiro_plant": {
+  "en": "União Fabril Barreiro Plant",
+  "ru": "Завод Униан Фабрил в Барейру"
+ },
+ "pmg_van_vlissingen_oostenburg_works": {
+  "en": "Van Vlissingen Oostenburg Works",
+  "ru": "Заводы Ван Флиссинген Остенбург"
+ },
+ "pmg_witkowitzer_ostrava_ironworks": {
+  "en": "Witkowitzer Ostrava Ironworks",
+  "ru": "Витковицкий металлургический завод в Остраве"
+ },
+ "pmg_yasuda_atosanupuri_mine": {
+  "en": "Yasuda Atosanupuri Sulfur Mine",
+  "ru": "Серный рудник Ясуда Атосанупури"
+ }
+}

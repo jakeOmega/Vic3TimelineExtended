@@ -155,6 +155,26 @@
   "en": "Undivided Farm Succession",
   "ru": "Неделимое наследование ферм"
  },
+ "arms_race_rival_pressure_modifier": {
+  "en": "Arms Race Pressure",
+  "ru": "Давление гонки вооружений"
+ },
+ "banking_capital_controls_out": {
+  "en": "Capital Controls",
+  "ru": "Контроль капитала"
+ },
+ "banking_dash_cat_external": {
+  "en": "External & Currency",
+  "ru": "Внешние расчёты и валюта"
+ },
+ "banking_dash_mon_band_label": {
+  "en": "Price Band",
+  "ru": "Ценовой коридор"
+ },
+ "banking_dash_mon_btn_recapitalise": {
+  "en": "Recapitalize the Bank",
+  "ru": "Рекапитализировать банк"
+ },
  "banking_dash_mon_mandate_dual": {
   "en": "Dual Mandate",
   "ru": "Двойной мандат"
@@ -171,6 +191,66 @@
   "en": "Peg Defense",
   "ru": "Защита привязки"
  },
+ "banking_dash_price_band_comfort": {
+  "en": "Stable prices",
+  "ru": "Стабильные цены"
+ },
+ "banking_dash_price_band_deflation": {
+  "en": "Deflation",
+  "ru": "Дефляция"
+ },
+ "banking_dash_price_band_elevated": {
+  "en": "Elevated",
+  "ru": "Повышенные"
+ },
+ "banking_dash_price_band_high": {
+  "en": "High",
+  "ru": "Высокие"
+ },
+ "banking_dash_price_band_hyper": {
+  "en": "Hyperinflation",
+  "ru": "Гиперинфляция"
+ },
+ "banking_dash_price_band_very_high": {
+  "en": "Very high",
+  "ru": "Очень высокие"
+ },
+ "banking_expand_deposit_guarantee": {
+  "en": "Expanded Deposit Guarantee",
+  "ru": "Расширенная гарантия вкладов"
+ },
+ "banking_external_import_charge": {
+  "en": "Import Financing Bill",
+  "ru": "Счёт за финансирование импорта"
+ },
+ "banking_external_sterilization_charge": {
+  "en": "Sterilization Bill",
+  "ru": "Счёт за стерилизацию"
+ },
+ "banking_foreign_borrowing_limits": {
+  "en": "Foreign-Currency Borrowing Limits",
+  "ru": "Лимиты заимствований в иностранной валюте"
+ },
+ "banking_nonmod_foreign_borrowing_limits_tt": {
+  "en": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_foreign_borrowing_limits').GetDesc]\\nUp to #v 50%#! after #v 24#! months.",
+  "ru": "$banking_nonmod_monthly_label$\\n[GetStaticModifier('banking_monthly_foreign_borrowing_limits').GetDesc]\\nДо #v 50%#! через #v 24#! мес."
+ },
+ "banking_nonmod_lifted_label": {
+  "en": "#title After lifting:#!",
+  "ru": "#title После снятия:#!"
+ },
+ "banking_nonmod_monthly_label": {
+  "en": "#title Each month:#!",
+  "ru": "#title Каждый месяц:#!"
+ },
+ "banking_nonmod_war_end_label": {
+  "en": "#title When the war ends:#!",
+  "ru": "#title Когда война закончится:#!"
+ },
+ "banking_raise_margin_requirements": {
+  "en": "Raised Margin Requirements",
+  "ru": "Повышенные маржинальные требования"
+ },
  "bg_megastructure_capped_private": {
   "en": "Private Megastructure Facility",
   "ru": "Частный мегаструктурный объект"
@@ -178,6 +258,46 @@
  "bg_sr_colony_sites": {
   "en": "Solar System Colonies",
   "ru": "Колонии Солнечной системы"
+ },
+ "border_dispute_resolved_modifier": {
+  "en": "Border Dispute Resolved",
+  "ru": "Пограничный спор урегулирован"
+ },
+ "ch_cultural_institutes_program": {
+  "en": "Cultural Institutes Program",
+  "ru": "Программа культурных институтов"
+ },
+ "ch_cultural_protectionism_program": {
+  "en": "Cultural Protectionism",
+  "ru": "Культурный протекционизм"
+ },
+ "ch_global_media_campaign": {
+  "en": "Global Media Campaign",
+  "ru": "Глобальная медиакампания"
+ },
+ "ch_model_developmentalist_junta": {
+  "en": "Developmentalist Junta",
+  "ru": "Хунта развития"
+ },
+ "ch_model_military_junta": {
+  "en": "Conservative Military Junta",
+  "ru": "Консервативная военная хунта"
+ },
+ "ch_model_royalist_absolutist": {
+  "en": "Absolutist Monarchist",
+  "ru": "Монархо-абсолютистская"
+ },
+ "ch_model_royalist_constitutional": {
+  "en": "Constitutional Monarchist",
+  "ru": "Монархо-конституционная"
+ },
+ "civil_rights_support_bar_name": {
+  "en": "Movement Support",
+  "ru": "Поддержка движения"
+ },
+ "colonial_cultural_assimilation_modifier": {
+  "en": "Cultural Assimilation Program",
+  "ru": "Программа культурной ассимиляции"
  },
  "concept_asset_relief_program": {
   "en": "Asset Relief Program",
@@ -599,6 +719,1006 @@
   "en": "World War",
   "ru": "Мировая война"
  },
+ "counter_propaganda_backlash_modifier": {
+  "en": "Propaganda Backfire",
+  "ru": "Провал пропаганды"
+ },
+ "country_nuclear_disarmament_bool": {
+  "en": "Nuclear Disarmament",
+  "ru": "Ядерное разоружение"
+ },
+ "country_nuclear_program_pause_bool": {
+  "en": "Nuclear Program Freeze",
+  "ru": "Заморозка ядерной программы"
+ },
+ "covert_exposed_op_link": {
+  "en": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],covert_exposed_op_tt #b [GetPlayer.GetCustom('covert_last_exposed_type_name')]#!#!",
+  "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],covert_exposed_op_tt #b [GetPlayer.GetCustom('covert_last_exposed_type_name')]#!#!"
+ },
+ "covert_foreign_ties_discredited": {
+  "en": "Foreign Ties Discredited",
+  "ru": "Иностранные связи дискредитированы"
+ },
+ "cr_btn_ending_coopted": {
+  "en": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_coopted_tt #b Reform on Paper#!#!",
+  "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_coopted_tt #b Реформа на бумаге#!#!"
+ },
+ "cr_btn_ending_federal": {
+  "en": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_federal_tt #b The Civil Rights Mandate is Signed#!#!",
+  "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_federal_tt #b Мандат гражданских прав подписан#!#!"
+ },
+ "cr_btn_ending_gradualist": {
+  "en": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_gradualist_tt #b A Settlement, At Last#!#!",
+  "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_gradualist_tt #b Наконец-то урегулирование#!#!"
+ },
+ "cr_btn_ending_grassroots": {
+  "en": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_grassroots_tt #b The Movement Carries the Day#!#!",
+  "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],cr_btn_ending_grassroots_tt #b Движение берёт верх#!#!"
+ },
+ "cr_cooptation_push_tt": {
+  "en": "Cooptation / Token Reform",
+  "ru": "Кооптация / символические реформы"
+ },
+ "cr_federal_push_tt": {
+  "en": "Federal Protection",
+  "ru": "Федеральная защита"
+ },
+ "cr_gradualist_push_tt": {
+  "en": "Gradualist Accommodation",
+  "ru": "Постепенное примирение"
+ },
+ "cr_grassroots_push_tt": {
+  "en": "Grassroots Organizing",
+  "ru": "Низовая самоорганизация"
+ },
+ "cr_segregationist_push_tt": {
+  "en": "Segregationist Consolidation",
+  "ru": "Сегрегационистская консолидация"
+ },
+ "cr_suppression_push_tt": {
+  "en": "Suppression / Crackdown",
+  "ru": "Подавление / репрессии"
+ },
+ "espionage_agent_exposed_modifier": {
+  "en": "Intelligence Network Exposed",
+  "ru": "Разведывательная сеть раскрыта"
+ },
+ "global_warming_high_latitudes": {
+  "en": "High-Latitude Warming",
+  "ru": "Потепление в высоких широтах"
+ },
+ "gm_arch_history_lead": {
+  "en": "Historical note:",
+  "ru": "Историческая справка:"
+ },
+ "gm_arch_site_ephesus_place": {
+  "en": "the silted plain of the Cayster below Ayasuluk",
+  "ru": "заиленная равнина Каистра под Аясулуком"
+ },
+ "gm_arch_site_hampi_place": {
+  "en": "the boulder hills on the Tungabhadra around Hampi",
+  "ru": "валунные холмы на Тунгабхадре вокруг Хампи"
+ },
+ "gm_arch_site_hattusa_place": {
+  "en": "the hills above Boğazköy, east of Ankara",
+  "ru": "холмы над Богазкёем к востоку от Анкары"
+ },
+ "gm_arch_site_khajuraho_place": {
+  "en": "the jungle around the village of Khajuraho",
+  "ru": "джунгли вокруг деревни Каджурахо"
+ },
+ "gm_arch_site_mogao_caves_place": {
+  "en": "the cliff of the Mogao grottoes near Dunhuang",
+  "ru": "утёс с гротами Могао близ Дуньхуана"
+ },
+ "gm_arch_site_monte_alban_place": {
+  "en": "the leveled mountaintop above the valley of Oaxaca",
+  "ru": "срезанная вершина горы над долиной Оахаки"
+ },
+ "gm_arch_site_mount_nemrut_place": {
+  "en": "the summit of Mount Nemrut in the Taurus",
+  "ru": "вершина горы Немрут в Тавре"
+ },
+ "gm_arch_site_palace_of_knossos_place": {
+  "en": "the hill of Kephala, south of Heraklion",
+  "ru": "холм Кефала к югу от Ираклиона"
+ },
+ "gm_arch_site_royal_cemetery_at_ur_place": {
+  "en": "Tell al-Muqayyar, the mound of Ur, near Nasiriyah",
+  "ru": "Телль-эль-Мукайир, курган Ура близ Насирии"
+ },
+ "gm_arch_site_royal_tombs_of_sipan_place": {
+  "en": "Huaca Rajada, the eroded adobe pyramids at Sipán",
+  "ru": "Уака-Раяда, размытые глинобитные пирамиды в Сипане"
+ },
+ "gm_arch_site_tomb_of_marquis_yi_place": {
+  "en": "Leigudun hill outside Suizhou",
+  "ru": "холм Лэйгудунь близ Суйчжоу"
+ },
+ "gm_arch_site_tomb_of_philip_ii_place": {
+  "en": "the Great Tumulus at Vergina",
+  "ru": "Великий курган в Вергине"
+ },
+ "gm_arch_site_villa_of_the_papyri_place": {
+  "en": "the buried Roman villa outside Herculaneum",
+  "ru": "погребённая римская вилла близ Геркуланума"
+ },
+ "gm_arch_site_vindolanda_tablets_place": {
+  "en": "the Roman fort of Vindolanda, behind Hadrian's Wall",
+  "ru": "римский форт Виндоланда за Адриановым валом"
+ },
+ "gm_boon_centenary": {
+  "en": "A Century of Nationhood",
+  "ru": "Столетие нации"
+ },
+ "gm_boon_defeat": {
+  "en": "Lest We Forget",
+  "ru": "Чтобы не забыть"
+ },
+ "gm_boon_faith": {
+  "en": "A Faith Proclaimed",
+  "ru": "Провозглашённая вера"
+ },
+ "gm_boon_great_power": {
+  "en": "A Seat Among the Powers",
+  "ru": "Место среди держав"
+ },
+ "gm_boon_homecoming": {
+  "en": "The Homecoming",
+  "ru": "Возвращение домой"
+ },
+ "gm_boon_regime": {
+  "en": "The New Order Proclaimed",
+  "ru": "Провозглашение нового порядка"
+ },
+ "gm_boon_reign": {
+  "en": "The New Reign",
+  "ru": "Новое правление"
+ },
+ "gm_boon_ruler_death": {
+  "en": "A Nation in Mourning",
+  "ru": "Нация в трауре"
+ },
+ "gm_boon_space": {
+  "en": "The Space Age",
+  "ru": "Космическая эра"
+ },
+ "gm_boon_tech_artistic": {
+  "en": "A Golden Age of the Arts",
+  "ru": "Золотой век искусств"
+ },
+ "gm_boon_tech_athletic": {
+  "en": "A Sporting Nation",
+  "ru": "Спортивная нация"
+ },
+ "gm_boon_tech_industrial": {
+  "en": "The Great Exhibition",
+  "ru": "Великая выставка"
+ },
+ "gm_boon_tech_naturalist": {
+  "en": "The Green Movement",
+  "ru": "Зелёное движение"
+ },
+ "gm_boon_tech_scientific": {
+  "en": "An Age of Inquiry",
+  "ru": "Эпоха познания"
+ },
+ "gm_boon_victory": {
+  "en": "Victory Parade",
+  "ru": "Парад победы"
+ },
+ "gm_mon_prev_rd_sup_line": {
+  "en": "\\nIts old supporters: #R [THIS.ScriptValue('gm_mon_disp_prev_rd_sup')|+1]#! approval, fading",
+  "ru": "\\nИх прежние сторонники: одобрение #R [THIS.ScriptValue('gm_mon_disp_prev_rd_sup')|+1]#!, угасает"
+ },
+ "gm_mon_prev_td_sup_line": {
+  "en": "\\nIts old supporters: #R [THIS.ScriptValue('gm_mon_disp_prev_td_sup')|+1]#! approval, fading",
+  "ru": "\\nИх прежние сторонники: одобрение #R [THIS.ScriptValue('gm_mon_disp_prev_td_sup')|+1]#!, угасает"
+ },
+ "gm_name_centenary_evt": {
+  "en": "the Centenary [ROOT.GetState.GetCustom('gm_form_name')]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] Столетия"
+ },
+ "gm_name_city_evt": {
+  "en": "the [ROOT.GetState.GetCityHubName] [ROOT.GetState.GetCustom('gm_form_name')]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] города [ROOT.GetState.GetCityHubName]"
+ },
+ "gm_name_defeat_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] to the Fallen of [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] павшим, [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]"
+ },
+ "gm_name_honours_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of [ROOT.GetState.GetCustom('gm_honours_name')]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')]: [ROOT.GetState.GetCustom('gm_honours_name')]"
+ },
+ "gm_name_skin_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_skin_name')]",
+  "ru": "[ROOT.GetState.GetCustom('gm_skin_name')]"
+ },
+ "gm_name_space_interstellar_probe_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Interstellar Voyage",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] межзвёздного полёта"
+ },
+ "gm_name_space_mars_landing_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Mars Landing",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] высадки на Марс"
+ },
+ "gm_name_space_moon_base_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Lunar Colony",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] лунной колонии"
+ },
+ "gm_name_space_moon_landing_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Moon Landing",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] высадки на Луну"
+ },
+ "gm_name_space_orbital_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the First Orbit",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] первой орбиты"
+ },
+ "gm_name_state_evt": {
+  "en": "the [ROOT.GetState.GetNameNoFormatting] [ROOT.GetState.GetCustom('gm_form_name')]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] области [ROOT.GetState.GetNameNoFormatting]"
+ },
+ "gm_name_victory_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the [ROOT.GetState.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting] War",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')] победы: [ROOT.GetState.MakeScope.Var('gm_name_enemy_cap').GetState.GetCountry.GetAdjectiveNoFormatting] фронт"
+ },
+ "gm_name_year_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]",
+  "ru": "[ROOT.GetState.GetCustom('gm_form_name')], [ROOT.GetState.MakeScope.ScriptValue('gm_state_name_year')|0]"
+ },
+ "gm_policy_ceremonial": {
+  "en": "State Ceremonial",
+  "ru": "Государственные церемонии"
+ },
+ "gm_policy_culture": {
+  "en": "Cultural Promotion",
+  "ru": "Поощрение культуры"
+ },
+ "gm_policy_education": {
+  "en": "Public Education",
+  "ru": "Народное образование"
+ },
+ "gm_policy_open": {
+  "en": "Open to the Public",
+  "ru": "Открыт для публики"
+ },
+ "gm_prev_rd_sup_line": {
+  "en": "\\nIts old supporters, #v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#!: #R [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_rd_sup')|+1]#! approval, fading",
+  "ru": "\\nПрежние сторонники, #v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#!: одобрение #R [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_rd_sup')|+1]#!, угасает"
+ },
+ "gm_prev_td_base_line": {
+  "en": "\\n#v [THIS.GetState.GetCustom('gm_base_ig_name')]#! approval: #G [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_td_base')|+1]#!, fading",
+  "ru": "\\n#v [THIS.GetState.GetCustom('gm_base_ig_name')]#!: одобрение #G [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_td_base')|+1]#!, угасает"
+ },
+ "gm_prev_td_sup_line": {
+  "en": "\\n#v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#! approval: #R [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_td_sup')|+1]#!, fading",
+  "ru": "\\n#v [THIS.GetState.GetCustom('gm_supporter_ig_name')]#!: одобрение #R [THIS.GetState.MakeScope.ScriptValue('gm_state_disp_prev_td_sup')|+1]#!, угасает"
+ },
+ "gm_sig_antiquity": {
+  "en": "Ancestral Antiquity",
+  "ru": "Древность предков"
+ },
+ "gm_sig_archive": {
+  "en": "Epigraphic Archive",
+  "ru": "Эпиграфический архив"
+ },
+ "gm_sig_concert_of_nations": {
+  "en": "To the Concert of Nations",
+  "ru": "Концерту наций"
+ },
+ "gm_sig_conquerors_of_space": {
+  "en": "To the Conquerors of Space",
+  "ru": "Покорителям космоса"
+ },
+ "gm_sig_conquerors_of_space_effect": {
+  "en": "#G +2%#! [concept_innovation]; the $ig_intelligentsia$ approve",
+  "ru": "#G +2%#! [concept_innovation|l]; одобрение со стороны группы $ig_intelligentsia$"
+ },
+ "gm_sig_heroes": {
+  "en": "Heroes of the Nation",
+  "ru": "Героям нации"
+ },
+ "gm_sig_liberty": {
+  "en": "Liberty",
+  "ru": "Свобода"
+ },
+ "gm_sig_martial_glory": {
+  "en": "Martial Glory",
+  "ru": "Воинская слава"
+ },
+ "gm_sig_name_arc_de_triomphe": {
+  "en": "To the Grande Armée",
+  "ru": "Великой армии"
+ },
+ "gm_sig_name_parthenon": {
+  "en": "The Glory of Athens",
+  "ru": "Слава Афин"
+ },
+ "gm_sig_name_temple_of_heaven": {
+  "en": "The Mandate of Heaven",
+  "ru": "Небесный мандат"
+ },
+ "gm_sig_name_terracotta_army": {
+  "en": "The First Emperor’s Army",
+  "ru": "Армия Первого императора"
+ },
+ "gm_sig_olympic": {
+  "en": "Olympic",
+  "ru": "Олимпийский"
+ },
+ "gm_sig_royal_pantheon": {
+  "en": "Royal Pantheon",
+  "ru": "Королевский пантеон"
+ },
+ "gm_sig_throne": {
+  "en": "Seat of the Throne",
+  "ru": "Престол"
+ },
+ "gm_sig_to_victory": {
+  "en": "To Victory",
+  "ru": "К победе"
+ },
+ "gm_sig_unknown_soldier": {
+  "en": "To the Unknown Soldier",
+  "ru": "Неизвестному солдату"
+ },
+ "gm_skin_landmark_aachen_cathedral": {
+  "en": "Aachen Cathedral",
+  "ru": "Ахенский собор"
+ },
+ "gm_skin_landmark_abu_simbel": {
+  "en": "Abu Simbel",
+  "ru": "Абу-Симбел"
+ },
+ "gm_skin_landmark_alexander_column": {
+  "en": "Alexander Column",
+  "ru": "Александровская колонна"
+ },
+ "gm_skin_landmark_alhambra": {
+  "en": "Alhambra",
+  "ru": "Альгамбра"
+ },
+ "gm_skin_landmark_amphitheatre_of_el_djem": {
+  "en": "Amphitheater of El Djem",
+  "ru": "Амфитеатр Эль-Джем"
+ },
+ "gm_skin_landmark_antikythera_mechanism": {
+  "en": "Antikythera Mechanism",
+  "ru": "Антикитерский механизм"
+ },
+ "gm_skin_landmark_arc_de_triomphe": {
+  "en": "Arc de Triomphe",
+  "ru": "Триумфальная арка"
+ },
+ "gm_skin_landmark_arch_of_ctesiphon": {
+  "en": "Arch of Ctesiphon",
+  "ru": "Арка Ктесифона"
+ },
+ "gm_skin_landmark_arco_de_santa_maria": {
+  "en": "Arco de Santa María",
+  "ru": "Арка Санта-Мария"
+ },
+ "gm_skin_landmark_baba_merzoug": {
+  "en": "Baba Merzoug",
+  "ru": "Баба-Мерзуг"
+ },
+ "gm_skin_landmark_basilica_of_saint_francis": {
+  "en": "Basilica of Saint Francis",
+  "ru": "Базилика Святого Франциска"
+ },
+ "gm_skin_landmark_basilica_of_superga": {
+  "en": "Basilica of Superga",
+  "ru": "Базилика Суперга"
+ },
+ "gm_skin_landmark_bodrum_castle": {
+  "en": "Bodrum Castle",
+  "ru": "Замок Бодрум"
+ },
+ "gm_skin_landmark_borobudur": {
+  "en": "Borobudur",
+  "ru": "Боробудур"
+ },
+ "gm_skin_landmark_brandenburg_gate": {
+  "en": "Brandenburg Gate",
+  "ru": "Бранденбургские ворота"
+ },
+ "gm_skin_landmark_buddhas_of_bamiyan": {
+  "en": "Buddhas of Bamiyan",
+  "ru": "Будды Бамиана"
+ },
+ "gm_skin_landmark_bukgwan_victory_stele": {
+  "en": "Bukgwan Victory Stele",
+  "ru": "Стела победы в Букгване"
+ },
+ "gm_skin_landmark_bulguksa": {
+  "en": "Bulguksa",
+  "ru": "Пульгукса"
+ },
+ "gm_skin_landmark_bunker_hill_monument": {
+  "en": "Bunker Hill Monument",
+  "ru": "Памятник на Банкер-Хилле"
+ },
+ "gm_skin_landmark_bust_of_nefertiti": {
+  "en": "Bust of Nefertiti",
+  "ru": "Бюст Нефертити"
+ },
+ "gm_skin_landmark_capitoline_museums": {
+  "en": "Capitoline Museums",
+  "ru": "Капитолийские музеи"
+ },
+ "gm_skin_landmark_caral_supe": {
+  "en": "Caral",
+  "ru": "Караль"
+ },
+ "gm_skin_landmark_cenotaph_of_maximilian": {
+  "en": "Cenotaph of Maximilian I",
+  "ru": "Кенотаф Максимилиана I"
+ },
+ "gm_skin_landmark_changdeokgung": {
+  "en": "Changdeokgung",
+  "ru": "Чхандоккун"
+ },
+ "gm_skin_landmark_charminar": {
+  "en": "Charminar",
+  "ru": "Чарминар"
+ },
+ "gm_skin_landmark_chateau_de_chambord": {
+  "en": "Château de Chambord",
+  "ru": "Замок Шамбор"
+ },
+ "gm_skin_landmark_chichen_itza": {
+  "en": "Chichén Itzá",
+  "ru": "Чичен-Ица"
+ },
+ "gm_skin_landmark_chogha_zanbil": {
+  "en": "Chogha Zanbil",
+  "ru": "Чога-Занбиль"
+ },
+ "gm_skin_landmark_citadel_of_aleppo": {
+  "en": "Citadel of Aleppo",
+  "ru": "Алеппская цитадель"
+ },
+ "gm_skin_landmark_cyrene": {
+  "en": "Cyrene",
+  "ru": "Кирена"
+ },
+ "gm_skin_landmark_dead_sea_scrolls": {
+  "en": "Dead Sea Scrolls",
+  "ru": "Свитки Мёртвого моря"
+ },
+ "gm_skin_landmark_deir_el_bahari_cache": {
+  "en": "Deir el-Bahari",
+  "ru": "Дейр-эль-Бахри"
+ },
+ "gm_skin_landmark_delphi": {
+  "en": "Delphi",
+  "ru": "Дельфы"
+ },
+ "gm_skin_landmark_diocletians_palace": {
+  "en": "Diocletian's Palace",
+  "ru": "Дворец Диоклетиана"
+ },
+ "gm_skin_landmark_ephesus": {
+  "en": "Ephesus",
+  "ru": "Эфес"
+ },
+ "gm_skin_landmark_fasil_ghebbi": {
+  "en": "Fasil Ghebbi",
+  "ru": "Фасил-Гебби"
+ },
+ "gm_skin_landmark_gobekli_tepe": {
+  "en": "Göbekli Tepe",
+  "ru": "Гёбекли-Тепе"
+ },
+ "gm_skin_landmark_golestan_palace": {
+  "en": "Golestan Palace",
+  "ru": "Дворец Голестан"
+ },
+ "gm_skin_landmark_grand_palace_bangkok": {
+  "en": "Grand Palace",
+  "ru": "Большой дворец"
+ },
+ "gm_skin_landmark_great_zimbabwe": {
+  "en": "Great Zimbabwe",
+  "ru": "Великий Зимбабве"
+ },
+ "gm_skin_landmark_gwalior_fort": {
+  "en": "Gwalior Fort",
+  "ru": "Форт Гвалиор"
+ },
+ "gm_skin_landmark_hampi": {
+  "en": "Hampi",
+  "ru": "Хампи"
+ },
+ "gm_skin_landmark_hattusa": {
+  "en": "Hattusa",
+  "ru": "Хаттуса"
+ },
+ "gm_skin_landmark_horses_of_saint_mark": {
+  "en": "Horses of Saint Mark",
+  "ru": "Кони Святого Марка"
+ },
+ "gm_skin_landmark_humble_administrators_garden": {
+  "en": "Humble Administrator's Garden",
+  "ru": "Сад скромного чиновника"
+ },
+ "gm_skin_landmark_imperial_city_of_hue": {
+  "en": "Imperial City of Huế",
+  "ru": "Императорский город Хюэ"
+ },
+ "gm_skin_landmark_ishtar_gate_babylon": {
+  "en": "Ishtar Gate of Babylon",
+  "ru": "Ворота Иштар в Вавилоне"
+ },
+ "gm_skin_landmark_itchan_kala": {
+  "en": "Itchan Kala",
+  "ru": "Ичан-Кала"
+ },
+ "gm_skin_landmark_itsukushima_shrine": {
+  "en": "Itsukushima Shrine",
+  "ru": "Храм Ицукусима"
+ },
+ "gm_skin_landmark_jantar_mantar": {
+  "en": "Jantar Mantar",
+  "ru": "Джантар-Мантар"
+ },
+ "gm_skin_landmark_jardim_botanico": {
+  "en": "Jardim Botânico",
+  "ru": "Ботанический сад"
+ },
+ "gm_skin_landmark_jeronimos_monastery": {
+  "en": "Jerónimos Monastery",
+  "ru": "Монастырь Жеронимуш"
+ },
+ "gm_skin_landmark_kazan_kremlin": {
+  "en": "Kazan Kremlin",
+  "ru": "Казанский кремль"
+ },
+ "gm_skin_landmark_khajuraho": {
+  "en": "Khajuraho",
+  "ru": "Каджурахо"
+ },
+ "gm_skin_landmark_kinkaku_ji": {
+  "en": "Kinkaku-ji",
+  "ru": "Кинкаку-дзи"
+ },
+ "gm_skin_landmark_klungkung_palace": {
+  "en": "Klungkung Palace",
+  "ru": "Дворец Клунгкунг"
+ },
+ "gm_skin_landmark_la_scala": {
+  "en": "La Scala",
+  "ru": "Ла Скала"
+ },
+ "gm_skin_landmark_lascaux_caves": {
+  "en": "Lascaux",
+  "ru": "Ласко"
+ },
+ "gm_skin_landmark_leptis_magna": {
+  "en": "Leptis Magna",
+  "ru": "Лептис-Магна"
+ },
+ "gm_skin_landmark_leshan_giant_buddha": {
+  "en": "Leshan Giant Buddha",
+  "ru": "Большой Будда в Лэшане"
+ },
+ "gm_skin_landmark_liberty_column": {
+  "en": "Liberty Column",
+  "ru": "Колонна Свободы"
+ },
+ "gm_skin_landmark_lion_monument": {
+  "en": "Lion Monument",
+  "ru": "Люцернский лев"
+ },
+ "gm_skin_landmark_lion_of_saint_mark": {
+  "en": "Lion of Saint Mark",
+  "ru": "Лев Святого Марка"
+ },
+ "gm_skin_landmark_longmen_grottoes": {
+  "en": "Longmen Grottoes",
+  "ru": "Лунмэньские пещеры"
+ },
+ "gm_skin_landmark_luxor_obelisk": {
+  "en": "Luxor Obelisk",
+  "ru": "Луксорский обелиск"
+ },
+ "gm_skin_landmark_machu_picchu": {
+  "en": "Machu Picchu",
+  "ru": "Мачу-Пикчу"
+ },
+ "gm_skin_landmark_marksburg": {
+  "en": "Marksburg",
+  "ru": "Марксбург"
+ },
+ "gm_skin_landmark_mausoleum_of_sultan_sanjar": {
+  "en": "Mausoleum of Sultan Sanjar",
+  "ru": "Мавзолей султана Санджара"
+ },
+ "gm_skin_landmark_mawangdui_tombs": {
+  "en": "Mawangdui Tombs",
+  "ru": "Гробницы Мавандуй"
+ },
+ "gm_skin_landmark_merida_theatre": {
+  "en": "Roman Theater of Mérida",
+  "ru": "Римский театр в Мериде"
+ },
+ "gm_skin_landmark_mesha_stele": {
+  "en": "Mesha Stele",
+  "ru": "Стела Меши"
+ },
+ "gm_skin_landmark_meteora": {
+  "en": "Meteora",
+  "ru": "Метеоры"
+ },
+ "gm_skin_landmark_mezquita_of_cordoba": {
+  "en": "Mezquita of Córdoba",
+  "ru": "Мескита в Кордове"
+ },
+ "gm_skin_landmark_mogao_caves": {
+  "en": "Mogao Library Cave",
+  "ru": "Библиотечная пещера Могао"
+ },
+ "gm_skin_landmark_mohenjo_daro": {
+  "en": "Mohenjo-daro",
+  "ru": "Мохенджо-Даро"
+ },
+ "gm_skin_landmark_mont_saint_michel": {
+  "en": "Mont-Saint-Michel",
+  "ru": "Мон-Сен-Мишель"
+ },
+ "gm_skin_landmark_monte_alban": {
+  "en": "Monte Albán",
+  "ru": "Монте-Альбан"
+ },
+ "gm_skin_landmark_moscow_kremlin": {
+  "en": "Moscow Kremlin",
+  "ru": "Московский Кремль"
+ },
+ "gm_skin_landmark_mount_nemrut": {
+  "en": "Mount Nemrut",
+  "ru": "Гора Немрут"
+ },
+ "gm_skin_landmark_muhammad_ali_mosque": {
+  "en": "Muhammad Ali Mosque",
+  "ru": "Мечеть Мухаммеда Али"
+ },
+ "gm_skin_landmark_musalla_of_herat": {
+  "en": "Musalla of Herat",
+  "ru": "Мусалла в Герате"
+ },
+ "gm_skin_landmark_mycenae_grave_circle": {
+  "en": "Mycenae",
+  "ru": "Микены"
+ },
+ "gm_skin_landmark_nag_hammadi_library": {
+  "en": "Nag Hammadi Library",
+  "ru": "Библиотека Наг-Хаммади"
+ },
+ "gm_skin_landmark_naqsh_e_jahan_square": {
+  "en": "Naqsh-e Jahan Square",
+  "ru": "Площадь Накше-Джахан"
+ },
+ "gm_skin_landmark_nelsons_column": {
+  "en": "Nelson's Column",
+  "ru": "Колонна Нельсона"
+ },
+ "gm_skin_landmark_nikko_toshogu": {
+  "en": "Nikkō Tōshō-gū",
+  "ru": "Никко-Тосёгу"
+ },
+ "gm_skin_landmark_nineveh_library": {
+  "en": "Library of Ashurbanipal",
+  "ru": "Библиотека Ашшурбанипала"
+ },
+ "gm_skin_landmark_obelisk_of_the_second_of_may": {
+  "en": "Obelisk of the Second of May",
+  "ru": "Обелиск Второго мая"
+ },
+ "gm_skin_landmark_obelisks_of_karnak": {
+  "en": "Obelisks of Karnak",
+  "ru": "Обелиски Карнака"
+ },
+ "gm_skin_landmark_old_city_of_sanaa": {
+  "en": "Old City of Sana'a",
+  "ru": "Старый город Саны"
+ },
+ "gm_skin_landmark_olympia": {
+  "en": "Olympia",
+  "ru": "Олимпия"
+ },
+ "gm_skin_landmark_oseberg_ship": {
+  "en": "Oseberg Ship",
+  "ru": "Корабль из Осеберга"
+ },
+ "gm_skin_landmark_otzi_the_iceman": {
+  "en": "Ötzi the Iceman",
+  "ru": "Ледяной человек Эци"
+ },
+ "gm_skin_landmark_palace_of_knossos": {
+  "en": "Palace of Knossos",
+  "ru": "Кносский дворец"
+ },
+ "gm_skin_landmark_palais_des_papes": {
+  "en": "Palais des Papes",
+  "ru": "Папский дворец"
+ },
+ "gm_skin_landmark_palmyra": {
+  "en": "Palmyra",
+  "ru": "Пальмира"
+ },
+ "gm_skin_landmark_parthenon": {
+  "en": "Parthenon",
+  "ru": "Парфенон"
+ },
+ "gm_skin_landmark_pergamon_altar": {
+  "en": "Pergamon Altar",
+  "ru": "Пергамский алтарь"
+ },
+ "gm_skin_landmark_persepolis": {
+  "en": "Persepolis",
+  "ru": "Персеполь"
+ },
+ "gm_skin_landmark_petra": {
+  "en": "Petra",
+  "ru": "Петра"
+ },
+ "gm_skin_landmark_piraeus_lion": {
+  "en": "Piraeus Lion",
+  "ru": "Пирейский лев"
+ },
+ "gm_skin_landmark_pompeii": {
+  "en": "Pompeii",
+  "ru": "Помпеи"
+ },
+ "gm_skin_landmark_pont_du_gard": {
+  "en": "Pont du Gard",
+  "ru": "Пон-дю-Гар"
+ },
+ "gm_skin_landmark_potala_palace": {
+  "en": "Potala Palace",
+  "ru": "Дворец Потала"
+ },
+ "gm_skin_landmark_pyramids_of_giza": {
+  "en": "Pyramids of Giza",
+  "ru": "Пирамиды Гизы"
+ },
+ "gm_skin_landmark_pyramids_of_meroe": {
+  "en": "Pyramids of Meroë",
+  "ru": "Пирамиды Мероэ"
+ },
+ "gm_skin_landmark_red_fort": {
+  "en": "Red Fort",
+  "ru": "Красный форт"
+ },
+ "gm_skin_landmark_registan": {
+  "en": "Registan",
+  "ru": "Регистан"
+ },
+ "gm_skin_landmark_rosetta_stone": {
+  "en": "Rosetta Stone",
+  "ru": "Розеттский камень"
+ },
+ "gm_skin_landmark_royal_cemetery_at_ur": {
+  "en": "Royal Cemetery at Ur",
+  "ru": "Царское кладбище в Уре"
+ },
+ "gm_skin_landmark_royal_palace_of_benin": {
+  "en": "Royal Palace of Benin",
+  "ru": "Королевский дворец Бенина"
+ },
+ "gm_skin_landmark_royal_palace_of_kandy": {
+  "en": "Royal Palace of Kandy",
+  "ru": "Королевский дворец в Канди"
+ },
+ "gm_skin_landmark_royal_palace_of_kumasi": {
+  "en": "Royal Palace of Kumasi",
+  "ru": "Королевский дворец в Кумаси"
+ },
+ "gm_skin_landmark_royal_palaces_of_abomey": {
+  "en": "Royal Palaces of Abomey",
+  "ru": "Королевские дворцы Абомея"
+ },
+ "gm_skin_landmark_royal_tombs_of_sipan": {
+  "en": "Royal Tombs of Sipán",
+  "ru": "Царские гробницы Сипана"
+ },
+ "gm_skin_landmark_saint_sophia_kiev": {
+  "en": "Saint Sophia Cathedral",
+  "ru": "Софийский собор"
+ },
+ "gm_skin_landmark_sans_souci_palace": {
+  "en": "Sans-Souci Palace",
+  "ru": "Дворец Сансуси"
+ },
+ "gm_skin_landmark_sanxingdui_pits": {
+  "en": "Sanxingdui",
+  "ru": "Саньсиндуй"
+ },
+ "gm_skin_landmark_shalimar_gardens": {
+  "en": "Shalimar Gardens",
+  "ru": "Сады Шалимар"
+ },
+ "gm_skin_landmark_shibam": {
+  "en": "Shibam",
+  "ru": "Шибам"
+ },
+ "gm_skin_landmark_shore_temple": {
+  "en": "Shore Temple of Mahabalipuram",
+  "ru": "Прибрежный храм в Махабалипураме"
+ },
+ "gm_skin_landmark_sidon_necropolis": {
+  "en": "Royal Necropolis of Sidon",
+  "ru": "Царский некрополь Сидона"
+ },
+ "gm_skin_landmark_statue_of_louis_xiv": {
+  "en": "Statue of Louis XIV",
+  "ru": "Статуя Людовика XIV"
+ },
+ "gm_skin_landmark_stelae_of_aksum": {
+  "en": "Stelae of Aksum",
+  "ru": "Стелы Аксума"
+ },
+ "gm_skin_landmark_sutton_hoo": {
+  "en": "Sutton Hoo",
+  "ru": "Саттон-Ху"
+ },
+ "gm_skin_landmark_swayambhunath": {
+  "en": "Swayambhunath",
+  "ru": "Сваямбхунатх"
+ },
+ "gm_skin_landmark_teatro_di_san_carlo": {
+  "en": "Teatro di San Carlo",
+  "ru": "Театр Сан-Карло"
+ },
+ "gm_skin_landmark_temple_of_confucius": {
+  "en": "Temple of Confucius",
+  "ru": "Храм Конфуция"
+ },
+ "gm_skin_landmark_temple_of_dendera": {
+  "en": "Temple of Dendera",
+  "ru": "Храм в Дендере"
+ },
+ "gm_skin_landmark_temple_of_heaven": {
+  "en": "Temple of Heaven",
+  "ru": "Храм Неба"
+ },
+ "gm_skin_landmark_temple_of_seti_abydos": {
+  "en": "Temple of Seti I at Abydos",
+  "ru": "Храм Сети I в Абидосе"
+ },
+ "gm_skin_landmark_temples_of_baalbek": {
+  "en": "Temples of Baalbek",
+  "ru": "Храмы Баальбека"
+ },
+ "gm_skin_landmark_teotihuacan": {
+  "en": "Teotihuacan",
+  "ru": "Теотиуакан"
+ },
+ "gm_skin_landmark_terracotta_army": {
+  "en": "Terracotta Army",
+  "ru": "Терракотовая армия"
+ },
+ "gm_skin_landmark_tikal": {
+  "en": "Tikal",
+  "ru": "Тикаль"
+ },
+ "gm_skin_landmark_tipus_tiger": {
+  "en": "Tipu's Tiger",
+  "ru": "Тигр Типу"
+ },
+ "gm_skin_landmark_todai_ji": {
+  "en": "Tōdai-ji",
+  "ru": "Тодай-дзи"
+ },
+ "gm_skin_landmark_tomb_of_alexander": {
+  "en": "Tomb of Alexander the Great",
+  "ru": "Гробница Александра Македонского"
+ },
+ "gm_skin_landmark_tomb_of_marquis_yi": {
+  "en": "Tomb of Marquis Yi",
+  "ru": "Гробница маркиза И"
+ },
+ "gm_skin_landmark_tomb_of_pakal": {
+  "en": "Temple of the Inscriptions",
+  "ru": "Храм Надписей"
+ },
+ "gm_skin_landmark_tomb_of_philip_ii": {
+  "en": "Royal Tombs of Vergina",
+  "ru": "Царские гробницы Вергины"
+ },
+ "gm_skin_landmark_tomb_of_tutankhamun": {
+  "en": "Tomb of Tutankhamun",
+  "ru": "Гробница Тутанхамона"
+ },
+ "gm_skin_landmark_tomb_of_william_the_silent": {
+  "en": "Tomb of William the Silent",
+  "ru": "Гробница Вильгельма Молчаливого"
+ },
+ "gm_skin_landmark_topkapi_palace": {
+  "en": "Topkapı Palace",
+  "ru": "Дворец Топкапы"
+ },
+ "gm_skin_landmark_troy_hisarlik": {
+  "en": "Troy",
+  "ru": "Троя"
+ },
+ "gm_skin_landmark_uffizi_gallery": {
+  "en": "Uffizi",
+  "ru": "Уффици"
+ },
+ "gm_skin_landmark_valley_of_the_temples": {
+  "en": "Valley of the Temples",
+  "ru": "Долина храмов"
+ },
+ "gm_skin_landmark_venus_de_milo": {
+  "en": "Venus de Milo",
+  "ru": "Венера Милосская"
+ },
+ "gm_skin_landmark_villa_of_the_papyri": {
+  "en": "Villa of the Papyri",
+  "ru": "Вилла папирусов"
+ },
+ "gm_skin_landmark_vindolanda_tablets": {
+  "en": "Vindolanda",
+  "ru": "Виндоланда"
+ },
+ "gm_skin_landmark_walhalla": {
+  "en": "Walhalla",
+  "ru": "Валхалла"
+ },
+ "gm_skin_landmark_walls_of_tallinn": {
+  "en": "Walls of Tallinn",
+  "ru": "Таллинские стены"
+ },
+ "gm_skin_landmark_washington_monument": {
+  "en": "Washington Monument",
+  "ru": "Монумент Вашингтона"
+ },
+ "gm_skin_landmark_washington_monument_baltimore": {
+  "en": "Baltimore's Washington Monument",
+  "ru": "Монумент Вашингтона в Балтиморе"
+ },
+ "gm_skin_landmark_windsor_castle": {
+  "en": "Windsor Castle",
+  "ru": "Виндзорский замок"
+ },
+ "gm_skin_landmark_winged_victory_of_samothrace": {
+  "en": "Winged Victory of Samothrace",
+  "ru": "Ника Самофракийская"
+ },
+ "gm_skin_landmark_xanthos": {
+  "en": "Xanthos",
+  "ru": "Ксанф"
+ },
+ "gm_skin_landmark_yungang_grottoes": {
+  "en": "Yungang Grottoes",
+  "ru": "Пещеры Юньган"
+ },
+ "gm_tr_row_detail": {
+  "en": "[ScriptContainer.GetCustom('gm_tr_dedication_name')], from [ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetName], taken in [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_year')|0]",
+  "ru": "[ScriptContainer.GetCustom('gm_tr_dedication_name')]; происхождение: [ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetName], год: [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_year')|0]"
+ },
+ "gm_tr_row_landmark_tt": {
+  "en": "#b Historical monument#!\\n[ScriptContainer.GetCustom('gm_tr_landmark_desc')]",
+  "ru": "#b Исторический памятник#!\\n[ScriptContainer.GetCustom('gm_tr_landmark_desc')]"
+ },
+ "gp_intervention_condemned_modifier": {
+  "en": "Intervention Condemned",
+  "ru": "Вмешательство осуждено"
+ },
+ "gp_intervention_target_modifier": {
+  "en": "Foreign Intervention",
+  "ru": "Иностранное вмешательство"
+ },
+ "gw_hist_chart_share_title": {
+  "en": "Our Share of World Emissions",
+  "ru": "Наша доля мировых выбросов"
+ },
+ "gw_hist_chart_temp_title": {
+  "en": "Global Temperature",
+  "ru": "Глобальная температура"
+ },
  "ig_approval_negative_modifier": {
   "en": "Disapproves of Policy",
   "ru": "Не одобряет политику"
@@ -610,6 +1730,206 @@
  "ig_approval_very_negative_modifier": {
   "en": "Strongly Disapproves of Policy",
   "ru": "Решительно не одобряет политику"
+ },
+ "imperial_federation_act_civilizing_mission": {
+  "en": "Civilizing Mission Compact",
+  "ru": "Пакт о цивилизаторской миссии"
+ },
+ "imperial_federation_act_iron_fist": {
+  "en": "Imperial Federation Act",
+  "ru": "Акт об имперской федерации"
+ },
+ "inh_continuity_of_title": {
+  "en": "Continuity of Title",
+  "ru": "Преемственность титула"
+ },
+ "inh_forced_heirship_rural": {
+  "en": "Divided Holdings",
+  "ru": "Раздел владений"
+ },
+ "inh_undivided_farm_rural": {
+  "en": "Undivided Farms",
+  "ru": "Неделимые фермы"
+ },
+ "irr_cultural_ties_modifier": {
+  "en": "Cultural Ties Strengthened",
+  "ru": "Культурные связи укреплены"
+ },
+ "irr_seek_war_blessing": {
+  "en": "Seek Blessing for Reunification",
+  "ru": "Искать благословение на воссоединение"
+ },
+ "iw_catch_policy_name_0": {
+  "en": "Ask",
+  "ru": "Спросить"
+ },
+ "iw_catch_policy_name_1": {
+  "en": "Ask if severe",
+  "ru": "Спросить, если серьёзно"
+ },
+ "iw_catch_policy_name_2": {
+  "en": "Expose",
+  "ru": "Разоблачить"
+ },
+ "iw_catch_policy_name_3": {
+  "en": "Watch",
+  "ru": "Наблюдать"
+ },
+ "iw_funding_name_0": {
+  "en": "Dormant",
+  "ru": "Спящая"
+ },
+ "iw_funding_name_1": {
+  "en": "Operational",
+  "ru": "Действующая"
+ },
+ "iw_funding_name_2": {
+  "en": "Professional",
+  "ru": "Профессиональная"
+ },
+ "iw_funding_name_3": {
+  "en": "Covert Network",
+  "ru": "Тайная сеть"
+ },
+ "iw_funding_name_4": {
+  "en": "Black Budget",
+  "ru": "Чёрная касса"
+ },
+ "iw_funding_name_5": {
+  "en": "Deep State",
+  "ru": "Глубинное государство"
+ },
+ "iw_op_name_comms_disruption": {
+  "en": "Communications Disruption",
+  "ru": "Нарушение связи"
+ },
+ "iw_op_name_counterintel_support": {
+  "en": "Counterintelligence Support",
+  "ru": "Контрразведывательная поддержка"
+ },
+ "iw_op_name_cultivate_assets": {
+  "en": "Cultivate Assets",
+  "ru": "Вербовать агентуру"
+ },
+ "iw_op_name_destabilization": {
+  "en": "Destabilization",
+  "ru": "Дестабилизация"
+ },
+ "iw_op_name_election_interference": {
+  "en": "Election Interference",
+  "ru": "Вмешательство в выборы"
+ },
+ "iw_op_name_financial_subversion": {
+  "en": "Financial Subversion",
+  "ru": "Финансовая диверсия"
+ },
+ "iw_op_name_ideological_subversion": {
+  "en": "Ideological Subversion",
+  "ru": "Идеологическая диверсия"
+ },
+ "iw_op_name_incite_autonomy": {
+  "en": "Incite Colonial Autonomy",
+  "ru": "Разжигать колониальную автономию"
+ },
+ "iw_op_name_industrial_espionage": {
+  "en": "Industrial Espionage",
+  "ru": "Промышленный шпионаж"
+ },
+ "iw_op_name_influence_campaign": {
+  "en": "Influence Campaign",
+  "ru": "Кампания влияния"
+ },
+ "iw_op_name_infrastructure_sabotage": {
+  "en": "Infrastructure Sabotage",
+  "ru": "Саботаж инфраструктуры"
+ },
+ "iw_op_name_military_espionage": {
+  "en": "Military Espionage",
+  "ru": "Военный шпионаж"
+ },
+ "iw_op_name_nuclear_sabotage": {
+  "en": "Nuclear Program Sabotage",
+  "ru": "Саботаж ядерной программы"
+ },
+ "iw_op_name_regime_change": {
+  "en": "Regime Change",
+  "ru": "Смена режима"
+ },
+ "iw_op_name_sabotage_colony": {
+  "en": "Sabotage Colony",
+  "ru": "Саботировать колонию"
+ },
+ "iw_op_name_secure_material": {
+  "en": "Secure Loose Material",
+  "ru": "Обезопасить бесхозный материал"
+ },
+ "iw_op_name_space_espionage": {
+  "en": "Space Program Espionage",
+  "ru": "Шпионаж за космической программой"
+ },
+ "iw_op_name_survey_defences": {
+  "en": "Survey Colony Defenses",
+  "ru": "Разведать оборону колонии"
+ },
+ "iw_tradecraft_tier_name_1": {
+  "en": "Fledgling",
+  "ru": "Новичок"
+ },
+ "iw_tradecraft_tier_name_2": {
+  "en": "Established",
+  "ru": "Состоявшийся"
+ },
+ "iw_tradecraft_tier_name_3": {
+  "en": "Seasoned",
+  "ru": "Опытный"
+ },
+ "iw_tradecraft_tier_name_4": {
+  "en": "Veteran",
+  "ru": "Ветеран"
+ },
+ "nd_taboo_band_1": {
+  "en": "Normalized",
+  "ru": "Нормализованное"
+ },
+ "nd_taboo_band_2": {
+  "en": "Fragile",
+  "ru": "Хрупкое"
+ },
+ "nd_taboo_band_3": {
+  "en": "Established",
+  "ru": "Устоявшееся"
+ },
+ "nd_taboo_band_4": {
+  "en": "Strong",
+  "ru": "Сильное"
+ },
+ "nd_taboo_band_5": {
+  "en": "Absolute",
+  "ru": "Абсолютное"
+ },
+ "nd_taboo_hist_target_title": {
+  "en": "Where the Taboo Was Heading",
+  "ru": "Куда шло табу"
+ },
+ "nd_taboo_hist_title": {
+  "en": "The Nuclear Taboo",
+  "ru": "Ядерное табу"
+ },
+ "nd_withdraw_umbrella_action": {
+  "en": "Withdraw Nuclear Umbrella",
+  "ru": "Отозвать ядерный зонтик"
+ },
+ "nuclear_standoff_relief_modifier": {
+  "en": "Nuclear Crisis Averted",
+  "ru": "Ядерный кризис предотвращён"
+ },
+ "nuclear_standoff_tension_modifier": {
+  "en": "Nuclear Standoff",
+  "ru": "Ядерное противостояние"
+ },
+ "nuclear_standoff_terror_modifier": {
+  "en": "Nuclear Terror",
+  "ru": "Ядерный террор"
  },
  "principle_monetary_union_1": {
   "en": "Monetary Cooperation",
@@ -630,6 +1950,558 @@
  "principle_monetary_union_5": {
   "en": "Reserve Currency",
   "ru": "Резервная валюта"
+ },
+ "proxy_conflict_destabilized_modifier": {
+  "en": "Sphere Destabilized",
+  "ru": "Сфера дестабилизирована"
+ },
+ "sr_colony_amalthea_physics": {
+  "en": "Amalthea Physics Lab",
+  "ru": "Физическая лаборатория Амальтеи"
+ },
+ "sr_colony_amalthea_rings": {
+  "en": "Amalthea Ring Study",
+  "ru": "Изучение колец Амальтеи"
+ },
+ "sr_colony_arcadia_civilian": {
+  "en": "Arcadia Civilian Colony",
+  "ru": "Гражданская колония Аркадии"
+ },
+ "sr_colony_arcadia_military": {
+  "en": "Arcadia Military Outpost",
+  "ru": "Военный форпост Аркадии"
+ },
+ "sr_colony_ariel_cryovolcanic": {
+  "en": "Ariel Cryovolcanic Station",
+  "ru": "Криовулканическая станция Ариэля"
+ },
+ "sr_colony_ariel_quarrying": {
+  "en": "Ariel Ice Quarrying",
+  "ru": "Добыча льда на Ариэле"
+ },
+ "sr_colony_callisto_agricultural": {
+  "en": "Callisto Agricultural Colony",
+  "ru": "Сельскохозяйственная колония Каллисто"
+ },
+ "sr_colony_callisto_gateway": {
+  "en": "Callisto Gateway Colony",
+  "ru": "Колония-шлюз Каллисто"
+ },
+ "sr_colony_ceres_observatory": {
+  "en": "Ceres Observatory",
+  "ru": "Обсерватория Цереры"
+ },
+ "sr_colony_ceres_waystation": {
+  "en": "Ceres Deep-Space Waystation",
+  "ru": "Станция дальнего космоса на Церере"
+ },
+ "sr_colony_daedalus_relay": {
+  "en": "Daedalus Deep-Space Relay",
+  "ru": "Ретранслятор дальнего космоса в кратере Дедал"
+ },
+ "sr_colony_daedalus_telescope": {
+  "en": "Daedalus Radio Telescope",
+  "ru": "Радиотелескоп в кратере Дедал"
+ },
+ "sr_colony_enceladus_astrobiology": {
+  "en": "Enceladus Astrobiology Lab",
+  "ru": "Астробиологическая лаборатория Энцелада"
+ },
+ "sr_colony_enceladus_water": {
+  "en": "Enceladus Water Extraction",
+  "ru": "Добыча воды на Энцеладе"
+ },
+ "sr_colony_eris_monitoring": {
+  "en": "Eris Monitoring Station",
+  "ru": "Станция наблюдения Эриды"
+ },
+ "sr_colony_eris_selfsufficiency": {
+  "en": "Eris Self-Sufficiency Colony",
+  "ru": "Самодостаточная колония Эриды"
+ },
+ "sr_colony_europa_drilling": {
+  "en": "Europa Subsurface Drilling",
+  "ru": "Подлёдное бурение на Европе"
+ },
+ "sr_colony_europa_surface": {
+  "en": "Europa Surface Habitat",
+  "ru": "Поверхностное поселение Европы"
+ },
+ "sr_colony_ganymede_command": {
+  "en": "Ganymede Command Center",
+  "ru": "Командный центр Ганимеда"
+ },
+ "sr_colony_ganymede_settlement": {
+  "en": "Ganymede Settlement",
+  "ru": "Поселение на Ганимеде"
+ },
+ "sr_colony_haumea_dynamics": {
+  "en": "Haumea Dynamics Laboratory",
+  "ru": "Лаборатория динамики Хаумеа"
+ },
+ "sr_colony_haumea_rings": {
+  "en": "Haumea Ring Study",
+  "ru": "Изучение колец Хаумеа"
+ },
+ "sr_colony_hellas_astrobiology": {
+  "en": "Hellas Astrobiology Lab",
+  "ru": "Астробиологическая лаборатория Эллады"
+ },
+ "sr_colony_hellas_settlement": {
+  "en": "Hellas Basin Settlement",
+  "ru": "Поселение в бассейне Эллада"
+ },
+ "sr_colony_himalia_depot": {
+  "en": "Himalia Fuel Depot",
+  "ru": "Топливный склад Гималии"
+ },
+ "sr_colony_himalia_telescope": {
+  "en": "Himalia Telescope Array",
+  "ru": "Телескопическая решётка Гималии"
+ },
+ "sr_colony_hygiea_automated": {
+  "en": "Hygiea Automated Hub",
+  "ru": "Автоматизированный узел Гигеи"
+ },
+ "sr_colony_hygiea_volatiles": {
+  "en": "Hygiea Volatile Extraction",
+  "ru": "Добыча летучих веществ на Гигее"
+ },
+ "sr_colony_iapetus_organics": {
+  "en": "Iapetus Organic Analysis",
+  "ru": "Анализ органики Япета"
+ },
+ "sr_colony_iapetus_ridge": {
+  "en": "Iapetus Ridge Survey",
+  "ru": "Исследование хребта Япета"
+ },
+ "sr_colony_imbrium_kreep": {
+  "en": "Imbrium KREEP Mining",
+  "ru": "Добыча KREEP в Море Дождей"
+ },
+ "sr_colony_imbrium_massdriver": {
+  "en": "Imbrium Mass Driver",
+  "ru": "Электромагнитная катапульта в Море Дождей"
+ },
+ "sr_colony_io_mining": {
+  "en": "Io Mining Operations",
+  "ru": "Горные работы на Ио"
+ },
+ "sr_colony_io_research": {
+  "en": "Io Volcanological Station",
+  "ru": "Вулканологическая станция на Ио"
+ },
+ "sr_colony_makemake_chemistry": {
+  "en": "Makemake Ice Chemistry",
+  "ru": "Химия льдов Макемаке"
+ },
+ "sr_colony_makemake_solarwind": {
+  "en": "Makemake Solar Wind Research",
+  "ru": "Изучение солнечного ветра на Макемаке"
+ },
+ "sr_colony_marius_hardened": {
+  "en": "Marius Hills Hardened Installation",
+  "ru": "Укреплённый объект в холмах Мариуса"
+ },
+ "sr_colony_marius_lavatubes": {
+  "en": "Marius Hills Lava Tube City",
+  "ru": "Город в лавовых трубках холмов Мариуса"
+ },
+ "sr_colony_mercury_ice": {
+  "en": "Mercury Polar Ice Extraction",
+  "ru": "Добыча полярного льда на Меркурии"
+ },
+ "sr_colony_mercury_solar": {
+  "en": "Mercury Solar Megastation",
+  "ru": "Солнечная мегастанция на Меркурии"
+ },
+ "sr_colony_mimas_gravity": {
+  "en": "Mimas Gravity Research",
+  "ru": "Гравитационные исследования на Мимасе"
+ },
+ "sr_colony_mimas_installation": {
+  "en": "Mimas Crater Installation",
+  "ru": "Кратерная установка на Мимасе"
+ },
+ "sr_colony_miranda_drilling": {
+  "en": "Miranda Subsurface Drilling",
+  "ru": "Подлёдное бурение на Миранде"
+ },
+ "sr_colony_miranda_rupes": {
+  "en": "Miranda Verona Rupes Camp",
+  "ru": "Лагерь у утёса Верона на Миранде"
+ },
+ "sr_colony_oberon_relay": {
+  "en": "Oberon Communications Relay",
+  "ru": "Ретранслятор связи на Обероне"
+ },
+ "sr_colony_oberon_research": {
+  "en": "Oberon Isolated Research",
+  "ru": "Изолированная лаборатория на Обероне"
+ },
+ "sr_colony_olympus_mons_atmospheric": {
+  "en": "Olympus Mons Atmospheric Station",
+  "ru": "Атмосферная станция на горе Олимп"
+ },
+ "sr_colony_olympus_mons_geothermal": {
+  "en": "Olympus Mons Geothermal Colony",
+  "ru": "Геотермальная колония на горе Олимп"
+ },
+ "sr_colony_pallas_composites": {
+  "en": "Pallas Composite Manufacturing",
+  "ru": "Производство композитов на Палладе"
+ },
+ "sr_colony_pallas_observatory": {
+  "en": "Pallas Observatory",
+  "ru": "Обсерватория на Палладе"
+ },
+ "sr_colony_peary_observatory": {
+  "en": "Peary Polar Observatory",
+  "ru": "Полярная обсерватория Пири"
+ },
+ "sr_colony_peary_solar": {
+  "en": "Peary Solar Power",
+  "ru": "Солнечная энергетика Пири"
+ },
+ "sr_colony_pluto_harvesting": {
+  "en": "Pluto-Charon Ice Harvesting",
+  "ru": "Добыча льда на Плутоне и Хароне"
+ },
+ "sr_colony_pluto_research": {
+  "en": "Pluto-Charon Research Complex",
+  "ru": "Исследовательский комплекс Плутона и Харона"
+ },
+ "sr_colony_proteus_extraction": {
+  "en": "Proteus Extraction Outpost",
+  "ru": "Добывающий форпост на Протее"
+ },
+ "sr_colony_proteus_probe": {
+  "en": "Proteus Atmospheric Relay",
+  "ru": "Атмосферный ретранслятор на Протее"
+ },
+ "sr_colony_psyche_careful": {
+  "en": "Psyche Careful Extraction",
+  "ru": "Бережная добыча на Психее"
+ },
+ "sr_colony_psyche_industrial": {
+  "en": "Psyche Industrial Mining",
+  "ru": "Промышленная добыча на Психее"
+ },
+ "sr_colony_rhea_observation": {
+  "en": "Rhea Ring Observation",
+  "ru": "Наблюдение за кольцами Реи"
+ },
+ "sr_colony_rhea_propellant": {
+  "en": "Rhea Propellant Refinery",
+  "ru": "Завод ракетного топлива на Рее"
+ },
+ "sr_colony_sedna_interstellar": {
+  "en": "Sedna Interstellar Station",
+  "ru": "Межзвёздная станция на Седне"
+ },
+ "sr_colony_sedna_outpost": {
+  "en": "Sedna Far Outpost",
+  "ru": "Дальний форпост на Седне"
+ },
+ "sr_colony_shackleton_depot": {
+  "en": "Shackleton Propellant Depot",
+  "ru": "Склад топлива в кратере Шеклтон"
+ },
+ "sr_colony_shackleton_outpost": {
+  "en": "Shackleton Polar Outpost",
+  "ru": "Полярный форпост в кратере Шеклтон"
+ },
+ "sr_colony_titan_hydrocarbons": {
+  "en": "Titan Hydrocarbon Harvesting",
+  "ru": "Добыча углеводородов на Титане"
+ },
+ "sr_colony_titan_prebiotic": {
+  "en": "Titan Prebiotic Research",
+  "ru": "Пребиотические исследования на Титане"
+ },
+ "sr_colony_titania_geophysics": {
+  "en": "Titania Geophysics Station",
+  "ru": "Геофизическая станция на Титании"
+ },
+ "sr_colony_titania_mining": {
+  "en": "Titania Canyon Mining",
+  "ru": "Добыча в каньоне Титании"
+ },
+ "sr_colony_tranquility_helium": {
+  "en": "Tranquility Helium-3 Extraction",
+  "ru": "Добыча гелия-3 на базе Транквилити"
+ },
+ "sr_colony_tranquility_heritage": {
+  "en": "Tranquility Heritage Site",
+  "ru": "Историческое место Транквилити"
+ },
+ "sr_colony_triton_gateway": {
+  "en": "Triton Gateway Base",
+  "ru": "Шлюзовая база на Тритоне"
+ },
+ "sr_colony_triton_geyser": {
+  "en": "Triton Geyser Energy",
+  "ru": "Энергия гейзеров Тритона"
+ },
+ "sr_colony_utopia_agriculture": {
+  "en": "Utopia Agricultural Domes",
+  "ru": "Сельскохозяйственные купола Утопии"
+ },
+ "sr_colony_utopia_ice": {
+  "en": "Utopia Ice Extraction",
+  "ru": "Добыча льда в Утопии"
+ },
+ "sr_colony_valles_marineris_mining": {
+  "en": "Valles Marineris Mining",
+  "ru": "Добыча в долинах Маринер"
+ },
+ "sr_colony_valles_marineris_research": {
+  "en": "Valles Marineris Research",
+  "ru": "Исследования в долинах Маринер"
+ },
+ "sr_colony_venus_atmospheric": {
+  "en": "Venus Atmospheric Habitat",
+  "ru": "Атмосферное поселение на Венере"
+ },
+ "sr_colony_venus_extraction": {
+  "en": "Venus Gas Extraction",
+  "ru": "Добыча газов на Венере"
+ },
+ "sr_colony_vesta_mining": {
+  "en": "Vesta Mining Operations",
+  "ru": "Горные работы на Весте"
+ },
+ "sr_colony_vesta_science": {
+  "en": "Vesta Science Outpost",
+  "ru": "Научный форпост на Весте"
+ },
+ "sr_commercial_space_dividend": {
+  "en": "Commercial Space Industry",
+  "ru": "Коммерческая космическая индустрия"
+ },
+ "sr_power_state_data_received": {
+  "en": "#G launched, and its data received#!",
+  "ru": "#G запуск выполнен, данные получены#!"
+ },
+ "sr_prog_state_running": {
+  "en": "#Y under way#!",
+  "ru": "#Y в процессе#!"
+ },
+ "sr_prog_state_signal_received": {
+  "en": "#G the signal has reached us#!",
+  "ru": "#G сигнал получен#!"
+ },
+ "sr_site_name_amalthea": {
+  "en": "Amalthea",
+  "ru": "Амальтея"
+ },
+ "sr_site_name_arcadia_planitia": {
+  "en": "Arcadia Planitia",
+  "ru": "Равнина Аркадия"
+ },
+ "sr_site_name_ariel": {
+  "en": "Ariel",
+  "ru": "Ариэль"
+ },
+ "sr_site_name_callisto": {
+  "en": "Callisto",
+  "ru": "Каллисто"
+ },
+ "sr_site_name_ceres": {
+  "en": "Ceres",
+  "ru": "Церера"
+ },
+ "sr_site_name_daedalus": {
+  "en": "Daedalus Crater",
+  "ru": "Кратер Дедал"
+ },
+ "sr_site_name_enceladus": {
+  "en": "Enceladus",
+  "ru": "Энцелад"
+ },
+ "sr_site_name_eris": {
+  "en": "Eris",
+  "ru": "Эрида"
+ },
+ "sr_site_name_europa": {
+  "en": "Europa",
+  "ru": "Европа"
+ },
+ "sr_site_name_ganymede": {
+  "en": "Ganymede",
+  "ru": "Ганимед"
+ },
+ "sr_site_name_haumea": {
+  "en": "Haumea",
+  "ru": "Хаумеа"
+ },
+ "sr_site_name_hellas_planitia": {
+  "en": "Hellas Planitia",
+  "ru": "Равнина Эллада"
+ },
+ "sr_site_name_himalia": {
+  "en": "Himalia",
+  "ru": "Гималия"
+ },
+ "sr_site_name_hygiea": {
+  "en": "10 Hygiea",
+  "ru": "10 Гигея"
+ },
+ "sr_site_name_iapetus": {
+  "en": "Iapetus",
+  "ru": "Япет"
+ },
+ "sr_site_name_imbrium": {
+  "en": "Mare Imbrium",
+  "ru": "Море Дождей"
+ },
+ "sr_site_name_io": {
+  "en": "Io",
+  "ru": "Ио"
+ },
+ "sr_site_name_makemake": {
+  "en": "Makemake",
+  "ru": "Макемаке"
+ },
+ "sr_site_name_marius_hills": {
+  "en": "Marius Hills",
+  "ru": "Холмы Мариуса"
+ },
+ "sr_site_name_mercury": {
+  "en": "Mercury",
+  "ru": "Меркурий"
+ },
+ "sr_site_name_mimas": {
+  "en": "Mimas",
+  "ru": "Мимас"
+ },
+ "sr_site_name_miranda": {
+  "en": "Miranda",
+  "ru": "Миранда"
+ },
+ "sr_site_name_oberon": {
+  "en": "Oberon",
+  "ru": "Оберон"
+ },
+ "sr_site_name_olympus_mons": {
+  "en": "Olympus Mons",
+  "ru": "Гора Олимп"
+ },
+ "sr_site_name_pallas": {
+  "en": "2 Pallas",
+  "ru": "2 Паллада"
+ },
+ "sr_site_name_peary": {
+  "en": "Peary Crater",
+  "ru": "Кратер Пири"
+ },
+ "sr_site_name_pluto": {
+  "en": "Pluto-Charon",
+  "ru": "Плутон-Харон"
+ },
+ "sr_site_name_proteus": {
+  "en": "Proteus",
+  "ru": "Протей"
+ },
+ "sr_site_name_psyche": {
+  "en": "16 Psyche",
+  "ru": "16 Психея"
+ },
+ "sr_site_name_rhea": {
+  "en": "Rhea",
+  "ru": "Рея"
+ },
+ "sr_site_name_sedna": {
+  "en": "Sedna",
+  "ru": "Седна"
+ },
+ "sr_site_name_shackleton": {
+  "en": "Shackleton Crater",
+  "ru": "Кратер Шеклтон"
+ },
+ "sr_site_name_titan": {
+  "en": "Titan",
+  "ru": "Титан"
+ },
+ "sr_site_name_titania": {
+  "en": "Titania",
+  "ru": "Титания"
+ },
+ "sr_site_name_tranquility": {
+  "en": "Tranquility Base",
+  "ru": "База Транквилити"
+ },
+ "sr_site_name_triton": {
+  "en": "Triton",
+  "ru": "Тритон"
+ },
+ "sr_site_name_utopia_planitia": {
+  "en": "Utopia Planitia",
+  "ru": "Равнина Утопия"
+ },
+ "sr_site_name_valles_marineris": {
+  "en": "Valles Marineris",
+  "ru": "Долины Маринер"
+ },
+ "sr_site_name_venus": {
+  "en": "Venus Cloud Habitat",
+  "ru": "Облачная колония Венеры"
+ },
+ "sr_site_name_vesta": {
+  "en": "4 Vesta",
+  "ru": "4 Веста"
+ },
+ "sr_solar_system_trade": {
+  "en": "Interplanetary Trade Networks",
+  "ru": "Межпланетные торговые сети"
+ },
+ "sr_window_name_ceres": {
+  "en": "Ceres",
+  "ru": "Церера"
+ },
+ "sr_window_name_hygiea": {
+  "en": "Hygiea",
+  "ru": "Гигея"
+ },
+ "sr_window_name_jupiter": {
+  "en": "Jupiter system",
+  "ru": "Система Юпитера"
+ },
+ "sr_window_name_kuiper": {
+  "en": "Kuiper Belt",
+  "ru": "Пояс Койпера"
+ },
+ "sr_window_name_mars": {
+  "en": "Mars",
+  "ru": "Марс"
+ },
+ "sr_window_name_neptune": {
+  "en": "Neptune system",
+  "ru": "Система Нептуна"
+ },
+ "sr_window_name_pallas": {
+  "en": "Pallas",
+  "ru": "Паллада"
+ },
+ "sr_window_name_psyche": {
+  "en": "Psyche",
+  "ru": "Психея"
+ },
+ "sr_window_name_saturn": {
+  "en": "Saturn system",
+  "ru": "Система Сатурна"
+ },
+ "sr_window_name_uranus": {
+  "en": "Uranus system",
+  "ru": "Система Урана"
+ },
+ "sr_window_name_venus": {
+  "en": "Venus",
+  "ru": "Венера"
+ },
+ "sr_window_name_vesta": {
+  "en": "Vesta",
+  "ru": "Веста"
  },
  "st_res_policy_buy_cheap": {
   "en": "Buy When Cheap",
@@ -706,5 +2578,865 @@
  "st_res_policy_stockpile": {
   "en": "Stockpile",
   "ru": "Накопление"
+ },
+ "te_budget_tab_banking": {
+  "en": "Banking",
+  "ru": "Банки"
+ },
+ "te_capital_controls_fatigue": {
+  "en": "Trapped Capital",
+  "ru": "Запертый капитал"
+ },
+ "te_construction_market_bg": {
+  "en": "Construction Sites",
+  "ru": "Стройплощадки"
+ },
+ "te_construction_market_site": {
+  "en": "Construction Site",
+  "ru": "Стройплощадка"
+ },
+ "te_decision_establish_strategic_reserve": {
+  "en": "Establish a $je_strategic_reserve$",
+  "ru": "Создать: $je_strategic_reserve$"
+ },
+ "te_decision_resume_solar_colonization": {
+  "en": "Resume $je_space_race_solar_colonization$",
+  "ru": "Возобновить: $je_space_race_solar_colonization$"
+ },
+ "te_demog_cd_dc_chr_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_chr').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_cd_dc_ext_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_ext').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_cd_dc_inf_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_inf').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_cd_dc_kill_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_kill').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! от всех."
+ },
+ "te_demog_cd_dc_mat_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_mat').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! от всех."
+ },
+ "te_demog_cd_dc_war_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_war').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_war').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_cd_dc_work_deaths": {
+  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [Country.MakeScope.Var('te_dg_dc_work').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_census_fewer_men": {
+  "en": "Census: Fewer Men",
+  "ru": "Перепись: меньше мужчин"
+ },
+ "te_demog_census_more_men": {
+  "en": "Census: More Men",
+  "ru": "Перепись: больше мужчин"
+ },
+ "te_demog_census_youth_bulge": {
+  "en": "Census: Youth Bulge",
+  "ru": "Перепись: молодёжный бугор"
+ },
+ "te_demog_dc_chr": {
+  "en": "Chronic Illness",
+  "ru": "Хронические болезни"
+ },
+ "te_demog_dc_chr_word": {
+  "en": "Chronic Illness",
+  "ru": "Хронические болезни"
+ },
+ "te_demog_dc_ext": {
+  "en": "Accidents, Violence",
+  "ru": "Несчастные случаи, насилие"
+ },
+ "te_demog_dc_ext_word": {
+  "en": "Accidents",
+  "ru": "Несчастные случаи"
+ },
+ "te_demog_dc_inf": {
+  "en": "Infection, Hunger",
+  "ru": "Инфекции, голод"
+ },
+ "te_demog_dc_inf_word": {
+  "en": "Infection",
+  "ru": "Инфекции"
+ },
+ "te_demog_dc_kill": {
+  "en": "Killed by Events",
+  "ru": "Погибшие из-за событий"
+ },
+ "te_demog_dc_kill_word": {
+  "en": "Killed by Events",
+  "ru": "Погибшие из-за событий"
+ },
+ "te_demog_dc_mat": {
+  "en": "Childbirth",
+  "ru": "Роды"
+ },
+ "te_demog_dc_mat_word": {
+  "en": "Childbirth",
+  "ru": "Роды"
+ },
+ "te_demog_dc_top_chr_what": {
+  "en": "pollution, the climate, drugs and addiction, radiation",
+  "ru": "загрязнение, климат, наркотики и зависимость, радиация"
+ },
+ "te_demog_dc_top_ext_what": {
+  "en": "disasters, massacres, crackdowns, mental health",
+  "ru": "катастрофы, массовые убийства, репрессии, психическое здоровье"
+ },
+ "te_demog_dc_top_war_what": {
+  "en": "devastation and war's other harms",
+  "ru": "разрушения и прочий вред войны"
+ },
+ "te_demog_dc_top_work_what": {
+  "en": "dangerous workplaces, forced labor",
+  "ru": "опасные рабочие места, принудительный труд"
+ },
+ "te_demog_dc_war": {
+  "en": "War, Devastation",
+  "ru": "Война, разрушения"
+ },
+ "te_demog_dc_war_word": {
+  "en": "War",
+  "ru": "Война"
+ },
+ "te_demog_dc_work": {
+  "en": "Work",
+  "ru": "Труд"
+ },
+ "te_demog_dc_work_word": {
+  "en": "Work",
+  "ru": "Труд"
+ },
+ "te_demog_ms_bl_plain": {
+  "en": "Birth Limit",
+  "ru": "Ограничение рождаемости"
+ },
+ "te_demog_ms_child_allowance": {
+  "en": "Child Allowance",
+  "ru": "Пособие на детей"
+ },
+ "te_demog_ms_crash_campaign": {
+  "en": "Crash Campaign",
+  "ru": "Ударная кампания"
+ },
+ "te_demog_ms_family_housing": {
+  "en": "Family Housing",
+  "ru": "Жильё для семей"
+ },
+ "te_demog_ms_free_contraception": {
+  "en": "Free Contraception",
+  "ru": "Бесплатная контрацепция"
+ },
+ "te_demog_ms_honours": {
+  "en": "Honors for Large Families",
+  "ru": "Почести многодетным семьям"
+ },
+ "te_demog_ms_later_longer_fewer": {
+  "en": "Later, Longer, Fewer",
+  "ru": "Позже, дольше, меньше"
+ },
+ "te_demog_ms_parental_leave": {
+  "en": "Parental Leave",
+  "ru": "Отпуск по уходу за ребёнком"
+ },
+ "te_demog_ms_restricted_contraception": {
+  "en": "Restricted Contraception",
+  "ru": "Ограниченная контрацепция"
+ },
+ "te_demog_ms_rural_exemption": {
+  "en": "Rural Exemption",
+  "ru": "Сельское исключение"
+ },
+ "te_demog_ms_sex_education": {
+  "en": "Sex Education",
+  "ru": "Половое просвещение"
+ },
+ "te_demog_mt_bar_area": {
+  "en": "Area",
+  "ru": "Площадь"
+ },
+ "te_demog_mt_bar_capital": {
+  "en": "Capital",
+  "ru": "Столица"
+ },
+ "te_demog_mt_bar_crowding": {
+  "en": "Crowding",
+  "ru": "Теснота"
+ },
+ "te_demog_mt_bar_gateway": {
+  "en": "Trade and Finance",
+  "ru": "Торговля и финансы"
+ },
+ "te_demog_mt_bar_infra": {
+  "en": "Infrastructure",
+  "ru": "Инфраструктура"
+ },
+ "te_demog_mt_bar_planning": {
+  "en": "Urban Planning",
+  "ru": "Градостроительство"
+ },
+ "te_demog_mt_bar_urban": {
+  "en": "Urbanization",
+  "ru": "Урбанизация"
+ },
+ "te_demog_mt_bar_work": {
+  "en": "Farms and Mines",
+  "ru": "Фермы и шахты"
+ },
+ "te_demog_mt_crowding": {
+  "en": "Metropolitan Crowding",
+  "ru": "Теснота мегаполиса"
+ },
+ "te_demog_mt_label_0": {
+  "en": "Metropolis",
+  "ru": "Метрополис"
+ },
+ "te_demog_mt_label_1": {
+  "en": "Leading City",
+  "ru": "Ведущий город"
+ },
+ "te_demog_mt_label_2": {
+  "en": "Several Cities",
+  "ru": "Несколько городов"
+ },
+ "te_demog_mt_label_3": {
+  "en": "Market Towns",
+  "ru": "Торговые городки"
+ },
+ "te_demog_ov_e0_over": {
+  "en": "#v over 10,000#!",
+  "ru": "#v более 10 000#!"
+ },
+ "te_demog_pattern_0": {
+  "en": "Primate",
+  "ru": "Примативный"
+ },
+ "te_demog_pattern_1": {
+  "en": "Dominant",
+  "ru": "Доминирующий"
+ },
+ "te_demog_pattern_2": {
+  "en": "Balanced",
+  "ru": "Сбалансированный"
+ },
+ "te_demog_pattern_3": {
+  "en": "Dispersed",
+  "ru": "Рассредоточенный"
+ },
+ "te_demog_sec_longevity": {
+  "en": "Longevity",
+  "ru": "Долголетие"
+ },
+ "te_demog_sec_work": {
+  "en": "Work and Retirement",
+  "ru": "Труд и пенсия"
+ },
+ "te_demog_st_dc_chr_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_chr').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_st_dc_ext_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_ext').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_st_dc_inf_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_inf').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_st_dc_kill_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_kill').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! от всех."
+ },
+ "te_demog_st_dc_mat_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_mat').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! от всех."
+ },
+ "te_demog_st_dc_war_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_war').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_war').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_demog_st_dc_work_deaths": {
+  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]",
+  "ru": "За прошлый год: смертей — #v [State.MakeScope.Var('te_dg_dc_work').GetValue|K]#!, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! от всех.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]"
+ },
+ "te_direct_construction_base_modifier": {
+  "en": "Base Construction",
+  "ru": "Базовое строительство"
+ },
+ "te_grid_mix_coal": {
+  "en": "Coal",
+  "ru": "Уголь"
+ },
+ "te_grid_mix_fusion": {
+  "en": "Fusion",
+  "ru": "Термоядерная"
+ },
+ "te_grid_mix_hydro": {
+  "en": "Hydro",
+  "ru": "Гидроэнергия"
+ },
+ "te_grid_mix_nuclear": {
+  "en": "Nuclear",
+  "ru": "Атомная"
+ },
+ "te_grid_mix_oil": {
+  "en": "Oil",
+  "ru": "Нефть"
+ },
+ "te_grid_mix_renewable": {
+  "en": "Renewables",
+  "ru": "Возобновляемые"
+ },
+ "te_grid_mix_space_solar": {
+  "en": "Space Solar",
+  "ru": "Космическая солнечная"
+ },
+ "te_hist_chart_bank_bubble_title": {
+  "en": "Bubble Pressure",
+  "ru": "Давление пузыря"
+ },
+ "te_hist_chart_bank_momentum_title": {
+  "en": "Banking Momentum",
+  "ru": "Банковский импульс"
+ },
+ "te_hist_chart_bank_value_title": {
+  "en": "Banking Cycle Value",
+  "ru": "Значение банковского цикла"
+ },
+ "te_hist_chart_colonial_drift_title": {
+  "en": "Monthly Stability Change",
+  "ru": "Ежемесячное изменение стабильности"
+ },
+ "te_hist_chart_colonial_stability_title": {
+  "en": "Colonial Stability",
+  "ru": "Колониальная стабильность"
+ },
+ "te_hist_chart_mon_fx_title": {
+  "en": "Exchange Rate Index",
+  "ru": "Индекс обменного курса"
+ },
+ "te_hist_chart_mon_inflation_title": {
+  "en": "Inflation",
+  "ru": "Инфляция"
+ },
+ "te_hist_chart_mon_policy_title": {
+  "en": "Policy Rate",
+  "ru": "Ключевая ставка"
+ },
+ "te_hist_chart_mon_rate_paid_title": {
+  "en": "Rate Paid on Debt",
+  "ru": "Выплачиваемая ставка по долгу"
+ },
+ "te_jmap_area_continent": {
+  "en": "Continent",
+  "ru": "Континент"
+ },
+ "te_jmap_area_world": {
+  "en": "World",
+  "ru": "Мир"
+ },
+ "te_jmap_color_grey": {
+  "en": "Grayscale",
+  "ru": "Оттенки серого"
+ },
+ "te_jmap_color_safe": {
+  "en": "Colorblind-Safe",
+  "ru": "Для дальтоников"
+ },
+ "te_jmap_options_heading": {
+  "en": "Map Options",
+  "ru": "Параметры карты"
+ },
+ "te_jmap_pick_base_comfort": {
+  "en": "Base Comfort",
+  "ru": "Базовый комфорт"
+ },
+ "te_jmap_pick_fertility": {
+  "en": "Fertility",
+  "ru": "Фертильность"
+ },
+ "te_jmap_scale_linear": {
+  "en": "Linear",
+  "ru": "Линейная"
+ },
+ "te_jmap_scale_log": {
+  "en": "Logarithmic",
+  "ru": "Логарифмическая"
+ },
+ "te_jmap_scale_own": {
+  "en": "Map Default",
+  "ru": "По умолчанию для карты"
+ },
+ "te_jmap_scale_ranked": {
+  "en": "Ranked",
+  "ru": "Ранговая"
+ },
+ "te_jmap_trim_default": {
+  "en": "Trim 4 Each End",
+  "ru": "Отсечь по 4 с каждого края"
+ },
+ "te_jmap_trim_none": {
+  "en": "Keep All",
+  "ru": "Оставить всё"
+ },
+ "te_jmap_trim_percent": {
+  "en": "Trim 5%",
+  "ru": "Отсечь 5%"
+ },
+ "te_market_tab_global_warming": {
+  "en": "Climate",
+  "ru": "Климат"
+ },
+ "te_market_tab_strategic_reserve": {
+  "en": "Reserve",
+  "ru": "Резерв"
+ },
+ "te_military_tab_covert": {
+  "en": "Covert",
+  "ru": "Тайные операции"
+ },
+ "te_military_tab_nuclear": {
+  "en": "Nuclear",
+  "ru": "Ядерное"
+ },
+ "te_nation_all_header": {
+  "en": "All Modifiers",
+  "ru": "Все модификаторы"
+ },
+ "te_nation_how_sub_construction": {
+  "en": "Construction Cost",
+  "ru": "Стоимость строительства"
+ },
+ "te_nation_in_force": {
+  "en": "In force",
+  "ru": "Действует"
+ },
+ "te_nation_ov_jud_short": {
+  "en": "Judiciary",
+  "ru": "Судебная власть"
+ },
+ "te_nation_ov_override_cause": {
+  "en": "Capacity: #v [Country.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]#!",
+  "ru": "Ёмкость: #v [Country.GetModifier.GetValueWithBreakdownFor('country_legislative_override_capacity_add')]#!"
+ },
+ "te_nation_ov_override_short": {
+  "en": "Override",
+  "ru": "Преодоление"
+ },
+ "te_nation_ov_wc_short": {
+  "en": "Wealth",
+  "ru": "Богатство"
+ },
+ "te_nation_sources_header": {
+  "en": "Where These Come From",
+  "ru": "Откуда они берутся"
+ },
+ "te_nation_wc_row_tt": {
+  "en": "The score moves toward its target each year.",
+  "ru": "Показатель каждый год смещается к целевому значению."
+ },
+ "te_officer_academies_standing": {
+  "en": "Academy Officer Corps",
+  "ru": "Офицерский корпус академий"
+ },
+ "te_political_commissars_indoctrination": {
+  "en": "Commissar Indoctrination",
+  "ru": "Идеологическая обработка комиссарами"
+ },
+ "te_pops_tab_demog": {
+  "en": "Demographics",
+  "ru": "Демография"
+ },
+ "te_seabed_administer_claims": {
+  "en": "Administer Seabed Claims",
+  "ru": "Управление претензиями на морское дно"
+ },
+ "te_seabed_basin_arctic": {
+  "en": "Arctic",
+  "ru": "Северный Ледовитый"
+ },
+ "te_seabed_basin_atlantic": {
+  "en": "Atlantic",
+  "ru": "Атлантический"
+ },
+ "te_seabed_basin_indian": {
+  "en": "Indian",
+  "ru": "Индийский"
+ },
+ "te_seabed_basin_pacific": {
+  "en": "Pacific",
+  "ru": "Тихий"
+ },
+ "te_seabed_basin_southern": {
+  "en": "Southern",
+  "ru": "Южный"
+ },
+ "te_seabed_local_only": {
+  "en": "Build only on local claims",
+  "ru": "Строить только на местных претензиях"
+ },
+ "te_seabed_long_haul": {
+  "en": "Long-Haul Seabed Operations",
+  "ru": "Дальние операции на морском дне"
+ },
+ "te_seabed_regime_name_3": {
+  "en": "Scramble",
+  "ru": "Схватка"
+ },
+ "te_society_tab_ch": {
+  "en": "Hegemony",
+  "ru": "Гегемония"
+ },
+ "te_sp_tt_e_2030s": {
+  "en": "Near Future",
+  "ru": "Ближайшее будущее"
+ },
+ "te_sp_tt_e_2040s": {
+  "en": "Near Future",
+  "ru": "Ближайшее будущее"
+ },
+ "te_sp_tt_e_2080s": {
+  "en": "Far Future",
+  "ru": "Далёкое будущее"
+ },
+ "te_sp_tt_k_affluent": {
+  "en": "Affluent Street",
+  "ru": "Богатая улица"
+ },
+ "te_sp_tt_k_boomtown": {
+  "en": "Boomtown",
+  "ru": "Город бума"
+ },
+ "te_sp_tt_k_city": {
+  "en": "City Street",
+  "ru": "Городская улица"
+ },
+ "te_sp_tt_k_cleared_land": {
+  "en": "Cleared Land",
+  "ru": "Расчищенная земля"
+ },
+ "te_sp_tt_k_colliery": {
+  "en": "Colliery",
+  "ru": "Угольная шахта"
+ },
+ "te_sp_tt_k_declining": {
+  "en": "Declining City",
+  "ru": "Город в упадке"
+ },
+ "te_sp_tt_k_devastated": {
+  "en": "Ruins",
+  "ru": "Руины"
+ },
+ "te_sp_tt_k_divided": {
+  "en": "Divided City",
+  "ru": "Разделённый город"
+ },
+ "te_sp_tt_k_farmland": {
+  "en": "Farmland",
+  "ru": "Пашня"
+ },
+ "te_sp_tt_k_forestry": {
+  "en": "Forestry",
+  "ru": "Лесное хозяйство"
+ },
+ "te_sp_tt_k_harbor": {
+  "en": "Harbor",
+  "ru": "Гавань"
+ },
+ "te_sp_tt_k_housing_blocks": {
+  "en": "Housing Blocks",
+  "ru": "Жилые кварталы"
+ },
+ "te_sp_tt_k_industry": {
+  "en": "Industrial City",
+  "ru": "Промышленный город"
+ },
+ "te_sp_tt_k_land_desert": {
+  "en": "Desert",
+  "ru": "Пустыня"
+ },
+ "te_sp_tt_k_land_forest": {
+  "en": "Forest",
+  "ru": "Лес"
+ },
+ "te_sp_tt_k_land_hills": {
+  "en": "Hills",
+  "ru": "Холмы"
+ },
+ "te_sp_tt_k_land_jungle": {
+  "en": "Jungle",
+  "ru": "Джунгли"
+ },
+ "te_sp_tt_k_land_mountain": {
+  "en": "Mountains",
+  "ru": "Горы"
+ },
+ "te_sp_tt_k_land_plains": {
+  "en": "Plains",
+  "ru": "Равнины"
+ },
+ "te_sp_tt_k_land_savanna": {
+  "en": "Savanna",
+  "ru": "Саванна"
+ },
+ "te_sp_tt_k_land_tundra": {
+  "en": "Tundra",
+  "ru": "Тундра"
+ },
+ "te_sp_tt_k_land_wetland": {
+  "en": "Wetland",
+  "ru": "Заболоченные земли"
+ },
+ "te_sp_tt_k_major_port": {
+  "en": "Major Port",
+  "ru": "Крупный порт"
+ },
+ "te_sp_tt_k_megacity": {
+  "en": "Megacity",
+  "ru": "Мегаполис"
+ },
+ "te_sp_tt_k_metropolis": {
+  "en": "Metropolis",
+  "ru": "Метрополис"
+ },
+ "te_sp_tt_k_nuclear": {
+  "en": "After a Nuclear Strike",
+  "ru": "После ядерного удара"
+ },
+ "te_sp_tt_k_oil": {
+  "en": "Oil Field",
+  "ru": "Нефтяное месторождение"
+ },
+ "te_sp_tt_k_open_pit": {
+  "en": "Open-Pit Mine",
+  "ru": "Карьер"
+ },
+ "te_sp_tt_k_plantation": {
+  "en": "Plantation",
+  "ru": "Плантация"
+ },
+ "te_sp_tt_k_poor": {
+  "en": "Poor Street",
+  "ru": "Бедная улица"
+ },
+ "te_sp_tt_k_ranch": {
+  "en": "Ranch",
+  "ru": "Ранчо"
+ },
+ "te_sp_tt_k_resort": {
+  "en": "Resort",
+  "ru": "Курорт"
+ },
+ "te_sp_tt_k_rundown": {
+  "en": "Run-Down Street",
+  "ru": "Запущенная улица"
+ },
+ "te_sp_tt_k_smog": {
+  "en": "City in Smog",
+  "ru": "Город в смоге"
+ },
+ "te_sp_tt_k_town": {
+  "en": "Town",
+  "ru": "Городок"
+ },
+ "te_sp_tt_terrain_docks": {
+  "en": "Terrain: port, set by the game.",
+  "ru": "Ландшафт: порт, задаётся игрой."
+ },
+ "te_sp_tt_terrain_mining": {
+  "en": "Terrain: mining, set by the game.",
+  "ru": "Ландшафт: добыча, задаётся игрой."
+ },
+ "te_sp_tt_why_cleared_land": {
+  "en": "The game gives this state cleared land terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «расчищенная земля». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_devastated": {
+  "en": "Its [concept_devastation] is #v [State.MakeScope.ScriptValue('te_state_picture_k_ruins')|%0]#! or more.",
+  "ru": "Её [concept_devastation|l] составляет #v [State.MakeScope.ScriptValue('te_state_picture_k_ruins')|%0]#! или больше."
+ },
+ "te_sp_tt_why_farmland": {
+  "en": "The game gives this state farmland terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «пашня». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_forestry": {
+  "en": "The game gives this state forestry terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «лесное хозяйство». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_harbor": {
+  "en": "The game gives this state port terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «порт». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_housing_blocks": {
+  "en": "[State.GetOwner.GetName] runs a $law_command_economy$ and has researched $prefabricated_construction$.",
+  "ru": "Страна [State.GetOwner.GetName] применяет закон «$law_command_economy$» и изучила технологию «$prefabricated_construction$»."
+ },
+ "te_sp_tt_why_land_desert": {
+  "en": "The game gives this state desert terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «пустыня». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_forest": {
+  "en": "The game gives this state forest terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «лес». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_hills": {
+  "en": "The game gives this state hills terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «холмы». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_jungle": {
+  "en": "The game gives this state jungle terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «джунгли». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_mountain": {
+  "en": "The game gives this state mountain terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «горы». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_plains": {
+  "en": "The game gives this state plains terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «равнины». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_savanna": {
+  "en": "The game gives this state savanna terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «саванна». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_tundra": {
+  "en": "The game gives this state tundra terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «тундра». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_land_wetland": {
+  "en": "The game gives this state wetland terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «заболоченные земли». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_open_pit": {
+  "en": "The game gives this state mining terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «добыча». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_plantation": {
+  "en": "The game gives this state plantation terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «плантации». $te_sp_tt_land_city$"
+ },
+ "te_sp_tt_why_ranch": {
+  "en": "The game gives this state pasture terrain. $te_sp_tt_land_city$",
+  "ru": "Игра задаёт этой области ландшафт «пастбище». $te_sp_tt_land_city$"
+ },
+ "te_systems_window_title": {
+  "en": "Timeline Extended",
+  "ru": "Timeline Extended"
+ },
+ "te_window_tab_colonial_empire": {
+  "en": "Colonial Empire",
+  "ru": "Колониальная империя"
+ },
+ "te_window_tab_grand_monuments": {
+  "en": "Grand Monuments",
+  "ru": "Великие памятники"
+ },
+ "te_window_tab_nation": {
+  "en": "Nation",
+  "ru": "Нация"
+ },
+ "te_window_tab_power_grids": {
+  "en": "Power Grids",
+  "ru": "Энергосети"
+ },
+ "te_window_tab_seabed": {
+  "en": "Seabed",
+  "ru": "Морское дно"
+ },
+ "te_window_tab_space_race": {
+  "en": "Space Race",
+  "ru": "Космическая гонка"
+ },
+ "too_much_private_construction": {
+  "en": "Excess [concept_private_construction]",
+  "ru": "Избыток: [concept_private_construction|l]"
+ },
+ "trade_embargo_suffered_modifier": {
+  "en": "Trade Embargo",
+  "ru": "Торговое эмбарго"
+ },
+ "un_arms_control_participant_modifier": {
+  "en": "Arms Control Participant",
+  "ru": "Участник контроля над вооружениями"
+ },
+ "un_bloc_vacuum_modifier": {
+  "en": "Vacuum of World Order",
+  "ru": "Вакуум мирового порядка"
+ },
+ "un_champion_order_cost": {
+  "en": "Champion International Order",
+  "ru": "Защита международного порядка"
+ },
+ "un_decolonization_pressure_modifier": {
+  "en": "Decolonization Declaration: International Pressure",
+  "ru": "Декларация о деколонизации: международное давление"
+ },
+ "un_dissolution_vacuum_modifier": {
+  "en": "The UN Has Fallen",
+  "ru": "ООН пала"
+ },
+ "un_hist_chart_auth_title": {
+  "en": "UN Authority",
+  "ru": "Авторитет ООН"
+ },
+ "un_hist_chart_target_title": {
+  "en": "Where Authority Was Heading",
+  "ru": "Куда шёл авторитет"
+ },
+ "un_human_rights_champion_modifier": {
+  "en": "Human Rights Champion",
+  "ru": "Защитник прав человека"
+ },
+ "un_peacekeeping_contributor_cost": {
+  "en": "Peacekeeping Contribution Expenses",
+  "ru": "Расходы на вклад в миротворчество"
+ },
+ "un_peacekeeping_contributor_modifier": {
+  "en": "[concept_un_peacekeeping] Contributor",
+  "ru": "Участник: [concept_un_peacekeeping|l]"
+ },
+ "un_standing_disgraced_modifier": {
+  "en": "International Standing: Disgraced",
+  "ru": "Международный авторитет: позорный"
+ },
+ "un_standing_exemplary_modifier": {
+  "en": "International Standing: Exemplary",
+  "ru": "Международный авторитет: образцовый"
+ },
+ "un_standing_poor_modifier": {
+  "en": "International Standing: Poor",
+  "ru": "Международный авторитет: низкий"
+ },
+ "un_standing_respected_modifier": {
+  "en": "International Standing: Respected",
+  "ru": "Международный авторитет: уважаемый"
+ },
+ "un_tariff_retaliation_modifier": {
+  "en": "Targeted by Unilateral Tariffs",
+  "ru": "Объект односторонних пошлин"
+ },
+ "un_trade_deal_bilateral_modifier": {
+  "en": "Bilateral Trade Agreement",
+  "ru": "Двустороннее торговое соглашение"
+ },
+ "un_undermine_order_cost": {
+  "en": "Undermine International Order",
+  "ru": "Подрыв международного порядка"
+ },
+ "war_goal_te_seize_strait_type_name": {
+  "en": "Seize Strait",
+  "ru": "Захват пролива"
+ },
+ "war_goal_te_un_mandate_restore_state_type_name": {
+  "en": "Authorized Restoration",
+  "ru": "Санкционированное восстановление"
  }
 }

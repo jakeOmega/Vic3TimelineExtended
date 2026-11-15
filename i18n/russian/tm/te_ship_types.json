@@ -1,0 +1,70 @@
+{
+ "ship_type_amphibious_assault_ship": {
+  "en": "Amphibious Assault Ship",
+  "ru": "Десантный корабль"
+ },
+ "ship_type_antimatter_battleship": {
+  "en": "Antimatter Battleship",
+  "ru": "Антиматериальный линкор"
+ },
+ "ship_type_arsenal_ship": {
+  "en": "Arsenal Ship",
+  "ru": "Корабль-арсенал"
+ },
+ "ship_type_asw_destroyer": {
+  "en": "ASW Destroyer",
+  "ru": "Эсминец ПЛО"
+ },
+ "ship_type_autonomous_swarm_submarine": {
+  "en": "Autonomous Swarm Submarine",
+  "ru": "Автономная подводная лодка роя"
+ },
+ "ship_type_expeditionary_sea_base": {
+  "en": "Expeditionary Sea Base",
+  "ru": "Экспедиционная морская база"
+ },
+ "ship_type_fleet_carrier": {
+  "en": "Fleet Carrier",
+  "ru": "Флотский авианосец"
+ },
+ "ship_type_guided_missile_ship": {
+  "en": "Guided Missile Ship",
+  "ru": "Ракетный корабль"
+ },
+ "ship_type_hypersonic_missile_platform": {
+  "en": "Hypersonic Missile Platform",
+  "ru": "Гиперзвуковая ракетная платформа"
+ },
+ "ship_type_networked_air_defense_cruiser": {
+  "en": "Networked Air Defense Cruiser",
+  "ru": "Сетевой крейсер ПВО"
+ },
+ "ship_type_nuclear_submarine": {
+  "en": "Nuclear Submarine",
+  "ru": "Атомная подводная лодка"
+ },
+ "ship_type_nuclear_supercarrier": {
+  "en": "Nuclear Supercarrier",
+  "ru": "Атомный суперавианосец"
+ },
+ "ship_type_orbital_support_amphibious_mothership": {
+  "en": "Orbital Support Mothership",
+  "ru": "Орбитальный корабль поддержки"
+ },
+ "ship_type_pulsed_laser_escort": {
+  "en": "Pulsed Laser Escort",
+  "ru": "Лазерный эскорт с импульсными лазерами"
+ },
+ "ship_type_stealth_attack_submarine": {
+  "en": "Stealth Attack Submarine",
+  "ru": "Малозаметная ударная подводная лодка"
+ },
+ "ship_type_stealth_battlecruiser": {
+  "en": "Stealth Battlecruiser",
+  "ru": "Малозаметный линейный крейсер"
+ },
+ "ship_type_swarm_coordination_vessel": {
+  "en": "Swarm Coordination Vessel",
+  "ru": "Корабль координации роя"
+ }
+}

@@ -1,0 +1,258 @@
+{
+ "ship_mod_arsenal_ship_armor_high": {
+  "en": "Heavy Composite Plate",
+  "ru": "Тяжёлая композитная плита"
+ },
+ "ship_mod_arsenal_ship_armor_light": {
+  "en": "Composite Plate",
+  "ru": "Композитная плита"
+ },
+ "ship_mod_arsenal_ship_armor_medium": {
+  "en": "Reinforced Composite",
+  "ru": "Усиленный композит"
+ },
+ "ship_mod_arsenal_ship_guns_high": {
+  "en": "Saturated VLS Cells",
+  "ru": "Насыщенные ячейки УВП"
+ },
+ "ship_mod_arsenal_ship_guns_light": {
+  "en": "Standard VLS Cells",
+  "ru": "Стандартные ячейки УВП"
+ },
+ "ship_mod_arsenal_ship_guns_medium": {
+  "en": "Expanded VLS Cells",
+  "ru": "Расширенные ячейки УВП"
+ },
+ "ship_mod_arsenal_ship_propulsion_high": {
+  "en": "Heavy Integrated Drive",
+  "ru": "Тяжёлый интегрированный привод"
+ },
+ "ship_mod_arsenal_ship_propulsion_light": {
+  "en": "Diesel-Gas Turbine",
+  "ru": "Дизель-газотурбинная установка"
+ },
+ "ship_mod_arsenal_ship_propulsion_medium": {
+  "en": "Combined Diesel-Electric",
+  "ru": "Комбинированная дизель-электрическая установка"
+ },
+ "ship_mod_arsenal_ship_range_high": {
+  "en": "Strategic Magazines",
+  "ru": "Стратегические погреба"
+ },
+ "ship_mod_arsenal_ship_range_light": {
+  "en": "Tactical Magazines",
+  "ru": "Тактические погреба"
+ },
+ "ship_mod_arsenal_ship_range_medium": {
+  "en": "Operational Magazines",
+  "ru": "Оперативные погреба"
+ },
+ "ship_mod_expeditionary_sea_base_armor_high": {
+  "en": "Hardened Mission Hull",
+  "ru": "Усиленный миссионный корпус"
+ },
+ "ship_mod_expeditionary_sea_base_armor_light": {
+  "en": "Standard Mercantile Hull",
+  "ru": "Стандартный торговый корпус"
+ },
+ "ship_mod_expeditionary_sea_base_armor_medium": {
+  "en": "Reinforced Auxiliary Hull",
+  "ru": "Усиленный вспомогательный корпус"
+ },
+ "ship_mod_expeditionary_sea_base_guns_high": {
+  "en": "Heavy Defensive Battery",
+  "ru": "Тяжёлая оборонительная батарея"
+ },
+ "ship_mod_expeditionary_sea_base_guns_light": {
+  "en": "Defensive Battery",
+  "ru": "Оборонительная батарея"
+ },
+ "ship_mod_expeditionary_sea_base_guns_light_desc": {
+  "en": "Light point-defense guns and CIWS mounts. Self-defense only.",
+  "ru": "Лёгкие орудия ближней обороны и установки CIWS. Только самооборона."
+ },
+ "ship_mod_expeditionary_sea_base_guns_medium": {
+  "en": "Multi-Role Battery",
+  "ru": "Многоцелевая батарея"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_high": {
+  "en": "Heavy Cruising Drive",
+  "ru": "Тяжёлый крейсерский привод"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_light": {
+  "en": "Cruising Drive",
+  "ru": "Крейсерский привод"
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_light_desc": {
+  "en": "Economical mercantile drive. Slow but cheap to run.",
+  "ru": "Экономичный торговый привод. Медленный, но дешёвый в эксплуатации."
+ },
+ "ship_mod_expeditionary_sea_base_propulsion_medium": {
+  "en": "Sustained Cruising Drive",
+  "ru": "Длительный крейсерский привод"
+ },
+ "ship_mod_expeditionary_sea_base_range_high": {
+  "en": "Theater Logistics",
+  "ru": "Логистика театра военных действий"
+ },
+ "ship_mod_expeditionary_sea_base_range_light": {
+  "en": "Forward Logistics",
+  "ru": "Передовая логистика"
+ },
+ "ship_mod_expeditionary_sea_base_range_medium": {
+  "en": "Sustained Logistics",
+  "ru": "Устойчивая логистика"
+ },
+ "ship_mod_guided_missile_ship_armor_high": {
+  "en": "Hardened Combatant Hull",
+  "ru": "Усиленный боевой корпус"
+ },
+ "ship_mod_guided_missile_ship_armor_light": {
+  "en": "Standard Naval Hull",
+  "ru": "Стандартный корабельный корпус"
+ },
+ "ship_mod_guided_missile_ship_armor_medium": {
+  "en": "Reinforced Composite Hull",
+  "ru": "Усиленный композитный корпус"
+ },
+ "ship_mod_guided_missile_ship_guns_high": {
+  "en": "Saturated Missile Battery",
+  "ru": "Насыщенная ракетная батарея"
+ },
+ "ship_mod_guided_missile_ship_guns_light": {
+  "en": "Single Missile Battery",
+  "ru": "Одиночная ракетная батарея"
+ },
+ "ship_mod_guided_missile_ship_guns_medium": {
+  "en": "Twin Missile Battery",
+  "ru": "Сдвоенная ракетная батарея"
+ },
+ "ship_mod_guided_missile_ship_propulsion_high": {
+  "en": "Combined-Cycle Drive",
+  "ru": "Привод комбинированного цикла"
+ },
+ "ship_mod_guided_missile_ship_propulsion_light": {
+  "en": "Diesel-Electric Drive",
+  "ru": "Дизель-электрический привод"
+ },
+ "ship_mod_guided_missile_ship_propulsion_medium": {
+  "en": "Gas Turbine Drive",
+  "ru": "Газотурбинный привод"
+ },
+ "ship_mod_guided_missile_ship_range_high": {
+  "en": "Theater Magazines",
+  "ru": "Погреба для театра военных действий"
+ },
+ "ship_mod_guided_missile_ship_range_light": {
+  "en": "Standard Magazines",
+  "ru": "Стандартные погреба"
+ },
+ "ship_mod_guided_missile_ship_range_medium": {
+  "en": "Extended Magazines",
+  "ru": "Расширенные погреба"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_high": {
+  "en": "Plasma Defense Hull",
+  "ru": "Корпус с плазменной защитой"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_light": {
+  "en": "Stealthed Composite Hull",
+  "ru": "Малозаметный композитный корпус"
+ },
+ "ship_mod_hypersonic_missile_platform_armor_light_desc": {
+  "en": "Radar-absorbent composite hull. Reduces [concept_detection] range and incidental damage.",
+  "ru": "Радиопоглощающий композитный корпус. Снижает дальность [Concept('concept_detection','обнаружения')] и случайный урон."
+ },
+ "ship_mod_hypersonic_missile_platform_armor_medium": {
+  "en": "Energetic Reactive Plating",
+  "ru": "Энергетическая динамическая защита"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_high": {
+  "en": "Heavy MaRV Salvo",
+  "ru": "Тяжёлый залп с МаРВ"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_light": {
+  "en": "Single Hypersonic Salvo",
+  "ru": "Одиночный гиперзвуковой залп"
+ },
+ "ship_mod_hypersonic_missile_platform_guns_medium": {
+  "en": "Dual-Mode Salvo Battery",
+  "ru": "Батарея залпов двойного режима"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_high": {
+  "en": "Superconducting Magnetic Drive",
+  "ru": "Сверхпроводящий магнитный привод"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_light": {
+  "en": "Combined-Cycle Drive",
+  "ru": "Привод комбинированного цикла"
+ },
+ "ship_mod_hypersonic_missile_platform_propulsion_medium": {
+  "en": "Integrated Electric Propulsion",
+  "ru": "Интегрированная электрическая силовая установка"
+ },
+ "ship_mod_hypersonic_missile_platform_range_high": {
+  "en": "Global Strike Range",
+  "ru": "Дальность глобального удара"
+ },
+ "ship_mod_hypersonic_missile_platform_range_light": {
+  "en": "Theater Strike Range",
+  "ru": "Дальность удара по театру военных действий"
+ },
+ "ship_mod_hypersonic_missile_platform_range_light_desc": {
+  "en": "Magazine load configured for theater-scale strike operations.",
+  "ru": "Боекомплект для ударных операций масштаба театра военных действий."
+ },
+ "ship_mod_hypersonic_missile_platform_range_medium": {
+  "en": "Continental Strike Range",
+  "ru": "Дальность континентального удара"
+ },
+ "ship_mod_nuclear_submarine_armor_high": {
+  "en": "Deep-Diving Pressure Hull",
+  "ru": "Прочный корпус для глубоководного погружения"
+ },
+ "ship_mod_nuclear_submarine_armor_light": {
+  "en": "Pressure Hull",
+  "ru": "Прочный корпус"
+ },
+ "ship_mod_nuclear_submarine_armor_medium": {
+  "en": "Reinforced Pressure Hull",
+  "ru": "Усиленный прочный корпус"
+ },
+ "ship_mod_nuclear_submarine_guns_high": {
+  "en": "Mk-48 ADCAP Battery",
+  "ru": "Батарея Mk-48 ADCAP"
+ },
+ "ship_mod_nuclear_submarine_guns_light": {
+  "en": "Mk-37 Torpedo Battery",
+  "ru": "Батарея торпед Mk-37"
+ },
+ "ship_mod_nuclear_submarine_guns_medium": {
+  "en": "Wire-Guided Torpedo Suite",
+  "ru": "Комплекс проводных торпед"
+ },
+ "ship_mod_nuclear_submarine_propulsion_high": {
+  "en": "S8G Natural-Circulation Reactor",
+  "ru": "Реактор S8G с естественной циркуляцией"
+ },
+ "ship_mod_nuclear_submarine_propulsion_light": {
+  "en": "S5W Reactor Plant",
+  "ru": "Реакторная установка S5W"
+ },
+ "ship_mod_nuclear_submarine_propulsion_medium": {
+  "en": "S6G Reactor Plant",
+  "ru": "Реакторная установка S6G"
+ },
+ "ship_mod_nuclear_submarine_range_high": {
+  "en": "Indefinite Patrol Provisioning",
+  "ru": "Снабжение патрулирования без ограничения срока"
+ },
+ "ship_mod_nuclear_submarine_range_light": {
+  "en": "Patrol Provisioning",
+  "ru": "Снабжение патрулирования"
+ },
+ "ship_mod_nuclear_submarine_range_medium": {
+  "en": "Strategic Patrol Provisioning",
+  "ru": "Снабжение стратегического патрулирования"
+ }
+}

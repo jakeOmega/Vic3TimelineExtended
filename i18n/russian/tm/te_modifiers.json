@@ -1,0 +1,114 @@
+{
+ "country_colonial_stability_drift_add": {
+  "en": "[concept_colonial_stability] Drift",
+  "ru": "Дрейф [Concept('concept_colonial_stability','колониальной стабильности')]"
+ },
+ "country_covert_defense_economic_add": {
+  "en": "Economic Covert Defense",
+  "ru": "Тайная защита: экономическая"
+ },
+ "country_covert_defense_ideological_add": {
+  "en": "Ideological Covert Defense",
+  "ru": "Тайная защита: идеологическая"
+ },
+ "country_covert_defense_military_add": {
+  "en": "Military Covert Defense",
+  "ru": "Тайная защита: военная"
+ },
+ "country_covert_operation_efficiency_mult": {
+  "en": "Covert Operation Efficiency",
+  "ru": "Эффективность тайных операций"
+ },
+ "country_cultural_hegemony_art_mult": {
+  "en": "Cultural Pull from Art",
+  "ru": "Культурное притяжение от искусства"
+ },
+ "country_culture_merge_speed_mult": {
+  "en": "Culture Merge Speed",
+  "ru": "Скорость слияния культур"
+ },
+ "country_inflation_anchoring_add": {
+  "en": "Inflation Anchoring",
+  "ru": "Якорение инфляции"
+ },
+ "country_inflation_pressure_add": {
+  "en": "Price Pressure",
+  "ru": "Ценовое давление"
+ },
+ "country_risk_premium_add": {
+  "en": "Risk Premium",
+  "ru": "Премия за риск"
+ },
+ "country_sol_expectations_lower_offset_add": {
+  "en": "[concept_sol_expectations] [concept_lower_strata] Offset",
+  "ru": "Смещение: [concept_sol_expectations|l], [concept_lower_strata|l]"
+ },
+ "country_space_race_progress_mult": {
+  "en": "[concept_space_race] Progress",
+  "ru": "Прогресс [Concept('concept_space_race','космической гонки')]"
+ },
+ "country_space_race_risk_mult": {
+  "en": "[concept_space_race] Failure Risk",
+  "ru": "Риск провала [Concept('concept_space_race','космической гонки')]"
+ },
+ "country_sr_colony_slots_add": {
+  "en": "Colony Module Slots",
+  "ru": "Ячейки модулей колоний"
+ },
+ "country_un_authority_target_add": {
+  "en": "UN Authority Target",
+  "ru": "Целевой авторитет ООН"
+ },
+ "country_wage_pressure_add": {
+  "en": "Wage Pressure",
+  "ru": "Давление на зарплаты"
+ },
+ "goods_output_tourism_mult": {
+  "en": "Building @tourism! [concept_tourism_output]",
+  "ru": "Здания: @tourism! [concept_tourism_output|l]"
+ },
+ "goods_trade_advantage_fine_art_mult": {
+  "en": "[concept_trade_advantage] for [GetGoods('fine_art').GetName]",
+  "ru": "[concept_trade_advantage]: [GetGoods('fine_art').GetName]"
+ },
+ "state_arable_land_mult": {
+  "en": "Arable Land",
+  "ru": "Пахотные земли"
+ },
+ "state_birth_limit_relief_add": {
+  "en": "Rural Exemption from the Birth Limit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Сельское исключение из ограничения рождаемости[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_desired_fertility_mult": {
+  "en": "Desired Family Size[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Желаемый размер семьи[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_fertility_means_add": {
+  "en": "Fertility Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Контроль рождаемости[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_maternal_mortality_mult": {
+  "en": "Maternal Deaths[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Материнская смертность[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_means_literacy_add": {
+  "en": "Family Planning Knowledge[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Знания о планировании семьи[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_medical_diffusion_add": {
+  "en": "Spread of Medicine[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Распространение медицины[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_migration_crowding_density_mult": {
+  "en": "[concept_migration_crowding] Tolerance",
+  "ru": "Терпимость: [concept_migration_crowding|l]"
+ },
+ "state_sex_ratio_at_birth_add": {
+  "en": "Boys per 100 Girls at Birth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Мальчиков на 100 девочек при рождении[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_urban_fertility_relief_add": {
+  "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Жильё для семей в городах[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ }
+}

@@ -1,4 +1,88 @@
 {
+ "cm_american": {
+  "en": "American",
+  "ru": "Американская"
+ },
+ "cm_andean": {
+  "en": "Andean",
+  "ru": "Андская"
+ },
+ "cm_anglophone": {
+  "en": "Anglophone",
+  "ru": "Англоязычная"
+ },
+ "cm_arab": {
+  "en": "Arab",
+  "ru": "Арабская"
+ },
+ "cm_czechoslovak": {
+  "en": "Czechoslovak",
+  "ru": "Чехословацкая"
+ },
+ "cm_dravidian": {
+  "en": "Dravidian",
+  "ru": "Дравидская"
+ },
+ "cm_east_african": {
+  "en": "East African",
+  "ru": "Восточноафриканская"
+ },
+ "cm_east_slavic": {
+  "en": "East Slavic",
+  "ru": "Восточнославянская"
+ },
+ "cm_german": {
+  "en": "German",
+  "ru": "Немецкая"
+ },
+ "cm_gran_colombian": {
+  "en": "Gran Colombian",
+  "ru": "Великоколумбийская"
+ },
+ "cm_indonesian": {
+  "en": "Indonesian",
+  "ru": "Индонезийская"
+ },
+ "cm_italian": {
+  "en": "Italian",
+  "ru": "Итальянская"
+ },
+ "cm_latin": {
+  "en": "Latin",
+  "ru": "Латинская"
+ },
+ "cm_nguni": {
+  "en": "Greater Nguni",
+  "ru": "Великонгунийская"
+ },
+ "cm_oghuz_turkic": {
+  "en": "Oghuz Turkic",
+  "ru": "Огузско-тюркская"
+ },
+ "cm_pan_malay": {
+  "en": "Pan-Malay",
+  "ru": "Панмалайская"
+ },
+ "cm_pan_slavic": {
+  "en": "Pan-Slavic",
+  "ru": "Общеславянская"
+ },
+ "cm_pan_turkic": {
+  "en": "Pan-Turkic",
+  "ru": "Общетюркская"
+ },
+ "cm_platine": {
+  "en": "Platine",
+  "ru": "Ла-платская"
+ },
+ "cm_scandinavian": {
+  "en": "Scandinavian",
+  "ru": "Скандинавская"
+ },
+ "cm_yugoslav": {
+  "en": "Yugoslav",
+  "ru": "Югославская"
+ },
  "je_te_cm_american": {
   "en": "Cultural Merge: $cm_american$",
   "ru": "Слияние культур: $cm_american$"

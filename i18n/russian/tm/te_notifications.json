@@ -1,0 +1,1202 @@
+{
+ "notification_arms_race_pressure_name": {
+  "en": "Arms Race Pressure",
+  "ru": "Давление гонки вооружений"
+ },
+ "notification_banking_overdraft_lift_notice_name": {
+  "en": "Intervention Budget Overdrawn",
+  "ru": "Бюджет вмешательства перерасходован"
+ },
+ "notification_colonial_ceasefire_granted_notice_name": {
+  "en": "Ceasefire and Independence",
+  "ru": "Прекращение огня и независимость"
+ },
+ "notification_colonial_crackdown_begun_notice_name": {
+  "en": "Crackdown Begun",
+  "ru": "Подавление начато"
+ },
+ "notification_colonial_independence_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName] даровала нам независимость."
+ },
+ "notification_colonial_independence_granted_notice_name": {
+  "en": "Independence Granted",
+  "ru": "Независимость дарована"
+ },
+ "notification_colonial_negotiations_started_notice_name": {
+  "en": "Autonomy Talks Opened",
+  "ru": "Начаты переговоры об автономии"
+ },
+ "notification_colonial_neocolonial_reforms_notice_name": {
+  "en": "Reforms With Strings Attached",
+  "ru": "Реформы с условиями"
+ },
+ "notification_colonial_neocolonial_terms_notice_name": {
+  "en": "Independence With Strings Attached",
+  "ru": "Независимость с условиями"
+ },
+ "notification_colonial_reparations_paid_notice_name": {
+  "en": "Reparations Paid",
+  "ru": "Репарации выплачены"
+ },
+ "notification_colonial_reparations_refused_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has refused our demand for colonial reparations.",
+  "ru": "Страна [SCOPE.sCountry('reparations_payer').GetName] отклонила наше требование о колониальных репарациях."
+ },
+ "notification_colonial_reparations_refused_notice_name": {
+  "en": "Reparations Refused",
+  "ru": "В репарациях отказано"
+ },
+ "notification_counter_propaganda_backlash_name": {
+  "en": "Propaganda Countered",
+  "ru": "Пропаганда нейтрализована"
+ },
+ "notification_covert_backlash_public_notice_name": {
+  "en": "Anger at Foreign Friends",
+  "ru": "Гнев на иностранных друзей"
+ },
+ "notification_covert_catch_watched_notice_name": {
+  "en": "Foreign Operation Watched",
+  "ru": "Иностранная операция под наблюдением"
+ },
+ "notification_covert_exposure_expelled_notice_name": {
+  "en": "Operation Exposed, Diplomats Expelled",
+  "ru": "Операция раскрыта, дипломаты высланы"
+ },
+ "notification_covert_exposure_repeat_notice_name": {
+  "en": "Another Operation Exposed",
+  "ru": "Раскрыта ещё одна операция"
+ },
+ "notification_covert_exposure_shored_notice_name": {
+  "en": "Operation Exposed",
+  "ru": "Операция раскрыта"
+ },
+ "notification_covert_exposure_turned_notice_name": {
+  "en": "Operation Exposed and Turned",
+  "ru": "Операция раскрыта, агенты перевербованы"
+ },
+ "notification_covert_severe_exposure_notice_name": {
+  "en": "Foreign Subversion Exposed",
+  "ru": "Иностранная диверсия раскрыта"
+ },
+ "notification_decentralized_claims_renounced_name": {
+  "en": "Colonial Claims Renounced",
+  "ru": "Колониальные претензии сняты"
+ },
+ "notification_decol_border_claim_pressed_notice_name": {
+  "en": "A Claim on Our Border",
+  "ru": "Претензия на нашу границу"
+ },
+ "notification_decol_border_mediation_lost_notice_name": {
+  "en": "The Mediators Find Against Us",
+  "ru": "Посредники решили не в нашу пользу"
+ },
+ "notification_decol_border_mediation_split_notice_name": {
+  "en": "The Border Is Mediated",
+  "ru": "Граница определена посредниками"
+ },
+ "notification_decol_border_mediation_won_notice_name": {
+  "en": "The Mediators Find for Us",
+  "ru": "Посредники решили в нашу пользу"
+ },
+ "notification_decol_collapse_aftershock_notice_name": {
+  "en": "Our Overlord's Empire Collapses",
+  "ru": "Империя нашего сюзерена рушится"
+ },
+ "notification_decol_iw_accords_notice_name": {
+  "en": "The Accords Are Agreed",
+  "ru": "Соглашения достигнуты"
+ },
+ "notification_decol_iw_allied_arms_notice_name": {
+  "en": "Arms from a Friend",
+  "ru": "Оружие от друга"
+ },
+ "notification_decol_iw_intervention_notice_name": {
+  "en": "A Great Power Intervenes",
+  "ru": "Великая держава вмешивается"
+ },
+ "notification_decol_iw_rebels_armed_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] is arming the rebels we are fighting.",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_side_taker').GetName] вооружает повстанцев, с которыми мы воюем."
+ },
+ "notification_decol_iw_rebels_armed_notice_name": {
+  "en": "Foreign Arms for the Rebels",
+  "ru": "Иностранное оружие для повстанцев"
+ },
+ "notification_decol_iw_talks_opened_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_talks_metropole').GetName] has opened talks to end the war.",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_talks_metropole').GetName] начала переговоры о прекращении войны."
+ },
+ "notification_decol_iw_talks_opened_notice_name": {
+  "en": "Talks Begin",
+  "ru": "Начались переговоры"
+ },
+ "notification_decol_iw_war_begins_notice_name": {
+  "en": "A War of Independence",
+  "ru": "Война за независимость"
+ },
+ "notification_decol_iw_war_begins_rebels_notice_name": {
+  "en": "They Have Sent the Army",
+  "ru": "Они послали армию"
+ },
+ "notification_decol_iw_war_ends_notice_name": {
+  "en": "A War of Independence Ends",
+  "ru": "Война за независимость окончена"
+ },
+ "notification_decol_iw_war_unstarted_notice_name": {
+  "en": "No War Came",
+  "ru": "Войны не случилось"
+ },
+ "notification_decol_iw_war_won_rebels_notice_name": {
+  "en": "Independence Won",
+  "ru": "Независимость завоёвана"
+ },
+ "notification_decol_liberation_contagion_notice_name": {
+  "en": "Independence Spreads",
+  "ru": "Независимость распространяется"
+ },
+ "notification_decol_truce_proposal_accepted_notice_name": {
+  "en": "Truce Accepted",
+  "ru": "Перемирие принято"
+ },
+ "notification_decol_truce_proposal_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has refused our offer of a five-year truce.",
+  "ru": "Страна [SCOPE.sCountry('truce_responder').GetName] отклонила наше предложение о пятилетнем перемирии."
+ },
+ "notification_decol_truce_proposal_declined_notice_name": {
+  "en": "Truce Refused",
+  "ru": "Перемирие отклонено"
+ },
+ "notification_espionage_agent_quietly_exposed_name": {
+  "en": "Agent Exchanged",
+  "ru": "Агент обменян"
+ },
+ "notification_former_colony_ties_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has turned down our proposal for closer ties.",
+  "ru": "Страна [SCOPE.sCountry('ties_former_overlord').GetName] отклонила наше предложение о более тесных связях."
+ },
+ "notification_former_colony_ties_declined_notice_name": {
+  "en": "Overture Rebuffed",
+  "ru": "Предложение отвергнуто"
+ },
+ "notification_former_colony_ties_welcomed_notice_desc": {
+  "en": "[SCOPE.sCountry('ties_former_overlord').GetName] has welcomed our proposal for closer ties.",
+  "ru": "Страна [SCOPE.sCountry('ties_former_overlord').GetName] приветствовала наше предложение о более тесных связях."
+ },
+ "notification_former_colony_ties_welcomed_notice_name": {
+  "en": "Closer Ties Welcomed",
+  "ru": "Более тесные связи приветствуются"
+ },
+ "notification_gp_condemnation_reforms_announced_notice_name": {
+  "en": "Colonial Reforms Announced",
+  "ru": "Объявлены колониальные реформы"
+ },
+ "notification_gp_condemnation_rejected_notice_name": {
+  "en": "Condemnation Rejected",
+  "ru": "Осуждение отклонено"
+ },
+ "notification_gp_intervention_condemned_notice_name": {
+  "en": "Our Intervention Condemned",
+  "ru": "Наше вмешательство осуждено"
+ },
+ "notification_gp_intervention_target_notice_name": {
+  "en": "Foreign Troops Land",
+  "ru": "Высадка иностранных войск"
+ },
+ "notification_gp_support_accepted_notice_name": {
+  "en": "A Colonial Power Stands With Us",
+  "ru": "Колониальная держава на нашей стороне"
+ },
+ "notification_gp_support_declined_notice_name": {
+  "en": "A Colonial Power Keeps Its Distance",
+  "ru": "Колониальная держава держится в стороне"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_name": {
+  "en": "#b MINING THE OCEAN FLOOR FOR RARE RESOURCES #!",
+  "ru": "#b ДОБЫЧА РЕДКИХ РЕСУРСОВ СО ДНА ОКЕАНА #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_name": {
+  "en": "#b MANUFACTURING REVOLUTION: 'PRINTING' SOLID OBJECTS #!",
+  "ru": "#b ПРОИЗВОДСТВЕННАЯ РЕВОЛЮЦИЯ: «ПЕЧАТЬ» ТВЁРДЫХ ОБЪЕКТОВ #!"
+ },
+ "notification_headlines_tech_advanced_agricultural_statistics_name": {
+  "en": "#b FARMING BY THE NUMBERS PROMISES RECORD HARVESTS #!",
+  "ru": "#b ЗЕМЛЕДЕЛИЕ ПО ЦИФРАМ ОБЕЩАЕТ РЕКОРДНЫЕ УРОЖАИ #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_name": {
+  "en": "#b FACTORIES ADOPT 'JUST-IN-TIME' PRODUCTION #!",
+  "ru": "#b ЗАВОДЫ ПЕРЕХОДЯТ НА ПРОИЗВОДСТВО «ТОЧНО В СРОК» #!"
+ },
+ "notification_headlines_tech_advanced_body_armor_name": {
+  "en": "#b NEW COMPOSITE ARMOR INCREASES SOLDIER SURVIVABILITY #!",
+  "ru": "#b НОВАЯ КОМПОЗИТНАЯ БРОНЯ ПОВЫШАЕТ ЖИВУЧЕСТЬ СОЛДАТ #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_name": {
+  "en": "#b NEXT-GEN ARMOR MAKES VEHICLES MORE RESILIENT #!",
+  "ru": "#b БРОНЯ НОВОГО ПОКОЛЕНИЯ ДЕЛАЕТ МАШИНЫ СТОЙЧЕЕ #!"
+ },
+ "notification_headlines_tech_advanced_military_aircraft_name": {
+  "en": "#b NEW GENERATION OF JETS DOMINATES THE SKIES #!",
+  "ru": "#b НОВОЕ ПОКОЛЕНИЕ РЕАКТИВНЫХ САМОЛЁТОВ ГОСПОДСТВУЕТ В НЕБЕ #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_name": {
+  "en": "#b BUILDING AT THE ATOMIC LEVEL NOW POSSIBLE #!",
+  "ru": "#b СТРОИТЬ НА АТОМНОМ УРОВНЕ ТЕПЕРЬ ВОЗМОЖНО #!"
+ },
+ "notification_headlines_tech_advanced_structural_engineering_name": {
+  "en": "#b STRONGER, LIGHTER, BETTER: THE FUTURE OF CONSTRUCTION #!",
+  "ru": "#b ПРОЧНЕЕ, ЛЕГЧЕ, ЛУЧШЕ: БУДУЩЕЕ СТРОИТЕЛЬСТВА #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_name": {
+  "en": "#b SILENT HUNTERS PROWL THE DEEP #!",
+  "ru": "#b БЕСШУМНЫЕ ОХОТНИКИ БОРОЗДЯТ ГЛУБИНЫ #!"
+ },
+ "notification_headlines_tech_advanced_workflow_optimization_name": {
+  "en": "#b DATA-DRIVEN EFFICIENCY SWEEPS INDUSTRIES #!",
+  "ru": "#b ЭФФЕКТИВНОСТЬ НА ОСНОВЕ ДАННЫХ ОХВАТЫВАЕТ ОТРАСЛИ #!"
+ },
+ "notification_headlines_tech_aluminum_mass_production_name": {
+  "en": "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!",
+  "ru": "#b БЫВШИЙ «МЕТАЛЛ ДЛЯ УКРАШЕНИЙ» ТЕПЕРЬ ДОСТУПЕН В ИЗОБИЛИИ #!"
+ },
+ "notification_headlines_tech_animation_name": {
+  "en": "#b DRAWINGS THAT MOVE DELIGHT AUDIENCES #!",
+  "ru": "#b ДВИЖУЩИЕСЯ РИСУНКИ ВОСХИЩАЮТ ЗРИТЕЛЕЙ #!"
+ },
+ "notification_headlines_tech_anti_sub_warfare_name": {
+  "en": "#b NEW TACTICS TO COUNTER UNDERSEA MENACE #!",
+  "ru": "#b НОВАЯ ТАКТИКА ПРОТИВ ПОДВОДНОЙ УГРОЗЫ #!"
+ },
+ "notification_headlines_tech_anti_war_movement_name": {
+  "en": "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!",
+  "ru": "#b ТЫСЯЧИ ВЫХОДЯТ НА МАРШ, ТРЕБУЯ «МИРА СЕЙЧАС!» #!"
+ },
+ "notification_headlines_tech_antibiotic_mass_production_name": {
+  "en": "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!",
+  "ru": "#b «ЧУДО-ЛЕКАРСТВА» СТАНОВЯТСЯ ШИРОКО ДОСТУПНЫМИ #!"
+ },
+ "notification_headlines_tech_antimatter_production_name": {
+  "en": "#b EXOTIC MATTER UNLOCKS UNPRECEDENTED ENERGY #!",
+  "ru": "#b ЭКЗОТИЧЕСКАЯ МАТЕРИЯ ОТКРЫВАЕТ НЕБЫВАЛУЮ ЭНЕРГИЮ #!"
+ },
+ "notification_headlines_tech_art_deco_architecture_name": {
+  "en": "#b SLEEK LINES AND BOLD SHAPES DEFINE MODERN CITIES #!",
+  "ru": "#b ОБТЕКАЕМЫЕ ЛИНИИ И СМЕЛЫЕ ФОРМЫ ОПРЕДЕЛЯЮТ СОВРЕМЕННЫЕ ГОРОДА #!"
+ },
+ "notification_headlines_tech_artificial_intelligence_name": {
+  "en": "#b A 'THINKING MACHINE' IS BORN #!",
+  "ru": "#b РОЖДАЕТСЯ «МЫСЛЯЩАЯ МАШИНА» #!"
+ },
+ "notification_headlines_tech_asteroid_mining_name": {
+  "en": "#b A GOLD RUSH IN THE HEAVENS #!",
+  "ru": "#b ЗОЛОТАЯ ЛИХОРАДКА В НЕБЕСАХ #!"
+ },
+ "notification_headlines_tech_augmented_reality_warfare_name": {
+  "en": "#b DIGITAL OVERLAYS ENHANCE THE MODERN BATTLEFIELD #!",
+  "ru": "#b ЦИФРОВЫЕ НАЛОЖЕНИЯ УСИЛИВАЮТ СОВРЕМЕННОЕ ПОЛЕ БОЯ #!"
+ },
+ "notification_headlines_tech_automated_surveillance_name": {
+  "en": "#b THE UNBLINKING EYE: SURVEILLANCE GOES AUTOMATIC #!",
+  "ru": "#b НЕМИГАЮЩЕЕ ОКО: СЛЕЖКА СТАНОВИТСЯ АВТОМАТИЧЕСКОЙ #!"
+ },
+ "notification_headlines_tech_autonomous_vehicles_name": {
+  "en": "#b CARS THAT DRIVE THEMSELVES HIT THE ROAD #!",
+  "ru": "#b НА ДОРОГИ ВЫЕЗЖАЮТ САМОУПРАВЛЯЕМЫЕ АВТОМОБИЛИ #!"
+ },
+ "notification_headlines_tech_barcodes_and_scanners_name": {
+  "en": "#b BLACK AND WHITE LINES TRANSFORM RETAIL #!",
+  "ru": "#b ЧЁРНО-БЕЛЫЕ ПОЛОСКИ МЕНЯЮТ РОЗНИЦУ #!"
+ },
+ "notification_headlines_tech_bergius_process_name": {
+  "en": "#b SYNTHETIC FUEL FROM COAL ANNOUNCED #!",
+  "ru": "#b ОБЪЯВЛЕНО О СИНТЕТИЧЕСКОМ ТОПЛИВЕ ИЗ УГЛЯ #!"
+ },
+ "notification_headlines_tech_bioenhanced_soldiers_name": {
+  "en": "#b HUMAN AUGMENTATION ENTERS MILITARY REALM #!",
+  "ru": "#b УЛУЧШЕНИЕ ЧЕЛОВЕКА ПРИХОДИТ В АРМИЮ #!"
+ },
+ "notification_headlines_tech_biohacking_and_human_augmentation_name": {
+  "en": "#b BEYOND HUMAN: THE AUGMENTATION DEBATE #!",
+  "ru": "#b ЗА ПРЕДЕЛАМИ ЧЕЛОВЕКА: СПОР ОБ УЛУЧШЕНИЯХ #!"
+ },
+ "notification_headlines_tech_biological_immortality_name": {
+  "en": "#b SCIENTISTS CLAIM TO HAVE HALTED AGING #!",
+  "ru": "#b УЧЁНЫЕ ЗАЯВЛЯЮТ, ЧТО ОСТАНОВИЛИ СТАРЕНИЕ #!"
+ },
+ "notification_headlines_tech_biotechnology_name": {
+  "en": "#b PRECISION GENE-EDITING TOOLS DEVELOPED #!",
+  "ru": "#b СОЗДАНЫ ТОЧНЫЕ ИНСТРУМЕНТЫ РЕДАКТИРОВАНИЯ ГЕНОВ #!"
+ },
+ "notification_headlines_tech_bombing_aircraft_name": {
+  "en": "#b CITIES NOW VULNERABLE TO AERIAL ATTACK #!",
+  "ru": "#b ГОРОДА ТЕПЕРЬ УЯЗВИМЫ ДЛЯ УДАРОВ С ВОЗДУХА #!"
+ },
+ "notification_headlines_tech_brain_computer_interfaces_name": {
+  "en": "#b DIRECT LINK BETWEEN BRAIN AND MACHINE ACHIEVED #!",
+  "ru": "#b ДОСТИГНУТА ПРЯМАЯ СВЯЗЬ МЕЖДУ МОЗГОМ И МАШИНОЙ #!"
+ },
+ "notification_headlines_tech_cellular_networks_name": {
+  "en": "#b PHONE CALLS UNTETHERED FROM WIRES #!",
+  "ru": "#b ТЕЛЕФОННЫЕ ЗВОНКИ ОСВОБОЖДЕНЫ ОТ ПРОВОДОВ #!"
+ },
+ "notification_headlines_tech_civil_rights_movement_name": {
+  "en": "#b MARCHES FOR CIVIL RIGHTS CHALLENGE STATUS QUO #!",
+  "ru": "#b МАРШИ ЗА ГРАЖДАНСКИЕ ПРАВА БРОСАЮТ ВЫЗОВ СТАТУС-КВО #!"
+ },
+ "notification_headlines_tech_clean_energy_technologies_name": {
+  "en": "#b POWER FROM THE SUN AND WIND GROWS #!",
+  "ru": "#b РАСТЁТ ЭНЕРГИЯ СОЛНЦА И ВЕТРА #!"
+ },
+ "notification_headlines_tech_cloud_computing_name": {
+  "en": "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!",
+  "ru": "#b ДАННЫЕ «В ОБЛАКЕ» МЕНЯЮТ ТЕХНОЛОГИИ #!"
+ },
+ "notification_headlines_tech_combined_arms_name": {
+  "en": "#b NEW DOCTRINE SYNCHRONIZES MILITARY FORCES #!",
+  "ru": "#b НОВАЯ ДОКТРИНА СИНХРОНИЗИРУЕТ ВОЙСКА #!"
+ },
+ "notification_headlines_tech_commercial_aviation_name": {
+  "en": "#b AIR TRAVEL SHRINKS THE GLOBE #!",
+  "ru": "#b АВИАПЕРЕЛЁТЫ СЖИМАЮТ ПЛАНЕТУ #!"
+ },
+ "notification_headlines_tech_compact_fusion_reactors_name": {
+  "en": "#b FUSION POWER IN A SMALLER PACKAGE #!",
+  "ru": "#b ТЕРМОЯДЕРНАЯ ЭНЕРГИЯ В БОЛЕЕ КОМПАКТНОМ ИСПОЛНЕНИИ #!"
+ },
+ "notification_headlines_tech_computer_aided_design_name": {
+  "en": "#b DIGITAL BLUEPRINTS REVOLUTIONIZE ENGINEERING #!",
+  "ru": "#b ЦИФРОВЫЕ ЧЕРТЕЖИ ПЕРЕВОРАЧИВАЮТ ИНЖЕНЕРНОЕ ДЕЛО #!"
+ },
+ "notification_headlines_tech_computer_networks_name": {
+  "en": "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!",
+  "ru": "#b КОМПЬЮТЕРЫ НАЧИНАЮТ «ГОВОРИТЬ» ДРУГ С ДРУГОМ #!"
+ },
+ "notification_headlines_tech_computing_machines_name": {
+  "en": "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!",
+  "ru": "#b «ЭЛЕКТРОННЫЕ МОЗГИ» БЕРУТСЯ ЗА СЛОЖНЫЕ РАСЧЁТЫ #!"
+ },
+ "notification_headlines_tech_consumer_credit_name": {
+  "en": "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!",
+  "ru": "#b «КУПИ СЕЙЧАС, ЗАПЛАТИ ПОТОМ» ПОДСТЁГИВАЕТ РОСТ ЭКОНОМИКИ #!"
+ },
+ "notification_headlines_tech_containerization_name": {
+  "en": "#b THE SIMPLE BOX THAT CHANGED GLOBAL TRADE #!",
+  "ru": "#b ПРОСТОЙ ЯЩИК, ИЗМЕНИВШИЙ МИРОВУЮ ТОРГОВЛЮ #!"
+ },
+ "notification_headlines_tech_contraceptive_pill_name": {
+  "en": "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!",
+  "ru": "#b «ТАБЛЕТКА» ВЫЗЫВАЕТ СОЦИАЛЬНУЮ РЕВОЛЮЦИЮ #!"
+ },
+ "notification_headlines_tech_cryptography_name": {
+  "en": "#b THE SECRET WAR OF CODES AND CIPHERS #!",
+  "ru": "#b ТАЙНАЯ ВОЙНА КОДОВ И ШИФРОВ #!"
+ },
+ "notification_headlines_tech_cyber_warfare_name": {
+  "en": "#b CONFLICT MOVES TO THE DIGITAL REALM #!",
+  "ru": "#b КОНФЛИКТ ПЕРЕМЕЩАЕТСЯ В ЦИФРОВУЮ СФЕРУ #!"
+ },
+ "notification_headlines_tech_cybersecurity_name": {
+  "en": "#b DIGITAL FORTRESSES GUARD AGAINST NEW THREATS #!",
+  "ru": "#b ЦИФРОВЫЕ КРЕПОСТИ ЗАЩИЩАЮТ ОТ НОВЫХ УГРОЗ #!"
+ },
+ "notification_headlines_tech_decline_of_organized_religion_name": {
+  "en": "#b RISE OF SECULARISM NOTED IN NEW SURVEYS #!",
+  "ru": "#b НОВЫЕ ОПРОСЫ ОТМЕЧАЮТ РОСТ СЕКУЛЯРИЗМА #!"
+ },
+ "notification_headlines_tech_decolonization_name": {
+  "en": "#b THE AGE OF EMPIRE ENDS, NEW NATIONS EMERGE #!",
+  "ru": "#b ЭПОХА ИМПЕРИЙ ЗАКАНЧИВАЕТСЯ, ПОЯВЛЯЮТСЯ НОВЫЕ НАЦИИ #!"
+ },
+ "notification_headlines_tech_digital_education_name": {
+  "en": "#b THE CLASSROOM OF THE FUTURE IS ONLINE #!",
+  "ru": "#b КЛАСС БУДУЩЕГО — В СЕТИ #!"
+ },
+ "notification_headlines_tech_digital_entertainment_name": {
+  "en": "#b ON-DEMAND ENTERTAINMENT RESHAPES LEISURE #!",
+  "ru": "#b РАЗВЛЕЧЕНИЯ ПО ЗАПРОСУ МЕНЯЮТ ДОСУГ #!"
+ },
+ "notification_headlines_tech_digital_telecommunications_name": {
+  "en": "#b CLEARER CALLS, FASTER DATA WITH DIGITAL #!",
+  "ru": "#b ЦИФРА: ЧИЩЕ ЗВОНКИ, БЫСТРЕЕ ДАННЫЕ #!"
+ },
+ "notification_headlines_tech_directed_energy_defenses_name": {
+  "en": "#b LASERS TO FORM DEFENSIVE SHIELD #!",
+  "ru": "#b ЛАЗЕРЫ ОБРАЗУЮТ ЗАЩИТНЫЙ ЩИТ #!"
+ },
+ "notification_headlines_tech_directed_energy_weapons_name": {
+  "en": "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!",
+  "ru": "#b «ЛУЧЕВЫЕ ПУШКИ» БОЛЬШЕ НЕ ФАНТАСТИКА #!"
+ },
+ "notification_headlines_tech_early_nanotechnology_name": {
+  "en": "#b SCIENCE OF THE SMALL PROMISES BIG FUTURE #!",
+  "ru": "#b НАУКА О МАЛОМ ОБЕЩАЕТ БОЛЬШОЕ БУДУЩЕЕ #!"
+ },
+ "notification_headlines_tech_electronic_warfare_name": {
+  "en": "#b THE INVISIBLE WAR OF THE AIRWAVES #!",
+  "ru": "#b НЕВИДИМАЯ ВОЙНА В ЭФИРЕ #!"
+ },
+ "notification_headlines_tech_environmental_movement_name": {
+  "en": "#b A GREEN WAVE: ACTIVISTS DEMAND PLANET'S PROTECTION #!",
+  "ru": "#b ЗЕЛЁНАЯ ВОЛНА: АКТИВИСТЫ ТРЕБУЮТ ЗАЩИТЫ ПЛАНЕТЫ #!"
+ },
+ "notification_headlines_tech_fiber_optics_name": {
+  "en": "#b MESSAGES SENT AT THE SPEED OF LIGHT #!",
+  "ru": "#b СООБЩЕНИЯ СО СКОРОСТЬЮ СВЕТА #!"
+ },
+ "notification_headlines_tech_fluorescent_lamps_name": {
+  "en": "#b EFFICIENT NEW LAMPS BRIGHTEN CITIES #!",
+  "ru": "#b НОВЫЕ ЭКОНОМИЧНЫЕ ЛАМПЫ ОСВЕЩАЮТ ГОРОДА #!"
+ },
+ "notification_headlines_tech_fusion_batteries_name": {
+  "en": "#b THE BATTERY THAT NEVER DIES? #!",
+  "ru": "#b БАТАРЕЯ, КОТОРАЯ НИКОГДА НЕ РАЗРЯДИТСЯ? #!"
+ },
+ "notification_headlines_tech_fusion_power_name": {
+  "en": "#b HARNESSING THE POWER OF A STAR #!",
+  "ru": "#b ОБУЗДАНИЕ МОЩИ ЗВЕЗДЫ #!"
+ },
+ "notification_headlines_tech_generative_ai_name": {
+  "en": "#b AI LEARNS TO CREATE ART, MUSIC, AND MORE #!",
+  "ru": "#b ИИ УЧИТСЯ СОЗДАВАТЬ ИСКУССТВО, МУЗЫКУ И НЕ ТОЛЬКО #!"
+ },
+ "notification_headlines_tech_genetic_engineering_name": {
+  "en": "#b REWRITING THE BOOK OF LIFE #!",
+  "ru": "#b ПЕРЕПИСЫВАЯ КНИГУ ЖИЗНИ #!"
+ },
+ "notification_headlines_tech_globalization_name": {
+  "en": "#b A TRULY INTERCONNECTED WORLD #!",
+  "ru": "#b ПО-НАСТОЯЩЕМУ ВЗАИМОСВЯЗАННЫЙ МИР #!"
+ },
+ "notification_headlines_tech_green_revolution_name": {
+  "en": "#b NEW FARMING TECHNIQUES TO FEED THE WORLD #!",
+  "ru": "#b НОВЫЕ МЕТОДЫ ЗЕМЛЕДЕЛИЯ, ЧТОБЫ НАКОРМИТЬ МИР #!"
+ },
+ "notification_headlines_tech_guided_missiles_name": {
+  "en": "#b 'SMART' MISSILES CAN NOW FIND THEIR OWN TARGETS #!",
+  "ru": "#b «УМНЫЕ» РАКЕТЫ ТЕПЕРЬ САМИ НАХОДЯТ ЦЕЛИ #!"
+ },
+ "notification_headlines_tech_hydraulic_fracturing_name": {
+  "en": "#b 'FRACKING' UNLOCKS VAST ENERGY RESERVES #!",
+  "ru": "#b «ФРЕКИНГ» ОТКРЫВАЕТ ОГРОМНЫЕ ЭНЕРГЕТИЧЕСКИЕ ЗАПАСЫ #!"
+ },
+ "notification_headlines_tech_hypersonic_weapons_name": {
+  "en": "#b NEW WEAPONS CAN TRAVEL FASTER THAN SOUND #!",
+  "ru": "#b НОВОЕ ОРУЖИЕ ЛЕТАЕТ БЫСТРЕЕ ЗВУКА #!"
+ },
+ "notification_headlines_tech_inertial_navigation_systems_name": {
+  "en": "#b NAVIGATE ANYWHERE WITHOUT EXTERNAL SIGNALS #!",
+  "ru": "#b НАВИГАЦИЯ В ЛЮБОЙ ТОЧКЕ БЕЗ ВНЕШНИХ СИГНАЛОВ #!"
+ },
+ "notification_headlines_tech_infrared_night_vision_name": {
+  "en": "#b TECHNOLOGY TURNS NIGHT INTO DAY #!",
+  "ru": "#b ТЕХНОЛОГИЯ ОБРАЩАЕТ НОЧЬ В ДЕНЬ #!"
+ },
+ "notification_headlines_tech_integrated_circuits_name": {
+  "en": "#b AN ENTIRE CIRCUIT ON A TINY CHIP #!",
+  "ru": "#b ЦЕЛАЯ СХЕМА НА КРОШЕЧНОМ ЧИПЕ #!"
+ },
+ "notification_headlines_tech_intergovernmental_organizations_name": {
+  "en": "#b NATIONS UNITE FOR GLOBAL COOPERATION #!",
+  "ru": "#b НАЦИИ ОБЪЕДИНЯЮТСЯ РАДИ ГЛОБАЛЬНОГО СОТРУДНИЧЕСТВА #!"
+ },
+ "notification_headlines_tech_isoprene_name": {
+  "en": "#b SYNTHETIC RUBBER PRODUCTION SOARS #!",
+  "ru": "#b ПРОИЗВОДСТВО СИНТЕТИЧЕСКОГО КАУЧУКА РЕЗКО РАСТЁТ #!"
+ },
+ "notification_headlines_tech_jadc2_name": {
+  "en": "#b ALL FORCES CONNECTED IN NEW BATTLE NETWORK #!",
+  "ru": "#b ВСЕ РОДА ВОЙСК СОЕДИНЕНЫ В НОВУЮ БОЕВУЮ СЕТЬ #!"
+ },
+ "notification_headlines_tech_jet_engine_technology_name": {
+  "en": "#b THE JET AGE HAS ARRIVED #!",
+  "ru": "#b НАСТУПИЛ РЕАКТИВНЫЙ ВЕК #!"
+ },
+ "notification_headlines_tech_keynesian_economics_name": {
+  "en": "#b GOVERNMENT SPENDING TO TACKLE ECONOMIC CRISIS #!",
+  "ru": "#b ГОСУДАРСТВЕННЫЕ РАСХОДЫ ПРОТИВ ЭКОНОМИЧЕСКОГО КРИЗИСА #!"
+ },
+ "notification_headlines_tech_knowledge_economy_name": {
+  "en": "#b IDEAS, NOT IRON, NOW DRIVE THE ECONOMY #!",
+  "ru": "#b ЭКОНОМИКУ ТЕПЕРЬ ДВИЖУТ ИДЕИ, А НЕ ЖЕЛЕЗО #!"
+ },
+ "notification_headlines_tech_laser_technology_name": {
+  "en": "#b THE POWERFUL BEAM OF LIGHT WITH ENDLESS USES #!",
+  "ru": "#b МОЩНЫЙ СВЕТОВОЙ ЛУЧ С БЕСКОНЕЧНЫМИ ПРИМЕНЕНИЯМИ #!"
+ },
+ "notification_headlines_tech_mainframe_computers_name": {
+  "en": "#b 'BIG IRON' COMPUTERS POWER MODERN INDUSTRY #!",
+  "ru": "#b КОМПЬЮТЕРЫ-«ГИГАНТЫ» ПИТАЮТ СОВРЕМЕННУЮ ПРОМЫШЛЕННОСТЬ #!"
+ },
+ "notification_headlines_tech_marketing_research_name": {
+  "en": "#b SCIENCE OF SELLING: WHAT DO CONSUMERS WANT? #!",
+  "ru": "#b НАУКА ПРОДАЖ: ЧЕГО ХОТЯТ ПОТРЕБИТЕЛИ? #!"
+ },
+ "notification_headlines_tech_mass_media_name": {
+  "en": "#b RADIO, TV, AND NEWSPAPERS SHAPE PUBLIC OPINION #!",
+  "ru": "#b РАДИО, ТЕЛЕВИДЕНИЕ И ГАЗЕТЫ ФОРМИРУЮТ ОБЩЕСТВЕННОЕ МНЕНИЕ #!"
+ },
+ "notification_headlines_tech_mental_health_awareness_name": {
+  "en": "#b STIGMA AROUND MENTAL HEALTH BEGINS TO FADE #!",
+  "ru": "#b СТИГМА ВОКРУГ ПСИХИЧЕСКОГО ЗДОРОВЬЯ НАЧИНАЕТ УХОДИТЬ #!"
+ },
+ "notification_headlines_tech_microprocessor_name": {
+  "en": "#b A COMPUTER ON A SINGLE CHIP #!",
+  "ru": "#b КОМПЬЮТЕР НА ОДНОМ ЧИПЕ #!"
+ },
+ "notification_headlines_tech_military_grade_cybersecurity_name": {
+  "en": "#b DIGITAL WARFARE DEMANDS DIGITAL DEFENSES #!",
+  "ru": "#b ЦИФРОВАЯ ВОЙНА ТРЕБУЕТ ЦИФРОВОЙ ЗАЩИТЫ #!"
+ },
+ "notification_headlines_tech_mind_backups_name": {
+  "en": "#b DIGITAL IMMORTALITY MAY SOON BE POSSIBLE #!",
+  "ru": "#b ЦИФРОВОЕ БЕССМЕРТИЕ МОЖЕТ СКОРО СТАТЬ ВОЗМОЖНЫМ #!"
+ },
+ "notification_headlines_tech_missile_defense_systems_name": {
+  "en": "#b DEFENSE SHIELD AGAINST MISSILES DEVELOPED #!",
+  "ru": "#b РАЗРАБОТАН ЗАЩИТНЫЙ ЩИТ ОТ РАКЕТ #!"
+ },
+ "notification_headlines_tech_modern_automotive_technology_name": {
+  "en": "#b MODERN AUTOMOBILES OFFER COMFORT AND RELIABILITY #!",
+  "ru": "#b СОВРЕМЕННЫЕ АВТОМОБИЛИ ДАРЯТ КОМФОРТ И НАДЁЖНОСТЬ #!"
+ },
+ "notification_headlines_tech_modern_chemical_processes_name": {
+  "en": "#b CHEMICAL INDUSTRY REVOLUTIONIZED #!",
+  "ru": "#b РЕВОЛЮЦИЯ В ХИМИЧЕСКОЙ ПРОМЫШЛЕННОСТИ #!"
+ },
+ "notification_headlines_tech_modern_management_techniques_name": {
+  "en": "#b 'SCIENTIFIC MANAGEMENT' BOOSTS PRODUCTIVITY #!",
+  "ru": "#b «НАУЧНОЕ УПРАВЛЕНИЕ» ПОВЫШАЕТ ПРОИЗВОДИТЕЛЬНОСТЬ #!"
+ },
+ "notification_headlines_tech_modern_material_science_name": {
+  "en": "#b 'WONDER MATERIALS' TO CHANGE THE FUTURE #!",
+  "ru": "#b «ЧУДО-МАТЕРИАЛЫ» ИЗМЕНЯТ БУДУЩЕЕ #!"
+ },
+ "notification_headlines_tech_modern_materials_name": {
+  "en": "#b FIBERGLASS AND NYLON: MATERIALS OF TOMORROW, TODAY #!",
+  "ru": "#b СТЕКЛОПЛАСТИК И НЕЙЛОН: МАТЕРИАЛЫ ЗАВТРАШНЕГО ДНЯ УЖЕ СЕГОДНЯ #!"
+ },
+ "notification_headlines_tech_modern_pharmaceuticals_name": {
+  "en": "#b THE DAWN OF THE MIRACLE DRUG ERA #!",
+  "ru": "#b ЗАРЯ ЭПОХИ ЧУДО-ЛЕКАРСТВ #!"
+ },
+ "notification_headlines_tech_modern_skyscrapers_name": {
+  "en": "#b A RACE TO THE CLOUDS: SKYLINES REDEFINED #!",
+  "ru": "#b ГОНКА К ОБЛАКАМ: НОВЫЙ ОБЛИК ГОРИЗОНТОВ #!"
+ },
+ "notification_headlines_tech_modern_tools_name": {
+  "en": "#b FORKLIFTS MODERNIZE THE WORKPLACE #!",
+  "ru": "#b ПОГРУЗЧИКИ МОДЕРНИЗИРУЮТ РАБОЧЕЕ МЕСТО #!"
+ },
+ "notification_headlines_tech_modern_vaccines_name": {
+  "en": "#b DEADLY DISEASES DEFEATED BY VACCINATION #!",
+  "ru": "#b СМЕРТЕЛЬНЫЕ БОЛЕЗНИ ПОБЕЖДЕНЫ ВАКЦИНАЦИЕЙ #!"
+ },
+ "notification_headlines_tech_molecular_assemblers_name": {
+  "en": "#b BUILDING ANYTHING, ONE ATOM AT A TIME #!",
+  "ru": "#b СТРОИТЬ ВСЁ, ЧТО УГОДНО, ПО ОДНОМУ АТОМУ #!"
+ },
+ "notification_headlines_tech_motorized_artillery_name": {
+  "en": "#b ARTILLERY NOW KEEPS PACE WITH ADVANCING ARMIES #!",
+  "ru": "#b АРТИЛЛЕРИЯ ТЕПЕРЬ ИДЁТ В НОГУ С НАСТУПАЮЩИМИ АРМИЯМИ #!"
+ },
+ "notification_headlines_tech_naval_convoy_defense_name": {
+  "en": "#b NEW TACTICS TO GUARD THE SEA LANES #!",
+  "ru": "#b НОВАЯ ТАКТИКА ОХРАНЫ МОРСКИХ ПУТЕЙ #!"
+ },
+ "notification_headlines_tech_naval_fire_control_systems_name": {
+  "en": "#b COMPUTER-AIMED NAVAL GUNS OFFER DEADLY ACCURACY #!",
+  "ru": "#b КОРАБЕЛЬНЫЕ ОРУДИЯ С КОМПЬЮТЕРНЫМ НАВЕДЕНИЕМ СТРЕЛЯЮТ СМЕРТЕЛЬНО ТОЧНО #!"
+ },
+ "notification_headlines_tech_network_centric_warfare_name": {
+  "en": "#b FIGHTING AT THE SPEED OF INFORMATION #!",
+  "ru": "#b БОЙ СО СКОРОСТЬЮ ИНФОРМАЦИИ #!"
+ },
+ "notification_headlines_tech_neural_lace_name": {
+  "en": "#b A SEAMLESS CONNECTION BETWEEN MIND AND MACHINE #!",
+  "ru": "#b БЕСШОВНАЯ СВЯЗЬ МЕЖДУ РАЗУМОМ И МАШИНОЙ #!"
+ },
+ "notification_headlines_tech_nuclear_energy_name": {
+  "en": "#b ATOMS FOR PEACE: CLEAN ENERGY FOR THE FUTURE #!",
+  "ru": "#b АТОМ ДЛЯ МИРА: ЧИСТАЯ ЭНЕРГИЯ ДЛЯ БУДУЩЕГО #!"
+ },
+ "notification_headlines_tech_nuclear_weapons_name": {
+  "en": "#b A WEAPON THAT CAN DESTROY WORLDS #!",
+  "ru": "#b ОРУЖИЕ, СПОСОБНОЕ УНИЧТОЖАТЬ МИРЫ #!"
+ },
+ "notification_headlines_tech_orbital_manufacturing_name": {
+  "en": "#b FACTORIES NOW ORBITING THE EARTH #!",
+  "ru": "#b ЗАВОДЫ ТЕПЕРЬ ВРАЩАЮТСЯ ВОКРУГ ЗЕМЛИ #!"
+ },
+ "notification_headlines_tech_orbital_weapon_platforms_name": {
+  "en": "#b THE ULTIMATE STRATEGIC HIGH GROUND #!",
+  "ru": "#b ВЫСШАЯ СТРАТЕГИЧЕСКАЯ ВЫСОТА #!"
+ },
+ "notification_headlines_tech_personal_appliances_name": {
+  "en": "#b MODERN CONVENIENCES EASE HOUSEHOLD BURDENS #!",
+  "ru": "#b СОВРЕМЕННЫЕ УДОБСТВА ОБЛЕГЧАЮТ ДОМАШНИЙ ТРУД #!"
+ },
+ "notification_headlines_tech_personal_computers_name": {
+  "en": "#b A COMPUTER IN EVERY HOME! #!",
+  "ru": "#b КОМПЬЮТЕР В КАЖДЫЙ ДОМ! #!"
+ },
+ "notification_headlines_tech_personalized_medicine_name": {
+  "en": "#b MEDICAL TREATMENTS TAILORED TO YOUR DNA #!",
+  "ru": "#b ЛЕЧЕНИЕ, ПОДОБРАННОЕ ПОД ВАШУ ДНК #!"
+ },
+ "notification_headlines_tech_photocopiers_name": {
+  "en": "#b INSTANT COPIES REVOLUTIONIZE THE OFFICE #!",
+  "ru": "#b МГНОВЕННЫЕ КОПИИ ПЕРЕВОРАЧИВАЮТ ОФИС #!"
+ },
+ "notification_headlines_tech_plastic_mass_production_name": {
+  "en": "#b PLASTIC: THE MATERIAL OF A THOUSAND USES #!",
+  "ru": "#b ПЛАСТИК: МАТЕРИАЛ ТЫСЯЧИ ПРИМЕНЕНИЙ #!"
+ },
+ "notification_headlines_tech_pollution_control_name": {
+  "en": "#b NATIONS BEGIN TO CLEAN UP THEIR ACT #!",
+  "ru": "#b НАЦИИ НАЧИНАЮТ НАВОДИТЬ ПОРЯДОК #!"
+ },
+ "notification_headlines_tech_precision_guided_munitions_name": {
+  "en": "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!",
+  "ru": "#b «УМНЫЕ БОМБЫ» ПОРАЖАЮТ ТОЧЕЧНУЮ ЦЕЛЬ #!"
+ },
+ "notification_headlines_tech_predictive_logistics_name": {
+  "en": "#b GETTING SUPPLIES THERE BEFORE THEY'RE NEEDED #!",
+  "ru": "#b ПОСТАВКИ ДОСТАВЛЯЮТСЯ ДО ТОГО, КАК ВОЗНИКНЕТ НУЖДА #!"
+ },
+ "notification_headlines_tech_programmable_matter_name": {
+  "en": "#b SHAPE-SHIFTING MATERIALS NOW A REALITY #!",
+  "ru": "#b МАТЕРИАЛЫ, МЕНЯЮЩИЕ ФОРМУ, СТАЛИ РЕАЛЬНОСТЬЮ #!"
+ },
+ "notification_headlines_tech_public_works_programs_name": {
+  "en": "#b NATIONS BUILD THEIR WAY OUT OF DEPRESSION #!",
+  "ru": "#b НАЦИИ СТРОЯТ ПУТЬ ИЗ ДЕПРЕССИИ #!"
+ },
+ "notification_headlines_tech_quantum_communications_name": {
+  "en": "#b THE UNBREAKABLE CODE IS HERE #!",
+  "ru": "#b НЕВЗЛАМЫВАЕМЫЙ КОД УЖЕ ЗДЕСЬ #!"
+ },
+ "notification_headlines_tech_quantum_computing_name": {
+  "en": "#b QUANTUM COMPUTERS TO SOLVE THE UNSOLVABLE #!",
+  "ru": "#b КВАНТОВЫЕ КОМПЬЮТЕРЫ РЕШАТ НЕРАЗРЕШИМОЕ #!"
+ },
+ "notification_headlines_tech_quantum_materials_name": {
+  "en": "#b ENGINEERING MATTER AT THE QUANTUM LEVEL #!",
+  "ru": "#b ИНЖЕНЕРИЯ МАТЕРИИ НА КВАНТОВОМ УРОВНЕ #!"
+ },
+ "notification_headlines_tech_radar_name": {
+  "en": "#b UNSEEN EYE SPOTS ENEMY AIRCRAFT #!",
+  "ru": "#b НЕВИДИМЫЙ ГЛАЗ ЗАМЕЧАЕТ ВРАЖЕСКИЕ САМОЛЁТЫ #!"
+ },
+ "notification_headlines_tech_rapid_deployment_forces_name": {
+  "en": "#b ELITE TROOPS READY TO DEPLOY ANYWHERE, ANYTIME #!",
+  "ru": "#b ЭЛИТНЫЕ ВОЙСКА ГОТОВЫ К РАЗВЁРТЫВАНИЮ В ЛЮБОМ МЕСТЕ И В ЛЮБОЕ ВРЕМЯ #!"
+ },
+ "notification_headlines_tech_recon_satellites_name": {
+  "en": "#b THE SPY IN THE SKY WATCHES FROM ABOVE #!",
+  "ru": "#b ШПИОН В НЕБЕ СЛЕДИТ СВЕРХУ #!"
+ },
+ "notification_headlines_tech_reusable_rocketry_name": {
+  "en": "#b ROCKETS THAT CAN LAND THEMSELVES #!",
+  "ru": "#b РАКЕТЫ, СПОСОБНЫЕ САМИ ПРИЗЕМЛЯТЬСЯ #!"
+ },
+ "notification_headlines_tech_robotics_name": {
+  "en": "#b ROBOTS NOW ON THE ASSEMBLY LINE #!",
+  "ru": "#b РОБОТЫ ТЕПЕРЬ НА КОНВЕЙЕРЕ #!"
+ },
+ "notification_headlines_tech_rocketry_name": {
+  "en": "#b REACHING FOR THE HEAVENS AND BEYOND #!",
+  "ru": "#b ТЯНЕМСЯ К НЕБЕСАМ И ДАЛЬШЕ #!"
+ },
+ "notification_headlines_tech_rural_electrification_name": {
+  "en": "#b LIGHTS COME TO THE COUNTRYSIDE #!",
+  "ru": "#b СВЕТ ПРИХОДИТ В ДЕРЕВНЮ #!"
+ },
+ "notification_headlines_tech_satellite_communications_name": {
+  "en": "#b A GLOBAL PHONE BOOTH NOW IN ORBIT #!",
+  "ru": "#b ГЛОБАЛЬНАЯ ТЕЛЕФОННАЯ БУДКА ТЕПЕРЬ НА ОРБИТЕ #!"
+ },
+ "notification_headlines_tech_second_wave_feminism_name": {
+  "en": "#b WOMEN'S LIBERATION MOVEMENT DEMANDS EQUALITY #!",
+  "ru": "#b ДВИЖЕНИЕ ЗА ОСВОБОЖДЕНИЕ ЖЕНЩИН ТРЕБУЕТ РАВЕНСТВА #!"
+ },
+ "notification_headlines_tech_semiautomatic_rifle_name": {
+  "en": "#b MORE FIREPOWER FOR THE AVERAGE SOLDIER #!",
+  "ru": "#b БОЛЬШЕ ОГНЕВОЙ МОЩИ РЯДОВОМУ СОЛДАТУ #!"
+ },
+ "notification_headlines_tech_sexual_revolution_name": {
+  "en": "#b TRADITIONAL VALUES CHALLENGED BY THE YOUTH #!",
+  "ru": "#b МОЛОДЁЖЬ БРОСАЕТ ВЫЗОВ ТРАДИЦИОННЫМ ЦЕННОСТЯМ #!"
+ },
+ "notification_headlines_tech_smart_grids_name": {
+  "en": "#b A SMARTER GRID FOR A SMARTER WORLD #!",
+  "ru": "#b БОЛЕЕ УМНАЯ СЕТЬ ДЛЯ БОЛЕЕ УМНОГО МИРА #!"
+ },
+ "notification_headlines_tech_social_justice_movements_name": {
+  "en": "#b A CALL FOR A FAIRER SOCIETY FOR ALL #!",
+  "ru": "#b ПРИЗЫВ К БОЛЕЕ СПРАВЕДЛИВОМУ ОБЩЕСТВУ ДЛЯ ВСЕХ #!"
+ },
+ "notification_headlines_tech_social_media_name": {
+  "en": "#b CONNECTING THE WORLD, ONE POST AT A TIME #!",
+  "ru": "#b СОЕДИНЯЯ МИР, ПОСТ ЗА ПОСТОМ #!"
+ },
+ "notification_headlines_tech_sonar_name": {
+  "en": "#b HEARING UNDERWATER: SUBMARINES HAVE NOWHERE TO HIDE #!",
+  "ru": "#b СЛУШАЯ ПОД ВОДОЙ: ПОДЛОДКАМ НЕГДЕ СПРЯТАТЬСЯ #!"
+ },
+ "notification_headlines_tech_space_based_solar_power_name": {
+  "en": "#b BEAMING ENERGY DOWN FROM ORBIT #!",
+  "ru": "#b ЭНЕРГИЯ ИЗ ОРБИТЫ ЛУЧОМ НА ЗЕМЛЮ #!"
+ },
+ "notification_headlines_tech_space_colonization_name": {
+  "en": "#b HUMANITY'S NEXT FRONTIER: THE STARS #!",
+  "ru": "#b СЛЕДУЮЩИЙ РУБЕЖ ЧЕЛОВЕЧЕСТВА: ЗВЁЗДЫ #!"
+ },
+ "notification_headlines_tech_space_elevator_name": {
+  "en": "#b AN ELEVATOR TO THE STARS #!",
+  "ru": "#b ЛИФТ К ЗВЁЗДАМ #!"
+ },
+ "notification_headlines_tech_space_exploration_name": {
+  "en": "#b ONE SMALL STEP FOR A MAN... #!",
+  "ru": "#b ОДИН МАЛЕНЬКИЙ ШАГ ЧЕЛОВЕКА... #!"
+ },
+ "notification_headlines_tech_space_militarization_name": {
+  "en": "#b THE NEXT BATTLEFIELD IS SPACE #!",
+  "ru": "#b СЛЕДУЮЩЕЕ ПОЛЕ БОЯ — КОСМОС #!"
+ },
+ "notification_headlines_tech_stainless_steel_mass_production_name": {
+  "en": "#b THE END OF RUST? STAINLESS STEEL FOR EVERYONE #!",
+  "ru": "#b КОНЕЦ РЖАВЧИНЕ? НЕРЖАВЕЮЩАЯ СТАЛЬ ДЛЯ ВСЕХ #!"
+ },
+ "notification_headlines_tech_stealth_technology_name": {
+  "en": "#b THE INVISIBLE AIRCRAFT IS NOW A REALITY #!",
+  "ru": "#b САМОЛЁТ-НЕВИДИМКА СТАЛ РЕАЛЬНОСТЬЮ #!"
+ },
+ "notification_headlines_tech_supersonic_aircraft_name": {
+  "en": "#b BREAKING THE SOUND BARRIER #!",
+  "ru": "#b ЗВУКОВОЙ БАРЬЕР ПРЕОДОЛЁН #!"
+ },
+ "notification_headlines_tech_swarm_technology_name": {
+  "en": "#b A SWARM OF DRONES, ACTING AS ONE #!",
+  "ru": "#b РОЙ ДРОНОВ ДЕЙСТВУЕТ КАК ЕДИНОЕ ЦЕЛОЕ #!"
+ },
+ "notification_headlines_tech_synthetic_biology_name": {
+  "en": "#b DESIGNING LIFE FROM SCRATCH #!",
+  "ru": "#b ПРОЕКТИРОВАНИЕ ЖИЗНИ С НУЛЯ #!"
+ },
+ "notification_headlines_tech_tactical_nuclear_weapons_name": {
+  "en": "#b BATTLEFIELD NUKES A DANGEROUS ESCALATION #!",
+  "ru": "#b ЯДЕРНОЕ ОРУЖИЕ НА ПОЛЕ БОЯ — ОПАСНАЯ ЭСКАЛАЦИЯ #!"
+ },
+ "notification_headlines_tech_telepathic_communities_name": {
+  "en": "#b A COMMUNITY OF MINDS #!",
+  "ru": "#b СООБЩЕСТВО РАЗУМОВ #!"
+ },
+ "notification_headlines_tech_television_broadcasting_name": {
+  "en": "#b BROADCASTING TO THE NATION #!",
+  "ru": "#b ВЕЩАНИЕ НА ВСЮ СТРАНУ #!"
+ },
+ "notification_headlines_tech_television_name": {
+  "en": "#b PICTURES IN YOUR LIVING ROOM #!",
+  "ru": "#b КАРТИНКИ В ВАШЕЙ ГОСТИНОЙ #!"
+ },
+ "notification_headlines_tech_terrorism_and_anti_terrorism_name": {
+  "en": "#b A NEW KIND OF WARFARE #!",
+  "ru": "#b НОВЫЙ ВИД ВОЙНЫ #!"
+ },
+ "notification_headlines_tech_transistors_name": {
+  "en": "#b THE TINY SWITCH THAT WILL CHANGE THE WORLD #!",
+  "ru": "#b КРОШЕЧНЫЙ ПЕРЕКЛЮЧАТЕЛЬ, КОТОРЫЙ ИЗМЕНИТ МИР #!"
+ },
+ "notification_headlines_tech_universal_basic_income_name": {
+  "en": "#b A PAYCHECK FOR EVERYONE? #!",
+  "ru": "#b ЗАРПЛАТА ДЛЯ КАЖДОГО? #!"
+ },
+ "notification_headlines_tech_video_games_name": {
+  "en": "#b A NEW PASTIME: THE RISE OF VIDEO GAMES #!",
+  "ru": "#b НОВОЕ УВЛЕЧЕНИЕ: ВИДЕОИГРЫ НАБИРАЮТ ПОПУЛЯРНОСТЬ #!"
+ },
+ "notification_headlines_tech_virtual_reality_name": {
+  "en": "#b STEPPING INTO ANOTHER WORLD #!",
+  "ru": "#b ШАГ В ДРУГОЙ МИР #!"
+ },
+ "notification_headlines_tech_wireless_internet_name": {
+  "en": "#b INTERNET WITHOUT THE WIRES #!",
+  "ru": "#b ИНТЕРНЕТ БЕЗ ПРОВОДОВ #!"
+ },
+ "notification_headlines_tech_world_wide_web_name": {
+  "en": "#b 'WORLD WIDE WEB' CONNECTS THE GLOBE #!",
+  "ru": "#b «ВСЕМИРНАЯ ПАУТИНА» СОЕДИНЯЕТ ПЛАНЕТУ #!"
+ },
+ "notification_homeland_created_desc": {
+  "en": "A new [SCOPE.sCulture('form_culture').GetName] [concept_homeland] has been created in [SCOPE.GetRootScope.GetState.GetName].",
+  "ru": "В области [SCOPE.GetRootScope.GetState.GetName] создана новая [concept_homeland|l] культуры [SCOPE.sCulture('form_culture').GetName]."
+ },
+ "notification_homeland_created_name": {
+  "en": "Homeland Created",
+  "ru": "Историческая родина создана"
+ },
+ "notification_homeland_removed_desc": {
+  "en": "The [SCOPE.sCulture('removal_culture').GetName] [concept_homeland] in [SCOPE.GetRootScope.GetState.GetName] has been removed.",
+  "ru": "[concept_homeland] культуры [SCOPE.sCulture('removal_culture').GetName] в области [SCOPE.GetRootScope.GetState.GetName] упразднена."
+ },
+ "notification_homeland_removed_name": {
+  "en": "Homeland Removed",
+  "ru": "Историческая родина упразднена"
+ },
+ "notification_industrial_nuke_succeeds_attacker_desc": {
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
+  "ru": "Наш [concept_nuclear_strike|l] по области [SCOPE.sState('target_state').GetName] прошёл успешно."
+ },
+ "notification_industrial_nuke_succeeds_attacker_name": {
+  "en": "[concept_nuclear_strike] Successful",
+  "ru": "[concept_nuclear_strike]: успех"
+ },
+ "notification_industrial_nuke_succeeds_defender_desc": {
+  "en": "[SCOPE.sCountry('nd_current_strike_launcher').GetName] has struck [SCOPE.sState('target_state').GetName] with a [concept_nuclear_strike].",
+  "ru": "Страна [SCOPE.sCountry('nd_current_strike_launcher').GetName] нанесла [concept_nuclear_strike|l] по области [SCOPE.sState('target_state').GetName]."
+ },
+ "notification_industrial_nuke_succeeds_defender_name": {
+  "en": "[concept_nuclear_strike] Successful",
+  "ru": "[concept_nuclear_strike]: успех"
+ },
+ "notification_irr_cultural_ties_notice_name": {
+  "en": "Cultural Ties Funded",
+  "ru": "Культурные связи профинансированы"
+ },
+ "notification_iw_election_interference_confidence_name": {
+  "en": "Election Interference Detected",
+  "ru": "Обнаружено вмешательство в выборы"
+ },
+ "notification_iw_operation_cancelled_desc": {
+  "en": "A cyber operation has been terminated.",
+  "ru": "Кибероперация прекращена."
+ },
+ "notification_iw_operation_cancelled_name": {
+  "en": "Cyber Operation Canceled",
+  "ru": "Кибероперация отменена"
+ },
+ "notification_iw_operation_launched_name": {
+  "en": "Cyber Operation Launched",
+  "ru": "Кибероперация запущена"
+ },
+ "notification_nationalization_notice_name": {
+  "en": "Foreign Assets Nationalized",
+  "ru": "Иностранные активы национализированы"
+ },
+ "notification_nd_crisis_ultimatum_issued_name": {
+  "en": "A Nuclear Ultimatum",
+  "ru": "Ядерный ультиматум"
+ },
+ "notification_nd_crisis_warning_reported_name": {
+  "en": "A Nuclear Warning, Reported",
+  "ru": "Ядерное предупреждение обнародовано"
+ },
+ "notification_nd_deploy_bar_enforced_name": {
+  "en": "Missile Defense Switched Off",
+  "ru": "Противоракетная оборона отключена"
+ },
+ "notification_nd_doctrine_bound_by_law_name": {
+  "en": "Doctrine Bound by Law",
+  "ru": "Доктрина закреплена законом"
+ },
+ "notification_nd_exchange_war_failed_name": {
+  "en": "No War After the Exchange",
+  "ru": "После обмена войны не последовало"
+ },
+ "notification_sr_earth_hostile_notice_name": {
+  "en": "A Hostile Fleet Is Bound for Earth",
+  "ru": "К Земле движется враждебный флот"
+ },
+ "notification_sr_space_command_dismantled_notice_name": {
+  "en": "Space Command Dismantled",
+  "ru": "Космическое командование расформировано"
+ },
+ "notification_tactical_nuke_succeeds_attacker_desc": {
+  "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
+  "ru": "Наш тактический [concept_nuclear_strike|l] по области [SCOPE.sState('target_state').GetName] прошёл успешно."
+ },
+ "notification_tactical_nuke_succeeds_attacker_name": {
+  "en": "Tactical [concept_nuclear_strike] Successful",
+  "ru": "Тактический [concept_nuclear_strike|l]: успех"
+ },
+ "notification_te_antarctic_treaty_lapsed_notice_name": {
+  "en": "The Antarctic Treaty Lapses",
+  "ru": "Антарктический договор утрачивает силу"
+ },
+ "notification_te_cm_merge_complete_notice_desc": {
+  "en": "The merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began is complete: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName].",
+  "ru": "Слияние, начатое страной [SCOPE.sCountry('te_cm_ev_starter').GetName], завершено: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')]; новая культура: [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "notification_te_cm_merge_complete_notice_name": {
+  "en": "A Culture Merge Completes",
+  "ru": "Слияние культур завершено"
+ },
+ "notification_te_cm_merge_started_notice_name": {
+  "en": "A Culture Merge Begins",
+  "ru": "Начинается слияние культур"
+ },
+ "notification_te_cm_merge_started_sphere_notice_name": {
+  "en": "A Culture Merge Begins in Our Sphere",
+  "ru": "Начинается слияние культур в нашей сфере"
+ },
+ "notification_te_law_replaced_notice_name": {
+  "en": "A Law Replaced",
+  "ru": "Закон заменён"
+ },
+ "notification_te_mon_swap_repaid_notice_name": {
+  "en": "Swap Line Repaid",
+  "ru": "Своп погашен"
+ },
+ "notification_te_mon_swap_settled_notice_name": {
+  "en": "Swap Line Called In",
+  "ru": "Своп отозван"
+ },
+ "notification_te_seabed_basin_full_notice_arctic_name": {
+  "en": "The $te_seabed_basin_arctic$ Ocean Is Fully Licensed",
+  "ru": "$te_seabed_basin_arctic$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_atlantic_name": {
+  "en": "The $te_seabed_basin_atlantic$ Ocean Is Fully Licensed",
+  "ru": "$te_seabed_basin_atlantic$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_indian_name": {
+  "en": "The $te_seabed_basin_indian$ Ocean Is Fully Licensed",
+  "ru": "$te_seabed_basin_indian$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_pacific_name": {
+  "en": "The $te_seabed_basin_pacific$ Ocean Is Fully Licensed",
+  "ru": "$te_seabed_basin_pacific$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_basin_full_notice_southern_name": {
+  "en": "The $te_seabed_basin_southern$ Ocean Is Fully Licensed",
+  "ru": "$te_seabed_basin_southern$ океан полностью лицензирован"
+ },
+ "notification_te_seabed_new_claimant_notice_arctic_name": {
+  "en": "A New Claimant in the $te_seabed_basin_arctic$ Ocean",
+  "ru": "Новый претендент: $te_seabed_basin_arctic$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_atlantic_name": {
+  "en": "A New Claimant in the $te_seabed_basin_atlantic$ Ocean",
+  "ru": "Новый претендент: $te_seabed_basin_atlantic$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_indian_name": {
+  "en": "A New Claimant in the $te_seabed_basin_indian$ Ocean",
+  "ru": "Новый претендент: $te_seabed_basin_indian$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_pacific_name": {
+  "en": "A New Claimant in the $te_seabed_basin_pacific$ Ocean",
+  "ru": "Новый претендент: $te_seabed_basin_pacific$ океан"
+ },
+ "notification_te_seabed_new_claimant_notice_southern_name": {
+  "en": "A New Claimant in the $te_seabed_basin_southern$ Ocean",
+  "ru": "Новый претендент: $te_seabed_basin_southern$ океан"
+ },
+ "notification_te_seabed_regime_open_notice_name": {
+  "en": "The Seabed Is Open",
+  "ru": "Морское дно открыто"
+ },
+ "notification_te_seabed_regime_regulated_notice_name": {
+  "en": "The Law of the Sea Regulates the Seabed",
+  "ru": "Морское право регулирует морское дно"
+ },
+ "notification_te_seabed_regime_scramble_notice_name": {
+  "en": "A Scramble for the Seabed",
+  "ru": "Схватка за морское дно"
+ },
+ "notification_un_arms_embargo_lifted_notice_name": {
+  "en": "The Arms Embargo Ends",
+  "ru": "Оружейное эмбарго снято"
+ },
+ "notification_un_article_19_notice_name": {
+  "en": "Article 19: Our Vote Is Lost",
+  "ru": "Статья 19: наш голос потерян"
+ },
+ "notification_un_bloc_vacuum_notice_name": {
+  "en": "Blocs Fill the Vacuum",
+  "ru": "Блоки заполняют вакуум"
+ },
+ "notification_un_charter_reform_ripe_notice_name": {
+  "en": "The Charter Has Been Outgrown",
+  "ru": "Устав перерос свои рамки"
+ },
+ "notification_un_conference_opened_notice_name": {
+  "en": "A Founding Conference",
+  "ru": "Учредительная конференция"
+ },
+ "notification_un_court_bar_notice_name": {
+  "en": "A Claim the Court Struck Down",
+  "ru": "Иск, отклонённый судом"
+ },
+ "notification_un_credentials_restored_notice_name": {
+  "en": "Our Credentials Are Restored",
+  "ru": "Наши полномочия восстановлены"
+ },
+ "notification_un_credentials_suspended_notice_name": {
+  "en": "Our Credentials Are Suspended",
+  "ru": "Наши полномочия приостановлены"
+ },
+ "notification_un_crisis_closed_notice_name": {
+  "en": "The UN Crisis Has Passed",
+  "ru": "Кризис ООН миновал"
+ },
+ "notification_un_crisis_opened_notice_name": {
+  "en": "The United Nations in Crisis",
+  "ru": "Организация Объединённых Наций в кризисе"
+ },
+ "notification_un_decolonization_pressure_notice_name": {
+  "en": "The Decolonization Declaration",
+  "ru": "Декларация о деколонизации"
+ },
+ "notification_un_dev_fund_contribution_lapsed_notice_name": {
+  "en": "Development Programs Contribution Ended",
+  "ru": "Взносы в программы развития прекращены"
+ },
+ "notification_un_dissolution_vacuum_notice_name": {
+  "en": "The Blocs After the United Nations",
+  "ru": "Блоки после Организации Объединённых Наций"
+ },
+ "notification_un_floor_open_notice_name": {
+  "en": "The Floor Is Open",
+  "ru": "Слово открыто"
+ },
+ "notification_un_food_reserve_drawn_notice_name": {
+  "en": "Our Grain Feeds a UN Aid Mission",
+  "ru": "Наше зерно кормит гуманитарную миссию ООН"
+ },
+ "notification_un_food_reserve_empty_notice_name": {
+  "en": "The World Food Reserve Is Empty",
+  "ru": "Мировой продовольственный резерв пуст"
+ },
+ "notification_un_food_reserve_relief_notice_name": {
+  "en": "Grain from the World Food Reserve",
+  "ru": "Зерно из мирового продовольственного резерва"
+ },
+ "notification_un_force_war_goal_struck_notice_name": {
+  "en": "A War Goal Struck",
+  "ru": "Цель войны отменена"
+ },
+ "notification_un_headquarters_host_notice_name": {
+  "en": "The UN Headquarters Comes to Us",
+  "ru": "Штаб-квартира ООН переезжает к нам"
+ },
+ "notification_un_humanitarian_token_received_name": {
+  "en": "Humanitarian Assistance Received",
+  "ru": "Получена гуманитарная помощь"
+ },
+ "notification_un_league_becomes_un_notice_name": {
+  "en": "The League Becomes the United Nations",
+  "ru": "Лига превращается в ООН"
+ },
+ "notification_un_mission_aid_failed_notice_name": {
+  "en": "A UN Aid Mission Fails",
+  "ru": "Миссия помощи ООН провалена"
+ },
+ "notification_un_mission_aid_succeeded_notice_name": {
+  "en": "A UN Aid Mission Accomplished",
+  "ru": "Миссия помощи ООН выполнена"
+ },
+ "notification_un_mission_electoral_failed_notice_name": {
+  "en": "UN Electoral Observers Withdrawn",
+  "ru": "Наблюдатели ООН за выборами отозваны"
+ },
+ "notification_un_mission_electoral_lapsed_notice_name": {
+  "en": "UN Electoral Observers Go Home",
+  "ru": "Наблюдатели ООН за выборами уезжают домой"
+ },
+ "notification_un_mission_electoral_succeeded_notice_name": {
+  "en": "An Election Observed",
+  "ru": "Выборы под наблюдением"
+ },
+ "notification_un_mission_lapsed_notice_name": {
+  "en": "A UN Mission Ends",
+  "ru": "Миссия ООН завершена"
+ },
+ "notification_un_mission_opened_notice_name": {
+  "en": "A UN Mission Arrives",
+  "ru": "Прибыла миссия ООН"
+ },
+ "notification_un_mission_peacekeeping_failed_notice_name": {
+  "en": "A UN Peacekeeping Mission Fails",
+  "ru": "Миротворческая миссия ООН провалена"
+ },
+ "notification_un_mission_peacekeeping_succeeded_notice_name": {
+  "en": "A UN Peacekeeping Mission Accomplished",
+  "ru": "Миротворческая миссия ООН выполнена"
+ },
+ "notification_un_mission_reinforced_notice_name": {
+  "en": "A UN Mission Reinforced",
+  "ru": "Миссия ООН усилена"
+ },
+ "notification_un_mission_stabilisation_failed_notice_name": {
+  "en": "A UN Stabilization Mission Fails",
+  "ru": "Стабилизационная миссия ООН провалена"
+ },
+ "notification_un_mission_stabilisation_succeeded_notice_name": {
+  "en": "A UN Stabilization Mission Accomplished",
+  "ru": "Стабилизационная миссия ООН выполнена"
+ },
+ "notification_un_mission_withdrawn_notice_name": {
+  "en": "A UN Contingent Goes Home",
+  "ru": "Контингент ООН возвращается домой"
+ },
+ "notification_un_permanent_seat_granted_notice_name": {
+  "en": "A Permanent Seat",
+  "ru": "Постоянное место"
+ },
+ "notification_un_representation_restored_notice_name": {
+  "en": "Our UN Representation Is Restored",
+  "ru": "Наше представительство в ООН восстановлено"
+ },
+ "notification_un_representation_suspended_notice_name": {
+  "en": "Our UN Representation Is Suspended",
+  "ru": "Наше представительство в ООН приостановлено"
+ },
+ "notification_un_sanctions_lapsed_notice_name": {
+  "en": "The Sanctions on Us Lapse",
+  "ru": "Санкции против нас сняты"
+ },
+ "notification_un_tariff_retaliation_received_name": {
+  "en": "Tariffs Imposed on Us",
+  "ru": "На нас наложены пошлины"
+ },
+ "notification_un_trade_arbitration_received_name": {
+  "en": "Dispute Sent to Arbitration",
+  "ru": "Спор передан в арбитраж"
+ },
+ "notification_un_trade_deal_received_name": {
+  "en": "Trade Concessions Offered",
+  "ru": "Предложены торговые уступки"
+ },
+ "notification_un_war_surcharge_notice_name": {
+  "en": "A War Without a Mandate",
+  "ru": "Война без мандата"
+ },
+ "notification_wonder_construction_complete_antimatter_facility_name": {
+  "en": "Antimatter Containment Facility Completed",
+  "ru": "Комплекс удержания антиматерии построен"
+ },
+ "notification_wonder_construction_complete_consciousness_network_name": {
+  "en": "Consciousness Network Completed",
+  "ru": "Сеть сознания построена"
+ },
+ "notification_wonder_construction_complete_mind_upload_nexus_name": {
+  "en": "Mind Upload Nexus Completed",
+  "ru": "Узел загрузки сознания построен"
+ },
+ "notification_wonder_construction_complete_nanofabrication_center_name": {
+  "en": "Nanofabrication Center Completed",
+  "ru": "Центр нанопроизводства построен"
+ },
+ "notification_wonder_construction_complete_orbital_battlestation_name": {
+  "en": "Orbital Battlestation Completed",
+  "ru": "Орбитальная боевая станция построена"
+ },
+ "notification_wonder_construction_complete_solar_collector_name": {
+  "en": "Orbital Solar Collector Completed",
+  "ru": "Орбитальный солнечный коллектор построен"
+ },
+ "notification_wonder_construction_complete_space_elevator_name": {
+  "en": "Space Elevator Completed",
+  "ru": "Космический лифт построен"
+ }
+}

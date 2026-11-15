@@ -107,6 +107,10 @@
   "en": "Those Who Speak Up",
   "ru": "Те, кто заговорил"
  },
+ "colonial_stability_negative_event": {
+  "en": "Colonial Crisis",
+  "ru": "Колониальный кризис"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "ru": "Пусть маршируют мирно"
