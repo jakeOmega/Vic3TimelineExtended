@@ -132,6 +132,8 @@ Lengths are in words, counting a scope reference or a spliced name as one. "Now"
 | Kind | Keys | Its job | Length | Now |
 |---|---|---|---|---|
 | Name | most keys without a suffix | Say what it is in the fewest words that tell it apart | 1–4, Title Case | |
+| Modifier name | a modifier type's or static modifier's own key | Label the value the engine prints beside it | a few words, Title Case, no figure; 70 characters at most | |
+| Modifier type description | `<modifier type>_desc` | When the line applies and how it is counted; the rule goes in a concept | 1–2 sentences | |
 | Modifier description | `*_modifier_desc` | Why the country has this, in the world's terms | one sentence, under 20 | 15, 26 |
 | Law description | `law_*_desc` | What the law provides, concretely enough to tell it from its neighbors | 1–3 sentences, under 45 | 23, 42 |
 | Button | `*_button`, `*_button_desc` | Name: the action as a verb. Description: what pressing it does, then what it costs or ends | name 2–5; description 1–2 sentences | 15, 21 |
@@ -148,6 +150,20 @@ Lengths are in words, counting a scope reference or a spliced name as one. "Now"
 ### Names
 
 A name tells the thing apart from its neighbors in a list. Prefer the plain noun to the grand one: "Family Planning", not "Comprehensive Family Planning Initiative". A button's name is what pressing it does: "Stop Retiring Oil Rigs", "Bring It Home".
+
+### Modifier names
+
+A modifier type's name sits beside a value the engine prints, formats and colors: "+20% Company Throughput Bonus", "−25% Greenhouse Gas Emissions". The name says what the value is of, and nothing else.
+
+- **The figure is the value.** Never type a number into a name: "adopters get #G +5%#! trade advantage" as the name of a yes/no field is a figure the engine can't format or scale and no test ties to the script. Make it a numeric field. A yes/no field is for a rule with no quantity: "Members May Adopt the Common Currency".
+- **When it applies goes in the `_desc`**, one or two sentences on hover: "For every adopter, and for the leader under any banking law but Unregulated Banking."
+- **The rule goes in a concept** the name or the description links, as "[concept_greenhouse_gas_emissions]" and "[concept_company_charter]" do. A system's terms, its formula, its thresholds: a concept, written to the concept row above.
+- **Let the heading name the audience.** Put the line in the block whose heading says who gets it (a power bloc principle's "Non-leader Bloc Members" for everyone but the leader) and leave it out of the name: "Swap Line Risk Premium", not "Swap Line Risk Premium for Members". Name a subset in the line, since the engine prints a block's lines in its own order and a line can't rely on the one above it: "Adopters' Credit Standing".
+
+> **Before** (`power_bloc_shared_currency_bool`): Members may adopt the leader's currency: adopters get +5% export and import advantage and +2% Capitalists Investment Pool contribution (none under Excess Private Construction)
+> **After:** ✓ Members May Adopt the Common Currency, then +5% Common Currency Trade Advantage and +2% Common Currency Investment Pool Contribution, each a numeric field with a one-sentence description.
+
+`modifier_name_audit` fails a name over 70 rendered characters (vanilla's longest is 66), one that reads as a sentence, and a modifier type's name with a figure in it.
 
 ### Modifier descriptions
 

@@ -125,9 +125,10 @@ class AuditResult(_AuditResult):
     how_only_skipped: int = 0
 
 
-def load_mod_loc(root: Path) -> tuple[dict[str, LocEntry], list[tuple[str, int, str]]]:
-    """The mod's English loc, last file (name order) winning, and every tagged
-    line as (file, line, key), the overridden copies included."""
+def load_mod_loc(root: Path, check: str = CHECK) -> tuple[dict[str, LocEntry], list[tuple[str, int, str]]]:
+    """The mod's English loc, last file (name order) winning, and every line
+    tagged for `check` as (file, line, key), the overridden copies included.
+    `modifier_name_audit` reads it with its own tag."""
     entries: dict[str, LocEntry] = {}
     tagged: list[tuple[str, int, str]] = []
     loc_dir = root / LOC_DIR
@@ -142,7 +143,7 @@ def load_mod_loc(root: Path) -> tuple[dict[str, LocEntry], list[tuple[str, int, 
             if parsed is None:
                 continue
             key, value, trailing = parsed
-            tag = parse_reviewed(trailing, (CHECK,))
+            tag = parse_reviewed(trailing, (check,))
             if tag:
                 tagged.append((rel, lineno, key))
             entries[key] = LocEntry(value, rel, lineno, tag)

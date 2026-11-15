@@ -38,8 +38,12 @@ After the independent review of PR #1810 (2026-11-14):
   the engine's rule that a pulse cannot see the modifiers it added;
 * the seigniorage is a flat minting add, so the leader's minting bonuses
   multiply it: every stated figure is "before minting bonuses", and the bonuses
-  the text names and the ceiling it gives are the laws', the technologies' and
-  the inflation bands' own (``MintingBonusTest``).
+  the guide names and the ceiling the tooltip gives are the laws', the
+  technologies' and the inflation bands' own (``MintingBonusTest``).
+
+2026-11-15 (owner: the principle's lines read as paragraphs): every figure the
+principle prints is a numeric display field, each held here to the script
+value or static modifier that pays it (``TooltipTest``).
 """
 
 import math
@@ -476,7 +480,7 @@ class ReachTest(unittest.TestCase):
                 self.assertAlmostEqual(self.reach(leader), share / (share + half), places=9)
 
     def test_half_at_fifteen_percent_and_three_quarters_at_forty_five(self):
-        # The figures the loc gives (country_te_mon_issuer_bool, the seigniorage field's desc).
+        # The figures concept_banking_currency_reach_desc gives.
         self.assertAlmostEqual(self.reach(union(2, leader_gdp=1e10, adopters=(1.5e9,))), 0.5)
         self.assertAlmostEqual(self.reach(union(2, leader_gdp=1e10, adopters=(4.5e9,))), 0.75)
 
@@ -1118,6 +1122,31 @@ def english():
     return loc
 
 
+# The principle's display fields (2026-11-15, owner: short names, figures as numeric fields, rules
+# in concepts, and each line in the block whose heading names who gets it). Each maps to the first
+# tier that carries it; every tier above restates it.
+POWER_BLOC_FIELDS = {                                   # Power Bloc: the currency's terms
+    "power_bloc_shared_currency_bool": 2,
+    "power_bloc_te_mon_currency_trade_advantage_mult": 2,
+    "power_bloc_te_mon_currency_investment_pool_add": 2,
+    "power_bloc_fiscal_backstop_bool": 3,
+    "power_bloc_banking_union_bool": 4,
+    "power_bloc_te_mon_currency_crash_chance_mult": 4,
+    "power_bloc_te_mon_currency_volatility_mult": 4,
+    "power_bloc_te_mon_currency_interventions_add": 4,
+    "power_bloc_reserve_currency_bool": 5,
+}
+NON_LEADER_FIELDS = {                                   # Non-leader Bloc Members: what only members get
+    "country_te_mon_swap_premium_add": 1,
+    "country_te_mon_swap_confidence_add": 1,
+    "country_te_mon_adopter_overvaluation_premium_mult": 3,
+    "country_te_mon_adopter_credit_standing_add": 5,
+}
+LEADER_FIELDS = ("country_te_mon_issuer_seigniorage_gdp_add", "country_te_mon_issuer_premium_add",
+                 "country_te_mon_issuer_interventions_add")
+CONCEPTS = ("concept_banking_common_currency", "concept_banking_currency_reach")
+
+
 class TooltipTest(unittest.TestCase):
     """The principle's display fields and the loc's figures are what the script pays."""
 
@@ -1126,42 +1155,156 @@ class TooltipTest(unittest.TestCase):
         cls.s = Script()
         cls.blocks = principle_blocks()
         cls.loc = english()
+        cls.static = definitions(MODIFIERS)
+
+    def block(self, tier, name):
+        return dict((k, float(v) if v != "yes" else v) for k, _, v in self.blocks[tier].get(name, []))
 
     def leader_block(self, tier):
-        return dict((k, float(v) if v != "yes" else v) for k, _, v in self.blocks[tier]["leader_modifier"])
+        return self.block(tier, "leader_modifier")
+
+    def bloc_block(self, tier):
+        return self.block(tier, "power_bloc_modifier")
+
+    def members_block(self, tier):
+        return self.block(tier, "non_leader_modifier")
+
+    def static_field(self, modifier, key):
+        return float(dict((k, v) for k, _, v in self.static[modifier])[key])
+
+    def n(self, name):
+        return self.s.number(name, None, None)
 
     def test_tier_one_promises_the_leader_nothing(self):
         self.assertNotIn("leader_modifier", self.blocks[1])
 
-    def test_each_tiers_display_fields_are_the_script_values(self):
-        union_point = float(dict((k, v) for k, _, v in definitions(MODIFIERS)["te_mon_union_banking_union"])
-                            ["country_banking_intervention_max_add"])
+    def test_each_tier_carries_exactly_its_fields(self):
+        for tier in range(1, 6):
+            with self.subTest(tier=tier):
+                want = {name for name, first in POWER_BLOC_FIELDS.items() if first <= tier}
+                self.assertEqual(set(self.bloc_block(tier)) - {"power_bloc_cohesion_per_member_add"}, want)
+                for name in want:
+                    if name.endswith("_bool"):
+                        self.assertEqual(self.bloc_block(tier)[name], "yes")
+                self.assertEqual(set(self.members_block(tier)),
+                                 {name for name, first in NON_LEADER_FIELDS.items() if first <= tier})
+        self.assertNotIn("member_modifier", self.blocks[1], "the swap line skips the leader: non_leader_modifier")
+
+    def test_each_tiers_leader_fields_are_the_script_values(self):
         for tier in (2, 3, 4, 5):
             block = self.leader_block(tier)
-            n = lambda name: self.s.number(name.format(tier), None, None)        # noqa: E731
             with self.subTest(tier=tier):
-                self.assertEqual(block["country_te_mon_issuer_bool"], "yes")
+                self.assertEqual(set(block), set(LEADER_FIELDS))
                 self.assertAlmostEqual(block["country_te_mon_issuer_seigniorage_gdp_add"],
-                                       n("te_mon_union_seigniorage_pct_{}") / 100)
+                                       self.n(f"te_mon_union_seigniorage_pct_{tier}") / 100)
                 self.assertAlmostEqual(block["country_te_mon_issuer_premium_add"],
-                                       -n("te_mon_union_issuer_cut_max_{}") / 100)
+                                       -self.n(f"te_mon_union_issuer_cut_max_{tier}") / 100)
+                # The issuer's own points; the banking union's is the Power Bloc line's.
                 self.assertEqual(block["country_te_mon_issuer_interventions_add"],
-                                 n("te_mon_union_issuer_bank_points_{}") + (union_point if tier >= 4 else 0))
-                self.assertEqual(set(block), {"country_te_mon_issuer_bool", "country_te_mon_issuer_seigniorage_gdp_add",
-                                              "country_te_mon_issuer_premium_add",
-                                              "country_te_mon_issuer_interventions_add"})
+                                 self.n(f"te_mon_union_issuer_bank_points_{tier}"))
 
     def test_the_owners_range_for_tier_five(self):
-        # "up to ~3 or 4 at principle V" (owner, 2026-11-14).
-        self.assertEqual(self.leader_block(5)["country_te_mon_issuer_interventions_add"], 4)
+        # "up to ~3 or 4 at principle V" (owner, 2026-11-14): the issuer's own and the banking union's.
+        self.assertEqual(self.leader_block(5)["country_te_mon_issuer_interventions_add"]
+                         + self.bloc_block(5)["power_bloc_te_mon_currency_interventions_add"], 4)
 
-    def test_the_display_fields_are_registered_and_named(self):
-        types = (ROOT / "common/modifier_type_definitions/banking_cycle_modifier_types.txt").read_text(encoding="utf-8-sig")
-        for name in ("country_te_mon_issuer_bool", "country_te_mon_issuer_seigniorage_gdp_add",
-                     "country_te_mon_issuer_premium_add", "country_te_mon_issuer_interventions_add"):
+    def test_the_swap_line_is_half_a_treaty_one(self):
+        self.assertEqual(self.n("te_mon_union_cooperation_share"), 0.5)
+        self.assertIn("half a swap line", self.loc["country_te_mon_swap_premium_add_desc"])
+        for tier in range(1, 6):
+            with self.subTest(tier=tier):
+                block = self.members_block(tier)
+                self.assertAlmostEqual(block["country_te_mon_swap_premium_add"],
+                                       -self.n("te_mon_union_cooperation_cut") / 100)
+                self.assertEqual(block["country_te_mon_swap_confidence_add"],
+                                 self.n("te_mon_union_cooperation_confidence"))
+
+    def test_the_trade_edge_is_the_adopters_modifiers(self):
+        edge = self.static_field("te_mon_union_adopter", "state_export_advantage_mult")
+        self.assertEqual(edge, self.static_field("te_mon_union_adopter", "state_import_advantage_mult"))
+        reserve = self.static_field("te_mon_union_reserve", "state_export_advantage_mult")
+        self.assertEqual(reserve, self.static_field("te_mon_union_reserve", "state_import_advantage_mult"))
+        for tier in (2, 3, 4, 5):
+            with self.subTest(tier=tier):
+                self.assertAlmostEqual(self.bloc_block(tier)["power_bloc_te_mon_currency_trade_advantage_mult"],
+                                       edge + (reserve if tier == 5 else 0))
+
+    def test_the_capital_market_by_tier(self):
+        unit = self.static_field("te_mon_union_credit", "state_capitalists_investment_pool_contribution_add")
+        for tier in (2, 3, 4, 5):
+            with self.subTest(tier=tier):
+                self.assertAlmostEqual(self.bloc_block(tier)["power_bloc_te_mon_currency_investment_pool_add"],
+                                       self.n(f"te_mon_union_credit_points_{tier}") * unit)
+        self.assertIn("$too_much_private_construction$",
+                      self.loc["power_bloc_te_mon_currency_investment_pool_add_desc"])
+        # No text promises more in a slump: the doubling was taken out (owner, 2026-11-14).
+        self.assertNotIn("te_mon_union_credit_slump_factor", self.s.values)
+        for key in ("power_bloc_te_mon_currency_investment_pool_add_desc", "te_mon_union_adopt_effect_tt",
+                    "te_mon_union_credit_desc", *CONCEPTS):
+            key = key if key.endswith(("_desc", "_tt")) else key + "_desc"
+            with self.subTest(key=key):
+                for phrase in ("downturn", "panic", "slump", "twice that", "pull back"):
+                    self.assertNotIn(phrase, self.loc[key].lower())
+
+    def test_the_backstop_cuts_the_overvaluation_premium_by_its_figure(self):
+        s = Script()
+        s.values.update(definitions("common/script_values/te_monetary_fx_script_values.txt"))
+
+        def premium(tier):
+            member = next(m for m in union(tier).bloc.members if m.name == "adopter0")
+            member.vars["te_mon_overvaluation"] = 15
+            return s.number("te_mon_premium_union_overvaluation", member, member)
+
+        self.assertGreater(premium(2), 0)
+        for tier in (3, 4, 5):
+            with self.subTest(tier=tier):
+                cut = self.members_block(tier)["country_te_mon_adopter_overvaluation_premium_mult"]
+                self.assertAlmostEqual(premium(tier), premium(2) * (1 + cut))
+
+    def test_the_banking_union_is_its_modifier(self):
+        for tier in (4, 5):
+            block = self.bloc_block(tier)
+            for display, real in (("power_bloc_te_mon_currency_crash_chance_mult", "country_banking_crash_chance_mult"),
+                                  ("power_bloc_te_mon_currency_volatility_mult", "country_banking_random_momentum_mult"),
+                                  ("power_bloc_te_mon_currency_interventions_add",
+                                   "country_banking_intervention_max_add")):
+                with self.subTest(tier=tier, field=display):
+                    self.assertAlmostEqual(block[display], self.static_field("te_mon_union_banking_union", real))
+
+    def test_the_reserve_tier(self):
+        self.assertAlmostEqual(self.members_block(5)["country_te_mon_adopter_credit_standing_add"],
+                               -self.n("te_mon_union_reserve_standing_cut") / 100)
+        # "...is doubled": the leader's reserve-currency cap at tier 5 against the ordinary one.
+        self.assertEqual(self.n("te_mon_reserve_currency_cap_tier_5"), 2 * self.n("te_mon_reserve_currency_cap"))
+        self.assertIn("doubled", self.loc["power_bloc_reserve_currency_bool_desc"])
+
+    def test_the_display_fields_are_registered_named_and_described(self):
+        types = {
+            "power_bloc": (ROOT / "common/modifier_type_definitions/power_bloc_extra_modifier_types.txt")
+            .read_text(encoding="utf-8-sig"),
+            "country": (ROOT / "common/modifier_type_definitions/banking_cycle_modifier_types.txt")
+            .read_text(encoding="utf-8-sig"),
+        }
+        for name in (*POWER_BLOC_FIELDS, *NON_LEADER_FIELDS, *LEADER_FIELDS):
             with self.subTest(type=name):
-                self.assertRegex(types, rf"(?m)^{name} = \{{")
+                self.assertRegex(types["country" if name.startswith("country") else "power_bloc"],
+                                 rf"(?m)^{name} = \{{")
                 self.assertIn(name, self.loc)
+                self.assertIn(name + "_desc", self.loc)
+                # A figure is the field's value, never words in its name.
+                self.assertNotRegex(self.loc[name], r"\d")
+        for concept in CONCEPTS:
+            with self.subTest(concept=concept):
+                self.assertIn(concept, self.loc)
+                self.assertIn(concept + "_desc", self.loc)
+
+    def test_the_paragraph_markers_are_gone(self):
+        for name in ("power_bloc_monetary_cooperation_bool", "country_te_mon_issuer_bool"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, self.loc)
+                for path in ("common/modifier_type_definitions/power_bloc_extra_modifier_types.txt",
+                             "common/modifier_type_definitions/banking_cycle_modifier_types.txt", PRINCIPLES):
+                    self.assertNotRegex((ROOT / path).read_text(encoding="utf-8-sig"), rf"(?m)^\s*{name} = ")
 
     def test_the_new_modifiers_are_named_and_described(self):
         for name in ("te_mon_union_issuer_premium", "te_mon_union_issuer_bank", "te_mon_union_credit"):
@@ -1170,37 +1313,14 @@ class TooltipTest(unittest.TestCase):
                 self.assertIn(name + "_desc", self.loc)
 
     def test_the_reach_figure_in_the_text(self):
-        half = self.s.number("te_mon_union_reach_half_share", None, None) * 100
-        self.assertIn(f"#v {half:g}%#!", self.loc["country_te_mon_issuer_bool"])
-        self.assertIn(f"#v {half:g}%#!", self.loc["country_te_mon_issuer_seigniorage_gdp_add_desc"])
-
-    def test_the_capital_markets_figures_in_the_three_tier_lines(self):
-        # Tier 5 prints all three lines, so their figures add up to the tier's own.
-        points = {t: self.s.number(f"te_mon_union_credit_points_{t}", None, None) for t in (2, 3, 4, 5)}
-        self.assertEqual(points[2], points[3], "tier 3's line gives no figure of its own")
-        cap = "$state_capitalists_investment_pool_contribution_add$"
-        for key, figure in (("power_bloc_shared_currency_bool", points[2]),
-                            ("power_bloc_banking_union_bool", points[4] - points[3]),
-                            ("power_bloc_reserve_currency_bool", points[5] - points[4])):
+        half = self.n("te_mon_union_reach_half_share") * 100
+        self.assertIn(f"#v {half:g}%#!", self.loc["concept_banking_currency_reach_desc"])
+        for key in ("country_te_mon_issuer_seigniorage_gdp_add_desc", "country_te_mon_issuer_premium_add_desc"):
             with self.subTest(key=key):
-                self.assertIn(f"#G +{figure:g}%#! {cap}", self.loc[key])
-        self.assertIn("$too_much_private_construction$", self.loc["power_bloc_shared_currency_bool"])
-        # No text promises more in a slump: the doubling was taken out (owner, 2026-11-14).
-        self.assertNotIn("te_mon_union_credit_slump_factor", self.s.values)
-        for key in ("power_bloc_shared_currency_bool", "power_bloc_banking_union_bool",
-                    "power_bloc_reserve_currency_bool", "te_mon_union_adopt_effect_tt", "te_mon_union_credit_desc",
-                    "country_te_mon_issuer_bool"):
-            with self.subTest(key=key):
-                for phrase in ("downturn", "panic", "slump", "twice that", "pull back"):
-                    self.assertNotIn(phrase, self.loc[key].lower())
-
-    def test_the_adopters_trade_figure_in_the_text(self):
-        edge = float(dict((k, v) for k, _, v in definitions(MODIFIERS)["te_mon_union_adopter"])
-                     ["state_export_advantage_mult"]) * 100
-        self.assertIn(f"#G +{edge:g}%#! export and import advantage", self.loc["power_bloc_shared_currency_bool"])
+                self.assertIn("[concept_banking_currency_reach]", self.loc[key])
 
     def test_the_budget_texts_give_the_issuers_points(self):
-        top = max(self.s.number(f"te_mon_union_issuer_bank_points_{t}", None, None) for t in (2, 3, 4, 5))
+        top = max(self.n(f"te_mon_union_issuer_bank_points_{t}") for t in (2, 3, 4, 5))
         self.assertEqual(top, 3)
         for key in ("banking_dash_budget_tt", "concept_banking_intervention_budget_desc"):
             with self.subTest(key=key):
@@ -1219,10 +1339,12 @@ class TooltipTest(unittest.TestCase):
 class MintingBonusTest(unittest.TestCase):
     """The seigniorage is a flat minting add, so the leader's minting bonuses multiply it
     (owner, 2026-11-14: keep them, and say so). Every figure the game states is BEFORE those
-    bonuses, and the text that says so names each bonus with its size. The engine checks none
-    of it: a law or a technology that changes its bonus, or a sixth source, would leave the
-    tooltip, the guide and the design note quietly wrong again, as they were by 1.3 to 1.75
-    times when the review of PR #1810 found it."""
+    bonuses. The tooltip gives the ceiling; the player guide names each bonus with its size
+    (2026-11-15: the tooltip's list of every law, technology and band went with the owner's
+    rule that a modifier's text is short). The engine checks none of it: a law or a technology
+    that changes its bonus, or a sixth source, would leave the tooltip, the guide and the
+    design note quietly wrong again, as they were by 1.3 to 1.75 times when the review of
+    PR #1810 found it."""
 
     KEY = "country_minting_mult"
 
@@ -1231,6 +1353,7 @@ class MintingBonusTest(unittest.TestCase):
         cls.s = Script()
         cls.loc = english()
         cls.desc = cls.loc["country_te_mon_issuer_seigniorage_gdp_add_desc"]
+        cls.guide = " ".join((ROOT / "docs/player_guide/04-banking.md").read_text(encoding="utf-8").split())
 
     def grants(self, body):
         return [float(v) for key, _, block in body if key == "modifier" for k, _, v in block if k == self.KEY]
@@ -1268,11 +1391,8 @@ class MintingBonusTest(unittest.TestCase):
         self.assertEqual(effects, [("country_minting_add", "1")])
 
     def test_every_figure_is_named_as_before_the_bonuses(self):
-        self.assertTrue(self.loc["country_te_mon_issuer_seigniorage_gdp_add"]
-                        .endswith(", before $country_minting_mult$ Bonuses"))
+        # The field's name is a label (2026-11-15); its hover says the figure is before the bonuses.
         self.assertIn("before its bonuses to [concept_budget_minting]", self.desc)
-        self.assertIn("its bonuses to [concept_budget_minting] then apply to the seigniorage",
-                      self.loc["country_te_mon_issuer_bool"])
         self.assertIn("before our bonuses to [concept_budget_minting]", self.loc["te_mon_union_seigniorage_desc"])
         paid = self.loc["banking_dash_mon_union_issuer_note_paid"]
         self.assertLess(paid.index("te_mon_union_seigniorage_base_display"), paid.index("before its bonuses"))
@@ -1282,8 +1402,8 @@ class MintingBonusTest(unittest.TestCase):
         laws = self.laws()
         self.assertEqual(laws, {"law_fiat_currency": 0.1, "law_digital_currency": 0.25},
                          "a law's minting bonus changed, or another law has one: the seigniorage text names them")
-        for law, bonus in laws.items():
-            self.assertIn(f"#G +{bonus * 100:g}%#! under ${law}$", self.desc)
+        names = {"law_fiat_currency": "Fiat Money", "law_digital_currency": "Digital Currency"}
+        self.assertIn(" or ".join(f"{bonus * 100:g}% under {names[law]}" for law, bonus in laws.items()), self.guide)
         # An issuer is on one of the two, never both: the test of who can lead.
         lead = self.s.triggers["te_mon_can_lead_union"]
         self.assertIn(("OR", "=", [("has_law_or_variant", "=", "law_type:law_fiat_currency"),
@@ -1293,18 +1413,16 @@ class MintingBonusTest(unittest.TestCase):
         techs = self.technologies()
         self.assertEqual(len(techs), 5, f"the technologies that move minting changed: {sorted(techs)}")
         self.assertEqual(set(techs.values()), {0.1})
-        for tech in techs:
-            self.assertIn(f"${tech}$", self.desc)
-        self.assertIn("#G +10%#! for each of $", self.desc)
-        self.assertIn("all five technologies", self.desc)
+        self.assertIn("10% for each of the five finance technologies", self.guide)
+        self.assertIn("all five finance technologies", self.desc)
 
     def test_the_inflation_bands_cuts_are_the_ones_stated(self):
         static = definitions(MODIFIERS)
         bands = {name: float(v) for name, body in static.items() if name.startswith("te_inflation_band_")
                  for k, _, v in body if k == self.KEY}
         self.assertEqual(bands, {"te_inflation_band_very_high": -0.3, "te_inflation_band_hyper": -0.8})
-        for band, cut in bands.items():
-            self.assertIn(f"#R −{-cut * 100:g}%#! from ${band}$", self.desc)
+        self.assertIn(f"Very High inflation takes {-bands['te_inflation_band_very_high'] * 100:g} points off the bonus "
+                      f"and Hyperinflation {-bands['te_inflation_band_hyper'] * 100:g}", self.guide)
 
     def ceiling(self):
         """The most the law and the technologies add: the dearer law and every technology."""
@@ -1313,8 +1431,8 @@ class MintingBonusTest(unittest.TestCase):
     def test_the_stated_ceiling_is_the_sum(self):
         top = self.ceiling()
         self.assertAlmostEqual(top, 0.75)
-        self.assertIn(f"With $law_digital_currency$ and all five technologies the leader mints #v {top * 100:g}%#! more",
-                      self.desc)
+        self.assertIn(f"With $law_digital_currency$ and all five finance technologies the leader mints "
+                      f"#v {top * 100:g}%#! more", self.desc)
         self.assertEqual(max(self.laws(), key=self.laws().get), "law_digital_currency")
 
     def test_the_guide_and_the_design_note_give_the_same_ceiling(self):
