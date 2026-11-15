@@ -2187,7 +2187,7 @@ eight, Singapore among them at 0.79 (an interest multiplier from elsewhere).
 | Debt | 17.4bn, 13% of GDP; interest 13.2M a week at 5.0 points, so **one point is worth 2.6M a week, 0.32% of income** |
 | Members | 153, GDP 27.3bn (21% of Singapore's). Adopters 5.5bn (4.3%); with two treaty peggers, 7.6bn anchored |
 | What leading cost | 0.135 points of risk premium for the union (0.169 with its treaties): 0.36M a week |
-| What leading paid | Seigniorage **98 pounds a week**. A reserve-currency cut of 0.098 points of credit standing, **worth nothing**: Singapore's standing was 0.05, its floor |
+| What leading paid | Seigniorage **98 pounds a week** by the script's figure (93 applied; about 163 minted once Singapore's minting bonuses multiplied it, L12). A reserve-currency cut of 0.098 points of credit standing, **worth nothing**: Singapore's standing was 0.05, its floor |
 | Intervention budget | 8 (central bank independence 7, national bank 1), 7 in use |
 | Investment pool | 357bn against 281M a week of private building, under Excess Private Construction at 340: it cannot be spent |
 
@@ -2295,8 +2295,8 @@ mints 1.75 times the figure; the "minted" column is what reaches its budget, and
 | 4 | 0 | 0.135pp = 0.36 | **−0.36** | 0.22 | 5.51 | 9.64 | 0.22pp = 0.59 | 0.36 | **+9.87** | +1.20% |
 | 5 | 0.0001 | 0.36 | **−0.36** | 0.28 | 10.51 | 18.40 | 0.42pp = 1.12 | 0.36 | **+19.17** | +2.33% |
 
-(The "before this work" seigniorage is what the save's budget showed, bonuses included: 98 pounds
-a week of the old capped figure.) With the whole bloc adopted at tier 5: reach 0.60, seigniorage
+(The "before this work" seigniorage is the old capped figure: 98 pounds a week by the script, 93
+applied and about 163 minted with the bonuses, 0.0001M or 0.0002M either way.) With the whole bloc adopted at tier 5: reach 0.60, seigniorage
 22.4M a week before bonuses and **39.2M minted (4.8% of income)**, cut 0.9pp (2.4M), net 41.3M
 (5.0%). The cost by tier is an estimate from the save's 0.135 (cooperation 0.101, the backstop
 0.023, supervision 0.011). The review's own estimate was 16.8M at tier 5 and about 36M with the
@@ -4046,7 +4046,7 @@ cut of *risk premium* (0.5 / 0.75 / 1.0 / 1.5pp) in proportion to its currency's
 1 / 2 / 3 / 4 more banking intervention points; issuer and adopters share a common capital market
 (capitalists' pool contribution +0.02 / +0.02 / +0.03 / +0.05, the same in every phase of the cycle). The tier-5
 seigniorage in the table's last row (world-GDP share × 2000, capped 1000 a week) is superseded:
-that formula paid the owner's Singapore 98 pounds a week.
+that formula paid the owner's Singapore 98 pounds a week (about 163 minted, with its bonuses).
 
 Tiers 4 and 5 are gated twice: the group's own `has_technology_researched = central_banking`,
 carried down from tier 1, and the mod's ordinary tier-4/5 pacing gate —

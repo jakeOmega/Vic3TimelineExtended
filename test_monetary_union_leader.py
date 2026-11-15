@@ -527,7 +527,7 @@ class ReachTest(unittest.TestCase):
         self.assertEqual(self.reach(leader), 0)
 
     def test_singapore_1957(self):
-        # The owner's save: 98 pounds a week before, of a weekly income of 821 million.
+        # The owner's save: 98 pounds a week before (about 163 minted), of a weekly income of 821 million.
         leader = self.singapore()
         reach = SGP_ANCHORED_M / (SGP_ANCHORED_M + 0.15 * SGP_GDP / 1e6)
         self.assertAlmostEqual(self.reach(leader), reach, places=9)

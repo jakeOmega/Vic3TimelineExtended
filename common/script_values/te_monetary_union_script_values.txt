@@ -272,7 +272,8 @@ te_mon_union_reach = {
 # with. Until 2026-11-14 it was tier 5 only, the
 # share of world GDP anchored x 2000 and capped at 1000 pounds a week: the
 # owner's Singapore, leading a tier-5 union of 153 members in 1957 on a weekly
-# income of 821 million, minted 98 pounds.
+# income of 821 million, was paid 98 pounds by this value (93 applied; about
+# 163 minted, with its bonuses).
 #
 # Sizing against the save, and the exploit cases: docs/systems/
 # monetary_policy_design.md §0.14.
