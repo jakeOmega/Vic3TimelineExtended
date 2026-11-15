@@ -160,7 +160,16 @@ class LocalOnlyTest(unittest.TestCase):
         worst = held = 0
         for _ in range(YEARS):
             for _ in range(12):
-                m.step_month(world, rng, conquest=0, annex=0, split=0, demolish=0.01, complete=0.15)
+                # build=3: the three levels a month these worlds have always
+                # had, not the pace sized to the pools (m.build_pace). At that
+                # pace they reach the case global_commons.md names under Build
+                # only on local claims: a level the second branch let in in
+                # another basin takes this basin's last claim, as the one with
+                # the most, before this basin's own levels are recorded, and
+                # the basin's states end the month with two distant licences
+                # (6 of these 30 worlds at pools of 1,500 to 500; take build=3
+                # out to see it).
+                m.step_month(world, rng, conquest=0, annex=0, split=0, demolish=0.01, complete=0.15, build=3)
                 for cid, c in world.countries.items():
                     for b in m.BASINS:
                         d = sum(s.distant() for s in world.owned(cid) if s.basin == b)
@@ -182,6 +191,7 @@ class LocalOnlyTest(unittest.TestCase):
                 self.assertLessEqual(worst, 1)
                 on += held
                 off += self._run(False, 8300 + i)[1]
+        self.assertGreater(on, 0, "no local claim ever ran out: the branch let no level in")
         self.assertLess(on * 5, off)
 
 

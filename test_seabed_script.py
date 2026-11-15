@@ -88,8 +88,8 @@ class ConstantsTest(unittest.TestCase):
     def test_pools(self):
         for b, pool in m.POOLS.items():
             self.assertEqual(literal(self.values, f"te_seabed_pool_{b}"), pool, b)
-        # spec § 2.2
-        self.assertEqual(m.POOLS, {"pacific": 300, "atlantic": 250, "indian": 200, "southern": 150, "arctic": 100})
+        # spec § 2.2's first estimates, times five
+        self.assertEqual(m.POOLS, {"pacific": 1500, "atlantic": 1250, "indian": 1000, "southern": 750, "arctic": 500})
 
     def test_weights(self):
         self.assertEqual(literal(self.values, "te_seabed_coast_weight"), m.COAST_WEIGHT)
@@ -569,7 +569,7 @@ class LockTest(unittest.TestCase):
     def test_constants(self):
         v = read(VALUES)
         self.assertEqual(literal(v, "te_seabed_influence_sponsor"), 50)
-        self.assertEqual(literal(v, "te_seabed_influence_per_claim"), 0.5)
+        self.assertEqual(literal(v, "te_seabed_influence_per_claim"), 0.1)
         self.assertEqual(literal(v, "te_seabed_unilateral_cost_mult"), 1.5)
         self.assertEqual(literal(v, "te_seabed_influence_unilateral"), 150)
         self.assertEqual(literal(v, "te_seabed_policy_lock_months"), 60)

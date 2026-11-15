@@ -23,7 +23,7 @@ GUI = os.path.join(REPO, "gui", "te_seabed_widgets.gui")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_global_commons_seabed_sguis.txt")
 BASINS = ("pacific", "atlantic", "indian", "arctic", "southern")
 # The longest a number printed in a cell can be: counts reach four digits (the
-# pools sum to 1,000), the readout five ("+99999" navy), a year four.
+# pools sum to 5,000), the readout five ("+99999" navy), a year four.
 NUMBER = "9999"
 YEAR = "1972"
 READOUT = "99999"

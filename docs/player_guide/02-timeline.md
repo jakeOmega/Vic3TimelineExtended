@@ -343,16 +343,18 @@ the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
-The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
-Extraplanetary Base's, and at base prices earns more per level: about three
-times as much in era 11, and still more than a Mining Colony after Advanced
-Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
+The Deep-Sea Mine mines mostly Structural and Conductive Metals, as the seabed's
+nodules are mostly manganese, nickel and copper, with a little of the
+Tech-Critical Metals an Extraplanetary Base makes far more of. It costs 5,000
+construction per level, a quarter of the Extraplanetary Base's, and at base
+prices earns more per level: about twice as much in era 11, and still more than
+a Mining Colony after Advanced Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
 Capacity, and two late production method groups each cut that bill by 30%:
 Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
-13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
-about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. Self-Replicating Miners with neither upgrade earn more than a
+13; not an elevator of your own). A Mining Colony with Fusion Tugs earns about a
+third more per level than an Advanced Deep-Sea Mine, and with both upgrades about
+twice as much. Self-Replicating Miners with neither upgrade earn more than a
 Mining Colony with both, and the upgrades add less to them, since they launch
 less. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
@@ -365,11 +367,11 @@ pool of licenses. A coastal state belongs to the basin its sea lane opens onto.
 
 | Basin | Licenses | Includes |
 |---|---|---|
-| Pacific | 300 | the Sea of Japan, the East and South China Seas and New Zealand |
-| Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
-| Indian | 200 | the Red Sea, Persian Gulf and Arabian Sea |
-| Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
-| Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
+| Pacific | 1,500 | the Sea of Japan, the East and South China Seas and New Zealand |
+| Atlantic | 1,250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
+| Indian | 1,000 | the Red Sea, Persian Gulf and Arabian Sea |
+| Southern | 750 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
+| Arctic | 500 | the Barents Sea, Greenland and Hudson Bay |
 
 Every January the pools are shared out by claim weight among every coastal
 country. A country without Abyssal Plain Mining counts at three quarters of
@@ -451,8 +453,8 @@ Transfer the other way. The article can be enforced, so a war's winner can take
 a rival's claims as a lease. No country barred by the Antarctic Treaty can lease
 Southern claims or receive them, and Sponsor Contractors protects no leased
 claims. AI countries offer claims they are unlikely to use soon, and ask for
-them when they are short of claims and Tech-Critical Metals sell above base
-price.
+them when they are short of claims and the Deep-Sea Mine's metals sell above
+base price.
 
 An overlord can take its subject's unused claims with Administer Seabed Claims,
 an action like Raise Subject Payments: no approval, and not on a protectorate
@@ -494,7 +496,7 @@ the claimant lists, with Relinquish and Claim Again, are only on your own.
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.75 | You aren't building Deep-Sea Mines yet, or you build your claims as fast as you get them and need no protection. |
-| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
+| Sponsor Contractors | 50, plus 0.1 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
 | Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
@@ -504,8 +506,8 @@ in one of your home basins has switched to it since your last change, and
 Scientific Survey, while your influence is in deficit. Sponsor Contractors'
 cost has no cap, so claiming a whole basin is expensive; to cut it, build on
 the claims, relinquish a basin, or drop to Scientific Survey when you can. AI
-countries take up Sponsor Contractors when it would bring them a license and
-Tech-Critical Metals sell above base price, and more readily the more unused
+countries take up Sponsor Contractors when it would bring them licenses and
+the Deep-Sea Mine's metals sell above base price, and more readily the more unused
 claims they hold. A few great powers, mostly those with poor UN standing or a
 rival claimant, choose Unilateral Licensing. The AI keeps to the five-year lock
 too.
