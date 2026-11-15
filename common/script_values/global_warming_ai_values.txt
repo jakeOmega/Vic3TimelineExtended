@@ -351,7 +351,10 @@ gw_ai_authority_deficit_repeal_weight = 15
 # policies in force (gw_ai_movement_pressure_unmasked), as the will reads the
 # warming beneath the haze: a policy that keeps the movement calm isn't
 # repealed for having worked, and once the movement goes (the ministry fully
-# funded), each policy falls back to its own will and band.
+# funded), each policy falls back to its own will and band. Renewable
+# Investment's hold also needs the treasury its answer needs
+# (gw_ai_can_carry_renewable_investment): a country that can't carry the 0.5%
+# of GDP falls back to its own will and band, like a calm one.
 #
 # Aerosol Injection stirs the movement and isn't among the seven, and neither
 # are Green Building Codes, Fossil-Fuel Tariffs or Carbon Removal Support, which
@@ -443,6 +446,17 @@ gw_ai_movement_pressure_weight = 30
 gw_ai_movement_hold_points = {
 	value = gw_ai_movement_pressure_unmasked
 	multiply = gw_ai_movement_pressure_weight
+}
+
+# Renewable Investment's, only while the treasury can carry its running cost:
+# the same gate as its answer, so the movement never holds the policy where it
+# wouldn't have the country take it up.
+gw_ai_movement_hold_points_renewable_investment = {
+	value = 0
+	if = {
+		limit = { gw_ai_can_carry_renewable_investment = yes }
+		add = gw_ai_movement_hold_points
+	}
 }
 
 # Each policy's will less threshold when the country can take it up now as an
@@ -654,7 +668,7 @@ gw_ai_repeal_margin_renewable_investment = {
 	value = 0
 	subtract = gw_ai_base_margin_renewable_investment
 	subtract = gw_ai_repeal_band
-	subtract = gw_ai_movement_hold_points
+	subtract = gw_ai_movement_hold_points_renewable_investment
 }
 
 gw_ai_base_margin_public_transit = {

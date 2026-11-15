@@ -171,7 +171,9 @@ class GwAiPolicyTableTest(unittest.TestCase):
                     adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
                     self.assertEqual(adopt["value"][1], margin)
                     self.assertEqual(adopt["add"][1], f"gw_ai_movement_answer_points_{p}")
-                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band", "gw_ai_movement_hold_points"])
+                    hold = ("gw_ai_movement_hold_points_renewable_investment" if p == "renewable_investment"
+                            else "gw_ai_movement_hold_points")
+                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band", hold])
                 else:
                     self.assertEqual(subtracted, [margin, "gw_ai_repeal_band"])
 

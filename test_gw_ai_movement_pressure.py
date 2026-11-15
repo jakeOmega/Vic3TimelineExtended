@@ -144,8 +144,22 @@ class WiringTest(unittest.TestCase):
                 self.assertIn(f"gw_possible_{p} = yes", body)
                 self.assertEqual(re.findall(r"authority >= (\d+)", body), asked)
         renewables = _code(_block(triggers, "gw_ai_can_answer_renewable_investment"))
-        self.assertIn("in_default = no", renewables)
-        self.assertIn("scaled_debt < 0.25", renewables)
+        self.assertIn("gw_ai_can_carry_renewable_investment = yes", renewables)
+        carry = _code(_block(triggers, "gw_ai_can_carry_renewable_investment"))
+        self.assertIn("in_default = no", carry)
+        self.assertIn("scaled_debt < 0.25", carry)
+
+    def test_renewable_investment_is_held_only_where_it_would_be_answered(self):
+        """Its running cost is money, not authority: the movement holds it
+        against repeal only while the treasury passes the same test its answer
+        does, one trigger for both, so a country that can no longer carry the
+        0.5% of GDP falls back to its own will and band."""
+        values = _text(VALUES)
+        hold = _code(_block(values, "gw_ai_movement_hold_points_renewable_investment"))
+        self.assertRegex(hold, r"value = 0\s+if = \{\s+limit = \{ gw_ai_can_carry_renewable_investment = yes \}"
+                               r"\s+add = gw_ai_movement_hold_points\s+\}")
+        self.assertIn("gw_ai_can_carry_renewable_investment = yes",
+                      _code(_block(_text(AI_TRIGGERS), "gw_ai_can_answer_renewable_investment")))
 
     def test_the_yearly_answer_is_set_by_the_seven_adopt_buttons_only(self):
         buttons = _text(BUTTONS)
@@ -165,7 +179,14 @@ class WiringTest(unittest.TestCase):
         for p in repeals:
             with self.subTest(policy=p):
                 body = _code(_block(values, f"gw_ai_repeal_margin_{p}"))
-                self.assertEqual("subtract = gw_ai_movement_hold_points" in body, p in _wants())
+                holds = re.findall(r"subtract = (gw_ai_movement_hold_points\w*)", body)
+                if p == "renewable_investment":
+                    expected = ["gw_ai_movement_hold_points_renewable_investment"]
+                elif p in _wants():
+                    expected = ["gw_ai_movement_hold_points"]
+                else:
+                    expected = []
+                self.assertEqual(holds, expected)
 
 
 class _Country:
@@ -181,6 +202,7 @@ class _Country:
         self.weight = _number("gw_ai_movement_pressure_weight") if weight is None else weight
         self.band = _number("gw_ai_repeal_band") if band is None else band
         self.target0 = activism  # the movement's target with nothing in force
+        self.solvent = True  # gw_ai_can_carry_renewable_investment
         self.activism = activism
         self.movement = True
         self.held = set()
@@ -195,16 +217,17 @@ class _Country:
         a = self.activism if self.movement else None
         press = self.pressure(a) if self.movement else 0.0
         unmasked = self.pressure(a + SWING * len(self.held)) if self.movement else 0.0
-        options = {p: m for p, m in self.base.items() if p not in self.held and self.can[p]}
+        options = {p: m for p, m in self.base.items() if p not in self.held and self.answerable(p)}
         nearest = max(options.values()) if options else None
         for p in sorted(self.base):
             if p in self.held:
-                if -self.base[p] - self.band - self.weight * unmasked > 0:
+                hold = self.weight * unmasked if self.solvent or p != "renewable_investment" else 0.0
+                if -self.base[p] - self.band - hold > 0:
                     self.held.discard(p)
                     self.log.append((n, "repeal", p))
                 continue
             points = 0.0
-            if press > 0 and self.cooldown <= 0 and self.can[p] and self.base[p] >= nearest:
+            if press > 0 and self.cooldown <= 0 and self.answerable(p) and self.base[p] >= nearest:
                 points = self.weight * press
             if self.can[p] and self.base[p] + points >= 0:
                 self.held.add(p)
@@ -215,6 +238,9 @@ class _Country:
             target = max(0.0, min(1.0, self.target0 - SWING * len(self.held)))
             step = max(-DRIFT, min(DRIFT, target - self.activism))
             self.activism += step
+
+    def answerable(self, p):
+        return self.can[p] and (self.solvent or p != "renewable_investment")
 
     def run(self, weeks, start=0):
         for n in range(start, start + weeks):
@@ -259,6 +285,22 @@ class ModelTest(unittest.TestCase):
         c.run(4, start=52 * 3)
         # adaptation is within its band (-10 > -15) and stays; reforestation (-20) lapses
         self.assertEqual(c.held, {"climate_adaptation"})
+
+    def test_renewable_investment_lapses_once_the_treasury_cannot_carry_it(self):
+        # Held by the movement alone (-20, below its band): it goes once the
+        # country can't pay, and the movement doesn't bring it back meanwhile.
+        base = {"renewable_investment": -20, "carbon_tax": -60}
+        c = _Country(base, activism=0.9).run(52)
+        self.assertEqual(c.held, {"renewable_investment"})
+        c.solvent = False
+        c.run(52 * 3, start=52)
+        self.assertEqual(c.held, set())
+        self.assertEqual([e[1] for e in c.log if e[2] == "renewable_investment"], ["adopt", "repeal"])
+        # Held by its own will (-10, inside the band), it stays, as on main.
+        own = _Country({"renewable_investment": -10, "carbon_tax": -60}, activism=0.9).run(52)
+        own.solvent = False
+        own.run(52 * 3, start=52)
+        self.assertEqual(own.held, {"renewable_investment"})
 
     def test_no_cycle_at_any_activism_or_weight(self):
         for weight in (20, 30, 40):

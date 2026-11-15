@@ -418,7 +418,8 @@ policies the movement asks for ([The Environmental
 Movement](#the-environmental-movement)): the one it is nearest to adopting anyway
 and can afford now. It does this at most once a year, so each answer has time to calm
 the movement before the next. It keeps those policies while the movement would
-be that restless again without them.
+be that restless again without them, and Renewable Investment only while it can
+still afford the running cost.
 
 | Policy | Threshold |
 |---|---|
