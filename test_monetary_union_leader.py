@@ -478,12 +478,36 @@ class ReachTest(unittest.TestCase):
             with self.subTest(tier=tier):
                 self.assertAlmostEqual(self.s.number("te_mon_union_currency_base_m", leader, leader), base)
 
-    def test_a_tier_five_leader_with_only_treaty_peggers_still_earns(self):
-        # As the old tier-5 seigniorage did: a reserve currency nobody in its own bloc has adopted.
+    def test_a_tier_five_leader_with_only_treaty_peggers_earns_nothing(self):
+        # Owner, 2026-11-14: an adopter is needed at tier V as at the others. The base is there
+        # (the peggers' GDP), and it pays nothing until a member of the bloc adopts.
         leader = union(5, adopters=())
         leader.vars["te_mon_anchored_gdp_m"] = 800
-        self.assertGreater(self.s.number("te_mon_union_seigniorage_value", leader, leader), 0)
+        self.assertEqual(self.s.number("te_mon_union_currency_base_m", leader, leader), 800)
+        self.assertFalse(self.s.check(self.s.triggers["te_mon_union_is_issuer"], leader, leader))
+        self.assertEqual(self.reach(leader), 0)
+        self.assertEqual(self.s.number("te_mon_union_seigniorage_value", leader, leader), 0)
+        self.assertEqual(self.s.number("te_mon_union_issuer_cut_value", leader, leader), 0)
         self.assertEqual(self.s.number("te_mon_union_seigniorage_value", union(4, adopters=()), None), 0)
+
+    def test_the_peggers_count_once_a_member_has_adopted(self):
+        # The same leader with one small adopter: the base is everything anchored, peggers included.
+        leader = union(5, leader_gdp=1e10, adopters=(1e8,))
+        leader.vars["te_mon_anchored_gdp_m"] = 900          # the adopter's 100 and 800 of peggers
+        self.assertAlmostEqual(self.reach(leader), 900 / (900 + 1500))
+        leader.bloc.tier = 4
+        self.assertAlmostEqual(self.reach(leader), 100 / (100 + 1500))
+
+    def test_reach_asks_for_the_issuer_and_nothing_less(self):
+        # The live walk of the members, not the stored sums: a stale count pays nobody.
+        body = self.s.values["te_mon_union_reach"]
+        limit = field(next(val for key, _, val in body if key == "if"), "limit")
+        self.assertEqual(limit, [("te_mon_union_is_issuer", "=", "yes"), ("te_mon_union_currency_base_m", ">", "0")])
+        leader = union(5, leader_gdp=1e10, adopters=(1e9,))
+        leader.vars["te_mon_anchored_gdp_m"] = 2000
+        self.assertGreater(self.reach(leader), 0)
+        leader.bloc.members[1].vars["te_mon_anchor_kind"] = 0      # it left; the sums are a month old
+        self.assertEqual(self.reach(leader), 0)
 
     def test_singapore_1957(self):
         # The owner's save: 98 pounds a week before, of a weekly income of 821 million.
@@ -512,11 +536,14 @@ class ReachTest(unittest.TestCase):
         self.assertLess(self.s.number("te_mon_union_issuer_cut_value", leader, leader), 1.5)
 
     def test_reach_is_zero_for_everyone_who_cannot_issue(self):
+        pegged = union(5, adopters=())
+        pegged.vars["te_mon_anchored_gdp_m"] = 5000
         cases = {"no bloc": Country("alone", 1e9),
                  "tier 1": union(1),
                  "no dial": union(5, dial=False),
                  "on gold": union(5, laws=("law_national_bank", "law_gold_standard")),
                  "no adopter": union(4, adopters=()),
+                 "tier 5, peggers and no adopter": pegged,
                  "a member": union(5).bloc.members[1]}
         for label, country in cases.items():
             with self.subTest(case=label):
@@ -875,11 +902,18 @@ class StepNineBTest(unittest.TestCase):
         self.assertEqual(self.removal(lose_dial).mods, {})
 
     def test_the_last_adopter_leaving_takes_everything_off(self):
+        # At tier V, and with a treaty pegger still anchored on the leader's money: the base
+        # stays above zero, and seigniorage and the cut go all the same (owner, 2026-11-14).
         def exit_all(leader):
             for member in leader.bloc.members[1:]:
                 member.vars["te_mon_anchor_kind"] = 0
-            leader.vars["te_mon_anchored_gdp_m"] = 0
-        self.assertEqual(self.removal(exit_all).mods, {})
+            leader.vars["te_mon_anchored_gdp_m"] = 800
+        leader = self.removal(exit_all)
+        self.assertEqual(leader.bloc.tier, 5)
+        self.assertEqual(self.s.number("te_mon_union_currency_base_m", leader, leader), 800)
+        self.assertEqual(leader.mods, {})
+        for name in ("te_mon_union_seigniorage_applied", "te_mon_union_issuer_cut_applied"):
+            self.assertEqual(leader.vars[name], 0)
 
     def test_no_longer_leading_takes_everything_off(self):
         def deposed(leader):

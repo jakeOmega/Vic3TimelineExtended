@@ -178,7 +178,8 @@ te_mon_union_reserve_standing_cut = { value = 0.25 }
 # THE BASE is the GDP that uses the leader's money. Below tier 5 the adopters'
 # (te_mon_union_adopter_gdp_m, summed by the leader's discovery). At tier 5
 # everything anchored on it, te_mon_anchored_gdp_m, WHICH COUNTS EVERY CHOSEN
-# ANCHOR: treaty peggers (kind 1) as well as union adopters (kind 2).
+# ANCHOR: treaty peggers (kind 1) as well as union adopters (kind 2). The base
+# alone pays nothing: te_mon_union_reach asks for an adopter first, at every tier.
 # Deliberate, and unchanged (§0.11 ruling T4): a reserve currency is held by
 # everybody who ties their money to it, not only by the bloc, and it is the
 # base the reserve-currency standing cut uses, so the terms cannot disagree
@@ -218,18 +219,25 @@ te_mon_union_currency_base_m = {
 	min = 0
 }
 
-# 0 to under 1. Zero for everybody who does not lead a bloc at tier 2 or above
-# with a currency it can issue (a dial, fiat or digital money): no adopter test
-# of its own, because the base is one. Below tier 5 it is the adopters' GDP,
-# zero with none; at tier 5 a treaty pegger alone still counts, as it did for
-# the old seigniorage.
+# 0 to under 1. Zero for everybody who is not the ISSUER
+# (te_mon_union_is_issuer): the leader of a bloc at tier 2 or above, with a
+# currency it can issue (a dial, fiat or digital money), that a member has
+# adopted.
+#
+# AT TIER 5 TOO (owner, 2026-11-14, on the review of PR #1810). As first built
+# the test here was the first three conditions and a base above zero, and the
+# tier-5 base counts treaty peggers: a tier-5 leader with a pegger and no
+# adopter was paid seigniorage and the cut, against the text's "once a member
+# adopts its currency". The issuer test asks for the adopter by a live walk of
+# the members, so the last adopter's exit takes both off at tier 5 as at the
+# others. Peggers still count toward the base once the leader is an issuer.
+# (Before this work such a leader earned the old capped seigniorage, at most
+# 1000 pounds a week; it now earns nothing until a member adopts.)
 te_mon_union_reach = {
 	value = 0
 	if = {
 		limit = {
-			is_power_bloc_leader = yes
-			te_mon_bloc_union_tier_2_plus = yes
-			te_mon_can_lead_union = yes
+			te_mon_union_is_issuer = yes
 			te_mon_union_currency_base_m > 0
 		}
 		value = te_mon_union_currency_base_m
