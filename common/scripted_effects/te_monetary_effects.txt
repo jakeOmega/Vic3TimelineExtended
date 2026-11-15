@@ -498,6 +498,14 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_union_banking_union }
 		te_mon_mod_strip = { NAME = te_mon_union_reserve }
 		te_mon_mod_strip = { NAME = te_mon_union_seigniorage }
+		# [2026-11-14] The issuer's premium cut and extra interventions, and the
+		# common capital market: te_monetary_apply_fx_one re-adds a missing one,
+		# as it does the seigniorage, so no _applied zeroing here either. This is
+		# also what takes all three off when the banking rule leaves Full
+		# (te_monetary_leave_full_system sends every managed modifier this way).
+		te_mon_mod_strip = { NAME = te_mon_union_issuer_premium }
+		te_mon_mod_strip = { NAME = te_mon_union_issuer_bank }
+		te_mon_mod_strip = { NAME = te_mon_union_credit }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }

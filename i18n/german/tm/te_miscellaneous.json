@@ -6128,8 +6128,8 @@
   "de": "hält sich zurück — #R unter Druck#!"
  },
  "banking_dash_mon_union_tt": {
-  "en": "#header Monetary Union#!\\nWhere the country stands in its power bloc's monetary principle. Its tiers do not stack: each includes the one before.",
-  "de": "#header Währungsunion#!\\nWo das Land im geldpolitischen Prinzip seines Machtblocks steht. Die Stufen stapeln sich nicht; jede schließt die vorherige mit ein."
+  "en": "#header Monetary Union#!\\nWhere the country stands in its power bloc's monetary principle. Its tiers do not stack: each includes the one before.[Country.GetCustom('te_mon_union_issuer_note')]",
+  "de": "#header Währungsunion#!\\nWo das Land im geldpolitischen Prinzip seines Machtblocks steht. Die Stufen stapeln sich nicht; jede schließt die vorherige mit ein.[Country.GetCustom('te_mon_union_issuer_note')]"
  },
  "banking_dash_mon_wage_label": {
   "en": "Wage Pressure",

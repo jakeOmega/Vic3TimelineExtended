@@ -308,6 +308,18 @@ te_nation_src_monetary_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_mon_union_credit }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_mon_union_issuer_bank }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_mon_union_issuer_premium }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_mon_union_pressure }
 		add = 1
 	}
@@ -3084,6 +3096,10 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_mon_union_issuer_premium }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_mon_union_reserve }
 		add = 1
 	}
@@ -3375,6 +3391,10 @@ te_nation_group_investment_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_mon_union_issuer_premium }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_monetary_rate_paid }
 		add = 1
 	}
@@ -3449,6 +3469,10 @@ te_nation_type_country_risk_premium_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_mon_arrangement_recipient }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_mon_union_issuer_premium }
 		add = 1
 	}
 }

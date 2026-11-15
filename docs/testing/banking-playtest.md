@@ -20,6 +20,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … contagion_one_open` | BROKEN once a game, when a contagion event opens for a country that already has one open. OK once a game, when a contagion event closes alone after a wave that reached its country while it was on its way or open was turned away (`turned_away=N`); a game with no such reach logs no OK | one contagion event per country at a time: the mark the spread sets when it sends the event (`banking_contagion_pending`) turned the second wave away, and the event answered for both | two contagion events open at once, so two rolls and two popups again; the line gives `date`, `open` and `turned_away`. Find both events for that country in `debug.log`. Within a week of loading a save made before the block, it can be a pair sent under the old rules: no fault. If the first had been open more than 120 days, the mark ran out under it. If both were sent while the mark stood, something sent the event past the spread, or removed the mark (a loyalist win re-running `je_banking_cycle`'s `immediate` would) | Mark ran out: raise `days` in `banking_contagion_mark_pending` above the event's real lifetime. Mark not seen or removed: make the mark untimed and count monthly passes instead, as `covert_open_event_stale_passes` does, or drop the revolution clear in `je_banking_cycle`'s `immediate` if a loyalist win caused it. The event `trigger` the owner sketched first (a mark set in `immediate`) is no fallback for the same-pulse case: both copies are sent before either opens |
 | `TE_SELF_CHECK … contagion_roll_scope` | Judged only for a contagion event that was alone: no other copy open for the same country between its roll and its answer (`open=1`), which since the block (`contagion_one_open`) is every one. OK once a game, when the first country a contagion cascade reached (a contagion crash spreading on, not an origin crash) has its own roll crash; BROKEN each time a lone event's options and its roll disagree. A copy open beside another is not judged: `contagion_one_open` reports that | the event's own `save_scope_as = contagion_crashed` replaced the upstream country's inherited one, so a cascade target's crash plays as a crash. The 2026-10-17 autosave already shows this: targets two and three tiers out had taken the crash-only options | `roll=crash read=scare open=1`: the save did not replace the inherited scope, so in a cascade only the first tier can crash. `roll=scare read=crash open=1`: a scare took the crash options, the 2026-10-16 bug. A country whose copy never resolved (annexed first) is not judged until the spread sends it the next one | A BROKEN with `open=1`: drop the saved scope and read the roll from `var:contagion_crash` in the text, options and cascade. With one contagion event at a time the variable is the event's own roll, so this no longer changes play. The old fallback, a saved scope *value* set on both outcomes, stays withdrawn: it needs the same replacement, and where that fails a scare inherits the upstream country's crash, the 2026-10-16 bug |
 | `TE_SELF_CHECK … banking_entry_everywhere` | Once a game, 30 days after the first yearly pulse (an old save's first after this change) | every country that should hold `je_banking_cycle` (under the rule, not decentralized, not a rebel) does, and the safety net added none: the engine activated every record | `missing=` countries still without it (each named on a `TE_SELF_CHECK INFO … missing:` line after it, `record=inactive` for one holding an inactive copy the engine has yet to activate, `record=none` for one with no record), `added_by_net=` how many the net has added (each logged as `TE_BANKING: the safety net added …`). The engine left records out (or, for `missing`, a country formed in the last two weeks); the net carries them, a month late at most. The net adds only where there is no record: over an inactive copy `add_journal_entry` is refused with an error, so it leaves that copy to the engine (#1416). **Read BROKEN `missing=3 added_by_net=0` on August 4, 2045 in the owner's EU game (2026-10-17), so the fallback below is in: the net runs monthly** | ~~Add the entry from a monthly pulse instead of the yearly one (`te_banking_entry_net` in `te_banking_entry_on_actions.txt`), so a country waits a month at most~~ (done 2026-10-17). Next: a `TE_BANKING: the safety net added` line for each named country within a month says the net carries them. A `record=none` country the net never adds, while still named a month on, means `add_journal_entry` fails for it: read its type and status in a save. A `record=inactive` country still named a month on holds a copy the engine does not activate though `is_shown_when_inactive` holds (`possible` is `always = yes`): read the copy in a save |
+| `TE_SELF_CHECK … mon_union_issuer` | Once a game, on the second monthly pulse of the first bloc leader at Monetary Union tier II or above that can issue a currency (fiat or digital money, a policy rate of its own) and has an adopter worth at least 1% of its own GDP. The 1% keeps out a union too small to pay anything; the second pulse, because a modifier added in one block is not visible to it. A leader that stops qualifying after its first pulse (its adopter leaves) starts again from a first pulse when it next qualifies | the leader's discovery counted its adopters and summed their GDP, its seigniorage and its risk-premium cut are above zero, and Common Currency, Seigniorage from the Common Currency and Issuer of the Common Currency are on its banking entry. The line gives `adopters`, `adopter_gdp_m`, `seigniorage` (pounds a week), `cut` (points), `points` and `credit` | a sum is zero or a modifier is missing; the line gives the same figures | `adopters` or `adopter_gdp_m` at 0: the discovery's sum, read across scopes in an op slot, failed. In `te_monetary_discover_union` write the member's GDP into its `te_mon_work_gdp_m` and add `prev.var:te_mon_work_gdp_m` inside `root = { }`, as the global anchored-GDP pass does. Both above 0 and `seigniorage` or `cut` at 0: `te_mon_union_reach`'s nested `divide = { }`; compute the denominator into a variable in the effect and divide by it. All four above 0: a scaled modifier did not land on the entry; read which is missing, and apply the three on the country instead. **No line** in a game where a leader's Monetary Union row shows such an adopter: the walk of the bloc's members never holds; use the stored count (`var:te_mon_union_adopters >= 1`) in `te_mon_union_is_issuer` |
 
 ## A contagion scare plays as a scare (2026-10-16)
 
@@ -361,6 +362,106 @@ if it never fires.
    guarantor has answered, with the honored text and the sum when it pays and the refused text when it does not.
 5. **The log.** After a game in which the above ran, neither `error.log` nor `debug.log` has a line naming
    `te_monetary_arrangement_events.txt` or `te_monetary_union_events.txt`.
+
+## A common currency pays its issuer (2026-11-14)
+
+The leader of a bloc whose common currency a member has adopted now carries what its adopters carry, mints a share of
+its own GDP and has risk premium cut in proportion to its currency's reach, holds up to four more intervention points,
+and shares a common capital market with its adopters (`monetary_policy_design.md` § 0.14). The script is run offline
+by `test_monetary_union_leader.py` and `test_banking_overdraft_shed.py`; these are what only the game shows. Play a
+bloc leader on Fiat Money with a national bank, take Monetary Union to tier II or above, and get a member to adopt
+(Press for Convergence, or an AI minor inside your market). Read `TE_SELF_CHECK mon_union_issuer` (the table above).
+
+1. **The principle's tooltip.** Tiers II to V show a Leader block of four lines: the sentence that begins "Once a
+   member adopts its currency", then "+0.50% Seigniorage at Full Reach, of GDP a Year, before Minting Bonuses",
+   "−0.50% Risk Premium at Full Reach" and "+1 Banking Intervention Points: More Central-Bank Tools in Force at Once" at tier II, rising to
+   +1.50%, −1.50% and +4 at tier V, each green. Tier I has no Leader block. A figure missing, or a raw
+   `country_te_mon_issuer_…` key: a script-only numeric type does not print in a principle's `leader_modifier`; the
+   fallback is one text marker per tier carrying the figures in words.
+2. **The entry's modifiers, the month after a member adopts.** The leader's banking entry lists Common Currency
+   (+5% export and import advantage), Seigniorage from the Common Currency (pounds a week), Issuer of the Common
+   Currency (a negative risk premium), Central Bank of the Union (+1 to +3) and Common Capital Market. From tier IV
+   also Banking Union, from tier V Reserve Currency. Hover the Monetary Union row: the tooltip ends with the number
+   of adopters and the reach as a percentage, and for a leader that is being paid, its seigniorage in pounds a week
+   twice: before its bonuses to minting, and with them.
+3. **The figures.** The Seigniorage from the Common Currency modifier carries the tier's percentage of the leader's
+   GDP × reach ÷ 52 (the overview's GDP; at tier V and a reach of 28%, 0.42% of GDP a year). **That is before the
+   leader's minting bonuses**: the budget's minting line rises by it × (1 + the bonus), 1.6 times on Fiat Money
+   with the five finance technologies and 1.75 on Digital Currency (the budget's minting tooltip lists the
+   bonuses). Check three things. (a) The line rises by the multiplied figure, as the 1957 save's did for the old
+   seigniorage. (b) The row tooltip's first figure is the modifier's. (c) Its second figure is the first × (1 + the
+   bonus the budget shows). **If the two figures are equal while the budget shows a bonus**,
+   `modifier:country_minting_mult` reads nothing from a display script value: take the second figure out of
+   `banking_dash_mon_union_issuer_note_paid` and leave "before its bonuses to minting", or build the bonus in
+   script from the law and the five technologies. The risk premium on the dashboard falls by the tier's points ×
+   reach, **a month after** the modifier appears.
+4. **More tools at once.** The budget cell's total rises by the points. With them, switch on a tool the old budget
+   had no room for (under Central Bank Independence at tier III or above: Reserve Requirements, the Countercyclical
+   Buffer and Margin Requirements beside a standing Deposit Guarantee).
+5. **Losing the points.** With those tools on, lose the points: have the last adopter leave, or enact Unregulated
+   Banking. The budget's free figure goes negative that month, and each following month one tool is lifted, the
+   cheapest first (Moral Suasion, then a 2-point tool), with its "withdrawn" marker on the history chart and no
+   radicals, until the budget is at 0 or above. A Bank Holiday in force is not lifted. Emergency Liquidity, if it is
+   the one lifted, pays its refund. **Each lift posts a feed notice, "Intervention Budget Overdrawn"**, naming the
+   tool in bold and saying the budget no longer covers the interventions in force; Emergency Liquidity's adds that
+   1% of GDP has come back. A raw `banking_…` key or "an intervention" in place of the name: the flag variable the
+   notice reads (`banking_overdraft_lifted`) is not being compared as `flag:<modifier>`; the fallback is one notice
+   per tool family with no name. After two lifts in successive months, open the first notice again: if it now names
+   the second tool, the feed draws its text afresh from the variable, and the name has to be stored per notice (a
+   saved scope cannot carry a modifier; one message type per tool can).
+6. **A law downgrade sheds too.** With no union at all: under Prudential Banking switch on the Deposit Guarantee and
+   two leaning tools, then enact Universal Banking, Light Prudence. Before this change the tools stayed on an
+   overdrawn budget; now they are lifted one a month as in 5. The same for a command economy's planning tools and a
+   cooperative's council tools after a law that cuts the budget. **And only what the budget needs.** Under Directed
+   Credit & Development Banks with a national bank (6 points, two sectors) run Agriculture credit, Infrastructure
+   credit and Moral Suasion, then enact Universal Banking, Light Prudence (5 points, one sector). The first month
+   lifts Agriculture credit alone (the sector cap) and the budget is +1; Moral Suasion must still be on a month
+   later. Likewise under Prudential Banking with Outflow Controls, the Deposit Guarantee and Moral Suasion: after
+   Universal Banking the controls go and nothing else. If Moral Suasion goes in the same month, the mark the
+   earlier step sets (`banking_overdraft_wait`) is not seen by the chain: move the chain to its own on_action a
+   day later.
+7. **The adopter's side.** An adopter's entry lists Common Capital Market, with "+2%" capitalists' investment pool
+   contribution at tiers II and III, +3% at IV, +5% at V. The figure is the same in a Downturn or a Panic as in a
+   boom, so a slump still takes its whole 10 or 25 points off capitalists' contribution beside it. A country under
+   Excess Private Construction has no such modifier.
+8. **Unregulated Banking.** A leader under it has neither Central Bank of the Union nor Banking Union, at any tier,
+   and keeps the rest. An adopter under it still has Banking Union.
+9. **The last adopter leaves.** Within a month the leader's entry has lost every modifier in 2, and 5 follows if
+   tools were running on the points. **At tier V too, with a country still pegged to the leader's money by
+   treaty**: the peg counts toward reach only while a member of the bloc has adopted, so seigniorage and the cut
+   in risk premium go with the last adopter.
+10. **Simplified mid-game.** Switch the banking rule to Simplified: within a month none of the modifiers in 2 is on
+    the entry or the country, and the budget is the law's and the bank's alone. The principle's Leader lines still
+    print; nothing pays them.
+11. **The AI.** In an observer game, count the blocs whose leader is on Fiat Money or Digital Currency with a
+    national bank and that hold a Monetary Union principle, against none before. A leader on gold should not take
+    tier II. Leaders at tier III should go on to IV and V when the technologies land (T-10 in § 0.11).
+12. **Is it strong enough?** The owner judged the strength "about right - good enough to test in-game at least"
+    (2026-11-14). Lead a union for a decade and compare it with the group you gave up for it. **If it tests weak,
+    the levers are more seigniorage, more trade advantage or another intervention point, never relief from the
+    cycle's penalties**: the owner had a doubling of the pool bonus in a Downturn or Panic removed because "the
+    investment pool contribution decrease is the worst part of downturns and panics. I worry this would make them
+    less painful and so make you not need to avoid them as much." A downturn or a panic should hurt a union's
+    leader and its adopters as much as anyone.
+13. **A tool that is on more than once.** The owner's 1957 save has Moral Suasion on Singapore's entry three times,
+    holding 3 points (issue #1811: the dashboard's Enable tests "not already on" where it is shown, not where it is
+    valid). Overdraw that budget by 1 and watch the first lift: if the budget's free figure rises by 1, one
+    `remove_modifier` takes one copy, and a stack of three is three months and three notices; if it rises by 3, it
+    takes them all and the chain lifted more than it needed. Either way the chain's branch stays true until the
+    last copy is gone, so no other tool goes first.
+14. **The capital market and Excess Private Construction, year on year.** The Common Capital Market's pool
+    contribution is withheld under Excess Private Construction, which is measured once a year. On an adopter whose
+    pool is close to what its private queue can spend, the contribution can itself tip the pool over: Excess
+    Private Construction appears, the contribution goes the next month, pool income falls, the yearly check drops
+    Excess Private Construction, and the contribution returns. Watch an adopter's banking entry for Common Capital
+    Market coming and going every year or two beside Excess Private Construction doing the opposite. Singapore is
+    the only country under Excess Private Construction in the three saves read, so no size for a band could be
+    taken from them. If it flips, hold the contribution off while `too_much_private_construction_last` is set (the
+    five years after an episode ends, which the construction system already keeps) by adding that test to
+    `te_mon_union_pool_is_saturated`.
+15. **A month when something else lifts a tool.** Let Emergency Liquidity wind down (twelve months at Stable or
+    above) on an overdrawn budget: the wind-down's own notice appears, the refund is paid once, and the overdraft
+    notice does not appear until the month after, if the budget is still short.
 
 ## Five timed monetary modifiers survive a revolution (2026-11-12, #470)
 

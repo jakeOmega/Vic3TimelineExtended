@@ -81,7 +81,8 @@ NOT_COPIED = {
     "te_mon_board_lever_applied", "te_mon_board_seigniorage_applied",
     "te_mon_union_adopter_applied", "te_mon_union_banking_applied",
     "te_mon_union_reserve_applied", "te_mon_union_pressure_applied",
-    "te_mon_union_seigniorage_applied",
+    "te_mon_union_seigniorage_applied", "te_mon_union_issuer_cut_applied",
+    "te_mon_union_issuer_bank_applied", "te_mon_union_credit_applied",
     # Recomputed from scratch by the monthly update or the discovery.
     "te_mon_regime", "te_premium_structural", "te_premium_cyclical",
     "te_rate_paid_pts", "te_market_yield", "te_mon_deficit_pct",
@@ -95,6 +96,11 @@ NOT_COPIED = {
     "te_mon_arr_provider_pts", "te_mon_arr_standing_pts",
     "te_mon_union_holdouts", "te_mon_union_refusers",
     "te_mon_union_seigniorage_pts", "te_mon_commodity_centre",
+    # The issuer's books (2026-11-14): its discovery's count of adopters and their
+    # GDP, and this pulse's premium cut, extra interventions and capital-market credit.
+    "te_mon_union_adopters", "te_mon_union_adopter_gdp_m",
+    "te_mon_union_issuer_cut_pts", "te_mon_union_issuer_bank_pts",
+    "te_mon_union_credit_pts",
     # The Backstops rows' display figures (GUI audit BNK-13): te_mon_bs_cost_<kind>
     # (parsed as its prefix), the union's per-member share and its sum.
     "te_mon_bs_cost_", "te_mon_bs_cost_union", "te_mon_bs_union_pts",
@@ -122,6 +128,9 @@ NOT_COPIED = {
     # the two notices posted in the same effect. Each describes something the
     # loser was told.
     "te_union_exit_from", "te_mon_swap_settled_amount",
+    # TE_SELF_CHECK mon_union_issuer's one-pulse mark (2026-11-14): the winner's own
+    # first qualifying pulse sets it again.
+    "te_mon_union_issuer_check",
 }
 
 # Written by the effect other than through a copy, each for a stated reason:

@@ -8555,17 +8555,25 @@ te_mon_board_wrong_stance = {
 
 # --- 5b: the power-bloc common currency (§15A.3) ----------------------------
 
-# MANAGED, flat; on an ADOPTER while kind = 2 (te_monetary_update_union). One
-# money, no conversion: the design's "state_trade_advantage_mult +0.05" names a
-# modifier type that does not exist, so it is the export / import pair phase 4
-# already uses (§0.8 ruling G9).
+# THE ADOPTERS' THREE (te_mon_union_adopter, _banking_union, _reserve) ARE ALSO
+# ON THE ISSUER since 2026-11-14 (§0.14): the leader of a bloc whose currency a
+# member has adopted uses that currency too (te_mon_uses_common_currency), so
+# it carries the same modifiers at the same figures; the banking union only
+# where its own banking law is not Unregulated Banking.
+
+# MANAGED, flat; on an ADOPTER while kind = 2, and on the issuer
+# (te_monetary_update_union). One money, no conversion: the design's
+# "state_trade_advantage_mult +0.05" names a modifier type that did not exist
+# when this shipped, so it is the export / import pair phase 4 already uses
+# (§0.8 ruling G9).
 te_mon_union_adopter = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_export_advantage_mult = 0.05
 	state_import_advantage_mult = 0.05
 }
 
-# MANAGED, flat; on an ADOPTER while its bloc holds tier 4 (the banking union).
+# MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 4
+# (the banking union).
 # One supervisor and one deposit guarantee across the whole currency area: the
 # cycle is steadier, crashes are rarer, and there is one more intervention in
 # reserve for when one comes anyway. The other half of the tier — contagion
@@ -8578,7 +8586,8 @@ te_mon_union_banking_union = {
 	country_banking_intervention_max_add = 1
 }
 
-# MANAGED, flat; on an ADOPTER while its bloc holds tier 5. A second helping of
+# MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 5.
+# A second helping of
 # te_mon_union_adopter's trade edge — the world quotes prices in this money, so
 # an adopter is not converting at either end of a trade. The tier's other gift
 # to an adopter, a cut of structural premium, goes through
@@ -8589,15 +8598,49 @@ te_mon_union_reserve = {
 	state_import_advantage_mult = 0.05
 }
 
-# MANAGED, scaled; on a tier-5 LEADER. multiplier = pounds a week
-# (te_mon_union_seigniorage_applied), from the share of world GDP anchored on
-# this country's money. The exorbitant privilege: everybody else holds balances
-# in it, and issuing them is free. A flat country_minting_add for the reason
-# te_mon_board_seigniorage gives — a _mult would scale the leader's own base
-# and transfer nothing from anybody.
+# MANAGED, scaled; on a LEADER from tier 2. multiplier = pounds a week
+# (te_mon_union_seigniorage_applied): a share of its own GDP, rising by tier,
+# times its currency's reach (te_mon_union_seigniorage_value). The exorbitant
+# privilege: everybody else holds balances in it, and issuing them is free. A
+# flat country_minting_add for the reason te_mon_board_seigniorage gives — a
+# _mult would scale the leader's own base and transfer nothing from anybody.
+# The engine multiplies it by 1 + the leader's country_minting_mult like every
+# flat minting add, so the multiplier here is the figure BEFORE minting bonuses
+# (te_monetary_union_script_values.txt, "Seigniorage, from tier 2").
 te_mon_union_seigniorage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_minting_add = 1
+}
+
+# MANAGED, scaled; on a LEADER from tier 2, beside the seigniorage and on the
+# same reach. multiplier = pp (te_mon_union_issuer_cut_applied). Cyclical on
+# purpose: the reserve-currency
+# cut in te_mon_arrangement_standing is credit standing, which a mature leader's
+# floor swallows, and what the union costs the leader (te_mon_arrangement_provider)
+# is cyclical. Reaches the premium a month late, like every modifier-borne term.
+te_mon_union_issuer_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+}
+
+# MANAGED, scaled; on the ISSUER under any banking law but Unregulated Banking.
+# multiplier = points (te_mon_union_issuer_bank_applied, 1 to 3 by tier): room in
+# the intervention budget, so more central-bank tools can be in force at once.
+# banking_display_points_total (extra_script_values.txt) adds the same variable.
+te_mon_union_issuer_bank = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_banking_intervention_max_add = 1
+}
+
+# MANAGED, scaled; on ADOPTERS and the issuer: the common capital market.
+# multiplier = hundredths (te_mon_union_credit_applied; 2 to 5 by tier, the same
+# in every phase of the cycle, 0 under Excess Private Construction). The key
+# the cycle's phases and the stance bands move: what credit is to private
+# investors. Never scaled up in a slump (owner, 2026-11-14): the pool's drop is
+# what a downturn is for.
+te_mon_union_credit = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_capitalists_investment_pool_contribution_add = 0.01
 }
 
 # MANAGED, scaled; on a LEADER while "Press for monetary convergence" is on.

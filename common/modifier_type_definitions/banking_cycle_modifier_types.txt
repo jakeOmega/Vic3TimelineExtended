@@ -375,6 +375,58 @@ country_te_mon_expected_inflation_add = {
 	game_data = { ai_value = 0 }
 }
 
+# ============================================================================
+# Monetary union: what each tier hands the LEADER, on the principle's tooltip
+# ============================================================================
+# 2026-11-14 (monetary_policy_design.md §0.14). principle_monetary_union_2..5
+# carry these four in `leader_modifier`, so the engine lists the tier's figures
+# under the principle's Leader heading. DISPLAY FIELDS, like the block above:
+# nothing reads them. The work is script (te_monetary_update_union), because
+# every one of them depends on something a principle's static block cannot
+# test: an adopter, a currency the leader can issue, its banking law, the
+# banking rule. test_monetary_union_leader.py holds each tier's figures to the
+# script values the update pays, so the tooltip and the effect cannot drift.
+# They are numbers, not text markers, so a higher tier restates and raises each
+# (principle_tier_audit).
+
+# The line that says when: once a member has adopted, and what reach is.
+country_te_mon_issuer_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_seigniorage_pct_N / 100: of the leader's own GDP a year, at
+# full reach.
+country_te_mon_issuer_seigniorage_gdp_add = {
+	color = good
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# -te_mon_union_issuer_cut_max_N / 100, in vanilla's interest scale like
+# country_risk_premium_add (0.01 = 1pp): at full reach.
+country_te_mon_issuer_premium_add = {
+	color = bad
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_issuer_bank_points_N, plus the banking union's own point at
+# tiers 4 and 5: the leader's whole gain in intervention points.
+country_te_mon_issuer_interventions_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
 # Vanilla declares country_loan_interest_rate_add at decimals = 0, which rounds
 # the whole realistic-rate stack to whole percent in tooltips — a 3.5% Consols
 # rate would read "4%". Re-declare the modifier *type* at decimals = 1; every

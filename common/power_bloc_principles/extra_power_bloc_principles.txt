@@ -4493,6 +4493,34 @@ principle_multilateral_institutions_5 = {
 # country scope is an open engine check (§17 check 16). The bools are what the
 # principle's tooltip prints.
 #
+# WHAT THE LEADER GETS (owner, 2026-11-14; §0.14). From tier 2, once a member
+# has adopted, the leader uses its own currency: it carries what its adopters
+# carry, earns seigniorage and a cut of risk premium in proportion to its
+# currency's reach (how large the economies using its money are beside its
+# own), and its central bank can keep more tools in force at once. That is
+# script too (te_monetary_update_union), for the reason above and because none
+# of it may outlive an adopter, a dial, a regulated banking law or the Full
+# banking rule, which a static block cannot test. Each tier's `leader_modifier`
+# carries DISPLAY FIELDS (country_te_mon_issuer_*, banking_cycle_modifier_types.txt)
+# so the engine prints the tier's figures under the principle's Leader
+# heading: nothing reads them, and test_monetary_union_leader.py holds them to
+# the script values. Each tier restates and raises them, like any modifier.
+#
+#                            seigniorage, of own    risk premium   interventions
+#                            GDP a year, at full    at full reach  (the banking
+#                            reach                                 union's point
+#                                                                  included)
+#   2  Common currency       0.5%                   -0.5pp         +1
+#   3  Fiscal backstop       0.75%                  -0.75pp        +2
+#   4  Banking union         1.0%                   -1.0pp         +3
+#   5  Reserve currency      1.5%                   -1.5pp         +4
+#
+# THE AI. Tiers 1 to 3 weigh what the tier is now worth to a leader: the mod's
+# ordinary 100, more where a member's money could adopt (a currency nobody can
+# share earns nothing) and where the leader carries debt for the cut to bite
+# on; never for a leader that cannot issue. Tiers 4 and 5 keep the mod-wide
+# 1000. The same weights serve a player's bloc and an AI's: no is_ai test.
+#
 # TIERS 4 AND 5 ARE GATED TWICE. `has_technology_researched = central_banking`
 # is the group's own gate, carried down from tier 1; the `_pb_principles_bool`
 # is the mod's ordinary tier-4/5 pacing gate, and is the line
@@ -4523,6 +4551,13 @@ principle_monetary_union_1 = {
 
 	ai_weight = {
 		value = 50
+		# [2026-11-14] The door to a currency that now pays its issuer: the
+		# mod's ordinary weight for a leader that could go on to issue one.
+		# Cooperation alone, for a leader on metal, stays at half.
+		if = {
+			limit = { te_mon_can_lead_union = yes }
+			add = 50
+		}
 		# A leader with no dial of its own has nothing to cooperate WITH.
 		if = {
 			limit = { NOT = { te_mon_has_dial = yes } }
@@ -4558,8 +4593,35 @@ principle_monetary_union_2 = {
 		power_bloc_cohesion_per_member_add = 1
 	}
 
+	# What the tier hands the leader, for the tooltip: display fields, paid by
+	# te_monetary_update_union (the header's table).
+	leader_modifier = {
+		country_te_mon_issuer_bool = yes
+		country_te_mon_issuer_seigniorage_gdp_add = 0.005
+		country_te_mon_issuer_premium_add = -0.005
+		country_te_mon_issuer_interventions_add = 1
+	}
+
 	ai_weight = {
 		value = 100
+		# [2026-11-14] A currency earns for its issuer once somebody uses it:
+		# worth more to a leader with a member whose money could adopt, and to
+		# one whose debt gives the premium cut something to bite on.
+		if = {
+			limit = {
+				power_bloc ?= {
+					any_power_bloc_member = {
+						is_power_bloc_leader = no
+						te_mon_union_regime_fits = yes
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = { scaled_debt >= 0.25 }
+			add = 50
+		}
 		# The principle is inert unless the leader is fiat / digital with a dial.
 		if = {
 			limit = { NOT = { te_mon_can_lead_union = yes } }
@@ -4594,8 +4656,22 @@ principle_monetary_union_3 = {
 		power_bloc_fiscal_backstop_bool = yes
 	}
 
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_bool = yes
+		country_te_mon_issuer_seigniorage_gdp_add = 0.0075
+		country_te_mon_issuer_premium_add = -0.0075
+		country_te_mon_issuer_interventions_add = 2
+	}
+
 	ai_weight = {
 		value = 100
+		# [2026-11-14] Half as much seigniorage and cut again, and a second
+		# intervention, for a leader whose currency is already in use.
+		if = {
+			limit = { te_mon_union_is_issuer = yes }
+			add = 50
+		}
 		if = {
 			limit = { NOT = { te_mon_can_lead_union = yes } }
 			multiply = 0
@@ -4634,6 +4710,14 @@ principle_monetary_union_4 = {
 		power_bloc_fiscal_backstop_bool = yes
 
 		power_bloc_banking_union_bool = yes
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_bool = yes
+		country_te_mon_issuer_seigniorage_gdp_add = 0.01
+		country_te_mon_issuer_premium_add = -0.01
+		country_te_mon_issuer_interventions_add = 3
 	}
 
 	ai_weight = {
@@ -4682,6 +4766,14 @@ principle_monetary_union_5 = {
 		power_bloc_cohesion_per_member_add = 2
 
 		power_bloc_reserve_currency_bool = yes
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_bool = yes
+		country_te_mon_issuer_seigniorage_gdp_add = 0.015
+		country_te_mon_issuer_premium_add = -0.015
+		country_te_mon_issuer_interventions_add = 4
 	}
 
 	ai_weight = {

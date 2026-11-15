@@ -170,27 +170,34 @@ te_monetary_leave_full_system = {
 	# 3. The External & Currency tools. Each Disable effect works on the entry,
 	# so only where there is one (under Disabled it has gone, and its
 	# modifiers with it).
+	# Each lift gives points back, so each marks the month for the overdraft
+	# chain (banking_overdraft_wait_a_pulse; see banking_external_cleanup).
 	if = {
 		limit = { has_journal_entry = je_banking_cycle }
 		if = {
 			limit = { banking_tool_restrict_inflows_active = yes }
 			banking_effect_cb_disable_restrict_inflows = yes
+			banking_overdraft_wait_a_pulse = yes
 		}
 		if = {
 			limit = { banking_tool_sterilize_inflows_active = yes }
 			banking_effect_cb_disable_sterilize_inflows = yes
+			banking_overdraft_wait_a_pulse = yes
 		}
 		if = {
 			limit = { banking_tool_foreign_borrowing_limits_active = yes }
 			banking_effect_cb_disable_foreign_borrowing_limits = yes
+			banking_overdraft_wait_a_pulse = yes
 		}
 		if = {
 			limit = { banking_tool_fx_surrender_active = yes }
 			banking_effect_cb_disable_fx_surrender = yes
+			banking_overdraft_wait_a_pulse = yes
 		}
 		if = {
 			limit = { banking_tool_emergency_import_financing_active = yes }
 			banking_effect_cb_disable_emergency_import_financing = yes
+			banking_overdraft_wait_a_pulse = yes
 		}
 	}
 	# 4. The backstop treaties.

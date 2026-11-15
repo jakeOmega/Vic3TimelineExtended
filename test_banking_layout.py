@@ -1159,6 +1159,11 @@ class BudgetPointsTest(unittest.TestCase):
         total = _block_from(sv, sv.index("{", start))
         listed = dict(re.findall(r"has_law = law_type:(\w+) \} add = (\d+)", total))
         listed.update(re.findall(r"te_mon_mod_has = \{ NAME = (\w+) \} \} add = (\d+)", total))
+        # A scaled grant (a common currency's issuer, 2026-11-14) is 1 a point, and the total
+        # adds its multiplier, the modifier's own _applied tracker.
+        for name, tracker in re.findall(r"te_mon_mod_has = \{ NAME = (\w+) \} \} add = var:(\w+)", total):
+            self.assertEqual(tracker, name + "_applied")
+            listed[name] = "1"
         grants = {}
         for sub in ("laws", "static_modifiers"):
             folder = os.path.join(REPO, "common", sub)
