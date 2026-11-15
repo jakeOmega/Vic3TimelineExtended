@@ -99,7 +99,8 @@ class ScanTest(unittest.TestCase):
 
     def test_a_constant_script_value_is_resolved(self):
         r = _run("\t\tturmoil > big_turmoil\n\t\tturmoil > small_turmoil\n\t\tturmoil > vanilla_turmoil",
-                 **{"common/script_values/v.txt": "big_turmoil = { value = 25 }\nsmall_turmoil = 0.25\n"})
+                 **{"common/script_values/v.txt": "big_turmoil = { value = 25 }\nsmall_turmoil = 0.25\n"
+                                                  "long_turmoil = {\n\tvalue = 30\n}\n"})
         self.assertEqual([(f.written, f.value) for f in r.unreviewed], [("big_turmoil", 25.0)])
         self.assertIn("(`big_turmoil` = 25)", r.unreviewed[0].message)
         # vanilla_turmoil names nothing in this tree: counted, not judged.
@@ -148,6 +149,15 @@ class SuppressionTest(unittest.TestCase):
     def test_the_plain_form_does_not_suppress(self):
         r = _run("\t\tturmoil > 25 # REVIEWED 2026-11-15: no tag")
         self.assertEqual(len(r.unreviewed), 1)
+
+    def test_a_constant_written_over_three_lines_is_resolved(self):
+        r = _run("\t\tturmoil > long_turmoil",
+                 **{"common/script_values/v.txt": "long_turmoil = {\n\tvalue = 30\n}\n"})
+        self.assertEqual([f.value for f in r.unreviewed], [30.0])
+
+    def test_a_stale_tag_in_a_file_with_no_ranged_value_is_found(self):
+        r = audit(_tree({"events/e.txt": "e.1 = { # REVIEWED 2026-11-15 (trigger_range): gone\n}\n"}))
+        self.assertEqual([s.line for s in r.stale], [1])
 
     def test_a_tag_that_suppresses_nothing_is_stale(self):
         r = _run("\t\tturmoil > 0.25 # REVIEWED 2026-11-15 (trigger_range): left over")

@@ -250,7 +250,7 @@ _NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 _DEFINE_RE = re.compile(r"^[ \t]*(?P<name>[A-Z][A-Z0-9_]*)[ \t]*=[ \t]*(?P<value>[-+]?\d+(?:\.\d+)?)", re.M)
 _TOP_VALUE_RE = re.compile(
     r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*)[ \t]*=[ \t]*"
-    r"(?:(?P<bare>[-+]?\d+(?:\.\d+)?)|\{[ \t]*value[ \t]*=[ \t]*(?P<block>[-+]?\d+(?:\.\d+)?)[ \t]*\})[ \t]*$",
+    r"(?:(?P<bare>[-+]?\d+(?:\.\d+)?)|\{\s*value[ \t]*=[ \t]*(?P<block>[-+]?\d+(?:\.\d+)?)\s*\})[ \t]*$",
     re.M)
 _TOP_NAME_RE = re.compile(r"^(?P<name>[A-Za-z_][A-Za-z0-9_]*)[ \t]*=", re.M)
 _ANY_NAME_RE = re.compile(r"\b(?:" + "|".join(sorted(map(re.escape, RANGES), key=len, reverse=True)) + r")\b")
@@ -414,7 +414,7 @@ def _resolve(written: str, constants: dict[str, float], names: set[str]) -> tupl
 def scan_text(text: str, rel: str, ranges: dict[str, Range], constants: dict[str, float],
               names: set[str], result: AuditResult) -> None:
     """Add one file's flags, stale tags and counts to `result`."""
-    if not _ANY_NAME_RE.search(text):
+    if not _ANY_NAME_RE.search(text) and CHECK not in text:
         return
     clean, comments = blank_comments_and_strings(text)
     starts = [0] + [m.end() for m in re.finditer(r"\n", clean)]
