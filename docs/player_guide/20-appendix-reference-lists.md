@@ -64,9 +64,9 @@ the sections after it.
 | Directed Credit | Directed Credit to Armaments | 3 | – |
 | Directed Credit | Directed Credit to Electrification | 1 | Rural Electrification |
 | External & Currency | Export Credit Facility | 2 | Corporate Governance |
-| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
+| External & Currency | Capital Controls | 2 | a law that allows it, or war |
 | External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
-| External & Currency | Sterilize Capital Inflows | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
+| External & Currency | Sterilization | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
 | External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
 | External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
 | External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |

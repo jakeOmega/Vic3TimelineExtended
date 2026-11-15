@@ -8,6 +8,12 @@ Status was checked on 2026-10-19 against `main` at `67dca09`, and again on 2026-
 
 ## Active
 
+### Banking and monetary policy
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-11-14-external-currency-tools-design.md](specs/2026-11-14-external-currency-tools-design.md): the five External & Currency exchange tools given one promise each on every currency, Capital Controls and Sterilization renamed, floating versions of Sterilization and Foreign Exchange Surrender, Limit Foreign-Currency Borrowing hidden on metal at par | Design and PR 1 (what the player reads) | PR 2 (the mechanics) |
+
 ### Demographics
 
 | Doc | Status | What's left |
