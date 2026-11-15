@@ -1,4 +1,876 @@
 {
+ "TE_STATE_GRID_ROW_PASS": {
+  "en": "Pass-through",
+  "ru": "Транзит"
+ },
+ "TE_STATE_GRID_ROW_PASS_TT": {
+  "en": "#b Pass-through#!\\nThis station takes in its market's import: it buys #v [State.MakeScope.ScriptValue('te_grid_import_disp')|1]#! $grid_power$ a week from across the border and sells it into its own market at the same fixed price, which costs it nothing. Without it the market would buy far more $grid_power$ than it sells and read as short of it.",
+  "ru": "#b Транзит#!\\nЭта станция принимает импорт своего рынка: она закупает за границей #v [State.MakeScope.ScriptValue('te_grid_import_disp')|1]#! ед. товара $grid_power$ в неделю и продаёт его на собственный рынок по той же фиксированной цене, не неся при этом затрат. Без неё рынок покупал бы $grid_power$ намного больше, чем продаёт, и считался бы дефицитным по этому товару."
+ },
+ "TE_STATE_GRID_ROW_SIZE": {
+  "en": "Grid size",
+  "ru": "Размер сети"
+ },
+ "TE_STATE_GRID_ROW_SIZE_TT": {
+  "en": "#b Grid Size#!\\nThe number of stations on this state's [concept_power_grid], its own included.",
+  "ru": "#b Размер сети#!\\nЧисло станций в [concept_power_grid|l] этой области, включая её собственные."
+ },
+ "TE_STATE_GRID_TT": {
+  "en": "#bold [concept_power_grid]#!\\nOnce a month the grid moves $electricity$ from states where it is cheap to states where it is expensive, until it sells at one price in the sending states and, to cover the losses on the way, at a higher price in the receiving ones.\\n\\nStations on this grid: #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!\\nSupply: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#! of demand\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]",
+  "ru": "#bold [concept_power_grid]#!\\nРаз в месяц сеть перемещает товар $electricity$ из областей, где он дёшев, в области, где он дорог, пока в отправляющих областях он не станет продаваться по единой цене, а в принимающих — по более высокой, покрывающей потери в пути.\\n\\nСтанций в этой сети: #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!\\nПредложение: #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#! от спроса\\nРежим: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]"
+ },
+ "TE_STATE_HOMELAND_TT": {
+  "en": "#bold [concept_homeland_dynamics]#!\\nCreation Rate: #v +[State.MakeScope.ScriptValue('te_homeland_annual_progress')|1]%#! a year #grey (base 10%)#!\\nRemoval Rate: #v +[State.MakeScope.ScriptValue('te_homeland_removal_annual_progress')|1]%#! a year #grey (slower under the UN Convention on Cultural Diversity)#!\\nChange Speed: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\nCreation Threshold: #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! of the population\\nRemoval Threshold: below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!\\n$TOOLTIP_DELIMITER$\\n#bold Multipliers#!\\n• State [concept_turmoil] #v 25%#! or more: #v ×1.25#!; #v 50%#! or more: #v ×1.5#!\\n• [concept_legitimacy] under #v 25#!: #v ×0.5#!; #v 75#! or more: #v ×1.25#!\\n$TOOLTIP_DELIMITER$\\n#bold Enabled by any one of#!\\n$TE_HOMELAND_UNLOCK_SOURCES$",
+  "ru": "#bold [concept_homeland_dynamics]#!\\nСкорость создания: #v +[State.MakeScope.ScriptValue('te_homeland_annual_progress')|1]%#! в год #grey (базовая 10%)#!\\nСкорость снятия: #v +[State.MakeScope.ScriptValue('te_homeland_removal_annual_progress')|1]%#! в год #grey (медленнее при Конвенции ООН о культурном разнообразии)#!\\nСкорость изменений: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\nПорог создания: #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! населения\\nПорог снятия: ниже #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!\\n$TOOLTIP_DELIMITER$\\n#bold Множители#!\\n• [concept_turmoil|l] в области #v 25%#! и выше: #v ×1,25#!; #v 50%#! и выше: #v ×1,5#!\\n• [concept_legitimacy|l] ниже #v 25#!: #v ×0,5#!; #v 75#! и выше: #v ×1,25#!\\n$TOOLTIP_DELIMITER$\\n#bold Включается любым одним из условий#!\\n$TE_HOMELAND_UNLOCK_SOURCES$"
+ },
+ "TE_STATE_POINTS_ROW_AVAILABLE": {
+  "en": "Available",
+  "ru": "Доступно"
+ },
+ "TE_STATE_POINTS_ROW_GENERATED": {
+  "en": "Generated",
+  "ru": "Получено"
+ },
+ "TE_STATE_SEABED_BASIN_STATUS": {
+  "en": "Ocean Basin: $TE_STATE_SEABED_ROW_BASIN_VALUE$",
+  "ru": "Океанический бассейн: $TE_STATE_SEABED_ROW_BASIN_VALUE$"
+ },
+ "TE_STATE_SEABED_BASIN_TT": {
+  "en": "#bold Ocean Basin#!\\nThis state's coast faces the $TE_STATE_SEABED_BASIN_NAME$ Ocean. A $building_ocean_mine$ here takes that basin's [concept_seabed_licence]s, and the state adds to its owner's claim weight there.\\nEach basin's licenses and claims: the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "#bold Океанический бассейн#!\\nПобережье этой области омывает $TE_STATE_SEABED_BASIN_NAME$ океан. Здание $building_ocean_mine$ здесь получает [Concept('concept_seabed_licence', 'лицензии на морское дно')] этого бассейна, а область добавляет вес притязания её владельца в нём.\\nЛицензии и притязания каждого бассейна: вкладка «Морское дно» окна $te_systems_window_title$."
+ },
+ "TE_STATE_SEABED_LICENCES_WAITING": {
+  "en": " #R [State.MakeScope.ScriptValue('te_seabed_state_unrecorded')|0]#! wait for a license until we have a [concept_seabed_claim] to spare.",
+  "ru": " Ожидают лицензии: #R [State.MakeScope.ScriptValue('te_seabed_state_unrecorded')|0]#! — пока у нас не появится свободная [Concept('concept_seabed_claim', 'претензия на морское дно')]."
+ },
+ "TE_STATE_SEABED_ROW_BASIN": {
+  "en": "Basin",
+  "ru": "Бассейн"
+ },
+ "TE_STATE_SEABED_ROW_BASIN_TT": {
+  "en": "#b Ocean Basin#!\\nThis state's coast faces the $TE_STATE_SEABED_BASIN_NAME$ Ocean. Its $building_ocean_mine$ levels take a $TE_STATE_SEABED_BASIN_NAME$ [concept_seabed_licence] first, and the state adds to our claim weight there.",
+  "ru": "#b Океанический бассейн#!\\nПобережье этой области омывает $TE_STATE_SEABED_BASIN_NAME$ океан. Уровни здания $building_ocean_mine$ здесь в первую очередь получают [Concept('concept_seabed_licence', 'лицензию на морское дно')] этого бассейна ($TE_STATE_SEABED_BASIN_NAME$ океан), а область добавляет к нашему весу притязания в нём."
+ },
+ "TE_STATE_SEABED_ROW_CLAIMS_TT": {
+  "en": "#b Our Claims in the $TE_STATE_SEABED_BASIN_NAME$#!\\nOur unused [concept_seabed_claim]s in this state's basin. A new $building_ocean_mine$ level here takes one and works at full throughput; with none left it takes another basin's license and works at #R -[State.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!. As of the last monthly update.",
+  "ru": "#b Наши претензии: $TE_STATE_SEABED_BASIN_NAME$ океан#!\\nНаши неиспользованные [Concept('concept_seabed_claim', 'претензии на морское дно')] в бассейне этой области. Новый уровень здания $building_ocean_mine$ здесь занимает одну из них и работает на полную мощность; если свободных нет, он берёт лицензию другого бассейна и работает на #R -[State.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!. По состоянию на последнее ежемесячное обновление."
+ },
+ "TE_STATE_SEABED_ROW_LICENCES_TT": {
+  "en": "#b Licenses Here#!\\nThis state has #v [State.MakeScope.ScriptValue('te_seabed_state_levels')|0]#! $building_ocean_mine$ levels: #v [State.MakeScope.ScriptValue('te_seabed_state_built_levels')|0]#! built and #v [State.MakeScope.ScriptValue('te_seabed_state_queued_levels')|0]#! queued. [concept_seabed_licence]s on them: #v [State.MakeScope.ScriptValue('te_seabed_state_records')|0]#!, #v [State.MakeScope.ScriptValue('te_seabed_state_local_records')|0]#! from its own basin and #v [State.MakeScope.ScriptValue('te_seabed_state_distant_records')|0]#! from others.[AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_unrecorded'), '(CFixedPoint)0'), 'TE_STATE_SEABED_LICENCES_WAITING')]\\n\\nA license stays with its level for good, and passes with the state if it changes hands.",
+  "ru": "#b Лицензии здесь#!\\nУровней здания $building_ocean_mine$ в этой области: #v [State.MakeScope.ScriptValue('te_seabed_state_levels')|0]#!; построено — #v [State.MakeScope.ScriptValue('te_seabed_state_built_levels')|0]#!, в очереди — #v [State.MakeScope.ScriptValue('te_seabed_state_queued_levels')|0]#!. [Concept('concept_seabed_licence', 'Лицензий на морское дно')] на них: #v [State.MakeScope.ScriptValue('te_seabed_state_records')|0]#!, из них из собственного бассейна — #v [State.MakeScope.ScriptValue('te_seabed_state_local_records')|0]#!, из других — #v [State.MakeScope.ScriptValue('te_seabed_state_distant_records')|0]#!.[AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_unrecorded'), '(CFixedPoint)0'), 'TE_STATE_SEABED_LICENCES_WAITING')]\\n\\nЛицензия навсегда остаётся за своим уровнем и вместе с областью переходит к новому владельцу."
+ },
+ "TE_STATE_SEABED_ROW_LONG_HAUL": {
+  "en": "Long-haul",
+  "ru": "Дальние"
+ },
+ "TE_STATE_SEABED_ROW_LONG_HAUL_TT": {
+  "en": "#b Long-Haul Licenses#!\\n#R [State.MakeScope.ScriptValue('te_seabed_state_distant_records')|0]#! of this state's levels hold another basin's [concept_seabed_licence], so its $building_ocean_mine$ carries $te_seabed_long_haul$: #R -[State.MakeScope.ScriptValue('te_seabed_state_long_haul_pct_disp')|0]%#! $building_ocean_mine$ throughput, -[State.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]% times their share of its licenses. At the next monthly update a free [concept_seabed_claim] in its own basin takes the place of one.",
+  "ru": "#b Дальние лицензии#!\\nУровней этой области с [Concept('concept_seabed_licence', 'лицензией на морское дно')] другого бассейна: #R [State.MakeScope.ScriptValue('te_seabed_state_distant_records')|0]#!, поэтому для здания $building_ocean_mine$ действует «$te_seabed_long_haul$»: #R -[State.MakeScope.ScriptValue('te_seabed_state_long_haul_pct_disp')|0]%#! производительности здания $building_ocean_mine$ (-[State.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]% × доля таких лицензий). На следующем ежемесячном обновлении свободная [Concept('concept_seabed_claim', 'претензия на морское дно')] в собственном бассейне заменит одну из них."
+ },
+ "TE_STATE_SEABED_ROW_WEIGHT": {
+  "en": "Weight",
+  "ru": "Вес"
+ },
+ "TE_STATE_SEABED_ROW_WEIGHT_TT": {
+  "en": "#b Claim Weight Here#!\\nWhat this state adds to our claim weight in the $TE_STATE_SEABED_BASIN_NAME$ now:\\nCoast: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] for a coastal state, half that if unincorporated)\\nPort levels: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nNaval share: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (our [Concept('concept_naval_power_projection','naval power projection')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], doubled under Unilateral Licensing or the $te_seabed_regime_name_3$ regime, spread over our coast)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! for our policy\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Our weight in the $TE_STATE_SEABED_BASIN_NAME$ at the last sharing: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Each January's sharing counts it again.",
+  "ru": "#b Вес притязания здесь#!\\nЧто эта область сейчас добавляет к нашему весу притязания в бассейне ($TE_STATE_SEABED_BASIN_NAME$ океан):\\nПобережье: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] для прибрежной области, вдвое меньше, если она не включена)\\nУровни порта: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nДоля флота: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (наша [Concept('concept_naval_power_projection','проекция морской мощи')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], вдвое больше при Одностороннем лицензировании или режиме «$te_seabed_regime_name_3$», распределяется по нашему побережью)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! за нашу политику\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Наш вес в бассейне ($TE_STATE_SEABED_BASIN_NAME$ океан) при последнем распределении: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Каждый январь распределение учитывает его заново."
+ },
+ "TE_STATE_SEABED_TT": {
+  "en": "#bold [concept_seabed_licence]s#!\\nAcross the country: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_total')|0]#! in use of our #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_entitled_total')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total')|0]#! of them from other basins\\nRoom to build: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_room_shown')|0]#!\\nEach basin's licenses and claims: the Seabed tab of the $te_systems_window_title$ window.",
+  "ru": "#bold [Concept('concept_seabed_licence', 'Лицензии на морское дно')]#!\\nПо всей стране: используется #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_total')|0]#! из положенных нам #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_entitled_total')|0]#!, из них #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total')|0]#! — из других бассейнов\\nМесто для строительства: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_room_shown')|0]#!\\nЛицензии и притязания каждого бассейна: вкладка «Морское дно» окна $te_systems_window_title$."
+ },
+ "TE_STATE_SEABED_WEIGHT_NONE": {
+  "en": "#R None of it counts#! while we have relinquished this basin, or in the Southern Ocean while we are an Antarctic Treaty party. ",
+  "ru": "#R Ничего из этого не засчитывается#!, пока мы отказались от этого бассейна, а в Южном океане — пока мы участвуем в Договоре об Антарктике. "
+ },
+ "TE_STATE_SOLAR_TT": {
+  "en": "#bold [concept_solar_collector_array] Slots#!\\nIn Use: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_consumed')|0]#!\\nReserved, queued levels included: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_reserved')|0]#!\\nEach fully staffed [concept_solar_collector_array] level gives the whole country #v 3#! Solar Receiver slots.",
+  "ru": "#bold Ячейки [Concept('concept_solar_collector_array', 'солнечного коллектора')]#!\\nИспользуется: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_consumed')|0]#!\\nЗарезервировано, включая уровни в очереди: #v [State.GetOwner.MakeScope.ScriptValue('solar_points_reserved')|0]#!\\nКаждый полностью укомплектованный уровень [Concept('concept_solar_collector_array', 'солнечного коллектора')] даёт всей стране #v 3#! ячейки солнечных приёмников."
+ },
+ "TE_STATE_UN_FAIL_ATTACKED": {
+  "en": "if this country is attacked",
+  "ru": "если на эту страну нападут"
+ },
+ "TE_STATE_UN_FAIL_CONTRIBUTORS": {
+  "en": "if this country is attacked, or if every contributor leaves while the [concept_un_standing_force] does not serve in it",
+  "ru": "если на эту страну нападут или если уйдут все участники, а [Concept('concept_un_standing_force', 'Постоянные силы ООН')] не служат в ней"
+ },
+ "TE_STATE_UN_FAIL_ELECTORAL": {
+  "en": "if this country is attacked, or stops holding elections",
+  "ru": "если на эту страну нападут или в ней перестанут проводиться выборы"
+ },
+ "TE_STATE_UN_MISSION_BARRED": {
+  "en": "\\n#v While the mission is here, a war goal the initiator of a play adds against this country, if the initiator is a represented member of the United Nations, is struck; unification goals and goals of the type the play opened with cost twice the usual infamy instead.#!",
+  "ru": "\\n#v Пока миссия здесь, любая цель войны, которую инициатор дипломатической игры добавляет против этой страны, если он представленный член Организации Объединённых Наций, вычёркивается; цели объединения и цели того типа, с которого началась дипломатическая игра, вместо этого влекут вдвое больше дурной славы.#!"
+ },
+ "TE_STATE_UN_MISSION_FORCE": {
+  "en": "\\nThe [concept_un_standing_force] serves in it as one more contributor.",
+  "ru": "\\n[concept_un_standing_force] служат в ней как ещё один участник."
+ },
+ "TE_STATE_UN_MISSION_OBSERVERS": {
+  "en": "\\nIt is an electoral observer mission: its observers are paid from the UN's budget, and it has no contributors.",
+  "ru": "\\nЭто миссия избирательных наблюдателей: её наблюдатели оплачиваются из бюджета ООН, участников у неё нет."
+ },
+ "TE_STATE_UN_MISSION_TT": {
+  "en": "#header United Nations Mission#!\\nA UN mission is working in this state. Contributing countries: #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#![AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_force'), '(CFixedPoint)0'), 'TE_STATE_UN_MISSION_FORCE')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_MISSION_OBSERVERS')][AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_barred'), '(CFixedPoint)0'), 'TE_STATE_UN_MISSION_BARRED')]\\n$TOOLTIP_DELIMITER$\\nIts effect here is multiplied by its #bold strength#!, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: the UN's [concept_un_enforcement], less what withheld [concept_un_dues] cost the budget, and more for every contributor up to three.\\n$TOOLTIP_DELIMITER$\\n#bold Succeeds:#! [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)1'), 'TE_STATE_UN_SUCCESS_PEACEKEEPING')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)2'), 'TE_STATE_UN_SUCCESS_AID')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)3'), 'TE_STATE_UN_SUCCESS_STABILISATION')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_SUCCESS_ELECTORAL')]\\n#bold Fails:#! [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)1'), 'TE_STATE_UN_FAIL_CONTRIBUTORS')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)2'), 'TE_STATE_UN_FAIL_ATTACKED')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)3'), 'TE_STATE_UN_FAIL_CONTRIBUTORS')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_FAIL_ELECTORAL')]\\nThe chamber on the UN tab of the Diplomacy panel lists every mission.",
+  "ru": "#header Миссия Организации Объединённых Наций#!\\nВ этой области работает миссия ООН. Страны-участники: #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#![AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_force'), '(CFixedPoint)0'), 'TE_STATE_UN_MISSION_FORCE')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_MISSION_OBSERVERS')][AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_barred'), '(CFixedPoint)0'), 'TE_STATE_UN_MISSION_BARRED')]\\n$TOOLTIP_DELIMITER$\\nЕё действие здесь умножается на её #bold силу#!, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: это [concept_un_enforcement|l], за вычетом ущерба бюджету от удержанных [Concept('concept_un_dues', 'взносов в ООН')], и больше за каждого участника, но не более чем за трёх.\\n$TOOLTIP_DELIMITER$\\n#bold Успех:#! [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)1'), 'TE_STATE_UN_SUCCESS_PEACEKEEPING')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)2'), 'TE_STATE_UN_SUCCESS_AID')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)3'), 'TE_STATE_UN_SUCCESS_STABILISATION')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_SUCCESS_ELECTORAL')]\\n#bold Провал:#! [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)1'), 'TE_STATE_UN_FAIL_CONTRIBUTORS')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)2'), 'TE_STATE_UN_FAIL_ATTACKED')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)3'), 'TE_STATE_UN_FAIL_CONTRIBUTORS')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)4'), 'TE_STATE_UN_FAIL_ELECTORAL')]\\nЗал заседаний на вкладке ООН панели дипломатии перечисляет все миссии."
+ },
+ "TE_STATE_UN_ROW_MONTHS": {
+  "en": "Months",
+  "ru": "Месяцы"
+ },
+ "TE_STATE_UN_ROW_PROGRESS": {
+  "en": "Progress",
+  "ru": "Прогресс"
+ },
+ "TE_STATE_UN_ROW_STRENGTH": {
+  "en": "Strength",
+  "ru": "Сила"
+ },
+ "TE_STATE_UN_ROW_TYPE": {
+  "en": "Mission",
+  "ru": "Миссия"
+ },
+ "TE_STATE_UN_SUCCESS_AID": {
+  "en": "after at least six months, once this state has no famine and a standard of living, without the mission's own help, of 10 or 1 above where it started, whichever is higher",
+  "ru": "не менее чем через шесть месяцев, когда в этой области нет голода, а уровень жизни (без учёта помощи самой миссии) достигает 10 или превышает исходный на 1 — смотря что больше"
+ },
+ "TE_STATE_UN_SUCCESS_ELECTORAL": {
+  "en": "when an election campaign here ends",
+  "ru": "когда здесь завершается избирательная кампания"
+ },
+ "TE_STATE_UN_SUCCESS_PEACEKEEPING": {
+  "en": "after two years of peace for this country",
+  "ru": "после двух лет мира для этой страны"
+ },
+ "TE_STATE_UN_SUCCESS_STABILISATION": {
+  "en": "once the collapse is over and a year has passed",
+  "ru": "когда крах закончился и прошёл год"
+ },
+ "TE_STATE_WEALTH_ROW_SCORE": {
+  "en": "Score",
+  "ru": "Показатель"
+ },
+ "TE_STATE_WEALTH_ROW_SCORE_TT": {
+  "en": "#b [concept_inheritance_concentration]#!\\nThis state's score now, and the target it is heading for: it moves 3% of the way each year. The further the score is from 50, either way, the stronger its effects.",
+  "ru": "#b [concept_inheritance_concentration]#!\\nПоказатель этой области сейчас и цель, к которой он движется: ежегодно он проходит 3% пути. Чем дальше показатель от 50 в любую сторону, тем сильнее его эффекты."
+ },
+ "TE_STATE_WEALTH_TT": {
+  "en": "#bold [concept_inheritance_concentration]#!\\nWhat this state's own score and its country's inheritance law do here. Above 50 the state has $inh_concentrated_property$ and, in farming country, $inh_land_hunger$; below 50, $inh_dispersed_property$. $law_equal_inheritance$, $law_primogeniture$ and $amendment_undivided_farm_succession$ each add one more, scaled by the state's share of Peasants and Farmers: $inh_forced_heirship_rural$, $inh_primogeniture_rural$ and $inh_undivided_farm_rural$. Hover one for its effects; the state's modifier icons leave them out.",
+  "ru": "#bold [concept_inheritance_concentration]#!\\nЧто здесь делают собственный показатель области и закон о наследовании её страны. Выше 50 в области действует $inh_concentrated_property$ и, в земледельческих областях, $inh_land_hunger$; ниже 50 — $inh_dispersed_property$. Ещё по одному эффекту добавляет каждый из вариантов: $law_equal_inheritance$, $law_primogeniture$ и $amendment_undivided_farm_succession$; их масштабирует доля крестьян и фермеров в области, а эффекты таковы: $inh_forced_heirship_rural$, $inh_primogeniture_rural$ и $inh_undivided_farm_rural$ соответственно. Наведите курсор на любой из них, чтобы увидеть его действие; значки модификаторов области их не показывают."
+ },
+ "UN_ARMS_CONTROL_DESC": {
+  "en": "Join the UN's arms control agreements. While we keep them, they count toward the UN's #bold Funding#! pillar, in proportion to our [concept_un_weight].",
+  "ru": "Присоединиться к соглашениям ООН по контролю над вооружениями. Пока мы их соблюдаем, они засчитываются в столп #bold Финансирование#! ООН пропорционально нашему [Concept('concept_un_weight', 'весу')]."
+ },
+ "UN_CHAMPION_ORDER_DESC": {
+  "en": "Put our weight behind the United Nations. While we do, we count as a champion in its #G Commitment#! pillar, in proportion to our [concept_un_weight], which raises the target [concept_un_authority] moves toward.",
+  "ru": "Поставить наш вес на службу Организации Объединённых Наций. Пока мы это делаем, мы считаемся поборником в её столпе #G Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что повышает цель, к которой движется [concept_un_authority|l]."
+ },
+ "UN_CONVENE_CONFERENCE_TT": {
+  "en": "We will convene a #bold founding conference#! for a new United Nations. It sits for 12 months; then the new organization is founded, with us as founder, headquarters host and (as a [concept_great_power]) a permanent member. It starts weak (authority 25) under the founding charter, with no reforms and no agencies. The world's leading power, if it is not us, is asked to join, stay out, or #R oppose#! — and its opposition ends the conference and bars another for ten years.",
+  "ru": "Мы созовём #bold учредительную конференцию#! по созданию новой Организации Объединённых Наций. Она заседает 12 месяцев; затем новая организация учреждается: мы становимся её основателем, хозяином штаб-квартиры и (как [concept_great_power|l]) постоянным членом. Она начинает слабой (авторитет 25) на основе учредительного устава, без реформ и агентств. Ведущую державу мира, если это не мы, просят присоединиться, остаться в стороне или #R выступить против#! — а её противодействие прекращает конференцию и на десять лет закрывает путь к новой."
+ },
+ "UN_DEFUND_DEVELOPMENT_DESC": {
+  "en": "Stop contributing to UN development programs, at whatever size. Its benefits end, its money stops counting toward the UN's #bold funding#! pillar and no longer pays the [concept_un_development_fund]'s grants, and the recipients' goodwill fades over the next few years.",
+  "ru": "Прекратить взносы в программы развития ООН, каким бы ни был их размер. Их выгоды заканчиваются, деньги перестают засчитываться в столп #bold финансирования#! ООН и больше не оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')], а добрая воля получателей угасает в ближайшие годы."
+ },
+ "UN_END_PEACEKEEPING_DESC": {
+  "en": "Bring our forces home from [concept_un_peacekeeping]. It stops counting toward the UN's #bold Funding#! pillar.",
+  "ru": "Вернуть наши силы домой из [Concept('concept_un_peacekeeping', 'миротворчества ООН')]. Оно перестаёт засчитываться в столп #bold Финансирование#! ООН."
+ },
+ "UN_FOOD_RESERVE_PLEDGE": {
+  "en": "Pledge Grain to the World Food Reserve",
+  "ru": "Пообещать зерно Всемирному продовольственному резерву"
+ },
+ "UN_FOOD_RESERVE_PLEDGE_DESC": {
+  "en": "Pledge grain from our Strategic Reserve to the [concept_un_food_reserve]. Whenever a new [concept_un_mission_aid] opens anywhere but in our own country, the Reserve may take up to a quarter of the grain we hold, at most 2,500 units, while we hold at least 500. Each time it draws on us our international standing rises. We may withdraw the pledge at any time.",
+  "ru": "Пообещать зерно из нашего Стратегического резерва [Concept('concept_un_food_reserve', 'Всемирному продовольственному резерву')]. Всякий раз, когда где-либо, кроме нашей страны, открывается новая [concept_un_mission_aid|l], Резерв может забрать до четверти имеющегося у нас зерна, но не более 2 500 ед., и только пока у нас не менее 500. Каждый раз, когда он берёт у нас зерно, наш международный авторитет растёт. Мы можем отозвать обещание в любой момент."
+ },
+ "UN_FOOD_RESERVE_WITHDRAW": {
+  "en": "Withdraw Our Grain Pledge",
+  "ru": "Отозвать обещание о зерне"
+ },
+ "UN_FOOD_RESERVE_WITHDRAW_DESC": {
+  "en": "Withdraw our pledge to the [concept_un_food_reserve]. The Reserve draws nothing more from our Strategic Reserve; what it already took stays given.",
+  "ru": "Отозвать наше обещание перед [Concept('concept_un_food_reserve', 'Всемирным продовольственным резервом')]. Резерв больше ничего не берёт из нашего Стратегического резерва; то, что он уже забрал, остаётся отданным."
+ },
+ "UN_FUND_DEVELOPMENT_DESC": {
+  "en": "Contribute to UN development programs, starting at #bold Token#! size: 0.0625% of our [Concept('concept_gdp', 'GDP')] a year, paid weekly. The money pays the [concept_un_development_fund]'s grants to the poorest members, as long as we pay our [concept_un_dues]. The contribution can be raised to Small (0.125%), Modest (0.25%), Substantial (0.5%) or Generous (1%); each doubling of the money adds a quarter of the Substantial size's benefits. In return our [concept_infamy] decays faster and our [concept_prestige] rises (+2% and +1% at Token, up to +10% and +5% at Generous), the program earns UN standing once it has run two years, and the members the Fund pays grow more receptive to our lobbying as they come to count on our money. Its money counts toward the UN's #bold funding#! pillar. Requires a [concept_un_development_fund] the [concept_un_general_assembly] has founded, and that the Fund pays us no grant.",
+  "ru": "Вносить вклад в программы развития ООН, начиная с размера #bold Символический#!: 0,0625% нашего [Concept('concept_gdp', 'ВВП')] в год, выплачиваются еженедельно. Эти деньги оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')] беднейшим членам, пока мы платим [Concept('concept_un_dues', 'взносы в ООН')]. Вклад можно повысить до размера Малый (0,125%), Скромный (0,25%), Значительный (0,5%) или Щедрый (1%); каждое удвоение средств добавляет четверть выгод размера Значительный. Взамен наша [concept_infamy|l] убывает быстрее, а [concept_prestige|l] растёт (+2% и +1% при размере Символический, до +10% и +5% при размере Щедрый), программа приносит авторитет в ООН после двух лет работы, а члены, которым платит Фонд, становятся восприимчивее к нашему лоббированию, по мере того как привыкают рассчитывать на наши деньги. Эти деньги засчитываются в столп #bold финансирования#! ООН. Требуется, чтобы [concept_un_general_assembly] учредила [concept_un_development_fund] и чтобы Фонд не выплачивал нам грант."
+ },
+ "UN_HUMAN_RIGHTS_DESC": {
+  "en": "Champion human rights at the United Nations. While we do, it counts toward the UN's #bold Funding#! pillar, in proportion to our [concept_un_weight].",
+  "ru": "Отстаивать права человека в Организации Объединённых Наций. Пока мы это делаем, это засчитывается в столп #bold Финансирование#! ООН пропорционально нашему [Concept('concept_un_weight', 'весу')]."
+ },
+ "UN_LIFT_SANCTIONS_DESC": {
+  "en": "Lift the [concept_un_sanctions] we enforce: the country they target loses their penalties, and the embargoes the Assembly imposed with them. Sanctions nobody enforces any more are lifted too; another member's stay in force. $UN_LIFT_SANCTIONS_EFFECTS$",
+  "ru": "Снять [concept_un_sanctions|l], которые мы обеспечиваем: страна, против которой они направлены, освобождается от их ограничений, а вместе с ними снимаются эмбарго, введённые Ассамблеей. Санкции, которые больше никто не обеспечивает, тоже снимаются; санкции другого члена остаются в силе. $UN_LIFT_SANCTIONS_EFFECTS$"
+ },
+ "UN_LOBBY_ACCEPT_BASE": {
+  "en": "from pledging a vote away before the debate is even heard",
+  "ru": "от обещания голоса, данного ещё до слушания дебатов"
+ },
+ "UN_LOBBY_ACCEPT_DEV_AID": {
+  "en": "from what [SCOPE.sCountry('actor').GetName]'s contributions to the [concept_un_development_fund] have given us",
+  "ru": "от выгод, которые нам принесли взносы страны [SCOPE.sCountry('actor').GetName] во [concept_un_development_fund]"
+ },
+ "UN_LOBBY_ACCEPT_EFFECTIVENESS": {
+  "en": "from how well [SCOPE.sCountry('actor').GetName] lobbies the [concept_un_general_assembly]",
+  "ru": "от того, насколько умело страна [SCOPE.sCountry('actor').GetName] лоббирует [Concept('concept_un_general_assembly', 'Генеральную Ассамблею')]"
+ },
+ "UN_LOBBY_ACCEPT_OBLIGATION": {
+  "en": "from the [concept_obligation] [SCOPE.sCountry('actor').GetName] would owe us in return",
+  "ru": "от [Concept('concept_obligation', 'обязательства')], которое страна [SCOPE.sCountry('actor').GetName] будет нам должна взамен"
+ },
+ "UN_LOBBY_ACCEPT_RELATIONS": {
+  "en": "from [SCOPE.GetRootScope.GetCountry.GetAdjectiveNoFormatting]-[SCOPE.sCountry('actor').GetAdjectiveNoFormatting] [concept_relations] being [SCOPE.GetRootScope.GetCountry.GetRelationsWithDesc(SCOPE.sCountry('actor'))]",
+  "ru": "от состояния [Concept('concept_relations', 'отношений')] ([SCOPE.GetRootScope.GetCountry.GetAdjectiveNoFormatting]-[SCOPE.sCountry('actor').GetAdjectiveNoFormatting]): [SCOPE.GetRootScope.GetCountry.GetRelationsWithDesc(SCOPE.sCountry('actor'))]"
+ },
+ "UN_LOBBY_ACCEPT_RIVALRY": {
+  "en": "from [SCOPE.sCountry('actor').GetName] being our [concept_rivalry]",
+  "ru": "от того, что страна [SCOPE.sCountry('actor').GetName] — наш [Concept('concept_rivalry', 'соперник')]"
+ },
+ "UN_LOBBY_ACCEPT_STANDING": {
+  "en": "from the record [SCOPE.sCountry('actor').GetName] has built in the [concept_un_general_assembly]",
+  "ru": "от репутации, которую страна [SCOPE.sCountry('actor').GetName] заработала в [Concept('concept_un_general_assembly', 'Генеральной Ассамблее')]"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_ALLY": {
+  "en": "from the resolution being aimed at an ally of ours",
+  "ru": "от того, что резолюция направлена против нашего союзника"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_BLOC": {
+  "en": "from the resolution being aimed at a fellow member of our [concept_power_bloc]",
+  "ru": "от того, что резолюция направлена против члена нашего [Concept('concept_power_bloc', 'силового блока')]"
+ },
+ "UN_LOBBY_ACCEPT_TARGET_RIVAL": {
+  "en": "from the resolution being aimed at a [concept_rivalry] of ours",
+  "ru": "от того, что резолюция направлена против нашего [Concept('concept_rivalry', 'соперника')]"
+ },
+ "UN_PAY_DUES_DESC": {
+  "en": "Resume paying our assessed [concept_un_dues], settling at once everything we owe from the months we withheld them. A member in arrears regains its vote the moment it pays.",
+  "ru": "Возобновить уплату начисленных нам [concept_un_dues|l], сразу погасив всё, что мы должны за месяцы удержания. Член, имеющий задолженность, возвращает себе право голоса, как только заплатит."
+ },
+ "UN_PROPOSE_ARMS_EMBARGO": {
+  "en": "Propose an Arms Embargo",
+  "ru": "Предложить оружейное эмбарго"
+ },
+ "UN_PROPOSE_ARMS_EMBARGO_DESC": {
+  "en": "Ask the General Assembly to impose a [concept_un_arms_embargo] on a country whose record gives it grounds (a [concept_un_case] of 40 or more) and that is our rival or at war with a member, but is not our ally, our overlord or our subject. A #bold binding#! resolution, carried by a simple majority. If it carries, for ten years the target's [concept_trade_advantage] in every [Concept('concept_military_good', 'military good')] falls by 30%, imports and exports alike, and its military goods cost 5% more, both scaled by the UN's [concept_un_enforcement]. A [concept_un_veto] leaves a voluntary embargo: half the penalty, for five years. Requires Charter Reform I, and that we are not under an arms embargo ourselves.",
+  "ru": "Попросить Генеральную Ассамблею ввести [Concept('concept_un_arms_embargo', 'оружейное эмбарго ООН')] против страны, чьё поведение даёт для этого основания ([Concept('concept_un_case', 'весомость дела')] 40 или более), которая является нашим соперником или воюет с членом ООН, но не является нашим союзником, сюзереном или зависимым государством. #bold Обязательная#! резолюция, принимаемая простым большинством. Если она принята, в течение десяти лет [Concept('concept_trade_advantage', 'торговое преимущество')] цели по любому [Concept('concept_military_good', 'военному товару')] снижается на 30%, и по импорту, и по экспорту, а её военные товары дорожают на 5%; и то и другое масштабируется в зависимости от [concept_un_enforcement|l]. [concept_un_veto] оставляет добровольное эмбарго: половину штрафа, на пять лет. Требуется Реформа Устава I, и чтобы мы сами не были под оружейным эмбарго."
+ },
+ "UN_PROPOSE_ARMS_EMBARGO_TT": {
+  "en": "#bold A General Assembly vote has been called#! on an arms embargo. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! по оружейному эмбарго. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце, а [concept_un_permanent_member|l] может наложить на него [Concept('concept_un_veto', 'вето')]. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_CEASEFIRE_DESC": {
+  "en": "Move the General Assembly to order a country that started a war against a member to cease fire. Its record must give the Assembly grounds: a [concept_un_case] of 40 or more. This is a #bold binding#! resolution. If it carries, the aggressor is under a ceasefire order for 24 months, and every month it goes on fighting a member its [concept_war_support] in that war falls by 2.5 × the UN's [concept_un_enforcement]. No peace is imposed: the war ends when the aggressor capitulates or makes peace. If a [concept_un_permanent_member] casts a [concept_un_veto], the Assembly can only call for a ceasefire, which lowers the aggressor's war support once and does nothing more. Requires Charter Reform II. #G UN credibility +1 if it carries.#!",
+  "ru": "Побудить Генеральную Ассамблею приказать стране, начавшей войну против члена ООН, прекратить огонь. Её поведение должно давать Ассамблее основания: [Concept('concept_un_case', 'весомость дела')] 40 или более. Это #bold обязательная#! резолюция. Если она принята, агрессор находится под приказом о прекращении огня 24 месяца, и каждый месяц, пока он продолжает воевать с членом ООН, его [Concept('concept_war_support', 'поддержка войны')] в этой войне падает на 2,5 × [concept_un_enforcement|l]. Мир не навязывается: война заканчивается, когда агрессор капитулирует или заключает мир. Если [concept_un_permanent_member|l] накладывает [Concept('concept_un_veto', 'вето')], Ассамблея может лишь призвать к прекращению огня, что один раз снижает поддержку войны агрессора и ничего более. Требуется Реформа Устава II. #G Доверие к ООН +1, если она принята.#!"
+ },
+ "UN_PROPOSE_CEASEFIRE_TT": {
+  "en": "#bold A General Assembly vote has been called#! on a binding ceasefire. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! по обязательному прекращению огня. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце, а [concept_un_permanent_member|l] может наложить на него [Concept('concept_un_veto', 'вето')]. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_CHARTER_REFORM": {
+  "en": "Table a charter reform",
+  "ru": "Внести реформу Устава"
+ },
+ "UN_PROPOSE_CHARTER_REFORM_DESC": {
+  "en": "Move the [concept_un_general_assembly] to amend the [concept_un_charter]. Reform I raises the ceiling on [concept_un_authority] from 70 to 85, Reform II from 85 to 100. It may be tabled only once authority has held within 5 points of the ceiling for 24 months running, and not within five years of the last reform vote. It needs a #bold two-thirds supermajority#! of all members, and it is #bold binding#!: any [concept_un_permanent_member] may [concept_un_veto] it, and a veto blocks it outright. [Concept('concept_major_power','Major powers')] and above only.",
+  "ru": "Побудить [concept_un_general_assembly] изменить [concept_un_charter]. Реформа I повышает потолок [Concept('concept_un_authority', 'авторитета ООН')] с 70 до 85, Реформа II — с 85 до 100. Её можно вносить, только когда авторитет 24 месяца подряд держится в пределах 5 пунктов от потолка, и не ранее чем через пять лет после последнего голосования по реформе. Требуется #bold большинство в две трети#! всех членов, и она #bold обязательна#!: любой [concept_un_permanent_member|l] может наложить [Concept('concept_un_veto', 'вето')], и вето полностью блокирует её. Только для [Concept('concept_major_power', 'крупных держав')] и выше."
+ },
+ "UN_PROPOSE_CHARTER_REFORM_TT": {
+  "en": "We will table the next reform of the [concept_un_charter] in the [concept_un_general_assembly]. It needs a #G two-thirds supermajority#! of all members, and any [concept_un_permanent_member] may [concept_un_veto] it outright. If it carries, the ceiling on [concept_un_authority] rises.",
+  "ru": "Мы внесём в [concept_un_general_assembly] очередную реформу [Concept('concept_un_charter', 'Устава ООН')]. Нужно #G большинство в две трети#! всех членов, и любой [concept_un_permanent_member|l] может полностью заблокировать её, наложив [Concept('concept_un_veto', 'вето')]. Если она принята, потолок [Concept('concept_un_authority', 'авторитета ООН')] растёт."
+ },
+ "UN_PROPOSE_CONDEMN_DESC": {
+  "en": "Propose a General Assembly resolution condemning a rival nation's military aggression. Its record must give the Assembly grounds: a [concept_un_case] of 30 or more. Triggers a vote among all UN members. If passed, the target receives diplomatic penalties and we gain [concept_prestige] as the resolution sponsor.",
+  "ru": "Предложить резолюцию Генеральной Ассамблеи с осуждением военной агрессии соперничающей страны. Её поведение должно давать Ассамблее основания: [Concept('concept_un_case', 'весомость дела')] 30 или более. Запускает голосование среди всех членов ООН. Если резолюция принята, цель получает дипломатические штрафы, а мы получаем [concept_prestige|l] как инициатор резолюции."
+ },
+ "UN_PROPOSE_CONDEMN_TT": {
+  "en": "#bold A General Assembly vote has been called#! to condemn military aggression. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! с осуждением военной агрессии. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_COURT_REFERRAL": {
+  "en": "Refer a Dispute to the World Court",
+  "ru": "Передать спор во Всемирный суд"
+ },
+ "UN_PROPOSE_COURT_REFERRAL_DESC": {
+  "en": "Ask the General Assembly to send one of our [Concept('concept_claim', 'claims')] to the [concept_un_world_court]: a state we claim, other than its holder's capital, held by a represented member that is neither our overlord, our subject nor at war with us. The case we name is the one with the best odds for us. A #bold binding#! resolution, carried by a simple majority, and it needs no case against the holder's record. If it carries, the court rules about a month after the vote. If it finds for us, the holder must cede the state or defy the court, and a holder that defies it opens the way to a military mandate. If it finds for the holder, our claim on the region is withdrawn, and for twenty years a [concept_war_goal] we add there costs extra [concept_infamy]. A [concept_un_veto] turns the ruling into an advisory opinion: nothing changes hands. Requires Charter Reform I, and an International Standing of 20 or more.",
+  "ru": "Попросить Генеральную Ассамблею передать одно из наших [Concept('concept_claim', 'притязаний')] во [concept_un_world_court]: область, на которую мы претендуем (но не столицу её владельца), удерживаемую представленным членом, который не является ни нашим сюзереном, ни зависимым государством и не воюет с нами. Дело берётся то, у которого для нас лучшие шансы. #bold Обязательная#! резолюция, принимаемая простым большинством, и для неё не нужно дело против поведения владельца. Если она принята, суд выносит решение примерно через месяц после голосования. Если он решает в нашу пользу, владелец должен уступить область или отказаться подчиниться суду, а отказ владельца подчиниться открывает путь к военному мандату. Если он решает в пользу владельца, наше притязание на регион отзывается, и в течение двадцати лет [concept_war_goal|l], которую мы добавляем там, обходится в дополнительную [Concept('concept_infamy', 'дурную славу')]. [concept_un_veto] превращает решение в консультативное заключение: ничего не переходит из рук в руки. Требуется Реформа Устава I и Международный авторитет 20 или более."
+ },
+ "UN_PROPOSE_COURT_REFERRAL_TT": {
+  "en": "#bold A General Assembly vote has been called#! on referring our claim to the World Court. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year, and the court rules about a month later.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о передаче нашего притязания во Всемирный суд. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце, а [concept_un_permanent_member|l] может наложить на него [Concept('concept_un_veto', 'вето')]. Итоги подводятся через год, а суд выносит решение примерно месяцем позже."
+ },
+ "UN_PROPOSE_CREDENTIALS_DESC": {
+  "en": "Ask the General Assembly to suspend the [concept_un_credentials] of a member, not our ally, overlord or subject, whose record gives it grounds (a [concept_un_case] of 50 or more) and that breaches the terms of the Declaration of Human Rights or has defied the Assembly's binding decisions (a defiance record of 10 or more). A [concept_un_permanent_member] can be named only after Charter Reform II. It carries with two thirds of the members with a vote, and no [concept_un_veto] can stop it. If it carries, the member's representation is suspended for five years, or until its case falls below 30: it casts no vote, tables nothing, draws no benefits of membership and loses any permanent seat, but it still pays its [concept_un_dues]. If by the time the vote closes it has left the United Nations or its case has fallen below 30, the motion is moot. Requires Charter Reform I, and an International Standing of 20 or more.",
+  "ru": "Попросить Генеральную Ассамблею приостановить [Concept('concept_un_credentials', 'полномочия делегации')] члена, не являющегося нашим союзником, сюзереном или зависимым государством, чьё поведение даёт для этого основания ([Concept('concept_un_case', 'весомость дела')] 50 или более) и который нарушает условия Декларации прав человека или не подчинялся обязательным решениям Ассамблеи (счёт неповиновения 10 или более). [Concept('concept_un_permanent_member', 'Постоянного члена')] можно назвать только после Реформы Устава II. Резолюция принимается двумя третями членов, имеющих голос, и никакое [concept_un_veto|l] не может её остановить. Если она принята, представительство члена приостанавливается на пять лет или пока его дело не упадёт ниже 30: он не голосует, ничего не вносит, не получает выгод членства и теряет любое постоянное место, но по-прежнему платит [concept_un_dues|l]. Если к закрытию голосования он вышел из Организации Объединённых Наций или его дело упало ниже 30, предложение теряет смысл. Требуется Реформа Устава I и Международный авторитет 20 или более."
+ },
+ "UN_PROPOSE_CREDENTIALS_TT": {
+  "en": "#bold A General Assembly vote has been called#! on suspending a member's credentials. Human members can vote at once; AI members vote in the ninth to eleventh month. It carries with two thirds of the members with a vote. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о приостановлении полномочий члена. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Резолюция принимается двумя третями членов, имеющих голос. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_DEVELOPMENT_FUND": {
+  "en": "Propose the World Development Fund",
+  "ru": "Предложить Всемирный фонд развития"
+ },
+ "UN_PROPOSE_DEVELOPMENT_FUND_DESC": {
+  "en": "Move the [concept_un_general_assembly] to found the [concept_un_development_fund]: grants every week to the members whose [concept_gdp_per_capita] is furthest below the members' average, into their [concept_investment_pool]. Under the founding charter it pays out only the members' Development Programs contributions, to members below a tenth of the average; Charter Reform I adds 5% of the UN budget and raises the line to a quarter, Reform II a quarter of the budget and half the average. It is recommendatory and a simple majority carries it. #G UN credibility +1 if it passes.#! Requires a UN whose members are assessed dues.",
+  "ru": "Побудить [concept_un_general_assembly] учредить [concept_un_development_fund]: еженедельные гранты членам, чей [Concept('concept_gdp_per_capita', 'ВВП на душу населения')] дальше всего ниже среднего по членам, в их [Concept('concept_investment_pool', 'инвестиционный пул')]. По учредительному уставу он выплачивает только вклады членов в Программы развития, членам с показателем ниже десятой части среднего; Реформа Устава I добавляет 5% бюджета ООН и поднимает порог до четверти, Реформа II — четверть бюджета и половину среднего. Резолюция рекомендательная и принимается простым большинством. #G Доверие к ООН +1, если она принята.#! Требуется ООН, члены которой облагаются взносами."
+ },
+ "UN_PROPOSE_DEVELOPMENT_FUND_TT": {
+  "en": "#bold A General Assembly vote has been called#! to found the World Development Fund. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! об учреждении Всемирного фонда развития. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_EXPULSION_TT": {
+  "en": "We will propose a motion in the [concept_un_general_assembly] calling for the expulsion of a [concept_un_permanent_member] who has recently abused the [concept_un_veto]. As a [concept_un_resolution_recommendatory] motion against the Council itself, it requires a #G 2/3 supermajority#! to pass.",
+  "ru": "Мы внесём в [concept_un_general_assembly] предложение об исключении [Concept('concept_un_permanent_member', 'постоянного члена')], недавно злоупотребившего [Concept('concept_un_veto', 'вето')]. Как [Concept('concept_un_resolution_recommendatory', 'рекомендательная резолюция')] против самого Совета, она требует #G большинства в 2/3#! для принятия."
+ },
+ "UN_PROPOSE_FOOD_RESERVE": {
+  "en": "Propose the World Food Reserve",
+  "ru": "Предложить Всемирный продовольственный резерв"
+ },
+ "UN_PROPOSE_FOOD_RESERVE_DESC": {
+  "en": "Move the [concept_un_general_assembly] to found the [concept_un_food_reserve]: members pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges to feed its state. While it stands, hunger among the members' people moves the delivery pillar of [concept_un_authority]. It is recommendatory and a simple majority carries it. #G UN credibility +1 if it passes.#!",
+  "ru": "Побудить [concept_un_general_assembly] учредить [concept_un_food_reserve]: члены обещают зерно из своих Стратегических резервов, и каждая новая [concept_un_mission_aid|l] черпает из этих обещаний, чтобы накормить свою область. Пока он существует, голод среди населения членов влияет на столп поставок [Concept('concept_un_authority', 'авторитета ООН')]. Резолюция рекомендательная и принимается простым большинством. #G Доверие к ООН +1, если она принята.#!"
+ },
+ "UN_PROPOSE_FOOD_RESERVE_TT": {
+  "en": "#bold A General Assembly vote has been called#! to found the World Food Reserve. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! об учреждении Всемирного продовольственного резерва. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_LIFT_SANCTIONS": {
+  "en": "Petition to Lift Sanctions",
+  "ru": "Ходатайствовать о снятии санкций"
+ },
+ "UN_PROPOSE_LIFT_SANCTIONS_DESC": {
+  "en": "Ask the General Assembly to lift the [concept_un_sanctions] on us. The vote takes a year, and a [concept_un_permanent_member] can veto it. If it carries, the sanctions end, with the embargoes the Assembly imposed with them, and their enforcer may table sanctions again. Members weigh how far our record has fallen below the grounds for sanctions (a case strength of 50), and are slow to lift sanctions that have stood less than five years. The members embargoing us vote against, and so does the enforcer while it is still our rival or its relations with us are Cold or worse; only then will it veto.",
+  "ru": "Попросить Генеральную Ассамблею снять [concept_un_sanctions|l] с нас. Голосование длится год, и [concept_un_permanent_member|l] может наложить на него вето. Если оно принято, санкции заканчиваются вместе с введёнными с ними эмбарго Ассамблеи, а обеспечивавшая их страна может вновь внести санкции. Члены оценивают, насколько наше поведение упало ниже оснований для санкций (весомость дела 50), и неохотно снимают санкции, действующие менее пяти лет. Члены, вводящие против нас эмбарго, голосуют против, как и обеспечивающая санкции страна, пока она остаётся нашим соперником или её отношения с нами холодные или хуже; только тогда она наложит вето."
+ },
+ "UN_PROPOSE_LIFT_SANCTIONS_TT": {
+  "en": "#bold A General Assembly vote has been called#! on lifting the [concept_un_sanctions] on us. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о снятии [concept_un_sanctions|l] с нас. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_MANDATE_DESC": {
+  "en": "Move the General Assembly to authorize us, by name, to recover one [concept_state_region] we hold a [concept_claim] on from a state whose record gives the Assembly grounds (a [concept_un_case] of 60 or more). This is a #bold binding#! resolution: any [concept_un_permanent_member] may [concept_un_veto] it, and a veto blocks it outright — there is no weaker form of a license to use force. If it carries we receive a mandate, which makes the #v $war_goal_te_un_mandate_restore_state_type_name$#! [concept_war_goal] available against that state, for that territory only, at no [concept_infamy]. Every other demand keeps its normal price, and adding any other demand against that country for territory, subjugation, regime change or humiliation voids the mandate and is condemned (reparations, opening markets and the like are allowed). Requires [concept_un_authority] 40+ and no mandate of our own already in force.",
+  "ru": "Побудить Генеральную Ассамблею уполномочить нас поимённо вернуть одну [Concept('concept_state_region', 'область')], на которую у нас есть [Concept('concept_claim', 'притязание')], у государства, чьё поведение даёт Ассамблее основания ([Concept('concept_un_case', 'весомость дела')] 60 или более). Это #bold обязательная#! резолюция: любой [concept_un_permanent_member|l] может наложить [Concept('concept_un_veto', 'вето')], и вето полностью блокирует её — более слабой формы разрешения на применение силы нет. Если она принята, мы получаем мандат, который делает доступной [concept_war_goal|l] #v $war_goal_te_un_mandate_restore_state_type_name$#! против этого государства, только на эту территорию и без [Concept('concept_infamy', 'дурной славы')]. Все прочие требования сохраняют обычную цену, а добавление против этой страны любого другого требования о территории, подчинении, смене режима или унижении аннулирует мандат и осуждается (репарации, открытие рынков и подобное разрешены). Требуется [Concept('concept_un_authority', 'авторитет ООН')] 40+ и отсутствие у нас действующего мандата."
+ },
+ "UN_PROPOSE_MANDATE_TT": {
+  "en": "#bold A General Assembly vote has been called#! on an authorized military mandate. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о санкционированном военном мандате. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце, а [concept_un_permanent_member|l] может наложить на него [Concept('concept_un_veto', 'вето')]. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_OBSERVER_REQUEST": {
+  "en": "Request Electoral Observers",
+  "ru": "Запросить избирательных наблюдателей"
+ },
+ "UN_PROPOSE_OBSERVER_REQUEST_DESC": {
+  "en": "Ask the General Assembly to send observers to our next election. The vote takes a year. If it carries, an [concept_un_mission_electoral] goes to our capital, paid from the UN's budget: our [concept_legitimacy] rises, and foreign Election Interference against us is easier to catch and does half the harm to our [concept_electoral_confidence]. It succeeds when an election campaign ends while it is here. #G UN credibility +1 if passed.#! Requires Charter Reform I, elections and peace.",
+  "ru": "Попросить Генеральную Ассамблею направить наблюдателей на наши ближайшие выборы. Голосование длится год. Если оно принято, в нашу столицу прибывает [concept_un_mission_electoral|l], оплачиваемая из бюджета ООН: наша [concept_legitimacy|l] растёт, а иностранное Вмешательство в выборы против нас легче обнаружить, и оно наносит вдвое меньше вреда [Concept('concept_electoral_confidence', 'доверию к выборам')]. Миссия завершается успехом, когда за время её присутствия заканчивается избирательная кампания. #G Доверие к ООН +1, если принято.#! Требуется Реформа Устава I, выборы и мир."
+ },
+ "UN_PROPOSE_OBSERVER_REQUEST_TT": {
+  "en": "#bold A General Assembly vote has been called#! on sending observers to our next election. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о направлении наблюдателей на наши ближайшие выборы. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_REFERENDUM_DESC": {
+  "en": "Move the General Assembly to order a member to let one of its subjects vote on independence, under the Assembly's supervision. Needs the [concept_decolonization_system] Declaration in force, and a direct [concept_subject] of another member whose [concept_liberty_desire] is 50 or more. This is a #bold binding#! resolution: any [concept_un_permanent_member] may [concept_un_veto] it, and a veto blocks it outright. If it carries, the [concept_overlord] must hold the vote or refuse it. A vote held ends in independence with a chance equal to the subject's liberty desire, between 20% and 90%. Refusing costs the overlord standing, a mark on its record and its subjects' loyalty. Requires Charter Reform II. #G UN credibility +1 if it carries.#!",
+  "ru": "Побудить Генеральную Ассамблею приказать члену позволить одному из его зависимых государств проголосовать за независимость под надзором Ассамблеи. Требуется действующая Декларация [Concept('concept_decolonization_system', 'деколонизации')] и непосредственное [Concept('concept_subject', 'зависимое государство')] другого члена, чьё [Concept('concept_liberty_desire', 'стремление к свободе')] составляет 50 или более. Это #bold обязательная#! резолюция: любой [concept_un_permanent_member|l] может наложить [Concept('concept_un_veto', 'вето')], и вето полностью блокирует её. Если она принята, [Concept('concept_overlord', 'сюзерен')] должен провести голосование или отказаться. Проведённое голосование завершается независимостью с вероятностью, равной стремлению зависимого государства к свободе, — от 20% до 90%. Отказ стоит сюзерену авторитета, пометки в его деле и лояльности его зависимых государств. Требуется Реформа Устава II. #G Доверие к ООН +1, если она принята.#!"
+ },
+ "UN_PROPOSE_REFERENDUM_TT": {
+  "en": "#bold A General Assembly vote has been called#! on a supervised self-determination referendum. Human members can vote at once; AI members vote in the ninth to eleventh month, and a [concept_un_permanent_member] may [concept_un_veto] it. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о референдуме по самоопределению под надзором. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце, а [concept_un_permanent_member|l] может наложить на него [Concept('concept_un_veto', 'вето')]. Итоги подводятся через год."
+ },
+ "UN_PROPOSE_SANCTIONS_DESC": {
+  "en": "Propose [concept_un_sanctions] against a rival. The General Assembly will vote over a year. If passed, the target receives severe trade and diplomatic penalties, and you become the sanctions enforcer, unless the target voted for its own sanctions. #G UN credibility +1 if passed.#! Requires [concept_major_power] rank and an unsanctioned rival whose record gives the Assembly grounds: a case strength of 50 or more.",
+  "ru": "Предложить [Concept('concept_un_sanctions', 'санкции ООН')] против соперника. Генеральная Ассамблея будет голосовать в течение года. Если они приняты, цель получает серьёзные торговые и дипломатические штрафы, а вы становитесь стороной, обеспечивающей санкции, если только цель не голосовала за собственные санкции. #G Доверие к ООН +1, если приняты.#! Требуется ранг [Concept('concept_major_power', 'крупной державы')] и соперник, не находящийся под санкциями, чьё поведение даёт Ассамблее основания: весомость дела 50 или более."
+ },
+ "UN_PROPOSE_SANCTIONS_TT": {
+  "en": "Propose [concept_un_sanctions] against a rival nation. The General Assembly votes on the measure over the following year: human members at once, AI members in its ninth to eleventh month.",
+  "ru": "Предложить [concept_un_sanctions|l] против соперничающей страны. Генеральная Ассамблея голосует по этой мере в течение следующего года: члены-люди — сразу, члены под управлением ИИ — на девятом–одиннадцатом месяце."
+ },
+ "UN_PROPOSE_STANDING_FORCE": {
+  "en": "Establish the Standing UN Force",
+  "ru": "Учредить Постоянные силы ООН"
+ },
+ "UN_PROPOSE_STANDING_FORCE_DESC": {
+  "en": "Propose that the General Assembly found a [concept_un_standing_force]. The vote takes a year. If it carries, every UN peacekeeping and stabilization mission counts the Force as a contributor and can no longer lapse or fail for want of one, the Force takes a tenth of the UN's budget, and at the [concept_un_tier_supranational] tier a member's war goals against a country such a mission serves are struck, all but the goal a play opens with, which pays a doubled [concept_infamy] surcharge. #G UN credibility +1 if passed.#! Binding: a [concept_un_veto] blocks it outright. Requires Charter Reform I and [concept_major_power] rank.",
+  "ru": "Предложить Генеральной Ассамблее учредить [concept_un_standing_force|l]. Голосование длится год. Если оно принято, каждая миротворческая и стабилизационная миссия ООН считает Силы участником и больше не может прекратиться или провалиться из-за отсутствия участника, Силы получают десятую часть бюджета ООН, а на уровне [concept_un_tier_supranational] цели войны члена против страны, которой служит такая миссия, вычёркиваются, кроме цели, с которой открывается дипломатическая игра, и она облагается удвоенной надбавкой за [Concept('concept_infamy', 'дурную славу')]. #G Доверие к ООН +1, если принято.#! Обязательная резолюция: [concept_un_veto] полностью блокирует её. Требуется Реформа Устава I и ранг [Concept('concept_major_power', 'крупной державы')]."
+ },
+ "UN_PROPOSE_STANDING_FORCE_TT": {
+  "en": "#bold A General Assembly vote has been called#! to found the [concept_un_standing_force]. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! об учреждении [concept_un_standing_force|l]. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_RAISE_DEVELOPMENT_DESC": {
+  "en": "Raise our contribution to UN development programs by one size. The five sizes are Token (0.0625% of [Concept('concept_gdp', 'GDP')] a year), Small (0.125%), Modest (0.25%), Substantial (0.5%) and Generous (1%). Each size doubles the money, which pays the [concept_un_development_fund]'s grants, and adds a quarter of the Substantial size's benefits. The program's standing clock keeps running.",
+  "ru": "Повысить наш вклад в программы развития ООН на один размер. Пять размеров: Символический (0,0625% [Concept('concept_gdp', 'ВВП')] в год), Малый (0,125%), Скромный (0,25%), Значительный (0,5%) и Щедрый (1%). Каждый размер удваивает средства, которые оплачивают гранты [Concept('concept_un_development_fund', 'Всемирного фонда развития')], и добавляет четверть выгод размера Значительный. Отсчёт авторитета программы продолжается."
+ },
+ "UN_REDUCE_DEVELOPMENT_DESC": {
+  "en": "Reduce our contribution to UN development programs by one size. Each size down halves the money and takes away a quarter of the Substantial size's benefits. The program's standing clock keeps running, and the recipients' goodwill settles toward the smaller size over the next few years.",
+  "ru": "Снизить наш вклад в программы развития ООН на один размер. Каждый размер вниз вдвое сокращает средства и отнимает четверть выгод размера Значительный. Отсчёт авторитета программы продолжается, а добрая воля получателей в ближайшие годы подстраивается под меньший размер."
+ },
+ "UN_REQUEST_AID_DESC": {
+  "en": "Request the General Assembly to authorize international humanitarian assistance for our country. Triggers a vote among all UN members. If passed, contributing nations provide aid and we receive economic benefits scaled by the number of donors.",
+  "ru": "Попросить Генеральную Ассамблею разрешить международную гуманитарную помощь нашей стране. Запускает голосование среди всех членов ООН. Если оно принято, страны-участницы оказывают помощь, а мы получаем экономические выгоды, масштабируемые числом доноров."
+ },
+ "UN_REQUEST_AID_TT": {
+  "en": "#bold A General Assembly vote has been called#! to authorize humanitarian aid. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о разрешении гуманитарной помощи. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_REQUEST_PEACEKEEPERS_DESC": {
+  "en": "Request the General Assembly to authorize deployment of peacekeeping forces to our territory. Triggers a vote among all UN members. If passed, contributing nations deploy forces and we receive stability benefits scaled by the number of contributors.",
+  "ru": "Попросить Генеральную Ассамблею разрешить размещение миротворческих сил на нашей территории. Запускает голосование среди всех членов ООН. Если оно принято, страны-участницы размещают силы, а мы получаем выгоды для стабильности, масштабируемые числом участников."
+ },
+ "UN_REQUEST_PEACEKEEPERS_TT": {
+  "en": "#bold A General Assembly vote has been called#! to authorize peacekeeping deployment. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
+  "ru": "#bold Назначено голосование Генеральной Ассамблеи#! о разрешении размещения миротворцев. Члены-люди могут голосовать сразу; члены под управлением ИИ голосуют на девятом–одиннадцатом месяце. Итоги подводятся через год."
+ },
+ "UN_STOP_CHAMPIONING_DESC": {
+  "en": "Stop championing the United Nations: we no longer count in its #bold Commitment#! pillar.",
+  "ru": "Перестать поддерживать Организацию Объединённых Наций: мы больше не учитываемся в её столпе #bold Приверженность#!."
+ },
+ "UN_STOP_UNDERMINING_DESC": {
+  "en": "Stop undermining the United Nations: we no longer count against its #bold Commitment#! pillar.",
+  "ru": "Перестать подрывать Организацию Объединённых Наций: мы больше не учитываемся против её столпа #bold Приверженность#!."
+ },
+ "UN_UNDERMINE_ORDER_DESC": {
+  "en": "Put our weight against the United Nations and assert our sovereign independence. While we do, we count against its #R Commitment#! pillar, in proportion to our [concept_un_weight], which lowers the target [concept_un_authority] moves toward.",
+  "ru": "Поставить наш вес против Организации Объединённых Наций и отстаивать нашу суверенную независимость. Пока мы это делаем, мы учитываемся против её столпа #R Приверженность#! пропорционально нашему [Concept('concept_un_weight', 'весу')], что понижает цель, к которой движется [concept_un_authority|l]."
+ },
+ "UN_VOTE_ACCEPT_TARGET_TT": {
+  "en": "Acknowledge the resolution and accept its verdict. If it passes, it lands more softly on us: a condemnation or sanctions do not take effect, an arms embargo becomes the voluntary one, and a suspension of our credentials, a ceasefire order or the cost of fighting on under one costs less standing; a referendum can then not be refused, nor a World Court ruling defied. International observers read the gesture as performative, and the regime visibly loses face at home.",
+  "ru": "Признать резолюцию и принять её вердикт. Если она будет принята, она ударит по нам мягче: осуждение или санкции не вступят в силу, оружейное эмбарго станет добровольным, а приостановка наших полномочий, приказ о прекращении огня или цена продолжения боевых действий вопреки ему будут стоить нам меньше авторитета; референдум тогда нельзя будет отклонить, а решение Всемирного суда — проигнорировать. Международные наблюдатели сочтут этот жест показным, и режим заметно потеряет лицо внутри страны."
+ },
+ "UN_VOTE_AGAINST_TT": {
+  "en": "Cast our vote #bold against#! the resolution.",
+  "ru": "Отдать наш голос #bold против#! резолюции."
+ },
+ "UN_VOTE_BALLOT_ALREADY_CAST_TT": {
+  "en": "#v Our vote on this resolution is already on the record — answering here changes nothing.#!",
+  "ru": "#v Наш голос по этой резолюции уже записан — ответ здесь ничего не изменит.#!"
+ },
+ "UN_VOTE_COMMITMENT_BREAK_TT": {
+  "en": "#R We pledged this vote the other way.#! Casting it this way goes back on our word: #R −4 International Standing#!, #R −20 [concept_relations]#! with the country we pledged it to, and the [concept_obligation] they took on to secure the pledge is struck off — we lose the favor we were owed.",
+  "ru": "#R Мы обещали отдать этот голос иначе.#! Голосование таким образом нарушает наше слово: #R −4 к Международному авторитету#!, #R −20 к [Concept('concept_relations', 'отношениям')]#! со страной, которой мы это обещали, а [Concept('concept_obligation', 'обязательство')], которое она приняла, чтобы добиться обещания, погашается — мы теряем причитавшуюся нам услугу."
+ },
+ "UN_VOTE_COMMITMENT_KEEP_TT": {
+  "en": "#G We pledged this vote, and this honors it.#! A small gain in International Standing, #G +10 [concept_relations]#! with the country we pledged it to, and the [concept_obligation] they owe us stands.",
+  "ru": "#G Мы обещали этот голос, и он исполняет обещание.#! Небольшой рост Международного авторитета, #G +10 к [Concept('concept_relations', 'отношениям')]#! со страной, которой мы это обещали, а [Concept('concept_obligation', 'обязательство')], которое она нам должна, остаётся в силе."
+ },
+ "UN_VOTE_IN_FAVOR_TT": {
+  "en": "Cast our vote #bold in favor#! of the resolution.",
+  "ru": "Отдать наш голос #bold за#! резолюцию."
+ },
+ "UN_VOTE_VETO_MORIBUND_TT": {
+  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. The UN is #bold Moribund#!: its decisions are recommendations, and blocking one #G costs the organization nothing#! — no credibility, no backlash, no [concept_infamy]. The proposer will still resent it.",
+  "ru": "Мы налагаем наше [concept_un_veto|l] как [concept_un_permanent_member|l], чтобы заблокировать обязательную форму этой резолюции. ООН находится на уровне #bold «Угасающий»#!: её решения носят рекомендательный характер, и блокировка #G ничего не стоит организации#! — ни доверия, ни ответной реакции, ни [Concept('concept_infamy', 'дурной славы')]. Инициатор всё равно будет недоволен."
+ },
+ "UN_VOTE_VETO_TT": {
+  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. Cost: #R UN credibility −1.5 × our weight in world affairs#!, [concept_un_veto] backlash, and (for ICC, condemnation, and peacekeeping resolutions) a small [concept_infamy] hit. Our veto record grows by #R 5#!, fading by 5% a year. The record weighs in the case for expelling us from our seat, and for five years any member may move to expel us. If the Assembly still passes the Rome Statute and the veto stands, the last power to veto it is marked as having #R Rejected the Rome Statute#!. The General Assembly's simple majority can still pass a graduated/weak form.",
+  "ru": "Мы налагаем наше [concept_un_veto|l] как [concept_un_permanent_member|l], чтобы заблокировать обязательную форму этой резолюции. Цена: #R доверие к ООН −1,5 × наш вес в мировых делах#!, ответная реакция на [concept_un_veto|l] и (для резолюций о МУС, осуждения и миротворчества) небольшой удар по [Concept('concept_infamy', 'дурной славе')]. Наша история вето растёт на #R 5#!, затухая на 5% в год. История вето учитывается в деле об исключении нас с нашего места, и в течение пяти лет любой член может внести предложение исключить нас. Если Ассамблея всё же принимает Римский статут, а вето остаётся в силе, последняя использовавшая вето держава получает пометку #R Отвергнут Римский статут#!. Простое большинство Генеральной Ассамблеи всё равно может принять смягчённую или слабую форму."
+ },
+ "UN_WITHDRAW_ARMS_CONTROL": {
+  "en": "Withdraw from Arms Control",
+  "ru": "Выйти из контроля над вооружениями"
+ },
+ "UN_WITHDRAW_ARMS_CONTROL_DESC": {
+  "en": "Leave the UN's arms control agreements. They stop counting toward the UN's #bold Funding#! pillar.",
+  "ru": "Выйти из соглашений ООН по контролю над вооружениями. Они перестают засчитываться в столп #bold Финансирование#! ООН."
+ },
+ "UN_WITHDRAW_HUMAN_RIGHTS": {
+  "en": "Withdraw Human Rights Support",
+  "ru": "Отозвать поддержку прав человека"
+ },
+ "UN_WITHDRAW_HUMAN_RIGHTS_DESC": {
+  "en": "Stop championing human rights at the United Nations. It stops counting toward the UN's #bold Funding#! pillar.",
+  "ru": "Перестать отстаивать права человека в Организации Объединённых Наций. Это перестаёт засчитываться в столп #bold Финансирование#! ООН."
+ },
+ "UN_WITHHOLD_DUES_DESC": {
+  "en": "Stop paying our assessed [concept_un_dues]. The money is ours to keep, but withholding it weakens the funding of the United Nations, costs our international standing, and after #v 24#! months in arrears costs us our vote in the [concept_un_general_assembly] until we pay what we owe.",
+  "ru": "Прекратить платить начисленные нам [concept_un_dues|l]. Деньги остаются у нас, но их удержание ослабляет финансирование Организации Объединённых Наций, стоит нам международного авторитета, а после #v 24#! мес. задолженности лишает нас голоса в [concept_un_general_assembly], пока мы не заплатим всё, что должны."
+ },
+ "VOLUNTARY_UNION_ACCEPT_ARMED_FORCES_OPPOSE": {
+  "en": "Our Armed Forces would lose their state by accepting",
+  "ru": "Наши Вооружённые силы потеряли бы своё государство при согласии"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_ANTAGONISTIC": {
+  "en": "We see them as antagonistic",
+  "ru": "Мы считаем их враждебными"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_BELLIGERENT": {
+  "en": "We see them as belligerent",
+  "ru": "Мы считаем их воинственными"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_COOPERATIVE": {
+  "en": "We see them as cooperative",
+  "ru": "Мы считаем их склонными к сотрудничеству"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_GENIAL": {
+  "en": "We see them as genial partners",
+  "ru": "Мы считаем их дружелюбными партнёрами"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_PROTECTIVE": {
+  "en": "We feel protective toward them",
+  "ru": "Мы чувствуем к ним желание защитить"
+ },
+ "VOLUNTARY_UNION_ACCEPT_ATT_WARY": {
+  "en": "We are wary of them",
+  "ru": "Мы относимся к ним настороженно"
+ },
+ "VOLUNTARY_UNION_ACCEPT_BASELINE": {
+  "en": "It is a great concession to dissolve our nation",
+  "ru": "Растворить нашу нацию — огромная уступка"
+ },
+ "VOLUNTARY_UNION_ACCEPT_CULTURAL_TIES": {
+  "en": "We have a standing cultural-ties bond with them",
+  "ru": "У нас с ними действует постоянная культурная связь"
+ },
+ "VOLUNTARY_UNION_ACCEPT_DIPLOMATIC_FRAMEWORK": {
+  "en": "We share a Diplomatic Framework -- soft alignment encourages union",
+  "ru": "Нас объединяет Дипломатическая рамка — мягкое сближение способствует объединению"
+ },
+ "VOLUNTARY_UNION_ACCEPT_NATIONALIST_IGS": {
+  "en": "Our government is led by nationalists who reject dissolution",
+  "ru": "Наше правительство возглавляют националисты, отвергающие роспуск"
+ },
+ "VOLUNTARY_UNION_ACCEPT_OUR_BLOC_LEADER": {
+  "en": "They lead our [concept_power_bloc] -- alignment is natural",
+  "ru": "Они возглавляют наш [concept_power_bloc|l] — сближение естественно"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PEACEFUL_IGS": {
+  "en": "Our government has pacifist or humanitarian voices",
+  "ru": "В нашем правительстве есть голоса пацифистов или гуманитариев"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PRIOR_OPENNESS": {
+  "en": "We previously signaled openness to union",
+  "ru": "Ранее мы выражали открытость к объединению"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PROTECTION_GREAT": {
+  "en": "As a small nation, union with a great power of our own people would shelter us under its protection",
+  "ru": "Малой нации объединение с великой державой нашего народа дало бы укрытие под её защитой"
+ },
+ "VOLUNTARY_UNION_ACCEPT_PROTECTION_MAJOR": {
+  "en": "Union with a powerful nation of our own people would offer us protection",
+  "ru": "Объединение с могущественной нацией нашего народа дало бы нам защиту"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_AMICABLE": {
+  "en": "Our relations are amicable",
+  "ru": "Наши отношения приятельские"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_COLD": {
+  "en": "Our relations are cold",
+  "ru": "Наши отношения холодные"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_CORDIAL": {
+  "en": "Our relations are cordial",
+  "ru": "Наши отношения сердечные"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_FRIENDLY": {
+  "en": "Our relations are friendly",
+  "ru": "Наши отношения дружеские"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_HOSTILE": {
+  "en": "Our relations are hostile",
+  "ru": "Наши отношения враждебные"
+ },
+ "VOLUNTARY_UNION_ACCEPT_REL_POOR": {
+  "en": "Our relations are poor",
+  "ru": "Наши отношения плохие"
+ },
+ "VOLUNTARY_UNION_ACCEPT_RIVALRY": {
+  "en": "We are formal rivals",
+  "ru": "Мы формальные соперники"
+ },
+ "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_BASELINE": {
+  "en": "Baseline interest in integrating the decentralized power",
+  "ru": "Базовый интерес к интеграции децентрализованной державы"
+ },
+ "VOLUNTARY_UNION_DECENTRALIZED_PROPOSE_SAME_CULTURE": {
+  "en": "They are kin -- a decentralized power of our own people",
+  "ru": "Они нам родня — децентрализованная держава нашего народа"
+ },
+ "VOLUNTARY_UNION_PROPOSE_BASELINE": {
+  "en": "Baseline interest in voluntary union",
+  "ru": "Базовый интерес к добровольному объединению"
+ },
+ "VOLUNTARY_UNION_PROPOSE_PRESSURE_HIGH": {
+  "en": "Strong irredentist pressure",
+  "ru": "Сильное ирредентистское давление"
+ },
+ "VOLUNTARY_UNION_PROPOSE_PRESSURE_MAX": {
+  "en": "Overwhelming irredentist pressure",
+  "ru": "Подавляющее ирредентистское давление"
+ },
+ "VOLUNTARY_UNION_PROPOSE_RELATIONS_NOT_FRIENDLY": {
+  "en": "Relations are short of friendly",
+  "ru": "Отношения не дотягивают до дружественных"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TARGET_OPEN": {
+  "en": "They have signaled openness to union",
+  "ru": "Они выразили открытость к объединению"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_LEAN_WARLIKE": {
+  "en": "Our government leans toward war over union",
+  "ru": "Наше правительство склоняется к войне, а не к объединению"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_PEACEFUL": {
+  "en": "Our government strongly prefers peaceful union",
+  "ru": "Наше правительство решительно предпочитает мирное объединение"
+ },
+ "VOLUNTARY_UNION_PROPOSE_TILT_WARLIKE": {
+  "en": "Our government heavily prefers conquest to merger",
+  "ru": "Наше правительство сильно предпочитает завоевание слиянию"
+ },
+ "WAR_SUPPORT_TE_CIVIL_DEFENCE": {
+  "en": "Shelters and civil defense",
+  "ru": "Убежища и гражданская оборона"
+ },
+ "WAR_SUPPORT_TE_COVERT_COMMS_DISRUPTED": {
+  "en": "Enemy communications disruption",
+  "ru": "Нарушение связи у противника"
+ },
+ "WAR_SUPPORT_TE_DECOL_COLONIAL_WAR": {
+  "en": "A war to keep a colony",
+  "ru": "Война за удержание колонии"
+ },
+ "WAR_SUPPORT_TE_DECOL_CONDEMNED": {
+  "en": "The world condemns it",
+  "ru": "Мир осуждает её"
+ },
+ "WAR_SUPPORT_TE_DECOL_FOREIGN_ARMS": {
+  "en": "Foreign arms",
+  "ru": "Иностранное оружие"
+ },
+ "WAR_SUPPORT_TE_DECOL_INDEPENDENCE": {
+  "en": "Fighting for independence",
+  "ru": "Борьба за независимость"
+ },
+ "WAR_SUPPORT_TE_DECOL_SETTLERS": {
+  "en": "Settlers to defend",
+  "ru": "Поселенцы, которых нужно защищать"
+ },
+ "WAR_SUPPORT_TE_NUCLEAR_SHADOW": {
+  "en": "Enemy nuclear arsenal",
+  "ru": "Ядерный арсенал противника"
+ },
+ "WAR_SUPPORT_TE_SPACE_BATTLES": {
+  "en": "Battles in space",
+  "ru": "Сражения в космосе"
+ },
+ "WAR_SUPPORT_TE_SPACE_COLONIES": {
+  "en": "Colonies occupied in space",
+  "ru": "Колонии в космосе под оккупацией"
+ },
+ "WAR_SUPPORT_TE_UN_CONDEMNED": {
+  "en": "Condemned by the United Nations",
+  "ru": "Осуждение Организацией Объединённых Наций"
+ },
+ "WAR_SUPPORT_TE_UN_ENEMY_CONDEMNED": {
+  "en": "Fighting a UN-condemned enemy",
+  "ru": "Борьба с врагом, осуждённым ООН"
+ },
+ "WAR_SUPPORT_TE_UN_REBUKED": {
+  "en": "Rebuked by the United Nations",
+  "ru": "Порицание Организацией Объединённых Наций"
+ },
+ "WAR_SUPPORT_TE_WW_AIR_RAIDS": {
+  "en": "Air raids on our cities (World War)",
+  "ru": "Воздушные налёты на наши города (Мировая война)"
+ },
+ "WAR_SUPPORT_TE_WW_HOME_FRONT_STRAIN": {
+  "en": "Home front strain (World War)",
+  "ru": "Напряжение тыла (Мировая война)"
+ },
+ "WAR_SUPPORT_TE_WW_PROLONGED_WAR": {
+  "en": "Prolonged World War",
+  "ru": "Затянувшаяся Мировая война"
+ },
+ "WW_APPEASE_BUTTON_DESC": {
+  "en": "Seek to accommodate the demands of rival powers through diplomatic concessions, hoping to avoid war.",
+  "ru": "Пытаться удовлетворить требования соперничающих держав дипломатическими уступками в надежде избежать войны."
+ },
+ "WW_APPEASE_POSSIBLE_TT": {
+  "en": "A democratic government: an elected legislature, and a republic or monarchy that is neither a single-party state nor an autocracy",
+  "ru": "Демократическое правительство: выборный законодательный орган, республика или монархия, не являющаяся однопартийным государством или автократией"
+ },
+ "WW_FULLY_RESOLVED_TT": {
+  "en": "The world war is fully resolved. The postwar order takes shape.",
+  "ru": "Мировая война полностью разрешена. Формируется послевоенный порядок."
+ },
+ "WW_JOIN_DEFENDER_TT": {
+  "en": "We formally enter the world war on the defender's side.",
+  "ru": "Мы официально вступаем в мировую войну на стороне обороняющихся."
+ },
+ "WW_JOIN_WAR_BUTTON": {
+  "en": "Enter the War",
+  "ru": "Вступить в войну"
+ },
+ "WW_JOIN_WAR_BUTTON_DESC": {
+  "en": "Commit our nation to the ongoing world war against the aggressor powers. Our fresh forces will have a temporary combat advantage, but we will bear the full costs of total war.",
+  "ru": "Вовлечь нашу нацию в идущую мировую войну против держав-агрессоров. Наши свежие силы получат временное боевое преимущество, но мы понесём все издержки тотальной войны."
+ },
+ "WW_JOIN_WAR_NEEDS_MAJOR_POWER": {
+  "en": "At least a [concept_major_power]",
+  "ru": "Ранг не ниже [Concept('concept_major_power', 'крупной державы')]"
+ },
+ "WW_JOIN_WAR_POSSIBLE_TT": {
+  "en": "A world war being fought, with a [Concept('concept_great_power','great power')] still on each side",
+  "ru": "Идёт мировая война, и на каждой стороне осталась хотя бы одна [Concept('concept_great_power','великая держава')]"
+ },
+ "WW_LEND_LEASE_BUTTON": {
+  "en": "Provide Lend-Lease",
+  "ru": "Предоставить ленд-лиз"
+ },
+ "WW_LEND_LEASE_BUTTON_DESC": {
+  "en": "Supply military equipment and resources to nations fighting on the side we favor, without committing our own troops to combat.",
+  "ru": "Поставлять военное снаряжение и ресурсы нациям, сражающимся на стороне, которую мы поддерживаем, не вовлекая наши войска в бой."
+ },
+ "WW_LEND_LEASE_POSSIBLE_TT": {
+  "en": "Ideological tension of #v 40%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!), or a world war being fought",
+  "ru": "Идеологическая напряжённость #v 40%#! или выше (сейчас #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!) либо идущая мировая война"
+ },
+ "WW_PEACE_CONCLUDED_TT": {
+  "en": "The world war has ended. Peace is concluded.",
+  "ru": "Мировая война окончена. Мир заключён."
+ },
+ "WW_PROPAGANDA_POSSIBLE_TT": {
+  "en": "[GetTechnology('mass_media').GetName] researched",
+  "ru": "Изучена технология [GetTechnology('mass_media').GetName]"
+ },
+ "WW_REARM_BUTTON_DESC": {
+  "en": "Initiate a major military buildup in response to rising ideological tensions.",
+  "ru": "Начать масштабное военное наращивание в ответ на растущую идеологическую напряжённость."
+ },
+ "WW_REQ_FIGHTING_TT": {
+  "en": "Fighting in the world war",
+  "ru": "Участие в мировой войне"
+ },
+ "WW_REQ_NOT_APPEASING_TT": {
+  "en": "Not pursuing appeasement",
+  "ru": "Не проводится умиротворение"
+ },
+ "WW_REQ_NOT_AT_WAR_TT": {
+  "en": "Not at war",
+  "ru": "Не в состоянии войны"
+ },
+ "WW_REQ_NOT_REARMING_TT": {
+  "en": "Not rearming",
+  "ru": "Не идёт перевооружение"
+ },
+ "WW_REQ_NO_ENTRY_COOLDOWN_TT": {
+  "en": "No attempt to enter it in the past year",
+  "ru": "Нет попыток вступить в неё за последний год"
+ },
+ "WW_REQ_TENSION_20_TT": {
+  "en": "Ideological tension of #v 20%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)",
+  "ru": "Идеологическая напряжённость #v 20%#! или выше (сейчас #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)"
+ },
+ "WW_REQ_TENSION_30_TT": {
+  "en": "Ideological tension of #v 30%#! or more (now #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)",
+  "ru": "Идеологическая напряжённость #v 30%#! или выше (сейчас #v [GetPlayer.MakeScope.ScriptValue('ww_ideological_tension')|0]%#!)"
+ },
+ "WW_REQ_TRENCH_WORKS_TT": {
+  "en": "[GetTechnology('trench_works').GetName] or [GetTechnology('combined_arms').GetName] researched",
+  "ru": "Изучена технология [GetTechnology('trench_works').GetName] или [GetTechnology('combined_arms').GetName]"
+ },
+ "WW_STOP_APPEASE_BUTTON": {
+  "en": "End Appeasement",
+  "ru": "Прекратить умиротворение"
+ },
+ "WW_STOP_APPEASE_BUTTON_DESC": {
+  "en": "Abandon the policy of diplomatic accommodation. [concept_political_lobby_appeasement] has failed.",
+  "ru": "Отказаться от политики дипломатических уступок. Итог — неудача: [concept_political_lobby_appeasement]."
+ },
+ "WW_STOP_LEND_LEASE_BUTTON": {
+  "en": "End Lend-Lease",
+  "ru": "Прекратить ленд-лиз"
+ },
+ "WW_STOP_LEND_LEASE_BUTTON_DESC": {
+  "en": "Cease supplying military equipment to foreign belligerents.",
+  "ru": "Прекратить поставки военного снаряжения иностранным воюющим сторонам."
+ },
+ "WW_STOP_REARM_BUTTON": {
+  "en": "Halt Rearmament",
+  "ru": "Остановить перевооружение"
+ },
+ "WW_STOP_REARM_BUTTON_DESC": {
+  "en": "Scale back military buildup, reducing costs but weakening deterrence.",
+  "ru": "Свернуть военное наращивание, сократив расходы, но ослабив сдерживание."
+ },
+ "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON": {
+  "en": "Demobilize Economy",
+  "ru": "Демобилизовать экономику"
+ },
+ "WW_STOP_TOTAL_WAR_ECONOMY_BUTTON_DESC": {
+  "en": "Return the economy to peacetime production.",
+  "ru": "Вернуть экономику к мирному производству."
+ },
+ "WW_STOP_WARTIME_RATIONING_BUTTON": {
+  "en": "End Rationing",
+  "ru": "Отменить нормирование"
+ },
+ "WW_STOP_WARTIME_RATIONING_BUTTON_DESC": {
+  "en": "End wartime rationing and restore civilian consumption levels.",
+  "ru": "Отменить военное нормирование и восстановить уровень гражданского потребления."
+ },
+ "WW_STOP_WAR_PROPAGANDA_BUTTON": {
+  "en": "End War Propaganda",
+  "ru": "Прекратить военную пропаганду"
+ },
+ "WW_STOP_WAR_PROPAGANDA_BUTTON_DESC": {
+  "en": "Cease the government propaganda campaign.",
+  "ru": "Прекратить правительственную пропагандистскую кампанию."
+ },
+ "WW_TOTAL_WAR_ECONOMY_BUTTON": {
+  "en": "Total War Economy",
+  "ru": "Экономика тотальной войны"
+ },
+ "WW_TOTAL_WAR_ECONOMY_BUTTON_DESC": {
+  "en": "Redirect the entire national economy toward the war effort.",
+  "ru": "Перенаправить всю национальную экономику на военные усилия."
+ },
+ "WW_WARTIME_RATIONING_BUTTON": {
+  "en": "Impose Rationing",
+  "ru": "Ввести нормирование"
+ },
+ "WW_WARTIME_RATIONING_BUTTON_DESC": {
+  "en": "Institute strict wartime rationing to ensure military supply.",
+  "ru": "Ввести строгое военное нормирование для обеспечения армии."
+ },
+ "WW_WAR_PROPAGANDA_BUTTON": {
+  "en": "Launch War Propaganda",
+  "ru": "Запустить военную пропаганду"
+ },
+ "WW_WAR_PROPAGANDA_BUTTON_DESC": {
+  "en": "Mobilize the press and media for the war effort.",
+  "ru": "Мобилизовать прессу и СМИ на военные усилия."
+ },
+ "addiction_public_health_modifier": {
+  "en": "Addiction Public Health Program",
+  "ru": "Программа общественного здравоохранения против зависимостей"
+ },
+ "aerosol_injection_cost_modifier": {
+  "en": "Aerosol Injection: Running Cost",
+  "ru": "Аэрозольная инъекция: эксплуатационные расходы"
+ },
+ "agdiff_first_mover_prestige": {
+  "en": "Agricultural Innovator",
+  "ru": "Аграрный новатор"
+ },
+ "agdiff_modern_chemical_processes": {
+  "en": "Petrochemical Inputs Diffusion",
+  "ru": "Распространение нефтехимического сырья"
+ },
+ "ai_assisted_governance_modifier": {
+  "en": "AI-Assisted Governance",
+  "ru": "Управление с помощью ИИ"
+ },
+ "ai_policing_banned_modifier": {
+  "en": "Predictive Policing Banned",
+  "ru": "Прогностическая полиция запрещена"
+ },
+ "ai_strategy_un_mandate": {
+  "en": "Enforce the Mandate",
+  "ru": "Обеспечить мандат"
+ },
  "amendment_cb_dual_mandate": {
   "en": "Dual Mandate Act",
   "ru": "Закон о двойном мандате"
@@ -155,17 +1027,637 @@
   "en": "Undivided Farm Succession",
   "ru": "Неделимое наследование ферм"
  },
+ "anti_colonial_momentum_modifier": {
+  "en": "Anti-Colonial Backlash",
+  "ru": "Антиколониальная реакция"
+ },
+ "anti_minority_boycott_modifier": {
+  "en": "Anti-Minority Boycott",
+  "ru": "Бойкот меньшинств"
+ },
+ "anti_war_movement_suppressed": {
+  "en": "Anti-War Movement Suppressed",
+  "ru": "Антивоенное движение подавлено"
+ },
+ "antitrust_established_firms_carve_out": {
+  "en": "Antitrust: Established Firms Carve-Out",
+  "ru": "Антимонополия: исключение для устоявшихся фирм"
+ },
+ "antitrust_market_competition_boost": {
+  "en": "Competitive Market Surge",
+  "ru": "Всплеск рыночной конкуренции"
+ },
+ "antitrust_public_outrage_advance": {
+  "en": "Antitrust: Public Outrage Advance",
+  "ru": "Антимонополия: возмущение общества, шаг вперёд"
+ },
+ "antitrust_public_outrage_concession": {
+  "en": "Antitrust: Public Outrage Concession",
+  "ru": "Антимонополия: возмущение общества, уступка"
+ },
+ "antitrust_public_outrage_stall": {
+  "en": "Antitrust: Public Outrage Stall",
+  "ru": "Антимонополия: возмущение общества, затор"
+ },
+ "appeasement_covert_spying_exposed": {
+  "en": "Caught Spying on Them",
+  "ru": "Уличены в шпионаже за ними"
+ },
+ "arms_race_escalation_modifier": {
+  "en": "Arms Race Escalation",
+  "ru": "Эскалация гонки вооружений"
+ },
+ "arms_race_ignored_modifier": {
+  "en": "Arms Race Conceded",
+  "ru": "Гонка вооружений уступлена"
+ },
  "arms_race_rival_pressure_modifier": {
   "en": "Arms Race Pressure",
   "ru": "Давление гонки вооружений"
+ },
+ "art_renaissance_funded_modifier": {
+  "en": "State-Funded Art Renaissance",
+  "ru": "Государственный ренессанс искусств"
+ },
+ "augment_ethics_board_advance": {
+  "en": "Augmentation: Ethics Board Advance",
+  "ru": "Аугментация: этический совет, шаг вперёд"
+ },
+ "augment_ethics_board_concession": {
+  "en": "Augmentation: Ethics Board Concession",
+  "ru": "Аугментация: этический совет, уступка"
+ },
+ "augment_ethics_board_stall": {
+  "en": "Augmentation: Ethics Board Stall",
+  "ru": "Аугментация: этический совет, затор"
+ },
+ "augmentation_crime_ban_modifier": {
+  "en": "Augmented Criminal Ban",
+  "ru": "Запрет аугментации для преступников"
+ },
+ "augmentation_debate_active_modifier": {
+  "en": "Augmentation Debate",
+  "ru": "Дебаты об аугментации"
+ },
+ "augmentation_devout_victory_modifier": {
+  "en": "Devout Victory on Augmentation",
+  "ru": "Победа Духовенства в вопросе аугментации"
+ },
+ "augmentation_divide_permanent_modifier": {
+  "en": "Entrenched Augmentation Divide",
+  "ru": "Укоренившийся раскол по аугментации"
+ },
+ "augmentation_ethics_board_modifier": {
+  "en": "Augmentation Ethics Board",
+  "ru": "Этический совет по аугментации"
+ },
+ "augmentation_kill_switch_modifier": {
+  "en": "Augmentation Kill Switch Mandate",
+  "ru": "Мандат на аварийное отключение аугментаций"
+ },
+ "augmentation_market_efficiency_modifier": {
+  "en": "Augmentation Market Efficiency",
+  "ru": "Рыночная эффективность аугментации"
+ },
+ "augmentation_market_forces_modifier": {
+  "en": "Augmentation Market Forces",
+  "ru": "Рыночные силы в аугментации"
+ },
+ "augmentation_religious_anger_modifier": {
+  "en": "Religious Anger Over Augmentation",
+  "ru": "Религиозный гнев из-за аугментации"
+ },
+ "augmentation_workplace_protection_modifier": {
+  "en": "Augmentation Workplace Protection",
+  "ru": "Защита на рабочем месте при аугментации"
+ },
+ "banking_asset_relief_excludes_bail_in_tt": {
+  "en": "$CB_BAIL_IN$ is not running: a government bails its banks out or bails them in, not both.",
+  "ru": "Не действует: $CB_BAIL_IN$. Правительство спасает свои банки либо за счёт государства, либо за счёт кредиторов, но не обоими способами."
+ },
+ "banking_bank_holiday_cooldown_set_tt": {
+  "en": "No other bank holiday can be declared for #v 5#! years.",
+  "ru": "Другие банковские каникулы нельзя объявить в течение #v 5#! лет."
+ },
+ "banking_bank_holiday_cooldown_tt": {
+  "en": "No bank holiday in the last #v 5#! years: shutting the banks is believed once, not every season.",
+  "ru": "Банковских каникул не было за последние #v 5#! лет: закрытию банков верят один раз, а не каждый сезон."
+ },
+ "banking_bank_holiday_forfeit_tt": {
+  "en": "The banks reopen before the full #v 90#! days, so they give up the #G +1#! momentum a full holiday reopens with.",
+  "ru": "Банки вновь открываются раньше полных #v 90#! дней, поэтому теряют #G +1#! импульса, с которым открываются банки после полных каникул."
+ },
+ "banking_bank_holiday_momentum_tt": {
+  "en": "if the [concept_banking_cycle] is falling, its momentum #b stops at 0#!, and it cannot fall below 0 while the banks are shut — the run stops.",
+  "ru": "если [concept_banking_cycle|l] падает, его импульс #b останавливается на 0#! и не может упасть ниже 0, пока банки закрыты — набег на банки прекращается."
+ },
+ "banking_bank_holiday_phase_tt": {
+  "en": "Only in a #b downturn#! or a #b panic#!: a bank holiday stops a run, and in calmer times there is no run to stop.",
+  "ru": "Только при #b спаде#! или #b панике#!: банковские каникулы останавливают набег на банки, а в спокойные времена останавливать нечего."
+ },
+ "banking_bank_holiday_radicals_tt": {
+  "en": "[Concept('concept_radical', 'Radicals')] among depositors who cannot reach their money: #R 5%#! of the middle strata, #R 3%#! of the upper strata and #R 2%#! of the lower strata.",
+  "ru": "[Concept('concept_radical', 'Радикалы')] среди вкладчиков, которые не могут получить свои деньги: #R 5%#! средних слоёв, #R 3%#! высших слоёв и #R 2%#! низших слоёв."
+ },
+ "banking_bank_holiday_reopen_tt": {
+  "en": "If the banks stay shut the full #v 90#! days, depositors come back when they reopen: momentum #G +1#!.",
+  "ru": "Если банки остаются закрытыми все #v 90#! дней, вкладчики возвращаются, когда они вновь открываются: импульс #G +1#!."
+ },
+ "banking_button_locked_by_law_tt": {
+  "en": "Your banking law allows this tool",
+  "ru": "Ваш закон о банках допускает этот инструмент"
+ },
+ "banking_button_locked_capital_controls_tt": {
+  "en": "Your banking law allows capital controls, or you are at war",
+  "ru": "Ваш закон о банках допускает контроль капитала, или вы воюете"
  },
  "banking_capital_controls_out": {
   "en": "Capital Controls",
   "ru": "Контроль капитала"
  },
+ "banking_countercyclical_capital_buffer": {
+  "en": "Counter-cyclical Buffer",
+  "ru": "Контрциклический буфер"
+ },
+ "banking_crash_intervention_correspondent_liquidity": {
+  "en": "Correspondent Liquidity Injection",
+  "ru": "Вливание ликвидности через банки-корреспонденты"
+ },
+ "banking_crash_intervention_deposit_guarantee": {
+  "en": "Active Deposit Guarantee",
+  "ru": "Действующая гарантия вкладов"
+ },
+ "banking_crash_intervention_dev_bank_lending": {
+  "en": "Development-Bank Crisis Lending",
+  "ru": "Кризисное кредитование банка развития"
+ },
+ "banking_crash_intervention_discount_window": {
+  "en": "Emergency Discount Window",
+  "ru": "Экстренное учётное окно"
+ },
+ "banking_crash_intervention_keynesian_stimulus": {
+  "en": "Keynesian Fiscal Stimulus",
+  "ru": "Кейнсианское фискальное стимулирование"
+ },
+ "banking_crash_intervention_mutual_clearing": {
+  "en": "Mutual Clearing-House Bailout",
+  "ru": "Спасение расчётной палаты взаимопомощи"
+ },
+ "banking_crash_intervention_nationalize": {
+  "en": "Nationalized Banking Sector",
+  "ru": "Национализированный банковский сектор"
+ },
+ "banking_crash_intervention_suspend_convertibility": {
+  "en": "Suspended Convertibility",
+  "ru": "Приостановленная конвертируемость"
+ },
+ "banking_crash_intervention_swap_lines": {
+  "en": "International Swap Lines",
+  "ru": "Международные линии валютного свопа"
+ },
+ "banking_crash_response_cost": {
+  "en": "Crisis Response Spending",
+  "ru": "Расходы на антикризисные меры"
+ },
+ "banking_crisis_capital_controls_modifier": {
+  "en": "Targeted Capital Controls",
+  "ru": "Целевой контроль капитала"
+ },
+ "banking_crisis_confidence_messaging_modifier": {
+  "en": "Confidence Messaging",
+  "ru": "Сообщения для восстановления доверия"
+ },
+ "banking_crisis_monetary_stabilization_modifier": {
+  "en": "Monetary Stabilization",
+  "ru": "Денежная стабилизация"
+ },
+ "banking_crisis_protectionism_light_modifier": {
+  "en": "Partial Trade Restrictions",
+  "ru": "Частичные торговые ограничения"
+ },
+ "banking_crisis_protectionism_modifier": {
+  "en": "Emergency Trade Restrictions",
+  "ru": "Экстренные торговые ограничения"
+ },
+ "banking_cycle_value_bar_name": {
+  "en": "[concept_banking_cycle] Value",
+  "ru": "[concept_banking_cycle]: значение"
+ },
+ "banking_cycle_value_bar_second": {
+  "en": "frenzy",
+  "ru": "ажиотаж"
+ },
+ "banking_dash_active_header": {
+  "en": "Active Policies",
+  "ru": "Действующие политики"
+ },
+ "banking_dash_available_header": {
+  "en": "Available Interventions",
+  "ru": "Доступные интервенции"
+ },
+ "banking_dash_btn_disable": {
+  "en": "Disable",
+  "ru": "Отключить"
+ },
+ "banking_dash_btn_enable": {
+  "en": "Enable",
+  "ru": "Включить"
+ },
+ "banking_dash_btn_execute": {
+  "en": "Transfer",
+  "ru": "Перевести"
+ },
+ "banking_dash_bubble_band_building": {
+  "en": "#white Building#!",
+  "ru": "#white Формируется#!"
+ },
+ "banking_dash_bubble_band_elevated": {
+  "en": "#yellow Elevated#!",
+  "ru": "#yellow Повышенное#!"
+ },
+ "banking_dash_bubble_band_high": {
+  "en": "#gold High#!",
+  "ru": "#gold Высокое#!"
+ },
+ "banking_dash_bubble_band_low": {
+  "en": "#green Low#!",
+  "ru": "#green Низкое#!"
+ },
+ "banking_dash_bubble_band_severe": {
+  "en": "#red Severe#!",
+  "ru": "#red Критическое#!"
+ },
+ "banking_dash_bubble_change_range": {
+  "en": "[Country.MakeScope.ScriptValue('banking_disp_bubble_change_lo')|+=1] to [Country.MakeScope.ScriptValue('banking_disp_bubble_change_hi')|+=1]",
+  "ru": "от [Country.MakeScope.ScriptValue('banking_disp_bubble_change_lo')|+=1] до [Country.MakeScope.ScriptValue('banking_disp_bubble_change_hi')|+=1]"
+ },
+ "banking_dash_bubble_change_tt": {
+  "en": "#header Bubble Pressure Next Month#!\\nHow far [concept_bubble_pressure] can move at the next monthly update, worked out from the readings above. Crashes and events can move it further, and it stays between 0 and 100.\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')] from the phase, active policies, laws and events\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_pushes'), '(CFixedPoint)0' ), 'banking_dash_change_stance_bubble', 'banking_dash_change_stance_none' )]",
+  "ru": "#header Давление пузыря в следующем месяце#!\\nНа сколько может сместиться [concept_bubble_pressure|l] при следующем ежемесячном обновлении, исходя из показаний выше. Крахи и события могут сместить его сильнее; при этом оно остаётся между 0 и 100.\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_bubble_pressure_monthly_add')] от фазы, действующих политик, законов и событий\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_pushes'), '(CFixedPoint)0' ), 'banking_dash_change_stance_bubble', 'banking_dash_change_stance_none' )]"
+ },
+ "banking_dash_bubble_fx_building": {
+  "en": "Only a Frenzy gives the monthly [concept_banking_crash] roll much to work with. In a market economy speculation has begun to feed momentum.",
+  "ru": "Только при Ажиотаже ежемесячная проверка на [concept_banking_crash|l] находит достаточно оснований. В рыночной экономике спекуляция начала подпитывать импульс."
+ },
+ "banking_dash_bubble_fx_elevated": {
+  "en": "A Frenzy now crashes at a real rate, and a Boom can. In a market economy speculation feeds momentum, so a rising cycle keeps climbing.",
+  "ru": "Теперь Ажиотаж приводит к краху с реальной вероятностью, а Бум — может. В рыночной экономике спекуляция подпитывает импульс, поэтому растущий цикл продолжает расти."
+ },
+ "banking_dash_bubble_fx_high": {
+  "en": "A Boom or Frenzy crashes at a high rate, and even an Expansion can. A crash from here would be severe. In a market economy speculation pushes momentum up strongly, so the climb is hard to stop.",
+  "ru": "Бум или Ажиотаж приводят к краху с высокой вероятностью, и даже Расширение может. Крах отсюда был бы жестоким. В рыночной экономике спекуляция сильно толкает импульс вверх, поэтому рост трудно остановить."
+ },
+ "banking_dash_bubble_fx_low": {
+  "en": "Too little air to crash on: the monthly [concept_banking_crash] roll reads nothing in any phase. In a market economy it is not yet feeding momentum.",
+  "ru": "Слишком мало воздуха для краха: ежемесячная проверка на [concept_banking_crash|l] ничего не показывает ни в одной фазе. В рыночной экономике он пока не подпитывает импульс."
+ },
+ "banking_dash_bubble_fx_severe": {
+  "en": "Even a Stable cycle can crash now, and a Frenzy seldom lasts long. A crash from here would be severe, and every crash wipes bubble pressure back to zero. In a market economy speculation pushes momentum as hard as it ever does.",
+  "ru": "Теперь может рухнуть даже Стабильный цикл, а Ажиотаж редко длится долго. Крах отсюда был бы жестоким, а каждый крах обнуляет давление пузыря. В рыночной экономике спекуляция толкает импульс так сильно, как только может."
+ },
+ "banking_dash_bubble_tt": {
+  "en": "#header Bubble Pressure#!\\nAccumulated speculative excess. It does not move the cycle by itself, but it is the main input to the monthly crash roll and to how severe a crash is when one happens. Command and cooperative economies are far less exposed to it. Nobody knows exactly how much air is in a bubble: the panel shows only a band.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! from active policies, laws and events\\nThe policy stance, currently [Country.GetCustom('te_mon_stance_band_name')] — [Country.GetCustom('te_mon_stance_bubble_effect')], on the central bank's own estimate of what the economy can bear",
+  "ru": "#header Давление пузыря#!\\nНакопленный спекулятивный избыток. Само по себе оно не двигает цикл, но служит главным входом для ежемесячной проверки на крах и для тяжести краха, когда он случается. Командные и кооперативные экономики подвержены ему гораздо меньше. Никто точно не знает, сколько воздуха в пузыре: панель показывает лишь диапазон.\\n$TOOLTIP_DELIMITER$\\n#title Ежемесячно толкают:#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! от действующих политик, законов и событий\\nКурс политики, сейчас [Country.GetCustom('te_mon_stance_band_name')] — [Country.GetCustom('te_mon_stance_bubble_effect')], по собственной оценке центрального банка того, что способна выдержать экономика"
+ },
+ "banking_dash_bubble_word_tt": {
+  "en": "#header Bubble Pressure#!\\n[Country.GetCustom('banking_dash_bubble_band')]\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('banking_dash_bubble_effect')]\\n#lore Command and cooperative economies are far less exposed to crashes, and feel little or none of the push on momentum.#!",
+  "ru": "#header Давление пузыря#!\\n[Country.GetCustom('banking_dash_bubble_band')]\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('banking_dash_bubble_effect')]\\n#lore Командные и кооперативные экономики гораздо меньше подвержены крахам и почти или совсем не чувствуют толчка импульса.#!"
+ },
+ "banking_dash_budget_free_tt": {
+  "en": "#header Points Free#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! points can still be spent. An intervention can be switched on only while its cost fits in what is free, so at 0 none can be switched on until one is switched off or a law raises the budget.\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]",
+  "ru": "#header Свободные очки#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! очков ещё можно потратить. Интервенцию можно включить, только пока её стоимость укладывается в свободное, поэтому при 0 ничего нельзя включить, пока не отключена другая или закон не повысит бюджет.\\n$TOOLTIP_DELIMITER$\\n[Country.GetModifier.GetValueWithBreakdownFor('country_banking_intervention_max_add')]"
+ },
+ "banking_dash_budget_tt": {
+  "en": "#header Intervention Budget#!\\nPoints left to spend on interventions. Every active policy holds its cost for as long as it stays enabled, so disabling one frees its points again. The [concept_financial_regulation] law sets most of the budget, a national bank and a power bloc's banking union add a point each, and the leader of a common currency a member has adopted gains up to three more.\\n$TOOLTIP_DELIMITER$\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! points free right now",
+  "ru": "#header Бюджет интервенций#!\\nОчки, оставшиеся на интервенции. Каждая действующая политика удерживает свою стоимость, пока включена, поэтому отключение возвращает очки. Закон о [Concept('concept_financial_regulation', 'финансовом регулировании')] задаёт большую часть бюджета, национальный банк и банковский союз силового блока добавляют по очку, а лидер общей валюты, принятой одним из членов, получает до трёх дополнительных.\\n$TOOLTIP_DELIMITER$\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! очков свободно прямо сейчас"
+ },
+ "banking_dash_budget_used": {
+  "en": "#v [Country.MakeScope.ScriptValue('banking_display_points_used')|0]#! used",
+  "ru": "#v [Country.MakeScope.ScriptValue('banking_display_points_used')|0]#! используется"
+ },
+ "banking_dash_budget_used_tt": {
+  "en": "#header Points In Use#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_used')|0]#! of the budget's #variable [Country.MakeScope.ScriptValue('banking_display_points_total')|0]#! points are held by the interventions switched on. Each holds its cost for as long as it stays enabled. They are listed under Active Policies below, and disabling one hands its points back.",
+  "ru": "#header Очки в использовании#!\\n#variable [Country.MakeScope.ScriptValue('banking_display_points_used')|0]#! из #variable [Country.MakeScope.ScriptValue('banking_display_points_total')|0]#! очков бюджета удерживаются включёнными интервенциями. Каждая удерживает свою стоимость, пока включена. Они перечислены ниже в разделе «Действующие политики», а отключение возвращает очки."
+ },
+ "banking_dash_budget_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! free",
+  "ru": "#v [Country.MakeScope.ScriptValue('banking_display_points_free')|0]#! свободно"
+ },
+ "banking_dash_cat_allocation": {
+  "en": "Allocation & Supply",
+  "ru": "Распределение и снабжение"
+ },
+ "banking_dash_cat_council": {
+  "en": "Council Direction",
+  "ru": "Руководство советом"
+ },
+ "banking_dash_cat_credit": {
+  "en": "Directed Credit",
+  "ru": "Целевое кредитование"
+ },
+ "banking_dash_cat_crisis": {
+  "en": "Crisis Response",
+  "ru": "Реагирование на кризис"
+ },
  "banking_dash_cat_external": {
   "en": "External & Currency",
   "ru": "Внешние расчёты и валюта"
+ },
+ "banking_dash_cat_investment": {
+  "en": "Investment & Credit",
+  "ru": "Инвестиции и кредит"
+ },
+ "banking_dash_cat_membership": {
+  "en": "Membership Mobilization",
+  "ru": "Мобилизация членов"
+ },
+ "banking_dash_cat_monetary": {
+  "en": "Monetary Policy",
+  "ru": "Денежная политика"
+ },
+ "banking_dash_cat_plan": {
+  "en": "Plan Management",
+  "ru": "Управление планом"
+ },
+ "banking_dash_cat_pool": {
+  "en": "Investment Pool Transfers",
+  "ru": "Переводы в инвестиционный пул"
+ },
+ "banking_dash_cat_prudential": {
+  "en": "Prudential Regulation",
+  "ru": "Пруденциальное регулирование"
+ },
+ "banking_dash_cat_surplus": {
+  "en": "Surplus & Reserves",
+  "ru": "Профицит и резервы"
+ },
+ "banking_dash_change_holiday": {
+  "en": "\\nThe bank holiday keeps momentum from falling below 0.",
+  "ru": "\\nБанковские каникулы не дают импульсу упасть ниже 0."
+ },
+ "banking_dash_change_reopen": {
+  "en": "\\n#variable [Country.MakeScope.ScriptValue('banking_disp_momentum_reopen')|+=2]#! as the banks reopen after a full bank holiday, the part the decay leaves",
+  "ru": "\\n#variable [Country.MakeScope.ScriptValue('banking_disp_momentum_reopen')|+=2]#! при вновь открытии банков после полных банковских каникул, часть, которую оставляет затухание"
+ },
+ "banking_dash_change_stance_bubble": {
+  "en": "#variable [Country.MakeScope.ScriptValue('banking_disp_stance_bubble_lo')|+=1]#! to #variable [Country.MakeScope.ScriptValue('banking_disp_stance_bubble_hi')|+=1]#! from the policy stance, [Country.GetCustom('te_mon_stance_band_name')], allowing for the central bank's estimate of what the economy can bear being off by up to [Country.MakeScope.ScriptValue('te_mon_forecast_error_bound')|1] points",
+  "ru": "от #variable [Country.MakeScope.ScriptValue('banking_disp_stance_bubble_lo')|+=1]#! до #variable [Country.MakeScope.ScriptValue('banking_disp_stance_bubble_hi')|+=1]#! за счёт курса политики, [Country.GetCustom('te_mon_stance_band_name')], с учётом того, что оценка центральным банком того, что способна выдержать экономика, может ошибаться не более чем на [Country.MakeScope.ScriptValue('te_mon_forecast_error_bound')|1] п."
+ },
+ "banking_dash_change_stance_none": {
+  "en": "No push from a policy stance: the country sets no interest rate of its own",
+  "ru": "Толчка от курса политики нет: страна не устанавливает собственной процентной ставки"
+ },
+ "banking_dash_dormant_monetary_note": {
+  "en": "#lore Readings only. The controls open when your#! #tooltippable Banking Cycle#! #lore starts.#!",
+  "ru": "#lore Только показания. Элементы управления откроются, когда начнётся#! #tooltippable Банковский цикл#! #lore вашей страны.#!"
+ },
+ "banking_dash_dormant_tools_note": {
+  "en": "#lore These open when your#! #tooltippable Banking Cycle#! #lore starts.#!",
+  "ru": "#lore Они откроются, когда начнётся#! #tooltippable Банковский цикл#! #lore вашей страны.#!"
+ },
+ "banking_dash_how_anchor": {
+  "en": "A [concept_banking_monetary_anchor] buys the anchor's credibility: your expected inflation is pulled toward the anchor's target as firmly as 80% of its central bank's word is worth, if that is more than your own. It costs you the dial: you take the anchor's rate and exchange rate, and cannot print or buy assets. Your inflation, cycle and neutral rate stay your own, so the borrowed rate is the wrong one whenever the two economies part ways, and you cannot devalue your way out. There are three ways to be anchored: a $currency_peg$ treaty (spread +0.5, credit standing −0.5 points, and a peg the markets can break), a power bloc's common currency (no spread and no peg to break: the premium rises instead), and a currency board, by which a puppet, vassal, colony or crown land uses its overlord's money (spread +0.25). As an anchor, every 5% of world GDP pegged to your currency is −0.1 points of credit standing, to −0.5.",
+  "ru": "[concept_banking_monetary_anchor] покупает доверие якоря: ваша ожидаемая инфляция подтягивается к цели якоря с силой, равной 80% веса слова его центрального банка, если это больше вашего собственного. Цена — рычаг управления: вы принимаете ставку и обменный курс якоря и не можете ни печатать деньги, ни покупать активы. Ваша инфляция, цикл и нейтральная ставка остаются вашими, поэтому заимствованная ставка неверна всякий раз, когда две экономики расходятся, и девальвацией не выкрутиться. Есть три способа быть привязанным: договор «$currency_peg$» (спред +0,5, кредитоспособность −0,5 пункта и привязка, которую рынки могут сломать), общая валюта силового блока (без спреда и без привязки, которую можно сломать: вместо этого растёт премия) и валютный совет, при котором марионетка, вассал, колония или коронная земля пользуются деньгами своего сюзерена (спред +0,25). В роли якоря каждые 5% мирового ВВП, привязанные к вашей валюте, дают −0,1 пункта кредитоспособности, до −0,5."
+ },
+ "banking_dash_how_backstops": {
+  "en": "A $swap_line$ you receive takes a point off your risk premium and adds 2 peg confidence a month, and in a panic your borrowed gold leaves at the ordinary speed instead of double. In a slump, a run on your peg or a hyperinflation the provider also lends you 0.1% of your GDP a month, to 2%; a war is not one of those, since a swap line is a central bank's liquidity instrument, not war finance. It is a loan: once the crisis passes the same 0.1% a month flows back, interest-free, and whatever is still owed when the line ends is settled in one payment, into debt if need be. You may hold one line at a time. A $lender_of_last_resort$ takes half of what your debt load adds to your premium, and imported panics start a fifth less deep. It is worth nothing while your guarantor is living down a guarantee it broke, and less every time you call it: half, then 35%, then 20%, then nothing on the third default. Ten quiet years forget one call. What you extend costs you the recipient's benefit × its GDP ÷ yours, never more than the whole: backing a minor is a sliver, backing an equal costs all of it, and a ward that defaults calls the guarantee.",
+  "ru": "Получаемый вами «$swap_line$» снимает пункт с вашей премии за риск и добавляет 2 к доверию к привязке в месяц, а при панике ваше заёмное золото уходит с обычной скоростью, а не вдвое быстрее. При спаде, набеге на вашу привязку или гиперинфляции поставщик также одалживает вам 0,1% вашего ВВП в месяц, до 2%; война к ним не относится, поскольку валютный своп — инструмент ликвидности центрального банка, а не военное финансирование. Это заём: после кризиса те же 0,1% в месяц возвращаются без процентов, а всё, что остаётся должным при окончании линии, погашается одним платежом, при необходимости — в долг. Одновременно можно иметь одну линию. «$lender_of_last_resort$» берёт на себя половину того, что ваша долговая нагрузка добавляет к вашей премии, а импортированные паники начинаются на пятую часть мягче. Он ничего не стоит, пока ваш гарант расплачивается за нарушенную им гарантию, и стоит всё меньше при каждом обращении: половину, затем 35%, затем 20%, затем ничего при третьем дефолте. Десять тихих лет стирают одно обращение. То, что вы предоставляете, стоит вам выгоды получателя × его ВВП ÷ ваш, но не больше целого: поддержка малой страны — крошка, поддержка равной стоит всего, а подопечный, объявивший дефолт, вызывает гарантию."
+ },
+ "banking_dash_how_borrowing": {
+  "en": "The market yield under [concept_banking_rate_paid] is the higher of your policy rate and the [concept_banking_reference_rate] plus the inflation lenders expect of you: cutting the rate beneath that floor stops saving you anything. Only inflation your lenders did not see coming erodes a debt; once they have priced it in, the floor rises with them. [concept_banking_credit_standing] is what your country is, and is floored, so standing past the floor buys nothing. [concept_banking_risk_premium] is what is happening now, charged on top of that floor so a panic bites a great power as hard as anyone. It grows with your debt once it passes a quarter of your credit limit, to +4% at the limit; with expectations more than three points from your bank's target, a quarter of a point a point; and with half a point for every level of printing.",
+  "ru": "Рыночная доходность по [Concept('concept_banking_rate_paid', 'выплачиваемой ставке')] — большее из вашей ключевой ставки и [Concept('concept_banking_reference_rate', 'референсной ставки')] плюс инфляция, которую от вас ожидают кредиторы: снижение ставки ниже этого порога ничего больше не экономит. Долг разъедает только та инфляция, которую кредиторы не предвидели; как только они её учли, порог растёт вместе с ней. [concept_banking_credit_standing] — то, чем является ваша страна, и у неё есть нижний порог, поэтому положение выше порога ничего не покупает. [concept_banking_risk_premium] — то, что происходит сейчас; она взимается сверх этого порога, чтобы паника била по великой державе так же сильно, как по любой другой. Она растёт вместе с вашим долгом, когда он превышает четверть кредитного лимита, до +4% на лимите; с ожиданиями, отстоящими от цели вашего банка более чем на три пункта, на четверть пункта за пункт; и на полпункта за каждый уровень печатания денег."
+ },
+ "banking_dash_how_budget": {
+  "en": "Every active policy holds its points for as long as it stays enabled, and disabling it frees them. Your [concept_financial_regulation] law sets most of the budget, and a national bank and a power bloc's banking union add a point each. Switching a tool on also has a price of its own, in money, radicals or infamy: its Enable button's tooltip shows it, and says why the button is grayed when it is.",
+  "ru": "Каждая действующая политика удерживает свои очки, пока включена, а отключение освобождает их. Закон о [Concept('concept_financial_regulation', 'финансовом регулировании')] задаёт большую часть бюджета, а национальный банк и банковский союз силового блока добавляют по очку. Включение инструмента имеет и собственную цену — деньгами, радикалами или дурной славой: её показывает подсказка кнопки «Включить» и объясняет, почему кнопка серая, когда она такая."
+ },
+ "banking_dash_how_crashes": {
+  "en": "Every month the game rolls for a [concept_banking_crash]. The higher the phase, the lower the bubble pressure at which the risk begins and the faster it grows. A crash's severity grows with the bubble pressure at that moment, with a large dose of chance; it decides how far the cycle falls, and every crash wipes bubble pressure to zero. A crash can also spread from a trading partner's ([concept_banking_contagion]). Command and cooperative economies are far less exposed.",
+  "ru": "Каждый месяц игра проверяет, случится ли [concept_banking_crash|l]. Чем выше фаза, тем ниже давление пузыря, при котором начинается риск, и тем быстрее он растёт. Тяжесть краха растёт с давлением пузыря на тот момент, с большой долей случайности; она определяет, насколько упадёт цикл, а каждый крах обнуляет давление пузыря. Крах может также перекинуться от торгового партнёра ([concept_banking_contagion|l]). Командные и кооперативные экономики подвержены гораздо меньше."
+ },
+ "banking_dash_how_cycle": {
+  "en": "The cycle value runs from 0 to 100 and sets the phase, from Panic through Stable to Frenzy. Each phase applies a modifier every month: in a market economy the low phases cut output and drain [concept_bubble_pressure], and the high phases raise output and build it. A command economy's phases act on construction and bureaucracy instead, and a cooperative's on the investment pool.",
+  "ru": "Значение цикла идёт от 0 до 100 и определяет фазу — от Паники через Стабильность до Ажиотажа. Каждая фаза ежемесячно применяет модификатор: в рыночной экономике низкие фазы сокращают выпуск и истощают [concept_bubble_pressure|l], а высокие повышают выпуск и наращивают его. В командной экономике фазы действуют на строительство и бюрократию, а в кооперативной — на инвестиционный пул."
+ },
+ "banking_dash_how_cycle_moves": {
+  "en": "[concept_banking_momentum] is added to the cycle value every month and loses a tenth of itself each month, so it sets how fast conditions change. The phases and a random monthly nudge pull the cycle back toward the middle; your policies, laws, events and budget balance push it. In a market economy bubble pressure also feeds momentum, so a boom keeps climbing once a bubble forms. The panel shows momentum and bubble pressure as bands, not figures.",
+  "ru": "[concept_banking_momentum] прибавляется к значению цикла каждый месяц и ежемесячно теряет десятую часть себя, поэтому определяет, как быстро меняются условия. Фазы и случайный ежемесячный толчок возвращают цикл к середине; ваши политики, законы, события и бюджет толкают его. В рыночной экономике давление пузыря тоже подпитывает импульс, поэтому бум, раз образовался пузырь, продолжает расти. Панель показывает импульс и давление пузыря диапазонами, а не числами."
+ },
+ "banking_dash_how_expected": {
+  "en": "[concept_banking_expected_inflation] is the floor under your borrowing: nobody holds your paper below a normal return over the inflation they expect, so lenders charge at least the [concept_banking_reference_rate] plus it, however low your rate goes, and cutting your way out stops working. Once it strays from your bank's target by more than a few points they charge a premium for the doubt. A delegated bank steers on the underlying trend, not on this figure. Expectations creep toward the target as fast as the bank is believed: an independent central bank twice as quickly as a delegated one, a bank the treasury owns barely at all, and a currency redeemable in metal without having to say anything. The further prices run from the target, the less of it anybody prices in, which is how expectations come unanchored and why they are slow to come back.",
+  "ru": "[concept_banking_expected_inflation] — нижний порог ваших заимствований: никто не держит ваши бумаги ниже нормальной доходности сверх ожидаемой ими инфляции, поэтому кредиторы берут как минимум [concept_banking_reference_rate|l] плюс её, как бы низко вы ни опускали ставку, и выход через снижение перестаёт работать. Когда она отклоняется от цели вашего банка более чем на несколько пунктов, они берут премию за сомнение. Делегированный банк ориентируется на базовый тренд, а не на эту цифру. Ожидания подтягиваются к цели настолько быстро, насколько банку верят: независимый центральный банк вдвое быстрее делегированного, банк, принадлежащий казначейству, едва ли вообще, а валюта, обмениваемая на металл, — без необходимости что-либо говорить. Чем дальше цены уходят от цели, тем меньше в неё кто-либо закладывает, из-за чего ожидания теряют якорь и так медленно возвращаются."
+ },
+ "banking_dash_how_fx": {
+  "en": "The [concept_banking_exchange_rate] closes a twelfth of the distance to its target each month. The target is par, 100, plus your real rate against the world's (4 a point, to five points), less 2 a point of inflation above the world's (to ten points), less 1.5 a point of risk premium, plus events still working through. A high rate and a weak currency are not a contradiction: the first term is what holding your money pays, the second is whether anyone trusts it. Trust is lost by inflating faster than the world, not won by deflating: what a falling price level pays your holders is already in the first term. A country without a national bank takes the market's rate and earns no carry either way.",
+  "ru": "[concept_banking_exchange_rate] ежемесячно проходит одну двенадцатую пути до цели. Цель — паритет, 100, плюс ваша реальная ставка против мировой (4 за пункт, до пяти пунктов), минус 2 за пункт инфляции сверх мировой (до десяти пунктов), минус 1,5 за пункт премии за риск, плюс события, ещё не отработавшие. Высокая ставка и слабая валюта не противоречат друг другу: первое слагаемое — то, что платят за хранение ваших денег, второе — доверяет ли им кто-нибудь. Доверие теряется из-за инфляции быстрее мировой, а не приобретается дефляцией: то, что падающий уровень цен платит вашим держателям, уже входит в первое слагаемое. Страна без национального банка принимает рыночный курс и в любом случае не получает процентного дохода (кэрри)."
+ },
+ "banking_dash_how_fx_effects": {
+  "en": "Every point under par is +1.25% $state_export_advantage_mult$ and −1.25% $state_import_advantage_mult$ in every state, and every point over par the reverse. A weak currency also adds 0.05 points of risk premium a point, as debts owed abroad get heavier. On prices only a change counts: each point your currency sits below its own average of the last three years adds 0.15 points to your cost of living, more for a market that lives by trade and less for one that barely trades, within the 6-point cap it shares with the price of goods. A delegated bank looks through it, as it would a bad harvest.",
+  "ru": "Каждый пункт ниже паритета даёт +1,25% $state_export_advantage_mult$ и −1,25% $state_import_advantage_mult$ в каждой области, а каждый пункт выше — наоборот. Слабая валюта также добавляет 0,05 пункта премии за риск за пункт, так как долги за рубежом становятся тяжелее. В ценах значение имеет лишь изменение: каждый пункт, на который ваша валюта ниже её собственного среднего за последние три года, добавляет 0,15 пункта к вашей стоимости жизни, больше для рынка, живущего торговлей, и меньше для почти не торгующего, в рамках предела в 6 пунктов, общего с ценой товаров. Делегированный банк смотрит сквозь это, как смотрел бы на плохой урожай."
+ },
+ "banking_dash_how_fx_fixed": {
+  "en": "Under a fixed parity the index cannot move, so the same forces show as overvaluation: how far par sits above where your currency would float. On a gold standard every 2 points of it beyond 5 costs a point of peg confidence a month, apart from what a rate under the world's put there, which your gold already pays for. Inflate at home under a fixed parity and you price yourself out of it. On commodity money there is no reserve to lose, so overvaluation is paid in prices: every point of it your own inflation put there, beyond the first 2, takes a point off the price pressure you carry, to 6 points: coin leaving a country whose prices have run ahead of the world's.",
+  "ru": "При фиксированном паритете индекс не может двигаться, поэтому те же силы проявляются как переоценка: насколько паритет выше того, где ваша валюта плавала бы. При золотом стандарте каждые 2 пункта переоценки сверх 5 стоят пункта доверия к привязке в месяц, помимо того, что туда вносит ставка ниже мировой, за что ваше золото уже платит. Инфлируйте дома при фиксированном паритете — и вы вытесните себя из него. При товарных деньгах терять резерв нечем, поэтому переоценка оплачивается в ценах: каждый пункт её, созданный вашей собственной инфляцией, сверх первых 2, снимает пункт с ценового давления, которое вы несёте, до 6 пунктов: монета уходит из страны, чьи цены убежали вперёд мировых."
+ },
+ "banking_dash_how_gold": {
+  "en": "The [concept_banking_bank_gold] is the bank's, not the treasury's: the government cannot spend it, and nothing that happens to it shows in your budget. Its limit grows with your economy, so a vault nobody tops up thins out over the decades. Two things fill it: a rate above the [concept_banking_world_rate], which borrows gold from abroad, and Recapitalize the Bank, which buys it with the treasury's own money. Nothing takes it back out for the government's use.",
+  "ru": "[concept_banking_bank_gold] принадлежит банку, а не казне: правительство не может его тратить, и то, что с ним происходит, не отражается в вашем бюджете. Его предел растёт вместе с вашей экономикой, поэтому хранилище, которое никто не пополняет, за десятилетия редеет. Его наполняют две вещи: ставка выше [concept_banking_world_rate|l], которая занимает золото за рубежом, и «Рекапитализировать банк», которое покупает его на деньги самой казны. Ничто не забирает его обратно для нужд правительства."
+ },
+ "banking_dash_how_gold_flow": {
+  "en": "Each point your rate sits above or below the World Rate moves gold worth 0.2% of your GDP a month, into the vault or out of it, to no more than 5 points. Gold drawn in by a high rate is [concept_banking_borrowed_gold]: it is here for the return, earned from your own merchants and banks rather than the treasury, and the moment your rate is no longer above the world's it leaves first, at twice the ordinary speed. A government with money buys its gold instead. Gold arriving pushes prices up and gold leaving pulls them down, by about half a point of price pressure for every 1% of GDP a year that moves. Leave the gold standard, or lose your national bank, and the borrowed gold goes home at once.",
+  "ru": "Каждый пункт, на который ваша ставка выше или ниже Мировой ставки, перемещает золото на 0,2% вашего ВВП в месяц в хранилище или из него, не более чем за 5 пунктов. Золото, привлечённое высокой ставкой, — это [concept_banking_borrowed_gold|l]: оно здесь ради доходности, заработанной вашими собственными купцами и банками, а не казной, и в тот момент, когда ваша ставка перестаёт быть выше мировой, оно уходит первым, вдвое быстрее обычного. Правительство, у которого есть деньги, покупает золото само. Приходящее золото толкает цены вверх, а уходящее тянет вниз, примерно на полпункта ценового давления за каждый 1% ВВП в год, который перемещается. Откажитесь от золотого стандарта или лишитесь национального банка — и заёмное золото сразу вернётся домой."
+ },
+ "banking_dash_how_header": {
+  "en": "How Banking Works",
+  "ru": "Как работает банковское дело"
+ },
+ "banking_dash_how_mandates": {
+  "en": "A delegated or independent central bank sets the [concept_banking_rate_target] each month by its [concept_banking_mandate]. Held by hand, the mandate does nothing.\\n#b $banking_dash_mon_mandate_inflation$#! answers for prices alone. For every point prices run above its target it puts the rate up by more than a point, and it leaves the [concept_banking_cycle] to them: it tightens into a boom only as prices rise and cuts in a slump only as they fall, so booms run further and slumps go deeper. Lenders believe it more than any other rule, which holds expected inflation closer to the target, but they take two years to come round.\\n#b The $banking_dash_mon_mandate_dual$#! reacts to inflation as hard, and leans against the cycle with its full weight on top: tightening into a boom, hard into a frenzy, and cutting hard in a panic. It judges the cycle by where it is heading, so it stops leaning on a boom that is already turning and eases before a slump arrives. Every bank starts on it.\\n#b $banking_dash_mon_mandate_growth$#! runs about a point looser, reacts only half as hard to the cycle, and ignores inflation until it passes about four percent. Above that it leans on prices as hard as the others, because inflation left to run past eight percent sets off a wage spiral no rate may catch. Cheaper credit, more momentum, faster bubbles and more crashes: that is the trade. It never sets a tighter rate than the Dual Mandate would, so with inflation low, and through a downturn or a panic, the two ask for the same rate.\\n#b $banking_dash_mon_mandate_peg$#! holds the [concept_banking_world_rate], to the tenth of a point (up to a point above it while the vault is short of gold), so that gold does not drain away, and ignores your own cycle. Only a convertible gold standard can run it.",
+  "ru": "Делегированный или независимый центральный банк ежемесячно устанавливает [concept_banking_rate_target|l] по своему [Concept('concept_banking_mandate', 'мандату')]. Когда управление ручное, мандат ничего не делает.\\n#b $banking_dash_mon_mandate_inflation$#! отвечает только за цены. За каждый пункт, на который цены превышают его цель, он поднимает ставку больше чем на пункт, а [concept_banking_cycle|l] оставляет им: он ужесточает политику в бум только по мере роста цен и снижает ставку в спад только по мере их падения, поэтому бумы длятся дольше, а спады глубже. Кредиторы верят ему больше, чем любому другому правилу, что удерживает ожидаемую инфляцию ближе к цели, но им нужно два года, чтобы прийти к этому.\\n#b $banking_dash_mon_mandate_dual$#! реагирует на инфляцию так же жёстко и вдобавок давит на цикл всем весом: ужесточает политику в бум, жёстко — при ажиотаже, и резко снижает ставку в панику. Он оценивает цикл по тому, куда тот направляется, поэтому перестаёт давить на бум, который уже разворачивается, и смягчается до наступления спада. Каждый банк начинает с него.\\n#b $banking_dash_mon_mandate_growth$#! держит ставку примерно на пункт мягче, вдвое слабее реагирует на цикл и игнорирует инфляцию, пока она не превысит около четырёх процентов. Выше этого он давит на цены так же жёстко, как другие, потому что инфляция, которой дали пройти восемь процентов, запускает спираль зарплат, которую не остановит никакая ставка. Более дешёвый кредит, больше импульса, быстрее пузыри и больше крахов: таков размен. Он никогда не устанавливает ставку жёстче, чем установил бы Двойной мандат, поэтому при низкой инфляции, в спад или панику они требуют одной и той же ставки.\\n#b $banking_dash_mon_mandate_peg$#! держит [concept_banking_world_rate|l] с точностью до десятой пункта (до пункта выше неё, пока в хранилище не хватает золота), чтобы золото не утекало, и игнорирует ваш собственный цикл. Запустить его может только конвертируемый золотой стандарт."
+ },
+ "banking_dash_how_mandates_change": {
+  "en": "A change takes effect at the next monthly update, and the mandate is then fixed for a year. Lenders price a looser rule at once: for each step looser, from Inflation Targeting to the Dual Mandate to Growth, expected inflation and the risk premium rise by half a point each, fading over two years. A tighter rule earns nothing at once. Under $law_central_bank_independence$ the mandate is an act on that law, the $amendment_cb_inflation_targeting$ or the $amendment_cb_dual_mandate$, and the bank moves to it 12 months after it passes. To change it, repeal the act in the law panel and pass another: a repeal needs an interest group in government that opposes the act, and its side has to outweigh the act's supporters. On a convertible gold standard the bank defends the peg whatever its act says. Independence also makes delegation permanent: you cannot overrule the bank, ask it to print for the treasury, or quietly run the economy loose in the year before a war. In exchange lenders believe the mandate: a lower credit-standing floor, a smaller premium, and a bank that reads its own economy more accurately.",
+  "ru": "Изменение вступает в силу при следующем ежемесячном обновлении, после чего мандат фиксируется на год. Кредиторы сразу закладывают в цену более мягкое правило: за каждый шаг к более мягкому (Таргетирование инфляции → Двойной мандат → Рост) ожидаемая инфляция и премия за риск растут на полпункта каждая, затухая в течение двух лет. Более жёсткое правило сразу ничего не даёт. При законе «$law_central_bank_independence$» мандат — это акт на основании этого закона: «$amendment_cb_inflation_targeting$» или «$amendment_cb_dual_mandate$», и банк переходит на него через 12 месяцев после принятия. Чтобы изменить его, отмените акт на панели законов и примите другой: для отмены нужна группа интересов в правительстве, выступающая против акта, и её сторона должна перевесить сторонников акта. При конвертируемом золотом стандарте банк защищает привязку, что бы ни говорил его акт. Независимость также делает делегирование постоянным: вы не можете отменить решение банка, попросить его печатать деньги для казны или тихо ослабить экономику за год до войны. Взамен кредиторы верят мандату: ниже порог кредитоспособности, меньше премия, а банк точнее читает свою экономику."
+ },
+ "banking_dash_how_mandates_floor": {
+  "en": "#b Out of room:#! a bank whose rate is on its floor can cut no further. When its rule asks for a lower rate anyway, the bank buys assets on its own account instead: #b one point#! of upward pressure on prices for every point it would have cut below the floor, at most #b five#!. The purchases grow and shrink no faster than the rate itself would move, and they have stopped by the time the rate rises off the floor. $banking_dash_mon_mandate_inflation$ and the $banking_dash_mon_mandate_dual$ buy only while prices are under their target; $banking_dash_mon_mandate_growth$ also buys through a slump with prices on target. This is the bank's own doing and costs you nothing; it needs a fiat or digital currency, and it does not apply to a dial you are steering by hand.",
+  "ru": "#b Нет запаса хода:#! банк, чья ставка достигла нижнего порога, дальше снижать её не может. Когда правило всё равно требует более низкой ставки, банк вместо этого покупает активы за свой счёт: #b один пункт#! повышательного давления на цены за каждый пункт, на который он снизил бы ставку ниже порога, не более #b пяти#!. Покупки растут и сокращаются не быстрее, чем двигалась бы сама ставка, и прекращаются к тому времени, когда ставка поднимается с порога. $banking_dash_mon_mandate_inflation$ и $banking_dash_mon_mandate_dual$ покупают, только пока цены ниже цели; $banking_dash_mon_mandate_growth$ покупает также в спад при ценах на цели. Это собственные действия банка, и вам они ничего не стоят; для них нужна фиатная или цифровая валюта, и они не действуют на рычаг, которым вы управляете вручную."
+ },
+ "banking_dash_how_peg": {
+  "en": "[concept_banking_peg_confidence] holds while the vault can pay: gold draining takes the strain. Once the vault is under a tenth of its limit it moves each month: −3 for every point your rate sits under the World Rate, −2 in a downturn or a panic, −2 while your debt is half your credit limit or more, and +2 (+1 from 70) while your rate is at or above the World Rate and no borrowed gold is waiting to leave. Borrowed gold that wants to go home and cannot be paid counts double, and as a gap of at least half a point: that is a run on a currency. In a deep slump, a Downturn or a Panic while your [concept_banking_policy_stance] reads Tight or Very Tight, it falls by 3 a month whatever the vault holds, and stops recovering; a swap line or your bloc's monetary cooperation still adds its share. Out of trouble it recovers by 3 a month under 40, 2 under 70 and 1 above, while your rate is at or above the World Rate and no borrowed gold is waiting to leave. At 20 or under you are asked to defend the peg, suspend convertibility, or devalue.",
+  "ru": "[concept_banking_peg_confidence] держится, пока хранилище способно платить: нагрузку принимает на себя утечка золота. Когда хранилище опускается ниже десятой части своего предела, доверие ежемесячно меняется: −3 за каждый пункт, на который ваша ставка ниже Мировой ставки, −2 в спад или панику, −2, пока ваш долг составляет половину кредитного лимита или больше, и +2 (+1 с 70), пока ваша ставка не ниже Мировой ставки и нет заёмного золота, ожидающего ухода. Заёмное золото, которое хочет вернуться домой и не может быть выплачено, считается вдвое, и как разрыв не менее полупункта: это набег на валюту. При глубоком упадке — Спаде или Панике, пока ваш [concept_banking_policy_stance] читается как Жёсткий или Очень жёсткий, — оно падает на 3 в месяц независимо от содержимого хранилища и перестаёт восстанавливаться; валютный своп или денежное сотрудничество вашего блока всё равно добавляют свою долю. Вне неприятностей оно восстанавливается на 3 в месяц ниже 40, на 2 ниже 70 и на 1 выше, пока ваша ставка не ниже Мировой ставки и нет заёмного золота, ожидающего ухода. При 20 и ниже вас просят защитить привязку, приостановить конвертируемость или девальвировать."
+ },
+ "banking_dash_how_prices": {
+  "en": "[concept_banking_inflation] is a reading, not a lever: you reach it through the rate, through what you print, and through the laws that set what labor costs. It comes off the [concept_banking_rate_paid], since every debt is written in money: the one part of borrowing a government can quietly arrange for itself, and the reason it is always tempting. It sets the real price of credit, your policy rate less inflation, which the [concept_banking_policy_stance] judges. And it puts you in a price band, whose modifier is what inflation costs. Past the High band's edge it starts feeding itself: workers bargain for next year's prices rather than last year's, and the labor laws behind [concept_banking_wage_pressure] count a second time.",
+  "ru": "[concept_banking_inflation] — показание, а не рычаг: на неё вы влияете через ставку, через то, что печатаете, и через законы, определяющие стоимость труда. Она вычитается из [concept_banking_rate_paid|l], так как каждый долг записан в деньгах: единственная часть заимствований, которую правительство может тихо устроить себе само, и причина, по которой это всегда соблазнительно. Она задаёт реальную цену кредита — вашу ключевую ставку за вычетом инфляции, — которую оценивает [concept_banking_policy_stance|l]. И помещает вас в ценовой диапазон, модификатор которого — это цена инфляции. За краем Высокого диапазона она начинает питаться сама собой: рабочие торгуются за цены следующего года, а не прошлого, и трудовые законы, лежащие в основе [concept_banking_wage_pressure|l], учитываются дважды."
+ },
+ "banking_dash_how_printing": {
+  "en": "[concept_banking_monetisation] pays for spending with money your bank creates instead of money you borrow: the oldest way to pay for a war, and the reason wars end in inflation. The press belongs to the treasury, so it takes a currency your state can create, a national bank to create it through, and a bank that still takes your government's instructions. [concept_banking_asset_purchases] push prices the same way. Both are counted on their own, outside the Price Pressure list, so [concept_banking_inflation_anchoring] does not absorb them.",
+  "ru": "[concept_banking_monetisation] оплачивает расходы деньгами, которые создаёт ваш банк, а не заёмными: старейший способ оплатить войну и причина, по которой войны заканчиваются инфляцией. Печатный станок принадлежит казне, поэтому нужны валюта, которую ваше государство может создавать, национальный банк, через который это делается, и банк, всё ещё принимающий указания вашего правительства. [concept_banking_asset_purchases] давит на цены тем же образом. Оба считаются отдельно, вне списка ценового давления, поэтому [concept_banking_inflation_anchoring|l] их не поглощает."
+ },
+ "banking_dash_how_rate": {
+  "en": "With a national bank and a currency of your own, outside a command economy, you hold the dial: you choose a Rate Target and the policy rate moves toward it each month. Delegated, the central bank sets the target from its mandate instead; Take Control and Delegate switch between you and the bank at no cost. Without a dial your rate is set elsewhere, and the Monetary Policy section says why.",
+  "ru": "При национальном банке и собственной валюте вне командной экономики рычаг у вас в руках: вы выбираете Целевую ставку, и ключевая ставка ежемесячно движется к ней. При делегировании центральный банк сам устанавливает цель по своему мандату; «Взять под контроль» и «Делегировать» переключают между вами и банком без затрат. Без рычага ваша ставка задаётся где-то ещё, и раздел «Денежная политика» объясняет, где."
+ },
+ "banking_dash_how_rate_none": {
+  "en": "A country with no national bank, or on a decentralized currency, sets no rate of its own: it borrows at the [concept_banking_world_rate], plus the inflation its lenders expect of it, plus a point. A national bank on commodity money may set its discount rate from one point under the World Rate to three over it.",
+  "ru": "Страна без национального банка или с децентрализованной валютой не устанавливает собственной ставки: она занимает по [Concept('concept_banking_world_rate', 'мировой ставке')] плюс инфляция, которую ожидают от неё кредиторы, плюс пункт. Национальный банк при товарных деньгах может устанавливать свою учётную ставку от одного пункта ниже Мировой ставки до трёх выше неё."
+ },
+ "banking_dash_how_stance": {
+  "en": "Policy Stance is the bank's estimate of your rate against what your economy can bear. The loose bands add momentum and bubble pressure every month and the tight bands drain them: this is how the rate reaches the cycle. Nobody knows what the economy can bear, not you and not your own central bank, whose reading carries its own error, so the real push can be stronger or weaker than the band says, and stepping the dial to hunt for the exact turning point will not find it.",
+  "ru": "Курс политики — это оценка банком вашей ставки относительно того, что может выдержать ваша экономика. Мягкие диапазоны ежемесячно добавляют импульс и давление пузыря, а жёсткие — истощают их: так ставка доходит до цикла. Никто не знает, что способна выдержать экономика, ни вы, ни ваш центральный банк, чья оценка содержит собственную ошибку, поэтому реальный толчок может быть сильнее или слабее, чем говорит диапазон, и подбор рычага ради точной переломной точки её не найдёт."
+ },
+ "banking_dash_how_start": {
+  "en": "Every country holds this panel from the start of the game, but its [concept_banking_cycle] starts only once it has researched $stock_exchange$ and owns an $building_urban_center$ of level 5 or higher. Until then there are no readings, crashes or contagion, the tools are grayed, and Monetary Policy shows its readings only: a central bank sets its rate by the Dual Mandate, or by the mandate its act names. The cycle starts at Stable, with no momentum and no bubble, and keeps running if the city later shrinks.",
+  "ru": "Эта панель есть у каждой страны с начала игры, но её [concept_banking_cycle|l] начинается только после изучения технологии $stock_exchange$ и при наличии здания $building_urban_center$ уровня 5 или выше. До этого нет ни показаний, ни крахов, ни заражения, инструменты серые, а «Денежная политика» показывает только показания: центральный банк устанавливает ставку по Двойному мандату или по мандату, названному в его акте. Цикл начинается со Стабильности, без импульса и пузыря, и продолжает идти, если город потом сжимается."
+ },
+ "banking_dash_how_sub_arrangements": {
+  "en": "International Arrangements",
+  "ru": "Международные договорённости"
+ },
+ "banking_dash_how_sub_borrowing": {
+  "en": "What Borrowing Costs",
+  "ru": "Во что обходится заимствование"
+ },
+ "banking_dash_how_sub_budget": {
+  "en": "The Intervention Budget",
+  "ru": "Бюджет интервенций"
+ },
+ "banking_dash_how_sub_crashes": {
+  "en": "Crashes",
+  "ru": "Крахи"
+ },
+ "banking_dash_how_sub_cycle": {
+  "en": "The Cycle",
+  "ru": "Цикл"
+ },
+ "banking_dash_how_sub_fx": {
+  "en": "The Exchange Rate",
+  "ru": "Обменный курс"
+ },
+ "banking_dash_how_sub_gold": {
+  "en": "Gold and the Peg",
+  "ru": "Золото и привязка"
+ },
+ "banking_dash_how_sub_mandates": {
+  "en": "The Mandates",
+  "ru": "Мандаты"
+ },
+ "banking_dash_how_sub_prices": {
+  "en": "Prices",
+  "ru": "Цены"
+ },
+ "banking_dash_how_sub_rate": {
+  "en": "The Policy Rate",
+  "ru": "Ключевая ставка"
+ },
+ "banking_dash_how_treaty_peg": {
+  "en": "A treaty peg has no rate of yours to defend it, so its [concept_banking_peg_confidence] moves on overvaluation alone, each month: +3 while you are overvalued by 5 points or less (+2 from 40, +1 from 70), −1 for every 2 points beyond 5 (a quarter of that under capital controls), and +2 with a $swap_line$. At 20 the markets force the question: shut the door, break the peg, or re-peg lower.",
+  "ru": "Для договорной привязки нет вашей ставки, которая её защищала бы, поэтому её [concept_banking_peg_confidence|l] ежемесячно меняется только по переоценке: +3, пока вы переоценены на 5 пунктов или меньше (+2 с 40, +1 с 70), −1 за каждые 2 пункта сверх 5 (четверть этого при контроле капитала) и +2 при наличии «$swap_line$». При 20 рынки заставляют решать: закрыть дверь, сломать привязку или привязать заново ниже."
+ },
+ "banking_dash_how_union": {
+  "en": "A power bloc's [concept_banking_monetary_union] principle has three tiers, each including the one before. #b Monetary cooperation:#! every member gets half a swap line from the leader, −0.5 points of risk premium and +1 peg confidence a month; the leader pays the usual cost, scaled by each member's GDP beside its own. #b Common currency:#! members may adopt the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to 80% of its credibility, and gains +5% $state_export_advantage_mult$ and $state_import_advantage_mult$. There is no peg to break, so overvaluation beyond 5 points raises the adopter's risk premium by 0.1 a point instead. #b Fiscal backstop:#! the leader is lender of last resort to every adopter, paying half their debt-load premium, and a default calls the guarantee; the overvaluation premium is halved.",
+  "ru": "Принцип «[concept_banking_monetary_union]» силового блока имеет три уровня, каждый включает предыдущий. #b Денежное сотрудничество:#! каждый член получает от лидера половину валютного свопа, −0,5 пункта премии за риск и +1 к доверию к привязке в месяц; лидер платит обычную цену, масштабируемую ВВП каждого члена в сравнении с его собственным. #b Общая валюта:#! члены могут принять деньги лидера. У принявшего нет рычага: он берёт ставку лидера без спреда, его обменный курс и до 80% его доверия, и получает +5% $state_export_advantage_mult$ и $state_import_advantage_mult$. Привязки, которую можно сломать, нет, поэтому переоценка свыше 5 пунктов вместо этого повышает премию за риск принявшего на 0,1 за пункт. #b Бюджетная страховка:#! лидер — кредитор последней инстанции для каждого принявшего, оплачивая половину их премии за долговую нагрузку, а дефолт вызывает гарантию; премия за переоценку уменьшается вдвое."
+ },
+ "banking_dash_how_union_terms": {
+  "en": "To adopt the common currency a member needs a fiat or digital currency with a national bank, inflation within 3 points of the leader's, and debt under half its credit limit, which is waived while the leader is pressing. Leaving drops the currency at once to where it would float, and costs +3 points of credit standing decaying over ten years, an investment-pool loss, radicals, the leader's relations and the bloc's cohesion, with no way back for ten years. A leader may press holdouts to converge at 50 influence per holdout. A pressed holdout loses the cooperation benefit and is put the question, and one that refuses costs the bloc cohesion and gains +250 $country_leverage_resistance_add$ for ten years.",
+  "ru": "Чтобы принять общую валюту, члену нужны фиатная или цифровая валюта с национальным банком, инфляция в пределах 3 пунктов от инфляции лидера и долг ниже половины кредитного лимита; последнее отменяется, пока лидер давит. Выход сразу опускает валюту туда, где она плавала бы, и стоит +3 пункта кредитоспособности, затухающих за десять лет, потери инвестиционного пула, радикалов, отношений с лидером и сплочённости блока, без пути назад в течение десяти лет. Лидер может давить на упорствующих, добиваясь сближения, за 50 влияния за каждого упорствующего. Прижатый упорствующий теряет выгоду сотрудничества, и ему ставят вопрос, а отказавшийся стоит блоку сплочённости и получает +250 $country_leverage_resistance_add$ на десять лет."
+ },
+ "banking_dash_momentum_band_collapsing": {
+  "en": "#gold Collapsing#!",
+  "ru": "#gold Обвал#!"
+ },
+ "banking_dash_momentum_band_falling": {
+  "en": "#Y Falling#!",
+  "ru": "#Y Падение#!"
+ },
+ "banking_dash_momentum_band_freefall": {
+  "en": "#R Freefall#!",
+  "ru": "#R Свободное падение#!"
+ },
+ "banking_dash_momentum_band_overheating": {
+  "en": "#R Overheating#!",
+  "ru": "#R Перегрев#!"
+ },
+ "banking_dash_momentum_band_rising": {
+  "en": "#G Rising#!",
+  "ru": "#G Рост#!"
+ },
+ "banking_dash_momentum_band_steady": {
+  "en": "Steady",
+  "ru": "Ровный"
+ },
+ "banking_dash_momentum_band_surging": {
+  "en": "#Y Surging#!",
+  "ru": "#Y Рывок#!"
+ },
+ "banking_dash_momentum_change_less": {
+  "en": "[Country.MakeScope.ScriptValue('banking_disp_momentum_change_hi')|+=2] or less",
+  "ru": "[Country.MakeScope.ScriptValue('banking_disp_momentum_change_hi')|+=2] или меньше"
+ },
+ "banking_dash_momentum_change_more": {
+  "en": "[Country.MakeScope.ScriptValue('banking_disp_momentum_change_lo')|+=2] or more",
+  "ru": "[Country.MakeScope.ScriptValue('banking_disp_momentum_change_lo')|+=2] или больше"
+ },
+ "banking_dash_momentum_change_tt": {
+  "en": "#header Momentum Next Month#!\\nHow far [concept_banking_momentum] can move at the next monthly update, worked out from the readings above. Crashes and events can move it further.\\n$TOOLTIP_DELIMITER$\\nA tenth of itself lost to decay; it is [Country.GetCustom('banking_dash_momentum_band')] ([Country.GetCustom('banking_dash_momentum_band_edges')]) now\\n[Country.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')] from the phase, active policies, laws and events\\n#variable [Country.MakeScope.ScriptValue('banking_disp_nudge_lo')|+=2]#! to #variable [Country.MakeScope.ScriptValue('banking_disp_nudge_hi')|+=2]#! from the random nudge, which only ever pulls the cycle back towards 50\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_pushes'), '(CFixedPoint)0' ), 'banking_dash_change_stance_momentum', 'banking_dash_change_stance_none' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_reopen'), '(CFixedPoint)0' ), 'banking_dash_change_reopen', 'te_tt_blank' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bank_holiday'), '(CFixedPoint)0' ), 'banking_dash_change_holiday', 'te_tt_blank' )]",
+  "ru": "#header Импульс в следующем месяце#!\\nНа сколько может сместиться [concept_banking_momentum|l] при следующем ежемесячном обновлении, исходя из показаний выше. Крахи и события могут сместить его сильнее.\\n$TOOLTIP_DELIMITER$\\nДесятая часть теряется из-за затухания; сейчас: [Country.GetCustom('banking_dash_momentum_band')] ([Country.GetCustom('banking_dash_momentum_band_edges')])\\n[Country.GetModifier.GetValueWithBreakdownFor('country_finance_momentum_monthly_add')] от фазы, действующих политик, законов и событий\\nот #variable [Country.MakeScope.ScriptValue('banking_disp_nudge_lo')|+=2]#! до #variable [Country.MakeScope.ScriptValue('banking_disp_nudge_hi')|+=2]#! от случайного толчка, который всегда лишь возвращает цикл к 50\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_pushes'), '(CFixedPoint)0' ), 'banking_dash_change_stance_momentum', 'banking_dash_change_stance_none' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_reopen'), '(CFixedPoint)0' ), 'banking_dash_change_reopen', 'te_tt_blank' )][SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bank_holiday'), '(CFixedPoint)0' ), 'banking_dash_change_holiday', 'te_tt_blank' )]"
+ },
+ "banking_dash_momentum_edges_collapsing": {
+  "en": "−5 to −3",
+  "ru": "от −5 до −3"
+ },
+ "banking_dash_momentum_edges_falling": {
+  "en": "−3 to −1",
+  "ru": "от −3 до −1"
+ },
+ "banking_dash_momentum_edges_freefall": {
+  "en": "−5 or less",
+  "ru": "−5 или меньше"
+ },
+ "banking_dash_momentum_edges_overheating": {
+  "en": "+5 or more",
+  "ru": "+5 или больше"
+ },
+ "banking_dash_momentum_edges_rising": {
+  "en": "+1 to +3",
+  "ru": "от +1 до +3"
+ },
+ "banking_dash_momentum_edges_steady": {
+  "en": "between −1 and +1",
+  "ru": "между −1 и +1"
+ },
+ "banking_dash_momentum_edges_surging": {
+  "en": "+3 to +5",
+  "ru": "от +3 до +5"
+ },
+ "banking_dash_momentum_fx_collapsing": {
+  "en": "The cycle value is falling fast. The low phases push momentum back up each month, and so can the country's policies.",
+  "ru": "Значение цикла быстро падает. Низкие фазы каждый месяц толкают импульс обратно вверх, и политики страны тоже могут."
+ },
+ "banking_dash_momentum_fx_falling": {
+  "en": "The cycle value is sliding steadily. Momentum loses a tenth of itself each month, so the slide eases unless something keeps pushing.",
+  "ru": "Значение цикла плавно скользит вниз. Импульс теряет десятую часть себя каждый месяц, поэтому спад смягчается, если что-то не продолжает толкать."
+ },
+ "banking_dash_momentum_fx_freefall": {
+  "en": "The cycle value is dropping faster than at any other reading, as it does after a crash. The low phases push momentum back up each month, and so can the country's policies.",
+  "ru": "Значение цикла падает быстрее, чем при любом другом показании, как после краха. Низкие фазы каждый месяц толкают импульс обратно вверх, и политики страны тоже могут."
+ },
+ "banking_dash_momentum_fx_overheating": {
+  "en": "The cycle value is climbing faster than at any other reading. In a Boom or Frenzy this lights the crash-risk warning on [concept_bubble_pressure].",
+  "ru": "Значение цикла растёт быстрее, чем при любом другом показании. При Буме или Ажиотаже это включает предупреждение о риске краха у показателя [concept_bubble_pressure|l]."
+ },
+ "banking_dash_momentum_fx_rising": {
+  "en": "The cycle value is climbing steadily. Momentum loses a tenth of itself each month, so the climb slows unless something keeps pushing.",
+  "ru": "Значение цикла плавно растёт. Импульс теряет десятую часть себя каждый месяц, поэтому рост замедляется, если что-то не продолжает толкать."
+ },
+ "banking_dash_momentum_fx_steady": {
+  "en": "The cycle value is barely moving. It stays that way until a policy, law, event or the monthly random nudge pushes momentum off zero.",
+  "ru": "Значение цикла почти не двигается. Так будет, пока политика, закон, событие или ежемесячный случайный толчок не сдвинет импульс с нуля."
+ },
+ "banking_dash_momentum_fx_surging": {
+  "en": "The cycle value is climbing fast. In a Boom or Frenzy this lights the crash-risk warning on [concept_bubble_pressure]. Momentum loses a tenth of itself each month, so only a steady push keeps it here.",
+  "ru": "Значение цикла быстро растёт. При Буме или Ажиотаже это включает предупреждение о риске краха у показателя [concept_bubble_pressure|l]. Импульс теряет десятую часть себя каждый месяц, поэтому удержать его здесь может только постоянный толчок."
  },
  "banking_dash_mon_band_label": {
   "en": "Price Band",
