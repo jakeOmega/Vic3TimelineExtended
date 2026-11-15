@@ -3427,9 +3427,213 @@
   "en": "We backed the older slate for the federation council: its money stays under members' votes and open books.",
   "ru": "Мы поддержали прежний список в совет федерации: её деньги остаются под голосами членов и открытыми книгами."
  },
+ "banking_event_partial_default": {
+  "en": "Partial Default",
+  "ru": "Частичный дефолт"
+ },
+ "banking_event_partial_default_desc": {
+  "en": "The government has refused to repay part of what it owes. Lenders now charge for the risk that it will do so again, and its standing abroad has suffered.",
+  "ru": "Правительство отказалось погасить часть своих долгов. Кредиторы теперь требуют плату за риск, что это повторится, а репутация страны за рубежом пострадала."
+ },
+ "banking_event_pension_stability": {
+  "en": "Pension Fund Stability",
+  "ru": "Устойчивость пенсионных фондов"
+ },
+ "banking_event_pension_stability_desc": {
+  "en": "Growing pension funds provide a stable, long-term source of capital.",
+  "ru": "Растущие пенсионные фонды дают стабильный долгосрочный источник капитала."
+ },
+ "banking_event_plan_figures_upheld": {
+  "en": "Planning Bureau Upheld",
+  "ru": "Плановое бюро одержало верх"
+ },
+ "banking_event_plan_figures_upheld_desc": {
+  "en": "We backed the planning bureau against the secretariat, and the plan's figures for money and credit stand.",
+  "ru": "Мы поддержали плановое бюро против секретариата, и плановые показатели по деньгам и кредиту остаются в силе."
+ },
+ "banking_event_predatory_crackdown": {
+  "en": "Lending Practice Reforms",
+  "ru": "Реформы кредитной практики"
+ },
+ "banking_event_predatory_crackdown_desc": {
+  "en": "Crackdown on predatory lending is temporarily constraining the financial sector.",
+  "ru": "Борьба с хищническим кредитованием временно сдерживает финансовый сектор."
+ },
+ "banking_event_provincial_exchange": {
+  "en": "Provincial Exchange Growth",
+  "ru": "Рост провинциальных бирж"
+ },
+ "banking_event_provincial_exchange_desc": {
+  "en": "New provincial stock exchanges are expanding access to capital markets.",
+  "ru": "Новые провинциальные фондовые биржи расширяют доступ к рынкам капитала."
+ },
+ "banking_event_qe_stimulus": {
+  "en": "Monetary Stimulus",
+  "ru": "Денежное стимулирование"
+ },
+ "banking_event_qe_stimulus_desc": {
+  "en": "Central bank bond-buying program is reducing borrowing costs.",
+  "ru": "Программа выкупа облигаций центральным банком снижает стоимость заимствований."
+ },
+ "banking_event_quiet_rescue": {
+  "en": "Quiet Financial Rescue",
+  "ru": "Тихое финансовое спасение"
+ },
+ "banking_event_quiet_rescue_desc": {
+  "en": "The government has quietly arranged a bailout of a failing financial institution, at considerable fiscal cost.",
+  "ru": "Правительство втихую организовало спасение несостоятельного финансового учреждения ценой значительных бюджетных затрат."
+ },
+ "banking_event_railway_fever": {
+  "en": "Railway Investment Fever",
+  "ru": "Железнодорожная инвестиционная лихорадка"
+ },
+ "banking_event_railway_fever_desc": {
+  "en": "A wave of railway investment is channeling capital into [concept_infrastructure] expansion.",
+  "ru": "Волна железнодорожных инвестиций направляет капитал на расширение [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "banking_event_rating_crackdown": {
+  "en": "Credit Rating Reforms",
+  "ru": "Реформы кредитных рейтингов"
+ },
+ "banking_event_rating_crackdown_desc": {
+  "en": "Overhaul of the credit rating system is temporarily disrupting financial markets.",
+  "ru": "Перестройка системы кредитных рейтингов временно нарушает работу финансовых рынков."
+ },
+ "banking_event_rural_credit": {
+  "en": "Emergency Rural Credit",
+  "ru": "Экстренный сельский кредит"
+ },
+ "banking_event_rural_credit_cost": {
+  "en": "Rural Credit Fiscal Cost",
+  "ru": "Бюджетные расходы на сельский кредит"
+ },
+ "banking_event_rural_credit_cost_desc": {
+  "en": "Government spending on emergency rural credit programs.",
+  "ru": "Государственные расходы на программы экстренного сельского кредитования."
+ },
+ "banking_event_rural_credit_desc": {
+  "en": "Government-backed emergency lending is propping up the rural credit system at fiscal cost.",
+  "ru": "Экстренное кредитование под гарантии государства поддерживает систему сельского кредита за счёт бюджета."
+ },
+ "banking_event_scandal_fallout": {
+  "en": "Banking Scandal Fallout",
+  "ru": "Последствия банковского скандала"
+ },
+ "banking_event_scandal_fallout_desc": {
+  "en": "A banking scandal has shaken confidence in financial institutions.",
+  "ru": "Банковский скандал подорвал доверие к финансовым учреждениям."
+ },
+ "banking_event_selective_bailout": {
+  "en": "Selective Bank Bailout",
+  "ru": "Выборочное спасение банков"
+ },
+ "banking_event_selective_bailout_cost": {
+  "en": "Bailout Fiscal Cost",
+  "ru": "Бюджетные расходы на спасение"
+ },
+ "banking_event_selective_bailout_cost_desc": {
+  "en": "Government spending on the selective bank bailout.",
+  "ru": "Государственные расходы на выборочное спасение банков."
+ },
+ "banking_event_selective_bailout_desc": {
+  "en": "The government has bailed out key banking institutions, stabilizing the system but creating moral hazard.",
+  "ru": "Правительство спасло ключевые банковские учреждения, стабилизировав систему, но создав моральный риск."
+ },
+ "banking_event_shadow_regulation": {
+  "en": "Shadow Banking Regulation",
+  "ru": "Регулирование теневого банкинга"
+ },
+ "banking_event_shadow_regulation_desc": {
+  "en": "Bringing shadow banks under regulation has reduced systemic risk but contracted credit availability and financial services output.",
+  "ru": "Взятие теневых банков под регулирование снизило системный риск, но сократило доступность кредита и выпуск финансовых услуг."
+ },
+ "banking_event_sovereign_wealth_fund": {
+  "en": "Sovereign Wealth Fund",
+  "ru": "Суверенный фонд"
+ },
+ "banking_event_sovereign_wealth_fund_cost": {
+  "en": "Sovereign Wealth Fund Cost",
+  "ru": "Расходы на суверенный фонд"
+ },
+ "banking_event_sovereign_wealth_fund_cost_desc": {
+  "en": "Government contributions to the sovereign wealth fund.",
+  "ru": "Государственные взносы в суверенный фонд."
+ },
+ "banking_event_sovereign_wealth_fund_desc": {
+  "en": "A state investment fund is building a reserve against future downturns, enhancing national [concept_prestige].",
+  "ru": "Государственный инвестиционный фонд создаёт резерв на случай будущих спадов, повышая национальный [concept_prestige|l]."
+ },
+ "banking_event_stockpile_release": {
+  "en": "Emergency Stockpiles Opened",
+  "ru": "Экстренные запасы вскрыты"
+ },
+ "banking_event_stockpile_release_desc": {
+  "en": "We have opened the emergency stockpiles to supply the factories that a failed depot left idle.",
+  "ru": "Мы вскрыли экстренные запасы, чтобы снабдить фабрики, оставшиеся без дела из-за выхода склада из строя."
+ },
+ "banking_event_student_debt_relief": {
+  "en": "Student Debt Relief",
+  "ru": "Списание студенческих долгов"
+ },
+ "banking_event_student_debt_relief_cost": {
+  "en": "Student Debt Relief Costs",
+  "ru": "Расходы на списание студенческих долгов"
+ },
+ "banking_event_student_debt_relief_cost_desc": {
+  "en": "Government spending on education debt relief.",
+  "ru": "Государственные расходы на списание долгов за образование."
+ },
+ "banking_event_student_debt_relief_desc": {
+  "en": "Programs to relieve the burden of education debt.",
+  "ru": "Программы облегчения бремени долгов за образование."
+ },
+ "banking_event_telegraph_settlement": {
+  "en": "Modern Financial Settlements",
+  "ru": "Современные финансовые расчёты"
+ },
+ "banking_event_telegraph_settlement_desc": {
+  "en": "Rapid interbank settlements are boosting the efficiency of financial services.",
+  "ru": "Быстрые межбанковские расчёты повышают эффективность финансовых услуг."
+ },
+ "banking_event_trade_bills": {
+  "en": "Trade Bill Market",
+  "ru": "Рынок торговых векселей"
+ },
+ "banking_event_trade_bills_desc": {
+  "en": "Refined trade bills are expanding the volume and reach of commerce.",
+  "ru": "Совершенствование торговых векселей расширяет объём и охват торговли."
+ },
+ "banking_event_trust_collapse": {
+  "en": "Trust Company Collapse",
+  "ru": "Крах трастовой компании"
+ },
+ "banking_event_trust_collapse_desc": {
+  "en": "The failure of a major trust company has damaged confidence in financial institutions.",
+  "ru": "Банкротство крупной трастовой компании подорвало доверие к финансовым учреждениям."
+ },
+ "banking_event_venture_boom": {
+  "en": "Venture Capital Boom",
+  "ru": "Бум венчурного капитала"
+ },
+ "banking_event_venture_boom_desc": {
+  "en": "Venture capital funds are driving innovation and industrial growth.",
+  "ru": "Фонды венчурного капитала стимулируют инновации и промышленный рост."
+ },
  "colonial_stability_negative_event": {
   "en": "Colonial Crisis",
   "ru": "Колониальный кризис"
+ },
+ "colonial_stability_negative_event_desc": {
+  "en": "Recent events have destabilized our colonial holdings.",
+  "ru": "Недавние события дестабилизировали наши колониальные владения."
+ },
+ "colonial_stability_positive_event": {
+  "en": "Positive Colonial Development",
+  "ru": "Положительное колониальное развитие"
+ },
+ "colonial_stability_positive_event_desc": {
+  "en": "Recent events have improved the stability of our colonial holdings.",
+  "ru": "Недавние события укрепили стабильность наших колониальных владений."
  },
  "covert_warfare.1.a": {
   "en": "Recall our operatives and apologize through back-channels",
@@ -7903,6 +8107,62 @@
   "en": "Who Watches the Watchmen",
   "ru": "Кто следит за стражами"
  },
+ "forced_law_through_event": {
+  "en": "Authority Spent Bypassing Procedure",
+  "ru": "Авторитет потрачен на обход процедуры"
+ },
+ "forced_law_through_event_consequences_large": {
+  "en": "Political Elite Bypassed",
+  "ru": "Политическая элита обойдена"
+ },
+ "forced_law_through_event_consequences_large_desc": {
+  "en": "The regime forced a law through the legislature without the consent of the political class. [concept_legitimacy] has cratered, and opposition movements are radicalizing.",
+  "ru": "Режим протолкнул закон через законодательный орган без согласия политического класса. [concept_legitimacy] рухнула, а оппозиционные движения радикализируются."
+ },
+ "forced_law_through_event_consequences_medium": {
+  "en": "Sidelined Political Class",
+  "ru": "Отстранённый политический класс"
+ },
+ "forced_law_through_event_consequences_medium_desc": {
+  "en": "The political elite were bypassed when this law was pushed through. Movements that disapproved have new grievances to organize around.",
+  "ru": "Политическую элиту обошли, когда закон проталкивали. У недовольных движений появились новые обиды, вокруг которых можно организоваться."
+ },
+ "forced_law_through_event_consequences_small": {
+  "en": "Elite Grumbling",
+  "ru": "Ропот элит"
+ },
+ "forced_law_through_event_consequences_small_desc": {
+  "en": "Opposition [Concept('concept_interest_group', 'interest groups')] resent being bypassed.",
+  "ru": "Оппозиционные [Concept('concept_interest_group', 'группы интересов')] возмущены тем, что их обошли."
+ },
+ "forced_law_through_event_desc": {
+  "en": "Authority committed to ramming a law through over the political elite's objections.",
+  "ru": "Авторитет потрачен на то, чтобы протолкнуть закон вопреки возражениям политической элиты."
+ },
+ "forced_law_through_event_enactment_large": {
+  "en": "Legislature Overridden",
+  "ru": "Законодательный орган преодолён"
+ },
+ "forced_law_through_event_enactment_large_desc": {
+  "en": "The regime is forcing this law through wholesale, brushing every legislative hurdle aside via its [concept_legislative_override_capacity].",
+  "ru": "Режим проталкивает этот закон целиком, отметая все законодательные препятствия с помощью своей [Concept('concept_legislative_override_capacity','возможности законодательного преодоления')]."
+ },
+ "forced_law_through_event_enactment_medium": {
+  "en": "Procedure Sidelined",
+  "ru": "Процедура отодвинута"
+ },
+ "forced_law_through_event_enactment_medium_desc": {
+  "en": "The regime is decisively pushing this law forward, bypassing the usual political mediation through its [concept_legislative_override_capacity].",
+  "ru": "Режим решительно проталкивает этот закон, минуя обычное политическое посредничество, с помощью своей [Concept('concept_legislative_override_capacity','возможности законодательного преодоления')]."
+ },
+ "forced_law_through_event_enactment_small": {
+  "en": "Light [Concept('concept_legislative_override_capacity','Legislative Override')]",
+  "ru": "Лёгкое [Concept('concept_legislative_override_capacity','законодательное преодоление')]"
+ },
+ "forced_law_through_event_enactment_small_desc": {
+  "en": "The regime is greasing the wheels to expedite this law's passage.",
+  "ru": "Режим смазывает шестерёнки, чтобы ускорить принятие этого закона."
+ },
  "formation_te.1.a": {
   "en": "Our claims extend to all of the subcontinent.",
   "ru": "Наши притязания распространяются на весь субконтинент."
@@ -7958,6 +8218,14 @@
  "formation_te.2.t": {
   "en": "From Sabang to Merauke",
   "ru": "От Сабанга до Мерауке"
+ },
+ "heir_education_event_cooldown": {
+  "en": "Education Event Cooldown",
+  "ru": "Перерыв между событиями об образовании"
+ },
+ "heir_education_event_cooldown_desc": {
+  "en": "The [concept_heir]'s education continues without interruption for the time being.",
+  "ru": "Образование [Concept('concept_heir','наследника')] пока продолжается без помех."
  },
  "heir_education_events.1.a": {
   "en": "Encourage them to excel!",
@@ -14050,6 +14318,14 @@
  "nuclear_custody.8.t": {
   "en": "Our Offer to Secure Their Arsenal",
   "ru": "Наше предложение обеспечить сохранность их арсенала"
+ },
+ "nuclear_event_prestige": {
+  "en": "Nuclear Achievement",
+  "ru": "Ядерное достижение"
+ },
+ "nuclear_event_prestige_desc": {
+  "en": "This country's nuclear capabilities have affected its standing in the eyes of the world.",
+  "ru": "Ядерные возможности этой страны повлияли на её положение в глазах мира."
  },
  "nuclear_incident.1.a": {
   "en": "Trust the duty officer. We wait for a second confirmation.",

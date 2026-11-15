@@ -3,121 +3,241 @@
   "en": "Anti-Colonialist",
   "ru": "Антиколониалист"
  },
+ "ideology_anti_colonialist_desc": {
+  "en": "Anti-Colonialists believe that colonialism is wrong and that colonized peoples should be free to govern themselves.",
+  "ru": "Антиколониалисты считают колониализм неправильным и полагают, что колонизированные народы вправе управлять собой сами."
+ },
  "ideology_anti_colonialist_leader": {
   "en": "Anti-Colonialist",
   "ru": "Антиколониалист"
+ },
+ "ideology_anti_colonialist_leader_desc": {
+  "en": "This leader holds that colonial rule is wrong and that colonized peoples should govern themselves.",
+  "ru": "Этот лидер считает, что колониальное правление неправильно и что колонизированные народы должны управлять собой сами."
  },
  "ideology_corporate": {
   "en": "Corpocrat",
   "ru": "Корпократ"
  },
+ "ideology_corporate_desc": {
+  "en": "This leader believes in a system where corporations play a central role in governance and decision-making, shaping policy to benefit business interests. The state and corporations are closely intertwined, with the private sector exerting significant influence over public affairs.",
+  "ru": "Этот лидер верит в систему, где корпорации играют центральную роль в управлении и принятии решений, формируя политику в интересах бизнеса. Государство и корпорации тесно переплетены, а частный сектор оказывает значительное влияние на общественные дела."
+ },
  "ideology_custom_religion_aristocratic_governance": {
   "en": "Aristocracy",
   "ru": "Аристократия"
+ },
+ "ideology_custom_religion_aristocratic_governance_desc": {
+  "en": "This religion is governed by a hereditary elite, emphasizing the importance of noble birth, social status, and inherited privilege.",
+  "ru": "Этой религией управляет наследственная элита; она подчёркивает значение знатного происхождения, общественного положения и унаследованных привилегий."
  },
  "ideology_custom_religion_corporate_governance": {
   "en": "Corporate Rule",
   "ru": "Корпоративное правление"
  },
+ "ideology_custom_religion_corporate_governance_desc": {
+  "en": "This religion sees wealth and power as divinely apportioned and therefore corporations should have a key role in governance.",
+  "ru": "Эта религия считает, что богатство и власть распределены божественным провидением, а потому корпорации должны играть ключевую роль в управлении."
+ },
  "ideology_custom_religion_exploitative_outlook": {
   "en": "Exploitation",
   "ru": "Эксплуатация"
+ },
+ "ideology_custom_religion_exploitative_outlook_desc": {
+  "en": "This religion values the extraction of resources, labor, and wealth from others for the good of the faithful, emphasizing the importance of dominance, control, and the pursuit of material gain.",
+  "ru": "Эта религия ценит добычу ресурсов, труда и богатства у других на благо верующих, подчёркивая важность господства, контроля и стремления к материальной выгоде."
  },
  "ideology_custom_religion_free_market_economy": {
   "en": "Divine Wealth",
   "ru": "Божественное богатство"
  },
+ "ideology_custom_religion_free_market_economy_desc": {
+  "en": "This religion believes wealth is divinely apportioned and therefore government should not interfere with the economy.",
+  "ru": "Эта религия считает, что богатство распределено божественным провидением, а потому правительство не должно вмешиваться в экономику."
+ },
  "ideology_custom_religion_imperial_cult_economy": {
   "en": "Enlightened Imperial Economy",
   "ru": "Просвещённая имперская экономика"
+ },
+ "ideology_custom_religion_imperial_cult_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure the prosperity of the empire.",
+  "ru": "Эта религия считает, что экономику следует регулировать ради процветания империи."
  },
  "ideology_custom_religion_imperial_cult_governance": {
   "en": "Imperial Cult",
   "ru": "Имперский культ"
  },
+ "ideology_custom_religion_imperial_cult_governance_desc": {
+  "en": "This religion believes the ruler is a divine figure and should be worshipped as such.",
+  "ru": "Эта религия считает правителя божественной фигурой, которой следует поклоняться как таковой."
+ },
  "ideology_custom_religion_imperial_cult_society": {
   "en": "Imperial Society",
   "ru": "Имперское общество"
+ },
+ "ideology_custom_religion_imperial_cult_society_desc": {
+  "en": "This religion believes in the divine right of the ruler and the importance of loyalty, obedience, and service to the empire.",
+  "ru": "Эта религия верит в божественное право правителя и в важность верности, послушания и служения империи."
  },
  "ideology_custom_religion_imperialist_outlook": {
   "en": "Imperialism",
   "ru": "Империализм"
  },
+ "ideology_custom_religion_imperialist_outlook_desc": {
+  "en": "This religion values expansion, conquest, and the establishment of empires, emphasizing the importance of dominance, control, and the spread of faith and civilization.",
+  "ru": "Эта религия ценит экспансию, завоевания и создание империй, подчёркивая важность господства, контроля и распространения веры и цивилизации."
+ },
  "ideology_custom_religion_inclusive_society": {
   "en": "Inclusive Society",
   "ru": "Инклюзивное общество"
+ },
+ "ideology_custom_religion_inclusive_society_desc": {
+  "en": "This religion values diversity, equality, and social inclusion, emphasizing the importance of tolerance, acceptance, and respect for all individuals.",
+  "ru": "Эта религия ценит разнообразие, равенство и социальную включённость, подчёркивая важность терпимости, принятия и уважения ко всем людям."
  },
  "ideology_custom_religion_isolationist_outlook": {
   "en": "Isolationism",
   "ru": "Изоляционизм"
  },
+ "ideology_custom_religion_isolationist_outlook_desc": {
+  "en": "This religion values self-sufficiency, independence, and the avoidance of entanglements with other nations, emphasizing the importance of autonomy, sovereignty, and non-intervention.",
+  "ru": "Эта религия ценит самодостаточность, независимость и отказ от втягивания в дела других наций, подчёркивая важность автономии, суверенитета и невмешательства."
+ },
  "ideology_custom_religion_meritocratic_society": {
   "en": "Meritocracy",
   "ru": "Меритократия"
+ },
+ "ideology_custom_religion_meritocratic_society_desc": {
+  "en": "This religion values talent, ability, and achievement, viewing these as divine gifts.",
+  "ru": "Эта религия ценит талант, способности и достижения, видя в них дары свыше."
  },
  "ideology_custom_religion_militarist_outlook": {
   "en": "Militarism",
   "ru": "Милитаризм"
  },
+ "ideology_custom_religion_militarist_outlook_desc": {
+  "en": "This religion values strength, power, and the use of military force to achieve its goals, emphasizing the importance of expansion, security, and national power.",
+  "ru": "Эта религия ценит силу, мощь и применение военной силы для достижения своих целей, подчёркивая важность экспансии, безопасности и национальной мощи."
+ },
  "ideology_custom_religion_pacifist_outlook": {
   "en": "Pacifism",
   "ru": "Пацифизм"
+ },
+ "ideology_custom_religion_pacifist_outlook_desc": {
+  "en": "This religion values peace, nonviolence, and the resolution of conflicts through peaceful means, emphasizing the importance of compassion, empathy, and understanding.",
+  "ru": "Эта религия ценит мир, ненасилие и разрешение конфликтов мирными средствами, подчёркивая важность сострадания, сопереживания и понимания."
  },
  "ideology_custom_religion_republican_governance": {
   "en": "Republicanism",
   "ru": "Республиканизм"
  },
+ "ideology_custom_religion_republican_governance_desc": {
+  "en": "This religion values representative government, popular sovereignty, and the rule of law, emphasizing the importance of citizen participation, accountability, and democratic [Concept('concept_power_bloc_principle', 'principles')].",
+  "ru": "Эта религия ценит представительное правление, народный суверенитет и верховенство закона, подчёркивая важность участия граждан, подотчётности и демократических [Concept('concept_power_bloc_principle', 'принципов')]."
+ },
  "ideology_custom_religion_social_democratic_economy": {
   "en": "Social Welfare",
   "ru": "Социальное обеспечение"
+ },
+ "ideology_custom_religion_social_democratic_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure social welfare and equality.",
+  "ru": "Эта религия считает, что экономику следует регулировать ради социального обеспечения и равенства."
  },
  "ideology_custom_religion_socialist_economy": {
   "en": "Divine Command Economy",
   "ru": "Экономика божественных предписаний"
  },
+ "ideology_custom_religion_socialist_economy_desc": {
+  "en": "This religion believes that the economy should be centrally planned and controlled by the government as a representative of the divine.",
+  "ru": "Эта религия считает, что экономика должна планироваться централизованно и контролироваться правительством как представителем божественного."
+ },
  "ideology_custom_religion_technocratic_governance": {
   "en": "Technocracy",
   "ru": "Технократия"
+ },
+ "ideology_custom_religion_technocratic_governance_desc": {
+  "en": "This religion envisages a society in which each person has a role based on their expertise, knowledge, and skills, and is given authority based on their competence.",
+  "ru": "Эта религия представляет общество, в котором у каждого есть роль, основанная на его экспертизе, знаниях и навыках, а власть даётся ему по его компетентности."
  },
  "ideology_custom_religion_theocratic_economy": {
   "en": "Theocratic Economy",
   "ru": "Теократическая экономика"
  },
+ "ideology_custom_religion_theocratic_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure the prosperity of the church.",
+  "ru": "Эта религия считает, что экономику следует регулировать ради процветания церкви."
+ },
  "ideology_custom_religion_theocratic_governance": {
   "en": "Theocracy",
   "ru": "Теократия"
+ },
+ "ideology_custom_religion_theocratic_governance_desc": {
+  "en": "This religion believes that the state should be governed by religious authorities, emphasizing the importance of divine law, spiritual guidance, and religious [Concept('concept_power_bloc_principle', 'principles')].",
+  "ru": "Эта религия считает, что государством должны управлять религиозные власти, подчёркивая важность божественного закона, духовного руководства и религиозных [Concept('concept_power_bloc_principle', 'принципов')]."
  },
  "ideology_custom_religion_theocratic_outlook": {
   "en": "Theocratic Expansion",
   "ru": "Теократическая экспансия"
  },
+ "ideology_custom_religion_theocratic_outlook_desc": {
+  "en": "This religion believes that the faith should be spread to all corners of the world.",
+  "ru": "Эта религия считает, что веру следует распространить во все уголки мира."
+ },
  "ideology_custom_religion_theocratic_society": {
   "en": "Theocratic Society",
   "ru": "Теократическое общество"
+ },
+ "ideology_custom_religion_theocratic_society_desc": {
+  "en": "This religion believes that religion should take center-stage in society.",
+  "ru": "Эта религия считает, что религия должна занимать центральное место в обществе."
  },
  "ideology_custom_religion_totalitarian_society": {
   "en": "Totalitarianism",
   "ru": "Тоталитаризм"
  },
+ "ideology_custom_religion_totalitarian_society_desc": {
+  "en": "This religion envisages a society where the state has absolute control over all aspects of public and private life, emphasizing obedience, conformity, and the suppression of dissent.",
+  "ru": "Эта религия представляет общество, где государство имеет абсолютный контроль над всеми сторонами общественной и частной жизни, подчёркивая послушание, конформизм и подавление инакомыслия."
+ },
  "ideology_custom_religion_traditionalist_economy": {
   "en": "Traditionalism",
   "ru": "Традиционализм"
+ },
+ "ideology_custom_religion_traditionalist_economy_desc": {
+  "en": "This religion favors traditional economic practices, emphasizing stability, continuity, and adherence to established customs and norms.",
+  "ru": "Эта религия отдаёт предпочтение традиционным экономическим практикам, подчёркивая стабильность, преемственность и верность устоявшимся обычаям и нормам."
  },
  "ideology_custom_religion_traditionalist_society": {
   "en": "Social Orthodoxy",
   "ru": "Социальная ортодоксия"
  },
+ "ideology_custom_religion_traditionalist_society_desc": {
+  "en": "This religion values traditional social norms, customs, and institutions, emphasizing stability, continuity, and adherence to established practices.",
+  "ru": "Эта религия ценит традиционные общественные нормы, обычаи и институты, подчёркивая стабильность, преемственность и верность устоявшимся практикам."
+ },
  "ideology_environmentalists": {
   "en": "Environmentalist",
   "ru": "Эколог"
+ },
+ "ideology_environmentalists_desc": {
+  "en": "Environmentalists believe that the environment should be protected and that human activity is causing harm to the planet.",
+  "ru": "Экологисты считают, что окружающую среду нужно защищать и что человеческая деятельность наносит вред планете."
  },
  "ideology_islamic_inheritance": {
   "en": "Islamic Inheritance",
   "ru": "Исламское наследование"
  },
+ "ideology_islamic_inheritance_desc": {
+  "en": "Islamic inheritance law, as outlined in the Quran, mandates specific shares for family members.",
+  "ru": "Исламское право наследования, изложенное в Коране, предписывает определённые доли для членов семьи."
+ },
  "ideology_multicultural": {
   "en": "Multiculturalist",
   "ru": "Мультикультуралист"
+ },
+ "ideology_multicultural_desc": {
+  "en": "Multiculturalists believe that diversity is a strength and that different cultures should be celebrated.",
+  "ru": "Мультикультуралисты считают, что разнообразие — это сила и что разные культуры следует чествовать."
  },
  "ideology_multicultural_ig": {
   "en": "Multiculturalist",
@@ -127,8 +247,16 @@
   "en": "Inclusive Multiculturalist",
   "ru": "Инклюзивный мультикультуралист"
  },
+ "ideology_multicultural_inclusive_desc": {
+  "en": "Inclusive Multiculturalists champion diversity across all dimensions — cultural, ethnic, and LGBTQ+ — believing that true equality must be intersectional.",
+  "ru": "Инклюзивные мультикультуралисты отстаивают разнообразие во всех измерениях — культурном, этническом и ЛГБТК+ — считая, что подлинное равенство должно быть интерсекциональным."
+ },
  "ideology_optimist_transhumanist": {
   "en": "Optimist Transhumanist",
   "ru": "Оптимист-трансгуманист"
+ },
+ "ideology_optimist_transhumanist_desc": {
+  "en": "Optimist Transhumanists believe that technology can be used to improve the human condition and that the future is bright.",
+  "ru": "Оптимисты-трансгуманисты считают, что технологии можно использовать для улучшения человеческого состояния и что будущее светло."
  }
 }

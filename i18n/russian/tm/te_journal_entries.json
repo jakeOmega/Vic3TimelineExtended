@@ -1,4 +1,24 @@
 {
+ "je_augmentation_status_banned": {
+  "en": "Augmentation is banned. Next: enact $law_regulated_augmentation_market$, $law_unrestricted_augmentation$ or $law_mandatory_augmentation$ to settle the debate; $law_human_purity$ ends it against augmentation.",
+  "ru": "Аугментация запрещена. Дальше: принять закон «$law_regulated_augmentation_market$», «$law_unrestricted_augmentation$» или «$law_mandatory_augmentation$», чтобы завершить спор; закон «$law_human_purity$» завершает его против аугментации."
+ },
+ "je_augmentation_status_mandatory": {
+  "en": "Augmentation is mandatory for all citizens: the debate is settled.",
+  "ru": "Аугментация обязательна для всех граждан: спор решён."
+ },
+ "je_augmentation_status_medical": {
+  "en": "Augmentation is permitted only for medical purposes. Next: enact $law_regulated_augmentation_market$, $law_unrestricted_augmentation$ or $law_mandatory_augmentation$ to settle the debate; held to the end, this law leaves society divided.",
+  "ru": "Аугментация разрешена только в медицинских целях. Дальше: принять закон «$law_regulated_augmentation_market$», «$law_unrestricted_augmentation$» или «$law_mandatory_augmentation$», чтобы завершить спор; если сохранять этот закон до конца, общество останется расколотым."
+ },
+ "je_augmentation_status_regulated": {
+  "en": "Augmentation is legal within government guidelines: the debate is settled.",
+  "ru": "Аугментация законна в рамках правительственных норм: спор решён."
+ },
+ "je_augmentation_status_unrestricted": {
+  "en": "The augmentation market operates freely: the debate is settled.",
+  "ru": "Рынок аугментации работает свободно: спор решён."
+ },
  "je_banking_cycle_command_economy": {
   "en": "Logistics & Allocation Gauge",
   "ru": "Показатель логистики и распределения"
@@ -6,6 +26,22 @@
  "je_banking_cycle_cooperative_ownership": {
   "en": "Cooperative Finance Dashboard",
   "ru": "Панель кооперативных финансов"
+ },
+ "je_banking_cycle_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Banking System game rule was switched off",
+  "ru": "$concept_journal_entry$ завершилась, когда было отключено игровое правило «Банковская система»"
+ },
+ "je_banking_cycle_reason_command_economy": {
+  "en": "In a Command Economy the [concept_banking_cycle] is a logistics gauge: [concept_banking_momentum] and [concept_bubble_pressure] track how well supply chains keep in step and how strained the administration is, not investor confidence.",
+  "ru": "При командной экономике [concept_banking_cycle|l] — это индикатор логистики: [concept_banking_momentum] и [concept_bubble_pressure] отслеживают, насколько согласованно идут цепочки поставок и насколько напряжена администрация, а не уверенность инвесторов."
+ },
+ "je_banking_cycle_reason_cooperative_ownership": {
+  "en": "Under Cooperative Ownership the [concept_banking_cycle] weighs what is paid out to workers against what is reinvested: high [concept_bubble_pressure] means too much paid out and too little put back.",
+  "ru": "При кооперативной собственности [concept_banking_cycle|l] сопоставляет выплаты работникам с реинвестированным: высокое [concept_bubble_pressure|l] означает, что выплачено слишком много, а вложено обратно слишком мало."
+ },
+ "je_banking_cycle_reason_market": {
+  "en": "In a Market Economy the [concept_banking_cycle] is a liquidity and sentiment gauge: [concept_banking_momentum] is investor-driven growth, and [concept_bubble_pressure] is overvaluation. [concept_fx_swap_lines] are arranged with another country by treaty.",
+  "ru": "При рыночной экономике [concept_banking_cycle|l] — индикатор ликвидности и настроений: [concept_banking_momentum] — это рост, движимый инвесторами, а [concept_bubble_pressure] — переоценка. [concept_fx_swap_lines] согласуются с другой страной по договору."
  },
  "je_banking_cycle_title_market": {
   "en": "Boom & Bust Cycle",
@@ -15,6 +51,10 @@
   "en": "Change",
   "ru": "Изменение"
  },
+ "je_ch_board_head_change_tt": {
+  "en": "Since the country's share at the recount before this one. Recounts come about twice a year and after every war.",
+  "ru": "Изменение доли страны с предыдущего пересчёта. Пересчёты проводятся примерно дважды в год и после каждой войны."
+ },
  "je_ch_board_head_country": {
   "en": "Country",
   "ru": "Страна"
@@ -23,9 +63,45 @@
   "en": "Model",
   "ru": "Модель"
  },
+ "je_ch_board_head_model_tt": {
+  "en": "Its political model at the last recount, in the colors of Political Models of the World below. Hover a swatch for the model's name and the laws behind it.",
+  "ru": "Её политическая модель при последнем пересчёте, в цветах раздела «Политические модели мира» ниже. Наведите курсор на образец, чтобы увидеть название модели и стоящие за ней законы."
+ },
+ "je_ch_board_head_rank_tt": {
+  "en": "Place at the last recount. The arrow marks the country's own row.",
+  "ru": "Место при последнем пересчёте. Стрелка отмечает строку самой страны."
+ },
+ "je_ch_how_benchmark": {
+  "en": "A country with this journal entry whose share trails the leading cultural power's by more than a few points carries the [concept_foreign_cultural_benchmark]: its people measure their government against the leader's, and [concept_legitimacy] falls. The wider the gap, the larger the loss. The leader never carries it. While we do, the overview shows it.",
+  "ru": "Страна с этой записью журнала, чья доля отстаёт от доли ведущей культурной державы больше чем на несколько пунктов, несёт [concept_foreign_cultural_benchmark|l]: её народ сравнивает своё правительство с правительством лидера, и [concept_legitimacy] падает. Чем шире разрыв, тем больше потеря. Лидер его никогда не несёт. Пока он у нас, обзор показывает его."
+ },
+ "je_ch_how_board": {
+  "en": "The ten countries with the largest [concept_cultural_pull_share], recounted about twice a year and after every war: each one's share, its change since its own share at the recount before, and its political model as a swatch whose hover names it. Hover a row for that country's components at the recount, which add up to its Raw Score. The arrow marks us, and outside the top ten our own rank follows the list.",
+  "ru": "Десять стран с наибольшей [Concept('concept_cultural_pull_share','культурной долей')], пересчитываемой примерно дважды в год и после каждой войны: доля каждой, её изменение с предыдущего пересчёта и её политическая модель в виде образца, название которой показывается при наведении. Наведите курсор на строку, чтобы увидеть составляющие этой страны на момент пересчёта, которые в сумме дают её Исходную оценку. Стрелка отмечает нас, а вне первой десятки наше место указано после списка."
+ },
+ "je_ch_how_bonus": {
+  "en": "From 1% [concept_cultural_pull_share] we carry the $cultural_hegemony_effect$ modifier, and its strength is our share, so at 20% every effect is twice what it is at 10%. It draws migrants and tourists, and raises [concept_trade_advantage] for $fine_art$, [concept_power_bloc_leverage] generation, diplomatic reputation, [concept_assimilation], [concept_infamy] decay and the [Concept('concept_loyalist','$concept_loyalists|q$')] high [concept_legitimacy] brings. The overview's Hegemony Bonus lists each effect at its strength now.",
+  "ru": "При [concept_cultural_pull_share|l] от 1% мы несём модификатор «$cultural_hegemony_effect$», сила которого равна нашей доле, так что при 20% каждый эффект вдвое сильнее, чем при 10%. Он привлекает мигрантов и туристов; кроме того, растут [concept_trade_advantage|l] для товара «$fine_art$», выработка [concept_power_bloc_leverage|l], дипломатическая репутация, [concept_assimilation|l], спад [Concept('concept_infamy','дурной славы')], а также [Concept('concept_loyalist','$concept_loyalists|q$')|l], которых даёт высокая [concept_legitimacy|l]. Бонус гегемонии в обзоре перечисляет каждый эффект с его текущей силой."
+ },
  "je_ch_how_header": {
   "en": "How Cultural Hegemony Works",
   "ru": "Как работает культурная гегемония"
+ },
+ "je_ch_how_models": {
+  "en": "The leading cultural power's model is its [concept_ch_exported_model], whose push on the matching political movements abroad grows with the model's share of world culture. The overview shows the current model, its owner and its push.",
+  "ru": "Модель ведущей культурной державы — её [concept_ch_exported_model|l], чьё давление на соответствующие политические движения за рубежом растёт вместе с долей модели в мировой культуре. Обзор показывает текущую модель, её владельца и её давление."
+ },
+ "je_ch_how_programmes": {
+  "en": "Funding and every program need [GetLawType('law_ministry_of_culture').GetName]. If it is repealed, funding drops to zero and every program stops at the next monthly update. Each funding step adds pull for a weekly cost that grows with our GDP, up to a cap that each level of investment in the [GetInstitutionType('institution_ministry_of_culture').GetName] raises by one, as do [GetTechnology('mass_media').GetName] and [GetTechnology('television').GetName]. The programs run until we end them, and Global Media Campaign and Cultural Protectionism exclude each other. Hover a program's name for what it gives while it runs, and a button for what it would change and anything still missing.",
+  "ru": "Для финансирования и каждой программы нужен закон «[GetLawType('law_ministry_of_culture').GetName]». Если его отменить, финансирование падает до нуля, а каждая программа останавливается при следующем ежемесячном обновлении. Каждый шаг финансирования добавляет притяжение за еженедельную плату, растущую вместе с нашим ВВП, до предела, который каждый уровень инвестиций в институт «[GetInstitutionType('institution_ministry_of_culture').GetName]» повышает на единицу, как и технологии «[GetTechnology('mass_media').GetName]» и «[GetTechnology('television').GetName]». Программы работают, пока мы их не завершим, а Глобальная медиакампания и Культурный протекционизм исключают друг друга. Наведите курсор на название программы, чтобы увидеть, что она даёт во время работы, а на кнопку — что она изменит и чего ещё не хватает."
+ },
+ "je_ch_how_pull": {
+  "en": "Each line is one of the [concept_cultural_pull_components]; hover its name for how it is scored. Lines that add nothing are left out. Their sum, raised by the [Concept('concept_ch_modifier_bonus','Pull Multiplier')], is our [concept_cultural_pull_raw_score].",
+  "ru": "Каждая строка — одна из [Concept('concept_cultural_pull_components','составляющих культурного притяжения')]; наведите курсор на название, чтобы увидеть, как она оценивается. Строки, ничего не добавляющие, опущены. Их сумма, умноженная на [Concept('concept_ch_modifier_bonus','множитель притяжения')], — наша [concept_cultural_pull_raw_score|l]."
+ },
+ "je_ch_how_share": {
+  "en": "Our [concept_cultural_pull_share] is our raw [concept_cultural_pull] as a percentage of every country's raw pull added together, so it stays meaningful as the world grows. Other countries' pull is recounted about twice a year and after every war, while ours counts as it stands, so the share can step without our own output changing. The share sets our [concept_ch_influence_tier] and the strength of the Cultural Hegemony modifier. The arrow beside it compares this month's reading with last month's.",
+  "ru": "Наша [concept_cultural_pull_share|l] — это наше исходное [concept_cultural_pull|l] в процентах от суммы исходного притяжения всех стран, поэтому она остаётся осмысленной по мере роста мира. Притяжение других стран пересчитывается примерно дважды в год и после каждой войны, а наше учитывается как есть, поэтому доля может меняться ступенями, даже если наш собственный результат не меняется. Доля определяет наш [concept_ch_influence_tier|l] и силу модификатора «Культурная гегемония». Стрелка рядом сравнивает показатель этого месяца с показателем прошлого."
  },
  "je_ch_how_sub_benchmark": {
   "en": "Foreign Cultural Benchmark",
@@ -55,6 +131,14 @@
   "en": "Cultural Share and Tiers",
   "ru": "Культурная доля и уровни"
  },
+ "je_ch_ov_benchmark_label": {
+  "en": "#R Benchmark#!",
+  "ru": "#R Ориентир#!"
+ },
+ "je_ch_ov_benchmark_tt": {
+  "en": "#title [concept_foreign_cultural_benchmark]#!\\nThe country trails the leading cultural power, and its people measure their government against it.\\nStrength: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
+  "ru": "#title [concept_foreign_cultural_benchmark]#!\\nСтрана отстаёт от ведущей культурной державы, и её народ сравнивает своё правительство с ней.\\nСила: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
+ },
  "je_ch_ov_bonus_active": {
   "en": "Active",
   "ru": "Действует"
@@ -71,9 +155,25 @@
   "en": "None",
   "ru": "Нет"
  },
+ "je_ch_ov_bonus_strength": {
+  "en": "Strength #v ×[Country.MakeScope.ScriptValue('ch_bonus_strength_display')|1]#!",
+  "ru": "Сила #v ×[Country.MakeScope.ScriptValue('ch_bonus_strength_display')|1]#!"
+ },
+ "je_ch_ov_bonus_tt_list": {
+  "en": "#title $je_ch_ov_bonus_label$#!\\nThe $cultural_hegemony_effect$ modifier at #v ×[Country.MakeScope.ScriptValue('ch_bonus_strength_display')|1]#!, the country's [concept_cultural_pull_share] at the last monthly update:\\n$country_mass_migration_attraction_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_mass_migration_attraction_mult_display')|+=1%]\\n$goods_output_tourism_mult$: [Country.MakeScope.ScriptValue('ch_bonus_goods_output_tourism_mult_display')|+=1%]\\n$goods_trade_advantage_fine_art_mult$: [Country.MakeScope.ScriptValue('ch_bonus_goods_trade_advantage_fine_art_mult_display')|+=1%]\\n$country_loyalists_from_legitimacy_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_loyalists_from_legitimacy_mult_display')|+=1%]\\n$country_leverage_generation_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_leverage_generation_mult_display')|+=1%]\\n$country_diplomatic_reputation_add$: [Country.MakeScope.ScriptValue('ch_bonus_country_diplomatic_reputation_add_display')|+=1]\\n$country_infamy_decay_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_infamy_decay_mult_display')|+=1%]\\n$state_assimilation_mult$: [Country.MakeScope.ScriptValue('ch_bonus_state_assimilation_mult_display')|+=1%]",
+  "ru": "#title $je_ch_ov_bonus_label$#!\\nМодификатор «$cultural_hegemony_effect$» с силой #v ×[Country.MakeScope.ScriptValue('ch_bonus_strength_display')|1]#! — это [concept_cultural_pull_share|l] страны на момент последнего ежемесячного обновления:\\n$country_mass_migration_attraction_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_mass_migration_attraction_mult_display')|+=1%]\\n$goods_output_tourism_mult$: [Country.MakeScope.ScriptValue('ch_bonus_goods_output_tourism_mult_display')|+=1%]\\n$goods_trade_advantage_fine_art_mult$: [Country.MakeScope.ScriptValue('ch_bonus_goods_trade_advantage_fine_art_mult_display')|+=1%]\\n$country_loyalists_from_legitimacy_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_loyalists_from_legitimacy_mult_display')|+=1%]\\n$country_leverage_generation_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_leverage_generation_mult_display')|+=1%]\\n$country_diplomatic_reputation_add$: [Country.MakeScope.ScriptValue('ch_bonus_country_diplomatic_reputation_add_display')|+=1]\\n$country_infamy_decay_mult$: [Country.MakeScope.ScriptValue('ch_bonus_country_infamy_decay_mult_display')|+=1%]\\n$state_assimilation_mult$: [Country.MakeScope.ScriptValue('ch_bonus_state_assimilation_mult_display')|+=1%]"
+ },
+ "je_ch_ov_bonus_tt_none": {
+  "en": "#title $je_ch_ov_bonus_label$#!\\nNone until the country's [concept_cultural_pull_share] reaches 1%.",
+  "ru": "#title $je_ch_ov_bonus_label$#!\\nНет, пока [concept_cultural_pull_share|l] страны не достигнет 1%."
+ },
  "je_ch_ov_leaders_label": {
   "en": "Leading Powers",
   "ru": "Ведущие державы"
+ },
+ "je_ch_ov_leaders_tt": {
+  "en": "The three largest cultural shares at the last recount, the leader first.",
+  "ru": "Три самые большие культурные доли при последнем пересчёте, лидер первым."
  },
  "je_ch_ov_model_anarchist": {
   "en": "Anarchist",
@@ -135,6 +235,10 @@
   "en": "Technocratic",
   "ru": "Технократическая"
  },
+ "je_ch_ov_model_tt": {
+  "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
+  "ru": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nДоля мировой культуры: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nСтран, где она действует: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nДавление за рубежом: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
+ },
  "je_ch_ov_prog_funding": {
   "en": "Funding [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]",
   "ru": "Финансирование [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0] / [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]"
@@ -143,13 +247,29 @@
   "en": "Programs",
   "ru": "Программы"
  },
+ "je_ch_ov_prog_no_ministry": {
+  "en": "#R No Ministry#!",
+  "ru": "#R Нет министерства#!"
+ },
  "je_ch_ov_prog_running": {
   "en": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! of 4 Running",
   "ru": "#v [Country.MakeScope.ScriptValue('ch_prog_count_display')|0]#! из 4 запущено"
  },
+ "je_ch_ov_prog_tt_list": {
+  "en": "#title $je_ch_widget_programmes_header$#!\\n$je_ch_widget_prog_outreach$: $je_ch_widget_prog_outreach_status$\\n$je_ch_widget_prog_institutes$: $je_ch_widget_prog_institutes_status$\\n$je_ch_widget_prog_media$: $je_ch_widget_prog_media_status$\\n$je_ch_widget_prog_protectionism$: $je_ch_widget_prog_protectionism_status$\\nFunding: #v [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0]#! of #v [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]#!, @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/week",
+  "ru": "#title $je_ch_widget_programmes_header$#!\\n$je_ch_widget_prog_outreach$: $je_ch_widget_prog_outreach_status$\\n$je_ch_widget_prog_institutes$: $je_ch_widget_prog_institutes_status$\\n$je_ch_widget_prog_media$: $je_ch_widget_prog_media_status$\\n$je_ch_widget_prog_protectionism$: $je_ch_widget_prog_protectionism_status$\\nФинансирование: #v [Country.MakeScope.ScriptValue('ch_program_funding_level_display')|0]#! из #v [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]#!, @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/нед."
+ },
  "je_ch_ov_rank_label": {
   "en": "World Rank",
   "ru": "Место в мире"
+ },
+ "je_ch_ov_share_label": {
+  "en": "Share #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!",
+  "ru": "Доля #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!"
+ },
+ "je_ch_ov_share_tt": {
+  "en": "#title [concept_cultural_pull_share]#!\\nSince Last Month: [Country.MakeScope.ScriptValue('ch_disp_share_delta')|+1]\\n[concept_cultural_pull_raw_score]: #v [Country.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! of a world total of #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
+  "ru": "#title [concept_cultural_pull_share]#!\\nС прошлого месяца: [Country.MakeScope.ScriptValue('ch_disp_share_delta')|+1]\\n[concept_cultural_pull_raw_score]: #v [Country.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! из мирового итога #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
  },
  "je_ch_ov_tier_0": {
   "en": "Negligible",
@@ -179,13 +299,81 @@
   "en": "Next: #v [Country.GetCustom('ch_next_tier_name')]#! from #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#! share",
   "ru": "Далее: #v [Country.GetCustom('ch_next_tier_name')]#! при доле от #v [Country.MakeScope.ScriptValue('ch_disp_next_tier_floor')|0]%#!"
  },
+ "je_ch_ov_tier_next_top": {
+  "en": "The highest tier.",
+  "ru": "Высший уровень."
+ },
+ "je_ch_prog_institutes_tt": {
+  "en": "#title $je_ch_widget_prog_institutes$#!\\nWhile it runs:\\n[GetStaticModifier('ch_cultural_institutes_program').GetDesc]",
+  "ru": "#title $je_ch_widget_prog_institutes$#!\\nПока программа работает:\\n[GetStaticModifier('ch_cultural_institutes_program').GetDesc]"
+ },
  "je_ch_prog_needs_ministry": {
   "en": "Funding and every program require [GetLawType('law_ministry_of_culture').GetName].",
   "ru": "Для финансирования и каждой программы требуется [GetLawType('law_ministry_of_culture').GetName]."
  },
+ "je_ch_prog_outreach_tt": {
+  "en": "#title International Cultural Outreach#!\\nWhile it runs:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCost: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week, the price of one funding step",
+  "ru": "#title Международная культурная работа#!\\nПока программа работает:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nСтоимость: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/нед., цена одного шага финансирования"
+ },
+ "je_ch_widget_bd_art_dr_tt": {
+  "en": "#title [concept_ch_art_production]#!\\nShare of the world's fine-art output, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, counts as #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! after [concept_ch_art_diminishing_returns].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "ru": "#title [concept_ch_art_production]#!\\nДоля мирового производства искусства, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, засчитывается как #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! после [Concept('concept_ch_art_diminishing_returns','убывающей отдачи')].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+ },
+ "je_ch_widget_bd_art_mult_tt": {
+  "en": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ It scales the Art Production line above.",
+  "ru": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ Масштабирует строку «Производство искусства» выше."
+ },
+ "je_ch_widget_bd_art_tt": {
+  "en": "#title [concept_ch_art_production]#!\\nShare of the world's fine-art output: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] of [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nA dominant share runs into [concept_ch_art_diminishing_returns].\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "ru": "#title [concept_ch_art_production]#!\\nДоля мирового производства искусства: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] из [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nДоминирующая доля сталкивается с [Concept('concept_ch_art_diminishing_returns','убывающей отдачей')].\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+ },
+ "je_ch_widget_bd_infamy_tt": {
+  "en": "#title [concept_ch_infamy]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], an infamy of 100.#!",
+  "ru": "#title [concept_ch_infamy]#!\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], то есть при дурной славе 100.#!"
+ },
+ "je_ch_widget_bd_instability_tt": {
+  "en": "#title [concept_ch_instability]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: full turmoil and a civil war.#!",
+  "ru": "#title [concept_ch_instability]#!\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: полные беспорядки и гражданская война.#!"
+ },
+ "je_ch_widget_bd_megaprojects_tt": {
+  "en": "#title [concept_ch_megaprojects]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], all seven megaprojects.#!",
+  "ru": "#title [concept_ch_megaprojects]#!\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0] — все семь мегапроектов.#!"
+ },
+ "je_ch_widget_bd_modifiers_tt": {
+  "en": "#title [concept_ch_modifiers]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!",
+  "ru": "#title [concept_ch_modifiers]#!\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!"
+ },
+ "je_ch_widget_bd_monuments_tt": {
+  "en": "#title [concept_ch_monuments]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0], twenty monuments.#!",
+  "ru": "#title [concept_ch_monuments]#!\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0] — двадцать памятников.#!"
+ },
+ "je_ch_widget_bd_mult_tt": {
+  "en": "#title [Concept('concept_ch_modifier_bonus','Pull Multiplier')]#!\\nRaises the sum of the components above by this much; the result is the [concept_cultural_pull_raw_score].",
+  "ru": "#title [Concept('concept_ch_modifier_bonus','Множитель притяжения')]#!\\nУвеличивает сумму составляющих выше на эту величину; результат — [concept_cultural_pull_raw_score|l]."
+ },
+ "je_ch_widget_bd_prestige_tt": {
+  "en": "#title [concept_ch_prestige]#!\\nPrestige: [Country.MakeScope.ScriptValue('prestige_display')|0] of [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] worldwide.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!",
+  "ru": "#title [concept_ch_prestige]#!\\nПрестиж: [Country.MakeScope.ScriptValue('prestige_display')|0] из [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] во всём мире.\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!"
+ },
+ "je_ch_widget_bd_raw_tt": {
+  "en": "#title [concept_cultural_pull_raw_score]#!\\nWorld Total: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
+  "ru": "#title [concept_cultural_pull_raw_score]#!\\nМировой итог: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
+ },
+ "je_ch_widget_bd_sol_tt": {
+  "en": "#title [concept_ch_sol]#!\\nStandard of living: [Country.MakeScope.ScriptValue('sol_display')|1] against a world average of [Country.MakeScope.ScriptValue('global_average_sol_display')|1].\\nCounted at #v ×[Country.MakeScope.ScriptValue('ch_sol_rank_factor')|2]#! for the country's [Concept('concept_rank','rank')].\\n#lore The bar runs from [Country.MakeScope.ScriptValue('ch_bar_sol_min')|0] to [Country.MakeScope.ScriptValue('ch_bar_sol_max')|0], zero at the center line.#!",
+  "ru": "#title [concept_ch_sol]#!\\nУровень жизни: [Country.MakeScope.ScriptValue('sol_display')|1] при среднемировом [Country.MakeScope.ScriptValue('global_average_sol_display')|1].\\nУчитывается с коэффициентом #v ×[Country.MakeScope.ScriptValue('ch_sol_rank_factor')|2]#! за [Concept('concept_rank','ранг')] страны.\\n#lore Шкала идёт от [Country.MakeScope.ScriptValue('ch_bar_sol_min')|0] до [Country.MakeScope.ScriptValue('ch_bar_sol_max')|0], ноль на центральной линии.#!"
+ },
+ "je_ch_widget_bd_tech_tt": {
+  "en": "#title [concept_ch_tech_leadership]#!\\nWorld firsts, decaying each year.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!",
+  "ru": "#title [concept_ch_tech_leadership]#!\\nМировые первенства, убывающие с каждым годом.\\n#lore Шкала заполнена при [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!"
+ },
  "je_ch_widget_board_header": {
   "en": "Top Cultural Powers",
   "ru": "Ведущие культурные державы"
+ },
+ "je_ch_widget_board_pending": {
+  "en": "The board fills at the next recount.",
+  "ru": "Таблица заполнится при следующем пересчёте."
  },
  "je_ch_widget_board_us_ours": {
   "en": "Our Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
@@ -207,6 +395,10 @@
   "en": "Program Funding",
   "ru": "Финансирование программ"
  },
+ "je_ch_widget_funding_value_tt": {
+  "en": "#title Funding Level#!\\nMaximum: #v [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]#!\\nEach level of investment in the [GetInstitutionType('institution_ministry_of_culture').GetName] raises it by one, as do [GetTechnology('mass_media').GetName] and [GetTechnology('television').GetName].\\n[Country.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')]",
+  "ru": "#title Уровень финансирования#!\\nМаксимум: #v [Country.MakeScope.ScriptValue('ch_program_funding_cap_display')|0]#!\\nКаждый уровень инвестиций в институт «[GetInstitutionType('institution_ministry_of_culture').GetName]» повышает его на единицу, как и технологии «[GetTechnology('mass_media').GetName]» и «[GetTechnology('television').GetName]».\\n[Country.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')]"
+ },
  "je_ch_widget_history_header": {
   "en": "History",
   "ru": "История"
@@ -214,6 +406,18 @@
  "je_ch_widget_models_header": {
   "en": "Political Models of the World",
   "ru": "Политические модели мира"
+ },
+ "je_ch_widget_models_legend": {
+  "en": "Every country's political model, weighted by its cultural pull. Slices run clockwise from the top in the order listed; models with under half a percent are left off the list.",
+  "ru": "Политическая модель каждой страны, взвешенная по её культурному притяжению. Сектора идут по часовой стрелке от верха в порядке списка; модели меньше полупроцента в список не входят."
+ },
+ "je_ch_widget_models_pending": {
+  "en": "The first census of the world's political models is taken at the next leaderboard recount.",
+  "ru": "Первая перепись политических моделей мира будет проведена при следующем пересчёте таблицы лидеров."
+ },
+ "je_ch_widget_models_pie_tt": {
+  "en": "Share of world culture by political model: the combined cultural pull of every country running each one. Slices run clockwise from the top, in the legend's order.",
+  "ru": "Доля мировой культуры по политическим моделям: совокупное культурное притяжение всех стран, применяющих каждую из них. Сектора идут по часовой стрелке от верха, в порядке легенды."
  },
  "je_ch_widget_prog_institutes": {
   "en": "Cultural Institutes",
@@ -235,49 +439,153 @@
   "en": "Cultural Programs",
   "ru": "Культурные программы"
  },
+ "je_ch_widget_rank_tt": {
+  "en": "Place among every country with any [concept_cultural_pull] at all, as of the last recount. Countries with none are not counted.",
+  "ru": "Место среди всех стран, имеющих хоть какое-то [concept_cultural_pull|l], на момент последнего пересчёта. Страны без него не учитываются."
+ },
  "je_civil_rights": {
   "en": "Civil Rights Movement",
   "ru": "Движение за гражданские права"
+ },
+ "je_civil_rights_broken_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the movement #b broken#!",
+  "ru": "$concept_journal_entry$ завершилась: движение #b подавлено#!"
  },
  "je_civil_rights_broken_header": {
   "en": "The Movement Broken",
   "ru": "Движение сломлено"
  },
+ "je_civil_rights_broken_tt": {
+  "en": "A discriminatory minority law is in force, Segregationist Consolidation has run over #v 18#! months, or Suppression / Crackdown has run longer than it",
+  "ru": "Действует дискриминационный закон о меньшинствах, либо «Сегрегационистская консолидация» действует более #v 18#! мес., либо «Подавление» / «Жёсткие меры» действуют дольше неё"
+ },
+ "je_civil_rights_complete_bar_tt": {
+  "en": "Movement support reaches 100",
+  "ru": "Поддержка движения достигает 100"
+ },
+ "je_civil_rights_coopted_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with #b reform on paper#!, the movement bought off with token concessions",
+  "ru": "$concept_journal_entry$ завершилась #b реформой на бумаге#!: движение откуплено символическими уступками"
+ },
  "je_civil_rights_coopted_header": {
   "en": "Reform on Paper",
   "ru": "Реформа на бумаге"
+ },
+ "je_civil_rights_coopted_tt": {
+  "en": "No ending above applies, and Cooptation / Token Reform has run over #v 18#! months",
+  "ru": "Ни одна из концовок выше не подходит, а «Кооптация» / «Символическая реформа» действует более #v 18#! мес."
+ },
+ "je_civil_rights_demobilized_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the movement #b demobilized#! by token reform",
+  "ru": "$concept_journal_entry$ завершилась: движение #b распущено#! символической реформой"
  },
  "je_civil_rights_demobilized_header": {
   "en": "The Movement Demobilizes",
   "ru": "Движение распускается"
  },
+ "je_civil_rights_demobilized_tt": {
+  "en": "The ending above does not apply, and Cooptation / Token Reform has run over #v 18#! months",
+  "ru": "Предыдущая концовка не подходит, а «Кооптация» / «Символическая реформа» действует более #v 18#! мес."
+ },
+ "je_civil_rights_drift_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the movement lost in #b the long drift#! of gradualism",
+  "ru": "$concept_journal_entry$ завершилась: движение затерялось в #b долгом дрейфе#! постепенства"
+ },
  "je_civil_rights_drift_header": {
   "en": "The Long Drift",
   "ru": "Долгий дрейф"
+ },
+ "je_civil_rights_drift_tt": {
+  "en": "No ending above applies, and Gradualist Accommodation has run over #v 18#! months",
+  "ru": "Ни одна из концовок выше не подходит, а «Постепенное примирение» действует более #v 18#! мес."
+ },
+ "je_civil_rights_equality_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with a #b new era of equality#!",
+  "ru": "$concept_journal_entry$ завершилась #b новой эрой равенства#!"
  },
  "je_civil_rights_equality_header": {
   "en": "A New Era of Equality",
   "ru": "Новая эра равенства"
  },
+ "je_civil_rights_equality_tt": {
+  "en": "No ending above applies: no pro-movement or cooptation policy has run over #v 18#! months",
+  "ru": "Ни одна из концовок выше не подходит: ни одна политика в поддержку движения или кооптации не действует более #v 18#! мес."
+ },
+ "je_civil_rights_faded_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the movement #b faded#!",
+  "ru": "$concept_journal_entry$ завершилась: движение #b угасло#!"
+ },
  "je_civil_rights_faded_header": {
   "en": "The Movement Fades",
   "ru": "Движение угасает"
+ },
+ "je_civil_rights_faded_tt": {
+  "en": "No ending above applies",
+  "ru": "Ни одна из концовок выше не подходит"
+ },
+ "je_civil_rights_fail_1": {
+  "en": "#b The Movement Broken#!",
+  "ru": "#b Движение подавлено#!"
+ },
+ "je_civil_rights_fail_2": {
+  "en": "#b The Movement Demobilizes#!",
+  "ru": "#b Движение распускается#!"
+ },
+ "je_civil_rights_fail_3": {
+  "en": "#b The Long Drift#!",
+  "ru": "#b Долгий дрейф#!"
+ },
+ "je_civil_rights_fail_4": {
+  "en": "#b The Movement Fades#!",
+  "ru": "#b Движение угасает#!"
+ },
+ "je_civil_rights_federal_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the #b Civil Rights Mandate#! signed into law",
+  "ru": "$concept_journal_entry$ завершилась: #b Мандат о гражданских правах#! подписан и стал законом"
  },
  "je_civil_rights_federal_header": {
   "en": "The Civil Rights Mandate is Signed",
   "ru": "Мандат о гражданских правах подписан"
  },
+ "je_civil_rights_federal_tt": {
+  "en": "No discriminatory minority law, and Federal Protection has run over #v 18#! months, at least as long as Grassroots Organizing and Gradualist Accommodation",
+  "ru": "Нет дискриминационного закона о меньшинствах, а «Федеральная защита» действует более #v 18#! мес., не меньше, чем «Низовая самоорганизация» и «Постепенное примирение»"
+ },
+ "je_civil_rights_gradualist_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with a #b negotiated settlement#!",
+  "ru": "$concept_journal_entry$ завершилась #b согласованным урегулированием#!"
+ },
  "je_civil_rights_gradualist_header": {
   "en": "A Settlement, At Last",
   "ru": "Наконец-то компромисс"
+ },
+ "je_civil_rights_grassroots_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the movement #b carrying the day#! from the streets",
+  "ru": "$concept_journal_entry$ завершилась: движение #b победило#! с улиц"
  },
  "je_civil_rights_grassroots_header": {
   "en": "The Movement Carries the Day",
   "ru": "Движение берёт верх"
  },
+ "je_civil_rights_grassroots_tt": {
+  "en": "No ending above applies, and Grassroots Organizing has run over #v 18#! months, at least as long as Gradualist Accommodation",
+  "ru": "Ни одна из концовок выше не подходит, а «Низовая самоорганизация» действует более #v 18#! мес., не меньше, чем «Постепенное примирение»"
+ },
+ "je_civil_rights_hollow_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with a #b victory on paper#!, a discriminatory minority law still standing",
+  "ru": "$concept_journal_entry$ завершилась #b победой на бумаге#!: дискриминационный закон о меньшинствах остаётся в силе"
+ },
  "je_civil_rights_hollow_header": {
   "en": "Victory on Paper",
   "ru": "Победа на бумаге"
+ },
+ "je_civil_rights_hollow_tt": {
+  "en": "A discriminatory minority law is in force",
+  "ru": "Действует дискриминационный закон о меньшинствах"
+ },
+ "je_civil_rights_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended with no discriminated community left to campaign, or with the Social Movements game rule switched off",
+  "ru": "$concept_journal_entry$ завершилась: не осталось дискриминируемой общины, которая могла бы бороться, либо отключено игровое правило «Социальные движения»"
  },
  "je_civil_rights_months_line": {
   "en": "\\n#bold Months run:#![AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_grassroots'), '(CFixedPoint)0'), 'je_civil_rights_months_grassroots')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_federal'), '(CFixedPoint)0'), 'je_civil_rights_months_federal')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_gradualist'), '(CFixedPoint)0'), 'je_civil_rights_months_gradualist')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_cooptation'), '(CFixedPoint)0'), 'je_civil_rights_months_cooptation')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_suppression'), '(CFixedPoint)0'), 'je_civil_rights_months_suppression')][AddLocalizationIf(GreaterThan_CFixedPoint(GetPlayer.MakeScope.ScriptValue('cr_months_disp_segregationist'), '(CFixedPoint)0'), 'je_civil_rights_months_segregationist')]",
@@ -287,9 +595,69 @@
   "en": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold If it wins now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold If it collapses now:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]",
   "ru": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_months_disp_total'), '(CFixedPoint)0'), 'je_civil_rights_months_line')]\\n#bold Если победит сейчас:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_win_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_win_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_win_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_win_4')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)5'), 'je_civil_rights_win_5')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_win_ending_now'), '(CFixedPoint)6'), 'je_civil_rights_win_6')]\\n#bold Если потерпит крах сейчас:#! [AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)1'), 'je_civil_rights_fail_1')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)2'), 'je_civil_rights_fail_2')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)3'), 'je_civil_rights_fail_3')][AddLocalizationIf(EqualTo_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('cr_fail_ending_now'), '(CFixedPoint)4'), 'je_civil_rights_fail_4')]"
  },
+ "je_civil_rights_reason": {
+  "en": "Discriminated communities are demanding equal treatment under the law. The movement wins when $civil_rights_support_bar_name$ reaches #v 100#! and collapses if it falls to #v 0#!. The panel lists what moves the bar each month, ticking each factor that applies now: laws, technology, grievances, [Concept('concept_radical', 'radicals')] and the policy buttons. Each ending below names what leads to it.",
+  "ru": "Дискриминируемые общины требуют равного обращения по закону. Движение побеждает, когда показатель «$civil_rights_support_bar_name$» достигает #v 100#!, и рушится, если падает до #v 0#!. Панель перечисляет, что двигает шкалу каждый месяц, отмечая каждый действующий сейчас фактор: законы, технологии, обиды, [Concept('concept_radical', 'радикалов')] и кнопки политики. Каждая концовка ниже указывает, что к ней ведёт."
+ },
+ "je_civil_rights_status_active": {
+  "en": "The movement is on the front page, and the cabinet is forced to take public positions.$je_civil_rights_progress_lines$",
+  "ru": "Движение на первых полосах, и кабинет вынужден занимать публичные позиции.$je_civil_rights_progress_lines$"
+ },
+ "je_civil_rights_status_growing": {
+  "en": "Sit-ins and chapter networks are spreading, but the levers of power haven't moved.$je_civil_rights_progress_lines$",
+  "ru": "Сидячие акции и сети отделений ширятся, но рычаги власти не сдвинулись.$je_civil_rights_progress_lines$"
+ },
+ "je_civil_rights_status_imminent": {
+  "en": "Reform is at the door: a march on the capital is a question of weeks, not years.$je_civil_rights_progress_lines$",
+  "ru": "Реформа на пороге: марш на столицу — вопрос недель, а не лет.$je_civil_rights_progress_lines$"
+ },
+ "je_civil_rights_status_marginal": {
+  "en": "The movement is marginal: small chapters, scattered leafleting, and a press that still calls them [Concept('concept_agitator', 'agitators')].$je_civil_rights_progress_lines$",
+  "ru": "Движение маргинально: небольшие отделения, разрозненные листовки и пресса, которая по-прежнему называет их [Concept('concept_agitator', 'агитаторами')].$je_civil_rights_progress_lines$"
+ },
+ "je_civil_rights_status_pressuring": {
+  "en": "The movement now sets the tempo, and backlash organizes openly.$je_civil_rights_progress_lines$",
+  "ru": "Теперь движение задаёт темп, а ответная реакция организуется открыто.$je_civil_rights_progress_lines$"
+ },
+ "je_civil_rights_win_1": {
+  "en": "#b Victory on Paper#!, while a discriminatory minority law stands",
+  "ru": "#b Победа на бумаге#!, пока действует дискриминационный закон о меньшинствах"
+ },
+ "je_civil_rights_win_6": {
+  "en": "#b A New Era of Equality#!, no pro-movement or cooptation policy having run over #v 18#! months",
+  "ru": "#b Новая эра равенства#!: ни одна политика в поддержку движения или кооптации не действует более #v 18#! мес."
+ },
  "je_colonial_empire": {
   "en": "Colonial Empire",
   "ru": "Колониальная империя"
+ },
+ "je_colonial_empire_act_civilizing_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded when we adopted the #b Civilizing Mission Compact#!",
+  "ru": "$concept_journal_entry$ завершилась, когда мы приняли #b Пакт о цивилизаторской миссии#!"
+ },
+ "je_colonial_empire_act_civilizing_tt": {
+  "en": "We take the $imperial_federation_act_civilizing_mission$ decision. It needs the Solidified band held for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (now #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) and liberal laws; the decision lists the rest.",
+  "ru": "Мы принимаем решение «$imperial_federation_act_civilizing_mission$». Для него нужно удерживать диапазон «Упроченный» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и либеральные законы; остальное перечислено в решении."
+ },
+ "je_colonial_empire_act_iron_fist_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded when we passed the #b Imperial Federation Act#!",
+  "ru": "$concept_journal_entry$ завершилась, когда мы приняли #b Акт об имперской федерации#!"
+ },
+ "je_colonial_empire_act_iron_fist_tt": {
+  "en": "We take the $imperial_federation_act_iron_fist$ decision. It needs the Solidified band held for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (now #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) and hard-line laws; the decision lists the rest.",
+  "ru": "Мы принимаем решение «$imperial_federation_act_iron_fist$». Для него нужно удерживать диапазон «Упроченный» в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) и жёсткие законы; остальное перечислено в решении."
+ },
+ "je_colonial_empire_assim_led_tt": {
+  "en": "Cultural Assimilation has run longer than each other program, and more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "«Культурная ассимиляция» действует дольше каждой другой программы и более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
+ "je_colonial_empire_assimilation_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with our colonies #b assimilated#!",
+  "ru": "$concept_journal_entry$ завершилась: наши колонии #b ассимилированы#!"
+ },
+ "je_colonial_empire_band_at_cap": {
+  "en": "#G the cap#!",
+  "ru": "#G предел#!"
  },
  "je_colonial_empire_band_collapsing": {
   "en": "#R Collapsing#!",
@@ -311,9 +679,33 @@
   "en": "#o Strained#!",
   "ru": "#o Напряжена#!"
  },
+ "je_colonial_empire_band_unknown": {
+  "en": "#lore unknown#!",
+  "ru": "#lore неизвестно#!"
+ },
+ "je_colonial_empire_bloc_alone": {
+  "en": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people. No neighboring state of ours is their [concept_homeland], so it would go alone.",
+  "ru": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! чел. Ни одна из наших соседних областей не является их [Concept('concept_homeland','исторической родиной')], поэтому она уйдёт одна."
+ },
  "je_colonial_empire_bloc_member_line": {
   "en": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people",
   "ru": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! чел."
+ },
+ "je_colonial_empire_bloc_people": {
+  "en": "Released, it forms a nation of its #v [SCOPE.sCulture('ce_bloc_culture').GetName]#! people.",
+  "ru": "После освобождения она образует нацию из людей культуры #v [SCOPE.sCulture('ce_bloc_culture').GetName]#!."
+ },
+ "je_colonial_empire_bloc_states": {
+  "en": "It takes with it every neighboring state of ours where they are at home, so one release takes all #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! of these, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people:",
+  "ru": "Вместе с ней уходят все наши соседние области, где её люди чувствуют себя как дома, поэтому одно освобождение забирает все эти области (#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#!), всего #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! чел.:"
+ },
+ "je_colonial_empire_bloc_states_tail": {
+  "en": "#lore And smaller ones, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! states in all.#!",
+  "ru": "#lore И более мелкие; всего областей: #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#!.#!"
+ },
+ "je_colonial_empire_bloc_weight": {
+  "en": "Its weight on stability: #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight')|=+2]#! a month, through [concept_acceptance] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_acceptance')|=+2]#! and [concept_colonial_overreach] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_overreach')|=+2]#!, before the monthly limit. Releasing it takes that away.",
+  "ru": "Её вес для стабильности: #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight')|=+2]#! в месяц — через [concept_acceptance|l] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_acceptance')|=+2]#! и [concept_colonial_overreach|l] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_overreach')|=+2]#!, до применения месячного предела. Освобождение убирает этот вес."
  },
  "je_colonial_empire_btn_accords": {
   "en": "Accords Signed",
@@ -339,41 +731,145 @@
   "en": "Release",
   "ru": "Освободить"
  },
+ "je_colonial_empire_collapse_tt": {
+  "en": "The Colonial Stability bar reaches #R 0#!",
+  "ru": "Шкала «Колониальная стабильность» достигает #R 0#!"
+ },
+ "je_colonial_empire_commonwealth_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with our colonies #b held through investment#!",
+  "ru": "$concept_journal_entry$ завершилась: наши колонии #b удержаны за счёт инвестиций#!"
+ },
+ "je_colonial_empire_complete_tt": {
+  "en": "The Colonial Stability bar holds at #G 100#! for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] sustained months (now #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). A drop below 100 resets the count.",
+  "ru": "Шкала «Колониальная стабильность» удерживается на #G 100#! в течение [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] мес. подряд (сейчас #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Падение ниже 100 обнуляет счёт."
+ },
+ "je_colonial_empire_conditions_pending": {
+  "en": "#lore The figures appear after the next monthly assessment.#!",
+  "ru": "#lore Показатели появятся после следующей ежемесячной оценки.#!"
+ },
+ "je_colonial_empire_crumbles_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the #b collapse of the empire#!",
+  "ru": "$concept_journal_entry$ завершилась #b крахом империи#!"
+ },
+ "je_colonial_empire_crumbles_path_tt": {
+  "en": "Military Garrison has run at least as long as each other program, or neither Colonial Development Investment nor Cultural Assimilation has run more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "«Военный гарнизон» действует не меньше любой другой программы, или ни «Инвестиции в колониальное развитие», ни «Культурная ассимиляция» не действовали более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
  "je_colonial_empire_decision_planned": {
   "en": "Planned Full Decolonization",
   "ru": "Запланированная полная деколонизация"
+ },
+ "je_colonial_empire_decision_planned_tt": {
+  "en": "Wind up the entire colonial empire at once. Every eligible territory is listed for confirmation before anything is released, and you can withdraw.",
+  "ru": "Свернуть всю колониальную империю разом. Прежде чем что-либо будет освобождено, каждая подходящая территория выводится списком для подтверждения, и вы можете отступить."
  },
  "je_colonial_empire_drift_acceptance": {
   "en": "Colonial [concept_acceptance]",
   "ru": "Колониальное [concept_acceptance|l]"
  },
+ "je_colonial_empire_drift_acceptance_tt": {
+  "en": "Colonies with a severely unaccepted population drain stability; overseas states where everyone is well accepted add to it.",
+  "ru": "Колонии с сильно непринятым населением истощают стабильность; заморские области, где все хорошо приняты, добавляют её."
+ },
  "je_colonial_empire_drift_base": {
   "en": "Base decline",
   "ru": "Базовый спад"
+ },
+ "je_colonial_empire_drift_base_tt": {
+  "en": "Every colonial empire loses some stability each month as the age of empire ends.",
+  "ru": "Каждая колониальная империя ежемесячно теряет часть стабильности, поскольку эпоха империй подходит к концу."
  },
  "je_colonial_empire_drift_cap": {
   "en": "Monthly limit",
   "ru": "Месячный предел"
  },
+ "je_colonial_empire_drift_cap_tt": {
+  "en": "Stability moves at most ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way. This is what the limit takes off the rows above.",
+  "ru": "Стабильность меняется не более чем на ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] в месяц в любую сторону. Именно столько предел срезает со строк выше."
+ },
  "je_colonial_empire_drift_domestic": {
   "en": "War and [concept_turmoil]",
   "ru": "Война и [concept_turmoil|l]"
+ },
+ "je_colonial_empire_drift_domestic_tt": {
+  "en": "#header War, revolution and [concept_turmoil]#!\\nBeing at war, a revolution, and [concept_turmoil] at home all drain stability.",
+  "ru": "#header Война, революция и [concept_turmoil|l]#!\\nВойна, революция и [concept_turmoil|l] внутри страны — всё это истощает стабильность."
  },
  "je_colonial_empire_drift_gp": {
   "en": "[concept_great_power|E] pressure",
   "ru": "Давление [Concept('concept_great_power','великих держав')]"
  },
+ "je_colonial_empire_drift_gp_tt_ours": {
+  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against ours; International Pressure lists them.",
+  "ru": "Осуждение и поддержка со стороны великих держав, каждая со своим весом по [Concept('concept_prestige','престижу')] относительно нашего; «Международное давление» перечисляет их."
+ },
+ "je_colonial_empire_drift_gp_tt_theirs": {
+  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against the country's.",
+  "ru": "Осуждение и поддержка со стороны великих держав, каждая со своим весом по [Concept('concept_prestige','престижу')] относительно престижа страны."
+ },
+ "je_colonial_empire_drift_igs_tt": {
+  "en": "Powerful Landowners and Armed Forces steady the empire; powerful Intelligentsia and Trade Unions erode it.",
+  "ru": "Влиятельные Землевладельцы и Вооружённые силы стабилизируют империю; влиятельные Интеллигенция и Профсоюзы подрывают её."
+ },
  "je_colonial_empire_drift_laws": {
   "en": "Laws and events",
   "ru": "Законы и события"
+ },
+ "je_colonial_empire_drift_laws_tt_ours": {
+  "en": "#header Laws, technologies and events#!\\nWhat our laws, some technologies and the modifiers recent events left behind add or take away. Hover the stability bar for each source.",
+  "ru": "#header Законы, технологии и события#!\\nЧто добавляют или отнимают наши законы, некоторые технологии и модификаторы, оставшиеся после недавних событий. Наведите курсор на шкалу стабильности, чтобы увидеть каждый источник."
+ },
+ "je_colonial_empire_drift_laws_tt_theirs": {
+  "en": "#header Laws, technologies and events#!\\nWhat the country's laws, some technologies and the modifiers recent events left behind add or take away.",
+  "ru": "#header Законы, технологии и события#!\\nЧто добавляют или отнимают законы страны, некоторые технологии и модификаторы, оставшиеся после недавних событий."
+ },
+ "je_colonial_empire_drift_overreach_tt": {
+  "en": "Holding more colonies than the metropole can support.",
+  "ru": "Больше колоний, чем может содержать метрополия."
  },
  "je_colonial_empire_drift_policies": {
   "en": "Programs",
   "ru": "Программы"
  },
+ "je_colonial_empire_drift_policies_tt_ours": {
+  "en": "What our running programs add, each shown on its row under Colonial Programs.",
+  "ru": "Что добавляют наши действующие программы, каждая показана в своей строке в разделе «Колониальные программы»."
+ },
+ "je_colonial_empire_drift_policies_tt_theirs": {
+  "en": "What the country's running programs add, each shown on its row under Colonial Programs.",
+  "ru": "Что добавляют действующие программы страны, каждая показана в своей строке в разделе «Колониальные программы»."
+ },
  "je_colonial_empire_drift_rank": {
   "en": "Rank",
   "ru": "Ранг"
+ },
+ "je_colonial_empire_drift_rank_tt": {
+  "en": "A [concept_great_power] holds its colonies more easily than a lesser power.",
+  "ru": "[concept_great_power] удерживает свои колонии легче, чем малая держава."
+ },
+ "je_colonial_empire_drift_total": {
+  "en": "#bold Projected change#!",
+  "ru": "#bold Прогнозируемое изменение#!"
+ },
+ "je_colonial_empire_drift_total_tt": {
+  "en": "What the bar moves by this month: the rows above, after the monthly limit.",
+  "ru": "На сколько сдвинется шкала в этом месяце: строки выше с учётом месячного предела."
+ },
+ "je_colonial_empire_endures_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with our empire #b secured#!",
+  "ru": "$concept_journal_entry$ завершилась: наша империя #b закреплена#!"
+ },
+ "je_colonial_empire_fail_tt": {
+  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programs let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
+  "ru": "Проваливается, когда шкала «Колониальная стабильность» достигает #R 0#! — колониальная система рушится. До трёх колониальных территорий объявляют независимость, самые неспокойные первыми, с интервалом в два месяца; каждую декларацию можно признать, обсудить или оспорить силой, и каждая ушедшая территория забирает с собой связанные земли, являющиеся [Concept('concept_homeland','исторической родиной')] её народа. [concept_liberty_desire|l] наших колониальных зависимых государств резко растёт, а эта запись журнала не вернётся десять лет. Если годы программ развития или ассимиляции не позволяют нам договориться об уходе, крах также стоит нам [concept_prestige|l] и [concept_sol|l] на годы."
+ },
+ "je_colonial_empire_garrison_led_tt": {
+  "en": "Military Garrison has run at least as long as each other program, and more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "«Военный гарнизон» действует не меньше любой другой программы и более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
+ "je_colonial_empire_gp_condemning": {
+  "en": "#R Condemning#!",
+  "ru": "#R Осуждает#!"
  },
  "je_colonial_empire_gp_effect": {
   "en": "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]/mo",
@@ -383,17 +879,49 @@
   "en": "Monthly",
   "ru": "В месяц"
  },
+ "je_colonial_empire_gp_head_effect_tt": {
+  "en": "What it adds to or takes from [concept_colonial_stability] each month, before the monthly limit.",
+  "ru": "Сколько она добавляет к [Concept('concept_colonial_stability','колониальной стабильности')] или отнимает от неё каждый месяц, до применения месячного предела."
+ },
  "je_colonial_empire_gp_head_name": {
   "en": "Great Power",
   "ru": "Великая держава"
+ },
+ "je_colonial_empire_gp_head_name_tt": {
+  "en": "A [concept_great_power] that condemns colonialism or backs the colonial powers. Its flag opens the country.",
+  "ru": "[concept_great_power], которая осуждает колониализм или поддерживает колониальные державы. Её флаг открывает страну."
  },
  "je_colonial_empire_gp_head_share": {
   "en": "Share",
   "ru": "Доля"
  },
+ "je_colonial_empire_gp_head_share_tt_ours": {
+  "en": "Its share of the [concept_prestige] of every [concept_great_power] and ours, at the monthly assessment. Added together, the condemners' shares isolate us at a third and turn an international consensus against us at two thirds.",
+  "ru": "Её доля [Concept('concept_prestige','престижа')] всех [Concept('concept_great_power','великих держав')] и нашего на момент ежемесячной оценки. В сумме доли осуждающих изолируют нас при одной трети и обращают международный консенсус против нас при двух третях."
+ },
+ "je_colonial_empire_gp_head_share_tt_theirs": {
+  "en": "Its share of the [concept_prestige] of every [concept_great_power] and the country's, at the monthly assessment. Added together, the condemners' shares isolate the country at a third and turn an international consensus against it at two thirds.",
+  "ru": "Её доля [Concept('concept_prestige','престижа')] всех [Concept('concept_great_power','великих держав')] и самой страны на момент ежемесячной оценки. В сумме доли осуждающих изолируют страну при одной трети и обращают международный консенсус против неё при двух третях."
+ },
  "je_colonial_empire_gp_head_stance": {
   "en": "Stance",
   "ru": "Позиция"
+ },
+ "je_colonial_empire_gp_head_stance_tt_ours": {
+  "en": "Whether it condemns our colonies or backs us.",
+  "ru": "Осуждает ли она наши колонии или поддерживает нас."
+ },
+ "je_colonial_empire_gp_head_stance_tt_theirs": {
+  "en": "Whether it condemns the country's colonies or backs it.",
+  "ru": "Осуждает ли она колонии страны или поддерживает её."
+ },
+ "je_colonial_empire_gp_row_tt": {
+  "en": "#header [ScriptContainer.MakeScope.Var('ce_gp_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nIt holds #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_share')|%0]#! of the [concept_prestige] of the great powers and the empire. Its prestige, #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_prestige')|0]#!, against the empire's counts #v ×[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_factor')|2]#! (from a quarter up to double), so it moves the empire's [concept_colonial_stability] by #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]#! a month. As of the monthly assessment.",
+  "ru": "#header [ScriptContainer.MakeScope.Var('ce_gp_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nНа неё приходится #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_share')|%0]#! [Concept('concept_prestige','престижа')] великих держав и империи. Её престиж, #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_prestige')|0]#!, по сравнению с престижем империи засчитывается с коэффициентом #v ×[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_factor')|2]#! (от четверти до двойного), поэтому она сдвигает [Concept('concept_colonial_stability','колониальную стабильность')] империи на #v [ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_weight')|=+2]#! в месяц. На момент ежемесячной оценки."
+ },
+ "je_colonial_empire_gp_supporting": {
+  "en": "#G Supporting#!",
+  "ru": "#G Поддерживает#!"
  },
  "je_colonial_empire_history_header": {
   "en": "History",
@@ -403,13 +931,81 @@
   "en": "Colonial Holdings",
   "ru": "Колониальные владения"
  },
+ "je_colonial_empire_holdings_subjects": {
+  "en": "Colonial Subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "ru": "Колониальные зависимые государства: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+ },
+ "je_colonial_empire_holdings_subjects_tt_ours": {
+  "en": "#header Colonial subjects#!\\nEvery [concept_colonial_subject] of ours or of our subjects. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
+  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l], наше или наших зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в диапазоне «Напряжённый» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
+ },
+ "je_colonial_empire_holdings_subjects_tt_theirs": {
+  "en": "#header Colonial subjects#!\\nEvery [concept_colonial_subject] of the country or of its subjects. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
+  "ru": "#header Колониальные зависимые государства#!\\nКаждое [concept_colonial_subject|l] страны или её зависимых государств. Достаточно любого из них, чтобы эта запись продолжала работать. Они сами не двигают шкалу стабильности, но в диапазоне «Напряжённый» и ниже их [concept_liberty_desire|l] растёт каждый месяц. Обновляется ежемесячно."
+ },
+ "je_colonial_empire_holdings_territories": {
+  "en": "Territories: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
+  "ru": "Территории: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, из них колоний: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
+ },
+ "je_colonial_empire_holdings_territories_tt_ours": {
+  "en": "#header Our territories#!\\nEvery [concept_colonial_territory] we hold, one row for the states one release takes together. A lit icon marks an [Concept('concept_overseas_colony','overseas colony')] among them, which keeps this entry running; the others count only for release. Each can be released from its row, and Planned Full Decolonization releases them all. Updated monthly.",
+  "ru": "#header Наши территории#!\\nКаждая [concept_colonial_territory|l], которой мы владеем, по одной строке на области, которые уходят вместе при одном освобождении. Горящий значок отмечает среди них [Concept('concept_overseas_colony','заморскую колонию')], которая поддерживает работу этой записи; остальные учитываются только при освобождении. Каждую можно освободить из её строки, а «Запланированная полная деколонизация» освобождает их все. Обновляется ежемесячно."
+ },
+ "je_colonial_empire_holdings_territories_tt_theirs": {
+  "en": "#header Its territories#!\\nEvery [concept_colonial_territory] the country holds. An [Concept('concept_overseas_colony','overseas colony')] among them keeps this entry running; the others count only for release. Updated monthly.",
+  "ru": "#header Её территории#!\\nКаждая [concept_colonial_territory|l], которой владеет страна. [Concept('concept_overseas_colony','Заморская колония')] среди них поддерживает работу этой записи; остальные учитываются только при освобождении. Обновляется ежемесячно."
+ },
+ "je_colonial_empire_holdings_wars": {
+  "en": "Wars of Independence: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
+  "ru": "Войны за независимость: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
+ },
+ "je_colonial_empire_holdings_wars_tt_ours": {
+  "en": "#header Wars of independence#!\\nEvery war we are fighting to keep a colony: a territory whose declaration we chose to fight, a colonial subject at war for its independence, or a colony's secession. Holding their land does not end such a war: only their capitulation, or a peace, does. Each drains [concept_colonial_stability], and the years of all of them together cost [concept_legitimacy]. Updated monthly.",
+  "ru": "#header Войны за независимость#!\\nКаждая война, которую мы ведём, чтобы удержать колонию: территория, чью декларацию мы решили оспорить силой, колониальное зависимое государство, воюющее за независимость, или отделение колонии. Занятие их земли такую войну не заканчивает: её заканчивает только их капитуляция или мир. Каждая истощает [Concept('concept_colonial_stability','колониальную стабильность')], а годы всех вместе стоят нам [concept_legitimacy|l]. Обновляется ежемесячно."
+ },
+ "je_colonial_empire_holdings_wars_tt_theirs": {
+  "en": "#header Wars of independence#!\\nEvery war the country is fighting to keep a colony: a territory whose declaration it chose to fight, a colonial subject at war for its independence, or a colony's secession. Holding their land does not end such a war: only their capitulation, or a peace, does. Each drains [concept_colonial_stability], and the years of all of them together cost [concept_legitimacy]. Updated monthly.",
+  "ru": "#header Войны за независимость#!\\nКаждая война, которую страна ведёт, чтобы удержать колонию: территория, чью декларацию она решила оспорить силой, колониальное зависимое государство, воюющее за независимость, или отделение колонии. Занятие их земли такую войну не заканчивает: её заканчивает только их капитуляция или мир. Каждая истощает [Concept('concept_colonial_stability','колониальную стабильность')], а годы всех вместе стоят ей [concept_legitimacy|l]. Обновляется ежемесячно."
+ },
  "je_colonial_empire_holdings_whole": {
   "en": "The Whole Empire",
   "ru": "Вся империя"
  },
+ "je_colonial_empire_how_bar_1": {
+  "en": "The bar runs from 0 to 100 and moves once a month by the sum of everything acting on it, but never by more than ±[GetPlayer.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] either way, so no single shock can empty it. Hover the bar at the top for every term with its current value; Why Stability Is Moving adds them up by group.",
+  "ru": "Шкала идёт от 0 до 100 и раз в месяц сдвигается на сумму всех действующих на неё факторов, но не более чем на ±[GetPlayer.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] в любую сторону, поэтому ни один шок не может опустошить её. Наведите курсор на шкалу вверху, чтобы увидеть каждое слагаемое с текущим значением; «Почему меняется стабильность» суммирует их по группам."
+ },
+ "je_colonial_empire_how_bar_2": {
+  "en": "Where the bar stands sets the [concept_colonial_band]. On the overview's bar a thin line marks where the next band begins, and a lighter stretch shows where the bar is heading in [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #G green#! while it rises, #R red#! while it falls. Hover the band at the top for the modifier it puts on this journal entry.",
+  "ru": "Положение шкалы определяет [concept_colonial_band|l]. На шкале обзора тонкая линия отмечает, где начинается следующий диапазон, а более светлый участок показывает, куда шкала движется за [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] мес. при темпе этого месяца: #G зелёным#!, пока она растёт, и #R красным#!, пока падает. Наведите курсор на диапазон вверху, чтобы увидеть модификатор, который он накладывает на эту запись журнала."
+ },
+ "je_colonial_empire_how_bar_3": {
+  "en": "The entry is won by holding the bar at 100 long enough (the overview counts the months once the empire is Solidified), or by taking the Imperial Federation Act or the Civilizing Mission Compact. It fails if the bar reaches 0, and ends without penalty once we hold no colony or colonial subject.",
+  "ru": "Запись завершается победой, если удерживать шкалу на 100 достаточно долго (обзор считает месяцы, когда империя в диапазоне «Упроченный»), или принятием Акта об имперской федерации или Пакта о цивилизаторской миссии. Она проваливается, если шкала достигает 0, и заканчивается без штрафа, когда у нас не остаётся ни колоний, ни колониальных зависимых государств."
+ },
+ "je_colonial_empire_how_decolonization": {
+  "en": "Each territory in Colonial Holdings has a Release button, and each colonial subject has Release and, for a colony, Dominion. A button opens a decision on that one target before anything happens; Reconsider is always offered, and is the default. A released territory leaves with every neighboring state of ours where its people are at home. It can go by our own grant, or at a Round Table Conference if none of its people is severely unaccepted and we have more than #v [GetPlayer.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [concept_authority]: the Landowners resent it, but the new country starts on better terms with us and stability recovers for longer. Freeing a subject makes it a former colony, as a released territory is. Raising a colony to a dominion is vanilla's own step up in autonomy: it stays our subject but no longer counts as colonial. Planned Full Decolonization releases every territory at once. Holding a rebel country's land does not end a war of independence: only its capitulation, or a peace, does. Open Talks, beside the war, begins the accords. One decision can be open at a time.",
+  "ru": "У каждой территории в разделе «Колониальные владения» есть кнопка «Освободить», а у каждого колониального зависимого государства — «Освободить» и, для колонии, «Доминион». Кнопка открывает решение по этой одной цели, прежде чем что-либо произойдёт; «Передумать» всегда доступна и выбрана по умолчанию. Освобождённая территория уходит вместе с каждой нашей соседней областью, где её народ чувствует себя как дома. Это может быть наш собственный дар или Конференция круглого стола, если никто из её народа не находится в сильно непринятом положении и у нас больше #v [GetPlayer.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [Concept('concept_authority','авторитета')]: Землевладельцы возмущены, но новая страна начинает на лучших условиях с нами, а стабильность дольше восстанавливается. Освобождение зависимого государства делает его бывшей колонией, как и освобождённую территорию. Возведение колонии в доминион — это собственная ступень автономии базовой игры: она остаётся нашим зависимым государством, но больше не считается колониальной. «Запланированная полная деколонизация» освобождает все территории разом. Занятие земли мятежной страны не заканчивает войну за независимость: её заканчивает только капитуляция или мир. «Начать переговоры» рядом с войной запускает соглашения. Одновременно может быть открыто одно решение."
+ },
  "je_colonial_empire_how_header": {
   "en": "How the Colonial Empire Works",
   "ru": "Как работает колониальная империя"
+ },
+ "je_colonial_empire_how_moves": {
+  "en": "A base decline is always there. Laws, some technologies and recent events add or take away, and so do powerful interest groups and our rank. War, revolution, [concept_turmoil] and [concept_colonial_overreach] drain the bar. Colonies with a severely unaccepted population drain it too, and overseas states where everyone is well accepted add to it. Overreach, great-power pressure and acceptance are counted at the monthly assessment; the other groups change as soon as their cause does. Each row's bar under Why Stability Is Moving spans that term's usual range; the figure beside it is exact.",
+  "ru": "Базовый спад есть всегда. Законы, некоторые технологии и недавние события добавляют или отнимают, как и влиятельные группы интересов и наш ранг. Война, революция, [concept_turmoil|l] и [concept_colonial_overreach|l] истощают шкалу. Колонии с сильно непринятым населением тоже её истощают, а заморские области, где все хорошо приняты, добавляют. Перенапряжение, давление великих держав и принятие учитываются при ежемесячной оценке; остальные группы меняются сразу, как только меняется их причина. Шкала каждой строки в «Почему меняется стабильность» охватывает обычный диапазон этого слагаемого; стоящая рядом цифра точна."
+ },
+ "je_colonial_empire_how_pressure": {
+  "en": "Each [concept_great_power] may condemn colonialism, back the colonial powers or stay out. Each counts in proportion to its [concept_prestige] against ours, from a quarter of a peer's weight up to double. When the condemning powers hold a third of the prestige of all great powers and ourselves we face diplomatic isolation, and at two thirds an international consensus against us. Each is a further monthly loss, and they stack. Support adds to stability every month but does not count against these thresholds.",
+  "ru": "Каждая [concept_great_power|l] может осуждать колониализм, поддерживать колониальные державы или не вмешиваться. Каждая учитывается пропорционально своему [Concept('concept_prestige','престижу')] относительно нашего: от четверти веса равного до двойного. Когда осуждающие державы держат треть престижа всех великих держав и нашего, мы сталкиваемся с дипломатической изоляцией, а при двух третях — с международным консенсусом против нас. Каждая из них — дополнительная ежемесячная потеря, и они суммируются. Поддержка добавляет стабильность каждый месяц, но не засчитывается против этих порогов."
+ },
+ "je_colonial_empire_how_programmes": {
+  "en": "Each program runs at a level from 0 to 3. Every month a level adds a third of the program's full effect to the bar and costs a third of its upkeep; hover a row for all its effects. Our laws and some of our technologies make each program worth more or less. Investment and Assimilation also charge a one-off payment on each step up, and the Garrison costs [concept_infamy] when it starts. The program we run longest, counting a month at a lower level as a share of a month, also decides how the empire ends.",
+  "ru": "Каждая программа работает на уровне от 0 до 3. Каждый месяц один уровень добавляет к шкале треть полного эффекта программы и стоит трети её содержания; наведите курсор на строку, чтобы увидеть все эффекты. Наши законы и некоторые технологии делают каждую программу более или менее эффективной. «Инвестиции» и «Ассимиляция» также взимают разовый платёж за каждый шаг вверх, а гарнизон при запуске стоит нам [Concept('concept_infamy','дурную славу')]. Программа, которую мы ведём дольше всех (месяц на низком уровне засчитывается как часть месяца), также определяет, чем кончится империя."
+ },
+ "je_colonial_empire_how_stance": {
+  "en": "Any country may condemn colonialism, back the colonial powers or stay neutral, but only a [concept_great_power]'s stance weighs on the colonial empires: it costs #v [GetPlayer.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence] for as long as it is held, and a lesser power's lies dormant, costing and moving nothing. A stance can change once every #v [GetPlayer.MakeScope.ScriptValue('decol_stance_cooldown_months')|0]#! months, and each change stirs our interest groups as The Colonial Question does. The Colonial Question asks once; after that, the buttons here change the stance. The section also gives our share of great-power prestige, which is how much our condemnation counts toward the escalations. It and The Colonial Powers stay on this tab after our own colonial empire ends.",
+  "ru": "Любая страна может осуждать колониализм, поддерживать колониальные державы или сохранять нейтралитет, но на колониальные империи давит только позиция [Concept('concept_great_power','великой державы')]: она обходится в #v [GetPlayer.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [Concept('concept_influence','влияния')], пока удерживается, а позиция малой державы дремлет, ничего не стоя и ничего не двигая. Позицию можно менять раз в #v [GetPlayer.MakeScope.ScriptValue('decol_stance_cooldown_months')|0]#! мес., и каждая смена будоражит наши группы интересов, как и «Колониальный вопрос». «Колониальный вопрос» задаётся один раз; после этого позицию меняют кнопки здесь. Раздел также показывает нашу долю престижа великих держав, то есть насколько наше осуждение считается при эскалациях. Он и «Колониальные державы» остаются на этой вкладке после конца нашей колониальной империи."
  },
  "je_colonial_empire_how_sub_bar": {
   "en": "Colonial Stability",
@@ -435,9 +1031,73 @@
   "en": "Our Stance on Colonialism",
   "ru": "Наша позиция по колониализму"
  },
+ "je_colonial_empire_invalid_conclusion_desc": {
+  "en": "The $concept_journal_entry$ ended when the Decolonization game rule was switched off",
+  "ru": "$concept_journal_entry$ завершилась, когда было отключено игровое правило «Деколонизация»"
+ },
+ "je_colonial_empire_invest_body_theirs": {
+  "en": "Pour resources into developing [concept_infrastructure] and institutions in the colonial territories. Its weekly upkeep grows with the [concept_gdp] of the colonies.",
+  "ru": "Вложение ресурсов в развитие [Concept('concept_infrastructure','инфраструктуры')] и институтов в колониальных территориях. Его еженедельное содержание растёт вместе с [Concept('concept_gdp','ВВП')] колоний."
+ },
+ "je_colonial_empire_invest_led_tt": {
+  "en": "Colonial Development Investment has run longer than Military Garrison, at least as long as Cultural Assimilation, and more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "«Инвестиции в колониальное развитие» действуют дольше «Военного гарнизона», не меньше «Культурной ассимиляции» и более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
+ "je_colonial_empire_iron_fist_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with our colonies #b held by the garrisons#!",
+  "ru": "$concept_journal_entry$ завершилась: наши колонии #b удержаны гарнизонами#!"
+ },
+ "je_colonial_empire_negotiated_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with a #b negotiated withdrawal#! from the colonies",
+  "ru": "$concept_journal_entry$ завершилась #b согласованным уходом#! из колоний"
+ },
+ "je_colonial_empire_negotiated_path_tt": {
+  "en": "Colonial Development Investment or Cultural Assimilation has run longer than Military Garrison, and one of the two has run more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "«Инвестиции в колониальное развитие» или «Культурная ассимиляция» действовали дольше «Военного гарнизона», и одна из двух действовала более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
+ "je_colonial_empire_negotiated_tt": {
+  "en": "Up to three colonial territories declare independence, two months apart, each to be conceded, negotiated or fought, and the empire keeps its ties to those it lets go.",
+  "ru": "До трёх колониальных территорий объявляют независимость с интервалом в два месяца, каждую можно признать, обсудить или оспорить силой, а империя сохраняет связи с теми, кого отпускает."
+ },
+ "je_colonial_empire_no_path_tt": {
+  "en": "No program has run more than 24 months (months, weighted by program level: Garrison #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Investment #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Assimilation #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)",
+  "ru": "Ни одна программа не действовала более 24 мес. (месяцы с учётом уровня программы: Гарнизон #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_months_value')|1]#!, Инвестиции #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_invest_months_value')|1]#!, Ассимиляция #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_assimilate_months_value')|1]#!)"
+ },
  "je_colonial_empire_ov_act": {
   "en": "Months Solidified: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
   "ru": "Месяцев закрепления: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
+ },
+ "je_colonial_empire_ov_act_tt_ours": {
+  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies we own ourselves, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
+  "ru": "Акт об имперской федерации и Пакт о цивилизаторской миссии, решения, сразу завершающие эту запись, требуют [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. подряд в диапазоне «Упроченный». Нужны также ранг великой державы, как минимум четыре колонии, которыми мы владеем сами, «Колониальная эксплуатация» или «Колониальное переселение», подходящий набор законов и достаточно [Concept('concept_authority','авторитета')] и [Concept('concept_prestige','престижа')]. Любой месяц ниже «Упроченного» обнуляет счёт."
+ },
+ "je_colonial_empire_ov_act_tt_theirs": {
+  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies the country owns itself, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
+  "ru": "Акт об имперской федерации и Пакт о цивилизаторской миссии, решения, сразу завершающие эту запись, требуют [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] мес. подряд в диапазоне «Упроченный». Нужны также ранг великой державы, как минимум четыре колонии, которыми страна владеет сама, «Колониальная эксплуатация» или «Колониальное переселение», подходящий набор законов и достаточно [Concept('concept_authority','авторитета')] и [Concept('concept_prestige','престижа')]. Любой месяц ниже «Упроченного» обнуляет счёт."
+ },
+ "je_colonial_empire_ov_assimilation_off_tt": {
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\nNot running",
+  "ru": "#header $je_colonial_empire_row_assimilation$#!\\nНе работает"
+ },
+ "je_colonial_empire_ov_assimilation_on_tt": {
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3",
+  "ru": "#header $je_colonial_empire_row_assimilation$#!\\n#G Работает#! на уровне #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! из 3"
+ },
+ "je_colonial_empire_ov_band_tt": {
+  "en": "[Concept('concept_colonial_band','Band')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title While in this band:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]",
+  "ru": "[Concept('concept_colonial_band','Диапазон')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title В этом диапазоне:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]"
+ },
+ "je_colonial_empire_ov_consensus": {
+  "en": "#R Consensus#!",
+  "ru": "#R Консенсус#!"
+ },
+ "je_colonial_empire_ov_consensus_tt_ours": {
+  "en": "#header International Consensus#!\\nThe condemning [Concept('concept_great_power','great powers')] hold two thirds of the [concept_prestige] of all great powers and ourselves. Diplomatic isolation and the consensus both apply, each a further loss to [concept_colonial_stability] every month.",
+  "ru": "#header Международный консенсус#!\\nОсуждающие [Concept('concept_great_power','великие державы')] держат две трети [Concept('concept_prestige','престижа')] всех великих держав и нашего. Действуют и дипломатическая изоляция, и консенсус, каждый — дополнительная ежемесячная потеря [Concept('concept_colonial_stability','колониальной стабильности')]."
+ },
+ "je_colonial_empire_ov_consensus_tt_theirs": {
+  "en": "#header International Consensus#!\\nThe condemning [Concept('concept_great_power','great powers')] hold two thirds of the [concept_prestige] of all great powers and the country. Diplomatic isolation and the consensus both apply, each a further loss to [concept_colonial_stability] every month.",
+  "ru": "#header Международный консенсус#!\\nОсуждающие [Concept('concept_great_power','великие державы')] держат две трети [Concept('concept_prestige','престижа')] всех великих держав и самой страны. Действуют и дипломатическая изоляция, и консенсус, каждый — дополнительная ежемесячная потеря [Concept('concept_colonial_stability','колониальной стабильности')]."
  },
  "je_colonial_empire_ov_gp_calm": {
   "en": "No escalation",
@@ -447,13 +1107,89 @@
   "en": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/mo",
   "ru": "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]/мес."
  },
+ "je_colonial_empire_ov_gp_tt_ours": {
+  "en": "#header Great-power pressure#!\\nCondemning us: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_condemners')|0]#! [Concept('concept_great_power','great powers')]; backing us: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_supporters')|0]#!. Together they move [concept_colonial_stability] by #v [Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]#! a month, any escalation included. International Pressure lists each one.",
+  "ru": "#header Давление великих держав#!\\nОсуждающих нас [Concept('concept_great_power','великих держав')]: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_condemners')|0]#!; поддерживающих нас: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_supporters')|0]#!. Вместе они сдвигают [Concept('concept_colonial_stability','колониальную стабильность')] на #v [Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]#! в месяц, включая любую эскалацию. «Международное давление» перечисляет каждую."
+ },
+ "je_colonial_empire_ov_gp_tt_theirs": {
+  "en": "#header Great-power pressure#!\\nCondemning it: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_condemners')|0]#! [Concept('concept_great_power','great powers')]; backing it: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_supporters')|0]#!. Together they move [concept_colonial_stability] by #v [Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]#! a month, any escalation included. International Pressure lists each one.",
+  "ru": "#header Давление великих держав#!\\nОсуждающих её [Concept('concept_great_power','великих держав')]: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_condemners')|0]#!; поддерживающих её: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_gp_supporters')|0]#!. Вместе они сдвигают [Concept('concept_colonial_stability','колониальную стабильность')] на #v [Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]#! в месяц, включая любую эскалацию. «Международное давление» перечисляет каждую."
+ },
+ "je_colonial_empire_ov_heading_ni_tt": {
+  "en": "#header Where it is heading#!\\nIn [Country.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The rate is assessed again every month.",
+  "ru": "#header Куда движется шкала#!\\nЧерез [Country.MakeScope.ScriptValue('colonial_empire_projection_months')|0] мес. при темпе этого месяца: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. Темп оценивается заново каждый месяц."
+ },
+ "je_colonial_empire_ov_held_colonies": {
+  "en": "Colonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
+  "ru": "Колонии: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
+ },
  "je_colonial_empire_ov_held_label": {
   "en": "Holdings",
   "ru": "Владения"
  },
+ "je_colonial_empire_ov_held_subjects": {
+  "en": "Subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "ru": "Зависимые государства: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+ },
+ "je_colonial_empire_ov_held_tt_ours": {
+  "en": "#header Why this entry runs#!\\nIt runs while we hold an [Concept('concept_overseas_colony','overseas colony')] or a [concept_colonial_subject], and ends without penalty once we hold neither.\\nColonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!, among #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#! [Concept('concept_colonial_territory','colonial territories')]. Colonial subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!.\\nColonial Holdings, below, lists each one with its buttons.",
+  "ru": "#header Почему запись работает#!\\nОна работает, пока мы владеем [Concept('concept_overseas_colony','заморской колонией')] или [Concept('concept_colonial_subject','колониальным зависимым государством')], и заканчивается без штрафа, как только не остаётся ни того, ни другого.\\nКолоний: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#! из #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#! [Concept('concept_colonial_territory','колониальных территорий')]. Колониальных зависимых государств: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!.\\n«Колониальные владения» ниже перечисляют каждое с его кнопками."
+ },
+ "je_colonial_empire_ov_held_tt_theirs": {
+  "en": "#header Why this entry runs#!\\nIt runs while the country holds an [Concept('concept_overseas_colony','overseas colony')] or a [concept_colonial_subject], and ends without penalty once it holds neither.\\nColonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!, among #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#! [Concept('concept_colonial_territory','colonial territories')]. Colonial subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!.",
+  "ru": "#header Почему запись работает#!\\nОна работает, пока страна владеет [Concept('concept_overseas_colony','заморской колонией')] или [Concept('concept_colonial_subject','колониальным зависимым государством')], и заканчивается без штрафа, как только не остаётся ни того, ни другого.\\nКолоний: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#! из #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#! [Concept('concept_colonial_territory','колониальных территорий')]. Колониальных зависимых государств: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!."
+ },
  "je_colonial_empire_ov_hold": {
   "en": "Months at 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
   "ru": "Месяцев на отметке 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
+ },
+ "je_colonial_empire_ov_hold_tt": {
+  "en": "The entry is won when [concept_colonial_stability] holds at 100 for [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] months in a row. Any month below 100 starts the count again.",
+  "ru": "Запись завершается победой, когда [concept_colonial_stability|l] удерживается на 100 в течение [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] мес. подряд. Любой месяц ниже 100 обнуляет счёт."
+ },
+ "je_colonial_empire_ov_isolation": {
+  "en": "#o Isolated#!",
+  "ru": "#o Изолирована#!"
+ },
+ "je_colonial_empire_ov_isolation_tt_ours": {
+  "en": "#header Diplomatic Isolation#!\\nThe condemning [Concept('concept_great_power','great powers')] hold a third of the [concept_prestige] of all great powers and ourselves. Until their share falls, [concept_colonial_stability] takes a further loss every month.",
+  "ru": "#header Дипломатическая изоляция#!\\nОсуждающие [Concept('concept_great_power','великие державы')] держат треть [Concept('concept_prestige','престижа')] всех великих держав и нашего. Пока их доля не упадёт, [concept_colonial_stability|l] терпит дополнительную потерю каждый месяц."
+ },
+ "je_colonial_empire_ov_isolation_tt_theirs": {
+  "en": "#header Diplomatic Isolation#!\\nThe condemning [Concept('concept_great_power','great powers')] hold a third of the [concept_prestige] of all great powers and the country. Until their share falls, [concept_colonial_stability] takes a further loss every month.",
+  "ru": "#header Дипломатическая изоляция#!\\nОсуждающие [Concept('concept_great_power','великие державы')] держат треть [Concept('concept_prestige','престижа')] всех великих держав и самой страны. Пока их доля не упадёт, [concept_colonial_stability|l] терпит дополнительную потерю каждый месяц."
+ },
+ "je_colonial_empire_ov_legend_condemn": {
+  "en": "Condemning: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
+  "ru": "Осуждают: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
+ },
+ "je_colonial_empire_ov_legend_condemn_tt_ours": {
+  "en": "At a third of this share the condemners isolate us diplomatically, and at two thirds an international consensus forms against us. Each is a further loss to [concept_colonial_stability] every month.",
+  "ru": "При трети этой доли осуждающие дипломатически изолируют нас, а при двух третях против нас складывается международный консенсус. Каждый — дополнительная ежемесячная потеря [Concept('concept_colonial_stability','колониальной стабильности')]."
+ },
+ "je_colonial_empire_ov_legend_condemn_tt_theirs": {
+  "en": "At a third of this share the condemners isolate the country diplomatically, and at two thirds an international consensus forms against it. Each is a further loss to [concept_colonial_stability] every month.",
+  "ru": "При трети этой доли осуждающие дипломатически изолируют страну, а при двух третях против неё складывается международный консенсус. Каждый — дополнительная ежемесячная потеря [Concept('concept_colonial_stability','колониальной стабильности')]."
+ },
+ "je_colonial_empire_ov_legend_support": {
+  "en": "Supporting: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
+  "ru": "Поддерживают: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
+ },
+ "je_colonial_empire_ov_legend_support_tt": {
+  "en": "Support adds to [concept_colonial_stability] every month but does not offset isolation or consensus.",
+  "ru": "Поддержка прибавляет [Concept('concept_colonial_stability','колониальной стабильности')] каждый месяц, но не компенсирует изоляцию или консенсус."
+ },
+ "je_colonial_empire_ov_next": {
+  "en": "[Country.GetCustom('colonial_empire_next_band_name')] at #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!",
+  "ru": "[Country.GetCustom('colonial_empire_next_band_name')] при #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
+ },
+ "je_colonial_empire_ov_pie_tt_ours": {
+  "en": "#header Great-power prestige#!\\nThe [concept_prestige] of all [Concept('concept_great_power','great powers')] and ourselves: the share held by those condemning us, and by those backing us.",
+  "ru": "#header Престиж великих держав#!\\n[concept_prestige] всех [Concept('concept_great_power','великих держав')] и нас: доля тех, кто осуждает нас, и тех, кто нас поддерживает."
+ },
+ "je_colonial_empire_ov_pie_tt_theirs": {
+  "en": "#header Great-power prestige#!\\nThe [concept_prestige] of all [Concept('concept_great_power','great powers')] and the country itself: the share held by those condemning it, and by those backing it.",
+  "ru": "#header Престиж великих держав#!\\n[concept_prestige] всех [Concept('concept_great_power','великих держав')] и самой страны: доля тех, кто осуждает её, и тех, кто её поддерживает."
  },
  "je_colonial_empire_ov_programmes_label": {
   "en": "Programs",
@@ -467,6 +1203,14 @@
   "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! of 3 running",
   "ru": "#v [Country.MakeScope.ScriptValue('colonial_empire_disp_programmes_running')|0]#! из 3 действуют"
  },
+ "je_colonial_empire_ov_programmes_tt_ours": {
+  "en": "#header $je_colonial_empire_programmes_header$#!\\n$je_colonial_empire_row_invest_short$: level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3\\n$je_colonial_empire_row_garrison_short$: level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3\\n$je_colonial_empire_row_assimilation_short$: level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3\\nTogether they add #v [Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#! [concept_colonial_stability] a month. Colonial Programs, below, steps each one.",
+  "ru": "#header $je_colonial_empire_programmes_header$#!\\n$je_colonial_empire_row_invest_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! из 3\\n$je_colonial_empire_row_garrison_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! из 3\\n$je_colonial_empire_row_assimilation_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! из 3\\nВместе они добавляют #v [Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#! [Concept('concept_colonial_stability','колониальной стабильности')] в месяц. «Колониальные программы» ниже позволяют менять уровень каждой."
+ },
+ "je_colonial_empire_ov_programmes_tt_theirs": {
+  "en": "#header $je_colonial_empire_programmes_header$#!\\n$je_colonial_empire_row_invest_short$: level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3\\n$je_colonial_empire_row_garrison_short$: level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3\\n$je_colonial_empire_row_assimilation_short$: level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3\\nTogether they add #v [Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#! [concept_colonial_stability] a month. Colonial Programs, below, lists each one.",
+  "ru": "#header $je_colonial_empire_programmes_header$#!\\n$je_colonial_empire_row_invest_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! из 3\\n$je_colonial_empire_row_garrison_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! из 3\\n$je_colonial_empire_row_assimilation_short$: уровень #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! из 3\\nВместе они добавляют #v [Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]#! [Concept('concept_colonial_stability','колониальной стабильности')] в месяц. «Колониальные программы» ниже перечисляют каждую."
+ },
  "je_colonial_empire_ov_stability_value": {
   "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
   "ru": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/мес.)"
@@ -475,21 +1219,129 @@
   "en": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
   "ru": "#v [Country.MakeScope.ScriptValue('colonial_empire_live_bar')|0]%#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/мес.)"
  },
+ "je_colonial_empire_ov_tick_eta": {
+  "en": "In about #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! months at this month's rate.",
+  "ru": "Примерно через #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! мес. при темпе этого месяца."
+ },
+ "je_colonial_empire_ov_tick_ni_tt": {
+  "en": "#header Next [Concept('concept_colonial_band','band')]: [Country.GetCustom('colonial_empire_next_band_name')] at [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_months_to_next'), '(CFixedPoint)0' ), 'je_colonial_empire_ov_tick_eta_ni', 'je_colonial_empire_ov_tick_no_eta' )]",
+  "ru": "#header Следующий [Concept('concept_colonial_band','диапазон')]: [Country.GetCustom('colonial_empire_next_band_name')] при [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_months_to_next'), '(CFixedPoint)0' ), 'je_colonial_empire_ov_tick_eta_ni', 'je_colonial_empire_ov_tick_no_eta' )]"
+ },
+ "je_colonial_empire_ov_tick_no_eta": {
+  "en": "Not approaching at this month's rate.",
+  "ru": "Не приближается при темпе этого месяца."
+ },
+ "je_colonial_empire_phase_unknown": {
+  "en": "#lore not yet assessed#!",
+  "ru": "#lore ещё не оценено#!"
+ },
  "je_colonial_empire_power_head_name": {
   "en": "Colonial Power",
   "ru": "Колониальная держава"
+ },
+ "je_colonial_empire_power_head_name_tt_ours": {
+  "en": "The countries holding the most people in overseas colonies and colonial subjects, largest first, ours among them if we are one. Its flag opens the country.",
+  "ru": "Страны с наибольшим числом людей в заморских колониях и колониальных зависимых государствах, от крупнейшей; мы среди них, если входим в их число. Флаг страны открывает её."
+ },
+ "je_colonial_empire_power_head_name_tt_theirs": {
+  "en": "The countries holding the most people in overseas colonies and colonial subjects, largest first. Its flag opens the country.",
+  "ru": "Страны с наибольшим числом людей в заморских колониях и колониальных зависимых государствах, от крупнейшей. Флаг страны открывает её."
  },
  "je_colonial_empire_power_head_people": {
   "en": "People",
   "ru": "Население"
  },
+ "je_colonial_empire_power_head_people_tt": {
+  "en": "The people of its overseas colonies and its colonial subjects, at the monthly assessment.",
+  "ru": "Население её заморских колоний и колониальных зависимых государств на момент ежемесячной оценки."
+ },
  "je_colonial_empire_power_head_stability": {
   "en": "Stability",
   "ru": "Стабильность"
  },
+ "je_colonial_empire_power_head_stability_tt": {
+  "en": "Its [concept_colonial_stability] while its entry runs, to the nearest 5.",
+  "ru": "Её [concept_colonial_stability|l], пока работает её запись, с округлением до 5."
+ },
+ "je_colonial_empire_power_head_status_tt": {
+  "en": "Where its colonial empire stands: not begun, its [Concept('concept_colonial_band','band')] while its entry runs, secured, or collapsed.",
+  "ru": "Состояние её колониальной империи: не началась, её [concept_colonial_band|l], пока работает её запись, закреплена или рухнула."
+ },
+ "je_colonial_empire_power_row_none_tt": {
+  "en": "#header [ScriptContainer.MakeScope.Var('ce_pw_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nOur stance does not move its [concept_colonial_stability]: we hold no stance that counts, it is us, or its entry does not run.",
+  "ru": "#header [ScriptContainer.MakeScope.Var('ce_pw_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nНаша позиция не сдвигает её [concept_colonial_stability|l]: у нас нет учитываемой позиции, речь о нас самих, или её запись не работает."
+ },
+ "je_colonial_empire_power_row_tt": {
+  "en": "#header [ScriptContainer.MakeScope.Var('ce_pw_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nOur stance moves its [concept_colonial_stability] by #v [ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_weight')|=+2]#! a month: our [concept_prestige] against its own, from a quarter of a peer's weight up to double. As of the monthly assessment.",
+  "ru": "#header [ScriptContainer.MakeScope.Var('ce_pw_capital').GetState.GetCountry.GetNameNoFormatting]#!\\nНаша позиция сдвигает её [concept_colonial_stability|l] на #v [ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_weight')|=+2]#! в месяц: наш [concept_prestige|l] против её собственного, от четверти веса равного до двойного. На момент ежемесячной оценки."
+ },
+ "je_colonial_empire_power_stability_none_tt": {
+  "en": "No [concept_colonial_stability] to show: its entry does not run, or began this month.",
+  "ru": "Нет [Concept('concept_colonial_stability','колониальной стабильности')] для показа: её запись не работает или началась в этом месяце."
+ },
+ "je_colonial_empire_power_stability_tt": {
+  "en": "Its [concept_colonial_stability] at the monthly assessment, to the nearest 5.",
+  "ru": "Её [concept_colonial_stability|l] на момент ежемесячной оценки, с округлением до 5."
+ },
+ "je_colonial_empire_power_status_collapsed": {
+  "en": "#R Collapsed#!",
+  "ru": "#R Рухнула#!"
+ },
+ "je_colonial_empire_power_status_collapsed_tt": {
+  "en": "Its colonial system collapsed in the last ten years, and its Colonial Empire entry cannot return until they have passed.",
+  "ru": "Её колониальная система рухнула за последние десять лет, и её запись «Колониальная империя» не вернётся, пока они не пройдут."
+ },
+ "je_colonial_empire_power_status_collapsing_tt": {
+  "en": "Its entry runs in the lowest [Concept('concept_colonial_band','band')]. At 0 its empire falls apart.",
+  "ru": "Её запись работает в самом низком [Concept('concept_colonial_band','диапазоне')]. При 0 её империя распадается."
+ },
+ "je_colonial_empire_power_status_crumbling_tt": {
+  "en": "Its entry runs, its [concept_colonial_stability] between 20 and 40.",
+  "ru": "Её запись работает, её [concept_colonial_stability|l] между 20 и 40."
+ },
+ "je_colonial_empire_power_status_not_begun": {
+  "en": "#lore Not begun#!",
+  "ru": "#lore Не начата#!"
+ },
+ "je_colonial_empire_power_status_not_begun_tt": {
+  "en": "Its Colonial Empire entry has not begun: it has not researched Decolonization yet, or its entry starts within two months (a year at the soonest after it ended for lack of colonies).",
+  "ru": "Её запись «Колониальная империя» не началась: она ещё не изучила деколонизацию или её запись начнётся в течение двух месяцев (не раньше чем через год после окончания из-за нехватки колоний)."
+ },
+ "je_colonial_empire_power_status_secured": {
+  "en": "#G Secured#!",
+  "ru": "#G Закреплена#!"
+ },
+ "je_colonial_empire_power_status_secured_tt": {
+  "en": "It won: it held its [concept_colonial_stability] until its empire was secured, and its Colonial Empire entry will not return.",
+  "ru": "Она победила: удерживала свою [Concept('concept_colonial_stability','колониальную стабильность')], пока её империя не закрепилась, и её запись «Колониальная империя» не вернётся."
+ },
+ "je_colonial_empire_power_status_solidified_tt": {
+  "en": "Its entry runs in the top [Concept('concept_colonial_band','band')], 90 and over. Held at 100 for five years, its empire is secured.",
+  "ru": "Её запись работает в высшем [Concept('concept_colonial_band','диапазоне')], от 90 и выше. Если удерживать 100 пять лет, её империя закрепляется."
+ },
+ "je_colonial_empire_power_status_stable_tt": {
+  "en": "Its entry runs, its [concept_colonial_stability] between 65 and 90.",
+  "ru": "Её запись работает, её [concept_colonial_stability|l] между 65 и 90."
+ },
+ "je_colonial_empire_power_status_strained_tt": {
+  "en": "Its entry runs, its [concept_colonial_stability] between 40 and 65.",
+  "ru": "Её запись работает, её [concept_colonial_stability|l] между 40 и 65."
+ },
  "je_colonial_empire_powers_header": {
   "en": "The Colonial Powers",
   "ru": "Колониальные державы"
+ },
+ "je_colonial_empire_powers_none": {
+  "en": "#lore No country holds an overseas colony or a colonial subject.#!",
+  "ru": "#lore Ни у одной страны нет заморской колонии или колониального зависимого государства.#!"
+ },
+ "je_colonial_empire_powers_pending": {
+  "en": "#lore The list appears after the next monthly assessment.#!",
+  "ru": "#lore Список появится после следующей ежемесячной оценки.#!"
+ },
+ "je_colonial_empire_pressure_consensus": {
+  "en": "#R International consensus#!",
+  "ru": "#R Международный консенсус#!"
  },
  "je_colonial_empire_pressure_consensus_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_consensus_loss')|=+2]/mo",
@@ -499,13 +1351,53 @@
   "en": "International Pressure",
   "ru": "Международное давление"
  },
+ "je_colonial_empire_pressure_isolation": {
+  "en": "#o Diplomatic isolation#!",
+  "ru": "#o Дипломатическая изоляция#!"
+ },
  "je_colonial_empire_pressure_isolation_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
   "ru": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/мес."
  },
+ "je_colonial_empire_pressure_none_ours": {
+  "en": "#G No great power is pressing us over our colonies.#!",
+  "ru": "#G Ни одна великая держава не давит на нас из-за колоний.#!"
+ },
+ "je_colonial_empire_pressure_none_theirs": {
+  "en": "#G No great power is pressing the country over its colonies.#!",
+  "ru": "#G Ни одна великая держава не давит на страну из-за её колоний.#!"
+ },
  "je_colonial_empire_programmes_header": {
   "en": "Colonial Programs",
   "ru": "Колониальные программы"
+ },
+ "je_colonial_empire_readout_collapsed_ours": {
+  "en": "Our colonial system collapsed, and its journal entry cannot return for ten years. Our stance on colonialism and the colonial powers stay here.",
+  "ru": "Наша колониальная система рухнула, и её запись журнала не вернётся десять лет. Наша позиция по колониализму и «Колониальные державы» остаются здесь."
+ },
+ "je_colonial_empire_readout_collapsed_theirs": {
+  "en": "The country's colonial system collapsed, and its journal entry cannot return for ten years. Its stance on colonialism and the colonial powers stay here.",
+  "ru": "Колониальная система страны рухнула, и её запись журнала не вернётся десять лет. Её позиция по колониализму и «Колониальные державы» остаются здесь."
+ },
+ "je_colonial_empire_readout_none_ours": {
+  "en": "The rest of this tab comes with the $je_colonial_empire$ journal entry, which runs while we hold an overseas colony or a colonial subject. An entry that has ended starts again within two months of our holding one, and no sooner than a year after it ended for lack of colonies.",
+  "ru": "Остальное на этой вкладке появится вместе с записью журнала «$je_colonial_empire$», которая работает, пока мы владеем заморской колонией или колониальным зависимым государством. Завершившаяся запись начинается снова в течение двух месяцев после того, как мы получим такое владение, и не раньше чем через год после окончания из-за нехватки колоний."
+ },
+ "je_colonial_empire_readout_none_theirs": {
+  "en": "The rest of this tab comes with the $je_colonial_empire$ journal entry, which runs while the country holds an overseas colony or a colonial subject. An entry that has ended starts again within two months of its holding one, and no sooner than a year after it ended for lack of colonies.",
+  "ru": "Остальное на этой вкладке появится вместе с записью журнала «$je_colonial_empire$», которая работает, пока страна владеет заморской колонией или колониальным зависимым государством. Завершившаяся запись начинается снова в течение двух месяцев после того, как страна получит такое владение, и не раньше чем через год после окончания из-за нехватки колоний."
+ },
+ "je_colonial_empire_readout_secured_ours": {
+  "en": "Our colonial empire is secured, and its journal entry will not return. Our stance on colonialism and the colonial powers stay here.",
+  "ru": "Наша колониальная империя закреплена, и её запись журнала не вернётся. Наша позиция по колониализму и «Колониальные державы» остаются здесь."
+ },
+ "je_colonial_empire_readout_secured_theirs": {
+  "en": "The country's colonial empire is secured, and its journal entry will not return. Its stance on colonialism and the colonial powers stay here.",
+  "ru": "Колониальная империя страны закреплена, и её запись журнала не вернётся. Её позиция по колониализму и «Колониальные державы» остаются здесь."
+ },
+ "je_colonial_empire_reason": {
+  "en": "Our nation holds overseas territories that are not part of our cultural [concept_homeland], directly or as colonial subjects. The era of [concept_decolonization_system] is upon us - will we integrate these lands fully into our nation, hold them by force, or release them to self-governance?",
+  "ru": "Наша нация владеет заморскими территориями, не входящими в нашу культурную [Concept('concept_homeland','историческую родину')], напрямую или в виде колониальных зависимых государств. Эпоха [Concept('concept_decolonization_system','деколонизации')] настала — полностью ли мы интегрируем эти земли в нашу нацию, удержим силой или отпустим на самоуправление?"
  },
  "je_colonial_empire_row_assimilation": {
   "en": "#bold Cultural Assimilation Program#!",
@@ -531,6 +1423,10 @@
   "en": "Development Investment",
   "ru": "Инвестиции в развитие"
  },
+ "je_colonial_empire_rows_own_only_ni": {
+  "en": "#lore Listed one by one only on a country's own panel.#!",
+  "ru": "#lore Перечисляются по одной только на собственной панели страны.#!"
+ },
  "je_colonial_empire_stability_header": {
   "en": "Why Stability Is Moving",
   "ru": "Почему меняется стабильность"
@@ -538,6 +1434,14 @@
  "je_colonial_empire_stance_anti": {
   "en": "Condemns colonialism",
   "ru": "Осуждает колониализм"
+ },
+ "je_colonial_empire_stance_anti_tt_ours": {
+  "en": "#header Condemns Colonialism#!\\nWhile we are a [concept_great_power], every colonial empire running its [concept_colonial_stability] weighs our condemnation against it, scaled by our [concept_prestige] against its own. We hold [GetStaticModifier('gp_anti_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_anti_colonial_policy_modifier').GetDesc]",
+  "ru": "#header Осуждает колониализм#!\\nПока мы — [concept_great_power|l], каждая колониальная империя, у которой работает её [concept_colonial_stability|l], учитывает наше осуждение против себя, в масштабе нашего [Concept('concept_prestige','престижа')] относительно её собственного. У нас действует [GetStaticModifier('gp_anti_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_anti_colonial_policy_modifier').GetDesc]"
+ },
+ "je_colonial_empire_stance_anti_tt_theirs": {
+  "en": "#header Condemns Colonialism#!\\nWhile the country is a [concept_great_power], its condemnation weighs on the [concept_colonial_stability] of every colonial empire whose entry runs, scaled by its [concept_prestige] against that empire's. It holds [GetStaticModifier('gp_anti_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_anti_colonial_policy_modifier').GetDesc]",
+  "ru": "#header Осуждает колониализм#!\\nПока страна — [concept_great_power|l], её осуждение давит на [Concept('concept_colonial_stability','колониальную стабильность')] каждой колониальной империи, у которой работает запись, в масштабе её [Concept('concept_prestige','престижа')] относительно престижа этой империи. У неё действует [GetStaticModifier('gp_anti_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_anti_colonial_policy_modifier').GetDesc]"
  },
  "je_colonial_empire_stance_btn_anti": {
   "en": "Condemn",
@@ -555,13 +1459,37 @@
   "en": "#o Dormant#!: not a great power",
   "ru": "#o Неактивна#!: не великая держава"
  },
+ "je_colonial_empire_stance_force_dormant_tt_ours": {
+  "en": "Only a [concept_great_power]'s stance weighs on the colonial empires. Ours lies dormant, costing nothing and moving no one, until we are a great power again.",
+  "ru": "На колониальные империи давит только позиция [Concept('concept_great_power','великой державы')]. Наша дремлет, ничего не стоя и никого не двигая, пока мы снова не станем великой державой."
+ },
+ "je_colonial_empire_stance_force_dormant_tt_theirs": {
+  "en": "Only a [concept_great_power]'s stance weighs on the colonial empires. The country's lies dormant, costing nothing and moving no one, until it is a great power again.",
+  "ru": "На колониальные империи давит только позиция [Concept('concept_great_power','великой державы')]. Позиция страны дремлет, ничего не стоя и никого не двигая, пока она снова не станет великой державой."
+ },
  "je_colonial_empire_stance_force_label": {
   "en": "In force",
   "ru": "Действует"
  },
+ "je_colonial_empire_stance_force_none": {
+  "en": "#lore No stance held#!",
+  "ru": "#lore Позиции нет#!"
+ },
+ "je_colonial_empire_stance_force_none_tt": {
+  "en": "A neutral stance has no cost and no weight.",
+  "ru": "У нейтральной позиции нет ни стоимости, ни веса."
+ },
  "je_colonial_empire_stance_force_yes": {
   "en": "#G Yes#!, for #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence]",
   "ru": "#G Да#!, цена: #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence|l]"
+ },
+ "je_colonial_empire_stance_force_yes_tt_ours": {
+  "en": "As a [concept_great_power] our stance counts on every colonial empire's [concept_colonial_stability], and its policy holds #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence] for as long as we keep it. Hover a row of The Colonial Powers for what it does to that empire a month.",
+  "ru": "Поскольку мы — [concept_great_power|l], наша позиция учитывается в [Concept('concept_colonial_stability','колониальной стабильности')] каждой колониальной империи, а её политика удерживает #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [Concept('concept_influence','влияния')], пока мы её сохраняем. Наведите курсор на строку «Колониальные державы», чтобы увидеть, что она делает с этой империей за месяц."
+ },
+ "je_colonial_empire_stance_force_yes_tt_theirs": {
+  "en": "As a [concept_great_power] the country's stance counts on every colonial empire's [concept_colonial_stability], and its policy holds #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [concept_influence] for as long as it keeps it.",
+  "ru": "Поскольку страна — [concept_great_power|l], её позиция учитывается в [Concept('concept_colonial_stability','колониальной стабильности')] каждой колониальной империи, а её политика удерживает #v [Country.MakeScope.ScriptValue('decol_stance_influence_cost')|0]#! [Concept('concept_influence','влияния')], пока она её сохраняет."
  },
  "je_colonial_empire_stance_header_ours": {
   "en": "Our Stance on Colonialism",
@@ -579,9 +1507,25 @@
   "en": "Neutral",
   "ru": "Нейтралитет"
  },
+ "je_colonial_empire_stance_neutral_tt_ours": {
+  "en": "#header Neutral#!\\nWe neither condemn nor back the colonial powers. A neutral stance costs nothing and weighs on no colonial empire.",
+  "ru": "#header Нейтралитет#!\\nМы не осуждаем колониальные державы и не поддерживаем их. Нейтральная позиция ничего не стоит и не давит ни на одну колониальную империю."
+ },
+ "je_colonial_empire_stance_neutral_tt_theirs": {
+  "en": "#header Neutral#!\\nThe country neither condemns nor backs the colonial powers. A neutral stance costs nothing and weighs on no colonial empire.",
+  "ru": "#header Нейтралитет#!\\nСтрана не осуждает колониальные державы и не поддерживает их. Нейтральная позиция ничего не стоит и не давит ни на одну колониальную империю."
+ },
  "je_colonial_empire_stance_next_label": {
   "en": "Next change",
   "ru": "Следующая смена"
+ },
+ "je_colonial_empire_stance_next_now": {
+  "en": "#G Now#!",
+  "ru": "#G Сейчас#!"
+ },
+ "je_colonial_empire_stance_next_tt": {
+  "en": "A stance can change once every #v [Country.MakeScope.ScriptValue('decol_stance_cooldown_months')|0]#! months, by these buttons, by The Colonial Question or by a vote for a Decolonization Resolution at the United Nations.",
+  "ru": "Позицию можно менять раз в #v [Country.MakeScope.ScriptValue('decol_stance_cooldown_months')|0]#! мес. этими кнопками, «Колониальным вопросом» или голосованием за Резолюцию о деколонизации в Организации Объединённых Наций."
  },
  "je_colonial_empire_stance_next_wait": {
   "en": "In #v [Country.MakeScope.ScriptValue('decol_stance_disp_months_left')|0]#! months",
@@ -590,6 +1534,14 @@
  "je_colonial_empire_stance_pro": {
   "en": "Backs the colonial powers",
   "ru": "Поддерживает колониальные державы"
+ },
+ "je_colonial_empire_stance_pro_tt_ours": {
+  "en": "#header Backs the Colonial Powers#!\\nWhile we are a [concept_great_power], every colonial empire running its [concept_colonial_stability] counts our support in its favor, scaled by our [concept_prestige] against its own. We hold [GetStaticModifier('gp_pro_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_pro_colonial_policy_modifier').GetDesc]",
+  "ru": "#header Поддерживает колониальные державы#!\\nПока мы — [concept_great_power|l], каждая колониальная империя, у которой работает её [concept_colonial_stability|l], засчитывает нашу поддержку в свою пользу, в масштабе нашего [Concept('concept_prestige','престижа')] относительно её собственного. У нас действует [GetStaticModifier('gp_pro_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_pro_colonial_policy_modifier').GetDesc]"
+ },
+ "je_colonial_empire_stance_pro_tt_theirs": {
+  "en": "#header Backs the Colonial Powers#!\\nWhile the country is a [concept_great_power], its support counts in favor of the [concept_colonial_stability] of every colonial empire whose entry runs, scaled by its [concept_prestige] against that empire's. It holds [GetStaticModifier('gp_pro_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_pro_colonial_policy_modifier').GetDesc]",
+  "ru": "#header Поддерживает колониальные державы#!\\nПока страна — [concept_great_power|l], её поддержка засчитывается в пользу [Concept('concept_colonial_stability','колониальной стабильности')] каждой колониальной империи, у которой работает запись, в масштабе её [Concept('concept_prestige','престижа')] относительно престижа этой империи. У неё действует [GetStaticModifier('gp_pro_colonial_policy_modifier').GetName]:\\n[GetStaticModifier('gp_pro_colonial_policy_modifier').GetDesc]"
  },
  "je_colonial_empire_stance_share": {
   "en": "#v [Country.MakeScope.ScriptValue('decol_stance_disp_gp_share')|%0]#! of great-power prestige",
@@ -603,17 +1555,129 @@
   "en": "#lore None#!: not a great power",
   "ru": "#lore Нет#!: не великая держава"
  },
+ "je_colonial_empire_stance_share_none_tt": {
+  "en": "Only a [concept_great_power]'s [concept_prestige] counts in the great powers' shares, as only a great power's stance weighs on the colonial empires.",
+  "ru": "В долях великих держав учитывается только [Concept('concept_prestige','престиж')] [Concept('concept_great_power','великой державы')], так же как на колониальные империи давит только позиция великой державы."
+ },
+ "je_colonial_empire_stance_share_tt_ours": {
+  "en": "Our [concept_prestige] as a share of every [concept_great_power]'s, ours included. If we condemn colonialism, our share joins the condemners': a colonial empire whose condemners hold a third of great-power prestige, its own counted, is isolated, and at two thirds an international consensus forms against it. Support counts toward neither. Each empire also feels our stance by our prestige against its own.",
+  "ru": "Наш [concept_prestige|l] как доля престижа каждой [Concept('concept_great_power','великой державы')], включая нашу. Если мы осуждаем колониализм, наша доля присоединяется к долям осуждающих: колониальная империя, у которой осуждающие держат треть престижа великих держав, включая её собственный, оказывается в изоляции, а при двух третях против неё складывается международный консенсус. Поддержка не учитывается ни там, ни там. Каждая империя также ощущает нашу позицию через наш престиж относительно её собственного."
+ },
+ "je_colonial_empire_stance_share_tt_theirs": {
+  "en": "The country's [concept_prestige] as a share of every [concept_great_power]'s, its own included. If the country condemns colonialism, its share joins the condemners': a colonial empire whose condemners hold a third of great-power prestige, its own counted, is isolated, and at two thirds an international consensus forms against it. Support counts toward neither. Each empire also feels the country's stance by the country's prestige against its own.",
+  "ru": "[concept_prestige] страны как доля престижа каждой [Concept('concept_great_power','великой державы')], включая её собственную. Если страна осуждает колониализм, её доля присоединяется к долям осуждающих: колониальная империя, у которой осуждающие держат треть престижа великих держав, включая её собственный, оказывается в изоляции, а при двух третях против неё складывается международный консенсус. Поддержка не учитывается ни там, ни там. Каждая империя также ощущает позицию страны через престиж страны относительно её собственного."
+ },
+ "je_colonial_empire_status_collapsing_ours": {
+  "en": "#R Colonial empire is on the verge of collapse!#! Immediate action is needed or we will lose everything.",
+  "ru": "#R Колониальная империя на грани краха!#! Нужны немедленные действия, иначе мы потеряем всё."
+ },
+ "je_colonial_empire_status_collapsing_theirs": {
+  "en": "#R Colonial empire is on the verge of collapse!#! Without immediate action it will lose everything.",
+  "ru": "#R Колониальная империя на грани краха!#! Без немедленных действий она потеряет всё."
+ },
+ "je_colonial_empire_status_completed": {
+  "en": "The empire has been secured; this entry will not return.",
+  "ru": "Империя закреплена; эта запись не вернётся."
+ },
+ "je_colonial_empire_status_cooldown": {
+  "en": "Our colonial system collapsed. This entry cannot return for ten years after a collapse.",
+  "ru": "Наша колониальная система рухнула. После краха эта запись не может вернуться десять лет."
+ },
+ "je_colonial_empire_status_crumbling": {
+  "en": "#R Colonial empire is crumbling.#! Unrest is widespread and maintaining control grows more costly by the day.",
+  "ru": "#R Колониальная империя разваливается.#! Волнения повсеместны, а удерживать контроль с каждым днём дороже."
+ },
+ "je_colonial_empire_status_no_colonies": {
+  "en": "Opens while we hold an overseas colony or a colonial subject.",
+  "ru": "Открывается, пока мы владеем заморской колонией или колониальным зависимым государством."
+ },
+ "je_colonial_empire_status_pending_ours": {
+  "en": "Our officials are still taking stock of the empire.",
+  "ru": "Наши чиновники всё ещё оценивают состояние империи."
+ },
+ "je_colonial_empire_status_pending_theirs": {
+  "en": "Its officials are still taking stock of the empire.",
+  "ru": "Её чиновники всё ещё оценивают состояние империи."
+ },
+ "je_colonial_empire_status_solidified": {
+  "en": "#G Colonial empire nearly fully integrated.#! The overseas territories are becoming a permanent part of the nation.",
+  "ru": "#G Колониальная империя почти полностью интегрирована.#! Заморские территории становятся постоянной частью нации."
+ },
+ "je_colonial_empire_status_stable": {
+  "en": "#G Colonial holdings are stable.#! Integration is proceeding, though challenges remain.",
+  "ru": "#G Колониальные владения стабильны.#! Интеграция идёт, хотя трудности остаются."
+ },
+ "je_colonial_empire_status_strained_ours": {
+  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
+  "ru": "#o Колониальная империя под напряжением.#! Растущая напряжённость и международное давление угрожают нашему контролю."
+ },
+ "je_colonial_empire_status_strained_theirs": {
+  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten its hold.",
+  "ru": "#o Колониальная империя под напряжением.#! Растущая напряжённость и международное давление угрожают её контролю."
+ },
+ "je_colonial_empire_subject_gdp_tt": {
+  "en": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! a year.",
+  "ru": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! в год."
+ },
  "je_colonial_empire_subject_head_gdp": {
   "en": "GDP",
   "ru": "ВВП"
+ },
+ "je_colonial_empire_subject_head_gdp_tt": {
+  "en": "Its [concept_gdp] a year. The list runs from the largest down.",
+  "ru": "Её [concept_gdp] в год. Список идёт от крупнейшего вниз."
  },
  "je_colonial_empire_subject_head_kind": {
   "en": "Kind",
   "ru": "Тип"
  },
+ "je_colonial_empire_subject_head_kind_tt": {
+  "en": "What kind of [concept_subject] it is. Hover the icon for why it counts as colonial.",
+  "ru": "Вид [Concept('concept_subject','зависимого государства')]. Наведите курсор на значок, чтобы узнать, почему оно считается колониальным."
+ },
+ "je_colonial_empire_subject_head_ld_tt": {
+  "en": "[concept_liberty_desire]. Hover a figure for its level and its weekly change.",
+  "ru": "[concept_liberty_desire]. Наведите курсор на цифру, чтобы увидеть уровень и недельное изменение."
+ },
  "je_colonial_empire_subject_head_name": {
   "en": "Subject",
   "ru": "Зависимое государство"
+ },
+ "je_colonial_empire_subject_head_name_tt": {
+  "en": "A colonial [concept_subject] of ours, or of one of our subjects. Its flag opens the country.",
+  "ru": "Колониальное [concept_subject|l] — наше или одного из наших зависимых государств. Флаг открывает страну."
+ },
+ "je_colonial_empire_subject_ld_tt": {
+  "en": "[concept_liberty_desire]: #v [State.GetCountry.GetLibertyDesireRaw|0]#! ([State.GetCountry.CalcLibertyDesireLevel.GetNameNoFormatting]), #v [State.GetCountry.GetWeeklyLibertyDesireChange|+1]#! a week.",
+  "ru": "[concept_liberty_desire]: #v [State.GetCountry.GetLibertyDesireRaw|0]#! ([State.GetCountry.CalcLibertyDesireLevel.GetNameNoFormatting]), #v [State.GetCountry.GetWeeklyLibertyDesireChange|+1]#! в неделю."
+ },
+ "je_colonial_empire_subject_name_tt": {
+  "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\n[State.GetCountry.GetCustom('colonial_subject_reason_custom')]",
+  "ru": "#header [State.GetCountry.GetNameNoFormatting]#!\\nСтолица: [State.GetName]\\n[State.GetCountry.GetCustom('colonial_subject_reason_custom')]"
+ },
+ "je_colonial_empire_subject_reason_colony": {
+  "en": "A colony. Release frees it; Dominion makes it a dominion, a looser tie that no longer counts as colonial.",
+  "ru": "Колония. «Освободить» делает её свободной; «Доминион» делает её доминионом — более слабой связью, которая больше не считается колониальной."
+ },
+ "je_colonial_empire_subject_reason_company": {
+  "en": "A chartered company. A company has no looser kind of subject to become, so its way out is independence.",
+  "ru": "Привилегированная компания. У компании нет более слабого вида зависимого государства, в который она могла бы превратиться, поэтому ей остаётся независимость."
+ },
+ "je_colonial_empire_subject_reason_other": {
+  "en": "A colonial subject.",
+  "ru": "Колониальное зависимое государство."
+ },
+ "je_colonial_empire_subject_reason_protectorate": {
+  "en": "A protectorate separated from our capital by sea, whose people share no [concept_heritage_trait] with ours. A protectorate has no looser kind of subject to become, so its way out is independence.",
+  "ru": "Протекторат, отделённый от нашей столицы морем, чей народ не делит с нашим ни одной [Concept('concept_heritage_trait','черты наследия')]. У протектората нет более слабого вида зависимого государства, в который он мог бы превратиться, поэтому ему остаётся независимость."
+ },
+ "je_colonial_empire_subjects_none_ours": {
+  "en": "#lore We hold no colonial subject.#!",
+  "ru": "#lore У нас нет колониальных зависимых государств.#!"
+ },
+ "je_colonial_empire_subjects_none_theirs": {
+  "en": "#lore It holds no colonial subject.#!",
+  "ru": "#lore У неё нет колониальных зависимых государств.#!"
  },
  "je_colonial_empire_term_assimilation": {
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]/mo",
@@ -627,21 +1691,89 @@
   "en": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/mo",
   "ru": "[Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]/мес."
  },
+ "je_colonial_empire_territories_none": {
+  "en": "#lore No territory is eligible.#!",
+  "ru": "#lore Нет подходящих территорий.#!"
+ },
+ "je_colonial_empire_territory_colony_tt": {
+  "en": "#header An overseas colony#!\\nIt, or a state that would leave with it, is an [Concept('concept_overseas_colony','overseas colony')]: its red figure shows the test it meets, or #v [State.MakeScope.ScriptValue('colonial_bloc_disp_unincorporated')|0]#! of its states are an [concept_unincorporated_state]. So it counts toward [concept_colonial_overreach], and drains stability while any of its people are severely unaccepted.",
+  "ru": "#header Заморская колония#!\\nОна, или область, которая ушла бы вместе с ней, — [Concept('concept_overseas_colony','заморская колония')]: её красная цифра показывает, какой тест она проходит, либо [Concept('concept_unincorporated_state','невключённых областей')] у неё: #v [State.MakeScope.ScriptValue('colonial_bloc_disp_unincorporated')|0]#!. Поэтому она учитывается в [Concept('concept_colonial_overreach','имперском перенапряжении')] и истощает стабильность, пока часть её населения сильно не принята."
+ },
+ "je_colonial_empire_territory_gdp_tt": {
+  "en": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_bloc_disp_gdp')|D]#! a year, with every state that would leave with it.",
+  "ru": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_bloc_disp_gdp')|D]#! в год, вместе с каждой областью, которая ушла бы вместе с ней."
+ },
  "je_colonial_empire_territory_head_gdp": {
   "en": "GDP",
   "ru": "ВВП"
+ },
+ "je_colonial_empire_territory_head_gdp_tt": {
+  "en": "Its [concept_gdp] a year, with the states that would leave with it. The list runs from the largest down.",
+  "ru": "Её [concept_gdp] в год вместе с областями, которые ушли бы вместе с ней. Список идёт от крупнейшего вниз."
  },
  "je_colonial_empire_territory_head_name": {
   "en": "Territory",
   "ru": "Территория"
  },
+ "je_colonial_empire_territory_head_name_tt": {
+  "en": "A [concept_colonial_territory] of ours; +N: the states one release takes with it.",
+  "ru": "Наша [concept_colonial_territory|l]; +N: области, которые одно освобождение забирает с собой."
+ },
  "je_colonial_empire_territory_head_primary": {
   "en": "Ours",
   "ru": "Наши"
  },
+ "je_colonial_empire_territory_head_primary_tt": {
+  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
+  "ru": "Доля её населения из наших основных культур по всем областям, которые ушли бы вместе. #R Красная#!, когда тест коренного населения делает колонией одну из них. Выше #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! территория считается заселённой землёй, а не колонией, и в список не входит."
+ },
  "je_colonial_empire_territory_head_sol": {
   "en": "SoL",
   "ru": "Ур. жизни"
+ },
+ "je_colonial_empire_territory_head_sol_tt": {
+  "en": "Its average [concept_sol], weighted by people across the states that would leave together. #R Red#! when the living-standards test makes one of them a colony.",
+  "ru": "Её средний [concept_sol|l], взвешенный по населению по всем областям, которые ушли бы вместе. #R Красный#!, когда тест уровня жизни делает колонией одну из них."
+ },
+ "je_colonial_empire_territory_not_colony_tt": {
+  "en": "#header Not an overseas colony#!\\nNone of its states is an [Concept('concept_overseas_colony','overseas colony')]: each is incorporated, and neither figure is red. So it adds no [concept_colonial_overreach]. The decisions can still release it.",
+  "ru": "#header Не заморская колония#!\\nНи одна из её областей не является [Concept('concept_overseas_colony','заморской колонией')]: каждая включена, и ни одна цифра не красная. Поэтому она не добавляет [Concept('concept_colonial_overreach','имперского перенапряжения')]. Решения всё равно могут её освободить."
+ },
+ "je_colonial_empire_territory_primary_bad_tt": {
+  "en": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test, in each of its states: a people sharing no [concept_heritage_trait] with ours is more than #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and accepted below #v [GetPlayer.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #R Met: a colony.#!",
+  "ru": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! её населения принадлежит к нашим основным культурам (в прошлом месяце).\\nТест коренного населения в каждой её области: народ, не имеющий с нашим общих [Concept('concept_heritage_trait','черт наследия')], составляет более #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! населения и принят ниже уровня #v [GetPlayer.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #R Выполнен: колония.#!"
+ },
+ "je_colonial_empire_territory_primary_tt": {
+  "en": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test, in each of its states: a people sharing no [concept_heritage_trait] with ours is more than #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and accepted below #v [GetPlayer.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #G Not met.#!",
+  "ru": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! её населения принадлежит к нашим основным культурам (в прошлом месяце).\\nТест коренного населения в каждой её области: народ, не имеющий с нашим общих [Concept('concept_heritage_trait','черт наследия')], составляет более #v [GetPlayer.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! населения и принят ниже уровня #v [GetPlayer.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #G Не выполнен.#!"
+ },
+ "je_colonial_empire_territory_sol_bad_tt": {
+  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [GetPlayer.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test, in each of its states: below the line, with any people not of our primary cultures. #R Met: a colony.#!",
+  "ru": "Средний [concept_sol|l] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; планка — #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [GetPlayer.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] нашего среднего по стране.\\nТест уровня жизни в каждой её области: ниже планки, при наличии людей не из наших основных культур. #R Выполнен: колония.#!"
+ },
+ "je_colonial_empire_territory_sol_tt": {
+  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [GetPlayer.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test, in each of its states: below the line, with any people not of our primary cultures. #G Not met.#!",
+  "ru": "Средний [concept_sol|l] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; планка — #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [GetPlayer.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] нашего среднего по стране.\\nТест уровня жизни в каждой её области: ниже планки, при наличии людей не из наших основных культур. #G Не выполнен.#!"
+ },
+ "je_colonial_empire_tt_assimilation": {
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\nUpkeep: the [concept_bureaucracy] and [concept_authority] lines below, a third of them a level\\nOne-off: @money!#v [Country.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]#! a step up\\nEach level adds #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#! [concept_colonial_stability] a month; the full program #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full program, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
+  "ru": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\nСодержание: строки [concept_bureaucracy|l] и [concept_authority|l] ниже, по трети на уровень\\nРазово: @money!#v [Country.MakeScope.ScriptValue('colonial_assim_step_cost_display')|D]#! за шаг вверх\\nКаждый уровень добавляет #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#! [Concept('concept_colonial_stability','колониальной стабильности')] в месяц; вся программа #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Вся программа на уровне 3 (каждый уровень даёт треть её):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
+ },
+ "je_colonial_empire_tt_garrison": {
+  "en": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\nUpkeep: #v [Country.MakeScope.ScriptValue('colonial_garrison_authority_display')|0]#! [concept_authority] (#v [Country.MakeScope.ScriptValue('colonial_garrison_authority_per_level')|0]#! a level)\\nOne-off: #v [Country.MakeScope.ScriptValue('colonial_garrison_start_infamy')|0]#! [concept_infamy] on starting it\\nEach level adds #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#! [concept_colonial_stability] a month; the full program #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full program, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]",
+  "ru": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\nСодержание: [concept_authority|l] — #v [Country.MakeScope.ScriptValue('colonial_garrison_authority_display')|0]#! (#v [Country.MakeScope.ScriptValue('colonial_garrison_authority_per_level')|0]#! на уровень)\\nРазово: [concept_infamy|l] — #v [Country.MakeScope.ScriptValue('colonial_garrison_start_infamy')|0]#! при запуске\\nКаждый уровень добавляет #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#! [Concept('concept_colonial_stability','колониальной стабильности')] в месяц; вся программа #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Вся программа на уровне 3 (каждый уровень даёт треть её):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
+ },
+ "je_colonial_empire_tt_invest": {
+  "en": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\nUpkeep: @money!#v [Country.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D]#! a week (@money!#v [Country.MakeScope.ScriptValue('colonial_invest_level_cost')|D]#! a level)\\nOne-off: @money!#v [Country.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D]#! a step up\\nEach level adds #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#! [concept_colonial_stability] a month; the full program #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full program, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]",
+  "ru": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\nСодержание: @money!#v [Country.MakeScope.ScriptValue('colonial_invest_weekly_cost')|D]#! в неделю (@money!#v [Country.MakeScope.ScriptValue('colonial_invest_level_cost')|D]#! на уровень)\\nРазово: @money!#v [Country.MakeScope.ScriptValue('colonial_invest_step_cost_display')|D]#! за шаг вверх\\nКаждый уровень добавляет #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#! [Concept('concept_colonial_stability','колониальной стабильности')] в месяц; вся программа #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Вся программа на уровне 3 (каждый уровень даёт треть её):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]"
+ },
+ "je_colonial_empire_voluntary_conclusion_desc": {
+  "en": "The $concept_journal_entry$ concluded with the empire #b given up#! before it could collapse",
+  "ru": "$concept_journal_entry$ завершилась: империя #b оставлена#! до того, как могла рухнуть"
+ },
+ "je_colonial_empire_voluntary_fail_tt": {
+  "en": "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero. The entry can start again a year later, once we hold a colony or colonial subject.",
+  "ru": "Заканчивается, когда все подходящие колониальные территории добровольно освобождены — не остаётся ни заморских областей, ни колониальных зависимых государств, — пока шкала «Колониальная стабильность» ещё выше нуля. Запись может начаться снова через год, как только у нас снова появится колония или колониальное зависимое государство."
  },
  "je_colonial_empire_war_backers_tt": {
   "en": "Great powers arming them: #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#!. Each one's arms make them fight harder, up to three.",
