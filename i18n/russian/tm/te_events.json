@@ -12194,5 +12194,933 @@
  "nuclear_custody.11.t": {
   "en": "The Budapest Offer",
   "ru": "Будапештское предложение"
+ },
+ "nuclear_custody.12.a": {
+  "en": "So be it.",
+  "ru": "Да будет так."
+ },
+ "nuclear_custody.12.d_accepted": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has accepted. Its warheads will be taken apart, and we are among its guarantors.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] согласилась. Её боеголовки будут разобраны, а мы входим в число гарантов."
+ },
+ "nuclear_custody.12.d_no_treaty": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has accepted the other powers' guarantees and given up its warheads, but no treaty could be made with us: our relations with it, or our own arsenal, would not allow one.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] приняла гарантии других держав и отказалась от своих боеголовок, но договор с нами заключить не удалось: этому помешали наши отношения с ней или наш собственный арсенал."
+ },
+ "nuclear_custody.12.d_refused": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has refused to give up its warheads. It says it will not trade them for the promises of great powers.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] отказалась отдать свои боеголовки. Она заявляет, что не променяет их на обещания великих держав."
+ },
+ "nuclear_custody.12.f": {
+  "en": "Ukraine's last nuclear warheads were taken by train to Russia in the spring of 1996, and on 1 June its government announced that none remained on its soil. The transfers had taken two years. Under the Trilateral Statement signed in Moscow in January 1994, Russia supplied fuel for Ukraine's power reactors in exchange, and the United States paid toward the cost of dismantling. The assurances of Ukraine's security and borders, signed in Budapest that December, were part of the same bargain.",
+  "ru": "Последние ядерные боеголовки Украины были вывезены поездом в Россию весной 1996 года, а 1 июня правительство страны объявило, что на её территории их не осталось. Передачи заняли два года. По Трёхстороннему заявлению, подписанному в Москве в январе 1994 года, Россия взамен поставляла топливо для украинских энергетических реакторов, а Соединённые Штаты оплачивали часть расходов на демонтаж. Гарантии безопасности и границ Украины, подписанные в Будапеште в декабре того же года, были частью той же сделки."
+ },
+ "nuclear_custody.12.t": {
+  "en": "An Answer on the Warheads",
+  "ru": "Ответ по боеголовкам"
+ },
+ "nuclear_custody.3.a": {
+  "en": "Secure them.",
+  "ru": "Обеспечить их сохранность."
+ },
+ "nuclear_custody.3.d": {
+  "en": "Custody of #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! nuclear warheads has passed to us, together with the lands where they were stored. Our officers have checked every weapon against the old inventories, and the count matches.",
+  "ru": "Под нашу опеку перешли #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! ядерных боеголовок вместе с землями, где они хранились. Наши офицеры сверили каждое изделие со старыми описями, и счёт сошёлся."
+ },
+ "nuclear_custody.3.d_lost": {
+  "en": "Custody of #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! nuclear warheads has passed to us, together with the lands where they were stored. When our officers checked the weapons against the old inventories, #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#! could not be found, and they have been listed as missing.",
+  "ru": "Под нашу опеку перешли #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! ядерных боеголовок вместе с землями, где они хранились. Когда наши офицеры сверили изделия со старыми описями, #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#! найти не удалось, и они числятся пропавшими."
+ },
+ "nuclear_custody.3.f": {
+  "en": "Instructions to the officers taking over the warhead storage sites that have passed to us:\\n\\nCount every warhead in person and against the former holder's inventory, not against its staff's word. The inventory is all that tells us what should be there.\\nRecord the serial marks of each weapon as you find it. If one is missing, its marks are what other governments will need in order to look for it.\\nKeep the former guard on site under our officers until the count is signed. They know the vaults, and they are the first people we will need to question.\\nChange every lock and every list of who may enter on the day you arrive. Nobody yet knows who else holds keys.\\nReport the count as you make it, whether or not it matches. We will be asked for it abroad, and we must give the same figure every time.",
+  "ru": "Указания офицерам, принимающим перешедшие к нам склады боеголовок:\\n\\nПересчитайте каждую боеголовку лично и по описи прежнего владельца, а не со слов его персонала. Только опись говорит нам, что должно здесь быть.\\nЗаписывайте серийные метки каждого изделия, как находите его. Если одно пропало, другим правительствам для поисков понадобятся именно его метки.\\nДержите прежнюю охрану на местах под командованием наших офицеров, пока счёт не будет подписан. Она знает хранилища, и допрашивать нам придётся в первую очередь её людей.\\nВ день прибытия смените все замки и все списки допущенных. Никто пока не знает, у кого ещё есть ключи.\\nДокладывайте счёт по мере подсчёта, сходится он или нет. С нас спросят за рубежом, и мы должны называть одну и ту же цифру."
+ },
+ "nuclear_custody.3.t": {
+  "en": "The Arsenal Changes Hands",
+  "ru": "Арсенал меняет владельца"
+ },
+ "nuclear_custody.4.a": {
+  "en": "Whatever the old state held answers to us now.",
+  "ru": "Всё, чем владело старое государство, теперь подчиняется нам."
+ },
+ "nuclear_custody.4.d": {
+  "en": "The old government left us no warheads, but its nuclear program is ours, and its doctrine stands until we choose another. Its pledges do not bind us, and the world will weigh our threats as those of a new government.",
+  "ru": "Прежнее правительство не оставило нам боеголовок, но его ядерная программа теперь наша, а его доктрина действует, пока мы не выберем другую. Его обязательства нас не связывают, а мир будет оценивать наши угрозы как угрозы нового правительства."
+ },
+ "nuclear_custody.4.d_armed": {
+  "en": "We hold #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads: the old government's arsenal and any our side held during the fighting. The officers who guard them have sworn to the new government. We keep the old government's doctrine and safeguards until we change them, and we may change them at once. Its pledges do not bind us, and the world will weigh our threats as those of a new government.",
+  "ru": "У нас #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! ядерных боеголовок: арсенал прежнего правительства и всё, что наша сторона захватила в ходе боёв. Охраняющие их офицеры присягнули новому правительству. Доктрина и меры безопасности прежнего правительства сохраняются, пока мы их не изменим, а изменить их мы можем немедленно. Его обязательства нас не связывают, а мир будет оценивать наши угрозы как угрозы нового правительства."
+ },
+ "nuclear_custody.4.d_armed_lost": {
+  "en": "We hold #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads: the old government's arsenal and any our side held during the fighting, less #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#! that went missing when its custodians fled. The officers who guard the rest have sworn to the new government. We keep the old government's doctrine and safeguards until we change them, and we may change them at once. Its pledges do not bind us, and the world will weigh our threats as those of a new government.",
+  "ru": "У нас #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! ядерных боеголовок: арсенал прежнего правительства и всё, что наша сторона захватила в ходе боёв, за вычетом #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#!, пропавших, когда их хранители бежали. Офицеры, охраняющие остальные, присягнули новому правительству. Доктрина и меры безопасности прежнего правительства сохраняются, пока мы их не изменим, а изменить их мы можем немедленно. Его обязательства нас не связывают, а мир будет оценивать наши угрозы как угрозы нового правительства."
+ },
+ "nuclear_custody.4.f": {
+  "en": "\\\"I command the guard at the state's nuclear sites, and I have come to tell the new government where things stand. My officers took the new oath this morning in the yard of the headquarters, in front of the people they command. We have kept every rule exactly as it stood: two signatures to open any store, a count every week, the same guard on every gate. Nobody has been dismissed and nobody has been allowed to leave. If the government wants any of that changed, it may change it today and we will carry the change out. I ask only that the order come from one office, in writing, so that my officers know whose word they are obeying.\\\"",
+  "ru": "«Я командую охраной ядерных объектов государства и пришёл сообщить новому правительству, как обстоят дела. Сегодня утром мои офицеры принесли новую присягу во дворе штаба, перед теми, кем они командуют. Мы сохранили каждое правило в точности: две подписи, чтобы открыть любое хранилище, пересчёт каждую неделю, тот же караул у каждых ворот. Никого не уволили, и никому не позволили уйти. Если правительство хочет что-то из этого изменить, оно может сделать это сегодня, и мы исполним. Прошу лишь, чтобы приказ исходил из одного ведомства и был письменным, чтобы мои офицеры знали, чьему слову они подчиняются.»"
+ },
+ "nuclear_custody.4.t": {
+  "en": "The Old Regime's Arsenal",
+  "ru": "Арсенал старого режима"
+ },
+ "nuclear_custody.5.a": {
+  "en": "Take them apart now, whatever it costs.",
+  "ru": "Разобрать их сейчас, чего бы это ни стоило."
+ },
+ "nuclear_custody.5.b": {
+  "en": "Let [SCOPE.sCountry('nd_cw_helper').GetName] take them apart.",
+  "ru": "Пусть страна [SCOPE.sCountry('nd_cw_helper').GetName] разберёт их."
+ },
+ "nuclear_custody.5.c": {
+  "en": "Keep them. They are the last card we hold.",
+  "ru": "Оставить их. Это наша последняя карта."
+ },
+ "nuclear_custody.5.d": {
+  "en": "[SCOPE.sCountry('nd_cw_rebel').GetName] is winning. If it takes the capital, it takes the state, and with it the #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads we still hold. We can take them apart now, in haste and in the middle of a war, and lose some of them in the confusion, or keep them and hope the war turns.",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_rebel').GetName] побеждает. Если она возьмёт столицу, то возьмёт и государство, а с ним и #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! ядерных боеголовок, которые у нас остаются. Мы можем разобрать их сейчас, наспех и посреди войны, потеряв часть в неразберихе, или сохранить и надеяться, что война повернётся."
+ },
+ "nuclear_custody.5.d_custodian": {
+  "en": "[SCOPE.sCountry('nd_cw_rebel').GetName] is winning. If it takes the capital, it takes the state, and with it the #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads we still hold. [SCOPE.sCountry('nd_cw_helper').GetName]'s technicians are already at our depots and could take the weapons apart under their own supervision without losing one. We can also do it ourselves, in haste, or keep them.",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_rebel').GetName] побеждает. Если она возьмёт столицу, то возьмёт и государство, а с ним и #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! ядерных боеголовок, которые у нас остаются. Техники страны [SCOPE.sCountry('nd_cw_helper').GetName] уже на наших складах и могли бы разобрать оружие под своим надзором, не потеряв ни одной единицы. Мы можем также сделать это сами, наспех, или сохранить их."
+ },
+ "nuclear_custody.5.f": {
+  "en": "South Africa built six nuclear bombs in the 1980s and had a seventh under construction. In 1989, as its government prepared to negotiate the end of apartheid, it ordered all of them dismantled. The engineers who had built the bombs took them apart in secret, and most of the program's documents were destroyed. South Africa joined the Non-Proliferation Treaty in 1991, and in March 1993 its president told the country's parliament what had been done.",
+  "ru": "Южная Африка создала шесть ядерных бомб в 1980-х годах, и седьмая была в производстве. В 1989 году, когда её правительство готовилось к переговорам о конце апартеида, оно приказало разобрать все. Инженеры, построившие бомбы, тайно разобрали их, а большая часть документов программы была уничтожена. В 1991 году Южная Африка присоединилась к Договору о нераспространении ядерного оружия, а в марте 1993 года президент рассказал парламенту страны о том, что было сделано."
+ },
+ "nuclear_custody.5.t": {
+  "en": "Deny Them the Bomb",
+  "ru": "Лишить их бомбы"
+ },
+ "nuclear_custody.6.a": {
+  "en": "We stand with the government.",
+  "ru": "Мы на стороне правительства."
+ },
+ "nuclear_custody.6.b": {
+  "en": "We stand with the rebels.",
+  "ru": "Мы на стороне повстанцев."
+ },
+ "nuclear_custody.6.c": {
+  "en": "We offer to secure their arsenal.",
+  "ru": "Мы предлагаем обеспечить сохранность их арсенала."
+ },
+ "nuclear_custody.6.d": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName] is at war with itself. The rebels of [SCOPE.sCountry('nd_cwr_reb').GetName] hold part of the country, and the government still holds its nuclear arsenal. Governments that hold warheads of their own want to know which side to back, and who will count the weapons when the war is over.",
+  "ru": "Страна [SCOPE.sCountry('nd_cwr_gov').GetName] воюет сама с собой. Повстанцы [SCOPE.sCountry('nd_cwr_reb').GetName] удерживают часть страны, а правительство по-прежнему владеет ядерным арсеналом. Правительства, у которых есть собственные боеголовки, хотят знать, чью сторону поддержать и кто пересчитает оружие, когда война закончится."
+ },
+ "nuclear_custody.6.d_rebels_armed": {
+  "en": "[SCOPE.sCountry('nd_cwr_gov').GetName] is at war with itself, and its nuclear arsenal has split with it: the rebels of [SCOPE.sCountry('nd_cwr_reb').GetName] hold warheads of their own now, about #v [SCOPE.sCountry('nd_cwr_reb').MakeScope.Var('nd_public_estimate').GetValue|0]#! by the reports. Governments that hold warheads of their own want to know which side to back, and who will count the weapons when the war is over.",
+  "ru": "Страна [SCOPE.sCountry('nd_cwr_gov').GetName] воюет сама с собой, и её ядерный арсенал раскололся вместе с ней: у повстанцев [SCOPE.sCountry('nd_cwr_reb').GetName] теперь есть собственные боеголовки, по сообщениям, около #v [SCOPE.sCountry('nd_cwr_reb').MakeScope.Var('nd_public_estimate').GetValue|0]#!. Правительства, у которых есть собственные боеголовки, хотят знать, чью сторону поддержать и кто пересчитает оружие, когда война закончится."
+ },
+ "nuclear_custody.6.e": {
+  "en": "This is not our war.",
+  "ru": "Это не наша война."
+ },
+ "nuclear_custody.6.f": {
+  "en": "\\\"My brother asked me at dinner whether any of it could reach us here. I work in the office that follows foreign arsenals, and I told him the truth: nobody in the office can say yet.\\\"\\n\\n\\\"I sat beside some of [SCOPE.sCountry('nd_cwr_gov').GetName]'s officers at a conference once. They were careful people, and proud of their procedures. I do not know whether careful people stay at their posts when nobody is sure who is paying them.\\\"\\n\\n\\\"If we back the government and the rebels win, they will remember it, and they may be holding some of those warheads when they do.\\\"\\n\\n\\\"We have been asked for a map of which storage sites lie on which side of the fighting. We are drawing it from what their officers have told us over the years and from what the newspapers print, and it is not yet good enough to act on.\\\"",
+  "ru": "«Брат спросил меня за ужином, может ли что-то из этого долететь до нас. Я работаю в ведомстве, которое следит за иностранными арсеналами, и сказал ему правду: пока никто в ведомстве не может ответить.»\\n\\n«Я однажды сидел рядом с некоторыми офицерами страны [SCOPE.sCountry('nd_cwr_gov').GetName] на конференции. Люди осторожные и гордые своими процедурами. Не знаю, остаются ли осторожные люди на постах, когда никто не уверен, кто им платит.»\\n\\n«Если мы поддержим правительство, а повстанцы победят, они это запомнят, и у них к тому времени могут оказаться некоторые из этих боеголовок.»\\n\\n«У нас запросили карту того, какие склады по какую сторону фронта лежат. Мы рисуем её по тому, что говорили нам их офицеры за эти годы, и по тому, что печатают газеты, и пока она недостаточно хороша, чтобы действовать по ней.»"
+ },
+ "nuclear_custody.6.t": {
+  "en": "A Nuclear Power Divided",
+  "ru": "Расколотая ядерная держава"
+ },
+ "nuclear_custody.7.a": {
+  "en": "Accept their help.",
+  "ru": "Принять их помощь."
+ },
+ "nuclear_custody.7.b": {
+  "en": "Our arsenal is our own business.",
+  "ru": "Наш арсенал — наше дело."
+ },
+ "nuclear_custody.7.d": {
+  "en": "[SCOPE.sCountry('nd_cw_helper').GetName] offers to send technicians and money to help us guard and count our nuclear warheads for as long as the war lasts. Its people would see our depots and our inventories. In return, fewer weapons would slip away whenever they change hands, and if the war goes against us, they could take the weapons apart for us without losing one.",
+  "ru": "Страна [SCOPE.sCountry('nd_cw_helper').GetName] предлагает прислать техников и деньги, чтобы помочь нам охранять и пересчитывать наши ядерные боеголовки, пока длится война. Её люди увидят наши склады и наши описи. Взамен меньше оружия будет теряться при каждой передаче из рук в руки, а если война обернётся против нас, они смогут разобрать оружие за нас, не потеряв ни одной единицы."
+ },
+ "nuclear_custody.7.f": {
+  "en": "To the government, from the officers in command of our nuclear storage sites, on [SCOPE.sCountry('nd_cw_helper').GetName]'s offer. If we accept, its technicians will need our inventories, the plans of each site and the names of the guards, and they will see how many weapons are kept where. We could not take that knowledge back after the war. In return they would bring people and money while our own guards are divided, and seals and counting methods of their own. If the fighting goes against us, they could take the weapons apart under their own supervision, which we cannot do quickly without losing some. We ask to be told the government's answer before their first team arrives, so that we can prepare the sites.",
+  "ru": "Правительству от офицеров, командующих нашими ядерными складами, о предложении страны [SCOPE.sCountry('nd_cw_helper').GetName]. Если мы согласимся, её техникам понадобятся наши описи, планы каждого объекта и имена караульных, и они увидят, сколько оружия где хранится. После войны мы не сможем забрать эти знания назад. Взамен они привезут людей и деньги, пока наша охрана разделена, а также собственные пломбы и методы счёта. Если бои пойдут против нас, они смогут разобрать оружие под собственным надзором, а мы быстро этого сделать не можем, не потеряв часть. Просим сообщить нам ответ правительства до прибытия их первой группы, чтобы мы могли подготовить объекты."
+ },
+ "nuclear_custody.7.t": {
+  "en": "An Offer to Secure Our Arsenal",
+  "ru": "Предложение обеспечить сохранность нашего арсенала"
+ },
+ "nuclear_custody.8.a": {
+  "en": "Noted.",
+  "ru": "Принято к сведению."
+ },
+ "nuclear_custody.8.d_accepted": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_cw_offer_to').GetCountry.GetName] has accepted our offer. Our technicians are on their way to its weapons depots.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_cw_offer_to').GetCountry.GetName] приняла наше предложение. Наши техники направляются на её склады оружия."
+ },
+ "nuclear_custody.8.d_declined": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_cw_offer_to').GetCountry.GetName] has declined our offer. Its arsenal, it says, is its own business.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_cw_offer_to').GetCountry.GetName] отклонила наше предложение. Её арсенал, по её словам, — её собственное дело."
+ },
+ "nuclear_custody.8.f": {
+  "en": "In 1993 the government of Kazakhstan told American officials that a plant at Ust-Kamenogorsk still held about six hundred kilograms of highly enriched uranium left over from the Soviet navy's reactor program, enough for more than twenty bombs. In Project Sapphire the next year, a small team of American specialists spent six weeks at the plant packing the material into steel drums. It was flown to the United States in November 1994, and Kazakhstan was paid for it.",
+  "ru": "В 1993 году правительство Казахстана сообщило американским официальным лицам, что на заводе в Усть-Каменогорске всё ещё хранится около шестисот килограммов высокообогащённого урана, оставшегося от реакторной программы советского флота, — достаточно более чем для двадцати бомб. В рамках проекта «Сапфир» в следующем году небольшая группа американских специалистов шесть недель работала на заводе, упаковывая материал в стальные бочки. В ноябре 1994 года его доставили самолётом в Соединённые Штаты, а Казахстану за него заплатили."
+ },
+ "nuclear_custody.8.t": {
+  "en": "Our Offer to Secure Their Arsenal",
+  "ru": "Наше предложение обеспечить сохранность их арсенала"
+ },
+ "nuclear_incident.1.a": {
+  "en": "Trust the duty officer. We wait for a second confirmation.",
+  "ru": "Довериться дежурному офицеру. Ждём второго подтверждения."
+ },
+ "nuclear_incident.1.a.tt": {
+  "en": "Nothing is launched; the inquiry into the warning follows in a few days.",
+  "ru": "Ничего не запускается; расследование предупреждения последует через несколько дней."
+ },
+ "nuclear_incident.1.b": {
+  "en": "Put the forces on alert, and let them see that we are ready.",
+  "ru": "Привести силы в боевую готовность и показать, что мы готовы."
+ },
+ "nuclear_incident.1.c": {
+  "en": "Give the launch order. If the warning is true, there is no later.",
+  "ru": "Отдать приказ на пуск. Если предупреждение верно, потом будет поздно."
+ },
+ "nuclear_incident.1.d": {
+  "en": "Our early-warning network is reporting what it reads as the opening of an attack from [SCOPE.sCountry('nd_warning_suspect').GetName]. The second channel, which should see whatever the first one sees, has confirmed nothing. The duty officer has passed the warning up with a written objection: an attack would not begin like this. The decision is the government's, and it must be made before a real attack would arrive.",
+  "ru": "Наша сеть раннего предупреждения сообщает о том, что похоже на начало нападения со стороны страны [SCOPE.sCountry('nd_warning_suspect').GetName]. Второй канал, который должен видеть всё то, что видит первый, ничего не подтвердил. Дежурный офицер передал предупреждение наверх с письменным возражением: нападение так не начиналось бы. Решение за правительством, и принять его нужно до того, как прибыло бы настоящее нападение."
+ },
+ "nuclear_incident.1.d_crisis": {
+  "en": "In the middle of our crisis with [SCOPE.sCountry('nd_warning_suspect').GetName], the early-warning network is reporting what it reads as the opening of an attack from its territory. The second channel has confirmed nothing. The duty officer has passed the warning up with a written objection: an attack would not begin like this. The decision is the government's.",
+  "ru": "Посреди нашего кризиса со страной [SCOPE.sCountry('nd_warning_suspect').GetName] сеть раннего предупреждения сообщает о том, что похоже на начало нападения с её территории. Второй канал ничего не подтвердил. Дежурный офицер передал предупреждение наверх с письменным возражением: нападение так не начиналось бы. Решение за правительством."
+ },
+ "nuclear_incident.1.f": {
+  "en": "In the government's crisis room, the officer who carries the warning center's reports stood at the end of the table and gave the figures as they came in. The first channel still showed an attack under way. The second channel, which watches the same sky by other means, showed nothing at all. Asked whether the second could be the broken one, the officer said that it could, but that the duty officer did not think so: \\\"Too few, from the wrong places, at an hour when nothing else on their side is moving.\\\" The objection was in writing and signed. The officer laid it on the table in front of the head of government, beside the figures from both channels, and waited to be told what to send back.",
+  "ru": "В кризисном зале правительства офицер, приносящий донесения центра предупреждения, стоял в конце стола и называл цифры по мере их поступления. Первый канал всё ещё показывал идущее нападение. Второй канал, наблюдающий за тем же небом другими средствами, не показывал ничего. На вопрос, не может ли сбоить как раз второй, офицер ответил, что может, но дежурный офицер так не думает: «Слишком мало, не оттуда и в час, когда у них больше ничего не движется». Возражение было письменным и подписанным. Офицер положил его на стол перед главой правительства рядом с цифрами обоих каналов и ждал, что прикажут передать в ответ."
+ },
+ "nuclear_incident.1.t": {
+  "en": "Conflicting Indications",
+  "ru": "Противоречивые показания"
+ },
+ "nuclear_incident.10.a": {
+  "en": "Send them the schedule, and invite their officers to watch.",
+  "ru": "Отправить им график и пригласить их офицеров понаблюдать."
+ },
+ "nuclear_incident.10.b": {
+  "en": "Scale it back. No exercise is worth a war by accident.",
+  "ru": "Свернуть учения. Ни одни учения не стоят случайной войны."
+ },
+ "nuclear_incident.10.c": {
+  "en": "Carry on as planned. The exercise runs to its timetable.",
+  "ru": "Продолжать по плану. Учения идут по расписанию."
+ },
+ "nuclear_incident.10.d": {
+  "en": "Our latest exercise, and the alert around it, has been read in [SCOPE.sCountry('nd_exercise_opponent').GetName] as cover for a first strike. Its forces have gone to their highest alert, its leaders have moved to their shelters, and its diplomats are asking our embassy questions they have never asked before. Even if we scale back now, that alarm will not fade at once.",
+  "ru": "Наши последние учения и тревога вокруг них восприняты в стране [SCOPE.sCountry('nd_exercise_opponent').GetName] как прикрытие первого удара. Её силы приведены в высшую боеготовность, её руководители перебрались в убежища, а её дипломаты задают нашему посольству вопросы, каких никогда не задавали. Даже если мы свернём учения сейчас, эта тревога не утихнет сразу."
+ },
+ "nuclear_incident.10.d_alarmed": {
+  "en": "Our latest exercise, and the alert around it, has been read in [SCOPE.sCountry('nd_exercise_opponent').GetName] as cover for a first strike. Its leaders have been briefed in their shelters, and its diplomats are asking our embassy questions they have never asked before. Even if we scale back now, that alarm will not fade at once.",
+  "ru": "Наши последние учения и тревога вокруг них восприняты в стране [SCOPE.sCountry('nd_exercise_opponent').GetName] как прикрытие первого удара. Её руководителей проинформировали в убежищах, а её дипломаты задают нашему посольству вопросы, каких никогда не задавали. Даже если мы свернём учения сейчас, эта тревога не утихнет сразу."
+ },
+ "nuclear_incident.10.d_deciding": {
+  "en": "Our latest exercise, and the alert around it, has been read in [SCOPE.sCountry('nd_exercise_opponent').GetName] as cover for a first strike. Its early-warning staff are sounding every alarm they have, its leaders are being briefed in their shelters, and its diplomats are asking our embassy questions they have never asked before. Whether its forces go to their highest alert is being decided in its capital tonight, and even if we scale back now, that alarm will not fade at once.",
+  "ru": "Наши последние учения и тревога вокруг них восприняты в стране [SCOPE.sCountry('nd_exercise_opponent').GetName] как прикрытие первого удара. Её персонал раннего предупреждения поднимает все возможные тревоги, её руководителей информируют в убежищах, а её дипломаты задают нашему посольству вопросы, каких никогда не задавали. Будут ли её силы приведены в высшую боеготовность, решается этой ночью в её столице, и даже если мы свернём учения сейчас, эта тревога не утихнет сразу."
+ },
+ "nuclear_incident.10.e": {
+  "en": "Let them believe it. Press our demands while they are afraid.",
+  "ru": "Пусть верят. Пока они напуганы, будем давить с требованиями."
+ },
+ "nuclear_incident.10.f": {
+  "en": "\\\"The government has asked its intelligence service how our exercise looks from [SCOPE.sCountry('nd_exercise_opponent').GetName], and this is our answer. They have not seen our timetable. What they have seen is our signals traffic double overnight, our codes change, our forces move to their exercise positions and our own leadership rehearse the procedure for releasing the weapons, with nobody explaining any of it. Their planners keep a list of the signs that come before a first strike, as ours do, and we have just shown them most of it. Their staff is working through the night. The questions their diplomats are putting to our embassy are the questions a government asks when it thinks it has days left. Whatever we decide, they need to hear it from us soon, and plainly.\\\"",
+  "ru": "«Правительство спросило нашу разведку, как наши учения выглядят из страны [SCOPE.sCountry('nd_exercise_opponent').GetName], и вот наш ответ. Нашего расписания они не видели. Они видели, как за ночь вдвое вырос наш радиообмен, как сменились наши коды, как наши силы вышли на учебные позиции и как наше собственное руководство репетирует процедуру применения оружия, и никто ничего не объяснял. Их планировщики ведут перечень признаков, предшествующих первому удару, как и наши, а мы только что показали им почти все. Их штаб работает всю ночь. Вопросы, которые их дипломаты задают нашему посольству, — это вопросы правительства, которое считает, что у него остались считаные дни. Что бы мы ни решили, им нужно услышать это от нас, скоро и прямо.»"
+ },
+ "nuclear_incident.10.t": {
+  "en": "The Exercise They Mistook",
+  "ru": "Учения, принятые за другое"
+ },
+ "nuclear_incident.11.a": {
+  "en": "Go to our highest alert.",
+  "ru": "Перейти в высшую боеготовность."
+ },
+ "nuclear_incident.11.b": {
+  "en": "Hold our posture, and ask them what they are doing.",
+  "ru": "Сохранить позицию и спросить, что они делают."
+ },
+ "nuclear_incident.11.d": {
+  "en": "[SCOPE.sCountry('nd_exerciser').GetName] has put its nuclear forces through an exercise on a scale we have never seen, in the middle of a crisis with us: signals traffic doubled, codes changed, its leaders rehearsing the procedure for releasing the weapons. Our analysts cannot rule out that it is cover for a first strike, and the general staff asks for our highest alert. Going there costs money and strain, and [SCOPE.sCountry('nd_exerciser').GetName] will read it as darkly as we read its exercise.",
+  "ru": "Страна [SCOPE.sCountry('nd_exerciser').GetName] провела учения своих ядерных сил в невиданных нами масштабах посреди кризиса с нами: радиообмен вырос вдвое, коды сменились, её руководители репетируют процедуру применения оружия. Наши аналитики не могут исключить, что это прикрытие первого удара, и генеральный штаб просит высшую боеготовность. Это стоит денег и напряжения, а страна [SCOPE.sCountry('nd_exerciser').GetName] воспримет это так же мрачно, как мы восприняли её учения."
+ },
+ "nuclear_incident.11.f": {
+  "en": "The general staff's points to the government on the exercise by [SCOPE.sCountry('nd_exerciser').GetName]:\\n\\nIts signals traffic has doubled and its codes have changed, which is what we would expect to see in the days before a first strike, and also in a large exercise.\\nIts leadership has rehearsed the release of its weapons, which it has never done this openly before.\\nWe have had no notice of the exercise through any channel, so we cannot check what we see against a timetable.\\nGoing to our highest alert would protect more of our forces if this is an attack, and would tell them we took it for one if it is not.\\nHolding our posture and asking them directly would cost nothing now, and would leave our forces as exposed as they are today.",
+  "ru": "Тезисы генерального штаба для правительства об учениях страны [SCOPE.sCountry('nd_exerciser').GetName]:\\n\\nЕё радиообмен вырос вдвое, а коды сменились: именно это мы ожидали бы увидеть за несколько дней до первого удара, но также и при крупных учениях.\\nЕё руководство отрепетировало применение оружия, чего прежде оно так открыто не делало.\\nОб учениях мы не получили уведомления ни по одному каналу, поэтому не можем сверить увиденное с расписанием.\\nВысшая боеготовность защитила бы больше наших сил, если это нападение, и сообщила бы им, что мы приняли это за нападение, если это не так.\\nСохранить позицию и спросить их напрямую ничего не стоило бы сейчас, но оставило бы наши силы такими же уязвимыми, как сегодня."
+ },
+ "nuclear_incident.11.t": {
+  "en": "Is This the Real Thing?",
+  "ru": "Это всерьёз?"
+ },
+ "nuclear_incident.12.a": {
+  "en": "Accept the invitation. Open talks.",
+  "ru": "Принять приглашение. Начать переговоры."
+ },
+ "nuclear_incident.12.b": {
+  "en": "Note it, and keep up the pressure.",
+  "ru": "Принять к сведению и продолжать давление."
+ },
+ "nuclear_incident.12.d": {
+  "en": "[SCOPE.sCountry('nd_exerciser').GetName] has answered our alarm over its exercise by sending us the schedule, printed and bound, and inviting our officers to watch the rest of it from its own command posts. It is the first thing it has offered since this crisis began. We could take it as an opening for talks, or note it politely and keep up the pressure.",
+  "ru": "Страна [SCOPE.sCountry('nd_exerciser').GetName] ответила на нашу тревогу по поводу её учений, прислав нам расписание в печатном переплетённом виде и пригласив наших офицеров понаблюдать за остальной частью со своих командных пунктов. Это первое, что она предложила с начала кризиса. Мы можем счесть это поводом для переговоров или вежливо принять к сведению и продолжать давление."
+ },
+ "nuclear_incident.12.f": {
+  "en": "The officer on our crisis staff given the timetable to check had it open on the desk by evening: a bound volume with every page numbered, listing each phase of the exercise, the units taking part and the hours they would stand on alert. Beside it lay our own log of what their forces had done since the exercise began. The officer went down the two side by side with a ruler, a line at a time, and put a small pencil tick beside each entry that matched. Where the log showed something the timetable did not, the officer wrote the hour in the margin and went on. Near midnight, halfway through the volume, the officer sent the first pages up to the government so that it would not have to wait for the rest.",
+  "ru": "Офицер нашего кризисного штаба, которому поручили проверить расписание, к вечеру разложил его на столе: переплетённый том с пронумерованными страницами, где перечислены все этапы учений, участвующие части и часы, в которые они будут стоять в боевой готовности. Рядом лежал наш собственный журнал того, что делали их силы с начала учений. Офицер шёл по обоим сверху вниз с линейкой, строка за строкой, и ставил карандашную галочку у каждой совпавшей записи. Там, где в журнале было что-то, чего нет в расписании, офицер писал час на полях и шёл дальше. К полуночи, на середине тома, офицер отправил первые страницы правительству, чтобы ему не пришлось ждать остального."
+ },
+ "nuclear_incident.12.t": {
+  "en": "They Showed Us the Timetable",
+  "ru": "Они показали нам расписание"
+ },
+ "nuclear_incident.2.a": {
+  "en": "The standing orders remain. A deterrent cannot afford to hesitate.",
+  "ru": "Действующие приказы остаются. Сдерживание не может позволить себе колебаний."
+ },
+ "nuclear_incident.2.b": {
+  "en": "From now on, only the capital can give that order.",
+  "ru": "Отныне такой приказ может отдать только столица."
+ },
+ "nuclear_incident.2.d": {
+  "en": "The warning of an attack from [SCOPE.sCountry('nd_warning_suspect').GetName] went first to the launch crews, as our standing orders require, and reached the government only afterward. The orders said fire. Somewhere between the warning center and the crews, an officer refused to pass the order on, and it went no further. The inquiry will report on what the warning was.",
+  "ru": "Предупреждение о нападении со стороны страны [SCOPE.sCountry('nd_warning_suspect').GetName] сначала поступило к пусковым расчётам, как требуют наши действующие приказы, и лишь потом к правительству. Приказ гласил: огонь. Где-то между центром предупреждения и расчётами офицер отказался передавать приказ дальше, и он дальше не пошёл. Расследование выяснит, чем было это предупреждение."
+ },
+ "nuclear_incident.2.f": {
+  "en": "\\\"I am the officer who held the launch order, and this is my evidence to the government's inquiry. The order came through authenticated, twice, and the procedure gave me one minute to pass it on. I read the warning that came with it. It showed an attack from one direction with nothing behind it, and none of the other stations were reporting anything. I have watched those screens for years, and an attack would not look like that. So I held the order and called the warning center, and I kept calling until they told me what they were seeing. I know what the standing orders say. I know that if the warning had been true, I spent minutes we did not have. I am telling you what I saw, and I will sign a statement that says so.\\\"",
+  "ru": "«Я офицер, задержавший пусковой приказ, и это мои показания расследованию правительства. Приказ пришёл с подтверждением подлинности, дважды, и по процедуре у меня была одна минута, чтобы передать его дальше. Я прочёл предупреждение, которое пришло с ним. Оно показывало нападение с одного направления и ничего за ним, а остальные станции ничего не сообщали. Я годами смотрел на эти экраны, и нападение выглядело бы не так. Поэтому я задержал приказ и позвонил в центр предупреждения, и звонил, пока мне не сказали, что они видят. Я знаю, что говорят действующие приказы. Я знаю, что если бы предупреждение было верным, я потратил минуты, которых у нас не было. Я говорю вам то, что видел, и подпишу заявление об этом.»"
+ },
+ "nuclear_incident.2.t": {
+  "en": "The Order Nobody Passed",
+  "ru": "Приказ, который никто не передал"
+ },
+ "nuclear_incident.20.a": {
+  "en": "Honor the officer who refused. We owe that officer everything.",
+  "ru": "Наградить отказавшегося офицера. Мы обязаны ему всем."
+ },
+ "nuclear_incident.20.b": {
+  "en": "Tighten the safeguards. Next time there may be no second officer.",
+  "ru": "Ужесточить меры безопасности. В следующий раз второго офицера может не оказаться."
+ },
+ "nuclear_incident.20.c": {
+  "en": "This never happened. Reassign the crew, and separately.",
+  "ru": "Этого не было. Перевести расчёт и по отдельности."
+ },
+ "nuclear_incident.20.d_fired_recalled": {
+  "en": "One of our nuclear-armed units, out of contact with the capital and convinced that [SCOPE.sCountry('nd_ic_enemy').GetName] had attacked, began to launch. A garbled fragment of a signal, half lost in interference, had seemed to confirm the order. The capital reached the unit at the last possible moment and recalled it, and no weapon struck. [SCOPE.sCountry('nd_ic_enemy').GetName] watched every step, and its government is demanding an explanation.",
+  "ru": "Одна из наших частей с ядерным оружием, потеряв связь со столицей и будучи уверена, что страна [SCOPE.sCountry('nd_ic_enemy').GetName] напала, начала пуск. Искажённый обрывок сигнала, наполовину потерянный в помехах, будто подтвердил приказ. Столица связалась с частью в последний возможный миг и отозвала её, и ни одно оружие не поразило цель. Страна [SCOPE.sCountry('nd_ic_enemy').GetName] наблюдала за каждым шагом, и её правительство требует объяснений."
+ },
+ "nuclear_incident.20.d_fired_war": {
+  "en": "One of our nuclear-armed units, cut off from the capital and convinced that [SCOPE.sCountry('nd_ic_enemy').GetName] had attacked, concluded that the order to fire had been given. The second officer concurred, and a weapon was launched before contact with the government was restored. The strike reports will establish what it hit. The unit acted under the authority our government had delegated to it.",
+  "ru": "Одна из наших частей с ядерным оружием, отрезанная от столицы и уверенная, что страна [SCOPE.sCountry('nd_ic_enemy').GetName] напала, пришла к выводу, что приказ на огонь был отдан. Второй офицер согласился, и оружие было запущено до восстановления связи с правительством. Донесения об ударе покажут, что оно поразило. Часть действовала в рамках полномочий, делегированных ей нашим правительством."
+ },
+ "nuclear_incident.20.d_held": {
+  "en": "One of our forward nuclear units lost contact with the capital, then received a launch order over a damaged line: incomplete, oddly worded and impossible to confirm. Its commander prepared to carry it out. A second officer, whose consent the procedure required, refused on the grounds that an order which could not be checked was not an order. The weapons stayed where they were until contact was restored.",
+  "ru": "Одна из наших передовых ядерных частей потеряла связь со столицей, а затем получила пусковой приказ по повреждённой линии: неполный, странно сформулированный и не поддающийся проверке. Командир приготовился его исполнить. Второй офицер, чьё согласие требовалось по процедуре, отказал на том основании, что приказ, который нельзя проверить, не является приказом. Оружие оставалось на месте, пока связь не была восстановлена."
+ },
+ "nuclear_incident.20.d_held_sub": {
+  "en": "One of our submarines, carrying a nuclear weapon, lost all contact with the capital for days while warships hunted it overhead. With depth charges bursting around the hull, the batteries failing and the air turning foul, its commander decided that the war had already begun and ordered the weapon prepared. Firing it required the consent of a second senior officer aboard. That officer refused, and the submarine surfaced instead.",
+  "ru": "Одна из наших подводных лодок с ядерным оружием на несколько дней потеряла всякую связь со столицей, пока над ней охотились боевые корабли. Когда вокруг корпуса рвались глубинные бомбы, садились батареи и портился воздух, командир решил, что война уже началась, и приказал готовить оружие. Для пуска требовалось согласие второго старшего офицера на борту. Тот отказал, и подводная лодка вместо этого всплыла."
+ },
+ "nuclear_incident.20.e": {
+  "en": "No more delegated weapons. Every launch key comes back to the capital.",
+  "ru": "Больше никакого делегированного оружия. Каждый пусковой ключ возвращается в столицу."
+ },
+ "nuclear_incident.20.f_fired": {
+  "en": "\\\"I commanded the unit, and this is my statement to the officers sent from the capital to take it. We had no contact from the evening on. Then a fragment of a signal came through: three groups out of eleven, the rest lost. The three we had were the right ones, in the right order. Under the authority the government gave us, a commander who cannot reach the capital and has reason to believe the country is under attack may act, and I had reason. My second officer read the groups and agreed. I gave the order. I have written down every step with the time beside it, and I ask that the government's own instructions to this unit be attached to my statement, so that whoever reads it can see what we were told to do.\\\"",
+  "ru": "«Я командовал частью, и это моё заявление офицерам, посланным из столицы, чтобы принять её. С вечера у нас не было связи. Потом пробился обрывок сигнала: три группы из одиннадцати, остальное потеряно. Три, что у нас были, оказались правильными и в правильном порядке. По полномочиям, данным нам правительством, командир, не имеющий связи со столицей и имеющий основания полагать, что страна подверглась нападению, может действовать, и у меня были основания. Мой второй офицер прочёл группы и согласился. Я отдал приказ. Я записал каждый шаг с указанием времени и прошу приложить к моему заявлению собственные указания правительства этой части, чтобы каждый, кто его прочтёт, видел, что нам было велено делать.»"
+ },
+ "nuclear_incident.20.f_held": {
+  "en": "The unit's commander and the second officer, whose consent the procedure requires, in the hours after contact with the capital was lost.\\n\\n\\\"The last signal we understood came hours ago. The one before it was a test. We cannot tell whether there is a government left to send us anything.\\\"\\n\\n\\\"We cannot tell that there isn't.\\\"\\n\\n\\\"If they have struck, every hour we wait gives them time to strike again, and our weapons may not be here to answer.\\\"\\n\\n\\\"And if they have not, ours will be the first shot of a war, fired because a signal did not get through. I will not give my consent. Enter my refusal in the log with the time, report it when contact is back, and I will answer for it.\\\"",
+  "ru": "Командир части и второй офицер, чьё согласие требуется по процедуре, в часы после потери связи со столицей.\\n\\n«Последний понятный нам сигнал пришёл несколько часов назад. Тот, что был до него, был проверочным. Мы не можем сказать, осталось ли правительство, способное нам что-либо прислать.»\\n\\n«Мы не можем сказать, что его нет.»\\n\\n«Если они нанесли удар, каждый час ожидания даёт им время ударить снова, а нашего оружия здесь может уже не быть, чтобы ответить.»\\n\\n«А если нет, то наш выстрел станет первым выстрелом войны, сделанным потому, что сигнал не дошёл. Я не дам согласия. Занесите мой отказ в журнал с указанием времени, доложите о нём, когда восстановится связь, и я отвечу за него.»"
+ },
+ "nuclear_incident.20.g": {
+  "en": "The commander did exactly what we authorized. We will not disown it.",
+  "ru": "Командир сделал в точности то, что мы разрешили. Мы не откажемся от этого."
+ },
+ "nuclear_incident.20.t_fired": {
+  "en": "Silence from the Capital",
+  "ru": "Молчание столицы"
+ },
+ "nuclear_incident.20.t_held": {
+  "en": "The Officer Who Refused",
+  "ru": "Офицер, который отказался"
+ },
+ "nuclear_incident.3.a": {
+  "en": "Reward whoever doubted the warning. We need more of that doubt, not less.",
+  "ru": "Наградить того, кто усомнился в предупреждении. Нам нужно больше такого сомнения, а не меньше."
+ },
+ "nuclear_incident.3.b": {
+  "en": "Seal the findings. As far as anyone knows, this inquiry never sat.",
+  "ru": "Засекретить выводы. Насколько кому известно, расследования не было."
+ },
+ "nuclear_incident.3.c": {
+  "en": "Orders are orders. An officer who second-guesses the system has no place in it.",
+  "ru": "Приказ есть приказ. Офицеру, который перепроверяет систему, в ней не место."
+ },
+ "nuclear_incident.3.d_chip": {
+  "en": "The inquiry has traced the warning to one faulty component, worth almost nothing, in the line that carries the warning data. It began writing random figures into the place where the count of incoming weapons belongs: two, then two hundred, then two again. The displays reported each figure faithfully as an attack from [SCOPE.sCountry('nd_warning_suspect').GetName].",
+  "ru": "Расследование проследило предупреждение до одной неисправной детали, почти ничего не стоящей, в линии, передающей данные предупреждения. Она стала записывать случайные числа в то место, где должно стоять число приближающихся боезарядов: два, потом двести, потом снова два. Дисплеи исправно отображали каждое число как нападение со стороны страны [SCOPE.sCountry('nd_warning_suspect').GetName]."
+ },
+ "nuclear_incident.3.d_clouds": {
+  "en": "The inquiry has found the cause: sunlight. At a rare angle, the sun struck a layer of high cloud above [SCOPE.sCountry('nd_warning_suspect').GetName], and our warning satellite, which watches for the heat of rocket engines, read the reflected glare as launches, one after another until it had counted five. The satellite was working as designed, and its designers had not allowed for light at that angle.",
+  "ru": "Расследование установило причину: солнечный свет. Под редким углом солнце осветило слой высоких облаков над страной [SCOPE.sCountry('nd_warning_suspect').GetName], и наш спутник предупреждения, следящий за теплом ракетных двигателей, принял отражённый блик за пуски, один за другим, пока не насчитал пять. Спутник работал как задумано, а его разработчики не учли свет под таким углом."
+ },
+ "nuclear_incident.3.d_coincidence": {
+  "en": "The inquiry has found four causes, all on the same night: a flight of swans over one of our radar stations, read as unidentified aircraft; a fighter escort for a visiting dignitary, flying where nobody expected it; a routine exercise by [SCOPE.sCountry('nd_warning_suspect').GetName]; and a line fault that cut off the one station that could have explained all three. Each had an innocent explanation, and the operators, seeing them together, read them as an attack.",
+  "ru": "Расследование установило четыре причины, и все в одну ночь: стая лебедей над одной из наших радиолокационных станций, принятая за неопознанные самолёты; эскорт истребителей для приезжего сановника, летевший там, где никто не ждал; плановые учения страны [SCOPE.sCountry('nd_warning_suspect').GetName]; и неисправность линии, отрезавшая единственную станцию, которая могла бы объяснить все три. У каждой было невинное объяснение, а операторы, увидев их вместе, приняли их за нападение."
+ },
+ "nuclear_incident.3.d_moonrise": {
+  "en": "The inquiry has found the cause. One of our radars, built to watch for missiles rising over the horizon, saw the moon rising instead. Its beam reached farther than its builders had expected, far enough to return an echo from the moon, and the system read that echo as a large launch from [SCOPE.sCountry('nd_warning_suspect').GetName].",
+  "ru": "Расследование установило причину. Одна из наших РЛС, построенная для наблюдения за ракетами, поднимающимися над горизонтом, увидела вместо этого восход луны. Её луч достал дальше, чем ожидали её создатели, достаточно далеко, чтобы вернуть эхо от Луны, и система приняла это эхо за крупный пуск со стороны страны [SCOPE.sCountry('nd_warning_suspect').GetName]."
+ },
+ "nuclear_incident.3.d_relay": {
+  "en": "The inquiry has found the cause. The warning lines in our network, which were meant to back each other up, had all been routed through the same relay station, and when that one station failed they all went silent at once. Our planners had always expected a sudden, total silence in the first minutes of an attack by [SCOPE.sCountry('nd_warning_suspect').GetName], which would try to blind our warning first.",
+  "ru": "Расследование установило причину. Линии предупреждения в нашей сети, которые должны были дублировать друг друга, были все проложены через одну и ту же ретрансляционную станцию, и когда эта станция вышла из строя, замолчали все сразу. Наши планировщики всегда ожидали внезапного полного молчания в первые минуты нападения страны [SCOPE.sCountry('nd_warning_suspect').GetName], которая постаралась бы сначала ослепить наше предупреждение."
+ },
+ "nuclear_incident.3.d_rocket": {
+  "en": "The inquiry has found the cause: a research rocket launched by foreign scientists to study the upper atmosphere. On our radar its climb looked like a missile fired at us from close by, the opening shot our planners had always expected from [SCOPE.sCountry('nd_warning_suspect').GetName]. The scientists' institute had sent notice of the launch weeks earlier, and the notice had reached our diplomats but not the warning staff.",
+  "ru": "Расследование установило причину: исследовательская ракета, запущенная иностранными учёными для изучения верхних слоёв атмосферы. На нашей РЛС её подъём выглядел как ракета, выпущенная по нам с близкого расстояния, — первый выстрел, которого наши планировщики всегда ожидали от страны [SCOPE.sCountry('nd_warning_suspect').GetName]. Институт учёных прислал уведомление о запуске за несколько недель, и оно дошло до наших дипломатов, но не до персонала предупреждения."
+ },
+ "nuclear_incident.3.d_solar": {
+  "en": "The inquiry has found the cause: a storm on the sun. A burst of solar radiation struck the upper atmosphere and blinded our radars, and the operators read the interference as deliberate jamming, the first step an attack by [SCOPE.sCountry('nd_warning_suspect').GetName] would take. The scientists who track such storms had seen this one coming, but they report to another office, and nothing they send reaches the warning staff.",
+  "ru": "Расследование установило причину: буря на солнце. Всплеск солнечной радиации ударил по верхним слоям атмосферы и ослепил наши РЛС, а операторы приняли помехи за преднамеренное подавление, первый шаг нападения страны [SCOPE.sCountry('nd_warning_suspect').GetName]. Учёные, наблюдающие за такими бурями, видели её приближение, но они подчиняются другому ведомству, и ничто из присланного ими не доходит до персонала предупреждения."
+ },
+ "nuclear_incident.3.d_tape": {
+  "en": "The inquiry has found the cause. A technician loaded a training exercise, a realistic simulated attack by [SCOPE.sCountry('nd_warning_suspect').GetName] written to test the crews, into the live warning system instead of the test system. For those minutes every console in the network showed the exercise as though it were real, until the technician's supervisor found the mistake and took it out.",
+  "ru": "Расследование установило причину. Техник загрузил учебное упражнение, реалистичную имитацию нападения страны [SCOPE.sCountry('nd_warning_suspect').GetName], написанную для проверки расчётов, в боевую систему предупреждения вместо тестовой. В течение тех минут каждая консоль в сети показывала упражнение как настоящее, пока начальник техника не обнаружил ошибку и не удалил его."
+ },
+ "nuclear_incident.3.f": {
+  "en": "To the government, from the board of inquiry into the warning. We have heard the officer who questioned it, the operators on both channels and the engineers who maintain the network. The officer did not know the cause when the doubt was raised, and did not claim to. The doubt rested on the shape of the warning: it matched none of the attacks the crews train for, and the second channel showed nothing. We find that the officer acted on what the screens showed and said so at once. We also find that the outcome that night rested on one person's judgment at the end of a long shift, and that nothing in our procedures would have caught the fault had that judgment gone the other way. Our recommendations are attached. We ask for the government's decision on the officer and on our findings.",
+  "ru": "Правительству от комиссии по расследованию предупреждения. Мы заслушали офицера, усомнившегося в нём, операторов обоих каналов и инженеров, обслуживающих сеть. Офицер не знал причины, когда высказал сомнение, и не утверждал, что знает. Сомнение основывалось на форме предупреждения: оно не совпадало ни с одним из нападений, к которым готовят расчёты, а второй канал ничего не показывал. Мы установили, что офицер действовал по тому, что показывали экраны, и сказал об этом сразу. Мы также установили, что исход той ночи зависел от суждения одного человека в конце долгой смены и что ничто в наших процедурах не выявило бы неисправность, если бы это суждение оказалось иным. Наши рекомендации прилагаются. Просим решения правительства по офицеру и по нашим выводам."
+ },
+ "nuclear_incident.3.f_launched": {
+  "en": "\\\"I sat on the inquiry board. We checked the finding three ways before we signed it: nothing was launched at us that night, by anyone. I read it to the government myself.\\\"\\n\\n\\\"The crews did everything their orders told them to do, and did it fast, which is what we trained them for. I would like someone to tell me which part of it they did wrong.\\\"\\n\\n\\\"My husband works at the warning center. He came home this morning, sat down at the kitchen table in his coat and has not said a word since.\\\"\\n\\n\\\"Our diplomats have asked for the finding in writing, so that it can go to [SCOPE.sCountry('nd_warning_suspect').GetName] before its government hears of it some other way.\\\"",
+  "ru": "«Я сидел в комиссии по расследованию. Мы проверили вывод тремя способами, прежде чем подписать: в ту ночь по нам ничего не запускали, никто. Я лично зачитал его правительству.»\\n\\n«Расчёты сделали всё, что велели им приказы, и сделали быстро, как мы их и учили. Хотел бы я, чтобы кто-нибудь сказал мне, что именно они сделали не так.»\\n\\n«Мой муж работает в центре предупреждения. Он вернулся домой сегодня утром, сел за кухонный стол в пальто и с тех пор не сказал ни слова.»\\n\\n«Наши дипломаты попросили вывод в письменном виде, чтобы он дошёл до страны [SCOPE.sCountry('nd_warning_suspect').GetName] раньше, чем её правительство узнает о нём иным путём.»"
+ },
+ "nuclear_incident.3.t": {
+  "en": "What the Warning Was",
+  "ru": "Чем было предупреждение"
+ },
+ "nuclear_incident.30.a": {
+  "en": "Ease the alert. Tired crews make the mistakes we cannot afford.",
+  "ru": "Ослабить тревогу. Уставшие расчёты делают ошибки, которых мы не можем себе позволить."
+ },
+ "nuclear_incident.30.b": {
+  "en": "Replace, retrain, repair: whatever it costs, we pay it.",
+  "ru": "Заменить, переучить, починить: чего бы это ни стоило, мы заплатим."
+ },
+ "nuclear_incident.30.c": {
+  "en": "Accidents happen. The alert stays exactly where it is.",
+  "ru": "Аварии случаются. Уровень тревоги остаётся прежним."
+ },
+ "nuclear_incident.30.d_bomber": {
+  "en": "A bomber carrying nuclear weapons has broken up in the air over [SCOPE.sState('nd_accident_state').GetName], scattering them across the ground below. None detonated, but the fall tripped one weapon's safety switches one after another, until a single low-voltage switch was all that stood between [SCOPE.sState('nd_accident_state').GetName] and a nuclear explosion. The conventional explosives in another burst on impact and spread radioactive material over the crash site.",
+  "ru": "Бомбардировщик с ядерным оружием развалился в воздухе над областью [SCOPE.sState('nd_accident_state').GetName], рассыпав его по земле. Ни одно не детонировало, но при падении одно за другим сработали предохранительные переключатели одного изделия, и между областью [SCOPE.sState('nd_accident_state').GetName] и ядерным взрывом остался лишь один низковольтный переключатель. Обычная взрывчатка другого изделия сдетонировала при ударе и разбросала радиоактивные материалы по месту падения."
+ },
+ "nuclear_incident.30.d_bomber_abroad": {
+  "en": "One of our bombers carrying nuclear weapons has broken up over [SCOPE.sState('nd_accident_state').GetName], in [SCOPE.sCountry('nd_accident_host').GetName], where our weapons are based. None of its nuclear weapons detonated, but the conventional explosives in one burst on impact and spread radioactive material over the crash site. It happened on [SCOPE.sCountry('nd_accident_host').GetName]'s soil and in full view of its people, and its government will now decide what our weapons are still doing there.",
+  "ru": "Один из наших бомбардировщиков с ядерным оружием развалился над областью [SCOPE.sState('nd_accident_state').GetName] в стране [SCOPE.sCountry('nd_accident_host').GetName], где размещено наше оружие. Ни одно из его ядерных изделий не детонировало, но обычная взрывчатка одного сдетонировала при ударе и разбросала радиоактивные материалы по месту падения. Это случилось на земле страны [SCOPE.sCountry('nd_accident_host').GetName] на глазах её народа, и её правительство теперь решит, что наше оружие там всё ещё делает."
+ },
+ "nuclear_incident.30.d_bomber_system": {
+  "en": "A bomber has broken up over [SCOPE.sState('nd_accident_state').GetName], scattering its nuclear weapons. None detonated, but conventional explosives spread radioactive material over the crash site. Our automatic retaliation system read the blast and radiation spike as an attack.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]",
+  "ru": "Бомбардировщик развалился над областью [SCOPE.sState('nd_accident_state').GetName], рассыпав своё ядерное оружие. Ни одно не детонировало, но обычная взрывчатка разбросала радиоактивные материалы по месту падения. Наша система автоматического возмездия приняла взрыв и скачок радиации за нападение.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]"
+ },
+ "nuclear_incident.30.d_crews": {
+  "en": "Inspectors have found skipped checks, falsified maintenance logs, and a launch officer asleep at the console with the blast door standing open. No weapon has been lost, and the inspectors are clear that this owes more to luck than to discipline. The question is how much longer the same procedures can be trusted.",
+  "ru": "Инспекторы обнаружили пропущенные проверки, подделанные журналы обслуживания и офицера-пускача, уснувшего за пультом при открытой взрывозащитной двери. Ни одно изделие не потеряно, и инспекторы подчёркивают, что этим мы обязаны скорее везению, чем дисциплине. Вопрос в том, сколько ещё можно доверять тем же процедурам."
+ },
+ "nuclear_incident.30.d_lost": {
+  "en": "An aircraft loaded with one of our nuclear weapons went down in deep water during a routine exercise, taking its crew and its weapon with it. The water is far too deep for recovery, and the weapon is gone for good. The investigators are still establishing why the aircraft was lost.",
+  "ru": "Самолёт с одним из наших ядерных изделий упал в глубокую воду во время плановых учений, унеся с собой экипаж и оружие. Вода слишком глубока для подъёма, и изделие потеряно навсегда. Следователи всё ещё выясняют, почему самолёт был потерян."
+ },
+ "nuclear_incident.30.d_shipment": {
+  "en": "An audit has found that armed nuclear weapons were flown across the country without anyone knowing they were aboard. Ground crews loading a bomber with weapons they believed were inert mounted live warheads instead, and the aircraft flew its route and sat on a runway for hours before anyone noticed. For that whole time, no record anywhere showed where those weapons were.",
+  "ru": "Аудит выявил, что боевое ядерное оружие перевозили по стране самолётом, и никто не знал, что оно на борту. Наземные бригады, загружавшие бомбардировщик изделиями, которые считали учебными, установили боевые боеголовки, и самолёт выполнил маршрут и несколько часов простоял на полосе, пока кто-либо заметил. Всё это время нигде не было записи о том, где находится это оружие."
+ },
+ "nuclear_incident.30.d_silo": {
+  "en": "A missile silo in [SCOPE.sState('nd_accident_state').GetName] has exploded. A maintenance technician dropped a heavy socket from a work platform; it fell the length of the silo and punctured the missile's fuel tank, and hours later the leaking fuel ignited. The blast threw aside the silo's heavy door and hurled the warhead clear of the site. It did not detonate, but the site is wrecked and the district around it contaminated.",
+  "ru": "В области [SCOPE.sState('nd_accident_state').GetName] взорвалась ракетная шахта. Техник обслуживания уронил тяжёлую торцевую головку с рабочей площадки; она пролетела всю шахту и пробила топливный бак ракеты, а несколько часов спустя вытекшее топливо воспламенилось. Взрыв отбросил тяжёлую крышку шахты и выбросил боеголовку за пределы объекта. Она не детонировала, но объект разрушен, а окрестности заражены."
+ },
+ "nuclear_incident.30.d_silo_abroad": {
+  "en": "One of our missile silos in [SCOPE.sState('nd_accident_state').GetName], in [SCOPE.sCountry('nd_accident_host').GetName], has exploded. Leaking fuel ignited and threw the warhead clear of the site. It did not detonate, but the site is wrecked and the district around it contaminated. It happened on [SCOPE.sCountry('nd_accident_host').GetName]'s soil and in full view of its people, and its government will now decide what our weapons are still doing there.",
+  "ru": "Одна из наших ракетных шахт в области [SCOPE.sState('nd_accident_state').GetName] в стране [SCOPE.sCountry('nd_accident_host').GetName] взорвалась. Вытекшее топливо воспламенилось и выбросило боеголовку за пределы объекта. Она не детонировала, но объект разрушен, а окрестности заражены. Это случилось на земле страны [SCOPE.sCountry('nd_accident_host').GetName] на глазах её народа, и её правительство теперь решит, что наше оружие там всё ещё делает."
+ },
+ "nuclear_incident.30.d_silo_system": {
+  "en": "A missile silo in [SCOPE.sState('nd_accident_state').GetName] has exploded. Leaking fuel ignited and hurled the warhead clear of the site. It did not detonate, but the automatic retaliation system read the explosion as an attack.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]",
+  "ru": "В области [SCOPE.sState('nd_accident_state').GetName] взорвалась ракетная шахта. Вытекшее топливо воспламенилось и выбросило боеголовку за пределы объекта. Она не детонировала, но система автоматического возмездия приняла взрыв за нападение.\\n\\n[ROOT.GetCountry.GetCustom('nd_system_outcome')]"
+ },
+ "nuclear_incident.30.e": {
+  "en": "Classify the whole affair. The public need never know.",
+  "ru": "Засекретить всё дело. Обществу знать незачем."
+ },
+ "nuclear_incident.30.f": {
+  "en": "To the government, from the inspectorate of the nuclear forces. We have taken statements from everyone on duty and compared them with the handling and maintenance records as far back as they go. The people involved were trained and certified, and each of them did what they had done many times before. The records show checks marked complete that nobody remembers carrying out, spare parts requested and not delivered, and shifts extended to cover posts left empty. No one of these explains what happened. Together they mean that our procedures are kept on paper by people too few and too tired to keep them in fact. We attach the records and an estimate of what it would cost to staff and supply the force properly, and we ask the government to choose between that cost and a lower state of alert.",
+  "ru": "Правительству от инспекции ядерных сил. Мы взяли показания у всех, кто был на дежурстве, и сравнили их с записями об обращении с оружием и обслуживании за весь доступный период. Задействованные люди были обучены и аттестованы, и каждый делал то, что делал много раз. Записи показывают проверки, отмеченные как выполненные, хотя никто не помнит, чтобы их проводил, запчасти, затребованные и не доставленные, и смены, продлённые, чтобы закрыть пустующие посты. Ни одно из этого само по себе не объясняет случившегося. Вместе это означает, что наши процедуры соблюдаются на бумаге людьми, которых слишком мало и которые слишком устали, чтобы соблюдать их на деле. Прилагаем записи и оценку стоимости надлежащего укомплектования и снабжения сил и просим правительство выбрать между этой стоимостью и пониженным уровнем тревоги."
+ },
+ "nuclear_incident.30.t": {
+  "en": "A Weapons Accident",
+  "ru": "Авария с оружием"
+ },
+ "nuclear_incident.31.a": {
+  "en": "Their weapons leave our soil.",
+  "ru": "Их оружие покидает нашу землю."
+ },
+ "nuclear_incident.31.b": {
+  "en": "Protest in the strongest terms, and keep the agreement.",
+  "ru": "Выразить протест в самых жёстких выражениях и сохранить соглашение."
+ },
+ "nuclear_incident.31.c": {
+  "en": "Say nothing. Their goodwill matters more than one district.",
+  "ru": "Промолчать. Их добрая воля важнее одного района."
+ },
+ "nuclear_incident.31.d_bomber": {
+  "en": "A [SCOPE.sCountry('nd_accident_guest').GetAdjective] bomber carrying nuclear weapons has broken up over [SCOPE.sState('nd_accident_state').GetName]. None of its weapons detonated, but the conventional explosives in one burst on impact and spread radioactive material over the crash site. The aircraft and its weapons were [SCOPE.sCountry('nd_accident_guest').GetName]'s, based here under our agreement, and what becomes of that agreement is now our decision.",
+  "ru": "[SCOPE.sCountry('nd_accident_guest').GetAdjective] бомбардировщик с ядерным оружием развалился над областью [SCOPE.sState('nd_accident_state').GetName]. Ни одно из изделий не детонировало, но обычная взрывчатка одного сдетонировала при ударе и разбросала радиоактивные материалы по месту падения. Самолёт и его оружие принадлежали стране [SCOPE.sCountry('nd_accident_guest').GetName] и базировались здесь по нашему соглашению, и судьба этого соглашения теперь за нами."
+ },
+ "nuclear_incident.31.d_silo": {
+  "en": "A missile silo that [SCOPE.sCountry('nd_accident_guest').GetName] operates in [SCOPE.sState('nd_accident_state').GetName] under our basing agreement has exploded. The warhead was thrown clear and did not detonate, but the site is wrecked and the district around it contaminated. The site was [SCOPE.sCountry('nd_accident_guest').GetName]'s, and what becomes of our basing agreement is now our decision.",
+  "ru": "Ракетная шахта, которую страна [SCOPE.sCountry('nd_accident_guest').GetName] эксплуатирует в области [SCOPE.sState('nd_accident_state').GetName] по нашему соглашению о базировании, взорвалась. Боеголовка была отброшена и не детонировала, но объект разрушен, а окрестности заражены. Объект принадлежал стране [SCOPE.sCountry('nd_accident_guest').GetName], и судьба нашего соглашения о базировании теперь за нами."
+ },
+ "nuclear_incident.31.f": {
+  "en": "\\\"They closed the road into the district before dawn and turned us back at a barrier. The soldiers at it were [SCOPE.sCountry('nd_accident_guest').GetAdjective], not ours, and nobody would tell us why.\\\"\\n\\n\\\"The district office in [SCOPE.sState('nd_accident_state').GetName] has one list of every household inside the line and a second of the households that want to leave. The second grows every hour, and we have no transport for it.\\\"\\n\\n\\\"My mother will not let the children outside. She has heard that the water is bad, and I cannot tell her that it is not.\\\"\\n\\n\\\"I measured the ground by the school myself, with an instrument their officers lent us. They told me the readings were within their limits, and I have written to our own health office to ask for ours.\\\"",
+  "ru": "«Дорогу в район перекрыли до рассвета и развернули нас у шлагбаума. Там стоял [SCOPE.sCountry('nd_accident_guest').GetAdjective] караул, не наш, и никто не говорил нам почему.»\\n\\n«В районной управе области [SCOPE.sState('nd_accident_state').GetName] есть один список всех домохозяйств внутри оцепления и второй — тех, кто хочет уехать. Второй растёт с каждым часом, а транспорта у нас нет.»\\n\\n«Моя мать не выпускает детей на улицу. Она слышала, что вода плохая, и я не могу сказать ей, что это не так.»\\n\\n«Я сам замерил землю у школы прибором, который одолжили нам их офицеры. Мне сказали, что показания в пределах их норм, и я написал в наше собственное ведомство здравоохранения, чтобы запросить наши.»"
+ },
+ "nuclear_incident.31.t": {
+  "en": "An Accident on Our Soil",
+  "ru": "Авария на нашей земле"
+ },
+ "nuclear_incident.4.a": {
+  "en": "Whatever comes of this, it was our doing.",
+  "ru": "Что бы из этого ни вышло, это наших рук дело."
+ },
+ "nuclear_incident.4.d_recalled": {
+  "en": "Our weapons were ordered to launch against [SCOPE.sCountry('nd_launch_victim').GetName] and recalled at the last possible moment. Nothing struck. But [SCOPE.sCountry('nd_launch_victim').GetName] watched it happen: its intelligence saw our forces go through every step that comes before a launch, and its government knows how close it came.",
+  "ru": "Наше оружие получило приказ на пуск по стране [SCOPE.sCountry('nd_launch_victim').GetName] и было отозвано в последний возможный миг. Ничто не поразило цель. Но страна [SCOPE.sCountry('nd_launch_victim').GetName] видела всё: её разведка наблюдала, как наши силы прошли каждый шаг, предшествующий пуску, и её правительство знает, как близко было дело."
+ },
+ "nuclear_incident.4.d_struck": {
+  "en": "Our weapon has been launched against [SCOPE.sCountry('nd_launch_victim').GetName] on the strength of a warning that no second source had confirmed. The strike reports will establish what it hit. Whether the attack we answered was ever real is now a question for the inquiry. Their government must decide how to answer.",
+  "ru": "Наше оружие запущено по стране [SCOPE.sCountry('nd_launch_victim').GetName] на основании предупреждения, которое не подтвердил ни один второй источник. Донесения об ударе покажут, что оно поразило. Было ли нападение, на которое мы ответили, реальным, теперь вопрос для расследования. Их правительство должно решить, как ответить."
+ },
+ "nuclear_incident.4.f": {
+  "en": "The investigator the government sent read the launch unit's duty log at the desk where it had been written. That night has two entries. The first records the order: the time, the authentication, the officer's name and the target. The second, written some minutes later in the same hand, records what came of it. Between them the officer wrote nothing, though the regulations ask for an entry at every step. The investigator copied both entries in full and checked the times against the warning center's own record, and they agreed to the minute. Then the investigator asked the officer to sit down, and began with the first entry.",
+  "ru": "Следователь, посланный правительством, прочёл журнал дежурства пусковой части за тем столом, за которым он велся. За ту ночь в нём две записи. Первая фиксирует приказ: время, подтверждение подлинности, имя офицера и цель. Вторая, написанная несколькими минутами позже тем же почерком, фиксирует, чем всё кончилось. Между ними офицер не написал ничего, хотя правила требуют записи на каждом шаге. Следователь переписал обе записи полностью и сверил время с собственным журналом центра предупреждения, и они совпали с точностью до минуты. Затем следователь попросил офицера сесть и начал с первой записи."
+ },
+ "nuclear_incident.4.t_recalled": {
+  "en": "Recalled with Seconds Left",
+  "ru": "Отозваны за секунды до пуска"
+ },
+ "nuclear_incident.4.t_struck": {
+  "en": "What We Have Done",
+  "ru": "Что мы наделали"
+ },
+ "nuclear_incident.40.a": {
+  "en": "Fix the procedure that failed, and check the ones that didn't.",
+  "ru": "Исправить процедуру, которая дала сбой, и проверить те, что не дали."
+ },
+ "nuclear_incident.40.b": {
+  "en": "No harm done. File the report and move on.",
+  "ru": "Вреда нет. Подшить отчёт и забыть."
+ },
+ "nuclear_incident.40.c": {
+  "en": "Classify the report. Officially, a meteorite fell on the garden.",
+  "ru": "Засекретить отчёт. Официально — на сад упал метеорит."
+ },
+ "nuclear_incident.40.d_alarm": {
+  "en": "Mechanics repairing a bomber at one of our bases accidentally set off the base alarm, the one reserved for a real attack. Crews ran for their aircraft, a bomber taxied toward the runway with its engines running, and for several minutes the base behaved exactly as it would at the start of a war. The mistake was caught before anything left the ground.",
+  "ru": "Механики, ремонтировавшие бомбардировщик на одной из наших баз, случайно включили сигнал тревоги базы, тот самый, что предназначен для настоящего нападения. Расчёты бросились к самолётам, один бомбардировщик порулил к полосе с работающими двигателями, и несколько минут база вела себя в точности так, как вела бы себя в начале войны. Ошибку заметили прежде, чем что-либо оторвалось от земли."
+ },
+ "nuclear_incident.40.d_drop": {
+  "en": "A crewman searching for a locking pin aboard one of our bombers grabbed the emergency release instead, and a nuclear weapon fell onto farmland below. It carried no nuclear core, but its conventional charge detonated on impact, leaving a crater in a family's garden, a wrecked house and several injured civilians. The family is asking for compensation, and the press is asking what else is flying overhead.",
+  "ru": "Член экипажа, искавший стопорный штифт на борту одного из наших бомбардировщиков, схватился вместо этого за аварийный сброс, и ядерное изделие упало на пашню внизу. В нём не было ядерного заряда, но обычный заряд сдетонировал при ударе, оставив воронку в саду одной семьи, разрушенный дом и нескольких раненых гражданских. Семья требует компенсации, а пресса спрашивает, что ещё летает над головой."
+ },
+ "nuclear_incident.40.d_klaxon": {
+  "en": "An intruder alarm at one of our air defense centers reported someone climbing the perimeter fence. Faulty wiring carried the alarm to other bases; at one of them the wrong klaxon sounded, and interceptor crews armed with nuclear weapons raced to their aircraft believing war had begun. A car drove onto the runway to stop them moments before take-off. The intruder was a bear.",
+  "ru": "Сигнализация вторжения в одном из наших центров противовоздушной обороны сообщила, что кто-то лезет через забор по периметру. Из-за неисправной проводки тревога дошла до других баз; на одной из них прозвучала не та сирена, и экипажи перехватчиков с ядерным оружием бросились к самолётам, думая, что началась война. Автомобиль выехал на полосу, чтобы остановить их за мгновения до взлёта. Нарушителем был медведь."
+ },
+ "nuclear_incident.40.d_tornado": {
+  "en": "A tornado has torn across one of our bomber bases, flattening hangars and flinging aircraft across the flight line. The crews reached shelter in time, and the nuclear weapons stored on the base were undamaged. The storm passed a few hundred meters from the aircraft standing on alert. The repairs will be expensive and will take months.",
+  "ru": "Торнадо пронёсся над одной из наших баз бомбардировщиков, сметая ангары и разбрасывая самолёты по лётному полю. Экипажи успели укрыться, а хранящееся на базе ядерное оружие не пострадало. Буря прошла в нескольких сотнях метров от самолётов, стоявших в готовности. Ремонт будет дорогим и займёт месяцы."
+ },
+ "nuclear_incident.40.f": {
+  "en": "\\\"The report runs to forty pages.\\\"\\n\\n\\\"Summarize it.\\\"\\n\\n\\\"Nothing blew up that was not supposed to, or not much. Nobody died. Several things happened that the manual says cannot happen, in an order the manual never considered, and every one of them was somebody's routine.\\\"\\n\\n\\\"And the recommendations?\\\"\\n\\n\\\"Nine pages. Most of them say 'check it twice.'\\\"\\n\\n\\\"And the rest?\\\"\\n\\n\\\"'Check it three times.' The committee was very tired.\\\"",
+  "ru": "«Отчёт занимает сорок страниц.»\\n\\n«Изложите вкратце.»\\n\\n«Ничего не взорвалось из того, что не должно, или почти ничего. Никто не погиб. Случилось несколько вещей, которые по инструкции случиться не могут, в порядке, которого инструкция не предусматривала, и каждая из них была чьей-то рутиной.»\\n\\n«А рекомендации?»\\n\\n«Девять страниц. Большинство гласит: „проверьте дважды“.»\\n\\n«А остальные?»\\n\\n«„Проверьте трижды“. Комиссия очень устала.»"
+ },
+ "nuclear_incident.40.t": {
+  "en": "A Routine Mishap",
+  "ru": "Рядовой инцидент"
+ },
+ "nuclear_incident.5.a": {
+  "en": "We will not forget how close they came.",
+  "ru": "Мы не забудем, как близко они подошли."
+ },
+ "nuclear_incident.5.b": {
+  "en": "Raise our own alert. They should know we are awake too.",
+  "ru": "Повысить собственную тревогу. Пусть знают, что мы тоже не спим."
+ },
+ "nuclear_incident.5.c": {
+  "en": "Warn them privately: stand down, or else.",
+  "ru": "Предупредить их неофициально: свернуть, или пожалеют."
+ },
+ "nuclear_incident.5.d": {
+  "en": "The nuclear forces of [SCOPE.sCountry('nd_interceptor').GetName] went through every step before a launch against us, and the order was recalled only at the last moment. Their government calls it a technical error. Our intelligence has confirmed how far the sequence went before it stopped.",
+  "ru": "Ядерные силы страны [SCOPE.sCountry('nd_interceptor').GetName] прошли каждый шаг перед пуском по нам, и приказ был отозван лишь в последний момент. Их правительство называет это технической ошибкой. Наша разведка подтвердила, как далеко зашла последовательность, прежде чем остановилась."
+ },
+ "nuclear_incident.5.f": {
+  "en": "To the government, from our intelligence service, on the night the weapons of [SCOPE.sCountry('nd_interceptor').GetName] were readied against us. We watched their forces go through each step that comes before a launch, in the order their procedures set and at the pace of a real order, not an exercise. No warning reached us through any channel. The sequence then stopped in every unit at once, and over the following hours their forces went back to their usual posture. Their government has since told ours that it was a technical error. We can neither confirm nor refute that. We can confirm that the order to stop came from their capital, and we are working to learn how the sequence began. Our full timeline is attached.",
+  "ru": "Правительству от нашей разведки в ночь, когда оружие страны [SCOPE.sCountry('nd_interceptor').GetName] было приведено в готовность против нас. Мы наблюдали, как их силы проходят каждый шаг перед пуском, в порядке, заданном их процедурами, и в темпе настоящего приказа, а не учений. Предупреждение до нас не дошло ни по одному каналу. Затем последовательность остановилась во всех частях разом, а в следующие часы их силы вернулись к обычному состоянию. Их правительство с тех пор сообщило нашему, что это была техническая ошибка. Подтвердить или опровергнуть это мы не можем. Мы можем подтвердить, что приказ остановиться пришёл из их столицы, и мы выясняем, как последовательность началась. Наша полная хронология прилагается."
+ },
+ "nuclear_incident.5.t": {
+  "en": "Their Weapons Were Ready",
+  "ru": "Их оружие было готово"
+ },
+ "nuclear_incident.50.a": {
+  "en": "We will win this war the way we started it.",
+  "ru": "Мы выиграем эту войну так же, как её начали."
+ },
+ "nuclear_incident.50.b": {
+  "en": "Tell them plainly: surrender, or face what we have.",
+  "ru": "Сказать им прямо: сдаться или встретить то, что у нас есть."
+ },
+ "nuclear_incident.50.c": {
+  "en": "Authorize the strike, and let the burden of it rest on us.",
+  "ru": "Разрешить удар и взять бремя на себя."
+ },
+ "nuclear_incident.50.d": {
+  "en": "Our general staff has brought a proposal to the government. [SCOPE.sCountry('nd_mw_enemy').GetName] has no nuclear weapons of its own, and no nuclear power has promised to answer for it. A single strike, the generals argue, would end the war in days and spare our soldiers months of fighting. They want an answer while the window is still open.",
+  "ru": "Наш генеральный штаб внёс предложение правительству. У страны [SCOPE.sCountry('nd_mw_enemy').GetName] нет собственного ядерного оружия, и ни одна ядерная держава не обещала за неё ответить. Один удар, утверждают генералы, закончил бы войну за считаные дни и избавил бы наших солдат от месяцев боёв. Они хотят ответа, пока окно ещё открыто."
+ },
+ "nuclear_incident.50.d_militarist": {
+  "en": "The proposal has not come up from the general staff. It has come down from the top. With the army's full backing, the leadership wants to know why [SCOPE.sCountry('nd_mw_enemy').GetName] is still fighting when it cannot answer a nuclear weapon and no one has promised to answer for it. One strike, they say, would end the war and show the world what we are. The order is expected.",
+  "ru": "Это предложение не поступило от генерального штаба. Оно пришло сверху. При полной поддержке армии руководство хочет знать, почему страна [SCOPE.sCountry('nd_mw_enemy').GetName] всё ещё воюет, когда не может ответить на ядерное оружие и никто не обещал за неё ответить. Один удар, говорят они, закончил бы войну и показал миру, кто мы. Приказ ожидается."
+ },
+ "nuclear_incident.50.f": {
+  "en": "The chief of the general staff and a senior adviser to the government, after the proposal was put.\\n\\n\\\"They have no weapon of their own, and nobody who will answer for them. That is the whole of the case, and it will not be true forever.\\\"\\n\\n\\\"It is true today. What happens to our standing with every government that has no weapon, and every government building one, after we use ours?\\\"\\n\\n\\\"I can tell you what happens to our soldiers if we do not. I sign the letters to their families, and every month this goes on there are more of them.\\\"\\n\\n\\\"Then you and I will answer for the dead on the other side as well. Put it in writing, with the target and the losses you expect on both sides, and the government will decide tonight.\\\"",
+  "ru": "Начальник генерального штаба и старший советник правительства после внесения предложения.\\n\\n«У них нет собственного оружия и нет никого, кто за них ответит. В этом весь довод, и вечно это правдой не будет.»\\n\\n«Сегодня это правда. Что станет с нашим положением перед каждым правительством, у которого нет оружия, и перед каждым, что его создаёт, после того как мы применим своё?»\\n\\n«Я могу сказать вам, что будет с нашими солдатами, если мы не применим. Я подписываю письма их семьям, и с каждым месяцем таких писем больше.»\\n\\n«Тогда мы с вами будем отвечать и за погибших с другой стороны. Изложите письменно, с целью и ожидаемыми потерями с обеих сторон, и правительство решит сегодня вечером.»"
+ },
+ "nuclear_incident.50.t": {
+  "en": "The Monopoly Window",
+  "ru": "Окно монополии"
+ },
+ "nuclear_incident.6.a": {
+  "en": "Renew the pledge, in public and in the government's own name.",
+  "ru": "Подтвердить обязательство публично и от имени самого правительства."
+ },
+ "nuclear_incident.6.b": {
+  "en": "A promise our own forces could not keep is not one we should go on making.",
+  "ru": "Обещание, которого не смогли сдержать наши силы, нам не следует продолжать давать."
+ },
+ "nuclear_incident.6.c": {
+  "en": "Say nothing. The doctrine stands, and so does the record.",
+  "ru": "Промолчать. Доктрина остаётся, как и запись."
+ },
+ "nuclear_incident.6.c.tt": {
+  "en": "#v No First Use#! remains our doctrine, and the broken pledge's costs run their course.",
+  "ru": "#v Неприменение первым#! остаётся нашей доктриной, а последствия нарушенного обязательства идут своим чередом."
+ },
+ "nuclear_incident.6.d": {
+  "en": "Nobody in our government gave the order, but our nuclear weapons have been used first. Our doctrine still promises that they never will be, and every foreign ministry wants to know whether the promise means anything now. The breach has already cost us. The doctrine itself stands until the government says otherwise.\\n\\nWe can renew the pledge in public and spend our standing at home to be believed. We can withdraw it now, while the blame falls on the launch rather than on the government. Or we can leave the question unanswered.",
+  "ru": "Никто в нашем правительстве не отдавал приказа, но наше ядерное оружие применили первым. Наша доктрина по-прежнему обещает, что этого не будет никогда, и каждое министерство иностранных дел хочет знать, значит ли теперь что-нибудь это обещание. Нарушение уже обошлось нам дорого. Сама доктрина остаётся, пока правительство не решит иначе.\\n\\nМы можем подтвердить обязательство публично и потратить свой авторитет внутри страны, чтобы нам поверили. Мы можем отозвать его сейчас, пока вина падает на пуск, а не на правительство. Или оставить вопрос без ответа."
+ },
+ "nuclear_incident.6.f": {
+  "en": "\\\"The government has asked our diplomatic service for its view of the draft statement, and as its head I will give it plainly. The draft says our doctrine is unchanged, and that is true: nobody here changed it. But every ambassador I see tomorrow will have read that our weapon was used first, and the draft does not say on whose order. They will ask me that before anything else. If we renew the pledge, I need to be able to tell them what we have done so that it cannot happen again, or they will not believe the renewal. If we withdraw it, I need to know before I walk into the first meeting. If we say nothing, I will say nothing, to people who expect an answer. Tell me which it is to be, and I will have the statement ready tonight.\\\"",
+  "ru": "«Правительство запросило у нашей дипломатической службы мнение о проекте заявления, и как её глава я скажу прямо. В проекте сказано, что наша доктрина не изменилась, и это правда: здесь её никто не менял. Но каждый посол, которого я увижу завтра, прочтёт, что наше оружие применили первым, а в проекте не сказано, по чьему приказу. Это они спросят у меня прежде всего. Если мы подтвердим обязательство, мне нужно уметь сказать, что мы сделали, чтобы этого не повторилось, иначе подтверждению не поверят. Если отзовём, мне нужно знать это до того, как я войду на первую встречу. Если промолчим, я буду молчать перед людьми, которые ждут ответа. Скажите, какой из путей выбран, и заявление будет готово сегодня вечером.»"
+ },
+ "nuclear_incident.6.t": {
+  "en": "The Pledge After the Launch",
+  "ru": "Обязательство после пуска"
+ },
+ "nuclear_incident.60.a": {
+  "en": "Publish the full findings and take the blame in public.",
+  "ru": "Опубликовать выводы полностью и принять вину публично."
+ },
+ "nuclear_incident.60.b": {
+  "en": "Deny it all. The documents are forgeries, every page.",
+  "ru": "Всё отрицать. Документы — подделки, каждая страница."
+ },
+ "nuclear_incident.60.d": {
+  "en": "The story of a nuclear incident our government chose to conceal has come out, complete with internal documents and the names of the officers involved. Copies are passing from hand to hand, and critics at home and governments abroad are asking what else has been kept from them.",
+  "ru": "История о ядерном инциденте, который наше правительство решило скрыть, вышла наружу вместе с внутренними документами и именами причастных офицеров. Копии ходят по рукам, а критики внутри страны и правительства за рубежом спрашивают, что ещё от них скрыли."
+ },
+ "nuclear_incident.60.f": {
+  "en": "Our security service's inventory of the leaked file, sent to the government with a request that each item be checked against our own records:\\n\\nA copy of the original incident report, with a page in it that is missing from our own copy, which means it was taken before the report was sealed.\\nThe instruction to seal the report, with the signature on it, which is the page foreign governments have asked about first.\\nThree pages of a duty log in a clerk's handwriting, which the clerk appears to have copied out at home.\\nA letter from an officer to a relative describing that night, kept by the family and given up after the officer's death.\\nThe names of the officers on duty, several of whom have since left the service and are no longer bound by its rules.",
+  "ru": "Опись утёкшего дела нашей службы безопасности, направленная правительству с просьбой сверить каждый пункт с нашими собственными записями:\\n\\nКопия первоначального отчёта об инциденте со страницей, которой нет в нашем экземпляре, что означает, что её изъяли до того, как отчёт засекретили.\\nУказание засекретить отчёт, с подписью, — страница, о которой иностранные правительства спросили в первую очередь.\\nТри страницы журнала дежурства, написанные почерком клерка, которые клерк, судя по всему, переписал дома.\\nПисьмо офицера родственнику, описывающее ту ночь, сохранённое семьёй и отданное после смерти офицера.\\nИмена офицеров, бывших на дежурстве, несколько из которых с тех пор покинули службу и более не связаны её правилами."
+ },
+ "nuclear_incident.60.t": {
+  "en": "A Secret Comes Out",
+  "ru": "Тайна выходит наружу"
+ },
+ "nuclear_incident.70.a": {
+  "en": "Stand down, if they will do the same.",
+  "ru": "Свернуть, если они сделают то же."
+ },
+ "nuclear_incident.70.b": {
+  "en": "There can be no peace after this.",
+  "ru": "После этого мира быть не может."
+ },
+ "nuclear_incident.70.d": {
+  "en": "No nuclear weapon has been launched between us and [SCOPE.sCountry('nd_exchange_offer_enemy').GetName] for at least a week. Both governments are being asked to stand down. If both accept, the nuclear exchange ends without a conventional war, under a five-year truce. If either refuses, war follows. Another launch would withdraw this offer.",
+  "ru": "Между нами и страной [SCOPE.sCountry('nd_exchange_offer_enemy').GetName] не запускалось ни одного ядерного изделия по меньшей мере неделю. Обоим правительствам предлагают свернуть боевые действия. Если оба согласятся, ядерный обмен закончится без обычной войны, с пятилетним перемирием. Если откажется любое, последует война. Новый пуск отзовёт это предложение."
+ },
+ "nuclear_incident.70.f": {
+  "en": "In the room the government had kept open since the first launch, the duty officer for the night read through the reports that had come in since morning. There was no new launch report. The last was a week old, pinned to the board beside the others. The reports on what the weapons had done were still arriving, and the officer entered each one in the ledger with the time it came. On the desk lay the message received that evening, asking both governments whether they would stand down. The officer had it copied twice, once for the head of government and once for the general staff, and sent both before the next report arrived.",
+  "ru": "В зале, который правительство держало открытым с первого пуска, ночной дежурный офицер читал донесения, поступившие с утра. Нового донесения о пуске не было. Последнее было недельной давности, пришпиленное к доске рядом с остальными. Донесения о том, что сделало оружие, всё ещё приходили, и офицер вносил каждое в журнал со временем получения. На столе лежало сообщение, полученное этим вечером, с вопросом к обоим правительствам, готовы ли они свернуться. Офицер велел скопировать его дважды, для главы правительства и для генерального штаба, и отправил оба экземпляра до прихода следующего донесения."
+ },
+ "nuclear_incident.70.t": {
+  "en": "After the Exchange",
+  "ru": "После обмена"
+ },
+ "nuclear_loose.2.a": {
+  "en": "Find out where the weapon came from.",
+  "ru": "Выяснить, откуда взялось оружие."
+ },
+ "nuclear_loose.2.d": {
+  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. Nothing was launched at us and nothing crossed our borders by air: the device was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead.",
+  "ru": "В области [SCOPE.sState('nd_loose_state').GetName] взорвано ядерное устройство. Ни одно государство не взяло ответственность. По нам ничего не запускали, и ничто не пересекало наши границы по воздуху: устройство ввезли в город и взорвали там. По оценкам, погибло #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! человек."
+ },
+ "nuclear_loose.2.f": {
+  "en": "Orders from the emergency command to the rescue and medical crews going into [SCOPE.sState('nd_loose_state').GetName]:\\n\\nApproach from upwind, and stop at the line the survey teams have marked. Beyond it the ground is still too contaminated to work on for long.\\nWear the dosimeter on the outside of your clothing and hand it in at the end of each shift. Anyone whose reading has passed the limit is not to go back in, however short-handed the crew is.\\nDo not drink water or eat food found in the city. The supply is contaminated, and clean water is being brought in.\\nTake the injured to the reception points on the edge of the city. The hospitals nearest the blast cannot take anyone.\\nHold anyone found carrying parts of the device and hand them to the security services. The investigators need to know who handled it before it was set off.",
+  "ru": "Приказ аварийного командования спасательным и медицинским бригадам, входящим в область [SCOPE.sState('nd_loose_state').GetName]:\\n\\nПодходите с наветренной стороны и останавливайтесь на линии, которую обозначили группы разведки. За ней земля всё ещё слишком заражена, чтобы работать долго.\\nНосите дозиметр поверх одежды и сдавайте его в конце каждой смены. Тот, чьё показание превысило предел, не возвращается, как бы ни не хватало людей.\\nНе пейте воду и не ешьте пищу, найденную в городе. Снабжение заражено, чистую воду подвозят.\\nОтвозите раненых в приёмные пункты на окраине города. Ближайшие к взрыву больницы никого принять не могут.\\nЗадерживайте любого, у кого найдены части устройства, и передавайте их службам безопасности. Следователям нужно знать, кто прикасался к нему до взрыва."
+ },
+ "nuclear_loose.2.t": {
+  "en": "A City Destroyed",
+  "ru": "Разрушенный город"
+ },
+ "nuclear_loose.3.a": {
+  "en": "Find where it came from.",
+  "ru": "Выяснить, откуда оно взялось."
+ },
+ "nuclear_loose.3.d": {
+  "en": "Our security services have seized a nuclear warhead, intact, before it could be used. The people who carried it are in custody and will not say where it came from. Our investigators are examining the weapon itself for its origin.",
+  "ru": "Наши службы безопасности изъяли ядерную боеголовку целой, прежде чем её успели применить. Те, кто её нёс, задержаны и не говорят, откуда она. Наши следователи изучают само изделие, чтобы установить его происхождение."
+ },
+ "nuclear_loose.3.f": {
+  "en": "To the government, from the team that made the seized device safe. The weapon is a factory-made warhead, not a homemade one: its casing, wiring and safety mechanisms are of military manufacture, and someone had already tried to get past the last of the safety mechanisms. We removed the firing assembly and sealed the core in a shielded container, which is now in a vault under our guard. Its serial markings have been ground off, but the material inside can still be measured, and the investigators have asked for samples. We recommend that nobody outside the investigation be told what was found until they report.",
+  "ru": "Правительству от группы, обезвредившей изъятое устройство. Это заводская боеголовка, а не кустарная: корпус, проводка и механизмы безопасности военного изготовления, и кто-то уже пытался обойти последний из механизмов безопасности. Мы извлекли узел зажигания и запечатали заряд в экранированный контейнер, который теперь хранится в хранилище под нашей охраной. Серийные маркировки сточены, но материал внутри всё ещё можно измерить, и следователи запросили образцы. Рекомендуем никому вне расследования не сообщать о находке до их доклада."
+ },
+ "nuclear_loose.3.t": {
+  "en": "A Device Seized",
+  "ru": "Изъятое устройство"
+ },
+ "nuclear_loose.4.a": {
+  "en": "Hold [SCOPE.sCountry('nd_loose_accused').GetName] to account.",
+  "ru": "Привлечь страну [SCOPE.sCountry('nd_loose_accused').GetName] к ответу."
+ },
+ "nuclear_loose.4.b": {
+  "en": "Name them all. Let the world judge.",
+  "ru": "Назвать их всех. Пусть мир судит."
+ },
+ "nuclear_loose.4.c": {
+  "en": "Ask each of them, privately, to let our inspectors in.",
+  "ru": "Обратиться к каждой из них неофициально с просьбой допустить наших инспекторов."
+ },
+ "nuclear_loose.4.d_confirmed": {
+  "en": "Our investigators are certain. The isotopes, the design and the markings all point one way: the warhead came from the arsenal of [SCOPE.sCountry('nd_loose_accused').GetName], or from an arsenal whose custody has since passed to it. It did not give the order, but the weapon was in its keeping when it was lost.",
+  "ru": "Наши следователи уверены. Изотопы, конструкция и маркировки указывают в одну сторону: боеголовка из арсенала страны [SCOPE.sCountry('nd_loose_accused').GetName] или из арсенала, опека над которым с тех пор перешла к ней. Она не отдавала приказа, но оружие находилось на её хранении, когда было потеряно."
+ },
+ "nuclear_loose.4.d_confirmed_gone": {
+  "en": "Our investigators are certain where the warhead came from, but the state that lost it no longer exists, and no one left can be made to answer for it.",
+  "ru": "Наши следователи уверены, откуда взялась боеголовка, но государства, потерявшего её, больше не существует, и некого привлечь к ответу."
+ },
+ "nuclear_loose.4.d_shortlist": {
+  "en": "Our investigators have narrowed it down, but no further: the warhead came from [SCOPE.sCountry('nd_loose_s1').GetName] or from [SCOPE.sCountry('nd_loose_s2').GetName]. They cannot say which, and naming both would accuse a country that may have done nothing wrong.",
+  "ru": "Наши следователи сузили круг, но не дальше: боеголовка из страны [SCOPE.sCountry('nd_loose_s1').GetName] или из страны [SCOPE.sCountry('nd_loose_s2').GetName]. Какой именно, они сказать не могут, а назвать обе значило бы обвинить страну, которая могла ни в чём не быть виновна."
+ },
+ "nuclear_loose.4.d_shortlist_three": {
+  "en": "Our investigators have narrowed it down, but no further: the warhead came from [SCOPE.sCountry('nd_loose_s1').GetName], [SCOPE.sCountry('nd_loose_s2').GetName] or [SCOPE.sCountry('nd_loose_s3').GetName]. They cannot say which, and naming them all would accuse countries that may have done nothing wrong.",
+  "ru": "Наши следователи сузили круг, но не дальше: боеголовка из страны [SCOPE.sCountry('nd_loose_s1').GetName], страны [SCOPE.sCountry('nd_loose_s2').GetName] или страны [SCOPE.sCountry('nd_loose_s3').GetName]. Какой именно, они сказать не могут, а назвать все значило бы обвинить страны, которые могли ни в чём не быть виновны."
+ },
+ "nuclear_loose.4.d_unknown": {
+  "en": "Our investigators cannot say where the warhead came from. Too little is left of it, or too little is on file, to match it to anyone's arsenal. Whoever lost it will not be made to answer for it.",
+  "ru": "Наши следователи не могут сказать, откуда взялась боеголовка. От неё осталось слишком мало, или в картотеке слишком мало данных, чтобы сопоставить её с чьим-либо арсеналом. Тот, кто её потерял, к ответу привлечён не будет."
+ },
+ "nuclear_loose.4.e": {
+  "en": "Blame [SCOPE.sCountry('nd_loose_rival').GetName] anyway.",
+  "ru": "Всё равно обвинить страну [SCOPE.sCountry('nd_loose_rival').GetName]."
+ },
+ "nuclear_loose.4.f": {
+  "en": "The forensic laboratory's account to the investigation, of what it examined and what each test can show:\\n\\nThe ratios of isotopes in the material. They show how the material was made, but they match an arsenal only if a sample from that arsenal is on file.\\nThe design of the device and the way its parts were made. Each arsenal's builders have habits, and some of them are recorded in the intelligence files.\\nThe markings and wear on the parts. A part made in one country and fitted in another can carry traces of both.\\nThe traces found where the device was kept before it moved. They show the route it took, not who owned it.",
+  "ru": "Отчёт судебной лаборатории следствию о том, что она исследовала и что может показать каждый тест:\\n\\nСоотношение изотопов в материале. Оно показывает, как материал был получен, но совпадает с арсеналом, только если образец из этого арсенала есть в картотеке.\\nКонструкция устройства и способ изготовления его частей. У строителей каждого арсенала свои привычки, и некоторые из них записаны в разведывательных досье.\\nМаркировки и износ деталей. Деталь, изготовленная в одной стране и установленная в другой, может нести следы обеих.\\nСледы, найденные там, где устройство хранилось до перемещения. Они показывают его маршрут, а не владельца."
+ },
+ "nuclear_loose.4.g": {
+  "en": "Say nothing for now.",
+  "ru": "Пока ничего не говорить."
+ },
+ "nuclear_loose.4.t": {
+  "en": "Where Did It Come From?",
+  "ru": "Откуда оно взялось?"
+ },
+ "nuclear_loose.5.a": {
+  "en": "Every government that holds warheads will be counting them tonight.",
+  "ru": "Каждое правительство, у которого есть боеголовки, будет сегодня ночью пересчитывать их."
+ },
+ "nuclear_loose.5.d": {
+  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName], in [SCOPE.sCountry('nd_loose_victim').GetName]. No state has claimed it. The device was a warhead lost from some government's arsenal, and nobody yet knows whose.",
+  "ru": "В области [SCOPE.sState('nd_loose_state').GetName] в стране [SCOPE.sCountry('nd_loose_victim').GetName] взорвано ядерное устройство. Ни одно государство не взяло ответственность. Устройство было боеголовкой, потерянной из арсенала какого-то правительства, и пока никто не знает, чьего."
+ },
+ "nuclear_loose.5.f": {
+  "en": "\\\"My son asked me whether it could happen here. I told him our government would have people looking for anything like it, and I hope that is true.\\\"\\n\\n\\\"The first we heard was a notice pinned up outside the post office. By evening there were people in front of it reading it aloud to the ones at the back.\\\"\\n\\n\\\"I keep thinking of whoever carried it into the city. They walked past guards and neighbors with it, and nobody knew what they had.\\\"\\n\\n\\\"The people at my work want to know which country it came from. Nobody can tell them, and every newspaper gives a different answer.\\\"",
+  "ru": "«Сын спросил, может ли это случиться здесь. Я сказал, что наше правительство поставит людей искать всё подобное, и надеюсь, что это правда.»\\n\\n«Мы впервые узнали из объявления, приколотого у почты. К вечеру перед ним стояли люди и читали его вслух тем, кто стоял сзади.»\\n\\n«Я всё думаю о том, кто привёз это в город. Он шёл с этим мимо охраны и соседей, и никто не знал, что у него.»\\n\\n«Люди на моей работе хотят знать, из какой страны оно. Никто не может им сказать, и каждая газета даёт свой ответ.»"
+ },
+ "nuclear_loose.5.t": {
+  "en": "A Stolen Bomb",
+  "ru": "Украденная бомба"
+ },
+ "nuclear_loose.6.a": {
+  "en": "Pay what they ask.",
+  "ru": "Заплатить, сколько просят."
+ },
+ "nuclear_loose.6.b": {
+  "en": "Let their inspectors in.",
+  "ru": "Допустить их инспекторов."
+ },
+ "nuclear_loose.6.c": {
+  "en": "It was not ours.",
+  "ru": "Она была не наша."
+ },
+ "nuclear_loose.6.d": {
+  "en": "[SCOPE.sCountry('nd_loose_claimant').GetName]'s investigators have traced the nuclear device that surfaced there to our arsenal, or to an arsenal whose custody passed to us. We did not send it. But we lost it, and [SCOPE.sCountry('nd_loose_claimant').GetName] wants us to answer for that: to pay for what it cost them, or to let their inspectors into our depots to count what we still hold.",
+  "ru": "Следователи страны [SCOPE.sCountry('nd_loose_claimant').GetName] проследили всплывшее там ядерное устройство до нашего арсенала или до арсенала, опека над которым перешла к нам. Мы его не посылали. Но мы его потеряли, и страна [SCOPE.sCountry('nd_loose_claimant').GetName] хочет, чтобы мы ответили за это: заплатили за причинённое им или допустили их инспекторов на наши склады, чтобы пересчитать то, что у нас остаётся."
+ },
+ "nuclear_loose.6.d_request": {
+  "en": "[SCOPE.sCountry('nd_loose_claimant').GetName]'s investigators believe the nuclear device that surfaced there came from one of a few arsenals, and ours is among them. They ask us, privately, to let their inspectors into our depots, so that the innocent can be told apart from the guilty.",
+  "ru": "Следователи страны [SCOPE.sCountry('nd_loose_claimant').GetName] полагают, что всплывшее там ядерное устройство происходит из одного из немногих арсеналов, и наш среди них. Они неофициально просят допустить их инспекторов на наши склады, чтобы невиновных можно было отличить от виновных."
+ },
+ "nuclear_loose.6.f": {
+  "en": "\\\"I keep the records of the state's nuclear stores, and I have been asked whether that device could have come from them. I cannot tell the government no. Our books balance today. What I cannot vouch for is every count made before my time, or any count made in a hurry. If the claimant's investigators are right, those are the counts they will want to see, and I would rather they read them with us in the room than without us. I can have the ledgers and the old inventories ready within a week, if the government decides to let them in.\\\"",
+  "ru": "«Я веду учёт государственных ядерных хранилищ, и меня спросили, могло ли это устройство быть оттуда. Я не могу сказать правительству „нет“. Наши книги сегодня сходятся. Я не могу ручаться за каждый подсчёт, сделанный до меня, и за любой подсчёт, сделанный в спешке. Если следователи заявителя правы, именно эти подсчёты они захотят увидеть, и я предпочёл бы, чтобы они читали их при нас, а не без нас. Я могу подготовить книги и старые описи за неделю, если правительство решит их допустить.»"
+ },
+ "nuclear_loose.6.t": {
+  "en": "The Warhead Was Ours",
+  "ru": "Боеголовка была наша"
+ },
+ "nuclear_loose.6.t_request": {
+  "en": "A Request from [SCOPE.sCountry('nd_loose_claimant').GetName]",
+  "ru": "Просьба страны [SCOPE.sCountry('nd_loose_claimant').GetName]"
+ },
+ "nuclear_loose.7.a": {
+  "en": "We have nothing to hide.",
+  "ru": "Нам нечего скрывать."
+ },
+ "nuclear_loose.7.d": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_loose_accused_by').GetCountry.GetName] has named us in public as a possible source of the stolen nuclear warhead that surfaced there. It has shown no proof.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_loose_accused_by').GetCountry.GetName] публично назвала нас возможным источником украденной ядерной боеголовки, всплывшей там. Доказательств она не представила."
+ },
+ "nuclear_loose.7.f": {
+  "en": "In the government's legal office, its head read [ROOT.GetCountry.MakeScope.Var('nd_loose_accused_by').GetCountry.GetName]'s statement aloud to the room, then read it again more slowly. It named our country as a possible source of the stolen warhead and offered no evidence. \\\"We are going to be asked to prove that something did not happen,\\\" one of the junior officials said, \\\"and in public.\\\" By the afternoon foreign newspapers had printed the accusation on their front pages. The office started on a reply and sent the first draft to the government before evening.",
+  "ru": "В юридическом отделе правительства его глава прочёл заявление страны [ROOT.GetCountry.MakeScope.Var('nd_loose_accused_by').GetCountry.GetName] вслух перед всеми, а затем перечитал медленнее. Оно называло нашу страну возможным источником украденной боеголовки и не приводило доказательств. «От нас потребуют доказать, что чего-то не было, — сказал один из младших чиновников, — и публично». К полудню иностранные газеты вынесли обвинение на первые полосы. Отдел приступил к ответу и до вечера отправил правительству первый черновик."
+ },
+ "nuclear_loose.7.t": {
+  "en": "Named in the Investigation",
+  "ru": "Названы в расследовании"
+ },
+ "nuclear_loose.8.d_denied": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] denies that the warhead was ever its own.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] отрицает, что боеголовка когда-либо была её."
+ },
+ "nuclear_loose.8.d_inspection": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] has opened its weapons depots to our inspectors.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] открыла свои склады оружия для наших инспекторов."
+ },
+ "nuclear_loose.8.d_paid": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] has paid the compensation we asked for. It has not said how its warhead came to be in our country.",
+  "ru": "Страна [ROOT.GetCountry.MakeScope.Var('nd_loose_answer_from').GetCountry.GetName] выплатила компенсацию, которую мы просили. Она не сказала, как её боеголовка оказалась в нашей стране."
+ },
+ "nuclear_loose.8.f": {
+  "en": "Alexander Litvinenko died in a London hospital in November 2006, three weeks after drinking tea poisoned with polonium-210. British investigators followed traces of the polonium through hotels, offices and aircraft. The public inquiry into his death reported in January 2016. It found that two Russian men had poisoned him, probably with the approval of the Russian state, and Russia had refused to hand either of them over.",
+  "ru": "Александр Литвиненко умер в лондонской больнице в ноябре 2006 года, через три недели после того, как выпил чай, отравленный полонием-210. Британские следователи прослеживали следы полония по гостиницам, офисам и самолётам. Публичное расследование его смерти завершилось в январе 2016 года. Оно установило, что его отравили двое россиян, вероятно, с одобрения российского государства, а Россия отказалась выдать любого из них."
+ },
+ "nuclear_loose.8.t": {
+  "en": "An Answer on the Warhead",
+  "ru": "Ответ по боеголовке"
+ },
+ "nuclear_loose.9.a": {
+  "en": "One fewer.",
+  "ru": "Одной меньше."
+ },
+ "nuclear_loose.9.d_assistance": {
+  "en": "The foreign technicians paid to secure our arsenal have found one of our warheads that had gone missing. It has been dismantled.",
+  "ru": "Иностранные техники, которым заплатили за обеспечение сохранности нашего арсенала, нашли одну из наших пропавших боеголовок. Она разобрана."
+ },
+ "nuclear_loose.9.d_convention": {
+  "en": "Under the Convention on the Physical Protection of Nuclear Material, one of our missing warheads has been found and dismantled.",
+  "ru": "В соответствии с Конвенцией о физической защите ядерного материала одна из наших пропавших боеголовок найдена и разобрана."
+ },
+ "nuclear_loose.9.d_covert": {
+  "en": "Our agents in [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] have found one of the warheads missing from its arsenal and seen it destroyed. We have not told [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] how.",
+  "ru": "Наши агенты в стране [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] нашли одну из боеголовок, пропавших из её арсенала, и проследили за её уничтожением. Стране [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] мы о том, как это было сделано, не сообщали."
+ },
+ "nuclear_loose.9.d_inspectors": {
+  "en": "Inspectors searching our depots have found one of our warheads that had gone missing. It has been dismantled.",
+  "ru": "Инспекторы, обыскивавшие наши склады, нашли одну из наших пропавших боеголовок. Она разобрана."
+ },
+ "nuclear_loose.9.f": {
+  "en": "In April 1998, in an operation called Auburn Endeavor, American specialists removed the highly enriched uranium kept at a research reactor near Tbilisi, and it was flown to Britain to be reprocessed. The reactor had been built in Soviet times. Georgia had been independent for less than a decade, had fought wars in two of its regions, and could no longer pay for the material to be guarded as it had been.",
+  "ru": "В апреле 1998 года в ходе операции «Оберн Индивор» американские специалисты вывезли высокообогащённый уран, хранившийся на исследовательском реакторе близ Тбилиси, и его доставили самолётом в Великобританию для переработки. Реактор был построен в советское время. Грузия была независимой меньше десяти лет, вела войны в двух своих регионах и больше не могла платить за охрану материала, как прежде."
+ },
+ "nuclear_loose.9.t": {
+  "en": "Loose Material Secured",
+  "ru": "Бесхозный материал под охраной"
+ },
+ "nuclear_taboo.1.d": {
+  "en": "Abroad, the bomb is spoken of less and less as a weapon like any other. Scientists sign open letters against it, and governments that hold it have begun to explain why they keep it. The nuclear taboo has risen to #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, and the infamy a government earns by using the bomb, or by threatening to, rises with it.",
+  "ru": "За рубежом о бомбе всё реже говорят как об обычном оружии. Учёные подписывают открытые письма против неё, а правительства, которые ею владеют, начали объяснять, почему её держат. Ядерное табу поднялось до #v [GetGlobalVariable('nd_taboo').GetValue|0]#!, и дурная слава, которую правительство получает за применение бомбы или угрозу ею, растёт вместе с ним."
+ },
+ "nuclear_taboo.1.f": {
+  "en": "\\\"I teach chemistry at the college. This term three of my students asked to write their papers on the bomb, and none of them wanted to write about how it works.\\\"\\n\\n\\\"I used to say it would end every war. My daughter asked me what it would leave behind when it did, and I have not said it since.\\\"\\n\\n\\\"The newspaper printed a letter against the bomb signed by two hundred scientists. My husband read it out at breakfast and said he did not see why scientists should have the last word on it.\\\"\\n\\n\\\"In the officers' mess we still talk about yields. A senior officer visiting from the capital asked us not to do it in front of foreign guests, because they had started to complain.\\\"",
+  "ru": "«Я преподаю химию в колледже. В этом семестре трое моих студентов попросили писать работы о бомбе, и никто из них не хотел писать о том, как она устроена.»\\n\\n«Раньше я говорил, что она положит конец всем войнам. Дочь спросила меня, что она оставит после себя, когда это сделает, и с тех пор я этого не говорил.»\\n\\n«Газета напечатала письмо против бомбы, подписанное двумястами учёными. Муж зачитал его за завтраком и сказал, что не понимает, почему последнее слово должно быть за учёными.»\\n\\n«В офицерской столовой мы всё ещё говорим о мощности. Старший офицер, приехавший из столицы, попросил нас не делать этого при иностранных гостях, потому что они начали жаловаться.»"
+ },
+ "nuclear_taboo.1.t": {
+  "en": "Something Different About This Weapon",
+  "ru": "Нечто особое в этом оружии"
+ },
+ "nuclear_taboo.2.d": {
+  "en": "Among the world's governments, using the bomb is now spoken of as a crime rather than a choice, and those that hold it take care to say they would use it only in the last extremity. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!. A government that used the bomb now would pay for it in infamy and in its relations with nearly every country.",
+  "ru": "Среди правительств мира применение бомбы теперь называют преступлением, а не выбором, а те, кто ею владеет, стараются подчёркивать, что применили бы её лишь в крайнем случае. Ядерное табу составляет #v [GetGlobalVariable('nd_taboo').GetValue|0]#!. Правительство, применившее бомбу сейчас, заплатило бы за это дурной славой и отношениями почти со всеми странами."
+ },
+ "nuclear_taboo.2.f": {
+  "en": "\\\"A nuclear war cannot be won and must never be fought.\\\"\\n\\n— Ronald Reagan and Mikhail Gorbachev, joint statement at Geneva",
+  "ru": "«В ядерной войне нельзя победить, и она никогда не должна быть развязана.»\\n\\n— Рональд Рейган и Михаил Горбачёв, совместное заявление в Женеве"
+ },
+ "nuclear_taboo.2.t": {
+  "en": "A Line the World Will Not Cross",
+  "ru": "Черта, которую мир не переступит"
+ },
+ "nuclear_taboo.20.a": {
+  "en": "A burden we are glad to set down",
+  "ru": "Бремя, которое мы рады сложить"
+ },
+ "nuclear_taboo.20.d": {
+  "en": "The last of our warheads has been taken apart. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_retired').GetValue|0]#! weapons have been dismantled by our own decision, and none remains. The world's regard for us will follow how much it has come to fear the weapon: the nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!.",
+  "ru": "Последняя из наших боеголовок разобрана. #v [ROOT.GetCountry.MakeScope.Var('nd_dismantle_retired').GetValue|0]#! изделий демонтировано по нашему собственному решению, и ни одного не осталось. Отношение мира к нам будет зависеть от того, насколько он научился бояться этого оружия: ядерное табу составляет #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ },
+ "nuclear_taboo.20.f": {
+  "en": "The technicians worked through the procedure as it was written: the casing opened, each component lifted out, logged, sealed in its own container and signed for by two people. This time officials from the capital stood along the wall to watch, and the doors were left open for them. When the last container was sealed, the senior technician read its serial number aloud, and the clerk at the table wrote it in the ledger and drew a line under the column. \\\"That is all of them,\\\" the technician said, and began to clear the bench.",
+  "ru": "Техники работали по процедуре, как она написана: корпус вскрывали, каждый компонент вынимали, заносили в журнал, запечатывали в отдельный контейнер и принимали под расписку двое. На этот раз чиновники из столицы стояли вдоль стены и наблюдали, и двери оставили для них открытыми. Когда последний контейнер был запечатан, старший техник прочёл его серийный номер вслух, а клерк за столом записал его в книгу и подвёл черту под столбцом. «Это все», — сказал техник и принялся убирать верстак."
+ },
+ "nuclear_taboo.20.t": {
+  "en": "The Last Warhead",
+  "ru": "Последняя боеголовка"
+ },
+ "nuclear_taboo.3.d": {
+  "en": "Most of the world now treats the bomb as a weapon that cannot be used. A country that holds one pays for it in prestige and leverage abroad and in the approval of the groups at home that favor restraint, and pays more the larger its arsenal. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!.",
+  "ru": "Большая часть мира теперь считает бомбу оружием, которое нельзя применять. Страна, которая её имеет, платит за это престижем и рычагами влияния за рубежом и одобрением внутренних групп, выступающих за сдержанность, и платит тем больше, чем крупнее её арсенал. Ядерное табу составляет #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ },
+ "nuclear_taboo.3.f": {
+  "en": "Guidance for the government's envoys abroad, on how to speak of nuclear weapons:\\n\\nDo not speak of nuclear weapons as one means of defense among others. Foreign governments now hear that as a threat, and they answer it as one.\\nWhen asked whether the bomb could ever be used, say only what the government has said in public. Anything more will be quoted back to us.\\nDo not mock a country for giving up its weapons or for never building them. Many of the governments you will meet regard that as the responsible course.\\nIf a host speaks of what a single bomb would do to a city, listen and do not dispute it. Envoys who have disputed it have been reported to their governments as callous.",
+  "ru": "Указания посланникам правительства за рубежом о том, как говорить о ядерном оружии:\\n\\nНе говорите о ядерном оружии как об одном из средств обороны среди прочих. Иностранные правительства теперь слышат в этом угрозу и отвечают на неё как на угрозу.\\nНа вопрос, могла ли бомба когда-либо быть применена, говорите лишь то, что правительство сказало публично. Всё остальное будет процитировано нам в ответ.\\nНе насмехайтесь над страной, отказавшейся от оружия или никогда его не строившей. Многие правительства, с которыми вы встретитесь, считают такой путь ответственным.\\nЕсли хозяин заговорит о том, что одна бомба сделает с городом, слушайте и не спорьте. О посланниках, которые спорили, сообщали их правительствам как о бессердечных."
+ },
+ "nuclear_taboo.3.t": {
+  "en": "The Unusable Weapon",
+  "ru": "Неприменимое оружие"
+ },
+ "nuclear_taboo.4.d": {
+  "en": "Using the bomb is now spoken of the way poison gas is: as something no state does, whatever the war. Holding one at all sets a state apart. The nuclear taboo stands at #v [GetGlobalVariable('nd_taboo').GetValue|0]#!.",
+  "ru": "О применении бомбы теперь говорят так же, как об отравляющем газе: как о том, чего не делает ни одно государство, какова бы ни была война. Уже само владение ею выделяет государство. Ядерное табу составляет #v [GetGlobalVariable('nd_taboo').GetValue|0]#!."
+ },
+ "nuclear_taboo.4.f": {
+  "en": "\\\"Before we start the lesson, I will answer the question one of you left on my desk: why do countries still keep the bomb if nobody will ever use it? That is a fair question, and the grown-ups are asking it too. When the first ones were made, people thought of them as bigger bombs, and some governments meant to use them. Then people learned what one would do to a city, and to the people living downwind of it for years afterward. Now almost everyone agrees it must never happen. The countries that still have them say they keep them so that nobody else will dare. Others say that as long as any exist, somebody might. You can make up your own minds. Tonight, ask someone at home what they think, and write it down.\\\"",
+  "ru": "«Прежде чем мы начнём урок, я отвечу на вопрос, который кто-то из вас оставил у меня на столе: почему страны всё ещё держат бомбу, если никто никогда не будет её применять? Это справедливый вопрос, и взрослые тоже его задают. Когда первые были созданы, люди считали их бомбами побольше, и некоторые правительства собирались их применять. Потом люди узнали, что одна сделает с городом и с людьми, живущими по ветру от него годами после. Теперь почти все согласны, что этого не должно случиться. Страны, у которых они всё ещё есть, говорят, что держат их, чтобы никто другой не посмел. Другие говорят, что пока они существуют, кто-нибудь может. Вы можете составить собственное мнение. Сегодня вечером спросите кого-нибудь дома, что он думает, и запишите это.»"
+ },
+ "nuclear_taboo.4.t": {
+  "en": "Beyond the Pale",
+  "ru": "За гранью допустимого"
  }
 }
