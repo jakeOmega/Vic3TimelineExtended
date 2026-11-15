@@ -928,9 +928,9 @@ AUTOMATION_LISTS = {
     # activism term, (activism - 0.25) x 10 a month per movement). Unrestricted
     # Automation is every country's law from 1836 until Humanoid Robotics (era
     # 11), so a stance on it is activism no law can answer for the whole life
-    # of the entry: at the mod's MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE
-    # (-0.1) and these movements' 0.75, +0.15 for the socialists and +0.075
-    # for labor in every country. Neutral here, as Natural Form and the
+    # of the entry: at MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (-0.05,
+    # vanilla's) and these movements' 0.75, +0.075 for the socialists and
+    # +0.0375 for labor in every country. Neutral here, as Natural Form and the
     # Frontier AI placeholder are; every law the "labor" and "socialist" lists
     # rate above it still rates above it, so the movements back the same laws
     # once Humanoid Robotics arrives. The interest groups' ideologies keep the
@@ -3304,7 +3304,7 @@ modifications = {
         # Unregulated Donations is the law of every country with a voting
         # franchise from 1836 until Mass Media or Keynesian Economics (era 6),
         # and No Campaign Finance Laws is barred to them, so a stance on it is
-        # activism nothing can answer while Reform or Revolution runs (+0.15
+        # activism nothing can answer while Reform or Revolution runs (+0.075
         # at strongly_disapprove; see AUTOMATION_LISTS "socialist_movement").
         # Neutral, below the two laws the movement still backs.
         "lawgroup_electoral_finance": [

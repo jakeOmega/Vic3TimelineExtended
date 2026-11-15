@@ -4,12 +4,13 @@ Vanilla's global entry `je_reform_or_revolution` counts, each month and for
 each socialist or labor movement with 5% support, (activism - 0.25) x 10
 toward revolution, weighted by the country's share of the involved population.
 The engine sets part of a movement's activism from its stance on each active
-law: MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (the mod's -0.1, vanilla's
--0.05) x the stance x the movement's active_law_radicalism_multiplier (0.75
-for both). A disapproved law that every country holds from 1836 and none can
-replace while the entry runs is therefore a fixed push toward revolution in
-every country: +0.15 activism for a strongly_disapprove, +0.075 for a
-disapprove (stance values -2 and -1 assumed, as for interest-group approval).
+law: MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (-0.05, vanilla's; the mod
+had -0.1 until 2026-11-15) x the stance x the movement's
+active_law_radicalism_multiplier (0.75 for both). A disapproved law that every
+country holds from 1836 and none can replace while the entry runs is therefore
+a fixed push toward revolution in every country: +0.075 activism for a
+strongly_disapprove, +0.0375 for a disapprove (stance values -2 and -1
+assumed, as for interest-group approval).
 Unrestricted Automation (to Humanoid Robotics, era 11) and Unregulated
 Donations (to Mass Media or Keynesian Economics, era 6) were two such laws.
 
@@ -166,9 +167,9 @@ class NeutralOnLockedDefaultsTest(unittest.TestCase):
         self.assertEqual(generated_stances("ideology_communist")[AUTOMATION][UNRESTRICTED], -2)
 
     def test_the_figures_rest_on_these_values(self):
-        """+0.15 = 2 x 0.1 x 0.75 and +0.075 = 1 x 0.1 x 0.75."""
+        """+0.075 = 2 x 0.05 x 0.75 and +0.0375 = 1 x 0.05 x 0.75."""
         m = re.search(r"(?m)^\s*MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE\s*=\s*(-?[\d.]+)", _read(DEFINES))
-        self.assertEqual(float(m.group(1)), -0.1)
+        self.assertEqual(float(m.group(1)), -0.05)
         with open(os.path.join(VANILLA, "political_movements.json")) as f:
             movements = json.load(f)
         for movement in MOVEMENTS.values():
