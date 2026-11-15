@@ -2324,24 +2324,6 @@ banking_eliq_wind_down_months = {
 	value = 12
 }
 
-export_credit_activation_cost = {
-	value = root.gdp
-	multiply = -0.002 # costs 0.2% of GDP to establish facility
-	round = yes
-}
-
-banking_omo_activation_cost = {
-	value = root.gdp
-	multiply = -0.005 # 0.5% of GDP — balance-sheet operational cost / signaling commitment
-	round = yes
-}
-
-banking_directed_credit_activation_cost = {
-	value = root.gdp
-	multiply = -0.008 # 0.8% of GDP — state co-financing commitment
-	round = yes
-}
-
 # Directed-credit sectors the country may still start: one at a time, plus
 # country_directed_credit_sectors_add (the Directed Credit & Development Banks
 # law's +1), minus those running. Every sector's `possible` asks for > 0;
@@ -2394,13 +2376,38 @@ banking_asset_relief_activation_cost = {
 	round = yes
 }
 
-# Banking-cycle radicals magnitudes: the toggle-cost friction shared by most of the tools in
-# banking_policy_effects.txt (market, command and cooperative alike). Defined separately so
-# banking-button friction can be tuned independently of global event balance. Against vanilla's
-# event_values.txt (very_small 0.01, small 0.02, medium 0.05, large 0.1): small matches vanilla
-# small_radicals; medium sits between vanilla small and medium.
+# Banking-cycle radicals magnitudes, defined separately so banking-button costs can be tuned
+# independently of global event balance. Against vanilla's event_values.txt (very_small 0.01,
+# small 0.02, medium 0.05, large 0.1): small matches vanilla small_radicals; medium sits between
+# vanilla small and medium. Small is the loyalist grant of the paired tools below; medium is
+# the crisis programs' price (Asset Relief, Bail-in).
 banking_small_radicals_value = 0.02
 banking_medium_radicals_value = 0.03
+
+# Toggle friction (owner, 2026-11-14). Switching an intervention on and off again always costs
+# something, so no tool can be clicked back and forth for free, and every routine tool costs the
+# same small amount: a round trip nets 0.5% of pops radicalized, or 0.2% of GDP for the lending
+# tools (Open-Market Operations, the five directed-credit sectors, Export Credit). It is paid on
+# switching on, where the Enable button's tooltip shows it, so a lift forced by a law, a rule or
+# the tool's own end costs nothing. A tool that grants loyalists on one switch (2%,
+# banking_small_radicals_value) radicalizes the same pops by
+# banking_toggle_paired_radicals_value on the other, so its round trip nets the same 0.5%.
+# Exempt, since switching them is free by design: Moral Suasion and the other economies' 1-point
+# tools (Coordination Protocol, Solidarity Campaign, Council Directive). The crisis programs
+# keep a price of their own (Asset Relief, Bail-in, the Bank Holiday, Emergency Liquidity), and
+# Capital Controls pays in infamy and relations. test_banking_toggle_costs.py holds
+# every tool to this.
+banking_toggle_radicals_value = 0.005
+banking_toggle_paired_radicals_value = {
+	value = banking_small_radicals_value
+	add = banking_toggle_radicals_value
+}
+# The country in scope (every banking_effect_* runs there), not root.
+banking_toggle_treasury_cost = {
+	value = gdp
+	multiply = -0.002 # 0.2% of GDP
+	round = yes
+}
 
 # Bank Holiday radicals (banking_effect_cb_bank_holiday), one per stratum, middle hardest: a
 # major, unpopular emergency measure that freezes every depositor's money. Its own constants so

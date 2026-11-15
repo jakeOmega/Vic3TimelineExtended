@@ -1,0 +1,140 @@
+﻿# ============================================================================
+# WAR WOUNDED (je_war_nursing) — which medical options count
+#
+# Vanilla's entry names its two medic-support options by hand: it starts for a
+# general whose formation has neither First Aid nor Field Hospitals, and it
+# completes when 20% of the army's battalions have Field Hospitals and a
+# general at a front has them. The mod adds Medevac Helicopters to the same
+# exclusive group, a better option than Field Hospitals, which vanilla's tests
+# don't know: an army entirely on Medevac started the entry and could never
+# complete it. te_vanilla_war_nursing.txt reads these three triggers instead.
+#
+# The sets are the options of group medic_support (mod and vanilla), and the
+# ones at least as good as Field Hospitals by unit_recovery_rate_add.
+# test_war_wounded_medics.py derives both from the option files and fails when
+# a trigger here leaves one out, so a medical option added later must be named
+# here too.
+# ============================================================================
+
+# Military formation scope. The formation has a medic-support option.
+te_formation_has_medic_support = {
+	OR = {
+		has_mobilization_option = mobilization_option:mobilization_option_first_aid
+		has_mobilization_option = mobilization_option:mobilization_option_field_hospitals
+		has_mobilization_option = mobilization_option:mobilization_option_medevac_helicopters
+	}
+}
+
+# Military formation scope. The formation has Field Hospitals or a medical
+# option at least as good.
+te_formation_has_field_hospitals_or_better = {
+	OR = {
+		has_mobilization_option = mobilization_option:mobilization_option_field_hospitals
+		has_mobilization_option = mobilization_option:mobilization_option_medevac_helicopters
+	}
+}
+
+# Country scope. At least 20% of the army's battalions have Field Hospitals or
+# a better medical option, counted together.
+#
+# army_mobilization_option_fraction reads one option and is a trigger only:
+# there is no script-value form to add two shares with (1.15.1 triggers.log and
+# event_targets.log). A formation carries one medic option, so the two shares
+# have the same denominator and add exactly, and the sum is tested as a ladder
+# of literal pairs whose thresholds add to 20%. Each option alone keeps its
+# native line, which shows the current share; the mixed rungs, in steps of 1%,
+# sit under one custom line. A combined share of 21% or more always passes, one
+# under 20% never does, and one in between can fall between two rungs.
+te_army_has_field_hospitals_or_better_share = {
+	OR = {
+		army_mobilization_option_fraction = {
+			target = mobilization_option:mobilization_option_field_hospitals
+			value >= 0.20
+		}
+		army_mobilization_option_fraction = {
+			target = mobilization_option:mobilization_option_medevac_helicopters
+			value >= 0.20
+		}
+		custom_tooltip = {
+			text = je_war_nursing_combined_medic_share_tt
+			OR = {
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.19 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.01 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.18 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.02 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.17 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.03 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.16 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.04 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.15 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.05 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.14 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.06 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.13 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.07 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.12 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.08 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.11 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.09 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.10 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.10 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.09 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.11 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.08 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.12 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.07 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.13 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.06 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.14 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.05 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.15 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.04 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.16 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.03 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.17 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.02 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.18 }
+				}
+				AND = {
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_field_hospitals value >= 0.01 }
+					army_mobilization_option_fraction = { target = mobilization_option:mobilization_option_medevac_helicopters value >= 0.19 }
+				}
+			}
+		}
+	}
+}

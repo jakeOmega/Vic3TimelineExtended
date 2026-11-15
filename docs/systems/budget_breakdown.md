@@ -133,7 +133,7 @@ they charge now.
 
 Only money in the weekly budget is included. One-time `add_treasury` payments
 and costs in innovation, influence or other resources are excluded. Two
-banking tools' bills, Sterilize Capital Inflows' and Emergency Import
+banking tools' bills, Sterilization's and Emergency Import
 Financing's, are weekly charges in the budget since 2026-10-27 (the owner;
 they were monthly `add_treasury` payments) and sit under Banking. FX
 Surrender's purchase of gold for the bank stays a monthly `add_treasury`, the
