@@ -88,7 +88,7 @@ covert_warfare_monthly_country = {
 				else_if = {
 					limit = { covert_warfare_entry_due = yes }
 					set_variable = { name = iw_entry_net_hold value = yes days = 365 }
-					debug_log = "TE_SELF_CHECK BROKEN covert_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_covert_warfare last month; it is not running and the country is still due it, so it ended at once or the add failed: the net waits a year for this country; read the TE_COVERT_ENTRY ended line before this; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
+					debug_log = "TE_SELF_CHECK BROKEN covert_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] late=[THIS.ScriptValue('iw_log_rule_late')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_covert_warfare last month; it is not running and the country is still due it, so it ended at once or the add failed: the net waits a year for this country; read the TE_COVERT_ENTRY ended line before this; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
 				}
 			}
 			remove_variable = iw_entry_net_added
@@ -100,11 +100,11 @@ covert_warfare_monthly_country = {
 			}
 			if = {
 				limit = { has_variable = iw_reopen_at_gate }
-				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=yes on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=yes on=[THIS.ScriptValue('iw_log_rule_on')|0] late=[THIS.ScriptValue('iw_log_rule_late')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 				remove_variable = iw_reopen_at_gate
 			}
 			else = {
-				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=no on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=no on=[THIS.ScriptValue('iw_log_rule_on')|0] late=[THIS.ScriptValue('iw_log_rule_late')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			add_journal_entry = { type = je_covert_warfare }
 			save_scope_as = iw_net_country

@@ -258,7 +258,7 @@ class CovertEarlyUnlockTest(unittest.TestCase):
         log = words(braced(code(COVERT_EFFECTS), r"^covert_log_entry_end = \{"))
         for branch in ("branch=rule_off", "branch=early_to_late", "branch=neither"):
             self.assertIn(branch, log)
-        for read in ("iw_log_rule_on", "iw_log_rule_early", "iw_log_rule_off"):
+        for read in ("iw_log_rule_on", "iw_log_rule_late", "iw_log_rule_early", "iw_log_rule_off"):
             self.assertEqual(log.count(f"ScriptValue('{read}')"), 3, read)
 
     def test_the_setting_descriptions_name_their_technology(self):

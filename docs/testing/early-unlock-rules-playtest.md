@@ -39,7 +39,7 @@ Central Archives early.
    Security): the stepper goes past 2, and the AI's great powers fund at 3 again within a month.
 7. **Early to late, mid-game.** With an early entry running two operations and no late source, switch the rule to *Late
    Unlock*: within a week the entry is gone, the operations end (funding 0) and the agent networks are cleared, and
-   `debug.log` has `TE_COVERT_ENTRY ended branch=early_to_late … on=1 early=0 off=0 opened_early=1 late_source=0`.
+   `debug.log` has `TE_COVERT_ENTRY ended branch=early_to_late … on=1 late=1 early=0 off=0 opened_early=1 late_source=0`.
    Research Mainframe Computers: within a month the entry is back, at funding 0, Tradecraft kept, with a
    `TE_COVERT_ENTRY added … ended_before=yes` line. Before Mainframe Computers it does not come back at all, not once
    a month (the net reads the outcome's own trigger, `covert_warfare_entry_would_end`).

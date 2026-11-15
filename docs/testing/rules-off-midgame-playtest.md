@@ -75,7 +75,8 @@ Setup: a dedicated monument and a construction site.
 
 Setup: the Ministry of Culture, program funding raised, one program (World Exposition) running.
 
-1. **The entry closes** within a week; the hegemony and program modifiers are gone.
+1. **The entry closes** within a week; the hegemony and program modifiers are gone. Its concluded page names both
+   reasons (switched off, or to Late Unlock before any country had Mass Media) and says it comes back, wrapped in full.
 2. **Programs are shut down** (funding 0, no program variable), and no movement carries the hegemon's model pressure
    (`ch_remove_hegemon_model_pressure`).
 3. **Switched back on**, the entry is back within a month for every country with Romanticism once some country has
@@ -87,7 +88,8 @@ Setup: the Ministry of Culture, program funding raised, one program (World Expos
 
 Setup: World War on, two great powers of opposed ideologies, the entry in its leadup or a world war under way.
 
-1. **The entry closes** within a week; Rising Tensions and the button modifiers are gone.
+1. **The entry closes** within a week; Rising Tensions and the button modifiers are gone. Its concluded page names both
+   reasons (switched off, or to Late Unlock before Combined Arms) and says a great power gets it back, wrapped in full.
 2. **Variables clear** within a month on every belligerent, the war's target and late joiners included
    (`world_war_events_on_action`).
 3. **A war under way** carries on as an ordinary war; no peace-conference event fires.
@@ -112,7 +114,10 @@ Setup: a great power with colonies, the entry running, a pressure band reached (
 
 Setup: funding at 1 or more, two operations running (one hostile), an agent network built.
 
-1. **The entry closes** within a week; funding reads 0.
+1. **The entry closes** within a week; funding reads 0. Its concluded page reads, in full and wrapped, not cut off:
+   "The journal entry ended, and every operation with it, when the Covert Warfare game rule was switched off, or was
+   switched to Late Unlock before Mainframe Computers or the … law. It comes back within a month once the rule is on and
+   the conditions to open it are met." (reworded 2026-11-15: the old line was wrong on the early-to-late branch).
 2. **Operations end** within days, each by its pact breaking (no infamy, no exposure event).
 3. **Networks are gone**: the agent-network map is empty, and the Space Race's intelligence tier reads none.
 4. **Switched back on** (2026-11-15; before then it did not return), within a month the entry is back for every
@@ -123,7 +128,7 @@ Setup: funding at 1 or more, two operations running (one hostile), an agent netw
 5. **Not back every month.** Play two more months after item 4: no further `TE_COVERT_ENTRY ended` line, and the
    journal holds one running Covert Warfare entry, not a new one each month (the Workshop report of 2026-11-15:
    `covert_warfare.md`, Coming back). A month-by-month `ended` / `added` pair for one country is the report's loop:
-   copy those lines, with their `branch=` and `on=`/`early=`/`off=` fields, into the report.
+   copy those lines, with their `branch=` and `on=`/`late=`/`early=`/`off=` fields, into the report.
 6. **A game begun with the rule off**, switched to *Late Unlock* later: within a month every country with a late
    source holds the entry (`ended_before=no` on its line).
 
@@ -226,6 +231,6 @@ under its "Switched off mid-game" note.
 
 | Self-check | OK means | BROKEN means, and the fallback |
 |---|---|---|
-| `covert_entry_return` (Covert Warfare, items 4 to 6; per add, OK once a game, logged by the monthly pass after the net added the entry) | the entry the net added last month is running: `add_journal_entry` brought it back and the outcome did not end it again | the entry is not running though the country is still due it: it ended at once (read the `TE_COVERT_ENTRY ended` line before it, whose `branch=` and `on=`/`early=`/`off=` fields say what the outcome read; `branch=neither` or `on=0` beside the net's `on=1` is a rule read that differs between an outcome and an on_action), or the add failed. The net then waits a year for that country (`iw_entry_net_hold`), so the loop the Workshop player saw slows from monthly to yearly. The fallback is the owner's: what the fields show decides it (`covert_warfare.md`, Coming back) |
+| `covert_entry_return` (Covert Warfare, items 4 to 6; per add, OK once a game, logged by the monthly pass after the net added the entry) | the entry the net added last month is running: `add_journal_entry` brought it back and the outcome did not end it again | the entry is not running though the country is still due it: it ended at once (read the `TE_COVERT_ENTRY ended` line before it, whose `branch=` and `on=`/`late=`/`early=`/`off=` fields say what the outcome read; `branch=neither` or `on=0` beside the net's `on=1` is a rule read that differs between an outcome and an on_action, and two settings at 1 a setting name no rule file defines), or the add failed. The net then waits a year for that country (`iw_entry_net_hold`), so the loop the Workshop player saw slows from monthly to yearly. The fallback is the owner's: what the fields show decides it (`covert_warfare.md`, Coming back) |
 | `ch_entry_return` (Cultural Hegemony, item 3; as above) | the entry the net added last month is running | as `covert_entry_return`, for `je_cultural_hegemony` (`ch_entry_net_hold`); its outcome writes no line of its own |
 | `mon_rule_switch_treaties` (Banking: Full to Simplified, row 6; logged once a game, one to two months after the switch, by a country that held a swap line, guarantee or receivership on its last Full pulse) | the country stands in none of the three articles any more: the `te_mon_full_system` requirement ended it | the article is still in force: the engine does not end an in-force article on a failed requirement, or not this soon. Script has no penalty-free way to end one article (`withdraw` is a treaty effect, and inside the binding period it is a break), so the fallback is the owner's: withdraw the treaty from `te_monetary_leave_full_system` (step 4) and accept what that charges, or leave the articles in force with their mechanics stopped, as before #1507. The same if row 6 shows a penalty |

@@ -33,6 +33,16 @@ te_covert_warfare_early = {
 	has_game_rule = covert_warfare_early_unlock
 }
 
+# The late setting's own read, for the debug.log lines alone (iw_log_rule_late,
+# covert_log_entry_end): never a gate. Beside te_covert_warfare_early and a read
+# of covert_warfare_disabled it tells the three settings apart in a player's
+# log: all three 0 is a save holding no value for the rule, two at 1 a setting
+# name no rule file defines (has_game_rule reads one as true). Gate on
+# te_covert_warfare_on and te_covert_warfare_early.
+te_covert_warfare_late_read_for_log = {
+	has_game_rule = covert_warfare_enabled
+}
+
 # ---- World War (world_war_rule) ----
 # The system runs: either unlock.
 te_world_war_on = {
