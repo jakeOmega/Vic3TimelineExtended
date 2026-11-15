@@ -983,7 +983,7 @@ types te_map_widgets
 	### force, so they show while the section is closed. Scripted GUIs (te_journal_map_sguis.txt), as the picks are.
 	###   Area      World | Continent | Market | Power Bloc | Country, and under Continent two rows of three continents
 	###   Outliers  Keep All | Trim 4 Each End | Trim 5%, greyed with the reason on a map that has no range
-	###   Scale     Map's Own | Linear | Logarithmic | Ranked (the thirteenth pass), the last three greyed likewise
+	###   Scale     Map Default | Linear | Logarithmic | Ranked (the thirteenth pass), the last three greyed likewise
 	###   and a line saying what the map on the page was measured over, or how old a Ranked map's places can be.
 	type te_jmap_options = flowcontainer {
 		direction = vertical

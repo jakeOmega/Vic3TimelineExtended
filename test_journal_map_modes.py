@@ -1323,11 +1323,18 @@ class OptionsTest(unittest.TestCase):
         values = loc_values()
         self.assertEqual(values["te_jmap_options_now"], "[GetPlayer.GetCustom('te_jmap_area_name')], "
                          "[GetPlayer.GetCustom('te_jmap_trim_short')], [GetPlayer.GetCustom('te_jmap_scale_short')]")
+        # 38 characters at its longest, "North America, Keep All, Default Scale": about 256 px in the page's font
+        # (EBGaramond 17) where the 470-wide header leaves about 296 beside its title at full size (measured
+        # 2026-11-14 against the game's font files; not seen in game)
         longest = max(len(", ".join((a, t, c))) for a in ("North America", "South America", "Power Bloc")
-                      for t in ("Trim 4", "Keep All", "Trim 5%") for c in ("Own Scale", "Linear", "Log", "Ranked"))
-        self.assertLessEqual(longest, 34, "the header's summary, at its longest")
+                      for t in ("Trim 4", "Keep All", "Trim 5%") for c in ("Default Scale", "Linear", "Log", "Ranked"))
+        self.assertLessEqual(longest, 38, "the header's summary, at its longest")
         self.assertEqual((values["te_jmap_trim_short_default"], values["te_jmap_scale_short_own"],
-                          values["te_jmap_scale_short_log"]), ("Trim 4", "Own Scale", "Log"))
+                          values["te_jmap_scale_short_log"]), ("Trim 4", "Default Scale", "Log"))
+        # the default scale's name (the owner, 2026-11-14, of "Map's Own": "I might call it map default or similar,
+        # it sounds odd as is"), and the doubling maps' line under Logarithmic, which says that scale is their default
+        self.assertEqual(values["te_jmap_scale_own"], "Map Default")
+        self.assertIn("which is this map's default.", values["te_jmap_scale_text_log_doubling"])
         # the line at the top names all three in full
         for text in ("te_jmap_area_name", "te_jmap_trim_name", "te_jmap_scale_name"):
             self.assertIn(f"[GetPlayer.GetCustom('{text}')]", values["te_jmap_options_in_use"])

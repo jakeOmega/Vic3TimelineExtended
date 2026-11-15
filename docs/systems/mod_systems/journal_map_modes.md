@@ -395,7 +395,7 @@ Ranked.
   (the trees already read the range's two), so each `te_jmap_<map>_factor` the Map Room reads takes one of four
   branches on `te_jmap_scale`. The map's own curve is the first, so a default paint pays one comparison, and
   `map_color` is untouched. The factors a system's own entry reads (`te_jmap_gw_factor`, `te_jmap_gm_factor`) and
-  the five fixed curves have no branch: the Scale buttons other than Map's Own are greyed, with the reason, while the
+  the five fixed curves have no branch: the Scale buttons other than Map Default are greyed, with the reason, while the
   pick has no range (`te_jmap_pick_fitted`), and an entry's page is the map's own curve whatever is set. The
   generated values file went from 3,567 lines to 11,562: a logarithm is a ladder of twenty straight pieces, and
   Logarithmic needs two for a straight map and four for a midpoint map (two a side). In a paint, one evaluation of
@@ -460,11 +460,14 @@ Ranked.
   custom localization). What the scale does
   comes from one of three custom localizations, named in each pick's key since a custom localization can't know
   which button is hovered: a straight map (`te_jmap_scale_text`), a doubling map (`_doubling`: Logarithmic "is
-  this map's own") and a midpoint map (`_mid`). The 35 own descriptions are untouched, so their German and Spanish
+  this map's default") and a midpoint map (`_mid`). The 35 own descriptions are untouched, so their German and Spanish
   stand; rewriting them into parts is the colors' pass.
-- **On the page**: a Scale row under Outliers in Map Options (Map's Own, Linear, Logarithmic, Ranked); the header
+- **On the page**: a Scale row under Outliers in Map Options (Map Default, Linear, Logarithmic, Ranked; the
+  first is the map's own curve, labelled "Map's Own" until 2026-11-14, when the owner said of it "I might call it
+  map default or similar, it sounds odd as is"); the header
   names the three options in force, the trim and the scale in a word or two (`te_jmap_trim_short`,
-  `te_jmap_scale_short`: "North America, Keep All, Own Scale" is the longest, 34 characters beside the title), and
+  `te_jmap_scale_short`: "North America, Keep All, Default Scale" is the longest, 38 characters, about 256 px in
+  the page's font where the header leaves about 296 beside its title), and
   the line at the top of the page names all three in full while any is off its default.
 - **Unverified** (play-test check 30). Script can tell success from failure in one place:
   `TE_SELF_CHECK OK|BROKEN rank_walk` (`te_jmap_rank_selfcheck`), once a game from the global monthly pulse whatever
@@ -580,7 +583,7 @@ Every map button clears the see-through flag before it opens a page.
   (`te_jmap_options_open`), with the options in force at the header's right. Open: an Area row of five buttons
   (World, Continent, Market, Power Bloc, Country, each as wide as its label, 450 in all inside the header's 470);
   under Continent, two rows of three continents; an Outliers row (Keep All, Trim 4 Each End, Trim 5%); since the
-  thirteenth pass a Scale row (Map's Own, Linear, Logarithmic, Ranked, 112 each); and a line saying what the map on
+  thirteenth pass a Scale row (Map Default, Linear, Logarithmic, Ranked, 112 each); and a line saying what the map on
   the page was measured over, or under Ranked how old its places can be. Each is a `te_jmap_option_button` on a
   scripted GUI (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`, `te_jmap_scale_*_sgui`),
   then the picks' repaint. Unlike a pick, an option draws pressed from its script value (`down` on `te_jmap_area`,
