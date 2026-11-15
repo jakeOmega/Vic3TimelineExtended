@@ -10,10 +10,26 @@ one of the state's figures. Two files come from the table below:
   (te_jmap_range_<map>), the dispatcher a pick and the monthly pulse run (te_jmap_refresh_range, on the pick in
   te_jmap_selector) and the maps the systems' own entries draw whatever the pick (te_jmap_refresh_entry_ranges).
 
+**The Map Room's options** (owner, 2026-11-14: "limiting where we draw it", "maybe excluding outliers"). The range is
+where both live, so both are written here. Area: a state outside the Map Room's area carries te_jmap_out
+(te_jmap_mark_area, te_journal_map_effects.txt), and every range the Map Room reads counts and orders only the states
+te_jmap_in_area passes, so the colors run over the area alone. Outliers: each end leaves out te_jmap_trim_count
+states, from the option (te_jmap_trim, te_journal_map_values.txt) and the count of states with a figure in the area:
+TRIM (the default), none, or TRIM_SHARE of them. A measure first counts those states, so the trim never passes the
+middle of a short list: ordered_state's position past the end takes the last state and logs, it doesn't skip
+(scripting_best_practices.md, "position = N + check_range_bounds = no Clamps Out-of-Range"), and under Country or
+Bloc a short list is the usual case. position takes no script value (effects.log: position = int), so
+te_jmap_measure_at is a ladder of literal positions, 0 to TRIM_MAX, each a call of te_jmap_measure_<map> = { K = n }.
+
+A map a system's own entry draws too (entry: Emissions, Grandeur) is measured twice. te_jmap_range_<map> stays the
+entry's: the whole world, the default trim, whatever the Map Room's options, each month. Its twin
+te_jmap_range_<map>_room is the Map Room's, under the options, with a factor of its own (te_jmap_<map>_room_factor),
+since a script value can't tell which page asks. The twin's range is the entry's until its first measure.
+
 **Fitted to the world** (owner, 2026-11-07: "people are not going to it to see that the world GDP/c average has gone
 up, they want to see the regional differences"). Nearly every map's colors run from the world's low to its high as
 it stands: the fifth lowest and the fifth highest of the states the map paints (TRIM states left out at each end, so
-one outlier doesn't flatten the rest; the extremes where fewer states have a figure), stored in global variables
+one outlier doesn't flatten the rest; fewer where few states have a figure, below), stored in global variables
 (te_jmap_rng_<map>_lo / _hi) by te_jmap_range_<map>. A pick measures its map at once, and the monthly pulse measures
 the pick's again (te_journal_map_on_actions.txt). A curve keeps its shape on the new span: its knots are fractions of
 it. A span is never narrower than the map's min_span, so a world where every state stands alike doesn't paint noise
@@ -64,8 +80,18 @@ EFFECTS_OUT = os.path.join(REPO, "common", "scripted_effects", "te_journal_map_r
 # How much shallower a soft cap's tail runs than its main stretch (the owner, 2026-11-06: "1/4 slope above").
 SLOPE_RATIO = 4
 # The states left out at each end of the world's range: the range runs from the (TRIM + 1)th lowest to the
-# (TRIM + 1)th highest. ordered_state's position counts from 0.
+# (TRIM + 1)th highest. ordered_state's position counts from 0. The default of the Map Room's Outliers option.
 TRIM = 4
+# The Outliers option's share: this part of the area's states with a figure is left out at each end (rounded down).
+TRIM_SHARE = 0.05
+# The most states an end leaves out, whatever the option: te_jmap_measure_at holds a literal position for each count
+# up to it (5% of 1,600 states with a figure).
+TRIM_MAX = 80
+# Under a limited area the default trim leaves out at most one state in this many at each end, so a country of
+# fifteen states isn't mostly outliers. The world keeps TRIM whatever its count, as before the options.
+AREA_TRIM_PART = 10
+# The Outliers option's settings (te_jmap_trim, te_journal_map_values.txt; unset is the default).
+TRIM_DEFAULT, TRIM_NONE, TRIM_PERCENT = 0, 1, 2
 # The most doublings a doubling map's ladder reads (2^20 is a millionfold).
 MAX_DOUBLINGS = 20
 
@@ -129,9 +155,10 @@ def rel_doubling(lo, hi, min_ratio, floor):
 # A map fitted to the world also has sel (its selector, te_journal_map_values.txt), where (the states it paints with
 # its factor, whose figures make its range), world (its shape), min_span (the narrowest range, in the figure's units;
 # a doubling's is its min_ratio), and fmt (the pick tooltip's number format, for the doc and the loc test); range_of
-# names a map whose range it shares, entry marks a map a system's own entry draws too (refreshed every month).
+# names a map whose range it shares, entry marks a map a system's own entry draws too (refreshed every month over the
+# whole world; SCALES, below the table, adds the Map Room's twin of each).
 # A fixed map has knots.
-SCALES = [
+TABLE = [
     dict(name="turmoil", input="turmoil", guards=[], three=False, sel=1, where=[],
          world=rel(soft_cap(0, 0.2, 1)), min_span=0.1,
          note="Turmoil, the radicals' share: half the color by a fifth of the world's range, the rest more slowly"),
@@ -320,6 +347,18 @@ SCALES = [
 ]
 
 
+def _room_twin(scale):
+    """The Map Room's copy of a map a system's own entry draws too: the same figure and shape, a range and a factor
+    of its own (te_jmap_<map>_room_*), measured under the Map Room's options. The entry keeps the row's."""
+    twin = {k: v for k, v in scale.items() if k != "entry"}
+    twin.update(name=scale["name"] + "_room", twin_of=scale["name"])
+    return twin
+
+
+# Every scale written: the table's rows, each entry map followed by its Map Room twin.
+SCALES = [s for row in TABLE for s in ([row, _room_twin(row)] if row.get("entry") else [row])]
+
+
 def fitted(scale):
     return "world" in scale
 
@@ -327,6 +366,29 @@ def fitted(scale):
 def range_name(scale):
     """The map whose range this one reads (its own, or range_of's)."""
     return scale.get("range_of", scale["name"])
+
+
+def in_room(scale):
+    """The Map Room paints with this scale (a map's only scale, or an entry map's twin): its range follows the Map
+    Room's options. An entry's own scale is measured over the whole world on the default trim, whatever they are."""
+    return not scale.get("entry")
+
+
+def trim_most(n):
+    """The most states an end can leave out of n and still have two left to span."""
+    return max(0, (n - 2) // 2)
+
+
+def trim_count(n, option=TRIM_DEFAULT, limited=False):
+    """The states each end of a range leaves out, as te_jmap_trim_count works it out (the test's reference): n the
+    states with a figure in the area, option the Outliers setting, limited whether the area is less than the world."""
+    if option == TRIM_NONE:
+        k = 0
+    elif option == TRIM_PERCENT:
+        k = int(n * TRIM_SHARE + 1e-9)
+    else:
+        k = min(TRIM, n // AREA_TRIM_PART) if limited else TRIM
+    return max(0, min(k, trim_most(n), TRIM_MAX))
 
 
 def num(x):
@@ -464,13 +526,17 @@ def range_values(scale):
         lines += _sv(f"te_jmap_{n}_lo", [f"value = te_jmap_{rn}_lo"])
         lines += _sv(f"te_jmap_{n}_hi", [f"value = te_jmap_{rn}_hi"])
         return lines
-    lo, hi = w["default"]
-    lo_body = [f"value = {num(lo)}", "if = {", f"\tlimit = {{ has_global_variable = te_jmap_rng_{n}_lo }}",
+    lo, hi = (num(x) for x in w["default"])
+    if scale.get("twin_of"):
+        # The Map Room's twin of an entry's map: the entry's range until its own first measure, so a save from before
+        # the twin paints as it did.
+        lo, hi = f"te_jmap_{scale['twin_of']}_lo", f"te_jmap_{scale['twin_of']}_hi"
+    lo_body = [f"value = {lo}", "if = {", f"\tlimit = {{ has_global_variable = te_jmap_rng_{n}_lo }}",
                f"\tvalue = global_var:te_jmap_rng_{n}_lo", "}"]
     if w["kind"] == "doubling":
         lo_body.append(f"min = {num(w['floor'])}")
     lines += _sv(f"te_jmap_{n}_lo", lo_body)
-    lines += _sv(f"te_jmap_{n}_hi", [f"value = {num(hi)}", "if = {",
+    lines += _sv(f"te_jmap_{n}_hi", [f"value = {hi}", "if = {",
                                      f"\tlimit = {{ has_global_variable = te_jmap_rng_{n}_hi }}",
                                      f"\tvalue = global_var:te_jmap_rng_{n}_hi", "}", f"min = te_jmap_{n}_hi_floor"])
     if w["kind"] == "doubling":
@@ -559,6 +625,48 @@ def _log_ladder(ratio):
     return body
 
 
+def option_values():
+    """The script values the Map Room's options act through: the count a range's measure takes, the states each end
+    leaves out of it, what the pick's map was last measured over (for the page), and whether the pick has a range at
+    all. Any scope: they read globals and the options (te_jmap_trim, te_jmap_area: te_journal_map_values.txt)."""
+    def stored(name, var):
+        return _sv(name, ["value = 0", "if = {", f"\tlimit = {{ has_global_variable = {var} }}",
+                          f"\tvalue = global_var:{var}", "}"])
+
+    lines = ["", "# ---- The Map Room's options (the generator's header): what a range counts and leaves out ----",
+             "# The states with a figure the range being measured counted (te_jmap_n, set by te_jmap_range_<map>)."]
+    lines += stored("te_jmap_states", "te_jmap_n")
+    lines += ["# The states each end of it leaves out (te_jmap_k, from te_jmap_trim_count or _entry)."]
+    lines += stored("te_jmap_cut", "te_jmap_k")
+    lines += ["# The most an end can leave out with two states still left to span: a short list is never trimmed past",
+              "# its middle (ordered_state's position past the end takes the last state, it doesn't skip)."]
+    lines += _sv("te_jmap_trim_most", ["value = te_jmap_states", "subtract = 2", "divide = 2", "floor = yes", "min = 0"])
+    lines += [f"# The Map Room's trim, by its Outliers option (te_jmap_trim): {TRIM} at each end by default, and under a",
+              f"# limited area at most one state in {AREA_TRIM_PART}; none; or {num(TRIM_SHARE * 100)}% of the states "
+              "with a figure. Never past",
+              f"# te_jmap_trim_most, nor {TRIM_MAX}, the last literal position te_jmap_measure_at holds."]
+    lines += _sv("te_jmap_trim_count", [
+        f"value = {TRIM}",
+        "if = {", f"\tlimit = {{ te_jmap_trim = {TRIM_NONE} }}", "\tvalue = 0", "}",
+        "else_if = {", f"\tlimit = {{ te_jmap_trim = {TRIM_PERCENT} }}", "\tvalue = te_jmap_states",
+        f"\tmultiply = {num(TRIM_SHARE)}", "\tfloor = yes", "}",
+        "else_if = {", "\tlimit = { te_jmap_area > 0 }", "\tvalue = te_jmap_states", f"\tdivide = {AREA_TRIM_PART}",
+        "\tfloor = yes", f"\tmax = {TRIM}", "}",
+        "max = te_jmap_trim_most", f"max = {TRIM_MAX}"])
+    lines += ["# A system's own entry: the default trim over the whole world, whatever the Map Room's options."]
+    lines += _sv("te_jmap_trim_count_entry", [f"value = {TRIM}", "max = te_jmap_trim_most"])
+    lines += ["# What the pick's map was last measured over, for the Map Room's page (te_jmap_shown_n, te_jmap_shown_k:",
+              "# a copy the Map Room's ranges keep, since the entries' ranges count into te_jmap_n and te_jmap_k too)."]
+    lines += stored("te_jmap_shown_states", "te_jmap_shown_n")
+    lines += stored("te_jmap_shown_cut", "te_jmap_shown_k")
+    sels = sorted({s["sel"] for s in SCALES if fitted(s) and in_room(s)})
+    lines += ["# 1 while the pick is a map fitted to a range, which the Outliers option acts on; 0 on a map of categories",
+              "# or on a fixed scale, which has no range to trim."]
+    lines += _sv("te_jmap_pick_fitted", ["value = 0", "if = {", "\tlimit = {", "\t\tOR = {"] +
+                 [f"\t\t\tte_jmap_selector = {sel}" for sel in sels] + ["\t\t}", "\t}", "\tvalue = 1", "}"])
+    return lines
+
+
 def render():
     lines = [
         "# AUTO-GENERATED by scripts/generators/gen_journal_map_scales.py — do not edit manually.",
@@ -576,7 +684,12 @@ def render():
             lo, hi = w["default"]
             desc = {"frac": "fitted to the world", "mid": f"fitted to the world on each side of {num(w.get('mid', 0))}",
                     "doubling": "a doubling at a time, fitted to the world"}[w["kind"]]
-            lines.append(f"# {desc.capitalize()}; before the first measure, {num(lo)} to {num(hi)}.")
+            if scale.get("twin_of"):
+                lines.append(f"# The Map Room's own copy of te_jmap_{scale['twin_of']}_*: its range follows the Map "
+                             "Room's options, the entry's doesn't.")
+                lines.append(f"# {desc.capitalize()}; before its first measure, the entry's range.")
+            else:
+                lines.append(f"# {desc.capitalize()}; before the first measure, {num(lo)} to {num(hi)}.")
             lines += range_values(scale)
             lines += fitted_factor(scale)
         else:
@@ -588,16 +701,26 @@ def render():
             lines += [f"{name}_lower = {{", f"\tvalue = {name}", "\tmultiply = 2", "\tmin = 0", "\tmax = 1", "}"]
             lines += [f"{name}_upper = {{", f"\tvalue = {name}", "\tmultiply = 2", "\tsubtract = 1", "\tmin = 0",
                       "\tmax = 1", "}"]
+    lines += option_values()
     return "\n".join(lines) + "\n"
 
 
-def _measure(n, where, order, position, var):
-    limit = " ".join(where)
-    return [
-        "ordered_state = {",
-    ] + ([f"\tlimit = {{ {limit} }}"] if limit else []) + [
+def measured(scale):
+    """The states a range counts and orders: those the map paints with its factor, and for a range the Map Room
+    reads, only those in its area (te_jmap_in_area, te_journal_map_triggers.txt: no te_jmap_out on the state)."""
+    return scale["where"] + (["te_jmap_in_area = yes"] if in_room(scale) else [])
+
+
+def _limit(scale):
+    limit = " ".join(measured(scale))
+    return [f"\tlimit = {{ {limit} }}"] if limit else []
+
+
+def _measure(scale, order, var):
+    n = scale["name"]
+    return ["ordered_state = {"] + _limit(scale) + [
         f"\torder_by = te_jmap_{n}_{order}",
-        f"\tposition = {position}",
+        "\tposition = $K$",
         "\tcheck_range_bounds = no",
         f"\tset_global_variable = {{ name = te_jmap_rng_{n}_{var} value = te_jmap_{n}_input }}",
         "}",
@@ -607,28 +730,54 @@ def _measure(n, where, order, position, var):
 def render_effects():
     lines = [
         "# AUTO-GENERATED by scripts/generators/gen_journal_map_scales.py — do not edit manually.",
-        "# The Map Room's maps fitted to the world (te_journal_map_scales_generated.txt): each te_jmap_range_<map>",
-        f"# measures the world's range for a map, from the {TRIM + 1}th lowest to the {TRIM + 1}th highest of the states it",
-        "# paints with a figure (the lowest and highest where fewer have one; the fixed curve's ends where none has),",
-        "# into te_jmap_rng_<map>_lo / _hi. Any scope: ordered_state iterates the world's states. te_jmap_refresh_range",
-        "# measures the pick's map (te_jmap_set_selector, te_journal_map_effects.txt; and monthly,",
-        "# te_journal_map_on_actions.txt), te_jmap_refresh_entry_ranges the maps a system's own entry draws too.",
+        "# The Map Room's maps fitted to the world (te_journal_map_scales_generated.txt). Each te_jmap_range_<map>",
+        "# measures a map's range into te_jmap_rng_<map>_lo / _hi: it counts the states the map paints with a figure",
+        "# (te_jmap_n), works out how many each end leaves out (te_jmap_k), and has te_jmap_measure_at take the state",
+        "# at that place from the top and from the bottom (te_jmap_measure_<map>, K a literal: position takes no",
+        f"# script value). By default the {TRIM + 1}th highest and the {TRIM + 1}th lowest; never past the middle of a "
+        "short list; no",
+        "# state with a figure, and the globals stay unset (the fixed curve's ends). A range the Map Room reads counts",
+        "# only the states in the Map Room's area (te_jmap_in_area) and takes its Outliers option's trim",
+        "# (te_jmap_trim_count); a range a system's own entry reads (te_jmap_range_gw, _gm) is the whole world's on the",
+        "# default trim, whatever the options, and the Map Room reads its twin (_room). Any scope: every_state and",
+        "# ordered_state walk the world's states. te_jmap_refresh_range measures the pick's map (te_jmap_set_selector",
+        "# and te_jmap_apply_options, te_journal_map_effects.txt; and monthly, te_journal_map_on_actions.txt),",
+        "# te_jmap_refresh_entry_ranges the entries' own.",
+        "",
+        "# A range's two ends, at the trim te_jmap_range_<map> just worked out (te_jmap_cut) from the count it took",
+        "# (te_jmap_states; none, and nothing is measured). MAP: the range's name. One literal position per count.",
     ]
+    ladder = []
+    for k in range(TRIM_MAX + 1):
+        if k == TRIM_MAX:
+            ladder += ["else = {"]
+        else:
+            ladder += ["else_if = {" if k else "if = {", f"\tlimit = {{ te_jmap_cut < {k + 1} }}"]
+        ladder += [f"\tte_jmap_measure_$MAP$ = {{ K = {k} }}", "}"]
+    lines += _sv("te_jmap_measure_at", ["if = {", "\tlimit = { te_jmap_states > 0 }"] +
+                 ["\t" + ln for ln in ladder] + ["}"])
     own = [s for s in SCALES if fitted(s) and range_name(s) == s["name"]]
     for scale in own:
-        n, where = scale["name"], scale["where"]
+        n = scale["name"]
         body = []
         for end in ("lo", "hi"):
             body += ["if = {", f"\tlimit = {{ has_global_variable = te_jmap_rng_{n}_{end} }}",
                      f"\tremove_global_variable = te_jmap_rng_{n}_{end}", "}"]
-        body += _measure(n, where, "input", TRIM, "hi")
-        body += _measure(n, where, "input_neg", TRIM, "lo")
-        body += ["# Fewer states than the trim takes out: the extremes.",
-                 "if = {", f"\tlimit = {{ NOT = {{ has_global_variable = te_jmap_rng_{n}_hi }} }}"]
-        body += ["\t" + ln for ln in _measure(n, where, "input", 0, "hi") + _measure(n, where, "input_neg", 0, "lo")]
-        body += ["}"]
-        lines += ["", f"# {scale['note']}."] + _sv(f"te_jmap_range_{n}", body)
-    picks = sorted((s["sel"], range_name(s)) for s in SCALES if fitted(s))
+        body += ["set_global_variable = { name = te_jmap_n value = 0 }", "every_state = {"] + _limit(scale) + [
+            "\tchange_global_variable = { name = te_jmap_n add = 1 }", "}"]
+        trim = "te_jmap_trim_count" if in_room(scale) else "te_jmap_trim_count_entry"
+        body += [f"set_global_variable = {{ name = te_jmap_k value = {trim} }}",
+                 f"te_jmap_measure_at = {{ MAP = {n} }}"]
+        if in_room(scale):
+            body += ["# What the Map Room's page says the map was measured over.",
+                     "set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }",
+                     "set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }"]
+        whose = ("The Map Room's range, under its options" if in_room(scale)
+                 else "The entry's own range: the whole world, the default trim")
+        lines += ["", f"# {scale['note']}.", f"# {whose}."] + _sv(f"te_jmap_range_{n}", body)
+        lines += ["# Its two ends: the state K places from the top, and from the bottom."]
+        lines += _sv(f"te_jmap_measure_{n}", _measure(scale, "input", "hi") + _measure(scale, "input_neg", "lo"))
+    picks = sorted((s["sel"], range_name(s)) for s in SCALES if fitted(s) and in_room(s))
     body = []
     for i, (sel, rn) in enumerate(picks):
         body += ["else_if = {" if i else "if = {", f"\tlimit = {{ te_jmap_selector = {sel} }}",

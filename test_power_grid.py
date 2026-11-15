@@ -871,7 +871,37 @@ class AITest(unittest.TestCase):
         self.assertIn("NOT = { owner = scope:te_grid_ai_site.owner }", end)
         self.assertRegex(end, r"scope:te_grid_ai_site = \{\s+te_grid_owners_interconnected = "
                               r"\{ FROM = scope:te_grid_ai_near \}")
-        self.assertRegex(end, r"OR = \{\s+always = \$ANY\$\s+te_grid_state_has_station = yes\s+\}")
+        # A partner's state counts if it has a station; with ANY = yes one with none counts too, but
+        # only while its owner has Electrical Capacitors and so could build one (a bloc partner
+        # needn't have it; the agreement needs it on both sides): the 2026-11-14 review.
+        from je_multiplier_scope_audit import parse_text
+
+        def counts(any_, tech, station):
+            node = next(n for n in parse_text(end.replace("$ANY$", any_), "t")[0] if n.key == "OR")
+
+            def holds(n):
+                if n.key == "OR":
+                    return any(holds(c) for c in n.children)
+                if n.key == "AND":
+                    return all(holds(c) for c in n.children)
+                if n.key == "always":
+                    return n.value == "yes"
+                if n.key == "owner":
+                    self.assertEqual([(c.key, c.value) for c in n.children],
+                                     [("has_technology_researched", "electrical_capacitors")])
+                    return tech
+                if n.key == "te_grid_state_has_station":
+                    return station == (n.value == "yes")
+                raise KeyError(n.key)
+            return holds(node)
+
+        for any_ in ("yes", "no"):
+            for tech in (False, True):
+                for station in (False, True):
+                    with self.subTest(ANY=any_, tech=tech, station=station):
+                        self.assertEqual(counts(any_, tech, station), station or (any_ == "yes" and tech))
+        # The technology before the building walk, so a state is walked only when it must be.
+        self.assertLess(end.index("electrical_capacitors"), end.index("te_grid_state_has_station"))
 
     def test_ai_partner_across_the_sea_counts_once_it_can_lay_a_cable(self):
         near = _code(_top_level(_read(TRIGGERS), "te_grid_ai_partner_near"))
@@ -1507,12 +1537,479 @@ class LocalizationTest(unittest.TestCase):
             self.assertIn(key, keys)
 
 
+
+PRINCIPLES = os.path.join(COMMON, "power_bloc_principles", "extra_power_bloc_principles.txt")
+PB_TYPES = os.path.join(COMMON, "modifier_type_definitions", "power_bloc_extra_modifier_types.txt")
+# The four principles whose bloc joins its members' grids (owner, 2026-11-14:
+# tiers IV and V of Market Unification and Internal Trade).
+GRID_PRINCIPLES = ("principle_market_unification_4", "principle_market_unification_5",
+                   "principle_internal_trade_4", "principle_internal_trade_5")
+GIA = "grid_interconnection_agreement"
+
+
+class _GridWorld:
+    """Countries, power blocs (members and principles), treaties (two parties
+    and their articles) and wars, and the country variable lists script writes."""
+
+    def __init__(self, countries, blocs=(), treaties=(), wars=(), meets=()):
+        self.countries = list(countries)
+        self.blocs = {name: (set(members), set(principles)) for name, members, principles in blocs}
+        self.treaties = [(a, b, set(articles)) for a, b, articles in treaties]
+        self.wars = {frozenset(pair) for pair in wars}
+        # pairs whose stations meet across a border or a sea (the article's any_scope_state)
+        self.meets = {frozenset(pair) for pair in meets}
+        self.lists = {}
+
+    def bloc_of(self, country):
+        return next((name for name, (members, _) in self.blocs.items() if country in members), None)
+
+    def partners(self, country):
+        return list(self.lists.get((country, "te_grid_partners"), []))
+
+
+class _GridScript:
+    """Runs the grid partner refresh and the tab's partner counts over a
+    _GridWorld, from the script's own parsed text: the subset of triggers,
+    effects and script values they use, and nothing else (an unknown key fails)."""
+
+    def __init__(self, world):
+        from je_multiplier_scope_audit import parse_text
+        self.w, self.saved = world, {}
+        self.effects = {n.key: n for n in parse_text(_read(EFFECTS), "effects")[0] if n.children}
+        self.triggers = {n.key: n for n in parse_text(_read(TRIGGERS), "triggers")[0] if n.children}
+        self.values = {n.key: n for n in parse_text(_read(VALUES), "values")[0] if n.children}
+
+    @staticmethod
+    def child(node, key):
+        return next(c for c in node.children if c.key == key)
+
+    def ref(self, token, this, root):
+        if token == "this":
+            return this
+        if token == "root":
+            return root
+        if token.startswith("scope:"):
+            return self.saved[token[len("scope:"):]]
+        raise KeyError(token)
+
+    def treaties_of(self, country):
+        return [i for i, (a, b, _) in enumerate(self.w.treaties) if country in (a, b)]
+
+    def holds(self, nodes, this, root):
+        return all(self.one(n, this, root) for n in nodes if n.key != "limit")
+
+    def one(self, n, this, root):
+        k, v = n.key, n.value
+        if k == "AND":
+            return self.holds(n.children, this, root)
+        if k == "OR":
+            return any(self.one(c, this, root) for c in n.children)
+        if k in ("NOT", "NAND"):
+            return not self.holds(n.children, this, root)
+        if k == "is_in_power_bloc":
+            return (self.w.bloc_of(this[1]) is not None) == (v == "yes")
+        if k == "power_bloc":
+            bloc = self.w.bloc_of(this[1])
+            return bloc is not None and self.holds(n.children, ("bloc", bloc), root)
+        if k == "has_principle":
+            return v.split(":", 1)[1] in self.w.blocs[this[1]][1]
+        if k == "this":
+            return this == self.ref(v, this, root)
+        if k == "has_war_with":
+            return frozenset((this[1], self.ref(v, this, root)[1])) in self.w.wars
+        if k == "is_target_in_variable_list":
+            target = self.ref(self.child(n, "target").value, this, root)
+            return target[1] in self.w.lists.get((this[1], self.child(n, "name").value), [])
+        if k == "first_country":
+            return self.w.treaties[this[1]][0] == self.ref(v, this, root)[1]
+        if k == "binds":
+            return self.ref(v, this, root)[1] in self.w.treaties[this[1]][:2]
+        if k == "any_scope_treaty":
+            return any(self.holds(n.children, ("treaty", i), root) for i in self.treaties_of(this[1]))
+        if k == "any_scope_article":
+            return any(self.holds(n.children, ("article", a), root) for a in self.w.treaties[this[1]][2])
+        if k == "has_type":
+            return this[1] == v
+        if k == "any_power_bloc_member":
+            return any(self.holds(n.children, ("country", m), root) for m in sorted(self.w.blocs[this[1]][0]))
+        if k == "save_temporary_scope_as":
+            self.saved[v] = this
+            return True
+        if k == "root":
+            if not n.children:
+                return root == self.ref(v, this, root)
+            return self.holds(n.children, root, root)
+        if k == "is_in_same_power_bloc":
+            bloc = self.w.bloc_of(this[1])
+            return bloc is not None and bloc == self.w.bloc_of(self.ref(v, this, root)[1])
+        if k == "has_attitude":
+            return False  # no attitudes in a test world
+        if k == "any_scope_state":
+            # Only the article reads it, for stations meeting the partner's (te_grid_ai_* aren't run here).
+            return frozenset((this[1], self.saved["te_treaty_partner"][1])) in self.w.meets
+        if k in self.triggers and v in ("yes", "no"):
+            return self.holds(self.triggers[k].children, this, root) == (v == "yes")
+        raise KeyError(f"the test interpreter does not know the trigger {k}")
+
+    def limit(self, n, this, root):
+        lim = next((c for c in n.children if c.key == "limit"), None)
+        return lim is None or self.holds(lim.children, this, root)
+
+    def run(self, nodes, this, root):
+        last_if = None
+        for n in nodes:
+            k, v = n.key, n.value
+            if k == "limit":
+                continue
+            if k == "clear_variable_list":
+                self.w.lists.pop((this[1], v), None)
+            elif k == "save_scope_as":
+                self.saved[v] = this
+            elif k == "add_to_variable_list":
+                target = self.ref(self.child(n, "target").value, this, root)
+                self.w.lists.setdefault((this[1], self.child(n, "name").value), []).append(target[1])
+            elif k in ("if", "else_if", "else"):
+                if k == "if" or not last_if:
+                    last_if = k == "else" or self.limit(n, this, root)
+                    if last_if:
+                        self.run(n.children, this, root)
+                continue
+            elif k == "every_scope_treaty":
+                for i in self.treaties_of(this[1]):
+                    if self.limit(n, ("treaty", i), root):
+                        self.run(n.children, ("treaty", i), root)
+            elif k in ("first_country", "second_country"):
+                self.run(n.children, ("country", self.w.treaties[this[1]][k == "second_country"]), root)
+            elif k.startswith("scope:"):
+                self.run(n.children, self.saved[k[len("scope:"):]], root)
+            elif k == "power_bloc":
+                bloc = self.w.bloc_of(this[1])
+                if bloc is not None:
+                    self.run(n.children, ("bloc", bloc), root)
+            elif k == "every_power_bloc_member":
+                for m in sorted(self.w.blocs[this[1]][0]):
+                    if self.limit(n, ("country", m), root):
+                        self.run(n.children, ("country", m), root)
+            elif k == "te_grid_bloc_link_selfcheck_effect":
+                pass  # a once-a-game log line (BlocPartnerTest.test_the_self_check reads it)
+            else:
+                raise KeyError(f"the test interpreter does not know the effect {k}")
+            last_if = None
+
+    def refresh(self, country):
+        self.saved = {}
+        node = self.effects["te_grid_refresh_partners_effect"]
+        self.run(node.children, ("country", country), ("country", country))
+
+    def accept_score(self, ai, other):
+        """The article's inherent_accept_score as the AI country `ai` weighs it with `other`
+        (first_country the AI, second_country the other), with no attitudes."""
+        from je_multiplier_scope_audit import parse_text
+        article = next(n for n in parse_text(_read(ARTICLE), "article")[0] if n.key == GIA)
+        score = self.child(self.child(article, "ai"), "inherent_accept_score")
+        self.saved = {"first_country": ("country", ai), "second_country": ("country", other)}
+        return self.val(score.children, ("country", ai), ("country", ai), 0)
+
+    def value(self, name, country):
+        """A tab value as the GUI reads it: ROOT and THIS the shown country."""
+        self.saved = {}
+        return self.val(self.values[name].children, ("country", country), ("country", country), 0)
+
+    def number(self, token, this, root):
+        if token in self.values:
+            return self.val(self.values[token].children, this, root, 0)
+        return float(token)
+
+    def val(self, nodes, this, root, total):
+        last_if = None
+        for n in nodes:
+            k, v = n.key, n.value
+            if k == "limit":
+                continue
+            if k in ("if", "else"):
+                if k == "if" or not last_if:
+                    last_if = k == "else" or self.limit(n, this, root)
+                    if last_if:
+                        total = self.val(n.children, this, root, total)
+                continue
+            last_if = None
+            if k == "value":
+                total = self.number(v, this, root)
+            elif k == "add" and n.children:
+                total += self.number(self.child(n, "value").value, this, root)
+            elif k == "add":
+                total += self.number(v, this, root)
+            elif k.startswith("scope:"):
+                self.holds(n.children, self.saved[k[len("scope:"):]], root)
+            elif k == "power_bloc":
+                bloc = self.w.bloc_of(this[1])
+                if bloc is not None:
+                    total = self.val(n.children, ("bloc", bloc), root, total)
+            elif k == "every_power_bloc_member":
+                for m in sorted(self.w.blocs[this[1]][0]):
+                    if self.limit(n, ("country", m), root):
+                        total = self.val(n.children, ("country", m), root, total)
+            elif k == "every_scope_treaty":
+                for i in self.treaties_of(this[1]):
+                    if self.limit(n, ("treaty", i), root):
+                        total = self.val(n.children, ("treaty", i), root, total)
+            else:
+                raise KeyError(f"the test interpreter does not know the value step {k}")
+        return total
+
+
+class BlocPartnerTest(unittest.TestCase):
+    """Since 2026-11-14 two members of a power bloc that holds Market
+    Unification IV or V or Internal Trade IV or V are grid partners as if they
+    held a Grid Interconnection Agreement: te_grid_refresh_partners_effect lists
+    them in te_grid_partners, which every link reads, and the tab counts them as
+    bloc partners, apart from the treaties."""
+
+    def bloc_world(self, principles=(), members=("FRA", "GER", "ITA"), wars=(), treaties=(("FRA", "SPA", (GIA,)),)):
+        return _GridWorld(("FRA", "GER", "ITA", "SPA", "POR"),
+                          blocs=[("bloc", members, principles)] if members else [],
+                          treaties=treaties, wars=wars)
+
+    def refreshed(self, world):
+        script = _GridScript(world)
+        for c in world.countries:
+            script.refresh(c)
+        return script
+
+    def assert_mutual(self, world):
+        for a in world.countries:
+            for b in world.partners(a):
+                self.assertIn(a, world.partners(b), f"{b} lists no {a}")
+            self.assertEqual(len(world.partners(a)), len(set(world.partners(a))), f"{a} lists a partner twice")
+
+    def test_the_trigger_names_the_four_tiers_through_has_principle(self):
+        trigger = _code(_top_level(_read(TRIGGERS), "te_grid_bloc_links_grids"))
+        self.assertIn("is_in_power_bloc = yes", trigger)
+        # Read through power_bloc ?= { }, safe for a country in no bloc.
+        m = re.search(r"\bpower_bloc \?= \{", trigger)
+        self.assertIsNotNone(m, "read through power_bloc ?= { }")
+        bloc = _block_from(trigger, m.end())
+        self.assertEqual(sorted(re.findall(r"has_principle = principle:(\w+)", bloc)), sorted(GRID_PRINCIPLES))
+        # Not through the marker: a script-only power bloc bool read from country scope is unverified.
+        self.assertNotIn("modifier:", trigger)
+
+    def test_without_the_principle_only_treaties(self):
+        for principles in ((), ("principle_market_unification_3",), ("principle_internal_trade_3",),
+                           ("principle_construction_4",)):
+            with self.subTest(principles=principles):
+                world = self.bloc_world(principles)
+                self.refreshed(world)
+                self.assertEqual(world.partners("FRA"), ["SPA"])
+                self.assertEqual(world.partners("GER"), [])
+                self.assert_mutual(world)
+
+    def test_each_principle_joins_every_member(self):
+        for principle in GRID_PRINCIPLES:
+            with self.subTest(principle=principle):
+                world = self.bloc_world((principle,))
+                self.refreshed(world)
+                self.assertEqual(sorted(world.partners("FRA")), ["GER", "ITA", "SPA"])
+                self.assertEqual(sorted(world.partners("GER")), ["FRA", "ITA"])
+                self.assertEqual(sorted(world.partners("ITA")), ["FRA", "GER"])
+                # Outside the bloc, nothing changes.
+                self.assertEqual(world.partners("SPA"), ["FRA"])
+                self.assertEqual(world.partners("POR"), [])
+                self.assert_mutual(world)
+
+    def test_a_member_with_an_agreement_is_listed_once(self):
+        world = self.bloc_world(("principle_internal_trade_5",), treaties=(("FRA", "GER", (GIA,)),))
+        self.refreshed(world)
+        self.assertEqual(sorted(world.partners("FRA")), ["GER", "ITA"])
+        self.assert_mutual(world)
+
+    def test_a_member_at_war_is_no_partner(self):
+        world = self.bloc_world(("principle_market_unification_4",), wars=(("FRA", "ITA"),))
+        self.refreshed(world)
+        self.assertNotIn("ITA", world.partners("FRA"))
+        self.assertNotIn("FRA", world.partners("ITA"))
+        self.assertEqual(world.partners("ITA"), ["GER"])
+        self.assert_mutual(world)
+
+    def test_leaving_the_bloc_losing_the_principle_or_dissolving_leaves_nothing_stale(self):
+        world = self.bloc_world(("principle_market_unification_5",))
+        script = self.refreshed(world)
+        self.assertIn("GER", world.partners("FRA"))
+        for change in ("GER leaves", "principle dropped", "bloc dissolved"):
+            with self.subTest(change=change):
+                world = self.bloc_world(("principle_market_unification_5",))
+                script = self.refreshed(world)
+                if change == "GER leaves":
+                    world.blocs["bloc"][0].discard("GER")
+                elif change == "principle dropped":
+                    world.blocs["bloc"][1].clear()
+                    world.blocs["bloc"][1].add("principle_market_unification_3")
+                else:
+                    world.blocs.clear()
+                # The next run's country pass refreshes every country with a station before any
+                # grid is built, starting from last month's lists.
+                for c in world.countries:
+                    script.refresh(c)
+                self.assertNotIn("GER", world.partners("FRA"))
+                self.assertEqual(world.partners("GER"), [])
+                # A country whose only partners were bloc partners keeps none.
+                self.assertEqual(world.partners("GER"), [])
+                self.assertIn("SPA", world.partners("FRA"))
+                self.assert_mutual(world)
+
+    def test_the_run_refreshes_every_station_holder_before_it_builds(self):
+        run = _top_level(_code(_read(EFFECTS)), "te_grid_world_update_effect")
+        countries = _sub(run, "every_country")
+        # The filter asks for a station or a station's figures, never a treaty, so a country whose
+        # only partners are bloc partners is refreshed like any other.
+        self.assertNotIn("treaty", _sub(countries, "limit"))
+        self.assertNotIn("power_bloc", _sub(countries, "limit"))
+        self.assertIn("te_grid_refresh_partners_effect = yes", countries)
+        self.assertLess(run.index("te_grid_refresh_partners_effect = yes"), run.index("te_grid_build_region_effect = yes"))
+        refresh = _code(_top_level(_read(EFFECTS), "te_grid_refresh_partners_effect"))
+        self.assertTrue(refresh.lstrip().startswith("clear_variable_list = te_grid_partners"))
+        # The AI's station and cable passes read the same list, refreshed the same way.
+        self.assertIn("te_grid_refresh_partners_effect = yes", _top_level(_code(_read(EFFECTS)), "te_grid_ai_build_effect"))
+
+    def test_the_tab_counts_bloc_partners_apart_from_treaties(self):
+        cases = [((), [], 1, 0), (("principle_internal_trade_4",), [], 1, 2),
+                 (("principle_market_unification_5",), [("FRA", "GER", (GIA,))], 2, 1),
+                 (("principle_market_unification_4",), [("FRA", "GER", ("customs_union",))], 1, 2)]
+        for principles, extra, treaties, bloc in cases:
+            with self.subTest(principles=principles, extra=extra):
+                world = self.bloc_world(principles, treaties=[("FRA", "SPA", (GIA,))] + extra)
+                script = self.refreshed(world)
+                self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA"), treaties)
+                self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "FRA"), bloc)
+                # The two add up to the partners the links read.
+                self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA")
+                                 + script.value("te_grid_tab_bloc_partners_disp", "FRA"), len(world.partners("FRA")))
+        world = self.bloc_world(("principle_internal_trade_4",), wars=(("FRA", "GER"),))
+        script = self.refreshed(world)
+        self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "FRA"), 1)
+        self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA")
+                         + script.value("te_grid_tab_bloc_partners_disp", "FRA"), len(world.partners("FRA")))
+        # Outside a bloc the count is 0, and the tab never reads the bloc's name there.
+        self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "SPA"), 0)
+
+    def test_the_overview_shows_bloc_partners_as_such(self):
+        gui = _read(os.path.join(REPO, "gui", "te_grid_widgets.gui"))
+        overview = gui[gui.index("type te_grid_overview_panel"):gui.index("type te_grid_mix_row")]
+        line = overview[overview.index("te_grid_ov_bloc_tt") - 600:]
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp'), "
+                      "'(CFixedPoint)0' )]\"", line)
+        self.assertIn("'(CFixedPoint)0' ), 'te_grid_ov_bloc', 'te_grid_ov_bloc_none' )", line)
+        loc = _read(os.path.join(LOC_DIR, "te_miscellaneous_l_english.yml"))
+        bloc = re.search(r"(?m)^ te_grid_ov_bloc:0 (.*)$", loc).group(1)
+        self.assertIn("te_grid_tab_bloc_partners_disp", bloc)
+        self.assertIn("Country.GetPowerBloc.GetName", bloc)
+        # The Agreements box counts treaties only.
+        word = re.search(r"(?m)^ te_grid_ov_agreements_word:0 (.*)$", loc).group(1)
+        self.assertIn("te_grid_tab_partners_disp", word)
+        self.assertNotIn("bloc", word)
+        # The fallback is never shown (the line is hidden), but reads no bloc.
+        self.assertNotIn("GetPowerBloc", re.search(r"(?m)^ te_grid_ov_bloc_none:0 (.*)$", loc).group(1))
+
+    def test_every_tier_carries_the_marker_and_nothing_else_does(self):
+        principles = _code(_read(PRINCIPLES))
+        for name in GRID_PRINCIPLES:
+            with self.subTest(principle=name):
+                block = _sub(_top_level(principles, name), "power_bloc_modifier")
+                self.assertIn("power_bloc_grid_interconnection_bool = yes", block)
+        self.assertEqual(principles.count("power_bloc_grid_interconnection_bool"), len(GRID_PRINCIPLES))
+        # Market Unification's tiers keep the customs union they carried.
+        for name in GRID_PRINCIPLES[:2]:
+            self.assertIn("power_bloc_customs_union_bool = yes", _sub(_top_level(principles, name), "power_bloc_modifier"))
+        marker = _code(_top_level(_read(PB_TYPES), "power_bloc_grid_interconnection_bool"))
+        for line in ("boolean = yes", "script_only = yes"):
+            self.assertIn(line, marker)
+        keys = set()
+        for name in os.listdir(LOC_DIR):
+            if name.endswith(".yml"):
+                keys |= set(re.findall(r"(?m)^ ([\w.]+):\d* ", _read(os.path.join(LOC_DIR, name))))
+        for key in ("power_bloc_grid_interconnection_bool", "power_bloc_grid_interconnection_bool_desc",
+                    "AI_GRID_LINKED_BY_BLOC", "te_grid_ov_bloc", "te_grid_ov_bloc_none", "te_grid_ov_bloc_tt"):
+            self.assertIn(key, keys)
+
+    def test_the_ai_wants_a_redundant_agreement_less(self):
+        article = _code(_top_level(_read(ARTICLE), "grid_interconnection_agreement"))
+        score = _sub(article, "inherent_accept_score")
+        at = score.index('desc = "AI_GRID_LINKED_BY_BLOC"')
+        branch = score[score.rindex("if = {", 0, at):]
+        limit = _sub(branch, "limit")
+        self.assertIn("is_in_same_power_bloc = scope:te_treaty_partner", limit)
+        self.assertIn("te_grid_bloc_links_grids = yes", limit)
+        self.assertRegex(branch, r'desc = "AI_GRID_LINKED_BY_BLOC"\s*value = -\d+')
+        # It is still offered: possible doesn't read the bloc.
+        self.assertNotIn("power_bloc", _sub(article, "possible"))
+        self.assertNotIn("te_grid_bloc_links_grids", _sub(article, "possible"))
+
+    def test_the_ais_score_for_an_agreement(self):
+        """Between two members of a bloc that joins grids the AI weighs the agreement as between
+        two countries whose grids don't meet, whether their stations meet or not; elsewhere as
+        before this change (the review of 2026-11-14: a flat -40 left members whose stations
+        don't meet at -40, against 0 before)."""
+        def score(principles, same_bloc, meet):
+            members = ("FRA", "GER") if same_bloc else ("FRA", "ITA")
+            world = _GridWorld(("FRA", "GER", "ITA"), blocs=[("bloc", members, principles)],
+                               meets=[("FRA", "GER")] if meet else ())
+            return _GridScript(world).accept_score("FRA", "GER")
+
+        strangers_apart = score((), False, False)
+        self.assertEqual(strangers_apart, -10)
+        self.assertEqual(score((), False, True), 20)        # strangers whose stations meet: +30
+        self.assertEqual(score((), True, False), 0)         # same bloc, no principle: +10
+        self.assertEqual(score((), True, True), 30)
+        for principle in GRID_PRINCIPLES:
+            for meet in (False, True):
+                with self.subTest(principle=principle, meet=meet):
+                    self.assertEqual(score((principle,), True, meet), strangers_apart)
+        # A bloc that holds one of them but the partner outside it: as strangers.
+        self.assertEqual(score((GRID_PRINCIPLES[0],), False, True), 20)
+        loc = _read(os.path.join(LOC_DIR, "te_miscellaneous_l_english.yml"))
+        line = re.search(r'(?m)^ AI_GRID_LINKED_BY_BLOC:0 "(.*)"$', loc).group(1)
+        # True whether the stations meet yet or not.
+        self.assertNotIn("joined", line)
+        self.assertIn("wherever they meet", line)
+
+    def test_the_self_check(self):
+        check = _code(_top_level(_read(EFFECTS), "te_grid_bloc_link_selfcheck_effect"))
+        outer = _sub(check, "limit")
+        self.assertIn("NOT = { has_global_variable = te_grid_bloc_link_checked }", outer)
+        # Either read opens it, so a has_principle that misses the tiers is caught by the marker.
+        self.assertIn("te_grid_bloc_links_grids = yes", _sub(outer, "OR"))
+        self.assertIn("modifier:power_bloc_grid_interconnection_bool = yes", _sub(outer, "OR"))
+        # A bloc of one, or of members all at war with it, is no test.
+        self.assertIn("NOT = { this = scope:te_grid_partners_of }", _sub(outer, "any_power_bloc_member"))
+        # Judged a month after it is first seen, not the day a principle lands, and only while
+        # has_principle reads as it did then, so a principle dropped the day of a refresh (its
+        # marker lagging: principle=0 beside marker=1) is seen afresh, not judged BROKEN.
+        at = check.index("has_variable = te_grid_chk_bloc_seen")
+        judge = _block_from(check, check.rindex("limit = {", 0, at) + len("limit = "))
+        self.assertIn("var:te_grid_chk_bloc_seen < te_history_month_index", judge)
+        same = re.sub(r"\s+", " ", _sub(judge, "OR"))
+        self.assertIn("AND = { var:te_grid_chk_bloc_seen_principle = 1 te_grid_bloc_links_grids = yes }", same)
+        self.assertIn("AND = { var:te_grid_chk_bloc_seen_principle = 0 te_grid_bloc_links_grids = no }", same)
+        # Anything else (first sight, or a changed read) records the read and waits again.
+        again = re.sub(r"\s+", " ", _block_from(check, check.rindex("else = {") + len("else = ")))
+        self.assertIn("set_variable = { name = te_grid_chk_bloc_seen value = te_history_month_index }", again)
+        self.assertIn("set_variable = { name = te_grid_chk_bloc_seen_principle value = 0 }", again)
+        self.assertIn("limit = { te_grid_bloc_links_grids = yes } set_variable = { name = te_grid_chk_bloc_seen_principle "
+                      "value = 1 }", again)
+        self.assertIn("set_global_variable = te_grid_bloc_link_checked", check)
+        for name in ("principle", "marker", "members", "listed"):
+            self.assertIn(f"te_grid_chk_bloc_{name}_g = {{ value = global_var:te_grid_chk_bloc_{name} }}", _read(VALUES))
+        self.assertIn("te_grid_bloc_link_selfcheck_effect = yes", _top_level(_code(_read(EFFECTS)), "te_grid_refresh_partners_effect"))
+
+
 class RecordTest(unittest.TestCase):
     """The grid's record, for the Power Grids tab: a grid lasts one run, so its hub carries its
     figures and each country lists its grids and stations until the next run clears them."""
 
+    # The grid's generation by source (2026-11-14), the sums of its members' splits.
+    MIX_SOURCES = ("coal", "oil", "hydro", "nuclear", "renewable", "fusion", "space_solar")
     REC_VARS = ("te_grid_rec_supply", "te_grid_rec_demand", "te_grid_rec_price", "te_grid_rec_sent",
-                "te_grid_rec_delivered", "te_grid_rec_countries", "te_grid_rec_markets")
+                "te_grid_rec_delivered", "te_grid_rec_countries", "te_grid_rec_markets") + tuple(
+                    f"te_grid_rec_mix_{src}" for src in MIX_SOURCES + ("total",))
 
     def setUp(self):
         self.effects = _code(_read(EFFECTS))
@@ -1563,7 +2060,8 @@ class RecordTest(unittest.TestCase):
             "te_grid_rec_sent": "local_var:te_grid_rec_sent",
             "te_grid_rec_delivered": "local_var:te_grid_rec_delivered",
             "te_grid_rec_countries": "local_var:te_grid_rec_countries",
-            "te_grid_rec_markets": "local_var:te_grid_rec_markets"})
+            "te_grid_rec_markets": "local_var:te_grid_rec_markets",
+            **{f"te_grid_rec_mix_{src}": f"local_var:te_grid_rec_mix_{src}" for src in self.MIX_SOURCES + ("total",)}})
         # On the hub, every one, and the hub (not ROOT, the country) is what the next run clears.
         hub_blocks = [_block_from(record, m.end()) for m in re.finditer(r"scope:te_grid_hub_state = \{", record)]
         self.assertEqual(sum(b.count("set_variable = { name = te_grid_rec_") for b in hub_blocks), len(self.REC_VARS))

@@ -401,7 +401,10 @@ takes one from another basin and works at -25% throughput (Long-Haul Seabed
 Operations, shown on the mine), until a local claim frees up and replaces it on
 its own. The
 building's requirements list how many licenses you have to spare and which
-kind the next level would take.
+kind the next level would take. Tick Build only on local claims in the Seabed
+tab and a level can be queued only in a state whose own basin has a claim to
+spare, so neither you nor private investment builds one by accident; long-haul
+levels already in that basin take its freed claims first.
 
 #### Claims, protection and the holding fee
 
@@ -466,7 +469,8 @@ The Seabed tab of the Timeline Extended window answers four questions. Its
 overview says how many more Deep-Sea Mines you can queue (and how many at home,
 without the long-haul penalty), your licenses and any holding fee, your
 long-haul levels, your unused claims and what next January can take of them,
-your policy and when it can next change, and the regime. The Ocean Basins table
+your policy and when it can next change, and the regime, with the Build only on
+local claims checkbox under the first four. The Ocean Basins table
 has a row for each basin: Free is your claims there, green where you have coast
 to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
@@ -482,8 +486,8 @@ claim weight there. The tile's tooltip has the national figures. Once you have
 researched Abyssal Plain Mining, every other coastal state, whoever owns it,
 shows its basin in an Ocean Basin tile, so you can see which pool a port there
 would weigh in. Another country's National Info has a Seabed tab with that
-country's overview and Ocean Basins table; the policy buttons and the claimant
-lists, with Relinquish and Claim Again, are only on your own.
+country's overview and Ocean Basins table; the checkbox, the policy buttons and
+the claimant lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
