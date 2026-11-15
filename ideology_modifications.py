@@ -924,6 +924,19 @@ AUTOMATION_LISTS = {
     "welfare": automation_constructor("-", "+", "0", "+"),
     # The machines belong to everyone.
     "socialist": automation_constructor("--", "0", "0", "++"),
+    # The two movements vanilla's Reform or Revolution entry reads (its
+    # activism term, (activism - 0.25) x 10 a month per movement). Unrestricted
+    # Automation is every country's law from 1836 until Humanoid Robotics (era
+    # 11), so a stance on it is activism no law can answer for the whole life
+    # of the entry: at MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (-0.05,
+    # vanilla's) and these movements' 0.75, +0.075 for the socialists and
+    # +0.0375 for labor in every country. Neutral here, as Natural Form and the
+    # Frontier AI placeholder are; every law the "labor" and "socialist" lists
+    # rate above it still rates above it, so the movements back the same laws
+    # once Humanoid Robotics arrives. The interest groups' ideologies keep the
+    # lists above.
+    "labor_movement": automation_constructor("0", "+", "++", "+"),
+    "socialist_movement": automation_constructor("0", "+", "+", "++"),
 }
 
 AUTOMATION_STANCES = {
@@ -934,9 +947,10 @@ AUTOMATION_STANCES = {
     **{k: "tax" for k in ("ideology_liberal_modern", "ideology_reformer", "ideology_corporatist")},
     **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_jingoist")},
     **{k: "labor" for k in (
-        "ideology_proletarian", "ideology_populist", "ideology_labor_movement", "ideology_fascist",
-        "ideology_fascist_movement",
+        "ideology_proletarian", "ideology_populist", "ideology_fascist", "ideology_fascist_movement",
     )},
+    "ideology_labor_movement": "labor_movement",
+    "ideology_socialist_movement": "socialist_movement",
     **{k: "traditional" for k in (
         "ideology_pious", "ideology_moralist", "ideology_agrarian", "ideology_paternalistic",
         "ideology_traditionalist", "ideology_reactionary",
@@ -946,7 +960,7 @@ AUTOMATION_STANCES = {
         "ideology_radical_movement", "ideology_humanitarian",
     )},
     **{k: "socialist" for k in (
-        "ideology_communist", "ideology_socialist_movement", "ideology_communist_leader", "ideology_communist_movement",
+        "ideology_communist", "ideology_communist_leader", "ideology_communist_movement",
         "ideology_vanguardist", "ideology_revolutionary_socialist_movement", "ideology_anarchist",
         "ideology_anarchist_movement", "ideology_utopian",
     )},
@@ -3287,9 +3301,15 @@ modifications = {
             ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "neutral"),
         ],
+        # Unregulated Donations is the law of every country with a voting
+        # franchise from 1836 until Mass Media or Keynesian Economics (era 6),
+        # and No Campaign Finance Laws is barred to them, so a stance on it is
+        # activism nothing can answer while Reform or Revolution runs (+0.075
+        # at strongly_disapprove; see AUTOMATION_LISTS "socialist_movement").
+        # Neutral, below the two laws the movement still backs.
         "lawgroup_electoral_finance": [
             ("law_no_campaign_finance_laws", "neutral"),
-            ("law_unregulated_donations", "strongly_disapprove"),
+            ("law_unregulated_donations", "neutral"),
             ("law_donation_limits", "approve"),
             ("law_publicly_funded_elections", "strongly_approve"),
         ],
