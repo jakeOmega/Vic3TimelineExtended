@@ -8303,6 +8303,22 @@
   "en": "Locks [Concept('concept_asset_relief_program', 'Asset Relief Program')]",
   "ru": "Блокирует [Concept('concept_asset_relief_program', 'Программу помощи активам')]"
  },
+ "country_banking_lock_capital_controls_bool": {
+  "en": "Locks [Concept('concept_capital_controls', 'Capital Controls')]",
+  "ru": "Блокирует [Concept('concept_capital_controls', 'Контроль капитала')]"
+ },
+ "country_banking_lock_directed_credit_bool": {
+  "en": "Locks [Concept('concept_directed_credit', 'Directed Credit')]",
+  "ru": "Блокирует [Concept('concept_directed_credit', 'Целевое кредитование')]"
+ },
+ "country_banking_lock_export_credit_bool": {
+  "en": "Locks [Concept('concept_export_credit_facility', 'Export Credit Facility')]",
+  "ru": "Блокирует [Concept('concept_export_credit_facility', 'Экспортное кредитование')]"
+ },
+ "country_banking_lock_open_market_ops_bool": {
+  "en": "Locks [Concept('concept_open_market_operations', 'Open Market Operations')]",
+  "ru": "Блокирует [Concept('concept_open_market_operations', 'Операции на открытом рынке')]"
+ },
  "country_building_airport_require_subsidies_bool": {
   "en": "Airports Require Subsidies",
   "ru": "Аэропорты требуют субсидий"
@@ -12567,9 +12583,17 @@
   "en": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence] a step.",
   "ru": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence|l] за ступень."
  },
+ "gm_je_tt_sig_conquerors_of_space": {
+  "en": "#b $gm_sig_conquerors_of_space$#!: [concept_innovation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_conquerors_of_space')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_conquerors_of_space')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_conquerors_of_space')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_conquerors_of_space')|%1]#! [concept_innovation] a step.",
+  "ru": "#b $gm_sig_conquerors_of_space$#!: [concept_innovation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_conquerors_of_space')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_conquerors_of_space')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_conquerors_of_space')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_conquerors_of_space')|%1]#! [concept_innovation|l] за ступень."
+ },
  "gm_je_tt_sig_glory_of_athens": {
   "en": "#b $gm_sig_glory_of_athens$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_glory_of_athens')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_glory_of_athens')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_glory_of_athens')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_glory_of_athens')|%1]#! [concept_influence] a step.",
   "ru": "#b $gm_sig_glory_of_athens$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_glory_of_athens')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_glory_of_athens')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_glory_of_athens')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_glory_of_athens')|%1]#! [concept_influence|l] за ступень."
+ },
+ "gm_je_tt_sig_grande_armee": {
+  "en": "#b $gm_sig_grande_armee$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_grande_armee')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_grande_armee')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_grande_armee')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_grande_armee')|%1]#! [concept_prestige] a step.",
+  "ru": "#b $gm_sig_grande_armee$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_grande_armee')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_grande_armee')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_grande_armee')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_grande_armee')|%1]#! [concept_prestige|l] за ступень."
  },
  "gm_je_tt_sig_held_concert_of_nations": {
   "en": "#b $gm_sig_concert_of_nations$#!, held\\nA unique dedication of $pm_monument_civic$ won from an opportunity, waiting for a monument to carry it: the dedication ceremony of the next monument dedicated $pm_monument_civic$ offers it. Each monument takes one.\\n$gm_sig_concert_of_nations_effect$ for each step of its [concept_grandeur].",
@@ -12591,6 +12615,18 @@
   "en": "#b $gm_sig_unknown_soldier$#!, held\\nA unique dedication of $pm_monument_war_memorial$ won from an opportunity, waiting for a monument to carry it: the dedication ceremony of the next monument dedicated $pm_monument_war_memorial$ offers it. Each monument takes one.\\n$gm_sig_unknown_soldier_effect$ for each step of its [concept_grandeur].",
   "ru": "#b $gm_sig_unknown_soldier$#!, в запасе\\nУникальное посвящение типа «$pm_monument_war_memorial$», полученное благодаря возможности и ожидающее монумент, который его примет: церемония посвящения следующего монумента типа «$pm_monument_war_memorial$» предложит его. Каждый монумент принимает одно.\\n$gm_sig_unknown_soldier_effect$ за каждую ступень его [Concept('concept_grandeur','величия')]."
  },
+ "gm_je_tt_sig_heroes": {
+  "en": "#b $gm_sig_heroes$#!: [concept_assimilation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_heroes')|%0]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_heroes')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_heroes')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_heroes')|%0]#! [concept_assimilation] a step.",
+  "ru": "#b $gm_sig_heroes$#!: [concept_assimilation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_heroes')|%0]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_heroes')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_heroes')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_heroes')|%0]#! [concept_assimilation|l] за ступень."
+ },
+ "gm_je_tt_sig_liberty": {
+  "en": "#b $gm_sig_liberty$#!: [concept_migration_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_liberty')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_liberty')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_liberty')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_liberty')|%1]#! [concept_migration_pull] a step.",
+  "ru": "#b $gm_sig_liberty$#!: [concept_migration_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_liberty')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_liberty')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_liberty')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_liberty')|%1]#! [concept_migration_pull|l] за ступень."
+ },
+ "gm_je_tt_sig_mandate_of_heaven": {
+  "en": "#b $gm_sig_mandate_of_heaven$#!: [concept_legitimacy] #G +[Country.MakeScope.ScriptValue('gm_display_sig_mandate_of_heaven')|1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_mandate_of_heaven')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_mandate_of_heaven')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_mandate_of_heaven')|1]#! [concept_legitimacy] a step.",
+  "ru": "#b $gm_sig_mandate_of_heaven$#!: [concept_legitimacy] #G +[Country.MakeScope.ScriptValue('gm_display_sig_mandate_of_heaven')|1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_mandate_of_heaven')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_mandate_of_heaven')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_mandate_of_heaven')|1]#! [concept_legitimacy|l] за ступень."
+ },
  "gm_je_tt_sig_martial_glory": {
   "en": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ a step.",
   "ru": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ за ступень."
@@ -12602,6 +12638,14 @@
  "gm_je_tt_sig_royal_pantheon": {
   "en": "#b $gm_sig_royal_pantheon$#!: $country_loyalists_from_legitimacy_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_royal_pantheon')|%0]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_royal_pantheon')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_royal_pantheon')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_royal_pantheon')|%0]#! $country_loyalists_from_legitimacy_mult$ a step.",
   "ru": "#b $gm_sig_royal_pantheon$#!: $country_loyalists_from_legitimacy_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_royal_pantheon')|%0]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_royal_pantheon')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_royal_pantheon')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_royal_pantheon')|%0]#! $country_loyalists_from_legitimacy_mult$ за ступень."
+ },
+ "gm_je_tt_sig_throne": {
+  "en": "#b $gm_sig_throne$#!: [concept_authority] #G +[Country.MakeScope.ScriptValue('gm_display_sig_throne')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_throne')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_throne')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_throne')|%1]#! [concept_authority] a step.",
+  "ru": "#b $gm_sig_throne$#!: [concept_authority] #G +[Country.MakeScope.ScriptValue('gm_display_sig_throne')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_throne')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_throne')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_throne')|%1]#! [concept_authority|l] за ступень."
+ },
+ "gm_je_tt_sig_to_victory": {
+  "en": "#b $gm_sig_to_victory$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_to_victory')|%1]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_to_victory')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_to_victory')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_to_victory')|%1]#! [concept_prestige] a step.",
+  "ru": "#b $gm_sig_to_victory$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_to_victory')|%1]#!\\nУникальное посвящение. Монументов, признанных на посвящении, на котором оно им дано: #v [Country.MakeScope.ScriptValue('gm_display_c_sig_to_victory')|0]#!; вместе с удерживаемыми трофеями с ним: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!.\\nСледующая ступень — при #v [Country.MakeScope.ScriptValue('gm_display_n_sig_to_victory')|0]#!, по #G +[Country.MakeScope.ScriptValue('gm_step_sig_to_victory')|%1]#! [concept_prestige|l] за ступень."
  },
  "gm_je_tt_sig_unknown_soldier": {
   "en": "#b $gm_sig_unknown_soldier$#!: $country_radicals_from_legitimacy_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_unknown_soldier')|%0]#!\\nA unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_unknown_soldier')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_unknown_soldier')|0]#!.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_unknown_soldier')|0]#!, for #G [Country.MakeScope.ScriptValue('gm_step_sig_unknown_soldier')|%0]#! $country_radicals_from_legitimacy_mult$ a step.",
@@ -18515,6 +18559,10 @@
   "en": "[Concept('concept_posture_militarist', 'militarist')] (mild)",
   "ru": "[Concept('concept_posture_militarist', 'позиция милитаристов')] (умеренная)"
  },
+ "nd_home_view_4": {
+  "en": "[Concept('concept_posture_restraint', 'restraint')] (mild)",
+  "ru": "[Concept('concept_posture_restraint', 'позиция сдержанности')] (умеренная)"
+ },
  "nd_home_view_5": {
   "en": "[Concept('concept_posture_officers', 'officers')], hawkish",
   "ru": "[Concept('concept_posture_officers', 'позиция офицеров')], ястребиная"
@@ -18522,6 +18570,14 @@
  "nd_home_view_6": {
   "en": "[Concept('concept_posture_officers', 'officers')], restrained",
   "ru": "[Concept('concept_posture_officers', 'позиция офицеров')], сдержанная"
+ },
+ "nd_home_view_8": {
+  "en": "[Concept('concept_posture_business', 'business')], hawkish",
+  "ru": "[Concept('concept_posture_business', 'позиция бизнеса')], ястребиная"
+ },
+ "nd_home_view_9": {
+  "en": "[Concept('concept_posture_business', 'business')], restrained",
+  "ru": "[Concept('concept_posture_business', 'позиция бизнеса')], сдержанная"
  },
  "nd_host_accident_silence": {
   "en": "Silence over a Weapons Accident",
@@ -26355,13 +26411,25 @@
   "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $high_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
  },
+ "te_bulk_tariff_effect_export_high_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $high_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
+ },
  "te_bulk_tariff_effect_export_low_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $low_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
  },
+ "te_bulk_tariff_effect_export_low_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $low_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
+ },
  "te_bulk_tariff_effect_export_max_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $max_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
+ },
+ "te_bulk_tariff_effect_export_max_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_export|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $max_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
  },
  "te_bulk_tariff_effect_export_no_tariffs_or_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
@@ -26379,13 +26447,25 @@
   "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $high_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
  },
+ "te_bulk_tariff_effect_import_high_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $high_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
+ },
  "te_bulk_tariff_effect_import_low_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $low_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
  },
+ "te_bulk_tariff_effect_import_low_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $low_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
+ },
  "te_bulk_tariff_effect_import_max_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
   "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $max_subventions$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_subventions','субсидии')]"
+ },
+ "te_bulk_tariff_effect_import_max_tariffs": {
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "ru": "Устанавливает уровень (параметр [Concept('concept_trade','$concept_import|q$')]) каждого торгуемого [Concept('concept_good','товара')] на #v $max_tariffs$#!, кроме случаев, когда [Concept('concept_treaty','договор')] запрещает [Concept('concept_tariffs','пошлины')]"
  },
  "te_bulk_tariff_effect_import_no_tariffs_or_subventions": {
   "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
@@ -26430,6 +26510,14 @@
  "te_bulk_tariff_req_policy_subvention_import": {
   "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import|q$')] [concept_subventions]",
   "ru": "Наша торговая политика разрешает [Concept('concept_subventions','субсидии')] на [Concept('concept_trade','$concept_import|q$')]"
+ },
+ "te_bulk_tariff_req_policy_tariff_export": {
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_export|q$')] [concept_tariffs]",
+  "ru": "Наша торговая политика разрешает [Concept('concept_tariffs','пошлины')] на [Concept('concept_trade','$concept_export|q$')]"
+ },
+ "te_bulk_tariff_req_policy_tariff_import": {
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import|q$')] [concept_tariffs]",
+  "ru": "Наша торговая политика разрешает [Concept('concept_tariffs','пошлины')] на [Concept('concept_trade','$concept_import|q$')]"
  },
  "te_bulk_tariff_req_ready_export": {
   "en": "[Concept('concept_trade','$concept_exports|q$')] were not set for all [Concept('concept_good','$concept_goods|q$')] in the last 3 months, or were set this week",
@@ -37147,9 +37235,17 @@
   "en": "Our delegation is seated: we conduct our own foreign policy ([concept_un_suspended_representation])",
   "ru": "Наша делегация допущена: мы ведём собственную внешнюю политику ([concept_un_suspended_representation|l])"
  },
+ "un_mission_volunteer_peacekeeping_tt": {
+  "en": "We send a contingent to the #bold [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')]#! in [SCOPE.sState('un_msn_tt_state').GetName], for [SCOPE.sCountry('un_msn_tt_host').GetName].",
+  "ru": "Мы направляем контингент в #bold [Concept('concept_un_mission_peacekeeping','миротворческую миссию')]#! в области [SCOPE.sState('un_msn_tt_state').GetName] для страны [SCOPE.sCountry('un_msn_tt_host').GetName]."
+ },
  "un_mission_volunteer_rewards_tt": {
   "en": "If the mission accomplishes its work, we gain #G International Standing#! (up to +3, scaled down the higher our standing already is) and #G +15#! relations with [SCOPE.sCountry('un_msn_tt_host').GetName]. While we serve, our intelligence networks there grow faster.",
   "ru": "Если миссия выполнит свою работу, мы получим #G международный авторитет#! (до +3, меньше при более высоком текущем авторитете) и #G +15#! к отношениям со страной [SCOPE.sCountry('un_msn_tt_host').GetName]. Пока мы служим, наши разведывательные сети там растут быстрее."
+ },
+ "un_mission_volunteer_stabilisation_tt": {
+  "en": "We send a contingent to the #bold [Concept('concept_un_mission_stabilisation', 'stabilization mission')]#! in [SCOPE.sState('un_msn_tt_state').GetName], for [SCOPE.sCountry('un_msn_tt_host').GetName].",
+  "ru": "Мы направляем контингент в #bold [Concept('concept_un_mission_stabilisation','стабилизационную миссию')]#! в области [SCOPE.sState('un_msn_tt_state').GetName] для страны [SCOPE.sCountry('un_msn_tt_host').GetName]."
  },
  "un_mission_volunteer_strength_tt": {
   "en": "It grows stronger with every contributor, up to three.",
@@ -37742,6 +37838,10 @@
  "un_standing_respected_modifier": {
   "en": "International Standing: Respected",
   "ru": "Международный авторитет: уважаемый"
+ },
+ "un_standing_sanctioned_accepted_tt": {
+  "en": "#R International Standing: −3#! for accepting the Assembly's [concept_un_sanctions].",
+  "ru": "#R Международный авторитет: −3#! за принятие [Concept('concept_un_sanctions','санкций ООН')] Ассамблеи."
  },
  "un_standing_sanctioned_partial_tt": {
   "en": "#R International Standing: −3#! for being placed under partial [concept_un_sanctions].",

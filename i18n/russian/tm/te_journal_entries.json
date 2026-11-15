@@ -10859,9 +10859,25 @@
   "en": "      #lore the#! [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] #lore in#! $je_un_led_subject_state$ #lore accomplished its work#!",
   "ru": "      #lore Успех:#! [Concept('concept_un_mission_peacekeeping', 'миротворческая миссия')] #lore в области#! $je_un_led_subject_state$ #lore — работа выполнена#!"
  },
+ "je_un_led_reason_22": {
+  "en": "      #lore the#! [Concept('concept_un_mission_aid', 'aid mission')] #lore in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "ru": "      #lore Успех:#! [Concept('concept_un_mission_aid', 'миссия помощи')] #lore в области#! $je_un_led_subject_state$ #lore — работа выполнена#!"
+ },
+ "je_un_led_reason_23": {
+  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilization mission')] #lore in#! $je_un_led_subject_state$ #lore accomplished its work#!",
+  "ru": "      #lore Успех:#! [Concept('concept_un_mission_stabilisation', 'стабилизационная миссия')] #lore в области#! $je_un_led_subject_state$ #lore — работа выполнена#!"
+ },
  "je_un_led_reason_24": {
   "en": "      #lore the#! [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
   "ru": "      #lore Провал:#! [Concept('concept_un_mission_peacekeeping', 'миротворческая миссия')] #lore в области#! $je_un_led_subject_state$ #lore — неудача#!"
+ },
+ "je_un_led_reason_25": {
+  "en": "      #lore the#! [Concept('concept_un_mission_aid', 'aid mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
+  "ru": "      #lore Провал:#! [Concept('concept_un_mission_aid', 'миссия помощи')] #lore в области#! $je_un_led_subject_state$ #lore — неудача#!"
+ },
+ "je_un_led_reason_26": {
+  "en": "      #lore the#! [Concept('concept_un_mission_stabilisation', 'stabilization mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
+  "ru": "      #lore Провал:#! [Concept('concept_un_mission_stabilisation', 'стабилизационная миссия')] #lore в области#! $je_un_led_subject_state$ #lore — неудача#!"
  },
  "je_un_led_reason_27": {
   "en": "      #lore a member ceded a state as the World Court ruled#!",
@@ -10934,6 +10950,10 @@
  "je_un_led_reason_38": {
   "en": "      #lore an electoral observer mission failed#!",
   "ru": "      #lore миссия избирательных наблюдателей провалилась#!"
+ },
+ "je_un_led_reason_38_on": {
+  "en": "      #lore the#! [Concept('concept_un_mission_electoral', 'electoral observer mission')] #lore in#! $je_un_led_subject_state$ #lore failed#!",
+  "ru": "      #lore Провал:#! [Concept('concept_un_mission_electoral', 'миссия избирательных наблюдателей')] #lore в области#! $je_un_led_subject_state$ #lore — неудача#!"
  },
  "je_un_led_reason_4": {
   "en": "      #lore a [concept_un_veto] cast in the Security Council#!",

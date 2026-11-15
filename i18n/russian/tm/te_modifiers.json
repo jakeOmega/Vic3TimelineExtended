@@ -391,6 +391,10 @@
   "en": "The money upkeep of the Family Policy measures that cost money: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ and $te_demog_ms_free_contraception$. A running measure's upkeep follows a change at the country's next yearly count. Used by the Family Policy section of the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "ru": "Денежное содержание мер семейной политики, требующих денег: «$te_demog_ms_child_allowance$», «$te_demog_ms_family_housing$», «$te_demog_ms_parental_leave$» и «$te_demog_ms_free_contraception$». Содержание действующей меры следует за изменением при очередном ежегодном подсчёте страны. Используется разделом «Семейная политика» вкладки «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
+ "country_finance_momentum_monthly_add": {
+  "en": "Monthly [concept_banking_momentum]",
+  "ru": "Ежемесячное изменение: [concept_banking_momentum|l]"
+ },
  "country_finance_momentum_monthly_add_desc": {
   "en": "An increase or decrease to the [concept_banking_momentum] of the [concept_banking_cycle], affecting the direction and speed of the change of financial conditions over time.",
   "ru": "Рост или снижение [Concept('concept_banking_momentum','банковского импульса')] [Concept('concept_banking_cycle','банковского цикла')], влияющее на направление и скорость изменения финансовых условий со временем."
@@ -5839,6 +5843,10 @@
   "en": "A change in the minimum local cultural acceptance that can be applied in a [concept_state].",
   "ru": "Изменение минимального местного культурного принятия, которое можно применить в [Concept('concept_state','области')]."
  },
+ "state_monthly_loyalists_add": {
+  "en": "Monthly [Concept('concept_loyalist','$concept_loyalists|q$')]",
+  "ru": "Ежемесячное изменение: [Concept('concept_loyalist','$concept_loyalists|q$')|l]"
+ },
  "state_monthly_loyalists_add_desc": {
   "en": "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists|q$')] each month, in incorporated [Concept('concept_state','$concept_states|q$')] only.",
   "ru": "Доля населения, ежемесячно переходящая в категорию [Concept('concept_loyalist','$concept_loyalists|q$')|l]. Только включённые [Concept('concept_state','$concept_states|q$')|l]."
@@ -5962,6 +5970,10 @@
  "state_urban_fertility_relief_add_desc": {
   "en": "How much of city life's pull toward smaller families is offset, as homes with room for children are built. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
   "ru": "Насколько компенсируется тяга городской жизни к малым семьям по мере строительства жилья с местом для детей. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_war_support_monthly_add": {
+  "en": "Monthly [concept_war_support]",
+  "ru": "Ежемесячное изменение: [concept_war_support|l]"
  },
  "state_war_support_monthly_add_desc": {
   "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive|q$')] share of the national population. Displayed in event tooltips as 'From Events'.",

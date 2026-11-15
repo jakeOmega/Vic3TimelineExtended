@@ -12411,6 +12411,10 @@
   "en": "Dedicate it To Victory",
   "ru": "Посвятить Победе"
  },
+ "monument_events.2.sig_to_victory.tt": {
+  "en": "#b $gm_sig_to_victory$#!, a unique dedication of $pm_monument_war_memorial$ we hold from an opportunity seized. On top of what $pm_monument_war_memorial$ does, it adds #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_to_victory')|%0]#! [concept_prestige] for each step of [concept_grandeur], counted with every monument that carries it, while this one stands upheld on it. One fewer is held.\\n\\n$monument_events.2.e.tt$",
+  "ru": "#b $gm_sig_to_victory$#! — уникальное посвящение «$pm_monument_war_memorial$», которое мы получили, использовав возможность. Помимо того, что даёт «$pm_monument_war_memorial$», оно добавляет #G +[SCOPE.GetRootScope.ScriptValue('gm_step_sig_to_victory')|%0]#! [Concept('concept_prestige','престижа')] за каждую ступень [Concept('concept_grandeur','величия')], считая вместе со всеми памятниками, несущими его, пока этот памятник сохраняет его. Число хранимых посвящений уменьшается на одно.\\n\\n$monument_events.2.e.tt$"
+ },
  "monument_events.2.sig_unknown_soldier": {
   "en": "Dedicate it To the Unknown Soldier",
   "ru": "Посвятить Неизвестному солдату"
