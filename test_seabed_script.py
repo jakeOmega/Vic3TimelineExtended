@@ -158,7 +158,8 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_sh", "te_seabed_lease_src", "te_seabed_lease_n", "te_seabed_lease_built",
                   "te_seabed_lease_unused", "te_seabed_subj_unused", "te_seabed_pass_built",
                   "te_seabed_pass_unused", "te_seabed_own_claims", "te_seabed_lease_past",
-                  "te_seabed_pass_to", "te_seabed_part", "te_seabed_wait"}
+                  "te_seabed_pass_to", "te_seabed_part", "te_seabed_wait", "te_seabed_local_only",
+                  "te_seabed_local_room"}
         named = {n.rstrip("_") for n in named}
         everything = (defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
                       | defined("diplomatic_actions"))

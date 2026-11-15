@@ -381,7 +381,7 @@ class EntryShapeTest(unittest.TestCase):
         for name, entry in self.entries.items():
             self.assertEqual(child(entry, "can_deactivate").value, "no", name)
             self.assertEqual(child(entry, "can_revolution_inherit").value, "yes", name)
-            self.assertEqual(child(entry, "group").value, "je_group_internal_affairs", name)
+            self.assertEqual(child(entry, "group").value, "je_group_te_systems", name)
             self.assertEqual(child(entry, "progressbar").value, "no", name)
             self.assertEqual(child(entry, "should_be_pinned_by_default_uninvolved_or_context").value, "yes", name)
 

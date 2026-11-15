@@ -178,7 +178,7 @@ its law's rate.
 
 The banking rule has a third setting: Simplified keeps the entry and the cycle and switches off the monetary layer
 (`banking_cycle.md`, "Full to Simplified mid-game"). Setup: Banking set to Full, a national bank on fiat money with
-inflation above the comfort band, a loose or tight stance, Sterilize Capital Inflows on, and, in a second game, a gold
+inflation above the comfort band, a loose or tight stance, Sterilization on, and, in a second game, a gold
 standard the peg crisis suspended. For row 6, sign a swap line (drawn on in a crisis, if one comes), a lender of last
 resort and, against a defaulted country, a debt receivership, inside their binding periods, and note both parties'
 infamy, relations and legitimacy. Switch the rule to Simplified.
@@ -188,7 +188,7 @@ infamy, relations and legitimacy. Switch the rule to Simplified.
 2. **The rate paid** stops counting inflation: within a month it is the reference rate plus the risk premium, with no
    inflation, expectations, monetisation or exchange-rate term in its breakdown.
 3. **The stance band** on the entry is the neutral one, and the cycle panel shows no stance push.
-4. **Sterilize Capital Inflows is off**, its history marker is drawn, and its weekly bill is gone from the budget a week
+4. **Sterilization is off**, its history marker is drawn, and its weekly bill is gone from the budget a week
    later. The same for any other External & Currency tool that was on.
 5. **The suspended gold standard** counts as convertible again (the simplified End the Gold Standard event can fire in
    a downturn).

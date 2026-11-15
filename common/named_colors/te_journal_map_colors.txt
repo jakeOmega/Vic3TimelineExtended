@@ -5,6 +5,11 @@ colors = {
 	# Every map: a state the metric has no figure for (no census yet, no banking cycle).
 	te_jmap_no_data = hsv360 { 0 0 38 }
 
+	# je_te_map_room, every map: a state outside the Map Room's area (its Area option, 2026-11-14). A dark slate, so
+	# the area stands out of it: darker and bluer than the "no data" grey above (38) and Power Grids' offline grey
+	# (52), and nothing like the pale te_jmap_none, each of which can sit inside the area beside it.
+	te_jmap_outside = hsv360 { 218 16 23 }
+
 	# je_te_map_room: turmoil, calm to unrest.
 	te_jmap_turmoil_low = hsv360 { 150 18 62 }
 	te_jmap_turmoil_high = hsv360 { 356 82 72 }

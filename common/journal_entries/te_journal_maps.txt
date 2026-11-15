@@ -60,8 +60,15 @@ je_te_map_room = {
 	# header): the life table's from a state's first seed, a year's births, deaths and migrants only once it has stepped
 	# (te_dg_stepped above 0; a seed writes their rates as 0), as the Demographics panel gates them.
 	map_color = {
-		# 1. Turmoil.
+		# A state outside the Map Room's area (its options, 2026-11-14): slate, whatever the map. The mark is put on
+		# the state by te_jmap_mark_area (te_journal_map_effects.txt) at each option click, pick and month, so the
+		# paint asks for one variable and nothing about continents, markets or blocs; under the world no state has it.
 		if = {
+			limit = { has_variable = te_jmap_out }
+			value = "te_jmap_outside"
+		}
+		# 1. Turmoil.
+		else_if = {
 			limit = { te_jmap_selector = 1 }
 			lerp = {
 				min_color = "te_jmap_turmoil_low"
@@ -881,6 +888,8 @@ je_te_map_room = {
 			}
 			value = "te_jmap_gw_removal"
 		}
+		# The Map Room's own factor (te_jmap_gw_room_factor): its range follows the Map Room's options, while the
+		# entry's (te_jmap_gw_factor) stays the whole world's.
 		else_if = {
 			limit = {
 				te_jmap_selector = 18
@@ -888,7 +897,7 @@ je_te_map_room = {
 			lerp = {
 				min_color = "te_jmap_gw_low"
 				max_color = "te_jmap_gw_high"
-				factor = te_jmap_gw_factor
+				factor = te_jmap_gw_room_factor
 			}
 		}
 		# 19. The systems' maps: the world's nuclear powers, as the world sees them, and the viewer's deterrent
@@ -1178,7 +1187,8 @@ je_te_map_room = {
 			}
 			value = "te_jmap_none"
 		}
-		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too).
+		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too, on its own factor,
+		# te_jmap_gm_factor: the Map Room's, te_jmap_gm_room_factor, follows the Map Room's options, as Emissions').
 		else_if = {
 			limit = {
 				te_jmap_selector = 24
@@ -1187,7 +1197,7 @@ je_te_map_room = {
 			lerp = {
 				min_color = "te_jmap_gm_low"
 				max_color = "te_jmap_gm_high"
-				factor = te_jmap_gm_factor
+				factor = te_jmap_gm_room_factor
 			}
 		}
 		else_if = {
@@ -1431,11 +1441,14 @@ je_te_map_room = {
 	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). 31, Power Grids: white on each grid's
 	# hub. 34, Company Headquarters: gold where a company keeps a regional headquarters (owner, 2026-11-08), over the
 	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none
-	# (Trade Capacity striped its Trade Centers while it painted the owner's trade, until 2026-11-11).
+	# (Trade Capacity striped its Trade Centers while it painted the owner's trade, until 2026-11-11). A state outside
+	# the Map Room's area has none either (te_jmap_in_area, in every branch: a first branch of its own would have to
+	# name a color to stripe with).
 	map_color_second = {
 		if = {
 			limit = {
 				te_jmap_selector = 31
+				te_jmap_in_area = yes
 				te_jmap_grid_hub = yes
 			}
 			value = "te_jmap_grid_hub"
@@ -1443,6 +1456,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 34
+				te_jmap_in_area = yes
 				has_variable = te_jmap_rhq_n
 			}
 			value = "te_jmap_hq_regional"
@@ -1450,6 +1464,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1463,6 +1478,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1476,6 +1492,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1489,6 +1506,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1502,6 +1520,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1515,6 +1534,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1528,6 +1548,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -1544,7 +1565,12 @@ je_te_map_room = {
 	# is a branch of its own, not a SelectLocalization in the loc: a key named there loses THIS, and every hover logged
 	# "Promote 'THIS' returned nullptr" and printed nothing (2026-11-05).
 	map_tooltip = {
+		# A state outside the Map Room's area: its name and the area, no figure (the paint's first branch).
 		if = {
+			limit = { has_variable = te_jmap_out }
+			custom_tooltip_no_bullet = te_jmap_tt_outside
+		}
+		else_if = {
 			limit = { te_jmap_selector = 1 }
 			custom_tooltip_no_bullet = te_jmap_tt_turmoil
 		}
@@ -2323,10 +2349,11 @@ je_te_map_room = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_pick
 		}
 		# A line under the map's own: the stripes' (11's runner-up, where the map stripes it, and 34's regional
-		# headquarters) and 45's Trade Center, which has no stripes.
+		# headquarters) and 45's Trade Center, which has no stripes. None for a state outside the Map Room's area.
 		if = {
 			limit = {
 				te_jmap_selector = 34
+				te_jmap_in_area = yes
 				has_variable = te_jmap_rhq_n
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_hq_regional
@@ -2334,6 +2361,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 45
+				te_jmap_in_area = yes
 				has_building = building_trade_center
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_trade_center
@@ -2341,6 +2369,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2354,6 +2383,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2367,6 +2397,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2380,6 +2411,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2393,6 +2425,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2406,6 +2439,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
@@ -2419,6 +2453,7 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 11
+				te_jmap_in_area = yes
 				has_variable = te_dg_stepped
 				var:te_dg_stepped > 0
 				has_variable = te_dg_dc_total
