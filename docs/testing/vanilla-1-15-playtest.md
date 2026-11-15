@@ -171,23 +171,26 @@ game, in English.
     own enactments instead, move it to `leader_modifier`.
   - Universal Basic Income: +0.5 toward reform in Reform or Revolution's country contribution tooltip (the "bonus
     values" line), once the entry runs.
+  - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
+    hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
+    engaged.
 - **Reform or Revolution and movement activism (2026-11-15).** In any game where a country has a socialist or a
   labor movement, hover the movement's activism and open its predicted-activism breakdown:
   - No "from Unrestricted Automation (active law)" line for either movement, and for the socialists none from
     Unregulated Donations in a country with a voting law. Both stances are neutral now, so that no law a country
     holds from 1836 and cannot leave pushes these movements toward revolution.
   - Read the per-law lines for one law the movement disapproves and one it strongly disapproves, and note the two
-    figures. The branch's sizing assumes +7.5% and +15% (the mod's −0.1 × −1 or −2 × 0.75). Half that means the
-    engine counts a stance as ±0.5 and ±1, and the figures in `docs/systems/mod_systems/automation_policy.md` and
-    the PR halve.
+    figures. The branch's sizing assumes +3.75% and +7.5% (−0.05, vanilla's define, × −1 or −2 × 0.75). Half that
+    means the engine counts a stance as ±0.5 and ±1, and the figures in
+    `docs/systems/mod_systems/automation_policy.md` and the PR halve.
+  - The define went back from the mod's −0.1 to vanilla's −0.05 on the same day, which halves every movement's
+    per-law line in every country, not only these two. Note whether movement civil wars and revolutions in an
+    observer run come later or fewer than in the runs before it.
   - Note any line that is not a law, radical or loyalist supporters, or the vanilla factors (lack of suffrage,
     institution funding, neighbouring revolution): it is a mod source the save study missed.
   Once the entry runs, read its bar tooltip every few years and note the date and outcome: the three 1.15 games
   read in the 2026-11-15 save study all ended in revolution (about 1856, 1888 and 1890), and no game without the
   mod has been measured.
-  - External Trade IV and V: the interest-tier trade advantage lines (+5% to +20%, +10% to +40% from engaged to
-    hegemonic). Compare a member's trade advantage in a region where it is hegemonic with one where it is only
-    engaged.
 - **Stalemates (#1449).** In a long world war, `world_war_events.31` (The Same Line) should also arrive for a
   war leader whose war is in the engine's stalemate countdown (both leaders at minimum war support, the war
   panel's stalemate timer running), whatever its age and battle count; its co-belligerents should not get it
