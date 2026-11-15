@@ -509,6 +509,15 @@ te_mon_selfcheck_union_issuer = {
 			}
 		}
 	}
+	# THE MARK GOES WHEN THE LEADER STOPS QUALIFYING (review of PR #1810, finding
+	# E), and once another leader has logged the game's one line. A mark left
+	# standing made the pulse a leader qualified AGAIN its "second": the pulse
+	# whose own adds it cannot see, after the adopter that left had taken the
+	# modifiers off, and so a false BROKEN from a healthy union.
+	else_if = {
+		limit = { has_variable = te_mon_union_issuer_check }
+		remove_variable = te_mon_union_issuer_check
+	}
 }
 
 

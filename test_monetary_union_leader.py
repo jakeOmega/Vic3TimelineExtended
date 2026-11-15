@@ -142,6 +142,18 @@ class Script:
         self.stub_values = {}       # script values a scenario fixes instead of running
         self.stub_triggers = {}     # likewise triggers
         self.log = []               # debug_log lines, in order
+        # The engine's rule: a modifier added or removed in an effect is not seen by the rest of
+        # that effect. While a pulse runs, `opening` holds the names each country carried when
+        # it began, and te_mon_mod_has answers from it (None: reads are live).
+        self.opening = None
+
+    def pulse(self, body, country):
+        """Run one pulse's effects on `country`: has-modifier reads see the pulse's opening state."""
+        self.opening = {id(country): set(country.mods)}
+        try:
+            self.execute(body, country, country)
+        finally:
+            self.opening = None
 
     # ---------------------------------------------------------------- values
     def number(self, value, scope, root):
@@ -223,6 +235,8 @@ class Script:
         if (key == "root" and op == "?=" and val == "this") or (key == "this" and val == "root"):
             return scope is root
         if key == "te_mon_mod_has":
+            if self.opening is not None and id(scope) in self.opening:
+                return field(val, "NAME") in self.opening[id(scope)]
             return field(val, "NAME") in scope.mods
         if key in self.triggers:
             return self.check(self.triggers[key], scope, root) == yes
@@ -265,39 +279,44 @@ class Script:
                     matched = True
                 elif key == "if":
                     matched = False
-            elif key == "set_variable":
-                scope.vars[field(val, "name")] = self.number(field(val, "value"), scope, root)
-            elif key == "change_variable":
-                name = field(val, "name")
-                scope.vars[name] = self.value([x for x in val if x[0] != "name"], scope, root, scope.vars[name])
-            elif key == "root":
-                self.execute(val, root, root)
-            elif key == "save_scope_as":
-                self.saved[val] = scope
-            elif key == "remove_variable":
-                del scope.vars[val]
-            elif key == "set_global_variable":
-                self.globals[val] = True
-            elif key == "debug_log":
-                self.log.append(val)
-            elif key == "power_bloc":
-                for item, _, inner in val:
-                    assert item == "every_power_bloc_member", item
-                    for member in scope.bloc.members:
-                        if self.check(field(inner, "limit"), member, root):
-                            self.execute([x for x in inner if x[0] != "limit"], member, root)
-            elif key == "te_mon_mod_add":
-                scope.mods[field(val, "NAME")] = 1
-            elif key == "te_mon_mod_add_scaled":
-                assert scope is root, "a scaled add reads root.var: the owner must be ROOT"
-                scope.mods[field(val, "NAME")] = scope.vars[field(val, "VAR")]
-            elif key == "te_mon_mod_remove":
-                del scope.mods[field(val, "NAME")]      # removing a missing modifier logs an error
-            elif key in self.effects:
-                params = {k: v for k, _, v in val} if isinstance(val, list) else {}
-                self.execute(substitute(self.effects[key], params), scope, root)
             else:
-                raise AssertionError(f"unsupported effect: {key}")
+                self.statement(key, val, scope, root)
+
+    def statement(self, key, val, scope, root):
+        """One effect that is not a branch. A subclass teaches it more (test_banking_overdraft_shed.py)."""
+        if key == "set_variable":
+            scope.vars[field(val, "name")] = self.number(field(val, "value"), scope, root)
+        elif key == "change_variable":
+            name = field(val, "name")
+            scope.vars[name] = self.value([x for x in val if x[0] != "name"], scope, root, scope.vars[name])
+        elif key == "root":
+            self.execute(val, root, root)
+        elif key == "save_scope_as":
+            self.saved[val] = scope
+        elif key == "remove_variable":
+            del scope.vars[val]
+        elif key == "set_global_variable":
+            self.globals[val] = True
+        elif key == "debug_log":
+            self.log.append(val)
+        elif key == "power_bloc":
+            for item, _, inner in val:
+                assert item == "every_power_bloc_member", item
+                for member in scope.bloc.members:
+                    if self.check(field(inner, "limit"), member, root):
+                        self.execute([x for x in inner if x[0] != "limit"], member, root)
+        elif key == "te_mon_mod_add":
+            scope.mods[field(val, "NAME")] = 1
+        elif key == "te_mon_mod_add_scaled":
+            assert scope is root, "a scaled add reads root.var: the owner must be ROOT"
+            scope.mods[field(val, "NAME")] = scope.vars[field(val, "VAR")]
+        elif key == "te_mon_mod_remove":
+            del scope.mods[field(val, "NAME")]      # removing a missing modifier logs an error
+        elif key in self.effects:
+            params = {k: v for k, _, v in val} if isinstance(val, list) else {}
+            self.execute(substitute(self.effects[key], params), scope, root)
+        else:
+            raise AssertionError(f"unsupported effect: {key}")
 
 
 # The owner's 1957 save: Singapore leads a tier-5 union. GDP in pounds.
@@ -702,7 +721,7 @@ class StepNineBTest(unittest.TestCase):
 
     def pulse(self, country):
         self.seed(country)
-        self.s.execute(self.tail, country, country)
+        self.s.pulse(self.tail, country)
 
     def discover(self, leader):
         """The leader's discovery: only the sums this change added are run for real."""
@@ -737,9 +756,65 @@ class StepNineBTest(unittest.TestCase):
         self.assertEqual(leader.mods["te_mon_union_credit"], 5)
         self.assertAlmostEqual(leader.mods["te_mon_union_issuer_premium"], 0.4248, places=3)
         self.assertTrue(10.4e6 < leader.mods["te_mon_union_seigniorage"] < 10.6e6)
-        # The trackers the next pulse compares against.
+        # The trackers the next pulse compares against: each modifier's own.
         self.assertEqual(leader.vars["te_mon_union_issuer_bank_applied"], 3)
         self.assertEqual(leader.vars["te_mon_union_credit_applied"], 5)
+        self.assertEqual(leader.vars["te_mon_union_seigniorage_applied"], leader.mods["te_mon_union_seigniorage"])
+        self.assertEqual(leader.vars["te_mon_union_issuer_cut_applied"], leader.mods["te_mon_union_issuer_premium"])
+        self.assertEqual(leader.vars["te_mon_union_pressure_applied"], 0)
+
+    # What one unit of each scaled modifier is. The multiplier is the script value, so the unit
+    # is half of every figure: 10 for 1 here mints ten times the seigniorage, and a flipped
+    # sign turns the cut into a surcharge, with every value and tracker reading as before.
+    UNITS = {"te_mon_union_seigniorage": ("country_minting_add", "1"),
+             "te_mon_union_issuer_premium": ("country_risk_premium_add", "-0.01"),
+             "te_mon_union_issuer_bank": ("country_banking_intervention_max_add", "1"),
+             "te_mon_union_credit": ("state_capitalists_investment_pool_contribution_add", "0.01"),
+             "te_mon_union_pressure": ("country_influence_cost_add", "50")}
+
+    def test_one_unit_of_each_scaled_modifier(self):
+        static = definitions(MODIFIERS)
+        for name, (key, unit) in self.UNITS.items():
+            with self.subTest(modifier=name):
+                effects = [(k, v) for k, _, v in static[name] if k != "icon"]
+                self.assertEqual(effects, [(key, unit)])
+
+    # The modifier each call steps, what it reads and where it remembers what it applied.
+    TRACKERS = {"te_mon_union_seigniorage": ("var:te_mon_union_seigniorage_pts", "te_mon_union_seigniorage_applied"),
+                "te_mon_union_issuer_premium": ("var:te_mon_union_issuer_cut_pts", "te_mon_union_issuer_cut_applied"),
+                "te_mon_union_issuer_bank": ("var:te_mon_union_issuer_bank_pts", "te_mon_union_issuer_bank_applied"),
+                "te_mon_union_credit": ("var:te_mon_union_credit_pts", "te_mon_union_credit_applied"),
+                "te_mon_union_pressure": ("var:te_mon_work", "te_mon_union_pressure_applied")}
+
+    def test_each_scaled_modifier_has_its_own_tracker(self):
+        calls = {}
+
+        def collect(body):
+            for key, _, val in body:
+                if key == "te_monetary_apply_fx_one":
+                    args = dict((k, v) for k, _, v in val)
+                    self.assertNotIn(args["NAME"], calls, "a modifier is stepped twice in one pulse")
+                    calls[args["NAME"]] = (args["VALUE"], args["APPLIED"])
+                elif isinstance(val, list):
+                    collect(val)
+        collect(self.s.effects["te_monetary_update_union"])
+        self.assertEqual(calls, self.TRACKERS)
+        self.assertEqual(set(calls), set(self.UNITS))
+
+    def test_no_two_scaled_modifiers_anywhere_share_a_tracker(self):
+        # A shared tracker makes each call see the other's figure as its own last write: both
+        # modifiers are rewritten every pulse, and the one that comes off zeroes the other's.
+        seen = {}
+        for path in sorted((ROOT / "common/scripted_effects").glob("*.txt")):
+            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+            for call in re.findall(r"te_monetary_apply_fx_one = \{([^{}]*)\}", text):
+                args = dict(re.findall(r"(\w+) = (\S+)", call))
+                if "$" in args["NAME"] or "$" in args["APPLIED"]:
+                    continue
+                self.assertEqual(seen.setdefault(args["APPLIED"], args["NAME"]), args["NAME"],
+                                 f"{args['APPLIED']} is the tracker of two modifiers")
+        self.assertGreater(len(seen), 8)
+        self.assertEqual(len(set(seen.values())), len(seen), "a modifier with two trackers")
 
     def test_what_each_tier_puts_on_the_issuer(self):
         expected = {2: {"te_mon_union_adopter"}, 3: {"te_mon_union_adopter"},
@@ -871,7 +946,7 @@ class SelfCheckTest(unittest.TestCase):
         for name in ("te_mon_work", "te_mon_work2"):
             leader.vars.setdefault(name, 0)
         leader.vars["te_mon_work_gdp"] = leader.gdp      # the discovery caches it
-        self.s.execute(self.tail, leader, leader)
+        self.s.pulse(self.tail, leader)
 
     def test_ok_on_the_second_pulse_and_once_a_game(self):
         leader = union(5, adopters=(2e9,))
@@ -885,6 +960,54 @@ class SelfCheckTest(unittest.TestCase):
         for _ in range(3):
             self.pulse(leader)
         self.assertEqual(len(self.s.log), 1)
+
+    def leave(self, leader):
+        """The one adopter goes back to its own money; the discovery re-derives the sums."""
+        leader.bloc.members[1].vars["te_mon_anchor_kind"] = 0
+        leader.vars.update(te_mon_union_adopters=0, te_mon_union_adopter_gdp_m=0)
+
+    def rejoin(self, leader, gdp):
+        leader.bloc.members[1].vars["te_mon_anchor_kind"] = 2
+        leader.vars.update(te_mon_union_adopters=1, te_mon_union_adopter_gdp_m=gdp / 1e6)
+
+    def test_a_leader_that_stops_qualifying_starts_again_from_its_first_pulse(self):
+        # Review of PR #1810, finding E. Marked on its first pulse, then the adopter leaves and
+        # everything comes off. When a member adopts again, that pulse puts the modifiers back,
+        # and they are not visible to it: read as the second pulse it logged a false BROKEN.
+        leader = union(5, adopters=(2e9,))
+        self.pulse(leader)
+        self.assertIn("te_mon_union_issuer_check", leader.vars)
+        self.leave(leader)
+        self.pulse(leader)
+        self.assertEqual(leader.mods, {})
+        self.assertNotIn("te_mon_union_issuer_check", leader.vars, "the mark goes when the leader stops qualifying")
+        self.assertEqual(self.s.log, [])
+        self.rejoin(leader, 2e9)
+        self.pulse(leader)
+        self.assertEqual(self.s.log, [], "a first pulse again: its own adds are not visible to it")
+        self.assertIn("te_mon_union_issuer_check", leader.vars)
+        self.pulse(leader)
+        self.assertEqual(len(self.s.log), 1)
+        self.assertTrue(self.s.log[0].startswith("TE_SELF_CHECK OK mon_union_issuer "), self.s.log[0])
+
+    def test_a_mark_left_behind_is_cleared_once_another_leader_has_logged(self):
+        # The line is once a game: a second leader marked in the same month must not keep its mark.
+        leader = union(5, adopters=(2e9,))
+        self.pulse(leader)
+        self.s.globals["te_mon_union_issuer_selfcheck_logged"] = True
+        self.pulse(leader)
+        self.assertNotIn("te_mon_union_issuer_check", leader.vars)
+        self.assertEqual(self.s.log, [])
+
+    def test_ok_at_the_edge_of_the_gate(self):
+        # The smallest union the check reads: tier II, one adopter at exactly 1% of the leader's
+        # GDP. Reach 0.0625, a cut of 0.031 points: under the 0.05 step, and still written, because
+        # a modifier that is missing is always put on.
+        leader = union(2, leader_gdp=1e10, adopters=(1e8,))
+        self.pulse(leader)
+        self.assertAlmostEqual(leader.mods["te_mon_union_issuer_premium"], 0.03125)
+        self.pulse(leader)
+        self.assertTrue(self.s.log and self.s.log[0].startswith("TE_SELF_CHECK OK mon_union_issuer "), self.s.log)
 
     def test_broken_when_the_discovery_summed_nothing(self):
         leader = union(5, adopters=(2e9,))
