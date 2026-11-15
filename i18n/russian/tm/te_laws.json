@@ -1647,12 +1647,24 @@
   "en": "Right to Information",
   "ru": "Право на информацию"
  },
+ "lawgroup_right_to_information_desc": {
+  "en": "The extent to which citizens have the right to access information held by the government and other public bodies.",
+  "ru": "Степень, в которой граждане вправе получать информацию, находящуюся в распоряжении правительства и других государственных органов."
+ },
  "lawgroup_rules_of_war": {
   "en": "Rules of War",
   "ru": "Правила войны"
  },
+ "lawgroup_rules_of_war_desc": {
+  "en": "The extent to which the conduct of war is regulated and governed by international laws and treaties.",
+  "ru": "Степень, в которой ведение войны регулируется международными законами и договорами."
+ },
  "lawgroup_state_power": {
   "en": "State Power",
   "ru": "Государственная власть"
+ },
+ "lawgroup_state_power_desc": {
+  "en": "Defines the distribution of power between the central government and regional administrations.",
+  "ru": "Определяет распределение власти между центральным правительством и региональными администрациями."
  }
 }
