@@ -233,7 +233,8 @@ te_grid_ai_market_area_has_power = {
 # farther, and the cable pass's walk (te_grid_sea_reach_effect) is too dear to
 # run for every state without a station. With ANY = no only a partner's state
 # with a station counts, built or queued; with ANY = yes any of its states
-# does. Reads the owner's own partner list, which te_grid_ai_build_effect
+# does, while the partner has Electrical Capacitors (te_grid_ai_partner_end).
+# Reads the owner's own partner list, which te_grid_ai_build_effect
 # refreshes for an AI country whether or not it has a station.
 te_grid_ai_partner_near = {
 	owner = { has_variable_list = te_grid_partners }
@@ -253,11 +254,19 @@ te_grid_ai_partner_near = {
 }
 
 # State scope, a state beside scope:te_grid_ai_site (te_grid_ai_partner_near):
-# another country's, whose owner the site's owner has an agreement with.
+# another country's, whose owner is a grid partner of the site's owner. With
+# ANY = yes a state with no station counts only if its owner has Electrical
+# Capacitors and so can build one there: a bloc partner needn't (an agreement
+# partner always has it, since the article needs it on both sides), and one
+# without it would never answer the AI's station (the 2026-11-14 review). The
+# technology is read first, so a state is walked for a station only if need be.
 te_grid_ai_partner_end = {
 	NOT = { owner = scope:te_grid_ai_site.owner }
 	OR = {
-		always = $ANY$
+		AND = {
+			always = $ANY$
+			owner = { has_technology_researched = electrical_capacitors }
+		}
 		te_grid_state_has_station = yes
 	}
 	save_temporary_scope_as = te_grid_ai_near

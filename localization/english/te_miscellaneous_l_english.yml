@@ -10,7 +10,7 @@
  AI_FREE_TRADE_POLICY:0 "from free trade policy"
  AI_FRIENDLY_WONT_DISARM:0 "from friendly relations preventing demands"
  AI_GOOD_RELATIONS_WITH_GP:0 "from good relations with a [concept_great_power]"
- AI_GRID_LINKED_BY_BLOC:0 "from our [concept_power_grid]s being joined through the [concept_power_bloc] already"
+ AI_GRID_LINKED_BY_BLOC:0 "from our [concept_power_bloc] already interconnecting our [concept_power_grid]s wherever they meet"
  AI_GRID_STATIONS_MEET:0 "from $building_grid_transfer_station$s on both sides of the border or the sea"
  AI_HAS_ENVIRONMENT_MINISTRY:0 "from having an environment ministry"
  AI_HAS_MILITARY_INDUSTRY:0 "from having military industry (will be destroyed)"

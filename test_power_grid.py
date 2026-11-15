@@ -871,7 +871,37 @@ class AITest(unittest.TestCase):
         self.assertIn("NOT = { owner = scope:te_grid_ai_site.owner }", end)
         self.assertRegex(end, r"scope:te_grid_ai_site = \{\s+te_grid_owners_interconnected = "
                               r"\{ FROM = scope:te_grid_ai_near \}")
-        self.assertRegex(end, r"OR = \{\s+always = \$ANY\$\s+te_grid_state_has_station = yes\s+\}")
+        # A partner's state counts if it has a station; with ANY = yes one with none counts too, but
+        # only while its owner has Electrical Capacitors and so could build one (a bloc partner
+        # needn't have it; the agreement needs it on both sides): the 2026-11-14 review.
+        from je_multiplier_scope_audit import parse_text
+
+        def counts(any_, tech, station):
+            node = next(n for n in parse_text(end.replace("$ANY$", any_), "t")[0] if n.key == "OR")
+
+            def holds(n):
+                if n.key == "OR":
+                    return any(holds(c) for c in n.children)
+                if n.key == "AND":
+                    return all(holds(c) for c in n.children)
+                if n.key == "always":
+                    return n.value == "yes"
+                if n.key == "owner":
+                    self.assertEqual([(c.key, c.value) for c in n.children],
+                                     [("has_technology_researched", "electrical_capacitors")])
+                    return tech
+                if n.key == "te_grid_state_has_station":
+                    return station == (n.value == "yes")
+                raise KeyError(n.key)
+            return holds(node)
+
+        for any_ in ("yes", "no"):
+            for tech in (False, True):
+                for station in (False, True):
+                    with self.subTest(ANY=any_, tech=tech, station=station):
+                        self.assertEqual(counts(any_, tech, station), station or (any_ == "yes" and tech))
+        # The technology before the building walk, so a state is walked only when it must be.
+        self.assertLess(end.index("electrical_capacitors"), end.index("te_grid_state_has_station"))
 
     def test_ai_partner_across_the_sea_counts_once_it_can_lay_a_cable(self):
         near = _code(_top_level(_read(TRIGGERS), "te_grid_ai_partner_near"))
@@ -1521,11 +1551,13 @@ class _GridWorld:
     """Countries, power blocs (members and principles), treaties (two parties
     and their articles) and wars, and the country variable lists script writes."""
 
-    def __init__(self, countries, blocs=(), treaties=(), wars=()):
+    def __init__(self, countries, blocs=(), treaties=(), wars=(), meets=()):
         self.countries = list(countries)
         self.blocs = {name: (set(members), set(principles)) for name, members, principles in blocs}
         self.treaties = [(a, b, set(articles)) for a, b, articles in treaties]
         self.wars = {frozenset(pair) for pair in wars}
+        # pairs whose stations meet across a border or a sea (the article's any_scope_state)
+        self.meets = {frozenset(pair) for pair in meets}
         self.lists = {}
 
     def bloc_of(self, country):
@@ -1572,7 +1604,7 @@ class _GridScript:
             return self.holds(n.children, this, root)
         if k == "OR":
             return any(self.one(c, this, root) for c in n.children)
-        if k == "NOT":
+        if k in ("NOT", "NAND"):
             return not self.holds(n.children, this, root)
         if k == "is_in_power_bloc":
             return (self.w.bloc_of(this[1]) is not None) == (v == "yes")
@@ -1604,9 +1636,19 @@ class _GridScript:
             self.saved[v] = this
             return True
         if k == "root":
+            if not n.children:
+                return root == self.ref(v, this, root)
             return self.holds(n.children, root, root)
-        if k in self.triggers and v == "yes":
-            return self.holds(self.triggers[k].children, this, root)
+        if k == "is_in_same_power_bloc":
+            bloc = self.w.bloc_of(this[1])
+            return bloc is not None and bloc == self.w.bloc_of(self.ref(v, this, root)[1])
+        if k == "has_attitude":
+            return False  # no attitudes in a test world
+        if k == "any_scope_state":
+            # Only the article reads it, for stations meeting the partner's (te_grid_ai_* aren't run here).
+            return frozenset((this[1], self.saved["te_treaty_partner"][1])) in self.w.meets
+        if k in self.triggers and v in ("yes", "no"):
+            return self.holds(self.triggers[k].children, this, root) == (v == "yes")
         raise KeyError(f"the test interpreter does not know the trigger {k}")
 
     def limit(self, n, this, root):
@@ -1659,6 +1701,15 @@ class _GridScript:
         node = self.effects["te_grid_refresh_partners_effect"]
         self.run(node.children, ("country", country), ("country", country))
 
+    def accept_score(self, ai, other):
+        """The article's inherent_accept_score as the AI country `ai` weighs it with `other`
+        (first_country the AI, second_country the other), with no attitudes."""
+        from je_multiplier_scope_audit import parse_text
+        article = next(n for n in parse_text(_read(ARTICLE), "article")[0] if n.key == GIA)
+        score = self.child(self.child(article, "ai"), "inherent_accept_score")
+        self.saved = {"first_country": ("country", ai), "second_country": ("country", other)}
+        return self.val(score.children, ("country", ai), ("country", ai), 0)
+
     def value(self, name, country):
         """A tab value as the GUI reads it: ROOT and THIS the shown country."""
         self.saved = {}
@@ -1670,17 +1721,26 @@ class _GridScript:
         return float(token)
 
     def val(self, nodes, this, root, total):
+        last_if = None
         for n in nodes:
             k, v = n.key, n.value
             if k == "limit":
                 continue
+            if k in ("if", "else"):
+                if k == "if" or not last_if:
+                    last_if = k == "else" or self.limit(n, this, root)
+                    if last_if:
+                        total = self.val(n.children, this, root, total)
+                continue
+            last_if = None
             if k == "value":
                 total = self.number(v, this, root)
+            elif k == "add" and n.children:
+                total += self.number(self.child(n, "value").value, this, root)
             elif k == "add":
                 total += self.number(v, this, root)
-            elif k == "if":
-                if self.limit(n, this, root):
-                    total = self.val(n.children, this, root, total)
+            elif k.startswith("scope:"):
+                self.holds(n.children, self.saved[k[len("scope:"):]], root)
             elif k == "power_bloc":
                 bloc = self.w.bloc_of(this[1])
                 if bloc is not None:
@@ -1821,11 +1881,13 @@ class BlocPartnerTest(unittest.TestCase):
                 self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA"), treaties)
                 self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "FRA"), bloc)
                 # The two add up to the partners the links read.
-                self.assertEqual(script.value("te_grid_tab_any_partners_disp", "FRA"), len(world.partners("FRA")))
+                self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA")
+                                 + script.value("te_grid_tab_bloc_partners_disp", "FRA"), len(world.partners("FRA")))
         world = self.bloc_world(("principle_internal_trade_4",), wars=(("FRA", "GER"),))
         script = self.refreshed(world)
         self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "FRA"), 1)
-        self.assertEqual(script.value("te_grid_tab_any_partners_disp", "FRA"), len(world.partners("FRA")))
+        self.assertEqual(script.value("te_grid_tab_partners_disp", "FRA")
+                         + script.value("te_grid_tab_bloc_partners_disp", "FRA"), len(world.partners("FRA")))
         # Outside a bloc the count is 0, and the tab never reads the bloc's name there.
         self.assertEqual(script.value("te_grid_tab_bloc_partners_disp", "SPA"), 0)
 
@@ -1881,6 +1943,34 @@ class BlocPartnerTest(unittest.TestCase):
         self.assertNotIn("power_bloc", _sub(article, "possible"))
         self.assertNotIn("te_grid_bloc_links_grids", _sub(article, "possible"))
 
+    def test_the_ais_score_for_an_agreement(self):
+        """Between two members of a bloc that joins grids the AI weighs the agreement as between
+        two countries whose grids don't meet, whether their stations meet or not; elsewhere as
+        before this change (the review of 2026-11-14: a flat -40 left members whose stations
+        don't meet at -40, against 0 before)."""
+        def score(principles, same_bloc, meet):
+            members = ("FRA", "GER") if same_bloc else ("FRA", "ITA")
+            world = _GridWorld(("FRA", "GER", "ITA"), blocs=[("bloc", members, principles)],
+                               meets=[("FRA", "GER")] if meet else ())
+            return _GridScript(world).accept_score("FRA", "GER")
+
+        strangers_apart = score((), False, False)
+        self.assertEqual(strangers_apart, -10)
+        self.assertEqual(score((), False, True), 20)        # strangers whose stations meet: +30
+        self.assertEqual(score((), True, False), 0)         # same bloc, no principle: +10
+        self.assertEqual(score((), True, True), 30)
+        for principle in GRID_PRINCIPLES:
+            for meet in (False, True):
+                with self.subTest(principle=principle, meet=meet):
+                    self.assertEqual(score((principle,), True, meet), strangers_apart)
+        # A bloc that holds one of them but the partner outside it: as strangers.
+        self.assertEqual(score((GRID_PRINCIPLES[0],), False, True), 20)
+        loc = _read(os.path.join(LOC_DIR, "te_miscellaneous_l_english.yml"))
+        line = re.search(r'(?m)^ AI_GRID_LINKED_BY_BLOC:0 "(.*)"$', loc).group(1)
+        # True whether the stations meet yet or not.
+        self.assertNotIn("joined", line)
+        self.assertIn("wherever they meet", line)
+
     def test_the_self_check(self):
         check = _code(_top_level(_read(EFFECTS), "te_grid_bloc_link_selfcheck_effect"))
         outer = _sub(check, "limit")
@@ -1890,8 +1980,21 @@ class BlocPartnerTest(unittest.TestCase):
         self.assertIn("modifier:power_bloc_grid_interconnection_bool = yes", _sub(outer, "OR"))
         # A bloc of one, or of members all at war with it, is no test.
         self.assertIn("NOT = { this = scope:te_grid_partners_of }", _sub(outer, "any_power_bloc_member"))
-        # Judged a month after it is first seen, not the day a principle lands.
-        self.assertIn("var:te_grid_chk_bloc_seen < te_history_month_index", check)
+        # Judged a month after it is first seen, not the day a principle lands, and only while
+        # has_principle reads as it did then, so a principle dropped the day of a refresh (its
+        # marker lagging: principle=0 beside marker=1) is seen afresh, not judged BROKEN.
+        at = check.index("has_variable = te_grid_chk_bloc_seen")
+        judge = _block_from(check, check.rindex("limit = {", 0, at) + len("limit = "))
+        self.assertIn("var:te_grid_chk_bloc_seen < te_history_month_index", judge)
+        same = re.sub(r"\s+", " ", _sub(judge, "OR"))
+        self.assertIn("AND = { var:te_grid_chk_bloc_seen_principle = 1 te_grid_bloc_links_grids = yes }", same)
+        self.assertIn("AND = { var:te_grid_chk_bloc_seen_principle = 0 te_grid_bloc_links_grids = no }", same)
+        # Anything else (first sight, or a changed read) records the read and waits again.
+        again = re.sub(r"\s+", " ", _block_from(check, check.rindex("else = {") + len("else = ")))
+        self.assertIn("set_variable = { name = te_grid_chk_bloc_seen value = te_history_month_index }", again)
+        self.assertIn("set_variable = { name = te_grid_chk_bloc_seen_principle value = 0 }", again)
+        self.assertIn("limit = { te_grid_bloc_links_grids = yes } set_variable = { name = te_grid_chk_bloc_seen_principle "
+                      "value = 1 }", again)
         self.assertIn("set_global_variable = te_grid_bloc_link_checked", check)
         for name in ("principle", "marker", "members", "listed"):
             self.assertIn(f"te_grid_chk_bloc_{name}_g = {{ value = global_var:te_grid_chk_bloc_{name} }}", _read(VALUES))

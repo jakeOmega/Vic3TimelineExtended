@@ -908,7 +908,8 @@ te_grid_tab_loss_disp = {
 # Electrical Capacitors); its bloc partners, the other members of its power
 # bloc while the bloc's principle joins their grids (te_grid_bloc_links_grids),
 # counted live too, and only those it has no agreement with, so the two add up
-# to its partners (te_grid_tab_any_partners_disp); and the countries whose
+# to its partners (held so by test_power_grid.py's BlocPartnerTest); and the
+# countries whose
 # undersea cables reach its own, or are reached by them, that aren't partners
 # yet (te_grid_cable_reach; each of those has a station, so its partner list is
 # fresh, and the lists are mutual, so the other side's is read, bloc partners
@@ -948,11 +949,6 @@ te_grid_tab_bloc_partners_disp = {
 			}
 		}
 	}
-}
-
-te_grid_tab_any_partners_disp = {
-	value = te_grid_tab_partners_disp
-	add = te_grid_tab_bloc_partners_disp
 }
 
 te_grid_tab_reach_disp = {

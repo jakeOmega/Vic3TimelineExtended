@@ -9,9 +9,13 @@
 #     built beside the station, whose Undersea Cable Range,
 #     building_grid_undersea_cable_range_add, is 1 or more) and either end's
 #     range reaches the other, counted in Sea Nodes: within one country, or
-#     between two with a Grid Interconnection Agreement;
+#     between two grid partners;
 #   - a neighbouring group of another country across a land border, when the
-#     two have a Grid Interconnection Agreement.
+#     two are grid partners.
+# Two countries are grid partners when they have a Grid Interconnection
+# Agreement, or, since 2026-11-14, are members of a power bloc that holds
+# Market Unification IV or V or Internal Trade IV or V and aren't at war
+# (te_grid_bloc_links_grids; te_grid_refresh_partners_effect lists both).
 # Once a month each grid moves Electricity until it sells at one price in the
 # states that send it and at that price over their transmission efficiency in
 # the states that receive it (te_grid_surplus_value, power_grid_values.txt):
@@ -88,6 +92,10 @@
 #                    linked to a member in another market)
 #   te_grid_sea_hops  during a walk across the sea, the Sea Nodes between
 #                    the state and the walk's start (te_grid_sea_reach_effect)
+#   te_grid_state_mix_<source>  the state's own Electricity by source at this
+#                    month's balancing (te_grid_mix_store_state_effect), for its
+#                    grid's record and its owner's National Generation; removed
+#                    when it leaves every grid (te_grid_mix_clear_state_effect)
 # Global lists during a run: te_grid_pending_states (online stations not yet
 # in a grid), te_grid_region (the grid being built and balanced) and
 # te_grid_frontier (members whose links are still to be followed), and
@@ -97,8 +105,10 @@
 # against its demand, whether it has demand, its sending price and the
 # sell/buy ratio senders end at, and te_grid_cable_range_max the
 # longest Undersea Cable Range of any station this run. Country variable
-# lists, refreshed each run: te_grid_partners, the countries each station
-# owner has a Grid Interconnection Agreement with; te_grid_cable_reach, the
+# lists, refreshed each run: te_grid_partners, each station owner's grid
+# partners (its agreement partners and its bloc partners, rebuilt from empty
+# at each refresh, so a partner that is one no longer drops out at the next
+# run); te_grid_cable_reach, the
 # countries whose undersea cables reach its own or are reached by them, which
 # lets the agreement be signed between them (123_grid_interconnection.txt).
 #
@@ -111,7 +121,9 @@
 # send a week) and te_grid_rec_delivered (what its receiving stations are
 # ordered to deliver, after losses), te_grid_rec_countries and
 # te_grid_rec_markets (how many own a station on it, and how many markets it
-# crosses), and the variable list te_grid_rec_capitals (the capitals of the
+# crosses), te_grid_rec_mix_<source> and te_grid_rec_mix_total (its
+# generation by source, the sum of its members' te_grid_state_mix_<source>),
+# and the variable list te_grid_rec_capitals (the capitals of the
 # countries on it, for their flags: a country read straight off a GUI list is
 # unproven, gui_modding_guide.md gotcha #15; a country with no capital is
 # counted but has no flag). Its size and its supply against its demand are
@@ -124,6 +136,11 @@
 # any state still holds a station's figures (power_grid_on_actions.txt): a
 # country that loses its last station, or a hub that stops being one, keeps
 # nothing from the run before.
+#
+# Country variables te_grid_chk_bloc_seen and te_grid_chk_bloc_seen_principle:
+# the month index at which the grid_bloc_link self-check saw the country in a
+# bloc that joins grids, and whether has_principle read it then
+# (te_grid_bloc_link_selfcheck_effect), judged in a later month.
 #
 # The flow modifiers are applied on the building with local-variable
 # multipliers: a `multiplier = var:` or script value there would resolve
@@ -1965,8 +1982,14 @@ te_grid_dispatch_info_effect = {
 # (power_bloc_grid_interconnection_bool, script-only: whether such a bool reads
 # from country scope is the Monetary Union's unverified check 16). Judged at a
 # call in a later month than the one that first saw it (te_grid_chk_bloc_seen,
-# a month index), so a principle taken or dropped that day, whose modifier may
-# lag, can't read BROKEN. The line prints both reads (principle=, marker=), the
+# a month index) and only while has_principle reads as it did then
+# (te_grid_chk_bloc_seen_principle, 0 or 1); a read that changed starts the
+# wait again. So a principle taken that day, whose marker may lag behind it,
+# can't read BROKEN, and nor can one dropped that day: principle=0 beside a
+# marker=1 that hasn't caught up yet is seen afresh, and by the next month's
+# call the marker reads 0 and nothing is judged. A has_principle that misses
+# the tiers reads principle=0 marker=1 month after month, and is judged.
+# The line prints both reads (principle=, marker=), the
 # other members it isn't at war with (members=) and how many of them its
 # partner list holds (listed=).
 #   OK      principle=1 and listed= equals members=: has_principle reads the
@@ -1998,6 +2021,16 @@ te_grid_bloc_link_selfcheck_effect = {
 			limit = {
 				has_variable = te_grid_chk_bloc_seen
 				var:te_grid_chk_bloc_seen < te_history_month_index
+				OR = {
+					AND = {
+						var:te_grid_chk_bloc_seen_principle = 1
+						te_grid_bloc_links_grids = yes
+					}
+					AND = {
+						var:te_grid_chk_bloc_seen_principle = 0
+						te_grid_bloc_links_grids = no
+					}
+				}
 			}
 			set_global_variable = te_grid_bloc_link_checked
 			set_global_variable = { name = te_grid_chk_bloc_principle value = 0 }
@@ -2044,9 +2077,15 @@ te_grid_bloc_link_selfcheck_effect = {
 				debug_log = "TE_SELF_CHECK BROKEN grid_bloc_link (principle=[SCOPE.ScriptValue('te_grid_chk_bloc_principle_g')|0] marker=[SCOPE.ScriptValue('te_grid_chk_bloc_marker_g')|0] members=[SCOPE.ScriptValue('te_grid_chk_bloc_members_g')|0] listed=[SCOPE.ScriptValue('te_grid_chk_bloc_listed_g')|0], against principle=1 and listed=members: no power bloc joins its members' grids; see docs/testing/power-grid-playtest.md)"
 			}
 		}
-		else_if = {
-			limit = { NOT = { has_variable = te_grid_chk_bloc_seen } }
+		# First seen, or has_principle reads otherwise than when it was: look
+		# again in a later month.
+		else = {
 			set_variable = { name = te_grid_chk_bloc_seen value = te_history_month_index }
+			set_variable = { name = te_grid_chk_bloc_seen_principle value = 0 }
+			if = {
+				limit = { te_grid_bloc_links_grids = yes }
+				set_variable = { name = te_grid_chk_bloc_seen_principle value = 1 }
+			}
 		}
 	}
 }

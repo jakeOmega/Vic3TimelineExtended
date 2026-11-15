@@ -19,8 +19,11 @@
 # Two members of a power bloc that holds Market Unification IV or V or
 # Internal Trade IV or V are partners without it (te_grid_bloc_links_grids,
 # 2026-11-14). The article stays open to them, since it outlasts the bloc's
-# principle and their membership, but the AI accepts it about as readily as
-# one whose grids don't meet (AI_GRID_LINKED_BY_BLOC).
+# principle and their membership, but the AI accepts it as readily as one
+# between two countries whose grids don't meet, whether or not the members'
+# stations meet: the stations' +30 isn't given (the bloc already joins them),
+# and AI_GRID_LINKED_BY_BLOC's -10 takes back the bloc's +10, so both come to
+# the base -10 (test_power_grid.py, BlocPartnerTest).
 # =================================================================
 grid_interconnection_agreement = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/grid_interconnection_agreement.dds"
@@ -148,9 +151,14 @@ grid_interconnection_agreement = {
 			}
 			# The agreement joins grids where both have a station across the
 			# border, or across a sea for interconnectors, or cables that reach
-			# each other farther out (te_grid_cable_reach).
+			# each other farther out (te_grid_cable_reach). Not between two members
+			# of a bloc that joins its members' grids, where it joins nothing more.
 			if = {
 				limit = {
+					NAND = {
+						is_in_same_power_bloc = scope:te_treaty_partner
+						te_grid_bloc_links_grids = yes
+					}
 					OR = {
 						any_scope_state = {
 							has_building = building_grid_transfer_station
@@ -203,11 +211,11 @@ grid_interconnection_agreement = {
 					value = 10
 				}
 			}
-			# Already joined through the bloc (te_grid_bloc_links_grids): the
+			# The bloc already interconnects them (te_grid_bloc_links_grids): the
 			# agreement adds nothing while the bloc holds the principle, only a
-			# link that outlasts it. Takes back the stations' and the bloc's
-			# terms, so it is signed about as readily as between two countries
-			# whose grids don't meet.
+			# link that outlasts it. Takes back the bloc's +10; the stations' +30
+			# isn't given (above). So it is signed as readily as between two
+			# countries whose grids don't meet, whether their stations meet or not.
 			if = {
 				limit = {
 					is_in_same_power_bloc = scope:te_treaty_partner
@@ -215,7 +223,7 @@ grid_interconnection_agreement = {
 				}
 				add = {
 					desc = "AI_GRID_LINKED_BY_BLOC"
-					value = -40
+					value = -10
 				}
 			}
 		}
