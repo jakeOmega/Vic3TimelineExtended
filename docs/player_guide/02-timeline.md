@@ -332,8 +332,10 @@ level. Its staff is the same at any size: a large base needs no more workers
 than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-and Space Colonization the larger Mining Colony, or the Resort Colony production
-method, which produces art and tourism instead. Von Neumann Machines (era 13)
+which mines mostly Structural and Tech-Critical Metals, with some gold and
+Conductive Metals and a little Base Metals and Chemical and Industrial Minerals.
+Space Colonization brings the larger Mining Colony, with the same mix, or the
+Resort Colony production method, which produces art and tourism instead. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:
 against a Mining Colony, a level uses a third less Launch Capacity and mines a
 quarter more of each good. With

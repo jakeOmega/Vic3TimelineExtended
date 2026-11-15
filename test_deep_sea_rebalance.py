@@ -531,6 +531,33 @@ class SelfReplicatingMiners(unittest.TestCase):
                         self.assertGreater(self.d.profit(self.PM, chosen), self.d.profit(pm, chosen))
 
 
+class ExtraplanetaryBaseMix(unittest.TestCase):
+    """The three mining methods share one mix, and Conductive Metals are a real part of
+    it: 95 / 380 / 475 a level (the figures: owner, 2026-11-15). At 15 a level, 1.6% of
+    its sales, a country fed by its bases covered its Tech-Critical demand one and a half
+    times over and a ninth of its Conductive, in a late game with Conductive Metals at
+    the price cap. The tenth-of-sales floor and the four-times rule are this test's own,
+    read off those figures, so a later edit can't thin the share back out unnoticed."""
+
+    ASTEROID, COLONY = "pm_space_mine", "pm_space_colony_mining"
+    MIN_CONDUCTIVE_SHARE = 0.10
+
+    def setUp(self):
+        self.d = _DATA
+
+    def test_the_mining_colony_is_four_asteroid_mines(self):
+        asteroid = self.d.goods(self.ASTEROID, "output")
+        self.assertEqual(self.d.goods(self.COLONY, "output"),
+                         {good: 4 * qty for good, qty in asteroid.items()})
+
+    def test_conductive_metals_are_a_tenth_of_each_mining_method_s_sales(self):
+        for pm in (self.ASTEROID, self.COLONY, SelfReplicatingMiners.PM):
+            with self.subTest(pm=pm):
+                conductive = self.d.goods(pm, "output")["copper"] * self.d.prices["copper"]
+                self.assertGreaterEqual(conductive / self.d.value(pm, "output"),
+                                        self.MIN_CONDUCTIVE_SHARE)
+
+
 class DeepSeaMineSupportVessels(unittest.TestCase):
     """The Deep-Sea Mine's ships: Motor Ship Tenders, then Magnetic Drive Tenders once the
     technology that makes those ships arrives, for every extraction method."""
