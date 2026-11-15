@@ -6,8 +6,12 @@
 # value: scripting_best_practices.md). This check reads the effect instead: the share of AI countries in the middle
 # of a law enactment.
 #
-# ai_law_cadence, once, at the first global monthly pulse on or after 1850.1.1, over AI countries that are not
-# decentralized nations (those never change a law: 121 of the 123 AI countries in an 1864 save that had changed none):
+# ai_law_cadence, once, at the first global monthly pulse on or after 1850.1.1 that is also at least 36 months after
+# the first pulse this build ran (te_alc_months counts them), over AI countries that are not decentralized nations
+# (those never change a law: 121 of the 123 AI countries in an 1864 save that had changed none). The 36 months let a
+# save begun on the build before settle at the new rate first: enactments under way then take a median 17 months to
+# end, and the share read at once would be the old one. A new game gives its verdict in 1850.
+# No line yet: the game hasn't reached 1850, or 36 months since this build was first loaded.
 #   OK          at least 35% are enacting a law: the raised rate is in force (expected 35-65%).
 #   BROKEN      under 30%: the rate is vanilla's. Eleven saves of four games on the build before (1864-2020) read
 #               22-31%, 24% in 1864. The INJECT is ignored; see the fallback in the play-test list.
@@ -18,13 +22,34 @@
 # te_ai_law_cadence_selfcheck_values.txt once it reads OK.
 on_monthly_pulse = {
 	on_actions = {
+		te_ai_law_cadence_selfcheck_settle
 		te_ai_law_cadence_selfcheck
 	}
 }
 
+# The settling count: one a month from the first pulse this build runs, up to 36.
+te_ai_law_cadence_selfcheck_settle = {
+	trigger = {
+		NOT = { has_global_variable = te_alc_checked }
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_alc_months } }
+			set_global_variable = { name = te_alc_months value = 0 }
+		}
+		if = {
+			limit = { global_var:te_alc_months < 36 }
+			change_global_variable = { name = te_alc_months add = 1 }
+		}
+	}
+}
+
+# The verdict, once (the latch is the first thing it sets).
 te_ai_law_cadence_selfcheck = {
 	trigger = {
 		NOT = { has_global_variable = te_alc_checked }
+		has_global_variable = te_alc_months
+		global_var:te_alc_months >= 36
 		game_date >= 1850.1.1
 	}
 	effect = {

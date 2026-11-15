@@ -18,7 +18,7 @@
 #
 # The file name sorts before another mod's kai_political_strategies.txt on purpose: two INJECTs of one field apply
 # in file order and the later one wins (an interest group's field, read 2026-10-10), so with that mod on, its own
-# aversion values, tuned to its own higher rates and above these but for the reactionary agenda's, stand.
+# aversion values, tuned to its own rates, stand.
 
 INJECT:ai_strategy_conservative_agenda = {
 	revolution_aversion = {

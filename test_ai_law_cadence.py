@@ -180,10 +180,21 @@ class TestSelfCheck(unittest.TestCase):
     def test_once_a_game_with_all_verdicts(self):
         text = SELFCHECK.read_text(encoding="utf-8-sig")
         body = _strip_comments(text)
-        self.assertRegex(body, r"on_monthly_pulse\s*=\s*\{\s*on_actions\s*=\s*\{\s*te_ai_law_cadence_selfcheck\s*\}")
+        self.assertRegex(body, r"on_monthly_pulse\s*=\s*\{\s*on_actions\s*=\s*\{\s*te_ai_law_cadence_selfcheck_settle"
+                               r"\s+te_ai_law_cadence_selfcheck\s*\}")
         self.assertNotRegex(body, r"on_monthly_pulse\s*=\s*\{[^}]*\beffect\b", "a sub-action, never a vanilla effect")
         self.assertIn("NOT = { has_global_variable = te_alc_checked }", body)
         self.assertIn("set_global_variable = te_alc_checked", body)
+
+    def test_a_save_from_the_build_before_settles_first(self):
+        # A save begun before this build would otherwise read the old world's share at its first pulse past 1850.
+        body = _strip_comments(SELFCHECK.read_text(encoding="utf-8-sig"))
+        settle = _block(body, "te_ai_law_cadence_selfcheck_settle")
+        self.assertIn("change_global_variable = { name = te_alc_months add = 1 }", settle)
+        self.assertRegex(settle, r"global_var:te_alc_months\s*<\s*36\b")
+        verdict = _block(_block(body, "te_ai_law_cadence_selfcheck"), "trigger")
+        self.assertRegex(verdict, r"has_global_variable = te_alc_months\s+global_var:te_alc_months\s*>=\s*36\b")
+        self.assertRegex(verdict, r"game_date\s*>=\s*1850\.1\.1")
         for verdict in ("OK", "BROKEN", "NO_VERDICT"):
             self.assertIn("TE_SELF_CHECK %s ai_law_cadence" % verdict, body)
         self.assertRegex(body, r"te_alc_chk_share\s*>=\s*0\.35")
