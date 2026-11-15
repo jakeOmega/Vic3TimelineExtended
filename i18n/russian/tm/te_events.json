@@ -8915,6 +8915,986 @@
   "en": "The Smokestack Question",
   "ru": "Вопрос о дымовых трубах"
  },
+ "ministry_law_events.11.a": {
+  "en": "Security needs these powers. Push the law forward.",
+  "ru": "Безопасность требует этих полномочий. Продвигаем закон."
+ },
+ "ministry_law_events.11.b": {
+  "en": "Build in strict oversight to reassure the public.",
+  "ru": "Введём строгий надзор, чтобы успокоить общество."
+ },
+ "ministry_law_events.11.d": {
+  "en": "Documents leaked to the press describe the powers that [SCOPE.sLaw('current_law_scope').GetName] would give the state: reading private correspondence, paying informants, and opening investigations without a court's warrant. Many citizens are uneasy. Others say a state with enemies must have such means.",
+  "ru": "Документы, попавшие в прессу, описывают полномочия, которые дал бы государству закон [SCOPE.sLaw('current_law_scope').GetName]: чтение частной переписки, оплата осведомителей и начало расследований без судебного ордера. Многих граждан это тревожит. Другие говорят, что у государства, у которого есть враги, должны быть такие средства."
+ },
+ "ministry_law_events.11.f": {
+  "en": "From the leaked draft, a memorandum by the officials preparing the new ministry to its future director. Section four: the ministry may open and read correspondence wherever its officers judge it necessary for the security of the state, without applying to a court. Section five: informants are to be paid from a fund that does not appear in the published budget. Section six: no subject of an investigation is to be told of it, and its records are to be kept apart from those of every other office. We recommend that sections four to six be left out of the published text of the law, and issued instead as internal instructions once the ministry is established.",
+  "ru": "Из просочившегося проекта: докладная записка чиновников, готовящих новое министерство, его будущему директору. Пункт четвёртый: министерство вправе вскрывать и читать корреспонденцию везде, где его сотрудники сочтут это необходимым для безопасности государства, не обращаясь в суд. Пункт пятый: осведомителям платить из фонда, которого нет в опубликованном бюджете. Пункт шестой: никого из объектов расследования о нём не уведомлять, а материалы хранить отдельно от архивов всех прочих ведомств. Рекомендуем исключить пункты с четвёртого по шестой из опубликованного текста закона и издать их как внутренние инструкции после создания министерства."
+ },
+ "ministry_law_events.11.t": {
+  "en": "The Shadow Files",
+  "ru": "Тайные досье"
+ },
+ "ministry_law_events.12.a": {
+  "en": "A civilized nation does not turn away the desperate.",
+  "ru": "Цивилизованная нация не отворачивается от отчаявшихся."
+ },
+ "ministry_law_events.12.b": {
+  "en": "Frame it as an orderly process to ease domestic fears.",
+  "ru": "Представим это как упорядоченный процесс, чтобы унять опасения внутри страны."
+ },
+ "ministry_law_events.12.d": {
+  "en": "A large group of refugees, fleeing war and hunger in their own country, has reached ours and is waiting to learn whether it may stay. Families are sleeping in the open near where they arrived, and no office of ours is charged with them. Supporters of [SCOPE.sLaw('current_law_scope').GetName] say this is the work such a ministry would do.",
+  "ru": "Большая группа беженцев, спасающихся от войны и голода в своей стране, добралась до нашей и ждёт решения, могут ли они остаться. Семьи ночуют под открытым небом там, где прибыли, и ни одно наше ведомство за них не отвечает. Сторонники закона [SCOPE.sLaw('current_law_scope').GetName] говорят, что это как раз работа для такого министерства."
+ },
+ "ministry_law_events.12.f": {
+  "en": "A customs officer was sent to the refugees' camp with a ledger, a borrowed table and an interpreter. The officer wrote down each family's name, where they had come from and how many children they had, and gave each family a numbered card. The interpreter gave the same answer all day: \\\"We do not know yet. Keep the card. When the government decides, they will call the numbers.\\\" Around midday a woman asked whether her brother, who had come a week earlier, was in the book. They went back through the pages together and did not find him, and the officer wrote his name on a separate sheet to send on to the capital.",
+  "ru": "В лагерь беженцев отправили таможенного чиновника с журналом, одолженным столом и переводчиком. Чиновник записывал имя каждой семьи, откуда она прибыла и сколько у неё детей, и выдавал каждой семье пронумерованную карточку. Весь день переводчик давал один и тот же ответ: «Пока мы не знаем. Храните карточку. Когда правительство решит, назовут номера». Около полудня одна женщина спросила, внесён ли в книгу её брат, прибывший неделей раньше. Они вместе перелистали страницы и не нашли его, и чиновник записал его имя на отдельном листе, чтобы отправить в столицу."
+ },
+ "ministry_law_events.12.t": {
+  "en": "The Refugees' Camp",
+  "ru": "Лагерь беженцев"
+ },
+ "ministry_law_events.13.a": {
+  "en": "The truth must be guided for the good of the people.",
+  "ru": "Правду следует направлять на благо народа."
+ },
+ "ministry_law_events.13.b": {
+  "en": "Rebrand it as public information to calm the press.",
+  "ru": "Переименуем это в общественное информирование, чтобы успокоить прессу."
+ },
+ "ministry_law_events.13.d": {
+  "en": "The plans for [SCOPE.sLaw('current_law_scope').GetName] have alarmed the country's editors and printers. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] say that a ministry charged with managing information will decide what every newspaper may print. Its supporters say the country hears more rumor than news, and that the state must answer it.",
+  "ru": "Планы закона [SCOPE.sLaw('current_law_scope').GetName] встревожили редакторов и печатников страны. Члены группы интересов [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] говорят, что министерство, управляющее информацией, будет решать, что может напечатать каждая газета. Его сторонники отвечают, что страна слышит больше слухов, чем новостей, и государство должно им противостоять."
+ },
+ "ministry_law_events.13.f": {
+  "en": "\\\"I have called the staff of this paper into the composing room because, as your editor, I owe you this before anyone else hears it. I have read the draft regulations twice. Each issue is to go to the ministry's office the night before it prints, and it will come back with the pages they allow. They call this a formality for any paper with nothing to hide. Some of you have families and cannot afford to lose this job, and I will not ask anyone to. Those who stay will print what comes back from that office.\\\"",
+  "ru": "«Я собрал сотрудников газеты в наборной, потому что, как ваш редактор, обязан сказать вам это раньше, чем кто-либо услышит. Я дважды прочитал проект правил. Каждый номер надо будет отправлять в канцелярию министерства накануне печати, и вернётся он с теми страницами, которые там разрешат. Для газеты, которой нечего скрывать, это называют формальностью. У некоторых из вас семьи, и вы не можете позволить себе потерять эту работу, и я не стану никого просить об этом. Те, кто останется, будут печатать то, что вернётся из той канцелярии»."
+ },
+ "ministry_law_events.13.t": {
+  "en": "The Loudspeaker State",
+  "ru": "Государство-громкоговоритель"
+ },
+ "ministry_law_events.14.a": {
+  "en": "Science needs the state's coordination. Press forward!",
+  "ru": "Науке нужна координация государства. Вперёд!"
+ },
+ "ministry_law_events.14.b": {
+  "en": "Let the universities lead the design process.",
+  "ru": "Пусть процессом руководят университеты."
+ },
+ "ministry_law_events.14.d": {
+  "en": "Scientists at one of our universities have announced a discovery, and it has revived the argument over [SCOPE.sLaw('current_law_scope').GetName]. Members of the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] say that only steady funding from the state turns such work into practical use. Skeptics say officials should not decide what scientists study.",
+  "ru": "Учёные одного из наших университетов объявили об открытии, и это возобновило спор о законе [SCOPE.sLaw('current_law_scope').GetName]. Члены группы интересов [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] говорят, что только стабильное финансирование государства превращает такую работу в практическую пользу. Скептики отвечают, что чиновники не должны решать, что изучать учёным."
+ },
+ "ministry_law_events.14.f": {
+  "en": "The professor led the officials drafting the law through the laboratory in the order the work had been done: the bench where the first samples were prepared, the instrument that measured them, and the notebook with the readings that did not fit. The officials spent longest at the instrument. One of them asked what it had cost and wrote the figure down. Another asked which office paid the laboratory's salaries, and the professor explained that three offices did, each from a different budget and on a different date. By the end of the visit the officials had filled several pages, and the professor had been asked to set out the laboratory's needs for the next five years in writing.",
+  "ru": "Профессор провёл чиновников, составляющих закон, по лаборатории в том порядке, в каком шла работа: стол, где готовили первые образцы, прибор, который их измерял, и тетрадь с показаниями, не вписавшимися в картину. Дольше всего чиновники задержались у прибора. Один из них спросил, во сколько он обошёлся, и записал цифру. Другой спросил, какое ведомство платит жалованье сотрудникам лаборатории, и профессор объяснил, что платят три ведомства, каждое из своего бюджета и в свой срок. К концу визита чиновники исписали несколько страниц, а профессора попросили изложить потребности лаборатории на следующие пять лет письменно."
+ },
+ "ministry_law_events.14.t": {
+  "en": "The Laboratory of the State",
+  "ru": "Лаборатория государства"
+ },
+ "ministry_law_events.15.a": {
+  "en": "Dissent must be monitored for the nation's safety.",
+  "ru": "За инакомыслием необходимо следить ради безопасности нации."
+ },
+ "ministry_law_events.15.b": {
+  "en": "Start with modest powers to avoid a backlash.",
+  "ru": "Начнём со скромных полномочий, чтобы избежать недовольства."
+ },
+ "ministry_law_events.15.d": {
+  "en": "Reports of secret meetings and hand-copied pamphlets have strengthened the case for [SCOPE.sLaw('current_law_scope').GetName]. Its supporters say that dissent is spreading faster than the government's present officers can follow it, and that the state needs a ministry whose only work is to watch it.",
+  "ru": "Донесения о тайных собраниях и переписанных от руки листовках укрепили доводы в пользу закона [SCOPE.sLaw('current_law_scope').GetName]. Его сторонники говорят, что инакомыслие распространяется быстрее, чем нынешние чиновники правительства успевают за ним следить, и что государству нужно министерство, единственная задача которого — наблюдать за ним."
+ },
+ "ministry_law_events.15.f": {
+  "en": "Report from a paid informant, passed to the officials drafting the law as an example of what the government's officers receive now: \\\"They meet on Thursdays in the back room of a print shop near the station. They read pamphlets that have no license and argue about them. I have not been inside. My information comes from a man who has.\\\"\\n\\nNote by the receiving officer: this is the fourth report this month on the same shop, and two of the others give the same source. We cannot tell whether the meetings are large or small, or whether they take place at all, and we have no way to check without sending our own people in. We ask for the staff to do so.",
+  "ru": "Донесение оплачиваемого осведомителя, переданное чиновникам, составляющим закон, как пример того, что сейчас получают служащие правительства: «Они собираются по четвергам в задней комнате типографии у вокзала. Читают листовки без разрешения и спорят о них. Сам я внутри не был. Мои сведения от человека, который был».\\n\\nПримечание принявшего донесение сотрудника: это уже четвёртое донесение за месяц об этой типографии, и два других ссылаются на тот же источник. Мы не можем сказать, многолюдны ли эти собрания или малочисленны и происходят ли они вообще, а проверить это, не послав своих людей, нельзя. Просим выделить штат для этого."
+ },
+ "ministry_law_events.15.t": {
+  "en": "The Watchers",
+  "ru": "Наблюдатели"
+ },
+ "ministry_law_events.16.a": {
+  "en": "Consumers deserve protection. Act now!",
+  "ru": "Потребители заслуживают защиты. Действуем сейчас!"
+ },
+ "ministry_law_events.16.b": {
+  "en": "Let industry self-regulate within the new framework.",
+  "ru": "Пусть промышленность саморегулируется в рамках новой системы."
+ },
+ "ministry_law_events.16.d": {
+  "en": "Food sold by a well-known manufacturer has made a number of people ill. Its owners and the [SCOPE.gsInterestGroup('industrialists_ig').GetName] call it an isolated case. Inspectors who examined the works found that cheaper ingredients had been substituted for years with no change to the label. Supporters of [SCOPE.sLaw('current_law_scope').GetName] say that no office now has the power to stop it.",
+  "ru": "Продукты известного производителя вызвали болезни у ряда людей. Его владельцы и группа интересов [SCOPE.gsInterestGroup('industrialists_ig').GetName] называют это единичным случаем. Инспекторы, осмотревшие производство, выяснили, что годами более дешёвые ингредиенты подменяли без изменения этикетки. Сторонники закона [SCOPE.sLaw('current_law_scope').GetName] говорят, что сейчас ни у одного ведомства нет полномочий это остановить."
+ },
+ "ministry_law_events.16.f": {
+  "en": "A chemist's analysis of a packet of the manufacturer's flour, as read into the record of the government's inquiry:\\n\\nWheat flour, about two parts in three. The label promises nothing else.\\nChalk, about one part in six. It whitens the flour and adds weight, and flour is sold by weight.\\nSawdust, in small amounts. It may have come from the mill floor rather than been added on purpose, and the inspectors are asking which.\\nAlum, in small amounts. Bakers use it to whiten bread, and in quantity it causes stomach complaints, which is what the sick reported.\\nA substance the chemist could not identify. A sample has been sent for further tests, and the result will be added to the record.",
+  "ru": "Анализ химика пачки муки этого производителя, зачитанный для протокола правительственного расследования:\\n\\nПшеничная мука, около двух частей из трёх. Этикетка не обещает ничего другого.\\nМел, около одной части из шести. Он отбеливает муку и добавляет вес, а муку продают на вес.\\nОпилки, в малых количествах. Возможно, они попали с пола мельницы, а не были добавлены намеренно; инспекторы выясняют, как именно.\\nКвасцы, в малых количествах. Пекари используют их для отбеливания хлеба, а в большом количестве они вызывают расстройство желудка, на что и жаловались заболевшие.\\nВещество, которое химик не смог определить. Образец отправлен на дополнительные исследования, результат будет внесён в протокол."
+ },
+ "ministry_law_events.16.t": {
+  "en": "The Tainted Product",
+  "ru": "Испорченный продукт"
+ },
+ "ministry_law_events.17.a": {
+  "en": "Our cities need plans. Establish the ministry!",
+  "ru": "Нашим городам нужны планы. Учреждаем министерство!"
+ },
+ "ministry_law_events.17.b": {
+  "en": "Consult with developers to smooth the transition.",
+  "ru": "Посоветуемся с застройщиками, чтобы смягчить переход."
+ },
+ "ministry_law_events.17.d": {
+  "en": "Our cities are growing faster than anyone planned for. New tenements go up on any free ground, the drains overflow, and smoke settles low over the streets. Builders and landlords oppose [SCOPE.sLaw('current_law_scope').GetName], which would give the state a say in what is built and where.",
+  "ru": "Наши города растут быстрее, чем кто-либо планировал. Новые доходные дома встают на любом свободном участке, канавы переполнены, а дым стелется низко над улицами. Строители и домовладельцы выступают против закона [SCOPE.sLaw('current_law_scope').GetName], который дал бы государству право голоса в том, что и где строится."
+ },
+ "ministry_law_events.17.f": {
+  "en": "One of the officials drafting the law walked the newest district of the capital with the builder who owns most of it. Where the plans filed the year before showed a square and a market, there were six rows of tenements, a workshop, and a yard stacked with bricks for more. The builder pointed out the drains, which were new, and the water pump at the end of each row. \\\"The square is still in the plans,\\\" the builder said. \\\"We will lay it out when the last plots are sold.\\\" The official asked where the children played and was shown the street. At the end of the walk the builder handed over a copy of the plans and asked where the next set should be sent once the ministry existed.",
+  "ru": "Один из чиновников, составляющих закон, прошёл по новейшему кварталу столицы вместе со строителем, которому принадлежит большая его часть. Там, где планы, поданные годом раньше, показывали площадь и рынок, стояли шесть рядов доходных домов, мастерская и двор, заваленный кирпичом для новых построек. Строитель показал на водостоки, которые были новыми, и на водокачку в конце каждого ряда. «Площадь по-прежнему в планах, — сказал строитель. — Разобьём её, когда будут проданы последние участки». Чиновник спросил, где играют дети, и ему показали улицу. В конце прогулки строитель вручил копию планов и спросил, куда посылать следующие, когда министерство будет создано."
+ },
+ "ministry_law_events.17.t": {
+  "en": "The City Rises",
+  "ru": "Город растёт"
+ },
+ "ministry_law_events.18.a": {
+  "en": "Faith and governance shall strengthen each other.",
+  "ru": "Вера и управление укрепят друг друга."
+ },
+ "ministry_law_events.18.b": {
+  "en": "Promise clerical autonomy within the ministry.",
+  "ru": "Пообещаем духовенству самостоятельность внутри министерства."
+ },
+ "ministry_law_events.18.d": {
+  "en": "[SCOPE.sLaw('current_law_scope').GetName] has divided the [SCOPE.gsInterestGroup('devout_ig').GetName]. Some religious leaders welcome a ministry that would fund and protect their faith. Others expect it to choose their leaders and approve what they teach, and they say the faithful have never needed the state to manage them.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] расколол группу интересов [SCOPE.gsInterestGroup('devout_ig').GetName]. Одни религиозные лидеры приветствуют министерство, которое финансировало бы и защищало их веру. Другие ожидают, что оно будет выбирать их руководителей и одобрять то, чему они учат, и говорят, что верующим никогда не требовалось государство, чтобы ими управлять."
+ },
+ "ministry_law_events.18.f": {
+  "en": "To the government, from one of the country's senior religious leaders, on the proposed ministry. We have kept our houses of worship, our schools and our charities for many generations without an office of the state to direct them. We are not opposed to the state's help. Many of our buildings need repair, and our schools turn children away for want of teachers. But we will not accept that the ministry should choose who leads us, or read what we teach before we teach it. If the law is written to fund us and not to govern us, we will say so in public and ask our people to support it. If it is not, we will say that too. We ask to see the text before it is final.",
+  "ru": "Правительству от одного из высших религиозных лидеров страны по поводу предлагаемого министерства. Многие поколения мы содержали наши храмы, школы и благотворительные учреждения без государственного ведомства, которое бы ими руководило. Мы не против помощи государства. Многим нашим зданиям нужен ремонт, а наши школы отказывают детям из-за нехватки учителей. Но мы не согласимся, чтобы министерство выбирало, кто нас возглавляет, или читало то, чему мы учим, прежде чем мы это преподадим. Если закон будет написан, чтобы поддерживать нас, а не управлять нами, мы скажем об этом публично и призовём наш народ его поддержать. Если нет, мы скажем и это. Просим показать нам текст до его окончательной редакции."
+ },
+ "ministry_law_events.18.t": {
+  "en": "The Faithful and the State",
+  "ru": "Верующие и государство"
+ },
+ "ministry_law_events.19.a": {
+  "en": "A great nation has obligations to the world.",
+  "ru": "У великой нации есть обязательства перед миром."
+ },
+ "ministry_law_events.19.b": {
+  "en": "Frame it as strategic investment to win domestic support.",
+  "ru": "Представим это как стратегическое вложение, чтобы получить поддержку внутри страны."
+ },
+ "ministry_law_events.19.d": {
+  "en": "Reports of a famine abroad have filled our newspapers, with photographs of the hungry on the front pages. Relief societies have asked the government to send help. Supporters of [SCOPE.sLaw('current_law_scope').GetName] say that a ministry for the purpose could send it in weeks instead of months.",
+  "ru": "Сообщения о голоде за рубежом заполнили наши газеты, а на первых полосах — фотографии голодающих. Общества помощи просят правительство отправить помощь. Сторонники закона [SCOPE.sLaw('current_law_scope').GetName] говорят, что министерство, созданное для этого, могло бы сделать это за недели, а не за месяцы."
+ },
+ "ministry_law_events.19.f": {
+  "en": "Remarks heard in the week the famine photographs were published.\\n\\n\\\"We set up a table outside the station on Monday. By Wednesday the back room was full of tins and blankets, and nobody can tell us how to get them there.\\\"\\n\\n\\\"Three offices have written to say that it is a matter for one of the other two. I have kept the letters.\\\"\\n\\n\\\"There are families on my own street who skip meals. I gave something, and I would like the government to look at its own country as well.\\\"\\n\\n\\\"My son wants to go out with the relief teams. I have told him to wait until someone in the government is in charge of them.\\\"",
+  "ru": "Реплики, услышанные на той неделе, когда были опубликованы фотографии голода.\\n\\n«В понедельник мы поставили стол у вокзала. К среде задняя комната была полна консервов и одеял, и никто не может сказать нам, как отправить их туда».\\n\\n«Три ведомства написали, что это дело одного из двух других. Я сохранил письма».\\n\\n«На моей собственной улице есть семьи, которые пропускают обеды. Я кое-что дал, и мне хотелось бы, чтобы правительство взглянуло и на собственную страну».\\n\\n«Мой сын хочет поехать с командами помощи. Я сказал ему подождать, пока кто-нибудь в правительстве не возьмёт их на себя»."
+ },
+ "ministry_law_events.19.t": {
+  "en": "The Distant Crisis",
+  "ru": "Далёкий кризис"
+ },
+ "ministry_law_events.2.a": {
+  "en": "Fund it in full. We will not build half a ministry.",
+  "ru": "Финансируем полностью. Половину министерства мы строить не станем."
+ },
+ "ministry_law_events.2.b": {
+  "en": "Promise a lean operation to win the skeptics over.",
+  "ru": "Пообещаем экономную работу, чтобы переубедить скептиков."
+ },
+ "ministry_law_events.2.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] object to the money that [SCOPE.sLaw('current_law_scope').GetName] would commit to a new ministry, and say it would be better spent elsewhere. The law's supporters answer that the ministry cannot do its work without offices and staff, and that both cost money.",
+  "ru": "Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] возражает против денег, которые закон [SCOPE.sLaw('current_law_scope').GetName] выделил бы на новое министерство, и говорит, что их лучше потратить на другое. Сторонники закона отвечают, что министерство не сможет работать без помещений и штата, а и то и другое стоит денег."
+ },
+ "ministry_law_events.2.f": {
+  "en": "\\\"I speak for the [SCOPE.gsInterestGroup('opposing_ig').GetName], and I say this to the officials who have brought us the law. You ask for offices, a staff and a budget that will grow every year, and you have not told us what the new ministry will do that is not being done now. Every department of this government was small when it began. I would like to be shown one that stayed small. We are not against order in the state's business. We are against paying for a building, a staff and a seal before anyone has written down what they are for. Put the ministry's duties on paper, give the cost of each one, and we will read it.\\\"",
+  "ru": "«Я говорю от имени группы интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] и обращаюсь к чиновникам, принёсшим нам этот закон. Вы просите помещения, штат и бюджет, который будет расти каждый год, а не сказали нам, что новое министерство будет делать такого, чего не делается сейчас. Каждое ведомство этого правительства было небольшим в начале. Я хотел бы, чтобы мне показали хоть одно, которое осталось небольшим. Мы не против порядка в делах государства. Мы против того, чтобы платить за здание, штат и печать, прежде чем кто-либо записал, для чего они нужны. Изложите обязанности министерства на бумаге, назовите цену каждой, и мы прочтём»."
+ },
+ "ministry_law_events.2.t": {
+  "en": "The Budget Debate",
+  "ru": "Бюджетные дебаты"
+ },
+ "ministry_law_events.20.a": {
+  "en": "Pause to overhaul the hiring process",
+  "ru": "Приостановимся и перестроим процесс найма"
+ },
+ "ministry_law_events.20.b": {
+  "en": "Defend the appointments and press through",
+  "ru": "Защитим назначения и продолжим"
+ },
+ "ministry_law_events.20.d": {
+  "en": "The first appointments to the ministry that [SCOPE.sLaw('current_law_scope').GetName] will create have been published, together with the names of the appointees' relatives in government. The [SCOPE.gsInterestGroup('opposing_ig').GetName] say the new ministry is being filled by patronage, not by people who can do the work.",
+  "ru": "Опубликованы первые назначения в министерство, которое создаст закон [SCOPE.sLaw('current_law_scope').GetName], вместе со списком родственников назначенных, служащих в правительстве. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] заявляет, что новое министерство заполняют по протекции, а не людьми, способными делать дело."
+ },
+ "ministry_law_events.20.f": {
+  "en": "Entries from the list of the ministry's first appointments that the [SCOPE.gsInterestGroup('opposing_ig').GetName] have published, each with their note:\\n\\nThe deputy director, brother-in-law of the official who drafted the law. He has never run an office of any size.\\nEleven junior clerks, all from the deputy director's home district. They were appointed without the written test the other applicants sat.\\nThe head of purchasing, who studied with the deputy director and until this year sold office supplies to the government. The ministry has placed its first orders with that firm.\\nThe chief clerk, a cousin of the deputy director's wife. The chief clerk has kept accounts before, and the list says so, but was chosen over three applicants with more years in the work.",
+  "ru": "Записи из списка первых назначений в министерство, опубликованного группой интересов [SCOPE.gsInterestGroup('opposing_ig').GetName], каждая с её примечанием:\\n\\nЗаместитель директора, шурин чиновника, составлявшего закон. Он никогда не руководил сколько-нибудь крупным ведомством.\\nОдиннадцать младших писарей, все из родного округа заместителя директора. Их назначили без письменного испытания, которое проходили другие кандидаты.\\nНачальник снабжения, учившийся вместе с заместителем директора и до этого года продававший канцелярские товары правительству. Первые заказы министерство разместило в его фирме.\\nГлавный писарь, двоюродный брат жены заместителя директора. Главный писарь прежде вёл счета, и список об этом говорит, но он был выбран вместо троих кандидатов с большим стажем работы."
+ },
+ "ministry_law_events.20.t": {
+  "en": "A Ministry of Cousins",
+  "ru": "Министерство кузенов"
+ },
+ "ministry_law_events.21.a": {
+  "en": "Hold the law back while the budget is revised.",
+  "ru": "Придержим закон, пока бюджет пересматривается."
+ },
+ "ministry_law_events.21.b": {
+  "en": "Press through despite fiscal warnings.",
+  "ru": "Продолжим вопреки финансовым предостережениям."
+ },
+ "ministry_law_events.21.d": {
+  "en": "Officials of the treasury have sent the government a memorandum opposing the spending that [SCOPE.sLaw('current_law_scope').GetName] would commit us to. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are repeating its figures in public.",
+  "ru": "Чиновники казначейства направили правительству докладную записку против расходов, к которым обяжет нас закон [SCOPE.sLaw('current_law_scope').GetName]. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] публично повторяет её цифры."
+ },
+ "ministry_law_events.21.f": {
+  "en": "To the government, from the officials of the treasury. We have costed the law as it is drafted. The first year's cost is the one its supporters quote: offices, a staff of the size proposed and an opening budget. They have not given the cost of the years after. Salaries rise with service, and a new ministry hires to meet the work it finds. Of the departments for which we hold accounts, none spends less now than in its first year. Over five years we expect the ministry to cost several times what it costs in the first. We do not say it should not be created. We ask that the law fix its budget for the first five years, and that any increase come back to the government for approval.",
+  "ru": "Правительству от чиновников казначейства. Мы рассчитали стоимость закона в том виде, в каком он составлен. Расходы первого года — те, что называют его сторонники: помещения, штат предложенного размера и начальный бюджет. О расходах следующих лет они не говорят. Жалованье растёт с выслугой, а новое министерство нанимает людей под ту работу, которую находит. Из ведомств, по которым у нас есть отчёты, ни одно не тратит сейчас меньше, чем в первый год. За пять лет, по нашим ожиданиям, министерство будет стоить в несколько раз больше, чем в первый. Мы не говорим, что его не следует создавать. Мы просим, чтобы закон зафиксировал его бюджет на первые пять лет и чтобы любое увеличение возвращалось в правительство на утверждение."
+ },
+ "ministry_law_events.21.t": {
+  "en": "The Treasury's Sums",
+  "ru": "Расчёты казначейства"
+ },
+ "ministry_law_events.22.a": {
+  "en": "Pause to settle the turf war first",
+  "ru": "Сначала приостановимся и уладим борьбу за влияние"
+ },
+ "ministry_law_events.22.b": {
+  "en": "Press through and crush internal resistance",
+  "ru": "Продолжим и подавим внутреннее сопротивление"
+ },
+ "ministry_law_events.22.d": {
+  "en": "Older departments are slowing the work of setting up the ministry that [SCOPE.sLaw('current_law_scope').GetName] will create. Files arrive late or incomplete, staff are not released, and letters go unanswered. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are mocking the confusion in public.",
+  "ru": "Старые ведомства замедляют работу по созданию министерства, которое учредит закон [SCOPE.sLaw('current_law_scope').GetName]. Дела приходят с опозданием или неполными, сотрудников не отпускают, письма остаются без ответа. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] публично высмеивает эту неразбериху."
+ },
+ "ministry_law_events.22.f": {
+  "en": "The clerk sent to collect an older department's files for the new ministry arrived at the hour the letter had set and was asked to wait in the corridor. At midday an assistant brought out two boxes. The clerk checked them against the list. The correspondence was there, but the registers that indexed it were not, and nor were the accounts. The assistant went to ask about them and did not come back. At four the clerk wrote out a note of what was missing, left one copy with the porter, kept the other, and carried the two boxes back across the city to the new offices.",
+  "ru": "Писарь, посланный забрать дела старого ведомства для нового министерства, прибыл в час, назначенный в письме, и ему предложили подождать в коридоре. В полдень помощник вынес два ящика. Писарь сверил их со списком. Переписка была на месте, но не было реестров, по которым она индексировалась, как и счетов. Помощник пошёл узнать о них и не вернулся. В четыре часа писарь написал записку о том, чего не хватает, оставил один экземпляр у швейцара, другой взял себе и понёс два ящика через весь город в новые помещения."
+ },
+ "ministry_law_events.22.t": {
+  "en": "Files Slow to Arrive",
+  "ru": "Дела не торопятся"
+ },
+ "ministry_law_events.23.a": {
+  "en": "Pause and negotiate a graceful exit.",
+  "ru": "Приостановимся и договоримся о достойном уходе."
+ },
+ "ministry_law_events.23.b": {
+  "en": "Press on, and let the bureau make its case.",
+  "ru": "Продолжим и пусть ведомство изложит свои доводы."
+ },
+ "ministry_law_events.23.d": {
+  "en": "Officials of the ministry that we are closing by enacting [SCOPE.sLaw('current_law_scope').GetName] are fighting to keep it. They have let it be known that the ministry's records can only be worked by the people who keep them now. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have taken up their cause in public.",
+  "ru": "Чиновники министерства, которое мы закрываем, приняв закон [SCOPE.sLaw('current_law_scope').GetName], борются за его сохранение. Они дали понять, что с архивами министерства смогут работать только те, кто хранит их сейчас. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] публично поддержала их дело."
+ },
+ "ministry_law_events.23.f": {
+  "en": "\\\"As senior registrar of this ministry, I have asked every clerk to the records room to hear this. We have served every government this country has had in our time, and we have been reorganized before. I am not asking anyone to break the law. I am asking you to do your work exactly as it is written down, and no more. The indexes are ours. We built them, and the guide to them is in our heads, because no one ever paid us to write it out. If the government wants the records moved, they will be moved box by box, at the pace the regulations set. If anyone from the offices taking over our work asks you for help, send them to me, in writing.\\\"",
+  "ru": "«Как старший регистратор этого министерства, я попросил всех писарей собраться в архиве, чтобы это услышать. Мы служили каждому правительству, какое было у этой страны на нашем веку, и нас уже реорганизовывали. Я не прошу никого нарушать закон. Я прошу вас выполнять свою работу точно так, как она записана, и не более. Указатели наши. Мы их составили, а ключ к ним в наших головах, потому что никто никогда не платил нам за то, чтобы записать его. Если правительство хочет перенести архивы, их будут переносить ящик за ящиком, в темпе, который определяют правила. Если кто-нибудь из ведомств, принимающих нашу работу, попросит вас о помощи, отправляйте его ко мне, в письменном виде»."
+ },
+ "ministry_law_events.23.t": {
+  "en": "Final Stand of the Bureau",
+  "ru": "Последний бой ведомства"
+ },
+ "ministry_law_events.24.a": {
+  "en": "Defer until the military's concerns are addressed",
+  "ru": "Отложим, пока не будут учтены опасения военных"
+ },
+ "ministry_law_events.24.b": {
+  "en": "Press through over the brass's objections",
+  "ru": "Продолжим вопреки возражениям верхушки"
+ },
+ "ministry_law_events.24.d": {
+  "en": "Senior officers have let it be known that they will not cooperate fully with [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of the danger of putting the army's business in civilian hands.",
+  "ru": "Старшие офицеры дали понять, что не станут полностью сотрудничать с законом [SCOPE.sLaw('current_law_scope').GetName]. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] предупреждает об опасности передачи дел армии в гражданские руки."
+ },
+ "ministry_law_events.24.f": {
+  "en": "A senior officer speaks with the official sent by the government to ask for the army's help with the new ministry.\\n\\n\\\"We will obey the law when it passes. We will not pretend to like it, and we will not lend our staff officers to make it work. Those are two different things.\\\"\\n\\n\\\"The ministry cannot draw up its accounts without your quartermasters' books.\\\"\\n\\n\\\"Then it may request them through the proper channels, and it will receive them in the proper time.\\\"\\n\\n\\\"How long is the proper time?\\\"\\n\\n\\\"As long as the regulations allow. I have put our objections in writing and sent them to your office, so that no one can say later that the army gave no warning.\\\"",
+  "ru": "Старший офицер беседует с чиновником, присланным правительством просить помощи армии для нового министерства.\\n\\n«Мы будем подчиняться закону, когда он будет принят. Мы не станем притворяться, будто он нам нравится, и не предоставим наших штабных офицеров, чтобы он работал. Это разные вещи».\\n\\n«Министерство не может составить свои счета без книг ваших интендантов».\\n\\n«Тогда оно может запросить их по надлежащим каналам и получит их в надлежащее время».\\n\\n«А сколько длится надлежащее время?»\\n\\n«Столько, сколько позволяют правила. Наши возражения я изложил письменно и отправил в ваше ведомство, чтобы никто не мог потом сказать, что армия не предупреждала»."
+ },
+ "ministry_law_events.24.t": {
+  "en": "Obedience Without Help",
+  "ru": "Подчинение без помощи"
+ },
+ "ministry_law_events.25.a": {
+  "en": "Hold the law back to reassure foreign observers.",
+  "ru": "Придержим закон, чтобы успокоить иностранных наблюдателей."
+ },
+ "ministry_law_events.25.b": {
+  "en": "Press on. Foreign opinion will adjust.",
+  "ru": "Продолжим. Мнение за рубежом приспособится."
+ },
+ "ministry_law_events.25.d": {
+  "en": "Foreign envoys have begun asking pointed questions about [SCOPE.sLaw('current_law_scope').GetName] and what it says about our intentions. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the law is drawing the wrong kind of attention abroad.",
+  "ru": "Иностранные посланники начали задавать острые вопросы о законе [SCOPE.sLaw('current_law_scope').GetName] и о том, что он говорит о наших намерениях. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] предупреждает, что закон привлекает за рубежом не то внимание."
+ },
+ "ministry_law_events.25.f": {
+  "en": "Remarks made by foreign envoys in our capital, as our own officials reported them to the government.\\n\\n\\\"Your government is changing how it deals with the world. Mine would like to know why it is doing so now, and what it is preparing for.\\\"\\n\\n\\\"My instructions are to say little and report everything. I will be reporting that your officials themselves cannot tell me who will be in charge.\\\"\\n\\n\\\"We have no objection to a ministry. We would like to know whether the new ministry will honor our existing agreements or ask to renegotiate them.\\\"\\n\\n\\\"I have been asked to delay our answer on the trade question until we know who in your government will be receiving it.\\\"",
+  "ru": "Реплики иностранных посланников в нашей столице в передаче наших чиновников правительству.\\n\\n«Ваше правительство меняет способ ведения дел с миром. Моё хотело бы знать, почему сейчас и к чему оно готовится».\\n\\n«Мои инструкции: говорить мало и сообщать обо всём. Я сообщу, что ваши чиновники сами не могут мне сказать, кто будет главным».\\n\\n«Мы не возражаем против министерства. Мы хотели бы знать, будет ли новое министерство соблюдать наши действующие соглашения или попросит их пересмотреть».\\n\\n«Мне поручили задержать наш ответ по торговому вопросу, пока мы не узнаем, кто в вашем правительстве будет его получать»."
+ },
+ "ministry_law_events.25.t": {
+  "en": "Foreign Capitals Take Note",
+  "ru": "Иностранные столицы берут на заметку"
+ },
+ "ministry_law_events.26.a": {
+  "en": "Defer to mercantile concerns",
+  "ru": "Уступим купеческим опасениям"
+ },
+ "ministry_law_events.26.b": {
+  "en": "Press through despite merchant opposition",
+  "ru": "Продолжим вопреки сопротивлению купцов"
+ },
+ "ministry_law_events.26.d": {
+  "en": "A group of trading houses has hired counsel to argue against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] repeat the arguments wherever they will be heard.",
+  "ru": "Группа торговых домов наняла адвоката, чтобы выступать против закона [SCOPE.sLaw('current_law_scope').GetName]. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] повторяет их доводы везде, где их готовы слушать."
+ },
+ "ministry_law_events.26.f": {
+  "en": "\\\"I am counsel for the trading houses, and I put their case to the officials drafting this law. My clients do not ask for favors. They ask to be left to trade. Every office set over commerce in this country has begun by promising to simplify the rules and gone on to add its own. My clients will have to employ clerks to read this ministry's notices, and those clerks will be paid out of the margins that let their goods sell abroad. If the government wants one office for trade, the law should name the offices the ministry replaces and close them when it opens.\\\"",
+  "ru": "«Я адвокат торговых домов и излагаю их позицию чиновникам, составляющим этот закон. Мои клиенты не просят одолжений. Они просят оставить их торговать. Каждое ведомство, поставленное над торговлей в этой стране, начинало с обещания упростить правила, а затем добавляло свои. Моим клиентам придётся нанимать писарей, чтобы читать уведомления этого министерства, а платить им придётся из тех самых прибылей, которые позволяют их товарам продаваться за границей. Если правительство хочет одно ведомство для торговли, закон должен назвать ведомства, которые это министерство заменяет, и закрыть их, когда оно откроется»."
+ },
+ "ministry_law_events.26.t": {
+  "en": "Counsel for the Trading Houses",
+  "ru": "Адвокат торговых домов"
+ },
+ "ministry_law_events.27.a": {
+  "en": "Hold the law back. The artists have a point.",
+  "ru": "Придержим закон. В словах художников есть смысл."
+ },
+ "ministry_law_events.27.b": {
+  "en": "Press on. Patronage need not mean control.",
+  "ru": "Продолжим. Покровительство не обязано означать контроль."
+ },
+ "ministry_law_events.27.d": {
+  "en": "A manifesto against [SCOPE.sLaw('current_law_scope').GetName], signed by well-known painters, writers and musicians, is being handed out in the capital. The [SCOPE.gsInterestGroup('opposing_ig').GetName] present the law as the beginning of censorship.",
+  "ru": "В столице раздают манифест против закона [SCOPE.sLaw('current_law_scope').GetName], подписанный известными художниками, писателями и музыкантами. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] представляет закон как начало цензуры."
+ },
+ "ministry_law_events.27.f": {
+  "en": "To the government and the public, from the undersigned artists. We have been offered money, and we thank the government for thinking our work worth it. We have not been told who will decide which of us receives it, on what grounds, or for how long. A grant that is renewed each year is a grant that can be refused each year, and an artist who must ask every year soon learns what the answer depends on. We ask that the law name an independent board of artists to award the funds, that the board publish its decisions with its reasons, and that the content of the work be left to the people who make it. Until the law says so, none of us will apply.",
+  "ru": "Правительству и обществу от нижеподписавшихся художников. Нам предложили деньги, и мы благодарим правительство за то, что оно сочло нашу работу того достойной. Нам не сказали, кто будет решать, кто из нас их получит, на каком основании и на какой срок. Грант, возобновляемый каждый год, — это грант, в котором можно отказать каждый год, а художник, вынужденный просить каждый год, скоро узнаёт, от чего зависит ответ. Мы просим, чтобы закон назвал независимую комиссию художников для распределения средств, чтобы комиссия публиковала свои решения с обоснованиями, а содержание работ оставалось на усмотрение тех, кто их создаёт. Пока закон этого не скажет, никто из нас обращаться не будет."
+ },
+ "ministry_law_events.27.t": {
+  "en": "The Artists' Manifesto",
+  "ru": "Манифест художников"
+ },
+ "ministry_law_events.28.a": {
+  "en": "Hold the law back until tempers cool.",
+  "ru": "Придержим закон, пока страсти не улягутся."
+ },
+ "ministry_law_events.28.b": {
+  "en": "Press on. The strike is a bargaining tactic.",
+  "ru": "Продолжим. Забастовка — это способ торга."
+ },
+ "ministry_law_events.28.d": {
+  "en": "Workers have struck over the labor provisions of [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have called for the law to be stopped and warn of more trouble if it goes forward.",
+  "ru": "Рабочие объявили забастовку из-за трудовых положений закона [SCOPE.sLaw('current_law_scope').GetName]. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] призывает остановить закон и предупреждает о новых волнениях, если он пойдёт дальше."
+ },
+ "ministry_law_events.28.f": {
+  "en": "A government official went to the picket line at the gates of the largest works in the capital to hear the strikers' case. The strike committee's speaker stood on a crate and read their demand aloud: \\\"No rule about our hours, our pay or our safety to be written without our representatives in the room.\\\" The people around the crate had heard it read several times that morning, and they called out the words with the speaker. The official asked whether they objected to the ministry itself. The speaker said they did not, only to having it set up over their heads. The official copied the demand into a notebook, and the committee asked for a written reply by the end of the week.",
+  "ru": "Правительственный чиновник пришёл к пикету у ворот крупнейшего предприятия столицы, чтобы выслушать доводы бастующих. Оратор стачечного комитета встал на ящик и прочитал вслух их требование: «Никаких правил о нашем рабочем времени, оплате и безопасности без участия наших представителей». Стоявшие вокруг ящика слышали его уже несколько раз за это утро и выкрикивали слова вместе с оратором. Чиновник спросил, возражают ли они против самого министерства. Оратор ответил, что нет, только против того, чтобы его создавали у них над головой. Чиновник записал требование в блокнот, и комитет попросил письменный ответ до конца недели."
+ },
+ "ministry_law_events.28.t": {
+  "en": "Down Tools",
+  "ru": "Инструменты брошены"
+ },
+ "ministry_law_events.29.a": {
+  "en": "Hold the law back and hear industry out.",
+  "ru": "Придержим закон и выслушаем промышленников."
+ },
+ "ministry_law_events.29.b": {
+  "en": "Press on. The smokestacks have had their way long enough.",
+  "ru": "Продолжим. Дымовые трубы слишком долго добивались своего."
+ },
+ "ministry_law_events.29.d": {
+  "en": "Industrial firms have paid for a public campaign against [SCOPE.sLaw('current_law_scope').GetName]: posters, newspaper advertisements and speakers at the factory gates. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn that the regulations would drive plants abroad.",
+  "ru": "Промышленные компании оплатили общественную кампанию против закона [SCOPE.sLaw('current_law_scope').GetName]: плакаты, газетные объявления и ораторов у заводских ворот. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] предупреждает, что регулирование вытеснит заводы за границу."
+ },
+ "ministry_law_events.29.f": {
+  "en": "A billposter hired by the campaign against the law started along the main road out of the factory district at first light. The poster showed a factory gate with a padlock on it, and under the picture a line saying that the new law would close it. The billposter pasted it on walls, on fences, on the sides of sheds and on the board outside the works where the shift notices hung, working from a bucket of paste and a roll of sheets carried on a handcart. By the time the morning shift arrived, the road was covered on both sides. At midday the billposter collected a fresh roll from the campaign office and started on the next road.",
+  "ru": "Расклейщик афиш, нанятый кампанией против закона, с первым светом начал вдоль главной дороги из заводского района. На плакате были заводские ворота с замком, а под рисунком — строка о том, что новый закон их закроет. Расклейщик клеил его на стены, заборы, стенки сараев и на доску у проходной, где висели сменные объявления, работая с ведром клея и рулоном листов на ручной тележке. К приходу утренней смены дорога была оклеена с обеих сторон. В полдень расклейщик взял в штабе кампании свежий рулон и принялся за следующую дорогу."
+ },
+ "ministry_law_events.29.t": {
+  "en": "Industry's Counter-Attack",
+  "ru": "Контратака промышленности"
+ },
+ "ministry_law_events.3.a": {
+  "en": "Give the new ministry its full jurisdiction, now.",
+  "ru": "Немедленно передадим новому министерству всю полноту полномочий."
+ },
+ "ministry_law_events.3.b": {
+  "en": "Allow a transitional period to ease the change.",
+  "ru": "Допустим переходный период, чтобы смягчить перемены."
+ },
+ "ministry_law_events.3.d": {
+  "en": "The departments that handle this business today do not want to give it up. Their senior officials have managed it for years, and they are slow to hand over files, staff or authority to a ministry that [SCOPE.sLaw('current_law_scope').GetName] has not yet finished creating.",
+  "ru": "Ведомства, которые занимаются этим сегодня, не хотят от него отказываться. Их старшие чиновники вели это дело годами и неохотно передают дела, штат или полномочия министерству, создание которого закон [SCOPE.sLaw('current_law_scope').GetName] ещё не завершил."
+ },
+ "ministry_law_events.3.f": {
+  "en": "A senior official of one of the older departments speaks with the officer sent to take over its files.\\n\\n\\\"You want the files, the clerks who keep them and the right to sign. I have answered for this business for twenty years. When something goes wrong in it, the letters still come to my desk.\\\"\\n\\n\\\"Once the law passes, the letters will come to us, and we will need the files to answer them.\\\"\\n\\n\\\"Then take the files. The clerks are another matter. They know which papers matter and which can wait, and none of that is written down anywhere. If you take them, my department cannot do the work it is keeping.\\\"\\n\\n\\\"Then lend them to us for a month, and come with them. We will write up the transfer of the files and the clerks together, and send it to your department to agree.\\\"",
+  "ru": "Старший чиновник одного из старых ведомств беседует с сотрудником, посланным принять его дела.\\n\\n«Вам нужны дела, писари, которые их ведут, и право подписи. Я отвечал за это дело двадцать лет. Когда в нём что-нибудь идёт не так, письма по-прежнему приходят на мой стол».\\n\\n«Когда закон будет принят, письма будут приходить к нам, и нам понадобятся дела, чтобы на них отвечать».\\n\\n«Тогда забирайте дела. С писарями иначе. Они знают, какие бумаги важны, а какие могут подождать, и нигде это не записано. Если вы заберёте их, моё ведомство не сможет выполнять работу, которую за собой оставляет».\\n\\n«Тогда одолжите их нам на месяц и приходите вместе с ними. Мы составим описание передачи дел и писарей вместе и отправим в ваше ведомство на согласование»."
+ },
+ "ministry_law_events.3.t": {
+  "en": "Bureaucratic Turf Wars",
+  "ru": "Бюрократические войны за влияние"
+ },
+ "ministry_law_events.30.a": {
+  "en": "Hold the law back and hear the officers out.",
+  "ru": "Придержим закон и выслушаем офицеров."
+ },
+ "ministry_law_events.30.b": {
+  "en": "The law goes ahead. The officers can transfer or retire.",
+  "ru": "Закон вступит в силу. Офицеры могут перейти или уйти в отставку."
+ },
+ "ministry_law_events.30.d": {
+  "en": "The officials who have kept the state's secrets until now have let it be known, through intermediaries, that they do not want the law [SCOPE.sLaw('current_law_scope').GetName]. It would put their work under a new ministry and a new chain of command. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have taken up their objections and ask that the law be held back until the officials agree to it.",
+  "ru": "Чиновники, хранившие до сих пор государственные тайны, через посредников дали понять, что не хотят закона [SCOPE.sLaw('current_law_scope').GetName]. Он поставил бы их работу под новое министерство и новую цепочку подчинения. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] поддержала их возражения и просит придержать закон, пока чиновники не дадут согласия."
+ },
+ "ministry_law_events.30.f": {
+  "en": "To the government, from the officers who now keep the state's confidential files, delivered by hand. We have read the draft charter of the new ministry. It would place every office that gathers information for the state under one head, with one budget and one set of files. Our objection is to handing our sources to people we have not vetted, on a timetable set by people who have never run an informant. Several of our officers have told us they will retire rather than transfer. We ask that no file be moved until each office has agreed to the terms of its own transfer, and we are ready to meet whoever the government names to settle them.",
+  "ru": "Правительству от офицеров, ныне хранящих секретные дела государства, доставлено лично. Мы прочли проект устава нового министерства. Он поместил бы все ведомства, собирающие сведения для государства, под одно начало, с одним бюджетом и одним набором дел. Мы возражаем против передачи наших источников людям, которых мы не проверяли, в сроки, назначенные теми, кто никогда не вёл осведомителя. Несколько наших офицеров сказали нам, что скорее уйдут в отставку, чем перейдут. Просим не переносить ни одного дела, пока каждое ведомство не согласится с условиями собственной передачи, и мы готовы встретиться с тем, кого назначит правительство, чтобы их согласовать."
+ },
+ "ministry_law_events.30.t": {
+  "en": "The Old Hands Object",
+  "ru": "Старая гвардия возражает"
+ },
+ "ministry_law_events.31.a": {
+  "en": "Let the law wait until the objections are heard.",
+  "ru": "Пусть закон подождёт, пока не будут выслушаны возражения."
+ },
+ "ministry_law_events.31.b": {
+  "en": "The arrivals offices need this ministry. Enact it.",
+  "ru": "Ведомствам по приёму прибывающих нужно это министерство. Принимаем."
+ },
+ "ministry_law_events.31.d": {
+  "en": "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have turned against the law [SCOPE.sLaw('current_law_scope').GetName] while it is being enacted. They say a ministry to receive and settle refugees would tell the world that our door is open, and that the officials who handle arrivals today need more staff, not a new ministry to answer to. They ask that the law wait.",
+  "ru": "Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] выступила против закона [SCOPE.sLaw('current_law_scope').GetName], пока он принимается. Она говорит, что министерство по приёму и расселению беженцев скажет миру, что наша дверь открыта, и что чиновникам, занимающимся прибывающими сегодня, нужно больше штата, а не новое министерство, которому надо отчитываться. Она просит отложить закон."
+ },
+ "ministry_law_events.31.f": {
+  "en": "\\\"I have run the arrivals office at this post for eleven years, and you are the first person from the capital to ask me what it needs. We have four clerks and one interpreter, and the interpreter speaks two of the languages we hear. People wait on those benches for days while we copy their particulars onto three sets of forms for three departments, and none of the departments reads the others' forms. A ministry would give us one form, and somewhere to send a family once its papers are stamped. Those who say the ministry will bring more people here have never sat on our benches. I have written it all down for you, with the number of people waiting each morning this month.\\\"",
+  "ru": "«Я одиннадцать лет руковожу пунктом приёма на этом посту, и вы первый человек из столицы, который спросил, что ему нужно. У нас четыре писаря и один переводчик, и переводчик знает два из тех языков, что мы слышим. Люди днями ждут на этих скамьях, пока мы переписываем их данные на три комплекта бланков для трёх ведомств, и ни одно из них не читает бланки других. Министерство дало бы нам один бланк и место, куда направить семью, когда её бумаги проштампованы. Те, кто говорит, что министерство привлечёт сюда больше людей, никогда не сидели на наших скамьях. Я записал всё для вас, с числом ожидающих каждое утро в этом месяце»."
+ },
+ "ministry_law_events.31.t": {
+  "en": "The Wrong Moment",
+  "ru": "Неподходящий момент"
+ },
+ "ministry_law_events.32.a": {
+  "en": "Hold the law back while we answer the editors.",
+  "ru": "Придержим закон и ответим редакторам."
+ },
+ "ministry_law_events.32.b": {
+  "en": "Enact it. The newspapers will learn to work with the ministry.",
+  "ru": "Принимаем. Газеты научатся работать с министерством."
+ },
+ "ministry_law_events.32.d": {
+  "en": "The editors of our newspapers have printed the same objection to the law [SCOPE.sLaw('current_law_scope').GetName] on the same morning: that a ministry of propaganda would decide what they may print. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have taken up the cause and say the law puts every newspaper under the state.",
+  "ru": "Редакторы наших газет в одно и то же утро напечатали одно и то же возражение против закона [SCOPE.sLaw('current_law_scope').GetName]: министерство пропаганды будет решать, что им печатать. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] поддержала их и говорит, что закон ставит каждую газету под государство."
+ },
+ "ministry_law_events.32.f": {
+  "en": "\\\"We ran the editorial on the front page, and three other papers ran one like it the same day. Nobody arranged that. We had all read the draft.\\\"\\n\\n\\\"The draft says the ministry will coordinate public information. I have worked in this trade for thirty years, and I have seen what an official does with a page proof when he is given a pen.\\\"\\n\\n\\\"My publisher wants to know whether the new ministry will buy advertising space. If it does, he says, he will print whatever it likes.\\\"\\n\\n\\\"I sell papers outside the station. Since the editorials started, the morning bundle is gone by eight, and people ask me for yesterday's as well.\\\"",
+  "ru": "«Мы поставили передовицу на первую полосу, и ещё три газеты в тот же день напечатали такую же. Никто этого не организовывал. Мы все прочли проект».\\n\\n«Проект говорит, что министерство будет координировать общественную информацию. Я работаю в этом деле тридцать лет и видел, что делает чиновник с оттиском полосы, когда ему дают перо».\\n\\n«Мой издатель хочет знать, будет ли новое министерство покупать рекламное место. Если да, говорит он, он напечатает всё, что ему угодно».\\n\\n«Я продаю газеты у вокзала. С тех пор как пошли передовицы, утренняя пачка расходится к восьми, и люди просят у меня ещё и вчерашние»."
+ },
+ "ministry_law_events.32.t": {
+  "en": "The Press Rebels",
+  "ru": "Бунт прессы"
+ },
+ "ministry_law_events.33.a": {
+  "en": "Pause the law and meet the scientists' objections.",
+  "ru": "Приостановим закон и учтём возражения учёных."
+ },
+ "ministry_law_events.33.b": {
+  "en": "Press through despite the scientists' walkout.",
+  "ru": "Продолжим вопреки уходу учёных."
+ },
+ "ministry_law_events.33.d": {
+  "en": "Senior scientists invited to advise on the law [SCOPE.sLaw('current_law_scope').GetName] have walked out of the consultations. They say the draft gives the new ministry the last word on which research is funded. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have taken up their objection and warn that grants would follow politics.",
+  "ru": "Старшие учёные, приглашённые консультировать по закону [SCOPE.sLaw('current_law_scope').GetName], покинули консультации. Они говорят, что проект даёт новому министерству последнее слово в том, какие исследования финансировать. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] поддержала их возражение и предупреждает, что гранты будут следовать за политикой."
+ },
+ "ministry_law_events.33.f": {
+  "en": "The consultation had reached the fourth clause of the draft, the one that gave the ministry the final say over grants, when the oldest of the physicists put down his pen. \\\"I have read it three times,\\\" he said to the official in the chair. \\\"It says the committee advises and the ministry decides.\\\" The official began to explain the appeals procedure. The physicist stood, put his papers back in his case and walked to the door, and the two chemists at the end of the table followed him. The younger scientists stayed in their seats for a minute, looking at the official, and then one of them got up as well. The official called a recess and went out to report to the drafting office.",
+  "ru": "Консультация дошла до четвёртой статьи проекта, той, что давала министерству последнее слово по грантам, когда старейший из физиков отложил перо. «Я прочёл это трижды, — сказал он чиновнику в председательском кресле. — Здесь сказано, что комитет советует, а министерство решает». Чиновник начал объяснять порядок обжалования. Физик встал, убрал бумаги в портфель и пошёл к двери, а двое химиков в конце стола последовали за ним. Молодые учёные ещё с минуту оставались на местах, глядя на чиновника, а потом один из них тоже встал. Чиновник объявил перерыв и вышел докладывать в ведомство, составляющее закон."
+ },
+ "ministry_law_events.33.t": {
+  "en": "Academics Walk Out",
+  "ru": "Учёные уходят"
+ },
+ "ministry_law_events.34.a": {
+  "en": "Hold the law back until the drafting office is secure.",
+  "ru": "Придержим закон, пока ведомство-составитель не будет защищено."
+ },
+ "ministry_law_events.34.b": {
+  "en": "Press through and hunt the whistleblowers later.",
+  "ru": "Продолжим, а разоблачителей найдём позже."
+ },
+ "ministry_law_events.34.d": {
+  "en": "Copies of the working papers for the law [SCOPE.sLaw('current_law_scope').GetName] are being passed from hand to hand outside the government: lists of what the new ministry would watch, and of who would report to it. Someone inside the drafting office made the copies. The [SCOPE.gsInterestGroup('opposing_ig').GetName] are quoting from them openly.",
+  "ru": "Копии рабочих бумаг закона [SCOPE.sLaw('current_law_scope').GetName] ходят по рукам за пределами правительства: списки того, за чем будет наблюдать новое министерство, и тех, кто будет ему докладывать. Копии сделал кто-то из ведомства-составителя. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] открыто цитирует их."
+ },
+ "ministry_law_events.34.f": {
+  "en": "To whoever receives these papers, from one of the clerks who typed them. I have attached the drafts as they were on my desk: the schedule of publications the new ministry would read before they are printed, the forms on which neighbors would report what they hear, and the circular telling schools how to choose the pupils who would write reports on their classmates. I swore to keep the office's business secret, and I have kept it in everything else. I do not believe the oath was meant to cover this. I have not signed my name, and I ask that nobody try to find it.",
+  "ru": "Тому, кто получит эти бумаги, от одного из писарей, печатавших их. Я приложил черновики такими, какими они лежали на моём столе: перечень изданий, которые новое министерство будет читать до печати, бланки, на которых соседи будут сообщать услышанное, и циркуляр, указывающий школам, как выбирать учеников, которые будут писать донесения на одноклассников. Я клялся хранить дела ведомства в тайне и хранил её во всём остальном. Не думаю, что клятва предназначалась для этого. Своё имя я не подписал и прошу, чтобы никто не пытался его выяснить."
+ },
+ "ministry_law_events.34.t": {
+  "en": "Whistleblowers Emerge",
+  "ru": "Появляются разоблачители"
+ },
+ "ministry_law_events.35.a": {
+  "en": "Hold the law back and go through their points.",
+  "ru": "Придержим закон и разберём их доводы."
+ },
+ "ministry_law_events.35.b": {
+  "en": "Press through over the lobby's objections.",
+  "ru": "Продолжим вопреки возражениям лобби."
+ },
+ "ministry_law_events.35.d": {
+  "en": "The largest manufacturers have joined in one campaign against the law [SCOPE.sLaw('current_law_scope').GetName]. Their associations have sent objections to every office working on the draft and paid for notices in the newspapers. They say inspections and recalls would hold up ordinary trade for years. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have taken their side.",
+  "ru": "Крупнейшие производители объединились в одну кампанию против закона [SCOPE.sLaw('current_law_scope').GetName]. Их ассоциации разослали возражения во все ведомства, работающие над проектом, и оплатили объявления в газетах. Они говорят, что проверки и отзывы товаров на годы затормозят обычную торговлю. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] встала на их сторону."
+ },
+ "ministry_law_events.35.f": {
+  "en": "Points sent by the manufacturers' associations to the officials drafting the law:\\n\\nThe draft lets inspectors call a product defective but does not say what defective means. We ask for a definition before any inspector is appointed.\\nThe draft lets the ministry order a recall on a single complaint. A rival could stop a firm's sales with one letter, so we ask that a recall require a test result.\\nSmall workshops cannot pay for the testing the draft requires of every product line. We ask that firms below a certain size be tested by sample.\\nMost of our members already test their own goods. We ask that their certificates be accepted wherever they meet the ministry's standard.\\nThe ministry will need engineers to inspect machinery, and there are too few engineers to go around. We ask for a year's notice before inspections begin, so that firms can train their own.",
+  "ru": "Доводы, отправленные ассоциациями производителей чиновникам, составляющим закон:\\n\\nПроект позволяет инспекторам называть продукт дефектным, но не говорит, что значит «дефектный». Просим дать определение до назначения любого инспектора.\\nПроект позволяет министерству приказать об отзыве по одной жалобе. Конкурент мог бы остановить продажи фирмы одним письмом, поэтому просим, чтобы для отзыва требовался результат испытания.\\nМелкие мастерские не могут оплатить испытания, которых проект требует для каждой линии продукции. Просим, чтобы фирмы ниже определённого размера проверялись выборочно.\\nБольшинство наших членов уже испытывают свои товары. Просим принимать их сертификаты везде, где они отвечают стандарту министерства.\\nМинистерству понадобятся инженеры для проверки оборудования, а инженеров на всех не хватает. Просим уведомить за год до начала проверок, чтобы фирмы смогли подготовить своих."
+ },
+ "ministry_law_events.35.t": {
+  "en": "Objections in Writing",
+  "ru": "Возражения в письменном виде"
+ },
+ "ministry_law_events.36.a": {
+  "en": "Pause to consult affected neighborhoods",
+  "ru": "Приостановимся, чтобы посоветоваться с затронутыми кварталами"
+ },
+ "ministry_law_events.36.b": {
+  "en": "Press through despite local resistance",
+  "ru": "Продолжим вопреки местному сопротивлению"
+ },
+ "ministry_law_events.36.d": {
+  "en": "Residents of the older quarters of our cities have organized against the law [SCOPE.sLaw('current_law_scope').GetName]. The draft would let the new ministry clear streets for new roads and housing and pay the owners a set price. The [SCOPE.gsInterestGroup('opposing_ig').GetName] have joined the residents and say no ministry should be able to take a family's house by order.",
+  "ru": "Жители старых кварталов наших городов организовались против закона [SCOPE.sLaw('current_law_scope').GetName]. Проект позволил бы новому министерству расчищать улицы под новые дороги и жильё, выплачивая владельцам твёрдую цену. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] присоединилась к жителям и говорит, что никакое министерство не должно иметь возможность отнять дом у семьи по приказу."
+ },
+ "ministry_law_events.36.f": {
+  "en": "\\\"You have come from the drafting office to ask what the street thinks, so I will tell you what I said at the meeting last night. My father built this house, and I was born in the back room. The plan on the wall at the town hall draws a road through it, and through the bakery, and through the yard where the children play. Your draft says I will be paid what the house is worth. It is worth something to a buyer, and I am not selling. Every household on the street has signed the paper you have in your hand, and we ask that it be read out wherever the law is being decided.\\\"",
+  "ru": "«Вы пришли из ведомства-составителя спросить, что думает улица, и я скажу вам то, что сказал на вчерашнем собрании. Этот дом построил мой отец, а я родился в задней комнате. План на стене ратуши проводит через него дорогу, и через пекарню, и через двор, где играют дети. Ваш проект говорит, что мне заплатят столько, сколько стоит дом. Он чего-то стоит для покупателя, а я не продаю. Каждый дом на улице подписал бумагу, которая у вас в руках, и мы просим зачитать её везде, где решается судьба закона»."
+ },
+ "ministry_law_events.36.t": {
+  "en": "Neighborhood Resistance",
+  "ru": "Сопротивление кварталов"
+ },
+ "ministry_law_events.37.a": {
+  "en": "Hold the law back and hear the religious leaders.",
+  "ru": "Придержим закон и выслушаем религиозных лидеров."
+ },
+ "ministry_law_events.37.b": {
+  "en": "Press through despite religious protest.",
+  "ru": "Продолжим вопреки религиозному протесту."
+ },
+ "ministry_law_events.37.d": {
+  "en": "Religious authorities have organized public demonstrations against [SCOPE.sLaw('current_law_scope').GetName]. The [SCOPE.gsInterestGroup('opposing_ig').GetName] decry it as state intrusion into matters of conscience.",
+  "ru": "Религиозные авторитеты организовали публичные демонстрации против закона [SCOPE.sLaw('current_law_scope').GetName]. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] осуждает его как вторжение государства в дела совести."
+ },
+ "ministry_law_events.37.f": {
+  "en": "Remarks heard among the marchers against the law.\\n\\n\\\"Our elders read the draft aloud after prayers, clause by clause. When they reached the part about registering every house of worship with the ministry, people got up and went out into the street, and the elders went with them.\\\"\\n\\n\\\"I am not devout. I marched because the draft lets an inspector into any place where people pray, and nothing in it says where the inspector's business ends.\\\"\\n\\n\\\"The state already keeps our holy days and pays for repairs to the old places of worship. Now it wants to approve who teaches our children the faith. My grandfather would not have let a clerk choose his teacher.\\\"\\n\\n\\\"We carried the banners from the festival procession. The shopkeepers came out to watch us pass, and some of them closed up and walked at the back.\\\"",
+  "ru": "Реплики, услышанные среди участников марша против закона.\\n\\n«Наши старейшины прочли проект вслух после молитвы, пункт за пунктом. Когда они дошли до той части, где каждый дом молитвы надо зарегистрировать в министерстве, люди встали и вышли на улицу, а старейшины пошли с ними».\\n\\n«Я не набожен. Я пошёл на марш, потому что проект пускает инспектора в любое место, где молятся, и ничто в нём не говорит, где кончаются дела инспектора».\\n\\n«Государство и так отмечает наши священные дни и платит за ремонт старых мест богослужения. Теперь оно хочет утверждать, кто будет учить наших детей вере. Мой дед не позволил бы писарю выбирать себе учителя».\\n\\n«Мы несли знамёна с праздничной процессии. Лавочники выходили посмотреть, как мы идём, а некоторые закрыли лавки и шли в хвосте»."
+ },
+ "ministry_law_events.37.t": {
+  "en": "The Faithful Protest",
+  "ru": "Протест верующих"
+ },
+ "ministry_law_events.38.a": {
+  "en": "Let the law wait. Our own needs come first.",
+  "ru": "Пусть закон подождёт. Наши нужды важнее."
+ },
+ "ministry_law_events.38.b": {
+  "en": "Enact it. What we give abroad comes back to us.",
+  "ru": "Принимаем. То, что мы отдаём за рубеж, к нам вернётся."
+ },
+ "ministry_law_events.38.d": {
+  "en": "Opponents of the law [SCOPE.sLaw('current_law_scope').GetName] have made it a question of who comes first. The [SCOPE.gsInterestGroup('opposing_ig').GetName] say every sum the new ministry sends abroad is a sum not spent at home, and they are reading out the waiting lists of our own hospitals and schools to make the point.",
+  "ru": "Противники закона [SCOPE.sLaw('current_law_scope').GetName] превратили его в вопрос о том, кто первым. Группа интересов [SCOPE.gsInterestGroup('opposing_ig').GetName] говорит, что каждая сумма, которую новое министерство отправит за рубеж, — это сумма, не потраченная дома, и зачитывает очереди в наши собственные больницы и школы, чтобы подчеркнуть это."
+ },
+ "ministry_law_events.38.f": {
+  "en": "\\\"I have the draft budget here, and I have done the sum. The new ministry's first year costs as much as the schools in our three poorest provinces. You will have to explain that to the people there, and I will not do it for you.\\\"\\n\\n\\\"Then do the rest of the sum. Most of the aid is bought from our own farms and works. The countries that receive it buy from us afterwards, and they remember who helped them.\\\"\\n\\n\\\"The parents in those provinces cannot pay a teacher with what a foreign government remembers. They want a teacher this year.\\\"\\n\\n\\\"Then put the schools in the same budget, and I will support them. My case is that the ministry is worth what it costs, and I will make it in front of anyone you like.\\\"",
+  "ru": "«У меня здесь проект бюджета, и я подсчитал. Первый год нового министерства стоит как школы в трёх наших беднейших провинциях. Вам придётся объяснять это тамошним людям, и за вас я этого делать не буду».\\n\\n«Тогда досчитайте остальное. Большая часть помощи закупается на наших собственных фермах и заводах. Страны, которые её получают, потом покупают у нас и помнят, кто им помог».\\n\\n«Родители в тех провинциях не могут заплатить учителю тем, что помнит иностранное правительство. Им нужен учитель в этом году».\\n\\n«Тогда включите школы в тот же бюджет, и я их поддержу. Мой довод в том, что министерство стоит своих денег, и я изложу его перед кем угодно»."
+ },
+ "ministry_law_events.38.t": {
+  "en": "Charity Begins at Home",
+  "ru": "Милосердие начинается дома"
+ },
+ "ministry_law_events.39.a": {
+  "en": "Open examinations. The best candidates get the posts.",
+  "ru": "Открытые экзамены. Лучшие кандидаты получат должности."
+ },
+ "ministry_law_events.39.b": {
+  "en": "Appoint people we trust. Loyalty is a qualification too.",
+  "ru": "Назначим людей, которым доверяем. Верность — тоже квалификация."
+ },
+ "ministry_law_events.39.d": {
+  "en": "The new ministry under the law [SCOPE.sLaw('current_law_scope').GetName] will need its first staff, and how they are chosen has become a question of its own. Reformers want open examinations, with each post going to whoever scores best. Others want the posts given to people the government knows and trusts, as a reward for their service.",
+  "ru": "Новому министерству по закону [SCOPE.sLaw('current_law_scope').GetName] понадобится первый штат, и то, как его выбирать, стало отдельным вопросом. Реформаторы хотят открытых экзаменов, чтобы каждая должность доставалась тому, кто набрал больше баллов. Другие хотят отдавать должности людям, которых правительство знает и которым доверяет, в награду за службу."
+ },
+ "ministry_law_events.39.f": {
+  "en": "The drafting office's notes for the government on filling the new ministry's first posts:\\n\\nThe head of each department should be chosen first, because the heads will choose everyone below them.\\nOpen examinations would take most of a year to set, sit and mark, and the ministry could not open until they were done.\\nAppointment on recommendation could fill every desk within a month. Those appointed would owe their posts to whoever recommended them.\\nThe universities have offered to set the examination papers, and would expect a say in what the papers cover.\\nThe clerks transferring from the older offices already know the work. Under either method they could be kept on without a test, if the government wishes.",
+  "ru": "Заметки ведомства-составителя для правительства о заполнении первых должностей нового министерства:\\n\\nСначала следует выбрать главу каждого отдела, потому что именно главы выберут всех, кто ниже.\\nНа составление, проведение и проверку открытых экзаменов уйдёт большая часть года, и министерство не могло бы открыться, пока они не завершатся.\\nНазначение по рекомендации позволило бы заполнить каждый стол за месяц. Назначенные были бы обязаны своими местами тем, кто их рекомендовал.\\nУниверситеты предложили составить экзаменационные работы и рассчитывали бы на слово в том, что они охватывают.\\nПисари, переходящие из старых ведомств, уже знают работу. При любом из способов их можно оставить без испытания, если правительство пожелает."
+ },
+ "ministry_law_events.39.t": {
+  "en": "Filling the Desks",
+  "ru": "Заполнение столов"
+ },
+ "ministry_law_events.4.a": {
+  "en": "Close it quickly. A slow ending is harder on everyone.",
+  "ru": "Закроем быстро. Медленное завершение тяжелее для всех."
+ },
+ "ministry_law_events.4.b": {
+  "en": "Offer generous severance and retraining.",
+  "ru": "Предложим щедрое выходное пособие и переобучение."
+ },
+ "ministry_law_events.4.d": {
+  "en": "We are enacting [SCOPE.sLaw('current_law_scope').GetName], which closes a ministry, and its staff expect to be let go. Many have already begun clearing their desks. Their heads of department have asked the government what will happen to them: severance pay, places in other offices, or nothing.",
+  "ru": "Мы принимаем закон [SCOPE.sLaw('current_law_scope').GetName], закрывающий министерство, и его сотрудники ждут увольнения. Многие уже начали освобождать столы. Главы отделов спросили правительство, что с ними будет: выходное пособие, места в других ведомствах или ничего."
+ },
+ "ministry_law_events.4.f": {
+  "en": "A clerk of the ministry to be closed spent the last afternoon of the week on the contents of the desk. The files for the current year were tied in bundles with string, and each bundle was labeled with the name of the office that might take over its business. The clerk's own things went into a box: a pen case, a cushion for the chair, a cup with a chipped handle. The ledger stayed open on the desk at the last page written, so that whoever came next would see where the entries stopped. Then the clerk went to the next room, where a colleague was still emptying drawers, and held the boxes while they were filled.",
+  "ru": "Писарь закрываемого министерства провёл последний день недели за содержимым своего стола. Дела текущего года перевязали шпагатом в пачки, и каждую пачку пометили названием ведомства, которое могло бы принять её дела. Личные вещи писаря легли в коробку: пенал, подушка для стула, чашка с отбитой ручкой. Журнал остался открытым на столе на последней записанной странице, чтобы тот, кто придёт следующим, видел, где записи оборвались. Потом писарь пошёл в соседнюю комнату, где коллега ещё опустошал ящики, и держал коробки, пока их наполняли."
+ },
+ "ministry_law_events.4.t": {
+  "en": "The Redundant Clerks",
+  "ru": "Лишние писари"
+ },
+ "ministry_law_events.40.a": {
+  "en": "Start it small. It can ask for more later.",
+  "ru": "Начнём с малого. Позже оно сможет попросить больше."
+ },
+ "ministry_law_events.40.b": {
+  "en": "Fund it in full from the first day.",
+  "ru": "Финансируем полностью с первого дня."
+ },
+ "ministry_law_events.40.d": {
+  "en": "The new ministry under the law [SCOPE.sLaw('current_law_scope').GetName] needs a budget before it can open. One side wants it started with a small staff and a small allowance, to be raised later if the work requires it. The other wants it funded in full from the start, so that it is not judged on a year in which it could do nothing.",
+  "ru": "Новому министерству по закону [SCOPE.sLaw('current_law_scope').GetName] нужен бюджет, прежде чем оно сможет открыться. Одна сторона хочет начать с небольшого штата и небольшого содержания, чтобы позже увеличить, если этого потребует работа. Другая хочет полного финансирования с самого начала, чтобы министерство не оценивали по году, когда оно ничего не могло сделать."
+ },
+ "ministry_law_events.40.f": {
+  "en": "\\\"Every clerk the ministry hires is paid every month for as long as the ministry lasts. Start it with forty and let it ask for more when it can show the work. A ministry that has to ask for its money keeps careful accounts.\\\"\\n\\n\\\"A ministry of forty clerks will spend its first year answering letters it cannot act on, and at the end of the year you will point at the letters and say it failed. Give it the staff the draft asks for, and judge it on what it does.\\\"\\n\\n\\\"The draft asks for three hundred. I can find the money for a third of that without raising a tax.\\\"\\n\\n\\\"Then tell the government so, and tell it what the other two hundred would have done. I will put my figures beside yours.\\\"",
+  "ru": "«Каждому писарю, которого нанимает министерство, платят каждый месяц, пока существует министерство. Начните с сорока и позвольте просить больше, когда сможет показать работу. Министерство, которому приходится просить деньги, ведёт аккуратные счета».\\n\\n«Министерство из сорока писарей проведёт первый год, отвечая на письма, по которым не может действовать, а в конце года вы покажете на письма и скажете, что оно провалилось. Дайте ему штат, которого просит проект, и судите по тому, что оно делает».\\n\\n«Проект просит трёхсот. Треть этого я смогу найти без повышения налога».\\n\\n«Тогда скажите об этом правительству и скажите, что сделали бы остальные двести. Я положу свои цифры рядом с вашими»."
+ },
+ "ministry_law_events.40.t": {
+  "en": "What It Will Cost",
+  "ru": "Во что это обойдётся"
+ },
+ "ministry_law_events.41.a": {
+  "en": "Give the ministry the offices. One head answers for the work.",
+  "ru": "Отдадим министерству ведомства. Один руководитель отвечает за работу."
+ },
+ "ministry_law_events.41.b": {
+  "en": "Leave the old offices be. The ministry works beside them.",
+  "ru": "Оставим старые ведомства. Министерство работает рядом с ними."
+ },
+ "ministry_law_events.41.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say what the new ministry takes over. Reformers want it to absorb the offices elsewhere in the government that now do parts of its work, so that one head answers for all of it. Others, the landed interest among them, want those offices left where they are, with the ministry working beside them.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, что берёт на себя новое министерство. Реформаторы хотят, чтобы оно поглотило ведомства в других частях правительства, которые сейчас выполняют часть его работы, и один руководитель отвечал за всё. Другие, в том числе землевладельцы, хотят оставить эти ведомства на месте, а министерство пусть работает рядом с ними."
+ },
+ "ministry_law_events.41.f": {
+  "en": "The clerk from the drafting office spread the government's organization chart across two desks and held the corners down with books. With a ruler and a red pencil he drew the new ministry's box at the top of a fresh sheet. Then he went down the old chart office by office. Where the draft said an office was to move, he crossed it out on the old sheet and drew it again under the new box. Where the draft said nothing, he left the office in place and made a mark in the margin. By the end of the afternoon the new sheet had six offices under the ministry, and the old one had nine marks in its margin, each with a question for the government written beside it.",
+  "ru": "Писарь из ведомства-составителя разложил организационную схему правительства на двух столах и придавил углы книгами. Линейкой и красным карандашом он начертил квадрат нового министерства наверху чистого листа. Затем прошёл по старой схеме ведомство за ведомством. Где проект говорил, что ведомство переходит, он вычёркивал его на старом листе и рисовал заново под новым квадратом. Где проект молчал, он оставлял ведомство на месте и делал пометку на полях. К концу дня на новом листе под министерством было шесть ведомств, а на старом на полях было девять пометок, и рядом с каждой — вопрос к правительству."
+ },
+ "ministry_law_events.41.t": {
+  "en": "Lines on the Chart",
+  "ru": "Линии на схеме"
+ },
+ "ministry_law_events.42.a": {
+  "en": "Close it quickly and be done with it.",
+  "ru": "Закроем быстро и покончим с этим."
+ },
+ "ministry_law_events.42.b": {
+  "en": "Close it office by office, and finish the open cases.",
+  "ru": "Закроем ведомство за ведомством и доведём открытые дела."
+ },
+ "ministry_law_events.42.d": {
+  "en": "Once [SCOPE.sLaw('current_law_scope').GetName] is in force, the ministry it abolishes will have to close. Its staff, its files and the work still on its desks must go somewhere. One view is to close it within weeks and save the cost at once. The other is to close it office by office, handing each task to another department before the desk that did it is cleared.",
+  "ru": "Когда закон [SCOPE.sLaw('current_law_scope').GetName] вступит в силу, упразднённое им министерство придётся закрыть. Его штат, дела и работа, ещё лежащая на столах, должны куда-то перейти. Одна точка зрения: закрыть его за недели и сразу сэкономить. Другая: закрывать ведомство за ведомством, передавая каждую задачу другому отделу, прежде чем стол, который её вёл, будет освобождён."
+ },
+ "ministry_law_events.42.f": {
+  "en": "\\\"You have the order, and I will not argue with it. But before you seal the doors, look in that cabinet. Every file in it is a case still open: a payment owed, a permit half granted, a complaint we promised to answer. If the doors close on Friday, the people in those files will come here on Monday and find nobody. Give me until the end of the season and I will hand each case to an office that can finish it, with a note in our register saying where it went. My staff have agreed to stay on and do the work.\\\"",
+  "ru": "«Приказ у вас, и я не стану спорить. Но прежде чем опечатывать двери, загляните в тот шкаф. Каждое дело в нём — это ещё открытый случай: долг по платежу, наполовину выданное разрешение, жалоба, на которую мы обещали ответить. Если двери закроются в пятницу, люди из этих дел придут сюда в понедельник и никого не найдут. Дайте мне срок до конца сезона, и я передам каждое дело ведомству, которое сможет его завершить, с пометкой в нашем реестре о том, куда оно ушло. Мои сотрудники согласились остаться и сделать эту работу»."
+ },
+ "ministry_law_events.42.t": {
+  "en": "Closing the Doors",
+  "ru": "Закрытие дверей"
+ },
+ "ministry_law_events.43.a": {
+  "en": "A civilian heads the ministry, with officers to advise.",
+  "ru": "Министерство возглавит гражданский, офицеры будут советовать."
+ },
+ "ministry_law_events.43.b": {
+  "en": "Put a general at its head. The army knows its business.",
+  "ru": "Поставим во главе генерала. Армия знает своё дело."
+ },
+ "ministry_law_events.43.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say who will head the new ministry of war. Reformers want a civilian in charge, with officers to advise. The general staff want one of their own at its head, answering to the government.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, кто возглавит новое военное министерство. Реформаторы хотят гражданского руководителя при офицерах-советниках. Генеральный штаб хочет своего человека во главе, подотчётного правительству."
+ },
+ "ministry_law_events.43.f": {
+  "en": "\\\"A general at the head of the ministry will buy what the army asks for and plan the wars the army likes to fight. A civilian will ask what each regiment costs and whether we need it.\\\"\\n\\n\\\"A civilian will ask, and will not understand the answer. Supply, drill, the reserves, the timetables for calling them up: an officer learns these over thirty years, and a man who has not learned them signs whatever his clerks put in front of him.\\\"\\n\\n\\\"He will have officers to explain them, as the draft says. What he will not have is a career that depends on the generals he is meant to oversee.\\\"\\n\\n\\\"When a war comes, he will still be having it explained to him while the enemy marches. I would rather the ministry were run by someone who has seen a battle.\\\"",
+  "ru": "«Генерал во главе министерства будет покупать то, что просит армия, и планировать войны, какие армия любит вести. Гражданский спросит, сколько стоит каждый полк и нужен ли он нам».\\n\\n«Гражданский спросит и не поймёт ответа. Снабжение, строевая подготовка, резервы, графики их призыва: офицер изучает это тридцать лет, а кто этого не изучил, подписывает всё, что кладут перед ним писари».\\n\\n«У него будут офицеры, которые это объяснят, как сказано в проекте. Чего у него не будет — это карьеры, зависящей от генералов, за которыми он должен надзирать».\\n\\n«Когда придёт война, ему всё ещё будут объяснять, пока враг будет маршировать. Я предпочёл бы, чтобы министерством руководил тот, кто видел бой»."
+ },
+ "ministry_law_events.43.t": {
+  "en": "A Uniform at the Desk",
+  "ru": "Мундир за столом"
+ },
+ "ministry_law_events.44.a": {
+  "en": "Our envoys will speak firmly and mean it.",
+  "ru": "Наши посланники будут говорить твёрдо и подразумевать это."
+ },
+ "ministry_law_events.44.b": {
+  "en": "Our envoys will seek agreement first.",
+  "ru": "Наши посланники сначала будут искать согласия."
+ },
+ "ministry_law_events.44.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must set the instructions the new ministry gives our envoys. The army's senior officers want envoys told to speak firmly and to make clear what we would fight for. The intelligentsia want envoys who seek agreement first and keep the army out of their talks.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен определить инструкции, которые новое министерство даёт нашим посланникам. Старшие офицеры армии хотят, чтобы посланникам велели говорить твёрдо и ясно давать понять, за что мы готовы воевать. Интеллигенция хочет посланников, которые сначала ищут согласия и не вмешивают армию в переговоры."
+ },
+ "ministry_law_events.44.f": {
+  "en": "To the government, from the envoys who have represented it abroad, on the instructions the new ministry should issue. We have been asked whether envoys should be told to speak firmly or to seek agreement. In our experience a foreign government listens to an envoy whose own government is known to keep its word, whether the word is a warning or a promise. What harms us is an envoy who warns without his government behind him, or promises what the treasury will not pay. We ask that whichever instruction is chosen be written down plainly and sent to every legation, so that our envoys say the same thing in every capital. We also ask that the army be told what we have been instructed to say.",
+  "ru": "Правительству от посланников, представлявших его за границей, об инструкциях, которые должно издать новое министерство. Нас спросили, следует ли велеть посланникам говорить твёрдо или искать согласия. По нашему опыту, иностранное правительство слушает посланника, чьё собственное правительство известно тем, что держит слово, будь то предупреждение или обещание. Нам вредит посланник, который предупреждает, не имея за собой правительства, или обещает то, за что казна не заплатит. Просим, чтобы любая избранная инструкция была записана ясно и разослана в каждое представительство, чтобы наши посланники говорили одно и то же в каждой столице. Просим также, чтобы армии сообщили, что нам велено говорить."
+ },
+ "ministry_law_events.44.t": {
+  "en": "Instructions for Envoys",
+  "ru": "Инструкции для посланников"
+ },
+ "ministry_law_events.45.a": {
+  "en": "The ministry will work to protect our producers.",
+  "ru": "Министерство будет защищать наших производителей."
+ },
+ "ministry_law_events.45.b": {
+  "en": "The ministry will work for open markets.",
+  "ru": "Министерство будет добиваться открытых рынков."
+ },
+ "ministry_law_events.45.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say whether the new ministry of commerce works to protect our own producers or to open our markets. Industrialists want tariffs to keep foreign goods from underselling theirs. Merchants and shopkeepers want trade freed, so that they can buy cheaply wherever goods are made.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, будет ли новое министерство торговли защищать наших производителей или открывать наши рынки. Промышленники хотят пошлин, чтобы иностранные товары не продавались дешевле их собственных. Купцы и лавочники хотят свободной торговли, чтобы покупать дёшево там, где товары производятся."
+ },
+ "ministry_law_events.45.f": {
+  "en": "\\\"Half the cloth on my shelves comes from abroad. A tariff on it is a tax on every customer who comes through that door.\\\"\\n\\n\\\"My husband works at the mill and I buy the bread. I would like someone to tell me which of the two the ministry is for.\\\"\\n\\n\\\"We opened the second mill on the understanding that the government would protect us from being undersold. Two hundred families draw wages from it, and a ministry for free trade would close it.\\\"\\n\\n\\\"I carry goods into the country and out of it. Whatever the ministry decides, I want to know a season ahead, so that I can tell my buyers what next year's prices will be.\\\"",
+  "ru": "«Половина ткани на моих полках — иностранная. Пошлина на неё — налог на каждого покупателя, входящего в эту дверь».\\n\\n«Мой муж работает на фабрике, а хлеб покупаю я. Хотелось бы, чтобы кто-нибудь сказал мне, для кого из двоих министерство».\\n\\n«Мы открыли вторую фабрику в расчёте, что правительство защитит нас от продаж по более низкой цене. Двести семей получают с неё жалованье, а министерство свободной торговли её закроет».\\n\\n«Я вожу товары в страну и из неё. Что бы ни решило министерство, я хочу знать за сезон, чтобы сказать покупателям, какими будут цены в следующем году»."
+ },
+ "ministry_law_events.45.t": {
+  "en": "Whose Market",
+  "ru": "Чей рынок"
+ },
+ "ministry_law_events.46.a": {
+  "en": "The ministry chooses the works it pays for.",
+  "ru": "Министерство выбирает работы, за которые платит."
+ },
+ "ministry_law_events.46.b": {
+  "en": "Let panels of artists award the grants.",
+  "ru": "Пусть гранты распределяют комиссии художников."
+ },
+ "ministry_law_events.46.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say how the new ministry of culture pays for art. Religious leaders want the state to choose the works it funds and to give guidance on their content. Artists and writers want grants awarded by panels of their peers, with no say over what is made.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, как новое министерство культуры будет оплачивать искусство. Религиозные лидеры хотят, чтобы государство выбирало финансируемые работы и давало указания об их содержании. Художники и писатели хотят грантов, распределяемых комиссиями из равных им, без права голоса в том, что создаётся."
+ },
+ "ministry_law_events.46.f": {
+  "en": "\\\"I have been asked to tell the drafting committee what the artists want, and it is simple. Give the money to panels of working artists, change the panels every year, and let them fund whoever applies. I have painted for a patron who chose the subject and for a buyer who never saw the canvas until it was finished, and I know which pictures I am prouder of. Guidance on content means a clerk who reads the play before the rehearsal and asks for changes. Most of us would take less money to be spared that clerk. Fund the attempt, and look at the results when each grant ends.\\\"",
+  "ru": "«Меня попросили рассказать составляющему закон комитету, чего хотят художники, и это просто. Отдайте деньги комиссиям работающих художников, меняйте комиссии каждый год и пусть они финансируют всякого, кто подаёт заявку. Я писал для заказчика, выбиравшего сюжет, и для покупателя, который не видел полотна, пока оно не было закончено, и знаю, какими картинами горжусь больше. Указания о содержании — это писарь, читающий пьесу до репетиции и просящий правок. Большинство из нас согласилось бы на меньшие деньги, лишь бы избавиться от этого писаря. Финансируйте попытку и смотрите на результаты, когда каждый грант закончится»."
+ },
+ "ministry_law_events.46.t": {
+  "en": "Who Pays the Piper",
+  "ru": "Кто платит, тот заказывает музыку"
+ },
+ "ministry_law_events.47.a": {
+  "en": "In doubt, the ministry sides with the employer.",
+  "ru": "В сомнительных случаях министерство встаёт на сторону работодателя."
+ },
+ "ministry_law_events.47.b": {
+  "en": "In doubt, the ministry sides with the worker.",
+  "ru": "В сомнительных случаях министерство встаёт на сторону работника."
+ },
+ "ministry_law_events.47.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] leaves open how the ministry will rule when employers and workers bring it a dispute. Industrialists want its boards and inspectors to start from what keeps works running and hiring. The trade unions want them to start from the worker's pay and safety.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] оставляет открытым вопрос, как министерство будет разрешать споры работодателей и работников. Промышленники хотят, чтобы его комиссии и инспекторы исходили из того, что поддерживает работу и найм на предприятиях. Профсоюзы хотят, чтобы они исходили из зарплаты и безопасности работника."
+ },
+ "ministry_law_events.47.f": {
+  "en": "Memorandum for the government, from the officials drafting the labor ministry's rules of procedure. The ministry will hear disputes over dismissals, hours, unpaid wages and injuries at work. In most of them the facts will be unclear and the rules will not settle the matter. We have been asked which side the ministry should favor when that happens. If it is the employer, owners will find the ministry quick and predictable, and workers will stop bringing it their cases. If it is the worker, the unions will bring every case they have, and the ministry will need three times the staff we have planned. We have drafted the procedure both ways and attach both versions. We ask the government to choose one before the boards are appointed.",
+  "ru": "Записка для правительства от чиновников, составляющих правила процедуры министерства труда. Министерство будет разбирать споры об увольнениях, рабочем времени, невыплаченной зарплате и травмах на работе. В большинстве из них факты будут неясны, а правила не разрешат дела. Нас спросили, чью сторону должно принимать министерство в таких случаях. Если работодателя, владельцы сочтут министерство быстрым и предсказуемым, а работники перестанут приносить ему свои дела. Если работника, профсоюзы принесут каждое своё дело, и министерству понадобится втрое больший штат, чем мы запланировали. Мы составили процедуру в обоих вариантах и прилагаем обе версии. Просим правительство выбрать одну до назначения комиссий."
+ },
+ "ministry_law_events.47.t": {
+  "en": "When in Doubt",
+  "ru": "В случае сомнений"
+ },
+ "ministry_law_events.48.a": {
+  "en": "Binding standards, enforced by the ministry's inspectors.",
+  "ru": "Обязательные стандарты, соблюдение которых обеспечивают инспекторы министерства."
+ },
+ "ministry_law_events.48.b": {
+  "en": "Industry sets its own standards and reports on them.",
+  "ru": "Промышленность сама устанавливает стандарты и отчитывается о них."
+ },
+ "ministry_law_events.48.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say how the new environment ministry enforces its standards. Scientists want them binding, with fines and prosecution for works that break them. Industrialists want voluntary standards, with each industry measuring what it releases and reporting the figures itself.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, как новое министерство окружающей среды будет добиваться соблюдения своих стандартов. Учёные хотят, чтобы они были обязательными, со штрафами и преследованием для предприятий, которые их нарушают. Промышленники хотят добровольных стандартов, где каждая отрасль измеряет свои выбросы и сама сообщает цифры."
+ },
+ "ministry_law_events.48.f": {
+  "en": "At the hearing the scientist set two jars of river water on the table in front of the committee, one clear and one the color of weak tea. \\\"Above the works and below it,\\\" she said. \\\"The same afternoon.\\\" The industrialists' spokesman waited for her to finish and then laid down a binder of his own: the monitoring records his association had kept for ten years, voluntarily, and checked by an outside firm. The chairman asked the scientist whether she had seen the records. She said she had, and that they measured what came out of the chimneys, not what went into the river. The spokesman said river samples could be added. The chairman made a note and asked both of them to submit their figures in writing by the end of the week.",
+  "ru": "На слушании учёная поставила перед комитетом на стол две банки речной воды, одну прозрачную, другую цвета слабого чая. «Выше завода и ниже, — сказала она. — В тот же день». Представитель промышленников дождался, пока она закончит, и положил свою папку: записи мониторинга, которые его ассоциация вела десять лет добровольно и проверяла сторонняя фирма. Председатель спросил учёную, видела ли она эти записи. Она ответила, что видела и что они измеряют то, что выходит из труб, а не то, что попадает в реку. Представитель сказал, что пробы реки можно добавить. Председатель сделал пометку и попросил обоих представить свои цифры в письменном виде до конца недели."
+ },
+ "ministry_law_events.48.t": {
+  "en": "Who Measures the Smoke",
+  "ru": "Кто измеряет дым"
+ },
+ "ministry_law_events.49.a": {
+  "en": "Watch at home first. Subversion starts here.",
+  "ru": "Сначала следим внутри страны. Подрывная деятельность начинается здесь."
+ },
+ "ministry_law_events.49.b": {
+  "en": "Look abroad first, and leave our citizens alone.",
+  "ru": "Сначала смотрим за границу и не трогаем своих граждан."
+ },
+ "ministry_law_events.49.d": {
+  "en": "Where the new ministry under [SCOPE.sLaw('current_law_scope').GetName] should look first is still open. Senior officers want it watching for subversion at home, leaving intelligence abroad to the army. The intelligentsia want it to look outward, and fear a ministry whose first work is watching its own citizens.",
+  "ru": "Куда должно смотреть в первую очередь новое министерство по закону [SCOPE.sLaw('current_law_scope').GetName], пока не решено. Старшие офицеры хотят, чтобы оно следило за подрывной деятельностью внутри страны, а разведку за рубежом оставило армии. Интеллигенция хочет, чтобы оно смотрело вовне, и опасается министерства, первая задача которого — следить за собственными гражданами."
+ },
+ "ministry_law_events.49.f": {
+  "en": "What the new ministry's planners say each remit would need in its first year:\\n\\nA service looking inward would need an office in every province and a register of the societies, unions and newspapers it is to watch.\\nIt would draw its people from the police and the provincial offices, who know the country but rarely speak a foreign language.\\nA service looking outward would need officers attached to our missions abroad, and each of them would need years to learn his post.\\nIt would draw its people from the army and the diplomatic service, both of which will want them back.\\nEither service would need an archive. The planners propose one building for both, so that the choice can be revisited without moving the files.",
+  "ru": "Что, по словам планировщиков нового министерства, потребуется каждому из направлений в первый год:\\n\\nСлужбе, обращённой внутрь, понадобится ведомство в каждой провинции и реестр обществ, союзов и газет, за которыми ей предстоит следить.\\nОна набирала бы людей из полиции и провинциальных ведомств, которые знают страну, но редко говорят на иностранных языках.\\nСлужбе, обращённой вовне, понадобятся офицеры при наших миссиях за границей, и каждому потребуются годы, чтобы освоить свой пост.\\nОна набирала бы людей из армии и дипломатической службы, а те захотят получить их обратно.\\nЛюбой службе понадобится архив. Планировщики предлагают одно здание для обеих, чтобы выбор можно было пересмотреть без переноса дел."
+ },
+ "ministry_law_events.49.t": {
+  "en": "Which Way to Look",
+  "ru": "Куда смотреть"
+ },
+ "ministry_law_events.5.a": {
+  "en": "Civilian oversight is non-negotiable.",
+  "ru": "Гражданский надзор не обсуждается."
+ },
+ "ministry_law_events.5.b": {
+  "en": "Grant operational autonomy to ease the transition.",
+  "ru": "Предоставим оперативную самостоятельность, чтобы облегчить переход."
+ },
+ "ministry_law_events.5.d": {
+  "en": "Senior officers of the [SCOPE.gsInterestGroup('armed_forces_ig').GetName] have sent the government a memorandum on [SCOPE.sLaw('current_law_scope').GetName]. They accept that civilian officials may manage the army's supplies and pay. They do not accept that the new ministry should direct operations, and they ask for a guarantee that it will not.",
+  "ru": "Старшие офицеры группы интересов [SCOPE.gsInterestGroup('armed_forces_ig').GetName] направили правительству записку по закону [SCOPE.sLaw('current_law_scope').GetName]. Они согласны, что гражданские чиновники могут ведать снабжением и жалованьем армии. Они не согласны, чтобы новое министерство руководило операциями, и просят гарантии, что этого не будет."
+ },
+ "ministry_law_events.5.f": {
+  "en": "To the government, from the senior officers of the armed forces. We have read the law that would create a ministry of war. We have no objection to a civilian office that buys our supplies, keeps our accounts and pays our soldiers, and it may do these things better than we have. We object to any clause that would let that office give orders in the field, choose commanders or move units without our advice. Several of us have said that we would resign rather than serve under such a clause, and we have not tried to talk them out of it. We ask that the law say in plain words that operations remain with the army's own commanders, and that we be shown the text again before it passes.",
+  "ru": "Правительству от старших офицеров вооружённых сил. Мы прочли закон, который создал бы военное министерство. Мы не возражаем против гражданского ведомства, которое закупает наше снабжение, ведёт наши счета и платит нашим солдатам, и оно, возможно, делает это лучше нас. Мы возражаем против любого пункта, который позволил бы этому ведомству отдавать приказы в поле, назначать командиров или перемещать части без нашего совета. Некоторые из нас заявили, что уйдут в отставку, но не станут служить при таком пункте, и мы не пытались их отговорить. Просим, чтобы закон прямо сказал, что операции остаются за собственными командирами армии, и чтобы нам снова показали текст до его принятия."
+ },
+ "ministry_law_events.5.t": {
+  "en": "The Generals' War Room",
+  "ru": "Военный штаб генералов"
+ },
+ "ministry_law_events.50.a": {
+  "en": "Settle every family whose claim is accepted.",
+  "ru": "Расселим каждую семью, чьё ходатайство принято."
+ },
+ "ministry_law_events.50.b": {
+  "en": "Keep the numbers low and spread them out.",
+  "ru": "Будем держать число небольшим и расселять рассредоточенно."
+ },
+ "ministry_law_events.50.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say how many refugees the new ministry will settle, and on what terms. The intelligentsia want resettlement offered to everyone whose claim is accepted, with housing and language classes. Religious leaders want the numbers kept low and new arrivals spread thinly, so that no town changes faster than it can bear.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, сколько беженцев расселит новое министерство и на каких условиях. Интеллигенция хочет, чтобы переселение предлагалось всем, чьё ходатайство принято, с жильём и языковыми курсами. Религиозные лидеры хотят, чтобы число было небольшим, а прибывших расселяли тонким слоем, чтобы ни один город не менялся быстрее, чем может выдержать."
+ },
+ "ministry_law_events.50.f": {
+  "en": "\\\"Every family we leave out of resettlement goes back to the camp, and the camp already holds more people than it was built for. Give them a house and a language class and in two years they are paying taxes like anyone else.\\\"\\n\\n\\\"In two years, perhaps. In the first year they are forty families in a town of two thousand, and every one of them needs a school place and a doctor. I am not asking you to turn anyone away. I am asking you to send fewer to each town.\\\"\\n\\n\\\"Fewer to each town means more towns, and every town says what you are saying.\\\"\\n\\n\\\"Then the ministry will have to ask every town, and that will take longer than you want. Each town will also have agreed to what it gets.\\\"",
+  "ru": "«Каждая семья, которую мы не включим в переселение, возвращается в лагерь, а лагерь уже вмещает больше людей, чем был рассчитан. Дайте им дом и языковой курс, и через два года они будут платить налоги, как все».\\n\\n«Через два года, возможно. В первый год это сорок семей в городе с двумя тысячами жителей, и каждой нужны место в школе и врач. Я не прошу вас никого отвергать. Я прошу посылать меньше в каждый город».\\n\\n«Меньше в каждый город — значит больше городов, и каждый город говорит то же, что и вы».\\n\\n«Тогда министерству придётся спрашивать каждый город, и это займёт больше времени, чем вам хочется. Зато каждый город согласится с тем, что получит»."
+ },
+ "ministry_law_events.50.t": {
+  "en": "Terms of Welcome",
+  "ru": "Условия приёма"
+ },
+ "ministry_law_events.51.a": {
+  "en": "The ministry makes everything itself, under its own officials.",
+  "ru": "Министерство делает всё само, силами своих чиновников."
+ },
+ "ministry_law_events.51.b": {
+  "en": "Contract the work out to the studios and printers.",
+  "ru": "Поручим работу студиям и типографиям по контракту."
+ },
+ "ministry_law_events.51.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say who makes what the new ministry puts out. One view is that the ministry should write, print and film everything itself, under its own officials. The industrialists want the work contracted to private studios, printers and advertising firms, paid by the piece.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, кто создаёт то, что выпускает новое министерство. Одни считают, что министерство должно писать, печатать и снимать всё само, силами своих чиновников. Промышленники хотят, чтобы работа отдавалась по контракту частным студиям, типографиям и рекламным фирмам с оплатой за штуку."
+ },
+ "ministry_law_events.51.f": {
+  "en": "\\\"I run a film studio, and the committee has asked me why the ministry should buy from people like me. A ministry that makes its own films will hire officials to write them, and officials write the way officials talk. Audiences leave the cinema before the end. My writers have spent their working lives finding out what keeps people in their seats, and they will do it for whoever pays. Give us the message and the date it must be showing, and we will deliver it in a form people choose to watch. The ministry keeps the right to refuse anything we make. We ask to be paid for what it accepts.\\\"",
+  "ru": "«Я руковожу киностудией, и комитет спросил меня, почему министерство должно покупать у таких, как я. Министерство, которое снимает собственные фильмы, наймёт чиновников, чтобы их писать, а чиновники пишут так, как говорят чиновники. Зрители уходят из кинотеатра, не дождавшись конца. Мои сценаристы всю жизнь выясняли, что удерживает людей в креслах, и сделают это для любого, кто платит. Дайте нам идею и дату, к которой фильм должен идти на экранах, и мы поставим его в виде, который люди выбирают смотреть. Министерство сохраняет право отказаться от всего, что мы сделаем. Мы просим платить за то, что оно принимает»."
+ },
+ "ministry_law_events.51.t": {
+  "en": "Made to Order",
+  "ru": "Сделано на заказ"
+ },
+ "ministry_law_events.52.a": {
+  "en": "Let the scientists choose what the ministry funds.",
+  "ru": "Пусть учёные выбирают, что финансирует министерство."
+ },
+ "ministry_law_events.52.b": {
+  "en": "Fund the research our industry can put to use.",
+  "ru": "Финансируем исследования, которые наша промышленность может применить."
+ },
+ "ministry_law_events.52.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say what the new ministry of science funds first. The intelligentsia want most of its money spent on basic research, chosen by scientists. Industrialists want it spent on applied work with uses in industry, chosen with their firms.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, что в первую очередь финансирует новое министерство науки. Интеллигенция хочет, чтобы большая часть его денег шла на фундаментальные исследования, выбираемые учёными. Промышленники хотят, чтобы она шла на прикладные работы, применимые в промышленности, выбираемые вместе с их фирмами."
+ },
+ "ministry_law_events.52.f": {
+  "en": "To the drafting committee, from the professors of the sciences at our universities. We have been asked how the new ministry should divide its money between basic and applied research. Much of the work industry now relies on began as questions nobody expected to be useful: the structure of the atom, the behavior of the electron, the chemistry of soil. We cannot tell the committee which of today's questions will be useful in thirty years, and neither can anyone else. Applied work should be funded as well. Our request is that a fixed share of the budget, which we suggest should be half, go to research proposed by scientists and judged by other scientists, and that the share be written into the law so that it is not argued over every year.",
+  "ru": "Составляющему закон комитету от профессоров наук наших университетов. Нас спросили, как новое министерство должно разделить деньги между фундаментальными и прикладными исследованиями. Многое из того, на что опирается нынешняя промышленность, начиналось с вопросов, от которых никто не ждал пользы: строение атома, поведение электрона, химия почвы. Мы не можем сказать комитету, какие из сегодняшних вопросов окажутся полезными через тридцать лет, и никто другой тоже не может. Прикладные работы тоже следует финансировать. Наша просьба — чтобы определённая доля бюджета, которую мы предлагаем сделать половиной, шла на исследования, предложенные учёными и оцениваемые другими учёными, и чтобы эта доля была записана в закон и не оспаривалась каждый год."
+ },
+ "ministry_law_events.52.t": {
+  "en": "The Long View",
+  "ru": "Взгляд вдаль"
+ },
+ "ministry_law_events.53.a": {
+  "en": "Allow whatever the rules do not forbid.",
+  "ru": "Разрешим всё, что не запрещено правилами."
+ },
+ "ministry_law_events.53.b": {
+  "en": "Nothing goes out until the ministry approves it.",
+  "ru": "Ничто не выходит, пока министерство не одобрит."
+ },
+ "ministry_law_events.53.d": {
+  "en": "Before [SCOPE.sLaw('current_law_scope').GetName] is final, its drafters have to choose what the new ministry allows by default and what it stops. The intelligentsia want publication allowed unless a work breaks a narrow list of rules. Senior officers want the reverse: nothing printed or broadcast until the ministry has approved it.",
+  "ru": "Прежде чем закон [SCOPE.sLaw('current_law_scope').GetName] станет окончательным, его составителям нужно выбрать, что новое министерство разрешает по умолчанию, а что останавливает. Интеллигенция хочет разрешить публикацию, если работа не нарушает узкого перечня правил. Старшие офицеры хотят обратного: ничего не печатать и не передавать в эфир, пока министерство не одобрит."
+ },
+ "ministry_law_events.53.f": {
+  "en": "In a back room of the drafting office, two clerks were trying both standards on one week of the country's printed matter: the newspapers, two novels, a schoolbook, a song sheet and the transcripts of the evening broadcasts. The first clerk worked with the permissive rules beside him and passed each page to his out tray unless it broke one of them. The second read the same pages with the restrictive rules and held each one back until he could find the rule that allowed it. By the middle of the afternoon both clerks had been through the week's pages, and the second had begun a list of questions for the drafters about the rules he had applied.",
+  "ru": "В задней комнате ведомства-составителя два писаря пробовали оба стандарта на одной неделе печатной продукции страны: газеты, два романа, школьный учебник, листок с песнями и расшифровки вечерних передач. Первый писарь работал с разрешительными правилами под рукой и передавал каждую страницу в выходной лоток, если она не нарушала ни одного из них. Второй читал те же страницы с запретительными правилами и придерживал каждую, пока не находил правило, которое её разрешало. К середине дня оба писаря прошли по страницам недели, и второй начал список вопросов составителям о правилах, которые он применял."
+ },
+ "ministry_law_events.53.t": {
+  "en": "The Default Answer",
+  "ru": "Ответ по умолчанию"
+ },
+ "ministry_law_events.54.a": {
+  "en": "The ministry sets the standards and tests the goods.",
+  "ru": "Министерство устанавливает стандарты и испытывает товары."
+ },
+ "ministry_law_events.54.b": {
+  "en": "Each industry writes its own standards, and the ministry checks them.",
+  "ru": "Каждая отрасль пишет свои стандарты, а министерство их проверяет."
+ },
+ "ministry_law_events.54.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say who writes the safety standards for goods on sale. Shopkeepers and small traders want strict standards set and enforced by the new ministry. The industrialists want each industry to write and police its own, under the ministry's eye.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, кто пишет стандарты безопасности для товаров в продаже. Лавочники и мелкие торговцы хотят строгих стандартов, устанавливаемых и обеспечиваемых новым министерством. Промышленники хотят, чтобы каждая отрасль писала и контролировала свои стандарты под надзором министерства."
+ },
+ "ministry_law_events.54.f": {
+  "en": "\\\"When a tin of meat makes a customer sick, she comes back to my counter, not to the cannery. I cannot test what I sell. I want a ministry that tests it before it reaches me.\\\"\\n\\n\\\"The ministry will not have a laboratory for years. We have laboratories now. Let the canners' association write the standard and test against it, and let the ministry check our books.\\\"\\n\\n\\\"Your association already has a standard. I have read it, and most of it is about how the tins are labeled.\\\"\\n\\n\\\"Then sit on the committee that writes the next one. The association will give the shopkeepers two seats on it.\\\"",
+  "ru": "«Когда банка мясных консервов вызывает у покупательницы болезнь, она приходит к моему прилавку, а не на консервный завод. Я не могу испытывать то, что продаю. Мне нужно министерство, которое испытывает это до того, как оно попадёт ко мне».\\n\\n«У министерства не будет лаборатории годами. У нас лаборатории уже есть. Пусть ассоциация консервщиков пишет стандарт и испытывает по нему, а министерство проверяет наши книги».\\n\\n«У вашей ассоциации уже есть стандарт. Я читал его, и большая его часть — о том, как маркируются банки».\\n\\n«Тогда войдите в комитет, который напишет следующий. Ассоциация даст лавочникам в нём два места»."
+ },
+ "ministry_law_events.54.t": {
+  "en": "Who Writes the Rules",
+  "ru": "Кто пишет правила"
+ },
+ "ministry_law_events.55.a": {
+  "en": "Build upward. Keep the cities inside their present edges.",
+  "ru": "Строим вверх. Удерживаем города в нынешних границах."
+ },
+ "ministry_law_events.55.b": {
+  "en": "Let the cities grow outward onto open land.",
+  "ru": "Пусть города растут вширь, на свободные земли."
+ },
+ "ministry_law_events.55.d": {
+  "en": "The law [SCOPE.sLaw('current_law_scope').GetName] must say how the new ministry lets our cities grow. The intelligentsia want them built upward and closer together, with new housing among the existing streets, and the landowners oppose it. The industrialists want room to build outward onto open land, where sites for works and housing are cheap.",
+  "ru": "Закон [SCOPE.sLaw('current_law_scope').GetName] должен сказать, как новое министерство позволит расти нашим городам. Интеллигенция хочет строить их вверх и плотнее, с новым жильём среди существующих улиц, а землевладельцы против. Промышленники хотят места для строительства вширь, на свободных землях, где участки под заводы и жильё дёшевы."
+ },
+ "ministry_law_events.55.f": {
+  "en": "The surveyor from the drafting office unrolled the two plans on the low wall at the top of the hill, where the whole town could be seen at once. The first kept the town inside its present edge and filled it in: taller houses on the old lots, the market moved to make room for a new street. The second ran new streets out across the fields to the east, toward the works. The landowner who had walked up with him put a hand on the second plan. \\\"That is my land,\\\" he said, \\\"and my tenants farm it.\\\" The surveyor told him that the first plan took his houses in the old town instead. The landowner asked for copies of both, and the surveyor promised them by the end of the week.",
+  "ru": "Землемер из ведомства-составителя развернул два плана на низкой стене на вершине холма, откуда виден весь город сразу. Первый оставлял город в нынешних границах и застраивал его плотнее: более высокие дома на старых участках, рынок перенесён, чтобы освободить место для новой улицы. Второй вёл новые улицы через поля на восток, к заводам. Землевладелец, поднявшийся с ним, положил руку на второй план. «Это моя земля, — сказал он, — и мои арендаторы её обрабатывают». Землемер ответил, что первый план вместо этого берёт его дома в старом городе. Землевладелец попросил копии обоих, и землемер пообещал их до конца недели."
+ },
+ "ministry_law_events.55.t": {
+  "en": "Up or Out",
+  "ru": "Вверх или вширь"
+ },
  "movement_events_te.1.a": {
   "en": "Let them march in peace",
   "ru": "Пусть маршируют мирно"
