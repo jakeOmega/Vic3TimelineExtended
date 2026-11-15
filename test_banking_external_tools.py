@@ -48,6 +48,9 @@ def definitions(path):
     return {key: value for key, _, value in parse_body((ROOT / path).read_text(encoding='utf-8-sig'))}
 
 
+OVERDRAFT_WAIT = 'banking_overdraft_wait_a_pulse'
+
+
 class Script:
     def __init__(self, *, cash=10000, deferred=False, **inputs):
         self.values = definitions('common/script_values/banking_external_values.txt')
@@ -56,6 +59,9 @@ class Script:
         self.triggers = definitions('common/scripted_triggers/banking_policy_triggers.txt')
         self.effects = definitions('common/scripted_effects/banking_external_effects.txt')
         self.effects.update(definitions('common/scripted_effects/banking_policy_effects.txt'))
+        # The one effect of the banking cycle's file these call: the mark a lift leaves for the
+        # overdraft chain (test_banking_overdraft_shed.py holds what the chain does with it).
+        self.effects[OVERDRAFT_WAIT] = definitions('common/scripted_effects/banking_cycle_effects.txt')[OVERDRAFT_WAIT]
         self.vars = {}
         self.tools = set()
         self.inputs = dict(gdp=1e6, gold_reserves=cash, export_reliance=.2,
@@ -191,6 +197,8 @@ class Script:
                     matched = True
                 elif key == 'if':
                     matched = False
+            elif key == 'set_variable' and isinstance(val, str):
+                self.vars[val] = True       # the bare form: a flag
             elif key == 'set_variable':
                 self.vars[self.field(val, 'name')] = self.number(self.field(val, 'value'))
             elif key == 'change_variable':
@@ -431,6 +439,15 @@ class ExternalPolicyScenarios(unittest.TestCase):
         s.tools.update(('sterilize_inflows', 'fx_surrender'))
         s.effect('banking_external_monthly_update')
         self.assertFalse(s.tools)
+        # Each lift gave points back: the overdraft chain is told to sit this month out.
+        self.assertIn('banking_overdraft_wait', s.vars)
+
+    def test_a_month_that_lifts_nothing_leaves_no_mark_for_the_overdraft_chain(self):
+        s = Script()
+        s.tools.update(('sterilize_inflows', 'fx_surrender'))
+        s.effect('banking_external_monthly_update')
+        self.assertEqual(s.tools, {'sterilize_inflows', 'fx_surrender'})
+        self.assertNotIn('banking_overdraft_wait', s.vars)
 
     # --- the floating versions (2026-11-14) ---------------------------------
     @staticmethod

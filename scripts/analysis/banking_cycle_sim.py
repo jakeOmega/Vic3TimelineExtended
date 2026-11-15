@@ -937,6 +937,9 @@ class State:
     eliq_announced: bool = False
     eliq_recovery_months: int = 0
     eliq_wind_downs: int = 0
+    # banking_overdraft_wait: an earlier step of this month's pulse lifted a tool,
+    # so prune_overdrawn_tools sits the month out (banking_overdraft_wait_a_pulse)
+    overdraft_wait: bool = False
 
     # exogenous
     gdp: float = 1.0e7
@@ -2775,6 +2778,7 @@ def eliq_wind_down(cfg: Config, state: State) -> None:
         if "eliq" in state.tools and "eliq" not in cfg.hold_tools:
             state.tools.discard("eliq")
             state.eliq_wind_downs += 1
+            state.overdraft_wait = True  # banking_overdraft_wait_a_pulse
         state.eliq_announced = False
         state.eliq_recovery_months = 0
 
@@ -3052,31 +3056,51 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
             return
 
 
-def prune_overdrawn_tools(cfg: Config, state: State) -> None:
-    """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
-    order = [
+# banking_crash_check_overdrawn_interventions' chain after the crash interventions, by
+# economy: the tool lifted first comes first. The five External & Currency tools, then
+# (since 2026-11-14, when the script's chain was extended to them) the standing tools,
+# cheapest first. Until then the script stopped at the external tools and this port shed
+# the rest in an order of its own. The Bank Holiday is not in the chain: it runs out its
+# ninety days. test_banking_overdraft_shed.py holds each list to the script's order.
+OVERDRAFT_SHED_ORDER = {
+    "market": (
         "emergency_import_financing", "sterilize_inflows", "fx_surrender",
         "restrict_inflows", "foreign_borrowing_limits",
-        "capital_controls",
-        "eliq",
-        "bank_holiday",
+        "moral_suasion", "dc_elec",
+        "export_credit", "dc_agri", "capital_controls", "reserve_requirements", "margin", "buffer",
+        "directed", "dc_arms", "bail_in",
+        "dc_heavy", "omo", "deposit", "eliq",
         "asset_relief",
-        "bail_in",
-        "deposit",
-        "omo",
-        "directed",
-        "dc_heavy",
-        "dc_agri",
-        "dc_arms",
-        "dc_elec",
-        "export_credit",
-        "buffer",
-        "reserve_requirements",
-        "margin",
-        "moral_suasion",
-    ]
-    if cfg.economy != "market":
-        order = []  # actual overdraw effect has no ce/cw disable branch
+    ),
+    "command": (
+        "ce_coordination",
+        "ce_target_cut", "ce_stockpile", "ce_consolidation",
+        "ce_plan_revision", "ce_allocation", "ce_admin_campaign",
+        "ce_distribution",
+    ),
+    "coop": (
+        "cw_solidarity", "cw_directive",
+        "cw_dividend", "cw_ceiling",
+        "cw_credit", "cw_buyout",
+        "cw_mutual_aid", "cw_capital_plan",
+    ),
+}
+
+
+def prune_overdrawn_tools(cfg: Config, state: State) -> None:
+    """banking_crash_check_overdrawn_interventions, for the dashboard tools.
+
+    Not in a month where an earlier step of the pulse lifted a tool: in the game the
+    chain still reads the budget the pulse opened with, so the script has it clear the
+    mark and wait for the next month's true sum (review of PR #1810, finding B). The
+    only such step modelled here is the Emergency Liquidity wind-down; the script's
+    other two, the Outflow Controls cleanup and the directed-credit cap, follow a law
+    change, and a run's laws are fixed. The AI's own switches and a timer running out
+    are separate effects in the game and mark nothing.
+    """
+    if state.overdraft_wait:
+        state.overdraft_wait = False
+        return
     if intervention_points(cfg, state) < 0:
         # Family interventions are shed first (the timed crash modifiers), then
         # the per-law base options — banking_crash_check_overdrawn_interventions.
@@ -3090,11 +3114,9 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         for name in list(state.timed):
             del state.timed[name]
             return
-        for tool in order:
+        for tool in OVERDRAFT_SHED_ORDER[cfg.economy]:
             if tool in state.tools and tool not in cfg.hold_tools:
                 state.tools.discard(tool)
-                if tool == "bank_holiday":
-                    state.holiday_reopening = False
                 break
 
 

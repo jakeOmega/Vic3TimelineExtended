@@ -1492,74 +1492,322 @@ apply_banking_crash_softening_option_effect = {
 # Only one removal per pulse: the engine doesn't refresh modifier:X reads inside the same
 # effect block (CLAUDE.md "modifier-after-effect read ordering"), so a tight loop would
 # fire on stale data. Spacing removals by month also gives the player visible feedback.
+#
+# THE STANDING TOOLS FOLLOW (2026-11-14), after everything above and in the same chain, so
+# the cases above shed exactly as they did. Until then the chain ended at the five External
+# & Currency tools, and a budget cut left every other tool running on points the country no
+# longer had: enact Prudential Banking, switch on a guarantee and the leaning tools, go back
+# to Unregulated Banking and keep them all. The points a common currency gives its issuer
+# (te_mon_union_issuer_bank) come and go with the bloc's tier, its leadership and its
+# adopters, so they would have run through the same hole. Now an overdrawn budget lifts one
+# tool a month until it balances, cheapest first, so the crisis programs are the last to
+# go: the market tools, then the planning tools, then the council tools (a country runs one
+# family at a time). A player who would rather keep a cheap tool lifts a dearer one first.
+#
+# Each is lifted as a law lifts it (banking_strip_tool, extra_effects.txt): the history
+# marker, and none of the manual Disable's radicals or loyalists. Emergency Liquidity goes
+# through its own Disable for the refund of what it lent. The Bank Holiday is left alone:
+# it ends on its own within ninety days, and its points come back then.
+# test_banking_overdraft_shed.py holds the chain to every tool that holds points.
+#
+# NOT IN A PULSE WHERE AN EARLIER STEP LIFTED A TOOL (review of PR #1810, finding B). The
+# chain is the last step of the entry's monthly pulse, and the budget it reads is the one
+# the pulse opened with: a remove_modifier reaches neither modifier:X nor has_modifier
+# until the whole effect ends. Three steps before it lift tools that hold points: the
+# Emergency Liquidity wind-down, the Outflow Controls cleanup and the directed-credit cap.
+# After a law change the cap or the cleanup can balance the budget by itself, and the
+# chain, still reading the old overdraft, lifted a second tool the country could afford
+# (Directed Credit with Agriculture credit, Infrastructure credit and Moral Suasion, then
+# Universal Banking: the cap lifts Agriculture, the budget is +1, and Moral Suasion went
+# too). In the month the wind-down closed the program the chain could reach its own
+# Emergency Liquidity branch on a has_modifier that was still true, and pay the refund a
+# second time. So each of those steps calls banking_overdraft_wait_a_pulse where it lifts,
+# a variable write being visible at once, and the chain then does nothing that month but
+# clear the mark, whatever the budget reads. It acts the month after, on a true sum.
+# A step added before the chain that lifts a tool must do the same;
+# test_banking_overdraft_shed.py walks the pulse's steps, the effects they call and the
+# events they fire, and fails on a lift with no mark beside it.
+#
+# THE MARK IS NEVER SET BY WHAT THE CHAIN ITSELF CALLS (banking_strip_tool, the Disable
+# effects): it would then hold its own next pulse and lift every second month.
+#
+# A PLAYER IS TOLD (finding C): each branch names its tool to banking_overdraft_told, which
+# posts a feed notice to a human. The budget can now be cut from outside (an adopter
+# leaves the common currency, the bloc drops a tier), and a tool that went with no word
+# looked like a bug.
+banking_overdraft_wait_a_pulse = {
+	set_variable = banking_overdraft_wait
+}
+
+# $TOOL$ = the modifier just lifted. Its own name is its loc key, and
+# banking_overdraft_lifted_tool (banking_dash_custom_loc.txt) prints it from the flag.
+# The variable stays set, for the notice to read after the pulse; only the notice reads it.
+banking_overdraft_told = {
+	if = {
+		limit = { is_ai = no }
+		set_variable = { name = banking_overdraft_lifted value = flag:$TOOL$ }
+		post_notification = banking_overdraft_lift_notice
+	}
+}
+
 banking_crash_check_overdrawn_interventions = {
 	if = {
+		limit = { has_variable = banking_overdraft_wait }
+		remove_variable = banking_overdraft_wait
+	}
+	else_if = {
 		limit = { modifier:country_banking_intervention_max_add < 0 }
 		# --- Family interventions (shed first) ---
 		if = {
 			limit = { has_modifier = banking_crash_intervention_capital_controls }
 			remove_modifier = banking_crash_intervention_capital_controls
+			banking_overdraft_told = { TOOL = banking_crash_intervention_capital_controls }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_swap_lines }
 			remove_modifier = banking_crash_intervention_swap_lines
+			banking_overdraft_told = { TOOL = banking_crash_intervention_swap_lines }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_discount_window }
 			remove_modifier = banking_crash_intervention_discount_window
+			banking_overdraft_told = { TOOL = banking_crash_intervention_discount_window }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_keynesian_stimulus }
 			remove_modifier = banking_crash_intervention_keynesian_stimulus
+			banking_overdraft_told = { TOOL = banking_crash_intervention_keynesian_stimulus }
 		}
 		# --- Per-law base options (one of these may be active; cheapest IP cost first) ---
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_suspend_convertibility }
 			remove_modifier = banking_crash_intervention_suspend_convertibility
+			banking_overdraft_told = { TOOL = banking_crash_intervention_suspend_convertibility }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_mutual_clearing }
 			remove_modifier = banking_crash_intervention_mutual_clearing
+			banking_overdraft_told = { TOOL = banking_crash_intervention_mutual_clearing }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_correspondent_liquidity }
 			remove_modifier = banking_crash_intervention_correspondent_liquidity
+			banking_overdraft_told = { TOOL = banking_crash_intervention_correspondent_liquidity }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_dev_bank_lending }
 			remove_modifier = banking_crash_intervention_dev_bank_lending
+			banking_overdraft_told = { TOOL = banking_crash_intervention_dev_bank_lending }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_open_market }
 			remove_modifier = banking_crash_intervention_open_market
+			banking_overdraft_told = { TOOL = banking_crash_intervention_open_market }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_deposit_guarantee }
 			remove_modifier = banking_crash_intervention_deposit_guarantee
+			banking_overdraft_told = { TOOL = banking_crash_intervention_deposit_guarantee }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_nationalize }
 			remove_modifier = banking_crash_intervention_nationalize
+			banking_overdraft_told = { TOOL = banking_crash_intervention_nationalize }
 		}
 		else_if = {
 			limit = { banking_tool_emergency_import_financing_active = yes }
 			banking_effect_cb_disable_emergency_import_financing = yes
+			banking_overdraft_told = { TOOL = banking_emergency_import_financing }
 		}
 		else_if = {
 			limit = { banking_tool_sterilize_inflows_active = yes }
 			banking_effect_cb_disable_sterilize_inflows = yes
+			banking_overdraft_told = { TOOL = banking_sterilize_inflows }
 		}
 		else_if = {
 			limit = { banking_tool_fx_surrender_active = yes }
 			banking_effect_cb_disable_fx_surrender = yes
+			banking_overdraft_told = { TOOL = banking_fx_surrender }
 		}
 		else_if = {
 			limit = { banking_tool_restrict_inflows_active = yes }
 			banking_effect_cb_disable_restrict_inflows = yes
+			banking_overdraft_told = { TOOL = banking_restrict_inflows }
 		}
 		else_if = {
 			limit = { banking_tool_foreign_borrowing_limits_active = yes }
 			banking_effect_cb_disable_foreign_borrowing_limits = yes
+			banking_overdraft_told = { TOOL = banking_foreign_borrowing_limits }
+		}
+		# --- The standing market tools, cheapest first (2026-11-14) ---
+		# 1 point
+		else_if = {
+			limit = { banking_tool_moral_suasion_active = yes }
+			banking_strip_tool = { MODIFIER = banking_moral_suasion MARK = off_cb_moral_suasion }
+			banking_overdraft_told = { TOOL = banking_moral_suasion }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_electrification_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_electrification MARK = off_cb_directed_credit_electrification }
+			banking_overdraft_told = { TOOL = banking_directed_credit_electrification }
+		}
+		# 2 points
+		else_if = {
+			limit = { banking_tool_export_credit_active = yes }
+			banking_strip_tool = { MODIFIER = banking_export_credit_facility MARK = off_cb_export_credit_facility }
+			banking_overdraft_told = { TOOL = banking_export_credit_facility }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_agriculture_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_agriculture MARK = off_cb_directed_credit_agriculture }
+			banking_overdraft_told = { TOOL = banking_directed_credit_agriculture }
+		}
+		else_if = {
+			limit = { banking_tool_capital_controls_active = yes }
+			banking_strip_tool = { MODIFIER = banking_capital_controls_out MARK = off_cb_capital_controls_outflow }
+			banking_overdraft_told = { TOOL = banking_capital_controls_out }
+		}
+		else_if = {
+			limit = { banking_tool_reserve_requirements_active = yes }
+			banking_strip_tool = { MODIFIER = banking_reserve_requirements MARK = off_cb_reserve_requirements }
+			banking_overdraft_told = { TOOL = banking_reserve_requirements }
+		}
+		else_if = {
+			limit = { banking_tool_margin_req_active = yes }
+			banking_strip_tool = { MODIFIER = banking_raise_margin_requirements MARK = off_cb_raise_margin_requirements }
+			banking_overdraft_told = { TOOL = banking_raise_margin_requirements }
+		}
+		else_if = {
+			limit = { banking_tool_buffer_active = yes }
+			banking_strip_tool = { MODIFIER = banking_countercyclical_capital_buffer MARK = off_cb_countercyclical_buffer }
+			banking_overdraft_told = { TOOL = banking_countercyclical_capital_buffer }
+		}
+		# 3 points
+		else_if = {
+			limit = { banking_tool_directed_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_infrastructure MARK = off_cb_directed_credit_infrastructure }
+			banking_overdraft_told = { TOOL = banking_directed_credit_infrastructure }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_armaments_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_armaments MARK = off_cb_directed_credit_armaments }
+			banking_overdraft_told = { TOOL = banking_directed_credit_armaments }
+		}
+		else_if = {
+			limit = { banking_tool_bail_in_regime_active = yes }
+			banking_strip_tool = { MODIFIER = banking_bail_in_regime MARK = off_cb_bail_in_regime }
+			banking_overdraft_told = { TOOL = banking_bail_in_regime }
+		}
+		# 4 points
+		else_if = {
+			limit = { banking_tool_directed_credit_heavy_industry_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_heavy_industry MARK = off_cb_directed_credit_heavy_industry }
+			banking_overdraft_told = { TOOL = banking_directed_credit_heavy_industry }
+		}
+		else_if = {
+			limit = { banking_tool_omo_active = yes }
+			banking_strip_tool = { MODIFIER = banking_open_market_ops MARK = off_cb_open_market_ops }
+			banking_overdraft_told = { TOOL = banking_open_market_ops }
+		}
+		else_if = {
+			limit = { banking_tool_deposit_active = yes }
+			banking_strip_tool = { MODIFIER = banking_expand_deposit_guarantee MARK = off_cb_expand_deposit_guarantee }
+			banking_overdraft_told = { TOOL = banking_expand_deposit_guarantee }
+		}
+		# The program is lent to the banks, and losing the points does not cancel
+		# the loans: its own Disable, for the refund.
+		else_if = {
+			limit = { banking_tool_eliq_active = yes }
+			banking_effect_cb_disable_emergency_liquidity_program = yes
+			banking_overdraft_told = { TOOL = banking_emergency_liquidity_program }
+		}
+		# 5 points
+		else_if = {
+			limit = { banking_tool_asset_relief_active = yes }
+			banking_strip_tool = { MODIFIER = banking_asset_relief_program MARK = off_cb_asset_relief_program }
+			banking_overdraft_told = { TOOL = banking_asset_relief_program }
+		}
+		# --- The planning tools (a command economy), cheapest first ---
+		else_if = {
+			limit = { banking_tool_ce_coordination_active = yes }
+			banking_strip_tool = { MODIFIER = planning_coordination_protocol MARK = off_ce_coordination_protocol }
+			banking_overdraft_told = { TOOL = planning_coordination_protocol }
+		}
+		else_if = {
+			limit = { banking_tool_ce_target_cut_active = yes }
+			banking_strip_tool = { MODIFIER = planning_target_reduction MARK = off_ce_target_reduction }
+			banking_overdraft_told = { TOOL = planning_target_reduction }
+		}
+		else_if = {
+			limit = { banking_tool_ce_stockpile_active = yes }
+			banking_strip_tool = { MODIFIER = planning_strategic_stockpile MARK = off_ce_strategic_stockpile }
+			banking_overdraft_told = { TOOL = planning_strategic_stockpile }
+		}
+		else_if = {
+			limit = { banking_tool_ce_consolidation_active = yes }
+			banking_strip_tool = { MODIFIER = planning_consolidation_order MARK = off_ce_consolidation_order }
+			banking_overdraft_told = { TOOL = planning_consolidation_order }
+		}
+		else_if = {
+			limit = { banking_tool_ce_plan_revision_active = yes }
+			banking_strip_tool = { MODIFIER = planning_plan_revision MARK = off_ce_plan_revision }
+			banking_overdraft_told = { TOOL = planning_plan_revision }
+		}
+		else_if = {
+			limit = { banking_tool_ce_allocation_active = yes }
+			banking_strip_tool = { MODIFIER = planning_emergency_allocation MARK = off_ce_emergency_allocation }
+			banking_overdraft_told = { TOOL = planning_emergency_allocation }
+		}
+		else_if = {
+			limit = { banking_tool_ce_admin_campaign_active = yes }
+			banking_strip_tool = { MODIFIER = planning_admin_campaign MARK = off_ce_admin_campaign }
+			banking_overdraft_told = { TOOL = planning_admin_campaign }
+		}
+		else_if = {
+			limit = { banking_tool_ce_distribution_active = yes }
+			banking_strip_tool = { MODIFIER = planning_distribution_upgrade MARK = off_ce_distribution_upgrade }
+			banking_overdraft_told = { TOOL = planning_distribution_upgrade }
+		}
+		# --- The council tools (cooperative ownership), cheapest first ---
+		else_if = {
+			limit = { banking_tool_cw_solidarity_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_solidarity_campaign MARK = off_cw_solidarity_campaign }
+			banking_overdraft_told = { TOOL = cooperative_solidarity_campaign }
+		}
+		else_if = {
+			limit = { banking_tool_cw_directive_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_council_directive MARK = off_cw_council_directive }
+			banking_overdraft_told = { TOOL = cooperative_council_directive }
+		}
+		else_if = {
+			limit = { banking_tool_cw_dividend_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_dividend_restraint MARK = off_cw_dividend_restraint }
+			banking_overdraft_told = { TOOL = cooperative_dividend_restraint }
+		}
+		else_if = {
+			limit = { banking_tool_cw_ceiling_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_consumption_ceiling MARK = off_cw_consumption_ceiling }
+			banking_overdraft_told = { TOOL = cooperative_consumption_ceiling }
+		}
+		else_if = {
+			limit = { banking_tool_cw_credit_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_credit_expansion MARK = off_cw_credit_expansion }
+			banking_overdraft_told = { TOOL = cooperative_credit_expansion }
+		}
+		else_if = {
+			limit = { banking_tool_cw_buyout_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_worker_buyout MARK = off_cw_worker_buyout }
+			banking_overdraft_told = { TOOL = cooperative_worker_buyout }
+		}
+		else_if = {
+			limit = { banking_tool_cw_mutual_aid_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_mutual_aid MARK = off_cw_mutual_aid_fund }
+			banking_overdraft_told = { TOOL = cooperative_mutual_aid }
+		}
+		else_if = {
+			limit = { banking_tool_cw_capital_plan_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_capital_plan MARK = off_cw_capital_plan }
+			banking_overdraft_told = { TOOL = cooperative_capital_plan }
 		}
 	}
 }
@@ -2687,6 +2935,8 @@ banking_cycle_eliq_wind_down = {
 			if = {
 				limit = { banking_tool_eliq_active = yes }
 				banking_effect_cb_disable_emergency_liquidity_program = yes
+				# Four points back, which the overdraft chain cannot see this pulse.
+				banking_overdraft_wait_a_pulse = yes
 				if = {
 					limit = { is_ai = no }
 					post_notification = banking_eliq_wound_down_notice
@@ -2786,6 +3036,8 @@ banking_cycle_cleanup_capital_controls = {
 			}
 		}
 		je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+		# Two points back, which the overdraft chain cannot see this pulse.
+		banking_overdraft_wait_a_pulse = yes
 	}
 }
 
@@ -2799,6 +3051,9 @@ banking_cycle_cleanup_capital_controls = {
 #     banking_directed_credit_slots_free is read ONCE into a local: a
 #     remove_modifier is not visible to the modifier reads it is built from
 #     until the block ends, so each shed counts itself up by hand.
+#
+#     Each shed also gives its points back, which the overdraft chain at the
+#     end of the same pulse cannot see: banking_overdraft_wait_a_pulse.
 banking_directed_credit_enforce_cap = {
 	if = {
 		limit = { banking_directed_credit_slots_free < 0 }
@@ -2807,30 +3062,35 @@ banking_directed_credit_enforce_cap = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_electrification_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_electrification }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_electrification }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_armaments_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_armaments }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_armaments }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_agriculture_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_agriculture }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_agriculture }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_heavy_industry_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_heavy_industry }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_heavy_industry }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_infrastructure }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+			banking_overdraft_wait_a_pulse = yes
 		}
 	}
 }

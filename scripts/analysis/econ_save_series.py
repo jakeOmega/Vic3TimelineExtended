@@ -44,8 +44,8 @@ Budget 0x3171 (all fx / 1e5):
 
 | token  | name |
 |--------|------|
-| 0x55be | weekly_expenses (22 slots; slot 7 = construction goods) |
-| 0x55bd | weekly_income (16 slots; slot 7 = investment-pool transfer to construction) |
+| 0x55be | weekly_expenses (22 slots; slot 7 = construction goods; slot 10 = interest, which on a 1.15.1 autosave equals principal x rate paid / 52 for 17 of the 25 largest debtors and 0.79 to 0.93 of it for the rest, 2026-11-14) |
+| 0x55bd | weekly_income (16 slots; slot 7 = investment-pool transfer to construction; slot 8 = minting, which on a 1.15.1 autosave is (500 + GDP / 1000 capped at 200,000 + the flat minting adds) x (1 + the minting multiplier) to the pound for the 17 countries above the cap with no flat adds of their own, and for Singapore with two script-added ones, 2026-11-14) |
 | 0x3776 | base_wage |
 | 0x5b51 | average_productivity |
 | 0x2a38 | money |
@@ -83,6 +83,11 @@ Building record (`<id> = { 0x27f8 = "<type>" ... }`): 0x3a52 levels, 0x01b7
 state, 0x32ed staffing (fx / 1e5), 0x5607 previous_staffing (employees, a raw
 int in 0x0167), 0x2d15 goods_cost and 0x5606 goods_sales (fx / 1e5), 0x5925
 production_methods.
+
+Power blocs (read on a 1.15.1 autosave, 2026-11-14; not used by this module). A bloc
+record is `<u32 id> = { ... }` holding 0x00db identity (a string), 0x5d4a principles (a
+list of strings) and 0x5dd4 leader (a country id). It carries no member list: each
+country block names its bloc's record id under token 0x5dd8.
 
 Save files: SAV0100 is plain text. SAV0105 keeps the meta as a `meta` zip
 entry; SAV0103 (autosaves) keeps it between the 24-byte header and the zip.

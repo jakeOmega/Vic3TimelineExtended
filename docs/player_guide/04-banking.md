@@ -182,8 +182,12 @@ budget](#the-intervention-budget)), and radicalizes some
 of the upper strata. If your intervention budget goes negative, for example
 after a law downgrade, the game switches off one crash response a month. Once
 those are gone, it lifts one of the five monetary interventions in External &
-Currency each month
-until the budget balances or none of those interventions remains.
+Currency each month, and then your other tools, the cheapest first, until the
+budget balances. A notification names each tool as it goes. Lift a costlier
+tool yourself if you would rather keep a cheap one. A Bank Holiday is left to
+run out. In a month when something else has already lifted a tool, such as a
+new banking law's cap on credit sectors or Emergency Liquidity winding down,
+nothing more is lifted until the next month.
 
 ### Banking contagion
 
@@ -284,7 +288,9 @@ tables in this chapter use the full names.
 
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
-and a power bloc's banking union 1 more. The overview's Budget box shows how
+a power bloc's banking union 1 more, and leading a common currency up to 3 on
+top of that (see [The Monetary Union principle
+group](#the-monetary-union-principle-group)). The overview's Budget box shows how
 many are in use and how many are free. Hover the free figure to see what each
 grant adds and what each active tool holds.
 
@@ -991,14 +997,43 @@ Each side signs for its own reasons:
 
 A power bloc can bind its members' money together through the Monetary Union
 principles. Each tier includes the ones before, and all need Central Banking.
+The leader's column applies once at least one member has adopted its currency.
 
-| Tier | Principle | Effect |
-|---|---|---|
-| I | Monetary Cooperation | Every member gets half a swap line from the leader |
-| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate and +5% export and import advantage |
-| III | Fiscal Backstop | The leader is lender of last resort to every adopter |
-| IV | Banking Union | Adopters get −25% crash likelihood and volatility and an intervention point; needs Keynesian Economics |
-| V | Reserve Currency | The leader borrows more cheaply and earns on the world's balances; adopters gain more trade advantage; needs Globalization |
+| Tier | Principle | Members | The leader |
+|---|---|---|---|
+| I | Monetary Cooperation | Every member gets half a swap line from the leader | Nothing |
+| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate, +5% export and import advantage and 2 points more capitalists' investment-pool contribution | What its adopters get; seigniorage of up to 0.5% of its GDP a year before minting bonuses; up to 0.5 points off its risk premium; 1 intervention point |
+| III | Fiscal Backstop | The leader is lender of last resort to every adopter | Up to 0.75% and 0.75 points; 2 intervention points |
+| IV | Banking Union | Adopters get −25% crash likelihood and volatility, an intervention point and 1 point more pool contribution; needs Keynesian Economics | Up to 1% and 1 point; 3 intervention points |
+| V | Reserve Currency | Adopters gain 5% more trade advantage, better credit standing and 2 points more pool contribution; needs Globalization | Up to 1.5% and 1.5 points; 4 intervention points; countries pegged to its money by treaty count toward its reach |
+
+Leading costs risk premium: the leader backs every member, every adopter's debts
+from tier III and their banks from tier IV, each in proportion to the member's
+GDP beside its own. What it earns depends on its currency's reach, which grows
+with the economies that use its money beside its own. Reach is a half when they
+come to 15% of the leader's GDP and three quarters at 45%, so the first adopters
+count most; the Monetary Union row's tooltip shows it. Seigniorage and the cut
+in risk premium are the tier's figures times reach: at tier V with a reach of a
+half, the leader mints 0.75% of its GDP a year and pays 0.75 points less. The
+cut is risk premium, not credit standing, so it counts even for a country whose
+credit standing is already at its floor.
+
+The seigniorage figures are before minting bonuses, which raise it as they
+raise all your minting: 10% under Fiat Money or 25% under Digital Currency, and
+10% for each of the five finance technologies from Banking to Modern Financial
+Instruments, so up to 75% more. At tier V and full reach that is about 2.6% of
+its GDP a year. Very High inflation takes 30 points off the bonus and
+Hyperinflation 80. The Monetary Union row's tooltip gives the leader's
+seigniorage in pounds a week, before the bonuses and with them.
+
+The intervention points are room in [the intervention
+budget](#the-intervention-budget) for more tools at once: under Central Bank
+Independence, two of them keep the three leaning tools on beside Expand Deposit
+Guarantee. A leader under Unregulated Banking gets none, and its banks stay
+outside the banking union. If the points go, because the last adopter leaves,
+the bloc loses the tier or you stop leading, the tools your budget no longer
+covers are lifted one a month. A country under Excess Private Construction gets
+none of the extra pool contribution.
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
 within 3 points of the leader's and debt under half your credit limit. Leaving

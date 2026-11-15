@@ -3935,8 +3935,8 @@ banking_display_points_free = {
 }
 
 # The intervention budget before any tool holds a point: every grant of
-# country_banking_intervention_max_add, the banking laws' and the banking
-# union's. Every negative one is a tool's cost (the policy, planning,
+# country_banking_intervention_max_add: the banking laws', the banking
+# union's and a common currency's issuer's. Every negative one is a tool's cost (the policy, planning,
 # cooperative and crash-intervention modifiers), so what the tools hold is
 # this less what is free; while the budget is overdrawn, free is negative and
 # used is more than the total. The overview's budget cell shows both.
@@ -3952,6 +3952,9 @@ banking_display_points_total = {
 	if = { limit = { has_law = law_type:law_central_bank_independence } add = 7 }
 	if = { limit = { has_law = law_type:law_national_bank } add = 1 }
 	if = { limit = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } add = 1 }
+	# A common currency's issuer: a scaled grant, 1 a point, so the points are its
+	# multiplier (te_mon_union_issuer_bank_applied; te_monetary_update_union).
+	if = { limit = { te_mon_mod_has = { NAME = te_mon_union_issuer_bank } } add = var:te_mon_union_issuer_bank_applied }
 }
 
 banking_display_points_used = {

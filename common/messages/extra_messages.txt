@@ -2513,6 +2513,18 @@ banking_eliq_wound_down_notice = {
 	color = good
 }
 
+# Banking: an overdrawn intervention budget lifted a tool (to the country, human
+# only; banking_overdraft_told, from every branch of
+# banking_crash_check_overdrawn_interventions). The text names the tool through
+# banking_overdraft_lifted_tool, and the cause, which can be another country's
+# doing: an adopter left the common currency, or the bloc dropped a tier.
+banking_overdraft_lift_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = bad
+}
+
 # Culture merges: another country has begun a merge (te_cm_tell_start), or a merge has
 # completed (te_cmg_<m>_tell), and the merge does not reach this human country: none of
 # its cultures is a primary culture here and no state here is one of their homelands.
