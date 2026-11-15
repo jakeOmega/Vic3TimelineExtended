@@ -1036,7 +1036,10 @@ covers are lifted one a month. A country under Excess Private Construction gets
 none of the extra pool contribution.
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
-within 3 points of the leader's and debt under half your credit limit. Leaving
+within 3 points of the leader's and debt under half your credit limit. An
+adopter keeps its own banking cycle and inflation, but goods traded in one money
+sell at one price, so its inflation is pulled toward the leader's, harder the
+further apart they are. Leaving
 worsens your credit standing for ten years, costs investment pool, relations and
 bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question

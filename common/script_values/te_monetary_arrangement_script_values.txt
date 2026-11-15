@@ -30,6 +30,12 @@
 #                                       a plain local var: and never a
 #                                       cross-country chain. They hold last
 #                                       pulse's figures when nobody is anchored
+#   te_mon_anchor_core      pp          ...and the anchor's te_inflation_core,
+#                                       copied the same way. HIDDEN STATE like
+#                                       the original (ruling P7): never in a
+#                                       tooltip, loc string or visible modifier.
+#                                       Read only by te_mon_pressure_regime_pull
+#                                       for a common-currency adopter
 #   te_mon_peg_parity_offset 0 to 50    index points a kind-1 pegger's parity
 #                                       sits BELOW its anchor's index (§0.8
 #                                       ruling G4: "re-peg lower"). 0 on every

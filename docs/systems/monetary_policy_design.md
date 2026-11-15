@@ -2391,6 +2391,50 @@ In `docs/testing/banking-playtest.md` § "A common currency pays its issuer", wi
 
 **Not verified in a running game**, like everything else in §0.
 
+### 0.15 An adopter's prices follow the leader's — 2026-11-15
+
+**The question (owner).** With a common currency, should inflation be independent? §15A.1 kept
+each adopter's inflation, neutral rate, stance gap and cycle its own (G1), on the reasoning that
+the leader's rate is the wrong rate whenever the cycles diverge. That half is right: euro members
+have run apart since 1999. But the gaps are small and persistent, about a point a year at most
+among like economies (Germany 1.6% against Greece 3% over 1999–2012; peak price-level gaps of
+22–27% against Germany for Greece, Ireland, Luxembourg and Spain, part of which reversed), and
+nearly all of the dispersion is in services and other non-traded prices (euro-area services 1.9%
+a year since 1999, non-energy industrial goods 0.6%). Goods traded in one money sell at one price.
+The model had no such force: the regime pull had branches for metal, a dollarized country and
+crypto, none for an adopter, and the §9.3 basket shares only cost-push, which mean-reverts, and
+only when the two share a market.
+
+**What that left was worse than independence: no fixed point.** An adopter's rate is the leader's
+with no term for its own expectations (G13), so each point of its own inflation is a point off its
+real rate, and the stance term hands back 0.4 of it. That is the manual dial's Taylor-principle
+failure (§9.1, the c table), against an imported credibility of at most 0.56 (0.8 × an
+independent bank's 0.7) before the mandate bonus. Iterating step 6 with that loop, a standing 1pp
+of domestic pressure carried an adopter 50 points above its leader in about a century, 2pp in about
+fifty years. The overvaluation premium and the AI's exit at 30 points were the only brakes.
+
+**What shipped.** A fourth branch of `te_mon_pressure_regime_pull`, last in order, for
+`te_mon_is_union_adopter`: `−te_mon_union_price_pull × (own core − te_mon_anchor_core)`.
+`te_mon_anchor_core` is a new step-1c copy of the anchor's `te_inflation_core`, beside the rate,
+index, c and target, seeded at 2 and **hidden state** like the original (P7). The pull is core to
+core, since the shared part of the headline, a market's goods prices, already reaches both through
+the basket when they share a market; and it is two-sided, so a colder adopter is pulled up.
+
+| Ruling | What | Why |
+|---|---|---|
+| U1 | `te_mon_union_price_pull` = **1**, the dollarized pull's strength | With half the basket traded, 1 halves the gap the domestic sum would open (fixed point leader + P/2 with expectations there). Under the leader's rate, 1 leaves the gap at 0.9–1.2 × the adopter's own pressure; 0.5 left 1.6–3 ×, nearer two points than one at the pressures a welfare state carries |
+| U2 | **Adopters only**, not treaty peggers or board subjects | The owner asked about a common currency. A peg can be broken and drains peg confidence as it diverges (§15.2), which is its designed release; a board subject is a colony. Both may want the same pull; it is one `OR` in the branch's limit |
+| U3 | **The leader is not pulled toward its adopters** | The leader's dial targets its own inflation, where the ECB targets the whole area's. That is close while the leader is most of the currency's GDP; a bloc whose adopters together outweigh their leader would want a two-way pull, which this does not model |
+
+**Known roughnesses.** The overvaluation premium (§15A.3) now bites less often, since the
+divergence it prices is smaller; its figures were left alone. The copy is last pulse's or this
+one's by country order, like every anchor copy (§17 check 18). The simulator models no anchored
+country, so it has no port; `test_monetary_union_price_pull.py` iterates step 6 with the script's
+own stance and pull terms instead.
+
+**In-game check.** `docs/testing/banking-playtest.md` § "An adopter's inflation follows its
+leader's". **Not verified in a running game.**
+
 ---
 
 ## 1. Goals, non-goals, principles
@@ -3932,7 +3976,9 @@ An anchored country (`te_mon_is_anchored`: kind > 0 and the anchor is valid):
 - **keeps its own inflation, neutral rate, stance gap and cycle.** This is the whole point:
   the imported rate is the wrong rate whenever the two cycles diverge, the stance politics
   (§13) and the inflation bands (§9.2) bite as normal, and the country cannot devalue its
-  way out. `te_mon_overvaluation` measures exactly how much it wishes it could.
+  way out. `te_mon_overvaluation` measures exactly how much it wishes it could. **Since
+  2026-11-15 a common-currency adopter's core inflation is also pulled toward its leader's**
+  (§0.15): without that pull an adopter had no fixed point.
 - **imports credibility:** its anchor coefficient `c` (§9.1) becomes
   `max( own c , 0.8 × anchor's c )`, and expectations anchor on the *anchor's* target.
 

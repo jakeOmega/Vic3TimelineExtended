@@ -40,7 +40,7 @@ class Monetary(Script):
 
     def __init__(self, laws=(), **inputs):
         stubs = dict(te_mon_is_dollarised=False, in_default=False, te_mon_is_metallic=False,
-                     te_mon_inflation_anchor=2.0)
+                     te_mon_is_union_adopter=False, te_mon_inflation_anchor=2.0)
         stubs.update(inputs)
         super().__init__(**stubs)
         self.laws = set(laws)

@@ -107,6 +107,10 @@ te_monetary_init_arrangement_variables = {
 		set_variable = { name = te_mon_anchor_target value = 2 }
 	}
 	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_core } }
+		set_variable = { name = te_mon_anchor_core value = 2 }
+	}
+	if = {
 		limit = { NOT = { has_variable = te_mon_peg_parity_offset } }
 		set_variable = { name = te_mon_peg_parity_offset value = 0 }
 	}
@@ -257,6 +261,13 @@ te_monetary_update_anchor = {
 		}
 		set_variable = { name = te_mon_anchor_c value = scope:te_mon_anchor_now.te_mon_credibility_c_own }
 		set_variable = { name = te_mon_anchor_target value = scope:te_mon_anchor_now.te_mon_inflation_anchor_own }
+		# HIDDEN: the anchor's core inflation, which the adopter's regime pull
+		# (te_mon_pressure_regime_pull, step 6) closes on. Copied for every kind,
+		# read for kind 2 only.
+		if = {
+			limit = { scope:te_mon_anchor_now = { has_variable = te_inflation_core } }
+			set_variable = { name = te_mon_anchor_core value = scope:te_mon_anchor_now.var:te_inflation_core }
+		}
 	}
 
 	# --- the clocks ---------------------------------------------------------

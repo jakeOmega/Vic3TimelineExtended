@@ -560,3 +560,18 @@ The script scenarios in `test_banking_external_tools.py` run each formula; what 
 4. **Limit Foreign-Currency Borrowing at par.** On a convertible Gold Standard its Enable row is gone from Available
    Interventions; after a devaluation (index 88) it is back, and it is lifted again the month the index returns to
    par. On Fiat Money it is there as before.
+
+## An adopter's inflation follows its leader's (2026-11-15)
+
+A common-currency adopter's core inflation is pulled toward its leader's by a point of pressure for each point between
+them (`monetary_policy_design.md` § 0.15). `test_monetary_union_price_pull.py` runs the branch and step 6 offline;
+these are what only the game shows. Play a bloc at Monetary Union tier II or above with a member that has adopted.
+Core inflation is hidden, so read it with the console event `te_debug_monetary.1`, on the adopter and on the leader.
+
+1. **The copy reads the leader's core.** The adopter's regime-pull line in `te_debug_monetary.1` equals the leader's
+   core less the adopter's, to the decimal, give or take the month the leader's own pulse moved it. *If it reads the
+   adopter's own core negated (the leader's figure as 0) or the seed's 2 for good:* `scope:te_mon_anchor_now.var:
+   te_inflation_core` is not read across countries in step 1c, the same read as the rate copy in P5-1.
+2. **The gap narrows.** Over three years after adopting, an adopter that joined 2 to 3 points above its leader comes
+   within about a point and a half, its own pressures permitting, and its Price Band follows. A treaty pegger and a
+   currency-board subject keep their own inflation as before.
