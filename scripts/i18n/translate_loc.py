@@ -1163,17 +1163,23 @@ def cmd_prompt(args) -> int:
     return 0
 
 
+# Russian inflects a short noun in its last letter (силы, сил; игра, игру), so
+# a four-letter stem would miss the other cases.
+MIN_STEM = {"ru": 3}
+
+
 def term_mismatches(tm: dict[str, dict], terms: dict[str, str], field: str) -> list[tuple[str, str, str]]:
     """(key, English term, expected rendering) for each translated line whose
     English uses a listed term but whose translation lacks that rendering.
     Inflection is allowed: each word of the rendering need only appear by its
-    stem (all but its last three letters, at least four)."""
+    stem (all but its last three letters, at least four; three in Russian)."""
     def fold(text: str) -> str:
         return text.casefold().replace("ё", "е")  # Russian writes е for ё at will
 
+    shortest = MIN_STEM.get(field, 4)
     out = []
     for en_term, rendering in terms.items():
-        stems = [fold(w[: max(4, len(w) - 3)]) for w in re.findall(r"\w+", rendering) if len(w) >= 4]
+        stems = [fold(w[: max(shortest, len(w) - 3)]) for w in re.findall(r"\w+", rendering) if len(w) >= 4]
         for key, record in tm.items():
             if "base" in record or not _mentions(en_term, record["en"]):
                 continue
