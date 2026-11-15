@@ -1671,3 +1671,53 @@ covert_tradecraft_display = {
 	}
 	floor = yes
 }
+
+# ---- debug.log reads (covert_log_entry_end, covert_warfare_monthly_country) ----
+# 1 where the read holds, 0 where it doesn't, printed as [THIS.ScriptValue('x')|0].
+# The three settings are read one by one, so a line tells a setting the save
+# holds from none at all (all three 0) and from a setting name no rule file
+# defines, which has_game_rule reads as true (scripting_best_practices.md §
+# "`has_game_rule` on a Setting No File Defines Is True"). te_covert_warfare_on
+# stands for the late setting, which is on and not early.
+iw_log_rule_on = {
+	value = 0
+	if = {
+		limit = { te_covert_warfare_on = yes }
+		value = 1
+	}
+}
+iw_log_rule_early = {
+	value = 0
+	if = {
+		limit = { te_covert_warfare_early = yes }
+		value = 1
+	}
+}
+iw_log_rule_off = {
+	value = 0
+	if = {
+		limit = { has_game_rule = covert_warfare_disabled }
+		value = 1
+	}
+}
+iw_log_late_source = {
+	value = 0
+	if = {
+		limit = { covert_warfare_slot_source = yes }
+		value = 1
+	}
+}
+iw_log_opened_early = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_opened_early }
+		value = 1
+	}
+}
+iw_log_net_added = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_entry_net_added }
+		value = 1
+	}
+}

@@ -132,6 +132,7 @@ COVERT_TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
 COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 COVERT_VALUES = ROOT / "common/script_values/covert_warfare_script_values.txt"
 COVERT_ON_ACTIONS = ROOT / "common/on_actions/covert_warfare_on_actions.txt"
+COVERT_EFFECTS = ROOT / "common/scripted_effects/covert_warfare_effects.txt"
 MISC_LOC = ROOT / "localization/english/te_miscellaneous_l_english.yml"
 TECH_DIR = ROOT / "common/technology/technologies"
 
@@ -221,15 +222,44 @@ class CovertEarlyUnlockTest(unittest.TestCase):
     def test_switched_to_late_the_early_entry_closes_and_comes_back_at_the_gate(self):
         immediate = words(braced(self.je, r"^\timmediate = \{"))
         self.assertIn("if = { limit = { covert_agency_limited = yes } set_variable = iw_opened_early }", immediate)
+        # The outcome's trigger is one named trigger, the two branches: the rule off, or early to late short of
+        # the late gate.
+        self.assertEqual(words(braced(self.triggers, r"^covert_warfare_entry_would_end = \{")),
+                         "OR = { NOT = { te_covert_warfare_on = yes } AND = { has_variable = iw_opened_early "
+                         "NOT = { te_covert_warfare_early = yes } NOT = { covert_warfare_slot_source = yes } } }")
         outcome = words(braced(self.je, r"^\toutcome = \{"))
-        self.assertIn("OR = { NOT = { te_covert_warfare_on = yes } AND = { has_variable = iw_opened_early "
-                      "NOT = { te_covert_warfare_early = yes } NOT = { covert_warfare_slot_source = yes } } }", outcome)
+        self.assertIn("trigger = { covert_warfare_entry_would_end = yes }", outcome)
         self.assertIn("covert_stop_for_rule = yes", outcome)
+        self.assertIn("covert_log_entry_end = yes", outcome)
         self.assertIn("set_variable = iw_reopen_at_gate", outcome)
+        self.assertNotIn("limit = { te_covert_warfare_on = yes } set_variable = iw_reopen_at_gate", outcome)
+
+    def test_the_net_adds_the_entry_wherever_it_is_due_and_never_one_that_would_end(self):
+        """Off then on again, or a game begun with the rule off: a country with no record of the entry gets it
+        once the rule is on and the setting's gate is met, not only one whose entry ended early to late
+        (2026-11-15, a Workshop report). The net reads the outcome's own trigger, so it can't add an entry the
+        outcome ends on its next update."""
+        due = words(braced(self.triggers, r"^covert_warfare_entry_due = \{"))
+        for part in ("te_covert_warfare_on = yes", "NOT = { has_journal_entry = je_covert_warfare }",
+                     "NOT = { has_inactive_journal_entry = je_covert_warfare }",
+                     "NOT = { is_country_type = decentralized }", "is_revolutionary = no",
+                     "covert_warfare_entry_unlocked = yes", "NOT = { covert_warfare_entry_would_end = yes }"):
+            self.assertIn(part, due)
+        self.assertNotIn("reopen_at_gate", due)
         net = words(braced(code(COVERT_ON_ACTIONS), r"^covert_warfare_monthly_country = \{"))
-        self.assertIn("has_variable = iw_reopen_at_gate te_covert_warfare_on = yes "
-                      "covert_warfare_entry_unlocked = yes", net)
-        self.assertIn("add_journal_entry = { type = je_covert_warfare }", net)
+        self.assertIn("limit = { NOT = { has_variable = iw_entry_net_hold } covert_warfare_entry_due = yes }", net)
+        self.assertEqual(net.count("add_journal_entry = { type = je_covert_warfare }"), 1)
+        # The self-check reads last month's add before the net can add again, and a failed return holds the net.
+        self.assertLess(net.index("TE_SELF_CHECK OK covert_entry_return"), net.index("add_journal_entry"))
+        self.assertIn("set_variable = { name = iw_entry_net_hold value = yes days = 365 }", net)
+        self.assertIn("TE_SELF_CHECK BROKEN covert_entry_return", net)
+
+    def test_the_outcome_logs_which_branch_ended_it(self):
+        log = words(braced(code(COVERT_EFFECTS), r"^covert_log_entry_end = \{"))
+        for branch in ("branch=rule_off", "branch=early_to_late", "branch=neither"):
+            self.assertIn(branch, log)
+        for read in ("iw_log_rule_on", "iw_log_rule_early", "iw_log_rule_off"):
+            self.assertEqual(log.count(f"ScriptValue('{read}')"), 3, read)
 
     def test_the_setting_descriptions_name_their_technology(self):
         rules = loc(RULES_LOC)
@@ -383,7 +413,8 @@ class WorldWarEarlyUnlockTest(unittest.TestCase):
         self.assertEqual(len(outcomes), 3)
         invalid = words(self.je[self.je.index("flags = { hidden invalid_outcome }"):])
         self.assertIn("OR = { NOT = { te_world_war_on = yes } NOT = { ww_era_reached = yes } }", invalid)
-        self.assertIn("set_variable = ww_reopen_at_gate", invalid)
+        # Set with the rule off too, so an entry ended on the rule comes back when the rule does (2026-11-15).
+        self.assertIn("effect = { ww_stop_for_rule = yes set_variable = ww_reopen_at_gate }", invalid)
         net = words(braced(code(WW_ON_ACTIONS), r"^world_war_events_on_action = \{"))
         self.assertIn("te_world_war_on = yes ww_era_reached = yes NOT = { ww_resting_after_early_war = yes }", net)
         self.assertIn("add_journal_entry = { type = je_world_war }", net)
@@ -683,13 +714,30 @@ class CulturalHegemonyEarlyUnlockTest(unittest.TestCase):
         immediate = words(braced(self.je, r"^\timmediate = \{"))
         self.assertIn("if = { limit = { te_cultural_hegemony_early = yes NOT = { ch_late_gate_met = yes } } "
                       "set_variable = ch_opened_early }", immediate)
+        self.assertEqual(words(braced(self.triggers, r"^ch_entry_would_end = \{")),
+                         "OR = { NOT = { te_cultural_hegemony_on = yes } AND = { has_variable = ch_opened_early "
+                         "NOT = { te_cultural_hegemony_early = yes } NOT = { ch_late_gate_met = yes } } }")
         outcome = words(self.je[self.je.index("flags = { hidden invalid_outcome }"):])
-        self.assertIn("OR = { NOT = { te_cultural_hegemony_on = yes } AND = { has_variable = ch_opened_early "
-                      "NOT = { te_cultural_hegemony_early = yes } NOT = { ch_late_gate_met = yes } } }", outcome)
+        self.assertIn("trigger = { ch_entry_would_end = yes }", outcome)
         self.assertIn("set_variable = ch_reopen_at_gate", outcome)
+        self.assertNotIn("limit = { te_cultural_hegemony_on = yes } set_variable = ch_reopen_at_gate", outcome)
+
+    def test_the_net_adds_the_entry_wherever_it_is_due_and_never_one_that_would_end(self):
+        """As Covert Warfare's: off then on again, or a game begun with the rule off, every country with no record
+        gets the entry once the gate is met (2026-11-15)."""
+        due = words(braced(self.triggers, r"^ch_entry_due = \{"))
+        for part in ("te_cultural_hegemony_on = yes", "NOT = { has_journal_entry = je_cultural_hegemony }",
+                     "NOT = { has_inactive_journal_entry = je_cultural_hegemony }",
+                     "NOT = { is_country_type = decentralized }", "is_revolutionary = no",
+                     "NOT = { ch_entry_would_end = yes }"):
+            self.assertIn(part, due)
+        self.assertTrue(due.endswith("ch_entry_unlocked = yes"), "the gate walks every country: last")
+        self.assertNotIn("reopen_at_gate", due)
         net = words(braced(code(CH_ON_ACTIONS), r"^ch_monthly_pulse_on_action = \{"))
-        self.assertIn("has_variable = ch_reopen_at_gate te_cultural_hegemony_on = yes ch_entry_unlocked = yes", net)
-        self.assertIn("add_journal_entry = { type = je_cultural_hegemony }", net)
+        self.assertIn("limit = { NOT = { has_variable = ch_entry_net_hold } ch_entry_due = yes }", net)
+        self.assertEqual(net.count("add_journal_entry = { type = je_cultural_hegemony }"), 1)
+        self.assertLess(net.index("TE_SELF_CHECK OK ch_entry_return"), net.index("add_journal_entry"))
+        self.assertIn("set_variable = { name = ch_entry_net_hold value = yes days = 365 }", net)
 
     def test_the_setting_descriptions_name_their_technology(self):
         rules = loc(RULES_LOC)

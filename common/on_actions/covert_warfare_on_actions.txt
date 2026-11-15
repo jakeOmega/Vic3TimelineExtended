@@ -43,22 +43,72 @@ on_monthly_pulse_country = {
 
 covert_warfare_monthly_country = {
 	effect = {
-		# The early unlock switched to the late one closed an entry opened early
-		# (je_covert_warfare's invalid outcome, which set iw_reopen_at_gate):
-		# add it back once the gate of the setting now in force is met. An
-		# ended entry doesn't come back on its own; add_journal_entry brings a
-		# concluded type back (rules-off-midgame-playtest.md, Colonial Empire's
-		# ce_reentry, read OK 2026-11-12).
+		# ---- The entry's net (covert_warfare.md, "Coming back") ----
+		# An ended entry doesn't come back on its own, and a record
+		# disable_evaluation removed while the rule was off is gone for good;
+		# add_journal_entry brings a concluded type back (Colonial Empire's
+		# ce_reentry, read OK 2026-11-12). So a country with no record of the
+		# entry gets it once the rule is on and the gate of the setting in
+		# force is met (covert_warfare_entry_due), whether its entry ended on
+		# the rule, ended early to late, or it never had one. The rule off
+		# pauses the service; on again, it resumes (funding 0, Tradecraft
+		# kept; the operations and networks ended with the rule).
+		#
+		#   1. The self-check, before anything is added this month, so it
+		#      reads last month's add (iw_entry_net_added, naming the country
+		#      it was set on, so a revolution's winner holding the loser's
+		#      mark gives no verdict):
+		#        TE_SELF_CHECK OK covert_entry_return      the entry the net
+		#                                                  added is running
+		#                                                  (once a game)
+		#        TE_SELF_CHECK BROKEN covert_entry_return  it is not, though the
+		#                                                  country is still due
+		#                                                  it: it ended at once,
+		#                                                  or the add failed
+		#      BROKEN also holds the net off this country for a year
+		#      (iw_entry_net_hold), so an entry that would end at every update
+		#      comes back once a year, not once a month; the outcome's own line
+		#      (covert_log_entry_end) says which branch ended it.
+		#   2. The add, with one TE_COVERT_ENTRY line naming the country, the
+		#      three settings as read here and whether its entry had ended
+		#      before (iw_reopen_at_gate, set by the outcome).
+		if = {
+			limit = { has_variable = iw_entry_net_added }
+			save_scope_as = iw_net_country
+			if = {
+				limit = { var:iw_entry_net_added ?= scope:iw_net_country }
+				if = {
+					limit = { has_journal_entry = je_covert_warfare }
+					if = {
+						limit = { NOT = { has_global_variable = iw_entry_return_ok_logged } }
+						set_global_variable = iw_entry_return_ok_logged
+						debug_log = "TE_SELF_CHECK OK covert_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_covert_warfare last month and it is running; logged once a game)"
+					}
+				}
+				else_if = {
+					limit = { covert_warfare_entry_due = yes }
+					set_variable = { name = iw_entry_net_hold value = yes days = 365 }
+					debug_log = "TE_SELF_CHECK BROKEN covert_entry_return country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the net added je_covert_warfare last month; it is not running and the country is still due it, so it ended at once or the add failed: the net waits a year for this country; read the TE_COVERT_ENTRY ended line before this; docs/testing/rules-off-midgame-playtest.md, Self-checks)"
+				}
+			}
+			remove_variable = iw_entry_net_added
+		}
 		if = {
 			limit = {
-				has_variable = iw_reopen_at_gate
-				te_covert_warfare_on = yes
-				covert_warfare_entry_unlocked = yes
-				NOT = { has_journal_entry = je_covert_warfare }
-				NOT = { has_inactive_journal_entry = je_covert_warfare }
+				NOT = { has_variable = iw_entry_net_hold }
+				covert_warfare_entry_due = yes
 			}
-			remove_variable = iw_reopen_at_gate
+			if = {
+				limit = { has_variable = iw_reopen_at_gate }
+				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=yes on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_variable = iw_reopen_at_gate
+			}
+			else = {
+				debug_log = "TE_COVERT_ENTRY added country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] ended_before=no on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 			add_journal_entry = { type = je_covert_warfare }
+			save_scope_as = iw_net_country
+			set_variable = { name = iw_entry_net_added value = scope:iw_net_country }
 		}
 		if = {
 			limit = { has_variable = iw_last_exposed_age }

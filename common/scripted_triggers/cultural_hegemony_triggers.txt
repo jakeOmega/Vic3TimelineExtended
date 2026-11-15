@@ -54,6 +54,43 @@ ch_late_gate_met = {
 	has_technology_researched = romanticism
 }
 
+# je_cultural_hegemony would end now, through its invalid outcome, which reads
+# exactly this: the rule off, or the early unlock switched to the late one
+# while an entry opened early (ch_opened_early) is still short of the late
+# gate. ch_entry_due reads it too, so the monthly net never adds an entry that
+# would end on its next update (covert_warfare_entry_would_end is the same
+# for Covert Warfare).
+ch_entry_would_end = {
+	OR = {
+		NOT = { te_cultural_hegemony_on = yes }
+		AND = {
+			has_variable = ch_opened_early
+			NOT = { te_cultural_hegemony_early = yes }
+			NOT = { ch_late_gate_met = yes }
+		}
+	}
+}
+
+# ch_monthly_pulse_on_action's net adds je_cultural_hegemony: the rule on, the
+# gate of the setting in force met, and no record of the entry, active or
+# inactive. A country with no record is one whose entry ended (on the rule, or
+# early to late short of the late gate), one whose inactive record
+# disable_evaluation removed while the rule was off (or from the game's start,
+# when it began off), or one the engine left out; every other country holds an
+# inactive record the engine activates itself (test_add_journal_entry_guard.py).
+# Not decentralized or revolutionary, as Banking's net. The record tests come
+# first: ch_entry_unlocked walks every country.
+ch_entry_due = {
+	te_cultural_hegemony_on = yes
+	NOT = { has_journal_entry = je_cultural_hegemony }
+	NOT = { has_inactive_journal_entry = je_cultural_hegemony }
+	NOT = { is_country_type = decentralized }
+	is_revolutionary = no
+	has_technology_researched = romanticism
+	NOT = { ch_entry_would_end = yes }
+	ch_entry_unlocked = yes
+}
+
 # The technology International Cultural Outreach (the world exposition
 # programme) needs: Mass Media, or under the early unlock the Electric
 # Telegraph, since world's fairs and touring exhibitions came long before

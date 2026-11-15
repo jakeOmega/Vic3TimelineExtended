@@ -3014,6 +3014,34 @@ covert_stop_for_rule = {
 	}
 }
 
+# Country scope, from je_covert_warfare's invalid outcome, before anything is
+# torn down: one debug.log line saying why the entry ended. The effect reads
+# the outcome's two branches again (covert_warfare_entry_would_end), so a line
+# with branch=neither says the outcome's trigger and its effect read the rule
+# differently, which nothing in this mod has seen. on/early/off are the three
+# settings read one by one (iw_log_rule_*); net_added=1 is an entry the
+# monthly net added within the last month (covert_warfare_monthly_country).
+# A Workshop player saw the entry come back every month and end on "the rule
+# switched off" with the rule on (2026-11-15); these lines and the net's say
+# which of the readings in covert_warfare.md, "Coming back", it was.
+covert_log_entry_end = {
+	if = {
+		limit = { NOT = { te_covert_warfare_on = yes } }
+		debug_log = "TE_COVERT_ENTRY ended branch=rule_off country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] opened_early=[THIS.ScriptValue('iw_log_opened_early')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] net_added=[THIS.ScriptValue('iw_log_net_added')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else_if = {
+		limit = {
+			has_variable = iw_opened_early
+			NOT = { te_covert_warfare_early = yes }
+			NOT = { covert_warfare_slot_source = yes }
+		}
+		debug_log = "TE_COVERT_ENTRY ended branch=early_to_late country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] opened_early=[THIS.ScriptValue('iw_log_opened_early')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] net_added=[THIS.ScriptValue('iw_log_net_added')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else = {
+		debug_log = "TE_COVERT_ENTRY ended branch=neither (the outcome's trigger held, but neither of its branches holds in its effect: the trigger and the effect read the rule differently) country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] on=[THIS.ScriptValue('iw_log_rule_on')|0] early=[THIS.ScriptValue('iw_log_rule_early')|0] off=[THIS.ScriptValue('iw_log_rule_off')|0] opened_early=[THIS.ScriptValue('iw_log_opened_early')|0] late_source=[THIS.ScriptValue('iw_log_late_source')|0] net_added=[THIS.ScriptValue('iw_log_net_added')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
 # ============================================================================
 # PRIORITY
 # ============================================================================

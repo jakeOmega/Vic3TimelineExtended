@@ -249,8 +249,13 @@ je_world_war = {
 	# later world war (world_war_conditions_met) once the rule is back on. A war
 	# already under way goes on as an ordinary war.
 	# Also the early unlock switched to the late one while this country lacks
-	# Combined Arms: the same teardown, and world_war_events_on_action adds the
-	# entry back at Combined Arms (ww_reopen_at_gate).
+	# Combined Arms: the same teardown.
+	# Either way world_war_events_on_action adds the entry back once the rule
+	# is on and the country has reached the era of the setting in force
+	# (ww_reopen_at_gate; set whether the rule is on or off, so an entry ended
+	# on the rule comes back when the rule does, 2026-11-15). A great power
+	# whose inactive record the rule's prune removed, one that never had an
+	# active entry, gets nothing from it: game_rules.md, the mid-game table.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_world_war_invalid_conclusion_desc
@@ -262,10 +267,7 @@ je_world_war = {
 		}
 		effect = {
 			ww_stop_for_rule = yes
-			if = {
-				limit = { te_world_war_on = yes }
-				set_variable = ww_reopen_at_gate
-			}
+			set_variable = ww_reopen_at_gate
 		}
 	}
 

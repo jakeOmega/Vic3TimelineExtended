@@ -228,28 +228,22 @@ je_cultural_hegemony = {
 	# off our movements, since its yearly refresh has stopped.
 	# Also the early unlock switched to the late one while an entry opened
 	# early (ch_opened_early) is still short of the late gate: the same
-	# teardown, and ch_monthly_pulse_on_action adds the entry back once the
-	# gate is met (ch_reopen_at_gate).
+	# teardown.
+	# Either way ch_monthly_pulse_on_action's net adds the entry back once the
+	# rule is on and the gate of the setting in force is met. The trigger is
+	# ch_entry_would_end, which the net reads too, so the net never adds an
+	# entry this ends at once.
 	outcome = {
 		flags = { hidden invalid_outcome }
 		conclusion_desc = je_cultural_hegemony_invalid_conclusion_desc
 		trigger = {
-			OR = {
-				NOT = { te_cultural_hegemony_on = yes }
-				AND = {
-					has_variable = ch_opened_early
-					NOT = { te_cultural_hegemony_early = yes }
-					NOT = { ch_late_gate_met = yes }
-				}
-			}
+			ch_entry_would_end = yes
 		}
 		effect = {
 			ch_shut_down_programmes = yes
 			ch_remove_hegemon_model_pressure = yes
-			if = {
-				limit = { te_cultural_hegemony_on = yes }
-				set_variable = ch_reopen_at_gate
-			}
+			# For the net's log line (ended_before=yes), removed at the add.
+			set_variable = ch_reopen_at_gate
 			if = {
 				limit = { has_variable = ch_opened_early }
 				remove_variable = ch_opened_early
