@@ -1492,7 +1492,7 @@ class ScaleTooltipTest(unittest.TestCase):
             text, n = self.values[f"{key}_scaled"], scale["name"]
             with self.subTest(pick=key):
                 self.assertTrue(text.startswith(f"#b ${key}$#!\\n{kinds[scale['world']['kind']]}\\n"
-                                                "$te_jmap_scaled_lead$ "), text)
+                                                "$te_jmap_scaled_lead$ $te_jmap_measured_area$: "), text)
                 # the same two figures as its own description, in the same formats
                 own = self.values[f"{key}_desc"]
                 for end in ("lo", "hi"):

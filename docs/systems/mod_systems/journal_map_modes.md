@@ -398,7 +398,11 @@ Ranked.
   the five fixed curves have no branch: the Scale buttons other than Map's Own are greyed, with the reason, while the
   pick has no range (`te_jmap_pick_fitted`), and an entry's page is the map's own curve whatever is set. The
   generated values file went from 3,567 lines to 11,562: a logarithm is a ladder of twenty straight pieces, and
-  Logarithmic needs two for a straight map and four for a midpoint map.
+  Logarithmic needs two for a straight map and four for a midpoint map (two a side). In a paint, one evaluation of
+  a factor under Logarithmic runs two of them (a midpoint map only its side's), as GDP per Capita's own curve
+  always has. A three-color map's `map_color` evaluates its factor twice a state under every scale, once in the
+  `< 0.5` split and once in `_lower` or `_upper`: so the eleven three-color maps (the eight midpoint maps, Life
+  Expectancy, Infant Mortality, Median Age) read four ladders a state under Logarithmic and the other maps two.
 - **Linear**: straight from the range's low to its high; on a map with a meaningful midpoint, straight on each side
   of it, to the range's end on that side, so the midpoint stays the neutral color.
 - **Logarithmic**: the same share of the color for each doubling. A map already on a doubling scale (GDP per
@@ -450,7 +454,10 @@ Ranked.
   map's own curve ("half the color in the first fifth of that span"), so its button shows it only under the map's
   own curve. Under any other scale the button shows `te_jmap_pick_<map>_scaled`
   (`SelectLocalization` on `te_jmap_scale` in the button's `tooltip`): the pick's name, the scale in force and
-  what it does, and the range's two figures in the formats its own description gives them. What the scale does
+  what it does, and the range's two figures in the formats its own description gives them, led by "The range now,
+  over" (`te_jmap_scaled_range_lead`; "Not read by this scale, …" under Ranked) and the area
+  (`$te_jmap_measured_area$`, spliced by each pick's key beside the lead, so the lead's text reads no second
+  custom localization). What the scale does
   comes from one of three custom localizations, named in each pick's key since a custom localization can't know
   which button is hovered: a straight map (`te_jmap_scale_text`), a doubling map (`_doubling`: Logarithmic "is
   this map's own") and a midpoint map (`_mid`). The 35 own descriptions are untouched, so their German and Spanish
@@ -598,7 +605,8 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    pick's tooltip the range (`te_jmap_<map>_lo` / `_hi`), the area in place of "the world"
    (`$te_jmap_measured_area$`) and, last, what the range leaves out (`$te_jmap_measured_trim$`); give it a second
    key, `te_jmap_pick_<map>_scaled`, for every scale but its own (the name, `$te_jmap_scale_in_force$` or its
-   `_doubling` or `_mid` form by the map's kind, `$te_jmap_scaled_lead$` and the same two figures), and have its
+   `_doubling` or `_mid` form by the map's kind, `$te_jmap_scaled_lead$ $te_jmap_measured_area$:` and the same two
+   figures), and have its
    button choose between the two on `te_jmap_scale` as the others do (`ScaleTooltipTest`). Mark it
    `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
    and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
