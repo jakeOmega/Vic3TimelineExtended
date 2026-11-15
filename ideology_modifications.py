@@ -61,6 +61,42 @@ def transition_constructor(attitude):
         ("law_managed_fossil_phaseout", phaseout),
     ]
 
+
+_STANCE_RANK = {
+    "strongly_disapprove": -2,
+    "disapprove": -1,
+    "neutral": 0,
+    "approve": 1,
+    "strongly_approve": 2,
+}
+_RANK_STANCE = {rank: stance for stance, rank in _STANCE_RANK.items()}
+
+
+def neutral_on_locked_default(lines, default):
+    """`lines` (a lawgroup's (law, stance) pairs) with `default` at neutral and
+    every law rated above it lifted to at least approve, so it still rates
+    above it.
+
+    For a movement ideology and a law a country holds from 1836 that nothing
+    the movement rates higher can replace before the movement exists
+    (NEUTRAL_ON_LOCKED_DEFAULT at the end of this file; the rule is in
+    movement_stances.py, the guard test_movement_stance_guard.py). A law at or
+    below `default` keeps its stance, and since a lift only raises a stance to
+    approve, no two other laws change order (two may tie). The two automation
+    lists of #1824 were built this way by hand. Returns a new list: the shared
+    lists the interest groups' ideologies read are never changed."""
+    floor = _STANCE_RANK[dict(lines)[default]]
+    assert floor < 0, (default, lines)
+    out = []
+    for law, stance in lines:
+        rank = _STANCE_RANK[stance]
+        if law == default:
+            rank = 0
+        elif rank > floor:
+            rank = max(rank, 1)
+        out.append((law, _RANK_STANCE[rank]))
+    return out
+
 anti_privacy_entry = [
     ("law_minimal_privacy_protection", "neutral"),
     ("law_moderate_data_privacy", "disapprove"),
@@ -924,20 +960,14 @@ AUTOMATION_LISTS = {
     "welfare": automation_constructor("-", "+", "0", "+"),
     # The machines belong to everyone.
     "socialist": automation_constructor("--", "0", "0", "++"),
-    # The two movements vanilla's Reform or Revolution entry reads (its
-    # activism term, (activism - 0.25) x 10 a month per movement). Unrestricted
-    # Automation is every country's law from 1836 until Humanoid Robotics (era
-    # 11), so a stance on it is activism no law can answer for the whole life
-    # of the entry: at MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE (-0.05,
-    # vanilla's) and these movements' 0.75, +0.075 for the socialists and
-    # +0.0375 for labor in every country. Neutral here, as Natural Form and the
-    # Frontier AI placeholder are; every law the "labor" and "socialist" lists
-    # rate above it still rates above it, so the movements back the same laws
-    # once Humanoid Robotics arrives. The interest groups' ideologies keep the
-    # lists above.
-    "labor_movement": automation_constructor("0", "+", "++", "+"),
-    "socialist_movement": automation_constructor("0", "+", "+", "++"),
 }
+# The movement ideologies below take these lists too, then
+# NEUTRAL_ON_LOCKED_DEFAULT (end of file) makes each neutral on Unrestricted
+# Automation: every country holds it from 1836 until Humanoid Robotics (era
+# 11), so a movement's stance on it is activism no law can answer. The labor
+# and socialist movements, the two vanilla's Reform or Revolution entry reads,
+# were the first (#1824: labor 0/+/++/+, socialists 0/+/+/++); the interest
+# groups' ideologies keep the lists as they are.
 
 AUTOMATION_STANCES = {
     **{k: "free" for k in ("ideology_plutocratic", "ideology_laissez_faire", "ideology_market_liberal")},
@@ -947,10 +977,9 @@ AUTOMATION_STANCES = {
     **{k: "tax" for k in ("ideology_liberal_modern", "ideology_reformer", "ideology_corporatist")},
     **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_jingoist")},
     **{k: "labor" for k in (
-        "ideology_proletarian", "ideology_populist", "ideology_fascist", "ideology_fascist_movement",
+        "ideology_proletarian", "ideology_populist", "ideology_labor_movement", "ideology_fascist",
+        "ideology_fascist_movement",
     )},
-    "ideology_labor_movement": "labor_movement",
-    "ideology_socialist_movement": "socialist_movement",
     **{k: "traditional" for k in (
         "ideology_pious", "ideology_moralist", "ideology_agrarian", "ideology_paternalistic",
         "ideology_traditionalist", "ideology_reactionary",
@@ -960,9 +989,9 @@ AUTOMATION_STANCES = {
         "ideology_radical_movement", "ideology_humanitarian",
     )},
     **{k: "socialist" for k in (
-        "ideology_communist", "ideology_communist_leader", "ideology_communist_movement",
-        "ideology_vanguardist", "ideology_revolutionary_socialist_movement", "ideology_anarchist",
-        "ideology_anarchist_movement", "ideology_utopian",
+        "ideology_communist", "ideology_socialist_movement", "ideology_communist_leader",
+        "ideology_communist_movement", "ideology_vanguardist", "ideology_revolutionary_socialist_movement",
+        "ideology_anarchist", "ideology_anarchist_movement", "ideology_utopian",
     )},
 }
 
@@ -4507,6 +4536,93 @@ for _ideology, _list in BODILY_AUTONOMY_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_bodily_autonomy"] = BODILY_AUTONOMY_LISTS[_list]
 for _ideology, _list in FRONTIER_AI_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_frontier_ai_control"] = FRONTIER_AI_LISTS[_list]
+
+# --- Movement ideologies and the laws no government can leave (#1824, #1832) ---
+# A movement's activism takes MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE
+# (vanilla's -0.05) x the stance x its active_law_radicalism_multiplier from
+# every law in force. The rule (movement_stances.py, "Standing grievances"): a
+# movement may disapprove of a law a country can hold from 1836 only if it
+# rates higher a law of the group that a country can enact by the era in which
+# the movement can first exist. Each line below broke it; the comment gives the
+# movement's first era and the first era a law it rated higher opens. Each
+# takes neutral_on_locked_default: neutral on that law, every law it rated
+# above it lifted to at least approve, so the movement still backs the same
+# laws once they open. The interest groups' ideologies keep their lists, so
+# their approval still reads these stances (test_movement_stance_guard.py
+# covers movements only). The guard's resolution is an era, so a one-era gap
+# (the bank, banking, heredity for the fascists) breaks it too.
+LOCKED_DEFAULT_GROUPS = {
+    # every country from 1836 (extra_history.txt); the first alternative at
+    # Humanoid Robotics, era 11
+    "law_unrestricted_automation": "lawgroup_automation_policy",
+    # every country from 1836; Restorative Justice at Behaviorism (era 5),
+    # Rehabilitation at Mental Health Awareness (era 10)
+    "law_punishment_focused_criminal_justice": "lawgroup_criminal_justice",
+    # every country from 1836; State Eugenics at Behaviorism (era 5), the rest
+    # at Gene Splicing (era 8)
+    "law_traditional_heredity": "lawgroup_genetic_rights",
+    # every country from 1836; Free Mutual Banking and Universal Banking at
+    # Postal Savings and Central Banking (era 2)
+    "law_unregulated_banking": "lawgroup_financial_regulation",
+    # the group's first law, so every country's; the bank at Central Banking
+    # (era 2)
+    "law_no_national_bank": "lawgroup_national_bank",
+    # the ministries' "no" laws are their groups' first: Propaganda and
+    # Religion at Mass Media (era 6), Refugee Affairs at the Civil Rights
+    # Movement (era 7), Intelligence and Security at Mass Surveillance (era 5)
+    "law_no_ministry_of_propaganda": "lawgroup_ministry_of_propaganda",
+    "law_no_ministry_of_religion": "lawgroup_ministry_of_religion",
+    "law_no_ministry_of_refugee_affairs": "lawgroup_ministry_of_refugee_affairs",
+    "law_no_ministry_of_intelligence_and_security": "lawgroup_ministry_of_intelligence_and_security",
+}
+NEUTRAL_ON_LOCKED_DEFAULT = {
+    # Labor Movement (era 2) and Socialism (era 3): #1824, which also made the
+    # socialists neutral on Unregulated Donations above.
+    "ideology_labor_movement": ("law_unrestricted_automation",),
+    "ideology_socialist_movement": ("law_unrestricted_automation",),
+    # Anarchism (era 3)
+    "ideology_anarchist_movement": (
+        "law_unrestricted_automation", "law_punishment_focused_criminal_justice",
+    ),
+    # Socialism (era 3)
+    "ideology_communist_movement": ("law_unrestricted_automation",),
+    # the socialist movement's ideology after Reform or Revolution's switch
+    # (reform_or_revolution.2), so from Socialism (era 3)
+    "ideology_revolutionary_socialist_movement": (
+        "law_unrestricted_automation", "law_traditional_heredity",
+    ),
+    # Political Agitation (era 4)
+    "ideology_fascist_movement": (
+        "law_unrestricted_automation", "law_traditional_heredity", "law_no_ministry_of_propaganda",
+    ),
+    # Egalitarianism (era 2)
+    "ideology_radical_movement": (
+        "law_unrestricted_automation", "law_punishment_focused_criminal_justice",
+    ),
+    # Democracy (era 1), and the liberal movement's republican switch
+    "ideology_liberal_movement": ("law_punishment_focused_criminal_justice", "law_unregulated_banking"),
+    "ideology_liberal_republican_movement": ("law_punishment_focused_criminal_justice",),
+    # the German, Italian, Yugoslav and Dominican national movements: no
+    # technology, so from 1836
+    "ideology_national_liberal_movement": ("law_punishment_focused_criminal_justice",),
+    # Academia (era 1). Vanilla's own stance on child labour beside it has the
+    # same one-era gap (Restricted Child Labor, era 2); that one is vanilla's.
+    "ideology_modernizer_movement_2": ("law_no_national_bank",),
+    # the religious majority movement: no technology, so from 1836
+    "ideology_traditionalist_movement": ("law_no_ministry_of_religion",),
+    # the cultural minority movement whose culture shares nothing with the
+    # primary ones: no technology, so from 1836
+    "ideology_pluralist_movement_4": ("law_no_ministry_of_refugee_affairs",),
+    # no technology, so from 1836
+    "ideology_reactionary_movement": ("law_no_ministry_of_intelligence_and_security",),
+}
+# {(ideology, law): the lawgroup's stances before the lift}, for the test.
+LOCKED_DEFAULT_SOURCES = {}
+for _ideology, _laws in NEUTRAL_ON_LOCKED_DEFAULT.items():
+    for _law in _laws:
+        _group = LOCKED_DEFAULT_GROUPS[_law]
+        LOCKED_DEFAULT_SOURCES[(_ideology, _law)] = list(modifications[_ideology][_group])
+        modifications[_ideology][_group] = neutral_on_locked_default(modifications[_ideology][_group], _law)
 
 # Vanilla 1.15 gave two interest groups a successor ideology: the Armed Forces
 # hold Militarist where they held Patriotic (the Petty Bourgeoisie keep

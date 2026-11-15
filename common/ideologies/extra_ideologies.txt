@@ -14,13 +14,25 @@
 		law_industry_banned = approve
 	}
 
+	# The missing ministry counts once (#1832): movement_environmental's
+	# radicalism factors already read the gap to a fully funded ministry
+	# (NO_INSTITUTION_ / INSTITUTION_FUNDING_LEVEL_ministry_of_the_environment),
+	# so the stance on the law in force is neutral; the ministry itself is still
+	# strongly approved, so the movement backs enacting it. This ideology is
+	# also a leader's, so an interest group led by an environmentalist no longer
+	# loses approval to the missing ministry either.
 	lawgroup_ministry_of_the_environment = {
-		law_no_ministry_of_the_environment = strongly_disapprove
+		law_no_ministry_of_the_environment = neutral
 		law_ministry_of_the_environment = strongly_approve
 	}
 
+	# Unrestricted Extraction is every country's law from 1836, and the
+	# moratorium opens at Environmental Movement (era 8), an era after the
+	# movement forms at Pollution Control: neutral, as the movement-stance guard
+	# asks (#1832; test_movement_stance_guard.py). Both other laws still rate
+	# above it.
 	lawgroup_resource_transition = {
-		law_unrestricted_extraction = disapprove
+		law_unrestricted_extraction = neutral
 		law_fossil_expansion_moratorium = approve
 		law_managed_fossil_phaseout = strongly_approve
 	}
