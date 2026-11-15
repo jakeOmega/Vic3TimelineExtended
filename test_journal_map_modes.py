@@ -1749,6 +1749,11 @@ class ColorTest(_RoomBranches, unittest.TestCase):
         self.assertEqual(values["te_jmap_color_own"], "$te_jmap_scale_own$")
         self.assertEqual(values["te_jmap_scale_own"], "Map Default")
         self.assertEqual((values["te_jmap_color_safe"], values["te_jmap_color_grey"]), ("Colorblind-Safe", "Grayscale"))
+        # nothing of the look can be checked here: the play-test list says what to look at, and what to do instead
+        check = next(line for line in read(PLAYTEST).splitlines() if line.startswith("| 31 | Map Options: Color"))
+        for words in ("Colorblind-Safe", "Grayscale", "GDP per Capita", "Fertility", "Company HQs", "All defaults",
+                      "Odd hues between two stops", "Stripes missing under Grayscale", "Grayscale should mark the midpoint"):
+            self.assertIn(words, check)
 
     def custom_text(self, name, options, depth=0):
         """A custom localization's text under `options`, its own splices and custom localizations resolved."""

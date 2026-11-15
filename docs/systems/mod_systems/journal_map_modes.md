@@ -21,7 +21,9 @@ day, the owner's ask) turns Trade Volume into Trade Capacity, each state's own, 
 gives the Map Room two options, Area and Outliers (§ The Map Room's Options). The thirteenth (the same day, the
 owner's pick of the assessment that followed: "I'll go with your recommendation", and of the eight maps that run both
 ways from a midpoint, "What about symlog?") adds a third, Scale: the map's own curve, Linear, Logarithmic or Ranked
-(§ The Map Room's Options, Scale). The colors, the last the owner named, are not built.
+(§ The Map Room's Options, Scale). The fourteenth (the same day, the second half of that pick) adds the last the
+owner named, Color: the map's own colors, colorblind-safe ramps or greyscale, and rewrites the 35 fitted picks'
+tooltips so that each is true under every scale and color (§ The Map Room's Options, Color).
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -454,25 +456,17 @@ Ranked.
 - **Outliers under Ranked** has nothing to act on (a place is no outlier's to move), so its three buttons are greyed
   with that reason (`te_jmap_trim_ranked_tt`); the range is still measured, and the tooltip prints it as "not read
   by this scale".
-- **No tooltip describes a curve that isn't in force.** Each of the 35 fitted picks' own descriptions describes the
-  map's own curve ("half the color in the first fifth of that span"), so its button shows it only under the map's
-  own curve. Under any other scale the button shows `te_jmap_pick_<map>_scaled`
-  (`SelectLocalization` on `te_jmap_scale` in the button's `tooltip`): the pick's name, the scale in force and
-  what it does, and the range's two figures in the formats its own description gives them, led by "The range now,
-  over" (`te_jmap_scaled_range_lead`; "Not read by this scale, …" under Ranked) and the area
-  (`$te_jmap_measured_area$`, spliced by each pick's key beside the lead, so the lead's text reads no second
-  custom localization). What the scale does
-  comes from one of three custom localizations, named in each pick's key since a custom localization can't know
-  which button is hovered: a straight map (`te_jmap_scale_text`), a doubling map (`_doubling`: Logarithmic "is
-  this map's default") and a midpoint map (`_mid`). The 35 own descriptions are untouched, so their German and Spanish
-  stand; rewriting them into parts is the colors' pass.
+- **No tooltip describes a curve that isn't in force.** A fitted pick's tooltip gives the scale a line of its own
+  (§ Color, "The tooltips", has the whole form since the fourteenth pass): under Map Default the map's own curve
+  in words, under any other scale the scale in force and what it does. What the scale does comes from one of three
+  custom localizations, named in each pick's key since a custom localization can't know which button is hovered:
+  a straight map (`te_jmap_scale_text`), a doubling map (`_doubling`: Logarithmic "is this map's default") and a
+  midpoint map (`_mid`). The range's line is led by "The range now, over" (`te_jmap_scaled_range_lead`; "Not read
+  by this scale, …" under Ranked) and the area (`$te_jmap_measured_area$`).
 - **On the page**: a Scale row under Outliers in Map Options (Map Default, Linear, Logarithmic, Ranked; the
   first is the map's own curve, labelled "Map's Own" until 2026-11-14, when the owner said of it "I might call it
-  map default or similar, it sounds odd as is"); the header
-  names the three options in force, the trim and the scale in a word or two (`te_jmap_trim_short`,
-  `te_jmap_scale_short`: "North America, Keep All, Default Scale" is the longest, 38 characters, about 256 px in
-  the page's font where the header leaves about 296 beside its title), and
-  the line at the top of the page names all three in full while any is off its default.
+  map default or similar, it sounds odd as is"). The header and the line at the top of the page name the scale
+  only while it is off its default (§ Color, "The header and the line").
 - **Seen in game** (the owner, 2026-11-14, `main` at `5e1a5deb4`; play-test list, ninth session): asked to switch
   GDP per Capita through the four scales, the owner saw each repaint, paused too, and Linear push most states toward
   the low color; and under Logarithmic the midpoint stay cream on Fertility or Net Migration ("All looks good"). So
@@ -487,6 +481,87 @@ Ranked.
   Linear and Logarithmic against the generator's reference, in floats and in the engine's five decimals
   (`ScaleTest`), and the rank effects over made-up states, ties and midpoints included, against a plain sort
   (`RankRunTest`).
+
+### Color
+
+Fourteenth pass (2026-11-14). `te_jmap_color`: 0 the map's own colors (the default, labelled Map Default as the
+scale's is, from the same key), 1 Colorblind-Safe, 2 Grayscale (internally `grey`). Nothing here has been seen in
+the game (play-test check 31).
+
+- **Shared branches, not a branch a map.** A `lerp`'s colors are literal names, so another palette can't be
+  swapped into a map's own branch, and a branch per map per palette would more than double the paint. Eleven
+  branches open `map_color` instead, after the area's slate and before any map's own, each taken only while the
+  option is off its default, so a default paint pays one comparison a branch. They color whatever fitted map is
+  picked from one ramp, and ask the generated values file two things about the state: `te_jmap_pick_ramp` (0 the
+  pick's own lerp wouldn't paint it, 1 it would and the pick runs one way, 2 it would and the pick runs both ways
+  from a midpoint) and `te_jmap_pick_factor`, the picked map's factor, under the Scale option as every factor is.
+  Each row of `te_jmap_pick_ramp` repeats the limit of that map's own lerp branch (the table's `where`, or `paint`
+  on the three rows where the two differ: GDP per Capita paints a state with no figure at its low end, Current
+  Comfort is guarded by its own variable, and Emissions' lerp is what its two flat branches leave).
+  `ColorTest` reads the paint in ladder order and holds each row to it. A state the ramp doesn't take falls
+  through to its map's own branches.
+- **Five stops, four lerps.** The engine mixes two colors at a time, so a ramp of five published stops is four
+  lerps end to end, the factor read a quarter at a time (`te_jmap_pick_q1` to `_q4`; the paint takes the first
+  lerp whose end the factor is under). Five because the published five-class schemes are designed as five, and
+  four straight mixes between them follow the scheme closely; three stops would flatten the middle of the ramp
+  and nine would put eight comparisons in front of every state. Nothing records whether the engine's `lerp` mixes
+  in RGB or in hue, saturation and value, so every stop pair is checked under both (`ColorTest`), and the
+  diverging ramp's near-white middle is written twice, once with each side's hue, so that a mix in hue could not
+  sweep through the hues between.
+- **Colorblind-Safe**: ColorBrewer 2.0's five-class sequential YlOrBr (Brewer, Harrower and the Pennsylvania
+  State University, colorbrewer2.org, which marks it colorblind safe), pale yellow at the low end to brown at the
+  high, on the 27 maps that run one way, the three-color ones with no meaningful midpoint among them (Life
+  Expectancy, Infant Mortality, Median Age). On the eight midpoint maps, ColorBrewer's five-class diverging PuOr:
+  orange below the midpoint, near white at it, purple above, two lerps a side, so the midpoint keeps a color of
+  its own at exactly factor 0.5. Checked in CIELAB under normal vision and with no L, M or S cones (Machado,
+  Oliveira and Fernandes 2009, severity 1): lightness never turns along either ramp, so both keep their order in
+  grey (the diverging one as distance from the midpoint); neighbouring stops are at least 17 apart; the two sides
+  of the midpoint at least 19 apart the same distance out; the sequential ramp at least 40 from slate and from the
+  "no data" grey, the diverging one at least 18 and 10 (both with no S cones; over 30 for every other eye).
+- **Below the scale.** Two maps paint a state apart from their scale: Company Headquarters at a loss (its own
+  red) and Emissions where a state removes more than it emits (its own green). The red sits within 5 of the
+  sequential ramp for an eye with no S cones and within 13 with no M, so under Colorblind-Safe both take one color
+  off the ramp instead (`te_jmap_pick_below`, `te_jmap_cb_below`: the first color of Tableau's Color Blind 10,
+  a blue at least 50 from every color of the ramp). "None" (pale) and "no data" keep their colors there.
+- **Grayscale**: ColorBrewer's nine-class Greys from its second class to its sixth, light at the low end to dark
+  at the high, one lerp. A grey for "no data" would be a grey on the ramp, and so would the pale "none", so a
+  lightness band can't keep them apart. Instead every state of a fitted map that the ramp doesn't take (no
+  figure, none, a loss, a removal) is the "no data" grey with light stripes (`map_color_second`'s first branch,
+  `te_jmap_grey_stripe`): grey is a figure, striped is not on the scale, slate is outside the area. The ramp's
+  dark end is 25 lighter than slate. The regional headquarters' gold stripes stand down under Grayscale, so a
+  stripe says one thing. **A midpoint is not marked under Grayscale**: the ramp runs one way, and the midpoint
+  sits at the middle grey, as the tooltip says. It is the one place the option loses the midpoint; marking it
+  would take a second pattern or a step in the ramp (check 31 names the fallback).
+- **Where it doesn't apply.** A map of categories or on a fixed scale keeps its colors: the two buttons are greyed
+  there with the reason (`te_jmap_color_no_range_tt`), and Map Default stays. A system's own entry reads neither
+  the option nor the shared values, so its page keeps its own colors, as it keeps its own curve.
+- **The tooltips.** Each of the 35 fitted picks' tooltips (`te_jmap_pick_<map>_desc`, one key again; the
+  thirteenth pass's `_scaled` twins are gone) is four lines, each true whatever is set: what the map shows, with
+  no word of a curve, a color or a range (`PickTooltipTest` holds it to that); the range now; the scale, the
+  map's own curve under Map Default (`te_jmap_curve_<shape>`, eleven keys shared by the maps of a shape) and the
+  scale in force otherwise; the colors, the map's own under Map Default (`te_jmap_pick_<map>_colors`) and the
+  palette in force otherwise. The line chooses for itself (`SelectLocalization` on the option, inside the key).
+  The own curve's words come from the generator (`curve_key`, `curve_words`), from the knots the curve itself is
+  written from, and the test holds each key to them and each knee to the factor it describes; the first rewrite
+  found two maps (Capitalists, Academics) whose tooltips had never mentioned their knee. Every map now says which
+  color is its low end and which its high. What the palette in force says depends on what the map can show
+  besides its ramp, so there are five custom localizations (`te_jmap_color_text`, `_none`, `_hq`, `_gw`, `_mid`),
+  as the scale has three.
+- **The header and the line.** Four options don't fit beside the header's title, so the header's summary
+  (`te_jmap_options_now`) and the line at the top of the page (`te_jmap_options_in_use`) name only the options
+  off their defaults, in the rows' order; with none set the header reads "All defaults" and the line is hidden.
+  Each option is a part that is empty at its default (`te_jmap_now_area`, `_trim`, `_scale`, `_color`; the
+  line's `te_jmap_set_scale` and `_color` differ only in using the full names), led by a comma where an option
+  before it is set, so the two lines read the same triggers and can't disagree about what is set. The header
+  takes the short names "Log", "Colorblind" and "Gray". At its longest, "North America, Keep All, Ranked,
+  Colorblind", it is 43 characters, about 302 px in the page's font where the header leaves about 296 beside its
+  title at full size and 338 with the title at its smallest. `ColorTest` runs both lines over all sixteen
+  combinations. A custom localization's text here reads another's two levels down; the
+  precedent in the mod, the Grand Monuments' trophy names, goes one (check 31 has the fallback).
+- **Cost.** A default paint: eleven more comparisons a state, each a read of one global. Off the default: the
+  shared branches work `te_jmap_pick_ramp` and the factor out up to four times a state, each a ladder on the
+  pick (35 rows at most) before the map's own factor. The owner's frame reading (below) saw no cost in the
+  default paint; this has not been read.
 
 ### A stored factor, weighed and not built
 
@@ -612,9 +687,11 @@ Every map button clears the see-through flag before it opens a page.
   (`te_jmap_options_open`), with the options in force at the header's right. Open: an Area row of five buttons
   (World, Continent, Market, Power Bloc, Country, each as wide as its label, 450 in all inside the header's 470);
   under Continent, two rows of three continents; an Outliers row (Keep All, Trim 4 Each End, Trim 5%); since the
-  thirteenth pass a Scale row (Map Default, Linear, Logarithmic, Ranked, 112 each); and a line saying what the map on
+  thirteenth pass a Scale row (Map Default, Linear, Logarithmic, Ranked, 112 each) and since the fourteenth a
+  Color row (Map Default, Colorblind-Safe, Grayscale, 150 each); and a line saying what the map on
   the page was measured over, or under Ranked how old its places can be. Each is a `te_jmap_option_button` on a
-  scripted GUI (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`, `te_jmap_scale_*_sgui`),
+  scripted GUI (`te_jmap_area_*_sgui`, `te_jmap_continent_*_sgui`, `te_jmap_trim_*_sgui`, `te_jmap_scale_*_sgui`,
+  `te_jmap_color_*_sgui`),
   then the picks' repaint. Unlike a pick, an option draws pressed from its script value (`down` on `te_jmap_area`,
   `te_jmap_continent`, `te_jmap_trim`, `te_jmap_scale`), not from `is_valid`, which is kept for what greys it
   (`enabled`): Power Bloc with no bloc; Outliers on a map with no range or under Ranked; Linear, Logarithmic and
@@ -634,12 +711,16 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    to the world unless its numbers mean something fixed (a row with `sel`, `where` and a `rel*` shape: the range
    effect, the dispatcher's branch and the trees come with it, and so do the Map Room's options: the range keeps to
    its area and takes its trim, the factor branches on the scale, and a rank effect stores its places). Give its
-   pick's tooltip the range (`te_jmap_<map>_lo` / `_hi`), the area in place of "the world"
-   (`$te_jmap_measured_area$`) and, last, what the range leaves out (`$te_jmap_measured_trim$`); give it a second
-   key, `te_jmap_pick_<map>_scaled`, for every scale but its own (the name, `$te_jmap_scale_in_force$` or its
-   `_doubling` or `_mid` form by the map's kind, `$te_jmap_scaled_lead$ $te_jmap_measured_area$:` and the same two
-   figures), and have its
-   button choose between the two on `te_jmap_scale` as the others do (`ScaleTooltipTest`). Mark it
+   pick's tooltip its four lines (§ Color, "The tooltips"): what it shows, with no word of a curve, a color or
+   a range; the range (`$te_jmap_scaled_lead$ $te_jmap_measured_area$:`, `te_jmap_<map>_lo` / `_hi`, then
+   `$te_jmap_measured_trim$`); the scale's line, choosing between `te_jmap_curve_<shape>` (the generator's
+   `curve_key`; a new shape needs its key, with `curve_words`' text) and `te_jmap_scale_in_force` or its
+   `_doubling` or `_mid` form; and the colors' line, choosing between a new `te_jmap_pick_<map>_colors` (which
+   color is its low end, which its high, and anything it paints apart from its scale) and `te_jmap_color_in_force`
+   or its `_none`, `_hq`, `_gw` or `_mid` form (`PickTooltipTest`). The Color option needs nothing else from a
+   fitted row: `te_jmap_pick_ramp` and `te_jmap_pick_factor` gain its branch from the table (give the row `paint`
+   if its lerp branch isn't limited by its `where`), and a color it paints flat that is neither "none" nor "no
+   data" must join `te_jmap_pick_below` (`ColorTest` fails until it does). Mark it
    `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
    and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
