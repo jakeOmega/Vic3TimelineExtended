@@ -1,39 +1,663 @@
 {
+ "country_academy_trained_battalions_add": {
+  "en": "Academy-Trained Battalions",
+  "ru": "Батальоны, подготовленные академиями"
+ },
+ "country_academy_trained_battalions_add_desc": {
+  "en": "Battalions whose barracks train under $pm_officer_academies$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_officer_academies_standing$, which strengthens the $ig_armed_forces$.",
+  "ru": "Батальоны, казармы которых готовят по методу «$pm_officer_academies$». Недоукомплектованные казармы считаются за меньшее. Каждый месяц их доля среди ваших регулярных батальонов масштабирует показатель «$te_officer_academies_standing$», усиливающий $ig_armed_forces$."
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Initiated",
+  "ru": "Еженедельная эскалация в [Concept('concept_diplomatic_play','дипломатических играх')], начатых вами"
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country initiated, applied while the play is below 100. Floored at 0; combine with the matching #V _mult#! to scale.",
+  "ru": "Фиксированное количество [Concept('concept_escalation','эскалации')], добавляемое каждую неделю к каждой [Concept('concept_diplomatic_play','дипломатической игре')], начатой этой страной, пока игра ниже 100. Не ниже 0; сочетайте с соответствующим #V _mult#! для масштабирования."
+ },
+ "country_aggressor_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country initiated.",
+  "ru": "Множитель к соответствующему количеству #V _add#! еженедельной [Concept('concept_escalation','эскалации')] для игр, начатых этой страной."
+ },
+ "country_antimatter_facility_max_level_add": {
+  "en": "[concept_antimatter_facility] Slots",
+  "ru": "Слоты: [concept_antimatter_facility|l]"
+ },
+ "country_antimatter_facility_max_level_add_desc": {
+  "en": "Available capacity for antimatter-powered sub-buildings. Each Antimatter Containment Facility level provides 5 slots. Each Antimatter Engine or Warhead Plant level consumes 1 slot.",
+  "ru": "Доступная ёмкость для подзданий на антиматерии. Каждый уровень хранилища антиматерии даёт 5 слотов. Каждый уровень двигателя на антиматерии или завода боеголовок занимает 1 слот."
+ },
+ "country_authority_if_unelected_add": {
+  "en": "[concept_authority], without an Elected Government",
+  "ru": "[concept_authority] без выборного правительства"
+ },
+ "country_authority_if_unelected_add_desc": {
+  "en": "Under any other Distribution of Power law: the crown's law has the last word.",
+  "ru": "При любом другом законе о распределении власти: последнее слово за законом короны."
+ },
+ "country_bank_forecast_error_add": {
+  "en": "Central Bank Forecasting Error",
+  "ru": "Ошибка прогноза центрального банка"
+ },
+ "country_bank_forecast_error_add_desc": {
+  "en": "How far your central bank's reading of what the economy can bear may stray from the truth. It is why the policy stance you are shown is a band rather than a figure, and why a bank can hold the rate steady while the ground moves under it. A narrower error means fewer mistakes, not none.",
+  "ru": "Насколько оценка центральным банком того, что способна вынести экономика, может отклоняться от истины. Поэтому курс политики показывается вам диапазоном, а не числом, и поэтому банк может держать ставку, пока почва уходит из-под ног. Меньшая ошибка означает меньше промахов, но не их отсутствие."
+ },
+ "country_banking_crash_chance_mult": {
+  "en": "[concept_banking_crash] Likelihood",
+  "ru": "Вероятность: [concept_banking_crash|l]"
+ },
+ "country_banking_crash_chance_mult_desc": {
+  "en": "Scales the probability of a [concept_banking_crash] occurring when [concept_bubble_pressure] is high. Positive values increase crash risk, negative values reduce it.",
+  "ru": "Масштабирует вероятность наступления [Concept('concept_banking_crash','банковского краха')] при высоком [Concept('concept_bubble_pressure','давлении пузыря')]. Положительные значения повышают риск краха, отрицательные снижают."
+ },
+ "country_banking_intervention_max_add": {
+  "en": "Maximum Banking Intervention Points",
+  "ru": "Максимум очков банковского вмешательства"
+ },
+ "country_banking_intervention_max_add_desc": {
+  "en": "The maximum number of points that can be applied to regulate the [concept_banking_cycle] at once.",
+  "ru": "Максимальное число очков, которое можно одновременно потратить на регулирование [Concept('concept_banking_cycle','банковского цикла')]."
+ },
+ "country_banking_random_momentum_mult": {
+  "en": "[concept_banking_cycle] Volatility",
+  "ru": "Волатильность: [concept_banking_cycle|l]"
+ },
+ "country_banking_random_momentum_mult_desc": {
+  "en": "Scales the random [concept_banking_momentum] nudges that drive the [concept_banking_cycle]. Higher values mean larger random swings in cycle momentum.",
+  "ru": "Масштабирует случайные толчки [Concept('concept_banking_momentum','банковского импульса')], движущие [Concept('concept_banking_cycle','банковским циклом')]. Более высокие значения означают более крупные случайные колебания импульса цикла."
+ },
+ "country_bubble_pressure_monthly_add": {
+  "en": "Monthly [concept_bubble_pressure]",
+  "ru": "Ежемесячное изменение: [concept_bubble_pressure|l]"
+ },
+ "country_bubble_pressure_monthly_add_desc": {
+  "en": "An increase or decrease to the [concept_bubble_pressure] of the [concept_banking_cycle], affecting the likelihood of a financial bubble causing a [concept_banking_crash].",
+  "ru": "Рост или снижение [Concept('concept_bubble_pressure','давления пузыря')] в [Concept('concept_banking_cycle','банковском цикле')], влияющее на вероятность того, что финансовый пузырь вызовет [Concept('concept_banking_crash','банковский крах')]."
+ },
+ "country_coal_export_tariffs_rate_add": {
+  "en": "Maximum $coal$ Export Tariff Rate",
+  "ru": "Максимальная ставка экспортной пошлины: $coal$"
+ },
+ "country_coal_export_tariffs_rate_add_desc": {
+  "en": "Additional maximum export tariff rate for $coal$. The collected rate scales with the selected tariff level.",
+  "ru": "Дополнительная максимальная ставка экспортной пошлины (товар: $coal$). Взимаемая ставка масштабируется выбранным уровнем пошлин."
+ },
+ "country_coal_import_tariffs_rate_add": {
+  "en": "Maximum $coal$ Import Tariff Rate",
+  "ru": "Максимальная ставка импортной пошлины: $coal$"
+ },
+ "country_coal_import_tariffs_rate_add_desc": {
+  "en": "Additional maximum import tariff rate for $coal$. The collected rate scales with the selected tariff level.",
+  "ru": "Дополнительная максимальная ставка импортной пошлины (товар: $coal$). Взимаемая ставка масштабируется выбранным уровнем пошлин."
+ },
+ "country_colonial_assim_effectiveness_add": {
+  "en": "Colonial [concept_assimilation] Effectiveness",
+  "ru": "Эффективность колониальной [Concept('concept_assimilation','ассимиляции')]"
+ },
+ "country_colonial_assim_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Cultural [concept_assimilation] policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "ru": "Ежемесячный бонус к колониальной стабильности от законов и технологий, пока действует политика культурной [Concept('concept_assimilation','ассимиляции')]. Читается шкалой [Concept('concept_colonial_stability','колониальной стабильности')]; виден в подсказке каждого вносящего вклад закона и технологии и в предпросмотре кнопки политики."
+ },
+ "country_colonial_garrison_effectiveness_add": {
+  "en": "Colonial Garrison Effectiveness",
+  "ru": "Эффективность колониального гарнизона"
+ },
+ "country_colonial_garrison_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Military Garrison policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "ru": "Ежемесячный бонус к колониальной стабильности от законов и технологий, пока действует политика «Военный гарнизон». Читается шкалой [Concept('concept_colonial_stability','колониальной стабильности')]; виден в подсказке каждого вносящего вклад закона и технологии и в предпросмотре кнопки политики."
+ },
+ "country_colonial_invest_effectiveness_add": {
+  "en": "Colonial Investment Effectiveness",
+  "ru": "Эффективность колониальных инвестиций"
+ },
+ "country_colonial_invest_effectiveness_add_desc": {
+  "en": "Per-month colonial-stability bonus contributed by laws and technologies while the Invest in Development policy is active. Read by the [concept_colonial_stability] bar; visible in each contributing law and technology tooltip and in the policy button's preview.",
+  "ru": "Ежемесячный бонус к колониальной стабильности от законов и технологий, пока действует политика «Инвестиции в развитие». Читается шкалой [Concept('concept_colonial_stability','колониальной стабильности')]; виден в подсказке каждого вносящего вклад закона и технологии и в предпросмотре кнопки политики."
+ },
  "country_colonial_stability_drift_add": {
   "en": "[concept_colonial_stability] Drift",
   "ru": "Дрейф [Concept('concept_colonial_stability','колониальной стабильности')]"
+ },
+ "country_colonial_stability_drift_add_desc": {
+  "en": "Per-month drift on the [concept_colonial_stability] bar contributed by laws and other persistent sources. Always-on (independent of policy buttons). Each contributing law shows its individual contribution in its own tooltip.",
+  "ru": "Ежемесячный дрейф шкалы [Concept('concept_colonial_stability','колониальной стабильности')] от законов и других постоянных источников. Действует всегда (независимо от кнопок политик). Каждый вносящий вклад закон показывает свой вклад в собственной подсказке."
+ },
+ "country_commissar_battalions_add": {
+  "en": "Battalions with Commissars",
+  "ru": "Батальоны с комиссарами"
+ },
+ "country_commissar_battalions_add_desc": {
+  "en": "Battalions whose barracks train under $pm_political_commissars$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_political_commissars_indoctrination$, which draws pops to the interest groups in government.",
+  "ru": "Батальоны, казармы которых готовят по методу «$pm_political_commissars$». Недоукомплектованные казармы считаются за меньшее. Каждый месяц их доля среди ваших регулярных батальонов масштабирует показатель «$te_political_commissars_indoctrination$», привлекающий группы населения к группам интересов в правительстве."
+ },
+ "country_constitutional_law_enactment_success_add": {
+  "en": "Enactment Success of Constitutional Laws",
+  "ru": "Успех принятия конституционных законов"
+ },
+ "country_constitutional_law_enactment_success_add_desc": {
+  "en": "For laws on Distribution of Power, Governance Principles, Church and State, Citizenship, Free Speech, Internal Security, State Power and the Judiciary: the courts hear challenges to them. Not while the courts can't challenge the government (Autocracy, Single-Party State, Algorithmic Governance).",
+  "ru": "Для законов о распределении власти, принципах управления, церкви и государстве, гражданстве, свободе слова, внутренней безопасности, государственной власти и судебной системе: суды рассматривают жалобы на них. Не действует, пока суды не могут оспаривать действия правительства (автократия, однопартийное государство, алгоритмическое управление)."
  },
  "country_covert_defense_economic_add": {
   "en": "Economic Covert Defense",
   "ru": "Тайная защита: экономическая"
  },
+ "country_covert_defense_economic_add_desc": {
+  "en": "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and Space Program Espionage.",
+  "ru": "Дополнительная защита от экономических [Concept('concept_covert_operations','тайных операций')], таких как финансовая диверсия, промышленный шпионаж и шпионаж за космической программой."
+ },
  "country_covert_defense_ideological_add": {
   "en": "Ideological Covert Defense",
   "ru": "Тайная защита: идеологическая"
+ },
+ "country_covert_defense_ideological_add_desc": {
+  "en": "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change, Cultivate Assets and Incite Colonial Autonomy.",
+  "ru": "Дополнительная защита от идеологических [Concept('concept_covert_operations','тайных операций')], таких как вмешательство в выборы, кампании влияния, идеологическая диверсия, дестабилизация, смена режима, «Вербовать агентуру» и «Разжигать колониальную автономию»."
  },
  "country_covert_defense_military_add": {
   "en": "Military Covert Defense",
   "ru": "Тайная защита: военная"
  },
+ "country_covert_defense_military_add_desc": {
+  "en": "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage, Nuclear Program Sabotage, Sabotage Colony, Survey Colony Defenses and Secure Loose Material.",
+  "ru": "Дополнительная защита от военных [Concept('concept_covert_operations','тайных операций')], таких как военный шпионаж, нарушение связи, саботаж [Concept('concept_infrastructure','инфраструктуры')], саботаж ядерной программы, «Саботировать колонию», «Разведать оборону колонии» и «Обезопасить бесхозный материал»."
+ },
  "country_covert_operation_efficiency_mult": {
   "en": "Covert Operation Efficiency",
   "ru": "Эффективность тайных операций"
+ },
+ "country_covert_operation_efficiency_mult_desc": {
+  "en": "A bonus or penalty to the effectiveness and stealth of offensive [concept_covert_operations].",
+  "ru": "Бонус или штраф к эффективности и скрытности наступательных [Concept('concept_covert_operations','тайных операций')]."
+ },
+ "country_covert_operation_slot_add": {
+  "en": "Covert Operation Slots",
+  "ru": "Слоты тайных операций"
+ },
+ "country_covert_operation_slot_add_desc": {
+  "en": "Additional simultaneous covert operation slots available to the nation.",
+  "ru": "Дополнительные слоты одновременных тайных операций, доступные стране."
+ },
+ "country_credit_standing_add": {
+  "en": "Credit Standing",
+  "ru": "Кредитоспособность"
+ },
+ "country_credit_standing_add_desc": {
+  "en": "The part of your government's borrowing rate that comes from what your country #b is#!: access to capital markets, its standing among the powers, finance technologies, banking institutions, and the credibility of its monetary regime. Lower is better. Credibility has a lower bound, though — lenders will not price any sovereign below a floor, so standing earned past that point buys nothing further.",
+  "ru": "Часть процентной ставки по заимствованиям вашего правительства, зависящая от того, #b чем является#! ваша страна: доступа к рынкам капитала, её положения среди держав, финансовых технологий, банковских институтов и доверия к её денежному режиму. Чем ниже, тем лучше. Но у доверия есть нижний предел: кредиторы не станут оценивать никакого суверена ниже порога, поэтому авторитет, заработанный сверх этого, ничего не даёт."
+ },
+ "country_credit_standing_floor_add": {
+  "en": "Credit Standing Floor",
+  "ru": "Нижний предел кредитоспособности"
+ },
+ "country_credit_standing_floor_add_desc": {
+  "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
+  "ru": "Наименьшая плата, которую кредиторы возьмут с вас за то, чем является ваша страна, какими бы здоровыми ни стали её финансы. Авторитет, заработанный сверх этого предела, ничего не даёт, поэтому единственный способ получить более выгодные условия — понизить предел."
  },
  "country_cultural_hegemony_art_mult": {
   "en": "Cultural Pull from Art",
   "ru": "Культурное притяжение от искусства"
  },
+ "country_cultural_hegemony_art_mult_desc": {
+  "en": "A bonus or penalty to the [concept_cultural_pull] generated by $fine_art$ production. Part of the [concept_cultural_hegemony_system].",
+  "ru": "Бонус или штраф к [Concept('concept_cultural_pull','культурному притяжению')], создаваемому производством: $fine_art$. Часть системы [Concept('concept_cultural_hegemony_system','культурной гегемонии')]."
+ },
+ "country_cultural_program_max_funding_add": {
+  "en": "Cultural Program Maximum Funding Level",
+  "ru": "Максимальный уровень финансирования культурных программ"
+ },
+ "country_cultural_program_max_funding_add_desc": {
+  "en": "Increases the maximum funding level available for state-backed cultural programs in the Cultural Hegemony [concept_journal_entry].",
+  "ru": "Повышает максимальный уровень финансирования государственных культурных программ в [Concept('concept_journal_entry','записи журнала')] «Культурная гегемония»."
+ },
+ "country_cultural_pull_add_desc": {
+  "en": "A flat bonus or penalty to the nation's [concept_cultural_pull] score, representing its global soft power influence. Contributes to [concept_cultural_pull_share].",
+  "ru": "Фиксированный бонус или штраф к показателю [Concept('concept_cultural_pull','культурного притяжения')] страны, отражающий её мировое влияние мягкой силы. Вносит вклад в [Concept('concept_cultural_pull_share','культурную долю')]."
+ },
+ "country_cultural_pull_mult_desc": {
+  "en": "A percentage bonus or penalty to the nation's [concept_cultural_pull] raw score, applied after all [concept_cultural_pull_components] are summed.",
+  "ru": "Процентный бонус или штраф к исходному показателю [Concept('concept_cultural_pull','культурного притяжения')] страны, применяемый после суммирования всех [Concept('concept_cultural_pull_components','составляющих культурного притяжения')]."
+ },
  "country_culture_merge_speed_mult": {
   "en": "Culture Merge Speed",
   "ru": "Скорость слияния культур"
+ },
+ "country_culture_merge_speed_mult_desc": {
+  "en": "How much faster the pops of a running culture merge become the merged culture in this country. $law_public_schools$, the $institution_ministry_of_culture$ (per level), $radio$, $film$ and $mass_propaganda$ add to it. A subject or bloc member of the country that started the merge converts at half the pace its own literacy, urbanization and $country_culture_merge_speed_mult$ give.",
+  "ru": "Насколько быстрее группы населения идущего слияния культур становятся слитой культурой в этой стране. Увеличивают её: $law_public_schools$, $institution_ministry_of_culture$ (за уровень), $radio$, $film$ и $mass_propaganda$. Зависимое государство или член блока страны, начавшей слияние, преобразуется вдвое медленнее, чем дают его собственные грамотность, урбанизация и показатель «$country_culture_merge_speed_mult$»."
+ },
+ "country_defender_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You",
+  "ru": "Еженедельная эскалация в [Concept('concept_diplomatic_play','дипломатических играх')] против вас"
+ },
+ "country_defender_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is the target of. Floored at 0; combine with the matching #V _mult#! to scale.",
+  "ru": "Фиксированное количество [Concept('concept_escalation','эскалации')], добавляемое каждую неделю к каждой [Concept('concept_diplomatic_play','дипломатической игре')], целью которой является эта страна. Не ниже 0; сочетайте с соответствующим #V _mult#! для масштабирования."
+ },
+ "country_defender_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country is the target of.",
+  "ru": "Множитель к соответствующему количеству #V _add#! еженедельной [Concept('concept_escalation','эскалации')] для игр, целью которых является эта страна."
+ },
+ "country_directed_credit_sectors_add": {
+  "en": "Directed Credit Priority Sectors",
+  "ru": "Приоритетные секторы целевого кредитования"
+ },
+ "country_directed_credit_sectors_add_desc": {
+  "en": "How many sectors the state can steer [Concept('concept_directed_credit', 'directed credit')] toward at the same time, beyond the first.",
+  "ru": "На сколько секторов одновременно государство может направлять [Concept('concept_directed_credit','целевое кредитование')], помимо первого."
+ },
+ "country_economic_dependence_leverage_gain_mult": {
+  "en": "Leverage from [concept_economic_dependence]",
+  "ru": "Рычаги влияния от [Concept('concept_economic_dependence','экономической зависимости')]"
+ },
+ "country_economic_dependence_leverage_gain_mult_desc": {
+  "en": "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market].",
+  "ru": "Множитель к [Concept('concept_power_bloc_leverage','рычагам влияния')], получаемым от того, насколько другая [Concept('concept_country','страна')] зависит от нашего [Concept('concept_market','рынка')]."
+ },
+ "country_enactment_speed_law_multicultural_mult": {
+  "en": "Enactment Speed for [GetLawType('law_multicultural').GetName]",
+  "ru": "Скорость принятия: [GetLawType('law_multicultural').GetName]"
+ },
+ "country_enactment_speed_law_multicultural_mult_desc": {
+  "en": "An increase or decrease to the speed of legislative enactments for the specific law",
+  "ru": "Повышение или снижение скорости законодательного принятия именно этого закона"
+ },
+ "country_enactment_success_chance_law_compulsory_primary_school_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]",
+  "ru": "Шанс [Concept('concept_enactment_success','успешного принятия')]: [GetLawType('law_compulsory_primary_school').GetName]"
+ },
+ "country_enactment_success_chance_law_compulsory_primary_school_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "ru": "Фиксированное повышение в процентных пунктах вероятности принятия именно этого закона"
+ },
+ "country_environmental_movement_radicalism_add": {
+  "en": "Environmental Movement Radicalism",
+  "ru": "Радикализм экологического движения"
+ },
+ "country_environmental_movement_radicalism_add_desc": {
+  "en": "Raises or lowers how radical the Environmental Movement in this country is. National climate policies in force lower it.",
+  "ru": "Повышает или понижает радикальность экологического движения в этой стране. Действующая национальная климатическая политика снижает её."
+ },
+ "country_family_limitation_literacy_mult": {
+  "en": "Family Limitation Among the Literate[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Ограничение семьи среди грамотных[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_limitation_literacy_mult_desc": {
+  "en": "How readily a people who nearly all read take up family limitation, stopping at the family size they want by methods older than any modern one. A state church slows it; a secular state speeds it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько охотно народ, почти целиком умеющий читать, прибегает к ограничению семьи, останавливаясь на желаемом размере семьи методами старше любых современных. Государственная церковь замедляет его; светское государство ускоряет. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_policy_upkeep_mult": {
+  "en": "Family Policy Upkeep[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Содержание семейной политики[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_policy_upkeep_mult_desc": {
+  "en": "The money upkeep of the Family Policy measures that cost money: $te_demog_ms_child_allowance$, $te_demog_ms_family_housing$, $te_demog_ms_parental_leave$ and $te_demog_ms_free_contraception$. A running measure's upkeep follows a change at the country's next yearly count. Used by the Family Policy section of the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Денежное содержание мер семейной политики, требующих денег: «$te_demog_ms_child_allowance$», «$te_demog_ms_family_housing$», «$te_demog_ms_parental_leave$» и «$te_demog_ms_free_contraception$». Содержание действующей меры следует за изменением при очередном ежегодном подсчёте страны. Используется разделом «Семейная политика» вкладки «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "country_finance_momentum_monthly_add_desc": {
+  "en": "An increase or decrease to the [concept_banking_momentum] of the [concept_banking_cycle], affecting the direction and speed of the change of financial conditions over time.",
+  "ru": "Рост или снижение [Concept('concept_banking_momentum','банковского импульса')] [Concept('concept_banking_cycle','банковского цикла')], влияющее на направление и скорость изменения финансовых условий со временем."
+ },
+ "country_finance_value_monthly_add": {
+  "en": "Monthly Financial Cycle Value",
+  "ru": "Ежемесячное значение финансового цикла"
+ },
+ "country_finance_value_monthly_add_desc": {
+  "en": "A direct monthly change to the current [concept_banking_cycle] value.",
+  "ru": "Прямое ежемесячное изменение текущего значения [Concept('concept_banking_cycle','банковского цикла')]."
+ },
+ "country_gm_monument_ceremonial_share_add": {
+  "en": "Grandeur of Every Monument in Legitimacy and Authority",
+  "ru": "Величие каждого монумента для легитимности и авторитета"
+ },
+ "country_gm_monument_ceremonial_share_add_desc": {
+  "en": "Legitimacy and the Leader's authority from monuments also count this share of the grandeur of every monument, not only those to the regime and the Leader, under the monument policy $gm_policy_ceremonial$.",
+  "ru": "Легитимность и авторитет лидера от монументов также учитывают эту долю величия каждого монумента, а не только монументов режиму и лидеру, при политике монументов «$gm_policy_ceremonial$»."
+ },
+ "country_gm_monument_cultural_pull_mult": {
+  "en": "Cultural Pull from Monuments",
+  "ru": "Культурное притяжение от монументов"
+ },
+ "country_gm_monument_cultural_pull_mult_desc": {
+  "en": "The cultural pull our Grand Monuments give, under the monument policy $gm_policy_culture$.",
+  "ru": "Культурное притяжение, которое дают наши великие монументы, при политике монументов «$gm_policy_culture$»."
+ },
+ "country_gm_monument_education_step_add": {
+  "en": "Education Access per Step of Monument Grandeur",
+  "ru": "Доступ к образованию за ступень величия монументов"
+ },
+ "country_gm_monument_education_step_add_desc": {
+  "en": "Education access in every state for each step of our monuments' grandeur, under the monument policy $gm_policy_education$.",
+  "ru": "Доступ к образованию в каждой области за каждую ступень величия наших монументов, при политике монументов «$gm_policy_education$»."
+ },
+ "country_gm_monument_prestige_mult": {
+  "en": "Prestige from Monuments",
+  "ru": "Престиж от монументов"
+ },
+ "country_gm_monument_prestige_mult_desc": {
+  "en": "The prestige our Grand Monuments give, under the monument policy $gm_policy_culture$ while cultural pull does nothing.",
+  "ru": "Престиж, который дают наши великие монументы, при политике монументов «$gm_policy_culture$», пока культурное притяжение ничего не даёт."
+ },
+ "country_gm_monument_tourism_mult": {
+  "en": "$tourism$ from Each Monument",
+  "ru": "$tourism$ от каждого монумента"
+ },
+ "country_gm_monument_tourism_mult_desc": {
+  "en": "The tourism each Grand Monument brings, under the monument policy $gm_policy_open$.",
+  "ru": "Туризм, который приносит каждый великий монумент, при политике монументов «$gm_policy_open$»."
+ },
+ "country_grain_export_tariffs_rate_add": {
+  "en": "@grain! $grain$ Export Tariff Rate",
+  "ru": "@grain! Ставка экспортной пошлины: $grain$"
+ },
+ "country_grain_export_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on exports of $grain$. Tax code customs probe only.",
+  "ru": "Повышение или снижение ставки пошлины на экспорт товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_grain_import_tariffs_rate_add": {
+  "en": "@grain! $grain$ Import Tariff Rate",
+  "ru": "@grain! Ставка импортной пошлины: $grain$"
+ },
+ "country_grain_import_tariffs_rate_add_desc": {
+  "en": "An increase or decrease to the tariff rate on imports of $grain$. Tax code customs probe only.",
+  "ru": "Повышение или снижение ставки пошлины на импорт товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_grain_max_export_tariffs_level_add": {
+  "en": "@grain! $grain$ Maximum Export Tariff Level",
+  "ru": "@grain! Максимальный уровень экспортной пошлины: $grain$"
+ },
+ "country_grain_max_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest export tariff level that can be set for $grain$. Tax code customs probe only.",
+  "ru": "Повышает или понижает наивысший уровень экспортной пошлины, который можно установить для товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_grain_max_import_tariffs_level_add": {
+  "en": "@grain! $grain$ Maximum Import Tariff Level",
+  "ru": "@grain! Максимальный уровень импортной пошлины: $grain$"
+ },
+ "country_grain_max_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the highest import tariff level that can be set for $grain$. Tax code customs probe only.",
+  "ru": "Повышает или понижает наивысший уровень импортной пошлины, который можно установить для товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_grain_min_export_tariffs_level_add": {
+  "en": "@grain! $grain$ Minimum Export Tariff Level",
+  "ru": "@grain! Минимальный уровень экспортной пошлины: $grain$"
+ },
+ "country_grain_min_export_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest export tariff level that can be set for $grain$. Tax code customs probe only.",
+  "ru": "Повышает или понижает наинизший уровень экспортной пошлины, который можно установить для товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_grain_min_import_tariffs_level_add": {
+  "en": "@grain! $grain$ Minimum Import Tariff Level",
+  "ru": "@grain! Минимальный уровень импортной пошлины: $grain$"
+ },
+ "country_grain_min_import_tariffs_level_add_desc": {
+  "en": "Raises or lowers the lowest import tariff level that can be set for $grain$. Tax code customs probe only.",
+  "ru": "Повышает или понижает наинизший уровень импортной пошлины, который можно установить для товара: $grain$. Только для проверки таможни налогового кодекса."
+ },
+ "country_greenhouse_gas_emissions_mult_desc": {
+  "en": "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions].",
+  "ru": "Изменяет скорость, с которой эта страна вносит вклад в глобальные [Concept('concept_greenhouse_gas_emissions','выбросы парниковых газов')]."
+ },
+ "country_grid_transmission_efficiency_add": {
+  "en": "Grid Transmission Efficiency",
+  "ru": "Эффективность передачи в сети"
+ },
+ "country_grid_transmission_efficiency_add_desc": {
+  "en": "The share of the $electricity$ sent to a $building_grid_transfer_station$ over its grid that arrives. The rest is lost in transmission.",
+  "ru": "Доля передаваемого товара ($electricity$), отправленного по сети в здание «$building_grid_transfer_station$», которая доходит. Остальное теряется при передаче."
+ },
+ "country_household_greenhouse_gas_emissions_mult": {
+  "en": "Household Greenhouse Gas Emissions",
+  "ru": "Парниковые выбросы домохозяйств"
+ },
+ "country_household_greenhouse_gas_emissions_mult_desc": {
+  "en": "Changes the household fossil-heating contribution to climate emissions. Reductions stack and are capped at complete elimination.",
+  "ru": "Изменяет вклад отопления жилищ ископаемым топливом в климатические выбросы. Сокращения складываются и ограничены полным устранением."
+ },
+ "country_ideology_resistance_mult": {
+  "en": "Ideology Resistance",
+  "ru": "Идеологическая устойчивость"
+ },
+ "country_ideology_resistance_mult_desc": {
+  "en": "Resistance to foreign cultural influence from the [concept_cultural_hegemony_system]. Reduces the loss of [concept_legitimacy] from the [concept_foreign_cultural_benchmark].",
+  "ru": "Сопротивление иностранному культурному влиянию от системы [Concept('concept_cultural_hegemony_system','культурной гегемонии')]. Снижает потерю [Concept('concept_legitimacy','легитимности')] от [Concept('concept_foreign_cultural_benchmark','иностранного культурного ориентира')]."
  },
  "country_inflation_anchoring_add": {
   "en": "Inflation Anchoring",
   "ru": "Якорение инфляции"
  },
+ "country_inflation_anchoring_add_desc": {
+  "en": "How much standing upward pressure on prices a credible central bank absorbs before it reaches them. It offsets the net pressure from wages and every other standing source, up to this much — and only ever downward to zero, so it never pushes prices down on its own. A bank markets believe can hold its target without holding the economy down to do it.",
+  "ru": "Какую постоянную восходящую нагрузку на цены способен поглотить заслуживающий доверия центральный банк, прежде чем она до них дойдёт. Она компенсирует чистое давление от зарплат и всех прочих постоянных источников вплоть до этого значения — и только вниз до нуля, так что сама по себе цены не снижает. Банк, которому верят рынки, может удерживать свою цель, не придавливая для этого экономику."
+ },
  "country_inflation_pressure_add": {
   "en": "Price Pressure",
   "ru": "Ценовое давление"
+ },
+ "country_inflation_pressure_add_desc": {
+  "en": "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetization level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target.",
+  "ru": "Постоянная восходящая нагрузка на цены — насколько выше ожиданий устанавливается инфляция, пока действует этот источник, а не величина, добавляемая каждый месяц. Сюда давит обесценивание валюты. Деньги, напечатанные для оплаты нужд правительства, тоже давят на цены, но учитываются отдельно, по уровню монетизации, а не по этому показателю. Отрицательное значение давит на цены в другую сторону. Ваш центральный банк может противостоять давлению более жёстким курсом, а то, сколько его дойдёт до цен, зависит от того, верит ли кто-нибудь цели банка."
+ },
+ "country_institution_cost_institution_migration_controls_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_migration_controls').GetName]",
+  "ru": "@bur![Nbsp][concept_bureaucracy]: стоимость — [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_commerce_mult": {
+  "en": "Impact of [GetInstitutionType('institution_ministry_of_commerce').GetName]",
+  "ru": "Влияние: [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_impact_institution_ministry_of_commerce_mult_desc": {
+  "en": "An increase or reduction to the effects of the [GetInstitutionType('institution_ministry_of_commerce').GetName] [concept_institution]",
+  "ru": "Усиление или ослабление эффектов [Concept('concept_institution','института')] [GetInstitutionType('institution_ministry_of_commerce').GetName]"
+ },
+ "country_institution_migration_controls_max_investment_add": {
+  "en": "Max [GetInstitutionType('institution_migration_controls').GetName] [concept_institution] Investment",
+  "ru": "Максимум вложений в [Concept('concept_institution','институт')]: [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_migration_controls_max_investment_add_desc": {
+  "en": "Increases the maximum [concept_institution] [concept_investment_level] available for [GetInstitutionType('institution_migration_controls').GetName]",
+  "ru": "Повышает максимальный [Concept('concept_investment_level','уровень инвестиций')] [Concept('concept_institution','института')], доступный для: [GetInstitutionType('institution_migration_controls').GetName]"
+ },
+ "country_institution_size_change_speed_institution_ministry_of_the_environment_mult": {
+  "en": "[GetInstitutionType('institution_ministry_of_the_environment').GetName] Size Change Speed",
+  "ru": "Скорость изменения размера: [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_institution_size_change_speed_institution_ministry_of_the_environment_mult_desc": {
+  "en": "How fast you change the size of the [GetInstitutionType('institution_ministry_of_the_environment').GetName] [concept_institution]",
+  "ru": "Как быстро вы меняете размер [Concept('concept_institution','института')] [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "country_intelligence_capacity_add_desc": {
+  "en": "A flat bonus or penalty to the nation's [concept_intelligence_capacity] score, representing its counterintelligence capability.",
+  "ru": "Фиксированный бонус или штраф к показателю [Concept('concept_intelligence_capacity','разведывательного потенциала')] страны, отражающий её контрразведывательные возможности."
+ },
+ "country_intelligence_capacity_mult_desc": {
+  "en": "A percentage bonus or penalty to the nation's [concept_intelligence_capacity] score.",
+  "ru": "Процентный бонус или штраф к показателю [Concept('concept_intelligence_capacity','разведывательного потенциала')] страны."
+ },
+ "country_iron_export_tariffs_rate_add": {
+  "en": "@iron! $iron$ Export Tariff Rate",
+  "ru": "@iron! Ставка экспортной пошлины: $iron$"
+ },
+ "country_iron_import_tariffs_rate_add": {
+  "en": "@iron! $iron$ Import Tariff Rate",
+  "ru": "@iron! Ставка импортной пошлины: $iron$"
+ },
+ "country_iron_max_export_tariffs_level_add": {
+  "en": "@iron! $iron$ Maximum Export Tariff Level",
+  "ru": "@iron! Максимальный уровень экспортной пошлины: $iron$"
+ },
+ "country_iron_max_import_tariffs_level_add": {
+  "en": "@iron! $iron$ Maximum Import Tariff Level",
+  "ru": "@iron! Максимальный уровень импортной пошлины: $iron$"
+ },
+ "country_iron_min_export_tariffs_level_add": {
+  "en": "@iron! $iron$ Minimum Export Tariff Level",
+  "ru": "@iron! Минимальный уровень экспортной пошлины: $iron$"
+ },
+ "country_iron_min_import_tariffs_level_add": {
+  "en": "@iron! $iron$ Minimum Import Tariff Level",
+  "ru": "@iron! Минимальный уровень импортной пошлины: $iron$"
+ },
+ "country_judicial_independence_ceiling_add": {
+  "en": "[Concept('concept_judicial_independence','Judicial Independence')] Ceiling",
+  "ru": "Потолок: [Concept('concept_judicial_independence','независимость судов')]"
+ },
+ "country_judicial_independence_ceiling_add_desc": {
+  "en": "The highest [concept_judicial_independence] the courts can earn. The score rises by 4 a year toward it and falls by 10 a year above it.",
+  "ru": "Наивысшая [Concept('concept_judicial_independence','независимость судов')], которую могут заслужить суды. Оценка растёт к нему на 4 в год и падает на 10 в год выше него."
+ },
+ "country_judicial_independence_ceiling_mult_desc": {
+  "en": "The executive can ignore its courts, so they earn less trust.",
+  "ru": "Исполнительная власть может игнорировать свои суды, поэтому они заслуживают меньше доверия."
+ },
+ "country_legislative_override_capacity_add_desc": {
+  "en": "How easily this regime can bypass the normal legislative process. At 2 or more, the regime can decisively push laws through despite [Concept('concept_interest_group','Interest Group')] opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so capacity above a threshold acts as a buffer that lets the regime act again sooner and at higher tiers. Authoritarian governance, suppressive policies, centralized state structures, surveillance technology, state institutions (policing, thought control, propaganda), and certain power bloc principles raise capacity; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.",
+  "ru": "Насколько легко этот режим может обойти обычный законодательный процесс. При 2 и более режим может решительно проталкивать законы вопреки противодействию [Concept('concept_interest_group','групп интересов')]; при 4 и более — принимать их напрямую. Каждый пункт также снижает затраты [Concept('concept_authority','авторитета')] — умеренно ниже +5 (около −3% при +2, −9% при +4) и круто выше (около −20% при +5, −50% при +8, −75% при +16). Принуждение закона временно истощает потенциал, восстанавливающийся около пяти лет, поэтому потенциал выше порога служит запасом, позволяющим режиму действовать снова раньше и на более высоких уровнях. Потенциал повышают авторитарное управление, подавляющие политики, централизованные государственные структуры, технологии слежки, государственные институты (полиция, контроль мысли, пропаганда) и некоторые принципы силового блока; понижают демократическое избирательное право, децентрализация, феодальные порядки и защищённые свободы."
+ },
+ "country_legitimacy_from_votes_if_elected_add": {
+  "en": "[concept_legitimacy] from Votes, with an Elected Government",
+  "ru": "[concept_legitimacy] от голосов при выборном правительстве"
+ },
+ "country_legitimacy_from_votes_if_elected_add_desc": {
+  "en": "Under Landed, Wealth or Census Voting, Universal Suffrage or Anarchy: the legislature's law has the last word, and the government elected to make it gains standing.",
+  "ru": "При цензовом, имущественном и земельном избирательном праве, всеобщем избирательном праве или анархии: последнее слово за законом законодательного органа, а избранное для его принятия правительство приобретает авторитет."
+ },
+ "country_leverage_threshold_change_add": {
+  "en": "[concept_power_bloc_leverage] Threshold Change",
+  "ru": "Изменение порога: [concept_power_bloc_leverage|l]"
+ },
+ "country_leverage_threshold_change_add_desc": {
+  "en": "A change in the [concept_power_bloc_leverage] threshold for a [concept_power_bloc_leader] to invite a country to their [concept_power_bloc].",
+  "ru": "Изменение порога [Concept('concept_power_bloc_leverage','рычагов влияния')], при котором [Concept('concept_power_bloc_leader','лидер силового блока')] может пригласить страну в свой [Concept('concept_power_bloc','силовой блок')]."
+ },
+ "country_longevity_care_price_fall_mult": {
+  "en": "Longevity Care Price Fall[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Падение цен на медицину долголетия[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_longevity_care_price_fall_mult_desc": {
+  "en": "How much faster the market price of longevity care falls each year, bringing it within reach of poorer people sooner. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько быстрее рыночная цена медицины долголетия падает каждый год, делая её доступной для менее состоятельных людей раньше. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "country_nd_crew_strain_monthly_add": {
+  "en": "Crew Strain a Month",
+  "ru": "Напряжение экипажей в месяц"
+ },
+ "country_nd_crew_strain_monthly_add_desc": {
+  "en": "How much crew strain builds, or recovers, each month.",
+  "ru": "Насколько растёт или снижается напряжение экипажей каждый месяц."
+ },
+ "country_nd_crisis_danger_add": {
+  "en": "Danger in Our Crises",
+  "ru": "Опасность наших кризисов"
+ },
+ "country_nd_crisis_danger_add_desc": {
+  "en": "Added to the danger of a nuclear crisis we are a party to.",
+  "ru": "Добавляется к опасности ядерного кризиса, в котором мы участвуем."
+ },
+ "country_nd_custody_cost_mult": {
+  "en": "Cost of Holding the Warheads",
+  "ru": "Стоимость хранения боеголовок"
+ },
+ "country_nd_custody_cost_mult_desc": {
+  "en": "What custody of the arsenal costs, part of the deterrent's weekly upkeep.",
+  "ru": "Во сколько обходится хранение арсенала, часть еженедельного содержания средства сдерживания."
+ },
+ "country_nd_custody_loss_add": {
+  "en": "Warheads Lost When Custody Changes Hands",
+  "ru": "Боеголовки, потерянные при смене хранителя"
+ },
+ "country_nd_custody_loss_add_desc": {
+  "en": "The share of the arsenal that goes missing when it changes hands, in a civil war or when an arsenal passes to another country. Commanders who hold launch authority can also take their weapons with them.",
+  "ru": "Доля арсенала, которая пропадает при смене рук, во время гражданской войны или когда арсенал переходит к другой стране. Командиры, имеющие право на запуск, могут также унести своё оружие с собой."
+ },
+ "country_nd_halt_chance_add": {
+  "en": "Chance of a Halt",
+  "ru": "Шанс остановки"
+ },
+ "country_nd_halt_chance_add_desc": {
+  "en": "The chance that someone in the chain stops a launch the government never ordered.",
+  "ru": "Вероятность того, что кто-то в цепочке остановит запуск, которого правительство не приказывало."
+ },
+ "country_nd_incident_rate_mult": {
+  "en": "Everyday Incident Rate",
+  "ru": "Частота повседневных инцидентов"
+ },
+ "country_nd_incident_rate_mult_desc": {
+  "en": "How often a false warning, a weapons accident or a commander cut off from the capital comes up, against Routine readiness. A crisis adds misreadings of its own.",
+  "ru": "Как часто возникают ложная тревога, авария оружия или командир, отрезанный от столицы, при обычной готовности. Кризис добавляет собственные ошибочные прочтения."
+ },
+ "country_nd_launch_credit_add": {
+  "en": "Launch Credit",
+  "ru": "Зачёт запуска"
+ },
+ "country_nd_launch_credit_add_desc": {
+  "en": "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer.",
+  "ru": "Доля боеголовок, которые уничтожил бы первый удар, но которые уходят до его нанесения. Кризис считает их среди боеголовок, которые уцелели бы для ответа."
+ },
+ "country_nd_threat_pressure_add": {
+  "en": "Pressure Our Threats Exert",
+  "ru": "Давление наших угроз"
+ },
+ "country_nd_threat_pressure_add_desc": {
+  "en": "Added to the pressure to concede on a country we threaten.",
+  "ru": "Добавляется к давлению, заставляющему уступить стране, которой мы угрожаем."
+ },
+ "country_nuclear_program_progress_mult_desc": {
+  "en": "Multiplies the rate at which this country's [concept_nuclear_program] progress accrues. Values greater than 0 speed progress; negative values slow it.",
+  "ru": "Умножает скорость, с которой накапливается прогресс [Concept('concept_nuclear_program','ядерной программы')] этой страны. Значения больше 0 ускоряют прогресс; отрицательные замедляют его."
+ },
+ "country_nuclear_weapon_attack_success_add": {
+  "en": "[concept_nuclear_strike] Success Chance",
+  "ru": "Шанс успеха [Concept('concept_nuclear_strike','ядерного удара')]"
+ },
+ "country_nuclear_weapon_attack_success_add_desc": {
+  "en": "The chance that our [concept_nuclear_stockpile] will successfully deliver a [concept_nuclear_strike] on their target.",
+  "ru": "Вероятность того, что наш [concept_nuclear_stockpile|l] успешно нанесёт [Concept('concept_nuclear_strike','ядерный удар')] по их цели."
+ },
+ "country_orbital_debris_removal_add": {
+  "en": "[concept_orbital_debris] Removal per Month",
+  "ru": "Уборка [Concept('concept_orbital_debris','орбитального мусора')] в месяц"
+ },
+ "country_orbital_debris_removal_add_desc": {
+  "en": "Points of [concept_orbital_debris] this country clears from orbit each month, taken from the high orbits first. Every country that uses orbit benefits.",
+  "ru": "Очки [Concept('concept_orbital_debris','орбитального мусора')], которые эта страна очищает с орбиты каждый месяц, сначала с высоких орбит. Выгоду получает каждая страна, использующая орбиту."
+ },
+ "country_orbital_debris_removal_mult": {
+  "en": "[concept_orbital_debris] Removal",
+  "ru": "Уборка [Concept('concept_orbital_debris','орбитального мусора')]"
+ },
+ "country_orbital_debris_removal_mult_desc": {
+  "en": "Scales this country's orbital debris removal, up to +100%. It removes nothing on its own: it needs a Space Program running a debris removal method.",
+  "ru": "Масштабирует уборку орбитального мусора этой страной, до +100%. Сама по себе она ничего не убирает: нужна космическая программа с методом уборки мусора."
+ },
+ "country_override_with_algorithmic_governance_add": {
+  "en": "[Concept('concept_legislative_override_capacity','Legislative Override Capacity')] under Algorithmic Governance",
+  "ru": "[Concept('concept_legislative_override_capacity','Возможность законодательного преодоления')] при алгоритмическом управлении"
+ },
+ "country_override_with_algorithmic_governance_add_desc": {
+  "en": "With Algorithmic Governance, the system that writes the law also judges it.",
+  "ru": "При алгоритмическом управлении система, пишущая закон, ещё и судит по нему."
+ },
+ "country_participant_diplomatic_play_escalation_weekly_add": {
+  "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined",
+  "ru": "Еженедельная эскалация в [Concept('concept_diplomatic_play','дипломатических играх')], к которым вы присоединились"
+ },
+ "country_participant_diplomatic_play_escalation_weekly_add_desc": {
+  "en": "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is a committed participant in (either side). Floored at 0; stacks with the role-specific aggressor / defender contributions when applicable.",
+  "ru": "Фиксированное количество [Concept('concept_escalation','эскалации')], добавляемое каждую неделю к каждой [Concept('concept_diplomatic_play','дипломатической игре')], в которой эта страна является полноценным участником (с любой стороны). Не ниже 0; складывается с вкладами конкретных ролей агрессора и защитника, когда применимо."
+ },
+ "country_participant_diplomatic_play_escalation_weekly_mult_desc": {
+  "en": "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country has joined as a committed participant.",
+  "ru": "Множитель к соответствующему количеству #V _add#! еженедельной [Concept('concept_escalation','эскалации')] для игр, к которым эта страна присоединилась как полноценный участник."
+ },
+ "country_policy_rate_drift_speed_mult": {
+  "en": "Policy Rate Adjustment Speed",
+  "ru": "Скорость корректировки ключевой ставки"
+ },
+ "country_policy_rate_drift_speed_mult_desc": {
+  "en": "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month, so a small change of course takes seasons rather than weeks. While inflation is far from its target too, it covers up to a sixth of the distance a month, so a bank chasing a runaway inflation closes most of the way in about a year.",
+  "ru": "Как быстро ключевая ставка сближается с целью, к которой стремится ваш центральный банк. На базовом уровне она преодолевает около трети пункта в месяц, поэтому небольшое изменение курса занимает сезоны, а не недели. Пока инфляция тоже далека от цели, она преодолевает до шестой части расстояния в месяц, так что банк, гонящийся за галопирующей инфляцией, проходит большую часть пути примерно за год."
  },
  "country_risk_premium_add": {
   "en": "Risk Premium",

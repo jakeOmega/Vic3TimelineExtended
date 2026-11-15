@@ -28587,17 +28587,237 @@
   "en": "Champion International Order",
   "ru": "Защита международного порядка"
  },
+ "un_cultural_diversity_terms_hegemon_tt": {
+  "en": "As the world's cultural hegemon we would also project #R 10% less#! [concept_cultural_pull], scaled by [concept_un_enforcement].",
+  "ru": "Как мировой культурный гегемон мы также получили бы на #R 10% меньше#! [concept_cultural_pull|l] с поправкой на [Concept('concept_un_enforcement','принуждение ООН')]."
+ },
+ "un_decolonization_champion_modifier": {
+  "en": "Decolonization Champion",
+  "ru": "Борец за деколонизацию"
+ },
  "un_decolonization_pressure_modifier": {
   "en": "Decolonization Declaration: International Pressure",
   "ru": "Декларация о деколонизации: международное давление"
+ },
+ "un_defund_development_effect_tt": {
+  "en": "Ends our contribution: its expense, its benefits and its share of the UN's #bold funding#! pillar stop.",
+  "ru": "Прекращает наш вклад: его расходы, его выгоды и его доля в опоре ООН, связанной с #bold финансированием#!."
+ },
+ "un_deleg_bulk_against_effect_tt": {
+  "en": "Our delegation presses the members on the list to vote #R against#!. A campaign starts on each one the Assembly does not already read as leaning against, from the top of the list down, until our [concept_influence] runs out. Each uses #v 100#! [concept_influence] for as long as it runs, and our [concept_influence] covers #v [THIS.ScriptValue('un_deleg_bulk_budget')|0]#! of them now.",
+  "ru": "Наша делегация убеждает членов из списка голосовать #R против#!. Кампания начинается с каждого, кого Ассамблея ещё не считает склоняющимся против, сверху вниз по списку, пока не закончится [Concept('concept_influence','влияния')]. Каждая кампания занимает #v 100#! ед. [Concept('concept_influence','влияния')], пока длится, и сейчас нашего [Concept('concept_influence','влияния')] хватает на #v [THIS.ScriptValue('un_deleg_bulk_budget')|0]#! таких кампаний."
+ },
+ "un_deleg_bulk_for_effect_tt": {
+  "en": "Our delegation presses the members on the list to vote #G in favor#!. A campaign starts on each one the Assembly does not already read as leaning for, from the top of the list down, until our [concept_influence] runs out. Each uses #v 100#! [concept_influence] for as long as it runs, and our [concept_influence] covers #v [THIS.ScriptValue('un_deleg_bulk_budget')|0]#! of them now.",
+  "ru": "Наша делегация убеждает членов из списка голосовать #G за#!. Кампания начинается с каждого, кого Ассамблея ещё не считает склоняющимся за, сверху вниз по списку, пока не закончится [Concept('concept_influence','влияния')]. Каждая кампания занимает #v 100#! ед. [Concept('concept_influence','влияния')], пока длится, и сейчас нашего [Concept('concept_influence','влияния')] хватает на #v [THIS.ScriptValue('un_deleg_bulk_budget')|0]#! таких кампаний."
+ },
+ "un_deleg_bulk_target_against_tt": {
+  "en": "A member on the list can be lobbied and is not yet read as leaning against",
+  "ru": "Члена из списка можно склонять, и Ассамблея ещё не считает его склоняющимся против"
+ },
+ "un_deleg_bulk_target_for_tt": {
+  "en": "A member on the list can be lobbied and is not yet read as leaning for",
+  "ru": "Члена из списка можно склонять, и Ассамблея ещё не считает его склоняющимся за"
+ },
+ "un_deleg_campaign_cost_tt": {
+  "en": "It uses #v 100#! [concept_influence] for as long as it runs.",
+  "ru": "Занимает #v 100#! ед. [Concept('concept_influence','влияния')], пока длится."
+ },
+ "un_deleg_can_afford_tt": {
+  "en": "We have the [concept_influence] to run a campaign",
+  "ru": "У нас достаточно [Concept('concept_influence','влияния')], чтобы начать кампанию"
+ },
+ "un_deleg_can_send_tt": {
+  "en": "The diplomatic action is open to us",
+  "ru": "Дипломатическое действие нам доступно"
+ },
+ "un_deleg_member_open_tt": {
+  "en": "They are an AI member with a vote, have not voted, and are not the resolution's target",
+  "ru": "Это член под управлением ИИ, у него есть голос, он ещё не голосовал и не является целью резолюции"
+ },
+ "un_deleg_not_lobbying_tt": {
+  "en": "We are not already lobbying them",
+  "ru": "Мы ещё не склоняем его к голосованию"
+ },
+ "un_deleg_pledge_accepts_tt": {
+  "en": "#G They will accept.#!",
+  "ru": "#G Они согласятся.#!"
+ },
+ "un_deleg_pledge_refuses_tt": {
+  "en": "#R They will refuse.#! The request still counts: we cannot ask them again on this resolution.",
+  "ru": "#R Они откажутся.#! Просьба всё равно засчитывается: по этой резолюции мы не можем обратиться к ним снова."
+ },
+ "un_deleg_stop_tt": {
+  "en": "We stop lobbying them: the [concept_influence] is freed, and what the campaign had gained is lost.",
+  "ru": "Мы прекращаем склонять их к голосованию: [Concept('concept_influence','влияния')] освобождается, а достигнутое кампанией теряется."
+ },
+ "un_deleg_we_vote_tt": {
+  "en": "We have a vote in the Assembly",
+  "ru": "У нас есть голос в Ассамблее"
+ },
+ "un_dev_fund_pool_grant_modifier": {
+  "en": "World Development Fund Grant",
+  "ru": "Грант Всемирного фонда развития"
+ },
+ "un_dev_fund_to_generous_tt": {
+  "en": "Our contribution becomes #bold Generous#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_generous')|D]#! a week (1% of GDP a year), for #G +10%#! [concept_infamy] decay and #G +5%#! [concept_prestige].",
+  "ru": "Наш вклад становится #bold щедрым#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_generous')|D]#! в неделю (1% ВВП в год) за #G +10%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +5%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_dev_fund_to_modest_tt": {
+  "en": "Our contribution becomes #bold Modest#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_modest')|D]#! a week (0.25% of GDP a year), for #G +6%#! [concept_infamy] decay and #G +3%#! [concept_prestige].",
+  "ru": "Наш вклад становится #bold скромным#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_modest')|D]#! в неделю (0,25% ВВП в год) за #G +6%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +3%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_dev_fund_to_small_tt": {
+  "en": "Our contribution becomes #bold Small#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_small')|D]#! a week (0.125% of GDP a year), for #G +4%#! [concept_infamy] decay and #G +2%#! [concept_prestige].",
+  "ru": "Наш вклад становится #bold небольшим#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_small')|D]#! в неделю (0,125% ВВП в год) за #G +4%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +2%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_dev_fund_to_substantial_tt": {
+  "en": "Our contribution becomes #bold Substantial#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_substantial')|D]#! a week (0.5% of GDP a year), for #G +8%#! [concept_infamy] decay and #G +4%#! [concept_prestige].",
+  "ru": "Наш вклад становится #bold существенным#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_substantial')|D]#! в неделю (0,5% ВВП в год) за #G +8%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +4%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_dev_fund_to_token_tt": {
+  "en": "Our contribution becomes #bold Token#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_token')|D]#! a week (0.0625% of GDP a year), for #G +2%#! [concept_infamy] decay and #G +1%#! [concept_prestige].",
+  "ru": "Наш вклад становится #bold символическим#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_token')|D]#! в неделю (0,0625% ВВП в год) за #G +2%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +1%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_development_contributor_cost": {
+  "en": "Development Program Expenses",
+  "ru": "Расходы на программы развития"
+ },
+ "un_development_contributor_modifier": {
+  "en": "UN Development Contributor",
+  "ru": "Участник развития ООН"
+ },
+ "un_development_fund_budget_tt": {
+  "en": "The UN has a budget to share: its members are assessed [concept_un_dues] (from the [concept_un_tier_contested] tier)",
+  "ru": "У ООН есть бюджет для распределения: с членов взимаются [concept_un_dues|l] (начиная с уровня [Concept('concept_un_tier_contested','«Оспариваемый»')])"
+ },
+ "un_development_patron_modifier": {
+  "en": "Grateful Aid Recipients",
+  "ru": "Благодарные получатели помощи"
  },
  "un_dissolution_vacuum_modifier": {
   "en": "The UN Has Fallen",
   "ru": "ООН пала"
  },
+ "un_docket_option_pass": {
+  "en": "Leave it to another delegation.",
+  "ru": "Предоставить это другой делегации."
+ },
+ "un_docket_pass_tt": {
+  "en": "Another member may be offered the matter in our place. Declining earns us nothing.",
+  "ru": "Вопрос может быть предложен другому члену вместо нас. Отказ ничего нам не даёт."
+ },
+ "un_dossier_tt_busting": {
+  "en": "#R Busting the sanctions goes on our record#! (+8 to the case the Assembly could make against us)",
+  "ru": "#R Обход санкций заносится в наш послужной список#! (+8 к делу, которое Ассамблея могла бы возбудить против нас)"
+ },
+ "un_dossier_tt_court": {
+  "en": "#R Defying the court goes on our record#! (+6 to the case the Assembly could make against us)",
+  "ru": "#R Пренебрежение судом заносится в наш послужной список#! (+6 к делу, которое Ассамблея могла бы возбудить против нас)"
+ },
+ "un_dossier_tt_defiance": {
+  "en": "#R Refusing a binding decision goes on our record#! (+10 to the case the Assembly could make against us)",
+  "ru": "#R Отказ подчиниться обязательному решению заносится в наш послужной список#! (+10 к делу, которое Ассамблея могла бы возбудить против нас)"
+ },
+ "un_dues_assessed_tt": {
+  "en": "The United Nations assesses dues (it is above the Moribund tier)",
+  "ru": "Организация Объединённых Наций начисляет взносы (её уровень выше «Угасающий»)"
+ },
+ "un_dues_resume_effect_tt": {
+  "en": "We pay the #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_arrears_months')|0]#! months of [concept_un_dues] we owe: #R @money![ROOT.GetCountry.MakeScope.ScriptValue('un_disp_arrears_owed')|D]#! from our treasury, at once. Our arrears are cleared, any lost vote is restored, and our dues of @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_dues_weekly_value')|D]#! a week are charged again.",
+  "ru": "Мы выплачиваем задолженность по [Concept('concept_un_dues','взносам в ООН')] за #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_arrears_months')|0]#! мес.: #R @money![ROOT.GetCountry.MakeScope.ScriptValue('un_disp_arrears_owed')|D]#! из нашей казны, немедленно. Задолженность погашена, утраченный голос восстановлен, и наши взносы в размере @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_dues_weekly_value')|D]#! в неделю снова начисляются."
+ },
+ "un_dues_withhold_effect_tt": {
+  "en": "We stop paying our [concept_un_dues] of @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_dues_weekly_value')|D]#! a week.\\n#R International Standing: −3#! for withholding them.\\nEvery month we withhold while dues are assessed is a month in arrears, and what we would have paid is added to what we owe; dues are billed by the month, so this month's are owed at once. The funding of the United Nations falls with our share of the members' GDP.\\n#R After 24 months in arrears we lose our vote in the [concept_un_general_assembly]#! (Article 19): no ballots, no resolutions tabled, and no place in a two-thirds supermajority, until we pay.",
+  "ru": "Мы прекращаем платить [concept_un_dues|l] в размере @money!#v [ROOT.GetCountry.MakeScope.ScriptValue('un_dues_weekly_value')|D]#! в неделю.\\n#R Международный авторитет: −3#! за их удержание.\\nКаждый месяц удержания при начисляемых взносах — месяц задолженности, и то, что мы заплатили бы, прибавляется к нашему долгу; взносы выставляются помесячно, поэтому взносы за этот месяц причитаются сразу. Финансирование Организации Объединённых Наций падает вместе с нашей долей в ВВП членов.\\n#R После 24 месяцев задолженности мы теряем голос в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]#! (статья 19): никаких бюллетеней, никаких внесённых резолюций и никакого места в большинстве в две трети, пока мы не заплатим."
+ },
+ "un_electoral_observers_modifier": {
+  "en": "UN Electoral Observers",
+  "ru": "Избирательные наблюдатели ООН"
+ },
+ "un_end_peacekeeping_cooldown_tt": {
+  "en": "Cannot withdraw peacekeeping contribution while commitment cooldown is active.",
+  "ru": "Нельзя отозвать вклад в миротворчество, пока действует перерыв на обязательства."
+ },
+ "un_food_reserve_needs_reserve_tt": {
+  "en": "We have a Strategic Reserve Hub, and our Strategic Reserve can store grain",
+  "ru": "У нас есть узел стратегического резерва, и наш стратегический резерв может хранить зерно"
+ },
+ "un_food_reserve_pledge_effect_tt": {
+  "en": "We pledge grain from our Strategic Reserve to the [concept_un_food_reserve]. Each new UN aid mission may draw up to a quarter of what we hold, at most 2,500 units.",
+  "ru": "Мы обещаем зерно из нашего стратегического резерва [Concept('concept_un_food_reserve','Всемирному продовольственному резерву')]. Каждая новая миссия помощи ООН может забрать до четверти наших запасов, но не более 2 500 ед."
+ },
+ "un_food_reserve_relief_state_modifier": {
+  "en": "World Food Reserve Relief",
+  "ru": "Помощь Всемирного продовольственного резерва"
+ },
+ "un_food_reserve_withdraw_effect_tt": {
+  "en": "We withdraw our grain pledge: the [concept_un_food_reserve] draws nothing more from our Strategic Reserve.",
+  "ru": "Мы отзываем обещание поставок зерна: [concept_un_food_reserve|l] больше ничего не берёт из нашего стратегического резерва."
+ },
+ "un_found_influence_tt": {
+  "en": "We have #bold 500#! [concept_influence] available",
+  "ru": "У нас есть #bold 500#! ед. [Concept('concept_influence','влияния')]"
+ },
+ "un_found_tech_early_tt": {
+  "en": "You have researched $multilateral_alliances$ or $intergovernmental_organizations$",
+  "ru": "Вы изучили $multilateral_alliances$ или $intergovernmental_organizations$"
+ },
+ "un_founding_cost_modifier": {
+  "en": "UN Founding Costs",
+  "ru": "Расходы на основание ООН"
+ },
+ "un_founding_member_modifier": {
+  "en": "UN Founding Member",
+  "ru": "Член-основатель ООН"
+ },
+ "un_fund_development_effect_tt": {
+  "en": "Starts a #bold Token#! contribution: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_token')|D]#! a week (0.0625% of GDP a year), for #G +2%#! [concept_infamy] decay and #G +1%#! [concept_prestige].",
+  "ru": "Начинает #bold символический#! вклад: @money!#v [THIS.ScriptValue('un_disp_dev_fund_cost_token')|D]#! в неделю (0,0625% ВВП в год) за #G +2%#! к снижению [Concept('concept_infamy','дурной славы')] и #G +1%#! к [Concept('concept_prestige','престижу')]."
+ },
+ "un_fund_development_needs_fund_tt": {
+  "en": "The [concept_un_general_assembly] has founded the [concept_un_development_fund]: until then, a contribution's money would reach no one",
+  "ru": "[Concept('concept_un_general_assembly','Генеральная Ассамблея')] основала [Concept('concept_un_development_fund','Всемирный фонд развития')]: до тех пор деньги вклада не дойдут ни до кого"
+ },
+ "un_fund_development_not_recipient_tt": {
+  "en": "The [concept_un_development_fund] pays us no grant: it would only hand our money back",
+  "ru": "[Concept('concept_un_development_fund','Всемирный фонд развития')] не выплачивает нам грант: он лишь вернул бы нам наши же деньги"
+ },
+ "un_fund_development_pays_dues_tt": {
+  "en": "We pay our [concept_un_dues]: while we withhold them, a contribution's money would not reach the [concept_un_development_fund]",
+  "ru": "Мы платим [concept_un_dues|l]: пока мы их удерживаем, деньги вклада не дойдут до [Concept('concept_un_development_fund','Всемирного фонда развития')]"
+ },
+ "un_ga_resolution_modifier": {
+  "en": "General Assembly Resolution Participant",
+  "ru": "Участник резолюции Генеральной Ассамблеи"
+ },
+ "un_grounds_expulsion_tt": {
+  "en": "A [concept_un_permanent_member] that is not our ally, overlord or subject has used its [concept_un_veto] in the last five years",
+  "ru": "[concept_un_permanent_member|l], не являющийся нашим союзником, сюзереном или зависимым государством, применил [concept_un_veto|l] за последние пять лет"
+ },
+ "un_grounds_sanctions_tt": {
+  "en": "A rival not already under sanctions has a record that supports them (case strength 50 or more)",
+  "ru": "У соперника, ещё не находящегося под санкциями, есть послужной список, оправдывающий их (весомость дела 50 или более)"
+ },
+ "un_heritage_program_modifier": {
+  "en": "UNESCO Heritage Program",
+  "ru": "Программа наследия ЮНЕСКО"
+ },
+ "un_heritage_refusal_modifier": {
+  "en": "Refused World Heritage Convention",
+  "ru": "Отказ от Конвенции о всемирном наследии"
+ },
+ "un_high_authority_infamy_modifier": {
+  "en": "UN International Order",
+  "ru": "Международный порядок ООН"
+ },
  "un_hist_chart_auth_title": {
   "en": "UN Authority",
   "ru": "Авторитет ООН"
+ },
+ "un_hist_chart_target_legend": {
+  "en": "#lore the target the world supported, 0-100#!",
+  "ru": "#lore цель, которую поддержал мир, 0–100#!"
  },
  "un_hist_chart_target_title": {
   "en": "Where Authority Was Heading",
@@ -28607,6 +28827,486 @@
   "en": "Human Rights Champion",
   "ru": "Защитник прав человека"
  },
+ "un_human_rights_declaration_modifier": {
+  "en": "Human Rights Declaration Ratified",
+  "ru": "Декларация прав человека ратифицирована"
+ },
+ "un_human_rights_refusal_modifier": {
+  "en": "Refused Human Rights Declaration",
+  "ru": "Отказ от Декларации прав человека"
+ },
+ "un_humanitarian_aid_cost": {
+  "en": "Humanitarian Aid Expenses",
+  "ru": "Расходы на гуманитарную помощь"
+ },
+ "un_humanitarian_aid_modifier": {
+  "en": "Major Humanitarian Aid Contributor",
+  "ru": "Крупный вкладчик гуманитарной помощи"
+ },
+ "un_humanitarian_aid_received_modifier": {
+  "en": "International Humanitarian Aid",
+  "ru": "Международная гуманитарная помощь"
+ },
+ "un_humanitarian_token_cost": {
+  "en": "Token Aid Expenses",
+  "ru": "Расходы на символическую помощь"
+ },
+ "un_humanitarian_token_modifier": {
+  "en": "Humanitarian Aid Contributor",
+  "ru": "Участник гуманитарной помощи"
+ },
+ "un_humanitarian_token_received_modifier": {
+  "en": "Modest Humanitarian Assistance",
+  "ru": "Скромная гуманитарная помощь"
+ },
+ "un_icc_member_modifier": {
+  "en": "ICC Member State",
+  "ru": "Государство — член МУС"
+ },
+ "un_icc_refusal_modifier": {
+  "en": "Rejected the Rome Statute",
+  "ru": "Отказ от Римского статута"
+ },
+ "un_ideological_champion_modifier": {
+  "en": "Ideological Champion at the UN",
+  "ru": "Идеологический лидер в ООН"
+ },
+ "un_influence_pending_tt": {
+  "en": "We also have the #bold [GetPlayer.MakeScope.ScriptValue('un_influence_pending_value')|0]#! [concept_influence] committed to a start in the past week, not yet taken from our total",
+  "ru": "У нас также есть #bold [GetPlayer.MakeScope.ScriptValue('un_influence_pending_value')|0]#! ед. [Concept('concept_influence','влияния')], задействованных за последнюю неделю и ещё не вычтенных из нашего общего запаса"
+ },
+ "un_join_not_revolutionary_tt": {
+  "en": "We are not an uprising: the UN seats a country's government, not those fighting it",
+  "ru": "Мы не мятеж: ООН принимает правительство страны, а не тех, кто с ним борется"
+ },
+ "un_law_of_sea_refusal_modifier": {
+  "en": "Rejected Law of the Sea",
+  "ru": "Отказ от Морского права"
+ },
+ "un_leave_drops_international_ai_oversight_tt": {
+  "en": "$law_international_ai_oversight$ falls to $law_national_ai_licensing$: it needs membership",
+  "ru": "$law_international_ai_oversight$ сменяется на $law_national_ai_licensing$: для неё необходимо членство"
+ },
+ "un_ledger_tt_credibility_down_0_5": {
+  "en": "#R UN credibility −0.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#R Доверие к ООН −0,5#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_down_1": {
+  "en": "#R UN credibility −1#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#R Доверие к ООН −1#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_down_1_5": {
+  "en": "#R UN credibility −1.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#R Доверие к ООН −1,5#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_down_2": {
+  "en": "#R UN credibility −2#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#R Доверие к ООН −2#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_down_2_5": {
+  "en": "#R UN credibility −2.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#R Доверие к ООН −2,5#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_up_0_5": {
+  "en": "#G UN credibility +0.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Доверие к ООН +0,5#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_up_1": {
+  "en": "#G UN credibility +1#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Доверие к ООН +1#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_up_1_5": {
+  "en": "#G UN credibility +1.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Доверие к ООН +1,5#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_credibility_up_2": {
+  "en": "#G UN credibility +2#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Доверие к ООН +2#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_delivery_institutional_0_5": {
+  "en": "#G UN delivery +0.5#!, moving [concept_un_authority]'s target: the organization delivered in a crisis.",
+  "ru": "#G Результативность ООН +0,5#!, сдвигает цель [Concept('concept_un_authority','авторитета ООН')]: организация справилась в кризисе."
+ },
+ "un_ledger_tt_delivery_up_0_25": {
+  "en": "#G UN delivery +0.25#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Результативность ООН +0,25#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_delivery_up_0_75": {
+  "en": "#G UN delivery +0.75#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
+  "ru": "#G Результативность ООН +0,75#! × наш вес в мировых делах (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), сдвигает цель [Concept('concept_un_authority','авторитета ООН')]"
+ },
+ "un_ledger_tt_p5_walkout": {
+  "en": "#R UN authority −4#! × our weight in world affairs (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, at most ×2), at once: a permanent member walking out is a world moment, on top of our share of world power leaving the participation pillar.",
+  "ru": "#R Авторитет ООН −4#! × наш вес в мировых делах (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, не более ×2), немедленно: уход постоянного члена — событие мирового масштаба, помимо того, что наша доля мировой мощи покидает опору участия."
+ },
+ "un_lift_sanctions_grounds_tt": {
+  "en": "We are under [concept_un_sanctions]",
+  "ru": "Мы под [Concept('concept_un_sanctions','санкциями ООН')]"
+ },
+ "un_loan_conditions_modifier": {
+  "en": "UN Emergency Loan Conditions",
+  "ru": "Условия экстренного займа ООН"
+ },
+ "un_loan_repayment_modifier": {
+  "en": "UN Emergency Loan Repayments",
+  "ru": "Погашение экстренного займа ООН"
+ },
+ "un_lobby_against_action": {
+  "en": "Lobby Against the Resolution",
+  "ru": "Лоббировать против резолюции"
+ },
+ "un_lobby_against_action_action_break_name": {
+  "en": "Stop Lobbying",
+  "ru": "Прекратить лоббирование"
+ },
+ "un_lobby_against_action_action_notification_break_name": {
+  "en": "Lobbying Ended",
+  "ru": "Лоббирование прекращено"
+ },
+ "un_lobby_against_action_action_notification_name": {
+  "en": "Lobbied at the United Nations",
+  "ru": "Лоббирование в Организации Объединённых Наций"
+ },
+ "un_lobby_against_action_action_propose_name": {
+  "en": "Start Lobbying Against",
+  "ru": "Начать лоббирование против"
+ },
+ "un_lobby_campaign_against_effect_tt": {
+  "en": "Our delegation presses them to vote #R against#!: their lean moves #R −3#! for each full month the campaign runs, up to #R −15#!. While it runs, the chamber shows us their true position.",
+  "ru": "Наша делегация убеждает их голосовать #R против#!: их склонность сдвигается на #R −3#! за каждый полный месяц кампании, до #R −15#!. Пока она идёт, палата показывает нам их истинную позицию."
+ },
+ "un_lobby_campaign_for_effect_tt": {
+  "en": "Our delegation presses them to vote #G in favor#!: their lean moves #G +3#! for each full month the campaign runs, up to #G +15#!. While it runs, the chamber shows us their true position.",
+  "ru": "Наша делегация убеждает их голосовать #G за#!: их склонность сдвигается на #G +3#! за каждый полный месяц кампании, до #G +15#!. Пока она идёт, палата показывает нам их истинную позицию."
+ },
+ "un_lobby_campaign_maintain_tt": {
+  "en": "The resolution is still in session, they have not voted, and both of us keep our votes",
+  "ru": "Резолюция всё ещё рассматривается, они не голосовали, и у нас обоих сохраняются голоса"
+ },
+ "un_lobby_campaign_member_votes_tt": {
+  "en": "They have a vote in the Assembly",
+  "ru": "У них есть голос в Ассамблее"
+ },
+ "un_lobby_campaign_not_both_ways_tt": {
+  "en": "We are not already lobbying them the other way",
+  "ru": "Мы ещё не склоняем их в обратную сторону"
+ },
+ "un_lobby_commitment_struck_against_tt": {
+  "en": "If they accept, they undertake to vote #R against#! the resolution before the [concept_un_general_assembly], and we owe them an [concept_obligation] for it. They are free to break their word; if they do, the [concept_obligation] is struck off and their standing in the organization suffers.",
+  "ru": "Если они согласятся, то обязуются проголосовать #R против#! резолюции в [Concept('concept_un_general_assembly','Генеральной Ассамблее')], а мы остаёмся им должны [concept_obligation|l]. Они вправе нарушить слово; в таком случае [concept_obligation|l] списывается, а их положение в организации страдает."
+ },
+ "un_lobby_commitment_struck_tt": {
+  "en": "If they accept, they undertake to vote #G in favor#! of the resolution before the [concept_un_general_assembly], and we owe them an [concept_obligation] for it. They are free to break their word; if they do, the [concept_obligation] is struck off and their standing in the organization suffers.",
+  "ru": "Если они согласятся, то обязуются проголосовать #G за#! резолюцию в [Concept('concept_un_general_assembly','Генеральной Ассамблее')], а мы остаёмся им должны [concept_obligation|l]. Они вправе нарушить слово; в таком случае [concept_obligation|l] списывается, а их положение в организации страдает."
+ },
+ "un_lobby_for_action": {
+  "en": "Lobby For the Resolution",
+  "ru": "Лоббировать за резолюцию"
+ },
+ "un_lobby_for_action_action_propose_name": {
+  "en": "Start Lobbying For",
+  "ru": "Начать лоббирование за"
+ },
+ "un_lobby_has_not_voted_tt": {
+  "en": "They have not yet cast their vote on the resolution",
+  "ru": "Они ещё не отдали голос по резолюции"
+ },
+ "un_lobby_no_obligation_owed_tt": {
+  "en": "We do not already owe them an [concept_obligation]",
+  "ru": "Мы ещё не должны им [concept_obligation|l]"
+ },
+ "un_lobby_not_pledged_tt": {
+  "en": "They have not already pledged their vote on this resolution",
+  "ru": "Они ещё не обещали свой голос по этой резолюции"
+ },
+ "un_lobby_not_the_target_tt": {
+  "en": "They are not the country the resolution is aimed at",
+  "ru": "Они не та страна, против которой направлена резолюция"
+ },
+ "un_lobby_not_yet_approached_tt": {
+  "en": "We have not already asked them for a pledge on this resolution",
+  "ru": "Мы ещё не просили их об обещании по этой резолюции"
+ },
+ "un_lobby_under_cap_tt": {
+  "en": "We have collected fewer than two pledges on this resolution",
+  "ru": "Мы получили менее двух обещаний по этой резолюции"
+ },
+ "un_mandate_authority_tt": {
+  "en": "The [concept_un_authority] of the organization is at least 40",
+  "ru": "[concept_un_authority|l] организации составляет не менее 40"
+ },
+ "un_mandate_case_tt": {
+  "en": "Some state whose record supports a mandate (case strength 60 or more) holds a [concept_state_region] we have a [concept_claim] on",
+  "ru": "Некое государство, чей послужной список оправдывает мандат (весомость дела 60 или более), владеет [Concept('concept_state_region','стратегический регион')], на который у нас есть [Concept('concept_claim','притязание')]"
+ },
+ "un_mandate_cooldown_tt": {
+  "en": "We have not moved for a military mandate in the last five years",
+  "ru": "Мы не добивались военного мандата за последние пять лет"
+ },
+ "un_mandate_no_live_mandate_tt": {
+  "en": "We hold no authorized military mandate already",
+  "ru": "У нас ещё нет действующего санкционированного военного мандата"
+ },
+ "un_mandate_standing_tt": {
+  "en": "Our International Standing in the organization is not Disgraced",
+  "ru": "Наш международный авторитет в организации не «Опозорен»"
+ },
+ "un_mandate_war_support_modifier": {
+  "en": "A War the United Nations Authorized",
+  "ru": "Война, санкционированная Организацией Объединённых Наций"
+ },
+ "un_member_privileges_modifier": {
+  "en": "UN Membership Privileges",
+  "ru": "Привилегии члена ООН"
+ },
+ "un_membership_benefits_modifier": {
+  "en": "UN Membership Benefits",
+  "ru": "Выгоды членства в ООН"
+ },
+ "un_membership_eligible_tt": {
+  "en": "We conduct our own foreign policy: we are independent, or a dominion, protectorate or tributary",
+  "ru": "Мы ведём собственную внешнюю политику: мы независимы либо являемся доминионом, протекторатом или данником"
+ },
+ "un_mission_aid_fallback_tt": {
+  "en": "Every one of the requester's states already holds another UN mission, so no [Concept('concept_un_mission_aid', 'aid mission')] can open. #G The requester receives the country-wide aid instead.#!",
+  "ru": "В каждой области просителя уже действует другая миссия ООН, поэтому [Concept('concept_un_mission_aid','миссию помощи')] открыть нельзя. #G Вместо этого проситель получает помощь для всей страны.#!"
+ },
+ "un_mission_aid_joined_tt": {
+  "en": "We join, or open, an #G [Concept('concept_un_mission_aid', 'UN aid mission')]#! in the famine-stricken state. It succeeds when the famine is over and the state's standard of living has recovered on its own account, not just by the mission's help.",
+  "ru": "Мы присоединяемся к #G [Concept('concept_un_mission_aid','миссии помощи ООН')]#! в области, охваченной голодом, или открываем её. Она завершается успехом, когда голод закончен, а уровень жизни в области восстановился сам по себе, а не только благодаря помощи миссии."
+ },
+ "un_mission_aid_opened_tt": {
+  "en": "An #G [Concept('concept_un_mission_aid', 'UN aid mission')]#! goes to the requester's state most in need, with the members who pledge as its donors. It works in that state, and succeeds when the state's standard of living has risen on its own account, not just by the mission's help: to 10, or past where it started if that was higher.",
+  "ru": "#G [Concept('concept_un_mission_aid','Миссия помощи ООН')]#! направляется в наиболее нуждающуюся область просителя, а обещавшие помощь члены становятся её донорами. Она работает в этой области и завершается успехом, когда уровень жизни в области вырос сам по себе, а не только благодаря помощи миссии: до 10 или выше исходного значения, если оно было больше."
+ },
+ "un_mission_aid_state_modifier": {
+  "en": "UN Aid Mission",
+  "ru": "Миссия помощи ООН"
+ },
+ "un_mission_electoral_fallback_tt": {
+  "en": "The requester is at war or no longer holds elections, or every one of its states already holds another UN mission: #R no observers can be sent.#!",
+  "ru": "Проситель воюет или больше не проводит выборов, либо в каждой его области уже действует другая миссия ООН: #R наблюдателей направить нельзя.#!"
+ },
+ "un_mission_electoral_opened_tt": {
+  "en": "An #G [Concept('concept_un_mission_electoral', 'electoral observer mission')]#! goes to the requester's capital (or, if the capital already holds another UN mission, its most populous state without one), paid from the UN's budget. It succeeds when an election campaign there ends while it is present, fails if the requester is attacked or stops holding elections, and lapses after five years without an election.",
+  "ru": "#G [Concept('concept_un_mission_electoral','Миссия избирательных наблюдателей')]#! направляется в столицу просителя (или, если в столице уже действует другая миссия ООН, в самую населённую область без неё) за счёт бюджета ООН. Она завершается успехом, когда там заканчивается избирательная кампания при её присутствии, терпит неудачу, если проситель подвергается нападению или перестаёт проводить выборы, и прекращается после пяти лет без выборов."
+ },
+ "un_mission_expelled_tt": {
+  "en": "#R We send the [Concept('concept_un_mission_stabilisation', 'UN stabilization mission')] home.#! It fails, and UN delivery falls.",
+  "ru": "#R Мы отправляем [Concept('concept_un_mission_stabilisation','стабилизационную миссию ООН')] домой.#! Она терпит неудачу, и результативность ООН падает."
+ },
+ "un_mission_host_intel_tt": {
+  "en": "While the mission stays, the intelligence networks of the countries serving in it grow faster in our country.",
+  "ru": "Пока миссия остаётся, разведывательные сети служащих в ней стран растут в нашей стране быстрее."
+ },
+ "un_mission_hosts_aid_tt": {
+  "en": "An [Concept('concept_un_mission_aid', 'UN aid mission')] is not already at work in one of our states",
+  "ru": "[Concept('concept_un_mission_aid','Миссия помощи ООН')] ещё не работает ни в одной из наших областей"
+ },
+ "un_mission_hosts_peacekeeping_tt": {
+  "en": "A [Concept('concept_un_mission_peacekeeping', 'UN peacekeeping mission')] is not already deployed on our soil",
+  "ru": "[Concept('concept_un_mission_peacekeeping','Миротворческая миссия ООН')] ещё не развёрнута на нашей земле"
+ },
+ "un_mission_joined_tt": {
+  "en": "We join the [Concept('concept_un_mission', 'UN mission')] the resolution sent, as a contributor: it grows stronger, and we share in its success.",
+  "ru": "Мы присоединяемся как участник к [Concept('concept_un_mission','миссии ООН')], направленной резолюцией: она становится сильнее, и мы разделяем её успех."
+ },
+ "un_mission_peacekeeping_state_modifier": {
+  "en": "UN Peacekeeping Mission",
+  "ru": "Миротворческая миссия ООН"
+ },
+ "un_mission_pk_fallback_tt": {
+  "en": "Every one of the requester's states already holds another UN mission, so no [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] can deploy. #G The requester receives the country-wide peacekeeping support instead.#!",
+  "ru": "В каждой области просителя уже действует другая миссия ООН, поэтому [Concept('concept_un_mission_peacekeeping','миротворческую миссию')] развернуть нельзя. #G Вместо этого проситель получает миротворческую поддержку для всей страны.#!"
+ },
+ "un_mission_pk_opened_tt": {
+  "en": "A #G [Concept('concept_un_mission_peacekeeping', 'UN peacekeeping mission')]#! deploys to the requester's most devastated state, with the members who pledge as its contributors. It works in that state, and succeeds after two years of peace for the host. If no member joins it within six months, it lapses.",
+  "ru": "#G [Concept('concept_un_mission_peacekeeping','Миротворческая миссия ООН')]#! разворачивается в наиболее опустошённой области просителя, а обещавшие участие члены становятся её участниками. Она работает в этой области и завершается успехом после двух лет мира для принимающей стороны. Если за шесть месяцев к ней не присоединится ни один член, она прекращается."
+ },
+ "un_mission_service_cost": {
+  "en": "UN Mission Contingents",
+  "ru": "Контингенты миссий ООН"
+ },
+ "un_mission_stab_joined_tt": {
+  "en": "We join, or open, a #G [Concept('concept_un_mission_stabilisation', 'UN stabilization mission')]#! in the collapsing country's most populous state. It succeeds once the collapse is over and a year has passed. Our intelligence networks there grow faster while we serve.",
+  "ru": "Мы присоединяемся к #G [Concept('concept_un_mission_stabilisation','стабилизационной миссии ООН')]#! в самой населённой области рушащейся страны или открываем её. Она завершается успехом, когда крах закончился и прошёл год. Наши разведывательные сети там растут быстрее, пока мы служим."
+ },
+ "un_mission_stabilisation_state_modifier": {
+  "en": "UN Stabilization Mission",
+  "ru": "Стабилизационная миссия ООН"
+ },
+ "un_mission_volunteer_aid_tt": {
+  "en": "We send a contingent to the #bold [Concept('concept_un_mission_aid', 'aid mission')]#! in [SCOPE.sState('un_msn_tt_state').GetName], for [SCOPE.sCountry('un_msn_tt_host').GetName].",
+  "ru": "Мы направляем контингент в #bold [Concept('concept_un_mission_aid','миссию помощи')]#! в области [SCOPE.sState('un_msn_tt_state').GetName] для страны [SCOPE.sCountry('un_msn_tt_host').GetName]."
+ },
+ "un_mission_volunteer_commitment_tt": {
+  "en": "#v If we bring the contingent home before the work is done, we lose standing and the host's regard, and we cannot send it back.#!",
+  "ru": "#v Если мы отзовём контингент домой до окончания работы, мы потеряем авторитет и расположение принимающей стороны и не сможем отправить его обратно.#!"
+ },
+ "un_mission_volunteer_cost_tt": {
+  "en": "It costs us @money!#v [THIS.ScriptValue('un_mission_service_one_expense_value')|D]#! a week for as long as we serve: a quarter of a percent of our [Concept('concept_gdp', 'GDP')] a year.",
+  "ru": "Это обходится нам в @money!#v [THIS.ScriptValue('un_mission_service_one_expense_value')|D]#! в неделю, пока мы служим: четверть процента нашего [Concept('concept_gdp','ВВП')] в год."
+ },
+ "un_mission_volunteer_covered_tt": {
+  "en": "Our peacekeeping program already pays for our contingents in [Concept('concept_un_mission_peacekeeping', 'peacekeeping')] and [Concept('concept_un_mission_stabilisation', 'stabilization')] missions: #G serving costs nothing more.#!",
+  "ru": "Наша миротворческая программа уже оплачивает наши контингенты в миссиях [Concept('concept_un_mission_peacekeeping','миротворческих')] и [Concept('concept_un_mission_stabilisation','стабилизационных')]: #G служба не требует дополнительных затрат.#!"
+ },
+ "un_mission_volunteer_electoral_tt": {
+  "en": "This is an [Concept('concept_un_mission_electoral', 'electoral observer mission')]: its observers are paid from the UN's budget, and members do not send it contingents.",
+  "ru": "Это [Concept('concept_un_mission_electoral','миссия избирательных наблюдателей')]: её наблюдатели оплачиваются из бюджета ООН, и члены не направляют в неё контингенты."
+ },
+ "un_mission_volunteer_full_tt": {
+  "en": "It already has three contributors or more: ours adds no strength, but we share in its success.",
+  "ru": "У неё уже три участника или больше: наш не добавляет силы, но мы разделяем её успех."
+ },
+ "un_mission_volunteer_need_not_electoral_tt": {
+  "en": "The mission takes contingents: an electoral observer mission is staffed from the UN's budget",
+  "ru": "Миссия принимает контингенты: миссия избирательных наблюдателей укомплектовывается из бюджета ООН"
+ },
+ "un_mission_volunteer_need_not_host_tt": {
+  "en": "The mission does not serve us: a host cannot send a contingent to its own mission",
+  "ru": "Миссия не служит нам: принимающая сторона не может направить контингент в собственную миссию"
+ },
+ "un_mission_volunteer_need_not_sanctioned_tt": {
+  "en": "We are not under the Assembly's [concept_un_sanctions]",
+  "ru": "Мы не под [Concept('concept_un_sanctions','санкциями ООН')] Ассамблеи"
+ },
+ "un_mission_volunteer_need_not_withdrawn_tt": {
+  "en": "We have not already brought a contingent home from this mission",
+  "ru": "Мы ещё не отзывали контингент из этой миссии"
+ },
+ "un_mission_volunteer_need_peace_tt": {
+  "en": "We are not at war with the mission's host",
+  "ru": "Мы не воюем с принимающей стороной миссии"
+ },
+ "un_mission_volunteer_need_rank_tt": {
+  "en": "We are a [concept_major_power] or greater",
+  "ru": "Мы — [concept_major_power|l] или выше"
+ },
+ "un_mission_volunteer_rewards_tt": {
+  "en": "If the mission accomplishes its work, we gain #G International Standing#! (up to +3, scaled down the higher our standing already is) and #G +15#! relations with [SCOPE.sCountry('un_msn_tt_host').GetName]. While we serve, our intelligence networks there grow faster.",
+  "ru": "Если миссия выполнит свою работу, мы получим #G международный авторитет#! (до +3, меньше при более высоком текущем авторитете) и #G +15#! к отношениям со страной [SCOPE.sCountry('un_msn_tt_host').GetName]. Пока мы служим, наши разведывательные сети там растут быстрее."
+ },
+ "un_mission_volunteer_strength_tt": {
+  "en": "It grows stronger with every contributor, up to three.",
+  "ru": "С каждым участником она становится сильнее, до трёх."
+ },
+ "un_mission_withdraw_final_tt": {
+  "en": "We cannot send a contingent back to this mission.",
+  "ru": "Мы не можем снова направить контингент в эту миссию."
+ },
+ "un_mission_withdraw_last_force_tt": {
+  "en": "We are the last member to serve in it, but the [concept_un_standing_force] stays: the mission goes on at reduced strength.",
+  "ru": "Мы последний член, служащий в ней, но [concept_un_standing_force|l] остаются: миссия продолжается с уменьшенной силой."
+ },
+ "un_mission_withdraw_last_tt": {
+  "en": "#R We are the last to serve in it: the mission fails at the next monthly update, and UN delivery falls.#!",
+  "ru": "#R Мы последние, кто служит в ней: миссия потерпит неудачу при ближайшем ежемесячном обновлении, и результативность ООН упадёт.#!"
+ },
+ "un_mission_withdraw_relations_tt": {
+  "en": "[SCOPE.sCountry('un_msn_tt_host').GetName] resents being left: #R −10#! relations.",
+  "ru": "Страна [SCOPE.sCountry('un_msn_tt_host').GetName] возмущена тем, что её бросили: #R −10#! к отношениям."
+ },
+ "un_mission_withdraw_standing_tt": {
+  "en": "#R International Standing: −2#! for leaving a mission before its work is done.",
+  "ru": "#R Международный авторитет: −2#! за уход из миссии до завершения её работы."
+ },
+ "un_mission_withdraw_tt": {
+  "en": "We bring our contingent home from the UN mission in [SCOPE.sState('un_msn_tt_state').GetName].",
+  "ru": "Мы отзываем наш контингент из миссии ООН в области [SCOPE.sState('un_msn_tt_state').GetName]."
+ },
+ "un_narcotics_mass_production_tt": {
+  "en": "A UN member has researched #bold Antibiotic Mass Production#!",
+  "ru": "Член ООН изучил #bold массовое производство антибиотиков#!"
+ },
+ "un_narcotics_refusal_modifier": {
+  "en": "Refused Narcotics Convention",
+  "ru": "Отказ от Конвенции о наркотических средствах"
+ },
+ "un_no_active_vote_tt": {
+  "en": "No General Assembly vote is currently in progress",
+  "ru": "Сейчас не идёт ни одно голосование Генеральной Ассамблеи"
+ },
+ "un_no_resolution_cooldown_tt": {
+  "en": "No resolution on this topic has closed in the last five years (ten for a motion to strip a permanent seat)",
+  "ru": "За последние пять лет не закрывалась ни одна резолюция по этой теме (десять лет для предложения лишить постоянного места)"
+ },
+ "un_non_binding_rebuke_modifier": {
+  "en": "Non-Binding Rebuke",
+  "ru": "Необязательное порицание"
+ },
+ "un_nonmember_pariah_modifier": {
+  "en": "International Pariah",
+  "ru": "Международный изгой"
+ },
+ "un_nonmember_pariah_strong_modifier": {
+  "en": "UN Outsider: Shut Out",
+  "ru": "Чужак в ООН: изоляция"
+ },
+ "un_nonproliferation_refusal_modifier": {
+  "en": "Non-Proliferation Treaty Refusal",
+  "ru": "Отказ от Договора о нераспространении"
+ },
+ "un_npt_disarmament_modifier": {
+  "en": "NPT Disarmament Pressure",
+  "ru": "Давление в пользу разоружения по ДНЯО"
+ },
+ "un_nuclear_ban_refusal_modifier": {
+  "en": "Refused the Nuclear Weapons Ban",
+  "ru": "Отказ от запрета ядерного оружия"
+ },
+ "un_nuclear_ban_terms_armed_tt": {
+  "en": "We hold #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_stockpile')|0]#! nuclear warheads. Ratifying holds us to that number, #R a fifth less every five years#! and #R none#! after 25 years; warheads above the ceiling are taken apart, a tenth of the excess a month, and our [concept_nuclear_program] builds nothing for as long as we are a party.",
+  "ru": "У нас #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_stockpile')|0]#! ядерных боеголовок. Ратификация закрепляет за нами это число, #R на пятую часть меньше каждые пять лет#! и #R ни одной#! через 25 лет; боеголовки сверх предела разбираются, по десятой части излишка в месяц, а наша [concept_nuclear_program|l] ничего не строит, пока мы остаёмся участником."
+ },
+ "un_nuclear_ban_terms_unarmed_tt": {
+  "en": "We hold no nuclear warheads. Ratifying means #R we may build none#!: any program of ours is held.",
+  "ru": "У нас нет ядерных боеголовок. Ратификация означает, что #R мы не можем строить их вовсе#!: любая наша программа приостановлена."
+ },
+ "un_observer_mission_cost": {
+  "en": "Observer Mission Expenses",
+  "ru": "Расходы на миссию наблюдателей"
+ },
+ "un_observer_mission_modifier": {
+  "en": "Observer Mission Active",
+  "ru": "Миссия наблюдателей действует"
+ },
+ "un_observer_request_need_peace_tt": {
+  "en": "We are not at war",
+  "ru": "Мы не воюем"
+ },
+ "un_observer_status_modifier": {
+  "en": "UN Observer Status",
+  "ru": "Статус наблюдателя ООН"
+ },
+ "un_order_ledger_tt_referendum_held": {
+  "en": "#G UN delivery +0.5, moving [concept_un_authority]'s target:#! a supervised referendum held.",
+  "ru": "#G Результативность ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')]:#! проведён референдум под наблюдением."
+ },
+ "un_order_ledger_tt_referendum_refused": {
+  "en": "#R UN credibility −1, moving [concept_un_authority]'s target:#! a binding order of the Assembly refused.",
+  "ru": "#R Доверие к ООН −1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')]:#! отвергнут обязательный приказ Ассамблеи."
+ },
+ "un_order_standing_held_tt": {
+  "en": "#G International Standing:#! a referendum held under the Assembly's supervision. #v Gains are scaled down the higher our standing already is.#!",
+  "ru": "#G Международный авторитет:#! проведён референдум под наблюдением Ассамблеи. #v Прирост тем меньше, чем выше наш текущий авторитет.#!"
+ },
+ "un_order_standing_refused_tt": {
+  "en": "#R International Standing: −5#! for refusing the referendum the Assembly ordered.",
+  "ru": "#R Международный авторитет: −5#! за отказ от референдума, приказанного Ассамблеей."
+ },
+ "un_org_name_league": {
+  "en": "League of Nations",
+  "ru": "Лига Наций"
+ },
+ "un_pandemic_cooperation_modifier": {
+  "en": "Global Pandemic Response",
+  "ru": "Глобальный ответ на пандемию"
+ },
+ "un_pandemic_isolationist_modifier": {
+  "en": "Pandemic Response Isolationist",
+  "ru": "Изоляционизм в ответе на пандемию"
+ },
  "un_peacekeeping_contributor_cost": {
   "en": "Peacekeeping Contribution Expenses",
   "ru": "Расходы на вклад в миротворчество"
@@ -28614,6 +29314,414 @@
  "un_peacekeeping_contributor_modifier": {
   "en": "[concept_un_peacekeeping] Contributor",
   "ru": "Участник: [concept_un_peacekeeping|l]"
+ },
+ "un_peacekeeping_deployed_modifier": {
+  "en": "Peacekeeping Force Deployed",
+  "ru": "Миротворческие силы развёрнуты"
+ },
+ "un_peacekeeping_deployment_cost": {
+  "en": "Peacekeeping Deployment Expenses",
+  "ru": "Расходы на развёртывание миротворцев"
+ },
+ "un_peacekeeping_end_tt": {
+  "en": "Ends #bold $un_peacekeeping_contributor_modifier$#! and #bold $un_peacekeeping_contributor_cost$#!",
+  "ru": "Прекращает #bold $un_peacekeeping_contributor_modifier$#! и #bold $un_peacekeeping_contributor_cost$#!"
+ },
+ "un_peacekeeping_received_modifier": {
+  "en": "[concept_un_peacekeeping] Deployed",
+  "ru": "[concept_un_peacekeeping] развёрнуто"
+ },
+ "un_peacekeeping_resented_modifier": {
+  "en": "Peacekeepers Resented",
+  "ru": "Миротворцы не приняты"
+ },
+ "un_peacekeeping_welcomed_modifier": {
+  "en": "Peacekeepers Welcomed",
+  "ru": "Миротворцам рады"
+ },
+ "un_permanent_member_modifier": {
+  "en": "UN Security Council Permanent Member",
+  "ru": "Постоянный член Совета Безопасности ООН"
+ },
+ "un_physical_protection_loose_tt": {
+  "en": "Nuclear warheads must have gone missing somewhere in the world",
+  "ru": "Где-то в мире должны были пропасть ядерные боеголовки"
+ },
+ "un_physical_protection_refusal_modifier": {
+  "en": "Refused Nuclear Material Protection",
+  "ru": "Отказ от защиты ядерного материала"
+ },
+ "un_programme_influence_tt": {
+  "en": "We have #bold 100#! [concept_influence] available",
+  "ru": "У нас есть #bold 100#! ед. [Concept('concept_influence','влияния')]"
+ },
+ "un_programme_not_yet_ours_tt": {
+  "en": "We are not already taking part in this program",
+  "ru": "Мы ещё не участвуем в этой программе"
+ },
+ "un_programme_ours_tt": {
+  "en": "We are taking part in this program",
+  "ru": "Мы участвуем в этой программе"
+ },
+ "un_propose_asat_not_striker_tt": {
+  "en": "We have not made a destructive anti-satellite strike in the last two years",
+  "ru": "За последние два года мы не наносили разрушительных противоспутниковых ударов"
+ },
+ "un_propose_colony_protection_holder_tt": {
+  "en": "We hold a colony in space",
+  "ru": "У нас есть колония в космосе"
+ },
+ "un_propose_colony_protection_not_actor_tt": {
+  "en": "Our fleets have not seized or destroyed a colony in the last two years",
+  "ru": "За последние два года наши флоты не захватывали и не уничтожали колонию"
+ },
+ "un_propose_cultural_diversity_needs_unesco_tt": {
+  "en": "The Cultural Heritage Program (UNESCO) is in force",
+  "ru": "Программа культурного наследия (ЮНЕСКО) действует"
+ },
+ "un_propose_cultural_diversity_not_hegemon_tt": {
+  "en": "We are not the world's cultural hegemon",
+  "ru": "Мы не являемся мировым культурным гегемоном"
+ },
+ "un_propose_decolonization_champion_tt": {
+  "en": "We have not championed [concept_decolonization_system] in the Assembly within the last five years",
+  "ru": "За последние пять лет мы не выступали в Ассамблее в защиту [Concept('concept_decolonization_system','деколонизации')]"
+ },
+ "un_propose_decolonization_collapsed_tt": {
+  "en": "Our own colonial empire has not just collapsed",
+  "ru": "Наша собственная колониальная империя не рухнула только что"
+ },
+ "un_propose_decolonization_grounds_tt": {
+  "en": "Some country still holds a subject",
+  "ru": "Какая-то страна всё ещё держит зависимое государство"
+ },
+ "un_propose_icc_needs_unhrc_tt": {
+  "en": "The Universal Declaration of Human Rights is in force: the Court would be its enforcer",
+  "ru": "Всеобщая декларация прав человека действует: суд стал бы её исполнителем"
+ },
+ "un_propose_not_in_force_tt": {
+  "en": "The Assembly has not already adopted it in full",
+  "ru": "Ассамблея ещё не приняла её целиком"
+ },
+ "un_propose_not_party_tt": {
+  "en": "We are not already a party to it",
+  "ru": "Мы ещё не являемся её стороной"
+ },
+ "un_propose_not_refused_tt": {
+  "en": "We have not recently turned it down in the Assembly",
+  "ru": "Мы недавно не отклоняли её в Ассамблее"
+ },
+ "un_propose_nuclear_ban_needs_npt_tt": {
+  "en": "The Non-Proliferation Treaty (IAEA) is in force",
+  "ru": "Договор о нераспространении ядерного оружия (МАГАТЭ) действует"
+ },
+ "un_propose_nuclear_ban_unarmed_tt": {
+  "en": "We hold no nuclear weapons",
+  "ru": "У нас нет ядерного оружия"
+ },
+ "un_propose_refugee_grounds_tt": {
+  "en": "Some other country is at war or has a state in misery, so there are people fleeing it",
+  "ru": "Другая страна воюет или в её области царит нищета, поэтому из неё бегут люди"
+ },
+ "un_recess_ai_tt": {
+  "en": "The floor is not in recess: for three months after each vote only human members may table business",
+  "ru": "Заседание не прервано: в течение трёх месяцев после каждого голосования вопросы могут вносить только члены-люди"
+ },
+ "un_referendum_hold_odds_tt": {
+  "en": "[SCOPE.sCountry('un_ref_subject').GetName] votes. With a #v [ROOT.GetCountry.MakeScope.Var('un_ref_chance').GetValue|0]%#! chance (its [concept_liberty_desire] to the nearest 5, held between 20% and 90%) it votes to leave and #R becomes independent#!. Otherwise it votes to stay, and its liberty desire #G falls by 20#!.",
+  "ru": "Страна [SCOPE.sCountry('un_ref_subject').GetName] голосует. С вероятностью #v [ROOT.GetCountry.MakeScope.Var('un_ref_chance').GetValue|0]%#! (её [concept_liberty_desire|l], округлённое до 5, в пределах от 20% до 90%) она голосует за выход и #R становится независимой#!. В противном случае она голосует за то, чтобы остаться, и её стремление к свободе #G падает на 20#!."
+ },
+ "un_referendum_independent_tt": {
+  "en": "[SCOPE.sCountry('un_ref_subject').GetName] is no longer a [concept_subject] of [SCOPE.sCountry('un_ref_overlord').GetName].",
+  "ru": "Страна [SCOPE.sCountry('un_ref_subject').GetName] больше не является [Concept('concept_subject','зависимым государством')] страны [SCOPE.sCountry('un_ref_overlord').GetName]."
+ },
+ "un_referendum_moot_tt": {
+  "en": "The subject the resolution named is no longer [SCOPE.sCountry('un_vote_target').GetName]'s, so there is no vote to hold.",
+  "ru": "Названное резолюцией зависимое государство больше не принадлежит стране [SCOPE.sCountry('un_vote_target').GetName], поэтому голосовать не о чем."
+ },
+ "un_referendum_not_refusing_tt": {
+  "en": "We have not refused a referendum the Assembly ordered in the last five years",
+  "ru": "За последние пять лет мы не отказывались от референдума, приказанного Ассамблеей"
+ },
+ "un_referendum_ordered_accepted_tt": {
+  "en": "[SCOPE.sCountry('un_vote_target').GetName] voted for the resolution, so it holds the vote in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]: refusing is not open to it.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_target').GetName] проголосовала за резолюцию, поэтому она проводит голосование в стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]: отказаться она не может."
+ },
+ "un_referendum_ordered_tt": {
+  "en": "[SCOPE.sCountry('un_vote_target').GetName] must now hold the vote in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] or refuse it.",
+  "ru": "Страна [SCOPE.sCountry('un_vote_target').GetName] теперь должна провести голосование в стране [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] или отказаться от него."
+ },
+ "un_referendum_refuse_tt": {
+  "en": "We refuse the vote the Assembly ordered in [SCOPE.sCountry('un_ref_subject').GetName]. For five years we may not ask the Assembly for a referendum anywhere else.",
+  "ru": "Мы отказываемся от голосования, приказанного Ассамблеей в стране [SCOPE.sCountry('un_ref_subject').GetName]. В течение пяти лет мы не можем просить Ассамблею о референдуме где-либо ещё."
+ },
+ "un_referendum_refused_modifier": {
+  "en": "Referendum Refused",
+  "ru": "Отказ от референдума"
+ },
+ "un_referendum_refused_notice_tt": {
+  "en": "The [concept_liberty_desire] of [SCOPE.sCountry('un_ref_subject').GetName] rose by 15, and the refusal goes on the record of [SCOPE.sCountry('un_ref_overlord').GetName].",
+  "ru": "[concept_liberty_desire|U] страны [SCOPE.sCountry('un_ref_subject').GetName] выросло на 15, а отказ заносится в послужной список страны [SCOPE.sCountry('un_ref_overlord').GetName]."
+ },
+ "un_referendum_stayed_tt": {
+  "en": "The [concept_liberty_desire] of [SCOPE.sCountry('un_ref_subject').GetName] fell by 20.",
+  "ru": "[concept_liberty_desire|U] страны [SCOPE.sCountry('un_ref_subject').GetName] упало на 20."
+ },
+ "un_reform_champion_modifier": {
+  "en": "UN Reform Champion",
+  "ru": "Сторонник реформы ООН"
+ },
+ "un_reform_compromise_modifier": {
+  "en": "UN Reform Compromise",
+  "ru": "Компромисс по реформе ООН"
+ },
+ "un_reform_opponent_modifier": {
+  "en": "UN Reform Opponent",
+  "ru": "Противник реформы ООН"
+ },
+ "un_refounding_cooldown_tt": {
+  "en": "The United Nations was dissolved, or a founding conference collapsed, too recently",
+  "ru": "Организация Объединённых Наций была распущена, либо учредительная конференция провалилась слишком недавно"
+ },
+ "un_refugee_closed_modifier": {
+  "en": "Refugee Crisis - Borders Closed",
+  "ru": "Кризис беженцев — границы закрыты"
+ },
+ "un_refugee_program_modifier": {
+  "en": "UNHCR Refugee Program",
+  "ru": "Программа УВКБ ООН для беженцев"
+ },
+ "un_refugee_source_brain_drain_modifier": {
+  "en": "Population Exodus",
+  "ru": "Исход населения"
+ },
+ "un_refugee_source_relief_modifier": {
+  "en": "Refugee Resettlement Relief",
+  "ru": "Облегчение переселения беженцев"
+ },
+ "un_refuse_aid_severe_penalty_tt": {
+  "en": "As a #bold [concept_great_power]#! refusing aid with [concept_un_authority] above 70, we will suffer #R severe diplomatic and domestic penalties#!: significant loss of authority, popular unrest, and [concept_interest_group] disapproval.",
+  "ru": "Как #bold [concept_great_power|l]#! мы, отказываясь от помощи при [concept_un_authority|l] выше 70, понесём #R серьёзные дипломатические и внутренние потери#!: значительную потерю авторитета, народные волнения и недовольство [Concept('concept_interest_group','групп интересов')]."
+ },
+ "un_refused_aid_penalty_modifier": {
+  "en": "Refused Humanitarian Aid",
+  "ru": "Отказ от гуманитарной помощи"
+ },
+ "un_regime_antarctic_station_modifier": {
+  "en": "Antarctic Treaty: Station Science Shared",
+  "ru": "Договор об Антарктике: обмен данными станций"
+ },
+ "un_regime_climate_adaptation_modifier": {
+  "en": "Climate Accord: Adaptation Aid",
+  "ru": "Климатическое соглашение: помощь в адаптации"
+ },
+ "un_regime_climate_emitter_modifier": {
+  "en": "Climate Accord: A High Emitter",
+  "ru": "Климатическое соглашение: крупный эмитент"
+ },
+ "un_regime_colonial_pressure_modifier": {
+  "en": "Decolonization Declaration: A Colonial Power",
+  "ru": "Декларация о деколонизации: колониальная держава"
+ },
+ "un_regime_colony_liberty_modifier": {
+  "en": "Decolonization Declaration: A Colony",
+  "ru": "Декларация о деколонизации: колония"
+ },
+ "un_regime_cultural_hegemon_modifier": {
+  "en": "Cultural Diversity: The Hegemon Makes Room",
+  "ru": "Культурное разнообразие: гегемон уступает место"
+ },
+ "un_regime_heritage_site_modifier": {
+  "en": "World Heritage: A Wonder Protected",
+  "ru": "Всемирное наследие: чудо под защитой"
+ },
+ "un_regime_naval_curb_modifier": {
+  "en": "Law of the Sea: Fleets Held to the Convention",
+  "ru": "Морское право: флоты в рамках конвенции"
+ },
+ "un_regime_npt_guarantee_modifier": {
+  "en": "Non-Proliferation Treaty: Security Guarantee",
+  "ru": "Договор о нераспространении: гарантии безопасности"
+ },
+ "un_regime_npt_inspection_modifier": {
+  "en": "Non-Proliferation Treaty: Inspections",
+  "ru": "Договор о нераспространении: инспекции"
+ },
+ "un_regime_refugee_host_modifier": {
+  "en": "Refugee Convention: A Host",
+  "ru": "Конвенция о беженцах: принимающая сторона"
+ },
+ "un_regime_refugee_source_modifier": {
+  "en": "Refugee Convention: Relief",
+  "ru": "Конвенция о беженцах: помощь"
+ },
+ "un_regime_rights_violator_modifier": {
+  "en": "Human Rights Declaration: Laws in Breach",
+  "ru": "Декларация прав человека: законы в нарушение"
+ },
+ "un_regime_shared_intelligence_modifier": {
+  "en": "UN Intelligence Sharing",
+  "ru": "Обмен разведданными ООН"
+ },
+ "un_regime_space_laggard_modifier": {
+  "en": "Outer Space Treaty: Shared Progress",
+  "ru": "Договор о космосе: общий прогресс"
+ },
+ "un_regime_space_leader_modifier": {
+  "en": "Outer Space Treaty: The Leader Shares",
+  "ru": "Договор о космосе: лидер делится"
+ },
+ "un_regime_space_weapon_modifier": {
+  "en": "Outer Space Treaty: A Weapon in Orbit",
+  "ru": "Договор о космосе: оружие на орбите"
+ },
+ "un_sanctions_busting_modifier": {
+  "en": "Sanctions Busting",
+  "ru": "Обход санкций"
+ },
+ "un_sanctions_enforcement_modifier": {
+  "en": "Strict Sanctions Enforcement",
+  "ru": "Строгое соблюдение санкций"
+ },
+ "un_sanctions_enforcer_modifier": {
+  "en": "Sanctions Enforcer",
+  "ru": "Исполнитель санкций"
+ },
+ "un_sanctions_partial_modifier": {
+  "en": "Partial Sanctions Compliance",
+  "ru": "Частичное соблюдение санкций"
+ },
+ "un_sanctions_target_modifier": {
+  "en": "Under [concept_un_sanctions]",
+  "ru": "Под [Concept('concept_un_sanctions','санкциями ООН')]"
+ },
+ "un_sanctions_voluntary_target_modifier": {
+  "en": "Under Voluntary [concept_un_sanctions]",
+  "ru": "Под добровольными [Concept('concept_un_sanctions','санкциями ООН')]"
+ },
+ "un_seat_join_full_tt": {
+  "en": "#bold Permanent seat:#! all five seats on the [concept_un_security_council] are held, so joining does not seat us. A seat that falls vacant goes to the [Concept('concept_great_power', 'Great Power')] member with the most [concept_prestige] that holds none.",
+  "ru": "#bold Постоянное место:#! все пять мест в [Concept('concept_un_security_council','Совете Безопасности')] заняты, поэтому вступление не даёт нам места. Освободившееся место отправляется члену-[Concept('concept_great_power','великой державе')] с наибольшим [concept_prestige|l], у которого его нет."
+ },
+ "un_seat_join_signing_tt": {
+  "en": "#bold Permanent seat:#! as a [Concept('concept_great_power', 'Great Power')], we stand for a permanent seat on the [concept_un_security_council]. Seats do not go to whoever signs first: when the signing period closes, a year after the founding, the open seats go to the [Concept('concept_great_power', 'Great Power')] members with the most [concept_prestige].",
+  "ru": "#bold Постоянное место:#! как [Concept('concept_great_power','великая держава')] мы претендуем на постоянное место в [Concept('concept_un_security_council','Совете Безопасности')]. Места достаются не тому, кто подпишет первым: когда период подписания закончится, через год после основания, свободные места получат члены-[Concept('concept_great_power','великие державы')] с наибольшим [concept_prestige|l]."
+ },
+ "un_seat_join_vacant_tt": {
+  "en": "#bold Permanent seat:#! a seat on the [concept_un_security_council] stands open. At the start of each month it goes to the [Concept('concept_great_power', 'Great Power')] member with the most [concept_prestige] that holds none — which could be us.",
+  "ru": "#bold Постоянное место:#! место в [Concept('concept_un_security_council','Совете Безопасности')] свободно. В начале каждого месяца оно отправляется члену-[Concept('concept_great_power','великой державе')] с наибольшим [concept_prestige|l], у которого его нет — возможно, это будем мы."
+ },
+ "un_secure_commitment_action": {
+  "en": "Seek a Vote Commitment: For",
+  "ru": "Добиться обещания голоса: за"
+ },
+ "un_secure_commitment_action_action_name": {
+  "en": "A request for a vote in favor in the [concept_un_general_assembly]",
+  "ru": "Просьба проголосовать за в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]"
+ },
+ "un_secure_commitment_action_action_propose_name": {
+  "en": "Ask them to vote for it",
+  "ru": "Попросить их голосовать за"
+ },
+ "un_secure_commitment_against_action": {
+  "en": "Seek a Vote Commitment: Against",
+  "ru": "Добиться обещания голоса: против"
+ },
+ "un_secure_commitment_against_action_action_name": {
+  "en": "A request for a vote against in the [concept_un_general_assembly]",
+  "ru": "Просьба проголосовать против в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]"
+ },
+ "un_secure_commitment_against_action_action_propose_name": {
+  "en": "Ask them to vote against it",
+  "ru": "Попросить их голосовать против"
+ },
+ "un_security_council_modifier": {
+  "en": "UN Security Council Seat",
+  "ru": "Место в Совете Безопасности ООН"
+ },
+ "un_self_corrected_modifier": {
+  "en": "Performative Self-Correction",
+  "ru": "Показная самокоррекция"
+ },
+ "un_sovereignty_concession_modifier": {
+  "en": "Sovereignty Concessions",
+  "ru": "Уступки суверенитета"
+ },
+ "un_sovereignty_resentment_ig_modifier": {
+  "en": "Resents the United Nations",
+  "ru": "Недовольство Организацией Объединённых Наций"
+ },
+ "un_sovereignty_welcome_ig_modifier": {
+  "en": "Welcomes the United Nations",
+  "ru": "Поддержка Организации Объединённых Наций"
+ },
+ "un_space_independent_modifier": {
+  "en": "Independent Space Program",
+  "ru": "Независимая космическая программа"
+ },
+ "un_space_partnership_modifier": {
+  "en": "International Space Partnership",
+  "ru": "Международное космическое партнёрство"
+ },
+ "un_sponsor_cost_modifier": {
+  "en": "Sponsoring a UN Resolution",
+  "ru": "Спонсорство резолюции ООН"
+ },
+ "un_sponsor_influence_tt": {
+  "en": "We have #bold 150#! [concept_influence] available to sponsor it",
+  "ru": "У нас есть #bold 150#! ед. [Concept('concept_influence','влияния')], чтобы стать её спонсором"
+ },
+ "un_sponsor_punitive_cost_modifier": {
+  "en": "Sponsoring a Coercive UN Resolution",
+  "ru": "Спонсорство принудительной резолюции ООН"
+ },
+ "un_sponsor_punitive_influence_tt": {
+  "en": "We have #bold 300#! [concept_influence] available to sponsor it",
+  "ru": "У нас есть #bold 300#! ед. [Concept('concept_influence','влияния')], чтобы стать её спонсором"
+ },
+ "un_standing_aid_delivered_tt": {
+  "en": "#G International Standing:#! humanitarian aid delivered. #v Gains are scaled down the higher our standing already is.#!",
+  "ru": "#G Международный авторитет:#! гуманитарная помощь доставлена. #v Прирост тем меньше, чем выше наш текущий авторитет.#!"
+ },
+ "un_standing_arms_embargo_accepted_tt": {
+  "en": "#R International Standing: −3#! for accepting the Assembly's [concept_un_arms_embargo].",
+  "ru": "#R Международный авторитет: −3#! за принятие [concept_un_arms_embargo|l] Ассамблеи."
+ },
+ "un_standing_arms_embargo_partial_tt": {
+  "en": "#R International Standing: −3#! for being placed under a voluntary [concept_un_arms_embargo].",
+  "ru": "#R Международный авторитет: −3#! за наложение добровольного [concept_un_arms_embargo|l]."
+ },
+ "un_standing_arms_embargo_tt": {
+  "en": "#R International Standing: −6#! for being placed under a [concept_un_arms_embargo].",
+  "ru": "#R Международный авторитет: −6#! за наложение [concept_un_arms_embargo|l]."
+ },
+ "un_standing_censured_accepted_tt": {
+  "en": "#R International Standing: −3#! for accepting the Assembly's censure.",
+  "ru": "#R Международный авторитет: −3#! за принятие порицания Ассамблеи."
+ },
+ "un_standing_censured_tt": {
+  "en": "#R International Standing: −8#! for being censured by the [concept_un_general_assembly].",
+  "ru": "#R Международный авторитет: −8#! за порицание со стороны [Concept('concept_un_general_assembly','Генеральной Ассамблеи')]."
+ },
+ "un_standing_complied_tt": {
+  "en": "#G International Standing:#! a binding decision complied with. #v Gains are scaled down the higher our standing already is.#!",
+  "ru": "#G Международный авторитет:#! обязательное решение выполнено. #v Прирост тем меньше, чем выше наш текущий авторитет.#!"
+ },
+ "un_standing_contribution_tt": {
+  "en": "#G International Standing:#! our share of a program the Assembly voted through. #v Gains are scaled down the higher our standing already is.#!",
+  "ru": "#G Международный авторитет:#! наша доля в программе, одобренной Ассамблеей. #v Прирост тем меньше, чем выше наш текущий авторитет.#!"
+ },
+ "un_standing_credentials_accepted_tt": {
+  "en": "#R International Standing: −4#! for accepting the suspension of our [concept_un_credentials].",
+  "ru": "#R Международный авторитет: −4#! за согласие на приостановку наших [Concept('concept_un_credentials','полномочий делегации')]."
+ },
+ "un_standing_credentials_tt": {
+  "en": "#R International Standing: −8#! for having our [concept_un_credentials] suspended by the [concept_un_general_assembly].",
+  "ru": "#R Международный авторитет: −8#! за приостановку наших [Concept('concept_un_credentials','полномочий делегации')] [Concept('concept_un_general_assembly','Генеральной Ассамблеей')]."
+ },
+ "un_standing_defied_tt": {
+  "en": "#R International Standing: −5#! for defying a [concept_un_resolution_binding].",
+  "ru": "#R Международный авторитет: −5#! за неподчинение [Concept('concept_un_resolution_binding','обязательной резолюции')]."
  },
  "un_standing_disgraced_modifier": {
   "en": "International Standing: Disgraced",
@@ -28623,17 +29731,53 @@
   "en": "International Standing: Exemplary",
   "ru": "Международный авторитет: образцовый"
  },
+ "un_standing_leave_tt": {
+  "en": "#R International Standing: −5#! for withdrawing from the United Nations. The rest of the record is frozen, not erased — it waits for us if we return.",
+  "ru": "#R Международный авторитет: −5#! за выход из Организации Объединённых Наций. Остальной послужной список заморожен, а не стёрт — он ждёт нас, если мы вернёмся."
+ },
+ "un_standing_peacekeeping_delivered_tt": {
+  "en": "#G International Standing:#! peacekeepers deployed. #v Gains are scaled down the higher our standing already is.#!",
+  "ru": "#G Международный авторитет:#! миротворцы развёрнуты. #v Прирост тем меньше, чем выше наш текущий авторитет.#!"
+ },
  "un_standing_poor_modifier": {
   "en": "International Standing: Poor",
   "ru": "Международный авторитет: низкий"
+ },
+ "un_standing_rebuked_tt": {
+  "en": "#R International Standing: −3#! for being rebuked by the [concept_un_general_assembly].",
+  "ru": "#R Международный авторитет: −3#! за выговор от [Concept('concept_un_general_assembly','Генеральной Ассамблеи')]."
  },
  "un_standing_respected_modifier": {
   "en": "International Standing: Respected",
   "ru": "Международный авторитет: уважаемый"
  },
+ "un_standing_sanctioned_partial_tt": {
+  "en": "#R International Standing: −3#! for being placed under partial [concept_un_sanctions].",
+  "ru": "#R Международный авторитет: −3#! за наложение частичных [Concept('concept_un_sanctions','санкций ООН')]."
+ },
+ "un_standing_sanctioned_tt": {
+  "en": "#R International Standing: −6#! for being placed under [concept_un_sanctions].",
+  "ru": "#R Международный авторитет: −6#! за наложение [Concept('concept_un_sanctions','санкций ООН')]."
+ },
+ "un_standing_seat_stripped_tt": {
+  "en": "#R International Standing: −5#!, and every benefit our standing earns is suspended for five years — the Assembly has voted our permanent seat away.",
+  "ru": "#R Международный авторитет: −5#!, и все выгоды, которые приносит наш авторитет, приостановлены на пять лет — Ассамблея проголосовала за лишение нас постоянного места."
+ },
  "un_tariff_retaliation_modifier": {
   "en": "Targeted by Unilateral Tariffs",
   "ru": "Объект односторонних пошлин"
+ },
+ "un_teeth_embargo_all_tt": {
+  "en": "At the Supranational tier, sanctions are also a universal embargo: every member of [concept_major_power] rank with [concept_diplomatic_relevancy] to the target, however it voted, #R sees its relations with the target fall by 30, and places an [concept_embargo] on it#! wherever relations are then Poor or worse. Each embargo costs its member influence and trade, and a member that breaks one while the sanctions stand, when it could have kept it, is busting them.",
+  "ru": "На уровне «Надгосударственный» санкции также становятся всеобщим эмбарго: каждый член ранга [concept_major_power|l], имеющий [Concept('concept_diplomatic_relevancy','дипломатическую значимость')] для цели, как бы он ни голосовал, #R видит падение отношений с целью на 30 и вводит против неё [Concept('concept_embargo','эмбарго')]#! везде, где отношения тогда плохие или хуже. Каждое эмбарго стоит его члену влияния и торговли, а член, нарушающий его, пока действуют санкции, хотя мог бы его сохранить, обходит их."
+ },
+ "un_teeth_embargo_voters_tt": {
+  "en": "At the Strong tier, sanctions are also an embargo: every member of [concept_major_power] rank that voted for them and has [concept_diplomatic_relevancy] to the target #R sees its relations with the target fall by 30, and places an [concept_embargo] on it#! wherever relations are then Poor or worse. Each embargo costs its member influence and trade, and a member that breaks one while the sanctions stand, when it could have kept it, is busting them.",
+  "ru": "На уровне «Сильный» санкции также становятся эмбарго: каждый член ранга [concept_major_power|l], голосовавший за них и имеющий [Concept('concept_diplomatic_relevancy','дипломатическую значимость')] для цели, #R видит падение отношений с целью на 30 и вводит против неё [Concept('concept_embargo','эмбарго')]#! везде, где отношения тогда плохие или хуже. Каждое эмбарго стоит его члену влияния и торговли, а член, нарушающий его, пока действуют санкции, хотя мог бы его сохранить, обходит их."
+ },
+ "un_trade_arbitration_modifier": {
+  "en": "Trade Arbitration Accepted",
+  "ru": "Торговый арбитраж принят"
  },
  "un_trade_deal_bilateral_modifier": {
   "en": "Bilateral Trade Agreement",
@@ -28643,12 +29787,740 @@
   "en": "Undermine International Order",
   "ru": "Подрыв международного порядка"
  },
+ "un_unilateral_tariffs_modifier": {
+  "en": "Unilateral Tariffs Imposed",
+  "ru": "Односторонние пошлины введены"
+ },
+ "un_unlock_early_tt": {
+  "en": "You have researched $multilateral_alliances$ or $intergovernmental_organizations$, or the $je_united_nations$ has been founded",
+  "ru": "Вы изучили $multilateral_alliances$ или $intergovernmental_organizations$, либо основана $je_united_nations$"
+ },
+ "un_veto_abolition_modifier": {
+  "en": "Veto Abolition Advocate",
+  "ru": "Сторонник отмены вето"
+ },
+ "un_veto_authority_drain_modifier": {
+  "en": "Veto Backlash",
+  "ru": "Ответный удар из-за вето"
+ },
+ "un_veto_crisis_modifier": {
+  "en": "Veto Crisis Denouncer",
+  "ru": "Обличитель кризиса вето"
+ },
+ "un_veto_isolation_modifier": {
+  "en": "Diplomatic Isolation After [concept_un_veto]",
+  "ru": "Дипломатическая изоляция после [concept_un_veto|l]"
+ },
+ "un_vote_aid_request_passed_tt": {
+  "en": "The humanitarian aid program was authorized. #G UN credibility +1, moving [concept_un_authority]'s target.#! An aid mission opens in the requester's state most in need, and every major-power member that voted on it and accepts it pledges aid for ten years.",
+  "ru": "Программа гуманитарной помощи одобрена. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Миссия помощи открывается в наиболее нуждающейся области просителя, и каждый голосовавший за и согласный член-великая держава обещает помощь на десять лет."
+ },
+ "un_vote_antarctic_passed_tt": {
+  "en": "The Antarctic Treaty was adopted and the Antarctic Treaty Secretariat (ATS) established. #G UN credibility +1, moving [concept_un_authority]'s target.#! Its parties hold no new Southern seabed licenses, those with an Antarctic research station gain research, and every party adds to [concept_un_authority]'s target.",
+  "ru": "Договор об Антарктике принят, и учреждён Секретариат Договора об Антарктике (СДА). #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Его участники не получают новых лицензий на южное морское дно, у тех, у кого есть антарктическая исследовательская станция, растут исследования, и каждый участник вносит вклад в цель [Concept('concept_un_authority','авторитета ООН')]."
+ },
+ "un_vote_arms_embargo_passed_tt": {
+  "en": "The arms embargo carried. #G UN credibility +1, moving [concept_un_authority]'s target.#! For ten years the target's [concept_trade_advantage] in every [Concept('concept_military_good', 'military good')] falls by 30% and its military goods cost 5% more, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier). A target that voted for its own embargo takes the voluntary one instead: half the penalty, for five years.",
+  "ru": "Оружейное эмбарго принято. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! В течение десяти лет [concept_trade_advantage|l] цели по каждому [Concept('concept_military_good','военному товару')] падает на 30%, а её военные товары дорожают на 5% с поправкой на [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! на текущем уровне). Цель, проголосовавшая за собственное эмбарго, получает добровольное: половину штрафа на пять лет."
+ },
+ "un_vote_arms_embargo_passed_vetoed_tt": {
+  "en": "The embargo passed the General Assembly but was vetoed in the [concept_un_security_council]. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! A voluntary embargo instead: half the penalty, for five years, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!).",
+  "ru": "Эмбарго прошло в Генеральной Ассамблее, но было заблокировано вето в [Concept('concept_un_security_council','Совете Безопасности')]. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Вместо этого — добровольное эмбарго: половина штрафа на пять лет с поправкой на [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!)."
+ },
+ "un_vote_asat_passed_tt": {
+  "en": "The Moratorium on Destructive Anti-Satellite Tests was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! A party's destructive anti-satellite strike costs it twice the infamy and twice the case strength, and a party running a debris-removal method counts toward the Delivery pillar.",
+  "ru": "Мораторий на разрушительные противоспутниковые испытания принят. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Разрушительный противоспутниковый удар участника обходится ему в двойную дурную славу и двойную весомость дела, а участник, применяющий метод уборки мусора, засчитывается в опору результативности."
+ },
+ "un_vote_bloc_leverage_gain_tt": {
+  "en": "Our [concept_power_bloc] gains #G 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we have shown the bloc we can deliver.",
+  "ru": "Наш [concept_power_bloc|l] получает #G 3#! ед. [Concept('concept_power_bloc_leverage','рычагов влияния')] в каждом из остальных своих членов, заседающих в Ассамблее: мы показали блоку, что способны добиваться результата."
+ },
+ "un_vote_bloc_leverage_loss_tt": {
+  "en": "Our [concept_power_bloc] loses #R 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we could not carry the vote we called.",
+  "ru": "Наш [concept_power_bloc|l] теряет #R 3#! ед. [Concept('concept_power_bloc_leverage','рычагов влияния')] в каждом из остальных своих членов, заседающих в Ассамблее: мы не смогли провести голосование, которое созвали."
+ },
+ "un_vote_ceasefire_passed_tt": {
+  "en": "The Assembly ordered a ceasefire. #G UN credibility +1, moving [concept_un_authority]'s target.#! For 24 months, every month the aggressor fights on as an attacker against a member, its [concept_war_support] in each such war falls by 2.5 × the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier), its record of aggression grows and the UN's peace and order suffers; after three months of it, the aggressor loses standing. If the war ends while the order stands and the aggressor has taken nothing from its victim, the UN's delivery gains and peacekeepers deploy to the victim's most devastated state. If the order runs out with the war still on, or the war ends with the aggressor holding the victim's capital or the victim as a subject, or with the victim holding fewer states than when the order was made, UN credibility falls.",
+  "ru": "Ассамблея приказала прекратить огонь. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! В течение 24 месяцев за каждый месяц, пока агрессор продолжает воевать как нападающий против члена, его [Concept('concept_war_support','поддержка войны')] в каждой такой войне падает на 2,5 × [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! на текущем уровне), его счёт агрессий растёт, а мир и порядок ООН страдают; через три месяца этого агрессор теряет авторитет. Если война заканчивается, пока приказ действует и агрессор ничего не отнял у жертвы, результативность ООН растёт, а миротворцы разворачиваются в наиболее опустошённой области жертвы. Если срок приказа истекает при продолжающейся войне, либо война заканчивается тем, что агрессор держит столицу жертвы или саму жертву как зависимое государство, либо тем, что у жертвы осталось меньше областей, чем при издании приказа, доверие к ООН падает."
+ },
+ "un_vote_ceasefire_passed_vetoed_tt": {
+  "en": "The ceasefire carried in the General Assembly but was vetoed in the [concept_un_security_council]. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The Assembly can only call for a ceasefire: the aggressor's [concept_war_support] in each war it fights against a member falls once, by 10 × the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!), and nothing more follows.",
+  "ru": "Прекращение огня прошло в Генеральной Ассамблее, но было заблокировано вето в [Concept('concept_un_security_council','Совете Безопасности')]. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Ассамблея может лишь призвать к прекращению огня: [Concept('concept_war_support','поддержка войны')] агрессора в каждой войне против члена один раз падает на 10 × [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!), и больше ничего не следует."
+ },
+ "un_vote_climate_passed_tt": {
+  "en": "The Climate Accord was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The UN Environment Programme (UNEP) is established.",
+  "ru": "Климатическое соглашение принято. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждена Программа ООН по окружающей среде (ЮНЕП)."
+ },
+ "un_vote_colony_protection_passed_tt": {
+  "en": "The Convention on the Settlement of Outer Space was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! A party that destroys a colony, or closes in on a free one, pays twice the infamy and twice the case strength.",
+  "ru": "Конвенция о заселении космического пространства принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Участник, уничтожающий колонию или приближающийся к свободной, платит двойную дурную славу и двойную весомость дела."
+ },
+ "un_vote_condemn_passed_tt": {
+  "en": "The condemnation resolution passed. #G UN credibility +1, moving [concept_un_authority]'s target.#! Relations with the condemned nation deteriorate. Its penalties are scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier).",
+  "ru": "Резолюция об осуждении принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Отношения с осуждённой страной ухудшаются. Её штрафы масштабируются [Concept('concept_un_enforcement','принуждением ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! на текущем уровне)."
+ },
+ "un_vote_condemn_passed_vetoed_tt": {
+  "en": "The condemnation passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The target receives a non-binding rebuke instead of formal condemnation, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!).",
+  "ru": "Осуждение прошло в Генеральной Ассамблее, но было заблокировано вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Вместо официального осуждения цель получает необязательное порицание с поправкой на [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!)."
+ },
+ "un_vote_court_referral_passed_tt": {
+  "en": "The Assembly sent the dispute to the [concept_un_world_court]. #G UN credibility +1, moving [concept_un_authority]'s target.#! The court rules about a month from now, on the odds as they stand then. If it finds for the claimant, the holder must cede the state or defy the court; if it finds for the holder, the claimant's claim on the region is withdrawn.",
+  "ru": "Ассамблея передала спор во [Concept('concept_un_world_court','Всемирный суд')]. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Суд выносит решение примерно через месяц, исходя из тогдашних шансов. Если он найдёт правой претендующую сторону, владелец должен уступить область или не подчиниться суду; если правым окажется владелец, претензия претендента на регион снимается."
+ },
+ "un_vote_court_referral_passed_vetoed_tt": {
+  "en": "The referral passed the General Assembly but was vetoed in the [concept_un_security_council], so the [concept_un_world_court] gives an advisory opinion instead of a ruling. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! Nothing changes hands; if the opinion goes against the holder, it loses 2 International Standing.",
+  "ru": "Передача дела прошла в Генеральной Ассамблее, но была заблокирована вето в [Concept('concept_un_security_council','Совете Безопасности')], поэтому [Concept('concept_un_world_court','Всемирный суд')] даёт консультативное заключение вместо решения. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Ничего не переходит из рук в руки; если заключение окажется не в пользу владельца, он теряет 2 ед. международного авторитета."
+ },
+ "un_vote_credentials_moot_tt": {
+  "en": "The Assembly voted to suspend the member's [concept_un_credentials]. #G UN credibility +1, moving [concept_un_authority]'s target.#! But the motion is moot: since it was tabled the member has left the United Nations, or its case strength has fallen below 30, the figure that ends a suspension. Its representation is not suspended.",
+  "ru": "Ассамблея проголосовала за приостановку [Concept('concept_un_credentials','полномочий делегации')] члена. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Но предложение утратило смысл: с момента его внесения член покинул Организацию Объединённых Наций, либо весомость его дела упала ниже 30 — значения, при котором приостановка прекращается. Его представительство не приостановлено."
+ },
+ "un_vote_credentials_passed_tt": {
+  "en": "The Assembly suspended the member's [concept_un_credentials]. #G UN credibility +1, moving [concept_un_authority]'s target.#! For five years, or until its case falls below 30, its representation is suspended: it casts no vote, tables nothing, draws no benefits of membership and gives up any permanent seat, but it still pays its [concept_un_dues].",
+  "ru": "Ассамблея приостановила [Concept('concept_un_credentials','полномочия делегации')] члена. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! На пять лет или пока весомость его дела не упадёт ниже 30 его представительство приостановлено: он не голосует, ничего не вносит, не получает выгод членства и отказывается от любого постоянного места, но по-прежнему платит [concept_un_dues|l]."
+ },
+ "un_vote_cultural_diversity_passed_tt": {
+  "en": "The Convention on Cultural Diversity was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! Every party, at ×1 (the terms scale with [concept_un_enforcement]):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nA party that trails the cultural hegemon feels #G half#! the [concept_foreign_cultural_benchmark]. The hegemon, if it ratifies:\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]",
+  "ru": "Конвенция о культурном разнообразии принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Каждый участник, при ×1 (условия масштабируются [Concept('concept_un_enforcement','принуждением ООН')]):\\n[GetStaticModifier('un_cultural_diversity_modifier').GetDesc]\\nУчастник, отстающий от культурного гегемона, чувствует на #G половину меньше#! [Concept('concept_foreign_cultural_benchmark','иностранного культурного ориентира')]. Гегемон, если он ратифицирует:\\n[GetStaticModifier('un_regime_cultural_hegemon_modifier').GetDesc]"
+ },
+ "un_vote_decide_later_tt": {
+  "en": "We cast no vote yet, and this event will not come back. We can still vote on the UN tab of the Diplomacy panel at any time until the proposer reports back, twelve months after the resolution opened. A member that never votes abstains.",
+  "ru": "Мы пока не голосовали, и это событие не вернётся. Мы по-прежнему можем проголосовать на вкладке ООН панели дипломатии в любой момент, пока инициатор не отчитается, через двенадцать месяцев после открытия резолюции. Член, который так и не проголосует, воздерживается."
+ },
+ "un_vote_decolonization_passed_tt": {
+  "en": "The [concept_decolonization_system] Resolution was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! Colonial powers face increased international pressure.",
+  "ru": "Резолюция о [Concept('concept_decolonization_system','деколонизации')] принята. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Колониальные державы сталкиваются с растущим международным давлением."
+ },
+ "un_vote_development_fund_passed_tt": {
+  "en": "The [concept_un_development_fund] is founded. #G UN credibility +1, moving [concept_un_authority]'s target.#! Development Programs open to every member that pays its dues. From next month the Fund pays the members below its line, shared by population, into their [concept_investment_pool] if they run the Banking journal entry and into their treasury if not: the members' Development Programs contributions and, once the charter is reformed, a share of the UN budget. Under the founding charter the line is a tenth of the members' average [concept_gdp_per_capita]; Charter Reform I adds 5% of the budget and raises it to a quarter, Reform II a quarter of the budget and half the average. The lending facility lends from what is left.",
+  "ru": "[Concept('concept_un_development_fund','Всемирный фонд развития')] основан. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Программы развития открыты для каждого члена, платящего взносы. Со следующего месяца Фонд выплачивает членам ниже его черты, пропорционально населению, в их [Concept('concept_investment_pool','инвестиционный фонд')], если они ведут запись журнала о банковском деле, и в казну, если нет: вклады членов в программы развития и, после реформы Устава, долю бюджета ООН. По учредительному уставу черта равна десятой части среднего [Concept('concept_gdp_per_capita','ВВП на душу населения')] членов; Реформа Устава I добавляет 5% бюджета и поднимает черту до четверти, Реформа II — четверть бюджета и половину среднего. Кредитный механизм кредитует из остатка."
+ },
+ "un_vote_expulsion_failed_tt": {
+  "en": "The motion fell short of the 2/3 supermajority. #R UN credibility −1, moving [concept_un_authority]'s target.#! The target retains its permanent seat, and the proposer's relations with it fall by 15.",
+  "ru": "Предложению не хватило большинства в две трети. #R Доверие к ООН −1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Цель сохраняет постоянное место, а отношения инициатора с ней падают на 15."
+ },
+ "un_vote_expulsion_passed_tt": {
+  "en": "The motion carried by 2/3 supermajority. #G UN credibility +1, moving [concept_un_authority]'s target.#! The target forfeits its permanent seat on the Security Council.",
+  "ru": "Предложение принято большинством в две трети. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Цель лишается постоянного места в Совете Безопасности."
+ },
+ "un_vote_failed_tt": {
+  "en": "The resolution failed. #R UN credibility −1, moving [concept_un_authority]'s target.#! The proposer's [concept_influence] suffers for five years.",
+  "ru": "Резолюция провалена. #R Доверие к ООН −1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! [Concept('concept_influence','Влияние')] инициатора страдает в течение пяти лет."
+ },
+ "un_vote_failure_penalty": {
+  "en": "Failed UN Resolution",
+  "ru": "Проваленная резолюция ООН"
+ },
+ "un_vote_food_reserve_passed_tt": {
+  "en": "The [concept_un_food_reserve] is founded. #G UN credibility +1, moving [concept_un_authority]'s target.#! Members may pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges. From next month the delivery pillar of authority answers for hunger among the members: down to #R -10#! with famine, #G +3#! while almost no one goes hungry.",
+  "ru": "[Concept('concept_un_food_reserve','Всемирный продовольственный резерв')] основан. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Члены могут обещать зерно из своих стратегических резервов, и каждая новая [Concept('concept_un_mission_aid','миссия помощи')] использует эти обещания. Со следующего месяца опора авторитета, связанная с результативностью, отвечает за голод среди членов: до #R −10#! при голоде, #G +3#! пока почти никто не голодает."
+ },
+ "un_vote_heritage_passed_tt": {
+  "en": "The Cultural Heritage Program was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN Educational, Scientific and Cultural Organization (UNESCO) is established.",
+  "ru": "Программа культурного наследия принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждена Организация Объединённых Наций по вопросам образования, науки и культуры (ЮНЕСКО)."
+ },
+ "un_vote_human_rights_passed_tt": {
+  "en": "The Universal Declaration was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The UN Human Rights Council (UNHRC) is established.",
+  "ru": "Всеобщая декларация принята. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждён Совет ООН по правам человека (СПЧ ООН)."
+ },
+ "un_vote_icc_passed_tt": {
+  "en": "The Rome Statute was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The International Criminal Court (ICC) is established.",
+  "ru": "Римский статут принят. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждён Международный уголовный суд (МУС)."
+ },
+ "un_vote_icc_passed_vetoed_tt": {
+  "en": "The ICC referral passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The General Assembly issues a symbolic censure of the last power to veto it, which is recorded as having #R Rejected the Rome Statute#! unless the UN is Moribund — no court jurisdiction is established.",
+  "ru": "Передача в МУС прошла в Генеральной Ассамблее, но была заблокирована вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Генеральная Ассамблея выносит символическое порицание последней державе, применившей вето, и это записывается как #R отказ от Римского статута#!, если только ООН не «Угасающая» — юрисдикция суда не устанавливается."
+ },
+ "un_vote_initiated_tt": {
+  "en": "#bold A General Assembly vote has been called.#! All UN member states will vote on this resolution over the next year. Results will depend on the balance of support and opposition.",
+  "ru": "#bold Созвано голосование Генеральной Ассамблеи.#! Все государства-члены ООН проголосуют по этой резолюции в течение следующего года. Результат будет зависеть от баланса поддержки и противодействия."
+ },
+ "un_vote_law_of_sea_passed_tt": {
+  "en": "The Convention on the Law of the Sea was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The International Tribunal for the Law of the Sea (ITLOS) is established.",
+  "ru": "Конвенция по морскому праву принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждён Международный трибунал по морскому праву (МТМП)."
+ },
+ "un_vote_lift_sanctions_moot_tt": {
+  "en": "The petition carried, but the [concept_un_sanctions] had already ended. #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "ru": "Ходатайство удовлетворено, но [Concept('concept_un_sanctions','санкции ООН')] уже закончились. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#!"
+ },
+ "un_vote_lift_sanctions_passed_tt": {
+  "en": "The [concept_un_sanctions] on the petitioner are lifted, with the embargoes the Assembly imposed with them, and their enforcer may table sanctions again. #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "ru": "[Concept('concept_un_sanctions','Санкции ООН')] против просителя сняты вместе с эмбарго, которые Ассамблея наложила вместе с ними, и их исполнитель вновь может вносить санкции. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#!"
+ },
+ "un_vote_lift_sanctions_passed_vetoed_tt": {
+  "en": "A [concept_un_permanent_member] cast a [concept_un_veto]. Lifting sanctions has no graduated form, so the petition is blocked outright and the sanctions stay.",
+  "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У снятия санкций нет ослабленной формы, поэтому ходатайство заблокировано полностью, и санкции остаются."
+ },
+ "un_vote_military_mandate_passed_tt": {
+  "en": "The Assembly authorized the mandate. #G UN credibility +1, moving [concept_un_authority]'s target.#! The proposer may pursue the named [concept_state_region] against the named state at no [concept_infamy], in one [concept_diplomatic_play] only; unused, it expires after five years. Once a play carries it, it covers that one demand only: any other demand in that play against that country for territory, subjugation, regime change or humiliation voids the authorization and is condemned. Other demands — reparations, opening markets and the like — are allowed at their normal price.",
+  "ru": "Ассамблея санкционировала мандат. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Инициатор может добиваться названного [Concept('concept_state_region','стратегического региона')] у названного государства без [Concept('concept_infamy','дурной славы')] только в одной [Concept('concept_diplomatic_play','дипломатической игре')]; если не использован, он истекает через пять лет. Когда игра несёт его, он покрывает только это одно требование: любое другое требование в этой игре к этой стране о территории, подчинении, смене режима или унижении аннулирует санкцию и осуждается. Другие требования — репарации, открытие рынков и тому подобное — допускаются по обычной цене."
+ },
+ "un_vote_military_mandate_passed_vetoed_tt": {
+  "en": "A [concept_un_permanent_member] cast a [concept_un_veto]. An authorization to use force has no graduated form, so the resolution is blocked outright and no mandate is issued.",
+  "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У санкции на применение силы нет ослабленной формы, поэтому резолюция заблокирована полностью, и мандат не выдаётся."
+ },
+ "un_vote_narcotics_passed_tt": {
+  "en": "The Single Convention on Narcotic Drugs was adopted and the International Narcotics Control Board established. #G UN credibility +1, moving [concept_un_authority]'s target.#! Every party, at ×1 (the terms scale with [concept_un_enforcement]):\\n[GetStaticModifier('un_narcotics_control_modifier').GetDesc]",
+  "ru": "Единая конвенция о наркотических средствах принята, и учреждён Международный комитет по контролю над наркотиками. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Каждый участник, при ×1 (условия масштабируются [Concept('concept_un_enforcement','принуждением ООН')]):\\n[GetStaticModifier('un_narcotics_control_modifier').GetDesc]"
+ },
+ "un_vote_npt_passed_tt": {
+  "en": "The Non-Proliferation Treaty was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The International Atomic Energy Agency (IAEA) is established.",
+  "ru": "Договор о нераспространении ядерного оружия принят. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждено Международное агентство по атомной энергии (МАГАТЭ)."
+ },
+ "un_vote_nuclear_ban_passed_tt": {
+  "en": "The Treaty on the Prohibition of Nuclear Weapons was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! A party that holds warheads is held to the number it had when it ratified, #R a fifth less every five years#! and none after 25 years; a party that holds none may build none. A member holding warheads that cast no ballot on it, or joins later, is not bound. While it is in force the [concept_nuclear_taboo]'s target rises by up to #G 6#!, as strong as UN authority.",
+  "ru": "Договор о запрещении ядерного оружия принят. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Участник, имеющий боеголовки, ограничивается их числом на момент ратификации, #R на пятую часть меньше каждые пять лет#! и ни одной через 25 лет; участник без них не может их строить. Член с боеголовками, не голосовавший по нему или вступивший позже, не связан. Пока он действует, цель [Concept('concept_nuclear_taboo','ядерного табу')] растёт до #G 6#!, как и авторитет ООН."
+ },
+ "un_vote_observer_request_passed_tt": {
+  "en": "The request for electoral observers was granted. #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "ru": "Просьба об избирательных наблюдателях удовлетворена. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#!"
+ },
+ "un_vote_pandemic_passed_tt": {
+  "en": "The Global Pandemic Response was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The World Health Organization (WHO) is established.",
+  "ru": "Глобальный ответ на пандемию принят. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждена Всемирная организация здравоохранения (ВОЗ)."
+ },
+ "un_vote_peacekeeping_request_passed_tt": {
+  "en": "The peacekeeping deployment was authorized. #G UN credibility +1, moving [concept_un_authority]'s target.#! A peacekeeping mission opens in the requester's most devastated state, and every major-power member that voted on it and accepts it pledges a contingent and joins the Peacekeeping program.",
+  "ru": "Развёртывание миротворцев санкционировано. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Миротворческая миссия открывается в наиболее опустошённой области просителя, и каждый голосовавший за и согласный член-крупная держава обещает контингент и присоединяется к миротворческой программе."
+ },
+ "un_vote_peacekeeping_request_passed_vetoed_tt": {
+  "en": "The peacekeeping request passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! No mission opens and no contingents are levied: the requester is sent observers, a five-year boost to its relations and prestige.",
+  "ru": "Просьба о миротворцах прошла в Генеральной Ассамблее, но была заблокирована вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Миссия не открывается, контингенты не набираются: просителю направляются наблюдатели, пятилетний прирост отношений и престижа."
+ },
+ "un_vote_peacekeeping_request_passed_weak_tt": {
+  "en": "The peacekeeping request passed, but the United Nations is below the Established tier and can field no force. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! No mission opens and no contingents are levied: the requester is sent observers, a five-year boost to its relations and prestige.",
+  "ru": "Просьба о миротворцах принята, но уровень Организации Объединённых Наций ниже «Устоявшийся», и она не может выставить силы. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Миссия не открывается, контингенты не набираются: просителю направляются наблюдатели, пятилетний прирост отношений и престижа."
+ },
+ "un_vote_physical_protection_passed_tt": {
+  "en": "The Convention on the Physical Protection of Nuclear Material was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! Its parties' custody of their warheads counts as secured: #G half#! as many go missing whenever they change hands, and each month there is a #v 3%#! chance to find one of theirs that already has.",
+  "ru": "Конвенция о физической защите ядерного материала принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Хранение боеголовок её участниками считается защищённым: при каждой смене рук пропадает #G вдвое меньше#! боеголовок, и каждый месяц с вероятностью #v 3%#! находится одна из их уже пропавших."
+ },
+ "un_vote_referendum_passed_tt": {
+  "en": "The Assembly ordered a supervised referendum. #G UN credibility +1, moving [concept_un_authority]'s target.#! The [concept_overlord] must hold the vote or refuse it. Held, it ends in independence with a chance from the subject's [concept_liberty_desire] (20% to 90%), or else the subject's liberty desire falls by 20; the overlord gains standing and the UN's delivery gains. Refused, the overlord loses 5 standing and its record of defiance grows by 10, the subject's liberty desire rises by 15, the overlord's prestige and its subjects' loyalty suffer for five years, and UN credibility falls.",
+  "ru": "Ассамблея приказала провести референдум под наблюдением. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! [Concept('concept_overlord','Сюзерен')] должен провести голосование или отказаться. Если оно проведено, оно заканчивается независимостью с вероятностью, зависящей от [Concept('concept_liberty_desire','стремления к свободе')] зависимого государства (от 20% до 90%), иначе его стремление к свободе падает на 20; сюзерен получает авторитет, и результативность ООН растёт. Если он отказался, сюзерен теряет 5 ед. авторитета, а его счёт неповиновения растёт на 10, стремление к свободе зависимого государства растёт на 15, престиж сюзерена и лояльность его зависимых государств страдают пять лет, и доверие к ООН падает."
+ },
+ "un_vote_referendum_passed_vetoed_tt": {
+  "en": "A [concept_un_permanent_member] cast a [concept_un_veto]. A referendum has no graduated form, so the resolution is blocked outright and no vote is held.",
+  "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У референдума нет ослабленной формы, поэтому резолюция заблокирована полностью, и голосование не проводится."
+ },
+ "un_vote_reform_1_passed_tt": {
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #Y New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #Y The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
+  "ru": "Реформа Устава I принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 70 до 85#!, открывая уровень «Сильный» — где санкции становятся эмбарго, осуждение изолирует, а [concept_un_dues|l] вырастают до 0,4% ВВП — и #G доверие к ООН +2#!. #Y Новые дела:#! Всемирный суд, оружейные эмбарго, полномочия делегаций, Постоянные силы ООН, избирательные наблюдатели и Конвенция о культурном разнообразии могут быть внесены в Ассамблею. #Y [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает 5% бюджета ООН и выплачивает членам ниже четверти среднего."
+ },
+ "un_vote_reform_2_passed_tt": {
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #Y Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #Y New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #Y The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
+  "ru": "Реформа Устава II принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 85 до 100#!, открывая уровень «Надгосударственный» — где [concept_un_dues|l] вырастают до 1% ВВП, а каждый крупный член вводит эмбарго против находящихся под санкциями — и #G доверие к ООН +2#!. #Y Сдержанность в применении вето:#! отныне большинство в две трети проводит резолюцию вопреки [Concept('concept_un_veto','вето')]. #Y Новые дела:#! обязательные прекращения огня, референдумы под наблюдением и Договор о запрещении ядерного оружия могут быть внесены в Ассамблею. #Y [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает четверть бюджета ООН и выплачивает членам ниже половины среднего."
+ },
+ "un_vote_reform_passed_tt": {
+  "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",
+  "ru": "Реформа Устава принята. #G Доверие к ООН +1,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#!"
+ },
+ "un_vote_reform_passed_vetoed_tt": {
+  "en": "The charter reform carried the Assembly but was vetoed in the Security Council. Charter changes need the permanent members' consent — there is no graduated fallback, and the ceiling stays where it is.",
+  "ru": "Реформа устава прошла в Ассамблее, но была заблокирована вето в Совете Безопасности. Изменения устава требуют согласия постоянных членов — ослабленной замены нет, и потолок остаётся прежним."
+ },
+ "un_vote_refugee_passed_tt": {
+  "en": "The International Refugee Resolution was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN High Commissioner for Refugees (UNHCR) is established.",
+  "ru": "Международная резолюция о беженцах принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждено Управление Верховного комиссара ООН по делам беженцев (УВКБ ООН)."
+ },
+ "un_vote_sanctions_passed_tt": {
+  "en": "The sanctions resolution has passed. Sanctions are now in effect against the target nation, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier). #G UN credibility +1, moving [concept_un_authority]'s target.#!",
+  "ru": "Резолюция о санкциях принята. Санкции теперь действуют против страны-цели с поправкой на [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! на текущем уровне). #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#!"
+ },
+ "un_vote_sanctions_passed_vetoed_tt": {
+  "en": "The sanctions resolution passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! Voluntary partial sanctions only — no enforcer benefits, milder penalties on the target, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!).",
+  "ru": "Резолюция о санкциях прошла в Генеральной Ассамблее, но была заблокирована вето в Совете Безопасности. #G Доверие к ООН +0,5, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Только добровольные частичные санкции — без выгод исполнителю, с более мягкими штрафами для цели, с поправкой на [Concept('concept_un_enforcement','принуждение ООН')] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!)."
+ },
+ "un_vote_space_passed_tt": {
+  "en": "The Space Cooperation Resolution was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN Office for Outer Space Affairs (UNOOSA) is established.",
+  "ru": "Резолюция о космическом сотрудничестве принята. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Учреждено Управление ООН по вопросам космического пространства (УКВКП)."
+ },
+ "un_vote_standing_force_passed_tt": {
+  "en": "The [concept_un_standing_force] is founded. #G UN credibility +1, moving [concept_un_authority]'s target.#! Every UN peacekeeping and stabilization mission counts it as a contributor and can no longer lapse or fail for want of one. Its tenth of the UN's budget raises no one's dues: it shrinks what the lending facility can lend. At the [concept_un_tier_supranational] tier, a member's war goals against a country such a mission serves are struck, except unification goals and goals of the type its play opened with.",
+  "ru": "[Concept('concept_un_standing_force','Постоянные силы ООН')] основаны. #G Доверие к ООН +1, сдвигает цель [Concept('concept_un_authority','авторитета ООН')].#! Каждая миротворческая и стабилизационная миссия ООН считает их участником и больше не может прекратиться или провалиться из-за отсутствия такового. Их десятая часть бюджета ООН ничьих взносов не повышает: она уменьшает то, что может ссудить кредитный механизм. На уровне [Concept('concept_un_tier_supranational','«Надгосударственный»')] цели войны члена против страны, которой служит такая миссия, аннулируются, кроме целей объединения и целей того типа, с которого началась его игра."
+ },
+ "un_vote_standing_force_passed_vetoed_tt": {
+  "en": "A [concept_un_permanent_member] cast a [concept_un_veto]. A standing force has no graduated form, so the resolution is blocked outright and no force is founded.",
+  "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У постоянных сил нет ослабленной формы, поэтому резолюция заблокирована полностью, и силы не основываются."
+ },
+ "un_vote_success_reward": {
+  "en": "Successful UN Resolution",
+  "ru": "Успешная резолюция ООН"
+ },
+ "un_vote_veto_overridden_tt": {
+  "en": "#G The veto was overridden.#! Under Charter Reform II (veto restraint), a two-thirds supermajority of the members with a vote carries a resolution over a permanent member's veto, in its full form.",
+  "ru": "#G Вето преодолено.#! По Реформе Устава II (сдержанность в применении вето) большинство в две трети членов, имеющих голос, проводит резолюцию вопреки вето постоянного члена, в полной форме."
+ },
+ "un_walkout_condemn_modifier": {
+  "en": "Condemned Assembly Walkout",
+  "ru": "Осуждение ухода из Ассамблеи"
+ },
+ "un_walkout_join_modifier": {
+  "en": "Joined Assembly Walkout",
+  "ru": "Присоединение к уходу из Ассамблеи"
+ },
+ "un_walkout_mediator_modifier": {
+  "en": "Assembly Walkout Mediator",
+  "ru": "Посредник при уходе из Ассамблеи"
+ },
+ "un_withdrawal_penalty_modifier": {
+  "en": "Estranged from the United Nations",
+  "ru": "Отчуждение от Организации Объединённых Наций"
+ },
+ "une_formation_bloc_unanimity_tt": {
+  "en": "Every other [concept_great_power] is in our [concept_power_bloc]",
+  "ru": "Все остальные [concept_great_power|l] входят в наш [concept_power_bloc|l]"
+ },
+ "une_formation_un_supranational_tt": {
+  "en": "[concept_un_authority] stands at the [concept_un_tier_supranational] tier",
+  "ru": "[concept_un_authority|U] находится на уровне [Concept('concept_un_tier_supranational','«Надгосударственный»')]"
+ },
+ "veteran_mental_health_modifier": {
+  "en": "Veteran Mental Health Services",
+  "ru": "Психологическая помощь ветеранам"
+ },
+ "veterancy6": {
+  "en": "Commando",
+  "ru": "Коммандос"
+ },
+ "veterancy7": {
+  "en": "Elite",
+  "ru": "Элита"
+ },
+ "veterancy8": {
+  "en": "Legendary",
+  "ru": "Легенда"
+ },
+ "veterans_peace_testimony_modifier": {
+  "en": "Veterans’ Peace Testimony",
+  "ru": "Мирные свидетельства ветеранов"
+ },
+ "veterans_testimony_movement_calming": {
+  "en": "Veterans’ Testimony (Anti-War)",
+  "ru": "Свидетельства ветеранов (антивоенные)"
+ },
+ "voluntary_union_action_propose_name": {
+  "en": "Propose Voluntary Union",
+  "ru": "Предложить добровольный союз"
+ },
+ "voluntary_union_decentralized_action_notification_name": {
+  "en": "Decentralized Power Integrated",
+  "ru": "Децентрализованная власть объединена"
+ },
+ "voluntary_union_decentralized_culture_tt": {
+  "en": "Requires the target share one of your primary cultures, until Globalization is researched — which lifts the cultural restriction entirely",
+  "ru": "Требуется, чтобы цель разделяла одну из ваших основных культур, пока не изучена глобализация — после чего культурное ограничение снимается полностью"
+ },
+ "war_crime_coverup_modifier": {
+  "en": "Atrocity Covered Up",
+  "ru": "Злодеяние скрыто"
+ },
+ "war_crime_reform_modifier": {
+  "en": "Military Doctrine Reform",
+  "ru": "Реформа военной доктрины"
+ },
+ "war_crime_scandal_modifier": {
+  "en": "War Crimes Scandal",
+  "ru": "Скандал вокруг военных преступлений"
+ },
+ "war_crime_tribunal_modifier": {
+  "en": "War Crimes Tribunal",
+  "ru": "Трибунал по военным преступлениям"
+ },
+ "war_goal_te_colonial_independence": {
+  "en": "Independence from [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "ru": "Независимость от страны [WAR_GOAL_DRAFT.GetTarget.GetName]"
+ },
+ "war_goal_te_colonial_independence_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] accepts the independence [WAR_GOAL_DRAFT.GetHolder.GetName] declared and gives up the colony.",
+  "ru": "Страна [WAR_GOAL_DRAFT.GetTarget.GetName] признаёт независимость, объявленную страной [WAR_GOAL_DRAFT.GetHolder.GetName], и отказывается от колонии."
+ },
+ "war_goal_te_colonial_independence_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them keep the independence they declared from [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "ru": "Попытаться убедить страну [WAR_GOAL_DRAFT.GetHolder.GetName] присоединиться к нам, помогая ей сохранить независимость, объявленную от страны [WAR_GOAL_DRAFT.GetTarget.GetName]."
+ },
+ "war_goal_te_colonial_independence_type_desc": {
+  "en": "Keep the independence a colony declared. Holding its own land does not enforce it: only the colonial power's capitulation or a peace ends the war.",
+  "ru": "Удержать независимость, объявленную колонией. Одного владения её землёй недостаточно: войну завершает только капитуляция колониальной державы или мир."
+ },
+ "war_goal_te_colonial_independence_type_name": {
+  "en": "Colonial Independence",
+  "ru": "Колониальная независимость"
+ },
+ "war_goal_te_colonial_reconquest": {
+  "en": "Reconquer [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "ru": "Отвоевать страну [WAR_GOAL_DRAFT.GetTarget.GetName]"
+ },
+ "war_goal_te_colonial_reconquest_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetHolder.GetName] takes back the colony that declared itself [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "ru": "Страна [WAR_GOAL_DRAFT.GetHolder.GetName] возвращает колонию, провозгласившую себя страной [WAR_GOAL_DRAFT.GetTarget.GetName]."
+ },
+ "war_goal_te_colonial_reconquest_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them take back [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "ru": "Попытаться убедить страну [WAR_GOAL_DRAFT.GetHolder.GetName] присоединиться к нам, помогая ей вернуть страну [WAR_GOAL_DRAFT.GetTarget.GetName]."
+ },
+ "war_goal_te_colonial_reconquest_type_desc": {
+  "en": "Take back a colony that declared its independence. Holding its land does not enforce it: only its capitulation or a peace ends the war.",
+  "ru": "Вернуть колонию, объявившую независимость. Одного владения её землёй недостаточно: войну завершает только её капитуляция или мир."
+ },
+ "war_goal_te_colonial_reconquest_type_name": {
+  "en": "Reconquest",
+  "ru": "Отвоевание"
+ },
+ "war_goal_te_reunify_country": {
+  "en": "Reunify with [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "ru": "Воссоединиться со страной [WAR_GOAL_DRAFT.GetTarget.GetName]"
+ },
+ "war_goal_te_reunify_country_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetHolder.GetName] absorbs [WAR_GOAL_DRAFT.GetTarget.GetName] in the name of national reunification.",
+  "ru": "Страна [WAR_GOAL_DRAFT.GetHolder.GetName] поглощает страну [WAR_GOAL_DRAFT.GetTarget.GetName] во имя национального воссоединения."
+ },
+ "war_goal_te_reunify_country_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by allowing them to reunify with [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "ru": "Попытаться убедить страну [WAR_GOAL_DRAFT.GetHolder.GetName] присоединиться к нам, позволив ей воссоединиться со страной [WAR_GOAL_DRAFT.GetTarget.GetName]."
+ },
+ "war_goal_te_reunify_country_type_desc": {
+  "en": "Annex a [concept_country] that shares our primary culture and whose [concept_homeland] we hold sweeping claims on. Costs the same #b [concept_infamy]#! as any other annexation, which is already lower for states in our cultural homeland and states we hold claims on.",
+  "ru": "Аннексировать [Concept('concept_country','страну')], разделяющую нашу основную культуру и на [Concept('concept_homeland','историческую родину')] которой у нас есть обширные притязания. Стоит столько же #b [Concept('concept_infamy','дурной славы')]#!, сколько любая другая аннексия, а она и так ниже для областей нашей культурной родины и областей, на которые у нас есть притязания."
+ },
+ "war_goal_te_reunify_country_type_name": {
+  "en": "Reunify the Nation",
+  "ru": "Воссоединить нацию"
+ },
+ "war_goal_te_seize_strait": {
+  "en": "Seize [WAR_GOAL_DRAFT.GetTargetState.GetCountry.GetFlagTextIcon] [WAR_GOAL_DRAFT.GetTargetState.GetName] Strait Shore",
+  "ru": "Захватить берег пролива: [WAR_GOAL_DRAFT.GetTargetState.GetCountry.GetFlagTextIcon] [WAR_GOAL_DRAFT.GetTargetState.GetName]"
+ },
+ "war_goal_te_seize_strait_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] cedes the [concept_strait] shore of [WAR_GOAL_DRAFT.GetTargetState.GetName] to [WAR_GOAL_DRAFT.GetHolder.GetName] and keeps the rest of the [concept_state].",
+  "ru": "Страна [WAR_GOAL_DRAFT.GetTarget.GetName] уступает стране [WAR_GOAL_DRAFT.GetHolder.GetName] берег [Concept('concept_strait','пролива')] в области [WAR_GOAL_DRAFT.GetTargetState.GetName] и сохраняет остальную часть [Concept('concept_state','области')]."
+ },
+ "war_goal_te_seize_strait_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by forcing [WAR_GOAL_DRAFT.GetWarGoalStakeholder.GetName] to cede them the [concept_strait] shore of [WAR_GOAL_DRAFT.GetTargetState.GetName].",
+  "ru": "Попытаться убедить страну [WAR_GOAL_DRAFT.GetHolder.GetName] присоединиться к нам, вынудив страну [WAR_GOAL_DRAFT.GetWarGoalStakeholder.GetName] уступить ей берег [Concept('concept_strait','пролива')] в области [WAR_GOAL_DRAFT.GetTargetState.GetName]."
+ },
+ "war_goal_te_seize_strait_type_desc": {
+  "en": "Take only the [concept_strait] shore of an enemy [concept_state] and leave the rest of the state to its owner. Holding a shore gives us [concept_strait_control] of that strait. A canal can be seized only once it is built. Costs a quarter of the #b [concept_infamy]#! of conquering the whole state, or the share of its provinces taken if that is more.",
+  "ru": "Забрать только берег [Concept('concept_strait','пролива')] вражеской [Concept('concept_state','области')], оставив остальную область владельцу. Удержание берега даёт нам [Concept('concept_strait_control','контроль над проливом')]. Канал можно захватить, только когда он построен. Стоит четверть #b [Concept('concept_infamy','дурной славы')]#! завоевания всей области или долю захваченных провинций, если она больше."
+ },
  "war_goal_te_seize_strait_type_name": {
   "en": "Seize Strait",
   "ru": "Захват пролива"
  },
+ "war_goal_te_un_mandate_restore_state": {
+  "en": "Recover [WAR_GOAL_DRAFT.GetTargetState.GetName] under UN mandate",
+  "ru": "Вернуть область [WAR_GOAL_DRAFT.GetTargetState.GetName] по мандату ООН"
+ },
+ "war_goal_te_un_mandate_restore_state_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] returns the [concept_state] of [WAR_GOAL_DRAFT.GetTargetState.GetName] to [WAR_GOAL_DRAFT.GetHolder.GetName], as the [concept_un_general_assembly] authorized. It costs no [concept_infamy]. #R Adding any other demand against that country to this play for territory, subjugation, regime change or humiliation voids the mandate.#!",
+  "ru": "Страна [WAR_GOAL_DRAFT.GetTarget.GetName] возвращает [Concept('concept_state','область')] [WAR_GOAL_DRAFT.GetTargetState.GetName] стране [WAR_GOAL_DRAFT.GetHolder.GetName], как санкционировала [Concept('concept_un_general_assembly','Генеральная Ассамблея')]. Это не стоит [Concept('concept_infamy','дурной славы')]. #R Добавление в эту игру любого другого требования к этой стране о территории, подчинении, смене режима или унижении аннулирует мандат.#!"
+ },
+ "war_goal_te_un_mandate_restore_state_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them recover [WAR_GOAL_DRAFT.GetTargetState.GetName] under their UN mandate.",
+  "ru": "Попытаться убедить страну [WAR_GOAL_DRAFT.GetHolder.GetName] присоединиться к нам, помогая ей вернуть область [WAR_GOAL_DRAFT.GetTargetState.GetName] по её мандату ООН."
+ },
+ "war_goal_te_un_mandate_restore_state_type_desc": {
+  "en": "Recover a [concept_state] the [concept_un_general_assembly] has authorized us by name to recover, from the state it named. Costs no #b [concept_infamy]#! while the mandate stands. Available only against that state, for that [concept_state_region], and in a single [concept_diplomatic_play] — adding any further territorial or subjugation demand against the same state voids the mandate.",
+  "ru": "Вернуть [Concept('concept_state','область')], которую [Concept('concept_un_general_assembly','Генеральная Ассамблея')] поимённо уполномочила нас вернуть у названного ею государства. Не стоит #b [Concept('concept_infamy','дурной славы')]#!, пока действует мандат. Доступно только против этого государства, для этого [Concept('concept_state_region','стратегического региона')] и в одной [Concept('concept_diplomatic_play','дипломатической игре')] — добавление любого дальнейшего территориального требования или требования о подчинении к тому же государству аннулирует мандат."
+ },
  "war_goal_te_un_mandate_restore_state_type_name": {
   "en": "Authorized Restoration",
   "ru": "Санкционированное восстановление"
+ },
+ "war_on_drugs_modifier": {
+  "en": "War on Drugs",
+  "ru": "Война с наркотиками"
+ },
+ "war_profit_tax_modifier": {
+  "en": "Excess War Profits Tax",
+  "ru": "Налог на сверхприбыли военного времени"
+ },
+ "war_profiteering_investigation_modifier": {
+  "en": "War Profiteering Investigation",
+  "ru": "Расследование военной наживы"
+ },
+ "water_crisis_infrastructure_modifier": {
+  "en": "Water Infrastructure Investment",
+  "ru": "Инвестиции в водную инфраструктуру"
+ },
+ "water_crisis_ministry_modifier": {
+  "en": "Ministry Water Management",
+  "ru": "Управление водными ресурсами министерством"
+ },
+ "water_crisis_rationing_modifier": {
+  "en": "Water Rationing",
+  "ru": "Нормирование воды"
+ },
+ "we_am_annihilation_military": {
+  "en": "Antimatter Weapons Integration",
+  "ru": "Интеграция антиматериального оружия"
+ },
+ "we_am_annihilation_propulsion": {
+  "en": "Antimatter Propulsion",
+  "ru": "Антиматериальная тяга"
+ },
+ "we_am_breach_press_ahead": {
+  "en": "Accelerated Antimatter Program",
+  "ru": "Ускоренная программа по антиматерии"
+ },
+ "we_am_breach_rebuild": {
+  "en": "Antimatter Safety Reconstruction",
+  "ru": "Перестройка безопасности антиматерии"
+ },
+ "we_am_breakthrough_military": {
+  "en": "Antimatter Military Applications",
+  "ru": "Военное применение антиматерии"
+ },
+ "we_am_breakthrough_research": {
+  "en": "Antimatter Research Breakthrough",
+  "ru": "Прорыв в исследовании антиматерии"
+ },
+ "we_am_incident_suppress": {
+  "en": "Suppressed Antimatter Incident",
+  "ru": "Скрытый инцидент с антиматерией"
+ },
+ "we_am_incident_transparent": {
+  "en": "Transparent Antimatter Investigation",
+  "ru": "Открытое расследование инцидента с антиматерией"
+ },
+ "we_am_propulsion_civilian": {
+  "en": "Civilian Antimatter Applications",
+  "ru": "Гражданское применение антиматерии"
+ },
+ "we_am_propulsion_military": {
+  "en": "Military Antimatter Logistics",
+  "ru": "Военная логистика на антиматерии"
+ },
+ "we_ob_arms_race_maintain": {
+  "en": "Orbital Arms Race",
+  "ru": "Орбитальная гонка вооружений"
+ },
+ "we_ob_arms_race_treaty": {
+  "en": "Orbital Arms Limitation",
+  "ru": "Ограничение орбитальных вооружений"
+ },
+ "we_ob_deterrence_negotiate": {
+  "en": "Negotiation from Strength",
+  "ru": "Переговоры с позиции силы"
+ },
+ "we_ob_deterrence_strength": {
+  "en": "Orbital Deterrence",
+  "ru": "Орбитальное сдерживание"
+ },
+ "we_ob_highground_accelerate": {
+  "en": "Accelerated Battlestation Program",
+  "ru": "Ускоренная программа боевых станций"
+ },
+ "we_ob_highground_assure": {
+  "en": "Diplomatic Reassurance",
+  "ru": "Дипломатические заверения"
+ },
+ "we_ob_strike_defensive": {
+  "en": "Orbital Defensive Posture",
+  "ru": "Оборонительная орбитальная позиция"
+ },
+ "we_ob_strike_project": {
+  "en": "Global Strike Projection",
+  "ru": "Глобальное проецирование удара"
+ },
+ "we_ob_surveillance_dominance": {
+  "en": "Full Spectrum Dominance",
+  "ru": "Полное господство в спектре"
+ },
+ "we_ob_surveillance_share": {
+  "en": "Allied Intelligence Sharing",
+  "ru": "Обмен разведданными с союзниками"
+ },
+ "we_ob_weapons_test_classify": {
+  "en": "Classified Orbital Incident",
+  "ru": "Засекреченный орбитальный инцидент"
+ },
+ "we_ob_weapons_test_relief": {
+  "en": "Debris Rain Relief Effort",
+  "ru": "Помощь после дождя обломков"
+ },
+ "we_sc_beam_compensate": {
+  "en": "Beam Accident Compensation",
+  "ru": "Компенсация за аварию луча"
+ },
+ "we_sc_beam_minimize": {
+  "en": "Beam Incident Downplayed",
+  "ru": "Инцидент с лучом приуменьшен"
+ },
+ "we_sc_first_light_focus": {
+  "en": "Solar Collector Program Focus",
+  "ru": "Приоритет программы солнечных коллекторов"
+ },
+ "we_sc_first_light_pride": {
+  "en": "Solar Collector Triumph",
+  "ru": "Триумф солнечных коллекторов"
+ },
+ "we_sc_monopoly_assert": {
+  "en": "Energy Sovereignty",
+  "ru": "Энергетический суверенитет"
+ },
+ "we_sc_monopoly_share": {
+  "en": "Energy Licensing Agreements",
+  "ru": "Соглашения о лицензировании энергии"
+ },
+ "we_sc_postscarcity_research": {
+  "en": "Energy-Fueled Research",
+  "ru": "Исследования на энергии"
+ },
+ "we_sc_postscarcity_subsidize": {
+  "en": "Universal Energy Subsidy",
+  "ru": "Всеобщая энергетическая субсидия"
+ },
+ "we_sc_postscarcity_subsidize_cost": {
+  "en": "Energy Subsidy Payments",
+  "ru": "Выплаты энергетической субсидии"
+ },
+ "we_sc_storm_rideout": {
+  "en": "Solar Storm Weathered",
+  "ru": "Солнечная буря пережита"
+ },
+ "we_sc_storm_shutdown": {
+  "en": "Solar Collector Emergency Shutdown",
+  "ru": "Аварийное отключение солнечных коллекторов"
+ },
+ "we_sc_surplus_export": {
+  "en": "Energy Export Boom",
+  "ru": "Бум энергетического экспорта"
+ },
+ "we_sc_surplus_invest": {
+  "en": "Industrial Electrification Surge",
+  "ru": "Всплеск промышленной электрификации"
+ },
+ "we_se_astronaut_education": {
+  "en": "Space Education Initiative",
+  "ru": "Инициатива космического образования"
+ },
+ "we_se_astronaut_industry": {
+  "en": "Astronaut Generation Workforce",
+  "ru": "Рабочая сила для подготовки астронавтов"
+ },
+ "we_se_debris_clearance": {
+  "en": "Orbital Debris Clearance",
+  "ru": "Очистка орбиты от мусора"
+ },
+ "we_se_debris_defense": {
+  "en": "Orbital Defense Grid",
+  "ru": "Орбитальная оборонительная сеть"
+ },
+ "we_se_gateway_restricted": {
+  "en": "Restricted Orbital Access",
+  "ru": "Ограниченный доступ на орбиту"
+ },
+ "we_se_milestone_celebrate": {
+  "en": "Elevator Milestone Celebration",
+  "ru": "Празднование вехи лифта"
+ },
+ "we_se_milestone_focus": {
+  "en": "Elevator Construction Focus",
+  "ru": "Приоритет строительства лифта"
+ },
+ "we_se_shared_access": {
+  "en": "Shared Orbital Governance",
+  "ru": "Совместное управление орбитой"
+ },
+ "we_se_structural_halt": {
+  "en": "Elevator Construction Halted",
+  "ru": "Строительство лифта остановлено"
+ },
+ "we_se_structural_reinforce": {
+  "en": "Elevator Reinforcement Program",
+  "ru": "Программа укрепления лифта"
+ },
+ "we_se_trade_auction": {
+  "en": "Orbital Commerce Boom",
+  "ru": "Бум орбитальной торговли"
+ },
+ "we_se_trade_national": {
+  "en": "National Orbital Priority",
+  "ru": "Национальный орбитальный приоритет"
+ },
+ "welfare_automation_fears_advance": {
+  "en": "Welfare: Automation Fears Advance",
+  "ru": "Социальное обеспечение: опасения автоматизации растут"
+ },
+ "welfare_automation_fears_concession": {
+  "en": "Welfare: Automation Fears Concession",
+  "ru": "Социальное обеспечение: уступка опасениям автоматизации"
+ },
+ "welfare_automation_fears_stall": {
+  "en": "Welfare: Automation Fears Stall",
+  "ru": "Социальное обеспечение: опасения автоматизации стихают"
+ },
+ "women_combat_roles_modifier": {
+  "en": "Women in Combat Roles",
+  "ru": "Женщины в боевых ролях"
+ },
+ "ww_air_raid_relief_modifier": {
+  "en": "Air Raid Relief",
+  "ru": "Помощь после воздушных налётов"
+ },
+ "ww_arsenal_of_democracy_modifier": {
+  "en": "Arsenal of Democracy",
+  "ru": "Арсенал демократии"
+ },
+ "ww_fresh_forces_modifier": {
+  "en": "Fresh Forces",
+  "ru": "Свежие силы"
+ },
+ "ww_ground_offensive_modifier": {
+  "en": "Ground Offensive",
+  "ru": "Наземное наступление"
+ },
+ "ww_home_front_strain_modifier": {
+  "en": "Home Front Strain",
+  "ru": "Напряжение тыла"
+ },
+ "ww_late_entry_cooldown": {
+  "en": "Recent Intervention Decision",
+  "ru": "Недавнее решение о вмешательстве"
+ },
+ "ww_lend_lease_modifier": {
+  "en": "Lend-Lease Program",
+  "ru": "Программа ленд-лиза"
+ },
+ "ww_liberation_hero_modifier": {
+  "en": "Liberation Hero",
+  "ru": "Герой освобождения"
+ },
+ "ww_occupation_duties_modifier": {
+  "en": "Occupation Duties",
+  "ru": "Оккупационные обязанности"
+ },
+ "ww_prolonged_war_exhaustion_modifier": {
+  "en": "Prolonged War Weariness",
+  "ru": "Усталость от затяжной войны"
+ },
+ "ww_regime_change_modifier": {
+  "en": "Imposed [concept_regime_change]",
+  "ru": "Навязанная [concept_regime_change|l]"
+ },
+ "ww_rising_tensions_modifier": {
+  "en": "Rising Global Tensions",
+  "ru": "Растущая мировая напряжённость"
+ },
+ "ww_victors_peace_modifier": {
+  "en": "Victor’s Peace",
+  "ru": "Мир победителя"
+ },
+ "ww_war_crimes_exposed_modifier": {
+  "en": "War Crimes Exposed",
+  "ru": "Военные преступления разоблачены"
+ },
+ "ww_war_propaganda_modifier": {
+  "en": "War Propaganda Campaign",
+  "ru": "Кампания военной пропаганды"
+ },
+ "ww_wartime_rationing_modifier": {
+  "en": "Wartime Rationing",
+  "ru": "Нормирование военного времени"
+ },
+ "youth_mental_health_funding_modifier": {
+  "en": "Youth Mental Health Funding",
+  "ru": "Финансирование психического здоровья молодёжи"
  }
 }
