@@ -14963,7 +14963,7 @@ pm_metamaterial_explosives = {
 # what it earned on the promoters alone. The antibiotic itself is 2 Drugs a
 # level (owner, 2026-11-15), about the hormone tier's share of its input cost.
 pm_plain_feed = {
-	texture = "gfx/interface/icons/production_method_icons/subsistence_pastures.dds"
+	texture = "gfx/interface/icons/production_method_icons/simple_farming.dds"
 }
 
 pm_antibiotic_growth_promoters = {
