@@ -24,8 +24,71 @@ banking_external_inflow_damp = {
 banking_external_gold_pressure_factor = {
 	value = 1
 	if = {
-		limit = { banking_external_eligible_sterilize_inflows = yes banking_tool_sterilize_inflows_active = yes has_variable = banking_external_sterilization_funded var:banking_external_sterilization_funded = 1 }
+		limit = { te_mon_has_gold_flows = yes banking_external_eligible_sterilize_inflows = yes banking_tool_sterilize_inflows_active = yes has_variable = banking_external_sterilization_funded var:banking_external_sterilization_funded = 1 }
 		value = banking_external_sterilized_factor
+	}
+}
+
+# STERILIZATION ON A FLOATING CURRENCY (2026-11-14,
+# docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md): the
+# central bank buys or sells foreign money against the move and sells bills to
+# absorb what it paid, so the index closes half its usual share of the distance
+# to its target each month, up or down (te_mon_fx_shadow_step reads this). A
+# shock decays at its own speed, so it moves a sterilized currency less than
+# half as far. Funded as on gold: the flag is the monthly update's, set before
+# step 5b reads it.
+banking_external_fx_sterilized_speed = { value = 0.5 }
+banking_external_fx_adjust_factor = {
+	value = 1
+	if = {
+		limit = {
+			te_mon_fx_floats = yes
+			banking_external_eligible_sterilize_inflows = yes
+			banking_tool_sterilize_inflows_active = yes
+			has_variable = banking_external_sterilization_funded
+			var:banking_external_sterilization_funded = 1
+		}
+		value = banking_external_fx_sterilized_speed
+	}
+}
+
+# FOREIGN EXCHANGE SURRENDER ON A FLOATING CURRENCY (2026-11-14): exporters who
+# must sell their foreign earnings for the home currency hold up its price. A
+# term of the exchange-rate target (te_mon_fx_target_value), 4 points at the full
+# export share, banded as the gold purchase is (banking_external_export_share):
+# what a real rate one point above the world's buys. No treasury money moves.
+banking_external_surrender_fx_points = { value = 4 }
+banking_external_surrender_fx_reach = {
+	value = banking_external_surrender_fx_points
+	multiply = banking_external_export_share
+}
+banking_external_surrender_fx_term = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_fx_floats = yes
+			banking_external_eligible_fx_surrender = yes
+			banking_tool_fx_surrender_active = yes
+		}
+		value = banking_external_surrender_fx_reach
+	}
+}
+
+# How far the index still has to go to its target, either way: the floating AI
+# sterilizes a move of 8 points or more (banking_ai_core_cb_sterilize_inflows).
+banking_external_fx_target_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_index }
+		value = te_mon_fx_target_value
+		subtract = var:te_fx_index
+	}
+}
+banking_external_fx_target_distance = {
+	value = banking_external_fx_target_gap
+	if = {
+		limit = { banking_external_fx_target_gap < 0 }
+		multiply = -1
 	}
 }
 # The stock of safer debt survives a repeal, revolution or temporary law change;
@@ -152,7 +215,7 @@ banking_external_purchase_cash = {
 banking_external_surrender_purchase_display = {
 	value = 0
 	if = {
-		limit = { banking_tool_fx_surrender_active = yes }
+		limit = { banking_tool_fx_surrender_active = yes te_mon_has_gold_flows = yes }
 		value = banking_external_surrender_purchase
 	}
 }
@@ -163,7 +226,7 @@ banking_external_surrender_purchase_display = {
 # changes on this country's currency, without the tool and with it, everything
 # else as it stands. Each re-reads the formula the monthly pulse runs, with the
 # tool's own factor taken out or put in; nothing the pulse runs reads these.
-# Design: docs/superpowers/specs/2026-11-14-external-currency-tools-design.md.
+# Design: docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md.
 
 # The World Rate Gap before controls: te_mon_gold_gap_value without
 # te_mon_controls_damp, so clamped to five points either way.
@@ -280,4 +343,21 @@ banking_ext_disp_fx_premium = {
 banking_ext_disp_fx_premium_protected = {
 	value = banking_ext_disp_fx_premium
 	multiply = banking_external_fx_exposure
+}
+
+# Sterilization's pair on a floating currency: this month's move of the index
+# toward its target (te_mon_fx_shadow_step, the index being the shadow there),
+# at the usual speed and sterilized.
+banking_ext_disp_fx_step = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_shadow }
+		value = te_mon_fx_target_value
+		subtract = var:te_fx_shadow
+		multiply = te_mon_fx_adjust_speed
+	}
+}
+banking_ext_disp_fx_step_sterilized = {
+	value = banking_ext_disp_fx_step
+	multiply = banking_external_fx_sterilized_speed
 }

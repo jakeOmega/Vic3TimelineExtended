@@ -1194,6 +1194,31 @@ banking_cycle_is_expansion_or_boom = {
 	var:finance_cycle_value >= 60
 }
 
+# DOES A RATE OF THE COUNTRY'S OWN MOVE MONEY ACROSS ITS BORDER? (2026-11-14,
+# docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md.) On
+# convertible gold with a dial the World Rate Gap moves gold (te_mon_has_gold_flows);
+# on a floating currency with a dial it moves the exchange-rate target. Commodity
+# money has a dial, but its rate term feeds only the shadow, which nothing on it
+# reads, and an anchored country has no dial: on neither has a flow tool anything
+# to act on. Restrict Speculative Inflows, Sterilization and the surrender
+# requirement require it, each acting on whichever of the two the country has.
+banking_external_rate_moves_money = {
+	OR = {
+		te_mon_has_gold_flows = yes
+		AND = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+	}
+}
+# The same, as the greyed button's requirement line.
+banking_external_rate_moves_money_tt = {
+	custom_tooltip = {
+		text = banking_external_tt_rate_moves_money
+		banking_external_rate_moves_money = yes
+	}
+}
+
 # THE GREYED ENABLE BUTTON'S CONDITION LIST (GUI audit BNK-3, 2026-10-27).
 # IsValidTooltip prints every test below, so each is a `custom_tooltip`
 # phrased as a requirement, like the older tools' (te_monetary_sguis.txt's
@@ -1206,10 +1231,7 @@ banking_cycle_is_expansion_or_boom = {
 # own line (te_banking_cycle_started_tt) still opens the list.
 banking_external_eligible_restrict_inflows = {
 	hidden_trigger = { banking_external_available = yes }
-	custom_tooltip = {
-		text = banking_mon_tt_needs_dial
-		te_mon_has_dial = yes
-	}
+	banking_external_rate_moves_money_tt = yes
 	custom_tooltip = {
 		text = banking_button_locked_capital_controls_tt
 		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
@@ -1228,10 +1250,7 @@ banking_ai_core_cb_restrict_inflows = {
 
 banking_external_eligible_sterilize_inflows = {
 	hidden_trigger = { banking_external_available = yes }
-	custom_tooltip = {
-		text = banking_mon_tt_recap_has_flows
-		te_mon_has_gold_flows = yes
-	}
+	banking_external_rate_moves_money_tt = yes
 }
 banking_possible_cb_sterilize_inflows = {
 	te_banking_cycle_started_tt = yes
@@ -1243,13 +1262,31 @@ banking_possible_cb_sterilize_inflows = {
 		gold_reserves >= banking_external_sterilization_cost
 	}
 }
+# Gold: sterilize the gold a boom draws in. Floating: smooth a move of at least
+# 8 points still to come, either way.
 banking_ai_core_cb_sterilize_inflows = {
-	te_mon_gold_flow_signed > 0
-	banking_cycle_is_expansion_or_boom = yes
+	OR = {
+		AND = {
+			te_mon_has_gold_flows = yes
+			te_mon_gold_flow_signed > 0
+			banking_cycle_is_expansion_or_boom = yes
+		}
+		AND = {
+			te_mon_fx_floats = yes
+			banking_external_fx_target_distance >= 8
+		}
+	}
 }
 
+# Hidden on metal at par (owner, 2026-11-14): there the index cannot fall
+# below par, so there is no weak-currency premium to protect against. The
+# Enable row and the AI's button test it too, and the monthly cleanup lifts an
+# active one; a devalued metal currency keeps it until the index is back at par.
 banking_external_eligible_foreign_borrowing_limits = {
-	hidden_trigger = { banking_external_available = yes }
+	hidden_trigger = {
+		banking_external_available = yes
+		te_mon_fx_pinned_at_par = no
+	}
 	has_law_or_variant = law_type:law_national_bank
 }
 banking_possible_cb_foreign_borrowing_limits = {
@@ -1264,10 +1301,7 @@ banking_ai_core_cb_foreign_borrowing_limits = {
 
 banking_external_eligible_fx_surrender = {
 	hidden_trigger = { banking_external_available = yes }
-	custom_tooltip = {
-		text = banking_mon_tt_recap_has_flows
-		te_mon_has_gold_flows = yes
-	}
+	banking_external_rate_moves_money_tt = yes
 	custom_tooltip = {
 		text = banking_button_locked_capital_controls_tt
 		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
@@ -1282,18 +1316,33 @@ banking_possible_cb_fx_surrender = {
 		text = banking_external_tt_exports
 		banking_external_export_share > 0
 	}
-	custom_tooltip = {
-		text = banking_external_tt_treasury_has_money
-		gold_reserves > 0
-	}
-	custom_tooltip = {
-		text = banking_mon_tt_recap_room
-		te_mon_gold_inflow_room > 0
+	# Only gold buys anything: on a floating currency the central bank pays
+	# exporters in its own money and no treasury cash or vault is involved.
+	trigger_if = {
+		limit = { te_mon_has_gold_flows = yes }
+		custom_tooltip = {
+			text = banking_external_tt_treasury_has_money
+			gold_reserves > 0
+		}
+		custom_tooltip = {
+			text = banking_mon_tt_recap_room
+			te_mon_gold_inflow_room > 0
+		}
 	}
 }
+# Gold: fill a vault under half full. Floating: hold up a currency below 95.
 banking_ai_core_cb_fx_surrender = {
-	te_mon_bank_gold_scaled < 0.5
-	gold_reserves > 0
+	OR = {
+		AND = {
+			te_mon_has_gold_flows = yes
+			te_mon_bank_gold_scaled < 0.5
+			gold_reserves > 0
+		}
+		AND = {
+			te_mon_fx_floats = yes
+			te_mon_fx_index_display < 95
+		}
+	}
 }
 
 banking_external_eligible_emergency_import_financing = {

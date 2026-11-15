@@ -843,7 +843,8 @@ banking_dash_disable_cb_sterilize_inflows = {
 
 banking_dash_enable_cb_foreign_borrowing_limits = {
 	scope = country
-	is_shown = { banking_external_available = yes banking_tool_foreign_borrowing_limits_active = no }
+	# Hidden on metal at par, where it has nothing to protect against (owner, 2026-11-14).
+	is_shown = { banking_external_available = yes te_mon_fx_pinned_at_par = no banking_tool_foreign_borrowing_limits_active = no }
 	ai_is_valid = { always = no }
 	is_valid = { banking_possible_cb_foreign_borrowing_limits = yes }
 	effect = { banking_effect_cb_foreign_borrowing_limits = yes }

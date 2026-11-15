@@ -47,6 +47,19 @@ te_cm_in_sphere = {
 	}
 }
 
+# Country scope. $CULTURE$ = a culture that has just switched into a merge's result. Is this country tied to it: is it
+# one of the country's primary cultures, or does the country own a state that is one of its homelands? Such a human
+# country is told of the switch (te_cmg_<m>_tell, the notices in te_culture_merge_effects.txt). Read only for human
+# countries, and only for a culture that switched in the census's pass.
+te_cm_tied_to = {
+	OR = {
+		country_has_primary_culture = cu:$CULTURE$
+		any_scope_state = {
+			state_region = { is_homeland = cu:$CULTURE$ }
+		}
+	}
+}
+
 # ---- Russification (spec section 7; plan Task 7) ----
 # Vanilla's je_russification completes when 65% of the western borderlands' states are
 # at least 15% Russian. Russian pops that merged into East Slavic no longer count, so the

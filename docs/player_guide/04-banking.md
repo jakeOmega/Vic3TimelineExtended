@@ -454,10 +454,12 @@ External & Currency groups Export Credit Facility and Capital Controls with
 five monetary interventions. These five appear only under the full Banking
 System. Each holds 2 points while it runs (Emergency Import Financing 3),
 leaving fewer for deposit guarantees, domestic credit or crisis relief. Restrict
-Speculative Inflows needs your own policy rate; Sterilization and the surrender
-requirement need a convertible Gold Standard with your own policy rate; Limit
+Speculative Inflows, Sterilization and the surrender requirement need your own
+policy rate on a convertible Gold Standard or a floating currency; Limit
 Foreign-Currency Borrowing and Emergency Import Financing need National Bank
-Established. The tooltips show their current costs and restrictions.
+Established, and Limit Foreign-Currency Borrowing is hidden while your currency
+is held at par on metal. The tooltips show their current costs and
+restrictions.
 
 What the exchange tools do depends on your currency. On a convertible Gold
 Standard with National Bank Established, the gap between your policy rate and
@@ -467,8 +469,8 @@ Standard whose convertibility is suspended) it moves the target your Exchange
 Rate Index heads for instead (see
 [The exchange-rate index and capital controls](#the-exchange-rate-index-and-capital-controls)).
 On Commodity Money no rate of yours moves money across the border, so Capital
-Controls and Restrict Speculative Inflows do nothing there beyond their
-modifiers. Each tool's tooltip has an "On this currency" line that says what it
+Controls does nothing there beyond its modifiers and the other three flow tools
+are unavailable. Each tool's tooltip has an "On this currency" line that says what it
 does on the currency you have, with the figure it changes now and with the
 tool.
 
@@ -476,16 +478,17 @@ tool.
 |---|---|---|
 | Capital Controls | Your interest rate moves a quarter as much money across the border, in or out. On gold the World Rate Gap counts at a quarter, both for the gold it moves and for the Peg Confidence a low rate drains; on a floating currency the rate's push on the exchange rate falls to a quarter. Under a treaty peg, an overvalued peg loses a quarter as much Peg Confidence. | Infamy and great-power relations when imposed, and a step of Trapped Capital for each peacetime year it stays on. It does nothing for a currency distrusted for its inflation or its debts. |
 | Restrict Speculative Inflows | Money drawn in by a rate above the world's arrives at half speed, and money leaving is not slowed. On gold it halves the gold, and so the Borrowed Gold, that a high rate brings in; on a floating currency it halves the rise a high real rate gives the exchange rate. | −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. On gold the vault fills more slowly. |
-| Sterilization | Removes 75% of the inflation pressure from incoming gold. Gold Standard only. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
-| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a currency below par, reaching half that component after about 24 months. On metal your currency stays at par unless you devalue, so there is nothing for it to reduce. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
-| Foreign Exchange Surrender Requirement | Exporters must sell what they earn abroad to the central bank. The treasury buys gold for the bank with it, without adding Borrowed Gold that foreign lenders can withdraw. Gold Standard only. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
+| Sterilization | Money crossing the border moves prices at home less. On gold it removes 75% of the inflation pressure from incoming gold; on a floating currency the exchange rate moves toward its target at half speed, up or down, so a fall reaches prices more slowly and a rise reaches exporters more slowly. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. On gold, foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a currency below par, reaching half that component after about 24 months. On metal your currency stays at par unless you devalue, so the tool is hidden there. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
+| Foreign Exchange Surrender Requirement | Exporters must sell what they earn abroad to the central bank. On gold the treasury buys gold for the bank with it, without adding Borrowed Gold that foreign lenders can withdraw; on a floating currency the earnings hold up the currency, lifting the target your exchange rate heads for by up to 4 points. | −10% export advantage and −3% bureaucracy. On gold, the cash spent on reserves: purchases stop at the vault's capacity and cannot exceed available cash. On a floating currency no cash is spent, but the stronger currency costs a further 1.25% export advantage a point. |
 | Emergency Import Financing | +15% import advantage while a financial crisis lasts. | A weekly government expense of a quarter of the monthly rate: initially 0.05% of annual GDP a month, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
 
 Surrender purchases depend on your market's exports. The monthly cap is 0.05%
 of annual GDP when export reliance is above 30%, half that amount above 10%,
 and a quarter with any smaller positive share. A market with no exports buys
 nothing. Cash needed for the other funded interventions reduces what you can
-spend on these purchases.
+spend on these purchases. On a floating currency the same bands set the lift:
+4 points above 30%, 2 above 10%, 1 below, and none without exports.
 
 Emergency Import Financing is available during a Downturn or Panic, a gold
 crisis with Peg Confidence at 40 or below, or hyperinflation. War alone does not
@@ -496,17 +499,23 @@ switching it off and back on does not reset the cost.
 
 Sterilization ends if the treasury cannot cover a month of it. The surrender
 requirement's purchases stay monthly: the treasury pays the same day, and the
-same sum, as the vault receives. Sterilization and the surrender requirement
-end when you lose the conditions for convertible gold flows, including a
-suspension of convertibility. Other tools are lifted when their law or monetary
-requirements no longer hold. Restrict Speculative Inflows and the surrender
+same sum, as the vault receives. Restrict Speculative Inflows, Sterilization
+and the surrender requirement end when your rate no longer moves money across
+the border: on Commodity Money, or without a national bank setting your own
+rate. Moving between gold and a floating currency, by suspending convertibility
+for instance, changes what they do but does not lift them. Limit
+Foreign-Currency Borrowing is lifted when your currency comes to be held at par
+on metal, and its protection then unwinds as after any repeal. Other tools are
+lifted when their law or monetary requirements no longer hold. Restrict Speculative Inflows and the surrender
 requirement share Capital Controls' wartime exception to restrictive financial
 regulation laws.
 
 The AI restricts inflows when positive rate pressure accompanies an Expansion
-or hotter cycle, and sterilizes when gold is arriving during those phases. It
-uses borrowing limits when the Exchange Rate Index is below 95, surrender
-requirements when its vault is less than half full and it has cash, and import
+or hotter cycle, and sterilizes when gold is arriving during those phases or,
+on a floating currency, when its exchange rate still has 8 points or more to
+move. It uses borrowing limits when the Exchange Rate Index is below 95,
+surrender requirements when its vault is less than half full and it has cash
+or, on a floating currency, when the index is below 95, and import
 financing during a financial crisis. It favors lifting each tool when those
 reasons end.
 
@@ -909,7 +918,9 @@ sets the index: it moves between 50 and 150, drifting toward a target that
 rises when your real interest rate beats the World Rate and falls when your
 inflation runs above the world's (running below it does not raise it), when
 lenders charge you a risk premium, or
-when events knock it; the tooltip lists each term. Every point below par
+when events knock it; the tooltip lists each term. The Foreign Exchange
+Surrender Requirement adds up to 4 points to the target, and Sterilization
+halves the speed at which the index closes on it. Every point below par
 gives +1.25% export advantage and −1.25% import advantage, and above par the
 reverse. A weak currency adds risk premium, and a fall below its three-year
 average raises prices for a while.

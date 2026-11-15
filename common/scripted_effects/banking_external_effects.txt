@@ -105,6 +105,9 @@ banking_external_end_charges = {
 banking_external_purchase_reserves = {
 	if = {
 		limit = {
+			# Gold only: on a floating currency the requirement works through the
+			# exchange-rate target instead (banking_external_surrender_fx_term).
+			te_mon_has_gold_flows = yes
 			banking_external_eligible_fx_surrender = yes
 			banking_tool_fx_surrender_active = yes
 			has_variable = te_bank_gold
