@@ -659,80 +659,1900 @@
   "en": "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month, so a small change of course takes seasons rather than weeks. While inflation is far from its target too, it covers up to a sixth of the distance a month, so a bank chasing a runaway inflation closes most of the way in about a year.",
   "ru": "Как быстро ключевая ставка сближается с целью, к которой стремится ваш центральный банк. На базовом уровне она преодолевает около трети пункта в месяц, поэтому небольшое изменение курса занимает сезоны, а не недели. Пока инфляция тоже далека от цели, она преодолевает до шестой части расстояния в месяц, так что банк, гонящийся за галопирующей инфляцией, проходит большую часть пути примерно за год."
  },
+ "country_policy_rate_floor_add": {
+  "en": "Lowest Policy Rate",
+  "ru": "Наименьшая ключевая ставка"
+ },
+ "country_policy_rate_floor_add_desc": {
+  "en": "The lowest rate your central bank is able to set. Normally nothing below zero: charge savers to keep money in a bank and they will keep it in cash instead. A currency with no cash to keep can be pushed past that point.",
+  "ru": "Наименьшая ставка, которую способен установить ваш центральный банк. Обычно не ниже нуля: если брать со вкладчиков плату за хранение денег в банке, они станут держать их наличными. Валюту, у которой нет наличных, можно опустить ниже этой отметки."
+ },
+ "country_rights_law_enactment_success_add": {
+  "en": "Enactment Success of Rights Laws",
+  "ru": "Успех принятия законов о правах"
+ },
+ "country_rights_law_enactment_success_add_desc": {
+  "en": "For laws on Rights of Women, Slavery, Minority Rights, LGBTQ+ Rights and Privacy Rights. Not while the courts can't challenge the government.",
+  "ru": "Для законов о правах женщин, о рабстве, о правах меньшинств, правах ЛГБТК+ и правах на частную жизнь. Не действует, пока суды не могут оспаривать решения правительства."
+ },
  "country_risk_premium_add": {
   "en": "Risk Premium",
   "ru": "Премия за риск"
+ },
+ "country_risk_premium_add_desc": {
+  "en": "The part of a government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! the country's credit standing, after the floor that standing cannot fall below — so a crisis always costs a country, however sound its finances, and relief measures can pull the charge back down again.",
+  "ru": "Часть ставки заимствования правительства, которая зависит от того, что #b происходит#!: состояния финансового цикла, экстренных интервенций, исхода банковских кризисов, тяжести уже накопленных долгов и любого дефолта, памятного современникам. Она взимается #b сверх#! кредитоспособности страны, после нижней границы, ниже которой эта кредитоспособность упасть не может, — поэтому кризис всегда обходится стране дорого, как бы ни были прочны её финансы, а меры помощи могут снова снизить эту плату."
+ },
+ "country_seabed_claim_floor_add": {
+  "en": "Unused Seabed Claims Kept Each January",
+  "ru": "Неиспользованные претензии на морское дно, сохраняемые каждый январь"
+ },
+ "country_seabed_claim_floor_add_desc": {
+  "en": "The share of our unused [concept_seabed_claim]s in each basin that each January sharing leaves us, whatever our rivals' weight.",
+  "ru": "Доля наших неиспользованных [Concept('concept_seabed_claim','претензий на морское дно')] в каждом бассейне, которую мы сохраняем при ежегодном январском распределении, каков бы ни был вес наших соперников."
+ },
+ "country_seabed_claim_weight_mult": {
+  "en": "Seabed Claim Weight",
+  "ru": "Вес претензий на морское дно"
+ },
+ "country_seabed_claim_weight_mult_desc": {
+  "en": "Our claim weight in every ocean basin, which sets our share of each basin's [concept_seabed_licence]s.",
+  "ru": "Наш вес притязания в каждом океаническом бассейне, от которого зависит наша доля [Concept('concept_seabed_licence','лицензий на морское дно')] этого бассейна."
+ },
+ "country_seabed_naval_weight_mult": {
+  "en": "Naval Power Projection in Seabed Claims",
+  "ru": "Проекция морской мощи в претензиях на морское дно"
+ },
+ "country_seabed_naval_weight_mult_desc": {
+  "en": "How much more our naval power projection counts in our seabed claim weight.",
+  "ru": "Насколько сильнее проекция нашей морской мощи учитывается в весе наших претензий на морское дно."
+ },
+ "country_seabed_unilateral_relations_add": {
+  "en": "Relations a Year with Each Other Unilateral Claimant",
+  "ru": "Отношения в год с каждым другим односторонним претендентом"
+ },
+ "country_seabed_unilateral_relations_add_desc": {
+  "en": "Relations each year with every other country licensing the seabed unilaterally in a basin where we both have coast.",
+  "ru": "Отношения каждый год с каждой страной, которая в одностороннем порядке выдаёт лицензии на морское дно в бассейне, где у нас обоих есть побережье."
+ },
+ "country_ship_type_destroyer_construction_efficiency_add": {
+  "en": "$ship_type_destroyer$ Construction Efficiency",
+  "ru": "$ship_type_destroyer$: эффективность строительства"
+ },
+ "country_ship_type_destroyer_construction_efficiency_add_desc": {
+  "en": "The efficiency of [Concept('concept_ship_type', '$ship_type_destroyer|q$')] @ship_construction! [concept_ship_construction]",
+  "ru": "Эффективность @ship_construction! [Concept('concept_ship_construction','кораблестроения')] для [Concept('concept_ship_type', '$ship_type_destroyer|q$')|l]"
+ },
+ "country_sol_expectation_adaptation_rate_mult": {
+  "en": "[concept_sol_expectations] Adaptation Rate",
+  "ru": "[concept_sol_expectations]: скорость адаптации"
+ },
+ "country_sol_expectation_adaptation_rate_mult_desc": {
+  "en": "Scales how quickly the population's [concept_sol_expectations] adapt to their actual [concept_sol]. Higher values mean expectations adjust faster.",
+  "ru": "Определяет, как быстро [concept_sol_expectations|l] населения подстраиваются под фактический [concept_sol|l]. Чем выше значение, тем быстрее меняются ожидания."
  },
  "country_sol_expectations_lower_offset_add": {
   "en": "[concept_sol_expectations] [concept_lower_strata] Offset",
   "ru": "Смещение: [concept_sol_expectations|l], [concept_lower_strata|l]"
  },
+ "country_sol_expectations_lower_offset_add_desc": {
+  "en": "Adjusts how much the lower class expects relative to the country average. Positive values raise the expectations of the poor; negative values mean they are more accustomed to hardship.",
+  "ru": "Определяет, насколько больше или меньше среднего по стране ожидает низший класс. Положительные значения повышают ожидания бедных, отрицательные означают, что они больше привыкли к лишениям."
+ },
+ "country_sol_expectations_lower_offset_mult": {
+  "en": "[concept_sol_expectations] [concept_lower_strata] Offset Scale",
+  "ru": "[concept_sol_expectations]: [concept_lower_strata], масштаб смещения"
+ },
+ "country_sol_expectations_lower_offset_mult_desc": {
+  "en": "Percentage scaling of the lower class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "ru": "Процентное масштабирование смещения ожиданий низшего класса. Положительные значения усиливают его ожидания, отрицательные ослабляют."
+ },
+ "country_sol_expectations_middle_offset_add": {
+  "en": "[concept_sol_expectations] [concept_middle_strata] Offset",
+  "ru": "[concept_sol_expectations]: [concept_middle_strata], смещение"
+ },
+ "country_sol_expectations_middle_offset_add_desc": {
+  "en": "Adjusts how much the middle class expects relative to the country average. Positive values raise middle-class expectations; negative values make them more accepting of modest living standards.",
+  "ru": "Определяет, насколько больше или меньше среднего по стране ожидает средний класс. Положительные значения повышают его ожидания, отрицательные делают его более терпимым к скромному уровню жизни."
+ },
+ "country_sol_expectations_middle_offset_mult_desc": {
+  "en": "Percentage scaling of the middle class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "ru": "Процентное масштабирование смещения ожиданий среднего класса. Положительные значения усиливают его ожидания, отрицательные ослабляют."
+ },
+ "country_sol_expectations_offset_mult": {
+  "en": "[concept_sol_expectations] Offset Scale",
+  "ru": "[concept_sol_expectations]: масштаб смещения"
+ },
+ "country_sol_expectations_offset_mult_desc": {
+  "en": "Percentage scaling of the overall expectation offset before per-strata adjustments. Affects all classes equally.",
+  "ru": "Процентное масштабирование общего смещения ожиданий до корректировок по слоям. Действует на все классы одинаково."
+ },
+ "country_sol_expectations_shift_add": {
+  "en": "[concept_sol_expectations] Monthly Shift",
+  "ru": "[concept_sol_expectations]: ежемесячный сдвиг"
+ },
+ "country_sol_expectations_shift_add_desc": {
+  "en": "A persistent monthly bias applied to the population's [concept_sol_expectations]. Positive values raise expectations over time (people expect more), negative values lower them.",
+  "ru": "Постоянное ежемесячное смещение [concept_sol_expectations|l] населения. Положительные значения со временем повышают ожидания (люди ждут больше), отрицательные снижают их."
+ },
+ "country_sol_expectations_shift_max_add": {
+  "en": "[concept_sol_expectations] Shift Ceiling",
+  "ru": "[concept_sol_expectations]: потолок сдвига"
+ },
+ "country_sol_expectations_shift_max_add_desc": {
+  "en": "Sets a maximum ceiling for the [concept_sol_expectations] shift. Even if actual SoL rises far above expectations, the shift cannot exceed this value. Lower values prevent excessive complacency from rapid growth.",
+  "ru": "Задаёт максимальный предел сдвига [concept_sol_expectations|l]. Даже если фактический уровень жизни намного превысит ожидания, сдвиг не сможет превзойти это значение. Меньшие значения не дают чрезмерному самодовольству расти вместе с быстрым ростом."
+ },
+ "country_sol_expectations_shift_min_add": {
+  "en": "[concept_sol_expectations] Shift Floor",
+  "ru": "[concept_sol_expectations]: нижний предел сдвига"
+ },
+ "country_sol_expectations_shift_min_add_desc": {
+  "en": "Sets a minimum floor for the [concept_sol_expectations] shift. Even if actual SoL drops far below expectations, the shift cannot fall below this value. Higher values provide a stronger safety net against expectation collapse.",
+  "ru": "Задаёт минимальный предел сдвига [concept_sol_expectations|l]. Даже если фактический уровень жизни упадёт намного ниже ожиданий, сдвиг не опустится ниже этого значения. Большие значения дают более надёжную защиту от краха ожиданий."
+ },
+ "country_sol_expectations_target_add": {
+  "en": "[concept_sol_expectations] Target Offset",
+  "ru": "[concept_sol_expectations]: целевое смещение"
+ },
+ "country_sol_expectations_target_add_desc": {
+  "en": "Offsets the target that the population's [concept_sol_expectations] converge toward. Positive values mean people permanently expect more than their actual [concept_sol]; negative values mean they expect less.",
+  "ru": "Смещает цель, к которой сходятся [concept_sol_expectations|l] населения. Положительные значения означают, что люди постоянно ждут больше, чем даёт их фактический [concept_sol|l], отрицательные — что ждут меньше."
+ },
+ "country_sol_expectations_upper_offset_add_desc": {
+  "en": "Adjusts how much the upper class expects relative to the country average. Positive values mean the wealthy expect even more luxury; negative values mean they are more in touch with common living standards.",
+  "ru": "Определяет, насколько больше или меньше среднего по стране ожидает высший класс. Положительные значения означают, что богатые ждут ещё больше роскоши, отрицательные — что они ближе к обычному уровню жизни."
+ },
+ "country_sol_expectations_upper_offset_mult_desc": {
+  "en": "Percentage scaling of the upper class expectation offset. Positive values amplify their expectations; negative values dampen them.",
+  "ru": "Процентное масштабирование смещения ожиданий высшего класса. Положительные значения усиливают его ожидания, отрицательные ослабляют."
+ },
+ "country_solar_receiver_max_level_add": {
+  "en": "Available Solar Receiver Slots",
+  "ru": "Доступные ячейки приёмников солнечной энергии"
+ },
+ "country_solar_receiver_max_level_add_desc": {
+  "en": "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot.",
+  "ru": "Число дополнительных приёмников солнечной энергии, которые можно построить. Каждый уровень орбитального солнечного коллектора добавляет 10 ячеек, а каждый уровень приёмника солнечной энергии занимает 1 ячейку."
+ },
+ "country_space_race_max_funding_add": {
+  "en": "[concept_space_race] Funding Cap",
+  "ru": "[concept_space_race]: предел финансирования"
+ },
+ "country_space_race_max_funding_add_desc": {
+  "en": "Raises the cap on each [concept_space_race] milestone's funding. Funding can go up to six levels past the cap, but each level past it adds less pace than the one before.",
+  "ru": "Повышает предел финансирования каждого этапа [Concept('concept_space_race','космической гонки')]. Финансирование может превышать предел на шесть уровней, но каждый следующий уровень сверх предела добавляет меньше темпа, чем предыдущий."
+ },
+ "country_space_race_progress_add": {
+  "en": "[concept_space_race] Monthly Progress",
+  "ru": "[concept_space_race]: ежемесячный прогресс"
+ },
+ "country_space_race_progress_add_desc": {
+  "en": "Increases the rate of progress toward [concept_space_race] milestones. Contributed by aerospace buildings, space infrastructure, technologies, and partnerships.",
+  "ru": "Ускоряет продвижение к этапам [Concept('concept_space_race','космической гонки')]. Дают его аэрокосмические здания, космическая инфраструктура, технологии и партнёрства."
+ },
  "country_space_race_progress_mult": {
   "en": "[concept_space_race] Progress",
   "ru": "Прогресс [Concept('concept_space_race','космической гонки')]"
+ },
+ "country_space_race_progress_mult_desc": {
+  "en": "Multiplicative bonus to [concept_space_race] milestone progress. The Ambitious approach on active milestones provides this bonus at the cost of increased failure risk.",
+  "ru": "Мультипликативный бонус к прогрессу этапов [Concept('concept_space_race','космической гонки')]. Амбициозный подход на активных этапах даёт этот бонус ценой повышенного риска провала."
  },
  "country_space_race_risk_mult": {
   "en": "[concept_space_race] Failure Risk",
   "ru": "Риск провала [Concept('concept_space_race','космической гонки')]"
  },
+ "country_space_race_risk_mult_desc": {
+  "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
+  "ru": "Мультипликативная корректировка риска провала в [Concept('concept_space_race','космической гонке')]. Безопасный подход на активных этапах снижает риск провала ценой более медленного прогресса."
+ },
+ "country_sr_colony_growth_add": {
+  "en": "Colony Growth a Month",
+  "ru": "Рост колоний за месяц"
+ },
+ "country_sr_colony_growth_add_desc": {
+  "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
+  "ru": "Насколько быстрее каждый месяц растёт население каждой нашей колонии сверх #v 0,2%#!, на которые растёт любая колония, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка»."
+ },
  "country_sr_colony_slots_add": {
   "en": "Colony Module Slots",
   "ru": "Ячейки модулей колоний"
+ },
+ "country_sr_colony_slots_add_desc": {
+  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
+  "ru": "Ячейки модулей в каждой нашей колонии сверх тех, что даёт её размер, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Жилые модули, космодромы, оборонительные сооружения и объекты делят их между собой, а колония может взять до #v 4#! [Concept('concept_sr_module','колониальных модулей')] сверх них по растущей цене."
+ },
+ "country_sr_module_fabrication_add": {
+  "en": "Colony Module Fabrication per Month",
+  "ru": "Изготовление колониальных модулей в месяц"
+ },
+ "country_sr_module_fabrication_add_desc": {
+  "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
+  "ru": "Очки в месяц на колониальные модули из нашей очереди при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Каждый модуль стоит 100."
+ },
+ "country_st_res_aeroplanes_capacity_add": {
+  "en": "$aeroplanes$ Reserve Capacity",
+  "ru": "$aeroplanes$: вместимость резерва"
+ },
+ "country_st_res_aeroplanes_capacity_add_desc": {
+  "en": "Maximum aeroplanes that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество самолётов, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_aeroplanes_decay_add": {
+  "en": "$aeroplanes$ Reserve Decay",
+  "ru": "$aeroplanes$: убыль резерва"
+ },
+ "country_st_res_aeroplanes_decay_add_desc": {
+  "en": "Fraction of the aeroplane stockpile lost to airframe fatigue and obsolescence per year.",
+  "ru": "Доля запаса самолётов, которую ежегодно съедают усталость планеров и устаревание."
+ },
+ "country_st_res_ammunition_capacity_add_desc": {
+  "en": "Maximum ammunition that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество боеприпасов, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_ammunition_decay_add_desc": {
+  "en": "Fraction of the ammunition stockpile lost to degradation per year.",
+  "ru": "Доля запаса боеприпасов, которую ежегодно съедает порча."
+ },
+ "country_st_res_artillery_capacity_add_desc": {
+  "en": "Maximum artillery pieces that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество артиллерийских орудий, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_artillery_decay_add_desc": {
+  "en": "Fraction of the artillery stockpile lost to wear and obsolescence per year.",
+  "ru": "Доля запаса артиллерии, которую ежегодно съедают износ и устаревание."
+ },
+ "country_st_res_copper_capacity_add_desc": {
+  "en": "Maximum conductive metals that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество проводниковых металлов, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_copper_decay_add_desc": {
+  "en": "Fraction of the conductive metals stockpile lost per year. Ingots and cathodes keep indefinitely, so the base rate is zero.",
+  "ru": "Доля запаса проводниковых металлов, теряемая за год. Слитки и катоды хранятся бесконечно, поэтому базовая ставка равна нулю."
+ },
+ "country_st_res_fertilizer_capacity_add_desc": {
+  "en": "Maximum chemicals that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество химикатов, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_fertilizer_decay_add_desc": {
+  "en": "Fraction of the chemicals stockpile lost to caking, moisture absorption and container corrosion per year.",
+  "ru": "Доля запаса химикатов, которую ежегодно съедают слёживание, впитывание влаги и коррозия тары."
+ },
+ "country_st_res_grain_capacity_add_desc": {
+  "en": "Maximum grain that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество зерна, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_grain_decay_add_desc": {
+  "en": "Fraction of the grain stockpile lost to spoilage per year.",
+  "ru": "Доля запаса зерна, которую ежегодно съедает порча."
+ },
+ "country_st_res_oil_capacity_add_desc": {
+  "en": "Maximum oil that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество нефти, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_oil_decay_add_desc": {
+  "en": "Fraction of the oil stockpile lost to evaporation and sludge per year.",
+  "ru": "Доля запаса нефти, которую ежегодно съедают испарение и осадок."
+ },
+ "country_st_res_small_arms_capacity_add_desc": {
+  "en": "Maximum small arms that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество стрелкового оружия, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_small_arms_decay_add_desc": {
+  "en": "Fraction of the small arms stockpile lost to corrosion and obsolescence per year.",
+  "ru": "Доля запаса стрелкового оружия, которую ежегодно съедают коррозия и устаревание."
+ },
+ "country_st_res_tanks_capacity_add_desc": {
+  "en": "Maximum tanks that can be held in the national strategic reserve.",
+  "ru": "Максимальное количество танков, которое можно хранить в национальном стратегическом резерве."
+ },
+ "country_st_res_tanks_decay_add_desc": {
+  "en": "Fraction of the tank stockpile lost to mechanical degradation and obsolescence per year.",
+  "ru": "Доля запаса танков, которую ежегодно съедают механический износ и устаревание."
+ },
+ "country_st_res_weekly_rate_cap_add": {
+  "en": "Strategic Reserve Weekly Rate Cap",
+  "ru": "Недельный предел обмена стратегического резерва"
+ },
+ "country_st_res_weekly_rate_cap_add_desc": {
+  "en": "Maximum amount of resources that can be added to or removed from the strategic reserve each week, representing logistical constraints on how quickly reserves can be mobilized or replenished.",
+  "ru": "Максимальное количество ресурсов, которое можно добавить в стратегический резерв или изъять из него за неделю: отражает логистические ограничения на скорость мобилизации или пополнения резервов."
+ },
+ "country_subjugation_cultural_strength_add": {
+  "en": "Subjugation Strength (Cultural)",
+  "ru": "Сила подчинения (культурная)"
+ },
+ "country_subjugation_cultural_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Cultural bloc and you share at least one primary culture with the target.",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете культурный блок и у вас с целью есть хотя бы одна общая основная культура."
+ },
+ "country_subjugation_ideological_strength_add": {
+  "en": "Subjugation Strength (Ideological)",
+  "ru": "Сила подчинения (идеологическая)"
+ },
+ "country_subjugation_ideological_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading an Ideological Union and the target shares your governance [concept_power_bloc_principle] (the same Power Structure law).",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете Идеологический союз, а цель разделяет ваш управленческий [Concept('concept_power_bloc_principle','принцип силового блока')] (тот же закон «Структура власти»)."
+ },
+ "country_subjugation_military_strength_add": {
+  "en": "Subjugation Strength (Military)",
+  "ru": "Сила подчинения (военная)"
+ },
+ "country_subjugation_military_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Military Treaty Organization and your standing army is at least five times the target's.",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете Организацию военного договора, а ваша постоянная армия как минимум в пять раз больше армии цели."
+ },
+ "country_subjugation_religious_strength_add": {
+  "en": "Subjugation Strength (Religious)",
+  "ru": "Сила подчинения (религиозная)"
+ },
+ "country_subjugation_religious_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Religious bloc and the target shares your [concept_state_religion].",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете религиозный блок, а цель исповедует вашу [Concept('concept_state_religion','государственную религию')]."
+ },
+ "country_subjugation_sovereign_strength_add": {
+  "en": "Subjugation Strength (Sovereign Empire)",
+  "ru": "Сила подчинения (суверенная империя)"
+ },
+ "country_subjugation_sovereign_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Sovereign Empire bloc. Applies against any target regardless of religion, culture, government, or economic profile.",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете блок «Суверенная империя». Действует против любой цели независимо от религии, культуры, формы правления или экономического профиля."
+ },
+ "country_subjugation_strength_add": {
+  "en": "Subjugation Strength",
+  "ru": "Сила подчинения"
+ },
+ "country_subjugation_strength_add_desc": {
+  "en": "A flat bonus to your [concept_subjugation_strength] against any target.",
+  "ru": "Фиксированный бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')] против любой цели."
+ },
+ "country_subjugation_trade_strength_add": {
+  "en": "Subjugation Strength (Trade)",
+  "ru": "Сила подчинения (торговая)"
+ },
+ "country_subjugation_trade_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a Trade League and the target's [concept_economic_dependence] on you is at least #b Reliant#! (level 3 of 5).",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')], когда вы возглавляете Торговую лигу, а [Concept('concept_economic_dependence','экономическая зависимость')] цели от вас не ниже уровня #b «Зависимая»#! (3-й из 5)."
+ },
+ "country_te_mon_adopter_credit_standing_add": {
+  "en": "Adopters’ [concept_banking_credit_standing]",
+  "ru": "[concept_banking_credit_standing] принявших валюту стран"
+ },
+ "country_te_mon_adopter_credit_standing_add_desc": {
+  "en": "Points off the credit standing premium of every adopter: it borrows in money the world already holds.",
+  "ru": "Пункты, вычитаемые из надбавки за кредитоспособность каждой принявшей валюту страны: она занимает в деньгах, которые мир уже держит."
+ },
+ "country_te_mon_adopter_overvaluation_premium_mult": {
+  "en": "Adopters’ Overvaluation [concept_banking_risk_premium]",
+  "ru": "[concept_banking_risk_premium]: переоценка у принявших валюту"
+ },
+ "country_te_mon_adopter_overvaluation_premium_mult_desc": {
+  "en": "An adopter has no peg to break, so an overvalued currency raises its risk premium instead. With the leader behind its debts, that part of the premium is smaller.",
+  "ru": "У принявшей валюту страны нет привязки, которую можно сорвать, поэтому переоценённая валюта повышает её премию за риск. Если за долгами стоит лидер, эта часть премии меньше."
+ },
+ "country_te_mon_asset_purchase_pressure_add": {
+  "en": "Price Pressure from Asset Purchases",
+  "ru": "Ценовое давление от покупки активов"
+ },
+ "country_te_mon_asset_purchase_pressure_add_desc": {
+  "en": "Upward pressure on prices from your central bank buying assets with money it creates. Counted apart from $country_inflation_pressure_add$, so [concept_banking_inflation_anchoring] does not absorb it.",
+  "ru": "Давление на рост цен от того, что ваш центральный банк покупает активы на деньги, которые сам создаёт. Учитывается отдельно от показателя «$country_inflation_pressure_add$», поэтому [concept_banking_inflation_anchoring|l] его не поглощает."
+ },
+ "country_te_mon_expected_inflation_add": {
+  "en": "Expected Inflation",
+  "ru": "Ожидаемая инфляция"
+ },
+ "country_te_mon_expected_inflation_add_desc": {
+  "en": "What your lenders and workers assume prices will do, raised at once. It does not move on metal or on another country's money.",
+  "ru": "То, как, по мнению ваших кредиторов и работников, поведут себя цены, — растёт сразу. Не меняется ни от металла, ни от денег другой страны."
+ },
+ "country_te_mon_fx_adjust_speed_mult": {
+  "en": "Speed of Exchange-Rate Moves",
+  "ru": "Скорость изменений обменного курса"
+ },
+ "country_te_mon_fx_adjust_speed_mult_desc": {
+  "en": "How fast the [concept_banking_exchange_rate] closes the distance to its target each month, up or down.",
+  "ru": "Как быстро [concept_banking_exchange_rate|l] сокращает разрыв с целевым значением каждый месяц, вверх или вниз."
+ },
+ "country_te_mon_fx_debt_protection_add": {
+  "en": "Protection from Foreign-Currency Debt",
+  "ru": "Защита от долга в иностранной валюте"
+ },
+ "country_te_mon_fx_debt_protection_add_desc": {
+  "en": "How much of the [concept_banking_risk_premium] a currency below par adds is shielded, built up a month at a time.",
+  "ru": "Какая часть [Concept('concept_banking_risk_premium','премии за риск')], которую добавляет валюта ниже паритета, защищена; нарастает по месяцам."
+ },
+ "country_te_mon_fx_target_support_add": {
+  "en": "Exchange-Rate Target, at Most",
+  "ru": "Целевой обменный курс, не более"
+ },
+ "country_te_mon_fx_target_support_add_desc": {
+  "en": "Points that exporters' earnings sold to the central bank add to the target the [concept_banking_exchange_rate] heads for, at the full export share.",
+  "ru": "Пункты, которые выручка экспортёров, проданная центральному банку, добавляет к цели, к которой стремится [concept_banking_exchange_rate|l], при полной доле экспорта."
+ },
+ "country_te_mon_inflow_price_pressure_mult": {
+  "en": "Price Pressure from Gold Coming In",
+  "ru": "Ценовое давление от притока золота"
+ },
+ "country_te_mon_inflow_price_pressure_mult_desc": {
+  "en": "How much of the upward pressure on prices that gold arriving from abroad adds reaches your prices.",
+  "ru": "Какая часть давления на рост цен от золота, прибывающего из-за рубежа, доходит до ваших цен."
+ },
+ "country_te_mon_inflow_pull_mult": {
+  "en": "Pull of Money Coming In",
+  "ru": "Притяжение приходящих денег"
+ },
+ "country_te_mon_inflow_pull_mult_desc": {
+  "en": "How far a rate above the world's draws money in: gold into the vault on the gold standard, a rise in your [concept_banking_exchange_rate] on a floating currency. Money leaving is not slowed.",
+  "ru": "Насколько сильно ставка выше мировой притягивает деньги: золото в хранилище при золотом стандарте, рост вашего [concept_banking_exchange_rate|l] при плавающей валюте. Уходящие деньги это не замедляет."
+ },
+ "country_te_mon_issuer_interventions_add": {
+  "en": "Issuer [concept_banking_intervention_budget]",
+  "ru": "[concept_banking_intervention_budget] эмитента"
+ },
+ "country_te_mon_issuer_interventions_add_desc": {
+  "en": "Points added to the leader's intervention budget once a member has adopted its currency, under any banking law but $law_unregulated_banking$. If they go, the tools the budget no longer covers are lifted one a month until the rest fit.",
+  "ru": "Пункты, добавляемые к бюджету интервенций лидера, когда участник принял его валюту, при любом банковском законе, кроме закона «$law_unregulated_banking$». Если участники уходят, инструменты, которые бюджет больше не покрывает, отменяются по одному в месяц, пока остальные не уместятся."
+ },
+ "country_te_mon_issuer_premium_add_desc": {
+  "en": "Points off the leader's risk premium once a member has adopted its currency: the figure times the currency's [concept_banking_currency_reach]. It is risk premium, not [concept_banking_credit_standing], so it counts for a leader already at its credit floor.",
+  "ru": "Пункты, вычитаемые из премии за риск лидера, когда участник принял его валюту: значение, умноженное на [Concept('concept_banking_currency_reach','охват валюты')]. Это именно премия за риск, а не [Concept('concept_banking_credit_standing','кредитоспособность')], поэтому она действует и на лидера, уже находящегося на нижней границе кредитоспособности."
+ },
+ "country_te_mon_issuer_seigniorage_gdp_add": {
+  "en": "[concept_banking_common_currency] Seigniorage",
+  "ru": "Сеньораж [Concept('concept_banking_common_currency','общей валюты')]"
+ },
+ "country_te_mon_issuer_seigniorage_gdp_add_desc": {
+  "en": "What the leader mints a year, as a share of its own GDP, once a member has adopted its currency: the figure times the currency's [concept_banking_currency_reach], before its bonuses to [concept_budget_minting], which multiply it as they do everything it mints. With $law_digital_currency$ and all five finance technologies the leader mints #v 75%#! more.",
+  "ru": "Сколько лидер чеканит за год, в долях собственного ВВП, когда участник принял его валюту: значение, умноженное на [Concept('concept_banking_currency_reach','охват валюты')], до учёта бонусов к [Concept('concept_budget_minting','чеканке')], которые умножают его так же, как и всё, что он чеканит. При законе «$law_digital_currency$» и всех пяти финансовых технологиях лидер чеканит на #v 75%#! больше."
+ },
+ "country_te_mon_minting_gdp_add": {
+  "en": "Money Created a Year, of GDP",
+  "ru": "Создаваемые деньги за год, в долях ВВП"
+ },
+ "country_te_mon_minting_gdp_add_desc": {
+  "en": "Spending your bank pays for with money it creates rather than money you borrow. For a small economy that is a fifth again on top of an ordinary mint, and a good deal more for a large one, since the ordinary mint stops growing past a certain size.",
+  "ru": "Расходы, которые ваш банк оплачивает деньгами, созданными им, а не заёмными. Для малой экономики это ещё пятая часть сверх обычной чеканки, а для крупной намного больше, поскольку обычная чеканка перестаёт расти после определённого размера."
+ },
+ "country_te_mon_printing_pressure_add": {
+  "en": "Price Pressure from Printed Money",
+  "ru": "Ценовое давление от печати денег"
+ },
+ "country_te_mon_printing_pressure_add_desc": {
+  "en": "Upward pressure on prices from money your bank creates to pay for your spending. Counted apart from $country_inflation_pressure_add$, so [concept_banking_inflation_anchoring] does not absorb it, and more again once lenders and workers expect it.",
+  "ru": "Давление на рост цен от денег, которые ваш банк создаёт, чтобы оплатить ваши расходы. Учитывается отдельно от показателя «$country_inflation_pressure_add$», поэтому [concept_banking_inflation_anchoring|l] его не поглощает, и оно ещё сильнее, когда кредиторы и работники этого ожидают."
+ },
+ "country_te_mon_rate_gap_pull_mult": {
+  "en": "Pull of the Rate Gap",
+  "ru": "Притяжение разрыва ставок"
+ },
+ "country_te_mon_rate_gap_pull_mult_desc": {
+  "en": "How far the gap between your [concept_banking_policy_rate] and the [concept_banking_world_rate] moves money across your border: gold in and out of the vault on the gold standard, your [concept_banking_exchange_rate] on a floating currency. Inflation and debt still weigh on the currency in full.",
+  "ru": "Насколько разрыв между вашей [Concept('concept_banking_policy_rate','ключевой ставкой')] и [Concept('concept_banking_world_rate','мировой ставкой')] перемещает деньги через вашу границу: золото в хранилище и из него при золотом стандарте, ваш [concept_banking_exchange_rate|l] при плавающей валюте. Инфляция и долг по-прежнему полностью давят на валюту."
+ },
+ "country_te_mon_reserve_purchase_gdp_add": {
+  "en": "Gold Bought for the Bank, of Annual GDP, at Most",
+  "ru": "Золото, купленное для банка, в долях годового ВВП, не более"
+ },
+ "country_te_mon_reserve_purchase_gdp_add_desc": {
+  "en": "Treasury money paid to exporters for the foreign earnings they surrender, which adds to the [concept_banking_bank_gold].",
+  "ru": "Деньги казны, выплаченные экспортёрам за сданную иностранную выручку, которые пополняют [Concept('concept_banking_bank_gold','золото банка')]."
+ },
+ "country_te_mon_swap_confidence_add": {
+  "en": "Swap Line [concept_banking_peg_confidence] a Month",
+  "ru": "Линия своп: [concept_banking_peg_confidence] в месяц"
+ },
+ "country_te_mon_swap_confidence_add_desc": {
+  "en": "Added each month to a member's peg confidence, on the same terms as the swap line's cut in premium. It matters only to a member whose money is pegged.",
+  "ru": "Добавляется каждый месяц к доверию к привязке участника на тех же условиях, что и снижение премии по линии своп. Важно только для участника, чья валюта привязана."
+ },
+ "country_te_mon_swap_premium_add": {
+  "en": "Swap Line [concept_banking_risk_premium]",
+  "ru": "Линия своп: [concept_banking_risk_premium]"
+ },
+ "country_te_mon_swap_premium_add_desc": {
+  "en": "Points off a member's risk premium: half a swap line from the leader's central bank, which pays for it in premium of its own. It needs a leader with a national bank that does not run a command economy, and a holdout the leader is pressing to converge loses it.",
+  "ru": "Пункты, вычитаемые из премии за риск участника: половина линии своп от центрального банка лидера, который платит за неё собственной премией. Нужен лидер с национальным банком, не управляющий командной экономикой, а упорствующий участник, которого лидер подталкивает к сближению, её теряет."
+ },
+ "country_te_pb_principle_slots_add": {
+  "en": "Extra [concept_power_bloc_principle] Slots",
+  "ru": "Дополнительные ячейки [Concept('concept_power_bloc_principle','принципов')]"
+ },
+ "country_te_pb_principle_slots_add_desc": {
+  "en": "Adds this many [concept_power_bloc_principle] slots to a [concept_power_bloc] this country leads, up to #v 8#! in all. The $rule_te_principle_slots_rule$ game rule's $setting_te_principle_slots_four$ setting turns these slots off.",
+  "ru": "Добавляет [Concept('concept_power_bloc','силовому блоку')], который возглавляет эта страна, столько ячеек [Concept('concept_power_bloc_principle','принципов')], всего до #v 8#!. Настройка «$setting_te_principle_slots_four$» правила «$rule_te_principle_slots_rule$» отключает эти ячейки."
  },
  "country_un_authority_target_add": {
   "en": "UN Authority Target",
   "ru": "Целевой авторитет ООН"
  },
+ "country_un_authority_target_add_desc": {
+  "en": "Added to the target that [concept_un_authority] moves toward, multiplied by this country's [Concept('concept_un_weight','weight in world affairs')]: its share of world [concept_prestige] against a typical [concept_great_power]'s (×1), up to ×5. It counts in full, for or against, while this country is a UN member that is not undermining the organization. Outside the UN, or while undermining it, only a negative total counts: good policies then only offset bad ones. Summed over every country and held to −25 to +25 from all sources together, as the Policy line of the target.",
+  "ru": "Добавляется к цели, к которой движется [concept_un_authority|l], с умножением на [Concept('concept_un_weight','вес в мировых делах')] этой страны: её долю мирового [Concept('concept_prestige','престижа')] по сравнению с типичной [Concept('concept_great_power','великой державой')] (×1), до ×5. Учитывается полностью, в плюс или в минус, пока страна состоит в ООН и не подрывает организацию. Вне ООН или при подрыве организации учитывается только отрицательная сумма: хорошая политика тогда лишь гасит плохую. Суммируется по всем странам и ограничена значениями от −25 до +25 по всем источникам вместе, как строка «Политика» цели."
+ },
+ "country_un_lobbying_fund_recipients_mult": {
+  "en": "UN Lobbying Effectiveness with Aid Recipients",
+  "ru": "Эффективность лоббирования ООН среди получателей помощи"
+ },
+ "country_un_lobbying_fund_recipients_mult_desc": {
+  "en": "As UN Lobbying Effectiveness, but only with the members the [concept_un_development_fund] pays a grant.",
+  "ru": "Как «Эффективность лоббирования ООН», но только среди членов, которым [concept_un_development_fund] выплачивает грант."
+ },
+ "country_un_lobbying_mult": {
+  "en": "UN Lobbying Effectiveness",
+  "ru": "Эффективность лоббирования ООН"
+ },
+ "country_un_lobbying_mult_desc": {
+  "en": "How well this country lobbies the [concept_un_general_assembly]. Its campaigns move a member's vote this much faster and further, and a member weighing a vote commitment it asks for counts the same share in its favor: +20 for every 25%.",
+  "ru": "Насколько успешно эта страна лоббирует [Concept('concept_un_general_assembly','Генеральную Ассамблею')]. Её кампании двигают голос члена настолько быстрее и дальше, а член, взвешивающий просимое ею обязательство голосовать, засчитывает ту же долю в её пользу: +20 за каждые 25%."
+ },
  "country_wage_pressure_add": {
   "en": "Wage Pressure",
   "ru": "Давление на зарплаты"
+ },
+ "country_wage_pressure_add_desc": {
+  "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labor and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarized#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
+  "ru": "Постоянное давление на рост цен со стороны зарплат: насколько выше ожиданий устанавливается инфляция, пока действуют эти трудовые и социальные законы. Работники, способные торговаться, и работники с гарантированным минимальным доходом обходятся нанимателям дороже, и наниматели перекладывают это на цены. Оно учитывается отдельно от всех прочих источников инфляции, потому что те же законы возвращают его, когда цены под контролем: пока инфляция в #b стабильном диапазоне#!, каждые #v 0,1%#! давления на зарплаты также слегка снижают то, что #b низшие слои ожидают#! от жизни (повышение зарплат было реальным, поэтому разочарование меньше), и добавляют к вашему #b банковскому импульсу#!, ведь деньги, сохраняющие стоимость, тратятся. Вне этого диапазона дивиденд прекращается, и он никогда не выплачивается #b командной экономике#! или #b долларизованной#! стране: ни одна из них не заработала стабильность, за которую он выплачивается. Когда общая инфляция достигает #v 8%#!, эти законы учитываются #b второй раз#!, поскольку работники, ожидающие дальнейшего роста цен, начинают заранее торговаться за повышение. Законы, подавляющие зарплаты, несут вместо этого отрицательное значение, и дивиденд по ним не выплачивается."
+ },
+ "country_wealth_concentration_economy_add": {
+  "en": "[concept_inheritance_concentration]: Economic Laws",
+  "ru": "[concept_inheritance_concentration]: экономические законы"
+ },
+ "country_wealth_concentration_economy_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: how freely capital compounds and combines. The economic laws together move it at most 15 either way.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области: насколько свободно капитал накапливается и объединяется. Экономические законы вместе сдвигают её не более чем на 15 в любую сторону."
+ },
+ "country_wealth_concentration_inheritance_add": {
+  "en": "[concept_inheritance_concentration]: Inheritance Law",
+  "ru": "[concept_inheritance_concentration]: закон о наследовании"
+ },
+ "country_wealth_concentration_inheritance_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: who inherits an estate decides whether a fortune passes on whole or is broken up. The Inheritance law and its amendments together move it at most 50 either way.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области: от того, кто наследует имущество, зависит, перейдёт ли состояние целым или будет раздроблено. Закон о наследовании и его поправки вместе сдвигают её не более чем на 50 в любую сторону."
+ },
+ "country_wealth_concentration_public_goods_add": {
+  "en": "[concept_inheritance_concentration]: Public Goods",
+  "ru": "[concept_inheritance_concentration]: общественные блага"
+ },
+ "country_wealth_concentration_public_goods_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: whether health care, schooling and ideas are provided to all or sold to those who can pay. Private provision and strict intellectual property raise it; public provision lowers it.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области: предоставляются ли здравоохранение, школы и идеи всем или продаются тем, кто может заплатить. Частное обеспечение и строгая интеллектуальная собственность повышают её, государственное обеспечение понижает."
+ },
+ "country_wealth_concentration_slavery_add": {
+  "en": "[concept_inheritance_concentration]: Slavery",
+  "ru": "[concept_inheritance_concentration]: рабство"
+ },
+ "country_wealth_concentration_slavery_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: property in people is the largest single asset a planter class holds. Only the law in force counts, not how many people are enslaved.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области: собственность на людей — крупнейшее отдельное имущество класса плантаторов. Учитывается только действующий закон, а не число порабощённых."
+ },
+ "country_wealth_concentration_tax_add": {
+  "en": "[concept_inheritance_concentration]: Taxes on Wealth",
+  "ru": "[concept_inheritance_concentration]: налоги на богатство"
+ },
+ "country_wealth_concentration_tax_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: taxing great incomes breaks fortunes up. With the legislated tax code's dividend tax, at most −10.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области: налогообложение больших доходов дробит состояния. С налогом на дивиденды из законодательно установленного налогового кодекса — не более −10."
+ },
+ "country_weekly_investment_pool_add": {
+  "en": "Weekly [concept_investment_pool] Change",
+  "ru": "Недельное изменение: [concept_investment_pool]"
+ },
+ "country_weekly_investment_pool_add_desc": {
+  "en": "A direct weekly change to the [concept_investment_pool].",
+  "ru": "Прямое недельное изменение показателя «[concept_investment_pool|l]»."
+ },
+ "country_weekly_investment_pool_mult": {
+  "en": "Weekly [concept_investment_pool] Income",
+  "ru": "Недельный доход: [concept_investment_pool]"
+ },
+ "country_weekly_investment_pool_mult_desc": {
+  "en": "A share of the [concept_investment_pool]'s weekly income, added to the pool each week, or taken from it when negative.",
+  "ru": "Доля недельного дохода показателя «[concept_investment_pool|l]», добавляемая в пул каждую неделю или изымаемая из него, если она отрицательна."
+ },
+ "goods_input_advanced_materials_add": {
+  "en": "@advanced_materials! $advanced_materials$ Input",
+  "ru": "@advanced_materials! $advanced_materials$: расход"
+ },
+ "goods_input_advanced_materials_add_desc": {
+  "en": "The amount of @advanced_materials! $advanced_materials$ consumed by buildings",
+  "ru": "Количество @advanced_materials! $advanced_materials$, потребляемое зданиями"
+ },
+ "goods_input_aeroplanes_mult": {
+  "en": "@aeroplanes! $aeroplanes$ Input",
+  "ru": "@aeroplanes! $aeroplanes$: расход"
+ },
+ "goods_input_aeroplanes_mult_desc": {
+  "en": "The amount of @aeroplanes! $aeroplanes$ consumed by buildings",
+  "ru": "Количество @aeroplanes! $aeroplanes$, потребляемое зданиями"
+ },
+ "goods_input_coal_mult": {
+  "en": "@coal! $coal$ Input",
+  "ru": "@coal! $coal$: расход"
+ },
+ "goods_input_coffee_add": {
+  "en": "@coffee! $coffee$ Input",
+  "ru": "@coffee! $coffee$: расход"
+ },
+ "goods_input_coffee_add_desc": {
+  "en": "The amount of @coffee! $coffee$ consumed by buildings",
+  "ru": "Количество @coffee! $coffee$, потребляемое зданиями"
+ },
+ "goods_input_construction_add": {
+  "en": "@construction! [concept_budget_construction_goods] Input",
+  "ru": "@construction! [concept_budget_construction_goods]: расход"
+ },
+ "goods_input_construction_add_desc": {
+  "en": "The amount of @construction! [concept_budget_construction_goods] consumed by buildings",
+  "ru": "Количество @construction! [concept_budget_construction_goods], потребляемое зданиями"
+ },
+ "goods_input_consumer_appliances_add": {
+  "en": "@consumer_appliances! $consumer_appliances$ Input",
+  "ru": "@consumer_appliances! $consumer_appliances$: расход"
+ },
+ "goods_input_consumer_appliances_add_desc": {
+  "en": "The amount of @consumer_appliances! $consumer_appliances$ consumed by buildings",
+  "ru": "Количество @consumer_appliances! $consumer_appliances$, потребляемое зданиями"
+ },
+ "goods_input_copper_mult": {
+  "en": "@copper! $copper$ Input",
+  "ru": "@copper! $copper$: расход"
+ },
+ "goods_input_digital_access_add": {
+  "en": "@digital_access! $digital_access$ Input",
+  "ru": "@digital_access! $digital_access$: расход"
+ },
+ "goods_input_digital_access_add_desc": {
+  "en": "The amount of @digital_access! $digital_access$ consumed by buildings",
+  "ru": "Количество @digital_access! $digital_access$, потребляемое зданиями"
+ },
+ "goods_input_digital_assets_add": {
+  "en": "@digital_assets! $digital_assets$ Input",
+  "ru": "@digital_assets! $digital_assets$: расход"
+ },
+ "goods_input_digital_assets_add_desc": {
+  "en": "The amount of @digital_assets! $digital_assets$ consumed by buildings",
+  "ru": "Количество @digital_assets! $digital_assets$, потребляемое зданиями"
+ },
+ "goods_input_electricity_mult": {
+  "en": "@electricity! $electricity$ Input",
+  "ru": "@electricity! $electricity$: расход"
+ },
+ "goods_input_electricity_mult_desc": {
+  "en": "The amount of @electricity! $electricity$ consumed by buildings",
+  "ru": "Количество @electricity! $electricity$, потребляемое зданиями"
+ },
+ "goods_input_electronic_components_add": {
+  "en": "@electronic_components! $electronic_components$ Input",
+  "ru": "@electronic_components! $electronic_components$: расход"
+ },
+ "goods_input_electronic_components_add_desc": {
+  "en": "The amount of @electronic_components! $electronic_components$ consumed by buildings",
+  "ru": "Количество @electronic_components! $electronic_components$, потребляемое зданиями"
+ },
+ "goods_input_fertilizer_mult": {
+  "en": "@fertilizer! $fertilizer$ Input",
+  "ru": "@fertilizer! $fertilizer$: расход"
+ },
+ "goods_input_fine_art_add": {
+  "en": "@fine_art! $fine_art$ Input",
+  "ru": "@fine_art! $fine_art$: расход"
+ },
+ "goods_input_fine_art_add_desc": {
+  "en": "The amount of @fine_art! $fine_art$ consumed by buildings",
+  "ru": "Количество @fine_art! $fine_art$, потребляемое зданиями"
+ },
+ "goods_input_gold_add": {
+  "en": "@gold! $gold$ Input",
+  "ru": "@gold! $gold$: расход"
+ },
+ "goods_input_gold_add_desc": {
+  "en": "The amount of @gold! $gold$ consumed by buildings",
+  "ru": "Количество @gold! $gold$, потребляемое зданиями"
+ },
+ "goods_input_grain_mult": {
+  "en": "@grain! $grain$ Input",
+  "ru": "@grain! $grain$: расход"
+ },
+ "goods_input_grain_mult_desc": {
+  "en": "The amount of @grain! $grain$ consumed by buildings",
+  "ru": "Количество @grain! $grain$, потребляемое зданиями"
+ },
+ "goods_input_grid_power_add": {
+  "en": "@grid_power! $grid_power$ Input",
+  "ru": "@grid_power! $grid_power$: расход"
+ },
+ "goods_input_grid_power_add_desc": {
+  "en": "The amount of @grid_power! $grid_power$ consumed by buildings",
+  "ru": "Количество @grid_power! $grid_power$, потребляемое зданиями"
+ },
+ "goods_input_launch_capacity_add": {
+  "en": "@launch_capacity! $launch_capacity$ Input",
+  "ru": "@launch_capacity! $launch_capacity$: расход"
+ },
+ "goods_input_launch_capacity_add_desc": {
+  "en": "The amount of @launch_capacity! $launch_capacity$ consumed by buildings",
+  "ru": "Количество @launch_capacity! $launch_capacity$, потребляемое зданиями"
+ },
+ "goods_input_luxury_clothes_add": {
+  "en": "@luxury_clothes! $luxury_clothes$ Input",
+  "ru": "@luxury_clothes! $luxury_clothes$: расход"
+ },
+ "goods_input_luxury_clothes_add_desc": {
+  "en": "The amount of @luxury_clothes! $luxury_clothes$ consumed by buildings",
+  "ru": "Количество @luxury_clothes! $luxury_clothes$, потребляемое зданиями"
+ },
+ "goods_input_magnetic_drive_ships_add": {
+  "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Input",
+  "ru": "@magnetic_drive_ships! $magnetic_drive_ships$: расход"
+ },
+ "goods_input_magnetic_drive_ships_add_desc": {
+  "en": "The amount of @magnetic_drive_ships! $magnetic_drive_ships$ consumed by buildings",
+  "ru": "Количество @magnetic_drive_ships! $magnetic_drive_ships$, потребляемое зданиями"
+ },
+ "goods_input_merchant_marine_mult": {
+  "en": "@merchant_marine! $merchant_marine$ Input",
+  "ru": "@merchant_marine! $merchant_marine$: расход"
+ },
+ "goods_input_merchant_marine_mult_desc": {
+  "en": "The amount of @merchant_marine! $merchant_marine$ consumed by buildings",
+  "ru": "Количество @merchant_marine! $merchant_marine$, потребляемое зданиями"
+ },
+ "goods_input_motor_ships_add": {
+  "en": "@motor_ships! $motor_ships$ Input",
+  "ru": "@motor_ships! $motor_ships$: расход"
+ },
+ "goods_input_motor_ships_add_desc": {
+  "en": "The amount of @motor_ships! $motor_ships$ consumed by buildings",
+  "ru": "Количество @motor_ships! $motor_ships$, потребляемое зданиями"
+ },
+ "goods_input_robotics_add": {
+  "en": "@robotics! $robotics$ Input",
+  "ru": "@robotics! $robotics$: расход"
+ },
+ "goods_input_robotics_add_desc": {
+  "en": "The amount of @robotics! $robotics$ consumed by buildings",
+  "ru": "Количество @robotics! $robotics$, потребляемое зданиями"
+ },
+ "goods_input_services_add": {
+  "en": "@services! $services$ Input",
+  "ru": "@services! $services$: расход"
+ },
+ "goods_input_services_add_desc": {
+  "en": "The amount of @services! $services$ consumed by buildings",
+  "ru": "Количество @services! $services$, потребляемое зданиями"
+ },
+ "goods_input_tea_add": {
+  "en": "@tea! $tea$ Input",
+  "ru": "@tea! $tea$: расход"
+ },
+ "goods_input_tea_add_desc": {
+  "en": "The amount of @tea! $tea$ consumed by buildings",
+  "ru": "Количество @tea! $tea$, потребляемое зданиями"
+ },
+ "goods_input_tech_metals_add": {
+  "en": "@tech_metals! Tech Metals Input",
+  "ru": "@tech_metals! Критические для технологий металлы: расход"
+ },
+ "goods_input_tech_metals_add_desc": {
+  "en": "The amount of @tech_metals! Tech Metals consumed by buildings",
+  "ru": "Количество @tech_metals! критических для технологий металлов, потребляемое зданиями"
+ },
+ "goods_input_telephones_mult": {
+  "en": "@telephones! $telephones$ Input",
+  "ru": "@telephones! $telephones$: расход"
+ },
+ "goods_input_wood_mult": {
+  "en": "@wood! $wood$ Input",
+  "ru": "@wood! $wood$: расход"
+ },
+ "goods_input_wood_mult_desc": {
+  "en": "The amount of @wood! $wood$ consumed by buildings",
+  "ru": "Количество @wood! $wood$, потребляемое зданиями"
+ },
+ "goods_output_advanced_materials_add": {
+  "en": "@advanced_materials! $advanced_materials$ Output",
+  "ru": "@advanced_materials! $advanced_materials$: выпуск"
+ },
+ "goods_output_advanced_materials_add_desc": {
+  "en": "The amount of @advanced_materials! $advanced_materials$ produced by buildings",
+  "ru": "Количество @advanced_materials! $advanced_materials$, производимое зданиями"
+ },
+ "goods_output_advanced_materials_mult": {
+  "en": "Building @advanced_materials! $advanced_materials$ output",
+  "ru": "@advanced_materials! $advanced_materials$: выпуск зданий"
+ },
+ "goods_output_clothes_mult": {
+  "en": "Building @clothes! $clothes$ output",
+  "ru": "@clothes! $clothes$: выпуск зданий"
+ },
+ "goods_output_clothes_mult_desc": {
+  "en": "A bonus or penalty to the amount of @clothes! $clothes$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @clothes! $clothes$, производимому зданиями"
+ },
+ "goods_output_coal_mult": {
+  "en": "Building @coal! $coal$ output",
+  "ru": "@coal! $coal$: выпуск зданий"
+ },
+ "goods_output_coal_mult_desc": {
+  "en": "A bonus or penalty to the amount of @coal! $coal$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @coal! $coal$, производимому зданиями"
+ },
+ "goods_output_coffee_mult": {
+  "en": "Building @coffee! $coffee$ output",
+  "ru": "@coffee! $coffee$: выпуск зданий"
+ },
+ "goods_output_coffee_mult_desc": {
+  "en": "A bonus or penalty to the amount of @coffee! $coffee$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @coffee! $coffee$, производимому зданиями"
+ },
+ "goods_output_construction_add": {
+  "en": "@construction! [concept_budget_construction_goods] Output",
+  "ru": "@construction! [concept_budget_construction_goods]: выпуск"
+ },
+ "goods_output_construction_add_desc": {
+  "en": "The amount of @construction! [concept_budget_construction_goods] produced by buildings",
+  "ru": "Количество @construction! [concept_budget_construction_goods], производимое зданиями"
+ },
+ "goods_output_construction_mult": {
+  "en": "Building @construction! Construction output",
+  "ru": "@construction! Строительство: выпуск зданий"
+ },
+ "goods_output_construction_mult_desc": {
+  "en": "A bonus or penalty to the amount of @construction! Construction produced by buildings",
+  "ru": "Бонус или штраф к количеству @construction! строительства, производимого зданиями"
+ },
+ "goods_output_consumer_appliances_add": {
+  "en": "@consumer_appliances! $consumer_appliances$ Output",
+  "ru": "@consumer_appliances! $consumer_appliances$: выпуск"
+ },
+ "goods_output_consumer_appliances_add_desc": {
+  "en": "The amount of @consumer_appliances! $consumer_appliances$ produced by buildings",
+  "ru": "Количество @consumer_appliances! $consumer_appliances$, производимое зданиями"
+ },
+ "goods_output_consumer_appliances_mult": {
+  "en": "Building @consumer_appliances! $consumer_appliances$ output",
+  "ru": "@consumer_appliances! $consumer_appliances$: выпуск зданий"
+ },
+ "goods_output_consumer_appliances_mult_desc": {
+  "en": "A bonus or penalty to the amount of @consumer_appliances! $consumer_appliances$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @consumer_appliances! $consumer_appliances$, производимому зданиями"
+ },
+ "goods_output_copper_mult": {
+  "en": "Building @copper! $copper$ output",
+  "ru": "@copper! $copper$: выпуск зданий"
+ },
+ "goods_output_copper_mult_desc": {
+  "en": "A bonus or penalty to the amount of @copper! $copper$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @copper! $copper$, производимому зданиями"
+ },
+ "goods_output_digital_access_add": {
+  "en": "@digital_access! $digital_access$ Output",
+  "ru": "@digital_access! $digital_access$: выпуск"
+ },
+ "goods_output_digital_access_add_desc": {
+  "en": "The amount of @digital_access! $digital_access$ produced by buildings",
+  "ru": "Количество @digital_access! $digital_access$, производимое зданиями"
+ },
+ "goods_output_digital_access_mult": {
+  "en": "Building @digital_access! $digital_access$ output",
+  "ru": "@digital_access! $digital_access$: выпуск зданий"
+ },
+ "goods_output_digital_access_mult_desc": {
+  "en": "A bonus or penalty to the amount of @digital_access! $digital_access$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @digital_access! $digital_access$, производимому зданиями"
+ },
+ "goods_output_digital_assets_add": {
+  "en": "@digital_assets! $digital_assets$ Output",
+  "ru": "@digital_assets! $digital_assets$: выпуск"
+ },
+ "goods_output_digital_assets_add_desc": {
+  "en": "The amount of @digital_assets! $digital_assets$ produced by buildings",
+  "ru": "Количество @digital_assets! $digital_assets$, производимое зданиями"
+ },
+ "goods_output_digital_assets_mult": {
+  "en": "Building @digital_assets! $digital_assets$ output",
+  "ru": "@digital_assets! $digital_assets$: выпуск зданий"
+ },
+ "goods_output_digital_assets_mult_desc": {
+  "en": "A bonus or penalty to the amount of @digital_assets! $digital_assets$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @digital_assets! $digital_assets$, производимому зданиями"
+ },
+ "goods_output_dye_mult": {
+  "en": "Building @dye! $dye$ output",
+  "ru": "@dye! $dye$: выпуск зданий"
+ },
+ "goods_output_dye_mult_desc": {
+  "en": "A bonus or penalty to the amount of @dye! $dye$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @dye! $dye$, производимому зданиями"
+ },
+ "goods_output_electronic_components_add": {
+  "en": "@electronic_components! $electronic_components$ Output",
+  "ru": "@electronic_components! $electronic_components$: выпуск"
+ },
+ "goods_output_electronic_components_add_desc": {
+  "en": "The amount of @electronic_components! $electronic_components$ produced by buildings",
+  "ru": "Количество @electronic_components! $electronic_components$, производимое зданиями"
+ },
+ "goods_output_electronic_components_mult": {
+  "en": "Building @electronic_components! $electronic_components$ output",
+  "ru": "@electronic_components! $electronic_components$: выпуск зданий"
+ },
+ "goods_output_explosives_mult": {
+  "en": "Building @explosives! $explosives$ output",
+  "ru": "@explosives! $explosives$: выпуск зданий"
+ },
+ "goods_output_explosives_mult_desc": {
+  "en": "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @explosives! $explosives$, производимому зданиями"
+ },
+ "goods_output_fish_mult": {
+  "en": "Building @fish! $fish$ output",
+  "ru": "@fish! $fish$: выпуск зданий"
+ },
+ "goods_output_fish_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fish! $fish$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @fish! $fish$, производимому зданиями"
+ },
+ "goods_output_furniture_mult": {
+  "en": "Building @furniture! $furniture$ output",
+  "ru": "@furniture! $furniture$: выпуск зданий"
+ },
+ "goods_output_furniture_mult_desc": {
+  "en": "A bonus or penalty to the amount of @furniture! $furniture$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @furniture! $furniture$, производимому зданиями"
+ },
+ "goods_output_glass_mult": {
+  "en": "Building @glass! $glass$ output",
+  "ru": "@glass! $glass$: выпуск зданий"
+ },
+ "goods_output_glass_mult_desc": {
+  "en": "A bonus or penalty to the amount of @glass! $glass$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @glass! $glass$, производимому зданиями"
+ },
+ "goods_output_gold_mult": {
+  "en": "Building @gold! $gold$ output",
+  "ru": "@gold! $gold$: выпуск зданий"
+ },
+ "goods_output_gold_mult_desc": {
+  "en": "A bonus or penalty to the amount of @gold! $gold$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @gold! $gold$, производимому зданиями"
+ },
+ "goods_output_grain_mult": {
+  "en": "Building @grain! $grain$ output",
+  "ru": "@grain! $grain$: выпуск зданий"
+ },
+ "goods_output_grain_mult_desc": {
+  "en": "A bonus or penalty to the amount of @grain! $grain$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @grain! $grain$, производимому зданиями"
+ },
+ "goods_output_grid_power_add": {
+  "en": "@grid_power! $grid_power$ Output",
+  "ru": "@grid_power! $grid_power$: выпуск"
+ },
+ "goods_output_grid_power_add_desc": {
+  "en": "The amount of @grid_power! $grid_power$ produced by buildings",
+  "ru": "Количество @grid_power! $grid_power$, производимое зданиями"
+ },
+ "goods_output_grid_power_mult": {
+  "en": "Building @grid_power! $grid_power$ output",
+  "ru": "@grid_power! $grid_power$: выпуск зданий"
+ },
+ "goods_output_grid_power_mult_desc": {
+  "en": "A bonus or penalty to the amount of @grid_power! $grid_power$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @grid_power! $grid_power$, производимому зданиями"
+ },
+ "goods_output_groceries_mult": {
+  "en": "Building @groceries! $groceries$ output",
+  "ru": "@groceries! $groceries$: выпуск зданий"
+ },
+ "goods_output_groceries_mult_desc": {
+  "en": "A bonus or penalty to the amount of @groceries! $groceries$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @groceries! $groceries$, производимому зданиями"
+ },
+ "goods_output_iron_mult": {
+  "en": "Building @iron! $iron$ output",
+  "ru": "@iron! $iron$: выпуск зданий"
+ },
+ "goods_output_iron_mult_desc": {
+  "en": "A bonus or penalty to the amount of @iron! $iron$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @iron! $iron$, производимому зданиями"
+ },
+ "goods_output_launch_capacity_add": {
+  "en": "@launch_capacity! $launch_capacity$ Output",
+  "ru": "@launch_capacity! $launch_capacity$: выпуск"
+ },
+ "goods_output_launch_capacity_add_desc": {
+  "en": "The amount of @launch_capacity! $launch_capacity$ produced by buildings",
+  "ru": "Количество @launch_capacity! $launch_capacity$, производимое зданиями"
+ },
+ "goods_output_launch_capacity_mult": {
+  "en": "Building @launch_capacity! $launch_capacity$ output",
+  "ru": "@launch_capacity! $launch_capacity$: выпуск зданий"
+ },
+ "goods_output_launch_capacity_mult_desc": {
+  "en": "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @launch_capacity! $launch_capacity$, производимому зданиями"
+ },
+ "goods_output_luxury_clothes_mult": {
+  "en": "Building @luxury_clothes! $luxury_clothes$ output",
+  "ru": "@luxury_clothes! $luxury_clothes$: выпуск зданий"
+ },
+ "goods_output_luxury_clothes_mult_desc": {
+  "en": "A bonus or penalty to the amount of @luxury_clothes! $luxury_clothes$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @luxury_clothes! $luxury_clothes$, производимому зданиями"
+ },
+ "goods_output_luxury_furniture_mult": {
+  "en": "Building @luxury_furniture! $luxury_furniture$ output",
+  "ru": "@luxury_furniture! $luxury_furniture$: выпуск зданий"
+ },
+ "goods_output_luxury_furniture_mult_desc": {
+  "en": "A bonus or penalty to the amount of @luxury_furniture! $luxury_furniture$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @luxury_furniture! $luxury_furniture$, производимому зданиями"
+ },
+ "goods_output_magnetic_drive_ships_add": {
+  "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Output",
+  "ru": "@magnetic_drive_ships! $magnetic_drive_ships$: выпуск"
+ },
+ "goods_output_magnetic_drive_ships_add_desc": {
+  "en": "The amount of @magnetic_drive_ships! $magnetic_drive_ships$ produced by buildings",
+  "ru": "Количество @magnetic_drive_ships! $magnetic_drive_ships$, производимое зданиями"
+ },
+ "goods_output_magnetic_drive_ships_mult": {
+  "en": "Building @magnetic_drive_ships! $magnetic_drive_ships$ output",
+  "ru": "@magnetic_drive_ships! $magnetic_drive_ships$: выпуск зданий"
+ },
+ "goods_output_magnetic_drive_ships_mult_desc": {
+  "en": "A bonus or penalty to the amount of @magnetic_drive_ships! $magnetic_drive_ships$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @magnetic_drive_ships! $magnetic_drive_ships$, производимому зданиями"
+ },
+ "goods_output_meat_mult": {
+  "en": "Building @meat! $meat$ output",
+  "ru": "@meat! $meat$: выпуск зданий"
+ },
+ "goods_output_meat_mult_desc": {
+  "en": "A bonus or penalty to the amount of @meat! $meat$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @meat! $meat$, производимому зданиями"
+ },
+ "goods_output_merchant_marine_mult": {
+  "en": "@merchant_marine! $merchant_marine$ Output",
+  "ru": "@merchant_marine! $merchant_marine$: выпуск"
+ },
+ "goods_output_merchant_marine_mult_desc": {
+  "en": "The amount of @merchant_marine! $merchant_marine$ produced by buildings",
+  "ru": "Количество @merchant_marine! $merchant_marine$, производимое зданиями"
+ },
+ "goods_output_motor_ships_add": {
+  "en": "@motor_ships! $motor_ships$ Output",
+  "ru": "@motor_ships! $motor_ships$: выпуск"
+ },
+ "goods_output_motor_ships_add_desc": {
+  "en": "The amount of @motor_ships! $motor_ships$ produced by buildings",
+  "ru": "Количество @motor_ships! $motor_ships$, производимое зданиями"
+ },
+ "goods_output_motor_ships_mult": {
+  "en": "Building @motor_ships! $motor_ships$ output",
+  "ru": "@motor_ships! $motor_ships$: выпуск зданий"
+ },
+ "goods_output_motor_ships_mult_desc": {
+  "en": "A bonus or penalty to the amount of @motor_ships! $motor_ships$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @motor_ships! $motor_ships$, производимому зданиями"
+ },
+ "goods_output_opium_mult": {
+  "en": "Building @opium! $opium$ output",
+  "ru": "@opium! $opium$: выпуск зданий"
+ },
+ "goods_output_opium_mult_desc": {
+  "en": "A bonus or penalty to the amount of @opium! $opium$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @opium! $opium$, производимому зданиями"
+ },
+ "goods_output_paper_mult": {
+  "en": "Building @paper! $paper$ output",
+  "ru": "@paper! $paper$: выпуск зданий"
+ },
+ "goods_output_paper_mult_desc": {
+  "en": "A bonus or penalty to the amount of @paper! $paper$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @paper! $paper$, производимому зданиями"
+ },
+ "goods_output_porcelain_mult": {
+  "en": "Building @porcelain! $porcelain$ output",
+  "ru": "@porcelain! $porcelain$: выпуск зданий"
+ },
+ "goods_output_porcelain_mult_desc": {
+  "en": "A bonus or penalty to the amount of @porcelain! $porcelain$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @porcelain! $porcelain$, производимому зданиями"
+ },
+ "goods_output_robotics_add": {
+  "en": "@robotics! Robotics Output",
+  "ru": "@robotics! Промышленная робототехника: выпуск"
+ },
+ "goods_output_robotics_add_desc": {
+  "en": "The amount of @robotics! Robotics produced by buildings",
+  "ru": "Количество @robotics! промышленной робототехники, производимое зданиями"
+ },
+ "goods_output_robotics_mult": {
+  "en": "Building @robotics! Robotics output",
+  "ru": "@robotics! Промышленная робототехника: выпуск зданий"
+ },
+ "goods_output_rubber_mult": {
+  "en": "Building @rubber! $rubber$ output",
+  "ru": "@rubber! $rubber$: выпуск зданий"
+ },
+ "goods_output_rubber_mult_desc": {
+  "en": "A bonus or penalty to the amount of @rubber! $rubber$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @rubber! $rubber$, производимому зданиями"
+ },
+ "goods_output_services_mult": {
+  "en": "Building @services! $services$ output",
+  "ru": "@services! $services$: выпуск зданий"
+ },
+ "goods_output_services_mult_desc": {
+  "en": "A bonus or penalty to the amount of @services! $services$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @services! $services$, производимому зданиями"
+ },
+ "goods_output_steel_mult": {
+  "en": "Building @steel! $steel$ output",
+  "ru": "@steel! $steel$: выпуск зданий"
+ },
+ "goods_output_steel_mult_desc": {
+  "en": "A bonus or penalty to the amount of @steel! $steel$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @steel! $steel$, производимому зданиями"
+ },
+ "goods_output_sulfur_mult": {
+  "en": "Building @sulfur! $sulfur$ output",
+  "ru": "@sulfur! $sulfur$: выпуск зданий"
+ },
+ "goods_output_sulfur_mult_desc": {
+  "en": "A bonus or penalty to the amount of @sulfur! $sulfur$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @sulfur! $sulfur$, производимому зданиями"
+ },
+ "goods_output_tea_mult": {
+  "en": "Building @tea! $tea$ output",
+  "ru": "@tea! $tea$: выпуск зданий"
+ },
+ "goods_output_tea_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tea! $tea$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @tea! $tea$, производимому зданиями"
+ },
+ "goods_output_tech_metals_add": {
+  "en": "@tech_metals! $tech_metals$ Output",
+  "ru": "@tech_metals! $tech_metals$: выпуск"
+ },
+ "goods_output_tech_metals_add_desc": {
+  "en": "The amount of @tech_metals! $tech_metals$ produced by buildings",
+  "ru": "Количество @tech_metals! $tech_metals$, производимое зданиями"
+ },
+ "goods_output_tech_metals_mult": {
+  "en": "Building @tech_metals! $tech_metals$ output",
+  "ru": "@tech_metals! $tech_metals$: выпуск зданий"
+ },
+ "goods_output_telephones_mult": {
+  "en": "Building @telephones! $telephones$ output",
+  "ru": "@telephones! $telephones$: выпуск зданий"
+ },
+ "goods_output_telephones_mult_desc": {
+  "en": "A bonus or penalty to the amount of @telephones! $telephones$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @telephones! $telephones$, производимому зданиями"
+ },
+ "goods_output_tobacco_mult": {
+  "en": "Building @tobacco! $tobacco$ output",
+  "ru": "@tobacco! $tobacco$: выпуск зданий"
+ },
+ "goods_output_tobacco_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tobacco! $tobacco$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @tobacco! $tobacco$, производимому зданиями"
+ },
+ "goods_output_tourism_add_desc": {
+  "en": "The amount of @tourism! [concept_tourism_system] produced by buildings",
+  "ru": "Количество @tourism! [concept_tourism_system], производимое зданиями"
  },
  "goods_output_tourism_mult": {
   "en": "Building @tourism! [concept_tourism_output]",
   "ru": "Здания: @tourism! [concept_tourism_output|l]"
  },
+ "goods_output_tourism_mult_desc": {
+  "en": "A bonus or penalty to the amount of @tourism! [concept_tourism_system] produced by buildings",
+  "ru": "Бонус или штраф к количеству @tourism! [concept_tourism_system], производимому зданиями"
+ },
+ "goods_output_transportation_mult": {
+  "en": "Building @transportation! $transportation$ output",
+  "ru": "@transportation! $transportation$: выпуск зданий"
+ },
+ "goods_output_transportation_mult_desc": {
+  "en": "A bonus or penalty to the amount of @transportation! $transportation$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @transportation! $transportation$, производимому зданиями"
+ },
+ "goods_output_wood_mult": {
+  "en": "Building @wood! $wood$ output",
+  "ru": "@wood! $wood$: выпуск зданий"
+ },
+ "goods_output_wood_mult_desc": {
+  "en": "A bonus or penalty to the amount of @wood! $wood$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @wood! $wood$, производимому зданиями"
+ },
+ "goods_trade_advantage_aeroplanes_mult_desc": {
+  "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('aeroplanes').GetName].",
+  "ru": "Увеличение или уменьшение общего [Concept('concept_trade_advantage','торгового преимущества')] для товара «[GetGoods('aeroplanes').GetName]»."
+ },
  "goods_trade_advantage_fine_art_mult": {
   "en": "[concept_trade_advantage] for [GetGoods('fine_art').GetName]",
   "ru": "[concept_trade_advantage]: [GetGoods('fine_art').GetName]"
+ },
+ "interest_group_ideology_environmentalists_leader_chance_mult": {
+  "en": "$ideology_environmentalists$ [concept_leader] Chance",
+  "ru": "$ideology_environmentalists$: шанс [Concept('concept_leader','лидера')]"
+ },
+ "interest_group_ideology_environmentalists_leader_chance_mult_desc": {
+  "en": "An increase or decrease to the chance for this [concept_interest_group] to select a [concept_leader] with the $ideology_environmentalists$ [concept_ideology]",
+  "ru": "Увеличение или уменьшение шанса, что эта [Concept('concept_interest_group','группа интересов')] выберет [Concept('concept_leader','лидером')] персонажа с [Concept('concept_ideology','идеологией')] «$ideology_environmentalists$»"
+ },
+ "power_bloc_te_mon_currency_crash_chance_mult": {
+  "en": "[concept_banking_common_currency] [concept_banking_crash] Likelihood",
+  "ru": "[concept_banking_common_currency]: вероятность [Concept('concept_banking_crash','банковского краха')]"
+ },
+ "power_bloc_te_mon_currency_crash_chance_mult_desc": {
+  "en": "For every adopter, and for the leader under any banking law but $law_unregulated_banking$: one supervisor over every bank that uses the currency.",
+  "ru": "Для каждой принявшей валюту страны и для лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: один надзиратель над каждым банком, использующим валюту."
+ },
+ "power_bloc_te_mon_currency_interventions_add_desc": {
+  "en": "Points added to the intervention budget of every adopter, and of the leader under any banking law but $law_unregulated_banking$: room to keep one more tool in force.",
+  "ru": "Пункты, добавляемые к бюджету интервенций каждой принявшей валюту страны, а также лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: запас, чтобы держать в силе ещё один инструмент."
+ },
+ "power_bloc_te_mon_currency_investment_pool_add": {
+  "en": "[concept_banking_common_currency] [concept_investment_pool] Contribution",
+  "ru": "[concept_banking_common_currency]: [concept_investment_pool|l], вклад"
+ },
+ "power_bloc_te_mon_currency_investment_pool_add_desc": {
+  "en": "Added to the $capitalists$ [concept_investment_pool] contribution of every country using the currency, the same in every phase of the cycle. None under $too_much_private_construction$.",
+  "ru": "Добавляется к вкладу «$capitalists$» каждой страны, использующей валюту (см. [concept_investment_pool|l]), одинаково в каждой фазе цикла. Не действует при состоянии «$too_much_private_construction$»."
+ },
+ "power_bloc_te_mon_currency_trade_advantage_mult_desc": {
+  "en": "Export and import advantage in every state of a country using the currency: each adopter, and the leader once one has adopted.",
+  "ru": "Преимущество экспорта и импорта в каждой области страны, использующей валюту: каждой принявшей её страны, а лидера — после того, как её принял хотя бы один участник."
+ },
+ "power_bloc_te_mon_currency_volatility_mult": {
+  "en": "[concept_banking_common_currency] [concept_banking_cycle] Volatility",
+  "ru": "[concept_banking_common_currency]: волатильность [Concept('concept_banking_cycle','банковского цикла')]"
+ },
+ "power_bloc_te_mon_currency_volatility_mult_desc": {
+  "en": "How far [concept_banking_momentum] swings at random, for every adopter, and for the leader under any banking law but $law_unregulated_banking$: one deposit guarantee across the currency.",
+  "ru": "Насколько сильно случайно колеблется [concept_banking_momentum|l], для каждой принявшей валюту страны и для лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: единая гарантия вкладов на всю валюту."
+ },
+ "state_ageing_rate_add": {
+  "en": "Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Старение в медицине долголетия[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_ageing_rate_add_desc": {
+  "en": "How much more slowly the bodies of people in longevity care age: at -10% a body ages nine-tenths of a year each year, at -100% it stops aging. Who is in care depends on the health laws, the augmentation laws and wealth. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько медленнее стареют тела людей, получающих медицину долголетия: при -10% тело за год стареет на девять десятых года, при -100% старение прекращается. Кто получает такую помощь, зависит от законов здравоохранения, законов об аугментации и богатства. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_arable_land_mult": {
   "en": "Arable Land",
   "ru": "Пахотные земли"
  },
+ "state_arable_land_mult_desc": {
+  "en": "A multiplier for the amount of [concept_arable_land] in this [concept_state].",
+  "ru": "Множитель количества [Concept('concept_arable_land','пахотной земли')] в этой [Concept('concept_state','области')]."
+ },
+ "state_atmospheric_carbon_capture_add": {
+  "en": "Atmospheric Carbon Removal",
+  "ru": "Удаление углерода из атмосферы"
+ },
+ "state_atmospheric_carbon_capture_add_desc": {
+  "en": "Carbon taken out of the atmosphere at this location by removal-only methods, such as Direct Air Capture at Carbon Conversion Works. It is the Carbon Captured figure on the Climate tab of the Market panel, and is subtracted from the market total after policy reductions.",
+  "ru": "Углерод, извлекаемый из атмосферы в этом месте методами, предназначенными только для удаления, например прямым улавливанием из воздуха на заводах переработки углерода. Это показатель «Улавливание углерода» на вкладке «Климат» панели рынка; он вычитается из общего итога рынка после сокращений по политике."
+ },
+ "state_backup_external_mortality_mult": {
+  "en": "Deaths from Violence and Accidents in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от насилия и несчастных случаев в медицине долголетия[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_external_mortality_mult_desc": {
+  "en": "Deaths from violence and accidents among people in longevity care, whose minds are backed up and restored to a new body. The census takes it times the state's share of people in care. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от насилия и несчастных случаев среди людей, получающих медицину долголетия, чей разум сохранён в резервной копии и восстанавливается в новом теле. Перепись учитывает их, умножая на долю таких людей в области. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_work_mortality_mult": {
+  "en": "Deaths at Work in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти на работе в медицине долголетия[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_work_mortality_mult_desc": {
+  "en": "Deaths at work among people in longevity care, whose minds are backed up and restored to a new body. The census takes it times the state's share of people in care. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти на работе среди людей, получающих медицину долголетия, чей разум сохранён в резервной копии и восстанавливается в новом теле. Перепись учитывает их, умножая на долю таких людей в области. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_birth_limit_relief_add": {
   "en": "Rural Exemption from the Birth Limit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Сельское исключение из ограничения рождаемости[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_birth_limit_relief_add_desc": {
+  "en": "How much of the Birth Limit farm families are spared, by the state's share of $peasants$ and $farmers$. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Какая часть ограничения рождаемости снимается с фермерских семей, в зависимости от доли в области групп «$peasants$» и «$farmers$». Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_building_afghan_nassaji_kabul_mills_max_level_add": {
+  "en": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level",
+  "ru": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName]: максимальный уровень"
+ },
+ "state_building_afghan_nassaji_kabul_mills_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] can expand to in this state",
+  "ru": "Увеличивает максимальное число уровней, до которых может расшириться здание «[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName]» в этой области"
+ },
+ "state_building_hydro_plant_max_level_add_desc": {
+  "en": "A bonus or penalty to the maximum level of [GetBuildingType('building_hydro_plant').GetName] buildings.",
+  "ru": "Бонус или штраф к максимальному уровню зданий «[GetBuildingType('building_hydro_plant').GetName]»."
+ },
+ "state_building_military_base_max_level_add_desc": {
+  "en": "Increases the maximum level of Military Bases in the state. Higher levels multiply [concept_fortification_level], unlocking stronger [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
+  "ru": "Увеличивает максимальный уровень военных баз в области. Более высокие уровни умножают [concept_fortification_level|l], открывая более сильные [Concept('concept_battle_condition', 'условия боя')] [Concept('concept_fortification_system','укреплений')]."
+ },
+ "state_building_resettlement_colony_max_level_add": {
+  "en": "Max Settlement Authority Level",
+  "ru": "Максимальный уровень Управления по заселению"
+ },
+ "state_building_resettlement_colony_max_level_add_desc": {
+  "en": "The maximum level of the Settlement Authority in this state.",
+  "ru": "Максимальный уровень Управления по заселению в этой области."
+ },
+ "state_child_labor_participation_add": {
+  "en": "Census: Children at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Перепись: дети на работе[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_child_labor_participation_add_desc": {
+  "en": "The share of children aged 10 to 14 who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля детей в возрасте от 10 до 14 лет, которые работают. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_chronic_mortality_mult": {
+  "en": "Deaths from Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от хронических болезней[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_chronic_mortality_mult_desc": {
+  "en": "Deaths from the diseases of age, which poverty in old age makes more common. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от болезней старости, которые учащаются из-за бедности в старости. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_chronic_treatment_add": {
+  "en": "Treatment of Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Лечение хронических болезней[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_chronic_treatment_add_desc": {
+  "en": "The share of deaths from the diseases of age that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля смертей от болезней старости, которых может избежать медицина там, где люди могут до неё добраться. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_climate_cold_relief_add": {
+  "en": "Cold Relief",
+  "ru": "Облегчение холодов"
+ },
+ "state_climate_cold_relief_add_desc": {
+  "en": "How far heating and insulation ease the winter cold that makes a state less comfortable to live in, cutting the cold part of its [concept_local_climate] penalty by this share.",
+  "ru": "Насколько отопление и теплоизоляция смягчают зимний холод, из-за которого в области жить менее комфортно, сокращая холодовую часть штрафа от [Concept('concept_local_climate','местного климата')] на эту долю."
+ },
+ "state_climate_disease_relief_add": {
+  "en": "Malaria Relief",
+  "ru": "Защита от малярии"
+ },
+ "state_climate_disease_relief_add_desc": {
+  "en": "How far medicine and drainage protect newcomers from malaria, cutting the malaria part of a state's [concept_local_climate] penalty by this share.",
+  "ru": "Насколько лекарства и осушение защищают приезжих от малярии, сокращая малярийную часть штрафа области от [Concept('concept_local_climate','местного климата')] на эту долю."
+ },
+ "state_climate_heat_relief_add": {
+  "en": "Heat Relief",
+  "ru": "Облегчение жары"
+ },
+ "state_climate_heat_relief_add_desc": {
+  "en": "How far fans and air conditioning ease the summer heat that makes a state less comfortable to live in, cutting the heat part of its [concept_local_climate] penalty by this share.",
+  "ru": "Насколько вентиляторы и кондиционеры смягчают летнюю жару, из-за которой в области жить менее комфортно, сокращая жаркую часть штрафа от [Concept('concept_local_climate','местного климата')] на эту долю."
+ },
+ "state_climate_sun_relief_add": {
+  "en": "Winter Sun Relief",
+  "ru": "Компенсация зимнего солнца"
+ },
+ "state_climate_sun_relief_add_desc": {
+  "en": "How far weather modification and the last technologies close the gap between a gloomy winter and a sunny one, shrinking by this share both what a dark winter costs a state in [concept_local_climate] and what a bright one draws.",
+  "ru": "Насколько изменение погоды и последние технологии сокращают разрыв между мрачной и солнечной зимой, уменьшая на эту долю как потери области от тёмной зимы, так и выигрыш от яркой по части [Concept('concept_local_climate','местного климата')]."
+ },
+ "state_climate_water_relief_add": {
+  "en": "Water Supply",
+  "ru": "Водоснабжение"
+ },
+ "state_climate_water_relief_add_desc": {
+  "en": "How far pumps, dams and desalination make up for a dry state's want of water, cutting the water part of its [concept_local_climate] penalty by this share.",
+  "ru": "Насколько насосы, плотины и опреснение восполняют недостаток воды в засушливой области, сокращая водную часть штрафа от [Concept('concept_local_climate','местного климата')] на эту долю."
+ },
+ "state_climate_winter_relief_add": {
+  "en": "Winter Relief",
+  "ru": "Облегчение зимы"
+ },
+ "state_climate_winter_relief_add_desc": {
+  "en": "How far heating, insulation and warm clothing close the gap between a raw winter and a mild one, shrinking by this share both what a harsh winter costs a state in [concept_local_climate] and what a mild one draws.",
+  "ru": "Насколько отопление, теплоизоляция и тёплая одежда сокращают разрыв между суровой и мягкой зимой, уменьшая на эту долю как потери области от суровой зимы, так и выигрыш от мягкой по части [Concept('concept_local_climate','местного климата')]."
+ },
+ "state_contraception_add": {
+  "en": "Contraception[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Контрацепция[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_contraception_add_desc": {
+  "en": "The methods families have to space or limit births, beyond the traditional ones everyone has. How much of it people use depends on how many can read. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Способы, которыми семьи могут разносить или ограничивать рождения, помимо традиционных, известных всем. Насколько они используются, зависит от числа грамотных. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_custom_religion_animist_standard_of_living_add": {
+  "en": "[concept_sol] Modifier for $custom_religion_animist$",
+  "ru": "Модификатор [Concept('concept_sol','уровня жизни')] для религии «$custom_religion_animist$»"
+ },
+ "state_custom_religion_animist_standard_of_living_add_desc": {
+  "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
+  "ru": "Бонус или штраф к [Concept('concept_sol','уровню жизни')] групп населения, исповедующих эту собственную религию"
+ },
+ "state_death_cause_chr_mult": {
+  "en": "Counted in Causes of Death under Chronic Illness[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Учитывается в причинах смерти как хронические болезни[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_chr_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Chronic Illness in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти, добавляемые соседней строкой смертности, учитываются как «Хронические болезни» в разделе причин смерти на вкладке «Демография». Число смертей меняет соседняя строка; перепись читает только эту.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_ext_mult": {
+  "en": "Counted in Causes of Death under Accidents and Violence[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Учитывается в причинах смерти как несчастные случаи и насилие[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_ext_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Accidents and Violence in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти, добавляемые соседней строкой смертности, учитываются как «Несчастные случаи и насилие» в разделе причин смерти на вкладке «Демография». Число смертей меняет соседняя строка; перепись читает только эту.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_inf_mult": {
+  "en": "Counted in Causes of Death under Infection and Hunger[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Учитывается в причинах смерти как инфекции и голод[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_inf_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Infection and Hunger in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти, добавляемые соседней строкой смертности, учитываются как «Инфекции и голод» в разделе причин смерти на вкладке «Демография». Число смертей меняет соседняя строка; перепись читает только эту.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_war_mult": {
+  "en": "Counted in Causes of Death under War and Devastation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Учитывается в причинах смерти как война и опустошение[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_war_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under War and Devastation in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти, добавляемые соседней строкой смертности, учитываются как «Война и опустошение» в разделе причин смерти на вкладке «Демография». Число смертей меняет соседняя строка; перепись читает только эту.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_work_mult": {
+  "en": "Counted in Causes of Death under Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Учитывается в причинах смерти как работа[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_work_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Work in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти, добавляемые соседней строкой смертности, учитываются как «Работа» в разделе причин смерти на вкладке «Демография». Число смертей меняет соседняя строка; перепись читает только эту.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_demog_absorbed_birth_rate_mult_desc": {
+  "en": "$state_birth_rate_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "ru": "$state_birth_rate_mult_desc$. Если перепись населения определяет рождения и смерти в области, этот эффект учитывается в её собственных показателях."
+ },
+ "state_demog_ontop_birth_rate_mult_desc": {
+  "en": "$state_birth_rate_mult_desc$. Where the demographic census sets a state's births and deaths, it applies this effect at its own rate.",
+  "ru": "$state_birth_rate_mult_desc$. Если перепись населения определяет рождения и смерти в области, этот эффект применяется по её собственной ставке."
+ },
+ "state_demog_replaced_ratio_add_desc": {
+  "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it carries this effect its own way instead: through its ages (who is old, when they retire, how many children there are) or through who works.",
+  "ru": "$state_working_adult_ratio_add_desc$. Если перепись населения определяет рабочую силу области, этот эффект учитывается ею по-своему: через возрастной состав (кто стар, когда уходят на пенсию, сколько детей) или через то, кто работает."
  },
  "state_desired_fertility_mult": {
   "en": "Desired Family Size[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Желаемый размер семьи[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
+ "state_desired_fertility_mult_desc": {
+  "en": "How many children families want, before the means to plan a family decide how many they have. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Сколько детей хотят иметь семьи, прежде чем средства планирования семьи определят, сколько их будет на самом деле. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_mortality_mult": {
+  "en": "Deaths from Violence and Accidents[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от насилия и несчастных случаев[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_mortality_mult_desc": {
+  "en": "Deaths from violence, traffic and everyday accidents, mostly of young men. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти от насилия, на дорогах и в повседневных несчастных случаях, в основном среди молодых мужчин. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_safety_add": {
+  "en": "Safer Streets and Homes[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Безопасные улицы и дома[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_safety_add_desc": {
+  "en": "The share of deaths from violence, traffic and everyday accidents that safer roads, buildings, cars and quicker help prevent: all of it at 100%, though never more than 95%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля смертей от насилия, дорожных и бытовых несчастных случаев, которых удаётся избежать благодаря более безопасным дорогам, зданиям, автомобилям и более быстрой помощи: все при 100%, но не более 95%. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_family_migration_add": {
+  "en": "Families Among Migrants[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Семьи среди мигрантов[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_family_migration_add_desc": {
+  "en": "How far cheaper, faster travel lets migrants bring their families, so more of the people moving to or from a state go as whole families rather than as young workers alone. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько более дешёвые и быстрые поездки позволяют мигрантам брать с собой семьи, так что больше людей, переезжающих в область или из неё, едут целыми семьями, а не молодыми работниками-одиночками. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_fertility_means_add": {
   "en": "Fertility Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Контроль рождаемости[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_fertility_means_add_desc": {
+  "en": "How much more of the gap between the children families want and the children they would have without trying they can close, whatever they can read: programs, clinics and custom. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько большую часть разрыва между числом детей, которых хотят семьи, и числом детей, которые были бы у них без попыток планирования, они могут закрыть, как бы ни умели читать: программы, клиники и обычаи. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_fortification_level_add_desc": {
+  "en": "The [concept_fortification_level] of this state, determined by the [concept_fortification_system]. Higher values unlock stronger defensive [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
+  "ru": "[concept_fortification_level] этой области, определяемый [Concept('concept_fortification_system','укреплениями')]. Более высокие значения открывают более сильные оборонительные [Concept('concept_battle_condition', 'условия боя')] [Concept('concept_fortification_system','укреплений')]."
+ },
+ "state_greenhouse_gas_emissions_add": {
+  "en": "Greenhouse Gas Emissions",
+  "ru": "Выбросы парниковых газов"
+ },
+ "state_greenhouse_gas_emissions_add_desc": {
+  "en": "Greenhouse gas emissions from the fuel this location's buildings burn, less carbon capture and synthetic-fuel credits. National and market totals also count household heating, apply each state owner's policy reductions and subtract atmospheric carbon removal.",
+  "ru": "Выбросы парниковых газов от топлива, сжигаемого зданиями в этом месте, за вычетом улавливания углерода и кредитов за синтетическое топливо. В национальные и рыночные итоги также входит бытовое отопление, применяются сокращения по политике каждого владельца области и вычитается удаление углерода из атмосферы."
+ },
+ "state_harvest_condition_financial_panic_duration_mult": {
+  "en": "[GetHarvestConditionType('financial_panic').GetName] [concept_harvest_condition] Duration",
+  "ru": "Длительность [Concept('concept_harvest_condition','местного условия')]: [GetHarvestConditionType('financial_panic').GetName]"
+ },
+ "state_harvest_condition_financial_panic_duration_mult_desc": {
+  "en": "An increase or decrease to the duration of [GetHarvestConditionType('financial_panic').GetName].",
+  "ru": "Увеличение или уменьшение длительности состояния «[GetHarvestConditionType('financial_panic').GetName]»."
+ },
+ "state_harvest_condition_financial_panic_impact_mult": {
+  "en": "[GetHarvestConditionType('financial_panic').GetName] [concept_harvest_condition] Impact",
+  "ru": "Влияние [Concept('concept_harvest_condition','местного условия')]: [GetHarvestConditionType('financial_panic').GetName]"
+ },
+ "state_harvest_condition_financial_panic_impact_mult_desc": {
+  "en": "An increase or decrease to the impact of [GetHarvestConditionType('financial_panic').GetName].",
+  "ru": "Увеличение или уменьшение влияния состояния «[GetHarvestConditionType('financial_panic').GetName]»."
+ },
+ "state_harvest_condition_torrential_rains_duration_mult": {
+  "en": "[GetHarvestConditionType('torrential_rains').GetName] Duration",
+  "ru": "Длительность: [GetHarvestConditionType('torrential_rains').GetName]"
+ },
+ "state_health_care_access_add": {
+  "en": "Health Care Access[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Доступ к здравоохранению[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_health_care_access_add_desc": {
+  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, a health law adds more with each level of its institution, and a [concept_power_bloc]'s Healthcare principle a little more with each level. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Сколько людей могут добраться до врача, медсестры или больницы. Медицина спасает жизни лишь настолько, насколько она доступна. Рынки и благотворительность дают некоторый доступ везде, закон о здравоохранении добавляет больше с каждым уровнем своего института, а принцип «Здравоохранение» [Concept('concept_power_bloc','силового блока')] добавляет ещё немного с каждым уровнем. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_homeland_change_speed_mult": {
+  "en": "[concept_homeland] Change Speed",
+  "ru": "[concept_homeland]: скорость изменения"
+ },
+ "state_homeland_change_speed_mult_desc": {
+  "en": "Modifies how quickly [concept_homeland] creation and removal occurs. Higher values make demographic shifts happen faster.",
+  "ru": "Определяет, как быстро возникают и исчезают [Concept('concept_homeland','исторические родины')]. Более высокие значения ускоряют демографические сдвиги."
+ },
+ "state_homeland_creation_threshold_add": {
+  "en": "[concept_homeland] Creation Threshold",
+  "ru": "[concept_homeland]: порог создания"
+ },
+ "state_homeland_creation_threshold_add_desc": {
+  "en": "The percentage of a state's population that a primary culture must reach for a new [concept_homeland] to form. Higher values make formation harder. Modified per-state by [Concept('concept_decree', 'decrees')] and buildings.",
+  "ru": "Доля населения области, которую должна занимать основная культура, чтобы образовалась новая [Concept('concept_homeland','историческая родина')]. Более высокие значения затрудняют образование. Изменяется в каждой области [Concept('concept_decree', 'указами')] и зданиями."
+ },
+ "state_homeland_removal_speed_mult": {
+  "en": "[concept_homeland] Removal Speed",
+  "ru": "[concept_homeland]: скорость утраты"
+ },
+ "state_homeland_removal_speed_mult_desc": {
+  "en": "Modifies how quickly a non-primary culture loses its [concept_homeland] here once its share has fallen below the removal threshold. Negative values let minority homelands last longer.",
+  "ru": "Определяет, как быстро неосновная культура теряет здесь свою [Concept('concept_homeland','историческую родину')], когда её доля упала ниже порога утраты. Отрицательные значения позволяют родинам меньшинств сохраняться дольше."
+ },
+ "state_homeland_removal_threshold_add": {
+  "en": "[concept_homeland] Removal Threshold",
+  "ru": "[concept_homeland]: порог утраты"
+ },
+ "state_homeland_removal_threshold_add_desc": {
+  "en": "The percentage of a state's population below which a non-primary culture's [concept_homeland] is removed. Higher values make it easier to lose homelands. Modified per-state by [Concept('concept_decree', 'decrees')] and buildings.",
+  "ru": "Доля населения области, ниже которой [Concept('concept_homeland','историческая родина')] неосновной культуры утрачивается. Более высокие значения облегчают потерю родин. Изменяется в каждой области [Concept('concept_decree', 'указами')] и зданиями."
+ },
+ "state_infection_treatment_add": {
+  "en": "Treatment of Infection[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Лечение инфекций[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_infection_treatment_add_desc": {
+  "en": "The share of deaths from infection and hunger that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля смертей от инфекций и голода, которых может избежать медицина там, где люди могут до неё добраться. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_infrastructure_from_aeroplanes_consumption_add": {
+  "en": "[concept_infrastructure] from [concept_pop] [GetGoods('aeroplanes').GetName] Consumption",
+  "ru": "[concept_infrastructure] от потребления товара «[GetGoods('aeroplanes').GetName]» [Concept('concept_pop','группами населения')]"
+ },
+ "state_infrastructure_from_aeroplanes_consumption_add_desc": {
+  "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('aeroplanes').GetName] consumed by the [Concept('concept_pop', '$concept_pops|q$')] that live there",
+  "ru": "Объём [Concept('concept_infrastructure','инфраструктуры')] [Concept('concept_state','области')], добавляемый за каждую единицу товара «[GetGoods('aeroplanes').GetName]», которую потребляют [Concept('concept_pop', '$concept_pops|q$')|l], живущие там"
+ },
+ "state_labor_participation_add": {
+  "en": "Census: People at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Перепись: люди на работе[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_labor_participation_add_desc": {
+  "en": "The share of working-age women and men who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля работающих среди женщин и мужчин трудоспособного возраста. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_late_marriage_farms_add": {
+  "en": "Late Marriage on the Farms[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Поздние браки на фермах[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_late_marriage_farms_add_desc": {
+  "en": "How much more common late marriage becomes, times the state's share of $peasants$ and $farmers$: where one heir takes the farm whole, the brothers and sisters who don't inherit wait to marry, or never do. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько чаще становятся поздние браки, умноженное на долю «$peasants$» и «$farmers$» в области: там, где ферму целиком получает один наследник, не наследующие братья и сёстры ждут с браком или не женятся вовсе. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_cover_add": {
+  "en": "Longevity Care Through the Health System[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Медицина долголетия через систему здравоохранения[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_cover_add_desc": {
+  "en": "The share of the people the health system reaches who are within reach of longevity care through it, at most 100%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля людей, до которых дотягивается система здравоохранения, которым через неё доступна медицина долголетия, не более 100%. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_floor_add": {
+  "en": "Minimum Longevity Care Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Минимальный охват медициной долголетия[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_floor_add_desc": {
+  "en": "At least this share of the people are within reach of longevity care through the health system, however few it reaches. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Не менее этой доли людей имеют доступ к медицине долголетия через систему здравоохранения, как бы мало людей она ни охватывала. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_market_reach_add": {
+  "en": "Longevity Care Market Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Охват медициной долголетия через рынок[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_market_reach_add_desc": {
+  "en": "How many levels of wealth further down the market brings longevity care: people that much poorer can buy it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "На сколько уровней богатства ниже рынок приносит медицину долголетия: настолько более бедные люди могут её купить. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_malaria_control_add": {
+  "en": "Malaria Control",
+  "ru": "Борьба с малярией"
+ },
+ "state_malaria_control_add_desc": {
+  "en": "How far malaria's toll on the people who live with it has been brought under control. In a state with malaria, deaths from infection rise by a share that this takes away: all of it at 100%. Used by the census on the Demographics tab. It also eases the malaria part of a state's [concept_local_climate] cost, whatever the Demographics rule.",
+  "ru": "Насколько удалось обуздать урон, который малярия наносит людям, живущим с ней. В области с малярией смертность от инфекций растёт на долю, которую это значение убирает: полностью при 100%. Используется переписью на вкладке «Демография». Также смягчает малярийную часть издержек [Concept('concept_local_climate','местного климата')] области, независимо от правила «Демография»."
+ },
+ "state_male_labor_participation_add": {
+  "en": "Census: Men at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Перепись: мужчины на работе[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_male_labor_participation_add_desc": {
+  "en": "The share of working-age men who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля мужчин трудоспособного возраста, которые работают. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_maternal_mortality_mult": {
   "en": "Maternal Deaths[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Материнская смертность[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
+ "state_maternal_mortality_mult_desc": {
+  "en": "Deaths of women in pregnancy and childbirth, unsafe abortions among them. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти женщин при беременности и родах, в том числе от небезопасных абортов. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_maternal_treatment_add": {
+  "en": "Treatment in Childbirth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Помощь при родах[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_maternal_treatment_add_desc": {
+  "en": "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля смертей матерей при родах, которых может избежать медицина там, где люди могут до неё добраться. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_means_literacy_add": {
   "en": "Family Planning Knowledge[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Знания о планировании семьи[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_means_literacy_add_desc": {
+  "en": "Knowledge of how to plan a family, spread beyond those who can read: people use the means to plan a family as if [concept_literacy] were this much higher. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Знание о том, как планировать семью, распространившееся за пределы грамотных: люди пользуются средствами планирования семьи так, как если бы [concept_literacy|l] была настолько выше. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_medical_diffusion_add": {
   "en": "Spread of Medicine[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Распространение медицины[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
+ "state_medical_diffusion_add_desc": {
+  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training, the World Health Organization and a [concept_power_bloc]'s Healthcare principle add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Как быстро новая медицина достигает каждой области: доля разрыва между её [Concept('concept_health_care_access','доступом к здравоохранению')] и лечением и тем уровнем, к которому они идут, которая закрывается при каждом ежегодном подсчёте. 10% везде; связь, медицинское образование, Всемирная организация здравоохранения и принцип «Здравоохранение» [Concept('concept_power_bloc','силового блока')] добавляют больше. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_metro_share_add": {
+  "en": "Metropolitan Share Target[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Целевая доля мегаполиса[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_metro_share_add_desc": {
+  "en": "Points on the target of the share of a state's urban people who live in its largest city: green belts and new towns spread them over more places. Used by the census on a state's Demographics subtab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Пункты к цели доли городских жителей области, живущих в её крупнейшем городе: зелёные пояса и новые города расселяют их по большему числу мест. Используется переписью на подвкладке «Демография» области.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_migration_crowding_density_mult": {
   "en": "[concept_migration_crowding] Tolerance",
   "ru": "Терпимость: [concept_migration_crowding|l]"
+ },
+ "state_migration_crowding_density_mult_desc": {
+  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. It multiplies the densities that open and close an [concept_internal_resettlement] frontier in the same way. Improved by urban planning, [concept_infrastructure], and modern transportation.",
+  "ru": "Умножает население, которое может вместить область, прежде чем [Concept('concept_migration_crowding','миграционная теснота')] снизит [Concept('concept_migration_pull','миграционную привлекательность')]: и долю, которую допускает её [Concept('concept_arable_land','пахотная земля')], и долю, которую добавляет её [Concept('concept_urban_engineering','городская инженерия')]. Так же умножает плотности, при которых открывается и закрывается граница [Concept('concept_internal_resettlement','внутреннего переселения')]. Улучшается градостроительством, [concept_infrastructure|l] и современным транспортом."
+ },
+ "state_min_cultural_acceptance_delta_add": {
+  "en": "Minimum Local Acceptance",
+  "ru": "Минимальное местное принятие"
+ },
+ "state_min_cultural_acceptance_delta_add_desc": {
+  "en": "A change in the minimum local cultural acceptance that can be applied in a [concept_state].",
+  "ru": "Изменение минимального местного культурного принятия, которое можно применить в [Concept('concept_state','области')]."
+ },
+ "state_monthly_loyalists_add_desc": {
+  "en": "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists|q$')] each month, in incorporated [Concept('concept_state','$concept_states|q$')] only.",
+  "ru": "Доля населения, ежемесячно переходящая в категорию [Concept('concept_loyalist','$concept_loyalists|q$')|l]. Только включённые [Concept('concept_state','$concept_states|q$')|l]."
+ },
+ "state_natural_fertility_mult": {
+  "en": "Natural Fertility[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Естественная рождаемость[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_natural_fertility_mult_desc": {
+  "en": "How many children women have before any family planning, through their standing inside marriage. Women's legal standing and their work move it: where women work the fields, own property, hold jobs or vote, they have more say over how many children they have. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Сколько детей рожают женщины до всякого планирования семьи, исходя из их положения в браке. На него влияют правовое положение женщин и их работа: там, где женщины работают в поле, владеют имуществом, занимают должности или голосуют, они больше решают, сколько у них будет детей. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_nuclear_weapon_defense_chance_add": {
+  "en": "[concept_nuclear_strike] Defense Chance",
+  "ru": "[concept_nuclear_strike]: шанс защиты"
+ },
+ "state_nuclear_weapon_defense_chance_add_desc": {
+  "en": "The chance of successfully defending a [Concept('concept_state','$concept_state|q$')] against a [concept_nuclear_strike].",
+  "ru": "Шанс успешно защитить [Concept('concept_state','$concept_state|q$')|l] от [Concept('concept_nuclear_strike','ядерного удара')]."
+ },
+ "state_orbital_battery_fire_add": {
+  "en": "Fire on Hostile Fleets at Earth",
+  "ru": "Огонь по вражеским флотам у Земли"
+ },
+ "state_orbital_battery_fire_add_desc": {
+  "en": "Fire this state's ground-to-orbit batteries put on enemy fleets in Earth orbit each month, while its owner controls the state",
+  "ru": "Огонь, который наземные орбитальные батареи этой области ведут по вражеским флотам на орбите Земли каждый месяц, пока владелец контролирует область"
+ },
+ "state_orbital_debris_sweep_add": {
+  "en": "Low-Orbit Debris Swept in Peace",
+  "ru": "Мусор на низкой орбите, убираемый в мирное время"
+ },
+ "state_orbital_debris_sweep_add_desc": {
+  "en": "Low-orbit debris this state's ground lasers clear each month, while its owner controls the state and is at war with no one",
+  "ru": "Мусор на низкой орбите, который наземные лазеры этой области убирают каждый месяц, пока владелец контролирует область и ни с кем не воюет"
+ },
+ "state_pollution_generation_mult": {
+  "en": "Generated [concept_pollution_system]",
+  "ru": "Порождаемое [concept_pollution_system|l]"
+ },
+ "state_pollution_generation_mult_desc": {
+  "en": "A percentage change to the amount of [concept_generated_pollution] generated in this state",
+  "ru": "Процентное изменение объёма [Concept('concept_generated_pollution','образуемого загрязнения')] в этой области"
+ },
+ "state_pop_support_movement_anti_war_mult": {
+  "en": "$movement_anti_war_name$ [concept_pop] Attraction",
+  "ru": "Привлекательность для [Concept('concept_pop','групп населения')]: «$movement_anti_war_name$»"
+ },
+ "state_pop_support_movement_anti_war_mult_desc": {
+  "en": "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_anti_war_name$.",
+  "ru": "Увеличение или уменьшение доли [Concept('concept_pop', 'групп населения')], привлечённых движением «$movement_anti_war_name$»."
+ },
+ "state_rejuvenation_add": {
+  "en": "Rejuvenation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Омоложение[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_rejuvenation_add_desc": {
+  "en": "Each year the bodies of people in longevity care who are biologically older than 35 close this share of the gap to 35. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Каждый год тела людей, получающих медицину долголетия, биологически старше 35 лет сокращают эту долю разрыва до 35. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_reserve_battalions_add_desc": {
+  "en": "[concept_reserve_battalions] trained in this state's barracks. An understaffed barracks counts for less. Each one adds the conscription rate and the [Concept('concept_conscription_center', 'conscription-center')] limit for one more conscript battalion, even past the limit set by your [GetLawGroup('lawgroup_army_model').GetName] law.",
+  "ru": "[concept_reserve_battalions], обученные в казармах этой области. Недоукомплектованные казармы считаются за меньшее. Каждый добавляет норму призыва и лимит [Concept('concept_conscription_center', 'призывных пунктов')] ещё для одного призывного батальона, даже сверх предела, заданного вашим законом из группы «[GetLawGroup('lawgroup_army_model').GetName]»."
+ },
+ "state_resettlement_recruits_add": {
+  "en": "Recruited for resettlement last month",
+  "ru": "Завербовано для переселения в прошлом месяце"
+ },
+ "state_resettlement_recruits_add_desc": {
+  "en": "People Settlement Authorities took from this state last month.",
+  "ru": "Люди, которых Управления по заселению взяли из этой области в прошлом месяце."
+ },
+ "state_resettlement_transfer_add": {
+  "en": "Settlers Moved per Month",
+  "ru": "Переселенцев в месяц"
+ },
+ "state_resettlement_transfer_add_desc": {
+  "en": "How many people this state's Settlement Authority recruits for it each month, when enough eligible people can be found. Those who die in transit never arrive.",
+  "ru": "Сколько людей Управление по заселению этой области набирает для неё каждый месяц, если находится достаточно подходящих людей. Умершие в пути не достигают цели."
  },
  "state_sex_ratio_at_birth_add": {
   "en": "Boys per 100 Girls at Birth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Мальчиков на 100 девочек при рождении[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
+ "state_sex_ratio_at_birth_add_desc": {
+  "en": "How far a preference for sons raises the boys born per 100 girls above the natural 105. It counts only once prenatal sexing exists, with $microprocessor$. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько предпочтение сыновей повышает число рождающихся мальчиков на 100 девочек над естественным значением 105. Учитывается только после появления пренатального определения пола с технологией «$microprocessor$». Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_sr_ship_construction_add": {
+  "en": "Fleet Strength Built a Month",
+  "ru": "Сила флота, строящегося за месяц"
+ },
+ "state_sr_ship_construction_add_desc": {
+  "en": "Warship strength this state's Space Command adds to its owner's home fleet each month, while its owner controls the state",
+  "ru": "Боевая сила, которую Космическое командование этой области добавляет домашнему флоту владельца каждый месяц, пока владелец контролирует область"
+ },
  "state_urban_fertility_relief_add": {
   "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
   "ru": "Жильё для семей в городах[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_urban_fertility_relief_add_desc": {
+  "en": "How much of city life's pull toward smaller families is offset, as homes with room for children are built. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько компенсируется тяга городской жизни к малым семьям по мере строительства жилья с местом для детей. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_war_support_monthly_add_desc": {
+  "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive|q$')] share of the national population. Displayed in event tooltips as 'From Events'.",
+  "ru": "Дополнительная [concept_war_support|l], получаемая каждый месяц и масштабируемая по доле населения страны, приходящейся на [Concept('concept_state','$concept_state_possessive|q$')|l]. Отображается во всплывающих подсказках событий как «От событий»."
+ },
+ "state_wealth_concentration_land_add": {
+  "en": "[concept_inheritance_concentration]: Land Tenure",
+  "ru": "[concept_inheritance_concentration]: землевладение"
+ },
+ "state_wealth_concentration_land_add_desc": {
+  "en": "Moves each state's [concept_inheritance_concentration] target, times its share of $peasants$ and $farmers$: great estates gather the land into few hands, smallholdings spread it.",
+  "ru": "Сдвигает цель [concept_inheritance_concentration|l] в каждой области, умноженную на долю «$peasants$» и «$farmers$»: крупные поместья сосредоточивают землю в немногих руках, мелкие хозяйства рассредоточивают её."
+ },
+ "state_work_capacity_mult": {
+  "en": "Census: Fitness for Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Перепись: годность к труду[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_capacity_mult_desc": {
+  "en": "How fit people are to work at each age, most of all past 60. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Насколько люди пригодны к труду в каждом возрасте, особенно после 60 лет. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_mortality_mult": {
+  "en": "Deaths at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти на работе[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_mortality_mult_desc": {
+  "en": "Deaths in mines, mills and workshops, shared between women and men by their part of the workforce. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Смерти в шахтах, на фабриках и в мастерских, распределяемые между женщинами и мужчинами по их доле в рабочей силе. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_safety_add": {
+  "en": "Safer Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "ru": "Безопасный труд[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_safety_add_desc": {
+  "en": "The share of deaths at work that safer machines and safer kinds of work prevent, whatever the labor laws: all of it at 100%, though never more than 95%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "ru": "Доля смертей на работе, которых удаётся избежать благодаря более безопасным машинам и видам работ, независимо от трудовых законов: все при 100%, но не более 95%. Используется переписью на вкладке «Демография».[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_yearly_cultural_acceptance_add": {
+  "en": "Annual Cultural Acceptance",
+  "ru": "Ежегодное культурное принятие"
+ },
+ "state_yearly_cultural_acceptance_add_desc": {
+  "en": "The amount of cultural acceptance gained each year for cultures with negative acceptance modifiers.",
+  "ru": "Сколько культурного принятия добавляется каждый год для культур с отрицательными модификаторами принятия."
+ },
+ "unit_combat_unit_type_jet_powered_fighters_defense_mult_desc": {
+  "en": "A percentage bonus or penalty to the defense capability of Jet-Powered Fighters combat units",
+  "ru": "Процентный бонус или штраф к оборонительным возможностям боевых частей типа «Реактивная авиация»"
+ },
+ "unit_combat_unit_type_jet_powered_fighters_offense_mult_desc": {
+  "en": "A bonus or penalty to the [concept_offense] of [GetCombatUnitType('combat_unit_type_jet_powered_fighters').GetName] units",
+  "ru": "Бонус или штраф к [Concept('concept_offense','наступлению')] частей «[GetCombatUnitType('combat_unit_type_jet_powered_fighters').GetName]»"
+ },
+ "unit_combat_unit_type_orbital_tactical_vehicles_defense_mult_desc": {
+  "en": "A percentage bonus or penalty to the defense capability of Orbital Tactical Vehicles combat units",
+  "ru": "Процентный бонус или штраф к оборонительным возможностям боевых частей типа «Орбитальные тактические аппараты»"
+ },
+ "unit_combat_unit_type_orbital_tactical_vehicles_offense_mult": {
+  "en": "Orbital Tactical Vehicles Offense",
+  "ru": "Наступление орбитальных тактических аппаратов"
+ },
+ "unit_combat_unit_type_orbital_tactical_vehicles_offense_mult_desc": {
+  "en": "A percentage bonus or penalty to the offense capability of Orbital Tactical Vehicles combat units",
+  "ru": "Процентный бонус или штраф к наступательным возможностям боевых частей типа «Орбитальные тактические аппараты»"
+ },
+ "unit_combat_unit_type_orbital_weapons_platforms_defense_mult_desc": {
+  "en": "A percentage bonus or penalty to the defense capability of Orbital Weapons Platforms combat units",
+  "ru": "Процентный бонус или штраф к оборонительным возможностям боевых частей типа «Орбитальные оружейные платформы»"
+ },
+ "unit_combat_unit_type_orbital_weapons_platforms_offense_mult_desc": {
+  "en": "A percentage bonus or penalty to the offense capability of Orbital Weapons Platforms combat units",
+  "ru": "Процентный бонус или штраф к наступательным возможностям боевых частей типа «Орбитальные оружейные платформы»"
+ },
+ "unit_combat_unit_type_stealth_aircraft_defense_mult_desc": {
+  "en": "A percentage bonus or penalty to the defense capability of Stealth Aircraft combat units",
+  "ru": "Процентный бонус или штраф к оборонительным возможностям боевых частей типа «Малозаметные самолёты»"
+ },
+ "unit_combat_unit_type_stealth_aircraft_offense_mult_desc": {
+  "en": "A percentage bonus or penalty to the offense capability of Stealth Aircraft combat units",
+  "ru": "Процентный бонус или штраф к наступательным возможностям боевых частей типа «Малозаметные самолёты»"
  }
 }

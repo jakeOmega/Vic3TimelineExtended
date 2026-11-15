@@ -1,15 +1,47 @@
 {
+ "notification_arms_race_pressure_desc": {
+  "en": "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget.",
+  "ru": "[SCOPE.sCountry('arms_race_rival').GetName] отвечает тем же на наше военное наращивание, усиливая давление на наш оборонный бюджет."
+ },
  "notification_arms_race_pressure_name": {
   "en": "Arms Race Pressure",
   "ru": "Давление гонки вооружений"
+ },
+ "notification_banking_cycle_started_notice_desc": {
+  "en": "With a stock exchange and a city of real size, our financial sector now runs a cycle of its own. It starts at Stable, with no momentum and no bubble. The banking tools and the central bank's controls are open on the Banking tab of the Budget panel.",
+  "ru": "Теперь, когда у нас есть биржа и город настоящих размеров, наш финансовый сектор живёт собственным циклом. Он начинается со стадии «Стабильный», без импульса и без пузыря. Банковские инструменты и средства управления центрального банка открыты на вкладке «Банки» панели бюджета."
+ },
+ "notification_banking_cycle_started_notice_name": {
+  "en": "The Banking Cycle Begins",
+  "ru": "Начало банковского цикла"
+ },
+ "notification_banking_eliq_wound_down_notice_desc": {
+  "en": "The banking cycle has held at Stable or above for 12 months, and the banks no longer borrow from the lender of last resort. The Emergency Liquidity Program has closed, and 1% of GDP has come back to the treasury. If another crisis comes, it can be opened again, and its announcement will steady the market once more.",
+  "ru": "Банковский цикл держался на уровне «Стабильный» или выше 12 месяцев, и банки больше не берут взаймы у кредитора последней инстанции. Программа экстренной ликвидности закрыта, и 1% ВВП вернулся в казну. Если придёт новый кризис, её можно открыть снова, и её объявление вновь успокоит рынок."
+ },
+ "notification_banking_eliq_wound_down_notice_name": {
+  "en": "Emergency Liquidity Wound Down",
+  "ru": "Экстренная ликвидность свёрнута"
+ },
+ "notification_banking_overdraft_lift_notice_desc": {
+  "en": "Our [concept_banking_intervention_budget] no longer covers the interventions in force, so #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#! has been lifted.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] While the budget stays overdrawn, one more is lifted each month: crash responses first, then the $banking_dash_cat_external$ tools, then the rest from the cheapest up. To keep a cheap tool, lift a costlier one first.",
+  "ru": "Наш [concept_banking_intervention_budget|l] больше не покрывает действующие интервенции, поэтому снят следующий инструмент: #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#!.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] Пока бюджет остаётся превышенным, каждый месяц снимается ещё один: сначала меры реагирования на крах, затем инструменты категории «$banking_dash_cat_external$», затем остальные, начиная с самых дешёвых. Чтобы сохранить дешёвый инструмент, сначала снимите более дорогой."
  },
  "notification_banking_overdraft_lift_notice_name": {
   "en": "Intervention Budget Overdrawn",
   "ru": "Бюджет вмешательства перерасходован"
  },
+ "notification_colonial_ceasefire_granted_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName] согласилась на перемирие с нашим движением за независимость и даровала нам независимость. Мы свободны."
+ },
  "notification_colonial_ceasefire_granted_notice_name": {
   "en": "Ceasefire and Independence",
   "ru": "Прекращение огня и независимость"
+ },
+ "notification_colonial_crackdown_begun_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has launched a crackdown on our independence movement.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName], наш [concept_overlord|l], развернула репрессии против нашего движения за независимость."
  },
  "notification_colonial_crackdown_begun_notice_name": {
   "en": "Crackdown Begun",
@@ -23,17 +55,33 @@
   "en": "Independence Granted",
   "ru": "Независимость дарована"
  },
+ "notification_colonial_negotiations_started_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has opened negotiations with us on greater autonomy.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName], наш [concept_overlord|l], начала с нами переговоры о расширении автономии."
+ },
  "notification_colonial_negotiations_started_notice_name": {
   "en": "Autonomy Talks Opened",
   "ru": "Начаты переговоры об автономии"
+ },
+ "notification_colonial_neocolonial_reforms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has announced colonial reforms whose economic provisions favor its own firms and markets. We remain under its rule.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName], наш [concept_overlord|l], объявила колониальные реформы, экономические положения которых выгодны её собственным фирмам и рынкам. Мы остаёмся под её властью."
  },
  "notification_colonial_neocolonial_reforms_notice_name": {
   "en": "Reforms With Strings Attached",
   "ru": "Реформы с условиями"
  },
+ "notification_colonial_neocolonial_terms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has granted us independence, on economic terms that favor its own firms and markets.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName] даровала нам независимость на экономических условиях, выгодных её собственным фирмам и рынкам."
+ },
  "notification_colonial_neocolonial_terms_notice_name": {
   "en": "Independence With Strings Attached",
   "ru": "Независимость с условиями"
+ },
+ "notification_colonial_reparations_paid_notice_desc": {
+  "en": "[SCOPE.sCountry('reparations_payer').GetName] has accepted our claim and paid the colonial reparations we demanded.",
+  "ru": "Страна [SCOPE.sCountry('reparations_payer').GetName] приняла наше требование и выплатила колониальные репарации, которых мы добивались."
  },
  "notification_colonial_reparations_paid_notice_name": {
   "en": "Reparations Paid",
@@ -47,69 +95,153 @@
   "en": "Reparations Refused",
   "ru": "В репарациях отказано"
  },
+ "notification_colonial_territory_absorbed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has been absorbed by [SCOPE.sCountry('absorbing_country').GetName] as the era of [concept_decolonization_system] reshapes the political map.",
+  "ru": "Страна [SCOPE.sCountry('collapsing_country').GetName] поглощена страной [SCOPE.sCountry('absorbing_country').GetName]: эпоха [Concept('concept_decolonization_system','деколонизации')] перекраивает политическую карту."
+ },
+ "notification_colonial_territory_absorbed_notice_name": {
+  "en": "Colonial Territory Absorbed",
+  "ru": "Колониальная территория поглощена"
+ },
+ "notification_colonial_territory_collapsed_notice_desc": {
+  "en": "[SCOPE.sCountry('collapsing_country').GetName] has collapsed into disorganized territory, reverting to uncolonized land.",
+  "ru": "Страна [SCOPE.sCountry('collapsing_country').GetName] развалилась на неорганизованную территорию и снова стала неколонизированной землёй."
+ },
+ "notification_colonial_territory_collapsed_notice_name": {
+  "en": "Colonial Territory Collapsed",
+  "ru": "Колониальная территория развалилась"
+ },
+ "notification_counter_propaganda_backlash_desc": {
+  "en": "[SCOPE.sCountry('propaganda_rival').GetName] has launched a counter-propaganda campaign that is undermining our messaging abroad.",
+  "ru": "Страна [SCOPE.sCountry('propaganda_rival').GetName] начала кампанию контрпропаганды, которая подрывает наши идеи за рубежом."
+ },
  "notification_counter_propaganda_backlash_name": {
   "en": "Propaganda Countered",
   "ru": "Пропаганда нейтрализована"
+ },
+ "notification_covert_backlash_public_notice_desc": {
+  "en": "The exposure of an operation by #b [SCOPE.sCountry('iw_exposed_by').GetName]#! has turned public anger on its friends at home. The interest groups in the lobby that favors it gain $covert_foreign_ties_discredited$ and lose [concept_political_strength] for a time.",
+  "ru": "Разоблачение операции страны #b [SCOPE.sCountry('iw_exposed_by').GetName]#! обратило общественный гнев на её друзей внутри страны. Группы интересов в лобби, выступающем за неё, получают «$covert_foreign_ties_discredited$» и на время теряют [Concept('concept_political_strength','политическую силу')]."
  },
  "notification_covert_backlash_public_notice_name": {
   "en": "Anger at Foreign Friends",
   "ru": "Гнев на иностранных друзей"
  },
+ "notification_covert_catch_watched_notice_desc": {
+  "en": "Our counterintelligence has caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [GetPlayer.GetCustom('covert_caught_type_name')] against us. Under our standing order it is letting the operation run and watching it. It is listed under Known Foreign Operations, where we can expose it at any time.",
+  "ru": "Наша контрразведка поймала агентов страны #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#!, проводящих против нас операцию: [GetPlayer.GetCustom('covert_caught_type_name')]. По нашему постоянному приказу она позволяет операции идти и наблюдает за ней. Операция значится среди «Известных иностранных операций», где мы можем разоблачить её в любой момент."
+ },
  "notification_covert_catch_watched_notice_name": {
   "en": "Foreign Operation Watched",
   "ru": "Иностранная операция под наблюдением"
+ },
+ "notification_covert_exposure_expelled_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over. Its officers under diplomatic cover have been sent home, and it has expelled ours in turn.",
+  "ru": "Мы обнародовали улики против страны #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Её операция против нас, $covert_exposed_op_link$, закончена. Её офицеры под дипломатическим прикрытием высланы домой, а в ответ она выслала наших."
  },
  "notification_covert_exposure_expelled_notice_name": {
   "en": "Operation Exposed, Diplomats Expelled",
   "ru": "Операция раскрыта, дипломаты высланы"
  },
+ "notification_covert_exposure_repeat_notice_desc": {
+  "en": "Our counterintelligence has exposed another operation run against us by #b [SCOPE.sCountry('iw_exposed_by').GetName]#!: $covert_exposed_op_link$. It is over.",
+  "ru": "Наша контрразведка разоблачила ещё одну операцию страны #b [SCOPE.sCountry('iw_exposed_by').GetName]#! против нас: $covert_exposed_op_link$. Она закончена."
+ },
  "notification_covert_exposure_repeat_notice_name": {
   "en": "Another Operation Exposed",
   "ru": "Раскрыта ещё одна операция"
+ },
+ "notification_covert_exposure_shored_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and our counterintelligence is on alert.",
+  "ru": "Мы обнародовали улики против страны #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Её операция против нас, $covert_exposed_op_link$, закончена, а наша контрразведка приведена в готовность."
  },
  "notification_covert_exposure_shored_notice_name": {
   "en": "Operation Exposed",
   "ru": "Операция раскрыта"
  },
+ "notification_covert_exposure_turned_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and what it gave us is now a foothold inside its service.",
+  "ru": "Мы обнародовали улики против страны #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Её операция против нас, $covert_exposed_op_link$, закончена, а то, что она нам дала, стало плацдармом внутри её службы."
+ },
  "notification_covert_exposure_turned_notice_name": {
   "en": "Operation Exposed and Turned",
   "ru": "Операция раскрыта, агенты перевербованы"
+ },
+ "notification_covert_severe_exposure_notice_desc": {
+  "en": "[SCOPE.sCountry('covert_exposure_operator').GetName] has been caught running a covert campaign to bring down the government of [SCOPE.sCountry('detected_by_country').GetName], which we stand behind. Our relations with [SCOPE.sCountry('covert_exposure_operator').GetName] have suffered for it.",
+  "ru": "Страна [SCOPE.sCountry('covert_exposure_operator').GetName] уличена в тайной кампании по свержению правительства страны [SCOPE.sCountry('detected_by_country').GetName], за которой мы стоим. Наши отношения со страной [SCOPE.sCountry('covert_exposure_operator').GetName] из-за этого испортились."
  },
  "notification_covert_severe_exposure_notice_name": {
   "en": "Foreign Subversion Exposed",
   "ru": "Иностранная диверсия раскрыта"
  },
+ "notification_decentralized_claims_renounced_desc": {
+  "en": "In keeping with decolonization, we have renounced our [Concept('concept_claim', 'claims')] on the states of [Concept('concept_decentralized_nation', 'decentralized nations')].",
+  "ru": "В соответствии с деколонизацией мы отказались от своих [Concept('concept_claim', 'претензий')] на области [Concept('concept_decentralized_nation', 'децентрализованных наций')]."
+ },
  "notification_decentralized_claims_renounced_name": {
   "en": "Colonial Claims Renounced",
   "ru": "Колониальные претензии сняты"
+ },
+ "notification_decol_border_claim_pressed_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] demands that the border between us be redrawn and now claims [SCOPE.sState('rival_border_state').GetName]. Our relations fall by 40.",
+  "ru": "Страна [SCOPE.sCountry('border_claimant').GetName] требует пересмотра границы между нами и теперь заявляет претензии на область [SCOPE.sState('rival_border_state').GetName]. Наши отношения падают на 40."
  },
  "notification_decol_border_claim_pressed_notice_name": {
   "en": "A Claim on Our Border",
   "ru": "Претензия на нашу границу"
  },
+ "notification_decol_border_mediation_lost_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for it. It now claims [SCOPE.sState('rival_border_state').GetName], and our relations fall by 10.",
+  "ru": "Страна [SCOPE.sCountry('border_claimant').GetName] передала наш пограничный спор на международное посредничество, и посредники вынесли решение в её пользу. Теперь она заявляет претензии на область [SCOPE.sState('rival_border_state').GetName], а наши отношения падают на 10."
+ },
  "notification_decol_border_mediation_lost_notice_name": {
   "en": "The Mediators Find Against Us",
   "ru": "Посредники решили не в нашу пользу"
+ },
+ "notification_decol_border_mediation_split_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators split the difference. Neither of us gains a claim, and our relations rise by 10.",
+  "ru": "Страна [SCOPE.sCountry('border_claimant').GetName] передала наш пограничный спор на международное посредничество, и посредники поделили спорное поровну. Ни одна из сторон не получает претензии, а наши отношения улучшаются на 10."
  },
  "notification_decol_border_mediation_split_notice_name": {
   "en": "The Border Is Mediated",
   "ru": "Граница определена посредниками"
  },
+ "notification_decol_border_mediation_won_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for us. We now claim [SCOPE.sState('disputed_state').GetName].",
+  "ru": "Страна [SCOPE.sCountry('border_claimant').GetName] передала наш пограничный спор на международное посредничество, и посредники вынесли решение в нашу пользу. Теперь мы заявляем претензии на область [SCOPE.sState('disputed_state').GetName]."
+ },
  "notification_decol_border_mediation_won_notice_name": {
   "en": "The Mediators Find for Us",
   "ru": "Посредники решили в нашу пользу"
+ },
+ "notification_decol_collapse_aftershock_notice_desc": {
+  "en": "The colonial empire of [SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has collapsed. We gain $colonial_collapse_subject_unrest_modifier$ for 20 years, and our relations with it fall by 50.",
+  "ru": "Колониальная империя страны [SCOPE.sCountry('decol_colonial_power').GetName], нашего [concept_overlord|l], развалилась. Мы получаем «$colonial_collapse_subject_unrest_modifier$» на 20 лет, а наши отношения с ней падают на 50."
  },
  "notification_decol_collapse_aftershock_notice_name": {
   "en": "Our Overlord's Empire Collapses",
   "ru": "Империя нашего сюзерена рушится"
  },
+ "notification_decol_iw_accords_notice_desc": {
+  "en": "The talks with [SCOPE.sCountry('decol_iw_talks_rebels').GetName] have reached terms: our claim is dropped, and the war can end in a white peace. Offer one from the peace screen.",
+  "ru": "Переговоры со страной [SCOPE.sCountry('decol_iw_talks_rebels').GetName] достигли условий: наша претензия снята, и войну можно закончить белым миром. Предложите его на экране мира."
+ },
  "notification_decol_iw_accords_notice_name": {
   "en": "The Accords Are Agreed",
   "ru": "Соглашения достигнуты"
  },
+ "notification_decol_iw_allied_arms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] is sending us arms for our war to keep a colony.",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_side_taker').GetName] присылает нам оружие для нашей войны за удержание колонии."
+ },
  "notification_decol_iw_allied_arms_notice_name": {
   "en": "Arms from a Friend",
   "ru": "Оружие от друга"
+ },
+ "notification_decol_iw_intervention_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] has entered our war of independence on the rebels' side.",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_side_taker').GetName] вступила в нашу войну за независимость на стороне повстанцев."
  },
  "notification_decol_iw_intervention_notice_name": {
   "en": "A Great Power Intervenes",
@@ -131,29 +263,57 @@
   "en": "Talks Begin",
   "ru": "Начались переговоры"
  },
+ "notification_decol_iw_war_begins_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war with [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName].",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_gp_metropole').GetName] начала войну со страной [SCOPE.sCountry('decol_iw_gp_rebels').GetName], колонией, провозгласившей независимость в области [SCOPE.sState('decol_iw_note_state').GetName]."
+ },
  "notification_decol_iw_war_begins_notice_name": {
   "en": "A War of Independence",
   "ru": "Война за независимость"
+ },
+ "notification_decol_iw_war_begins_rebels_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war to take back our country.",
+  "ru": "Страна [SCOPE.sCountry('decol_iw_gp_metropole').GetName] начала войну, чтобы вернуть нашу страну."
  },
  "notification_decol_iw_war_begins_rebels_notice_name": {
   "en": "They Have Sent the Army",
   "ru": "Они послали армию"
  },
+ "notification_decol_iw_war_ends_notice_desc": {
+  "en": "The war between [SCOPE.sCountry('decol_iw_end_metropole').GetName] and its colony in [SCOPE.sState('decol_iw_end_state').GetName] is over.",
+  "ru": "Война между страной [SCOPE.sCountry('decol_iw_end_metropole').GetName] и её колонией в области [SCOPE.sState('decol_iw_end_state').GetName] окончена."
+ },
  "notification_decol_iw_war_ends_notice_name": {
   "en": "A War of Independence Ends",
   "ru": "Война за независимость окончена"
+ },
+ "notification_decol_iw_war_unstarted_notice_desc": {
+  "en": "The war to take back [SCOPE.sState('decol_iw_end_state').GetName] never began. [SCOPE.sCountry('decol_iw_end_rebels').GetName] is free.",
+  "ru": "Война за возвращение области [SCOPE.sState('decol_iw_end_state').GetName] так и не началась. Страна [SCOPE.sCountry('decol_iw_end_rebels').GetName] свободна."
  },
  "notification_decol_iw_war_unstarted_notice_name": {
   "en": "No War Came",
   "ru": "Войны не случилось"
  },
+ "notification_decol_iw_war_won_rebels_notice_desc": {
+  "en": "Our war with [SCOPE.sCountry('decol_iw_end_metropole').GetName] is over, and we are free.",
+  "ru": "Наша война со страной [SCOPE.sCountry('decol_iw_end_metropole').GetName] окончена, и мы свободны."
+ },
  "notification_decol_iw_war_won_rebels_notice_name": {
   "en": "Independence Won",
   "ru": "Независимость завоёвана"
  },
+ "notification_decol_liberation_contagion_notice_desc": {
+  "en": "[SCOPE.sCountry('decolonized_new_country').GetName] has broken free of [SCOPE.sCountry('decolonizing_parent').GetName], and our own colonies have taken note. We gain $colonial_stability_negative_event$ for a year: our colonial stability falls by 1 a month.",
+  "ru": "Страна [SCOPE.sCountry('decolonized_new_country').GetName] вырвалась из-под власти страны [SCOPE.sCountry('decolonizing_parent').GetName], и наши собственные колонии это заметили. Мы получаем «$colonial_stability_negative_event$» на год: наша колониальная стабильность падает на 1 в месяц."
+ },
  "notification_decol_liberation_contagion_notice_name": {
   "en": "Independence Spreads",
   "ru": "Независимость распространяется"
+ },
+ "notification_decol_truce_proposal_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
+  "ru": "Страна [SCOPE.sCountry('truce_responder').GetName] приняла наше предложение: пятилетнее перемирие теперь связывает обе наши страны."
  },
  "notification_decol_truce_proposal_accepted_notice_name": {
   "en": "Truce Accepted",
@@ -166,6 +326,10 @@
  "notification_decol_truce_proposal_declined_notice_name": {
   "en": "Truce Refused",
   "ru": "Перемирие отклонено"
+ },
+ "notification_espionage_agent_quietly_exposed_desc": {
+  "en": "One of our intelligence operatives has been quietly returned via a prisoner exchange with [SCOPE.sCountry('espionage_catcher').GetName]. Our network in the region is compromised.",
+  "ru": "Одного из наших агентов разведки тихо вернули в ходе обмена заключёнными со страной [SCOPE.sCountry('espionage_catcher').GetName]. Наша сеть в регионе скомпрометирована."
  },
  "notification_espionage_agent_quietly_exposed_name": {
   "en": "Agent Exchanged",
@@ -187,269 +351,633 @@
   "en": "Closer Ties Welcomed",
   "ru": "Более тесные связи приветствуются"
  },
+ "notification_gm_com_lapsed_notice_desc": {
+  "en": "The monument can no longer be raised as asked. The moment has passed, and no one holds it against us.",
+  "ru": "Монумент больше нельзя воздвигнуть, как просили. Момент упущен, и никто не ставит нам это в вину."
+ },
+ "notification_gm_com_lapsed_notice_name": {
+  "en": "An Opportunity Lapses",
+  "ru": "Возможность упущена"
+ },
+ "notification_gm_com_missed_notice_desc": {
+  "en": "The time for the monument has run out. The moment has passed, and no one holds it against us.",
+  "ru": "Время для монумента вышло. Момент упущен, и никто не ставит нам это в вину."
+ },
+ "notification_gm_com_missed_notice_name": {
+  "en": "An Opportunity Passes",
+  "ru": "Возможность проходит"
+ },
+ "notification_gm_com_reminder_notice_desc": {
+  "en": "The monument we were asked for has a year left to be raised. Raise It on the Grand Monuments tab queues the missing levels, which count once their monument is dedicated.",
+  "ru": "У монумента, о котором нас просили, остался год до возведения. Кнопка «Воздвигнуть» на вкладке «Великие монументы» ставит в очередь недостающие уровни, которые засчитываются после освящения их монумента."
+ },
+ "notification_gm_com_reminder_notice_name": {
+  "en": "A Year Left on the Opportunity",
+  "ru": "Остался год на возможность"
+ },
+ "notification_gm_tr_home_reach_notice_desc": {
+  "en": "We hold a trophy taken from [SCOPE.sState('gm_tr_notice_state').GetName], one of our own states. Bring It Home, on its row under Trophies, rebuilds it where it stood.",
+  "ru": "У нас есть трофей, взятый из области [SCOPE.sState('gm_tr_notice_state').GetName], одной из наших собственных. Кнопка «Вернуть на родину» в его строке в разделе «Трофеи» восстанавливает его там, где он стоял."
+ },
+ "notification_gm_tr_home_reach_notice_name": {
+  "en": "A Trophy Within Reach",
+  "ru": "Трофей в пределах досягаемости"
+ },
+ "notification_gm_tr_homecoming_notice_desc": {
+  "en": "A monument carried off as a trophy has been rebuilt where it stood, in [SCOPE.sState('gm_tr_notice_state').GetName]. The Homecoming lends the government legitimacy for ten years.",
+  "ru": "Монумент, увезённый как трофей, восстановлен там, где стоял, в области [SCOPE.sState('gm_tr_notice_state').GetName]. Возвращение даёт правительству легитимность на десять лет."
+ },
+ "notification_gm_tr_homecoming_notice_name": {
+  "en": "A Trophy Comes Home",
+  "ru": "Трофей возвращается домой"
+ },
+ "notification_gm_tr_lost_notice_desc": {
+  "en": "[SCOPE.sCountry('gm_tr_taker').GetName] has carried off one of our Grand Monuments, or part of it, from [SCOPE.sState('gm_tr_notice_state').GetName]. It is listed under Held Abroad on the Grand Monuments tab, with the ways to get it back. The outrage stiffens our war support.",
+  "ru": "Страна [SCOPE.sCountry('gm_tr_taker').GetName] увезла один из наших великих монументов или его часть из области [SCOPE.sState('gm_tr_notice_state').GetName]. Он значится в разделе «Удерживается за рубежом» на вкладке «Великие монументы» вместе со способами вернуть его. Возмущение укрепляет нашу поддержку войны."
+ },
+ "notification_gm_tr_lost_notice_name": {
+  "en": "Our Monument Carried Off",
+  "ru": "Наш монумент увезён"
+ },
+ "notification_gm_tr_site_reach_notice_desc": {
+  "en": "Our armies hold [SCOPE.sState('gm_tr_notice_state').GetName], where trophies stand. Its state view lists them, and each can be carried off while we hold it.",
+  "ru": "Наши армии удерживают область [SCOPE.sState('gm_tr_notice_state').GetName], где стоят трофеи. В её окне области они перечислены, и каждый можно увезти, пока мы её удерживаем."
+ },
+ "notification_gm_tr_site_reach_notice_name": {
+  "en": "Trophies Within Reach",
+  "ru": "Трофеи в пределах досягаемости"
+ },
+ "notification_gm_tr_taken_notice_desc": {
+  "en": "We have carried off a monument, or part of one, from [SCOPE.sState('gm_tr_notice_state').GetName] as a trophy. It stands in our capital now, under Trophies on the Grand Monuments tab.",
+  "ru": "Мы увезли монумент или его часть из области [SCOPE.sState('gm_tr_notice_state').GetName] как трофей. Теперь он стоит в нашей столице, в разделе «Трофеи» на вкладке «Великие монументы»."
+ },
+ "notification_gm_tr_taken_notice_name": {
+  "en": "A Trophy Carried Off",
+  "ru": "Трофей увезён"
+ },
+ "notification_gm_vanity_backlash_notice_desc": {
+  "en": "A new level of a Grand Monument opened in [SCOPE.sState('gm_vanity_state').GetName] while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
+  "ru": "Новый уровень великого монумента открылся в области [SCOPE.sState('gm_vanity_state').GetName], когда страна была в дефолте, голоде или спаде. Жители области возмущены, и легитимность правительства страдает около двух лет."
+ },
+ "notification_gm_vanity_backlash_notice_name": {
+  "en": "A Palace amid Hardship",
+  "ru": "Дворец среди лишений"
+ },
+ "notification_gp_condemnation_reforms_announced_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has acknowledged our criticism of its colonial rule and announced reforms.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName] признала нашу критику её колониального правления и объявила реформы."
+ },
  "notification_gp_condemnation_reforms_announced_notice_name": {
   "en": "Colonial Reforms Announced",
   "ru": "Объявлены колониальные реформы"
+ },
+ "notification_gp_condemnation_rejected_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has rejected our condemnation of its colonial rule and doubled down.",
+  "ru": "Страна [SCOPE.sCountry('decol_colonial_power').GetName] отвергла наше осуждение её колониального правления и ужесточила курс."
  },
  "notification_gp_condemnation_rejected_notice_name": {
   "en": "Condemnation Rejected",
   "ru": "Осуждение отклонено"
  },
+ "notification_gp_intervention_condemned_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_condemning_power').GetName] has condemned our intervention in [SCOPE.sCountry('intervention_victim').GetName]. We gain $gp_intervention_condemned_modifier$ for five years, fading, and its relations with us fall by 40.",
+  "ru": "Страна [SCOPE.sCountry('decol_condemning_power').GetName] осудила наше вмешательство в дела страны [SCOPE.sCountry('intervention_victim').GetName]. Мы получаем «$gp_intervention_condemned_modifier$» на пять лет, с затуханием, а отношения страны с нами падают на 40."
+ },
  "notification_gp_intervention_condemned_notice_name": {
   "en": "Our Intervention Condemned",
   "ru": "Наше вмешательство осуждено"
+ },
+ "notification_gp_intervention_target_notice_desc": {
+  "en": "[SCOPE.sCountry('intervening_power').GetName] has answered our nationalization with a military intervention. We gain $gp_intervention_target_modifier$ for ten years, fading, and its relations with us fall by 100.",
+  "ru": "Страна [SCOPE.sCountry('intervening_power').GetName] ответила на нашу национализацию военной интервенцией. Мы получаем «$gp_intervention_target_modifier$» на десять лет, с затуханием, а отношения страны с нами падают на 100."
  },
  "notification_gp_intervention_target_notice_name": {
   "en": "Foreign Troops Land",
   "ru": "Высадка иностранных войск"
  },
+ "notification_gp_support_accepted_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defense of the colonial powers.",
+  "ru": "Страна [SCOPE.sCountry('backed_colonial_power').GetName] открыто поддержала нашу позицию в защиту колониальных держав."
+ },
  "notification_gp_support_accepted_notice_name": {
   "en": "A Colonial Power Stands With Us",
   "ru": "Колониальная держава на нашей стороне"
+ },
+ "notification_gp_support_declined_notice_desc": {
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defense of the colonial powers.",
+  "ru": "Страна [SCOPE.sCountry('backed_colonial_power').GetName] публично отмежевалась от нашей позиции в защиту колониальных держав."
  },
  "notification_gp_support_declined_notice_name": {
   "en": "A Colonial Power Keeps Its Distance",
   "ru": "Колониальная держава держится в стороне"
  },
+ "notification_headlines_tech_ICBMs_desc": {
+  "en": "A successful test of an ICBM has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!",
+  "ru": "Сообщается об успешном испытании МБР в стране [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore Создание ракет, достаточно мощных, чтобы доставлять груз между континентами, имеет ошеломляющие геополитические последствия. Международные аналитики предупреждают, что эта технология может коренным образом изменить характер войны и мировой баланс сил... #!"
+ },
+ "notification_headlines_tech_ICBMs_name": {
+  "en": "#b ROCKETS NOW CAPABLE OF STRIKING ACROSS CONTINENTS #!",
+  "ru": "#b РАКЕТЫ ТЕПЕРЬ СПОСОБНЫ БИТЬ ЧЕРЕЗ КОНТИНЕНТЫ #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_desc": {
+  "en": "A significant social movement advocating for LGBTQ+ rights is gaining mainstream attention in [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetName]. #lore Activists are pushing for legal protections and societal acceptance for individuals with diverse sexual orientations and gender identities, challenging long-held social norms... #!",
+  "ru": "Значительное общественное движение за права ЛГБТК+ набирает внимание в стране [SCOPE.sCountry('headlines_LGBTQ_rights_movement_researcher').GetName]. #lore Активисты добиваются правовой защиты и общественного принятия для людей с разной сексуальной ориентацией и гендерной идентичностью, бросая вызов давним социальным нормам... #!"
+ },
+ "notification_headlines_tech_LGBTQ_rights_movement_name": {
+  "en": "#b CALLS FOR EQUALITY AND ACCEPTANCE GROW #!",
+  "ru": "#b РАСТЁТ ТРЕБОВАНИЕ РАВЕНСТВА И ПРИНЯТИЯ #!"
+ },
+ "notification_headlines_tech_abyssal_plain_mining_desc": {
+  "en": "With the depletion of terrestrial mineral resources, companies in [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetName] are turning to the ocean floor for mining. #lore This abyssal-plain mining could provide access to valuable minerals, but it also raises environmental concerns... #!",
+  "ru": "В связи с истощением наземных минеральных ресурсов компании страны [SCOPE.sCountry('headlines_abyssal_plain_mining_researcher').GetName] обращаются к добыче на океанском дне. #lore Добыча на абиссальных равнинах может дать доступ к ценным минералам, но вызывает и экологические опасения... #!"
+ },
  "notification_headlines_tech_abyssal_plain_mining_name": {
   "en": "#b MINING THE OCEAN FLOOR FOR RARE RESOURCES #!",
   "ru": "#b ДОБЫЧА РЕДКИХ РЕСУРСОВ СО ДНА ОКЕАНА #!"
+ },
+ "notification_headlines_tech_additive_manufacturing_desc": {
+  "en": "Engineers in [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetName] have demonstrated a viable process for additive manufacturing. #lore Popularly known as '3D printing,' the technology builds items layer by layer from a digital model. Experts predict this will disrupt everything from prototyping to producing complex, on-demand parts... #!",
+  "ru": "Инженеры страны [SCOPE.sCountry('headlines_additive_manufacturing_researcher').GetName] продемонстрировали жизнеспособный процесс аддитивного производства. #lore Известная как «3D-печать», эта технология создаёт изделия слой за слоем по цифровой модели. Эксперты предсказывают, что она перевернёт всё: от создания прототипов до выпуска сложных деталей по требованию... #!"
  },
  "notification_headlines_tech_additive_manufacturing_name": {
   "en": "#b MANUFACTURING REVOLUTION: 'PRINTING' SOLID OBJECTS #!",
   "ru": "#b ПРОИЗВОДСТВЕННАЯ РЕВОЛЮЦИЯ: «ПЕЧАТЬ» ТВЁРДЫХ ОБЪЕКТОВ #!"
  },
+ "notification_headlines_tech_advanced_agricultural_statistics_desc": {
+  "en": "Agronomists in [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetName] are applying advanced agricultural statistics to boost efficiency. #lore By analyzing crop data and livestock patterns with modern statistical methods, farms can optimize yields and resource use. The approach promises to make farming a more exact science... #!",
+  "ru": "Агрономы страны [SCOPE.sCountry('headlines_advanced_agricultural_statistics_researcher').GetName] применяют передовую сельскохозяйственную статистику для повышения эффективности. #lore Анализируя данные об урожаях и поголовье современными статистическими методами, фермы могут оптимизировать урожайность и расход ресурсов. Этот подход обещает сделать земледелие более точной наукой... #!"
+ },
  "notification_headlines_tech_advanced_agricultural_statistics_name": {
   "en": "#b FARMING BY THE NUMBERS PROMISES RECORD HARVESTS #!",
   "ru": "#b ЗЕМЛЕДЕЛИЕ ПО ЦИФРАМ ОБЕЩАЕТ РЕКОРДНЫЕ УРОЖАИ #!"
+ },
+ "notification_headlines_tech_advanced_assembly_lines_desc": {
+  "en": "Manufacturers in [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetName] are implementing advanced assembly lines. #lore Incorporating modular components and producing items only as needed allows for greater flexibility and reduced waste. Economists believe this will lower costs for a wide variety of consumer goods... #!",
+  "ru": "Производители страны [SCOPE.sCountry('headlines_advanced_assembly_lines_researcher').GetName] внедряют передовые сборочные линии. #lore Модульные компоненты и выпуск изделий только по мере надобности дают большую гибкость и меньше отходов. Экономисты считают, что это снизит стоимость самых разных потребительских товаров... #!"
  },
  "notification_headlines_tech_advanced_assembly_lines_name": {
   "en": "#b FACTORIES ADOPT 'JUST-IN-TIME' PRODUCTION #!",
   "ru": "#b ЗАВОДЫ ПЕРЕХОДЯТ НА ПРОИЗВОДСТВО «ТОЧНО В СРОК» #!"
  },
+ "notification_headlines_tech_advanced_body_armor_desc": {
+  "en": "Military researchers in [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetName] have unveiled advanced body armor. #lore The use of lightweight composites and advanced ceramics offers superior protection without significantly increasing weight, a crucial factor for infantry mobility and effectiveness in combat situations... #!",
+  "ru": "Военные исследователи страны [SCOPE.sCountry('headlines_advanced_body_armor_researcher').GetName] представили передовую бронезащиту. #lore Лёгкие композиты и передовая керамика обеспечивают превосходную защиту без заметного увеличения веса, что крайне важно для мобильности и эффективности пехоты в бою... #!"
+ },
  "notification_headlines_tech_advanced_body_armor_name": {
   "en": "#b NEW COMPOSITE ARMOR INCREASES SOLDIER SURVIVABILITY #!",
   "ru": "#b НОВАЯ КОМПОЗИТНАЯ БРОНЯ ПОВЫШАЕТ ЖИВУЧЕСТЬ СОЛДАТ #!"
+ },
+ "notification_headlines_tech_advanced_materials_armor_desc": {
+  "en": "The armed forces of [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetName] have begun to field vehicles with advanced materials armor. #lore By incorporating materials like Composite and Reactive Armor, military vehicles demonstrate a marked increase in their ability to withstand enemy fire, potentially changing the calculus of armored warfare... #!",
+  "ru": "Вооружённые силы страны [SCOPE.sCountry('headlines_advanced_materials_armor_researcher').GetName] начали оснащаться бронёй из передовых материалов. #lore Благодаря таким материалам, как композитная и динамическая защита, военная техника заметно лучше выдерживает вражеский огонь, что может изменить расчёт бронетанковой войны... #!"
  },
  "notification_headlines_tech_advanced_materials_armor_name": {
   "en": "#b NEXT-GEN ARMOR MAKES VEHICLES MORE RESILIENT #!",
   "ru": "#b БРОНЯ НОВОГО ПОКОЛЕНИЯ ДЕЛАЕТ МАШИНЫ СТОЙЧЕЕ #!"
  },
+ "notification_headlines_tech_advanced_military_aircraft_desc": {
+  "en": "A new line of advanced military aircraft has been unveiled in [SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetName]. #lore These latest designs boast superior speed, range, and armament capacity, setting a new standard for air combat and strategic [concept_power_projection] that other nations will be forced to match... #!",
+  "ru": "В стране [SCOPE.sCountry('headlines_advanced_military_aircraft_researcher').GetName] представлена новая линейка передовых военных самолётов. #lore Эти новейшие конструкции отличаются превосходной скоростью, дальностью и боевой нагрузкой, задавая новый стандарт воздушного боя и стратегической [Concept('concept_power_projection','проекции силы')], которому придётся соответствовать другим странам... #!"
+ },
  "notification_headlines_tech_advanced_military_aircraft_name": {
   "en": "#b NEW GENERATION OF JETS DOMINATES THE SKIES #!",
   "ru": "#b НОВОЕ ПОКОЛЕНИЕ РЕАКТИВНЫХ САМОЛЁТОВ ГОСПОДСТВУЕТ В НЕБЕ #!"
+ },
+ "notification_headlines_tech_advanced_nanofabrication_desc": {
+  "en": "A breakthrough in advanced nanofabrication is being reported from labs in [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetName]. #lore This unprecedented control over matter at the nanoscale is expected to have revolutionary applications in fields as diverse as medicine and electronics... #!",
+  "ru": "Из лабораторий страны [SCOPE.sCountry('headlines_advanced_nanofabrication_researcher').GetName] сообщают о прорыве в передовом нанопроизводстве. #lore Беспрецедентный контроль над материей на наноуровне, как ожидается, найдёт революционное применение в самых разных областях, от медицины до электроники... #!"
  },
  "notification_headlines_tech_advanced_nanofabrication_name": {
   "en": "#b BUILDING AT THE ATOMIC LEVEL NOW POSSIBLE #!",
   "ru": "#b СТРОИТЬ НА АТОМНОМ УРОВНЕ ТЕПЕРЬ ВОЗМОЖНО #!"
  },
+ "notification_headlines_tech_advanced_structural_engineering_desc": {
+  "en": "The construction industry of [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetName] is pioneering advanced structural engineering. #lore By combining high-strength composites and new welding techniques, structures can be built to be lighter and more durable, opening up new possibilities in architecture and industry... #!",
+  "ru": "Строительная отрасль страны [SCOPE.sCountry('headlines_advanced_structural_engineering_researcher').GetName] первой применяет передовую конструкционную инженерию. #lore Сочетание высокопрочных композитов и новых методов сварки позволяет строить более лёгкие и долговечные сооружения, открывая новые возможности для архитектуры и промышленности... #!"
+ },
  "notification_headlines_tech_advanced_structural_engineering_name": {
   "en": "#b STRONGER, LIGHTER, BETTER: THE FUTURE OF CONSTRUCTION #!",
   "ru": "#b ПРОЧНЕЕ, ЛЕГЧЕ, ЛУЧШЕ: БУДУЩЕЕ СТРОИТЕЛЬСТВА #!"
+ },
+ "notification_headlines_tech_advanced_submarine_technology_desc": {
+  "en": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective] engineers have perfected advanced submarine technology. #lore Thanks to innovations like nuclear power and sound-dampening hulls, a new class of submarine is capable of greater speed and stealth. Naval analysts note these vessels will be exceptionally difficult to track... #!",
+  "ru": "[SCOPE.sCountry('headlines_advanced_submarine_technology_researcher').GetAdjective] инженерный корпус довёл до совершенства передовые подводные технологии. #lore Благодаря таким новшествам, как ядерная энергетика и звукопоглощающие корпуса, новый класс подводных лодок способен на большую скорость и скрытность. Военно-морские аналитики отмечают, что эти суда будет исключительно трудно отследить... #!"
  },
  "notification_headlines_tech_advanced_submarine_technology_name": {
   "en": "#b SILENT HUNTERS PROWL THE DEEP #!",
   "ru": "#b БЕСШУМНЫЕ ОХОТНИКИ БОРОЗДЯТ ГЛУБИНЫ #!"
  },
+ "notification_headlines_tech_advanced_workflow_optimization_desc": {
+  "en": "Businesses in [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetName] are seeing productivity gains through advanced workflow optimization. #lore Using the latest technology and data analysis to streamline processes, companies are cutting waste and increasing output, setting a new standard for operational management... #!",
+  "ru": "Предприятия страны [SCOPE.sCountry('headlines_advanced_workflow_optimization_researcher').GetName] получают прирост производительности благодаря передовой оптимизации рабочих процессов. #lore Используя новейшие технологии и анализ данных для упрощения процессов, компании сокращают потери и увеличивают выпуск, задавая новый стандарт операционного управления... #!"
+ },
  "notification_headlines_tech_advanced_workflow_optimization_name": {
   "en": "#b DATA-DRIVEN EFFICIENCY SWEEPS INDUSTRIES #!",
   "ru": "#b ЭФФЕКТИВНОСТЬ НА ОСНОВЕ ДАННЫХ ОХВАТЫВАЕТ ОТРАСЛИ #!"
+ },
+ "notification_headlines_tech_aluminum_mass_production_desc": {
+  "en": "Chemists in [SCOPE.sCountry('headlines_aluminum_mass_production_researcher').GetName] have unlocked an industrial method for aluminum mass production. #lore Once more valuable than gold, this incredibly strong and lightweight metal is now available for widespread use in everything from aviation to cookware... #!",
+  "ru": "Химики страны [SCOPE.sCountry('headlines_aluminum_mass_production_researcher').GetName] нашли промышленный способ массового производства алюминия. #lore Когда-то этот невероятно прочный и лёгкий металл ценился дороже золота, а теперь доступен для широкого применения, от авиации до кухонной посуды... #!"
  },
  "notification_headlines_tech_aluminum_mass_production_name": {
   "en": "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!",
   "ru": "#b БЫВШИЙ «МЕТАЛЛ ДЛЯ УКРАШЕНИЙ» ТЕПЕРЬ ДОСТУПЕН В ИЗОБИЛИИ #!"
  },
+ "notification_headlines_tech_animation_desc": {
+  "en": "A new form of entertainment, animation, is being pioneered by artists in [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore By rapidly displaying a sequence of drawings, a magical illusion of movement is created, opening up a novel medium for storytelling and artistic expression... #!",
+  "ru": "Новую форму развлечения, анимацию, создают художники страны [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore Быстро сменяя друг друга рисунки, они создают волшебную иллюзию движения, открывая новый вид искусства для рассказа историй и художественного самовыражения... #!"
+ },
  "notification_headlines_tech_animation_name": {
   "en": "#b DRAWINGS THAT MOVE DELIGHT AUDIENCES #!",
   "ru": "#b ДВИЖУЩИЕСЯ РИСУНКИ ВОСХИЩАЮТ ЗРИТЕЛЕЙ #!"
+ },
+ "notification_headlines_tech_anti_sub_warfare_desc": {
+  "en": "The navy of [SCOPE.sCountry('headlines_anti_sub_warfare_researcher').GetName] has developed new anti-submarine warfare tactics. #lore Better sonar and homing torpedoes have improved the ability to hunt enemy submarines, a critical development for securing vital [Concept('concept_shipping_lane', 'shipping lanes')] against commerce raiders... #!",
+  "ru": "Флот страны [SCOPE.sCountry('headlines_anti_sub_warfare_researcher').GetName] разработал новую тактику противолодочной войны. #lore Улучшенные гидролокаторы и самонаводящиеся торпеды повысили способность охотиться на вражеские подводные лодки, что важно для защиты жизненно важных [Concept('concept_shipping_lane', 'морских торговых путей')] от торговых рейдеров... #!"
  },
  "notification_headlines_tech_anti_sub_warfare_name": {
   "en": "#b NEW TACTICS TO COUNTER UNDERSEA MENACE #!",
   "ru": "#b НОВАЯ ТАКТИКА ПРОТИВ ПОДВОДНОЙ УГРОЗЫ #!"
  },
+ "notification_headlines_tech_anti_war_movement_desc": {
+  "en": "A growing anti-war movement has taken root in [SCOPE.sCountry('headlines_anti_war_movement_researcher').GetName], challenging government policy. #lore Composed of students, activists, and ordinary citizens, these movements are shaping public opinion and putting pressure on politicians to reconsider their military ventures... #!",
+  "ru": "В стране [SCOPE.sCountry('headlines_anti_war_movement_researcher').GetName] укоренилось растущее антивоенное движение, бросающее вызов политике правительства. #lore Из студентов, активистов и обычных граждан состоят эти движения, формирующие общественное мнение и заставляющие политиков пересмотреть свои военные авантюры... #!"
+ },
  "notification_headlines_tech_anti_war_movement_name": {
   "en": "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!",
   "ru": "#b ТЫСЯЧИ ВЫХОДЯТ НА МАРШ, ТРЕБУЯ «МИРА СЕЙЧАС!» #!"
+ },
+ "notification_headlines_tech_antibiotic_mass_production_desc": {
+  "en": "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] has achieved antibiotic mass production. #lore The ability to produce these miracle drugs in large quantities means that once-fatal bacterial infections can now be treated. This development is expected to have a dramatic positive effect on public health and life expectancy... #!",
+  "ru": "Страна [SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] добилась массового производства антибиотиков. #lore Способность производить эти чудодейственные лекарства в больших количествах означает, что некогда смертельные бактериальные инфекции теперь можно лечить. Ожидается, что это резко улучшит общественное здоровье и продолжительность жизни... #!"
  },
  "notification_headlines_tech_antibiotic_mass_production_name": {
   "en": "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!",
   "ru": "#b «ЧУДО-ЛЕКАРСТВА» СТАНОВЯТСЯ ШИРОКО ДОСТУПНЫМИ #!"
  },
+ "notification_headlines_tech_antimatter_production_desc": {
+  "en": "Physicists in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] report a breakthrough in antimatter production. #lore With an incredible energy density, this substance promises to revolutionize spacecraft propulsion and power generation, though its volatility remains a significant concern... #!",
+  "ru": "Физики страны [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] сообщают о прорыве в производстве антиматерии. #lore Благодаря невероятной плотности энергии это вещество обещает революцию в двигателях космических кораблей и энергетике, хотя его нестабильность остаётся серьёзной проблемой... #!"
+ },
  "notification_headlines_tech_antimatter_production_name": {
   "en": "#b EXOTIC MATTER UNLOCKS UNPRECEDENTED ENERGY #!",
   "ru": "#b ЭКЗОТИЧЕСКАЯ МАТЕРИЯ ОТКРЫВАЕТ НЕБЫВАЛУЮ ЭНЕРГИЮ #!"
+ },
+ "notification_headlines_tech_art_deco_architecture_desc": {
+  "en": "A glamorous new style, Art Deco architecture, is sweeping the nation of [SCOPE.sCountry('headlines_art_deco_architecture_researcher').GetName]. #lore Defined by rich ornamentation and strong geometric forms, it has become the signature look for a new generation of prestigious buildings and a symbol of modern sophistication... #!",
+  "ru": "Блистательный новый стиль, архитектура ар-деко, захватывает страну [SCOPE.sCountry('headlines_art_deco_architecture_researcher').GetName]. #lore Богатые украшения и строгие геометрические формы сделали его фирменным обликом нового поколения престижных зданий и символом современной утончённости... #!"
  },
  "notification_headlines_tech_art_deco_architecture_name": {
   "en": "#b SLEEK LINES AND BOLD SHAPES DEFINE MODERN CITIES #!",
   "ru": "#b ОБТЕКАЕМЫЕ ЛИНИИ И СМЕЛЫЕ ФОРМЫ ОПРЕДЕЛЯЮТ СОВРЕМЕННЫЕ ГОРОДА #!"
  },
+ "notification_headlines_tech_artificial_intelligence_desc": {
+  "en": "Researchers in [SCOPE.sCountry('headlines_artificial_intelligence_researcher').GetName] claim to have created the first artificial general intelligence. #lore Unlike narrow AI, this machine appears capable of human-like reasoning across a range of tasks. The development raises profound questions for the future of industry, labor, and humanity itself... #!",
+  "ru": "Исследователи страны [SCOPE.sCountry('headlines_artificial_intelligence_researcher').GetName] заявляют, что создали первый общий искусственный интеллект. #lore В отличие от узкого ИИ, эта машина, по-видимому, способна к человекоподобным рассуждениям в самых разных задачах. Это поднимает глубокие вопросы о будущем промышленности, труда и самого человечества... #!"
+ },
  "notification_headlines_tech_artificial_intelligence_name": {
   "en": "#b A 'THINKING MACHINE' IS BORN #!",
   "ru": "#b РОЖДАЕТСЯ «МЫСЛЯЩАЯ МАШИНА» #!"
+ },
+ "notification_headlines_tech_asteroid_mining_desc": {
+  "en": "Corporations in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] have announced the first viable plans for asteroid mining. #lore The prospect of extracting valuable metals and minerals from near-earth asteroids could fuel further space exploration and create immense wealth, kicking off a new extra-terrestrial resource race... #!",
+  "ru": "Корпорации страны [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] объявили о первых жизнеспособных планах добычи на астероидах. #lore Перспектива извлечения ценных металлов и минералов из околоземных астероидов может подстегнуть дальнейшее освоение космоса и создать огромное богатство, дав начало новой внеземной гонке за ресурсами... #!"
  },
  "notification_headlines_tech_asteroid_mining_name": {
   "en": "#b A GOLD RUSH IN THE HEAVENS #!",
   "ru": "#b ЗОЛОТАЯ ЛИХОРАДКА В НЕБЕСАХ #!"
  },
+ "notification_headlines_tech_augmented_reality_warfare_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_augmented_reality_warfare_researcher').GetName] is testing systems for augmented reality warfare. #lore By feeding soldiers real-time data directly into their field of vision, this technology improves situational awareness and target acquisition. Analysts are studying the potential advantages this could offer in combat... #!",
+  "ru": "Армия страны [SCOPE.sCountry('headlines_augmented_reality_warfare_researcher').GetName] испытывает системы войны с дополненной реальностью. #lore Передавая солдатам данные в реальном времени прямо в поле зрения, эта технология улучшает осведомлённость об обстановке и захват целей. Аналитики изучают возможные преимущества в бою... #!"
+ },
  "notification_headlines_tech_augmented_reality_warfare_name": {
   "en": "#b DIGITAL OVERLAYS ENHANCE THE MODERN BATTLEFIELD #!",
   "ru": "#b ЦИФРОВЫЕ НАЛОЖЕНИЯ УСИЛИВАЮТ СОВРЕМЕННОЕ ПОЛЕ БОЯ #!"
+ },
+ "notification_headlines_tech_automated_surveillance_desc": {
+  "en": "Military forces in [SCOPE.sCountry('headlines_automated_surveillance_researcher').GetName] have deployed systems for automated surveillance. #lore A network of ground sensors and aerial drones allows for constant monitoring of territory without requiring a human presence, raising questions about privacy and the future of intelligence gathering... #!",
+  "ru": "Вооружённые силы страны [SCOPE.sCountry('headlines_automated_surveillance_researcher').GetName] развернули системы автоматизированного наблюдения. #lore Сеть наземных датчиков и воздушных дронов позволяет постоянно следить за территорией без присутствия человека, поднимая вопросы о неприкосновенности частной жизни и будущем сбора разведданных... #!"
  },
  "notification_headlines_tech_automated_surveillance_name": {
   "en": "#b THE UNBLINKING EYE: SURVEILLANCE GOES AUTOMATIC #!",
   "ru": "#b НЕМИГАЮЩЕЕ ОКО: СЛЕЖКА СТАНОВИТСЯ АВТОМАТИЧЕСКОЙ #!"
  },
+ "notification_headlines_tech_autonomous_vehicles_desc": {
+  "en": "Inventors in [SCOPE.sCountry('headlines_autonomous_vehicles_researcher').GetName] have demonstrated the first commercially viable autonomous vehicle. #lore Vehicles capable of navigating traffic without a human driver could revolutionize transportation and logistics, though public acceptance and regulatory hurdles remain... #!",
+  "ru": "Изобретатели страны [SCOPE.sCountry('headlines_autonomous_vehicles_researcher').GetName] продемонстрировали первый коммерчески пригодный беспилотный автомобиль. #lore Транспорт, способный двигаться в потоке без водителя, мог бы произвести революцию в перевозках и логистике, хотя общественное принятие и регуляторные препятствия остаются... #!"
+ },
  "notification_headlines_tech_autonomous_vehicles_name": {
   "en": "#b CARS THAT DRIVE THEMSELVES HIT THE ROAD #!",
   "ru": "#b НА ДОРОГИ ВЫЕЗЖАЮТ САМОУПРАВЛЯЕМЫЕ АВТОМОБИЛИ #!"
+ },
+ "notification_headlines_tech_barcodes_and_scanners_desc": {
+  "en": "Retailers in [SCOPE.sCountry('headlines_barcodes_and_scanners_researcher').GetName] are widely adopting barcodes and scanners. #lore This system of encoding product information into lines for quick scanning has drastically improved inventory management and checkout speed, streamlining the entire logistics chain... #!",
+  "ru": "Розничные торговцы страны [SCOPE.sCountry('headlines_barcodes_and_scanners_researcher').GetName] повсеместно переходят на штрихкоды и сканеры. #lore Эта система кодирования сведений о товаре в линиях для быстрого сканирования резко улучшила управление запасами и скорость расчёта, упорядочив всю логистическую цепочку... #!"
  },
  "notification_headlines_tech_barcodes_and_scanners_name": {
   "en": "#b BLACK AND WHITE LINES TRANSFORM RETAIL #!",
   "ru": "#b ЧЁРНО-БЕЛЫЕ ПОЛОСКИ МЕНЯЮТ РОЗНИЦУ #!"
  },
+ "notification_headlines_tech_bergius_process_desc": {
+  "en": "Chemists in [SCOPE.sCountry('headlines_bergius_process_researcher').GetName] have perfected the Bergius process, allowing for the creation of synthetic fuel. #lore By hydrogenating coal under high pressure, liquid fuels can be produced, a crucial strategic development for any nation with limited access to natural oil reserves... #!",
+  "ru": "Химики страны [SCOPE.sCountry('headlines_bergius_process_researcher').GetName] довели до совершенства процесс Бергиуса, позволяющий получать синтетическое топливо. #lore Гидрирование угля под высоким давлением даёт жидкое топливо, что является важнейшим стратегическим достижением для любой нации с ограниченным доступом к природным запасам нефти... #!"
+ },
  "notification_headlines_tech_bergius_process_name": {
   "en": "#b SYNTHETIC FUEL FROM COAL ANNOUNCED #!",
   "ru": "#b ОБЪЯВЛЕНО О СИНТЕТИЧЕСКОМ ТОПЛИВЕ ИЗ УГЛЯ #!"
+ },
+ "notification_headlines_tech_bioenhanced_soldiers_desc": {
+  "en": "A military program in [SCOPE.sCountry('headlines_bioenhanced_soldiers_researcher').GetName] is reportedly creating bioenhanced soldiers. #lore The use of biotechnology to enhance the strength and intelligence of soldiers opens a Pandora's box of ethical debates and raises the specter of a new kind of arms race... #!",
+  "ru": "Военная программа страны [SCOPE.sCountry('headlines_bioenhanced_soldiers_researcher').GetName], по сообщениям, создаёт биоусиленных солдат. #lore Использование биотехнологий для усиления силы и интеллекта солдат открывает ящик Пандоры этических споров и порождает призрак новой гонки вооружений... #!"
  },
  "notification_headlines_tech_bioenhanced_soldiers_name": {
   "en": "#b HUMAN AUGMENTATION ENTERS MILITARY REALM #!",
   "ru": "#b УЛУЧШЕНИЕ ЧЕЛОВЕКА ПРИХОДИТ В АРМИЮ #!"
  },
+ "notification_headlines_tech_biohacking_and_human_augmentation_desc": {
+  "en": "The science of biohacking and human augmentation is advancing rapidly in [SCOPE.sCountry('headlines_biohacking_and_human_augmentation_researcher').GetName]. #lore From gene editing to neuroprosthetics, the ability to push beyond natural human limits raises profound ethical questions about what it means to be human... #!",
+  "ru": "Наука о биохакинге и аугментации человека быстро развивается в стране [SCOPE.sCountry('headlines_biohacking_and_human_augmentation_researcher').GetName]. #lore От редактирования генов до нейропротезов: способность выйти за естественные пределы человека поднимает глубокие этические вопросы о том, что значит быть человеком... #!"
+ },
  "notification_headlines_tech_biohacking_and_human_augmentation_name": {
   "en": "#b BEYOND HUMAN: THE AUGMENTATION DEBATE #!",
   "ru": "#b ЗА ПРЕДЕЛАМИ ЧЕЛОВЕКА: СПОР ОБ УЛУЧШЕНИЯХ #!"
+ },
+ "notification_headlines_tech_biological_immortality_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_biological_immortality_researcher').GetName] claim a breakthrough in achieving biological immortality. #lore While still theoretical, the prospect of arresting the aging process through genetic engineering could reshape society in unimaginable ways, posing deep social and economic questions... #!",
+  "ru": "Учёные страны [SCOPE.sCountry('headlines_biological_immortality_researcher').GetName] заявляют о прорыве в достижении биологического бессмертия. #lore Хотя это пока теория, перспектива остановить процесс старения средствами генной инженерии способна изменить общество до неузнаваемости, поставив глубокие социальные и экономические вопросы... #!"
  },
  "notification_headlines_tech_biological_immortality_name": {
   "en": "#b SCIENTISTS CLAIM TO HAVE HALTED AGING #!",
   "ru": "#b УЧЁНЫЕ ЗАЯВЛЯЮТ, ЧТО ОСТАНОВИЛИ СТАРЕНИЕ #!"
  },
+ "notification_headlines_tech_biotechnology_desc": {
+  "en": "[SCOPE.sCountry('headlines_biotechnology_researcher').GetAdjective] scientists are making huge leaps in biotechnology. #lore Technologies like CRISPR allow for the precise editing of genes, heralding a new era of breakthroughs in medicine and agriculture, along with intense ethical debate... #!",
+  "ru": "[SCOPE.sCountry('headlines_biotechnology_researcher').GetAdjective] научный мир делает огромные скачки в биотехнологиях. #lore Такие технологии, как CRISPR, позволяют точно редактировать гены, открывая новую эру прорывов в медицине и сельском хозяйстве вместе с острыми этическими спорами... #!"
+ },
  "notification_headlines_tech_biotechnology_name": {
   "en": "#b PRECISION GENE-EDITING TOOLS DEVELOPED #!",
   "ru": "#b СОЗДАНЫ ТОЧНЫЕ ИНСТРУМЕНТЫ РЕДАКТИРОВАНИЯ ГЕНОВ #!"
+ },
+ "notification_headlines_tech_bombing_aircraft_desc": {
+  "en": "The development of strategic bombing aircraft in [SCOPE.sCountry('headlines_bombing_aircraft_researcher').GetName] marks a dark turn in warfare. #lore These long-range aircraft are capable of striking deep into enemy territory, targeting industrial centers and civilian populations alike. Strategists are grappling with the implications of this new dimension of total war... #!",
+  "ru": "Разработка стратегических бомбардировщиков в стране [SCOPE.sCountry('headlines_bombing_aircraft_researcher').GetName] знаменует мрачный поворот в войне. #lore Эти самолёты дальнего действия способны наносить удары вглубь вражеской территории, поражая как промышленные центры, так и гражданское население. Стратеги осмысливают последствия нового измерения тотальной войны... #!"
  },
  "notification_headlines_tech_bombing_aircraft_name": {
   "en": "#b CITIES NOW VULNERABLE TO AERIAL ATTACK #!",
   "ru": "#b ГОРОДА ТЕПЕРЬ УЯЗВИМЫ ДЛЯ УДАРОВ С ВОЗДУХА #!"
  },
+ "notification_headlines_tech_brain_computer_interfaces_desc": {
+  "en": "Researchers in [SCOPE.sCountry('headlines_brain_computer_interfaces_researcher').GetName] have demonstrated working brain-computer interfaces. #lore The ability to connect the human brain directly to computers opens up astonishing possibilities for medicine, communication, and human enhancement... #!",
+  "ru": "Исследователи страны [SCOPE.sCountry('headlines_brain_computer_interfaces_researcher').GetName] продемонстрировали работающие интерфейсы мозг-компьютер. #lore Возможность напрямую соединить человеческий мозг с компьютерами открывает поразительные перспективы для медицины, связи и улучшения человека... #!"
+ },
  "notification_headlines_tech_brain_computer_interfaces_name": {
   "en": "#b DIRECT LINK BETWEEN BRAIN AND MACHINE ACHIEVED #!",
   "ru": "#b ДОСТИГНУТА ПРЯМАЯ СВЯЗЬ МЕЖДУ МОЗГОМ И МАШИНОЙ #!"
+ },
+ "notification_headlines_tech_cellular_networks_desc": {
+  "en": "The launch of commercial cellular networks in [SCOPE.sCountry('headlines_cellular_networks_researcher').GetName] is changing how people communicate. #lore The ability to make phone calls from almost anywhere is transforming both business and social life, freeing communication from the confines of a building... #!",
+  "ru": "Запуск коммерческих сотовых сетей в стране [SCOPE.sCountry('headlines_cellular_networks_researcher').GetName] меняет то, как люди общаются. #lore Возможность звонить почти откуда угодно преображает и деловую, и общественную жизнь, освобождая связь от стен здания... #!"
  },
  "notification_headlines_tech_cellular_networks_name": {
   "en": "#b PHONE CALLS UNTETHERED FROM WIRES #!",
   "ru": "#b ТЕЛЕФОННЫЕ ЗВОНКИ ОСВОБОЖДЕНЫ ОТ ПРОВОДОВ #!"
  },
+ "notification_headlines_tech_civil_rights_movement_desc": {
+  "en": "A powerful civil rights movement has emerged in [SCOPE.sCountry('headlines_civil_rights_movement_researcher').GetName], demanding an end to systemic [concept_discrimination]. #lore Through organized protests and acts of civil disobedience, the movement is forcing a national conversation on equality and justice, with consequences that are being watched around the world... #!",
+  "ru": "В стране [SCOPE.sCountry('headlines_civil_rights_movement_researcher').GetName] возникло мощное движение за гражданские права, требующее покончить с системной [Concept('concept_discrimination','дискриминацией')]. #lore Благодаря организованным протестам и актам гражданского неповиновения движение вынуждает страну вести разговор о равенстве и справедливости, и мир следит за его последствиями... #!"
+ },
  "notification_headlines_tech_civil_rights_movement_name": {
   "en": "#b MARCHES FOR CIVIL RIGHTS CHALLENGE STATUS QUO #!",
   "ru": "#b МАРШИ ЗА ГРАЖДАНСКИЕ ПРАВА БРОСАЮТ ВЫЗОВ СТАТУС-КВО #!"
+ },
+ "notification_headlines_tech_clean_energy_technologies_desc": {
+  "en": "[SCOPE.sCountry('headlines_clean_energy_technologies_researcher').GetName] is investing heavily in clean energy technologies. #lore With advancements in solar panels and wind turbines, generating electricity without burning fossil fuels is becoming more viable, a key step in addressing environmental concerns... #!",
+  "ru": "Страна [SCOPE.sCountry('headlines_clean_energy_technologies_researcher').GetName] активно инвестирует в чистые энергетические технологии. #lore С развитием солнечных панелей и ветряных турбин выработка электричества без сжигания ископаемого топлива становится всё более осуществимой, что важный шаг к решению экологических проблем... #!"
  },
  "notification_headlines_tech_clean_energy_technologies_name": {
   "en": "#b POWER FROM THE SUN AND WIND GROWS #!",
   "ru": "#b РАСТЁТ ЭНЕРГИЯ СОЛНЦА И ВЕТРА #!"
  },
+ "notification_headlines_tech_cloud_computing_desc": {
+  "en": "The rise of cloud computing is transforming the tech industry in [SCOPE.sCountry('headlines_cloud_computing_researcher').GetName]. #lore The delivery of computing services over the internet allows for massive, flexible data storage and processing, providing a powerful new tool for businesses and individuals... #!",
+  "ru": "Подъём облачных вычислений преображает технологическую отрасль в стране [SCOPE.sCountry('headlines_cloud_computing_researcher').GetName]. #lore Предоставление вычислительных услуг через интернет позволяет хранить и обрабатывать огромные объёмы данных гибко, давая бизнесу и частным лицам мощный новый инструмент... #!"
+ },
  "notification_headlines_tech_cloud_computing_name": {
   "en": "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!",
   "ru": "#b ДАННЫЕ «В ОБЛАКЕ» МЕНЯЮТ ТЕХНОЛОГИИ #!"
+ },
+ "notification_headlines_tech_combined_arms_desc": {
+  "en": "Military theorists in [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] have perfected the doctrine of combined arms. #lore By tightly coordinating infantry, armor, and air power, armed forces can achieve a battlefield effectiveness far greater than the sum of their parts, setting a new standard for military operations... #!",
+  "ru": "Военные теоретики страны [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] довели до совершенства доктрину общевойсковых операций. #lore Тесно координируя пехоту, бронетехнику и авиацию, вооружённые силы достигают боевой эффективности, намного превосходящей сумму составляющих, задавая новый стандарт военных операций... #!"
  },
  "notification_headlines_tech_combined_arms_name": {
   "en": "#b NEW DOCTRINE SYNCHRONIZES MILITARY FORCES #!",
   "ru": "#b НОВАЯ ДОКТРИНА СИНХРОНИЗИРУЕТ ВОЙСКА #!"
  },
+ "notification_headlines_tech_commercial_aviation_desc": {
+  "en": "The widespread use of airplanes for passenger travel, known as commercial aviation, is making the world a smaller place. #lore Thanks to innovators in [SCOPE.sCountry('headlines_commercial_aviation_researcher').GetName], crossing oceans in hours instead of weeks is now a reality for those who can afford it... #!",
+  "ru": "Широкое использование самолётов для пассажирских перевозок, известное как коммерческая авиация, делает мир меньше. #lore Благодаря новаторам страны [SCOPE.sCountry('headlines_commercial_aviation_researcher').GetName] пересечь океаны за часы, а не за недели, теперь реальность для тех, кто может себе это позволить... #!"
+ },
  "notification_headlines_tech_commercial_aviation_name": {
   "en": "#b AIR TRAVEL SHRINKS THE GLOBE #!",
   "ru": "#b АВИАПЕРЕЛЁТЫ СЖИМАЮТ ПЛАНЕТУ #!"
+ },
+ "notification_headlines_tech_compact_fusion_reactors_desc": {
+  "en": "Physicists in [SCOPE.sCountry('headlines_compact_fusion_reactors_researcher').GetName] have blueprinted new compact fusion reactors. #lore These smaller, more efficient designs could be a game-changer for providing clean, cheap energy, though making them a practical reality remains a significant challenge... #!",
+  "ru": "Физики страны [SCOPE.sCountry('headlines_compact_fusion_reactors_researcher').GetName] составили чертежи новых компактных термоядерных реакторов. #lore Эти более компактные и эффективные конструкции могут стать переломными для получения чистой и дешёвой энергии, хотя превратить их в практическую реальность остаётся серьёзной задачей... #!"
  },
  "notification_headlines_tech_compact_fusion_reactors_name": {
   "en": "#b FUSION POWER IN A SMALLER PACKAGE #!",
   "ru": "#b ТЕРМОЯДЕРНАЯ ЭНЕРГИЯ В БОЛЕЕ КОМПАКТНОМ ИСПОЛНЕНИИ #!"
  },
+ "notification_headlines_tech_computer_aided_design_desc": {
+  "en": "[SCOPE.sCountry('headlines_computer_aided_design_researcher').GetAdjective] engineers are adopting computer-aided design. #lore The use of computers to create complex and accurate designs is transforming manufacturing and engineering, allowing for faster development and more intricate products... #!",
+  "ru": "[SCOPE.sCountry('headlines_computer_aided_design_researcher').GetAdjective] инженерный корпус осваивает автоматизированное проектирование. #lore Использование компьютеров для создания сложных и точных чертежей преображает производство и инженерное дело, ускоряя разработку и позволяя создавать более замысловатые изделия... #!"
+ },
  "notification_headlines_tech_computer_aided_design_name": {
   "en": "#b DIGITAL BLUEPRINTS REVOLUTIONIZE ENGINEERING #!",
   "ru": "#b ЦИФРОВЫЕ ЧЕРТЕЖИ ПЕРЕВОРАЧИВАЮТ ИНЖЕНЕРНОЕ ДЕЛО #!"
+ },
+ "notification_headlines_tech_computer_networks_desc": {
+  "en": "Technicians in [SCOPE.sCountry('headlines_computer_networks_researcher').GetName] are building the first computer networks. #lore The ability to connect computers to share data and resources is a foundational development, laying the groundwork for what could become a global web of information... #!",
+  "ru": "Техники страны [SCOPE.sCountry('headlines_computer_networks_researcher').GetName] строят первые компьютерные сети. #lore Возможность соединять компьютеры для обмена данными и ресурсами — основополагающее достижение, закладывающее фундамент того, что может стать глобальной паутиной информации... #!"
  },
  "notification_headlines_tech_computer_networks_name": {
   "en": "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!",
   "ru": "#b КОМПЬЮТЕРЫ НАЧИНАЮТ «ГОВОРИТЬ» ДРУГ С ДРУГОМ #!"
  },
+ "notification_headlines_tech_computing_machines_desc": {
+  "en": "Early computing machines developed in [SCOPE.sCountry('headlines_computing_machines_researcher').GetName] are changing information processing. #lore These massive devices can automate complex calculations at speeds no human could match, leading to major advancements in science and engineering... #!",
+  "ru": "Ранние вычислительные машины, созданные в стране [SCOPE.sCountry('headlines_computing_machines_researcher').GetName], меняют обработку информации. #lore Эти огромные устройства могут автоматизировать сложные расчёты со скоростью, недоступной ни одному человеку, что ведёт к крупным достижениям в науке и инженерии... #!"
+ },
  "notification_headlines_tech_computing_machines_name": {
   "en": "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!",
   "ru": "#b «ЭЛЕКТРОННЫЕ МОЗГИ» БЕРУТСЯ ЗА СЛОЖНЫЕ РАСЧЁТЫ #!"
+ },
+ "notification_headlines_tech_consumer_credit_desc": {
+  "en": "The rise of consumer credit in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] has transformed the retail economy. #lore A system that allows people to purchase goods on credit is fueling unprecedented consumer spending, though some economists warn of the potential risks of rising debt... #!",
+  "ru": "Рост потребительского кредита в стране [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] преобразил розничную экономику. #lore Система, позволяющая людям покупать товары в кредит, подпитывает небывалые потребительские траты, хотя некоторые экономисты предупреждают о рисках растущей задолженности... #!"
  },
  "notification_headlines_tech_consumer_credit_name": {
   "en": "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!",
   "ru": "#b «КУПИ СЕЙЧАС, ЗАПЛАТИ ПОТОМ» ПОДСТЁГИВАЕТ РОСТ ЭКОНОМИКИ #!"
  },
+ "notification_headlines_tech_containerization_desc": {
+  "en": "The process of containerization, pioneered in [SCOPE.sCountry('headlines_containerization_researcher').GetName], has revolutionized global trade. #lore By placing goods in standardized containers, ships and ports can operate with incredible efficiency, dramatically lowering the cost of moving goods around the world... #!",
+  "ru": "Контейнеризация, первопроходцем которой стала страна [SCOPE.sCountry('headlines_containerization_researcher').GetName], совершила революцию в мировой торговле. #lore Размещение грузов в стандартных контейнерах позволяет судам и портам работать с невероятной эффективностью, резко удешевляя перевозку товаров по всему миру... #!"
+ },
  "notification_headlines_tech_containerization_name": {
   "en": "#b THE SIMPLE BOX THAT CHANGED GLOBAL TRADE #!",
   "ru": "#b ПРОСТОЙ ЯЩИК, ИЗМЕНИВШИЙ МИРОВУЮ ТОРГОВЛЮ #!"
+ },
+ "notification_headlines_tech_contraceptive_pill_desc": {
+  "en": "The development of the contraceptive pill in [SCOPE.sCountry('headlines_contraceptive_pill_researcher').GetName] is having a massive social impact. #lore By giving women reliable control over their fertility, this small pill is playing a central role in family planning and the ongoing women's liberation movement... #!",
+  "ru": "Разработка противозачаточных таблеток в стране [SCOPE.sCountry('headlines_contraceptive_pill_researcher').GetName] оказывает огромное социальное влияние. #lore Давая женщинам надёжный контроль над своей плодовитостью, эта маленькая таблетка играет центральную роль в планировании семьи и продолжающемся движении за освобождение женщин... #!"
  },
  "notification_headlines_tech_contraceptive_pill_name": {
   "en": "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!",
   "ru": "#b «ТАБЛЕТКА» ВЫЗЫВАЕТ СОЦИАЛЬНУЮ РЕВОЛЮЦИЮ #!"
  },
+ "notification_headlines_tech_cryptography_desc": {
+  "en": "Masters of cryptography in [SCOPE.sCountry('headlines_cryptography_researcher').GetName] are working in secret to gain an edge in the war. #lore The art of writing and solving codes is a crucial tool for securing communications while breaking into the enemy's, providing a vital intelligence advantage... #!",
+  "ru": "Мастера криптографии в стране [SCOPE.sCountry('headlines_cryptography_researcher').GetName] тайно работают над преимуществом в войне. #lore Искусство составления и разгадывания шифров — важнейший инструмент защиты своей связи и вскрытия вражеской, дающий жизненно важное разведывательное преимущество... #!"
+ },
  "notification_headlines_tech_cryptography_name": {
   "en": "#b THE SECRET WAR OF CODES AND CIPHERS #!",
   "ru": "#b ТАЙНАЯ ВОЙНА КОДОВ И ШИФРОВ #!"
+ },
+ "notification_headlines_tech_cyber_warfare_desc": {
+  "en": "As the world becomes more digital, so does conflict. [SCOPE.sCountry('headlines_cyber_warfare_researcher').GetName] is developing tools for cyber warfare, a new and invisible battlefield where nations attack and defend in cyberspace... #!",
+  "ru": "По мере того как мир становится цифровым, цифровым становится и конфликт. Страна [SCOPE.sCountry('headlines_cyber_warfare_researcher').GetName] разрабатывает средства кибервойны, нового и невидимого поля боя, где страны нападают и защищаются в киберпространстве... #!"
  },
  "notification_headlines_tech_cyber_warfare_name": {
   "en": "#b CONFLICT MOVES TO THE DIGITAL REALM #!",
   "ru": "#b КОНФЛИКТ ПЕРЕМЕЩАЕТСЯ В ЦИФРОВУЮ СФЕРУ #!"
  },
+ "notification_headlines_tech_cybersecurity_desc": {
+  "en": "With increasing reliance on digital technologies, experts in [SCOPE.sCountry('headlines_cybersecurity_researcher').GetName] are developing new methods of cybersecurity. #lore This field is dedicated to keeping critical information and systems safe from a new generation of digital threats... #!",
+  "ru": "Из-за растущей зависимости от цифровых технологий эксперты страны [SCOPE.sCountry('headlines_cybersecurity_researcher').GetName] разрабатывают новые методы кибербезопасности. #lore Эта область занимается защитой важной информации и систем от нового поколения цифровых угроз... #!"
+ },
  "notification_headlines_tech_cybersecurity_name": {
   "en": "#b DIGITAL FORTRESSES GUARD AGAINST NEW THREATS #!",
   "ru": "#b ЦИФРОВЫЕ КРЕПОСТИ ЗАЩИЩАЮТ ОТ НОВЫХ УГРОЗ #!"
+ },
+ "notification_headlines_tech_decline_of_organized_religion_desc": {
+  "en": "Sociologists in [SCOPE.sCountry('headlines_decline_of_organized_religion_researcher').GetName] have noted a steady decline of organized religion. #lore A marked trend towards secularism is changing social norms and values, as fewer people affiliate with traditional religious institutions... #!",
+  "ru": "Социологи страны [SCOPE.sCountry('headlines_decline_of_organized_religion_researcher').GetName] отметили устойчивый упадок организованной религии. #lore Заметная тенденция к секуляризму меняет социальные нормы и ценности, поскольку всё меньше людей связывают себя с традиционными религиозными институтами... #!"
  },
  "notification_headlines_tech_decline_of_organized_religion_name": {
   "en": "#b RISE OF SECULARISM NOTED IN NEW SURVEYS #!",
   "ru": "#b НОВЫЕ ОПРОСЫ ОТМЕЧАЮТ РОСТ СЕКУЛЯРИЗМА #!"
  },
+ "notification_headlines_tech_decolonization_desc": {
+  "en": "The process of decolonization is reshaping the world map. #lore The dismantling of old colonial empires, championed by thinkers in [SCOPE.sCountry('headlines_decolonization_researcher').GetName], has led to the birth of new independent states in a messy but necessary process of global change... #!",
+  "ru": "Процесс деколонизации перекраивает карту мира. #lore Демонтаж старых колониальных империй, за который выступали мыслители страны [SCOPE.sCountry('headlines_decolonization_researcher').GetName], привёл к рождению новых независимых государств в трудном, но необходимом процессе глобальных перемен... #!"
+ },
  "notification_headlines_tech_decolonization_name": {
   "en": "#b THE AGE OF EMPIRE ENDS, NEW NATIONS EMERGE #!",
   "ru": "#b ЭПОХА ИМПЕРИЙ ЗАКАНЧИВАЕТСЯ, ПОЯВЛЯЮТСЯ НОВЫЕ НАЦИИ #!"
+ },
+ "notification_headlines_tech_digital_education_desc": {
+  "en": "Educators in [SCOPE.sCountry('headlines_digital_education_researcher').GetName] are embracing digital education. #lore With online learning and multimedia resources, education is becoming more accessible and collaborative for students with a reliable internet connection... #!",
+  "ru": "Педагоги страны [SCOPE.sCountry('headlines_digital_education_researcher').GetName] осваивают цифровое образование. #lore Благодаря онлайн-обучению и мультимедийным ресурсам образование становится доступнее и совместнее для учащихся с надёжным доступом в интернет... #!"
  },
  "notification_headlines_tech_digital_education_name": {
   "en": "#b THE CLASSROOM OF THE FUTURE IS ONLINE #!",
   "ru": "#b КЛАСС БУДУЩЕГО — В СЕТИ #!"
  },
+ "notification_headlines_tech_digital_entertainment_desc": {
+  "en": "From video games to streaming services, digital entertainment is reshaping how people spend their free time. #lore In [SCOPE.sCountry('headlines_digital_entertainment_researcher').GetName] and beyond, there are more ways than ever to be entertained or distracted from home... #!",
+  "ru": "От видеоигр до стриминговых сервисов: цифровые развлечения меняют то, как люди проводят свободное время. #lore В стране [SCOPE.sCountry('headlines_digital_entertainment_researcher').GetName] и за её пределами развлечься или отвлечься, не выходя из дома, можно как никогда многими способами... #!"
+ },
  "notification_headlines_tech_digital_entertainment_name": {
   "en": "#b ON-DEMAND ENTERTAINMENT RESHAPES LEISURE #!",
   "ru": "#b РАЗВЛЕЧЕНИЯ ПО ЗАПРОСУ МЕНЯЮТ ДОСУГ #!"
+ },
+ "notification_headlines_tech_digital_telecommunications_desc": {
+  "en": "The switch from analog to digital telecommunications is making communication systems more efficient and versatile. #lore Companies in [SCOPE.sCountry('headlines_digital_telecommunications_researcher').GetName] are leading the charge, allowing for clearer calls and faster data transmission... #!",
+  "ru": "Переход от аналоговой связи к цифровой делает системы связи эффективнее и универсальнее. #lore Компании страны [SCOPE.sCountry('headlines_digital_telecommunications_researcher').GetName] возглавляют этот переход, обеспечивая более чёткие звонки и более быструю передачу данных... #!"
  },
  "notification_headlines_tech_digital_telecommunications_name": {
   "en": "#b CLEARER CALLS, FASTER DATA WITH DIGITAL #!",
   "ru": "#b ЦИФРА: ЧИЩЕ ЗВОНКИ, БЫСТРЕЕ ДАННЫЕ #!"
  },
+ "notification_headlines_tech_directed_energy_defenses_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_directed_energy_defenses_researcher').GetName] is developing directed-energy defenses. #lore By using high-energy lasers to shoot down incoming missiles and drones, this futuristic technology promises a new layer of defense against aerial threats... #!",
+  "ru": "Армия страны [SCOPE.sCountry('headlines_directed_energy_defenses_researcher').GetName] разрабатывает оборонительные системы на направленной энергии. #lore Используя мощные лазеры для сбивания ракет и дронов, эта футуристическая технология обещает новый рубеж защиты от воздушных угроз... #!"
+ },
  "notification_headlines_tech_directed_energy_defenses_name": {
   "en": "#b LASERS TO FORM DEFENSIVE SHIELD #!",
   "ru": "#b ЛАЗЕРЫ ОБРАЗУЮТ ЗАЩИТНЫЙ ЩИТ #!"
+ },
+ "notification_headlines_tech_directed_energy_weapons_desc": {
+  "en": "[SCOPE.sCountry('headlines_directed_energy_weapons_researcher').GetName] has tested prototype directed-energy weapons. #lore High-energy lasers and microwaves can now be used as weapons, offering a new level of precision for targeting and neutralizing threats at the speed of light... #!",
+  "ru": "Страна [SCOPE.sCountry('headlines_directed_energy_weapons_researcher').GetName] испытала прототипы оружия направленной энергии. #lore Мощные лазеры и микроволновые излучатели теперь можно использовать как оружие, обеспечивая новую точность при наведении и нейтрализации угроз со скоростью света... #!"
  },
  "notification_headlines_tech_directed_energy_weapons_name": {
   "en": "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!",
   "ru": "#b «ЛУЧЕВЫЕ ПУШКИ» БОЛЬШЕ НЕ ФАНТАСТИКА #!"
  },
+ "notification_headlines_tech_e-commerce_desc": {
+  "en": "Thanks to the internet, buying and selling goods from anywhere is now a reality. #lore This system of e-commerce, pioneered by companies in [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], is a convenient new way to shop and a great way for businesses to reach new customers... #!",
+  "ru": "Благодаря интернету покупать и продавать товары откуда угодно стало реальностью. #lore Эта система электронной коммерции, у истоков которой стояли компании страны [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], — удобный новый способ делать покупки и отличный способ для бизнеса находить новых клиентов... #!"
+ },
+ "notification_headlines_tech_e-commerce_name": {
+  "en": "#b SHOPPING FROM HOME WITH 'E-COMMERCE' #!",
+  "ru": "#b ПОКУПКИ НА ДОМУ С «ЭЛЕКТРОННОЙ КОММЕРЦИЕЙ» #!"
+ },
+ "notification_headlines_tech_early_nanotechnology_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] are making breakthroughs in early nanotechnology. #lore The ability to manipulate materials at the atomic level could lead to incredible breakthroughs in medicine, materials, and computing... #!",
+  "ru": "Учёные страны [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] совершают прорывы в ранних нанотехнологиях. #lore Возможность манипулировать материалами на атомном уровне может привести к невероятным прорывам в медицине, материалах и вычислениях... #!"
+ },
  "notification_headlines_tech_early_nanotechnology_name": {
   "en": "#b SCIENCE OF THE SMALL PROMISES BIG FUTURE #!",
   "ru": "#b НАУКА О МАЛОМ ОБЕЩАЕТ БОЛЬШОЕ БУДУЩЕЕ #!"
+ },
+ "notification_headlines_tech_electronic_warfare_desc": {
+  "en": "The military of [SCOPE.sCountry('headlines_electronic_warfare_researcher').GetName] has developed capabilities for electronic warfare. #lore By disrupting enemy communications and radar with invisible radio waves, a significant advantage can be gained in battle. It is a new and subtle way to fight... #!",
+  "ru": "Армия страны [SCOPE.sCountry('headlines_electronic_warfare_researcher').GetName] создала средства радиоэлектронной борьбы. #lore Подавляя вражескую связь и радары невидимыми радиоволнами, можно получить значительное преимущество в бою. Это новый и тонкий способ воевать... #!"
  },
  "notification_headlines_tech_electronic_warfare_name": {
   "en": "#b THE INVISIBLE WAR OF THE AIRWAVES #!",
   "ru": "#b НЕВИДИМАЯ ВОЙНА В ЭФИРЕ #!"
  },
+ "notification_headlines_tech_environmental_movement_desc": {
+  "en": "An environmental movement dedicated to protecting the planet is gaining support in [SCOPE.sCountry('headlines_environmental_movement_researcher').GetName]. #lore It raises awareness about ecological issues like [concept_pollution_system] and pushes for more sustainable ways of living for future generations... #!",
+  "ru": "Экологическое движение, посвящённое защите планеты, набирает поддержку в стране [SCOPE.sCountry('headlines_environmental_movement_researcher').GetName]. #lore Оно привлекает внимание к экологическим проблемам, таким как [Concept('concept_pollution_system','загрязнение')], и настаивает на более устойчивом образе жизни для будущих поколений... #!"
+ },
  "notification_headlines_tech_environmental_movement_name": {
   "en": "#b A GREEN WAVE: ACTIVISTS DEMAND PLANET'S PROTECTION #!",
   "ru": "#b ЗЕЛЁНАЯ ВОЛНА: АКТИВИСТЫ ТРЕБУЮТ ЗАЩИТЫ ПЛАНЕТЫ #!"
+ },
+ "notification_headlines_tech_fiber_optics_desc": {
+  "en": "A breakthrough in fiber optics by researchers in [SCOPE.sCountry('headlines_fiber_optics_researcher').GetName] promises to revolutionize communications. #lore By sending data as pulses of light through thin glass strands, faster and more efficient communication networks can be built, forming the backbone of a modern digital world... #!",
+  "ru": "Прорыв в оптоволокне, совершённый исследователями страны [SCOPE.sCountry('headlines_fiber_optics_researcher').GetName], обещает революцию в связи. #lore Передача данных импульсами света по тонким стеклянным нитям позволяет строить более быстрые и эффективные сети связи, составляющие основу современного цифрового мира... #!"
  },
  "notification_headlines_tech_fiber_optics_name": {
   "en": "#b MESSAGES SENT AT THE SPEED OF LIGHT #!",
   "ru": "#b СООБЩЕНИЯ СО СКОРОСТЬЮ СВЕТА #!"
  },
+ "notification_headlines_tech_fluorescent_lamps_desc": {
+  "en": "Inventors in [SCOPE.sCountry('headlines_fluorescent_lamps_researcher').GetName] have perfected fluorescent lamps. #lore These new lamps are much more efficient than the old arc lamps, making electrical lighting more widespread and affordable for cities and homes... #!",
+  "ru": "Изобретатели страны [SCOPE.sCountry('headlines_fluorescent_lamps_researcher').GetName] довели до совершенства люминесцентные лампы. #lore Эти новые лампы намного эффективнее старых дуговых, делая электрическое освещение более распространённым и доступным для городов и домов... #!"
+ },
  "notification_headlines_tech_fluorescent_lamps_name": {
   "en": "#b EFFICIENT NEW LAMPS BRIGHTEN CITIES #!",
   "ru": "#b НОВЫЕ ЭКОНОМИЧНЫЕ ЛАМПЫ ОСВЕЩАЮТ ГОРОДА #!"
  },
+ "notification_headlines_tech_fusion_batteries_desc": {
+  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing microfusion cells: fusion reactors small and safe enough to replace batteries, powering devices and vehicles for years. Energy as we know it may never be the same... #!",
+  "ru": "Представьте батарею, которую никогда не нужно заряжать. Страна [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] разрабатывает микротермоядерные элементы: термоядерные реакторы, достаточно малые и безопасные, чтобы заменить батареи, питая устройства и транспорт годами. Энергия в привычном нам виде может никогда не стать прежней... #!"
+ },
  "notification_headlines_tech_fusion_batteries_name": {
   "en": "#b THE BATTERY THAT NEVER DIES? #!",
   "ru": "#b БАТАРЕЯ, КОТОРАЯ НИКОГДА НЕ РАЗРЯДИТСЯ? #!"
+ },
+ "notification_headlines_tech_fusion_power_desc": {
+  "en": "Scientists in [SCOPE.sCountry('headlines_fusion_power_researcher').GetName] are on the verge of achieving sustained fusion power. #lore If the power of nuclear fusion can be harnessed, it could provide a nearly limitless source of clean energy. It remains the holy grail of energy production... #!",
+  "ru": "Учёные страны [SCOPE.sCountry('headlines_fusion_power_researcher').GetName] стоят на пороге устойчивой термоядерной энергетики. #lore Если удастся обуздать энергию ядерного синтеза, она станет почти безграничным источником чистой энергии. Это по-прежнему священный Грааль энергетики... #!"
  },
  "notification_headlines_tech_fusion_power_name": {
   "en": "#b HARNESSING THE POWER OF A STAR #!",
