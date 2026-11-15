@@ -37,6 +37,7 @@ them:
     python3 movement_stances.py --lawgroup lawgroup_rules_of_war [--current law_x]
     python3 movement_stances.py --law law_total_war
     python3 movement_stances.py --gaps
+    python3 movement_stances.py --standing
 
 The CLI builds a small ModState on the committed `vanilla_parsed/` snapshot,
 so it needs no game install.
@@ -55,6 +56,7 @@ ENTITY_TYPES = {
     "Ideologies": "ideologies",
     "Laws": "laws",
     "Law Groups": "law_groups",
+    "Technologies": "technology/technologies",
 }
 
 # Stance -> rank. A movement backs a law it rates BACKING_RANK or better.
@@ -294,6 +296,285 @@ def stance_gaps(movements: dict, ideologies: dict, laws: dict, carriers=frozense
 
 
 # ---------------------------------------------------------------------------
+# Standing grievances (#1832): a stance on a law no government can leave
+# ---------------------------------------------------------------------------
+# A movement's target activism takes MOVEMENT_RADICALISM_FROM_ACTIVE_LAW_STANCE
+# (vanilla's -0.05) x the stance x its active_law_radicalism_multiplier from
+# each law in force. So a disapproved law that a country holds from 1836, while
+# nothing the movement rates higher can be enacted, is activism no government
+# can answer. The rule (test_movement_stance_guard.py): a movement may
+# disapprove of a law a country can hold from 1836 only if it rates higher a
+# law of the same group that a country can enact by the era in which the
+# movement can first exist. The resolution is an era (about 25 years).
+#
+# How each side is read:
+# - When a movement can first exist: the technologies its `creation_trigger`
+#   names (a block's conditions all hold, so the latest; an OR's alternatives,
+#   the earliest). Anything else (laws, cultures, scripted triggers) is read as
+#   true from 1836 and a negation as never delaying, so an unread condition
+#   can only make the movement earlier and the guard err toward a flag. A
+#   movement that switches ideology (`set_core_ideology`) holds the new one
+#   from its own first era.
+# - When a law can first be enacted: its `unlocking_technologies` (any of),
+#   one of its `unlocking_laws` (any of, each at its own first era), and the
+#   technology and law conditions of its `can_enact` and `is_visible`.
+#   `always = no` there means never. A `trigger_if` is an exception for the
+#   countries its limit picks (vanilla's British India, Congress Poland) and
+#   doesn't delay anyone else. Any other condition (a tag, subject status, a
+#   government type, a scripted trigger) is one the guard can't place in
+#   time: the answer is "unread", and a row whose only answers in time are
+#   unread is not counted as answered.
+# - A law a country can hold from 1836: one whose first era is 1, or one the
+#   history's GLOBAL every_country block activates (`seeded`).
+# - An answer: another law of the group the ideology rates higher, not a
+#   carrier, not barred by a law the one in force needs (Unregulated
+#   Donations needs a voting law, which bars No Campaign Finance Laws).
+
+_ERA_NEVER = None
+_SCOPE_FREE_KEYS = frozenset({"AND", "hidden_trigger", "custom_tooltip", "limit"})
+
+
+def technology_eras(technologies: dict) -> dict:
+    """{technology: era number} from `era = era_N`."""
+    out: dict = {}
+    for name, raw in technologies.items():
+        body = _unwrap(raw)
+        era = _unwrap(body.get("era")) if isinstance(body, dict) else None
+        if isinstance(era, str) and era.startswith("era_"):
+            out[_entity_name(name)] = int(era.split("_", 1)[1])
+    return out
+
+
+def _entity_name(key: str) -> str:
+    return key.rsplit(":", 1)[-1]
+
+
+def _as_names(raw) -> list:
+    """A field's value as a flat list of names (`x`, `{ x y }`, repeated keys)."""
+    value = _unwrap(raw)
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    out: list = []
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            out.extend(_as_names(item))
+    return [x for x in out if isinstance(x, str)]
+
+
+class _EraReader:
+    """Earliest era a trigger can hold. `strict` reads it as a law's gate
+    (unknown conditions are recorded in `unread`, a negation too); otherwise
+    as a movement's creation_trigger (only technologies count)."""
+
+    def __init__(self, eras: dict, law_era=None, strict: bool = True):
+        self.eras, self.law_era, self.strict = eras, law_era, strict
+        self.unread: set = set()
+        self.unknown_techs: set = set()
+
+    def _tech(self, tech: str) -> int:
+        if tech not in self.eras:
+            self.unknown_techs.add(tech)
+            return 99
+        return self.eras[tech]
+
+    def era(self, body, any_of: bool = False):
+        """None means never."""
+        values: list = []
+        for key, value in _items(body):
+            if key == "has_technology_researched" and isinstance(value, str):
+                values.append(self._tech(value))
+            elif key == "always" and isinstance(value, str):
+                values.append(_ERA_NEVER if value == "no" else 1)
+            elif key in ("has_law", "has_law_or_variant") and isinstance(value, str) and value.startswith("law_type:"):
+                if self.strict and self.law_era is not None:
+                    values.append(self.law_era(value.split(":", 1)[1]))
+                else:
+                    values.append(1)
+            elif key == "text":
+                continue  # custom_tooltip's loc key
+            elif key in _NEGATIONS:
+                if self.strict:
+                    self.unread.add(key)
+                values.append(1)
+            elif key in ("trigger_if", "trigger_else", "trigger_else_if"):
+                values.append(1)
+            elif key == "OR" and isinstance(value, dict):
+                values.append(self.era(value, any_of=True))
+            elif isinstance(value, dict):
+                if self.strict and key not in _SCOPE_FREE_KEYS:
+                    self.unread.add(key)
+                values.append(self.era(value))
+            else:
+                if self.strict:
+                    self.unread.add(key)
+                values.append(1)
+        if not values:
+            return 1
+        known = [v for v in values if v is not _ERA_NEVER]
+        if any_of:
+            return min(known) if known else _ERA_NEVER
+        return _ERA_NEVER if len(known) < len(values) else max(known)
+
+
+def movement_first_era(body, eras: dict) -> tuple[int, set]:
+    """(the first era a movement can exist in, technologies the era table lacks)."""
+    trigger = _unwrap(body.get("creation_trigger")) if isinstance(body, dict) else None
+    reader = _EraReader(eras, strict=False)
+    era = reader.era(trigger) if isinstance(trigger, dict) else 1
+    return (1 if era is _ERA_NEVER else era), reader.unknown_techs
+
+
+def law_gates(laws: dict, eras: dict) -> tuple[dict, set]:
+    """({law: {"group", "era" (None = never), "unread" (sorted), "needs", "barred_by"}},
+    technologies the era table lacks)."""
+    bodies = {name: _unwrap(raw) for name, raw in laws.items()}
+    bodies = {n: b for n, b in bodies.items() if isinstance(b, dict) and isinstance(_unwrap(b.get("group")), str)}
+    memo: dict = {}
+    unknown: set = set()
+
+    def gate(law: str, stack: tuple = ()) -> dict:
+        if law in memo:
+            return memo[law]
+        if law not in bodies or law in stack:
+            return {"era": _ERA_NEVER if law in stack else 1, "unread": []}
+        body = bodies[law]
+        techs = _as_names(body.get("unlocking_technologies"))
+        unread: set = set()
+        reader = _EraReader(eras, law_era=lambda x: gate(x, stack + (law,))["era"])
+        era = min(reader._tech(t) for t in techs) if techs else 1
+        needs = _as_names(body.get("unlocking_laws"))
+        if needs:
+            options = [(gate(x, stack + (law,)), x) for x in needs]
+            clean = [g["era"] for g, _ in options if g["era"] is not _ERA_NEVER and not g["unread"]]
+            any_era = [g["era"] for g, _ in options if g["era"] is not _ERA_NEVER]
+            if clean:
+                era = max(era, min(clean))
+            elif any_era:
+                era = max(era, min(any_era))
+                unread.add("unlocking_laws")
+            else:
+                era = _ERA_NEVER
+        for key in ("can_enact", "is_visible"):
+            trigger = _unwrap(body.get(key))
+            if isinstance(trigger, dict) and era is not _ERA_NEVER:
+                cond = reader.era(trigger)
+                era = _ERA_NEVER if cond is _ERA_NEVER else max(era, cond)
+        unread |= {f"{k}" for k in reader.unread}
+        unknown.update(reader.unknown_techs)
+        out = {
+            "group": _unwrap(body.get("group")),
+            "era": era,
+            "unread": sorted(unread),
+            "needs": needs,
+            "barred_by": _as_names(body.get("disallowing_laws")),
+        }
+        if not stack:
+            memo[law] = out
+        return out
+
+    return {law: gate(law) for law in sorted(bodies)}, unknown
+
+
+def standing_grievances(movements: dict, ideologies: dict, laws: dict, technologies: dict,
+                        carriers=frozenset(), seeded=frozenset(), open_gates=frozenset()) -> dict:
+    """Every (movement, ideology, law it disapproves of that a country can hold
+    from 1836), with the laws it rates higher and its verdict (see the section
+    comment above):
+
+    {"rows": [{movement, ideology, via, first_era, law, group, stance,
+               answers: [{law, stance, era, unread}], verdict}],
+     "unknown_technologies": [...]}
+
+    `verdict` is "answered" (an answer opens by `first_era` with nothing
+    unread, or its unread conditions are in `open_gates`), "unread" (every
+    answer in time has a condition the guard can't place) or "standing" (no
+    answer opens in time)."""
+    eras = technology_eras(technologies)
+    gates, unknown = law_gates(laws, eras)
+    parent_of = law_parents(laws)
+    members: dict = {}
+    for law, g in gates.items():
+        members.setdefault(g["group"], []).append(law)
+    holdable = {law for law, g in gates.items()
+                if law not in carriers and (law in seeded or g["era"] == 1)}
+    rows: list = []
+    for name in sorted(movements):
+        body = _unwrap(movements[name])
+        if not isinstance(body, dict):
+            continue
+        first_era, missing = movement_first_era(body, eras)
+        unknown |= missing
+        for ideology, via in movement_ideologies(body, name):
+            ideology_body = _unwrap(ideologies.get(ideology))
+            if not isinstance(ideology_body, dict):
+                continue
+            for group, laws_of_group in sorted(members.items()):
+                block = _unwrap(ideology_body.get(group))
+                if isinstance(block, list) and block:
+                    block = _unwrap(block[-1])
+                if not isinstance(block, dict):
+                    continue
+                ranks = {law: _rank(_stance(block, law, parent_of)[0]) for law in laws_of_group}
+                for law in laws_of_group:
+                    if law not in holdable or ranks[law] >= 0:
+                        continue
+                    needs = set(gates[law]["needs"])
+                    answers = [
+                        {"law": other, "stance": ranks[other], "era": gates[other]["era"],
+                         "unread": [] if other in open_gates else gates[other]["unread"]}
+                        for other in laws_of_group
+                        if other != law and other not in carriers and ranks[other] > ranks[law]
+                        and gates[other]["era"] is not _ERA_NEVER
+                        and not (needs and needs <= set(gates[other]["barred_by"]))
+                    ]
+                    in_time = [a for a in answers if a["era"] <= first_era]
+                    verdict = ("answered" if any(not a["unread"] for a in in_time)
+                               else "unread" if in_time else "standing")
+                    rows.append({
+                        "movement": name, "ideology": ideology, "via": via, "first_era": first_era,
+                        "law": law, "group": group, "stance": ranks[law], "answers": answers,
+                        "verdict": verdict,
+                    })
+    return {"rows": rows, "unknown_technologies": sorted(unknown)}
+
+
+VERDICT_RANK = {"answered": 0, "unread": 1, "standing": 2}
+
+
+def new_grievances(merged: dict, vanilla: dict) -> list:
+    """Rows of `merged` (standing_grievances on the mod's data) whose verdict is
+    worse than vanilla's own data gives the same (movement, ideology, law), a
+    row vanilla lacks counting as answered there: what the mod made, leaving
+    vanilla's design to vanilla."""
+    base = {(r["movement"], r["ideology"], r["law"]): VERDICT_RANK[r["verdict"]] for r in vanilla["rows"]}
+    return [r for r in merged["rows"]
+            if VERDICT_RANK[r["verdict"]] > base.get((r["movement"], r["ideology"], r["law"]), 0)]
+
+
+def history_seeded_laws(mod_path: str) -> set:
+    """Laws common/history/extra_history.txt's GLOBAL every_country block
+    activates, its conditional lines included (the 1836 baseline of the mod's
+    law groups)."""
+    import re
+
+    path = os.path.join(mod_path, "common", "history", "extra_history.txt")
+    if not os.path.isfile(path):
+        return set()
+    with open(path, encoding="utf-8-sig") as fh:
+        text = fh.read()
+    m = re.search(r"(?m)^\tevery_country\s*=\s*\{", text)
+    if not m:
+        return set()
+    depth, i = 1, m.end()
+    while depth and i < len(text):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return set(re.findall(r"activate_law\s*=\s*law_type:(law_\w+)", text[m.end():i]))
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -315,6 +596,9 @@ def main(argv=None) -> int:
     what.add_argument("--movements", action="store_true", help="list every movement")
     what.add_argument("--lawgroup", help="stances on one law group")
     what.add_argument("--law", help="stances on the group of one law")
+    what.add_argument("--standing", action="store_true",
+                      help="movements' stances on laws no government can leave (#1832): every row the mod "
+                           "makes worse than vanilla, then vanilla's own")
     what.add_argument("--gaps", action="store_true",
                       help="law groups no movement rates, and laws no movement backs")
     ap.add_argument("--current", help="with --lawgroup/--law: compare against this law")
@@ -331,6 +615,17 @@ def main(argv=None) -> int:
     carriers = carrier_laws(args.mod_path)
     if args.movements:
         out = movement_catalog(movements, ideologies)
+    elif args.standing:
+        def run(data, carriers_, seeded):
+            return standing_grievances(data.get("Political Movements") or {}, data.get("Ideologies") or {},
+                                       data.get("Laws") or {}, data.get("Technologies") or {},
+                                       carriers_, seeded)
+        merged = run({et: ms.get_data(et) or {} for et in ENTITY_TYPES}, carriers,
+                     history_seeded_laws(args.mod_path))
+        base = run(vanilla, frozenset(), frozenset())
+        out = {"made_by_the_mod": new_grievances(merged, base),
+               "vanilla": [r for r in base["rows"] if r["verdict"] != "answered"],
+               "unknown_technologies": merged["unknown_technologies"]}
     elif args.gaps:
         out = stance_gaps(movements, ideologies, laws, carriers,
                           set(vanilla.get("Law Groups") or {}))
