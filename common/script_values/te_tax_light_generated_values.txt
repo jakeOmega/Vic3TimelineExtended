@@ -85,7 +85,10 @@ te_tax_light_idx_div_4 = {
 	else_if = { limit = { has_law = law_type:law_graduated_taxation } value = 12 }
 }
 te_tax_light_min_div = { value = 0 }
-te_tax_light_max_div = { value = te_tax_light_idx_div_4 }
+te_tax_light_max_div = {
+	value = te_tax_light_idx_div_4
+	if = { limit = { te_tax_light_extra_div = yes } value = te_tax_light_extra_cap_div }
+}
 te_tax_light_idx_land_0 = {
 	value = 0
 	if = { limit = { has_law = law_type:law_land_based_taxation } value = 16 }
@@ -252,9 +255,57 @@ te_tax_light_idx_cons_at_level = {
 	if = { limit = { has_variable = te_tax_light_level var:te_tax_light_level = 4 } value = te_tax_light_idx_cons_4 }
 }
 
+# The extra div tax (LIGHT_EXTRAS): under a law that levies none (law_consumption_based_taxation, law_land_based_taxation, law_per_capita_based_taxation)
+# and none of law_traditionalism, the code may levy it from nothing up to
+# te_tax_light_extra_cap_div index steps; the law collects none of it, so je_tax_code declares
+# te_tax_light_levy_div x the index. Its steps are law_proportional_taxation's, capped:
+# te_tax_light_xidx_div_<n> is the extra ladder at native level n (0 where the extra is closed);
+# _native and _at_level as for the law's. te_tax_light_ai_idx_<key>: what an AI levies at its native
+# level, the extra's rate where it is open and the law's otherwise.
+te_tax_light_extra_cap_div = { value = 2 }
+te_tax_light_xidx_div_0 = {
+	value = 0
+	if = { limit = { te_tax_light_extra_div = yes } value = 1 }
+}
+te_tax_light_xidx_div_1 = {
+	value = 0
+	if = { limit = { te_tax_light_extra_div = yes } value = 2 }
+}
+te_tax_light_xidx_div_2 = {
+	value = 0
+	if = { limit = { te_tax_light_extra_div = yes } value = 2 }
+}
+te_tax_light_xidx_div_3 = {
+	value = 0
+	if = { limit = { te_tax_light_extra_div = yes } value = 2 }
+}
+te_tax_light_xidx_div_4 = {
+	value = 0
+	if = { limit = { te_tax_light_extra_div = yes } value = 2 }
+}
+te_tax_light_xidx_div_native = {
+	value = te_tax_light_xidx_div_2
+	if = { limit = { tax_level = very_low } value = te_tax_light_xidx_div_0 }
+	if = { limit = { tax_level = low } value = te_tax_light_xidx_div_1 }
+	if = { limit = { tax_level = high } value = te_tax_light_xidx_div_3 }
+	if = { limit = { tax_level = very_high } value = te_tax_light_xidx_div_4 }
+}
+te_tax_light_xidx_div_at_level = {
+	value = te_tax_light_xidx_div_2
+	if = { limit = { has_variable = te_tax_light_level var:te_tax_light_level = 0 } value = te_tax_light_xidx_div_0 }
+	if = { limit = { has_variable = te_tax_light_level var:te_tax_light_level = 1 } value = te_tax_light_xidx_div_1 }
+	if = { limit = { has_variable = te_tax_light_level var:te_tax_light_level = 3 } value = te_tax_light_xidx_div_3 }
+	if = { limit = { has_variable = te_tax_light_level var:te_tax_light_level = 4 } value = te_tax_light_xidx_div_4 }
+}
+te_tax_light_ai_idx_div = {
+	value = te_tax_light_idx_div_native
+	if = { limit = { te_tax_light_extra_div = yes } value = te_tax_light_xidx_div_native }
+}
+
 # te_tax_light_rung_<key>: the step the enacted rate sits on, the lowest native level whose
 # rate under the active law is at least the code's (0 very low .. 4 very high); -1 for a tax
-# the law does not levy. Literal thresholds per law.
+# the law does not levy. Literal thresholds per law. An extra tax (LIGHT_EXTRAS) sits on its
+# extra ladder's step while it is open and above nothing, and on none (-1) at nothing: no tax.
 te_tax_light_rung_wage = {
 	value = -1
 	if = {
@@ -299,6 +350,14 @@ te_tax_light_rung_div = {
 		if = { limit = { var:te_tax_en_div <= 8 } value = 2 }
 		if = { limit = { var:te_tax_en_div <= 6 } value = 1 }
 		if = { limit = { var:te_tax_en_div <= 4 } value = 0 }
+	}
+	else_if = {
+		limit = { te_tax_light_extra_div = yes has_variable = te_tax_en_div var:te_tax_en_div > 0 }
+		value = 4
+		if = { limit = { var:te_tax_en_div <= 2 } value = 3 }
+		if = { limit = { var:te_tax_en_div <= 2 } value = 2 }
+		if = { limit = { var:te_tax_en_div <= 2 } value = 1 }
+		if = { limit = { var:te_tax_en_div <= 1 } value = 0 }
 	}
 }
 te_tax_light_rung_land = {
@@ -828,7 +887,9 @@ te_tax_light_rlv_trade_unions = {
 # je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the
 # engine reads each from the owning country about every four days, so the sync only writes
 # the variables. te_tax_light_relief_<key>_value: the tax's relief steps
-# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_react_<ig>_<pos|neg>_value:
+# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_levy_<key>_value: an extra
+# tax's index (te_tax_en_<key>) while the code is in force and the extra is open (LIGHT_EXTRAS).
+# te_tax_light_react_<ig>_<pos|neg>_value:
 # the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of
 # its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the
 # modifier off the entry: the gates under which the sync used to remove it.
@@ -851,6 +912,10 @@ te_tax_light_relief_head_value = {
 te_tax_light_relief_cons_value = {
 	value = 0
 	if = { limit = { te_tax_light_levies_cons = yes has_variable = te_tax_light_rl_cons var:te_tax_light_rl_cons > 0 } value = var:te_tax_light_rl_cons }
+}
+te_tax_light_levy_div_value = {
+	value = 0
+	if = { limit = { te_tax_light_in_force = yes te_tax_light_extra_div = yes has_variable = te_tax_en_div var:te_tax_en_div > 0 } value = var:te_tax_en_div }
 }
 te_tax_light_react_armed_forces_pos_value = {
 	value = 0
@@ -934,7 +999,7 @@ te_tax_view_light_was = {
 }
 te_tax_view_light_levied_wage = {
 	value = 0
-	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_wage = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_holds_wage = yes } value = 1 }
 }
 te_tax_view_light_rung_wage = {
 	value = -1
@@ -952,7 +1017,7 @@ te_tax_view_light_relief_wage_rate = {
 }
 te_tax_view_light_levied_div = {
 	value = 0
-	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_div = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_holds_div = yes } value = 1 }
 }
 te_tax_view_light_rung_div = {
 	value = -1
@@ -968,9 +1033,14 @@ te_tax_view_light_relief_div_rate = {
 	value = 0
 	if = { limit = { has_variable = te_tax_light_rl_div } value = var:te_tax_light_rl_div multiply = te_tax_step_div }
 }
+te_tax_view_light_extra_div = {
+	value = 0
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_extra_div = yes } value = 1 }
+}
+te_tax_view_light_extra_cap_div_rate = { value = te_tax_light_extra_cap_div multiply = te_tax_step_div }
 te_tax_view_light_levied_land = {
 	value = 0
-	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_land = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_holds_land = yes } value = 1 }
 }
 te_tax_view_light_rung_land = {
 	value = -1
@@ -988,7 +1058,7 @@ te_tax_view_light_relief_land_rate = {
 }
 te_tax_view_light_levied_head = {
 	value = 0
-	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_head = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_holds_head = yes } value = 1 }
 }
 te_tax_view_light_rung_head = {
 	value = -1
@@ -1006,7 +1076,7 @@ te_tax_view_light_relief_head_rate = {
 }
 te_tax_view_light_levied_cons = {
 	value = 0
-	if = { limit = { has_variable = te_tax_light_on te_tax_light_levies_cons = yes } value = 1 }
+	if = { limit = { has_variable = te_tax_light_on te_tax_light_holds_cons = yes } value = 1 }
 }
 te_tax_view_light_rung_cons = {
 	value = -1
