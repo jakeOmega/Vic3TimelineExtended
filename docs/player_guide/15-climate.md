@@ -412,6 +412,16 @@ Injection in default or once the haze is as thick as it can get, and stops it in
 default. Between the two it leaves the policy alone, so an election doesn't flip
 policies back and forth.
 
+A restless Environmental Movement moves the AI too. Once the movement's activism
+passes 50%, the AI adds up to 30 points, the full 30 at 75%, to one of the seven
+policies the movement asks for ([The Environmental
+Movement](#the-environmental-movement)): the one it is nearest to adopting anyway
+and can afford now. It does this at most once a year, so each answer has time to calm
+the movement before the next. It keeps each of those policies while the
+movement would be that restless again without it, and Renewable Investment only
+while it can still afford the running cost. While the movement lasts, it lets
+at most one of the seven lapse a year, unless it is short of authority.
+
 | Policy | Threshold |
 |---|---|
 | Climate Adaptation | 25 |
@@ -652,4 +662,5 @@ Each unfunded level of the ministry raises it by 5 points. Without the ministry,
 the levels your technologies would add count as unfunded, so a missing ministry
 costs nothing until the Environmental Movement technology. It disbands once the
 Ministry of the Environment is established and funded to its maximum. Its
-support also pushes AI countries toward climate policies.
+support, and its activism once it passes 50%, push AI countries toward climate
+policies ([How the AI adopts climate policy](#how-the-ai-adopts-climate-policy)).

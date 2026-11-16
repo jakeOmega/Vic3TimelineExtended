@@ -1,0 +1,24 @@
+﻿# Global Warming: the AI's bookkeeping for the Environmental Movement's
+# pressure (global_warming_ai_values.txt, "The Environmental Movement's
+# pressure"). The player's widget never calls these.
+#
+# Scope: country.
+
+# A revolution's winner inherits the loser's variables, but whether a timed
+# variable keeps counting down there is unread (scripting_best_practices.md,
+# "What a Civil War's Winner Inherits"). Arriving without its countdown, either
+# year's lock would never expire, and the movement would never be answered
+# again, or no policy of the seven lapse while it lasted. Either winner can
+# receive one from the other side in the merge, so the winner starts with
+# neither: at worst it answers, or lets a policy lapse, up to a year sooner
+# than the loser would have. Called from te_civil_war_on_won.
+gw_ai_repair_after_civil_war = {
+	if = {
+		limit = { has_variable = gw_ai_movement_answered }
+		remove_variable = gw_ai_movement_answered
+	}
+	if = {
+		limit = { has_variable = gw_ai_movement_lapsed }
+		remove_variable = gw_ai_movement_lapsed
+	}
+}

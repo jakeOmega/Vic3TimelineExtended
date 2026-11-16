@@ -204,8 +204,8 @@ game, in English.
     technology that line is 0: note whether a zero line shows at all, and the movement's activism then.
   - Count the Environmental Movement's "could adopt" climate-policy lines (+0.10 each) in an AI country with the
     Global Warming entry open, and note the country's activism. The 2026-11-15 save read found most AI countries
-    holding none of the seven policies those lines count. If most such movements sit at full activism from these
-    lines alone, that is the gap the AI climate-policy follow-up to #1832 takes up.
+    holding none of the seven policies those lines count. Since 2026-11-15 a movement past 50% activism pulls the AI
+    toward them; `global-warming-playtest.md`, "The AI answers the Environmental Movement", checks it.
   - In an observer run, note whether movement civil wars come later or fewer than in the runs before #1832.
     Estimated from four saves: a fifth to a half fewer movements reach 0.75 activism from the law, radical and
     loyalist terms alone (26→18, 36→23, 28→15, 38→30).
