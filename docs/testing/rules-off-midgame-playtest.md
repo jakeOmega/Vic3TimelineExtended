@@ -189,7 +189,7 @@ Setup: a UN founded, the player a member with a seat, a convention ratified, a m
 ## Legislated Tax Code
 
 Setup: Tax Code Enabled with a bill passed (a rate changed), and a second game under Light Tax Code with a tax set below
-its law's rate.
+its law's rate and, on Per-Capita Taxation, the low dividend tax raised to 5%.
 
 1. **Full code.** Within a month the Legislated Tax Code gives way to the base-game taxation law its code was closest
    to, the tax-level buttons are live, and tax income doesn't fall to nothing at any point (check the weekly income the
@@ -198,7 +198,11 @@ its law's rate.
    the taxation law is unchanged. *Partly run through the harness, 2026-11-12 (`game-qa-results-2026-11-12.md`): with
    the rule switched from Light to Disabled in a copy of a fresh save, the rule-off branch ran for all 291 countries
    within the month. The entry, the modifiers and the law were not looked at.*
-3. **Both.** No `te_tax_ig_view_*` or relief modifier is left on the country or its states.
+3. **Both.** No `te_tax_ig_view_*` or relief modifier is left on the country or its states. Under the light code the
+   Low Dividend Tax (`te_tax_light_levy_div`, a flat country modifier since 2026-11-16) is gone too, at the country's
+   next monthly pulse (`TE_TAX light_levy_off` in `debug.log`), and the Budget's Dividends Taxes line reads zero; the
+   same holds for the rule switched from Light to Tax Code Enabled, where a levy left on would tax dividends beside
+   the carrier's own rate.
 4. **Switched back on**, the full code migrates the country again on the next monthly dispatch, from its base-game law.
 5. **The Tax Code tab after the rule is switched on during play** (2026-11-13, a Workshop report: the tab greyed for
    ten years under the full code, its tooltip saying the conditions were met and the entry was not running). A game

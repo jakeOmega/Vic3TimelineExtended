@@ -548,16 +548,66 @@ Serves S12. Result: ___
 
 Owner, 2026-11-15. Under the light setting a law that levies no dividend tax (Consumption-Based,
 Land-Based, Per-Capita) lets the code levy one from nothing up to 5%, closed under Traditionalism
-(`docs/systems/tax_code_schema.md` § "The low dividend tax"). The law collects none of it, so it
-is the entry's scaling modifier `te_tax_light_levy_div`, a positive tax rate from a journal entry,
-which nothing in the mod or the base game has shown collecting. The structural tests are
-`test_tax_code_light_extra.py`; these are the things only the game can show.
+(`docs/systems/tax_code_schema.md` § "The low dividend tax"). The law collects none of it, so the
+code levies it through a modifier of its own, `te_tax_light_levy_div`: a positive tax rate from
+outside the law, which nothing in the mod or the base game has shown collecting. #1855 declared it
+on `je_tax_code` (a scaling modifier); since 2026-11-16 it is a flat country modifier that the light
+sync removes and adds again at `multiplier = te_tax_light_levy_div_value`
+(`te_tax_light_gen_levy`), and `te_tax_light_levy_net` takes it off where the code is no longer in
+force. The structural tests are `test_tax_code_light_extra.py` and
+`test_tax_code_scaling_modifiers.py` (`LevyTest`); these are the things only the game can show.
+
+### What the observer game of 2026-11-16 read
+
+- **The declaration's self-check read BROKEN.** The unattended observer game on `main` at build
+  `81b947368`, run 2026-11-16, logged:
+
+  ```
+  TE_SELF_CHECK BROKEN tax_light_div_levy levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1, 1881 (the read sees the law's dividend rate but not the entry's levy: the fallback is a flat country modifier from the sync, docs/testing/tax-code-playtest.md)
+  ```
+
+  In all 70 AI countries whose code levied the low tax, `modifier:tax_dividends_add` read 0 where
+  the code's rate should show, while the 5 on Proportional or Graduated read their law's rate.
+- **A declaration does reach that read for another field.** The same game logged
+  `TE_SELF_CHECK OK scaling_live` (the Strategic Reserve entry's declared budget field read in full
+  through `modifier:`, 6592.16 against 6592.16). Why the declared `tax_dividends_add` read 0 can't be
+  told from the script. Either the declared value read 0 when the entry evaluated it (the levy's
+  value is a named script value whose limit reads `has_law`, `has_game_rule` and scripted triggers;
+  `scaling_live`'s is an inline variable read), or the engine leaves a tax rate from a declaration
+  out of the country's sum, and perhaps out of collection too. The relief's declarations have the
+  levy's shape, so the first would touch them as well; no AI country carries relief, so no observer
+  game reads it.
+- **But tax income suggests the levy may have been collected.** A comparison of that game with the
+  baseline of the same day (build `dab9335f1`, before #1855): among AI countries on Per-Capita
+  Taxation outside Traditionalism, at the same tax level in both games, tax income as a share of GDP
+  is higher with #1855 from the first years (1836–40 27.0% → 29.7%, 1841–50 25.4% → 28.5%, 1851–60
+  23.6% → 26.4%), and under Traditionalism, which closes the low tax, there is no such gap. That is
+  what a collected levy would look like. It is not proof: one game of each build, and nothing else
+  has been ruled out. On Land-Based Taxation outside Traditionalism, where the levy applies as well,
+  the gap is absent (19.1% → 18.0%, 17.9% → 18.4%, 24.1% → 26.5% over the same three spans, the
+  median country lower in each). Source: an analysis of the two games' AI telemetry probe
+  (`TE_AIP`) for the private-construction question of 2026-11-16, its tax-by-law tables.
+
+**What decides whether the flat modifier was needed: PT-47 read on a build that still declares the
+levy** (`main` before the change of 2026-11-16, or a save made there). Script can't measure
+collection, so only the Budget panel's Dividends Taxes line can say.
+
+- The line reads zero: the declaration never collected, and the flat modifier is the fix. Read PT-47
+  again on the new build.
+- The line shows the levy: the declaration collected and only the self-check's read was blind. The
+  owner chooses between keeping the flat modifier, which puts the levy where `has_modifier` and a
+  self-check can see it (`tax_light_levy_flat` below then means something), and going back to the
+  declaration with its self-check retired on the Budget's evidence. No script read of a country's
+  dividend tax rate other than `modifier:` exists, so a declaration's check can't be corrected by
+  reading it differently: it could only test the declared value's inputs, which proves nothing about
+  the levy.
 
 ### Self-checks
 
 | Line | When it logs | OK | BROKEN | Then |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … tax_light_div_levy` | once a game under the light setting. From the third global monthly pulse this build runs there (two months after the first) it counts, each month, AI countries that follow their level, with the code in force and a dividend tax above nothing: the levy group (the tax open, the entry active) and a control on Proportional or Graduated (the law's own rate). It reads `modifier:tax_dividends_add` against the code's rate (`te_tax_en_div` × 0.025, up to 0.01 over for the spectrum auction). No country starts on Proportional or Graduated, so it gives its verdict only once the control has 5 countries, or on the first pulse from 1900.1.1 with whatever it has: **no line before then**, and in a game where few AI countries enact those laws the line comes in 1900. A plain `TE_SELF_CHECK START tax_light_div_levy` line comes first (a START alone means the engine dropped the templated line). NO_VERDICT: fewer than 5 countries in a group by 1900, a mixed reading, or a control that does not match, so the read does not see a law's rate either. **Script can't measure collection:** a scaling modifier shows in a `modifier:` read within days whether or not the Budget collects it, so only the Budget panel's Dividends Taxes line (PT-47) shows the tax is collected | 80% or more of each group match, 5 or more in each: the levy shows in the same rate read that shows a law's own dividend rate. Read the Budget once (PT-47) | 80% or more of the levy group read 0 while 80% or more of the control match: the read sees the law's rate and not the levy | **Fallback on BROKEN, or on a Budget line that stays at zero in PT-47:** apply `te_tax_light_levy_div` as a flat country modifier from the light sync, removed and re-added with `multiplier = te_tax_light_levy_div_value` (the dynamic-modifier pattern the relief used before #1404), and drop its declaration from `je_tax_code`. On OK and a Budget line that reads it, delete the self-check's two files |
+| `TE_SELF_CHECK … tax_light_levy_flat` | once a game under the light setting. Each country's own monthly pulse (a 30-day timer, so mostly not the 1st, when the AI's sync re-adds the levy) counts it into the month's totals; the first month counted starts at the third global monthly pulse this build runs there, so a save from an older build has had its first syncs. It counts AI countries that follow their level, with the code in force and a dividend tax above nothing: the levy group (the tax open) and a control on Proportional or Graduated (the law's own rate). For each it reads whether the country holds `te_tax_light_levy_div` (*held*: a flat modifier is visible to `has_modifier`, a declaration was not) and `modifier:tax_dividends_add` against the code's rate, `te_tax_en_div` × 0.025, up to 0.01 over for the spectrum auction (*matched*, *at 0*, or *above*: a second copy). The verdict comes on the 1st after a month in which the control had 5 countries, or from 1900.1.1 with whatever the month had; a levy group of 5 or more of which fewer than 20% hold the levy needs no control and is reported from the first month. A plain `TE_SELF_CHECK START tax_light_levy_flat` line comes first (a START alone means the engine dropped the templated line). NO_VERDICT: fewer than 5 in a group by 1900, a mixed reading, or a control that does not match. A new latch (`te_tllf_checked`), so a game that logged the old check's verdict logs this one too. **Script can't measure collection:** OK says the levy is on the country and shows in the rate read that shows a law's own rate, not that the Budget collects it; only the Budget panel's Dividends Taxes line (PT-47) shows that | 5 or more in each group; 80% or more of the levy group hold the levy and match; 80% or more of the control match. Read the Budget once (PT-47) | **`not_applied`**: under 20% of the levy group hold it: the sync never put it on. **`unread`**: 80% or more hold it, 80% or more read 0, the control matches: the read sees a law's rate and no modifier's, as it saw none of the declaration's. **`doubled`**: 80% or more hold it and 20% or more read above the code's rate: the levy is on twice | **`not_applied`:** a fault in the script, not the engine: run `te_tax_debug.9` in one such country and read its `te_tax_en_div` and modifier list in the save report. **`unread`:** PT-47 decides. If the Budget line shows the tax, the levy collects and `modifier:` is blind to a tax rate from outside a law: record that in `scripting_best_practices.md` and delete the self-check. If it reads zero, no modifier collects a dividend tax under a law that levies none, and the owner chooses between another carrier (an amendment carrying the rate in `tax_modifier_<level>` blocks, as the full code's carrier does; capability ledger row 1) and retiring the low dividend tax. **`doubled`:** record the applied multiplier and re-add only when it differs (`scripting_best_practices.md`, "Modifier Values Are NOT Recalculated Within a Single Effect Block"). On OK and a Budget line that reads it, delete the self-check's two files (`te_tax_light_levy_flat_selfcheck_*`) |
+| `TE_SELF_CHECK … tax_light_div_levy` (retired 2026-11-16) | read #1855's declaration once a game, from the third global monthly pulse: `modifier:tax_dividends_add` in the levy group against a control on Proportional or Graduated, with the entry active | — | **Read BROKEN, 2026-11-16** (observer game, build `81b947368`): `levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1, 1881` (in full above) | Its fallback, the flat country modifier from the light sync, was built on 2026-11-16, and `tax_light_levy_flat` replaced the check. Whether the declaration in fact collected is the PT-47 reading above |
 
 ### PT-47 The low dividend tax collects
 
@@ -567,10 +617,13 @@ and the step "Not levied"; its name's tooltip ends with the note that the law le
 tax, naming Proportional Taxation (up to 20%) and Graduated Taxation (up to 30%). Raise it one
 step (2.5%, step Very Low, the tax level unchanged), then a second (5%): the step reads Low, the +
 button's tooltip said the tax level rises, and the overview's Tax Level and Set By follow.
-Expect within about four days: the entry's modifiers list "Low Dividend Tax" at +5%, Budget's
-Dividends Taxes line above zero, and the Industrialists' "Resents Recent Tax Changes" at −2.5
-before ideology, shown rounded to a whole point (their views on taxation move it either way). Cut
-it to nothing (shift-click −): the line goes back to zero within four days. A country with
+Expect at once: the country's modifiers (the Nation tab's economy list, and All Modifiers) list
+"Low Dividend Tax" at +5%, and the Tax Code entry does not. Within a few days: Budget's Dividends
+Taxes line above zero, and the Industrialists' "Resents Recent Tax Changes" at −2.5 before
+ideology, shown rounded to a whole point (their views on taxation move it either way). Cut it to
+nothing (shift-click −): the modifier goes at once and the line goes back to zero within days. On
+a build that still declares the levy (before 2026-11-16), the same steps read the entry's modifiers
+list instead; that reading is the one that decides whether the flat modifier was needed (above). A country with
 foreign-owned buildings: whether the foreign owners' dividends pay it is unread (the
 base game books a dividend tax on the receiving pop's budget, so expect it not to, as under
 Proportional).
@@ -580,14 +633,19 @@ Serves S14. Result: ___
 
 Rule *light*. (a) With the low tax at 5%, enact Land-Based Taxation: it stays at 5%
 (`light_law_changed`). Enact Proportional: the dividend tax is Proportional's rate for the tax
-level and the levy is off the entry. Back to Per-Capita: it is at nothing, the range 0–5%.
-(b) Enact Traditionalism on Land-Based with the low tax raised: the row hides, the tax level and
-Set By follow the next day (`te_tax_light.3` from the law's activation), and the levy and the
-Budget line go to zero within days. (c) Observer mode, an AI country on Per-Capita at Medium:
-its Budget's dividend rate reads 5% and the save report `te_tax_en_div = 2`. (d) Switch the rule
-to Disabled mid-game: the levy ends within days. (e) Load a save begun before this build: the
-player's dividend row reads 0%, and after the 1st each AI country on a law without one levies 5%
-from Low up (save report) and its Industrialists show the reaction to the rise, once.
+level and the Low Dividend Tax is off the country. Back to Per-Capita: it is at nothing, the range
+0–5%. (b) Enact Traditionalism on Land-Based with the low tax raised: the row hides, the tax level
+and Set By follow the next day (`te_tax_light.3` from the law's activation), the Low Dividend Tax
+comes off the country with that sync, and the Budget line goes to zero within days. (c) Observer
+mode, an AI country on Per-Capita at Medium: its Budget's dividend rate reads 5% and the save
+report `te_tax_en_div = 2`. (d) Switch the rule to Disabled mid-game: the Low Dividend Tax comes
+off at the country's next monthly pulse, within a month (`TE_TAX light_levy_off`), and so it does
+switched to Tax Code Enabled. (e) Load a save begun before #1855: the player's dividend row reads
+0%, and after the 1st each AI country on a law without one levies 5% from Low up (save report)
+and its Industrialists show the reaction to the rise, once. (f) Load a save made on a build that
+declared the levy (#1855 to 2026-11-16) with the low tax raised: the entry lists no Low Dividend
+Tax, and from the country's next sync (the 1st, or a step) the country carries it once, never
+twice (a declaration is not written to a save).
 Serves S14. Result: ___
 
 ## Script profiler

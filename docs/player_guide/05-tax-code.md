@@ -46,8 +46,8 @@ tax, and tariffs and subsidies work as in the base game.
 A law that levies no dividend tax still lets you levy a low one, from zero up to
 5%, Proportional Taxation's Low rate. It starts at zero, so choosing it is up to
 you, and its steps are Proportional's: 2.5% sits on the Very Low step and 5% on
-Low. Your law collects none of it; the Tax Code entry levies it, and it shows
-there as Low Dividend Tax. Traditionalism rules it out. To tax dividends more
+Low. Your law collects none of it; the tax code levies it through a modifier on
+your country, Low Dividend Tax. Traditionalism rules it out. To tax dividends more
 heavily, enact Proportional or Graduated Taxation.
 
 <!-- screenshot: the Tax Code tab under the Light Tax Code, Tax Rates open -->
