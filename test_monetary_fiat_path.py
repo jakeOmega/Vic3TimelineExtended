@@ -397,14 +397,17 @@ class CurrencyWeights(unittest.TestCase):
                                      (n, suspended, band))
 
     def test_cooperative_ownership_joins_the_banks_economic_systems(self):
-        # A minor, out of debt, in no power bloc: 600 base, +400 for the
-        # economic systems that presuppose someone managing credit.
+        # A minor, out of debt, in no power bloc, with the bureaucracy to staff
+        # the bank (the #1822 branch, test_ai_institution_laws.py, is left out
+        # as the bloc one is): 600 base, +400 for the economic systems that
+        # presuppose someone managing credit.
         def bank_weight(law):
             s = World(laws=(law,), scaled_debt=0, country_rank=1)
             s.inputs['rank_value:major_power'] = 3
             return s.weight([item for item in self.bank
                              if not (item[0] == 'if' and any(
-                                 k == 'power_bloc' for k, _, _ in Script.field(item[2], 'limit')))])
+                                 k in ('power_bloc', 'te_ai_law_brings_unstaffed_institution')
+                                 for k, _, _ in Script.field(item[2], 'limit')))])
         for law in ('law_interventionism', 'law_laissez_faire', 'law_command_economy',
                     'law_cooperative_ownership'):
             self.assertEqual(bank_weight(law), 1000, law)
