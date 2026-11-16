@@ -17,6 +17,7 @@ pays interest, against one that spends what it has.
 Run: python3 -m unittest test_construction_market_ai_purchase -v
 """
 import itertools
+import json
 import math
 import re
 import unittest
@@ -32,6 +33,7 @@ DEFINES_DIR = ROOT / "common/defines"
 SYSTEM_DOC = ROOT / "docs/systems/mod_systems/construction.md"
 AI_DOC = ROOT / "docs/systems/mod_systems/ai.md"
 PLAYTEST = ROOT / "docs/testing/ai-economy-playtest.md"
+PROBE_KEY = ROOT / "scripts/analysis/ai_probe_key.json"
 
 # The rule, restated here so the script is checked against something that is not itself.
 FLOOR_INCOME_SHARE = 0.05
@@ -518,6 +520,22 @@ class Wiring(unittest.TestCase):
         self.assertIn("## The AI's construction purchase fits its budget", playtest)
         for field in ("cm_public", "cm_price", "debt_scaled", "paused"):
             self.assertIn(f"`{field}`", playtest)
+
+    def test_the_play_test_rows_name_fields_the_probe_logs(self):
+        # The AI telemetry probe is temporary (docs/testing/ai-probe-runbook.md): once it is removed there is nothing
+        # to hold the rows to.
+        if not PROBE_KEY.is_file():
+            self.skipTest("the AI telemetry probe is not in this build")
+        key = json.loads(PROBE_KEY.read_text(encoding="utf-8"))
+        logged = {name for names in key["lines"].values() for name in names}
+        logged |= {f"n_{name}" for name in key["counters"]} | set(key["data_functions"])
+        playtest = PLAYTEST.read_text(encoding="utf-8")
+        section = playtest[playtest.index("## The AI's construction purchase fits its budget"):]
+        section = section[:section.index("\n## ", 5)] if "\n## " in section[5:] else section
+        named = set(re.findall(r"`([a-z][a-z_0-9]*)`", section))
+        fields = {name for name in named if not name.startswith("te_") and name not in ("main", "is_ai")}
+        self.assertGreaterEqual(len(fields), 20)
+        self.assertEqual(sorted(fields - logged), [])
 
 
 def _code(text):
