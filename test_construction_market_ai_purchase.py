@@ -4,10 +4,11 @@ common/script_values/te_construction_market_ai_values.txt sets the purchase: the
 smoothed price, scaled by reserves and debt, or a floor if that is more, capped by the government queue. Until
 2026-11-15 the floor was 10 points a week for every country, which was more than the whole weekly income of 23 of the
 28 AI countries buying in February 1836; they borrowed to the engine's construction pause within months. The floor is
-now a twentieth of fixed income, never more than the 10 points it was, paid from reserves (a tenth of itself with
-none), and a fifth of fixed income higher while the country is short of bureaucracy, so such a country buys at least
-a fifth. While the engine reports construction paused the purchase is nothing, except for a country short of
-bureaucracy with a Government Administration level in its queue, which goes on buying that fifth
+now a twentieth of fixed income, never more than the 10 points it was, paid from reserves (nothing with none) or,
+up to a tenth of it, from the surplus, and a fifth of fixed income higher while the country is short of bureaucracy,
+so such a country buys at least a fifth. A government with no surplus, no reserves and no such shortage buys nothing.
+While the engine reports construction paused the purchase is nothing, except for a country short of bureaucracy with
+a Government Administration level in its queue, which goes on buying that fifth
 (docs/systems/mod_systems/construction.md, "The AI's purchase").
 
 Nothing in the engine checks that script, so this runs the script's own text. What each part checks:
@@ -192,8 +193,10 @@ def model_factor(c):
 
 
 def model_floor(c):
-    floor = min(FLOOR_MAX_POINTS, FLOOR_INCOME_SHARE * c.fixed_income / c.price)
-    floor *= max(FLOOR_MIN_FACTOR, min(1.0, c.reserves / FLOOR_FULL_RESERVES))
+    whole = min(FLOOR_MAX_POINTS, FLOOR_INCOME_SHARE * c.fixed_income / c.price)
+    from_reserves = whole * max(0.0, min(1.0, c.reserves / FLOOR_FULL_RESERVES))
+    from_surplus = min(max(c.surplus, 0.0) / c.price, whole * FLOOR_MIN_FACTOR)
+    floor = max(from_reserves, from_surplus)
     if c.bureaucracy < 0:
         floor += BUREAUCRACY_INCOME_SHARE * c.fixed_income / c.price
     return floor
@@ -249,7 +252,7 @@ class Constants(unittest.TestCase):
     def test_the_floor_is_whole_at_the_reserves_the_engine_asks_before_it_queues(self):
         self.assertEqual(FLOOR_FULL_RESERVES, NAI["CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS"])
 
-    def test_the_part_on_credit_is_a_two_hundredth_of_income(self):
+    def test_the_part_the_surplus_pays_is_a_two_hundredth_of_income(self):
         self.assertAlmostEqual(FLOOR_INCOME_SHARE * FLOOR_MIN_FACTOR, 0.005)
 
     def test_the_engine_pauses_a_critical_construction_far_later_than_the_rest(self):
@@ -402,38 +405,76 @@ class Floor(unittest.TestCase):
         self.assertEqual(Country(2649.0, 0.0, 1143.0, reserves=0.3, income=2848.0).script(),
                          Country(2649.0, 0.0, 1143.0, reserves=0.3, income=99999.0).script())
 
-    def test_it_shrinks_as_the_reserves_do(self):
+    def test_it_shrinks_as_the_reserves_do_to_nothing(self):
         fixed_income, price = ECONOMIES["mid"]
         full = Country(fixed_income, 0.0, price, reserves=0.1).script_floor()
         self.assertAlmostEqual(full, FLOOR_INCOME_SHARE * fixed_income / price, delta=STEP)
         self.assertAlmostEqual(Country(fixed_income, 0.0, price, reserves=0.9).script_floor(), full, delta=STEP)
         self.assertAlmostEqual(Country(fixed_income, 0.0, price, reserves=0.05).script_floor(), full / 2, delta=STEP)
         self.assertAlmostEqual(Country(fixed_income, 0.0, price, reserves=0.02).script_floor(), full / 5, delta=STEP)
+        self.assertAlmostEqual(Country(fixed_income, 0.0, price, reserves=0.002).script_floor(), full / 50, delta=STEP)
+        self.assertEqual(Country(fixed_income, 0.0, price, reserves=0.0).script_floor(), 0.0)
 
-    def test_with_none_left_a_tenth_of_it_is_all_that_goes_on_credit(self):
-        for name in ("tiny", "mid", "large", "huge"):
+    def test_no_surplus_and_no_reserves_buys_nothing(self):
+        # Owner, 2026-11-16: a government that cannot cover its fixed bills and has nothing put by buys nothing. No
+        # part of the floor is on credit. Its queued level waits: a market game has no base construction.
+        for name in ECONOMIES:
             fixed_income, price = ECONOMIES[name]
-            for share, debt in itertools.product((-0.25, 0.0), (0.0, 0.05, 0.2, 0.39, 1.2)):
+            for share, debt in itertools.product((-2.0, -0.25, 0.0), (0.0, 0.05, 0.2, 0.39)):
                 c = Country(fixed_income, share * fixed_income, price, debt=debt)
                 with self.subTest(economy=name, surplus=share, debt=debt):
-                    self.assertLessEqual(c.bill(), 0.005 * fixed_income + STEP * price)
-                    self.assertLessEqual(c.script(), 1.0 + STEP)
+                    self.assertEqual(c.script(), 0.0)
 
-    def test_the_war_and_banking_brakes_do_not_touch_it(self):
+    def test_no_surplus_with_reserves_buys_what_the_reserves_carry(self):
+        for name in ("tiny", "mid", "large"):
+            fixed_income, price = ECONOMIES[name]
+            for share, reserves in itertools.product((-0.25, 0.0), (0.004, 0.03, 0.1, 0.6)):
+                c = Country(fixed_income, share * fixed_income, price, reserves=reserves)
+                with self.subTest(economy=name, surplus=share, reserves=reserves):
+                    self.assertAlmostEqual(c.bill(), FLOOR_INCOME_SHARE * fixed_income * min(1.0, reserves / 0.1),
+                                           delta=STEP * price)
+
+    def test_a_small_surplus_with_no_reserves_buys_the_surplus(self):
+        # No reserves and no debt: the surplus term spends the surplus exactly, and the floor never asks for more
+        # than the surplus, however small. Before, a surplus under a 200th of income bought the 200th on credit.
+        for name in ECONOMIES:
+            fixed_income, price = ECONOMIES[name]
+            for share in (0.0001, 0.001, 0.004, 0.005, 0.02, 0.17):
+                c = Country(fixed_income, share * fixed_income, price, queued=50, weekly_max=140.0)
+                with self.subTest(economy=name, surplus=share):
+                    self.assertAlmostEqual(c.bill(), c.surplus, delta=STEP * price)
+
+    def test_no_part_of_the_floor_is_ever_on_credit(self):
+        # Whatever the surplus, the debt and the brakes: with no reserves and no shortage of bureaucracy, the bill is
+        # never more than the surplus.
+        for (fixed_income, price), share, debt, at_war, bubble in itertools.product(
+                ECONOMIES.values(), (-0.3, 0.0, 0.0005, 0.003, 0.01, 0.2), (0.0, 0.1, 0.39), (False, True),
+                (None, 80.0)):
+            c = Country(fixed_income, share * fixed_income, price, debt=debt, at_war=at_war, bubble=bubble)
+            with self.subTest(fixed_income=fixed_income, surplus=share, debt=debt, at_war=at_war, bubble=bubble):
+                self.assertLessEqual(c.bill(), max(c.surplus, 0.0) + STEP * price)
+
+    def test_with_a_surplus_and_no_reserves_a_tenth_of_it_holds_against_debt_and_the_brakes(self):
+        # At exactly no reserves the floor is the smaller of a tenth of the twentieth and the surplus itself. It
+        # binds only where debt or the brakes cut the surplus term under it, and the surplus pays for it.
+        fixed_income, price = ECONOMIES["mid"]
+        tenth = FLOOR_MIN_FACTOR * FLOOR_INCOME_SHARE * fixed_income / price
+        at_war = Country(fixed_income, 0.02 * fixed_income, price, debt=0.3, at_war=True)  # the factor is 0.2
+        self.assertLess(0.02 * fixed_income / price * 0.2, tenth)
+        self.assertAlmostEqual(at_war.script(), tenth, delta=STEP)
+        self.assertLess(at_war.bill(), at_war.surplus)
+        thin = Country(fixed_income, 0.003 * fixed_income, price, debt=0.3, at_war=True)
+        self.assertAlmostEqual(thin.script(), 0.003 * fixed_income / price, delta=STEP)
+        calm = Country(fixed_income, 0.02 * fixed_income, price)
+        self.assertAlmostEqual(calm.script(), 0.02 * fixed_income / price, delta=STEP)
+
+    def test_the_war_and_banking_brakes_do_not_touch_what_reserves_pay(self):
         fixed_income, price = ECONOMIES["mid"]
         for reserves in (0.0, 0.05, 0.2):
             calm = Country(fixed_income, 0.0, price, reserves=reserves)
             shaken = Country(fixed_income, 0.0, price, reserves=reserves, at_war=True, bubble=80.0)
             with self.subTest(reserves=reserves):
                 self.assertEqual(shaken.script(), calm.script())
-
-    def test_a_queued_level_always_gets_something(self):
-        # With no base construction in a market game, a purchase of nothing leaves the queue where it stands.
-        for fixed_income, price in ((300.0, 1999.0), (857.0, 1249.0), (13678.0, 1265.0)):
-            for share, debt in itertools.product((-2.0, -0.2, 0.0, 0.001), (0.0, 0.1, 0.39, 0.99)):
-                c = Country(fixed_income, share * fixed_income, price, debt=debt)
-                with self.subTest(fixed_income=fixed_income, surplus=share, debt=debt):
-                    self.assertGreater(c.script(), 0.0005)
 
     def test_the_old_price_clamp_is_gone(self):
         code = _code(AI_VALUES.read_text(encoding="utf-8-sig"))
@@ -442,7 +483,9 @@ class Floor(unittest.TestCase):
         self.assertNotRegex(floor, r"\bmax\s*=\s*150\b")
         self.assertNotRegex(floor, r"\bvalue\s*=\s*income\b")
         self.assertNotIn("te_construction_market_price\n", floor)
-        self.assertEqual(floor.count("var:te_construction_market_price_stabilizer"), 2)
+        # Every division is by the smoothed price: the fifth, the twentieth, and the surplus that pays the tenth.
+        self.assertEqual(floor.count("var:te_construction_market_price_stabilizer"), 3)
+        self.assertEqual(floor.count("divide ="), 4)  # those three, and reserves over the tenth of their limit
 
 
 class ShortOfBureaucracy(unittest.TestCase):
@@ -478,6 +521,7 @@ class ShortOfBureaucracy(unittest.TestCase):
                          income=12261.0)
         self.assertAlmostEqual(short.script(), 6174.0 / 1369.0 * 0.996, delta=STEP)
         self.assertEqual(short.script(), enough.script())
+        # Its floor still has the tenth, which its surplus pays.
         self.assertAlmostEqual(short.script_floor(), 0.1 * 0.05 * 11806.0 / 1369.0 + 0.2 * 11806.0 / 1369.0, delta=STEP)
         self.assertEqual(before(short), 26.0)
 
@@ -498,6 +542,19 @@ class TheAdministration(unittest.TestCase):
                 c = self.paused(fixed_income, price, surplus=surplus * fixed_income, debt=debt, weekly_max=140.0)
                 with self.subTest(economy=name, surplus=surplus, debt=debt):
                     # On credit, whatever the reserves (none, in debt) and the surplus.
+                    self.assertAlmostEqual(c.bill(), BUREAUCRACY_INCOME_SHARE * fixed_income, delta=STEP * price)
+
+    def test_it_does_not_depend_on_the_floor(self):
+        # The floor is nothing for a country with no surplus and no reserves; the purchase through the pause is its
+        # own branch and still buys the fifth.
+        for name in ("tiny", "mid", "large"):
+            fixed_income, price = ECONOMIES[name]
+            for surplus in (-0.5, 0.0):
+                c = self.paused(fixed_income, price, surplus=surplus * fixed_income, weekly_max=140.0)
+                unpaused_with_nothing = Country(fixed_income, surplus * fixed_income, price)
+                with self.subTest(economy=name, surplus=surplus):
+                    self.assertEqual(unpaused_with_nothing.script(), 0.0)
+                    self.assertEqual(c.reserves, 0.0)
                     self.assertAlmostEqual(c.bill(), BUREAUCRACY_INCOME_SHARE * fixed_income, delta=STEP * price)
 
     def test_it_is_held_to_one_levels_weekly_maximum(self):
@@ -683,7 +740,7 @@ class TheLongRun(unittest.TestCase):
                 self.assertLessEqual(run.default_year, 30)
 
     def test_now_a_country_with_a_surplus_never_borrows_and_never_pauses(self):
-        for share in (0.006, 0.06, 0.17, 0.33, 0.7):
+        for share in (0.0005, 0.006, 0.06, 0.17, 0.33, 0.7):
             run = long_run(now, 3000.0, share, 30)
             with self.subTest(surplus=share):
                 self.assertLess(run.debt, 1e-6)
@@ -743,15 +800,14 @@ class TheLongRun(unittest.TestCase):
         self.assertGreater(long_run(now, 3000.0, 0.17, 30).by_year[-1],
                            long_run(before, 3000.0, 0.17, 30, paid=PRICE_PAID_BEFORE, tax_raise=0.15).by_year[-1])
 
-    def test_with_no_surplus_at_all_the_part_on_credit_takes_decades_to_matter(self):
-        # A two-hundredth of income a week, borrowed, with interest on it: under 2% of the ceiling after ten years
-        # and a fifth after thirty, never paused, for about 19 points (0.6 a year: a 100-point level in 160 years).
-        # The rule before was past the ceiling inside ten.
-        self.assertLess(long_run(now, 3000.0, 0.0, 10).debt, 0.02)
+    def test_with_no_surplus_at_all_it_buys_nothing_and_owes_nothing(self):
+        # Until 2026-11-16 a tenth of the floor went on credit here: about 19 points in thirty years (0.6 a year, a
+        # 100-point level in 160 years) for a debt of a fifth of the ceiling, most of it interest. The rule before
+        # was past the ceiling inside ten years.
         thirty = long_run(now, 3000.0, 0.0, 30)
-        self.assertLess(thirty.debt, 0.25)
+        self.assertEqual(thirty.by_year[-1], 0.0)
+        self.assertEqual(thirty.debt, 0.0)
         self.assertEqual(thirty.paused_weeks, 0)
-        self.assertAlmostEqual(thirty.by_year[-1], 19, delta=1)
         self.assertLessEqual(long_run(before, 3000.0, 0.0, 30).default_year, 10)
 
 

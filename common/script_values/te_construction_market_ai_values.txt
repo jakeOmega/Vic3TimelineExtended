@@ -7,7 +7,11 @@
 #
 # Nothing while the government queue is empty, or while the engine has paused
 # the country's construction (one case apart, below). Otherwise the larger of
-# two amounts, never more than the queue can take in a week:
+# two amounts, never more than the queue can take in a week. Both can be
+# nothing: a government with no surplus, no reserves and no shortage of
+# bureaucracy cannot pay for anything and buys nothing, and its queued level
+# waits (a market game has no base construction) until one of the three
+# returns. That is intended (owner, 2026-11-16).
 #
 #   The surplus. Net fixed income (the budget before construction, which the
 #   engine counts as a temporary expense) over the smoothed price, times
@@ -44,15 +48,18 @@
 #   Paid from reserves, not on credit: whole while the reserves are a tenth of
 #   their limit or more, which is what the engine's AI must hold before it may
 #   queue a government building (NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS),
-#   and less in a straight line below that. A floor on credit, however small,
-#   is the old floor again for a country whose surplus is under it: a few
-#   points now, interest from then on, less built every year after.
+#   less in a straight line below that, and nothing with none. A floor on
+#   credit, however small, is the old floor again for a country whose surplus
+#   is under it: a few points now, interest from then on, less built every
+#   year after.
 #
-#   A tenth of itself with no reserves left (a 200th of fixed income, at most
-#   one point). That part is on credit. It is there because a market game has
-#   no base construction, so a purchase of nothing leaves a queued level where
-#   it stands; it is the surplus's own 0.1 ("never fully halt") for a country
-#   with no surplus.
+#   With no reserves, a country that has a surplus is still held to a tenth of
+#   that twentieth (a 200th of fixed income, at most one point), whatever its
+#   debt and the brakes take off the surplus term, and never more than the
+#   surplus itself. So the surplus pays it and no part of the floor is on
+#   credit. Until 2026-11-16 that tenth was owed to every country, and one with
+#   no surplus bought it on credit: about 0.6 points a year for a country with
+#   3,000 a week, and a fifth of its debt ceiling owed after thirty years.
 #
 #   Short of bureaucracy, the floor is a fifth of fixed income higher
 #   (te_construction_market_ai_bureaucracy_purchase), whatever the reserves and
@@ -104,16 +111,33 @@ te_construction_market_ai_bureaucracy_purchase = {
 	divide = var:te_construction_market_price_stabilizer
 }
 
-te_construction_market_ai_purchase_floor = {
+# The twentieth of fixed income in points, never more than the floor was.
+te_construction_market_ai_purchase_floor_whole = {
 	value = fixed_income
 	multiply = TE_CONSTRUCTION_MARKET_AI_FLOOR_INCOME_SHARE
 	divide = var:te_construction_market_price_stabilizer
 	max = TE_CONSTRUCTION_MARKET_AI_FLOOR_MAX_POINTS
+}
+
+te_construction_market_ai_purchase_floor = {
+	# What reserves pay: all of it at a tenth of their limit, nothing at none.
+	value = te_construction_market_ai_purchase_floor_whole
 	multiply = {
 		value = scaled_gold_reserves
 		divide = TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES
 		max = 1
-		min = TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR
+		min = 0
+	}
+	# What the surplus pays where that is more: a tenth of it, and never more
+	# than the surplus.
+	min = {
+		value = net_fixed_income
+		min = 0
+		divide = var:te_construction_market_price_stabilizer
+		max = {
+			value = te_construction_market_ai_purchase_floor_whole
+			multiply = TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR
+		}
 	}
 	if = {
 		limit = {
