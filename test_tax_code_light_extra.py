@@ -241,11 +241,18 @@ class DefaultTest(unittest.TestCase):
                       "clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div "
                       "max = te_tax_light_xidx_div_at_level } } else_if = { limit = { NOT = { "
                       "te_tax_light_levies_div = yes } } set_variable = { name = te_tax_en_div value = 0 } }", clamp)
-        # From a law that levied it: nothing, as the base game gives that law.
+
+    def test_a_level_moved_outside_the_code_clamps_it_to_the_new_levels_rate(self):
+        # The levied taxes move by the law's difference; the low tax only falls, to its rate at the new level, so
+        # it never holds the level above where it was moved (review of #1855: an uprising's AI choosing a lower
+        # level each month would otherwise shift every levied tax down again each month).
+        # test_tax_code_light.StepTest.test_a_shift_never_leaves_a_tax_above_the_new_level models it.
         shift = flat(block(read(GEN_EFFECTS), "te_tax_light_gen_shift"))
-        div = shift[shift.index("te_tax_en_div") - 120:]
-        self.assertIn("limit = { te_tax_light_levies_div = yes }", div[:200])
-        self.assertNotIn("extra", shift)
+        branch = shift[shift.index("else_if = { limit = { te_tax_light_extra_div = yes }"):]
+        self.assertIn("clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div "
+                      "max = te_tax_light_xidx_div_native }", branch)
+        self.assertIn("te_tax_light_gen_react = { KEY = div }", branch)
+        self.assertNotIn("change_variable = { name = te_tax_en_div add", branch[:branch.index("te_tax_light_gen_react")])
 
     def test_nothing_is_levied_at_nothing(self):
         value = flat(block(read(VALUES), "te_tax_light_levy_div_value"))
@@ -313,6 +320,7 @@ class ReactionTest(unittest.TestCase):
         self.assertEqual(costs["trade_unions"], 0)
 
     def test_a_closed_or_carried_extra_draws_none(self):
+        # A shift's clamp is scored, as the levied taxes' moves are (DefaultTest).
         for name in ("te_tax_light_gen_close", "te_tax_light_gen_clamp", "te_tax_light_gen_uniform"):
             self.assertNotIn("te_tax_light_gen_react", block(read(GEN_EFFECTS), name), name)
         close = flat(block(read(GEN_EFFECTS), "te_tax_light_gen_close"))
@@ -367,7 +375,8 @@ class CivilWarTest(unittest.TestCase):
         self.assertIn("te_tax_copy_token = { NAME = te_tax_en_div }", copy)
 
     def test_the_rebels_keep_it_while_the_war_lasts(self):
-        # Only an AI's sync writes the extra's rate (DefaultTest), and rebels holding te_cw_origin are not one.
+        # Only an AI's sync writes the extra's rate (DefaultTest), and rebels holding te_cw_origin are not one;
+        # a lower level their AI sets clamps it to that level's rate (the shift, DefaultTest).
         self.assertEqual(flat(block(read(TAX_TRIGGERS), "te_tax_light_ai_uniform")),
                          "is_ai = yes NOT = { has_variable = te_cw_origin }")
 
@@ -396,8 +405,8 @@ class PanelTest(unittest.TestCase):
         note = loc(GEN_LOC)["te_tax_lt_extra_note_div"]
         self.assertIn("The taxation law levies no dividend tax", note)
         self.assertIn("#v 5%#!", note)
-        self.assertIn("$law_proportional_taxation$ at up to #v 20%#!", note)
-        self.assertIn("$law_graduated_taxation$ at up to #v 30%#!", note)
+        self.assertIn("The laws that tax dividends in full are $law_proportional_taxation$, up to #v 20%#!, and", note)
+        self.assertIn("$law_graduated_taxation$, up to #v 30%#!.", note)
         self.assertNotIn("Proportional Taxation", note)
 
     def test_the_levy_and_the_how_text(self):
@@ -423,10 +432,26 @@ class SelfCheckTest(unittest.TestCase):
                 self.assertIn("te_tax_code_light_on = yes", body)
                 self.assertIn("NOT = { has_global_variable = te_tldv_checked }", body)
         verdict = flat(block(text, "te_tax_light_div_levy_selfcheck"))
-        self.assertTrue(verdict.split("effect = { ")[1].startswith("set_global_variable = te_tldv_checked"))
         for status in ("START", "OK", "BROKEN", "NO_VERDICT"):
             self.assertIn(f"TE_SELF_CHECK {status} tax_light_div_levy", verdict)
         self.assertIn("modifier:tax_dividends_add", read(SELF_CHECK_VALUES))
+
+    def test_it_waits_for_a_control_and_ok_needs_one(self):
+        # No country starts on Proportional or Graduated, so a verdict at the first run could never be BROKEN
+        # (review of #1855): it counts each month and latches only once the control has 5 countries, or from 1900.
+        verdict = flat(block(read(SELF_CHECK), "te_tax_light_div_levy_selfcheck"))
+        latch = verdict.index("set_global_variable = te_tldv_checked")
+        self.assertIn("limit = { OR = { global_var:te_tldv_cn >= 5 game_date >= 1900.1.1 } } "
+                      "set_global_variable = te_tldv_checked debug_log = \"TE_SELF_CHECK START", verdict)
+        self.assertLess(verdict.index("every_country"), latch)
+        self.assertEqual(verdict.count("set_global_variable = te_tldv_checked"), 1)
+        ok = verdict[verdict.index("random_country = { if = { limit = {"):verdict.index("TE_SELF_CHECK OK")]
+        for condition in ("te_tldv_chk_n_g >= 5", "te_tldv_chk_match_share >= 0.8", "te_tldv_chk_cn_g >= 5",
+                          "te_tldv_chk_cmatch_share >= 0.8"):
+            self.assertIn(condition, ok)
+        # The control is countries on a law that levies the tax; the levy group those where it is open.
+        self.assertIn("te_tax_light_levies_div = yes", verdict)
+        self.assertIn("te_tax_light_extra_div = yes has_journal_entry = je_tax_code", verdict)
 
     def test_every_value_it_reads_is_defined(self):
         used = set(re.findall(r"\b(te_tldv_chk_\w+)", strip_comments(read(SELF_CHECK))))
@@ -438,6 +463,8 @@ class SelfCheckTest(unittest.TestCase):
         text = read(PLAYTEST)
         self.assertIn("tax_light_div_levy", text)
         self.assertIn("The light code's low dividend tax", text)
+        # Script can't see collection: the row says so and points at the Budget line.
+        self.assertIn("Script can't measure collection", text)
 
 
 if __name__ == "__main__":

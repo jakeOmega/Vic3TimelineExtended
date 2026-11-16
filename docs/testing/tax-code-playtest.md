@@ -557,7 +557,7 @@ which nothing in the mod or the base game has shown collecting. The structural t
 
 | Line | When it logs | OK | BROKEN | Then |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … tax_light_div_levy` | once a game under the light setting, the first global monthly pulse at least three months after this build first ran there, after a plain `TE_SELF_CHECK START tax_light_div_levy` line (a START alone means the engine dropped the templated line). It reads `modifier:tax_dividends_add` against the code's rate (`te_tax_en_div` × 0.025, up to 0.01 over for the spectrum auction) in AI countries that follow their level, with the code in force and a dividend tax above nothing: the levy group (the tax open, the entry active) and a control on Proportional or Graduated (the law's own rate). NO_VERDICT: fewer than 5 countries in a group, a mixed reading, or a control that does not match, so the read does not see the law's rate either | 80% or more of the levy group match: the levy is in each country's dividend tax rate, the modifier the law's own rate is in. Read the Budget once (PT-47) | 80% or more of the levy group read 0 while 80% or more of the control match: the read sees the law's rate and not the levy | **Fallback on BROKEN:** apply `te_tax_light_levy_div` as a flat country modifier from the light sync, removed and re-added with `multiplier = te_tax_light_levy_div_value` (the dynamic-modifier pattern the relief used before #1404), and drop its declaration from `je_tax_code`. On OK and a Budget line that reads it, delete the self-check's two files |
+| `TE_SELF_CHECK … tax_light_div_levy` | once a game under the light setting. From the third global monthly pulse this build runs there (two months after the first) it counts, each month, AI countries that follow their level, with the code in force and a dividend tax above nothing: the levy group (the tax open, the entry active) and a control on Proportional or Graduated (the law's own rate). It reads `modifier:tax_dividends_add` against the code's rate (`te_tax_en_div` × 0.025, up to 0.01 over for the spectrum auction). No country starts on Proportional or Graduated, so it gives its verdict only once the control has 5 countries, or on the first pulse from 1900.1.1 with whatever it has: **no line before then**, and in a game where few AI countries enact those laws the line comes in 1900. A plain `TE_SELF_CHECK START tax_light_div_levy` line comes first (a START alone means the engine dropped the templated line). NO_VERDICT: fewer than 5 countries in a group by 1900, a mixed reading, or a control that does not match, so the read does not see a law's rate either. **Script can't measure collection:** a scaling modifier shows in a `modifier:` read within days whether or not the Budget collects it, so only the Budget panel's Dividends Taxes line (PT-47) shows the tax is collected | 80% or more of each group match, 5 or more in each: the levy shows in the same rate read that shows a law's own dividend rate. Read the Budget once (PT-47) | 80% or more of the levy group read 0 while 80% or more of the control match: the read sees the law's rate and not the levy | **Fallback on BROKEN, or on a Budget line that stays at zero in PT-47:** apply `te_tax_light_levy_div` as a flat country modifier from the light sync, removed and re-added with `multiplier = te_tax_light_levy_div_value` (the dynamic-modifier pattern the relief used before #1404), and drop its declaration from `je_tax_code`. On OK and a Budget line that reads it, delete the self-check's two files |
 
 ### PT-47 The low dividend tax collects
 
@@ -568,9 +568,10 @@ tax, naming Proportional Taxation (up to 20%) and Graduated Taxation (up to 30%)
 step (2.5%, step Very Low, the tax level unchanged), then a second (5%): the step reads Low, the +
 button's tooltip said the tax level rises, and the overview's Tax Level and Set By follow.
 Expect within about four days: the entry's modifiers list "Low Dividend Tax" at +5%, Budget's
-Dividends Taxes line above zero, and the Industrialists' "Resents Recent Tax Changes" at about −2
-or −3. Cut it to nothing (shift-click −): the line goes back to zero within four days. A
-country with foreign-owned buildings: whether the foreign owners' dividends pay it is unread (the
+Dividends Taxes line above zero, and the Industrialists' "Resents Recent Tax Changes" at −2.5
+before ideology, shown rounded to a whole point (their views on taxation move it either way). Cut
+it to nothing (shift-click −): the line goes back to zero within four days. A country with
+foreign-owned buildings: whether the foreign owners' dividends pay it is unread (the
 base game books a dividend tax on the receiving pop's budget, so expect it not to, as under
 Proportional).
 Serves S14. Result: ___
@@ -580,8 +581,9 @@ Serves S14. Result: ___
 Rule *light*. (a) With the low tax at 5%, enact Land-Based Taxation: it stays at 5%
 (`light_law_changed`). Enact Proportional: the dividend tax is Proportional's rate for the tax
 level and the levy is off the entry. Back to Per-Capita: it is at nothing, the range 0–5%.
-(b) Enact Traditionalism on Land-Based with the low tax raised: the row hides, and the levy and
-the Budget line go to zero within days. (c) Observer mode, an AI country on Per-Capita at Medium:
+(b) Enact Traditionalism on Land-Based with the low tax raised: the row hides, the tax level and
+Set By follow the next day (`te_tax_light.3` from the law's activation), and the levy and the
+Budget line go to zero within days. (c) Observer mode, an AI country on Per-Capita at Medium:
 its Budget's dividend rate reads 5% and the save report `te_tax_en_div = 2`. (d) Switch the rule
 to Disabled mid-game: the levy ends within days. (e) Load a save begun before this build: the
 player's dividend row reads 0%, and after the 1st each AI country on a law without one levies 5%
