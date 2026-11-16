@@ -97,6 +97,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "gui/journal_entry_widgets/sr_fleets_generated_rows.gui",
     "common/power_bloc_principles/te_principle_slot_gates_generated.txt",
     "common/scripted_effects/te_pb_remove_principle_generated.txt",
+    "common/scripted_effects/te_cred_monopoly_ladder_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",
     "common/scripted_effects/te_demog_generated_effects.txt",
     "common/scripted_effects/te_demog_capital_generated.txt",

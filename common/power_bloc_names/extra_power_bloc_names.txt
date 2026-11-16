@@ -408,3 +408,32 @@ REPLACE:joint_front = {
 # Imperial Circle is vanilla's own since 1.15: it passes only for a Sovereign
 # Empire (1.14.5 passed it for any monarchy, and the mod held the AI to a
 # monarchy's Sovereign Empire with a REPLACE).
+
+## generic Creditors' Consortium names (2026-11-16): the bodies creditors set
+## up to collect: the Corporation of Foreign Bondholders (1868), the
+## International Financial Commission over Greece (1898), the League of
+## Nations' stabilization loans of the 1920s.
+bondholders_council = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+
+financial_commission = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+
+concert_of_lenders = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+
+stabilization_fund = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+

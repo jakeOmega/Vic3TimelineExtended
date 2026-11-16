@@ -357,10 +357,13 @@ te_mon_union_pool_is_saturated = {
 # Either kind of lender of last resort, whichever is in force. One name for
 # "somebody stands behind this country's debts": the relief in
 # te_mon_arr_recipient_value, the panic dampener in banking_cycle_effects.txt
-# and the default hook all read it.
+# and the default hook all read it. The third kind is a Creditors' Consortium's
+# standing guarantee of its members (te_cred_guarantee_is_effective,
+# te_creditors_consortium_triggers.txt; 2026-11-16).
 te_mon_has_effective_backstop = {
 	OR = {
 		te_mon_lolr_is_effective = yes
 		te_mon_union_backstop_is_effective = yes
+		te_cred_guarantee_is_effective = yes
 	}
 }

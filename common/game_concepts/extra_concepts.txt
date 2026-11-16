@@ -341,3 +341,8 @@ concept_inheritance_concentration = {}
 
 # the census's health-care access (docs/systems/mod_systems/demographics.md § Demographics, Causes of Death)
 concept_health_care_access = {}
+
+# Creditors' Consortium (2026-11-16): the leader's standing guarantee of its
+# members' debts and the rescue on terms a member's default calls
+# (docs/systems/mod_systems/power_blocs.md § "Creditors' Consortium")
+concept_consortium_guarantee = {}

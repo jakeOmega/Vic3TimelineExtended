@@ -71,6 +71,14 @@ INJECT:identity_military_treaty_organization = {
 	}
 }
 
+# Creditors' Consortium (mod-defined, 2026-11-16) — paid out only when the
+# target is in the leader's receivership: Egypt went from the Caisse de la
+# Dette in 1876 to British occupation in 1882. Its leader_modifier carries
+# country_subjugation_creditor_strength_add = 0.4 in the identity itself
+# (extra_power_bloc_identities.txt), since an INJECT on a mod-defined entity
+# from a file that loads first is dropped.
+
+
 # Research Commons (identity_research_commons, mod-defined): no bonus, as
 # Diplomatic Framework has none (design 2026-11-16 § 8.4). Its hold on members
 # is the shared technology and Institutes Left Behind, not subjugation.

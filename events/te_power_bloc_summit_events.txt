@@ -11,7 +11,7 @@
 # wait while the mandate goes on a principle. A timed initiative already
 # running is not offered again; Rally the Bloc is, for its immediate cohesion.
 # Beside the five general initiatives, each bloc identity has one of its own
-# (options i to o, and q), offered only to a leader of that identity.
+# (options i to q), offered only to a leader of that identity.
 # Modifiers: common/static_modifiers/te_power_bloc_summit_modifiers.txt.
 # Design: docs/systems/mod_systems/power_blocs.md.
 # ============================================================================
@@ -316,6 +316,22 @@ te_pb_summit.1 = {
 		}
 	}
 
+	# Creditors' Consortium: Debt Conference.
+	option = {
+		name = te_pb_summit.1.p
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_creditors_consortium }
+			NOT = { has_modifier = te_pb_summit_debt_conference }
+		}
+		te_pb_summit_pay = { KIND = debt_conference }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_debt_conference }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
 	# Research Commons: Scientific Congress. The members' innovation rises, and
 	# the pool takes its share of the rise (te_rc_contribution).
 	option = {
@@ -348,7 +364,7 @@ te_pb_summit.1 = {
 # ----------------------------------------------------------------------------
 # te_pb_summit_grant_member_initiative sends it, a day on, to every member but
 # the leader when the leader's summit gives each member a ten-year initiative
-# (options i, j, k, m, n, o and q of te_pb_summit.1). Only the leader saw that
+# (options i, j, k, m, n, o, p and q of te_pb_summit.1). Only the leader saw that
 # event. The member carries <modifier>_told for a month: it picks the text and
 # the modifier the option lists, and is removed here. The option changes
 # nothing. scope:te_pb_summit_leader is the leader that convened the summit.
@@ -384,6 +400,10 @@ te_pb_summit.2 = {
 				desc = te_pb_summit.2.d_culture
 			}
 			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_debt_conference_told }
+				desc = te_pb_summit.2.d_debt_conference
+			}
+			triggered_desc = {
 				trigger = { has_variable = te_pb_summit_science_told }
 				desc = te_pb_summit.2.d_science
 			}
@@ -406,6 +426,7 @@ te_pb_summit.2 = {
 			has_variable = te_pb_summit_congress_told
 			has_variable = te_pb_summit_culture_told
 			has_variable = te_pb_summit_ambassadors_told
+			has_variable = te_pb_summit_debt_conference_told
 			has_variable = te_pb_summit_science_told
 		}
 	}
@@ -459,6 +480,13 @@ te_pb_summit.2 = {
 				}
 			}
 			else_if = {
+				limit = { has_variable = te_pb_summit_debt_conference_told }
+				add_modifier = {
+					name = te_pb_summit_debt_conference
+					days = long_modifier_time
+				}
+			}
+			else_if = {
 				limit = { has_variable = te_pb_summit_science_told }
 				add_modifier = {
 					name = te_pb_summit_science
@@ -475,6 +503,7 @@ te_pb_summit.2 = {
 		remove_variable = te_pb_summit_congress_told
 		remove_variable = te_pb_summit_culture_told
 		remove_variable = te_pb_summit_ambassadors_told
+		remove_variable = te_pb_summit_debt_conference_told
 		remove_variable = te_pb_summit_science_told
 	}
 }

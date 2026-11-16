@@ -379,7 +379,7 @@ class Summits(unittest.TestCase):
 
     def test_every_member_initiative_has_its_text_and_its_line(self):
         initiatives = set(re.findall(r"te_pb_summit_grant_member_initiative = \{ MODIFIER = (\w+) \}", self.summit))
-        self.assertEqual(len(initiatives), 7)
+        self.assertEqual(len(initiatives), 8)
         for modifier in initiatives:
             with self.subTest(modifier=modifier):
                 short = modifier.removeprefix("te_pb_summit_")

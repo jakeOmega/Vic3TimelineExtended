@@ -1,0 +1,34 @@
+﻿# The Creditors' Consortium power bloc identity: the monthly pulse.
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.
+# The rescue itself rides the monetary layer's on_country_default
+# (te_monetary_on_country_default, te_monetary_on_actions.txt).
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_cred_monthly_on_action
+	}
+}
+
+# Every country, but the work is gated: a leader runs Development Lending and
+# asks the monetary discovery for members it has not seen; any country drops
+# an adjustment term whose receivership has gone and keeps its Development
+# Lending modifier in step; the self-checks run once a game each.
+te_cred_monthly_on_action = {
+	effect = {
+		if = {
+			limit = { te_cred_leads_consortium = yes }
+			te_cred_leader_monthly = yes
+			te_cred_selfcheck_imposition = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					te_cred_in_consortium = yes
+					has_variable = te_cred_adjustment_by
+					te_cred_dl_has_receiver_modifier = yes
+				}
+			}
+			te_cred_member_monthly = yes
+		}
+	}
+}

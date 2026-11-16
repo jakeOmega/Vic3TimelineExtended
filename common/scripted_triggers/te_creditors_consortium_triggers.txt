@@ -1,0 +1,460 @@
+﻿# ============================================================================
+# The Creditors' Consortium power bloc identity: triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.
+# System: docs/systems/mod_systems/power_blocs.md § "Creditors' Consortium".
+#
+# Script names here start te_cred_ (the construction-cost system already owns
+# te_cc_ for its variables); the events keep the te_cc namespace.
+#
+# The identity's mechanic is the monetary layer's lender of last resort
+# (monetary_policy.md, phases 5 and 6). These triggers add the consortium as
+# one more source of the guarantee's relief (te_mon_has_effective_backstop,
+# te_mon_arr_recipient_value) and one more receiver of a defaulter's call
+# (te_monetary_on_country_default); everything else is the layer's own.
+# ============================================================================
+
+
+# --- The bloc and its leader -------------------------------------------------
+
+# Country scope: in a bloc with this identity, leader or member.
+te_cred_in_consortium = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_identity = identity:identity_creditors_consortium }
+}
+
+# Country scope: leads one.
+te_cred_leads_consortium = {
+	is_power_bloc_leader = yes
+	power_bloc ?= { has_identity = identity:identity_creditors_consortium }
+}
+
+# Country scope (the leader): has it broken a guarantee in the last five years?
+# The monetary layer's guarantor clock, te_mon_lolr_suspended_months: a leader
+# that refused a member's rescue, or reneged on a treaty guarantee
+# (te_lolr.1's Renege), stands behind nobody until it runs out. One clock for
+# every guarantee the country gives, because a guarantee is worth what the
+# last one honored was worth.
+te_cred_backer_has_reneged = {
+	has_variable = te_mon_lolr_suspended_months
+	var:te_mon_lolr_suspended_months > 0
+}
+
+# Country scope (a member): refused a rescue's terms in the last ten years.
+# A timed variable on the COUNTRY, not the bloc, so leaving and rejoining (or
+# joining another consortium) restores nothing: this is the cooling-off rule.
+te_cred_guarantee_forfeit = {
+	has_variable = te_cred_terms_refused
+}
+
+
+# --- The standing guarantee (§ 5.2) --------------------------------------------
+
+# Member scope: the consortium's leader stands behind this member's debt this
+# month, at the strength the Lender of Last Resort article gives a ward.
+#
+# THE NO-STACKING RULE IS IN HERE. Not where a treaty already takes a share
+# off the debt-load premium (te_mon_has_treaty_debt_relief: an effective
+# guarantee or a receivership), so the treaty guarantor is called first on a
+# default and a debtor already under a commission is not rescued again. The
+# Monetary Union's tier III backstop is the other source of the same relief:
+# the relief value and the leader's cost ask te_mon_union_backstop_is_effective
+# themselves, so exactly one of the two is paid.
+#
+# Not for a command economy (as under the articles), not for a member that
+# refused terms in the last ten years, not from a leader that is no valid
+# backstop provider (no national bank, a command economy, in default: the
+# founder check, te_mon_backstop_provider_valid) or has broken a guarantee in
+# the last five. Only under the Full banking rule: the identity keeps its name
+# when the rule leaves Full, and loses its mechanic.
+te_cred_guarantee_is_effective = {
+	te_mon_full_system = yes
+	is_power_bloc_leader = no
+	te_cred_in_consortium = yes
+	te_mon_is_command = no
+	te_cred_guarantee_forfeit = no
+	te_mon_has_treaty_debt_relief = no
+	power_bloc ?= {
+		power_bloc_leader = {
+			te_mon_backstop_provider_valid = yes
+			te_cred_backer_has_reneged = no
+		}
+	}
+}
+
+# ...and the share of it the consortium pays, where the Monetary Union's tier
+# III backstop does not already pay the same relief (an adopter of the same
+# leader's currency).
+te_cred_guarantee_pays_relief = {
+	te_cred_guarantee_is_effective = yes
+	te_mon_union_backstop_is_effective = no
+}
+
+
+# --- Receivership --------------------------------------------------------------
+
+# Country scope (a member): under a receivership whose receiver is its own
+# consortium's leader. Read by can_leave and the cohesion step.
+te_cred_in_leaders_receivership = {
+	te_mon_is_under_receivership = yes
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		power_bloc_leader = {
+			save_temporary_scope_as = te_cred_rcv_leader
+		}
+	}
+	var:te_mon_receiver ?= scope:te_cred_rcv_leader
+}
+
+# Country scope (a debtor): holds the treaty-less receivership that the rescue
+# sets when debt_receivership can't be made by treaty (§ 11 fact 1's fallback,
+# te_cred_set_direct_receivership). The discovery honors it as it honors the
+# article (te_monetary_discover_arrangements), and its conditions are the
+# article's requirement_to_maintain: the Full rule, a receiver that is a valid
+# backstop provider, a debtor that is no command economy. It also ends when the
+# debtor is no longer in the receiver's consortium: it was the consortium's
+# rescue, and can_leave holds the debtor in while it stands.
+te_cred_has_direct_receivership = {
+	te_mon_full_system = yes
+	has_variable = te_cred_direct_receivership
+	has_variable = te_cred_receiver
+	exists = var:te_cred_receiver
+	te_mon_is_command = no
+	var:te_cred_receiver = {
+		te_mon_backstop_provider_valid = yes
+		te_cred_leads_consortium = yes
+	}
+	is_in_same_power_bloc = var:te_cred_receiver
+}
+
+# Country scope (the rescuing leader): can its rescue put the debtor under a
+# receivership at all? The article's technology (§ 5.3: before the leader has
+# it, a rescue carries the other terms alone).
+te_cred_receivership_possible = {
+	has_technology_researched = international_exchange_standards
+}
+
+
+# --- Structural adjustment (§ 5.3.1) -------------------------------------------
+
+# Law scope of can_impose: ROOT the imposing country, scope:target_country the
+# country imposed upon, scope:law the law type (vanilla's
+# can_impose_law_default header). The consortium's leader may impose its own
+# law of the three economic groups on a member while the member is under its
+# receivership AND accepted the adjustment term (te_cred_adjustment_by). Read
+# by the can_impose INJECTs in common/laws/te_creditors_consortium_law_injections.txt.
+te_cred_can_impose_adjustment = {
+	has_law = scope:law
+	te_cred_leads_consortium = yes
+	scope:target_country ?= {
+		is_in_same_power_bloc = root
+		te_mon_is_under_receivership = yes
+		var:te_mon_receiver ?= root
+		var:te_cred_adjustment_by ?= root
+	}
+}
+
+# ...and the AI's reason to use it, for law $LAW$'s ai_impose_chance (root the
+# imposer, scope:target_country the member): the same, where the member does
+# not hold the law yet.
+te_cred_ai_wants_adjustment_of = {
+	te_cred_leads_consortium = yes
+	scope:target_country ?= {
+		is_in_same_power_bloc = root
+		te_mon_is_under_receivership = yes
+		var:te_mon_receiver ?= root
+		var:te_cred_adjustment_by ?= root
+		NOT = { has_law = law_type:$LAW$ }
+	}
+}
+
+# Country scope (the leader), $TARGET$ the debtor: does the leader hold a law
+# of the three economic groups the debtor lacks? Without one, the adjustment
+# term would impose nothing, so it is not offered (§ 5.3: "a term the engine
+# rules out is not offered"). Command Economy is left out: the leader cannot
+# hold it (the law lock) and it carries no consortium can_impose.
+te_cred_leader_laws_differ = {
+	OR = {
+		AND = { has_law = law_type:law_traditionalism $TARGET$ = { NOT = { has_law = law_type:law_traditionalism } } }
+		AND = { has_law = law_type:law_interventionism $TARGET$ = { NOT = { has_law = law_type:law_interventionism } } }
+		AND = { has_law = law_type:law_agrarianism $TARGET$ = { NOT = { has_law = law_type:law_agrarianism } } }
+		AND = { has_law = law_type:law_industry_banned $TARGET$ = { NOT = { has_law = law_type:law_industry_banned } } }
+		AND = { has_law = law_type:law_extraction_economy $TARGET$ = { NOT = { has_law = law_type:law_extraction_economy } } }
+		AND = { has_law = law_type:law_laissez_faire $TARGET$ = { NOT = { has_law = law_type:law_laissez_faire } } }
+		AND = { has_law = law_type:law_cooperative_ownership $TARGET$ = { NOT = { has_law = law_type:law_cooperative_ownership } } }
+		AND = { has_law = law_type:law_mercantilism $TARGET$ = { NOT = { has_law = law_type:law_mercantilism } } }
+		AND = { has_law = law_type:law_protectionism $TARGET$ = { NOT = { has_law = law_type:law_protectionism } } }
+		AND = { has_law = law_type:law_free_trade $TARGET$ = { NOT = { has_law = law_type:law_free_trade } } }
+		AND = { has_law = law_type:law_isolationism $TARGET$ = { NOT = { has_law = law_type:law_isolationism } } }
+		AND = { has_law = law_type:law_consumption_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_consumption_based_taxation } } }
+		AND = { has_law = law_type:law_land_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_land_based_taxation } } }
+		AND = { has_law = law_type:law_per_capita_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_per_capita_based_taxation } } }
+		AND = { has_law = law_type:law_proportional_taxation $TARGET$ = { NOT = { has_law = law_type:law_proportional_taxation } } }
+		AND = { has_law = law_type:law_graduated_taxation $TARGET$ = { NOT = { has_law = law_type:law_graduated_taxation } } }
+	}
+}
+
+
+# --- The rescue's terms (te_cc.1) ------------------------------------------------
+# Country scope: the leader (ROOT of te_cc.1), scope:te_cc_debtor the member.
+# A term the engine or an article's own gate rules out is not offered.
+
+# Structural adjustment: it works through the receivership's can_impose, so it
+# needs the receivership's technology, and a law to impose.
+te_cred_term_adjustment_available = {
+	te_cred_receivership_possible = yes
+	te_cred_leader_laws_differ = { TARGET = scope:te_cc_debtor }
+}
+
+# Concessions: the leader's investors may build in the debtor (Foreign
+# Investment Rights, debtor -> leader) and its companies take monopolies there.
+# Offered where the rights can be granted now, or are already in force and the
+# leader has a company to demand a monopoly for.
+te_cred_term_concessions_available = {
+	OR = {
+		can_create_treaty = {
+			first_country = scope:te_cc_debtor
+			second_country = root
+			is_draft = no
+			binding_period = { years = 5 }
+			articles_to_create = {
+				{
+					article = foreign_investment_rights
+					source_country = scope:te_cc_debtor
+					target_country = root
+				}
+			}
+		}
+		AND = {
+			scope:te_cc_debtor = {
+				any_scope_treaty = {
+					any_scope_article = {
+						has_type = foreign_investment_rights
+						source_country = scope:te_cc_debtor
+						target_country = root
+					}
+				}
+			}
+			any_company = { always = yes }
+		}
+	}
+}
+
+# Privatization: article 105's own gates (the debtor holds cooperative
+# ownership, agrarianism or traditionalism; the leader laissez-faire or
+# interventionism), run by can_create_treaty.
+te_cred_term_privatization_available = {
+	can_create_treaty = {
+		first_country = scope:te_cc_debtor
+		second_country = root
+		is_draft = no
+		binding_period = { years = 5 }
+		articles_to_create = {
+			{
+				article = enforce_privatization
+				source_country = scope:te_cc_debtor
+				target_country = root
+			}
+		}
+	}
+}
+
+# How many terms beside the receivership this rescue carries: the bloc's
+# Conditionality tier's figure, or as many as are available if fewer
+# (te_cred_terms_to_pick). One trigger per count, for the options' triggers:
+# comparing a script value with `=` in a trigger is not the mod's practice.
+te_cred_terms_pick_0 = { te_cred_terms_to_pick < 1 }
+te_cred_terms_pick_1 = {
+	te_cred_terms_to_pick >= 1
+	te_cred_terms_to_pick < 2
+}
+te_cred_terms_pick_2 = {
+	te_cred_terms_to_pick >= 2
+	te_cred_terms_to_pick < 3
+}
+te_cred_terms_pick_3 = { te_cred_terms_to_pick >= 3 }
+
+# Is the rescue still on? Read when the member answers (te_cc.2) and by the
+# leader's options: the leader still leads the member's consortium and can
+# back it. A member that left, or a leader that defaulted in the meantime, ends
+# the rescue: nothing is paid.
+te_cred_rescue_still_valid = {
+	exists = scope:te_cc_creditor
+	exists = scope:te_cc_debtor
+	scope:te_cc_creditor = {
+		te_cred_leads_consortium = yes
+		te_mon_backstop_provider_valid = yes
+	}
+	scope:te_cc_debtor = {
+		is_in_same_power_bloc = scope:te_cc_creditor
+		te_mon_is_under_receivership = no
+	}
+}
+
+
+# --- Principle tiers ---------------------------------------------------------------
+# Read through has_principle (the Monetary Union's convention,
+# te_mon_bloc_union_tier_*). Tiers do not stack, so "at least tier N" is an OR
+# that lists every higher tier: a gate that stops short reads a bloc that
+# upgraded past it as having nothing.
+
+te_cred_cond_tier_1_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle_group = principle_group:principle_group_conditionality }
+}
+
+te_cred_cond_tier_2_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_conditionality_2
+			has_principle = principle:principle_conditionality_3
+			has_principle = principle:principle_conditionality_4
+			has_principle = principle:principle_conditionality_5
+		}
+	}
+}
+
+te_cred_cond_tier_3_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_conditionality_3
+			has_principle = principle:principle_conditionality_4
+			has_principle = principle:principle_conditionality_5
+		}
+	}
+}
+
+te_cred_cond_tier_4_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_conditionality_4
+			has_principle = principle:principle_conditionality_5
+		}
+	}
+}
+
+te_cred_cond_tier_5 = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle = principle:principle_conditionality_5 }
+}
+
+te_cred_dl_tier_1_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle_group = principle_group:principle_group_development_lending }
+}
+
+te_cred_dl_tier_2_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_development_lending_2
+			has_principle = principle:principle_development_lending_3
+			has_principle = principle:principle_development_lending_4
+			has_principle = principle:principle_development_lending_5
+		}
+	}
+}
+
+te_cred_dl_tier_3_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_development_lending_3
+			has_principle = principle:principle_development_lending_4
+			has_principle = principle:principle_development_lending_5
+		}
+	}
+}
+
+te_cred_dl_tier_4_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_development_lending_4
+			has_principle = principle:principle_development_lending_5
+		}
+	}
+}
+
+te_cred_dl_tier_5 = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle = principle:principle_development_lending_5 }
+}
+
+
+# --- Development Lending (§ 5.4) ---------------------------------------------------
+
+# Country scope (a member): takes part in the transfer at all. Not a command
+# economy, whose investment pool the law disables (country_disable_investment_pool_bool).
+te_cred_dl_takes_part = {
+	te_mon_is_command = no
+}
+
+# ...pays: above the bloc's GDP per head, as the leader's monthly pulse stored
+# it on the leader (te_cred_dl_bloc_gdppc), and has pool income to share.
+# The leader pays too when it is above.
+te_cred_dl_is_donor = {
+	te_cred_dl_takes_part = yes
+	power_bloc ?= {
+		power_bloc_leader = { save_temporary_scope_as = te_cred_dl_leader }
+	}
+	scope:te_cred_dl_leader ?= { has_variable = te_cred_dl_bloc_gdppc }
+	country_gdp_per_capita > scope:te_cred_dl_leader.var:te_cred_dl_bloc_gdppc
+	investment_pool_gross_income > 0
+}
+
+# ...receives: below it, and not the leader. The leader stands behind the
+# members' debts and pays for it; letting it draw on members richer per head
+# than itself would turn the Marshall Plan inside out (a poor leader of rich
+# minors collecting from them).
+te_cred_dl_is_receiver = {
+	te_cred_dl_takes_part = yes
+	is_power_bloc_leader = no
+	power_bloc ?= {
+		power_bloc_leader = { save_temporary_scope_as = te_cred_dl_leader }
+	}
+	scope:te_cred_dl_leader ?= { has_variable = te_cred_dl_bloc_gdppc }
+	country_gdp_per_capita < scope:te_cred_dl_leader.var:te_cred_dl_bloc_gdppc
+}
+
+# Country scope: which Development Lending receiver modifier this member should
+# carry (te_cred_dl_sync_receiver_modifier): the one for its bloc's tier, from
+# tier II, while it is a receiver. Exactly one holds for a receiver at tier II
+# and up, none otherwise.
+te_cred_dl_wants_receiver_2 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_2_plus = yes
+	te_cred_dl_tier_3_plus = no
+}
+
+te_cred_dl_wants_receiver_3 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_3_plus = yes
+	te_cred_dl_tier_4_plus = no
+}
+
+te_cred_dl_wants_receiver_4 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_4_plus = yes
+	te_cred_dl_tier_5 = no
+}
+
+te_cred_dl_wants_receiver_5 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_5 = yes
+}
+
+# ...and does it carry any? For the monthly pulse's gate: a country that left
+# the bloc still drops its modifier.
+te_cred_dl_has_receiver_modifier = {
+	OR = {
+		has_modifier = te_cred_dl_receiver_2
+		has_modifier = te_cred_dl_receiver_3
+		has_modifier = te_cred_dl_receiver_4
+		has_modifier = te_cred_dl_receiver_5
+	}
+}
+

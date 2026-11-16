@@ -301,6 +301,72 @@ country_te_pb_principle_slots_add = {
 	}
 }
 
+# Creditors' Consortium (2026-11-16, docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5).
+# The identity's marker: its power_bloc_modifier carries it for the tooltip
+# alone; script reads has_identity (te_cred_in_consortium,
+# te_creditors_consortium_triggers.txt), as the Monetary Union reads has_principle.
+power_bloc_debt_administration_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Conditionality's display fields: script pays each (te_cred_terms_allowed,
+# te_cred_receivership_take_extra, te_cred_monopolies_allowed,
+# te_cred_receivership_exit_extra), reading the tier through has_principle.
+power_bloc_te_cred_rescue_terms_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_remittance_add = {
+	color = neutral
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_monopolies_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_receivership_months_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Development Lending's display fields: te_cred_dl_share pays the first,
+# te_cred_dl_receiver_2..5 (static modifiers) the second.
+power_bloc_te_cred_dl_share_add = {
+	color = neutral
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_dl_construction_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
 # Research Commons (identity_research_commons, power_blocs.md § Research
 # Commons). The identity's marker only labels its tooltip; script reads
 # has_identity (te_rc_in_commons). The two Technology Controls booleans sit on

@@ -405,15 +405,27 @@ te_monetary_on_country_default = {
 			set_variable = { name = te_mon_lolr_call_forget value = te_mon_lolr_call_forget_months }
 			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
 			save_scope_as = te_lolr_ward
-			# A treaty guarantor first; else [5b] the leader of a tier-3 monetary
-			# union, which is lender of last resort to every adopter (§15A.3).
+			# A treaty guarantor first; else the leader of the member's Creditors'
+			# Consortium, which rescues on terms (te_cc.1; spec
+			# 2026-11-16-power-bloc-identities-design.md § 5.3); else [5b] the
+			# leader of a tier-3 monetary union, which is lender of last resort
+			# to every adopter (§15A.3). One call: the counter and the cooldown
+			# above are the member's whichever backer answers.
 			if = {
 				limit = { te_mon_lolr_is_effective = yes }
 				var:te_mon_lolr_guarantor = {
 					trigger_event = { id = te_lolr.1 popup = yes }
 				}
 			}
-			else = {
+			else_if = {
+				limit = { te_cred_guarantee_is_effective = yes }
+				te_cred_call_consortium = yes
+			}
+			else_if = {
+				limit = {
+					te_mon_union_backstop_is_effective = yes
+					exists = var:te_mon_anchor
+				}
 				var:te_mon_anchor = {
 					trigger_event = { id = te_lolr.1 popup = yes }
 				}

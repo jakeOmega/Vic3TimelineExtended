@@ -1225,6 +1225,7 @@ INJECT:pmg_base_building_power_bloc_statue = {
 	production_methods = {
 		pm_power_bloc_statue_cultural
 		pm_power_bloc_statue_diplomatic
+		pm_power_bloc_statue_creditors_consortium
 		pm_power_bloc_statue_research_commons
 	}
 }
