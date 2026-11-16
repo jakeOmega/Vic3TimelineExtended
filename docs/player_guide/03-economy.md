@@ -220,8 +220,8 @@ investors.
 - Watch the market line. A standing shortage keeps the price high, which means
 you need more Construction Sector levels or a better production method. Cheap wood, iron and steel make
 construction cheaper, because the sector buys them.
-- A high price makes Construction Sectors profitable, and investors then build
-them on their own.
+- Construction Sectors make a small profit at the base price and a large one
+when the price is high, and investors then build them on their own.
 - Spread production-method switches out. Every switch adds five years of
 retooling upkeep, heaviest in the first months, and switching a whole industry
 at once can take the construction your queues were counting on.
