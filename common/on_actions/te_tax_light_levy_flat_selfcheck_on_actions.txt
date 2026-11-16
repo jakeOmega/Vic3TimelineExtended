@@ -30,7 +30,7 @@
 #   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
 #   BROKEN not_applied   5 or more in the levy group and fewer than 20% hold the levy: the sync did not add it.
 #               Needs no control, so it can come from the first window. Fallback: the sync's add is broken, not the
-#               engine: run te_tax_debug.9 in one such country and read the save report; nothing else is to build.
+#               engine: sync one such country from the console and read its save report (the play-test row).
 #   then, once the control has 5 countries in a window, or from 1900.1.1 with whatever the window has:
 #   OK          5 or more in each group, 80% or more of the levy group holding the levy and matching, 80% or more of
 #               the control matching. Read the Budget's Dividends Taxes line once (PT-47).
@@ -97,7 +97,7 @@ te_tax_light_levy_flat_selfcheck_month = {
 							te_tllf_chk_n_g >= 5
 							te_tllf_chk_held_share < 0.2
 						}
-						debug_log = "TE_SELF_CHECK BROKEN tax_light_levy_flat not_applied levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the light sync did not put the flat Low Dividend Tax on AI countries whose code levies it: run te_tax_debug.9 in one and read the save report, docs/testing/tax-code-playtest.md)"
+						debug_log = "TE_SELF_CHECK BROKEN tax_light_levy_flat not_applied levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the light sync did not put the flat Low Dividend Tax on AI countries whose code levies it: a script fault; sync one from the console and read its save report, docs/testing/tax-code-playtest.md)"
 					}
 					else_if = {
 						limit = {

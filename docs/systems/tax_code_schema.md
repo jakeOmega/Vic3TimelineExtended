@@ -249,6 +249,7 @@ Every `TE_TAX <tag>` line in `common/` and `events/` (`test_tax_code_console.py`
 | `light_entry_net` | every country | te_tax_on_actions.txt | the monthly net added `je_tax_code` to a country with the light code in force and no copy of the entry, active or inactive (the engine left it out); the entry carries the relief and reactions |
 | `full_entry_net` | every country | te_tax_on_actions.txt | the monthly net added `je_tax_code` to a country with the full code in force and no copy of the entry, active or inactive (the rule was switched on during play, or the engine left it out); the Tax Code tab opens only while the entry is active |
 | `light_law_changed` | every country | te_tax_light_effects.txt | the light code was carried into a new taxation law's range |
+| `light_levy_off` | every country | te_tax_on_actions.txt | the monthly net took the low dividend tax's flat levy (`te_tax_light_levy_div`) off a country whose light code is no longer in force (the rule switched to Disabled or to the full code mid-game) |
 | `light_level_adopted` | player, rebels | te_tax_light_effects.txt | the native tax level moved outside the light code (script; console `te_tax_debug.10`; for an uprising's rebels while the war lasts, their AI), and every tax moved with it |
 | `light_migrated` | every country | te_tax_light_effects.txt | a country's taxation law and tax level became light-code rates (`te_tax_light.2`) |
 | `light_state` | console | te_tax_debug_events.txt | the light code's state (console `te_tax_debug.9`) |
