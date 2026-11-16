@@ -36,6 +36,33 @@ te_construction_market_budget_mode_on = {
 	has_variable = te_construction_market_budget_mode
 }
 
+# Short of bureaucracy with a Government Administration level in the
+# construction queue. The AI probe's cm_admin reads it
+# (common/script_values/te_ai_probe_values.txt, from
+# scripts/generators/gen_ai_probe.py). The AI's purchase read it while it
+# bought through the engine's pause for such a country, which was removed on
+# 2026-11-16 (te_construction_market_ai_values.txt); nothing else calls it.
+# The shortage is tested first, so only a country that is short walks its
+# buildings. Two reads of "in the queue", either of which will do:
+#   - level_after_queued_constructions above level: the engine's count of a
+#     building's levels once its queued constructions finish, which the mod
+#     reads for queued levels elsewhere (a queued building exists at once at
+#     level 0, play-test 2026-10-22: scripting_best_practices.md);
+#   - is_under_construction, yes on a building whose first level is being
+#     built (read live, 2026-11-13), and which vanilla's tutorial reads on a
+#     building the moment its expansion is ordered.
+# Scope: country
+te_construction_market_ai_building_administration = {
+	bureaucracy < 0
+	any_scope_building = {
+		is_building_type = building_government_administration
+		OR = {
+			is_under_construction = yes
+			te_construction_market_building_queued_levels > 0
+		}
+	}
+}
+
 # The engine's pm_retooling modifier (a building that switches production
 # methods, common/static_modifiers/extra_modifiers.txt) is removed as soon as
 # it appears: te_remove_waived_pm_retooling. This is the global waiver only;

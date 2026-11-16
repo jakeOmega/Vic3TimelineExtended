@@ -83,7 +83,9 @@
 # the 76 rows under that clause among them. What was bought went to the
 # private queue, at the investment pool's expense, or went unused. So the
 # clause and its self-check (TE_SELF_CHECK construction_admin_while_paused,
-# which read BROKEN) were removed (owner, 2026-11-16). An indebted country
+# which read BROKEN) were removed (owner, 2026-11-16); its queue test
+# (te_construction_market_ai_building_administration) stays for the AI
+# probe's cm_admin and is not read here. An indebted country
 # short of bureaucracy still builds where the engine itself reports no pause:
 # that game had 39 such rows at 40% of the debt ceiling or more, the floor
 # above bought the fifth in all of them, and in 30 the queue was building. The
@@ -207,6 +209,14 @@ te_construction_market_ai_purchase_target = {
 	else = {
 		value = 0
 	}
+}
+
+# Building scope: its levels still in a construction queue
+# (te_construction_market_ai_building_administration, which the AI probe
+# reads; the purchase above does not).
+te_construction_market_building_queued_levels = {
+	value = level_after_queued_constructions
+	subtract = level
 }
 
 # ai_value of the Construction Sector in a market game (building_construction_sector,

@@ -23,6 +23,7 @@ Nothing in the engine checks that script, so this runs the script's own text. Wh
   rule before, that a paused country buys nothing, that the probe's sample countries spend no more than they have),
   and a week-by-week budget against the rule before.
 - Constants holds the script's constants to the engine defines they are taken from.
+- TheQueueRead runs the trigger the removed clause read its queue with, which the AI probe still reads.
 
 Run: python3 -m unittest test_construction_market_ai_purchase -v
 """
@@ -37,6 +38,7 @@ from test_construction_market_budget_step import CURRENT_VALUES, DISPLAY_VALUES,
 
 ROOT = Path(__file__).resolve().parent
 AI_VALUES = ROOT / "common/script_values/te_construction_market_ai_values.txt"
+TRIGGERS = ROOT / "common/scripted_triggers/te_construction_market_triggers.txt"
 PULSE = ROOT / "common/scripted_effects/te_construction_market_pulse_effects.txt"
 AI_EFFECTS = ROOT / "common/scripted_effects/te_construction_market_ai_effects.txt"
 DEFINES_DIR = ROOT / "common/defines"
@@ -529,6 +531,85 @@ class TheSites(unittest.TestCase):
             with self.subTest(bureaucracy=bureaucracy):
                 self.assertEqual(self.use(bureaucracy=bureaucracy), 6.0)
                 self.assertEqual(self.use(purchase=90.0, bureaucracy=bureaucracy), 20.0)
+
+
+ADMINISTRATION = "building_government_administration"
+QUEUE_READ = "te_construction_market_ai_building_administration"
+
+
+class QueueEnv(AiEnv):
+    """The evaluator with the construction market's scripted triggers and a country's buildings to walk."""
+
+    def __init__(self, names, flags, buildings=()):
+        super().__init__(names, {}, flags)
+        self.buildings = buildings
+        if "triggers" not in _PARSED:
+            _PARSED["triggers"] = load(TRIGGERS)[1]
+
+    def one_cond(self, key, op, val):
+        if key == "is_building_type":
+            return self.names["its type"] == val
+        if key == "any_scope_building":
+            return any(building.env().cond(val) for building in self.buildings)
+        if key in _PARSED["triggers"]:
+            return self.cond(_PARSED["triggers"][key]) == (val == "yes")
+        return super().one_cond(key, op, val)
+
+
+class Building:
+    def __init__(self, kind, level=1, queued=0, under_construction=None):
+        self.kind, self.level, self.queued = kind, level, queued
+        self.under_construction = queued > 0 if under_construction is None else under_construction
+
+    def env(self):
+        return QueueEnv({"its type": self.kind, "level": float(self.level),
+                         "level_after_queued_constructions": float(self.level + self.queued)},
+                        flags={"is_under_construction": self.under_construction})
+
+
+def administration(level=3, queued=1, **kwargs):
+    """A country's buildings with a Government Administration that has `queued` levels in the queue."""
+    return [Building("building_barracks", 5, 1), Building(ADMINISTRATION, level, queued, **kwargs)]
+
+
+class TheQueueRead(unittest.TestCase):
+    """te_construction_market_ai_building_administration: short of bureaucracy with a Government Administration level
+    in the queue. The purchase read it while it bought through the pause; the AI probe's cm_admin still does."""
+
+    def reads(self, bureaucracy=-5.0, buildings=()):
+        return QueueEnv({"bureaucracy": bureaucracy}, {}, buildings).cond([(QUEUE_READ, "=", "yes")])
+
+    def test_either_read_of_the_queue_will_do(self):
+        # A level queued on a standing building, a first level being built (level 0), an expansion with no progress
+        # the engine may not call under construction, and a level it calls under construction without a count of
+        # queued levels.
+        for buildings in (administration(), administration(level=0),
+                          administration(queued=2, under_construction=False),
+                          administration(queued=0, under_construction=True)):
+            with self.subTest(administration=[(b.level, b.queued, b.under_construction) for b in buildings][-1]):
+                self.assertTrue(self.reads(buildings=buildings))
+
+    def test_it_needs_the_shortage_and_the_queued_administration(self):
+        cases = {
+            "not short of bureaucracy": {"bureaucracy": 0.0, "buildings": administration()},
+            "no administration at all": {"buildings": ()},
+            "an administration with nothing queued": {"buildings": administration(queued=0)},
+            "another building queued": {"buildings": [Building("building_barracks", 2, 3)]},
+        }
+        for name, kwargs in cases.items():
+            with self.subTest(name):
+                self.assertFalse(self.reads(**kwargs))
+
+    def test_only_a_country_that_is_short_walks_its_buildings(self):
+        self.assertEqual([key for key, _op, _value in load(TRIGGERS)[1][QUEUE_READ]],
+                         ["bureaucracy", "any_scope_building"])
+
+    def test_the_probe_is_its_only_caller(self):
+        callers = [p.name for p in sorted((ROOT / "common").rglob("*.txt"))
+                   if "%s = yes" % QUEUE_READ in p.read_text(encoding="utf-8-sig")]
+        self.assertEqual(callers, ["te_ai_probe_values.txt"],
+                         "the purchase must not read it again; and once the AI probe is gone, remove the trigger, "
+                         "te_construction_market_building_queued_levels and this class with it")
 
 
 # February 1836, the second run of the AI telemetry probe on main 3a0e13409: tag, weekly income, fixed income, net
