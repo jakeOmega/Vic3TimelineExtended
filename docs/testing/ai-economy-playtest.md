@@ -440,18 +440,19 @@ With the third-party AI mod on (its `kai_political_strategies.txt` INJECTs the f
 
 ### Second read: the rate in force, with the 39 in the agendas' fields (2026-11-16)
 
-An unattended game from 1836 to 1850 on a test build with this change (`bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in; since `81b947368` only #1867 touched `common/ai_strategies/`), read by the probe against the two games on the 39-in-the-default build over the same months (February 1836 to December 1849). One game of each build; "the 20 largest" are those at the last snapshot read (the scorecard's table 3a, which takes each decade's 20 largest, reads conservatives at 0.0632):
+An unattended game from 1836 to 1850 on a test build with this change (`bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in; since `81b947368` only #1867 touched `common/ai_strategies/`), read by the probe against the two games on the 39-in-the-default build over the same months (the probe's first 168, to January 1, 1850). One game of each build; "the 20 largest" are the 20 largest AI economies at that cut, each ranked by its last report (the scorecard's table 3a, which takes each decade's 20 largest, reads conservatives at 0.0632):
 
 | Law starts per idle month, 1836–1849 | `dab9335f1` | `81b947368` | `bdc33ca56` |
 |---|---|---|---|
-| Conservatives, the 20 largest economies | 0.0121 | 0.0129 | 0.0645 |
-| Conservatives, every AI country | 0.0135 | 0.0114 | 0.0501 |
-| Every agenda, every AI country | 0.0155 | 0.0137 | 0.0569 |
-| Progressive over conservative, every AI country | 3.9 | 3.3 | 2.65 |
+| Conservatives, the 20 largest economies | 0.0105 | 0.0198 | 0.0668 |
+| Every agenda, the 20 largest economies | 0.0171 | 0.0246 | 0.0787 |
+| Conservatives, every AI country | 0.0135 | 0.0115 | 0.0501 |
+| Every agenda, every AI country | 0.0155 | 0.0138 | 0.0569 |
+| Progressive over conservative, every AI country | 3.9 | 3.3 | 2.7 |
 | Mid-enactment, 1840s readings: every AI country / the 20 largest | 14% / 18% | 13% / 32% | 35% / 48% |
 
-- **In force.** Conservatives read 0.05 a month or more, the bar above, about four to five times the build before, so the INJECT reaches a political agenda's own `change_law_chance`, and the first verdict most likely read (b), the default's field not adding to the agenda's. The agendas' ratio narrowed (2.65 against 3.3 and 3.9 over the same years), not to the raised chances' 1.2.
-- **Highest early.** To January 1843 conservatives among the 20 largest read 0.10 (every AI country 0.067); from 1843, 0.0475 and 0.0355 (table 3a). Both sit below the 0.10–0.15 this list expected at the first verdict's availability, so most idle months most likely have nothing an AI would start, and fewer as countries pass the laws they want: cause (c) now binds. The owner on the first verdict (2026-11-16): "Primogeniture ... is liked by conservative IGs, so maybe is evidence for the 'nothing they want to pass' option."
+- **In force.** Conservatives read 0.05 a month or more, the bar above: 3.4 times the build before among the 20 largest and 4.3 times over every AI country (6.4 and 3.7 times the first game's), so the INJECT reaches a political agenda's own `change_law_chance`, and the first verdict most likely read (b), the default's field not adding to the agenda's. The agendas' ratio narrowed (2.7 against 3.3 and 3.9 over the same years), not to the raised chances' 1.2.
+- **Highest early.** In table 3a, conservatives among each decade's 20 largest read 0.082 before 1843 (33 starts in 402 idle months) and 0.0475 from 1843 (23 in 484); every AI country, 0.065 and 0.0355. Both later rates sit below the 0.10–0.15 this list expected at the first verdict's availability, so most idle months most likely have nothing an AI would start, and fewer as countries pass the laws they want: cause (c) now binds. The owner on the first verdict (2026-11-16): "Primogeniture ... is liked by conservative IGs, so maybe is evidence for the 'nothing they want to pass' option."
 - **How enactments ended** (table 3b, every AI country): 248 of the 1,395 that ended were cancelled (18%), none failed and none were replaced; Primogeniture was 116 of the 248, then Unitary State (32) and Free Testation (21). The median chance to pass at a cancellation was 0.72 in 1836–1839, 0.08 in 1840–1844 and 0.00 in 1845–1849.
 - **The self-check has not read on this build**: the run ended in 1850. It reads in a game that reaches 1890, or 36 months after this build is first loaded.
 
