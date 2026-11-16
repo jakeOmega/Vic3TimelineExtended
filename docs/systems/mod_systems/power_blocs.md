@@ -85,7 +85,7 @@ One of the two identities added on 2026-11-16, beside the Research Commons: memb
 
 **The rest.** Summit option p, Debt Conference (`te_pb_summit_debt_conference`, every member, −0.5pp `country_risk_premium_add`, member relations). Statue `pm_power_bloc_statue_creditors_consortium` (prestige 3, −0.25pp premium) and HQ `pm_hq_creditors_consortium` (−0.5pp premium, +10% leverage generation, capitalists' pool efficiency). Subjugation: `country_subjugation_creditor_strength_add = 0.4` in the identity's own `leader_modifier`, paid against a member in the leader's receivership. Bloc names: four generic ones. Concept `concept_consortium_guarantee`.
 
-**Not built.** The banking dashboard's Backstops rows don't list the consortium's members (the sums are in the premium breakdowns); the identity's icon is Trade League's as a placeholder; the principles reuse the Foreign Investment and Construction icons.
+**Not built.** The banking dashboard's Backstops rows don't list the consortium's members (the sums are in the premium breakdowns); the principles reuse the Foreign Investment and Construction icons.
 
 ## Research Commons
 

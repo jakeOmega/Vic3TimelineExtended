@@ -1641,6 +1641,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
         # Legislated tax code: s1 stamped a coin with $ and s3 with a rouble sign.
         "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": 2},
+        "je_research_commons": {"subject": "a polished brass laboratory microscope beside a round-bottomed glass flask of glowing green liquid", "seed": 2},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon
