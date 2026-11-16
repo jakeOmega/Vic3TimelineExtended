@@ -452,6 +452,8 @@ SELF_CHECK_STUBS = {"te_debug_demog_conscription_selfcheck_start": "",
                     "te_debug_demog_cause_deaths_selfcheck": "",
                     # Causes of Death's tags (owner, 2026-10-22): test_demographics_cause_tags reads its text
                     "te_debug_demog_cause_tags_selfcheck": "",
+                    # and the same where an earthquake or a tsunami is (2026-11-16), which reads the state region
+                    "te_debug_demog_harvest_tags_selfcheck": "",
                     # the census's province line (2026-10-20): a debug_log line; TestProvinceLine runs its text
                     "te_debug_demog_province_change": "",
                     # the runaway tripwire (2026-11-06): debug_log and the state's name;

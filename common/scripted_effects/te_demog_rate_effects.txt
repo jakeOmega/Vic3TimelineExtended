@@ -782,8 +782,10 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
-			# once a game: the tags against the lines on top (Causes of Death; te_debug_demog_effects.txt)
+			# once a game: the tags against the lines on top (Causes of Death; te_debug_demog_effects.txt), and the same
+			# where an earthquake or a tsunami is, whose tags are the first INJECT into a harvest condition
 			te_debug_demog_cause_tags_selfcheck = yes
+			te_debug_demog_harvest_tags_selfcheck = yes
 			set_variable = { name = te_dg_q_d value = local_var:te_dg_rate_q }
 			# Private Health Insurance's wealth line (the on-top family's wealth field; owner, 2026-10-11, option b):
 			# at the census's share of the bare curve, at least te_demog_k_wealth_line_floor a wealth level first

@@ -1,0 +1,142 @@
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:29: TE_AIP ARM v=1
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:47: TE_AIP CANARY start t=CHI y=1836
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:48: TE_AIP CANARY date v=February 1, 1836
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:49: TE_AIP CANARY subsidies v=0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:50: TE_AIP CANARY gov_wages v=41517
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:51: TE_AIP CANARY mil_wages v=35753
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:52: TE_AIP CANARY gov_goods v=80531
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:53: TE_AIP CANARY mil_goods v=3419
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:54: TE_AIP CANARY con_goods v=0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:55: TE_AIP CANARY con_goods_gov v=0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:56: TE_AIP CANARY con_goods_priv v=0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:57: TE_AIP CANARY welfare v=0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:58: TE_AIP CANARY week_income v=289207
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:59: TE_AIP CANARY week_expenses v=168754
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:60: TE_AIP CANARY con_used v=51.1
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:61: TE_AIP CANARY con_unused v=0.0
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:62: TE_AIP CANARY con_used_gov v=47.3
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:63: TE_AIP CANARY con_used_priv v=3.7
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:64: TE_AIP CANARY con_base v=51.1
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:65: TE_AIP CANARY innovation v=52.5
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:66: TE_AIP CANARY innovation_max v=69.5
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:67: TE_AIP CANARY research_speed v=52.50
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:68: TE_AIP CANARY researching v=Romanticism
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:69: TE_AIP CANARY enacting v=
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:70: TE_AIP CANARY end
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 1 y=1836
+[02:27:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 1 February 1, 1836
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 2 y=1836
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 2 March 1, 1836
+[02:28:27][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 3 y=1836
+[02:28:27][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 3 April 1, 1836
+[02:30:46][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 11 y=1836
+[02:30:46][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 11 December 1, 1836
+[02:31:03][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 12 y=1837
+[02:31:03][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 12 January 1, 1837
+[02:31:21][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 13 y=1837
+[02:31:21][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 13 February 1, 1837
+[02:34:30][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:87: TE_AIP K 24 y=1838
+[02:34:30][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:88: TE_AIP KDATE 24 January 1, 1838
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:116: TE_AIP S A1 GBR 251 1 y=1836 ai=1 rank=1 type=1 subject=0 gdp=25457026 pop=25967977 sol=7.93 sol_exp=5.80 lit=0.481 peasants=0.466 radicals=0.006 loyalists=0.001 legitimacy=77 infamy=0.0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:117: TE_AIP S A2 GBR 251 1 states=28 states_inc=10 colonies=2 subjects=20 war=0 plays=0 levels=2282 techs=53 innovation=57.0 enacting=1 researching=1 revolution=0 insurrection=0 election=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:118: TE_AIP S F1 GBR 251 1 income=157649 expenses=204358 fixed_income=147000 fixed_expenses=140766 net_fixed=6234 tax_income=101084 tax_level=2 gold=930976 gold_limit=6109686 gold_scaled=0.152 debt_scaled=0.000 principal=0 credit=40475033 default=0 bankrupt=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:119: TE_AIP S F2 GBR 251 1 loans=0 pool=235646 pool_income=63580 mil_expenses=66747 mil_share=0.326 gov_wage=2 mil_wage=2 bur=-93 bur_made=2513 bur_used=2606 auth=243 auth_used=999 infl=420 infl_used=1992 exports=58799
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:120: TE_AIP S F3 GBR 251 1 imports=60741 pact_share=0.000 gdp_rank=3
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:121: TE_AIP S U1 GBR 251 1 ux_all=0 ux_banking=0 ux_climate=0 ux_colonial=0 ux_covert=0 ux_culture=0 ux_drugs=0 ux_energy_industry=0 ux_family=0 ux_nuclear=0 ux_nuclear_taboo=0 ux_pensions=0 ux_space=0 ux_un=0 ui_pension_reform=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:122: TE_AIP S U2 GBR 251 1 ui_reserve=0 ui_tax_code=0 ui_un=0 ui_war_tax=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:123: TE_AIP S C1 GBR 251 1 queue_levels=3 queue_gov=1 queue_priv=2 queue_n=3 queue_n_gov=1 queue_n_priv=2 queue_days=68 queue_days_gov=45 paused=0 wasted=1 healthy=1 cm_target=25.000 cm_price=1428 cm_public=25.000 companies=2
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:124: TE_AIP S C2 GBR 251 1 companies_max=2
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:125: TE_AIP S O1 GBR 251 1 low_mfg=80 low_infra=23 low_power=0 low_mine=1 rt_mfg=0 rt_infra=0 rt_power=0 rt_mine=0 rt_all=0 sub_all=0 uc_no_light=0 uc_no_transit=107 uc_stalls=0 ga_simple=0 uni_scholastic=13
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:126: TE_AIP S M1 GBR 251 1 army=97 army_conscripts=145 navy=228 army_power=3135 navy_power=22843 army_tier=1.59 irregular=0.000 line=0.000 alliances=0 defensive_pacts=2 rivals=1 interests=17 colony_growth=0.0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:127: TE_AIP S Y1 GBR 251 1 strat_admin=3 strat_political=3 strat_diplomatic=4 law_enacting=47 tech_researching=146
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:128: TE_AIP S L1 GBR 251 1 2;9;4;0;0;5;4;3;3;1;2;2;3;3;4;3;2;2;3;1;1;3
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:129: TE_AIP S L2 GBR 251 1 3;2;1;3;2;1;2;3;2;2;4;2;1;1;1;2;3;2;3;1;1;1
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:130: TE_AIP S L3 GBR 251 1 1;1;2;2;2;1;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:131: TE_AIP S T1 GBR 251 1 12;4;0;0;0;0;0;0;0;0;0;0;0;8;4;0;0;0;0;0;0;0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:132: TE_AIP S T2 GBR 251 1 0;0;0;0;18;7;0;0;0;0;0;0;0;0;0;0;0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:133: TE_AIP S I1 GBR 251 1 2;1;0;3;1;1;0;1;0;1;1;0;0;0;0;0;0;0;0;0;0;0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:134: TE_AIP S I2 GBR 251 1 0;6
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:135: TE_AIP S G1 GBR 251 1 264;159;94;11;1032;70;962;39;12;0;24;111;80;0;10;0;2;19;0;107;1170;3
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:136: TE_AIP S G2 GBR 251 1 0;48;13;35;136;11;52;17;291;850;26;0;1167;107;0;80;107;0;0;351;173;48
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:137: TE_AIP S G3 GBR 251 1 178;31;28;0;0;0;0;0;6;0;0;0;0;0;1;0;2
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:138: TE_AIP S B1 GBR 251 1 bt_construction_sector=80 bt_government_administration=35 bt_university=13 bt_barrack=97 bt_conscription_center=48 bt_military_base=0 bt_shipyard=17 bt_naval_administration=136 bt_naval_logistics_center=31 bt_port=42 bt_railway=13 bt_highway=0 bt_airport=0 bt_network_infrastructure=0 bt_power_plant=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:139: TE_AIP S B2 GBR 251 1 bt_hydro_plant=0 bt_nuclear_plant=0 bt_renewable_energy_plant=0 bt_fusion_plant=0 bt_urban_center=107 bt_trade_center=52 bt_art_academy=3 bt_financial_district=291 bt_manor_house=850 bt_company_headquarter=0 bt_public_housing=0 bt_software_industry=0 bt_electronic_components_and_semiconductor_industry=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:140: TE_AIP S N1 GBR 251 1 n_built=0 n_expanded=0 n_built_gov=0 n_built_mil=0 n_built_infra=0 n_built_power=0 n_built_ind=0 n_built_res=0 n_built_agri=0 n_pm=15 n_tech=0 n_law_start=1 n_law_pass=0 n_law_fail=0 n_law_end=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:141: TE_AIP S N2 GBR 251 1 n_default=0 n_play=0 n_war=0 n_reform=1 n_company=0 n_colony=1 n_inst_up=0 n_inst_down=0
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:170: TE_AIP X 1 GBR 251 1 subsidies=0 gov_wages=7827 mil_wages=22256 gov_goods=30440 mil_goods=44491
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:171: TE_AIP X 2 GBR 251 1 con_goods=59085 con_goods_gov=48436 con_goods_priv=10649 welfare=56 week_income=157649 week_expenses=204358
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:172: TE_AIP X 3 GBR 251 1 con_used=28.4 con_unused=0.0 con_used_gov=23.3 con_used_priv=5.1 con_base=28.4
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:173: TE_AIP X 4 GBR 251 1 innovation=57.0 innovation_max=124.7 research_speed=62.70
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:174: TE_AIP X 5 GBR 251 1 researching=Nationalism
+[02:28:08][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:175: TE_AIP X 6 GBR 251 1 enacting=Total Separation
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:116: TE_AIP S A1 GBR 251 13 y=1837 ai=1 rank=1 type=1 subject=0 gdp=29618712 pop=26289569 sol=8.09 sol_exp=5.78 lit=0.494 peasants=0.472 radicals=0.019 loyalists=0.024 legitimacy=79 infamy=13.8
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:117: TE_AIP S A2 GBR 251 13 states=30 states_inc=10 colonies=3 subjects=20 war=0 plays=0 levels=2299 techs=53 innovation=61.7 enacting=1 researching=1 revolution=0 insurrection=0 election=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:118: TE_AIP S F1 GBR 251 13 income=248442 expenses=248833 fixed_income=180301 fixed_expenses=143564 net_fixed=36737 tax_income=117584 tax_level=2 gold=0 gold_limit=7108490 gold_scaled=0.000 debt_scaled=0.006 principal=286496 credit=44581773 default=0 bankrupt=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:119: TE_AIP S F2 GBR 251 13 loans=1 pool=1449939 pool_income=95943 mil_expenses=65886 mil_share=0.264 gov_wage=1 mil_wage=2 bur=61 bur_made=2786 bur_used=2724 auth=48 auth_used=1250 infl=69 infl_used=2667 exports=183198
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:120: TE_AIP S F3 GBR 251 13 imports=13742 pact_share=0.000 gdp_rank=3
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:121: TE_AIP S U1 GBR 251 13 ux_all=0 ux_banking=0 ux_climate=0 ux_colonial=0 ux_covert=0 ux_culture=0 ux_drugs=0 ux_energy_industry=0 ux_family=0 ux_nuclear=0 ux_nuclear_taboo=0 ux_pensions=0 ux_space=0 ux_un=0 ui_pension_reform=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:122: TE_AIP S U2 GBR 251 13 ui_reserve=0 ui_tax_code=0 ui_un=0 ui_war_tax=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:123: TE_AIP S C1 GBR 251 13 queue_levels=6 queue_gov=1 queue_priv=5 queue_n=6 queue_n_gov=1 queue_n_priv=5 queue_days=32 queue_days_gov=5 paused=0 wasted=1 healthy=1 cm_target=25.000 cm_price=1311 cm_public=25.000 companies=2
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:124: TE_AIP S C2 GBR 251 13 companies_max=2
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:125: TE_AIP S O1 GBR 251 13 low_mfg=58 low_infra=30 low_power=0 low_mine=1 rt_mfg=0 rt_infra=0 rt_power=0 rt_mine=0 rt_all=0 sub_all=0 uc_no_light=0 uc_no_transit=64 uc_stalls=0 ga_simple=0 uni_scholastic=10
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:126: TE_AIP S M1 GBR 251 13 army=85 army_conscripts=133 navy=236 army_power=2748 navy_power=22874 army_tier=1.57 irregular=0.000 line=0.000 alliances=0 defensive_pacts=2 rivals=1 interests=19 colony_growth=0.0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:127: TE_AIP S Y1 GBR 251 13 strat_admin=3 strat_political=3 strat_diplomatic=4 law_enacting=47 tech_researching=146
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:128: TE_AIP S L1 GBR 251 13 2;9;4;0;0;5;4;3;3;1;2;2;3;3;4;3;2;2;3;1;1;3
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:129: TE_AIP S L2 GBR 251 13 3;2;1;3;2;1;2;3;2;2;4;2;1;1;1;2;3;2;3;1;1;1
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:130: TE_AIP S L3 GBR 251 13 1;1;2;2;2;1;1;2;1;1;1;1;1;1;1;1;1;1;1;1;1
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:131: TE_AIP S T1 GBR 251 13 12;4;0;0;0;0;0;0;0;0;0;0;0;8;4;0;0;0;0;0;0;0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:132: TE_AIP S T2 GBR 251 13 0;0;0;0;18;7;0;0;0;0;0;0;0;0;0;0;0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:133: TE_AIP S I1 GBR 251 13 2;1;0;3;1;1;0;1;0;1;1;0;0;0;0;0;0;0;0;0;0;0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:134: TE_AIP S I2 GBR 251 13 0;6
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:135: TE_AIP S G1 GBR 251 13 265;158;96;11;1042;70;972;42;15;0;24;111;80;0;10;0;2;19;0;109;1191;3
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:136: TE_AIP S G2 GBR 251 13 0;50;13;37;136;11;53;17;298;853;37;0;1188;110;0;82;110;0;0;336;157;48
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:137: TE_AIP S G3 GBR 251 13 179;32;24;0;0;0;0;0;6;0;0;0;0;0;1;0;5
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:138: TE_AIP S B1 GBR 251 13 bt_construction_sector=82 bt_government_administration=37 bt_university=13 bt_barrack=85 bt_conscription_center=48 bt_military_base=0 bt_shipyard=17 bt_naval_administration=136 bt_naval_logistics_center=32 bt_port=44 bt_railway=13 bt_highway=0 bt_airport=0 bt_network_infrastructure=0 bt_power_plant=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:139: TE_AIP S B2 GBR 251 13 bt_hydro_plant=0 bt_nuclear_plant=0 bt_renewable_energy_plant=0 bt_fusion_plant=0 bt_urban_center=109 bt_trade_center=53 bt_art_academy=3 bt_financial_district=298 bt_manor_house=853 bt_company_headquarter=0 bt_public_housing=0 bt_software_industry=0 bt_electronic_components_and_semiconductor_industry=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:140: TE_AIP S N1 GBR 251 13 n_built=0 n_expanded=5 n_built_gov=2 n_built_mil=0 n_built_infra=1 n_built_power=0 n_built_ind=2 n_built_res=0 n_built_agri=0 n_pm=91 n_tech=0 n_law_start=0 n_law_pass=0 n_law_fail=0 n_law_end=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:141: TE_AIP S N2 GBR 251 13 n_default=0 n_play=1 n_war=0 n_reform=0 n_company=0 n_colony=1 n_inst_up=0 n_inst_down=0
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:170: TE_AIP X 1 GBR 251 13 subsidies=0 gov_wages=7218 mil_wages=21940 gov_goods=34959 mil_goods=43946
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:171: TE_AIP X 2 GBR 251 13 con_goods=105269 con_goods_gov=37497 con_goods_priv=67770 welfare=17 week_income=248442 week_expenses=248833
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:172: TE_AIP X 3 GBR 251 13 con_used=69.7 con_unused=0.0 con_used_gov=24.8 con_used_priv=44.8 con_base=69.7
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:173: TE_AIP X 4 GBR 251 13 innovation=61.7 innovation_max=126.7 research_speed=61.72
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:174: TE_AIP X 5 GBR 251 13 researching=Nationalism
+[02:31:34][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:175: TE_AIP X 6 GBR 251 13 enacting=Total Separation
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:116: TE_AIP S A1 LUX 61 11 y=1836 ai=1 rank=4 type=1 subject=1 gdp=68597 pop=177457 sol=6.76 sol_exp=5.42 lit=0.164 peasants=0.563 radicals=0.013 loyalists=0.009 legitimacy=85 infamy=0.0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:117: TE_AIP S A2 LUX 61 11 states=1 states_inc=1 colonies=0 subjects=0 war=0 plays=0 levels=16 techs=43 innovation=52.5 enacting=1 researching=1 revolution=0 insurrection=0 election=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:118: TE_AIP S F1 LUX 61 11 income=1127 expenses=689 fixed_income=1063 fixed_expenses=625 net_fixed=438 tax_income=1063 tax_level=2 gold=0 gold_limit=13719 gold_scaled=0.000 debt_scaled=0.343 principal=95853 credit=279007 default=0 bankrupt=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:119: TE_AIP S F2 LUX 61 11 loans=0 pool=1666 pool_income=92 mil_expenses=410 mil_share=0.594 gov_wage=0 mil_wage=2 bur=63 bur_made=105 bur_used=41 auth=329 auth_used=1032 infl=770 infl_used=100 exports=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:120: TE_AIP S F3 LUX 61 11 imports=0 pact_share=0.000 gdp_rank=210
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:121: TE_AIP S U1 LUX 61 11 ux_all=0 ux_banking=0 ux_climate=0 ux_colonial=0 ux_covert=0 ux_culture=0 ux_drugs=0 ux_energy_industry=0 ux_family=0 ux_nuclear=0 ux_nuclear_taboo=0 ux_pensions=0 ux_space=0 ux_un=0 ui_pension_reform=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:122: TE_AIP S U2 LUX 61 11 ui_reserve=0 ui_tax_code=0 ui_un=0 ui_war_tax=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:123: TE_AIP S C1 LUX 61 11 queue_levels=3 queue_gov=1 queue_priv=2 queue_n=3 queue_n_gov=1 queue_n_priv=2 queue_days=9971 queue_days_gov=2547 paused=1 wasted=0 healthy=1 cm_target=0.000 cm_price=1397 cm_public=0.000 companies=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:124: TE_AIP S C2 LUX 61 11 companies_max=1
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:125: TE_AIP S O1 LUX 61 11 low_mfg=1 low_infra=1 low_power=0 low_mine=0 rt_mfg=0 rt_infra=0 rt_power=0 rt_mine=0 rt_all=0 sub_all=0 uc_no_light=0 uc_no_transit=0 uc_stalls=0 ga_simple=0 uni_scholastic=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:126: TE_AIP S M1 LUX 61 11 army=3 army_conscripts=3 navy=0 army_power=34 navy_power=0 army_tier=0.99 irregular=0.666 line=0.333 alliances=0 defensive_pacts=0 rivals=0 interests=4 colony_growth=0.0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:127: TE_AIP S Y1 LUX 61 11 strat_admin=1 strat_political=1 strat_diplomatic=15 law_enacting=120 tech_researching=11
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:128: TE_AIP S L1 LUX 61 11 2;1;4;0;0;5;1;3;0;1;2;1;3;3;1;2;1;1;2;1;1;1
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:129: TE_AIP S L2 LUX 61 11 1;2;1;1;2;2;2;1;1;2;4;2;1;1;1;2;1;1;1;1;1;1
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:130: TE_AIP S L3 LUX 61 11 1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:131: TE_AIP S T1 LUX 61 11 12;0;0;0;0;0;0;0;0;0;0;0;0;8;2;0;0;0;0;0;0;0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:132: TE_AIP S T2 LUX 61 11 0;0;0;0;18;3;0;0;0;0;0;0;0;0;0;0;0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:133: TE_AIP S I1 LUX 61 11 0;0;0;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:134: TE_AIP S I2 LUX 61 11 0;6
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:135: TE_AIP S G1 LUX 61 11 1;0;1;0;6;1;5;1;0;0;0;0;0;0;0;0;0;0;0;0;7;0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:136: TE_AIP S G2 LUX 61 11 0;0;0;0;0;0;1;0;0;7;0;0;7;1;0;1;1;0;0;4;4;0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:137: TE_AIP S G3 LUX 61 11 0;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;1
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:138: TE_AIP S B1 LUX 61 11 bt_construction_sector=1 bt_government_administration=0 bt_university=0 bt_barrack=3 bt_conscription_center=0 bt_military_base=0 bt_shipyard=0 bt_naval_administration=0 bt_naval_logistics_center=0 bt_port=0 bt_railway=0 bt_highway=0 bt_airport=0 bt_network_infrastructure=0 bt_power_plant=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:139: TE_AIP S B2 LUX 61 11 bt_hydro_plant=0 bt_nuclear_plant=0 bt_renewable_energy_plant=0 bt_fusion_plant=0 bt_urban_center=0 bt_trade_center=1 bt_art_academy=0 bt_financial_district=0 bt_manor_house=7 bt_company_headquarter=0 bt_public_housing=0 bt_software_industry=0 bt_electronic_components_and_semiconductor_industry=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:140: TE_AIP S N1 LUX 61 11 n_built=0 n_expanded=0 n_built_gov=0 n_built_mil=0 n_built_infra=0 n_built_power=0 n_built_ind=0 n_built_res=0 n_built_agri=0 n_pm=3 n_tech=0 n_law_start=1 n_law_pass=0 n_law_fail=0 n_law_end=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:141: TE_AIP S N2 LUX 61 11 n_default=0 n_play=0 n_war=0 n_reform=0 n_company=0 n_colony=0 n_inst_up=0 n_inst_down=0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:170: TE_AIP X 1 LUX 61 11 subsidies=0 gov_wages=0 mil_wages=290 gov_goods=0 mil_goods=119
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:171: TE_AIP X 2 LUX 61 11 con_goods=63 con_goods_gov=0 con_goods_priv=63 welfare=0 week_income=1127 week_expenses=689
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:172: TE_AIP X 3 LUX 61 11 con_used=0.0 con_unused=0.0 con_used_gov=0.0 con_used_priv=0.0 con_base=0.0
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:173: TE_AIP X 4 LUX 61 11 innovation=52.5 innovation_max=74.6 research_speed=52.50
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:174: TE_AIP X 5 LUX 61 11 researching=Intensive Agriculture
+[02:30:48][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:175: TE_AIP X 6 LUX 61 11 enacting=Religious Schools
+[02:29:37][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:185: TE_AIP E default LAH 269 7 debt=1.001 gold=0 net_fixed=-18985
+[02:29:54][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:185: TE_AIP E default_end LAH 269 8 debt=0.000 gold=0 net_fixed=-18360
+[02:28:26][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:181: TE_AIP E law_end UBD 224 2 law=169 chance=0.94 stall=0.00 setbacks=0
+[02:29:13][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:181: TE_AIP E law_end SIC 211 5 law=169 chance=0.63 stall=0.07 setbacks=1
+[02:29:50][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:181: TE_AIP E law_pass SCM 258 7 law=169 chance=0.70 stall=0.07 setbacks=0
+[02:27:49][jomini_effect_impl.cpp:459]: common/scripted_effects/te_ai_probe_effects.txt:181: TE_AIP E law_start CRO 0 1 law=160 chance=0.12 stall=0.00 setbacks=0
+[02:28:38][jomini_effect_impl.cpp:459]: common/on_actions/te_ai_probe_on_actions.txt:103: TE_AIP E play HER 0 3 target=MAI

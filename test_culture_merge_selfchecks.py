@@ -383,9 +383,20 @@ class LatchTest(unittest.TestCase):
         fervor = squash(block(text, "te_cm_chk_fervor"))
         self.assertIn("scope:te_cm_fervor_source = { culture_current_fervor >= 5 }", fervor)
         self.assertLess(fervor.index("set_fervor = 0"), fervor.index("te_cmg_set_fervor_from_source = yes"))
-        # conversion_merges_pops: the first pass must have made a result pop to compare the second against.
+        # conversion_merges_pops: the first pass must have made two result pops to compare the second against, half
+        # of one being no measure (the 2026-11-16 BROKEN read +3 then +4).
         monthly = squash(block(text, "te_cm_chk_conversion_monthly"))
-        self.assertIn("global_var:te_cm_chk_conv_inc1 >= 1", monthly)
+        self.assertIn("global_var:te_cm_chk_conv_inc1 >= 2", monthly)
+        # The second pass is measured from just before it converts, not from 35 days after the first: the year between
+        # holds the result's migrants and its pops hired elsewhere, which read as the pass's own new pops.
+        self.assertIn("subtract = global_var:te_cm_chk_conv_pre2", monthly)
+        self.assertNotIn("subtract = global_var:te_cm_chk_conv_mid", monthly)
+        stage2 = conversion.split("global_var:te_cm_chk_conv_stage = 2", 1)[1]
+        self.assertIn("global_var:te_cm_chk_conv_result ?= scope:te_cm_chk_conv_res_now", stage2)
+        self.assertLess(stage2.index("name = te_cm_chk_conv_pre2"), stage2.index("name = te_cm_chk_conv_stage value = 3"))
+        for name in ("te_cm_chk_conv_pre2", "te_cm_chk_conv_part_first", "te_cm_chk_conv_part_second"):
+            self.assertIn(f"NAME = {name}", squash(block(text, "te_cm_chk_conversion_clear")))
+            self.assertIn(f"GetGlobalVariable('{name}')", monthly)
         # The sample's cultures are saved inside the block that picks the state, not from a global read back after it.
         self.assertNotIn("limit = { has_global_variable = te_cm_chk_conv_stage } cu:", conversion)
         self.assertLess(conversion.index("random_scope_state"), conversion.index("name = te_cm_chk_conv_part"))

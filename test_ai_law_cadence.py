@@ -1,13 +1,15 @@
-"""AI law cadence (2026-11-15): AI countries start law changes more often, with more revolution aversion to match.
+"""AI law cadence: AI countries start law changes more often, with more revolution aversion to match.
 
-- common/ai_strategies/edited_default_strategy.txt: ai_strategy_default's change_law_chance is vanilla's 1 plus 39,
-  times 10 in the mod's crisis case. By vanilla's comment (unread in game) the default's field adds to every
-  political strategy's own.
-- common/ai_strategies/edited_political_strategies.txt: seven political agendas' revolution_aversion, each vanilla's
-  whole block plus one `add` line; nothing else in those strategies (the pass-chance floor stays vanilla's).
+- common/ai_strategies/edited_political_strategies.txt: every political agenda's own change_law_chance is vanilla's
+  whole block plus one `add = 39` line (2026-11-16), and seven agendas' revolution_aversion is vanilla's whole block
+  plus one `add` line (2026-11-15); nothing else in those strategies (the pass-chance floor stays vanilla's).
+- common/ai_strategies/edited_default_strategy.txt: ai_strategy_default's change_law_chance is vanilla's 1, times 10
+  in the mod's crisis case. Its 2026-11-15 `add = 39` moved into the agendas: an unattended run read no rise with it
+  there, and kept beside the agendas' 39 it would make the chance vanilla's + 79 if the default's field adds.
 - TE_SELF_CHECK ai_law_cadence (common/on_actions/te_ai_law_cadence_selfcheck_on_actions.txt) and its play-test row.
 
-The arithmetic behind the numbers: docs/systems/mod_systems/ai.md § Law-Change Cadence.
+The arithmetic behind the numbers, and the outcome table under each engine behavior:
+docs/systems/mod_systems/ai.md § Law-Change Cadence.
 """
 
 import re
@@ -15,8 +17,9 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT = ROOT / "common/ai_strategies/edited_default_strategy.txt"
-POLITICAL = ROOT / "common/ai_strategies/edited_political_strategies.txt"
+STRATEGIES = ROOT / "common/ai_strategies"
+DEFAULT = STRATEGIES / "edited_default_strategy.txt"
+POLITICAL = STRATEGIES / "edited_political_strategies.txt"
 SELFCHECK = ROOT / "common/on_actions/te_ai_law_cadence_selfcheck_on_actions.txt"
 SELFCHECK_VALUES = ROOT / "common/script_values/te_ai_law_cadence_selfcheck_values.txt"
 PLAYTEST = ROOT / "docs/testing/ai-economy-playtest.md"
@@ -27,8 +30,53 @@ VANILLA_DEFAULT_CHANCE = 1
 CHANCE_ADD = 39
 CRISIS_MULTIPLIER = 10
 
-# Vanilla 1.15.1's revolution_aversion block per agenda (game/common/ai_strategies/03_political_strategies.txt),
-# whitespace-normalized, and the mod's rise. test_restated_blocks_match_the_game_files reads the game where installed.
+# Vanilla 1.15.1's political agendas (every `type = political` strategy, all in 03_political_strategies.txt; the mod
+# adds none), in the game file's order, with the name ai.md's outcome table gives each.
+POLITICAL_AGENDAS = {
+    "ai_strategy_conservative_agenda": "Conservative",
+    "ai_strategy_reactionary_agenda": "Reactionary",
+    "ai_strategy_progressive_agenda": "Progressive",
+    "ai_strategy_egalitarian_agenda": "Egalitarian",
+    "ai_strategy_nationalist_agenda": "Nationalist",
+    "ai_strategy_maintain_mandate_of_heaven": "Mandate of Heaven",
+    "ai_strategy_tanzimat_reforms": "Tanzimat",
+    "ai_strategy_meiji_restoration": "Meiji Restoration",
+    "ai_strategy_great_reforms": "Great Reforms",
+    "ai_strategy_consolidation_agenda": "Consolidation",
+    "ai_strategy_confrontation_agenda": "Confrontation",
+}
+# The seven the 41-60% target is for (ai.md): every agenda but the four with a purpose of their own.
+COMMON_AGENDAS = (
+    "ai_strategy_conservative_agenda", "ai_strategy_reactionary_agenda", "ai_strategy_progressive_agenda",
+    "ai_strategy_egalitarian_agenda", "ai_strategy_nationalist_agenda", "ai_strategy_consolidation_agenda",
+    "ai_strategy_confrontation_agenda",
+)
+
+_INSURRECTION = "if = { limit = { any_interest_group = { is_insurrectionary = yes } } add = %s } "
+_SOCIALIST = "if = { limit = { has_revolutionary_socialist_laws = yes } add = 25 } "
+_COMMITMENT = "if = { limit = { has_enactment_je_or_law_commitment = yes } add = %s } "
+
+# Vanilla 1.15.1's change_law_chance block per agenda, comments stripped and whitespace-normalized.
+# test_restated_blocks_match_the_game_files reads the game where installed (vanilla_parsed/ holds no AI strategies).
+VANILLA_CHANCE = {
+    "ai_strategy_conservative_agenda": "value = 2.5 " + _INSURRECTION % "7.5" + _SOCIALIST + _COMMITMENT % "25",
+    "ai_strategy_reactionary_agenda": "value = 3.5 " + _INSURRECTION % "1.5" + _SOCIALIST + _COMMITMENT % "10",
+    "ai_strategy_progressive_agenda": "value = 10 " + _INSURRECTION % "10" + _SOCIALIST + _COMMITMENT % "25",
+    "ai_strategy_egalitarian_agenda": "value = 15 " + _INSURRECTION % "5" + _SOCIALIST + _COMMITMENT % "25",
+    "ai_strategy_nationalist_agenda": "value = 10 " + _INSURRECTION % "10" + _SOCIALIST + _COMMITMENT % "25",
+    "ai_strategy_maintain_mandate_of_heaven": "value = 1 " + _COMMITMENT % "10" + _SOCIALIST,
+    "ai_strategy_tanzimat_reforms": "value = 100",
+    "ai_strategy_meiji_restoration": "value = 50 " + _SOCIALIST,
+    "ai_strategy_great_reforms": "value = 100 " + _SOCIALIST,
+    "ai_strategy_consolidation_agenda": "value = 10 " + _INSURRECTION % "5" + _COMMITMENT % "25",
+    "ai_strategy_confrontation_agenda": (
+        "value = 20 " + _INSURRECTION % "5" + _COMMITMENT % "25"
+        + "if = { limit = { has_journal_entry = je_social_revolution } add = 10 }"
+    ),
+}
+VANILLA_CHANCE = {name: block.strip() for name, block in VANILLA_CHANCE.items()}
+
+# Vanilla 1.15.1's revolution_aversion block per agenda the mod raises, and the rise.
 VANILLA_AVERSION = {
     "ai_strategy_conservative_agenda": (
         "value = 75 "
@@ -45,6 +93,14 @@ VANILLA_AVERSION = {
     "ai_strategy_nationalist_agenda": "value = 35",
     "ai_strategy_consolidation_agenda": "value = 75",
     "ai_strategy_confrontation_agenda": "value = 25",
+}
+# The agendas whose aversion stays vanilla's (no INJECT of it): Mandate of Heaven never goes ahead, the Meiji
+# Restoration's starts rise 6%, the Tanzimat and the Great Reforms were certain already.
+VANILLA_AVERSION_KEPT = {
+    "ai_strategy_maintain_mandate_of_heaven": "value = 100",
+    "ai_strategy_tanzimat_reforms": "value = 25",
+    "ai_strategy_meiji_restoration": "value = 10",
+    "ai_strategy_great_reforms": "value = 10",
 }
 AVERSION_ADD = {
     "ai_strategy_conservative_agenda": 10,
@@ -86,6 +142,23 @@ def _top_level_keys(body):
     return keys
 
 
+def _top_level_entries(text):
+    """(prefix, name, body) of each top-level `[PREFIX:]name = { ... }` of a stripped file."""
+    out, depth, i = [], 0, 0
+    for m in re.finditer(r"(?m)[{}]|^(?:([A-Z_]+):)?(\w+)\s*=\s*\{", text):
+        if m.start() < i:
+            continue
+        if m.group(0) == "{":
+            depth += 1
+        elif m.group(0) == "}":
+            depth -= 1
+        elif depth == 0:
+            body = _block(text[m.start():], m.group(2))
+            out.append((m.group(1), m.group(2), body))
+            i = m.end() + len(body) + 1
+    return out
+
+
 def _norm(text):
     return " ".join(text.replace("{", " { ").replace("}", " } ").split())
 
@@ -93,6 +166,27 @@ def _norm(text):
 def _without_line(body, pattern):
     """The body with the first line matching `pattern` removed."""
     return re.sub(pattern, "", body, count=1)
+
+
+def _value(block):
+    """The number on a normalized block's leading `value =` line: the field in normal times."""
+    return float(re.match(r"value = ([\d.]+)", block).group(1))
+
+
+def _outcomes(name):
+    """The agenda's change_law_chance and revolution_aversion in normal times, by what the engine does with the
+    INJECT: replaces vanilla's field with it (or merges in only the keys vanilla's lacks, which gives the same),
+    sums the two fields, or ignores it. Without the default strategy's 1, which adds to each if vanilla's comment holds.
+    """
+    v = _value(VANILLA_CHANCE[name])
+    chance = {"replaced": v + CHANCE_ADD, "summed": 2 * v + CHANCE_ADD, "ignored": v}
+    if name in VANILLA_AVERSION:
+        a, rise = _value(VANILLA_AVERSION[name]), AVERSION_ADD[name]
+        aversion = {"replaced": a + rise, "summed": 2 * a + rise, "ignored": a}
+    else:
+        a = _value(VANILLA_AVERSION_KEPT[name])
+        aversion = {"replaced": a, "summed": a, "ignored": a}
+    return chance, aversion
 
 
 class TestDefaultChangeLawChance(unittest.TestCase):
@@ -105,17 +199,15 @@ class TestDefaultChangeLawChance(unittest.TestCase):
     def test_the_field_appears_once(self):
         self.assertEqual(_top_level_keys(self.strategy).count("change_law_chance"), 1)
 
-    def test_restates_vanilla_then_adds(self):
-        keys = _top_level_keys(self.field)
-        self.assertEqual(keys[:2], ["value", "add"], "value = 1 (vanilla's), then the add, then the crisis branch")
+    def test_vanilla_value_and_no_rise(self):
+        # The rise is in the agendas' own fields; one here too would count twice if the default's field adds.
+        self.assertEqual(_top_level_keys(self.field), ["value", "if"], "value = 1 (vanilla's), then the crisis branch")
         self.assertRegex(self.field, r"^\s*value\s*=\s*%d\s" % VANILLA_DEFAULT_CHANCE)
-        self.assertRegex(self.field, r"\badd\s*=\s*%d\b" % CHANCE_ADD)
-        self.assertEqual(VANILLA_DEFAULT_CHANCE + CHANCE_ADD, 40)
+        self.assertNotRegex(self.field, r"\badd\s*=")
 
     def test_the_crisis_multiplier_still_applies(self):
         branch = _block(self.field, "if")
         self.assertIsNotNone(branch)
-        self.assertEqual(_top_level_keys(self.field), ["value", "add", "if"])
         movement = _block(branch, "any_political_movement")
         self.assertRegex(movement, r"political_movement_support\s*>\s*0\.2\b")
         self.assertRegex(movement, r"political_movement_radicalism\s*>\s*0\.75\b")
@@ -136,17 +228,30 @@ class TestPoliticalStrategies(unittest.TestCase):
         cls.text = _strip_comments(POLITICAL.read_text(encoding="utf-8-sig"))
         cls.injected = re.findall(r"(?m)^INJECT:(ai_strategy_\w+)\s*=\s*\{", cls.text)
 
-    def test_injects_the_seven_agendas_once_each(self):
-        self.assertEqual(sorted(self.injected), sorted(VANILLA_AVERSION))
+    def test_injects_every_political_agenda_once(self):
+        self.assertEqual(sorted(self.injected), sorted(POLITICAL_AGENDAS))
         self.assertNotRegex(self.text, r"(?m)^(?:REPLACE|TRY_REPLACE|REPLACE_OR_CREATE):", "INJECT only")
 
-    def test_only_revolution_aversion(self):
-        # The pass-chance floor and the agendas' own rates stay vanilla's (ai.md § Law-Change Cadence).
+    def test_only_the_rate_and_the_aversion(self):
+        # The pass-chance floor stays vanilla's (ai.md § Law-Change Cadence).
         for name in self.injected:
             with self.subTest(strategy=name):
-                self.assertEqual(_top_level_keys(_block(self.text, name)), ["revolution_aversion"])
+                expected = (["revolution_aversion"] if name in VANILLA_AVERSION else []) + ["change_law_chance"]
+                self.assertEqual(_top_level_keys(_block(self.text, name)), expected)
 
-    def test_each_restates_vanilla_and_adds_once(self):
+    def test_each_chance_restates_vanilla_and_adds_39_once(self):
+        for name, vanilla in VANILLA_CHANCE.items():
+            with self.subTest(strategy=name):
+                field = _block(_block(self.text, name), "change_law_chance")
+                self.assertEqual(len(re.findall(r"(?m)^\s*add\s*=\s*%d\s*$" % CHANCE_ADD, field)), 1)
+                own = _without_line(field, r"(?m)^\s*add\s*=\s*%d\s*$" % CHANCE_ADD)
+                self.assertEqual(_norm(own), vanilla)
+                self.assertEqual(_top_level_keys(field)[:2], ["value", "add"])
+                # `add` is the one top-level key vanilla's field lacks, so a merge of the new keys only gives the
+                # same total as a replace.
+                self.assertNotIn("add", _top_level_keys(own))
+
+    def test_each_aversion_restates_vanilla_and_adds_once(self):
         for name, vanilla in VANILLA_AVERSION.items():
             with self.subTest(strategy=name):
                 field = _block(_block(self.text, name), "revolution_aversion")
@@ -158,13 +263,12 @@ class TestPoliticalStrategies(unittest.TestCase):
 
     def test_aversion_stays_within_the_engine_range(self):
         for name, add in AVERSION_ADD.items():
-            base = int(re.match(r"value = (\d+)", VANILLA_AVERSION[name]).group(1))
             with self.subTest(strategy=name):
                 self.assertGreater(add, 0)
-                self.assertLessEqual(base + add, 100)
+                self.assertLessEqual(_value(VANILLA_AVERSION[name]) + add, 100)
 
     def test_sorts_before_the_other_ai_mods_file(self):
-        # Two INJECTs of one field apply in file order and the later one wins; with that mod on, its aversion stands.
+        # Two INJECTs of one field apply in file order and the later one wins; with that mod on, its values stand.
         self.assertLess(POLITICAL.name, "kai_political_strategies.txt")
 
     def test_restated_blocks_match_the_game_files(self):
@@ -172,9 +276,86 @@ class TestPoliticalStrategies(unittest.TestCase):
         if path is None:
             self.skipTest("no Victoria 3 install")
         game = _strip_comments(path.read_text(encoding="utf-8-sig"))
-        for name, vanilla in VANILLA_AVERSION.items():
+        political = [name for _, name, body in _top_level_entries(game) if re.search(r"\btype\s*=\s*political\b", body)]
+        self.assertEqual(political, list(POLITICAL_AGENDAS), "vanilla's political agendas changed: add each new one")
+        for name in POLITICAL_AGENDAS:
             with self.subTest(strategy=name):
-                self.assertEqual(_norm(_block(_block(game, name), "revolution_aversion")), vanilla)
+                strategy = _block(game, name)
+                self.assertEqual(_norm(_block(strategy, "change_law_chance")), VANILLA_CHANCE[name])
+                aversion = _norm(_block(strategy, "revolution_aversion"))
+                self.assertEqual(aversion, VANILLA_AVERSION.get(name) or VANILLA_AVERSION_KEPT[name])
+
+
+class TestTheModsOtherStrategies(unittest.TestCase):
+    """Nothing else in the mod sets the rate, adds a political agenda without it, or REPLACEs an agenda."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.files = {p: _strip_comments(p.read_text(encoding="utf-8-sig")) for p in sorted(STRATEGIES.glob("*.txt"))}
+
+    def test_no_other_file_sets_change_law_chance(self):
+        # So a country's chance is the default's field and its agenda's, each as this test pins it.
+        for path, text in self.files.items():
+            if path in (DEFAULT, POLITICAL):
+                continue
+            with self.subTest(file=path.name):
+                self.assertNotIn("change_law_chance", text)
+
+    def test_no_replace_of_a_political_agenda(self):
+        # A REPLACE applies after every INJECT, so it would drop the agenda's raised rate and aversion.
+        for path, text in self.files.items():
+            for prefix, name, _ in _top_level_entries(text):
+                with self.subTest(file=path.name, entry=name):
+                    if name in POLITICAL_AGENDAS:
+                        self.assertEqual(prefix, "INJECT")
+
+    def test_a_political_agenda_of_the_mods_own_carries_the_rise(self):
+        for path, text in self.files.items():
+            for prefix, name, body in _top_level_entries(text):
+                if prefix is None and re.search(r"\btype\s*=\s*political\b", body):
+                    with self.subTest(file=path.name, strategy=name):
+                        self.assertRegex(_block(body, "change_law_chance") or "", r"\badd\s*=\s*%d\b" % CHANCE_ADD)
+
+
+class TestOutcomes(unittest.TestCase):
+    """The chance a country rolls under each thing the engine may do with an INJECTed script-value field."""
+
+    def test_common_agendas_land_in_the_target_band_on_a_replace(self):
+        # ai.md: about 41-60% at each 50-day law update, whether or not the default's 1 adds.
+        for name in COMMON_AGENDAS:
+            chance, _ = _outcomes(name)
+            for default in (0, VANILLA_DEFAULT_CHANCE):
+                with self.subTest(strategy=name, default_adds=bool(default)):
+                    self.assertGreaterEqual(chance["replaced"] + default, 41)
+                    self.assertLessEqual(chance["replaced"] + default, 60)
+
+    def test_a_sum_overshoots_by_vanillas_own_value_at_most_80(self):
+        for name in COMMON_AGENDAS:
+            chance, _ = _outcomes(name)
+            with self.subTest(strategy=name):
+                self.assertEqual(chance["summed"] - chance["replaced"], chance["ignored"])
+                self.assertLessEqual(chance["summed"] + VANILLA_DEFAULT_CHANCE, 80)
+
+    def test_the_special_agendas(self):
+        self.assertEqual(_outcomes("ai_strategy_maintain_mandate_of_heaven")[0]["replaced"], 40)
+        self.assertEqual(_outcomes("ai_strategy_meiji_restoration")[0]["replaced"], 89)
+        for name in ("ai_strategy_tanzimat_reforms", "ai_strategy_great_reforms"):
+            with self.subTest(strategy=name):
+                self.assertGreaterEqual(_outcomes(name)[0]["ignored"], 100, "certain already")
+
+    def test_the_system_doc_carries_the_outcome_table(self):
+        doc = SYSTEM_DOC.read_text(encoding="utf-8")
+
+        def cell(x, chance):
+            return "certain" if chance and x >= 100 else "%g" % x
+
+        for name, label in POLITICAL_AGENDAS.items():
+            chance, aversion = _outcomes(name)
+            row = "| %s | %s |" % (label, " | ".join(
+                [cell(chance[k], True) for k in ("replaced", "summed", "ignored")]
+                + [cell(aversion[k], False) for k in ("replaced", "summed", "ignored")]))
+            with self.subTest(strategy=name):
+                self.assertIn(row, doc)
 
 
 class TestSelfCheck(unittest.TestCase):
@@ -201,15 +382,21 @@ class TestSelfCheck(unittest.TestCase):
                                     r"te_ai_law_cadence_selfcheck_settle\s+te_ai_law_cadence_selfcheck\s*\}")
         self.assertNotRegex(self.body, r"on_monthly_pulse\s*=\s*\{[^}]*\beffect\b", "a sub-action, never an effect")
         # the latch: in the verdict's own trigger, and the first thing its effect sets
-        self.assertIn("NOT = { has_global_variable = te_alc_checked }", self.trigger)
-        self.assertTrue(self.effect.strip().startswith("set_global_variable = te_alc_checked"))
+        self.assertIn("NOT = { has_global_variable = te_alc2_checked }", self.trigger)
+        self.assertTrue(self.effect.strip().startswith("set_global_variable = te_alc2_checked"))
+
+    def test_a_save_that_logged_the_first_verdict_checks_again(self):
+        # The first build's latch and count were te_alc_checked / te_alc_months: a save that set them (the
+        # 2026-11-16 run) must settle and check afresh on this build, not stay silent or read at once.
+        self.assertNotRegex(self.body, r"\bte_alc_(checked|months)\b")
 
     def test_a_save_from_the_build_before_settles_first(self):
         # A save begun before this build would otherwise read the old world's share at its first pulse past 1890.
         settle = _block(self.body, "te_ai_law_cadence_selfcheck_settle")
-        self.assertIn("change_global_variable = { name = te_alc_months add = 1 }", settle)
-        self.assertRegex(settle, r"global_var:te_alc_months\s*<\s*36\b")
-        self.assertRegex(self.trigger, r"has_global_variable = te_alc_months\s+global_var:te_alc_months\s*>=\s*36\b")
+        self.assertIn("NOT = { has_global_variable = te_alc2_checked }", settle)
+        self.assertIn("change_global_variable = { name = te_alc2_months add = 1 }", settle)
+        self.assertRegex(settle, r"global_var:te_alc2_months\s*<\s*36\b")
+        self.assertRegex(self.trigger, r"has_global_variable = te_alc2_months\s+global_var:te_alc2_months\s*>=\s*36\b")
         # late enough that most AI countries have a law to start (conservatives read 0.09-0.10 in 1849 and 1867)
         self.assertRegex(self.trigger, r"game_date\s*>=\s*1890\.1\.1")
 
@@ -247,14 +434,18 @@ class TestSelfCheck(unittest.TestCase):
             ("else", "", "NO_VERDICT"),
         ])
 
-    def test_broken_names_its_three_causes_and_no_line_sends_to_the_replace_alone(self):
+    def test_lines_name_the_agendas_field_and_broken_its_two_causes(self):
         lines = {line.split()[1]: line for _, _, line in self.branches()}
+        self.assertIn("the political agendas' raised change_law_chance is in force", lines["OK"])
         broken = lines["BROKEN"]
-        for cause in ("the INJECT is ignored", "does not add to an agenda's own", "no law to start",
+        for cause in ("each agenda's own change_law_chance", "the agendas' INJECT is ignored", "no law to start",
                       "not grounds for the REPLACE alone"):
             self.assertIn(cause, broken)
+        # The rise is in the agenda's own field now, so the default not adding is no cause any more.
+        self.assertNotIn("does not add", broken)
         for verdict, line in lines.items():
             with self.subTest(verdict=verdict):
+                self.assertNotIn("default strategy", line)
                 self.assertIn("cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/", line)
                 self.assertIn("rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/", line)
                 # log_triage.py shows a line's first 400 characters: the figures and, for BROKEN, the causes fit
@@ -281,6 +472,8 @@ class TestSelfCheck(unittest.TestCase):
         playtest = PLAYTEST.read_text(encoding="utf-8")
         self.assertIn("ai_law_cadence", playtest)
         self.assertIn("Fallback", playtest)
+        # the first verdict, read 2026-11-16 on the build with the rise in the default strategy's field
+        self.assertIn("TE_SELF_CHECK BROKEN ai_law_cadence cons=23/121=0.19 rest=21/98=0.21", playtest)
         self.assertIn("## Law-Change Cadence", SYSTEM_DOC.read_text(encoding="utf-8"))
 
 

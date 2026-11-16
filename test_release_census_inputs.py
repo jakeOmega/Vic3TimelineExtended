@@ -144,7 +144,8 @@ class ReleaseCensusInputsTest(unittest.TestCase):
                          "common/technology/technologies/te_demog_tech_injections.txt",
                          "common/static_modifiers/te_demog_cause_tags_generated.txt",
                          "common/interest_group_traits/te_demog_cause_tags_generated.txt",
-                         "common/character_traits/te_demog_cause_tags_generated.txt"}
+                         "common/character_traits/te_demog_cause_tags_generated.txt",
+                         "common/harvest_condition_types/te_demog_cause_tags_generated.txt"}
         decrees = "common/decrees/extra_decrees.txt"
         outreach = self._entry_lines(self.before[self.root / decrees].decode("utf-8-sig"), "decree_medical_outreach")
         self.assertTrue(outreach, "decree_medical_outreach found")
