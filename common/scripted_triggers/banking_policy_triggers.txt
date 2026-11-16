@@ -411,8 +411,10 @@ banking_possible_cb_bank_holiday = {
 # te_mon_union_banking_union) both ask te_mon_union_has_regulator, the second
 # for an adopter only since 2026-11-15 (#1812; until then an adopter under
 # Unregulated Banking reached 3 and this comment was false for it).
-# test_monetary_union_leader.RegulatorTest holds every positive grant in
-# common/ to that rule.
+# test_monetary_union_leader.RegulatorTest holds it: every static modifier in
+# common/static_modifiers/ that adds points is one of those two, the update
+# puts neither on a country under that law, and no file in common/ outside
+# the laws and the static modifiers adds a point at all.
 banking_possible_cb_bail_in_regime = {
 	te_banking_cycle_started_tt = yes
 	modifier:country_can_use_bail_in_bool = yes

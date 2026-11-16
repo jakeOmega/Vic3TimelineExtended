@@ -432,7 +432,8 @@ bloc leader on Fiat Money with a national bank, take Monetary Union to tier II o
    boom, so a slump still takes its whole 10 or 25 points off capitalists' contribution beside it. A country under
    Excess Private Construction has no such modifier.
 8. **Unregulated Banking.** A leader under it has neither Central Bank of the Union nor Banking Union, at any tier,
-   and keeps the rest. An adopter under it still has Banking Union.
+   and keeps the rest. An adopter under it has no Banking Union either (since #1812; "Leftovers of the monetary
+   layer" below, check 1).
 9. **The last adopter leaves.** Within a month the leader's entry has lost every modifier in 2, and 5 follows if
    tools were running on the points. **At tier V too, with a country still pegged to the leader's money by
    treaty**: the peg counts toward reach only while a member of the bloc has adopted, so seigniorage and the cut
@@ -610,11 +611,17 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
 6. **Monetizing the Deficit says "before minting bonuses".** With Monetize Deficit at 1 or more, the step's tooltip
    line "Money Created a Year, of GDP" and the Monetizing the Deficit modifier each say the figure is before the
    country's bonuses to Minting, with Minting linked. Check the budget: the minting line rises by the modifier's
-   figure times (1 + the bonus the minting tooltip lists), not by the figure itself. The step's description names
-   two inflation bands through their modifiers' own names, which read "Inflation: Very High" and "Inflation:
-   Hyperinflation" in mid-sentence: if that reads badly, the bands need short names of their own to splice.
+   figure times (1 + the bonus the minting tooltip lists), not by the figure itself. The step's description ends
+   its sentence on the bonuses "and less while your Price Band is Very high or Hyperinflation", with the row's own
+   short band names.
 7. **Currency-board seigniorage.** An overlord with a currency-board subject: the Seigniorage from Currency Boards
    modifier's figure is half the subject's minting before the subject's bonuses (for a subject above 200M of GDP
    with no gold, 100,250 a week), and the overlord's minting line rises by that times (1 + the overlord's bonus).
-   The subject's own "why" line under its policy rate says half of what it mints before its bonuses goes to the
-   overlord.
+   The subject's own "why" line under its policy rate, and its Currency Board modifier, say half of what it mints
+   before its bonuses goes to the overlord.
+8. **What an unregulated adopter keeps, and what it can now be offered.** Two consequences nobody chose, for the
+   owner to rule on (`monetary_policy_design.md`, ruling L16). A crash in a fellow user of the currency still
+   reaches such an adopter less readily at tier IV and V (the contagion damp asks the tier and the shared currency,
+   not the modifier), though its row says it is outside the banking union. And it can now be offered the Deposit
+   Insurance Debate, which the union's common guarantee used to rule out for it: watch for that event on an
+   unregulated adopter with Central Banking, in a Stagnation, Stable or Expansion phase.

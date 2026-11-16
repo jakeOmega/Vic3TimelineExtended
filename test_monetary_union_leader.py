@@ -991,9 +991,26 @@ class StepNineBTest(unittest.TestCase):
 
 
 UNREGULATED = ("law_national_bank", "law_fiat_currency", "law_unregulated_banking")
-REGULATED = ("law_free_mutual_banking", "law_universal_banking_light_prudence", "law_prudential_narrow_banking",
-             "law_directed_credit_development_banks", "law_central_bank_independence")
 POINTS = "country_banking_intervention_max_add"
+
+
+def financial_regulation_laws():
+    """Every law of the Financial Regulation group, from the law file itself."""
+    return [name for name, body in definitions("common/laws/extra_laws.txt").items()
+            if isinstance(body, list) and ("group", "=", "lawgroup_financial_regulation") in body]
+
+
+# Every banking law but Unregulated Banking: derived, so a law added to the group is tested too.
+REGULATED = tuple(law for law in financial_regulation_laws() if law != "law_unregulated_banking")
+
+
+def positive_grants(text):
+    """{owner: points} for each top-level block of a script file that ADDS intervention points."""
+    code = re.sub(r"#[^\n]*", "", text)
+    out = {}
+    for m in re.finditer(rf"(?m)^[ \t]+{POINTS} = \+?([1-9]\d*(?:\.\d+)?)\b", code):
+        out[re.findall(r"(?m)^([\w:.]+) = \{", code[:m.start()])[-1]] = float(m.group(1))
+    return out
 
 
 class ScoreScript(Script):
@@ -1080,9 +1097,45 @@ class RegulatorTest(unittest.TestCase):
         self.assertIn("te_mon_union_banking_union", member.mods)
 
     def grants(self):
-        """{static modifier: points} for every modifier in the mod that ADDS intervention points."""
-        return {name: float(v) for name, body in definitions(MODIFIERS).items() if isinstance(body, list)
-                for k, _, v in body if k == POINTS and float(v) > 0}
+        """{static modifier: points} for every static modifier in the mod that ADDS intervention
+        points: every file of common/static_modifiers/, not extra_modifiers.txt alone (review of
+        PR #1851: a grant added to another file there went unseen)."""
+        out = {}
+        files = sorted((ROOT / "common/static_modifiers").glob("*.txt"))
+        self.assertGreater(len(files), 20)
+        for path in files:
+            out.update(positive_grants(path.read_text(encoding="utf-8-sig")))
+        return out
+
+    def test_the_regulated_laws_are_the_groups_own(self):
+        self.assertIn("law_unregulated_banking", financial_regulation_laws())
+        self.assertGreaterEqual(len(REGULATED), 6)
+        for law in ("law_central_bank_independence", "law_state_owned_banking", "law_free_mutual_banking"):
+            self.assertIn(law, REGULATED)
+        self.assertNotIn("law_unregulated_banking", REGULATED)
+
+    def test_nothing_outside_the_laws_and_the_static_modifiers_adds_a_point(self):
+        # The laws' points are the budget itself; a static modifier's are held to the regulator
+        # rule below. A grant anywhere else in common/ (a technology, a production method, a
+        # principle's own block) would reach a country under Unregulated Banking untested.
+        seen, elsewhere = 0, {}
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            rel = path.relative_to(ROOT).as_posix()
+            if rel.startswith(("common/laws/", "common/static_modifiers/", "common/modifier_type_definitions/")):
+                continue
+            seen += 1
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+            if POINTS in text:
+                found = positive_grants(text)
+                if found:
+                    elsewhere[rel] = found
+        self.assertGreater(seen, 500)
+        self.assertEqual(elsewhere, {})
+        # ...and the scan does find the ones that exist, where they are allowed.
+        laws = positive_grants((ROOT / "common/laws/extra_laws.txt").read_text(encoding="utf-8-sig"))
+        self.assertEqual(laws["law_unregulated_banking"], 1)
+        self.assertEqual(laws["law_national_bank"], 1)
+        self.assertEqual(set(financial_regulation_laws()) | {"law_national_bank"}, set(laws))
 
     def test_every_grant_of_points_from_a_modifier_asks_for_a_regulator(self):
         # The two the Monetary Union pays. A third grant added without the test would reopen #1812.
@@ -1705,11 +1758,24 @@ class OtherMintingFiguresTest(MintingBonusTest):
         self.assertIn(("OR", "=", [("has_law_or_variant", "=", "law_type:law_fiat_currency"),
                                    ("has_law_or_variant", "=", "law_type:law_digital_currency")]),
                       triggers["te_mon_can_monetise"])
-        # ...and the two bands the text names are the two that cut minting.
-        for band in ("te_inflation_band_very_high", "te_inflation_band_hyper"):
-            self.assertIn(f"${band}$", desc)
-            self.assertIn(band, self.loc)
-            self.assertLess(float(dict(self.static(band))[self.KEY]), 0)
+        # ...and the two bands the text names are the two that cut minting, by the short names
+        # the Price Band row shows ("Very high", "Hyperinflation"), not the band modifiers' own
+        # ("Inflation: Very High"), which do not read in a sentence.
+        self.assertIn("less while your $banking_dash_mon_band_label$ is $banking_dash_price_band_very_high$ "
+                      "or $banking_dash_price_band_hyper$.", desc)
+        self.assertEqual(self.loc["banking_dash_mon_band_label"], "Price Band")
+        for band in ("very_high", "hyper"):
+            with self.subTest(band=band):
+                self.assertNotIn(f"$te_inflation_band_{band}$", desc)
+                short = self.loc[f"banking_dash_price_band_{band}"]
+                self.assertNotIn(":", short)
+                self.assertNotIn("[", short)
+                # The row's effects line for that band draws the band's modifier, which cuts minting.
+                self.assertIn(f"GetStaticModifier('te_inflation_band_{band}')", self.loc[f"banking_dash_price_band_fx_{band}"])
+                self.assertLess(float(dict(self.static(f"te_inflation_band_{band}"))[self.KEY]), 0)
+        cut = {name for name, body in definitions(MODIFIERS).items() if name.startswith("te_inflation_band_")
+               for k, _, v in body if k == self.KEY and float(v) < 0}
+        self.assertEqual(cut, {"te_inflation_band_very_high", "te_inflation_band_hyper"})
 
     def test_the_board_takes_half_of_the_flat_sum_from_each_side(self):
         # The overlord's half is half the subject's flat adds, read before any multiplier; the
@@ -1721,6 +1787,10 @@ class OtherMintingFiguresTest(MintingBonusTest):
         self.assertEqual(values["te_mon_board_seigniorage_from_subject"][0], ("value", "=", "modifier:country_minting_add"))
         self.assertEqual(self.static("te_mon_board_subject"), [("country_minting_mult", f"{-share:g}")])
         self.assertIn("mints before its own bonuses", self.loc["te_mon_board_seigniorage_desc"])
+        self.assertIn("half of what we mint before our bonuses is theirs", self.loc["te_mon_board_subject_desc"])
+        for key in ("te_mon_board_seigniorage_desc", "te_mon_board_subject_desc", "banking_dash_mon_why_board"):
+            self.assertNotIn("mint earns", self.loc[key])
+            self.assertNotIn("next to nothing", self.loc[key])
         self.assertIn("half of what the country mints before its bonuses", self.loc["banking_dash_mon_why_board"])
         guide = " ".join((ROOT / "docs/player_guide/04-banking.md").read_text(encoding="utf-8").split())
         self.assertIn("half of what the subject mints before its bonuses goes to the overlord", guide)

@@ -9459,7 +9459,7 @@
  te_mon_board_seigniorage:0 "Seigniorage from Currency Boards"
  te_mon_board_seigniorage_desc:0 "Half of what every subject that runs a currency board on our money mints before its own bonuses. The figure is before our bonuses to [concept_budget_minting], which raise it as they raise everything we mint. It grows with a subject's gold mines and, up to a ceiling, with its economy."
  te_mon_board_subject:0 "Currency Board"
- te_mon_board_subject_desc:0 "We have no money of our own: we issue our overlord's, against their reserves, and half of what our mint earns is theirs. More autonomy would end it."
+ te_mon_board_subject_desc:0 "We have no money of our own: we issue our overlord's, against their reserves, and half of what we mint before our bonuses is theirs. More autonomy would end it."
  te_mon_board_wrong_stance:0 "The Overlord’s Rate"
  te_mon_board_wrong_stance_desc:0 "For half a year and more the interest rate we are made to use has been plainly wrong for us — far too tight, or far too loose — because it is set for somebody else's economy. It lasts until our policy stance leaves the extreme."
  te_mon_bond_support_at_max_tt:0 "Our central bank already monetizes the deficit at the top of its range, so it buys no more bonds."

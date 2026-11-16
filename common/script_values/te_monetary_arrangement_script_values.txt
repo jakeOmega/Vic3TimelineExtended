@@ -598,9 +598,16 @@ te_mon_board_seigniorage_share = { value = 0.5 }
 # `modifier:` read works at all from script; if it reads 0 the overlord simply
 # gains nothing, and the fallback is to count gold-mine levels.
 #
-# BE HONEST ABOUT THE SIZE (§15A.4): vanilla's base minting is a flat 500 and
-# the real money is gold-mine production methods, so for a colony without gold
-# both sides of this are rounding errors. It is a GOLD-COLONY lever.
+# THE SIZE (corrected 2026-11-15, #1812; design §0.16, item 5). The flat sum
+# this reads is vanilla's base 500, vanilla's GDP term (the country_gdp static
+# modifier: country_minting_add scaled by GDP / 1000 and capped at 200,000 a
+# week, so 200M of GDP reaches the cap), gold-mine production methods and
+# whatever script adds. A subject without gold is therefore worth up to
+# 100,250 a week to its overlord, before the overlord's own minting bonuses,
+# and one with gold more. Until then this comment followed §15A.4: "vanilla's
+# base minting is a flat 500", the board a gold-colony lever and a rounding
+# error otherwise. In the owner's 1940 save Spain's boards pay it 118,999 a
+# week, 4.7% of its income.
 te_mon_board_seigniorage_from_subject = {
 	value = modifier:country_minting_add
 	multiply = te_mon_board_seigniorage_share

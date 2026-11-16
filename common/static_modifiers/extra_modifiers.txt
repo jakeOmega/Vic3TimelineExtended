@@ -8530,8 +8530,10 @@ te_mon_peg_broken_premium = {
 # --- 5c: subject currency boards (§15A.4). All three MANAGED, applied only by
 # te_monetary_apply_board_modifiers (step 9b).
 
-# On a subject while its currency board is in force (kind 3). Half its minting
-# goes to the overlord; -0.5 is te_mon_board_seigniorage_share restated.
+# On a subject while its currency board is in force (kind 3). Half of what it
+# mints before its bonuses goes to the overlord: fifty points off its
+# multiplier here, and half its flat sum added on the overlord
+# (te_mon_board_seigniorage). -0.5 is te_mon_board_seigniorage_share restated.
 te_mon_board_subject = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_minting_mult = -0.5
