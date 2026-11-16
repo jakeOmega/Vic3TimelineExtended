@@ -217,8 +217,11 @@ te_tax_light_gen_clamp = {
 # greyed, so only script reaches this; or an uprising holding a copied code, whose AI sets
 # its level): each levied tax moves by its law's difference between the new level and the
 # one the code last set, clamped into the range, which is what the country already
-# collects. Each tax that moves draws its reaction. An extra tax (LIGHT_EXTRAS) stays: the law
-# collects none of it at any level, so the move changes nothing it collects.
+# collects. Each tax that moves draws its reaction. An open extra tax (LIGHT_EXTRAS) is clamped to
+# at most its rate at the new level (te_tax_light_xidx_<key>_native), also scored: the law collects
+# none of it at any level, but left above that rate it would sit on a higher step than the new
+# level, the sync would set the level back to its step, and the next outside move (an uprising's
+# AI choosing a lower level each month) would shift every levied tax down again from there.
 te_tax_light_gen_shift = {
 	if = {
 		limit = { te_tax_light_levies_wage = yes }
@@ -236,6 +239,14 @@ te_tax_light_gen_shift = {
 		change_variable = { name = te_tax_en_div add = te_tax_light_idx_div_native }
 		change_variable = { name = te_tax_en_div subtract = te_tax_light_idx_div_at_level }
 		clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div max = te_tax_light_max_div }
+		set_variable = { name = te_tax_light_d value = var:te_tax_en_div }
+		change_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }
+		if = { limit = { NOT = { var:te_tax_light_d = 0 } } te_tax_light_gen_react = { KEY = div } }
+	}
+	else_if = {
+		limit = { te_tax_light_extra_div = yes }
+		set_variable = { name = te_tax_light_was value = var:te_tax_en_div }
+		clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div max = te_tax_light_xidx_div_native }
 		set_variable = { name = te_tax_light_d value = var:te_tax_en_div }
 		change_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }
 		if = { limit = { NOT = { var:te_tax_light_d = 0 } } te_tax_light_gen_react = { KEY = div } }

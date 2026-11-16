@@ -397,7 +397,7 @@
  te_tax_light_relief_wage:0 "$te_tax_inst_wage$ Relief"
  te_tax_light_relief_wage_desc:0 "The light tax code sets the $te_tax_inst_wage$ below the rate the taxation law sets at the current tax level."
  te_tax_lt_extra_cap_div:0 "#v 5%#!"
- te_tax_lt_extra_note_div:0 "\n\nThe taxation law levies no dividend tax, so the tax code may levy only a low one, up to #v 5%#!. A law that taxes dividends levies it in full: $law_proportional_taxation$ at up to #v 20%#! and $law_graduated_taxation$ at up to #v 30%#!."
+ te_tax_lt_extra_note_div:0 "\n\nThe taxation law levies no dividend tax, so the tax code may levy only a low one, up to #v 5%#!. The laws that tax dividends in full are $law_proportional_taxation$, up to #v 20%#!, and $law_graduated_taxation$, up to #v 30%#!."
  te_tax_lt_range_cons_1:0 "#v 0–35%#!"
  te_tax_lt_range_cons_2:0 "#v 0–35%#!"
  te_tax_lt_range_cons_3:0 "#v 0–35%#!"

@@ -115,6 +115,43 @@ def rung(ladder, idx):
     return next(n for n, value in enumerate(ladder) if idx <= value) if idx <= ladder[-1] else LAST
 
 
+# The low dividend tax a law without one allows (LIGHT_EXTRAS, test_tax_code_light_extra.py): under those laws
+# the code holds it as key "x" on the extra ladder, on no step (-1) at nothing.
+EXTRA_LAWS = {law for _n, law in gen.light_extra_laws("div")}
+XLADDER = gen.light_extra_ladder("div")
+XCAP = gen.light_extra("div").cap
+
+
+def x_rung(idx):
+    return -1 if idx == 0 else rung(XLADDER, idx)
+
+
+def code_ranges(law, by_key):
+    """[(key, range)] of every tax the code holds under `law`: the levied ones and, where it is open, "x"."""
+    out = [(key, range(FLOOR, by_key[key][-1] + 1)) for key in KEYS if by_key[key][-1]]
+    if law in EXTRA_LAWS:
+        out.append(("x", range(FLOOR, XCAP + 1)))
+    return out
+
+
+def code_level(by_key, code):
+    """The tax level the sync sets: the highest step among the taxes the code holds."""
+    return max(x_rung(idx) if key == "x" else rung(by_key[key], idx) for key, idx in code.items())
+
+
+def shifted(by_key, code, old, new):
+    """te_tax_light_gen_shift: each levied tax moves by its law's difference between the levels, clamped into
+    its range; the low dividend tax is clamped to at most its rate at the new level."""
+    out = {}
+    for key, idx in code.items():
+        if key == "x":
+            out[key] = max(FLOOR, min(idx, XLADDER[new]))
+        else:
+            ladder = by_key[key]
+            out[key] = min(max(idx + ladder[new] - ladder[old], FLOOR), ladder[-1])
+    return out
+
+
 class BoundsTest(unittest.TestCase):
     """The range of each tax is nothing up to the law's own very-high rate."""
 
@@ -247,19 +284,61 @@ class StepTest(unittest.TestCase):
                         self.assertEqual(ladder[level] - code[key], 0)
 
     def test_every_code_in_range_collects_its_own_rates_with_no_negative_relief(self):
+        # Under a law without a dividend tax the code also holds the low one ("x"), collected as its own
+        # index (the levy), with no relief, on a step no higher than the level.
         for law, by_key in ladders().items():
-            levied = [key for key in KEYS if by_key[key][-1]]
-            ranges = [range(FLOOR, by_key[key][-1] + 1) for key in levied]
+            keys, ranges = zip(*code_ranges(law, by_key))
+            levied = [key for key in keys if key != "x"]
             for combo in itertools.product(*ranges):
-                code = dict(zip(levied, combo))
-                level = max(rung(by_key[key], code[key]) for key in levied)
+                code = dict(zip(keys, combo))
+                level = code_level(by_key, code)
                 for key in levied:
                     relief = by_key[key][level] - code[key]
                     self.assertGreaterEqual(relief, 0, (law, code))
                     # The law's rate at the level, less the relief, is the code's rate.
                     self.assertEqual(by_key[key][level] - relief, code[key])
+                if "x" in code:
+                    self.assertLessEqual(x_rung(code["x"]), level, (law, code))
+                    self.assertLessEqual(code["x"], XLADDER[level], (law, code))
                 # The level is the step of some tax: lowering every other tax never moves it.
-                self.assertIn(level, [rung(by_key[key], code[key]) for key in levied])
+                self.assertIn(level, [x_rung(idx) if key == "x" else rung(by_key[key], idx)
+                                      for key, idx in code.items()])
+
+    def test_a_shift_never_leaves_a_tax_above_the_new_level(self):
+        """te_tax_light_gen_shift, for a level moved outside the code (an uprising's AI, script on a player's
+        country): after it no tax sits above the new level, so the sync keeps the level where it was moved; a
+        uniform code (an AI's, as the rebels copy it) lands on it exactly, and holds there month after month.
+        Left above its rate at the new level, the low dividend tax would put the level back up and the next
+        move would shift every levied tax down again (review of #1855)."""
+        for law, by_key in ladders().items():
+            keys, ranges = zip(*code_ranges(law, by_key))
+            for combo in itertools.product(*ranges):
+                code = dict(zip(keys, combo))
+                old = code_level(by_key, code)
+                for new in range(len(LEVELS)):
+                    if new != old:
+                        self.assertLessEqual(code_level(by_key, shifted(by_key, code, old, new)), new,
+                                             (law, code, old, new))
+            for old in range(len(LEVELS)):
+                for x in (range(FLOOR, XLADDER[old] + 1) if law in EXTRA_LAWS else [None]):
+                    code = {key: by_key[key][old] for key in keys if key != "x"}
+                    if x is not None:
+                        code["x"] = x
+                    for new in range(len(LEVELS)):
+                        with self.subTest(law=law, old=old, new=new, x=x):
+                            once = shifted(by_key, code, old, new)
+                            self.assertEqual(code_level(by_key, once), new)
+                            # The next month the AI picks the same level: nothing moves.
+                            self.assertEqual(shifted(by_key, once, new, new), once)
+        # The generated shift is the model's.
+        shift = flat(block(read(GEN_EFFECTS), "te_tax_light_gen_shift"))
+        self.assertIn("else_if = { limit = { te_tax_light_extra_div = yes } "
+                      "set_variable = { name = te_tax_light_was value = var:te_tax_en_div } "
+                      "clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div "
+                      "max = te_tax_light_xidx_div_native } set_variable = { name = te_tax_light_d "
+                      "value = var:te_tax_en_div } change_variable = { name = te_tax_light_d "
+                      "subtract = var:te_tax_light_was } if = { limit = { NOT = { var:te_tax_light_d = 0 } } "
+                      "te_tax_light_gen_react = { KEY = div } } }", shift)
 
     def test_a_tax_cut_below_the_very_low_rate_sits_on_the_very_low_step_and_is_all_relief(self):
         for law, by_key in ladders().items():
@@ -306,6 +385,33 @@ class StepTest(unittest.TestCase):
                     self.assertIn(f"has_law = law_type:{law} var:te_tax_light_level = {level} "
                                   f"var:te_tax_light_rg_{key} = {level}", flat(down))
                     self.assertIn(f"var:te_tax_en_{key} <= {ladder[level - 1] + 1}", flat(down))
+            if gen.light_extra(key):
+                # The low dividend tax under a law without one: the same thresholds on its own ladder, from
+                # no step at nothing (test_tax_code_light_extra.py).
+                for level in range(len(LEVELS)):
+                    for idx in range(FLOOR, XCAP):
+                        raises = x_rung(idx + 1) > level
+                        literal = level < LAST and idx >= XLADDER[level]
+                        with self.subTest(key=key, extra=True, level=level, idx=idx):
+                            self.assertEqual(raises, literal)
+                    if level < LAST:
+                        self.assertIn(f"te_tax_light_extra_{key} = yes var:te_tax_light_level = {level} "
+                                      f"var:te_tax_en_{key} >= {XLADDER[level]}", flat(up))
+                for level in range(1, len(LEVELS)):
+                    for idx in range(FLOOR + 1, XCAP + 1):
+                        if x_rung(idx) != level:
+                            continue
+                        leaves = x_rung(idx - 1) < level
+                        literal = idx <= XLADDER[level - 1] + 1
+                        with self.subTest(key=key, extra=True, level=level, idx=idx):
+                            self.assertEqual(leaves, literal)
+                    self.assertIn(f"te_tax_light_extra_{key} = yes var:te_tax_light_level = {level} "
+                                  f"var:te_tax_light_rg_{key} = {level}", flat(down))
+                    self.assertIn(f"var:te_tax_en_{key} <= {XLADDER[level - 1] + 1}", flat(down))
+                # Shift-click up raises the level only while it is below the cap's step.
+                cap_step = x_rung(XCAP)
+                for level in range(len(LEVELS)):
+                    self.assertEqual(cap_step > level, level < 1, level)
             # A tax on the very-low step (any rate up to the law's very-low rate, so a tax cut to
             # nothing too) never lowers the level by a step down: it has nowhere lower to take it.
             self.assertNotIn(f"var:te_tax_light_rg_{key} = 0", flat(down))
@@ -671,7 +777,10 @@ class HookTest(unittest.TestCase):
         self.assertLess(released.index("set_variable = { name = te_tax_light_on value = 0 }"),
                         released.index("trigger_event = { id = te_tax_light.2 }"))
         law = flat(block(self.text, "te_tax_light_on_law_activated"))
-        self.assertIn("law_type = { is_same_law_group_as = law_type:law_proportional_taxation }", law)
+        # A taxation law, or an economic system law: Traditionalism closes the low dividend tax and leaving it
+        # reopens it (test_tax_code_light_extra.py).
+        self.assertIn("law_type = { OR = { is_same_law_group_as = law_type:law_proportional_taxation "
+                      "is_same_law_group_as = law_type:law_traditionalism } }", law)
         self.assertIn("owner = { te_tax_light_in_force = yes }", law)
 
     def test_events_are_hidden_country_events_on_the_light_setting(self):

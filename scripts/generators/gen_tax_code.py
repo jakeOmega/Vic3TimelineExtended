@@ -5349,8 +5349,11 @@ def light_effects():
         "# greyed, so only script reaches this; or an uprising holding a copied code, whose AI sets",
         "# its level): each levied tax moves by its law's difference between the new level and the",
         "# one the code last set, clamped into the range, which is what the country already",
-        "# collects. Each tax that moves draws its reaction. An extra tax (LIGHT_EXTRAS) stays: the law",
-        "# collects none of it at any level, so the move changes nothing it collects.",
+        "# collects. Each tax that moves draws its reaction. An open extra tax (LIGHT_EXTRAS) is clamped to",
+        "# at most its rate at the new level (te_tax_light_xidx_<key>_native), also scored: the law collects",
+        "# none of it at any level, but left above that rate it would sit on a higher step than the new",
+        "# level, the sync would set the level back to its step, and the next outside move (an uprising's",
+        "# AI choosing a lower level each month) would shift every levied tax down again from there.",
         "te_tax_light_gen_shift = {",
     ]
     for instrument in INSTRUMENTS:
@@ -5368,6 +5371,17 @@ def light_effects():
             f"\t\tif = {{ limit = {{ NOT = {{ var:te_tax_light_d = 0 }} }} te_tax_light_gen_react = {{ KEY = {key} }} }}",
             "\t}",
         ]
+        if light_extra(key):
+            lines += [
+                "\telse_if = {",
+                f"\t\tlimit = {{ te_tax_light_extra_{key} = yes }}",
+                f"\t\tset_variable = {{ name = te_tax_light_was value = var:{en} }}",
+                f"\t\tclamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_xidx_{key}_native }}",
+                f"\t\tset_variable = {{ name = te_tax_light_d value = var:{en} }}",
+                "\t\tchange_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }",
+                f"\t\tif = {{ limit = {{ NOT = {{ var:te_tax_light_d = 0 }} }} te_tax_light_gen_react = {{ KEY = {key} }} }}",
+                "\t}",
+            ]
     lines += [
         "}",
         "",
@@ -5631,13 +5645,16 @@ def light_localization():
         # The row's note while the extra is open (te_tax_lt_row_<key>_tt; organize_loc files te_tax_lt_extra_* here).
         # Neutral: another country's panel shows it too (test_te_system_tab_bodies.py).: why the cap is low, and the
         # laws that levy the tax in full, each to its very-high rate.
-        full = [f"${law}$ at up to #v {fmt(rate(instrument, light_ladders()[law][extra.key][-1]) * 100)}%#!"
+        full = [f"${law}$, up to #v {fmt(rate(instrument, light_ladders()[law][extra.key][-1]) * 100)}%#!"
                 for _n, law in light_laws() if light_levies(law, extra.key)]
-        if len(full) > 1:
-            full = [(", ".join(full[:-1]) + ("," if len(full) > 2 else "") + " and " + full[-1])]
+        if len(full) == 1:
+            laws = f"The law that taxes {extra.base} in full is {full[0]}"
+        else:
+            joined = f"{full[0]}, and {full[1]}" if len(full) == 2 else "; ".join(full[:-1]) + "; and " + full[-1]
+            laws = f"The laws that tax {extra.base} in full are {joined}"
         entries[f"te_tax_lt_extra_note_{extra.key}"] = (
             f'0 "\\n\\nThe taxation law levies no {extra.noun}, so the tax code may levy only a low one, up to '
-            f'{cap}. A law that taxes {extra.base} levies it in full: {full[0]}."')
+            f'{cap}. {laws}."')
     for ig in IGS:
         for sign, text in (("pos", "Welcomes Recent Tax Changes"), ("neg", "Resents Recent Tax Changes")):
             key = f"te_tax_light_react_{ig}_{sign}"
