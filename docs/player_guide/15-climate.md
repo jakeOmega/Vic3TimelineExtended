@@ -417,9 +417,10 @@ passes 50%, the AI adds up to 30 points, the full 30 at 75%, to one of the seven
 policies the movement asks for ([The Environmental
 Movement](#the-environmental-movement)): the one it is nearest to adopting anyway
 and can afford now. It does this at most once a year, so each answer has time to calm
-the movement before the next. It keeps those policies while the movement would
-be that restless again without them, and Renewable Investment only while it can
-still afford the running cost.
+the movement before the next. It keeps each of those policies while the
+movement would be that restless again without it, and Renewable Investment only
+while it can still afford the running cost. While the movement lasts, it drops
+at most one of the seven a year.
 
 | Policy | Threshold |
 |---|---|
