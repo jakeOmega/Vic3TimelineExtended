@@ -1500,10 +1500,10 @@
    "peasants",
    "radicals",
    "loyalists",
-   "legitimacy"
+   "legitimacy",
+   "infamy"
   ],
   "A2": [
-   "infamy",
    "states",
    "states_inc",
    "colonies",
@@ -1516,9 +1516,7 @@
    "enacting",
    "researching",
    "revolution",
-   "insurrection"
-  ],
-  "A3": [
+   "insurrection",
    "election"
   ],
   "F1": [
@@ -1535,10 +1533,10 @@
    "debt_scaled",
    "principal",
    "credit",
-   "default"
+   "default",
+   "bankrupt"
   ],
   "F2": [
-   "bankrupt",
    "loans",
    "pool",
    "pool_income",
@@ -1551,14 +1549,37 @@
    "bur_used",
    "auth",
    "auth_used",
-   "infl"
+   "infl",
+   "infl_used",
+   "exports"
   ],
   "F3": [
-   "infl_used",
-   "exports",
    "imports",
    "pact_share",
    "gdp_rank"
+  ],
+  "U1": [
+   "ux_all",
+   "ux_banking",
+   "ux_climate",
+   "ux_colonial",
+   "ux_covert",
+   "ux_culture",
+   "ux_drugs",
+   "ux_energy_industry",
+   "ux_family",
+   "ux_nuclear",
+   "ux_nuclear_taboo",
+   "ux_pensions",
+   "ux_space",
+   "ux_un",
+   "ui_pension_reform"
+  ],
+  "U2": [
+   "ui_reserve",
+   "ui_tax_code",
+   "ui_un",
+   "ui_war_tax"
   ],
   "C1": [
    "queue_levels",
@@ -1574,10 +1595,28 @@
    "healthy",
    "cm_target",
    "cm_price",
+   "cm_public",
    "companies"
   ],
   "C2": [
    "companies_max"
+  ],
+  "O1": [
+   "low_mfg",
+   "low_infra",
+   "low_power",
+   "low_mine",
+   "rt_mfg",
+   "rt_infra",
+   "rt_power",
+   "rt_mine",
+   "rt_all",
+   "sub_all",
+   "uc_no_light",
+   "uc_no_transit",
+   "uc_stalls",
+   "ga_simple",
+   "uni_scholastic"
   ],
   "M1": [
    "army",
@@ -1586,6 +1625,8 @@
    "army_power",
    "navy_power",
    "army_tier",
+   "irregular",
+   "line",
    "alliances",
    "defensive_pacts",
    "rivals",
@@ -1619,11 +1660,11 @@
    "lw_education_system",
    "lw_health_system",
    "lw_free_speech",
-   "lw_labor_rights"
+   "lw_labor_rights",
+   "lw_childrens_rights",
+   "lw_rights_of_women"
   ],
   "L2": [
-   "lw_childrens_rights",
-   "lw_rights_of_women",
    "lw_welfare",
    "lw_migration",
    "lw_slavery",
@@ -1641,13 +1682,13 @@
    "lw_bodily_autonomy",
    "lw_state_power",
    "lw_judiciary",
-   "lw_electoral_finance"
-  ],
-  "L3": [
+   "lw_electoral_finance",
    "lw_financial_regulation",
    "lw_genetic_rights",
    "lw_internet_governance",
-   "lw_frontier_ai_control",
+   "lw_frontier_ai_control"
+  ],
+  "L3": [
    "lw_family_reproductive_policy",
    "lw_language_policy",
    "lw_antitrust",
@@ -1663,9 +1704,7 @@
    "lw_ministry_of_labor",
    "lw_ministry_of_refugee_affairs",
    "lw_ministry_of_propaganda",
-   "lw_ministry_of_science"
-  ],
-  "L4": [
+   "lw_ministry_of_science",
    "lw_ministry_of_thought_control",
    "lw_ministry_of_consumer_protection",
    "lw_ministry_of_urban_planning",
@@ -1692,11 +1731,11 @@
    "tc_production_4",
    "tc_production_5",
    "tc_production_6",
-   "tc_production_7"
+   "tc_production_7",
+   "tc_production_8",
+   "tc_production_9"
   ],
   "T2": [
-   "tc_production_8",
-   "tc_production_9",
    "tc_production_10",
    "tc_production_11",
    "tc_production_12",
@@ -1735,11 +1774,11 @@
    "in_ministry_of_propaganda",
    "in_ministry_of_science",
    "in_ministry_of_thought_control",
-   "in_ministry_of_consumer_protection"
+   "in_ministry_of_consumer_protection",
+   "in_ministry_of_urban_planning",
+   "in_ministry_of_religion"
   ],
   "I2": [
-   "in_ministry_of_urban_planning",
-   "in_ministry_of_religion",
    "in_ministry_of_international_aid",
    "in_migration_controls"
   ],
@@ -1763,11 +1802,11 @@
    "bg_whaling",
    "bg_fishing",
    "bg_oil_extraction",
-   "bg_service"
+   "bg_service",
+   "bg_urban_facilities",
+   "bg_arts"
   ],
   "G2": [
-   "bg_urban_facilities",
-   "bg_arts",
    "bg_power",
    "bg_government",
    "bg_technology",
@@ -1785,13 +1824,13 @@
    "bg_public_infrastructure",
    "bg_construction",
    "bg_private_infrastructure",
-   "bg_canals"
-  ],
-  "G3": [
+   "bg_canals",
    "bg_monuments",
    "bg_military",
    "bg_army",
-   "bg_conscription",
+   "bg_conscription"
+  ],
+  "G3": [
    "bg_navy",
    "bg_naval_logistics_center",
    "bg_army_logistics_center",
@@ -1807,9 +1846,7 @@
    "bg_high_tech",
    "bg_clean_power",
    "bg_grand_monuments",
-   "bg_sr_colony_sites"
-  ],
-  "G4": [
+   "bg_sr_colony_sites",
    "bg_te_construction_market_bg"
   ],
   "B1": [
@@ -1826,10 +1863,10 @@
    "bt_railway",
    "bt_highway",
    "bt_airport",
-   "bt_network_infrastructure"
+   "bt_network_infrastructure",
+   "bt_power_plant"
   ],
   "B2": [
-   "bt_power_plant",
    "bt_hydro_plant",
    "bt_nuclear_plant",
    "bt_renewable_energy_plant",
@@ -1858,10 +1895,10 @@
    "n_tech",
    "n_law_start",
    "n_law_pass",
-   "n_law_fail"
+   "n_law_fail",
+   "n_law_end"
   ],
   "N2": [
-   "n_law_end",
    "n_default",
    "n_play",
    "n_war",

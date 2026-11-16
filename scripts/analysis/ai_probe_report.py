@@ -349,6 +349,31 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
             [num(r, "pool") / num(r, "income") for r in rows if num(r, "income") > 0], 1)),
         ("Method changes a year", lambda rows: spread([num(r, "n_pm") for r in rows], 0)),
     ])
+
+    def ratio(top, bottom, scale=100, digits=0):
+        return lambda rows: spread([num(r, top) / num(r, bottom) for r in rows if num(r, bottom) > 0], digits, scale)
+
+    table("1c. Staffing, retooling and old methods (shares of levels, %)", [
+        ("Manufacturing under half staffed", ratio("low_mfg", "bg_manufacturing")),
+        ("Manufacturing retooling", ratio("rt_mfg", "bg_manufacturing")),
+        ("Power under half staffed", ratio("low_power", "bg_power")),
+        ("Infrastructure under half staffed", ratio("low_infra", "bg_infrastructure")),
+        ("Mines under half staffed", ratio("low_mine", "bg_mining")),
+        ("All levels retooling", ratio("rt_all", "levels")),
+        ("All levels subsidized", ratio("sub_all", "levels")),
+        ("Urban centers with no street lighting", ratio("uc_no_light", "bt_urban_center")),
+        ("Administrations on the first method", ratio("ga_simple", "bt_government_administration")),
+    ])
+    table("1d. The government's purchase of construction (the construction market)", [
+        ("Buying any", lambda rows: share(rows, lambda r: num(r, "cm_public") > 0)),
+        ("Points a week, where buying", lambda rows: spread([num(r, "cm_public") for r in rows if num(r, "cm_public") > 0], 0)),
+        ("Construction paused", lambda rows: share(rows, lambda r: num(r, "paused") == 1)),
+        ("No government level queued", lambda rows: share(rows, lambda r: num(r, "queue_gov") == 0)),
+        ("Debt at 40% of limit or more", lambda rows: share(rows, lambda r: num(r, "debt_scaled") >= 0.4)),
+        ("Reserves under 10% of limit", lambda rows: share(rows, lambda r: num(r, "gold_scaled") < 0.1 and num(r, "debt_scaled") == 0)),
+        ("Tax, % of GDP", ratio("tax_income", "gdp", 5200, 1)),
+        ("Script expenses, % of GDP", ratio("ux_all", "gdp", 5200, 1)),
+    ])
     table("1b. Solvency", [
         ("In default", lambda rows: share(rows, lambda r: num(r, "default") == 1)),
         ("Declared bankrupt (10 years)", lambda rows: share(rows, lambda r: num(r, "bankrupt") == 1)),
@@ -388,6 +413,8 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
             [num(r, "army_tier") for r in rows if num(r, "army") > 0], 2)),
         ("Military technologies", lambda rows: spread(
             [sum(num(r, f) for f in r if f.startswith("tc_military_")) for r in rows], 0)),
+        ("Irregular infantry, % of the army", lambda rows: spread(
+            [num(r, "irregular") for r in rows if num(r, "army") > 0], 0, 100)),
         ("Barracks levels", lambda rows: spread([num(r, "bt_barrack") for r in rows], 0)),
     ])
     table("5. Expansion", [

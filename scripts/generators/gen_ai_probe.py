@@ -53,8 +53,8 @@ sys.path.insert(0, str(ROOT))
 
 VERSION = 1
 PREFIX = "te_aip_"
-FIELDS_PER_LINE = 14
-POSITIONAL_PER_LINE = 20
+FIELDS_PER_LINE = 15
+POSITIONAL_PER_LINE = 22
 # Groups whose lines carry bare values, semicolon-separated, in the order ai_probe_key.json gives (`lines`): the bulk
 # of a snapshot, at a third of the bytes of key=value.
 POSITIONAL = ("L", "T", "I", "G")
@@ -113,6 +113,26 @@ BUILDING_TYPES = [
     "building_urban_center", "building_trade_center", "building_art_academy", "building_financial_district",
     "building_manor_house", "building_company_headquarter", "building_public_housing", "building_software_industry",
     "building_electronic_components_and_semiconductor_industry",
+]
+
+# The mod's budget mirrors: each system's script-charged expense or income, as the Budget panel itemizes it. The
+# 2026-11-15 save study found script expenses at 2.5% of AI GDP and could name a third of them.
+BUDGET_EXPENSES = ["banking", "climate", "colonial", "covert", "culture", "drugs", "energy_industry", "family",
+                   "nuclear", "nuclear_taboo", "pensions", "space", "un"]
+BUDGET_INCOMES = ["pension_reform", "reserve", "tax_code", "un", "war_tax"]
+
+# Building classes whose staffing and retooling are summed (levels in buildings under half staffed, levels
+# carrying the retooling modifier). The same study read AI manufacturing at 48% staffed and 46% retooling in 1958.
+STAFFING_CLASSES = [("mfg", "bg_manufacturing"), ("infra", "bg_infrastructure"), ("power", "bg_power"),
+                    ("mine", "bg_mining")]
+
+# Production methods a modern economy should have left: (key, building type, method).
+STALE_METHODS = [
+    ("uc_no_light", "building_urban_center", "pm_no_street_lighting"),
+    ("uc_no_transit", "building_urban_center", "pm_no_public_transport"),
+    ("uc_stalls", "building_urban_center", "pm_market_stalls"),
+    ("ga_simple", "building_government_administration", "pm_simple_organization"),
+    ("uni_scholastic", "building_university", "pm_scholastic_education"),
 ]
 
 # The classes a finished building is counted under (the first group that matches).
@@ -330,6 +350,11 @@ def variable(key: str, name: str) -> Field:
     return Field(key, f"value = 0 if = {{ limit = {{ has_variable = {name} }} value = var:{name} }}")
 
 
+def levels(key: str, limit: str) -> Field:
+    """The levels of the country's buildings that pass the limit (one pass over its buildings)."""
+    return Field(key, f"\tvalue = 0\n\tevery_scope_building = {{\n\t\tlimit = {{ {limit} }}\n\t\tadd = level\n\t}}")
+
+
 def short(name: str, prefix: str) -> str:
     """A field's key from an entity's name: the prefix off, lower case (`lawgroup_LGBTQ_rights` -> `lgbtq_rights`)."""
     return (name[len(prefix):] if name.startswith(prefix) else name).lower()
@@ -419,6 +444,7 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         Field("cm_target", "value = 0 if = { limit = { has_variable = te_construction_market_price_stabilizer } "
               "value = te_construction_market_ai_purchase_target }", 1),
         variable("cm_price", "te_construction_market_price_stabilizer"),
+        variable("cm_public", "te_construction_market_public_target"),
         read("companies", "num_companies"),
         read("companies_max", "max_num_companies"),
     ]
@@ -433,6 +459,8 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
                 f'\tadd = {{ value = "country_army_unit_type_fraction(unit_type:{unit})" multiply = {tier} }}'
                 for unit, tier in cat["unit_tier"].items()
             ]), 2),
+        read("irregular", '"country_army_unit_type_fraction(unit_type:combat_unit_type_irregular_infantry)"', 3),
+        read("line", '"country_army_unit_type_fraction(unit_type:combat_unit_type_line_infantry)"', 3),
         read("alliances", "num_alliances"),
         read("defensive_pacts", "num_defensive_pacts"),
         read("rivals", "num_rivals"),
@@ -465,9 +493,23 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         read("bt_" + short(name, "building_"), f'"country_has_building_type_levels({name})"')
         for name in cat["building_types"]
     ]
+    budget = (
+        [read("ux_all", "modifier:country_expenses_add")]
+        + [read("ux_" + name, f"modifier:country_te_budget_expense_{name}_add") for name in BUDGET_EXPENSES]
+        + [read("ui_" + name, f"modifier:country_te_budget_income_{name}_add") for name in BUDGET_INCOMES]
+    )
+    staffing = (
+        [levels("low_" + name, f"is_building_group = {group} occupancy < 0.5") for name, group in STAFFING_CLASSES]
+        + [levels("rt_" + name, f"is_building_group = {group} has_modifier = pm_retooling")
+           for name, group in STAFFING_CLASSES]
+        + [levels("rt_all", "has_modifier = pm_retooling"), levels("sub_all", "is_subsidized = yes")]
+        + [levels(key, f"is_building_type = {building} has_active_production_method = {method}")
+           for key, building, method in STALE_METHODS if building in cat["building_types"]]
+    )
     counters = [variable("n_" + name, PREFIX + "n_" + name) for name in COUNTERS]
-    return [("A", economy), ("F", finance), ("C", construction), ("M", military), ("Y", strategy), ("L", laws),
-            ("T", techs), ("I", institutions), ("G", groups), ("B", types), ("N", counters)]
+    return [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
+            ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
+            ("N", counters)]
 
 
 def all_fields(cat: dict) -> list[Field]:
