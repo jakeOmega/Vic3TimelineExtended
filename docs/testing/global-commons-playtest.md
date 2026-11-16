@@ -28,10 +28,10 @@ what only the game can show.
    them by something other than profit; give the groups `ai_selection = most_productive` and an `ai_value` ladder
    (`pmg_emissions_control`'s pattern).
 4. The Deep-Sea Mine's new figures: a level on Deep-Sea Mining at full staff employs 500 machinists, 400 engineers and
-   100 academics, and produces 320 Structural Metals, 230 Conductive Metals, 70 Tech-Critical Metals, 5 Base Metals,
+   100 academics, and produces 320 Structural Metals, 230 Conductive Metals, 70 Tech-Critical Metals, 10 Base Metals,
    50 Gold and 50 Chemical and Industrial Minerals a week at base throughput (the deposit mix of 2026-11-15, Base
    Metals by value since 2026-11-16). An Asteroid Mine lists no Base Metals and 260 Structural Metals. The Deep-Sea
-   profit tooltip at prices near base reads about £13,300 a level a week, against about £7,250 for an Extraplanetary
+   profit tooltip at prices near base reads about £13,500 a level a week, against about £7,250 for an Extraplanetary
    Base on Asteroid Mine in the same market.
 5. Saves from before the change: existing Deep-Sea Mines keep their levels and change outputs on load, and lay off
    the half of their staff the new method no longer employs. Existing Extraplanetary Bases start on Chemical
@@ -492,7 +492,7 @@ types, and every trigger, docket item and vote follows a pattern already seen in
 - [ ] The convention's hover (Table a Resolution, Our Obligations, the ITLOS icon) lists the seabed
       terms.
 - [ ] A party with Deep-Sea Mines pays royalties: Our Obligations shows "Royalties: N a week",
-      N ≈ 1,412 × its levels, and the Budget panel's Breakdown counts them under United Nations.
+      N ≈ 1,420 × its levels, and the Budget panel's Breakdown counts them under United Nations.
 - [ ] With the World Development Fund standing, its pot (the chamber's Fund row) grows by the
       royalties; without it, the UN budget does.
 - [ ] A poorer party sees "Reserved half" in Our Obligations; a richer one does not.

@@ -16,11 +16,11 @@
 #   Structural Metals (iron)            320 x  40 = 12,800
 #   Conductive Metals (copper)          230 x  40 =  9,200
 #   Tech-Critical Metals                 70 x  80 =  5,600
-#   Base Metals (lead)                    5 x  40 =    200
+#   Base Metals (lead)                   10 x  40 =    400
 #   Gold                                 50 x 100 =  5,000
 #   Chemical and Industrial Minerals     50 x  50 =  2,500
 #   (sulfur)                                        ------
-#                                                   35,300
+#                                                   35,500
 # Change the output figures here when the method changes: the royalty and the
 # holding fee follow them (test_deep_sea_rebalance.py holds this to the
 # method, test_global_commons_un.py the loc to this).
@@ -29,7 +29,7 @@ te_seabed_level_output_value = {
 	add = { value = 320 multiply = 40 }
 	add = { value = 230 multiply = 40 }
 	add = { value = 70 multiply = 80 }
-	add = { value = 5 multiply = 40 }
+	add = { value = 10 multiply = 40 }
 	add = { value = 50 multiply = 100 }
 	add = { value = 50 multiply = 50 }
 }

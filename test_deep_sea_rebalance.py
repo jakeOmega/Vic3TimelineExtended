@@ -476,11 +476,12 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
     def test_both_upgrades_flip_the_order_for_space_colonization(self):
         """Since the deposit mix of 2026-11-15 a Deep-Sea Mine level sells a sixth less
         (the same 620 of its three metals, more of them at 40 than at 80), and since
-        Base Metals went by value on 2026-11-16 another twentieth less. An Asteroid Mine
-        on Fusion Tugs, the next era's upgrade, now earns a little more a level than an
-        era-11 Deep-Sea Mine (14,450 against 13,300 to 14,300); with no upgrade it stays
-        behind (test_out_earns_every_method_of_its_era_without_upgrades), and with both
-        it still earns less for each point of construction."""
+        Base Metals went by value on 2026-11-16 another twenty-fifth less. An Asteroid
+        Mine on Fusion Tugs, the next era's upgrade, now earns more a level than an
+        era-11 Deep-Sea Mine on Motor Ship Tenders and as much as one on Magnetic Drive
+        Tenders (14,450 against 13,500 and 14,500); with no upgrade it stays behind
+        (test_out_earns_every_method_of_its_era_without_upgrades), and with both it
+        still earns less for each point of construction."""
         by_group = self.d.logistics_upgrades()
         upgrades = list(by_group.values())
         _, deep_cost = self.d.construction(DEEP_SEA)
@@ -562,10 +563,10 @@ class ExtraplanetaryBaseMix(unittest.TestCase):
     No Base Metals (2026-11-16; 10 / 40 / 50 a level before), by value as DeepSeaMineMix
     has it. Lead and zinc are volatile and asteroids hold almost none: 47 ppm zinc and
     0.2 ppm lead in an ordinary (H) chondrite beside 1.6% nickel, 323 and 2.6 ppm beside
-    1.1% in a CI carbonaceous chondrite, the most zinc-rich class. At market prices that
-    is under 0.05% and under 0.5% of the value of the rock's nickel, cobalt and copper:
-    a third of a unit a level and under four, and nothing in a metallic body. Their
-    sales went to Structural Metals at equal value."""
+    1.1% in a CI carbonaceous chondrite, the most zinc-rich class. Sold at market prices
+    they would bring under 0.05% and under 0.5% of what the rock's nickel, cobalt and
+    copper would, whatever the tonnage: a third of a unit a level and under four, and
+    nothing in a metallic body. Their sales went to Structural Metals at equal value."""
 
     ASTEROID, COLONY = "pm_space_mine", "pm_space_colony_mining"
     MIN_CONDUCTIVE_SHARE = 0.10
@@ -602,17 +603,19 @@ class DeepSeaMineMix(unittest.TestCase):
     620 a level made before, when Tech-Critical was 260. Two figures elsewhere restate
     the base method and must follow it.
 
-    Base Metals go by value (owner, 2026-11-16: a game unit is no physical quantity, so
-    goods compare by what they sell for). A tonne of that zone's nodules holds about
-    1.4 kg of zinc and 0.3 kg of lead beside 284 kg of manganese, 13 of nickel, 11 of
-    copper and 2 of cobalt; at 2024 market prices the lead and zinc are about 0.9% of
-    the four metals' value. Of the three metals' sales that is 6 units of Base Metals a
-    level: 5, where it was 50. The 1% ceiling is this test's own, read off that figure."""
+    Base Metals go by value (the rule: owner, 2026-11-16). A game unit is no physical
+    quantity, so a good's sales at base prices follow what selling all the real deposits
+    of its metals would bring at market prices. For the seabed's estimated deposits (the
+    nodule zone, the Pacific's cobalt crusts and the vent sulfides) at 2024 prices, lead
+    and zinc come to about 217 billion dollars and manganese, nickel, cobalt and copper
+    to 13,500 billion: 1.6%. Of the three metals' sales that is 11 units of Base Metals
+    a level: 10, where it was 50 (7%). The band of 1% to 2% is this test's own, read
+    off that figure (docs/systems/mod_systems/production_methods.md has the table)."""
 
     BASE = "pm_ocean_mine"
     METALS = {"structural": "iron", "conductive": "copper", "tech_metals": "tech_metals"}
     BASE_METALS = "lead"
-    MAX_BASE_METALS_SHARE = 0.01
+    BASE_METALS_SHARE = (0.01, 0.02)
     ADD = re.compile(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}")
     WEIGHT = re.compile(r"value\s*=\s*te_seabed_ai_(\w+)_up\s+subtract\s*=\s*te_seabed_ai_\1_down"
                         r"\s+multiply\s*=\s*([\d.]+)")
@@ -633,15 +636,16 @@ class DeepSeaMineMix(unittest.TestCase):
         self.assertGreater(iron, copper)
         self.assertGreater(copper, 3 * tech)
 
-    def test_base_metals_are_under_a_hundredth_of_the_metals_sales(self):
-        """On every method of the capped family, and never none: nodules do carry both."""
+    def test_base_metals_are_a_hundredth_to_a_fiftieth_of_the_metals_sales(self):
+        """On every method of the capped family."""
         for pm in self.d.group_methods(self.d.base_group(DEEP_SEA)):
             out = self.d.goods(pm, "output")
             metals = sum(out[good] * self.d.prices[good] for good in self.METALS.values())
             base = out.get(self.BASE_METALS, 0.0) * self.d.prices[self.BASE_METALS]
+            low, high = self.BASE_METALS_SHARE
             with self.subTest(pm=pm):
-                self.assertGreater(base, 0)
-                self.assertLessEqual(base / metals, self.MAX_BASE_METALS_SHARE)
+                self.assertGreaterEqual(base / metals, low)
+                self.assertLessEqual(base / metals, high)
 
     def test_the_royalty_s_output_value_is_the_base_method_s(self):
         body = self._value_body("te_seabed_level_output_value",
