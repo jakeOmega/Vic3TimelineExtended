@@ -316,15 +316,17 @@ te_mon_uses_common_currency = {
 # was asked of the issuer only (te_mon_union_issuer_has_regulator), and an
 # adopter under Unregulated Banking kept the banking union and its point: 3
 # with its national bank, the Bail-in Regime's cost. In the owner's 1958 save 9
-# of 57 adopters were under that law, each with the modifier on its banking
-# entry, and three of the four read had a Bail-in Regime in force.
+# of 57 adopters were under that law. The four whose banking entries were read
+# all carried the modifier, and each had a 3-point tool in force (a Bail-in
+# Regime on three, Infrastructure credit on the fourth).
 te_mon_union_has_regulator = {
 	NOT = { has_law_or_variant = law_type:law_unregulated_banking }
 }
 
 # In the banking union: on either side of a common currency at tier 4 or above,
 # under a banking law with a regulator. What te_mon_union_banking_union is
-# applied on (te_monetary_update_union), and what the adoption score counts.
+# applied on (te_monetary_update_union). The adoption score asks the regulator
+# test by itself, since a holdout does not use the currency yet.
 te_mon_union_in_banking_union = {
 	te_mon_bloc_union_tier_4_plus = yes
 	te_mon_uses_common_currency = yes

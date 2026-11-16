@@ -1013,7 +1013,7 @@ class RegulatorTest(unittest.TestCase):
     the budget is below the cost already"), so nothing may add a point under that law. PR #1810
     asked that of the issuer only; an adopter kept the banking union and its point, 3 with its
     national bank, which is the Bail-in Regime's cost (#1812: 9 of 57 adopters in the owner's
-    1958 save were under that law, each with the modifier on its banking entry)."""
+    1958 save were under that law, and the four whose banking entries were read carried it)."""
 
     def setUp(self):
         self.s = Script(world_gdp_m=WORLD_M)
