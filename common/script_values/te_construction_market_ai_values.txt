@@ -1,4 +1,104 @@
-﻿te_construction_market_ai_purchase_target = {
+﻿# ----------------------------------------------------------------------------
+# What an AI government buys a week, in construction points
+# ----------------------------------------------------------------------------
+# te_construction_market_ai_update_buy writes it to the country's purchase from
+# the weekly pulse of a market game. A player sets the purchase in the
+# construction panel, and a direct game has no purchase.
+#
+# Nothing while the engine has paused the country's construction or its
+# government queue is empty. Otherwise the larger of two amounts, never more
+# than the queue can take in a week:
+#
+#   The surplus. Net fixed income (the budget before construction, which the
+#   engine counts as a temporary expense) over the smoothed price, times
+#   1 + reserves - debt, each as a share of its limit, less the war and banking
+#   brakes below, never under 0.1. With no reserves and no debt it spends the
+#   surplus exactly; reserves raise it and are drawn down, debt lowers it and
+#   is paid off. It never borrows.
+#
+#   The floor, te_construction_market_ai_purchase_floor, for a government whose
+#   surplus buys less.
+#
+# The floor is an amount the country can pay. Until 2026-11-15 it was 10 points
+# a week for every country: about 12,500 a week at the smoothed price, and
+# 20,000 at the price paid, since the floors together asked for several times
+# what the construction sectors made and held the good at its price ceiling. In
+# February 1836 that was the purchase of 26 of 28 buying AI countries and more
+# than the whole weekly income of 23 of them, so they borrowed to the engine's
+# pause (NAI CONSTRUCTION_DEBT_PAUSE, 40% of the debt ceiling) within months. A
+# debt ceiling is about 250 weeks of an AI's income, so interest on that debt,
+# at the 9 to 11% a year an AI pays, takes about a fifth of its income, and a
+# country with less than that to spare never gets back under the resume line
+# (20%). Numbers and the long-run comparison:
+# docs/systems/mod_systems/construction.md, "The AI's purchase".
+#
+#   A twentieth of fixed income over the smoothed price. That is the margin the
+#   engine's own budget AI defends: it cuts wages and should-have spending when
+#   income is under 1.05 times expenses (NAI WAGE_CUT_INCOME_RATIO_THRESHOLD,
+#   MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE). Fixed income, not income,
+#   which also counts temporary income: what the investment pool repays the
+#   treasury for private construction is not the government's to spend.
+#
+#   Never more than the 10 points it was, so no country's floor rose.
+#
+#   Paid from reserves, not on credit: whole while the reserves are a tenth of
+#   their limit or more, which is what the engine's AI must hold before it may
+#   queue a government building (NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS),
+#   and less in a straight line below that. A floor on credit, however small,
+#   is the old floor again for a country whose surplus is under it: a few
+#   points now, interest from then on, less built every year after.
+#
+#   A tenth of itself with no reserves left (a 200th of fixed income, at most
+#   one point). That part is on credit. It is there because a market game has
+#   no base construction, so a purchase of nothing leaves a queued level where
+#   it stands; it is the surplus's own 0.1 ("never fully halt") for a country
+#   with no surplus.
+#
+#   Short of bureaucracy, a fifth of fixed income more, whatever the reserves
+#   and the debt: a shortage costs tax in proportion (vanilla's
+#   administrative_overburden), the building that ends it costs 100 points, and
+#   the engine's own pause for a construction it calls critical is 99% of the
+#   ceiling, not 40%. The clause is from 2024, when it divided by the price
+#   held between 500 and 1,500 around a base of 1,000. The bounds became 50 and
+#   150 when the base was halved and stayed there when it went back to 1,000,
+#   so it bought a fifth of income at a price of 150: 1.7 times the country's
+#   whole income at the price in play.
+#
+# The purchase is not rounded (it was, to whole points, which the 10-point
+# floor hid): a small economy buys a fraction of a point a week.
+#
+# test_construction_market_ai_purchase.py runs these two values against a model
+# written apart from them, and holds the constants to the engine's defines.
+TE_CONSTRUCTION_MARKET_AI_FLOOR_INCOME_SHARE = 0.05
+TE_CONSTRUCTION_MARKET_AI_FLOOR_MAX_POINTS = 10
+TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES = 0.1
+TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR = 0.1
+TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE = 0.2
+
+te_construction_market_ai_purchase_floor = {
+	value = fixed_income
+	multiply = TE_CONSTRUCTION_MARKET_AI_FLOOR_INCOME_SHARE
+	divide = var:te_construction_market_price_stabilizer
+	max = TE_CONSTRUCTION_MARKET_AI_FLOOR_MAX_POINTS
+	multiply = {
+		value = scaled_gold_reserves
+		divide = TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES
+		max = 1
+		min = TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR
+	}
+	if = {
+		limit = {
+			bureaucracy < 0
+		}
+		add = {
+			value = fixed_income
+			multiply = TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE
+			divide = var:te_construction_market_price_stabilizer
+		}
+	}
+}
+
+te_construction_market_ai_purchase_target = {
 	if = {
 		limit = {
 			is_construction_paused = no
@@ -51,24 +151,7 @@
 			# Floor at 0.1× — never fully halt; AI should keep some momentum
 			min = 0.1
 		}
-		min = {
-			value = 10
-			if = {
-				limit = {
-					bureaucracy < 0
-				}
-				add = {
-					value = income
-					divide = {
-						value = te_construction_market_price
-						min = 50
-						max = 150
-					}
-					divide = 5
-				}
-			}
-		}
-		round_to = 1
+		min = te_construction_market_ai_purchase_floor
 		max = {
 			value = construction_queue_num_queued_government_levels
 			multiply = modifier:country_max_weekly_construction_progress_add

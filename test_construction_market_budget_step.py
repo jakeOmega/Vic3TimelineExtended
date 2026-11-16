@@ -11,6 +11,8 @@ results are checked against a model written independently of the script: the
 price formula itself, N worked out from it, and, for a small gap, N against
 1 + e with e taken as a numeric derivative of the price. Arithmetic is rounded
 to five decimals after every operation, as the engine's fixed-point numbers are.
+test_construction_market_ai_purchase.py runs the AI's purchase through the same
+evaluator.
 
 It also pins the two defines the script mirrors (script cannot read defines).
 
@@ -28,7 +30,7 @@ TARGET_VALUES = ROOT / "common/script_values/te_construction_market_target_value
 CURRENT_VALUES = ROOT / "common/script_values/te_construction_market_current_values.txt"
 DISPLAY_VALUES = ROOT / "common/script_values/te_construction_market_display_values.txt"
 
-TOKEN = re.compile(r"<=|>=|!=|[{}=<>]|[^\s{}=<>!]+")
+TOKEN = re.compile(r"<=|>=|!=|\?=|[{}=<>]|[^\s{}=<>!?]+")
 
 
 def tokenize(text):
@@ -45,7 +47,7 @@ def parse_block(tokens, pos):
     items = []
     while pos < len(tokens) and tokens[pos] != "}":
         key = tokens[pos]
-        if pos + 1 < len(tokens) and tokens[pos + 1] in ("=", "<", ">", "<=", ">=", "!="):
+        if pos + 1 < len(tokens) and tokens[pos + 1] in ("=", "<", ">", "<=", ">=", "!=", "?="):
             op = tokens[pos + 1]
             if tokens[pos + 2] == "{":
                 value, pos = parse_block(tokens, pos + 3)
