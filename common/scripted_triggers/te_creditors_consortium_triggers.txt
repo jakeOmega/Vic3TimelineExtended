@@ -419,3 +419,42 @@ te_cred_dl_is_receiver = {
 	scope:te_cred_dl_leader ?= { has_variable = te_cred_dl_bloc_gdppc }
 	country_gdp_per_capita < scope:te_cred_dl_leader.var:te_cred_dl_bloc_gdppc
 }
+
+# Country scope: which Development Lending receiver modifier this member should
+# carry (te_cred_dl_sync_receiver_modifier): the one for its bloc's tier, from
+# tier II, while it is a receiver. Exactly one holds for a receiver at tier II
+# and up, none otherwise.
+te_cred_dl_wants_receiver_2 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_2_plus = yes
+	te_cred_dl_tier_3_plus = no
+}
+
+te_cred_dl_wants_receiver_3 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_3_plus = yes
+	te_cred_dl_tier_4_plus = no
+}
+
+te_cred_dl_wants_receiver_4 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_4_plus = yes
+	te_cred_dl_tier_5 = no
+}
+
+te_cred_dl_wants_receiver_5 = {
+	te_cred_dl_is_receiver = yes
+	te_cred_dl_tier_5 = yes
+}
+
+# ...and does it carry any? For the monthly pulse's gate: a country that left
+# the bloc still drops its modifier.
+te_cred_dl_has_receiver_modifier = {
+	OR = {
+		has_modifier = te_cred_dl_receiver_2
+		has_modifier = te_cred_dl_receiver_3
+		has_modifier = te_cred_dl_receiver_4
+		has_modifier = te_cred_dl_receiver_5
+	}
+}
+

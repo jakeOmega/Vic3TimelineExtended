@@ -23,14 +23,15 @@
 #                             chose in te_cc.1, read when the debtor answers
 #   te_cred_mono_left         the monopolies still to demand in this rescue
 #   te_cred_dl_bloc_gdppc     LEADER: the bloc's GDP per head, last pulse
-#   te_cred_dl_pool_m         LEADER: what donors paid in last pulse, before
+#   te_cred_dl_pool           LEADER: what donors paid in last pulse, before
 #                             it was split (a scratch sum)
 #   te_cred_dl_pop_m          LEADER: the receivers' population, in millions
 #   te_cred_dl_paid / _received  what this member paid or was paid last pulse
-#   te_cred_dl_receiver_applied  0, 2, 3, 4 or 5: which receiver modifier
-#                             (te_cred_dl_receiver_N) it carries
-#   te_cred_member            1: the leader's pulse has seen this member, so
-#                             the monetary discovery has been asked for once
+#   te_cred_seen_by           scope: the leader whose pulse has seen this
+#                             member, so the monetary discovery was asked for
+#   te_cred_paid              what the leader paid in the last rescue (te_cc.3)
+#   te_cred_rcv_check         scope, 30 days: te_cc.9's receivership check
+#   te_cred_mono_made         monopoly treaties the last rescue made (te_cc.9)
 # ============================================================================
 
 
@@ -310,28 +311,25 @@ te_cred_dl_receipt = {
 	min = 0
 }
 
-# Which receiver modifier a member should carry: 0 none, or the tier (2 to 5;
-# tier I adds no construction). Member scope.
+# Which receiver modifier a member carries, for te_debug_cc.1: 0 none, or the
+# tier (2 to 5). Member scope.
 te_cred_dl_receiver_tier = {
 	value = 0
 	if = {
-		limit = { te_cred_dl_is_receiver = yes }
-		if = {
-			limit = { te_cred_dl_tier_5 = yes }
-			value = 5
-		}
-		else_if = {
-			limit = { te_cred_dl_tier_4_plus = yes }
-			value = 4
-		}
-		else_if = {
-			limit = { te_cred_dl_tier_3_plus = yes }
-			value = 3
-		}
-		else_if = {
-			limit = { te_cred_dl_tier_2_plus = yes }
-			value = 2
-		}
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		value = 5
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		value = 4
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		value = 3
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		value = 2
 	}
 }
 

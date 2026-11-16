@@ -139,15 +139,19 @@ te_cred_refuse_rescue = {
 # Scope: the member, accepting. Pays the rescue, then makes each term.
 te_cred_apply_rescue = {
 	# The payment: the guarantee's honour cost, fixed when the leader offered
-	# (te_cred_offer_cost), so the sum the leader agreed to is the sum paid.
-	set_variable = { name = te_cred_paid value = var:te_cred_offer_cost days = 365 }
+	# (te_cred_offer_cost, set by te_cc.1's option, so it is there while this
+	# option's tooltip is read), so the sum the leader agreed to is the sum
+	# paid. te_cred_paid keeps it for te_cc.3's text.
 	scope:te_cc_creditor = {
 		add_treasury = {
-			value = scope:te_cc_debtor.var:te_cred_paid
+			value = scope:te_cc_debtor.var:te_cred_offer_cost
 			multiply = -1
 		}
 	}
-	add_treasury = var:te_cred_paid
+	add_treasury = var:te_cred_offer_cost
+	hidden_effect = {
+		set_variable = { name = te_cred_paid value = var:te_cred_offer_cost days = 365 }
+	}
 	change_relations = {
 		country = scope:te_cc_creditor
 		value = 25
@@ -192,6 +196,7 @@ te_cred_apply_rescue = {
 		remove_variable = te_cred_offer_adjustment
 		remove_variable = te_cred_offer_concessions
 		remove_variable = te_cred_offer_privatization
+		remove_variable = te_cred_offer_cost
 		trigger_event = { id = te_cc.9 days = 3 }
 		trigger_event = { id = te_monetary_internal.2 days = 1 }
 		scope:te_cc_creditor = {
@@ -214,6 +219,7 @@ te_cred_refuse_terms = {
 		remove_variable = te_cred_offer_adjustment
 		remove_variable = te_cred_offer_concessions
 		remove_variable = te_cred_offer_privatization
+		remove_variable = te_cred_offer_cost
 		trigger_event = { id = te_monetary_internal.2 days = 1 }
 	}
 	change_relations = {
@@ -353,7 +359,12 @@ te_cred_demand_monopolies = {
 	scope:te_cc_creditor = {
 		every_company = {
 			if = {
-				limit = { scope:te_cc_debtor = { var:te_cred_mono_left > 0 } }
+				limit = {
+					scope:te_cc_debtor = {
+						has_variable = te_cred_mono_left
+						var:te_cred_mono_left > 0
+					}
+				}
 				save_scope_as = te_cred_mono_company
 				scope:te_cc_debtor = { te_cred_monopoly_ladder_generated = yes }
 			}
@@ -367,6 +378,7 @@ te_cred_demand_monopolies = {
 te_cred_try_monopoly = {
 	if = {
 		limit = {
+			has_variable = te_cred_mono_left
 			var:te_cred_mono_left > 0
 			any_scope_building = { is_building_type = $BT$ }
 			scope:te_cred_mono_company = {
@@ -383,7 +395,7 @@ te_cred_try_monopoly = {
 						source_country = root
 						target_country = scope:te_cc_creditor
 						inputs = {
-							{ company = scope:te_cred_mono_company }
+							{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
 							{ building_type = bt:$BT$ }
 						}
 					}
@@ -402,7 +414,7 @@ te_cred_try_monopoly = {
 					source_country = root
 					target_country = scope:te_cc_creditor
 					inputs = {
-						{ company = scope:te_cred_mono_company }
+						{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
 						{ building_type = bt:$BT$ }
 					}
 				}
@@ -660,69 +672,32 @@ te_cred_dl_pulse = {
 }
 
 # Scope: any country. Carries the receiver modifier its tier gives
-# (te_cred_dl_receiver_tier: none, or te_cred_dl_receiver_2 to _5), changing it
-# only when the tier changes. Its own pulse, so a member that leaves the bloc,
-# or rises above the average, drops it the next month.
+# (te_cred_dl_wants_receiver_N: none, or te_cred_dl_receiver_2 to _5), adding or
+# removing one only when the tier changes. Its own pulse, so a member that
+# leaves the bloc, or rises above the average, drops it the next month. No
+# variable: each step reads the triggers and the modifiers, so a tooltip walk
+# of the debug event's option reads nothing it wrote.
 te_cred_dl_sync_receiver_modifier = {
+	te_cred_dl_sync_receiver_tier = { N = 2 }
+	te_cred_dl_sync_receiver_tier = { N = 3 }
+	te_cred_dl_sync_receiver_tier = { N = 4 }
+	te_cred_dl_sync_receiver_tier = { N = 5 }
+}
+
+te_cred_dl_sync_receiver_tier = {
 	if = {
 		limit = {
-			OR = {
-				te_cred_in_consortium = yes
-				has_variable = te_cred_dl_receiver_applied
-			}
+			te_cred_dl_wants_receiver_$N$ = yes
+			NOT = { has_modifier = te_cred_dl_receiver_$N$ }
 		}
-		set_variable = { name = te_cred_dl_receiver_target value = te_cred_dl_receiver_tier }
-		if = {
-			limit = {
-				NOT = {
-					AND = {
-						has_variable = te_cred_dl_receiver_applied
-						var:te_cred_dl_receiver_applied = var:te_cred_dl_receiver_target
-					}
-				}
-			}
-			if = {
-				limit = { has_modifier = te_cred_dl_receiver_2 }
-				remove_modifier = te_cred_dl_receiver_2
-			}
-			if = {
-				limit = { has_modifier = te_cred_dl_receiver_3 }
-				remove_modifier = te_cred_dl_receiver_3
-			}
-			if = {
-				limit = { has_modifier = te_cred_dl_receiver_4 }
-				remove_modifier = te_cred_dl_receiver_4
-			}
-			if = {
-				limit = { has_modifier = te_cred_dl_receiver_5 }
-				remove_modifier = te_cred_dl_receiver_5
-			}
-			if = {
-				limit = { var:te_cred_dl_receiver_target = 2 }
-				add_modifier = { name = te_cred_dl_receiver_2 }
-			}
-			else_if = {
-				limit = { var:te_cred_dl_receiver_target = 3 }
-				add_modifier = { name = te_cred_dl_receiver_3 }
-			}
-			else_if = {
-				limit = { var:te_cred_dl_receiver_target = 4 }
-				add_modifier = { name = te_cred_dl_receiver_4 }
-			}
-			else_if = {
-				limit = { var:te_cred_dl_receiver_target = 5 }
-				add_modifier = { name = te_cred_dl_receiver_5 }
-			}
-			set_variable = { name = te_cred_dl_receiver_applied value = var:te_cred_dl_receiver_target }
+		add_modifier = { name = te_cred_dl_receiver_$N$ }
+	}
+	else_if = {
+		limit = {
+			te_cred_dl_wants_receiver_$N$ = no
+			has_modifier = te_cred_dl_receiver_$N$
 		}
-		if = {
-			limit = {
-				var:te_cred_dl_receiver_applied = 0
-				te_cred_in_consortium = no
-			}
-			remove_variable = te_cred_dl_receiver_applied
-		}
-		remove_variable = te_cred_dl_receiver_target
+		remove_modifier = te_cred_dl_receiver_$N$
 	}
 }
 

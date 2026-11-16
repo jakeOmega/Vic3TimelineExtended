@@ -375,12 +375,38 @@ Alignment, a pact that slowly aligns a country's relations with third parties to
 its own and builds the leader up to 1,000 Involvement where that country is
 local, and a Diplomatic Framework never blocks a member's voluntary union.
 
+### The Creditors' Consortium identity
+
+A Creditors' Consortium binds its members by credit. It appears only with the
+Banking System game rule set to Enabled, and its founder needs a National Bank,
+no Command Economy and no default. Its leader can't then enact Command Economy
+or abolish the bank.
+
+The leader stands behind every other member's debts, as a Lender of Last Resort
+treaty would: each member's risk premium from debt load falls, and the leader
+pays part of that in premium of its own. A member with Command Economy, or one
+already guaranteed by a treaty or its currency union, gets nothing from it.
+
+When a member defaults, its leader chooses: pay the member's creditors, on the
+terms the bloc's Conditionality tier allows, or refuse. The terms are a debt
+receivership (once the leader has International Exchange Standards), its own
+economic, trade and tax laws imposed on the member while the receivership lasts,
+investment rights with monopolies for its companies, and privatization. A
+refusal costs a fifth of the bloc's cohesion at once and ends the guarantee of
+every member for five years. The member may refuse the terms in turn: it stays
+in default, loses the guarantee for ten years, and may leave the bloc at once.
+A member in the leader's receivership can't leave. Cohesion rests on the
+leader's share of the bloc's GDP, falls with the leader's debt, members in
+receivership and members with Command Economy, and drops by 50 while the leader
+is in default.
+
 ### New principle groups
 
 Foreign Service and Multilateral Institutions are open only to a Diplomatic
-Framework, and Artistic Expression only to a Cultural Commonwealth.
+Framework, Artistic Expression only to a Cultural Commonwealth, and
+Conditionality and Development Lending only to a Creditors' Consortium.
 Vassalization, Colonial Offices and Sacred Civics are closed to a Diplomatic
-Framework. Urban Planning and Rural Development exclude each other.
+Framework, and Sacred Civics to a Creditors' Consortium. Urban Planning and Rural Development exclude each other.
 
 | Group | First tiers need | What it does |
 |---|---|---|
@@ -399,6 +425,8 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
 | Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
+| Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (one to three), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), more monopolies, and a longer receivership (12 to 36 months out of default). |
+| Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. |
 
 ### Principle tiers IV and V
 
@@ -463,6 +491,7 @@ event, The Summit's Communiqué, tells you which of these its summit gave you.
 | Ideological Union | Congress of the Movement | Members: +25% chance for laws you impose on them to pass, +5% for their own enactments, −25% radicals from political movements |
 | Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
 | Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
+| Creditors' Consortium | Debt Conference | Members: −0.5 percentage points of risk premium. Relations between every two members +20 |
 
 The religious council takes its name from your state religion: an ecumenical
 council, a synod, the ulama in council, a rabbinical council, a Sangiti, a

@@ -25,7 +25,7 @@ te_cred_monthly_on_action = {
 				OR = {
 					te_cred_in_consortium = yes
 					has_variable = te_cred_adjustment_by
-					has_variable = te_cred_dl_receiver_applied
+					te_cred_dl_has_receiver_modifier = yes
 				}
 			}
 			te_cred_member_monthly = yes
