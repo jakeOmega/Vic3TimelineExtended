@@ -22,6 +22,7 @@ Run: python3 -m unittest test_un_ceasefire_order -v
 from __future__ import annotations
 
 import os
+import re
 import unittest
 
 import change_variable_init_audit
@@ -96,8 +97,10 @@ class CeasefireOrderCounters(unittest.TestCase):
         # The file alone: no other file, and nothing of vanilla's, sets these.
         result = change_variable_init_audit.judge({REL: _text()})
         self.assertEqual([(f.line, f.message) for f in result.flags], [])
-        self.assertEqual(result.judged, len(_text().split("change_variable = {")) - 1)
-        self.assertEqual(result.unjudged, 0)
+        # It judged every change the file writes (comments aside).
+        written = re.findall(r"\bchange_variable\s*=\s*\{", blank_comments_and_strings(_text())[0])
+        self.assertEqual((result.judged, result.unjudged), (len(written), 0))
+        self.assertGreaterEqual(len(written), 4)
 
     def test_the_order_ends_with_none_of_its_variables(self):
         kept = set()

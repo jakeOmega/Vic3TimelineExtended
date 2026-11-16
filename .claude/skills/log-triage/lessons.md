@@ -469,6 +469,14 @@ The one mod finding that day (`Variable 'sr_program_lost_moon_base' is used but 
 
 Four culture-merge PRs landed during the run, each touching `culture-merges-playtest.md`, and GitHub runs no `pull_request` workflow while a PR conflicts: a push showed no CI run at all, and `gh pr view --json mergeable` (`CONFLICTING`) was the only sign. `git merge-tree --write-tree --name-only HEAD origin/main` tells you before you merge. Also, `gui.log` stays at its 4 KB buffer until the game quits, so a snapshot of a running game misses most of it; read it after a quit.
 
+### A mod frame above a vanilla law's `on_activate` is the mod activating the law, not running the failing effect: count the same lines with no mod frame before guarding anything (2026-11-15)
+
+Four lines of 2026-11-14 had a mod file in the stack and a `Script location` in vanilla's Distribution of Power laws (`set_only_legal_party_from_ig effect [ Invalid target interestgroup ]`, `remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]`), and the report rightly marked the entry NOT REVIEWED (#1818). Three checks settled them. `git grep` for the failing effect in `common/` and `events/`: the mod runs neither. The stack's last mod line: an `activate_law` (the law-consistency sweep), or `create_dynamic_country` with an `origin`, which copies that country's laws and runs each law's `on_activate` in the new country (by the message, one with no ruler's group yet). Then the same messages with no mod frame in the same snapshot: 22 of 26 lines, in the same one-plus-two pattern as the mod-framed set. So vanilla reaches the block the same way and the entry takes `- reviewed: mod frame, <why>`; a guard on the mod's side would have had to stop the sweep choosing Single-Party State, which changes what a revolution's country ends up with to silence a line vanilla logs anyway. The body of an entry can already explain its mod frames (this one did, twice) and the report still says NOT REVIEWED until the `- reviewed:` line is there.
+
+### A grep that finds a `set_variable` does not show a counter is ever started: read what guards the set (2026-11-15)
+
+`change_variable effect [ Variable not of the 'value' scope type. Type: empty ]` is `change_variable` on a variable nothing has set (`scripting_best_practices.md` § "`change_variable` Does Not Create a Variable"). The UN cease-fire order's `un_cf_debit_months` had one `set_variable`, the reset after a booking, behind `has_variable` of itself; the issue's own first reading was that a sibling counter had the same fault, and that one was set at imposition, 120 lines up. `python3 change_variable_init_audit.py` answers it for the whole mod in five seconds, and names the guarded sets.
+
 ## Single messages worth knowing
 
 ### `add_loyalists` and `add_radicals` share the same `*_radicals` script values (2026-05-05)
