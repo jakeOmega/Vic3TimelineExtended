@@ -22,6 +22,12 @@
 #   the country's technology allows; not within five years of a step-down.
 # - A mission past the ceiling the pass set (the engine's AI ignoring the
 #   gate) is stepped back to it at the next review, with no five years' wait.
+# - The milestone guard: the six-month step down keeps a mission that carries
+#   a running milestone past 75% of its goal (sr_ai_mission_guard_tier); the
+#   count stays at its limit and the step goes on once the milestone ends.
+# - A program even Earth Orbit is too dear for (its bill over 20% at twelve
+#   reviews in a row) is pulled down, and the country founds or builds none
+#   for five years, nor while Earth Orbit is over 10% (sr_ai_program_demolish).
 # - Funding is shed first (the AI's funding buttons, space_race_buttons.txt:
 #   no increase past 10% with its funding, a decrease while over 20%), so a
 #   mission steps down only when the mission itself is too dear.
@@ -49,7 +55,17 @@ sr_ai_mission_budget_monthly = {
 		limit = { sr_has_space_program = yes }
 		if = {
 			limit = { is_ai = yes }
-			sr_ai_mission_budget_review = yes
+			sr_ai_program_affordability_count = yes
+			if = {
+				limit = {
+					has_variable = sr_ai_program_unaffordable_months
+					var:sr_ai_program_unaffordable_months >= sr_ai_program_unaffordable_months_limit
+				}
+				sr_ai_program_demolish = yes
+			}
+			else = {
+				sr_ai_mission_budget_review = yes
+			}
 		}
 		else = {
 			# A player's program: Any Mission (a country the player has just
@@ -59,9 +75,56 @@ sr_ai_mission_budget_monthly = {
 		}
 	}
 	else_if = {
-		limit = { has_variable = sr_ai_mission_ceiling }
+		limit = {
+			OR = {
+				has_variable = sr_ai_mission_ceiling
+				has_variable = sr_ai_program_unaffordable_months
+			}
+		}
 		sr_ai_mission_budget_forget = yes
 	}
+}
+
+# The year's count towards pulling a program down: a review with Earth Orbit's
+# bill over the step-down share adds a month, any other review ends the count.
+sr_ai_program_affordability_count = {
+	if = {
+		limit = { sr_ai_mission_overrun_earth_orbit > 0 }
+		if = {
+			limit = { has_variable = sr_ai_program_unaffordable_months }
+			change_variable = { name = sr_ai_program_unaffordable_months add = 1 }
+		}
+		else = {
+			set_variable = { name = sr_ai_program_unaffordable_months value = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_ai_program_unaffordable_months }
+		remove_variable = sr_ai_program_unaffordable_months
+	}
+}
+
+# Pull down an AI country's Space Program it can't pay for even on Earth Orbit
+# (owner, 2026-11-16; the building stays demolishable, owner 2026-10-05). The
+# mod's own removal, as the capital rule's (te_on_state_owner_change,
+# extra_on_actions.txt): the milestones fail as any lost program's do, with
+# The Silent Gantry for the country (space_race_events.76), and come back
+# from zero once a program can carry them again. A colony holder's Solar
+# System Colonization entry stays open and its colonies stay held, with no
+# settlers or modules until it has a program again; at the autonomy ask an AI
+# without a program lets a colony go as a free colony (space_race_events.94).
+# An existing Space Command stays (its possible keeps a standing one). Five
+# years, as long as the mission wait, before the country founds or builds one
+# again (sr_ai_may_found_space_program), and then only with Earth Orbit
+# within the climbing share. The line is for observer runs.
+sr_ai_program_demolish = {
+	debug_log = "TE_SR_AI_PROGRAM demolished country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_earth_orbit=[THIS.ScriptValue('sr_ai_mission_bill_earth_orbit')|0] (Earth Orbit's bill over the step-down share at twelve monthly reviews in a row: the AI's budget pass pulled its Space Program down; ai.md § Space Program Mission Budget)"
+	every_scope_state = {
+		limit = { has_building = building_space_program }
+		remove_building = building_space_program
+	}
+	sr_ai_mission_budget_forget = yes
+	set_variable = { name = sr_ai_program_demolished value = yes days = 1825 }
 }
 
 # Any Mission on a player's program that still carries an AI ceiling (a
@@ -107,6 +170,10 @@ sr_ai_mission_budget_forget = {
 		limit = { has_variable = sr_ai_mission_none_seen }
 		remove_variable = sr_ai_mission_none_seen
 	}
+	if = {
+		limit = { has_variable = sr_ai_program_unaffordable_months }
+		remove_variable = sr_ai_program_unaffordable_months
+	}
 }
 
 # An AI country's monthly review.
@@ -142,12 +209,19 @@ sr_ai_mission_budget_review = {
 		}
 		if = {
 			limit = { var:sr_ai_mission_over_months >= sr_ai_mission_over_months_limit }
+			# The step down, held above a mission that carries a milestone past
+			# the guard's line (sr_ai_mission_step_down_tier). While the guard
+			# holds part of it the count stays at its limit, so the rest of the
+			# step comes at the first review after the milestone ends.
 			if = {
 				limit = { sr_ai_mission_step_down_size > 0 }
 				sr_ai_mission_start_cooldown = yes
 			}
-			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_affordable_tier }
-			remove_variable = sr_ai_mission_over_months
+			if = {
+				limit = { NOT = { sr_ai_mission_guard_gap > 0 } }
+				remove_variable = sr_ai_mission_over_months
+			}
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_step_down_tier }
 		}
 		else = {
 			# Over, not yet for long enough: hold, and climb no further.

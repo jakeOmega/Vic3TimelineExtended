@@ -88,3 +88,38 @@ sr_ai_mission_ceiling_allows_deep_space = {
 sr_ai_mission_ceiling_allows_interstellar = {
 	sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
 }
+
+# A running milestone past the guard's line (sr_ai_guard_progress_<m>,
+# sr_ai_mission_budget_values.txt): the six-month step down keeps a mission
+# that carries it (sr_ai_mission_guard_tier). Country scope.
+sr_ai_milestone_guarded = {
+	has_variable = sr_active_$MILESTONE$
+	has_variable = sr_progress_$MILESTONE$
+	var:sr_progress_$MILESTONE$ >= sr_ai_guard_progress_$MILESTONE$
+}
+
+# An AI country may found a Space Program, by the decision or by construction
+# (the building's can_build_government): the demolition's test in reverse, a
+# means test and no rank. Earth Orbit's bill within the climbing share, out of
+# default and the bankruptcy modifier, and not within five years of pulling one
+# down (sr_ai_program_demolish), so no program is founded that the next year
+# would demolish. Country scope.
+sr_ai_may_found_space_program = {
+	sr_ai_space_budget_in_trouble = no
+	sr_ai_mission_room_earth_orbit >= 0
+	NOT = { has_variable = sr_ai_program_demolished }
+}
+
+# The Space Program's can_build_government (extra_buildings.txt): a player's
+# government always may; an AI's by the means test above. The engine's own
+# construction AI can build the program, which is how countries that were never
+# great or major powers came to run one. Country scope.
+sr_ai_may_build_space_program = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_ai_program_means_tt
+			sr_ai_may_found_space_program = yes
+		}
+	}
+}

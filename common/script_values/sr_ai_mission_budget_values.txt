@@ -35,6 +35,18 @@ sr_ai_mission_share_up = 0.1
 sr_ai_mission_share_down = 0.2
 sr_ai_mission_over_months_limit = 6
 
+# A program even Earth Orbit is too dear for: an AI country whose Earth Orbit
+# bill has been over the step-down share at this many monthly reviews in a row
+# pulls its Space Program down (owner, 2026-11-16), and founds or builds none
+# for sr_ai_program_demolished's five years, nor while Earth Orbit's bill is
+# over the climbing share (sr_ai_may_found_space_program).
+sr_ai_program_unaffordable_months_limit = 12
+
+# The milestone guard (owner, 2026-11-16): a running milestone past this share
+# of its goal holds the six-month step down at the cheapest mission that still
+# carries it. Default and bankruptcy still drop the program at once.
+sr_ai_mission_guard_share = 0.75
+
 # sr_funding_throughput's building_space_program_throughput_add
 # (space_race_modifiers.txt), which each funding level of a billed milestone
 # adds; test_ai_space_mission_budget.py holds the two equal.
@@ -317,11 +329,100 @@ sr_ai_mission_hold_or_climb_tier = {
 	min = sr_ai_mission_held_tier
 }
 
-# How far the rule's step-down (six reviews over the step-down share) lowers
-# the program from the mission it holds: over 0, a step down, and the five
-# years' wait starts.
+# ---- The milestone guard ------------------------------------------------------
+
+# Each guarded milestone's line, in its progress points: sr_ai_mission_guard_share
+# of its goal (sr_<m>_goal, space_race_values.txt, the goal its entry pins), set
+# against var:sr_progress_<m> by sr_ai_milestone_guarded. Suborbital and Orbital
+# Flight need none: Earth Orbit, the floor, carries them.
+sr_ai_guard_progress_moon_landing = {
+	value = sr_moon_landing_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_probe = {
+	value = sr_probe_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_mars_landing = {
+	value = sr_mars_landing_goal
+	multiply = sr_ai_mission_guard_share
+}
+# Solar System Colonization's goal is its next colony's (stage or target), read
+# live, as its bar's percent is (sr_progress_solar_colonization_percent).
+sr_ai_guard_progress_solar_colonization = {
+	value = sr_solar_colonization_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_interstellar_probe = {
+	value = sr_interstellar_probe_goal
+	multiply = sr_ai_mission_guard_share
+}
+
+# The cheapest mission that still carries every running milestone past its
+# guard line: the floor of the six-month step down (1: none).
+# - The Moon Mission carries the Moon Landing and the Deep-Space Probe; the
+#   Mars Mission the Mars Landing; the Interstellar Mission the Interstellar
+#   Probe (each entry's country_sr_<mission>_program_bool).
+# - Solar Colonization carries Solar System Colonization, but only for a country
+#   with no colony: a holder's entry stays open and only pauses, its progress
+#   kept (ai.md § Space Program Mission Budget, A colony holder). Deep Space
+#   Exploration carries it where only outer worlds are left (the entry's
+#   possible: no lunar world free and no inner world open).
+sr_ai_mission_guard_tier = {
+	value = 1
+	if = {
+		limit = {
+			OR = {
+				sr_ai_milestone_guarded = { MILESTONE = moon_landing }
+				sr_ai_milestone_guarded = { MILESTONE = probe }
+			}
+		}
+		value = 2
+	}
+	if = {
+		limit = { sr_ai_milestone_guarded = { MILESTONE = mars_landing } }
+		value = 3
+	}
+	if = {
+		limit = {
+			sr_ai_milestone_guarded = { MILESTONE = solar_colonization }
+			NOT = { sr_has_space_colony = yes }
+		}
+		value = 4
+		if = {
+			limit = {
+				NOT = { sr_sites_lunar_open = yes }
+				NOT = { sr_colonization_inner_open = yes }
+			}
+			value = 5
+		}
+	}
+	if = {
+		limit = { sr_ai_milestone_guarded = { MILESTONE = interstellar_probe } }
+		value = 6
+	}
+}
+
+# The six-month step down: to the dearest mission within the climbing share,
+# but not below the guard's floor, and never above the mission held.
+sr_ai_mission_step_down_tier = {
+	value = sr_ai_mission_affordable_tier
+	min = sr_ai_mission_guard_tier
+	max = sr_ai_mission_held_tier
+}
+
+# How far the rule's step-down lowers the program from the mission it holds:
+# over 0, a step down, and the five years' wait starts.
 sr_ai_mission_step_down_size = {
 	value = sr_ai_mission_held_tier
+	subtract = sr_ai_mission_step_down_tier
+}
+
+# Over 0: the guard holds the step down above the affordable mission, so the
+# six-month count stays at its limit and the step goes on as soon as the
+# milestone ends, if the bill is still over.
+sr_ai_mission_guard_gap = {
+	value = sr_ai_mission_step_down_tier
 	subtract = sr_ai_mission_affordable_tier
 }
 
@@ -406,6 +507,13 @@ sr_ai_mission_bill_now = {
 	value = sr_ai_mission_units_current
 	multiply = sr_ai_program_throughput_funded
 	multiply = sr_launch_capacity_unit_price
+}
+
+# Earth Orbit's bill over the step-down share (over 0: even the cheapest mission
+# costs more than the program may keep; sr_ai_program_affordability_count).
+sr_ai_mission_overrun_earth_orbit = {
+	value = sr_ai_mission_bill_earth_orbit
+	subtract = sr_ai_mission_budget_down
 }
 
 # Over the step-down share by this much (over 0: the mission itself, unfunded,

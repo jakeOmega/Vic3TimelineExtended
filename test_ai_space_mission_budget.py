@@ -139,6 +139,9 @@ class Country:
         self.vars = {}       # name -> value
         self.expiry = {}     # timed variable -> months left
         self.pms = {"mission": MISSION[mission], "ceiling": ceiling or NONE} if program else None
+        self.colonization_goal = 300.0   # sr_solar_colonization_goal: the Moon's, stage 0
+        self.lunar_open = True           # sr_sites_lunar_open
+        self.inner_open = True           # sr_colonization_inner_open
 
     @property
     def mission(self):
@@ -200,6 +203,8 @@ class Script:
             return c.throughput_modifier + self.constants["sr_ai_funding_throughput_per_level"] * sum(c.funding.values())
         if token == "sr_launch_capacity_unit_price":      # its market scopes are the engine's
             return c.price
+        if token == "sr_solar_colonization_goal":         # its stage and target are the sites'
+            return c.colonization_goal
         m = re.fullmatch(r"sr_funding_(\w+)_level", token)
         if m and m.group(1) in MILESTONES:
             return float(c.funding.get(m.group(1), 0))
@@ -268,6 +273,15 @@ class Script:
             return c.ai == yes
         if key == "has_technology_researched":
             return value in c.techs
+        if key == "custom_tooltip":
+            return self.check([p for p in value if p[0] != "text"], c)
+        if key == "has_building":
+            assert value == "building_space_program", value
+            return c.pms is not None
+        if key == "sr_sites_lunar_open":
+            return c.lunar_open == yes
+        if key == "sr_colonization_inner_open":
+            return c.inner_open == yes
         if key == "any_scope_building":
             return c.pms is not None and self.check(value, c)
         if key == "is_building_type":
@@ -333,6 +347,12 @@ class Script:
                     self.switches.append((group, pm))
             elif key == "custom_tooltip":
                 self.execute([p for p in value if p[0] != "text"], c)
+            elif key == "every_scope_state":   # the one state that matters: the program's
+                if self.check(field(value, "limit") or [], c):
+                    self.execute([p for p in value if p[0] != "limit"], c)
+            elif key == "remove_building":
+                assert value == "building_space_program", value
+                c.pms = None
             elif key in self.effects and value == "yes":
                 self.run(key, c)
             else:
@@ -499,9 +519,25 @@ class StructureTest(unittest.TestCase):
                 tier = next(t for t, v in TIERS.items() if v[0] == key)
                 self.assertIn(f"production_method = {MISSION[tier]}", text[:text.index("ai_chance")])
         found = decisions["te_decision_found_space_program"]
-        ai_chance = found[found.index("ai_chance"):]
-        self.assertIn("sr_ai_mission_room_earth_orbit >= 0", ai_chance)
-        self.assertIn("sr_ai_space_budget_in_trouble = no", ai_chance)
+        self.assertIn("sr_ai_may_found_space_program = yes", found[found.index("ai_chance"):])
+
+    def test_an_ai_builds_a_program_only_by_the_means_test(self):
+        building = parse(blocks(read(BUILDINGS))["REPLACE_OR_CREATE:building_space_program"])
+        can_build = field(building, "can_build_government")
+        self.assertEqual(can_build, [("owner", "?=", [("sr_ai_may_build_space_program", "=", "yes")])])
+        triggers = blocks(read(TRIGGERS))
+        self.assertIn("is_ai = no", triggers["sr_ai_may_build_space_program"])
+        self.assertIn("sr_ai_may_found_space_program = yes", triggers["sr_ai_may_build_space_program"])
+        self.assertNotIn("sr_ai_should_participate", triggers["sr_ai_may_found_space_program"], "a means test, no rank")
+        loc = (ROOT / "localization/english/te_miscellaneous_l_english.yml").read_text(encoding="utf-8-sig")
+        self.assertRegex(loc, r'(?m)^ sr_ai_program_means_tt:0 "[^"]+"$')
+
+    def test_the_guard_line_and_the_demolition_count_are_named(self):
+        self.assertEqual(self.constants["sr_ai_mission_guard_share"], 0.75)
+        self.assertEqual(self.constants["sr_ai_program_unaffordable_months_limit"], 12)
+        demolish = blocks(read(EFFECTS))["sr_ai_program_demolish"]
+        self.assertRegex(demolish, r"name = sr_ai_program_demolished value = yes days = 1825 \}")
+        self.assertIn("remove_building = building_space_program", demolish)
 
     def test_every_ceiling_has_its_words(self):
         loc = LOC.read_text(encoding="utf-8-sig")
@@ -671,6 +707,135 @@ class PassTest(unittest.TestCase):
         self.script.month(c)
         self.assertNotIn("sr_ai_mission_over_months", c.vars, "the Moon itself is within the band")
 
+    # ---- the milestone guard ----------------------------------------------------------------
+    def over_on_solar(self, **kw):
+        """Solar at 30%: over the step-down share; the dearest within 10% is the Moon."""
+        return Country(income_for(0.30, self.units(4)), mission=4, **kw)
+
+    def run_milestone(self, c, milestone, share):
+        goal = c.colonization_goal if milestone == "solar_colonization" else self.script.value(f"sr_{milestone}_goal", c)
+        c.vars[f"sr_active_{milestone}"] = "yes"
+        c.vars[f"sr_progress_{milestone}"] = goal * share
+
+    def test_the_guard_holds_the_step_at_76_percent(self):
+        c = self.over_on_solar()
+        self.run_milestone(c, "solar_colonization", 0.76)
+        self.script.month(c, 12)
+        self.assertEqual((c.mission, c.ceiling), (4, 4))
+        self.assertGreaterEqual(c.vars["sr_ai_mission_over_months"], 6, "the count stays at its limit")
+        self.assertNotIn("sr_ai_mission_cooldown", c.vars)
+
+    def test_the_guard_lets_the_step_go_at_74_percent(self):
+        c = self.over_on_solar()
+        self.run_milestone(c, "solar_colonization", 0.74)
+        self.script.month(c, 6)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+
+    def test_default_steps_past_the_guard_at_once(self):
+        c = self.over_on_solar(in_default=True)
+        self.run_milestone(c, "solar_colonization", 0.90)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (1, 1))
+
+    def test_the_step_comes_at_the_first_review_after_the_milestone_ends(self):
+        c = self.over_on_solar()
+        self.run_milestone(c, "solar_colonization", 0.80)
+        self.script.month(c, 9)
+        self.assertEqual(c.mission, 4)
+        del c.vars["sr_active_solar_colonization"]   # founded its colony, or failed
+        del c.vars["sr_progress_solar_colonization"]
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        self.assertIn("sr_ai_mission_cooldown", c.vars)
+
+    def test_the_guard_steps_only_as_far_as_the_milestone_allows(self):
+        # A Mars Landing at 80% on Solar Colonization: down to the Mars Mission, not the Moon.
+        c = self.over_on_solar()
+        self.run_milestone(c, "mars_landing", 0.80)
+        self.script.month(c, 6)
+        self.assertEqual((c.mission, c.ceiling), (3, 3))
+        self.assertIn("sr_ai_mission_cooldown", c.vars)
+        self.assertIn("sr_ai_mission_over_months", c.vars, "the rest of the step waits on the landing")
+
+    def test_a_holders_colonization_only_pauses_so_it_is_not_guarded(self):
+        c = self.over_on_solar()
+        c.vars["sr_colony_count"] = 1
+        self.run_milestone(c, "solar_colonization", 0.90)
+        self.script.month(c, 6)
+        self.assertEqual(c.mission, 2)
+
+    def test_outer_worlds_only_guard_deep_space(self):
+        c = Country(income_for(0.30, self.units(5)), mission=5)
+        c.lunar_open = c.inner_open = False
+        self.run_milestone(c, "solar_colonization", 0.80)
+        self.script.month(c, 6)
+        self.assertEqual(c.mission, 5)
+        c.inner_open = True
+        self.script.month(c)
+        self.assertEqual(c.mission, 4, "Solar Colonization carries it again")
+
+    # ---- a program even Earth Orbit is too dear for ------------------------------------------------
+    def test_a_year_over_on_earth_orbit_pulls_the_program_down(self):
+        c = Country(income_for(0.25, self.units(1)), mission=1)
+        self.script.month(c, 11)
+        self.assertIsNotNone(c.pms)
+        self.assertEqual(c.vars["sr_ai_program_unaffordable_months"], 11)
+        self.script.month(c)
+        self.assertIsNone(c.pms)
+        self.assertEqual(set(c.vars), {"sr_ai_program_demolished"})
+        # Five years (60 months) from the review, which the month's tick then counts down.
+        self.assertEqual(c.expiry["sr_ai_program_demolished"], 59, "five years before it founds one again")
+        self.assertTrue(self.script.log[-1].startswith("TE_SR_AI_PROGRAM demolished "))
+
+    def test_one_review_under_ends_the_count(self):
+        c = Country(income_for(0.25, self.units(1)), mission=1)
+        self.script.month(c, 11)
+        c.income *= 2   # 12.5%
+        self.script.month(c)
+        self.assertNotIn("sr_ai_program_unaffordable_months", c.vars)
+        c.income /= 2
+        self.script.month(c, 11)
+        self.assertIsNotNone(c.pms)
+
+    def test_a_player_never_counts_and_a_takeover_stops_the_count(self):
+        c = Country(income_for(0.25, self.units(1)), mission=1, ai=False)
+        self.script.month(c, 24)
+        self.assertIsNotNone(c.pms)
+        self.assertNotIn("sr_ai_program_unaffordable_months", c.vars)
+        c = Country(income_for(0.25, self.units(1)), mission=1)
+        self.script.month(c, 8)
+        c.ai = False
+        self.script.month(c)
+        self.assertNotIn("sr_ai_program_unaffordable_months", c.vars)
+        c.ai = True
+        self.script.month(c, 11)
+        self.assertIsNotNone(c.pms, "the count started again from zero")
+
+    def test_founding_waits_five_years_after_a_demolition(self):
+        c = Country(income_for(0.25, self.units(1)), mission=1)
+        self.script.month(c, 12)
+        c.income *= 10   # Earth Orbit at 2.5%: affordable at once
+        self.assertFalse(self.script.holds("sr_ai_may_found_space_program", c))
+        c.tick(58)   # 59 months of the 60 gone
+        self.assertFalse(self.script.holds("sr_ai_may_found_space_program", c))
+        c.tick(1)
+        self.assertTrue(self.script.holds("sr_ai_may_found_space_program", c))
+        self.assertTrue(self.script.holds("sr_ai_may_build_space_program", c))
+
+    def test_founding_asks_earth_orbit_within_the_climbing_share(self):
+        units = self.units(1)
+        for share, may in ((0.099, True), (0.10, True), (0.101, False)):
+            with self.subTest(share=share):
+                c = Country(income_for(share, units), program=False)
+                self.assertEqual(self.script.holds("sr_ai_may_found_space_program", c), may)
+                self.assertEqual(self.script.holds("sr_ai_may_build_space_program", c), may)
+        for kind in ("in_default", "bankrupt"):
+            with self.subTest(kind=kind):
+                c = Country(income_for(0.01, units), program=False, **{kind: True})
+                self.assertFalse(self.script.holds("sr_ai_may_found_space_program", c))
+        c = Country(income_for(5.0, units), program=False, ai=False)
+        self.assertTrue(self.script.holds("sr_ai_may_build_space_program", c), "a player's government always may")
+
     def test_a_lost_program_leaves_no_record(self):
         c = Country(income_for(0.05, self.units(4)), mission=1)
         self.script.month(c)
@@ -748,6 +913,8 @@ CASES_1958 = {
     "GBR": (1_912_000, 1.06, 1.03, 0, 1, None),
     "OYO": (19_000, 1.21, 1.17, 0, 4, "in_default"),
 }
+# Pulled down after a year: Earth Orbit's bill over 20% of own revenue at twelve reviews in a row.
+DEMOLISHED_1958 = {"ITA", "MEX", "IDN", "SCA", "OYO"}
 # What the rule picks: (after the first review, after six).
 PICKS_1958 = {
     "GER": (4, 2), "UNA": (3, 1), "ITA": (1, 1), "G20": (4, 1), "MEX": (1, 1), "IDN": (1, 1),
@@ -772,6 +939,8 @@ class Singapore1958Test(unittest.TestCase):
                 first = c.mission
                 script.month(c, 5)
                 self.assertEqual((first, c.mission), PICKS_1958[tag])
+                script.month(c, 6)
+                self.assertEqual(c.pms is None, tag in DEMOLISHED_1958)
 
 
 if __name__ == "__main__":

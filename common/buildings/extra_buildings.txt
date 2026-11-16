@@ -486,8 +486,12 @@ REPLACE_OR_CREATE:building_space_program = {
 
 	required_construction = construction_cost_super_high
 
+	# A player's government always may; an AI's only by the means test its
+	# budget pass reverses to pull a program down (sr_ai_may_build_space_program,
+	# sr_ai_mission_budget_triggers.txt; ai.md § Space Program Mission Budget),
+	# as Found a Space Program's AI weight asks.
 	can_build_government = {
-		always = yes
+		owner ?= { sr_ai_may_build_space_program = yes }
 	}
 
 	can_build_private = {

@@ -521,9 +521,12 @@ te_decision_establish_strategic_reserve = {
 # space_race_buttons.txt's header explains), out of default and not under the
 # bankruptcy modifier (sr_ai_space_budget_in_trouble), whose weekly surplus
 # covers the Earth Orbit bill (net_fixed_income, the affordability reader
-# cultural_hegemony_buttons.txt uses) and whose Earth Orbit bill is within
-# the share of fixed income the AI's monthly budget pass lets a program climb
-# to (ai.md § Space Program Mission Budget).
+# cultural_hegemony_buttons.txt uses), and that passes the means test the
+# AI's budget pass reverses to pull a program down
+# (sr_ai_may_found_space_program, sr_ai_mission_budget_triggers.txt: Earth
+# Orbit's bill within the share of fixed income a program may climb to, and
+# not within five years of pulling one down; ai.md § Space Program Mission
+# Budget). The building's can_build_government asks the same of an AI.
 # ============================================================================
 te_decision_found_space_program = {
 	is_shown = {
@@ -557,12 +560,10 @@ te_decision_found_space_program = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				sr_ai_space_budget_in_trouble = no
 				net_fixed_income > sr_mission_bill_earth_orbit
-				# Earth Orbit within the budget the AI's monthly pass climbs by
-				# (sr_ai_mission_budget_values.txt): a program it founds is one it
-				# would keep.
-				sr_ai_mission_room_earth_orbit >= 0
+				# The means test the budget pass reverses to pull a program
+				# down: a program it founds is one it would keep.
+				sr_ai_may_found_space_program = yes
 			}
 			add = 100
 		}

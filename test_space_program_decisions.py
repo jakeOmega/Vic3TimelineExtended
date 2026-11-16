@@ -205,10 +205,14 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
             with self.subTest(decision=name):
                 ai = block(block(self.decisions, name), "ai_chance")
                 self.assertIn("sr_ai_should_participate = yes", ai)
-                self.assertIn("sr_ai_space_budget_in_trouble = no", ai)
+        for name in MISSIONS:
+            with self.subTest(decision=name):
+                self.assertIn("sr_ai_space_budget_in_trouble = no", block(block(self.decisions, name), "ai_chance"))
+        # Founding asks the means test the budget pass reverses to pull a program down (trouble
+        # included; test_ai_space_mission_budget.py runs it).
         found = block(block(self.decisions, "te_decision_found_space_program"), "ai_chance")
         self.assertRegex(found, r"net_fixed_income > sr_mission_bill_earth_orbit")
-        self.assertIn("sr_ai_mission_room_earth_orbit >= 0", found)
+        self.assertIn("sr_ai_may_found_space_program = yes", found)
         for name in MISSIONS:
             with self.subTest(decision=name):
                 ai = block(block(self.decisions, name), "ai_chance")
