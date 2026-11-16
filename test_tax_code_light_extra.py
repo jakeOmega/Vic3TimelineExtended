@@ -391,9 +391,9 @@ class PanelTest(unittest.TestCase):
     def test_the_tooltip_says_why_the_cap_is_low_and_names_the_laws_that_tax_dividends_in_full(self):
         table = loc(LOC)
         self.assertIn("SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
-                      "'te_tax_view_light_extra_div'), '(CFixedPoint)1' ), 'te_tax_lt_row_div_extra', 'te_tax_empty' )",
+                      "'te_tax_view_light_extra_div'), '(CFixedPoint)1' ), 'te_tax_lt_extra_note_div', 'te_tax_empty' )",
                       table["te_tax_lt_row_div_tt"])
-        note = loc(GEN_LOC)["te_tax_lt_row_div_extra"]
+        note = loc(GEN_LOC)["te_tax_lt_extra_note_div"]
         self.assertIn("Your taxation law levies no dividend tax", note)
         self.assertIn("#v 5%#!", note)
         self.assertIn("$law_proportional_taxation$ at up to #v 20%#!", note)
