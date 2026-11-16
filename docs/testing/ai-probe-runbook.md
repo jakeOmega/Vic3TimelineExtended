@@ -45,7 +45,9 @@ names its run folder; the log copy is there whether or not the run reached its d
 
 **The harness's estimate is low.** The first long run (2026-11-16) took 6 h 46 min from 1836 to 1925, 0.75 s a
 game day on average, where the harness estimated 4.85 h. At that rate a run takes about 4.9 hours to 1900, 7.6 to
-1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room.
+1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room. The day's
+other two runs took 5 h 05 min from 1836 to October 1913, where the game crashed (a failed run's reply carries no
+`timing`), and 52 min from 1836 to 1850, 0.58 s a game day, where the harness estimated 0.69 h.
 
 **The short check comes first, always.** Nobody had printed most of the probe's lines before it was written, and a
 `debug_log` line the engine cannot render is dropped whole. `check` says whether the probe armed (if not, the
@@ -119,6 +121,28 @@ What the probe cannot see, and where to look instead: which building the AI queu
 construction queues, `scripts/analysis/econ_save_series.py`), production methods in use (`save_world_report.py
 buildings`), pops and wages. The run's last save is kept as the harness's dated fixture.
 
+## Judging a run, and comparing two
+
+Beside the largest economies first (above), the owner (2026-11-16): "a world where both the large ai economies and
+the small ai economies grow is better still, so work that helps small countries is not wasted. Just not *as*
+critical." And on the first comparison of two builds: "There is going to be a lot of noise in the data (e.g. if the
+UK loses India...)... The areas that I expect to have the least noise are tax as a percent of GDP and governments
+buying construction".
+
+- **Two games differ by chance, a lot.** Countries' fortunes part early and stay parted. In the two long games of
+  2026-11-16 China left Traditionalism in 1870 in one and in 1908 in the other, Austria, Spain and Belgium lost
+  territory in one, and the banking crashes fell in different decades; the 20 largest economies' private
+  construction differed by a third in the 1890s for those reasons, not for anything the builds changed
+  (`ai-economy-playtest.md` § The AI's construction purchase fits its budget, "Read 2026-11-16").
+- **Compare the same country**, and for a sum, the same tag-years with the same economic-system law, no banking
+  crash in either game and GDP within 1.5 times, before the 20 largest's totals, whose members change between games.
+- **Two or three games per build** where a decision rests on a difference the history alone could make.
+- **Count each country once a year.** A country's reporting month drifts, so one to six countries a year report
+  twice in one calendar year (China and Spain in 1900 in both games of 2026-11-16): a yearly sum keeps the later
+  report.
+- **Read each run with its own build's key** (`--key` with the `ai_probe_key.json` of the commit that ran), even
+  where one key would do.
+
 ## What the first long run taught (1836 to 1925, 2026-11-16)
 
 - **It took 6 h 46 min**, 0.75 s a game day, against the harness's estimate of 4.85 h (above).
@@ -140,6 +164,37 @@ buildings`), pops and wages. The run's last save is kept as the harness's dated 
   staffed was an inference: version 1 had no field for the sector's own staffing. Vanilla's AI expands no building
   under 80% staffed unless it hired the week before (`00_ai.txt`, `PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD`), so
   version 2 logs the sector's staffing against both thresholds (table 1f).
+
+## The three runs of 2026-11-16
+
+Unattended AI-only games from 1836, all under the same lobby rules (Small-Economy Construction off). Self-checks
+are counted by check (`row_standing_on_creation` logged OK twice in each).
+
+| Run | Build | Reached | Wall time | Self-checks |
+|---|---|---|---|---|
+| 1 | `dab9335f1`: the probe, before the day's AI changes | 1925.1.1 | 6 h 46 min | 68 OK, 5 BROKEN |
+| 2 | `main` at `81b947368`: #1849, #1850, #1851, #1854, #1855, #1856, #1857 | October 1913, where the game crashed (#1871, fixed by #1872) | 5 h 05 min | 71 OK, 4 BROKEN |
+| 3 | `bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in | 1850.1.1 | 52 min | 54 OK, 1 BROKEN |
+
+- **The readings** are in the lists that asked for them: `ai-economy-playtest.md` § AI law cadence (runs 1 and 2
+  under "First verdict", run 3 under "Second read"), § The AI's construction purchase fits its budget ("Read
+  2026-11-16", runs 1 and 2) and § The Construction Sector's workforce ("First reading", run 3).
+- **Run 1's BROKEN checks**: `delayed_state_event` (known since 2026-11-08), `ai_law_cadence`, and three that #1866
+  then settled (`cause_tags_read`, `workforce_pull_births`, `cm_conversion_merges_pops`: their rows in
+  `demographics-playtest.md` and `culture-merges-playtest.md`). All three read OK in run 2 and the first two again
+  in run 3, which ended before the third's date.
+- **Run 2's**: `delayed_state_event`; `ai_law_cadence` (`cons=13/106=0.12 rest=19/90=0.21`, the build before
+  #1867); `construction_admin_while_paused` (`country=BIC weeks=14 bought=420.0 wasted_weeks=0 spent=842553
+  repaid=842553`), on which the owner chose to take the purchase through the pause out ("Let's do this.",
+  2026-11-16), PR #1874; and `tax_light_div_levy` (`levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1,
+  1881`), on which PR #1873 is open.
+- **Run 3's**: `delayed_state_event` alone; `harvest_tags_read`, #1866's new check, read OK.
+- **Version 2's first long read** (run 3's `check`): every version-2 addition read as the table above expects but the
+  world line, whose `dn` and `dn_states` were 0 in all 14 lines; the purchase recomputed from a snapshot matched
+  `cm_target` in 3,943 of 3,946.
+- **A run that crashes keeps its log.** Run 2's `fixture_debug.log` ran to the crash, and the probe's reader parsed it
+  as any other (the comparisons to 1912 came from it). A failed run keeps no `lines.log`, so its self-checks are read from that log
+  (`grep -a TE_SELF_CHECK`); the harness's side is in the game-qa skill.
 
 ## What a run costs
 
