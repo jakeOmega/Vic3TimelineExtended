@@ -83,6 +83,7 @@ NOT_COPIED = {
     "te_mon_union_reserve_applied", "te_mon_union_pressure_applied",
     "te_mon_union_seigniorage_applied", "te_mon_union_issuer_cut_applied",
     "te_mon_union_issuer_bank_applied", "te_mon_union_credit_applied",
+    "te_mon_reserve_floor_applied",
     # Recomputed from scratch by the monthly update or the discovery.
     "te_mon_regime", "te_premium_structural", "te_premium_cyclical",
     "te_rate_paid_pts", "te_market_yield", "te_mon_deficit_pct",
@@ -101,6 +102,9 @@ NOT_COPIED = {
     "te_mon_union_adopters", "te_mon_union_adopter_gdp_m",
     "te_mon_union_issuer_cut_pts", "te_mon_union_issuer_bank_pts",
     "te_mon_union_credit_pts",
+    # What step 5's floor swallowed, and the part of a reserve currency's cut paid
+    # as risk premium for it (#1812): both re-derived every pulse.
+    "te_premium_floor_swallowed", "te_mon_reserve_floor_pts",
     # The Backstops rows' display figures (GUI audit BNK-13): te_mon_bs_cost_<kind>
     # (parsed as its prefix), the union's per-member share and its sum.
     "te_mon_bs_cost_", "te_mon_bs_cost_union", "te_mon_bs_union_pts",

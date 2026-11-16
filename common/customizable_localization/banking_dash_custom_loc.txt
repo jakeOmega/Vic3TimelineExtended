@@ -1109,6 +1109,46 @@ te_mon_anchor_state = {
 }
 
 
+# What the Monetary Anchor row's tooltip adds for an anchor whose credit
+# standing is on its floor (2026-11-16, #1812): the part of its reserve-currency
+# cut the floor swallows comes off its risk premium instead
+# (te_mon_reserve_currency_premium), and the line above it, "Credit standing
+# from arrangements now", would otherwise read as a gain the country does not
+# get. The issuer of a common currency reads that its own cut answers part of it,
+# and, where that cut covers all the floor cancels and the modifier is off, that
+# it covers it (Singapore in the owner's 1958 save: a reserve cut of 0.08 points
+# under an issuer cut of 0.39; review of #1857). Nothing for anybody else: the
+# last key is empty.
+te_mon_reserve_floor_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_reserve_floor_display > 0
+			te_mon_union_is_issuer = yes
+		}
+		localization_key = banking_dash_mon_anchor_floor_note_issuer
+	}
+	text = {
+		trigger = { te_mon_reserve_floor_display > 0 }
+		localization_key = banking_dash_mon_anchor_floor_note
+	}
+	text = {
+		trigger = {
+			te_mon_union_is_issuer = yes
+			has_variable = te_premium_floor_swallowed
+			var:te_premium_floor_swallowed > 0
+			te_mon_reserve_currency_cut > 0
+		}
+		localization_key = banking_dash_mon_anchor_floor_note_issuer_covered
+	}
+	text = {
+		localization_key = banking_dash_mon_anchor_floor_note_none
+	}
+}
+
+
 # ----------------------------------------------------------------------------
 # Phase 6a — the drawn balance on a swap line (§15C.1)
 # ----------------------------------------------------------------------------

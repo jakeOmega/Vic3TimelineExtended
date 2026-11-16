@@ -506,6 +506,9 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_union_issuer_premium }
 		te_mon_mod_strip = { NAME = te_mon_union_issuer_bank }
 		te_mon_mod_strip = { NAME = te_mon_union_credit }
+		# [#1812, 2026-11-16] A reserve currency's cut where the floor swallows
+		# it: the same, re-added by te_monetary_apply_fx_one on a missing one.
+		te_mon_mod_strip = { NAME = te_mon_reserve_currency_premium }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -754,6 +757,10 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_premium_structural } }
 		set_variable = { name = te_premium_structural value = 0.5 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_premium_floor_swallowed } }
+		set_variable = { name = te_premium_floor_swallowed value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_premium_cyclical } }
@@ -2129,8 +2136,17 @@ te_monetary_update_premium = {
 	# country_credit_standing_floor_add, which law_central_bank_independence
 	# carries at -0.0025. That replaces the te_mon_is_cbi branch that used to
 	# hard-code 0.25 here.
+	#
+	# [#1812, 2026-11-16] WHAT THE FLOOR SWALLOWED, recorded where it is applied:
+	# the points of standing this month's sum earned past the floor, which buy
+	# nothing. Step 9b reads it (te_mon_reserve_floor_value) to pay a reserve
+	# currency's swallowed cut as risk premium instead, so it is this floor and
+	# this sum, never a second copy of the law and the technologies that move it.
+	set_variable = { name = te_premium_floor_swallowed value = 0 }
 	if = {
 		limit = { var:te_premium_structural < te_mon_standing_floor }
+		set_variable = { name = te_premium_floor_swallowed value = te_mon_standing_floor }
+		change_variable = { name = te_premium_floor_swallowed subtract = var:te_premium_structural }
 		set_variable = { name = te_premium_structural value = te_mon_standing_floor }
 	}
 	if = {
