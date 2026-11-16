@@ -151,3 +151,25 @@ a major power table International Sanctions against a rival and let them carry.
 | **The choice arrives.** Wait 90 days after the results. | Cargo Under Seal, naming the sanctioned country, with Enforce, Partial compliance and Quietly profit. Choosing Enforce gives Strict Sanctions Enforcement. | Nothing: check in the console that `un_events.43` ran (it opens nothing if the enforcer modifier or the target's `un_sanctions_target_on` is gone). A blank country name: `scope:sanctioned_country` did not ride from `un_vote.2` through the relay. |
 | **Once a regime.** Answer it, then wait out the regime. | No second Cargo Under Seal for the same regime. | A second copy: something other than `un_vote.2` queues `un_events.43` or `un_events.5` (`test_un_lift_sanctions.py` pins one site each). |
 | **A lifted regime.** Carry sanctions, then press Lift Ours (Programmes and Conventions) within 90 days. | No Cargo Under Seal. | It arrives: the relay's limit no longer restates `un_events.5`'s trigger. |
+
+## The ceasefire order's debit (2026-11-15)
+
+A Binding Ceasefire's order is meant to cost the UN's peace and order 0.25 for each month the aggressor fights on,
+booked every six months and when the order ends (docs/systems/un_redesign_design.md §0.12 item 6). It never did: the
+month added to a counter nothing had set, and `change_variable` on an unset variable does nothing (#1818, found in the
+logs of a 1952 to 1954 order). `un_ceasefire_order_impose` now starts the counter. `test_un_ceasefire_order.py` and
+`change_variable_init_audit` hold the script; only a game shows the entry. Found the UN with `event te_debug_un.1`,
+raise it with the console event's "Raise the UN one tier" until Charter Reform II is in force, then have a member that
+started a war against another member named in a Binding Ceasefire and let it carry without a veto.
+
+**This debit is live for the first time.** The figure is the design's and has never run in a game: an order defied
+to the end, 24 months of fighting on, now costs the UN's peace and order up to 6 points (24 × 0.25), in four entries
+of −1.5, on a pillar that runs from −20 to 0. Until now it cost nothing. Watch what one or two such orders do to UN
+authority in a long game before judging the 0.25; `un_cf_order_debit` in `common/script_values/un_order_values.txt` is
+the one number to change.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The first booking.** Let the aggressor fight on for six months under the order. | In the sixth month the authority ledger gains one Peace and Order entry of −1.5, "a war fought on under the Assembly's ceasefire order by" the aggressor. `game.log` has no `change_variable effect [ Variable not of the 'value' scope type. Type: empty ]` line from `un_order_effects.txt`. | The log line is back and no entry: `un_ceasefire_order_impose` no longer sets `un_cf_debit_months`. No line and no entry: `un_cf_order_debit_accrued` read 0 where `un_ledger_entry_on` takes its `POINTS` (a script value that reads the aggressor's variable from the ledger's scope); store the figure in a variable on the aggressor first and pass that. |
+| **The last booking.** End the war in the eighth month of fighting, or let the order run out. | One more entry for the months since the last booking (−0.5 for two), then the ending's own entry (delivery for an order kept, credibility for one defied). At most five debit entries over a 24-month order. | A second entry of −1.5 or more means the booking did not put the counter back to 0 (`un_ceasefire_book_accrued_debit`). |
+| **An order from before the fix.** Load a save with an order already standing. | No debit for that order, and the log line continues until it ends: its counter was never started. Not a regression. | |
