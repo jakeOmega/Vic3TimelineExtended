@@ -419,8 +419,8 @@ Movement](#the-environmental-movement)): the one it is nearest to adopting anywa
 and can afford now. It does this at most once a year, so each answer has time to calm
 the movement before the next. It keeps each of those policies while the
 movement would be that restless again without it, and Renewable Investment only
-while it can still afford the running cost. While the movement lasts, it drops
-at most one of the seven a year.
+while it can still afford the running cost. While the movement lasts, it lets
+at most one of the seven lapse a year, unless it is short of authority.
 
 | Policy | Threshold |
 |---|---|

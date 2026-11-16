@@ -120,7 +120,8 @@ on_civil_war_won = {
 # repair restores what the loser held (#460-#465). Each is a no-op for a
 # loyalist winner except the tax code's, which runs for either winner of a
 # merge (the winner's own code applies; it closes the bill and the draft and
-# resyncs collection), and none depends on the order of the others.
+# resyncs collection), and the climate AI's, which clears its yearly locks on
+# either winner. None depends on the order of the others.
 te_civil_war_on_won = {
 	effect = {
 		te_civil_war_resolve_sides = yes

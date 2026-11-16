@@ -461,6 +461,22 @@ class ModelTest(unittest.TestCase):
                 if lock:
                     self.assertEqual((len(gone), len(c.held & set(held))), (2, 2), c.log)
 
+    def test_a_far_answer_lapses_once_nearer_ones_calm_the_movement(self):
+        # The rule as written, not a cycle: a militant movement with only the
+        # Carbon Tax in reach carries it from 30 points short. Once the cheaper
+        # two come into reach and calm it, the movement wouldn't press for the
+        # tax any more (its hold, 12, is short of the 15 it needs), so the tax
+        # lapses and isn't taken up again. The hold as first built kept it.
+        for hold, kept in (("one", False), ("all", True)):
+            with self.subTest(hold=hold):
+                c = _Country(self.BASE, activism=1.0, can={p: p == "carbon_tax" for p in self.BASE}, hold=hold)
+                c.run(52)
+                c.can = {p: True for p in self.BASE}
+                c.run(52 * 9, start=52)
+                self.assertEqual("carbon_tax" in c.held, kept, c.log)
+                self.assertEqual([e[2] for e in c.log if e[1] == "adopt"],
+                                 ["carbon_tax", "climate_adaptation", "reforestation"])
+
     def test_no_cycle_at_any_activism_or_weight(self):
         for weight in (20, 30, 40):
             for a0 in (0.55, 0.65, 0.75, 0.9, 1.0):
