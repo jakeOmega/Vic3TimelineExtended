@@ -51,7 +51,9 @@
 # a sync after a taxation law is activated (te_tax_light.3). A released country
 # starts from its own law, so its marker is cleared first. Each country's own
 # monthly pulse also runs the entry's safety net (te_tax_light_entry_net, below):
-# the light code's relief and reactions are je_tax_code's scaling modifiers.
+# the light code's relief and reactions are je_tax_code's scaling modifiers;
+# and the low dividend tax's teardown (te_tax_light_levy_net, below), a flat
+# modifier the sync adds, taken off where the code is no longer in force.
 # The full code has the same net (te_tax_full_entry_net): its tab opens only
 # while the entry is active.
 #
@@ -243,6 +245,7 @@ on_monthly_pulse_country = {
 		te_tax_light_entry_stuck
 		te_tax_full_entry_stuck
 		te_tax_rule_off_net
+		te_tax_light_levy_net
 	}
 }
 
@@ -429,6 +432,29 @@ te_tax_rule_off_net = {
 			}
 			te_tax_leave_code_for_rule = yes
 			debug_log = "TE_TAX rule_off left the code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope. The light code's low dividend tax is a flat country modifier,
+# te_tax_light_levy_div, which only the light sync adds and refreshes
+# (te_tax_light_gen_levy, its one refresh site; 2026-11-16, after
+# TE_SELF_CHECK tax_light_div_levy read the entry's declaration at 0). The sync
+# runs only while the code is in force, so where it no longer is (the rule
+# switched to Disabled, or to the full code, mid-game, from the screen that
+# changes country) this takes the levy off, at the country's next monthly
+# pulse. Removal only: it never adds or rescales the levy. Under the full code
+# the carrier's own dividend rate applies, so a levy left there would tax
+# dividends twice.
+te_tax_light_levy_net = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { te_tax_light_in_force = yes }
+				te_tax_light_has_levy = yes
+			}
+			te_tax_light_gen_clear_levy = yes
+			debug_log = "TE_TAX light_levy_off the code is not in force here, so the low dividend tax's levy came off; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }

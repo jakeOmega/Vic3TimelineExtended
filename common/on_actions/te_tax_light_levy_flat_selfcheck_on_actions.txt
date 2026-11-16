@@ -1,0 +1,204 @@
+﻿# TEMPORARY self-check (2026-11-16): does the light sync's flat low dividend tax reach the country?
+#
+# Under the light setting a law that levies no dividend tax (Consumption-Based, Land-Based, Per-Capita) lets the code
+# levy one up to a low cap (LIGHT_EXTRAS in scripts/generators/gen_tax_code.py). #1855 levied it as a declaration on
+# je_tax_code, and its self-check, tax_light_div_levy, read BROKEN in the observer game of 2026-11-16 (build
+# 81b947368, July 1, 1881): modifier:tax_dividends_add read 0 in 70 of 70 AI countries whose code levied it, while 5 of
+# 5 on Proportional or Graduated read the law's rate. Since then the light sync removes and adds again a flat country
+# modifier, te_tax_light_levy_div, at multiplier = te_tax_light_levy_div_value (te_tax_light_gen_levy). A flat
+# modifier, unlike a declaration, is visible to has_modifier, so this check can tell three things apart: the sync did
+# not put it on (held), it is on and the rate read shows it (matched), and it is on and the rate read does not (at 0).
+#
+# What script can and can't show. modifier:tax_dividends_add is the country's dividend tax rate from every source. A
+# modifier shows in that read whether or not the Budget collects it, so OK says the levy is on the country and shows
+# in the same read as a law's own dividend rate, which is what the engine taxes dividends by; it can't say the tax is
+# collected. Only the Budget panel's Dividends Taxes line can (docs/testing/tax-code-playtest.md, PT-47).
+#
+# When it reads. The sync re-adds the levy on the 1st (the AI's monthly processor), so the count is taken on each
+# country's own monthly pulse, a 30-day timer that falls on other days, and summed over a calendar month (a window,
+# opened by the global pulse on the 1st). The first window opens on the third global monthly pulse this build runs
+# under the light setting (te_tllf_months), two months after the first, so a save from an older build has had its
+# first syncs. It counts AI countries that follow their tax level (te_tax_light_ai_uniform), with the code in force
+# and a dividend tax above nothing (degenerate inputs out: a player's own choice, a rebel during its war, and no tax):
+#   levy     the extra is open (te_tax_light_extra_div): the rate is the levy alone;
+#   control  the law levies it (Proportional, Graduated): the rate is the law's, which an AI's code never relieves.
+# A country matches when its rate is the code's (te_tax_en_div x te_tax_step_div) to within 0.001, or up to 0.011 over
+# (the spectrum auction's re_spectrum_auction adds 0.01); it reads 0 under 0.001 and above the code's past 0.011 (a
+# second copy of the levy). Held: it has te_tax_light_levy_div (te_tax_light_has_levy).
+#
+# One verdict a game, given on a global pulse from the month's window:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   BROKEN not_applied   5 or more in the levy group and fewer than 20% hold the levy: the sync did not add it.
+#               Needs no control, so it can come from the first window. Fallback: the sync's add is broken, not the
+#               engine: run te_tax_debug.9 in one such country and read the save report; nothing else is to build.
+#   then, once the control has 5 countries in a window, or from 1900.1.1 with whatever the window has:
+#   OK          5 or more in each group, 80% or more of the levy group holding the levy and matching, 80% or more of
+#               the control matching. Read the Budget's Dividends Taxes line once (PT-47).
+#   BROKEN doubled       80% or more hold it and 20% or more read above the code's rate, control matching: the levy is
+#               on twice. Fallback: record the applied multiplier and re-add only when it differs
+#               (scripting_best_practices.md, "Modifier Values Are NOT Recalculated Within a Single Effect Block").
+#   BROKEN unread        80% or more hold it, 80% or more read 0, control matching: a flat country modifier's
+#               tax_dividends_add is missing from the read as the declaration's was, so the read sees only a law's
+#               dividend rate. Then the Budget line (PT-47) decides: if it shows the tax, the levy works and only the
+#               read is blind (delete this check); if not, no modifier levies a dividend tax under a law without one,
+#               and the owner decides between another carrier and retiring the low dividend tax.
+#   NO_VERDICT  anything else: fewer than 5 in a group by 1900, a mixed reading, or a control that does not match.
+#
+# Play-test row: docs/testing/tax-code-playtest.md § The light code's low dividend tax. Delete this file and
+# te_tax_light_levy_flat_selfcheck_values.txt once it reads OK and the Budget line has been read.
+on_monthly_pulse = {
+	on_actions = {
+		te_tax_light_levy_flat_selfcheck_month
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_tax_light_levy_flat_selfcheck_count
+	}
+}
+
+# Global, the 1st of each month under the light setting until the verdict: the settling count (up to 3), the verdict
+# from the window the month's country pulses filled, then a fresh window. The latch is the first thing a verdict sets.
+te_tax_light_levy_flat_selfcheck_month = {
+	trigger = {
+		te_tax_code_light_on = yes
+		NOT = { has_global_variable = te_tllf_checked }
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_tllf_months } }
+			set_global_variable = { name = te_tllf_months value = 0 }
+		}
+		if = {
+			limit = { global_var:te_tllf_months < 3 }
+			change_global_variable = { name = te_tllf_months add = 1 }
+		}
+		# The verdict, from a window a whole month of country pulses filled. The counts are read through
+		# script values in a country's scope (any country: they read only globals), as the log line needs one.
+		if = {
+			limit = { has_global_variable = te_tllf_window }
+			random_country = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								te_tllf_chk_n_g >= 5
+								te_tllf_chk_held_share < 0.2
+							}
+							te_tllf_chk_cn_g >= 5
+							game_date >= 1900.1.1
+						}
+					}
+					set_global_variable = te_tllf_checked
+					debug_log = "TE_SELF_CHECK START tax_light_levy_flat (the verdict line follows; none after this one means the engine dropped the templated line)"
+					if = {
+						limit = {
+							te_tllf_chk_n_g >= 5
+							te_tllf_chk_held_share < 0.2
+						}
+						debug_log = "TE_SELF_CHECK BROKEN tax_light_levy_flat not_applied levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the light sync did not put the flat Low Dividend Tax on AI countries whose code levies it: run te_tax_debug.9 in one and read the save report, docs/testing/tax-code-playtest.md)"
+					}
+					else_if = {
+						limit = {
+							te_tllf_chk_n_g >= 5
+							te_tllf_chk_held_share >= 0.8
+							te_tllf_chk_match_share >= 0.8
+							te_tllf_chk_cn_g >= 5
+							te_tllf_chk_cmatch_share >= 0.8
+						}
+						debug_log = "TE_SELF_CHECK OK tax_light_levy_flat levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the flat Low Dividend Tax is on the country and shows in the rate read that shows a law's own dividend rate; script can't see collection, so read the Budget's Dividends Taxes line once: docs/testing/tax-code-playtest.md, PT-47)"
+					}
+					else_if = {
+						limit = {
+							te_tllf_chk_n_g >= 5
+							te_tllf_chk_held_share >= 0.8
+							te_tllf_chk_over_share >= 0.2
+							te_tllf_chk_cn_g >= 5
+							te_tllf_chk_cmatch_share >= 0.8
+						}
+						debug_log = "TE_SELF_CHECK BROKEN tax_light_levy_flat doubled levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the dividend tax rate reads above the code's: the levy is on twice; record the applied multiplier, docs/testing/tax-code-playtest.md)"
+					}
+					else_if = {
+						limit = {
+							te_tllf_chk_n_g >= 5
+							te_tllf_chk_held_share >= 0.8
+							te_tllf_chk_zero_share >= 0.8
+							te_tllf_chk_cn_g >= 5
+							te_tllf_chk_cmatch_share >= 0.8
+						}
+						debug_log = "TE_SELF_CHECK BROKEN tax_light_levy_flat unread levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (the flat Low Dividend Tax is on the country and the rate read does not show it, as it did not show the declaration: the Budget's Dividends Taxes line decides, docs/testing/tax-code-playtest.md, PT-47)"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK NO_VERDICT tax_light_levy_flat levy: held=[SCOPE.ScriptValue('te_tllf_chk_held_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_n_g')|0] matched=[SCOPE.ScriptValue('te_tllf_chk_match_g')|0] at0=[SCOPE.ScriptValue('te_tllf_chk_zero_g')|0] above=[SCOPE.ScriptValue('te_tllf_chk_over_g')|0]; control=[SCOPE.ScriptValue('te_tllf_chk_cmatch_g')|0]/[SCOPE.ScriptValue('te_tllf_chk_cn_g')|0] matched; date=[TimeKeeper.GetCurrentDate.GetString] (fewer than 5 countries in a group by 1900, a mixed reading, or a control that does not match: read the Budget as docs/testing/tax-code-playtest.md says, PT-47)"
+					}
+				}
+			}
+		}
+		# A fresh window from the third pulse, while no verdict has been given.
+		if = {
+			limit = {
+				global_var:te_tllf_months >= 3
+				NOT = { has_global_variable = te_tllf_checked }
+			}
+			set_global_variable = { name = te_tllf_n value = 0 }
+			set_global_variable = { name = te_tllf_held value = 0 }
+			set_global_variable = { name = te_tllf_match value = 0 }
+			set_global_variable = { name = te_tllf_zero value = 0 }
+			set_global_variable = { name = te_tllf_over value = 0 }
+			set_global_variable = { name = te_tllf_cn value = 0 }
+			set_global_variable = { name = te_tllf_cmatch value = 0 }
+			set_global_variable = te_tllf_window
+		}
+	}
+}
+
+# Country scope, each country's own monthly pulse while a window is open: an AI country that follows its tax level,
+# with the code in force and a dividend tax above nothing, counts itself in the levy group or the control.
+te_tax_light_levy_flat_selfcheck_count = {
+	trigger = {
+		te_tax_code_light_on = yes
+		has_global_variable = te_tllf_window
+		NOT = { has_global_variable = te_tllf_checked }
+		te_tax_light_in_force = yes
+		te_tax_light_ai_uniform = yes
+		has_variable = te_tax_en_div
+		var:te_tax_en_div >= 1
+	}
+	effect = {
+		if = {
+			limit = { te_tax_light_extra_div = yes }
+			change_global_variable = { name = te_tllf_n add = 1 }
+			if = {
+				limit = { te_tax_light_has_levy = yes }
+				change_global_variable = { name = te_tllf_held add = 1 }
+			}
+			if = {
+				limit = {
+					te_tllf_chk_dev >= -0.001
+					te_tllf_chk_dev <= 0.011
+				}
+				change_global_variable = { name = te_tllf_match add = 1 }
+			}
+			if = {
+				limit = { modifier:tax_dividends_add < 0.001 }
+				change_global_variable = { name = te_tllf_zero add = 1 }
+			}
+			if = {
+				limit = { te_tllf_chk_dev > 0.011 }
+				change_global_variable = { name = te_tllf_over add = 1 }
+			}
+		}
+		else_if = {
+			limit = { te_tax_light_levies_div = yes }
+			change_global_variable = { name = te_tllf_cn add = 1 }
+			if = {
+				limit = {
+					te_tllf_chk_dev >= -0.001
+					te_tllf_chk_dev <= 0.011
+				}
+				change_global_variable = { name = te_tllf_cmatch add = 1 }
+			}
+		}
+	}
+}

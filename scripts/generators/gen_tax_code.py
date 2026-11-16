@@ -4749,7 +4749,8 @@ class LightExtra(NamedTuple):
 # in light mode"). Under a taxation law that levies no dividend tax (Consumption-Based, Land-Based, Per-Capita) the
 # light code may levy one from nothing up to LIGHT_EXTRA_CAP_DIV index steps; a law that levies one keeps its own
 # range. The law collects nothing of it, so the code adds it: te_tax_light_levy_<key> (one step's rate) x the index,
-# declared on je_tax_code like the relief. It sits on the step the same rate sits on under the anchor law, so
+# a flat country modifier the light sync removes and adds again (te_tax_light_gen_levy; light_levy_values says why it
+# is not declared on je_tax_code like the relief). It sits on the step the same rate sits on under the anchor law, so
 # Proportional's own ladder capped at the cap (5% on Low, 2.5% on Very Low), and it carries no relief and gives no
 # view band: below it is only no tax, which the law already gives. It is closed under Traditionalism, which bans
 # every law that taxes wages or dividends, as the legislated code refuses a dividend tax there (te_tax_draft_ready).
@@ -4878,27 +4879,37 @@ def light_payers(instrument):
 
 def light_scaling_values():
     """[(modifier, value name, limit, variable read)] for each of je_tax_code's scaling modifiers:
-    every tax's relief, each extra tax's levy (LIGHT_EXTRAS), then each group's welcoming and
-    resentful reaction. The entry's hand-written declarations are held to this list by
-    test_tax_code_scaling_modifiers.py."""
+    every tax's relief, then each group's welcoming and resentful reaction. The entry's hand-written
+    declarations are held to this list by test_tax_code_scaling_modifiers.py. An extra tax's levy is not
+    one of them (light_levy_values)."""
     out = []
     for instrument in INSTRUMENTS:
         key = instrument.key
         rl = f"te_tax_light_rl_{key}"
         out.append((f"te_tax_light_relief_{key}", f"te_tax_light_relief_{key}_value",
                     f"te_tax_light_levies_{key} = yes has_variable = {rl} var:{rl} > 0", rl))
-    # The levy reads the rule and the marker too (te_tax_light_in_force), unlike the relief: a positive tax must
-    # stop the day the code does, even before the entry's invalid outcome ends it.
-    for extra in LIGHT_EXTRAS:
-        en = f"te_tax_en_{extra.key}"
-        out.append((f"te_tax_light_levy_{extra.key}", f"te_tax_light_levy_{extra.key}_value",
-                    f"te_tax_light_in_force = yes te_tax_light_extra_{extra.key} = yes has_variable = {en} "
-                    f"var:{en} > 0", en))
     for ig in IGS:
         lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
         for sign, comparison in (("pos", "> 0"), ("neg", "< 0")):
             out.append((f"te_tax_light_react_{ig}_{sign}", f"te_tax_light_react_{ig}_{sign}_value",
                         f"has_variable = {lr} var:{lr} {comparison} has_variable = {mag} var:{mag} >= 1", mag))
+    return out
+
+
+def light_levy_values():
+    """[(modifier, value name, limit, variable read)] for each extra tax's levy (LIGHT_EXTRAS): a flat country
+    modifier the light sync removes and adds again at multiplier = the value (te_tax_light_gen_levy), not a
+    declaration on je_tax_code. #1855 declared it there, and TE_SELF_CHECK tax_light_div_levy read BROKEN in the
+    observer game of 2026-11-16 (build 81b947368): modifier:tax_dividends_add read 0 in 70 of 70 AI countries
+    whose code levied it, while 5 of 5 on a law that levies one read the law's rate
+    (docs/testing/tax-code-playtest.md, § "The light code's low dividend tax"). The value reads the rule and the
+    marker (te_tax_light_in_force), so it is 0 wherever the code is not in force."""
+    out = []
+    for extra in LIGHT_EXTRAS:
+        en = f"te_tax_en_{extra.key}"
+        out.append((f"te_tax_light_levy_{extra.key}", f"te_tax_light_levy_{extra.key}_value",
+                    f"te_tax_light_in_force = yes te_tax_light_extra_{extra.key} = yes has_variable = {en} "
+                    f"var:{en} > 0", en))
     return out
 
 
@@ -4973,8 +4984,8 @@ def _light_values():
         names = ", ".join(law for _n, law in light_extra_laws(key))
         lines += ["", f"# The extra {key} tax (LIGHT_EXTRAS): under a law that levies none ({names})",
                   f"# and none of {', '.join(extra.barred_by)}, the code may levy it from nothing up to",
-                  f"# te_tax_light_extra_cap_{key} index steps; the law collects none of it, so je_tax_code declares",
-                  f"# te_tax_light_levy_{key} x the index. Its steps are {extra.anchor}'s, capped:",
+                  f"# te_tax_light_extra_cap_{key} index steps; the law collects none of it, so the light sync adds",
+                  f"# te_tax_light_levy_{key} x the index (te_tax_light_gen_levy). Its steps are {extra.anchor}'s, capped:",
                   f"# te_tax_light_xidx_{key}_<n> is the extra ladder at native level n (0 where the extra is closed);",
                   "# _native and _at_level as for the law's. te_tax_light_ai_idx_<key>: what an AI levies at its native",
                   "# level, the extra's rate where it is open and the law's otherwise.",
@@ -5042,13 +5053,15 @@ def _light_values():
     lines += ["", "# je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the",
               "# engine reads each from the owning country about every four days, so the sync only writes",
               "# the variables. te_tax_light_relief_<key>_value: the tax's relief steps",
-              "# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_levy_<key>_value: an extra",
-              "# tax's index (te_tax_en_<key>) while the code is in force and the extra is open (LIGHT_EXTRAS).",
-              "# te_tax_light_react_<ig>_<pos|neg>_value:",
+              "# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_react_<ig>_<pos|neg>_value:",
               "# the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of",
               "# its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the",
-              "# modifier off the entry: the gates under which the sync used to remove it."]
-    for _modifier, name, limit, read in light_scaling_values():
+              "# modifier off the entry: the gates under which the sync used to remove it.",
+              "# te_tax_light_levy_<key>_value: an extra tax's index (te_tax_en_<key>) while the code is in",
+              "# force and the extra is open (LIGHT_EXTRAS), 0 otherwise. Not a declaration: the multiplier of",
+              "# the flat country modifier te_tax_light_levy_<key>, which te_tax_light_gen_levy removes and",
+              "# adds again from the sync, in the country's own scope."]
+    for _modifier, name, limit, read in light_scaling_values() + light_levy_values():
         lines += [f"{name} = {{", "\tvalue = 0",
                   f"\tif = {{ limit = {{ {limit} }} value = var:{read} }}", "}"]
     lines += ["", "# Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0",
@@ -5134,6 +5147,14 @@ def light_triggers():
         lines += [f"te_tax_light_extra_{extra.key} = {{", f"\tOR = {{ {laws} }}"]
         lines += [f"\tNOT = {{ has_law = law_type:{law} }}" for law in extra.barred_by]
         lines.append("}")
+    lines += [
+        "",
+        "# The country holds an extra tax's levy, the flat modifier te_tax_light_gen_levy adds: the",
+        "# teardown net's test (te_tax_light_levy_net) and the levy self-check's.",
+        "te_tax_light_has_levy = {",
+        f"\tOR = {{ {' '.join(f'has_modifier = {modifier}' for modifier, *_rest in light_levy_values())} }}",
+        "}",
+    ]
     lines += [
         "",
         "# The code holds the tax, so its row shows and its steps work: the law levies it, or it is an",
@@ -5243,8 +5264,9 @@ def light_effects():
     lines = [
         HEADER,
         "# The light code's per-tax and per-group parts (docs/systems/tax_code_schema.md, \"Light",
-        "# code\"), called only by te_tax_light_effects.txt. Country scope. They write variables and",
-        "# swap the flat view-band modifiers; the relief and reaction modifiers are je_tax_code's",
+        "# code\"), called by te_tax_light_effects.txt (te_tax_light_gen_clear_levy also by",
+        "# te_tax_on_actions.txt's te_tax_light_levy_net). Country scope. They write variables and swap",
+        "# the flat view-band and levy modifiers; the relief and reaction modifiers are je_tax_code's",
         "# scaling modifiers, which read the variables written here.",
         "",
         "# Every light token, with its default where absent. Never overwrites one.",
@@ -5387,8 +5409,9 @@ def light_effects():
         "",
         "# An extra tax that closed without a change of taxation law (LIGHT_EXTRAS: a barring law such as",
         "# Traditionalism was enacted) goes to nothing, for every country, with no reaction: the law",
-        "# change's own approval covers it, as for a taxation law. Its levy already reads 0 from the moment",
-        "# it closed (te_tax_light_levy_<key>_value).",
+        "# change's own approval covers it, as for a taxation law. Its levy's value reads 0 from the moment",
+        "# it closed (te_tax_light_levy_<key>_value), and the same sync takes the levy off",
+        "# (te_tax_light_gen_levy).",
         "te_tax_light_gen_close = {",
     ]
     for extra in LIGHT_EXTRAS:
@@ -5438,6 +5461,33 @@ def light_effects():
             "\t}",
             f"\telse = {{ set_variable = {{ name = {rl} value = 0 }} }}",
         ]
+    lines += [
+        "}",
+        "",
+        "# An extra tax's levy (LIGHT_EXTRAS), the dynamic-modifier pattern: the flat country modifier",
+        "# te_tax_light_levy_<key> (one step's rate above zero) comes off and goes back on at",
+        "# multiplier = te_tax_light_levy_<key>_value, the code's index while the code is in force and",
+        "# the extra is open, and stays off at 0 (Traditionalism, a law that levies the tax, a tax cut to",
+        "# nothing). Called once, from te_tax_light_sync, its one refresh site; the sync runs in the",
+        "# country's own scope, so the multiplier reads the country's variables. Not a declaration on",
+        "# je_tax_code: TE_SELF_CHECK tax_light_div_levy read the declared levy at 0 in 70 of 70 AI",
+        "# countries (2026-11-16, docs/testing/tax-code-playtest.md). The value reads only persistent",
+        "# variables, so a step button's tooltip pass reads nothing unset.",
+        "te_tax_light_gen_levy = {",
+    ]
+    for modifier, name, _limit, _read in light_levy_values():
+        lines += [f"\tif = {{ limit = {{ has_modifier = {modifier} }} remove_modifier = {modifier} }}",
+                  f"\tif = {{ limit = {{ {name} > 0 }} add_modifier = {{ name = {modifier} multiplier = {name} }} }}"]
+    lines += [
+        "}",
+        "",
+        "# The levy off a country where the code is not in force (te_tax_light_levy_net,",
+        "# te_tax_on_actions.txt): the rule switched to Disabled or to the full code mid-game, where",
+        "# the sync no longer runs. Removal only.",
+        "te_tax_light_gen_clear_levy = {",
+    ]
+    for modifier, _name, _limit, _read in light_levy_values():
+        lines.append(f"\tif = {{ limit = {{ has_modifier = {modifier} }} remove_modifier = {modifier} }}")
     lines += [
         "}",
         "",
@@ -5504,8 +5554,10 @@ def light_effects():
 def light_static_modifiers():
     lines = [
         HEADER,
-        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"), each declared",
-        "# on je_tax_code (scaling_modifiers_while_active) with its value from te_tax_light_generated_values.txt.",
+        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"). The relief and",
+        "# the reactions are declared on je_tax_code (scaling_modifiers_while_active) with their values",
+        "# from te_tax_light_generated_values.txt; an extra tax's levy is a flat country modifier the",
+        "# light sync adds (te_tax_light_gen_levy).",
         "",
         "# Relief: one index step's rate below zero per tax, x te_tax_light_rl_<key> steps. The base",
         "# game's mon_ease_taxes (common/static_modifiers/montenegrin_modifiers.txt) is a country",
@@ -5516,8 +5568,9 @@ def light_static_modifiers():
                   "\ticon = \"gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds\"",
                   f"\t{instrument.modifier} = -{fmt(instrument.step)}", "}"]
     lines += ["", "# An extra tax's levy (LIGHT_EXTRAS): one index step's rate above zero, x te_tax_en_<key> steps,",
-              "# where the law levies none of it. The base game's modifier_jizya_tax (106_modifiers.txt) is a",
-              "# country modifier that levies a tax rate (tax_heathen_add) whatever the law."]
+              "# where the law levies none of it, added to the country by the light sync (te_tax_light_gen_levy).",
+              "# The base game's modifier_jizya_tax (106_modifiers.txt) is a country modifier that levies a tax",
+              "# rate (tax_heathen_add) whatever the law."]
     for extra in LIGHT_EXTRAS:
         instrument = next(i for i in INSTRUMENTS if i.key == extra.key)
         lines += ["", f"te_tax_light_levy_{extra.key} = {{",

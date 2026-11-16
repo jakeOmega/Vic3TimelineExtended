@@ -2,8 +2,9 @@
 
 Under the light setting a country on Consumption-Based, Land-Based or Per-Capita Taxation may levy a dividend
 tax from nothing up to a low cap (LIGHT_EXTRAS in scripts/generators/gen_tax_code.py), closed under
-Traditionalism; Proportional and Graduated keep their own range. The law collects none of it, so je_tax_code
-declares te_tax_light_levy_div (test_tax_code_scaling_modifiers.py). Schema: docs/systems/tax_code_schema.md,
+Traditionalism; Proportional and Graduated keep their own range. The law collects none of it, so the light sync
+adds te_tax_light_levy_div, a flat country modifier (test_tax_code_scaling_modifiers.LevyTest); #1855 declared it on
+je_tax_code, and its self-check read the declaration at 0 (2026-11-16). Schema: docs/systems/tax_code_schema.md,
 "Light code". Each class pins one rule, so a regression of it fails here:
 
 - the cap and the range under each law, against vanilla_parsed's rates;
@@ -11,7 +12,7 @@ declares te_tax_light_levy_div (test_tax_code_scaling_modifiers.py). Schema: doc
   keeps a player's taxes on load;
 - the AI's rate: Proportional's ladder capped, at the AI's native level, never above the player's cap;
 - the reactions: the shared dividend tax reaction, once per change, and no relief or band;
-- the rule switched off: the levy stops with the code;
+- the rule switched off: the levy stops with the code (the teardown net);
 - civil wars: the rebels and the winner carry the rate;
 - the panel and its text; and the self-check that reads the levy in game.
 """
@@ -41,8 +42,12 @@ JE = "common/journal_entries/je_tax_code.txt"
 LIGHT_GUI = "gui/journal_entry_widgets/te_tax_light_widget.gui"
 LOC = "localization/english/te_tax_l_english.yml"
 GEN_LOC = "localization/english/te_tax_generated_l_english.yml"
-SELF_CHECK = "common/on_actions/te_tax_light_div_levy_selfcheck_on_actions.txt"
-SELF_CHECK_VALUES = "common/script_values/te_tax_light_div_levy_selfcheck_values.txt"
+SELF_CHECK = "common/on_actions/te_tax_light_levy_flat_selfcheck_on_actions.txt"
+SELF_CHECK_VALUES = "common/script_values/te_tax_light_levy_flat_selfcheck_values.txt"
+OLD_SELF_CHECK = "common/on_actions/te_tax_light_div_levy_selfcheck_on_actions.txt"
+OLD_SELF_CHECK_VALUES = "common/script_values/te_tax_light_div_levy_selfcheck_values.txt"
+GEN_TRIGGERS = "common/scripted_triggers/te_tax_light_generated_triggers.txt"
+ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
 PLAYTEST = "docs/testing/tax-code-playtest.md"
 
 LEVELS = gen.NATIVE_LEVELS
@@ -338,7 +343,8 @@ class ReactionTest(unittest.TestCase):
 
 
 class RuleOffTest(unittest.TestCase):
-    """Only the light setting levies it, and it stops the day the code does."""
+    """Only the light setting levies it, and it stops with the code: the sync's value reads the rule and the marker,
+    and where the code is no longer in force (the sync no longer runs) a monthly net takes the levy off."""
 
     def test_the_levy_reads_the_rule_and_the_marker(self):
         value = flat(block(read(VALUES), "te_tax_light_levy_div_value"))
@@ -353,13 +359,30 @@ class RuleOffTest(unittest.TestCase):
         je = flat(block(read(JE), "je_tax_code"))
         self.assertIn("flags = { hidden invalid_outcome } conclusion_desc = je_tax_code_invalid_conclusion_desc "
                       "trigger = { NOT = { te_tax_code_on = yes } }", je)
-        self.assertIn("modifier = te_tax_light_levy_div value = { value = te_tax_light_levy_div_value }", je)
 
-    def test_nothing_else_applies_the_levy(self):
+    def test_the_entry_no_longer_declares_the_levy(self):
+        # Declared and added both, dividends would be taxed twice. A declaration is not written to a save
+        # (scripting_best_practices.md, "A Journal Entry's Declared Modifiers Are Not Saved"), so a game saved on
+        # #1855's build loads with no declared copy, and the flat one comes with the first sync.
+        je = flat(block(read(JE), "je_tax_code"))
+        self.assertNotIn("te_tax_light_levy_div", je)
+        self.assertNotIn("te_tax_light_levy_div_value", je)
+
+    def test_the_teardown_takes_it_off_under_disabled_and_the_full_code(self):
+        net = flat(block(read(ON_ACTIONS), "te_tax_light_levy_net"))
+        self.assertIn("limit = { NOT = { te_tax_light_in_force = yes } te_tax_light_has_levy = yes } "
+                      "te_tax_light_gen_clear_levy = yes", net)
+        self.assertNotIn("add_modifier", net)
+        self.assertNotIn("add_modifier", block(read(GEN_EFFECTS), "te_tax_light_gen_clear_levy"))
+
+    def test_nothing_else_names_the_levy(self):
+        # The modifier, its refresh, its teardown and its test, the self-check that reads it, and the Nation tab's
+        # count of the modifiers a country holds (gen_nation_tab.py).
+        allowed = {MODIFIERS, GEN_EFFECTS, GEN_TRIGGERS, SELF_CHECK, "common/script_values/te_nation_generated_values.txt"}
         for directory in ("common", "events"):
             for path in sorted((ROOT / directory).rglob("*.txt")):
                 rel = path.relative_to(ROOT).as_posix()
-                if rel in (JE, MODIFIERS):
+                if rel in allowed:
                     continue
                 with self.subTest(path=rel):
                     text = strip_comments(path.read_text("utf-8-sig", "replace"))
@@ -380,12 +403,16 @@ class CivilWarTest(unittest.TestCase):
         self.assertEqual(flat(block(read(TAX_TRIGGERS), "te_tax_light_ai_uniform")),
                          "is_ai = yes NOT = { has_variable = te_cw_origin }")
 
-    def test_the_winner_reads_it_from_its_own_variables(self):
-        # A revolution's winner inherits variables, not modifiers: the levy is the entry's declaration of a
-        # variable, and the entry is inherited.
-        je = flat(block(read(JE), "je_tax_code"))
-        self.assertIn("can_revolution_inherit = yes", je)
+    def test_the_winner_and_the_rebels_get_the_levy_back_from_their_own_variables(self):
+        # A revolution's winner inherits variables, not modifiers, and the rebels' copy writes no modifier: each
+        # side's next sync adds the levy from te_tax_en_div. The winner's is te_tax_light.3 from the civil-war repair,
+        # the rebels' te_tax_light.3 the day after te_tax_light.4.
         self.assertIn("value = var:te_tax_en_div", flat(block(read(VALUES), "te_tax_light_levy_div_value")))
+        civil = strip_comments(read("common/scripted_effects/te_tax_civil_war_effects.txt"))
+        self.assertIn("trigger_event = { id = te_tax_light.3 }", civil)
+        adopt = flat(block(read(EFFECTS), "te_tax_light_adopt_copied_code"))
+        self.assertIn("trigger_event = { id = te_tax_light.3 days = 1 }", adopt)
+        self.assertIn("te_tax_light_sync = yes", flat(block(read("events/te_tax_light_events.txt"), "te_tax_light.3")))
 
 
 class PanelTest(unittest.TestCase):
@@ -421,50 +448,114 @@ class PanelTest(unittest.TestCase):
 
 
 class SelfCheckTest(unittest.TestCase):
-    """TE_SELF_CHECK tax_light_div_levy reads the levy in game; its play-test row names the fallback."""
+    """TE_SELF_CHECK tax_light_levy_flat reads the flat levy in game; its play-test row names its fallbacks. It
+    replaced tax_light_div_levy, which read the declaration BROKEN on 2026-11-16, under a new latch, so a game that
+    logged the old verdict logs a fresh one."""
+
+    MONTH = "te_tax_light_levy_flat_selfcheck_month"
+    COUNT = "te_tax_light_levy_flat_selfcheck_count"
+
+    def test_the_old_check_is_gone_and_the_new_latch_is_new(self):
+        self.assertFalse((ROOT / OLD_SELF_CHECK).exists())
+        self.assertFalse((ROOT / OLD_SELF_CHECK_VALUES).exists())
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                text = strip_comments(path.read_text("utf-8-sig", "replace"))
+                self.assertNotIn("te_tldv_", text, path)
+                self.assertNotIn("TE_SELF_CHECK OK tax_light_div_levy", text, path)
+        text = strip_comments(read(SELF_CHECK))
+        self.assertIn("te_tllf_checked", text)
 
     def test_it_is_gated_and_latched(self):
         text = read(SELF_CHECK)
-        self.assertIn("on_monthly_pulse = {", text)
-        for handler in ("te_tax_light_div_levy_selfcheck_settle", "te_tax_light_div_levy_selfcheck"):
+        self.assertIn("on_monthly_pulse = { on_actions = { %s } }" % self.MONTH, flat(strip_comments(text)))
+        self.assertIn("on_monthly_pulse_country = { on_actions = { %s } }" % self.COUNT, flat(strip_comments(text)))
+        for handler in (self.MONTH, self.COUNT):
             body = flat(block(text, handler))
             with self.subTest(handler=handler):
                 self.assertIn("te_tax_code_light_on = yes", body)
-                self.assertIn("NOT = { has_global_variable = te_tldv_checked }", body)
-        verdict = flat(block(text, "te_tax_light_div_levy_selfcheck"))
-        for status in ("START", "OK", "BROKEN", "NO_VERDICT"):
-            self.assertIn(f"TE_SELF_CHECK {status} tax_light_div_levy", verdict)
+                self.assertIn("NOT = { has_global_variable = te_tllf_checked }", body)
+        month = flat(block(text, self.MONTH))
+        for line in ("TE_SELF_CHECK START tax_light_levy_flat", "TE_SELF_CHECK OK tax_light_levy_flat",
+                     "TE_SELF_CHECK BROKEN tax_light_levy_flat not_applied",
+                     "TE_SELF_CHECK BROKEN tax_light_levy_flat doubled",
+                     "TE_SELF_CHECK BROKEN tax_light_levy_flat unread", "TE_SELF_CHECK NO_VERDICT tax_light_levy_flat"):
+            with self.subTest(line=line):
+                self.assertEqual(month.count(line), 1)
+        # One latch, set once, before the verdict lines, and the window stops refilling after it.
+        self.assertEqual(month.count("set_global_variable = te_tllf_checked"), 1)
+        self.assertLess(month.index("set_global_variable = te_tllf_checked"), month.index("TE_SELF_CHECK START"))
+        self.assertLess(month.index("TE_SELF_CHECK START"), month.index("TE_SELF_CHECK BROKEN"))
+
+    def test_it_counts_on_each_countrys_own_pulse_not_on_the_1st(self):
+        # The sync re-adds the levy on the 1st; each country's own monthly pulse is a 30-day timer on other days.
+        count = flat(block(read(SELF_CHECK), self.COUNT))
+        self.assertIn("has_global_variable = te_tllf_window", count)
+        self.assertNotIn("every_country", count)
+        month = flat(block(read(SELF_CHECK), self.MONTH))
+        self.assertNotIn("every_country", month)
+        # The first window opens on the third global pulse, so the first syncs have run.
+        self.assertIn("limit = { global_var:te_tllf_months < 3 } change_global_variable = { name = te_tllf_months "
+                      "add = 1 }", month)
+        self.assertIn("limit = { global_var:te_tllf_months >= 3 NOT = { has_global_variable = te_tllf_checked } }",
+                      month)
+        self.assertLess(month.index("TE_SELF_CHECK START"), month.index("set_global_variable = te_tllf_window"))
+
+    def test_degenerate_inputs_are_left_out(self):
+        # An AI that follows its level (no player's choice, no rebel during its war), the code in force, a dividend
+        # tax above nothing; the levy group where the extra is open, the control where the law levies it.
+        count = flat(block(read(SELF_CHECK), self.COUNT))
+        for condition in ("te_tax_light_in_force = yes", "te_tax_light_ai_uniform = yes",
+                          "has_variable = te_tax_en_div var:te_tax_en_div >= 1"):
+            self.assertIn(condition, count)
+        self.assertIn("if = { limit = { te_tax_light_extra_div = yes } change_global_variable = { name = te_tllf_n", count)
+        self.assertIn("else_if = { limit = { te_tax_light_levies_div = yes } change_global_variable = { name = "
+                      "te_tllf_cn", count)
+        # Held is the flat modifier (has_modifier, which a declaration could not offer); the rate read is the
+        # country's dividend tax from every source.
+        self.assertIn("limit = { te_tax_light_has_levy = yes } change_global_variable = { name = te_tllf_held", count)
         self.assertIn("modifier:tax_dividends_add", read(SELF_CHECK_VALUES))
 
-    def test_it_waits_for_a_control_and_ok_needs_one(self):
-        # No country starts on Proportional or Graduated, so a verdict at the first run could never be BROKEN
-        # (review of #1855): it counts each month and latches only once the control has 5 countries, or from 1900.
-        verdict = flat(block(read(SELF_CHECK), "te_tax_light_div_levy_selfcheck"))
-        latch = verdict.index("set_global_variable = te_tldv_checked")
-        self.assertIn("limit = { OR = { global_var:te_tldv_cn >= 5 game_date >= 1900.1.1 } } "
-                      "set_global_variable = te_tldv_checked debug_log = \"TE_SELF_CHECK START", verdict)
-        self.assertLess(verdict.index("every_country"), latch)
-        self.assertEqual(verdict.count("set_global_variable = te_tldv_checked"), 1)
-        ok = verdict[verdict.index("random_country = { if = { limit = {"):verdict.index("TE_SELF_CHECK OK")]
-        for condition in ("te_tldv_chk_n_g >= 5", "te_tldv_chk_match_share >= 0.8", "te_tldv_chk_cn_g >= 5",
-                          "te_tldv_chk_cmatch_share >= 0.8"):
+    def test_ok_needs_the_levy_held_and_read_and_a_matching_control(self):
+        month = flat(block(read(SELF_CHECK), self.MONTH))
+        ok = month[month.index("TE_SELF_CHECK START"):month.index("TE_SELF_CHECK OK")]
+        ok = ok[ok.rindex("limit = {"):]
+        for condition in ("te_tllf_chk_n_g >= 5", "te_tllf_chk_held_share >= 0.8", "te_tllf_chk_match_share >= 0.8",
+                          "te_tllf_chk_cn_g >= 5", "te_tllf_chk_cmatch_share >= 0.8"):
             self.assertIn(condition, ok)
-        # The control is countries on a law that levies the tax; the levy group those where it is open.
-        self.assertIn("te_tax_light_levies_div = yes", verdict)
-        self.assertIn("te_tax_light_extra_div = yes has_journal_entry = je_tax_code", verdict)
+        # The verdict waits for a control of 5 (none starts on Proportional or Graduated) or 1900, except a levy
+        # the sync never put on, which needs no control.
+        self.assertIn("OR = { AND = { te_tllf_chk_n_g >= 5 te_tllf_chk_held_share < 0.2 } te_tllf_chk_cn_g >= 5 "
+                      "game_date >= 1900.1.1 }", month)
+        for kind, condition in (("unread", "te_tllf_chk_zero_share >= 0.8"),
+                                ("doubled", "te_tllf_chk_over_share >= 0.2")):
+            line = month.index(f"TE_SELF_CHECK BROKEN tax_light_levy_flat {kind}")
+            branch = month[month.rindex("limit = {", 0, line):line]
+            with self.subTest(kind=kind):
+                for needed in (condition, "te_tllf_chk_held_share >= 0.8", "te_tllf_chk_cn_g >= 5",
+                               "te_tllf_chk_cmatch_share >= 0.8"):
+                    self.assertIn(needed, branch)
 
     def test_every_value_it_reads_is_defined(self):
-        used = set(re.findall(r"\b(te_tldv_chk_\w+)", strip_comments(read(SELF_CHECK))))
-        defined = set(re.findall(r"(?m)^(te_tldv_chk_\w+) = \{", read(SELF_CHECK_VALUES)))
+        used = set(re.findall(r"\b(te_tllf_chk_\w+)", strip_comments(read(SELF_CHECK))))
+        defined = set(re.findall(r"(?m)^(te_tllf_chk_\w+) = \{", read(SELF_CHECK_VALUES)))
         self.assertTrue(used)
         self.assertLessEqual(used, defined)
+        # Every global count it reads is guarded: they are set only once the first window opens.
+        values = read(SELF_CHECK_VALUES)
+        for var in set(re.findall(r"global_var:(\w+)", strip_comments(values))):
+            self.assertIn(f"has_global_variable = {var}", values)
 
-    def test_the_play_test_list_names_it_and_its_fallback(self):
+    def test_the_play_test_list_names_it_its_fallbacks_and_the_old_reading(self):
         text = read(PLAYTEST)
-        self.assertIn("tax_light_div_levy", text)
+        self.assertIn("tax_light_levy_flat", text)
         self.assertIn("The light code's low dividend tax", text)
         # Script can't see collection: the row says so and points at the Budget line.
         self.assertIn("Script can't measure collection", text)
+        self.assertIn("PT-47", text)
+        # Today's reading of the old check, and the build it came from.
+        self.assertIn("TE_SELF_CHECK BROKEN tax_light_div_levy levy=0/70 matched, 70 at 0; control=5/5 matched", text)
+        self.assertIn("81b947368", text)
 
 
 if __name__ == "__main__":

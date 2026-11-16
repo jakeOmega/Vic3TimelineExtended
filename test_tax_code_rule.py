@@ -125,12 +125,17 @@ class OnActionGateSweepTest(unittest.TestCase):
     te_tax_code_light_on for the light code's (te_tax_light_*). Each task's tests pin
     its own hooks; this pins the invariant for the next one.
 
-    One exception, the rule switched to Disabled mid-game (2026-11-08): te_tax_rule_off_net
-    serves no setting, so its gate is the rule off together with a migration marker,
-    which no save from before the rule has (te_tax_triggers.txt's header says why)."""
+    Two exceptions, for what the code leaves behind when it stops. The rule switched to
+    Disabled mid-game (2026-11-08): te_tax_rule_off_net serves no setting, so its gate is the
+    rule off together with a migration marker, which no save from before the rule has
+    (te_tax_triggers.txt's header says why). And the light code's low dividend tax
+    (2026-11-16), a flat modifier only the light sync adds: te_tax_light_levy_net takes it off
+    wherever the code is not in force (Disabled, or the full code), so its gate is the code
+    not in force together with the levy itself, which no save from before it holds."""
 
     ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
     RULE_OFF = "te_tax_rule_off_net"
+    LEVY_OFF = "te_tax_light_levy_net"
 
     def test_every_handler_is_one_positively_gated_block(self):
         parsed = load(self.ON_ACTIONS)
@@ -145,6 +150,10 @@ class OnActionGateSweepTest(unittest.TestCase):
                     limit = effect["if"]["limit"]
                     self.assertEqual(limit.get("NOT"), {"te_tax_code_on": "yes"})
                     self.assertIn("has_law", limit["OR"], "the marker: the carrier, or a migration")
+                    continue
+                if name == self.LEVY_OFF:
+                    self.assertEqual(effect["if"]["limit"], {"NOT": {"te_tax_light_in_force": "yes"},
+                                                             "te_tax_light_has_levy": "yes"})
                     continue
                 gate = "te_tax_code_light_on" if name.startswith("te_tax_light_") else "te_tax_code_full"
                 self.assertEqual(effect["if"]["limit"].get(gate), "yes")

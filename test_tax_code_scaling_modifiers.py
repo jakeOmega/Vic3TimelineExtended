@@ -1,4 +1,4 @@
-"""The light tax code's relief, low dividend tax and reactions are scaling modifiers on je_tax_code.
+"""The light tax code's relief and reactions are scaling modifiers on je_tax_code; its low dividend tax is not.
 
 Since 1.15 the entry declares each of the 21 relief and reaction modifiers in `scaling_modifiers_while_active`
 and the engine re-reads its value from the owning country about every four days
@@ -9,10 +9,11 @@ at `multiplier = var:te_tax_light_rl_<key>` and a reaction at
 each declaration to the generator's lists (the entry is hand-written, the values
 generated), that each value is a guarded read that is 0 wherever the old sync
 added nothing, and the monthly net that gives the entry to a country in force the
-engine left without one. The 22nd, the low dividend tax a law without one allows (owner, 2026-11-15), is
-the tax itself, not a relief: test_tax_code_light_extra.py. test_tax_code_light.py checks that the sync still writes
-the variables and adds neither; test_journal_entry_shape.py the tree-wide rule
-that nothing adds, removes or tests a declared key.
+engine left without one. The low dividend tax a law without one allows (owner, 2026-11-15) was a 22nd from #1855
+until TE_SELF_CHECK tax_light_div_levy read the declaration at 0 in 70 of 70 AI countries (2026-11-16); it is now a
+flat country modifier the light sync removes and adds again (LevyTest below, test_tax_code_light_extra.py).
+test_tax_code_light.py checks that the sync still writes the variables; test_journal_entry_shape.py the tree-wide
+rule that nothing adds, removes or tests a declared key.
 """
 
 import importlib.util
@@ -89,23 +90,27 @@ def declarations():
 
 
 class DeclarationTest(unittest.TestCase):
-    def test_the_entry_declares_every_relief_levy_and_reaction_once_in_block_form(self):
+    def test_the_entry_declares_every_relief_and_reaction_once_in_block_form(self):
         self.assertEqual(len(RELIEF) + len(REACTIONS), 21)
         self.assertEqual(list(LEVIES), ["te_tax_light_levy_div"])
         found = declarations()
-        for family, expected in (("relief", RELIEF), ("levies", LEVIES), ("reactions", REACTIONS)):
+        for family, expected in (("relief", RELIEF), ("reactions", REACTIONS)):
             with self.subTest(family=family):
                 self.assertEqual({m: v for m, v in found.items() if m in expected},
                                  {m: [v] for m, v in expected.items()})
-        # Nothing else: the view bands stay flat country modifiers (the full code adds them too).
-        self.assertEqual(set(found), set(RELIEF) | set(LEVIES) | set(REACTIONS))
-        self.assertEqual(len(found), 22)
+        # Nothing else: the view bands and the low dividend tax's levy are flat country modifiers. The levy must
+        # never be declared beside the sync's flat copy, which would tax dividends twice.
+        self.assertEqual(set(found), set(RELIEF) | set(REACTIONS))
+        self.assertEqual(len(found), 21)
+        self.assertFalse(set(found) & set(LEVIES))
 
-    def test_the_generator_emits_exactly_the_declared_values(self):
+    def test_the_generator_emits_exactly_the_declared_values_and_the_levys(self):
         generated = {modifier: name for modifier, name, _limit, _read in gen.light_scaling_values()}
-        self.assertEqual(generated, {**RELIEF, **LEVIES, **REACTIONS})
+        self.assertEqual(generated, {**RELIEF, **REACTIONS})
+        levies = {modifier: name for modifier, name, _limit, _read in gen.light_levy_values()}
+        self.assertEqual(levies, LEVIES)
         values = read(VALUES)
-        for name in generated.values():
+        for name in {**generated, **levies}.values():
             with self.subTest(value=name):
                 self.assertEqual(len(re.findall(rf"(?m)^{name} = \{{", values)), 1)
 
@@ -174,10 +179,85 @@ class DeclarationTest(unittest.TestCase):
             self.assertIn(f"set_variable = {{ name = te_tax_lr_mag_{ig} value = {{ value = var:te_tax_lr_{ig} "
                           "round = yes } }", sizes)
         sync = flat(block(read(EFFECTS), "te_tax_light_sync"))
-        self.assertIn("te_tax_light_gen_relief = yes te_tax_light_gen_reaction_sizes = yes", sync)
-        names = "|".join(map(re.escape, sorted({**RELIEF, **LEVIES, **REACTIONS})))
+        self.assertIn("te_tax_light_gen_relief = yes te_tax_light_gen_levy = yes "
+                      "te_tax_light_gen_reaction_sizes = yes", sync)
+        names = "|".join(map(re.escape, sorted({**RELIEF, **REACTIONS})))
         for path in (GEN_EFFECTS, EFFECTS):
             self.assertIsNone(re.search(rf"\b({names})\b", strip_comments(read(path))), path)
+
+
+class LevyTest(unittest.TestCase):
+    """The low dividend tax's levy is a flat country modifier, the dynamic-modifier pattern: the sync, its one
+    refresh site, takes it off and puts it back at multiplier = the value, in the country's own scope; a monthly
+    net takes it off where the code is not in force, and adds nothing."""
+
+    def test_the_sync_removes_the_old_copy_then_adds_at_the_values_multiplier(self):
+        body = flat(block(read(GEN_EFFECTS), "te_tax_light_gen_levy"))
+        expected = " ".join(
+            f"if = {{ limit = {{ has_modifier = {modifier} }} remove_modifier = {modifier} }} "
+            f"if = {{ limit = {{ {name} > 0 }} add_modifier = {{ name = {modifier} multiplier = {name} }} }}"
+            for modifier, name in LEVIES.items())
+        self.assertEqual(body, expected)
+        # The remove comes before the add: a same-name add_modifier stacks.
+        self.assertLess(body.index("remove_modifier"), body.index("add_modifier"))
+
+    def test_the_sync_is_its_one_refresh_site(self):
+        # Exactly one call of the refresh, from te_tax_light_sync, and no other add of the levy anywhere.
+        calls, adds = [], []
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                text = strip_comments(path.read_text("utf-8-sig", "replace"))
+                rel = path.relative_to(ROOT).as_posix()
+                calls += [rel] * text.count("te_tax_light_gen_levy = yes")
+                for modifier in LEVIES:
+                    adds += [rel] * len(re.findall(rf"add_modifier = \{{ name = {modifier}\b", text))
+                    self.assertNotRegex(text, rf"add_modifier = {modifier}\b", rel)
+        self.assertEqual(calls, [EFFECTS])
+        self.assertEqual(adds, [GEN_EFFECTS] * len(LEVIES))
+        sync = flat(block(read(EFFECTS), "te_tax_light_sync"))
+        self.assertEqual(sync.count("te_tax_light_gen_levy = yes"), 1)
+        # Inside the in-force branch, after the law change, Traditionalism's close and the AI's or the player's
+        # rates, so the multiplier reads this sync's rate.
+        self.assertTrue(sync.startswith("if = { limit = { te_tax_light_in_force = yes }"))
+        self.assertLess(sync.index("te_tax_light_gen_close = yes"), sync.index("te_tax_light_gen_levy = yes"))
+        self.assertLess(sync.index("te_tax_light_gen_shift = yes"), sync.index("te_tax_light_gen_levy = yes"))
+
+    def test_every_caller_of_the_sync_is_the_countrys_own_scope(self):
+        # The multiplier resolves against the calling scope chain (scripting_best_practices.md, "Scope Chain
+        # Issues with add_modifier + Script Values"): each caller is a country event, the step's scripted GUI or
+        # a light effect those run.
+        callers = set()
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                if "te_tax_light_sync = yes" in strip_comments(path.read_text("utf-8-sig", "replace")):
+                    callers.add(path.relative_to(ROOT).as_posix())
+        self.assertEqual(callers, {EFFECTS, "events/te_tax_light_events.txt", "events/te_tax_debug_events.txt"})
+
+    def test_the_teardown_net_takes_it_off_where_the_code_is_not_in_force_and_adds_nothing(self):
+        text = flat(strip_comments(read(ON_ACTIONS)))
+        pulse = re.search(r"on_monthly_pulse_country = \{ on_actions = \{ ([^}]*) \} \}", text)
+        self.assertIn("te_tax_light_levy_net", pulse.group(1).split())
+        net = flat(block(read(ON_ACTIONS), "te_tax_light_levy_net"))
+        self.assertTrue(net.startswith(
+            "effect = { if = { limit = { NOT = { te_tax_light_in_force = yes } te_tax_light_has_levy = yes } "
+            "te_tax_light_gen_clear_levy = yes debug_log = \"TE_TAX light_levy_off "), net)
+        clear = flat(block(read(GEN_EFFECTS), "te_tax_light_gen_clear_levy"))
+        self.assertEqual(clear, " ".join(f"if = {{ limit = {{ has_modifier = {m} }} remove_modifier = {m} }}"
+                                         for m in LEVIES))
+        has = flat(block(read("common/scripted_triggers/te_tax_light_generated_triggers.txt"), "te_tax_light_has_levy"))
+        self.assertEqual(has, "OR = { " + " ".join(f"has_modifier = {m}" for m in LEVIES) + " }")
+        # Not in force covers the rule switched to Disabled and to the full code: the trigger reads the light
+        # setting and the marker.
+        self.assertEqual(flat(block(read(TRIGGERS), "te_tax_light_in_force")),
+                         "te_tax_code_light_on = yes has_variable = te_tax_light_on var:te_tax_light_on >= 1")
+
+    def test_the_multiplier_never_reads_a_removed_variable(self):
+        # The multiplier is te_tax_en_<key>, which nothing removes (modifier_multiplier_var_audit's rule).
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                text = strip_comments(path.read_text("utf-8-sig", "replace"))
+                for extra in gen.LIGHT_EXTRAS:
+                    self.assertNotIn(f"remove_variable = te_tax_en_{extra.key}", text, path)
 
 
 class SafetyNetTest(unittest.TestCase):

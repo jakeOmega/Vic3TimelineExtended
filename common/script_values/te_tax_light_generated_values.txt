@@ -257,8 +257,8 @@ te_tax_light_idx_cons_at_level = {
 
 # The extra div tax (LIGHT_EXTRAS): under a law that levies none (law_consumption_based_taxation, law_land_based_taxation, law_per_capita_based_taxation)
 # and none of law_traditionalism, the code may levy it from nothing up to
-# te_tax_light_extra_cap_div index steps; the law collects none of it, so je_tax_code declares
-# te_tax_light_levy_div x the index. Its steps are law_proportional_taxation's, capped:
+# te_tax_light_extra_cap_div index steps; the law collects none of it, so the light sync adds
+# te_tax_light_levy_div x the index (te_tax_light_gen_levy). Its steps are law_proportional_taxation's, capped:
 # te_tax_light_xidx_div_<n> is the extra ladder at native level n (0 where the extra is closed);
 # _native and _at_level as for the law's. te_tax_light_ai_idx_<key>: what an AI levies at its native
 # level, the extra's rate where it is open and the law's otherwise.
@@ -887,12 +887,14 @@ te_tax_light_rlv_trade_unions = {
 # je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the
 # engine reads each from the owning country about every four days, so the sync only writes
 # the variables. te_tax_light_relief_<key>_value: the tax's relief steps
-# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_levy_<key>_value: an extra
-# tax's index (te_tax_en_<key>) while the code is in force and the extra is open (LIGHT_EXTRAS).
-# te_tax_light_react_<ig>_<pos|neg>_value:
+# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_react_<ig>_<pos|neg>_value:
 # the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of
 # its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the
 # modifier off the entry: the gates under which the sync used to remove it.
+# te_tax_light_levy_<key>_value: an extra tax's index (te_tax_en_<key>) while the code is in
+# force and the extra is open (LIGHT_EXTRAS), 0 otherwise. Not a declaration: the multiplier of
+# the flat country modifier te_tax_light_levy_<key>, which te_tax_light_gen_levy removes and
+# adds again from the sync, in the country's own scope.
 te_tax_light_relief_wage_value = {
 	value = 0
 	if = { limit = { te_tax_light_levies_wage = yes has_variable = te_tax_light_rl_wage var:te_tax_light_rl_wage > 0 } value = var:te_tax_light_rl_wage }
@@ -912,10 +914,6 @@ te_tax_light_relief_head_value = {
 te_tax_light_relief_cons_value = {
 	value = 0
 	if = { limit = { te_tax_light_levies_cons = yes has_variable = te_tax_light_rl_cons var:te_tax_light_rl_cons > 0 } value = var:te_tax_light_rl_cons }
-}
-te_tax_light_levy_div_value = {
-	value = 0
-	if = { limit = { te_tax_light_in_force = yes te_tax_light_extra_div = yes has_variable = te_tax_en_div var:te_tax_en_div > 0 } value = var:te_tax_en_div }
 }
 te_tax_light_react_armed_forces_pos_value = {
 	value = 0
@@ -980,6 +978,10 @@ te_tax_light_react_trade_unions_pos_value = {
 te_tax_light_react_trade_unions_neg_value = {
 	value = 0
 	if = { limit = { has_variable = te_tax_lr_trade_unions var:te_tax_lr_trade_unions < 0 has_variable = te_tax_lr_mag_trade_unions var:te_tax_lr_mag_trade_unions >= 1 } value = var:te_tax_lr_mag_trade_unions }
+}
+te_tax_light_levy_div_value = {
+	value = 0
+	if = { limit = { te_tax_light_in_force = yes te_tax_light_extra_div = yes has_variable = te_tax_en_div var:te_tax_en_div > 0 } value = var:te_tax_en_div }
 }
 
 # Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0

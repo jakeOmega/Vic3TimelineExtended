@@ -125,8 +125,9 @@ SECTIONS = {
         # Free Market Construction off, te_direct_construction_ensure_base)
         "te_construction_market_private_share_modifier", "te_direct_construction_base_modifier",
         # The tax code: interest groups' views, relief (the light code's reactions
-        # and relief are its entry's scaling modifiers since #1404)
-        "te_tax_ig_view_*", "te_tax_relief_*",
+        # and relief are its entry's scaling modifiers since #1404), and the light
+        # code's low dividend tax, added by its sync since 2026-11-16
+        "te_tax_ig_view_*", "te_tax_relief_*", "te_tax_light_levy_div",
         # Monetary arrangements, inflation and exchange rate bands, while the
         # country holds no banking entry (te_mon_mod_home; since #1020 only the
         # game's first fortnight and a running revolution's rebels): on the
@@ -325,7 +326,8 @@ SOURCE_GROUPS = {
     "sanctions": ("un_sanctions_enforcer_modifier",),
     # A dynasty's continuity
     "inheritance": ("inh_*",),
-    "tax_relief": ("te_tax_relief_*",),
+    # The full code's relief, and the light code's low dividend tax (never together: one code at a time)
+    "tax_relief": ("te_tax_relief_*", "te_tax_light_levy_div"),
     # The tax code's interest-group views, all eight groups' in one: each group's
     # four bands read the same ("Opposes the Tax Code"), and a list matches the
     # text, so a band split across two groups would show under the wrong flag
@@ -478,6 +480,8 @@ NOT_A_ROW = {
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
     "country_enactment_speed_law_multicultural_mult": "the Civil Rights journal entry (Federal Protection, "
                                                       "Segregationist Consolidation) and the law panel's enactment",
+    "tax_dividends_add": "the Budget panel's Dividends Taxes line and the Tax Code tab's Dividend Tax row "
+                         "(the light code's Low Dividend Tax)",
 }
 
 

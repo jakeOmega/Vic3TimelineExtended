@@ -404,6 +404,10 @@ te_nation_src_inheritance_count = {
 te_nation_src_tax_relief_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = te_tax_light_levy_div }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_tax_relief_ag_1 }
 		add = 1
 	}

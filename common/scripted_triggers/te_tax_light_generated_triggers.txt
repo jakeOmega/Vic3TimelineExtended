@@ -26,6 +26,12 @@ te_tax_light_extra_div = {
 	NOT = { has_law = law_type:law_traditionalism }
 }
 
+# The country holds an extra tax's levy, the flat modifier te_tax_light_gen_levy adds: the
+# teardown net's test (te_tax_light_levy_net) and the levy self-check's.
+te_tax_light_has_levy = {
+	OR = { has_modifier = te_tax_light_levy_div }
+}
+
 # The code holds the tax, so its row shows and its steps work: the law levies it, or it is an
 # open extra tax.
 te_tax_light_holds_wage = {

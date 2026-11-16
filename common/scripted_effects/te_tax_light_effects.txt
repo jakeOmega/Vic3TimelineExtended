@@ -10,6 +10,7 @@
 # own schema), which the player moves one step at a time from the tax code's
 # panel. A change moves the rate and the native tax level at once, and the
 # relief and the reactions within days (je_tax_code's scaling modifiers, below).
+# The low dividend tax's levy, a flat country modifier, moves with the sync.
 # There are no bills.
 #
 # Collection. Each rate sits on a step of its law's ladder: the lowest native
@@ -26,9 +27,15 @@
 # law that levies no dividend tax (Consumption-Based, Land-Based, Per-Capita)
 # leaves te_tax_en_div at nothing, and the code may raise it to a low cap
 # (te_tax_light_extra_cap_div) unless Traditionalism is enacted
-# (te_tax_light_extra_div). The law collects none of it, so the entry declares
+# (te_tax_light_extra_div). The law collects none of it, so the sync adds
 # te_tax_light_levy_div, one step's rate, times the index, in place of a
-# relief. It sits on the step Proportional Taxation puts the same rate on, so
+# relief: a flat country modifier, removed and added again at multiplier =
+# te_tax_light_levy_div_value (te_tax_light_gen_levy, step 4 below). #1855
+# declared it on je_tax_code instead, and TE_SELF_CHECK tax_light_div_levy read
+# it at 0 in 70 of 70 AI countries (2026-11-16; docs/testing/tax-code-playtest.md,
+# "The light code's low dividend tax"). Where the code is not in force the sync
+# does not run, so te_tax_light_levy_net (te_tax_on_actions.txt) takes it off.
+# It sits on the step Proportional Taxation puts the same rate on, so
 # it counts toward the tax level like any tax; it carries no relief and gives
 # no view band. A player's starts at nothing; an AI's follows its tax level
 # like its other taxes. A change of it draws the reactions a dividend tax
@@ -51,15 +58,15 @@
 # of the country it rose against, and the sync keeps that code as it keeps a
 # player's, each tax moving with the level its AI sets.
 #
-# The relief, levy and reaction modifiers are je_tax_code's scaling modifiers
+# The relief and reaction modifiers are je_tax_code's scaling modifiers
 # (scaling_modifiers_while_active): the entry reads each from the country's
-# variables (te_tax_light_rl_<key>, te_tax_en_div, te_tax_lr_<ig>,
-# te_tax_lr_mag_<ig>; the values are te_tax_light_relief_<key>_value,
-# te_tax_light_levy_div_value and te_tax_light_react_<ig>_<pos|neg>
-# _value, te_tax_light_generated_values.txt) about every four days while it is
-# active, so the sync only writes the variables. A country in force that the
-# engine left without the entry gets it from te_tax_light_entry_net
-# (te_tax_on_actions.txt).
+# variables (te_tax_light_rl_<key>, te_tax_lr_<ig>, te_tax_lr_mag_<ig>; the
+# values are te_tax_light_relief_<key>_value and te_tax_light_react_<ig>_
+# <pos|neg>_value, te_tax_light_generated_values.txt) about every four days
+# while it is active, so for them the sync only writes the variables. A
+# country in force that the engine left without the entry gets it from
+# te_tax_light_entry_net (te_tax_on_actions.txt). The low dividend tax's levy
+# is the one modifier the sync itself adds (above).
 #
 # Civil wars. At an outbreak the rebels receive every light token of the
 # original's (te_tax_light_copy_code, te_tax_civil_war_effects.txt), and
@@ -68,7 +75,8 @@
 # variable here it does not hold itself and no modifier; both sides hold every
 # token from the outbreak, so the winner keeps its own code, and the next sync
 # (te_tax_light.3 from te_tax_repair_after_civil_war, or the 1st) adds the view
-# bands back from the variables.
+# bands and the levy back from the variables; the rebels' first sync, the day
+# after te_tax_light.4, adds theirs.
 #
 # Every entry point is a country effect in the country's own scope: a country
 # event (te_tax_light.1-.4) or the player's scripted GUI (te_tax_light_step_
@@ -100,9 +108,9 @@ te_tax_light_migrate_country = {
 }
 
 # Country scope. Writes the native fiscal state from the code: the tax level,
-# the relief steps and reaction sizes the entry's scaling modifiers read, and
-# the view bands. Stateless: every part is derived from the variables and
-# re-applied, so a second call changes nothing. In order:
+# the relief steps and reaction sizes the entry's scaling modifiers read, the
+# low dividend tax's levy and the view bands. Stateless: every part is derived
+# from the variables and re-applied, so a second call changes nothing. In order:
 #   1. the active law changed since the last sync (on_law_activated raises
 #      te_tax_light.3; the 1st catches anything else): a player's code is
 #      clamped into the new law's range, at most the law's rate at the tax
@@ -122,7 +130,10 @@ te_tax_light_migrate_country = {
 #      country it rose against keeps its shape, every tax moving with the level
 #      its AI sets;
 #   3. each tax's step, and for a player's country the tax level they give;
-#   4. relief steps, reaction sizes and bands (the view-band modifiers).
+#   4. relief steps, the levy (te_tax_light_gen_levy: the flat modifier off,
+#      and on again at the code's index while the low dividend tax is open and
+#      above nothing; this is its one refresh site), reaction sizes and bands
+#      (the view-band modifiers).
 # Every limit on the way reads a variable that persists between runs
 # (te_tax_light_gen_init creates the scratch ones), because a step button's
 # tooltip walks this without running it: a limit that reads a value set earlier
@@ -187,6 +198,7 @@ te_tax_light_sync = {
 			}
 		}
 		te_tax_light_gen_relief = yes
+		te_tax_light_gen_levy = yes
 		te_tax_light_gen_reaction_sizes = yes
 		te_tax_light_gen_bands = yes
 	}
@@ -199,7 +211,7 @@ te_tax_light_sync = {
 # does), as the legislated code's te_tax.6 installs the carrier, and the first
 # sync runs the next day (te_tax_light.3), once the new level reads: it finds
 # the level where the code put it and keeps every rate, re-deriving the steps,
-# the relief, the reaction sizes and the view bands. A taxation law the rebels
+# the relief, the levy, the reaction sizes and the view bands. A taxation law the rebels
 # hold apart from the original's is the sync's first step: the code is clamped
 # into its range and the tax level never rises. Whether this fires before or
 # after the engine has finished setting the rebels' laws and tax level is

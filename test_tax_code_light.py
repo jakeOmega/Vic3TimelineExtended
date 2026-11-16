@@ -694,9 +694,10 @@ class SyncTest(unittest.TestCase):
         at = in_order(["else = {", "te_tax_light_gen_shift = yes", "te_tax_light_gen_steps = yes",
                        "limit = { var:te_tax_light_law > 0 } set_variable = { name = te_tax_light_level "
                        "value = var:te_tax_light_tgt } te_tax_light_gen_set_level = yes"], at)
-        # 3. Relief steps, reaction sizes and views, for both.
-        in_order(["te_tax_light_gen_relief = yes", "te_tax_light_gen_reaction_sizes = yes",
-                  "te_tax_light_gen_bands = yes"], at)
+        # 3. Relief steps, the low dividend tax's flat levy (its one refresh site), reaction sizes and
+        # views, for both.
+        in_order(["te_tax_light_gen_relief = yes", "te_tax_light_gen_levy = yes",
+                  "te_tax_light_gen_reaction_sizes = yes", "te_tax_light_gen_bands = yes"], at)
 
     def test_monthly_fades_then_syncs(self):
         body = flat(block(self.text, "te_tax_light_process_month"))
