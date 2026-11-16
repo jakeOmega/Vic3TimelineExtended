@@ -256,7 +256,7 @@ Taxation:
 	Tax Probe Carrier
 		Temporary developer carrier with zero domestic rates at all native levels. Not a playable tax law.
 	Legislated Tax Code
-		This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected.
+		This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected. To change a tax, open the Budget panel's Tax Code tab and draft a reform.
 Trade Policy:
 	Mercantilism - Unlocking Technology: International Trade
 		An export-focused economy with an emphasis on keeping a positive current account and competing with other nations.
