@@ -115,11 +115,59 @@ class ShareTest(unittest.TestCase):
         self.assertIn("te_rc_in_commons = no", inner(body, "outcome = {"))
         self.assertIn("te_rc_entry_ended = yes", inner(body, "outcome = {"))
 
+    def test_share_compares_production(self):
+        """The cohesion share adds each side's own program drains back (coordinator's ruling, 2026-11-16)."""
+        self.assertIn("add = te_rc_program_drains", entry(VALUES, "te_rc_leader_own_adds"))
+        self.assertIn("add = te_rc_program_drains", entry(VALUES, "te_rc_member_production_adds"))
+        self.assertIn("var:te_rc_production", entry(VALUES, "te_rc_bloc_members_eff"))
+        self.assertNotIn("te_rc_program_drains", entry(VALUES, "te_rc_member_gross_adds"))  # the contribution is after them
+
+    def test_program_drains_match_the_declarations(self):
+        """te_rc_program_drains reads each program drain's declared value while its entry is active."""
+        drains = entry(VALUES, "te_rc_program_drains")
+        per_level = re.search(r"country_weekly_innovation_add = -(\d+)",
+                              entry(read("common/static_modifiers/space_race_modifiers.txt"), "sr_space_program_cost"))
+        self.assertEqual(per_level.group(1), re.search(r"value = (\d+)",
+                         entry(read("common/script_values/space_race_values.txt"), "sr_innovation_per_cost_level")).group(1))
+        found = 0
+        for path in sorted((ROOT / "common/journal_entries").glob("*.txt")):
+            text = strip_comments(path.read_text(encoding="utf-8-sig"))
+            for je in re.findall(r"(?m)^(je_[a-z_]+) = \{", text):
+                body = entry(text, je)
+                for block in re.findall(r"scaling_modifiers_while_active = \{(.*?)\n\t\}", body, re.S):
+                    modifier = re.search(r"modifier = (\w+)", block).group(1)
+                    if modifier not in ("sr_space_program_cost", "nuclear_weapon_program_funding", "gm_arch_diversion"):
+                        continue
+                    found += 1
+                    term = re.search(r"add = (\S+)|value = \{ value = (\w+) \}", block)
+                    term = term.group(1) or term.group(2)
+                    with self.subTest(entry=je, modifier=modifier):
+                        branch = re.search(rf"has_journal_entry = {je}\b(.*?)\n\t\}}", drains, re.S)
+                        self.assertTrue(branch, f"no te_rc_program_drains branch for {je}")
+                        self.assertIn(term, branch.group(1))
+                        for gate in re.findall(r"(sr_milestone_billed_\w+) = yes", block):
+                            self.assertIn(gate, branch.group(1))
+        self.assertEqual(found, 9)  # seven milestones, the nuclear program, archaeology
+
     def test_institutes_left_behind_runs_ten_years(self):
         self.assertIn("value = 120", entry(EFFECTS, "te_rc_start_institutes_left_behind"))
         self.assertIn("divide = 120", entry(VALUES, "te_rc_ilb_fraction"))
         apply = entry(EFFECTS, "te_rc_ilb_apply")
         self.assertLess(apply.index("remove_modifier = te_rc_institutes_left_behind"), apply.index("add_modifier"))
+        # one apply a day: the monthly step skips a penalty that began today (fix 3)
+        self.assertIn("set_variable = { name = te_rc_ilb_new days = 1 }",
+                      entry(EFFECTS, "te_rc_start_institutes_left_behind"))
+        monthly = entry(ON_ACTIONS, "te_rc_monthly_country")
+        self.assertRegex(monthly, r"NOT = \{ has_variable = te_rc_ilb_new \}\s*\}\s*te_rc_ilb_refresh = yes")
+
+    def test_only_a_standing_commons_penalizes(self):
+        """Institutes Left Behind falls only on a leaver from a Commons whose leader still exists and still
+        leads one (coordinator's ruling, 2026-11-16): not after a dissolution, a lost leader or an identity change."""
+        left = entry(TRIGGERS, "te_rc_has_left_commons")
+        self.assertIn("var:te_rc_leader = { te_rc_leads_commons = yes }", left)
+        self.assertIn("exists = var:te_rc_leader", left)
+        self.assertNotIn("is_in_same_power_bloc", left)
+        self.assertIn("always = no", inner(left, "trigger_else = {"))
 
 
 class GrantTest(unittest.TestCase):
@@ -131,16 +179,55 @@ class GrantTest(unittest.TestCase):
     def test_discovery_hooks_skip_a_grant(self):
         for rel, name in (("common/on_actions/headlines.txt", "extra_headlines_tech"),
                           ("common/on_actions/cultural_hegemony_on_actions.txt", "cultural_hegemony_tech_first_on_action"),
-                          ("common/on_actions/extra_on_actions.txt", "agricultural_diffusion_on_action")):
+                          ("common/on_actions/extra_on_actions.txt", "agricultural_diffusion_on_action"),
+                          ("common/on_actions/te_demog_on_actions.txt", "te_demog_lines_country_on_action"),
+                          ("common/on_actions/extra_on_actions.txt", "add_arable_land_effect_on_action")):
             with self.subTest(hook=name):
                 body = entry(read(rel), name)
                 self.assertIn("NOT = { has_variable = te_rc_granting }", inner(body, "trigger = {"))
+
+    def test_a_pass_refreshes_once_what_the_guard_keeps_off(self):
+        """te_rc_refresh_after_grants runs the census and arable-land hooks' events once per member a pass gave
+        a technology (fix 1, 2026-11-16): the same events, so a change to either hook shows here."""
+        def events(text):
+            """Each trigger_event in text, spacing dropped, with whether it sits in an every_scope_state."""
+            flat = re.sub(r"\s+", "", text)
+            found = set()
+            for match in re.finditer(r"trigger_event=\{[^}]*\}", flat):
+                in_states = flat.rfind("every_scope_state={", 0, match.start()) > flat.rfind("}}", 0, match.start())
+                found.add((match.group(0), in_states))
+            return found
+        refresh = events(entry(EFFECTS, "te_rc_refresh_after_grants"))
+        census = events(entry(read("common/on_actions/te_demog_on_actions.txt"), "te_demog_lines_country_on_action"))
+        arable = events(entry(read("common/on_actions/extra_on_actions.txt"), "add_arable_land_effect_on_action"))
+        self.assertEqual(len(census), 2)
+        self.assertEqual(len(arable), 1)
+        self.assertEqual(refresh, census | arable)
+        after = entry(EFFECTS, "te_rc_after_pass")
+        self.assertRegex(after, r"var:te_rc_grants_pass > 0 \}\s*te_rc_refresh_after_grants = yes")
 
     def test_own_hook_does_not_recurse(self):
         hook = entry(ON_ACTIONS, "te_rc_on_acquired")
         self.assertLess(hook.index("has_variable = te_rc_granting"), hook.index("te_rc_share_acquired = yes"))
         self.assertIn("te_rc_monthly_country", entry(ON_ACTIONS, "on_monthly_pulse_country"))
         self.assertIn("te_rc_on_acquired", entry(ON_ACTIONS, "on_acquired_technology"))
+        # a hook that fires after a grant runs no pass per grant (fix 6)
+        self.assertIn("NOT = { has_variable = te_rc_granted_recent }",
+                      inner(hook[hook.index("te_rc_in_commons = yes") - 40:], "limit = {"))
+
+    def test_world_first_hooks_load_first(self):
+        """The engine runs a merged on_action's lists in file load order. Cultural Hegemony's world-first test
+        asks that no other country hold the technology, so it must run before te_rc_on_acquired shares the
+        leader's discovery with the members: its file, and the headline's, sort before this system's."""
+        own = "te_research_commons_on_actions.txt"
+        for hook in ("cultural_hegemony_tech_first_on_action", "extra_headlines_tech", "agricultural_diffusion_on_action"):
+            listed = [path.name for path in sorted((ROOT / "common/on_actions").glob("*.txt"))
+                      if re.search(rf"(?ms)^on_acquired_technology = \{{[^}}]*\b{hook}\b",
+                                   strip_comments(path.read_text(encoding="utf-8-sig")))]
+            with self.subTest(hook=hook):
+                self.assertTrue(listed, "the hook is no longer on on_acquired_technology")
+                for name in listed:
+                    self.assertLess(name, own)
 
 
 class TechnologyControlsTest(unittest.TestCase):
@@ -178,6 +265,14 @@ class TechnologyControlsTest(unittest.TestCase):
                       entry(GROUPS, "INJECT:principle_group_advanced_research"))
         self.assertIn("unlocking_identity = identity_research_commons",
                       entry(GROUPS, "principle_group_technology_controls"))
+
+    def test_embargo_counts_only_its_own_and_spares_a_member(self):
+        action = read("common/diplomatic_actions/te_research_commons_embargo.txt")
+        one = inner(entry(action, "te_rc_technology_embargo"), "possible = {")
+        self.assertRegex(one, r"root = \{\s*has_diplomatic_pact = \{\s*who = prev\s*type = te_rc_technology_embargo"
+                              r"\s*is_initiator = yes")
+        refresh = entry(EFFECTS, "te_rc_embargo_refresh")
+        self.assertIn("NOT = { is_in_same_power_bloc = root }", inner(refresh, "limit = {"))
 
     def test_science_aid_is_closed(self):
         articles = read("common/treaty_articles/extra_treaty_articles.txt")
