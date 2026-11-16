@@ -12,6 +12,7 @@ helpers. Self-Replicating Construction (Von Neumann Machines, era 13 spec § 7.1
 first added after these tests; each test names the place a later one misses.
 """
 import glob
+import itertools
 import os
 import re
 import unittest
@@ -172,6 +173,147 @@ class ConstructionTiers(unittest.TestCase):
                     self.assertEqual(count(rf"BUILDING = te_construction_market_site TIER = {i} PM = {twin} \}}"), 3)
         # Two site activations and one sector activation a tier; one sector read and three site reads a tier above 1.
         self.assertEqual(count(r"TIER = \d+ PM ="), 7 * len(self.tiers) - 4)
+
+
+class SectorWorkforce(unittest.TestCase):
+    """The Construction Sector's tiers hire a third of what they did until 2026-11-16, and
+    Wooden Buildings takes 30 wood, not 40 (owner; construction.md, "Construction as a Market
+    Good"): Wooden Buildings turned 1,000 of goods into a unit of construction worth 1,000, so
+    it could pay its 6,000 workers nothing, and the sectors stayed under half staffed. Every
+    automation method was cut by the same third, so it removes the same share as before.
+
+    Two guards. Every tier's margin at base prices pays at least Wooden Buildings' 0.10 a
+    worker a week. And no combination of the sector's or the Construction Site's methods
+    (base, automation, principle) hires fewer than none of any profession, or a token staff of
+    1 to 99 a level: an automation method that cuts more than a tier hires is the bug
+    pm_employment_audit exists for, and test_flat_crews.py exempts the site (its market method
+    hires ten), so the site's direct tiers are checked here."""
+
+    BUILDINGS = ("building_construction_sector", "te_construction_market_site")
+    MIN_WAGE_BREAKEVEN = 0.10  # Wooden Buildings' since 2026-11-16; it was 0.00
+    MIN_STAFF = 100  # test_flat_crews.py's MIN_STAFF
+
+    @classmethod
+    def setUpClass(cls):
+        import pm_costs
+
+        cls.pms = _parse("common", "production_methods")
+        cls.groups = _parse("common", "production_method_groups")
+        cls.buildings = _parse("common", "buildings")
+        cls.prices = pm_costs.load_goods()
+
+    def staff(self, combo, bucket="level_scaled"):
+        out = {}
+        for pm in combo:
+            for key, qty in _numbers(_block(self.pms[pm], "building_modifiers", bucket)).items():
+                if key.startswith("building_employment_") and key.endswith("_add"):
+                    out[key] = out.get(key, 0.0) + qty
+        return out
+
+    def combos(self, building):
+        groups = [g for g in _list(self.buildings[building].get("production_method_groups"))
+                  if not g.startswith("pmg_maintenance")]
+        methods = [_list(self.groups[g].get("production_methods")) for g in groups]
+        for combo in itertools.product(*methods):
+            chosen = set(combo)
+            if all(not _list(self.pms[pm].get("unlocking_production_methods"))
+                   or chosen & set(_list(self.pms[pm].get("unlocking_production_methods")))
+                   for pm in combo):
+                yield combo
+
+    def margin(self, tier):
+        """(margin a level at base prices, per-level staff)."""
+        goods = _block(self.pms[tier], "building_modifiers", "workforce_scaled")
+        value = {"input": 0.0, "output": 0.0}
+        for key, qty in _numbers(goods).items():
+            kind, good = re.fullmatch(r"goods_(input|output)_(\w+)_add", key).groups()
+            value[kind] += qty * self.prices[good]
+        return value["output"] - value["input"], sum(self.staff([tier]).values())
+
+    def test_every_tier_pays_its_workers(self):
+        for tier in _list(self.groups[SECTOR_GROUP].get("production_methods")):
+            with self.subTest(tier=tier):
+                margin, staff = self.margin(tier)
+                self.assertGreater(staff, 0)
+                self.assertGreaterEqual(round(margin / staff, 4), self.MIN_WAGE_BREAKEVEN,
+                                        f"{tier}: margin {margin:.0f} over {staff:.0f} workers")
+
+    def test_the_ladder_climbs(self):
+        """Each tier pays its workers more, and makes more a level, than the one before, so
+        each is worth switching to. The first five were set to an even climb on 2026-11-16,
+        about 1.6 times a step (0.10, 0.16, 0.25, 0.40, 0.63), at the owner's request: Steel-Frame
+        paid 0.36 after the cut, as much as Arc-Welded and three times Iron-Frame."""
+        tiers = _list(self.groups[SECTOR_GROUP].get("production_methods"))
+        margins = [self.margin(t) for t in tiers]
+        for before, after, (m0, s0), (m1, s1) in zip(tiers, tiers[1:], margins, margins[1:]):
+            with self.subTest(before=before, after=after):
+                self.assertGreater(m1, m0, "margin a level")
+                self.assertGreater(m1 / s1, m0 / s0, "wage breakeven")
+
+    def test_no_combination_goes_negative_or_keeps_a_token_staff(self):
+        checked = 0
+        for building in self.BUILDINGS:
+            for combo in self.combos(building):
+                if MARKET_PM in combo:  # ten laborers by design (te_construction_market_pms.txt)
+                    continue
+                checked += 1
+                by_type = self.staff(combo)
+                with self.subTest(building=building, combo=" + ".join(combo)):
+                    self.assertEqual({k: v for k, v in by_type.items() if v < 0}, {})
+                    staff = sum(by_type.values())
+                    self.assertFalse(0 < staff < self.MIN_STAFF, f"keeps {staff:.0f} a level")
+        # 8 tiers x 2 principle methods x the automation methods each tier takes, twice
+        self.assertGreaterEqual(checked, 2 * (8 * 2 * 3 + 5 * 2 + 3 * 2 + 2 * 2))
+
+    # What each automation method's goods cost a week over the workers it removes a level,
+    # at base prices, before the workforce cut of 2026-11-16 (origin/main at 97c2ad90a): the
+    # wage at which it pays for itself. The cut took a third of the workers it removes, and
+    # its inputs were cut to about a third with it (owner, the same day), so that it pays off
+    # at about the wage it did. A method added later takes the band of the one before it.
+    PAYOFF_BEFORE_CUT = {
+        "pm_prefabricated_building_components": 310 / 1000,
+        "pm_tower_cranes": 750 / 1800,
+        "pm_computer_aided_design": 1230 / 2600,
+        "pm_3d_printed_buildings": 2030 / 4550,
+        "pm_3d_printed_buildings_nanomaterial": 2030 / 4570,
+    }
+    PAYOFF_BAND = 0.10
+
+    def test_automation_pays_off_at_the_wage_it_did(self):
+        """An automation method's goods, over the workers it removes, stay within a tenth of
+        what they were before the workforce cut: the inputs and the cut move together. Before
+        2026-11-16's input change Prefabricated Components paid off at 0.93 a worker, three
+        times its 0.31, because the workers it removed were cut and its goods were not."""
+        methods = [pm for pm in _list(self.groups["pmg_construction_automation"].get("production_methods"))
+                   if sum(self.staff([pm]).values()) < 0]
+        self.assertEqual(set(methods), set(self.PAYOFF_BEFORE_CUT), "a new automation method needs a band")
+        for pm in methods:
+            with self.subTest(method=pm):
+                goods = _block(self.pms[pm], "building_modifiers", "workforce_scaled")
+                cost = sum(qty * self.prices[re.fullmatch(r"goods_input_(\w+)_add", key).group(1)]
+                           for key, qty in _numbers(goods).items())
+                payoff = cost / -sum(self.staff([pm]).values())
+                before = self.PAYOFF_BEFORE_CUT[pm]
+                self.assertLessEqual(abs(payoff / before - 1), self.PAYOFF_BAND,
+                                     f"pays off at {payoff:.3f} a worker against {before:.3f}")
+
+    def test_a_flat_crew_method_cancels_its_tier_exactly(self):
+        """An automation method that hires a flat crew (`unscaled`) is automated by design: it
+        cancels the per-level staff of every tier it runs on and the crew runs the building
+        (owner, 2026-11-16: "3D printed buildings is an automated method - it cancels the per
+        level employment and replaces with a unscaled employment"). Its zero is not a bug, but
+        it must cancel exactly what the tier hires, profession by profession: no more, or the
+        level goes negative, and no less, or a token staff is left."""
+        checked = 0
+        for building in self.BUILDINGS:
+            for combo in self.combos(building):
+                if not any(sum(self.staff([pm], "unscaled").values()) > 0 for pm in combo):
+                    continue
+                checked += 1
+                with self.subTest(building=building, combo=" + ".join(combo)):
+                    self.assertEqual({k: v for k, v in self.staff(combo).items() if v != 0}, {})
+        # 3D Printed Buildings' Nanomaterial copy on 2 tiers x 2 principle methods, twice
+        self.assertGreaterEqual(checked, 8)
 
 
 def _value(value):
