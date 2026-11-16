@@ -33848,7 +33848,8 @@ sr_mq_count_by_index = {
 
 # Fabrication builds the queue's first entry (sr_mod_month has checked there is one
 # and the stock covers it). It leaves the queue first; an entry for a world THIS no
-# longer holds is dropped unbuilt.
+# longer holds is dropped unbuilt. A lunar world's module takes no shipment slot
+# (sr_mod_fab_build_lunar, the owner, 2026-11-15).
 sr_mod_fab_head = {
 	set_local_variable = { name = sr_mq_head_cost_now value = sr_mq_head_cost }
 	set_local_variable = { name = sr_mq_head_site value = var:sr_mq_1_site }
@@ -34477,107 +34478,198 @@ sr_mod_fab_head = {
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 35 global_var:sr_site_holder_shackleton ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = shackleton TYPE = hab CODE = 3 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = shackleton TYPE = a CODE = 1 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = shackleton TYPE = b CODE = 2 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = shackleton TYPE = def CODE = 4 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = shackleton TYPE = mine CODE = 6 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = shackleton TYPE = yard CODE = 7 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = shackleton TYPE = lab CODE = 8 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = shackleton TYPE = culture CODE = 9 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = shackleton TYPE = resort CODE = 10 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = shackleton TYPE = black CODE = 11 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = shackleton TYPE = train CODE = 12 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = shackleton TYPE = bunker CODE = 13 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = shackleton TYPE = foundry CODE = 14 INDEX = 35 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = shackleton TYPE = admin CODE = 15 INDEX = 35 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = hab CODE = 3 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = a CODE = 1 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = b CODE = 2 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = def CODE = 4 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = mine CODE = 6 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = yard CODE = 7 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = lab CODE = 8 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = culture CODE = 9 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = resort CODE = 10 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = black CODE = 11 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = train CODE = 12 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = bunker CODE = 13 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = foundry CODE = 14 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = admin CODE = 15 INDEX = 35 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 36 global_var:sr_site_holder_peary ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = peary TYPE = hab CODE = 3 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = peary TYPE = a CODE = 1 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = peary TYPE = b CODE = 2 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = peary TYPE = def CODE = 4 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = peary TYPE = mine CODE = 6 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = peary TYPE = yard CODE = 7 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = peary TYPE = lab CODE = 8 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = peary TYPE = culture CODE = 9 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = peary TYPE = resort CODE = 10 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = peary TYPE = black CODE = 11 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = peary TYPE = train CODE = 12 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = peary TYPE = bunker CODE = 13 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = peary TYPE = foundry CODE = 14 INDEX = 36 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = peary TYPE = admin CODE = 15 INDEX = 36 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = peary TYPE = hab CODE = 3 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = peary TYPE = a CODE = 1 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = peary TYPE = b CODE = 2 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = peary TYPE = def CODE = 4 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = peary TYPE = mine CODE = 6 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = peary TYPE = yard CODE = 7 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = peary TYPE = lab CODE = 8 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = peary TYPE = culture CODE = 9 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = peary TYPE = resort CODE = 10 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = peary TYPE = black CODE = 11 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = peary TYPE = train CODE = 12 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = peary TYPE = bunker CODE = 13 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = peary TYPE = foundry CODE = 14 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = peary TYPE = admin CODE = 15 INDEX = 36 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 37 global_var:sr_site_holder_tranquility ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = tranquility TYPE = hab CODE = 3 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = tranquility TYPE = a CODE = 1 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = tranquility TYPE = b CODE = 2 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = tranquility TYPE = def CODE = 4 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = tranquility TYPE = mine CODE = 6 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = tranquility TYPE = yard CODE = 7 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = tranquility TYPE = lab CODE = 8 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = tranquility TYPE = culture CODE = 9 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = tranquility TYPE = resort CODE = 10 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = tranquility TYPE = black CODE = 11 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = tranquility TYPE = train CODE = 12 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = tranquility TYPE = bunker CODE = 13 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = tranquility TYPE = foundry CODE = 14 INDEX = 37 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = tranquility TYPE = admin CODE = 15 INDEX = 37 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = hab CODE = 3 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = a CODE = 1 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = b CODE = 2 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = def CODE = 4 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = mine CODE = 6 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = yard CODE = 7 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = lab CODE = 8 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = culture CODE = 9 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = resort CODE = 10 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = black CODE = 11 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = train CODE = 12 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = bunker CODE = 13 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = foundry CODE = 14 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = admin CODE = 15 INDEX = 37 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 38 global_var:sr_site_holder_marius_hills ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = marius_hills TYPE = hab CODE = 3 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = marius_hills TYPE = a CODE = 1 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = marius_hills TYPE = b CODE = 2 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = marius_hills TYPE = def CODE = 4 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = marius_hills TYPE = mine CODE = 6 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = marius_hills TYPE = yard CODE = 7 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = marius_hills TYPE = lab CODE = 8 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = marius_hills TYPE = culture CODE = 9 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = marius_hills TYPE = resort CODE = 10 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = marius_hills TYPE = black CODE = 11 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = marius_hills TYPE = train CODE = 12 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = marius_hills TYPE = bunker CODE = 13 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = marius_hills TYPE = foundry CODE = 14 INDEX = 38 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = marius_hills TYPE = admin CODE = 15 INDEX = 38 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = hab CODE = 3 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = a CODE = 1 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = b CODE = 2 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = def CODE = 4 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = mine CODE = 6 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = yard CODE = 7 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = lab CODE = 8 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = culture CODE = 9 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = resort CODE = 10 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = black CODE = 11 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = train CODE = 12 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = bunker CODE = 13 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = foundry CODE = 14 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = admin CODE = 15 INDEX = 38 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 39 global_var:sr_site_holder_daedalus ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = daedalus TYPE = hab CODE = 3 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = daedalus TYPE = a CODE = 1 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = daedalus TYPE = b CODE = 2 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = daedalus TYPE = def CODE = 4 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = daedalus TYPE = mine CODE = 6 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = daedalus TYPE = yard CODE = 7 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = daedalus TYPE = lab CODE = 8 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = daedalus TYPE = culture CODE = 9 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = daedalus TYPE = resort CODE = 10 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = daedalus TYPE = black CODE = 11 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = daedalus TYPE = train CODE = 12 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = daedalus TYPE = bunker CODE = 13 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = daedalus TYPE = foundry CODE = 14 INDEX = 39 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = daedalus TYPE = admin CODE = 15 INDEX = 39 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = hab CODE = 3 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = a CODE = 1 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = b CODE = 2 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = def CODE = 4 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = mine CODE = 6 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = yard CODE = 7 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = lab CODE = 8 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = culture CODE = 9 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = resort CODE = 10 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = black CODE = 11 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = train CODE = 12 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = bunker CODE = 13 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = foundry CODE = 14 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = admin CODE = 15 INDEX = 39 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 40 global_var:sr_site_holder_imbrium ?= this }
-		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build = { KEY = imbrium TYPE = hab CODE = 3 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build = { KEY = imbrium TYPE = a CODE = 1 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build = { KEY = imbrium TYPE = b CODE = 2 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build = { KEY = imbrium TYPE = def CODE = 4 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build = { KEY = imbrium TYPE = mine CODE = 6 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build = { KEY = imbrium TYPE = yard CODE = 7 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build = { KEY = imbrium TYPE = lab CODE = 8 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build = { KEY = imbrium TYPE = culture CODE = 9 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build = { KEY = imbrium TYPE = resort CODE = 10 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build = { KEY = imbrium TYPE = black CODE = 11 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build = { KEY = imbrium TYPE = train CODE = 12 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = imbrium TYPE = bunker CODE = 13 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = imbrium TYPE = foundry CODE = 14 INDEX = 40 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = imbrium TYPE = admin CODE = 15 INDEX = 40 } }
+		if = { limit = { local_var:sr_mq_head_type = 3 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = hab CODE = 3 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 1 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = a CODE = 1 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 2 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = b CODE = 2 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 4 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = def CODE = 4 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 6 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = mine CODE = 6 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 7 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = yard CODE = 7 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 8 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = lab CODE = 8 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 9 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = culture CODE = 9 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 10 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = resort CODE = 10 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 11 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = black CODE = 11 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 12 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = train CODE = 12 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = bunker CODE = 13 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = foundry CODE = 14 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = admin CODE = 15 INDEX = 40 } }
 	}
 	sr_mq_recount = yes
+}
+
+# A lunar world's module goes ahead of a head that waits for a shipment slot (the
+# owner, 2026-11-15): the first one in the queue moves to the top, the entries it
+# passes down a place. Only while it can go at once: launches not barred
+# (sr_mq_head_needs_no_slot). From sr_mod_month, before each build.
+sr_mq_promote_lunar = {
+	if = {
+		limit = {
+			has_variable = sr_mq_1_site
+			NOT = { sr_ms_has_free_slot = yes }
+			NOT = { OR = { var:sr_mq_1_site ?= 35 var:sr_mq_1_site ?= 36 var:sr_mq_1_site ?= 37 var:sr_mq_1_site ?= 38 var:sr_mq_1_site ?= 39 var:sr_mq_1_site ?= 40 } }
+			NOT = { sr_launches_barred = yes }
+		}
+		if = {
+			limit = { OR = { var:sr_mq_2_site ?= 35 var:sr_mq_2_site ?= 36 var:sr_mq_2_site ?= 37 var:sr_mq_2_site ?= 38 var:sr_mq_2_site ?= 39 var:sr_mq_2_site ?= 40 } }
+			sr_mq_to_top_2 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_3_site ?= 35 var:sr_mq_3_site ?= 36 var:sr_mq_3_site ?= 37 var:sr_mq_3_site ?= 38 var:sr_mq_3_site ?= 39 var:sr_mq_3_site ?= 40 } }
+			sr_mq_to_top_3 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_4_site ?= 35 var:sr_mq_4_site ?= 36 var:sr_mq_4_site ?= 37 var:sr_mq_4_site ?= 38 var:sr_mq_4_site ?= 39 var:sr_mq_4_site ?= 40 } }
+			sr_mq_to_top_4 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_5_site ?= 35 var:sr_mq_5_site ?= 36 var:sr_mq_5_site ?= 37 var:sr_mq_5_site ?= 38 var:sr_mq_5_site ?= 39 var:sr_mq_5_site ?= 40 } }
+			sr_mq_to_top_5 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_6_site ?= 35 var:sr_mq_6_site ?= 36 var:sr_mq_6_site ?= 37 var:sr_mq_6_site ?= 38 var:sr_mq_6_site ?= 39 var:sr_mq_6_site ?= 40 } }
+			sr_mq_to_top_6 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_7_site ?= 35 var:sr_mq_7_site ?= 36 var:sr_mq_7_site ?= 37 var:sr_mq_7_site ?= 38 var:sr_mq_7_site ?= 39 var:sr_mq_7_site ?= 40 } }
+			sr_mq_to_top_7 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_8_site ?= 35 var:sr_mq_8_site ?= 36 var:sr_mq_8_site ?= 37 var:sr_mq_8_site ?= 38 var:sr_mq_8_site ?= 39 var:sr_mq_8_site ?= 40 } }
+			sr_mq_to_top_8 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_9_site ?= 35 var:sr_mq_9_site ?= 36 var:sr_mq_9_site ?= 37 var:sr_mq_9_site ?= 38 var:sr_mq_9_site ?= 39 var:sr_mq_9_site ?= 40 } }
+			sr_mq_to_top_9 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_10_site ?= 35 var:sr_mq_10_site ?= 36 var:sr_mq_10_site ?= 37 var:sr_mq_10_site ?= 38 var:sr_mq_10_site ?= 39 var:sr_mq_10_site ?= 40 } }
+			sr_mq_to_top_10 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_11_site ?= 35 var:sr_mq_11_site ?= 36 var:sr_mq_11_site ?= 37 var:sr_mq_11_site ?= 38 var:sr_mq_11_site ?= 39 var:sr_mq_11_site ?= 40 } }
+			sr_mq_to_top_11 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_12_site ?= 35 var:sr_mq_12_site ?= 36 var:sr_mq_12_site ?= 37 var:sr_mq_12_site ?= 38 var:sr_mq_12_site ?= 39 var:sr_mq_12_site ?= 40 } }
+			sr_mq_to_top_12 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_13_site ?= 35 var:sr_mq_13_site ?= 36 var:sr_mq_13_site ?= 37 var:sr_mq_13_site ?= 38 var:sr_mq_13_site ?= 39 var:sr_mq_13_site ?= 40 } }
+			sr_mq_to_top_13 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_14_site ?= 35 var:sr_mq_14_site ?= 36 var:sr_mq_14_site ?= 37 var:sr_mq_14_site ?= 38 var:sr_mq_14_site ?= 39 var:sr_mq_14_site ?= 40 } }
+			sr_mq_to_top_14 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_15_site ?= 35 var:sr_mq_15_site ?= 36 var:sr_mq_15_site ?= 37 var:sr_mq_15_site ?= 38 var:sr_mq_15_site ?= 39 var:sr_mq_15_site ?= 40 } }
+			sr_mq_to_top_15 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_16_site ?= 35 var:sr_mq_16_site ?= 36 var:sr_mq_16_site ?= 37 var:sr_mq_16_site ?= 38 var:sr_mq_16_site ?= 39 var:sr_mq_16_site ?= 40 } }
+			sr_mq_to_top_16 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_17_site ?= 35 var:sr_mq_17_site ?= 36 var:sr_mq_17_site ?= 37 var:sr_mq_17_site ?= 38 var:sr_mq_17_site ?= 39 var:sr_mq_17_site ?= 40 } }
+			sr_mq_to_top_17 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_18_site ?= 35 var:sr_mq_18_site ?= 36 var:sr_mq_18_site ?= 37 var:sr_mq_18_site ?= 38 var:sr_mq_18_site ?= 39 var:sr_mq_18_site ?= 40 } }
+			sr_mq_to_top_18 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_19_site ?= 35 var:sr_mq_19_site ?= 36 var:sr_mq_19_site ?= 37 var:sr_mq_19_site ?= 38 var:sr_mq_19_site ?= 39 var:sr_mq_19_site ?= 40 } }
+			sr_mq_to_top_19 = yes
+		}
+		else_if = {
+			limit = { OR = { var:sr_mq_20_site ?= 35 var:sr_mq_20_site ?= 36 var:sr_mq_20_site ?= 37 var:sr_mq_20_site ?= 38 var:sr_mq_20_site ?= 39 var:sr_mq_20_site ?= 40 } }
+			sr_mq_to_top_20 = yes
+		}
+	}
 }
 
 # A waiting shipment's world (local_var:sr_ms_site_now): local_var:sr_ms_go = 1 when it

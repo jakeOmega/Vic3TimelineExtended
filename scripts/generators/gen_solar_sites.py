@@ -313,9 +313,13 @@ MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 # Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
 # Space Colonization, Molecular Assemblers), so their tooltips show it, and up to
 # SLOTS_PAST_MAX modules past them, the n-th past costing sr_module_points x
-# (1 + n).
+# (1 + n). A module past them is queued only while the module stock can hold
+# its price (sr_mod_fab_stock_cap, sr_colony_module_values.txt): the base stock
+# of 500 holds the fourth's, and storage and a year's fabrication the rest (the
+# owner, 2026-11-15: "increase the max you can go over the limit, since you can
+# store more now too").
 SLOTS_MODIFIER = "country_sr_colony_slots_add"
-SLOTS_PAST_MAX = 4
+SLOTS_PAST_MAX = 8
 
 # The Modules view's lines of cells (colony management design § 8), in order;
 # Terraforming on a fourth line of its own, shown on the worlds that take it.
@@ -356,8 +360,16 @@ NEAR_EARTH_TECH = "asteroid_mining"
 OVERFLOW_GRADE = -75
 
 # The Moon's six worlds (lunar colonization design § 3): stage 0, at Earth's
-# location, never gated, founded the month their fleet leaves (§ 3.3).
+# location, never gated, founded the month their fleet leaves (§ 3.3). A module
+# for one takes no shipment slot either (the owner, 2026-11-15): it is installed
+# the month it is built, unless Earth is blockaded (sr_mod_fab_build_lunar).
 LUNAR: tuple[Site, ...] = tuple(s for s in SITES if s.stage == 0)
+
+
+def lunar_test(var: str) -> str:
+    """A country-scope trigger: `var` (a queue place's site) names a lunar world;
+    false while it is unset."""
+    return "OR = { " + " ".join(f"{var} ?= {s.index}" for s in LUNAR) + " }"
 
 # No Spaceport on a lunar world (design § 3.1): fleets dock at Earth, the same
 # location. Its slots hold Habitats and Defences. module_types() and its kin
@@ -1898,6 +1910,32 @@ def render_module_values() -> list[str]:
             f"\tif = {{ limit = {{ has_technology_researched = {NEAR_EARTH_TECH} }} add = {NEAR_EARTH_ROOM} }}"]
     out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_ebase_room_{s.key} }}" for s in SITES]
     out.append("}")
+    out += render_shipment_wait_values()
+    return out
+
+
+def render_shipment_wait_values() -> list[str]:
+    """The Next Module hover's wait (the owner, 2026-11-15: the hover says what
+    holds the queue): per world, the months until a module waiting at Earth for
+    it can leave, and per shipment slot the same for the module waiting there."""
+    out = ["", "# Country scope: the months until a module waiting at Earth for the world can leave",
+           "# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). The",
+           "# Moon and Mercury are never gated and have none."]
+    gated = [s for s in SITES if s.body]
+    out += [f"sr_mod_wait_months_{s.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} "
+            f"value = sr_window_months_to_next_{s.body} }} }}" for s in gated]
+    out += ["", "# Country scope: the same for the module waiting in shipment slot n, 999 while the",
+            "# slot is empty or its module in flight (sr_disp_ms_first_leave takes the least)."]
+    for n in range(1, SHIP_SLOTS + 1):
+        out += [f"sr_disp_ms_wait_months_{n} = {{",
+                "\tvalue = 999",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = sr_ms_{n}_site NOT = {{ has_variable = sr_ms_{n}_arrive }} }}",
+                "\t\tvalue = 0"]
+        for m, s in enumerate(gated):
+            out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ var:sr_ms_{n}_site = {s.index} }} "
+                       f"value = sr_mod_wait_months_{s.key} }}")
+        out += ["\t}", "}"]
     return out
 
 
@@ -2220,7 +2258,8 @@ def render_module_queue() -> list[str]:
     out += ["}", "",
             "# Fabrication builds the queue's first entry (sr_mod_month has checked there is one",
             "# and the stock covers it). It leaves the queue first; an entry for a world THIS no",
-            "# longer holds is dropped unbuilt.",
+            "# longer holds is dropped unbuilt. A lunar world's module takes no shipment slot",
+            "# (sr_mod_fab_build_lunar, the owner, 2026-11-15).",
             "sr_mod_fab_head = {",
             "\tset_local_variable = { name = sr_mq_head_cost_now value = sr_mq_head_cost }",
             "\tset_local_variable = { name = sr_mq_head_site value = var:sr_mq_1_site }",
@@ -2228,15 +2267,34 @@ def render_module_queue() -> list[str]:
             "\tsr_mq_remove_1 = yes"]
     for n, site in enumerate(SITES):
         k = site.key
+        build = "sr_mod_fab_build_lunar" if site in LUNAR else "sr_mod_fab_build"
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{k} ?= this }}"]
         for m, t in enumerate(module_types(site)):
             # A Terraforming level for a world finished meanwhile is dropped unbuilt.
             extra = f" sr_site_terra_open_{k} = yes" if t == "terra" else ""
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_head_type = {MODULE_CODES[t]}{extra} }} "
-                       f"sr_mod_fab_build = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }} }}")
+                       f"{build} = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }} }}")
         out.append("\t}")
-    out += ["\tsr_mq_recount = yes", "}"]
+    out += ["\tsr_mq_recount = yes", "}", "",
+            "# A lunar world's module goes ahead of a head that waits for a shipment slot (the",
+            "# owner, 2026-11-15): the first one in the queue moves to the top, the entries it",
+            "# passes down a place. Only while it can go at once: launches not barred",
+            "# (sr_mq_head_needs_no_slot). From sr_mod_month, before each build.",
+            "sr_mq_promote_lunar = {",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\thas_variable = sr_mq_1_site",
+            "\t\t\tNOT = { sr_ms_has_free_slot = yes }",
+            f"\t\t\tNOT = {{ {lunar_test('var:sr_mq_1_site')} }}",
+            "\t\t\tNOT = { sr_launches_barred = yes }",
+            "\t\t}"]
+    for n in range(2, q + 1):
+        out += ["\t\tif = {" if n == 2 else "\t\telse_if = {",
+                f"\t\t\tlimit = {{ {lunar_test(f'var:sr_mq_{n}_site')} }}",
+                f"\t\t\tsr_mq_to_top_{n} = yes",
+                "\t\t}"]
+    out += ["\t}", "}"]
     return out
 
 
@@ -2409,7 +2467,9 @@ def render_module_triggers() -> list[str]:
            "#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the",
            "#                                 queue has a free place, the cap has room counting",
            "#                                 queue and shipments, and a specialization's",
-           "#                                 founding choice is made",
+           "#                                 founding choice is made; past a world's slots,",
+           "#                                 only while the module stock can hold the price",
+           "#                                 (the owner, 2026-11-15), or it could never be built",
            "#   sr_mod_departs_<key>          a module can leave for it this month at no premium",
            "# Any scope: sr_site_shipping_<key>, a module is on its way there."]
     for site in SITES:
@@ -2428,7 +2488,8 @@ def render_module_triggers() -> list[str]:
             out += [f"sr_mod_can_queue_{t}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
                     "\tsr_mq_has_room = yes",
-                    f"\tsr_mod_slots_used_{k} < sr_site_slots_max_{k}"]
+                    f"\tsr_mod_slots_used_{k} < sr_site_slots_max_{k}",
+                    f"\tsr_mod_next_cost_{k} <= sr_mod_fab_stock_cap"]
             if t == "terra":
                 # Terraforming (era 13 spec § 7.11): the technology's marker, at most
                 # sr_terra_max_levels at once, and only while the world is unfinished.
@@ -2448,6 +2509,9 @@ def render_module_triggers() -> list[str]:
         out += ["\t}", "}"]
     out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
             f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
+            "", "# The queue's first entry is for a lunar world, whose module takes no shipment slot",
+            "# while launches aren't barred (sr_mq_head_needs_no_slot).",
+            f"sr_mq_head_lunar = {{ {lunar_test('var:sr_mq_1_site')} }}",
             "", "# The queue scripted GUI's place (scope:op) holds an entry.",
             "sr_mq_scope_place_filled = {", "\tOR = {",
             *[f"\t\tAND = {{ scope:op = {n} has_variable = sr_mq_{n}_site }}" for n in range(1, QUEUE_SLOTS + 1)],
@@ -2487,6 +2551,10 @@ def render_module_triggers() -> list[str]:
             "# ... is at or past its slots, so the next one costs more (design § 5).",
             "sr_mod_scope_past_slots = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} >= sr_site_slots_{s.key} }}" for s in SITES]
+    out += ["\t}", "}",
+            "# ... and its next costs no more than the module stock can hold (the owner, 2026-11-15).",
+            "sr_mod_scope_price_fits = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_next_cost_{s.key} <= sr_mod_fab_stock_cap }}" for s in SITES]
     out += ["\t}", "}",
             "# ... has a queue to clear.",
             "sr_mod_scope_has_queue = {", "\tOR = {"]

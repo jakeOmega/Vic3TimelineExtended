@@ -1158,11 +1158,13 @@ sr_disp_fab_stock = {
 }
 # The queue's head (the owner, 2026-10-31): 0 nothing queued; 1 being
 # fabricated, built in sr_disp_mq_next_months; 2 its points are in stock but
-# every shipment slot is taken; 3 stopped: the launch site lost, or no points
-# a month and too few in stock. The month's pulse adds the rate and then builds
-# (sr_mod_month), whose build loop asks only the launch site, the stock, a free
-# slot and the queue, never the rate: a head the stock covers is built with no
-# fabrication. So the head waits at least one month.
+# every shipment slot is taken (a lunar world's module needs none:
+# sr_mq_head_needs_no_slot); 3 stopped: the launch site lost, a price the stock
+# can't hold, or no points a month and too few in stock (sr_disp_mq_stop_reason
+# says which). The month's pulse adds the rate and then builds (sr_mod_month),
+# whose build loop asks only the launch site, the stock, a free slot and the
+# queue, never the rate: a head the stock covers is built with no fabrication.
+# So the head waits at least one month.
 sr_disp_mq_next_state = {
 	value = 0
 	if = {
@@ -1175,14 +1177,66 @@ sr_disp_mq_next_state = {
 		else_if = {
 			limit = { sr_mod_fab_stock_value >= sr_mq_head_cost }
 			if = {
-				limit = { NOT = { sr_ms_has_free_slot = yes } }
+				limit = {
+					NOT = { sr_ms_has_free_slot = yes }
+					NOT = { sr_mq_head_needs_no_slot = yes }
+				}
 				value = 2
 			}
+		}
+		# A price past what the stock can hold (the cap fell after it was
+		# queued: less fabrication, or a cheaper storage method).
+		else_if = {
+			limit = { sr_mq_head_cost > sr_mod_fab_stock_cap }
+			value = 3
 		}
 		else_if = {
 			limit = { NOT = { sr_mod_fab_rate > 0 } }
 			value = 3
 		}
+	}
+}
+# Why the head is stopped (state 3), for the hover: 1 the launch site lost, 2 a
+# price past what the stock can hold, 3 no fabrication.
+sr_disp_mq_stop_reason = {
+	value = 3
+	if = {
+		limit = { sr_launch_site_lost = yes }
+		value = 1
+	}
+	else_if = {
+		limit = { sr_mq_head_cost > sr_mod_fab_stock_cap }
+		value = 2
+	}
+}
+# The head's price and the points it still needs.
+sr_disp_mq_head_cost = {
+	value = sr_mq_head_cost
+}
+sr_disp_mq_next_need = {
+	value = sr_mq_head_cost
+	subtract = sr_mod_fab_stock_value
+	min = 0
+	floor = yes
+}
+# The stock's cap and its three parts (the owner, 2026-11-15): the base, a year
+# of this month's fabrication, the Space Program's storage method.
+sr_disp_fab_stock_cap = {
+	value = sr_mod_fab_stock_cap
+}
+sr_disp_fab_stock_year = {
+	value = sr_mod_fab_stock_year
+	floor = yes
+}
+sr_disp_fab_storage = {
+	value = sr_mod_fab_storage
+}
+# 1 while nothing leaves Earth (blockaded, or the launch site lost).
+sr_disp_launches_barred = {
+	value = 0
+	if = {
+		limit = { sr_launches_barred = yes }
+		value = 1
 	}
 }
 sr_disp_mq_next_months = {
@@ -1222,6 +1276,42 @@ sr_disp_ms_flying = {
 	if = { limit = { has_variable = sr_ms_6_arrive } add = 1 }
 	if = { limit = { has_variable = sr_ms_7_arrive } add = 1 }
 	if = { limit = { has_variable = sr_ms_8_arrive } add = 1 }
+}
+# The Next Module hover while every slot is taken (the owner, 2026-11-15): the
+# months until the first waiting shipment can leave (its window;
+# sr_disp_ms_wait_months_<n>, generated) and until the first in flight lands,
+# which frees its slot. At least 1: the month's step has already run.
+sr_disp_ms_first_leave = {
+	value = 999
+	max = sr_disp_ms_wait_months_1
+	max = sr_disp_ms_wait_months_2
+	max = sr_disp_ms_wait_months_3
+	max = sr_disp_ms_wait_months_4
+	max = sr_disp_ms_wait_months_5
+	max = sr_disp_ms_wait_months_6
+	max = sr_disp_ms_wait_months_7
+	max = sr_disp_ms_wait_months_8
+	min = 1
+}
+sr_disp_ms_land_months_1 = { value = 999 if = { limit = { has_variable = sr_ms_1_arrive } value = var:sr_ms_1_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_2 = { value = 999 if = { limit = { has_variable = sr_ms_2_arrive } value = var:sr_ms_2_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_3 = { value = 999 if = { limit = { has_variable = sr_ms_3_arrive } value = var:sr_ms_3_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_4 = { value = 999 if = { limit = { has_variable = sr_ms_4_arrive } value = var:sr_ms_4_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_5 = { value = 999 if = { limit = { has_variable = sr_ms_5_arrive } value = var:sr_ms_5_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_6 = { value = 999 if = { limit = { has_variable = sr_ms_6_arrive } value = var:sr_ms_6_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_7 = { value = 999 if = { limit = { has_variable = sr_ms_7_arrive } value = var:sr_ms_7_arrive subtract = te_history_month_index } }
+sr_disp_ms_land_months_8 = { value = 999 if = { limit = { has_variable = sr_ms_8_arrive } value = var:sr_ms_8_arrive subtract = te_history_month_index } }
+sr_disp_ms_first_land = {
+	value = 999
+	max = sr_disp_ms_land_months_1
+	max = sr_disp_ms_land_months_2
+	max = sr_disp_ms_land_months_3
+	max = sr_disp_ms_land_months_4
+	max = sr_disp_ms_land_months_5
+	max = sr_disp_ms_land_months_6
+	max = sr_disp_ms_land_months_7
+	max = sr_disp_ms_land_months_8
+	min = 1
 }
 # The modules' upkeep: +1% Space Program throughput a level past the first.
 sr_disp_mod_upkeep_pct = {

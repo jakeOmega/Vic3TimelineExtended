@@ -6,13 +6,33 @@
 # ============================================================================
 
 # ---- Fabrication (design § 5) ------------------------------------------------------
-# Every module's points; at most this many modules a month; the stock kept
-# while fabrication stalls.
-# The stock's cap is the dearest module's price: the fourth past a world's
-# slots, 5 x sr_module_points (colony management design § 5).
+# Every module's points; at most this many modules a month.
 sr_module_points = { value = 100 }
 sr_mod_fab_per_month = { value = 2 }
-sr_mod_fab_stock_cap = { value = 500 }
+
+# Country scope. The module stock, the points kept while fabrication stalls (the
+# owner, 2026-11-15): a base that holds the fourth module past a world's slots
+# (5 x sr_module_points, colony management design § 5), a year of this month's
+# fabrication (the methods and Orbital Yards pay for their own storage), and the
+# Space Program's Module Storage method (country_sr_module_storage_add,
+# sr_colony_module_pms.txt). A module past a world's slots is queued only while
+# the stock can hold its price (sr_mod_can_queue_<type>_<key>). sr_mod_month adds
+# no points past it, but never takes away a stock already above it.
+sr_mod_fab_stock_base = { value = 500 }
+sr_mod_fab_stock_months = { value = 12 }
+sr_mod_fab_stock_cap = {
+	value = sr_mod_fab_stock_base
+	add = sr_mod_fab_stock_year
+	add = sr_mod_fab_storage
+	floor = yes
+}
+sr_mod_fab_stock_year = {
+	value = sr_mod_fab_rate
+	multiply = sr_mod_fab_stock_months
+}
+sr_mod_fab_storage = {
+	value = modifier:country_sr_module_storage_add
+}
 
 # Dismantling (owner, 2026-10-31): the months a module level takes to come
 # down, one level at a time a world, so a colony can't be stripped bare when a

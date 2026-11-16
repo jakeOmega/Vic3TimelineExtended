@@ -24,11 +24,14 @@
 # ---- The month's fabrication (the entry's pulse) ----------------------------------
 # Country scope. The queue's counts rebuilt; the month's points into the stock,
 # kept up to its cap so a stall (nothing queued, every slot taken) loses nothing
-# short of it; then up to two modules from the head of the queue, each into a
-# free shipment slot. Under Full Colonies an occupied launch site fabricates
-# nothing (slice 6 fleets design § 5.1: the Space Program's method still gives
-# its country points from a state it doesn't control); a blockade in orbit
-# doesn't stop fabrication, and the modules wait at Earth.
+# short of it (a stock already above a cap that fell is kept, not cut); then up
+# to two modules from the head of the queue, each into a free shipment slot, or
+# for a lunar world into none (sr_mq_head_needs_no_slot; the owner, 2026-11-15).
+# While every slot is taken, a lunar world's module further down goes ahead of
+# the head (sr_mq_promote_lunar). Under Full Colonies an occupied launch site
+# fabricates nothing (slice 6 fleets design § 5.1: the Space Program's method
+# still gives its country points from a state it doesn't control); a blockade in
+# orbit doesn't stop fabrication, and the modules wait at Earth.
 sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
@@ -36,11 +39,13 @@ sr_mod_month = {
 		# A level being dismantled at each world, a month on (owner, 2026-10-31).
 		sr_md_month = yes
 		sr_mod_fabrication_self_check = yes
+		sr_mod_storage_self_check = yes
 		sr_marker_self_check = yes
 		if = {
 			limit = {
 				sr_mod_fab_rate > 0
 				NOT = { sr_launch_site_lost = yes }
+				sr_mod_fab_stock_value < sr_mod_fab_stock_cap
 			}
 			set_variable = {
 				name = sr_fab_stock
@@ -52,17 +57,22 @@ sr_mod_month = {
 			}
 		}
 		set_local_variable = { name = sr_fab_built value = 0 }
+		sr_mq_promote_lunar = yes
 		while = {
 			limit = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
 				NOT = { sr_launch_site_lost = yes }
 				sr_mod_fab_stock_value >= sr_mq_head_cost
-				sr_ms_has_free_slot = yes
+				OR = {
+					sr_ms_has_free_slot = yes
+					sr_mq_head_needs_no_slot = yes
+				}
 				has_variable = sr_mq_1_site
 				has_variable = sr_mq_1_type
 			}
 			change_local_variable = { name = sr_fab_built add = 1 }
 			sr_mod_fab_head = yes
+			sr_mq_promote_lunar = yes
 		}
 	}
 }
@@ -79,6 +89,33 @@ sr_mod_fab_build = {
 	set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
 	set_local_variable = { name = sr_ms_new_type value = $CODE$ }
 	sr_ms_store_new = yes
+}
+
+# Country scope, from sr_mod_fab_head for a lunar world (the owner, 2026-11-15):
+# its module takes no shipment slot. Earth's own Moon is reached the month a
+# module is built (the transit is 0), so while launches aren't barred it is
+# installed at once, through the landing's own install (sr_mod_install_<key>): a
+# blockaded or occupied world, or a full cap, loses it, as a landing does. With
+# launches barred it waits in a shipment slot like any other (sr_mod_month built
+# it only with one free) and lands once the bar lifts.
+sr_mod_fab_build_lunar = {
+	if = {
+		limit = { NOT = { sr_launches_barred = yes } }
+		change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
+		set_local_variable = { name = sr_ms_type_now value = $CODE$ }
+		set_local_variable = { name = sr_ms_installed value = 0 }
+		sr_mod_install_$KEY$ = yes
+		# Lost on a world blockaded, occupied or full: the console's record, and the log.
+		if = {
+			limit = { local_var:sr_ms_installed = 0 }
+			set_variable = { name = sr_ms_last_lost_site value = $INDEX$ }
+			set_variable = { name = sr_ms_last_lost_type value = $CODE$ }
+			debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world blockaded, occupied or its cap full) country=[THIS.GetCountry.GetTagName]"
+		}
+	}
+	else = {
+		sr_mod_fab_build = { KEY = $KEY$ TYPE = $TYPE$ CODE = $CODE$ INDEX = $INDEX$ }
+	}
 }
 
 # ---- The queue -----------------------------------------------------------------------
@@ -476,6 +513,45 @@ sr_mod_fabrication_self_check = {
 	else_if = {
 		limit = { has_variable = sr_mod_fab_check_armed }
 		remove_variable = sr_mod_fab_check_armed
+	}
+}
+
+# Country scope, from sr_mod_month. TE_SELF_CHECK module_storage (the owner,
+# 2026-11-15): a Space Program running a Module Storage method must give its
+# country storage (country_sr_module_storage_add, level-scaled, so its staff
+# don't matter). Armed on the first such country, the verdict a month later (a
+# modifier sum can lag a day after a method changes); re-armed if it no longer
+# runs one by then. Once a game. The method is the only source, so OK can't be a
+# false pass. Fallback if BROKEN: workforce_scaled, as fabrication's
+# (docs/testing/solar-colonies-playtest.md).
+sr_mod_storage_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_mod_storage_checked }
+			sr_mod_storage_runs = yes
+		}
+		if = {
+			limit = {
+				has_variable = sr_mod_storage_check_armed
+				te_history_month_index > var:sr_mod_storage_check_armed
+			}
+			set_global_variable = { name = sr_mod_storage_checked value = yes }
+			if = {
+				limit = { sr_mod_fab_storage > 0 }
+				debug_log = "TE_SELF_CHECK OK module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program's Module Storage method gives its country storage) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program has run a Module Storage method for a month and its country has no storage: the method's level_scaled country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_variable = sr_mod_storage_check_armed } }
+			set_variable = { name = sr_mod_storage_check_armed value = te_history_month_index }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_mod_storage_check_armed }
+		remove_variable = sr_mod_storage_check_armed
 	}
 }
 

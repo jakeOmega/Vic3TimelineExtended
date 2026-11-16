@@ -261,6 +261,12 @@ sr_colony_module_sgui = {
 					text = sr_mod_req_slot_room_tt
 					sr_mod_scope_slot_room = yes
 				}
+				# Past its slots, only while the module stock can hold the price (the
+				# owner, 2026-11-15).
+				custom_tooltip = {
+					text = sr_mod_req_price_fits_tt
+					sr_mod_scope_price_fits = yes
+				}
 				# Terraforming (code 16; era 13 spec § 7.11): the technology's marker, at
 				# most three at a world at once, and only while the world is unfinished.
 				# Only the worlds that take it have its button.
