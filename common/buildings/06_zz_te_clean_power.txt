@@ -28,9 +28,6 @@ building_hydro_plant = {
 	}
 
 	required_construction = construction_cost_very_high
-	# Vanilla's power plant value: 1000, plus 4000 in a state with no power plant of any
-	# kind (te_ai_coverage_values.txt, #1822).
-	ai_value = { value = te_clean_power_plant_ai_value }
 
 	has_max_level = yes
 
@@ -58,9 +55,6 @@ building_nuclear_plant = {
 	}
 
 	required_construction = construction_cost_mega_high
-	# Vanilla's power plant value: 1000, plus 4000 in a state with no power plant of any
-	# kind (te_ai_coverage_values.txt, #1822).
-	ai_value = { value = te_clean_power_plant_ai_value }
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -82,9 +76,6 @@ building_renewable_energy_plant = {
 	}
 
 	required_construction = construction_cost_super_high
-	# Vanilla's power plant value: 1000, plus 4000 in a state with no power plant of any
-	# kind (te_ai_coverage_values.txt, #1822).
-	ai_value = { value = te_clean_power_plant_ai_value }
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -106,9 +97,6 @@ building_fusion_plant = {
 	}
 
 	required_construction = construction_cost_extreme
-	# Vanilla's power plant value: 1000, plus 4000 in a state with no power plant of any
-	# kind (te_ai_coverage_values.txt, #1822).
-	ai_value = { value = te_clean_power_plant_ai_value }
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }

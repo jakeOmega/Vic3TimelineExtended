@@ -403,8 +403,7 @@
 		}
 		# Consumer Appliances are a household good until integrated circuits,
 		# which make them an input of electronics, software and construction
-		# methods (37 methods use them). The industrial strategy exports them
-		# instead (te_ai_export_stance_strategies.txt).
+		# methods (37 methods use them).
 		consumer_appliances = {
 			stance = wants_high_supply
 			trigger = {

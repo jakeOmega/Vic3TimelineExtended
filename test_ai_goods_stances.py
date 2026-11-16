@@ -8,8 +8,8 @@ mod's goods had none. The engine says nothing about a good that lacks one, so:
 - every stance is one of the four values the game executable holds, and gates on technologies that exist;
 - every input of the mod's four later construction tiers has a stance (vanilla's default strategy's or the mod's)
   whose gate the country has passed by the time it can use the tier, or is on CONSTRUCTION_INPUTS_UNSTANCED;
-- the three export stances sit in the administrative strategies named in
-  common/ai_strategies/te_ai_export_stance_strategies.txt.
+- the mod gives no vanilla administrative strategy a goods stance (the two export stances first written for #1822
+  were taken out in review: EXEMPT and docs/systems/mod_systems/ai.md say why).
 
 docs/systems/mod_systems/ai.md § AI Coverage of the Mod's Content.
 """
@@ -24,7 +24,6 @@ ROOT = Path(__file__).resolve().parent
 GOODS = ROOT / "common/goods/timeline_extended_extra_goods.txt"
 STRATEGY_FILES = sorted((ROOT / "common/ai_strategies").glob("*.txt"))
 DEFAULT = ROOT / "common/ai_strategies/edited_default_strategy.txt"
-EXPORTS = ROOT / "common/ai_strategies/te_ai_export_stance_strategies.txt"
 SYSTEM_DOC = ROOT / "docs/systems/mod_systems/ai.md"
 
 # The stance values among the 1.15.1 executable's strings. Vanilla's files use the first three.
@@ -34,6 +33,9 @@ STANCES = {"wants_high_supply", "wants_export", "does_not_want", "wants_import"}
 EXEMPT = {
     "grid_power": "a fixed-price settlement good (tradeable = no): Grid Transfer Stations buy and sell it at base "
                   "price, so no stance could move it",
+    "tourism": "a household luxury no building uses, made by the Tourism Industry in the arts building group; "
+               "vanilla's default strategy names no household luxury, and a stance would favor a building group "
+               "investors already over-queue (491 art academies queued at 37.5% staffing in a 1958 save)",
 }
 
 # Vanilla goods the mod REPLACEs. Vanilla's strategies decide their stances (aeroplanes and tanks in the default
@@ -60,11 +62,6 @@ LATER_CONSTRUCTION_TIERS = (
     "pm_self_replicating_construction",
 )
 
-EXPORT_STANCES = {
-    "ai_strategy_agricultural_expansion": {"tourism"},
-    "ai_strategy_plantation_economy": {"tourism"},
-    "ai_strategy_industrial_expansion": {"consumer_appliances"},
-}
 
 
 def entries(node):
@@ -194,7 +191,7 @@ class GoodsStanceTests(unittest.TestCase):
                     for tech in technologies_in(trigger) if trigger else ():
                         self.assertIn(tech, self.techs)
                     checked += 1
-        self.assertGreaterEqual(checked, 15)
+        self.assertGreaterEqual(checked, 12)
 
     def test_the_default_strategy_gates_each_mod_stance_on_a_technology(self):
         # "construction" is the one ungated stance: every country builds from day one.
@@ -246,19 +243,10 @@ class GoodsStanceTests(unittest.TestCase):
             self.assertEqual(field(trigger, "has_port_country"), "yes")
             self.assertEqual(field(trigger, "country_rank"), "rank_value:major_power")
 
-    def test_export_stances(self):
-        text = EXPORTS.read_text(encoding="utf-8-sig")
-        injected = re.findall(r"(?m)^INJECT:(ai_strategy_\w+)\s*=\s*\{", text)
-        self.assertEqual(sorted(injected), sorted(EXPORT_STANCES))
-        self.assertEqual(re.findall(r"(?m)^(?!INJECT:)[A-Z_]*:?ai_strategy_\w+\s*=\s*\{", text), [],
-                         "only INJECTs: a REPLACE would drop vanilla's strategy")
-        for strategy, goods in EXPORT_STANCES.items():
-            with self.subTest(strategy=strategy):
-                self.assertEqual(set(self.stances[strategy]), goods)
-                for good in goods:
-                    stance, trigger = self.stances[strategy][good]
-                    self.assertEqual(stance, "wants_export")
-                    self.assertTrue(required_technologies(trigger))
+    def test_only_the_default_strategy_carries_mod_stances(self):
+        # A stance in an administrative strategy replaces the default's for the countries on it, and another AI
+        # mod REPLACEs six of the seven; the mod's stances all sit in the default strategy.
+        self.assertEqual(set(self.stances), {"ai_strategy_default"})
 
     def test_matches_the_game_files(self):
         try:
