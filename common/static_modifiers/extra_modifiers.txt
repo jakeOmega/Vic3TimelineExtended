@@ -8520,6 +8520,18 @@ te_mon_arrangement_standing = {
 	country_credit_standing_add = -0.01
 }
 
+# [#1812, owner 2026-11-16] MANAGED, scaled; on an anchor whose credit standing
+# is on its floor. multiplier = pp (te_mon_reserve_floor_applied): the part of
+# the reserve currency's cut above that the floor swallows, less a union
+# leader's own te_mon_union_issuer_premium (te_mon_reserve_floor_value). Cyclical
+# for the reason the issuer's cut is: standing past the floor buys nothing, and
+# this is added after it. Applied only by te_monetary_apply_reserve_floor_premium
+# (step 9b, its one refresh site).
+te_mon_reserve_currency_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+}
+
 # te_peg.2 "Break the peg": +2pp for five years (days = 1825). Timed, applied by
 # the event option and NOT managed — the te_mon_peg_suspension precedent.
 te_mon_peg_broken_premium = {

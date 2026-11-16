@@ -58,6 +58,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [plans/2026-11-01-local-climate.md](plans/2026-11-01-local-climate.md): Tasks 1–9 in two PRs (A: the record, the generator and the tile's readings; B: relief carriers, the comfort formula with warming, the modifier and defines, the Comfort row, docs) | Tasks 1–3 merged (#1307); 4–8 in the comfort PR | Task 9's whole-branch review |
 | [specs/2026-11-13-regional-climate-warming-design.md](specs/2026-11-13-regional-climate-warming-design.md): Climate Warming by latitude band (#1681): Tropical Warming between the tropics and High-Latitude Warming 55° or more from the equator, state modifiers on top of the world's, refreshed from the monthly state pulse; the Warming Penalty hover, the help page and the guide | Built (#1681's PR) | In-game checks (`docs/testing/vanilla-1-15-playtest.md`, "Regional warming"); the AI climate will that reads the bands (§ 2, non-goals) |
 
+### Power blocs
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-11-16-power-bloc-identities-design.md](specs/2026-11-16-power-bloc-identities-design.md): three new power bloc identities from the owner's brainstorm: Creditors' Consortium (the leader stands behind members' debts and rescues a defaulter on terms: receivership, imposed economic law, concessions and monopolies), Research Commons (members stop researching and send most of their innovation to the leader, and every member is granted what any member knows) and Dynastic Compact (crowned members joined to the leader in Personal Union by consent or by succession); their requirements, primary principle groups and the parts each identity touches; the build order is its § 9 | Design only (2026-11-16): the owner's rulings in its § 12 | All three identities, one PR each (§ 9); thirteen engine facts to verify (§ 11); Producers' Cartel and Climate Club tabled (§ 2) |
+
 ### Interface
 
 | Doc | Status | What's left |

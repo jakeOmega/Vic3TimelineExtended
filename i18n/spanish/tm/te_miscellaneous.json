@@ -5548,8 +5548,8 @@
   "es": "moneda común de #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — tipo #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#!"
  },
  "banking_dash_mon_anchor_tt": {
-  "en": "#header Monetary Anchor#!\\n#v $banking_dash_mon_fx_effect_label$#! shows how far the country has drifted from the currency it borrowed.\\n$TOOLTIP_DELIMITER$\\n#title Credit standing from arrangements now:#! #G −[Country.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!",
-  "es": "#header Ancla monetaria#!\\n#v $banking_dash_mon_fx_effect_label$#! muestra cuánto se ha alejado el país de la moneda que tomó prestada.\\n$TOOLTIP_DELIMITER$\\n#title Solvencia crediticia por los acuerdos actuales:#! #G −[Country.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#!"
+  "en": "#header Monetary Anchor#!\\n#v $banking_dash_mon_fx_effect_label$#! shows how far the country has drifted from the currency it borrowed.\\n$TOOLTIP_DELIMITER$\\n#title Credit standing from arrangements now:#! #G −[Country.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#![Country.GetCustom('te_mon_reserve_floor_note')]",
+  "es": "#header Ancla monetaria#!\\n#v $banking_dash_mon_fx_effect_label$#! muestra cuánto se ha alejado el país de la moneda que tomó prestada.\\n$TOOLTIP_DELIMITER$\\n#title Solvencia crediticia por los acuerdos actuales:#! #G −[Country.MakeScope.ScriptValue('te_mon_arr_standing_display')|2]#![Country.GetCustom('te_mon_reserve_floor_note')]"
  },
  "banking_dash_mon_anchoring_tt": {
   "en": "#header $country_inflation_anchoring_add$#!\\n$country_inflation_anchoring_add_desc$\\n$TOOLTIP_DELIMITER$\\nAbsorbing #v [Country.MakeScope.ScriptValue('te_mon_pressure_anchoring')|1]%#! of the wage and price pressure above, out of #v [Country.MakeScope.ScriptValue('te_mon_anchoring_capacity_display')|1]%#! it could.\\n#title Where it comes from:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_inflation_anchoring_add')]",
