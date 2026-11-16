@@ -417,12 +417,12 @@ received, and the leader the pool, the cap rise and its own share.
 Cohesion rests on the leader's own innovation, before what the members send, as
 a share of the bloc's, so a leader that closes its universities and lives on the
 pool loses its bloc. The worst relations between the leader and a member lower
-it, and so does each member. The leader can't abolish its Ministry of Science. A member can leave only
-when the bloc's leverage advantage over it is 10 or less (30 for the other
-identities), and a country that leaves keeps what it learned but carries
-Institutes Left Behind: −50% research speed, falling to nothing over ten years,
-and ending if it joins a Research Commons again. A bloc that changes identity
-doesn't count as being left.
+it, and so does each member. The leader can't abolish its Ministry of Science.
+A member can leave only when the bloc's leverage advantage over it is 10 or less
+(30 for the other identities), and a country that leaves keeps what it learned
+but carries Institutes Left Behind: −50% research speed, falling to nothing
+over ten years, and ending if it joins a Research Commons again. A bloc that
+changes identity doesn't count as being left.
 
 ### New principle groups
 

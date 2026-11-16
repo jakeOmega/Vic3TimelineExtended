@@ -136,8 +136,9 @@ class IdentityTest(unittest.TestCase):
                    if l.startswith(" concept_subjugation_strength_desc:")][0]
         self.assertIn("$identity_creditors_consortium$: #v +0.40#!", concept)
 
-    def test_placeholder_icon(self):
-        self.assertIn('icon = "gfx/interface/icons/central_identity_pillars_icons/trade_league.dds"', self.identity)
+    def test_own_icon(self):
+        self.assertIn('icon = "gfx/interface/icons/central_identity_pillars_icons/identity_creditors_consortium.dds"',
+                      self.identity)
 
 
 class PrincipleGroupsTest(unittest.TestCase):
