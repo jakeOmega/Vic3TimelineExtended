@@ -34628,8 +34628,8 @@
   "ru": "Запрошено претензий больше, чем она может уступить"
  },
  "te_seabed_ai_lease_wanted": {
-  "en": "Short of seabed claims, with $tech_metals$ expensive",
-  "ru": "Не хватает претензий на морское дно, а товар «$tech_metals$» дорог"
+  "en": "Short of seabed claims, with the $building_ocean_mine$'s metals expensive",
+  "ru": "Не хватает претензий на морское дно, а металлы для «$building_ocean_mine$» дороги"
  },
  "te_seabed_basin_arctic": {
   "en": "Arctic",

@@ -375,6 +375,18 @@
   "en": "Automated Trading",
   "ru": "Автоматизированная торговля"
  },
+ "pm_autonomous_harvesters_building_rubber_plantation_desc": {
+  "en": "Tapping robots run along the rows on rails, score each tree and collect the latex, and self-driving carts take it to the collection sheds.",
+  "ru": "Роботы-сборщики сока движутся вдоль рядов по рельсам, надрезают каждое дерево и собирают латекс, а беспилотные тележки отвозят его на сборные склады."
+ },
+ "pm_autonomous_harvesters_plantation": {
+  "en": "Autonomous Harvesters",
+  "ru": "Автономные комбайны"
+ },
+ "pm_autonomous_harvesters_plantation_desc": {
+  "en": "Self-driving harvesters and picking robots work the rows by camera and satellite positioning, and the staff left on the harvest watch over them and repair what breaks.",
+  "ru": "Беспилотные комбайны и роботы-сборщики обходят ряды, ориентируясь по камерам и спутниковому позиционированию, а оставшиеся на уборке работники следят за ними и чинят поломки."
+ },
  "pm_autonomous_highway": {
   "en": "Autonomous Highway",
   "ru": "Автономное шоссе"
@@ -5035,6 +5047,14 @@
   "en": "CSFA Sicilian Sulfur Depot",
   "ru": "Сицилийский серный склад CSFA"
  },
+ "pm_cultured_tobacco_leaf": {
+  "en": "Cultured Tobacco Leaf",
+  "ru": "Культивированный табачный лист"
+ },
+ "pm_cultured_tobacco_leaf_desc": {
+  "en": "Half the culture vessels grow tobacco leaf tissue instead of fruit. It is pressed and cured into sheets that cigarette and cigar makers buy as leaf.",
+  "ru": "Половина ёмкостей выращивает ткань табачного листа вместо плодов. Её прессуют и сушат в листы, которые производители сигарет и сигар покупают как табачный лист."
+ },
  "pm_customized_clothing": {
   "en": "Customized Clothing",
   "ru": "Одежда на заказ"
@@ -5523,6 +5543,14 @@
   "en": "GE Schenectady Works",
   "ru": "Заводы GE в Скенектади"
  },
+ "pm_gene_edited_livestock": {
+  "en": "Gene-Edited Livestock",
+  "ru": "Скот с редактированным геномом"
+ },
+ "pm_gene_edited_livestock_desc": {
+  "en": "The herds are bred from edited embryos: cattle that tolerate heat, pigs immune to the worst swine diseases, and breeds that turn more of their feed into meat. Healthier animals need fewer drugs and foul less water for the meat they give.",
+  "ru": "Стада выводят из отредактированных эмбрионов: коровы, переносящие жару, свиньи, невосприимчивые к худшим болезням свиней, и породы, которые больше корма превращают в мясо. Здоровым животным нужно меньше лекарств, и они меньше загрязняют воду на каждую единицу мяса."
+ },
  "pm_genentech_dna_way_campus": {
   "en": "Genentech DNA Way Campus",
   "ru": "Кампус Genentech «ДНК-Вэй»"
@@ -5815,6 +5843,14 @@
   "en": "GWR Swindon Works",
   "ru": "Заводы GWR в Суиндоне"
  },
+ "pm_hand_harvesting": {
+  "en": "Hand Harvesting",
+  "ru": "Ручной сбор"
+ },
+ "pm_hand_harvesting_desc": {
+  "en": "Crews bring in the crop by hand, with knives, shears and baskets.",
+  "ru": "Бригады собирают урожай вручную: ножами, ножницами и корзинами."
+ },
  "pm_hanka_precision_hq": {
   "en": "Hanka Cybernetics Division",
   "ru": "Кибернетическое подразделение Hanka"
@@ -5962,6 +5998,14 @@
  "pm_improved_crop_rotation": {
   "en": "Improved Crop Rotation",
   "ru": "Улучшенный севооборот"
+ },
+ "pm_industrial_feedlots": {
+  "en": "Industrial Feedlots",
+  "ru": "Промышленные откормочные площадки"
+ },
+ "pm_industrial_feedlots_desc": {
+  "en": "Herds are finished in pens on grain rations instead of on open range, and artificial insemination spreads a few high-yielding breeds. Each animal reaches slaughter weight sooner, and runoff from the pens fouls the water nearby.",
+  "ru": "Скот доращивают в загонах на зерновом рационе вместо вольного выпаса, а искусственное осеменение распространяет несколько высокопродуктивных пород. Каждое животное быстрее достигает убойного веса, а стоки из загонов загрязняют воду поблизости."
  },
  "pm_industrial_highway": {
   "en": "Industrial Highway",
@@ -6386,6 +6430,22 @@
  "pm_mav_budapest_locomotive_works": {
   "en": "MÁV Budapest Locomotive Works",
   "ru": "Паровозостроительный завод MÁV в Будапеште"
+ },
+ "pm_mechanical_harvesters_plantation": {
+  "en": "Mechanical Harvesters",
+  "ru": "Механические комбайны"
+ },
+ "pm_mechanical_harvesters_plantation_desc": {
+  "en": "Machines built for each crop do the picking: cane cutters, cotton pickers, grape shakers and tea shears. Fewer harvest crews are needed, and the machines run on diesel.",
+  "ru": "Сбором занимаются машины, созданные под каждую культуру: тростникорезы, хлопкоуборочные машины, виноградные встряхиватели и чайные ножницы. Нужно меньше уборочных бригад, а машины работают на дизельном топливе."
+ },
+ "pm_mechanized_feeding_lines": {
+  "en": "Mechanized Feeding Lines",
+  "ru": "Механизированные кормовые линии"
+ },
+ "pm_mechanized_feeding_lines_desc": {
+  "en": "Conveyors and mixer wagons carry rations to the pens, waterers refill themselves and mechanical scrapers clear the barns, in place of the hands who did it with pitchforks and buckets.",
+  "ru": "Конвейеры и миксеры-раздатчики подвозят рационы к загонам, поилки наполняются сами, а механические скребки чистят коровники вместо работников с вилами и вёдрами."
  },
  "pm_media_corporations": {
   "en": "Media Corporations",
@@ -7519,6 +7579,14 @@
   "en": "Pirelli Bicocca Plant",
   "ru": "Завод Pirelli в Бикокке"
  },
+ "pm_plain_feed": {
+  "en": "Plain Feed",
+  "ru": "Обычный корм"
+ },
+ "pm_plain_feed_desc": {
+  "en": "The herds graze and eat hay and grain with nothing mixed in.",
+  "ru": "Стада пасутся и едят сено и зерно без каких-либо добавок."
+ },
  "pm_political_commissars": {
   "en": "Political Commissars",
   "ru": "Политкомиссары"
@@ -7727,6 +7795,14 @@
   "en": "Ramirez Vila Real Cannery",
   "ru": "Консервный завод Рамиреса в Вила-Реал"
  },
+ "pm_recombinant_growth_hormones": {
+  "en": "Recombinant Growth Hormones",
+  "ru": "Рекомбинантные гормоны роста"
+ },
+ "pm_recombinant_growth_hormones_desc": {
+  "en": "Growth hormone brewed by engineered bacteria, given by injection or implant, makes each animal put on more lean meat from the same feed. The herds are also dosed against the diseases that spread through crowded pens.",
+  "ru": "Гормон роста, выращенный генно-инженерными бактериями и вводимый инъекцией или имплантом, позволяет каждому животному набирать больше постного мяса на том же корме. Стадам также дают лекарства от болезней, распространяющихся в тесных загонах."
+ },
  "pm_regional_branding_building_furniture_manufactory": {
   "en": "Regional Marketing",
   "ru": "Региональный маркетинг"
@@ -7918,6 +7994,14 @@
  "pm_robotic_assembly_lines_building_tooling_workshop": {
   "en": "Robotic Assembly Lines",
   "ru": "Роботизированные сборочные линии"
+ },
+ "pm_robotic_barns": {
+  "en": "Robotic Barns",
+  "ru": "Роботизированные фермы"
+ },
+ "pm_robotic_barns_desc": {
+  "en": "Robots push feed, clean the stalls and sort the animals, and a collar on each animal reports its health and movements to the barn's computers. The staff who remain watch the herd on screens and treat the animals the sensors flag.",
+  "ru": "Роботы подвозят корм, чистят стойла и сортируют животных, а ошейник на каждом животном передаёт данные о его здоровье и движениях на компьютеры фермы. Оставшиеся работники следят за стадом по экранам и лечат животных, на которых указывают датчики."
  },
  "pm_robotic_food_processing": {
   "en": "Robotic Food Processing",
@@ -9710,6 +9794,10 @@
  "pmg_fcm_la_seyne_shipyard": {
   "en": "FCM La Seyne Shipyard",
   "ru": "Верфь FCM в Ла-Сене"
+ },
+ "pmg_feed_additives_building_livestock_ranch": {
+  "en": "Feed Additives",
+  "ru": "Кормовые добавки"
  },
  "pmg_ferranti_hollinwood_works": {
   "en": "Ferranti Hollinwood Works",

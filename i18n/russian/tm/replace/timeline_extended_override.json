@@ -467,6 +467,10 @@
   "en": "Photography",
   "ru": "Фотография"
  },
+ "pmg_fencing": {
+  "en": "Herd Management",
+  "ru": "Управление стадом"
+ },
  "pmg_fertilizer_production": {
   "en": "Chemicals Production",
   "ru": "Производство химикатов"
