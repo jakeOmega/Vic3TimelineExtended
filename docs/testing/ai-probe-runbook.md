@@ -167,8 +167,9 @@ buying construction".
 
 ## The three runs of 2026-11-16
 
-Unattended AI-only games from 1836, all under the same lobby rules (Small-Economy Construction off). Self-checks
-are counted by check (`row_standing_on_creation` logged OK twice in each).
+Unattended AI-only games from 1836 under the owner's last lobby rules (the replies of runs 1 and 3 list the same
+settings, Small-Economy Construction off among them; run 2's, a refusal, lists none). Self-checks are counted by
+check (`row_standing_on_creation` logged OK twice in each).
 
 | Run | Build | Reached | Wall time | Self-checks |
 |---|---|---|---|---|
@@ -193,8 +194,8 @@ are counted by check (`row_standing_on_creation` logged OK twice in each).
   world line, whose `dn` and `dn_states` were 0 in all 14 lines; the purchase recomputed from a snapshot matched
   `cm_target` in 3,943 of 3,946.
 - **A run that crashes keeps its log.** Run 2's `fixture_debug.log` ran to the crash, and the probe's reader parsed it
-  as any other (the comparisons to 1912 came from it). A failed run keeps no `lines.log`, so its self-checks are read from that log
-  (`grep -a TE_SELF_CHECK`); the harness's side is in the game-qa skill.
+  as any other (the comparisons to 1912 came from it). A failed run keeps no `lines.log`, so its self-checks are
+  read from that log (`grep -a TE_SELF_CHECK`); the harness's side is in the game-qa skill.
 
 ## What a run costs
 

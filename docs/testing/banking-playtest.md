@@ -665,3 +665,7 @@ capital, and a country that holds no state or no market neither rolls a crash no
    come; they are registered in `docs/vanilla/vanilla_known_bugs.md`.
 2. **If it crashes there anyway.** With these guards in place, the next suspect is vanilla's Goods Transfer article
    (`vanilla_known_bugs.md` § "Latent crashes the mod does not patch"), or a country with states but no capital.
+3. **Unverified: a living country in a stateless overlord's market** (#1872's review). `exists = market` passes a
+   living origin or target that sits in the market of an overlord with no states, which sends the trigger's route
+   check a market with no capital. The crash dump does not cover that case; a crash at the same RVA with such a
+   subject in the game would point to it.
