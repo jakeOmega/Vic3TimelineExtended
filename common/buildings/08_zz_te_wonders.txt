@@ -1,4 +1,9 @@
-﻿#==================================================
+﻿# Every building in this file carries ai_value = { value = te_wonder_ai_value }: the engine's base for a
+# government building (what each scored with no ai_value), and nothing for a country in default or under
+# a declared bankruptcy (te_ai_coverage_values.txt, #1822). test_ai_building_values.py fails on one
+# without it.
+
+#==================================================
 # UN and Power Bloc Headquarters
 #==================================================
 
@@ -15,6 +20,7 @@ building_un_headquarters = {
 		pmg_un_headquarters
 	}
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	# One HQ in the world, and only the host (global_var:un_hq_country) may
 	# build it. The max level of 1 comes from base_values, which every country
@@ -45,6 +51,7 @@ building_power_bloc_hq = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -76,6 +83,7 @@ building_wonder_golden_gate_bridge = {
 		marketing_research
 	}
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -100,6 +108,7 @@ building_wonder_empire_state_building = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -124,6 +133,7 @@ building_wonder_sydney_opera_house = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -148,6 +158,7 @@ building_wonder_cn_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -172,6 +183,7 @@ building_wonder_hoover_dam = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -196,6 +208,7 @@ building_wonder_pentagon = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -224,6 +237,7 @@ building_wonder_kennedy_space_center = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -248,6 +262,7 @@ building_wonder_aswan_high_dam = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -272,6 +287,7 @@ building_wonder_tokyo_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -296,6 +312,7 @@ building_wonder_moscow_state_university = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -320,6 +337,7 @@ building_wonder_berlin_tv_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -344,6 +362,7 @@ building_wonder_azadi_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -368,6 +387,7 @@ building_wonder_kenyatta_icc = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -396,6 +416,7 @@ building_wonder_burj_khalifa = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -420,6 +441,7 @@ building_wonder_world_trade_center = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -444,6 +466,7 @@ building_wonder_lotus_temple = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -468,6 +491,7 @@ building_wonder_itaipu_dam = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -492,6 +516,7 @@ building_wonder_petronas_towers = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -516,6 +541,7 @@ building_wonder_basilica_of_our_lady_of_peace = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -544,6 +570,7 @@ building_wonder_three_gorges_dam = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -568,6 +595,7 @@ building_wonder_channel_tunnel = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -592,6 +620,7 @@ building_wonder_taipei_101 = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -616,6 +645,7 @@ building_wonder_lotte_world_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -640,6 +670,7 @@ building_wonder_gardens_by_the_bay = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -664,6 +695,7 @@ building_wonder_abraj_al_bait = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -692,6 +724,7 @@ building_wonder_shanghai_tower = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -716,6 +749,7 @@ building_wonder_fast_telescope = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -740,6 +774,7 @@ building_wonder_statue_of_unity = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -764,6 +799,7 @@ building_wonder_golden_bridge = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	potential = {
@@ -792,6 +828,7 @@ building_wonder_large_hadron_collider = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -822,6 +859,7 @@ building_wonder_international_space_station = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -853,6 +891,7 @@ building_wonder_iter = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -884,6 +923,7 @@ building_wonder_svalbard_seed_vault = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -914,6 +954,7 @@ building_wonder_ligo = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -944,6 +985,7 @@ building_wonder_continental_union_hq = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -985,6 +1027,7 @@ building_wonder_peace_palace = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
@@ -1011,6 +1054,7 @@ building_wonder_palais_des_nations = {
 	}
 
 	required_construction = construction_cost_mega_high
+	ai_value = { value = te_wonder_ai_value }
 
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	possible = {
