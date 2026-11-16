@@ -392,6 +392,8 @@ An unattended AI-only game from 1836 to 1925 on the build with the 39 in `ai_str
 
 `TE_SELF_CHECK BROKEN ai_law_cadence cons=23/121=0.19 rest=21/98=0.21 date=January 1, 1890`
 
+A second game the same day, on `main` at `81b947368` (the 39 still in the default's field), logged `TE_SELF_CHECK BROKEN ai_law_cadence cons=13/106=0.12 rest=19/90=0.21 date=January 1, 1890`.
+
 The AI telemetry probe in the same run (`law_start` and `law_end` events) gave law starts per idle country-month by agenda, an idle month being one with no enactment under way, against a roll every 50 days at vanilla's chances and at vanilla's + 39 (the default's 1 counted):
 
 | Agenda | Starts | Idle months | Read | Vanilla's chances predict | Vanilla's + 39 predicts |
@@ -435,6 +437,23 @@ With the third-party AI mod on (its `kai_political_strategies.txt` INJECTs the f
 | **The period.** `ai_law_cadence_report.py --period` on four or more saves of one game. | Same-phase share near 1 at 1,200 hours and near 0.5 at 2,400. | A different period changes the table's waits in proportion: re-run `ai.md`'s arithmetic with it before touching a number. |
 | **Civil wars.** Count revolutionary countries in each save (the country flag `0x4386`, `save_country_probe.py`'s BINARY LAYOUT), and watch the outliner for revolutions over a run. | About as many as before: 0–10 at a time across the eleven saves (1864–2020), median 4. Those include secessions as well as revolutions over a law. | **Clearly more, regularly over 10.** Two causes, with different fixes. (a) The two civil-war gates share one boldness draw (the one-gate column in `ai.md`), so exposure is up to two thirds above vanilla for conservatives: raise each of the seven agendas' `add` lines so that its aversion totals the one-gate value in `ai.md`'s table, rounded to a whole number with halves up (conservative 91, reactionary 79, progressive 67, nationalist 57, egalitarian 43, consolidation 83, confrontation 39; not to the nearest 5, which would leave three of them below the value that holds exposure at vanilla's). (b) The rate took and the aversions didn't, though each agenda's two fields share one INJECT (unlikely; the self-check reads only the rate): raising the `add` lines then does nothing, so take step 3 above (the REPLACE) for the aversions, or lower the rate. No script reads an AI's aversion, so the two can't be told apart directly: take (a)'s one-line fix first, and (b)'s if civil wars stay high. **Far fewer, near none over a run.** Most likely the engine sums the INJECTed field with vanilla's (aversions 110–160 for four agendas: those AIs never pass a law a radical movement defends; the chances then read twice vanilla's plus 39, and the self-check reads OK). The fix is to make each INJECT carry only its rise, with no restated `value` or conditionals, in both fields. Otherwise the aversions took and the rate didn't, though they share one INJECT, and the AI is more timid than vanilla. |
 | **By eye, two minutes.** In an observer game a few years past 1890, look at what five large AI countries are enacting (each one's Politics panel). | Three or four of the five enacting a law. Before the change about one in four was. | One of five or none: as for the self-check's BROKEN. |
+
+### Second read: the rate in force, with the 39 in the agendas' fields (2026-11-16)
+
+An unattended game from 1836 to 1850 on a test build with this change (`bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in; since `81b947368` only #1867 touched `common/ai_strategies/`), read by the probe against the two games on the 39-in-the-default build over the same months (February 1836 to December 1849). One game of each build; "the 20 largest" are those at the last snapshot read (the scorecard's table 3a, which takes each decade's 20 largest, reads conservatives at 0.0632):
+
+| Law starts per idle month, 1836–1849 | `dab9335f1` | `81b947368` | `bdc33ca56` |
+|---|---|---|---|
+| Conservatives, the 20 largest economies | 0.0121 | 0.0129 | 0.0645 |
+| Conservatives, every AI country | 0.0135 | 0.0114 | 0.0501 |
+| Every agenda, every AI country | 0.0155 | 0.0137 | 0.0569 |
+| Progressive over conservative, every AI country | 3.9 | 3.3 | 2.65 |
+| Mid-enactment, 1840s readings: every AI country / the 20 largest | 14% / 18% | 13% / 32% | 35% / 48% |
+
+- **In force.** Conservatives read 0.05 a month or more, the bar above, about four to five times the build before, so the INJECT reaches a political agenda's own `change_law_chance`, and the first verdict most likely read (b), the default's field not adding to the agenda's. The agendas' ratio narrowed (2.65 against 3.3 and 3.9 over the same years), not to the raised chances' 1.2.
+- **Highest early.** To January 1843 conservatives among the 20 largest read 0.10 (every AI country 0.067); from 1843, 0.0475 and 0.0355 (table 3a). Both sit below the 0.10–0.15 this list expected at the first verdict's availability, so most idle months most likely have nothing an AI would start, and fewer as countries pass the laws they want: cause (c) now binds. The owner on the first verdict (2026-11-16): "Primogeniture ... is liked by conservative IGs, so maybe is evidence for the 'nothing they want to pass' option."
+- **How enactments ended** (table 3b, every AI country): 248 of the 1,395 that ended were cancelled (18%), none failed and none were replaced; Primogeniture was 116 of the 248, then Unitary State (32) and Free Testation (21). The median chance to pass at a cancellation was 0.72 in 1836–1839, 0.08 in 1840–1844 and 0.00 in 1845–1849.
+- **The self-check has not read on this build**: the run ended in 1850. It reads in a game that reaches 1890, or 36 months after this build is first loaded.
 
 ## AI coverage of the mod's content (#1822, 2026-11-15)
 
@@ -504,6 +523,25 @@ The baseline is the build before: the probe's two short runs of February and Mar
 | **By hand, two minutes: a player is untouched.** Play a country in a market game and set a purchase; then take an AI country from the change-country screen; then go back. | Your figure stays as set. The AI country's box shows the AI's last figure, often a fraction of a point, and stops moving while you hold it; within a week of your leaving, the AI moves it again. | A played country's purchase moving by itself: the pulse's `is_ai` test. |
 | **By hand: the construction rule switched.** Free Market Construction to Disabled and back, in a running game. | In the direct game no AI purchase is written; on the first weekly pulse after the switch back each AI country has one again, sized as above. | No purchase after the switch back: `te_construction_market_ai_update_buy` reads the smoothed price, which the pulse sets just before it. |
 
+### Read 2026-11-16: the baseline game against `main`, to 1912
+
+Two unattended AI-only games from 1836 under the same rules: the build before (`dab9335f1`, the 10-point floor; to 1925) and `main` at `81b947368` (this purchase; to October 1913, when the game crashed on the banking contagion, #1871, which this change does not touch). The probe's figures for the 20 largest AI economies of each decade, the baseline's before the arrow. One game of each build, so a difference counts only where it is large and steady (`docs/testing/ai-probe-runbook.md` § Judging a run).
+
+| The 20 largest | 1830s | 1840s | 1870s | 1890s | 1910–1912 |
+|---|---|---|---|---|---|
+| Buying any construction, % of readings | 56 → 95 | 54 → 87 | 62 → 75 | 57 → 82 | 43 → 77 |
+| Points a week where buying, median | 10.0 → 7.7 | 10.0 → 8.1 | 11.0 → 13.3 | 23.5 → 18.3 | 29.5 → 26.5 |
+| Government points used a week, sum | 265 → 243 | 203 → 251 | 235 → 280 | 336 → 488 | 330 → 820 |
+| All construction points used a week, sum | 460 → 435 | 550 → 605 | 1,231 → 1,301 | 2,217 → 1,914 | 3,396 → 3,610 |
+| Tax, % of GDP, median | 23.7 → 24.2 | 22.7 → 24.5 | 19.0 → 21.3 | 17.5 → 20.9 | 17.7 → 19.1 |
+| Construction paused, % of readings | 1 → 0 | 0 → 0 | 6 → 4 | 16 → 4 | 5 → 15 |
+| Every other AI country: paused, % of readings | 76 → 0 | 69 → 2 | 61 → 7 | 75 → 11 | 69 → 10 |
+
+- **Debt and pauses: fewer, outside the largest economies' last decades.** AI countries with debt at 40% of the ceiling or more, in single years: 43 → 0 in 1837, 50 → 2 in 1840, 74 → 16 in 1890, 57 → 19 in 1912; declared bankrupt 11 → 1, 30 → 25 and 26 → 7 in 1840, 1890 and 1912. Among the 20 largest the paused share and the share at 40% rose on `main` in 1900–1912 (12% and 15% paused against 10% and 5%; 12% at 40% in both stretches against 8% and 3%), which neither game explains.
+- **Tax take** was 0.5 to 4.1 points of GDP higher on `main` among the 20 largest in every decade. That and governments' buying are the two measures the owner expects to carry the least noise between runs (the runbook).
+- **What the comparison can say about private construction.** `main`'s private points were lower from the 1880s (the 20 largest, same tags: 1,351 → 1,138 a week in the 1880s, 1,647 → 1,115 in the 1890s), and a read of both games put that on the games' histories, not on this purchase or on the Light code's dividend levy (#1855). Twelve countries whose histories ran alike (Great Britain, the United States, Russia, the Ottoman Empire, the Netherlands, East India, Brazil, Mexico, the East Indies, Portugal, Korea, Awadh) built 26–57% more building levels on `main` in each decade from the 1870s to the 1890s, and 7% fewer in the 1900s. The summed gap came from law paths (China left Traditionalism in 1870 in the baseline and in 1908 on `main`; Japan in 1864 and 1886), lost territory (Austria, Spain, Belgium, the Philippines, Egypt) and a weaker France, and the timing of banking crashes (`main`'s cluster in 1889–1894 in Great Britain, France and Portugal; the baseline's in 1867–1868, 1872–1875, 1883 and 1900–1902). A private point cost the same or less on `main`, unused construction was about 0 in both, and private spending was a 24th of the pool in both. What it cannot say is whether China's law path, the largest single cause, was chance: one game of each build.
+- **The lever it measured, not built:** leaving Traditionalism doubles a country's investment-pool income per unit of GDP (China about 6% to 12–13% in both games; Traditionalism is −50% pool efficiency for six strata), worth about 120–280 private points a week to `main`'s China in the 1900s. An AI enact weight for leaving it, for great and major powers or by GDP rank, is a proposal: an INJECT on a vanilla law's weight, the owner's call.
+
 ## Small-Economy Construction: three strengths (2026-11-16)
 
 The rule's one "on" setting is now the strongest of three, so the owner can choose how far the rule goes: half the price (*mild*), a fifth (*standard*) or a tenth (*strong*, the old setting under its old name) for a country with almost no GDP, the full price from a GDP of 10 million under all three (`construction.md`, "How the strengths are sized"). Nothing has been run in the game. The self-check above covers every strength, and its line now prints `min`. The probe's fields (`scripts/analysis/ai_probe_key.json`; `docs/testing/ai-probe-runbook.md`) give most of what to read: `gdp`, `income`, `cm_price` (the smoothed price of a point, discount included), `cm_public` (the points the government buys a week), `con_used_gov` (the points its sites used) and `n_built_gov` (government buildings finished since the last snapshot). The factor a country should have is `min` + (1 − `min`) × `gdp` ÷ 10 million, at most 1. The purchase rows assume PR #1854's purchase (the AI buys what its surplus affords); before it, the 10-point floor sets an AI's purchase whatever the strength, and only `cm_price` and the bill follow the setting.
@@ -531,3 +569,18 @@ The baseline is the unattended run on dab9335f1 (1836 to 1925), read for the 20 
 | **Automation.** The share of AI sector levels on each automation method, against the baseline. | About as many as before: each method removes a third of the workers it did and takes about a third of its goods, so it pays off at the wage it did (0.31 to 0.48 a worker). | Far fewer: the AI's choice is reading something other than the pay-off (the employment factor or a goods shortage); read the method's goods' prices in a save. Far more: the same in reverse. |
 | **By hand: a player's price.** A market game's construction panel, price per point, in the first few decades. | Nearer base than before, so the same purchase costs less. | |
 | **A direct game** (Free Market Construction Disabled), observer, ten years. | Construction Sites staff sooner and their wages cost the government about a third of before; points per level as before. | Sites downsized by the AI more often than before: unlikely to be this change, since a smaller wage bill only helps; read the site guard (`construction.md` § Free Market Construction off). |
+
+### First reading (2026-11-16): one game to 1849, the sectors still under-staffed
+
+The test build of § AI law cadence's second read (`bdc33ca56`, with this change and the probe's version 2) ran unattended from 1836 to 1850. The probe read the sector itself (scorecard table 1f), the 20 largest AI economies of each five years, medians:
+
+| Years | Under half staffed, % of levels | Under 80% staffed, % | Mean staffing, % | Subsidized, % | Wooden / Iron-Frame, % of levels | Price over base | Sell orders over buy orders |
+|---|---|---|---|---|---|---|---|
+| 1836–1839 | 93 | 100 | 32 | 0 | 61 / 39 | 1.30 | 0.53 |
+| 1840–1844 | 81 | 97 | 37 | 0 | 60 / 40 | 1.26 | 0.56 |
+| 1845–1849 | 81 | 92 | 36 | 0 | 60 / 40 | 1.23 | 0.59 |
+
+- **Staffing: not met in these years.** Most levels sit under 80% staffed and about a third staffed on average, while the same countries' other manufacturing is almost all staffed (3–4% of levels under half, against 35–36% with the sectors counted, table 1c): the sector is what sits idle, as the baseline inferred, now read on the sector itself. Why is unread: the row's next step, local wages against the tier's breakeven, has not been taken.
+- **The price: not near base.** 1.23 to 1.30 times base, with sell orders a little over half the buy orders. The baseline's smoothed price (`cm_price`, a different read) was 1.54 and 1.38 times base in the 1830s and 1840s.
+- **Construction in the 1840s**, the 20 largest of each year, yearly means, against the two games on earlier builds (`dab9335f1` / `81b947368` / `bdc33ca56`): government points used a week 203 / 251 / 277, private 348 / 354 / 399; buying any construction 54 / 87 / 83% of readings; GDP in 1849 436 / 445 / 450 million, building levels 37,614 / 37,382 / 38,249. The third build differs from the second by this change, #1867's law cadence and the rest of the test build's PRs, so no single one is read here.
+- **Not evidence for or against this change yet.** No version-1 field reads the sector's staffing, so neither earlier game can be set beside the table, and this is one game of fourteen years, all of it on Wooden and Iron-Frame Buildings: the middle tiers' row is unread.
