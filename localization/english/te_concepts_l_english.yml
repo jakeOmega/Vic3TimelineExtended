@@ -3160,7 +3160,7 @@
  te_political_commissars_indoctrination_desc:0 "Party commissars in every unit school the troops, and through them their families, in loyalty to the government. Scales with the share of your regular battalions trained under $pm_political_commissars$."
  te_rc_contribution:0 "Research Commons: Contribution"
  te_rc_contribution_desc:0 "The weekly [concept_innovation] this country sends the [concept_power_bloc_leader] of its Research Commons: 75% of its own, counted before its multipliers and after what its own programs spend. The leader's monthly review sets the figure."
- te_rc_institutes_left_behind_desc:0 "This country left a Research Commons, and the joint laboratories its scientists worked in stayed with the bloc. The research speed lost falls from 50% to nothing over ten years, and ends at once if it joins a Research Commons again."
+ te_rc_institutes_left_behind_desc:0 "This country left a Research Commons, and the joint laboratories its scientists worked in stayed with the bloc. The research speed lost falls from 50% to nothing over ten years, and ends at the leader's next monthly review if it joins a Research Commons again."
  te_rc_pool:0 "Research Commons: Members’ Research"
  te_rc_pool_cap_desc:0 "The weekly [concept_innovation] cap rises by a tenth of what the members of this country's Research Commons send it."
  te_rc_pool_desc:0 "The weekly [concept_innovation] the members of this country's Research Commons send it. A member that leaves stops sending within days."
