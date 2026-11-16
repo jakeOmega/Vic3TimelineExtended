@@ -399,6 +399,13 @@ TABLE = [
          world=rel_doubling(10, 10240, 4, 1), min_span=4,
          note="Investment, what the state's owners pay into the Investment Pool a week, estimated: the same share of "
               "the color for each doubling from the world's low (at least 1) to its high"),
+    # Population Density (2026-11-16): people per km² of land (te_jmap_density, from the region area table), which ran
+    # from 0.009 (Nunavut) to 734 (Suzhou) at the 1836 start, the fifth lowest 0.017 and the fifth highest 267: some
+    # sixteen doublings, so a doubling at a time; a state with no people pale, apart from the scale.
+    dict(name="density", input="te_jmap_density", guards=[], three=False, sel=47,
+         where=["te_jmap_density > 0"], world=rel_doubling(0.03125, 256, 4, 0.01), min_span=4,
+         note="Population Density, the state's people per km² of land: the same share of the color for each "
+              "doubling from the world's low (at least 0.01) to its high"),
 ]
 
 

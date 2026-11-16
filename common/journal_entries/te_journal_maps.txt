@@ -965,6 +965,24 @@ je_te_map_room = {
 			limit = { te_jmap_selector = 46 }
 			value = "te_jmap_none"
 		}
+		# 47. Population Density (2026-11-16): the state's people per km² of land (te_jmap_density: the engine's people
+		# over its region's area from the area table, shared by province), a doubling at a time; a state with no people
+		# pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density > 0
+			}
+			lerp = {
+				min_color = "te_jmap_density_low"
+				max_color = "te_jmap_density_high"
+				factor = te_jmap_density_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 47 }
+			value = "te_jmap_none"
+		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
 		else_if = {
@@ -2113,6 +2131,25 @@ je_te_map_room = {
 		else_if = {
 			limit = { te_jmap_selector = 46 }
 			custom_tooltip_no_bullet = te_jmap_tt_invest_none
+		}
+		# Population Density in whole people per km² from 10, in hundredths below it, where whole numbers would read 0.
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density >= 10
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_density
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_density_sparse
+		}
+		else_if = {
+			limit = { te_jmap_selector = 47 }
+			custom_tooltip_no_bullet = te_jmap_tt_density_none
 		}
 		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
 		# it too).
