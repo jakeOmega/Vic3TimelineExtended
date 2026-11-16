@@ -483,13 +483,22 @@ te_tax_on_law_activated = {
 # Light code: a taxation law activated in a migrated country, enacted or set by
 # script. The sync is dispatched as te_tax_light.3, a country event, so it sees
 # the new law and runs with the country as ROOT; it clamps the code into the
-# new law's range (te_tax_light_sync, step 1).
+# new law's range (te_tax_light_sync, step 1). An economic system law too
+# (review of #1855): Traditionalism closes the low dividend tax and leaving it
+# reopens it, so the sync sets the tax level and Set By the same day rather
+# than on the 1st. The sync re-derives everything, so running it again changes
+# nothing else.
 te_tax_light_on_law_activated = {
 	effect = {
 		if = {
 			limit = {
 				te_tax_code_light_on = yes
-				law_type = { is_same_law_group_as = law_type:law_proportional_taxation }
+				law_type = {
+					OR = {
+						is_same_law_group_as = law_type:law_proportional_taxation
+						is_same_law_group_as = law_type:law_traditionalism
+					}
+				}
 				owner = { te_tax_light_in_force = yes }
 			}
 			owner = {

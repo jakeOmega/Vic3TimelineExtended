@@ -31,9 +31,9 @@ law's rate for your tax level, so you collect what the base game would.
 
 | Taxation law | Wage Tax | Dividend Tax | Rural Assessment | Head Tax | Consumption Tax |
 |---|---|---|---|---|---|
-| Consumption-Based Taxation | not levied | not levied | not levied | not levied | 0–35% |
-| Land-Based Taxation | not levied | not levied | 0–1.0 | not levied | 0–35% |
-| Per-Capita Taxation | 0–15% | not levied | 0–0.5 | 0–1.0 | 0–35% |
+| Consumption-Based Taxation | not levied | 0–5% (low) | not levied | not levied | 0–35% |
+| Land-Based Taxation | not levied | 0–5% (low) | 0–1.0 | not levied | 0–35% |
+| Per-Capita Taxation | 0–15% | 0–5% (low) | 0–0.5 | 0–1.0 | 0–35% |
 | Proportional Taxation | 0–30% | 0–20% | not levied | not levied | 0–35% |
 | Graduated Taxation | 0–20% | 0–30% | not levied | not levied | 0–35% |
 
@@ -42,6 +42,13 @@ rural assessment in steps of 0.025 and the head tax in steps of 0.05. Click − 
 \+ on a tax's row to move it a step; shift-click sends it to zero or to the
 highest rate your law allows. You still choose which goods carry consumption
 tax, and tariffs and subsidies work as in the base game.
+
+A law that levies no dividend tax still lets you levy a low one, from zero up to
+5%, Proportional Taxation's Low rate. It starts at zero, so choosing it is up to
+you, and its steps are Proportional's: 2.5% sits on the Very Low step and 5% on
+Low. Your law collects none of it; the Tax Code entry levies it, and it shows
+there as Low Dividend Tax. Traditionalism rules it out. To tax dividends more
+heavily, enact Proportional or Graduated Taxation.
 
 <!-- screenshot: the Tax Code tab under the Light Tax Code, Tax Rates open -->
 
@@ -85,16 +92,18 @@ the base game.
 When you enact another taxation law, every rate moves into the new law's range.
 A tax the new law doesn't levy stops, a tax you had cut to zero stays at zero,
 and a tax it adds starts at the new law's rate for your current tax level, as it
-would in the base game. No tax ends up
+would in the base game. A low dividend tax stays when the new law levies no
+dividend tax either, and stops under Traditionalism. No tax ends up
 above the new law's rate for your current tax level, so a change of law never
 raises your tax level: a 20% wage tax under Proportional Taxation at Medium
 becomes 15% under Graduated Taxation. The law change's own approval changes are
 the base game's; the move adds no reaction of its own.
 
 AI countries keep choosing their tax level as in the base game, and their taxes
-follow it: every tax at their law's rate for that level. Their interest groups
-react to each change as yours do. A country released from yours and a newly
-formed one start from their own law and tax level. Rebels start with your rates
+follow it: every tax at their law's rate for that level. Under a law that levies
+no dividend tax they also levy the low one, 5% at a Low tax level or above.
+Their interest groups react to each change as yours do. A country released from
+yours and a newly formed one start from their own law and tax level. Rebels start with your rates
 and your tax level, and while their war lasts each of their taxes moves with the
 tax level their AI sets. When the war ends, the winner keeps its own rates: a
 revolution that wins carries on with the rates the rebels took from you (see
