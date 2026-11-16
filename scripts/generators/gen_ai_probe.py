@@ -72,6 +72,13 @@ POSITIONAL = ("L", "T", "I", "G", "J", "R", "H")
 # Version 2's positional groups each fit one line (test_ai_probe.py holds every line under 1,500 characters);
 # version 1's keep POSITIONAL_PER_LINE, so their lines read as they did.
 LINE_SIZE = {"J": 30, "R": 30, "H": 30}
+# The snapshot lines each version added, so that `check` expects of a log only the lines its version printed.
+# A line a later version adds goes under that version (test_ai_probe.py fails on a line under none).
+LINES_ADDED = {
+    1: ["A1", "A2", "F1", "F2", "F3", "U1", "U2", "C1", "C2", "O1", "M1", "Y1", "L1", "L2", "L3", "T1", "T2",
+        "I1", "I2", "G1", "G2", "G3", "B1", "B2", "N1", "N2"],
+    2: ["O2", "J1", "R1", "H1"],
+}
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
 EFFECTS_FILE = "common/scripted_effects/te_ai_probe_effects.txt"
@@ -1161,6 +1168,7 @@ def render_key(cat: dict) -> str:
         "lines": {name: [field.key for field in part] for name, part in snapshot_lines(cat)},
         "data_functions": [key for _, key, _ in DATA_FUNCTIONS],
         # Version 2.
+        "lines_added": LINES_ADDED,
         "level_names": LEVEL_NAMES,
         "level_fields": LEVEL_FIELDS,
         "law_end_how": LAW_END_HOW,
@@ -1171,13 +1179,39 @@ def render_key(cat: dict) -> str:
         "unit_info": {field: cat["unit_types"][members[0]] for field, members in cat["unit_line"]
                       if len(members) == 1},
         "world_fields": WORLD_FIELDS,
+        # Each T field's technologies, so that the files can be rebuilt from the key alone (catalog_from_key).
+        "tech_cell_names": cat["tech_cells"],
     }
     return json.dumps(key, indent=1) + "\n"
 
 
 def plan_outputs(mod_state) -> dict[str, tuple[str, bool]]:
     """{relative path: (text, with BOM)}."""
-    cat = catalog(mod_state)
+    return render_outputs(catalog(mod_state))
+
+
+def catalog_from_key(key: dict) -> dict:
+    """The catalog a key was written from: what render_outputs needs, so a test can hold the committed files to
+    this generator without holding them to the mod's laws and technologies of the day (the probe's catalog is
+    frozen at its last run, and a law added since only goes unread)."""
+    return {
+        "law_groups": key["law_groups"],
+        "laws": key["laws"],
+        "all_laws": key["all_laws"],
+        "tech_cells": key["tech_cell_names"],
+        "all_techs": key["all_techs"],
+        "unit_tier": key["unit_tier"],
+        "building_groups": key["building_groups"],
+        "building_types": key["building_types"],
+        "institutions": key["institutions"],
+        "unit_line": [(name, members) for name, members in key["unit_line"].items()],
+        "unit_types": {key["unit_line"][name][0]: info for name, info in key["unit_info"].items()},
+        "tech_flags": list(key["tech_flags"].values()),
+        "play_types": key["play_types"],
+    }
+
+
+def render_outputs(cat: dict) -> dict[str, tuple[str, bool]]:
     return {
         VALUES_FILE: (render_values(cat) + EVENT_VALUES, True),
         EFFECTS_FILE: (render_effects(cat), True),
