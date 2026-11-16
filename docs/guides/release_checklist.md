@@ -5,7 +5,7 @@ How a release is cut, from `main` to the Workshop and GitHub. 1.1.9 (2026-10-18)
 ## 1. Before cutting
 
 - CI green on `main`'s head.
-- Translations current: `python3 scripts/i18n/translate_loc.py --language german status` (and `spanish`) shows 0 stale and 0 missing; otherwise run a pass (`i18n/README.md`).
+- Translations current: `python3 scripts/i18n/translate_loc.py --language german status` (and `spanish`, `russian`) shows 0 stale and 0 missing; otherwise run a pass (`i18n/README.md`).
 - Work through the play-test lists marked "Before a release play-test" in `docs/README.md` (`docs/testing/`), and read the latest `TE_SELF_CHECK` lines.
 - Leave open any PR that removes an old-save repair a player updating from the last release still needs.
 

@@ -1,0 +1,610 @@
+{
+ "country_te_budget_expense_banking_add": {
+  "en": "Breakdown: Banking",
+  "ru": "Разбивка: Банковское дело"
+ },
+ "country_te_budget_expense_banking_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Banking.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Банковское дело»."
+ },
+ "country_te_budget_expense_climate_add": {
+  "en": "Breakdown: Climate Policy",
+  "ru": "Разбивка: Климатическая политика"
+ },
+ "country_te_budget_expense_climate_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Climate Policy.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Климатическая политика»."
+ },
+ "country_te_budget_expense_colonial_add": {
+  "en": "Breakdown: Colonial Development",
+  "ru": "Разбивка: Колониальное развитие"
+ },
+ "country_te_budget_expense_colonial_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Colonial Development.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Колониальное развитие»."
+ },
+ "country_te_budget_expense_covert_add": {
+  "en": "Breakdown: Covert Actions",
+  "ru": "Разбивка: Скрытые операции"
+ },
+ "country_te_budget_expense_covert_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Covert Actions.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Скрытые операции»."
+ },
+ "country_te_budget_expense_culture_add": {
+  "en": "Breakdown: Cultural Hegemony",
+  "ru": "Разбивка: Культурная гегемония"
+ },
+ "country_te_budget_expense_culture_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Cultural Hegemony.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Культурная гегемония»."
+ },
+ "country_te_budget_expense_drugs_add": {
+  "en": "Breakdown: Drug Shortage Response",
+  "ru": "Разбивка: Меры при дефиците лекарств"
+ },
+ "country_te_budget_expense_drugs_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Меры при дефиците лекарств»."
+ },
+ "country_te_budget_expense_energy_industry_add": {
+  "en": "Breakdown: Energy and Industry Programs",
+  "ru": "Разбивка: Энергетические и промышленные программы"
+ },
+ "country_te_budget_expense_energy_industry_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Energy and Industry Programs.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Энергетические и промышленные программы»."
+ },
+ "country_te_budget_expense_family_add": {
+  "en": "Breakdown: Family Policy",
+  "ru": "Разбивка: Семейная политика"
+ },
+ "country_te_budget_expense_family_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Family Policy.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Семейная политика»."
+ },
+ "country_te_budget_expense_nuclear_add": {
+  "en": "Breakdown: Nuclear Program",
+  "ru": "Разбивка: Ядерная программа"
+ },
+ "country_te_budget_expense_nuclear_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Program.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Ядерная программа»."
+ },
+ "country_te_budget_expense_nuclear_taboo_add": {
+  "en": "Breakdown: Nuclear Civil Defense",
+  "ru": "Разбивка: Ядерная гражданская оборона"
+ },
+ "country_te_budget_expense_nuclear_taboo_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Civil Defense.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Ядерная гражданская оборона»."
+ },
+ "country_te_budget_expense_pensions_add": {
+  "en": "Breakdown: Old-Age Pensions",
+  "ru": "Разбивка: Пенсии по старости"
+ },
+ "country_te_budget_expense_pensions_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Old-Age Pensions.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Пенсии по старости»."
+ },
+ "country_te_budget_expense_space_add": {
+  "en": "Breakdown: Space Race",
+  "ru": "Разбивка: Космическая гонка"
+ },
+ "country_te_budget_expense_space_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Space Race.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Космическая гонка»."
+ },
+ "country_te_budget_expense_un_add": {
+  "en": "Breakdown: United Nations",
+  "ru": "Разбивка: Организация Объединённых Наций"
+ },
+ "country_te_budget_expense_un_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "ru": "Не повторное списание: строка «$country_expenses_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Организация Объединённых Наций»."
+ },
+ "country_te_budget_income_pension_reform_add": {
+  "en": "Breakdown: Pension Reform",
+  "ru": "Разбивка: Пенсионная реформа"
+ },
+ "country_te_budget_income_pension_reform_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Pension Reform.",
+  "ru": "Не повторное поступление: строка «$country_tax_income_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Пенсионная реформа»."
+ },
+ "country_te_budget_income_reserve_add": {
+  "en": "Breakdown: Strategic Reserve Sales",
+  "ru": "Разбивка: Продажи из стратегического резерва"
+ },
+ "country_te_budget_income_reserve_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Strategic Reserve Sales.",
+  "ru": "Не повторное поступление: строка «$country_tax_income_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Продажи из стратегического резерва»."
+ },
+ "country_te_budget_income_tax_code_add": {
+  "en": "Breakdown: Spectrum Auctions",
+  "ru": "Разбивка: Аукционы радиочастот"
+ },
+ "country_te_budget_income_tax_code_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Spectrum Auctions.",
+  "ru": "Не повторное поступление: строка «$country_tax_income_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Аукционы радиочастот»."
+ },
+ "country_te_budget_income_un_add": {
+  "en": "Breakdown: United Nations",
+  "ru": "Разбивка: Организация Объединённых Наций"
+ },
+ "country_te_budget_income_un_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "ru": "Не повторное поступление: строка «$country_tax_income_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Организация Объединённых Наций»."
+ },
+ "country_te_budget_income_war_tax_add": {
+  "en": "Breakdown: War Profit Tax",
+  "ru": "Разбивка: Налог на военные прибыли"
+ },
+ "country_te_budget_income_war_tax_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under War Profit Tax.",
+  "ru": "Не повторное поступление: строка «$country_tax_income_add$» уже включает эту сумму. Она продублирована, чтобы вкладка «Разбивка» панели «Бюджет» могла показать её по статье «Налог на военные прибыли»."
+ },
+ "te_budget_chart_additional_expense": {
+  "en": "Other Additional Expenses",
+  "ru": "Прочие дополнительные расходы"
+ },
+ "te_budget_chart_additional_expense_tt": {
+  "en": "Additional expenses no row above claims.",
+  "ru": "Дополнительные расходы, не отнесённые ни к одной строке выше."
+ },
+ "te_budget_chart_additional_income": {
+  "en": "Other Additional Income",
+  "ru": "Прочие дополнительные доходы"
+ },
+ "te_budget_chart_additional_income_tt": {
+  "en": "Additional income no row above claims.",
+  "ru": "Дополнительные доходы, не отнесённые ни к одной строке выше."
+ },
+ "te_budget_chart_administration": {
+  "en": "General Administration",
+  "ru": "Общая администрация"
+ },
+ "te_budget_chart_administration_group": {
+  "en": "Administration",
+  "ru": "Администрация"
+ },
+ "te_budget_chart_administration_group_tt": {
+  "en": "#b $te_budget_chart_administration_group$#!\\nGovernment Administration's weekly cost, split between your institutions and General Administration.\\n$TOOLTIP_DELIMITER$\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]",
+  "ru": "#b $te_budget_chart_administration_group$#!\\nЕженедельные расходы «Правительственной администрации», распределённые между вашими институтами и «Общей администрацией».\\n$TOOLTIP_DELIMITER$\\nРасходы на администрацию: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nПроизведено бюрократии: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nИспользование бюрократии институтами: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nПул институтов: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]"
+ },
+ "te_budget_chart_administration_tt": {
+  "en": "Government Administration's cost that no institution takes: unused capacity and bureaucracy used outside institutions.",
+  "ru": "Расходы «Правительственной администрации», которые не берёт на себя ни один институт: неиспользованные мощности и бюрократия, использованная вне институтов."
+ },
+ "te_budget_chart_army": {
+  "en": "Army",
+  "ru": "Армия"
+ },
+ "te_budget_chart_civil": {
+  "en": "Other Civil Buildings",
+  "ru": "Прочие гражданские здания"
+ },
+ "te_budget_chart_civil_tt": {
+  "en": "Wages and goods of universities, ports and other civil buildings. Government Administration is split among your institutions under Administration, and the Space Program is under Program Costs.",
+  "ru": "Зарплаты и товары университетов, портов и прочих гражданских зданий. Расходы «Правительственной администрации» распределены между вашими институтами в статье «Администрация», а «Космическая программа» учтена в статье «Расходы на программы»."
+ },
+ "te_budget_chart_construction_tt": {
+  "en": "Goods for the government's construction. The Investment Pool Transfer, which funds private construction, is left out.",
+  "ru": "Товары для государственного строительства. Перевод в инвестиционный пул, финансирующий частное строительство, не учитывается."
+ },
+ "te_budget_chart_diplomacy_expense": {
+  "en": "Diplomatic Payments",
+  "ru": "Дипломатические выплаты"
+ },
+ "te_budget_chart_diplomacy_income": {
+  "en": "Diplomatic Income",
+  "ru": "Дипломатические доходы"
+ },
+ "te_budget_chart_expand_tt": {
+  "en": "Show or hide the rows inside.",
+  "ru": "Показать или скрыть вложенные строки."
+ },
+ "te_budget_chart_expense": {
+  "en": "Weekly Expenses",
+  "ru": "Недельные расходы"
+ },
+ "te_budget_chart_group_tt": {
+  "en": "Includes the indented rows below it.",
+  "ru": "Включает строки с отступом ниже."
+ },
+ "te_budget_chart_how": {
+  "en": "How the Breakdown Works",
+  "ru": "Как работает разбивка"
+ },
+ "te_budget_chart_how_admin": {
+  "en": "Government Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs; targets still being implemented do not count. General Administration receives the remainder, including unused capacity and bureaucracy used outside institutions. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance, so the allocation is capped at the government's civil wage, goods and slave-upkeep total.",
+  "ru": "«Правительственная администрация» производит бюрократию и налоговую ёмкость, а не товары на продажу. Её еженедельный операционный дефицит — это стоимость зарплат и входящих товаров, включая содержание рабов.\\n\\nДоля, отнесённая на институты, равна их текущему использованию бюрократии, делённому на всю произведённую бюрократию, но не более 100%. Каждый институт получает эту долю пула пропорционально своему текущему уровню, включая институты со сниженной стоимостью бюрократии; цели, которые ещё внедряются, не учитываются. «Общая администрация» получает остаток, включая неиспользованные мощности и бюрократию, использованную вне институтов. Если производства или уровней институтов нет, все расходы на администрацию остаются в ней.\\n\\nБюджет прогнозирует зарплаты, тогда как здания администрации сообщают свой последний недельный баланс, поэтому распределение ограничено суммой гражданских зарплат, товаров и содержания рабов правительства."
+ },
+ "te_budget_chart_how_charts": {
+  "en": "Income and expense totals leave out the Investment Pool Transfer. A share counts positive amounts only: a refund stays in the list with its sign and a zero share, so expanding a group never changes the whole, and a group whose costs and refunds cancel can still be expanded. Other Income and Other Expenses reconcile the listed rows to the budget's totals, including temporary flows and uncategorized items.",
+  "ru": "Итоги доходов и расходов не включают перевод в инвестиционный пул. В долю входят только положительные суммы: возврат остаётся в списке со своим знаком и нулевой долей, поэтому раскрытие группы никогда не меняет целое, а группу, чьи затраты и возвраты взаимно погашаются, всё равно можно раскрыть. Статьи «Прочие доходы» и «Прочие расходы» сводят перечисленные строки к итогам бюджета, включая временные потоки и некатегоризированные позиции."
+ },
+ "te_budget_chart_how_civil": {
+  "en": "Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Program Costs as part of Space Race, capped at what the civil total holds after administration. Construction Goods leaves out the Investment Pool Transfer, which funds private construction.",
+  "ru": "Университеты, порты и прочие гражданские здания остаются в статье «Прочие гражданские здания», кроме «Космической программы»: её еженедельный операционный дефицит, зарплаты и пусковые мощности отражаются в статье «Расходы на программы» как часть «Космической гонки» и ограничены тем, что остаётся от гражданского итога после администрации. «Строительные товары» не включают перевод в инвестиционный пул, который финансирует частное строительство."
+ },
+ "te_budget_chart_how_journal": {
+  "en": "Banking, Covert Actions, Cultural Hegemony, the United Nations and other systems have rows of their own, each listing the sources applied now, with their multipliers and any decay. Their amounts are taken out of Additional Expenses or Income once, and only the unattributed remainder stays there. One-time treasury payments and costs in other resources are outside the weekly budget.",
+  "ru": "У банковского дела, скрытых операций, культурной гегемонии, Организации Объединённых Наций и других систем есть собственные строки, в каждой из которых перечислены применяемые сейчас источники с их множителями и затуханием. Их суммы однократно вычитаются из дополнительных расходов или доходов, и там остаётся лишь неатрибутированный остаток. Разовые выплаты из казны и затраты в других ресурсах лежат вне недельного бюджета."
+ },
+ "te_budget_chart_how_military": {
+  "en": "Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance; Shipping covers supply ships and port connections. Each branch's wages are its forecast total less its goods. Materials and Support is its goods plus the whole operating deficit of logistics centers and naval fortifications, their wages, goods and slave upkeep together. Barracks, conscription and naval administration are already in the branch forecast and are not added again. Navy also includes warship construction and maintenance. Weekly operating balances can differ from wage forecasts, and Other Military Costs reconciles the difference.",
+  "ru": "Военные расходы включают зарплаты армии и флота, товары, содержание рабов, строительство военных кораблей и их обслуживание; «Перевозки и связи» охватывают суда снабжения и портовые связи. Зарплаты каждого рода войск — это их прогнозный итог за вычетом товаров. «Материалы и поддержка» — это товары плюс весь операционный дефицит логистических центров и морских укреплений, включая их зарплаты, товары и содержание рабов. Казармы, призыв и морское управление уже учтены в прогнозе рода войск и повторно не добавляются. «Флот» также включает строительство и обслуживание военных кораблей. Недельные операционные балансы могут отличаться от прогнозов зарплат, и «Прочие военные расходы» сводят эту разницу."
+ },
+ "te_budget_chart_how_sub_admin": {
+  "en": "Administration",
+  "ru": "Администрация"
+ },
+ "te_budget_chart_how_sub_charts": {
+  "en": "Totals and Shares",
+  "ru": "Итоги и доли"
+ },
+ "te_budget_chart_how_sub_civil": {
+  "en": "Other Civil Buildings",
+  "ru": "Прочие гражданские здания"
+ },
+ "te_budget_chart_how_sub_journal": {
+  "en": "Journal Systems",
+  "ru": "Системы журнала"
+ },
+ "te_budget_chart_how_sub_military": {
+  "en": "Military",
+  "ru": "Вооружённые силы"
+ },
+ "te_budget_chart_income": {
+  "en": "Weekly Income",
+  "ru": "Недельные доходы"
+ },
+ "te_budget_chart_institution_colonial_affairs_tt": {
+  "en": "#b $institution_colonial_affairs$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_colonial_affairs$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_health_system_tt": {
+  "en": "#b $institution_health_system$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_health_system')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_health_system$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_health_system')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_home_affairs_tt": {
+  "en": "#b $institution_home_affairs$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_home_affairs$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_migration_controls_tt": {
+  "en": "#b $institution_migration_controls$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_migration_controls$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_commerce_tt": {
+  "en": "#b $institution_ministry_of_commerce$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_commerce$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_consumer_protection_tt": {
+  "en": "#b $institution_ministry_of_consumer_protection$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_consumer_protection$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_culture_tt": {
+  "en": "#b $institution_ministry_of_culture$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_culture$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_foreign_affairs_tt": {
+  "en": "#b $institution_ministry_of_foreign_affairs$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_foreign_affairs$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_intelligence_and_security_tt": {
+  "en": "#b $institution_ministry_of_intelligence_and_security$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_intelligence_and_security$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_international_aid_tt": {
+  "en": "#b $institution_ministry_of_international_aid$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_international_aid$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_labor_tt": {
+  "en": "#b $institution_ministry_of_labor$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_labor$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_propaganda_tt": {
+  "en": "#b $institution_ministry_of_propaganda$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_propaganda$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_refugee_affairs_tt": {
+  "en": "#b $institution_ministry_of_refugee_affairs$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_refugee_affairs$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_religion_tt": {
+  "en": "#b $institution_ministry_of_religion$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_religion$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_science_tt": {
+  "en": "#b $institution_ministry_of_science$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_science$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_the_environment_tt": {
+  "en": "#b $institution_ministry_of_the_environment$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_the_environment$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_thought_control_tt": {
+  "en": "#b $institution_ministry_of_thought_control$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_thought_control$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_urban_planning_tt": {
+  "en": "#b $institution_ministry_of_urban_planning$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_urban_planning$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_ministry_of_war_tt": {
+  "en": "#b $institution_ministry_of_war$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_ministry_of_war$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_national_bank_tt": {
+  "en": "#b $institution_national_bank$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_national_bank$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_police_tt": {
+  "en": "#b $institution_police$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_police')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_police$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_police')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_schools_tt": {
+  "en": "#b $institution_schools$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_schools')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_schools$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_schools')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_social_security_tt": {
+  "en": "#b $institution_social_security$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_social_security')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_social_security$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_social_security')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_institution_workplace_safety_tt": {
+  "en": "#b $institution_workplace_safety$#!\\nLevel [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0] of [TopScope.ScriptValue('te_budget_institution_levels')|0] institution levels: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D] of the @money![TopScope.ScriptValue('te_budget_institution_pool')|D] institution pool.",
+  "ru": "#b $institution_workplace_safety$#!\\nУровень [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0] из [TopScope.ScriptValue('te_budget_institution_levels')|0] уровней институтов: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D] из пула институтов @money![TopScope.ScriptValue('te_budget_institution_pool')|D]."
+ },
+ "te_budget_chart_materials": {
+  "en": "Materials and Support",
+  "ru": "Материалы и поддержка"
+ },
+ "te_budget_chart_materials_tt": {
+  "en": "Branch goods, plus the upkeep of logistics centers and naval fortifications. Navy also includes warship construction and maintenance.",
+  "ru": "Товары рода войск, плюс содержание логистических центров и морских укреплений. «Флот» также включает строительство и обслуживание военных кораблей."
+ },
+ "te_budget_chart_military": {
+  "en": "Military",
+  "ru": "Вооружённые силы"
+ },
+ "te_budget_chart_military_adjustment": {
+  "en": "Other Military Costs",
+  "ru": "Прочие военные расходы"
+ },
+ "te_budget_chart_military_adjustment_tt": {
+  "en": "The difference between the military total and its army and navy parts, from weekly balances that differ from wage forecasts.",
+  "ru": "Разница между военным итогом и суммой его частей по армии и флоту, возникающая из-за недельных балансов, отличающихся от прогнозов зарплат."
+ },
+ "te_budget_chart_navy": {
+  "en": "Navy",
+  "ru": "Флот"
+ },
+ "te_budget_chart_no_expense": {
+  "en": "No positive expenses this week.",
+  "ru": "На этой неделе положительных расходов нет."
+ },
+ "te_budget_chart_no_income": {
+  "en": "No positive income this week.",
+  "ru": "На этой неделе положительных доходов нет."
+ },
+ "te_budget_chart_other_expense": {
+  "en": "Other Expenses",
+  "ru": "Прочие расходы"
+ },
+ "te_budget_chart_other_expense_tt": {
+  "en": "What the rows above leave of the budget's weekly expenses: temporary flows and uncategorized items.",
+  "ru": "То, что строки выше оставляют от недельных расходов бюджета: временные потоки и некатегоризированные позиции."
+ },
+ "te_budget_chart_other_income": {
+  "en": "Other Income",
+  "ru": "Прочие доходы"
+ },
+ "te_budget_chart_other_income_tt": {
+  "en": "What the rows above leave of the budget's weekly income: temporary flows and uncategorized items.",
+  "ru": "То, что строки выше оставляют от недельных доходов бюджета: временные потоки и некатегоризированные позиции."
+ },
+ "te_budget_chart_pie_tt": {
+  "en": "Each color matches a row below. Expand a group to split its slice.",
+  "ru": "Каждый цвет соответствует строке ниже. Раскройте группу, чтобы разделить её сектор."
+ },
+ "te_budget_chart_port_connections": {
+  "en": "Port Connections",
+  "ru": "Портовые связи"
+ },
+ "te_budget_chart_port_connections_tt": {
+  "en": "The upkeep of port connections.",
+  "ru": "Содержание портовых связей."
+ },
+ "te_budget_chart_programmes": {
+  "en": "Program Costs",
+  "ru": "Расходы на программы"
+ },
+ "te_budget_chart_shipping": {
+  "en": "Shipping and Connections",
+  "ru": "Перевозки и связи"
+ },
+ "te_budget_chart_source_expense_banking": {
+  "en": "Banking",
+  "ru": "Банки"
+ },
+ "te_budget_chart_source_expense_banking_tt": {
+  "en": "#b Banking#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\nBought for the bank's gold reserve this month, outside the weekly budget: @money![GetPlayer.MakeScope.ScriptValue('banking_external_surrender_purchase_display')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]",
+  "ru": "#b Банковское дело#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\nКуплено для золотого запаса банка в этом месяце, вне недельного бюджета: @money![GetPlayer.MakeScope.ScriptValue('banking_external_surrender_purchase_display')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]"
+ },
+ "te_budget_chart_source_expense_climate": {
+  "en": "Climate Policy",
+  "ru": "Климатическая политика"
+ },
+ "te_budget_chart_source_expense_climate_tt": {
+  "en": "#b Climate Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]",
+  "ru": "#b Климатическая политика#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]"
+ },
+ "te_budget_chart_source_expense_colonial": {
+  "en": "Colonial Development",
+  "ru": "Колониальное развитие"
+ },
+ "te_budget_chart_source_expense_colonial_tt": {
+  "en": "#b Colonial Development#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]",
+  "ru": "#b Колониальное развитие#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]"
+ },
+ "te_budget_chart_source_expense_covert": {
+  "en": "Covert Actions",
+  "ru": "Скрытые операции"
+ },
+ "te_budget_chart_source_expense_covert_tt": {
+  "en": "#b Covert Actions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]",
+  "ru": "#b Скрытые операции#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]"
+ },
+ "te_budget_chart_source_expense_culture": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "te_budget_chart_source_expense_culture_tt": {
+  "en": "#b Cultural Hegemony#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]",
+  "ru": "#b Культурная гегемония#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]"
+ },
+ "te_budget_chart_source_expense_drugs": {
+  "en": "Drug Shortage Response",
+  "ru": "Меры при дефиците лекарств"
+ },
+ "te_budget_chart_source_expense_drugs_tt": {
+  "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]",
+  "ru": "#b Меры при дефиците лекарств#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]"
+ },
+ "te_budget_chart_source_expense_energy_industry": {
+  "en": "Energy and Industry Programs",
+  "ru": "Энергетические и промышленные программы"
+ },
+ "te_budget_chart_source_expense_energy_industry_tt": {
+  "en": "#b Energy and Industry Programs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]",
+  "ru": "#b Энергетические и промышленные программы#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_energy_industry')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_energy_industry_add')]"
+ },
+ "te_budget_chart_source_expense_family": {
+  "en": "Family Policy",
+  "ru": "Семейная политика"
+ },
+ "te_budget_chart_source_expense_family_tt": {
+  "en": "#b Family Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]",
+  "ru": "#b Семейная политика#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]"
+ },
+ "te_budget_chart_source_expense_nuclear": {
+  "en": "Nuclear Program",
+  "ru": "Ядерная программа"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo": {
+  "en": "Nuclear Civil Defense",
+  "ru": "Ядерная гражданская оборона"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo_tt": {
+  "en": "#b Nuclear Civil Defense#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]",
+  "ru": "#b Ядерная гражданская оборона#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]"
+ },
+ "te_budget_chart_source_expense_nuclear_tt": {
+  "en": "#b Nuclear Program#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]",
+  "ru": "#b Ядерная программа#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]"
+ },
+ "te_budget_chart_source_expense_pensions": {
+  "en": "Old-Age Pensions",
+  "ru": "Пенсии по старости"
+ },
+ "te_budget_chart_source_expense_pensions_tt": {
+  "en": "#b Old-Age Pensions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]",
+  "ru": "#b Пенсии по старости#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]"
+ },
+ "te_budget_chart_source_expense_space": {
+  "en": "Space Race",
+  "ru": "Космическая гонка"
+ },
+ "te_budget_chart_source_expense_space_tt": {
+  "en": "#b Space Race#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nSpace Program: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nThe Space Program's wages and input goods, moved here from Other Civil Buildings.\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]",
+  "ru": "#b Космическая гонка#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nКосмическая программа: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nЗарплаты и входящие товары «Космической программы», перенесённые сюда из статьи «Прочие гражданские здания».\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]"
+ },
+ "te_budget_chart_source_expense_un": {
+  "en": "United Nations",
+  "ru": "Организация Объединённых Наций"
+ },
+ "te_budget_chart_source_expense_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]",
+  "ru": "#b Организация Объединённых Наций#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]"
+ },
+ "te_budget_chart_source_income_pension_reform": {
+  "en": "Pension Reform",
+  "ru": "Пенсионная реформа"
+ },
+ "te_budget_chart_source_income_pension_reform_tt": {
+  "en": "#b Pension Reform#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]",
+  "ru": "#b Пенсионная реформа#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]"
+ },
+ "te_budget_chart_source_income_reserve": {
+  "en": "Strategic Reserve Sales",
+  "ru": "Продажи из стратегического резерва"
+ },
+ "te_budget_chart_source_income_reserve_tt": {
+  "en": "#b Strategic Reserve Sales#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]",
+  "ru": "#b Продажи из стратегического резерва#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]"
+ },
+ "te_budget_chart_source_income_tax_code": {
+  "en": "Spectrum Auctions",
+  "ru": "Аукционы радиочастот"
+ },
+ "te_budget_chart_source_income_tax_code_tt": {
+  "en": "#b Spectrum Auctions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]",
+  "ru": "#b Аукционы радиочастот#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]"
+ },
+ "te_budget_chart_source_income_un": {
+  "en": "United Nations",
+  "ru": "Организация Объединённых Наций"
+ },
+ "te_budget_chart_source_income_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]",
+  "ru": "#b Организация Объединённых Наций#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]"
+ },
+ "te_budget_chart_source_income_war_tax": {
+  "en": "War Profit Tax",
+  "ru": "Налог на военные прибыли"
+ },
+ "te_budget_chart_source_income_war_tax_tt": {
+  "en": "#b War Profit Tax#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]",
+  "ru": "#b Налог на военные прибыли#!\\nНедельная сумма: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n$TOOLTIP_DELIMITER$\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]"
+ },
+ "te_budget_chart_supply_construction": {
+  "en": "Supply Ship Construction",
+  "ru": "Строительство судов снабжения"
+ },
+ "te_budget_chart_supply_construction_tt": {
+  "en": "Building supply ships.",
+  "ru": "Постройка судов снабжения."
+ },
+ "te_budget_chart_supply_maintenance": {
+  "en": "Supply Ship Maintenance",
+  "ru": "Содержание судов снабжения"
+ },
+ "te_budget_chart_supply_maintenance_tt": {
+  "en": "Keeping supply ships at sea.",
+  "ru": "Содержание судов снабжения в море."
+ },
+ "te_budget_chart_tab": {
+  "en": "Breakdown",
+  "ru": "Разбивка"
+ },
+ "te_budget_chart_tab_tt": {
+  "en": "Weekly public income and expenses as pies and itemized amounts. Government Administration costs are allocated among your institutions.",
+  "ru": "Недельные государственные доходы и расходы в виде диаграмм и построчных сумм. Расходы «Правительственной администрации» распределены между вашими институтами."
+ },
+ "te_budget_chart_taxes": {
+  "en": "Taxes",
+  "ru": "Налоги"
+ },
+ "te_budget_chart_wages": {
+  "en": "Wages",
+  "ru": "Зарплаты"
+ },
+ "te_budget_chart_wages_army_tt": {
+  "en": "The army's wages: its forecast total less its goods.",
+  "ru": "Зарплаты армии: её прогнозный итог за вычетом товаров."
+ },
+ "te_budget_chart_wages_navy_tt": {
+  "en": "The navy's wages: its forecast total less its goods.",
+  "ru": "Зарплаты флота: его прогнозный итог за вычетом товаров."
+ }
+}

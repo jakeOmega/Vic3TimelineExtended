@@ -38,7 +38,7 @@ LIBRARY = os.path.join(GUI_DIR, "te_widget_library.gui")
 TAB_WIDGETS = os.path.join(GUI_DIR, "te_system_tab_widgets.gui")
 POPUPS = os.path.join(GUI_DIR, "te_popups.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
-# The translation memories: deploy ships their German and Spanish lines into the
+# The translation memories: deploy ships their translated lines into the
 # same popups (scripts/generators/gen_non_english_loc.py, i18n/README.md).
 I18N_DIR = os.path.join(REPO, "i18n")
 

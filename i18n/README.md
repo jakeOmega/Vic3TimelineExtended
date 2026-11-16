@@ -7,7 +7,7 @@ The mod is written in English. `localization/english/` is the only loc the repo 
 
 None of the generated `.yml` is committed. The translation memory is.
 
-Two languages have one: German (`german/`) and Spanish (`spanish/`), both machine-translated.
+Three languages have one: German (`german/`), Spanish (`spanish/`) and Russian (`russian/`), all machine-translated.
 
 ## What's here
 
@@ -21,12 +21,12 @@ Two languages have one: German (`german/`) and Spanish (`spanish/`), both machin
 
 `scripts/i18n/translate_loc.py` keeps what differs between languages in four tables, each taken from what the base game's own loc does in that language (issue #566 has the survey):
 
-| Table | German | Spanish |
-|---|---|---|
-| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` |
-| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` |
-| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside |
-| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% |
+| Table | German | Spanish | Russian |
+|---|---|---|---|
+| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` | `ru` |
+| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` | none for now, as for Spanish: vanilla declines (`RU_CL_RP` …, issue #566), but the first run had no game files to read its forms from, so the brief phrases around the name («страна X») |
+| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside | «…» with „…“ inside |
+| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% | 1 000 with a no-break space, 10% |
 
 A new language needs a row in each table it differs in, a `BRIEF.md` (copy the nearest one and rewrite its grammar, number, quote and voice sections against the base game's loc in that language), and an empty `terms.json`. Pass `--language <folder>` to every command below; the default is German.
 
@@ -98,6 +98,14 @@ The eighth update pass (November 2026) brought both languages up together, in a 
 - **An agent can translate the previous English instead of the line.** One Spanish flavor line came back as a translation of the dialogue it replaced, and merge caught it only because its `\n` count differed. A word-level comparison over the whole pass found no other case. For each updated line, it compared how close the new translation is to the old with how close the new English is to the old. Run it after a pass that rewrote most of its lines.
 - **A rewrite surfaces older splits.** The civil rights strategies' names had several German renderings (*Gradualist Accommodation* three ways); they are now in `terms.json` on their modifier names. German infamy in plain text is *Verrufenheit*, as the memory says 51 times, not *Ächtung*. Five older German lines put *in* before `GetAltName('IN')`, a form that already carries its preposition.
 - **A label of digits and one letter counts as nothing to translate** ("1930s"), so `status` skips it and deploy ships the English. A memory entry for it still ships: the state-picture eras are *1930er-Jahre* and *Década de 1930*.
+
+The Russian run (November 2026) translated the whole mod in one pass, in a cloud container with no game install: 35,561 keys and 569,900 words, the most of any language so far (24 of the keys came in from `main` during the run, as one more chunk). It took about an hour and a quarter. Three glossary chunks went out in parallel and finished in about eight minutes: the concepts and journal entries (1,369 names), the other names (1,590: laws, buildings, technologies, formables), and 1,369 short labels that other lines insert by `$key$` (modifier names, culture names, era and street labels), so that later chunks' REFERENCED KEYS could say what each insert reads. `prepare --no-vanilla --templates te_ timeline_extended` then grouped every file by template, not just the generated ones: 1,520 examples stood for 7,568 copies, a fifth of all keys (identical modifier descriptions, the carbon-capture methods, the culture merges, the power bloc names, the per-building modifier names). Grouping 31,000 lines took about three minutes. 56 content chunks went to Sonnet agents eight at a time on a rolling basis, each taking 3 to 10 minutes, about 45 minutes in all. `expand` wrote 7,534 copies and left 34 whose example's translation had changed a swapped token (a concept call's display text), which a 36-line chunk finished with the sibling translations grepped from the memory. Merge rejected 23 lines, nearly all a concept link added where the English has plain text, fixed by hand; after the first wave every prompt said "keep exactly the concept links the English has". Then 59 lines were corrected by script and 379 by three correction agents in parallel. No line in the memory mixes Cyrillic and Latin letters (checked by script). Cost wasn't measured. What the run adds for the next language:
+
+- **Russian declines country names, but this memory doesn't.** Vanilla reaches its Russian case forms through `GetAltName('RU_CL_RP')` and others (issue #566), and the forms couldn't be checked without the game, so `COUNTRY_FORMS` has no Russian row: merge rejects `GetAltName`, and the brief puts a noun before the name that takes the case («стране [X.GetName]», «правительство страны [X.GetName]») and keeps past-tense verbs off a bare name, whose gender can't be known. A pass with the game files can switch to vanilla's forms. `GetAdjective` is masculine nominative singular, so agents set it before a masculine noun (народ, рынок, флот) and reworded the sentence around it.
+- **Without the game, seed the base game's terms in the brief, not only in `terms.json`.** A table of some forty recurring base-game words (pop, interest group, power bloc, authority, infamy, state, subject …) went into the brief, and `terms.json` was seeded with 272 terms from the German and Spanish lists' English side before the first chunk. None of the base-game words were checked against vanilla's Russian; `docs/testing/russian-localization-playtest.md` asks the play-test to compare them.
+- **Settle the level and band names from the glossary chunk's labels before content goes out.** They drifted again, as in the Spanish run: the UN authority tiers, tradecraft tiers, nuclear readiness, colonial stability bands, UN standing, the UN pillars and the covert funding levels each came out two or three ways in the first wave. From the second wave on, every prompt carried the labels' wording, and a correction pass took the earlier lines to it: about 300 lines, picked by an English regex per family, each with a conditional note ("if this line names a level of …, write it as the labels read …; otherwise leave it").
+- **Settle the everyday words agents reach for as each report comes in, and append them to the next prompts.** The ones that split here: the Strategic Reserve's hub (*хаб* and *узел*), the Drugs good (vanilla's opium, renamed: *Наркотики* on the label, *лекарства* in the prose, now *препараты*), devastation, a country's UN standing (*репутация* and *международный авторитет*), the Tender ship role and the Grand Monuments (*памятники* and *монументы*). The brief now lists them.
+- **`check-terms` uses three-letter stems for Russian** (`MIN_STEM`), because a four-letter noun inflects in its last letter (*силы*, *сил*; *игра*, *игру*); with four, 164 lines were flagged, most of them correct. It also folds *ё* into *е*. Terms whose English word has several senses (*Defenses*, *Red Line*, *United Nations* beside the abbreviation *ООН*, the pop types *Farmers* and *Clerks* at the start of a sentence) came out of `terms.json`.
 
 `merge` also drops every TM entry, in every file, whose key the English no longer has. In a feature branch that translates only its own files (`prepare --files te_tax`), revert the other TM files it pruned (`git checkout -- i18n/<language>/tm/<file>.json`) so the pruning lands with a translation pass instead.
 

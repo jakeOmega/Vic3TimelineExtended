@@ -169,5 +169,5 @@ Be concrete in the issue: the exact query/validation you needed, the endpoint sh
 - This repo lives on the WSL/Linux side (`mod_path`, e.g. `~/src/Vic3TimelineExtended`).
 - The engine reads from the Windows-side mod folder (`mod_deploy_target`, e.g. `/mnt/c/Users/<winuser>/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended`).
 - `scripts/deploy.sh` rsyncs only `common/`, `events/`, `localization/`, `gui/`, `gfx/`, `map_data/`, `.metadata/` (plus `thumbnail.png`). Everything else (Python, docs, tests, `.git`, logs) stays in the repo.
-- The ten non-English languages ship English copies generated at deploy time, with German and Spanish translations swapped in from `i18n/<language>/tm/`. Never commit a non-English loc folder. Details: `.claude/rules/localization.md` and `i18n/README.md`.
+- The ten non-English languages ship English copies generated at deploy time, with German, Spanish and Russian translations swapped in from `i18n/<language>/tm/`. Never commit a non-English loc folder. Details: `.claude/rules/localization.md` and `i18n/README.md`.
 - The auto-deploy watcher runs the rsync continuously while VS Code is open; manual edits via other editors will not auto-deploy.

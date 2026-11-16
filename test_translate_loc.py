@@ -85,6 +85,9 @@ class MarkupCheckRejectsTests(unittest.TestCase):
         errors = t.check_translation(en, "Protege a [TARGET_COUNTRY.GetAltName('DAT')]", "spanish")[0]
         self.assertTrue(any("GetAltName" in e for e in errors), errors)
         self.assertEqual(t.check_translation(en, "Protege a [TARGET_COUNTRY.GetName]", "spanish")[0], [])
+        errors = t.check_translation(en, "Защитить [TARGET_COUNTRY.GetAltName('RU_CL_VP')]", "russian")[0]
+        self.assertTrue(any("GetAltName" in e for e in errors), errors)
+        self.assertEqual(t.check_translation(en, "Защитить страну [TARGET_COUNTRY.GetName]", "russian")[0], [])
 
     def test_lost_reference_icon_code_and_line_break(self):
         errors = _errors("#b $VAL$#! @money!\\nMore", "fett Geld mehr")
@@ -171,6 +174,12 @@ class NumberFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_numbers(en, es, "spanish"),
                          "Cuesta 2,5 veces más, hasta 1\u00a0000 unidades, o 12\u00a0000 al 5%.")
 
+    def test_russian_decimal_comma_no_break_space_closed_percent(self):
+        en = "Costs 2.5 times as much, up to 1,000 units, at 5%."
+        ru = "Стоит в 2.5 раза больше, до 1,000 единиц, при 5 %."
+        self.assertEqual(t.localize_numbers(en, ru, "russian"),
+                         "Стоит в 2,5 раза больше, до 1\u00a0000 единиц, при 5%.")
+
     def test_english_formats_kept_for_other_languages(self):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 
@@ -194,6 +203,12 @@ class QuoteFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_quotes('\\"Empezar con “sí”.\\"', "spanish"), "«Empezar con “sí”.»")
         self.assertEqual(t.localize_quotes("La acción “Resolver la crisis”", "spanish"), "La acción «Resolver la crisis»")
 
+    def test_russian_guillemets_outside_low_high_inside(self):
+        self.assertEqual(t.localize_quotes('\\"Начать с „да“.\\"', "russian"), "«Начать с „да“.»")
+        self.assertEqual(t.localize_quotes("Действие „Разрешить кризис”", "russian"), "Действие «Разрешить кризис»")
+        # English-style “…” would close where nothing is open: left for the reader
+        self.assertEqual(t.localize_quotes("Действие “Разрешить кризис”", "russian"), "Действие “Разрешить кризис”")
+
     def test_spanish_apostrophe_is_not_a_quote(self):
         self.assertEqual(t.localize_quotes('O’Higgins dijo \\"no\\"', "spanish"), "O’Higgins dijo «no»")
 
@@ -210,6 +225,14 @@ class TermCheckTests(unittest.TestCase):
                          [("b", "Tradecraft", "Spionagehandwerk")])
 
 
+class RussianTermCheckTests(unittest.TestCase):
+    def test_yo_and_ye_match(self):
+        tm = {"a": {"en": "Strategic Reserve rises", "ru": "Стратегический резерв растет"},
+              "b": {"en": "Strategic Reserve falls", "ru": "Запас падает"}}
+        self.assertEqual(t.term_mismatches(tm, {"Strategic Reserve": "Стратегический резерв растёт"}, "ru"),
+                         [("b", "Strategic Reserve", "Стратегический резерв растёт")])
+
+
 class QuoteRepairTests(unittest.TestCase):
     def test_plain_closing_quote_after_german_opening(self):
         line = ' k:0 "„Man hört es." \\n\\n— Kommandant"\n'
@@ -221,6 +244,9 @@ class QuoteRepairTests(unittest.TestCase):
     def test_spanish_marks(self):
         self.assertEqual(t.repair_bare_quotes(' k:0 "Dijo "Hola" en voz alta"', "spanish"), "Dijo «Hola» en voz alta")
         self.assertEqual(t.repair_bare_quotes(' k:0 "«Se oye." \\n— Comandante"', "spanish"), "«Se oye.» \\n— Comandante")
+
+    def test_russian_marks(self):
+        self.assertEqual(t.repair_bare_quotes(' k:0 "Он сказал "Привет" громко"', "russian"), "Он сказал «Привет» громко")
 
 
 class ChunkingTests(unittest.TestCase):

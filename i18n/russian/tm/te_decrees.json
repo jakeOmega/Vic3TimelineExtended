@@ -1,0 +1,142 @@
+{
+ "decree_antiterrorism_campaign": {
+  "en": "Anti-Terrorism Campaign",
+  "ru": "Кампания по борьбе с терроризмом"
+ },
+ "decree_antiterrorism_campaign_desc": {
+  "en": "Anti-Terrorism Campaign allows the government to increase security measures and reduce the risk of terrorist attacks.",
+  "ru": "Кампания по борьбе с терроризмом позволяет правительству усилить меры безопасности и снизить риск терактов."
+ },
+ "decree_bureaucracy_reform": {
+  "en": "Bureaucratic Reform",
+  "ru": "Бюрократическая реформа"
+ },
+ "decree_bureaucracy_reform_desc": {
+  "en": "Bureaucratic Reform allows the government to streamline the [concept_bureaucracy] and reduce corruption.",
+  "ru": "Бюрократическая реформа позволяет правительству оптимизировать [Concept('concept_bureaucracy','бюрократию')] и сократить коррупцию."
+ },
+ "decree_cultural_emigration_initiative": {
+  "en": "Cultural Emigration Initiative",
+  "ru": "Инициатива культурной эмиграции"
+ },
+ "decree_cultural_emigration_initiative_desc": {
+  "en": "Cultural Emigration Initiative allows the government to encourage citizens to emigrate to other countries.",
+  "ru": "Инициатива культурной эмиграции позволяет правительству поощрять граждан к эмиграции в другие страны."
+ },
+ "decree_cultural_integration": {
+  "en": "Cultural Integration",
+  "ru": "Культурная интеграция"
+ },
+ "decree_cultural_integration_desc": {
+  "en": "Cultural Integration speeds up the process of integrating cultures, increasing cultural acceptance.",
+  "ru": "Культурная интеграция ускоряет процесс интеграции культур, повышая культурное принятие."
+ },
+ "decree_encourage_emigration": {
+  "en": "Encourage Emigration",
+  "ru": "Поощрение эмиграции"
+ },
+ "decree_encourage_emigration_desc": {
+  "en": "Promote emigration to reduce population pressure through media campaigns and incentives.",
+  "ru": "Поощряйте эмиграцию, чтобы снизить демографическое давление, с помощью медиакампаний и стимулов."
+ },
+ "decree_greenest_grass_campaign": {
+  "en": "Greenest Grass Campaign",
+  "ru": "Кампания «Трава зеленее»"
+ },
+ "decree_greenest_grass_campaign_desc": {
+  "en": "A highly effective campaign to encourage migration to a region.",
+  "ru": "Крайне эффективная кампания по привлечению миграции в регион."
+ },
+ "decree_medical_outreach": {
+  "en": "Medical Outreach",
+  "ru": "Медицинский охват"
+ },
+ "decree_medical_outreach_behind_tt": {
+  "en": "This state's medicine is still behind what our technology and laws allow, and the next yearly count won't close the gap on its own",
+  "ru": "Медицина этой области всё ещё отстаёт от того, что позволяют наши технологии и законы, и следующий ежегодный подсчёт сам не сократит разрыв"
+ },
+ "decree_medical_outreach_desc": {
+  "en": "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner.",
+  "ru": "Врачи и медсёстры едут обучать местных специалистов и работать в клиниках области, так что новейшие методы лечения и охват нашей системы здравоохранения приходят сюда на годы раньше."
+ },
+ "decree_migration_invalid_tooltip": {
+  "en": "In a [concept_power_bloc] allowing forced migration.",
+  "ru": "В [Concept('concept_power_bloc','силовом блоке')], допускающем принудительную миграцию."
+ },
+ "decree_natalism_initiative": {
+  "en": "Natalism Initiative",
+  "ru": "Инициатива по повышению рождаемости"
+ },
+ "decree_natalism_initiative_desc": {
+  "en": "Natalism Initiative allows the government to encourage citizens to have more children.",
+  "ru": "Инициатива по повышению рождаемости позволяет правительству поощрять граждан к рождению большего числа детей."
+ },
+ "decree_political_patronage": {
+  "en": "Political Patronage",
+  "ru": "Политическое покровительство"
+ },
+ "decree_political_patronage_desc": {
+  "en": "Political Patronage allows the government to appoint political allies to key positions in the government.",
+  "ru": "Политическое покровительство позволяет правительству назначать политических союзников на ключевые государственные должности."
+ },
+ "decree_pollution_control": {
+  "en": "Pollution Control",
+  "ru": "Контроль загрязнения"
+ },
+ "decree_pollution_control_desc": {
+  "en": "[concept_pollution_system] Control reduces pollution generation in a state.",
+  "ru": "Контроль [Concept('concept_pollution_system','загрязнения')] снижает образование загрязнения в области."
+ },
+ "decree_promote_tourism": {
+  "en": "Promote Tourism",
+  "ru": "Развитие туризма"
+ },
+ "decree_promote_tourism_desc": {
+  "en": "Through advertising and investment in [concept_infrastructure], we can increase the number of tourists visiting our [concept_state].",
+  "ru": "Благодаря рекламе и вложениям в [Concept('concept_infrastructure','инфраструктуру')] мы можем увеличить число туристов, посещающих нашу [Concept('concept_state','область')]."
+ },
+ "decree_resettlement_recruitment_drive": {
+  "en": "Resettlement Recruitment Drive",
+  "ru": "Набор переселенцев"
+ },
+ "decree_resettlement_recruitment_drive_desc": {
+  "en": "Recruiters for our Settlement Authorities concentrate here. Every Settlement Authority recruits from this state before any other, and may take twice as many of its eligible people each month.",
+  "ru": "Вербовщики наших Управлений по заселению сосредоточены здесь. Каждое Управление по заселению набирает людей из этой области прежде других и может брать вдвое больше подходящих людей в месяц."
+ },
+ "decree_resettlement_recruitment_drive_needs_authority_tt": {
+  "en": "We run at least one Settlement Authority",
+  "ru": "У нас действует хотя бы одно Управление по заселению"
+ },
+ "decree_subsidize_immigration": {
+  "en": "Subsidize Immigration",
+  "ru": "Субсидирование иммиграции"
+ },
+ "decree_subsidize_immigration_desc": {
+  "en": "Subsidize Immigration provides financial assistance to immigrants, encouraging them to settle in our [concept_state].",
+  "ru": "Субсидирование иммиграции оказывает финансовую помощь иммигрантам, поощряя их селиться в нашей [Concept('concept_state','области')]."
+ },
+ "decree_tax_breaks": {
+  "en": "Tax Breaks",
+  "ru": "Налоговые льготы"
+ },
+ "decree_tax_breaks_desc": {
+  "en": "Tax Breaks allows the government to reduce taxes locally, increasing approval.",
+  "ru": "Налоговые льготы позволяют правительству снижать налоги на местном уровне, повышая одобрение."
+ },
+ "decree_trade_reform": {
+  "en": "Trade Reform",
+  "ru": "Торговая реформа"
+ },
+ "decree_trade_reform_desc": {
+  "en": "Trade Reform allows the government to reduce [concept_tariffs] and increase trade with other countries.",
+  "ru": "Торговая реформа позволяет правительству снизить [Concept('concept_tariffs','пошлины')] и увеличить торговлю с другими странами."
+ },
+ "decree_war_propaganda": {
+  "en": "War Propaganda",
+  "ru": "Военная пропаганда"
+ },
+ "decree_war_propaganda_desc": {
+  "en": "War Propaganda allows the government to increase [concept_war_support].",
+  "ru": "Военная пропаганда позволяет правительству повысить [Concept('concept_war_support','поддержку войны')]."
+ }
+}
