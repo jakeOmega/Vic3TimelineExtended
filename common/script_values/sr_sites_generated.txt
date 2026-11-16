@@ -12451,8 +12451,8 @@ sr_mod_wait_months_haumea = { value = 0 if = { limit = { sr_launch_windows_apply
 sr_mod_wait_months_sedna = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
 
 # Country scope: the same for the module waiting in shipment slot n, 999 while the
-# slot is empty or its module in flight (sr_disp_ms_first_leave takes the least).
-sr_disp_ms_wait_months_1 = {
+# slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least).
+sr_ms_wait_months_1 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_1_site NOT = { has_variable = sr_ms_1_arrive } }
@@ -12492,7 +12492,7 @@ sr_disp_ms_wait_months_1 = {
 		else_if = { limit = { var:sr_ms_1_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_2 = {
+sr_ms_wait_months_2 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_2_site NOT = { has_variable = sr_ms_2_arrive } }
@@ -12532,7 +12532,7 @@ sr_disp_ms_wait_months_2 = {
 		else_if = { limit = { var:sr_ms_2_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_3 = {
+sr_ms_wait_months_3 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_3_site NOT = { has_variable = sr_ms_3_arrive } }
@@ -12572,7 +12572,7 @@ sr_disp_ms_wait_months_3 = {
 		else_if = { limit = { var:sr_ms_3_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_4 = {
+sr_ms_wait_months_4 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_4_site NOT = { has_variable = sr_ms_4_arrive } }
@@ -12612,7 +12612,7 @@ sr_disp_ms_wait_months_4 = {
 		else_if = { limit = { var:sr_ms_4_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_5 = {
+sr_ms_wait_months_5 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_5_site NOT = { has_variable = sr_ms_5_arrive } }
@@ -12652,7 +12652,7 @@ sr_disp_ms_wait_months_5 = {
 		else_if = { limit = { var:sr_ms_5_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_6 = {
+sr_ms_wait_months_6 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_6_site NOT = { has_variable = sr_ms_6_arrive } }
@@ -12692,7 +12692,7 @@ sr_disp_ms_wait_months_6 = {
 		else_if = { limit = { var:sr_ms_6_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_7 = {
+sr_ms_wait_months_7 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_7_site NOT = { has_variable = sr_ms_7_arrive } }
@@ -12732,7 +12732,7 @@ sr_disp_ms_wait_months_7 = {
 		else_if = { limit = { var:sr_ms_7_site = 34 } value = sr_mod_wait_months_sedna }
 	}
 }
-sr_disp_ms_wait_months_8 = {
+sr_ms_wait_months_8 = {
 	value = 999
 	if = {
 		limit = { has_variable = sr_ms_8_site NOT = { has_variable = sr_ms_8_arrive } }

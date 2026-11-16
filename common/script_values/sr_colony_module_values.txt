@@ -96,6 +96,18 @@ sr_slots_marker_gap = {
 	subtract = sr_colony_slots_modifier
 }
 
+# Country scope. The months until the module in shipment slot n lands, 999 while
+# the slot is empty or waiting (sr_disp_ms_first_land takes the least; the
+# months until a waiting one can leave are sr_ms_wait_months_<n>, generated).
+sr_ms_land_months_1 = { value = 999 if = { limit = { has_variable = sr_ms_1_arrive } value = var:sr_ms_1_arrive subtract = te_history_month_index } }
+sr_ms_land_months_2 = { value = 999 if = { limit = { has_variable = sr_ms_2_arrive } value = var:sr_ms_2_arrive subtract = te_history_month_index } }
+sr_ms_land_months_3 = { value = 999 if = { limit = { has_variable = sr_ms_3_arrive } value = var:sr_ms_3_arrive subtract = te_history_month_index } }
+sr_ms_land_months_4 = { value = 999 if = { limit = { has_variable = sr_ms_4_arrive } value = var:sr_ms_4_arrive subtract = te_history_month_index } }
+sr_ms_land_months_5 = { value = 999 if = { limit = { has_variable = sr_ms_5_arrive } value = var:sr_ms_5_arrive subtract = te_history_month_index } }
+sr_ms_land_months_6 = { value = 999 if = { limit = { has_variable = sr_ms_6_arrive } value = var:sr_ms_6_arrive subtract = te_history_month_index } }
+sr_ms_land_months_7 = { value = 999 if = { limit = { has_variable = sr_ms_7_arrive } value = var:sr_ms_7_arrive subtract = te_history_month_index } }
+sr_ms_land_months_8 = { value = 999 if = { limit = { has_variable = sr_ms_8_arrive } value = var:sr_ms_8_arrive subtract = te_history_month_index } }
+
 sr_mod_fab_stock_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }

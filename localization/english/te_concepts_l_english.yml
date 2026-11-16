@@ -59,7 +59,6 @@
  AI_TOTAL_WAR:0 "from having adopted total war"
  AI_WARY_ATTITUDE:0 "from wary relations"
  AT_WAR:0 "At War"
- Base: #v 500#!
  CB_ASSET_RELIEF:"Asset Relief Program"
  CB_BAIL_IN:"Bail-in Regime"
  CB_BANK_HOLIDAY:"Declare a Bank Holiday"

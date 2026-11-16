@@ -360,6 +360,16 @@ sr_mod_stop_fabrication = {
 	}
 }
 
+sr_mod_stop_storage = {
+	if = {
+		limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_storage_none } } }
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_storage_none
+		}
+	}
+}
+
 # ---- AI (design § 10) -----------------------------------------------------------------------
 # Country scope, from the entry's pulse; once a year. A holder or top-three
 # space power (sr_ai_tends_colonies) with money to spare queues one module at
@@ -367,7 +377,7 @@ sr_mod_stop_fabrication = {
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
 # placeholder Defences or Spaceport), and runs the best fabrication method
-# while anything is queued; otherwise fabrication goes off.
+# while anything is queued; otherwise fabrication goes off. Storage stays off.
 sr_mod_ai_review = {
 	if = {
 		limit = {
@@ -396,6 +406,9 @@ sr_mod_ai_review = {
 		else = {
 			sr_mod_stop_fabrication = yes
 		}
+		# No storage (the owner, 2026-11-15): the AI queues only within its
+		# colonies' slots, where the base stock is always enough.
+		sr_mod_stop_storage = yes
 	}
 }
 

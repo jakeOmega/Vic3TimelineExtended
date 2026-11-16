@@ -1925,9 +1925,9 @@ def render_shipment_wait_values() -> list[str]:
     out += [f"sr_mod_wait_months_{s.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} "
             f"value = sr_window_months_to_next_{s.body} }} }}" for s in gated]
     out += ["", "# Country scope: the same for the module waiting in shipment slot n, 999 while the",
-            "# slot is empty or its module in flight (sr_disp_ms_first_leave takes the least)."]
+            "# slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least)."]
     for n in range(1, SHIP_SLOTS + 1):
-        out += [f"sr_disp_ms_wait_months_{n} = {{",
+        out += [f"sr_ms_wait_months_{n} = {{",
                 "\tvalue = 999",
                 "\tif = {",
                 f"\t\tlimit = {{ has_variable = sr_ms_{n}_site NOT = {{ has_variable = sr_ms_{n}_arrive }} }}",
