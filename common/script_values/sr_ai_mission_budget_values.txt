@@ -52,8 +52,8 @@ sr_ai_mission_guard_share = 0.75
 # it: the guard holds a step down for at most this many monthly reviews past
 # the six-month count. Three years: longer than the 26 months between Mars
 # launch windows, so a real wait for a window is never cut. Set it very high
-# to remove the cap. Still open for the owner (ai.md § Space Program Mission
-# Budget).
+# to remove the cap. Kept at three years by the owner, 2026-11-16 (ai.md §
+# Space Program Mission Budget).
 sr_ai_mission_guard_months_limit = 36
 
 # sr_funding_throughput's building_space_program_throughput_add
