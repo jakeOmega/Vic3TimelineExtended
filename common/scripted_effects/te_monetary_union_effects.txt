@@ -336,22 +336,19 @@ te_monetary_update_union = {
 	# Not on holdouts. A supervisor examines the banks inside the currency area;
 	# a member that kept its own money kept its own supervisor with it.
 	#
-	# [2026-11-14] The issuer's own banks are inside it too, UNLESS ITS LAW IS
-	# UNREGULATED BANKING (te_mon_union_issuer_has_regulator): the modifier
+	# [2026-11-14] The issuer's own banks are inside it too.
+	#
+	# NOBODY UNDER UNREGULATED BANKING (te_mon_union_has_regulator): the modifier
 	# carries an intervention point, and one point more is what opens that law
-	# the tools its budget denies it. An adopter under the same law keeps the
-	# modifier, as it always has.
+	# the tools its budget denies it. Asked of the issuer since 2026-11-14 and of
+	# an adopter since 2026-11-15 (#1812): until then an adopter under that law
+	# kept the modifier and reached 3 points. One trigger for both sides
+	# (te_mon_union_in_banking_union), so the two cannot drift apart again. A
+	# country that enacts Unregulated Banking loses the modifier on its next
+	# pulse, and banking_crash_check_overdrawn_interventions lifts what the
+	# smaller budget no longer covers, one tool a month.
 	if = {
-		limit = {
-			te_mon_bloc_union_tier_4_plus = yes
-			OR = {
-				te_mon_is_union_adopter = yes
-				AND = {
-					te_mon_union_is_issuer = yes
-					te_mon_union_issuer_has_regulator = yes
-				}
-			}
-		}
+		limit = { te_mon_union_in_banking_union = yes }
 		if = {
 			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } }
 			te_mon_mod_add = { NAME = te_mon_union_banking_union }

@@ -8530,8 +8530,10 @@ te_mon_peg_broken_premium = {
 # --- 5c: subject currency boards (§15A.4). All three MANAGED, applied only by
 # te_monetary_apply_board_modifiers (step 9b).
 
-# On a subject while its currency board is in force (kind 3). Half its minting
-# goes to the overlord; -0.5 is te_mon_board_seigniorage_share restated.
+# On a subject while its currency board is in force (kind 3). Half of what it
+# mints before its bonuses goes to the overlord: fifty points off its
+# multiplier here, and half its flat sum added on the overlord
+# (te_mon_board_seigniorage). -0.5 is te_mon_board_seigniorage_share restated.
 te_mon_board_subject = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_minting_mult = -0.5
@@ -8558,14 +8560,18 @@ te_mon_board_wrong_stance = {
 # THE ADOPTERS' THREE (te_mon_union_adopter, _banking_union, _reserve) ARE ALSO
 # ON THE ISSUER since 2026-11-14 (§0.14): the leader of a bloc whose currency a
 # member has adopted uses that currency too (te_mon_uses_common_currency), so
-# it carries the same modifiers at the same figures; the banking union only
-# where its own banking law is not Unregulated Banking.
+# it carries the same modifiers at the same figures. The banking union reaches
+# neither side under Unregulated Banking (te_mon_union_in_banking_union; the
+# issuer since 2026-11-14, an adopter since 2026-11-15, #1812).
 
 # MANAGED, flat; on an ADOPTER while kind = 2, and on the issuer
-# (te_monetary_update_union). One money, no conversion: the design's
-# "state_trade_advantage_mult +0.05" names a modifier type that did not exist
-# when this shipped, so it is the export / import pair phase 4 already uses
-# (§0.8 ruling G9).
+# (te_monetary_update_union). One money, no conversion. The design asked for
+# "state_trade_advantage_mult +0.05"; this is the export / import pair phase 4
+# already uses (§0.8 ruling G9). The ruling's reason, that the overall type
+# did not exist, was wrong (it did, and vanilla's External Trade principles
+# carry it: corrected 2026-11-15, #1812). The pair stays until one look in
+# game shows the overall figure counts the same both ways; the ruling says
+# what to read and what a switch touches.
 te_mon_union_adopter = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_export_advantage_mult = 0.05
@@ -8573,7 +8579,7 @@ te_mon_union_adopter = {
 }
 
 # MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 4
-# (the banking union).
+# (the banking union) and its own banking law is not Unregulated Banking.
 # One supervisor and one deposit guarantee across the whole currency area: the
 # cycle is steadier, crashes are rarer, and there is one more intervention in
 # reserve for when one comes anyway. The other half of the tier — contagion

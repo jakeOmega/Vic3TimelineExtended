@@ -6008,8 +6008,8 @@
   "es": "resistiéndose — #R bajo presión#!"
  },
  "banking_dash_mon_union_tt": {
-  "en": "#header Monetary Union#!\\nWhere the country stands in its power bloc's monetary principle. Its tiers do not stack: each includes the one before.[Country.GetCustom('te_mon_union_issuer_note')]",
-  "es": "#header Unión monetaria#!\\nDónde se sitúa el país en el principio monetario de su bloque de poder. Sus niveles no se acumulan: cada uno incluye el anterior.[Country.GetCustom('te_mon_union_issuer_note')]"
+  "en": "#header Monetary Union#!\\nWhere the country stands in its power bloc's monetary principle. Its tiers do not stack: each includes the one before.[Country.GetCustom('te_mon_union_issuer_note')][Country.GetCustom('te_mon_union_regulator_note')]",
+  "es": "#header Unión monetaria#!\\nDónde se sitúa el país en el principio monetario de su bloque de poder. Sus niveles no se acumulan: cada uno incluye el anterior.[Country.GetCustom('te_mon_union_issuer_note')][Country.GetCustom('te_mon_union_regulator_note')]"
  },
  "banking_dash_mon_wage_tt": {
   "en": "#header $country_wage_pressure_add$#!\\nHow far above expectations inflation settles while the country's labor and welfare laws stand. What they pay back while prices are stable is under [concept_banking_wage_pressure].\\n$TOOLTIP_DELIMITER$\\n#title What the laws come to:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_wage_pressure_add')]",
