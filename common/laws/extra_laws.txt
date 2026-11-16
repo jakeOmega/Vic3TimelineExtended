@@ -1858,16 +1858,6 @@ law_medical_augmentation_only = {
 	}
 
 	progressiveness = 60
-
-	ai_enact_weight_modifier = {
-		value = 0
-
-		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
-		if = {
-			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_health_system } }
-			add = te_ai_unstaffed_institution_law_weight
-		}
-	}
 }
 
 law_regulated_augmentation_market = {
@@ -1901,16 +1891,6 @@ law_regulated_augmentation_market = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT }
-	}
-
-	ai_enact_weight_modifier = {
-		value = 0
-
-		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
-		if = {
-			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_consumer_protection } }
-			add = te_ai_unstaffed_institution_law_weight
-		}
 	}
 }
 
@@ -1952,16 +1932,6 @@ law_mandatory_augmentation = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT }
-	}
-
-	ai_enact_weight_modifier = {
-		value = 0
-
-		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
-		if = {
-			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_war } }
-			add = te_ai_unstaffed_institution_law_weight
-		}
 	}
 }
 
@@ -3135,16 +3105,6 @@ law_central_bank_independence = {
 		# +/-0.5pp. Read by te_mon_forecast_error_bound. This advertises the
 		# WIDTH of the error band, never the error itself (§8).
 		country_bank_forecast_error_add = -0.01
-	}
-
-	ai_enact_weight_modifier = {
-		value = 0
-
-		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
-		if = {
-			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_national_bank } }
-			add = te_ai_unstaffed_institution_law_weight
-		}
 	}
 }
 
