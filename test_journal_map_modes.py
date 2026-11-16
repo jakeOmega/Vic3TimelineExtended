@@ -294,7 +294,7 @@ class MapRoomTest(unittest.TestCase):
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
         # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 47)), "one pick per selector, 2 unused")
+        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 48)), "one pick per selector, 2 unused")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -1018,6 +1018,57 @@ class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
         self.assertIn("TE_SELF_CHECK BROKEN invest_rate", body)
         playtest = read("docs/testing/journal-map-modes-playtest.md")
         self.assertIn("invest_rate", playtest)
+
+class PopulationDensityMapTest(_RoomBranches, unittest.TestCase):
+    """Population Density (2026-11-16): people per km² of land, from the engine's people and the region area table."""
+
+    def test_the_paint_and_the_hover(self):
+        colors = self.of(self.colors, 47)
+        self.assertEqual([limit for limit, _ in colors],
+                         ["te_jmap_selector = 47 te_jmap_density > 0", "te_jmap_selector = 47"])
+        self.assertIn("factor = te_jmap_density_factor", colors[0][1])
+        self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a state with no people is pale")
+        # whole people per km² from 10, hundredths below, where whole numbers would read 0
+        hover = self.of(self.hover, 47)
+        self.assertEqual([(limit, body) for limit, body in hover],
+                         [("te_jmap_selector = 47 te_jmap_density >= 10", "custom_tooltip_no_bullet = te_jmap_tt_density"),
+                          ("te_jmap_selector = 47 te_jmap_density > 0",
+                           "custom_tooltip_no_bullet = te_jmap_tt_density_sparse"),
+                          ("te_jmap_selector = 47", "custom_tooltip_no_bullet = te_jmap_tt_density_none")])
+        loc = loc_values()
+        for key, fmt in (("te_jmap_tt_density", "0"), ("te_jmap_tt_density_sparse", "2")):
+            self.assertIn(f"ScriptValue('te_jmap_density')|{fmt}]", loc[key], key)
+            self.assertIn("ScriptValue('te_jmap_density_area')", loc[key], key)
+
+    def test_the_figure_is_the_state_s_people_over_its_share_of_the_region_s_land(self):
+        values = code(VALUES)
+        area = " ".join(block(values, "te_jmap_density_area").split())
+        # the region's area from the table, read only once it is written
+        self.assertIn("limit = { state_region = { has_variable = te_region_area } } value = te_region_area_km2", area)
+        # shared out by province, so a split region's parts don't each claim the whole
+        self.assertIn("divide = { value = state_region.num_provinces min = 1 } multiply = num_provinces", area)
+        density = " ".join(block(values, "te_jmap_density").split())
+        # the bareword head reads state_population (scripting_best_practices.md: a nested read can resolve to none)
+        self.assertTrue(density.startswith("value = state_population divide = { value = te_jmap_density_area min = 1 }"),
+                        density)
+        self.assertIn("if = { limit = { te_jmap_density_area < 1 } value = 0 }", density)
+        # cheap reads only: the paint walks nothing
+        for body in (area, density):
+            self.assertNotRegex(body, r"\b(?:every|any|ordered|random)_", body)
+        # the table it reads is written at the game's start
+        self.assertIn("te_region_area_on_action", block(code("common/on_actions/te_region_area_on_actions.txt"),
+                                                        "on_game_started"))
+
+    def test_it_sits_with_the_cities(self):
+        row = block(code(WIDGETS), "te_jmap_pick_row")
+        at = row.index('text = "te_jmap_pick_population_density"')
+        inner = enclosing_span(row, at)[0] - 1
+        self.assertEqual(re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner)),
+                         ["tourism_appeal", "city_rank", "population_density"])
+        migration = CategoriesTest.CATEGORIES.index("migration")
+        bodies = [enclosing(row, m.end()) for m in re.finditer(r"\bte_jmap_category\s*=\s*\{", row)]
+        self.assertIn('text = "te_jmap_pick_population_density"', bodies[migration])
+
 
 class CategoriesTest(unittest.TestCase):
     """The Map Room's picks in seven collapsible categories (owner's ask, 2026-11-11)."""
@@ -1864,7 +1915,7 @@ class PickTooltipTest(_RoomBranches, unittest.TestCase):
 
     def test_every_pick_has_one_tooltip(self):
         picks = self.picks()
-        self.assertEqual(len(picks), 35)
+        self.assertEqual(len(picks), 36)
         for key in sorted(set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))):
             self.assertIn(f'tooltip = "{key}_desc"', self.row, key)
         self.assertNotIn("SelectLocalization", self.row, "a pick's tooltip chooses its own parts")
