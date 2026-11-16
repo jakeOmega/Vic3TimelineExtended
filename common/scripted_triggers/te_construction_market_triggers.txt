@@ -37,11 +37,13 @@ te_construction_market_budget_mode_on = {
 }
 
 # Short of bureaucracy with a Government Administration level in the
-# construction queue: the one case in which an AI goes on buying construction
-# while the engine reports its construction paused
-# (te_construction_market_ai_purchase_target). The shortage is tested first, so
-# only a country that is short walks its buildings. Two reads of "in the
-# queue", either of which will do:
+# construction queue. The AI probe's cm_admin reads it
+# (common/script_values/te_ai_probe_values.txt, from
+# scripts/generators/gen_ai_probe.py). The AI's purchase read it while it
+# bought through the engine's pause for such a country, which was removed on
+# 2026-11-16 (te_construction_market_ai_values.txt); nothing else calls it.
+# The shortage is tested first, so only a country that is short walks its
+# buildings. Two reads of "in the queue", either of which will do:
 #   - level_after_queued_constructions above level: the engine's count of a
 #     building's levels once its queued constructions finish, which the mod
 #     reads for queued levels elsewhere (a queued building exists at once at

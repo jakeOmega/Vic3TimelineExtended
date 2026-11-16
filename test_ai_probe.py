@@ -468,17 +468,19 @@ class ReportPartsTest(unittest.TestCase):
 
         import test_construction_market_ai_purchase as purchase
         count = 0
-        for (fixed, price), share, (reserves, debt), bureaucracy, paused, war, bubble, (queued, weekly), halls in \
+        # cm_admin (short of bureaucracy with an administration queued) is no term of the purchase since the
+        # purchase through the engine's pause was removed (2026-11-16): the restatement gives the script's figure
+        # whichever way the field reads.
+        for (fixed, price), share, (reserves, debt), bureaucracy, paused, war, bubble, (queued, weekly), admin in \
                 itertools.product(((857.0, 1249.0), (75817.0, 1256.0)), (-0.25, 0.03, 0.33),
                                   ((0.0, 0.0), (0.04, 0.0), (0.6, 0.0), (0.0, 0.3), (0.0, 0.45)), (50.0, -5.0),
                                   (False, True), (False, True), (None, 60.0), ((0, 20.0), (1, 10.0), (3, 140.0)),
-                                  ((), purchase.administration())):
+                                  (0, 1)):
             c = purchase.Country(fixed, share * fixed, price, reserves, debt, bureaucracy, queued, weekly,
-                                 paused=paused, at_war=war, bubble=bubble, buildings=halls)
+                                 paused=paused, at_war=war, bubble=bubble)
             record = {"cm_price": price, "fixed_income": fixed, "net_fixed": share * fixed, "gold_scaled": reserves,
                       "debt_scaled": debt, "queue_gov": queued, "cm_level_max": weekly, "paused": int(paused),
-                      "war": int(war), "bubble": bubble or 0, "bur": bureaucracy,
-                      "cm_admin": int(bureaucracy < 0 and c.administration_in_queue())}
+                      "war": int(war), "bubble": bubble or 0, "bur": bureaucracy, "cm_admin": admin}
             count += 1
             with self.subTest(record=record):
                 self.assertAlmostEqual(ai_probe_report.purchase_target(record), c.script(), delta=purchase.STEP)

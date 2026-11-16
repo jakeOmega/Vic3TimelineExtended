@@ -612,7 +612,9 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         read("companies_max", "max_num_companies"),
         # Version 2: what te_construction_market_ai_purchase_target reads that the fields above lack, so the
         # purchase can be recomputed from a snapshot (ai_probe_report.py purchase_target): the banking brake's
-        # bubble pressure, the weekly maximum a queued level takes, and the paused-administration exception.
+        # bubble pressure and the weekly maximum a queued level takes. cm_admin, a country short of bureaucracy
+        # with a Government Administration queued, was a term too until the purchase through the engine's pause
+        # was removed (2026-11-16); it stays as a field of its own.
         variable("bubble", "bubble_pressure", 1),
         read("cm_level_max", "modifier:country_max_weekly_construction_progress_add", 2),
         flag("cm_admin", "te_construction_market_ai_building_administration = yes"),

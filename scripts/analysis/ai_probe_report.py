@@ -541,7 +541,9 @@ def check_construction_sector(key: dict, records: list[dict]) -> tuple[list[str]
 def purchase_target(r: dict):
     """te_construction_market_ai_purchase_target (common/script_values/te_construction_market_ai_values.txt)
     restated over a snapshot's fields, None where the snapshot lacks a term (version 1). Script `min = X` raises
-    the value to X, `max = X` lowers it to X."""
+    the value to X, `max = X` lowers it to X. A paused country buys nothing, whatever `cm_admin` reads: the purchase
+    through the pause for a queued administration was removed on 2026-11-16, so a log from a build that still had it
+    differs on the rows of a paused country with `cm_admin` 1."""
     if "cm_level_max" not in r or num(r, "cm_price") <= 0:
         return None
     price = num(r, "cm_price")
@@ -561,8 +563,6 @@ def purchase_target(r: dict):
         if num(r, "bur") < 0:
             floor += bureaucracy_buy
         return min(max(value, floor), queue * level_max)
-    if queue > 0 and num(r, "cm_admin") == 1:
-        return min(bureaucracy_buy, level_max)
     return 0.0
 
 

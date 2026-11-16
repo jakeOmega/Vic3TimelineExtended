@@ -32,7 +32,6 @@ te_construction_market_on_weekly_pulse = {
 				is_ai = yes
 			}
 			te_construction_market_ai_update_buy = yes
-			te_construction_market_ai_admin_paused_selfcheck = yes
 		}
 		# Last, after the sites are sized; see the effect for why.
 		te_construction_market_ensure_site = yes
