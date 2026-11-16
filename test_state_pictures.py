@@ -267,6 +267,8 @@ class TestRegistry(unittest.TestCase):
         for key in r.PICTURES:
             for terrain in r.terrains(key):
                 self.assertLess(r.weight(key, terrain), 2 ** 24, key)
+        # a megacity's place sits between a character and prosperity, and is part of the bound below
+        self.assertLessEqual(r.W_MEGACITY, 9 * r.W_UPKEEP)
         # a great city's takeover stands above the oil field's and under the lowest condition
         most = 9 * r.W_RUNG + 9 * r.W_CHAR + 9 * r.W_UPKEEP + 9 * r.W_MEANS + 99
         self.assertLess(r.W_OVER + most, r.W_CITY_OVER)
@@ -429,6 +431,34 @@ class TestRegistry(unittest.TestCase):
         top_region = registry.W_REGION * max(d for _lines, d in registry.REGIONS.values())
         self.assertGreater(registry.W_RUNG, registry.W_SIZE * max(digits) + top_region)
         self.assertGreater(registry.W_SIZE, top_region)
+
+    def test_a_megacity_outranks_prosperity_and_a_metropolis_does_not(self):
+        # the owner, 2026-11-16: a megacity shows whatever its standard of living. A run-down, a poor
+        # or an affluent street still outranks a town or a metropolis, and a character outranks all.
+        # The city's own list decides; every takeover list keeps its order (a test above).
+        r = registry
+        city = {k: p for k, p in r.PICTURES.items() if r.CITY_TERRAIN in p["terrain"]}
+        megacities = [k for k, p in city.items() if p["size"] == r.MEGACITY]
+        self.assertEqual(len(megacities), 24)  # eight families on rungs 3 to 5
+        prosperity = [k for k, p in city.items() if p.get("upkeep") or p.get("means")]
+        smaller = [k for k, p in city.items() if p["size"] in ("town", "metropolis")]
+        plain = [k for k, p in city.items() if not (p["size"] or p.get("upkeep") or p.get("means")
+                                                    or p.get("character") or p.get("condition"))]
+        above = [k for k, p in city.items() if p.get("character") or p.get("condition")]
+        self.assertTrue(prosperity and smaller and plain and above)
+        for mega in megacities:
+            rung = city[mega]["rung"]
+            for group, expect in ((prosperity, True), (smaller, True), (plain, True), (above, False)):
+                for other in group:
+                    if city[other]["rung"] == rung:
+                        with self.subTest(mega, other=other):
+                            self.assertEqual(r.weight(mega) > r.weight(other), expect)
+        # what stays as it was: prosperity over a town or a metropolis, on every rung
+        for other in prosperity:
+            for small in smaller:
+                if city[small]["rung"] == city[other]["rung"]:
+                    with self.subTest(other, small=small):
+                        self.assertGreater(r.weight(other), r.weight(small))
 
     def test_the_size_conditions_read_the_pass_variable(self):
         effects = EFFECTS.read_text(encoding="utf-8-sig")
@@ -863,10 +893,18 @@ class TestYearlyPass(unittest.TestCase):
                 self.assertIn(d["variant"], {"size": r.SIZES, "means": r.MEANS, "upkeep": r.UPKEEP}[axis])
                 self.assertIn(r.CITY_LANDMARK[d["region"]], d["prompt"])
                 self.assertFalse(d["variant"] == "megacity" and d["rung"] < 3)
-        # run-down over poor or affluent over any size over the plain street, all under a character
+        # a megacity over run-down over poor or affluent over a town or a metropolis over the plain
+        # street, all under a character
         self.assertLess(9 * r.W_SIZE + 9 * r.W_REGION, r.W_MEANS)
         self.assertLess(9 * r.W_MEANS + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_UPKEEP)
         self.assertLess(9 * r.W_UPKEEP + 9 * r.W_MEANS + 9 * r.W_SIZE + 9 * r.W_REGION, r.W_CHAR)
+        # a megacity's place sits inside the upkeep's range, so the proof reads the digits the tables use
+        under = (r.W_UPKEEP * max(d for _l, d in r.UPKEEP.values())
+                 + r.W_MEANS * max(d for _l, d in r.MEANS.values())
+                 + r.W_SIZE * max(d for name, (_l, d) in r.SIZES.items() if name != r.MEGACITY)
+                 + 9 * r.W_REGION)
+        self.assertLess(under, r.W_MEGACITY)
+        self.assertLess(r.W_MEGACITY + 9 * r.W_REGION, r.W_CHAR)
         effects = EFFECTS.read_text(encoding="utf-8-sig")
         for tag in ("te_sp_means", "te_sp_rundown"):
             self.assertIn(f"name = {tag} value", effects)
