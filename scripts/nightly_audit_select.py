@@ -216,7 +216,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/company_types/*.txt": "input to gen_company_building_cleanup.py — hand-authored company definitions",
     "common/modifier_type_definitions/tech_gate_modifier_types.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored modifier defs",
     "common/modifier_type_definitions/mod_entity_modifier_types.txt": "referenced by resources.py as the registration target for mining throughput modifiers; bodies hand-authored",
-    "common/power_bloc_principles/extra_power_bloc_principles.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored",
+    "common/power_bloc_principles/*.txt": "input to gen_pb_principle_unlock_descs.py — hand-authored",
     "common/state_traits/te_mining_traits.txt": "trait definitions hand-authored; resources.py only references trait names when injecting state_regions/*.txt",
     "common/scripted_buttons/un_buttons.txt": "input to gen_un_button_descs.py — button bodies hand-authored; generator only reads each button's modifiers to produce te_un_button_effects_l_english.yml",
     "common/script_values/covert_warfare_script_values.txt": "input to gen_covert_tech_theft.py (theft share, phase/priority multipliers) — hand-authored",

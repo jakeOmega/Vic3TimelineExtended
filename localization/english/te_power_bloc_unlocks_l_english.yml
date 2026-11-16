@@ -1,4 +1,8 @@
 ﻿l_english:
+
+#
+# POWER_BLOC_UNLOCKS
+#
  country_advanced_agri_stats_pb_principles_bool:0 "Enables [GetTechnology('advanced_agricultural_statistics').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]"
  country_advanced_agri_stats_pb_principles_bool_desc:0 "Unlocks tier IV [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_rural').GetName] [concept_power_bloc_principle_group] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')]."
  country_anti_war_pb_principles_bool:0 "Enables [GetTechnology('anti_war_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]"
