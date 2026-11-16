@@ -299,8 +299,9 @@ te_mon_uses_common_currency = {
 }
 
 # Has this country a regulator for the union to work through? Every banking law
-# but Unregulated Banking. That law's whole identity is its budget: with the
-# national bank a leader or an adopter must have it holds 2 points, and its
+# but Unregulated Banking. That law's whole identity is its budget: with a
+# national bank it holds 2 points (a leader must have one; a member needs one
+# to adopt, te_mon_union_regime_fits, though not to stay), and its
 # unlocked tools cost 3 (Bail-in Regime, Infrastructure and Armaments credit,
 # Emergency Import Financing) and 4 (Open-Market Operations, the Deposit
 # Guarantee, Emergency Liquidity, Heavy Industry credit), so a single point

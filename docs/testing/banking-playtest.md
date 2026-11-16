@@ -575,3 +575,46 @@ Core inflation is hidden, so read it with the console event `te_debug_monetary.1
 2. **The gap narrows.** Over three years after adopting, an adopter that joined 2 to 3 points above its leader comes
    within about a point and a half, its own pressures permitting, and its Price Band follows. A treaty pegger and a
    currency-board subject keep their own inflation as before.
+
+## Leftovers of the monetary layer (2026-11-15, #1812)
+
+Five things left over from the Monetary Union's leader benefits (`monetary_policy_design.md` § 0.16). The script and
+the texts are held offline by `test_monetary_union_leader.py` (`RegulatorTest`, `OtherMintingFiguresTest`); these
+are what only the game shows. No self-check: the change rests on no engine fact the mod does not already use the same
+way (a law test in a scripted trigger; a scripted trigger in a custom localization's `trigger`).
+
+1. **An adopter under Unregulated Banking is outside the banking union.** In a bloc at Monetary Union tier IV or V,
+   find an adopter under Unregulated Banking (in the owner's 1958 Singapore save: ACE, E94, F11, SIA and five more).
+   Its banking entry has Common Currency and Common Capital Market and **no Banking Union**; its budget's total is the
+   law's 1, and the national bank's 1 where it still has one. An adopter under any other banking law still has Banking Union.
+2. **Loading a game from before the change.** Within a month every such adopter loses Banking Union. One whose
+   tools then hold more points than its budget has (a Bail-in Regime, Infrastructure or Armaments credit or Emergency
+   Import Financing, 3 points each, on a budget of 2) is overdrawn, and a tool is lifted the month after, as in "A common currency pays its issuer",
+   check 5. For the player's own country the "Intervention Budget Overdrawn" notice names the tool; the AI is told
+   nothing. If a tool stays on an overdrawn budget for more than two months, the overdraft chain is not reaching it.
+3. **The row says why.** Hover the Monetary Union row of a country that is in the currency at tier IV or V under
+   Unregulated Banking, as that country or as an observer: the tooltip ends, after a divider, with "Outside the
+   banking union." in bold and one sentence naming Unregulated Banking. A country under another banking law, a
+   holdout, and any country in a bloc below tier IV show no such line. A leader that is also the issuer reads its
+   issuer's note first and this one after it.
+4. **The principle's tooltip.** On Monetary Union IV and V, hover "Common Currency Intervention Budget", "Common
+   Currency Banking Crash Likelihood", "Common Currency Banking Cycle Volatility" and the Banking Union checkmark:
+   each names Unregulated Banking as the exception for every country using the currency, not for the leader alone.
+5. **Trade advantage: one line or two (ruling G9).** The adopter's Common Currency modifier carries "+5% Trade
+   Advantage for Exports" and "+5% Trade Advantage for Imports"; the design asked for one "+5% Trade Advantage". To
+   decide the switch, open a trade center's advantage breakdown for an export and for an import in two countries: an
+   adopter, and a country in a bloc with External Trade (which gives the overall "Trade Advantage" +25%). If the
+   overall figure appears in both the export and the import breakdown, in the same list as the directional ones and
+   added the same way, the two forms are the same benefit and the switch is safe (G9 lists what it touches). If the
+   overall figure is applied apart from them, or to one direction only, keep the pair.
+6. **Monetizing the Deficit says "before minting bonuses".** With Monetize Deficit at 1 or more, the step's tooltip
+   line "Money Created a Year, of GDP" and the Monetizing the Deficit modifier each say the figure is before the
+   country's bonuses to Minting, with Minting linked. Check the budget: the minting line rises by the modifier's
+   figure times (1 + the bonus the minting tooltip lists), not by the figure itself. The step's description names
+   two inflation bands through their modifiers' own names, which read "Inflation: Very High" and "Inflation:
+   Hyperinflation" in mid-sentence: if that reads badly, the bands need short names of their own to splice.
+7. **Currency-board seigniorage.** An overlord with a currency-board subject: the Seigniorage from Currency Boards
+   modifier's figure is half the subject's minting before the subject's bonuses (for a subject above 200M of GDP
+   with no gold, 100,250 a week), and the overlord's minting line rises by that times (1 + the overlord's bonus).
+   The subject's own "why" line under its policy rate says half of what it mints before its bonuses goes to the
+   overlord.

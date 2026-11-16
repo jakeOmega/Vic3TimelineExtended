@@ -8563,10 +8563,13 @@ te_mon_board_wrong_stance = {
 # issuer since 2026-11-14, an adopter since 2026-11-15, #1812).
 
 # MANAGED, flat; on an ADOPTER while kind = 2, and on the issuer
-# (te_monetary_update_union). One money, no conversion: the design's
-# "state_trade_advantage_mult +0.05" names a modifier type that did not exist
-# when this shipped, so it is the export / import pair phase 4 already uses
-# (§0.8 ruling G9).
+# (te_monetary_update_union). One money, no conversion. The design asked for
+# "state_trade_advantage_mult +0.05"; this is the export / import pair phase 4
+# already uses (§0.8 ruling G9). The ruling's reason, that the overall type
+# did not exist, was wrong (it did, and vanilla's External Trade principles
+# carry it: corrected 2026-11-15, #1812). The pair stays until one look in
+# game shows the overall figure counts the same both ways; the ruling says
+# what to read and what a switch touches.
 te_mon_union_adopter = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_export_advantage_mult = 0.05

@@ -1660,5 +1660,74 @@ class MintingBonusTest(unittest.TestCase):
                         .startswith("$banking_dash_mon_union_issuer_note$"))
 
 
+
+class OtherMintingFiguresTest(MintingBonusTest):
+    """The same rule for the two other figures the mod pays as a flat minting add (#1812, item 5):
+    Monetizing the Deficit and the overlord's currency-board seigniorage. The engine multiplies
+    each by 1 + country_minting_mult, as it does the union's seigniorage, so a text that gives
+    the figure must say it is before those bonuses. PR #1810 said so for the union's only.
+
+    Inherits MintingBonusTest's readers and its tests, which then run a second time here."""
+
+    def static(self, name):
+        return [(k, v) for k, _, v in definitions(MODIFIERS)[name] if k != "icon"]
+
+    def test_both_are_flat_minting_adds(self):
+        # The premise: paid any other way, "before bonuses" would be the wrong thing to say.
+        for name in ("te_monetisation_minting", "te_mon_board_seigniorage"):
+            with self.subTest(modifier=name):
+                self.assertEqual(self.static(name), [("country_minting_add", "1")])
+
+    def test_each_stated_figure_is_named_as_before_the_bonuses(self):
+        for key, phrase in (("country_te_mon_minting_gdp_add_desc", "before your bonuses to [concept_budget_minting]"),
+                            ("te_monetisation_minting_desc", "before your bonuses to [concept_budget_minting]"),
+                            ("te_mon_bond_support_tt", "before our bonuses to [concept_budget_minting]"),
+                            ("te_mon_board_seigniorage_desc", "before our bonuses to [concept_budget_minting]")):
+            with self.subTest(key=key):
+                self.assertIn(phrase, self.loc[key])
+
+    def test_the_step_states_its_share_of_gdp_and_the_text_qualifies_it(self):
+        # The one percent is the display field's and the script value's; the qualifier follows it.
+        values = definitions("common/script_values/te_monetary_script_values.txt")
+        share = float(field(values["te_mon_monetisation_gdp_share"], "value"))
+        step = dict(self.static("te_mon_monetisation_step"))
+        self.assertEqual(float(step["country_te_mon_minting_gdp_add"]), share)
+        tooltip = self.loc["te_mon_bond_support_tt"]
+        figure = f"#b {share * 100:g}%#!"
+        self.assertLess(tooltip.index(figure), tooltip.index("before our bonuses"))
+
+    def test_the_monetizers_ceiling_is_the_laws_and_the_technologies(self):
+        top = self.ceiling()
+        desc = self.loc["country_te_mon_minting_gdp_add_desc"]
+        self.assertIn(f"with $law_digital_currency$ and all five finance technologies you mint #v {top * 100:g}%#! more", desc)
+        # A monetizer is on Fiat Money or Digital Currency, so the dearer law's bonus is reachable.
+        triggers = definitions("common/scripted_triggers/te_monetary_triggers.txt")
+        self.assertIn(("OR", "=", [("has_law_or_variant", "=", "law_type:law_fiat_currency"),
+                                   ("has_law_or_variant", "=", "law_type:law_digital_currency")]),
+                      triggers["te_mon_can_monetise"])
+        # ...and the two bands the text names are the two that cut minting.
+        for band in ("te_inflation_band_very_high", "te_inflation_band_hyper"):
+            self.assertIn(f"${band}$", desc)
+            self.assertIn(band, self.loc)
+            self.assertLess(float(dict(self.static(band))[self.KEY]), 0)
+
+    def test_the_board_takes_half_of_the_flat_sum_from_each_side(self):
+        # The overlord's half is half the subject's flat adds, read before any multiplier; the
+        # subject's half is fifty points off its multiplier. "Half of what it mints before its
+        # bonuses" is true of both, and "half its minting" of neither once the subject has bonuses.
+        values = definitions("common/script_values/te_monetary_arrangement_script_values.txt")
+        share = float(field(values["te_mon_board_seigniorage_share"], "value"))
+        self.assertEqual(share, 0.5)
+        self.assertEqual(values["te_mon_board_seigniorage_from_subject"][0], ("value", "=", "modifier:country_minting_add"))
+        self.assertEqual(self.static("te_mon_board_subject"), [("country_minting_mult", f"{-share:g}")])
+        self.assertIn("mints before its own bonuses", self.loc["te_mon_board_seigniorage_desc"])
+        self.assertIn("half of what the country mints before its bonuses", self.loc["banking_dash_mon_why_board"])
+        guide = " ".join((ROOT / "docs/player_guide/04-banking.md").read_text(encoding="utf-8").split())
+        self.assertIn("half of what the subject mints before its bonuses goes to the overlord", guide)
+
+    def test_the_guide_says_so_for_printing(self):
+        self.assertIn("Each level mints about 1% of a year's GDP before minting bonuses", self.guide)
+
+
 if __name__ == "__main__":
     unittest.main()

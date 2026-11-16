@@ -1375,7 +1375,7 @@ failures and no audit findings. File inventory and the architectural rules: `mod
 | **G6** | **A drawn swap line pays the recipient.** The provider's 0.1%-of-recipient-GDP monthly draw lands in the recipient's treasury | §15A.2 states only the draw. "Under gold a swap line *is* reserve lending" — money that leaves one treasury and arrives nowhere is a tax, not a loan. 1.2% of GDP a year, only while `te_mon_in_external_crisis` | delete the recipient's `add_treasury` |
 | **G7** | **Currency boards do not count toward the reserve-currency cut** | "per 5% of world GDP *pegged* to it": a board is imposed, not a vote of confidence, and counted, the East India Company alone would hand Britain the full −0.5 on day one | the `kind < 3` line in `te_monetary_refresh_anchored_gdp` |
 | **G8** | **No monetary term lives in an article's `source_modifier` / `target_modifier`, and there are three arrangement modifiers, not two.** `te_mon_arrangement_recipient` and `_provider` carry cyclical points as designed; a third, `te_mon_arrangement_standing`, carries the *structural* ones (the pegger's −0.5, the reserve currency's cut), because one multiplier cannot scale two fields differently. Articles carry prestige only | this **bypasses §17 check 14** rather than answering it (the §0.1 precedent for check 6) | — |
-| **G9** | **`state_trade_advantage_mult` does not exist.** An adopter gets `state_export_advantage_mult` and `state_import_advantage_mult` +0.05 each (`te_mon_union_adopter`) | the engine has only per-good `goods_trade_advantage_*`; the export / import pair is what phase 4 already uses | — |
+| **G9** | **An adopter gets `state_export_advantage_mult` and `state_import_advantage_mult` +0.05 each (`te_mon_union_adopter`), not §15A.3's `state_trade_advantage_mult` +0.05.** ~~`state_trade_advantage_mult` does not exist.~~ **Corrected 2026-11-15 (#1812): it exists, and did when this was written.** Vanilla defines it (`common/modifier_type_definitions/00_modifier_types.txt`, "Trade Advantage"; the two used here are "Trade Advantage for Exports" and "for Imports") and puts it on External Trade I to III at +0.25; the mod's own principles and laws files used it nine times in the commit before phase 5. `scripts/query.py modifier-search state_trade_advantage_mult` lists 73 entities. | ~~the engine has only per-good `goods_trade_advantage_*`~~; the export / import pair is what phase 4 already uses, and there it has to be a pair: `te_fx_weak` and `te_fx_strong` move the two in opposite directions. **The pair was kept in #1812, as a judgment call for the owner.** One overall line is what the design asked for and what the principle's own tooltip prints ("+5% Common Currency Trade Advantage"), but whether the engine adds the overall figure into the same sum as the directional ones, so that +5% overall is +5% each way for a country with other trade bonuses, has not been seen in game, and neither form has been seen applied from the banking entry (T-7). `docs/testing/banking-playtest.md` § "Leftovers of the monetary layer" has the one look that settles it | the two fields in `te_mon_union_adopter` and `te_mon_union_reserve`, the loc that says "export and import advantage" (three keys and the guide's tier table), `gen_nation_tab.py` rerun |
 | **G10** | **The union's tier is read through `has_principle`, and "cohesion per adopter" is per member.** The three `power_bloc_*_bool` markers exist for the principle tooltip only; `power_bloc_cohesion_per_member_add = 1` sits on tiers 2–3 | **bypasses §17 check 16** (`has_principle` has vanilla script precedent). And no script can put a modifier on a bloc, so a per-adopter cohesion term cannot be applied; per-member is the nearest static form | — |
 | **G11** | **The Question fires on three of §15A.3's four triggers.** Pressure newly applied, criteria newly met and a tier change are one integer signature (`te_mon_union_q_state`); **a change of government in the holdout is not shipped**. `te_mon_union_last_asked` is a countdown (`te_mon_union_ask_cooldown`), not a date | there is no cheap government-change signature, and a date variable buys nothing a countdown does not | — |
 | **G12** | **"Panic severity inputs reduced" is one site**: an imported crash's `crash_severity` × 0.8 for a country with an effective backstop (treaty guarantee or tier-3 union) | origin crashes are rolled in generated events (`gen_banking_events.py`); the contagion path is script and is where a foreign guarantor plausibly matters | — |
@@ -2260,6 +2260,7 @@ credit is the same in every phase of the cycle (L11). Everything is script, appl
 | **L13** | **Reach needs an adopter at every tier, tier 5 included** (put to the owner on the review, who did not object) | as first built reach asked for a leader at tier 2 or above with a currency it could issue and a base above zero, and the tier-5 base counts treaty peggers. A tier-5 leader with a pegger and no adopter was therefore paid seigniorage and the cut, and the last adopter's exit took neither off. `te_mon_union_reach` now asks `te_mon_union_is_issuer`, whose live walk (L2) finds the adopter. Peggers still count toward the base once the leader is an issuer. **Before this work such a leader earned the old capped seigniorage, at most 1,000 pounds a week; it now earns nothing until a member adopts.** The owner knows |
 | **L14** | **The overdraft chain does nothing in a month when another step has lifted a tool** (review, finding B) | the chain is the last step of the banking entry's monthly pulse, and a modifier removed in an effect is still read by the rest of it. The Emergency Liquidity wind-down, the Outflow Controls cleanup and the directed-credit cap run before it and give points back, which the chain could not see: after a downgrade from Directed Credit to Universal Banking the cap lifted Agriculture credit, the budget was +1, and the chain lifted Moral Suasion on the old −1; in the wind-down's month it could close Emergency Liquidity a second time and pay the refund twice. Each such step now sets a variable where it lifts (`banking_overdraft_wait_a_pulse`; a variable write is visible at once) and the chain clears it and waits for the next month's true sum. The monetary update's lifts of External & Currency tools, run from the country's monthly on_action the same day, mark too: whether a removal there has reached the sum the chain reads is not verified, and the mark costs at most a month. L8 made this reachable from a law downgrade; the class existed before for the crash responses |
 | **L15** | **A player is told which tool an overdraft lifted** (review, finding C) | the budget can now be cut from outside (an adopter leaves, the bloc drops a tier), and a tool that went with no word read as a bug. Every branch of the chain posts a feed notice naming the tool by its own name and the cause; the Emergency Liquidity branch adds its refund. The AI is told nothing |
+| **L16** | **An adopter under Unregulated Banking is outside the banking union too** (2026-11-15, #1812; L6 asked it of the leader only) | the modifier carries a point, and that law's budget is its lock: 1, or 2 with a national bank (a member needs one to adopt, though the discovery does not ask for it afterwards), against the Bail-in Regime's 3. In the owner's 1958 save 9 of 57 adopters were under that law, each with `te_mon_union_banking_union` on its banking entry; of the four read, three (E94, F11, SIA) had a Bail-in Regime in force and the fourth (ACE) Infrastructure credit, each a 3-point tool (when each was switched on is not in a save). One trigger, `te_mon_union_in_banking_union`, now gates both sides; `te_mon_union_issuer_has_regulator` became `te_mon_union_has_regulator`. The adoption score counts the supervisor's +5 only where there is a regulator. **The leader's supervision cost for such an adopter and the shared currency's contagion damp are unchanged**, as L6 left them for an unregulated leader: both are keyed on the tier and the currency, not on the modifier. **In a running game** the modifier comes off on the adopter's next monthly pulse and the overdraft chain (L8) lifts what 2 points no longer cover, one tool a month |
 
 #### What four points buy, by banking law
 
@@ -2365,21 +2366,21 @@ fields and the loc follow by test.
 #### Known roughnesses (the leader's benefits)
 
 - **A tier-5 leader's reach counts imposed peggers** (above). Excluding them needs a second sum in
-  the global anchored-GDP pass.
-- **An adopter under Unregulated Banking still gets the banking union's point**, as it has since
-  tier 4 shipped, so it reaches 3 and the tools L6 names. Closing it is a change to the adopters'
-  side, which this work left alone.
+  the global anchored-GDP pass. **Still open, with what three saves show and what each answer
+  costs: § 0.16.**
+- ~~**An adopter under Unregulated Banking still gets the banking union's point**, as it has since
+  tier 4 shipped, so it reaches 3 and the tools L6 names.~~ **Closed 2026-11-15 (#1812, ruling L16).**
 - **The standing reserve-currency cut is still paid in standing**, to treaty anchors and to leaders
   alike, and is still swallowed at the floor. The tier-5 line of the tooltip names it as credit
-  standing.
+  standing. **Measured and left for the owner, 2026-11-15 (#1812): § 0.16.**
 - **The seigniorage is minting**, so the leader's own `country_minting_mult` scales it (L12): the
   figures are stated before it. The Very High inflation band takes 30 points off the bonus (1.75
   to 1.45, 1.6 to 1.3), not 30% off the seigniorage. The Monetary Union row's "with them" figure
   reads the multiplier from script (`modifier:country_minting_mult`), which has not been seen in
   game; the play-test list has the check and the fallback.
-- **Monetizing the Deficit is a flat minting add too** (`te_monetisation_minting`), so the same
-  bonuses multiply it, and its field "Money Created a Year, of GDP" is before them as well. Not
-  this work's; reported with it.
+- ~~**Monetizing the Deficit is a flat minting add too** (`te_monetisation_minting`), so the same
+  bonuses multiply it, and its field "Money Created a Year, of GDP" is before them as well.~~
+  **Stated 2026-11-15 (#1812), with the overlord's currency-board seigniorage: § 0.16.**
 - **The cut reaches the premium a month late**, like every modifier-borne term.
 - **Moral Suasion was stacked three times on Singapore's entry** in the save, holding 3 points. Not
   this work's: the dashboard's Enable tests "not already on" in `is_shown` only.
@@ -2434,6 +2435,97 @@ own stance and pull terms instead.
 
 **In-game check.** `docs/testing/banking-playtest.md` § "An adopter's inflation follows its
 leader's". **Not verified in a running game.**
+
+### 0.16 Five leftovers of the monetary layer — 2026-11-15 (#1812)
+
+Found while building § 0.14 and outside its scope. **Nothing below has been seen in a running game.**
+The saves are the owner's, read in place: Singapore 1958.2.27, Byzantium 2020.11.1, New York 1940.7.29.
+Countries are named from their tag's localization, with the tag beside it; a save can show a tag under another name.
+
+**1. An adopter under Unregulated Banking** is outside the banking union: ruling L16 above.
+
+**2. The reserve-currency standing cut at the credit floor: measured, not changed. An owner decision.**
+`te_mon_reserve_currency_cut` is credit standing, and standing is floored (§ 7.1), so an anchor on its
+floor gains nothing from it. § 0.14 gave the union's leader a separate cut in risk premium for that
+reason. Whether a plain treaty anchor should get one was looked at and **not built**, because what the
+floor swallows is very small for every plain anchor in three saves:
+
+| Save | Anchor | GDP pegged to it, of the world's | Cut, points | On its floor | What the cut would be worth a week | Of its income |
+|---|---|---|---|---|---|---|
+| New York 1940 | Prussia (PRU) | 4.97% | 0.099 | yes (0.5) | 7,500 | 0.21% |
+| Singapore 1958 | Italy (ITA) | 1.97% | 0.039 | yes (0.4) | 1,560 | 0.13% |
+| Singapore 1958 | Indonesia (IDN) | 1.58% | 0.032 | yes (0.5) | 2,900 | 0.48% |
+| Byzantium 2020 | North American Union (UNA) | 0.44% | 0.009 | yes (0.15) | nothing: see below | 0 |
+| New York 1940 | Brazil (BRZ), America (USA), Great Britain (GBR) | 0.32% to 0.44% | 0.006 to 0.009 | yes | nothing | 0 |
+| Singapore 1958 | Scandinavia (SCA) | 0.26% | 0.005 | yes (0.4) | nothing | 0 |
+| New York 1940 | India (BHA) | 0.04% | 0.001 | no (0.7 against 0.5) | nothing | 0 |
+
+Ten countries in the three saves have treaty peggers: Singapore, an issuer, and these nine plain
+anchors, eight of them on their floor. So the mechanism is as the issue says. But the rate, 0.1
+points per 5% of world GDP, pays a tenth of a point to the best case and 0.13% to 0.48% of income
+to the three it pays at all. **The other six are paid nothing whatever their standing**: a cut under 0.01 points is never applied (`te_monetary_apply_fx_one` removes a
+modifier below 0.01). The floor column is rebuilt from the law and the two technologies that move it
+(0.5, −0.25 under Central Bank Independence, −0.1 each for Machine Learning and Universal Digital
+Identity); it is not a figure in the save, though every standing value above sits exactly on it.
+Singapore itself (4.1% of the world anchored, 0.082 points) is an issuer with § 0.14's 0.391 points,
+which is the case § 0.14 already answered.
+
+Three ways to go, for the owner:
+
+| Option | What it does | What it pays the table's best case (Prussia) | Cost to build |
+|---|---|---|---|
+| A. Leave it | nothing | 0, as now | none |
+| B. Pay what the floor swallows as risk premium | a new managed modifier carries `min(cut, floor − standing before the floor)`, less the issuer's own cut for a union leader, so nobody is paid twice and nobody above the floor changes. **Not built, so not tested: the formula is a proposal** | 0.099 points, 7,500 a week | a static modifier, three variables in the contract and the civil-war classification, the strip list, the Nation tab registry, loc, tests: about what one of § 0.14's three modifiers took |
+| C. Raise the rate | `te_mon_reserve_currency_per_step`, say 0.1 to 0.5 a step with the cap moved to match | nothing more at the floor by itself; with B, 0.5 points and 37,000 a week (1% of income) | one line, and a table of who then reaches the cap |
+
+B obeys L11: it is a level, the same in every phase of the cycle, and a structural penalty bites
+harder with it, not softer (the swallowed part shrinks as standing rises). It was not built because
+on these figures it adds a modifier and its plumbing for a few thousand pounds a week, and because
+the lever that would make the reserve currency worth having for a plain anchor is the rate (C), which
+is a balance choice. **An imposed peg counts toward this cut by design** (ruling C1; the article's own
+text promises the anchor "reserve-currency risk-premium relief"), so B would also make an imposed peg
+pay an anchor on its floor, which it does not today.
+
+**3. A tier-5 leader's reach counts imposed peggers: unchanged, and still the owner's question.**
+`te_monetary_refresh_anchored_gdp` adds every anchored country of kind 1 or 2 to its anchor's
+`te_mon_anchored_gdp_m`, and an imposed pegger is kind 1 like a chosen one. At tier 5 that sum is the
+base of reach (T4, L13), so an imposed peg raises the leader's seigniorage and its cut in risk premium
+once a member has adopted. **In the three saves there is no imposed peg at all**: 31 peg articles (8,
+3 and 20), every one a `currency_peg`. So the share of any leader's reach that comes from imposed pegs
+is zero as measured, which says the AI rarely or never imposes one in these games (a pretext needs a
+country in default) and nothing about what a player could do with it. What each answer costs:
+
+| Answer | Build |
+|---|---|
+| Count them (as now) | nothing. The bound is reach's own: it saturates, and each imposed peg takes a war goal against a country in default |
+| Do not count them toward reach, keep them in the standing cut | a second per-anchor sum beside `te_mon_anchored_gdp_m` in the global pass, chosen pegs only (the pass tests `te_mon_is_imposed_pegger` nowhere today: that trigger is a treaty walk, so it is either run for every anchored country each month or replaced by a flag the discovery stores), read by `te_mon_union_currency_base_m`; the reach concept's text; two tests |
+| Count them at a discount | the same second sum, and a share constant |
+| Count them nowhere | the first sum itself changes, which also takes the standing cut away from an imposing anchor, against C1 and the article's text |
+
+**4. Ruling G9** said `state_trade_advantage_mult` does not exist. It does, and did then: corrected in
+§ 0.8. The adopter's modifier keeps the export and import pair as a judgment call: G9 says why, and
+what a switch touches.
+
+**5. The two other flat minting adds are stated as before minting bonuses**, as L12 states the union's
+seigniorage. `te_monetisation_minting` (Monetizing the Deficit: the step's "Money Created a Year, of
+GDP" field, the applied modifier, the bond-purchase tooltip) and `te_mon_board_seigniorage` (the
+overlord's half of a currency-board subject's minting). The engine multiplies both by 1 + the
+country's `country_minting_mult`, so a monetizer on Digital Currency with the five finance
+technologies creates 1.75% of GDP a step where the field says 1.0%. In the 1958 save Mysore (MYS)
+monetizes at level 2, 75,531 a week before its bonuses. **The board's "half" was restated too**: the
+overlord is paid half of the subject's flat minting, read before any multiplier, and the subject
+loses fifty points of its multiplier, so "half of what it mints before its bonuses" is true of both
+sides and "half its minting" of neither once the subject has bonuses (L12's subject, +50% and −50%,
+minted exactly 1.0 times its base: two thirds of what it would have). The overlord's line also said
+the income was "worth what their gold mines are worth — for a colony without gold, next to nothing".
+That is not what the script pays: the flat sum includes vanilla's GDP term, up to 200,000 a week, so
+a subject without gold above 200M of GDP is worth 100,250 a week before the overlord's bonuses, and
+Spain (SPA) in the 1940 save is paid 118,999 a week by its boards on an income of 6.7M, 1.8% of it
+before its own bonuses. The sentence now
+says it grows with a subject's gold mines and, up to a ceiling, with its economy.
+`test_monetary_union_leader.OtherMintingFiguresTest` holds the texts to the modifiers.
+
+**In-game checks.** `docs/testing/banking-playtest.md` § "Leftovers of the monetary layer".
 
 ---
 
