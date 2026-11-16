@@ -64,13 +64,14 @@ innovation, innovation cap and prestige.
 > Program can carry it again. Solar System Colonization only pauses once you
 > hold a colony.
 
-The building's fifth production method group, Mission Limit, is for AI
-countries. Yours stays on Any Mission, which limits nothing. An AI program runs
-the highest mission whose bill is at most a tenth of its government's income,
-and Mission Limit holds it there. It drops to a cheaper mission after six months
-over a fifth, and to Earth Orbit at once while the country is in default or
-bankrupt. After a drop it waits five years before it climbs again, so expect AI
-rivals to race only as far as their budgets reach.
+AI countries run their programs on a budget. An AI program runs the highest
+mission whose bill is at most a tenth of its government's income. It drops to a
+cheaper mission after six months over a fifth, unless a milestone that mission
+carries is three quarters done, and to Earth Orbit at once while the country is
+in default or bankrupt. After a drop it waits five years before it climbs
+again. An AI that can't pay even for Earth Orbit for a year pulls its program
+down and founds no other for five years. So expect AI rivals to race only as far
+as their budgets reach.
 
 ### Moving to the next mission
 

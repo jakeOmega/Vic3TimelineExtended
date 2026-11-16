@@ -539,6 +539,21 @@ class StructureTest(unittest.TestCase):
         self.assertRegex(demolish, r"name = sr_ai_program_demolished value = yes days = 1825 \}")
         self.assertIn("remove_building = building_space_program", demolish)
 
+    def test_every_panel_that_hides_the_maintenance_groups_hides_the_mission_limit(self):
+        # Owner, 2026-11-16: the row is for the AI only, so no panel shows it (an AI rival's
+        # limit included). Each strip of a building's method groups filters them by key.
+        filters = 0
+        for name in ("building_details_panel.gui", "production_methods.gui", "building_browser_panel.gui",
+                     "goods_state_panel.gui"):
+            for line in (ROOT / "gui" / name).read_text(encoding="utf-8-sig").splitlines():
+                if "'pmg_maintenance'" in line:
+                    filters += 1
+                    with self.subTest(panel=name):
+                        self.assertIn("Not(EqualTo_string(ProductionMethodGroup.GetKey, "
+                                      "'pmg_space_program_mission_ceiling'))", line)
+                        self.assertEqual(line.count("("), line.count(")"))
+        self.assertEqual(filters, 6)
+
     def test_every_ceiling_has_its_words(self):
         loc = LOC.read_text(encoding="utf-8-sig")
         for key in ["pmg_space_program_mission_ceiling", NONE, f"{NONE}_desc",
