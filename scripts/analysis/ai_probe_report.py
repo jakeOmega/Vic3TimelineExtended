@@ -316,6 +316,15 @@ def check_x_construction(records: list[dict]) -> list[str]:
            f"{len(rows) - kinds['none']}; among the 20 largest of their year {big['unpaid']} unpaid, {big['idle']} idle"]
     if named:
         out.append(f"  the 20 largest's: {', '.join(named[:24])}" + (" ..." if len(named) > 24 else ""))
+    # `wasted` (has_wasted_construction) is not unused points: in run 2 it held on 11,750 of 16,119 unpaused rows
+    # with con_unused above 0 on 108, and never while paused. Unused points are con_unused.
+    unpaused = [r for r in rows if num(r, "paused") != 1 and x_construction(r) != "none"]
+    if unpaused:
+        out.append(f"  unpaused readings: `wasted` yes in {sum(1 for r in unpaused if num(r, 'wasted') == 1)}, unused "
+                   f"points (con_unused) above 0 in {sum(1 for r in unpaused if num(r.get('x') or {}, 'con_unused') > 0)}"
+                   f" of {len(unpaused)}; paused: `wasted` yes in "
+                   f"{sum(1 for r in rows if num(r, 'paused') == 1 and num(r, 'wasted') == 1)} (the flag is not unused "
+                   "points: read con_unused)")
     return out
 
 

@@ -596,6 +596,10 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         read("queue_days", "construction_queue_duration"),
         read("queue_days_gov", "construction_queue_government_duration"),
         flag("paused", "is_construction_paused = yes"),
+        # NOT a measure of construction points bought and not used, and silent while a country is paused: in run 2
+        # (2026-11-16) has_wasted_construction held on 11,750 of 16,119 unpaused snapshots while the X line's
+        # con_unused was above 0 on only 108, and on none of the 1,056 paused ones (35 of which had unused points).
+        # Read con_unused for unused points (ai_probe_report.py does).
         flag("wasted", "has_wasted_construction = yes"),
         flag("healthy", "has_healthy_economy = yes"),
         # The construction market's AI purchase reads the price variable unguarded, so it is read only where set.
