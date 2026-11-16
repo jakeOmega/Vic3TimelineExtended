@@ -347,9 +347,9 @@ def count(key: str, tests: list[str]) -> Field:
     return Field(key, "\n".join(lines))
 
 
-def variable(key: str, name: str) -> Field:
+def variable(key: str, name: str, decimals: int = 0) -> Field:
     """A country variable, 0 when unset."""
-    return Field(key, f"value = 0 if = {{ limit = {{ has_variable = {name} }} value = var:{name} }}")
+    return Field(key, f"value = 0 if = {{ limit = {{ has_variable = {name} }} value = var:{name} }}", decimals)
 
 
 def levels(key: str, limit: str) -> Field:
@@ -444,9 +444,10 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         flag("healthy", "has_healthy_economy = yes"),
         # The construction market's AI purchase reads the price variable unguarded, so it is read only where set.
         Field("cm_target", "value = 0 if = { limit = { has_variable = te_construction_market_price_stabilizer } "
-              "value = te_construction_market_ai_purchase_target }", 1),
+              "value = te_construction_market_ai_purchase_target }", 3),
         variable("cm_price", "te_construction_market_price_stabilizer"),
-        variable("cm_public", "te_construction_market_public_target"),
+        # Three decimals: a small government's purchase is a fraction of a point (0.08 would print as 0).
+        variable("cm_public", "te_construction_market_public_target", 3),
         read("companies", "num_companies"),
         read("companies_max", "max_num_companies"),
     ]
