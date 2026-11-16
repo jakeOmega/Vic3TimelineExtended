@@ -103,14 +103,15 @@ whose conditions hold, the weight picks the most specific, in this order of prec
 | 2 | Takeover | a great city (a metropolis or larger) on any land; under it, an oil field on the open land it stands on | the yearly pass |
 | 3 | Technology rung | 1 up to 9 on the family's ladder | the owner's technology, live |
 | 4 | Character or function | housing blocks, smog; boomtown, declining, divided, heavy industry, resort | the owner's law and the state region's pollution, live; the yearly pass for the rest |
+| 4a | Megacity | a largest city over 10,000,000 people, from city rung 3 (owner, 2026-11-16: over every street below) | the yearly pass |
 | 5 | Upkeep | run-down | the yearly pass |
 | 6 | Means | poor, affluent | the yearly pass |
-| 7 | Size, or scale | town, metropolis, megacity; a major port, a colliery | the yearly pass; for a major port a building's level, live |
+| 7 | Size, or scale | town, metropolis; a major port, a colliery (a megacity is place 4a) | the yearly pass; for a major port a building's level, live |
 | 8 | Region | a family of the picture's group: eight for cities, four for farmland, one for forestry | geography, live |
 
 So the right technology beats the right size, and a devastated city beats everything. The weight is a number
 in place value (a takeover 10,000,000, and a condition its digit × 1,000,000 on top of that; rung × 100,000;
-a character its digit × 10,000; upkeep 1,000; means its digit × 100; size or scale × 10; a named region its
+a character its digit × 10,000; a megacity 2,000; upkeep 1,000; means its digit × 100; size or scale × 10; a named region its
 family's digit), which also keeps two pictures from tying. Vanilla's weights are 1 and 2, so
 any mod picture that applies wins. Conditions and takeovers share the place above the rung without meeting:
 a condition is a city picture and a takeover stands on open land. That keeps the largest weight (13,400,000

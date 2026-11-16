@@ -179,7 +179,8 @@ SIZES = {
 }
 
 # The weight is a number in place value, so the most specific picture that
-# applies wins and nothing ties: rung, then size, then a named region. The
+# applies wins and nothing ties: rung, then size, then a named region (a megacity's size
+# outranks prosperity, below). The
 # design reserves the places between and above for prosperity, character and
 # conditions. Vanilla's own weights are 1 and 2, so any picture here that
 # applies outranks vanilla's.
@@ -196,6 +197,14 @@ W_CHAR = 10000  # times the character's digit
 # over a poor or an affluent one over a town or a metropolis.
 W_UPKEEP = 1000
 W_MEANS = 100  # times the level's digit
+# A megacity has a place of its own between a character and prosperity (the owner, 2026-11-16: a
+# megacity is so large that it should show whatever its people's standard of living, where it had
+# lost to the poor, affluent and run-down streets). A town and a metropolis stay in the size place,
+# under prosperity. Even all of the places under a character added together (1,000 run-down, 300
+# affluent, 30 metropolis, 9 of a region: 1,339) stay under this, and a character's lowest weight
+# (10,000) stays over it.
+W_MEGACITY = 2000
+MEGACITY = "megacity"
 # The yearly pass's tags: te_sp_means is 1 poor, 3 affluent, absent ordinary; te_sp_rundown is
 # present while the standard of living sits well under what the state's people expect.
 MEANS = {
@@ -2176,6 +2185,11 @@ def takes_over(key: str, terrain: str) -> bool:
     return terrain not in PICTURES[key]["terrain"] and terrain in terrains(key)
 
 
+def size_weight(size: str) -> int:
+    """A size's share of the weight: its digit in the size place, a megacity's place of its own."""
+    return W_MEGACITY if size == MEGACITY else W_SIZE * SIZES[size][1]
+
+
 def weight(key: str, terrain: str = None) -> int:
     """A picture's weight, in its own terrains or, with `terrain`, in that terrain's list."""
     p = PICTURES[key]
@@ -2183,7 +2197,7 @@ def weight(key: str, terrain: str = None) -> int:
     if terrain and takes_over(key, terrain) and not p.get("condition"):
         w += W_CITY_OVER
     if p["size"]:
-        w += W_SIZE * SIZES[p["size"]][1]
+        w += size_weight(p["size"])
     if p.get("scale"):
         w += W_SIZE * SCALES[p["scale"]][1]
     if p["region"]:
