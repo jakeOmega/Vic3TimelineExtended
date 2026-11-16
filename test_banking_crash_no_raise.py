@@ -131,8 +131,11 @@ TRIGGERS = definitions("common/scripted_triggers/banking_policy_triggers.txt")
 
 class Interp:
     def __init__(self, variables, laws=(), scopes=(), global_vars=(), overrides=None, values=None,
-                 global_values=None, picks=None, others=None, trigger_values=None):
+                 global_values=None, picks=None, others=None, trigger_values=None, stateless=False):
         self.vars = dict(variables)
+        # A country that has lost its last state: is_country_alive = no, and no market or
+        # capital (#1871). Every other country of these runs holds land.
+        self.stateless = stateless
         self.laws = set(laws)
         self.globals = set(global_vars)
         self.logs = []
@@ -184,6 +187,10 @@ class Interp:
                 answer = val.removeprefix("law_type:") in self.laws
             elif key == "exists" and val.startswith("scope:"):
                 answer = val.removeprefix("scope:") in self.scopes
+            elif key == "exists" and val in ("market", "capital"):
+                answer = not self.stateless
+            elif key == "is_country_alive":
+                answer = self.stateless != (val == "yes")
             elif key in ("root", "ROOT") and val.startswith("scope:"):
                 answer = self.scopes.get(val.removeprefix("scope:")) == "ROOT"
             elif key.startswith("scope:") and isinstance(val, list):
@@ -715,9 +722,10 @@ class ContagionScareOnlyTest(unittest.TestCase):
     # The history chart's marker and the demographic wealth shock: neither touches the roll.
     ASIDE = {"te_history_record_banking_marker": None, "te_demog_wc_shock": None}
 
-    def run_effect(self, body, variables, picks, overrides=None):
+    def run_effect(self, body, variables, picks, overrides=None, stateless=False):
         it = Interp(variables, values=self.VALUES, picks=list(picks), others=self.ORIGIN,
-                    trigger_values=self.PINNED, overrides={**self.ASIDE, **(overrides or {})})
+                    trigger_values=self.PINNED, overrides={**self.ASIDE, **(overrides or {})},
+                    stateless=stateless)
         it.execute(copy.deepcopy(body))
         return it
 
@@ -767,6 +775,17 @@ class ContagionScareOnlyTest(unittest.TestCase):
                          ["banking_crisis_wave_init", "banking_cycle_spread_contagion"])
         calm = self.run_effect(body, {"bubble_pressure": 60, "finance_cycle_value": 80}, [1], overrides=stubs)
         self.assertNotIn("banking_crashed_last_year", calm.vars)
+
+    def test_a_country_with_no_state_rolls_no_crash(self):
+        # #1871: the spread reads the origin's market, which a country that lost its last state
+        # does not have. No pick is given, so a roll would fail the run.
+        stubs = {"banking_crisis_wave_init": None, "banking_cycle_spread_contagion": None}
+        body = EFFECTS["banking_cycle_check_and_execute_crash"]
+        it = self.run_effect(body, {"bubble_pressure": 100, "finance_cycle_value": 95}, [],
+                             overrides=stubs, stateless=True)
+        self.assertEqual(it.vars["crash"], 0)
+        self.assertEqual([name for name in it.ran if name in stubs], [])
+        self.assertNotIn("banking_crashed_last_year", it.vars)
 
     def test_the_year_is_a_year_and_set_where_each_crash_is_decided(self):
         mark = field(EFFECTS["banking_mark_crashed_last_year"], "set_variable")
@@ -1248,7 +1267,7 @@ class ContagionBlockTest(unittest.TestCase):
         # The every_country limit keeps its wave test (Country.spread models it), and its roll's
         # success runs banking_contagion_reach, which alone sends the event.
         spread = EFFECTS["banking_cycle_spread_contagion"]
-        loop = field(field(spread, "custom_tooltip"), "every_country")
+        loop = field(field(field(spread, "if"), "custom_tooltip"), "every_country")
         self.assertIn(("NOT", "=", [("banking_crisis_wave_reached", "=", "yes")]), field(loop, "limit"))
         body = field(loop, "random")
         self.assertIn(("banking_contagion_reach", "=", "yes"), body)
