@@ -5628,14 +5628,15 @@ def light_localization():
             f'0 "{light_range_text(instrument, light_extra_ladder(extra.key))}"')
         cap = f"#v {fmt(rate(instrument, extra.cap) * 100)}%#!"
         entries[f"te_tax_lt_extra_cap_{extra.key}"] = f'0 "{cap}"'
-        # The row's note while the extra is open (te_tax_lt_row_<key>_tt; organize_loc files te_tax_lt_extra_* here): why the cap is low, and the
+        # The row's note while the extra is open (te_tax_lt_row_<key>_tt; organize_loc files te_tax_lt_extra_* here).
+        # Neutral: another country's panel shows it too (test_te_system_tab_bodies.py).: why the cap is low, and the
         # laws that levy the tax in full, each to its very-high rate.
         full = [f"${law}$ at up to #v {fmt(rate(instrument, light_ladders()[law][extra.key][-1]) * 100)}%#!"
                 for _n, law in light_laws() if light_levies(law, extra.key)]
         if len(full) > 1:
             full = [(", ".join(full[:-1]) + ("," if len(full) > 2 else "") + " and " + full[-1])]
         entries[f"te_tax_lt_extra_note_{extra.key}"] = (
-            f'0 "\\n\\nYour taxation law levies no {extra.noun}, so the tax code may levy only a low one, up to '
+            f'0 "\\n\\nThe taxation law levies no {extra.noun}, so the tax code may levy only a low one, up to '
             f'{cap}. A law that taxes {extra.base} levies it in full: {full[0]}."')
     for ig in IGS:
         for sign, text in (("pos", "Welcomes Recent Tax Changes"), ("neg", "Resents Recent Tax Changes")):

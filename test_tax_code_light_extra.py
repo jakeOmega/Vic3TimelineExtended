@@ -394,7 +394,7 @@ class PanelTest(unittest.TestCase):
                       "'te_tax_view_light_extra_div'), '(CFixedPoint)1' ), 'te_tax_lt_extra_note_div', 'te_tax_empty' )",
                       table["te_tax_lt_row_div_tt"])
         note = loc(GEN_LOC)["te_tax_lt_extra_note_div"]
-        self.assertIn("Your taxation law levies no dividend tax", note)
+        self.assertIn("The taxation law levies no dividend tax", note)
         self.assertIn("#v 5%#!", note)
         self.assertIn("$law_proportional_taxation$ at up to #v 20%#!", note)
         self.assertIn("$law_graduated_taxation$ at up to #v 30%#!", note)
