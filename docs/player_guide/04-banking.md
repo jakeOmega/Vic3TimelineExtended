@@ -760,8 +760,9 @@ actually happened, and never falls below 0.5%.
 
 Credit standing is what your country is: rank, finance technologies and a stock
 exchange, institutions, your courts (the Judiciary law and Judicial
-Independence) and currency credibility. It cannot go below 0.5 points
-(0.25 under Central Bank Independence). Risk premium is what is happening: the
+Independence) and currency credibility. It cannot go below its floor of 0.5
+points, which Central Bank Independence lowers by 0.25 and Machine Learning and
+Universal Digital Identity by 0.1 each. Risk premium is what is happening: the
 cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that
 have strayed from target, money printing and a weak currency.
