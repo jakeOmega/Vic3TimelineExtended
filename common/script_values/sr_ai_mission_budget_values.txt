@@ -23,12 +23,14 @@
 # monthly reviews in a row. The gap is the hysteresis: a mission chosen at
 # 10% must double its bill (the price can at most double from base) or halve
 # the income to be stepped down.
-# Anchor (the owner's 1958 save, AI countries): the 76 governments in surplus,
-# none of them with a program, ran a surplus of 16% of their own revenue
-# (1.8% of GDP on revenue of 11.2%). A program at 10% leaves such a budget in
-# surplus; at 20% it puts it in deficit. A player pays 1% to 3% (Singapore
-# 1958 2.2%, Byzantium 2020 1.0%, New York 1940 2.8%); the solvent AI
-# programs read paid 2% to 6% (USA 1940 3%, Russia 1940 6%, Britain 1958 6%).
+# Anchor (the owner's 1958 save, AI countries; the 2026-11-15 save study): the
+# 76 governments in surplus, none of them with a program, ran a surplus of 16%
+# of their own revenue (1.8% of GDP on revenue of 11.2%). A program at 10%
+# leaves such a budget in surplus; at 20% it puts it in deficit. A player's
+# grown economy pays 1% to 5% (Singapore 1958 2.2%, 1947 5.2%, Byzantium 2020
+# 1.0%, New York 1940 2.8%; Singapore 1932 paid 69%); the solvent AI programs
+# read paid 2% to 6% (Scandinavia 1940 2%, USA 1940 3%, Russia 1940 6%,
+# Britain 1958 6%). ai.md § Space Program Mission Budget has the rest.
 sr_ai_mission_share_up = 0.1
 sr_ai_mission_share_down = 0.2
 sr_ai_mission_over_months_limit = 6
