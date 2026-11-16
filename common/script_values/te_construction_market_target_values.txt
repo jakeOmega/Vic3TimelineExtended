@@ -74,21 +74,6 @@ te_construction_market_public_use_target = {
 			# capped the same way in te_construction_market_ai_purchase_target.
 			max = te_construction_market_public_queue_cap
 		}
-		# Paused by the engine, the one purchase that still reaches the sites
-		# is an AI's for an administration while it is short of bureaucracy
-		# (te_construction_market_ai_purchase_target). The AI's weekly update
-		# sets its purchase to 0 in every other paused case, so the shortage
-		# is all that is tested here, not the queue: this is read several
-		# times a week and the queue's test walks the country's buildings. A
-		# player's purchase stays at nothing while paused.
-		else_if = {
-			limit = {
-				is_ai = yes
-				bureaucracy < 0
-			}
-			value = te_construction_market_public_setting
-			max = te_construction_market_public_queue_cap
-		}
 		else = {
 			value = 0
 		}

@@ -6,8 +6,8 @@
 # construction panel, and a direct game has no purchase.
 #
 # Nothing while the government queue is empty, or while the engine has paused
-# the country's construction (one case apart, below). Otherwise the larger of
-# two amounts, never more than the queue can take in a week. Both can be
+# the country's construction. Otherwise the larger of two amounts, never more
+# than the queue can take in a week. Both can be
 # nothing: a government with no surplus, no reserves and no shortage of
 # bureaucracy cannot pay for anything and buys nothing, and its queued level
 # waits (a market game has no base construction) until one of the three
@@ -73,23 +73,21 @@
 #   fifth of income at a price of 150: 1.7 times the country's whole income at
 #   the price in play.
 #
-# While the engine reports construction paused (is_construction_paused: from
-# 40% of the debt ceiling until debt is back under 20%) the purchase is 0, with
-# one exception (owner, 2026-11-16): a country short of bureaucracy that has a
-# Government Administration level in its queue goes on buying that fifth, on
-# credit, at most one level's weekly maximum
-# (te_construction_market_ai_building_administration,
-# common/scripted_triggers/te_construction_market_triggers.txt). A shortage
-# limits the income that would pay the debt down, and the engine's own pause
-# for a construction it calls critical is 99% of the ceiling, not 40%. Whether
-# the engine counts an administration as critical in a market game, and so
-# spends those points while it reports the pause, is unread:
-# TE_SELF_CHECK construction_admin_while_paused reads it
-# (te_construction_market_ai_effects.txt). The engine buys a Construction
-# Site's inputs only for the points a queue spends, so points it does not
-# spend should cost nothing; the self-check logs what was paid.
-# te_construction_market_public_use_target lets that purchase through to the
-# sites.
+# While the engine reports construction paused (is_construction_paused) the
+# purchase is 0 for every country, whatever its bureaucracy. For a day
+# (2026-11-16, #1854) a country short of bureaucracy with a Government
+# Administration level in its queue went on buying that fifth through the
+# pause. An observer game on that build (1836 to 1913) showed that nothing
+# bought reaches the government queue while the flag is yes: in the AI probe's
+# 1,056 yearly rows of a paused country the queue had used no construction,
+# the 76 rows under that clause among them. What was bought went to the
+# private queue, at the investment pool's expense, or went unused. So the
+# clause and its self-check (TE_SELF_CHECK construction_admin_while_paused,
+# which read BROKEN) were removed (owner, 2026-11-16). An indebted country
+# short of bureaucracy still builds where the engine itself reports no pause:
+# that game had 39 such rows at 40% of the debt ceiling or more, the floor
+# above bought the fifth in all of them, and in 30 the queue was building. The
+# record is in docs/systems/mod_systems/construction.md, "The AI's purchase".
 #
 # The purchase is not rounded (it was, to whole points, which the 10-point
 # floor hid): a small economy buys a fraction of a point a week.
@@ -206,57 +204,10 @@ te_construction_market_ai_purchase_target = {
 			multiply = modifier:country_max_weekly_construction_progress_add
 		}
 	}
-	# Paused by the engine, short of bureaucracy and building an
-	# administration: the fifth, on credit, for one level.
-	else_if = {
-		limit = {
-			construction_queue_num_queued_government_levels > 0
-			te_construction_market_ai_building_administration = yes
-		}
-		value = te_construction_market_ai_bureaucracy_purchase
-		max = modifier:country_max_weekly_construction_progress_add
-	}
 	else = {
 		value = 0
 	}
 }
-
-# What the engine counts as temporary in the budget, for the self-check's line
-# (docs/guides/scripting_best_practices.md, "An AI Spending Rule Reads
-# net_fixed_income"): on the expense side the construction the treasury and
-# the investment pool are billed for, on the income side what the pool repays.
-te_construction_market_temporary_expenses = {
-	value = total_expenses
-	subtract = fixed_expenses
-}
-
-te_construction_market_temporary_income = {
-	value = income
-	subtract = fixed_income
-}
-
-# Building scope: its levels still in a construction queue
-# (te_construction_market_ai_building_administration).
-te_construction_market_building_queued_levels = {
-	value = level_after_queued_constructions
-	subtract = level
-}
-
-# Country scope: its Government Administration levels, and its states, which
-# the self-check compares week to week.
-te_construction_market_administration_levels = {
-	value = "country_has_building_type_levels(bt:building_government_administration)"
-}
-
-te_construction_market_state_count = {
-	value = num_states
-}
-
-# The self-check gives its BROKEN once the purchases made while paused come to
-# this many points with no administration level finished: four levels' worth,
-# so a state's poor construction efficiency does not read as the engine's
-# refusal.
-TE_CONSTRUCTION_MARKET_AI_ADMIN_SELFCHECK_POINTS = 400
 
 # ai_value of the Construction Sector in a market game (building_construction_sector,
 # common/buildings/te_construction_market_site.txt). Scope: the state the AI is
