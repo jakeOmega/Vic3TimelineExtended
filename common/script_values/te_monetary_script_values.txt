@@ -35,6 +35,12 @@
 #   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
 #   te_premium_structural   floor to 30             what the country *is*; floored
 #                                                   at 0.5 (0.25 under CBI)
+#   te_premium_floor_swallowed >= 0                 [#1812] what the floor took back
+#                                                   this pulse: te_mon_standing_floor
+#                                                   less the structural sum, where the
+#                                                   sum was under it, else 0. Written
+#                                                   only by step 5; read by step 9b's
+#                                                   te_mon_reserve_floor_value
 #   te_premium_cyclical     -10 to 40               what is *happening*; added after the floor
 #   te_rate_paid_pts        0.5 to 60               the displayed rate paid, clamped (§4)
 #   te_rate_paid_applied    0.5 to 60               the value last written into
@@ -907,6 +913,10 @@ te_mon_access_premium = {
 #
 # Also rendered in the dashboard's Credit Standing tooltip, so the figure the
 # player reads is the one the premium is actually floored at.
+#
+# [#1812] Step 5 records what it swallows (te_premium_floor_swallowed), and a
+# reserve currency's cut is paid from that record where the floor takes it: read
+# the record, never this value beside a sum of your own.
 te_mon_standing_floor = {
 	value = 0.5
 	add = {

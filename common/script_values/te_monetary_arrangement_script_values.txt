@@ -78,6 +78,13 @@
 #   te_mon_anchored_gdp_m   >= 0        GDP (millions) of everyone anchored to
 #                                       this country. Written by the GLOBAL
 #                                       monthly pass, like te_mon_world_own_den
+#   te_mon_reserve_floor_pts  >= 0      [#1812] the part of the reserve-currency
+#                                       cut the credit floor swallows, paid as
+#                                       risk premium instead, pp; re-derived in
+#                                       step 9b every pulse (te_mon_reserve_
+#                                       floor_value), and...
+#   te_mon_reserve_floor_applied >= 0   ...what te_mon_reserve_currency_premium
+#                                       was last applied at. BACKS A MULTIPLIER
 #   te_mon_board_wrong_months 0 to 24   [5c] consecutive months a currency-board
 #                                       subject's DISPLAYED band has sat at an
 #                                       extreme (1 or 5). Never the true gap
@@ -185,6 +192,58 @@ te_mon_reserve_currency_cut = {
 		multiply = te_mon_reserve_currency_per_step
 		min = 0
 		max = te_mon_reserve_currency_cap_effective
+	}
+}
+
+# [#1812, owner 2026-11-16] ...AND WHERE THE CREDIT FLOOR SWALLOWS IT, RISK
+# PREMIUM INSTEAD. The cut above is credit standing (te_mon_arr_standing_value),
+# and standing past the floor buys nothing, so an anchor already on its floor,
+# which is most of them (eight of nine plain treaty anchors in the owner's three
+# saves, design §0.16), was paid nothing for being a reserve currency. Now the
+# part the floor swallows comes off its CYCLICAL premium
+# (te_mon_reserve_currency_premium, step 9b), as the issuer's cut does for a
+# union leader (te_mon_union_issuer_premium). In effect the cut is taken off
+# after the floor: the country pays the higher of its floor and its standing
+# before the cut, less the cut.
+#
+#   paid = min( cut , what the floor swallowed ) - the issuer's own cut, >= 0
+#
+# * WHAT THE FLOOR SWALLOWED is step 5's own record (te_premium_floor_swallowed:
+#   its floor less its sum, the cut's standing included), not a second copy of
+#   the floor. It counts every term the floor took back, the cut last: an anchor
+#   above its floor swallows nothing and is paid nothing here, one part-way gets
+#   the standing cut down to the floor and the rest here.
+# * THE ISSUER'S CUT IS NETTED, so nobody is paid twice for the same floor: #1810
+#   gave the leader of a common currency a risk-premium cut because its
+#   reserve-currency standing bought nothing. A leader gets the larger of the
+#   two, never the sum. Read after te_monetary_update_union writes it, so it is
+#   this pulse's.
+# * AN IMPOSED PEG COUNTS: te_mon_anchored_gdp_m counts every treaty pegger
+#   (ruling C1: the imposed article promises its anchor "reserve-currency
+#   risk-premium relief"), so where the floor swallows the standing cut an
+#   imposed peg now pays its anchor too (ruling L18).
+# * THE SAME 0.01 CUTOFF AS EVERY SCALED PREMIUM TERM (te_monetary_apply_fx_one):
+#   a figure under a hundredth of a point is not applied, so the anchors whose
+#   whole cut is under it (six of the nine in the saves) are paid in neither form.
+# * A LEVEL, read from nothing in the cycle: the same in every phase (L11).
+#
+# Every input is re-derived each month, so the value is zero, and the modifier
+# comes off, the pulse the country stops anchoring or leaves its floor.
+te_mon_reserve_floor_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_premium_floor_swallowed
+			var:te_premium_floor_swallowed > 0
+			te_mon_reserve_currency_cut > 0
+		}
+		value = te_mon_reserve_currency_cut
+		max = var:te_premium_floor_swallowed
+		if = {
+			limit = { has_variable = te_mon_union_issuer_cut_pts }
+			subtract = var:te_mon_union_issuer_cut_pts
+		}
+		min = 0
 	}
 }
 
@@ -438,6 +497,9 @@ te_mon_arr_recipient_value = {
 }
 
 # ...and in pp of STRUCTURAL premium: the pegger's cut, the reserve currency's.
+# Whatever of the reserve currency's the credit floor swallows is paid again as
+# risk premium in step 9b (te_mon_reserve_floor_value, #1812); this value is
+# unchanged by that.
 te_mon_arr_standing_value = {
 	value = te_mon_reserve_currency_cut
 	# [6c] The -0.5pp is the market's reward for a CHOSEN discipline, so an
@@ -521,6 +583,16 @@ te_mon_arr_standing_display = {
 	if = {
 		limit = { has_variable = te_mon_arr_standing_pts }
 		value = var:te_mon_arr_standing_pts
+	}
+}
+
+# [#1812] The Monetary Anchor row's note (te_mon_reserve_floor_note): what
+# te_mon_reserve_currency_premium carries, its multiplier. 0 while it is off.
+te_mon_reserve_floor_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_reserve_floor_applied }
+		value = var:te_mon_reserve_floor_applied
 	}
 }
 

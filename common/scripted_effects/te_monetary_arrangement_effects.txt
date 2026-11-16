@@ -15,7 +15,10 @@
 #                                                    the anchor's figures copied,
 #                                                    the clocks
 #   te_monetary_apply_arrangement_modifiers step 9b  the three scaled modifiers
-#                                                    and the swap line's draw
+#                                                    and the swap line's draw,
+#                                                    then (after the union's)
+#                                                    te_monetary_apply_reserve_
+#                                                    floor_premium (#1812)
 #   te_monetary_update_anchor_peg           step 10  a kind-1 pegger's confidence
 #   te_monetary_discover_arrangements       te_monetary_internal.2 (the hooks),
 #                                           the yearly pulse, and step 1c
@@ -184,6 +187,15 @@ te_monetary_init_arrangement_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_anchored_gdp_m } }
 		set_variable = { name = te_mon_anchored_gdp_m value = 0 }
+	}
+	# [#1812] The reserve currency's cut where the floor swallows it.
+	if = {
+		limit = { NOT = { has_variable = te_mon_reserve_floor_pts } }
+		set_variable = { name = te_mon_reserve_floor_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_reserve_floor_applied } }
+		set_variable = { name = te_mon_reserve_floor_applied value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_emergency_controls_months } }
@@ -749,6 +761,27 @@ te_mon_record_backstop_backer = {
 }
 
 # ----------------------------------------------------------------------------
+# Step 9b — the reserve currency's cut where the credit floor swallows it
+# ----------------------------------------------------------------------------
+# Scope: country, ROOT = this. Called once, from te_monetary_apply_arrangement_
+# modifiers after te_monetary_update_union (owner, 2026-11-16, #1812; design
+# §0.16, ruling L17). THE one refresh site of te_mon_reserve_currency_premium,
+# a MANAGED scaled modifier stepped like te_mon_union_issuer_premium: re-applied
+# when its figure moves 0.05pp or it has gone missing, removed under 0.01. The
+# figure is te_mon_reserve_floor_value: the part of te_mon_reserve_currency_cut
+# that step 5's floor swallowed this month, less the union issuer's own cut.
+# Step 5 reads it through modifier:country_risk_premium_add a month later, like
+# every modifier-borne term.
+te_monetary_apply_reserve_floor_premium = {
+	set_variable = { name = te_mon_reserve_floor_pts value = te_mon_reserve_floor_value }
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_reserve_currency_premium VALUE = var:te_mon_reserve_floor_pts APPLIED = te_mon_reserve_floor_applied STEP = 0.05 STEP_NEG = -0.05 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
 # A change of (kind, anchor)
 # ----------------------------------------------------------------------------
 # Scope: country. Reads te_mon_anchor_kind_new and, when it is > 0,
@@ -831,6 +864,10 @@ te_monetary_apply_arrangement_modifiers = {
 
 	# --- [5b] the common currency (§15A.3) -----------------------------------
 	te_monetary_update_union = yes
+
+	# --- [#1812] a reserve currency's cut where the credit floor swallows it --
+	# AFTER the union's update, which writes the issuer's own cut this pulse.
+	te_monetary_apply_reserve_floor_premium = yes
 
 	# --- the swap line is DRAWN in a crisis, and REPAID out of one (§15A.2) --
 	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
