@@ -181,18 +181,19 @@ INJECT:building_power_plant = {
 	}
 
 	# AI coverage (#1822): vanilla 1.15.1's ai_value restated, with one change. Vanilla adds 4000
-	# in a state with no building_power_plant built or under way; the test is now "no power plant
-	# of any kind" (te_state_has_a_power_plant), the same test the mod's own plants use, so a state
-	# with a nuclear or renewable plant no longer draws a coal plant for the bonus. An INJECTed
-	# script-value field replaces vanilla's (read on interest groups and parties), so the whole
-	# field is restated; if the engine kept vanilla's instead, nothing changes.
+	# in a state with no building_power_plant built or under way; the test is now "nothing here
+	# makes Electricity" (te_state_has_a_power_plant: any plant, a Grid Transfer Station, a company
+	# power station), so a state that already has power no longer draws a coal plant for the
+	# bonus. The mod's own plants take no such bonus. An INJECTed script-value field replaces
+	# vanilla's (read on interest groups and parties), so the whole field is restated; if the
+	# engine kept vanilla's instead, nothing changes.
 	# test_ai_building_values.py holds the restated lines to vanilla's.
 	ai_value = {
 		value = 1000
 
 		if = {
 			limit = { te_state_has_a_power_plant = no }
-			add = te_ai_first_power_plant_bonus
+			add = 4000
 		}
 
 		if = { # Five-Year Plan electrification objective

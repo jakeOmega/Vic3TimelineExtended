@@ -1,6 +1,7 @@
-﻿# Every building in this file carries ai_value = { value = te_wonder_ai_value }, vanilla's value
-# for a monument a country can build (te_ai_coverage_values.txt, #1822). test_ai_building_values.py
-# fails on one without it.
+﻿# Every building in this file carries ai_value = { value = te_wonder_ai_value }: the engine's base for a
+# government building (what each scored with no ai_value), and nothing for a country in default or under
+# a declared bankruptcy (te_ai_coverage_values.txt, #1822). test_ai_building_values.py fails on one
+# without it.
 
 #==================================================
 # UN and Power Bloc Headquarters

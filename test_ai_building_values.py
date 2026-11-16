@@ -1,19 +1,21 @@
-"""Building `ai_value` where vanilla gives the same role one and the mod's building had none (#1822).
+"""Building `ai_value` for the mod's government buildings, and the first-plant test on vanilla's power plant (#1822).
 
 A building with no `ai_value` scores the engine's base (NAI GOVERNMENT_BUILDING_BASE_VALUE and
-PRODUCTION_BUILDING_BASE_VALUE, both 1000) and the engine logs nothing. So:
+PRODUCTION_BUILDING_BASE_VALUE, both 1000) and the engine logs nothing. AI governments queue one construction at a
+time and most are insolvent, so nothing here asks for more than that base (docs/systems/mod_systems/ai.md § AI
+Coverage of the Mod's Content). What the tests hold is each rule, not a number the play-test list says to tune:
 
 - every government-funded building the mod adds that the construction queue can start carries an `ai_value`, or is on
   PLACED_BY_SCRIPT with what places it (the mod's own checklist: scripting_best_practices.md § Checklist for New
   Buildings/Goods, item 6);
-- the mod's four power plants take vanilla's first-plant bonus, and "the state has a power plant" names every
-  building of the power group, for vanilla's plant too, whose restated `ai_value` is held to vanilla's;
-- Highway, Airport and Network Infrastructure carry vanilla's railway base, the wonders vanilla's monument value,
-  and the megaprojects' sites a value that is nothing in default.
+- the wonders and the megaprojects' sites use a named value that is nothing for a country in default;
+- Highway, Airport and Network Infrastructure use a named value, so the size can be tuned in one place;
+- vanilla's power plant is restated with one change: its first-plant bonus asks whether anything in the state makes
+  Electricity (te_state_has_a_power_plant), and that trigger names every building whose methods output Electricity;
+- the mod's own power plants carry no `ai_value` (no first-plant bonus: they cost 2,000 to 10,000 points).
 
-The numbers are in common/script_values/te_ai_coverage_values.txt; docs/systems/mod_systems/ai.md § AI Coverage of
-the Mod's Content says what each stands on. Every value is written `ai_value = { value = <script value> }`, the
-form the company flagships already use; a bare name there is a form no vanilla or mod building has.
+Every value is written `ai_value = { value = <script value> }`, the form the company flagships already use; a bare
+name there is a form no vanilla or mod building has.
 """
 import json
 import re
@@ -48,6 +50,9 @@ MEGAPROJECT_VALUED = tuple(
 ) + ("building_antimatter_warhead_plant",)
 CLEAN_POWER = ("building_hydro_plant", "building_nuclear_plant", "building_renewable_energy_plant",
                "building_fusion_plant")
+METHOD_FILES = sorted((ROOT / "common/production_methods").glob("*.txt"))
+GROUP_FILES = sorted((ROOT / "common/production_method_groups").glob("*.txt"))
+INSOLVENT = [["owner", [["OR", [["in_default", "yes"], ["has_modifier", "declared_bankruptcy"]]]]]]
 INFRASTRUCTURE = ("building_airport", "building_highway", "building_network_infrastructure")
 
 
@@ -137,10 +142,45 @@ def mod_buildings():
     return out
 
 
-def script_value_number(name):
-    text = re.sub(r"#[^\n]*", "", VALUES.read_text(encoding="utf-8-sig"))
-    m = re.search(r"(?m)^" + re.escape(name) + r"\s*=\s*(-?[\d.]+)\s*$", text)
-    return float(m.group(1)) if m else None
+def outputs_electricity(block):
+    for key, _, value in entries(block):
+        if key == "goods_output_electricity_add":
+            try:
+                if float(value) > 0:
+                    return True
+            except (TypeError, ValueError):
+                return True  # a script value: count it
+        elif isinstance(value, (dict, list)) and outputs_electricity(value):
+            return True
+    return False
+
+
+def electricity_makers():
+    """Every building, vanilla's or the mod's, with a production method that outputs Electricity."""
+    methods = {name for name, entry in vanilla("pms").items() if outputs_electricity(entry[1])}
+    for path in METHOD_FILES:
+        for name, _, block in entries(parse(path)):
+            if isinstance(block, (dict, list)) and outputs_electricity(block):
+                methods.add(bare(name))
+    groups = {name: set(field(entry[1], "production_methods") or ()) for name, entry in vanilla("pm_groups").items()}
+    for path in GROUP_FILES:
+        for name, _, block in entries(parse(path)):
+            listed = set(field(block, "production_methods") or ())
+            if name.startswith("INJECT:"):
+                groups.setdefault(bare(name), set()).update(listed)
+            else:
+                groups[bare(name)] = listed
+    making = {name for name, listed in groups.items() if listed & methods}
+    buildings = {name: set(field(entry[1], "production_method_groups") or ())
+                 for name, entry in vanilla("buildings").items()}
+    for path in BUILDING_FILES:
+        for name, _, block in entries(parse(path)):
+            listed = set(field(block, "production_method_groups") or ())
+            if name.startswith("INJECT:"):
+                buildings.setdefault(bare(name), set()).update(listed)
+            else:
+                buildings[bare(name)] = listed
+    return {name for name, listed in buildings.items() if listed & making}
 
 
 class GovernmentBuildingTests(unittest.TestCase):
@@ -192,42 +232,68 @@ class GovernmentBuildingTests(unittest.TestCase):
 class ValueTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.groups = building_groups()
         cls.buildings = mod_buildings()
         cls.vanilla_buildings = vanilla("buildings")
+        cls.values = parse(VALUES)
+        cls.triggers = parse(TRIGGERS)
 
     def ai_value(self, name):
         return plain(field(self.buildings[name][1], "ai_value"))
 
-    def test_clean_power_plants_take_vanillas_power_plant_value(self):
+    def assert_nothing_in_default(self, name, base):
+        """`name` is a script value: a named base, times 0 while the state's owner is insolvent."""
+        value = plain(field(self.values, name))
+        self.assertEqual(value, [["value", base],
+                                 ["if", [["limit", [["te_state_owner_is_insolvent", "yes"]]], ["multiply", "0"]]]])
+        self.assertGreater(float(field(self.values, base)), 0)
+
+    def test_insolvent_means_in_default_or_bankrupt(self):
+        self.assertEqual(plain(field(self.triggers, "te_state_owner_is_insolvent")), INSOLVENT)
+        text = re.sub(r"#[^\n]*", "", TRIGGERS.read_text(encoding="utf-8-sig"))
+        self.assertRegex(text, r"te_state_owner_is_insolvent\s*=\s*\{\s*owner\s*\?=")  # state scope: guard the link
+
+    def test_wonders_use_a_value_that_is_nothing_in_default(self):
+        names = [name for name, _, _ in entries(parse(WONDERS))]
+        self.assertGreaterEqual(len(names), 39)
+        for name in names:
+            with self.subTest(building=name):
+                self.assertEqual(self.ai_value(name), [["value", "te_wonder_ai_value"]])
+        self.assert_nothing_in_default("te_wonder_ai_value", "te_ai_wonder_base_value")
+
+    def test_a_wonder_does_not_outrank_a_university(self):
+        # One government construction is queued at a time: a wonder (5,000 points, 10,000 government employees)
+        # must not score above the building that makes innovation. Vanilla's university is 2000.
+        university = field(self.vanilla_buildings["building_university"][1], "ai_value")
+        self.assertLess(float(field(self.values, "te_ai_wonder_base_value")), float(field(university, "value")))
+
+    def test_megaproject_sites_are_worth_nothing_in_default(self):
+        for name in MEGAPROJECT_VALUED:
+            with self.subTest(building=name):
+                self.assertEqual(self.ai_value(name), [["value", "te_megaproject_ai_value"]])
+        self.assert_nothing_in_default("te_megaproject_ai_value", "te_ai_megaproject_base_value")
+
+    def test_infrastructure_uses_its_named_value(self):
+        for name in INFRASTRUCTURE:
+            with self.subTest(building=name):
+                self.assertEqual(self.ai_value(name), [["value", "te_infrastructure_ai_value"]])
+        self.assertGreater(float(field(self.values, "te_infrastructure_ai_value")), 0)
+
+    def test_the_mods_power_plants_take_no_first_plant_bonus(self):
         for name in CLEAN_POWER:
             with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), [["value", "te_clean_power_plant_ai_value"]])
-        vanilla_value = vanilla_block(self.vanilla_buildings["building_power_plant"])
-        ai = dict((k, v) for k, v in field_pairs(vanilla_value, "ai_value"))
-        self.assertEqual(float(ai["value"]), script_value_number("te_ai_power_plant_base_value"))
-        first = [v for k, v in field_pairs(vanilla_value, "ai_value") if k == "if"][0]
-        self.assertEqual(float(dict(first)["add"]), script_value_number("te_ai_first_power_plant_bonus"))
-        value = plain(field(parse(VALUES), "te_clean_power_plant_ai_value"))
-        self.assertEqual(value, [["value", "te_ai_power_plant_base_value"],
-                                 ["if", [["limit", [["te_state_has_a_power_plant", "no"]]],
-                                         ["add", "te_ai_first_power_plant_bonus"]]]])
+                self.assertIsNone(field(self.buildings[name][1], "ai_value"))
 
-    def test_every_power_building_counts_as_a_power_plant(self):
-        power = {name for name, entry in self.vanilla_buildings.items()
-                 if "bg_power" in chain(field(entry[1], "building_group"), self.groups)}
-        power |= {name for name, (_, block) in self.buildings.items()
-                  if "bg_power" in chain(field(block, "building_group"), self.groups)}
-        self.assertEqual(power, {"building_power_plant", *CLEAN_POWER})
-        trigger = field(parse(TRIGGERS), "te_state_has_a_power_plant")
-        either = field(trigger, "OR")
+    def test_every_electricity_maker_counts_as_a_power_plant(self):
+        makers = electricity_makers()
+        self.assertGreaterEqual(len(makers), 16)
+        self.assertLessEqual({"building_power_plant", "building_grid_transfer_station", *CLEAN_POWER}, makers)
+        either = field(field(self.triggers, "te_state_has_a_power_plant"), "OR")
         built = {v for k, _, v in entries(either) if k == "has_building"}
         under_way = field(either, "any_scope_building")
         self.assertEqual(field(under_way, "is_under_construction"), "yes")
         queued = {v for k, _, v in entries(field(under_way, "OR")) if k == "is_building_type"}
         self.assertEqual(built, queued)
-        self.assertLessEqual(power, built, "a power building the first-plant test does not count")
-        self.assertEqual(built - power, {"building_solar_receiver"})  # makes Electricity outside the power group
+        self.assertEqual(built, makers, "the first-plant test and the buildings that output Electricity differ")
 
     def test_vanillas_power_plant_is_restated_with_the_wider_test(self):
         injected = None
@@ -241,44 +307,10 @@ class ValueTests(unittest.TestCase):
         self.assertEqual([k for k, _ in injected], [k for k, _ in theirs])
         self.assertEqual(injected[0], theirs[0])   # value = 1000
         self.assertEqual(injected[2], theirs[2])   # the Five-Year Plan branch, unchanged
-        # The one change: vanilla's NOR on building_power_plant alone becomes the any-plant test, at vanilla's 4000.
+        # The one change: vanilla's NOR on building_power_plant alone becomes the any-maker test; the bonus is vanilla's.
         self.assertEqual(theirs[1][1][0][0], "limit")
         self.assertEqual(theirs[1][1][0][1][0][0], "NOR")
-        self.assertEqual(theirs[1][1][1], ["add", "4000"])
-        self.assertEqual(injected[1], ["if", [["limit", [["te_state_has_a_power_plant", "no"]]],
-                                              ["add", "te_ai_first_power_plant_bonus"]]])
-
-    def test_infrastructure_takes_vanillas_railway_base(self):
-        for name in INFRASTRUCTURE:
-            with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), [["value", "te_infrastructure_ai_value"]])
-        railway = dict(field_pairs(vanilla_block(self.vanilla_buildings["building_railway"]), "ai_value"))
-        self.assertEqual(float(railway["value"]), script_value_number("te_infrastructure_ai_value"))
-
-    def test_wonders_take_vanillas_monument_value(self):
-        names = [name for name, _, _ in entries(parse(WONDERS))]
-        self.assertGreaterEqual(len(names), 39)
-        for name in names:
-            with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), [["value", "te_wonder_ai_value"]])
-        eiffel = field(self.vanilla_buildings["building_eiffel_tower"][1], "ai_value")
-        self.assertEqual(float(eiffel), script_value_number("te_wonder_ai_value"))
-
-    def test_megaproject_sites_are_worth_nothing_in_default(self):
-        for name in MEGAPROJECT_VALUED:
-            with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), [["value", "te_megaproject_ai_value"]])
-        value = plain(field(parse(VALUES), "te_megaproject_ai_value"))
-        self.assertEqual(value[0], ["value", "te_ai_megaproject_base_value"])
-        self.assertEqual(script_value_number("te_ai_megaproject_base_value"), 1000)  # NAI GOVERNMENT_BUILDING_BASE_VALUE
-        self.assertEqual(value[1], ["if", [["limit", [["owner", [["OR", [["in_default", "yes"],
-                                                                         ["has_modifier", "declared_bankruptcy"]]]]]]],
-                                           ["multiply", "0"]]])
-
-
-def field_pairs(block, key):
-    """The [key, value] pairs inside the first `key` block of a `plain`-shaped block."""
-    return next(value for k, value in block if k == key)
+        self.assertEqual(injected[1], ["if", [["limit", [["te_state_has_a_power_plant", "no"]]], theirs[1][1][1]]])
 
 
 if __name__ == "__main__":
