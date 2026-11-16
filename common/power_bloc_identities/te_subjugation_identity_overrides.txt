@@ -70,3 +70,7 @@ INJECT:identity_military_treaty_organization = {
 		country_subjugation_military_strength_add = 0.4
 	}
 }
+
+# Research Commons (identity_research_commons, mod-defined): no bonus, as
+# Diplomatic Framework has none (design 2026-11-16 § 8.4). Its hold on members
+# is the shared technology and Institutes Left Behind, not subjugation.

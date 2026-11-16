@@ -565,6 +565,11 @@ on_acquired_technology = {
 # so only the first researcher of each diffusion-eligible tech actually
 # triggers the broadcast. See common/scripted_effects/agricultural_diffusion_effects.txt.
 agricultural_diffusion_on_action = {
+	# A Research Commons grant is not a discovery (te_rc_grant sets te_rc_granting
+	# around add_technology_researched; power_blocs.md § Research Commons).
+	trigger = {
+		NOT = { has_variable = te_rc_granting }
+	}
 	effect = {
 		agdiff_dispatch_if_first = { TECH = nitrogen_fixation }
 		agdiff_dispatch_if_first = { TECH = modern_chemical_processes }
