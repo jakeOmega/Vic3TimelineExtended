@@ -265,6 +265,38 @@ class SectorWorkforce(unittest.TestCase):
         # 8 tiers x 2 principle methods x the automation methods each tier takes, twice
         self.assertGreaterEqual(checked, 2 * (8 * 2 * 3 + 5 * 2 + 3 * 2 + 2 * 2))
 
+    # What each automation method's goods cost a week over the workers it removes a level,
+    # at base prices, before the workforce cut of 2026-11-16 (origin/main at 97c2ad90a): the
+    # wage at which it pays for itself. The cut took a third of the workers it removes, and
+    # its inputs were cut to about a third with it (owner, the same day), so that it pays off
+    # at about the wage it did. A method added later takes the band of the one before it.
+    PAYOFF_BEFORE_CUT = {
+        "pm_prefabricated_building_components": 310 / 1000,
+        "pm_tower_cranes": 750 / 1800,
+        "pm_computer_aided_design": 1230 / 2600,
+        "pm_3d_printed_buildings": 2030 / 4550,
+        "pm_3d_printed_buildings_nanomaterial": 2030 / 4570,
+    }
+    PAYOFF_BAND = 0.10
+
+    def test_automation_pays_off_at_the_wage_it_did(self):
+        """An automation method's goods, over the workers it removes, stay within a tenth of
+        what they were before the workforce cut: the inputs and the cut move together. Before
+        2026-11-16's input change Prefabricated Components paid off at 0.93 a worker, three
+        times its 0.31, because the workers it removed were cut and its goods were not."""
+        methods = [pm for pm in _list(self.groups["pmg_construction_automation"].get("production_methods"))
+                   if sum(self.staff([pm]).values()) < 0]
+        self.assertEqual(set(methods), set(self.PAYOFF_BEFORE_CUT), "a new automation method needs a band")
+        for pm in methods:
+            with self.subTest(method=pm):
+                goods = _block(self.pms[pm], "building_modifiers", "workforce_scaled")
+                cost = sum(qty * self.prices[re.fullmatch(r"goods_input_(\w+)_add", key).group(1)]
+                           for key, qty in _numbers(goods).items())
+                payoff = cost / -sum(self.staff([pm]).values())
+                before = self.PAYOFF_BEFORE_CUT[pm]
+                self.assertLessEqual(abs(payoff / before - 1), self.PAYOFF_BAND,
+                                     f"pays off at {payoff:.3f} a worker against {before:.3f}")
+
     def test_a_flat_crew_method_cancels_its_tier_exactly(self):
         """An automation method that hires a flat crew (`unscaled`) is automated by design: it
         cancels the per-level staff of every tier it runs on and the crew runs the building
