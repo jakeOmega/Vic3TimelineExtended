@@ -51,6 +51,14 @@ A trigger that compares a bounded value against a literal outside its range is c
 | `movement_events.6` (A Rally in the City), option a, at `events/movement_events.txt:968` | `scope:relevant_movement.political_movement_radicalism <= 25` | Always true: the option adds loyalists in the state whatever the movement's activism. It reads as meant for 0.25. |
 | `invoke_doctrine_of_lapse`, the AI's `propose_score`, at `common/diplomatic_actions/46_doctrine_of_lapse.txt:151` | `scope:target_country.capital = { turmoil > 25 }` | Never true: the +10 for a target whose capital is in turmoil never applies. The mod's three aid articles made the same test until 2026-11-15 (#1829). |
 
+## Latent crashes the mod does not patch
+
+Vanilla script that can crash the game but has not been seen to. The mod leaves each one alone until the row's condition is met. If it is met, the patch follows § "Vanilla bugs the mod fixes" above. No `###` heading: this section holds no log signatures.
+
+| Where | What can crash | Patch it when |
+|---|---|---|
+| Goods Transfer (`goods_transfer`), its `possible` at `common/treaty_articles/13_goods_transfer.txt:32`, and its weekly `non_fulfillment` condition at line 78 | `is_market_reachable_for_trade` with no `is_country_alive` guard. On a country with no states the trigger can search from a null capital and crash the game: 1.15.1, RVA `0xd63d38`, where the mod's banking contagion did it in a 2026-11-16 observer run (#1871; `scripting_best_practices.md` § "`is_market_reachable_for_trade` Crashes the Game on a Country With No States"). The `possible` is evaluated with a stateless country in scope: the AI's treaty weighing read its line 44 for one in the 2026-11-08 observer run (the stateless-country entry under § "Script errors observed"). Line 78 reads the source country of a goods transfer that is already in force. Checked against 1.15.1 (`vanilla_parsed/`). | A crash at RVA `0xd63d38` (or the same site on a later version) with the mod's contagion guarded. Then make a `# VANILLA FIX:` that puts `is_country_alive = yes` ahead of both reads (on the source country for line 78), and report it to Paradox. `unguarded_uses()` in `test_banking_contagion_alive_guard.py` flags both uses when run on the vanilla file. |
+
 ## Script errors observed
 
 ### `common/ai_strategies/00_default_strategy.txt:5065` — invalid `region` event target

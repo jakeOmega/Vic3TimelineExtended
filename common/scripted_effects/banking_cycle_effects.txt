@@ -2650,48 +2650,58 @@ banking_cycle_bank_holiday_reopen = {
 #    trade-linked countries weighted by GDP.
 banking_cycle_check_and_execute_crash = {
 	set_variable = { name = crash value = 0 }
-	random_list = {
-		0 = {
-			modifier = {
-				add = var:bubble_pressure
-				if = {
-					limit = { var:finance_cycle_value >= 88 } # frenzy
-					subtract = 15
-					multiply = 0.35
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 75 } # boom
-					subtract = 25
-					multiply = 0.15
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 60 } # expansion
-					subtract = 50
-					multiply = 0.05
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 40 } # stable
-					subtract = 75
-					multiply = 0.02
-				}
-				else = {
-					# stagnation and below. Without this branch the weight fell
-					# through as RAW bubble pressure, so a country dropping out of
-					# a boom through 40 with its bubble intact crashed at
-					# bubble / (bubble + 100) a month — a third at bubble 50 —
-					# while two points higher it was zero
-					# (docs/audits/banking_cycle_simulation.md F4).
-					subtract = 90
-					multiply = 0.01
-				}
-				multiply = banking_crash_chance_economy_mult
-				min = 0
-				# Scale crash probability by the crash chance modifier
-				multiply = banking_crash_chance_multiplier_value
-			}
-			set_variable = { name = crash value = 1 }
+	# No crash for a country with no state or no market (#1871): the crash
+	# spreads from scope:banking_crash_origin_country.market, and such a
+	# country has no economy to crash. It keeps its cycle; the roll resumes
+	# if it regains land.
+	if = {
+		limit = {
+			is_country_alive = yes
+			exists = market
 		}
-		100 = { }
+		random_list = {
+			0 = {
+				modifier = {
+					add = var:bubble_pressure
+					if = {
+						limit = { var:finance_cycle_value >= 88 } # frenzy
+						subtract = 15
+						multiply = 0.35
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 75 } # boom
+						subtract = 25
+						multiply = 0.15
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 60 } # expansion
+						subtract = 50
+						multiply = 0.05
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 40 } # stable
+						subtract = 75
+						multiply = 0.02
+					}
+					else = {
+						# stagnation and below. Without this branch the weight fell
+						# through as RAW bubble pressure, so a country dropping out of
+						# a boom through 40 with its bubble intact crashed at
+						# bubble / (bubble + 100) a month — a third at bubble 50 —
+						# while two points higher it was zero
+						# (docs/audits/banking_cycle_simulation.md F4).
+						subtract = 90
+						multiply = 0.01
+					}
+					multiply = banking_crash_chance_economy_mult
+					min = 0
+					# Scale crash probability by the crash chance modifier
+					multiply = banking_crash_chance_multiplier_value
+				}
+				set_variable = { name = crash value = 1 }
+			}
+			100 = { }
+		}
 	}
 
 	if = {
@@ -2746,154 +2756,178 @@ banking_cycle_check_and_execute_crash = {
 #     Countries where the source is less than 5% of target GDP (a target more
 #     than 20 times its size) are immune.
 banking_cycle_spread_contagion = {
-	custom_tooltip = {
-		text = BANKING_CONTAGION_SPREAD_TT
-		every_country = {
-			limit = {
-				NOT = { THIS = scope:banking_crash_origin_country }
-				# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
-				NOT = { banking_crisis_wave_reached = yes }
-				te_banking_cycle_running = yes
-				# Trade-reachable
-				OR = {
-					this.market = scope:banking_crash_origin_country.market
-					is_market_reachable_for_trade = scope:banking_crash_origin_country.market
-				}
-				# At least one trade channel
-				OR = {
-					this.market = scope:banking_crash_origin_country.market
-					is_in_customs_union_with = scope:banking_crash_origin_country
-					# [Monetary policy 5b, §15A.3] A shared currency is a channel too.
-					te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
-					is_adjacent_to_country = scope:banking_crash_origin_country
-					economic_dependence = {
-						target = scope:banking_crash_origin_country
-						value > 0.05
-					}
-					market = {
-						market_trade_reliance = {
-							target = scope:banking_crash_origin_country.market
-							value > 0.01
-						}
-					}
-					market = {
-						market_production_share = {
-							target = scope:banking_crash_origin_country
-							value > 0.01
-						}
-					}
-					market = {
-						market_consumption_share = {
-							target = scope:banking_crash_origin_country
-							value > 0.01
-						}
-					}
-				}
-				# GDP filter: source must have at least 5% of target's GDP
-				# Tiny economies cannot destabilise giants
-				scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
+	# The origin must hold land and a market: every target test below reads
+	# scope:banking_crash_origin_country.market (#1871). Both callers, the
+	# monthly crash check and the contagion event's cascade
+	# (minor_events_timelineextended.7's after), pass through here.
+	if = {
+		limit = {
+			scope:banking_crash_origin_country ?= {
+				is_country_alive = yes
+				exists = market
 			}
-
-			random = {
-				chance = 25
-				# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
-				# origin GDP >= affected GDP (same size or bigger)
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= gdp }
-					add = 5
-				}
-				# origin GDP >= 2x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
-					add = 10
-				}
-				# origin GDP >= 5x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
-					add = 15
-				}
-				# origin GDP >= 10x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
-					add = 20
-				}
-				# Same market = strongest contagion channel
-				modifier = {
-					trigger = { this.market = scope:banking_crash_origin_country.market }
-					add = 10
-				}
-				# Hard crash spreads more easily
-				modifier = {
-					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-					add = 10
-				}
-				modifier = {
-					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
-					add = 5
-				}
-				modifier = {
-					trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
-					add = 10
-				}
-				# [Monetary policy 5b, §15A.3] One currency, one banking system's worth
-				# of exposure.
-				modifier = {
-					trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
-					add = 10
-				}
-				# [Monetary policy 5b tier 4] ...unless the currency area has one
-				# supervisor and one deposit guarantee over all of it, which is most
-				# of what the shared currency was carrying. Not all of it: a common
-				# supervisor is not a wall, and 2008 and 2011 both crossed one.
-				# -6 of the channel's +10 leaves +4. A literal, as in every other
-				# `random` modifier in the mod: a script-value name here is a
-				# malformed token and the line is dropped (scripting_best_practices.md
-				# § Named Script Values in Weight/Random Modifier `add =`).
-				modifier = {
-					trigger = {
-						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
-						te_mon_bloc_union_tier_4_plus = yes
+		}
+		custom_tooltip = {
+			text = BANKING_CONTAGION_SPREAD_TT
+			every_country = {
+				limit = {
+					# First, before anything reads this.market or calls
+					# is_market_reachable_for_trade (#1871). A country that has lost its
+					# last state stays in the game with no capital and no market, and on
+					# it the trigger searches from a null capital and crashes the game
+					# (1.15.1). exists = capital alone is not enough: such a country's
+					# capital can still resolve to the state it lost
+					# (scripting_best_practices.md § "Guard Scope References in
+					# Triggers"); it is here for a country with states but no capital,
+					# a case nobody has seen. test_banking_contagion_alive_guard.py
+					# pins is_country_alive as the first line.
+					is_country_alive = yes
+					exists = capital
+					NOT = { THIS = scope:banking_crash_origin_country }
+					# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
+					NOT = { banking_crisis_wave_reached = yes }
+					te_banking_cycle_running = yes
+					# Trade-reachable
+					OR = {
+						this.market = scope:banking_crash_origin_country.market
+						is_market_reachable_for_trade = scope:banking_crash_origin_country.market
 					}
-					add = -6
-				}
-				modifier = {
-					trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
-					add = 5
-				}
-				modifier = {
-					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
-					add = 5
-				}
-				modifier = {
-					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
-					add = 10
-				}
-				modifier = {
-					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
-					add = 5
-				}
-				modifier = {
-					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
-					add = 10
-				}
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
-					add = 1.5
-				}
-				modifier = {
-					trigger = { has_law_or_variant = law_type:law_free_trade }
-					add = 1.5
+					# At least one trade channel
+					OR = {
+						this.market = scope:banking_crash_origin_country.market
+						is_in_customs_union_with = scope:banking_crash_origin_country
+						# [Monetary policy 5b, §15A.3] A shared currency is a channel too.
+						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
+						is_adjacent_to_country = scope:banking_crash_origin_country
+						economic_dependence = {
+							target = scope:banking_crash_origin_country
+							value > 0.05
+						}
+						market = {
+							market_trade_reliance = {
+								target = scope:banking_crash_origin_country.market
+								value > 0.01
+							}
+						}
+						market = {
+							market_production_share = {
+								target = scope:banking_crash_origin_country
+								value > 0.01
+							}
+						}
+						market = {
+							market_consumption_share = {
+								target = scope:banking_crash_origin_country
+								value > 0.01
+							}
+						}
+					}
+					# GDP filter: source must have at least 5% of target's GDP
+					# Tiny economies cannot destabilise giants
+					scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
 				}
 
-				scope:banking_crash_origin_country = {
-					save_scope_as = banking_crash_origin_country
-				}
+				random = {
+					chance = 25
+					# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
+					# origin GDP >= affected GDP (same size or bigger)
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= gdp }
+						add = 5
+					}
+					# origin GDP >= 2x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
+						add = 10
+					}
+					# origin GDP >= 5x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
+						add = 15
+					}
+					# origin GDP >= 10x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
+						add = 20
+					}
+					# Same market = strongest contagion channel
+					modifier = {
+						trigger = { this.market = scope:banking_crash_origin_country.market }
+						add = 10
+					}
+					# Hard crash spreads more easily
+					modifier = {
+						trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+						add = 10
+					}
+					modifier = {
+						trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
+						add = 5
+					}
+					modifier = {
+						trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
+						add = 10
+					}
+					# [Monetary policy 5b, §15A.3] One currency, one banking system's worth
+					# of exposure.
+					modifier = {
+						trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
+						add = 10
+					}
+					# [Monetary policy 5b tier 4] ...unless the currency area has one
+					# supervisor and one deposit guarantee over all of it, which is most
+					# of what the shared currency was carrying. Not all of it: a common
+					# supervisor is not a wall, and 2008 and 2011 both crossed one.
+					# -6 of the channel's +10 leaves +4. A literal, as in every other
+					# `random` modifier in the mod: a script-value name here is a
+					# malformed token and the line is dropped (scripting_best_practices.md
+					# § Named Script Values in Weight/Random Modifier `add =`).
+					modifier = {
+						trigger = {
+							te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
+							te_mon_bloc_union_tier_4_plus = yes
+						}
+						add = -6
+					}
+					modifier = {
+						trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
+						add = 5
+					}
+					modifier = {
+						trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
+						add = 5
+					}
+					modifier = {
+						trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
+						add = 10
+					}
+					modifier = {
+						trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
+						add = 5
+					}
+					modifier = {
+						trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
+						add = 10
+					}
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
+						add = 1.5
+					}
+					modifier = {
+						trigger = { has_law_or_variant = law_type:law_free_trade }
+						add = 1.5
+					}
 
-				# Mark the target reached at once, so cascading spreads from other
-				# countries in this wave cannot hit it twice, and send it the
-				# contagion event, unless it holds one already, on its way or
-				# open: one at a time, across waves too (banking_contagion_reach).
-				banking_contagion_reach = yes
+					scope:banking_crash_origin_country = {
+						save_scope_as = banking_crash_origin_country
+					}
+
+					# Mark the target reached at once, so cascading spreads from other
+					# countries in this wave cannot hit it twice, and send it the
+					# contagion event, unless it holds one already, on its way or
+					# open: one at a time, across waves too (banking_contagion_reach).
+					banking_contagion_reach = yes
+				}
 			}
 		}
 	}
