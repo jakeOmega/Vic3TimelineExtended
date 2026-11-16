@@ -79,3 +79,31 @@ Mandate of Heaven (aversion 100: it never goes ahead), the Meiji Restoration (it
 - The enactment length, which moves the factors little: at 10 or 20 months the conservative factor's middle is 3.2 or 2.5.
 
 **With the third-party AI mod that a Workshop player runs alongside** (its files: `kai_political_strategies.txt`, a whole-file copy of `00_default_strategy.txt`; from the 2026-11-15 study of it, not from its files). It INJECTs `change_law_chance`, `min_law_chance_to_pass` and `revolution_aversion` into the five common agendas, the Tanzimat and the Great Reforms, and REPLACEs the Meiji Restoration. Its copy of the default strategy keeps vanilla's `change_law_chance = { value = 1 }`, and this mod's INJECT lands on that copy, so the rates add: each agenda's chance is that mod's agenda value plus this mod's 40. On `revolution_aversion` both mods INJECT the same field. INJECTs apply in file order and, by the interest-group read, the later one wins; `edited_political_strategies.txt` sorts before `kai_political_strategies.txt`, so that mod's values stand and this mod's land only on the consolidation and confrontation agendas it doesn't touch. Neither mod's aversions were sized for the combined rate: that mod's were set for its own agenda rates, which now carry this mod's 39 on top. The extra exposure is probably small, since that mod's waits are already short. Its floors stand, since this mod sets none. An INJECT can't survive a REPLACE, but this mod injects nothing into the Meiji Restoration. That two INJECTs of one strategy field resolve this way is unread; if the earlier one wins instead, this mod's aversions apply with both mods' rates added, a higher rate than these aversions were sized for.
+
+## AI Government Construction
+
+In a market game the engine's AI chooses which government building to queue and where, and script decides how much construction the government buys for the queue each week. Both halves have to fit an AI's budget for an AI government to build anything. The owner's order of importance for AI behavior (2026-11-15) is economic growth, technological advancement, legal modernization, military modernization, expansion; the purchase rule serves the first, by keeping governments out of debts that end in default.
+
+**The purchase** (`te_construction_market_ai_purchase_target`; the full account, the evidence and the tables are in [Construction](construction.md) § The AI's purchase). Each week an AI government with a level queued, and not paused by the engine, buys the larger of:
+- **its surplus**: net fixed income over the smoothed price, times 1 + reserves − debt (never under 0.1), which never borrows;
+- **a floor**: a twentieth of fixed income, never more than 10 points, paid from reserves (whole at reserves of a tenth or more, a tenth of itself with none), plus a fifth of fixed income while the country is short of bureaucracy.
+
+Until 2026-11-15 the floor was a flat 10 points a week, about 12,500 to 20,000, which was several times the whole income of most AI countries: they borrowed to the engine's pause within months and stayed there.
+
+It is the same market, price and purchase variable a player has; there is no AI-only modifier and no subsidy. The rule only sets the number a player sets by hand.
+
+**The engine's gates around it** (`NAI` defines, all vanilla's; `test_construction_market_ai_purchase.py` fails if the mod sets one):
+
+| Gate | Define | What it does to an AI government's building |
+|---|---|---|
+| Queue allowance | `CONSTRUCTION_MAX_NUM_GOVERNMENT_BUILDING_CONSTRUCTIONS_BASE` 1, `_SCALED` 0.05 | One government building queued, plus one per 20 points of construction output (in a market game, the two purchases). The purchase is capped at queued levels × the weekly maximum per level |
+| Reserve gate | `CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS` 0.1 | No new government building is queued unless reserves stay above a tenth after its cost. A country in debt has no reserves, so debt stops the next building as well as the current one |
+| Debt pause | `CONSTRUCTION_DEBT_PAUSE` 0.4, `CONSTRUCTION_DEBT_RESUME` 0.2 | `is_construction_paused`: the purchase is 0 from 40% of the debt ceiling until debt is back under 20%. A ceiling is about 250 weeks of an AI's income, so interest at the pause is about a fifth of income |
+| Budget AI | `WAGE_CUT_INCOME_RATIO_THRESHOLD` 1.05, `CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD` 0.1 and the tax and spending thresholds beside them | Wages and "should-have" spending are cut when income is under 1.05 times expenses, and taxes rise with less surplus once debt is over a tenth of the ceiling. The floor's twentieth is that 1.05 |
+
+**What is left to the owner** (none of it changed with the floor):
+- **One level at a time.** The surplus term draws reserves down while a level is queued, and the reserve gate then holds the next building back until they are rebuilt, so a rich AI buys one level's weekly maximum whatever its surplus (Germany in 1958: 140 points on a GDP of 3.1 billion). The levers are the queue allowance's base, the reserve gate, and how far the surplus term draws reserves.
+- **Small economies.** A government with 1,000 a week and a surplus of a third buys a quarter of a point a week, so a 100-point Government Administration level takes seven years. That is what it can pay at 1,000 a point with no base construction; before, it bought ten points a week for a few months and then nothing. The Small-Economy Construction rule (off by default) is the existing lever, and a base amount of construction for market games would be another.
+- **The bureaucracy fifth** is the clause's original figure, now at the real price, where it had been buying 1.7 times income. Whether a fifth is enough to end a shortage in good time is for an observer run to show.
+
+**Reading it in an observer run:** the AI telemetry probe logs the purchase (`cm_public`), the smoothed price (`cm_price`), income, expenses, reserves and debt against their limits, the pause and defaults for each AI country; `docs/testing/ai-economy-playtest.md` § The AI's construction purchase fits its budget says what each should show.
