@@ -3092,8 +3092,9 @@ te_seabed_world_totals = {
 }
 
 # No scope, after the sharing's leases and pacts (seabed claims spec § 7): in
-# each basin, a country this sharing first gives a share (te_seabed_ent above
-# 0 and no te_seabed_claimed mark yet) is told to every other player with a
+# each basin, a country this sharing first gives a share (te_seabed_ent at
+# te_seabed_share_min or more and no te_seabed_claimed mark yet; one licence
+# while the pools were a fifth of this size) is told to every other player with a
 # share there since an earlier sharing and coast on the basin (review I2: a
 # distant share in every basin had a great power hear of each newcomer about
 # four times; the message group lets a player mute the rest); then every
@@ -3125,7 +3126,7 @@ te_seabed_claimant_notice = {
 	every_country = {
 		limit = {
 			has_variable = te_seabed_ent_$B$
-			var:te_seabed_ent_$B$ > 0
+			var:te_seabed_ent_$B$ >= te_seabed_share_min
 			NOT = { has_variable = te_seabed_claimed_$B$ }
 		}
 		save_scope_as = te_seabed_newcomer
@@ -3135,7 +3136,7 @@ te_seabed_claimant_notice = {
 				is_ai = no
 				has_variable = te_seabed_claimed_$B$
 				has_variable = te_seabed_ent_$B$
-				var:te_seabed_ent_$B$ > 0
+				var:te_seabed_ent_$B$ >= te_seabed_share_min
 				has_variable = te_seabed_coast_$B$
 				var:te_seabed_coast_$B$ > 0
 			}
@@ -3149,7 +3150,7 @@ te_seabed_mark_claimed = {
 	every_country = {
 		limit = {
 			has_variable = te_seabed_ent_$B$
-			var:te_seabed_ent_$B$ > 0
+			var:te_seabed_ent_$B$ >= te_seabed_share_min
 			NOT = { has_variable = te_seabed_claimed_$B$ }
 		}
 		set_variable = te_seabed_claimed_$B$

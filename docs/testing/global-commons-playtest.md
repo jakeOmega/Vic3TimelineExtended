@@ -28,9 +28,10 @@ what only the game can show.
    them by something other than profit; give the groups `ai_selection = most_productive` and an `ai_value` ladder
    (`pmg_emissions_control`'s pattern).
 4. The Deep-Sea Mine's new figures: a level on Deep-Sea Mining at full staff employs 500 machinists, 400 engineers and
-   100 academics, and produces 260 Structural Metals, 260 Tech-Critical Metals, 150 Conductive and Base Metals, 50 Gold
-   and 50 Chemical and Industrial Minerals a week at base throughput. Its profit tooltip at prices near base reads
-   about £22,700 a level a week, against about £7,250 for an Extraplanetary Base on Asteroid Mine in the same market.
+   100 academics, and produces 320 Structural Metals, 230 Conductive Metals, 70 Tech-Critical Metals, 50 Base Metals,
+   50 Gold and 50 Chemical and Industrial Minerals a week at base throughput (the deposit mix of 2026-11-15). Its
+   profit tooltip at prices near base reads about £15,100 a level a week, against about £7,250 for an Extraplanetary
+   Base on Asteroid Mine in the same market.
 5. Saves from before the change: existing Deep-Sea Mines keep their levels and change outputs on load, and lay off
    the half of their staff the new method no longer employs. Existing Extraplanetary Bases start on Chemical
    Launch and Chemical Tugs, the groups' defaults. Watch for a base left with no method in a new group.
@@ -166,7 +167,7 @@ even in that save, and the scale comes from those lines.
    included; hover every cell and check each figure against the variable inspector. The pool bar's
    five segments read left to right: our built mines (gold), queued (lighter gold), our claims
    (green), rivals' mines (red), rivals' claims (the dark background).
-8. **The policy buttons and influence.** Sponsor Contractors needs and holds 50 influence plus 0.5
+8. **The policy buttons and influence.** Sponsor Contractors needs and holds 50 influence plus 0.1
    per unused claim (the country's influence breakdown lists "Seabed Policy: Sponsor Contractors" at
    that figure, and it follows the claims month by month); Unilateral Licensing 1.5 times that, at
    least 150. The current policy's button is greyed with "This is not already our policy" crossed. The new policy's weight shows at the next January sharing. Under
@@ -174,7 +175,8 @@ even in that save, and the scale comes from those lines.
    (−5 from each side of the pair: check that `change_relations` from each side moves the one
    figure, so the year's loss is 10, not 20 or 5).
 9. **The AI's policy.** Over a few decades of an observer game past era 11: AI claimants move to
-   Sponsor Contractors once Tech-Critical Metals sell above base price at home; Unilateral Licensing
+   Sponsor Contractors once the Deep-Sea Mine's metals (Structural, Conductive and Tech-Critical,
+   weighted by its sales) sell above base price at home; Unilateral Licensing
    is rare, held mostly by great powers with poor UN standing or a rival claimant, and never by one
    with Exemplary standing; no AI flips policy every year.
 10. **Old saves and the rule switched on mid-game.** Load a save from before the rule with Deep-Sea
@@ -232,7 +234,7 @@ even in that save, and the scale comes from those lines.
     engine's builder knows nothing of the fee, so if AIs queue far ahead of their construction and pay
     much, lower the rate or lengthen the grace, never add an `is_ai` rule (spec § 8).
 20. **Sponsor's cost at scale.** In a late-game save, a great power on Sponsor Contractors with most
-    of a basin's claims: its influence bill (50 + 0.5 a claim) should be noticeable but affordable;
+    of a basin's claims: its influence bill (50 + 0.1 a claim, on pools of 500 to 1,500) should be noticeable but affordable;
     tune `te_seabed_influence_per_claim` from the figures.
 21. **A lease at entry and at the sharing.** Sign a treaty with Lease Pacific Seabed Claims for 20
     claims to us: a day later our Pacific claims rise by up to 20 and the lessor's fall as much, and
@@ -357,6 +359,30 @@ even in that save, and the scale comes from those lines.
     our claims entering force, Administer Seabed Claims taken on us, or a level in another basin with no
     claim left (queued before the box was ticked) taking this basin's claim first. Such a level takes
     another basin's license; it is expected, and the swap replaces it when a local claim frees up.
+33. **The pools at five times their size, and the deposit mix** (owner, 2026-11-15). (a) **An existing
+    save's first sharing.** Load a save with Deep-Sea Mines from before the change and pass a January:
+    every basin's pool on the Seabed tab reads five times what it did (Pacific 1,500, Atlantic 1,250,
+    Indian 1,000, Southern 750, Arctic 500), our licenses are unchanged, and our claims and the
+    waiting shares are about five times larger. No `TE_SELF_CHECK BROKEN seabed_cap` at that sharing
+    (its OK logs once a game, so a save that has passed a sharing before shows nothing). A standing
+    lease keeps its total: it is now a fifth of the share it was. (b) **The cost of
+    a share.** On Sponsor Contractors the influence held is about what it was for the same share of
+    a basin (50 + 0.1 a claim). (c) **Figures fit.** With four-digit pools, claims and licenses, no
+    figure on the Seabed tab, the State Panel tile or the rivals' rows elides or wraps
+    (`test_seabed_layout.py` sizes the boxes; this is the look). (d) **The mine.** Item 4 of the
+    rebalance list above; an old save's mines change output on load. (e) **AI, observer run past era
+    11.** AI claimants still take up Sponsor Contractors and ask for leases when the mine's metals
+    sell above base, now reading Structural and Conductive Metals as well as Tech-Critical. With five
+    times the claims, check they don't all sit on Sponsor Contractors for the protection term alone,
+    or lease claims out and ask for them back every year. (f) **The market at scale.** With several
+    countries building, watch Structural and Conductive Metals' prices: 5,000 levels on the era-12
+    methods make about 3.2M and 2.3M a week before throughput. (g) **Small shares.** A claimant with
+    fewer than five licenses' share in a basin (`te_seabed_share_min`) is not in the basin's claimant
+    list and raises no New Claimant notice; the first sharing under the new pools in an existing save
+    should not bring a burst of those notices. With many claimants, check the list still shows the
+    largest (it holds 40 at most). (h) **AI on Sponsor Contractors in an existing save.** If AIs that
+    held Sponsor Contractors drop to Scientific Survey in the January the pools change, the yearly
+    country pulse ran before the sharing (`global_commons.md`, Pools).
 
 ### The Seabed tab after the GUI audit (2026-10-27)
 
@@ -465,7 +491,7 @@ types, and every trigger, docket item and vote follows a pattern already seen in
 - [ ] The convention's hover (Table a Resolution, Our Obligations, the ITLOS icon) lists the seabed
       terms.
 - [ ] A party with Deep-Sea Mines pays royalties: Our Obligations shows "Royalties: N a week",
-      N ≈ 1,788 × its levels, and the Budget panel's Breakdown counts them under United Nations.
+      N ≈ 1,484 × its levels, and the Budget panel's Breakdown counts them under United Nations.
 - [ ] With the World Development Fund standing, its pot (the chamber's Fund row) grows by the
       royalties; without it, the UN budget does.
 - [ ] A poorer party sees "Reserved half" in Our Obligations; a richer one does not.

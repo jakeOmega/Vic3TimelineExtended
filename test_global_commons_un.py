@@ -185,7 +185,7 @@ class HandTypedFiguresTest(unittest.TestCase):
         body = _block(values, "te_seabed_level_output_value")
         output = sum(float(a) * float(b) for a, b in
                      re.findall(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}", body))
-        self.assertEqual(output, 44700)
+        self.assertEqual(output, 37100)
         rate = _value("te_seabed_royalty_rate")
         per_level = output * rate
         seabed = LOC["je_un_terms_law_of_sea_seabed"]

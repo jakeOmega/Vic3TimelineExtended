@@ -21,6 +21,7 @@ import seabed_model as m  # noqa: E402
 VALUES = "common/script_values/te_global_commons_seabed_values.txt"
 AI_VALUES = "common/script_values/te_global_commons_seabed_ai_values.txt"
 EFFECTS = "common/scripted_effects/te_global_commons_seabed_effects.txt"
+LEASE = "common/treaty_articles/122_seabed_lease.txt"
 TRIGGERS = "common/scripted_triggers/te_global_commons_seabed_triggers.txt"
 MODIFIERS = "common/static_modifiers/te_global_commons_seabed_modifiers.txt"
 TYPES = "common/modifier_type_definitions/te_global_commons_seabed_modifier_types.txt"
@@ -88,8 +89,35 @@ class ConstantsTest(unittest.TestCase):
     def test_pools(self):
         for b, pool in m.POOLS.items():
             self.assertEqual(literal(self.values, f"te_seabed_pool_{b}"), pool, b)
-        # spec § 2.2
-        self.assertEqual(m.POOLS, {"pacific": 300, "atlantic": 250, "indian": 200, "southern": 150, "arctic": 100})
+        # spec § 2.2's first estimates, times five
+        self.assertEqual(m.POOLS, {"pacific": 1500, "atlantic": 1250, "indian": 1000, "southern": 750, "arctic": 500})
+
+    def test_what_is_counted_in_licences_follows_the_pools(self):
+        """A share of a pool costs and weighs what it did when the pools grew
+        fivefold (2026-11-15): each figure counted in licences is held to the
+        pools' total, not to a literal, so the next change of size fails here
+        until they follow."""
+        total = sum(m.POOLS.values())
+        ai = read(AI_VALUES)
+        for text, name, per_thousand in ((self.values, "te_seabed_share_min", 1),
+                                         (ai, "te_seabed_ai_gain_min", 1),
+                                         (ai, "te_seabed_ai_lease_margin", 5)):
+            with self.subTest(value=name):
+                self.assertEqual(literal(text, name) * 1000, per_thousand * total)
+        for text, name, whole_pools in ((self.values, "te_seabed_influence_per_claim", 500),
+                                        (ai, "te_seabed_ai_protect_per_claim", 100)):
+            with self.subTest(value=name):
+                self.assertAlmostEqual(literal(text, name) * total, whole_pools)
+        lease = strip_comments(read(LEASE))
+        for b in m.BASINS:
+            with self.subTest(article=b):
+                article = block(lease, f"te_seabed_lease_{b}")
+                spare = article[article.index('desc = "te_seabed_ai_lease_spare"'):]
+                pull = float(re.search(r"multiply = ([\d.]+)", spare[:spare.index("}")])[1])
+                self.assertAlmostEqual(pull * total, 1000)          # 1 a spare claim at pools of 1,000
+                maneuvers, infamy = (int(d) for d in re.findall(
+                    r'desc = "te_seabed_lease_war_claims"\s+value = scope:quantity\s+divide = (\d+)', article))
+                self.assertEqual((maneuvers * 50, infamy * 100), (total, total))
 
     def test_weights(self):
         self.assertEqual(literal(self.values, "te_seabed_coast_weight"), m.COAST_WEIGHT)
@@ -569,7 +597,7 @@ class LockTest(unittest.TestCase):
     def test_constants(self):
         v = read(VALUES)
         self.assertEqual(literal(v, "te_seabed_influence_sponsor"), 50)
-        self.assertEqual(literal(v, "te_seabed_influence_per_claim"), 0.5)
+        self.assertEqual(literal(v, "te_seabed_influence_per_claim"), 0.1)
         self.assertEqual(literal(v, "te_seabed_unilateral_cost_mult"), 1.5)
         self.assertEqual(literal(v, "te_seabed_influence_unilateral"), 150)
         self.assertEqual(literal(v, "te_seabed_policy_lock_months"), 60)
@@ -709,7 +737,7 @@ class PanelDataTest(unittest.TestCase):
         leaves it out; a claimant needs a share there and a capital."""
         listed = strip_comments(block(read(TRIGGERS), "te_seabed_rank_listed"))
         for cond in ("has_variable = te_seabed_shared", "has_variable = te_seabed_ent_$B$",
-                     "var:te_seabed_ent_$B$ > 0", "exists = capital",
+                     "var:te_seabed_ent_$B$ >= te_seabed_share_min", "exists = capital",
                      "NOT = { THIS = scope:te_seabed_rank_viewer }"):
             self.assertIn(cond, listed)
 

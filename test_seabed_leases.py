@@ -222,7 +222,8 @@ class LeaseSharingTest(unittest.TestCase):
 
 class LeaseAiTest(unittest.TestCase):
     """Spec §§ 4, 8: offer claims the source is unlikely to use, request when
-    the target's room is near 0 and Tech-Critical Metals sell above base."""
+    the target's room is near 0 and the Deep-Sea Mine's metals sell above
+    base."""
 
     def test_ai_blocks(self):
         loc = english_loc()
@@ -243,8 +244,9 @@ class LeaseAiTest(unittest.TestCase):
 
     def test_the_lessor_weighs_the_quantity(self):
         """Review I3: an AI lessor refuses to lease more than it can spare: the
-        claims asked above its spare cost 5 points each, so 10 over outweighs
-        the spare's largest pull (+30) and the base reluctance."""
+        claims asked above its spare cost 1 point each (5 while the pools were a
+        fifth of this size), so 50 over outweighs the spare's largest pull (+30)
+        and the base reluctance. The spare pulls a fifth of a point a claim."""
         loc = english_loc()
         for b in m.BASINS:
             score = strip_comments(block(block(article(b), "\tai"), "\t\tinherent_accept_score"))
@@ -252,7 +254,10 @@ class LeaseAiTest(unittest.TestCase):
             self.assertIn("scope:article.input_quantity", giver)
             self.assertIn(f"subtract = te_seabed_ai_lease_spare_{b}", giver)
             self.assertIn('desc = "te_seabed_ai_lease_too_many"', giver)
-            self.assertIn("multiply = 5", giver)
+            too_many = giver[giver.index('desc = "te_seabed_ai_lease_too_many"'):]
+            self.assertNotIn("multiply", too_many[:too_many.index("}")])
+            spare = giver[giver.index('desc = "te_seabed_ai_lease_spare"'):]
+            self.assertIn("multiply = 0.2", spare[:spare.index("}")])
         self.assertRegex(loc, r'(?m)^ te_seabed_ai_lease_too_many:0 "')
 
     def test_offer_follows_the_spec(self):
@@ -267,7 +272,8 @@ class LeaseAiTest(unittest.TestCase):
             self.assertIn(f"te_seabed_ai_lease_spare_{b}", block(values, f"te_seabed_ai_lease_offer_value_{b}"))
             request = block(values, f"te_seabed_ai_lease_request_value_{b}")
             self.assertIn("te_seabed_room", request)
-            self.assertIn("te_seabed_ai_tech_metals_premium", request)
+            # the mine's three metals by their share of its sales
+            self.assertIn("te_seabed_ai_metals_premium", request)
             self.assertIn(f"te_seabed_home_{b}", request)
 
     def test_sponsor_pull_counts_protected_claims(self):

@@ -11,13 +11,14 @@
 #
 #   policy        when it scores
 #   Survey        always te_seabed_ai_will_survey: the default
-#   Sponsor       the policy would bring at least one licence AND Tech-Critical
-#                 Metals sell above base price at home: 30, +40 per 100% the
+#   Sponsor       the policy would bring at least te_seabed_ai_gain_min
+#                 licences AND the mine's metals sell above base price at
+#                 home (te_seabed_ai_metals_premium): 30, +40 per 100% the
 #                 price stands above base, at most +20
 #   Unilateral    the same licence test, then by rank (great +25, major +10,
 #                 others -20), UN standing (poor or disgraced +15, respected
 #                 -15, exemplary -60: a large weight, not a ban), a rival that
-#                 also claims +10, Tech-Critical Metals above 1.25x base +15,
+#                 also claims +10, the mine's metals above 1.25x base +15,
 #                 an ITLOS party under the Regulated regime -15 (defection
 #                 costs, § 3.3)
 #
@@ -34,8 +35,11 @@ te_seabed_ai_stay_bonus = 10
 te_seabed_ai_influence_spare = 100
 te_seabed_ai_influence_deficit_pull = 50
 # Sponsor Contractors' pull per unused claim it would protect, and its cap.
-te_seabed_ai_protect_per_claim = 0.1
+te_seabed_ai_protect_per_claim = 0.02
 te_seabed_ai_protect_max = 20
+# The licence test's bar: a policy counts only if it would bring this many
+# licences, a thousandth of the five pools (1 of 1,000 before 2026-11-15).
+te_seabed_ai_gain_min = 5
 
 # ---- The licence test: what Sponsor Contractors would bring ----
 # Σ over basins of pool × w' ÷ (W − w + w'), w' = w × r: the country's weight
@@ -159,13 +163,83 @@ te_seabed_ai_projected = {
 	add = te_seabed_ai_projected_southern
 }
 
-# How far above base Tech-Critical Metals sell in the country's market, as a
-# fraction (0 at or below base). The block form, as vanilla reads market
-# goods from country scope (scripting_best_practices.md, market_goods_pricier).
-te_seabed_ai_tech_metals_premium = {
+# How far each of the Deep-Sea Mine's three metals sells above base in the
+# country's market (_up) or below it (_down), as fractions. The block form, as
+# vanilla reads market goods from country scope, and the two clamped halves, so
+# the difference is the signed premium whether or not the engine's reads are
+# signed (scripting_best_practices.md, market_goods_pricier).
+te_seabed_ai_structural_up = {
+	value = 0
+	market = {
+		mg:iron = { add = market_goods_pricier }
+	}
+	min = 0
+}
+
+te_seabed_ai_structural_down = {
+	value = 0
+	market = {
+		mg:iron = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+te_seabed_ai_conductive_up = {
+	value = 0
+	market = {
+		mg:copper = { add = market_goods_pricier }
+	}
+	min = 0
+}
+
+te_seabed_ai_conductive_down = {
+	value = 0
+	market = {
+		mg:copper = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+te_seabed_ai_tech_metals_up = {
 	value = 0
 	market = {
 		mg:tech_metals = { add = market_goods_pricier }
+	}
+	min = 0
+}
+
+te_seabed_ai_tech_metals_down = {
+	value = 0
+	market = {
+		mg:tech_metals = { add = market_goods_cheaper }
+	}
+	min = 0
+}
+
+# The mine's basket: the three signed premiums weighted by each metal's share
+# of the base method's metal sales at base prices (pm_ocean_mine: Structural
+# 320 x 40, Conductive 230 x 40, Tech-Critical 70 x 80, of 27,600;
+# test_deep_sea_rebalance.py holds the weights to the method), 0 when the
+# basket is at or below base. One metal a little above base no longer opens
+# the wills on its own while the other two sell below it (review, 2026-11-15).
+# Until then the AI read Tech-Critical Metals alone, which were nearly half
+# the mine's sales and are now a seventh.
+te_seabed_ai_metals_premium = {
+	value = 0
+	add = {
+		value = te_seabed_ai_structural_up
+		subtract = te_seabed_ai_structural_down
+		multiply = 0.46
+	}
+	add = {
+		value = te_seabed_ai_conductive_up
+		subtract = te_seabed_ai_conductive_down
+		multiply = 0.34
+	}
+	add = {
+		value = te_seabed_ai_tech_metals_up
+		subtract = te_seabed_ai_tech_metals_down
+		multiply = 0.20
 	}
 	min = 0
 }
@@ -176,12 +250,12 @@ te_seabed_ai_will_sponsor = {
 	value = 0
 	if = {
 		limit = {
-			te_seabed_ai_projected >= 1
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_projected >= te_seabed_ai_gain_min
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 30
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
@@ -189,7 +263,7 @@ te_seabed_ai_will_sponsor = {
 	# Protection (seabed claims spec § 2.2): the more unused claims of its own,
 	# the more Sponsor Contractors keeps of them each January.
 	if = {
-		limit = { te_seabed_ai_projected >= 1 }
+		limit = { te_seabed_ai_projected >= te_seabed_ai_gain_min }
 		add = {
 			value = te_seabed_protected_claims
 			multiply = te_seabed_ai_protect_per_claim
@@ -201,7 +275,7 @@ te_seabed_ai_will_sponsor = {
 te_seabed_ai_will_unilateral = {
 	value = 0
 	if = {
-		limit = { te_seabed_ai_projected >= 1 }
+		limit = { te_seabed_ai_projected >= te_seabed_ai_gain_min }
 		if = {
 			limit = { country_rank >= rank_value:great_power }
 			add = 25
@@ -240,7 +314,7 @@ te_seabed_ai_will_unilateral = {
 			add = 10
 		}
 		if = {
-			limit = { te_seabed_ai_tech_metals_premium > 0.25 }
+			limit = { te_seabed_ai_metals_premium > 0.25 }
 			add = 15
 		}
 		if = {
@@ -320,13 +394,14 @@ te_seabed_ai_score_unilateral = {
 #             twice a year), plus a margin; with nothing queued, all but the
 #             margin (spec § 4: no levels queued, or claims well above its pace)
 #   offer     the spare, while the country isn't short of claims itself
-#   request   10, +40 per 100% Tech-Critical Metals stand above base (at most
-#             +20), in a home basin, while its room is at most the margin
+#   request   10, +40 per 100% the mine's metals stand above base
+#             (te_seabed_ai_metals_premium, at most +20), in a home basin,
+#             while its room is at most the margin
 # ============================================================================
 
 te_seabed_ai_lease_pace_months = 12
 te_seabed_ai_lease_build_months = 6
-te_seabed_ai_lease_margin = 5
+te_seabed_ai_lease_margin = 25
 
 te_seabed_ai_lease_spare_pacific = {
 	value = te_seabed_own_claims_pacific
@@ -355,11 +430,11 @@ te_seabed_ai_lease_request_value_pacific = {
 			te_seabed_is_claimant = yes
 			has_variable = te_seabed_home_pacific
 			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 10
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
@@ -393,11 +468,11 @@ te_seabed_ai_lease_request_value_atlantic = {
 			te_seabed_is_claimant = yes
 			has_variable = te_seabed_home_atlantic
 			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 10
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
@@ -431,11 +506,11 @@ te_seabed_ai_lease_request_value_indian = {
 			te_seabed_is_claimant = yes
 			has_variable = te_seabed_home_indian
 			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 10
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
@@ -469,11 +544,11 @@ te_seabed_ai_lease_request_value_arctic = {
 			te_seabed_is_claimant = yes
 			has_variable = te_seabed_home_arctic
 			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 10
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
@@ -507,11 +582,11 @@ te_seabed_ai_lease_request_value_southern = {
 			te_seabed_is_claimant = yes
 			has_variable = te_seabed_home_southern
 			NOT = { te_seabed_room > te_seabed_ai_lease_margin }
-			te_seabed_ai_tech_metals_premium > 0
+			te_seabed_ai_metals_premium > 0
 		}
 		value = 10
 		add = {
-			value = te_seabed_ai_tech_metals_premium
+			value = te_seabed_ai_metals_premium
 			multiply = 40
 			max = 20
 		}
