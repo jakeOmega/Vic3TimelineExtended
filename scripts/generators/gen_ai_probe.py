@@ -247,24 +247,25 @@ def catalog(mod_state) -> dict:
             continue
         tech_cells.setdefault((category, int(era[4:])), []).append(name)
 
+    # A land unit type's tier is the era of the technology that unlocks it (1 with none): a measure of how modern
+    # a type is that compares across infantry, artillery and cavalry. Upgrade chains do not give one: cavalry
+    # types upgrade into each other in a circle.
+    tech_era = {}
+    for key in techs:
+        body = unwrap(techs[key])
+        era = unwrap(body.get("era")) if isinstance(body, dict) else None
+        if isinstance(era, str) and era.startswith("era_"):
+            tech_era[bare(key)] = int(era[4:])
     units = mod_state.get_data("Combat Unit Types")
     land_groups = {"combat_unit_group_infantry", "combat_unit_group_artillery", "combat_unit_group_cavalry"}
-    upgrades: dict[str, list[str]] = {}
-    land: list[str] = []
+    tier: dict[str, int] = {}
     for key in units:
         body = unwrap(units[key])
         if not isinstance(body, dict) or unwrap(body.get("group")) not in land_groups:
             continue
-        name = bare(key)
-        land.append(name)
-        ups = unwrap(body.get("upgrades"))
-        upgrades[name] = [u for u in ups if isinstance(u, str)] if isinstance(ups, list) else []
-    tier = dict.fromkeys(land, 1)
-    for _ in range(len(land)):                      # longest chain of upgrades that reaches each type
-        for name in land:
-            for target in upgrades[name]:
-                if target in tier and tier[target] < tier[name] + 1:
-                    tier[target] = tier[name] + 1
+        unlocks = unwrap(body.get("unlocking_technologies"))
+        eras = [tech_era[t] for t in unlocks if t in tech_era] if isinstance(unlocks, list) else []
+        tier[bare(key)] = max(eras, default=1)
 
     # A group counts when a building belongs to it or to a group under it. Vanilla keeps 21 legacy groups
     # (bg_coal_mining, bg_wheat_farms, ...) that no building belongs to; test_no_dead_building_groups.py bars them.
@@ -490,7 +491,7 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         for name in cat["building_groups"]
     ]
     types = [
-        read("bt_" + short(name, "building_"), f'"country_has_building_type_levels({name})"')
+        read("bt_" + short(name, "building_"), f'"country_has_building_type_levels(bt:{name})"')
         for name in cat["building_types"]
     ]
     budget = (
@@ -587,6 +588,7 @@ def render_effects(cat: dict) -> str:
         "\tordered_country = {\n"
         "\t\tlimit = { NOT = { is_country_type = decentralized } }\n"
         "\t\torder_by = gdp\n"
+        "\t\tposition = 0\n"                  # the first only: with no position the walk takes every country
         "\t\tte_aip_canary = yes\n"
         "\t}\n"
         "}\n\n"

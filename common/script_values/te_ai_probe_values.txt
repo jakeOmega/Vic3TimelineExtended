@@ -251,32 +251,32 @@ te_aip_navy_power = { value = naval_power_projection }
 te_aip_army_tier = {
 	value = 0
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_irregular_infantry)" multiply = 1 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_line_infantry)" multiply = 2 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_skirmish_infantry)" multiply = 3 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_line_infantry)" multiply = 1 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_skirmish_infantry)" multiply = 2 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_trench_infantry)" multiply = 4 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_squad_infantry)" multiply = 5 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_mechanized_infantry)" multiply = 6 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_mechanized_infantry)" multiply = 5 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_cannon_artillery)" multiply = 1 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_mobile_artillery)" multiply = 2 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_mobile_artillery)" multiply = 1 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_shrapnel_artillery)" multiply = 3 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_siege_artillery)" multiply = 4 }
 	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_hussars)" multiply = 1 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_dragoons)" multiply = 83 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_cuirassiers)" multiply = 83 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_lancers)" multiply = 82 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_tanks)" multiply = 1 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_armored_infantry)" multiply = 7 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_robotic_soldiers)" multiply = 8 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_swarm_bots)" multiply = 9 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_grey_goo)" multiply = 10 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_motorized_artillery)" multiply = 5 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_guided_artillery_projectiles)" multiply = 6 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_networked_guided_artillery_projectiles)" multiply = 7 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_bombardment)" multiply = 8 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_precision_antimatter_strikes)" multiply = 9 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_scout_tanks)" multiply = 2 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_stealth_reconnaissance_drone_carrier)" multiply = 3 }
-	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_holographic_ambush_combat_vehicle)" multiply = 4 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_dragoons)" multiply = 1 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_cuirassiers)" multiply = 1 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_lancers)" multiply = 1 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_tanks)" multiply = 5 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_armored_infantry)" multiply = 6 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_robotic_soldiers)" multiply = 11 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_swarm_bots)" multiply = 11 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_grey_goo)" multiply = 13 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_motorized_artillery)" multiply = 6 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_guided_artillery_projectiles)" multiply = 7 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_networked_guided_artillery_projectiles)" multiply = 9 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_bombardment)" multiply = 11 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_precision_antimatter_strikes)" multiply = 13 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_scout_tanks)" multiply = 7 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_stealth_reconnaissance_drone_carrier)" multiply = 9 }
+	add = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_holographic_ambush_combat_vehicle)" multiply = 11 }
 }
 te_aip_irregular = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_irregular_infantry)" }
 te_aip_line = { value = "country_army_unit_type_fraction(unit_type:combat_unit_type_line_infantry)" }
@@ -2114,34 +2114,34 @@ te_aip_bg_sr_colony_sites = { value = "country_has_building_group_levels(bg_sr_c
 te_aip_bg_te_construction_market_bg = { value = "country_has_building_group_levels(te_construction_market_bg)" }
 
 # --- B ---
-te_aip_bt_construction_sector = { value = "country_has_building_type_levels(building_construction_sector)" }
-te_aip_bt_government_administration = { value = "country_has_building_type_levels(building_government_administration)" }
-te_aip_bt_university = { value = "country_has_building_type_levels(building_university)" }
-te_aip_bt_barrack = { value = "country_has_building_type_levels(building_barrack)" }
-te_aip_bt_conscription_center = { value = "country_has_building_type_levels(building_conscription_center)" }
-te_aip_bt_military_base = { value = "country_has_building_type_levels(building_military_base)" }
-te_aip_bt_shipyard = { value = "country_has_building_type_levels(building_shipyard)" }
-te_aip_bt_naval_administration = { value = "country_has_building_type_levels(building_naval_administration)" }
-te_aip_bt_naval_logistics_center = { value = "country_has_building_type_levels(building_naval_logistics_center)" }
-te_aip_bt_port = { value = "country_has_building_type_levels(building_port)" }
-te_aip_bt_railway = { value = "country_has_building_type_levels(building_railway)" }
-te_aip_bt_highway = { value = "country_has_building_type_levels(building_highway)" }
-te_aip_bt_airport = { value = "country_has_building_type_levels(building_airport)" }
-te_aip_bt_network_infrastructure = { value = "country_has_building_type_levels(building_network_infrastructure)" }
-te_aip_bt_power_plant = { value = "country_has_building_type_levels(building_power_plant)" }
-te_aip_bt_hydro_plant = { value = "country_has_building_type_levels(building_hydro_plant)" }
-te_aip_bt_nuclear_plant = { value = "country_has_building_type_levels(building_nuclear_plant)" }
-te_aip_bt_renewable_energy_plant = { value = "country_has_building_type_levels(building_renewable_energy_plant)" }
-te_aip_bt_fusion_plant = { value = "country_has_building_type_levels(building_fusion_plant)" }
-te_aip_bt_urban_center = { value = "country_has_building_type_levels(building_urban_center)" }
-te_aip_bt_trade_center = { value = "country_has_building_type_levels(building_trade_center)" }
-te_aip_bt_art_academy = { value = "country_has_building_type_levels(building_art_academy)" }
-te_aip_bt_financial_district = { value = "country_has_building_type_levels(building_financial_district)" }
-te_aip_bt_manor_house = { value = "country_has_building_type_levels(building_manor_house)" }
-te_aip_bt_company_headquarter = { value = "country_has_building_type_levels(building_company_headquarter)" }
-te_aip_bt_public_housing = { value = "country_has_building_type_levels(building_public_housing)" }
-te_aip_bt_software_industry = { value = "country_has_building_type_levels(building_software_industry)" }
-te_aip_bt_electronic_components_and_semiconductor_industry = { value = "country_has_building_type_levels(building_electronic_components_and_semiconductor_industry)" }
+te_aip_bt_construction_sector = { value = "country_has_building_type_levels(bt:building_construction_sector)" }
+te_aip_bt_government_administration = { value = "country_has_building_type_levels(bt:building_government_administration)" }
+te_aip_bt_university = { value = "country_has_building_type_levels(bt:building_university)" }
+te_aip_bt_barrack = { value = "country_has_building_type_levels(bt:building_barrack)" }
+te_aip_bt_conscription_center = { value = "country_has_building_type_levels(bt:building_conscription_center)" }
+te_aip_bt_military_base = { value = "country_has_building_type_levels(bt:building_military_base)" }
+te_aip_bt_shipyard = { value = "country_has_building_type_levels(bt:building_shipyard)" }
+te_aip_bt_naval_administration = { value = "country_has_building_type_levels(bt:building_naval_administration)" }
+te_aip_bt_naval_logistics_center = { value = "country_has_building_type_levels(bt:building_naval_logistics_center)" }
+te_aip_bt_port = { value = "country_has_building_type_levels(bt:building_port)" }
+te_aip_bt_railway = { value = "country_has_building_type_levels(bt:building_railway)" }
+te_aip_bt_highway = { value = "country_has_building_type_levels(bt:building_highway)" }
+te_aip_bt_airport = { value = "country_has_building_type_levels(bt:building_airport)" }
+te_aip_bt_network_infrastructure = { value = "country_has_building_type_levels(bt:building_network_infrastructure)" }
+te_aip_bt_power_plant = { value = "country_has_building_type_levels(bt:building_power_plant)" }
+te_aip_bt_hydro_plant = { value = "country_has_building_type_levels(bt:building_hydro_plant)" }
+te_aip_bt_nuclear_plant = { value = "country_has_building_type_levels(bt:building_nuclear_plant)" }
+te_aip_bt_renewable_energy_plant = { value = "country_has_building_type_levels(bt:building_renewable_energy_plant)" }
+te_aip_bt_fusion_plant = { value = "country_has_building_type_levels(bt:building_fusion_plant)" }
+te_aip_bt_urban_center = { value = "country_has_building_type_levels(bt:building_urban_center)" }
+te_aip_bt_trade_center = { value = "country_has_building_type_levels(bt:building_trade_center)" }
+te_aip_bt_art_academy = { value = "country_has_building_type_levels(bt:building_art_academy)" }
+te_aip_bt_financial_district = { value = "country_has_building_type_levels(bt:building_financial_district)" }
+te_aip_bt_manor_house = { value = "country_has_building_type_levels(bt:building_manor_house)" }
+te_aip_bt_company_headquarter = { value = "country_has_building_type_levels(bt:building_company_headquarter)" }
+te_aip_bt_public_housing = { value = "country_has_building_type_levels(bt:building_public_housing)" }
+te_aip_bt_software_industry = { value = "country_has_building_type_levels(bt:building_software_industry)" }
+te_aip_bt_electronic_components_and_semiconductor_industry = { value = "country_has_building_type_levels(bt:building_electronic_components_and_semiconductor_industry)" }
 
 # --- N ---
 te_aip_n_built = { value = 0 if = { limit = { has_variable = te_aip_n_built } value = var:te_aip_n_built } }

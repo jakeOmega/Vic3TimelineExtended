@@ -30,6 +30,7 @@ te_aip_arm = {
 	ordered_country = {
 		limit = { NOT = { is_country_type = decentralized } }
 		order_by = gdp
+		position = 0
 		te_aip_canary = yes
 	}
 }

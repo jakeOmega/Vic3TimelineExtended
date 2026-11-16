@@ -61,6 +61,18 @@ class GeneratedFilesTest(unittest.TestCase):
         self.assertTrue(read, "no script value read found: the pattern is stale")
         self.assertEqual(read - defined, set())
 
+    def test_building_type_levels_are_read_through_the_bt_link(self):
+        """A bare building name there is no event target: the read logs an error at load and gives 0 (the first
+        run, 2026-11-15)."""
+        reads = re.findall(r'"country_has_building_type_levels\(([^)]*)\)"', text(VALUES))
+        self.assertGreater(len(reads), 10)
+        self.assertEqual([read for read in reads if not read.startswith("bt:building_")], [])
+
+    def test_unit_tiers_are_eras(self):
+        tiers = json.loads(KEY.read_text(encoding="utf-8"))["unit_tier"]
+        self.assertEqual(tiers["combat_unit_type_irregular_infantry"], 1)
+        self.assertTrue(all(1 <= tier <= 13 for tier in tiers.values()), tiers)
+
     def test_no_script_value_is_defined_twice(self):
         names = re.findall(r"(?m)^(te_aip_[a-z0-9_]+) = \{", text(VALUES))
         self.assertEqual(sorted(n for n in set(names) if names.count(n) > 1), [])

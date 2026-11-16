@@ -212,6 +212,18 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
         if zeros:
             ok = False
             out.append(f"  fields that are 0 or absent in every snapshot (the read is wrong): {zeros}")
+        # Not a verdict: early in a game much is rightly 0. A whole group at 0 is a read that does not work
+        # (every building-type level was, until the read took a `bt:` link).
+        positional = set(key.get("positional_groups", []))
+        for name, fields in key["lines"].items():
+            dead = [f for f in fields if all(not r.get(f) for r in records)]
+            if not dead:
+                continue
+            if name[0] in positional or len(dead) > 8:
+                out.append(f"  {name}: {len(dead)} of {len(fields)} fields are 0 in every snapshot"
+                           + (" (ALL: check the read)" if len(dead) == len(fields) else ""))
+            else:
+                out.append(f"  {name}: 0 in every snapshot: {', '.join(dead)}")
     else:
         out.append("  none yet: a country first reports within twelve months of arming")
     data = len(parsed.data_lines)
@@ -409,7 +421,7 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
     table("4. Military", [
         ("Army (battalions)", lambda rows: spread([num(r, "army") for r in rows], 0)),
         ("Navy", lambda rows: spread([num(r, "navy") for r in rows], 0)),
-        ("Army unit tier (1 = the oldest types)", lambda rows: spread(
+        ("Army units, mean era of their types", lambda rows: spread(
             [num(r, "army_tier") for r in rows if num(r, "army") > 0], 2)),
         ("Military technologies", lambda rows: spread(
             [sum(num(r, f) for f in r if f.startswith("tc_military_")) for r in rows], 0)),
