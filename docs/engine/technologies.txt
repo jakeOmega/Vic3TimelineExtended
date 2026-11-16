@@ -1013,7 +1013,7 @@
 		Unlocking Technologies:
 			Modern Chemical Processes
 		Unlocks Buildings: Artificial Sweeteners Plant, Phosphate Mine
-		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 19 (listed under their buildings in buildings.txt)
 	Civil Rights Movement - A movement aimed at ending racial segregation and [concept_discrimination]. It has fought for equal rights and opportunities for all, shaking the very foundations of society.
 		Unlocking Technologies:
 			Mass Media
@@ -1205,7 +1205,7 @@
 		Unlocking Technologies:
 			Integrated Circuits
 			Plastic Mass Production
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Gene Splicing - By cutting and pasting DNA, we can now manipulate the very building blocks of life. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas.
 		Unlocking Technologies:
 			Green Revolution
@@ -1256,7 +1256,7 @@
 			Gene Splicing
 			Computer Networks
 		Unlocks Buildings: Beverage Concentrates Plant, Phenolic Resin Panels Plant, Svalbard Global Seed Vault
-		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
 	Early Nanotechnology - We're just beginning to manipulate materials at the atomic level. This early work in nanotechnology could lead to some incredible breakthroughs in the future.
 		Unlocking Technologies:
 			Computer Networks
@@ -1285,7 +1285,7 @@
 			Computer Networks
 			Advanced Assembly Lines
 		Unlocks Laws: Contracted Administration
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	E-Commerce - Thanks to the internet, we can now buy and sell goods from anywhere in the world. It's a convenient way to shop, and a great way for businesses to reach new customers.
 		Unlocking Technologies:
 			World Wide Web
@@ -1408,7 +1408,7 @@
 		Unlocking Technologies:
 			Industrial Robotics
 			Supply Chain Management
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Advanced Structural Engineering - By combining high-strength composites, new welding techniques, and tougher concrete, we can build things that are lighter, stronger, and last longer. A boon for all industries, really.
 		Unlocking Technologies:
 			Industrial Robotics
@@ -1422,7 +1422,7 @@
 		Unlocking Technologies:
 			Wireless Internet (Wi-Fi)
 			Cloud Computing
-		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 18 (listed under their buildings in buildings.txt)
 	mRNA Therapeutics - Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.
 		Unlocking Technologies:
 			Modern Pharmaceuticals
@@ -1517,12 +1517,12 @@
 		Unlocking Technologies:
 			Machine Learning
 			Electric Vehicles
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Genetic Engineering - By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.
 		Unlocking Technologies:
 			Biotechnology
 		Unlocks Buildings: Integrated Biorefinery
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Synthetic Biology - By designing and building new biological parts and systems, we can create solutions to some of the world's most pressing problems. It's a field with enormous potential, and some significant risks.
 		Unlocking Technologies:
 			Genetic Engineering
