@@ -122,8 +122,10 @@ def prerequisite_order(catalog: list[Tech]) -> list[Tech]:
 def render_sync(order: list[Tech]) -> str:
     n = len(order)
     lines = [
-        "# Scope: power bloc (a Research Commons), from te_rc_leader_pulse",
-        "# (te_research_commons_effects.txt) once a month. For each technology, in",
+        "# Scope: power bloc (a Research Commons), through te_rc_sync_pass",
+        "# (te_research_commons_effects.txt): once a month from te_rc_leader_pulse,",
+        "# and from te_rc_share_acquired whenever a member or the leader acquires a",
+        "# technology other than by a grant. For each technology, in",
         "# prerequisite order: if any member (the leader included) has it and any",
         "# member lacks it, every member that lacks it is granted it (te_rc_grant).",
         f"# Cost per pass: {n} technologies, {2 * n} any_power_bloc_member checks (each",

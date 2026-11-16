@@ -155,7 +155,7 @@ class TechnologyControlsTest(unittest.TestCase):
                 self.assertIn("power_bloc_technology_controls_bool = yes", bloc)
                 self.assertIn(f"country_covert_defense_economic_add = {defense}", member)
                 self.assertIn(f"country_covert_defense_military_add = {defense}", member)
-                self.assertIn(f"te_pb_principle_slot_free = {{ GROUP = principle_group_technology_controls }}",
+                self.assertIn("te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }",
                               inner(body, "possible = {"))
                 if strength is None:
                     self.assertNotIn("embargo", bloc)

@@ -146,6 +146,10 @@ te_rc_leader_pulse = {
 te_rc_member_update = {
 	set_variable = te_rc_member
 	set_variable = { name = te_rc_leader value = scope:te_rc_leader }
+	# A former leader that stayed on as a member drops its leader figures.
+	remove_variable = te_rc_leader_own_eff
+	remove_variable = te_rc_members_eff
+	remove_variable = te_rc_leader_share
 	# A returning leaver's research is pooled again.
 	if = {
 		limit = { has_variable = te_rc_ilb_months }
@@ -362,18 +366,18 @@ te_rc_end_institutes_left_behind = {
 # Country scope, the embargoing leader (the pact's root), with
 # scope:target_country: the target's spread cut, refreshed each month by the
 # pact's monthly_effect and once when it is declared. The cut is sized at the
-# leader (te_rc_embargo_points) and carried to the target on the leader's
-# variable. Two Commons embargoing one country overwrite each other's cut
-# month by month; the target carries one of them.
+# leader (the script value te_rc_embargo_points) and carried to the target on
+# the leader's variable te_rc_embargo_cut. Two Commons embargoing one country
+# overwrite each other's cut month by month; the target carries one of them.
 te_rc_embargo_refresh = {
-	set_variable = { name = te_rc_embargo_points value = te_rc_embargo_points }
+	set_variable = { name = te_rc_embargo_cut value = te_rc_embargo_points }
 	scope:target_country = {
 		remove_modifier = te_rc_technology_embargoed
 		if = {
-			limit = { root.var:te_rc_embargo_points > 0 }
+			limit = { root.var:te_rc_embargo_cut > 0 }
 			add_modifier = {
 				name = te_rc_technology_embargoed
-				multiplier = root.var:te_rc_embargo_points
+				multiplier = root.var:te_rc_embargo_cut
 				months = 2
 			}
 		}
