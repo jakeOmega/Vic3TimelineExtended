@@ -281,7 +281,7 @@ class AgreementTests(unittest.TestCase):
         self.assertEqual(extra, [])
 
     def test_migrated_audits_lost_their_own_parser(self):
-        self.assertEqual(len(MIGRATED), 54)
+        self.assertEqual(len(MIGRATED), 55)
         for name in MIGRATED:
             with open(os.path.join(ROOT, f"{name}.py"), encoding="utf-8") as fh:
                 source = fh.read()
