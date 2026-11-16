@@ -1270,10 +1270,11 @@ te_debug_demog.290 = {
 # delayed_state_event: does a delayed state event run at all? Armed once a game with workforce_lines_net
 # (te_debug_demog_wf_selfchecks): the capital is sent .199 with days = 7, the old path, and its country .198 with
 # days = 14. OK: .199 ran, and logged its scopes (debug_log_scopes) a week before. BROKEN: it never ran, as the saves
-# say; then the mod's three gameplay state events triggered with a delay never run either: te_demog_events.4's
-# day-later refresh (te_demog_lines_country_on_action), monument_events.30's next order a day on
-# (gm_state_run_mon_orders) and monument_events.31's day-later orphan adoption (gm_state_adopt_orphans). They want the
-# same move to a country event (test_delayed_state_events.py lists them).
+# say. BROKEN in every game read since it landed (2026-11-08 to 2026-11-16), so the mod's three gameplay state
+# events that waited this way now wait on a country event that runs them undelayed: te_demog_events.5 for .4's
+# day-later refresh, monument_events.34 and .35 for .30's next order and .31's orphan adoption
+# (test_delayed_state_events.py fails on a new delayed state-event call). BROKEN is therefore the expected verdict and
+# asks nothing; an OK means a patch fixed the path, and the relays could go back to plain delayed calls.
 te_debug_demog.199 = {
 	type = state_event
 	hidden = yes
@@ -1295,7 +1296,7 @@ te_debug_demog.198 = {
 			debug_log = "TE_SELF_CHECK OK delayed_state_event (a state event triggered with days = 7 ran a week on: the TE_PROBE line before this one has its scopes) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN delayed_state_event (a state event triggered with days = 7 never ran: move the delayed calls of te_demog_events.4, monument_events.30 and .31 to a country event) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN delayed_state_event (a state event triggered with days = 7 never ran, as in every game since 2026-11-08: expected, and nothing to do, since te_demog_events.4 and monument_events.30 and .31 already wait on country events; an OK would mean a patch fixed the path) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

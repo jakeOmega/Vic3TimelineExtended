@@ -719,6 +719,16 @@ te_debug_demog_wf_selfchecks = {
 			capital = { trigger_event = { id = te_debug_demog.199 days = 7 } }
 			trigger_event = { id = te_debug_demog.198 days = 14 }
 		}
+		# workforce_pull_births: a war clears the capital's mark (a war's dead, conscripts and refugees likely move the
+		# workforce figure by more than the births); the next census step at peace marks it again
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_wfp_done }
+				is_at_war = yes
+				capital = { has_variable = te_dg_wfp_y }
+			}
+			capital = { te_debug_demog_wf_pull_unmark = yes }
+		}
 		if = {
 			limit = {
 				NOT = { has_global_variable = te_demog_selfcheck_amend_done }
@@ -917,7 +927,14 @@ te_debug_demog_step3_selfchecks = {
 #     ratio its pops were set to times 1 - e^-b (te_demog_wf_pull_share)? OK from half to twice the prediction. Under
 #     half, the pull isn't the births and the lead closes less than a quarter of a gap a year; over twice, it closes the
 #     whole gap and more, and W's lead overshoots the aim (docs/testing/demographics-playtest.md has both fallbacks).
-#     Only where the prediction is at least 0.01, so an OK can't come from a figure that had nowhere to go.
+#     Only where the prediction is at least 0.01, so an OK can't come from a figure that had nowhere to go. Only in a
+#     capital whose country is at peace at the mark, at the read and on every monthly pulse between (a war clears the
+#     mark: te_debug_demog_wf_selfchecks), since a war likely moves a state's workforce figure by means the births
+#     leave out (the dead and the conscripts are workers; devastation moves people). On 2026-11-16 Grão-Pará's
+#     capital Pará, at war with Brazil since 1836, read a ratio of -0.23. A read that moved against its gap (ratio
+#     under 0) says something else moved the figure more than the births did, so it gives no verdict and the next
+#     year's mark is read instead, twice at most; the third read gives its verdict whatever its sign
+#     (te_demog_selfcheck_wfp_resamples), so a pull too slow to see still reads slow.
 te_debug_demog_wf_term_checks = {
 	if = {
 		limit = {
@@ -972,23 +989,42 @@ te_debug_demog_wf_term_checks = {
 			te_debug_demog_wfp_years >= 1
 			te_debug_demog_wfp_years < 2
 			te_debug_demog_wfp_pred_size >= te_debug_demog_wfp_min_move
+			is_capital = yes
+			owner = { is_at_war = no }
 		}
-		set_global_variable = { name = te_demog_selfcheck_wfp_done value = yes }
 		if = {
 			limit = {
-				te_debug_demog_wfp_ratio >= 0.5
-				te_debug_demog_wfp_ratio <= 2
+				te_debug_demog_wfp_ratio < 0
+				NOT = { global_var:te_demog_selfcheck_wfp_resamples ?= 2 }
 			}
-			debug_log = "TE_SELF_CHECK OK workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (the engine's figure moved by about what its births predict: W's lead closes about half of a gap a year) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else_if = {
-			limit = { te_debug_demog_wfp_ratio < 0.5 }
-			debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (slow: the engine's figure moved under half of what its births predict, so the pull isn't the births and W's lead closes under a quarter of a gap a year; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			if = {
+				limit = { has_global_variable = te_demog_selfcheck_wfp_resamples }
+				change_global_variable = { name = te_demog_selfcheck_wfp_resamples add = 1 }
+			}
+			else = {
+				set_global_variable = { name = te_demog_selfcheck_wfp_resamples value = 1 }
+			}
+			debug_log = "TE_PROBE workforce_pull_births against engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] state=[THIS.GetState.GetNameNoFormatting] resample=[GetGlobalVariable('te_demog_selfcheck_wfp_resamples').GetValue|0] (the figure moved against its gap, so something other than the births moved it more: no verdict; the next mark is read, and the third read gives its verdict whatever its sign) date=[TimeKeeper.GetCurrentDate.GetString]"
+			te_debug_demog_wf_pull_unmark = yes
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (fast: the engine's figure moved over twice what its births predict, so W's lead overshoots the aim; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			set_global_variable = { name = te_demog_selfcheck_wfp_done value = yes }
+			if = {
+				limit = {
+					te_debug_demog_wfp_ratio >= 0.5
+					te_debug_demog_wfp_ratio <= 2
+				}
+				debug_log = "TE_SELF_CHECK OK workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (the engine's figure moved by about what its births predict: W's lead closes about half of a gap a year) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { te_debug_demog_wfp_ratio < 0.5 }
+				debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (slow: the engine's figure moved under half of what its births predict, so the pull isn't the births and W's lead closes under a quarter of a gap a year; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (fast: the engine's figure moved over twice what its births predict, so W's lead overshoots the aim; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
 		}
-		debug_log_scopes = yes
 	}
 	# the pull's marks go once the check has run, in any capital
 	if = {
@@ -1034,7 +1070,8 @@ te_debug_demog_wf_term_landing = {
 # census year, the walk's engine figure, the ratio the pops are set to for the year to come (the pops' bases, W and the
 # lines on top: the modifier just added can't be read back in this effect), the births per 1,000 the pull's share
 # reads, and the move the births predict: (set - engine) x te_demog_wf_pull_share (demographics_model.
-# workforce_pull_move). Each step replaces the last step's mark, so a check reads only the year just gone.
+# workforce_pull_move). Each step replaces the last step's mark, so a check reads only the year just gone. Only while
+# the country is at peace; a war in the year clears the mark (te_debug_demog_wf_selfchecks).
 te_debug_demog_wf_pull_mark = {
 	if = {
 		limit = { has_variable = te_dg_wfp_y }
@@ -1044,6 +1081,7 @@ te_debug_demog_wf_pull_mark = {
 		limit = {
 			NOT = { has_global_variable = te_demog_selfcheck_wfp_done }
 			is_capital = yes
+			owner = { is_at_war = no }
 			var:te_dg_stepped > 0
 			has_variable = te_dg_mw
 			has_variable = te_dg_wf_engine
@@ -1419,9 +1457,10 @@ te_debug_demog_runaway_selfcheck = {
 # mortality line on top carries a tag at its value on its cause's script-only type (demographics_params.DEATH_CAUSE_TAGS),
 # so the five tags' sum is the lines on top, if the engine scales a tag with the line beside it: in a code static
 # modifier the engine scales itself (pollution, devastation), under a multiplier and as an event modifier decays. The
-# first state whose lines on top come to a tenth or more either way. A few untagged vanilla lines (five, at most 5%:
+# first state whose lines on top come to a tenth or more either way. A few untagged vanilla lines (four, at most 5%:
 # demographics_params.DEATH_CAUSE_UNTAGGED) and other mods' can open a small gap, so the tolerance is 0.03 and a
-# twentieth of the read.
+# twentieth of the read. Its BROKEN of 2026-11-16 (Umbria, 0.121 on top, no tag) was an earthquake, then untagged at
+# 0.05 a point of intensity; harvest_tags_read (below) reads the tag that answers it.
 te_debug_demog_cause_tags_selfcheck = {
 	if = {
 		limit = {
@@ -1461,6 +1500,71 @@ te_debug_demog_cause_tags_selfcheck = {
 		}
 		else = {
 			debug_log = "TE_SELF_CHECK BROKEN cause_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (the tags don't add up to the lines on top: a tag isn't scaled with its line, or a line has no tag) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+	}
+}
+
+# THIS = a state, beside te_debug_demog_cause_tags_selfcheck (the census's deaths term under Full, its local
+# te_dg_rate_os the lines on top): TE_SELF_CHECK harvest_tags_read, once a game (2026-11-16). An earthquake's and a
+# tsunami's harvest-condition modifier carries state_mortality_mult = 0.05 a point of intensity (an earthquake rolls 1
+# to 2 points, 2 to 4 in the Alpide belt, 2 to 6 on the Ring of Fire). Their tags are the mod's first INJECT into a
+# harvest condition's modifier block (common/harvest_condition_types/te_demog_cause_tags_generated.txt): the first
+# state whose region has either, with a line or a tag of a tenth or more (two points: an unscaled tag then falls
+# short by more than the tolerance, and a tag alone still arms the check if the INJECT took the line away).
+#   OK      the tags add up to the lines on top (cause_tags_read's tolerance): the INJECT adds to vanilla's block and
+#           its tag scales with the intensity as the line beside it does.
+#   BROKEN  short: the INJECT is ignored, or its tag doesn't scale with the intensity.
+#   BROKEN  over: the tags exceed the lines, so the line has gone: the INJECT replaced vanilla's block, and earthquakes
+#           and tsunamis lost their own lines (mortality, infrastructure, throughput). Revert at once.
+te_debug_demog_harvest_tags_selfcheck = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			NOT = { has_global_variable = te_demog_selfcheck_harvest_tags_done }
+			state_region = {
+				OR = {
+					has_harvest_condition = earthquake
+					has_harvest_condition = tsunami
+				}
+			}
+			OR = {
+				local_var:te_dg_rate_os >= 0.1
+				modifier:state_death_cause_ext_mult >= 0.1
+			}
+		}
+		set_global_variable = { name = te_demog_selfcheck_harvest_tags_done value = yes }
+		set_local_variable = {
+			name = te_dg_htag_chk_sum
+			value = {
+				value = modifier:state_death_cause_inf_mult
+				add = modifier:state_death_cause_chr_mult
+				add = modifier:state_death_cause_ext_mult
+				add = modifier:state_death_cause_work_mult
+				add = modifier:state_death_cause_war_mult
+			}
+		}
+		set_local_variable = { name = te_dg_htag_chk_gap value = { value = local_var:te_dg_rate_os subtract = local_var:te_dg_htag_chk_sum } }
+		set_local_variable = { name = te_dg_htag_chk_tol value = { value = local_var:te_dg_rate_os multiply = 0.05 } }
+		if = {
+			limit = { local_var:te_dg_htag_chk_tol < 0 }
+			change_local_variable = { name = te_dg_htag_chk_tol multiply = -1 }
+		}
+		change_local_variable = { name = te_dg_htag_chk_tol add = 0.03 }
+		set_local_variable = { name = te_dg_htag_chk_neg value = { value = local_var:te_dg_htag_chk_tol multiply = -1 } }
+		if = {
+			limit = {
+				local_var:te_dg_htag_chk_gap <= local_var:te_dg_htag_chk_tol
+				local_var:te_dg_htag_chk_gap >= local_var:te_dg_htag_chk_neg
+			}
+			debug_log = "TE_SELF_CHECK OK harvest_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] accidents=[THIS.ScriptValue('te_debug_demog_cause_tag_ext')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (an earthquake or a tsunami here: the INJECTed tag adds to vanilla's block and scales with the intensity, so the tags add up to the lines on top) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = { local_var:te_dg_htag_chk_gap > local_var:te_dg_htag_chk_tol }
+			debug_log = "TE_SELF_CHECK BROKEN harvest_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] accidents=[THIS.ScriptValue('te_debug_demog_cause_tag_ext')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (short: the tags fall short of the lines, so the INJECT into the harvest condition is ignored or its tag doesn't scale with the intensity; the earthquake's deaths spread over the census's causes, as before 2026-11-16; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN harvest_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] accidents=[THIS.ScriptValue('te_debug_demog_cause_tag_ext')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (over: the tags exceed the lines, so the INJECT replaced the harvest condition's modifier block and earthquakes and tsunamis lost their own lines; revert it at once, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 	}

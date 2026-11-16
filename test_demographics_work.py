@@ -755,12 +755,38 @@ class TestWorkTermSelfChecks(unittest.TestCase):
         f = self._pull(e0=0.257, engine=0.26, pred=0.004)
         self.assertLess(f["pred_size"], f["min_move"], "a figure with nowhere to go gives no verdict")
 
+    def test_the_pull_check_reads_a_capital_at_peace_and_resamples_a_move_against_its_gap(self):
+        """2026-11-16: Grão-Pará's capital Pará, at war with Brazil from the game's first day, read a ratio of -0.23
+        (moved -0.0025 against a predicted +0.0108) and a false BROKEN slow; on main the next game's Hadiya read 1.28.
+        The mark and the read want a capital at peace, a war in the year clears the mark on the country's monthly
+        pulse, and a move against the gap gives no verdict twice before the third read gives one whatever its sign."""
+        body = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_term_checks")
+        pull = body.split("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", 1)[1]
+        head = pull.split("te_debug_demog_wfp_ratio < 0", 1)[0]
+        for needle in ("is_capital = yes", "owner = { is_at_war = no }"):
+            self.assertIn(needle, head)
+        against, verdicts = pull.split("set_global_variable = { name = te_demog_selfcheck_wfp_done value = yes }", 1)
+        self.assertIn("te_debug_demog_wfp_ratio < 0", against)
+        self.assertIn("NOT = { global_var:te_demog_selfcheck_wfp_resamples ?= 2 }", against)
+        self.assertIn("TE_PROBE workforce_pull_births against", against)
+        self.assertIn("te_debug_demog_wf_pull_unmark = yes", against)
+        self.assertNotIn("TE_SELF_CHECK", against, "a move against the gap gives no verdict")
+        self.assertEqual(verdicts.count("TE_SELF_CHECK OK workforce_pull_births"), 1)
+        f = self._pull(e0=0.252, engine=0.2495, pred=0.0108)
+        self.assertLess(f["ratio"], 0, "the 2026-11-16 read moved against its gap")
+        monthly = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_selfchecks")
+        clear = monthly.split("is_at_war = yes", 1)
+        self.assertEqual(len(clear), 2, "a war clears the mark on the monthly pulse")
+        self.assertIn("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", clear[0].rsplit("if = {", 1)[1])
+        self.assertIn("capital = { te_debug_demog_wf_pull_unmark = yes }", clear[1].split("}\n\t\tif = {", 1)[0])
+
     def test_the_pull_mark_predicts_from_the_set_ratio(self):
         """The mark: on a capital after a step, the walk's figure, the set ratio for the year to come (bases, the W
         just set and the lines on top) and the births' move (demographics_model.workforce_pull_move); each step
         replaces the last's, and it stops once the check has run."""
         mark = _block(_text(CONSOLE_EFFECTS), "te_debug_demog_wf_pull_mark")
         for needle in ("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", "is_capital = yes",
+                       "owner = { is_at_war = no }",
                        "var:te_dg_stepped > 0", "add = local_var:te_dg_wf_rem", "multiply = te_demog_wf_pull_share",
                        "te_debug_demog_wf_pull_unmark = yes"):
             self.assertIn(needle, mark)
@@ -772,7 +798,8 @@ class TestWorkTermSelfChecks(unittest.TestCase):
         eng.vars.update(te_dg_wf_engine=0.257, te_dg_cbr=38.0)
         eng.fixtures["year"] = 1840.0
         eng.effects["te_debug_demog_wf_pull_mark"] = effects["te_debug_demog_wf_pull_mark"].replace(
-            "is_capital = yes", "").replace("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", "")
+            "is_capital = yes", "").replace("NOT = { has_global_variable = te_demog_selfcheck_wfp_done }", "").replace(
+            "owner = { is_at_war = no }", "")
         eng.effects["te_debug_demog_wf_pull_unmark"] = effects["te_debug_demog_wf_pull_unmark"]
         eng.call("te_demog_workforce_refresh")
         w = eng.vars["te_dg_mw"]
