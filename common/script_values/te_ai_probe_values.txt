@@ -6,11 +6,51 @@
 te_aip_id = { value = 0 if = { limit = { has_variable = te_aip_id } value = var:te_aip_id } }
 te_aip_k = { value = 0 if = { limit = { has_global_variable = te_aip_k } value = global_var:te_aip_k } }
 te_aip_year = { value = year }
-# The month a new country first reports in: its serial modulo 12, so the world's snapshots spread over the year.
+# The calendar month a country reports in each year (0 = January): its serial modulo 12, so the world's
+# snapshots spread over the year.
 te_aip_id_phase = {
 	value = 0
 	if = { limit = { has_variable = te_aip_id } value = var:te_aip_id }
 	modulo = 12
+}
+# Version 3's schedule (te_aip_country_tick). The calendar month as a running count, year * 12 + month
+# (0 = January), the form te_history_month_index reads.
+te_aip_month_index = {
+	value = year
+	multiply = 12
+	if = { limit = { month = 1 } add = 1 }
+	if = { limit = { month = 2 } add = 2 }
+	if = { limit = { month = 3 } add = 3 }
+	if = { limit = { month = 4 } add = 4 }
+	if = { limit = { month = 5 } add = 5 }
+	if = { limit = { month = 6 } add = 6 }
+	if = { limit = { month = 7 } add = 7 }
+	if = { limit = { month = 8 } add = 8 }
+	if = { limit = { month = 9 } add = 9 }
+	if = { limit = { month = 10 } add = 10 }
+	if = { limit = { month = 11 } add = 11 }
+}
+# The month a country first reports in: its month this year (te_aip_country_tick moves it a year on if it
+# has passed), then the same month of each next year.
+te_aip_first_due = {
+	value = year
+	multiply = 12
+	add = te_aip_id_phase
+}
+te_aip_next_due = {
+	value = year
+	add = 1
+	multiply = 12
+	add = te_aip_id_phase
+}
+# Months until the country's next report: 0 or less is due.
+te_aip_due_in = {
+	value = 0
+	if = {
+		limit = { has_variable = te_aip_due }
+		value = var:te_aip_due
+		subtract = te_aip_month_index
+	}
 }
 # The global month's place in the probe's year: the W line prints at 1, the month the probe armed in and
 # every twelfth after.
@@ -144,6 +184,19 @@ te_aip_companies_max = { value = max_num_companies }
 te_aip_bubble = { value = 0 if = { limit = { has_variable = bubble_pressure } value = var:bubble_pressure } }
 te_aip_cm_level_max = { value = modifier:country_max_weekly_construction_progress_add }
 te_aip_cm_admin = { value = 0 if = { limit = { te_construction_market_ai_building_administration = yes } value = 1 } }
+te_aip_bank_phase = {
+	value = 0
+	if = { limit = { te_banking_cycle_running = yes banking_cycle_is_panic = yes } value = 1 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_downturn = yes } value = 2 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_stagnation = yes } value = 3 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_stable = yes } value = 4 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_expansion = yes } value = 5 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_boom = yes } value = 6 }
+	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_frenzy = yes } value = 7 }
+}
+te_aip_bank_cycle = { value = 0 if = { limit = { has_variable = finance_cycle_value } value = var:finance_cycle_value } }
+te_aip_bank_momentum = { value = 0 if = { limit = { has_variable = finance_cycle_momentum } value = var:finance_cycle_momentum } }
+te_aip_bank_crashed = { value = 0 if = { limit = { has_variable = banking_crashed_last_year } value = 1 } }
 
 # --- O ---
 te_aip_low_mfg = {
@@ -2269,6 +2322,7 @@ te_aip_n_colony = { value = 0 if = { limit = { has_variable = te_aip_n_colony } 
 te_aip_n_inst_up = { value = 0 if = { limit = { has_variable = te_aip_n_inst_up } value = var:te_aip_n_inst_up } }
 te_aip_n_inst_down = { value = 0 if = { limit = { has_variable = te_aip_n_inst_down } value = var:te_aip_n_inst_down } }
 te_aip_n_law_set = { value = 0 if = { limit = { has_variable = te_aip_n_law_set } value = var:te_aip_n_law_set } }
+te_aip_n_bank_down = { value = 0 if = { limit = { has_variable = te_aip_n_bank_down } value = var:te_aip_n_bank_down } }
 
 # --- J ---
 te_aip_im_colonial_affairs = { value = 0 if = { limit = { has_institution = institution_colonial_affairs } institution:institution_colonial_affairs = { add = investment_max } } }
@@ -2535,15 +2589,29 @@ te_aip_ev_play_b_id = { value = 0 if = { limit = { has_global_variable = te_aip_
 te_aip_ev_play_b_rank = { value = 0 if = { limit = { has_global_variable = te_aip_play_b_rank } value = global_var:te_aip_play_b_rank } }
 
 # --- version 2, the W line: the world outside the AI countries ---
+# every_country does not reach a decentralized nation (scripting_best_practices.md, Country Type Mechanics):
+# version 2 counted them with it and read 0 in every line of its first run, while the same game's
+# decentralized_law_baseline self-check, which tests any_decentralized_country, printed OK. Version 3 uses the
+# dedicated iterator, and two reads that do not depend on it: every state in the world (every_state from a
+# country scope is global), and the states of the countries every_country reaches, whose difference is the
+# land the decentralized nations hold.
 te_aip_w_countries = {
 	value = 0
 	every_country = { limit = { NOT = { is_country_type = decentralized } } add = 1 }
 }
 te_aip_w_dn = {
 	value = 0
-	every_country = { limit = { is_country_type = decentralized } add = 1 }
+	every_decentralized_country = { add = 1 }
 }
 te_aip_w_dn_states = {
 	value = 0
-	every_country = { limit = { is_country_type = decentralized } add = num_states }
+	every_decentralized_country = { add = num_states }
+}
+te_aip_w_states = {
+	value = 0
+	every_state = { add = 1 }
+}
+te_aip_w_c_states = {
+	value = 0
+	every_country = { limit = { NOT = { is_country_type = decentralized } } add = num_states }
 }

@@ -4,7 +4,8 @@ TEMPORARY (2026-11-15). The probe exists to show where the game's AI falls short
 of importance: economic growth, technological advancement, legal modernization, military modernization, expansion.
 It is inert in a played game. It arms itself in a game with no human player (an observer or unattended run), or
 from the console with `event te_debug_ai_probe.1` (`.2` disarms). Remove the four generated files, this generator,
-`scripts/analysis/ai_probe_report.py`, `ai_probe_key.json` and `test_ai_probe.py` once the AI work it serves is done.
+`scripts/analysis/ai_probe_report.py`, `ai_probe_compare.py`, `ai_probe_key.json`, `test_ai_probe.py` and
+`test_ai_probe_compare.py` once the AI work it serves is done.
 
     python3 scripts/generators/gen_ai_probe.py            write the files (only those whose content changed)
     python3 scripts/generators/gen_ai_probe.py --check    exit 1 if a file on disk differs from the generator's
@@ -26,7 +27,12 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                the yearly snapshot of one country, a line per field group. A country's snapshot
                                month is its id modulo 12, so a twelfth of the world reports each month and no tick
                                writes more than the log's rotation can hold. `id` is a serial the probe gives each
-                               country object (two objects can share a tag in a civil war). Version 2 adds O2
+                               country object (two objects can share a tag in a civil war). From version 3 the
+                               month is a calendar month (0 = January): a country reports at its first monthly
+                               pulse in that month or after it, once each calendar year (te_aip_country_tick).
+                               Versions 1 and 2 counted twelve of the country's pulses, which are 30 days apart,
+                               so a report drifted five days earlier a year and every six years or so fell twice
+                               in one calendar year (January and December). Version 2 adds O2
                                (manufacturing staffing without the Construction Sector, then the sector itself:
                                staffing, subsidies, methods, the construction good's price and orders, and the
                                Construction Sites' staffing), J1 (each institution's
@@ -44,7 +50,13 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                ranks.
   W <k> y=<year> ...           from version 2, once a year (the month the probe armed in, and every twelfth after):
                                the world outside the AI countries, which no snapshot covers (decentralized nations
-                               and the states they hold).
+                               and the states they hold). Version 2 counted them with `every_country`, which does
+                               not reach a decentralized nation, so its `dn` and `dn_states` read 0 in every line;
+                               version 3 counts them with `every_decentralized_country` and adds two independent
+                               reads of the same land: every state in the world, and the states of every country
+                               `every_country` reaches (WORLD_FIELDS).
+Version 3 also adds the banking cycle to C2 (its phase, `finance_cycle_value`, its momentum, a crash in the last
+365 days; BANK_PHASES) and the months in a panic or downturn to the counters (`n_bank_down`).
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
@@ -67,7 +79,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 2
+VERSION = 3
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
@@ -83,6 +95,7 @@ LINES_ADDED = {
     1: ["A1", "A2", "F1", "F2", "F3", "U1", "U2", "C1", "C2", "O1", "M1", "Y1", "L1", "L2", "L3", "T1", "T2",
         "I1", "I2", "G1", "G2", "G3", "B1", "B2", "N1", "N2"],
     2: ["O2", "J1", "R1", "H1"],
+    3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -174,12 +187,20 @@ BUILT_CLASSES = [
 
 # Event counters kept on the country between two of its snapshots. `law_set` (version 2) counts a law activated
 # other than by a passed enactment: by script (the mod's law-consistency sweep, an event), a revolution, or a new
-# country's setup.
+# country's setup. `bank_down` (version 3) counts the country's monthly pulses with its banking cycle in a panic or
+# a downturn (banking_cycle_is_recession), so that a crash between two snapshots shows.
 COUNTERS = (
     ["built", "expanded"] + [f"built_{name}" for name, _ in BUILT_CLASSES]
     + ["pm", "tech", "law_start", "law_pass", "law_fail", "law_end", "default", "play", "war", "reform", "company",
-       "colony", "inst_up", "inst_down", "law_set"]
+       "colony", "inst_up", "inst_down", "law_set", "bank_down"]
 )
+
+# The banking cycle's phases (the C2 line's `bank_phase`, 1-based; 0 is no cycle running): the bands of
+# finance_cycle_value that common/scripted_triggers/market_triggers.txt's banking_cycle_is_* triggers test (under
+# 10, 25, 40, 60, 75, 88, then frenzy), which the journal entry's phase modifiers follow in every economy type.
+# A cycle runs only once te_banking_cycle_running holds (the rule on, the entry held, the cycle started: a stock
+# exchange and an Urban Center of level 5), so early in a game most countries read 0.
+BANK_PHASES = ["panic", "downturn", "stagnation", "stable", "expansion", "boom", "frenzy"]
 
 # How an enactment ended, the `how` of a law_end line (1-based). The engine has no hook for a cancellation, so
 # the end hook reads what the pass and fail hooks marked just before it, and failing both, whether the law is still
@@ -591,6 +612,15 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         variable("bubble", "bubble_pressure", 1),
         read("cm_level_max", "modifier:country_max_weekly_construction_progress_add", 2),
         flag("cm_admin", "te_construction_market_ai_building_administration = yes"),
+        # Version 3: the banking cycle (BANK_PHASES), which confounded the first comparison of two runs: a crash
+        # in one run's 1890s and not the other's. The phase guards its reads with te_banking_cycle_running, as
+        # the journal entry's phase modifiers guard theirs with has_variable; the value and momentum are the
+        # cycle's own variables (absent before the cycle starts and after the rule is switched off); `bank_crashed`
+        # is the 365-day mark every crash sets, origin and contagion (banking_mark_crashed_last_year).
+        index("bank_phase", [f"te_banking_cycle_running = yes banking_cycle_is_{phase} = yes" for phase in BANK_PHASES]),
+        variable("bank_cycle", "finance_cycle_value", 1),
+        variable("bank_momentum", "finance_cycle_momentum", 2),
+        flag("bank_crashed", "has_variable = banking_crashed_last_year"),
     ]
     military = [
         read("army", "army_size"),
@@ -716,11 +746,41 @@ BASE_VALUES = (
     "te_aip_id = { value = 0 if = { limit = { has_variable = te_aip_id } value = var:te_aip_id } }\n"
     "te_aip_k = { value = 0 if = { limit = { has_global_variable = te_aip_k } value = global_var:te_aip_k } }\n"
     "te_aip_year = { value = year }\n"
-    "# The month a new country first reports in: its serial modulo 12, so the world's snapshots spread over the year.\n"
+    "# The calendar month a country reports in each year (0 = January): its serial modulo 12, so the world's\n"
+    "# snapshots spread over the year.\n"
     "te_aip_id_phase = {\n"
     "\tvalue = 0\n"
     "\tif = { limit = { has_variable = te_aip_id } value = var:te_aip_id }\n"
     "\tmodulo = 12\n"
+    "}\n"
+    "# Version 3's schedule (te_aip_country_tick). The calendar month as a running count, year * 12 + month\n"
+    "# (0 = January), the form te_history_month_index reads.\n"
+    "te_aip_month_index = {\n"
+    "\tvalue = year\n"
+    "\tmultiply = 12\n"
+    + "".join(f"\tif = {{ limit = {{ month = {m} }} add = {m} }}\n" for m in range(1, 12))
+    + "}\n"
+    "# The month a country first reports in: its month this year (te_aip_country_tick moves it a year on if it\n"
+    "# has passed), then the same month of each next year.\n"
+    "te_aip_first_due = {\n"
+    "\tvalue = year\n"
+    "\tmultiply = 12\n"
+    "\tadd = te_aip_id_phase\n"
+    "}\n"
+    "te_aip_next_due = {\n"
+    "\tvalue = year\n"
+    "\tadd = 1\n"
+    "\tmultiply = 12\n"
+    "\tadd = te_aip_id_phase\n"
+    "}\n"
+    "# Months until the country's next report: 0 or less is due.\n"
+    "te_aip_due_in = {\n"
+    "\tvalue = 0\n"
+    "\tif = {\n"
+    "\t\tlimit = { has_variable = te_aip_due }\n"
+    "\t\tvalue = var:te_aip_due\n"
+    "\t\tsubtract = te_aip_month_index\n"
+    "\t}\n"
     "}\n"
     "# The global month's place in the probe's year: the W line prints at 1, the month the probe armed in and\n"
     "# every twelfth after.\n"
@@ -761,8 +821,10 @@ def snapshot_lines(cat: dict) -> list[tuple[str, list[Field]]]:
 
 LINE_HEAD = "[THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0]"
 # The W line's fields (te_aip_w_<name>), in the order it prints them: countries that are not decentralized
-# nations, decentralized nations, and the states they hold, which is the land left to colonize.
-WORLD_FIELDS = ["countries", "dn", "dn_states"]
+# nations, decentralized nations, and the states they hold, which is the land left to colonize; from version 3,
+# every state in the world and the states of the countries that are not decentralized nations, so that
+# `states - c_states` reads the same land a second way (EVENT_VALUES).
+WORLD_FIELDS = ["countries", "dn", "dn_states", "states", "c_states"]
 LAW_FIELDS = ("law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] "
               "stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]")
 WORLD_LINE = ("TE_AIP W [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0] "
@@ -852,21 +914,35 @@ def render_effects(cat: dict) -> str:
         "\t\tlimit = { NOT = { has_variable = te_aip_id } }\n"
         "\t\tchange_global_variable = { name = te_aip_next_id add = 1 }\n"
         "\t\tset_variable = { name = te_aip_id value = global_var:te_aip_next_id }\n"
-        "\t\tset_variable = { name = te_aip_m value = te_aip_id_phase }\n"
         "\t}\n"
         "}\n\n"
-        "# A country's month: a serial on first sight, then a snapshot every twelfth month, in the month its serial\n"
-        "# gives it.\n"
+        "# A country's pulse (every 30 days, not each calendar month: scripting_best_practices.md,\n"
+        "# `on_monthly_pulse_country` Is a 30-Day Timer): a serial on first sight, the month it is first due (this\n"
+        "# year's reporting month, or next year's once that has passed), then a snapshot at the first pulse in the due\n"
+        "# month or after it, which sets the next due month a calendar year on. So a country reports once in each\n"
+        "# calendar year, in its month (a February one in March when its pulse misses February). A second pulse in a\n"
+        "# 31-day month finds the next report a year off. Versions 1 and 2 counted twelve pulses instead (te_aip_m,\n"
+        "# now unused), 360 days, so a report drifted five days earlier a year.\n"
         "te_aip_country_tick = {\n"
         "\tte_aip_ensure_id = yes\n"
         "\tif = {\n"
-        "\t\tlimit = { NOT = { has_variable = te_aip_m } }\n"
-        "\t\tset_variable = { name = te_aip_m value = 0 }\n"
+        "\t\tlimit = { NOT = { has_variable = te_aip_due } }\n"
+        "\t\tset_variable = { name = te_aip_due value = te_aip_first_due }\n"
+        "\t\tif = {\n"
+        "\t\t\tlimit = { te_aip_due_in < 0 }\n"
+        "\t\t\tchange_variable = { name = te_aip_due add = 12 }\n"
+        "\t\t}\n"
         "\t}\n"
-        "\tchange_variable = { name = te_aip_m add = 1 }\n"
         "\tif = {\n"
-        "\t\tlimit = { var:te_aip_m >= 12 }\n"
-        "\t\tset_variable = { name = te_aip_m value = 0 }\n"
+        "\t\tlimit = {\n"
+        "\t\t\tte_banking_cycle_running = yes\n"
+        "\t\t\tbanking_cycle_is_recession = yes\n"
+        "\t\t}\n"
+        "\t\tte_aip_count = { N = bank_down }\n"
+        "\t}\n"
+        "\tif = {\n"
+        "\t\tlimit = { te_aip_due_in <= 0 }\n"
+        "\t\tset_variable = { name = te_aip_due value = te_aip_next_due }\n"
         "\t\tte_aip_snapshot = yes\n"
         "\t}\n"
         "}\n\n"
@@ -960,17 +1036,31 @@ EVENT_VALUES = (
         for name in ("type", "a_id", "a_rank", "b_id", "b_rank"))
     + "\n"
     "# --- version 2, the W line: the world outside the AI countries ---\n"
+    "# every_country does not reach a decentralized nation (scripting_best_practices.md, Country Type Mechanics):\n"
+    "# version 2 counted them with it and read 0 in every line of its first run, while the same game's\n"
+    "# decentralized_law_baseline self-check, which tests any_decentralized_country, printed OK. Version 3 uses the\n"
+    "# dedicated iterator, and two reads that do not depend on it: every state in the world (every_state from a\n"
+    "# country scope is global), and the states of the countries every_country reaches, whose difference is the\n"
+    "# land the decentralized nations hold.\n"
     "te_aip_w_countries = {\n"
     "\tvalue = 0\n"
     "\tevery_country = { limit = { NOT = { is_country_type = decentralized } } add = 1 }\n"
     "}\n"
     "te_aip_w_dn = {\n"
     "\tvalue = 0\n"
-    "\tevery_country = { limit = { is_country_type = decentralized } add = 1 }\n"
+    "\tevery_decentralized_country = { add = 1 }\n"
     "}\n"
     "te_aip_w_dn_states = {\n"
     "\tvalue = 0\n"
-    "\tevery_country = { limit = { is_country_type = decentralized } add = num_states }\n"
+    "\tevery_decentralized_country = { add = num_states }\n"
+    "}\n"
+    "te_aip_w_states = {\n"
+    "\tvalue = 0\n"
+    "\tevery_state = { add = 1 }\n"
+    "}\n"
+    "te_aip_w_c_states = {\n"
+    "\tvalue = 0\n"
+    "\tevery_country = { limit = { NOT = { is_country_type = decentralized } } add = num_states }\n"
     "}\n"
 )
 
@@ -1256,6 +1346,10 @@ def render_key(cat: dict) -> str:
         "unit_info": {field: cat["unit_types"][members[0]] for field, members in cat["unit_line"]
                       if len(members) == 1},
         "world_fields": WORLD_FIELDS,
+        # Version 3: the C2 line's bank_phase names (1-based), and how a log's snapshots are spaced: version 3
+        # reports each country once a calendar year, versions 1 and 2 every twelve of its 30-day pulses.
+        "bank_phases": BANK_PHASES,
+        "calendar_schedule_from": 3,
         # Each T field's technologies, so that the files can be rebuilt from the key alone (catalog_from_key).
         "tech_cell_names": cat["tech_cells"],
         # The O2 line's Construction Sector fields: each cs_pm_* field's methods, and the staffing the *80 fields
