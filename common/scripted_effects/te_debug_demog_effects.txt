@@ -719,6 +719,16 @@ te_debug_demog_wf_selfchecks = {
 			capital = { trigger_event = { id = te_debug_demog.199 days = 7 } }
 			trigger_event = { id = te_debug_demog.198 days = 14 }
 		}
+		# workforce_pull_births: a war clears the capital's mark (a war's dead, conscripts and refugees likely move the
+		# workforce figure by more than the births); the next census step at peace marks it again
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_selfcheck_wfp_done }
+				is_at_war = yes
+				capital = { has_variable = te_dg_wfp_y }
+			}
+			capital = { te_debug_demog_wf_pull_unmark = yes }
+		}
 		if = {
 			limit = {
 				NOT = { has_global_variable = te_demog_selfcheck_amend_done }
@@ -917,7 +927,14 @@ te_debug_demog_step3_selfchecks = {
 #     ratio its pops were set to times 1 - e^-b (te_demog_wf_pull_share)? OK from half to twice the prediction. Under
 #     half, the pull isn't the births and the lead closes less than a quarter of a gap a year; over twice, it closes the
 #     whole gap and more, and W's lead overshoots the aim (docs/testing/demographics-playtest.md has both fallbacks).
-#     Only where the prediction is at least 0.01, so an OK can't come from a figure that had nowhere to go.
+#     Only where the prediction is at least 0.01, so an OK can't come from a figure that had nowhere to go. Only in a
+#     capital whose country is at peace at the mark, at the read and on every monthly pulse between (a war clears the
+#     mark: te_debug_demog_wf_selfchecks), since a war likely moves a state's workforce figure by means the births
+#     leave out (the dead and the conscripts are workers; devastation moves people). On 2026-11-16 Grão-Pará's
+#     capital Pará, at war with Brazil since 1836, read a ratio of -0.23. A read that moved against its gap (ratio
+#     under 0) says something else moved the figure more than the births did, so it gives no verdict and the next
+#     year's mark is read instead, twice at most; the third read gives its verdict whatever its sign
+#     (te_demog_selfcheck_wfp_resamples), so a pull too slow to see still reads slow.
 te_debug_demog_wf_term_checks = {
 	if = {
 		limit = {
@@ -972,23 +989,42 @@ te_debug_demog_wf_term_checks = {
 			te_debug_demog_wfp_years >= 1
 			te_debug_demog_wfp_years < 2
 			te_debug_demog_wfp_pred_size >= te_debug_demog_wfp_min_move
+			is_capital = yes
+			owner = { is_at_war = no }
 		}
-		set_global_variable = { name = te_demog_selfcheck_wfp_done value = yes }
 		if = {
 			limit = {
-				te_debug_demog_wfp_ratio >= 0.5
-				te_debug_demog_wfp_ratio <= 2
+				te_debug_demog_wfp_ratio < 0
+				NOT = { global_var:te_demog_selfcheck_wfp_resamples ?= 2 }
 			}
-			debug_log = "TE_SELF_CHECK OK workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (the engine's figure moved by about what its births predict: W's lead closes about half of a gap a year) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else_if = {
-			limit = { te_debug_demog_wfp_ratio < 0.5 }
-			debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (slow: the engine's figure moved under half of what its births predict, so the pull isn't the births and W's lead closes under a quarter of a gap a year; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			if = {
+				limit = { has_global_variable = te_demog_selfcheck_wfp_resamples }
+				change_global_variable = { name = te_demog_selfcheck_wfp_resamples add = 1 }
+			}
+			else = {
+				set_global_variable = { name = te_demog_selfcheck_wfp_resamples value = 1 }
+			}
+			debug_log = "TE_PROBE workforce_pull_births against engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] state=[THIS.GetState.GetNameNoFormatting] resample=[GetGlobalVariable('te_demog_selfcheck_wfp_resamples').GetValue|0] (the figure moved against its gap, so something other than the births moved it more: no verdict; the next mark is read, and the third read gives its verdict whatever its sign) date=[TimeKeeper.GetCurrentDate.GetString]"
+			te_debug_demog_wf_pull_unmark = yes
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (fast: the engine's figure moved over twice what its births predict, so W's lead overshoots the aim; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			set_global_variable = { name = te_demog_selfcheck_wfp_done value = yes }
+			if = {
+				limit = {
+					te_debug_demog_wfp_ratio >= 0.5
+					te_debug_demog_wfp_ratio <= 2
+				}
+				debug_log = "TE_SELF_CHECK OK workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (the engine's figure moved by about what its births predict: W's lead closes about half of a gap a year) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { te_debug_demog_wfp_ratio < 0.5 }
+				debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (slow: the engine's figure moved under half of what its births predict, so the pull isn't the births and W's lead closes under a quarter of a gap a year; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN workforce_pull_births engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] engine_before=[THIS.ScriptValue('te_debug_demog_wfp_e0_read')|3] moved=[THIS.ScriptValue('te_debug_demog_wfp_moved')|4] predicted=[THIS.ScriptValue('te_debug_demog_wfp_pred_read')|4] ratio=[THIS.ScriptValue('te_debug_demog_wfp_ratio')|2] set_before=[THIS.ScriptValue('te_debug_demog_wfp_set_read')|3] births_per_1000=[THIS.ScriptValue('te_debug_demog_wfp_cbr_read')|1] aim=[THIS.ScriptValue('te_demog_wf_engine_target')|3] since=[THIS.ScriptValue('te_debug_demog_wfp_y_read')|0] (fast: the engine's figure moved over twice what its births predict, so W's lead overshoots the aim; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
 		}
-		debug_log_scopes = yes
 	}
 	# the pull's marks go once the check has run, in any capital
 	if = {
@@ -1034,7 +1070,8 @@ te_debug_demog_wf_term_landing = {
 # census year, the walk's engine figure, the ratio the pops are set to for the year to come (the pops' bases, W and the
 # lines on top: the modifier just added can't be read back in this effect), the births per 1,000 the pull's share
 # reads, and the move the births predict: (set - engine) x te_demog_wf_pull_share (demographics_model.
-# workforce_pull_move). Each step replaces the last step's mark, so a check reads only the year just gone.
+# workforce_pull_move). Each step replaces the last step's mark, so a check reads only the year just gone. Only while
+# the country is at peace; a war in the year clears the mark (te_debug_demog_wf_selfchecks).
 te_debug_demog_wf_pull_mark = {
 	if = {
 		limit = { has_variable = te_dg_wfp_y }
@@ -1044,6 +1081,7 @@ te_debug_demog_wf_pull_mark = {
 		limit = {
 			NOT = { has_global_variable = te_demog_selfcheck_wfp_done }
 			is_capital = yes
+			owner = { is_at_war = no }
 			var:te_dg_stepped > 0
 			has_variable = te_dg_mw
 			has_variable = te_dg_wf_engine
