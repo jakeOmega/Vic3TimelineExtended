@@ -6374,6 +6374,7 @@
  sr_abandon_home_tt:0 "The colony's people come home to our capital, and the site is unclaimed again. Its modules are lost."
  sr_abandon_keep_tt:0 "The colony stays ours."
  sr_abandon_req_none_pending_tt:0 "We are not already answering for another colony's abandonment"
+ sr_ai_program_means_tt:0 "An AI country builds a Space Program only if Earth Orbit would cost it at most a tenth of its government's income, out of default and bankruptcy, and not within five years of pulling one down."
  sr_approach_cost_ambitious_interstellar_probe:0 "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]#! innovation a week, on top of funding (as much as two more funding levels)."
  sr_approach_cost_ambitious_mars_landing:0 "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]#! innovation a week, on top of funding (as much as two more funding levels)."
  sr_approach_cost_ambitious_moon_landing:0 "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]#! innovation a week, on top of funding (as much as two more funding levels)."

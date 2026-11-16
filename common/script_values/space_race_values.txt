@@ -1043,9 +1043,11 @@ sr_power_rank_score = {
 }
 
 # ======= Space Program mission bills (AI decisions) =======
-# The weekly Launch Capacity bill of each mission at full staffing, for the AI
-# weights of te_decision_found_space_program and te_decision_space_mission_*
-# (common/decisions/extra_decisions.txt). An estimate: an understaffed
+# The weekly Launch Capacity of each mission at full staffing, and our market's
+# price for it: the Earth Orbit bill te_decision_found_space_program weighs
+# (common/decisions/extra_decisions.txt), and the units and price the AI's
+# monthly budget pass prices every mission with (sr_ai_mission_budget_values.txt;
+# its bills also carry the program's throughput). An estimate: an understaffed
 # programme buys less.
 #
 # Units: goods_input_launch_capacity_add of each production method
@@ -1080,67 +1082,8 @@ sr_launch_capacity_unit_price = {
 	}
 }
 
-# The mission the programme runs now, as its weekly units (0 without one).
-# Each mission carries every lower mission's bool, so the highest bool held
-# names it.
-sr_mission_units_current = {
-	value = 0
-	if = {
-		limit = { modifier:country_sr_interstellar_mission_program_bool = yes }
-		add = sr_mission_units_interstellar
-	}
-	else_if = {
-		limit = { modifier:country_sr_deep_space_exploration_program_bool = yes }
-		add = sr_mission_units_deep_space
-	}
-	else_if = {
-		limit = { modifier:country_sr_solar_colonization_program_bool = yes }
-		add = sr_mission_units_solar
-	}
-	else_if = {
-		limit = { modifier:country_sr_mars_mission_program_bool = yes }
-		add = sr_mission_units_mars
-	}
-	else_if = {
-		limit = { modifier:country_sr_moon_mission_program_bool = yes }
-		add = sr_mission_units_moon
-	}
-	else_if = {
-		limit = { modifier:country_sr_earth_orbit_program_bool = yes }
-		add = sr_mission_units_earth_orbit
-	}
-}
-
 # Founding: the whole Earth Orbit bill.
 sr_mission_bill_earth_orbit = {
 	value = sr_mission_units_earth_orbit
-	multiply = sr_launch_capacity_unit_price
-}
-
-# Switching up: only the increase, since net_fixed_income already pays the
-# mission the programme runs now.
-sr_mission_bill_increase_moon = {
-	value = sr_mission_units_moon
-	subtract = sr_mission_units_current
-	multiply = sr_launch_capacity_unit_price
-}
-sr_mission_bill_increase_mars = {
-	value = sr_mission_units_mars
-	subtract = sr_mission_units_current
-	multiply = sr_launch_capacity_unit_price
-}
-sr_mission_bill_increase_solar = {
-	value = sr_mission_units_solar
-	subtract = sr_mission_units_current
-	multiply = sr_launch_capacity_unit_price
-}
-sr_mission_bill_increase_deep_space = {
-	value = sr_mission_units_deep_space
-	subtract = sr_mission_units_current
-	multiply = sr_launch_capacity_unit_price
-}
-sr_mission_bill_increase_interstellar = {
-	value = sr_mission_units_interstellar
-	subtract = sr_mission_units_current
 	multiply = sr_launch_capacity_unit_price
 }

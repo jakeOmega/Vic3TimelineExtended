@@ -35,6 +35,18 @@
 # already chosen costs nothing while it stays outside (sr_<m>_cost gates the
 # approach terms, and the declaration follows its rank within days).
 #
+# THE PROGRAM'S BILL. Each funding level adds +25% to the Space Program's
+# throughput, and so to its weekly Launch Capacity bill, which the weights
+# above never saw: Germany's 7 levels in the owner's 1958 save paid for
+# 2.56 times its mission's own bill. So an AI's increase-funding buttons
+# weigh 0 while one more level would take the program's bill past 10% of
+# the government's fixed income, or in default or under the bankruptcy
+# modifier (sr_ai_space_fund_up_blocked), and its decrease-funding buttons
+# get +100 while the bill is over 20%, or in trouble
+# (sr_ai_space_fund_down_due). Funding goes first, so the monthly budget
+# pass steps a mission down only when the mission itself is too dear
+# (sr_ai_mission_budget_effects.txt; ai.md § Space Program Mission Budget).
+#
 # The innovation reads below are AI weights, not gates: a step's cost reaches
 # the country 2 to 5 days after the click (the entry declares it, #1404), so
 # the weights can see the old figure for those days. No pending booking: the
@@ -131,6 +143,11 @@ sr_btn_fund_up_suborbital = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = suborbital } }
@@ -162,6 +179,11 @@ sr_btn_fund_down_suborbital = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -261,6 +283,11 @@ sr_btn_fund_up_orbital = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = orbital } }
@@ -292,6 +319,11 @@ sr_btn_fund_down_orbital = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -391,6 +423,11 @@ sr_btn_fund_up_moon_landing = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = moon_landing } }
@@ -422,6 +459,11 @@ sr_btn_fund_down_moon_landing = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -521,6 +563,11 @@ sr_btn_fund_up_probe = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = probe } }
@@ -552,6 +599,11 @@ sr_btn_fund_down_probe = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -651,6 +703,11 @@ sr_btn_fund_up_mars_landing = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = mars_landing } }
@@ -682,6 +739,11 @@ sr_btn_fund_down_mars_landing = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -781,6 +843,11 @@ sr_btn_fund_up_interstellar_probe = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = interstellar_probe } }
@@ -812,6 +879,11 @@ sr_btn_fund_down_interstellar_probe = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}
@@ -911,6 +983,11 @@ sr_btn_fund_up_solar_colonization = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
 			multiply = 0
 		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_up_blocked = yes }
+			multiply = 0
+		}
 	}
 
 	possible = { sr_possible_fund_up_within_cap = { MILESTONE = solar_colonization } }
@@ -942,6 +1019,11 @@ sr_btn_fund_down_solar_colonization = {
 		# Non-participant: see NON-PARTICIPANTS in the header.
 		if = {
 			limit = { NOT = { sr_ai_should_participate = yes } }
+			add = 100
+		}
+		# The Space Program's budget: see THE PROGRAM'S BILL in the header.
+		if = {
+			limit = { sr_ai_space_fund_down_due = yes }
 			add = 100
 		}
 	}

@@ -1,0 +1,41 @@
+﻿# ============================================================================
+# MISSION LIMIT — the Space Program's AI budget ceiling (docs/systems/mod_systems/ai.md § Space Program Mission Budget)
+# ============================================================================
+# A fifth group on building_space_program (extra_buildings.txt). Its methods
+# carry nothing: each is a ceiling on the mission group above it. Every
+# mission above Earth Orbit lists, in its unlocking_production_methods, the
+# ceilings that allow it (extra_pms.txt), so a building on the Moon Mission
+# ceiling can run Earth Orbit or the Moon Mission and nothing dearer.
+#
+# Why a group: a production method has no trigger of its own, and the only
+# per-building gate the engine checks for everyone, its own AI included, is
+# another group's active method (scripting_best_practices.md § Locking
+# Production Methods). The mission group keeps ai_selection = most_productive,
+# under which the engine's AI climbs to the dearest mission it is allowed;
+# the ceiling is what it is allowed. sr_ai_mission_budget_review
+# (sr_ai_mission_budget_effects.txt) sets it once a month for an AI country,
+# to the dearest mission its budget covers.
+#
+# Every method lists only itself (the self-reference ratchet, as the Grand
+# Monuments' dedications do), so none is ever available from the panel or to
+# the engine's AI: only script moves the group, which the lock does not bind
+# (te_debug_monuments probe, 2026-10-08). A player's program stays on Any
+# Mission, the default, the only row its panel shows; the monthly pass puts
+# back Any Mission on a program a player takes over from the AI.
+#
+# No ai_selection: with the ratchet only the active method is ever valid, so
+# the engine has nothing to choose.
+# ============================================================================
+
+pmg_space_program_mission_ceiling = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_earth_orbit
+		pm_sr_mission_ceiling_moon
+		pm_sr_mission_ceiling_mars
+		pm_sr_mission_ceiling_solar
+		pm_sr_mission_ceiling_deep_space
+		pm_sr_mission_ceiling_interstellar
+	}
+}
