@@ -154,7 +154,8 @@ class TestLadders(unittest.TestCase):
     def test_construction_ladder_reads_goods_per_level(self):
         lad = D.ladder(MS, N, "construction")
         self.assertEqual([t.construction_out for t in lad.base][:2], [1.0, 2.0])
-        self.assertEqual(lad.base[0].employment, 6000.0)
+        # A third of the 6,000 it hired until 2026-11-16 (construction.md)
+        self.assertEqual(lad.base[0].employment, 2000.0)
 
     def test_maintenance_rates(self):
         self.assertEqual(D.ladder(MS, N, "heavy").maintenance, 0.1)
