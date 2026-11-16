@@ -7,22 +7,23 @@ smoothed price, scaled by reserves and debt, or a floor if that is more, capped 
 now a twentieth of fixed income, never more than the 10 points it was, paid from reserves (nothing with none) or,
 up to a tenth of it, from the surplus, and a fifth of fixed income higher while the country is short of bureaucracy,
 so such a country buys at least a fifth. A government with no surplus, no reserves and no such shortage buys nothing.
-While the engine reports construction paused the purchase is nothing, except for a country short of bureaucracy with
-a Government Administration level in its queue, which goes on buying that fifth
-(docs/systems/mod_systems/construction.md, "The AI's purchase").
+While the engine reports construction paused the purchase is nothing, whatever the country's bureaucracy. For a day
+(2026-11-16) a paused country short of bureaucracy with a Government Administration level in its queue went on buying
+that fifth; an observer game showed that nothing bought while paused reaches the government queue, so that clause and
+its self-check were removed (docs/systems/mod_systems/construction.md, "The AI's purchase").
 
 Nothing in the engine checks that script, so this runs the script's own text. What each part checks:
 
 - ScriptAgainstModel runs the values through the evaluator of test_construction_market_budget_step.py, with the
-  engine's reads (income, debt, reserves, the queue, the buildings) stubbed, against the same rule restated in Python
+  engine's reads (income, debt, reserves, the queue) stubbed, against the same rule restated in Python
   (`model`). The restatement follows the script line by line, so it checks the script's operators and their order,
   and that a value does what its comment says; it would repeat a mistake in the rule itself.
-- Surplus, Floor, TheAdministration, TheEvidence and TheLongRun are the independent checks: properties the rule must
-  have whatever its wording (what it costs against income, that it never rises above the rule before, that the
-  probe's sample countries spend no more than they have), and a week-by-week budget against the rule before.
+- Surplus, Floor, ShortOfBureaucracy, Paused, TheSites, TheEvidence and TheLongRun are the independent checks:
+  properties the rule must have whatever its wording (what it costs against income, that it never rises above the
+  rule before, that a paused country buys nothing, that the probe's sample countries spend no more than they have),
+  and a week-by-week budget against the rule before.
 - Constants holds the script's constants to the engine defines they are taken from.
-- TheSelfCheck runs the weekly effects (the purchase, then TE_SELF_CHECK construction_admin_while_paused) over a
-  country week by week, with a small runner for the few effects they use.
+- TheQueueRead runs the trigger the removed clause read its queue with, which the AI probe still reads.
 
 Run: python3 -m unittest test_construction_market_ai_purchase -v
 """
@@ -34,7 +35,6 @@ import unittest
 from pathlib import Path
 
 from test_construction_market_budget_step import CURRENT_VALUES, DISPLAY_VALUES, TARGET_VALUES, Env, load
-from test_construction_market_site_sizing import TOKEN as EFFECT_TOKEN, code as effect_code, parse as parse_effects
 
 ROOT = Path(__file__).resolve().parent
 AI_VALUES = ROOT / "common/script_values/te_construction_market_ai_values.txt"
@@ -53,11 +53,6 @@ FLOOR_MAX_POINTS = 10.0
 FLOOR_FULL_RESERVES = 0.1
 FLOOR_MIN_FACTOR = 0.1
 BUREAUCRACY_INCOME_SHARE = 0.2
-SELFCHECK_POINTS = 400.0
-ADMINISTRATION = "building_government_administration"
-ADMINISTRATION_LEVELS = '"country_has_building_type_levels(bt:%s)"' % ADMINISTRATION
-SELFCHECK = "construction_admin_while_paused"
-SELFCHECK_VARS = ("levels", "states", "weeks", "bought", "wasted", "spent", "repaid")
 
 # The engine's AI defines the constants are taken from (vanilla 1.15.1, common/defines/00_ai.txt). The mod must leave
 # them alone for the reasoning to hold; test_matches_the_game_files reads them where the game is installed.
@@ -81,97 +76,56 @@ def _parsed():
             constants.update(c)
             values.update(v)
         _PARSED["constants"], _PARSED["values"] = constants, values
-        _PARSED["triggers"] = load(TRIGGERS)[1]
-        items, _ = parse_effects(EFFECT_TOKEN.findall(effect_code(AI_EFFECTS)))
-        _PARSED["effects"] = {key: value for key, _op, value in items}
     return _PARSED
 
 
 class AiEnv(Env):
-    """The shared evaluator with the AI values and the construction market's scripted triggers loaded too, the files
-    parsed once, and a country's buildings to walk."""
+    """The shared evaluator with the AI values file loaded too, and the files parsed once."""
 
-    def __init__(self, names, variables, flags, buildings=(), globals_=frozenset()):
+    def __init__(self, names, variables, flags):
         parsed = _parsed()
         self.memo = {}
-        self.constants, self.values, self.scripted = parsed["constants"], parsed["values"], parsed["triggers"]
-        self.names, self.variables, self.flags, self.triggers = names, variables, flags, {}
-        self.buildings, self.globals = buildings, globals_
+        self.constants, self.values = parsed["constants"], parsed["values"]
+        self.names, self.variables, self.flags = names, variables, flags
+        # te_construction_market_triggers.txt: a Fixed Budget is on while this variable is set.
+        budget_mode = "te_construction_market_budget_mode"
+        self.triggers = {budget_mode + "_on": lambda: budget_mode in variables}
 
     def operand(self, raw):
         # The engine's numbers have five decimals; the shared evaluator's floats carry noise past that, which a
         # comparison with 0 would read as a quantity.
         return round(super().operand(raw), 5)
 
-    def one_cond(self, key, op, val):
-        if key == "has_global_variable":
-            return val in self.globals
-        if key == "is_building_type":
-            return self.names["its type"] == val
-        if key == "any_scope_building":
-            return any(building.env().cond(val) for building in self.buildings)
-        if key in self.scripted:
-            return self.cond(self.scripted[key]) == (val == "yes")
-        return super().one_cond(key, op, val)
-
-
-class Building:
-    def __init__(self, kind, level=1, queued=0, under_construction=None):
-        self.kind, self.level, self.queued = kind, level, queued
-        self.under_construction = queued > 0 if under_construction is None else under_construction
-
-    def env(self):
-        return AiEnv({"its type": self.kind, "level": float(self.level),
-                      "level_after_queued_constructions": float(self.level + self.queued)},
-                     {}, flags={"is_under_construction": self.under_construction})
-
-
-def administration(level=3, queued=1, **kwargs):
-    """A country's buildings with a Government Administration that has `queued` levels in the queue."""
-    return [Building("building_barracks", 5, 1), Building(ADMINISTRATION, level, queued, **kwargs)]
-
 
 class Country:
     """One week of one government, as the script reads it."""
 
     def __init__(self, fixed_income, surplus, price=1250.0, reserves=0.0, debt=0.0, bureaucracy=50.0, queued=1,
-                 weekly_max=20.0, paused=False, at_war=False, bubble=None, income=None, buildings=(), ai=True):
+                 weekly_max=20.0, paused=False, at_war=False, bubble=None, income=None):
         self.fixed_income = float(fixed_income)
         self.surplus = float(surplus)  # net_fixed_income
         self.price = float(price)  # var:te_construction_market_price_stabilizer
         self.reserves, self.debt = reserves, debt  # scaled_gold_reserves, scaled_debt
         self.bureaucracy, self.queued, self.weekly_max = bureaucracy, queued, weekly_max
         self.paused, self.at_war, self.bubble = paused, at_war, bubble
-        self.income = float(fixed_income if income is None else income)
-        self.buildings, self.ai = list(buildings), ai
-        self.states, self.site_levels, self.wasted, self.construction_bill = 4, 1, False, 0.0
+        self.income = float(fixed_income if income is None else income)  # read by the rule before only
         self.vars = {"te_construction_market_price_stabilizer": self.price}
         if bubble is not None:
             self.vars["bubble_pressure"] = bubble
 
-    def administration_in_queue(self):
-        return any(b.kind == ADMINISTRATION and (b.queued > 0 or b.under_construction) for b in self.buildings)
-
-    def env(self, globals_=frozenset()):
+    def env(self):
         names = {
             "net_fixed_income": self.surplus,
             "fixed_income": self.fixed_income,
-            "income": self.income,
-            "fixed_expenses": self.fixed_income - self.surplus,
-            "total_expenses": self.fixed_income - self.surplus + self.construction_bill,
             "scaled_gold_reserves": self.reserves,
             "scaled_debt": self.debt,
             "bureaucracy": self.bureaucracy,
             "construction_queue_num_queued_government_levels": float(self.queued),
             "modifier:country_max_weekly_construction_progress_add": self.weekly_max,
-            "num_states": float(self.states),
-            ADMINISTRATION_LEVELS: float(sum(b.level for b in self.buildings if b.kind == ADMINISTRATION)),
-            # The levels of its Construction Sites that have a crew (the placement values' walk, not run here).
-            "te_construction_market_site_levels": float(self.site_levels),
         }
-        flags = {"is_construction_paused": self.paused, "is_at_war": self.at_war, "is_ai": self.ai,
-                 "has_wasted_construction": self.wasted}
-        return AiEnv(names, self.vars, flags, self.buildings, globals_)
+        # The evaluator fails on a read it has no stub for. There is none for is_ai, for a building or for income
+        # that is not fixed: the purchase and the sites' use of it may read none of them.
+        return AiEnv(names, self.vars, flags={"is_construction_paused": self.paused, "is_at_war": self.at_war})
 
     def script(self):
         return self.env().value("te_construction_market_ai_purchase_target")
@@ -204,11 +158,7 @@ def model_floor(c):
 
 def model(c):
     """The script's rule restated line by line (see the module's docstring for what that does and does not check)."""
-    if c.queued <= 0:
-        return 0.0
-    if c.paused:
-        if c.bureaucracy < 0 and c.administration_in_queue():
-            return min(BUREAUCRACY_INCOME_SHARE * c.fixed_income / c.price, c.weekly_max)
+    if c.paused or c.queued <= 0:
         return 0.0
     points = max(max(c.surplus, 0.0) / c.price * model_factor(c), model_floor(c))
     return min(points, c.queued * c.weekly_max)
@@ -241,7 +191,6 @@ class Constants(unittest.TestCase):
         self.assertEqual(constants["TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES"], FLOOR_FULL_RESERVES)
         self.assertEqual(constants["TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR"], FLOOR_MIN_FACTOR)
         self.assertEqual(constants["TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE"], BUREAUCRACY_INCOME_SHARE)
-        self.assertEqual(constants["TE_CONSTRUCTION_MARKET_AI_ADMIN_SELFCHECK_POINTS"], SELFCHECK_POINTS)
 
     def test_the_floor_is_the_margin_the_engines_budget_ai_defends(self):
         # Income under 1.05 times expenses is where it cuts wages and should-have spending: a surplus of 1 - 1/1.05,
@@ -254,10 +203,6 @@ class Constants(unittest.TestCase):
 
     def test_the_part_the_surplus_pays_is_a_two_hundredth_of_income(self):
         self.assertAlmostEqual(FLOOR_INCOME_SHARE * FLOOR_MIN_FACTOR, 0.005)
-
-    def test_the_engine_pauses_a_critical_construction_far_later_than_the_rest(self):
-        # What the purchase through the pause leans on: the engine has a second, later pause.
-        self.assertGreater(NAI["CONSTRUCTION_DEBT_PAUSE_CRITICAL_CONSTRUCTION"], 2 * NAI["CONSTRUCTION_DEBT_PAUSE"])
 
     def test_the_mod_leaves_those_defines_at_the_engines_values(self):
         # A mod define that moves one of them moves what the formula's constants stand on: revisit both together.
@@ -275,20 +220,6 @@ class Constants(unittest.TestCase):
             m = re.search(rf"^\s*{name}\s*=\s*([0-9.]+)", text, re.M)
             self.assertIsNotNone(m, name)
             self.assertEqual(float(m.group(1)), value, name)
-
-    def test_the_self_checks_points_are_four_administration_levels(self):
-        # construction_cost_very_low, the base game's, which the mod does not redefine.
-        path = _game_file("buildings/07_government.txt")
-        if path is None:
-            self.skipTest("no Victoria 3 install")
-        text = path.read_text(encoding="utf-8-sig")
-        body = text[text.index(ADMINISTRATION + " = {"):]
-        self.assertRegex(body[:body.index("\n}")], r"required_construction\s*=\s*construction_cost_very_low\b")
-        values = _game_file("script_values/building_values.txt").read_text(encoding="utf-8-sig")
-        cost = float(re.search(r"^construction_cost_very_low\s*=\s*(\d+)", values, re.M).group(1))
-        self.assertEqual(SELFCHECK_POINTS, 4 * cost)
-        for path in sorted((ROOT / "common/script_values").glob("*.txt")):
-            self.assertNotRegex(path.read_text(encoding="utf-8-sig"), r"(?m)^construction_cost_very_low\s*=")
 
 
 class ScriptAgainstModel(unittest.TestCase):
@@ -308,22 +239,19 @@ class ScriptAgainstModel(unittest.TestCase):
                 self.assertAlmostEqual(c.script(), model(c), delta=STEP)
         self.assertGreater(count, 2000)
 
-    def test_paused_and_not_with_and_without_an_administration_queued(self):
+    def test_paused_and_not(self):
         count = 0
         budgets = ((0.0, 0.0), (0.3, 0.0), (0.0, 0.45), (0.0, 0.9))  # reserves, debt
-        queues = ((), administration(queued=0), administration(), administration(level=0),
-                  administration(queued=2, under_construction=False))
-        for (name, (fixed_income, price)), share, (reserves, debt), bureaucracy, paused, buildings, (queued, cap) in \
-                itertools.product(ECONOMIES.items(), (-0.25, 0.03, 0.33), budgets, (50.0, -5.0), (False, True), queues,
+        for (name, (fixed_income, price)), share, (reserves, debt), bureaucracy, paused, (queued, cap) in \
+                itertools.product(ECONOMIES.items(), (-0.25, 0.03, 0.33), budgets, (50.0, -5.0), (False, True),
                                   ((0, 20.0), (1, 10.0), (3, 20.0), (1, 140.0))):
             c = Country(fixed_income, share * fixed_income, price, reserves, debt, bureaucracy, queued, cap,
-                        paused=paused, buildings=buildings)
+                        paused=paused)
             count += 1
-            halls = [(b.level, b.queued) for b in buildings if b.kind == ADMINISTRATION]
             with self.subTest(economy=name, surplus=share, reserves=reserves, debt=debt, bureaucracy=bureaucracy,
-                              paused=paused, administration=halls, queue=(queued, cap)):
+                              paused=paused, queue=(queued, cap)):
                 self.assertAlmostEqual(c.script(), model(c), delta=STEP)
-        self.assertGreater(count, 3000)
+        self.assertGreater(count, 350)
 
     def test_it_is_not_rounded_to_whole_points(self):
         # A surplus of 143 a week (Kunduz's) buys a ninth of a point with no debt. Whole points made that nothing.
@@ -331,9 +259,9 @@ class ScriptAgainstModel(unittest.TestCase):
         self.assertNotIn("round", _code(AI_VALUES.read_text(encoding="utf-8-sig")))
 
     def test_with_an_empty_queue_it_buys_nothing(self):
-        for paused, bureaucracy, buildings in itertools.product((False, True), (50.0, -50.0), ((), administration())):
-            with self.subTest(paused=paused, bureaucracy=bureaucracy, administration=bool(buildings)):
-                c = Country(75817.0, 30000.0, bureaucracy=bureaucracy, paused=paused, queued=0, buildings=buildings)
+        for paused, bureaucracy in itertools.product((False, True), (50.0, -50.0)):
+            with self.subTest(paused=paused, bureaucracy=bureaucracy):
+                c = Country(75817.0, 30000.0, bureaucracy=bureaucracy, paused=paused, queued=0)
                 self.assertEqual(c.script(), 0.0)
 
     def test_the_queue_caps_it(self):
@@ -376,7 +304,7 @@ class Surplus(unittest.TestCase):
             if debt and reserves:
                 continue
             c = Country(fixed_income, share * fixed_income, price, reserves, debt, bureaucracy, queued=50,
-                        weekly_max=140.0, buildings=administration())
+                        weekly_max=140.0)
             with self.subTest(fixed_income=fixed_income, surplus=share, debt=debt, bureaucracy=bureaucracy):
                 self.assertLessEqual(c.script(), before(c) + 0.5 + STEP)
 
@@ -526,100 +454,162 @@ class ShortOfBureaucracy(unittest.TestCase):
         self.assertEqual(before(short), 26.0)
 
 
-class TheAdministration(unittest.TestCase):
-    """While the engine reports construction paused, one purchase goes on (owner, 2026-11-16)."""
+class Paused(unittest.TestCase):
+    """While the engine reports construction paused an AI buys nothing, whatever its bureaucracy. A purchase through
+    the pause for a queued Government Administration was tried on 2026-11-16 and removed the same day: an observer
+    game showed that nothing bought while paused reaches the government queue (construction.md, "The AI's
+    purchase")."""
 
-    def paused(self, fixed_income=13678.0, price=1265.0, **kwargs):
-        kwargs.setdefault("bureaucracy", -5.0)
-        kwargs.setdefault("buildings", administration())
-        return Country(fixed_income, kwargs.pop("surplus", 0.0), price, debt=kwargs.pop("debt", 0.5), paused=True,
-                       **kwargs)
+    def test_it_buys_nothing_whatever_its_bureaucracy(self):
+        count = 0
+        for (name, (fixed_income, price)), share, (reserves, debt), bureaucracy, (queued, cap) in itertools.product(
+                ECONOMIES.items(), (-0.3, 0.0, 0.03, 0.5), ((0.0, 0.41), (0.0, 0.7), (0.0, 0.98), (0.3, 0.0)),
+                (-763.0, -5.0, 0.0, 50.0), ((1, 20.0), (14, 30.0), (50, 140.0))):
+            c = Country(fixed_income, share * fixed_income, price, reserves, debt, bureaucracy, queued, cap,
+                        paused=True)
+            count += 1
+            with self.subTest(economy=name, surplus=share, reserves=reserves, debt=debt, bureaucracy=bureaucracy,
+                              queue=(queued, cap)):
+                self.assertEqual(c.script(), 0.0)
+        self.assertGreater(count, 700)
 
-    def test_short_of_bureaucracy_with_one_queued_it_buys_the_fifth(self):
-        for name in ("tiny", "mid"):
-            fixed_income, price = ECONOMIES[name]
-            for surplus, debt in itertools.product((-0.3, 0.0, 0.5), (0.41, 0.7, 0.98)):
-                c = self.paused(fixed_income, price, surplus=surplus * fixed_income, debt=debt, weekly_max=140.0)
-                with self.subTest(economy=name, surplus=surplus, debt=debt):
-                    # On credit, whatever the reserves (none, in debt) and the surplus.
-                    self.assertAlmostEqual(c.bill(), BUREAUCRACY_INCOME_SHARE * fixed_income, delta=STEP * price)
+    def test_the_script_reads_nothing_of_a_paused_country_but_the_pause(self):
+        # The evaluator fails on a read it has no stub for, and here it has the pause alone: no income, no debt, no
+        # bureaucracy, no queue, no buildings, and not whether the AI or a player runs the country.
+        env = AiEnv({}, {}, flags={"is_construction_paused": True})
+        self.assertEqual(env.value("te_construction_market_ai_purchase_target"), 0.0)
 
-    def test_it_does_not_depend_on_the_floor(self):
-        # The floor is nothing for a country with no surplus and no reserves; the purchase through the pause is its
-        # own branch and still buys the fifth.
+    def test_the_same_shortage_still_buys_its_fifth_where_the_engine_reports_no_pause(self):
+        # The floor's fifth does not shrink with debt (the owner's point of 2026-11-16, that a shortage of
+        # bureaucracy limits income), and the engine does not always report the pause at 40% of the ceiling.
         for name in ("tiny", "mid", "large"):
             fixed_income, price = ECONOMIES[name]
-            for surplus in (-0.5, 0.0):
-                c = self.paused(fixed_income, price, surplus=surplus * fixed_income, weekly_max=140.0)
-                unpaused_with_nothing = Country(fixed_income, surplus * fixed_income, price)
-                with self.subTest(economy=name, surplus=surplus):
-                    self.assertEqual(unpaused_with_nothing.script(), 0.0)
-                    self.assertEqual(c.reserves, 0.0)
+            for surplus, debt in itertools.product((-0.3, 0.0), (0.41, 0.7, 0.98)):
+                c = Country(fixed_income, surplus * fixed_income, price, debt=debt, bureaucracy=-5.0, queued=50,
+                            weekly_max=140.0, paused=True)
+                with self.subTest(economy=name, surplus=surplus, debt=debt):
+                    self.assertEqual(c.script(), 0.0)
+                    c.paused = False
                     self.assertAlmostEqual(c.bill(), BUREAUCRACY_INCOME_SHARE * fixed_income, delta=STEP * price)
 
-    def test_it_is_held_to_one_levels_weekly_maximum(self):
-        # The rest of the queue is paused and could not use more.
-        fixed_income, price = ECONOMIES["huge"]
-        for queued in (1, 5):
-            with self.subTest(queued=queued):
-                self.assertAlmostEqual(self.paused(fixed_income, price, queued=queued, weekly_max=40.0).script(), 40.0,
-                                       places=6)
-
-    def test_every_other_paused_country_buys_nothing(self):
-        cases = {
-            "not short of bureaucracy": {"bureaucracy": 0.0},
-            "no administration at all": {"buildings": ()},
-            "an administration with nothing queued": {"buildings": administration(queued=0)},
-            "another building queued": {"buildings": [Building("building_barracks", 2, 3)]},
-            "an empty queue": {"queued": 0},
-        }
-        for name, kwargs in cases.items():
-            with self.subTest(name):
-                self.assertEqual(self.paused(surplus=5000.0, **kwargs).script(), 0.0)
-
-    def test_either_read_of_the_queue_will_do(self):
-        # A first level being built (level 0), an expansion with no progress the engine may not call under
-        # construction, and a level it calls under construction without a count of queued levels.
-        for buildings in (administration(level=0), administration(queued=2, under_construction=False),
-                          administration(queued=0, under_construction=True)):
-            with self.subTest(administration=[(b.level, b.queued, b.under_construction) for b in buildings][-1]):
-                self.assertGreater(self.paused(buildings=buildings).script(), 0.0)
-
-    def test_only_a_country_that_is_short_walks_its_buildings(self):
-        trigger = _parsed()["triggers"]["te_construction_market_ai_building_administration"]
-        self.assertEqual([key for key, _op, _value in trigger], ["bureaucracy", "any_scope_building"])
-
-    def test_outside_the_pause_an_administration_in_the_queue_changes_nothing(self):
-        for (fixed_income, price), share, bureaucracy in itertools.product(ECONOMIES.values(), (-0.2, 0.0, 0.4),
-                                                                          (-5.0, 5.0)):
-            with self.subTest(fixed_income=fixed_income, surplus=share, bureaucracy=bureaucracy):
-                self.assertEqual(
-                    Country(fixed_income, share * fixed_income, price, bureaucracy=bureaucracy,
-                            buildings=administration()).script(),
-                    Country(fixed_income, share * fixed_income, price, bureaucracy=bureaucracy).script())
+    def test_east_india_in_1877(self):
+        # The observer game of 2026-11-16 on main 81b947368: paused at 47% of its debt ceiling, 763 short of
+        # bureaucracy, 14 government levels queued at 30 points a week each. The clause bought it 30 points a week,
+        # and its government queue used none of them (TE_SELF_CHECK BROKEN construction_admin_while_paused, after 14
+        # weeks and 420 points).
+        east_india = Country(434223.0, -69194.0, 1242.0, debt=0.472, bureaucracy=-763.0, queued=14, weekly_max=30.0,
+                             paused=True, income=596386.0)
+        self.assertEqual(east_india.script(), 0.0)
+        # Had the engine reported no pause, the floor's fifth: 69.9 points.
+        east_india.paused = False
+        self.assertAlmostEqual(east_india.script(), 0.2 * 434223.0 / 1242.0, delta=STEP)
 
 
-class ThePurchaseReachesTheSites(unittest.TestCase):
-    """te_construction_market_public_use_target, which sizes the sites, used to be nothing whenever paused."""
+class TheSites(unittest.TestCase):
+    """te_construction_market_public_use_target, which sizes the Construction Sites, is nothing whenever the engine
+    reports the pause, for the AI and for a player."""
 
     def use(self, purchase=6.0, **kwargs):
         c = Country(13678.0, 0.0, 1265.0, **kwargs)
         c.vars["te_construction_market_public_target"] = purchase
         return c.env().value("te_construction_market_public_use_target")
 
-    def test_an_ais_purchase_for_a_shortage_goes_through_the_pause(self):
-        self.assertEqual(self.use(paused=True, bureaucracy=-5.0), 6.0)
-        self.assertEqual(self.use(purchase=90.0, paused=True, bureaucracy=-5.0, queued=2, weekly_max=20.0), 40.0)
+    def test_paused_it_is_nothing_whatever_the_purchase_and_the_bureaucracy(self):
+        for purchase, bureaucracy in itertools.product((0.5, 6.0, 90.0), (-763.0, -5.0, 5.0)):
+            with self.subTest(purchase=purchase, bureaucracy=bureaucracy):
+                self.assertEqual(self.use(purchase, paused=True, bureaucracy=bureaucracy, queued=14, weekly_max=30.0),
+                                 0.0)
 
-    def test_nothing_else_does(self):
-        self.assertEqual(self.use(paused=True, bureaucracy=5.0), 0.0)
-        self.assertEqual(self.use(paused=True, bureaucracy=-5.0, ai=False), 0.0)
+    def test_it_reads_nothing_of_a_paused_country_but_the_pause(self):
+        # As for the purchase: with the pause and the purchase variable alone, nothing else is read. So it cannot
+        # tell an AI's country from a player's, or one short of bureaucracy from another.
+        env = AiEnv({}, {"te_construction_market_public_target": 30.0}, flags={"is_construction_paused": True})
+        self.assertEqual(env.value("te_construction_market_public_use_target"), 0.0)
 
-    def test_unpaused_it_is_the_purchase_up_to_the_queues_cap_as_before(self):
-        for ai, bureaucracy in itertools.product((True, False), (-5.0, 5.0)):
-            with self.subTest(ai=ai, bureaucracy=bureaucracy):
-                self.assertEqual(self.use(ai=ai, bureaucracy=bureaucracy), 6.0)
-                self.assertEqual(self.use(purchase=90.0, ai=ai, bureaucracy=bureaucracy), 20.0)
+    def test_unpaused_it_is_the_purchase_up_to_the_queues_cap(self):
+        for bureaucracy in (-5.0, 5.0):
+            with self.subTest(bureaucracy=bureaucracy):
+                self.assertEqual(self.use(bureaucracy=bureaucracy), 6.0)
+                self.assertEqual(self.use(purchase=90.0, bureaucracy=bureaucracy), 20.0)
+
+
+ADMINISTRATION = "building_government_administration"
+QUEUE_READ = "te_construction_market_ai_building_administration"
+
+
+class QueueEnv(AiEnv):
+    """The evaluator with the construction market's scripted triggers and a country's buildings to walk."""
+
+    def __init__(self, names, flags, buildings=()):
+        super().__init__(names, {}, flags)
+        self.buildings = buildings
+        if "triggers" not in _PARSED:
+            _PARSED["triggers"] = load(TRIGGERS)[1]
+
+    def one_cond(self, key, op, val):
+        if key == "is_building_type":
+            return self.names["its type"] == val
+        if key == "any_scope_building":
+            return any(building.env().cond(val) for building in self.buildings)
+        if key in _PARSED["triggers"]:
+            return self.cond(_PARSED["triggers"][key]) == (val == "yes")
+        return super().one_cond(key, op, val)
+
+
+class Building:
+    def __init__(self, kind, level=1, queued=0, under_construction=None):
+        self.kind, self.level, self.queued = kind, level, queued
+        self.under_construction = queued > 0 if under_construction is None else under_construction
+
+    def env(self):
+        return QueueEnv({"its type": self.kind, "level": float(self.level),
+                         "level_after_queued_constructions": float(self.level + self.queued)},
+                        flags={"is_under_construction": self.under_construction})
+
+
+def administration(level=3, queued=1, **kwargs):
+    """A country's buildings with a Government Administration that has `queued` levels in the queue."""
+    return [Building("building_barracks", 5, 1), Building(ADMINISTRATION, level, queued, **kwargs)]
+
+
+class TheQueueRead(unittest.TestCase):
+    """te_construction_market_ai_building_administration: short of bureaucracy with a Government Administration level
+    in the queue. The purchase read it while it bought through the pause; the AI probe's cm_admin still does."""
+
+    def reads(self, bureaucracy=-5.0, buildings=()):
+        return QueueEnv({"bureaucracy": bureaucracy}, {}, buildings).cond([(QUEUE_READ, "=", "yes")])
+
+    def test_either_read_of_the_queue_will_do(self):
+        # A level queued on a standing building, a first level being built (level 0), an expansion with no progress
+        # the engine may not call under construction, and a level it calls under construction without a count of
+        # queued levels.
+        for buildings in (administration(), administration(level=0),
+                          administration(queued=2, under_construction=False),
+                          administration(queued=0, under_construction=True)):
+            with self.subTest(administration=[(b.level, b.queued, b.under_construction) for b in buildings][-1]):
+                self.assertTrue(self.reads(buildings=buildings))
+
+    def test_it_needs_the_shortage_and_the_queued_administration(self):
+        cases = {
+            "not short of bureaucracy": {"bureaucracy": 0.0, "buildings": administration()},
+            "no administration at all": {"buildings": ()},
+            "an administration with nothing queued": {"buildings": administration(queued=0)},
+            "another building queued": {"buildings": [Building("building_barracks", 2, 3)]},
+        }
+        for name, kwargs in cases.items():
+            with self.subTest(name):
+                self.assertFalse(self.reads(**kwargs))
+
+    def test_only_a_country_that_is_short_walks_its_buildings(self):
+        self.assertEqual([key for key, _op, _value in load(TRIGGERS)[1][QUEUE_READ]],
+                         ["bureaucracy", "any_scope_building"])
+
+    def test_the_probe_is_its_only_caller(self):
+        callers = [p.name for p in sorted((ROOT / "common").rglob("*.txt"))
+                   if "%s = yes" % QUEUE_READ in p.read_text(encoding="utf-8-sig")]
+        self.assertEqual(callers, ["te_ai_probe_values.txt"],
+                         "the purchase must not read it again; and once the AI probe is gone, remove the trigger, "
+                         "te_construction_market_building_queued_levels and this class with it")
 
 
 # February 1836, the second run of the AI telemetry probe on main 3a0e13409: tag, weekly income, fixed income, net
@@ -811,213 +801,6 @@ class TheLongRun(unittest.TestCase):
         self.assertLessEqual(long_run(before, 3000.0, 0.0, 30).default_year, 10)
 
 
-# ---------------------------------------------------------------------------
-# The weekly effects, run: the purchase, then the self-check.
-# ---------------------------------------------------------------------------
-class Game:
-    """Runs scripted effects of te_construction_market_ai_effects.txt on a country. It knows the effects that file
-    uses and fails on any other."""
-
-    def __init__(self):
-        self.globals, self.log = set(), []
-
-    def pulse(self, country):
-        """What the weekly pulse runs for an AI country in a market game, in its order."""
-        self.run("te_construction_market_ai_update_buy", country)
-        self.run("te_construction_market_ai_admin_paused_selfcheck", country)
-
-    def run(self, name, country):
-        self.effect(_parsed()["effects"][name], country)
-
-    def verdicts(self):
-        return [line.split()[1] for line in self.log if line.startswith("TE_SELF_CHECK") and "START" not in line]
-
-    def effect(self, items, c):
-        taken = True
-        for key, _op, value in items:
-            if key in ("if", "else_if"):
-                if key == "else_if" and taken:
-                    continue
-                taken = c.env(self.globals).cond(next(v for k, _o, v in value if k == "limit"))
-                if taken:
-                    self.effect([item for item in value if item[0] != "limit"], c)
-            elif key == "else":
-                if not taken:
-                    self.effect(value, c)
-                taken = True
-            elif key == "set_variable":
-                fields = {k: v for k, _o, v in value}
-                c.vars[fields["name"]] = c.env(self.globals).operand(fields["value"])
-            elif key == "change_variable":
-                fields = {k: v for k, _o, v in value}
-                assert fields["name"] in c.vars, "change_variable on unset %s does nothing" % fields["name"]
-                c.vars[fields["name"]] += c.env(self.globals).operand(fields["add"])
-            elif key == "remove_variable":
-                assert value in c.vars, "remove_variable of unset %s" % value
-                del c.vars[value]
-            elif key == "set_global_variable":
-                self.globals.add({k: v for k, _o, v in value}["name"])
-            elif key == "debug_log":
-                self.log.append(value.strip('"'))
-            elif key == "debug_log_scopes":
-                pass
-            elif key in _parsed()["effects"] and value == "yes":
-                self.effect(_parsed()["effects"][key], c)
-            else:
-                raise AssertionError("the runner does not know the effect %r" % key)
-
-
-def paused_and_short(**kwargs):
-    """A mid-size AI over 40% of its debt ceiling, short of bureaucracy, with an administration level queued and a
-    Construction Site at work. A fifth of its income buys 9.5 points a week."""
-    kwargs.setdefault("buildings", administration())
-    return Country(60000.0, kwargs.pop("surplus", 1000.0), 1265.0, debt=0.5, bureaucracy=-8.0, paused=True, **kwargs)
-
-
-def armed(c):
-    return any(name.startswith("te_cm_chk_admin_") for name in c.vars)
-
-
-class TheSelfCheck(unittest.TestCase):
-    """TE_SELF_CHECK construction_admin_while_paused: does the engine build an administration through its pause?"""
-
-    def weeks(self, game, country, count):
-        for _ in range(count):
-            game.pulse(country)
-
-    def finish_the_level(self, country):
-        hall = next(b for b in country.buildings if b.kind == ADMINISTRATION)
-        hall.level, hall.queued, hall.under_construction = hall.level + 1, 0, False
-        country.queued -= 1
-
-    def test_the_pulse_sets_the_purchase_first(self):
-        game, c = Game(), paused_and_short()
-        game.pulse(c)
-        self.assertAlmostEqual(c.vars["te_construction_market_public_target"], 0.2 * 60000.0 / 1265.0, delta=STEP)
-        self.assertTrue(armed(c))
-        self.assertEqual(game.log, [])
-
-    def test_ok_when_a_level_finishes_while_paused(self):
-        game, c = Game(), paused_and_short()
-        self.weeks(game, c, 12)
-        self.assertEqual(game.log, [])
-        self.finish_the_level(c)
-        game.pulse(c)
-        self.assertEqual(game.verdicts(), ["OK"])
-        self.assertEqual(game.log[0], "TE_SELF_CHECK START %s" % SELFCHECK)
-        self.assertFalse(armed(c))
-
-    def test_broken_once_four_levels_worth_was_bought_and_none_finished(self):
-        game, c = Game(), paused_and_short()
-        weekly = 0.2 * 60000.0 / 1265.0
-        self.weeks(game, c, 1 + math.ceil(SELFCHECK_POINTS / weekly) - 1)
-        self.assertEqual(game.log, [])
-        game.pulse(c)
-        self.assertEqual(game.verdicts(), ["BROKEN"])
-        self.assertEqual(game.log[0], "TE_SELF_CHECK START %s" % SELFCHECK)
-        self.assertFalse(armed(c))
-
-    def test_the_line_carries_what_was_bought_and_what_it_cost(self):
-        game, c = Game(), paused_and_short()
-        c.wasted, c.construction_bill, c.income = True, 5000.0, 60400.0
-        self.weeks(game, c, 4)
-        self.assertEqual(c.vars["te_cm_chk_admin_weeks"], 3)
-        self.assertEqual(c.vars["te_cm_chk_admin_wasted"], 3)
-        self.assertAlmostEqual(c.vars["te_cm_chk_admin_bought"], 3 * 0.2 * 60000.0 / 1265.0, delta=3 * STEP)
-        self.assertAlmostEqual(c.vars["te_cm_chk_admin_spent"], 3 * 5000.0, places=3)
-        self.assertAlmostEqual(c.vars["te_cm_chk_admin_repaid"], 3 * 400.0, places=3)
-
-    def test_a_small_country_takes_longer_and_is_judged_on_the_same_points(self):
-        game, c = Game(), Country(3000.0, 100.0, 1250.0, debt=0.5, bureaucracy=-2.0, paused=True,
-                                  buildings=administration())
-        self.weeks(game, c, 800)  # 0.48 points a week
-        self.assertEqual(game.log, [])
-        self.weeks(game, c, 40)
-        self.assertEqual(game.verdicts(), ["BROKEN"])
-
-    def test_leaving_the_pause_decides_nothing(self):
-        # Debt fell under the resume line: a level that finishes now proves nothing about the pause.
-        game, c = Game(), paused_and_short()
-        self.weeks(game, c, 5)
-        c.paused, c.debt = False, 0.19
-        self.finish_the_level(c)
-        game.pulse(c)
-        self.assertEqual(game.log, [])
-        self.assertFalse(armed(c))
-
-    def test_a_level_that_came_with_a_conquered_state_decides_nothing(self):
-        game, c = Game(), paused_and_short()
-        self.weeks(game, c, 5)
-        c.states += 1
-        c.buildings.append(Building(ADMINISTRATION, 2))
-        game.pulse(c)
-        self.assertEqual(game.log, [])
-        self.assertFalse(armed(c))
-        game.pulse(c)  # and it arms again on the new count
-        self.assertTrue(armed(c))
-
-    def test_a_shortage_that_ends_some_other_way_decides_nothing(self):
-        game, c = Game(), paused_and_short()
-        self.weeks(game, c, 5)
-        c.bureaucracy = 3.0
-        game.pulse(c)
-        self.assertEqual(game.log, [])
-        self.assertFalse(armed(c))
-
-    def test_it_does_not_arm_without_each_thing_it_reads(self):
-        cases = {
-            "not paused": {"paused": False, "debt": 0.3},
-            "not short": {"bureaucracy": 4.0},
-            "no administration queued": {"buildings": administration(queued=0)},
-            "no Construction Site with a crew": {"site_levels": 0},
-        }
-        for name, change in cases.items():
-            game, c = Game(), paused_and_short()
-            for field, value in change.items():
-                setattr(c, field, value)
-            self.weeks(game, c, 60)
-            with self.subTest(name):
-                self.assertEqual(game.log, [])
-                self.assertFalse(armed(c))
-
-    def test_once_a_game(self):
-        game, first, second = Game(), paused_and_short(), paused_and_short()
-        self.weeks(game, first, 3)
-        self.weeks(game, second, 3)
-        self.finish_the_level(first)
-        game.pulse(first)
-        self.assertEqual(game.verdicts(), ["OK"])
-        self.finish_the_level(second)
-        game.pulse(second)
-        self.assertEqual(game.verdicts(), ["OK"])
-        self.assertFalse(armed(second))
-        third = paused_and_short()
-        self.weeks(game, third, 60)
-        self.assertEqual(game.verdicts(), ["OK"])
-        self.assertFalse(armed(third))
-
-    def test_each_line_can_be_rendered(self):
-        # A templated debug_log the engine cannot render is dropped whole. These accessors are the ones the
-        # construction site delivery check prints with (te_construction_market_update_effects.txt).
-        effect = _code(AI_EFFECTS.read_text(encoding="utf-8-sig"))
-        lines = re.findall(r'debug_log = "(TE_SELF_CHECK (?:OK|BROKEN) %s[^"]*)"' % SELFCHECK, effect)
-        self.assertEqual(len(lines), 2)
-        for line in lines:
-            accessors = re.findall(r"\[([^\]]*)\]", line)
-            self.assertEqual(accessors[0], "THIS.GetCountry.GetTagName")
-            printed = [re.fullmatch(r"THIS\.Var\('te_cm_chk_admin_(\w+)'\)\.GetValue\|[01]", a) for a in accessors[1:]]
-            self.assertTrue(all(printed), accessors)
-            self.assertLessEqual({m.group(1) for m in printed}, set(SELFCHECK_VARS))
-            self.assertNotIn("'", re.sub(r"\[[^\]]*\]", "", line))
-        self.assertEqual(effect.count('debug_log = "TE_SELF_CHECK START %s"' % SELFCHECK), 2)
-
-    def test_every_variable_it_counts_on_is_set_when_it_arms(self):
-        game, c = Game(), paused_and_short()
-        game.pulse(c)
-        self.assertEqual({name[len("te_cm_chk_admin_"):] for name in c.vars if name.startswith("te_cm_chk_admin_")},
-                         set(SELFCHECK_VARS))
-
-
 class Wiring(unittest.TestCase):
     def test_only_an_ai_country_in_a_market_game_runs_it(self):
         pulse = PULSE.read_text(encoding="utf-8-sig")
@@ -1026,13 +809,11 @@ class Wiring(unittest.TestCase):
         call = pulse.index("te_construction_market_ai_update_buy = yes")
         self.assertLess(market, call)
         self.assertRegex(pulse[market:call], r"if = \{\s*limit = \{\s*is_ai = yes\s*\}\s*$")
-        # ... and its self-check, in the same block, after the purchase is set.
-        self.assertRegex(pulse[call:], r"^te_construction_market_ai_update_buy = yes\s+"
-                                       r"te_construction_market_ai_admin_paused_selfcheck = yes\s+\}")
-        for effect in ("te_construction_market_ai_update_buy", "te_construction_market_ai_admin_paused_selfcheck"):
-            callers = [p.name for p in sorted((ROOT / "common").rglob("*.txt"))
-                       if "%s = yes" % effect in p.read_text(encoding="utf-8-sig")]
-            self.assertEqual(callers, [PULSE.name], effect)
+        # ... and nothing else in that block.
+        self.assertRegex(pulse[call:], r"^te_construction_market_ai_update_buy = yes\s+\}")
+        callers = [p.name for p in sorted((ROOT / "common").rglob("*.txt"))
+                   if "te_construction_market_ai_update_buy = yes" in p.read_text(encoding="utf-8-sig")]
+        self.assertEqual(callers, [PULSE.name])
 
     def test_it_writes_the_purchase_and_nothing_else(self):
         effect = _code(AI_EFFECTS.read_text(encoding="utf-8-sig"))
@@ -1049,9 +830,13 @@ class Wiring(unittest.TestCase):
         self.assertIn("## The AI's construction purchase fits its budget", playtest)
         for field in ("cm_public", "cm_price", "debt_scaled", "paused"):
             self.assertIn(f"`{field}`", playtest)
-        section = playtest[playtest.index("## The AI's construction purchase fits its budget"):]
-        self.assertIn("`TE_SELF_CHECK … %s`" % SELFCHECK, section)
-        self.assertIn("Fallback", section)
+
+    def test_the_docs_keep_the_reading_the_removed_clause_went_on(self):
+        # So that the purchase through the pause is not built a second time on the same guess.
+        line = "TE_SELF_CHECK BROKEN construction_admin_while_paused country=BIC weeks=14 bought=420.0"
+        self.assertIn(line, SYSTEM_DOC.read_text(encoding="utf-8"))
+        playtest = PLAYTEST.read_text(encoding="utf-8")
+        self.assertIn(line, playtest[playtest.index("## The AI's construction purchase fits its budget"):])
 
     def test_the_play_test_rows_name_fields_the_probe_logs(self):
         # The AI telemetry probe is temporary (docs/testing/ai-probe-runbook.md): once it is removed there is nothing
@@ -1071,8 +856,7 @@ class Wiring(unittest.TestCase):
 
 
 # Backticked words in the play-test section that are not fields of the probe.
-NOT_PROBE_FIELDS = {"main", "is_ai", "is_construction_paused", "else_if", "wasted_weeks", "spent",
-                    "repaid", "bought", "weeks", "bureaucracy"}
+NOT_PROBE_FIELDS = {"main", "is_ai", "has_wasted_construction", "wasted_weeks", "spent", "repaid", "weeks"}
 
 
 def _code(text):

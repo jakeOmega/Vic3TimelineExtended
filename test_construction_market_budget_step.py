@@ -230,8 +230,7 @@ class State:
         }
         return Env(
             names, variables,
-            # A player: the one purchase that goes on through the engine's pause is an AI's (the AI values file).
-            flags={"is_construction_paused": self.paused, "is_ai": False},
+            flags={"is_construction_paused": self.paused},
             triggers={"te_construction_market_budget_mode_on": lambda: True},
         )
 
