@@ -2843,6 +2843,16 @@ Diplomatic action confirmation dialogs show "Effects:" using `<action_name>_effe
 
 **No modifier sets a country's credit limit, but `building_cash_reserves_mult` moves it.** The limit is every domestic building's cash reserves plus a GDP-scaled base (vanilla `concept_credit_desc`; the base is defines-only, `monetary_policy_design.md` § "Supporting facts"). A country-level `building_cash_reserves_mult` lowers what each building may hold, so the reserves, and the limit with them, shrink as the excess is paid out, and recover as a decaying modifier fades. Vanilla grants the type at country level on the `postal_savings` tech. The debt restructuring's market exclusion uses it (`banking_restructuring_wary_lenders` / `_shut_out`, #800). The shrink is gradual and its pace is the engine's, unconfirmed in game.
 
+## An AI Spending Rule Reads `net_fixed_income` and `fixed_income`, and a Share of the Debt Ceiling Is Not a Share of Income
+The engine keeps a fixed budget and a total one, and the difference is what it calls temporary. Read in the AI telemetry probe's 1836 rows (2026-11-15, 76 country snapshots):
+
+- `net_fixed_income` = `fixed_income` − `fixed_expenses`, to the pound, in every row.
+- **Construction is temporary.** `total_expenses` − `fixed_expenses` was the government's construction bill (10 points × 1,999 on 20 countries buying 10 points at the price ceiling), so `net_fixed_income` is the budget before construction and a purchase sized on it does not feed back into itself.
+- **`income` counts temporary income.** It ran about 200 above `fixed_income` on small countries: a tenth of a point of private construction at 1,999, which the investment pool repays the treasury. That money is not the government's to spend, so size a rule on `fixed_income`.
+- **Interest looks fixed.** Every paused debtor's `total_expenses` equalled its `fixed_expenses`. Not proved: it would also read so with interest at nil.
+
+**`scaled_debt` and the engine's debt thresholds are shares of the ceiling, and an AI's ceiling is about 250 weeks of its income** (medians of 235 and 253 in the two runs; nearer 600 weeks of revenue late in the owner's games, where AI revenue is 8% of GDP). At the 9 to 11% a year an AI pays, the debt at which the engine pauses AI construction (`NAI.CONSTRUCTION_DEBT_PAUSE`, 0.4) costs about a fifth of income in interest, and the resume line (0.2) a tenth. So a spending floor paid on credit takes any AI whose surplus is under it to the pause and leaves it there: the construction purchase's 10-point floor did that to most AI countries within months (`construction.md` § The AI's purchase), and a draft that capped the borrowing at 10% of the ceiling still ended a 3%-surplus country in default in a budget model. Pay a floor from reserves (`scaled_gold_reserves`), and take the engine's own thresholds from `00_ai.txt` rather than a round share of the ceiling.
+
 ## Extending Vanilla On-Actions Safely
 
 **Never add `effect = { }` directly to a vanilla on-action.** Adding `effect` to a vanilla on_action (e.g. `on_yearly_pulse_country`, `on_election_campaign_end`) **overwrites** the vanilla effect block, silently breaking base-game logic.
