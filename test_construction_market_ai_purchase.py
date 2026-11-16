@@ -1015,7 +1015,7 @@ class Wiring(unittest.TestCase):
 
 
 # Backticked words in the play-test section that are not fields of the probe.
-NOT_PROBE_FIELDS = {"main", "is_ai", "is_construction_paused", "is_under_construction", "wasted_weeks", "spent",
+NOT_PROBE_FIELDS = {"main", "is_ai", "is_construction_paused", "else_if", "wasted_weeks", "spent",
                     "repaid", "bought", "weeks", "bureaucracy"}
 
 
