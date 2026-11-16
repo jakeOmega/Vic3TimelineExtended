@@ -297,10 +297,32 @@ sr_ai_mission_affordable_tier = {
 	}
 }
 
-# Hold the mission running now, or climb to the dearest one within the budget.
+# The mission the pass may hold the program at: the one it runs, but never past
+# the ceiling the pass set at its last review. A mission past that ceiling (the
+# engine's AI ignoring the gate, the case the self-check reads BROKEN) is
+# stepped back to the ceiling at this review, not ratified; a climb within the
+# ceiling, after a new technology, is held. Read before the review sets this
+# month's ceiling.
+sr_ai_mission_held_tier = {
+	value = sr_ai_mission_tier_current
+	if = {
+		limit = { has_variable = sr_ai_mission_ceiling }
+		max = var:sr_ai_mission_ceiling
+	}
+}
+
+# Hold the mission, or climb to the dearest one within the budget.
 sr_ai_mission_hold_or_climb_tier = {
 	value = sr_ai_mission_affordable_tier
-	min = sr_ai_mission_tier_current
+	min = sr_ai_mission_held_tier
+}
+
+# How far the rule's step-down (six reviews over the step-down share) lowers
+# the program from the mission it holds: over 0, a step down, and the five
+# years' wait starts.
+sr_ai_mission_step_down_size = {
+	value = sr_ai_mission_held_tier
+	subtract = sr_ai_mission_affordable_tier
 }
 
 # The dearest mission the country's technology allows.

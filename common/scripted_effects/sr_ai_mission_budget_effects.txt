@@ -20,6 +20,8 @@
 #   a row over it, step down to the dearest mission within 10%.
 # - Otherwise: hold the mission, or climb to the dearest one within 10% that
 #   the country's technology allows; not within five years of a step-down.
+# - A mission past the ceiling the pass set (the engine's AI ignoring the
+#   gate) is stepped back to it at the next review, with no five years' wait.
 # - Funding is shed first (the AI's funding buttons, space_race_buttons.txt:
 #   no increase past 10% with its funding, a decrease while over 20%), so a
 #   mission steps down only when the mission itself is too dear.
@@ -52,21 +54,31 @@ sr_ai_mission_budget_monthly = {
 		else = {
 			# A player's program: Any Mission (a country the player has just
 			# taken over from the AI), and no record.
-			if = {
-				limit = {
-					NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_none } }
-				}
-				activate_production_method = {
-					building_type = building_space_program
-					production_method = pm_sr_mission_ceiling_none
-				}
-			}
+			sr_ai_mission_ceiling_lift = yes
 			sr_ai_mission_budget_forget = yes
 		}
 	}
 	else_if = {
 		limit = { has_variable = sr_ai_mission_ceiling }
 		sr_ai_mission_budget_forget = yes
+	}
+}
+
+# Any Mission on a player's program that still carries an AI ceiling (a
+# country the player has taken over): from the monthly pass, and from each
+# mission decision before it switches the mission, since script passes the
+# ceiling's lock and the engine would then switch the program off a mission
+# its ceiling doesn't allow, failing its milestones (extra_decisions.txt).
+sr_ai_mission_ceiling_lift = {
+	if = {
+		limit = {
+			sr_has_space_program = yes
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_none } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_none
+		}
 	}
 }
 
@@ -102,9 +114,17 @@ sr_ai_mission_budget_review = {
 	# 1. Last month's settings, before anything moves.
 	sr_ai_mission_self_check = yes
 
-	# 2. This month's ceiling.
+	# 2. This month's ceiling. Every hold is at sr_ai_mission_held_tier, the
+	# mission running but never past last month's ceiling: a mission the engine
+	# moved past it is stepped back here, not ratified (a climb within the
+	# ceiling, after a new technology, is held). The values are read before
+	# the ceiling is overwritten.
 	if = {
 		limit = { sr_ai_space_budget_in_trouble = yes }
+		if = {
+			limit = { sr_ai_mission_held_tier > 1 }
+			sr_ai_mission_start_cooldown = yes
+		}
 		set_variable = { name = sr_ai_mission_ceiling value = 1 }
 		if = {
 			limit = { has_variable = sr_ai_mission_over_months }
@@ -122,12 +142,16 @@ sr_ai_mission_budget_review = {
 		}
 		if = {
 			limit = { var:sr_ai_mission_over_months >= sr_ai_mission_over_months_limit }
+			if = {
+				limit = { sr_ai_mission_step_down_size > 0 }
+				sr_ai_mission_start_cooldown = yes
+			}
 			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_affordable_tier }
 			remove_variable = sr_ai_mission_over_months
 		}
 		else = {
 			# Over, not yet for long enough: hold, and climb no further.
-			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_tier_current }
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_held_tier }
 		}
 	}
 	else = {
@@ -137,7 +161,7 @@ sr_ai_mission_budget_review = {
 		}
 		if = {
 			limit = { has_variable = sr_ai_mission_cooldown }
-			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_tier_current }
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_held_tier }
 		}
 		else = {
 			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_hold_or_climb_tier }
@@ -147,12 +171,10 @@ sr_ai_mission_budget_review = {
 	# 3. The mission: the dearest under the ceiling that the technology allows.
 	set_variable = { name = sr_ai_mission_target value = sr_ai_mission_target_tier }
 	if = {
-		# A step down: the mission first, then the ceiling, and five years
-		# before the program may climb again (as long as the mod's retooling,
-		# RETOOLING_WEEKS = 260), so an income or a price that swings around
-		# a line can't fail the same milestones over and over.
+		# Down (the rule's step-down, or a step back to the ceiling): the
+		# mission first, then the ceiling, so the mission is always one the
+		# active ceiling allows.
 		limit = { sr_ai_mission_target_gap > 0 }
-		set_variable = { name = sr_ai_mission_cooldown value = yes days = 1825 }
 		sr_ai_mission_set_mission = yes
 		sr_ai_mission_set_ceiling = yes
 	}
@@ -160,6 +182,16 @@ sr_ai_mission_budget_review = {
 		sr_ai_mission_set_ceiling = yes
 		sr_ai_mission_set_mission = yes
 	}
+}
+
+# Five years before the program may climb again (as long as the mod's
+# retooling, RETOOLING_WEEKS = 260), so an income or a price that swings around
+# a line can't fail the same milestones over and over. Started by the rule's
+# step-downs only (default or bankruptcy, and six reviews over the step-down
+# share), not by a step back to the ceiling: an engine that kept climbing past
+# it would otherwise hold the program at its ceiling for good.
+sr_ai_mission_start_cooldown = {
+	set_variable = { name = sr_ai_mission_cooldown value = yes days = 1825 }
 }
 
 # The program onto mission var:sr_ai_mission_target, unless it runs it.

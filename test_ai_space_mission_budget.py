@@ -47,6 +47,9 @@ TIERS = {
     6: ("interstellar", "pm_interstellar_mission", "aneutronic_fusion", "sr_mission_units_interstellar"),
 }
 MISSION = {t: pm for t, (_, pm, _, _) in TIERS.items()}
+DECISION = {2: "te_decision_space_mission_moon", 3: "te_decision_space_mission_mars",
+            4: "te_decision_space_mission_solar", 5: "te_decision_space_mission_deep_space",
+            6: "te_decision_space_mission_interstellar"}
 CEILING = {t: f"pm_sr_mission_ceiling_{key}" for t, (key, _, _, _) in TIERS.items()}
 NONE = "pm_sr_mission_ceiling_none"
 ALL_TECH = frozenset(tech for _, _, tech, _ in TIERS.values() if tech)
@@ -167,6 +170,7 @@ class Script:
         self.globals = set()
         self.log = []
         self.ignore_ceiling_switch = False   # a switch that doesn't take, for the self-check
+        self.switches = []                   # (group, method) in the order script switched them
         self._cache = {}
 
     def body(self, table, name, args=None):
@@ -323,8 +327,12 @@ class Script:
                 pm = field(value, "production_method")
                 group = "ceiling" if pm.startswith("pm_sr_mission_ceiling_") else "mission"
                 assert pm in (CEILING.values() if group == "ceiling" else MISSION.values()) or pm == NONE, pm
+                assert pm != c.pms[group], f"a switch to the method already active: {pm}"
                 if not (group == "ceiling" and self.ignore_ceiling_switch):
                     c.pms[group] = pm
+                    self.switches.append((group, pm))
+            elif key == "custom_tooltip":
+                self.execute([p for p in value if p[0] != "text"], c)
             elif key in self.effects and value == "yes":
                 self.run(key, c)
             else:
@@ -335,11 +343,22 @@ class Script:
             self.run("sr_ai_mission_budget_monthly", c)
             c.tick()
 
+    def take_decision(self, name, c):
+        """A decision's when_taken, as written."""
+        decision = parse(blocks(read(DECISIONS))[name])
+        self.execute(field(decision, "when_taken"), c)
+
     def value(self, name, c):
         return self.number(name, c)
 
     def holds(self, name, c, args=None):
         return self.check(self.body(self.triggers, name, args), c)
+
+
+def valid(c):
+    """The program's mission is one its active Mission Limit method allows (the missions'
+    unlocking_production_methods, as test_each_mission_lists_the_ceilings_that_allow_it holds them)."""
+    return c.mission == 1 or c.pms["ceiling"] == NONE or c.ceiling >= c.mission
 
 
 def income_for(share, units, price=BASE_PRICE, throughput=1.0):
@@ -439,8 +458,22 @@ class StructureTest(unittest.TestCase):
         self.assertIn(("sr_ai_mission_budget_monthly", "yes"), top)
 
     def test_five_years_before_climbing_again(self):
-        review = blocks(read(EFFECTS))["sr_ai_mission_budget_review"]
-        self.assertRegex(review, r"name = sr_ai_mission_cooldown value = yes days = 1825 \}")
+        effects = blocks(read(EFFECTS))
+        self.assertRegex(effects["sr_ai_mission_start_cooldown"],
+                         r"name = sr_ai_mission_cooldown value = yes days = 1825 \}")
+        # Started by the rule's two step-downs only, never by a step back to the ceiling.
+        self.assertEqual(effects["sr_ai_mission_budget_review"].count("sr_ai_mission_start_cooldown = yes"), 2)
+        self.assertNotIn("sr_ai_mission_cooldown value", effects["sr_ai_mission_budget_review"])
+
+    def test_every_mission_decision_lifts_a_players_ceiling_before_the_switch(self):
+        decisions = blocks(read(DECISIONS))
+        for tier in range(2, 7):
+            name = DECISION[tier]
+            with self.subTest(decision=name):
+                taken = decisions[name][decisions[name].index("when_taken"):decisions[name].index("ai_chance")]
+                lift = re.search(r"limit = \{ is_ai = no \}\s*sr_ai_mission_ceiling_lift = yes", taken)
+                self.assertIsNotNone(lift)
+                self.assertLess(lift.start(), taken.index(f"production_method = {MISSION[tier]}"))
 
     def test_funding_buttons_follow_the_budget(self):
         buttons = blocks(read(BUTTONS))
@@ -585,6 +618,58 @@ class PassTest(unittest.TestCase):
         self.script.month(c)
         self.assertEqual((c.mission, c.pms["ceiling"]), (2, NONE), "the mission is the player's to change")
         self.assertEqual(c.vars, {})
+
+    def test_a_players_begin_decision_lifts_the_ceiling_first(self):
+        # A player takes over an AI country held at the Moon, with the technology to Mars, and
+        # takes Begin the Mars Mission before the monthly pass has lifted the ceiling.
+        # The Moon at 9%, Mars at 30%: the AI is held at the Moon.
+        c = Country(income_for(0.09, self.units(2)), mission=1, techs={"space_exploration", "knowledge_economy"})
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        c.ai = False
+        self.script.switches.clear()
+        self.script.take_decision(DECISION[3], c)
+        self.assertEqual(self.script.switches, [("ceiling", NONE), ("mission", MISSION[3])])
+        self.assertTrue(valid(c), "the engine would switch the program off a mission past its ceiling")
+
+    def test_an_ai_begin_decision_leaves_its_ceiling(self):
+        c = Country(income_for(0.001, self.units(6)), mission=1, techs={"space_exploration"})
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 6))
+        c.techs.add("knowledge_economy")
+        self.script.switches.clear()
+        self.script.take_decision(DECISION[3], c)
+        self.assertEqual(self.script.switches, [("mission", MISSION[3])])
+        self.assertTrue(valid(c))
+
+    def test_a_climb_past_the_ceiling_is_stepped_back_at_the_next_review(self):
+        # Mars chosen (Solar would cost 15%, in the band); the engine jumps to Solar regardless.
+        c = Country(income_for(0.15, self.units(4)), mission=1)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (3, 3))
+        c.pms["mission"] = MISSION[4]
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (3, 3))
+        self.assertTrue(self.script.log[0].startswith("TE_SELF_CHECK BROKEN sr_ai_mission_ceiling "))
+        self.assertNotIn("sr_ai_mission_cooldown", c.vars, "a step back starts no five years' wait")
+        self.script.month(c, 24)
+        self.assertEqual((c.mission, c.ceiling), (3, 3))
+        c.income *= 2   # Solar at 7.5%: it climbs at once
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (4, 4))
+
+    def test_a_climb_past_the_ceiling_into_the_red_is_stepped_back_at_once(self):
+        # The Moon chosen (Solar at 30%); the engine jumps to Solar: back at the next review,
+        # not after six.
+        c = Country(income_for(0.30, self.units(4)), mission=1)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        c.pms["mission"] = MISSION[4]
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        self.assertNotIn("sr_ai_mission_cooldown", c.vars)
+        self.script.month(c)
+        self.assertNotIn("sr_ai_mission_over_months", c.vars, "the Moon itself is within the band")
 
     def test_a_lost_program_leaves_no_record(self):
         c = Country(income_for(0.05, self.units(4)), mission=1)

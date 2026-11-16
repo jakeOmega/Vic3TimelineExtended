@@ -652,6 +652,13 @@ te_decision_space_mission_moon = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_moon_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_moon_mission
@@ -702,6 +709,13 @@ te_decision_space_mission_mars = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_mars_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_mars_mission
@@ -778,6 +792,13 @@ te_decision_space_mission_solar = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_solar_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_solar_colonization
@@ -899,6 +920,13 @@ te_decision_space_mission_deep_space = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_deep_space_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_deep_space_exploration
@@ -950,6 +978,13 @@ te_decision_space_mission_interstellar = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_interstellar_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_interstellar_mission
