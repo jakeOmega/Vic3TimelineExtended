@@ -19,9 +19,35 @@ te_tax_light_levies_cons = {
 	OR = { has_law = law_type:law_consumption_based_taxation has_law = law_type:law_land_based_taxation has_law = law_type:law_per_capita_based_taxation has_law = law_type:law_proportional_taxation has_law = law_type:law_graduated_taxation }
 }
 
+# An extra tax is open (LIGHT_EXTRAS): the active law levies none of it and no barring law is
+# enacted. The code may then levy it up to its cap (te_tax_light_extra_cap_<key>).
+te_tax_light_extra_div = {
+	OR = { has_law = law_type:law_consumption_based_taxation has_law = law_type:law_land_based_taxation has_law = law_type:law_per_capita_based_taxation }
+	NOT = { has_law = law_type:law_traditionalism }
+}
+
+# The code holds the tax, so its row shows and its steps work: the law levies it, or it is an
+# open extra tax.
+te_tax_light_holds_wage = {
+	te_tax_light_levies_wage = yes
+}
+te_tax_light_holds_div = {
+	OR = { te_tax_light_levies_div = yes te_tax_light_extra_div = yes }
+}
+te_tax_light_holds_land = {
+	te_tax_light_levies_land = yes
+}
+te_tax_light_holds_head = {
+	te_tax_light_levies_head = yes
+}
+te_tax_light_holds_cons = {
+	te_tax_light_levies_cons = yes
+}
+
 # The law the code was last carried into (te_tax_light_law, the id te_tax_light_law_id gives
 # it) levied the tax. A levied tax may sit at 0, so a law change tells a tax the new law
-# adds from a tax the player cut to nothing by this, not by the index.
+# adds from a tax the player cut to nothing by this, not by the index. _old_extra_: that law
+# levied none of an extra tax, so the code's own one carries over to a new law that levies none.
 te_tax_light_old_levies_wage = {
 	has_variable = te_tax_light_law
 	OR = { var:te_tax_light_law = 3 var:te_tax_light_law = 4 var:te_tax_light_law = 5 }
@@ -42,6 +68,10 @@ te_tax_light_old_levies_cons = {
 	has_variable = te_tax_light_law
 	OR = { var:te_tax_light_law = 1 var:te_tax_light_law = 2 var:te_tax_light_law = 3 var:te_tax_light_law = 4 var:te_tax_light_law = 5 }
 }
+te_tax_light_old_extra_div = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 1 var:te_tax_light_law = 2 var:te_tax_light_law = 3 }
+}
 
 # A step's effect on the tax level, read before the step for its tooltip (the step itself
 # re-derives the level from the rates). te_tax_light_rg_<key> and te_tax_light_level are
@@ -52,6 +82,8 @@ te_tax_light_old_levies_cons = {
 #   _down_lowers_<key>: the tax alone sets the tax level and one step down leaves its step
 #                       (index - 1 at or under the rate one level lower);
 #   _min_lowers_<key>:  the tax alone sets the tax level and the level is above very low.
+# An open extra tax (LIGHT_EXTRAS) has the same branches on its extra ladder; its cap sits on the
+# step its anchor law puts the same rate on, so _max_raises_ reads that step, not very high.
 te_tax_light_up_raises_wage = {
 	has_variable = te_tax_light_level has_variable = te_tax_en_wage has_variable = te_tax_light_rg_wage
 	OR = {
@@ -111,12 +143,18 @@ te_tax_light_up_raises_div = {
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 1 var:te_tax_en_div >= 6 }
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 2 var:te_tax_en_div >= 8 }
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 3 var:te_tax_en_div >= 10 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 0 var:te_tax_en_div >= 1 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 1 var:te_tax_en_div >= 2 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 2 var:te_tax_en_div >= 2 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 3 var:te_tax_en_div >= 2 }
 	}
 }
 te_tax_light_max_raises_div = {
 	has_variable = te_tax_light_level has_variable = te_tax_en_div has_variable = te_tax_light_rg_div
-	te_tax_light_levies_div = yes
-	var:te_tax_light_level < 4
+	OR = {
+		AND = { te_tax_light_levies_div = yes var:te_tax_light_level < 4 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level < 1 }
+	}
 }
 te_tax_light_down_lowers_div = {
 	has_variable = te_tax_light_level has_variable = te_tax_en_div has_variable = te_tax_light_rg_div
@@ -129,6 +167,10 @@ te_tax_light_down_lowers_div = {
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 2 var:te_tax_light_rg_div = 2 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 2 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 2 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 2 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 2 } } var:te_tax_en_div <= 7 }
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 3 var:te_tax_light_rg_div = 3 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 3 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 3 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 3 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 3 } } var:te_tax_en_div <= 9 }
 		AND = { has_law = law_type:law_graduated_taxation var:te_tax_light_level = 4 var:te_tax_light_rg_div = 4 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 4 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 4 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 4 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 4 } } var:te_tax_en_div <= 11 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 1 var:te_tax_light_rg_div = 1 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 1 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 1 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 1 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 1 } } var:te_tax_en_div <= 2 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 2 var:te_tax_light_rg_div = 2 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 2 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 2 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 2 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 2 } } var:te_tax_en_div <= 3 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 3 var:te_tax_light_rg_div = 3 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 3 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 3 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 3 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 3 } } var:te_tax_en_div <= 3 }
+		AND = { te_tax_light_extra_div = yes var:te_tax_light_level = 4 var:te_tax_light_rg_div = 4 NOR = { AND = { has_variable = te_tax_light_rg_wage var:te_tax_light_rg_wage >= 4 } AND = { has_variable = te_tax_light_rg_land var:te_tax_light_rg_land >= 4 } AND = { has_variable = te_tax_light_rg_head var:te_tax_light_rg_head >= 4 } AND = { has_variable = te_tax_light_rg_cons var:te_tax_light_rg_cons >= 4 } } var:te_tax_en_div <= 3 }
 	}
 }
 te_tax_light_min_lowers_div = {
