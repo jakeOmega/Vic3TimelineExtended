@@ -397,11 +397,34 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
         ("Military, share of spending", lambda rows: spread([num(r, "mil_share") for r in rows], 0, 100)),
         ("Bureaucracy below 0", lambda rows: share(rows, lambda r: num(r, "bur") < 0)),
     ])
+    def xnum(record, field):
+        value = (record.get("x") or {}).get(field)
+        return value if isinstance(value, (int, float)) else None
+
+    def of_gdp(field):
+        """A weekly budget line of the X records as a share of yearly GDP, %."""
+        return lambda rows: spread([xnum(r, field) * 52 / num(r, "gdp") for r in rows
+                                    if xnum(r, field) is not None and num(r, "gdp") > 0], 1, 100)
+
+    table("1e. Where the government's money goes (share of GDP, %)", [
+        ("Government goods", of_gdp("gov_goods")),
+        ("Government wages", of_gdp("gov_wages")),
+        ("Military goods", of_gdp("mil_goods")),
+        ("Military wages", of_gdp("mil_wages")),
+        ("Subsidies", of_gdp("subsidies")),
+        ("Welfare", of_gdp("welfare")),
+        ("Construction goods, government", of_gdp("con_goods_gov")),
+        ("All expenses", ratio("expenses", "gdp", 5200, 1)),
+        ("All income", ratio("income", "gdp", 5200, 1)),
+    ])
     table("2. Technology", [
         ("Technologies", lambda rows: spread([num(r, "techs") for r in rows], 0)),
         ("Leader", lambda rows: max((num(r, "techs") for r in rows), default="-")),
         ("Acquired a year", lambda rows: spread([num(r, "n_tech") for r in rows], 1)),
         ("Innovation", lambda rows: spread([num(r, "innovation") for r in rows], 0)),
+        ("Innovation, share of its cap, %", lambda rows: spread(
+            [xnum(r, "innovation") / xnum(r, "innovation_max") for r in rows
+             if xnum(r, "innovation") is not None and xnum(r, "innovation_max")], 0, 100)),
         ("University levels", lambda rows: spread([num(r, "bt_university") for r in rows], 0)),
         ("No university", lambda rows: share(rows, lambda r: num(r, "bt_university") == 0)),
         ("Researching nothing", lambda rows: share(rows, lambda r: num(r, "researching") == 0)),

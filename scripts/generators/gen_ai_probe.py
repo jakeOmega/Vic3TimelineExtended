@@ -27,11 +27,12 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                month is its id modulo 12, so a twelfth of the world reports each month and no tick
                                writes more than the log's rotation can hold. `id` is a serial the probe gives each
                                country object (two objects can share a tag in a civil war).
-  X <n> <TAG> <id> <k> ...     the same for major and great powers only: figures only the interface's data
-                               functions give (the budget's lines, construction used and unused, innovation).
-                               Nobody had printed these from `debug_log` before this probe, so each is also
+  X <n> <TAG> <id> <k> ...     with each snapshot: figures only the interface's data functions give (the
+                               budget's lines, construction used and unused, innovation against its cap, the
+                               technology being researched and the law being enacted by name). Each is also
                                printed alone at arming (`CANARY <name> v=...`): a data function the engine does
-                               not have drops its whole line, and the canary shows which.
+                               not have drops its whole line, and the canary shows which. All 21 printed in the
+                               first run (2026-11-15).
   E <event> <TAG> <id> <k> ... a decision as it happens: a law enactment started, passed, failed or ended, a
                                default and its end, a diplomatic play.
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
@@ -153,7 +154,7 @@ COUNTERS = (
        "colony", "inst_up", "inst_down"]
 )
 
-# The interface's data functions, printed for major and great powers (and once each at arming, alone).
+# The interface's data functions, printed with each snapshot (and once each at arming, alone).
 DATA_FUNCTIONS = [
     # (line, key, accessor after `THIS.GetCountry.`)
     (1, "subsidies", "GetSubsidiesExpenses|0"),
@@ -658,17 +659,12 @@ def render_effects(cat: dict) -> str:
         else:
             body = " ".join(field.accessor() for field in part)
         out.append(f'\tdebug_log = "TE_AIP S {name} {LINE_HEAD} {body}"\n')
-    out.append(
-        "\tif = {\n"
-        "\t\tlimit = { country_rank >= rank_value:major_power }\n"
-        "\t\tte_aip_snapshot_data_functions = yes\n"
-        "\t}\n"
-    )
+    out.append("\tte_aip_snapshot_data_functions = yes\n")
     for name in COUNTERS:
         out.append(f"\tset_variable = {{ name = te_aip_n_{name} value = 0 }}\n")
     out.append("}\n\n")
 
-    out.append("# The interface's figures, for major and great powers (see te_aip_canary).\n"
+    out.append("# The interface's figures (see te_aip_canary).\n"
                "te_aip_snapshot_data_functions = {\n")
     for line in sorted({line for line, _, _ in DATA_FUNCTIONS}):
         body = " ".join(f"{key}=[THIS.GetCountry.{accessor}]" for n, key, accessor in DATA_FUNCTIONS if n == line)

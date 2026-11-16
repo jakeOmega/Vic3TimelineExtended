@@ -208,7 +208,7 @@ class ParserTest(unittest.TestCase):
         second = [line.replace(" FRA 3 24 ", " FRA 3 36 ") for line in log if "TE_AIP S " in line]
         parsed = ai_probe_report.parse_lines(log + second, self.key)
         out = ai_probe_report.report(parsed, self.key)
-        for heading in ("1. Economic growth", "1b. Solvency", "1c. Staffing", "1d. The government's purchase",
+        for heading in ("1. Economic growth", "1b. Solvency", "1c. Staffing", "1d. The government's purchase", "1e. Where the government's money goes",
                         "2. Technology", "3. Laws", "4. Military", "5. Expansion"):
             self.assertIn(heading, out)
 

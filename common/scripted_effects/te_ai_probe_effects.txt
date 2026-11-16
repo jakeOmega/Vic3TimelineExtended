@@ -139,10 +139,7 @@ te_aip_snapshot = {
 	debug_log = "TE_AIP S B2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] bt_hydro_plant=[THIS.ScriptValue('te_aip_bt_hydro_plant')|0] bt_nuclear_plant=[THIS.ScriptValue('te_aip_bt_nuclear_plant')|0] bt_renewable_energy_plant=[THIS.ScriptValue('te_aip_bt_renewable_energy_plant')|0] bt_fusion_plant=[THIS.ScriptValue('te_aip_bt_fusion_plant')|0] bt_urban_center=[THIS.ScriptValue('te_aip_bt_urban_center')|0] bt_trade_center=[THIS.ScriptValue('te_aip_bt_trade_center')|0] bt_art_academy=[THIS.ScriptValue('te_aip_bt_art_academy')|0] bt_financial_district=[THIS.ScriptValue('te_aip_bt_financial_district')|0] bt_manor_house=[THIS.ScriptValue('te_aip_bt_manor_house')|0] bt_company_headquarter=[THIS.ScriptValue('te_aip_bt_company_headquarter')|0] bt_public_housing=[THIS.ScriptValue('te_aip_bt_public_housing')|0] bt_software_industry=[THIS.ScriptValue('te_aip_bt_software_industry')|0] bt_electronic_components_and_semiconductor_industry=[THIS.ScriptValue('te_aip_bt_electronic_components_and_semiconductor_industry')|0]"
 	debug_log = "TE_AIP S N1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] n_built=[THIS.ScriptValue('te_aip_n_built')|0] n_expanded=[THIS.ScriptValue('te_aip_n_expanded')|0] n_built_gov=[THIS.ScriptValue('te_aip_n_built_gov')|0] n_built_mil=[THIS.ScriptValue('te_aip_n_built_mil')|0] n_built_infra=[THIS.ScriptValue('te_aip_n_built_infra')|0] n_built_power=[THIS.ScriptValue('te_aip_n_built_power')|0] n_built_ind=[THIS.ScriptValue('te_aip_n_built_ind')|0] n_built_res=[THIS.ScriptValue('te_aip_n_built_res')|0] n_built_agri=[THIS.ScriptValue('te_aip_n_built_agri')|0] n_pm=[THIS.ScriptValue('te_aip_n_pm')|0] n_tech=[THIS.ScriptValue('te_aip_n_tech')|0] n_law_start=[THIS.ScriptValue('te_aip_n_law_start')|0] n_law_pass=[THIS.ScriptValue('te_aip_n_law_pass')|0] n_law_fail=[THIS.ScriptValue('te_aip_n_law_fail')|0] n_law_end=[THIS.ScriptValue('te_aip_n_law_end')|0]"
 	debug_log = "TE_AIP S N2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] n_default=[THIS.ScriptValue('te_aip_n_default')|0] n_play=[THIS.ScriptValue('te_aip_n_play')|0] n_war=[THIS.ScriptValue('te_aip_n_war')|0] n_reform=[THIS.ScriptValue('te_aip_n_reform')|0] n_company=[THIS.ScriptValue('te_aip_n_company')|0] n_colony=[THIS.ScriptValue('te_aip_n_colony')|0] n_inst_up=[THIS.ScriptValue('te_aip_n_inst_up')|0] n_inst_down=[THIS.ScriptValue('te_aip_n_inst_down')|0]"
-	if = {
-		limit = { country_rank >= rank_value:major_power }
-		te_aip_snapshot_data_functions = yes
-	}
+	te_aip_snapshot_data_functions = yes
 	set_variable = { name = te_aip_n_built value = 0 }
 	set_variable = { name = te_aip_n_expanded value = 0 }
 	set_variable = { name = te_aip_n_built_gov value = 0 }
@@ -168,7 +165,7 @@ te_aip_snapshot = {
 	set_variable = { name = te_aip_n_inst_down value = 0 }
 }
 
-# The interface's figures, for major and great powers (see te_aip_canary).
+# The interface's figures (see te_aip_canary).
 te_aip_snapshot_data_functions = {
 	debug_log = "TE_AIP X 1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] subsidies=[THIS.GetCountry.GetSubsidiesExpenses|0] gov_wages=[THIS.GetCountry.GetGovernmentWagesExpenses|0] mil_wages=[THIS.GetCountry.GetMilitaryWagesExpenses|0] gov_goods=[THIS.GetCountry.GetGovernmentGoodsExpenses|0] mil_goods=[THIS.GetCountry.GetMilitaryGoodsExpenses|0]"
 	debug_log = "TE_AIP X 2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] con_goods=[THIS.GetCountry.GetConstructionGoodsExpenses|0] con_goods_gov=[THIS.GetCountry.GetGovernmentConstructionGoodsExpenses|0] con_goods_priv=[THIS.GetCountry.GetPrivateConstructionGoodsExpenses|0] welfare=[THIS.GetCountry.GetWelfarePaymentsExpenses|0] week_income=[THIS.GetCountry.GetWeeklyIncome|0] week_expenses=[THIS.GetCountry.GetWeeklyExpenses|0]"
