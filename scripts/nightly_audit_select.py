@@ -67,6 +67,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_effects/covert_tech_theft_generated.txt",
     "common/scripted_triggers/covert_tech_theft_generated.txt",
     "common/customizable_localization/covert_tech_theft_generated.txt",
+    "common/scripted_effects/te_research_commons_sync_generated.txt",
     "common/script_values/te_ai_probe_values.txt",
     "common/scripted_effects/te_ai_probe_effects.txt",
     "common/on_actions/te_ai_probe_on_actions.txt",
