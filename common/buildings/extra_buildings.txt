@@ -473,6 +473,7 @@ REPLACE_OR_CREATE:building_space_program = {
 		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
 		pmg_space_program_module_fabrication # colony modules (sr_colony_module_pmgs.txt)
 		pmg_space_program_module_storage # the module stock's storage (sr_colony_module_pmgs.txt)
+		pmg_space_program_mission_ceiling # the AI's mission budget ceiling (sr_mission_ceiling_pmgs.txt)
 	}
 
 	possible = {
@@ -485,8 +486,12 @@ REPLACE_OR_CREATE:building_space_program = {
 
 	required_construction = construction_cost_super_high
 
+	# A player's government always may; an AI's only by the means test its
+	# budget pass reverses to pull a program down (sr_ai_may_build_space_program,
+	# sr_ai_mission_budget_triggers.txt; ai.md § Space Program Mission Budget),
+	# as Found a Space Program's AI weight asks.
 	can_build_government = {
-		always = yes
+		owner ?= { sr_ai_may_build_space_program = yes }
 	}
 
 	can_build_private = {

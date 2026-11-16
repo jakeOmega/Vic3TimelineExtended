@@ -1,0 +1,485 @@
+﻿# ============================================================================
+# THE AI'S SPACE PROGRAM BUDGET (docs/systems/mod_systems/ai.md § Space Program Mission Budget)
+# ============================================================================
+# Country scope, once a month for every country (space_race_on_action), with
+# or without the Space Race rule: the program buys its Launch Capacity either
+# way. An AI country's Space Program runs the dearest mission its government
+# can pay for, as a player would choose; a player's is never touched, beyond
+# lifting the AI's ceiling from a program a player has taken over.
+#
+# Why: the mission group's ai_selection = most_productive climbed every AI
+# program to the dearest mission its technology allowed. In the owner's 1958
+# save nine AI programs ran Solar Colonization, and the eight full-staffed
+# ones paid 94% to 791% of their government's own revenue for it: 62% of all
+# AI government goods spending in that save (study of 2026-11-15).
+#
+# The rule (sr_ai_mission_budget_values.txt for the numbers):
+# - In default or under the bankruptcy modifier: Earth Orbit, at once.
+# - The mission's own bill (unfunded, at full staff, at our market's price)
+#   over 20% of fixed income: hold, no climbing; after six monthly reviews in
+#   a row over it, step down to the dearest mission within 10%.
+# - Otherwise: hold the mission, or climb to the dearest one within 10% that
+#   the country's technology allows; not within five years of a step-down.
+# - A mission past the ceiling the pass set (the engine's AI ignoring the
+#   gate) is stepped back to it at the next review, with no five years' wait.
+# - The milestone guard: the six-month step down keeps a mission that carries
+#   a running milestone past 75% of its goal whose progress moves this month
+#   (sr_ai_mission_guard_tier). The count is kept and goes on rising; the step
+#   goes on at the first review after the milestone ends or stops moving, and
+#   at the latest three years past the six months (sr_ai_mission_guard_until).
+# - A program even Earth Orbit is too dear for (its bill over 20% at twelve
+#   reviews in a row) is pulled down, and the country founds or builds none
+#   for five years, nor while Earth Orbit is over 10% (sr_ai_program_demolish).
+# - Funding is shed first (the AI's funding buttons, space_race_buttons.txt:
+#   no increase past 10% with its funding, a decrease while over 20%), so a
+#   mission steps down only when the mission itself is too dear.
+#
+# How: the pass records the ceiling it chose (var:sr_ai_mission_ceiling, a
+# tier 1 to 6) and puts the program on the Mission Limit method of that tier
+# (sr_mission_ceiling_pms.txt). The missions above it are then unavailable to
+# the engine's AI, which would otherwise climb back past it under
+# most_productive. The pass then sets the mission itself
+# (var:sr_ai_mission_target): stepping down, the mission first and then the
+# ceiling; climbing, the ceiling first, so neither move ever leaves the
+# program on a mission its ceiling doesn't allow.
+#
+# What a step down costs: the Space Program buys no construction, so the
+# mod's retooling surcharge (pm_retooling, a construction input multiplier)
+# costs it nothing. But a lower mission fails every milestone the higher one
+# carried (space_race.md, Programme loss), and that progress is lost; hence
+# the six months' wait and the five years before it may climb again.
+#
+# Self-check sr_ai_mission_ceiling (sr_ai_mission_self_check, below).
+# ============================================================================
+
+sr_ai_mission_budget_monthly = {
+	if = {
+		limit = { sr_has_space_program = yes }
+		if = {
+			limit = { is_ai = yes }
+			sr_ai_program_affordability_count = yes
+			if = {
+				limit = {
+					has_variable = sr_ai_program_unaffordable_months
+					var:sr_ai_program_unaffordable_months >= sr_ai_program_unaffordable_months_limit
+				}
+				sr_ai_program_demolish = yes
+			}
+			else = {
+				sr_ai_mission_budget_review = yes
+			}
+		}
+		else = {
+			# A player's program: Any Mission (a country the player has just
+			# taken over from the AI), and no record.
+			sr_ai_mission_ceiling_lift = yes
+			sr_ai_mission_budget_forget = yes
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_variable = sr_ai_mission_ceiling
+				has_variable = sr_ai_program_unaffordable_months
+			}
+		}
+		sr_ai_mission_budget_forget = yes
+	}
+}
+
+# The year's count towards pulling a program down: a review with Earth Orbit's
+# bill over the step-down share adds a month, any other review ends the count.
+sr_ai_program_affordability_count = {
+	if = {
+		limit = { sr_ai_mission_overrun_earth_orbit > 0 }
+		if = {
+			limit = { has_variable = sr_ai_program_unaffordable_months }
+			change_variable = { name = sr_ai_program_unaffordable_months add = 1 }
+		}
+		else = {
+			set_variable = { name = sr_ai_program_unaffordable_months value = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_ai_program_unaffordable_months }
+		remove_variable = sr_ai_program_unaffordable_months
+	}
+}
+
+# Pull down an AI country's Space Program it can't pay for even on Earth Orbit
+# (owner, 2026-11-16; the building stays demolishable, owner 2026-10-05). The
+# mod's own removal, as the capital rule's (te_on_state_owner_change,
+# extra_on_actions.txt): the milestones fail as any lost program's do, with
+# The Silent Gantry for the country (space_race_events.76), and come back
+# from zero once a program can carry them again. A colony holder's Solar
+# System Colonization entry stays open and its colonies stay held, with no
+# settlers or modules until it has a program again; at the autonomy ask an AI
+# without a program most often keeps a colony under a charter, and otherwise
+# lets it go as a free colony (space_race_events.94).
+# An existing Space Command stays (its possible keeps a standing one). Five
+# years, as long as the mission wait, before the country founds or builds one
+# again (sr_ai_may_found_space_program), and then only with Earth Orbit
+# within the climbing share. The line is for observer runs.
+sr_ai_program_demolish = {
+	debug_log = "TE_SR_AI_PROGRAM demolished country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_earth_orbit=[THIS.ScriptValue('sr_ai_mission_bill_earth_orbit')|0] (Earth Orbit's bill over the step-down share at twelve monthly reviews in a row: the AI's budget pass pulled its Space Program down; ai.md § Space Program Mission Budget)"
+	every_scope_state = {
+		limit = { has_building = building_space_program }
+		remove_building = building_space_program
+	}
+	sr_ai_mission_budget_forget = yes
+	set_variable = { name = sr_ai_program_demolished value = yes days = 1825 }
+}
+
+# Any Mission on a player's program that still carries an AI ceiling (a
+# country the player has taken over): from the monthly pass, and from each
+# mission decision before it switches the mission, since script passes the
+# ceiling's lock and the engine would then switch the program off a mission
+# its ceiling doesn't allow, failing its milestones (extra_decisions.txt).
+sr_ai_mission_ceiling_lift = {
+	if = {
+		limit = {
+			sr_has_space_program = yes
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_none } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_none
+		}
+	}
+}
+
+sr_ai_mission_budget_forget = {
+	if = {
+		limit = { has_variable = sr_ai_mission_ceiling }
+		remove_variable = sr_ai_mission_ceiling
+	}
+	if = {
+		limit = { has_variable = sr_ai_mission_target }
+		remove_variable = sr_ai_mission_target
+	}
+	if = {
+		limit = { has_variable = sr_ai_mission_over_months }
+		remove_variable = sr_ai_mission_over_months
+	}
+	if = {
+		limit = { has_variable = sr_ai_mission_checked_months }
+		remove_variable = sr_ai_mission_checked_months
+	}
+	if = {
+		limit = { has_variable = sr_ai_mission_cooldown }
+		remove_variable = sr_ai_mission_cooldown
+	}
+	if = {
+		limit = { has_variable = sr_ai_mission_none_seen }
+		remove_variable = sr_ai_mission_none_seen
+	}
+	if = {
+		limit = { has_variable = sr_ai_program_unaffordable_months }
+		remove_variable = sr_ai_program_unaffordable_months
+	}
+}
+
+# An AI country's monthly review.
+sr_ai_mission_budget_review = {
+	# 1. Last month's settings, before anything moves.
+	sr_ai_mission_self_check = yes
+
+	# 2. This month's ceiling. Every hold is at sr_ai_mission_held_tier, the
+	# mission running but never past last month's ceiling: a mission the engine
+	# moved past it is stepped back here, not ratified (a climb within the
+	# ceiling, after a new technology, is held). The values are read before
+	# the ceiling is overwritten.
+	if = {
+		limit = { sr_ai_space_budget_in_trouble = yes }
+		if = {
+			limit = { sr_ai_mission_held_tier > 1 }
+			sr_ai_mission_start_cooldown = yes
+		}
+		set_variable = { name = sr_ai_mission_ceiling value = 1 }
+		if = {
+			limit = { has_variable = sr_ai_mission_over_months }
+			remove_variable = sr_ai_mission_over_months
+		}
+	}
+	else_if = {
+		limit = { sr_ai_mission_overrun > 0 }
+		if = {
+			limit = { has_variable = sr_ai_mission_over_months }
+			change_variable = { name = sr_ai_mission_over_months add = 1 }
+		}
+		else = {
+			set_variable = { name = sr_ai_mission_over_months value = 1 }
+		}
+		if = {
+			limit = { var:sr_ai_mission_over_months >= sr_ai_mission_over_months_limit }
+			# The step down, held above a mission that carries a milestone past
+			# the guard's line (sr_ai_mission_step_down_tier). While the guard
+			# holds part of it the count is kept and goes on rising, so the rest
+			# of the step comes at the first review after the milestone ends or
+			# stops moving, or once the count reaches sr_ai_mission_guard_until.
+			if = {
+				limit = { sr_ai_mission_step_down_size > 0 }
+				sr_ai_mission_start_cooldown = yes
+			}
+			if = {
+				limit = { NOT = { sr_ai_mission_guard_gap > 0 } }
+				remove_variable = sr_ai_mission_over_months
+			}
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_step_down_tier }
+		}
+		else = {
+			# Over, not yet for long enough: hold, and climb no further.
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_held_tier }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_variable = sr_ai_mission_over_months }
+			remove_variable = sr_ai_mission_over_months
+		}
+		if = {
+			limit = { has_variable = sr_ai_mission_cooldown }
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_held_tier }
+		}
+		else = {
+			set_variable = { name = sr_ai_mission_ceiling value = sr_ai_mission_hold_or_climb_tier }
+		}
+	}
+
+	# 3. The mission: the dearest under the ceiling that the technology allows.
+	set_variable = { name = sr_ai_mission_target value = sr_ai_mission_target_tier }
+	if = {
+		# Down (the rule's step-down, or a step back to the ceiling): the
+		# mission first, then the ceiling, so the mission is always one the
+		# active ceiling allows.
+		limit = { sr_ai_mission_target_gap > 0 }
+		sr_ai_mission_set_mission = yes
+		sr_ai_mission_set_ceiling = yes
+	}
+	else = {
+		sr_ai_mission_set_ceiling = yes
+		sr_ai_mission_set_mission = yes
+	}
+}
+
+# Five years before the program may climb again (as long as the mod's
+# retooling, RETOOLING_WEEKS = 260), so an income or a price that swings around
+# a line can't fail the same milestones over and over. Started by the rule's
+# step-downs only (default or bankruptcy, and six reviews over the step-down
+# share), not by a step back to the ceiling: an engine that kept climbing past
+# it would otherwise hold the program at its ceiling for good.
+sr_ai_mission_start_cooldown = {
+	set_variable = { name = sr_ai_mission_cooldown value = yes days = 1825 }
+}
+
+# The program onto mission var:sr_ai_mission_target, unless it runs it.
+sr_ai_mission_set_mission = {
+	if = {
+		limit = {
+			var:sr_ai_mission_target ?= 1
+			NOT = { sr_space_program_runs = { PM = pm_earth_orbit } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_earth_orbit
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_target ?= 2
+			NOT = { sr_space_program_runs = { PM = pm_moon_mission } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_moon_mission
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_target ?= 3
+			NOT = { sr_space_program_runs = { PM = pm_mars_mission } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_mars_mission
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_target ?= 4
+			NOT = { sr_space_program_runs = { PM = pm_solar_colonization } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_solar_colonization
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_target ?= 5
+			NOT = { sr_space_program_runs = { PM = pm_deep_space_exploration } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_deep_space_exploration
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_target ?= 6
+			NOT = { sr_space_program_runs = { PM = pm_interstellar_mission } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_interstellar_mission
+		}
+	}
+}
+
+# The program onto the Mission Limit of tier var:sr_ai_mission_ceiling,
+# unless it carries it.
+sr_ai_mission_set_ceiling = {
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 1
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_earth_orbit } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_earth_orbit
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 2
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_moon } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_moon
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 3
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_mars
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 4
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_solar
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 5
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_deep_space
+		}
+	}
+	else_if = {
+		limit = {
+			var:sr_ai_mission_ceiling ?= 6
+			NOT = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar } }
+		}
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = pm_sr_mission_ceiling_interstellar
+		}
+	}
+}
+
+# Self-check sr_ai_mission_ceiling, once a game for each verdict. Three engine
+# facts nobody had read: that script can set a government building's method
+# for the AI, that it then stays, and that the engine's own method AI leaves a
+# Mission Limit ceiling alone and climbs no mission past it.
+#   BROKEN  the ceiling the pass set last month is not the active one, the
+#           program runs a mission past that ceiling, or a cheaper mission
+#           than the pass set: the engine's AI moved one, or the switch did
+#           not take; or the program is still on Any Mission at two reviews in
+#           a row after the pass set a ceiling, so the switch to a ceiling
+#           never took. A dearer mission than the pass set but within the
+#           ceiling is not BROKEN: a country that researches a mission's
+#           technology between reviews may climb to it (the engine's AI, or a
+#           Begin decision), and the ceiling allows that.
+#   OK      twelve monthly reviews in which both held while the country's
+#           technology allowed a dearer mission than its ceiling (so the
+#           engine's AI, under most_productive, had a mission to climb to).
+# Judged only for a program the pass has set. One on Any Mission at a single
+# review is not judged: a Space Program founded since the last review starts
+# there, and the record names the program it replaced.
+sr_ai_mission_self_check = {
+	if = {
+		limit = {
+			has_variable = sr_ai_mission_ceiling
+			has_variable = sr_ai_mission_target
+			sr_space_program_runs = { PM = pm_sr_mission_ceiling_none }
+		}
+		if = {
+			limit = { has_variable = sr_ai_mission_none_seen }
+			if = {
+				limit = { NOT = { has_global_variable = sr_ai_mission_ceiling_broken_logged } }
+				set_global_variable = { name = sr_ai_mission_ceiling_broken_logged value = yes }
+				debug_log = "TE_SELF_CHECK BROKEN sr_ai_mission_ceiling country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] ceiling_set=[THIS.Var('sr_ai_mission_ceiling').GetValue|0] ceiling_active=0 mission_set=[THIS.Var('sr_ai_mission_target').GetValue|0] mission_now=[THIS.ScriptValue('sr_ai_mission_tier_current')|0] (tiers: 1 Earth Orbit, 2 Moon, 3 Mars, 4 Solar, 5 Deep Space, 6 Interstellar; ceiling 0 Any Mission) (the AI's Space Program is still on Any Mission at two monthly reviews in a row after the budget pass set a ceiling: activate_production_method did not move it onto a Mission Limit ceiling; docs/testing/space-race-playtest.md)"
+			}
+		}
+		else = {
+			set_variable = { name = sr_ai_mission_none_seen value = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = sr_ai_mission_ceiling
+			has_variable = sr_ai_mission_target
+		}
+		if = {
+			limit = { has_variable = sr_ai_mission_none_seen }
+			remove_variable = sr_ai_mission_none_seen
+		}
+		if = {
+			limit = {
+				OR = {
+					sr_ai_mission_ceiling_gap > 0
+					sr_ai_mission_ceiling_gap < 0
+					sr_ai_mission_past_ceiling > 0
+					sr_ai_mission_target_gap < 0
+				}
+			}
+			if = {
+				limit = { NOT = { has_global_variable = sr_ai_mission_ceiling_broken_logged } }
+				set_global_variable = { name = sr_ai_mission_ceiling_broken_logged value = yes }
+				debug_log = "TE_SELF_CHECK BROKEN sr_ai_mission_ceiling country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] ceiling_set=[THIS.Var('sr_ai_mission_ceiling').GetValue|0] ceiling_active=[THIS.ScriptValue('sr_ai_mission_ceiling_tier_active')|0] mission_set=[THIS.Var('sr_ai_mission_target').GetValue|0] mission_now=[THIS.ScriptValue('sr_ai_mission_tier_current')|0] tech=[THIS.ScriptValue('sr_ai_mission_tech_tier')|0] (tiers: 1 Earth Orbit, 2 Moon, 3 Mars, 4 Solar, 5 Deep Space, 6 Interstellar; ceiling 0 Any Mission) fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_now=[THIS.ScriptValue('sr_ai_mission_bill_now')|0] share_now_pct=[THIS.ScriptValue('sr_ai_mission_share_now_pct')|1] throughput_modifier=[THIS.ScriptValue('sr_ai_mission_throughput_read')|2] funding_levels=[THIS.ScriptValue('sr_ai_program_funding_levels')|0] (the Mission Limit ceiling the AI's budget pass set last month is not the active one, or the Space Program runs a mission past it or cheaper than the pass set: the engine's AI moved it, or the switch did not take; docs/testing/space-race-playtest.md)"
+			}
+		}
+		else_if = {
+			limit = { sr_ai_mission_tech_headroom > 0 }
+			if = {
+				limit = { has_variable = sr_ai_mission_checked_months }
+				change_variable = { name = sr_ai_mission_checked_months add = 1 }
+			}
+			else = {
+				set_variable = { name = sr_ai_mission_checked_months value = 1 }
+			}
+			if = {
+				limit = {
+					var:sr_ai_mission_checked_months >= 12
+					NOT = { has_global_variable = sr_ai_mission_ceiling_ok_logged }
+				}
+				set_global_variable = { name = sr_ai_mission_ceiling_ok_logged value = yes }
+				debug_log = "TE_SELF_CHECK OK sr_ai_mission_ceiling country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] ceiling=[THIS.Var('sr_ai_mission_ceiling').GetValue|0] mission=[THIS.Var('sr_ai_mission_target').GetValue|0] tech=[THIS.ScriptValue('sr_ai_mission_tech_tier')|0] (tiers: 1 Earth Orbit, 2 Moon, 3 Mars, 4 Solar, 5 Deep Space, 6 Interstellar) fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_now=[THIS.ScriptValue('sr_ai_mission_bill_now')|0] share_now_pct=[THIS.ScriptValue('sr_ai_mission_share_now_pct')|1] share_mission_pct=[THIS.ScriptValue('sr_ai_mission_share_current_pct')|1] throughput_modifier=[THIS.ScriptValue('sr_ai_mission_throughput_read')|2] funding_levels=[THIS.ScriptValue('sr_ai_program_funding_levels')|0] (for twelve monthly reviews the Space Program kept the mission and the Mission Limit ceiling the AI's budget pass set, though its technology allowed a dearer mission: script sets a government building's method for the AI, and the engine's AI keeps the ceiling and climbs no mission past it)"
+			}
+		}
+	}
+}

@@ -20,6 +20,11 @@ space_race_on_action = {
 			limit = { has_technology_researched = in_situ_resource_utilization }
 			sr_ebase_refresh = yes
 		}
+		# The AI's Space Program budget (sr_ai_mission_budget_effects.txt): an AI
+		# country's mission and its Mission Limit ceiling; a player's program
+		# only loses an AI ceiling it was taken over with. Not gated on the
+		# Space Race rule: the program buys its Launch Capacity either way.
+		sr_ai_mission_budget_monthly = yes
 		# The propellant_depots_bool self-check (sr_launch_window_effects.txt), for
 		# every country: it gates itself on holding, having held or reading the
 		# depot. It is also the canary for the INJECT that declares the colonies'

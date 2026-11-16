@@ -1,0 +1,157 @@
+﻿# ============================================================================
+# THE AI'S SPACE PROGRAM BUDGET (docs/systems/mod_systems/ai.md § Space Program Mission Budget)
+# ============================================================================
+# Country scope. The values are in sr_ai_mission_budget_values.txt, the
+# monthly pass in sr_ai_mission_budget_effects.txt.
+# ============================================================================
+
+# The country's Space Program runs the production method PM (a mission or a
+# Mission Limit ceiling).
+sr_space_program_runs = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		has_active_production_method = $PM$
+	}
+}
+
+# In default, or under the bankruptcy modifier: the program drops to Earth
+# Orbit and sheds its funding.
+sr_ai_space_budget_in_trouble = {
+	OR = {
+		in_default = yes
+		has_modifier = declared_bankruptcy
+	}
+}
+
+# An AI's increase-funding buttons weigh 0: one more level would take the
+# program's bill past the climbing share, or the country is in trouble.
+sr_ai_space_fund_up_blocked = {
+	is_ai = yes
+	sr_has_space_program = yes
+	OR = {
+		sr_ai_space_budget_in_trouble = yes
+		sr_ai_mission_fund_up_room < 0
+	}
+}
+
+# An AI's decrease-funding buttons get +100: the program's bill with its
+# funding is over the step-down share, or the country is in trouble.
+sr_ai_space_fund_down_due = {
+	is_ai = yes
+	sr_has_space_program = yes
+	OR = {
+		sr_ai_space_budget_in_trouble = yes
+		sr_ai_mission_funded_overrun > 0
+	}
+}
+
+# The AI's ceiling allows the mission of that tier: the pass has reviewed the
+# program (an AI ceiling, not Any Mission, is active) and the ceiling is at
+# or above the mission. Read by the mission decisions' AI weights, so that
+# no decision takes an AI past its ceiling: script moves a method past the
+# lock, and the engine would then switch the program off a mission its
+# ceiling no longer allows.
+sr_ai_mission_ceiling_allows_moon = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_moon }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_mars = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_solar = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_deep_space = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_interstellar = {
+	sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+}
+
+# A running milestone past the guard's line (sr_ai_guard_progress_<m>,
+# sr_ai_mission_budget_values.txt) whose progress moves this month: the
+# six-month step down keeps a mission that carries it (sr_ai_mission_guard_tier).
+# The second half is the gate of the milestones' monthly tick
+# (sr_monthly_progress_update_effect, space_race_effects.txt), the same
+# triggers, so a milestone that can't move is never guarded: an AI out of the
+# global top three, or the rule switched off. test_ai_space_mission_budget.py
+# holds the two to each other. Country scope.
+sr_ai_milestone_guarded = {
+	has_variable = sr_active_$MILESTONE$
+	has_variable = sr_progress_$MILESTONE$
+	var:sr_progress_$MILESTONE$ >= sr_ai_guard_progress_$MILESTONE$
+	sr_space_race_on = yes
+	sr_ai_should_participate = yes
+}
+
+# Solar System Colonization past the guard's line, for a country with no colony
+# (a holder's entry stays open and only pauses, its progress kept: ai.md
+# § Space Program Mission Budget, A colony holder). Its progress has its own
+# loop, gated as the entry's monthly pulse gates it (je_space_race.txt: the
+# programme running, which holds the choice to settle the Moon after the race
+# is over, sr_colonization_by_choice; then sr_ai_should_participate), and a
+# world must be left to found (the entry's possible, sr_any_site_unclaimed).
+# Country scope.
+sr_ai_colonization_guarded = {
+	sr_ai_milestone_guarded = { MILESTONE = solar_colonization }
+	sr_solar_colonization_running = yes
+	sr_any_site_unclaimed = yes
+	NOT = { sr_has_space_colony = yes }
+}
+
+# The guard's backstop has not run out: the over-budget count, which goes on
+# rising at each review the guard holds the step, is under the six-month count
+# plus sr_ai_mission_guard_months_limit (sr_ai_mission_guard_until). Country
+# scope.
+sr_ai_mission_guard_in_time = {
+	has_variable = sr_ai_mission_over_months
+	var:sr_ai_mission_over_months < sr_ai_mission_guard_until
+}
+
+# An AI country may found a Space Program, by the decision or by construction
+# (the building's can_build_government): the demolition's test in reverse, a
+# means test and no rank. Earth Orbit's bill within the climbing share, out of
+# default and the bankruptcy modifier, and not within five years of pulling one
+# down (sr_ai_program_demolish), so no program is founded that the next year
+# would demolish. Country scope.
+sr_ai_may_found_space_program = {
+	sr_ai_space_budget_in_trouble = no
+	sr_ai_mission_room_earth_orbit >= 0
+	NOT = { has_variable = sr_ai_program_demolished }
+}
+
+# The Space Program's can_build_government (extra_buildings.txt): a player's
+# government always may; an AI's by the means test above. The engine's own
+# construction AI can build the program, which is how countries that were never
+# great or major powers came to run one. A trigger_if, so a player's list of
+# requirements shows no line at all. Country scope.
+sr_ai_may_build_space_program = {
+	trigger_if = {
+		limit = { is_ai = yes }
+		custom_tooltip = {
+			text = sr_ai_program_means_tt
+			sr_ai_may_found_space_program = yes
+		}
+	}
+}

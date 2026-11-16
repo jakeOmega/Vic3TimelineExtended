@@ -1,0 +1,70 @@
+﻿# ============================================================================
+# MISSION LIMIT — the methods of pmg_space_program_mission_ceiling (sr_mission_ceiling_pmgs.txt)
+# ============================================================================
+# Each method is a ceiling on the Space Program's mission and carries nothing
+# else: no goods, no staff, no modifiers. The missions list the ceilings that
+# allow them (extra_pms.txt):
+#
+#   ceiling                          missions it allows
+#   pm_sr_mission_ceiling_none       every mission (the default; a player's)
+#   pm_sr_mission_ceiling_earth_orbit  Earth Orbit
+#   pm_sr_mission_ceiling_moon       up to the Moon Mission
+#   pm_sr_mission_ceiling_mars       up to the Mars Mission
+#   pm_sr_mission_ceiling_solar      up to Solar Colonization
+#   pm_sr_mission_ceiling_deep_space up to Deep Space Exploration
+#   pm_sr_mission_ceiling_interstellar every mission, set by the AI's pass
+#
+# Interstellar and None allow the same missions; the pass sets Interstellar,
+# so a program on None is one the pass has not reviewed (a player's, or one
+# founded since the last monthly pulse) and the self-check can tell the two
+# apart.
+#
+# Every method lists only itself in unlocking_production_methods, so it is
+# valid only while it is active: the panel offers no other row and the
+# engine's AI can't move the group. Script moves it past the lock
+# (scripting_best_practices.md § Locking Production Methods). Never add
+# replacement_if_valid here: it would swap a ceiling away by itself.
+# ============================================================================
+
+pm_sr_mission_ceiling_none = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+	is_default = yes
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_none }
+}
+
+pm_sr_mission_ceiling_earth_orbit = {
+	texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_earth_orbit }
+}
+
+pm_sr_mission_ceiling_moon = {
+	texture = "gfx/interface/icons/production_method_icons/pm_moon_mission.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_moon }
+}
+
+pm_sr_mission_ceiling_mars = {
+	texture = "gfx/interface/icons/production_method_icons/pm_mars_mission.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_mars }
+}
+
+pm_sr_mission_ceiling_solar = {
+	texture = "gfx/interface/icons/production_method_icons/pm_solar_colonization.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_solar }
+}
+
+pm_sr_mission_ceiling_deep_space = {
+	texture = "gfx/interface/icons/production_method_icons/pm_deep_space_exploration.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_deep_space }
+}
+
+pm_sr_mission_ceiling_interstellar = {
+	texture = "gfx/interface/icons/production_method_icons/pm_interstellar_mission.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_sr_mission_ceiling_interstellar }
+}

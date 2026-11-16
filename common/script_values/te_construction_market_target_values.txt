@@ -74,6 +74,21 @@ te_construction_market_public_use_target = {
 			# capped the same way in te_construction_market_ai_purchase_target.
 			max = te_construction_market_public_queue_cap
 		}
+		# Paused by the engine, the one purchase that still reaches the sites
+		# is an AI's for an administration while it is short of bureaucracy
+		# (te_construction_market_ai_purchase_target). The AI's weekly update
+		# sets its purchase to 0 in every other paused case, so the shortage
+		# is all that is tested here, not the queue: this is read several
+		# times a week and the queue's test walks the country's buildings. A
+		# player's purchase stays at nothing while paused.
+		else_if = {
+			limit = {
+				is_ai = yes
+				bureaucracy < 0
+			}
+			value = te_construction_market_public_setting
+			max = te_construction_market_public_queue_cap
+		}
 		else = {
 			value = 0
 		}
@@ -300,8 +315,8 @@ te_construction_market_budget_quantity_gap = {
 #
 # Goods the construction sites use per construction point: the same factor
 # te_construction_market_price scales the price by (construction cost scaling,
-# at least the small-economy rule's minimum factor: it is below 1 only under
-# te_small_economy_construction_rule).
+# at least the lowest factor any setting of te_small_economy_construction_rule
+# gives: it is below 1 only under that rule).
 te_construction_market_goods_per_point = {
 	value = 1
 	add = construction_cost_scaling_mult

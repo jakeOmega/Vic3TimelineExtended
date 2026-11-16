@@ -272,8 +272,12 @@ raises the cost of the materials your construction uses instead.
 It is also a catch-up mechanic: a poor country, with many peasants and a low
 GDP per capita, builds cheaply. With the Small-Economy Construction game rule
 on, a small economy also pays less for construction and for construction
-maintenance: a tenth of the price with almost no GDP, rising in a straight line
-to the full price at a GDP of 10 million. The rule is off by default. The
+maintenance: half the price, a fifth or a tenth with almost no GDP, by the
+rule's setting, rising in a straight line to the full price at a GDP of 10
+million. The rule is off by default. For a government with £1,000 a week of
+income that spends a third of it on construction, a 100-point building takes
+about seven years at full price, three and a half at half, a year and a half
+at a fifth and nine months at a tenth. The
 [Nation tab](01-introduction.md#the-nation-tab) shows the current scaling, and
 below it any excess private construction in force. Its tooltip gives the cost of
 a point as factors: the scaling in force and where it is heading, the GDP
