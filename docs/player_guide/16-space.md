@@ -775,7 +775,8 @@ and Molecular Assemblers, whose tooltips list Colony Module Slots. Past them it
 still takes up to eight more modules, each costing 100 fabrication points more
 than the last: 200, then 300, and so on up to 900. You can queue one only while
 your module stock can hold its price (see below), so without storage or much
-fabrication you stop at the fourth, at 500. The Modules view's Slots figure turns
+fabrication you stop at the fourth, at 500. One already queued is still built if
+the stock shrinks later. The Modules view's Slots figure turns
 red past them, and its hover gives the next module's price. Solar System shows
 each site's slots and Extraplanetary Base room under its name, so you can weigh
 a site before you settle it.
@@ -824,8 +825,9 @@ Program's fourth production method group, Module Storage, adds:
 | Component Depot | Cislunar Infrastructure | 1,000 Electricity and 5 Advanced Materials | +1,000 |
 | Orbital Depot | Space Colonization | 500 Launch Capacity, 1,000 Electricity and 10 Advanced Materials | +3,000 |
 
-Points made while the stock is full are lost. The Fabrication hover in the
-Modules view breaks the stock's size down.
+Points made while the stock is full are lost, unless the next module in the
+queue costs more, when the stock fills to its price. The Fabrication hover in
+the Modules view breaks the stock's size down.
 
 A finished module waits at Earth for its site's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your
@@ -835,8 +837,9 @@ lands, so modules waiting for one launch window can hold all eight for two years
 While all eight are taken the queue waits, and the next module reads "shipping
 full"; its hover says when the first can leave and when the first lands. A module
 for the Moon takes no slot: it is installed the month it is built, and one further
-down the queue goes ahead of a module waiting for a slot. Only a blockade of Earth
-holds it back.
+down the queue goes ahead of a module waiting for a slot once your stock covers
+it. While Earth or that Moon colony is blockaded, or the colony occupied, it takes
+a slot as before.
 A module lands for whoever holds the colony then, and is lost if the site was
 released or filled to four past its slots in the meantime.
 

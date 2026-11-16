@@ -112,9 +112,9 @@ pm_sr_fabrication_fusion_shipyards = {
 # ============================================================================
 # The production methods of pmg_space_program_module_storage
 # (sr_colony_module_pmgs.txt). Each adds to the module stock's cap through
-# country_sr_module_storage_add (level_scaled, as the Strategic Reserve hub's
-# capacity: the program is one level, so the figure is the method's), for goods
-# a week; the base 500 and a year of fabrication need no method
+# country_sr_module_storage_add (workforce-scaled, as fabrication's points and
+# the goods it pays are: a half-staffed programme stores half; review of #1847),
+# for goods a week; the base 500 and a year of fabrication need no method
 # (sr_mod_fab_stock_cap). Like fabrication, no method employs anyone.
 #
 #   method               gate                      goods a week                                  storage
@@ -148,7 +148,7 @@ pm_sr_storage_component_depot = {
 		}
 	}
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_sr_module_storage_add = 1000
 		}
 	}
@@ -175,7 +175,7 @@ pm_sr_storage_orbital_depot = {
 		}
 	}
 	country_modifiers = {
-		level_scaled = {
+		workforce_scaled = {
 			country_sr_module_storage_add = 3000
 		}
 	}

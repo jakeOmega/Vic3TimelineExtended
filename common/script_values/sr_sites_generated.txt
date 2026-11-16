@@ -12414,41 +12414,44 @@ sr_ebase_room_total = {
 }
 
 # Country scope: the months until a module waiting at Earth for the world can leave
-# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). The
-# Moon and Mercury are never gated and have none.
-sr_mod_wait_months_valles_marineris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars } }
-sr_mod_wait_months_olympus_mons = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars } }
-sr_mod_wait_months_hellas_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars } }
-sr_mod_wait_months_utopia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars } }
-sr_mod_wait_months_arcadia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars } }
-sr_mod_wait_months_ceres = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_ceres } }
-sr_mod_wait_months_vesta = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_vesta } }
-sr_mod_wait_months_psyche = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_psyche } }
-sr_mod_wait_months_pallas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_pallas } }
-sr_mod_wait_months_hygiea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_hygiea } }
-sr_mod_wait_months_io = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_europa = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_ganymede = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_callisto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_himalia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_amalthea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter } }
-sr_mod_wait_months_venus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_venus } }
-sr_mod_wait_months_titan = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn } }
-sr_mod_wait_months_enceladus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn } }
-sr_mod_wait_months_rhea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn } }
-sr_mod_wait_months_mimas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn } }
-sr_mod_wait_months_iapetus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn } }
-sr_mod_wait_months_titania = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus } }
-sr_mod_wait_months_oberon = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus } }
-sr_mod_wait_months_miranda = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus } }
-sr_mod_wait_months_ariel = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus } }
-sr_mod_wait_months_triton = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune } }
-sr_mod_wait_months_proteus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune } }
-sr_mod_wait_months_pluto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
-sr_mod_wait_months_eris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
-sr_mod_wait_months_makemake = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
-sr_mod_wait_months_haumea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
-sr_mod_wait_months_sedna = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper } }
+# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). In a
+# window's last month (past its optimum) one still waiting missed it and leaves at
+# the next window's first month, about the gap since the last window less 2 (a
+# cycle varies by a month or so; review of #1847). The Moon and Mercury are never
+# gated and have none.
+sr_mod_wait_months_valles_marineris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_olympus_mons = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_hellas_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_utopia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_arcadia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_ceres = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_ceres if = { limit = { te_history_month_index > sr_window_next_optimum_ceres } value = sr_window_previous_gap_ceres subtract = 2 } } }
+sr_mod_wait_months_vesta = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_vesta if = { limit = { te_history_month_index > sr_window_next_optimum_vesta } value = sr_window_previous_gap_vesta subtract = 2 } } }
+sr_mod_wait_months_psyche = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_psyche if = { limit = { te_history_month_index > sr_window_next_optimum_psyche } value = sr_window_previous_gap_psyche subtract = 2 } } }
+sr_mod_wait_months_pallas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_pallas if = { limit = { te_history_month_index > sr_window_next_optimum_pallas } value = sr_window_previous_gap_pallas subtract = 2 } } }
+sr_mod_wait_months_hygiea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_hygiea if = { limit = { te_history_month_index > sr_window_next_optimum_hygiea } value = sr_window_previous_gap_hygiea subtract = 2 } } }
+sr_mod_wait_months_io = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_europa = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_ganymede = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_callisto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_himalia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_amalthea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_venus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_venus if = { limit = { te_history_month_index > sr_window_next_optimum_venus } value = sr_window_previous_gap_venus subtract = 2 } } }
+sr_mod_wait_months_titan = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_enceladus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_rhea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_mimas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_iapetus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_titania = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_oberon = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_miranda = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_ariel = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_triton = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune if = { limit = { te_history_month_index > sr_window_next_optimum_neptune } value = sr_window_previous_gap_neptune subtract = 2 } } }
+sr_mod_wait_months_proteus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune if = { limit = { te_history_month_index > sr_window_next_optimum_neptune } value = sr_window_previous_gap_neptune subtract = 2 } } }
+sr_mod_wait_months_pluto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_eris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_makemake = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_haumea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_sedna = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
 
 # Country scope: the same for the module waiting in shipment slot n, 999 while the
 # slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least).

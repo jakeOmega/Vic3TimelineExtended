@@ -3946,7 +3946,7 @@ types space_race_widget_types
 						### The hover says what holds the queue now (the owner, 2026-11-15):
 						### stopped (by its reason), every shipment slot taken, or fabricating.
 						te_sr_value_row = {
-							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_stop_reason'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_stopped_site', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_stop_reason'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_tt_stopped_cap', 'je_space_race_widget_mq_tt_stopped_fab' ) ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_tt_full', 'je_space_race_widget_mq_tt_months' ) )]"
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_stop_reason'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_stopped_site', 'je_space_race_widget_mq_tt_stopped_fab' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_tt_full', 'je_space_race_widget_mq_tt_months' ) )]"
 							blockoverride "row_label" {
 								text = "je_space_race_widget_mq_next_label"
 							}

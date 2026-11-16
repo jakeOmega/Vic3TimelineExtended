@@ -366,10 +366,22 @@ OVERFLOW_GRADE = -75
 LUNAR: tuple[Site, ...] = tuple(s for s in SITES if s.stage == 0)
 
 
-def lunar_test(var: str) -> str:
-    """A country-scope trigger: `var` (a queue place's site) names a lunar world;
-    false while it is unset."""
-    return "OR = { " + " ".join(f"{var} ?= {s.index}" for s in LUNAR) + " }"
+def lunar_open_test(var: str, place_type: str | None = None) -> str:
+    """A country-scope trigger: `var` (a queue place's site) names a lunar world
+    that can take a module now, neither blockaded nor occupied (a module built
+    for one would be lost at once; review of #1847); false while it is unset.
+    With `place_type` (the place's type variable), also one the stock can pay
+    for: a specialization at sr_module_points, a slot module at the world's
+    sr_mod_generic_cost_<key> (sr_mq_head_cost's prices)."""
+    parts = []
+    for s in LUNAR:
+        terms = [f"{var} ?= {s.index}", f"NOT = {{ has_global_variable = sr_site_blockaded_{s.key} }}",
+                 f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}"]
+        if place_type:
+            terms += ["sr_mod_fab_stock_value >= sr_module_points",
+                      f"OR = {{ {place_type} ?= 1 {place_type} ?= 2 sr_mod_fab_stock_value >= sr_mod_generic_cost_{s.key} }}"]
+        parts.append("AND = { " + " ".join(terms) + " }")
+    return "OR = { " + " ".join(parts) + " }"
 
 # No Spaceport on a lunar world (design § 3.1): fleets dock at Earth, the same
 # location. Its slots hold Habitats and Defences. module_types() and its kin
@@ -1919,11 +1931,16 @@ def render_shipment_wait_values() -> list[str]:
     holds the queue): per world, the months until a module waiting at Earth for
     it can leave, and per shipment slot the same for the module waiting there."""
     out = ["", "# Country scope: the months until a module waiting at Earth for the world can leave",
-           "# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). The",
-           "# Moon and Mercury are never gated and have none."]
+           "# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). In a",
+           "# window's last month (past its optimum) one still waiting missed it and leaves at",
+           "# the next window's first month, about the gap since the last window less 2 (a",
+           "# cycle varies by a month or so; review of #1847). The Moon and Mercury are never",
+           "# gated and have none."]
     gated = [s for s in SITES if s.body]
     out += [f"sr_mod_wait_months_{s.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} "
-            f"value = sr_window_months_to_next_{s.body} }} }}" for s in gated]
+            f"value = sr_window_months_to_next_{s.body} if = {{ limit = {{ te_history_month_index > "
+            f"sr_window_next_optimum_{s.body} }} value = sr_window_previous_gap_{s.body} subtract = 2 }} }} }}"
+            for s in gated]
     out += ["", "# Country scope: the same for the module waiting in shipment slot n, 999 while the",
             "# slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least)."]
     for n in range(1, SHIP_SLOTS + 1):
@@ -2278,20 +2295,21 @@ def render_module_queue() -> list[str]:
         out.append("\t}")
     out += ["\tsr_mq_recount = yes", "}", "",
             "# A lunar world's module goes ahead of a head that waits for a shipment slot (the",
-            "# owner, 2026-11-15): the first one in the queue moves to the top, the entries it",
-            "# passes down a place. Only while it can go at once: launches not barred",
-            "# (sr_mq_head_needs_no_slot). From sr_mod_month, before each build.",
+            "# owner, 2026-11-15): the first one in the queue that can be installed now and that",
+            "# the stock can pay for moves to the top, the entries it passes down a place (an",
+            "# unpaid one would hold a paid head back; review of #1847). Only while launches",
+            "# aren't barred (sr_mq_head_needs_no_slot). From sr_mod_month, before each build.",
             "sr_mq_promote_lunar = {",
             "\tif = {",
             "\t\tlimit = {",
             "\t\t\thas_variable = sr_mq_1_site",
             "\t\t\tNOT = { sr_ms_has_free_slot = yes }",
-            f"\t\t\tNOT = {{ {lunar_test('var:sr_mq_1_site')} }}",
+            "\t\t\tNOT = { sr_mq_head_lunar_open = yes }",
             "\t\t\tNOT = { sr_launches_barred = yes }",
             "\t\t}"]
     for n in range(2, q + 1):
         out += ["\t\tif = {" if n == 2 else "\t\telse_if = {",
-                f"\t\t\tlimit = {{ {lunar_test(f'var:sr_mq_{n}_site')} }}",
+                f"\t\t\tlimit = {{ {lunar_open_test(f'var:sr_mq_{n}_site', f'var:sr_mq_{n}_type')} }}",
                 f"\t\t\tsr_mq_to_top_{n} = yes",
                 "\t\t}"]
     out += ["\t}", "}"]
@@ -2509,9 +2527,13 @@ def render_module_triggers() -> list[str]:
         out += ["\t}", "}"]
     out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
             f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
-            "", "# The queue's first entry is for a lunar world, whose module takes no shipment slot",
-            "# while launches aren't barred (sr_mq_head_needs_no_slot).",
-            f"sr_mq_head_lunar = {{ {lunar_test('var:sr_mq_1_site')} }}",
+            "", "# The queue's first entry is for a lunar world neither blockaded nor occupied, whose",
+            "# module takes no shipment slot while launches aren't barred (sr_mq_head_needs_no_slot).",
+            f"sr_mq_head_lunar_open = {{ {lunar_open_test('var:sr_mq_1_site')} }}",
+            "", "# A module for such a lunar world waits further down the queue (the Next Module hover).",
+            "sr_mq_lunar_behind = {", "\tOR = {",
+            *[f"\t\t{lunar_open_test(f'var:sr_mq_{n}_site')}" for n in range(2, QUEUE_SLOTS + 1)],
+            "\t}", "}",
             "", "# The queue scripted GUI's place (scope:op) holds an entry.",
             "sr_mq_scope_place_filled = {", "\tOR = {",
             *[f"\t\tAND = {{ scope:op = {n} has_variable = sr_mq_{n}_site }}" for n in range(1, QUEUE_SLOTS + 1)],

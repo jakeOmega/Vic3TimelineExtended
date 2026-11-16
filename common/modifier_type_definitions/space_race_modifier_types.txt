@@ -56,7 +56,7 @@ country_sr_module_fabrication_add = {
 }
 
 # The module stock's cap beyond its base and a year of fabrication (the owner,
-# 2026-11-15): the Space Program's Module Storage methods give it, level-scaled,
+# 2026-11-15): the Space Program's Module Storage methods give it, workforce-scaled,
 # and sr_mod_fab_stock_cap reads it. The engine consumes nothing.
 country_sr_module_storage_add = {
 	color = good

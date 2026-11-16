@@ -17,7 +17,8 @@ sr_mod_fab_per_month = { value = 2 }
 # Space Program's Module Storage method (country_sr_module_storage_add,
 # sr_colony_module_pms.txt). A module past a world's slots is queued only while
 # the stock can hold its price (sr_mod_can_queue_<type>_<key>). sr_mod_month adds
-# no points past it, but never takes away a stock already above it.
+# no points past it (or past the queue's first module's price, where that is
+# more: sr_mod_fab_stock_fill_cap), but never takes away a stock above it.
 sr_mod_fab_stock_base = { value = 500 }
 sr_mod_fab_stock_months = { value = 12 }
 sr_mod_fab_stock_cap = {
@@ -32,6 +33,17 @@ sr_mod_fab_stock_year = {
 }
 sr_mod_fab_storage = {
 	value = modifier:country_sr_module_storage_add
+}
+# Country scope. What sr_mod_month fills the stock to: its cap, or the queue's
+# first module's price where that is more, so a module queued while the cap was
+# higher (more fabrication then, or a storage method since switched off) is still
+# built rather than stopping the queue (review of #1847).
+sr_mod_fab_stock_fill_cap = {
+	value = sr_mod_fab_stock_cap
+	if = {
+		limit = { has_variable = sr_mq_1_site }
+		min = sr_mq_head_cost
+	}
 }
 
 # Dismantling (owner, 2026-10-31): the months a module level takes to come

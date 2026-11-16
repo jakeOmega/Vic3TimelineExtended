@@ -1159,9 +1159,10 @@ sr_disp_fab_stock = {
 # The queue's head (the owner, 2026-10-31): 0 nothing queued; 1 being
 # fabricated, built in sr_disp_mq_next_months; 2 its points are in stock but
 # every shipment slot is taken (a lunar world's module needs none:
-# sr_mq_head_needs_no_slot); 3 stopped: the launch site lost, a price the stock
-# can't hold, or no points a month and too few in stock (sr_disp_mq_stop_reason
-# says which). The month's pulse adds the rate and then builds (sr_mod_month),
+# sr_mq_head_needs_no_slot); 3 stopped: the launch site lost, or no points a
+# month and too few in stock (sr_disp_mq_stop_reason says which). A price past
+# the stock's cap doesn't stop it: the stock fills to the head's price
+# (sr_mod_fab_stock_fill_cap). The month's pulse adds the rate and then builds (sr_mod_month),
 # whose build loop asks only the launch site, the stock, a free slot and the
 # queue, never the rate: a head the stock covers is built with no fabrication.
 # So the head waits at least one month.
@@ -1184,29 +1185,29 @@ sr_disp_mq_next_state = {
 				value = 2
 			}
 		}
-		# A price past what the stock can hold (the cap fell after it was
-		# queued: less fabrication, or a cheaper storage method).
-		else_if = {
-			limit = { sr_mq_head_cost > sr_mod_fab_stock_cap }
-			value = 3
-		}
 		else_if = {
 			limit = { NOT = { sr_mod_fab_rate > 0 } }
 			value = 3
 		}
 	}
 }
-# Why the head is stopped (state 3), for the hover: 1 the launch site lost, 2 a
-# price past what the stock can hold, 3 no fabrication.
+# Why the head is stopped (state 3), for the hover: 1 the launch site lost, 3
+# no fabrication.
 sr_disp_mq_stop_reason = {
 	value = 3
 	if = {
 		limit = { sr_launch_site_lost = yes }
 		value = 1
 	}
-	else_if = {
-		limit = { sr_mq_head_cost > sr_mod_fab_stock_cap }
-		value = 2
+}
+# 1 while a module for a lunar world that can take it waits behind the head
+# (sr_mq_lunar_behind): the hover's note that it goes ahead of a head waiting
+# for a slot once the stock covers it (sr_mq_promote_lunar).
+sr_disp_mq_lunar_behind = {
+	value = 0
+	if = {
+		limit = { sr_mq_lunar_behind = yes }
+		value = 1
 	}
 }
 # The head's price.

@@ -24,7 +24,9 @@
 # ---- The month's fabrication (the entry's pulse) ----------------------------------
 # Country scope. The queue's counts rebuilt; the month's points into the stock,
 # kept up to its cap so a stall (nothing queued, every slot taken) loses nothing
-# short of it (a stock already above a cap that fell is kept, not cut); then up
+# short of it, or up to the queue's first module's price where that is more, so a
+# module queued while the cap was higher is still built (sr_mod_fab_stock_fill_cap;
+# review of #1847); a stock already above them is kept, not cut. Then up
 # to two modules from the head of the queue, each into a free shipment slot, or
 # for a lunar world into none (sr_mq_head_needs_no_slot; the owner, 2026-11-15).
 # While every slot is taken, a lunar world's module further down goes ahead of
@@ -45,14 +47,14 @@ sr_mod_month = {
 			limit = {
 				sr_mod_fab_rate > 0
 				NOT = { sr_launch_site_lost = yes }
-				sr_mod_fab_stock_value < sr_mod_fab_stock_cap
+				sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap
 			}
 			set_variable = {
 				name = sr_fab_stock
 				value = {
 					value = sr_mod_fab_stock_value
 					add = sr_mod_fab_rate
-					max = sr_mod_fab_stock_cap
+					max = sr_mod_fab_stock_fill_cap
 				}
 			}
 		}
@@ -93,24 +95,30 @@ sr_mod_fab_build = {
 
 # Country scope, from sr_mod_fab_head for a lunar world (the owner, 2026-11-15):
 # its module takes no shipment slot. Earth's own Moon is reached the month a
-# module is built (the transit is 0), so while launches aren't barred it is
-# installed at once, through the landing's own install (sr_mod_install_<key>): a
-# blockaded or occupied world, or a full cap, loses it, as a landing does. With
-# launches barred it waits in a shipment slot like any other (sr_mod_month built
-# it only with one free) and lands once the bar lifts.
+# module is built (the transit is 0), so while launches aren't barred and the
+# world is neither blockaded nor occupied it is installed at once, through the
+# landing's own install (sr_mod_install_<key>; a full cap loses it, as a landing
+# does). Otherwise it waits in a shipment slot like any other (sr_mod_month built
+# it only with one free: sr_mq_head_needs_no_slot reads the same three tests)
+# and lands when it would have before, lost if the world is still blockaded or
+# occupied then (review of #1847: paying for a module lost the same month).
 sr_mod_fab_build_lunar = {
 	if = {
-		limit = { NOT = { sr_launches_barred = yes } }
+		limit = {
+			NOT = { sr_launches_barred = yes }
+			NOT = { has_global_variable = sr_site_blockaded_$KEY$ }
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+		}
 		change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
 		set_local_variable = { name = sr_ms_type_now value = $CODE$ }
 		set_local_variable = { name = sr_ms_installed value = 0 }
 		sr_mod_install_$KEY$ = yes
-		# Lost on a world blockaded, occupied or full: the console's record, and the log.
+		# Lost on a full cap: the console's record, and the log.
 		if = {
 			limit = { local_var:sr_ms_installed = 0 }
 			set_variable = { name = sr_ms_last_lost_site value = $INDEX$ }
 			set_variable = { name = sr_ms_last_lost_type value = $CODE$ }
-			debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world blockaded, occupied or its cap full) country=[THIS.GetCountry.GetTagName]"
+			debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world's cap full) country=[THIS.GetCountry.GetTagName]"
 		}
 	}
 	else = {
@@ -530,13 +538,13 @@ sr_mod_fabrication_self_check = {
 }
 
 # Country scope, from sr_mod_month. TE_SELF_CHECK module_storage (the owner,
-# 2026-11-15): a Space Program running a Module Storage method must give its
-# country storage (country_sr_module_storage_add, level-scaled, so its staff
-# don't matter). Armed on the first such country, the verdict a month later (a
-# modifier sum can lag a day after a method changes); re-armed if it no longer
-# runs one by then. Once a game. The method is the only source, so OK can't be a
-# false pass. Fallback if BROKEN: workforce_scaled, as fabrication's
-# (docs/testing/solar-colonies-playtest.md).
+# 2026-11-15): a Space Program running a Module Storage method at half staff or
+# more must give its country storage (country_sr_module_storage_add,
+# workforce-scaled as fabrication's points are). Armed on the first such
+# country, the verdict a month later (a modifier sum can lag a day after a
+# method changes); re-armed if it no longer qualifies by then. Once a game. The
+# method is the only source, so OK can't be a false pass. Fallback if BROKEN:
+# read the method and occupancy in script (docs/testing/solar-colonies-playtest.md).
 sr_mod_storage_self_check = {
 	if = {
 		limit = {
@@ -554,7 +562,7 @@ sr_mod_storage_self_check = {
 				debug_log = "TE_SELF_CHECK OK module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program's Module Storage method gives its country storage) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program has run a Module Storage method for a month and its country has no storage: the method's level_scaled country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program has run a Module Storage method at half staff or more for a month and its country has no storage: the method's country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 		else_if = {

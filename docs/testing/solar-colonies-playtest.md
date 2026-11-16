@@ -974,7 +974,7 @@ queue behind them. The console is `event te_debug_space_race.4` as above.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK OK/BROKEN module_storage country=… storage=… cap=…` | once a game, a month after a Space Program first runs a Module Storage method | the method's level-scaled `country_sr_module_storage_add` reaches its country (`storage` 1000 or 3000, `cap` 500 + a year of fabrication + that) | `storage=0`: a PM's `level_scaled` country modifier doesn't reach the country from a one-level, non-expandable building | make the methods' storage `workforce_scaled`, as fabrication's is, and say in their descriptions that it falls with staff |
+| `TE_SELF_CHECK OK/BROKEN module_storage country=… storage=… cap=…` | once a game, a month after a Space Program first runs a Module Storage method at half staff or more | the method's workforce-scaled `country_sr_module_storage_add` reaches its country (`storage` up to 1000 or 3000 by staffing, `cap` 500 + a year of fabrication + that) | `storage=0`: the group's country modifier doesn't reach the country (`module_fabrication`'s check covers the same route for fabrication) | read the method and the program's occupancy in script (`sr_mod_storage_runs`) and add the storage in `sr_mod_fab_storage` |
 
 1. **Module Storage.** The Space Program shows a fourth group, Module Storage, on No Module Storage. Component Depot
    (Cislunar Infrastructure) and Orbital Depot (Space Colonization) list +1,000 and +3,000 Colony Module Storage and
@@ -984,13 +984,15 @@ queue behind them. The console is `event te_debug_space_race.4` as above.
    (it is not cut), and fabrication adds nothing until the stock is below the new cap.
 3. **Past the slots.** At a colony four past its slots, with only the base stock, the + button greys out with "Our
    module stock can hold its price" crossed; with an Orbital Depot it allows up to eight past, the Slots hover giving
-   the price (up to 900) and the stock's cap. Queue one, then switch storage off: the queue reads "stopped" with the
-   "more than our module stock can hold" hover.
+   the price (up to 900) and the stock's cap. Queue one, then switch storage off: when it reaches the top the stock
+   still fills to its price (the Next Module hover counts down) and it is built.
 4. **The Moon needs no slot.** With all eight shipment slots taken by modules for Mars, queue a Mining Complex at a
    lunar colony behind a Mars module. Next month the lunar module jumps to the top of the queue and is installed
-   that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it.
+   that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it. With the stock below the
+   lunar module's price it stays where it is. A blockaded or occupied lunar colony's module takes a slot instead.
 5. **The hover by state.** The Next Module line reads "shipping full" with every slot taken, and its hover gives
    the waiting and in-flight counts, the months until the first can leave (Mars: the months to its window) and
-   the first lands, and the Moon note. With Earth blockaded the last line reads "Earth is blockaded" instead. While
-   fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, a
-   price past the stock, or no fabrication. "1 month" reads singular.
+   the first lands, and, with a Moon module behind the head, the Moon note (with Earth blockaded, "Earth is
+   blockaded" instead). In a window's last month a module still waiting reads about a cycle less 2 months. While
+   fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, or no
+   fabrication. "1 month" reads singular.

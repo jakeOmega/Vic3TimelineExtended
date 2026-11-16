@@ -1627,11 +1627,16 @@ class ModulesTest(unittest.TestCase):
         self.assertIn("value = sr_mod_fab_rate", year)
         self.assertIn("multiply = sr_mod_fab_stock_months", year)
         self.assertIn("modifier:country_sr_module_storage_add", _block(values, "sr_mod_fab_storage"))
-        # Points go in only below the cap, so a stock above a cap that fell is kept, not cut.
+        # The month fills to the cap, or to the queue's first module's price where
+        # that is more, so a module queued under a higher cap is still built.
+        fill = _block(values, "sr_mod_fab_stock_fill_cap")
+        self.assertIn("value = sr_mod_fab_stock_cap", fill)
+        self.assertRegex(fill, r"limit = \{ has_variable = sr_mq_1_site \}\s*min = sr_mq_head_cost")
+        # Points go in only below it, so a stock above a cap that fell is kept, not cut.
         month = _block(self.modules, "sr_mod_month")
         add = month[:month.index("set_local_variable = { name = sr_fab_built")]
-        self.assertIn("sr_mod_fab_stock_value < sr_mod_fab_stock_cap", add)
-        self.assertIn("max = sr_mod_fab_stock_cap", add)
+        self.assertIn("sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap", add)
+        self.assertIn("max = sr_mod_fab_stock_fill_cap", add)
 
     def test_the_storage_group_is_on_the_space_program(self):
         buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))
@@ -1644,7 +1649,7 @@ class ModulesTest(unittest.TestCase):
         storage = {}
         for method in methods:
             body = _block(pms, method)
-            m = re.search(r"country_modifiers = \{\s*level_scaled = \{\s*country_sr_module_storage_add = (\d+)", body)
+            m = re.search(r"country_modifiers = \{\s*workforce_scaled = \{\s*country_sr_module_storage_add = (\d+)", body)
             storage[method] = int(m.group(1)) if m else 0
         self.assertEqual(storage, {"pm_sr_storage_none": 0, "pm_sr_storage_component_depot": 1000,
                                    "pm_sr_storage_orbital_depot": 3000})
@@ -1657,16 +1662,22 @@ class ModulesTest(unittest.TestCase):
         runs = _block(triggers, "sr_mod_storage_runs")
         for method in methods[1:]:
             self.assertIn(f"has_active_production_method = {method}", runs)
+        self.assertIn("occupancy >= 0.5", runs)
         self.assertIn("sr_mod_storage_self_check = yes", _block(self.modules, "sr_mod_month"))
 
     def test_a_lunar_module_takes_no_shipment_slot(self):
         lunar = sorted(s.index for s in gss.LUNAR)
         self.assertEqual(len(lunar), 6)
-        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", _block(self.triggers, "sr_mq_head_lunar"))),
-                         lunar)
+        head = _block(self.triggers, "sr_mq_head_lunar_open")
+        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", head)), lunar)
+        # Only a world that can take the module now: a blockaded or occupied one
+        # would lose it the month it is paid for (review of #1847).
+        for site in gss.LUNAR:
+            self.assertIn(f"AND = {{ var:sr_mq_1_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
+                          f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} }}", head)
         triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
         no_slot = _block(triggers, "sr_mq_head_needs_no_slot")
-        self.assertIn("sr_mq_head_lunar = yes", no_slot)
+        self.assertIn("sr_mq_head_lunar_open = yes", no_slot)
         self.assertIn("NOT = { sr_launches_barred = yes }", no_slot)
         # The build loop takes a free slot or a head that needs none.
         loop = _block(_block(self.modules, "sr_mod_month"), "while")
@@ -1676,7 +1687,10 @@ class ModulesTest(unittest.TestCase):
         # barred; then into a slot like any other.
         build = _block(self.modules, "sr_mod_fab_build_lunar")
         go = build[:build.index("else = {")]
-        self.assertIn("NOT = { sr_launches_barred = yes }", go)
+        # The same three tests as sr_mq_head_needs_no_slot, so the slot branch runs only with a slot free.
+        for term in ("NOT = { sr_launches_barred = yes }", "NOT = { has_global_variable = sr_site_blockaded_$KEY$ }",
+                     "NOT = { has_global_variable = sr_site_occupier_$KEY$ }"):
+            self.assertIn(term, _block(go, "limit"))
         self.assertIn("change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }", go)
         self.assertIn("set_local_variable = { name = sr_ms_type_now value = $CODE$ }", go)
         self.assertLess(go.index("name = sr_ms_installed value = 0"), go.index("sr_mod_install_$KEY$ = yes"))
@@ -1695,13 +1709,25 @@ class ModulesTest(unittest.TestCase):
         for term in ("has_variable = sr_mq_1_site", "NOT = { sr_ms_has_free_slot = yes }",
                      "NOT = { sr_launches_barred = yes }"):
             self.assertIn(term, gate)
-        self.assertRegex(gate, r"NOT = \{ OR = \{ (var:sr_mq_1_site \?= \d+ ?)+\} \}")
-        lunar = " ".join(f"var:sr_mq_{{n}}_site ?= {s.index}" for s in gss.LUNAR)
-        # The first lunar entry from place 2 on moves to the top.
-        moves = re.findall(r"limit = \{ OR = \{ ([^}]*) \} \}\s*sr_mq_to_top_(\d+) = yes", promote)
+        self.assertIn("NOT = { sr_mq_head_lunar_open = yes }", gate)
+        # The first lunar entry from place 2 on that can be installed now and that
+        # the stock can pay for moves to the top (review of #1847).
+        moves = re.findall(r"limit = \{ (OR = \{ .*?) \}\s*sr_mq_to_top_(\d+) = yes", promote)
         self.assertEqual([int(n) for _, n in moves], list(range(2, gss.QUEUE_SLOTS + 1)))
         for test, n in moves:
-            self.assertEqual(test.strip(), lunar.format(n=n))
+            with self.subTest(place=n):
+                self.assertEqual(test.strip(), gss.lunar_open_test(f"var:sr_mq_{n}_site", f"var:sr_mq_{n}_type"))
+                for site in gss.LUNAR:
+                    self.assertIn(f"var:sr_mq_{n}_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
+                                  f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} "
+                                  "sr_mod_fab_stock_value >= sr_module_points "
+                                  f"OR = {{ var:sr_mq_{n}_type ?= 1 var:sr_mq_{n}_type ?= 2 "
+                                  f"sr_mod_fab_stock_value >= sr_mod_generic_cost_{site.key} }}", test)
+        # The hover's Moon note reads the same entries behind the head.
+        behind = _block(self.triggers, "sr_mq_lunar_behind")
+        self.assertNotIn("var:sr_mq_1_site", behind)
+        for n in range(2, gss.QUEUE_SLOTS + 1):
+            self.assertIn(gss.lunar_open_test(f"var:sr_mq_{n}_site"), behind)
         # Before the first build and after each.
         month = _block(self.modules, "sr_mod_month")
         self.assertLess(month.index("sr_mq_promote_lunar = yes"), month.index("while = {"))
@@ -1726,8 +1752,12 @@ class ModulesTest(unittest.TestCase):
         gated = [s for s in gss.SITES if s.body]
         for site in gated:
             with self.subTest(site=site.key):
+                # In a window's last month one still waiting leaves at the next window
+                # (review of #1847): the gap since the last one less 2 stands in for it.
                 self.assertIn(f"sr_mod_wait_months_{site.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} "
-                              f"value = sr_window_months_to_next_{site.body} }} }}", self.values)
+                              f"value = sr_window_months_to_next_{site.body} if = {{ limit = {{ te_history_month_index > "
+                              f"sr_window_next_optimum_{site.body} }} value = sr_window_previous_gap_{site.body} subtract = 2 }} }} }}",
+                              self.values)
         for n in range(1, gss.SHIP_SLOTS + 1):
             body = _block(self.values, f"sr_ms_wait_months_{n}")
             with self.subTest(slot=n):
