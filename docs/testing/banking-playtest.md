@@ -651,3 +651,17 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
     its Monetary Union row), note how many and what share of its reach they make: the owner's answer to farming is
     to count imposed pegs at a discount, not to exclude them (`monetary_policy_design.md` § 0.16 item 3). Imposed
     pegs also count toward the reserve cut, so an anchor on its floor is now paid for them too.
+
+## No contagion through a country with no states (2026-11-16, #1871)
+
+The contagion asked `is_market_reachable_for_trade` of a country that had lost its last state, and the game crashed
+(1.15.1, RVA `0xd63d38`, an observer run in October 1913). The spread now skips a target that holds no state or no
+capital, and a country that holds no state or no market neither rolls a crash nor spreads one.
+
+1. **No market errors from the contagion.** In an observer run long enough for a country to lose every state while
+   its war goes on (its probe or snapshot line reads `states=0`), `error.log` has no `Event target link 'market'
+   returned an invalid object` with a `banking_cycle_effects.txt` frame, and the run does not crash at RVA
+   `0xd63d38`. Vanilla's own lines of that message for the same country (the Corn Laws, the treaty articles) still
+   come; they are registered in `docs/vanilla/vanilla_known_bugs.md`.
+2. **If it crashes there anyway.** With these guards in place, the next suspect is vanilla's Goods Transfer article
+   (`vanilla_known_bugs.md` § "Latent crashes the mod does not patch"), or a country with states but no capital.
