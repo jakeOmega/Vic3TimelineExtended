@@ -458,7 +458,7 @@ other.
 | Rural Development | Nothing | Arable land, farm throughput. |
 | Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
 | Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (one to three), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), more monopolies, and a longer receivership (12 to 36 months out of default). |
-| Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. |
+| Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. In return the bloc gains 4 to 20 cohesion, and countries poorer than its average accept its invitations more readily. |
 | Technology Controls | Nuclear Weapons | No Modernization Aid to countries outside the bloc, and members' research better guarded against espionage. From tier III the leader can place a Technology Embargo. |
 
 ### Principle tiers IV and V

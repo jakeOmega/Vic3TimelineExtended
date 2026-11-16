@@ -3163,7 +3163,7 @@
  te_rc_contribution_desc:0 "The weekly [concept_innovation] this country sends the [concept_power_bloc_leader] of its Research Commons: 75% of its own, counted before its multipliers and after what its own programs spend. The leader's monthly review sets the figure."
  te_rc_institutes_left_behind_desc:0 "This country left a Research Commons, and the joint laboratories its scientists worked in stayed with the bloc. The research speed lost falls from 50% to nothing over ten years, and ends at the leader's next monthly review if it joins a Research Commons again."
  te_rc_pool:0 "Research Commons: Members’ Research"
- te_rc_pool_cap_desc:0 "The weekly [concept_innovation] cap rises by a tenth of what the members of this country's Research Commons send it."
+ te_rc_pool_cap_desc:0 "The weekly [concept_innovation] cap rises by a tenth of what the members of this country's Research Commons send it, and by more with a $pm_hq_research_commons$ at the bloc's headquarters."
  te_rc_pool_desc:0 "The weekly [concept_innovation] the members of this country's Research Commons send it. A member that leaves stops sending within days."
  te_rc_technology_embargo_action_notification_break_desc:0 "[INITIATOR_COUNTRY.GetName] has lifted its technology embargo on [GetPlayer.GetName]."
  te_rc_technology_embargo_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has placed [GetPlayer.GetName] under a technology embargo, cutting its [concept_technology_spread]."

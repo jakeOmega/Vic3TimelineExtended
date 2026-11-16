@@ -2521,8 +2521,11 @@ pm_hq_diplomatic_framework = {
 }
 
 # Research Commons (power_blocs.md § Research Commons): the leader's joint
-# laboratory. The cap is what the pool fills, so the headquarters raises it.
-# Placeholder art: the national laboratories' icon.
+# laboratory. The cap is what the pool fills, so the headquarters raises it:
+# by a fortieth of the pool beside the identity's tenth (te_rc_pool_cap_value
+# reads the field), a quarter more of a cap rise that grows with the members'
+# innovation. A flat +25 was a tenth of era 6's technology cap gains and under
+# a hundredth of era 13's. Placeholder art: the national laboratories' icon.
 pm_hq_research_commons = {
 	texture = "gfx/interface/icons/production_method_icons/pm_national_labs.dds"
 
@@ -2531,7 +2534,7 @@ pm_hq_research_commons = {
 
 	country_modifiers = {
 		workforce_scaled = {
-			country_weekly_innovation_max_add = 25
+			country_te_rc_pool_cap_share_add = 0.025
 			country_prestige_mult = 0.05
 		}
 	}

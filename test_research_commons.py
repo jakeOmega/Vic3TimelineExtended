@@ -92,6 +92,26 @@ class ShareTest(unittest.TestCase):
         self.assertRegex(VALUES, r"(?m)^te_rc_contribution_share = 0\.75$")
         self.assertRegex(VALUES, r"(?m)^te_rc_pool_cap_share = 0\.1$")
 
+    def test_institute_raises_the_cap_with_the_pool(self):
+        """The Joint Research Institute adds a share of the pool to the cap, not a flat figure
+        that later eras' caps dwarf (2026-11-16 review); the cap value reads its field."""
+        hq = entry(read("common/production_methods/unique_pms.txt"), "pm_hq_research_commons")
+        self.assertRegex(hq, r"country_te_rc_pool_cap_share_add = 0\.025\b")
+        self.assertNotIn("country_weekly_innovation_max_add", hq)
+        cap = entry(VALUES, "te_rc_pool_cap_value")
+        self.assertIn("value = te_rc_pool_cap_share", cap)
+        self.assertIn("add = modifier:country_te_rc_pool_cap_share_add", cap)
+        self.assertRegex(read("common/modifier_type_definitions/power_bloc_extra_modifier_types.txt"),
+                         r"(?m)^country_te_rc_pool_cap_share_add = \{")
+
+    def test_statue_grows_with_the_era(self):
+        """The Commons' statue lifts its state's universities, a share that grows with each
+        era's university methods, in place of a flat +5 weekly innovation that later eras'
+        costs dwarfed (2026-11-16 review)."""
+        statue = entry(read("common/production_methods/extra_pms.txt"), "pm_power_bloc_statue_research_commons")
+        self.assertNotIn("country_weekly_innovation_add", statue)
+        self.assertIn("building_university_throughput_add", inner(statue, "state_modifiers = {"))
+
     def test_fixed_point_reads_add_units(self):
         gross = entry(VALUES, "te_rc_member_gross_adds")
         self.assertIn("value = modifier:country_weekly_innovation_add", gross)
