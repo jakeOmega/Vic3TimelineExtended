@@ -1,6 +1,6 @@
-"""The light tax code's relief and reactions are scaling modifiers on je_tax_code.
+"""The light tax code's relief, low dividend tax and reactions are scaling modifiers on je_tax_code.
 
-Since 1.15 the entry declares each of the 21 in `scaling_modifiers_while_active`
+Since 1.15 the entry declares each of the 21 relief and reaction modifiers in `scaling_modifiers_while_active`
 and the engine re-reads its value from the owning country about every four days
 (design: docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.9).
 Until then the light sync removed and re-added them on the country, the relief
@@ -9,7 +9,8 @@ at `multiplier = var:te_tax_light_rl_<key>` and a reaction at
 each declaration to the generator's lists (the entry is hand-written, the values
 generated), that each value is a guarded read that is 0 wherever the old sync
 added nothing, and the monthly net that gives the entry to a country in force the
-engine left without one. test_tax_code_light.py checks that the sync still writes
+engine left without one. The 22nd, the low dividend tax a law without one allows (owner, 2026-11-15), is
+the tax itself, not a relief: test_tax_code_light_extra.py. test_tax_code_light.py checks that the sync still writes
 the variables and adds neither; test_journal_entry_shape.py the tree-wide rule
 that nothing adds, removes or tests a declared key.
 """
@@ -39,6 +40,7 @@ KEYS = [instrument.key for instrument in gen.INSTRUMENTS]
 RELIEF = {f"te_tax_light_relief_{key}": f"te_tax_light_relief_{key}_value" for key in KEYS}
 REACTIONS = {f"te_tax_light_react_{ig}_{sign}": f"te_tax_light_react_{ig}_{sign}_value"
              for ig in gen.IGS for sign in ("pos", "neg")}
+LEVIES = {f"te_tax_light_levy_{extra.key}": f"te_tax_light_levy_{extra.key}_value" for extra in gen.LIGHT_EXTRAS}
 
 
 def read(path):
@@ -87,19 +89,21 @@ def declarations():
 
 
 class DeclarationTest(unittest.TestCase):
-    def test_the_entry_declares_every_relief_and_reaction_once_in_block_form(self):
+    def test_the_entry_declares_every_relief_levy_and_reaction_once_in_block_form(self):
         self.assertEqual(len(RELIEF) + len(REACTIONS), 21)
+        self.assertEqual(list(LEVIES), ["te_tax_light_levy_div"])
         found = declarations()
-        for family, expected in (("relief", RELIEF), ("reactions", REACTIONS)):
+        for family, expected in (("relief", RELIEF), ("levies", LEVIES), ("reactions", REACTIONS)):
             with self.subTest(family=family):
                 self.assertEqual({m: v for m, v in found.items() if m in expected},
                                  {m: [v] for m, v in expected.items()})
         # Nothing else: the view bands stay flat country modifiers (the full code adds them too).
-        self.assertEqual(set(found), set(RELIEF) | set(REACTIONS))
+        self.assertEqual(set(found), set(RELIEF) | set(LEVIES) | set(REACTIONS))
+        self.assertEqual(len(found), 22)
 
     def test_the_generator_emits_exactly_the_declared_values(self):
         generated = {modifier: name for modifier, name, _limit, _read in gen.light_scaling_values()}
-        self.assertEqual(generated, {**RELIEF, **REACTIONS})
+        self.assertEqual(generated, {**RELIEF, **LEVIES, **REACTIONS})
         values = read(VALUES)
         for name in generated.values():
             with self.subTest(value=name):
@@ -115,6 +119,18 @@ class DeclarationTest(unittest.TestCase):
                                  f"value = 0 if = {{ limit = {{ te_tax_light_levies_{key} = yes has_variable = {rl} "
                                  f"var:{rl} > 0 }} value = var:{rl} }}")
 
+    def test_the_levy_is_the_guarded_index_while_the_code_is_in_force_and_the_extra_open(self):
+        # Unlike the relief it reads the rule and the marker (te_tax_light_in_force): a positive tax stops the
+        # day the code does, before the entry's invalid outcome ends it.
+        values = read(VALUES)
+        for extra in gen.LIGHT_EXTRAS:
+            en = f"te_tax_en_{extra.key}"
+            with self.subTest(key=extra.key):
+                self.assertEqual(flat(block(values, LEVIES[f"te_tax_light_levy_{extra.key}"])),
+                                 f"value = 0 if = {{ limit = {{ te_tax_light_in_force = yes "
+                                 f"te_tax_light_extra_{extra.key} = yes has_variable = {en} var:{en} > 0 }} "
+                                 f"value = var:{en} }}")
+
     def test_a_reaction_is_the_guarded_rounded_size_on_the_side_of_its_sign(self):
         # The old sync added _pos x round(lr) for round(lr) >= 1 and _neg x -round(lr) for round(lr) <= -1.
         values = read(VALUES)
@@ -128,7 +144,7 @@ class DeclarationTest(unittest.TestCase):
 
     def test_every_variable_read_is_guarded(self):
         values = read(VALUES)
-        for name in itertools.chain(RELIEF.values(), REACTIONS.values()):
+        for name in itertools.chain(RELIEF.values(), LEVIES.values(), REACTIONS.values()):
             body = block(values, name)
             for var in set(re.findall(r"var:(\w+)", body)):
                 with self.subTest(value=name, var=var):
@@ -159,7 +175,7 @@ class DeclarationTest(unittest.TestCase):
                           "round = yes } }", sizes)
         sync = flat(block(read(EFFECTS), "te_tax_light_sync"))
         self.assertIn("te_tax_light_gen_relief = yes te_tax_light_gen_reaction_sizes = yes", sync)
-        names = "|".join(map(re.escape, sorted({**RELIEF, **REACTIONS})))
+        names = "|".join(map(re.escape, sorted({**RELIEF, **LEVIES, **REACTIONS})))
         for path in (GEN_EFFECTS, EFFECTS):
             self.assertIsNone(re.search(rf"\b({names})\b", strip_comments(read(path))), path)
 

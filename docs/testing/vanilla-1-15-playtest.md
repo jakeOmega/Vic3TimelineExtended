@@ -91,7 +91,7 @@ game, in English.
   Code, Light setting: a step moves the rate and the tax level at once and the Budget's collected rate within a few
   days (note whether it lands at once, which would mean `should_update_on_player_command` re-reads the
   declarations); the interest group reactions show on the entry, named as the source; under the full code and before
-  any step, the entry carries 21 declarations at 0, so it is where a zero row would show first. The two lag windows
+  any step, the entry carries 22 declarations at 0, so it is where a zero row would show first. The two lag windows
   have their own checks in `tax_code_schema.md` § "Light code checks". Space Race: a funding step or an approach
   switch moves the entry's Space Program Cost and the panel's pace within a few days. Open a colony holder's Solar
   System Colonization entry: it should list both the Space Program Cost (declared in `je_space_race.txt`) and the

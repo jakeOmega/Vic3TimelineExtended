@@ -241,11 +241,13 @@ te_tax_entry_unlocked = {
 # The light code's step (te_tax_light_cmd_step, te_tax_light_effects.txt; the
 # rows' buttons, te_tax_light_step_<key>_sgui). KEY: wage, div, land, head or
 # cons. DIR: 0 one step down, 1 one step up, 2 to zero, 3 to the law's very-high
-# rate. One custom_tooltip line per condition, the variable on the left of each
-# comparison.
+# rate, or a low dividend tax's cap. One custom_tooltip line per condition, the
+# variable on the left of each comparison. The code holds the tax
+# (te_tax_light_holds_<key>): the law levies it, or it is the low dividend tax
+# a law without one allows.
 te_tax_light_can_step = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_light_in_force = yes }
-	custom_tooltip = { text = te_tax_lt_tt_levied te_tax_light_levies_$KEY$ = yes }
+	custom_tooltip = { text = te_tax_lt_tt_levied te_tax_light_holds_$KEY$ = yes }
 	te_tax_light_can_step_$DIR$ = { KEY = $KEY$ }
 }
 
