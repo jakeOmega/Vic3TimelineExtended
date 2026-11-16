@@ -4,7 +4,9 @@
 Reads:
     common/modifier_type_definitions/tech_gate_modifier_types.txt
         - the authoritative set of country_*_pb_principles_bool modifiers
-    common/power_bloc_principles/extra_power_bloc_principles.txt
+    common/power_bloc_principles/*.txt (extra_power_bloc_principles.txt and
+    the identities' own files, such as te_creditors_consortium_principles.txt;
+    not the generated slot gates)
         - each principle's `possible = { modifier:<bool> = yes }` clause
 
 Writes:
@@ -34,9 +36,20 @@ from path_constants import mod_path
 
 logger = logging.getLogger(__name__)
 
-PRINCIPLES_FILE = os.path.join(
-    mod_path, "common", "power_bloc_principles", "extra_power_bloc_principles.txt"
-)
+PRINCIPLES_DIR = os.path.join(mod_path, "common", "power_bloc_principles")
+PRINCIPLES_FILE = os.path.join(PRINCIPLES_DIR, "extra_power_bloc_principles.txt")
+# Written by scripts/generators/gen_pb_principle_slots.py; it gates vanilla
+# principles and unlocks nothing.
+GENERATED_GATES = "te_principle_slot_gates_generated.txt"
+
+
+def principle_files():
+    """Every hand-written principle file, extra_power_bloc_principles.txt first."""
+    names = sorted(
+        n for n in os.listdir(PRINCIPLES_DIR)
+        if n.endswith(".txt") and n != GENERATED_GATES and n != os.path.basename(PRINCIPLES_FILE)
+    )
+    return [PRINCIPLES_FILE] + [os.path.join(PRINCIPLES_DIR, n) for n in names]
 TECH_GATE_FILE = os.path.join(
     mod_path, "common", "modifier_type_definitions", "tech_gate_modifier_types.txt"
 )
@@ -113,10 +126,17 @@ def collect_defined_unlock_bools():
 
 def collect_principle_unlocks():
     """Return list of (bool_name, group, tier, principle_id) in file order."""
-    parser = ParadoxFileParser()
-    parser.parse_file(PRINCIPLES_FILE, apply_directives=False)
     rows = []
-    for principle_id, raw_entry in parser.data.items():
+    for path in principle_files():
+        parser = ParadoxFileParser()
+        parser.parse_file(path, apply_directives=False)
+        rows.extend(_principle_rows(parser.data))
+    return rows
+
+
+def _principle_rows(data):
+    rows = []
+    for principle_id, raw_entry in data.items():
         entry = _value_of(raw_entry)
         if not isinstance(entry, dict):
             continue

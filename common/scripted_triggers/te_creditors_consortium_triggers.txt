@@ -178,12 +178,14 @@ te_cred_leader_laws_differ = {
 		AND = { has_law = law_type:law_traditionalism $TARGET$ = { NOT = { has_law = law_type:law_traditionalism } } }
 		AND = { has_law = law_type:law_interventionism $TARGET$ = { NOT = { has_law = law_type:law_interventionism } } }
 		AND = { has_law = law_type:law_agrarianism $TARGET$ = { NOT = { has_law = law_type:law_agrarianism } } }
+		AND = { has_law = law_type:law_industry_banned $TARGET$ = { NOT = { has_law = law_type:law_industry_banned } } }
 		AND = { has_law = law_type:law_extraction_economy $TARGET$ = { NOT = { has_law = law_type:law_extraction_economy } } }
 		AND = { has_law = law_type:law_laissez_faire $TARGET$ = { NOT = { has_law = law_type:law_laissez_faire } } }
 		AND = { has_law = law_type:law_cooperative_ownership $TARGET$ = { NOT = { has_law = law_type:law_cooperative_ownership } } }
 		AND = { has_law = law_type:law_mercantilism $TARGET$ = { NOT = { has_law = law_type:law_mercantilism } } }
 		AND = { has_law = law_type:law_protectionism $TARGET$ = { NOT = { has_law = law_type:law_protectionism } } }
 		AND = { has_law = law_type:law_free_trade $TARGET$ = { NOT = { has_law = law_type:law_free_trade } } }
+		AND = { has_law = law_type:law_isolationism $TARGET$ = { NOT = { has_law = law_type:law_isolationism } } }
 		AND = { has_law = law_type:law_consumption_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_consumption_based_taxation } } }
 		AND = { has_law = law_type:law_land_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_land_based_taxation } } }
 		AND = { has_law = law_type:law_per_capita_based_taxation $TARGET$ = { NOT = { has_law = law_type:law_per_capita_based_taxation } } }

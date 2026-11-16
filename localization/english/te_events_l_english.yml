@@ -5559,6 +5559,42 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_CC
+#
+ te_cc.1.a:0 "Pay its creditors."
+ te_cc.1.b:0 "Pay, if it adopts our economic laws."
+ te_cc.1.c:0 "Pay, for concessions to our investors."
+ te_cc.1.d:0 "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and lets us set terms on how it is governed until its finances recover. If we refuse, our guarantee of every other member lapses with it."
+ te_cc.1.e:0 "Pay, if it sells its state enterprises."
+ te_cc.1.f:0 "From the treasury's foreign desk, to the government. The creditors of [SCOPE.sCountry('te_cc_debtor').GetName] have sent us their claims with a covering letter, and the claims are in order. The debtor's own officials have asked to see us before we answer. They have brought their accounts, and they say they will take any reasonable terms. The desk has drafted the terms our bloc's rules allow and attached them. The creditors want our answer within the week. The debtor's officials have asked for it sooner."
+ te_cc.1.g:0 "Pay, for our laws and concessions."
+ te_cc.1.h:0 "Pay, for our laws and its state enterprises."
+ te_cc.1.i:0 "Pay, for concessions and its state enterprises."
+ te_cc.1.j:0 "Pay, on every term we can set."
+ te_cc.1.t:0 "A Member Defaults"
+ te_cc.1.z:0 "Its debts are its own."
+ te_cc.2.a:0 "We accept the terms."
+ te_cc.2.a.tt:0 "[SCOPE.sCountry('te_cc_creditor').GetName] pays our creditors, and its terms take effect:"
+ te_cc.2.b:0 "We will not be governed from abroad."
+ te_cc.2.d:0 "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], will pay our creditors @money!#v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_cost').GetValue|D]#! if we accept its terms. If we refuse, we stay in [concept_default], and for ten years no consortium will stand behind our debts."
+ te_cc.2.f:0 "\"The terms came in a folder with our bloc's seal on it, and I read them aloud to the delegation in the order they were written. The payment comes first, and it is the whole of what we owe this year. The conditions follow, and they run to several pages. Nobody at the table asked for a second reading. Our creditors' agents are waiting in the next room for whatever we decide.\""
+ te_cc.2.t:0 "The Consortium's Terms"
+ te_cc.3.a_accepted:0 "The commission can begin its work."
+ te_cc.3.a_accepted.tt:0 "Each term it accepted is in force."
+ te_cc.3.a_refused:0 "Then they will settle with their creditors alone."
+ te_cc.3.a_refused.tt:0 "We pay nothing, and owe it nothing."
+ te_cc.3.d_accepted:0 "[SCOPE.sCountry('te_cc_debtor').GetName] has accepted our terms. We have paid its creditors @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.Var('te_cred_paid').GetValue|D]#!, and the terms are in force."
+ te_cc.3.d_refused:0 "[SCOPE.sCountry('te_cc_debtor').GetName] has refused our terms. It stays in [concept_default], and nothing has been paid. For ten years it cannot count on our guarantee, and it may leave our [concept_power_bloc] when it chooses."
+ te_cc.3.f:0 "Notes from the treasury's foreign desk, for the government's file on the rescue.\n• The debtor's answer arrived in writing, signed by its treasury.\n• Its creditors were told the same day.\n• The desk has kept a copy of the terms as offered.\n• The bloc's other members have asked for one."
+ te_cc.3.t_accepted:0 "Our Terms Are Accepted"
+ te_cc.3.t_refused:0 "Our Terms Are Refused"
+ te_cc.4.a:0 "We will remember this."
+ te_cc.4.a.tt:0 "For #b five years#! [SCOPE.sCountry('te_cc_creditor').GetName] stands behind no member's debts."
+ te_cc.4.d:0 "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], has refused to pay our creditors. We remain in [concept_default], and our creditors have been told to look to us alone."
+ te_cc.4.f:0 "The delegation came back from [SCOPE.sCountry('te_cc_creditor').GetName] on the evening train with its papers unsigned. Its head went straight to the treasury and sat with the accounts until late. In the morning the treasury asked every department for a list of what could be cut, and by the end of the week the lists were on its desk."
+ te_cc.4.t:0 "Our Bloc Leaves Us to Our Creditors"
+
+#
 # TE_CULTURE_MERGE
 #
  te_culture_merge.1.a:0 "One people, at last."
@@ -5581,6 +5617,16 @@
  te_culture_merge.4.d_primary:0 "This year's census completed the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName]. [SCOPE.sCulture('te_cm_ev_own_part').GetName] switched in the same census, and every remaining [SCOPE.sCulture('te_cm_ev_own_part').GetName] pop, in our country as in every other, is [SCOPE.sCulture('te_cm_ev_result').GetName] now. [SCOPE.sCulture('te_cm_ev_own_part').GetName] is one of our primary cultures, so [SCOPE.sCulture('te_cm_ev_result').GetName] is one of ours from now on too."
  te_culture_merge.4.f:0 "A grandmother, to her granddaughter, who had asked what to put on a school form:\n\n\"Write [SCOPE.sCulture('te_cm_ev_result').GetName]. That is what the form asks for, and it is what your teacher will expect. When I was your age we had more than one name, and each side thought the other talked strangely. Your grandfather and I came from different sides of that, and we married anyway, and our children never cared which side was which. If anyone asks where the family came from, give them the names of the villages. I have written them on the back of the form for you.\""
  te_culture_merge.4.t:0 "The [SCOPE.sCulture('te_cm_ev_result').GetName] Merge Is Complete"
+
+#
+# TE_DEBUG_CC
+#
+ te_debug_cc.1.a:0 "Close."
+ te_debug_cc.1.b:0 "Call the guarantee as if we had defaulted."
+ te_debug_cc.1.c:0 "Run a Development Lending pulse."
+ te_debug_cc.1.d:0 "#lore Console-only. Nothing in the mod fires this event.#!\n\n#title Membership#!\nLeader: #v [SCOPE.sCountry('te_debug_cc_leader').GetName]#! (itself = leader or no bloc)   Guarantee in force: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_guarantee')|0]#!   Relief in points: #v [SCOPE.GetRootScope.ScriptValue('te_cred_guarantee_relief')|2]#!\nCalls on our record: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Next rescue's cost: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_honour_cost_display')|D]#!\n\n#title Receivership#!\nUnder one: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_in_receivership')|0]#!   Receiver: #v [SCOPE.sCountry('te_debug_cc_receiver').GetName]#! (itself = none)   Treaty-less: #v [ROOT.GetVariable('te_cred_direct_receivership').GetValue|0]#!   Months under the exit threshold: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\n\n#title Development Lending#!\nPaid last month: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_paid_display')|D]#!   Received: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_received_display')|D]#!   Receiver modifier tier: #v [ROOT.GetVariable('te_cred_dl_receiver_applied').GetValue|0]#!\n\n#title As leader#!\nTerms a rescue allows: #v [SCOPE.GetRootScope.ScriptValue('te_cred_terms_allowed')|0]#!   Remittance: #v [SCOPE.GetRootScope.ScriptValue('te_cred_take_share_own')|%2]#!   Months to exit: #v [SCOPE.GetRootScope.ScriptValue('te_cred_exit_months_own')|0]#!   Bloc GDP per head: #v [ROOT.GetVariable('te_cred_dl_bloc_gdppc').GetValue|2]#!"
+ te_debug_cc.1.f:0 "Option b sends the default call to our leader as if we had defaulted; option c runs a Development Lending pulse now."
+ te_debug_cc.1.t:0 "Creditors' Consortium: Test Read-Out"
 
 #
 # TE_DEBUG_CH
@@ -6480,6 +6526,7 @@
  te_pb_summit.1.m:0 "Convene a congress of the movement."
  te_pb_summit.1.n:0 "Celebrate the culture we share."
  te_pb_summit.1.o:0 "Convene a conference of ambassadors."
+ te_pb_summit.1.p:0 "Hold a conference on the members' debts."
  te_pb_summit.1.t:0 "A Summit of the Bloc"
  te_pb_summit.2.a:0 "Our delegation signed with the rest."
  te_pb_summit.2.d_ambassadors:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference of ambassadors. For ten years every member's diplomats, ours included, coordinate their work with the others'. The delegations left on better terms with one another than they arrived."
@@ -6487,6 +6534,7 @@
  te_pb_summit.2.d_council:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and called a council of the bloc's faith. The council set out a common teaching, which goes out in every member, ours included, for ten years."
  te_pb_summit.2.d_culture:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a congress of the letters and arts its members share. Its program of exhibitions and exchanges runs in every member, ours included, for ten years. The delegations left on better terms with one another than they arrived."
  te_pb_summit.2.d_customs_members:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and had the members bring their tariffs and customs procedures into line. For ten years our customs houses follow the bloc's common code, as every member's do."
+ te_pb_summit.2.d_debt_conference:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference on its members' debts. The members agreed to coordinate their borrowing, and for ten years every member, ours included, borrows a little more cheaply for it. The delegations left on better terms with one another than they arrived."
  te_pb_summit.2.d_drills:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and put joint exercises first on its agenda. For ten years every member's army, ours included, will train beside the others under a common program. The delegations left on better terms with one another than they arrived."
  te_pb_summit.2.f:0 "From our delegation at the summit, to the government. The host set the agenda before we arrived, and the draft communiqué was on the table at the first session. We secured two changes of wording in the third paragraph and none of substance. Every delegation has signed. The text follows by the next courier, with our notes on what it commits us to and from what date."
  te_pb_summit.2.t:0 "The Summit's Communiqué"

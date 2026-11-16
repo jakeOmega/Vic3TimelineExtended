@@ -1,0 +1,76 @@
+﻿# ============================================================================
+# Creditors' Consortium: console test event
+# ============================================================================
+# `event te_debug_cc.1` as a member or the leader of a Creditors' Consortium.
+# Nothing in the mod fires it. It reads out the country's place in the
+# consortium and offers the two things a play-test otherwise waits years for:
+# the default call, and a Development Lending pulse.
+# docs/testing/power-bloc-identities-playtest.md lists the checks it serves.
+# ============================================================================
+
+namespace = te_debug_cc
+
+te_debug_cc.1 = { # REVIEWED 2026-11-16: console-only test event (`event te_debug_cc.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_cc.1.t
+	desc = te_debug_cc.1.d
+	flavor = te_debug_cc.1.f
+
+	immediate = {
+		# The read-out names the leader and the receiver; a country with none
+		# names itself, so each saved scope exists.
+		save_scope_as = te_debug_cc_leader
+		power_bloc ?= {
+			power_bloc_leader = { save_scope_as = te_debug_cc_leader }
+		}
+		save_scope_as = te_debug_cc_receiver
+		if = {
+			limit = {
+				has_variable = te_mon_receiver
+				exists = var:te_mon_receiver
+			}
+			var:te_mon_receiver = { save_scope_as = te_debug_cc_receiver }
+		}
+	}
+
+	# Close.
+	option = {
+		name = te_debug_cc.1.a
+		default_option = yes
+	}
+
+	# The default call, as te_monetary_on_country_default makes it, without the
+	# default: counted on the member's record and sent to its leader (te_cc.1).
+	option = {
+		name = te_debug_cc.1.b
+		trigger = { te_cred_guarantee_is_effective = yes }
+		change_variable = { name = te_mon_lolr_calls add = 1 }
+		clamp_variable = {
+			name = te_mon_lolr_calls
+			min = 0
+			max = te_mon_lolr_calls_cap
+		}
+		te_cred_call_consortium = yes
+	}
+
+	# A Development Lending pulse now (the leader).
+	option = {
+		name = te_debug_cc.1.c
+		trigger = {
+			te_cred_leads_consortium = yes
+			te_cred_dl_tier_1_plus = yes
+		}
+		te_cred_dl_pulse = yes
+		power_bloc = {
+			every_power_bloc_member = { te_cred_dl_sync_receiver_modifier = yes }
+		}
+	}
+}

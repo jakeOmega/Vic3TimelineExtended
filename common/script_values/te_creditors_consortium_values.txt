@@ -100,21 +100,81 @@ te_cred_monopolies_allowed = {
 
 
 # --- Conditionality's receivership terms -------------------------------------------
-# Read in the DEBTOR'S scope by the monetary layer's te_mon_receivership_take_share
-# and te_mon_receivership_exit_months (te_monetary_arrangement_script_values.txt),
-# for any receivership whose receiver leads a consortium: the commission's
-# terms are the receiver's institution, whichever way it was set up. They read
-# the debtor's te_mon_receiver whether or not the receivership flag is up this
-# moment, because the discovery reads the exit months for the treaty-less
-# receivership just after it has reset the flag
-# (te_cred_discover_direct_receivership); a country that holds no receivership
-# never reads either.
 
-# The remittance's share of the debtor's GDP a month: the article's 0.1%
-# (te_mon_receivership_take_share_base), raised by tier: 0.1, 0.15, 0.15, 0.2,
-# 0.25%. At the top a debtor pays 3% of its GDP a year, about what the Ottoman
-# Public Debt Administration took (a quarter to a third of the empire's
-# revenue). Debtor scope.
+# The leader's own figures, by its bloc's Conditionality tier. Leader scope;
+# 0 for a country that leads no consortium.
+#
+# The remittance: the article's 0.1% of the debtor's GDP a month
+# (te_mon_receivership_take_share's base), raised to 0.1, 0.15, 0.15, 0.2,
+# 0.25% by tier. At the top a debtor pays 3% of its GDP a year, about what the
+# Ottoman Public Debt Administration took (a quarter to a third of the
+# empire's revenue).
+te_cred_take_extra_own = {
+	value = 0
+	if = {
+		limit = { te_cred_leads_consortium = no }
+		value = 0
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 0.0015
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_4_plus = yes }
+		value = 0.001
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_2_plus = yes }
+		value = 0.0005
+	}
+}
+
+# The exit ramp: the article's 12 months out of default and under a quarter
+# of the debt ceiling, raised to 12, 18, 24, 30, 36 by tier.
+te_cred_exit_extra_own = {
+	value = 0
+	if = {
+		limit = { te_cred_leads_consortium = no }
+		value = 0
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 24
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_4_plus = yes }
+		value = 18
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_3_plus = yes }
+		value = 12
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_2_plus = yes }
+		value = 6
+	}
+}
+
+# ...in full, for te_cc.1's tooltips. Leader scope.
+te_cred_take_share_own = {
+	value = 0.001
+	add = te_cred_take_extra_own
+}
+
+te_cred_exit_months_own = {
+	value = 12
+	add = te_cred_exit_extra_own
+}
+
+# The same read from the DEBTOR'S scope, through its receiver
+# (te_mon_receiver), by te_mon_receivership_take_share and
+# te_mon_receivership_exit_months. They read the receiver whether or not the
+# receivership flag is up this moment, because the discovery reads the exit
+# months for the treaty-less receivership just after it has reset the flag
+# (te_cred_discover_direct_receivership); a country that holds no receivership
+# never reads either. Any receivership whose receiver leads a consortium gets
+# them: the commission's terms are the receiver's institution, whichever way
+# it was set up.
 te_cred_receivership_take_extra = {
 	value = 0
 	if = {
@@ -123,34 +183,11 @@ te_cred_receivership_take_extra = {
 			exists = var:te_mon_receiver
 		}
 		var:te_mon_receiver = {
-			if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_5 = yes
-				}
-				add = 0.0015
-			}
-			else_if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_4_plus = yes
-				}
-				add = 0.001
-			}
-			else_if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_2_plus = yes
-				}
-				add = 0.0005
-			}
+			add = te_cred_take_extra_own
 		}
 	}
 }
 
-# The months out of default and under a quarter of the debt ceiling that end
-# the receivership: the article's 12, raised by tier: 12, 18, 24, 30, 36.
-# Debtor scope.
 te_cred_receivership_exit_extra = {
 	value = 0
 	if = {
@@ -159,34 +196,7 @@ te_cred_receivership_exit_extra = {
 			exists = var:te_mon_receiver
 		}
 		var:te_mon_receiver = {
-			if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_5 = yes
-				}
-				add = 24
-			}
-			else_if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_4_plus = yes
-				}
-				add = 18
-			}
-			else_if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_3_plus = yes
-				}
-				add = 12
-			}
-			else_if = {
-				limit = {
-					te_cred_leads_consortium = yes
-					te_cred_cond_tier_2_plus = yes
-				}
-				add = 6
-			}
+			add = te_cred_exit_extra_own
 		}
 	}
 }
