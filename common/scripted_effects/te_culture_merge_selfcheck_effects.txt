@@ -206,8 +206,11 @@ te_cm_chk_census_year = {
 # (te_cm_chk_primary_of), once. te_cm_chk_formation_monthly arms it a monthly pulse later, and te_cm_chk_formation reads it.
 #
 # cm_conversion_merges_pops: stage 0 picks one state of this country that has pops of the part and counts its pops of
-# the result (te_cm_chk_conv_before), then waits 35 days (stage 1). Stage 2, a later pass by the same country for the same
-# part, waits 35 days again (stage 3). The monthly pulse reads the state after each wait.
+# the result (te_cm_chk_conv_before) and of the part (te_cm_chk_conv_part_first), then waits 35 days (stage 1). Stage 2,
+# a later pass by the same country for the same part and result, counts both again just before it converts
+# (te_cm_chk_conv_pre2, te_cm_chk_conv_part_second) and waits 35 days again (stage 3). The monthly pulse reads the state
+# after each wait, so each pass is measured over its own 35 days: until 2026-11-16 the second was measured from 35 days
+# after the first, a year that also held the result's migrants and its pops hired elsewhere.
 te_cm_chk_conversion = {
 	# ---- cm_rate_inputs ----
 	if = {
@@ -278,11 +281,17 @@ te_cm_chk_conversion = {
 			limit = { any_scope_pop = { culture = cu:$CULTURE$ } }
 			set_global_variable = { name = te_cm_chk_conv_state value = this }
 			set_local_variable = { name = te_cm_chk_n value = 0 }
+			set_local_variable = { name = te_cm_chk_p value = 0 }
 			every_scope_pop = {
 				limit = { culture = cu:$RESULT$ }
 				change_local_variable = { name = te_cm_chk_n add = 1 }
 			}
+			every_scope_pop = {
+				limit = { culture = cu:$CULTURE$ }
+				change_local_variable = { name = te_cm_chk_p add = 1 }
+			}
 			set_global_variable = { name = te_cm_chk_conv_before value = local_var:te_cm_chk_n }
+			set_global_variable = { name = te_cm_chk_conv_part_first value = local_var:te_cm_chk_p }
 			cu:$CULTURE$ = { save_temporary_scope_as = te_cm_chk_part_s }
 			cu:$RESULT$ = { save_temporary_scope_as = te_cm_chk_result_s }
 			set_global_variable = { name = te_cm_chk_conv_part value = scope:te_cm_chk_part_s }
@@ -292,7 +301,8 @@ te_cm_chk_conversion = {
 		}
 	}
 
-	# ---- stage 2 to 3: the same country converts the same part again ----
+	# ---- stage 2 to 3: the same country converts the same part into the same result again ----
+	# A part can sit in two merges (Scottish in British and in Anglophone), so the result is matched as well as the part.
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_cm_chk_conversion_merges_pops_done }
@@ -302,8 +312,27 @@ te_cm_chk_conversion = {
 			global_var:te_cm_chk_conv_part ?= scope:te_cm_part
 		}
 		save_temporary_scope_as = te_cm_chk_conv_country
+		cu:$RESULT$ = { save_temporary_scope_as = te_cm_chk_conv_res_now }
 		if = {
-			limit = { global_var:te_cm_chk_conv_state = { owner = scope:te_cm_chk_conv_country } }
+			limit = {
+				global_var:te_cm_chk_conv_result ?= scope:te_cm_chk_conv_res_now
+				global_var:te_cm_chk_conv_state = { owner = scope:te_cm_chk_conv_country }
+			}
+			# just before this pass converts, so the read 35 days on counts this pass's new pops and not the year's
+			global_var:te_cm_chk_conv_state = {
+				set_local_variable = { name = te_cm_chk_n value = 0 }
+				set_local_variable = { name = te_cm_chk_p value = 0 }
+				every_scope_pop = {
+					limit = { culture = scope:te_cm_chk_conv_res_now }
+					change_local_variable = { name = te_cm_chk_n add = 1 }
+				}
+				every_scope_pop = {
+					limit = { culture = scope:te_cm_part }
+					change_local_variable = { name = te_cm_chk_p add = 1 }
+				}
+				set_global_variable = { name = te_cm_chk_conv_pre2 value = local_var:te_cm_chk_n }
+				set_global_variable = { name = te_cm_chk_conv_part_second value = local_var:te_cm_chk_p }
+			}
 			set_global_variable = { name = te_cm_chk_conv_stage value = 3 }
 			set_global_variable = { name = te_cm_chk_conv_wait value = yes days = 35 }
 		}
@@ -323,12 +352,17 @@ te_cm_chk_conversion_clear = {
 	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_inc1 }
 	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_inc2 }
 	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_half }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_pre2 }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_part_first }
+	te_cm_chk_remove_global = { NAME = te_cm_chk_conv_part_second }
 }
 
 # Any scope, the monthly pulse. cm_conversion_merges_pops: the pops of the result in the sample state, 35 days after a pass.
 # Stage 1 (after the first pass): the first pass made inc1 result pops. A split with nothing to merge into makes one per
-# building, profession and religion of the part; inc1 below 1 means nothing was made here, so the sample starts over from
-# another state at the next pass. Stage 3 (after the second pass): inc2 more.
+# building, profession and religion of the part; inc1 below 2 means one new pop or none, too few for half of it to tell
+# a merge from a split, so the sample starts over from another state at the next pass. Stage 3 (35 days after the second
+# pass): inc2 more than just before it (te_cm_chk_conv_pre2). Under a merge inc2 counts only the part's pops that have
+# no result pop to merge into (a workplace new since the first pass); under a split, about every pop of the part.
 #   OK      inc2 is below half of inc1: the second pass merged what it converted into the result pops the first made.
 #   BROKEN  inc2 is half of inc1 or more: every pass splits off a new pop beside the old one, so the pops multiply for
 #           as long as the merge runs.
@@ -355,7 +389,7 @@ te_cm_chk_conversion_monthly = {
 			set_global_variable = { name = te_cm_chk_conv_inc1 value = global_var:te_cm_chk_conv_now }
 			change_global_variable = { name = te_cm_chk_conv_inc1 subtract = global_var:te_cm_chk_conv_before }
 			if = {
-				limit = { global_var:te_cm_chk_conv_inc1 >= 1 }
+				limit = { global_var:te_cm_chk_conv_inc1 >= 2 }
 				set_global_variable = { name = te_cm_chk_conv_mid value = global_var:te_cm_chk_conv_now }
 				set_global_variable = { name = te_cm_chk_conv_stage value = 2 }
 			}
@@ -366,14 +400,18 @@ te_cm_chk_conversion_monthly = {
 		else = {
 			set_global_variable = { name = te_cm_chk_conversion_merges_pops_done value = yes }
 			set_global_variable = { name = te_cm_chk_conv_inc2 value = global_var:te_cm_chk_conv_now }
-			change_global_variable = { name = te_cm_chk_conv_inc2 subtract = global_var:te_cm_chk_conv_mid }
+			change_global_variable = { name = te_cm_chk_conv_inc2 subtract = global_var:te_cm_chk_conv_pre2 }
 			set_global_variable = { name = te_cm_chk_conv_half value = { value = global_var:te_cm_chk_conv_inc1 divide = 2 } }
+			# the sample on a line of its own, from the state's scope, so the verdict line can't be lost to an accessor
+			global_var:te_cm_chk_conv_state = {
+				debug_log = "TE_PROBE cm_conversion_merges_pops sample state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] (the state the verdict below counted) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 			if = {
 				limit = { global_var:te_cm_chk_conv_inc2 < global_var:te_cm_chk_conv_half }
-				debug_log = "TE_SELF_CHECK OK cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass merged what it converted into the result pops the first pass made: the pop count does not climb with every pass)"
+				debug_log = "TE_SELF_CHECK OK cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] before_second=[GetGlobalVariable('te_cm_chk_conv_pre2').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] part_first=[GetGlobalVariable('te_cm_chk_conv_part_first').GetValue|0] part_second=[GetGlobalVariable('te_cm_chk_conv_part_second').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass merged what it converted into the result pops the first pass made: the pop count does not climb with every pass)"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass split off about as many new result pops as the first: change_pop_culture does not merge into an existing pop of the result, so every yearly pass adds pops until the switch; take the fallback in docs/testing/culture-merges-playtest.md)"
+				debug_log = "TE_SELF_CHECK BROKEN cm_conversion_merges_pops before=[GetGlobalVariable('te_cm_chk_conv_before').GetValue|0] after_first=[GetGlobalVariable('te_cm_chk_conv_mid').GetValue|0] before_second=[GetGlobalVariable('te_cm_chk_conv_pre2').GetValue|0] after_second=[GetGlobalVariable('te_cm_chk_conv_now').GetValue|0] first_pass=+[GetGlobalVariable('te_cm_chk_conv_inc1').GetValue|0] second_pass=+[GetGlobalVariable('te_cm_chk_conv_inc2').GetValue|0] part_first=[GetGlobalVariable('te_cm_chk_conv_part_first').GetValue|0] part_second=[GetGlobalVariable('te_cm_chk_conv_part_second').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the second pass, measured from just before it, split off about as many new result pops as the first: change_pop_culture does not merge into an existing pop of the result, so every yearly pass adds pops until the switch; read second_pass against part_second, and take the fallback in docs/testing/culture-merges-playtest.md)"
 			}
 			te_cm_chk_conversion_clear = yes
 		}
