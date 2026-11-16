@@ -40,6 +40,8 @@ REPLACE:principle_group_vassalization = {
 }
 
 INJECT:principle_group_advanced_research = {
+	primary_for_identity = identity_research_commons
+
 	levels = {
 		principle_advanced_research_4
 		principle_advanced_research_5
@@ -134,6 +136,8 @@ INJECT:principle_group_freedom_of_movement = {
 }
 
 principle_group_education = {
+	primary_for_identity = identity_research_commons
+
 	levels = {
 		principle_education_1
 		principle_education_2
@@ -362,5 +366,23 @@ principle_group_monetary_union = {
 		principle_monetary_union_3
 		principle_monetary_union_4
 		principle_monetary_union_5
+	}
+}
+
+### Research Commons (docs/systems/mod_systems/power_blocs.md § Research
+### Commons). Advanced Research and Education above are primary for it; this
+### group is its own, and like Diplomatic Framework it stays out of the three
+### groups with explicit unlock lists (Vassalization, Colonial Offices, Sacred
+### Civics). Tiers: common/power_bloc_principles/te_research_commons_principles.txt.
+principle_group_technology_controls = {
+	primary_for_identity = identity_research_commons
+	unlocking_identity = identity_research_commons
+
+	levels = {
+		principle_technology_controls_1
+		principle_technology_controls_2
+		principle_technology_controls_3
+		principle_technology_controls_4
+		principle_technology_controls_5
 	}
 }

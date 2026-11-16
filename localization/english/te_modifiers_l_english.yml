@@ -665,6 +665,8 @@
  power_bloc_te_mon_currency_trade_advantage_mult_desc:0 "Export and import advantage in every state of a country using the currency: each adopter, and the leader once one has adopted."
  power_bloc_te_mon_currency_volatility_mult:0 "[concept_banking_common_currency] [concept_banking_cycle] Volatility"
  power_bloc_te_mon_currency_volatility_mult_desc:0 "How far [concept_banking_momentum] swings at random, for every country using the currency under any banking law but $law_unregulated_banking$: one deposit guarantee across the currency."
+ power_bloc_technology_embargo_strength_add:0 "Technology Embargo Strength"
+ power_bloc_technology_embargo_strength_add_desc:0 "A $te_rc_technology_embargo$ cuts its target's [concept_technology_spread] by the bloc's share of the world's weekly [concept_innovation] times this figure, in percent, to at most 50%. At 100, a bloc with a third of the world's innovation cuts it by 33%."
  ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult:0 "$ship_type_amphibious_assault_ship$ $ship_accuracy_add$"
  ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult_desc:0 "$ship_accuracy_add_desc$"
  ship_battle_against_ship_type_amphibious_assault_ship_hull_damage_mult:0 "$ship_type_amphibious_assault_ship$ $ship_hull_damage_add$"

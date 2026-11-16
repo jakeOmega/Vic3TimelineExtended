@@ -4158,6 +4158,21 @@ law_no_ministry_of_science = {
 
 	progressiveness = 0
 
+	# A Research Commons' leader can't close its Ministry of Science (owner,
+	# 2026-11-16): the identity needs one to found, and the lock is the law's
+	# own, as vanilla's National Militia locks a Military Treaty Organization's
+	# leader (power_blocs.md § Research Commons).
+	can_enact = {
+		custom_tooltip = {
+			text = te_rc_ministry_law_lock_tt
+			OR = {
+				is_power_bloc_leader = no
+				power_bloc ?= {
+					NOT = { has_identity = identity:identity_research_commons }
+				}
+			}
+		}
+	}
 }
 
 law_ministry_of_science = {

@@ -194,7 +194,8 @@ class RegistryTests(unittest.TestCase):
         entry (je_world_climate.txt, #1448) shares Global Warming's icon, as the same climate seen from the world.
         The culture merge entries (te_culture_merges_generated.txt, one per merge) all use vanilla's waving flag, the
         icon of Russification and the cultural renaissances; one picture for thirty-two entries is a placeholder the
-        owner can replace.
+        owner can replace. The Research Commons entry (je_research_commons.txt, 2026-11-16) borrows Heir
+        Education's icon until the coordinator's icon pass for the power bloc identities registers its own.
         REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
         import re
         defined = set()
@@ -205,7 +206,8 @@ class RegistryTests(unittest.TestCase):
         import culture_merges_config as cfg
         merges = {"je_te_cm_%s" % m.key for m in cfg.MERGES}  # exactly the roster's, not whatever carries the prefix
         self.assertEqual({name for name in defined if name.startswith("je_te_cm_")}, merges)
-        self.assertEqual(defined - registered - merges, {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
+        self.assertEqual(defined - registered - merges,
+                         {"je_nuclear_program", "je_te_map_room", "je_world_climate", "je_research_commons"})
         self.assertEqual(registered - defined, set())
 
 

@@ -1,0 +1,64 @@
+﻿# ============================================================================
+# RESEARCH COMMONS (identity_research_commons): triggers
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons; design:
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.
+# Script reads the identity through has_identity, as the monetary union reads
+# has_principle; the identity's marker (power_bloc_research_pool_bool) only
+# labels its tooltip.
+# ============================================================================
+
+# Country scope: the country is in a power bloc whose identity is the
+# Research Commons, as its leader or as a member.
+te_rc_in_commons = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_identity = identity:identity_research_commons }
+}
+
+# Country scope: the country leads a Research Commons.
+te_rc_leads_commons = {
+	is_power_bloc_leader = yes
+	power_bloc ?= { has_identity = identity:identity_research_commons }
+}
+
+# Country scope: a member that contributes (in a Commons, not its leader).
+te_rc_is_contributor = {
+	is_power_bloc_leader = no
+	te_rc_in_commons = yes
+}
+
+# Country scope: a former non-leader member (te_rc_member, set by the leader's
+# pulse) that is in no Research Commons now and has left the bloc of the
+# leader it served (te_rc_leader). A bloc that changed its identity keeps its
+# members in the same leader's bloc, so they are not leavers; a bloc that
+# dissolved, or a leader that no longer exists, leaves them leavers. The
+# leader read is guarded apart from its NOT (scripting_best_practices.md, the
+# has_variable bullet).
+te_rc_has_left_commons = {
+	has_variable = te_rc_member
+	te_rc_in_commons = no
+	trigger_if = {
+		limit = {
+			has_variable = te_rc_leader
+			exists = var:te_rc_leader
+		}
+		NOT = { is_in_same_power_bloc = var:te_rc_leader }
+	}
+}
+
+# Country scope (the would-be giver): Technology Controls closes Science Aid
+# and its upgrade to $TARGET$, a country outside the giver's bloc. Read in
+# science_aid's and science_aid_2's possible (extra_treaty_articles.txt), where
+# root is the source party. The principle's power_bloc_modifier carries the
+# boolean at every tier.
+te_rc_tech_controls_bars_aid = {
+	power_bloc ?= { modifier:power_bloc_technology_controls_bool = yes }
+	NOT = { is_in_same_power_bloc = $TARGET$ }
+}
+
+# Country scope: leads a bloc whose Technology Controls tier opens the
+# Technology Embargo (III and up).
+te_rc_can_embargo = {
+	is_power_bloc_leader = yes
+	power_bloc ?= { modifier:power_bloc_can_use_technology_embargo_bool = yes }
+}

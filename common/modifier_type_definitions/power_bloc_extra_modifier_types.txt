@@ -300,3 +300,47 @@ country_te_pb_principle_slots_add = {
 		ai_value = 0
 	}
 }
+
+# Research Commons (identity_research_commons, power_blocs.md § Research
+# Commons). The identity's marker only labels its tooltip; script reads
+# has_identity (te_rc_in_commons). The two Technology Controls booleans sit on
+# its principles' power_bloc_modifier: the first at every tier, read by Science
+# Aid's possible (te_rc_tech_controls_bars_aid), the second from tier III, read
+# by the Technology Embargo's selectable (te_rc_can_embargo). The strength
+# field shows the tier's embargo factor (50, 75, 100) for the tooltip; script
+# reads the tier with has_principle (te_rc_embargo_points), and
+# test_research_commons.py holds the two to each other.
+power_bloc_research_pool_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_controls_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_technology_embargo_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_embargo_strength_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}

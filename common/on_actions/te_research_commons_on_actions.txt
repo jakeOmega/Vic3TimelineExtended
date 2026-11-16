@@ -1,0 +1,74 @@
+﻿# ============================================================================
+# RESEARCH COMMONS (identity_research_commons): on_actions
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons. The engine unions
+# same-name on_action declarations across files.
+#
+# There is no on_action for joining or leaving a power bloc, so the monthly
+# pulse finds both: the leader's pulse marks every member it meets
+# (te_rc_member, te_rc_leader), and a country carrying the mark outside any
+# Commons has left (te_rc_has_left_commons).
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_rc_monthly_country
+	}
+}
+
+on_acquired_technology = {
+	on_actions = {
+		te_rc_on_acquired
+	}
+}
+
+# ROOT = a country, on its monthly pulse.
+te_rc_monthly_country = {
+	effect = {
+		if = {
+			limit = { te_rc_leads_commons = yes }
+			te_rc_leader_pulse = yes
+		}
+		else_if = {
+			limit = { has_variable = te_rc_member }
+			te_rc_detect_leaver = yes
+		}
+		else_if = {
+			# A former leader's figures, once it leads no Commons.
+			limit = { has_variable = te_rc_leader_share }
+			remove_variable = te_rc_leader_share
+			remove_variable = te_rc_leader_own_eff
+			remove_variable = te_rc_members_eff
+		}
+		if = {
+			limit = { has_variable = te_rc_ilb_months }
+			te_rc_ilb_refresh = yes
+		}
+	}
+}
+
+# ROOT = the country that acquired scope:technology. A grant (te_rc_granting
+# set around it, te_rc_grant) is not a discovery: it is counted for
+# TE_SELF_CHECK rc_grant_hook and goes no further, so the ladder does not run
+# again from inside itself.
+te_rc_on_acquired = {
+	trigger = {
+		has_game_started = yes
+	}
+	effect = {
+		if = {
+			limit = { has_variable = te_rc_granting }
+			te_rc_count_global = { NAME = te_rc_sc_hook_inside }
+		}
+		else = {
+			if = {
+				limit = { has_variable = te_rc_granted_recent }
+				te_rc_count_global = { NAME = te_rc_sc_hook_after }
+			}
+			if = {
+				limit = { te_rc_in_commons = yes }
+				te_rc_share_acquired = yes
+			}
+		}
+	}
+}

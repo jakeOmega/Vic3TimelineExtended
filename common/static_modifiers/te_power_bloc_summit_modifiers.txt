@@ -110,3 +110,12 @@ te_pb_summit_ambassadors = {
 	country_influence_mult = 0.10
 	country_infamy_decay_mult = 0.25
 }
+
+# Research Commons: Scientific Congress (option q). Every member's innovation,
+# the leader's included, rises by a tenth. A member's contribution is a share
+# of its add lines, which the multiplier doesn't touch, so the pool's add lines
+# stay as they were and the leader's own tenth raises what they bring it.
+te_pb_summit_science = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_mult = 0.10
+}

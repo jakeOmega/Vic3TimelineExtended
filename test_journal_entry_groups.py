@@ -62,6 +62,7 @@ SYSTEM_ENTRIES = frozenset({
     "je_colonial_empire",
     "je_grand_monuments",
     "je_heir_education",
+    "je_research_commons",
 })
 RIGHTS_ENTRIES = frozenset({
     "je_civil_rights",
@@ -174,7 +175,7 @@ class JournalEntryGroupTest(unittest.TestCase):
 
     def test_counts(self):
         self.assertEqual(len(SYSTEM_ENTRIES | merge_entries()), len(SYSTEM_ENTRIES) + len(cfg.MERGES))
-        self.assertEqual((len(SYSTEM_ENTRIES), len(RIGHTS_ENTRIES), len(OUTSIDE)), (20, 6, 4))
+        self.assertEqual((len(SYSTEM_ENTRIES), len(RIGHTS_ENTRIES), len(OUTSIDE)), (21, 6, 4))
 
 
 if __name__ == "__main__":

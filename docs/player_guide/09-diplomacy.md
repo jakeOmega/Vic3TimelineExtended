@@ -375,12 +375,39 @@ Alignment, a pact that slowly aligns a country's relations with third parties to
 its own and builds the leader up to 1,000 Involvement where that country is
 local, and a Diplomatic Framework never blocks a member's voluntary union.
 
+### The Research Commons identity
+
+A Research Commons pools its members' science in the leader. It opens with
+Intergovernmental Organizations, and founding one needs the Ministry of Science
+law. Members other than the leader research nothing themselves (−1000% research
+speed). Each sends the leader 75% of its weekly innovation, counted after what
+its own programs spend and before its multipliers. The leader's innovation rises
+by what the members send and its innovation cap by a tenth of it. Every member
+is given each technology another member knows, at the leader's monthly review
+and on the day one of them acquires a new one. A newcomer gets them all at the
+first review after it joins, and the bloc gets what the newcomer alone knew.
+The Research Commons journal entry shows a member what it sends and what it has
+received, and the leader the pool, the cap rise and its own share.
+
+Cohesion rests on the leader's own innovation, before what the members send, as
+a share of the bloc's, so a leader that closes its universities and lives on the
+pool loses its bloc. The worst relations between the leader and a member lower
+it, and so does each member. The leader can't abolish its Ministry of Science. A member can leave only
+when the bloc's leverage advantage over it is 10 or less (30 for the other
+identities), and a country that leaves keeps what it learned but carries
+Institutes Left Behind: −50% research speed, falling to nothing over ten years,
+and ending if it joins a Research Commons again. A bloc that changes identity
+doesn't count as being left.
+
 ### New principle groups
 
 Foreign Service and Multilateral Institutions are open only to a Diplomatic
 Framework, and Artistic Expression only to a Cultural Commonwealth.
 Vassalization, Colonial Offices and Sacred Civics are closed to a Diplomatic
 Framework. Urban Planning and Rural Development exclude each other.
+Technology Controls is open only to a Research Commons, which, like a
+Diplomatic Framework, can't take Vassalization, Colonial Offices or Sacred
+Civics.
 
 | Group | First tiers need | What it does |
 |---|---|---|
@@ -399,6 +426,7 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
 | Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
+| Technology Controls | Nuclear Weapons | No Modernization Aid to countries outside the bloc, and members' research better guarded against espionage. From tier III the leader can place a Technology Embargo. |
 
 ### Principle tiers IV and V
 
@@ -433,6 +461,7 @@ article would.
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
 | Market Unification IV and V, Internal Trade IV and V | Members' power grids join as under a Grid Interconnection Agreement; see [Power grids](03-economy.md#power-grids) |
+| Technology Controls III+ | Technology Embargo: a hostile pact on one country outside the bloc at a time that cuts its technology spread by the bloc's share of the world's innovation times 50% (III), 75% (IV) or 100% (V), to at most 50% |
 
 ### Bloc summits
 
@@ -463,6 +492,7 @@ event, The Summit's Communiqué, tells you which of these its summit gave you.
 | Ideological Union | Congress of the Movement | Members: +25% chance for laws you impose on them to pass, +5% for their own enactments, −25% radicals from political movements |
 | Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
 | Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
+| Research Commons | Scientific Congress | Members: +10% weekly innovation |
 
 The religious council takes its name from your state religion: an ecumenical
 council, a synod, the ulama in council, a rabbinical council, a Sangiti, a

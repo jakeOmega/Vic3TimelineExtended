@@ -39,6 +39,7 @@ INITIATIVES = {
     "m": [("te_pb_summit_congress", "member")],
     "n": [("te_pb_summit_culture", "member")],
     "o": [("te_pb_summit_ambassadors", "member")],
+    "q": [("te_pb_summit_science", "member")],
 }
 # Offered while running, for its immediate cohesion.
 REPEATABLE = {"a"}
@@ -51,6 +52,7 @@ IDENTITY_OPTIONS = {
     "m": "identity_ideological_union",
     "n": "identity_cultural",
     "o": "identity_diplomatic",
+    "q": "identity_research_commons",
 }
 RELATIONS = {"i": "te_pb_summit_member_relations", "n": "te_pb_summit_member_relations",
              "o": "te_pb_summit_member_relations", "l": "te_pb_summit_leader_relations"}
