@@ -90,7 +90,9 @@ te_cc_apply_scaling = {
 # by at most construction_cost_max_yearly_move of itself. A country with no stored factor first gets the scaling
 # in force, read before the share moves, so a save from before the cap moves from where it stood. Last, the
 # small-economy factor (var:te_cc_small_factor, 1 unless te_small_economy_construction_rule is on), which the cap
-# does not touch. te_cc_had_reading tells the self-check whether the country had a reading before this one.
+# does not touch, and the setting's factor at no GDP it was worked out from (var:te_cc_small_min, 1 with the rule
+# off), for the Nation tab and the start self-check. te_cc_had_reading tells the self-check whether the country had
+# a reading before this one.
 te_cc_yearly_update = {
 	if = {
 		limit = { has_variable = te_cc_slack }
@@ -110,14 +112,15 @@ te_cc_yearly_update = {
 	set_variable = { name = te_cc_gdp_part value = construction_cost_scaling_gdp_mult }
 	set_variable = { name = te_cc_scale value = te_cc_scale_next }
 	set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor }
+	set_variable = { name = te_cc_small_min value = te_cc_small_economy_min_factor }
 	te_cc_slack_selfcheck = yes
 }
 
 # Any scope, from on_game_started_after_lobby (te_construction_market_on_actions.txt), when the game rules are
-# final. With te_small_economy_construction_rule on, every country gets the scaling at once, so a small economy
-# builds cheaply from the first day and not from its first yearly pulse, up to a year on. ROOT is none there and
-# add_modifier's multiplier resolves against ROOT, so each country is reached through a hidden country event
-# (te_construction_market_recalc_events.3; scripting_best_practices.md, "add_modifier { multiplier = var:X }
+# final. With te_small_economy_construction_rule on (at any strength), every country gets the scaling at once, so a
+# small economy builds cheaply from the first day and not from its first yearly pulse, up to a year on. ROOT is none
+# there and add_modifier's multiplier resolves against ROOT, so each country is reached through a hidden country
+# event (te_construction_market_recalc_events.3; scripting_best_practices.md, "add_modifier { multiplier = var:X }
 # Resolves Against ROOT"). With the rule off there is nothing to apply in a new game: the scaling starts at 0.
 te_cc_game_start = {
 	if = {
@@ -184,15 +187,16 @@ te_cc_weekly_new_country = {
 # cap and the small-economy rule"). Once a game, in two steps.
 #   Arm (here, from the game-start pass, right after the modifier is set): up to three countries whose factor is
 #        well below 1 (under 0.8, so the discount is too large for anything else on the country to hide) and above
-#        the minimum (so their GDP was not read as nothing) each queue te_construction_market_recalc_events.5 two
-#        days on. The modifier cannot be read here: a modifier set in an effect is not visible inside it.
+#        the setting's minimum (var:te_cc_small_min, so their GDP was not read as nothing) each queue
+#        te_construction_market_recalc_events.5 two days on. Every strength's minimum is below 0.8, so it can arm
+#        under each. The modifier cannot be read here: a modifier set in an effect is not visible inside it.
 #   Read (te_cc_small_start_verdict, in that event): the first of them to arrive reads the country's whole
 #        construction-cost modifier (te_cc_modifier_total, the lever of the construction setting in force).
 #          OK      it is below 0 and the country did not have to try again: a discount is in force two days into
 #                  the game. That shows gdp read on the first day and that the multiplier resolved against this
 #                  country: against a wrong ROOT it resolves to 1, the static modifier's own +100%, and the total
-#                  would be above 0. It does not show the size is right; the line carries the total and the stored
-#                  contribution to compare by eye.
+#                  would be above 0. It does not show the size is right; the line carries the total, the stored
+#                  contribution and the setting's minimum to compare by eye (factor = min + (1 - min) x gdp / 10M).
 #          BROKEN  the total is 0 or more (no discount in force: the wrong ROOT, or the modifier never added), no
 #                  contribution was stored, or the country had to try again (gdp read 0 on the first day, so small
 #                  economies paid full price until the weekly pass reached them).
@@ -206,8 +210,9 @@ te_cc_small_start_selfcheck = {
 			NOT = { has_global_variable = te_cc_small_start_check_done }
 			global_var:te_cc_small_start_queued < 3
 			has_variable = te_cc_small_factor
+			has_variable = te_cc_small_min
 			var:te_cc_small_factor < 0.8
-			var:te_cc_small_factor > construction_cost_small_economy_min_factor
+			var:te_cc_small_factor > var:te_cc_small_min
 		}
 		change_global_variable = { name = te_cc_small_start_queued add = 1 }
 		trigger_event = { id = te_construction_market_recalc_events.5 days = 2 }
@@ -241,10 +246,10 @@ te_cc_small_start_verdict = {
 				var:te_cc_chk_total < 0
 				var:te_cc_chk_stored < 0
 			}
-			debug_log = "TE_SELF_CHECK OK small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] modifier_total=[THIS.Var('te_cc_chk_total').GetValue|3] stored=[THIS.Var('te_cc_chk_stored').GetValue|3]"
+			debug_log = "TE_SELF_CHECK OK small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] min=[THIS.Var('te_cc_small_min').GetValue|3] modifier_total=[THIS.Var('te_cc_chk_total').GetValue|3] stored=[THIS.Var('te_cc_chk_stored').GetValue|3]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] modifier_total=[THIS.Var('te_cc_chk_total').GetValue|3] stored=[THIS.Var('te_cc_chk_stored').GetValue|3] (no discount in force two days on: a total of 0 or more means the multiplier did not resolve against the country or the modifier was never added; or the country had to try again because gdp read 0 on the first day)"
+			debug_log = "TE_SELF_CHECK BROKEN small_economy_start country=[THIS.GetCountry.GetTagName] gdp=[THIS.Var('te_cc_chk_gdp').GetValue|0] factor=[THIS.Var('te_cc_small_factor').GetValue|3] min=[THIS.Var('te_cc_small_min').GetValue|3] modifier_total=[THIS.Var('te_cc_chk_total').GetValue|3] stored=[THIS.Var('te_cc_chk_stored').GetValue|3] (no discount in force two days on: a total of 0 or more means the multiplier did not resolve against the country or the modifier was never added; or the country had to try again because gdp read 0 on the first day)"
 		}
 		debug_log_scopes = yes
 		remove_variable = te_cc_chk_gdp

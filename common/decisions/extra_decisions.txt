@@ -518,9 +518,15 @@ te_decision_establish_strategic_reserve = {
 #
 # ai_chance: only an AI that would race (sr_ai_should_participate, the top
 # three by ranking; any other makes no progress but would pay the bill, as
-# space_race_buttons.txt's header explains) and whose weekly surplus covers
-# the Earth Orbit bill. net_fixed_income is the affordability reader the
-# mod's AI uses (cultural_hegemony_buttons.txt).
+# space_race_buttons.txt's header explains), out of default and not under the
+# bankruptcy modifier (sr_ai_space_budget_in_trouble), whose weekly surplus
+# covers the Earth Orbit bill (net_fixed_income, the affordability reader
+# cultural_hegemony_buttons.txt uses), and that passes the means test the
+# AI's budget pass reverses to pull a program down
+# (sr_ai_may_found_space_program, sr_ai_mission_budget_triggers.txt: Earth
+# Orbit's bill within the share of fixed income a program may climb to, and
+# not within five years of pulling one down; ai.md § Space Program Mission
+# Budget). The building's can_build_government asks the same of an AI.
 # ============================================================================
 te_decision_found_space_program = {
 	is_shown = {
@@ -554,8 +560,10 @@ te_decision_found_space_program = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
 				net_fixed_income > sr_mission_bill_earth_orbit
+				# The means test the budget pass reverses to pull a program
+				# down: a program it founds is one it would keep.
+				sr_ai_may_found_space_program = yes
 			}
 			add = 100
 		}
@@ -606,8 +614,16 @@ te_decision_found_space_program = {
 # Colonization (sr_has_colony_beyond_moon: a lunar colony alone doesn't open
 # the outer system).
 #
-# ai_chance: the same gates as founding, against the increase in the weekly
-# bill (sr_mission_bill_increase_<mission>, space_race_values.txt).
+# ai_chance: a racing AI (sr_ai_should_participate) out of trouble whose
+# Mission Limit ceiling allows the mission (sr_ai_mission_ceiling_allows_<m>,
+# sr_ai_mission_budget_triggers.txt). The AI's monthly budget pass sets that
+# ceiling to the dearest mission within its budget and climbs the program
+# to it itself (ai.md § Space Program Mission Budget), so these weights only
+# keep a decision from taking an AI past its ceiling: script moves a method
+# past the ceiling's lock, and the engine would then switch the program off
+# the mission. Until 2026-11-15 they asked that net_fixed_income cover the
+# increase in the bill, which no AI in deficit ever met while the engine's AI
+# climbed past it.
 # test_space_program_decisions.py holds the techs, bools and milestones to the
 # production methods and the journal entries.
 # ============================================================================
@@ -637,6 +653,13 @@ te_decision_space_mission_moon = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_moon_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_moon_mission
@@ -649,8 +672,8 @@ te_decision_space_mission_moon = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
-				net_fixed_income > sr_mission_bill_increase_moon
+				sr_ai_space_budget_in_trouble = no
+				sr_ai_mission_ceiling_allows_moon = yes
 			}
 			add = 100
 		}
@@ -687,6 +710,13 @@ te_decision_space_mission_mars = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_mars_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_mars_mission
@@ -699,8 +729,8 @@ te_decision_space_mission_mars = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
-				net_fixed_income > sr_mission_bill_increase_mars
+				sr_ai_space_budget_in_trouble = no
+				sr_ai_mission_ceiling_allows_mars = yes
 			}
 			add = 100
 		}
@@ -763,6 +793,13 @@ te_decision_space_mission_solar = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_solar_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_solar_colonization
@@ -784,8 +821,8 @@ te_decision_space_mission_solar = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
-				net_fixed_income > sr_mission_bill_increase_solar
+				sr_ai_space_budget_in_trouble = no
+				sr_ai_mission_ceiling_allows_solar = yes
 			}
 			add = 100
 		}
@@ -884,6 +921,13 @@ te_decision_space_mission_deep_space = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_deep_space_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_deep_space_exploration
@@ -896,8 +940,8 @@ te_decision_space_mission_deep_space = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
-				net_fixed_income > sr_mission_bill_increase_deep_space
+				sr_ai_space_budget_in_trouble = no
+				sr_ai_mission_ceiling_allows_deep_space = yes
 			}
 			add = 100
 		}
@@ -935,6 +979,13 @@ te_decision_space_mission_interstellar = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_begin_interstellar_mission
+			# A player who took this country over from the AI: Any Mission first, so
+			# no AI ceiling is left that the mission is past
+			# (sr_ai_mission_ceiling_lift, sr_ai_mission_budget_effects.txt).
+			if = {
+				limit = { is_ai = no }
+				sr_ai_mission_ceiling_lift = yes
+			}
 			activate_production_method = {
 				building_type = building_space_program
 				production_method = pm_interstellar_mission
@@ -947,8 +998,8 @@ te_decision_space_mission_interstellar = {
 		if = {
 			limit = {
 				sr_ai_should_participate = yes
-				in_default = no
-				net_fixed_income > sr_mission_bill_increase_interstellar
+				sr_ai_space_budget_in_trouble = no
+				sr_ai_mission_ceiling_allows_interstellar = yes
 			}
 			add = 100
 		}

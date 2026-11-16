@@ -19805,6 +19805,17 @@ pm_earth_orbit = {
 pm_moon_mission = {
 	texture = "gfx/interface/icons/production_method_icons/pm_moon_mission.dds"
 
+	# The ceilings that allow it (sr_mission_ceiling_pms.txt): Any Mission, a
+	# player's, and the AI's own from this mission up.
+	unlocking_production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_moon
+		pm_sr_mission_ceiling_mars
+		pm_sr_mission_ceiling_solar
+		pm_sr_mission_ceiling_deep_space
+		pm_sr_mission_ceiling_interstellar
+	}
+
 	unlocking_technologies = {
 		space_exploration
 	}
@@ -19846,6 +19857,16 @@ pm_moon_mission = {
 
 pm_mars_mission = {
 	texture = "gfx/interface/icons/production_method_icons/pm_mars_mission.dds"
+
+	# The ceilings that allow it (sr_mission_ceiling_pms.txt): Any Mission, a
+	# player's, and the AI's own from this mission up.
+	unlocking_production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_mars
+		pm_sr_mission_ceiling_solar
+		pm_sr_mission_ceiling_deep_space
+		pm_sr_mission_ceiling_interstellar
+	}
 
 	unlocking_technologies = {
 		knowledge_economy
@@ -19892,6 +19913,15 @@ pm_solar_colonization = {
 
 	# Era 10 (lunar colonization design § 4): 10,000 a week, sized for Reusable
 	# Rockets; the 25,000 it had was sized for era 11's Ablative Rockets.
+	# The ceilings that allow it (sr_mission_ceiling_pms.txt): Any Mission, a
+	# player's, and the AI's own from this mission up.
+	unlocking_production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_solar
+		pm_sr_mission_ceiling_deep_space
+		pm_sr_mission_ceiling_interstellar
+	}
+
 	unlocking_technologies = {
 		cislunar_infrastructure
 	}
@@ -19935,6 +19965,14 @@ pm_solar_colonization = {
 
 pm_deep_space_exploration = {
 	texture = "gfx/interface/icons/production_method_icons/pm_deep_space_exploration.dds"
+
+	# The ceilings that allow it (sr_mission_ceiling_pms.txt): Any Mission, a
+	# player's, and the AI's own from this mission up.
+	unlocking_production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_deep_space
+		pm_sr_mission_ceiling_interstellar
+	}
 
 	unlocking_technologies = {
 		space_colonization
@@ -19982,6 +20020,13 @@ pm_interstellar_mission = {
 	texture = "gfx/interface/icons/production_method_icons/pm_interstellar_mission.dds"
 
 	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31)
+	# The ceilings that allow it (sr_mission_ceiling_pms.txt): Any Mission, a
+	# player's, and the AI's own from this mission up.
+	unlocking_production_methods = {
+		pm_sr_mission_ceiling_none
+		pm_sr_mission_ceiling_interstellar
+	}
+
 	unlocking_technologies = {
 		aneutronic_fusion
 	}

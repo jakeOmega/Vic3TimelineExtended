@@ -1201,6 +1201,15 @@ REPLACE_OR_CREATE:pmg_base_building_space_program = {
 	# most_productive to every building of that kind (university, government
 	# administration, every monument). The te_decision_space_mission_*
 	# decisions also advance the mission (extra_decisions.txt).
+	# Under most_productive the AI climbed straight to the dearest mission its
+	# technology allowed, however little it could pay (nine AI programs on
+	# Solar Colonization in the owner's 1958 save, at up to eight times their
+	# government's own revenue). It keeps most_productive, which climbs toward
+	# the mission the AI may afford: the Mission Limit group
+	# (sr_mission_ceiling_pmgs.txt) caps how far, and the AI's monthly budget
+	# pass sets the cap (sr_ai_mission_budget_effects.txt). Under the default,
+	# most_profitable, the engine would pull every AI program down to Earth
+	# Orbit, which no ceiling gates, failing its milestones.
 	ai_selection = most_productive
 	production_methods = {
 		pm_earth_orbit

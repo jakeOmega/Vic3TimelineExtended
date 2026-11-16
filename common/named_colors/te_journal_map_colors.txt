@@ -195,6 +195,10 @@ colors = {
 	# (pale straw to deep bronze); a state that pays nothing is te_jmap_none.
 	te_jmap_invest_low = hsv360 { 48 20 95 }
 	te_jmap_invest_high = hsv360 { 24 88 46 }
+	# je_te_map_room: Population Density, people per km² of land, a doubling at a time (pale lemon to deep wine, the
+	# classic density ramp); a state with no people is te_jmap_none.
+	te_jmap_density_low = hsv360 { 56 22 96 }
+	te_jmap_density_high = hsv360 { 338 86 40 }
 	# je_te_map_room: Population Growth per 1,000, diverging at none: shrinking magenta, cream at none, growing teal.
 	te_jmap_growth_low = hsv360 { 305 45 52 }
 	te_jmap_growth_mid = hsv360 { 50 6 92 }
