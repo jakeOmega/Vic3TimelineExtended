@@ -334,7 +334,7 @@ than a small one. It starts on Regolith Processing, which makes Structural Metal
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
 which mines mostly Structural and Tech-Critical Metals, with some gold and
-Conductive Metals and a little Base Metals and Chemical and Industrial Minerals.
+Conductive Metals and a little Chemical and Industrial Minerals.
 Space Colonization brings the larger Mining Colony, with the same mix, or the
 Resort Colony production method, which produces art and tourism instead. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:
@@ -346,15 +346,16 @@ from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work
 
 The Deep-Sea Mine mines mostly Structural and Conductive Metals, as the seabed's
 nodules are mostly manganese, nickel and copper, with a little of the
-Tech-Critical Metals an Extraplanetary Base makes far more of. It costs 5,000
+Tech-Critical Metals an Extraplanetary Base makes far more of and a trace of
+Base Metals, which asteroids lack. It costs 5,000
 construction per level, a quarter of the Extraplanetary Base's, and at base
-prices earns more per level: about twice as much in era 11, and still more than
+prices earns more per level: nearly twice as much in era 11, and still more than
 a Mining Colony after Advanced Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
 Capacity, and two late production method groups each cut that bill by 30%:
 Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
-13; not an elevator of your own). A Mining Colony with Fusion Tugs earns about a
-third more per level than an Advanced Deep-Sea Mine, and with both upgrades about
+13; not an elevator of your own). A Mining Colony with Fusion Tugs earns nearly
+half more per level than an Advanced Deep-Sea Mine, and with both upgrades about
 twice as much. Self-Replicating Miners with neither upgrade earn more than a
 Mining Colony with both, and the upgrades add less to them, since they launch
 less. With the Global Commons rule off, the Deep-Sea Mine has no

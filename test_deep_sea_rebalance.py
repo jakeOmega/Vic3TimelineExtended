@@ -475,13 +475,16 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
 
     def test_both_upgrades_flip_the_order_for_space_colonization(self):
         """Since the deposit mix of 2026-11-15 a Deep-Sea Mine level sells a sixth less
-        (the same 620 of its three metals, more of them at 40 than at 80), so the
-        Asteroid Mine stays behind the era-11 Deep-Sea Mine on the upgrade of the next
-        era (Fusion Tugs), no longer on the era-13 one as well."""
+        (the same 620 of its three metals, more of them at 40 than at 80), and since
+        Base Metals went by value on 2026-11-16 another twentieth less. An Asteroid Mine
+        on Fusion Tugs, the next era's upgrade, now earns a little more a level than an
+        era-11 Deep-Sea Mine (14,450 against 13,300 to 14,300); with no upgrade it stays
+        behind (test_out_earns_every_method_of_its_era_without_upgrades), and with both
+        it still earns less for each point of construction."""
         by_group = self.d.logistics_upgrades()
         upgrades = list(by_group.values())
-        next_era = [pm for group, pm in by_group.items() if self.d.era(LOGISTICS[group]) <= 12]
-        self.assertEqual(len(next_era), 1)
+        _, deep_cost = self.d.construction(DEEP_SEA)
+        _, space_cost = self.d.construction(SPACE)
         deep = self.d.group_methods(self.d.base_group(DEEP_SEA))
         space = self.d.group_methods(self.d.base_group(SPACE))
         best_deep = max(max(self.d.deep_profits(pm).values()) for pm in deep)
@@ -494,10 +497,11 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
                     # Space Colonization's methods: ahead of every Deep-Sea method with both.
                     self.assertGreater(self.d.profit(pm, upgrades), best_deep)
                 else:
-                    # The Asteroid Mine stays behind the Deep-Sea Mine of its era on Fusion Tugs.
+                    # The Asteroid Mine, even with both, returns less on its construction
+                    # than the Deep-Sea Mine of its era.
                     same_era = [d for d in deep if self.d.method_era(d, DEEP_SEA) <= era]
-                    self.assertLess(self.d.profit(pm, next_era),
-                                    max(min(self.d.deep_profits(d).values()) for d in same_era))
+                    self.assertLess(self.d.profit(pm, upgrades) / space_cost,
+                                    max(min(self.d.deep_profits(d).values()) for d in same_era) / deep_cost)
 
     def test_each_upgrade_only_cuts_launch_capacity(self):
         space = self.d.group_methods(self.d.base_group(SPACE))
@@ -553,10 +557,19 @@ class ExtraplanetaryBaseMix(unittest.TestCase):
     its sales, a country fed by its bases covered its Tech-Critical demand one and a half
     times over and a ninth of its Conductive, in a late game with Conductive Metals at
     the price cap. The tenth-of-sales floor and the four-times rule are this test's own,
-    read off those figures, so a later edit can't thin the share back out unnoticed."""
+    read off those figures, so a later edit can't thin the share back out unnoticed.
+
+    No Base Metals (2026-11-16; 10 / 40 / 50 a level before), by value as DeepSeaMineMix
+    has it. Lead and zinc are volatile and asteroids hold almost none: 47 ppm zinc and
+    0.2 ppm lead in an ordinary (H) chondrite beside 1.6% nickel, 323 and 2.6 ppm beside
+    1.1% in a CI carbonaceous chondrite, the most zinc-rich class. At market prices that
+    is under 0.05% and under 0.5% of the value of the rock's nickel, cobalt and copper:
+    a third of a unit a level and under four, and nothing in a metallic body. Their
+    sales went to Structural Metals at equal value."""
 
     ASTEROID, COLONY = "pm_space_mine", "pm_space_colony_mining"
     MIN_CONDUCTIVE_SHARE = 0.10
+    BASE_METALS = "lead"
 
     def setUp(self):
         self.d = _DATA
@@ -573,6 +586,11 @@ class ExtraplanetaryBaseMix(unittest.TestCase):
                 self.assertGreaterEqual(conductive / self.d.value(pm, "output"),
                                         self.MIN_CONDUCTIVE_SHARE)
 
+    def test_no_mining_method_makes_base_metals(self):
+        for pm in (self.ASTEROID, self.COLONY, SelfReplicatingMiners.PM):
+            with self.subTest(pm=pm):
+                self.assertNotIn(self.BASE_METALS, self.d.goods(pm, "output"))
+
 
 class DeepSeaMineMix(unittest.TestCase):
     """The Deep-Sea Mine's metals follow the seabed's deposits (2026-11-15). Against the
@@ -582,10 +600,19 @@ class DeepSeaMineMix(unittest.TestCase):
     Copper Mines book theirs, over the mod's own deposits, that is about half Structural
     Metals, three eighths Conductive and a ninth Tech-Critical: 320 / 230 / 70 of the
     620 a level made before, when Tech-Critical was 260. Two figures elsewhere restate
-    the base method and must follow it."""
+    the base method and must follow it.
+
+    Base Metals go by value (owner, 2026-11-16: a game unit is no physical quantity, so
+    goods compare by what they sell for). A tonne of that zone's nodules holds about
+    1.4 kg of zinc and 0.3 kg of lead beside 284 kg of manganese, 13 of nickel, 11 of
+    copper and 2 of cobalt; at 2024 market prices the lead and zinc are about 0.9% of
+    the four metals' value. Of the three metals' sales that is 6 units of Base Metals a
+    level: 5, where it was 50. The 1% ceiling is this test's own, read off that figure."""
 
     BASE = "pm_ocean_mine"
     METALS = {"structural": "iron", "conductive": "copper", "tech_metals": "tech_metals"}
+    BASE_METALS = "lead"
+    MAX_BASE_METALS_SHARE = 0.01
     ADD = re.compile(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}")
     WEIGHT = re.compile(r"value\s*=\s*te_seabed_ai_(\w+)_up\s+subtract\s*=\s*te_seabed_ai_\1_down"
                         r"\s+multiply\s*=\s*([\d.]+)")
@@ -605,6 +632,16 @@ class DeepSeaMineMix(unittest.TestCase):
         iron, copper, tech = (self.out[good] for good in self.METALS.values())
         self.assertGreater(iron, copper)
         self.assertGreater(copper, 3 * tech)
+
+    def test_base_metals_are_under_a_hundredth_of_the_metals_sales(self):
+        """On every method of the capped family, and never none: nodules do carry both."""
+        for pm in self.d.group_methods(self.d.base_group(DEEP_SEA)):
+            out = self.d.goods(pm, "output")
+            metals = sum(out[good] * self.d.prices[good] for good in self.METALS.values())
+            base = out.get(self.BASE_METALS, 0.0) * self.d.prices[self.BASE_METALS]
+            with self.subTest(pm=pm):
+                self.assertGreater(base, 0)
+                self.assertLessEqual(base / metals, self.MAX_BASE_METALS_SHARE)
 
     def test_the_royalty_s_output_value_is_the_base_method_s(self):
         body = self._value_body("te_seabed_level_output_value",

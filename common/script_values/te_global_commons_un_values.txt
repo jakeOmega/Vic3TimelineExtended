@@ -11,15 +11,16 @@
 # ---- The seabed under the Law of the Sea: royalties (§3.3) ----------------------------
 
 # A Deep-Sea Mine level's base output value a week at base prices, on the
-# base method's outputs (pm_ocean_mine, the deposit mix of 2026-11-15):
+# base method's outputs (pm_ocean_mine, the deposit mix of 2026-11-15 and Base
+# Metals by value, 2026-11-16):
 #   Structural Metals (iron)            320 x  40 = 12,800
 #   Conductive Metals (copper)          230 x  40 =  9,200
 #   Tech-Critical Metals                 70 x  80 =  5,600
-#   Base Metals (lead)                   50 x  40 =  2,000
+#   Base Metals (lead)                    5 x  40 =    200
 #   Gold                                 50 x 100 =  5,000
 #   Chemical and Industrial Minerals     50 x  50 =  2,500
 #   (sulfur)                                        ------
-#                                                   37,100
+#                                                   35,300
 # Change the output figures here when the method changes: the royalty and the
 # holding fee follow them (test_deep_sea_rebalance.py holds this to the
 # method, test_global_commons_un.py the loc to this).
@@ -28,7 +29,7 @@ te_seabed_level_output_value = {
 	add = { value = 320 multiply = 40 }
 	add = { value = 230 multiply = 40 }
 	add = { value = 70 multiply = 80 }
-	add = { value = 50 multiply = 40 }
+	add = { value = 5 multiply = 40 }
 	add = { value = 50 multiply = 100 }
 	add = { value = 50 multiply = 50 }
 }
@@ -37,7 +38,7 @@ te_seabed_level_output_value = {
 # rate is a few percent; spec §11 #7).
 te_seabed_royalty_rate = { value = 0.04 }
 
-# What one level pays a week: about 1,500.
+# What one level pays a week: about 1,400.
 te_seabed_royalty_per_level = {
 	value = te_seabed_level_output_value
 	multiply = te_seabed_royalty_rate
