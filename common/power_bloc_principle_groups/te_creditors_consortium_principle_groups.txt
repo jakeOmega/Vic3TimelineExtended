@@ -1,0 +1,30 @@
+﻿# The Creditors' Consortium's own principle groups (2026-11-16): primary for
+# identity_creditors_consortium and open to it alone. Tiers and figures:
+# common/power_bloc_principles/te_creditors_consortium_principles.txt.
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.4.
+
+principle_group_conditionality = {
+	primary_for_identity = identity_creditors_consortium
+	unlocking_identity = identity_creditors_consortium
+
+	levels = {
+		principle_conditionality_1
+		principle_conditionality_2
+		principle_conditionality_3
+		principle_conditionality_4
+		principle_conditionality_5
+	}
+}
+
+principle_group_development_lending = {
+	primary_for_identity = identity_creditors_consortium
+	unlocking_identity = identity_creditors_consortium
+
+	levels = {
+		principle_development_lending_1
+		principle_development_lending_2
+		principle_development_lending_3
+		principle_development_lending_4
+		principle_development_lending_5
+	}
+}

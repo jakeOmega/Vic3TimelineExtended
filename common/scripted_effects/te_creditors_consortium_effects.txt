@@ -1,0 +1,826 @@
+﻿# ============================================================================
+# The Creditors' Consortium power bloc identity: effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.
+# System: docs/systems/mod_systems/power_blocs.md § "Creditors' Consortium".
+# Triggers and values: te_creditors_consortium_triggers.txt / _values.txt.
+#
+# THE FLOW OF A RESCUE
+#   on_country_default -> te_monetary_on_country_default (te_monetary_on_actions.txt)
+#     a treaty guarantor first (te_lolr.1); else, for a member whose consortium
+#     guarantee stands (te_cred_guarantee_is_effective), te_cred_call_consortium:
+#   te_cc.1  the leader: rescue on the terms its Conditionality allows, or refuse
+#   te_cc.2  the member: accept the terms (paid, te_cred_apply_rescue) or refuse
+#   te_cc.3  the leader hears the answer
+#   te_cc.4  the member hears a refusal
+#   te_cc.9  three days on, hidden: did the treaties enter into force? (§ 11
+#            facts 1 and 3; TE_SELF_CHECK cc_receivership_treaty / cc_monopoly_treaty)
+#
+# Scopes saved by te_cred_call_consortium and read by every event of the chain:
+#   scope:te_cc_debtor    the member in default
+#   scope:te_cc_creditor  its consortium's leader
+# ============================================================================
+
+
+# --- The call -------------------------------------------------------------------
+
+# Scope: the member in default (ROOT of on_country_default). Called by
+# te_monetary_on_country_default after it has counted the call on the member's
+# record (te_mon_lolr_calls, the cooldown), exactly as for a treaty guarantee.
+te_cred_call_consortium = {
+	save_scope_as = te_cc_debtor
+	power_bloc ?= {
+		power_bloc_leader = {
+			save_scope_as = te_cc_creditor
+			trigger_event = { id = te_cc.1 popup = yes }
+		}
+	}
+}
+
+
+# --- te_cc.1: the leader's offer --------------------------------------------------
+
+# Scope: the leader. Writes the chosen terms on the member and asks it.
+# $ADJ$, $CONC$, $PRIV$: yes or no, structural adjustment, concessions,
+# privatization, written on the member as 1 or 0. They last 120 days there: an
+# answer that never comes (the event lapses) leaves nothing behind.
+te_cred_offer_rescue = {
+	te_cred_offer_rescue_tooltip = { ADJ = $ADJ$ CONC = $CONC$ PRIV = $PRIV$ }
+	hidden_effect = {
+		scope:te_cc_debtor = {
+			set_variable = { name = te_cred_offer_adjustment value = 0 days = 120 }
+			set_variable = { name = te_cred_offer_concessions value = 0 days = 120 }
+			set_variable = { name = te_cred_offer_privatization value = 0 days = 120 }
+			if = {
+				limit = { always = $ADJ$ }
+				set_variable = { name = te_cred_offer_adjustment value = 1 days = 120 }
+			}
+			if = {
+				limit = { always = $CONC$ }
+				set_variable = { name = te_cred_offer_concessions value = 1 days = 120 }
+			}
+			if = {
+				limit = { always = $PRIV$ }
+				set_variable = { name = te_cred_offer_privatization value = 1 days = 120 }
+			}
+			set_variable = { name = te_cred_offer_cost value = te_mon_lolr_honour_cost days = 120 }
+			trigger_event = { id = te_cc.2 popup = yes }
+		}
+	}
+}
+
+# The option's tooltip: what the member will be asked to take. Scope: the
+# leader. Shown in te_cc.1, before anything is written.
+te_cred_offer_rescue_tooltip = {
+	custom_tooltip = {
+		text = te_cred_offer_payment_tt
+	}
+	if = {
+		limit = { te_cred_receivership_possible = yes }
+		custom_tooltip = { text = te_cred_offer_receivership_tt }
+	}
+	else = {
+		custom_tooltip = { text = te_cred_offer_no_receivership_tt }
+	}
+	if = {
+		limit = { always = $ADJ$ }
+		custom_tooltip = { text = te_cred_offer_adjustment_tt }
+	}
+	if = {
+		limit = { always = $CONC$ }
+		custom_tooltip = { text = te_cred_offer_concessions_tt }
+	}
+	if = {
+		limit = { always = $PRIV$ }
+		custom_tooltip = { text = te_cred_offer_privatization_tt }
+	}
+}
+
+# Scope: the leader. Refuse: te_lolr.1's Renege without a treaty to withdraw
+# from, so no infamy. The guarantee clock is the one te_lolr.1 starts
+# (te_mon_lolr_suspended_months, five years), so every member loses the
+# standing guarantee (te_cred_backer_has_reneged), and every treaty guarantee
+# the leader gives lapses with it. The bloc loses a fifth of its cohesion at
+# once.
+te_cred_refuse_rescue = {
+	custom_tooltip = te_cred_refuse_suspends_tt
+	hidden_effect = {
+		set_variable = { name = te_mon_lolr_suspended_months value = te_mon_lolr_suspension_months }
+	}
+	if = {
+		limit = { has_modifier = te_mon_lolr_reneged }
+		hidden_effect = { remove_modifier = te_mon_lolr_reneged }
+	}
+	add_modifier = {
+		name = te_mon_lolr_reneged
+		days = 1825
+	}
+	power_bloc ?= {
+		custom_tooltip = {
+			text = te_cred_refuse_cohesion_tt
+			add_cohesion_percent = -0.2
+		}
+	}
+	scope:te_cc_debtor = {
+		change_relations = {
+			country = root
+			value = -40
+		}
+		hidden_effect = { trigger_event = { id = te_cc.4 } }
+	}
+	hidden_effect = {
+		debug_log = "TE_CC refused debtor=[SCOPE.sCountry('te_cc_debtor').GetNameNoFormatting] creditor=[ROOT.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+
+# --- te_cc.2: the member's answer ----------------------------------------------------
+
+# Scope: the member, accepting. Pays the rescue, then makes each term.
+te_cred_apply_rescue = {
+	# The payment: the guarantee's honour cost, fixed when the leader offered
+	# (te_cred_offer_cost, set by te_cc.1's option, so it is there while this
+	# option's tooltip is read), so the sum the leader agreed to is the sum
+	# paid. te_cred_paid keeps it for te_cc.3's text.
+	scope:te_cc_creditor = {
+		add_treasury = {
+			value = scope:te_cc_debtor.var:te_cred_offer_cost
+			multiply = -1
+		}
+	}
+	add_treasury = var:te_cred_offer_cost
+	hidden_effect = {
+		set_variable = { name = te_cred_paid value = var:te_cred_offer_cost days = 365 }
+		# Holds the adjustment term until the discovery has read the new
+		# receivership (internal.2 a day on, te_cc.9 three days on).
+		set_variable = { name = te_cred_rescue_pending value = 1 days = 10 }
+	}
+	change_relations = {
+		country = scope:te_cc_creditor
+		value = 25
+	}
+
+	# The receivership, where the leader has its technology.
+	if = {
+		limit = { scope:te_cc_creditor = { te_cred_receivership_possible = yes } }
+		custom_tooltip = te_cred_accept_receivership_tt
+		hidden_effect = { te_cred_make_receivership = yes }
+	}
+
+	# Structural adjustment: the leader may impose its economic laws while the
+	# receivership stands (te_cred_can_impose_adjustment). Removed by the monthly
+	# pulse once the receivership has gone (te_cred_member_monthly).
+	if = {
+		limit = { var:te_cred_offer_adjustment = 1 }
+		custom_tooltip = te_cred_accept_adjustment_tt
+		hidden_effect = {
+			set_variable = { name = te_cred_adjustment_by value = scope:te_cc_creditor }
+		}
+	}
+
+	# Concessions: Foreign Investment Rights for the leader, then monopolies.
+	if = {
+		limit = { var:te_cred_offer_concessions = 1 }
+		custom_tooltip = te_cred_accept_concessions_tt
+		hidden_effect = {
+			te_cred_grant_investment_rights = yes
+			te_cred_demand_monopolies = yes
+		}
+	}
+
+	# Privatization: article 105, with the member as its source.
+	if = {
+		limit = { var:te_cred_offer_privatization = 1 }
+		custom_tooltip = te_cred_accept_privatization_tt
+		hidden_effect = { te_cred_make_privatization = yes }
+	}
+
+	hidden_effect = {
+		remove_variable = te_cred_offer_adjustment
+		remove_variable = te_cred_offer_concessions
+		remove_variable = te_cred_offer_privatization
+		remove_variable = te_cred_offer_cost
+		trigger_event = { id = te_cc.9 days = 3 }
+		trigger_event = { id = te_monetary_internal.2 days = 1 }
+		# The answer is the DEBTOR's (te_cc.3 reads it through scope:te_cc_debtor),
+		# so two members answering the same leader at once can't overwrite each other.
+		set_variable = { name = te_cc_answer value = 1 days = 120 }
+		scope:te_cc_creditor = {
+			trigger_event = { id = te_monetary_internal.2 days = 1 }
+			trigger_event = { id = te_cc.3 }
+		}
+		debug_log = "TE_CC rescued debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# Scope: the member, refusing. It stays in default, loses the standing
+# guarantee for ten years whichever bloc it is in (the cooling-off rule: the
+# variable is on the country, so leaving and rejoining restores nothing), and
+# may leave the bloc whatever the leader's leverage (the identity's can_leave).
+te_cred_refuse_terms = {
+	custom_tooltip = te_cred_terms_refused_tt
+	hidden_effect = {
+		set_variable = { name = te_cred_terms_refused days = 3650 }
+		remove_variable = te_cred_offer_adjustment
+		remove_variable = te_cred_offer_concessions
+		remove_variable = te_cred_offer_privatization
+		remove_variable = te_cred_offer_cost
+		trigger_event = { id = te_monetary_internal.2 days = 1 }
+	}
+	change_relations = {
+		country = scope:te_cc_creditor
+		value = -20
+	}
+	hidden_effect = {
+		set_variable = { name = te_cc_answer value = 2 days = 120 }
+		scope:te_cc_creditor = {
+			trigger_event = { id = te_monetary_internal.2 days = 1 }
+			trigger_event = { id = te_cc.3 }
+		}
+		debug_log = "TE_CC terms_refused debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+
+# --- The treaties ----------------------------------------------------------------------
+# Each term is its own treaty, created in force (is_draft = no), each behind a
+# can_create_treaty that runs the article's own gates, so a term the engine
+# refuses is skipped rather than half made. Five-year binding periods, the
+# engine's default (TREATY_DEFAULT_BINDING_DURATION_YEARS).
+
+# Scope: the member. The receivership: article 114 with the member as its
+# source and the leader as its target, as the article reads them. Where
+# can_create_treaty refuses it (the article's can_ratify asks that the leader
+# outrank the member or out-earn it, te_mon_can_receive_for), the receivership
+# is set directly (te_cred_set_direct_receivership). Where the treaty is made,
+# te_cc.9 checks three days on that it entered into force, and sets it directly
+# if not (§ 11 fact 1).
+te_cred_make_receivership = {
+	if = {
+		limit = {
+			can_create_treaty = {
+				first_country = root
+				second_country = scope:te_cc_creditor
+				is_draft = no
+				binding_period = { years = 5 }
+				articles_to_create = {
+					{
+						article = debt_receivership
+						source_country = root
+						target_country = scope:te_cc_creditor
+					}
+				}
+			}
+		}
+		# Keep identical to the can_create_treaty above.
+		create_treaty = {
+			first_country = root
+			second_country = scope:te_cc_creditor
+			is_draft = no
+			binding_period = { years = 5 }
+			articles_to_create = {
+				{
+					article = debt_receivership
+					source_country = root
+					target_country = scope:te_cc_creditor
+				}
+			}
+		}
+		set_variable = { name = te_cred_rcv_check value = scope:te_cc_creditor days = 30 }
+	}
+	else = {
+		te_cred_set_direct_receivership = yes
+	}
+}
+
+# Scope: the member. The treaty-less receivership (§ 11 fact 1's fallback, the
+# treaty-transfer helper's shape): the role variables the monetary layer's
+# discovery derives from article 114, set from the consortium's own record.
+# The discovery honors it (te_cred_discover_direct_receivership) under the
+# article's own conditions, the exit ramp included.
+te_cred_set_direct_receivership = {
+	set_variable = { name = te_cred_direct_receivership value = 1 }
+	set_variable = { name = te_cred_receiver value = scope:te_cc_creditor }
+	# The article's binding period: te_decision_cred_end_receivership opens after it.
+	set_variable = { name = te_cred_direct_binding value = 1 days = 1825 }
+	set_variable = { name = te_mon_receiver value = scope:te_cc_creditor }
+	set_variable = { name = te_mon_receivership_clear_months value = 0 }
+	trigger_event = { id = te_monetary_internal.2 days = 1 }
+	scope:te_cc_creditor = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+}
+
+# Scope: the member. Foreign Investment Rights, member -> leader, unless the
+# leader holds them already.
+te_cred_grant_investment_rights = {
+	if = {
+		limit = {
+			NOT = {
+				any_scope_treaty = {
+					any_scope_article = {
+						has_type = foreign_investment_rights
+						source_country = root
+						target_country = scope:te_cc_creditor
+					}
+				}
+			}
+			can_create_treaty = {
+				first_country = root
+				second_country = scope:te_cc_creditor
+				is_draft = no
+				binding_period = { years = 5 }
+				articles_to_create = {
+					{
+						article = foreign_investment_rights
+						source_country = root
+						target_country = scope:te_cc_creditor
+					}
+				}
+			}
+		}
+		# Keep identical to the can_create_treaty above.
+		create_treaty = {
+			first_country = root
+			second_country = scope:te_cc_creditor
+			is_draft = no
+			binding_period = { years = 5 }
+			articles_to_create = {
+				{
+					article = foreign_investment_rights
+					source_country = root
+					target_country = scope:te_cc_creditor
+				}
+			}
+		}
+	}
+}
+
+# Scope: the member. Monopolies for the leader's companies, as many as its
+# Conditionality tier gives (te_cred_monopolies_allowed): each of the leader's
+# companies in turn, each of its building types the member has a building of
+# (the generated ladder, te_cred_monopoly_ladder_generated), until the count is
+# spent. Each monopoly is its own acquire_monopoly_for_company treaty, which
+# vanilla's can_ratify allows with Foreign Investment Rights in force.
+te_cred_demand_monopolies = {
+	set_variable = { name = te_cred_mono_left value = scope:te_cc_creditor.te_cred_monopolies_allowed }
+	set_variable = { name = te_cred_mono_made value = 0 }
+	# For te_cc.9's self-check: an article from before this rescue can't pass it.
+	if = {
+		limit = {
+			any_scope_treaty = {
+				any_scope_article = {
+					has_type = acquire_monopoly_for_company
+					source_country = root
+				}
+			}
+		}
+		set_variable = { name = te_cred_mono_prior value = 1 days = 30 }
+	}
+	scope:te_cc_creditor = {
+		every_company = {
+			if = {
+				limit = {
+					scope:te_cc_debtor = {
+						has_variable = te_cred_mono_left
+						var:te_cred_mono_left > 0
+					}
+				}
+				save_scope_as = te_cred_mono_company
+				scope:te_cc_debtor = { te_cred_monopoly_ladder_generated = yes }
+			}
+		}
+	}
+	remove_variable = te_cred_mono_left
+}
+
+# Scope: the member, scope:te_cred_mono_company a company of scope:te_cc_creditor.
+# One rung of the ladder: $BT$ a building type of that company's type.
+te_cred_try_monopoly = {
+	if = {
+		limit = {
+			has_variable = te_cred_mono_left
+			var:te_cred_mono_left > 0
+			any_scope_building = { is_building_type = $BT$ }
+			# No company_has_building_type_monopoly here: it names no country, so
+			# it would skip a company that holds the monopoly anywhere. A second
+			# monopoly for the same company and type here is refused by the
+			# article itself (usage_limit once_per_side_with_same_inputs, and
+			# can_ratify's duplicate-inputs check), which can_create_treaty runs.
+			can_create_treaty = {
+				first_country = root
+				second_country = scope:te_cc_creditor
+				is_draft = no
+				binding_period = { years = 5 }
+				articles_to_create = {
+					{
+						article = acquire_monopoly_for_company
+						source_country = root
+						target_country = scope:te_cc_creditor
+						inputs = {
+							{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
+							{ building_type = bt:$BT$ }
+						}
+					}
+				}
+			}
+		}
+		# Keep identical to the can_create_treaty above.
+		create_treaty = {
+			first_country = root
+			second_country = scope:te_cc_creditor
+			is_draft = no
+			binding_period = { years = 5 }
+			articles_to_create = {
+				{
+					article = acquire_monopoly_for_company
+					source_country = root
+					target_country = scope:te_cc_creditor
+					inputs = {
+						{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
+						{ building_type = bt:$BT$ }
+					}
+				}
+			}
+		}
+		change_variable = { name = te_cred_mono_left add = -1 }
+		change_variable = { name = te_cred_mono_made add = 1 }
+	}
+}
+
+# Scope: the member. Article 105, member as source.
+te_cred_make_privatization = {
+	if = {
+		limit = {
+			can_create_treaty = {
+				first_country = root
+				second_country = scope:te_cc_creditor
+				is_draft = no
+				binding_period = { years = 5 }
+				articles_to_create = {
+					{
+						article = enforce_privatization
+						source_country = root
+						target_country = scope:te_cc_creditor
+					}
+				}
+			}
+		}
+		# Keep identical to the can_create_treaty above.
+		create_treaty = {
+			first_country = root
+			second_country = scope:te_cc_creditor
+			is_draft = no
+			binding_period = { years = 5 }
+			articles_to_create = {
+				{
+					article = enforce_privatization
+					source_country = root
+					target_country = scope:te_cc_creditor
+				}
+			}
+		}
+	}
+}
+
+
+# --- The monetary layer's hooks ----------------------------------------------------------
+# Called from te_monetary_discover_arrangements (te_monetary_arrangement_effects.txt).
+# Scope: country, ROOT = this, the discovery's own contract.
+
+# After the article receivership is read: the treaty-less one, under the same
+# conditions as the article's requirement_to_maintain (te_cred_has_direct_receivership)
+# and the same exit ramp (twelve months and more, by Conditionality tier, out of
+# default and under a quarter of the ceiling). A treaty receivership found by
+# the walk wins, and ends the direct one: two commissions over one treasury
+# are not two.
+#
+# Off the Full banking rule the receivership PAUSES: te_cred_has_direct_receivership
+# fails, nothing is paid or relieved, and the record waits; back on Full, the
+# next discovery finds it again. The article receivership is not like that: its
+# requirement_to_maintain removes it from its treaty.
+te_cred_discover_direct_receivership = {
+	if = {
+		limit = { has_variable = te_cred_direct_receivership }
+		if = {
+			limit = { var:te_mon_receivership = 1 }
+			te_cred_end_direct_receivership = yes
+		}
+		else_if = {
+			limit = {
+				has_variable = te_mon_receivership_clear_months
+				var:te_mon_receivership_clear_months >= te_mon_receivership_exit_months
+			}
+			te_cred_end_direct_receivership = yes
+		}
+		else_if = {
+			limit = { te_cred_has_direct_receivership = yes }
+			set_variable = { name = te_mon_receivership value = 1 }
+			set_variable = { name = te_mon_receiver value = var:te_cred_receiver }
+		}
+		else_if = {
+			limit = { te_mon_full_system = yes }
+			# Its conditions failed under the Full rule: the debtor left the bloc
+			# or became a command economy, or the receiver stopped leading it or
+			# backing anyone (in default, no national bank). Over, as the
+			# article's requirement_to_maintain would end it.
+			te_cred_end_direct_receivership = yes
+		}
+	}
+}
+
+te_cred_end_direct_receivership = {
+	remove_variable = te_cred_direct_receivership
+	if = {
+		limit = { has_variable = te_cred_receiver }
+		remove_variable = te_cred_receiver
+	}
+	if = {
+		limit = { has_variable = te_cred_direct_binding }
+		remove_variable = te_cred_direct_binding
+	}
+}
+
+# After te_monetary_discover_union: what the consortium's leader pays for the
+# guarantee it gives every member, and for the treaty-less receiverships it
+# runs. A GDP-scaled share of each member's relief, as a guarantor pays
+# (te_mon_arr_lolr_cost_to_root), into the same te_mon_arr_provider_pts the
+# treaties' costs go to.
+te_cred_discover_leader_costs = {
+	if = {
+		limit = {
+			te_mon_full_system = yes
+			te_cred_leads_consortium = yes
+		}
+		power_bloc = {
+			every_power_bloc_member = {
+				limit = { NOT = { this = root } }
+				save_scope_as = te_mon_arr_party
+				if = {
+					limit = { te_cred_guarantee_pays_relief = yes }
+					root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_cred_guarantee_cost_to_root } }
+				}
+				if = {
+					limit = {
+						te_cred_has_direct_receivership = yes
+						var:te_cred_receiver ?= root
+					}
+					root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_receivership_cost_to_root } }
+					te_mon_record_backstop_partner = { KIND = receivership COST = te_mon_arr_receivership_cost_to_root }
+				}
+			}
+		}
+	}
+}
+
+
+# --- The monthly pulse ---------------------------------------------------------------------
+# te_cred_monthly_on_action (te_creditors_consortium_on_actions.txt), every country.
+
+# Scope: the leader.
+te_cred_leader_monthly = {
+	# A member the monetary layer does not read monthly yet gets its discovery
+	# now, and the leader with it. The layer reads a country every month only
+	# while its te_mon_arr_scan is 1, which its own discovery sets (a consortium
+	# member is on the list); a member that joined, or left and came back, has 0
+	# or none from its last discovery outside, and would wait for the yearly
+	# scan while the leader pays for its guarantee from the first month. Keyed on
+	# the flag itself, so a rejoining member is caught however soon it returns.
+	if = {
+		limit = { te_mon_full_system = yes }
+		power_bloc = {
+			every_power_bloc_member = {
+				limit = {
+					NOT = { this = root }
+					NOT = { var:te_mon_arr_scan ?= 1 }
+				}
+				trigger_event = { id = te_monetary_internal.2 days = 1 }
+				root = { set_variable = { name = te_cred_new_member value = 1 days = 5 } }
+			}
+		}
+		if = {
+			limit = { has_variable = te_cred_new_member }
+			trigger_event = { id = te_monetary_internal.2 days = 1 }
+			remove_variable = te_cred_new_member
+		}
+	}
+	te_cred_dl_pulse = yes
+}
+
+# Scope: any country, monthly.
+te_cred_member_monthly = {
+	# The adjustment term lasts as long as the receivership it was agreed under:
+	# once the member is no longer in that leader's receivership, the leader's
+	# right to impose goes. Only under the Full rule, so a switch to Simplified
+	# (which zeroes every receivership role) pauses the term with the
+	# receivership rather than ending it.
+	if = {
+		limit = {
+			te_mon_full_system = yes
+			has_variable = te_cred_adjustment_by
+			NOT = {
+				AND = {
+					te_mon_is_under_receivership = yes
+					exists = var:te_cred_adjustment_by
+					var:te_mon_receiver ?= var:te_cred_adjustment_by
+				}
+			}
+			# Not in the days between the rescue and the discovery that reads
+			# the new receivership, treaty or not (te_cc.9 is due three days on).
+			NOT = { has_variable = te_cred_rescue_pending }
+		}
+		remove_variable = te_cred_adjustment_by
+	}
+	te_cred_dl_sync_receiver_modifier = yes
+}
+
+
+# --- Development Lending (§ 5.4) -------------------------------------------------------------
+# Scope: the leader. Members above the bloc's GDP per head pay a share of a
+# month of their investment pool's income (te_cred_dl_payment); members below
+# it, the leader excepted, share what was paid by population. Money moves pool
+# to pool (add_investment_pool, paired), so none is made or lost, and none is
+# paid while there is nobody to receive it. Runs under any banking rule: the
+# pools are vanilla's, not the monetary layer's.
+te_cred_dl_pulse = {
+	if = {
+		limit = { te_cred_dl_tier_1_plus = yes }
+		set_variable = { name = te_cred_dl_bloc_gdppc value = te_cred_dl_bloc_gdppc_now }
+		set_variable = { name = te_cred_dl_pool value = 0 }
+		set_variable = { name = te_cred_dl_pop_m value = 0 }
+		# 1. The receivers' population.
+		power_bloc = {
+			every_power_bloc_member = {
+				set_variable = { name = te_cred_dl_paid value = 0 }
+				set_variable = { name = te_cred_dl_received value = 0 }
+				if = {
+					limit = { te_cred_dl_is_receiver = yes }
+					save_scope_as = te_cred_dl_m
+					root = { change_variable = { name = te_cred_dl_pop_m add = scope:te_cred_dl_m.te_cred_dl_pop_weight } }
+				}
+			}
+		}
+		if = {
+			limit = { var:te_cred_dl_pop_m > 0 }
+			# 2. The donors pay in.
+			power_bloc = {
+				every_power_bloc_member = {
+					if = {
+						limit = { te_cred_dl_is_donor = yes }
+						set_variable = { name = te_cred_dl_paid value = te_cred_dl_payment }
+						if = {
+							limit = { var:te_cred_dl_paid > 0 }
+							add_investment_pool = {
+								value = var:te_cred_dl_paid
+								multiply = -1
+							}
+							save_scope_as = te_cred_dl_m
+							root = { change_variable = { name = te_cred_dl_pool add = scope:te_cred_dl_m.var:te_cred_dl_paid } }
+						}
+					}
+				}
+			}
+			# 3. The receivers are paid out.
+			if = {
+				limit = { var:te_cred_dl_pool > 0 }
+				power_bloc = {
+					every_power_bloc_member = {
+						if = {
+							limit = { te_cred_dl_is_receiver = yes }
+							set_variable = { name = te_cred_dl_received value = te_cred_dl_receipt }
+							add_investment_pool = var:te_cred_dl_received
+						}
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_cred_dl_bloc_gdppc }
+		remove_variable = te_cred_dl_bloc_gdppc
+	}
+}
+
+# Scope: any country. Carries the receiver modifier its tier gives
+# (te_cred_dl_wants_receiver_N: none, or te_cred_dl_receiver_2 to _5), adding or
+# removing one only when the tier changes. Its own pulse, so a member that
+# leaves the bloc, or rises above the average, drops it the next month. No
+# variable: each step reads the triggers and the modifiers, so a tooltip walk
+# of the debug event's option reads nothing it wrote.
+te_cred_dl_sync_receiver_modifier = {
+	te_cred_dl_sync_receiver_tier = { N = 2 }
+	te_cred_dl_sync_receiver_tier = { N = 3 }
+	te_cred_dl_sync_receiver_tier = { N = 4 }
+	te_cred_dl_sync_receiver_tier = { N = 5 }
+}
+
+te_cred_dl_sync_receiver_tier = {
+	if = {
+		limit = {
+			te_cred_dl_wants_receiver_$N$ = yes
+			NOT = { has_modifier = te_cred_dl_receiver_$N$ }
+		}
+		add_modifier = { name = te_cred_dl_receiver_$N$ }
+	}
+	else_if = {
+		limit = {
+			te_cred_dl_wants_receiver_$N$ = no
+			has_modifier = te_cred_dl_receiver_$N$
+		}
+		remove_modifier = te_cred_dl_receiver_$N$
+	}
+}
+
+
+# --- Self-check: structural adjustment (§ 11 fact 2) ----------------------------------------
+# Scope: a consortium's leader, monthly. Once a game, the first month a member
+# sits in this leader's receivership with the adjustment term
+# (te_cred_adjustment_by): for every law of the three groups the leader holds
+# and the member does not, does the engine grant the imposition
+# (has_law_imposition_rights, the trigger behind the diplomatic action)? The
+# can_impose that grants it was added by INJECT
+# (te_creditors_consortium_law_injections.txt).
+#   OK      rights for at least one of the laws tested
+#   BROKEN  for none: the INJECTed can_impose is not read. The fallback is
+#           start_enactment of one of the leader's laws from the rescue
+#           (docs/testing/power-bloc-identities-playtest.md).
+# Logged only when at least one law was tested, so a pair holding the same
+# laws can't pass it, and only for a member that is not the leader's subject,
+# which vanilla's can_impose_law_default would pass on its own.
+te_cred_selfcheck_imposition = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_cc_sc_imposition_logged }
+			power_bloc ?= {
+				any_power_bloc_member = {
+					var:te_cred_adjustment_by ?= root
+					te_mon_is_under_receivership = yes
+					var:te_mon_receiver ?= root
+					# Not the leader's subject: vanilla's can_impose_law_default
+					# grants it the imposition anyway, which would pass the check.
+					NOT = { is_subject_of = root }
+				}
+			}
+		}
+		power_bloc = {
+			random_power_bloc_member = {
+				limit = {
+					var:te_cred_adjustment_by ?= root
+					te_mon_is_under_receivership = yes
+					var:te_mon_receiver ?= root
+					NOT = { is_subject_of = root }
+				}
+				save_scope_as = te_cc_sc_target
+			}
+		}
+		set_variable = { name = te_cred_sc_tested value = 0 }
+		set_variable = { name = te_cred_sc_rights value = 0 }
+		te_cred_sc_imposition_rung = { LAW = law_traditionalism }
+		te_cred_sc_imposition_rung = { LAW = law_interventionism }
+		te_cred_sc_imposition_rung = { LAW = law_agrarianism }
+		te_cred_sc_imposition_rung = { LAW = law_industry_banned }
+		te_cred_sc_imposition_rung = { LAW = law_extraction_economy }
+		te_cred_sc_imposition_rung = { LAW = law_laissez_faire }
+		te_cred_sc_imposition_rung = { LAW = law_cooperative_ownership }
+		te_cred_sc_imposition_rung = { LAW = law_mercantilism }
+		te_cred_sc_imposition_rung = { LAW = law_protectionism }
+		te_cred_sc_imposition_rung = { LAW = law_free_trade }
+		te_cred_sc_imposition_rung = { LAW = law_isolationism }
+		te_cred_sc_imposition_rung = { LAW = law_consumption_based_taxation }
+		te_cred_sc_imposition_rung = { LAW = law_land_based_taxation }
+		te_cred_sc_imposition_rung = { LAW = law_per_capita_based_taxation }
+		te_cred_sc_imposition_rung = { LAW = law_proportional_taxation }
+		te_cred_sc_imposition_rung = { LAW = law_graduated_taxation }
+		if = {
+			limit = { var:te_cred_sc_tested > 0 }
+			set_global_variable = te_cc_sc_imposition_logged
+			if = {
+				limit = { var:te_cred_sc_rights > 0 }
+				debug_log = "TE_SELF_CHECK OK cc_adjustment_imposition ([ROOT.GetCountry.GetNameNoFormatting] may impose [ROOT.GetCountry.MakeScope.Var('te_cred_sc_rights').GetValue|0] of the [ROOT.GetCountry.MakeScope.Var('te_cred_sc_tested').GetValue|0] economic laws it holds and [SCOPE.sCountry('te_cc_sc_target').GetNameNoFormatting], in its receivership, lacks: the INJECTed can_impose is read; check the action shows in the diplomacy panel) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cc_adjustment_imposition ([ROOT.GetCountry.GetNameNoFormatting] may impose none of the [ROOT.GetCountry.MakeScope.Var('te_cred_sc_tested').GetValue|0] economic laws it holds and [SCOPE.sCountry('te_cc_sc_target').GetNameNoFormatting], in its receivership, lacks: the INJECTed can_impose is not read; see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		remove_variable = te_cred_sc_tested
+		remove_variable = te_cred_sc_rights
+	}
+}
+
+# One law of the ladder above. Scope: the leader.
+te_cred_sc_imposition_rung = {
+	if = {
+		limit = {
+			has_law = law_type:$LAW$
+			scope:te_cc_sc_target = { NOT = { has_law = law_type:$LAW$ } }
+		}
+		change_variable = { name = te_cred_sc_tested add = 1 }
+		if = {
+			limit = {
+				has_law_imposition_rights = {
+					target_country = scope:te_cc_sc_target
+					type = law_type:$LAW$
+				}
+			}
+			change_variable = { name = te_cred_sc_rights add = 1 }
+		}
+	}
+}

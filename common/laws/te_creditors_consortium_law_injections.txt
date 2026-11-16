@@ -1,0 +1,360 @@
+﻿# ============================================================================
+# The Creditors' Consortium: structural adjustment and the leader's law locks
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md
+# §§ 5.3.1 and 8.1.
+#
+# STRUCTURAL ADJUSTMENT (§ 5.3.1). A consortium's leader may impose its own law
+# of the economic system, trade policy and taxation groups on a member while
+# the member is under the leader's receivership AND accepted the adjustment
+# term of its rescue (te_cred_can_impose_adjustment, which reads
+# te_cred_adjustment_by). None of these laws has a can_impose in vanilla 1.15.1
+# (vanilla_parsed/common/laws.json), and none of the mod's INJECTs or REPLACEs
+# adds one (git grep "can_impose" common/laws), so an INJECT adding the block
+# is the clean wedge. Each keeps vanilla's default as its first branch
+# (can_impose_law_default: an overlord over a puppet, colony and the rest), so
+# nothing that could impose before loses it. Command Economy is left out: the
+# leader cannot hold it (below). The variant laws (Canton System, Sakoku) are
+# skins of Isolationism and are left out too.
+#
+# Whether a can_impose added by INJECT makes the engine offer the imposition is
+# § 11 fact 2, unverified: TE_SELF_CHECK cc_adjustment_imposition
+# (te_cred_selfcheck_imposition, te_creditors_consortium_effects.txt) reads
+# has_law_imposition_rights once a game; the fallback is start_enactment from
+# the rescue.
+#
+# The AI. ai_impose_chance, vanilla's script-value shape (root the imposer,
+# scope:target_country the member), added where vanilla has none: vanilla's
+# base_impose_law_weight, ten times, as vanilla weighs Cooperative Ownership
+# for a bloc of that law. law_cooperative_ownership keeps vanilla's own
+# ai_impose_chance (a second block would be rejected).
+#
+# THE LAW LOCKS (§ 8.1). A consortium's leader cannot enact Command Economy or
+# abolish its National Bank: the founder check
+# (te_mon_backstop_provider_valid) would fail, and with it every guarantee the
+# bloc gives. Vanilla's Command Economy has no can_enact (nor do the mod's two
+# INJECTs on it), so this INJECT adds the block; law_no_national_bank is the
+# mod's own law and carries its clause in common/laws/extra_laws.txt.
+# ============================================================================
+
+# ---- lawgroup_economic_system ----
+INJECT:law_traditionalism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_traditionalism
+				te_cred_ai_wants_adjustment_of = { LAW = law_traditionalism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_interventionism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_interventionism
+				te_cred_ai_wants_adjustment_of = { LAW = law_interventionism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_agrarianism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_agrarianism
+				te_cred_ai_wants_adjustment_of = { LAW = law_agrarianism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_industry_banned = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_industry_banned
+				te_cred_ai_wants_adjustment_of = { LAW = law_industry_banned }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_extraction_economy = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_extraction_economy
+				te_cred_ai_wants_adjustment_of = { LAW = law_extraction_economy }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_laissez_faire = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_laissez_faire
+				te_cred_ai_wants_adjustment_of = { LAW = law_laissez_faire }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_cooperative_ownership = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+}
+
+# ---- lawgroup_trade_policy ----
+INJECT:law_mercantilism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_mercantilism
+				te_cred_ai_wants_adjustment_of = { LAW = law_mercantilism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_protectionism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_protectionism
+				te_cred_ai_wants_adjustment_of = { LAW = law_protectionism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_free_trade = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_free_trade
+				te_cred_ai_wants_adjustment_of = { LAW = law_free_trade }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_isolationism = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_isolationism
+				te_cred_ai_wants_adjustment_of = { LAW = law_isolationism }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+# ---- lawgroup_taxation ----
+INJECT:law_consumption_based_taxation = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_consumption_based_taxation
+				te_cred_ai_wants_adjustment_of = { LAW = law_consumption_based_taxation }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_land_based_taxation = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_land_based_taxation
+				te_cred_ai_wants_adjustment_of = { LAW = law_land_based_taxation }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_per_capita_based_taxation = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_per_capita_based_taxation
+				te_cred_ai_wants_adjustment_of = { LAW = law_per_capita_based_taxation }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_proportional_taxation = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_proportional_taxation
+				te_cred_ai_wants_adjustment_of = { LAW = law_proportional_taxation }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+INJECT:law_graduated_taxation = {
+	can_impose = {
+		OR = {
+			can_impose_law_default = yes
+			te_cred_can_impose_adjustment = yes
+		}
+	}
+	ai_impose_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_law = law_type:law_graduated_taxation
+				te_cred_ai_wants_adjustment_of = { LAW = law_graduated_taxation }
+			}
+			add = base_impose_law_weight
+			multiply = 10
+		}
+	}
+}
+
+# ---- the leader's lock ----
+INJECT:law_command_economy = {
+	can_enact = {
+		custom_tooltip = {
+			text = te_cred_leader_cannot_enact_tt
+			te_cred_leads_consortium = no
+		}
+	}
+}

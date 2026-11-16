@@ -1,0 +1,385 @@
+﻿# ============================================================================
+# The Creditors' Consortium power bloc identity: script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.
+# Triggers: common/scripted_triggers/te_creditors_consortium_triggers.txt.
+#
+# VARIABLES (country scope unless marked; none is a monetary-layer variable,
+# and none is read by the monthly monetary update except through the layer's
+# own role variables):
+#
+#   te_cred_terms_refused     timed (3650 days)  a member refused a rescue's
+#                             terms: no standing guarantee until it lapses,
+#                             and it may leave the bloc whatever the leverage
+#   te_cred_direct_receivership  1 / absent    the treaty-less receivership
+#   te_cred_receiver          scope              ...and its receiver (§ 11
+#                             fact 1's fallback; te_cred_set_direct_receivership)
+#   te_cred_adjustment_by     scope              the debtor accepted structural
+#                             adjustment from this leader: it may impose its
+#                             economic laws while the receivership stands.
+#                             Removed when the receivership has gone
+#   te_cred_offer_adjustment / _concessions / _privatization  0 or 1, timed
+#                             (120 days), on the debtor: the terms the leader
+#                             chose in te_cc.1, read when the debtor answers
+#   te_cred_mono_left         the monopolies still to demand in this rescue
+#   te_cred_dl_bloc_gdppc     LEADER: the bloc's GDP per head, last pulse
+#   te_cred_dl_pool           LEADER: what donors paid in last pulse, before
+#                             it was split (a scratch sum)
+#   te_cred_dl_pop_m          LEADER: the receivers' population, in millions
+#   te_cred_dl_paid / _received  what this member paid or was paid last pulse
+#   te_cred_paid              what the leader paid in the last rescue (te_cc.3)
+#   te_cred_rcv_check         scope, 30 days: te_cc.9's receivership check
+#   te_cred_mono_made         monopoly treaties the last rescue made (te_cc.9)
+# ============================================================================
+
+
+# --- The rescue (§ 5.3) --------------------------------------------------------
+
+# How many terms beside the receivership the bloc's Conditionality allows a
+# rescue: 0 without the group, then 1, 1, 2, 2, 3. Country scope, the leader.
+te_cred_terms_allowed = {
+	value = 0
+	if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 3
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_3_plus = yes }
+		value = 2
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_1_plus = yes }
+		value = 1
+	}
+}
+
+# How many terms are on offer to this debtor. Leader scope, scope:te_cc_debtor.
+te_cred_terms_available = {
+	value = 0
+	if = {
+		limit = { te_cred_term_adjustment_available = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_term_concessions_available = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_term_privatization_available = yes }
+		add = 1
+	}
+}
+
+# ...and how many the leader picks: the tier's figure, or every available one
+# if there are fewer.
+te_cred_terms_to_pick = {
+	value = te_cred_terms_allowed
+	max = te_cred_terms_available
+	min = 0
+}
+
+# Monopolies a concessions term demands: 1, 1, 2, 2, 3 by Conditionality tier
+# (0 without it, but a rescue without it carries no concessions anyway).
+# Country scope, the leader.
+te_cred_monopolies_allowed = {
+	value = 0
+	if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 3
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_3_plus = yes }
+		value = 2
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_1_plus = yes }
+		value = 1
+	}
+}
+
+
+# --- Conditionality's receivership terms -------------------------------------------
+
+# The leader's own figures, by its bloc's Conditionality tier. Leader scope;
+# 0 for a country that leads no consortium.
+#
+# The remittance: the article's 0.1% of the debtor's GDP a month
+# (te_mon_receivership_take_share's base), raised to 0.1, 0.15, 0.15, 0.2,
+# 0.25% by tier. At the top a debtor pays 3% of its GDP a year, about what the
+# Ottoman Public Debt Administration took (a quarter to a third of the
+# empire's revenue).
+te_cred_take_extra_own = {
+	value = 0
+	if = {
+		limit = { te_cred_leads_consortium = no }
+		value = 0
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 0.0015
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_4_plus = yes }
+		value = 0.001
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_2_plus = yes }
+		value = 0.0005
+	}
+}
+
+# The exit ramp: the article's 12 months out of default and under a quarter
+# of the debt ceiling, raised to 12, 18, 24, 30, 36 by tier.
+te_cred_exit_extra_own = {
+	value = 0
+	if = {
+		limit = { te_cred_leads_consortium = no }
+		value = 0
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_5 = yes }
+		value = 24
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_4_plus = yes }
+		value = 18
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_3_plus = yes }
+		value = 12
+	}
+	else_if = {
+		limit = { te_cred_cond_tier_2_plus = yes }
+		value = 6
+	}
+}
+
+# ...in full, for te_cc.1's tooltips. Leader scope.
+te_cred_take_share_own = {
+	value = 0.001
+	add = te_cred_take_extra_own
+}
+
+te_cred_exit_months_own = {
+	value = 12
+	add = te_cred_exit_extra_own
+}
+
+# The same read from the DEBTOR'S scope, through its receiver
+# (te_mon_receiver), by te_mon_receivership_take_share and
+# te_mon_receivership_exit_months. They read the receiver whether or not the
+# receivership flag is up this moment, because the discovery reads the exit
+# months for the treaty-less receivership just after it has reset the flag
+# (te_cred_discover_direct_receivership); a country that holds no receivership
+# never reads either. Any receivership whose receiver leads a consortium gets
+# them: the commission's terms are the receiver's institution, whichever way
+# it was set up.
+te_cred_receivership_take_extra = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_mon_receiver
+			exists = var:te_mon_receiver
+		}
+		var:te_mon_receiver = {
+			add = te_cred_take_extra_own
+		}
+	}
+}
+
+te_cred_receivership_exit_extra = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_mon_receiver
+			exists = var:te_mon_receiver
+		}
+		var:te_mon_receiver = {
+			add = te_cred_exit_extra_own
+		}
+	}
+}
+
+
+# --- The standing guarantee's price (§ 5.2) ----------------------------------------
+
+# What the consortium's guarantee takes off this member's premium: the Lender
+# of Last Resort's relief (te_mon_lolr_relief: a share of the debt-load
+# premium that tapers with the member's own record of defaults). 0 where the
+# guarantee does not pay. Member scope.
+te_cred_guarantee_relief = {
+	value = 0
+	if = {
+		limit = { te_cred_guarantee_pays_relief = yes }
+		value = te_mon_lolr_relief
+	}
+}
+
+# ...and what it costs ROOT, the leader: that relief times the member's GDP
+# over the leader's, clamped to 1, the guarantor's price
+# (te_mon_arr_gdp_ratio_to_root; ROOT's GDP is cached in te_mon_work_gdp by the
+# discovery). Member scope.
+te_cred_guarantee_cost_to_root = {
+	value = te_cred_guarantee_relief
+	multiply = te_mon_arr_gdp_ratio_to_root
+}
+
+
+# --- Development Lending (§ 5.4) -----------------------------------------------------
+
+# The share of a donor's investment pool income it pays a month: 5, 7.5, 10,
+# 12.5 and 15% by tier. Sized against the neocolonial dependency's -12% of the
+# pool's income and the cooperative banking phases' -36% to +24%; the Marshall
+# Plan was about 1.2% of US GDP a year, near 8% of its gross private
+# investment. Country scope (any member).
+te_cred_dl_share = {
+	value = 0
+	if = {
+		limit = { te_cred_dl_tier_5 = yes }
+		value = 0.15
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_4_plus = yes }
+		value = 0.125
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_3_plus = yes }
+		value = 0.10
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_2_plus = yes }
+		value = 0.075
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_1_plus = yes }
+		value = 0.05
+	}
+}
+
+# Weeks in a month, for the pool's weekly income (investment_pool_gross_income).
+te_cred_weeks_per_month = { value = 4.33 }
+
+# What this donor pays this month: the share of a month of its pool's gross
+# income, never more than the pool holds. Donor scope.
+te_cred_dl_payment = {
+	value = investment_pool_gross_income
+	min = 0
+	multiply = te_cred_weeks_per_month
+	multiply = te_cred_dl_share
+	max = investment_pool
+	min = 0
+}
+
+# The bloc's GDP per head, for the leader's pulse: all members' GDP over all
+# members' people. Leader scope.
+te_cred_dl_bloc_gdppc_now = {
+	value = 0
+	power_bloc ?= {
+		every_power_bloc_member = {
+			add = gdp
+		}
+	}
+	divide = {
+		value = 0
+		power_bloc ?= {
+			every_power_bloc_member = {
+				add = total_population
+			}
+		}
+		min = 1
+	}
+}
+
+# A receiver's population in millions, its weight in the split. Receiver scope.
+te_cred_dl_pop_weight = {
+	value = total_population
+	divide = 1000000
+	min = 0.001
+}
+
+# ...and its share of what was paid in this pulse: the pot times its people
+# over all receivers' people. Receiver scope, ROOT the leader.
+te_cred_dl_receipt = {
+	value = root.var:te_cred_dl_pool
+	multiply = te_cred_dl_pop_weight
+	divide = {
+		value = root.var:te_cred_dl_pop_m
+		min = 0.001
+	}
+	min = 0
+}
+
+# Which receiver modifier a member carries, for te_debug_cc.1: 0 none, or the
+# tier (2 to 5). Member scope.
+te_cred_dl_receiver_tier = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		value = 5
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		value = 4
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		value = 3
+	}
+	else_if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		value = 2
+	}
+}
+
+
+# --- The AI ---------------------------------------------------------------------------
+
+# How much a country's debt makes it want a consortium's invitation: up to +40
+# at 0.8 of its debt ceiling and over. Invitee scope.
+te_cred_ai_invite_debt_score = {
+	value = scaled_debt
+	min = 0
+	max = 0.8
+	multiply = 50
+}
+
+
+# --- Display (te_debug_cc.1, the loc) -------------------------------------------------
+
+te_cred_honour_cost_display = {
+	value = te_mon_lolr_honour_cost
+}
+
+te_cred_dl_paid_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cred_dl_paid }
+		value = var:te_cred_dl_paid
+	}
+}
+
+te_cred_dl_received_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cred_dl_received }
+		value = var:te_cred_dl_received
+	}
+}
+
+# A trigger as a number, for te_debug_cc.1's read-out (loc cannot evaluate a
+# scripted trigger).
+te_cred_debug_guarantee = {
+	value = 0
+	if = {
+		limit = { te_cred_guarantee_is_effective = yes }
+		value = 1
+	}
+}
+
+te_cred_debug_in_receivership = {
+	value = 0
+	if = {
+		limit = { te_mon_is_under_receivership = yes }
+		value = 1
+	}
+}

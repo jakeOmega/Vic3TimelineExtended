@@ -16,7 +16,10 @@
 # docs/superpowers/specs/2026-10-08-demographics-design.md; on the law since
 # 2026-10-17, so its tooltip says it): a script-only type, which changes no tax
 # rate (test_tax_code_migration allows script-only lines and nothing else). It
-# sits here because this is the one file that may INJECT these laws.
+# sits here because this is the one file that may INJECT these laws' can_enact,
+# is_visible or modifier. The Creditors' Consortium INJECTs can_impose and
+# ai_impose_chance from te_creditors_consortium_law_injections.txt
+# (test_tax_code_rule.py checks the split).
 
 INJECT:law_consumption_based_taxation = {
 	can_enact = {

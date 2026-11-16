@@ -32,6 +32,7 @@ NO_TAB = {
     "je_world_war": "no tab; the World War entry is the only panel",
     "je_civil_rights": "no tab",
     "je_world_climate": "no tab (the world's climate entry; its scaled global_warming modifier)",
+    "je_research_commons": "no tab; the entry is the Research Commons' only panel (power_blocs.md § Research Commons)",
 }
 
 # A parameterized `je:je_<prefix>$X$` site: the entries it can name.

@@ -3812,7 +3812,7 @@ te_subjugation_strength_other = {
 # Country scope. Display only: which identity line the Subjugate tooltip shows.
 #   0 none (Diplomatic Framework, or an identity with no subjugation bonus)
 #   1 Sovereign Empire, 2 Religious, 3 Ideological Union, 4 Cultural,
-#   5 Trade League, 6 Military Treaty Organization
+#   5 Trade League, 6 Military Treaty Organization, 7 Creditors' Consortium
 te_subjugation_identity_index = {
 	value = 0
 	if = {
@@ -3838,6 +3838,10 @@ te_subjugation_identity_index = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		value = 6
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		value = 7
 	}
 }
 
@@ -3868,6 +3872,10 @@ te_subjugation_identity_bonus = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		add = modifier:country_subjugation_military_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		add = modifier:country_subjugation_creditor_strength_add
 	}
 }
 
@@ -3928,6 +3936,18 @@ te_subjugation_strength_identity = {
 			te_target_militarily_weaker = { TARGET = scope:target_country }
 		}
 		add = modifier:country_subjugation_military_strength_add
+	}
+
+	# Creditors' Consortium — the target is in the actor's receivership
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_creditors_consortium }
+			scope:target_country ?= {
+				te_mon_is_under_receivership = yes
+				var:te_mon_receiver ?= root
+			}
+		}
+		add = modifier:country_subjugation_creditor_strength_add
 	}
 }
 

@@ -1556,6 +1556,8 @@ ICONS: dict[str, dict[str, dict]] = {
     # Diplomatic Framework, on the Ideological Union's lectern.
     "power_bloc_identity": {
         "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": 0},
+        "identity_creditors_consortium": {"subject": "a heavy iron-bound strongbox with gilded corners and a large brass padlock, a rolled bond certificate tied with a red ribbon lying on its lid", "seed": 1},
+        "identity_research_commons": {"subject": "an ornate brass model of an atom, three gilded elliptical orbits around a round glowing nucleus, on a small round wooden stand", "seed": 3},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
@@ -1639,6 +1641,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
         # Legislated tax code: s1 stamped a coin with $ and s3 with a rouble sign.
         "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": 2},
+        "je_research_commons": {"subject": "a polished brass laboratory microscope beside a round-bottomed glass flask of glowing green liquid", "seed": 2},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon

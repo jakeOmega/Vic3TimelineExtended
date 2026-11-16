@@ -584,4 +584,94 @@ INJECT:ai_power_bloc_identity_score = {
 		add = scope:target_country.relations:root
 		desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
 	}
+
+	### Creditors' Consortium (2026-11-16): vanilla's convention, scope:actor the
+	### inviting bloc's country and ROOT the invitee. A country in debt wants a
+	### creditor behind it (up to +40 at 0.8 of its ceiling); a command economy
+	### gets no guarantee from one.
+	if = {
+		limit = {
+			scope:actor.power_bloc ?= {
+				has_identity = identity:identity_creditors_consortium
+			}
+		}
+		if = {
+			limit = {
+				te_mon_full_system = yes
+				te_mon_is_command = no
+				scaled_debt > 0.1
+			}
+			add = {
+				desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_BACKING"
+				value = te_cred_ai_invite_debt_score
+			}
+		}
+		if = {
+			limit = { te_mon_is_command = yes }
+			add = {
+				desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_COMMAND_ECONOMY"
+				value = -50
+			}
+		}
+	}
+
+	### Research Commons (power_blocs.md § Research Commons): the technologies
+	### the Commons would share, and less for a great power, which would give up
+	### its own research for them.
+	if = {
+		limit = {
+			scope:actor.power_bloc ?= {
+				has_identity = identity:identity_research_commons
+			}
+		}
+		if = {
+			limit = { scope:actor.techs_researched > techs_researched }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_TECH_GAP"
+				value = scope:actor.techs_researched
+				subtract = techs_researched
+				multiply = 2
+				max = 60
+			}
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_GREAT_POWER"
+				value = -50
+			}
+		}
+	}
+}
+
+# The join treaty's AI score (09_join_power_bloc.txt): root is the joining
+# country and scope:target_country the bloc's side.
+INJECT:ai_power_bloc_identity_score_treaties = {
+	### Research Commons (power_blocs.md § Research Commons): the technologies
+	### the Commons would share, and less for a great power, which would give up
+	### its own research for them.
+	if = {
+		limit = {
+			scope:target_country.power_bloc ?= {
+				has_identity = identity:identity_research_commons
+			}
+		}
+		if = {
+			limit = { scope:target_country.techs_researched > techs_researched }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_TECH_GAP"
+				value = scope:target_country.techs_researched
+				subtract = techs_researched
+				multiply = 2
+				max = 60
+			}
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_GREAT_POWER"
+				value = -50
+			}
+		}
+	}
 }

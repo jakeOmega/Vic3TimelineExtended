@@ -82,6 +82,9 @@ def parse_body(source):
             pos += 1
             if key == "}":
                 return result
+            if key == "{":                      # an anonymous block, as in create_treaty's articles_to_create
+                result.append(("{", None, body()))
+                continue
             if pos >= len(tokens) or tokens[pos] not in OPERATORS:
                 result.append((key, None, None))
                 continue

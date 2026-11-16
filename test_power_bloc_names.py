@@ -37,6 +37,8 @@ IDENTITIES = {
     "identity_trade_league", "identity_sovereign_empire", "identity_ideological_union",
     "identity_military_treaty_organization", "identity_religious", "identity_cultural",
     "identity_diplomatic",
+    "identity_creditors_consortium",
+    "identity_research_commons",
 }
 
 
@@ -96,7 +98,8 @@ class PowerBlocNamesTest(unittest.TestCase):
                     pool.setdefault(identity_only(body), []).append(key)
             wanted = IDENTITIES
         else:  # CI: only the identities whose names the mod supplies
-            wanted = {"identity_military_treaty_organization", "identity_cultural", "identity_diplomatic"}
+            wanted = {"identity_military_treaty_organization", "identity_cultural", "identity_diplomatic",
+                      "identity_creditors_consortium", "identity_research_commons"}
         for identity in sorted(wanted):
             with self.subTest(identity=identity):
                 self.assertTrue(pool.get(identity), f"no name the AI can always draw for {identity}")

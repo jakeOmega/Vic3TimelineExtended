@@ -825,6 +825,11 @@ science_aid = {
 			institution = institution_ministry_of_science
 			value >= 2
 		}
+		# Technology Controls (a Research Commons' group): no aid out of the bloc.
+		custom_tooltip = {
+			text = te_rc_tech_controls_aid_tt
+			NOT = { te_rc_tech_controls_bars_aid = { TARGET = scope:other_country } }
+		}
 	}
 
 	can_ratify = {
@@ -933,6 +938,11 @@ science_aid_2 = {
 		institution_investment_level = {
 			institution = institution_ministry_of_science
 			value >= 4
+		}
+		# Technology Controls (a Research Commons' group): no aid out of the bloc.
+		custom_tooltip = {
+			text = te_rc_tech_controls_aid_tt
+			NOT = { te_rc_tech_controls_bars_aid = { TARGET = scope:other_country } }
 		}
 	}
 

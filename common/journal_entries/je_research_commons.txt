@@ -1,0 +1,77 @@
+﻿# ============================================================================
+# THE RESEARCH COMMONS: the pooled research of identity_research_commons
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons; design:
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.2.
+#
+# Every member of a Research Commons and its leader hold this entry. It carries
+# the pooled research as three declared modifiers, re-read by the engine every
+# few days with the owning country as root, so nothing stacks and nothing is
+# added or removed by name:
+#   te_rc_contribution  on a member, at var:te_rc_contributed (75% of its
+#                       weekly innovation after its own programs, set by the
+#                       leader's monthly pulse: the fixed point is in
+#                       te_research_commons_values.txt)
+#   te_rc_pool          on the leader, the members' contributions as they stand
+#   te_rc_pool_cap      on the leader, a tenth of the pool on its innovation cap
+# Each value is 0 the day the country stops being a member or the leader, so
+# the transfer stops at the entry's next update; the invalid outcome then ends
+# the entry and hands over to te_rc_entry_ended (Institutes Left Behind for a
+# member that left).
+#
+# No activation triggers: te_rc_leader_pulse adds the entry to the leader and to
+# each member lacking it, so no country holds an inactive copy, and
+# add_journal_entry brings a concluded entry back for a country that joins
+# again. No game rule gates the identity, so the one invalid outcome is the
+# condition the entry stands on.
+# ============================================================================
+je_research_commons = {
+	icon = "gfx/interface/icons/event_icons/je_research_commons.dds"
+
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this; always = yes is vanilla's own default.
+	activation_description = {
+		always = yes
+	}
+
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_rc_leads_commons = yes }
+				desc = je_research_commons_status_leader
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = je_research_commons_status_member
+			}
+		}
+	}
+
+	scaling_modifiers_while_active = {
+		modifier = te_rc_contribution
+		value = { value = te_rc_contribution_value }
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_rc_pool
+		value = { value = te_rc_pool_value }
+	}
+	scaling_modifiers_while_active = {
+		modifier = te_rc_pool_cap
+		value = { value = te_rc_pool_cap_value }
+	}
+
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_research_commons_invalid_conclusion_desc
+		trigger = {
+			te_rc_in_commons = no
+		}
+		effect = {
+			te_rc_entry_ended = yes
+		}
+	}
+
+	weight = 100
+	should_be_pinned_by_default_uninvolved_or_context = yes
+}

@@ -23,6 +23,7 @@ te_nation_refresh_source_flags = {
 	set_variable = { name = te_nation_src_tax_relief value = te_nation_src_tax_relief_count }
 	set_variable = { name = te_nation_src_tax_views value = te_nation_src_tax_views_count }
 	set_variable = { name = te_nation_src_automation value = te_nation_src_automation_count }
+	set_variable = { name = te_nation_src_development_lending value = te_nation_src_development_lending_count }
 	set_variable = { name = te_nation_src_resettlement value = te_nation_src_resettlement_count }
 	set_variable = { name = te_nation_src_transhumanism value = te_nation_src_transhumanism_count }
 	set_variable = { name = te_nation_src_colonial value = te_nation_src_colonial_count }
@@ -30,5 +31,5 @@ te_nation_refresh_source_flags = {
 	set_variable = { name = te_nation_src_commons value = te_nation_src_commons_count }
 	set_variable = { name = te_nation_src_foreign value = te_nation_src_foreign_count }
 	# Every flag above is set (_ready_limit)
-	set_variable = te_nation_src_set_e2f86b0c
+	set_variable = te_nation_src_set_0c8cff10
 }
