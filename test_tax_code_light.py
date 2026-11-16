@@ -152,7 +152,12 @@ class BoundsTest(unittest.TestCase):
                         else:
                             self.assertNotIn(f"law_type:{law}", body)
             self.assertEqual(flat(block(text, f"te_tax_light_min_{key}")), f"value = {FLOOR}")
-            self.assertEqual(flat(block(text, f"te_tax_light_max_{key}")), f"value = te_tax_light_idx_{key}_{LAST}")
+            top = f"value = te_tax_light_idx_{key}_{LAST}"
+            if gen.light_extra(key):
+                # A low tax where the law levies none (test_tax_code_light_extra.py).
+                top += (f" if = {{ limit = {{ te_tax_light_extra_{key} = yes }} "
+                        f"value = te_tax_light_extra_cap_{key} }}")
+            self.assertEqual(flat(block(text, f"te_tax_light_max_{key}")), top)
 
     def test_the_floor_is_zero_and_below_every_laws_very_low_rate(self):
         self.assertEqual(FLOOR, 0)
@@ -199,10 +204,15 @@ class StepTest(unittest.TestCase):
     """Each rate's step, and the level and relief that follow from it."""
 
     def parse_rungs(self, key):
-        """{law: [thresholds for steps LAST-1 .. 0]} from te_tax_light_rung_<key>."""
+        """{law: [thresholds for steps LAST-1 .. 0]} from te_tax_light_rung_<key>; "extra" for the branch of a
+        low tax where the law levies none (test_tax_code_light_extra.py)."""
         body = block(read(VALUES), f"te_tax_light_rung_{key}")
         out = {}
-        for branch in re.split(r"(?=\b(?:if|else_if) = \{\s*limit = \{ has_law)", body)[1:]:
+        for branch in re.split(r"(?=\b(?:if|else_if) = \{\s*limit = \{ (?:has_law|te_tax_light_extra_))", body)[1:]:
+            if re.match(r"(?:if|else_if) = \{\s*limit = \{ te_tax_light_extra_", branch):
+                out["extra"] = [(int(t), int(v)) for t, v in re.findall(
+                    rf"var:te_tax_en_{key} <= (\d+) \}} value = (\d+)", branch)]
+                continue
             law = re.search(r"has_law = law_type:(\w+)", branch).group(1)
             out[law] = [(int(t), int(v)) for t, v in re.findall(
                 rf"var:te_tax_en_{key} <= (\d+) \}} value = (\d+)", branch)]
@@ -567,7 +577,9 @@ class SyncTest(unittest.TestCase):
         at = in_order(["var:te_tax_light_law = te_tax_light_law_id",
                        "limit = { te_tax_light_ai_uniform = yes } te_tax_light_gen_uniform = yes",
                        "else = { te_tax_light_gen_clamp = yes }",
-                       "set_variable = { name = te_tax_light_law value = te_tax_light_law_id }"])
+                       "set_variable = { name = te_tax_light_law value = te_tax_light_law_id }",
+                       # A low dividend tax a barring law closed goes to nothing (test_tax_code_light_extra.py).
+                       "te_tax_light_gen_close = yes"])
         # 2. The AI: every tax follows the native level, scored.
         at = in_order(["limit = { te_tax_light_ai_uniform = yes }", "te_tax_light_gen_uniform_scored = yes",
                        "set_variable = { name = te_tax_light_level value = te_tax_light_native_level }",
@@ -622,7 +634,8 @@ class SyncTest(unittest.TestCase):
         self.assertIn("var:te_tax_en_$KEY$ < te_tax_light_max_$KEY$", flat(block(text, "te_tax_light_can_step_1")))
         can = flat(block(text, "te_tax_light_can_step"))
         self.assertIn("te_tax_light_in_force = yes", can)
-        self.assertIn("te_tax_light_levies_$KEY$ = yes", can)
+        # The law levies the tax, or it is a low tax the law allows (test_tax_code_light_extra.py).
+        self.assertIn("te_tax_light_holds_$KEY$ = yes", can)
 
     def test_handlers_are_generated_per_tax_and_op(self):
         text = read(SGUIS)
