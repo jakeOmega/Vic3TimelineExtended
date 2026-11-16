@@ -179,6 +179,35 @@ INJECT:building_power_plant = {
 		default_auto_expand_rule = yes
 		state = { rt_fossil_construction_allowed_here = yes }
 	}
+
+	# AI coverage (#1822): vanilla 1.15.1's ai_value restated, with one change. Vanilla adds 4000
+	# in a state with no building_power_plant built or under way; the test is now "no power plant
+	# of any kind" (te_state_has_a_power_plant), the same test the mod's own plants use, so a state
+	# with a nuclear or renewable plant no longer draws a coal plant for the bonus. An INJECTed
+	# script-value field replaces vanilla's (read on interest groups and parties), so the whole
+	# field is restated; if the engine kept vanilla's instead, nothing changes.
+	# test_ai_building_values.py holds the restated lines to vanilla's.
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = { te_state_has_a_power_plant = no }
+			add = te_ai_first_power_plant_bonus
+		}
+
+		if = { # Five-Year Plan electrification objective
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_electrification_var
+					}
+					five_year_plan_electrification_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 }
 
 REPLACE:building_automotive_industry = {
@@ -243,6 +272,8 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -765,6 +796,8 @@ REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -871,6 +904,8 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -937,6 +972,8 @@ REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -996,6 +1033,8 @@ REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -1096,6 +1135,8 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	possible = {
 		custom_tooltip = {
@@ -1140,6 +1181,8 @@ REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -1200,6 +1243,8 @@ REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 

@@ -1,0 +1,27 @@
+﻿# AI coverage of the mod's own content (#1822). docs/systems/mod_systems/ai.md § AI Coverage of the Mod's Content.
+
+# State scope. The state has a building that makes Electricity, built or under construction: vanilla's coal and
+# oil plant, the mod's four plants, or a Solar Receiver. Vanilla's power plant asks this of itself alone (the NOR
+# in its ai_value); the mod widens it so that one plant of any kind ends the first-plant bonus for all of them.
+# test_ai_building_values.py fails if a building of the power group is missing here.
+te_state_has_a_power_plant = {
+	OR = {
+		has_building = building_power_plant
+		has_building = building_hydro_plant
+		has_building = building_nuclear_plant
+		has_building = building_renewable_energy_plant
+		has_building = building_fusion_plant
+		has_building = building_solar_receiver
+		any_scope_building = {
+			is_under_construction = yes
+			OR = {
+				is_building_type = building_power_plant
+				is_building_type = building_hydro_plant
+				is_building_type = building_nuclear_plant
+				is_building_type = building_renewable_energy_plant
+				is_building_type = building_fusion_plant
+				is_building_type = building_solar_receiver
+			}
+		}
+	}
+}

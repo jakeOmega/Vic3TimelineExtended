@@ -34,6 +34,8 @@ building_airport = {
 	}
 
 	required_construction = construction_cost_super_high
+	# Vanilla's railway base (te_ai_coverage_values.txt, #1822).
+	ai_value = te_infrastructure_ai_value
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -60,6 +62,8 @@ building_highway = {
 	}
 
 	required_construction = construction_cost_super_high
+	# Vanilla's railway base (te_ai_coverage_values.txt, #1822).
+	ai_value = te_infrastructure_ai_value
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -90,6 +94,8 @@ building_network_infrastructure = {
 	}
 
 	required_construction = construction_cost_mega_high
+	# Vanilla's railway base (te_ai_coverage_values.txt, #1822).
+	ai_value = te_infrastructure_ai_value
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
