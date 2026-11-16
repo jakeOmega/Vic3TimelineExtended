@@ -23,8 +23,10 @@
 # - A mission past the ceiling the pass set (the engine's AI ignoring the
 #   gate) is stepped back to it at the next review, with no five years' wait.
 # - The milestone guard: the six-month step down keeps a mission that carries
-#   a running milestone past 75% of its goal (sr_ai_mission_guard_tier); the
-#   count stays at its limit and the step goes on once the milestone ends.
+#   a running milestone past 75% of its goal whose progress moves this month
+#   (sr_ai_mission_guard_tier). The count is kept and goes on rising; the step
+#   goes on at the first review after the milestone ends or stops moving, and
+#   at the latest three years past the six months (sr_ai_mission_guard_until).
 # - A program even Earth Orbit is too dear for (its bill over 20% at twelve
 #   reviews in a row) is pulled down, and the country founds or builds none
 #   for five years, nor while Earth Orbit is over 10% (sr_ai_program_demolish).
@@ -112,7 +114,8 @@ sr_ai_program_affordability_count = {
 # from zero once a program can carry them again. A colony holder's Solar
 # System Colonization entry stays open and its colonies stay held, with no
 # settlers or modules until it has a program again; at the autonomy ask an AI
-# without a program lets a colony go as a free colony (space_race_events.94).
+# without a program most often keeps a colony under a charter, and otherwise
+# lets it go as a free colony (space_race_events.94).
 # An existing Space Command stays (its possible keeps a standing one). Five
 # years, as long as the mission wait, before the country founds or builds one
 # again (sr_ai_may_found_space_program), and then only with Earth Orbit
@@ -211,8 +214,9 @@ sr_ai_mission_budget_review = {
 			limit = { var:sr_ai_mission_over_months >= sr_ai_mission_over_months_limit }
 			# The step down, held above a mission that carries a milestone past
 			# the guard's line (sr_ai_mission_step_down_tier). While the guard
-			# holds part of it the count stays at its limit, so the rest of the
-			# step comes at the first review after the milestone ends.
+			# holds part of it the count is kept and goes on rising, so the rest
+			# of the step comes at the first review after the milestone ends or
+			# stops moving, or once the count reaches sr_ai_mission_guard_until.
 			if = {
 				limit = { sr_ai_mission_step_down_size > 0 }
 				sr_ai_mission_start_cooldown = yes

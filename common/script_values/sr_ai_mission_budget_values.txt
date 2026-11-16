@@ -43,9 +43,18 @@ sr_ai_mission_over_months_limit = 6
 sr_ai_program_unaffordable_months_limit = 12
 
 # The milestone guard (owner, 2026-11-16): a running milestone past this share
-# of its goal holds the six-month step down at the cheapest mission that still
-# carries it. Default and bankruptcy still drop the program at once.
+# of its goal, whose progress moves this month, holds the six-month step down at
+# the cheapest mission that still carries it. Default and bankruptcy still drop
+# the program at once.
 sr_ai_mission_guard_share = 0.75
+
+# The guard's backstop, for a milestone that stops moving where no gate shows
+# it: the guard holds a step down for at most this many monthly reviews past
+# the six-month count. Three years: longer than the 26 months between Mars
+# launch windows, so a real wait for a window is never cut. Set it very high
+# to remove the cap. Still open for the owner (ai.md § Space Program Mission
+# Budget).
+sr_ai_mission_guard_months_limit = 36
 
 # sr_funding_throughput's building_space_program_throughput_add
 # (space_race_modifiers.txt), which each funding level of a billed milestone
@@ -358,16 +367,18 @@ sr_ai_guard_progress_interstellar_probe = {
 	multiply = sr_ai_mission_guard_share
 }
 
-# The cheapest mission that still carries every running milestone past its
-# guard line: the floor of the six-month step down (1: none).
+# The cheapest mission that still carries every guarded milestone
+# (sr_ai_milestone_guarded, sr_ai_colonization_guarded: past its line, and its
+# progress moving this month): the floor of the six-month step down (1: none).
 # - The Moon Mission carries the Moon Landing and the Deep-Space Probe; the
 #   Mars Mission the Mars Landing; the Interstellar Mission the Interstellar
 #   Probe (each entry's country_sr_<mission>_program_bool).
-# - Solar Colonization carries Solar System Colonization, but only for a country
-#   with no colony: a holder's entry stays open and only pauses, its progress
-#   kept (ai.md § Space Program Mission Budget, A colony holder). Deep Space
-#   Exploration carries it where only outer worlds are left (the entry's
-#   possible: no lunar world free and no inner world open).
+# - Solar Colonization carries Solar System Colonization while a lunar world is
+#   free or an inner world open. Where only outer worlds are left, only Deep
+#   Space Exploration founds one (sr_sites_generated.txt: stage 3 and later
+#   need country_sr_deep_space_exploration_program_bool), so the guard holds
+#   it only for a program already on Deep Space Exploration or above; one on
+#   Solar Colonization could never found the colony it would be held for.
 sr_ai_mission_guard_tier = {
 	value = 1
 	if = {
@@ -384,16 +395,18 @@ sr_ai_mission_guard_tier = {
 		value = 3
 	}
 	if = {
-		limit = {
-			sr_ai_milestone_guarded = { MILESTONE = solar_colonization }
-			NOT = { sr_has_space_colony = yes }
-		}
-		value = 4
+		limit = { sr_ai_colonization_guarded = yes }
 		if = {
 			limit = {
-				NOT = { sr_sites_lunar_open = yes }
-				NOT = { sr_colonization_inner_open = yes }
+				OR = {
+					sr_sites_lunar_open = yes
+					sr_colonization_inner_open = yes
+				}
 			}
+			value = 4
+		}
+		else_if = {
+			limit = { sr_ai_mission_held_tier >= 5 }
 			value = 5
 		}
 	}
@@ -403,11 +416,23 @@ sr_ai_mission_guard_tier = {
 	}
 }
 
+# The over-budget count at which the guard lets go: the six-month count plus
+# the backstop (sr_ai_mission_guard_months_limit). The count goes on rising by
+# one at each review the guard holds the step, so it is the clock.
+sr_ai_mission_guard_until = {
+	value = sr_ai_mission_over_months_limit
+	add = sr_ai_mission_guard_months_limit
+}
+
 # The six-month step down: to the dearest mission within the climbing share,
-# but not below the guard's floor, and never above the mission held.
+# but not below the guard's floor while the backstop allows it
+# (sr_ai_mission_guard_in_time), and never above the mission held.
 sr_ai_mission_step_down_tier = {
 	value = sr_ai_mission_affordable_tier
-	min = sr_ai_mission_guard_tier
+	if = {
+		limit = { sr_ai_mission_guard_in_time = yes }
+		min = sr_ai_mission_guard_tier
+	}
 	max = sr_ai_mission_held_tier
 }
 
@@ -419,8 +444,9 @@ sr_ai_mission_step_down_size = {
 }
 
 # Over 0: the guard holds the step down above the affordable mission, so the
-# six-month count stays at its limit and the step goes on as soon as the
-# milestone ends, if the bill is still over.
+# six-month count is kept and goes on rising. The rest of the step comes at the
+# first review after the milestone ends or stops moving, or once the count
+# reaches sr_ai_mission_guard_until, if the bill is still over.
 sr_ai_mission_guard_gap = {
 	value = sr_ai_mission_step_down_tier
 	subtract = sr_ai_mission_affordable_tier

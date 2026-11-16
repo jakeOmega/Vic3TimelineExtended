@@ -36,6 +36,8 @@ DECISIONS = ROOT / "common/decisions/extra_decisions.txt"
 ON_ACTIONS = ROOT / "common/on_actions/space_race_on_actions.txt"
 MODIFIERS = ROOT / "common/static_modifiers/space_race_modifiers.txt"
 LOC = ROOT / "localization/english/te_production_methods_l_english.yml"
+SR_EFFECTS = ROOT / "common/scripted_effects/space_race_effects.txt"
+SR_JOURNAL = ROOT / "common/journal_entries/je_space_race.txt"
 
 # tier: (key, mission method, its technology, units value)
 TIERS = {
@@ -142,6 +144,9 @@ class Country:
         self.colonization_goal = 300.0   # sr_solar_colonization_goal: the Moon's, stage 0
         self.lunar_open = True           # sr_sites_lunar_open
         self.inner_open = True           # sr_colonization_inner_open
+        self.world_left = True           # sr_any_site_unclaimed
+        self.rule_on = True              # sr_space_race_on
+        self.rank = 1                    # global_country_ranking
 
     @property
     def mission(self):
@@ -199,6 +204,8 @@ class Script:
             return float(c.vars[token[4:]])
         if token == "fixed_income":
             return c.income
+        if token == "global_country_ranking":
+            return float(c.rank)
         if token == "modifier:building_space_program_throughput_add":
             return c.throughput_modifier + self.constants["sr_ai_funding_throughput_per_level"] * sum(c.funding.values())
         if token == "sr_launch_capacity_unit_price":      # its market scopes are the engine's
@@ -271,6 +278,11 @@ class Script:
             return c.in_default == yes
         if key == "is_ai":
             return c.ai == yes
+        if key == "is_player":
+            return (not c.ai) == yes
+        if key == "trigger_if":
+            rest = [p for p in value if p[0] != "limit"]
+            return not self.check(field(value, "limit") or [], c) or self.check(rest, c)
         if key == "has_technology_researched":
             return value in c.techs
         if key == "custom_tooltip":
@@ -282,6 +294,12 @@ class Script:
             return c.lunar_open == yes
         if key == "sr_colonization_inner_open":
             return c.inner_open == yes
+        if key == "sr_any_site_unclaimed":               # the sites' own, generated
+            return c.world_left == yes
+        if key == "sr_space_race_on":                    # the game rules
+            return c.rule_on == yes
+        if key == "modifier:country_sr_solar_colonization_program_bool":   # Solar Colonization and above
+            return (c.pms is not None and c.mission >= 4) == yes
         if key == "any_scope_building":
             return c.pms is not None and self.check(value, c)
         if key == "is_building_type":
@@ -526,7 +544,9 @@ class StructureTest(unittest.TestCase):
         can_build = field(building, "can_build_government")
         self.assertEqual(can_build, [("owner", "?=", [("sr_ai_may_build_space_program", "=", "yes")])])
         triggers = blocks(read(TRIGGERS))
-        self.assertIn("is_ai = no", triggers["sr_ai_may_build_space_program"])
+        build = parse(triggers["sr_ai_may_build_space_program"])
+        self.assertEqual([k for k, _, _ in build], ["trigger_if"], "a player's requirements show no line")
+        self.assertEqual(field(field(build, "trigger_if"), "limit"), [("is_ai", "=", "yes")])
         self.assertIn("sr_ai_may_found_space_program = yes", triggers["sr_ai_may_build_space_program"])
         self.assertNotIn("sr_ai_should_participate", triggers["sr_ai_may_found_space_program"], "a means test, no rank")
         loc = (ROOT / "localization/english/te_miscellaneous_l_english.yml").read_text(encoding="utf-8-sig")
@@ -534,10 +554,37 @@ class StructureTest(unittest.TestCase):
 
     def test_the_guard_line_and_the_demolition_count_are_named(self):
         self.assertEqual(self.constants["sr_ai_mission_guard_share"], 0.75)
+        # Three years: longer than the 26 months between Mars launch windows.
+        self.assertEqual(self.constants["sr_ai_mission_guard_months_limit"], 36)
         self.assertEqual(self.constants["sr_ai_program_unaffordable_months_limit"], 12)
         demolish = blocks(read(EFFECTS))["sr_ai_program_demolish"]
         self.assertRegex(demolish, r"name = sr_ai_program_demolished value = yes days = 1825 \}")
         self.assertIn("remove_building = building_space_program", demolish)
+
+    def test_the_guard_reads_the_progress_gates_themselves(self):
+        # A milestone is guarded only while its progress can move this month, by the very
+        # triggers its monthly tick reads: the six milestones' shared effect, and Solar System
+        # Colonization's own loop in its entry's monthly pulse.
+        triggers = blocks(read(TRIGGERS))
+        guarded = parse(triggers["sr_ai_milestone_guarded"])
+        colonization = parse(triggers["sr_ai_colonization_guarded"])
+        tick = parse(blocks(read(SR_EFFECTS))["sr_monthly_progress_update_effect"])
+        tick_gate = field(field(tick, "if"), "limit")
+        self.assertTrue(tick_gate)
+        for item in tick_gate:
+            with self.subTest(gate=item):
+                self.assertIn(item, guarded)
+        entry = parse(blocks(read(SR_JOURNAL))["je_space_race_solar_colonization"])
+        loop = field(field(field(entry, "on_monthly_pulse"), "effect"), "if")
+        gates = [field(loop, "limit"), field(field(loop, "if"), "limit")]
+        self.assertEqual(gates, [[("sr_solar_colonization_running", "=", "yes")],
+                                 [("sr_ai_should_participate", "=", "yes")]])
+        for gate in gates:
+            for item in gate:
+                with self.subTest(gate=item):
+                    self.assertTrue(item in colonization or item in guarded)
+        self.assertIn(("sr_ai_milestone_guarded", "=", [("MILESTONE", "=", "solar_colonization")]), colonization)
+        self.assertIn(("sr_any_site_unclaimed", "=", "yes"), colonization, "a world left to found")
 
     def test_every_panel_that_hides_the_maintenance_groups_hides_the_mission_limit(self):
         # Owner, 2026-11-16: the row is for the AI only, so no panel shows it (an AI rival's
@@ -728,16 +775,23 @@ class PassTest(unittest.TestCase):
         return Country(income_for(0.30, self.units(4)), mission=4, **kw)
 
     def run_milestone(self, c, milestone, share):
+        """The milestone running at `share` of its goal; the evaluator never moves its progress."""
         goal = c.colonization_goal if milestone == "solar_colonization" else self.script.value(f"sr_{milestone}_goal", c)
         c.vars[f"sr_active_{milestone}"] = "yes"
         c.vars[f"sr_progress_{milestone}"] = goal * share
+        if milestone == "solar_colonization":
+            c.vars["sr_completed_moon_landing"] = "yes"   # sr_solar_colonization_qualified
+
+    def guard_until(self):
+        return int(self.script.constants["sr_ai_mission_over_months_limit"]
+                   + self.script.constants["sr_ai_mission_guard_months_limit"])
 
     def test_the_guard_holds_the_step_at_76_percent(self):
         c = self.over_on_solar()
         self.run_milestone(c, "solar_colonization", 0.76)
         self.script.month(c, 12)
         self.assertEqual((c.mission, c.ceiling), (4, 4))
-        self.assertGreaterEqual(c.vars["sr_ai_mission_over_months"], 6, "the count stays at its limit")
+        self.assertGreaterEqual(c.vars["sr_ai_mission_over_months"], 6, "the count is kept")
         self.assertNotIn("sr_ai_mission_cooldown", c.vars)
 
     def test_the_guard_lets_the_step_go_at_74_percent(self):
@@ -788,6 +842,124 @@ class PassTest(unittest.TestCase):
         c.inner_open = True
         self.script.month(c)
         self.assertEqual(c.mission, 4, "Solar Colonization carries it again")
+
+    # ---- the guard reads whether the milestone can move, with a three-year backstop ------------
+    def test_a_milestone_frozen_by_rank_is_not_guarded(self):
+        # Progress moves only in the global top three (sr_ai_should_participate), while the
+        # entries stay open for every great or major power.
+        for tier, share, milestone in ((2, 0.50, "moon_landing"), (4, 3.00, "solar_colonization")):
+            with self.subTest(milestone=milestone):
+                c = Country(income_for(share, self.units(tier)), mission=tier)
+                c.rank = 4
+                self.run_milestone(c, milestone, 0.80)
+                self.script.month(c, 5)
+                self.assertEqual(c.mission, tier)
+                self.script.month(c)
+                self.assertEqual((c.mission, c.ceiling), (1, 1), "at the review the count reaches six")
+                self.assertNotIn("sr_ai_mission_over_months", c.vars)
+                self.assertIn("sr_ai_mission_cooldown", c.vars)
+                self.script.month(c, 24)
+                self.assertIsNotNone(c.pms, "Earth Orbit within 20%: not pulled down")
+
+    def test_falling_out_of_the_top_three_ends_the_guard_at_the_next_review(self):
+        c = Country(income_for(0.50, self.units(2)), mission=2)
+        self.run_milestone(c, "moon_landing", 0.80)
+        self.script.month(c, 12)
+        self.assertEqual(c.mission, 2)
+        c.rank = 4
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (1, 1))
+
+    def test_colonization_that_cannot_move_is_not_guarded(self):
+        def setup(c):
+            pass
+
+        def race_over_moon_free(c):
+            self.script.globals.add("sr_all_colonies_complete")
+            c.vars["sr_completed_solar_colonization"] = "yes"
+
+        def no_world_left(c):
+            c.world_left = False
+
+        def rule_off(c):
+            c.rule_on = False
+
+        for change, guarded in ((setup, True), (race_over_moon_free, False), (no_world_left, False),
+                                (rule_off, False)):
+            with self.subTest(case=change.__name__):
+                self.script = Script()
+                c = self.over_on_solar()
+                self.run_milestone(c, "solar_colonization", 0.80)
+                change(c)
+                self.script.month(c, 6)
+                self.assertEqual(c.mission, 4 if guarded else 2)
+        # Chosen again after the race (Resume Solar System Colonization): guarded.
+        self.script = Script()
+        c = self.over_on_solar()
+        self.run_milestone(c, "solar_colonization", 0.80)
+        race_over_moon_free(c)
+        c.vars["sr_colonization_resumed"] = "yes"
+        self.script.month(c, 6)
+        self.assertEqual(c.mission, 4)
+
+    def test_outer_worlds_only_on_solar_colonization_are_not_guarded(self):
+        # Only Deep Space Exploration founds an outer world, so Solar Colonization is never held
+        # for one: the step comes at the review the count reaches six.
+        c = Country(income_for(0.40, self.units(4)), mission=4)
+        c.lunar_open = c.inner_open = False
+        self.run_milestone(c, "solar_colonization", 0.80)
+        self.script.month(c, 5)
+        self.assertEqual(c.mission, 4)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        self.assertNotIn("sr_ai_mission_over_months", c.vars)
+
+    def test_the_backstop_ends_a_freeze_no_gate_sees(self):
+        # A Moon Landing at 80% that never moves although every gate passes: held through the
+        # six reviews and thirty-five more, stepped down at the forty-second.
+        until = self.guard_until()
+        self.assertEqual(until, 42)
+        c = Country(income_for(0.50, self.units(2)), mission=2)
+        self.run_milestone(c, "moon_landing", 0.80)
+        self.script.month(c, until - 1)
+        self.assertEqual((c.mission, c.ceiling), (2, 2))
+        self.assertEqual(c.vars["sr_ai_mission_over_months"], until - 1)
+        self.assertNotIn("sr_ai_mission_cooldown", c.vars)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (1, 1))
+        self.assertNotIn("sr_ai_mission_over_months", c.vars)
+        self.assertIn("sr_ai_mission_cooldown", c.vars)
+
+    def test_the_backstop_ends_a_partial_step_too(self):
+        # A Mars Landing at 80% on Solar Colonization over budget: down to the Mars Mission at six
+        # reviews, and the rest of the way (to Earth Orbit, the Moon being 12%) at forty-two, the
+        # Mars Mission being over as well.
+        until = self.guard_until()
+        c = Country(income_for(0.40, self.units(3)), mission=4)   # Mars 40%, Solar 80%
+        self.run_milestone(c, "mars_landing", 0.80)
+        self.script.month(c, 6)
+        self.assertEqual(c.mission, 3)
+        self.script.month(c, until - 7)
+        self.assertEqual(c.mission, 3)
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (1, 1))
+
+    def test_a_guarded_milestone_that_moves_is_held_until_the_backstop(self):
+        c = self.over_on_solar()
+        self.run_milestone(c, "solar_colonization", 0.80)
+        self.script.month(c, self.guard_until() - 1)
+        self.assertEqual((c.mission, c.ceiling), (4, 4))
+
+    def test_a_milestone_that_ends_inside_the_backstop_steps_at_the_next_review(self):
+        c = Country(income_for(0.50, self.units(2)), mission=2)
+        self.run_milestone(c, "moon_landing", 0.80)
+        self.script.month(c, 30)
+        self.assertEqual(c.mission, 2)
+        del c.vars["sr_active_moon_landing"]   # landed
+        del c.vars["sr_progress_moon_landing"]
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (1, 1))
+        self.assertNotIn("sr_ai_mission_over_months", c.vars)
 
     # ---- a program even Earth Orbit is too dear for ------------------------------------------------
     def test_a_year_over_on_earth_orbit_pulls_the_program_down(self):
