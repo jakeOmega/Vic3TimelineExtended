@@ -617,8 +617,9 @@ and the step "Not levied"; its name's tooltip ends with the note that the law le
 tax, naming Proportional Taxation (up to 20%) and Graduated Taxation (up to 30%). Raise it one
 step (2.5%, step Very Low, the tax level unchanged), then a second (5%): the step reads Low, the +
 button's tooltip said the tax level rises, and the overview's Tax Level and Set By follow.
-Expect at once: the country's modifiers (the Nation tab's economy list, and All Modifiers) list
-"Low Dividend Tax" at +5%, and the Tax Code entry does not. Within a few days: Budget's Dividends
+Expect at once: the country's modifiers list "Low Dividend Tax" at +5% (the Nation tab's All
+Modifiers; its economy section's list from the tab's next monthly count), and the Tax Code entry
+does not. Within a few days: Budget's Dividends
 Taxes line above zero, and the Industrialists' "Resents Recent Tax Changes" at −2.5 before
 ideology, shown rounded to a whole point (their views on taxation move it either way). Cut it to
 nothing (shift-click −): the modifier goes at once and the line goes back to zero within days. On
