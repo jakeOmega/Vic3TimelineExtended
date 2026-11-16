@@ -2452,9 +2452,9 @@ floor swallows is very small for every plain anchor in three saves:
 
 | Save | Anchor | GDP pegged to it, of the world's | Cut, points | On its floor | What the cut would be worth a week | Of its income |
 |---|---|---|---|---|---|---|
-| New York 1940 | Prussia (PRU) | 4.97% | 0.099 | yes (0.5) | 7,500 | 0.21% |
-| Singapore 1958 | Italy (ITA) | 1.97% | 0.039 | yes (0.4) | 1,560 | 0.13% |
-| Singapore 1958 | Indonesia (IDN) | 1.58% | 0.032 | yes (0.5) | 2,900 | 0.48% |
+| New York 1940 | Prussia (PRU) | 4.97% | 0.099 | yes (0.5) | 7,550 | 0.46% |
+| Singapore 1958 | Italy (ITA) | 1.97% | 0.039 | yes (0.4) | 1,560 | 0.25% |
+| Singapore 1958 | Indonesia (IDN) | 1.58% | 0.032 | yes (0.5) | 2,900 | 0.51% |
 | Byzantium 2020 | North American Union (UNA) | 0.44% | 0.009 | yes (0.15) | nothing: see below | 0 |
 | New York 1940 | Brazil (BRZ), America (USA), Great Britain (GBR) | 0.32% to 0.44% | 0.006 to 0.009 | yes | nothing | 0 |
 | Singapore 1958 | Scandinavia (SCA) | 0.26% | 0.005 | yes (0.4) | nothing | 0 |
@@ -2462,8 +2462,9 @@ floor swallows is very small for every plain anchor in three saves:
 
 Ten countries in the three saves have treaty peggers: Singapore, an issuer, and these nine plain
 anchors, eight of them on their floor. So the mechanism is as the issue says. But the rate, 0.1
-points per 5% of world GDP, pays a tenth of a point to the best case and 0.13% to 0.48% of income
-to the three it pays at all. **The other six are paid nothing whatever their standing**: a cut under 0.01 points is never applied (`te_monetary_apply_fx_one` removes a
+points per 5% of world GDP, pays a tenth of a point to the best case and 0.25% to 0.51% of income
+to the three it pays at all (income as § 0.14 counts it, without the investment pool's transfer to
+construction). **The other six are paid nothing whatever their standing**: a cut under 0.01 points is never applied (`te_monetary_apply_fx_one` removes a
 modifier below 0.01). The floor column is rebuilt from the law and the two technologies that move it
 (0.5, −0.25 under Central Bank Independence, −0.1 each for Machine Learning and Universal Digital
 Identity); it is not a figure in the save, though every standing value above sits exactly on it.
@@ -2475,12 +2476,13 @@ Three ways to go, for the owner:
 | Option | What it does | What it pays the table's best case (Prussia) | Cost to build |
 |---|---|---|---|
 | A. Leave it | nothing | 0, as now | none |
-| B. Pay what the floor swallows as risk premium | a new managed modifier carries `min(cut, floor − standing before the floor)`, less the issuer's own cut for a union leader, so nobody is paid twice and nobody above the floor changes. **Not built, so not tested: the formula is a proposal** | 0.099 points, 7,500 a week | a static modifier, three variables in the contract and the civil-war classification, the strip list, the Nation tab registry, loc, tests: about what one of § 0.14's three modifiers took |
-| C. Raise the rate | `te_mon_reserve_currency_per_step`, say 0.1 to 0.5 a step with the cap moved to match | nothing more at the floor by itself; with B, 0.5 points and 37,000 a week (1% of income) | one line, and a table of who then reaches the cap |
+| B. Pay what the floor swallows as risk premium | a new managed modifier carries `min(cut, floor − standing before the floor)`, less the issuer's own cut for a union leader, so nobody is paid twice and nobody above the floor changes. **Not built, so not tested: the formula is a proposal** | 0.099 points, 7,550 a week | a static modifier, three variables in the contract and the civil-war classification, the strip list, the Nation tab registry, loc, tests: about what one of § 0.14's three modifiers took |
+| C. Raise the rate | `te_mon_reserve_currency_per_step`, say 0.1 to 0.5 a step with the cap moved to match | nothing more at the floor by itself; with B, 0.5 points and 37,900 a week (2.3% of income) | one line, and a table of who then reaches the cap |
 
 B obeys L11: it is a level, the same in every phase of the cycle, and a structural penalty bites
 harder with it, not softer (the swallowed part shrinks as standing rises). It was not built because
-on these figures it adds a modifier and its plumbing for a few thousand pounds a week, and because
+on these figures it adds a modifier and its plumbing for a quarter to half a percent of income in the
+three cases it pays and nothing in the other six, and because
 the lever that would make the reserve currency worth having for a plain anchor is the rate (C), which
 is a balance choice. **An imposed peg counts toward this cut by design** (ruling C1; the article's own
 text promises the anchor "reserve-currency risk-premium relief"), so B would also make an imposed peg
@@ -2511,7 +2513,7 @@ seigniorage. `te_monetisation_minting` (Monetizing the Deficit: the step's "Mone
 GDP" field, the applied modifier, the bond-purchase tooltip) and `te_mon_board_seigniorage` (the
 overlord's half of a currency-board subject's minting). The engine multiplies both by 1 + the
 country's `country_minting_mult`, so a monetizer on Digital Currency with the five finance
-technologies creates 1.75% of GDP a step where the field says 1.0%. In the 1958 save Mysore (MYS)
+technologies creates 1.75% of GDP a step where the field says 1.0%. In the 1958 save a country tagged MYS (Mysore's tag)
 monetizes at level 2, 75,531 a week before its bonuses. **The board's "half" was restated too**: the
 overlord is paid half of the subject's flat minting, read before any multiplier, and the subject
 loses fifty points of its multiplier, so "half of what it mints before its bonuses" is true of both
@@ -2520,7 +2522,7 @@ minted exactly 1.0 times its base: two thirds of what it would have). The overlo
 the income was "worth what their gold mines are worth — for a colony without gold, next to nothing".
 That is not what the script pays: the flat sum includes vanilla's GDP term, up to 200,000 a week, so
 a subject without gold above 200M of GDP is worth 100,250 a week before the overlord's bonuses, and
-Spain (SPA) in the 1940 save is paid 118,999 a week by its boards on an income of 6.7M, 1.8% of it
+Spain (SPA) in the 1940 save is paid 118,999 a week by its boards on an income of 2.5M, 4.7% of it
 before its own bonuses. The sentence now
 says it grows with a subject's gold mines and, up to a ceiling, with its economy.
 `test_monetary_union_leader.OtherMintingFiguresTest` holds the texts to the modifiers.
