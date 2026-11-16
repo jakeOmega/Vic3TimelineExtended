@@ -1,0 +1,195 @@
+﻿# ============================================================================
+# TECHNOLOGY EMBARGO: Technology Controls III to V (identity_research_commons)
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons; design
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.5.
+#
+# A Research Commons' leader, once its bloc holds Technology Controls III,
+# places an embargo on one country outside the bloc at a time: a hostile pact,
+# shaped like vanilla's trade embargo (13_embargo.txt), whose monthly_effect
+# cuts the target's technology spread by te_rc_embargo_points (the bloc's share
+# of the world's innovation times 50, 75 or 100 by tier, at most 50 points, a
+# point being -1%). The cut is the dynamic-modifier pattern from the pact's one
+# refresh site (te_rc_embargo_refresh), with a two-month duration so it lapses
+# once the pact ends; the break effects take it off at once.
+# ============================================================================
+te_rc_technology_embargo = {
+	# Placeholder art: vanilla's Knowledge Sharing icon.
+	texture = "gfx/interface/icons/diplomatic_action_icons/knowledge_sharing.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	should_notify_third_parties = yes
+
+	selectable = {
+		NOT = { is_country_type = decentralized }
+		is_revolutionary = no
+		te_rc_can_embargo = yes
+	}
+
+	potential = {
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			is_revolutionary = no
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_rc_technology_embargo_not_member_tt
+			NOT = { is_in_same_power_bloc = scope:target_country }
+		}
+		custom_tooltip = {
+			text = te_rc_technology_embargo_one_tt
+			NOT = {
+				any_country = {
+					has_diplomatic_pact = {
+						who = root
+						type = te_rc_technology_embargo
+					}
+				}
+			}
+		}
+	}
+
+	accept_effect = {
+		te_rc_embargo_refresh = yes
+	}
+
+	pact = {
+		cost = 100
+		forced_duration = 12
+
+		is_hostile = yes
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		max_target_involvement = 1000
+		target_involvement_applies_to = mutual
+
+		relations_progress_per_day = -1 # At -100, -1 relations
+
+		monthly_effect = {
+			te_rc_embargo_refresh = yes
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				has_diplomatic_relevance = scope:target_country
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = te_rc_technology_embargo_tier_tt
+					te_rc_can_embargo = yes
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = te_rc_technology_embargo_not_member_tt
+					NOT = { is_in_same_power_bloc = scope:target_country }
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NOT_DECENTRALIZED"
+					NOT = { is_country_type = decentralized }
+					scope:target_country = {
+						NOT = { is_country_type = decentralized }
+					}
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_DIPLOMATIC_AUTONOMY"
+					aggressive_diplomatic_plays_permitted = yes
+					scope:target_country = { aggressive_diplomatic_plays_permitted = yes }
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = "DIPLOMATIC_PACT_REQUIREMENT_NO_SUBJECT_RELATION"
+					NOT = {
+						is_subject_of = scope:target_country
+						scope:target_country = { is_subject_of = root }
+					}
+				}
+			}
+		}
+
+		manual_break_effect = {
+			scope:target_country = { remove_modifier = te_rc_technology_embargoed }
+		}
+
+		auto_break_effect = {
+			scope:target_country = { remove_modifier = te_rc_technology_embargoed }
+		}
+	}
+
+	ai = {
+		check_acceptance_for_will_break = no
+		max_influence_spending_fraction = 0.1
+
+		evaluation_chance = {
+			value = 0.05
+		}
+
+		propose_score = {
+			value = 10
+		}
+
+		# A rival in research: hostile to it, and close behind or ahead.
+		will_propose = {
+			OR = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = antagonistic
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = belligerent
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = domineering
+				}
+			}
+			scope:target_country.techs_researched >= {
+				value = techs_researched
+				subtract = 15
+			}
+		}
+
+		will_break = {
+			OR = {
+				has_attitude = {
+					who = scope:target_country
+					attitude = conciliatory
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = genial
+				}
+				has_attitude = {
+					who = scope:target_country
+					attitude = protective
+				}
+			}
+		}
+	}
+}

@@ -4,7 +4,8 @@
 Reads:
     common/modifier_type_definitions/tech_gate_modifier_types.txt
         - the authoritative set of country_*_pb_principles_bool modifiers
-    common/power_bloc_principles/extra_power_bloc_principles.txt
+    common/power_bloc_principles/*.txt (extra_power_bloc_principles.txt first,
+    then an identity's own files such as te_research_commons_principles.txt)
         - each principle's `possible = { modifier:<bool> = yes }` clause
 
 Writes:
@@ -34,9 +35,18 @@ from path_constants import mod_path
 
 logger = logging.getLogger(__name__)
 
-PRINCIPLES_FILE = os.path.join(
-    mod_path, "common", "power_bloc_principles", "extra_power_bloc_principles.txt"
-)
+PRINCIPLES_DIR = os.path.join(mod_path, "common", "power_bloc_principles")
+PRINCIPLES_FILE = os.path.join(PRINCIPLES_DIR, "extra_power_bloc_principles.txt")
+
+
+def principle_files():
+    """The mod's principle files: the shared one first, then the rest by name."""
+    others = sorted(
+        os.path.join(PRINCIPLES_DIR, name)
+        for name in os.listdir(PRINCIPLES_DIR)
+        if name.endswith(".txt") and os.path.join(PRINCIPLES_DIR, name) != PRINCIPLES_FILE
+    )
+    return [PRINCIPLES_FILE] + others
 TECH_GATE_FILE = os.path.join(
     mod_path, "common", "modifier_type_definitions", "tech_gate_modifier_types.txt"
 )
@@ -113,10 +123,13 @@ def collect_defined_unlock_bools():
 
 def collect_principle_unlocks():
     """Return list of (bool_name, group, tier, principle_id) in file order."""
-    parser = ParadoxFileParser()
-    parser.parse_file(PRINCIPLES_FILE, apply_directives=False)
+    entries = []
+    for path in principle_files():
+        parser = ParadoxFileParser()
+        parser.parse_file(path, apply_directives=False)
+        entries.extend(parser.data.items())
     rows = []
-    for principle_id, raw_entry in parser.data.items():
+    for principle_id, raw_entry in entries:
         entry = _value_of(raw_entry)
         if not isinstance(entry, dict):
             continue

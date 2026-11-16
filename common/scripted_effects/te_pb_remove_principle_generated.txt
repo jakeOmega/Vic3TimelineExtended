@@ -685,6 +685,26 @@ te_pb_remove_principle_in_scope = {
 		remove_principle = principle_shared_canon_5
 	}
 	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_1 }
+		remove_principle = principle_technology_controls_1
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_2 }
+		remove_principle = principle_technology_controls_2
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_3 }
+		remove_principle = principle_technology_controls_3
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_4 }
+		remove_principle = principle_technology_controls_4
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_5 }
+		remove_principle = principle_technology_controls_5
+	}
+	else_if = {
 		limit = { scope:te_principle ?= principle:principle_transport_1 }
 		remove_principle = principle_transport_1
 	}
