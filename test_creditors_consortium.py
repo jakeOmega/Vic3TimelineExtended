@@ -51,7 +51,10 @@ CONDITIONALITY = {
     1: (1, 0.001, 1, 12), 2: (1, 0.0015, 1, 18), 3: (2, 0.0015, 2, 24), 4: (2, 0.002, 2, 30), 5: (3, 0.0025, 3, 36),
 }
 DEVELOPMENT_LENDING = {1: (0.05, 0), 2: (0.075, 0.05), 3: (0.10, 0.10), 4: (0.125, 0.15), 5: (0.15, 0.20)}
-DEVELOPMENT_LENDING_COHESION = {1: 4, 2: 8, 3: 12, 4: 16, 5: 20}
+# Exploit Members' cohesion mirrored (-5 to -40, the mod's IV and V included),
+# and the leader's influence, its own gain, as Exploit Members' leader has its.
+DEVELOPMENT_LENDING_COHESION = {1: 5, 2: 10, 3: 20, 4: 30, 5: 40}
+DEVELOPMENT_LENDING_INFLUENCE = {1: 0.1, 2: 0.15, 3: 0.2, 4: 0.25, 5: 0.3}
 DEVELOPMENT_LENDING_INVITE_PER_TIER = 5
 
 SELF_CHECKS = ("cc_receivership_treaty", "cc_monopoly_treaty", "cc_adjustment_imposition")
@@ -200,6 +203,8 @@ class PrincipleGroupsTest(unittest.TestCase):
                 self.assertIn("te_pb_principle_slot_free = { GROUP = principle_group_development_lending }", body)
                 self.assertAlmostEqual(num(body, "power_bloc_te_cred_dl_share_add"), share)
                 self.assertEqual(num(body, "power_bloc_cohesion_add"), DEVELOPMENT_LENDING_COHESION[tier])
+                self.assertAlmostEqual(num(block_at(body, body.index("leader_modifier")), "country_influence_mult"),
+                                       DEVELOPMENT_LENDING_INFLUENCE[tier])
                 self.assertEqual(num(body, "power_bloc_te_cred_dl_invite_add"),
                                  DEVELOPMENT_LENDING_INVITE_PER_TIER * tier)
                 self.assertEqual("country_keynesian_pb_principles_bool" in body, tier == 4)
