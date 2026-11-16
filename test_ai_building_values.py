@@ -12,7 +12,8 @@ PRODUCTION_BUILDING_BASE_VALUE, both 1000) and the engine logs nothing. So:
   and the megaprojects' sites a value that is nothing in default.
 
 The numbers are in common/script_values/te_ai_coverage_values.txt; docs/systems/mod_systems/ai.md § AI Coverage of
-the Mod's Content says what each stands on.
+the Mod's Content says what each stands on. Every value is written `ai_value = { value = <script value> }`, the
+form the company flagships already use; a bare name there is a form no vanilla or mod building has.
 """
 import json
 import re
@@ -250,7 +251,7 @@ class ValueTests(unittest.TestCase):
     def test_infrastructure_takes_vanillas_railway_base(self):
         for name in INFRASTRUCTURE:
             with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), "te_infrastructure_ai_value")
+                self.assertEqual(self.ai_value(name), [["value", "te_infrastructure_ai_value"]])
         railway = dict(field_pairs(vanilla_block(self.vanilla_buildings["building_railway"]), "ai_value"))
         self.assertEqual(float(railway["value"]), script_value_number("te_infrastructure_ai_value"))
 
@@ -259,7 +260,7 @@ class ValueTests(unittest.TestCase):
         self.assertGreaterEqual(len(names), 39)
         for name in names:
             with self.subTest(building=name):
-                self.assertEqual(self.ai_value(name), "te_wonder_ai_value")
+                self.assertEqual(self.ai_value(name), [["value", "te_wonder_ai_value"]])
         eiffel = field(self.vanilla_buildings["building_eiffel_tower"][1], "ai_value")
         self.assertEqual(float(eiffel), script_value_number("te_wonder_ai_value"))
 
