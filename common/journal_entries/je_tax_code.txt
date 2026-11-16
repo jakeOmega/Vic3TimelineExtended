@@ -20,9 +20,10 @@
 # the country's te_tax_* variables (docs/systems/tax_code_schema.md), which a
 # revolution's winner inherits, and an inherited copy of the entry re-running
 # an `immediate` would have nothing to repair. Under the full code it is
-# display only. Under the light code it also carries the code's relief and the
-# interest groups' reactions to rate changes, as scaling modifiers (below), so
-# a country in force must hold it active. It has no scripted buttons and no
+# display only. Under the light code it also carries the code's relief, the
+# low dividend tax a law without one allows, and the interest groups'
+# reactions to rate changes, as scaling modifiers (below), so a country in
+# force must hold it active. It has no scripted buttons and no
 # progress bar, so no bars-on-top marker.
 #
 # Auto-activation reaches only new games (scripting_best_practices.md, "JE
@@ -97,7 +98,8 @@ je_tax_code = {
 	# The rule switched to Disabled mid-game, from the screen that changes
 	# country (2026-11-08). The entry otherwise never ends, and under the light
 	# code its declared relief and reactions kept cutting taxes and moving
-	# approval. It ends on its next update and takes them along;
+	# approval (the low dividend tax's value reads the rule itself, so it stops
+	# levying at once). It ends on its next update and takes them along;
 	# te_tax_rule_off_net hands a full-code country back the vanilla law its
 	# code is equivalent to and clears what the code left on the country.
 	outcome = {
@@ -111,8 +113,9 @@ je_tax_code = {
 	can_revolution_inherit = yes
 	should_update_on_player_command = yes
 
-	# The light code's relief and reactions (docs/systems/tax_code_schema.md,
-	# "Light code"), one declaration per modifier. Each value is generated
+	# The light code's relief, low dividend tax and reactions
+	# (docs/systems/tax_code_schema.md, "Light code"), one declaration per
+	# modifier, 22 in all. Each value is generated
 	# (te_tax_light_generated_values.txt) and reads the country's variables,
 	# which the light sync writes: 0, and the modifier off the entry, under the
 	# full code, before the migration and whenever the sync would have removed
@@ -147,6 +150,16 @@ je_tax_code = {
 		modifier = te_tax_light_relief_cons
 		value = {
 			value = te_tax_light_relief_cons_value
+		}
+	}
+	# The low dividend tax a law without one allows (owner, 2026-11-15):
+	# te_tax_en_div steps of one step's rate above zero, while the code is in
+	# force and the law levies none (te_tax_light_extra_div). The law collects
+	# none of it, so this is the tax itself, not a relief.
+	scaling_modifiers_while_active = {
+		modifier = te_tax_light_levy_div
+		value = {
+			value = te_tax_light_levy_div_value
 		}
 	}
 	# Reactions: the running reaction's rounded size (te_tax_lr_mag_<ig>) on

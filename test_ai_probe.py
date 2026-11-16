@@ -73,6 +73,12 @@ class GeneratedFilesTest(unittest.TestCase):
         self.assertEqual(tiers["combat_unit_type_irregular_infantry"], 1)
         self.assertTrue(all(1 <= tier <= 13 for tier in tiers.values()), tiers)
 
+    def test_the_construction_purchase_prints_with_decimals(self):
+        """A small government buys a fraction of a point a week; printed whole, 0.08 reads as no purchase."""
+        snapshot = re.search(r"(?ms)^te_aip_snapshot = \{\n(.*?)^\}", text(EFFECTS)).group(1)
+        for field in ("cm_public", "cm_target"):
+            self.assertIn(f"{field}=[THIS.ScriptValue('te_aip_{field}')|3]", snapshot)
+
     def test_no_script_value_is_defined_twice(self):
         names = re.findall(r"(?m)^(te_aip_[a-z0-9_]+) = \{", text(VALUES))
         self.assertEqual(sorted(n for n in set(names) if names.count(n) > 1), [])

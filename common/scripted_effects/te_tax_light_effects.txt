@@ -22,6 +22,18 @@
 # The country collects the law's rate at the level plus the relief: the code's
 # rate. The tax-level buttons are greyed (te_tax_native_controls_sgui).
 #
+# The low dividend tax (owner, 2026-11-15; LIGHT_EXTRAS in gen_tax_code.py). A
+# law that levies no dividend tax (Consumption-Based, Land-Based, Per-Capita)
+# leaves te_tax_en_div at nothing, and the code may raise it to a low cap
+# (te_tax_light_extra_cap_div) unless Traditionalism is enacted
+# (te_tax_light_extra_div). The law collects none of it, so the entry declares
+# te_tax_light_levy_div, one step's rate, times the index, in place of a
+# relief. It sits on the step Proportional Taxation puts the same rate on, so
+# it counts toward the tax level like any tax; it carries no relief and gives
+# no view band. A player's starts at nothing; an AI's follows its tax level
+# like its other taxes. A change of it draws the reactions a dividend tax
+# change does.
+#
 # Interest groups. Each change draws a reaction from every group, scored with
 # the full code's material and ideology reasons for that change alone
 # (te_tax_light_gen_react); a reaction that pleases a group counts half. The
@@ -39,10 +51,11 @@
 # of the country it rose against, and the sync keeps that code as it keeps a
 # player's, each tax moving with the level its AI sets.
 #
-# The relief and reaction modifiers are je_tax_code's scaling modifiers
+# The relief, levy and reaction modifiers are je_tax_code's scaling modifiers
 # (scaling_modifiers_while_active): the entry reads each from the country's
-# variables (te_tax_light_rl_<key>, te_tax_lr_<ig>, te_tax_lr_mag_<ig>; the
-# values are te_tax_light_relief_<key>_value and te_tax_light_react_<ig>_<pos|neg>
+# variables (te_tax_light_rl_<key>, te_tax_en_div, te_tax_lr_<ig>,
+# te_tax_lr_mag_<ig>; the values are te_tax_light_relief_<key>_value,
+# te_tax_light_levy_div_value and te_tax_light_react_<ig>_<pos|neg>
 # _value, te_tax_light_generated_values.txt) about every four days while it is
 # active, so the sync only writes the variables. A country in force that the
 # engine left without the entry gets it from te_tax_light_entry_net
@@ -97,7 +110,8 @@ te_tax_light_migrate_country = {
 #      tax cut to nothing stays at nothing, a tax the old law did not levy
 #      starts at the level's rate);
 #      an AI's follows the native level; no reaction, the law change's own
-#      approval covers it;
+#      approval covers it; then a low dividend tax a barring law has closed
+#      goes to nothing (te_tax_light_gen_close);
 #   2. an AI country: every tax at the law's rate for its native level, each
 #      change scored (te_tax_light_gen_uniform_scored);
 #      a player's: if the native level moved outside the code (only script can
@@ -135,6 +149,8 @@ te_tax_light_sync = {
 			set_variable = { name = te_tax_light_law value = te_tax_light_law_id }
 			debug_log = "TE_TAX light_law_changed the code was carried into the new taxation law's range; law=[SCOPE.ScriptValue('te_tax_light_law_id')|0] month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
+		# A low dividend tax a barring law closed (Traditionalism) goes to nothing.
+		te_tax_light_gen_close = yes
 		if = {
 			limit = { te_tax_light_ai_uniform = yes }
 			if = {
