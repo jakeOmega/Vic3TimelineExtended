@@ -608,6 +608,27 @@ class PassTest(unittest.TestCase):
         self.script.month(c)
         self.assertTrue(self.script.log[0].startswith("TE_SELF_CHECK BROKEN sr_ai_mission_ceiling "))
 
+    def test_a_climb_within_the_ceiling_after_a_new_technology_is_not_broken(self):
+        # Rich, with the technology to Mars: ceiling 6, mission 3. Cislunar Infrastructure arrives
+        # between reviews and the engine's AI (or Begin Solar Colonization) climbs within the ceiling.
+        c = Country(income_for(0.001, self.units(6)), mission=1, techs={"space_exploration", "knowledge_economy"})
+        self.script.month(c)
+        self.assertEqual((c.mission, c.ceiling), (3, 6))
+        c.techs.add("cislunar_infrastructure")
+        c.pms["mission"] = MISSION[4]
+        self.script.month(c, 3)
+        self.assertEqual(self.script.log, [])
+        self.assertEqual((c.mission, c.ceiling, c.vars["sr_ai_mission_target"]), (4, 6, 4))
+
+    def test_the_self_check_reads_broken_when_the_mission_falls_below_the_pass(self):
+        c = Country(income_for(0.06, self.units(3)), mission=1)   # Solar would be 12%
+        self.script.month(c)
+        self.assertEqual(c.mission, 3)
+        c.pms["mission"] = MISSION[2]   # moved down by something other than the pass
+        self.script.month(c)
+        self.assertEqual(len(self.script.log), 1)
+        self.assertTrue(self.script.log[0].startswith("TE_SELF_CHECK BROKEN sr_ai_mission_ceiling "))
+
     def test_the_self_check_reads_broken_when_the_ceiling_never_takes(self):
         self.script.ignore_ceiling_switch = True
         c = Country(income_for(0.05, self.units(2)), mission=1)

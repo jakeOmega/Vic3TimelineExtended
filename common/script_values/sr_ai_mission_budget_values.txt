@@ -433,9 +433,10 @@ sr_ai_mission_share_current_pct = {
 	}
 }
 
-# The two checks of the self-check, as gaps (0: they agree): the ceiling
-# active against the one the pass set, and the mission running against the one
-# it set.
+# The self-check's reads, as gaps (0: they agree): the ceiling active against
+# the one the pass set; the mission running against the one it set (the review
+# reads it too, after setting the new one: over 0 is a step down); and the
+# mission running against the ceiling the pass set (over 0: past it).
 sr_ai_mission_ceiling_gap = {
 	value = sr_ai_mission_ceiling_tier_active
 	subtract = var:sr_ai_mission_ceiling
@@ -444,6 +445,11 @@ sr_ai_mission_ceiling_gap = {
 sr_ai_mission_target_gap = {
 	value = sr_ai_mission_tier_current
 	subtract = var:sr_ai_mission_target
+}
+
+sr_ai_mission_past_ceiling = {
+	value = sr_ai_mission_tier_current
+	subtract = var:sr_ai_mission_ceiling
 }
 
 # Over 0: the country's technology allows a dearer mission than its ceiling.

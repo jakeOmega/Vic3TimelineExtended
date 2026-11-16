@@ -295,11 +295,15 @@ sr_ai_mission_set_ceiling = {
 # facts nobody had read: that script can set a government building's method
 # for the AI, that it then stays, and that the engine's own method AI leaves a
 # Mission Limit ceiling alone and climbs no mission past it.
-#   BROKEN  the ceiling or the mission the pass set last month is not the one
-#           the program runs now: the engine's AI moved one, or the switch
-#           did not take; or the program is still on Any Mission at two
-#           reviews in a row after the pass set a ceiling, so the switch to a
-#           ceiling never took.
+#   BROKEN  the ceiling the pass set last month is not the active one, the
+#           program runs a mission past that ceiling, or a cheaper mission
+#           than the pass set: the engine's AI moved one, or the switch did
+#           not take; or the program is still on Any Mission at two reviews in
+#           a row after the pass set a ceiling, so the switch to a ceiling
+#           never took. A dearer mission than the pass set but within the
+#           ceiling is not BROKEN: a country that researches a mission's
+#           technology between reviews may climb to it (the engine's AI, or a
+#           Begin decision), and the ceiling allows that.
 #   OK      twelve monthly reviews in which both held while the country's
 #           technology allowed a dearer mission than its ceiling (so the
 #           engine's AI, under most_productive, had a mission to climb to).
@@ -339,14 +343,14 @@ sr_ai_mission_self_check = {
 				OR = {
 					sr_ai_mission_ceiling_gap > 0
 					sr_ai_mission_ceiling_gap < 0
-					sr_ai_mission_target_gap > 0
+					sr_ai_mission_past_ceiling > 0
 					sr_ai_mission_target_gap < 0
 				}
 			}
 			if = {
 				limit = { NOT = { has_global_variable = sr_ai_mission_ceiling_broken_logged } }
 				set_global_variable = { name = sr_ai_mission_ceiling_broken_logged value = yes }
-				debug_log = "TE_SELF_CHECK BROKEN sr_ai_mission_ceiling country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] ceiling_set=[THIS.Var('sr_ai_mission_ceiling').GetValue|0] ceiling_active=[THIS.ScriptValue('sr_ai_mission_ceiling_tier_active')|0] mission_set=[THIS.Var('sr_ai_mission_target').GetValue|0] mission_now=[THIS.ScriptValue('sr_ai_mission_tier_current')|0] tech=[THIS.ScriptValue('sr_ai_mission_tech_tier')|0] (tiers: 1 Earth Orbit, 2 Moon, 3 Mars, 4 Solar, 5 Deep Space, 6 Interstellar; ceiling 0 Any Mission) fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_now=[THIS.ScriptValue('sr_ai_mission_bill_now')|0] share_now_pct=[THIS.ScriptValue('sr_ai_mission_share_now_pct')|1] throughput_modifier=[THIS.ScriptValue('sr_ai_mission_throughput_read')|2] funding_levels=[THIS.ScriptValue('sr_ai_program_funding_levels')|0] (the Mission Limit ceiling or the mission the AI's budget pass set last month is not the one the Space Program runs: the engine's AI moved it, or the switch did not take; docs/testing/space-race-playtest.md)"
+				debug_log = "TE_SELF_CHECK BROKEN sr_ai_mission_ceiling country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] ceiling_set=[THIS.Var('sr_ai_mission_ceiling').GetValue|0] ceiling_active=[THIS.ScriptValue('sr_ai_mission_ceiling_tier_active')|0] mission_set=[THIS.Var('sr_ai_mission_target').GetValue|0] mission_now=[THIS.ScriptValue('sr_ai_mission_tier_current')|0] tech=[THIS.ScriptValue('sr_ai_mission_tech_tier')|0] (tiers: 1 Earth Orbit, 2 Moon, 3 Mars, 4 Solar, 5 Deep Space, 6 Interstellar; ceiling 0 Any Mission) fixed_income=[THIS.ScriptValue('sr_ai_mission_fixed_income_read')|0] bill_now=[THIS.ScriptValue('sr_ai_mission_bill_now')|0] share_now_pct=[THIS.ScriptValue('sr_ai_mission_share_now_pct')|1] throughput_modifier=[THIS.ScriptValue('sr_ai_mission_throughput_read')|2] funding_levels=[THIS.ScriptValue('sr_ai_program_funding_levels')|0] (the Mission Limit ceiling the AI's budget pass set last month is not the active one, or the Space Program runs a mission past it or cheaper than the pass set: the engine's AI moved it, or the switch did not take; docs/testing/space-race-playtest.md)"
 			}
 		}
 		else_if = {
