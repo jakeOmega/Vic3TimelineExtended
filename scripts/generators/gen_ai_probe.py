@@ -106,9 +106,13 @@ RANKS = ["great_power", "major_power", "minor_power", "insignificant_power", "un
 # Building types logged by level beside the groups, where one type is the thing to watch.
 BUILDING_TYPES = [
     "building_construction_sector", "building_government_administration", "building_university",
-    "building_barracks", "building_naval_base", "building_conscription_center", "building_port",
-    "building_railway", "building_power_plant", "building_urban_center", "building_trade_center",
-    "building_arts_academy", "building_financial_district", "building_manor_house", "building_company_headquarter",
+    "building_barrack", "building_conscription_center", "building_military_base", "building_shipyard",
+    "building_naval_administration", "building_naval_logistics_center", "building_port", "building_railway",
+    "building_highway", "building_airport", "building_network_infrastructure", "building_power_plant",
+    "building_hydro_plant", "building_nuclear_plant", "building_renewable_energy_plant", "building_fusion_plant",
+    "building_urban_center", "building_trade_center", "building_art_academy", "building_financial_district",
+    "building_manor_house", "building_company_headquarter", "building_public_housing", "building_software_industry",
+    "building_electronic_components_and_semiconductor_industry",
 ]
 
 # The classes a finished building is counted under (the first group that matches).
@@ -242,8 +246,25 @@ def catalog(mod_state) -> dict:
                 if target in tier and tier[target] < tier[name] + 1:
                     tier[target] = tier[name] + 1
 
-    groups = [bare(key) for key in mod_state.get_data("Building Groups")]
-    buildings = {bare(key) for key in mod_state.get_data("Buildings")}
+    # A group counts when a building belongs to it or to a group under it. Vanilla keeps 21 legacy groups
+    # (bg_coal_mining, bg_wheat_farms, ...) that no building belongs to; test_no_dead_building_groups.py bars them.
+    group_data = mod_state.get_data("Building Groups")
+    parent = {}
+    for key in group_data:
+        body = unwrap(group_data[key])
+        up = unwrap(body.get("parent_group")) if isinstance(body, dict) else None
+        if isinstance(up, str):
+            parent[bare(key)] = up
+    building_data = mod_state.get_data("Buildings")
+    live: set[str] = set()
+    for key in building_data:
+        body = unwrap(building_data[key])
+        group = unwrap(body.get("building_group")) if isinstance(body, dict) else None
+        while isinstance(group, str) and group not in live:
+            live.add(group)
+            group = parent.get(group)
+    groups = [bare(key) for key in group_data if bare(key) in live]
+    buildings = {bare(key) for key in building_data}
     institutions = [bare(key) for key in mod_state.get_data("Institutions")]
     return {
         "law_groups": law_groups,

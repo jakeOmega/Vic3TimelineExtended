@@ -388,7 +388,7 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
             [num(r, "army_tier") for r in rows if num(r, "army") > 0], 2)),
         ("Military technologies", lambda rows: spread(
             [sum(num(r, f) for f in r if f.startswith("tc_military_")) for r in rows], 0)),
-        ("Barracks levels", lambda rows: spread([num(r, "bt_barracks") for r in rows], 0)),
+        ("Barracks levels", lambda rows: spread([num(r, "bt_barrack") for r in rows], 0)),
     ])
     table("5. Expansion", [
         ("States", lambda rows: spread([num(r, "states") for r in rows], 0)),
