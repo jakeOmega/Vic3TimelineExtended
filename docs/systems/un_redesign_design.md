@@ -924,7 +924,10 @@ the classification and the loc.
    a member defending in one of them. Each such month: war
    support −2.5 × E in each war, aggression record +1, and an order debit of 0.25 that accrues
    on the aggressor and is booked every six months and when the order ends (ledger 30), so a
-   long order does not fill the twelve-entry log. After three months of fighting on, standing
+   long order does not fill the twelve-entry log. The count (`un_cf_debit_months`) starts at 0
+   when the order is imposed, with the order's other counters; until 2026-11-15 nothing set it,
+   so the month's `change_variable` failed and no debit was ever booked (#1818;
+   `test_un_ceasefire_order.py`). After three months of fighting on, standing
    −5 once (−2 if it accepted the censure; code 39). At imposition the aggressor records the
    victim's state count and capital region. The order then ends one of five ways (the
    `un_order_effects.txt` header): **kept** when the war with the victim is over, the aggressor
@@ -1036,7 +1039,8 @@ the classification and the loc.
       (the mod's first `is_diplomatic_play_type`).
 - [ ] Electoral mission: closes after a campaign ends; Election Interference's cut halved.
 - [ ] Ceasefire: war support falls monthly and the war ends by capitulation; at most five log
-      entries per order. A peace that takes a state gives `.5` and no mission; a white peace
+      entries per order, the first after six months of fighting on
+      (`docs/testing/un-tooltips-playtest.md`, "The ceasefire order's debit"). A peace that takes a state gives `.5` and no mission; a white peace
       gives `.3` and a mission; a victim suspended mid-war lapses quietly; the vote events name
       the victim and the subject (`SCOPE.sCountry(…).MakeScope.Var(…).GetState`).
 - [ ] Referendum: `make_independent` on a dominion; the roll matches the shown odds.

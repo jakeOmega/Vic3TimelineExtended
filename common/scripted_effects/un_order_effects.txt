@@ -66,7 +66,8 @@
 #                             presence IS the order.
 #     un_cf_fought_months     months it has fought on under the order
 #     un_cf_debit_months      months of order debit accrued but not yet
-#                             booked (ledger 30)
+#                             booked (ledger 30): 0 at imposition and after
+#                             each booking
 #     un_cf_order_accepted    flag: it voted for its own censure
 #     un_cf_fight_on_charged  flag: its standing has paid for fighting on
 #     un_cf_victim            the victim the order names (the mission's host)
@@ -298,6 +299,10 @@ un_ceasefire_order_impose = {
 	save_temporary_scope_as = un_cf_agg_check
 	set_variable = { name = un_cf_order_months value = un_cf_order_length }
 	set_variable = { name = un_cf_fought_months value = 0 }
+	# The month counts with change_variable, which does nothing on a variable
+	# that is not set: every counter it changes starts here (#1818: without
+	# this line no order's debit was ever booked).
+	set_variable = { name = un_cf_debit_months value = 0 }
 	if = {
 		limit = { has_variable = un_cf_fight_on_charged }
 		remove_variable = un_cf_fight_on_charged

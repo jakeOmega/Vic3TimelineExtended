@@ -2336,6 +2336,24 @@ Key pattern: `remove_modifier` + `add_modifier` with `multiplier` calculated fro
 
 **Don't use `min` / `max` inside `change_variable`.** The engine docs list them as operations without saying which way they clamp, and vanilla never uses them there. The direction is easy to get backwards: in a script value `max = N` caps (see "Repeated `min` / `max` in a script value are sequential clamps"), so `change_variable = { name = x max = 0 }` written as "no lower than 0" most likely caps `x` at 0 instead. Ten mod sites did that (2026-09-26): the nuclear programme's development setbacks, Election Interference's "worst phase reached", which as written never left 0, and the Intelligence Sharing shield. Use `clamp_variable = { name = x max = 120 min = 0 }`, where `min` is unambiguously the floor. Pass both bounds, as all eight vanilla sites do; a one-bound form has no precedent. Or write an explicit `if = { limit = { var:x < N } set_variable = { name = x value = N } }`. `change_variable_clamp_audit` flags any `min =` / `max =` directly inside `change_variable`, `change_global_variable` or `change_local_variable` on every `POST /reload` and in CI (`--strict`).
 
+## `change_variable` Does Not Create a Variable: Set It Before the First Change
+
+`change_variable` (and `change_global_variable`, `change_local_variable`) on a variable that is not set does nothing, and each time it runs it logs `change_variable effect [ Variable not of the 'value' scope type. Type: empty ]`. Nothing is said at load. The variable stays unset: a `var:X` comparison on the next line logs `Failed to fetch variable for 'X' due to not being set`, `Event target link 'var' returned an unset scope` and `Invalid left side during comparison 'var'`, and is false. Read from `game.log`, 2026-11-14 (1.15.1): the UN cease-fire order's month ran `change_variable = { name = un_cf_debit_months add = 1 }` and then tested `var:un_cf_debit_months >= un_cf_order_debit_batch_months`; the four lines came once a month for the 17 months one aggressor fought on, the test never passed, and no order's debit was ever booked (#1818).
+
+**The count-and-reset shape hides it.** The only `set_variable` of that counter was the reset after a booking, `if = { limit = { has_variable = un_cf_debit_months var:un_cf_debit_months > 0 } … set_variable = { name = un_cf_debit_months value = 0 } }`: a grep for the name finds a set, but that set can only run once the variable exists. A set behind a `has_variable = X` check or a `var:X` read of the same variable re-sets; it never initialises.
+
+Start a counter where its owner starts (the order's imposition, a container's creation, a journal entry's `immediate`), or initialise it at the change, as `un_standing_year_rollover` does:
+
+```
+if = {
+	limit = { NOT = { has_variable = x } }
+	set_variable = { name = x value = 0 }
+}
+change_variable = { name = x add = 1 }
+```
+
+`change_variable_init_audit` flags a change whose variable has no initialising `set_variable` anywhere in the mod or in vanilla's `common/` (`--strict` in CI). It matches names, through a scripted effect's `$PARAM$` to the name each caller passes, so it catches a counter nothing starts but not one whose set runs too late.
+
 ## Character Trait `replace` Block
 
 When adding a new tier to a mutually exclusive trait group (e.g., adding "terrible" tier to the ruler_poor/average/skilled/exceptional series), EVERY existing trait's `replace = { ... }` block must be updated to include the new trait. Otherwise two traits from the same group can coexist on a character. The `replace` list causes the engine to automatically remove any listed trait when the new one is added.

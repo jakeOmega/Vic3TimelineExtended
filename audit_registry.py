@@ -257,6 +257,21 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `min =` / `max =` line or the `change_variable = {` line",
     ),
     Audit(
+        "change_variable_init_audit",
+        "A `change_variable` (or the global or local form) on a variable nothing sets first: no `set_variable` "
+        "of it in the mod or in vanilla's `common/`, or each one behind a `has_variable` check or a `var:` read "
+        "of the same variable. `change_variable` on an unset variable does nothing and logs `Variable not of "
+        "the 'value' scope type. Type: empty` each time, so the counter never counts (#1818: the UN cease-fire "
+        "order's debit). Set it where its owner begins, or just before the change behind "
+        "`NOT = { has_variable = X }`.",
+        where="trailing on the `change_variable` line (the opening line of a multi-line block)",
+        tags=("variable_init",),
+        note="Matches names only: one unguarded set anywhere clears every change of that name, so it does not "
+             "prove the set runs first. A set of a name in a scripted effect's parameter counts for the name "
+             "each caller passes; a change whose name is all parameter is not judged. `--write` writes the "
+             "report offline.",
+    ),
+    Audit(
         "building_scope_variable_audit",
         "A variable set or read in building scope. Buildings hold no variables (#519).",
         where="trailing on the flagged operation or the bare `var:X` line",

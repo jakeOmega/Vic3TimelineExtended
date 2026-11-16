@@ -112,6 +112,7 @@ POST_LOAD_AUDITS = [
     ("sol_fraction_audit",            "sol_fraction_audit"),
     ("delayed_event_trigger_audit",   "delayed_event_trigger_audit"),
     ("trigger_range_audit",           "trigger_range_audit"),
+    ("change_variable_init_audit",    "change_variable_init_audit"),
 ]
 
 
