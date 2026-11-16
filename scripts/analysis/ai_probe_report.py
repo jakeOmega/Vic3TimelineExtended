@@ -24,6 +24,7 @@ Figures are medians with the 10th and 90th percentiles unless a line says otherw
 from __future__ import annotations
 
 import argparse
+import bisect
 import json
 import re
 import statistics
@@ -69,8 +70,16 @@ class Parsed:
         self.snapshots: dict[tuple[int, int], dict] = {}   # (id, k) -> record
         self.data_lines: dict[tuple[int, int], dict] = {}  # the X lines, same key
         self.events: list[dict] = []
+        self.world: dict[int, dict] = {}            # the W lines (version 2): k -> {y, countries, dn, dn_states}
         self.bad: list[str] = []
         self.line_names: Counter = Counter()
+        self.k_restarts = 0                         # a K line whose month is below the last one's: a second run
+        self._last_k = 0
+
+    def version(self) -> int:
+        """The probe version the log armed with (1 before ARM lines carried it)."""
+        versions = [int(m.group(1)) for body in self.armed for m in [re.search(r"v=(\d+)", body)] if m]
+        return max(versions, default=1)
 
     def records(self) -> list[dict]:
         out = []
@@ -104,7 +113,13 @@ def parse_lines(lines, key: dict, parsed: Parsed | None = None) -> Parsed:
                 parsed.canary[name] = number(value[2:]) if value.startswith("v=") else (value or True)
             elif kind == "K":
                 k, _, body = rest.partition(" ")
+                if int(k) < parsed._last_k:
+                    parsed.k_restarts += 1
+                parsed._last_k = int(k)
                 parsed.ticks.setdefault(int(k), {}).update(pairs(body))
+            elif kind == "W":
+                k, _, body = rest.partition(" ")
+                parsed.world[int(k)] = {"k": int(k), **pairs(body)}
             elif kind == "KDATE":
                 k, _, date = rest.partition(" ")
                 parsed.ticks.setdefault(int(k), {})["date"] = date.strip()
@@ -156,6 +171,15 @@ def load_dir(folder: Path) -> Parsed:
     ticks = folder / "ticks.json"
     if ticks.exists():
         parsed.ticks = {int(k): v for k, v in json.loads(ticks.read_text(encoding="utf-8")).items()}
+    world = folder / "world.json"
+    if world.exists():
+        parsed.world = {int(k): v for k, v in json.loads(world.read_text(encoding="utf-8")).items()}
+    canary = folder / "canary.json"
+    if canary.exists():
+        parsed.canary = json.loads(canary.read_text(encoding="utf-8"))
+    armed = folder / "armed.json"
+    if armed.exists():
+        parsed.armed = json.loads(armed.read_text(encoding="utf-8"))
     return parsed
 
 
@@ -189,7 +213,11 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
                f"with a date: {sum(1 for t in parsed.ticks.values() if 'date' in t)}")
     records = parsed.records()
     out.append(f"snapshots: {len(records)} of {len({r['id'] for r in records})} countries")
-    expected = list(key["lines"])
+    version = parsed.version()
+    expected = expected_lines(key, version)
+    if len(expected) < len(key["lines"]):
+        out.append(f"  a version-{version} log: the {len(key['lines']) - len(expected)} lines later versions added "
+                   "are not expected of it")
     absent = [name for name in expected if not parsed.line_names.get(name)]
     if records:
         top = max(parsed.line_names.values())
@@ -216,6 +244,10 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
         # (every building-type level was, until the read took a `bt:` link).
         positional = set(key.get("positional_groups", []))
         for name, fields in key["lines"].items():
+            if name not in expected:
+                continue
+            # A field no record carries is not in this log's version (version 2's additions to a version-1 line).
+            fields = [f for f in fields if any(f in r for r in records)]
             dead = [f for f in fields if all(not r.get(f) for r in records)]
             if not dead:
                 continue
@@ -229,9 +261,186 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
     data = len(parsed.data_lines)
     out.append(f"data-function (X) records: {data}")
     out.append(f"events: {len(parsed.events)} {dict(Counter(e['event'] for e in parsed.events).most_common())}")
+    if version >= 2:
+        lines, good = check_version_2(parsed, key, records)
+        out.extend(lines)
+        ok = ok and good
+    if parsed.k_restarts:
+        out.append(f"WARNING: the month count went back {parsed.k_restarts} times: these files hold more than one "
+                   "run, whose serials and months collide. Read each run alone.")
     if parsed.bad:
         out.append(f"unreadable probe lines: {len(parsed.bad)}; first: {parsed.bad[0]}")
     return out, ok
+
+
+def expected_lines(key: dict, version: int) -> list[str]:
+    """The snapshot lines a log of this probe version prints (every line, for a key without `lines_added`)."""
+    added = key.get("lines_added")
+    if not added:
+        return list(key["lines"])
+    wanted = {name for v, names in added.items() if int(v) <= version for name in names}
+    return [name for name in key["lines"] if name in wanted]
+
+
+def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[list[str], bool]:
+    """Version 2's additions, each read here once: none of them had printed when it was written (2026-11-16)."""
+    out, ok = ["version 2 additions:"], True
+    # The W line.
+    if parsed.world:
+        first = parsed.world[min(parsed.world)]
+        out.append(f"  world (W) lines: {len(parsed.world)}; the first: {first}")
+        if all(not w.get("dn") for w in parsed.world.values()):
+            out.append("  W: dn is 0 in every line (no decentralized nation counted: check the read)")
+    else:
+        out.append("  world (W) lines: NONE (the first prints in the month the probe arms)")
+        ok = False
+    # Law ends.
+    ends = [e for e in parsed.events if e["event"] == "law_end"]
+    if ends:
+        how = Counter(e.get("how") for e in ends)
+        names = key.get("law_end_how", [])
+        shown = {(names[h - 1] if isinstance(h, int) and 0 < h <= len(names) else h): n for h, n in how.items()}
+        out.append(f"  law ends by how they ended: {shown}; maximum setbacks: "
+                   f"{dict(Counter(e.get('max') for e in ends))}")
+        passes = sum(1 for e in parsed.events if e["event"] == "law_pass")
+        if how.get(1, 0) != passes:
+            out.append(f"  law_end how=passed {how.get(1, 0)} against {passes} law_pass lines (the pass mark is not "
+                       "reaching the end hook)")
+        if not any(isinstance(h, int) and h > 0 for h in how):
+            ok = False
+    else:
+        out.append("  law ends: none yet")
+    sets = sum(num(r, "n_law_set") for r in records)
+    out.append(f"  laws set outside an enactment (n_law_set), all snapshots: {sets}")
+    # Plays.
+    plays = [e for e in parsed.events if e["event"] == "play"]
+    if plays:
+        types = key.get("play_types", [])
+        named = Counter(types[e["type"] - 1] if isinstance(e.get("type"), int) and 0 < e["type"] <= len(types)
+                        else e.get("type") for e in plays)
+        out.append(f"  plays by type: {dict(named.most_common(8))}; initiator rank 0 in "
+                   f"{sum(1 for e in plays if not e.get('rank'))} of {len(plays)}; serial 0 in "
+                   f"{sum(1 for e in plays if not e.get('id'))}")
+        if all(not e.get("type") for e in plays):
+            out.append("  plays: type is 0 in every play (the type index did not evaluate in the play's scope)")
+            ok = False
+    else:
+        out.append("  plays: none yet")
+    zero_ids = sum(1 for e in parsed.events if not e.get("id"))
+    out.append(f"  events with serial 0: {zero_ids} of {len(parsed.events)}")
+    new = [r for r in records if any(f.startswith("im_") for f in r)]
+    if new:
+        # Institutions: the level can never be above the maximum the country may invest in.
+        over = Counter()
+        held = 0
+        for r in new:
+            for f in r:
+                if f.startswith("in_") and num(r, f) > 0:
+                    held += 1
+                    if num(r, "im_" + f[3:]) < num(r, f):
+                        over[f[3:]] += 1
+        out.append(f"  institutions: level above investment_max in {sum(over.values())} of {held} held "
+                   f"institutions{(': ' + str(dict(over.most_common(5)))) if over else ''}")
+        if held and sum(over.values()) == held:
+            out.append("  im_*: every maximum reads below its level (investment_max is not read)")
+            ok = False
+        # Units: the R line's shares add up to the army.
+        unit_fields = list(key.get("unit_line", {}))
+        armies = [r for r in new if num(r, "army") > 0]
+        sums = [sum(num(r, f) for f in unit_fields) for r in armies]
+        if sums:
+            near = sum(1 for s in sums if abs(s - 1) <= 0.02)
+            out.append(f"  units: the R line's shares add to 1 (within 0.02) in {near} of {len(sums)} armies; "
+                       f"median sum {pct(sums, .5):.3f}")
+        # Technologies.
+        flags = list(key.get("tech_flags", {}))
+        held_any = Counter(f for r in new for f in flags if num(r, f) == 1)
+        out.append(f"  technology flags held at least once: {len(held_any)} of {len(flags)}")
+        # The construction purchase, recomputed from the snapshot.
+        pairs_ = [(purchase_target(r), num(r, "cm_target")) for r in new if num(r, "cm_price") > 0]
+        pairs_ = [(a, b) for a, b in pairs_ if a is not None]
+        if pairs_:
+            match = sum(1 for a, b in pairs_ if abs(a - b) <= max(0.011, 0.02 * abs(b)))
+            out.append(f"  purchase recomputed from the snapshot matches cm_target in {match} of {len(pairs_)}"
+                       + ("" if match >= 0.9 * len(pairs_) else " (a term is missing or misread: see purchase_target)"))
+        bubbles = sum(1 for r in new if num(r, "bubble") > 0)
+        out.append(f"  bubble pressure above 0 in {bubbles} of {len(new)}; cm_level_max above 0 in "
+                   f"{sum(1 for r in new if num(r, 'cm_level_max') > 0)}")
+    else:
+        out.append("  no snapshot with the version-2 fields yet")
+    lines, good = check_construction_sector(key, records)
+    return out + lines, ok and good
+
+
+def check_construction_sector(key: dict, records: list[dict]) -> tuple[list[str], bool]:
+    """The O2 line's Construction Sector fields: each read against what the others say it must be."""
+    out, ok = [], True
+    rows = [r for r in records if "cs_low" in r]
+    if not rows:
+        return ["  Construction Sector fields: no snapshot carries them yet"], True
+    sector = [r for r in rows if num(r, "bt_construction_sector") > 0]
+    methods = list(key.get("construction_methods", {}))
+    out.append(f"  Construction Sector: {len(sector)} of {len(rows)} snapshots hold a sector")
+    if sector:
+        def levels_of(r):
+            return num(r, "bt_construction_sector")
+        summed = sum(1 for r in sector if sum(num(r, m) for m in methods) == levels_of(r))
+        order = sum(1 for r in sector if num(r, "cs_low") <= num(r, "cs_low80") <= levels_of(r))
+        staffing = [num(r, "cs_staffed") / levels_of(r) for r in sector]
+        out.append(f"  sector levels on a named method add to its levels in {summed} of {len(sector)}; under half "
+                   f"<= under {100 * key.get('ai_expansion_staffing', 0.8):.0f}% <= levels in {order}")
+        out.append(f"  sector staffing (cs_staffed over levels): median {pct(staffing, .5):.2f}, 10th-90th "
+                   f"{pct(staffing, .1):.2f}-{pct(staffing, .9):.2f}; above 1 in {sum(1 for s in staffing if s > 1.01)}; "
+                   f"subsidized in {sum(1 for r in sector if num(r, 'cs_sub') > 0)}")
+        if summed == 0:
+            out.append("  cs_pm_*: no sector's methods add up to its levels (the method read is wrong)")
+        # A sector not all under half staffed has staff, so a 0 there everywhere is a read that returns nothing.
+        staffed = [r for r in sector if num(r, "cs_low") < levels_of(r)]
+        if staffed and all(not num(r, "cs_staffed") for r in staffed):
+            out.append("  cs_staffed is 0 in every sector with staff (occupancy did not read as a value)")
+            ok = False
+    prices = [num(r, "cs_price") for r in rows]
+    out.append(f"  construction good, price over base: median {pct(prices, .5):.3f}, 10th-90th "
+               f"{pct(prices, .1):.3f}-{pct(prices, .9):.3f}; below base in {sum(1 for p in prices if p < 0.999)}")
+    if all(abs(p - 1) < 0.0005 for p in prices):
+        out.append("  cs_price is exactly 1 in every snapshot (the market read returns nothing)")
+        ok = False
+    for name in ("cs_buy", "cs_sell"):
+        positive = sum(1 for r in rows if num(r, name) > 0)
+        out.append(f"  {name} above 0 in {positive} of {len(rows)}"
+                   + ("" if positive else " (the order read returns nothing; the price is not affected)"))
+    sites = [r for r in rows if num(r, "bg_te_construction_market_bg") > 0]
+    out.append(f"  Construction Sites: {len(sites)} snapshots hold one; under half staffed in "
+               f"{sum(1 for r in sites if num(r, 'site_low') > 0)}")
+    return out, ok
+
+
+def purchase_target(r: dict):
+    """te_construction_market_ai_purchase_target (common/script_values/te_construction_market_ai_values.txt)
+    restated over a snapshot's fields, None where the snapshot lacks a term (version 1). Script `min = X` raises
+    the value to X, `max = X` lowers it to X."""
+    if "cm_level_max" not in r or num(r, "cm_price") <= 0:
+        return None
+    price = num(r, "cm_price")
+    fixed, net, gold, debt = num(r, "fixed_income"), num(r, "net_fixed"), num(r, "gold_scaled"), num(r, "debt_scaled")
+    queue, level_max = num(r, "queue_gov"), num(r, "cm_level_max")
+    bureaucracy_buy = fixed * 0.2 / price
+    if num(r, "paused") != 1 and queue > 0:
+        factor = 1 + gold - debt
+        if num(r, "war") == 1 and gold < 0.5:
+            factor -= 0.5 - gold
+        if num(r, "bubble") >= 50 and gold < 0.3:
+            factor -= 0.3 - gold
+        value = max(net, 0) / price * max(factor, 0.1)
+        whole = min(fixed * 0.05 / price, 10)
+        floor = whole * min(max(gold / 0.1, 0), 1)
+        floor = max(floor, min(max(net, 0) / price, whole * 0.1))
+        if num(r, "bur") < 0:
+            floor += bureaucracy_buy
+        return min(max(value, floor), queue * level_max)
+    if queue > 0 and num(r, "cm_admin") == 1:
+        return min(bureaucracy_buy, level_max)
+    return 0.0
 
 
 # --- report --------------------------------------------------------------------------------------------------------
@@ -274,6 +483,109 @@ def series(records: list[dict]) -> dict[int, list[dict]]:
     return by_id
 
 
+# A default within this many months of the same country's last default ending continues that episode: the engine
+# moves a country in and out of default month to month (in the first long run half the gaps were 0 months, 89%
+# were within 12, and 1,925 defaults made 317 episodes on this rule).
+DEFAULT_EPISODE_GAP = 12
+CADENCE_FROM_YEAR = 1890
+
+
+def k_to_year(ticks: dict[int, dict]):
+    """A function from a month count to its year, from the K lines (the nearest earlier month for a gap)."""
+    ks = sorted(k for k, t in ticks.items() if isinstance(t.get("y"), int))
+    years = [ticks[k]["y"] for k in ks]
+
+    def year(k):
+        if not ks:
+            return None
+        i = bisect.bisect_right(ks, k) - 1
+        return years[max(i, 0)]
+    return year
+
+
+def first_k_of_year(ticks: dict[int, dict], year: int):
+    ks = [k for k, t in ticks.items() if isinstance(t.get("y"), int) and t["y"] >= year]
+    return min(ks) if ks else None
+
+
+def default_episodes(events: list[dict], gap: int = DEFAULT_EPISODE_GAP) -> list[dict]:
+    """The default events that open an episode: a country's first default, or one more than `gap` months after its
+    last default ended. Countries are told apart by tag (version 1 logged some events with serial 0)."""
+    out, last_end = [], {}
+    for event in sorted((e for e in events if e["event"] in ("default", "default_end")), key=lambda e: e["k"]):
+        tag = event["tag"]
+        if event["event"] == "default_end":
+            last_end[tag] = event["k"]
+        elif tag not in last_end or event["k"] - last_end[tag] > gap:
+            out.append(event)
+    return out
+
+
+def law_cadence(events: list[dict], ai: list[dict], strategies: list[str], from_k=None, include=None) -> list[dict]:
+    """Law starts per idle month, by the political agenda held: the reference computation of the 2026-11-16
+    baseline analysis (l1_cadence.py), here so a later run reads the same way.
+
+    For each tag that reported: an idle spell runs from an enactment's end (or month 1) to the next start, or to
+    the last month the tag reported (censored, no start). Each idle month counts against the agenda the tag held at
+    that month (its latest snapshot at or before it; the first one before that); a start counts against the agenda
+    held in its month. A start in the month an enactment ended counts with no idle month. `from_k` repeats the count
+    for months from that one on. `include(tag, k)`, where given, keeps only the months (and starts) it accepts: the
+    largest economies' months, for instance."""
+    snaps: dict[str, list[tuple[int, int]]] = defaultdict(list)
+    for r in ai:
+        snaps[r["tag"]].append((r["k"], num(r, "strat_political")))
+    for rows in snaps.values():
+        rows.sort(key=lambda pair: pair[0])     # by month only, stably: two objects can share a tag and a month
+    keys = {tag: [k for k, _ in rows] for tag, rows in snaps.items()}
+
+    def agenda(tag, k):
+        rows = snaps[tag]
+        i = bisect.bisect_right(keys[tag], k) - 1
+        idx = rows[max(i, 0)][1]
+        return strategies[idx - 1] if 0 < idx <= len(strategies) else "none"
+
+    if not events:
+        return []
+    last_k = max(e["k"] for e in events)
+    by_tag: dict[str, list[tuple[int, int]]] = defaultdict(list)
+    for e in events:
+        if e["event"] == "law_end":
+            by_tag[e["tag"]].append((e["k"], 0))
+        elif e["event"] == "law_start":
+            by_tag[e["tag"]].append((e["k"], 1))
+    stats: dict[str, dict] = defaultdict(lambda: {"starts": 0, "months": 0, "starts_late": 0, "months_late": 0,
+                                                  "waits": []})
+    for tag in snaps:
+        seq = sorted(by_tag.get(tag, []))
+        enacting, free = bool(seq) and seq[0][1] == 0, 1
+        spells = []
+        for k, kind in seq:
+            if kind == 1:
+                if not enacting:
+                    spells.append((free, k, True))
+                enacting = True
+            else:
+                enacting, free = False, k
+        if not enacting:
+            spells.append((free, min(keys[tag][-1], last_k), False))
+        for k0, k1, started in spells:
+            months = range(k0, k1) if started else range(k0, k1 + 1)
+            for m in months:
+                if include is not None and not include(tag, m):
+                    continue
+                row = stats[agenda(tag, m)]
+                row["months"] += 1
+                if from_k is not None and m >= from_k:
+                    row["months_late"] += 1
+            if started and (include is None or include(tag, k1)):
+                row = stats[agenda(tag, k1)]
+                row["starts"] += 1
+                row["waits"].append(k1 - k0)
+                if from_k is not None and k1 >= from_k:
+                    row["starts_late"] += 1
+    return [{"agenda": name, **row} for name, row in sorted(stats.items(), key=lambda item: -item[1]["months"])]
+
+
 def yearly_rate(first: dict, last: dict, field: str):
     a, b, months = num(first, field), num(last, field), last["k"] - first["k"]
     if a <= 0 or b <= 0 or months <= 0:
@@ -281,215 +593,720 @@ def yearly_rate(first: dict, last: dict, field: str):
     return (b / a) ** (12 / months) - 1
 
 
-def report(parsed: Parsed, key: dict, bucket_years: int = 10) -> str:
+# The scorecard's three lenses, in the order every table gives them. The owner judges a run first by the largest
+# economies (2026-11-16): "I am most interested in ensuring the big economies grow - they are typically the
+# competitors to the player. A game where only the big economies grow is better than one where only small economies
+# grow. But by country count, most economies are small. So just a warning about measuring success by median country
+# or anything like that."
+TOP_N = 20
+LENSES = [
+    ("top", f"The {TOP_N} largest AI economies of the decade (by GDP): medians, with the 10th and 90th percentiles"),
+    ("world", "All AI countries, weighted by GDP: medians become GDP-weighted means, shares become shares of GDP, "
+              "ratios become the ratio of the totals, and counts a year become totals a year"),
+    ("all", "The typical country: every AI country, medians (most of them are small)"),
+]
+RANK_BANDS = [
+    ("great", ["great_power"]), ("major", ["major_power"]), ("minor", ["minor_power"]),
+    ("insignificant", ["insignificant_power"]),
+    ("unrecognized", ["unrecognized_major_power", "unrecognized_regional_power", "unrecognized_power"]),
+]
+
+
+def gdp(record: dict) -> float:
+    return max(num(record, "gdp"), 0)
+
+
+def weighted(pairs_, digits=1, scale=1.0) -> str:
+    """The GDP-weighted mean of (value, record) pairs."""
+    pairs_ = [(v, r) for v, r in pairs_ if isinstance(v, (int, float))]
+    weight = sum(gdp(r) for _, r in pairs_)
+    if not pairs_ or weight <= 0:
+        return "-"
+    return f"{sum(v * gdp(r) for v, r in pairs_) / weight * scale:.{digits}f}"
+
+
+def gdp_share(records, test) -> str:
+    records = list(records)
+    total = sum(gdp(r) for r in records)
+    if not records or total <= 0:
+        return "-"
+    return f"{100 * sum(gdp(r) for r in records if test(r)) / total:.0f}% of GDP"
+
+
+class Col:
+    """A scorecard column, read through each lens (LENSES).
+
+    value(r)            a figure per snapshot: its median (or mean, `mean=True`); weighted by GDP, or summed a year
+                        (`total=True`) through the world lens. None leaves the snapshot out.
+    test(r)             a share of snapshots; of GDP through the world lens.
+    ratio=(top, bottom) the median of a ratio per snapshot; the ratio of the totals through the world lens.
+    custom(rows)        a string from the rows, "-" through the world lens.
+    world(rows)         replaces any of these through the world lens.
+    among(r)            keeps only the snapshots it accepts, through every lens.
+    """
+
+    def __init__(self, name, value=None, *, test=None, ratio=None, custom=None, world=None, digits=1, scale=1.0,
+                 mean=False, total=False, among=None):
+        self.name, self.value, self.test, self.ratio, self.custom, self.world = name, value, test, ratio, custom, world
+        self.digits, self.scale, self.mean, self.total, self.among = digits, scale, mean, total, among
+
+    def cell(self, rows: list[dict], lens: str) -> str:
+        if self.among:
+            rows = [r for r in rows if self.among(r)]
+        if lens == "world" and self.world is not None:
+            return str(self.world(rows))
+        if self.custom:
+            return "-" if lens == "world" else str(self.custom(rows))
+        if self.test:
+            return gdp_share(rows, self.test) if lens == "world" else share(rows, self.test)
+        if self.ratio:
+            top, bottom = self.ratio
+            usable = [r for r in rows if isinstance(bottom(r), (int, float)) and bottom(r) > 0
+                      and isinstance(top(r), (int, float))]
+            if lens == "world":
+                below = sum(bottom(r) for r in usable)
+                return f"{sum(top(r) for r in usable) / below * self.scale:.{self.digits}f}" if below else "-"
+            return spread([top(r) / bottom(r) for r in usable], self.digits, self.scale)
+        values = [(self.value(r), r) for r in rows]
+        values = [(v, r) for v, r in values if isinstance(v, (int, float))]
+        if lens == "world":
+            if self.total:
+                years = len({r["y"] for _, r in values})
+                return f"{sum(v for v, _ in values) / years * self.scale:.{self.digits}f}" if years else "-"
+            return weighted(values, self.digits, self.scale)
+        if self.mean:
+            return f"{statistics.fmean(v for v, _ in values) * self.scale:.{self.digits}f}" if values else "-"
+        return spread([v for v, _ in values], self.digits, self.scale)
+
+
+def field(name: str):
+    return lambda r: num(r, name)
+
+
+def logged(name: str, fn):
+    """fn(r) where the snapshot's probe version logged the field, else None (a version-1 log has none of
+    version 2's fields, and a 0 there would read as a real figure)."""
+    return lambda r: fn(r) if name in r else None
+
+
+def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int = CADENCE_FROM_YEAR) -> str:
     records = [r for r in parsed.records() if "y" in r]
     out: list[str] = []
     if not records:
         return "No snapshots with a year yet.\n"
     world = [r for r in records if num(r, "type") != key["country_types"].index("decentralized") + 1]
     ai = [r for r in world if num(r, "ai") == 1]
-    years = sorted({r["y"] for r in records})
-    out.append(f"# AI probe scorecard: {years[0]} to {years[-1]}")
+    run_years = sorted({r["y"] for r in records})
+    out.append(f"# AI probe scorecard: {run_years[0]} to {run_years[-1]}")
     out.append("")
     out.append(f"{len(records)} snapshots of {len({r['id'] for r in records})} countries; {len(ai)} are AI countries "
-               f"that are not decentralized nations, which is what every table below counts. Medians, with the 10th "
-               f"and 90th percentiles and the count in brackets.")
+               "that are not decentralized nations, which is what every table below counts.")
+    out.append("")
+    out.append(f"**A run is judged first by the largest economies.** Every table gives the {TOP_N} largest AI "
+               "economies of each decade first, then all AI countries weighted by GDP, and only then the typical "
+               "country, which is small: most AI countries are tiny unrecognized ones, so a median over countries "
+               "says little about the competitors a player meets.")
     if not ai:
         out.append("")
         out.append("No AI country has reported yet.")
         return "\n".join(out) + "\n"
     by_id = series(ai)
+    ranks = key["ranks"]
+    year_of = k_to_year(parsed.ticks)
+
+    def bucket_of(year):
+        return year - year % bucket_years
+
+    def label_of(start):
+        return f"{start}s" if bucket_years == 10 else f"{start}-{start + bucket_years - 1}"
+
+    bucket_rows: dict[int, list[dict]] = defaultdict(list)
+    for r in ai:
+        bucket_rows[bucket_of(r["y"])].append(r)
 
     def buckets():
-        start = years[0] - years[0] % bucket_years
-        while start <= years[-1]:
-            rows = [r for r in ai if start <= r["y"] < start + bucket_years]
-            if rows:
-                yield f"{start}s" if bucket_years == 10 else f"{start}-{start + bucket_years - 1}", rows
-            start += bucket_years
+        for start in sorted(bucket_rows):
+            yield label_of(start), bucket_rows[start]
 
-    def table(title: str, columns: list[tuple[str, object]]):
+    # The largest economies of each decade: the ids with the highest median GDP over their snapshots in it.
+    top_ids: dict[int, set[int]] = {}
+    for start, rows in bucket_rows.items():
+        gdps = defaultdict(list)
+        for r in rows:
+            gdps[r["id"]].append(gdp(r))
+        ranked = sorted(gdps, key=lambda ident: -statistics.median(gdps[ident]))
+        top_ids[start] = set(ranked[:TOP_N])
+    top_tags = {(r["tag"], start) for start, rows in bucket_rows.items() for r in rows if r["id"] in top_ids[start]}
+
+    def top(rows):
+        return [r for r in rows if r["id"] in top_ids[bucket_of(r["y"])]]
+
+    def lens_rows(rows, lens):
+        return top(rows) if lens == "top" else rows
+
+    def table(title: str, columns: list[Col], note: str = ""):
         out.append("")
         out.append(f"## {title}")
-        out.append("")
-        out.append("| Years | " + " | ".join(name for name, _ in columns) + " |")
-        out.append("|---|" + "---|" * len(columns))
-        for label, rows in buckets():
-            out.append(f"| {label} | " + " | ".join(str(fn(rows)) for _, fn in columns) + " |")
+        if note:
+            out.append("")
+            out.append(note)
+        for lens, heading in LENSES:
+            out.append("")
+            out.append(f"**{heading}**")
+            out.append("")
+            out.append("| Years | " + " | ".join(col.name for col in columns) + " |")
+            out.append("|---|" + "---|" * len(columns))
+            for label, rows in buckets():
+                chosen = lens_rows(rows, lens)
+                out.append(f"| {label} | " + " | ".join(col.cell(chosen, lens) for col in columns) + " |")
 
-    def growth(field):
-        def run(rows):
-            ids = {r["id"] for r in rows}
-            rates = []
-            for ident in ids:
-                mine = [r for r in by_id[ident] if r in rows]
-                if len(mine) >= 2:
-                    rate = yearly_rate(mine[0], mine[-1], field)
-                    if rate is not None:
-                        rates.append(rate)
-            return spread(rates, 2, 100)
-        return run
+    def rates(rows, fn):
+        """(yearly growth of fn, the country's first snapshot) for each country with two snapshots in the rows."""
+        ids = {r["id"] for r in rows}
+        chosen = {id(r) for r in rows}
+        out_ = []
+        for ident in ids:
+            mine = [r for r in by_id[ident] if id(r) in chosen]
+            if len(mine) >= 2 and mine[-1]["k"] > mine[0]["k"]:
+                a, b = fn(mine[0]), fn(mine[-1])
+                if a and b and a > 0 and b > 0:
+                    out_.append(((b / a) ** (12 / (mine[-1]["k"] - mine[0]["k"])) - 1, mine[0]))
+        return out_
 
     def per_head(r):
         return num(r, "gdp") / num(r, "pop") if num(r, "pop") > 0 else None
 
-    def head_growth(rows):
-        ids = {r["id"] for r in rows}
-        rates = []
-        for ident in ids:
-            mine = [r for r in by_id[ident] if r in rows]
-            if len(mine) >= 2 and per_head(mine[0]) and per_head(mine[-1]) and mine[-1]["k"] > mine[0]["k"]:
-                rates.append((per_head(mine[-1]) / per_head(mine[0])) ** (12 / (mine[-1]["k"] - mine[0]["k"])) - 1)
-        return spread(rates, 2, 100)
+    def growth(fn):
+        return Col("", custom=lambda rows: spread([v for v, _ in rates(rows, fn)], 2, 100),
+                   world=lambda rows: weighted(rates(rows, fn), 2, 100))
 
+    def named(name, col):
+        col.name = name
+        return col
+
+    def totals(top_fn, bottom_fn, digits=1, scale=1.0):
+        """The ratio of two totals over the rows (the world lens of a per-country ratio)."""
+        def run(rows):
+            usable = [r for r in rows if isinstance(bottom_fn(r), (int, float)) and isinstance(top_fn(r), (int, float))]
+            below = sum(bottom_fn(r) for r in usable)
+            return f"{sum(top_fn(r) for r in usable) / below * scale:.{digits}f}" if below else "-"
+        return run
+
+    # Event counts a snapshot: the events of the snapshot's tag in its year.
+    def event_rate(events, digits=3):
+        by = Counter((e["tag"], year_of(e["k"])) for e in events)
+        value = (lambda r: by[(r["tag"], r["y"])]) if parsed.ticks else (lambda r: None)
+        return dict(value=value, mean=True, total=True, digits=digits)
+
+    # --- the headline ----------------------------------------------------------------------------------------------
+    out.append("")
+    out.append(f"## The headline: the {TOP_N} largest economies against the rest")
+    out.append("")
+    out.append(f"| Years | GDP growth, % a year, {TOP_N} largest (median) | GDP growth, GDP-weighted, all | "
+               f"GDP per head growth, {TOP_N} largest | GDP growth, the rest (median) | "
+               f"{TOP_N} largest, share of AI GDP | Technologies, {TOP_N} largest (median) |")
+    out.append("|---|---|---|---|---|---|---|")
+    for label, rows in buckets():
+        biggest = top(rows)
+        chosen = {id(r) for r in biggest}
+        rest = [r for r in rows if id(r) not in chosen]
+        total = sum(gdp(r) for r in rows)
+        big_share = f"{100 * sum(gdp(r) for r in biggest) / total:.0f}%" if total else "-"
+        out.append(f"| {label} | {spread([v for v, _ in rates(biggest, field('gdp'))], 2, 100)} | "
+                   f"{weighted(rates(rows, field('gdp')), 2, 100)} | "
+                   f"{spread([v for v, _ in rates(biggest, per_head)], 2, 100)} | "
+                   f"{spread([v for v, _ in rates(rest, field('gdp'))], 2, 100)} | {big_share} | "
+                   f"{spread([num(r, 'techs') for r in biggest], 0)} |")
+    newest_top = sorted({r["tag"] for r in top(list(buckets())[-1][1])})
+    out.append("")
+    out.append(f"The {TOP_N} largest in the last decade read: {', '.join(newest_top)}.")
+
+    def band_of(r):
+        name = ranks[num(r, "rank") - 1] if 0 < num(r, "rank") <= len(ranks) else "none"
+        return next((band for band, members in RANK_BANDS if name in members), "other")
+
+    out.append("")
+    out.append("## GDP growth by rank band, % a year (median of countries)")
+    out.append("")
+    out.append("| Years | " + " | ".join(band for band, _ in RANK_BANDS) + " |")
+    out.append("|---|" + "---|" * len(RANK_BANDS))
+    for label, rows in buckets():
+        cells = [spread([v for v, _ in rates([r for r in rows if band_of(r) == band], field("gdp"))], 2, 100)
+                 for band, _ in RANK_BANDS]
+        out.append(f"| {label} | " + " | ".join(cells) + " |")
+
+    # --- 1. growth -------------------------------------------------------------------------------------------------
     table("1. Economic growth", [
-        ("GDP growth, % a year", growth("gdp")),
-        ("GDP per head growth, % a year", head_growth),
-        ("GDP per head", lambda rows: spread([per_head(r) for r in rows if per_head(r)], 2)),
-        ("Standard of living", lambda rows: spread([num(r, "sol") for r in rows], 1)),
-        ("Peasants, % of pops", lambda rows: spread([num(r, "peasants") for r in rows], 0, 100)),
-        ("Building levels", lambda rows: spread([num(r, "levels") for r in rows], 0)),
+        named("GDP growth, % a year", growth(field("gdp"))),
+        named("GDP per head growth, % a year", growth(per_head)),
+        Col("GDP per head", lambda r: per_head(r) or None, digits=2, world=totals(field("gdp"), field("pop"), 2)),
+        Col("Standard of living", field("sol")),
+        Col("Peasants, % of pops", field("peasants"), digits=0, scale=100),
+        Col("Building levels (world: total)", field("levels"), digits=0, total=True),
     ])
     table("1a. The means of growth: construction and investment", [
-        ("Construction sector levels", lambda rows: spread([num(r, "bt_construction_sector") for r in rows], 0)),
-        ("No construction sector", lambda rows: share(rows, lambda r: num(r, "bt_construction_sector") == 0)),
-        ("Queued levels", lambda rows: spread([num(r, "queue_levels") for r in rows], 0)),
-        ("Empty queue", lambda rows: share(rows, lambda r: num(r, "queue_levels") == 0)),
-        ("Built + expanded a year", lambda rows: spread([num(r, "n_built") + num(r, "n_expanded") for r in rows], 0)),
-        ("Of which government", lambda rows: spread([num(r, "n_built_gov") for r in rows], 0)),
-        ("Investment pool, weeks of income", lambda rows: spread(
-            [num(r, "pool") / num(r, "income") for r in rows if num(r, "income") > 0], 1)),
-        ("Method changes a year", lambda rows: spread([num(r, "n_pm") for r in rows], 0)),
+        Col("Construction sector levels (world: total)", field("bt_construction_sector"), digits=0, total=True),
+        Col("No construction sector", test=lambda r: num(r, "bt_construction_sector") == 0),
+        Col("Queued levels (world: total)", field("queue_levels"), digits=0, total=True),
+        Col("Empty queue", test=lambda r: num(r, "queue_levels") == 0),
+        Col("Built + expanded a year", lambda r: num(r, "n_built") + num(r, "n_expanded"), digits=0, total=True),
+        Col("Of which government", field("n_built_gov"), digits=0, total=True),
+        Col("Investment pool, weeks of income", ratio=(field("pool"), field("income")), digits=1),
+        Col("Method changes a year", field("n_pm"), digits=0, total=True),
     ])
 
-    def ratio(top, bottom, scale=100, digits=0):
-        return lambda rows: spread([num(r, top) / num(r, bottom) for r in rows if num(r, bottom) > 0], digits, scale)
+    def outside_construction(r):
+        return num(r, "bg_manufacturing") - num(r, "bg_construction")
 
     table("1c. Staffing, retooling and old methods (shares of levels, %)", [
-        ("Manufacturing under half staffed", ratio("low_mfg", "bg_manufacturing")),
-        ("Manufacturing retooling", ratio("rt_mfg", "bg_manufacturing")),
-        ("Power under half staffed", ratio("low_power", "bg_power")),
-        ("Infrastructure under half staffed", ratio("low_infra", "bg_infrastructure")),
-        ("Mines under half staffed", ratio("low_mine", "bg_mining")),
-        ("All levels retooling", ratio("rt_all", "levels")),
-        ("All levels subsidized", ratio("sub_all", "levels")),
-        ("Urban centers with no street lighting", ratio("uc_no_light", "bt_urban_center")),
-        ("Administrations on the first method", ratio("ga_simple", "bt_government_administration")),
-    ])
+        Col("Manufacturing incl. Construction Sectors, under half staffed",
+            ratio=(field("low_mfg"), field("bg_manufacturing")), digits=0, scale=100),
+        Col("Manufacturing excl. Construction Sectors, under half staffed",
+            ratio=(logged("low_mfg_nc", field("low_mfg_nc")), logged("low_mfg_nc", outside_construction)),
+            digits=0, scale=100),
+        Col("Construction Sector levels, share of manufacturing", ratio=(field("bg_construction"),
+                                                                       field("bg_manufacturing")), digits=0, scale=100),
+        Col("Manufacturing retooling", ratio=(field("rt_mfg"), field("bg_manufacturing")), digits=0, scale=100),
+        Col("Power under half staffed", ratio=(field("low_power"), field("bg_power")), digits=0, scale=100),
+        Col("Infrastructure under half staffed", ratio=(field("low_infra"), field("bg_infrastructure")), digits=0,
+            scale=100),
+        Col("Mines under half staffed", ratio=(field("low_mine"), field("bg_mining")), digits=0, scale=100),
+        Col("All levels retooling", ratio=(field("rt_all"), field("levels")), digits=0, scale=100),
+        Col("All levels subsidized", ratio=(field("sub_all"), field("levels")), digits=0, scale=100),
+        Col("Urban centers with no street lighting", ratio=(field("uc_no_light"), field("bt_urban_center")),
+            digits=0, scale=100),
+        Col("Administrations on the first method", ratio=(field("ga_simple"), field("bt_government_administration")),
+            digits=0, scale=100),
+    ], note="The mod puts the Construction Sector under bg_heavy_industry, so the first column counts idle "
+            "sectors as idle manufacturing; the second (version 2) leaves them out.")
+
+    # Version 2: the sector itself (gen_ai_probe.py, CONSTRUCTION_SECTOR).
+    methods = list(key.get("construction_methods", {}))
+    gate = key.get("ai_expansion_staffing", 0.8)
+
+    def has_sector(r):
+        return "cs_low" in r and num(r, "bt_construction_sector") > 0
+
+    def sector_share(name):
+        return Col("", ratio=(field(name), field("bt_construction_sector")), digits=0, scale=100, among=has_sector)
+
+    def method_mix(rows):
+        totals_ = [sum(num(r, m) for r in rows) for m in methods]
+        whole = sum(totals_)
+        return "/".join(f"{100 * t / whole:.0f}" for t in totals_) if whole else "-"
+
+    def site_share(name):
+        return Col("", ratio=(field(name), field("bg_te_construction_market_bg")), digits=0, scale=100,
+                   among=lambda r: "site_low" in r and num(r, "bg_te_construction_market_bg") > 0)
+
+    if methods:
+        table("1f. The Construction Sector itself: staffing, subsidies, methods and the good's price", [
+            Col("Sector levels (world: total)", field("bt_construction_sector"), digits=0, total=True,
+                among=lambda r: "cs_low" in r),
+            named("Under half staffed, % of levels", sector_share("cs_low")),
+            named(f"Under {100 * gate:.0f}% staffed (the AI's expansion gate), % of levels", sector_share("cs_low80")),
+            named("Mean staffing, % (level-weighted)", sector_share("cs_staffed")),
+            named("Subsidized, % of levels", sector_share("cs_sub")),
+            Col("Levels by method, % (" + "/".join(m[6:] for m in methods) + ")", custom=method_mix,
+                world=method_mix, among=has_sector),
+            Col("Construction good, price over base", field("cs_price"), digits=2, among=lambda r: "cs_price" in r),
+            Col("Sell orders / buy orders", ratio=(field("cs_sell"), field("cs_buy")), digits=2,
+                among=lambda r: "cs_buy" in r),
+            named("Construction Sites under half staffed, % of site levels", site_share("site_low")),
+            named(f"Sites under {100 * gate:.0f}% staffed, %", site_share("site_low80")),
+        ], note=f"Vanilla's AI expands no building under {100 * gate:.0f}% staffed unless it hired the week before "
+                "(00_ai.txt, PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD). The price and the orders are the "
+                "country's market's, which a country in another's market shares; the world lens's orders count a "
+                "shared market once for each of its countries. The method mix is of all the rows' levels in each "
+                "lens. Construction Sites are the market's own building, not the sector.")
     table("1d. The government's purchase of construction (the construction market)", [
-        ("Buying any", lambda rows: share(rows, lambda r: num(r, "cm_public") > 0)),
-        ("Points a week, where buying", lambda rows: spread([num(r, "cm_public") for r in rows if num(r, "cm_public") > 0], 0)),
-        ("Construction paused", lambda rows: share(rows, lambda r: num(r, "paused") == 1)),
-        ("No government level queued", lambda rows: share(rows, lambda r: num(r, "queue_gov") == 0)),
-        ("Debt at 40% of limit or more", lambda rows: share(rows, lambda r: num(r, "debt_scaled") >= 0.4)),
-        ("Reserves under 10% of limit", lambda rows: share(rows, lambda r: num(r, "gold_scaled") < 0.1 and num(r, "debt_scaled") == 0)),
-        ("Tax, % of GDP", ratio("tax_income", "gdp", 5200, 1)),
-        ("Script expenses, % of GDP", ratio("ux_all", "gdp", 5200, 1)),
-    ])
+        Col("Buying any", test=lambda r: num(r, "cm_public") > 0),
+        Col("Points a week, where buying (world: total)", lambda r: num(r, "cm_public") or None, digits=2,
+            total=True),
+        Col("Construction paused", test=lambda r: num(r, "paused") == 1),
+        Col("No government level queued", test=lambda r: num(r, "queue_gov") == 0),
+        Col("Debt at 40% of limit or more", test=lambda r: num(r, "debt_scaled") >= 0.4),
+        Col("Reserves under 10% of limit", test=lambda r: num(r, "gold_scaled") < 0.1 and num(r, "debt_scaled") == 0),
+        Col("Tax, % of GDP", ratio=(field("tax_income"), field("gdp")), digits=1, scale=5200),
+        Col("Script expenses, % of GDP", ratio=(field("ux_all"), field("gdp")), digits=1, scale=5200),
+        Col("Banking brake on (bubble pressure 50+, reserves under 0.3)", among=lambda r: "bubble" in r,
+            test=lambda r: num(r, "bubble") >= 50 and num(r, "gold_scaled") < 0.3),
+    ], note="The world lens's points a week are the total the AI governments buy, over the weeks sampled.")
+
+    episodes = default_episodes(parsed.events)
     table("1b. Solvency", [
-        ("In default", lambda rows: share(rows, lambda r: num(r, "default") == 1)),
-        ("Declared bankrupt (10 years)", lambda rows: share(rows, lambda r: num(r, "bankrupt") == 1)),
-        ("Taking loans", lambda rows: share(rows, lambda r: num(r, "loans") == 1)),
-        ("Debt, share of limit", lambda rows: spread([num(r, "debt_scaled") for r in rows], 2)),
-        ("Reserves, share of limit", lambda rows: spread([num(r, "gold_scaled") for r in rows], 2)),
-        ("Income / expenses", lambda rows: spread(
-            [num(r, "income") / num(r, "expenses") for r in rows if num(r, "expenses") > 0], 2)),
-        ("Military, share of spending", lambda rows: spread([num(r, "mil_share") for r in rows], 0, 100)),
-        ("Bureaucracy below 0", lambda rows: share(rows, lambda r: num(r, "bur") < 0)),
-    ])
-    def xnum(record, field):
-        value = (record.get("x") or {}).get(field)
+        Col("In default", test=lambda r: num(r, "default") == 1),
+        Col(f"Default episodes started a year (a default {DEFAULT_EPISODE_GAP}+ months after the last ended)",
+            **event_rate(episodes)),
+        Col("Defaults a year (every default event)", **event_rate([e for e in parsed.events
+                                                                     if e["event"] == "default"])),
+        Col("Declared bankrupt (10 years)", test=lambda r: num(r, "bankrupt") == 1),
+        Col("Taking loans", test=lambda r: num(r, "loans") == 1),
+        Col("Debt, share of limit", field("debt_scaled"), digits=2),
+        Col("Reserves, share of limit", field("gold_scaled"), digits=2),
+        Col("Income / expenses", ratio=(field("income"), field("expenses")), digits=2),
+        Col("Military, share of spending", field("mil_share"), digits=0, scale=100,
+            world=totals(field("mil_expenses"), field("expenses"), 0, 100)),
+        Col("Bureaucracy below 0", test=lambda r: num(r, "bur") < 0),
+    ], note="Defaults and episodes are a mean a country-year (the world lens: a total a year). The engine moves a "
+            "country in and out of default month to month, so episodes are the figure to read.")
+
+    def xnum(record, name):
+        value = (record.get("x") or {}).get(name)
         return value if isinstance(value, (int, float)) else None
 
-    def of_gdp(field):
-        """A weekly budget line of the X records as a share of yearly GDP, %."""
-        return lambda rows: spread([xnum(r, field) * 52 / num(r, "gdp") for r in rows
-                                    if xnum(r, field) is not None and num(r, "gdp") > 0], 1, 100)
+    def x_field(name):
+        return lambda r: xnum(r, name)
+
+    def of_gdp(name):
+        """A weekly budget line of the X records against yearly GDP, %."""
+        return Col("", ratio=(x_field(name), lambda r: gdp(r) / 52 if xnum(r, name) is not None else None),
+                   digits=1, scale=100)
 
     table("1e. Where the government's money goes (share of GDP, %)", [
-        ("Government goods", of_gdp("gov_goods")),
-        ("Government wages", of_gdp("gov_wages")),
-        ("Military goods", of_gdp("mil_goods")),
-        ("Military wages", of_gdp("mil_wages")),
-        ("Subsidies", of_gdp("subsidies")),
-        ("Welfare", of_gdp("welfare")),
-        ("Construction goods, government", of_gdp("con_goods_gov")),
-        ("All expenses", ratio("expenses", "gdp", 5200, 1)),
-        ("All income", ratio("income", "gdp", 5200, 1)),
+        named("Government goods", of_gdp("gov_goods")),
+        named("Government wages", of_gdp("gov_wages")),
+        named("Military goods", of_gdp("mil_goods")),
+        named("Military wages", of_gdp("mil_wages")),
+        named("Subsidies", of_gdp("subsidies")),
+        named("Welfare", of_gdp("welfare")),
+        named("Construction goods, government", of_gdp("con_goods_gov")),
+        Col("All expenses", ratio=(field("expenses"), field("gdp")), digits=1, scale=5200),
+        Col("All income", ratio=(field("income"), field("gdp")), digits=1, scale=5200),
     ])
+
+    # --- 2. technology ---------------------------------------------------------------------------------------------
     table("2. Technology", [
-        ("Technologies", lambda rows: spread([num(r, "techs") for r in rows], 0)),
-        ("Leader", lambda rows: max((num(r, "techs") for r in rows), default="-")),
-        ("Acquired a year", lambda rows: spread([num(r, "n_tech") for r in rows], 1)),
-        ("Innovation", lambda rows: spread([num(r, "innovation") for r in rows], 0)),
-        ("Innovation, share of its cap, %", lambda rows: spread(
-            [xnum(r, "innovation") / xnum(r, "innovation_max") for r in rows
-             if xnum(r, "innovation") is not None and xnum(r, "innovation_max")], 0, 100)),
-        ("University levels", lambda rows: spread([num(r, "bt_university") for r in rows], 0)),
-        ("No university", lambda rows: share(rows, lambda r: num(r, "bt_university") == 0)),
-        ("Researching nothing", lambda rows: share(rows, lambda r: num(r, "researching") == 0)),
-        ("Literacy, %", lambda rows: spread([num(r, "lit") for r in rows], 0, 100)),
+        Col("Technologies", field("techs"), digits=0),
+        Col("Leader", custom=lambda rows: max((num(r, "techs") for r in rows), default="-"),
+            world=lambda rows: max((num(r, "techs") for r in rows), default="-")),
+        Col("Acquired a year", field("n_tech"), digits=1),
+        Col("Innovation", field("innovation"), digits=0),
+        Col("Innovation, share of its cap, %", ratio=(x_field("innovation"), x_field("innovation_max")), digits=0,
+            scale=100),
+        Col("University levels (world: total)", field("bt_university"), digits=0, total=True),
+        Col("No university", test=lambda r: num(r, "bt_university") == 0),
+        Col("Researching nothing", test=lambda r: num(r, "researching") == 0),
+        Col("Literacy, %", field("lit"), digits=0, scale=100),
     ])
+
+    flags = key.get("tech_flags", {})
+    flagged = [r for r in ai if any(f in r for f in flags)]
+    if flags:
+        out.append("")
+        out.append(f"## 2a. Specific technologies: share holding each, %, the {TOP_N} largest / every AI country")
+        out.append("")
+        if not flagged:
+            out.append("Not logged by this log's probe version (version 2 adds the H line).")
+        else:
+            labels = [label for label, _ in buckets()]
+            out.append("| Technology | " + " | ".join(labels) + " |")
+            out.append("|---|" + "---|" * len(labels))
+            for name, tech in flags.items():
+                cells = []
+                for _, rows in buckets():
+                    rows = [r for r in rows if name in r]
+                    biggest = top(rows)
+                    if not rows:
+                        cells.append("-")
+                        continue
+                    a = f"{100 * sum(num(r, name) for r in biggest) / len(biggest):.0f}" if biggest else "-"
+                    cells.append(f"{a} / {100 * sum(num(r, name) for r in rows) / len(rows):.0f}")
+                out.append(f"| {tech} | " + " | ".join(cells) + " |")
+
+    # --- 3. laws ---------------------------------------------------------------------------------------------------
     table("3. Laws", [
-        ("Enacting a law", lambda rows: share(rows, lambda r: num(r, "enacting") == 1)),
-        ("Enactments started a year", lambda rows: spread([num(r, "n_law_start") for r in rows], 1)),
-        ("Passed a year, mean", lambda rows: f"{statistics.fmean(num(r, 'n_law_pass') for r in rows):.2f}"),
-        ("Failed a year, mean", lambda rows: f"{statistics.fmean(num(r, 'n_law_fail') for r in rows):.2f}"),
-        ("Ended a year, mean", lambda rows: f"{statistics.fmean(num(r, 'n_law_end') for r in rows):.2f}"),
-        ("Institution levels, all", lambda rows: spread(
-            [sum(num(r, f) for f in r if f.startswith("in_")) for r in rows], 0)),
-        ("Government reforms a year, mean",
-         lambda rows: f"{statistics.fmean(num(r, 'n_reform') for r in rows):.2f}"),
+        Col("Enacting a law", test=lambda r: num(r, "enacting") == 1),
+        Col("Enactments started a year", field("n_law_start"), digits=1),
+        Col("Passed a year, mean", field("n_law_pass"), mean=True, total=True, digits=2),
+        Col("Failed a year, mean", field("n_law_fail"), mean=True, total=True, digits=2),
+        Col("Ended a year, mean", field("n_law_end"), mean=True, total=True, digits=2),
+        Col("Laws set outside an enactment a year, mean (script, revolution, a new country)",
+            logged("n_law_set", field("n_law_set")), mean=True, total=True, digits=2),
+        Col("Institution levels, all", lambda r: sum(num(r, f) for f in r if f.startswith("in_")), digits=0),
+        Col("Government reforms a year, mean", field("n_reform"), mean=True, total=True, digits=2),
     ])
+
+    # 3a. The law cadence: the largest economies' months first, then every AI country's (the reference figures).
+    from_k = first_k_of_year(parsed.ticks, cadence_from)
+
+    def top_month(tag, k):
+        y = year_of(k)
+        return y is not None and (tag, bucket_of(y)) in top_tags
+
+    def cadence_table(rows_):
+        def rate(starts, months):
+            return f"{starts / months:.4f}" if months else "-"
+        out.append("")
+        out.append(f"| Agenda | Starts | Idle months | Starts per idle month | Months idle before a start, median | "
+                   f"Starts from {cadence_from} | Idle months from {cadence_from} | "
+                   f"Starts per idle month from {cadence_from} |")
+        out.append("|---|---|---|---|---|---|---|---|")
+        total = {"starts": 0, "months": 0, "starts_late": 0, "months_late": 0, "waits": []}
+        for row in rows_:
+            for name in total:
+                total[name] += row[name]
+        for row in rows_ + [{"agenda": "all agendas", **total}]:
+            wait = f"{statistics.median(row['waits']):.1f}" if row["waits"] else "-"
+            late = (f"{row['starts_late']} | {row['months_late']} | {rate(row['starts_late'], row['months_late'])}"
+                    if from_k is not None else "- | - | -")
+            out.append(f"| {row['agenda']} | {row['starts']} | {row['months']} | {rate(row['starts'], row['months'])} "
+                       f"| {wait} | {late} |")
+
+    cadence = law_cadence(parsed.events, ai, key["strategies"]["political"], from_k)
+    if cadence:
+        out.append("")
+        out.append("## 3a. Law starts per idle month, by political agenda")
+        out.append("")
+        out.append("An idle month is one with no enactment under way, from an enactment's end (or the first month) to "
+                   "the next start; it counts against the agenda held that month. The rate is the monthly hazard of "
+                   f"a start. The last three columns count months from {cadence_from} only"
+                   + ("" if from_k is not None else " (none in this log)") + ".")
+        out.append("")
+        out.append(f"**The {TOP_N} largest AI economies: their months in the decades they were among them**")
+        cadence_table(law_cadence(parsed.events, ai, key["strategies"]["political"], from_k, include=top_month))
+        out.append("")
+        out.append("**Every AI country** (the baseline analysis's l1_cadence.py, which reads the same way)")
+        cadence_table(cadence)
+
+    # 3b. How enactments ended.
+    ends = [e for e in parsed.events if e["event"] == "law_end" and e["tag"] in {r["tag"] for r in ai}]
+    if ends:
+        how_names = key.get("law_end_how", [])
+        passed_at = {(e["tag"], e["k"]) for e in parsed.events if e["event"] == "law_pass"}
+
+        def how(e):
+            h = e.get("how")
+            if isinstance(h, int) and 0 < h <= len(how_names):
+                return how_names[h - 1]
+            return "passed" if (e["tag"], e["k"]) in passed_at else "unpassed"
+        out.append("")
+        out.append("## 3b. How enactments ended")
+        out.append("")
+        out.append("From the law_end events of AI countries. Version 2 logs how each ended (`how`): cancelled means "
+                   "stopped with the law still available (by the AI, or by script), replaced means stopped because "
+                   "the law was no longer available (a law set by script or a revolution barred it). A version-1 "
+                   "log tells only passed (a law_pass the same month) from unpassed.")
+        kinds = how_names + ["unpassed"]
+        for lens, heading in (("top", f"The {TOP_N} largest AI economies"), ("all", "Every AI country")):
+            out.append("")
+            out.append(f"**{heading}**")
+            out.append("")
+            out.append("| Years | Ended | " + " | ".join(k.capitalize() for k in kinds)
+                       + " | Chance to pass at a cancellation, median |")
+            out.append("|---|---|" + "---|" * len(kinds) + "---|")
+            for start in sorted(bucket_rows):
+                mine = [e for e in ends if year_of(e["k"]) is not None and bucket_of(year_of(e["k"])) == start
+                        and (lens == "all" or (e["tag"], start) in top_tags)]
+                if not mine:
+                    continue
+                counts = Counter(how(e) for e in mine)
+                chances = [num(e, "chance") for e in mine if how(e) in ("cancelled", "unpassed")]
+                chance = f"{statistics.median(chances):.2f}" if chances else "-"
+                out.append(f"| {label_of(start)} | {len(mine)} | " + " | ".join(str(counts.get(k, 0)) for k in kinds)
+                           + f" | {chance} |")
+        laws = key["all_laws"]
+        stopped = Counter(laws[e["law"] - 1] for e in ends
+                          if how(e) != "passed" and isinstance(e.get("law"), int) and 0 < e["law"] <= len(laws))
+        if stopped:
+            out.append("")
+            out.append("Laws most often ended without passing, every AI country: " + ", ".join(
+                f"{name} {n}" for name, n in stopped.most_common(12)))
+
+    # 3c. The old law kept while the technology for the next one is held (version 2's H line).
+    def holding(label, law_group, law, techs):
+        name = "lw_" + (law_group[len("lawgroup_"):] if law_group.startswith("lawgroup_") else law_group).lower()
+        names = key["laws"].get(law_group, [])
+        if law not in names:
+            return None
+        idx = names.index(law) + 1
+        tech_fields = ["h_" + t.replace("-", "_") for t in techs]
+        return Col(label, test=lambda r: num(r, name) == idx,
+                   among=lambda r: all(f in r for f in tech_fields) and any(num(r, f) == 1 for f in tech_fields))
+
+    gates = [
+        ("No Schools, holding Rationalism", "lawgroup_education_system", "law_no_schools", ["rationalism"]),
+        ("Land-Based taxation, holding Currency Standards", "lawgroup_taxation", "law_land_based_taxation",
+         ["currency_standards"]),
+        ("Land-Based taxation, holding an era-3 society technology", "lawgroup_taxation", "law_land_based_taxation",
+         ["civilizing_mission", "human_rights", "pan-nationalism"]),
+        ("Traditionalism, holding an era-3 society technology", "lawgroup_economic_system", "law_traditionalism",
+         ["civilizing_mission", "human_rights", "pan-nationalism"]),
+        ("No Colonial Affairs, holding Colonization", "lawgroup_colonization", "law_no_colonial_affairs",
+         ["colonization"]),
+        ("Peasant Levies, holding Military Drill", "lawgroup_army_model", "law_peasant_levies", ["military_drill"]),
+    ]
+    columns = [col for col in (holding(*gate) for gate in gates) if col is not None]
+    if flagged and columns:
+        table("3c. The old law kept while the technology for the next is held (share of those holding it)", columns)
+
+    # 3d. Institutions against their maximum (version 2's J line), in the last decade read.
+    last_start = max(bucket_rows)
+    newest = {}
+    for r in bucket_rows[last_start]:
+        if any(f.startswith("im_") for f in r) and (r["id"] not in newest or r["k"] > newest[r["id"]]["k"]):
+            newest[r["id"]] = r
+    if newest:
+        out.append("")
+        out.append("## 3d. Institutions against the maximum a country may invest in, in the last decade read")
+        out.append("")
+        out.append(f"| Institution | Countries with it | Level, median | Maximum, median | At its maximum, the "
+                   f"{TOP_N} largest | At its maximum, all |")
+        out.append("|---|---|---|---|---|---|")
+        for name in key["institutions"]:
+            short_name = name[len("institution_"):] if name.startswith("institution_") else name
+            have = [r for r in newest.values() if num(r, "im_" + short_name) > 0]
+            if not have:
+                continue
+
+            def at_max(r, s=short_name):
+                return num(r, "in_" + s) >= num(r, "im_" + s)
+            out.append(f"| {short_name} | {len(have)} | "
+                       f"{statistics.median(num(r, 'in_' + short_name) for r in have):.0f} | "
+                       f"{statistics.median(num(r, 'im_' + short_name) for r in have):.0f} | "
+                       f"{share(top(have), at_max)} | {share(have, at_max)} |")
+
+    # --- 4. military -----------------------------------------------------------------------------------------------
+    def armed(r):
+        return num(r, "army") > 0
+
     table("4. Military", [
-        ("Army (battalions)", lambda rows: spread([num(r, "army") for r in rows], 0)),
-        ("Navy", lambda rows: spread([num(r, "navy") for r in rows], 0)),
-        ("Army units, mean era of their types", lambda rows: spread(
-            [num(r, "army_tier") for r in rows if num(r, "army") > 0], 2)),
-        ("Military technologies", lambda rows: spread(
-            [sum(num(r, f) for f in r if f.startswith("tc_military_")) for r in rows], 0)),
-        ("Irregular infantry, % of the army", lambda rows: spread(
-            [num(r, "irregular") for r in rows if num(r, "army") > 0], 0, 100)),
-        ("Barracks levels", lambda rows: spread([num(r, "bt_barrack") for r in rows], 0)),
+        Col("Army (battalions; world: total)", field("army"), digits=0, total=True),
+        Col("Navy (world: total)", field("navy"), digits=0, total=True),
+        Col("Army units, mean era of their types", field("army_tier"), digits=2, among=armed),
+        Col("Military technologies", lambda r: sum(num(r, f) for f in r if f.startswith("tc_military_")), digits=0),
+        Col("Irregular infantry, % of the army", field("irregular"), digits=0, scale=100, among=armed),
+        Col("Barracks levels", field("bt_barrack"), digits=0),
     ])
+
+    unit_line = key.get("unit_line", {})
+    unit_info = key.get("unit_info", {})
+    if any(f in r for r in ai for f in unit_line):
+        def with_units(r):
+            return num(r, "army") > 0 and "u_irregular_infantry" in r
+
+        era1 = [f for f, info in unit_info.items() if info["tier"] <= 1]
+
+        def group(name):
+            members = [f for f, info in unit_info.items() if info["group"] == name]
+            return lambda r: sum(num(r, f) for f in members)
+
+        table("4a. The army by unit type (shares of the army, %)", [
+            Col("Irregular infantry", field("u_irregular_infantry"), digits=0, scale=100, among=with_units),
+            Col("Line infantry", field("u_line_infantry"), digits=0, scale=100, among=with_units),
+            Col("Irregulars over half the army", test=lambda r: num(r, "u_irregular_infantry") > 0.5,
+                among=with_units),
+            Col("Of those, holding Line Infantry", test=lambda r: num(r, "h_line_infantry") == 1,
+                among=lambda r: with_units(r) and num(r, "u_irregular_infantry") > 0.5),
+            Col("Holding General Staff, nothing past era-1 types",
+                test=lambda r: sum(num(r, f) for f in era1) >= 0.995,
+                among=lambda r: with_units(r) and num(r, "h_general_staff") == 1),
+            Col("Artillery", group("combat_unit_group_artillery"), digits=0, scale=100, among=with_units),
+            Col("Cavalry", group("combat_unit_group_cavalry"), digits=0, scale=100, among=with_units),
+            Col("Shares add to", lambda r: sum(num(r, f) for f in unit_line), digits=2, among=with_units),
+        ])
+        held, unlocked = Counter(), Counter()
+        latest = {}
+        for r in bucket_rows[last_start]:
+            if with_units(r) and (r["id"] not in latest or r["k"] > latest[r["id"]]["k"]):
+                latest[r["id"]] = r
+        for r in latest.values():
+            for name, info in unit_info.items():
+                if num(r, name) > 0:
+                    held[name] += 1
+                techs = ["h_" + t.replace("-", "_") for t in info.get("techs", [])]
+                if all(num(r, t) == 1 for t in techs):
+                    unlocked[name] += 1
+        out.append("")
+        out.append(f"In the last decade read, of {len(latest)} armies, each type held by / unlocked for: "
+                   + ", ".join(f"{name[2:]} {held[name]}/{unlocked[name]}" for name in unit_info
+                               if held[name] or unlocked[name]))
+
+    # --- 5. expansion ----------------------------------------------------------------------------------------------
+    plays = [e for e in parsed.events if e["event"] == "play"]
     table("5. Expansion", [
-        ("States", lambda rows: spread([num(r, "states") for r in rows], 0)),
-        ("Colonies under way", lambda rows: share(rows, lambda r: num(r, "colonies") > 0)),
-        ("Plays started a year, mean", lambda rows: f"{statistics.fmean(num(r, 'n_play') for r in rows):.3f}"),
-        ("Wars started a year, mean", lambda rows: f"{statistics.fmean(num(r, 'n_war') for r in rows):.3f}"),
-        ("At war", lambda rows: share(rows, lambda r: num(r, "war") == 1)),
-        ("Infamy", lambda rows: spread([num(r, "infamy") for r in rows], 0)),
-        ("Countries reporting", lambda rows: len({r["id"] for r in rows})),
-    ])
+        Col("States (world: total)", field("states"), digits=0, total=True),
+        Col("Colonies under way", test=lambda r: num(r, "colonies") > 0),
+        Col("Plays started a year, mean", field("n_play"), mean=True, total=True, digits=3),
+        Col("Play events a year, as initiator", **event_rate(plays)),
+        Col("Wars started a year, mean", field("n_war"), mean=True, total=True, digits=3),
+        Col("At war", test=lambda r: num(r, "war") == 1),
+        Col("Infamy", field("infamy"), digits=0),
+        Col("Countries reporting", custom=lambda rows: len({r["id"] for r in rows}),
+            world=lambda rows: len({r["id"] for r in rows})),
+    ], note="n_play counts plays of snapshotted countries between their snapshots (a country's last months and a "
+            "dead country's are lost); play events count every play, so they run higher. n_war counts the plays "
+            "that became wars.")
+
+    play_types = key.get("play_types", [])
+    typed = [e for e in plays if isinstance(e.get("type"), int) and e["type"] > 0]
+    if typed:
+        def rank(i):
+            return ranks[i - 1] if isinstance(i, int) and 0 < i <= len(ranks) else "none"
+        out.append("")
+        out.append("## 5a. Diplomatic plays by type, every initiator")
+        out.append("")
+        out.append("| Type | Plays | Initiators by rank | Targets by rank |")
+        out.append("|---|---|---|---|")
+        by_type = defaultdict(list)
+        for e in typed:
+            by_type[play_types[e["type"] - 1] if e["type"] <= len(play_types) else str(e["type"])].append(e)
+        for name, mine in sorted(by_type.items(), key=lambda item: -len(item[1])):
+            a = Counter(rank(e.get("rank")) for e in mine).most_common(3)
+            b = Counter(rank(e.get("target_rank")) for e in mine).most_common(3)
+            out.append(f"| {name} | {len(mine)} | {', '.join(f'{n} {c}' for n, c in a)} | "
+                       f"{', '.join(f'{n} {c}' for n, c in b)} |")
+    if plays:
+        tags = {r["tag"] for r in ai}
+        out.append("")
+        out.append(f"{sum(1 for e in plays if e['tag'] not in tags)} of {len(plays)} plays came from countries the "
+                   "probe never snapshotted (decentralized nations' uprisings and the like).")
+
+    if parsed.world:
+        out.append("")
+        out.append("## 5b. The world outside the AI countries: the last reading of each decade")
+        out.append("")
+        out.append("| Years | Countries (not decentralized) | Decentralized nations | States they hold |")
+        out.append("|---|---|---|---|")
+        by_decade = {}
+        for k in sorted(parsed.world):
+            w = parsed.world[k]
+            if isinstance(w.get("y"), int):
+                by_decade[bucket_of(w["y"])] = w
+        for start, w in sorted(by_decade.items()):
+            out.append(f"| {label_of(start)} | {w.get('countries', '-')} | {w.get('dn', '-')} | "
+                       f"{w.get('dn_states', '-')} |")
+
+    # --- the last decade's laws and strategies ---------------------------------------------------------------------
+    latest = {}
+    for record in bucket_rows[last_start]:
+        if record["id"] not in latest or record["k"] > latest[record["id"]]["k"]:
+            latest[record["id"]] = record
+    biggest = [r for r in latest.values() if r["id"] in top_ids[last_start]]
+
+    def commonest(rows, name, names, n=4):
+        counts = Counter(num(r, name) for r in rows)
+        return ", ".join(f"{names[idx - 1] if 0 < idx <= len(names) else 'none'} {c}"
+                         for idx, c in counts.most_common(n))
 
     out.append("")
     out.append("## The commonest law in each group, in the last decade read")
     out.append("")
-    last = list(buckets())[-1][1]
-    newest = {}
-    for record in last:
-        if record["id"] not in newest or record["k"] > newest[record["id"]]["k"]:
-            newest[record["id"]] = record
-    out.append("| Group | Laws held (countries) |")
-    out.append("|---|---|")
-    for group in key["law_groups"]:
-        field = "lw_" + (group[len("lawgroup_"):] if group.startswith("lawgroup_") else group).lower()
-        counts = Counter(num(r, field) for r in newest.values())
-        names = key["laws"][group]
-        cells = []
-        for idx, n in counts.most_common(4):
-            name = names[idx - 1] if 0 < idx <= len(names) else "none"
-            cells.append(f"{name} {n}")
-        if counts.keys() - {0}:
-            out.append(f"| {group} | {', '.join(cells)} |")
+    out.append(f"| Group | The {TOP_N} largest | Every AI country |")
+    out.append("|---|---|---|")
+    for group_name in key["law_groups"]:
+        name = "lw_" + (group_name[len("lawgroup_"):] if group_name.startswith("lawgroup_") else group_name).lower()
+        if {num(r, name) for r in latest.values()} - {0}:
+            names = key["laws"][group_name]
+            out.append(f"| {group_name} | {commonest(biggest, name, names, 3)} | "
+                       f"{commonest(latest.values(), name, names)} |")
 
     out.append("")
     out.append("## Strategies held, in the last decade read")
     out.append("")
     for kind, names in key["strategies"].items():
-        counts = Counter(num(r, f"strat_{kind}") for r in newest.values())
-        cells = [f"{names[idx - 1] if 0 < idx <= len(names) else 'none'} {n}" for idx, n in counts.most_common()]
-        out.append(f"- {kind}: {', '.join(cells)}")
+        out.append(f"- {kind}, the {TOP_N} largest: {commonest(biggest, f'strat_{kind}', names, 20)}")
+        out.append(f"- {kind}, every AI country: {commonest(latest.values(), f'strat_{kind}', names, 20)}")
 
     events = Counter(e["event"] for e in parsed.events)
     if events:
@@ -520,6 +1337,8 @@ def write_parse(parsed: Parsed, folder: Path) -> None:
             handle.write(json.dumps(event) + "\n")
     (folder / "ticks.json").write_text(json.dumps(parsed.ticks, indent=1), encoding="utf-8")
     (folder / "canary.json").write_text(json.dumps(parsed.canary, indent=1), encoding="utf-8")
+    (folder / "world.json").write_text(json.dumps(parsed.world, indent=1), encoding="utf-8")
+    (folder / "armed.json").write_text(json.dumps(parsed.armed), encoding="utf-8")
 
 
 def main(argv=None) -> int:
@@ -534,9 +1353,14 @@ def main(argv=None) -> int:
         if verb == "report":
             p.add_argument("--md", type=Path, help="write the scorecard here as well")
             p.add_argument("--years", type=int, default=10, help="years per row (default 10)")
+            p.add_argument("--cadence-from", type=int, default=CADENCE_FROM_YEAR,
+                           help=f"the year table 3a's later columns start (default {CADENCE_FROM_YEAR})")
     args = parser.parse_args(argv)
     key = load_key(args.key)
     parsed = gather(args.sources, key)
+    if parsed.k_restarts and args.verb != "check":
+        print(f"WARNING: the month count went back {parsed.k_restarts} times: these files hold more than one run, "
+              "whose serials and months collide. Parse each run alone.", file=sys.stderr)
     if args.verb == "check":
         lines, ok = check(parsed, key)
         print("\n".join(lines))
@@ -546,7 +1370,7 @@ def main(argv=None) -> int:
         write_parse(parsed, args.out)
         print(f"{len(parsed.snapshots)} snapshots, {len(parsed.events)} events, {len(parsed.ticks)} ticks -> {args.out}")
         return 0
-    text = report(parsed, key, args.years)
+    text = report(parsed, key, args.years, args.cadence_from)
     print(text)
     if args.md:
         args.md.write_text(text, encoding="utf-8")
