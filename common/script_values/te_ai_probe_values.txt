@@ -186,13 +186,16 @@ te_aip_cm_level_max = { value = modifier:country_max_weekly_construction_progres
 te_aip_cm_admin = { value = 0 if = { limit = { te_construction_market_ai_building_administration = yes } value = 1 } }
 te_aip_bank_phase = {
 	value = 0
-	if = { limit = { te_banking_cycle_running = yes banking_cycle_is_panic = yes } value = 1 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_downturn = yes } value = 2 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_stagnation = yes } value = 3 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_stable = yes } value = 4 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_expansion = yes } value = 5 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_boom = yes } value = 6 }
-	else_if = { limit = { te_banking_cycle_running = yes banking_cycle_is_frenzy = yes } value = 7 }
+	if = {
+		limit = { te_banking_cycle_running = yes }
+		if = { limit = { banking_cycle_is_panic = yes } value = 1 }
+		else_if = { limit = { banking_cycle_is_downturn = yes } value = 2 }
+		else_if = { limit = { banking_cycle_is_stagnation = yes } value = 3 }
+		else_if = { limit = { banking_cycle_is_stable = yes } value = 4 }
+		else_if = { limit = { banking_cycle_is_expansion = yes } value = 5 }
+		else_if = { limit = { banking_cycle_is_boom = yes } value = 6 }
+		else_if = { limit = { banking_cycle_is_frenzy = yes } value = 7 }
+	}
 }
 te_aip_bank_cycle = { value = 0 if = { limit = { has_variable = finance_cycle_value } value = var:finance_cycle_value } }
 te_aip_bank_momentum = { value = 0 if = { limit = { has_variable = finance_cycle_momentum } value = var:finance_cycle_momentum } }

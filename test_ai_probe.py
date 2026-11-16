@@ -588,9 +588,10 @@ class BankingCycleTest(unittest.TestCase):
     def test_every_phase_read_is_guarded_by_the_running_cycle(self):
         phase = block("te_aip_bank_phase", text(VALUES))
         tests = re.findall(r"limit = \{ (.*?) \}", phase)
-        self.assertEqual(len(tests), len(gen_ai_probe.BANK_PHASES))
-        for test, name in zip(tests, gen_ai_probe.BANK_PHASES):
-            self.assertEqual(test, f"te_banking_cycle_running = yes banking_cycle_is_{name} = yes")
+        self.assertEqual(tests, ["te_banking_cycle_running = yes"]
+                         + [f"banking_cycle_is_{name} = yes" for name in gen_ai_probe.BANK_PHASES])
+        inside = phase.index("te_banking_cycle_running = yes")
+        self.assertTrue(all(phase.index(f"banking_cycle_is_{name}") > inside for name in gen_ai_probe.BANK_PHASES))
         tick = block("te_aip_country_tick", text(EFFECTS))
         guard = tick.index("te_banking_cycle_running = yes")
         self.assertLess(guard, tick.index("banking_cycle_is_recession = yes"))

@@ -621,7 +621,7 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         # the journal entry's phase modifiers guard theirs with has_variable; the value and momentum are the
         # cycle's own variables (absent before the cycle starts and after the rule is switched off); `bank_crashed`
         # is the 365-day mark every crash sets, origin and contagion (banking_mark_crashed_last_year).
-        index("bank_phase", [f"te_banking_cycle_running = yes banking_cycle_is_{phase} = yes" for phase in BANK_PHASES]),
+        bank_phase_field(),
         variable("bank_cycle", "finance_cycle_value", 1),
         variable("bank_momentum", "finance_cycle_momentum", 2),
         flag("bank_crashed", "has_variable = banking_crashed_last_year"),
@@ -708,6 +708,14 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
     return [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
             ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
             ("N", counters), ("J", institution_max), ("R", units), ("H", tech_flags)]
+
+
+def bank_phase_field() -> Field:
+    """The banking cycle's phase (BANK_PHASES, 1-based), 0 with no cycle running. The phase triggers read
+    finance_cycle_value unguarded, so they are tested only inside te_banking_cycle_running."""
+    tests = "\n".join(f"\t\t{'if' if i == 1 else 'else_if'} = {{ limit = {{ banking_cycle_is_{phase} = yes }} value = {i} }}"
+                      for i, phase in enumerate(BANK_PHASES, 1))
+    return Field("bank_phase", f"\tvalue = 0\n\tif = {{\n\t\tlimit = {{ te_banking_cycle_running = yes }}\n{tests}\n\t}}")
 
 
 def construction_sector_fields(cat: dict) -> list[Field]:
@@ -937,12 +945,13 @@ def render_effects(cat: dict) -> str:
         "\t\t\tchange_variable = { name = te_aip_due add = 12 }\n"
         "\t\t}\n"
         "\t}\n"
+        "\t# The cycle's phase triggers read finance_cycle_value unguarded, so they run only once the cycle runs.\n"
         "\tif = {\n"
-        "\t\tlimit = {\n"
-        "\t\t\tte_banking_cycle_running = yes\n"
-        "\t\t\tbanking_cycle_is_recession = yes\n"
+        "\t\tlimit = { te_banking_cycle_running = yes }\n"
+        "\t\tif = {\n"
+        "\t\t\tlimit = { banking_cycle_is_recession = yes }\n"
+        "\t\t\tte_aip_count = { N = bank_down }\n"
         "\t\t}\n"
-        "\t\tte_aip_count = { N = bank_down }\n"
         "\t}\n"
         "\tif = {\n"
         "\t\tlimit = { te_aip_due_in <= 0 }\n"

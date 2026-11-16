@@ -121,12 +121,13 @@ te_aip_country_tick = {
 			change_variable = { name = te_aip_due add = 12 }
 		}
 	}
+	# The cycle's phase triggers read finance_cycle_value unguarded, so they run only once the cycle runs.
 	if = {
-		limit = {
-			te_banking_cycle_running = yes
-			banking_cycle_is_recession = yes
+		limit = { te_banking_cycle_running = yes }
+		if = {
+			limit = { banking_cycle_is_recession = yes }
+			te_aip_count = { N = bank_down }
 		}
-		te_aip_count = { N = bank_down }
 	}
 	if = {
 		limit = { te_aip_due_in <= 0 }
