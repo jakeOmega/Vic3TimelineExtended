@@ -1693,10 +1693,16 @@ class QueueNextModuleTest(unittest.TestCase):
                                   state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
                                   state.index("NOT = { sr_mod_fab_rate > 0 }"))
         # The launch site first, then a covered head (built, or waiting for a
-        # slot), and only then no rate: stopped.
+        # slot), and only then no rate: stopped. A price past the stock's cap
+        # doesn't stop it: the stock fills to the head's price (review of #1847).
         self.assertLess(lost, covered)
         self.assertLess(covered, no_rate)
         self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+        self.assertNotIn("sr_mod_fab_stock_cap", state)
+        # A lunar head waits for no slot (the owner, 2026-11-15).
+        self.assertIn("NOT = { sr_mq_head_needs_no_slot = yes }", state)
+        reason = _block(_read(DISPLAY), "sr_disp_mq_stop_reason")
+        self.assertEqual(re.findall(r"value = (\d)", reason), ["3", "1"])
 
 class TabTest(unittest.TestCase):
     """The colonization status's tabs (UI pass design § 11): a row of four

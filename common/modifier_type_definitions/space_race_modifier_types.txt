@@ -55,6 +55,19 @@ country_sr_module_fabrication_add = {
 	script_only = yes
 }
 
+# The module stock's cap beyond its base and a year of fabrication (the owner,
+# 2026-11-15): the Space Program's Module Storage methods give it, workforce-scaled,
+# and sr_mod_fab_stock_cap reads it. The engine consumes nothing.
+country_sr_module_storage_add = {
+	color = good
+	percent = no
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # Module slots at every colony we hold, beside its size's (colony management
 # design § 5): Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced
 # Nanofabrication, Space Colonization and Molecular Assemblers carry +1 each,

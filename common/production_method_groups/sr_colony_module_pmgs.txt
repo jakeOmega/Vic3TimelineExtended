@@ -20,3 +20,20 @@ pmg_space_program_module_fabrication = {
 		pm_sr_fabrication_fusion_shipyards
 	}
 }
+
+# Module Storage (the owner, 2026-11-15): a fourth group on building_space_program,
+# beside Module Fabrication. Each method adds to the module stock's cap
+# (country_sr_module_storage_add, workforce-scaled, as fabrication's points are)
+# for goods a week; the stock's
+# base and a year of fabrication come without it (sr_mod_fab_stock_cap,
+# sr_colony_module_values.txt). The AI keeps No Module Storage: its own queue
+# stays within its colonies' slots, where the base stock is always enough.
+pmg_space_program_module_storage = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_sr_storage_none
+		pm_sr_storage_component_depot
+		pm_sr_storage_orbital_depot
+	}
+}

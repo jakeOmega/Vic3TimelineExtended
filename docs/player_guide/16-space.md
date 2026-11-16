@@ -772,8 +772,11 @@ Terraformed tile.
 A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
 Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
 and Molecular Assemblers, whose tooltips list Colony Module Slots. Past them it
-still takes up to four more modules, each costing 100 fabrication points more
-than the last: 200, then 300, 400 and 500. The Modules view's Slots figure turns
+still takes up to eight more modules, each costing 100 fabrication points more
+than the last: 200, then 300, and so on up to 900. You can queue one only while
+your module stock can hold its price (see below), so without storage or much
+fabrication you stop at the fourth, at 500. One already queued is still built if
+the stock shrinks later. The Modules view's Slots figure turns
 red past them, and its hover gives the next module's price. Solar System shows
 each site's slots and Extraplanetary Base room under its name, so you can weigh
 a site before you settle it.
@@ -810,13 +813,33 @@ Each module within a colony's slots costs 100 points, so a fully staffed Space P
 adds 3 points a month a level of its own, with or without a fabrication method. Fabrication builds the queue
 in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
-top. Up to 500 points wait in stock while nothing is queued, enough for the
-most expensive module.
+top.
+
+Points wait in a stock while nothing is queued or every shipment slot is taken.
+It holds 500, plus a year of your current fabrication, plus what the Space
+Program's fourth production method group, Module Storage, adds:
+
+| Method | Technology | Goods a week | Storage |
+|---|---|---|---|
+| No Module Storage | | | |
+| Component Depot | Cislunar Infrastructure | 1,000 Electricity and 5 Advanced Materials | +1,000 |
+| Orbital Depot | Space Colonization | 500 Launch Capacity, 1,000 Electricity and 10 Advanced Materials | +3,000 |
+
+Points made while the stock is full are lost, unless the next module in the
+queue costs more, when the stock fills to its price. The Fabrication hover in
+the Modules view breaks the stock's size down.
 
 A finished module waits at Earth for its site's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your
 drive buys (see [Colony fleets in flight](#colony-fleets-in-flight)). Eight
-modules can wait or fly at once; while all eight are taken, fabrication waits.
+modules can wait or fly at once, and a slot is free again only when its module
+lands, so modules waiting for one launch window can hold all eight for two years.
+While all eight are taken the queue waits, and the next module reads "shipping
+full"; its hover says when the first can leave and when the first lands. A module
+for the Moon takes no slot: it is installed the month it is built, and one further
+down the queue goes ahead of a module waiting for a slot once your stock covers
+it. While Earth or that Moon colony is blockaded, or the colony occupied, it takes
+a slot as before.
 A module lands for whoever holds the colony then, and is lost if the site was
 released or filled to four past its slots in the meantime.
 

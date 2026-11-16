@@ -966,3 +966,33 @@ flight has a track.
    with the ship on it, filling from launch to landing. A lunar fleet lands the month it leaves and never shows. A
    fleet launched before this build has its departure month stored already, so its bar is right from the first
    month. The world's name and "in N months (year)" both still fit.
+
+## Module storage, Moon modules and the Next Module hover (2026-11-15)
+
+From a game where eight Hellas Planitia modules held every shipment slot for a Mars window and stopped the Moon's
+queue behind them. The console is `event te_debug_space_race.4` as above.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN module_storage country=… storage=… cap=…` | once a game, a month after a Space Program first runs a Module Storage method at half staff or more | the method's workforce-scaled `country_sr_module_storage_add` reaches its country (`storage` up to 1000 or 3000 by staffing, `cap` 500 + a year of fabrication + that) | `storage=0`: the group's country modifier doesn't reach the country (`module_fabrication`'s check covers the same route for fabrication) | read the method and the program's occupancy in script (`sr_mod_storage_runs`) and add the storage in `sr_mod_fab_storage` |
+
+1. **Module Storage.** The Space Program shows a fourth group, Module Storage, on No Module Storage. Component Depot
+   (Cislunar Infrastructure) and Orbital Depot (Space Colonization) list +1,000 and +3,000 Colony Module Storage and
+   their goods. The Fabrication row's hover lists the stock: Base 500, a year's fabrication at this month's rate,
+   and Module Storage, adding up to the cap it names. With the stock full, the month's points don't raise it.
+2. **A cap that falls.** With a full stock above 500, switch Module Storage back to None: the stock keeps its points
+   (it is not cut), and fabrication adds nothing until the stock is below the new cap.
+3. **Past the slots.** At a colony four past its slots, with only the base stock, the + button greys out with "Our
+   module stock can hold its price" crossed; with an Orbital Depot it allows up to eight past, the Slots hover giving
+   the price (up to 900) and the stock's cap. Queue one, then switch storage off: when it reaches the top the stock
+   still fills to its price (the Next Module hover counts down) and it is built.
+4. **The Moon needs no slot.** With all eight shipment slots taken by modules for Mars, queue a Mining Complex at a
+   lunar colony behind a Mars module. Next month the lunar module jumps to the top of the queue and is installed
+   that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it. With the stock below the
+   lunar module's price it stays where it is. A blockaded or occupied lunar colony's module takes a slot instead.
+5. **The hover by state.** The Next Module line reads "shipping full" with every slot taken, and its hover gives
+   the waiting and in-flight counts, the months until the first can leave (Mars: the months to its window) and
+   the first lands, and, with a Moon module behind the head, the Moon note (with Earth blockaded, "Earth is
+   blockaded" instead). In a window's last month a module still waiting reads about a cycle less 2 months. While
+   fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, or no
+   fabrication. "1 month" reads singular.

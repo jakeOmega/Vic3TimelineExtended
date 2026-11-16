@@ -6,13 +6,45 @@
 # ============================================================================
 
 # ---- Fabrication (design § 5) ------------------------------------------------------
-# Every module's points; at most this many modules a month; the stock kept
-# while fabrication stalls.
-# The stock's cap is the dearest module's price: the fourth past a world's
-# slots, 5 x sr_module_points (colony management design § 5).
+# Every module's points; at most this many modules a month.
 sr_module_points = { value = 100 }
 sr_mod_fab_per_month = { value = 2 }
-sr_mod_fab_stock_cap = { value = 500 }
+
+# Country scope. The module stock, the points kept while fabrication stalls (the
+# owner, 2026-11-15): a base that holds the fourth module past a world's slots
+# (5 x sr_module_points, colony management design § 5), a year of this month's
+# fabrication (the methods and Orbital Yards pay for their own storage), and the
+# Space Program's Module Storage method (country_sr_module_storage_add,
+# sr_colony_module_pms.txt). A module past a world's slots is queued only while
+# the stock can hold its price (sr_mod_can_queue_<type>_<key>). sr_mod_month adds
+# no points past it (or past the queue's first module's price, where that is
+# more: sr_mod_fab_stock_fill_cap), but never takes away a stock above it.
+sr_mod_fab_stock_base = { value = 500 }
+sr_mod_fab_stock_months = { value = 12 }
+sr_mod_fab_stock_cap = {
+	value = sr_mod_fab_stock_base
+	add = sr_mod_fab_stock_year
+	add = sr_mod_fab_storage
+	floor = yes
+}
+sr_mod_fab_stock_year = {
+	value = sr_mod_fab_rate
+	multiply = sr_mod_fab_stock_months
+}
+sr_mod_fab_storage = {
+	value = modifier:country_sr_module_storage_add
+}
+# Country scope. What sr_mod_month fills the stock to: its cap, or the queue's
+# first module's price where that is more, so a module queued while the cap was
+# higher (more fabrication then, or a storage method since switched off) is still
+# built rather than stopping the queue (review of #1847).
+sr_mod_fab_stock_fill_cap = {
+	value = sr_mod_fab_stock_cap
+	if = {
+		limit = { has_variable = sr_mq_1_site }
+		min = sr_mq_head_cost
+	}
+}
 
 # Dismantling (owner, 2026-10-31): the months a module level takes to come
 # down, one level at a time a world, so a colony can't be stripped bare when a
@@ -75,6 +107,18 @@ sr_slots_marker_gap = {
 	value = sr_site_slots_tech_seen
 	subtract = sr_colony_slots_modifier
 }
+
+# Country scope. The months until the module in shipment slot n lands, 999 while
+# the slot is empty or waiting (sr_disp_ms_first_land takes the least; the
+# months until a waiting one can leave are sr_ms_wait_months_<n>, generated).
+sr_ms_land_months_1 = { value = 999 if = { limit = { has_variable = sr_ms_1_arrive } value = var:sr_ms_1_arrive subtract = te_history_month_index } }
+sr_ms_land_months_2 = { value = 999 if = { limit = { has_variable = sr_ms_2_arrive } value = var:sr_ms_2_arrive subtract = te_history_month_index } }
+sr_ms_land_months_3 = { value = 999 if = { limit = { has_variable = sr_ms_3_arrive } value = var:sr_ms_3_arrive subtract = te_history_month_index } }
+sr_ms_land_months_4 = { value = 999 if = { limit = { has_variable = sr_ms_4_arrive } value = var:sr_ms_4_arrive subtract = te_history_month_index } }
+sr_ms_land_months_5 = { value = 999 if = { limit = { has_variable = sr_ms_5_arrive } value = var:sr_ms_5_arrive subtract = te_history_month_index } }
+sr_ms_land_months_6 = { value = 999 if = { limit = { has_variable = sr_ms_6_arrive } value = var:sr_ms_6_arrive subtract = te_history_month_index } }
+sr_ms_land_months_7 = { value = 999 if = { limit = { has_variable = sr_ms_7_arrive } value = var:sr_ms_7_arrive subtract = te_history_month_index } }
+sr_ms_land_months_8 = { value = 999 if = { limit = { has_variable = sr_ms_8_arrive } value = var:sr_ms_8_arrive subtract = te_history_month_index } }
 
 sr_mod_fab_stock_value = {
 	value = 0

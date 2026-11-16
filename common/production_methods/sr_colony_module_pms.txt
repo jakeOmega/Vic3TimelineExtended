@@ -106,3 +106,77 @@ pm_sr_fabrication_fusion_shipyards = {
 		}
 	}
 }
+
+# ============================================================================
+# MODULE STORAGE — the Space Program's storage methods (the owner, 2026-11-15)
+# ============================================================================
+# The production methods of pmg_space_program_module_storage
+# (sr_colony_module_pmgs.txt). Each adds to the module stock's cap through
+# country_sr_module_storage_add (workforce-scaled, as fabrication's points and
+# the goods it pays are: a half-staffed programme stores half; review of #1847),
+# for goods a week; the base 500 and a year of fabrication need no method
+# (sr_mod_fab_stock_cap). Like fabrication, no method employs anyone.
+#
+#   method               gate                      goods a week                                  storage
+#   None (default)       -                         -                                             0
+#   Component Depot      cislunar_infrastructure   1,000 Electricity, 5 Advanced Materials       +1,000
+#   Orbital Depot        space_colonization        500 Launch Capacity, 1,000 Electricity,      +3,000
+#                                                  10 Advanced Materials
+# ============================================================================
+
+pm_sr_storage_none = {
+	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
+}
+
+pm_sr_storage_component_depot = {
+	texture = "gfx/interface/icons/production_method_icons/pm_containerized_cargo.dds"
+
+	unlocking_technologies = {
+		cislunar_infrastructure
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (60.00%)
+			goods_input_advanced_materials_add = 5               # Price: 4000, Total cost:  20000.0 (40.00%)
+			# Output goods
+			# Total input cost: 50000.0
+			# Total output cost: 0
+			# Profit: -50000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_sr_module_storage_add = 1000
+		}
+	}
+}
+
+pm_sr_storage_orbital_depot = {
+	texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
+
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_launch_capacity_add = 500                # Price:  200, Total cost: 100000.0 (58.82%)
+			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (17.65%)
+			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (23.53%)
+			# Output goods
+			# Total input cost: 170000.0
+			# Total output cost: 0
+			# Profit: -170000.0
+			# Profit margin: -100.00%
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_sr_module_storage_add = 3000
+		}
+	}
+}

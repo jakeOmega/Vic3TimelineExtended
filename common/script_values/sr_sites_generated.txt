@@ -3226,12 +3226,12 @@ sr_site_generic_built_valles_marineris = {
 	add = sr_site_terra_value_valles_marineris
 }
 # Valles Marineris's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_valles_marineris = {
 	value = 4
 	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_valles_marineris = { value = sr_site_slots_valles_marineris add = 4 }
+sr_site_slots_max_valles_marineris = { value = sr_site_slots_valles_marineris add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_valles_marineris = {
 	value = sr_site_generic_built_valles_marineris
@@ -3452,12 +3452,12 @@ sr_site_generic_built_olympus_mons = {
 	add = sr_site_terra_value_olympus_mons
 }
 # Olympus Mons's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_olympus_mons = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_olympus_mons = { value = sr_site_slots_olympus_mons add = 4 }
+sr_site_slots_max_olympus_mons = { value = sr_site_slots_olympus_mons add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_olympus_mons = {
 	value = sr_site_generic_built_olympus_mons
@@ -3677,12 +3677,12 @@ sr_site_generic_built_hellas_planitia = {
 	add = sr_site_terra_value_hellas_planitia
 }
 # Hellas Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_hellas_planitia = {
 	value = 4
 	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_hellas_planitia = { value = sr_site_slots_hellas_planitia add = 4 }
+sr_site_slots_max_hellas_planitia = { value = sr_site_slots_hellas_planitia add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_hellas_planitia = {
 	value = sr_site_generic_built_hellas_planitia
@@ -3904,12 +3904,12 @@ sr_site_generic_built_utopia_planitia = {
 	add = sr_site_terra_value_utopia_planitia
 }
 # Utopia Planitia's slots: 4 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_utopia_planitia = {
 	value = 4
 	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_utopia_planitia = { value = sr_site_slots_utopia_planitia add = 4 }
+sr_site_slots_max_utopia_planitia = { value = sr_site_slots_utopia_planitia add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_utopia_planitia = {
 	value = sr_site_generic_built_utopia_planitia
@@ -4129,12 +4129,12 @@ sr_site_generic_built_arcadia_planitia = {
 	add = sr_site_terra_value_arcadia_planitia
 }
 # Arcadia Planitia's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_arcadia_planitia = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_arcadia_planitia = { value = sr_site_slots_arcadia_planitia add = 4 }
+sr_site_slots_max_arcadia_planitia = { value = sr_site_slots_arcadia_planitia add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_arcadia_planitia = {
 	value = sr_site_generic_built_arcadia_planitia
@@ -4349,12 +4349,12 @@ sr_site_generic_built_ceres = {
 	add = sr_site_admin_value_ceres
 }
 # Ceres's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_ceres = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_ceres = { value = sr_site_slots_ceres add = 4 }
+sr_site_slots_max_ceres = { value = sr_site_slots_ceres add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_ceres = {
 	value = sr_site_generic_built_ceres
@@ -4565,12 +4565,12 @@ sr_site_generic_built_vesta = {
 	add = sr_site_admin_value_vesta
 }
 # 4 Vesta's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_vesta = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_vesta = { value = sr_site_slots_vesta add = 4 }
+sr_site_slots_max_vesta = { value = sr_site_slots_vesta add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_vesta = {
 	value = sr_site_generic_built_vesta
@@ -4781,12 +4781,12 @@ sr_site_generic_built_psyche = {
 	add = sr_site_admin_value_psyche
 }
 # 16 Psyche's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_psyche = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_psyche = { value = sr_site_slots_psyche add = 4 }
+sr_site_slots_max_psyche = { value = sr_site_slots_psyche add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_psyche = {
 	value = sr_site_generic_built_psyche
@@ -4997,12 +4997,12 @@ sr_site_generic_built_pallas = {
 	add = sr_site_admin_value_pallas
 }
 # 2 Pallas's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_pallas = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_pallas = { value = sr_site_slots_pallas add = 4 }
+sr_site_slots_max_pallas = { value = sr_site_slots_pallas add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_pallas = {
 	value = sr_site_generic_built_pallas
@@ -5214,12 +5214,12 @@ sr_site_generic_built_hygiea = {
 	add = sr_site_admin_value_hygiea
 }
 # 10 Hygiea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_hygiea = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_hygiea = { value = sr_site_slots_hygiea add = 4 }
+sr_site_slots_max_hygiea = { value = sr_site_slots_hygiea add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_hygiea = {
 	value = sr_site_generic_built_hygiea
@@ -5430,12 +5430,12 @@ sr_site_generic_built_io = {
 	add = sr_site_admin_value_io
 }
 # Io's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_io = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_io = { value = sr_site_slots_io add = 4 }
+sr_site_slots_max_io = { value = sr_site_slots_io add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_io = {
 	value = sr_site_generic_built_io
@@ -5645,12 +5645,12 @@ sr_site_generic_built_europa = {
 	add = sr_site_admin_value_europa
 }
 # Europa's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_europa = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_europa = { value = sr_site_slots_europa add = 4 }
+sr_site_slots_max_europa = { value = sr_site_slots_europa add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_europa = {
 	value = sr_site_generic_built_europa
@@ -5866,12 +5866,12 @@ sr_site_generic_built_ganymede = {
 	add = sr_site_terra_value_ganymede
 }
 # Ganymede's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_ganymede = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_ganymede = { value = sr_site_slots_ganymede add = 4 }
+sr_site_slots_max_ganymede = { value = sr_site_slots_ganymede add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_ganymede = {
 	value = sr_site_generic_built_ganymede
@@ -6091,12 +6091,12 @@ sr_site_generic_built_callisto = {
 	add = sr_site_terra_value_callisto
 }
 # Callisto's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_callisto = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_callisto = { value = sr_site_slots_callisto add = 4 }
+sr_site_slots_max_callisto = { value = sr_site_slots_callisto add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_callisto = {
 	value = sr_site_generic_built_callisto
@@ -6311,12 +6311,12 @@ sr_site_generic_built_himalia = {
 	add = sr_site_admin_value_himalia
 }
 # Himalia's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_himalia = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_himalia = { value = sr_site_slots_himalia add = 4 }
+sr_site_slots_max_himalia = { value = sr_site_slots_himalia add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_himalia = {
 	value = sr_site_generic_built_himalia
@@ -6527,12 +6527,12 @@ sr_site_generic_built_amalthea = {
 	add = sr_site_admin_value_amalthea
 }
 # Amalthea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_amalthea = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_amalthea = { value = sr_site_slots_amalthea add = 4 }
+sr_site_slots_max_amalthea = { value = sr_site_slots_amalthea add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_amalthea = {
 	value = sr_site_generic_built_amalthea
@@ -6749,12 +6749,12 @@ sr_site_generic_built_venus = {
 	add = sr_site_terra_value_venus
 }
 # Venus Cloud Habitat's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_venus = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_venus = { value = sr_site_slots_venus add = 4 }
+sr_site_slots_max_venus = { value = sr_site_slots_venus add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_venus = {
 	value = sr_site_generic_built_venus
@@ -6970,12 +6970,12 @@ sr_site_generic_built_mercury = {
 	add = sr_site_admin_value_mercury
 }
 # Mercury's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_mercury = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_mercury = { value = sr_site_slots_mercury add = 4 }
+sr_site_slots_max_mercury = { value = sr_site_slots_mercury add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_mercury = {
 	value = sr_site_generic_built_mercury
@@ -7192,12 +7192,12 @@ sr_site_generic_built_titan = {
 	add = sr_site_terra_value_titan
 }
 # Titan's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_titan = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_titan = { value = sr_site_slots_titan add = 4 }
+sr_site_slots_max_titan = { value = sr_site_slots_titan add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_titan = {
 	value = sr_site_generic_built_titan
@@ -7412,12 +7412,12 @@ sr_site_generic_built_enceladus = {
 	add = sr_site_admin_value_enceladus
 }
 # Enceladus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_enceladus = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_enceladus = { value = sr_site_slots_enceladus add = 4 }
+sr_site_slots_max_enceladus = { value = sr_site_slots_enceladus add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_enceladus = {
 	value = sr_site_generic_built_enceladus
@@ -7628,12 +7628,12 @@ sr_site_generic_built_rhea = {
 	add = sr_site_admin_value_rhea
 }
 # Rhea's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_rhea = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_rhea = { value = sr_site_slots_rhea add = 4 }
+sr_site_slots_max_rhea = { value = sr_site_slots_rhea add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_rhea = {
 	value = sr_site_generic_built_rhea
@@ -7843,12 +7843,12 @@ sr_site_generic_built_mimas = {
 	add = sr_site_admin_value_mimas
 }
 # Mimas's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_mimas = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_mimas = { value = sr_site_slots_mimas add = 4 }
+sr_site_slots_max_mimas = { value = sr_site_slots_mimas add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_mimas = {
 	value = sr_site_generic_built_mimas
@@ -8059,12 +8059,12 @@ sr_site_generic_built_iapetus = {
 	add = sr_site_admin_value_iapetus
 }
 # Iapetus's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_iapetus = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_iapetus = { value = sr_site_slots_iapetus add = 4 }
+sr_site_slots_max_iapetus = { value = sr_site_slots_iapetus add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_iapetus = {
 	value = sr_site_generic_built_iapetus
@@ -8275,12 +8275,12 @@ sr_site_generic_built_titania = {
 	add = sr_site_admin_value_titania
 }
 # Titania's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_titania = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_titania = { value = sr_site_slots_titania add = 4 }
+sr_site_slots_max_titania = { value = sr_site_slots_titania add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_titania = {
 	value = sr_site_generic_built_titania
@@ -8490,12 +8490,12 @@ sr_site_generic_built_oberon = {
 	add = sr_site_admin_value_oberon
 }
 # Oberon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_oberon = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_oberon = { value = sr_site_slots_oberon add = 4 }
+sr_site_slots_max_oberon = { value = sr_site_slots_oberon add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_oberon = {
 	value = sr_site_generic_built_oberon
@@ -8705,12 +8705,12 @@ sr_site_generic_built_miranda = {
 	add = sr_site_admin_value_miranda
 }
 # Miranda's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_miranda = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_miranda = { value = sr_site_slots_miranda add = 4 }
+sr_site_slots_max_miranda = { value = sr_site_slots_miranda add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_miranda = {
 	value = sr_site_generic_built_miranda
@@ -8921,12 +8921,12 @@ sr_site_generic_built_ariel = {
 	add = sr_site_admin_value_ariel
 }
 # Ariel's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_ariel = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_ariel = { value = sr_site_slots_ariel add = 4 }
+sr_site_slots_max_ariel = { value = sr_site_slots_ariel add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_ariel = {
 	value = sr_site_generic_built_ariel
@@ -9137,12 +9137,12 @@ sr_site_generic_built_triton = {
 	add = sr_site_admin_value_triton
 }
 # Triton's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_triton = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_triton = { value = sr_site_slots_triton add = 4 }
+sr_site_slots_max_triton = { value = sr_site_slots_triton add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_triton = {
 	value = sr_site_generic_built_triton
@@ -9353,12 +9353,12 @@ sr_site_generic_built_proteus = {
 	add = sr_site_admin_value_proteus
 }
 # Proteus's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_proteus = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_proteus = { value = sr_site_slots_proteus add = 4 }
+sr_site_slots_max_proteus = { value = sr_site_slots_proteus add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_proteus = {
 	value = sr_site_generic_built_proteus
@@ -9569,12 +9569,12 @@ sr_site_generic_built_pluto = {
 	add = sr_site_admin_value_pluto
 }
 # Pluto-Charon's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_pluto = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_pluto = { value = sr_site_slots_pluto add = 4 }
+sr_site_slots_max_pluto = { value = sr_site_slots_pluto add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_pluto = {
 	value = sr_site_generic_built_pluto
@@ -9785,12 +9785,12 @@ sr_site_generic_built_eris = {
 	add = sr_site_admin_value_eris
 }
 # Eris's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_eris = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_eris = { value = sr_site_slots_eris add = 4 }
+sr_site_slots_max_eris = { value = sr_site_slots_eris add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_eris = {
 	value = sr_site_generic_built_eris
@@ -10000,12 +10000,12 @@ sr_site_generic_built_makemake = {
 	add = sr_site_admin_value_makemake
 }
 # Makemake's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_makemake = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_makemake = { value = sr_site_slots_makemake add = 4 }
+sr_site_slots_max_makemake = { value = sr_site_slots_makemake add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_makemake = {
 	value = sr_site_generic_built_makemake
@@ -10216,12 +10216,12 @@ sr_site_generic_built_haumea = {
 	add = sr_site_admin_value_haumea
 }
 # Haumea's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_haumea = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_haumea = { value = sr_site_slots_haumea add = 4 }
+sr_site_slots_max_haumea = { value = sr_site_slots_haumea add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_haumea = {
 	value = sr_site_generic_built_haumea
@@ -10431,12 +10431,12 @@ sr_site_generic_built_sedna = {
 	add = sr_site_admin_value_sedna
 }
 # Sedna's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_sedna = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_sedna = { value = sr_site_slots_sedna add = 4 }
+sr_site_slots_max_sedna = { value = sr_site_slots_sedna add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_sedna = {
 	value = sr_site_generic_built_sedna
@@ -10642,12 +10642,12 @@ sr_site_generic_built_shackleton = {
 	add = sr_site_admin_value_shackleton
 }
 # Shackleton Crater's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_shackleton = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_shackleton = { value = sr_site_slots_shackleton add = 4 }
+sr_site_slots_max_shackleton = { value = sr_site_slots_shackleton add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_shackleton = {
 	value = sr_site_generic_built_shackleton
@@ -10850,12 +10850,12 @@ sr_site_generic_built_peary = {
 	add = sr_site_admin_value_peary
 }
 # Peary Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_peary = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_peary = { value = sr_site_slots_peary add = 4 }
+sr_site_slots_max_peary = { value = sr_site_slots_peary add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_peary = {
 	value = sr_site_generic_built_peary
@@ -11059,12 +11059,12 @@ sr_site_generic_built_tranquility = {
 	add = sr_site_admin_value_tranquility
 }
 # Tranquility Base's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_tranquility = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_tranquility = { value = sr_site_slots_tranquility add = 4 }
+sr_site_slots_max_tranquility = { value = sr_site_slots_tranquility add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_tranquility = {
 	value = sr_site_generic_built_tranquility
@@ -11266,12 +11266,12 @@ sr_site_generic_built_marius_hills = {
 	add = sr_site_admin_value_marius_hills
 }
 # Marius Hills's slots: 3 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_marius_hills = {
 	value = 3
 	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_marius_hills = { value = sr_site_slots_marius_hills add = 4 }
+sr_site_slots_max_marius_hills = { value = sr_site_slots_marius_hills add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_marius_hills = {
 	value = sr_site_generic_built_marius_hills
@@ -11473,12 +11473,12 @@ sr_site_generic_built_daedalus = {
 	add = sr_site_admin_value_daedalus
 }
 # Daedalus Crater's slots: 1 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_daedalus = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_daedalus = { value = sr_site_slots_daedalus add = 4 }
+sr_site_slots_max_daedalus = { value = sr_site_slots_daedalus add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_daedalus = {
 	value = sr_site_generic_built_daedalus
@@ -11682,12 +11682,12 @@ sr_site_generic_built_imbrium = {
 	add = sr_site_admin_value_imbrium
 }
 # Mare Imbrium's slots: 2 by its size, plus the holder's country_sr_colony_slots_add;
-# up to 4 modules past them.
+# up to 8 modules past them.
 sr_site_slots_imbrium = {
 	value = 2
 	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_slots_add } }
 }
-sr_site_slots_max_imbrium = { value = sr_site_slots_imbrium add = 4 }
+sr_site_slots_max_imbrium = { value = sr_site_slots_imbrium add = 8 }
 # Its slots built or on their way, every shipper's: what the queue's head pays past.
 sr_site_generic_pending_imbrium = {
 	value = sr_site_generic_built_imbrium
@@ -12411,6 +12411,369 @@ sr_ebase_room_total = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_ebase_room_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_ebase_room_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_ebase_room_imbrium }
+}
+
+# Country scope: the months until a module waiting at Earth for the world can leave
+# (0 when it can now): its window's while windows bind THIS (sr_mod_departs). In a
+# window's last month (past its optimum) one still waiting missed it and leaves at
+# the next window's first month, about the gap since the last window less 2 (a
+# cycle varies by a month or so; review of #1847). The Moon and Mercury are never
+# gated and have none.
+sr_mod_wait_months_valles_marineris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_olympus_mons = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_hellas_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_utopia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_arcadia_planitia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_mars if = { limit = { te_history_month_index > sr_window_next_optimum_mars } value = sr_window_previous_gap_mars subtract = 2 } } }
+sr_mod_wait_months_ceres = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_ceres if = { limit = { te_history_month_index > sr_window_next_optimum_ceres } value = sr_window_previous_gap_ceres subtract = 2 } } }
+sr_mod_wait_months_vesta = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_vesta if = { limit = { te_history_month_index > sr_window_next_optimum_vesta } value = sr_window_previous_gap_vesta subtract = 2 } } }
+sr_mod_wait_months_psyche = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_psyche if = { limit = { te_history_month_index > sr_window_next_optimum_psyche } value = sr_window_previous_gap_psyche subtract = 2 } } }
+sr_mod_wait_months_pallas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_pallas if = { limit = { te_history_month_index > sr_window_next_optimum_pallas } value = sr_window_previous_gap_pallas subtract = 2 } } }
+sr_mod_wait_months_hygiea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_hygiea if = { limit = { te_history_month_index > sr_window_next_optimum_hygiea } value = sr_window_previous_gap_hygiea subtract = 2 } } }
+sr_mod_wait_months_io = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_europa = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_ganymede = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_callisto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_himalia = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_amalthea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_jupiter if = { limit = { te_history_month_index > sr_window_next_optimum_jupiter } value = sr_window_previous_gap_jupiter subtract = 2 } } }
+sr_mod_wait_months_venus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_venus if = { limit = { te_history_month_index > sr_window_next_optimum_venus } value = sr_window_previous_gap_venus subtract = 2 } } }
+sr_mod_wait_months_titan = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_enceladus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_rhea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_mimas = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_iapetus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_saturn if = { limit = { te_history_month_index > sr_window_next_optimum_saturn } value = sr_window_previous_gap_saturn subtract = 2 } } }
+sr_mod_wait_months_titania = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_oberon = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_miranda = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_ariel = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_uranus if = { limit = { te_history_month_index > sr_window_next_optimum_uranus } value = sr_window_previous_gap_uranus subtract = 2 } } }
+sr_mod_wait_months_triton = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune if = { limit = { te_history_month_index > sr_window_next_optimum_neptune } value = sr_window_previous_gap_neptune subtract = 2 } } }
+sr_mod_wait_months_proteus = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_neptune if = { limit = { te_history_month_index > sr_window_next_optimum_neptune } value = sr_window_previous_gap_neptune subtract = 2 } } }
+sr_mod_wait_months_pluto = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_eris = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_makemake = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_haumea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+sr_mod_wait_months_sedna = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
+
+# Country scope: the same for the module waiting in shipment slot n, 999 while the
+# slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least).
+sr_ms_wait_months_1 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_1_site NOT = { has_variable = sr_ms_1_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_1_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_1_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_1_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_1_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_1_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_1_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_1_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_1_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_1_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_1_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_1_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_1_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_1_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_1_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_1_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_1_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_1_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_1_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_1_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_1_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_1_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_1_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_1_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_1_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_1_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_1_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_1_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_1_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_1_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_1_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_1_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_1_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_1_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_2 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_2_site NOT = { has_variable = sr_ms_2_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_2_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_2_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_2_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_2_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_2_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_2_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_2_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_2_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_2_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_2_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_2_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_2_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_2_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_2_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_2_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_2_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_2_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_2_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_2_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_2_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_2_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_2_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_2_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_2_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_2_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_2_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_2_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_2_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_2_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_2_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_2_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_2_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_2_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_3 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_3_site NOT = { has_variable = sr_ms_3_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_3_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_3_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_3_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_3_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_3_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_3_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_3_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_3_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_3_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_3_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_3_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_3_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_3_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_3_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_3_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_3_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_3_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_3_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_3_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_3_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_3_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_3_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_3_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_3_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_3_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_3_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_3_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_3_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_3_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_3_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_3_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_3_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_3_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_4 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_4_site NOT = { has_variable = sr_ms_4_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_4_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_4_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_4_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_4_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_4_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_4_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_4_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_4_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_4_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_4_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_4_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_4_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_4_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_4_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_4_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_4_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_4_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_4_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_4_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_4_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_4_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_4_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_4_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_4_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_4_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_4_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_4_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_4_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_4_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_4_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_4_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_4_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_4_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_5 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_5_site NOT = { has_variable = sr_ms_5_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_5_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_5_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_5_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_5_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_5_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_5_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_5_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_5_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_5_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_5_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_5_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_5_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_5_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_5_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_5_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_5_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_5_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_5_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_5_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_5_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_5_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_5_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_5_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_5_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_5_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_5_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_5_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_5_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_5_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_5_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_5_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_5_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_5_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_6 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_6_site NOT = { has_variable = sr_ms_6_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_6_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_6_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_6_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_6_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_6_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_6_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_6_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_6_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_6_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_6_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_6_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_6_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_6_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_6_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_6_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_6_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_6_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_6_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_6_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_6_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_6_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_6_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_6_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_6_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_6_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_6_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_6_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_6_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_6_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_6_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_6_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_6_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_6_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_7 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_7_site NOT = { has_variable = sr_ms_7_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_7_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_7_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_7_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_7_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_7_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_7_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_7_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_7_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_7_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_7_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_7_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_7_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_7_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_7_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_7_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_7_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_7_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_7_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_7_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_7_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_7_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_7_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_7_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_7_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_7_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_7_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_7_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_7_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_7_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_7_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_7_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_7_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_7_site = 34 } value = sr_mod_wait_months_sedna }
+	}
+}
+sr_ms_wait_months_8 = {
+	value = 999
+	if = {
+		limit = { has_variable = sr_ms_8_site NOT = { has_variable = sr_ms_8_arrive } }
+		value = 0
+		if = { limit = { var:sr_ms_8_site = 1 } value = sr_mod_wait_months_valles_marineris }
+		else_if = { limit = { var:sr_ms_8_site = 2 } value = sr_mod_wait_months_olympus_mons }
+		else_if = { limit = { var:sr_ms_8_site = 3 } value = sr_mod_wait_months_hellas_planitia }
+		else_if = { limit = { var:sr_ms_8_site = 4 } value = sr_mod_wait_months_utopia_planitia }
+		else_if = { limit = { var:sr_ms_8_site = 5 } value = sr_mod_wait_months_arcadia_planitia }
+		else_if = { limit = { var:sr_ms_8_site = 6 } value = sr_mod_wait_months_ceres }
+		else_if = { limit = { var:sr_ms_8_site = 7 } value = sr_mod_wait_months_vesta }
+		else_if = { limit = { var:sr_ms_8_site = 8 } value = sr_mod_wait_months_psyche }
+		else_if = { limit = { var:sr_ms_8_site = 9 } value = sr_mod_wait_months_pallas }
+		else_if = { limit = { var:sr_ms_8_site = 10 } value = sr_mod_wait_months_hygiea }
+		else_if = { limit = { var:sr_ms_8_site = 11 } value = sr_mod_wait_months_io }
+		else_if = { limit = { var:sr_ms_8_site = 12 } value = sr_mod_wait_months_europa }
+		else_if = { limit = { var:sr_ms_8_site = 13 } value = sr_mod_wait_months_ganymede }
+		else_if = { limit = { var:sr_ms_8_site = 14 } value = sr_mod_wait_months_callisto }
+		else_if = { limit = { var:sr_ms_8_site = 15 } value = sr_mod_wait_months_himalia }
+		else_if = { limit = { var:sr_ms_8_site = 16 } value = sr_mod_wait_months_amalthea }
+		else_if = { limit = { var:sr_ms_8_site = 17 } value = sr_mod_wait_months_venus }
+		else_if = { limit = { var:sr_ms_8_site = 19 } value = sr_mod_wait_months_titan }
+		else_if = { limit = { var:sr_ms_8_site = 20 } value = sr_mod_wait_months_enceladus }
+		else_if = { limit = { var:sr_ms_8_site = 21 } value = sr_mod_wait_months_rhea }
+		else_if = { limit = { var:sr_ms_8_site = 22 } value = sr_mod_wait_months_mimas }
+		else_if = { limit = { var:sr_ms_8_site = 23 } value = sr_mod_wait_months_iapetus }
+		else_if = { limit = { var:sr_ms_8_site = 24 } value = sr_mod_wait_months_titania }
+		else_if = { limit = { var:sr_ms_8_site = 25 } value = sr_mod_wait_months_oberon }
+		else_if = { limit = { var:sr_ms_8_site = 26 } value = sr_mod_wait_months_miranda }
+		else_if = { limit = { var:sr_ms_8_site = 27 } value = sr_mod_wait_months_ariel }
+		else_if = { limit = { var:sr_ms_8_site = 28 } value = sr_mod_wait_months_triton }
+		else_if = { limit = { var:sr_ms_8_site = 29 } value = sr_mod_wait_months_proteus }
+		else_if = { limit = { var:sr_ms_8_site = 30 } value = sr_mod_wait_months_pluto }
+		else_if = { limit = { var:sr_ms_8_site = 31 } value = sr_mod_wait_months_eris }
+		else_if = { limit = { var:sr_ms_8_site = 32 } value = sr_mod_wait_months_makemake }
+		else_if = { limit = { var:sr_ms_8_site = 33 } value = sr_mod_wait_months_haumea }
+		else_if = { limit = { var:sr_ms_8_site = 34 } value = sr_mod_wait_months_sedna }
+	}
 }
 
 # ===== Terraforming (era 13 spec § 7.11) =====
