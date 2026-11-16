@@ -1,0 +1,47 @@
+﻿# TE_SELF_CHECK tax_light_div_levy (common/on_actions/te_tax_light_div_levy_selfcheck_on_actions.txt): the
+# counts it stores, read back for its verdict and its log line. Delete with that file.
+te_tldv_chk_n_g = { value = global_var:te_tldv_n }
+te_tldv_chk_match_g = { value = global_var:te_tldv_match }
+te_tldv_chk_zero_g = { value = global_var:te_tldv_zero }
+te_tldv_chk_cn_g = { value = global_var:te_tldv_cn }
+te_tldv_chk_cmatch_g = { value = global_var:te_tldv_cmatch }
+
+# The shares the verdict reads: matched or at 0 over counted (0 with none counted).
+te_tldv_chk_match_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_tldv_n > 0 }
+		value = global_var:te_tldv_match
+		divide = global_var:te_tldv_n
+	}
+}
+te_tldv_chk_zero_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_tldv_n > 0 }
+		value = global_var:te_tldv_zero
+		divide = global_var:te_tldv_n
+	}
+}
+te_tldv_chk_cmatch_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_tldv_cn > 0 }
+		value = global_var:te_tldv_cmatch
+		divide = global_var:te_tldv_cn
+	}
+}
+
+# Country scope: the country's dividend tax rate from every source less the code's rate (te_tax_en_div steps of
+# te_tax_step_div), 0 without the variable.
+te_tldv_chk_dev = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_div }
+		value = modifier:tax_dividends_add
+		subtract = {
+			value = var:te_tax_en_div
+			multiply = te_tax_step_div
+		}
+	}
+}
