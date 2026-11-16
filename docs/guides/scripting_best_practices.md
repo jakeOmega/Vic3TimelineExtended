@@ -1541,6 +1541,12 @@ PM modifier blocks have strict scope rules:
 
 **Scale `state_trade_capacity_add` against vanilla's Trade Center: 10 per level, workforce-scaled** (`pm_trade_center`, `11_private_infrastructure.txt`). The type has `decimals = 0`. Thirteen company flagships once carried 500 on a misreading of vanilla (1dd5f98c raised the two canal companies, 64bafd59 the other eleven); all fourteen flagships that carry the key now have 50.
 
+## A Power Bloc Statue's `country_modifiers` Are Paid Once a Statue, in Every State of Every Member: Keep a Rate the Country Holds Once Out of Them
+
+`building_power_bloc_statue` has one level, but every state of every bloc member may hold one (its `potential` asks only `is_in_power_bloc`), so a line in a statue method's `country_modifiers` is paid once per statue, forty or fifty times over in a large country. That is harmless for an output that buildings already add without limit: vanilla's statues stack prestige (+3) and, for the Ideological Union, influence (+5), and innovation would be no different. It is wrong for a rate the country is meant to hold once. The Creditors' Consortium's statue first carried −0.25pp of `country_risk_premium_add`, which reached the cyclical premium's −10pp clamp at forty statues (review, 2026-11-16). Put such an effect in `state_modifiers`, sized for one state, as vanilla puts each identity's own effect (decree cost, conscription, political strength, infrastructure, conversion), and leave a country-wide figure to the headquarters, which is one to a bloc.
+
+A flat figure a late era dwarfs is the other trap: the Research Commons' statue first gave +5 weekly innovation and its headquarters +25 innovation cap, both small beside era 13's costs and caps. Give a share of something the eras grow (the state's universities through throughput, a share of the pool), not a larger number.
+
 ## Company Building Requirements
 
 Every company building needs:

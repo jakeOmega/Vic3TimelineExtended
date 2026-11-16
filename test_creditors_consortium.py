@@ -44,12 +44,18 @@ IMPOSABLE = [
 ]
 
 # The tier tables (§ 5.4): Conditionality's terms, remittance (share of GDP a
-# month), monopolies and months to exit; Development Lending's share and the
-# receivers' construction.
+# month), monopolies and months to exit; Development Lending's share, the
+# receivers' construction, and what the bloc gets for it: cohesion and the
+# appeal to poorer invitees (2026-11-16 review).
 CONDITIONALITY = {
     1: (1, 0.001, 1, 12), 2: (1, 0.0015, 1, 18), 3: (2, 0.0015, 2, 24), 4: (2, 0.002, 2, 30), 5: (3, 0.0025, 3, 36),
 }
 DEVELOPMENT_LENDING = {1: (0.05, 0), 2: (0.075, 0.05), 3: (0.10, 0.10), 4: (0.125, 0.15), 5: (0.15, 0.20)}
+# Exploit Members' cohesion mirrored (-5 to -40, the mod's IV and V included),
+# and the leader's influence, its own gain, as Exploit Members' leader has its.
+DEVELOPMENT_LENDING_COHESION = {1: 5, 2: 10, 3: 20, 4: 30, 5: 40}
+DEVELOPMENT_LENDING_INFLUENCE = {1: 0.1, 2: 0.15, 3: 0.2, 4: 0.25, 5: 0.3}
+DEVELOPMENT_LENDING_INVITE_PER_TIER = 5
 
 SELF_CHECKS = ("cc_receivership_treaty", "cc_monopoly_treaty", "cc_adjustment_imposition")
 
@@ -162,7 +168,8 @@ class PrincipleGroupsTest(unittest.TestCase):
                 self.assertEqual(re.findall(r"unlocking_identity = (\w+)", body), [IDENTITY])
 
     def test_existing_groups_become_primary(self):
-        for group in ("principle_group_foreign_investment", "principle_group_monetary_union"):
+        for group in ("principle_group_foreign_investment", "principle_group_monetary_union",
+                      "principle_group_companies"):
             with self.subTest(group=group):
                 body = entity(self.shared, group)
                 self.assertIn(f"primary_for_identity = {IDENTITY}", body)
@@ -196,6 +203,11 @@ class PrincipleGroupsTest(unittest.TestCase):
                 self.assertIn(f"principle_tier_{tier}.dds", body)
                 self.assertIn("te_pb_principle_slot_free = { GROUP = principle_group_development_lending }", body)
                 self.assertAlmostEqual(num(body, "power_bloc_te_cred_dl_share_add"), share)
+                self.assertEqual(num(body, "power_bloc_cohesion_add"), DEVELOPMENT_LENDING_COHESION[tier])
+                self.assertAlmostEqual(num(block_at(body, body.index("leader_modifier")), "country_influence_mult"),
+                                       DEVELOPMENT_LENDING_INFLUENCE[tier])
+                self.assertEqual(num(body, "power_bloc_te_cred_dl_invite_add"),
+                                 DEVELOPMENT_LENDING_INVITE_PER_TIER * tier)
                 self.assertEqual("country_keynesian_pb_principles_bool" in body, tier == 4)
                 self.assertEqual("country_globalization_pb_principles_bool" in body, tier == 5)
                 if construction:
@@ -216,6 +228,15 @@ class PrincipleGroupsTest(unittest.TestCase):
         self.assertEqual(re.findall(r"value = ([\d.]+)", take)[2:], ["0.0015", "0.001", "0.0005"])
         exit_ = entity(values, "te_cred_exit_extra_own")
         self.assertEqual(re.findall(r"value = (\d+)", exit_)[2:], ["24", "18", "12", "6"])
+
+    def test_the_invitation_pays_what_the_tiers_print(self):
+        # The display field is tier x te_cred_dl_invite_per_tier, and
+        # te_cred_dl_tier reads the tiers from the top down.
+        values = strip_comments(read(VALUES))
+        self.assertRegex(values, r"(?m)^te_cred_dl_invite_per_tier = %d\s*$" % DEVELOPMENT_LENDING_INVITE_PER_TIER)
+        tier = entity(values, "te_cred_dl_tier")
+        self.assertEqual(re.findall(r"value = (\d)", tier), ["0", "5", "4", "3", "2", "1"])
+        self.assertEqual(re.findall(r"te_cred_dl_tier_(\d)(?:_plus)? = yes", tier), ["5", "4", "3", "2", "1"])
 
     def test_unlock_descriptions_read_every_principle_file(self):
         import gen_pb_principle_unlock_descs as gen   # noqa: E402  (root module)
@@ -541,6 +562,12 @@ class SharedPiecesTest(unittest.TestCase):
     def test_statue_and_hq(self):
         statue = entity(read("common/production_methods/extra_pms.txt"), "pm_power_bloc_statue_creditors_consortium")
         self.assertIn(f"unlocking_identity = {IDENTITY}", statue)
+        # A statue can go in every state of every member, so a country-wide
+        # premium cut was paid once a statue, to the monetary layer's -10pp
+        # clamp at forty; its identity effect is the state's (2026-11-16 review).
+        self.assertNotIn("country_risk_premium_add", statue)
+        self.assertIn("state_capitalists_investment_pool_efficiency_mult",
+                      block_at(statue, statue.index("state_modifiers")))
         self.assertIn("pm_power_bloc_statue_creditors_consortium", read("common/production_method_groups/extra_pm_groups.txt"))
         hq = entity(read("common/production_methods/unique_pms.txt"), "pm_hq_creditors_consortium")
         self.assertIn(f"unlocking_identity = {IDENTITY}", hq)
@@ -553,6 +580,21 @@ class SharedPiecesTest(unittest.TestCase):
         self.assertIn('desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_BACKING"', part)
         self.assertIn('desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_COMMAND_ECONOMY"', part)
         self.assertIn("scope:actor.power_bloc ?=", score[score.rindex("if = {", 0, score.index(f"identity:{IDENTITY}")):])
+        self.assertIn('desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_DEVELOPMENT_LENDING"', part)
+        self.assertIn("scope:actor.te_cred_dl_tier", part)
+        self.assertIn("multiply = te_cred_dl_invite_per_tier", part)
+
+    def test_join_treaty_score_weighs_what_the_invitation_weighs(self):
+        # A country asked to join by treaty reads ai_power_bloc_identity_score_treaties,
+        # not the invitation's score: the consortium's three terms are in both.
+        score = strip_comments(entity(read("common/script_values/modified.txt"), "ai_power_bloc_identity_score_treaties"))
+        start = score.index(f"identity:{IDENTITY}")
+        self.assertIn("scope:target_country.power_bloc ?=", score[score.rindex("if = {", 0, start):start])
+        part = block_at(score, score.rindex("if = {", 0, start))
+        for desc in ("BACKING", "COMMAND_ECONOMY", "DEVELOPMENT_LENDING"):
+            self.assertIn(f'desc = "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_{desc}"', part)
+        self.assertIn("scope:target_country.te_cred_dl_tier", part)
+        self.assertNotIn("scope:actor", part)
 
     def test_nation_tab_registers_the_receiver_modifiers(self):
         text = read("scripts/generators/gen_nation_tab.py")

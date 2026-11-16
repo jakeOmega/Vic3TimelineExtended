@@ -410,3 +410,30 @@ power_bloc_technology_embargo_strength_add = {
 	script_only = yes
 	game_data = { ai_value = 0 }
 }
+
+# Development Lending's third display field (2026-11-16 review): the acceptance
+# a country below the bloc's GDP per head gives the bloc's invitation and its
+# join treaty, 5 a tier. Script pays it in both AI scores (modified.txt,
+# te_cred_dl_invite_per_tier); test_creditors_consortium.py holds the field
+# to the value.
+power_bloc_te_cred_dl_invite_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# The Joint Research Institute's figure (pm_hq_research_commons, 2026-11-16
+# review): the share of the pool added to the leader's innovation cap beside
+# the identity's own tenth (te_rc_pool_cap_share). Workforce-scaled on the
+# headquarters, read by te_rc_pool_cap_value, so a half-staffed institute
+# adds half. A share of the pool, not a flat cap, so it grows with the
+# members' innovation from era to era.
+country_te_rc_pool_cap_share_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}

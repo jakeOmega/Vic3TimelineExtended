@@ -256,6 +256,40 @@ te_cred_dl_share = {
 	}
 }
 
+# The bloc's Development Lending tier, 0 without the group. Country scope (any
+# member).
+te_cred_dl_tier = {
+	value = 0
+	if = {
+		limit = { te_cred_dl_tier_5 = yes }
+		value = 5
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_4_plus = yes }
+		value = 4
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_3_plus = yes }
+		value = 3
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_2_plus = yes }
+		value = 2
+	}
+	else_if = {
+		limit = { te_cred_dl_tier_1_plus = yes }
+		value = 1
+	}
+}
+
+# Acceptance a country below the bloc's GDP per head (the leader's
+# te_cred_dl_bloc_gdppc, so a country that would receive) gives the bloc's
+# invitation and its join treaty, a tier: the Development Lending terms of
+# ai_power_bloc_identity_score and _treaties (modified.txt). The principles'
+# power_bloc_te_cred_dl_invite_add shows it; test_creditors_consortium.py
+# holds the two to each other.
+te_cred_dl_invite_per_tier = 5
+
 # Weeks in a month, for the pool's weekly income (investment_pool_gross_income).
 te_cred_weeks_per_month = { value = 4.33 }
 
@@ -342,7 +376,6 @@ te_cred_ai_invite_debt_score = {
 	max = 0.8
 	multiply = 50
 }
-
 
 # --- Display (te_debug_cc.1, the loc) -------------------------------------------------
 

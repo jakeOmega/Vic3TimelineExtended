@@ -32,6 +32,17 @@
 # Marshall Plan was about 1.2% of American GDP a year, some 8% of its gross
 # private investment.
 #
+# What the payers get (2026-11-16 review): the leader is usually the richest
+# member and pays most. Exploit Members, the transfer the other way, is a
+# positive group: its leader takes authority, influence, legitimacy and income
+# for the cohesion it costs (-5, -10, -20, -30, -40). Mirroring the cohesion
+# alone would leave this one net negative, so the leader also gains what the
+# Marshall Plan bought the United States, standing abroad: cohesion +5, +10,
+# +20, +30 and +40, the leader's influence +10% to +30%, and countries below
+# the bloc's GDP per head give its invitation and its join treaty +5 a tier
+# (te_cred_dl_invite_per_tier, read by the two AI scores in modified.txt;
+# the power_bloc_te_cred_dl_invite_add line is its display field).
+#
 # GATES. Tiers I to III need Central Banking, as the Monetary Union's do (the
 # identity's founder holds a National Bank, which needs it, so it binds only a
 # bloc whose leader changed). Tier IV needs Intergovernmental Organizations
@@ -193,8 +204,14 @@ principle_development_lending_1 = {
 		has_technology_researched = central_banking
 	}
 
+	leader_modifier = {
+		country_influence_mult = 0.1
+	}
+
 	power_bloc_modifier = {
 		power_bloc_te_cred_dl_share_add = 0.05
+		power_bloc_cohesion_add = 5
+		power_bloc_te_cred_dl_invite_add = 5
 	}
 
 	ai_weight = {
@@ -221,9 +238,15 @@ principle_development_lending_2 = {
 		has_technology_researched = central_banking
 	}
 
+	leader_modifier = {
+		country_influence_mult = 0.15
+	}
+
 	power_bloc_modifier = {
 		power_bloc_te_cred_dl_share_add = 0.075
 		power_bloc_te_cred_dl_construction_add = 0.05
+		power_bloc_cohesion_add = 10
+		power_bloc_te_cred_dl_invite_add = 10
 	}
 
 	ai_weight = {
@@ -240,9 +263,15 @@ principle_development_lending_3 = {
 		has_technology_researched = central_banking
 	}
 
+	leader_modifier = {
+		country_influence_mult = 0.2
+	}
+
 	power_bloc_modifier = {
 		power_bloc_te_cred_dl_share_add = 0.1
 		power_bloc_te_cred_dl_construction_add = 0.1
+		power_bloc_cohesion_add = 20
+		power_bloc_te_cred_dl_invite_add = 15
 	}
 
 	ai_weight = {
@@ -260,9 +289,15 @@ principle_development_lending_4 = {
 		modifier:country_keynesian_pb_principles_bool = yes
 	}
 
+	leader_modifier = {
+		country_influence_mult = 0.25
+	}
+
 	power_bloc_modifier = {
 		power_bloc_te_cred_dl_share_add = 0.125
 		power_bloc_te_cred_dl_construction_add = 0.15
+		power_bloc_cohesion_add = 30
+		power_bloc_te_cred_dl_invite_add = 20
 	}
 
 	ai_weight = {
@@ -280,9 +315,15 @@ principle_development_lending_5 = {
 		modifier:country_globalization_pb_principles_bool = yes
 	}
 
+	leader_modifier = {
+		country_influence_mult = 0.3
+	}
+
 	power_bloc_modifier = {
 		power_bloc_te_cred_dl_share_add = 0.15
 		power_bloc_te_cred_dl_construction_add = 0.2
+		power_bloc_cohesion_add = 40
+		power_bloc_te_cred_dl_invite_add = 25
 	}
 
 	ai_weight = {

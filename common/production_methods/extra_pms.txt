@@ -20244,9 +20244,13 @@ pm_power_bloc_statue_diplomatic = {
 	}
 }
 
-# Creditors' Consortium (2026-11-16): a monument to the bloc's credit. A
-# quarter point off the risk premium the monetary layer reads (cyclical, so
-# the structural floor doesn't swallow it), beside vanilla's prestige.
+# Creditors' Consortium (2026-11-16): a monument to the bloc's credit, which
+# draws the state's capitalists to invest, beside vanilla's prestige. A statue
+# can go in every state of every member, so a country-wide line is paid once a
+# statue: the risk premium cut it first carried (-0.25pp a statue) reached the
+# monetary layer's -10pp clamp at forty statues. Its identity effect is now the
+# state's, as vanilla's statues have theirs, and the premium cut is the
+# headquarters', one to a bloc.
 pm_power_bloc_statue_creditors_consortium = {
 	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
 
@@ -20257,7 +20261,12 @@ pm_power_bloc_statue_creditors_consortium = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_prestige_add = 3
-			country_risk_premium_add = -0.0025
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_capitalists_investment_pool_efficiency_mult = 0.1
 		}
 	}
 
@@ -20269,7 +20278,11 @@ pm_power_bloc_statue_creditors_consortium = {
 }
 
 # Research Commons (power_blocs.md § Research Commons): the statue honors the
-# bloc's science, a little innovation beside the prestige every statue gives.
+# bloc's science. Its identity effect is the state's universities, beside the
+# prestige every statue gives: a share of what they make, so it grows with the
+# era's university methods. The flat +5 weekly innovation it first carried
+# shrank against later eras' tech costs (a line per statue is no harm here:
+# universities add innovation without limit too).
 pm_power_bloc_statue_research_commons = {
 	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
 
@@ -20280,7 +20293,12 @@ pm_power_bloc_statue_research_commons = {
 	country_modifiers = {
 		workforce_scaled = {
 			country_prestige_add = 3
-			country_weekly_innovation_add = 5
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.1
 		}
 	}
 

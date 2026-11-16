@@ -102,10 +102,16 @@ te_rc_pool_value = {
 	}
 }
 
-# Country scope: the leader's cap rise, te_rc_pool_cap's declaration.
+# Country scope: the leader's cap rise, te_rc_pool_cap's declaration: the
+# identity's tenth of the pool, and a fortieth more with a fully staffed Joint
+# Research Institute (pm_hq_research_commons's country_te_rc_pool_cap_share_add,
+# workforce-scaled, so its staffing scales it).
 te_rc_pool_cap_value = {
 	value = te_rc_pool_value
-	multiply = te_rc_pool_cap_share
+	multiply = {
+		value = te_rc_pool_cap_share
+		add = modifier:country_te_rc_pool_cap_share_add
+	}
 }
 
 # Country scope: the weekly innovation the country's own programs take, in add
