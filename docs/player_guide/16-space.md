@@ -66,8 +66,8 @@ innovation, innovation cap and prestige.
 
 The building's fifth production method group, Mission Limit, is for AI
 countries. Yours stays on Any Mission, which limits nothing. An AI program runs
-the costliest mission that costs at most a tenth of its government's income, and
-Mission Limit holds it there. It drops to a cheaper mission after six months
+the highest mission whose bill is at most a tenth of its government's income,
+and Mission Limit holds it there. It drops to a cheaper mission after six months
 over a fifth, and to Earth Orbit at once while the country is in default or
 bankrupt. After a drop it waits five years before it climbs again, so expect AI
 rivals to race only as far as their budgets reach.
