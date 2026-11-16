@@ -192,7 +192,7 @@ identity_creditors_consortium = {
 			AND = {
 				custom_tooltip = {
 					text = te_cred_can_leave_receivership_tt
-					NOT = { te_cred_in_leaders_receivership = yes }
+					NOT = { te_cred_bound_to_leader = yes }
 				}
 				power_bloc = {
 					leverage_advantage = {

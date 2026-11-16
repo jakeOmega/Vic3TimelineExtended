@@ -1,0 +1,56 @@
+﻿# ============================================================================
+# End the Consortium's Receivership (Creditors' Consortium, power_blocs.md)
+# ============================================================================
+# The treaty-less receivership (te_cred_set_direct_receivership) stands in for
+# article 114 where the engine would not make it. The article can be withdrawn
+# once its five-year binding period is over; this is the same exit for the
+# receivership that has no treaty to withdraw from. Shown to the debtor while it
+# holds one; possible once five years have passed (te_cred_direct_binding, set
+# with it) and under the Full rule, where the receivership is in force. Ending
+# it ends the adjustment term with it (te_cred_member_monthly), as withdrawing
+# from the article would.
+#
+# ai_chance: an AI debtor withdraws when it is hostile to its receiver, the
+# attitudes te_cc.2's refusal reads; any other waits for the exit ramp.
+# ============================================================================
+te_decision_cred_end_receivership = {
+	is_shown = {
+		has_variable = te_cred_direct_receivership
+	}
+
+	possible = {
+		te_cred_has_direct_receivership = yes
+		custom_tooltip = {
+			text = te_cred_direct_binding_over_tt
+			NOT = { has_variable = te_cred_direct_binding }
+		}
+	}
+
+	when_taken = {
+		custom_tooltip = te_decision_cred_end_receivership_tt
+		hidden_effect = {
+			var:te_cred_receiver = { save_scope_as = te_cc_creditor }
+			te_cred_end_direct_receivership = yes
+			trigger_event = { id = te_monetary_internal.2 days = 1 }
+			scope:te_cc_creditor = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				exists = var:te_cred_receiver
+				var:te_cred_receiver = {
+					save_temporary_scope_as = te_cred_dec_receiver
+				}
+				OR = {
+					has_attitude = { who = scope:te_cred_dec_receiver attitude = domineering }
+					has_attitude = { who = scope:te_cred_dec_receiver attitude = belligerent }
+					has_attitude = { who = scope:te_cred_dec_receiver attitude = antagonistic }
+				}
+			}
+			add = 50
+		}
+	}
+}

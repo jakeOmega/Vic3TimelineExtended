@@ -202,9 +202,11 @@ te_cred_apply_rescue = {
 		remove_variable = te_cred_offer_cost
 		trigger_event = { id = te_cc.9 days = 3 }
 		trigger_event = { id = te_monetary_internal.2 days = 1 }
+		# The answer is the DEBTOR's (te_cc.3 reads it through scope:te_cc_debtor),
+		# so two members answering the same leader at once can't overwrite each other.
+		set_variable = { name = te_cc_answer value = 1 days = 120 }
 		scope:te_cc_creditor = {
 			trigger_event = { id = te_monetary_internal.2 days = 1 }
-			set_variable = { name = te_cc_answer value = 1 days = 120 }
 			trigger_event = { id = te_cc.3 }
 		}
 		debug_log = "TE_CC rescued debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
@@ -230,9 +232,9 @@ te_cred_refuse_terms = {
 		value = -20
 	}
 	hidden_effect = {
+		set_variable = { name = te_cc_answer value = 2 days = 120 }
 		scope:te_cc_creditor = {
 			trigger_event = { id = te_monetary_internal.2 days = 1 }
-			set_variable = { name = te_cc_answer value = 2 days = 120 }
 			trigger_event = { id = te_cc.3 }
 		}
 		debug_log = "TE_CC terms_refused debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
@@ -299,6 +301,8 @@ te_cred_make_receivership = {
 te_cred_set_direct_receivership = {
 	set_variable = { name = te_cred_direct_receivership value = 1 }
 	set_variable = { name = te_cred_receiver value = scope:te_cc_creditor }
+	# The article's binding period: te_decision_cred_end_receivership opens after it.
+	set_variable = { name = te_cred_direct_binding value = 1 days = 1825 }
 	set_variable = { name = te_mon_receiver value = scope:te_cc_creditor }
 	set_variable = { name = te_mon_receivership_clear_months value = 0 }
 	trigger_event = { id = te_monetary_internal.2 days = 1 }
@@ -359,6 +363,18 @@ te_cred_grant_investment_rights = {
 te_cred_demand_monopolies = {
 	set_variable = { name = te_cred_mono_left value = scope:te_cc_creditor.te_cred_monopolies_allowed }
 	set_variable = { name = te_cred_mono_made value = 0 }
+	# For te_cc.9's self-check: an article from before this rescue can't pass it.
+	if = {
+		limit = {
+			any_scope_treaty = {
+				any_scope_article = {
+					has_type = acquire_monopoly_for_company
+					source_country = root
+				}
+			}
+		}
+		set_variable = { name = te_cred_mono_prior value = 1 days = 30 }
+	}
 	scope:te_cc_creditor = {
 		every_company = {
 			if = {
@@ -384,9 +400,11 @@ te_cred_try_monopoly = {
 			has_variable = te_cred_mono_left
 			var:te_cred_mono_left > 0
 			any_scope_building = { is_building_type = $BT$ }
-			scope:te_cred_mono_company = {
-				NOT = { company_has_building_type_monopoly = bt:$BT$ }
-			}
+			# No company_has_building_type_monopoly here: it names no country, so
+			# it would skip a company that holds the monopoly anywhere. A second
+			# monopoly for the same company and type here is refused by the
+			# article itself (usage_limit once_per_side_with_same_inputs, and
+			# can_ratify's duplicate-inputs check), which can_create_treaty runs.
 			can_create_treaty = {
 				first_country = root
 				second_country = scope:te_cc_creditor
@@ -515,6 +533,10 @@ te_cred_end_direct_receivership = {
 		limit = { has_variable = te_cred_receiver }
 		remove_variable = te_cred_receiver
 	}
+	if = {
+		limit = { has_variable = te_cred_direct_binding }
+		remove_variable = te_cred_direct_binding
+	}
 }
 
 # After te_monetary_discover_union: what the consortium's leader pays for the
@@ -555,18 +577,21 @@ te_cred_discover_leader_costs = {
 
 # Scope: the leader.
 te_cred_leader_monthly = {
-	# A member the leader has not seen yet gets its discovery now, and the leader
-	# with it: the monetary layer otherwise finds a new member's guarantee on its
-	# yearly scan (te_mon_arr_scan is set by its own first discovery).
+	# A member the monetary layer does not read monthly yet gets its discovery
+	# now, and the leader with it. The layer reads a country every month only
+	# while its te_mon_arr_scan is 1, which its own discovery sets (a consortium
+	# member is on the list); a member that joined, or left and came back, has 0
+	# or none from its last discovery outside, and would wait for the yearly
+	# scan while the leader pays for its guarantee from the first month. Keyed on
+	# the flag itself, so a rejoining member is caught however soon it returns.
 	if = {
 		limit = { te_mon_full_system = yes }
 		power_bloc = {
 			every_power_bloc_member = {
 				limit = {
 					NOT = { this = root }
-					NOT = { var:te_cred_seen_by ?= root }
+					NOT = { var:te_mon_arr_scan ?= 1 }
 				}
-				set_variable = { name = te_cred_seen_by value = root }
 				trigger_event = { id = te_monetary_internal.2 days = 1 }
 				root = { set_variable = { name = te_cred_new_member value = 1 days = 5 } }
 			}
@@ -718,7 +743,8 @@ te_cred_dl_sync_receiver_tier = {
 #           start_enactment of one of the leader's laws from the rescue
 #           (docs/testing/power-bloc-identities-playtest.md).
 # Logged only when at least one law was tested, so a pair holding the same
-# laws can't pass it.
+# laws can't pass it, and only for a member that is not the leader's subject,
+# which vanilla's can_impose_law_default would pass on its own.
 te_cred_selfcheck_imposition = {
 	if = {
 		limit = {
@@ -728,6 +754,9 @@ te_cred_selfcheck_imposition = {
 					var:te_cred_adjustment_by ?= root
 					te_mon_is_under_receivership = yes
 					var:te_mon_receiver ?= root
+					# Not the leader's subject: vanilla's can_impose_law_default
+					# grants it the imposition anyway, which would pass the check.
+					NOT = { is_subject_of = root }
 				}
 			}
 		}
@@ -737,6 +766,7 @@ te_cred_selfcheck_imposition = {
 					var:te_cred_adjustment_by ?= root
 					te_mon_is_under_receivership = yes
 					var:te_mon_receiver ?= root
+					NOT = { is_subject_of = root }
 				}
 				save_scope_as = te_cc_sc_target
 			}
