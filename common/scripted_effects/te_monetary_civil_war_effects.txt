@@ -777,6 +777,10 @@ te_mon_cw_repoint_to_winner = {
 				var:te_mon_swap_provider ?= scope:te_cw_loser
 				var:te_mon_lolr_guarantor ?= scope:te_cw_loser
 				var:te_mon_receiver ?= scope:te_cw_loser
+				# A Creditors' Consortium's own records of the same roles: the
+				# treaty-less receivership and the adjustment term.
+				var:te_cred_receiver ?= scope:te_cw_loser
+				var:te_cred_adjustment_by ?= scope:te_cw_loser
 			}
 		}
 		if = {
@@ -794,6 +798,14 @@ te_mon_cw_repoint_to_winner = {
 		if = {
 			limit = { var:te_mon_receiver ?= scope:te_cw_loser }
 			set_variable = { name = te_mon_receiver value = root }
+		}
+		if = {
+			limit = { var:te_cred_receiver ?= scope:te_cw_loser }
+			set_variable = { name = te_cred_receiver value = root }
+		}
+		if = {
+			limit = { var:te_cred_adjustment_by ?= scope:te_cw_loser }
+			set_variable = { name = te_cred_adjustment_by value = root }
 		}
 		set_variable = { name = te_mon_arr_scan value = 1 }
 	}

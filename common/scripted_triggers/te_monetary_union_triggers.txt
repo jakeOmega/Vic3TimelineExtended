@@ -261,6 +261,15 @@ te_mon_union_backstop_is_effective = {
 			}
 		}
 	}
+	# A Creditors' Consortium member that refused its leader's terms has lost
+	# that leader's guarantee for ten years (te_cred_refuse_terms), the union's
+	# backstop from the same leader with it: no relief, no cost, no call.
+	NOT = {
+		AND = {
+			te_cred_guarantee_forfeit = yes
+			var:te_mon_anchor = { te_cred_leads_consortium = yes }
+		}
+	}
 }
 
 # --- What the tiers hand the LEADER (2026-11-14, §0.14) ----------------------

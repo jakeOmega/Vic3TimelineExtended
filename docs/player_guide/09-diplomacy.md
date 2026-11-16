@@ -385,7 +385,9 @@ or abolish the bank.
 The leader stands behind every other member's debts, as a Lender of Last Resort
 treaty would: each member's risk premium from debt load falls, and the leader
 pays part of that in premium of its own. A member with Command Economy, or one
-already guaranteed by a treaty or its currency union, gets nothing from it.
+already guaranteed by a treaty, gets nothing from it. A member its currency
+union backs takes the premium relief from the union, and the consortium still
+answers its default.
 
 When a member defaults, its leader chooses: pay the member's creditors, on the
 terms the bloc's Conditionality tier allows, or refuse. The terms are a debt

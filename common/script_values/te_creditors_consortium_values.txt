@@ -27,8 +27,6 @@
 #                             it was split (a scratch sum)
 #   te_cred_dl_pop_m          LEADER: the receivers' population, in millions
 #   te_cred_dl_paid / _received  what this member paid or was paid last pulse
-#   te_cred_seen_by           scope: the leader whose pulse has seen this
-#                             member, so the monetary discovery was asked for
 #   te_cred_paid              what the leader paid in the last rescue (te_cc.3)
 #   te_cred_rcv_check         scope, 30 days: te_cc.9's receivership check
 #   te_cred_mono_made         monopoly treaties the last rescue made (te_cc.9)

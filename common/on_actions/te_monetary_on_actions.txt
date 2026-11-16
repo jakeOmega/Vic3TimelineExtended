@@ -425,6 +425,9 @@ te_monetary_on_country_default = {
 				limit = {
 					te_mon_union_backstop_is_effective = yes
 					exists = var:te_mon_anchor
+					# A debtor under a receivership is not called for again: a
+					# receiver is a creditor, not a guarantor (114's header).
+					te_mon_has_treaty_debt_relief = no
 				}
 				var:te_mon_anchor = {
 					trigger_event = { id = te_lolr.1 popup = yes }
