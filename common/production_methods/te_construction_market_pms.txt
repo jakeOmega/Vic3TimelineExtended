@@ -140,7 +140,7 @@ pm_te_direct_construction_iron_frame = {
 		workforce_scaled = {
 			goods_input_wood_add = 16
 			goods_input_fabric_add = 8
-			goods_input_iron_add = 20
+			goods_input_iron_add = 18
 			goods_input_tools_add = 4
 			goods_input_transportation_add = 10
 		}
@@ -180,7 +180,7 @@ pm_te_direct_construction_steel_frame = {
 
 	building_modifiers = {
 		workforce_scaled = {
-			goods_input_steel_add = 20
+			goods_input_steel_add = 25
 			goods_input_glass_add = 16
 			goods_input_explosives_add = 4
 			goods_input_tools_add = 8
@@ -228,7 +228,7 @@ pm_te_direct_construction_arc_welded = {
 			goods_input_tools_add = 14
 			goods_input_electricity_add = 16
 			goods_input_copper_add = 2
-			goods_input_transportation_add = 33.5
+			goods_input_transportation_add = 30
 		}
 
 		level_scaled = {

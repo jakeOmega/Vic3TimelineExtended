@@ -221,20 +221,34 @@ class SectorWorkforce(unittest.TestCase):
                    for pm in combo):
                 yield combo
 
+    def margin(self, tier):
+        """(margin a level at base prices, per-level staff)."""
+        goods = _block(self.pms[tier], "building_modifiers", "workforce_scaled")
+        value = {"input": 0.0, "output": 0.0}
+        for key, qty in _numbers(goods).items():
+            kind, good = re.fullmatch(r"goods_(input|output)_(\w+)_add", key).groups()
+            value[kind] += qty * self.prices[good]
+        return value["output"] - value["input"], sum(self.staff([tier]).values())
+
     def test_every_tier_pays_its_workers(self):
         for tier in _list(self.groups[SECTOR_GROUP].get("production_methods")):
             with self.subTest(tier=tier):
-                goods = _block(self.pms[tier], "building_modifiers", "workforce_scaled")
-                value = {"input": 0.0, "output": 0.0}
-                for key, qty in _numbers(goods).items():
-                    kind, good = re.fullmatch(r"goods_(input|output)_(\w+)_add", key).groups()
-                    value[kind] += qty * self.prices[good]
-                staff = sum(self.staff([tier]).values())
+                margin, staff = self.margin(tier)
                 self.assertGreater(staff, 0)
-                breakeven = (value["output"] - value["input"]) / staff
-                self.assertGreaterEqual(round(breakeven, 4), self.MIN_WAGE_BREAKEVEN,
-                                        f"{tier}: margin {value['output'] - value['input']:.0f} "
-                                        f"over {staff:.0f} workers")
+                self.assertGreaterEqual(round(margin / staff, 4), self.MIN_WAGE_BREAKEVEN,
+                                        f"{tier}: margin {margin:.0f} over {staff:.0f} workers")
+
+    def test_the_ladder_climbs(self):
+        """Each tier pays its workers more, and makes more a level, than the one before, so
+        each is worth switching to. The first five were set to an even climb on 2026-11-16,
+        about 1.6 times a step (0.10, 0.16, 0.25, 0.40, 0.63), at the owner's request: Steel-Frame
+        paid 0.36 after the cut, as much as Arc-Welded and three times Iron-Frame."""
+        tiers = _list(self.groups[SECTOR_GROUP].get("production_methods"))
+        margins = [self.margin(t) for t in tiers]
+        for before, after, (m0, s0), (m1, s1) in zip(tiers, tiers[1:], margins, margins[1:]):
+            with self.subTest(before=before, after=after):
+                self.assertGreater(m1, m0, "margin a level")
+                self.assertGreater(m1 / s1, m0 / s0, "wage breakeven")
 
     def test_no_combination_goes_negative_or_keeps_a_token_staff(self):
         checked = 0
@@ -250,6 +264,24 @@ class SectorWorkforce(unittest.TestCase):
                     self.assertFalse(0 < staff < self.MIN_STAFF, f"keeps {staff:.0f} a level")
         # 8 tiers x 2 principle methods x the automation methods each tier takes, twice
         self.assertGreaterEqual(checked, 2 * (8 * 2 * 3 + 5 * 2 + 3 * 2 + 2 * 2))
+
+    def test_a_flat_crew_method_cancels_its_tier_exactly(self):
+        """An automation method that hires a flat crew (`unscaled`) is automated by design: it
+        cancels the per-level staff of every tier it runs on and the crew runs the building
+        (owner, 2026-11-16: "3D printed buildings is an automated method - it cancels the per
+        level employment and replaces with a unscaled employment"). Its zero is not a bug, but
+        it must cancel exactly what the tier hires, profession by profession: no more, or the
+        level goes negative, and no less, or a token staff is left."""
+        checked = 0
+        for building in self.BUILDINGS:
+            for combo in self.combos(building):
+                if not any(sum(self.staff([pm], "unscaled").values()) > 0 for pm in combo):
+                    continue
+                checked += 1
+                with self.subTest(building=building, combo=" + ".join(combo)):
+                    self.assertEqual({k: v for k, v in self.staff(combo).items() if v != 0}, {})
+        # 3D Printed Buildings' Nanomaterial copy on 2 tiers x 2 principle methods, twice
+        self.assertGreaterEqual(checked, 8)
 
 
 def _value(value):

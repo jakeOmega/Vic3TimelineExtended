@@ -18223,7 +18223,11 @@ pm_magnetic_drive_tenders_building_ocean_mine = {
 # Cutting the workforce, not adding a large margin, keeps the sector a small
 # share of GDP. Each automation method in pmg_construction_automation was cut
 # by the same third, so it removes the same share as before; their Construction
-# Site twins (te_construction_market_pms.txt) copy these figures.
+# Site twins (te_construction_market_pms.txt) copy these figures. The first five
+# tiers' wage breakevens then climb evenly, about 1.6 times a step (0.10, 0.16,
+# 0.25, 0.40, 0.63), at the owner's request: Iron-Frame 18 iron (was 20),
+# Steel-Frame 25 steel (20), Arc-Welded 30 transportation (33.5);
+# test_construction_tiers.py holds the climb.
 REPLACE:pm_wooden_buildings = {
 	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
 
@@ -18278,20 +18282,20 @@ REPLACE:pm_iron_frame_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 16                            # Price:   20, Total cost:   320.0 (18.39%)
-			goods_input_fabric_add = 8                           # Price:   20, Total cost:   160.0 (9.20%)
-			goods_input_iron_add = 20                            # Price:   40, Total cost:   800.0 (45.98%)
-			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (9.20%)
-			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (17.24%)
+			goods_input_wood_add = 16                            # Price:   20, Total cost:   320.0 (19.28%)
+			goods_input_fabric_add = 8                           # Price:   20, Total cost:   160.0 (9.64%)
+			goods_input_iron_add = 18                            # Price:   40, Total cost:   720.0 (43.37%)
+			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (9.64%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (18.07%)
 			# Output goods
 			goods_output_construction_add = 2                    # Price: 1000, Total cost:  2000.0 (100.00%)
-			# Total input cost: 1740.0
+			# Total input cost: 1660.0
 			# Total output cost: 2000.0
-			# Profit: 260.0
-			# Profit margin: 14.94%
-			# Zero profit price multiplier: 0.87
+			# Profit: 340.0
+			# Profit margin: 20.48%
+			# Zero profit price multiplier: 0.83
 			# Employment: 2160
-			# Wage breakeven: 0.12
+			# Wage breakeven: 0.16
 		}
 
 		level_scaled = {
@@ -18322,20 +18326,20 @@ REPLACE:pm_steel_frame_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (37.66%)
-			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (24.11%)
-			goods_input_explosives_add = 4                       # Price:   50, Total cost:   200.0 (7.53%)
-			goods_input_tools_add = 8                            # Price:   40, Total cost:   320.0 (12.05%)
-			goods_input_transportation_add = 16.5                # Price:   30, Total cost:   495.0 (18.64%)
+			goods_input_steel_add = 25                           # Price:   50, Total cost:  1250.0 (43.03%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (22.03%)
+			goods_input_explosives_add = 4                       # Price:   50, Total cost:   200.0 (6.88%)
+			goods_input_tools_add = 8                            # Price:   40, Total cost:   320.0 (11.02%)
+			goods_input_transportation_add = 16.5                # Price:   30, Total cost:   495.0 (17.04%)
 			# Output goods
 			goods_output_construction_add = 3.5                  # Price: 1000, Total cost:  3500.0 (100.00%)
-			# Total input cost: 2655.0
+			# Total input cost: 2905.0
 			# Total output cost: 3500.0
-			# Profit: 845.0
-			# Profit margin: 31.83%
-			# Zero profit price multiplier: 0.76
+			# Profit: 595.0
+			# Profit margin: 20.48%
+			# Zero profit price multiplier: 0.83
 			# Employment: 2335
-			# Wage breakeven: 0.36
+			# Wage breakeven: 0.25
 		}
 
 		level_scaled = {
@@ -18366,22 +18370,22 @@ REPLACE:pm_arc_welded_buildings = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (24.01%)
-			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (15.37%)
-			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (9.60%)
-			goods_input_tools_add = 14                           # Price:   40, Total cost:   560.0 (13.45%)
-			goods_input_electricity_add = 16                     # Price:   30, Total cost:   480.0 (11.52%)
-			goods_input_copper_add = 2                           # Price:   40, Total cost:    80.0 (1.92%)
-			goods_input_transportation_add = 33.5                # Price:   30, Total cost:  1005.0 (24.13%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (24.63%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (15.76%)
+			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (9.85%)
+			goods_input_tools_add = 14                           # Price:   40, Total cost:   560.0 (13.79%)
+			goods_input_electricity_add = 16                     # Price:   30, Total cost:   480.0 (11.82%)
+			goods_input_copper_add = 2                           # Price:   40, Total cost:    80.0 (1.97%)
+			goods_input_transportation_add = 30                  # Price:   30, Total cost:   900.0 (22.17%)
 			# Output goods
 			goods_output_construction_add = 5                    # Price: 1000, Total cost:  5000.0 (100.00%)
-			# Total input cost: 4165.0
+			# Total input cost: 4060.0
 			# Total output cost: 5000.0
-			# Profit: 835.0
-			# Profit margin: 20.05%
-			# Zero profit price multiplier: 0.83
+			# Profit: 940.0
+			# Profit margin: 23.15%
+			# Zero profit price multiplier: 0.81
 			# Employment: 2335
-			# Wage breakeven: 0.36
+			# Wage breakeven: 0.40
 		}
 
 		level_scaled = {

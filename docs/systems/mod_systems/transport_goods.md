@@ -40,7 +40,7 @@ Before Railways, a state's transportation comes only from Urban Centers (2 a lev
 On 2026-11-07 the rail tiers' `REPLACE`s were deleted, so Rail is vanilla's 5, and Partial Bulk went from 5 to 2.5 to stay below it. Extensive Rail, which the slip missed (20 → 10 → 16.5), went to 10, twice vanilla Rail as it was twice the mod's Rail when written. Every other method the slip hit went back to the 10 it was written with, copies made from the slipped methods since included:
 
 - Cleanroom Fabs and AI-Managed Fab, set to 5 Merchant Marine (8.5 after #1050) on 2026-01-31.
-- Iron-Frame Buildings and its Construction Site twin. At 1 it cost £735 a construction point, less than Steel-Frame's £759; at 10 it costs £870, between Wooden (£1,000) and Steel-Frame.
+- Iron-Frame Buildings and its Construction Site twin. At 1 it cost £735 a construction point, less than Steel-Frame's £759; at 10 it costs £870, between Wooden (£1,000) and Steel-Frame. Since 2026-11-16 the goods of a point are Wooden £800, Iron-Frame £830 (18 iron) and Steel-Frame £830 (25 steel), with the transportation as here (`construction.md` § The sector's workforce and margin).
 - The chemical plants' Advanced Process Control, Distributed Control Systems and AI Managed Chemical Plant, with their Explosives Factory copies.
 - The power plants' Power Integrated Smart Systems and AI Managed Power Plant, with its reactor, aneutronic and hydro copies.
 
