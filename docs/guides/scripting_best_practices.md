@@ -5307,6 +5307,14 @@ than a sprawl (`monetary_policy_design.md` §0.9):
   refresh removes it. Check what a system leaves behind when it is switched off. A gate in
   `visible = { }` on treaty articles and principles stops new ones being chosen. What happens to
   articles already in force and principles already held hasn't been read in game.
+- **A figure stored under one setting outlives a switch to another.** Where a pulse stores what
+  a setting gives (Small-Economy Construction's factor, re-read each country's yearly pulse), a
+  switch leaves the old setting's figure in force until that pulse. So a floor on it is the
+  lowest any setting gives, not the chosen setting's (a country switched from a tenth to half
+  still prices at a tenth until its pulse), and a tooltip describes the setting the stored figure
+  came from (store it beside the figure: `var:te_cc_small_min`), with a note when the chosen one
+  differs. Keep the old "on" setting's name when an on/off rule grows strengths, so it means what
+  it did in saves and presets (2026-11-16).
 
 Two traps found on the way: an unconditional term that was only ever correct *because* of what
 the gate now changes (a "bankless spread" added in the no-dial branch, which every country would
