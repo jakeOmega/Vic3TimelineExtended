@@ -26,7 +26,10 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                the yearly snapshot of one country, a line per field group. A country's snapshot
                                month is its id modulo 12, so a twelfth of the world reports each month and no tick
                                writes more than the log's rotation can hold. `id` is a serial the probe gives each
-                               country object (two objects can share a tag in a civil war).
+                               country object (two objects can share a tag in a civil war). Version 2 adds O2
+                               (manufacturing staffing without the Construction Sector), J1 (each institution's
+                               maximum investment), R1 (the army by unit type) and H1 (specific technologies), and
+                               the construction purchase's remaining terms to C2 and `n_law_set` to N2.
   X <n> <TAG> <id> <k> ...     with each snapshot: figures only the interface's data functions give (the
                                budget's lines, construction used and unused, innovation against its cap, the
                                technology being researched and the law being enacted by name). Each is also

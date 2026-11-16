@@ -10,10 +10,20 @@ It is inert in a played game: every hook tests one global variable and stops. It
 pulse of a game with no human player, and `event te_debug_ai_probe.1` arms it by hand (`.2` disarms it and keeps it
 from arming itself again in that game).
 
+**A run is judged first by the largest economies.** The owner (2026-11-16): "I am most interested in ensuring the
+big economies grow - they are typically the competitors to the player. A game where only the big economies grow is
+better than one where only small economies grow. But by country count, most economies are small. So just a warning
+about measuring success by median country or anything like that." In the first long run half of all AI snapshots
+were unrecognized powers, so a median over countries is a median of tiny countries. The scorecard gives every
+table for the 20 largest AI economies of each decade first, then for all AI countries weighted by GDP, and the
+typical country last; its headline compares the 20 largest with the rest.
+
 ## Before a run
 
 1. `python3 scripts/generators/gen_ai_probe.py` and commit what it writes: the probe indexes laws, technologies,
-   strategies, institutions and building groups as they were when it last ran, and one added since goes unread.
+   strategies, institutions, building groups and play types as they were when it last ran, and one added since
+   goes unread. Regenerating after a law or technology was added re-chunks the positional lines (L, T), so a log
+   of the earlier build then needs its own key: `--key` takes the `ai_probe_key.json` of the build that ran.
 2. Deploy the build (`docs/guides/git_workflow.md` § Play-testing unmerged work). The probe's lines go to
    `debug.log`, which rotates at 512 KB through six generations, so a long run must copy the log as it is written:
    the QA harness's unattended run does (`fixture_debug.log` in its run folder).
@@ -26,13 +36,16 @@ Needs the owner's grant, of the launch and of the hours (`.claude/skills/game-qa
 python3 -m game_qa doctor
 python3 -m game_qa fixture --until 1836.3.20 --permission "<the owner's words>"      # two minutes: the short check
 python3 scripts/analysis/ai_probe_report.py check <backup root>/runs/<snapshot id>/fixture_debug.log
-python3 -m game_qa fixture --until 1930 --dry-run                                     # the estimate, for the owner
+python3 -m game_qa fixture --until 1930 --dry-run                                     # the harness's estimate
 python3 -m game_qa fixture --until 1930 --permission "<the owner's grant of the run>" --max-hours 9   # in the background
 ```
 
-The run plays under the game rules the owner last applied in a lobby (the dry run lists them). Estimates on the
-owner's machine: about 3 hours to 1900, 6 to 1936, 7 to 1950. The run's reply names its run folder; the log copy
-is there whether or not the run reached its date.
+The run plays under the game rules the owner last applied in a lobby (the dry run lists them). The run's reply
+names its run folder; the log copy is there whether or not the run reached its date.
+
+**The harness's estimate is low.** The first long run (2026-11-16) took 6 h 46 min from 1836 to 1925, 0.75 s a
+game day on average, where the harness estimated 4.85 h. At that rate a run takes about 4.9 hours to 1900, 7.6 to
+1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room.
 
 **The short check comes first, always.** Nobody had printed most of the probe's lines before it was written, and a
 `debug_log` line the engine cannot render is dropped whole. `check` says whether the probe armed (if not, the
@@ -42,9 +55,25 @@ out of `DATA_FUNCTIONS`, or split a line that is too long, regenerate, deploy an
 A short run ends before any country's yearly snapshot is due unless it reaches the month a serial gives it, so
 expect a twelfth of the countries a month: a run to 20 March shows two months' worth.
 
+For a version-2 log `check` also reads each version-2 addition, none of which had printed when it was written
+(2026-11-16). What to look for, and what a failure means:
+
+| `check` line | Good | If not |
+|---|---|---|
+| world (W) lines | one at the arming month, `dn` above 0 | `every_country` in a script value or `num_states` summed does not evaluate: the W values (`te_aip_w_*`) |
+| law ends by how they ended | `passed` equal to the law_pass lines; `maximum setbacks` 3 | the pass mark does not reach the end hook (hook order), or `max_law_enactment_setbacks` does not read as a value |
+| laws set outside an enactment | above 0 over a year (the law-consistency sweep, new countries) | the `on_law_activated` hook does not run with the law as root |
+| plays by type | named types, a rank and a serial on each | `is_diplomatic_play_type` in `te_aip_play_type_index` does not evaluate in the play's scope (type 0), or the globals do not carry the sides (rank or serial 0) |
+| institutions: level above investment_max | 0 of the held institutions | `institution:<x> = { add = investment_max }` does not read the maximum (every one reads below its level: the check fails) |
+| units: the R line's shares add to 1 | nearly all armies | a unit type missing from the line, or the fraction measures something other than the army |
+| technology flags held | about half of the 24 or more, even in 1836 | a flag misnamed (the generator stops on a key no file defines, so this would be the read) |
+| purchase recomputed matches cm_target | 90% or more | a term of `te_construction_market_ai_purchase_target` the snapshot still lacks, or misread (`cm_level_max`, `bubble`, `cm_admin`) |
+
+`check` on the full log of a seven-hour run takes about 15 seconds.
+
 ## A run from a save (the late game)
 
-An unattended run from 1836 reaches about 1930 overnight. For the late game, load a late save in debug mode, type
+An unattended run from 1836 reaches about 1925 overnight. For the late game, load a late save in debug mode, type
 `event te_debug_ai_probe.1` and then `observe`, and leave it running; a human-played game does not arm the probe by
 itself. Nothing copies the log in this case, so run a follower beside it (the harness's `game_qa.logtail` shows
 how), or keep the run under the six generations the game keeps (about 3 MB: a year or two of the world's
@@ -55,27 +84,60 @@ snapshots).
 ```bash
 python3 scripts/analysis/ai_probe_report.py report <fixture_debug.log> --md <where>.md   # the scorecard, by decade
 python3 scripts/analysis/ai_probe_report.py parse  <fixture_debug.log> --out <folder>    # snapshots.jsonl, events.jsonl
+python3 scripts/analysis/ai_probe_report.py report <folder> --md <where>.md              # the same, from the parse
 ```
 
-The scorecard has a table for each of the five priorities (growth has three: outcomes, the means of growth,
-solvency), the commonest law in each law group, the strategies held and the laws the AI started most. Its figures
-are medians over AI countries that are not decentralized nations. `snapshots.jsonl` holds every field for anything
-the scorecard does not show: one record per country and year, the indexed fields decoded with
-`scripts/analysis/ai_probe_key.json`.
+**Parse each run alone.** Serials and month counts start again in each run, so `parse` or `report` given two runs'
+logs in one call mixes their countries; both now warn when the month count goes back. To compare two runs, report
+each and set the tables side by side. Both builds' logs read with one key as long as neither build changed the
+laws, technologies or building groups the positional lines index (version 2 only added lines and fields); a
+version-1 log reports with the version-2 key, its version-2 tables saying "not logged".
+
+The scorecard starts with a headline (the 20 largest economies' growth against the rest's, and their share of AI
+GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has six: outcomes, the means of
+growth, staffing, the construction purchase, solvency, and where the money goes), each through the three lenses
+above. Version 2 adds: specific technologies held (2a); law starts per idle month by political agenda (3a), the
+computation of the 2026-11-16 baseline analysis, which a change to the AI's law cadence is read by; how enactments
+ended (3b); old laws kept while the technology for the next is held (3c); institutions against their maximum (3d);
+the army by unit type (4a); plays by type with both sides' ranks (5a); and the decentralized nations and the states
+they hold, which is the land left to colonize (5b). Defaults are counted as episodes too (a default within 12
+months of the last ending continues it), since the engine moves a country in and out of default month to month.
+`snapshots.jsonl` holds every field for anything the scorecard does not show: one record per country and year, the
+indexed fields decoded with `scripts/analysis/ai_probe_key.json`, which also names the tax and wage levels
+(`level_names`, 0 = very low), how an enactment ended (`law_end_how`) and each R-line unit type.
 
 What the probe cannot see, and where to look instead: which building the AI queued and why (the save's
 construction queues, `scripts/analysis/econ_save_series.py`), production methods in use (`save_world_report.py
 buildings`), pops and wages. The run's last save is kept as the harness's dated fixture.
 
+## What the first long run taught (1836 to 1925, 2026-11-16)
+
+- **It took 6 h 46 min**, 0.75 s a game day, against the harness's estimate of 4.85 h (above).
+- **`on_law_enactment_fail` fires only when an enactment's setbacks reach the country's maximum** (vanilla's comment
+  on the hook: "fails by accumulating too many setbacks"; the maximum is 3, `00_code_static_modifiers.txt`). No
+  enactment of the 2,938 that ended had more than 2, so the hook never fired: the 534 that ended unpassed were
+  stopped before a third setback, 346 of them with a chance to pass under 5%. Version 2 logs how each ended.
+- **Events before a country's first monthly pulse, and every play, carried serial 0** (546 of 12,687). Version 2
+  gives a country its serial at its first event.
+- **The counters run below the event counts for a reason**: a counter is reported at the country's next snapshot,
+  so a country's last months and a dead country's are lost, and plays by decentralized nations (81 of 394) are
+  never counted at all. `n_war` counts the plays that became wars, not plays.
+- **`low_mfg` counts the Construction Sector**, which the mod puts under bg_heavy_industry, so a small country's
+  idle sectors read as idle factories. Version 2 logs `low_mfg_nc` beside it.
+
 ## What a run costs
 
-About 27 log lines a country a year, a twelfth of the world each month (some 6 KB a country a year, 100 MB for a
-century of 180 countries, in the run folder on the backup drive). In game: a few hundred script-value reads a
-country a year and one global-variable test on each hooked on-action; nothing a player would notice, and nothing
-at all in a played game beyond that test.
+Version 1 wrote 32 lines a country a year (26 snapshot lines and 6 data-function lines), a twelfth of the world
+each month: 646,000 of the first run's 660,960 probe lines, the rest 12,687 events and two lines a month. Version 2
+writes 36 a country a year (the O2, J1, R1 and H1 lines) and one world line a year; the events are the same lines
+with more fields. On the first run's countries that is about 742,000 probe lines, 12% more, and about 11% more
+bytes (some 8 KB a country a year, 160 MB for 1836 to 1925, in the run folder on the backup drive). In game: a few
+hundred script-value reads a country a year and one global-variable test on each hooked on-action, `on_law_activated`
+now among them; nothing a player would notice, and nothing at all in a played game beyond that test.
 
 ## Removing it
 
-Delete the four generated files, the generator, the report, the key, `test_ai_probe.py` and this runbook, and take
-its rows out of `docs/auto_generated_files.md`, `scripts/nightly_audit_select.py`, `docs/guides/python_tools.md`
-and `docs/systems/mod_systems/ai.md`. The variables it leaves in a save (`te_aip_*`) are inert.
+Delete the four generated files, the generator, the report, the key, `test_ai_probe.py`, `test_fixtures/ai_probe/`
+and this runbook, and take its rows out of `docs/auto_generated_files.md`, `scripts/nightly_audit_select.py`,
+`docs/guides/python_tools.md` and `docs/systems/mod_systems/ai.md`. The variables it leaves in a save (`te_aip_*`)
+are inert.
