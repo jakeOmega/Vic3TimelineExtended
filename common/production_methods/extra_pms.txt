@@ -20182,6 +20182,29 @@ pm_power_bloc_statue_diplomatic = {
 	}
 }
 
+# Research Commons (power_blocs.md § Research Commons): the statue honors the
+# bloc's science, a little innovation beside the prestige every statue gives.
+pm_power_bloc_statue_research_commons = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	unlocking_identity = identity_research_commons
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 3
+			country_weekly_innovation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 500
+		}
+	}
+}
+
 INJECT:pm_road_carts = {
 	building_modifiers = {
 		level_scaled = {

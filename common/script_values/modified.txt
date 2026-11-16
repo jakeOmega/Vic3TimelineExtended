@@ -584,4 +584,63 @@ INJECT:ai_power_bloc_identity_score = {
 		add = scope:target_country.relations:root
 		desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
 	}
+	### Research Commons (power_blocs.md § Research Commons): the technologies
+	### the Commons would share, and less for a great power, which would give up
+	### its own research for them.
+	if = {
+		limit = {
+			scope:actor.power_bloc ?= {
+				has_identity = identity:identity_research_commons
+			}
+		}
+		if = {
+			limit = { scope:actor.techs_researched > techs_researched }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_TECH_GAP"
+				value = scope:actor.techs_researched
+				subtract = techs_researched
+				multiply = 2
+				max = 60
+			}
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_GREAT_POWER"
+				value = -50
+			}
+		}
+	}
+}
+
+# The join treaty's AI score (09_join_power_bloc.txt): root is the joining
+# country and scope:target_country the bloc's side.
+INJECT:ai_power_bloc_identity_score_treaties = {
+	### Research Commons (power_blocs.md § Research Commons): the technologies
+	### the Commons would share, and less for a great power, which would give up
+	### its own research for them.
+	if = {
+		limit = {
+			scope:target_country.power_bloc ?= {
+				has_identity = identity:identity_research_commons
+			}
+		}
+		if = {
+			limit = { scope:target_country.techs_researched > techs_researched }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_TECH_GAP"
+				value = scope:target_country.techs_researched
+				subtract = techs_researched
+				multiply = 2
+				max = 60
+			}
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = {
+				desc = "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_GREAT_POWER"
+				value = -50
+			}
+		}
+	}
 }

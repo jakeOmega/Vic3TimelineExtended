@@ -2520,6 +2520,36 @@ pm_hq_diplomatic_framework = {
 	}
 }
 
+# Research Commons (power_blocs.md § Research Commons): the leader's joint
+# laboratory. The cap is what the pool fills, so the headquarters raises it.
+# Placeholder art: the national laboratories' icon.
+pm_hq_research_commons = {
+	texture = "gfx/interface/icons/production_method_icons/pm_national_labs.dds"
+
+	unlocking_identity = identity_research_commons
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 25
+			country_prestige_mult = 0.05
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.25
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 5000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 3000
+		}
+	}
+}
+
 #==================================================
 # Production Methods - Wonder Buildings
 #==================================================
