@@ -28,21 +28,22 @@ te_rc_is_contributor = {
 }
 
 # Country scope: a former non-leader member (te_rc_member, set by the leader's
-# pulse) that is in no Research Commons now and has left the bloc of the
-# leader it served (te_rc_leader). A bloc that changed its identity keeps its
-# members in the same leader's bloc, so they are not leavers; a bloc that
-# dissolved, or a leader that no longer exists, leaves them leavers. The
-# leader read is guarded apart from its NOT (scripting_best_practices.md, the
-# has_variable bullet).
+# pulse) that left a Commons that still stands: it is in no Research Commons
+# now, and the leader it served (te_rc_leader) still exists and still leads one
+# (coordinator's ruling, 2026-11-16). A dissolved bloc, a leader that is gone,
+# and a bloc that changed identity put no penalty on their former members. The
+# leader read is guarded apart (scripting_best_practices.md, the has_variable
+# bullet).
 te_rc_has_left_commons = {
 	has_variable = te_rc_member
 	te_rc_in_commons = no
+	has_variable = te_rc_leader
 	trigger_if = {
-		limit = {
-			has_variable = te_rc_leader
-			exists = var:te_rc_leader
-		}
-		NOT = { is_in_same_power_bloc = var:te_rc_leader }
+		limit = { exists = var:te_rc_leader }
+		var:te_rc_leader = { te_rc_leads_commons = yes }
+	}
+	trigger_else = {
+		always = no
 	}
 }
 

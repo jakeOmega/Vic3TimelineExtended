@@ -108,21 +108,115 @@ te_rc_pool_cap_value = {
 	multiply = te_rc_pool_cap_share
 }
 
+# Country scope: the weekly innovation the country's own programs take, in add
+# units, a positive figure: the Space Race's milestones (sr_space_program_cost,
+# 15 a cost level, one declaration per milestone's entry), the nuclear program
+# (nuclear_weapon_program_funding) and archaeology (gm_arch_diversion). Each
+# term is its entry's declared value, read only while the entry is active.
+# test_research_commons.py holds the terms to the declarations. The cohesion
+# share adds it back on both sides, so it compares what each country produces,
+# not what it has left after its programs (coordinator's ruling, 2026-11-16:
+# spending the pool on the leader's programs fits the identity, § 6.2).
+te_rc_program_drains = {
+	value = 0
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_suborbital
+			sr_milestone_billed_suborbital = yes
+		}
+		add = { value = sr_suborbital_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_orbital
+			sr_milestone_billed_orbital = yes
+		}
+		add = { value = sr_orbital_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_moon_landing
+			sr_milestone_billed_moon_landing = yes
+		}
+		add = { value = sr_moon_landing_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_probe
+			sr_milestone_billed_probe = yes
+		}
+		add = { value = sr_probe_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_mars_landing
+			sr_milestone_billed_mars_landing = yes
+		}
+		add = { value = sr_mars_landing_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_interstellar_probe
+			sr_milestone_billed_interstellar_probe = yes
+		}
+		add = { value = sr_interstellar_probe_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_solar_colonization
+			sr_milestone_billed_solar_colonization = yes
+		}
+		add = { value = sr_solar_colonization_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = { has_journal_entry = je_nuclear_program }
+		add = nuclear_program_display_weekly_cost
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_grand_monuments
+			has_variable = gm_arch_innovation_units
+			var:gm_arch_innovation_units > 0.001
+		}
+		add = var:gm_arch_innovation_units
+	}
+	min = 0
+}
+
 # Country scope, the leader at its pulse, before the members' contributions
-# change: its own weekly innovation in add units, before the pool. The pool
-# read live here is the one that landed (the members' contributions of last
-# month).
+# change: what it produces, in add units, before the pool and its own
+# programs. The pool read live here is the one that landed (the members'
+# contributions of last month).
 te_rc_leader_own_adds = {
 	value = modifier:country_weekly_innovation_add
 	subtract = te_rc_pool_value
+	add = te_rc_program_drains
+	min = 0
+}
+
+# Country scope, a member at the leader's pulse, before its contribution is
+# set again: what it produces, in add units, before its contribution and its
+# own programs (the cohesion share's members' side; the contribution itself
+# is taken after the programs, te_rc_member_gross_adds).
+te_rc_member_production_adds = {
+	value = modifier:country_weekly_innovation_add
+	if = {
+		limit = {
+			has_journal_entry = je_research_commons
+			has_variable = te_rc_contributed
+		}
+		add = var:te_rc_contributed
+	}
+	add = te_rc_program_drains
 	min = 0
 }
 
 # Country scope, the leader: its share of the bloc's innovation (0 to 1), the
 # identity's main cohesion term. Set by te_rc_leader_pulse; the cohesion block
-# reads var:te_rc_leader_share. Each country's innovation is compared as the
-# engine shows it (add lines x the multiplier), before the pool and the
-# contribution.
+# reads var:te_rc_leader_share. Each country's production is compared as the
+# engine shows it (add lines x the multiplier), before the pool, the
+# contribution and the country's own programs, so a leader that spends the
+# pool on its programs keeps its share.
 te_rc_leader_share_value = {
 	value = 0
 	if = {
@@ -214,25 +308,25 @@ te_rc_embargo_points = {
 
 # ---- The leader's share: the two sides --------------------------------------
 
-# Country scope, the leader at its pulse: its own innovation before the pool,
-# as the engine shows it.
+# Country scope, the leader at its pulse: what it produces before the pool and
+# its programs, as the engine shows it.
 te_rc_leader_own_eff_value = {
 	value = te_rc_leader_own_adds
 	multiply = te_rc_innovation_mult_factor
 }
 
-# Power bloc scope: the members' innovation before their contributions, as the
-# engine shows it. te_rc_gross is set on every member by the same pulse, a
-# newcomer that pays nothing yet included.
+# Power bloc scope: what the members produce before their contributions and
+# their programs, as the engine shows it. te_rc_production is set on every
+# member by the same pulse, a newcomer that pays nothing yet included.
 te_rc_bloc_members_eff = {
 	value = 0
 	every_power_bloc_member = {
 		limit = {
 			is_power_bloc_leader = no
-			has_variable = te_rc_gross
+			has_variable = te_rc_production
 		}
 		add = {
-			value = var:te_rc_gross
+			value = var:te_rc_production
 			multiply = te_rc_innovation_mult_factor
 		}
 	}

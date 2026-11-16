@@ -8,6 +8,15 @@
 # pulse finds both: the leader's pulse marks every member it meets
 # (te_rc_member, te_rc_leader), and a country carrying the mark outside any
 # Commons has left (te_rc_has_left_commons).
+#
+# Load order matters for on_acquired_technology: the engine runs a merged
+# on_action's lists in file load order, and this file loads after
+# extra_on_actions.txt and headlines.txt. So when the leader researches a
+# technology, Cultural Hegemony's world-first test
+# (cultural_hegemony_tech_first_on_action, which asks that no other country
+# hold it) runs before te_rc_on_acquired grants it to the members.
+# test_research_commons.py pins the order; renaming this file to sort earlier
+# would cost every Commons leader its world firsts.
 # ============================================================================
 
 on_monthly_pulse_country = {
@@ -22,7 +31,10 @@ on_acquired_technology = {
 	}
 }
 
-# ROOT = a country, on its monthly pulse.
+# ROOT = a country, on its monthly pulse. Institutes Left Behind's monthly step
+# skips a country whose penalty began today (te_rc_ilb_new): its first copy was
+# added in this same effect or earlier today, and a remove_modifier doesn't see
+# a copy added in the same effect, so a second apply would stack.
 te_rc_monthly_country = {
 	effect = {
 		if = {
@@ -41,7 +53,10 @@ te_rc_monthly_country = {
 			remove_variable = te_rc_members_eff
 		}
 		if = {
-			limit = { has_variable = te_rc_ilb_months }
+			limit = {
+				has_variable = te_rc_ilb_months
+				NOT = { has_variable = te_rc_ilb_new }
+			}
 			te_rc_ilb_refresh = yes
 		}
 	}
@@ -50,7 +65,10 @@ te_rc_monthly_country = {
 # ROOT = the country that acquired scope:technology. A grant (te_rc_granting
 # set around it, te_rc_grant) is not a discovery: it is counted for
 # TE_SELF_CHECK rc_grant_hook and goes no further, so the ladder does not run
-# again from inside itself.
+# again from inside itself. Should the hook fire after a grant rather than
+# inside it (the self-check's BROKEN case), te_rc_granted_recent (three days)
+# keeps each grant from running a whole pass; the monthly pass shares a real
+# discovery made in those days.
 te_rc_on_acquired = {
 	trigger = {
 		has_game_started = yes
@@ -66,7 +84,10 @@ te_rc_on_acquired = {
 				te_rc_count_global = { NAME = te_rc_sc_hook_after }
 			}
 			if = {
-				limit = { te_rc_in_commons = yes }
+				limit = {
+					te_rc_in_commons = yes
+					NOT = { has_variable = te_rc_granted_recent }
+				}
 				te_rc_share_acquired = yes
 			}
 		}

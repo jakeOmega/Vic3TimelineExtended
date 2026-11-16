@@ -332,8 +332,10 @@ te_pb_summit.1 = {
 		}
 	}
 
-	# Research Commons: Scientific Congress. The members' innovation rises, and
-	# the pool takes its share of the rise (te_rc_contribution).
+	# Research Commons: Scientific Congress. Every member's innovation, the
+	# leader's included, rises by a tenth. The members' contributions are in add
+	# units, which a multiplier doesn't touch, so the pool takes no share of the
+	# members' rise; the leader's own +10% lifts the pool it receives.
 	option = {
 		name = te_pb_summit.1.q
 		trigger = {

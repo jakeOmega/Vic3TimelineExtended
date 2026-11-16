@@ -40,13 +40,20 @@ te_rc_technology_embargo = {
 			text = te_rc_technology_embargo_not_member_tt
 			NOT = { is_in_same_power_bloc = scope:target_country }
 		}
+		# One embargo of root's own: has_diplomatic_pact holds for either side,
+		# so it is asked from root with is_initiator = yes, and an embargo
+		# another Commons placed on root doesn't count. prev is the country
+		# any_country is at (root = { } is the one scope change).
 		custom_tooltip = {
 			text = te_rc_technology_embargo_one_tt
 			NOT = {
 				any_country = {
-					has_diplomatic_pact = {
-						who = root
-						type = te_rc_technology_embargo
+					root = {
+						has_diplomatic_pact = {
+							who = prev
+							type = te_rc_technology_embargo
+							is_initiator = yes
+						}
 					}
 				}
 			}

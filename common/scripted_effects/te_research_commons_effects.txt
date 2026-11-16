@@ -21,8 +21,10 @@
 #                       units); je_research_commons declares te_rc_contribution
 #                       at this value (te_rc_contribution_value)
 #   te_rc_gross         its weekly innovation before the contribution
+#   te_rc_production    the same before its own programs too (cohesion share)
 #   te_rc_grants_pass / _last / _total   technologies the ladder granted it
 #   te_rc_ilb_months    months of Institutes Left Behind still to run
+#   te_rc_ilb_new       one day: the penalty began today (one apply a day)
 #   te_rc_leader_own_eff, te_rc_members_eff, te_rc_leader_share   on the leader
 # All of them are variables, so a revolution's winner carries them on; the
 # modifiers are rebuilt from them (Institutes Left Behind each month, the
@@ -34,8 +36,9 @@
 # Country scope, the member granted $TECH$ (a technology key). te_rc_granting
 # is set around add_technology_researched so that an on_acquired_technology
 # the grant fires inside the effect is not taken for a discovery: the
-# headline, Cultural Hegemony's world first, agricultural diffusion and this
-# system's own hook all skip a country holding it (design § 6.3, "A grant is
+# headline, Cultural Hegemony's world first, agricultural diffusion, the census
+# and arable-land refreshes (run once a pass instead, te_rc_refresh_after_grants)
+# and this system's own hook all skip a country holding it (design § 6.3, "A grant is
 # not a discovery"). TE_SELF_CHECK rc_grant_hook says whether the hook fires
 # inside the grant; te_rc_granted_recent (three days) lets it see one that
 # fires after.
@@ -107,6 +110,31 @@ te_rc_after_pass = {
 	else = {
 		remove_variable = te_rc_grants_prev
 	}
+	if = {
+		limit = { var:te_rc_grants_pass > 0 }
+		te_rc_refresh_after_grants = yes
+	}
+}
+
+# Country scope, a member that received at least one technology in a pass: the
+# two technology refreshes the grant guard keeps off on_acquired_technology,
+# run once for the pass instead of once per technology. A newcomer 120
+# technologies behind with 40 states would otherwise queue about 9,600 state
+# events. Both are idempotent, set from the country's state at the time they
+# run, so one run after the pass ends where one per grant would:
+#   te_demog_lines_country_on_action (te_demog_on_actions.txt): each state's
+#     census lines at the families' sum, now and again a day later
+#     (te_demog_events.4 and .5), touched only where the sum changed;
+#   add_arable_land_effect_on_action (extra_on_actions.txt): arable land
+#     a day later (minor_events_timelineextended.1), which subtracts what it
+#     already added.
+# test_research_commons.py holds these lines to the two hooks' bodies.
+te_rc_refresh_after_grants = {
+	every_scope_state = {
+		trigger_event = { id = te_demog_events.4 }
+	}
+	trigger_event = { id = te_demog_events.5 days = 1 }
+	trigger_event = { id = minor_events_timelineextended.1 days = 1 }
 }
 
 # ---- The leader's monthly pulse ---------------------------------------------
@@ -121,6 +149,7 @@ te_rc_leader_pulse = {
 	remove_variable = te_rc_leader
 	remove_variable = te_rc_contributed
 	remove_variable = te_rc_gross
+	remove_variable = te_rc_production
 	if = {
 		limit = { has_variable = te_rc_ilb_months }
 		te_rc_end_institutes_left_behind = yes
@@ -158,6 +187,8 @@ te_rc_member_update = {
 	# The fixed point (te_research_commons_values.txt): the gross is read with
 	# last month's contribution added back, then the new one is set from it.
 	set_variable = { name = te_rc_gross value = te_rc_member_gross_adds }
+	# The cohesion share's members' side, before its programs too.
+	set_variable = { name = te_rc_production value = te_rc_member_production_adds }
 	if = {
 		limit = { has_journal_entry = je_research_commons }
 		te_rc_selfcheck_entry_add = yes
@@ -289,11 +320,13 @@ te_rc_share_acquired = {
 # ---- Leaving -----------------------------------------------------------------
 
 # Country scope: je_research_commons ended (its invalid outcome: no longer in a
-# Research Commons). A member that left gets Institutes Left Behind now; one
-# whose bloc changed identity, or a leader, does not.
+# Research Commons). A member that left a Commons that still stands gets
+# Institutes Left Behind now; a leader, and a member whose bloc dissolved,
+# changed identity or lost its leader, does not (te_rc_has_left_commons).
 te_rc_entry_ended = {
 	remove_variable = te_rc_contributed
 	remove_variable = te_rc_gross
+	remove_variable = te_rc_production
 	remove_variable = te_rc_paid_months
 	remove_variable = te_rc_leader_own_eff
 	remove_variable = te_rc_members_eff
@@ -301,8 +334,10 @@ te_rc_entry_ended = {
 	te_rc_detect_leaver = yes
 }
 
-# Country scope: a former member found outside any Commons. Also the monthly
-# pulse's backstop, should the entry not have ended.
+# Country scope: a former member found outside any Commons, penalized only if
+# its Commons still stands. Also the monthly pulse's backstop, should the
+# entry not have ended (a revolution's winner outside the bloc, which inherits
+# te_rc_member and te_rc_leader but not the entry's state).
 te_rc_detect_leaver = {
 	if = {
 		limit = { te_rc_has_left_commons = yes }
@@ -317,6 +352,7 @@ te_rc_detect_leaver = {
 		remove_variable = te_rc_leader
 		remove_variable = te_rc_contributed
 		remove_variable = te_rc_gross
+		remove_variable = te_rc_production
 		remove_variable = te_rc_paid_months
 	}
 }
@@ -326,6 +362,8 @@ te_rc_detect_leaver = {
 # script can't take a technology away).
 te_rc_start_institutes_left_behind = {
 	set_variable = { name = te_rc_ilb_months value = 120 }
+	# Today's monthly step skips it: one apply a day (te_rc_monthly_country).
+	set_variable = { name = te_rc_ilb_new days = 1 }
 	te_rc_ilb_apply = yes
 	debug_log = "TE_RC left country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (Institutes Left Behind for 120 months)"
 }
@@ -358,6 +396,7 @@ te_rc_ilb_refresh = {
 # Commons again).
 te_rc_end_institutes_left_behind = {
 	remove_variable = te_rc_ilb_months
+	remove_variable = te_rc_ilb_new
 	remove_modifier = te_rc_institutes_left_behind
 }
 
@@ -373,8 +412,13 @@ te_rc_embargo_refresh = {
 	set_variable = { name = te_rc_embargo_cut value = te_rc_embargo_points }
 	scope:target_country = {
 		remove_modifier = te_rc_technology_embargoed
+		# A target that joined the leader's bloc is cut no more, though the
+		# pact can't end before its forced duration runs out.
 		if = {
-			limit = { root.var:te_rc_embargo_cut > 0 }
+			limit = {
+				root.var:te_rc_embargo_cut > 0
+				NOT = { is_in_same_power_bloc = root }
+			}
 			add_modifier = {
 				name = te_rc_technology_embargoed
 				multiplier = root.var:te_rc_embargo_cut

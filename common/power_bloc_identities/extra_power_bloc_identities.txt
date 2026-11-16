@@ -426,7 +426,6 @@ identity_research_commons = {
 		}
 	}
 
-	# Placeholder icon until the coordinator renders this identity's own.
 	icon = "gfx/interface/icons/central_identity_pillars_icons/identity_research_commons.dds"
 	background = "gfx/interface/power_blocs/backgrounds/pb_background_generic.dds"
 

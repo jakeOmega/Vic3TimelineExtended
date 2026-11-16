@@ -1444,6 +1444,12 @@ tech_marker_grants_on_action = {
 }
 
 add_arable_land_effect_on_action = {
+	# Not for a Research Commons grant (te_rc_grant sets te_rc_granting around
+	# add_technology_researched): a sharing pass runs this once for each member
+	# it gave a technology (te_rc_refresh_after_grants), not once per technology.
+	trigger = {
+		NOT = { has_variable = te_rc_granting }
+	}
 	effect = {
 		trigger_event = {id = minor_events_timelineextended.1 days = 1}
 	}

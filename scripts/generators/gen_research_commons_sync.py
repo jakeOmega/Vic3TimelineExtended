@@ -128,10 +128,12 @@ def render_sync(order: list[Tech]) -> str:
         "# technology other than by a grant. For each technology, in",
         "# prerequisite order: if any member (the leader included) has it and any",
         "# member lacks it, every member that lacks it is granted it (te_rc_grant).",
-        f"# Cost per pass: {n} technologies, {2 * n} any_power_bloc_member checks (each",
-        "# stops at its first match, so about one member's read where every member",
-        "# holds the technology or none does, and up to every member's otherwise) and",
-        "# an every_power_bloc_member walk only where a member lacks what another has.",
+        f"# Cost per pass: {n} technologies, {2 * n} any_power_bloc_member checks. Each",
+        "# check stops at its first match, which helps little: where every member holds",
+        "# the technology, the first check stops at once but the second reads every",
+        "# member, and where none does, the first reads every member. So a pass is",
+        f"# about {n} x N member reads for a bloc of N, plus an every_power_bloc_member",
+        "# walk only where a member lacks what another has.",
         "te_rc_sync_all = {",
     ]
     for tech in order:
