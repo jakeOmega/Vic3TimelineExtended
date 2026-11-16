@@ -29,6 +29,8 @@ REPLACE:principle_group_vassalization = {
 	unlocking_identity = identity_ideological_union
 	unlocking_identity = identity_cultural
 	unlocking_identity = identity_religious
+	# Creditors' Consortium (2026-11-16, spec § 8.3): a creditor makes clients.
+	unlocking_identity = identity_creditors_consortium
 
 	levels = {
 		principle_vassalization_1
@@ -102,6 +104,8 @@ REPLACE:principle_group_colonial_offices = {
 	unlocking_identity = identity_ideological_union
 	unlocking_identity = identity_cultural
 	unlocking_identity = identity_religious
+	# Creditors' Consortium (2026-11-16, spec § 8.3).
+	unlocking_identity = identity_creditors_consortium
 
 	levels = {
 		principle_colonial_offices_1
@@ -113,6 +117,10 @@ REPLACE:principle_group_colonial_offices = {
 }
 
 INJECT:principle_group_foreign_investment = {
+	# The Creditors' Consortium's investment face (2026-11-16, spec § 5.4).
+	# Vanilla names no primary identity for the group; it stays open to all.
+	primary_for_identity = identity_creditors_consortium
+
 	levels = {
 		principle_foreign_investment_4
 		principle_foreign_investment_5
@@ -355,7 +363,11 @@ INJECT:principle_group_shared_canon = {
 ### Monetary policy phase 5b (docs/systems/monetary_policy_design.md §15A.3).
 ### No identity lock: no finance-flavoured principle exists in vanilla or the
 ### mod, so the slot is free, and any bloc may found a monetary union.
+### Primary for the Creditors' Consortium, its currency face (2026-11-16, spec
+### § 5.4), and still open to every identity.
 principle_group_monetary_union = {
+	primary_for_identity = identity_creditors_consortium
+
 	levels = {
 		principle_monetary_union_1
 		principle_monetary_union_2

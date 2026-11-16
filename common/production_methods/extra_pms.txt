@@ -20182,6 +20182,30 @@ pm_power_bloc_statue_diplomatic = {
 	}
 }
 
+# Creditors' Consortium (2026-11-16): a monument to the bloc's credit. A
+# quarter point off the risk premium the monetary layer reads (cyclical, so
+# the structural floor doesn't swallow it), beside vanilla's prestige.
+pm_power_bloc_statue_creditors_consortium = {
+	texture = "gfx/interface/icons/production_method_icons/wonders.dds"
+
+	unlocking_identity = identity_creditors_consortium
+
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_prestige_add = 3
+			country_risk_premium_add = -0.0025
+		}
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 500
+		}
+	}
+}
+
 INJECT:pm_road_carts = {
 	building_modifiers = {
 		level_scaled = {

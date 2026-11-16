@@ -39,6 +39,7 @@ INITIATIVES = {
     "m": [("te_pb_summit_congress", "member")],
     "n": [("te_pb_summit_culture", "member")],
     "o": [("te_pb_summit_ambassadors", "member")],
+    "p": [("te_pb_summit_debt_conference", "member")],
 }
 # Offered while running, for its immediate cohesion.
 REPEATABLE = {"a"}
@@ -51,9 +52,11 @@ IDENTITY_OPTIONS = {
     "m": "identity_ideological_union",
     "n": "identity_cultural",
     "o": "identity_diplomatic",
+    "p": "identity_creditors_consortium",
 }
 RELATIONS = {"i": "te_pb_summit_member_relations", "n": "te_pb_summit_member_relations",
-             "o": "te_pb_summit_member_relations", "l": "te_pb_summit_leader_relations"}
+             "o": "te_pb_summit_member_relations", "l": "te_pb_summit_leader_relations",
+             "p": "te_pb_summit_member_relations"}
 GRANT = {"bloc": "te_pb_summit_grant_bloc_initiative", "leader": "te_pb_summit_grant_leader_initiative",
          "member": "te_pb_summit_grant_member_initiative"}
 

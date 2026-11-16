@@ -110,3 +110,14 @@ te_pb_summit_ambassadors = {
 	country_influence_mult = 0.10
 	country_infamy_decay_mult = 0.25
 }
+
+# Creditors' Consortium, Debt Conference (option p), every member: lenders
+# reassured by a bloc that has met to stand behind its debts. Half a point off
+# the risk premium, read by the monetary layer's step 5 as a modifier sum (so
+# it works under any banking rule that prices debt): a swap line's cut is
+# te_mon_swap_premium_cut, a guarantee's up to half the debt-load premium.
+te_pb_summit_debt_conference = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.005
+}
+

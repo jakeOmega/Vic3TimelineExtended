@@ -130,3 +130,251 @@
 		}
 	}
 }
+
+# ============================================================================
+# Creditors' Consortium (2026-11-16)
+# ============================================================================
+# Members are bound by credit: the leader stands behind their debts, and a
+# member that defaults is rescued on terms. Design:
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5; the
+# script is te_creditors_consortium_*.txt (triggers, values, effects,
+# on-actions, laws, events); docs/systems/mod_systems/power_blocs.md
+# § "Creditors' Consortium".
+#
+# VISIBLE only under the Full banking rule (te_mon_full_system): its mechanic
+# is the monetary layer's guarantee and receivership. A bloc founded under
+# Full keeps the identity when the rule changes and loses the mechanic until
+# it changes back (every piece asks te_mon_full_system).
+#
+# POSSIBLE for a founder that is a valid backstop provider
+# (te_mon_backstop_provider_valid: a National Bank, no Command Economy, not in
+# default). The leader then can't enact Command Economy or abolish the bank
+# (te_creditors_consortium_law_injections.txt, extra_laws.txt).
+#
+# MANDATES and the per-member cohesion cost are Trade League's, without its
+# customs union or its great-power invitation penalty.
+#
+# SUBJUGATION. Its leader_modifier carries the creditor axis
+# (te_subjugation_identity_overrides.txt explains the others): +0.4 against a
+# member in the leader's receivership.
+identity_creditors_consortium = {
+	power_bloc_modifier = {
+		power_bloc_debt_administration_bool = yes
+		power_bloc_mandate_progress_per_great_power_member_add = 10
+		power_bloc_mandate_progress_per_major_power_member_add = 5
+		power_bloc_mandate_progress_per_minor_power_member_add = 2
+		power_bloc_mandate_progress_per_unrecognized_major_power_member_add = 2
+		power_bloc_mandate_progress_per_unrecognized_regional_power_member_add = 1
+		power_bloc_cohesion_per_member_add = -1
+	}
+
+	leader_modifier = {
+		country_subjugation_creditor_strength_add = 0.4
+	}
+
+	non_leader_modifier = {
+	}
+
+	member_modifier = {
+	}
+
+	# Vanilla's rule (the bloc's leverage advantage over the member is 30 or
+	# less), and not while the member is in the leader's receivership. A member
+	# that refused a rescue's terms in the last ten years may leave whatever the
+	# leverage (te_cred_guarantee_forfeit).
+	can_leave = {
+		OR = {
+			is_power_bloc_leader = yes
+			custom_tooltip = {
+				text = te_cred_can_leave_refused_tt
+				te_cred_guarantee_forfeit = yes
+			}
+			AND = {
+				custom_tooltip = {
+					text = te_cred_can_leave_receivership_tt
+					NOT = { te_cred_in_leaders_receivership = yes }
+				}
+				power_bloc = {
+					leverage_advantage = {
+						target = root
+						value <= 30
+					}
+				}
+			}
+		}
+	}
+
+	icon = "gfx/interface/icons/central_identity_pillars_icons/trade_league.dds"
+	background = "gfx/interface/power_blocs/backgrounds/pb_background_generic.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+		te_mon_full_system = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = te_cred_founder_valid_tt
+			te_mon_backstop_provider_valid = yes
+		}
+	}
+
+	mandate_progress = power_bloc_mandate_progress_by_rank
+
+	on_created = { relations_hit_with_power_bloc_leaders = yes }
+
+	# ROOT the leader, scope:power_bloc the bloc. COHESION_TARGET_MAX is 100.
+	cohesion = {
+		add = {
+			add = 0.2
+			multiply = define:NPowerBlocs|COHESION_TARGET_MAX
+			desc = POWER_BLOC_COHESION_BASE
+		}
+
+		# The leader's weight in the bloc: Trade League's term.
+		add = {
+			if = {
+				limit = { exists = scope:with_country }
+				add = "power_bloc_share_gdp_with(scope:with_country)"
+			}
+			else_if = {
+				limit = { exists = scope:without_country }
+				add = "power_bloc_share_gdp_without(scope:without_country)"
+			}
+			else = {
+				add = power_bloc_share_gdp
+			}
+			multiply = define:NPowerBlocs|COHESION_TARGET_MAX
+			multiply = 0.5
+			desc = POWER_BLOC_COHESION_CREDITORS_SHARE_GDP
+		}
+
+		# A creditor in debt: -3 for every tenth of the leader's debt ceiling
+		# it has used, to -40.
+		add = {
+			value = scaled_debt
+			multiply = -30
+			min = -40
+			max = 0
+			desc = POWER_BLOC_COHESION_CREDITORS_LEADER_DEBT
+		}
+
+		add = {
+			if = {
+				limit = { exists = scope:with_country }
+				add = "scope:power_bloc.power_bloc_worst_leader_relations_with(scope:with_country)"
+			}
+			else_if = {
+				limit = { exists = scope:without_country }
+				add = "scope:power_bloc.power_bloc_worst_leader_relations_without(scope:without_country)"
+			}
+			else = {
+				add = scope:power_bloc.power_bloc_worst_leader_relations
+			}
+			divide = define:NDiplomacy|MIN_RELATIONS
+			multiply = define:NPowerBlocs|COHESION_TARGET_MAX
+			multiply = -1
+			max = 0
+			desc = POWER_BLOC_COHESION_WORST_LEADER_RELATIONS
+		}
+
+		# -5 for each member under a receivership (anybody's), -10 for each
+		# member with Command Economy, which the guarantee can't reach.
+		add = {
+			scope:power_bloc = {
+				every_power_bloc_member = {
+					if = {
+						limit = {
+							is_power_bloc_leader = no
+							te_mon_is_under_receivership = yes
+						}
+						add = -5
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:with_country
+					scope:with_country ?= { te_mon_is_under_receivership = yes }
+				}
+				add = -5
+			}
+			else_if = {
+				limit = {
+					exists = scope:without_country
+					scope:without_country ?= { te_mon_is_under_receivership = yes }
+				}
+				subtract = -5
+			}
+			desc = POWER_BLOC_COHESION_CREDITORS_RECEIVERSHIP
+		}
+		add = {
+			scope:power_bloc = {
+				every_power_bloc_member = {
+					if = {
+						limit = {
+							is_power_bloc_leader = no
+							te_mon_is_command = yes
+						}
+						add = -10
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:with_country
+					scope:with_country ?= { te_mon_is_command = yes }
+				}
+				add = -10
+			}
+			else_if = {
+				limit = {
+					exists = scope:without_country
+					scope:without_country ?= { te_mon_is_command = yes }
+				}
+				subtract = -10
+			}
+			desc = POWER_BLOC_COHESION_CREDITORS_COMMAND_ECONOMY
+		}
+
+		# A creditor in default.
+		if = {
+			limit = { in_default = yes }
+			add = {
+				add = -50
+				desc = POWER_BLOC_COHESION_CREDITORS_LEADER_DEFAULT
+			}
+		}
+	}
+
+	# Founded by a creditor: Industrialists in government, low debt, and an
+	# economic-imperialism strategy (Trade League's weights). Every founder
+	# holds a National Bank (possible).
+	ai_weight = {
+		value = 100
+
+		if = {
+			limit = {
+				ig:ig_industrialists ?= { is_in_government = yes }
+			}
+			add = 100
+		}
+
+		if = {
+			limit = { scaled_debt < 0.25 }
+			add = 50
+		}
+
+		if = {
+			limit = { scaled_debt >= 0.6 }
+			multiply = 0.25
+		}
+
+		if = {
+			limit = {
+				has_strategy = ai_strategy_economic_imperialism
+			}
+			multiply = 2.0
+		}
+	}
+}
