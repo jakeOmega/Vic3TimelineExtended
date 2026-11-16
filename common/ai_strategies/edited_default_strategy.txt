@@ -387,5 +387,62 @@
 				has_technology_researched = modern_material_science
 			}
 		}
+		# AI coverage (#1822): the mod's goods no strategy named. Each gate is the
+		# technology that makes buildings start using the good, as vanilla gates
+		# copper on electrical_generation and oil on combustion_engine.
+		# test_ai_goods_stances.py holds every mod good to a stance or a stated
+		# exemption; docs/systems/mod_systems/ai.md § AI Coverage of the Mod's Content.
+		#
+		# Tech Metals: the Consumer Appliances Industry's base method uses them,
+		# then nuclear plants, engines, electronics and every later mining method.
+		tech_metals = {
+			stance = wants_high_supply
+			trigger = {
+				has_technology_researched = personal_appliances
+			}
+		}
+		# Consumer Appliances are a household good until integrated circuits,
+		# which make them an input of electronics, software and construction
+		# methods (37 methods use them). The industrial strategy exports them
+		# instead (te_ai_export_stance_strategies.txt).
+		consumer_appliances = {
+			stance = wants_high_supply
+			trigger = {
+				has_technology_researched = integrated_circuits
+			}
+		}
+		# Motor ships and magnetic-drive ships: vanilla's steamers stance, one and
+		# two generations on. Vanilla retires clippers when steamers arrive (a NAND
+		# on the steamer technologies); motor ships retire the same way when
+		# magnetic-drive ships arrive. Vanilla's steamers entry itself stays as it
+		# is: an INJECT can't change a key vanilla's block already holds, and no
+		# stance value means "none" (ai.md).
+		motor_ships = {
+			stance = wants_high_supply
+			trigger = {
+				has_technology_researched = advanced_submarine_technology
+				NOT = { has_technology_researched = modern_material_science }
+				has_port_country = yes
+				country_rank >= rank_value:major_power
+			}
+		}
+		magnetic_drive_ships = {
+			stance = wants_high_supply
+			trigger = {
+				has_technology_researched = modern_material_science
+				has_port_country = yes
+				country_rank >= rank_value:major_power
+			}
+		}
+		# Automobiles: 10 a level in Advanced Construction (pm_advanced_construction),
+		# the one input of the mod's later construction tiers that neither vanilla's
+		# default strategy (copper, electricity, engines) nor the entries above
+		# (digital assets, advanced materials, robotics) already cover.
+		automobiles = {
+			stance = wants_high_supply
+			trigger = {
+				has_technology_researched = prefabricated_construction
+			}
+		}
 	}
 }
