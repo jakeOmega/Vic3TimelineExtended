@@ -289,6 +289,7 @@ Vanilla defines that reference macros which aren't always set. Cosmetic warning 
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
 - reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors). The mod's law-consistency cascade (`te_fix_inconsistent_laws`, from `on_law_activated`) can activate `law_single_party_state`, so these errors can carry its frames, but they are still vanilla's unguarded `on_activate` (2026-10-27: one of three activations that session came through the cascade)
+- reviewed: mod frame, the mod runs neither effect (no `set_only_legal_party_from_ig` or `remove_ruling_interest_group` in its common/ or events/); a mod-framed line is the mod activating Single-Party State (the law-consistency sweep's `activate_law`, or `create_dynamic_country` copying its origin's laws) and vanilla's `on_activate` then failing as it does with no mod in the stack (22 of the 26 lines of 2026-11-14)
 
 ```
 Error: set_only_legal_party_from_ig effect [ Invalid target interestgroup ]
@@ -296,7 +297,7 @@ Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 Country in scope has no parties
 ```
 
-Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice). The mod reaches the `set_only_legal_party_from_ig` line too, without calling this file's helpers: a country formed by a planned decolonization (form_decolonized_country, from option a of decolonization_events.400) activates the law it is given, whose `on_activate` names a group the new country lacks (2026-10-24, one line, `:1311`). So the `reviewed` note above holds for helper calls only; a mod-framed line of this signature is still the vanilla law's missing guard.
+Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice). The mod reaches the `set_only_legal_party_from_ig` line too, without calling this file's helpers: a country formed by a planned decolonization (form_decolonized_country, from option a of decolonization_events.400) activates the law it is given, whose `on_activate` names a group the new country lacks (2026-10-24, one line, `:1311`). So the `reviewed` note above holds for helper calls only; a mod-framed line of this signature is still the vanilla law's missing guard. Read again on 2026-11-14 (#1818), a 1949–1957 game with 26 lines: `:1314` is `set_only_legal_party_from_ig = ruler.interest_group` and `:1324` the `remove_ruling_interest_group` inside `every_interest_group = { limit = { is_in_government = yes NOT = { has_party = yes } } … }`, which does not leave out an insurrectionary group. Four lines had a mod frame. Three came on 1954.6.30 through `te_fix_inconsistent_laws` (extra_on_actions.txt to extra_law_consistency_generated.txt): the sweep's Distribution of Power step replaced a law the country's other laws bar with Single-Party State, and the law's `on_activate` logged one `set_only_legal_party_from_ig` line and two `remove_ruling_interest_group` lines, so by the messages the country had no ruler's group to name and two insurrectionary groups in government. The same three lines came with no mod frame on 1954.9.2, and one to six lines on five other days: 22 in all. The fourth was a planned decolonization again (decolonization_events.txt, option a of `.401`; 1956.4.22). Read that way, both are a country given the law while it is being formed or while its government is in revolt, which vanilla's own activations did more often that session. Not looked into: which countries these were (the autosaves had rotated out), and whether the sweep should wait while the engine is still building a revolutionary country, as it waits at the start date.
 
 ### `gui/block_windows.gui:650` — malformed item desc
 
@@ -1606,6 +1607,37 @@ random_scope_state effect [ Wrong scope for effect: none, expected country
 ```
 
 `poland_events.1` picks up to four `random_country` targets that own a Polish homeland state and are not Polish themselves, and its option a (the default) runs `scope:polish_agitation_target_1_scope = { trigger_event = { id = poland_events.2 … } }` with no `exists`. With no such country the scope is unset (line 148, plus `Event target link 'scope' returned an unset scope` there), and `poland_events.2`'s `immediate` then runs `random_scope_state` in no scope (line 290). The same second logs two `Invalid owner for scope type 0` lines with no file (watch list). One firing, 1938.6.24 of a 1931–1938 game (2026-11-12), no mod frame. The mod's optional Pan-Slavic merge can take in Polish, but a merge would make more countries non-Polish owners of Polish homelands, not fewer; whether it ran in that game wasn't checked.
+
+### `common/journal_entries/00_poland.txt:25` — Christ of Nations reads the culture of a ruler Galicia doesn't have
+- stack: vanilla only
+
+```
+Error: Event target link 'ruler' returned an invalid object
+```
+
+`je_christ_of_nations`'s `is_shown_when_inactive` ends `AND = { c:GAL ?= this  ruler = { culture = cu:polish } }`, with no `exists = ruler`, so it logs when the trigger is read for a Galicia that has no ruler at that moment. One line, 1951.7.6 of a 1949–1957 game (2026-11-14, #1818), no mod frame. The mod has no copy of the file, the line reads no script value, and the mod's only uses of the tag are Galicia's country definition (an `INJECT`) and one `c:GAL ?= THIS` in te_formation_overrides.txt; a generated culture-merge trigger asks `has_journal_entry = je_christ_of_nations`, which reads none of the entry's triggers. Which moment it was isn't checked (that game's 1951 autosaves had rotated out); a Galicia being created that day is the likely case, as with the countries the Single-Party State entry above finds without a ruler's group.
+
+### `events/law_events/single_party_state_laws.txt:38, 39, 82, 83` — the Single-Party State enactment event reads the country's ruler from interest-group scope
+- stack: vanilla only
+
+```
+Error: Invalid right side during comparison 'interest_group'
+Error: Invalid right side during comparison 'party'
+Error: Invalid left side during comparison 'party'
+Error: Event target link 'party' returned an unset scope
+does not belong to a party
+```
+
+`single_party_state.1` (from `on_law_checkpoint_advance`) looks, in its `trigger` and again in `immediate`, for an interest group at least neutral to the law that is not the ruler's own: inside `any_interest_group` / `random_interest_group` it tests `NOT = { this = ruler.interest_group  this.party = ruler.interest_group.party  OR = { … } }`. `ruler` is a country link (event_targets.log: input scope country), so from interest-group scope `ruler.interest_group` is invalid every time (lines 38 and 82), and so is `ruler.interest_group.party` (39, 83) whenever the left side is not what fails first: `this.party` on a group in no party logs `Scoped Interest Group <name> does not belong to a party`, `Event target link 'party' returned an unset scope` and `Invalid left side during comparison 'party'`. 36 lines in a 1949–1957 game (2026-11-14, #1818), none with a mod frame: the trigger read on four days from 1952.3.17 to 1955.1.31, one group each time (line 38 four times; at line 39 one group with no party and three with one), and the event's `immediate` once, on 1955.1.31, over eight groups (line 82 eight times; at line 83 five with no party and three with one). So every group the test reached failed it at line 38 or 82, whatever the mod's ideologies make of the law. The mod has no copy of the file, fires none of its events, and the lines read no script value. The same block is in `single_party_state.2` to `.5` only as the `ruler.interest_group ?= { has_party = yes }` line in country scope, which is sound.
+
+### `events/japan_events/ep2_ezo_republic.txt:229` — the Ezo Republic's monthly trigger compares a civil war's origin with a Japan that is gone
+- stack: vanilla only
+
+```
+Error: Invalid right side during comparison 'c'
+```
+
+`ezo_republic.2` is on vanilla's `on_monthly_pulse_country` list, so its trigger is read for every country every month. Its second branch opens `civil_war_origin_country ?= c:JAP`: the `?=` covers a country that is in no civil war, not a missing Japan, so with no JAP in the world the line logs once a month for each country that is a side in a civil war (the first branch's `c:JAP ?= this` is written the safe way round). 100 lines from 1955.7.18 to 1957.3.20 of a 1949–1957 game, over two launches, one to four at a time (2026-11-14, #1818), none with a mod frame and none before 1955.7, although other countries' civil wars ran all through that game and Japan fought one of its own in 1951. The mod has no copy of the file, no script that removes or re-tags Japan, and the line reads no script value. That there was no JAP from 1955.7 is read from the message, not from a save.
 
 ## Expected mod-override noise
 
