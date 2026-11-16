@@ -293,7 +293,7 @@ te_cred_dl_bloc_gdppc_now = {
 }
 
 # A receiver's population in millions, its weight in the split. Receiver scope.
-te_cred_dl_pop_m = {
+te_cred_dl_pop_weight = {
 	value = total_population
 	divide = 1000000
 	min = 0.001
@@ -303,7 +303,7 @@ te_cred_dl_pop_m = {
 # over all receivers' people. Receiver scope, ROOT the leader.
 te_cred_dl_receipt = {
 	value = root.var:te_cred_dl_pool
-	multiply = te_cred_dl_pop_m
+	multiply = te_cred_dl_pop_weight
 	divide = {
 		value = root.var:te_cred_dl_pop_m
 		min = 0.001

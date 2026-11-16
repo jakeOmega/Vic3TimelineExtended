@@ -151,6 +151,9 @@ te_cred_apply_rescue = {
 	add_treasury = var:te_cred_offer_cost
 	hidden_effect = {
 		set_variable = { name = te_cred_paid value = var:te_cred_offer_cost days = 365 }
+		# Holds the adjustment term until the discovery has read the new
+		# receivership (internal.2 a day on, te_cc.9 three days on).
+		set_variable = { name = te_cred_rescue_pending value = 1 days = 10 }
 	}
 	change_relations = {
 		country = scope:te_cc_creditor
@@ -596,8 +599,8 @@ te_cred_member_monthly = {
 				}
 			}
 			# Not in the days between the rescue and the discovery that reads
-			# the new treaty (te_cc.9 is due three days on).
-			NOT = { has_variable = te_cred_rcv_check }
+			# the new receivership, treaty or not (te_cc.9 is due three days on).
+			NOT = { has_variable = te_cred_rescue_pending }
 		}
 		remove_variable = te_cred_adjustment_by
 	}
@@ -626,7 +629,7 @@ te_cred_dl_pulse = {
 				if = {
 					limit = { te_cred_dl_is_receiver = yes }
 					save_scope_as = te_cred_dl_m
-					root = { change_variable = { name = te_cred_dl_pop_m add = scope:te_cred_dl_m.te_cred_dl_pop_m } }
+					root = { change_variable = { name = te_cred_dl_pop_m add = scope:te_cred_dl_m.te_cred_dl_pop_weight } }
 				}
 			}
 		}
