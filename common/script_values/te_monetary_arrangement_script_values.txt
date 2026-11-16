@@ -401,7 +401,12 @@ te_mon_lolr_calls_cap = { value = 5 }
 # worth less to a receiver too. Its default under a receivership pays it
 # nothing — te_monetary_on_country_default tests the guarantee, not this — so
 # the counter never moves while the commission sits.
-te_mon_receivership_take_share = { value = 0.001 }
+# A Creditors' Consortium's Conditionality raises it for a receivership its
+# leader runs (te_cred_receivership_take_extra: up to 0.25%).
+te_mon_receivership_take_share = {
+	value = 0.001
+	add = te_cred_receivership_take_extra
+}
 
 # Debtor scope: what the commission remits to the receiver, a month.
 te_mon_receivership_take = {
@@ -411,7 +416,13 @@ te_mon_receivership_take = {
 
 # The exit ramp: twelve consecutive months worked down this far ends it.
 te_mon_receivership_exit_debt = { value = 0.25 }
-te_mon_receivership_exit_months = { value = 12 }
+# Debtor scope where it is read (step 1c's clamp, 114's non_fulfillment): a
+# Creditors' Consortium's Conditionality lengthens it for a receivership its
+# leader runs (te_cred_receivership_exit_extra: up to 36 months).
+te_mon_receivership_exit_months = {
+	value = 12
+	add = te_cred_receivership_exit_extra
+}
 
 
 # --- "Asymmetric magnitudes, shared mechanic" (§15A.1) ----------------------
@@ -494,6 +505,10 @@ te_mon_arr_recipient_value = {
 	}
 	# [5b] tier 1+ cooperation and tier 3's backstop add here.
 	add = te_mon_union_recipient_value
+	# A Creditors' Consortium's standing guarantee: the same relief, only where
+	# neither a treaty nor the union's backstop already pays it
+	# (te_cred_guarantee_pays_relief; te_creditors_consortium_values.txt).
+	add = te_cred_guarantee_relief
 }
 
 # ...and in pp of STRUCTURAL premium: the pegger's cut, the reserve currency's.

@@ -519,7 +519,8 @@ types te_map_widgets
 		}
 
 		# Migration and cities: what a state's climate and crowding do to its migration attraction (Local Climate before any technology's relief and
-			# after its owner's, and Migration Crowding), then the world's cities: what draws visitors and how large each is.
+			# after its owner's, and Migration Crowding), then the world's cities: what draws visitors and how large each is, and how
+			# thickly each state is peopled (Population Density).
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_migration"
@@ -592,6 +593,15 @@ types te_map_widgets
 					visible = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_city_rank_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_city_rank_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_population_density"
+					tooltip = "te_jmap_pick_population_density_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_population_density_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_population_density_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_population_density_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}

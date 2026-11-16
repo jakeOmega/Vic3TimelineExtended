@@ -3733,6 +3733,16 @@ law_no_national_bank = {
 
 	progressiveness = 0
 
+	# A Creditors' Consortium's leader cannot abolish its National Bank: the
+	# bloc's guarantee rests on it (te_mon_backstop_provider_valid; spec
+	# 2026-11-16-power-bloc-identities-design.md § 8.1,
+	# te_creditors_consortium_law_injections.txt).
+	can_enact = {
+		custom_tooltip = {
+			text = te_cred_leader_cannot_enact_tt
+			te_cred_leads_consortium = no
+		}
+	}
 }
 
 law_national_bank = {
@@ -4158,6 +4168,21 @@ law_no_ministry_of_science = {
 
 	progressiveness = 0
 
+	# A Research Commons' leader can't close its Ministry of Science (owner,
+	# 2026-11-16): the identity needs one to found, and the lock is the law's
+	# own, as vanilla's National Militia locks a Military Treaty Organization's
+	# leader (power_blocs.md § Research Commons).
+	can_enact = {
+		custom_tooltip = {
+			text = te_rc_ministry_law_lock_tt
+			OR = {
+				is_power_bloc_leader = no
+				power_bloc ?= {
+					NOT = { has_identity = identity:identity_research_commons }
+				}
+			}
+		}
+	}
 }
 
 law_ministry_of_science = {

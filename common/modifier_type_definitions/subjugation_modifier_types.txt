@@ -68,3 +68,15 @@ country_subjugation_military_strength_add = {
 	game_data = { ai_value = 50 }
 	script_only = yes
 }
+
+# Creditors' Consortium (2026-11-16): paid only when the target is in the
+# leader's receivership (te_subjugation_strength_identity). Carried by the
+# identity's own leader_modifier, since the identity is the mod's
+# (te_subjugation_identity_overrides.txt notes it).
+country_subjugation_creditor_strength_add = {
+	color = good
+	percent = no
+	decimals = 2
+	game_data = { ai_value = 50 }
+	script_only = yes
+}

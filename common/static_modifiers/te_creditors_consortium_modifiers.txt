@@ -1,0 +1,28 @@
+﻿# The Creditors' Consortium power bloc identity: static modifiers (2026-11-16).
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.4.
+
+# Development Lending, for a member below the bloc's GDP per head: its states
+# build faster while the bloc holds tier II and up. One modifier a tier, held
+# while the tier holds (te_cred_dl_sync_receiver_modifier, its own monthly
+# pulse; no duration), so a member that rises above the average or leaves the
+# bloc drops it the next month. Vanilla's Construction II gives every member
+# +10%; these go to the poorer members only, so they go higher at the top.
+te_cred_dl_receiver_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_construction_mult = 0.05
+}
+
+te_cred_dl_receiver_3 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_construction_mult = 0.10
+}
+
+te_cred_dl_receiver_4 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_construction_mult = 0.15
+}
+
+te_cred_dl_receiver_5 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_construction_mult = 0.20
+}

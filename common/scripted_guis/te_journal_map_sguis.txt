@@ -268,6 +268,16 @@ te_jmap_pick_investment_sgui = {
 	}
 }
 
+te_jmap_pick_population_density_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 47 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 47 }
+	}
+}
+
 # War Dead is the census's, last year's (te_dg_dc_war, once a state has stepped), so it waits for the census as the
 # census maps below do; on the page it sits beside Armed Forces, since the census shares a country's war dead out to
 # its states by their soldiers.

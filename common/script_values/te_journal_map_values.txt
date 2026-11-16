@@ -16,7 +16,8 @@
 # population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
 # second round); 41 capitalists, 42 aristocrats, 43 clergy, 44 academics (each class's share of the people, the
 # walk's), 45 trade capacity (the state's own, its Trade Center's; 2026-11-11), 46 investment (what the state's owners
-# pay into the Investment Pool, estimated; 2026-11-11); 0 none. 2 was literacy, retired because
+# pay into the Investment Pool, estimated; 2026-11-11), 47 population density (people per km² of land; 2026-11-16); 0
+# none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -599,6 +600,42 @@ te_jmap_invest_ari = {
 te_jmap_invest_value = {
 	value = te_jmap_invest_cap
 	add = te_jmap_invest_ari
+}
+
+# Population Density (47, 2026-11-16): the state's people per km² of land. Read live, as GDP per capita is: the
+# engine's people and province counts and one variable on the state region, no walk.
+#
+# The state's land in km²: its region's area (te_region_area, te_region_area_generated.txt, the row-weighted pixels of
+# the game's provinces.png, stored on the region at game start; read through te_region_area_km2,
+# resettlement_values.txt) times the state's share of the region's provinces, so a region split between owners shares
+# its land by province (script can't reach a province's own size; a region's provinces run near one size). 0 until
+# the area table is written (the game's first day, or the first month of a save from before it).
+te_jmap_density_area = {
+	value = 0
+	if = {
+		limit = { state_region = { has_variable = te_region_area } }
+		value = te_region_area_km2
+		divide = {
+			value = state_region.num_provinces
+			min = 1
+		}
+		multiply = num_provinces
+	}
+}
+
+# People per km²: 0 with no area yet, which paints the state pale ("none") until the table is written.
+# state_population as the bareword head of the value, the form that reads it (scripting_best_practices.md,
+# "state_population / total_population Are Triggers, Not Script Values").
+te_jmap_density = {
+	value = state_population
+	divide = {
+		value = te_jmap_density_area
+		min = 1
+	}
+	if = {
+		limit = { te_jmap_density_area < 1 }
+		value = 0
+	}
 }
 
 # ---------------------------------------------------------------------------

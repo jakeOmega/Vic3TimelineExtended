@@ -1,0 +1,429 @@
+﻿# ============================================================================
+# RESEARCH COMMONS (identity_research_commons): effects
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons; design:
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.
+#
+# Members stop researching (the identity's non_leader_modifier: -1000%
+# research speed), send the leader 75% of their weekly innovation after their
+# own programs, and are granted every technology any member holds. Callers:
+#   te_rc_monthly_country (te_research_commons_on_actions.txt, every country's
+#     monthly pulse): te_rc_leader_pulse for a Commons' leader, the leaver
+#     check for a former member, Institutes Left Behind's monthly step.
+#   te_rc_on_acquired (on_acquired_technology): the ladder at once when a
+#     member acquires a technology on its own.
+#   je_research_commons's invalid outcome: te_rc_entry_ended.
+#
+# Variables (country):
+#   te_rc_member        yes on a non-leader member, set by the leader's pulse
+#   te_rc_leader        the leader it served (a country)
+#   te_rc_contributed   the contribution it pays, in weekly innovation (add
+#                       units); je_research_commons declares te_rc_contribution
+#                       at this value (te_rc_contribution_value)
+#   te_rc_gross         its weekly innovation before the contribution
+#   te_rc_production    the same before its own programs too (cohesion share)
+#   te_rc_grants_pass / _last / _total   technologies the ladder granted it
+#   te_rc_ilb_months    months of Institutes Left Behind still to run
+#   te_rc_ilb_new       one day: the penalty began today (one apply a day)
+#   te_rc_leader_own_eff, te_rc_members_eff, te_rc_leader_share   on the leader
+# All of them are variables, so a revolution's winner carries them on; the
+# modifiers are rebuilt from them (Institutes Left Behind each month, the
+# entry's declarations from te_rc_contributed and the live pool).
+# ============================================================================
+
+# ---- The grant ---------------------------------------------------------------
+
+# Country scope, the member granted $TECH$ (a technology key). te_rc_granting
+# is set around add_technology_researched so that an on_acquired_technology
+# the grant fires inside the effect is not taken for a discovery: the
+# headline, Cultural Hegemony's world first, agricultural diffusion, the census
+# and arable-land refreshes (run once a pass instead, te_rc_refresh_after_grants)
+# and this system's own hook all skip a country holding it (design § 6.3, "A grant is
+# not a discovery"). TE_SELF_CHECK rc_grant_hook says whether the hook fires
+# inside the grant; te_rc_granted_recent (three days) lets it see one that
+# fires after.
+te_rc_grant = {
+	set_variable = te_rc_granting
+	add_technology_researched = $TECH$
+	remove_variable = te_rc_granting
+	set_variable = { name = te_rc_granted_recent days = 3 }
+	if = {
+		limit = { NOT = { has_variable = te_rc_grants_pass } }
+		set_variable = { name = te_rc_grants_pass value = 0 }
+	}
+	change_variable = { name = te_rc_grants_pass add = 1 }
+	te_rc_count_global = { NAME = te_rc_sc_grants }
+}
+
+# Any scope: adds 1 to global variable $NAME$, setting it first.
+te_rc_count_global = {
+	if = {
+		limit = { NOT = { has_global_variable = $NAME$ } }
+		set_global_variable = { name = $NAME$ value = 0 }
+	}
+	change_global_variable = { name = $NAME$ add = 1 }
+}
+
+# Power bloc scope (a Research Commons): one pass of the ladder, with each
+# member's count of what it received. te_rc_sync_all is generated
+# (te_research_commons_sync_generated.txt).
+te_rc_sync_pass = {
+	every_power_bloc_member = {
+		set_variable = { name = te_rc_grants_pass value = 0 }
+	}
+	te_rc_sync_all = yes
+	every_power_bloc_member = {
+		te_rc_after_pass = yes
+	}
+}
+
+# Country scope, a member after a pass: keep the counts the entry shows, and
+# the self-check on whether grants land (§ 11 fact 6): a member that received
+# ten or more technologies in a pass should receive far fewer in the next, the
+# first pass having closed its gap. If the grants did not land, the same
+# technologies come up again.
+te_rc_after_pass = {
+	if = {
+		limit = { NOT = { has_variable = te_rc_grants_total } }
+		set_variable = { name = te_rc_grants_total value = 0 }
+	}
+	change_variable = { name = te_rc_grants_total add = var:te_rc_grants_pass }
+	set_variable = { name = te_rc_grants_last value = var:te_rc_grants_pass }
+	if = {
+		limit = {
+			has_variable = te_rc_grants_prev
+			NOT = { has_global_variable = te_rc_sc_grant_lands_logged }
+		}
+		set_global_variable = te_rc_sc_grant_lands_logged
+		if = {
+			limit = { var:te_rc_grants_pass < te_rc_sc_half_prev_grants }
+			debug_log = "TE_SELF_CHECK OK rc_grant_lands country=[THIS.GetCountry.GetTagName] first=[THIS.ScriptValue('te_rc_sc_prev_grants')|0] next=[THIS.ScriptValue('te_rc_sc_pass_grants')|0] date=[TimeKeeper.GetCurrentDate.GetString] (a member granted ten or more technologies in one pass got fewer than half as many in the next: add_technology_researched grants land; logged once a game)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN rc_grant_lands country=[THIS.GetCountry.GetTagName] first=[THIS.ScriptValue('te_rc_sc_prev_grants')|0] next=[THIS.ScriptValue('te_rc_sc_pass_grants')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the next pass granted as many again: the grants did not land, or the engine refused them for missing prerequisites; docs/testing/power-bloc-identities-playtest.md, Self-checks)"
+		}
+	}
+	if = {
+		limit = { var:te_rc_grants_pass >= 10 }
+		set_variable = { name = te_rc_grants_prev value = var:te_rc_grants_pass }
+	}
+	else = {
+		remove_variable = te_rc_grants_prev
+	}
+	if = {
+		limit = { var:te_rc_grants_pass > 0 }
+		te_rc_refresh_after_grants = yes
+	}
+}
+
+# Country scope, a member that received at least one technology in a pass: the
+# two technology refreshes the grant guard keeps off on_acquired_technology,
+# run once for the pass instead of once per technology. A newcomer 120
+# technologies behind with 40 states would otherwise queue about 9,600 state
+# events. Both are idempotent, set from the country's state at the time they
+# run, so one run after the pass ends where one per grant would:
+#   te_demog_lines_country_on_action (te_demog_on_actions.txt): each state's
+#     census lines at the families' sum, now and again a day later
+#     (te_demog_events.4 and .5), touched only where the sum changed;
+#   add_arable_land_effect_on_action (extra_on_actions.txt): arable land
+#     a day later (minor_events_timelineextended.1), which subtracts what it
+#     already added.
+# test_research_commons.py holds these lines to the two hooks' bodies.
+te_rc_refresh_after_grants = {
+	every_scope_state = {
+		trigger_event = { id = te_demog_events.4 }
+	}
+	trigger_event = { id = te_demog_events.5 days = 1 }
+	trigger_event = { id = minor_events_timelineextended.1 days = 1 }
+}
+
+# ---- The leader's monthly pulse ---------------------------------------------
+
+# Country scope, the leader of a Research Commons, once a month. The order
+# matters: the leader's own innovation is read before the members'
+# contributions change, since the pool read live is the one that landed.
+te_rc_leader_pulse = {
+	save_scope_as = te_rc_leader
+	# A leader is no member: a member that took the lead drops its marks.
+	remove_variable = te_rc_member
+	remove_variable = te_rc_leader
+	remove_variable = te_rc_contributed
+	remove_variable = te_rc_gross
+	remove_variable = te_rc_production
+	if = {
+		limit = { has_variable = te_rc_ilb_months }
+		te_rc_end_institutes_left_behind = yes
+	}
+	if = {
+		limit = { NOT = { has_journal_entry = je_research_commons } }
+		add_journal_entry = { type = je_research_commons }
+	}
+	set_variable = { name = te_rc_leader_own_eff value = te_rc_leader_own_eff_value }
+	power_bloc = {
+		every_power_bloc_member = {
+			limit = { NOT = { this = scope:te_rc_leader } }
+			te_rc_member_update = yes
+		}
+	}
+	set_variable = { name = te_rc_members_eff value = power_bloc.te_rc_bloc_members_eff }
+	set_variable = { name = te_rc_leader_share value = te_rc_leader_share_value }
+	power_bloc = { te_rc_sync_pass = yes }
+	te_rc_selfcheck_grant_hook = yes
+}
+
+# Country scope, a non-leader member, from te_rc_leader_pulse (scope:te_rc_leader).
+te_rc_member_update = {
+	set_variable = te_rc_member
+	set_variable = { name = te_rc_leader value = scope:te_rc_leader }
+	# A former leader that stayed on as a member drops its leader figures.
+	remove_variable = te_rc_leader_own_eff
+	remove_variable = te_rc_members_eff
+	remove_variable = te_rc_leader_share
+	# A returning leaver's research is pooled again.
+	if = {
+		limit = { has_variable = te_rc_ilb_months }
+		te_rc_end_institutes_left_behind = yes
+	}
+	# The fixed point (te_research_commons_values.txt): the gross is read with
+	# last month's contribution added back, then the new one is set from it.
+	set_variable = { name = te_rc_gross value = te_rc_member_gross_adds }
+	# The cohesion share's members' side, before its programs too.
+	set_variable = { name = te_rc_production value = te_rc_member_production_adds }
+	if = {
+		limit = { has_journal_entry = je_research_commons }
+		te_rc_selfcheck_entry_add = yes
+		te_rc_selfcheck_contribution = yes
+		set_variable = { name = te_rc_contributed value = te_rc_contribution_from_gross }
+	}
+	else = {
+		# The entry has no activation triggers and so no inactive copy; a
+		# concluded one is gone, and add_journal_entry brings the type back
+		# (Colonial Empire's re-entry, read OK 2026-11-12). It pays from the
+		# month after it is added.
+		te_rc_selfcheck_entry_add = yes
+		set_variable = { name = te_rc_contributed value = 0 }
+		add_journal_entry = { type = je_research_commons }
+		set_variable = { name = te_rc_entry_added days = 45 }
+	}
+}
+
+# Country scope, a member with its entry active, before its contribution is
+# set again: the fixed point read in game (§ 11 fact 4, and whether the
+# entry's declaration lands). With last month's contribution C landed, the
+# add lines hold the gross less C, which at the fixed point is C/3; were the
+# declaration not landing they would hold the whole gross, 4C/3, and were it
+# landing twice, -2C/3; were modifier:country_weekly_innovation_add to read 0
+# as a value, exactly 0 (and the contribution would decay a quarter a month).
+# OK inside 0.1C to 0.8C, BROKEN at C or more, below 0 or at exactly 0; no
+# verdict in between, which a program's funding changed within the month could
+# explain, and the check waits for the next month. Only on a member that has
+# paid at least 10 for two months.
+te_rc_selfcheck_contribution = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_rc_sc_contribution_logged }
+			has_variable = te_rc_contributed
+			var:te_rc_contributed >= 10
+			has_variable = te_rc_paid_months
+			var:te_rc_paid_months >= 2
+		}
+		if = {
+			limit = {
+				te_rc_sc_ratio >= 0.1
+				te_rc_sc_ratio <= 0.8
+			}
+			set_global_variable = te_rc_sc_contribution_logged
+			debug_log = "TE_SELF_CHECK OK rc_contribution_lands country=[THIS.GetCountry.GetTagName] adds=[THIS.ScriptValue('te_rc_sc_adds')|1] contributed=[THIS.ScriptValue('te_rc_sc_contributed')|1] ratio=[THIS.ScriptValue('te_rc_sc_ratio')|2] date=[TimeKeeper.GetCurrentDate.GetString] (a member's add lines read about a third of its contribution: the declaration lands once and the contribution reads its own gross, not itself; logged once a game)"
+		}
+		else_if = {
+			limit = {
+				OR = {
+					te_rc_sc_ratio >= 1
+					te_rc_sc_ratio < 0
+					te_rc_sc_adds <= 0
+				}
+			}
+			set_global_variable = te_rc_sc_contribution_logged
+			debug_log = "TE_SELF_CHECK BROKEN rc_contribution_lands country=[THIS.GetCountry.GetTagName] adds=[THIS.ScriptValue('te_rc_sc_adds')|1] contributed=[THIS.ScriptValue('te_rc_sc_contributed')|1] ratio=[THIS.ScriptValue('te_rc_sc_ratio')|2] date=[TimeKeeper.GetCurrentDate.GetString] (expected a ratio near 0.33: 1.33 means the declaration does not land, so the leader's pool is paid by nobody; below 0 means it lands twice; adds=0 means the modifier read gives nothing; docs/testing/power-bloc-identities-playtest.md, Self-checks)"
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = te_rc_paid_months } }
+		set_variable = { name = te_rc_paid_months value = 0 }
+	}
+	change_variable = { name = te_rc_paid_months add = 1 }
+}
+
+# Country scope, a member at the leader's pulse: the entry the pulse added last
+# month is running (once a game), or is not (once).
+te_rc_selfcheck_entry_add = {
+	if = {
+		limit = {
+			has_variable = te_rc_entry_added
+			NOT = { has_global_variable = te_rc_sc_entry_add_logged }
+		}
+		set_global_variable = te_rc_sc_entry_add_logged
+		if = {
+			limit = { has_journal_entry = je_research_commons }
+			debug_log = "TE_SELF_CHECK OK rc_entry_add country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (the Research Commons entry the leader's pulse added last month is running; logged once a game)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN rc_entry_add country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (add_journal_entry of je_research_commons did not take, or the entry ended at once: the member pays nothing; docs/testing/power-bloc-identities-playtest.md, Self-checks)"
+		}
+	}
+	remove_variable = te_rc_entry_added
+}
+
+# Country scope, the leader after a pass: whether on_acquired_technology fires
+# for a scripted grant, and when (§ 11 fact 7). Once 20 grants have been made:
+# OK when the hook fired inside nine in ten of them (te_rc_granting set, so the
+# guard works); OK, with nothing to guard, when it never fired; BROKEN when it
+# fired after them, with the guard already gone, so a grant could pass for a
+# discovery. te_rc_sc_hook_after counts hook calls within three days of a
+# grant with no guard; a genuine acquisition in those days counts too, hence
+# the half.
+te_rc_selfcheck_grant_hook = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_rc_sc_hook_logged }
+			has_global_variable = te_rc_sc_grants
+			global_var:te_rc_sc_grants >= 20
+		}
+		set_global_variable = te_rc_sc_hook_logged
+		if = {
+			limit = { te_rc_sc_hook_inside_share >= 0.9 }
+			debug_log = "TE_SELF_CHECK OK rc_grant_hook fired=inside grants=[THIS.ScriptValue('te_rc_sc_grants_n')|0] inside=[THIS.ScriptValue('te_rc_sc_hook_inside_n')|0] after=[THIS.ScriptValue('te_rc_sc_hook_after_n')|0] date=[TimeKeeper.GetCurrentDate.GetString] (on_acquired_technology fires inside add_technology_researched, so the guard keeps grants from the headline and the world-first hooks; logged once a game)"
+		}
+		else_if = {
+			limit = { te_rc_sc_hook_after_share >= 0.5 }
+			debug_log = "TE_SELF_CHECK BROKEN rc_grant_hook fired=after grants=[THIS.ScriptValue('te_rc_sc_grants_n')|0] inside=[THIS.ScriptValue('te_rc_sc_hook_inside_n')|0] after=[THIS.ScriptValue('te_rc_sc_hook_after_n')|0] date=[TimeKeeper.GetCurrentDate.GetString] (on_acquired_technology fires for a grant after the effect, when te_rc_granting is gone: a grant can post a headline or count as a world first; docs/testing/power-bloc-identities-playtest.md, Self-checks)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK OK rc_grant_hook fired=never grants=[THIS.ScriptValue('te_rc_sc_grants_n')|0] inside=[THIS.ScriptValue('te_rc_sc_hook_inside_n')|0] after=[THIS.ScriptValue('te_rc_sc_hook_after_n')|0] date=[TimeKeeper.GetCurrentDate.GetString] (on_acquired_technology does not fire for a scripted grant: nothing to guard, and the ladder alone carries the sharing; logged once a game)"
+		}
+	}
+}
+
+# ---- A technology acquired on its own ----------------------------------------
+
+# Country scope, a member or leader of a Research Commons that acquired a
+# technology by research, spread or an event (not a grant: the caller skips a
+# country holding te_rc_granting). Runs the whole ladder at once, which shares
+# the technology whatever add_technology_researched does with a scope (§ 11
+# fact 7: unread, so the ladder's literal keys are used) and honors the
+# generator's exclusion list, which a scope can't be tested against. Cost: one
+# pass, 738 any_power_bloc_member checks, per acquisition.
+te_rc_share_acquired = {
+	power_bloc = { te_rc_sync_pass = yes }
+}
+
+# ---- Leaving -----------------------------------------------------------------
+
+# Country scope: je_research_commons ended (its invalid outcome: no longer in a
+# Research Commons). A member that left a Commons that still stands gets
+# Institutes Left Behind now; a leader, and a member whose bloc dissolved,
+# changed identity or lost its leader, does not (te_rc_has_left_commons).
+te_rc_entry_ended = {
+	remove_variable = te_rc_contributed
+	remove_variable = te_rc_gross
+	remove_variable = te_rc_production
+	remove_variable = te_rc_paid_months
+	remove_variable = te_rc_leader_own_eff
+	remove_variable = te_rc_members_eff
+	remove_variable = te_rc_leader_share
+	te_rc_detect_leaver = yes
+}
+
+# Country scope: a former member found outside any Commons, penalized only if
+# its Commons still stands. Also the monthly pulse's backstop, should the
+# entry not have ended (a revolution's winner outside the bloc, which inherits
+# te_rc_member and te_rc_leader but not the entry's state).
+te_rc_detect_leaver = {
+	if = {
+		limit = { te_rc_has_left_commons = yes }
+		te_rc_start_institutes_left_behind = yes
+	}
+	if = {
+		limit = {
+			has_variable = te_rc_member
+			te_rc_in_commons = no
+		}
+		remove_variable = te_rc_member
+		remove_variable = te_rc_leader
+		remove_variable = te_rc_contributed
+		remove_variable = te_rc_gross
+		remove_variable = te_rc_production
+		remove_variable = te_rc_paid_months
+	}
+}
+
+# Country scope: Institutes Left Behind starts, at full strength for ten years
+# falling to nothing (design § 6.4: the country keeps what it learned, since
+# script can't take a technology away).
+te_rc_start_institutes_left_behind = {
+	set_variable = { name = te_rc_ilb_months value = 120 }
+	# Today's monthly step skips it: one apply a day (te_rc_monthly_country).
+	set_variable = { name = te_rc_ilb_new days = 1 }
+	te_rc_ilb_apply = yes
+	debug_log = "TE_RC left country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (Institutes Left Behind for 120 months)"
+}
+
+# Country scope: the dynamic-modifier pattern's one refresh. The old copy goes
+# first, since a same-name add_modifier stacks; two months, so it lapses if
+# the monthly step ever stops.
+te_rc_ilb_apply = {
+	remove_modifier = te_rc_institutes_left_behind
+	add_modifier = {
+		name = te_rc_institutes_left_behind
+		multiplier = te_rc_ilb_fraction
+		months = 2
+	}
+}
+
+# Country scope, monthly: one month off, then the refresh, or the end.
+te_rc_ilb_refresh = {
+	change_variable = { name = te_rc_ilb_months add = -1 }
+	if = {
+		limit = { var:te_rc_ilb_months > 0 }
+		te_rc_ilb_apply = yes
+	}
+	else = {
+		te_rc_end_institutes_left_behind = yes
+	}
+}
+
+# Country scope: Institutes Left Behind ends (run out, or the country joined a
+# Commons again).
+te_rc_end_institutes_left_behind = {
+	remove_variable = te_rc_ilb_months
+	remove_variable = te_rc_ilb_new
+	remove_modifier = te_rc_institutes_left_behind
+}
+
+# ---- Technology Embargo ------------------------------------------------------
+
+# Country scope, the embargoing leader (the pact's root), with
+# scope:target_country: the target's spread cut, refreshed each month by the
+# pact's monthly_effect and once when it is declared. The cut is sized at the
+# leader (the script value te_rc_embargo_points) and carried to the target on
+# the leader's variable te_rc_embargo_cut. Two Commons embargoing one country
+# overwrite each other's cut month by month; the target carries one of them.
+te_rc_embargo_refresh = {
+	set_variable = { name = te_rc_embargo_cut value = te_rc_embargo_points }
+	scope:target_country = {
+		remove_modifier = te_rc_technology_embargoed
+		# A target that joined the leader's bloc is cut no more, though the
+		# pact can't end before its forced duration runs out.
+		if = {
+			limit = {
+				root.var:te_rc_embargo_cut > 0
+				NOT = { is_in_same_power_bloc = root }
+			}
+			add_modifier = {
+				name = te_rc_technology_embargoed
+				multiplier = root.var:te_rc_embargo_cut
+				months = 2
+			}
+		}
+	}
+}

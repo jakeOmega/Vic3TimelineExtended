@@ -565,6 +565,11 @@ on_acquired_technology = {
 # so only the first researcher of each diffusion-eligible tech actually
 # triggers the broadcast. See common/scripted_effects/agricultural_diffusion_effects.txt.
 agricultural_diffusion_on_action = {
+	# A Research Commons grant is not a discovery (te_rc_grant sets te_rc_granting
+	# around add_technology_researched; power_blocs.md § Research Commons).
+	trigger = {
+		NOT = { has_variable = te_rc_granting }
+	}
 	effect = {
 		agdiff_dispatch_if_first = { TECH = nitrogen_fixation }
 		agdiff_dispatch_if_first = { TECH = modern_chemical_processes }
@@ -1439,6 +1444,12 @@ tech_marker_grants_on_action = {
 }
 
 add_arable_land_effect_on_action = {
+	# Not for a Research Commons grant (te_rc_grant sets te_rc_granting around
+	# add_technology_researched): a sharing pass runs this once for each member
+	# it gave a technology (te_rc_refresh_after_grants), not once per technology.
+	trigger = {
+		NOT = { has_variable = te_rc_granting }
+	}
 	effect = {
 		trigger_event = {id = minor_events_timelineextended.1 days = 1}
 	}
