@@ -12,6 +12,13 @@ te_aip_id_phase = {
 	if = { limit = { has_variable = te_aip_id } value = var:te_aip_id }
 	modulo = 12
 }
+# The global month's place in the probe's year: the W line prints at 1, the month the probe armed in and
+# every twelfth after.
+te_aip_k_phase = {
+	value = 0
+	if = { limit = { has_global_variable = te_aip_k } value = global_var:te_aip_k }
+	modulo = 12
+}
 
 # --- A ---
 te_aip_y = { value = year }
@@ -134,6 +141,9 @@ te_aip_cm_price = { value = 0 if = { limit = { has_variable = te_construction_ma
 te_aip_cm_public = { value = 0 if = { limit = { has_variable = te_construction_market_public_target } value = var:te_construction_market_public_target } }
 te_aip_companies = { value = num_companies }
 te_aip_companies_max = { value = max_num_companies }
+te_aip_bubble = { value = 0 if = { limit = { has_variable = bubble_pressure } value = var:bubble_pressure } }
+te_aip_cm_level_max = { value = modifier:country_max_weekly_construction_progress_add }
+te_aip_cm_admin = { value = 0 if = { limit = { te_construction_market_ai_building_administration = yes } value = 1 } }
 
 # --- O ---
 te_aip_low_mfg = {
@@ -238,6 +248,13 @@ te_aip_uni_scholastic = {
 	value = 0
 	every_scope_building = {
 		limit = { is_building_type = building_university has_active_production_method = pm_scholastic_education }
+		add = level
+	}
+}
+te_aip_low_mfg_nc = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_manufacturing NOT = { is_building_group = bg_construction } occupancy < 0.5 }
 		add = level
 	}
 }
@@ -2167,8 +2184,282 @@ te_aip_n_company = { value = 0 if = { limit = { has_variable = te_aip_n_company 
 te_aip_n_colony = { value = 0 if = { limit = { has_variable = te_aip_n_colony } value = var:te_aip_n_colony } }
 te_aip_n_inst_up = { value = 0 if = { limit = { has_variable = te_aip_n_inst_up } value = var:te_aip_n_inst_up } }
 te_aip_n_inst_down = { value = 0 if = { limit = { has_variable = te_aip_n_inst_down } value = var:te_aip_n_inst_down } }
+te_aip_n_law_set = { value = 0 if = { limit = { has_variable = te_aip_n_law_set } value = var:te_aip_n_law_set } }
+
+# --- J ---
+te_aip_im_colonial_affairs = { value = 0 if = { limit = { has_institution = institution_colonial_affairs } institution:institution_colonial_affairs = { add = investment_max } } }
+te_aip_im_social_security = { value = 0 if = { limit = { has_institution = institution_social_security } institution:institution_social_security = { add = investment_max } } }
+te_aip_im_workplace_safety = { value = 0 if = { limit = { has_institution = institution_workplace_safety } institution:institution_workplace_safety = { add = investment_max } } }
+te_aip_im_schools = { value = 0 if = { limit = { has_institution = institution_schools } institution:institution_schools = { add = investment_max } } }
+te_aip_im_police = { value = 0 if = { limit = { has_institution = institution_police } institution:institution_police = { add = investment_max } } }
+te_aip_im_health_system = { value = 0 if = { limit = { has_institution = institution_health_system } institution:institution_health_system = { add = investment_max } } }
+te_aip_im_home_affairs = { value = 0 if = { limit = { has_institution = institution_home_affairs } institution:institution_home_affairs = { add = investment_max } } }
+te_aip_im_ministry_of_war = { value = 0 if = { limit = { has_institution = institution_ministry_of_war } institution:institution_ministry_of_war = { add = investment_max } } }
+te_aip_im_ministry_of_commerce = { value = 0 if = { limit = { has_institution = institution_ministry_of_commerce } institution:institution_ministry_of_commerce = { add = investment_max } } }
+te_aip_im_ministry_of_foreign_affairs = { value = 0 if = { limit = { has_institution = institution_ministry_of_foreign_affairs } institution:institution_ministry_of_foreign_affairs = { add = investment_max } } }
+te_aip_im_national_bank = { value = 0 if = { limit = { has_institution = institution_national_bank } institution:institution_national_bank = { add = investment_max } } }
+te_aip_im_ministry_of_culture = { value = 0 if = { limit = { has_institution = institution_ministry_of_culture } institution:institution_ministry_of_culture = { add = investment_max } } }
+te_aip_im_ministry_of_labor = { value = 0 if = { limit = { has_institution = institution_ministry_of_labor } institution:institution_ministry_of_labor = { add = investment_max } } }
+te_aip_im_ministry_of_the_environment = { value = 0 if = { limit = { has_institution = institution_ministry_of_the_environment } institution:institution_ministry_of_the_environment = { add = investment_max } } }
+te_aip_im_ministry_of_intelligence_and_security = { value = 0 if = { limit = { has_institution = institution_ministry_of_intelligence_and_security } institution:institution_ministry_of_intelligence_and_security = { add = investment_max } } }
+te_aip_im_ministry_of_refugee_affairs = { value = 0 if = { limit = { has_institution = institution_ministry_of_refugee_affairs } institution:institution_ministry_of_refugee_affairs = { add = investment_max } } }
+te_aip_im_ministry_of_propaganda = { value = 0 if = { limit = { has_institution = institution_ministry_of_propaganda } institution:institution_ministry_of_propaganda = { add = investment_max } } }
+te_aip_im_ministry_of_science = { value = 0 if = { limit = { has_institution = institution_ministry_of_science } institution:institution_ministry_of_science = { add = investment_max } } }
+te_aip_im_ministry_of_thought_control = { value = 0 if = { limit = { has_institution = institution_ministry_of_thought_control } institution:institution_ministry_of_thought_control = { add = investment_max } } }
+te_aip_im_ministry_of_consumer_protection = { value = 0 if = { limit = { has_institution = institution_ministry_of_consumer_protection } institution:institution_ministry_of_consumer_protection = { add = investment_max } } }
+te_aip_im_ministry_of_urban_planning = { value = 0 if = { limit = { has_institution = institution_ministry_of_urban_planning } institution:institution_ministry_of_urban_planning = { add = investment_max } } }
+te_aip_im_ministry_of_religion = { value = 0 if = { limit = { has_institution = institution_ministry_of_religion } institution:institution_ministry_of_religion = { add = investment_max } } }
+te_aip_im_ministry_of_international_aid = { value = 0 if = { limit = { has_institution = institution_ministry_of_international_aid } institution:institution_ministry_of_international_aid = { add = investment_max } } }
+te_aip_im_migration_controls = { value = 0 if = { limit = { has_institution = institution_migration_controls } institution:institution_migration_controls = { add = investment_max } } }
+
+# --- R ---
+te_aip_u_irregular_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_irregular_infantry)"
+}
+te_aip_u_line_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_line_infantry)"
+}
+te_aip_u_skirmish_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_skirmish_infantry)"
+}
+te_aip_u_trench_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_trench_infantry)"
+}
+te_aip_u_squad_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_squad_infantry)"
+}
+te_aip_u_mechanized_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_mechanized_infantry)"
+}
+te_aip_u_armored_infantry = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_armored_infantry)"
+}
+te_aip_u_cannon_artillery = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_cannon_artillery)"
+}
+te_aip_u_mobile_artillery = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_mobile_artillery)"
+}
+te_aip_u_shrapnel_artillery = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_shrapnel_artillery)"
+}
+te_aip_u_siege_artillery = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_siege_artillery)"
+}
+te_aip_u_motorized_artillery = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_motorized_artillery)"
+}
+te_aip_u_hussars = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_hussars)"
+}
+te_aip_u_dragoons = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_dragoons)"
+}
+te_aip_u_cuirassiers = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_cuirassiers)"
+}
+te_aip_u_lancers = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_lancers)"
+}
+te_aip_u_light_tanks = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_tanks)"
+}
+te_aip_u_tanks = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_heavy_tank)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_main_battle_tank)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_reactive_armor_tank)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_railgun_tank)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_DEW_tank)"
+}
+te_aip_u_marines = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_low_tier_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_mid_tier_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_high_tier_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_combined_arms_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_stealth_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_networked_marines)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_bioenhanced_marines)"
+}
+te_aip_u_air = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_bomber_aircraft)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_jet_powered_fighters)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_stealth_aircraft)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_tactical_vehicles)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_weapons_platforms)"
+}
+te_aip_u_later = {
+	value = 0
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_robotic_soldiers)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_swarm_bots)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_grey_goo)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_guided_artillery_projectiles)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_networked_guided_artillery_projectiles)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_bombardment)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_orbital_precision_antimatter_strikes)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_light_scout_tanks)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_stealth_reconnaissance_drone_carrier)"
+	add = "country_army_unit_type_fraction(unit_type:combat_unit_type_holographic_ambush_combat_vehicle)"
+}
+
+# --- H ---
+te_aip_h_rationalism = { value = 0 if = { limit = { has_technology_researched = rationalism } value = 1 } }
+te_aip_h_academia = { value = 0 if = { limit = { has_technology_researched = academia } value = 1 } }
+te_aip_h_empiricism = { value = 0 if = { limit = { has_technology_researched = empiricism } value = 1 } }
+te_aip_h_civilizing_mission = { value = 0 if = { limit = { has_technology_researched = civilizing_mission } value = 1 } }
+te_aip_h_human_rights = { value = 0 if = { limit = { has_technology_researched = human_rights } value = 1 } }
+te_aip_h_pan_nationalism = { value = 0 if = { limit = { has_technology_researched = pan-nationalism } value = 1 } }
+te_aip_h_nationalism = { value = 0 if = { limit = { has_technology_researched = nationalism } value = 1 } }
+te_aip_h_currency_standards = { value = 0 if = { limit = { has_technology_researched = currency_standards } value = 1 } }
+te_aip_h_colonization = { value = 0 if = { limit = { has_technology_researched = colonization } value = 1 } }
+te_aip_h_quinine = { value = 0 if = { limit = { has_technology_researched = quinine } value = 1 } }
+te_aip_h_malaria_prevention = { value = 0 if = { limit = { has_technology_researched = malaria_prevention } value = 1 } }
+te_aip_h_military_drill = { value = 0 if = { limit = { has_technology_researched = military_drill } value = 1 } }
+te_aip_h_line_infantry = { value = 0 if = { limit = { has_technology_researched = line_infantry } value = 1 } }
+te_aip_h_general_staff = { value = 0 if = { limit = { has_technology_researched = general_staff } value = 1 } }
+te_aip_h_trench_works = { value = 0 if = { limit = { has_technology_researched = trench_works } value = 1 } }
+te_aip_h_nco_training = { value = 0 if = { limit = { has_technology_researched = nco_training } value = 1 } }
+te_aip_h_mobile_armor = { value = 0 if = { limit = { has_technology_researched = mobile_armor } value = 1 } }
+te_aip_h_combined_arms = { value = 0 if = { limit = { has_technology_researched = combined_arms } value = 1 } }
+te_aip_h_artillery = { value = 0 if = { limit = { has_technology_researched = artillery } value = 1 } }
+te_aip_h_napoleonic_warfare = { value = 0 if = { limit = { has_technology_researched = napoleonic_warfare } value = 1 } }
+te_aip_h_breech_loading_artillery = { value = 0 if = { limit = { has_technology_researched = breech_loading_artillery } value = 1 } }
+te_aip_h_defense_in_depth = { value = 0 if = { limit = { has_technology_researched = defense_in_depth } value = 1 } }
+te_aip_h_motorized_artillery = { value = 0 if = { limit = { has_technology_researched = motorized_artillery } value = 1 } }
+te_aip_h_standing_army = { value = 0 if = { limit = { has_technology_researched = standing_army } value = 1 } }
+
+# --- version 2: a diplomatic play's type (ai_probe_key.json, play_types), read in the play's scope ---
+te_aip_play_type_index = {
+	value = 0
+	if = { limit = { is_diplomatic_play_type = dp_default_treaty_article } value = 1 }
+	else_if = { limit = { is_diplomatic_play_type = dp_open_market } value = 2 }
+	else_if = { limit = { is_diplomatic_play_type = dp_regime_change } value = 3 }
+	else_if = { limit = { is_diplomatic_play_type = dp_ban_slavery } value = 4 }
+	else_if = { limit = { is_diplomatic_play_type = dp_conquer_state } value = 5 }
+	else_if = { limit = { is_diplomatic_play_type = dp_return_state } value = 6 }
+	else_if = { limit = { is_diplomatic_play_type = dp_return_state_to_subject } value = 7 }
+	else_if = { limit = { is_diplomatic_play_type = dp_liberate_subject } value = 8 }
+	else_if = { limit = { is_diplomatic_play_type = dp_liberate_country } value = 9 }
+	else_if = { limit = { is_diplomatic_play_type = dp_release_as_subject } value = 10 }
+	else_if = { limit = { is_diplomatic_play_type = dp_independence } value = 11 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leave_power_bloc } value = 12 }
+	else_if = { limit = { is_diplomatic_play_type = dp_increase_autonomy } value = 13 }
+	else_if = { limit = { is_diplomatic_play_type = dp_reduce_autonomy } value = 14 }
+	else_if = { limit = { is_diplomatic_play_type = dp_take_treaty_port } value = 15 }
+	else_if = { limit = { is_diplomatic_play_type = dp_make_tributary } value = 16 }
+	else_if = { limit = { is_diplomatic_play_type = dp_make_dominion } value = 17 }
+	else_if = { limit = { is_diplomatic_play_type = dp_make_protectorate } value = 18 }
+	else_if = { limit = { is_diplomatic_play_type = dp_transfer_subject } value = 19 }
+	else_if = { limit = { is_diplomatic_play_type = dp_annex_subject } value = 20 }
+	else_if = { limit = { is_diplomatic_play_type = dp_revolution } value = 21 }
+	else_if = { limit = { is_diplomatic_play_type = dp_secession } value = 22 }
+	else_if = { limit = { is_diplomatic_play_type = dp_contain_threat } value = 23 }
+	else_if = { limit = { is_diplomatic_play_type = dp_taiping_rebellion } value = 24 }
+	else_if = { limit = { is_diplomatic_play_type = dp_join_power_bloc } value = 25 }
+	else_if = { limit = { is_diplomatic_play_type = dp_force_nationalization } value = 26 }
+	else_if = { limit = { is_diplomatic_play_type = dp_give_foreign_investment_rights } value = 27 }
+	else_if = { limit = { is_diplomatic_play_type = dp_demand_strait_access } value = 28 }
+	else_if = { limit = { is_diplomatic_play_type = dp_demand_toll_exemption } value = 29 }
+	else_if = { limit = { is_diplomatic_play_type = dp_demand_no_tolls } value = 30 }
+	else_if = { limit = { is_diplomatic_play_type = dp_demand_no_strait_closure } value = 31 }
+	else_if = { limit = { is_diplomatic_play_type = dp_native_uprising } value = 32 }
+	else_if = { limit = { is_diplomatic_play_type = dp_annex_war } value = 33 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_germany } value = 34 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_italy } value = 35 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_scandinavia } value = 36 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_ethiopia } value = 37 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_china } value = 38 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_arabia } value = 39 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_india } value = 40 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_indonesia } value = 41 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_andes } value = 42 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_russia } value = 43 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_germany } value = 44 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_italy } value = 45 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_scandinavia } value = 46 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_andes } value = 47 }
+	else_if = { limit = { is_diplomatic_play_type = dp_humiliation } value = 48 }
+	else_if = { limit = { is_diplomatic_play_type = dp_sepoy_mutiny } value = 49 }
+	else_if = { limit = { is_diplomatic_play_type = dp_balkan_war } value = 50 }
+	else_if = { limit = { is_diplomatic_play_type = dp_enforce_trialist_manifesto } value = 51 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_yugoslavia } value = 52 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_yugoslavia } value = 53 }
+	else_if = { limit = { is_diplomatic_play_type = dp_hungarian_revolution } value = 54 }
+	else_if = { limit = { is_diplomatic_play_type = dp_restore_union } value = 55 }
+	else_if = { limit = { is_diplomatic_play_type = dp_polish_uprising } value = 56 }
+	else_if = { limit = { is_diplomatic_play_type = dp_nuclear_exchange } value = 57 }
+	else_if = { limit = { is_diplomatic_play_type = dp_te_independence_war } value = 58 }
+	else_if = { limit = { is_diplomatic_play_type = dp_te_colonial_war } value = 59 }
+	else_if = { limit = { is_diplomatic_play_type = dp_te_colonial_uprising } value = 60 }
+	else_if = { limit = { is_diplomatic_play_type = dp_te_seize_strait } value = 61 }
+	else_if = { limit = { is_diplomatic_play_type = dp_te_un_mandate_restore_state } value = 62 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_african_union } value = 63 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_african_union } value = 64 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_india } value = 65 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_indonesia } value = 66 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_european_union } value = 67 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_european_union } value = 68 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_united_north_america } value = 69 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_united_north_america } value = 70 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_united_earth } value = 71 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_united_earth } value = 72 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_china } value = 73 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_intermarium } value = 74 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_intermarium } value = 75 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_east_african_federation } value = 76 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_east_african_federation } value = 77 }
+	else_if = { limit = { is_diplomatic_play_type = dp_unify_dar_al_islam } value = 78 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_dar_al_islam } value = 79 }
+}
 
 # --- read at a law event ---
 te_aip_ev_enact_chance = { value = enactment_chance }
 te_aip_ev_stall_chance = { value = stall_chance }
 te_aip_ev_setbacks = { value = enactment_setback_count }
+# Version 2, at a law's end: how it ended (ai_probe_key.json, law_end_how), and the setbacks it could take.
+te_aip_ev_law_how = {
+	value = 3
+	if = { limit = { has_variable = te_aip_law_how } value = var:te_aip_law_how }
+	else_if = { limit = { currently_enacting_law ?= { law_is_available = no } } value = 4 }
+}
+te_aip_ev_max_setbacks = { value = max_law_enactment_setbacks }
+
+# --- version 2, read at a diplomatic play: the globals te_aip_play_started sets ---
+te_aip_ev_play_type = { value = 0 if = { limit = { has_global_variable = te_aip_play_type } value = global_var:te_aip_play_type } }
+te_aip_ev_play_a_id = { value = 0 if = { limit = { has_global_variable = te_aip_play_a_id } value = global_var:te_aip_play_a_id } }
+te_aip_ev_play_a_rank = { value = 0 if = { limit = { has_global_variable = te_aip_play_a_rank } value = global_var:te_aip_play_a_rank } }
+te_aip_ev_play_b_id = { value = 0 if = { limit = { has_global_variable = te_aip_play_b_id } value = global_var:te_aip_play_b_id } }
+te_aip_ev_play_b_rank = { value = 0 if = { limit = { has_global_variable = te_aip_play_b_rank } value = global_var:te_aip_play_b_rank } }
+
+# --- version 2, the W line: the world outside the AI countries ---
+te_aip_w_countries = {
+	value = 0
+	every_country = { limit = { NOT = { is_country_type = decentralized } } add = 1 }
+}
+te_aip_w_dn = {
+	value = 0
+	every_country = { limit = { is_country_type = decentralized } add = 1 }
+}
+te_aip_w_dn_states = {
+	value = 0
+	every_country = { limit = { is_country_type = decentralized } add = num_states }
+}

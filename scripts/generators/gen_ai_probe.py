@@ -34,12 +34,22 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                not have drops its whole line, and the canary shows which. All 21 printed in the
                                first run (2026-11-15).
   E <event> <TAG> <id> <k> ... a decision as it happens: a law enactment started, passed, failed or ended, a
-                               default and its end, a diplomatic play.
+                               default and its end, a diplomatic play. From version 2 a law's end says how it ended
+                               (`how`: ai_probe_key.json, law_end_how) and a play gives its type and both sides'
+                               ranks.
+  W <k> y=<year> ...           from version 2, once a year (the month the probe armed in, and every twelfth after):
+                               the world outside the AI countries, which no snapshot covers (decentralized nations
+                               and the states they hold).
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
 Counters (`n_*` in the N group) are flows since the country's last snapshot: buildings built and expanded by
 class, production-method changes, technologies acquired, laws started, plays started, companies founded.
+
+OLD LOGS. A version-1 log (the first long run, 2026-11-16) must go on parsing with this version's key, so a new
+field or line is only ever added: no line is renamed or renumbered, a field joins the end of its group, and a
+positional group (`POSITIONAL`) never takes another field, since its lines are read by position. New positional
+fields go in a group of their own.
 """
 
 from __future__ import annotations
@@ -52,13 +62,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 1
+VERSION = 2
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
 # Groups whose lines carry bare values, semicolon-separated, in the order ai_probe_key.json gives (`lines`): the bulk
-# of a snapshot, at a third of the bytes of key=value.
-POSITIONAL = ("L", "T", "I", "G")
+# of a snapshot, at a third of the bytes of key=value. J, R and H are version 2's.
+POSITIONAL = ("L", "T", "I", "G", "J", "R", "H")
+# Version 2's positional groups each fit one line (test_ai_probe.py holds every line under 1,500 characters);
+# version 1's keep POSITIONAL_PER_LINE, so their lines read as they did.
+LINE_SIZE = {"J": 30, "R": 30, "H": 30}
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
 EFFECTS_FILE = "common/scripted_effects/te_ai_probe_effects.txt"
@@ -147,12 +160,53 @@ BUILT_CLASSES = [
     ("agri", ["bg_agriculture", "bg_plantations", "bg_ranching"]),
 ]
 
-# Event counters kept on the country between two of its snapshots.
+# Event counters kept on the country between two of its snapshots. `law_set` (version 2) counts a law activated
+# other than by a passed enactment: by script (the mod's law-consistency sweep, an event), a revolution, or a new
+# country's setup.
 COUNTERS = (
     ["built", "expanded"] + [f"built_{name}" for name, _ in BUILT_CLASSES]
     + ["pm", "tech", "law_start", "law_pass", "law_fail", "law_end", "default", "play", "war", "reform", "company",
-       "colony", "inst_up", "inst_down"]
+       "colony", "inst_up", "inst_down", "law_set"]
 )
+
+# How an enactment ended, the `how` of a law_end line (1-based). The engine has no hook for a cancellation, so
+# the end hook reads what the pass and fail hooks marked just before it, and failing both, whether the law is still
+# available. on_law_enactment_fail fires only when an enactment "fails by accumulating too many setbacks" (vanilla's
+# 00_code_on_actions.txt), and in the first long run none of the 2,938 enactments that ended had more than 2 of the
+# 3 setbacks a country may suffer (00_code_static_modifiers.txt: country_law_enactment_max_setbacks_add = 3): the
+# 534 that ended unpassed were all stopped before a third, which is why the fail hook never fired.
+LAW_END_HOW = [
+    "passed",       # on_law_enactment_pass fired for it
+    "failed",       # on_law_enactment_fail fired for it: the setbacks reached the country's maximum
+    "cancelled",    # stopped with the law still available: by the AI, or by script
+    "replaced",     # stopped with the law no longer available: a law set by script or a revolution barred it
+                    # (vanilla's own on_law_activated hook cancels such an enactment)
+]
+
+# The tax and wage levels the F group's `tax_level`, `gov_wage` and `mil_wage` print, 0-based (the first long run
+# printed 0 to 4 for tax and the military wage, medium the commonest).
+LEVEL_NAMES = ["very_low", "low", "medium", "high", "very_high"]
+LEVEL_FIELDS = ["tax_level", "gov_wage", "mil_wage"]
+
+# Technologies logged one by one (the H line), for the gates the first run's analysis could only infer:
+# Religious, Private and Public Schools; the era-3 society technologies vanilla's AI weights for Per-Capita
+# taxation and Interventionism wait for; the era-2 alternative proposed for them and the Per-Capita unlock; the
+# colonial laws, malaria and severe malaria; Professional Army. The unlocking technology of every unit type the R
+# line names follows them (`unit_techs`). The generator stops on a key no file defines.
+TECH_FLAGS = [
+    "rationalism", "academia", "empiricism",
+    "civilizing_mission", "human_rights", "pan-nationalism",
+    "nationalism", "currency_standards",
+    "colonization", "quinine", "malaria_prevention",
+    "military_drill",
+]
+
+# The army by unit type (the R line): each type of these groups up to this tier (the era of its unlocking
+# technology) by its share of the army, then sums for what is past it, so the shares add up to the whole army.
+UNIT_LINE_GROUPS = ["combat_unit_group_infantry", "combat_unit_group_artillery", "combat_unit_group_cavalry"]
+UNIT_LINE_MAX_TIER = 6
+UNIT_SUM_GROUPS = [("u_tanks", "combat_unit_group_tanks"), ("u_marines", "combat_unit_group_marines"),
+                   ("u_air", "combat_unit_group_aircraft")]
 
 # The interface's data functions, printed with each snapshot (and once each at arming, alone).
 DATA_FUNCTIONS = [
@@ -194,7 +248,7 @@ def load_state(root: Path = ROOT):
     from vanilla_parsed import load
 
     kinds = ("Laws", "Law Groups", "Technologies", "Combat Unit Types", "Building Groups", "Buildings",
-             "Institutions")
+             "Institutions", "Diplomatic Plays")
     snapshot = load(str(root / "vanilla_parsed"))
     state = ModState(
         {kind: "/nonexistent" for kind in kinds},
@@ -260,13 +314,36 @@ def catalog(mod_state) -> dict:
     units = mod_state.get_data("Combat Unit Types")
     land_groups = {"combat_unit_group_infantry", "combat_unit_group_artillery", "combat_unit_group_cavalry"}
     tier: dict[str, int] = {}
+    unit_types: dict[str, dict] = {}         # every unit type: its group, tier and unlocking technologies
     for key in units:
         body = unwrap(units[key])
-        if not isinstance(body, dict) or unwrap(body.get("group")) not in land_groups:
+        if not isinstance(body, dict):
             continue
         unlocks = unwrap(body.get("unlocking_technologies"))
-        eras = [tech_era[t] for t in unlocks if t in tech_era] if isinstance(unlocks, list) else []
+        unlocks = [t for t in unlocks if isinstance(t, str)] if isinstance(unlocks, list) else []
+        eras = [tech_era[t] for t in unlocks if t in tech_era]
+        group = unwrap(body.get("group"))
+        if bare(key) not in unit_types:
+            unit_types[bare(key)] = {"group": group, "tier": max(eras, default=1), "techs": unlocks}
+        if group not in land_groups:
+            continue
         tier[bare(key)] = max(eras, default=1)
+
+    # The R line: the named types in group order, then by tier; the sums after them.
+    named = sorted((name for name, info in unit_types.items()
+                    if info["group"] in UNIT_LINE_GROUPS and info["tier"] <= UNIT_LINE_MAX_TIER),
+                   key=lambda name: (UNIT_LINE_GROUPS.index(unit_types[name]["group"]), unit_types[name]["tier"]))
+    later = [name for name, info in unit_types.items()
+             if info["group"] in UNIT_LINE_GROUPS and info["tier"] > UNIT_LINE_MAX_TIER]
+    unit_line = [("u_" + short(name, "combat_unit_type_"), [name]) for name in named]
+    unit_line += [(field, [name for name, info in unit_types.items() if info["group"] == group])
+                  for field, group in UNIT_SUM_GROUPS]
+    unit_line.append(("u_later", later))
+    unit_techs = list(dict.fromkeys(t for name in named for t in unit_types[name]["techs"]))
+    tech_flags = list(dict.fromkeys(TECH_FLAGS + unit_techs))
+    missing = [t for t in tech_flags if t not in all_techs]
+    if missing:
+        raise ValueError(f"TECH_FLAGS names technologies no file defines: {missing}")
 
     # A group counts when a building belongs to it or to a group under it. Vanilla keeps 21 legacy groups
     # (bg_coal_mining, bg_wheat_farms, ...) that no building belongs to; test_no_dead_building_groups.py bars them.
@@ -288,6 +365,7 @@ def catalog(mod_state) -> dict:
     groups = [bare(key) for key in group_data if bare(key) in live]
     buildings = {bare(key) for key in building_data}
     institutions = [bare(key) for key in mod_state.get_data("Institutions")]
+    play_types = list(dict.fromkeys(bare(key) for key in mod_state.get_data("Diplomatic Plays")))
     return {
         "law_groups": law_groups,
         "laws": {group: by_group[group] for group in law_groups},
@@ -298,6 +376,11 @@ def catalog(mod_state) -> dict:
         "building_groups": list(dict.fromkeys(groups)),
         "building_types": [b for b in BUILDING_TYPES if b in buildings],
         "institutions": list(dict.fromkeys(institutions)),
+        "unit_line": unit_line,
+        "unit_types": unit_types,
+        "unit_techs": unit_techs,
+        "tech_flags": tech_flags,
+        "play_types": play_types,
     }
 
 
@@ -450,6 +533,12 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         variable("cm_public", "te_construction_market_public_target", 3),
         read("companies", "num_companies"),
         read("companies_max", "max_num_companies"),
+        # Version 2: what te_construction_market_ai_purchase_target reads that the fields above lack, so the
+        # purchase can be recomputed from a snapshot (ai_probe_report.py purchase_target): the banking brake's
+        # bubble pressure, the weekly maximum a queued level takes, and the paused-administration exception.
+        variable("bubble", "bubble_pressure", 1),
+        read("cm_level_max", "modifier:country_max_weekly_construction_progress_add", 2),
+        flag("cm_admin", "te_construction_market_ai_building_administration = yes"),
     ]
     military = [
         read("army", "army_size"),
@@ -508,11 +597,30 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         + [levels("rt_all", "has_modifier = pm_retooling"), levels("sub_all", "is_subsidized = yes")]
         + [levels(key, f"is_building_type = {building} has_active_production_method = {method}")
            for key, building, method in STALE_METHODS if building in cat["building_types"]]
+        # Version 2: manufacturing without the Construction Sector, which the mod puts under bg_heavy_industry
+        # (extra_building_groups.txt), so that low_mfg's idle sectors in a small country do not read as idle
+        # factories. Its denominator is bg_manufacturing less bg_construction, both in the G line.
+        + [levels("low_mfg_nc", "is_building_group = bg_manufacturing NOT = { is_building_group = bg_construction } "
+                  "occupancy < 0.5")]
     )
     counters = [variable("n_" + name, PREFIX + "n_" + name) for name in COUNTERS]
+    # Version 2's positional groups.
+    institution_max = [
+        Field("im_" + short(name, "institution_"),
+              f"value = 0 if = {{ limit = {{ has_institution = {name} }} institution:{name} = {{ add = investment_max }} }}")
+        for name in cat["institutions"]
+    ]
+    units = [
+        Field(field, "\n".join(
+            ["\tvalue = 0"]
+            + [f'\tadd = "country_army_unit_type_fraction(unit_type:{unit})"' for unit in members]), 3)
+        for field, members in cat["unit_line"]
+    ]
+    tech_flags = [flag("h_" + tech.replace("-", "_"), f"has_technology_researched = {tech}")
+                  for tech in cat["tech_flags"]]
     return [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
             ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
-            ("N", counters)]
+            ("N", counters), ("J", institution_max), ("R", units), ("H", tech_flags)]
 
 
 def all_fields(cat: dict) -> list[Field]:
@@ -530,6 +638,13 @@ BASE_VALUES = (
     "\tif = { limit = { has_variable = te_aip_id } value = var:te_aip_id }\n"
     "\tmodulo = 12\n"
     "}\n"
+    "# The global month's place in the probe's year: the W line prints at 1, the month the probe armed in and\n"
+    "# every twelfth after.\n"
+    "te_aip_k_phase = {\n"
+    "\tvalue = 0\n"
+    "\tif = { limit = { has_global_variable = te_aip_k } value = global_var:te_aip_k }\n"
+    "\tmodulo = 12\n"
+    "}\n"
 )
 
 
@@ -539,6 +654,10 @@ def render_values(cat: dict) -> str:
         parts.append(f"# --- {group} ---\n")
         parts.extend(field.script_value() for field in fields)
         parts.append("\n")
+    parts.append("# --- version 2: a diplomatic play's type (ai_probe_key.json, play_types), read in the play's scope ---\n")
+    parts.append(index("play_type_index", [f"is_diplomatic_play_type = {play}" for play in cat["play_types"]])
+                 .script_value())
+    parts.append("\n")
     return "".join(parts)
 
 
@@ -550,13 +669,20 @@ def snapshot_lines(cat: dict) -> list[tuple[str, list[Field]]]:
     """Every line of a snapshot: (its name, `G2`, and the fields it carries, in order)."""
     lines = []
     for group, fields in field_groups(cat):
-        size = POSITIONAL_PER_LINE if group in POSITIONAL else FIELDS_PER_LINE
+        size = LINE_SIZE.get(group, POSITIONAL_PER_LINE if group in POSITIONAL else FIELDS_PER_LINE)
         for n, part in enumerate(chunks(fields, size), 1):
             lines.append((f"{group}{n}", part))
     return lines
 
 
 LINE_HEAD = "[THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0]"
+# The W line's fields (te_aip_w_<name>), in the order it prints them: countries that are not decentralized
+# nations, decentralized nations, and the states they hold, which is the land left to colonize.
+WORLD_FIELDS = ["countries", "dn", "dn_states"]
+LAW_FIELDS = ("law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] "
+              "stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]")
+WORLD_LINE = ("TE_AIP W [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0] "
+              + " ".join(f"{name}=[THIS.ScriptValue('te_aip_w_{name}')|0]" for name in WORLD_FIELDS))
 
 
 def render_effects(cat: dict) -> str:
@@ -628,18 +754,27 @@ def render_effects(cat: dict) -> str:
         "\t\trandom_country = {\n"
         "\t\t\tdebug_log = \"TE_AIP K [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0]\"\n"
         "\t\t\tdebug_log = \"TE_AIP KDATE [THIS.ScriptValue('te_aip_k')|0] [TimeKeeper.GetCurrentDate.GetString]\"\n"
+        "\t\t\tif = {\n"
+        "\t\t\t\tlimit = { te_aip_k_phase = 1 }\n"
+        f"\t\t\t\tdebug_log = \"{WORLD_LINE}\"\n"
+        "\t\t\t}\n"
         "\t\t}\n"
         "\t}\n"
         "}\n\n"
-        "# A country's month: a serial on first sight, then a snapshot every twelfth month, in the month its serial\n"
-        "# gives it.\n"
-        "te_aip_country_tick = {\n"
+        "# A serial for the country in scope, the first time the probe sees it: at its first monthly pulse, or at an\n"
+        "# event before that (version 1 logged such events, and every play, with id 0).\n"
+        "te_aip_ensure_id = {\n"
         "\tif = {\n"
         "\t\tlimit = { NOT = { has_variable = te_aip_id } }\n"
         "\t\tchange_global_variable = { name = te_aip_next_id add = 1 }\n"
         "\t\tset_variable = { name = te_aip_id value = global_var:te_aip_next_id }\n"
         "\t\tset_variable = { name = te_aip_m value = te_aip_id_phase }\n"
         "\t}\n"
+        "}\n\n"
+        "# A country's month: a serial on first sight, then a snapshot every twelfth month, in the month its serial\n"
+        "# gives it.\n"
+        "te_aip_country_tick = {\n"
+        "\tte_aip_ensure_id = yes\n"
         "\tif = {\n"
         "\t\tlimit = { NOT = { has_variable = te_aip_m } }\n"
         "\t\tset_variable = { name = te_aip_m value = 0 }\n"
@@ -673,14 +808,31 @@ def render_effects(cat: dict) -> str:
     out.append("}\n\n")
 
     out.append(
-        "# A law's enactment, as it starts and as it ends: the law by its index (ai_probe_key.json, all_laws).\n"
+        "# A law's enactment as it starts, passes or fails: the law by its index (ai_probe_key.json, all_laws).\n"
         "te_aip_law_event = {\n"
+        "\tte_aip_ensure_id = yes\n"
         "\tte_aip_count = { N = law_$WHAT$ }\n"
-        f"\tdebug_log = \"TE_AIP E law_$WHAT$ {LINE_HEAD} law=[THIS.ScriptValue('te_aip_law_enacting')|0] "
-        "chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] "
-        "setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]\"\n"
+        f"\tdebug_log = \"TE_AIP E law_$WHAT$ {LINE_HEAD} {LAW_FIELDS}\"\n"
+        "}\n\n"
+        "# An enactment's end, with how it ended (ai_probe_key.json, law_end_how) and the setbacks it could take. The\n"
+        "# pass and fail hooks mark it just before (te_aip_law_how); the pass's mark stays for on_law_activated, which\n"
+        "# follows the end (vanilla's 00_code_on_actions.txt), so that activation is not counted as a law set by\n"
+        "# script (te_aip_law_activated). Any other mark is spent here.\n"
+        "te_aip_law_end_event = {\n"
+        "\tte_aip_ensure_id = yes\n"
+        "\tte_aip_count = { N = law_end }\n"
+        f"\tdebug_log = \"TE_AIP E law_end {LINE_HEAD} {LAW_FIELDS} "
+        "how=[THIS.ScriptValue('te_aip_ev_law_how')|0] max=[THIS.ScriptValue('te_aip_ev_max_setbacks')|0]\"\n"
+        "\tif = {\n"
+        "\t\tlimit = {\n"
+        "\t\t\thas_variable = te_aip_law_how\n"
+        "\t\t\tNOT = { var:te_aip_law_how = 1 }\n"
+        "\t\t}\n"
+        "\t\tremove_variable = te_aip_law_how\n"
+        "\t}\n"
         "}\n\n"
         "te_aip_default_event = {\n"
+        "\tte_aip_ensure_id = yes\n"
         f"\tdebug_log = \"TE_AIP E $WHAT$ {LINE_HEAD} debt=[THIS.ScriptValue('te_aip_debt_scaled')|3] "
         "gold=[THIS.ScriptValue('te_aip_gold')|0] net_fixed=[THIS.ScriptValue('te_aip_net_fixed')|0]\"\n"
         "}\n\n"
@@ -709,6 +861,33 @@ EVENT_VALUES = (
     "te_aip_ev_enact_chance = { value = enactment_chance }\n"
     "te_aip_ev_stall_chance = { value = stall_chance }\n"
     "te_aip_ev_setbacks = { value = enactment_setback_count }\n"
+    "# Version 2, at a law's end: how it ended (ai_probe_key.json, law_end_how), and the setbacks it could take.\n"
+    "te_aip_ev_law_how = {\n"
+    "\tvalue = 3\n"
+    "\tif = { limit = { has_variable = te_aip_law_how } value = var:te_aip_law_how }\n"
+    "\telse_if = { limit = { currently_enacting_law ?= { law_is_available = no } } value = 4 }\n"
+    "}\n"
+    "te_aip_ev_max_setbacks = { value = max_law_enactment_setbacks }\n"
+    "\n"
+    "# --- version 2, read at a diplomatic play: the globals te_aip_play_started sets ---\n"
+    + "".join(
+        f"te_aip_ev_play_{name} = {{ value = 0 if = {{ limit = {{ has_global_variable = te_aip_play_{name} }} "
+        f"value = global_var:te_aip_play_{name} }} }}\n"
+        for name in ("type", "a_id", "a_rank", "b_id", "b_rank"))
+    + "\n"
+    "# --- version 2, the W line: the world outside the AI countries ---\n"
+    "te_aip_w_countries = {\n"
+    "\tvalue = 0\n"
+    "\tevery_country = { limit = { NOT = { is_country_type = decentralized } } add = 1 }\n"
+    "}\n"
+    "te_aip_w_dn = {\n"
+    "\tvalue = 0\n"
+    "\tevery_country = { limit = { is_country_type = decentralized } add = 1 }\n"
+    "}\n"
+    "te_aip_w_dn_states = {\n"
+    "\tvalue = 0\n"
+    "\tevery_country = { limit = { is_country_type = decentralized } add = num_states }\n"
+    "}\n"
 )
 
 
@@ -733,33 +912,71 @@ te_aip_country_monthly = {
 }
 
 # Root = the law's country; currently_enacting_law still holds in all four (vanilla's 00_code_on_actions.txt).
+# The pass and fail hooks run just before the end hook (the first run's log: each law_pass line is followed by its
+# law_end), so each marks how the enactment ended for the end hook to log (te_aip_law_end_event). A mark left from
+# an earlier enactment is cleared when the next one starts.
 on_law_enactment_started = {
 	on_actions = { te_aip_law_started }
 }
 te_aip_law_started = {
 	trigger = { has_global_variable = te_aip_on }
-	effect = { te_aip_law_event = { WHAT = start } }
+	effect = {
+		if = {
+			limit = { has_variable = te_aip_law_how }
+			remove_variable = te_aip_law_how
+		}
+		te_aip_law_event = { WHAT = start }
+	}
 }
 on_law_enactment_pass = {
 	on_actions = { te_aip_law_passed }
 }
 te_aip_law_passed = {
 	trigger = { has_global_variable = te_aip_on }
-	effect = { te_aip_law_event = { WHAT = pass } }
+	effect = {
+		set_variable = { name = te_aip_law_how value = 1 }
+		te_aip_law_event = { WHAT = pass }
+	}
 }
+# Fires only when the setbacks reach the country's maximum (vanilla's comment on the hook); none did in the first
+# long run (gen_ai_probe.py, LAW_END_HOW).
 on_law_enactment_fail = {
 	on_actions = { te_aip_law_failed }
 }
 te_aip_law_failed = {
 	trigger = { has_global_variable = te_aip_on }
-	effect = { te_aip_law_event = { WHAT = fail } }
+	effect = {
+		set_variable = { name = te_aip_law_how value = 2 }
+		te_aip_law_event = { WHAT = fail }
+	}
 }
 on_law_enactment_ended = {
 	on_actions = { te_aip_law_ended }
 }
 te_aip_law_ended = {
 	trigger = { has_global_variable = te_aip_on }
-	effect = { te_aip_law_event = { WHAT = end } }
+	effect = { te_aip_law_end_event = yes }
+}
+
+# Root = the law; owner = its country. Every activation: a passed enactment's (its end hook left the pass mark,
+# taken here), or a law set any other way, counted as law_set: by script (the mod's law-consistency sweep, an
+# event), a revolution, or a new country's setup. A sweep's nested activation runs this again and counts too.
+on_law_activated = {
+	on_actions = { te_aip_law_activated }
+}
+te_aip_law_activated = {
+	trigger = { has_global_variable = te_aip_on }
+	effect = {
+		owner ?= {
+			if = {
+				limit = { has_variable = te_aip_law_how }
+				remove_variable = te_aip_law_how
+			}
+			else = {
+				te_aip_count = { N = law_set }
+			}
+		}
+	}
 }
 
 # Root = the country.
@@ -802,15 +1019,33 @@ te_aip_company_established = {
 	effect = { te_aip_count = { N = company } }
 }
 
-# Root = the play; scope:initiator and scope:target are the hook's own (vanilla's comment on the on-action).
+# Root = the play; scope:initiator and scope:target are the hook's own (vanilla's comment on the on-action). A
+# script value read in a debug_log line cannot see a scope (scripting_best_practices.md, `debug_log` Loc-String
+# Templating Limitations), so the play's type and each side's serial and rank go through global variables set
+# here, where the scopes are visible. Version 1 printed 0 for the initiator's serial.
 on_diplomatic_play_started = {
 	on_actions = { te_aip_play_started }
 }
 te_aip_play_started = {
 	trigger = { has_global_variable = te_aip_on }
 	effect = {
-		scope:initiator ?= { te_aip_count = { N = play } }
-		debug_log = "TE_AIP E play [SCOPE.sCountry('initiator').GetTagName] 0 [SCOPE.ScriptValue('te_aip_k')|0] target=[SCOPE.sCountry('target').GetTagName]"
+		set_global_variable = { name = te_aip_play_type value = te_aip_play_type_index }
+		set_global_variable = { name = te_aip_play_a_id value = 0 }
+		set_global_variable = { name = te_aip_play_a_rank value = 0 }
+		set_global_variable = { name = te_aip_play_b_id value = 0 }
+		set_global_variable = { name = te_aip_play_b_rank value = 0 }
+		scope:initiator ?= {
+			te_aip_ensure_id = yes
+			te_aip_count = { N = play }
+			set_global_variable = { name = te_aip_play_a_id value = var:te_aip_id }
+			set_global_variable = { name = te_aip_play_a_rank value = te_aip_rank }
+		}
+		scope:target ?= {
+			te_aip_ensure_id = yes
+			set_global_variable = { name = te_aip_play_b_id value = var:te_aip_id }
+			set_global_variable = { name = te_aip_play_b_rank value = te_aip_rank }
+		}
+		debug_log = "TE_AIP E play [SCOPE.sCountry('initiator').GetTagName] [SCOPE.ScriptValue('te_aip_ev_play_a_id')|0] [SCOPE.ScriptValue('te_aip_k')|0] target=[SCOPE.sCountry('target').GetTagName] type=[SCOPE.ScriptValue('te_aip_ev_play_type')|0] rank=[SCOPE.ScriptValue('te_aip_ev_play_a_rank')|0] target_rank=[SCOPE.ScriptValue('te_aip_ev_play_b_rank')|0] target_id=[SCOPE.ScriptValue('te_aip_ev_play_b_id')|0]"
 	}
 }
 on_diplo_play_war_start = {
@@ -925,6 +1160,17 @@ def render_key(cat: dict) -> str:
         "positional_groups": list(POSITIONAL),
         "lines": {name: [field.key for field in part] for name, part in snapshot_lines(cat)},
         "data_functions": [key for _, key, _ in DATA_FUNCTIONS],
+        # Version 2.
+        "level_names": LEVEL_NAMES,
+        "level_fields": LEVEL_FIELDS,
+        "law_end_how": LAW_END_HOW,
+        "play_types": cat["play_types"],
+        "tech_flags": {"h_" + tech.replace("-", "_"): tech for tech in cat["tech_flags"]},
+        # Each R field's unit types; for a field of one type, its group, tier and unlocking technologies.
+        "unit_line": {field: members for field, members in cat["unit_line"]},
+        "unit_info": {field: cat["unit_types"][members[0]] for field, members in cat["unit_line"]
+                      if len(members) == 1},
+        "world_fields": WORLD_FIELDS,
     }
     return json.dumps(key, indent=1) + "\n"
 

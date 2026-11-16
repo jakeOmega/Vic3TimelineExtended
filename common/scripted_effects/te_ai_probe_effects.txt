@@ -26,7 +26,7 @@ te_aip_arm = {
 		set_global_variable = { name = te_aip_k value = 0 }
 		set_global_variable = { name = te_aip_next_id value = 0 }
 	}
-	debug_log = "TE_AIP ARM v=1"
+	debug_log = "TE_AIP ARM v=2"
 	ordered_country = {
 		limit = { NOT = { is_country_type = decentralized } }
 		order_by = gdp
@@ -86,19 +86,29 @@ te_aip_global_tick = {
 		random_country = {
 			debug_log = "TE_AIP K [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0]"
 			debug_log = "TE_AIP KDATE [THIS.ScriptValue('te_aip_k')|0] [TimeKeeper.GetCurrentDate.GetString]"
+			if = {
+				limit = { te_aip_k_phase = 1 }
+				debug_log = "TE_AIP W [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0] countries=[THIS.ScriptValue('te_aip_w_countries')|0] dn=[THIS.ScriptValue('te_aip_w_dn')|0] dn_states=[THIS.ScriptValue('te_aip_w_dn_states')|0]"
+			}
 		}
 	}
 }
 
-# A country's month: a serial on first sight, then a snapshot every twelfth month, in the month its serial
-# gives it.
-te_aip_country_tick = {
+# A serial for the country in scope, the first time the probe sees it: at its first monthly pulse, or at an
+# event before that (version 1 logged such events, and every play, with id 0).
+te_aip_ensure_id = {
 	if = {
 		limit = { NOT = { has_variable = te_aip_id } }
 		change_global_variable = { name = te_aip_next_id add = 1 }
 		set_variable = { name = te_aip_id value = global_var:te_aip_next_id }
 		set_variable = { name = te_aip_m value = te_aip_id_phase }
 	}
+}
+
+# A country's month: a serial on first sight, then a snapshot every twelfth month, in the month its serial
+# gives it.
+te_aip_country_tick = {
+	te_aip_ensure_id = yes
 	if = {
 		limit = { NOT = { has_variable = te_aip_m } }
 		set_variable = { name = te_aip_m value = 0 }
@@ -121,8 +131,9 @@ te_aip_snapshot = {
 	debug_log = "TE_AIP S U1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] ux_all=[THIS.ScriptValue('te_aip_ux_all')|0] ux_banking=[THIS.ScriptValue('te_aip_ux_banking')|0] ux_climate=[THIS.ScriptValue('te_aip_ux_climate')|0] ux_colonial=[THIS.ScriptValue('te_aip_ux_colonial')|0] ux_covert=[THIS.ScriptValue('te_aip_ux_covert')|0] ux_culture=[THIS.ScriptValue('te_aip_ux_culture')|0] ux_drugs=[THIS.ScriptValue('te_aip_ux_drugs')|0] ux_energy_industry=[THIS.ScriptValue('te_aip_ux_energy_industry')|0] ux_family=[THIS.ScriptValue('te_aip_ux_family')|0] ux_nuclear=[THIS.ScriptValue('te_aip_ux_nuclear')|0] ux_nuclear_taboo=[THIS.ScriptValue('te_aip_ux_nuclear_taboo')|0] ux_pensions=[THIS.ScriptValue('te_aip_ux_pensions')|0] ux_space=[THIS.ScriptValue('te_aip_ux_space')|0] ux_un=[THIS.ScriptValue('te_aip_ux_un')|0] ui_pension_reform=[THIS.ScriptValue('te_aip_ui_pension_reform')|0]"
 	debug_log = "TE_AIP S U2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] ui_reserve=[THIS.ScriptValue('te_aip_ui_reserve')|0] ui_tax_code=[THIS.ScriptValue('te_aip_ui_tax_code')|0] ui_un=[THIS.ScriptValue('te_aip_ui_un')|0] ui_war_tax=[THIS.ScriptValue('te_aip_ui_war_tax')|0]"
 	debug_log = "TE_AIP S C1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] queue_levels=[THIS.ScriptValue('te_aip_queue_levels')|0] queue_gov=[THIS.ScriptValue('te_aip_queue_gov')|0] queue_priv=[THIS.ScriptValue('te_aip_queue_priv')|0] queue_n=[THIS.ScriptValue('te_aip_queue_n')|0] queue_n_gov=[THIS.ScriptValue('te_aip_queue_n_gov')|0] queue_n_priv=[THIS.ScriptValue('te_aip_queue_n_priv')|0] queue_days=[THIS.ScriptValue('te_aip_queue_days')|0] queue_days_gov=[THIS.ScriptValue('te_aip_queue_days_gov')|0] paused=[THIS.ScriptValue('te_aip_paused')|0] wasted=[THIS.ScriptValue('te_aip_wasted')|0] healthy=[THIS.ScriptValue('te_aip_healthy')|0] cm_target=[THIS.ScriptValue('te_aip_cm_target')|3] cm_price=[THIS.ScriptValue('te_aip_cm_price')|0] cm_public=[THIS.ScriptValue('te_aip_cm_public')|3] companies=[THIS.ScriptValue('te_aip_companies')|0]"
-	debug_log = "TE_AIP S C2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] companies_max=[THIS.ScriptValue('te_aip_companies_max')|0]"
+	debug_log = "TE_AIP S C2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] companies_max=[THIS.ScriptValue('te_aip_companies_max')|0] bubble=[THIS.ScriptValue('te_aip_bubble')|1] cm_level_max=[THIS.ScriptValue('te_aip_cm_level_max')|2] cm_admin=[THIS.ScriptValue('te_aip_cm_admin')|0]"
 	debug_log = "TE_AIP S O1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] low_mfg=[THIS.ScriptValue('te_aip_low_mfg')|0] low_infra=[THIS.ScriptValue('te_aip_low_infra')|0] low_power=[THIS.ScriptValue('te_aip_low_power')|0] low_mine=[THIS.ScriptValue('te_aip_low_mine')|0] rt_mfg=[THIS.ScriptValue('te_aip_rt_mfg')|0] rt_infra=[THIS.ScriptValue('te_aip_rt_infra')|0] rt_power=[THIS.ScriptValue('te_aip_rt_power')|0] rt_mine=[THIS.ScriptValue('te_aip_rt_mine')|0] rt_all=[THIS.ScriptValue('te_aip_rt_all')|0] sub_all=[THIS.ScriptValue('te_aip_sub_all')|0] uc_no_light=[THIS.ScriptValue('te_aip_uc_no_light')|0] uc_no_transit=[THIS.ScriptValue('te_aip_uc_no_transit')|0] uc_stalls=[THIS.ScriptValue('te_aip_uc_stalls')|0] ga_simple=[THIS.ScriptValue('te_aip_ga_simple')|0] uni_scholastic=[THIS.ScriptValue('te_aip_uni_scholastic')|0]"
+	debug_log = "TE_AIP S O2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] low_mfg_nc=[THIS.ScriptValue('te_aip_low_mfg_nc')|0]"
 	debug_log = "TE_AIP S M1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] army=[THIS.ScriptValue('te_aip_army')|0] army_conscripts=[THIS.ScriptValue('te_aip_army_conscripts')|0] navy=[THIS.ScriptValue('te_aip_navy')|0] army_power=[THIS.ScriptValue('te_aip_army_power')|0] navy_power=[THIS.ScriptValue('te_aip_navy_power')|0] army_tier=[THIS.ScriptValue('te_aip_army_tier')|2] irregular=[THIS.ScriptValue('te_aip_irregular')|3] line=[THIS.ScriptValue('te_aip_line')|3] alliances=[THIS.ScriptValue('te_aip_alliances')|0] defensive_pacts=[THIS.ScriptValue('te_aip_defensive_pacts')|0] rivals=[THIS.ScriptValue('te_aip_rivals')|0] interests=[THIS.ScriptValue('te_aip_interests')|0] colony_growth=[THIS.ScriptValue('te_aip_colony_growth')|1]"
 	debug_log = "TE_AIP S Y1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] strat_admin=[THIS.ScriptValue('te_aip_strat_admin')|0] strat_political=[THIS.ScriptValue('te_aip_strat_political')|0] strat_diplomatic=[THIS.ScriptValue('te_aip_strat_diplomatic')|0] law_enacting=[THIS.ScriptValue('te_aip_law_enacting')|0] tech_researching=[THIS.ScriptValue('te_aip_tech_researching')|0]"
 	debug_log = "TE_AIP S L1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_lw_governance_principles')|0];[THIS.ScriptValue('te_aip_lw_distribution_of_power')|0];[THIS.ScriptValue('te_aip_lw_citizenship')|0];[THIS.ScriptValue('te_aip_lw_caste_hegemony')|0];[THIS.ScriptValue('te_aip_lw_edo_social_system')|0];[THIS.ScriptValue('te_aip_lw_church_and_state')|0];[THIS.ScriptValue('te_aip_lw_bureaucracy')|0];[THIS.ScriptValue('te_aip_lw_army_model')|0];[THIS.ScriptValue('te_aip_lw_navy_model')|0];[THIS.ScriptValue('te_aip_lw_internal_security')|0];[THIS.ScriptValue('te_aip_lw_economic_system')|0];[THIS.ScriptValue('te_aip_lw_trade_policy')|0];[THIS.ScriptValue('te_aip_lw_taxation')|0];[THIS.ScriptValue('te_aip_lw_land_reform')|0];[THIS.ScriptValue('te_aip_lw_colonization')|0];[THIS.ScriptValue('te_aip_lw_policing')|0];[THIS.ScriptValue('te_aip_lw_education_system')|0];[THIS.ScriptValue('te_aip_lw_health_system')|0];[THIS.ScriptValue('te_aip_lw_free_speech')|0];[THIS.ScriptValue('te_aip_lw_labor_rights')|0];[THIS.ScriptValue('te_aip_lw_childrens_rights')|0];[THIS.ScriptValue('te_aip_lw_rights_of_women')|0]"
@@ -138,7 +149,10 @@ te_aip_snapshot = {
 	debug_log = "TE_AIP S B1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] bt_construction_sector=[THIS.ScriptValue('te_aip_bt_construction_sector')|0] bt_government_administration=[THIS.ScriptValue('te_aip_bt_government_administration')|0] bt_university=[THIS.ScriptValue('te_aip_bt_university')|0] bt_barrack=[THIS.ScriptValue('te_aip_bt_barrack')|0] bt_conscription_center=[THIS.ScriptValue('te_aip_bt_conscription_center')|0] bt_military_base=[THIS.ScriptValue('te_aip_bt_military_base')|0] bt_shipyard=[THIS.ScriptValue('te_aip_bt_shipyard')|0] bt_naval_administration=[THIS.ScriptValue('te_aip_bt_naval_administration')|0] bt_naval_logistics_center=[THIS.ScriptValue('te_aip_bt_naval_logistics_center')|0] bt_port=[THIS.ScriptValue('te_aip_bt_port')|0] bt_railway=[THIS.ScriptValue('te_aip_bt_railway')|0] bt_highway=[THIS.ScriptValue('te_aip_bt_highway')|0] bt_airport=[THIS.ScriptValue('te_aip_bt_airport')|0] bt_network_infrastructure=[THIS.ScriptValue('te_aip_bt_network_infrastructure')|0] bt_power_plant=[THIS.ScriptValue('te_aip_bt_power_plant')|0]"
 	debug_log = "TE_AIP S B2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] bt_hydro_plant=[THIS.ScriptValue('te_aip_bt_hydro_plant')|0] bt_nuclear_plant=[THIS.ScriptValue('te_aip_bt_nuclear_plant')|0] bt_renewable_energy_plant=[THIS.ScriptValue('te_aip_bt_renewable_energy_plant')|0] bt_fusion_plant=[THIS.ScriptValue('te_aip_bt_fusion_plant')|0] bt_urban_center=[THIS.ScriptValue('te_aip_bt_urban_center')|0] bt_trade_center=[THIS.ScriptValue('te_aip_bt_trade_center')|0] bt_art_academy=[THIS.ScriptValue('te_aip_bt_art_academy')|0] bt_financial_district=[THIS.ScriptValue('te_aip_bt_financial_district')|0] bt_manor_house=[THIS.ScriptValue('te_aip_bt_manor_house')|0] bt_company_headquarter=[THIS.ScriptValue('te_aip_bt_company_headquarter')|0] bt_public_housing=[THIS.ScriptValue('te_aip_bt_public_housing')|0] bt_software_industry=[THIS.ScriptValue('te_aip_bt_software_industry')|0] bt_electronic_components_and_semiconductor_industry=[THIS.ScriptValue('te_aip_bt_electronic_components_and_semiconductor_industry')|0]"
 	debug_log = "TE_AIP S N1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] n_built=[THIS.ScriptValue('te_aip_n_built')|0] n_expanded=[THIS.ScriptValue('te_aip_n_expanded')|0] n_built_gov=[THIS.ScriptValue('te_aip_n_built_gov')|0] n_built_mil=[THIS.ScriptValue('te_aip_n_built_mil')|0] n_built_infra=[THIS.ScriptValue('te_aip_n_built_infra')|0] n_built_power=[THIS.ScriptValue('te_aip_n_built_power')|0] n_built_ind=[THIS.ScriptValue('te_aip_n_built_ind')|0] n_built_res=[THIS.ScriptValue('te_aip_n_built_res')|0] n_built_agri=[THIS.ScriptValue('te_aip_n_built_agri')|0] n_pm=[THIS.ScriptValue('te_aip_n_pm')|0] n_tech=[THIS.ScriptValue('te_aip_n_tech')|0] n_law_start=[THIS.ScriptValue('te_aip_n_law_start')|0] n_law_pass=[THIS.ScriptValue('te_aip_n_law_pass')|0] n_law_fail=[THIS.ScriptValue('te_aip_n_law_fail')|0] n_law_end=[THIS.ScriptValue('te_aip_n_law_end')|0]"
-	debug_log = "TE_AIP S N2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] n_default=[THIS.ScriptValue('te_aip_n_default')|0] n_play=[THIS.ScriptValue('te_aip_n_play')|0] n_war=[THIS.ScriptValue('te_aip_n_war')|0] n_reform=[THIS.ScriptValue('te_aip_n_reform')|0] n_company=[THIS.ScriptValue('te_aip_n_company')|0] n_colony=[THIS.ScriptValue('te_aip_n_colony')|0] n_inst_up=[THIS.ScriptValue('te_aip_n_inst_up')|0] n_inst_down=[THIS.ScriptValue('te_aip_n_inst_down')|0]"
+	debug_log = "TE_AIP S N2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] n_default=[THIS.ScriptValue('te_aip_n_default')|0] n_play=[THIS.ScriptValue('te_aip_n_play')|0] n_war=[THIS.ScriptValue('te_aip_n_war')|0] n_reform=[THIS.ScriptValue('te_aip_n_reform')|0] n_company=[THIS.ScriptValue('te_aip_n_company')|0] n_colony=[THIS.ScriptValue('te_aip_n_colony')|0] n_inst_up=[THIS.ScriptValue('te_aip_n_inst_up')|0] n_inst_down=[THIS.ScriptValue('te_aip_n_inst_down')|0] n_law_set=[THIS.ScriptValue('te_aip_n_law_set')|0]"
+	debug_log = "TE_AIP S J1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_im_colonial_affairs')|0];[THIS.ScriptValue('te_aip_im_social_security')|0];[THIS.ScriptValue('te_aip_im_workplace_safety')|0];[THIS.ScriptValue('te_aip_im_schools')|0];[THIS.ScriptValue('te_aip_im_police')|0];[THIS.ScriptValue('te_aip_im_health_system')|0];[THIS.ScriptValue('te_aip_im_home_affairs')|0];[THIS.ScriptValue('te_aip_im_ministry_of_war')|0];[THIS.ScriptValue('te_aip_im_ministry_of_commerce')|0];[THIS.ScriptValue('te_aip_im_ministry_of_foreign_affairs')|0];[THIS.ScriptValue('te_aip_im_national_bank')|0];[THIS.ScriptValue('te_aip_im_ministry_of_culture')|0];[THIS.ScriptValue('te_aip_im_ministry_of_labor')|0];[THIS.ScriptValue('te_aip_im_ministry_of_the_environment')|0];[THIS.ScriptValue('te_aip_im_ministry_of_intelligence_and_security')|0];[THIS.ScriptValue('te_aip_im_ministry_of_refugee_affairs')|0];[THIS.ScriptValue('te_aip_im_ministry_of_propaganda')|0];[THIS.ScriptValue('te_aip_im_ministry_of_science')|0];[THIS.ScriptValue('te_aip_im_ministry_of_thought_control')|0];[THIS.ScriptValue('te_aip_im_ministry_of_consumer_protection')|0];[THIS.ScriptValue('te_aip_im_ministry_of_urban_planning')|0];[THIS.ScriptValue('te_aip_im_ministry_of_religion')|0];[THIS.ScriptValue('te_aip_im_ministry_of_international_aid')|0];[THIS.ScriptValue('te_aip_im_migration_controls')|0]"
+	debug_log = "TE_AIP S R1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_u_irregular_infantry')|3];[THIS.ScriptValue('te_aip_u_line_infantry')|3];[THIS.ScriptValue('te_aip_u_skirmish_infantry')|3];[THIS.ScriptValue('te_aip_u_trench_infantry')|3];[THIS.ScriptValue('te_aip_u_squad_infantry')|3];[THIS.ScriptValue('te_aip_u_mechanized_infantry')|3];[THIS.ScriptValue('te_aip_u_armored_infantry')|3];[THIS.ScriptValue('te_aip_u_cannon_artillery')|3];[THIS.ScriptValue('te_aip_u_mobile_artillery')|3];[THIS.ScriptValue('te_aip_u_shrapnel_artillery')|3];[THIS.ScriptValue('te_aip_u_siege_artillery')|3];[THIS.ScriptValue('te_aip_u_motorized_artillery')|3];[THIS.ScriptValue('te_aip_u_hussars')|3];[THIS.ScriptValue('te_aip_u_dragoons')|3];[THIS.ScriptValue('te_aip_u_cuirassiers')|3];[THIS.ScriptValue('te_aip_u_lancers')|3];[THIS.ScriptValue('te_aip_u_light_tanks')|3];[THIS.ScriptValue('te_aip_u_tanks')|3];[THIS.ScriptValue('te_aip_u_marines')|3];[THIS.ScriptValue('te_aip_u_air')|3];[THIS.ScriptValue('te_aip_u_later')|3]"
+	debug_log = "TE_AIP S H1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_h_rationalism')|0];[THIS.ScriptValue('te_aip_h_academia')|0];[THIS.ScriptValue('te_aip_h_empiricism')|0];[THIS.ScriptValue('te_aip_h_civilizing_mission')|0];[THIS.ScriptValue('te_aip_h_human_rights')|0];[THIS.ScriptValue('te_aip_h_pan_nationalism')|0];[THIS.ScriptValue('te_aip_h_nationalism')|0];[THIS.ScriptValue('te_aip_h_currency_standards')|0];[THIS.ScriptValue('te_aip_h_colonization')|0];[THIS.ScriptValue('te_aip_h_quinine')|0];[THIS.ScriptValue('te_aip_h_malaria_prevention')|0];[THIS.ScriptValue('te_aip_h_military_drill')|0];[THIS.ScriptValue('te_aip_h_line_infantry')|0];[THIS.ScriptValue('te_aip_h_general_staff')|0];[THIS.ScriptValue('te_aip_h_trench_works')|0];[THIS.ScriptValue('te_aip_h_nco_training')|0];[THIS.ScriptValue('te_aip_h_mobile_armor')|0];[THIS.ScriptValue('te_aip_h_combined_arms')|0];[THIS.ScriptValue('te_aip_h_artillery')|0];[THIS.ScriptValue('te_aip_h_napoleonic_warfare')|0];[THIS.ScriptValue('te_aip_h_breech_loading_artillery')|0];[THIS.ScriptValue('te_aip_h_defense_in_depth')|0];[THIS.ScriptValue('te_aip_h_motorized_artillery')|0];[THIS.ScriptValue('te_aip_h_standing_army')|0]"
 	te_aip_snapshot_data_functions = yes
 	set_variable = { name = te_aip_n_built value = 0 }
 	set_variable = { name = te_aip_n_expanded value = 0 }
@@ -163,6 +177,7 @@ te_aip_snapshot = {
 	set_variable = { name = te_aip_n_colony value = 0 }
 	set_variable = { name = te_aip_n_inst_up value = 0 }
 	set_variable = { name = te_aip_n_inst_down value = 0 }
+	set_variable = { name = te_aip_n_law_set value = 0 }
 }
 
 # The interface's figures (see te_aip_canary).
@@ -175,13 +190,32 @@ te_aip_snapshot_data_functions = {
 	debug_log = "TE_AIP X 6 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] enacting=[THIS.GetCountry.GetLawBeingEnacted.GetNameNoFormatting]"
 }
 
-# A law's enactment, as it starts and as it ends: the law by its index (ai_probe_key.json, all_laws).
+# A law's enactment as it starts, passes or fails: the law by its index (ai_probe_key.json, all_laws).
 te_aip_law_event = {
+	te_aip_ensure_id = yes
 	te_aip_count = { N = law_$WHAT$ }
 	debug_log = "TE_AIP E law_$WHAT$ [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]"
 }
 
+# An enactment's end, with how it ended (ai_probe_key.json, law_end_how) and the setbacks it could take. The
+# pass and fail hooks mark it just before (te_aip_law_how); the pass's mark stays for on_law_activated, which
+# follows the end (vanilla's 00_code_on_actions.txt), so that activation is not counted as a law set by
+# script (te_aip_law_activated). Any other mark is spent here.
+te_aip_law_end_event = {
+	te_aip_ensure_id = yes
+	te_aip_count = { N = law_end }
+	debug_log = "TE_AIP E law_end [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0] how=[THIS.ScriptValue('te_aip_ev_law_how')|0] max=[THIS.ScriptValue('te_aip_ev_max_setbacks')|0]"
+	if = {
+		limit = {
+			has_variable = te_aip_law_how
+			NOT = { var:te_aip_law_how = 1 }
+		}
+		remove_variable = te_aip_law_how
+	}
+}
+
 te_aip_default_event = {
+	te_aip_ensure_id = yes
 	debug_log = "TE_AIP E $WHAT$ [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] debt=[THIS.ScriptValue('te_aip_debt_scaled')|3] gold=[THIS.ScriptValue('te_aip_gold')|0] net_fixed=[THIS.ScriptValue('te_aip_net_fixed')|0]"
 }
 
