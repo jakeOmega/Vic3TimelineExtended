@@ -8558,8 +8558,9 @@ te_mon_board_wrong_stance = {
 # THE ADOPTERS' THREE (te_mon_union_adopter, _banking_union, _reserve) ARE ALSO
 # ON THE ISSUER since 2026-11-14 (§0.14): the leader of a bloc whose currency a
 # member has adopted uses that currency too (te_mon_uses_common_currency), so
-# it carries the same modifiers at the same figures; the banking union only
-# where its own banking law is not Unregulated Banking.
+# it carries the same modifiers at the same figures. The banking union reaches
+# neither side under Unregulated Banking (te_mon_union_in_banking_union; the
+# issuer since 2026-11-14, an adopter since 2026-11-15, #1812).
 
 # MANAGED, flat; on an ADOPTER while kind = 2, and on the issuer
 # (te_monetary_update_union). One money, no conversion: the design's
@@ -8573,7 +8574,7 @@ te_mon_union_adopter = {
 }
 
 # MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 4
-# (the banking union).
+# (the banking union) and its own banking law is not Unregulated Banking.
 # One supervisor and one deposit guarantee across the whole currency area: the
 # cycle is steadier, crashes are rarer, and there is one more intervention in
 # reserve for when one comes anyway. The other half of the tier — contagion

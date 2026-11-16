@@ -298,19 +298,46 @@ te_mon_uses_common_currency = {
 	}
 }
 
-# Has the LEADER a regulator for the union to work through? Every banking law
+# Has this country a regulator for the union to work through? Every banking law
 # but Unregulated Banking. That law's whole identity is its budget: with the
-# national bank a leader must have it holds 2 points, and its unlocked tools
-# cost 3 (Bail-in Regime, Infrastructure and Armaments credit, Emergency Import
-# Financing) and 4 (Open-Market Operations, the Deposit Guarantee, Emergency
-# Liquidity, Heavy Industry credit), so a single point more hands it tools the
-# law denies it. Every other law can already afford each tool its locks leave
-# open, so extra points there only let more of them run at once. Asked of the
-# leader's own extra interventions and of its place in the banking union
-# (which carries a point of its own, and the supervision a laissez-faire
-# banking system has nobody to submit to).
-te_mon_union_issuer_has_regulator = {
+# national bank a leader or an adopter must have it holds 2 points, and its
+# unlocked tools cost 3 (Bail-in Regime, Infrastructure and Armaments credit,
+# Emergency Import Financing) and 4 (Open-Market Operations, the Deposit
+# Guarantee, Emergency Liquidity, Heavy Industry credit), so a single point
+# more hands it tools the law denies it. Every other law can already afford
+# each tool its locks leave open, so extra points there only let more of them
+# run at once. Asked of the leader's own extra interventions, and of a place in
+# the banking union for EITHER side of the currency (which carries a point of
+# its own, and the supervision a laissez-faire banking system has nobody to
+# submit to).
+#
+# THE ADOPTER'S SIDE TOO, since 2026-11-15 (#1812). As built on 2026-11-14 this
+# was asked of the issuer only (te_mon_union_issuer_has_regulator), and an
+# adopter under Unregulated Banking kept the banking union and its point: 3
+# with its national bank, the Bail-in Regime's cost. In the owner's 1958 save 9
+# of 57 adopters were under that law, each with the modifier on its banking
+# entry, and three of the four read had a Bail-in Regime in force.
+te_mon_union_has_regulator = {
 	NOT = { has_law_or_variant = law_type:law_unregulated_banking }
+}
+
+# In the banking union: on either side of a common currency at tier 4 or above,
+# under a banking law with a regulator. What te_mon_union_banking_union is
+# applied on (te_monetary_update_union), and what the adoption score counts.
+te_mon_union_in_banking_union = {
+	te_mon_bloc_union_tier_4_plus = yes
+	te_mon_uses_common_currency = yes
+	te_mon_union_has_regulator = yes
+}
+
+# ...and the one country that is in the currency at that tier and NOT in the
+# banking union, for the Monetary Union row's tooltip, which says why
+# (te_mon_union_regulator_note): the player must be able to see what withholds
+# the point.
+te_mon_union_outside_banking_union = {
+	te_mon_bloc_union_tier_4_plus = yes
+	te_mon_uses_common_currency = yes
+	te_mon_union_has_regulator = no
 }
 
 # Can this country's private investors spend what the investment pool already

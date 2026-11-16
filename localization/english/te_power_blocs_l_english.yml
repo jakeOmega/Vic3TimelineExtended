@@ -4,7 +4,7 @@
 # POWER_BLOCS
 #
  power_bloc_banking_union_bool:0 "[concept_banking_common_currency] Banking Union"
- power_bloc_banking_union_bool_desc:0 "One supervisor and one deposit guarantee for the banks of every adopter, and of the leader under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter."
+ power_bloc_banking_union_bool_desc:0 "One supervisor and one deposit guarantee for the banks of every country using the currency, under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter."
  power_bloc_can_enact_decree_cultural_emigration_initiative_bool:0 "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]"
  power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc:0 "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries."
  power_bloc_can_enact_greenest_grass_campaign_bool:0 "Can Enact Greenest Grass Campaign"
