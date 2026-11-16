@@ -5,6 +5,17 @@ te_aml_match_g = { value = global_var:te_aml_match }
 te_aml_mismatch_g = { value = global_var:te_aml_mismatch }
 te_aml_unlisted_g = { value = global_var:te_aml_unlisted }
 te_aml_unlisted_acted_g = { value = global_var:te_aml_unlisted_acted }
+te_aml_vanilla_listed_g = { value = global_var:te_aml_vanilla_listed }
+te_aml_vanilla_match_g = { value = global_var:te_aml_vanilla_match }
+te_aml_tries_g = { value = global_var:te_aml_tries }
+
+# How many yearly passes with 20 or more listed movements the check makes before it gives up.
+te_aml_max_tries = 30
+# The least number of movements a count needs before a share of it means anything.
+te_aml_min_counted = 20
+# A listed movement treated the other way round (a pro movement suppressed, an anti movement bolstered) is BROKEN
+# only at this share of the listed movements or more, and at least three of them.
+te_aml_against_share_broken = 0.1
 
 # The share of listed movements the government treats as its list says (0 with none counted).
 te_aml_match_share = {
@@ -12,6 +23,15 @@ te_aml_match_share = {
 	if = {
 		limit = { global_var:te_aml_listed > 0 }
 		value = global_var:te_aml_match
+		divide = global_var:te_aml_listed
+	}
+}
+# The share of listed movements treated against their list.
+te_aml_mismatch_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_aml_listed > 0 }
+		value = global_var:te_aml_mismatch
 		divide = global_var:te_aml_listed
 	}
 }

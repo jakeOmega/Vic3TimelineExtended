@@ -1,9 +1,12 @@
 ﻿# AI coverage of the mod's own content (#1822). docs/systems/mod_systems/ai.md § AI Coverage of the Mod's Content.
 
 # State scope. The state has a building that makes Electricity, built or under construction: vanilla's coal and
-# oil plant, the mod's four plants, or a Solar Receiver. Vanilla's power plant asks this of itself alone (the NOR
-# in its ai_value); the mod widens it so that one plant of any kind ends the first-plant bonus for all of them.
-# test_ai_building_values.py fails if a building of the power group is missing here.
+# oil plant, the mod's four plants, the Solar Receiver, the Grid Transfer Station (it delivers its grid's power
+# as Electricity) and the nine company power stations. Vanilla's power plant asks this of itself alone (the NOR in
+# its ai_value) before adding 4000 for a state's first plant; the mod's restatement of that field
+# (extra_buildings.txt) asks it of all of them, so a state that already has power draws no coal plant for the
+# bonus. test_ai_building_values.py derives the list from the production methods that output Electricity and
+# fails when a new maker is missing here.
 te_state_has_a_power_plant = {
 	OR = {
 		has_building = building_power_plant
@@ -12,6 +15,16 @@ te_state_has_a_power_plant = {
 		has_building = building_renewable_energy_plant
 		has_building = building_fusion_plant
 		has_building = building_solar_receiver
+		has_building = building_grid_transfer_station
+		has_building = building_generic_power_hub
+		has_building = building_rosatom_mayak_association
+		has_building = building_calcutta_electric_victoria_house
+		has_building = building_eea_dock_sud_power_station
+		has_building = building_electricidad_caracas_power_house
+		has_building = building_hanseong_jeongi_gwanghwamun_station
+		has_building = building_ingolstadt_power_station
+		has_building = building_tokyo_electric_asakusa_station
+		has_building = building_siam_electric_wat_liab_station
 		any_scope_building = {
 			is_under_construction = yes
 			OR = {
@@ -21,7 +34,28 @@ te_state_has_a_power_plant = {
 				is_building_type = building_renewable_energy_plant
 				is_building_type = building_fusion_plant
 				is_building_type = building_solar_receiver
+				is_building_type = building_grid_transfer_station
+				is_building_type = building_generic_power_hub
+				is_building_type = building_rosatom_mayak_association
+				is_building_type = building_calcutta_electric_victoria_house
+				is_building_type = building_eea_dock_sud_power_station
+				is_building_type = building_electricidad_caracas_power_house
+				is_building_type = building_hanseong_jeongi_gwanghwamun_station
+				is_building_type = building_ingolstadt_power_station
+				is_building_type = building_tokyo_electric_asakusa_station
+				is_building_type = building_siam_electric_wat_liab_station
 			}
+		}
+	}
+}
+
+# State scope. The state's owner is in default or under a declared bankruptcy: no wonder and no megaproject site
+# for it (te_wonder_ai_value, te_megaproject_ai_value).
+te_state_owner_is_insolvent = {
+	owner ?= {
+		OR = {
+			in_default = yes
+			has_modifier = declared_bankruptcy
 		}
 	}
 }
@@ -39,8 +73,10 @@ te_ai_can_staff_new_institution = {
 # Country scope. Enacting a law that carries $INSTITUTION$ would found an institution the bureaucracy can't carry.
 # False while the country already has the institution: a law that only changes what an existing institution does
 # (Old Age Pension to Universal Basic Income, one Ministry of Labor to the other) adds no institution, and its
-# bureaucracy is a running cost the country pays already. Every law of the mod's that carries an institution
-# reads this in its ai_enact_weight_modifier (test_ai_institution_laws.py).
+# bureaucracy is a running cost the country pays already. Every law of the mod's that can found an institution
+# reads this in its ai_enact_weight_modifier: 22 of the 26 that carry one. The other four can only be enacted by a
+# country that already has the institution (their unlocking_laws all carry it), so the branch would never fire
+# there (test_ai_institution_laws.py derives which).
 te_ai_law_brings_unstaffed_institution = {
 	NOT = { has_institution = $INSTITUTION$ }
 	te_ai_can_staff_new_institution = no
@@ -48,7 +84,8 @@ te_ai_law_brings_unstaffed_institution = {
 
 # ---- TE_SELF_CHECK ai_movement_lists (te_ai_movement_lists_selfcheck_on_actions.txt). Delete with that file. ----
 
-# Country scope. The country holds one of the five political agendas te_ai_movement_strategies.txt adds to.
+# Country scope. The country holds one of the five common political agendas. te_ai_movement_strategies.txt adds to
+# four of them; under the fifth, the conservative agenda, the mod's movements are on neither list.
 te_aml_holds_a_common_agenda = {
 	OR = {
 		has_strategy = ai_strategy_conservative_agenda
@@ -95,14 +132,6 @@ te_aml_on_pro_list = {
 te_aml_on_anti_list = {
 	OR = {
 		AND = {
-			owner = { has_strategy = ai_strategy_conservative_agenda }
-			OR = {
-				is_political_movement_type = movement_civil_rights
-				is_political_movement_type = movement_anti_war
-				is_political_movement_type = movement_transhumanist
-			}
-		}
-		AND = {
 			owner = { has_strategy = ai_strategy_reactionary_agenda }
 			OR = {
 				is_political_movement_type = movement_civil_rights
@@ -117,4 +146,57 @@ te_aml_on_anti_list = {
 			}
 		}
 	}
+}
+
+# Political movement scope. The control: three movements vanilla itself lists on each list the mod INJECTs into
+# (the same agenda, the same side). If the INJECT replaced vanilla's list instead of appending to it, these are
+# no longer on it. test_ai_movement_lists.py holds them to the game's file where the game is installed.
+te_aml_vanilla_on_pro_list = {
+	OR = {
+		AND = {
+			owner = { has_strategy = ai_strategy_progressive_agenda }
+			OR = {
+				is_political_movement_type = movement_liberal
+				is_political_movement_type = movement_modernizer
+				is_political_movement_type = movement_feminist
+			}
+		}
+		AND = {
+			owner = { has_strategy = ai_strategy_egalitarian_agenda }
+			OR = {
+				is_political_movement_type = movement_labor
+				is_political_movement_type = movement_socialist
+				is_political_movement_type = movement_feminist
+			}
+		}
+	}
+}
+
+te_aml_vanilla_on_anti_list = {
+	OR = {
+		AND = {
+			owner = { has_strategy = ai_strategy_reactionary_agenda }
+			OR = {
+				is_political_movement_type = movement_socialist
+				is_political_movement_type = movement_labor
+				is_political_movement_type = movement_liberal
+			}
+		}
+		AND = {
+			owner = { has_strategy = ai_strategy_nationalist_agenda }
+			OR = {
+				is_political_movement_type = movement_socialist
+				is_political_movement_type = movement_labor
+				is_political_movement_type = movement_feminist
+			}
+		}
+	}
+}
+
+# Any scope (reads only the check's stored counts). The AI treats the mod's listed movements as their lists say:
+# three or more as listed, under a tenth against, and more often than the same movements where they are unlisted.
+te_aml_follows_the_mods_entries = {
+	te_aml_match_g >= 3
+	te_aml_mismatch_share < te_aml_against_share_broken
+	te_aml_match_share > te_aml_unlisted_share
 }

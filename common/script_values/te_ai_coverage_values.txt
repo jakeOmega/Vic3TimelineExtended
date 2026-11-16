@@ -3,50 +3,37 @@
 # vanilla anchors; docs/testing/ai-economy-playtest.md § AI coverage of the mod's content what a save should show.
 
 # ---- Buildings (ai_value is read in state scope: `owner` is the country deciding) ----
+#
+# AI governments are mostly insolvent and queue one government construction at a time (the 2026-11-15 study of the
+# owner's saves: 209 of 239 AI countries with no university in 1958; AI power plants 43% and infrastructure 39%
+# staffed), so no value here asks for more than the engine's base, 1000 (NAI GOVERNMENT_BUILDING_BASE_VALUE and
+# PRODUCTION_BUILDING_BASE_VALUE). Each is what the building scored with no ai_value at all; the names are there
+# so a size can be tuned after an observer run.
 
-# A power plant the mod adds: hydro, nuclear, renewable, fusion (common/buildings/06_zz_te_clean_power.txt).
-# Vanilla's building_power_plant scores 1000, plus 4000 in a state with no power plant built or under way, because
-# Electricity is a local good: a state with none can't run a method that uses it. The mod's plants had no ai_value,
-# so only the coal and oil plant earned the 4000. They now score the same way, and "a power plant" means any of
-# them (te_state_has_a_power_plant), for vanilla's plant too (its restated ai_value, extra_buildings.txt), so the
-# first plant of any kind takes the bonus and a second kind doesn't earn it again.
-te_ai_power_plant_base_value = 1000
-te_ai_first_power_plant_bonus = 4000
-te_clean_power_plant_ai_value = {
-	value = te_ai_power_plant_base_value
+# Highway, Airport, Network Infrastructure (common/buildings/11_zz_te_infrastructure.txt). Vanilla's railway scores
+# 2000, but these are not under-built (528 highways, 464 airports and 522 network buildings beside 580 railways in
+# a 2058 save) and AI infrastructure runs 39% staffed, so they stay at the base.
+te_infrastructure_ai_value = 1000
+
+# The mod's wonders, the UN Headquarters and a Power Bloc Headquarters (common/buildings/08_zz_te_wonders.txt), and
+# the megaprojects' construction sites and the Antimatter Warhead Plant (common/buildings/extra_buildings.txt): the
+# base, and nothing for a country in default or under a declared bankruptcy. A wonder is 5,000 construction points
+# and 10,000 government employees once built; vanilla's 10000 is for a 2,500-point monument that employs 100, and
+# at that value a wonder would outrank a University (2000) and a Government Administration (1000) in the one
+# government queue. A megaproject site's inputs run to hundreds of millions a week.
+te_ai_wonder_base_value = 1000
+te_wonder_ai_value = {
+	value = te_ai_wonder_base_value
 	if = {
-		limit = { te_state_has_a_power_plant = no }
-		add = te_ai_first_power_plant_bonus
+		limit = { te_state_owner_is_insolvent = yes }
+		multiply = 0
 	}
 }
-
-# Highway, Airport, Network Infrastructure (common/buildings/11_zz_te_infrastructure.txt): vanilla's railway base,
-# 2000, twice a plain building's 1000. Highways and airports make what a railway makes (infrastructure and
-# Transportation); Network Infrastructure makes the local good Digital Access. Parity, not a cure: in a 2058 save
-# the AI world already held 528 highways, 464 airports and 522 network buildings beside 580 railways.
-te_infrastructure_ai_value = 2000
-
-# The mod's wonders, the UN Headquarters and a Power Bloc Headquarters (common/buildings/08_zz_te_wonders.txt):
-# vanilla's value for every monument a country can build (the Eiffel Tower, Big Ben, the Statue of Liberty).
-# Without one they scored a government building's base, 1000; 16 of the 37 wonders stood in that 2058 save.
-te_wonder_ai_value = 10000
-
-# A megaproject's construction site and the Antimatter Warhead Plant (common/buildings/extra_buildings.txt). The
-# engine's base for a government building, which is what they scored with no ai_value, so a solvent country
-# behaves as before; nothing for a country in default or under a declared bankruptcy, since a site's inputs run
-# to hundreds of millions a week and the government pays for them.
 te_ai_megaproject_base_value = 1000
 te_megaproject_ai_value = {
 	value = te_ai_megaproject_base_value
 	if = {
-		limit = {
-			owner = {
-				OR = {
-					in_default = yes
-					has_modifier = declared_bankruptcy
-				}
-			}
-		}
+		limit = { te_state_owner_is_insolvent = yes }
 		multiply = 0
 	}
 }
@@ -54,12 +41,14 @@ te_megaproject_ai_value = {
 # ---- Institution laws (country scope) ----
 
 # The bureaucracy level 1 of a new institution takes: 1 for each 100,000 people in incorporated states, at least 10
-# (a new institution starts at level 1, MIN_INSTITUTION_INVESTMENT). Read from total_population, one cheap read
-# where incorporated population would be a walk of every state for each law the AI weighs: it overstates the cost
-# for a country with large unincorporated lands, which makes the check stricter there, and it leaves out the
-# cost modifiers (country_bureaucracy_investment_cost_factor_mult and the per-institution ones).
+# (a new institution starts at level 1, MIN_INSTITUTION_INVESTMENT). cached_ai_incorporated_population is the
+# engine's own figure for an AI country, the one vanilla's AI strategy reads (game/common/script_values/
+# ai_script_values.txt, wanted_army_size and its kin), so no state walk is needed. It leaves out the cost modifiers
+# (country_bureaucracy_investment_cost_factor_mult and the per-institution ones). Unread: that the cached figure is
+# filled when a law's ai_enact_weight_modifier is weighed; if it read 0 there, the check would only ask for the
+# minimum of 10, which fails open (docs/testing/ai-economy-playtest.md § AI coverage of the mod's content).
 te_ai_new_institution_bureaucracy = {
-	value = total_population
+	value = cached_ai_incorporated_population
 	divide = 100000
 	min = 10
 }
@@ -67,7 +56,8 @@ te_ai_new_institution_bureaucracy = {
 # Added to a law's AI weight while enacting it would found an institution the bureaucracy can't carry
 # (te_ai_law_brings_unstaffed_institution). Vanilla's readme on ai_enact_weight_modifier: the base weight "usually
 # ranges in the low hundreds, so +100 would be fairly significant and +1000 would be very significant". -1000 puts
-# the law below a ministry's standing preference (+10 to +200), the National Bank's (+600) and a movement's push
-# (1000 x support x radicalism). It is a strong preference against, not a ban: the National Bank's rank and debt
-# terms (+300, +400) or a +750 push on top of its +600 still bring it out ahead.
+# every one of the 22 laws below zero on its standing terms (a ministry's +10 to +100, the National Bank's +600,
+# the Ministry of the Environment's +500) and below a movement's push (1000 x support x radicalism). Two laws can
+# still come out ahead: the National Bank with its rank, debt and economic-system terms (up to +2450 in all) and
+# the Ministry of the Environment with its +750 branch (+1250). Every other law's terms sum to 800 at most.
 te_ai_unstaffed_institution_law_weight = -1000
