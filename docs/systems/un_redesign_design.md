@@ -931,7 +931,8 @@ the classification and the loc.
    −5 once (−2 if it accepted the censure; code 39). At imposition the aggressor records the
    victim's state count and capital region. The order then ends one of five ways (the
    `un_order_effects.txt` header): **kept** when the war with the victim is over, the aggressor
-   fights no other member and gained nothing — delivery +1.5 (ledger 31), standing +2 (code 5) if
+   fights no other member and gained nothing — delivery +0.75 (ledger 31; 1.5 until every delivery reward was
+   halved on 2026-10-06, `un_cf_delivery_credit`), standing +2 (code 5) if
    within the three months, and peacekeepers in the victim's most devastated state; **defied**
    when it gained (the victim lost a state, became its subject, or lost its capital region to it)
    or the order ran out with the war on — credibility −1 (ledger 32) and nothing earned;

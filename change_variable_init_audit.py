@@ -12,43 +12,67 @@ was four log lines a month while an order was being fought.
 What is flagged
 ---------------
 A `change_variable`, `change_global_variable` or `change_local_variable` whose
-variable has no *initialising* `set_variable` (of the same kind) anywhere in
-`common/` or `events/`, nor in vanilla's `common/` (the `vanilla_parsed/`
-snapshot). A set initialises unless it can only run when the variable is
-already set:
+variable has no *initialising* `set_variable` of that exact name and kind
+anywhere in `common/` or `events/`, nor in vanilla's `common/` (the
+`vanilla_parsed/` snapshot). A set initialises unless:
 
-* it sits in a block whose `limit` has `has_variable = X` as its own child or
-  under an `AND`, or reads `var:X` there (`var:X >= 6`: false when X is unset);
-* with nothing but `if` / `else_if` / `while` and other blocks that stay on
-  the same object between that limit and the set. Behind a scope change
-  (`scope:other = { set_variable = … }`, an iterator) a `var` guard no longer
-  speaks of the object being set; global and local guards hold at any depth.
+* it can only run when the variable is already set. It sits in a block whose
+  `limit` has `has_variable = X` or `exists = var:X` as its own child or under
+  an `AND`, or reads `var:X` there on either side of a comparison (`var:X >=
+  6`: false when X is unset), with nothing but `if` / `else_if` / `while` and
+  other blocks that stay on the same object between that limit and the set.
+  Behind a scope change (`scope:other = { set_variable = … }`, an iterator) a
+  `var` guard no longer speaks of the object being set; global and local
+  guards hold at any depth;
+* it is the flag form, `set_variable = x` or a block with no `value`. That
+  stores a boolean, and whether `change_variable` can count on one is unknown
+  (nothing in the mod relies on it), so it is not taken as a start.
 
-A set written in a scripted effect with the name in a parameter (`set_variable
-= { name = $OUT$ … }`) initialises the name each caller passes (`te_set_sqrt =
-{ … OUT = my_var }`), through helpers that pass it on.
+Names in a scripted effect's parameter are followed to the callers, both ways.
+A `set_variable = { name = $OUT$ … }` initialises the name each caller passes
+(`te_set_sqrt = { … OUT = my_var }`), and a `change_variable = { name =
+$COUNTER$ … }` is judged for each name a caller passes, through helpers that
+pass the name on (`wrap = { helper = { OUT = $OUT$ } }`). A name a call passes
+to such a change is flagged at the call.
 
 What is not judged
 ------------------
-* Whether the set runs *before* the change. A variable set at an object's
-  creation and changed in its monthly pulse is the mod's ordinary shape, and
-  only the name is matched: one initialising set anywhere clears every change
-  of that name.
-* A change whose name is all parameter (`name = $COUNTER$`): counted
-  (`AuditResult.unjudged`, in `regenerate()`'s summary), not judged. A name
-  that is part parameter (`sr_$KEY$_stock`) is matched against the sets as a
-  pattern, either way round.
-* A variable only vanilla's *events* set: the snapshot has no events, so such a
-  change is flagged and takes the comment below.
+* Whether the set runs *before* the change, or on the same object. A variable
+  set at an object's creation and changed in its monthly pulse is the mod's
+  ordinary shape, and only the name is matched: one initialising set anywhere
+  clears every change of that name.
+* A guard the audit cannot see in the set's own body. Only a `limit` is read.
+  A reset whose guard is held by the helper's caller, sits inside a scripted
+  trigger, an event's `trigger`, a button's `possible` or a `random_list`
+  entry's `trigger`, is the `else` of `NOT = { has_variable = X }`, or reaches
+  the object through a saved scope (`scope:me = { … }`) counts as a start.
+* What a set stores. `set_variable = { name = x value = scope:y }` counts,
+  whatever `scope:y` holds.
+* `clamp_variable` and `round_variable`, which presumably fail the same way on
+  an unset variable (not read from a log yet).
+* A change whose name carries a parameter and that no caller resolves (the
+  helper is never called with a plain name, or only through a call whose own
+  name is a parameter). If the name is all parameter it is counted
+  (`AuditResult.unjudged`); if part of it is literal (`sr_$KEY$_stock`) it is
+  matched against the sets as a pattern.
+
+What is flagged that may be sound (none in the mod today)
+---------------------------------------------------------
+* A variable only vanilla's *events* set: the snapshot has no events.
+* A variable set only by a helper that is itself called through a name in a
+  parameter (`sr_$KIND$_seed = { … }`): that call cannot be followed, so the
+  name it sets is not credited.
+Each takes the comment below.
 
 Suppress an intended one with a trailing
-`# REVIEWED YYYY-MM-DD (variable_init): rationale` on the `change_variable`
-line. A tagged comment on a line with no flag is stale and fails `--strict`.
+`# REVIEWED YYYY-MM-DD (variable_init): rationale` on the flagged line: the
+`change_variable` line, or the line of the call that passes the name. A tagged
+comment on a line with no flag is stale and fails `--strict`.
 
 A raw-text scan with `variable_guard_audit`'s tree, for its reasons: the parser
-keeps neither line numbers nor comments. About five seconds: only the files
+keeps neither line numbers nor comments. About six seconds: only the files
 that write a variable are parsed (some 40% of the text), and another only when
-it holds the name of a variable that would otherwise be flagged.
+it calls a scripted effect that sets or changes a name it is passed.
 """
 from __future__ import annotations
 
@@ -67,8 +91,10 @@ TITLE = "change_variable initialisation audit report"
 REPORT_PATH = os.path.join("docs", "engine", "change_variable_init_report.md")
 INTRO = (
     "A set does not count when it can only run with the variable already set: it sits in a block whose `limit` "
-    "has `has_variable = X` or reads `var:X`, on the same object. The reset after a batch, `if = { limit = { "
-    "var:x >= 6 } set_variable = { name = x value = 0 } }`, is the usual one.\n\n"
+    "has `has_variable = X`, `exists = var:X` or a read of `var:X`, on the same object. The reset after a batch, "
+    "`if = { limit = { var:x >= 6 } set_variable = { name = x value = 0 } }`, is the usual one. Nor does the flag "
+    "form, `set_variable = x`, which stores no number. Only a `limit` in the set's own body is read: a guard held "
+    "by a helper's caller, or inside a scripted trigger or an event's `trigger`, is not seen.\n\n"
     "Fix: set the variable where its owner begins (`set_variable = { name = x value = 0 }`), or just before the "
     "change: `if = { limit = { NOT = { has_variable = x } } set_variable = { name = x value = 0 } }`."
 )
@@ -94,46 +120,64 @@ GUARD_KEYS = {
     "has_global_variable": "global_var",
     "has_local_variable": "local_var",
 }
+_WRITE_KEYS = tuple(SET_KEYS) + tuple(CHANGE_KEYS)
 
-# A variable read at the head of a limit's own line (`this.` is the current
-# scope); `scope:x.var:y` reads another object's and is not a guard.
+# A variable read standing alone on one side of a limit's own line (`this.` is
+# the current scope); `scope:x.var:y` reads another object's and is no guard.
 _HEAD_READ_RE = re.compile(r"^(?:this\.)?(var|global_var|local_var):([A-Za-z0-9_$\-]+)$", re.I)
-_PARAM_RE = re.compile(r"\$[A-Za-z0-9_]+\$")
-_ANY_WRITE_RE = re.compile(r"\b(?:set|change)_(?:global_|local_)?variable\b")
+_PARAM_RE = re.compile(r"\$([A-Za-z0-9_]+)\$")
+# A quoted variable name, `name = "x"` or `set_variable = "x"`. Strings are
+# blanked before the scan, so these are unquoted first, length kept.
+_QUOTED_NAME_RE = re.compile(
+    r'(\b(?:name|(?:set|change)_(?:global_|local_)?variable)\s*=\s*)"([A-Za-z0-9_.:$\-]+)"')
 
-# A name with a `$PARAM$` in it is matched as a pattern only when this many
-# characters of it are literal: `$KEY$` or `$PX$f0` would match every name.
+# A change name that carries a `$PARAM$` and that no caller resolves is matched
+# as a pattern only when this many characters of it are literal: `$KEY$` or
+# `$PX$f0` would match every name.
 MIN_LITERAL = 4
 
-# How many rounds a parameter name is followed through helpers that pass it on
-# (`a = { OUT = $X$ }` inside `b`, called with `X = name`).
-MAX_PASSES = 6
+# A parameter name is followed through helpers that pass it on until nothing
+# new is found; this only bounds a loop that should never get near it.
+MAX_PASSES = 100
 
 
 @dataclass
 class Flag:
     file: str
-    line: int  # the `change_variable` line
+    line: int  # the `change_variable` line, or the call that passes the name
     effect: str  # change_variable / change_global_variable / change_local_variable
     kind: str  # var / global_var / local_var
     name: str
     # Where the variable is set, each behind a guard of its own name.
     guarded_sets: list[tuple[str, int]] = field(default_factory=list)
+    # Where it is set in the flag form only.
+    flag_sets: list[tuple[str, int]] = field(default_factory=list)
+    # For a name passed to a helper: (file, line, name as written) of the
+    # helper's change.
+    via: tuple[str, int, str] | None = None
     exemption: dict | None = None
 
     @property
     def message(self) -> str:
         setter = "set_" + self.effect[len("change_"):]
         guard = "has_" + self.effect[len("change_"):]
-        head = f"`{self.effect}` of `{self.name}`: "
-        if not self.guarded_sets:
-            return head + f"no `{setter}` of it in the mod or in vanilla's `common/`"
-        shown = ", ".join(f"`{f}:{ln}`" for f, ln in self.guarded_sets[:3])
-        more = len(self.guarded_sets) - 3
-        if more > 0:
-            shown += f" and {more} more"
-        return (head + f"every `{setter}` of it sits behind a `{guard}` check or a `{self.kind}:` read of it "
-                f"({shown}), so nothing sets it first")
+        if self.via:
+            head = (f"passes `{self.name}` to the `{self.effect}` of `{self.via[2]}` at "
+                    f"`{self.via[0]}:{self.via[1]}`: ")
+        else:
+            head = f"`{self.effect}` of `{self.name}`: "
+
+        def shown(sites: list[tuple[str, int]]) -> str:
+            text = ", ".join(f"`{f}:{ln}`" for f, ln in sites[:3])
+            return text + (f" and {len(sites) - 3} more" if len(sites) > 3 else "")
+
+        if self.guarded_sets:
+            return (head + f"every `{setter}` of it sits behind a `{guard}` check or a `{self.kind}:` read of it "
+                    f"({shown(self.guarded_sets)}), so nothing sets it first")
+        if self.flag_sets:
+            return (head + f"its only `{setter}` is the flag form ({shown(self.flag_sets)}), which stores no "
+                    "number")
+        return head + f"no `{setter}` of it in the mod or in vanilla's `common/`"
 
 
 @dataclass
@@ -141,7 +185,7 @@ class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
     judged: int = 0  # change sites matched against the sets
-    unjudged: int = 0  # change sites whose name is all parameter
+    unjudged: int = 0  # change sites whose name is all parameter and no caller resolves
 
 
 @dataclass
@@ -164,9 +208,24 @@ def _pattern(name: str) -> re.Pattern:
     return re.compile(".+".join(re.escape(part) for part in skeleton(name).split("\0")))
 
 
+def unquote_names(text: str) -> str:
+    """`text` with each quoted variable name's quotes turned to spaces, so the
+    name survives the blanking of strings. Offsets and lines are unchanged."""
+    # Written as the formatter leaves it; the cheap test spares the other
+    # files the pattern.
+    if 'name = "' not in text and 'variable = "' not in text:
+        return text
+    return _QUOTED_NAME_RE.sub(lambda m: f"{m.group(1)} {m.group(2)} ", text)
+
+
+def writes_a_variable(text: str) -> bool:
+    """Whether the text names a set or a change at all (comments included)."""
+    return any(key in text for key in _WRITE_KEYS)
+
+
 def _written_name(child: tuple) -> str | None:
     """The variable a set or change statement names: `set_variable = x`, or
-    the block's `name = x`. A quoted name was blanked and is not read."""
+    the block's `name = x`."""
     if child[0] == "scalar":
         value = child[3]
     else:
@@ -174,6 +233,17 @@ def _written_name(child: tuple) -> str | None:
     if not value or value.startswith('"'):
         return None
     return value
+
+
+def _stores_a_value(child: tuple) -> bool:
+    """False for the flag form of a set: `set_variable = x`, or a block with
+    no `value` (a bare flag, or one with only a duration)."""
+    if child[0] == "scalar":
+        return False
+    return any(
+        (c[0] == "scalar" and c[1] == "value") or (c[0] == "block" and c[1].key == "value")
+        for c in child[1].children
+    )
 
 
 def limit_guards(node: Node) -> set[tuple[str, str]]:
@@ -188,17 +258,21 @@ def limit_guards(node: Node) -> set[tuple[str, str]]:
                 if kind and op == "=" and value:
                     guards.add((kind, value))
                     continue
-                m = _HEAD_READ_RE.match(key)
+                # `var:x >= 6`, `5 < var:x`, `exists = var:x`: each is false
+                # (or an error) while x is unset.
+                sides = (key, value or "")
             elif child[0] == "block":
                 sub = child[1]
                 if (sub.key or "").upper() == "AND":
                     read(sub)
                     continue
-                m = _HEAD_READ_RE.match(sub.key or "")
+                sides = (sub.key or "",)
             else:
                 continue
-            if m:
-                guards.add((m.group(1).lower(), m.group(2)))
+            for side in sides:
+                m = _HEAD_READ_RE.match(side)
+                if m:
+                    guards.add((m.group(1).lower(), m.group(2)))
 
     for child in node.children:
         if child[0] == "block" and child[1].key == "limit":
@@ -210,17 +284,21 @@ class _Scan:
     """What the parsed files write: every set with whether it is guarded,
     every call that passes arguments, and every change."""
 
-    def __init__(self, links: set[str]):
+    def __init__(self, links: set[str], odd_params: frozenset[str] = frozenset()):
         self.links = links
-        # (kind, name, guarded, file, line, owner): `owner` is the scripted
-        # effect the statement is written in, if any.
-        self.sets: list[tuple[str, str, bool, str, int, str | None]] = []
+        # Parameter names that are not all upper case, so not caught by the
+        # cheap test below. The mod has none.
+        self.odd_params = odd_params
+        # (kind, name, guarded, file, line, owner, stores a value): `owner` is
+        # the scripted effect the statement is written in, if any.
+        self.sets: list[tuple[str, str, bool, str, int, str | None, bool]] = []
         # (callee, {argument: value}, guards at the call, file, line, owner).
         # Any block with an upper-case argument (`OUT = my_var`, as the mod
-        # writes them), so scripted triggers too; only a callee that sets a
-        # name in a parameter is ever looked up.
+        # writes them), so scripted triggers too; only a callee that sets or
+        # changes a name in a parameter is ever looked up.
         self.calls: list[tuple[str, dict[str, str], frozenset, str, int, str | None]] = []
-        self.changes: list[tuple[str, int, str, str, str]] = []  # file, line, effect, kind, name
+        # (file, line, effect, kind, name, owner)
+        self.changes: list[tuple[str, int, str, str, str, str | None]] = []
 
     def add(self, f: _File) -> None:
         if f.rel.startswith(SCRIPTED_EFFECTS_DIR):
@@ -231,6 +309,7 @@ class _Scan:
             self.walk(f.tree, frozenset(), f.rel, None)
 
     def walk(self, node: Node, guards: frozenset, rel: str, owner: str | None) -> None:
+        odd = self.odd_params
         for child in node.children:
             if child[0] == "bare":
                 continue
@@ -240,17 +319,18 @@ class _Scan:
                 name = _written_name(child)
                 if name:
                     kind = SET_KEYS[key]
-                    self.sets.append((kind, name, (kind, name) in guards, rel, line, owner))
+                    self.sets.append((kind, name, (kind, name) in guards, rel, line, owner,
+                                      _stores_a_value(child)))
             elif key in CHANGE_KEYS:
                 name = _written_name(child)
                 if name:
-                    self.changes.append((rel, line, key, CHANGE_KEYS[key], name))
+                    self.changes.append((rel, line, key, CHANGE_KEYS[key], name, owner))
             if child[0] != "block":
                 continue
             sub = child[1]
             if key:
                 args = {c[1]: c[3] for c in sub.children
-                        if c[0] == "scalar" and c[3] and c[1].isupper()}
+                        if c[0] == "scalar" and c[3] and (c[1].isupper() or c[1] in odd)}
                 if args:
                     self.calls.append((key, args, guards, rel, line, owner))
             inner = guards
@@ -263,47 +343,95 @@ class _Scan:
             self.walk(sub, inner, rel, owner)
 
 
-def substitute(template: str, args: dict[str, str]) -> str:
-    """`template` with each `$P$` the call passes filled in. A parameter the
-    call leaves out, or passes as a quoted string, stays."""
+def substitute(template: str, args: dict[str, str]) -> tuple[str, bool]:
+    """(`template` with each `$P$` the call passes filled in, whether the call
+    passes any of them). A parameter the call leaves out, or passes as a quoted
+    string, stays. A helper that passes a name on under the same parameter
+    (`OUT = $OUT$`) gives the template back unchanged, and has still passed it."""
+    passed = False
+
     def fill(m: re.Match) -> str:
-        value = args.get(m.group(0)[1:-1])
-        return m.group(0) if value is None or value.startswith('"') else value
-    return _PARAM_RE.sub(fill, template)
+        nonlocal passed
+        value = args.get(m.group(1))
+        if value is None or value.startswith('"'):
+            return m.group(0)
+        passed = True
+        return value
+
+    return _PARAM_RE.sub(fill, template), passed
 
 
-def resolve_sets(scan: _Scan) -> tuple[set[tuple[str, str]], dict[tuple[str, str], list[tuple[str, int]]]]:
-    """(the initialised names, the guarded sets by name). A set a scripted
-    effect makes of a name in a parameter is credited to the name each caller
-    passes, through helpers that pass it on."""
-    initialised: set[tuple[str, str]] = set()
-    guarded: dict[tuple[str, str], list[tuple[str, int]]] = {}
+@dataclass
+class _Resolved:
+    # Names with a set that stores a value and is not behind a guard of its
+    # own name; a name still carrying a `$PARAM$` is a helper's, unresolved.
+    initialised: set[tuple[str, str]] = field(default_factory=set)
+    guarded: dict[tuple[str, str], list[tuple[str, int]]] = field(default_factory=dict)
+    flag_form: dict[tuple[str, str], list[tuple[str, int]]] = field(default_factory=dict)
+    # A plain name a call passes to a helper's change:
+    # (kind, name) -> {(call file, call line): (change file, line, effect, name as written)}
+    reached: dict[tuple[str, str], dict[tuple[str, int], tuple[str, int, str, str]]] = field(default_factory=dict)
+    # The parameter-named change sites some caller resolved to a plain name.
+    resolved_changes: set[tuple[str, int]] = field(default_factory=set)
+    # Scripted effects that set or change a name they are passed.
+    helpers: set[str] = field(default_factory=set)
+
+
+def resolve(scan: _Scan) -> _Resolved:
+    """Credit every set and change a scripted effect makes of a name in a
+    parameter to the name each caller passes, through helpers that pass it on."""
+    out = _Resolved()
     # scripted effect -> {(kind, name with $PARAM$)} it sets unguarded.
-    templates: dict[str, set[tuple[str, str]]] = {}
-    for kind, name, is_guarded, rel, line, owner in scan.sets:
+    set_templates: dict[str, set[tuple[str, str]]] = {}
+    # scripted effect -> {(kind, name with $PARAM$, where the change is written)}.
+    change_templates: dict[str, set[tuple[str, str, tuple[str, int, str, str]]]] = {}
+    for kind, name, is_guarded, rel, line, owner, stores in scan.sets:
         if is_guarded:
-            guarded.setdefault((kind, name), []).append((rel, line))
-            continue
-        initialised.add((kind, name))
+            out.guarded.setdefault((kind, name), []).append((rel, line))
+        elif not stores:
+            out.flag_form.setdefault((kind, name), []).append((rel, line))
+        else:
+            out.initialised.add((kind, name))
+            if owner and "$" in name:
+                set_templates.setdefault(owner, set()).add((kind, name))
+    for rel, line, effect, kind, name, owner in scan.changes:
         if owner and "$" in name:
-            templates.setdefault(owner, set()).add((kind, name))
+            change_templates.setdefault(owner, set()).add((kind, name, (rel, line, effect, name)))
+
+    # Only a call of an effect that holds a template is ever read.
+    calls_of: dict[str, list] = {}
+    for call in scan.calls:
+        calls_of.setdefault(call[0], []).append(call)
     for _ in range(MAX_PASSES):
         grew = False
-        for callee, args, guards, rel, line, owner in scan.calls:
-            for kind, template in tuple(templates.get(callee, ())):
-                name = substitute(template, args)
-                if name == template:
-                    continue  # the call passes none of its parameters
-                if (kind, name) in guards:
-                    guarded.setdefault((kind, name), []).append((rel, line))
+        callees = [name for name in calls_of if name in set_templates or name in change_templates]
+        for callee, args, guards, rel, line, owner in (call for name in callees for call in calls_of[name]):
+            for kind, template in tuple(set_templates.get(callee, ())):
+                name, passed = substitute(template, args)
+                if not passed:
                     continue
-                initialised.add((kind, name))
-                if owner and "$" in name and (kind, name) not in templates.setdefault(owner, set()):
-                    templates[owner].add((kind, name))
+                if (kind, name) in guards:
+                    out.guarded.setdefault((kind, name), []).append((rel, line))
+                    continue
+                out.initialised.add((kind, name))
+                if owner and "$" in name and (kind, name) not in set_templates.setdefault(owner, set()):
+                    set_templates[owner].add((kind, name))
+                    grew = True
+            for kind, template, origin in tuple(change_templates.get(callee, ())):
+                name, passed = substitute(template, args)
+                if not passed:
+                    continue
+                if "$" not in name:
+                    out.reached.setdefault((kind, name), {}).setdefault((rel, line), origin)
+                    out.resolved_changes.add(origin[:2])
+                elif owner and (kind, name, origin) not in change_templates.setdefault(owner, set()):
+                    change_templates[owner].add((kind, name, origin))
                     grew = True
         if not grew:
             break
-    return initialised, guarded
+    out.helpers = {name for name, found in set_templates.items() if found}
+    out.helpers |= {name for name, found in change_templates.items() if found}
+    return out
 
 
 def vanilla_sets(mod_path: str) -> set[tuple[str, str]]:
@@ -366,41 +494,19 @@ def _script_files(mod_path: str):
                     yield path, os.path.relpath(path, mod_path).replace(os.sep, "/")
 
 
-def _uninitialised(scan: _Scan, initialised: set[tuple[str, str]]) -> set[tuple[str, str]]:
-    """The changed (kind, name)s no initialising set matches. A name that is
-    all parameter is not among them: it is not judged."""
-    exact = {kind: set() for kind in SET_KEYS.values()}
-    skeletons = {kind: set() for kind in SET_KEYS.values()}
-    patterns = {kind: [] for kind in SET_KEYS.values()}
-    for kind, name in initialised:
-        if "$" not in name:
-            exact[kind].add(name)
-        elif len(literal_part(name)) >= MIN_LITERAL:
-            skeletons[kind].add(skeleton(name))
-            patterns[kind].append(_pattern(name))
-
-    def is_initialised(kind: str, name: str) -> bool:
-        if "$" not in name:
-            return name in exact[kind] or any(p.fullmatch(name) for p in patterns[kind])
-        if skeleton(name) in skeletons[kind]:
-            return True
-        mine = _pattern(name)
-        return any(mine.fullmatch(n) for n in exact[kind])
-
-    changed = {(kind, name) for _rel, _line, _effect, kind, name in scan.changes
-               if "$" not in name or len(literal_part(name)) >= MIN_LITERAL}
-    return {(kind, name) for kind, name in changed if not is_initialised(kind, name)}
-
-
 def judge(texts: dict[str, str], *, links: set[str] | None = None,
           vanilla: set[tuple[str, str]] | None = None) -> AuditResult:
     """Audit `texts` ({relative path: file text}) as one mod."""
     links = links or set()
     result = AuditResult(files_audited=len(texts))
 
-    pending = dict(texts)
+    pending = {rel: unquote_names(text) for rel, text in texts.items()}
+    odd_params = frozenset(
+        p for rel, text in pending.items() if rel.startswith(SCRIPTED_EFFECTS_DIR) and "$" in text
+        for p in _PARAM_RE.findall(text) if not p.isupper()
+    )
     files: list[_File] = []
-    scan = _Scan(links)
+    scan = _Scan(links, odd_params)
 
     def load(rels: list[str]) -> None:
         for rel in rels:
@@ -409,36 +515,78 @@ def judge(texts: dict[str, str], *, links: set[str] | None = None,
             scan.add(files[-1])
 
     # Most of the mod's text writes no variable, and parsing is most of the
-    # cost. Such a file can still initialise one, by passing its name to a
-    # scripted effect that sets it, so it is parsed only when it holds the
-    # name of a variable that would otherwise be flagged (and every scripted
-    # effect file then, for a helper that only passes the name on).
-    load([rel for rel in sorted(pending) if _ANY_WRITE_RE.search(pending[rel])])
+    # cost. Such a file matters only when it calls a scripted effect that sets
+    # or changes a name it is passed, which its words tell without parsing it;
+    # a helper found that way can bring in callers of its own.
+    load([rel for rel in sorted(pending) if writes_a_variable(pending[rel])])
+    words: dict[str, set[str]] = {}
+    known: set[str] = set()
     while True:
-        mod_sets, guarded_sets = resolve_sets(scan)
-        missing = _uninitialised(scan, mod_sets | (vanilla or set()))
-        needles = {max(skeleton(name).split("\0"), key=len) for _kind, name in missing}
-        batch = [rel for rel in sorted(pending)
-                 if rel.startswith(SCRIPTED_EFFECTS_DIR) or any(n in pending[rel] for n in needles)]
-        if not needles or not batch:
+        found = resolve(scan)
+        new = found.helpers - known
+        known |= new
+        if not new or not pending:
+            break
+        for rel in pending:
+            if rel not in words:
+                words[rel] = set(pending[rel].split())
+        batch = [rel for rel in sorted(pending) if not new.isdisjoint(words[rel])]
+        if not batch:
             break
         load(batch)
 
+    # A plain name is cleared by a set of exactly that name. A set whose name
+    # still carries a parameter says nothing about a plain name: as a pattern,
+    # `te_dg_m$S$` would clear every variable that starts `te_dg_m`.
+    exact = {kind: set() for kind in SET_KEYS.values()}
+    skeletons = {kind: set() for kind in SET_KEYS.values()}
+    for kind, name in found.initialised | (vanilla or set()):
+        if "$" not in name:
+            exact[kind].add(name)
+        elif len(literal_part(name)) >= MIN_LITERAL:
+            skeletons[kind].add(skeleton(name))
+
+    def pattern_initialised(kind: str, name: str) -> bool:
+        """For a change name that carries a parameter no caller resolved: a set
+        written with the same parameters, or any plain set name it could be."""
+        if skeleton(name) in skeletons[kind]:
+            return True
+        mine = _pattern(name)
+        return any(mine.fullmatch(n) for n in exact[kind])
+
     comments = {f.rel: f.comments for f in files}
     used: set[tuple[str, int]] = set()
-    for rel, line, effect, kind, name in scan.changes:
-        if "$" in name and len(literal_part(name)) < MIN_LITERAL:
-            result.unjudged += 1
-            continue
-        result.judged += 1
-        if (kind, name) not in missing:
-            continue
+
+    def flag(rel: str, line: int, effect: str, kind: str, name: str, via=None) -> None:
         exemption = parse_reviewed(comments[rel].get(line), (CHECK,))
         if exemption is not None:
             used.add((rel, line))
-        result.flags.append(Flag(rel, line, effect, kind, name,
-                                 sorted(guarded_sets.get((kind, name), [])), exemption))
-    result.flags.sort(key=lambda f: (f.file, f.line))
+        result.flags.append(Flag(
+            rel, line, effect, kind, name,
+            sorted(found.guarded.get((kind, name), [])),
+            sorted(found.flag_form.get((kind, name), [])),
+            via, exemption,
+        ))
+
+    for rel, line, effect, kind, name, _owner in scan.changes:
+        if "$" not in name:
+            result.judged += 1
+            if name not in exact[kind]:
+                flag(rel, line, effect, kind, name)
+        elif (rel, line) in found.resolved_changes:
+            result.judged += 1  # each name a caller passes is judged below
+        elif len(literal_part(name)) >= MIN_LITERAL:
+            result.judged += 1
+            if not pattern_initialised(kind, name):
+                flag(rel, line, effect, kind, name)
+        else:
+            result.unjudged += 1
+    for (kind, name), calls in found.reached.items():
+        if name in exact[kind]:
+            continue
+        for (rel, line), (origin_rel, origin_line, effect, written) in calls.items():
+            flag(rel, line, effect, kind, name, via=(origin_rel, origin_line, written))
+    result.flags.sort(key=lambda f: (f.file, f.line, f.name))
 
     for rel in sorted(pending):
         if CHECK in pending[rel]:

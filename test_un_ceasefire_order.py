@@ -14,8 +14,8 @@ log lines over 17 months of one game were the only sign.
   every variable the order keeps is removed when it ends.
 - Each change in the file has a set that can run first (the mod-wide
   `change_variable_init_audit`, held here to this file alone).
-- The debit counts each month of fighting on, is booked at the batch size, and
-  is booked before every ending.
+- The debit counts each month of fighting on and no other month, is booked at
+  the batch size, and is booked before every ending.
 
 Run: python3 -m unittest test_un_ceasefire_order -v
 """
@@ -24,6 +24,7 @@ from __future__ import annotations
 import os
 import re
 import unittest
+from collections import Counter
 
 import change_variable_init_audit
 from blanked_text import blank_comments_and_strings
@@ -124,6 +125,11 @@ class CeasefireOrderDebit(unittest.TestCase):
         own = [(c[1] if c[0] == "scalar" else c[1].key, c) for c in fighting.children if c[0] != "bare"]
         count = [i for i, (key, c) in enumerate(own) if key == "change_variable" and _named(c) == "un_cf_debit_months"]
         self.assertEqual(len(count), 1, "one count a month, in the fighting branch itself")
+        # And nowhere else in the month: a second count outside the branch
+        # would charge the months the aggressor does not fight (the mutation
+        # the review of PR #1850 found this test let through).
+        self.assertEqual(Counter(_names(self.month, "change_variable")),
+                         {"un_cf_order_months": 1, "un_cf_fought_months": 1, "un_cf_debit_months": 1})
         adds = [c for c in own[count[0]][1][1].children if c[0] == "scalar" and c[1] == "add"]
         self.assertEqual([c[3] for c in adds], ["1"])
         # The next statement books the batch once it is full.

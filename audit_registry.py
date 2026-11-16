@@ -259,17 +259,27 @@ AUDITS: tuple[Audit, ...] = (
     Audit(
         "change_variable_init_audit",
         "A `change_variable` (or the global or local form) on a variable nothing sets first: no `set_variable` "
-        "of it in the mod or in vanilla's `common/`, or each one behind a `has_variable` check or a `var:` read "
-        "of the same variable. `change_variable` on an unset variable does nothing and logs `Variable not of "
-        "the 'value' scope type. Type: empty` each time, so the counter never counts (#1818: the UN cease-fire "
-        "order's debit). Set it where its owner begins, or just before the change behind "
-        "`NOT = { has_variable = X }`.",
-        where="trailing on the `change_variable` line (the opening line of a multi-line block)",
+        "of that exact name in the mod or in vanilla's `common/`, or each one behind a `has_variable` check, an "
+        "`exists = var:X` or a `var:` read of the same variable, or only the flag form `set_variable = X`. "
+        "`change_variable` on an unset variable does nothing and logs `Variable not of the 'value' scope type. "
+        "Type: empty` each time, so the counter never counts (#1818: the UN cease-fire order's debit). Set it "
+        "where its owner begins, or just before the change behind `NOT = { has_variable = X }`.",
+        where="trailing on the `change_variable` line (the opening line of a multi-line block); for a name a call "
+              "passes to a helper's `$PARAM$` change, on the line of that call",
         tags=("variable_init",),
-        note="Matches names only: one unguarded set anywhere clears every change of that name, so it does not "
-             "prove the set runs first. A set of a name in a scripted effect's parameter counts for the name "
-             "each caller passes; a change whose name is all parameter is not judged. `--write` writes the "
-             "report offline.",
+        note="Matches names only: one initialising set anywhere clears every change of that name, so it does not "
+             "prove the set runs first, or on the same object. A guard is read only from a `limit` in the set's "
+             "own body: a re-set whose guard is held by the helper's caller, sits in a scripted trigger, an "
+             "event's `trigger`, a button's `possible` or a `random_list` entry's `trigger`, is the `else` of "
+             "`NOT = { has_variable = X }`, or reaches the object through a saved scope counts as a start. What a "
+             "set stores is not read, except that the flag form (`set_variable = X`, or a block with no `value`) "
+             "is not taken as a start: whether `change_variable` works on a flag is unknown, and nothing in the "
+             "mod relies on it. `clamp_variable` and `round_variable` are not covered. A name in a scripted "
+             "effect's `$PARAM$` is followed to its callers, for sets and changes alike; a change no caller "
+             "resolves is matched as a pattern, or not judged if its name is all parameter. Two sound shapes "
+             "would be flagged and take the comment (none today): a variable only vanilla's events set, and one "
+             "set only by a helper called through a name in a parameter (`sr_$KIND$_seed = { … }`). `--write` "
+             "writes the report offline.",
     ),
     Audit(
         "building_scope_variable_audit",

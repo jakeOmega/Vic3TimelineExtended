@@ -162,6 +162,12 @@ logs of a 1952 to 1954 order). `un_ceasefire_order_impose` now starts the counte
 raise it with the console event's "Raise the UN one tier" until Charter Reform II is in force, then have a member that
 started a war against another member named in a Binding Ceasefire and let it carry without a veto.
 
+**This debit is live for the first time.** The figure is the design's and has never run in a game: an order defied
+to the end, 24 months of fighting on, now costs the UN's peace and order up to 6 points (24 × 0.25), in four entries
+of −1.5, on a pillar that runs from −20 to 0. Until now it cost nothing. Watch what one or two such orders do to UN
+authority in a long game before judging the 0.25; `un_cf_order_debit` in `common/script_values/un_order_values.txt` is
+the one number to change.
+
 | Check | Expect | If it fails |
 |---|---|---|
 | **The first booking.** Let the aggressor fight on for six months under the order. | In the sixth month the authority ledger gains one Peace and Order entry of −1.5, "a war fought on under the Assembly's ceasefire order by" the aggressor. `game.log` has no `change_variable effect [ Variable not of the 'value' scope type. Type: empty ]` line from `un_order_effects.txt`. | The log line is back and no entry: `un_ceasefire_order_impose` no longer sets `un_cf_debit_months`. No line and no entry: `un_cf_order_debit_accrued` read 0 where `un_ledger_entry_on` takes its `POINTS` (a script value that reads the aggressor's variable from the ledger's scope); store the figure in a variable on the aggressor first and pass that. |

@@ -2,11 +2,18 @@
 
 `change_variable` on a variable nothing has set does nothing and logs an error
 each time it runs. The audit flags a change whose variable has no initialising
-`set_variable` anywhere: none at all, or each one behind a `has_variable`
-check or a `var:` read of the same variable (the UN cease-fire order's debit,
-#1818). It must not flag the mod's ordinary shapes: a set at creation in
-another file, the guard-and-initialise idiom, a set through a helper's
-parameter, a variable vanilla sets.
+`set_variable` of that exact name anywhere: none at all, each one behind a
+`has_variable` check or a `var:` read of the same variable (the UN cease-fire
+order's debit, #1818), or only the flag form. It must not flag the mod's
+ordinary shapes: a set at creation in another file, the guard-and-initialise
+idiom, a set through a helper's parameter, a variable vanilla sets.
+
+The cases added after the review of PR #1850 are marked "review": a name passed
+on under the same parameter, a part-parameter set that used to clear every
+name with its prefix, `exists = var:x`, an all-parameter change followed to
+its callers, and the three loud false flags (a caller in a file that writes no
+variable, a quoted name, a parameter not in upper case). `KnownLimitTests`
+pins what the audit does not see, so the docs and the code say the same.
 """
 from __future__ import annotations
 
@@ -93,6 +100,63 @@ class DetectionTests(unittest.TestCase):
         )
         self.assertEqual(_names(result), [("f0_effects.txt", 2, "var", "months")])
 
+    def test_exists_and_a_read_on_the_right_guard_too(self):
+        # review, item 3: the mod writes `exists = var:x` some 645 times.
+        for limit in ("exists = var:x", "5 < var:x", "this.var:x >= 3", "var:x ?= 3",
+                      "AND = { is_ai = yes exists = var:x }"):
+            with self.subTest(limit=limit):
+                result = _judge(
+                    "e = {\n"
+                    "\tchange_variable = { name = x add = 1 }\n"
+                    "\tif = {\n"
+                    f"\t\tlimit = {{ {limit} }}\n"
+                    "\t\tset_variable = { name = x value = 0 }\n"
+                    "\t}\n"
+                    "}\n"
+                )
+                self.assertEqual(_names(result), [("f0_effects.txt", 2, "var", "x")])
+        result = _judge(
+            "e = {\n"
+            "\tchange_global_variable = { name = g add = 1 }\n"
+            "\tif = {\n"
+            "\t\tlimit = { exists = global_var:g }\n"
+            "\t\tset_global_variable = { name = g value = 0 }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(_names(result), [("f0_effects.txt", 2, "global_var", "g")])
+
+    def test_the_flag_form_of_a_set_starts_no_counter(self):
+        # review, item 6: `set_variable = x` stores a boolean. Whether
+        # change_variable can count on one is unknown; nothing in the mod
+        # relies on it, so it is not taken as a start.
+        for flag_set in ("set_variable = x", "set_variable = { name = x }", "set_variable = { name = x days = 30 }"):
+            with self.subTest(flag_set=flag_set):
+                result = _judge(f"e = {{\n\t{flag_set}\n\tchange_variable = {{ name = x add = 1 }}\n}}\n")
+                self.assertEqual(_names(result), [("f0_effects.txt", 3, "var", "x")])
+                self.assertEqual(result.flags[0].flag_sets, [("common/scripted_effects/f0_effects.txt", 2)])
+                self.assertIn("its only `set_variable` is the flag form", result.flags[0].message)
+        # A value in a block counts, and so does a value beside a duration.
+        for value_set in ("set_variable = { name = x value = { value = 1 add = 2 } }",
+                          "set_variable = { name = x value = 0 days = 30 }"):
+            with self.subTest(value_set=value_set):
+                result = _judge(f"e = {{\n\t{value_set}\n\tchange_variable = {{ name = x add = 1 }}\n}}\n")
+                self.assertEqual(_names(result), [])
+
+    def test_a_quoted_name_is_read(self):
+        # review, item 5: strings are blanked before the scan, so a quoted
+        # name used to vanish: a quoted set flagged its plain change, and a
+        # quoted change was never judged.
+        quoted_set = _judge(
+            'e = {\n\tset_variable = { name = "x" value = 0 }\n\tchange_variable = { name = x add = 1 }\n}\n')
+        self.assertEqual(_names(quoted_set), [])
+        quoted_change = _judge('e = {\n\tchange_variable = { name = "x" add = 1 }\n}\n')
+        self.assertEqual(_names(quoted_change), [("f0_effects.txt", 2, "var", "x")])
+        self.assertEqual(quoted_change.judged, 1)
+        # A quoted string that is no variable name is left alone.
+        other = _judge('e = {\n\tcustom_tooltip = "name = x"\n\tadd_modifier = { name = "a modifier" }\n}\n')
+        self.assertEqual((other.flags, other.judged), ([], 0))
+
     def test_a_guard_under_AND_and_in_a_nested_if_still_guards(self):
         result = _judge(
             "e = {\n"
@@ -155,9 +219,6 @@ class NotFlaggedTests(unittest.TestCase):
             "monthly = {\n\tchange_variable = { name = x add = 1 }\n}\n",
             events__start="s.1 = {\n\timmediate = {\n\t\tset_variable = { name = x value = 0 }\n\t}\n}\n",
         ))
-
-    def test_the_flag_form_of_set_variable_counts(self):
-        self.assertClean(_judge("e = {\n\tset_variable = x\n\tchange_variable = { name = x add = 1 }\n}\n"))
 
     def test_the_guard_and_initialise_idiom(self):
         self.assertClean(_judge(
@@ -233,6 +294,65 @@ class NotFlaggedTests(unittest.TestCase):
         ))
 
 
+class KnownLimitTests(unittest.TestCase):
+    """What the audit does not see (review, items 3 and 6), pinned so that the
+    module's docstring, the registry note and the code agree. Each of these is
+    a re-set that can only run with the variable set, and each counts as a
+    start: a guard is read only from a `limit` in the set's own body."""
+
+    CHANGE = "\tchange_variable = { name = x add = 1 }\n"
+
+    def assertNotSeen(self, *texts, **named):
+        self.assertEqual(_names(_judge(*texts, **named)), [])
+
+    def test_a_guard_held_by_the_helpers_caller(self):
+        self.assertNotSeen(
+            "e = {\n" + self.CHANGE + "\tif = {\n\t\tlimit = { has_variable = x }\n\t\treset_x = yes\n\t}\n}\n"
+            "reset_x = {\n\tset_variable = { name = x value = 0 }\n}\n")
+
+    def test_a_guard_inside_a_scripted_trigger(self):
+        self.assertNotSeen(
+            "e = {\n" + self.CHANGE + "\tif = {\n\t\tlimit = { x_is_set = yes }\n"
+            "\t\tset_variable = { name = x value = 0 }\n\t}\n}\n")
+
+    def test_an_events_trigger_and_a_random_list_entrys(self):
+        self.assertNotSeen(
+            "e = {\n" + self.CHANGE + "}\n",
+            events__a="a.1 = {\n\ttrigger = { has_variable = x }\n\timmediate = {\n"
+                      "\t\tset_variable = { name = x value = 0 }\n\t}\n}\n")
+        self.assertNotSeen(
+            "e = {\n" + self.CHANGE + "\trandom_list = {\n\t\t10 = {\n\t\t\ttrigger = { has_variable = x }\n"
+            "\t\t\tset_variable = { name = x value = 0 }\n\t\t}\n\t}\n}\n")
+
+    def test_the_else_of_a_negated_guard_and_a_saved_scope(self):
+        self.assertNotSeen(
+            "e = {\n" + self.CHANGE + "\tif = {\n\t\tlimit = { NOT = { has_variable = x } }\n\t\tadd_treasury = 1\n\t}\n"
+            "\telse = {\n\t\tset_variable = { name = x value = 0 }\n\t}\n}\n")
+        self.assertNotSeen(
+            "e = {\n\tsave_scope_as = me\n" + self.CHANGE + "\tif = {\n\t\tlimit = { has_variable = x }\n"
+            "\t\tscope:me = { set_variable = { name = x value = 0 } }\n\t}\n}\n")
+
+    def test_what_a_set_stores_and_on_which_object(self):
+        self.assertNotSeen("e = {\n\tset_variable = { name = x value = scope:foo }\n" + self.CHANGE + "}\n")
+        self.assertNotSeen(
+            "e = {\n\tset_variable = { name = x value = 0 }\n\tevery_scope_state = {\n\t" + self.CHANGE + "\t}\n}\n")
+
+    def test_a_helper_called_through_a_parameter_name_is_not_followed(self):
+        # The one known shape that is flagged though it is sound: the call's
+        # own name is a parameter, so the name the helper sets is not credited.
+        result = _judge(
+            "sr_grain_seed = {\n\tset_variable = { name = sr_$K$_n value = 0 }\n}\n",
+            "seed = {\n\tsr_$KIND$_seed = { K = grain }\n}\n",
+            "e = {\n\tseed = { KIND = grain }\n\tchange_variable = { name = sr_grain_n add = 1 }\n}\n",
+        )
+        self.assertEqual(_names(result), [("f2_effects.txt", 3, "var", "sr_grain_n")])
+
+    def test_clamp_and_round_are_not_read(self):
+        result = _judge("e = {\n\tclamp_variable = { name = x min = 0 max = 5 }\n"
+                        "\tround_variable = { name = x nearest = 1 }\n}\n")
+        self.assertEqual((result.flags, result.judged, result.unjudged), ([], 0, 0))
+
+
 class HelperParameterTests(unittest.TestCase):
     HELPER = "te_set_sqrt = {\n\tset_variable = { name = $OUT$ value = $IN$ }\n}\n"
 
@@ -292,16 +412,43 @@ class HelperParameterTests(unittest.TestCase):
         self.assertEqual(_names(result), [("f1_effects.txt", 2, "var", "x")])
         self.assertEqual(result.flags[0].guarded_sets, [("common/scripted_effects/f1_effects.txt", 5)])
 
-    def test_a_part_parameter_name_matches_as_a_pattern(self):
+    def test_a_part_parameter_set_clears_only_the_names_its_callers_pass(self):
+        # review, item 2: as a pattern, `sr_$KEY$_stock` used to clear every
+        # `sr_…_stock`, and `te_dg_m$S$` every variable starting `te_dg_m`.
+        store = "store = {\n\tset_variable = { name = sr_$KEY$_stock value = 0 }\n}\n"
+        draw = ("draw = {\n"
+                "\tchange_variable = { name = sr_grain_stock subtract = 1 }\n"
+                "\tchange_variable = { name = sr_steel_stock subtract = 1 }\n"
+                "}\n")
+        self.assertEqual(_names(_judge(store, draw)),
+                         [("f1_effects.txt", 2, "var", "sr_grain_stock"), ("f1_effects.txt", 3, "var", "sr_steel_stock")])
+        seeded = _judge(store, draw, "seed = {\n\tstore = { KEY = grain }\n}\n")
+        self.assertEqual(_names(seeded), [("f1_effects.txt", 3, "var", "sr_steel_stock")])
+
+    def test_a_pattern_set_does_not_swallow_an_unrelated_name(self):
+        # review, item 2: un_ledger_$PILLAR$ beside the counter un_ledger_seq.
+        result = _judge(
+            "book = {\n\tset_global_variable = { name = un_ledger_$PILLAR$ value = 0 }\n}\n",
+            "log = {\n"
+            "\tbook = { PILLAR = order }\n"
+            "\tchange_global_variable = { name = un_ledger_order add = 1 }\n"
+            "\tchange_global_variable = { name = un_ledger_seq add = 1 }\n"
+            "}\n",
+        )
+        self.assertEqual(_names(result), [("f1_effects.txt", 4, "global_var", "un_ledger_seq")])
+
+    def test_an_unresolved_parameter_change_is_matched_as_a_pattern(self):
+        # No caller passes GOOD, so the change's own name is all there is to
+        # go on: a set written with the same parameters clears it.
         result = _judge(
             "store = {\n\tset_variable = { name = sr_$KEY$_stock value = 0 }\n}\n",
             "draw = {\n"
-            "\tchange_variable = { name = sr_grain_stock subtract = 1 }\n"   # a set pattern, a literal change
-            "\tchange_variable = { name = sr_$GOOD$_stock add = 1 }\n"       # pattern against pattern
-            "\tchange_variable = { name = sr_grain_price add = 1 }\n"       # matches neither
+            "\tchange_variable = { name = sr_$GOOD$_stock add = 1 }\n"
+            "\tchange_variable = { name = sr_$GOOD$_price add = 1 }\n"
             "}\n",
         )
-        self.assertEqual(_names(result), [("f1_effects.txt", 4, "var", "sr_grain_price")])
+        self.assertEqual(_names(result), [("f1_effects.txt", 3, "var", "sr_$GOOD$_price")])
+        self.assertEqual((result.judged, result.unjudged), (2, 0))
 
     def test_a_parameter_change_matches_a_literal_set(self):
         result = _judge(
@@ -313,7 +460,114 @@ class HelperParameterTests(unittest.TestCase):
         )
         self.assertEqual(_names(result), [("f1_effects.txt", 3, "var", "te_tax_base_$BAND$")])
 
-    def test_an_all_parameter_name_is_counted_not_judged(self):
+    def test_a_name_passed_on_under_the_same_parameter(self):
+        # review, item 1: the mod's usual pass-on form, `OUT = $OUT$`. The
+        # wrapper's substitution gives the template back unchanged, which used
+        # to read as "this call passes nothing".
+        wrapper = "w = {\n\tte_set_sqrt = { IN = 4 OUT = $OUT$ }\n}\n"
+        use = "e = {\n\tw = { OUT = x }\n\tchange_variable = { name = x add = 1 }\n}\n"
+        self.assertEqual(_names(_judge(self.HELPER, wrapper, use)), [])
+        # Part parameter, short literal part, same name passed on.
+        result = _judge(
+            "h = {\n\tset_variable = { name = a_$P$ value = 0 }\n}\n",
+            "w = {\n\th = { P = $P$ }\n}\n",
+            "e = {\n\tw = { P = x }\n\tchange_variable = { name = a_x add = 1 }\n}\n",
+        )
+        self.assertEqual(_names(result), [])
+
+    def test_a_call_that_passes_none_of_the_parameters_credits_nothing(self):
+        # The other half of item 1: `IN` is no part of the name `$OUT$`.
+        result = _judge(
+            self.HELPER,
+            "e = {\n\tte_set_sqrt = { IN = x }\n\tchange_variable = { name = x add = 1 }\n}\n",
+        )
+        self.assertEqual(_names(result), [("f1_effects.txt", 3, "var", "x")])
+
+    def test_a_long_chain_of_helpers_in_any_file_order(self):
+        # Callers before their callees, so each pass resolves one level.
+        chain = ["e = {\n\tw7 = { A7 = x }\n\tchange_variable = { name = x add = 1 }\n}\n"]
+        for i in range(7, 0, -1):
+            chain.append(f"w{i} = {{\n\tw{i - 1} = {{ A{i - 1} = $A{i}$ }}\n}}\n")
+        chain += ["w0 = {\n\tte_set_sqrt = { IN = 1 OUT = $A0$ }\n}\n", self.HELPER]
+        self.assertEqual(_names(_judge(*chain)), [])
+
+    def test_a_caller_that_holds_only_part_of_the_name(self):
+        # review, item 5: the event writes no variable and never spells the
+        # variable's name, only the argument that completes it.
+        result = _judge(
+            "h = {\n\tset_variable = { name = $P$_ct value = 0 }\n}\n",
+            "e = {\n\tchange_variable = { name = abc_ct add = 1 }\n\tchange_variable = { name = xy_ct add = 1 }\n}\n",
+            events__c="c.1 = {\n\timmediate = {\n\t\th = { P = abc }\n\t}\n}\n",
+        )
+        self.assertEqual(_names(result), [("f1_effects.txt", 3, "var", "xy_ct")])
+
+    def test_a_wrapper_in_a_file_that_writes_no_variable(self):
+        # The wrapper's file is read because it calls the helper, and the
+        # event's because it calls the wrapper.
+        result = _judge(
+            self.HELPER,
+            "e = {\n\tchange_variable = { name = far add = 1 }\n}\n",
+            common__scripted_effects__wrap_effects="wrap = {\n\tte_set_sqrt = { IN = 2 OUT = $TO$ }\n}\n",
+            events__caller="c.1 = {\n\timmediate = {\n\t\twrap = { TO = far }\n\t}\n}\n",
+        )
+        self.assertEqual(_names(result), [])
+
+    def test_a_parameter_not_in_upper_case(self):
+        # review, item 5. The mod writes every parameter in capitals.
+        for param in ("out", "Out"):
+            with self.subTest(param=param):
+                result = _judge(
+                    f"h = {{\n\tset_variable = {{ name = ${param}$ value = 0 }}\n}}\n",
+                    f"e = {{\n\th = {{ {param} = x }}\n\tchange_variable = {{ name = x add = 1 }}\n}}\n",
+                )
+                self.assertEqual(_names(result), [])
+
+    def test_an_all_parameter_change_is_judged_for_each_name_a_caller_passes(self):
+        # review, item 4: the flag goes on the call that passes the name.
+        result = _judge(
+            "bump = {\n\tchange_variable = { name = $C$ add = 1 }\n}\n",
+            "e = {\n"
+            "\tset_variable = { name = started value = 0 }\n"
+            "\tbump = { C = started }\n"
+            "\tbump = { C = never_set }\n"
+            "}\n",
+        )
+        self.assertEqual(_names(result), [("f1_effects.txt", 4, "var", "never_set")])
+        flag = result.flags[0]
+        self.assertEqual(flag.via, ("common/scripted_effects/f0_effects.txt", 2, "$C$"))
+        self.assertIn("passes `never_set` to the `change_variable` of `$C$` at "
+                      "`common/scripted_effects/f0_effects.txt:2`", flag.message)
+        self.assertEqual((result.judged, result.unjudged), (1, 0))
+
+    def test_a_change_reached_through_a_wrapper_and_from_another_file(self):
+        result = _judge(
+            "bump = {\n\tchange_global_variable = { name = $C$ add = 1 }\n}\n",
+            "tick = {\n\tbump = { C = $C$ }\n}\n",
+            events__m="m.1 = {\n\timmediate = {\n\t\ttick = { C = world_clock }\n\t}\n}\n",
+        )
+        self.assertEqual(_names(result), [("m.txt", 3, "global_var", "world_clock")])
+
+    def test_a_part_parameter_change_resolved_by_a_caller_needs_that_exact_name(self):
+        result = _judge(
+            "draw = {\n\tchange_variable = { name = sr_$GOOD$_stock subtract = 1 }\n}\n",
+            "e = {\n"
+            "\tset_variable = { name = sr_grain_stock value = 0 }\n"
+            "\tdraw = { GOOD = grain }\n"
+            "\tdraw = { GOOD = steel }\n"
+            "}\n",
+        )
+        self.assertEqual(_names(result), [("f1_effects.txt", 4, "var", "sr_steel_stock")])
+
+    def test_a_name_passed_to_a_helper_is_suppressed_on_the_call(self):
+        result = _judge(
+            "bump = {\n\tchange_variable = { name = $C$ add = 1 }\n}\n",
+            "e = {\n\tbump = { C = theirs } # REVIEWED 2026-11-15 (variable_init): a vanilla event sets it\n}\n",
+        )
+        self.assertEqual(result.unreviewed, [])
+        self.assertEqual(len(result.exemptions), 1)
+        self.assertEqual(result.stale, [])
+
+    def test_an_all_parameter_name_no_caller_resolves_is_counted_not_judged(self):
         result = _judge(
             "bump = {\n"
             "\tchange_variable = { name = $COUNTER$ add = 1 }\n"

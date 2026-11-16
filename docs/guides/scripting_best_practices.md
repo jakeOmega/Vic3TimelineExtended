@@ -2352,7 +2352,11 @@ if = {
 change_variable = { name = x add = 1 }
 ```
 
-`change_variable_init_audit` flags a change whose variable has no initialising `set_variable` anywhere in the mod or in vanilla's `common/` (`--strict` in CI). It matches names, through a scripted effect's `$PARAM$` to the name each caller passes, so it catches a counter nothing starts but not one whose set runs too late.
+`change_variable_init_audit` flags a change whose variable has no initialising `set_variable` of that exact name anywhere in the mod or in vanilla's `common/` (`--strict` in CI). It matches names, through a scripted effect's `$PARAM$` to the name each caller passes, so it catches a counter nothing starts but not one whose set runs too late, or on another object.
+
+**The audit reads a guard only from a `limit` in the set's own body**: `has_variable = X`, `exists = var:X`, or a `var:X` read on either side of a comparison. A reset whose guard it cannot see there still looks like a start to it: one held by the helper's caller (`if = { limit = { has_variable = x } reset_x = yes }`), inside a scripted trigger, in an event's `trigger`, a button's `possible` or a `random_list` entry's `trigger`, in the `else` of `NOT = { has_variable = X }`, or on a set that reaches the object through a saved scope. So a clean audit does not excuse reading the sets yourself when a counter stays at nothing.
+
+**Whether `change_variable` works on a flag is untested.** `set_variable = x` and `set_variable = { name = x }` store a boolean, not a number. No changed variable in the mod is started that way (2026-11-15), and the audit does not take the flag form as a start; start a counter with `value = 0`. `clamp_variable` and `round_variable` presumably fail the same way on an unset variable (not read from a log yet), and the audit does not read them.
 
 ## Character Trait `replace` Block
 
