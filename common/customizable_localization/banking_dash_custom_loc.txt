@@ -1225,6 +1225,26 @@ te_mon_union_issuer_note = {
 }
 
 
+# What the Monetary Union row's tooltip adds for a country that uses a common
+# currency at tier 4 or above and is NOT in its banking union (2026-11-15,
+# #1812): an adopter, or the issuer, under Unregulated Banking. It carries no
+# te_mon_union_banking_union, so its budget lacks the principle's point and its
+# cycle the principle's steadiness, and nothing else on its screen says why.
+# Nothing for anybody else: the last key is empty.
+te_mon_union_regulator_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_union_outside_banking_union = yes }
+		localization_key = banking_dash_mon_union_regulator_note
+	}
+	text = {
+		localization_key = banking_dash_mon_union_regulator_note_none
+	}
+}
+
+
 # A bloc member's place in its leader's Monetary Union rows (GUI audit
 # BNK-13), evaluated on the member: the leader's view of te_mon_union_state.
 # "Would refuse" is te_monetary_discover_union's own test for its refusers

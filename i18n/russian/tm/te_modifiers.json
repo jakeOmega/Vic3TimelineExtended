@@ -2584,8 +2584,8 @@
   "ru": "[concept_banking_common_currency]: вероятность [Concept('concept_banking_crash','банковского краха')]"
  },
  "power_bloc_te_mon_currency_crash_chance_mult_desc": {
-  "en": "For every adopter, and for the leader under any banking law but $law_unregulated_banking$: one supervisor over every bank that uses the currency.",
-  "ru": "Для каждой принявшей валюту страны и для лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: один надзиратель над каждым банком, использующим валюту."
+  "en": "For every country using the currency under any banking law but $law_unregulated_banking$: one supervisor over every bank that uses the currency.",
+  "ru": "Для каждой страны, использующей валюту, при любом банковском законе, кроме закона «$law_unregulated_banking$»: один надзиратель над каждым банком, использующим валюту."
  },
  "power_bloc_te_mon_currency_interventions_add_desc": {
   "en": "Points added to the intervention budget of every adopter, and of the leader under any banking law but $law_unregulated_banking$: room to keep one more tool in force.",
@@ -2608,8 +2608,8 @@
   "ru": "[concept_banking_common_currency]: волатильность [Concept('concept_banking_cycle','банковского цикла')]"
  },
  "power_bloc_te_mon_currency_volatility_mult_desc": {
-  "en": "How far [concept_banking_momentum] swings at random, for every adopter, and for the leader under any banking law but $law_unregulated_banking$: one deposit guarantee across the currency.",
-  "ru": "Насколько сильно случайно колеблется [concept_banking_momentum|l], для каждой принявшей валюту страны и для лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: единая гарантия вкладов на всю валюту."
+  "en": "How far [concept_banking_momentum] swings at random, for every country using the currency under any banking law but $law_unregulated_banking$: one deposit guarantee across the currency.",
+  "ru": "Насколько сильно случайно колеблется [concept_banking_momentum|l], для каждой страны, использующей валюту, при любом банковском законе, кроме закона «$law_unregulated_banking$»: единая гарантия вкладов на всю валюту."
  },
  "state_ageing_rate_add": {
   "en": "Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

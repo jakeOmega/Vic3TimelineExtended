@@ -830,8 +830,9 @@ Command and dollarized economies never get it.
 ### Monetizing the deficit
 
 Monetize Deficit, from 0 to 3, has your national bank print money for the
-treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
-inflation pressure and half a point of risk premium. It needs Fiat Money or
+treasury. Each level mints about 1% of a year's GDP before minting bonuses (the
+same ones as for [seigniorage](#the-monetary-union-principle-group)), adds about
+2.5 points of inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
 Independence, Command Economy, dollarization and an anchored currency rule it
 out. An independent bank still buys assets by itself in a deflation (see [When
@@ -1029,8 +1030,10 @@ seigniorage in pounds a week, before the bonuses and with them.
 The intervention points are room in [the intervention
 budget](#the-intervention-budget) for more tools at once: under Central Bank
 Independence, two of them keep the three leaning tools on beside Expand Deposit
-Guarantee. A leader under Unregulated Banking gets none, and its banks stay
-outside the banking union. If the points go, because the last adopter leaves,
+Guarantee. A leader under Unregulated Banking gets none, and no country under
+that law is in the banking union, leader or adopter: it gets neither the
+union's intervention point nor its steadier cycle, and its Monetary Union row
+says so. If the points go, because the last adopter leaves,
 the bloc loses the tier or you stop leading, the tools your budget no longer
 covers are lifted one a month. A country under Excess Private Construction gets
 none of the extra pool contribution.
@@ -1054,8 +1057,9 @@ identities](09-diplomacy.md#power-bloc-principles-and-identities).
 ### Currency boards for subjects
 
 A puppet, vassal, colony or crown land whose overlord has a dial runs a currency
-board: the overlord's rate plus a quarter point, its exchange rate, and half the
-subject's minting goes to the overlord. Six months at Very Tight or Very Loose
+board: the overlord's rate plus a quarter point, its exchange rate, and half of
+what the subject mints before its bonuses goes to the overlord, whose own
+minting bonuses then raise it. Six months at Very Tight or Very Loose
 bring The Overlord's Rate, which raises liberty desire. More autonomy ends the
 board.
 
