@@ -371,6 +371,16 @@ law_universal_basic_income = {
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_social_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 law_post-scarcity = {
@@ -428,6 +438,16 @@ law_post-scarcity = {
 
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_social_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -1838,6 +1858,16 @@ law_medical_augmentation_only = {
 	}
 
 	progressiveness = 60
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_health_system } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 law_regulated_augmentation_market = {
@@ -1871,6 +1901,16 @@ law_regulated_augmentation_market = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT }
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_consumer_protection } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -1912,6 +1952,16 @@ law_mandatory_augmentation = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT }
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_war } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3086,6 +3136,16 @@ law_central_bank_independence = {
 		# WIDTH of the error band, never the error itself (§8).
 		country_bank_forecast_error_add = -0.01
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_national_bank } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 # =================================================================
@@ -3311,6 +3371,16 @@ law_civic_monolingualism = {
 		state_homeland_creation_threshold_add = -0.05
 		state_homeland_removal_threshold_add = 0.05
 		state_homeland_change_speed_mult = 0.25
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_schools } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3580,6 +3650,12 @@ law_ministry_of_foreign_affairs = {
 
 	ai_enact_weight_modifier = {
 		value = 100
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_foreign_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3630,6 +3706,12 @@ law_ministry_of_war = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_war } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3674,6 +3756,12 @@ law_ministry_of_commerce = {
 				}
 			}
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_commerce } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 }
@@ -3768,6 +3856,12 @@ law_national_bank = {
 			limit = { scaled_debt > 0.25 }
 			add = 400
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_national_bank } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3813,6 +3907,12 @@ law_ministry_of_culture = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_culture } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3847,6 +3947,16 @@ law_pro_labor_ministry_of_labor = {
 	modifier = {
 		country_institution_ministry_of_labor_max_investment_add = 3
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 law_pro_capital_ministry_of_labor = {
@@ -3871,6 +3981,16 @@ law_pro_capital_ministry_of_labor = {
 
 	modifier = {
 		country_institution_ministry_of_labor_max_investment_add = 3
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3916,6 +4036,12 @@ law_ministry_of_the_environment = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_the_environment } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3944,6 +4070,16 @@ law_ministry_of_intelligence_and_security = {
 	modifier = {
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
 		country_legislative_override_capacity_add = 1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_intelligence_and_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3979,6 +4115,16 @@ law_ministry_of_refugee_affairs = {
 
 	modifier = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_refugee_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4036,6 +4182,12 @@ law_ministry_of_propaganda = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_propaganda } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4092,6 +4244,12 @@ law_ministry_of_science = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_science } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4132,6 +4290,16 @@ law_ministry_of_thought_control = {
 	modifier = {
 		country_institution_ministry_of_thought_control_max_investment_add = 3
 		country_legislative_override_capacity_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_thought_control } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4179,6 +4347,12 @@ law_ministry_of_consumer_protection = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_consumer_protection } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4224,6 +4398,12 @@ law_ministry_of_urban_planning = {
 				}
 			}
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_urban_planning } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 }
@@ -4277,6 +4457,12 @@ law_ministry_of_religion = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_religion } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4304,6 +4490,16 @@ law_ministry_of_international_aid = {
 
 	modifier = {
 		country_institution_ministry_of_international_aid_max_investment_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_international_aid } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4576,6 +4772,12 @@ law_neocolonialism = {
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_colonial_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 
@@ -5326,6 +5528,12 @@ law_private_policing = {
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_police } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 }

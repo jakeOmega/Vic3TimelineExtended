@@ -25,3 +25,23 @@ te_state_has_a_power_plant = {
 		}
 	}
 }
+
+# Country scope. The country's bureaucracy can carry one more institution: it has the spare bureaucracy that level 1
+# of a new institution takes (te_ai_new_institution_bureaucracy), and the institutions it already has are not
+# heading for a shortage as they grow (approaching_bureaucracy_shortage, the engine's own forecast). Vanilla asks
+# the pair `bureaucracy >= 0` and `approaching_bureaucracy_shortage = no` for "the bureaucracy is in order"
+# (je_tsarpoints_bureaucratic_reform_completed); this adds the new institution's own cost to the first.
+te_ai_can_staff_new_institution = {
+	approaching_bureaucracy_shortage = no
+	bureaucracy >= te_ai_new_institution_bureaucracy
+}
+
+# Country scope. Enacting a law that carries $INSTITUTION$ would found an institution the bureaucracy can't carry.
+# False while the country already has the institution: a law that only changes what an existing institution does
+# (Old Age Pension to Universal Basic Income, one Ministry of Labor to the other) adds no institution, and its
+# bureaucracy is a running cost the country pays already. Every law of the mod's that carries an institution
+# reads this in its ai_enact_weight_modifier (test_ai_institution_laws.py).
+te_ai_law_brings_unstaffed_institution = {
+	NOT = { has_institution = $INSTITUTION$ }
+	te_ai_can_staff_new_institution = no
+}

@@ -50,3 +50,24 @@ te_megaproject_ai_value = {
 		multiply = 0
 	}
 }
+
+# ---- Institution laws (country scope) ----
+
+# The bureaucracy level 1 of a new institution takes: 1 for each 100,000 people in incorporated states, at least 10
+# (a new institution starts at level 1, MIN_INSTITUTION_INVESTMENT). Read from total_population, one cheap read
+# where incorporated population would be a walk of every state for each law the AI weighs: it overstates the cost
+# for a country with large unincorporated lands, which makes the check stricter there, and it leaves out the
+# cost modifiers (country_bureaucracy_investment_cost_factor_mult and the per-institution ones).
+te_ai_new_institution_bureaucracy = {
+	value = total_population
+	divide = 100000
+	min = 10
+}
+
+# Added to a law's AI weight while enacting it would found an institution the bureaucracy can't carry
+# (te_ai_law_brings_unstaffed_institution). Vanilla's readme on ai_enact_weight_modifier: the base weight "usually
+# ranges in the low hundreds, so +100 would be fairly significant and +1000 would be very significant". -1000 puts
+# the law below a ministry's standing preference (+10 to +200), the National Bank's (+600) and a movement's push
+# (1000 x support x radicalism). It is a strong preference against, not a ban: the National Bank's rank and debt
+# terms (+300, +400) or a +750 push on top of its +600 still bring it out ahead.
+te_ai_unstaffed_institution_law_weight = -1000
