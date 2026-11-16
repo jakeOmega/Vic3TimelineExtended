@@ -20,6 +20,8 @@ be taught to the test before it can go unseen.
 * reach, seigniorage and the premium cut against worked figures, the owner's
   1957 Singapore among them, and their limits;
 * the interventions and the banking union stop at Unregulated Banking;
+* for an adopter as for the issuer (#1812, ``RegulatorTest``): no grant of intervention points
+  reaches a country under that law, and its Monetary Union row says why;
 * the common capital market by tier, the same in every phase of the cycle
   (owner, 2026-11-14: nothing here may soften a downturn or a panic), and
   nothing on a pool that cannot be spent;
@@ -897,11 +899,15 @@ class StepNineBTest(unittest.TestCase):
         for name in ("te_mon_union_adopter", "te_mon_union_reserve", "te_mon_union_seigniorage",
                      "te_mon_union_issuer_premium", "te_mon_union_credit"):
             self.assertIn(name, leader.mods)
-        # An adopter under the same law keeps the banking union, as it always has.
+        # An adopter under the same law is outside the banking union too (#1812): until 2026-11-15
+        # it kept the modifier, and with it a third point on a budget whose limit is its law.
         member = leader.bloc.members[1]
         member.laws = set(laws)
         self.pulse(member)
-        self.assertIn("te_mon_union_banking_union", member.mods)
+        self.assertNotIn("te_mon_union_banking_union", member.mods)
+        self.assertEqual(member.vars["te_mon_union_banking_applied"], 0)
+        for name in ("te_mon_union_adopter", "te_mon_union_reserve", "te_mon_union_credit"):
+            self.assertIn(name, member.mods)
 
     def removal(self, change):
         leader = union(5)
@@ -982,6 +988,231 @@ class StepNineBTest(unittest.TestCase):
                       .read_text(encoding="utf-8-sig"))
         for name in ("te_mon_union_issuer_premium", "te_mon_union_issuer_bank", "te_mon_union_credit"):
             self.assertIn(f"te_mon_mod_strip = {{ NAME = {name} }}", text)
+
+
+UNREGULATED = ("law_national_bank", "law_fiat_currency", "law_unregulated_banking")
+POINTS = "country_banking_intervention_max_add"
+
+
+def financial_regulation_laws():
+    """Every law of the Financial Regulation group, from the law file itself."""
+    return [name for name, body in definitions("common/laws/extra_laws.txt").items()
+            if isinstance(body, list) and ("group", "=", "lawgroup_financial_regulation") in body]
+
+
+# Every banking law but Unregulated Banking: derived, so a law added to the group is tested too.
+REGULATED = tuple(law for law in financial_regulation_laws() if law != "law_unregulated_banking")
+
+
+def positive_grants(text):
+    """{owner: points} for each top-level block of a script file that ADDS intervention points."""
+    code = re.sub(r"#[^\n]*", "", text)
+    out = {}
+    for m in re.finditer(rf"(?m)^[ \t]+{POINTS} = \+?([1-9]\d*(?:\.\d+)?)\b", code):
+        out[re.findall(r"(?m)^([\w:.]+) = \{", code[:m.start()])[-1]] = float(m.group(1))
+    return out
+
+
+class ScoreScript(Script):
+    """The adoption score reads three things the union's own tests never needed. Each is a fact
+    of the scenario here, the same for both countries compared, so only the law differs."""
+
+    def test(self, key, op, val, scope, root):
+        if key == "exists":
+            return False                    # no market owner to share: the +30 is out for both
+        if key == "country_rank":
+            return False                    # neither is a great power
+        return super().test(key, op, val, scope, root)
+
+
+class RegulatorTest(unittest.TestCase):
+    """Unregulated Banking's budget is its lock (banking_possible_cb_bail_in_regime: "no law lock:
+    the budget is below the cost already"), so nothing may add a point under that law. PR #1810
+    asked that of the issuer only; an adopter kept the banking union and its point, 3 with its
+    national bank, which is the Bail-in Regime's cost (#1812: 9 of 57 adopters in the owner's
+    1958 save were under that law, and the four whose banking entries were read carried it)."""
+
+    def setUp(self):
+        self.s = Script(world_gdp_m=WORLD_M)
+        body = self.s.effects["te_monetary_update_union"]
+        after = next(i for i, (key, _, val) in enumerate(body)
+                     if key == "set_variable" and field(val, "name") == "te_mon_union_q_state")
+        self.tail = body[after + 1:]
+
+    def pulse(self, country):
+        self.s.run("te_monetary_init_union_variables", country)
+        country.vars.setdefault("te_mon_work", 0)
+        country.vars.setdefault("te_mon_work2", 0)
+        self.s.pulse(self.tail, country)
+
+    def adopter_under(self, tier, law):
+        leader = union(tier)
+        member = leader.bloc.members[1]
+        member.laws = {"law_national_bank", "law_fiat_currency", law}
+        return member
+
+    def test_an_adopter_under_unregulated_banking_is_outside_the_banking_union(self):
+        for tier in (4, 5):
+            member = self.adopter_under(tier, "law_unregulated_banking")
+            self.pulse(member)
+            with self.subTest(tier=tier):
+                self.assertNotIn("te_mon_union_banking_union", member.mods)
+                self.assertTrue(self.s.check(self.s.triggers["te_mon_union_outside_banking_union"], member, member))
+                self.assertFalse(self.s.check(self.s.triggers["te_mon_union_in_banking_union"], member, member))
+
+    def test_an_adopter_under_every_other_banking_law_is_in_it(self):
+        for law in REGULATED:
+            member = self.adopter_under(4, law)
+            self.pulse(member)
+            with self.subTest(law=law):
+                self.assertEqual(member.mods.get("te_mon_union_banking_union"), 1)
+                self.assertFalse(self.s.check(self.s.triggers["te_mon_union_outside_banking_union"], member, member))
+
+    def test_below_tier_four_nobody_is_in_it_and_nobody_is_told_they_are_out(self):
+        for tier in (2, 3):
+            for law in ("law_unregulated_banking", "law_central_bank_independence"):
+                member = self.adopter_under(tier, law)
+                self.pulse(member)
+                with self.subTest(tier=tier, law=law):
+                    self.assertNotIn("te_mon_union_banking_union", member.mods)
+                    self.assertFalse(self.s.check(self.s.triggers["te_mon_union_outside_banking_union"], member, member))
+
+    def test_a_holdout_is_neither_in_nor_told_it_is_out(self):
+        holdout = union(5).bloc.members[-1]
+        holdout.laws = set(UNREGULATED)
+        for name in ("te_mon_union_in_banking_union", "te_mon_union_outside_banking_union"):
+            self.assertFalse(self.s.check(self.s.triggers[name], holdout, holdout), name)
+
+    def test_enacting_unregulated_banking_takes_it_off_an_adopter_on_its_next_pulse(self):
+        member = self.adopter_under(4, "law_universal_banking_light_prudence")
+        self.pulse(member)
+        self.assertIn("te_mon_union_banking_union", member.mods)
+        member.laws = set(UNREGULATED)
+        self.pulse(member)
+        self.assertNotIn("te_mon_union_banking_union", member.mods)
+        self.assertEqual(member.vars["te_mon_union_banking_applied"], 0)
+        # ...and a regulated law puts it back.
+        member.laws = {"law_national_bank", "law_fiat_currency", "law_free_mutual_banking"}
+        self.pulse(member)
+        self.assertIn("te_mon_union_banking_union", member.mods)
+
+    def grants(self):
+        """{static modifier: points} for every static modifier in the mod that ADDS intervention
+        points: every file of common/static_modifiers/, not extra_modifiers.txt alone (review of
+        PR #1851: a grant added to another file there went unseen)."""
+        out = {}
+        files = sorted((ROOT / "common/static_modifiers").glob("*.txt"))
+        self.assertGreater(len(files), 20)
+        for path in files:
+            out.update(positive_grants(path.read_text(encoding="utf-8-sig")))
+        return out
+
+    def test_the_regulated_laws_are_the_groups_own(self):
+        self.assertIn("law_unregulated_banking", financial_regulation_laws())
+        self.assertGreaterEqual(len(REGULATED), 6)
+        for law in ("law_central_bank_independence", "law_state_owned_banking", "law_free_mutual_banking"):
+            self.assertIn(law, REGULATED)
+        self.assertNotIn("law_unregulated_banking", REGULATED)
+
+    def test_nothing_outside_the_laws_and_the_static_modifiers_adds_a_point(self):
+        # The laws' points are the budget itself; a static modifier's are held to the regulator
+        # rule below. A grant anywhere else in common/ (a technology, a production method, a
+        # principle's own block) would reach a country under Unregulated Banking untested.
+        seen, elsewhere = 0, {}
+        for path in sorted((ROOT / "common").rglob("*.txt")):
+            rel = path.relative_to(ROOT).as_posix()
+            if rel.startswith(("common/laws/", "common/static_modifiers/", "common/modifier_type_definitions/")):
+                continue
+            seen += 1
+            text = path.read_text(encoding="utf-8-sig", errors="replace")
+            if POINTS in text:
+                found = positive_grants(text)
+                if found:
+                    elsewhere[rel] = found
+        self.assertGreater(seen, 500)
+        self.assertEqual(elsewhere, {})
+        # ...and the scan does find the ones that exist, where they are allowed.
+        laws = positive_grants((ROOT / "common/laws/extra_laws.txt").read_text(encoding="utf-8-sig"))
+        self.assertEqual(laws["law_unregulated_banking"], 1)
+        self.assertEqual(laws["law_national_bank"], 1)
+        self.assertEqual(set(financial_regulation_laws()) | {"law_national_bank"}, set(laws))
+
+    def test_every_grant_of_points_from_a_modifier_asks_for_a_regulator(self):
+        # The two the Monetary Union pays. A third grant added without the test would reopen #1812.
+        self.assertEqual(set(self.grants()), {"te_mon_union_banking_union", "te_mon_union_issuer_bank"})
+        for tier in (2, 3, 4, 5):
+            for who in ("issuer", "adopter"):
+                leader = union(tier, laws=UNREGULATED)
+                country = leader if who == "issuer" else leader.bloc.members[1]
+                country.laws = set(UNREGULATED)
+                self.pulse(country)
+                with self.subTest(tier=tier, who=who):
+                    self.assertEqual([m for m in country.mods if m in self.grants()], [])
+
+    def test_the_budget_under_unregulated_banking_stays_below_the_bail_ins_cost(self):
+        # The comment over banking_possible_cb_bail_in_regime, as arithmetic from the files it names.
+        laws = definitions("common/laws/extra_laws.txt")
+
+        def law_points(name):
+            return sum(float(v) for key, _, block in laws[name] if key == "modifier"
+                       for k, _, v in block if k == POINTS)
+
+        budget = law_points("law_unregulated_banking") + law_points("law_national_bank")
+        self.assertEqual(budget, 2)
+        bail_in = definitions("common/scripted_triggers/banking_policy_triggers.txt")["banking_possible_cb_bail_in_regime"]
+        cost = next(float(v) for key, _, block in bail_in if key == "custom_tooltip"
+                    for k, op, v in block if k == f"modifier:{POINTS}" and op == ">=")
+        self.assertEqual(cost, 3)
+        self.assertLess(budget, cost)
+        # What reopened it: one grant on top is the cost exactly.
+        self.assertEqual(budget + self.grants()["te_mon_union_banking_union"], cost)
+
+    def test_the_adoption_score_counts_the_supervisor_only_where_there_is_a_regulator(self):
+        s = ScoreScript()
+        s.stub_values["te_mon_credibility_c_own"] = 0.5
+        s.stub_triggers["te_mon_union_leader_is_pressing"] = lambda scope: False
+
+        def score(tier, law):
+            holdout = union(tier).bloc.members[-1]
+            holdout.laws = {"law_national_bank", "law_fiat_currency", law}
+            return s.number("te_mon_union_adopt_score", holdout, holdout)
+
+        for tier, gap in ((2, 0), (3, 0), (4, 5), (5, 5)):
+            with self.subTest(tier=tier):
+                self.assertEqual(score(tier, "law_universal_banking_light_prudence")
+                                 - score(tier, "law_unregulated_banking"), gap)
+
+    def test_the_monetary_union_row_says_why(self):
+        loc = english()
+        self.assertIn("[Country.GetCustom('te_mon_union_regulator_note')]", loc["banking_dash_mon_union_tt"])
+        note = loc["banking_dash_mon_union_regulator_note"]
+        self.assertIn("$law_unregulated_banking$", note)
+        self.assertIn("intervention point", note)
+        self.assertEqual(loc["banking_dash_mon_union_regulator_note_none"], "")
+        block = definitions("common/customizable_localization/banking_dash_custom_loc.txt")["te_mon_union_regulator_note"]
+        texts = [val for key, _, val in block if key == "text"]
+        self.assertEqual([field(t, "localization_key") for t in texts],
+                         ["banking_dash_mon_union_regulator_note", "banking_dash_mon_union_regulator_note_none"])
+        self.assertEqual(field(texts[0], "trigger"), [("te_mon_union_outside_banking_union", "=", "yes")])
+
+    def test_the_principles_lines_name_the_law_for_both_sides(self):
+        loc = english()
+        for key in ("power_bloc_banking_union_bool_desc", "power_bloc_te_mon_currency_crash_chance_mult_desc",
+                    "power_bloc_te_mon_currency_volatility_mult_desc", "power_bloc_te_mon_currency_interventions_add_desc"):
+            with self.subTest(key=key):
+                self.assertIn("$law_unregulated_banking$", loc[key])
+                # The old wording gave the exception to the leader alone.
+                self.assertNotIn("every adopter, and", loc[key])
+                self.assertNotIn("the leader under any banking law", loc[key])
+
+    def test_one_trigger_gates_both_sides(self):
+        text = re.sub(r"#[^\n]*", "", (ROOT / UNION_EFFECTS).read_text(encoding="utf-8-sig"))
+        self.assertEqual(text.count("te_mon_union_in_banking_union = yes"), 1)
+        for path in (UNION_EFFECTS, UNION_VALUES, UNION_TRIGGERS):
+            code = re.sub(r"#[^\n]*", "", (ROOT / path).read_text(encoding="utf-8-sig"))
+            self.assertNotIn("te_mon_union_issuer_has_regulator", code, path)
+        comment = (ROOT / "common/scripted_triggers/banking_policy_triggers.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("THE BUDGET IS THE LOCK", comment)
 
 
 class SelfCheckTest(unittest.TestCase):
@@ -1480,6 +1711,92 @@ class MintingBonusTest(unittest.TestCase):
                                                       ("te_mon_union_seigniorage_base_display", ">", "0")])
         self.assertTrue(self.loc["banking_dash_mon_union_issuer_note_paid"]
                         .startswith("$banking_dash_mon_union_issuer_note$"))
+
+
+
+class OtherMintingFiguresTest(MintingBonusTest):
+    """The same rule for the two other figures the mod pays as a flat minting add (#1812, item 5):
+    Monetizing the Deficit and the overlord's currency-board seigniorage. The engine multiplies
+    each by 1 + country_minting_mult, as it does the union's seigniorage, so a text that gives
+    the figure must say it is before those bonuses. PR #1810 said so for the union's only.
+
+    Inherits MintingBonusTest's readers and its tests, which then run a second time here."""
+
+    def static(self, name):
+        return [(k, v) for k, _, v in definitions(MODIFIERS)[name] if k != "icon"]
+
+    def test_both_are_flat_minting_adds(self):
+        # The premise: paid any other way, "before bonuses" would be the wrong thing to say.
+        for name in ("te_monetisation_minting", "te_mon_board_seigniorage"):
+            with self.subTest(modifier=name):
+                self.assertEqual(self.static(name), [("country_minting_add", "1")])
+
+    def test_each_stated_figure_is_named_as_before_the_bonuses(self):
+        for key, phrase in (("country_te_mon_minting_gdp_add_desc", "before your bonuses to [concept_budget_minting]"),
+                            ("te_monetisation_minting_desc", "before your bonuses to [concept_budget_minting]"),
+                            ("te_mon_bond_support_tt", "before our bonuses to [concept_budget_minting]"),
+                            ("te_mon_board_seigniorage_desc", "before our bonuses to [concept_budget_minting]")):
+            with self.subTest(key=key):
+                self.assertIn(phrase, self.loc[key])
+
+    def test_the_step_states_its_share_of_gdp_and_the_text_qualifies_it(self):
+        # The one percent is the display field's and the script value's; the qualifier follows it.
+        values = definitions("common/script_values/te_monetary_script_values.txt")
+        share = float(field(values["te_mon_monetisation_gdp_share"], "value"))
+        step = dict(self.static("te_mon_monetisation_step"))
+        self.assertEqual(float(step["country_te_mon_minting_gdp_add"]), share)
+        tooltip = self.loc["te_mon_bond_support_tt"]
+        figure = f"#b {share * 100:g}%#!"
+        self.assertLess(tooltip.index(figure), tooltip.index("before our bonuses"))
+
+    def test_the_monetizers_ceiling_is_the_laws_and_the_technologies(self):
+        top = self.ceiling()
+        desc = self.loc["country_te_mon_minting_gdp_add_desc"]
+        self.assertIn(f"with $law_digital_currency$ and all five finance technologies you mint #v {top * 100:g}%#! more", desc)
+        # A monetizer is on Fiat Money or Digital Currency, so the dearer law's bonus is reachable.
+        triggers = definitions("common/scripted_triggers/te_monetary_triggers.txt")
+        self.assertIn(("OR", "=", [("has_law_or_variant", "=", "law_type:law_fiat_currency"),
+                                   ("has_law_or_variant", "=", "law_type:law_digital_currency")]),
+                      triggers["te_mon_can_monetise"])
+        # ...and the two bands the text names are the two that cut minting, by the short names
+        # the Price Band row shows ("Very high", "Hyperinflation"), not the band modifiers' own
+        # ("Inflation: Very High"), which do not read in a sentence.
+        self.assertIn("less while your $banking_dash_mon_band_label$ is $banking_dash_price_band_very_high$ "
+                      "or $banking_dash_price_band_hyper$.", desc)
+        self.assertEqual(self.loc["banking_dash_mon_band_label"], "Price Band")
+        for band in ("very_high", "hyper"):
+            with self.subTest(band=band):
+                self.assertNotIn(f"$te_inflation_band_{band}$", desc)
+                short = self.loc[f"banking_dash_price_band_{band}"]
+                self.assertNotIn(":", short)
+                self.assertNotIn("[", short)
+                # The row's effects line for that band draws the band's modifier, which cuts minting.
+                self.assertIn(f"GetStaticModifier('te_inflation_band_{band}')", self.loc[f"banking_dash_price_band_fx_{band}"])
+                self.assertLess(float(dict(self.static(f"te_inflation_band_{band}"))[self.KEY]), 0)
+        cut = {name for name, body in definitions(MODIFIERS).items() if name.startswith("te_inflation_band_")
+               for k, _, v in body if k == self.KEY and float(v) < 0}
+        self.assertEqual(cut, {"te_inflation_band_very_high", "te_inflation_band_hyper"})
+
+    def test_the_board_takes_half_of_the_flat_sum_from_each_side(self):
+        # The overlord's half is half the subject's flat adds, read before any multiplier; the
+        # subject's half is fifty points off its multiplier. "Half of what it mints before its
+        # bonuses" is true of both, and "half its minting" of neither once the subject has bonuses.
+        values = definitions("common/script_values/te_monetary_arrangement_script_values.txt")
+        share = float(field(values["te_mon_board_seigniorage_share"], "value"))
+        self.assertEqual(share, 0.5)
+        self.assertEqual(values["te_mon_board_seigniorage_from_subject"][0], ("value", "=", "modifier:country_minting_add"))
+        self.assertEqual(self.static("te_mon_board_subject"), [("country_minting_mult", f"{-share:g}")])
+        self.assertIn("mints before its own bonuses", self.loc["te_mon_board_seigniorage_desc"])
+        self.assertIn("half of what we mint before our bonuses is theirs", self.loc["te_mon_board_subject_desc"])
+        for key in ("te_mon_board_seigniorage_desc", "te_mon_board_subject_desc", "banking_dash_mon_why_board"):
+            self.assertNotIn("mint earns", self.loc[key])
+            self.assertNotIn("next to nothing", self.loc[key])
+        self.assertIn("half of what the country mints before its bonuses", self.loc["banking_dash_mon_why_board"])
+        guide = " ".join((ROOT / "docs/player_guide/04-banking.md").read_text(encoding="utf-8").split())
+        self.assertIn("half of what the subject mints before its bonuses goes to the overlord", guide)
+
+    def test_the_guide_says_so_for_printing(self):
+        self.assertIn("Each level mints about 1% of a year's GDP before minting bonuses", self.guide)
 
 
 if __name__ == "__main__":

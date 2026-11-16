@@ -4,8 +4,8 @@
   "ru": "Банковский союз ([concept_banking_common_currency|l])"
  },
  "power_bloc_banking_union_bool_desc": {
-  "en": "One supervisor and one deposit guarantee for the banks of every adopter, and of the leader under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter.",
-  "ru": "Единый надзорный орган и единая гарантия вкладов для банков каждого участника, принявшего валюту, и лидера при любом банковском законе, кроме «$law_unregulated_banking$». [concept_banking_crash] гораздо реже распространяется по общей валюте, а лидер платит за надзор за каждого такого участника."
+  "en": "One supervisor and one deposit guarantee for the banks of every country using the currency, under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter.",
+  "ru": "Единый надзорный орган и единая гарантия вкладов для банков каждой страны, использующей валюту, при любом банковском законе, кроме «$law_unregulated_banking$». [concept_banking_crash] гораздо реже распространяется по общей валюте, а лидер платит за надзор за каждого участника, принявшего валюту."
  },
  "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
   "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",

@@ -394,7 +394,7 @@ te_mon_union_issuer_cut_value = {
 # 1 / 2 / 3 / 4 by tier. What that lets each banking law run together, and why
 # 4 and not 3: design §0.14.
 #
-# NOT UNDER UNREGULATED BANKING (te_mon_union_issuer_has_regulator): its budget
+# NOT UNDER UNREGULATED BANKING (te_mon_union_has_regulator): its budget
 # is its identity, and a point more opens tools it is meant to go without.
 te_mon_union_issuer_bank_points_2 = { value = 1 }
 te_mon_union_issuer_bank_points_3 = { value = 2 }
@@ -406,7 +406,7 @@ te_mon_union_issuer_bank_value = {
 	if = {
 		limit = {
 			te_mon_union_is_issuer = yes
-			te_mon_union_issuer_has_regulator = yes
+			te_mon_union_has_regulator = yes
 		}
 		if = {
 			limit = { te_mon_bloc_union_tier_5 = yes }
@@ -574,8 +574,14 @@ te_mon_union_adopt_score = {
 	}
 	# A supervisor over our banks, and a currency the world already holds. Worth
 	# less each than the backstop: neither is somebody standing behind our debts.
+	# The supervisor only where there is a regulator for it to work through
+	# (te_mon_union_has_regulator, #1812): under Unregulated Banking an adopter
+	# is outside the banking union, so the tier adds nothing to its score.
 	if = {
-		limit = { te_mon_bloc_union_tier_4_plus = yes }
+		limit = {
+			te_mon_bloc_union_tier_4_plus = yes
+			te_mon_union_has_regulator = yes
+		}
 		add = 5
 	}
 	if = {

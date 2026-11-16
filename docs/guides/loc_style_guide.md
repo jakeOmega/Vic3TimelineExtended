@@ -156,7 +156,7 @@ A name tells the thing apart from its neighbors in a list. Prefer the plain noun
 A modifier type's name sits beside a value the engine prints, formats and colors: "+20% Company Throughput Bonus", "−25% Greenhouse Gas Emissions". The name says what the value is of, and nothing else.
 
 - **The figure is the value.** Never type a number into a name: "adopters get #G +5%#! trade advantage" as the name of a yes/no field is a figure the engine can't format or scale and no test ties to the script. Make it a numeric field. A yes/no field is for a rule with no quantity: "Members May Adopt the Common Currency".
-- **When it applies goes in the `_desc`**, one or two sentences on hover: "For every adopter, and for the leader under any banking law but Unregulated Banking."
+- **When it applies goes in the `_desc`**, one or two sentences on hover: "For every country using the currency under any banking law but Unregulated Banking."
 - **The rule goes in a concept** the name or the description links, as "[concept_greenhouse_gas_emissions]" and "[concept_company_charter]" do. A system's terms, its formula, its thresholds: a concept, written to the concept row above.
 - **Let the heading name the audience.** Put the line in the block whose heading says who gets it (a power bloc principle's "Non-leader Bloc Members" for everyone but the leader) and leave it out of the name: "Swap Line Risk Premium", not "Swap Line Risk Premium for Members". Name a subset in the line, since the engine prints a block's lines in its own order and a line can't rely on the one above it: "Adopters' Credit Standing".
 
