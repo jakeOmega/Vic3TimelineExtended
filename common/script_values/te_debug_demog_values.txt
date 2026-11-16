@@ -1183,3 +1183,8 @@ te_debug_demog_cause_tag_sum = {
 te_debug_demog_devastation = {
 	value = devastation
 }
+# TE_SELF_CHECK harvest_tags_read (te_debug_demog_harvest_tags_selfcheck, 2026-11-16), state scope: accidents and
+# violence's tag, which carries an earthquake's or a tsunami's line, for its log line.
+te_debug_demog_cause_tag_ext = {
+	value = modifier:state_death_cause_ext_mult
+}

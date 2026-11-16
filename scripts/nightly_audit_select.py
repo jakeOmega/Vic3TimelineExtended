@@ -109,6 +109,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/static_modifiers/te_demog_cause_tags_generated.txt",
     "common/interest_group_traits/te_demog_cause_tags_generated.txt",
     "common/character_traits/te_demog_cause_tags_generated.txt",
+    "common/harvest_condition_types/te_demog_cause_tags_generated.txt",
     "common/scripted_effects/te_demog_lx_generated_effects.txt",
     "common/script_values/te_demog_lx_generated_values.txt",
     "common/script_values/te_demog_spread_values_generated.txt",

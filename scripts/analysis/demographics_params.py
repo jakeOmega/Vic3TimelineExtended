@@ -814,11 +814,14 @@ CAUSE_SCALE_MIN_DEATHS = 1.0
 CAUSE_SCALE_MIN = 0.0001
 # Vanilla's carriers, tagged by generated INJECTs (gen_demographics.py, te_demog_cause_tags_generated.txt): {database:
 # (folder, the block that holds the line, or None for the entity itself)}. Static modifiers the mod already INJECTs or
-# REPLACEs carry their tag in that block, by hand.
+# REPLACEs carry their tag in that block, by hand. Harvest conditions since 2026-11-16: an earthquake's or a tsunami's
+# 0.05 is per point of intensity (1 to 6 by region), so one read 0.121 untagged in Umbria (cause_tags_read's BROKEN).
+# The first INJECT into a harvest condition: the self-check harvest_tags_read says whether it adds to vanilla's block.
 DEATH_CAUSE_TAG_DATABASES = {
     "modifiers": ("static_modifiers", None),
     "interest_group_traits": ("interest_group_traits", "modifier"),
     "character_traits": ("character_traits", "country_modifier"),
+    "harvest_condition_types": ("harvest_condition_types", "modifier"),
 }
 DEATH_CAUSE_TAGS = {
     # infection and hunger: epidemics, famines, food relief, medicine and nursing
@@ -862,6 +865,8 @@ DEATH_CAUSE_TAGS = {
         "krakatoa_eruption_no_help_modifier", "modifier_terror_cell_crackdown_state", "decree_put_the_riot_down",
         "harbingers_of_order_modifier", "modifier_slaughter_with_decrees", "congo_massacre_mortality_modifier",
         "modifier_kazakh_ungovernable_provinces", "sweden_law_birth_two",
+        # vanilla's two harvest conditions with a mortality line, 0.05 a point of intensity
+        "earthquake", "tsunami",
         "mental_health_crisis_active_modifier", "mental_health_infrastructure_modifier", "mental_health_neglect_modifier",
         "mental_health_leave_modifier", "youth_mental_health_funding_modifier", "mental_health_crisis_ignored_modifier",
         "veteran_mental_health_modifier",
@@ -887,13 +892,14 @@ assert len(DEATH_CAUSE_OF) == sum(len(v) for v in DEATH_CAUSE_TAGS.values()), "a
 # Lines that stay untagged (their deaths spread over the census's own causes, as the census's lag does): the census's own
 # terms and pairs, the engine's per-pop starvation penalties (the walk reads them), the moved laws' cancels, and vanilla
 # databases whose INJECT into a nested modifier block no read has shown to add rather than replace (companies'
-# prosperity_modifier, amendments' and harvest conditions' modifier: five lines of at most 5%).
+# prosperity_modifier and an amendment's modifier: four lines of at most 5%). The two harvest conditions stood here
+# too until 2026-11-16, as lines of 5%, but theirs is 5% a point of intensity (above).
 DEATH_CAUSE_UNTAGGED = frozenset({
     "starvation_penalty", "severe_starvation_penalty",
     "te_demog_census_deaths_up", "te_demog_census_deaths_down", "te_demog_line_deaths_up", "te_demog_line_deaths_down",
     "te_demog_fast_deaths", "law_charitable_health_system", "law_public_health_insurance",
     "company_oriental_consolidated_mining", "company_noda_shoyu", "company_ingolstadt_electrical_company",
-    "amendment_draconian_blasphemy_laws", "tsunami", "earthquake",
+    "amendment_draconian_blasphemy_laws",
 })
 # Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
 # script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
