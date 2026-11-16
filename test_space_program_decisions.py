@@ -198,16 +198,21 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
                 sv_units = re.search(r"^" + value + r"\s*=\s*(\d+)", self.values, re.M).group(1)
                 self.assertEqual(pm_units, sv_units)
 
-    def test_ai_weighs_the_increase_and_races_only_when_it_counts(self):
+    def test_ai_follows_its_budget_and_races_only_when_it_counts(self):
+        # The AI's monthly budget pass sets each AI program's Mission Limit ceiling and climbs it
+        # itself (test_ai_space_mission_budget.py); a mission decision only follows the ceiling.
         for name in [*MISSIONS, "te_decision_found_space_program"]:
             with self.subTest(decision=name):
                 ai = block(block(self.decisions, name), "ai_chance")
                 self.assertIn("sr_ai_should_participate = yes", ai)
-                self.assertIn("in_default = no", ai)
-                self.assertRegex(ai, r"net_fixed_income > sr_mission_bill_\w+")
+                self.assertIn("sr_ai_space_budget_in_trouble = no", ai)
+        found = block(block(self.decisions, "te_decision_found_space_program"), "ai_chance")
+        self.assertRegex(found, r"net_fixed_income > sr_mission_bill_earth_orbit")
+        self.assertIn("sr_ai_mission_room_earth_orbit >= 0", found)
         for name in MISSIONS:
-            body = block(self.values, "sr_mission_bill_increase_" + name.rsplit("space_mission_", 1)[1])
-            self.assertIn("subtract = sr_mission_units_current", body)
+            with self.subTest(decision=name):
+                ai = block(block(self.decisions, name), "ai_chance")
+                self.assertIn(f"sr_ai_mission_ceiling_allows_{name.rsplit('space_mission_', 1)[1]} = yes", ai)
 
     def test_pm_group_is_most_productive(self):
         pmg = block(strip_comments(read(PMGS)), "REPLACE_OR_CREATE:pmg_base_building_space_program")
