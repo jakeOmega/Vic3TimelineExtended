@@ -1,0 +1,60 @@
+﻿# AI coverage (#1822): the mod's four ideological movements on the political agendas' movement lists.
+#
+# Each vanilla political agenda lists the movements its government sides with (pro_movements) and against
+# (anti_movements). No list named movement_environmental, movement_civil_rights, movement_anti_war or
+# movement_transhumanist (common/political_movements/new_ideological_movements.txt), so every AI government was
+# indifferent to all four. What a list does is not documented; movements can be bolstered and suppressed, and the
+# lists are the only place a strategy names a movement.
+#
+# Placement is by what each movement's ideology wants, set against the interest groups the agenda favors and
+# opposes (the mod's own stances; scripts/analysis/ai_agenda_movement_alignment.py prints the scores, and the
+# table is in docs/systems/mod_systems/ai.md § AI Coverage of the Mod's Content):
+#   - Civil Rights (multicultural citizenship, minority protection, devolution, strong courts): with the
+#     progressive and egalitarian agendas, against the reactionary and nationalist ones.
+#   - Anti-War (limited war, no war ministry, a militia, no colonies): with the egalitarian agenda, against the
+#     nationalist one.
+#   - Transhumanist (unrestricted augmentation, open-source patents, algorithmic government, automation): with the
+#     progressive agenda, against the reactionary one.
+#   - Environmental (an environment ministry, a fossil phase-out; against laissez-faire and extraction): with the
+#     egalitarian agenda.
+# The conservative agenda gets no entry. Three of the movements score against its interest groups (Civil Rights,
+# Anti-War, Transhumanist), but vanilla lists the nearest vanilla movements, the cultural and religious minorities,
+# as anti for the reactionary and nationalist agendas only; the conservative agenda is the most common among AI
+# countries; and a suppressed movement can fall below what it needs to last and disband, which the mod's own
+# systems read. Those three entries are a proposal in ai.md, waiting on the self-check below.
+#
+# Each INJECT adds to the list vanilla's agenda already has. Unread in game: that an INJECTed list appends on an AI
+# strategy (it does on production method groups and laws) rather than replacing vanilla's list or being ignored.
+# TE_SELF_CHECK ai_movement_lists (common/on_actions/te_ai_movement_lists_selfcheck_on_actions.txt) reads the
+# effect, with vanilla's own entries on the same lists as its control.
+# edited_political_strategies.txt INJECTs other fields into the same agendas; another AI mod's INJECTs into them
+# merge with these. test_ai_movement_lists.py pins this file.
+
+INJECT:ai_strategy_reactionary_agenda = {
+	anti_movements = {
+		movement_civil_rights
+		movement_transhumanist
+	}
+}
+
+INJECT:ai_strategy_progressive_agenda = {
+	pro_movements = {
+		movement_civil_rights
+		movement_transhumanist
+	}
+}
+
+INJECT:ai_strategy_egalitarian_agenda = {
+	pro_movements = {
+		movement_environmental
+		movement_civil_rights
+		movement_anti_war
+	}
+}
+
+INJECT:ai_strategy_nationalist_agenda = {
+	anti_movements = {
+		movement_civil_rights
+		movement_anti_war
+	}
+}
