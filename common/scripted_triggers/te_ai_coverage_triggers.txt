@@ -45,3 +45,76 @@ te_ai_law_brings_unstaffed_institution = {
 	NOT = { has_institution = $INSTITUTION$ }
 	te_ai_can_staff_new_institution = no
 }
+
+# ---- TE_SELF_CHECK ai_movement_lists (te_ai_movement_lists_selfcheck_on_actions.txt). Delete with that file. ----
+
+# Country scope. The country holds one of the five political agendas te_ai_movement_strategies.txt adds to.
+te_aml_holds_a_common_agenda = {
+	OR = {
+		has_strategy = ai_strategy_conservative_agenda
+		has_strategy = ai_strategy_reactionary_agenda
+		has_strategy = ai_strategy_progressive_agenda
+		has_strategy = ai_strategy_egalitarian_agenda
+		has_strategy = ai_strategy_nationalist_agenda
+	}
+}
+
+# Political movement scope. One of the mod's four ideological movements.
+te_aml_is_mod_movement = {
+	OR = {
+		is_political_movement_type = movement_environmental
+		is_political_movement_type = movement_civil_rights
+		is_political_movement_type = movement_anti_war
+		is_political_movement_type = movement_transhumanist
+	}
+}
+
+# Political movement scope. The movement is on its country's agenda's pro list, by te_ai_movement_strategies.txt
+# (test_ai_movement_lists.py holds the two files together).
+te_aml_on_pro_list = {
+	OR = {
+		AND = {
+			owner = { has_strategy = ai_strategy_progressive_agenda }
+			OR = {
+				is_political_movement_type = movement_civil_rights
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+		AND = {
+			owner = { has_strategy = ai_strategy_egalitarian_agenda }
+			OR = {
+				is_political_movement_type = movement_environmental
+				is_political_movement_type = movement_civil_rights
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+}
+
+# Political movement scope. The same for the anti list.
+te_aml_on_anti_list = {
+	OR = {
+		AND = {
+			owner = { has_strategy = ai_strategy_conservative_agenda }
+			OR = {
+				is_political_movement_type = movement_civil_rights
+				is_political_movement_type = movement_anti_war
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+		AND = {
+			owner = { has_strategy = ai_strategy_reactionary_agenda }
+			OR = {
+				is_political_movement_type = movement_civil_rights
+				is_political_movement_type = movement_transhumanist
+			}
+		}
+		AND = {
+			owner = { has_strategy = ai_strategy_nationalist_agenda }
+			OR = {
+				is_political_movement_type = movement_civil_rights
+				is_political_movement_type = movement_anti_war
+			}
+		}
+	}
+}

@@ -1,0 +1,141 @@
+﻿# TEMPORARY self-check (2026-11-15, #1822): do the movement lists te_ai_movement_strategies.txt INJECTs take?
+#
+# That file adds the mod's four ideological movements to five political agendas' pro_movements and anti_movements
+# lists. Two things are unread: that an INJECTed list appends on an AI strategy, and what the lists do (no file
+# documents it; a government can bolster and suppress movements, and nothing else in a strategy names one). No
+# trigger reads a strategy's list, so this reads the effect: among AI countries on those agendas, how many of the
+# listed movements are bolstered (pro) or suppressed (anti), how many are treated the other way round, and how
+# often the same four movements are bolstered or suppressed where the agenda lists them on neither side.
+#
+# ai_movement_lists, read at each global yearly pulse from 1970.1.1 that is also at least two yearly pulses after
+# the first this build ran (te_aml_years counts them, so a save begun on the build before gives its governments
+# two years on the new lists first), until a pulse finds 20 or more listed movements; that pulse logs the verdict
+# and ends the check. The movements come with era 7 and later technologies, so an AI world may not hold 20 before
+# the 1980s or 1990s. No line: the game has not yet had 20 listed movements at a yearly pulse.
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          3 or more treated as listed, none treated against its list, and listed movements are acted on
+#               more often than unlisted ones: the lists are in force.
+#   BROKEN      one treated against its list (a pro movement suppressed, an anti movement bolstered), or none
+#               treated as listed while unlisted ones are acted on: the AI is not following these lists. Either
+#               the INJECT is ignored, or the lists do not drive bolstering and suppression.
+#   NO_VERDICT  nothing bolstered or suppressed anywhere (the AI may not use either on these movements, which
+#               says nothing about the INJECT), or too few treated as listed to tell.
+# With another mod that adds the same movements to these lists, OK can come from that mod alone.
+#
+# Play-test row: docs/testing/ai-economy-playtest.md § AI coverage of the mod's content. Delete this file,
+# te_ai_movement_lists_selfcheck_values.txt and the te_aml_ triggers in te_ai_coverage_triggers.txt once it reads OK.
+on_yearly_pulse = {
+	on_actions = {
+		te_ai_movement_lists_selfcheck_settle
+		te_ai_movement_lists_selfcheck
+	}
+}
+
+# The settling count: one a year from the first yearly pulse this build runs, up to 2.
+te_ai_movement_lists_selfcheck_settle = {
+	trigger = {
+		NOT = { has_global_variable = te_aml_checked }
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_aml_years } }
+			set_global_variable = { name = te_aml_years value = 0 }
+		}
+		if = {
+			limit = { global_var:te_aml_years < 2 }
+			change_global_variable = { name = te_aml_years add = 1 }
+		}
+	}
+}
+
+# The count, each year until 20 listed movements are found; then the verdict, once.
+te_ai_movement_lists_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_aml_checked }
+		has_global_variable = te_aml_years
+		global_var:te_aml_years >= 2
+		game_date >= 1970.1.1
+	}
+	effect = {
+		set_global_variable = { name = te_aml_listed value = 0 }
+		set_global_variable = { name = te_aml_match value = 0 }
+		set_global_variable = { name = te_aml_mismatch value = 0 }
+		set_global_variable = { name = te_aml_unlisted value = 0 }
+		set_global_variable = { name = te_aml_unlisted_acted value = 0 }
+		every_country = {
+			limit = {
+				is_ai = yes
+				te_aml_holds_a_common_agenda = yes
+			}
+			every_political_movement = {
+				limit = { te_aml_is_mod_movement = yes }
+				if = {
+					limit = { te_aml_on_pro_list = yes }
+					change_global_variable = { name = te_aml_listed add = 1 }
+					if = {
+						limit = { is_being_bolstered = yes }
+						change_global_variable = { name = te_aml_match add = 1 }
+					}
+					if = {
+						limit = { is_being_suppressed = yes }
+						change_global_variable = { name = te_aml_mismatch add = 1 }
+					}
+				}
+				else_if = {
+					limit = { te_aml_on_anti_list = yes }
+					change_global_variable = { name = te_aml_listed add = 1 }
+					if = {
+						limit = { is_being_suppressed = yes }
+						change_global_variable = { name = te_aml_match add = 1 }
+					}
+					if = {
+						limit = { is_being_bolstered = yes }
+						change_global_variable = { name = te_aml_mismatch add = 1 }
+					}
+				}
+				else = {
+					change_global_variable = { name = te_aml_unlisted add = 1 }
+					if = {
+						limit = {
+							OR = {
+								is_being_bolstered = yes
+								is_being_suppressed = yes
+							}
+						}
+						change_global_variable = { name = te_aml_unlisted_acted add = 1 }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { global_var:te_aml_listed >= 20 }
+			set_global_variable = te_aml_checked
+			debug_log = "TE_SELF_CHECK START ai_movement_lists (the verdict line follows; none after this one means the engine dropped the templated line)"
+			random_country = {
+				if = {
+					limit = {
+						te_aml_match_g >= 3
+						te_aml_mismatch_g = 0
+						te_aml_match_share > te_aml_unlisted_share
+					}
+					debug_log = "TE_SELF_CHECK OK ai_movement_lists listed=[SCOPE.ScriptValue('te_aml_listed_g')|0] as_listed=[SCOPE.ScriptValue('te_aml_match_g')|0]=[SCOPE.ScriptValue('te_aml_match_share')|2] against_list=[SCOPE.ScriptValue('te_aml_mismatch_g')|0] unlisted=[SCOPE.ScriptValue('te_aml_unlisted_g')|0] unlisted_acted=[SCOPE.ScriptValue('te_aml_unlisted_acted_g')|0]=[SCOPE.ScriptValue('te_aml_unlisted_share')|2]"
+				}
+				else_if = {
+					limit = {
+						OR = {
+							te_aml_mismatch_g > 0
+							AND = {
+								te_aml_match_g = 0
+								te_aml_unlisted_acted_g > 0
+							}
+						}
+					}
+					debug_log = "TE_SELF_CHECK BROKEN ai_movement_lists listed=[SCOPE.ScriptValue('te_aml_listed_g')|0] as_listed=[SCOPE.ScriptValue('te_aml_match_g')|0]=[SCOPE.ScriptValue('te_aml_match_share')|2] against_list=[SCOPE.ScriptValue('te_aml_mismatch_g')|0] unlisted=[SCOPE.ScriptValue('te_aml_unlisted_g')|0] unlisted_acted=[SCOPE.ScriptValue('te_aml_unlisted_acted_g')|0]=[SCOPE.ScriptValue('te_aml_unlisted_share')|2]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK NO_VERDICT ai_movement_lists listed=[SCOPE.ScriptValue('te_aml_listed_g')|0] as_listed=[SCOPE.ScriptValue('te_aml_match_g')|0]=[SCOPE.ScriptValue('te_aml_match_share')|2] against_list=[SCOPE.ScriptValue('te_aml_mismatch_g')|0] unlisted=[SCOPE.ScriptValue('te_aml_unlisted_g')|0] unlisted_acted=[SCOPE.ScriptValue('te_aml_unlisted_acted_g')|0]=[SCOPE.ScriptValue('te_aml_unlisted_share')|2]"
+				}
+			}
+		}
+	}
+}

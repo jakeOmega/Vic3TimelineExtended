@@ -1,0 +1,26 @@
+﻿# TE_SELF_CHECK ai_movement_lists (common/on_actions/te_ai_movement_lists_selfcheck_on_actions.txt): the counts it
+# stores, read back for its verdict and its log line. Delete with that file.
+te_aml_listed_g = { value = global_var:te_aml_listed }
+te_aml_match_g = { value = global_var:te_aml_match }
+te_aml_mismatch_g = { value = global_var:te_aml_mismatch }
+te_aml_unlisted_g = { value = global_var:te_aml_unlisted }
+te_aml_unlisted_acted_g = { value = global_var:te_aml_unlisted_acted }
+
+# The share of listed movements the government treats as its list says (0 with none counted).
+te_aml_match_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_aml_listed > 0 }
+		value = global_var:te_aml_match
+		divide = global_var:te_aml_listed
+	}
+}
+# The share of the same movements under agendas that list them on neither side that are bolstered or suppressed.
+te_aml_unlisted_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_aml_unlisted > 0 }
+		value = global_var:te_aml_unlisted_acted
+		divide = global_var:te_aml_unlisted
+	}
+}
