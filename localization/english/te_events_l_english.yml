@@ -6480,6 +6480,7 @@
  te_pb_summit.1.m:0 "Convene a congress of the movement."
  te_pb_summit.1.n:0 "Celebrate the culture we share."
  te_pb_summit.1.o:0 "Convene a conference of ambassadors."
+ te_pb_summit.1.q:0 "Convene a scientific congress."
  te_pb_summit.1.t:0 "A Summit of the Bloc"
  te_pb_summit.2.a:0 "Our delegation signed with the rest."
  te_pb_summit.2.d_ambassadors:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference of ambassadors. For ten years every member's diplomats, ours included, coordinate their work with the others'. The delegations left on better terms with one another than they arrived."
@@ -6488,6 +6489,7 @@
  te_pb_summit.2.d_culture:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a congress of the letters and arts its members share. Its program of exhibitions and exchanges runs in every member, ours included, for ten years. The delegations left on better terms with one another than they arrived."
  te_pb_summit.2.d_customs_members:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and had the members bring their tariffs and customs procedures into line. For ten years our customs houses follow the bloc's common code, as every member's do."
  te_pb_summit.2.d_drills:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and put joint exercises first on its agenda. For ten years every member's army, ours included, will train beside the others under a common program. The delegations left on better terms with one another than they arrived."
+ te_pb_summit.2.d_science:0 "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a scientific congress. The congress set a common program of research, and for ten years every member's laboratories, ours included, work to it."
  te_pb_summit.2.f:0 "From our delegation at the summit, to the government. The host set the agenda before we arrived, and the draft communiqué was on the table at the first session. We secured two changes of wording in the third paragraph and none of substance. Every delegation has signed. The text follows by the next courier, with our notes on what it commits us to and from what date."
  te_pb_summit.2.t:0 "The Summit's Communiqué"
 
