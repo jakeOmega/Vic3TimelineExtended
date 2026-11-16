@@ -219,9 +219,9 @@ te_mon_reserve_currency_cut = {
 #   two, never the sum. Read after te_monetary_update_union writes it, so it is
 #   this pulse's.
 # * AN IMPOSED PEG COUNTS: te_mon_anchored_gdp_m counts every treaty pegger
-#   (ruling C1: the imposed article promises its anchor "reserve-currency
-#   risk-premium relief"), so where the floor swallows the standing cut an
-#   imposed peg now pays its anchor too (ruling L18).
+#   (ruling C1: the imposed article promises its anchor the reserve currency's
+#   relief, as a chosen peg does), so where the floor swallows the standing cut
+#   an imposed peg now pays its anchor too (rulings L17, L18).
 # * THE SAME 0.01 CUTOFF AS EVERY SCALED PREMIUM TERM (te_monetary_apply_fx_one):
 #   a figure under a hundredth of a point is not applied, so the anchors whose
 #   whole cut is under it (six of the nine in the saves) are paid in neither form.

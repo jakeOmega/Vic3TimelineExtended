@@ -461,7 +461,9 @@ class TextTest(unittest.TestCase):
         self.assertTrue(MODIFIER in self.loc, f"{MODIFIER} has no name")
         self.assertLessEqual(len(self.loc[MODIFIER]), 70)
         self.assertNotRegex(self.loc[MODIFIER], r"\d")
-        self.assertRegex(self.loc[f"{MODIFIER}_desc"], r"risk[ _]premium")
+        desc = self.loc[f"{MODIFIER}_desc"]
+        self.assertIn("[concept_banking_credit_standing]", desc, "why: the standing it would have earned is at its best")
+        self.assertLess(len(re.sub(r"\[concept_\w+\]", "xx", desc).split()), 20, "one sentence, under 20 words")
 
     def test_the_anchor_row_says_why(self):
         self.assertIn("[Country.GetCustom('te_mon_reserve_floor_note')]", self.loc["banking_dash_mon_anchor_tt"])

@@ -988,7 +988,7 @@ Each side signs for its own reasons:
 
 | Article | Why the weaker side takes it | Why the stronger side agrees |
 |---|---|---|
-| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it. A bloc leader also gains 200 leverage generation over the pegger. It pays the article's upkeep. |
+| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it, in credit standing or, once its standing is at the floor, in risk premium. A bloc leader also gains 200 leverage generation over the pegger. It pays the article's upkeep. |
 | Swap Line | A country with high borrowing costs, a shaky gold peg or a habit of financial crises: −1 point of risk premium at once, +2 Peg Confidence a month, and credit of up to 2% of its GDP in a crisis, repaid afterwards. | A larger economy backing a partner cheaply: +1% prestige and better relations, and as a bloc leader 150 leverage generation over the partner, for extra risk premium in proportion to the partner's size (a sliver when a great power backs a minor) and loans in a crisis. It pays the upkeep. |
 | Lender of Last Resort | A heavily indebted country: its debt-load premium halves, imported panics start shallower, and a default brings a payout unless the guarantor refuses. Each payout makes the guarantee worth less. | A rich power sure of its ward: +2% prestige and better relations, and as a bloc leader 300 leverage generation over the ward, for extra risk premium in proportion to the ward's size. On a default it pays 5% to 15% of the ward's GDP, or refuses at a cost in infamy, prestige, relations and its own borrowing costs. |
 | Imposed Currency Peg | Nothing it would choose: it is forced on a country in default. | A major power or better that wants a defaulted country's money tied to its own for good; a bloc leader also gains 400 leverage generation over it. |
@@ -1017,7 +1017,8 @@ count most; the Monetary Union row's tooltip shows it. Seigniorage and the cut
 in risk premium are the tier's figures times reach: at tier V with a reach of a
 half, the leader mints 0.75% of its GDP a year and pays 0.75 points less. The
 cut is risk premium, not credit standing, so it counts even for a country whose
-credit standing is already at its floor.
+credit standing is already at its floor. A leader at its floor whose money is
+also pegged to by treaty gets the larger of this cut and the peg's, not both.
 
 The seigniorage figures are before minting bonuses, which raise it as they
 raise all your minting: 10% under Fiat Money or 25% under Digital Currency, and

@@ -580,7 +580,8 @@ Core inflation is hidden, so read it with the console event `te_debug_monetary.1
 ## Leftovers of the monetary layer (2026-11-15, #1812)
 
 Five things left over from the Monetary Union's leader benefits (`monetary_policy_design.md` § 0.16). The script and
-the texts are held offline by `test_monetary_union_leader.py` (`RegulatorTest`, `OtherMintingFiguresTest`); these
+the texts are held offline by `test_monetary_union_leader.py` (`RegulatorTest`, `OtherMintingFiguresTest`) and, for
+the reserve currency's cut at the floor (checks 9 and 10, added 2026-11-16), `test_monetary_reserve_floor.py`; these
 are what only the game shows. No self-check: the change rests on no engine fact the mod does not already use the same
 way (a law test in a scripted trigger; a scripted trigger in a custom localization's `trigger`).
 
@@ -601,7 +602,7 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
 4. **The principle's tooltip.** On Monetary Union IV and V, hover "Common Currency Intervention Budget", "Common
    Currency Banking Crash Likelihood", "Common Currency Banking Cycle Volatility" and the Banking Union checkmark:
    each names Unregulated Banking as the exception for every country using the currency, not for the leader alone.
-5. **Trade advantage: one line or two (ruling G9).** The adopter's Common Currency modifier carries "+5% Trade
+5. **Trade advantage: one line or two (ruling G9; the owner's switch waits on this look, ruling L19).** The adopter's Common Currency modifier carries "+5% Trade
    Advantage for Exports" and "+5% Trade Advantage for Imports"; the design asked for one "+5% Trade Advantage". To
    decide the switch, open a trade center's advantage breakdown for an export and for an import in two countries: an
    adopter, and a country in a bloc with External Trade (which gives the overall "Trade Advantage" +25%). If the
@@ -625,3 +626,24 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
    not the modifier), though its row says it is outside the banking union. And it can now be offered the Deposit
    Insurance Debate, which the union's common guarantee used to rule out for it: watch for that event on an
    unregulated adopter with Central Banking, in a Stagnation, Stable or Expansion phase.
+9. **A reserve currency on its floor is paid in risk premium (2026-11-16, ruling L17).** Find a plain treaty
+   anchor, not a bloc leader issuing a common currency, with countries worth 1% or more of world GDP pegged to its
+   money and its credit standing on its floor (in the owner's 1940 New York save: Prussia, 4.97%; in the 1958
+   Singapore save: Italy and Indonesia). It has the modifier "Reserve Currency Holdings" (on the Nation tab too), and the
+   Risk Premium tooltip lists it, at the cut in points the Monetary Anchor row's tooltip gives as "Credit standing from
+   arrangements now" (about 0.1 for Prussia, 0.04 for Italy, 0.03 for Indonesia; the two figures can differ by
+   up to 0.05, the step every premium term moves by). That tooltip ends, after a divider, with a sentence saying its
+   standing is on its floor and giving the same figure as risk premium. A country above its floor, and an anchor
+   whose peggers come to under half a percent of world GDP (America, Great Britain, Brazil in the 1940 save), have no
+   such modifier and no such line. `test_monetary_reserve_floor.py` holds the script; this checks the engine's sums
+   and the tooltip.
+10. **A leader is not paid twice.** A bloc leader issuing a common currency, on its floor, with treaty peggers too
+    (Singapore in the 1958 save): its Issuer of the Common Currency modifier is there and Reserve Currency Holdings is not,
+    because its issuer cut (about 0.39 points) is larger than the reserve cut (about 0.08). Where a leader's reserve
+    cut is the larger, it has both, and the two add up to the reserve cut, not more; its Monetary Anchor tooltip
+    names the issuer's cut.
+11. **Watch: imposed pegs and a tier-V leader's reach (ruling L18).** None of the 31 peg articles in the three saves
+    is imposed. If a leader at Monetary Union V is seen imposing pegs to raise its reach (Common Currency Reach on
+    its Monetary Union row), note how many and what share of its reach they make: the owner's answer to farming is
+    to count imposed pegs at a discount, not to exclude them (`monetary_policy_design.md` § 0.16 item 3). Imposed
+    pegs also count toward the reserve cut, so an anchor on its floor is now paid for them too.
