@@ -306,17 +306,28 @@ class VanillaLawGateTest(unittest.TestCase):
 
     def test_no_other_mod_file_injects_or_replaces_these_laws(self):
         # A second INJECT of can_enact would be the duplicate the check above
-        # guards against.
+        # guards against, and a REPLACE would drop the gates. Another file may
+        # INJECT fields this file leaves alone: the Creditors' Consortium adds
+        # can_impose and ai_impose_chance (te_creditors_consortium_law_injections.txt;
+        # an INJECT appends its keys, as law_anarchy's three mod INJECTs do).
         gate_file = ROOT / "common/laws/te_tax_vanilla_law_gates.txt"
         pattern = re.compile(
-            r"^\s*(?:INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT):(%s)\b" % "|".join(VANILLA_TAX_LAWS),
+            r"^\s*(INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT):(%s)\b" % "|".join(VANILLA_TAX_LAWS),
             re.M,
         )
+        owned = {"can_enact", "is_visible", "modifier"}
         offenders = []
         for path in sorted((ROOT / "common").rglob("*.txt")):
-            if path != gate_file:
-                text = path.read_text(encoding="utf-8-sig", errors="ignore")
-                offenders += [f"{path.name}: {m.group(0).strip()}" for m in pattern.finditer(text)]
+            if path == gate_file:
+                continue
+            matches = pattern.findall(path.read_text(encoding="utf-8-sig", errors="ignore"))
+            if not matches:
+                continue
+            bodies = load(path)
+            for directive, law in matches:
+                clash = owned & set(bodies.get(f"INJECT:{law}") or {}) if directive == "INJECT" else {directive}
+                if clash:
+                    offenders.append(f"{path.name}: {directive}:{law} {sorted(clash)}")
         self.assertEqual(offenders, [])
 
 
