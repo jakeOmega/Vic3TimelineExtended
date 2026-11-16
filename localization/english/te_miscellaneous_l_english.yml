@@ -1590,6 +1590,7 @@
  banking_dash_mon_act_value:0 "[Country.GetCustom('te_mon_mandate_act_status')]"
  banking_dash_mon_anchor_floor_note:0 "\n$TOOLTIP_DELIMITER$\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Lenders take #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! points off its [concept_banking_risk_premium] for that instead."
  banking_dash_mon_anchor_floor_note_issuer:0 "\n$TOOLTIP_DELIMITER$\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Its cut in [concept_banking_risk_premium] as issuer of the common currency covers part of that, and lenders take #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! points more off its risk premium for the rest."
+ banking_dash_mon_anchor_floor_note_issuer_covered:0 "\n$TOOLTIP_DELIMITER$\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Its cut in [concept_banking_risk_premium] as issuer of the common currency already covers that, so lenders take nothing more off for it."
  banking_dash_mon_anchor_floor_note_none:0 ""
  banking_dash_mon_anchor_label:0 "[concept_banking_monetary_anchor]"
  banking_dash_mon_anchor_state_board:0 "currency board on #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [Country.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"

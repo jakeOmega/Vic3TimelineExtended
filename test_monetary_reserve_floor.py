@@ -52,6 +52,7 @@ ARR_EFFECTS = "common/scripted_effects/te_monetary_arrangement_effects.txt"
 ARR_VALUES = "common/script_values/te_monetary_arrangement_script_values.txt"
 UNION_EFFECTS = "common/scripted_effects/te_monetary_union_effects.txt"
 MODIFIERS = "common/static_modifiers/extra_modifiers.txt"
+CUSTOM = "common/customizable_localization/banking_dash_custom_loc.txt"
 ACCESS = 0.0        # the capital-market access term: every finance technology, a stock exchange
 
 
@@ -155,6 +156,24 @@ class Pulse:
         return self.s.number("te_mon_reserve_currency_cut", c, c)
 
 
+def note(s, c):
+    """The key te_mon_reserve_floor_note shows for `c`: its first text whose trigger holds."""
+    for key, _, val in definitions(CUSTOM)["te_mon_reserve_floor_note"]:
+        if key != "text":
+            continue
+        trigger = next((v for k, _, v in val if k == "trigger"), None)
+        if trigger is None or s.check(trigger, c, c):
+            return field(val, "localization_key")
+    raise AssertionError("te_mon_reserve_floor_note has no fall-through")
+
+
+def relief_next_month(c):
+    """What the next step 5 will charge, less the floored standing it would charge without the
+    reserve currency: the relief the modifiers this pulse left on give, read a month late."""
+    before = c.before_cut
+    return max(0.5, before) - (max(0.5, before - c.mods.get(STANDING, 0)) - c.mods.get(MODIFIER, 0))
+
+
 def paid(c):
     """What the country's structural and modifier-borne cyclical premium come to, in points:
     the floored standing, less the risk premium the floor's cut and the issuer's cut take off."""
@@ -247,6 +266,49 @@ class FloorTest(unittest.TestCase):
                 self.assertLess(c.vars[PTS] - c.mods[MODIFIER], 0.05, "never further off than the step")
 
 
+class LagTest(unittest.TestCase):
+    """When the cut moves, step 5 measures the floor's part against last month's standing cut, so
+    for one month the payment answers last month's cut: the one-month lag every modifier-borne
+    term has, and it can be the whole move, not just the 0.05 step (review of #1857). The relief
+    in any month is never more than the previous month's cut."""
+
+    def setUp(self):
+        self.p = Pulse(self)
+
+    def test_a_rising_cut_is_paid_a_month_late(self):
+        # 0.02 under its floor; the cut jumps from nothing to 0.5.
+        c = anchor(before_cut=0.48, share=0.0)
+        for _ in range(3):
+            self.p.month(c)
+        self.assertNotIn(MODIFIER, c.mods)
+        c.vars["te_mon_anchored_gdp_m"] = 0.25 * WORLD_M
+        self.p.month(c)
+        self.assertAlmostEqual(c.mods[STANDING], 0.5)
+        self.assertAlmostEqual(c.mods[MODIFIER], 0.02, msg="what the floor took from last month's sum")
+        self.assertAlmostEqual(relief_next_month(c), 0.02)
+        self.p.month(c)
+        self.assertAlmostEqual(c.mods[MODIFIER], 0.5)
+        self.assertAlmostEqual(relief_next_month(c), 0.5)
+
+    def test_a_falling_cut_keeps_last_months_relief_a_month(self):
+        # 0.9 before the cut, which falls from 0.5 (0.4 of standing, 0.1 swallowed) to 0.1.
+        c = anchor(before_cut=0.9, share=0.25)
+        for _ in range(3):
+            self.p.month(c)
+        self.assertAlmostEqual(c.mods[STANDING], 0.5)
+        self.assertAlmostEqual(c.mods[MODIFIER], 0.1)
+        c.vars["te_mon_anchored_gdp_m"] = 0.05 * WORLD_M
+        self.p.month(c)
+        self.assertAlmostEqual(c.mods[STANDING], 0.1)
+        self.assertAlmostEqual(c.mods[MODIFIER], 0.1, msg="step 5 still summed last month's 0.5")
+        self.assertAlmostEqual(relief_next_month(c), 0.2)
+        self.assertLessEqual(relief_next_month(c), 0.5, "never more than the previous month's cut")
+        self.p.month(c)
+        self.assertNotIn(MODIFIER, c.mods)
+        self.assertAlmostEqual(relief_next_month(c), 0.1)
+        self.assertAlmostEqual(paid(c), 0.8)
+
+
 class LeaderTest(unittest.TestCase):
     """A union leader's issuer cut (#1810) answers the same floor: nobody is paid twice."""
 
@@ -283,6 +345,25 @@ class LeaderTest(unittest.TestCase):
         self.assertAlmostEqual(c.mods[ISSUER], 0.4248, places=3)
         self.assertNotIn(MODIFIER, c.mods)
         self.assertEqual(c.vars[PTS], 0)
+        # Its row still shows the reserve cut as standing, so the note says the issuer's cut covers it.
+        self.assertGreater(c.vars[SWALLOWED], 0)
+        self.assertEqual(note(self.p.s, c), "banking_dash_mon_anchor_floor_note_issuer_covered")
+
+    def test_each_case_reads_its_own_note(self):
+        c = self.leader(2, 30_000, adopters=(1e9,))          # reserve cut 0.36 over an issuer cut of 0.2
+        for _ in range(3):
+            self.p.month(c)
+        self.assertEqual(note(self.p.s, c), "banking_dash_mon_anchor_floor_note_issuer")
+        plain = anchor(before_cut=0.2)
+        above = anchor(before_cut=1.0)
+        for _ in range(3):
+            self.p.month(plain)
+            self.p.month(above)
+        self.assertEqual(note(self.p.s, plain), "banking_dash_mon_anchor_floor_note")
+        self.assertEqual(note(self.p.s, above), "banking_dash_mon_anchor_floor_note_none")
+        nobody = Country("nobody", 1e10)
+        self.p.seed(nobody)
+        self.assertEqual(note(self.p.s, nobody), "banking_dash_mon_anchor_floor_note_none")
 
     def test_a_leader_whose_union_stops_paying_gets_the_reserve_cut_back(self):
         # The last adopter leaves: the issuer's cut goes, and the floor's cut is the whole reserve cut.
@@ -471,9 +552,15 @@ class TextTest(unittest.TestCase):
         keys = re.findall(r"localization_key = (\w+)", custom)
         self.assertEqual(keys[-1], "banking_dash_mon_anchor_floor_note_none")
         self.assertEqual(self.loc["banking_dash_mon_anchor_floor_note_none"], "")
-        for key in keys[:-1]:
+        self.assertEqual(keys[-2], "banking_dash_mon_anchor_floor_note_issuer_covered")
+        for key in keys[:-2]:
             self.assertIn("te_mon_reserve_floor_display", self.loc[key])
             self.assertIn("[concept_banking_risk_premium]", self.loc[key])
+        covered = self.loc["banking_dash_mon_anchor_floor_note_issuer_covered"]
+        self.assertIn("[concept_banking_risk_premium]", covered)
+        self.assertIn("issuer", covered)
+        self.assertIn("already covers", covered)
+        self.assertNotIn("ScriptValue", covered, "there is no figure to give: the modifier is off")
         self.assertIn("te_mon_reserve_floor_display > 0", custom)
 
     def test_the_anchors_figures_are_the_script_values(self):

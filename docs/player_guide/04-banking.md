@@ -1018,8 +1018,9 @@ count most; the Monetary Union row's tooltip shows it. Seigniorage and the cut
 in risk premium are the tier's figures times reach: at tier V with a reach of a
 half, the leader mints 0.75% of its GDP a year and pays 0.75 points less. The
 cut is risk premium, not credit standing, so it counts even for a country whose
-credit standing is already at its floor. A leader at its floor whose money is
-also pegged to by treaty gets the larger of this cut and the peg's, not both.
+credit standing is already at its floor. A leader at its floor also has the
+reserve-currency cut an anchor gets, since its adopters count toward it as
+pegs do; it gets the larger of the two cuts, not both.
 
 The seigniorage figures are before minting bonuses, which raise it as they
 raise all your minting: 10% under Fiat Money or 25% under Digital Currency, and

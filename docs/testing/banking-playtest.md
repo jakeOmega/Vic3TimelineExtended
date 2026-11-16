@@ -636,12 +636,16 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
    standing is on its floor and giving the same figure as risk premium. A country above its floor, and an anchor
    whose peggers come to under half a percent of world GDP (America, Great Britain, Brazil in the 1940 save), have no
    such modifier and no such line. `test_monetary_reserve_floor.py` holds the script; this checks the engine's sums
-   and the tooltip.
+   and the tooltip. **Then the open question, the rate (option C of design § 0.16, left for this look):** is the
+   benefit worth having for the anchors it pays? It is a tenth of a point at most in the three saves (0.26% to
+   0.55% of their income). Note it in the play-test's findings, and whether an anchor's AI or a player would
+   seek pegs for it; raising `te_mon_reserve_currency_per_step` is the lever if not.
 10. **A leader is not paid twice.** A bloc leader issuing a common currency, on its floor, with treaty peggers too
     (Singapore in the 1958 save): its Issuer of the Common Currency modifier is there and Reserve Currency Holdings is not,
     because its issuer cut (about 0.39 points) is larger than the reserve cut (about 0.08). Where a leader's reserve
     cut is the larger, it has both, and the two add up to the reserve cut, not more; its Monetary Anchor tooltip
-    names the issuer's cut.
+    names the issuer's cut. Singapore's Monetary Anchor tooltip ends, after a divider, with a sentence saying its
+    issuer cut already covers what the floor cancels.
 11. **Watch: imposed pegs and a tier-V leader's reach (ruling L18).** None of the 31 peg articles in the three saves
     is imposed. If a leader at Monetary Union V is seen imposing pegs to raise its reach (Common Currency Reach on
     its Monetary Union row), note how many and what share of its reach they make: the owner's answer to farming is
