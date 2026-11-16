@@ -187,7 +187,7 @@ check (`row_standing_on_creation` logged OK twice in each).
 - **Run 2's**: `delayed_state_event`; `ai_law_cadence` (`cons=13/106=0.12 rest=19/90=0.21`, the build before
   #1867); `construction_admin_while_paused` (`country=BIC weeks=14 bought=420.0 wasted_weeks=0 spent=842553
   repaid=842553`), on which the owner chose to take the purchase through the pause out ("Let's do this.",
-  2026-11-16), PR #1874; and `tax_light_div_levy` (`levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1,
+  2026-11-16; done by #1874, `ai-economy-playtest.md`'s "Verdict"); and `tax_light_div_levy` (`levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1,
   1881`), on which PR #1873 is open.
 - **Run 3's**: `delayed_state_event` alone; `harvest_tags_read`, #1866's new check, read OK.
 - **Version 2's first long read** (run 3's `check`): every version-2 addition read as the table above expects but the

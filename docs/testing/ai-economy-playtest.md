@@ -531,7 +531,7 @@ What the line meant. East India bought 30 points a week for 14 weeks. `spent` eq
 
 ### Read 2026-11-16: the baseline game against `main`, to 1912
 
-Two unattended AI-only games from 1836 under the owner's last lobby rules: the build before (dab9335f1, the 10-point floor; to 1925) and `main` at 81b947368 (this purchase; to October 1913, when the game crashed on the banking contagion, #1871, which this change does not touch). The probe's figures for the 20 largest AI economies of each decade, the baseline's before the arrow. One game of each build, so a difference counts only where it is large and steady (`docs/testing/ai-probe-runbook.md` § Judging a run).
+Two unattended AI-only games from 1836 under the owner's last lobby rules: the build before (dab9335f1, the 10-point floor; to 1925) and `main` at 81b947368 (this purchase; to October 1913, when the game crashed on the banking contagion, #1871, which this change does not touch). The probe's figures for the 20 largest AI economies of each decade, the baseline's before the arrow. One game of each build, so a difference counts only where it is large and steady (`docs/testing/ai-probe-runbook.md` § Judging a run, and comparing two).
 
 | The 20 largest | 1830s | 1840s | 1870s | 1890s | 1910–1912 |
 |---|---|---|---|---|---|
