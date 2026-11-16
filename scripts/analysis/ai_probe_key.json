@@ -1626,7 +1626,21 @@
    "uni_scholastic"
   ],
   "O2": [
-   "low_mfg_nc"
+   "low_mfg_nc",
+   "cs_low",
+   "cs_low80",
+   "cs_staffed",
+   "cs_sub",
+   "cs_pm_wooden",
+   "cs_pm_iron_frame",
+   "cs_pm_steel_frame",
+   "cs_pm_arc_welded",
+   "cs_pm_later",
+   "cs_price",
+   "cs_buy",
+   "cs_sell",
+   "site_low",
+   "site_low80"
   ],
   "M1": [
    "army",
@@ -2839,5 +2853,26 @@
    "post-scarcity_economy",
    "terraforming"
   ]
- }
+ },
+ "construction_methods": {
+  "cs_pm_wooden": [
+   "pm_wooden_buildings"
+  ],
+  "cs_pm_iron_frame": [
+   "pm_iron_frame_buildings"
+  ],
+  "cs_pm_steel_frame": [
+   "pm_steel_frame_buildings"
+  ],
+  "cs_pm_arc_welded": [
+   "pm_arc_welded_buildings"
+  ],
+  "cs_pm_later": [
+   "pm_reinforced_concrete_buildings",
+   "pm_advanced_construction",
+   "pm_nanomaterial_buildings",
+   "pm_self_replicating_construction"
+  ]
+ },
+ "ai_expansion_staffing": 0.8
 }

@@ -27,7 +27,9 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                month is its id modulo 12, so a twelfth of the world reports each month and no tick
                                writes more than the log's rotation can hold. `id` is a serial the probe gives each
                                country object (two objects can share a tag in a civil war). Version 2 adds O2
-                               (manufacturing staffing without the Construction Sector), J1 (each institution's
+                               (manufacturing staffing without the Construction Sector, then the sector itself:
+                               staffing, subsidies, methods, the construction good's price and orders, and the
+                               Construction Sites' staffing), J1 (each institution's
                                maximum investment), R1 (the army by unit type) and H1 (specific technologies), and
                                the construction purchase's remaining terms to C2 and `n_law_set` to N2.
   X <n> <TAG> <id> <k> ...     with each snapshot: figures only the interface's data functions give (the
@@ -218,6 +220,24 @@ UNIT_LINE_MAX_TIER = 6
 UNIT_SUM_GROUPS = [("u_tanks", "combat_unit_group_tanks"), ("u_marines", "combat_unit_group_marines"),
                    ("u_air", "combat_unit_group_aircraft")]
 
+# The Construction Sector itself (version 2, the end of the O group). The first long run's analysis found that in
+# the 20 largest economies the manufacturing levels under half staffed were almost exactly the Construction
+# Sector's levels (Great Britain 1836: 80 against 82), while the construction good sold at 1.3 to 1.5 times its
+# base price; vanilla's AI expands no building under PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD (00_ai.txt: 0.8,
+# "unless those buildings hired last week"). These fields measure the sector where that was an inference: its
+# staffing against both thresholds, its staffed levels (level times occupancy, so the report divides by its levels
+# for the mean), its subsidies, its levels by construction method, and the construction good in the country's
+# market. The market-placed Construction Sites are a building of their own (te_construction_market_site, group
+# te_construction_market_bg), so their staffing is logged apart: a site short of workers is not a sector short of
+# them.
+CONSTRUCTION_SECTOR = "building_construction_sector"
+CONSTRUCTION_SITE = "te_construction_market_site"
+CONSTRUCTION_GOOD = "construction"
+AI_EXPANSION_STAFFING = 0.8
+# The sector's methods named one by one (vanilla's four: wooden, iron frame, steel frame, arc-welded); the mod's
+# later ones are summed (cs_pm_later), so the line keeps its length as methods are added.
+CONSTRUCTION_METHODS_NAMED = 4
+
 # The interface's data functions, printed with each snapshot (and once each at arming, alone).
 DATA_FUNCTIONS = [
     # (line, key, accessor after `THIS.GetCountry.`)
@@ -258,7 +278,7 @@ def load_state(root: Path = ROOT):
     from vanilla_parsed import load
 
     kinds = ("Laws", "Law Groups", "Technologies", "Combat Unit Types", "Building Groups", "Buildings",
-             "Institutions", "Diplomatic Plays")
+             "Institutions", "Diplomatic Plays", "PM Groups")
     snapshot = load(str(root / "vanilla_parsed"))
     state = ModState(
         {kind: "/nonexistent" for kind in kinds},
@@ -376,6 +396,10 @@ def catalog(mod_state) -> dict:
     buildings = {bare(key) for key in building_data}
     institutions = [bare(key) for key in mod_state.get_data("Institutions")]
     play_types = list(dict.fromkeys(bare(key) for key in mod_state.get_data("Diplomatic Plays")))
+    construction_methods = sector_methods(mod_state, building_data)
+    for needed in (CONSTRUCTION_SECTOR, CONSTRUCTION_SITE):
+        if needed not in buildings:
+            raise ValueError(f"The probe's Construction Sector fields name a building no file defines: {needed}")
     return {
         "law_groups": law_groups,
         "laws": {group: by_group[group] for group in law_groups},
@@ -391,7 +415,25 @@ def catalog(mod_state) -> dict:
         "unit_techs": unit_techs,
         "tech_flags": tech_flags,
         "play_types": play_types,
+        "construction_methods": construction_methods,
     }
+
+
+def sector_methods(mod_state, building_data) -> list[tuple[str, list[str]]]:
+    """The Construction Sector's construction methods (its first method group's), as (field, methods): the first
+    CONSTRUCTION_METHODS_NAMED one by one, then the rest as cs_pm_later."""
+    body = next((unwrap(building_data[key]) for key in building_data if bare(key) == CONSTRUCTION_SECTOR), None)
+    groups = unwrap(body.get("production_method_groups")) if isinstance(body, dict) else None
+    if not isinstance(groups, list) or not groups:
+        raise ValueError(f"{CONSTRUCTION_SECTOR} has no production method groups")
+    pm_groups = mod_state.get_data("PM Groups")
+    group = next((unwrap(pm_groups[key]) for key in pm_groups if bare(key) == groups[0]), None)
+    methods = unwrap(group.get("production_methods")) if isinstance(group, dict) else None
+    methods = [m for m in methods if isinstance(m, str)] if isinstance(methods, list) else []
+    if len(methods) <= CONSTRUCTION_METHODS_NAMED:
+        raise ValueError(f"{groups[0]} lists {len(methods)} methods; the probe names {CONSTRUCTION_METHODS_NAMED}")
+    named = [("cs_pm_" + short(m, "pm_").removesuffix("_buildings"), [m]) for m in methods[:CONSTRUCTION_METHODS_NAMED]]
+    return named + [("cs_pm_later", methods[CONSTRUCTION_METHODS_NAMED:])]
 
 
 class Field:
@@ -612,6 +654,7 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         # factories. Its denominator is bg_manufacturing less bg_construction, both in the G line.
         + [levels("low_mfg_nc", "is_building_group = bg_manufacturing NOT = { is_building_group = bg_construction } "
                   "occupancy < 0.5")]
+        + construction_sector_fields(cat)
     )
     counters = [variable("n_" + name, PREFIX + "n_" + name) for name in COUNTERS]
     # Version 2's positional groups.
@@ -631,6 +674,37 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
     return [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
             ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
             ("N", counters), ("J", institution_max), ("R", units), ("H", tech_flags)]
+
+
+def construction_sector_fields(cat: dict) -> list[Field]:
+    """Version 2's Construction Sector fields (CONSTRUCTION_SECTOR's comment): fourteen, which fill the O2 line."""
+    sector = f"is_building_type = {CONSTRUCTION_SECTOR}"
+    market = f"this.market.mg:{CONSTRUCTION_GOOD}"
+    return [
+        levels("cs_low", f"{sector} occupancy < 0.5"),
+        levels("cs_low80", f"{sector} occupancy < {AI_EXPANSION_STAFFING}"),
+        # Level times occupancy: the bare value read power_grid_values.txt's te_grid_mix_staffed_output_value makes
+        # (its self-check read a staffed share, grid_mix_staffing OK on 2026-11-13).
+        Field("cs_staffed", f"\tvalue = 0\n\tevery_scope_building = {{\n\t\tlimit = {{ {sector} }}\n"
+                            "\t\tadd = { value = level multiply = occupancy }\n\t}", 1),
+        levels("cs_sub", f"{sector} is_subsidized = yes"),
+    ] + [
+        levels(name, f"{sector} " + (f"has_active_production_method = {methods[0]}" if len(methods) == 1 else
+                                     "OR = { " + " ".join(f"has_active_production_method = {m}" for m in methods)
+                                     + " }"))
+        for name, methods in cat["construction_methods"]
+    ] + [
+        # The good's price over its base price in the country's market (a shared market's, for a country in one):
+        # the dot chain te_construction_market_price reads, whose price moved in the first long run; the cheaper
+        # side the Strategic Reserve's way (st_res_<good>_price_rel), since no engine doc says whether either term
+        # is signed.
+        Field("cs_price", f"\tvalue = 1\n\tadd = {{ value = {market}.market_goods_pricier min = 0 }}\n"
+                          f"\tsubtract = {{ value = {market}.market_goods_cheaper min = 0 }}", 3),
+        read("cs_buy", f"{market}.market_goods_buy_orders", 1),
+        read("cs_sell", f"{market}.market_goods_sell_orders", 1),
+        levels("site_low", f"is_building_type = {CONSTRUCTION_SITE} occupancy < 0.5"),
+        levels("site_low80", f"is_building_type = {CONSTRUCTION_SITE} occupancy < {AI_EXPANSION_STAFFING}"),
+    ]
 
 
 def all_fields(cat: dict) -> list[Field]:
@@ -1184,6 +1258,10 @@ def render_key(cat: dict) -> str:
         "world_fields": WORLD_FIELDS,
         # Each T field's technologies, so that the files can be rebuilt from the key alone (catalog_from_key).
         "tech_cell_names": cat["tech_cells"],
+        # The O2 line's Construction Sector fields: each cs_pm_* field's methods, and the staffing the *80 fields
+        # test below (vanilla's PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD).
+        "construction_methods": {name: methods for name, methods in cat["construction_methods"]},
+        "ai_expansion_staffing": AI_EXPANSION_STAFFING,
     }
     return json.dumps(key, indent=1) + "\n"
 
@@ -1211,6 +1289,7 @@ def catalog_from_key(key: dict) -> dict:
         "unit_types": {key["unit_line"][name][0]: info for name, info in key["unit_info"].items()},
         "tech_flags": list(key["tech_flags"].values()),
         "play_types": key["play_types"],
+        "construction_methods": [(name, methods) for name, methods in key["construction_methods"].items()],
     }
 
 

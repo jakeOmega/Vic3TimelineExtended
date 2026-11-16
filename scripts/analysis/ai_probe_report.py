@@ -368,6 +368,50 @@ def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[lis
                    f"{sum(1 for r in new if num(r, 'cm_level_max') > 0)}")
     else:
         out.append("  no snapshot with the version-2 fields yet")
+    lines, good = check_construction_sector(key, records)
+    return out + lines, ok and good
+
+
+def check_construction_sector(key: dict, records: list[dict]) -> tuple[list[str], bool]:
+    """The O2 line's Construction Sector fields: each read against what the others say it must be."""
+    out, ok = [], True
+    rows = [r for r in records if "cs_low" in r]
+    if not rows:
+        return ["  Construction Sector fields: no snapshot carries them yet"], True
+    sector = [r for r in rows if num(r, "bt_construction_sector") > 0]
+    methods = list(key.get("construction_methods", {}))
+    out.append(f"  Construction Sector: {len(sector)} of {len(rows)} snapshots hold a sector")
+    if sector:
+        def levels_of(r):
+            return num(r, "bt_construction_sector")
+        summed = sum(1 for r in sector if sum(num(r, m) for m in methods) == levels_of(r))
+        order = sum(1 for r in sector if num(r, "cs_low") <= num(r, "cs_low80") <= levels_of(r))
+        staffing = [num(r, "cs_staffed") / levels_of(r) for r in sector]
+        out.append(f"  sector levels on a named method add to its levels in {summed} of {len(sector)}; under half "
+                   f"<= under {100 * key.get('ai_expansion_staffing', 0.8):.0f}% <= levels in {order}")
+        out.append(f"  sector staffing (cs_staffed over levels): median {pct(staffing, .5):.2f}, 10th-90th "
+                   f"{pct(staffing, .1):.2f}-{pct(staffing, .9):.2f}; above 1 in {sum(1 for s in staffing if s > 1.01)}; "
+                   f"subsidized in {sum(1 for r in sector if num(r, 'cs_sub') > 0)}")
+        if summed == 0:
+            out.append("  cs_pm_*: no sector's methods add up to its levels (the method read is wrong)")
+        # A sector not all under half staffed has staff, so a 0 there everywhere is a read that returns nothing.
+        staffed = [r for r in sector if num(r, "cs_low") < levels_of(r)]
+        if staffed and all(not num(r, "cs_staffed") for r in staffed):
+            out.append("  cs_staffed is 0 in every sector with staff (occupancy did not read as a value)")
+            ok = False
+    prices = [num(r, "cs_price") for r in rows]
+    out.append(f"  construction good, price over base: median {pct(prices, .5):.3f}, 10th-90th "
+               f"{pct(prices, .1):.3f}-{pct(prices, .9):.3f}; below base in {sum(1 for p in prices if p < 0.999)}")
+    if all(abs(p - 1) < 0.0005 for p in prices):
+        out.append("  cs_price is exactly 1 in every snapshot (the market read returns nothing)")
+        ok = False
+    for name in ("cs_buy", "cs_sell"):
+        positive = sum(1 for r in rows if num(r, name) > 0)
+        out.append(f"  {name} above 0 in {positive} of {len(rows)}"
+                   + ("" if positive else " (the order read returns nothing; the price is not affected)"))
+    sites = [r for r in rows if num(r, "bg_te_construction_market_bg") > 0]
+    out.append(f"  Construction Sites: {len(sites)} snapshots hold one; under half staffed in "
+               f"{sum(1 for r in sites if num(r, 'site_low') > 0)}")
     return out, ok
 
 
@@ -835,6 +879,46 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
             digits=0, scale=100),
     ], note="The mod puts the Construction Sector under bg_heavy_industry, so the first column counts idle "
             "sectors as idle manufacturing; the second (version 2) leaves them out.")
+
+    # Version 2: the sector itself (gen_ai_probe.py, CONSTRUCTION_SECTOR).
+    methods = list(key.get("construction_methods", {}))
+    gate = key.get("ai_expansion_staffing", 0.8)
+
+    def has_sector(r):
+        return "cs_low" in r and num(r, "bt_construction_sector") > 0
+
+    def sector_share(name):
+        return Col("", ratio=(field(name), field("bt_construction_sector")), digits=0, scale=100, among=has_sector)
+
+    def method_mix(rows):
+        totals_ = [sum(num(r, m) for r in rows) for m in methods]
+        whole = sum(totals_)
+        return "/".join(f"{100 * t / whole:.0f}" for t in totals_) if whole else "-"
+
+    def site_share(name):
+        return Col("", ratio=(field(name), field("bg_te_construction_market_bg")), digits=0, scale=100,
+                   among=lambda r: "site_low" in r and num(r, "bg_te_construction_market_bg") > 0)
+
+    if methods:
+        table("1f. The Construction Sector itself: staffing, subsidies, methods and the good's price", [
+            Col("Sector levels (world: total)", field("bt_construction_sector"), digits=0, total=True,
+                among=lambda r: "cs_low" in r),
+            named("Under half staffed, % of levels", sector_share("cs_low")),
+            named(f"Under {100 * gate:.0f}% staffed (the AI's expansion gate), % of levels", sector_share("cs_low80")),
+            named("Mean staffing, % (level-weighted)", sector_share("cs_staffed")),
+            named("Subsidized, % of levels", sector_share("cs_sub")),
+            Col("Levels by method, % (" + "/".join(m[6:] for m in methods) + ")", custom=method_mix,
+                world=method_mix, among=has_sector),
+            Col("Construction good, price over base", field("cs_price"), digits=2, among=lambda r: "cs_price" in r),
+            Col("Sell orders / buy orders", ratio=(field("cs_sell"), field("cs_buy")), digits=2,
+                among=lambda r: "cs_buy" in r),
+            named("Construction Sites under half staffed, % of site levels", site_share("site_low")),
+            named(f"Sites under {100 * gate:.0f}% staffed, %", site_share("site_low80")),
+        ], note=f"Vanilla's AI expands no building under {100 * gate:.0f}% staffed unless it hired the week before "
+                "(00_ai.txt, PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD). The price and the orders are the "
+                "country's market's, which a country in another's market shares; the world lens's orders count a "
+                "shared market once for each of its countries. The method mix is of all the rows' levels in each "
+                "lens. Construction Sites are the market's own building, not the sector.")
     table("1d. The government's purchase of construction (the construction market)", [
         Col("Buying any", test=lambda r: num(r, "cm_public") > 0),
         Col("Points a week, where buying (world: total)", lambda r: num(r, "cm_public") or None, digits=2,

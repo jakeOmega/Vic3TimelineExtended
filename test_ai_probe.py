@@ -228,7 +228,8 @@ class ParserTest(unittest.TestCase):
         parsed = ai_probe_report.parse_lines(log + second, self.key)
         out = ai_probe_report.report(parsed, self.key)
         for heading in ("The headline", "GDP growth by rank band", "1. Economic growth", "1b. Solvency",
-                        "1c. Staffing", "1d. The government's purchase", "1e. Where the government's money goes",
+                        "1c. Staffing", "1f. The Construction Sector itself", "1d. The government's purchase",
+                        "1e. Where the government's money goes",
                         "2. Technology", "2a. Specific technologies", "3. Laws", "3a. Law starts per idle month",
                         "3b. How enactments ended", "3c. The old law kept", "3d. Institutions", "4. Military",
                         "4a. The army by unit type", "5. Expansion", "5a. Diplomatic plays by type",
@@ -288,6 +289,69 @@ class FreshTest(unittest.TestCase):
         self.assertEqual(key["level_names"][2], "medium")
         self.assertEqual(set(key["level_fields"]) - {f for fields in key["lines"].values() for f in fields}, set())
         self.assertEqual(key["law_end_how"], ["passed", "failed", "cancelled", "replaced"])
+
+
+class ConstructionSectorTest(unittest.TestCase):
+    """The O2 line's Construction Sector fields (gen_ai_probe.py, CONSTRUCTION_SECTOR)."""
+
+    def setUp(self):
+        self.key = json.loads(KEY.read_text(encoding="utf-8"))
+        self.values = text(VALUES)
+
+    def test_the_fields_fill_the_o2_line_and_add_no_line(self):
+        o2 = self.key["lines"]["O2"]
+        self.assertEqual(o2[0], "low_mfg_nc")
+        self.assertEqual(len(o2), gen_ai_probe.FIELDS_PER_LINE)
+        self.assertNotIn("O3", self.key["lines"])
+        for name in ("cs_low", "cs_low80", "cs_staffed", "cs_sub", "cs_price", "cs_buy", "cs_sell", "site_low",
+                     "site_low80", *self.key["construction_methods"]):
+            self.assertIn(name, o2)
+
+    def test_the_methods_are_the_sectors_and_each_counted_once(self):
+        """Each sector level runs one construction method, so the cs_pm_* fields add up to the sector's levels."""
+        methods = [m for members in self.key["construction_methods"].values() for m in members]
+        self.assertEqual(len(methods), len(set(methods)))
+        self.assertEqual(methods[:4], ["pm_wooden_buildings", "pm_iron_frame_buildings", "pm_steel_frame_buildings",
+                                       "pm_arc_welded_buildings"])
+        group = text(ROOT / "common/production_method_groups/13_construction.txt")
+        group += text(ROOT / "common/production_method_groups/extra_pm_groups.txt")
+        for method in methods:
+            self.assertIn(f"\t\t{method}\n", group)
+
+    def test_the_market_reads_use_the_construction_markets_own_chain(self):
+        """te_construction_market_price reads the good's price through this chain, and its price moved in the
+        first long run (cm_price 968 to 1,678 between the 10th and 90th percentiles), so the read works."""
+        chain = "this.market.mg:construction.market_goods_pricier"
+        self.assertIn(chain, text(ROOT / "common/script_values/te_construction_market_current_values.txt"))
+        price = re.search(r"(?ms)^te_aip_cs_price = \{\n(.*?)^\}", self.values).group(1)
+        self.assertIn(chain, price)
+        self.assertIn("market_goods_cheaper min = 0", price)
+
+    @unittest.skipUnless((GAME_STRATEGIES.parent / "defines/00_ai.txt").is_file(), "no game install")
+    def test_the_80_percent_fields_test_the_ais_expansion_threshold(self):
+        defines = text(GAME_STRATEGIES.parent / "defines/00_ai.txt")
+        found = re.search(r"PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD = ([0-9.]+)", defines)
+        self.assertEqual(float(found.group(1)), self.key["ai_expansion_staffing"])
+
+    def test_check_reads_each_field_against_the_others(self):
+        def snapshot(**fields):
+            row = {"bt_construction_sector": 10, "cs_low": 2, "cs_low80": 6, "cs_staffed": 6.5, "cs_sub": 0,
+                   "cs_pm_wooden": 4, "cs_pm_iron_frame": 6, "cs_pm_steel_frame": 0, "cs_pm_arc_welded": 0,
+                   "cs_pm_later": 0, "cs_price": 1.35, "cs_buy": 40, "cs_sell": 31, "site_low": 1, "site_low80": 2,
+                   "bg_te_construction_market_bg": 3}
+            row.update(fields)
+            return row
+
+        lines, ok = ai_probe_report.check_construction_sector(self.key, [snapshot(), snapshot(cs_price=0.9)])
+        self.assertTrue(ok, "\n".join(lines))
+        self.assertTrue(any("add to its levels in 2 of 2" in line for line in lines), "\n".join(lines))
+        lines, ok = ai_probe_report.check_construction_sector(self.key, [snapshot(cs_staffed=0)])
+        self.assertFalse(ok)
+        self.assertTrue(any("occupancy did not read" in line for line in lines))
+        lines, ok = ai_probe_report.check_construction_sector(self.key, [snapshot(cs_price=1)])
+        self.assertFalse(ok)
+        # A version-1 snapshot carries none of the fields: nothing to read, and no verdict.
+        self.assertEqual(ai_probe_report.check_construction_sector(self.key, [{"bt_construction_sector": 5}])[1], True)
 
 
 class OldLogTest(unittest.TestCase):

@@ -258,6 +258,90 @@ te_aip_low_mfg_nc = {
 		add = level
 	}
 }
+te_aip_cs_low = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector occupancy < 0.5 }
+		add = level
+	}
+}
+te_aip_cs_low80 = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector occupancy < 0.8 }
+		add = level
+	}
+}
+te_aip_cs_staffed = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector }
+		add = { value = level multiply = occupancy }
+	}
+}
+te_aip_cs_sub = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector is_subsidized = yes }
+		add = level
+	}
+}
+te_aip_cs_pm_wooden = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector has_active_production_method = pm_wooden_buildings }
+		add = level
+	}
+}
+te_aip_cs_pm_iron_frame = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector has_active_production_method = pm_iron_frame_buildings }
+		add = level
+	}
+}
+te_aip_cs_pm_steel_frame = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector has_active_production_method = pm_steel_frame_buildings }
+		add = level
+	}
+}
+te_aip_cs_pm_arc_welded = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector has_active_production_method = pm_arc_welded_buildings }
+		add = level
+	}
+}
+te_aip_cs_pm_later = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_construction_sector OR = { has_active_production_method = pm_reinforced_concrete_buildings has_active_production_method = pm_advanced_construction has_active_production_method = pm_nanomaterial_buildings has_active_production_method = pm_self_replicating_construction } }
+		add = level
+	}
+}
+te_aip_cs_price = {
+	value = 1
+	add = { value = this.market.mg:construction.market_goods_pricier min = 0 }
+	subtract = { value = this.market.mg:construction.market_goods_cheaper min = 0 }
+}
+te_aip_cs_buy = { value = this.market.mg:construction.market_goods_buy_orders }
+te_aip_cs_sell = { value = this.market.mg:construction.market_goods_sell_orders }
+te_aip_site_low = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = te_construction_market_site occupancy < 0.5 }
+		add = level
+	}
+}
+te_aip_site_low80 = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = te_construction_market_site occupancy < 0.8 }
+		add = level
+	}
+}
 
 # --- M ---
 te_aip_army = { value = army_size }

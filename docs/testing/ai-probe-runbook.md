@@ -68,6 +68,11 @@ For a version-2 log `check` also reads each version-2 addition, none of which ha
 | units: the R line's shares add to 1 | nearly all armies | a unit type missing from the line, or the fraction measures something other than the army |
 | technology flags held | about half of the 24 or more, even in 1836 | a flag misnamed (the generator stops on a key no file defines, so this would be the read) |
 | purchase recomputed matches cm_target | 90% or more | a term of `te_construction_market_ai_purchase_target` the snapshot still lacks, or misread (`cm_level_max`, `bubble`, `cm_admin`) |
+| Construction Sector: levels on a named method add to its levels | nearly every sector | `has_active_production_method` misses a method the sector runs (a method the generator's catalog lacks: rerun it) |
+| sector staffing (cs_staffed over levels) | between 0 and 1, and above 0 where a sector is not all under half staffed (else the check fails) | `add = { value = level multiply = occupancy }` does not read occupancy as a value from a country's `every_scope_building` |
+| construction good, price over base | spread around 1.3 to 1.5, as `cm_price` was; never exactly 1 everywhere (else the check fails) | the `this.market.mg:construction` reads return nothing |
+| cs_buy, cs_sell above 0 | in most snapshots | `market_goods_buy_orders` or `market_goods_sell_orders` does not read as a value (the price does not depend on them) |
+| Construction Sites under half staffed | some, in a market game | the sites' own staffing (`site_low`, `site_low80`); their levels are `bg_te_construction_market_bg` in G3 |
 
 `check` on the full log of a seven-hour run takes about 15 seconds.
 
@@ -94,9 +99,13 @@ laws, technologies or building groups the positional lines index (version 2 only
 version-1 log reports with the version-2 key, its version-2 tables saying "not logged".
 
 The scorecard starts with a headline (the 20 largest economies' growth against the rest's, and their share of AI
-GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has six: outcomes, the means of
-growth, staffing, the construction purchase, solvency, and where the money goes), each through the three lenses
-above. Version 2 adds: specific technologies held (2a); law starts per idle month by political agenda (3a), the
+GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has seven: outcomes, the means
+of growth, staffing, the Construction Sector, the construction purchase, solvency, and where the money goes), each
+through the three lenses
+above. Version 2 adds: the Construction Sector itself (1f: its staffing against half and against the 80% below
+which vanilla's AI expands no building, its subsidies, its levels by construction method, the construction good's
+price over base and its sell orders over its buy orders, and the Construction Sites' staffing apart from the
+sector's); specific technologies held (2a); law starts per idle month by political agenda (3a), the
 computation of the 2026-11-16 baseline analysis, which a change to the AI's law cadence is read by; how enactments
 ended (3b); old laws kept while the technology for the next is held (3c); institutions against their maximum (3d);
 the army by unit type (4a); plays by type with both sides' ranks (5a); and the decentralized nations and the states
@@ -124,16 +133,24 @@ buildings`), pops and wages. The run's last save is kept as the harness's dated 
   never counted at all. `n_war` counts the plays that became wars, not plays.
 - **`low_mfg` counts the Construction Sector**, which the mod puts under bg_heavy_industry, so a small country's
   idle sectors read as idle factories. Version 2 logs `low_mfg_nc` beside it.
+- **In the 20 largest economies, the manufacturing levels under half staffed were almost exactly the Construction
+  Sector's levels** (Great Britain 1836: 80 against 82; France 55 against 57; the United States 42 against 41),
+  while the construction good sold at 1.3 to 1.5 times its base price and private investors, who do 75-89% of a big
+  economy's construction, got that many fewer points for their money. That the sectors themselves sat under half
+  staffed was an inference: version 1 had no field for the sector's own staffing. Vanilla's AI expands no building
+  under 80% staffed unless it hired the week before (`00_ai.txt`, `PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD`), so
+  version 2 logs the sector's staffing against both thresholds (table 1f).
 
 ## What a run costs
 
 Version 1 wrote 32 lines a country a year (26 snapshot lines and 6 data-function lines), a twelfth of the world
 each month: 646,000 of the first run's 660,960 probe lines, the rest 12,687 events and two lines a month. Version 2
 writes 36 a country a year (the O2, J1, R1 and H1 lines) and one world line a year; the events are the same lines
-with more fields. On the first run's countries that is about 742,000 probe lines, 12% more, and about 11% more
-bytes (some 8 KB a country a year, 160 MB for 1836 to 1925, in the run folder on the backup drive). In game: a few
-hundred script-value reads a country a year and one global-variable test on each hooked on-action, `on_law_activated`
-now among them; nothing a player would notice, and nothing at all in a played game beyond that test.
+with more fields. On the first run's countries that is about 742,000 probe lines, 12% more, and about 14% more
+bytes (some 8 KB a country a year, 165 MB for 1836 to 1925, in the run folder on the backup drive). In game: a few
+hundred script-value reads a country a year, eleven more passes over its buildings for the Construction Sector and
+its sites, and one global-variable test on each hooked on-action, `on_law_activated` now among them; nothing a
+player would notice, and nothing at all in a played game beyond that test.
 
 ## Removing it
 
