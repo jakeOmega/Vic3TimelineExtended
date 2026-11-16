@@ -414,15 +414,19 @@ first review after it joins, and the bloc gets what the newcomer alone knew.
 The Research Commons journal entry shows a member what it sends and what it has
 received, and the leader the pool, the cap rise and its own share.
 
-Cohesion rests on the leader's own innovation, before what the members send, as
-a share of the bloc's, so a leader that closes its universities and lives on the
-pool loses its bloc. The worst relations between the leader and a member lower
-it, and so does each member. The leader can't abolish its Ministry of Science.
-A member can leave only when the bloc's leverage advantage over it is 10 or less
-(30 for the other identities), and a country that leaves keeps what it learned
+Cohesion rests on the innovation the leader produces itself, before what the
+members send and what its programs spend, as a share of what the whole bloc
+produces, so a leader that closes its universities and lives on the pool loses
+its bloc, while one that spends the pool on its own space or nuclear program
+doesn't. The worst relations between the leader and a member lower it, and so
+does each member. The leader can't abolish its Ministry of Science. A member
+can leave only when the bloc's leverage advantage over it is 10 or less (30 for
+the base game's identities), and a country that leaves keeps what it learned
 but carries Institutes Left Behind: −50% research speed, falling to nothing
-over ten years, and ending if it joins a Research Commons again. A bloc that
-changes identity doesn't count as being left.
+over ten years, and ending at the next monthly review if it joins a Research
+Commons again. The penalty falls only on a country that left a Commons that
+still stands: a bloc that dissolves, changes identity or loses its leader puts
+none on its former members.
 
 ### New principle groups
 
@@ -520,7 +524,7 @@ event, The Summit's Communiqué, tells you which of these its summit gave you.
 | Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
 | Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
 | Creditors' Consortium | Debt Conference | Members: −0.5 percentage points of risk premium. Relations between every two members +20 |
-| Research Commons | Scientific Congress | Members: +10% weekly innovation |
+| Research Commons | Scientific Congress | Members, you included: +10% weekly innovation, which also lifts what the pool brings you |
 
 The religious council takes its name from your state religion: an ecumenical
 council, a synod, the ulama in council, a rabbinical council, a Sangiti, a
