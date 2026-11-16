@@ -168,7 +168,8 @@ class PrincipleGroupsTest(unittest.TestCase):
                 self.assertEqual(re.findall(r"unlocking_identity = (\w+)", body), [IDENTITY])
 
     def test_existing_groups_become_primary(self):
-        for group in ("principle_group_foreign_investment", "principle_group_monetary_union"):
+        for group in ("principle_group_foreign_investment", "principle_group_monetary_union",
+                      "principle_group_companies"):
             with self.subTest(group=group):
                 body = entity(self.shared, group)
                 self.assertIn(f"primary_for_identity = {IDENTITY}", body)

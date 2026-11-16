@@ -349,6 +349,12 @@ principle_group_rural = {
 }
 
 INJECT:principle_group_companies = {
+	# The Creditors' Consortium's concessions face (2026-11-16 review): a
+	# rescue's concessions term hands the leader's companies monopolies in the
+	# debtor, as the Ottoman Public Debt Administration ran its tobacco
+	# monopoly through the Regie company. Vanilla names no primary identity
+	# for the group; it stays open to all.
+	primary_for_identity = identity_creditors_consortium
 
 	levels = {
 		principle_companies_4
