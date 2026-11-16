@@ -300,3 +300,140 @@ country_te_pb_principle_slots_add = {
 		ai_value = 0
 	}
 }
+
+# Creditors' Consortium (2026-11-16, docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5).
+# The identity's marker: its power_bloc_modifier carries it for the tooltip
+# alone; script reads has_identity (te_cred_in_consortium,
+# te_creditors_consortium_triggers.txt), as the Monetary Union reads has_principle.
+power_bloc_debt_administration_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Conditionality's display fields: script pays each (te_cred_terms_allowed,
+# te_cred_receivership_take_extra, te_cred_monopolies_allowed,
+# te_cred_receivership_exit_extra), reading the tier through has_principle.
+power_bloc_te_cred_rescue_terms_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_remittance_add = {
+	color = neutral
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_monopolies_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_receivership_months_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Development Lending's display fields: te_cred_dl_share pays the first,
+# te_cred_dl_receiver_2..5 (static modifiers) the second.
+power_bloc_te_cred_dl_share_add = {
+	color = neutral
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_dl_construction_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Research Commons (identity_research_commons, power_blocs.md § Research
+# Commons). The identity's marker only labels its tooltip; script reads
+# has_identity (te_rc_in_commons). The two Technology Controls booleans sit on
+# its principles' power_bloc_modifier: the first at every tier, read by Science
+# Aid's possible (te_rc_tech_controls_bars_aid), the second from tier III, read
+# by the Technology Embargo's selectable (te_rc_can_embargo). The strength
+# field shows the tier's embargo factor (50, 75, 100) for the tooltip; script
+# reads the tier with has_principle (te_rc_embargo_points), and
+# test_research_commons.py holds the two to each other.
+power_bloc_research_pool_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_controls_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_technology_embargo_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_embargo_strength_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Development Lending's third display field (2026-11-16 review): the acceptance
+# a country below the bloc's GDP per head gives the bloc's invitation and its
+# join treaty, 5 a tier. Script pays it in both AI scores (modified.txt,
+# te_cred_dl_invite_per_tier); test_creditors_consortium.py holds the field
+# to the value.
+power_bloc_te_cred_dl_invite_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# The Joint Research Institute's figure (pm_hq_research_commons, 2026-11-16
+# review): the share of the pool added to the leader's innovation cap beside
+# the identity's own tenth (te_rc_pool_cap_share). Workforce-scaled on the
+# headquarters, read by te_rc_pool_cap_value, so a half-staffed institute
+# adds half. A share of the pool, not a flat cap, so it grows with the
+# members' innovation from era to era.
+country_te_rc_pool_cap_share_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}

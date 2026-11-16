@@ -142,6 +142,10 @@ SECTIONS = {
         # monthly by the automated share, and Displaced Workers, scaled by the
         # share's yearly rise (te_automation_policy_effects.txt)
         "te_automation_robot_tax", "te_automation_dividend", "te_automation_displacement",
+        # Development Lending: a poorer member of a Creditors' Consortium builds
+        # faster, one modifier a tier, held while the tier holds
+        # (te_cred_dl_sync_receiver_modifier)
+        "te_cred_dl_receiver_*",
     ),
     "science_and_space": (
         # Space race milestones (first and later), the probe's data, the dividend
@@ -327,6 +331,8 @@ SOURCE_GROUPS = {
     # text, so a band split across two groups would show under the wrong flag
     "tax_views": ("te_tax_ig_view_*",),
     "automation": ("te_automation_*",),
+    # A Creditors' Consortium's Development Lending
+    "development_lending": ("te_cred_dl_receiver_*",),
     "resettlement": ("resettlement_*",),
     # Uploaded minds and Clade Citizenship's heritage parity
     "transhumanism": ("te_demog_um_*", "te_clade_parity_*"),

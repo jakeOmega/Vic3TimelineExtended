@@ -571,6 +571,27 @@ te_nation_src_automation_count = {
 	}
 }
 
+# Used by: the monthly pulse, for te_nation_src_development_lending
+te_nation_src_development_lending_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		add = 1
+	}
+}
+
 # Used by: the monthly pulse, for te_nation_src_resettlement
 te_nation_src_resettlement_count = {
 	value = 0
@@ -793,7 +814,7 @@ te_nation_src_foreign_count = {
 te_nation_list_governance_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_e2f86b0c }
+		limit = { has_variable = te_nation_src_set_0c8cff10 }
 		if = {
 			limit = { var:te_nation_src_governance > 0 }
 			add = te_nation_src_governance_count
@@ -805,7 +826,7 @@ te_nation_list_governance_count = {
 te_nation_list_society_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_e2f86b0c }
+		limit = { has_variable = te_nation_src_set_0c8cff10 }
 		if = {
 			limit = { var:te_nation_src_living_standards > 0 }
 			add = te_nation_src_living_standards_count
@@ -856,7 +877,7 @@ te_nation_list_society_count = {
 te_nation_list_economy_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_e2f86b0c }
+		limit = { has_variable = te_nation_src_set_0c8cff10 }
 		if = {
 			limit = { var:te_nation_src_construction > 0 }
 			add = te_nation_src_construction_count
@@ -886,6 +907,10 @@ te_nation_list_economy_count = {
 			add = te_nation_src_automation_count
 		}
 		if = {
+			limit = { var:te_nation_src_development_lending > 0 }
+			add = te_nation_src_development_lending_count
+		}
+		if = {
 			limit = { var:te_nation_src_colonial > 0 }
 			add = te_nation_src_colonial_count
 		}
@@ -896,7 +921,7 @@ te_nation_list_economy_count = {
 te_nation_list_science_and_space_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_e2f86b0c }
+		limit = { has_variable = te_nation_src_set_0c8cff10 }
 		if = {
 			limit = { var:te_nation_src_transhumanism > 0 }
 			if = {
@@ -919,7 +944,7 @@ te_nation_list_science_and_space_count = {
 te_nation_list_international_count = {
 	value = 0
 	if = {
-		limit = { has_variable = te_nation_src_set_e2f86b0c }
+		limit = { has_variable = te_nation_src_set_0c8cff10 }
 		if = {
 			limit = { var:te_nation_src_nuclear_order > 0 }
 			add = te_nation_src_nuclear_order_count
@@ -3048,6 +3073,22 @@ te_nation_types_economy_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_direct_construction_base_modifier }
 		add = 1
 	}
@@ -3169,6 +3210,22 @@ te_nation_group_production_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_direct_construction_base_modifier }
 		add = 1
 	}
@@ -3206,6 +3263,22 @@ te_nation_type_state_arable_land_mult_count = {
 # Used by: the state_construction_mult row
 te_nation_type_state_construction_mult_count = {
 	value = 0
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_cred_dl_receiver_5 }
+		add = 1
+	}
 	if = {
 		limit = { has_modifier = too_much_private_construction }
 		add = 1

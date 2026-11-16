@@ -275,6 +275,12 @@ te_demog_pension_law_on_action = {
 
 # ROOT = a country that acquired a technology: each of its states, as its own ROOT. Not before the game starts, as above.
 te_demog_lines_country_on_action = {
+	# Not for a Research Commons grant (te_rc_grant sets te_rc_granting around
+	# add_technology_researched): a sharing pass runs this once for each member
+	# it gave a technology (te_rc_refresh_after_grants), not once per technology.
+	trigger = {
+		NOT = { has_variable = te_rc_granting }
+	}
 	effect = {
 		if = {
 			limit = { has_game_started = yes }

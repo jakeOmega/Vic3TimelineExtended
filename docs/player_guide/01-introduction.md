@@ -40,7 +40,7 @@ closed, and one you open stays open as you switch maps.
 | Society | Turmoil, Devastation, Urban People |
 | Classes | Aristocrats, Clergymen, Capitalists, Academics: each class's share of the state's people |
 | Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity |
-| Migration and Cities | Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank |
+| Migration and Cities | Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank, Population Density |
 | Military | Armed Forces, Fighting-Age Men, War Dead |
 | Systems | A map for each of nine systems: Emissions, Nuclear Weapons, Agent Networks, United Nations, Political Models, Ocean Basins, Grandeur, Colonies, Power Grids |
 | Census | Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance, Net Migration, Population Growth, Health Care, Family Planning |
@@ -49,6 +49,9 @@ Hover a state for its figure. Trade Capacity colors each state by its own
 Trade Capacity, what its Trade Center can carry. Investment colors it by what
 its owners pay into the Investment Pool each week, an estimate from the
 profit of its financial districts, manor houses and company headquarters.
+Population Density colors it by its people per km² of land; where countries
+split a state region, each part takes the region's land in proportion to its
+provinces.
 
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the
@@ -265,7 +268,7 @@ turn a default system off.
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | Culture Merges | Disabled | Closely related cultures merging into one national culture. A game saved before it was added keeps it off. Turned off mid-game, every merge pauses where it stands and carries on when the rule is turned back on. | [States and population](08-states.md#culture-merges) |
-| Small-Economy Construction | Full Cost for Every Country | *Cheaper for Small Economies* (experimental): construction and construction maintenance cost a small economy less, a tenth of the price with almost no GDP, rising to the full price at a GDP of 10 million. Switched in a running game, it reaches each country within a year. | [Economy and construction](03-economy.md) |
+| Small-Economy Construction | Full Cost for Every Country | Experimental. Construction and construction maintenance cost a small economy less, rising to the full price at a GDP of 10 million. *Half the Cost*, *A Fifth of the Cost* and *A Tenth of the Cost for Small Economies* set the price with almost no GDP. Switched in a running game, on, off or to another strength, it reaches each country within a year. | [Economy and construction](03-economy.md) |
 | Global Commons | Enabled | *Enabled*: seabed licenses that cap the Deep-Sea Mine, the Law of the Sea's seabed terms at the UN, Antarctic research stations and the Antarctic Treaty. *Disabled*: the Deep-Sea Mine has no cap. | [The extended timeline](02-timeline.md#seabed-licenses) |
 | Power Bloc Principle Slots | Up to Eight | *Up to Eight*: four technologies the bloc leader researches each add a principle slot, up to eight. *Four (Base Game)*: the base game's slots only. | [Diplomacy](09-diplomacy.md#principle-slots) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. *Late Unlock*: it opens with Combined Arms. *Early Unlock*: it opens with Trench Works, democratic and authoritarian powers also count as opposed until Combined Arms, and a world war begun before Combined Arms can be followed by a second. | [Military and war](13-military.md) |

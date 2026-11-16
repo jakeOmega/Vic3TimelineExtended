@@ -2,7 +2,7 @@
 
 Part of the [mod systems reference](../mod_systems.md), which indexes every system.
 
-Thirteenth pass, 2026-11-14 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
+Fifteenth pass, 2026-11-16 (issue #1404, `docs/audits/vanilla_1_15_prep.md` § 4.1). The first pass (#1410, #1414) was
 built ahead of the in-game checks and answered most of them; the second (#1417) rebuilt the Map Room on those answers,
 and the third (#1420) added what its play-test asked for: picks that repaint a paused map, and the see-through journal
 page. Its picks closed the page for good, so the fourth (#1424) moved their repaint to a widget outside the page, which
@@ -23,7 +23,8 @@ owner's pick of the assessment that followed: "I'll go with your recommendation"
 ways from a midpoint, "What about symlog?") adds a third, Scale: the map's own curve, Linear, Logarithmic or Ranked
 (§ The Map Room's Options, Scale). The fourteenth (the same day, the second half of that pick) adds the last the
 owner named, Color: the map's own colors, colorblind-safe ramps or greyscale, and rewrites the 35 fitted picks'
-tooltips so that each is true under every scale and color (§ The Map Room's Options, Color).
+tooltips so that each is true under every scale and color (§ The Map Room's Options, Color). The fifteenth
+(2026-11-16, the owner's ask: "a population density map mode") adds Population Density, people per km² of land.
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -91,7 +92,7 @@ Comfort's two maps share Base Comfort's range (`range_of`), so they still compar
 (0–100, its tiers at 50 and 75 are what it shows), the paleness of the leading cause and of Ownership's leading holder
 (a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
 Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs,
-War Dead, Trade Capacity and Investment take GDP per capita's doubling scale, since their counts run over orders of magnitude.
+War Dead, Trade Capacity, Investment and Population Density take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
@@ -243,6 +244,20 @@ entry, in no country's journal.
   owners' building in profit: BROKEN when none stores a contribution, so the state's read of the reinvested share
   doesn't carry its country's base). It rests on the Company HQs map's unverified fact too, that an owners' building
   books its dividends as `weekly_profit` (`hq_profit`). Play-test check 28 names the fallbacks.
+- **The fifteenth pass's one** (2026-11-16, the owner's ask). 47 **Population Density**: the state's people per km²
+  of land (`te_jmap_density`), read live, as GDP per capita is: `state_population` over the state's land
+  (`te_jmap_density_area`), its region's area from the area table (`te_region_area`, which
+  `te_region_area_generated.txt` stores on each region at the game's start, the row-weighted pixels of the
+  game's `provinces.png`, read through `te_region_area_km2`) times its share of the region's provinces
+  (`num_provinces` over `state_region.num_provinces`), so a region split between owners shares its land by
+  province: script can't reach a province's own size, and a region's provinces run near one size. A doubling at
+  a time, pale lemon to deep wine; a state with no people, or none before the table is written, pale. At the
+  1836 start the regions ran from 0.009 (Nunavut) to 734 (Suzhou), median 10, the fifth lowest 0.017 and the
+  fifth highest 267: some sixteen doublings, so the scale's floor is 0.01 and its default 0.03125 to 256. The
+  hover gives whole people per km² from 10 and hundredths below it, a branch each (a `SelectLocalization` would
+  lose `THIS`), then the people and the km². Not the Crowding Penalty's density (`state_population_density`,
+  people over arable land and Urban Engineering, which the engine's crowding reads): this is the land itself.
+  Play-test check 32.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
@@ -682,7 +697,7 @@ Every map button clears the see-through flag before it opens a page.
   see-through flag does, so a category opened stays open from map to map. Society (Turmoil, Devastation, Urban People);
   Classes (Aristocrats, Clergymen; Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership,
   Company HQs; Investment, Trade Capacity); Migration and Cities (Base Comfort, Current Comfort, Crowding Penalty; Tourism Appeal, City
-  Rank); Military (Armed Forces, and Fighting-Age Men and War Dead while the census runs); Systems (the systems' nine in
+  Rank, Population Density); Military (Armed Forces, and Fighting-Age Men and War Dead while the census runs); Systems (the systems' nine in
   rows of three, Grandeur, Colonies and Power Grids last); Census (its maps three to a row, Population Growth, the walk's,
   beside Net Migration, and a last row of Health Care and Family Planning). `test_journal_map_modes.py`'s
   `CategoriesTest` holds every pick to one category.

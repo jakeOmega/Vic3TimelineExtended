@@ -249,10 +249,15 @@ te_mon_leave_backstop_treaties = {
 		}
 		set_variable = { name = te_mon_receivership value = 0 }
 	}
+	# The exit count goes with the article, which the engine removes off Full.
+	# A Creditors' Consortium's treaty-less receivership is not removed: it
+	# pauses (te_cred_discover_direct_receivership), so its months out of
+	# default are kept for when the rule returns.
 	if = {
 		limit = {
 			has_variable = te_mon_receivership_clear_months
 			var:te_mon_receivership_clear_months > 0
+			NOT = { has_variable = te_cred_direct_receivership }
 		}
 		set_variable = { name = te_mon_receivership_clear_months value = 0 }
 	}

@@ -333,8 +333,8 @@ absorbs at most one such nation a year.
 
 ## Power bloc principles and identities
 
-The mod adds one identity, fifteen principle groups, and tiers IV and V to every
-base-game group. A bloc can hold five mandates instead of three.
+The mod adds three identities, eighteen principle groups, and tiers IV and V to
+every base-game group. A bloc can hold five mandates instead of three.
 
 Each tier's effects are the complete list for that tier: tier V replaces tier IV
 rather than adding to it. Compare tiers by their tooltips, not by summing them.
@@ -375,12 +375,70 @@ Alignment, a pact that slowly aligns a country's relations with third parties to
 its own and builds the leader up to 1,000 Involvement where that country is
 local, and a Diplomatic Framework never blocks a member's voluntary union.
 
+### The Creditors' Consortium identity
+
+A Creditors' Consortium binds its members by credit. It appears only with the
+Banking System game rule set to Enabled, and its founder needs a National Bank,
+no Command Economy and no default. Its leader can't then enact Command Economy
+or abolish the bank.
+
+The leader stands behind every other member's debts, as a Lender of Last Resort
+treaty would: each member's risk premium from debt load falls, and the leader
+pays part of that in premium of its own. A member with Command Economy, or one
+already guaranteed by a treaty, gets nothing from it. A member its currency
+union backs takes the premium relief from the union, and the consortium still
+answers its default.
+
+When a member defaults, its leader chooses: pay the member's creditors, on the
+terms the bloc's Conditionality tier allows, or refuse. The terms are a debt
+receivership (once the leader has International Exchange Standards), its own
+economic, trade and tax laws imposed on the member while the receivership lasts,
+investment rights with monopolies for its companies, and privatization. A
+refusal costs a fifth of the bloc's cohesion at once and ends the guarantee of
+every member for five years. The member may refuse the terms in turn: it stays
+in default, loses the guarantee for ten years, and may leave the bloc at once.
+A member in the leader's receivership can't leave. Cohesion rests on the
+leader's share of the bloc's GDP, falls with the leader's debt, members in
+receivership and members with Command Economy, and drops by 50 while the leader
+is in default.
+
+### The Research Commons identity
+
+A Research Commons pools its members' science in the leader. It opens with
+Intergovernmental Organizations, and founding one needs the Ministry of Science
+law. Members other than the leader research nothing themselves (−1000% research
+speed). Each sends the leader 75% of its weekly innovation, counted after what
+its own programs spend and before its multipliers. The leader's innovation rises
+by what the members send and its innovation cap by a tenth of it. Every member
+is given each technology another member knows, at the leader's monthly review
+and on the day one of them acquires a new one. A newcomer gets them all at the
+first review after it joins, and the bloc gets what the newcomer alone knew.
+The Research Commons journal entry shows a member what it sends and what it has
+received, and the leader the pool, the cap rise and its own share.
+
+Cohesion rests on the innovation the leader produces itself, before what the
+members send and what its programs spend, as a share of what the whole bloc
+produces, so a leader that closes its universities and lives on the pool loses
+its bloc, while one that spends the pool on its own space or nuclear program
+doesn't. The worst relations between the leader and a member lower it, and so
+does each member. The leader can't abolish its Ministry of Science. A member
+can leave only when the bloc's leverage advantage over it is 10 or less (30 for
+the base game's identities), and a country that leaves keeps what it learned
+but carries Institutes Left Behind: −50% research speed, falling to nothing
+over ten years, and ending at the next monthly review if it joins a Research
+Commons again. The penalty falls only on a country that left a Commons that
+still stands: a bloc that dissolves, changes identity or loses its leader puts
+none on its former members.
+
 ### New principle groups
 
 Foreign Service and Multilateral Institutions are open only to a Diplomatic
-Framework, and Artistic Expression only to a Cultural Commonwealth.
-Vassalization, Colonial Offices and Sacred Civics are closed to a Diplomatic
-Framework. Urban Planning and Rural Development exclude each other.
+Framework, Artistic Expression only to a Cultural Commonwealth, Conditionality
+and Development Lending only to a Creditors' Consortium, and Technology Controls
+only to a Research Commons. Vassalization, Colonial Offices and Sacred Civics
+are closed to a Diplomatic Framework and a Research Commons, and Sacred Civics
+to a Creditors' Consortium. Urban Planning and Rural Development exclude each
+other.
 
 | Group | First tiers need | What it does |
 |---|---|---|
@@ -399,6 +457,9 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
 | Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
+| Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (one to three), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), more monopolies, and a longer receivership (12 to 36 months out of default). |
+| Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. In return the bloc gains 5 to 40 cohesion, the leader 10% to 30% more influence, and countries poorer than its average accept its invitations more readily. |
+| Technology Controls | Nuclear Weapons | No Modernization Aid to countries outside the bloc, and members' research better guarded against espionage. From tier III the leader can place a Technology Embargo. |
 
 ### Principle tiers IV and V
 
@@ -433,6 +494,7 @@ article would.
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
 | Market Unification IV and V, Internal Trade IV and V | Members' power grids join as under a Grid Interconnection Agreement; see [Power grids](03-economy.md#power-grids) |
+| Technology Controls III+ | Technology Embargo: a hostile pact on one country outside the bloc at a time that cuts its technology spread by the bloc's share of the world's innovation times 50% (III), 75% (IV) or 100% (V), to at most 50% |
 
 ### Bloc summits
 
@@ -463,6 +525,8 @@ event, The Summit's Communiqué, tells you which of these its summit gave you.
 | Ideological Union | Congress of the Movement | Members: +25% chance for laws you impose on them to pass, +5% for their own enactments, −25% radicals from political movements |
 | Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
 | Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
+| Creditors' Consortium | Debt Conference | Members: −0.5 percentage points of risk premium. Relations between every two members +20 |
+| Research Commons | Scientific Congress | Members, you included: +10% weekly innovation, which also lifts what the pool brings you |
 
 The religious council takes its name from your state religion: an ecumenical
 council, a synod, the ulama in council, a rabbinical council, a Sangiti, a

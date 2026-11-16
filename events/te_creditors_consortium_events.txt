@@ -1,0 +1,756 @@
+﻿# ============================================================================
+# The Creditors' Consortium: a member defaults, and is rescued on terms
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5.3.
+# The flow, the scopes and the helpers: te_creditors_consortium_effects.txt.
+#
+#   te_cc.1  the leader: rescue on terms, or refuse
+#   te_cc.2  the member: accept the terms, or refuse them
+#   te_cc.3  the leader hears the member's answer
+#   te_cc.4  the member hears that the leader refused
+#   te_cc.9  hidden, three days after a rescue: the treaty self-checks
+#
+# Fired only from te_monetary_on_country_default, which asks te_mon_full_system
+# (the banking rule on Full) and te_cred_guarantee_is_effective; each event
+# checks again in its trigger, since the rule can change while one waits.
+# ============================================================================
+
+namespace = te_cc
+
+
+# ----------------------------------------------------------------------------
+# te_cc.1 - the leader is called
+# ----------------------------------------------------------------------------
+# Options by how many terms beside the receivership the rescue carries
+# (te_cred_terms_to_pick: the bloc's Conditionality tier's figure, or as many
+# as are on offer if fewer), one option for each set of that size the engine
+# allows (te_cred_term_*_available). Exactly one count holds, so the player
+# sees only rescues of the right size, and the leader chooses which.
+#
+# THE AI'S ODDS ARE te_lolr.1's. Every rescue option carries te_lolr.1's
+# honour weight in full (10, +3 for a bloc member, -4 at 0.5 and again at 0.9
+# of the leader's ceiling, -3 for each prior call up to three) and Refuse its
+# refusal weight; where two or three rescues show at once
+# (te_cred_rescue_split_2 / _3), each takes a half or a third, so the rescues
+# together weigh what te_lolr.1's one Honour does. The split is a factor after
+# the adds: read as (base + adds) x factor, the sum is exact; read the other
+# way it errs toward refusal.
+te_cc.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_cc.1.t
+	# What a rescue buys: a receivership once the leader has its technology,
+	# terms once Conditionality offers any; the text promises only those.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					te_cred_receivership_possible = yes
+					te_cred_terms_pick_0 = no
+				}
+				desc = te_cc.1.d
+			}
+			triggered_desc = {
+				trigger = { te_cred_receivership_possible = yes }
+				desc = te_cc.1.d_receivership
+			}
+			triggered_desc = {
+				trigger = { te_cred_terms_pick_0 = no }
+				desc = te_cc.1.d_terms
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_cc.1.d_plain
+			}
+		}
+	}
+	flavor = te_cc.1.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+		te_mon_full_system = yes
+		exists = scope:te_cc_debtor
+		exists = scope:te_cc_creditor
+		te_cred_leads_consortium = yes
+		scope:te_cc_debtor = { is_in_same_power_bloc = root }
+	}
+
+	# Rescue with no term beyond the receivership (no Conditionality, or no
+	# term on offer).
+	option = {
+		name = te_cc.1.a
+		trigger = { te_cred_terms_pick_0 = yes }
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = no CONC = no PRIV = no }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+
+	# One term. Where two or three are on offer, a leader whose Trade Unions sit
+	# in government leans to adjustment, its Industrialists to concessions, and
+	# laissez-faire to privatization. The lean moves the choice among the
+	# rescues and the odds of a rescue barely (a factor of 1.25 on one of two
+	# or three adds a twelfth or an eighth to the rescues' sum).
+	option = {
+		name = te_cc.1.b
+		trigger = {
+			te_cred_terms_pick_1 = yes
+			te_cred_term_adjustment_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = yes CONC = no PRIV = no }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = {
+					te_cred_rescue_split_1 = no
+					ig:ig_trade_unions ?= { is_in_government = yes }
+				}
+				factor = 1.25
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+	option = {
+		name = te_cc.1.c
+		trigger = {
+			te_cred_terms_pick_1 = yes
+			te_cred_term_concessions_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = no CONC = yes PRIV = no }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = {
+					te_cred_rescue_split_1 = no
+					ig:ig_industrialists ?= { is_in_government = yes }
+				}
+				factor = 1.25
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+	option = {
+		name = te_cc.1.e
+		trigger = {
+			te_cred_terms_pick_1 = yes
+			te_cred_term_privatization_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = no CONC = no PRIV = yes }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = {
+					te_cred_rescue_split_1 = no
+					has_law = law_type:law_laissez_faire
+				}
+				factor = 1.25
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+
+	# Two terms.
+	option = {
+		name = te_cc.1.g
+		trigger = {
+			te_cred_terms_pick_2 = yes
+			te_cred_term_adjustment_available = yes
+			te_cred_term_concessions_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = yes CONC = yes PRIV = no }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+	option = {
+		name = te_cc.1.h
+		trigger = {
+			te_cred_terms_pick_2 = yes
+			te_cred_term_adjustment_available = yes
+			te_cred_term_privatization_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = yes CONC = no PRIV = yes }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+	option = {
+		name = te_cc.1.i
+		trigger = {
+			te_cred_terms_pick_2 = yes
+			te_cred_term_concessions_available = yes
+			te_cred_term_privatization_available = yes
+		}
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = no CONC = yes PRIV = yes }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+
+	# Every term.
+	option = {
+		name = te_cc.1.j
+		trigger = { te_cred_terms_pick_3 = yes }
+		default_option = yes
+		te_cred_offer_rescue = { ADJ = yes CONC = yes PRIV = yes }
+		# te_lolr.1's honour weight, split among the rescues shown together.
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_cc_debtor }
+				add = 3
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_2 = yes }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_3 = yes }
+				factor = 0.33
+			}
+		}
+	}
+
+	# Refuse: te_lolr.1's refusal weight.
+	option = {
+		name = te_cc.1.z
+		te_cred_refuse_rescue = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 3
+			}
+			# ...a member that has been here before: te_lolr.1's 2 / 4 / 6 / 8.
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 1 } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 2 } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:te_cc_debtor = { te_mon_lolr_calls_prior >= 3 } }
+				add = 2
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# te_cc.2 - the member is offered the rescue
+# ----------------------------------------------------------------------------
+# The terms the leader chose are on the member (te_cred_offer_*, 120 days).
+# An AI member accepts unless it is hostile to the leader (the attitudes
+# article 114's own AI reads as hostile).
+te_cc.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_cc.2.t
+	desc = te_cc.2.d
+	flavor = te_cc.2.f
+
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+		te_mon_full_system = yes
+		has_variable = te_cred_offer_cost
+		te_cred_rescue_still_valid = yes
+	}
+
+	option = {
+		name = te_cc.2.a
+		default_option = yes
+		custom_tooltip = te_cc.2.a.tt
+		te_cred_apply_rescue = yes
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	option = {
+		name = te_cc.2.b
+		te_cred_refuse_terms = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:te_cc_creditor attitude = domineering }
+						has_attitude = { who = scope:te_cc_creditor attitude = belligerent }
+						has_attitude = { who = scope:te_cc_creditor attitude = antagonistic }
+					}
+				}
+				add = 30
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# te_cc.3 - the leader hears the answer
+# ----------------------------------------------------------------------------
+# te_cc_answer on the debtor (scope:te_cc_debtor): 1 accepted, 2 refused. On the
+# debtor, not the leader, so two rescues answered at once each read their own.
+te_cc.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:te_cc_debtor.var:te_cc_answer ?= 1 }
+				desc = te_cc.3.t_accepted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_cc.3.t_refused
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:te_cc_debtor.var:te_cc_answer ?= 1 }
+				desc = te_cc.3.d_accepted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_cc.3.d_refused
+			}
+		}
+	}
+	flavor = te_cc.3.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cc_debtor
+		scope:te_cc_debtor = { has_variable = te_cc_answer }
+	}
+
+	option = {
+		name = {
+			trigger = { scope:te_cc_debtor.var:te_cc_answer ?= 1 }
+			text = te_cc.3.a_accepted
+		}
+		name = {
+			trigger = { NOT = { scope:te_cc_debtor.var:te_cc_answer ?= 1 } }
+			text = te_cc.3.a_refused
+		}
+		default_option = yes
+		if = {
+			limit = { scope:te_cc_debtor.var:te_cc_answer ?= 1 }
+			custom_tooltip = te_cc.3.a_accepted.tt
+		}
+		else = {
+			custom_tooltip = te_cc.3.a_refused.tt
+		}
+		hidden_effect = {
+			scope:te_cc_debtor = { remove_variable = te_cc_answer }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# te_cc.4 - the member hears that the leader refused
+# ----------------------------------------------------------------------------
+te_cc.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_cc.4.t
+	desc = te_cc.4.d
+	flavor = te_cc.4.f
+
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cc_creditor
+	}
+
+	option = {
+		name = te_cc.4.a
+		default_option = yes
+		custom_tooltip = te_cc.4.a.tt
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# te_cc.9 - hidden: did the rescue's treaties enter into force?
+# ----------------------------------------------------------------------------
+# Fired on the member three days after it accepted (te_cred_apply_rescue).
+#
+# cc_receivership_treaty (§ 11 fact 1): te_cred_make_receivership made a
+# debt_receivership treaty with is_draft = no (te_cred_rcv_check names the
+# leader). OK if the member is now the source of an in-force debt_receivership
+# article; BROKEN if not, and the receivership is then set directly
+# (te_cred_set_direct_receivership), the fallback. Its exit ramp and relief
+# follow either way.
+#
+# cc_monopoly_treaty (§ 11 fact 3): te_cred_demand_monopolies made
+# te_cred_mono_made acquire_monopoly_for_company treaties with a company and a
+# building type as inputs. OK if at least one such article with the member as
+# source is now in force; BROKEN if none is. No fallback runs: the leader may
+# still ask for monopolies in the treaty screen (docs/testing/power-bloc-identities-playtest.md).
+#
+# Each logs once a game, from the first rescue that tries it.
+te_cc.9 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		# Off the Full rule nothing is read: the engine has removed any
+		# receivership article (requirement_to_maintain), so a check would log a
+		# false BROKEN and set a receivership the rule has paused.
+		if = {
+			limit = {
+				te_mon_full_system = yes
+				has_variable = te_cred_rcv_check
+				exists = var:te_cred_rcv_check
+			}
+			var:te_cred_rcv_check = { save_scope_as = te_cc_creditor }
+			if = {
+				limit = { te_mon_is_article_source = { TYPE = debt_receivership } }
+				if = {
+					limit = { NOT = { has_global_variable = te_cc_sc_receivership_logged } }
+					set_global_variable = te_cc_sc_receivership_logged
+					debug_log = "TE_SELF_CHECK OK cc_receivership_treaty (create_treaty made [ROOT.GetCountry.GetNameNoFormatting]'s debt_receivership to [SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] and it is in force three days on; receivership flag=[ROOT.GetCountry.MakeScope.Var('te_mon_receivership').GetValue|0], which the article's on_entry_into_force dispatch sets) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			else = {
+				if = {
+					limit = { NOT = { has_global_variable = te_cc_sc_receivership_logged } }
+					set_global_variable = te_cc_sc_receivership_logged
+					debug_log = "TE_SELF_CHECK BROKEN cc_receivership_treaty (create_treaty with debt_receivership from [ROOT.GetCountry.GetNameNoFormatting] to [SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] left no article in force three days on: the receivership is set directly instead (te_cred_set_direct_receivership); see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				te_cred_set_direct_receivership = yes
+			}
+			remove_variable = te_cred_rcv_check
+		}
+
+		if = {
+			limit = {
+				te_mon_full_system = yes
+				has_variable = te_cred_mono_made
+				var:te_cred_mono_made > 0
+			}
+			# Only a member that held no monopoly article before the rescue
+			# (te_cred_mono_prior, te_cred_demand_monopolies), so an older
+			# article can't make it pass.
+			if = {
+				limit = {
+					NOT = { has_global_variable = te_cc_sc_monopoly_logged }
+					NOT = { has_variable = te_cred_mono_prior }
+				}
+				set_global_variable = te_cc_sc_monopoly_logged
+				if = {
+					limit = {
+						any_scope_treaty = {
+							any_scope_article = {
+								has_type = acquire_monopoly_for_company
+								source_country = root
+							}
+						}
+					}
+					debug_log = "TE_SELF_CHECK OK cc_monopoly_treaty (create_treaty made [ROOT.GetCountry.MakeScope.Var('te_cred_mono_made').GetValue|0] acquire_monopoly_for_company treaties with company and building-type inputs from [ROOT.GetCountry.GetNameNoFormatting], and one is in force three days on; check the company's monopoly in its panel) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN cc_monopoly_treaty (create_treaty made [ROOT.GetCountry.MakeScope.Var('te_cred_mono_made').GetValue|0] acquire_monopoly_for_company treaties from [ROOT.GetCountry.GetNameNoFormatting] and none is in force three days on: the inputs are not taken from script; see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			remove_variable = te_cred_mono_made
+		}
+		if = {
+			limit = { has_variable = te_cred_rcv_check }
+			remove_variable = te_cred_rcv_check
+		}
+		if = {
+			limit = { has_variable = te_cred_mono_made }
+			remove_variable = te_cred_mono_made
+		}
+		if = {
+			limit = { has_variable = te_cred_mono_prior }
+			remove_variable = te_cred_mono_prior
+		}
+	}
+}

@@ -205,7 +205,8 @@ class RegistryTests(unittest.TestCase):
         import culture_merges_config as cfg
         merges = {"je_te_cm_%s" % m.key for m in cfg.MERGES}  # exactly the roster's, not whatever carries the prefix
         self.assertEqual({name for name in defined if name.startswith("je_te_cm_")}, merges)
-        self.assertEqual(defined - registered - merges, {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
+        self.assertEqual(defined - registered - merges,
+                         {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
         self.assertEqual(registered - defined, set())
 
 

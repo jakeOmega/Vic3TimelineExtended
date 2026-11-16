@@ -1777,6 +1777,46 @@ te_jmap_measure_invest = {
 	}
 }
 
+# Population Density, the state's people per km² of land: the same share of the color for each doubling from the world's low (at least 0.01) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_density = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_density_lo }
+		remove_global_variable = te_jmap_rng_density_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_density_hi }
+		remove_global_variable = te_jmap_rng_density_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { te_jmap_density > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = density }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_density = {
+	ordered_state = {
+		limit = { te_jmap_density > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_density_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_density_hi value = te_jmap_density_input }
+	}
+	ordered_state = {
+		limit = { te_jmap_density > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_density_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_density_lo value = te_jmap_density_input }
+	}
+}
+
 # The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt).
 te_jmap_refresh_range = {
 	# One rank variable serves every map: no place outlives the pick or the setting it was taken under.
@@ -1920,6 +1960,10 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 46 }
 		te_jmap_range_invest = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 47 }
+		te_jmap_range_density = yes
 	}
 	# The Scale option's Ranked setting: the pick's places, taken with its range.
 	if = {
@@ -3025,6 +3069,31 @@ te_jmap_rank_invest = {
 	}
 }
 
+# Population Density, the state's people per km² of land: the same share of the color for each doubling from the world's low (at least 0.01) to its high.
+te_jmap_rank_density = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { te_jmap_density > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_density_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_density_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_density_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { te_jmap_density > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
 # The pick's places, if it is fitted to the world.
 te_jmap_refresh_rank = {
 	if = {
@@ -3166,6 +3235,10 @@ te_jmap_refresh_rank = {
 	else_if = {
 		limit = { te_jmap_selector = 46 }
 		te_jmap_rank_invest = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 47 }
+		te_jmap_rank_density = yes
 	}
 }
 

@@ -1,0 +1,157 @@
+﻿### TECHNOLOGY CONTROLS (identity_research_commons)
+### docs/systems/mod_systems/power_blocs.md § Research Commons; design
+### docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.5.
+###
+### The Commons' outside face: open among members, closed to everyone else.
+### Technology spread is one country-wide figure with no source, so script can't
+### stop an outsider's spread from drawing on what members know; the group works
+### on what script owns. Every tier closes Science Aid and its upgrade to
+### countries outside the bloc (power_bloc_technology_controls_bool, read in the
+### articles' possible); each raises members' covert defense on the two axes
+### technology theft runs on (industrial espionage: economic; military
+### espionage: military); from tier III the leader may place a Technology
+### Embargo on one country (te_research_commons_embargo.txt), sized by the
+### bloc's share of the world's innovation at 50, 75 and 100 points per share.
+###
+### Covert defense against capacity: laws give 5 to 10, a temporary vigilance up
+### to 25 (covert_warfare_modifier_types.txt), and 10 points is about 1.5
+### detection points, so tier V's 25 is a standing vigilance on both axes.
+###
+### Gates, to the pattern of Multilateral Institutions (I to III on the
+### identity's era, then one technology a tier): I and II Nuclear Weapons, which
+### the founder holds (the Ministry of Science needs it); III Satellite
+### Communications (era 7); IV Cellular Networks (era 8); V Automated
+### Surveillance (era 9). Tiers replace each other, so each restates the one
+### below (principle_tier_audit).
+
+principle_technology_controls_1 = {
+	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_technology_controls_bool = yes
+	}
+
+	member_modifier = {
+		country_covert_defense_economic_add = 5
+		country_covert_defense_military_add = 5
+	}
+
+	ai_weight = {
+		value = 100
+
+		if = {
+			limit = {
+				ig:ig_intelligentsia ?= { is_in_government = yes }
+			}
+			add = 50
+		}
+	}
+}
+
+principle_technology_controls_2 = {
+	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }
+		modifier:country_nuclear_weapons_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_technology_controls_bool = yes
+	}
+
+	member_modifier = {
+		country_covert_defense_economic_add = 10
+		country_covert_defense_military_add = 10
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+	}
+}
+
+principle_technology_controls_3 = {
+	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }
+		modifier:country_satcom_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_technology_controls_bool = yes
+		power_bloc_can_use_technology_embargo_bool = yes
+		power_bloc_technology_embargo_strength_add = 50
+	}
+
+	member_modifier = {
+		country_covert_defense_economic_add = 15
+		country_covert_defense_military_add = 15
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_technology_controls_4 = {
+	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }
+		modifier:country_cellular_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_technology_controls_bool = yes
+		power_bloc_can_use_technology_embargo_bool = yes
+		power_bloc_technology_embargo_strength_add = 75
+	}
+
+	member_modifier = {
+		country_covert_defense_economic_add = 20
+		country_covert_defense_military_add = 20
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}
+
+principle_technology_controls_5 = {
+	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
+
+	possible = {
+		te_pb_principle_slot_free = { GROUP = principle_group_technology_controls }
+		modifier:country_auto_surveillance_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		power_bloc_technology_controls_bool = yes
+		power_bloc_can_use_technology_embargo_bool = yes
+		power_bloc_technology_embargo_strength_add = 100
+	}
+
+	member_modifier = {
+		country_covert_defense_economic_add = 25
+		country_covert_defense_military_add = 25
+	}
+
+	ai_weight = {
+		value = 1000
+	}
+}

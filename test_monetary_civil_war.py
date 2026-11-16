@@ -140,12 +140,15 @@ NOT_COPIED = {
 # Written by the effect other than through a copy, each for a stated reason:
 # the seeded flag rides with the summed vault, the basket is re-seeded, the
 # scan flag sends the arrangements through the discovery, and te_mon_work is
-# the scratch the timed-modifier ladder reads.
+# the scratch the timed-modifier ladder reads. The repoint also carries the
+# Creditors' Consortium's own records of a receiver (te_cred_receiver, the
+# treaty-less receivership) and of the leader that may impose its laws
+# (te_cred_adjustment_by), so a revolution in the leader wipes neither.
 DIRECT_WRITES = {
     "te_bank_gold", "te_gold_hot_money", "te_bank_gold_seeded",
     "te_basket_seeded", "te_mon_arr_scan", "te_mon_work",
     "te_mon_anchor", "te_mon_swap_provider", "te_mon_lolr_guarantor",
-    "te_mon_receiver",
+    "te_mon_receiver", "te_cred_receiver", "te_cred_adjustment_by",
 }
 
 # `name =` anywhere inside the block, not only first, so a write spelled

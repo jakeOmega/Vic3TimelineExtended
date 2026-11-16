@@ -11,10 +11,11 @@ self-check whole, and the two in step. The engine reports none of it.
 The scaling's own factor, one plus the GDP part times the share, is stored at the pulse (var:te_cc_scale) and moves
 at most construction_cost_max_yearly_move of itself a year: a step in the share of a rich country moved every
 building's use of the construction good on one day. Under te_small_economy_construction_rule (off by default) the
-factor is multiplied by one that runs from construction_cost_small_economy_min_factor at no GDP to 1 at
-construction_cost_small_economy_full_gdp, which the cap does not touch. TheCapAndTheSmallEconomy runs the script's
-own text (the values, te_cc_yearly_update and te_cc_apply_scaling) with the evaluator of
-test_construction_market_budget_step.
+factor is multiplied by one that runs from the setting's factor at no GDP (construction_cost_small_economy_mild_factor,
+_standard_factor or _strong_factor) to 1 at construction_cost_small_economy_full_gdp, which the cap does not touch.
+TheCapAndTheSmallEconomy and TheStrengths run the script's own text (the values, the rule's triggers,
+te_cc_yearly_update and te_cc_apply_scaling) with the evaluator of test_construction_market_budget_step, reading
+has_game_rule against the setting a test picks.
 """
 
 import os
@@ -145,7 +146,8 @@ class TheWiring(unittest.TestCase):
         self.assertIn(move, body)
         self.assertLess(body.index(first), body.index("te_cc_slack_factor_eased"))
         self.assertLess(body.index("name = te_cc_gdp_part"), body.index(move))
-        self.assertIn("set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor }", body)
+        self.assertIn("set_variable = { name = te_cc_small_factor value = te_cc_small_economy_factor } "
+                      "set_variable = { name = te_cc_small_min value = te_cc_small_economy_min_factor }", body)
 
     def test_the_pulse_and_the_game_start_share_the_apply_effect(self):
         # One refresh site: the pulse, the rule switch (test_construction_rule_switch.py) and the game-start pass
@@ -171,14 +173,17 @@ class TheWiring(unittest.TestCase):
                      "te_cc_total_factor", "te_cc_modifier_total", "te_cc_other_sources", "te_cc_direct_rule",
                      "te_cc_has_reading", "te_cc_slack_factor_now", "te_cc_slack_factor_carried",
                      "te_cc_scale_now", "te_cc_scale_target", "te_cc_small_factor_now",
-                     "te_cc_small_factor_applies", "construction_cost_scaling_mult"):
+                     "te_cc_small_factor_applies", "te_cc_small_min_now", "te_cc_small_setting_changed",
+                     "te_cc_small_economy_min_factor", "construction_cost_scaling_mult"):
             body = _value(values, name)
             self.assertNotIn("every_", body, name)
             self.assertNotIn("te_country_", body, name)
         # ... and the small-economy factor in force, not today's GDP: only the pulse reads te_cc_small_economy_factor
         for name in ("construction_cost_scaling_mult", "te_cc_scaling_factor", "te_cc_small_factor_now",
-                     "te_cc_small_factor_applies"):
+                     "te_cc_small_factor_applies", "te_cc_small_min_now", "te_cc_small_setting_changed"):
             self.assertNotIn("te_cc_small_economy_factor", _value(values, name), name)
+        # the setting's minimum reads the game rule only (through its triggers), never the country's GDP
+        self.assertNotIn("gdp", _value(values, "te_cc_small_economy_min_factor"))
 
 
 # ---------------------------------------------------------------------------
@@ -187,14 +192,26 @@ class TheWiring(unittest.TestCase):
 CONSTANTS = ("construction_cost_gdppc_reference", "construction_cost_floor_ratio", "construction_cost_ceiling_ratio",
              "construction_cost_max_mult", "construction_cost_slack_full", "construction_cost_slack_none",
              "construction_cost_slack_ease", "construction_cost_max_yearly_move",
-             "construction_cost_small_economy_min_factor", "construction_cost_small_economy_full_gdp")
+             "construction_cost_small_economy_min_factor", "construction_cost_small_economy_full_gdp",
+             "construction_cost_small_economy_mild_factor", "construction_cost_small_economy_standard_factor",
+             "construction_cost_small_economy_strong_factor")
 NAMED = ("construction_cost_gdppc_floor", "construction_cost_gdppc_ceiling", "construction_cost_scaling_gdp_mult",
          "te_cc_slack_factor_now", "te_cc_slack_factor_carried", "te_cc_slack_now", "te_cc_slack_target",
          "te_cc_slack_factor_eased", "te_cc_scale_target", "te_cc_scale_now", "te_cc_scale_next",
-         "te_cc_small_economy_factor", "te_cc_small_factor_now", "te_cc_small_factor_applies",
+         "te_cc_small_economy_min_factor", "te_cc_small_economy_factor", "te_cc_small_factor_now",
+         "te_cc_small_factor_applies", "te_cc_small_min_now", "te_cc_small_setting_changed",
          "construction_cost_scaling_mult", "te_cc_modifier_total", "te_cc_other_sources", "te_cc_gdp_part_now",
          "te_cc_scaling_factor", "construction_cost_scaling_adjusted_mult",
          "construction_cost_scaling_direct_adjusted_mult")
+
+# The rule's settings, as a test names them, and the setting name has_game_rule reads. True is the rule's one "on"
+# setting before the strengths (2026-11-13), kept under its name as the strongest.
+RULE_PREFIX = "te_small_economy_construction_"
+SETTINGS = {False: RULE_PREFIX + "disabled", True: RULE_PREFIX + "enabled", "disabled": RULE_PREFIX + "disabled",
+            "mild": RULE_PREFIX + "mild", "standard": RULE_PREFIX + "standard", "strong": RULE_PREFIX + "enabled",
+            None: None}  # None: a save from before the rule, which stores no setting for it
+# The factor at no GDP each setting is meant to give, as the rules screen says it.
+MINIMUM = {"disabled": 1.0, "mild": 0.5, "standard": 0.2, "strong": 0.1}
 
 
 def _parse(text):
@@ -202,19 +219,25 @@ def _parse(text):
 
 
 class _CountryEnv(Env):
-    """Env, with has_modifier: the scaling's modifiers the country held when the effect began (a modifier change
-    is not visible inside the effect that makes it)."""
+    """Env, with has_modifier (the scaling's modifiers the country held when the effect began: a modifier change is
+    not visible inside the effect that makes it) and has_game_rule (the setting the test picked)."""
 
     def one_cond(self, key, op, val):
         if key == "has_modifier":
             return val in self.held
         if key == "is_country_type":
             return val == self.country_type
+        if key == "has_game_rule":
+            return val == self.setting
         return super().one_cond(key, op, val)
 
 
 class Country:
-    """A country's variables, modifiers and engine figures, with the script's values and effects run over them."""
+    """A country's variables, modifiers and engine figures, with the script's values and effects run over them.
+
+    rule picks the setting of te_small_economy_construction_rule (SETTINGS), and the rule's own scripted triggers
+    (te_construction_cost_triggers.txt) are run against it, so a test of a setting also tests how the script reads it.
+    Assign .rule between steps to switch the rule in a running game."""
 
     def __init__(self, rule=False, gdp=50e6, gdppc=1.0, slack=0.5, walked=1e6, others=0.0, direct=False,
                  country_type="recognized", **variables):
@@ -227,6 +250,7 @@ class Country:
         blocks = _top_blocks(_read(EFFECTS))  # not the self-checks: their log lines are not script
         self.effects = {name: _parse(blocks[name])
                         for name in ("te_cc_yearly_update", "te_cc_apply_scaling", "te_cc_weekly_new_country")}
+        self.rule_triggers = {name: _parse(body) for name, body in _top_blocks(_read(TRIGGERS)).items()}
         self.country_type = country_type
         self.rule, self.gdp, self.gdppc, self.slack, self.walked, self.others = rule, gdp, gdppc, slack, walked, others
         self.direct = direct  # free_market_construction_rule disabled
@@ -250,8 +274,9 @@ class Country:
             "modifier:country_construction_goods_cost_mult": self.others + own,
         }
         env.variables = self.variables
-        env.flags = {"te_small_economy_construction_on": self.rule, "te_free_market_construction_off": self.direct}
-        env.triggers = {}
+        env.setting = SETTINGS[self.rule]
+        env.flags = {"te_free_market_construction_off": self.direct}
+        env.triggers = {name: (lambda body=body: env.cond(body)) for name, body in self.rule_triggers.items()}
         return env
 
     def value(self, name):
@@ -305,8 +330,14 @@ class TheCapAndTheSmallEconomy(unittest.TestCase):
     def test_the_constants(self):
         c = Country().constants
         self.assertEqual(c["construction_cost_max_yearly_move"], 0.1)
-        self.assertEqual(c["construction_cost_small_economy_min_factor"], 0.1)
+        self.assertEqual(c["construction_cost_small_economy_mild_factor"], 0.5)
+        self.assertEqual(c["construction_cost_small_economy_standard_factor"], 0.2)
+        self.assertEqual(c["construction_cost_small_economy_strong_factor"], 0.1)
         self.assertEqual(c["construction_cost_small_economy_full_gdp"], 10e6)
+        # The floor of the price and goods per point is the lowest any setting gives, not the setting in force's:
+        # after a switch to a milder setting a country keeps its stronger factor until its next pulse.
+        self.assertEqual(c["construction_cost_small_economy_min_factor"],
+                         min(c["construction_cost_small_economy_%s_factor" % s] for s in ("mild", "standard", "strong")))
 
     def test_the_factor_rises_a_tenth_a_year(self):
         # Full employment in a rich country: the share is already 1, the GDP part +100%, so the target is 2.
@@ -478,15 +509,121 @@ class TheCapAndTheSmallEconomy(unittest.TestCase):
         self.assertAlmostEqual(country.value("te_construction_market_goods_per_point"), 0.1, places=5)
 
 
+class TheStrengths(unittest.TestCase):
+    """The rule's three strengths (2026-11-16): each setting's factor, the default, the old setting's meaning, and a
+    switch in a running game, which reaches a country at its next yearly pulse like the switch on and off."""
+
+    def test_each_settings_factor(self):
+        for setting, minimum in MINIMUM.items():
+            for gdp in (0, 75e3, 1e6, 5e6, 9.99e6, 10e6, 80e6):
+                with self.subTest(setting=setting, gdp=gdp):
+                    country = Country(rule=setting, gdp=gdp)
+                    self.assertAlmostEqual(country.value("te_cc_small_economy_min_factor"), minimum, places=5)
+                    self.assertAlmostEqual(country.value("te_cc_small_economy_factor"),
+                                           min(1.0, minimum + (1 - minimum) * gdp / 10e6), places=4)
+        # the full price returns at the same GDP under every strength
+        for setting in MINIMUM:
+            self.assertEqual(Country(rule=setting, gdp=10e6).value("te_cc_small_economy_factor"), 1.0, setting)
+
+    def test_the_default_and_a_save_from_before_the_rule_are_off(self):
+        rule = _squash(_body(_read(RULES), "te_small_economy_construction_rule"))
+        self.assertTrue(rule.startswith("default = " + SETTINGS["disabled"] + " "), rule[:80])
+        for rule_value in (False, "disabled", None):  # None: no setting stored, so no has_game_rule passes
+            with self.subTest(rule=rule_value):
+                country = Country(rule=rule_value, gdp=1e5, gdppc=0.4, slack=0.6)
+                self.assertEqual(country.value("te_cc_small_economy_min_factor"), 1.0)
+                self.assertEqual(country.value("te_cc_small_economy_factor"), 1.0)
+                country.run("te_cc_weekly_new_country")
+                self.assertEqual((country.variables, country.modifiers), ({}, {}))
+                country.pulse()
+                self.assertEqual(country.variables["te_cc_small_factor"], 1.0)
+                self.assertEqual(country.variables["te_cc_small_min"], 1.0)
+                self.assertEqual(country.modifiers, {})
+
+    def test_the_old_setting_keeps_its_meaning(self):
+        # A preset or a save made with the rule on between 2026-11-13 and 2026-11-16 names
+        # te_small_economy_construction_enabled: still a tenth with almost no GDP, the strongest setting.
+        self.assertEqual(SETTINGS[True], RULE_PREFIX + "enabled")
+        self.assertEqual(SETTINGS["strong"], SETTINGS[True])
+        country = Country(rule=True, gdp=1e6, gdppc=0.4, slack=0.6)
+        self.assertAlmostEqual(country.value("te_cc_small_economy_min_factor"), 0.1, places=5)
+        country.pulse()
+        self.assertAlmostEqual(country.variables["te_cc_small_factor"], 0.19, places=4)  # 2026-11-13's figure
+        self.assertAlmostEqual(country.modifiers["construction_cost_scaling"], -0.81, places=4)
+        self.assertEqual(min(MINIMUM.values()), MINIMUM["strong"])
+
+    def test_every_strength_reaches_a_new_country_at_the_weekly_pulse(self):
+        for setting, minimum in MINIMUM.items():
+            if setting == "disabled":
+                continue
+            with self.subTest(setting=setting):
+                new = Country(rule=setting, gdp=1e6, gdppc=0.4, slack=0.6)
+                new.run("te_cc_weekly_new_country")
+                factor = minimum + (1 - minimum) * 0.1
+                self.assertAlmostEqual(new.variables["te_cc_small_factor"], factor, places=4)
+                self.assertAlmostEqual(new.variables["te_cc_small_min"], minimum, places=5)
+                self.assertAlmostEqual(new.modifiers["construction_cost_scaling"], factor - 1, places=4)
+
+    def test_a_switch_waits_for_the_countrys_next_pulse(self):
+        # Strong, then mild, standard, off and strong again, a pulse after each, in either construction setting.
+        for direct in (False, True):
+            name = "construction_cost_scaling_direct" if direct else "construction_cost_scaling"
+            with self.subTest(direct=direct):
+                country = Country(rule="strong", gdp=1e6, gdppc=0.4, slack=0.6, direct=direct)
+                country.pulse()
+                self.assertAlmostEqual(country.modifiers[name], -0.81, places=4)
+                self.assertEqual(country.value("te_cc_small_setting_changed"), 0.0)
+                for setting, after in (("mild", 0.55), ("standard", 0.28), ("disabled", 1.0), ("strong", 0.19)):
+                    before = country.value("te_cc_small_factor_now")
+                    stored_min = country.variables["te_cc_small_min"]
+                    country.rule = setting
+                    # Until the pulse the country keeps the factor, the modifier, the price and goods per point it
+                    # had, and the tooltip names the minimum that factor came from, with a note that the setting
+                    # has changed.
+                    self.assertAlmostEqual(country.value("te_cc_small_factor_now"), before, places=5)
+                    self.assertAlmostEqual(country.value("construction_cost_scaling_mult"), before - 1, places=4)
+                    self.assertAlmostEqual(country.value("te_construction_market_goods_per_point"), before, places=4)
+                    self.assertAlmostEqual(country.value("te_cc_small_min_now"), stored_min, places=5)
+                    self.assertEqual(country.value("te_cc_small_setting_changed"), 1.0, setting)
+                    country.pulse()
+                    self.assertAlmostEqual(country.variables["te_cc_small_factor"], after, places=4)
+                    self.assertAlmostEqual(country.variables["te_cc_small_min"], MINIMUM[setting], places=5)
+                    self.assertAlmostEqual(country.value("te_cc_small_min_now"), MINIMUM[setting], places=5)
+                    self.assertEqual(country.value("te_cc_small_setting_changed"), 0.0, setting)
+                    if after < 1:
+                        self.assertAlmostEqual(country.modifiers[name], after - 1, places=4)
+                        self.assertEqual(country.value("te_cc_small_factor_applies"), 1.0)
+                    else:
+                        self.assertNotIn(name, country.modifiers)
+                        self.assertEqual(country.value("te_cc_small_factor_applies"), 0.0)
+
+    def test_the_tooltip_before_a_countrys_first_pulse(self):
+        # No stored minimum: the setting chosen now, and no note (the factor in force is 1 until the pulse).
+        for setting, minimum in MINIMUM.items():
+            country = Country(rule=setting, gdp=1e6)
+            self.assertAlmostEqual(country.value("te_cc_small_min_now"), minimum, places=5, msg=setting)
+            self.assertEqual(country.value("te_cc_small_setting_changed"), 0.0, setting)
+
+
 class TheSmallEconomyRule(unittest.TestCase):
     def test_off_by_default_and_read_positively(self):
         rule = _squash(_body(_read(RULES), "te_small_economy_construction_rule"))
         self.assertTrue(rule.startswith("default = te_small_economy_construction_disabled "), rule[:80])
-        for setting in ("te_small_economy_construction_enabled", "te_small_economy_construction_disabled"):
-            self.assertIn(setting + " = { flag = " + setting + " }", rule)
-        # a save from before the rule stores neither flag, and must read as off
-        self.assertEqual(_squash(_body(_read(TRIGGERS), "te_small_economy_construction_on")),
-                         "has_game_rule = te_small_economy_construction_enabled")
+        # Four settings, in the order the rules screen lists them: off, then each strength from the mildest. The
+        # strongest keeps the name of the rule's one "on" setting before the strengths, so a preset or a save made
+        # with the rule on still means a tenth.
+        settings = re.findall(r"(te_small_economy_construction_\w+) = \{ flag = \1 \}", rule)
+        self.assertEqual(settings, [RULE_PREFIX + s for s in ("disabled", "mild", "standard", "enabled")])
+        # Read positively: a save from before the rule stores no setting, and must read as off.
+        triggers = _top_blocks(_read(TRIGGERS))
+        self.assertEqual(_squash(triggers["te_small_economy_construction_on"]),
+                         "OR = { has_game_rule = te_small_economy_construction_mild "
+                         "has_game_rule = te_small_economy_construction_standard "
+                         "has_game_rule = te_small_economy_construction_enabled }")
+        for name, setting in (("mild", "mild"), ("standard", "standard"), ("strong", "enabled")):
+            self.assertEqual(_squash(triggers["te_small_economy_construction_%s_on" % name]),
+                             "has_game_rule = te_small_economy_construction_" + setting)
+        self.assertNotIn("NOT", " ".join(triggers.values()))
         for folder in ("common", "events"):
             for root, _dirs, files in os.walk(os.path.join(REPO, folder)):
                 for name in files:
@@ -550,6 +687,11 @@ class TheSmallEconomyRule(unittest.TestCase):
         arm = _squash(effects["te_cc_small_start_selfcheck"])
         self.assertIn("global_var:te_cc_small_start_queued < 3", arm)
         self.assertIn("var:te_cc_small_factor < 0.8", arm)  # a discount nothing else on the country can hide
+        # above the minimum of the setting the factor was worked out from: a GDP above nothing, under every strength
+        self.assertIn("var:te_cc_small_factor > var:te_cc_small_min", arm)
+        constants = Country().constants
+        for strength in ("mild", "standard", "strong"):
+            self.assertLess(constants["construction_cost_small_economy_%s_factor" % strength], 0.8, strength)
         self.assertIn("trigger_event = { id = te_construction_market_recalc_events.5 days = 2 }", arm)
         self.assertNotIn("debug_log", arm)
         event = _squash(_body(_read(START_EVENTS), "te_construction_market_recalc_events.5"))
@@ -557,6 +699,8 @@ class TheSmallEconomyRule(unittest.TestCase):
         self.assertEqual(event, "type = country_event hidden = yes immediate = { te_cc_small_start_verdict = yes }")
         verdict = _squash(effects["te_cc_small_start_verdict"])
         self.assertIn("set_variable = { name = te_cc_chk_total value = te_cc_modifier_total }", verdict)
+        # both lines carry the setting's minimum, so the factor can be checked by eye under any strength
+        self.assertEqual(verdict.count("min=[THIS.Var('te_cc_small_min').GetValue|3]"), 2)
         self.assertIn("limit = { NOT = { has_variable = te_cc_start_retried } var:te_cc_chk_total < 0 "
                       "var:te_cc_chk_stored < 0 } debug_log = \"TE_SELF_CHECK OK small_economy_start ", verdict)
         self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN small_economy_start ", verdict)
@@ -573,19 +717,43 @@ class TheSmallEconomyRule(unittest.TestCase):
 
     def test_the_text_names_the_figures_the_script_uses(self):
         constants = Country().constants
-        self.assertEqual(constants["construction_cost_small_economy_min_factor"], 0.1)  # "a tenth"
         self.assertEqual(constants["construction_cost_small_economy_full_gdp"], 10e6)   # "10 million"
         with open(RULE_LOC, encoding="utf-8-sig") as f:
             rules = f.read()
-        desc = re.search(r'setting_te_small_economy_construction_enabled_desc:0 "([^"]*)"', rules).group(1)
-        self.assertTrue(desc.startswith("Experimental. "), desc)
-        for phrase in ("a tenth", "10 million", "AI countries"):
-            self.assertIn(phrase, desc)
+        # Each strength's name and description give its price with almost no GDP, and the description the GDP at
+        # which the full price returns, from the constant the script reads.
+        words = {0.5: ("Half", "half the price"), 0.2: ("A Fifth", "a fifth of the price"),
+                 0.1: ("A Tenth", "a tenth of the price")}
+        for strength, setting in (("mild", "mild"), ("standard", "standard"), ("strong", "enabled")):
+            with self.subTest(strength=strength):
+                name_word, desc_words = words[constants["construction_cost_small_economy_%s_factor" % strength]]
+                key = "setting_te_small_economy_construction_" + setting
+                name = re.search(key + r':0 "([^"]*)"', rules).group(1)
+                desc = re.search(key + r'_desc:0 "([^"]*)"', rules).group(1)
+                self.assertTrue(name.startswith(name_word + " "), name)
+                self.assertTrue(name.endswith(" for Small Economies"), name)
+                self.assertTrue(desc.startswith("Experimental. "), desc)
+                for phrase in (desc_words, "almost no [concept_gdp]", "full price at a GDP of 10 million",
+                               "AI countries get the same", "next yearly update"):
+                    self.assertIn(phrase, desc)
         with open(MISC_LOC, encoding="utf-8-sig") as f:
             misc = f.read()
         small = re.search(r'te_nation_construction_scale_small:0 "([^\n]*)"', misc).group(1)
         self.assertIn("10 million", small)
         self.assertIn("te_cc_small_factor_now", small)
+        # the minimum the factor in force was worked out from, not a constant: it reads right under every strength
+        self.assertIn("ScriptValue('te_cc_small_min_now')|%0] with almost no GDP", small)
+        self.assertNotIn("construction_cost_small_economy", small)
+        # and after the rule is changed, both sentences say the new setting arrives at the next yearly update
+        pending = ("[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
+                   "'te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', "
+                   "'te_nation_construction_small_settled' )]")
+        plain = re.search(r'te_nation_construction_scale_plain:0 "([^\n]*)"', misc).group(1)
+        for line in (small, plain):
+            self.assertTrue(line.endswith("." + pending), line[-200:])
+        self.assertRegex(misc, r'te_nation_construction_small_pending:0 " The \$rule_te_small_economy_construction_'
+                               r'rule\$ game rule has been changed since the last yearly update')
+        self.assertIn('te_nation_construction_small_settled:0 ""', misc)
         for key in ("te_nation_construction_row_tt", "te_nation_ov_construction_tt"):
             line = re.search(key + r':0 "([^\n]*)"', misc).group(1)
             self.assertIn("'te_nation_construction_scale_small', 'te_nation_construction_scale_plain'", line, key)

@@ -593,6 +593,10 @@ te_monetary_discover_arrangements = {
 		}
 		set_variable = { name = te_mon_receiver value = scope:te_mon_new_receiver }
 	}
+	# ...or a Creditors' Consortium's treaty-less one, set where its rescue could
+	# not make the treaty (te_cred_discover_direct_receivership,
+	# te_creditors_consortium_effects.txt). The article wins where both exist.
+	te_cred_discover_direct_receivership = yes
 
 	# --- what ROOT pays for the lines and guarantees it extends -------------
 	# provider cost = recipient benefit x clamp( recipient gdp / provider gdp ).
@@ -660,6 +664,9 @@ te_monetary_discover_arrangements = {
 	}
 	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
 	te_monetary_discover_union = yes
+	# A Creditors' Consortium's leader: what its standing guarantee of the
+	# members and its treaty-less receiverships cost it.
+	te_cred_discover_leader_costs = yes
 
 	set_variable = { name = te_mon_arr_recipient_pts value = te_mon_arr_recipient_value }
 	set_variable = { name = te_mon_arr_standing_pts value = te_mon_arr_standing_value }
@@ -684,6 +691,10 @@ te_monetary_discover_arrangements = {
 				# [5b] Anybody in a bloc with the monetary-union group has a role.
 				te_mon_bloc_union_tier_1_plus = yes
 				te_mon_is_union_member = yes
+				# Every member and the leader of a Creditors' Consortium: the
+				# standing guarantee and its price (te_cred_discover_leader_costs).
+				te_cred_in_consortium = yes
+				has_variable = te_cred_direct_receivership
 				AND = {
 					has_variable = te_mon_debug_anchor_on
 					var:te_mon_debug_anchor_on = 1

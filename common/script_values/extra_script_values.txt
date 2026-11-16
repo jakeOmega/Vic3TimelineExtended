@@ -2504,9 +2504,10 @@ ce_treasury_pool_balance_multiplier = {
 # 5. max_yearly_move caps how far the scaling's own factor (one plus the GDP part times the applying
 #    share) moves at a yearly pulse, up or down: a rich country whose share steps moves every
 #    building's use of the construction good on one day, and the price with it.
-# 6. small_economy_min_factor and small_economy_full_gdp are the optional rule's
-#    (te_small_economy_construction_rule): construction as cheap as the min factor for a country with
-#    almost no GDP, at full cost from full_gdp, a straight line between. Not capped by 5.
+# 6. small_economy_mild_factor, _standard_factor, _strong_factor and small_economy_full_gdp are the optional
+#    rule's (te_small_economy_construction_rule): construction as cheap as the setting's factor for a country
+#    with almost no GDP, at full cost from full_gdp, a straight line between. Not capped by 5.
+#    small_economy_min_factor is the floor of the price and goods per point: keep it the lowest of the three.
 # The scripts/analysis tools read every constant here (econ_sim_data.read_numbers): re-run
 # econ_construction_counterfactual.py after a change.
 #
@@ -2539,9 +2540,20 @@ construction_cost_slack_ease = 0.33333
 construction_cost_max_yearly_move = 0.1
 
 # Small-economy rule (te_small_economy_construction_rule, off by default): the cost factor of a country
-# with almost no GDP (0.1 = ten times cheaper) and the GDP from which construction costs its full price
-construction_cost_small_economy_min_factor = 0.1
+# with almost no GDP under each strength (0.1 = ten times cheaper), and the GDP from which construction costs
+# its full price under all three. Sized against the base game's free construction (docs/systems/mod_systems/
+# construction.md, "The small-economy factor"): with a third of its income, a country under strong buys about as
+# many points as the base game's 10 free points a week and that third at full price would give it, and no more;
+# standard is about what the base game's GDP-scaled free points give an AI; mild halves the price.
+construction_cost_small_economy_mild_factor = 0.5
+construction_cost_small_economy_standard_factor = 0.2
+construction_cost_small_economy_strong_factor = 0.1
 construction_cost_small_economy_full_gdp = 10000000
+
+# The floor of one plus X wherever it is read (the construction market's price and goods per point, the Nation
+# tab's quotient): the lowest factor any setting gives. Not the setting in force's: after a switch to a milder
+# setting, a country keeps the factor it had until its next pulse, and the price must follow it there.
+construction_cost_small_economy_min_factor = 0.1
 
 # Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
@@ -2689,8 +2701,26 @@ te_cc_scale_next = {
 
 # ---- The small-economy factor (te_small_economy_construction_rule) ----
 
-# Today's: 1 with the rule off; with it on, min_factor at no GDP rising in a straight line to 1 at full_gdp.
-# Only the pulse and the game-start pass read it (te_cc_yearly_update); everything else reads the stored one.
+# The factor at no GDP of the setting chosen now: 1 with the rule off. Reads only the game rule.
+te_cc_small_economy_min_factor = {
+	value = 1
+	if = {
+		limit = { te_small_economy_construction_strong_on = yes }
+		value = construction_cost_small_economy_strong_factor
+	}
+	else_if = {
+		limit = { te_small_economy_construction_standard_on = yes }
+		value = construction_cost_small_economy_standard_factor
+	}
+	else_if = {
+		limit = { te_small_economy_construction_mild_on = yes }
+		value = construction_cost_small_economy_mild_factor
+	}
+}
+
+# Today's: 1 with the rule off; with it on, the setting's factor at no GDP rising in a straight line to 1 at
+# full_gdp. Only the pulse and the game-start pass read it (te_cc_yearly_update); everything else reads the stored
+# one.
 te_cc_small_economy_factor = {
 	value = 1
 	if = {
@@ -2699,21 +2729,44 @@ te_cc_small_economy_factor = {
 		divide = construction_cost_small_economy_full_gdp
 		multiply = {
 			value = 1
-			subtract = construction_cost_small_economy_min_factor
+			subtract = te_cc_small_economy_min_factor
 		}
-		add = construction_cost_small_economy_min_factor
+		add = te_cc_small_economy_min_factor
 		max = 1
-		min = construction_cost_small_economy_min_factor
+		min = te_cc_small_economy_min_factor
 	}
 }
 
 # The factor in force: as last stored (var:te_cc_small_factor), 1 before that. A rule switched in a running
-# game therefore reaches a country at its next yearly pulse, with the modifier.
+# game (on, off, or to another strength) therefore reaches a country at its next yearly pulse, with the modifier.
 te_cc_small_factor_now = {
 	value = 1
 	if = {
 		limit = { has_variable = te_cc_small_factor }
 		value = var:te_cc_small_factor
+	}
+}
+
+# The factor at no GDP that the factor in force was worked out from (var:te_cc_small_min, stored beside it), for
+# the Nation tab: the setting chosen now before a pulse has stored one.
+te_cc_small_min_now = {
+	value = te_cc_small_economy_min_factor
+	if = {
+		limit = { has_variable = te_cc_small_min }
+		value = var:te_cc_small_min
+	}
+}
+
+# 1 when the rule's setting has been changed since the country's last pulse (the stored minimum is not the one
+# chosen now), for the tooltip's note that the new setting arrives at the next one.
+te_cc_small_setting_changed = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cc_small_min
+			NOT = { var:te_cc_small_min = te_cc_small_economy_min_factor }
+		}
+		value = 1
 	}
 }
 
@@ -3759,7 +3812,7 @@ te_subjugation_strength_other = {
 # Country scope. Display only: which identity line the Subjugate tooltip shows.
 #   0 none (Diplomatic Framework, or an identity with no subjugation bonus)
 #   1 Sovereign Empire, 2 Religious, 3 Ideological Union, 4 Cultural,
-#   5 Trade League, 6 Military Treaty Organization
+#   5 Trade League, 6 Military Treaty Organization, 7 Creditors' Consortium
 te_subjugation_identity_index = {
 	value = 0
 	if = {
@@ -3785,6 +3838,10 @@ te_subjugation_identity_index = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		value = 6
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		value = 7
 	}
 }
 
@@ -3815,6 +3872,10 @@ te_subjugation_identity_bonus = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		add = modifier:country_subjugation_military_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		add = modifier:country_subjugation_creditor_strength_add
 	}
 }
 
@@ -3875,6 +3936,18 @@ te_subjugation_strength_identity = {
 			te_target_militarily_weaker = { TARGET = scope:target_country }
 		}
 		add = modifier:country_subjugation_military_strength_add
+	}
+
+	# Creditors' Consortium — the target is in the actor's receivership
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_creditors_consortium }
+			scope:target_country ?= {
+				te_mon_is_under_receivership = yes
+				var:te_mon_receiver ?= root
+			}
+		}
+		add = modifier:country_subjugation_creditor_strength_add
 	}
 }
 

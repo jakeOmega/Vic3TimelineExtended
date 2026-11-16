@@ -544,6 +544,8 @@ pmg_power_bloc_hq = {
 		pm_hq_ideological_union
 		pm_hq_cultural_coalition
 		pm_hq_diplomatic_framework
+		pm_hq_creditors_consortium
+		pm_hq_research_commons
 	}
 }
 pmg_wonder_golden_gate_bridge = {
