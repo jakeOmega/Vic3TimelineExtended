@@ -1,0 +1,90 @@
+﻿# ============================================================================
+# THE AI'S SPACE PROGRAM BUDGET (docs/systems/mod_systems/ai.md § Space Program Mission Budget)
+# ============================================================================
+# Country scope. The values are in sr_ai_mission_budget_values.txt, the
+# monthly pass in sr_ai_mission_budget_effects.txt.
+# ============================================================================
+
+# The country's Space Program runs the production method PM (a mission or a
+# Mission Limit ceiling).
+sr_space_program_runs = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		has_active_production_method = $PM$
+	}
+}
+
+# In default, or under the bankruptcy modifier: the program drops to Earth
+# Orbit and sheds its funding.
+sr_ai_space_budget_in_trouble = {
+	OR = {
+		in_default = yes
+		has_modifier = declared_bankruptcy
+	}
+}
+
+# An AI's increase-funding buttons weigh 0: one more level would take the
+# program's bill past the climbing share, or the country is in trouble.
+sr_ai_space_fund_up_blocked = {
+	is_ai = yes
+	sr_has_space_program = yes
+	OR = {
+		sr_ai_space_budget_in_trouble = yes
+		sr_ai_mission_fund_up_room < 0
+	}
+}
+
+# An AI's decrease-funding buttons get +100: the program's bill with its
+# funding is over the step-down share, or the country is in trouble.
+sr_ai_space_fund_down_due = {
+	is_ai = yes
+	sr_has_space_program = yes
+	OR = {
+		sr_ai_space_budget_in_trouble = yes
+		sr_ai_mission_funded_overrun > 0
+	}
+}
+
+# The AI's ceiling allows the mission of that tier: the pass has reviewed the
+# program (an AI ceiling, not Any Mission, is active) and the ceiling is at
+# or above the mission. Read by the mission decisions' AI weights, so that
+# no decision takes an AI past its ceiling: script moves a method past the
+# lock, and the engine would then switch the program off a mission its
+# ceiling no longer allows.
+sr_ai_mission_ceiling_allows_moon = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_moon }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_mars = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_solar = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_deep_space = {
+	OR = {
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space }
+		sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+	}
+}
+
+sr_ai_mission_ceiling_allows_interstellar = {
+	sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar }
+}

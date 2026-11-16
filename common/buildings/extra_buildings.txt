@@ -441,6 +441,7 @@ REPLACE_OR_CREATE:building_space_program = {
 		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
 		pmg_space_program_module_fabrication # colony modules (sr_colony_module_pmgs.txt)
 		pmg_space_program_module_storage # the module stock's storage (sr_colony_module_pmgs.txt)
+		pmg_space_program_mission_ceiling # the AI's mission budget ceiling (sr_mission_ceiling_pmgs.txt)
 	}
 
 	possible = {
