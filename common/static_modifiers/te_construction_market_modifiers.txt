@@ -21,8 +21,11 @@ te_construction_market_capacity_modifier = {
 # te_construction_market_site_crew adds and removes it. Never in a direct
 # game, whose site is a sector in the same group and would run at full output
 # on a tenth of its workers (te_construction_market_clear_crew).
+# Bookkeeping, not something a player acts on: the blank icon hides it from the
+# state panel's modifier rows, and gui_state_hidden_modifier_count names it
+# (test_hidden_state_modifiers.py).
 te_construction_market_crew_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	building_group_te_construction_market_bg_employee_mult = -0.9
 }
 
