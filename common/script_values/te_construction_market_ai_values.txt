@@ -15,10 +15,14 @@
 #
 #   The surplus. Net fixed income (the budget before construction, which the
 #   engine counts as a temporary expense) over the smoothed price, times
-#   1 + reserves - debt, each as a share of its limit, less the war and banking
-#   brakes below, never under 0.1. With no reserves and no debt it spends the
-#   surplus exactly; reserves raise it and are drawn down, debt lowers it and
-#   is paid off. It never borrows.
+#   1 + reserves - debt, each as a share of its limit, moved by what the
+#   country's interest rate asks of it (THE RATE, below), less the war and
+#   banking brakes below, never under 0.1. At a middling rate, and for a
+#   country the monetary update has not yet reached, that is the rule as it
+#   was: with no reserves and no debt it spends the surplus exactly; reserves
+#   raise it and are drawn down, debt lowers it and is paid off. At a high rate
+#   it holds part of the surplus back until it has a reserve; at a low rate it
+#   spends a little more than the surplus, on credit, up to a small allowance.
 #
 #   The floor, te_construction_market_ai_purchase_floor, for a government whose
 #   surplus buys less. The war and banking brakes do not touch it.
@@ -46,8 +50,11 @@
 #   Never more than the 10 points it was, so no country's floor rose.
 #
 #   Paid from reserves, not on credit: whole while the reserves are a tenth of
-#   their limit or more, less in a straight line below that, and nothing with
-#   none. The tenth is vanilla's reserve gate on a new construction (NAI
+#   their limit or more above the reserve the rate asks for (none at a low or
+#   middling rate, up to a tenth at a high one: THE RATE, below), less in a
+#   straight line below that, and nothing with none to spare. So the floor
+#   never spends the reserve a high rate asks a country to hold. The tenth is
+#   vanilla's reserve gate on a new construction (NAI
 #   CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS), which the mod lowered to 0.02
 #   on 2026-11-16 (#1877, common/defines/extra_defines.txt) so that a
 #   government with a surplus queues without first saving a tenth. The floor
@@ -109,6 +116,242 @@ TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES = 0.1
 TE_CONSTRUCTION_MARKET_AI_FLOOR_MIN_FACTOR = 0.1
 TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE = 0.2
 
+# ----------------------------------------------------------------------------
+# THE RATE: the reserve a government keeps, and the debt it may run, by what
+# borrowing costs it (#1877; owner, 2026-11-16: "If interest rates are high,
+# requiring a reserve makes sense. If low, no need, and you could even allow
+# spending in (small amounts of) debt.")
+# ----------------------------------------------------------------------------
+# The engine's own gates are one figure for every country (NAI
+# CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS, 0.02 in this mod), so the rate acts
+# here, on the purchase, and in the AI construction pass that queues for a
+# government the engine will not queue for (te_ai_build_pass_effects.txt).
+#
+# The rate is var:te_rate_paid_pts, the rate the monetary update writes every
+# month for every country under every banking setting (it is what the mod's
+# interest modifier applies: te_monetary_effects.txt, step 7), less the world
+# reference rate (var:te_mon_era_base_now: 3, then 2.5, then 2 by era). So it
+# reads the spread lenders charge this country above the world's safe rate:
+# its risk premium and its central bank's stance. Vanilla's interest
+# multipliers the mod leaves alone (declared_bankruptcy's +50% and a few event
+# and trait modifiers) are not in it. A country the update has not reached
+# reads the middle of the curve, which is the rule as it was.
+#
+# The curve, a straight line between its points, so a rate that moves by its
+# usual 0.2 points a month (the median monthly move in the history store of
+# 18 countries, 1836-1924; 0.7 at the 90th percentile) moves it a little:
+#
+#   spread           required reserve      credit allowance
+#   LOW or less      none                  CREDIT_MAX of the debt ceiling
+#   LOW to MID       none                  falling to none
+#   MID              none                  none: the rule as it was
+#   MID to HIGH      rising to RESERVE_MAX none
+#   HIGH or more     RESERVE_MAX           none
+#
+# In a financial crisis (te_mon_in_financial_crisis: the cycle's panic or
+# downturn, a gold peg losing confidence, hyperinflation) the spread is read
+# as HIGH at least, so a crisis always tightens the rule, whatever the rate
+# does. It needs saying: in the history store the rate rose above the year
+# before at some month of the year after a panic began in 25 of 33 panics, but
+# its mean over that year was lower than the year before's in 16, the central
+# bank cutting through the panic. No credit at war, where the war brake below
+# already holds the purchase back.
+#
+# The surplus term's factor gains RATE_GAIN times the credit the country has
+# not used, and loses RATE_GAIN times what it lacks of the reserve; only the
+# reserves above the one asked for are drawn down:
+#
+#   1 + reserves - debt + RATE_GAIN x max(0, allowance - debt)
+#       - min(reserves, required) - RATE_GAIN x max(0, required - reserves)
+#
+# At a high rate a country short of the reserve saves RATE_GAIN times the
+# shortfall's share of its surplus, and settles at the reserve asked for,
+# where it spends its surplus exactly. With a surplus and no reserves, at a
+# low rate it borrows a fifth of its surplus a week at first and settles
+# where the two pulls on the debt balance, at RATE_GAIN / (1 + RATE_GAIN) of
+# the allowance (two-thirds: 6.7% of the ceiling), its debt holding there. It
+# never borrows past the allowance; above it the debt is paid off as before.
+#
+# When the rate rises while it holds that debt, the allowance shrinks, the
+# factor falls under 1, and the surplus pays the debt down while the queue
+# goes on being bought: never under 0.1 of the surplus, and never less than
+# the floor. At a high rate a country with debt 0.067 and no reserves keeps
+# 0.73 of the factor it had at the middle (1 - 0.067 - 2 x 0.1). The engine's
+# pause (40% of the ceiling, resuming at 20%) is not reached by anything the
+# rule borrows.
+#
+# THE NUMBERS ARE THE OWNER'S TO CHANGE. Each one's reason:
+#
+#   SPREAD_LOW 2. A borrower lenders trust: the world reference rate plus the
+#   0.5-point structural floor and a point or so of cyclical premium. In the
+#   January 1925 save of the AI-only run (era base 2.5), 11 of the 20 largest
+#   AI economies paid 2 or less above it (Britain -0.3, the United States 0.7,
+#   France 1.6, Japan 2.0), 9% of all AI countries.
+#   SPREAD_MID 4. Between: the 20 largest's 75th percentile was 4.3 (China).
+#   SPREAD_HIGH 7. Past where a large economy pays: in 1925 only Korea (9.7,
+#   at 53% of its ceiling and paused) among the 20 largest, and 63% of all AI
+#   countries, whose median spread was 9.7. Most small countries borrow dear.
+#   RESERVE_MAX 0.1. Vanilla's reserve gate, which this curve gives back at a
+#   high rate.
+#   CREDIT_MAX 0.1 of the debt ceiling. The debt at which the engine's own AI
+#   starts to call debt significant and raise taxes
+#   (CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD); half the pause's resume line and
+#   a quarter of the pause; under the monetary system's debt-load premium,
+#   which starts at 0.25. A ceiling is about 320 weeks of a large economy's
+#   fixed income (the 20 largest, 1925-1947), so the balance point is about
+#   22 weeks of fixed income, about a tenth of GDP.
+#   RATE_GAIN 2. How hard the rate pulls: at a high rate with no reserves the
+#   surplus term buys 0.8 of what it did, and a large economy with a surplus of
+#   a quarter of its fixed income closes about a third of its shortfall a year
+#   (the reserve limit is about 67 weeks of its fixed income); at a low rate
+#   it buys up to 1.2 of what it did. In the 1925-1947 run's rows (each
+#   country's 1925 rate, moved by the debt-load premium as its debt moved),
+#   while building, that is a median of 1.04 for the 20 largest (1.10 by
+#   GDP) and 0.80 for all AI countries, 79% of which buy less: most small
+#   countries borrow at 12% or more and are in debt, so the surplus they no
+#   longer spend pays that debt down.
+#   CREDIT_SERVICE_SHARE 1/3. The allowance is also never more than the debt
+#   whose interest, at the rate HIGH asks for (the reference rate + 7), is a
+#   third of the country's surplus: a government with a small surplus may
+#   borrow only a little, and cannot borrow itself into a deficit when the
+#   rate climbs. At the balance point that interest is at most 22% of the
+#   surplus at that rate; at the rate paid, a median 4.7% for the 20 largest
+#   (1.3% of fixed income).
+TE_CONSTRUCTION_MARKET_AI_SPREAD_LOW = 2
+TE_CONSTRUCTION_MARKET_AI_SPREAD_MID = 4
+TE_CONSTRUCTION_MARKET_AI_SPREAD_HIGH = 7
+TE_CONSTRUCTION_MARKET_AI_RESERVE_MAX = 0.1
+TE_CONSTRUCTION_MARKET_AI_CREDIT_MAX = 0.1
+TE_CONSTRUCTION_MARKET_AI_RATE_GAIN = 2
+TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
+
+# THE PASS (common/scripted_effects/te_ai_build_pass_effects.txt). The engine
+# queues nothing new for a government in debt: it holds no reserves, and its
+# reserve gate asks for some after the building's cost. In the 1925-1947 run
+# that was 80 of the 112 years in which one of the 20 largest AI economies had
+# nothing queued. So once a month, for an AI government in a market game, at
+# peace, not paused and not in default, whose queue was already empty a month
+# before, the pass queues one level, where the rate allows it the means: its
+# reserves above the reserve asked for, plus the credit allowance not yet
+# used, are not negative. A university while innovation is under
+# INNOVATION_SHARE of its cap, else a Government Administration in the state
+# most short of tax capacity.
+#
+#   SURPLUS_SHARE 1/6 of fixed income, or SURPLUS_MIN 15,000 a week: the
+#   engine's own test before it adds should-have spending (income 1.2 times
+#   expenses, MONEY_SPENDING_MIN_RATIO_TO_ADD_SHOULD_HAVE, or that surplus,
+#   _MIN_SURPLUS_TO_IGNORE_RATIO_FOR_SHOULD_HAVE), read on fixed income. Not
+#   a judgement: it keeps the pass from queueing what the engine's budget AI
+#   would call unaffordable, and leaves room above its 1.05 for cutting
+#   should-have spending.
+#   INNOVATION_SHARE 0.9. The engine's AI wants innovation up to its cap
+#   (MONEY_SPENDING_INNOVATION_DESIRED_THRESHOLD 1.0) and a level past the cap
+#   is wasted, so the pass stops a level short of it.
+TE_AI_BUILD_PASS_SURPLUS_SHARE = 0.16667
+TE_AI_BUILD_PASS_SURPLUS_MIN = 15000
+TE_AI_BUILD_PASS_INNOVATION_SHARE = 0.9
+
+# The rate the monetary update last wrote, less the world reference rate, in
+# points a year; the curve's middle where the update has not run.
+te_construction_market_ai_rate_spread = {
+	value = TE_CONSTRUCTION_MARKET_AI_SPREAD_MID
+	if = {
+		limit = {
+			has_variable = te_rate_paid_pts
+			has_variable = te_mon_era_base_now
+		}
+		value = var:te_rate_paid_pts
+		subtract = var:te_mon_era_base_now
+	}
+	if = {
+		limit = {
+			te_mon_in_financial_crisis = yes
+		}
+		min = TE_CONSTRUCTION_MARKET_AI_SPREAD_HIGH
+	}
+}
+
+# The reserve the rate asks for, as a share of the reserve limit.
+te_construction_market_ai_required_reserves = {
+	value = te_construction_market_ai_rate_spread
+	subtract = TE_CONSTRUCTION_MARKET_AI_SPREAD_MID
+	divide = {
+		value = TE_CONSTRUCTION_MARKET_AI_SPREAD_HIGH
+		subtract = TE_CONSTRUCTION_MARKET_AI_SPREAD_MID
+	}
+	min = 0
+	max = 1
+	multiply = TE_CONSTRUCTION_MARKET_AI_RESERVE_MAX
+}
+
+# The rate the allowance is sized against: the reference rate plus HIGH, as a
+# fraction a year (the first era's reference rate where the update has not run).
+te_construction_market_ai_credit_stress_rate = {
+	value = 3
+	if = {
+		limit = {
+			has_variable = te_mon_era_base_now
+		}
+		value = var:te_mon_era_base_now
+	}
+	add = TE_CONSTRUCTION_MARKET_AI_SPREAD_HIGH
+	divide = 100
+}
+
+# The debt whose interest at that rate is a third of the surplus, as a share of
+# the debt ceiling (`credit`, which scaled_debt is the principal over).
+te_construction_market_ai_credit_service_cap = {
+	value = net_fixed_income
+	min = 0
+	multiply = 52
+	multiply = TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE
+	divide = te_construction_market_ai_credit_stress_rate
+	divide = {
+		value = credit
+		min = 1
+	}
+}
+
+# The debt the rate allows the purchase to run, as a share of the ceiling.
+te_construction_market_ai_credit_allowance = {
+	value = 0
+	if = {
+		limit = {
+			is_at_war = no
+		}
+		value = TE_CONSTRUCTION_MARKET_AI_SPREAD_MID
+		subtract = te_construction_market_ai_rate_spread
+		divide = {
+			value = TE_CONSTRUCTION_MARKET_AI_SPREAD_MID
+			subtract = TE_CONSTRUCTION_MARKET_AI_SPREAD_LOW
+		}
+		min = 0
+		max = 1
+		multiply = TE_CONSTRUCTION_MARKET_AI_CREDIT_MAX
+		max = te_construction_market_ai_credit_service_cap
+	}
+}
+
+# What the factor gains from credit not yet used.
+te_construction_market_ai_credit_term = {
+	value = te_construction_market_ai_credit_allowance
+	subtract = scaled_debt
+	min = 0
+	multiply = TE_CONSTRUCTION_MARKET_AI_RATE_GAIN
+}
+# What it loses to the reserve the rate asks for: the part of the reserves it
+# keeps, which is not drawn down, and RATE_GAIN times what it lacks of it.
+te_construction_market_ai_reserve_term = {
+	value = te_construction_market_ai_required_reserves
+	subtract = scaled_gold_reserves
+	min = 0
+	multiply = TE_CONSTRUCTION_MARKET_AI_RATE_GAIN
+	add = {
+		value = scaled_gold_reserves
+		max = te_construction_market_ai_required_reserves
+	}
+}
+
 # A fifth of fixed income, in points at the smoothed price.
 te_construction_market_ai_bureaucracy_purchase = {
 	value = fixed_income
@@ -125,10 +368,12 @@ te_construction_market_ai_purchase_floor_whole = {
 }
 
 te_construction_market_ai_purchase_floor = {
-	# What reserves pay: all of it at a tenth of their limit, nothing at none.
+	# What reserves pay: all of it at a tenth of their limit above the reserve
+	# the rate asks for, nothing with none to spare.
 	value = te_construction_market_ai_purchase_floor_whole
 	multiply = {
 		value = scaled_gold_reserves
+		subtract = te_construction_market_ai_required_reserves
 		divide = TE_CONSTRUCTION_MARKET_AI_FLOOR_FULL_RESERVES
 		max = 1
 		min = 0
@@ -165,6 +410,9 @@ te_construction_market_ai_purchase_target = {
 			add = scaled_gold_reserves
 			subtract = scaled_debt
 			add = 1
+			# THE RATE, above: credit at a low rate, a reserve at a high one.
+			add = te_construction_market_ai_credit_term
+			subtract = te_construction_market_ai_reserve_term
 
 			# Bankruptcy-avoidance brake: when reserves are thin under shock
 			# (war or financial-cycle stress), cut spending PROPORTIONALLY

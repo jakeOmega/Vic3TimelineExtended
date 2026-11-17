@@ -7,6 +7,9 @@ smoothed price, scaled by reserves and debt, or a floor if that is more, capped 
 now a twentieth of fixed income, never more than the 10 points it was, paid from reserves (nothing with none) or,
 up to a tenth of it, from the surplus, and a fifth of fixed income higher while the country is short of bureaucracy,
 so such a country buys at least a fifth. A government with no surplus, no reserves and no such shortage buys nothing.
+Since #1877 (owner, 2026-11-16) the interest rate moves the surplus term and the floor: at a high spread over the world
+reference rate the country keeps a reserve of up to vanilla's tenth and spends only what is above it, at a low one it
+may borrow up to a tenth of its debt ceiling, never more than a third of its surplus can carry at a high rate.
 While the engine reports construction paused the purchase is nothing, whatever the country's bureaucracy. For a day
 (2026-11-16) a paused country short of bureaucracy with a Government Administration level in its queue went on buying
 that fifth; an observer game showed that nothing bought while paused reaches the government queue, so that clause and
@@ -22,6 +25,10 @@ Nothing in the engine checks that script, so this runs the script's own text. Wh
   properties the rule must have whatever its wording (what it costs against income, that it never rises above the
   rule before, that a paused country buys nothing, that the probe's sample countries spend no more than they have),
   and a week-by-week budget against the rule before.
+- TheRate and TheRateLongRun pin the rate's curve at its ends and its middle, the debt ceiling and what its interest
+  can cost, that a crisis tightens it and a war takes the credit away, that it has no cliff, and, week by week, that
+  the debt settles under the allowance, a high rate holds the reserve, and a rate that climbs on the debt has it paid
+  down while the queue goes on being bought.
 - Constants holds the script's constants to the engine defines they are taken from, and pins the one of those
   defines the mod sets (the reserve gate, 0.02 since #1877), which the floor's full reserves no longer follow.
 - TheQueueRead runs the trigger the removed clause read its queue with, which the AI probe still reads.
@@ -54,6 +61,16 @@ FLOOR_MAX_POINTS = 10.0
 FLOOR_FULL_RESERVES = 0.1
 FLOOR_MIN_FACTOR = 0.1
 BUREAUCRACY_INCOME_SHARE = 0.2
+# THE RATE (#1877, owner 2026-11-16): the reserve a government keeps and the debt it may run, by the spread of the rate
+# it pays (var:te_rate_paid_pts) over the world reference rate (var:te_mon_era_base_now).
+SPREAD_LOW, SPREAD_MID, SPREAD_HIGH = 2.0, 4.0, 7.0
+RESERVE_MAX = 0.1
+CREDIT_MAX = 0.1
+RATE_GAIN = 2.0
+CREDIT_SERVICE_SHARE = 0.33333
+FIRST_ERA_BASE = 3.0  # what the stress rate stands on before the monetary update has run
+# THE PASS (te_ai_build_pass_effects.txt).
+PASS_SURPLUS_SHARE, PASS_SURPLUS_MIN, PASS_INNOVATION_SHARE = 0.16667, 15000.0, 0.9
 
 # The engine's AI defines the constants are taken from, at vanilla's values (1.15.1, common/defines/00_ai.txt);
 # test_matches_the_game_files reads them where the game is installed (vanilla_parsed/ holds no defines). The mod
@@ -65,6 +82,11 @@ NAI = {
     "CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS": 0.1,
     "WAGE_CUT_INCOME_RATIO_THRESHOLD": 1.05,
     "MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE": 1.05,
+    # THE RATE's credit allowance and THE PASS's surplus test and innovation stop.
+    "CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD": 0.1,
+    "MONEY_SPENDING_MIN_RATIO_TO_ADD_SHOULD_HAVE": 1.2,
+    "MONEY_SPENDING_MIN_SURPLUS_TO_IGNORE_RATIO_FOR_SHOULD_HAVE": 15000,
+    "MONEY_SPENDING_INNOVATION_DESIRED_THRESHOLD": 1.0,
 }
 # The one the mod sets (common/defines/extra_defines.txt, NAI): the reserve gate on a new construction, lowered from
 # vanilla's 0.1 so that a government with a surplus queues without first saving a tenth (#1877; ai.md § AI Government
@@ -91,14 +113,17 @@ def _parsed():
 class AiEnv(Env):
     """The shared evaluator with the AI values file loaded too, and the files parsed once."""
 
-    def __init__(self, names, variables, flags):
+    def __init__(self, names, variables, flags, crisis=False):
         parsed = _parsed()
         self.memo = {}
         self.constants, self.values = parsed["constants"], parsed["values"]
         self.names, self.variables, self.flags = names, variables, flags
         # te_construction_market_triggers.txt: a Fixed Budget is on while this variable is set.
         budget_mode = "te_construction_market_budget_mode"
-        self.triggers = {budget_mode + "_on": lambda: budget_mode in variables}
+        self.triggers = {budget_mode + "_on": lambda: budget_mode in variables,
+                         # te_monetary_triggers.txt: the cycle's panic or downturn, a peg losing confidence,
+                         # hyperinflation.
+                         "te_mon_in_financial_crisis": lambda: crisis}
 
     def operand(self, raw):
         # The engine's numbers have five decimals; the shared evaluator's floats carry noise past that, which a
@@ -110,7 +135,8 @@ class Country:
     """One week of one government, as the script reads it."""
 
     def __init__(self, fixed_income, surplus, price=1250.0, reserves=0.0, debt=0.0, bureaucracy=50.0, queued=1,
-                 weekly_max=20.0, paused=False, at_war=False, bubble=None, income=None):
+                 weekly_max=20.0, paused=False, at_war=False, bubble=None, income=None, rate=None, era=2.5,
+                 credit=None, crisis=False):
         self.fixed_income = float(fixed_income)
         self.surplus = float(surplus)  # net_fixed_income
         self.price = float(price)  # var:te_construction_market_price_stabilizer
@@ -118,9 +144,17 @@ class Country:
         self.bureaucracy, self.queued, self.weekly_max = bureaucracy, queued, weekly_max
         self.paused, self.at_war, self.bubble = paused, at_war, bubble
         self.income = float(fixed_income if income is None else income)  # read by the rule before only
+        # The rate paid and the world reference rate (var:te_rate_paid_pts, var:te_mon_era_base_now), both absent
+        # until the monetary update has run; the debt ceiling (`credit`), about 320 weeks of a large economy's fixed
+        # income in the 1925-1947 run; a financial crisis (te_mon_in_financial_crisis).
+        self.rate, self.era, self.crisis = rate, era, crisis
+        self.credit = 320.0 * self.fixed_income if credit is None else float(credit)
         self.vars = {"te_construction_market_price_stabilizer": self.price}
         if bubble is not None:
             self.vars["bubble_pressure"] = bubble
+        if rate is not None:
+            self.vars["te_rate_paid_pts"] = float(rate)
+            self.vars["te_mon_era_base_now"] = float(era)
 
     def env(self):
         names = {
@@ -131,10 +165,12 @@ class Country:
             "bureaucracy": self.bureaucracy,
             "construction_queue_num_queued_government_levels": float(self.queued),
             "modifier:country_max_weekly_construction_progress_add": self.weekly_max,
+            "credit": self.credit,
         }
         # The evaluator fails on a read it has no stub for. There is none for is_ai, for a building or for income
         # that is not fixed: the purchase and the sites' use of it may read none of them.
-        return AiEnv(names, self.vars, flags={"is_construction_paused": self.paused, "is_at_war": self.at_war})
+        return AiEnv(names, self.vars, flags={"is_construction_paused": self.paused, "is_at_war": self.at_war},
+                     crisis=self.crisis)
 
     def script(self):
         return self.env().value("te_construction_market_ai_purchase_target")
@@ -146,8 +182,32 @@ class Country:
         return self.script() * self.price
 
 
+def clamp01(x):
+    return max(0.0, min(1.0, x))
+
+
+def model_spread(c):
+    spread = SPREAD_MID if c.rate is None else c.rate - c.era
+    return max(spread, SPREAD_HIGH) if c.crisis else spread
+
+
+def model_required(c):
+    return RESERVE_MAX * clamp01((model_spread(c) - SPREAD_MID) / (SPREAD_HIGH - SPREAD_MID))
+
+
+def model_allowance(c):
+    if c.at_war:
+        return 0.0
+    stress = ((FIRST_ERA_BASE if c.rate is None else c.era) + SPREAD_HIGH) / 100
+    service = max(c.surplus, 0.0) * 52 * CREDIT_SERVICE_SHARE / stress / max(c.credit, 1.0)
+    return min(CREDIT_MAX * clamp01((SPREAD_MID - model_spread(c)) / (SPREAD_MID - SPREAD_LOW)), service)
+
+
 def model_factor(c):
+    required, allowance = model_required(c), model_allowance(c)
     factor = 1 + c.reserves - c.debt
+    factor += RATE_GAIN * max(0.0, allowance - c.debt)
+    factor -= min(c.reserves, required) + RATE_GAIN * max(0.0, required - c.reserves)
     if c.at_war and c.reserves < 0.5:
         factor -= 0.5 - c.reserves
     if c.bubble is not None and c.bubble >= 50 and c.reserves < 0.3:
@@ -157,7 +217,7 @@ def model_factor(c):
 
 def model_floor(c):
     whole = min(FLOOR_MAX_POINTS, FLOOR_INCOME_SHARE * c.fixed_income / c.price)
-    from_reserves = whole * max(0.0, min(1.0, c.reserves / FLOOR_FULL_RESERVES))
+    from_reserves = whole * clamp01((c.reserves - model_required(c)) / FLOOR_FULL_RESERVES)
     from_surplus = min(max(c.surplus, 0.0) / c.price, whole * FLOOR_MIN_FACTOR)
     floor = max(from_reserves, from_surplus)
     if c.bureaucracy < 0:
@@ -231,6 +291,42 @@ class Constants(unittest.TestCase):
         for name in MOD_NAI:
             self.assertRegex(nai.group(1), rf"(?m)^\t{name}\s*=", f"{name} is not in the NAI block")
 
+    def test_the_rate_and_the_pass_hold_the_numbers_this_file_models(self):
+        constants = _parsed()["constants"]
+        for name, value in (("SPREAD_LOW", SPREAD_LOW), ("SPREAD_MID", SPREAD_MID), ("SPREAD_HIGH", SPREAD_HIGH),
+                            ("RESERVE_MAX", RESERVE_MAX), ("CREDIT_MAX", CREDIT_MAX), ("RATE_GAIN", RATE_GAIN),
+                            ("CREDIT_SERVICE_SHARE", CREDIT_SERVICE_SHARE)):
+            self.assertEqual(constants["TE_CONSTRUCTION_MARKET_AI_" + name], value, name)
+        for name, value in (("SURPLUS_SHARE", PASS_SURPLUS_SHARE), ("SURPLUS_MIN", PASS_SURPLUS_MIN),
+                            ("INNOVATION_SHARE", PASS_INNOVATION_SHARE)):
+            self.assertEqual(constants["TE_AI_BUILD_PASS_" + name], value, name)
+
+    def test_the_rates_numbers_stand_where_their_comments_say(self):
+        self.assertLess(SPREAD_LOW, SPREAD_MID)
+        self.assertLess(SPREAD_MID, SPREAD_HIGH)
+        # At a high rate the reserve vanilla's gate asked for, which the floor is whole at.
+        self.assertEqual(RESERVE_MAX, NAI["CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS"])
+        self.assertEqual(RESERVE_MAX, FLOOR_FULL_RESERVES)
+        # The most credit is the debt the engine's AI still calls insignificant; it settles two-thirds of the way.
+        self.assertEqual(CREDIT_MAX, NAI["CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD"])
+        self.assertAlmostEqual(RATE_GAIN / (1 + RATE_GAIN) * CREDIT_MAX, 0.0667, delta=0.0001)
+        # Half the pause's resume line, a quarter of the pause, under the monetary system's debt-load premium.
+        self.assertLessEqual(CREDIT_MAX, NAI["CONSTRUCTION_DEBT_RESUME"] / 2)
+        self.assertLessEqual(CREDIT_MAX, NAI["CONSTRUCTION_DEBT_PAUSE"] / 4)
+        premium = re.search(r"(?ms)^te_mon_scaled_debt_premium = \{\n(.*?)^\}",
+                            (ROOT / "common/script_values/te_monetary_script_values.txt").read_text(encoding="utf-8-sig"))
+        self.assertRegex(premium.group(1), r"value = scaled_debt\s+subtract = 0\.25\b")
+        self.assertLess(CREDIT_MAX, 0.25)
+        self.assertAlmostEqual(CREDIT_SERVICE_SHARE, 1 / 3, delta=0.00001)
+
+    def test_the_pass_asks_for_the_surplus_the_engines_budget_ai_asks_for(self):
+        # Income 1.2 times expenses is a surplus of a sixth of income; or a surplus of 15,000 whatever the ratio.
+        self.assertAlmostEqual(PASS_SURPLUS_SHARE, 1 - 1 / NAI["MONEY_SPENDING_MIN_RATIO_TO_ADD_SHOULD_HAVE"],
+                               delta=0.00001)
+        self.assertEqual(PASS_SURPLUS_MIN, NAI["MONEY_SPENDING_MIN_SURPLUS_TO_IGNORE_RATIO_FOR_SHOULD_HAVE"])
+        self.assertGreater(1 - 1 / NAI["MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE"], 0)
+        self.assertLess(PASS_INNOVATION_SHARE, NAI["MONEY_SPENDING_INNOVATION_DESIRED_THRESHOLD"])
+
     def test_the_part_the_surplus_pays_is_a_two_hundredth_of_income(self):
         self.assertAlmostEqual(FLOOR_INCOME_SHARE * FLOOR_MIN_FACTOR, 0.005)
 
@@ -268,6 +364,24 @@ class ScriptAgainstModel(unittest.TestCase):
                               at_war=at_war, bubble=bubble, queue=(queued, weekly)):
                 self.assertAlmostEqual(c.script(), model(c), delta=STEP)
         self.assertGreater(count, 2000)
+
+    def test_across_rates_crises_and_wars(self):
+        count = 0
+        # The bubble's brake and the era are each varied once, at one rate; the brakes add to the rate's terms.
+        for (name, (fixed_income, price)), share, (reserves, debt), (rate, era, bubble), crisis, at_war, weeks in \
+                itertools.product(ECONOMIES.items(), (-0.25, 0.0, 0.03, 0.25, 0.7),
+                                  ((0.0, 0.0), (0.03, 0.0), (0.1, 0.0), (0.4, 0.0), (0.0, 0.03), (0.0, 0.067),
+                                   (0.0, 0.2), (0.0, 0.45)),
+                                  [(r, 2.5, None) for r in (None, 0.5, 3.5, 4.5, 5.5, 6.5, 8.0, 9.5, 12.0, 25.0)]
+                                  + [(3.5, 2.0, None), (8.0, 2.0, None), (3.5, 2.5, 60.0), (12.0, 2.5, 60.0)],
+                                  (False, True), (False, True), (120.0, 320.0)):
+            c = Country(fixed_income, share * fixed_income, price, reserves, debt, at_war=at_war, bubble=bubble,
+                        rate=rate, era=era, crisis=crisis, credit=weeks * fixed_income)
+            count += 1
+            with self.subTest(economy=name, surplus=share, reserves=reserves, debt=debt, rate=rate, era=era,
+                              crisis=crisis, at_war=at_war, bubble=bubble, credit_weeks=weeks):
+                self.assertAlmostEqual(c.script(), model(c), delta=STEP)
+        self.assertGreater(count, 10000)
 
     def test_paused_and_not(self):
         count = 0
@@ -699,26 +813,32 @@ PRICE, PRICE_PAID_BEFORE = 1250.0, 1999.0
 
 
 class Run:
-    def __init__(self, by_year, debt, paused_weeks, default_year):
+    def __init__(self, by_year, debt, paused_weeks, default_year, reserves=0.0, max_debt=0.0, debt_by_year=()):
         self.by_year, self.debt, self.paused_weeks, self.default_year = by_year, debt, paused_weeks, default_year
+        self.reserves, self.max_debt, self.debt_by_year = reserves, max_debt, list(debt_by_year)
 
 
-def long_run(rule, fixed_income, surplus_share, years, price=PRICE, paid=None, tax_raise=0.0):
+def long_run(rule, fixed_income, surplus_share, years, price=PRICE, paid=None, tax_raise=0.0, rate=None, era=2.5):
     """Points bought by the end of each year, the debt share at the end, the weeks paused, the year of default.
     `tax_raise` is what the engine's budget AI might add to income, as a share of it, once debt is over a tenth of
-    the ceiling (NAI CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD)."""
+    the ceiling (NAI CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD). `rate`, the rate paid in points a year (a number, or a
+    function of the year from 1), is what the purchase reads and what the debt costs; without it the purchase reads
+    no rate and the debt costs RATE."""
     ceiling, limit = CEILING_WEEKS * fixed_income, RESERVE_WEEKS * fixed_income
-    gold = debt = points = 0.0
-    paused, paused_weeks, by_year, default_year = False, 0, [], None
+    gold = debt = points = max_debt = 0.0
+    paused, paused_weeks, by_year, default_year, debt_by_year = False, 0, [], None, []
     for week in range(1, years * 52 + 1):
         share = debt / ceiling
-        surplus = surplus_share * fixed_income - RATE * debt / 52 + (tax_raise * fixed_income if share > 0.1 else 0.0)
+        now_rate = rate(math.ceil(week / 52)) if callable(rate) else rate
+        cost = RATE if now_rate is None else now_rate / 100
+        surplus = surplus_share * fixed_income - cost * debt / 52 + (tax_raise * fixed_income if share > 0.1 else 0.0)
         if paused and share <= NAI["CONSTRUCTION_DEBT_RESUME"]:
             paused = False
         elif not paused and share >= NAI["CONSTRUCTION_DEBT_PAUSE"]:
             paused = True
         paused_weeks += paused
-        bought = rule(Country(fixed_income, surplus, price, gold / limit, share, paused=paused))
+        bought = rule(Country(fixed_income, surplus, price, gold / limit, share, paused=paused, rate=now_rate, era=era,
+                              credit=ceiling))
         points += bought
         balance = surplus - bought * (paid or price)
         if balance >= 0:
@@ -731,9 +851,11 @@ def long_run(rule, fixed_income, surplus_share, years, price=PRICE, paid=None, t
             debt += -balance - drawn
         if default_year is None and debt >= ceiling:
             default_year = math.ceil(week / 52)
+        max_debt = max(max_debt, debt / ceiling)
         if week % 52 == 0:
             by_year.append(points)
-    return Run(by_year, debt / ceiling, paused_weeks, default_year)
+            debt_by_year.append(debt / ceiling)
+    return Run(by_year, debt / ceiling, paused_weeks, default_year, gold / limit, max_debt, debt_by_year)
 
 
 def now(c):
@@ -829,6 +951,179 @@ class TheLongRun(unittest.TestCase):
         self.assertEqual(thirty.debt, 0.0)
         self.assertEqual(thirty.paused_weeks, 0)
         self.assertLessEqual(long_run(before, 3000.0, 0.0, 30).default_year, 10)
+
+
+def values(c, *names):
+    env = c.env()
+    return [env.value(name) for name in names]
+
+
+CURVE = ("te_construction_market_ai_required_reserves", "te_construction_market_ai_credit_allowance")
+
+
+class TheRate(unittest.TestCase):
+    """The reserve a government keeps and the debt it may run, by the rate it pays (THE RATE in the values file)."""
+
+    def rich(self, spread, era=2.5, **kwargs):
+        # A surplus large enough that the allowance's service cap does not bind.
+        return Country(75817.0, 0.4 * 75817.0, 1256.0, rate=era + spread, era=era, **kwargs)
+
+    def test_with_no_rate_and_at_the_middle_it_is_the_rule_as_it_was(self):
+        for (name, (fixed_income, price)), share, (reserves, debt), at_war, bubble in itertools.product(
+                ECONOMIES.items(), (-0.25, 0.03, 0.25), ((0.0, 0.0), (0.06, 0.0), (0.4, 0.0), (0.0, 0.05), (0.0, 0.3)),
+                (False, True), (None, 60.0)):
+            none = Country(fixed_income, share * fixed_income, price, reserves, debt, at_war=at_war, bubble=bubble)
+            middle = Country(fixed_income, share * fixed_income, price, reserves, debt, at_war=at_war, bubble=bubble,
+                             rate=2.5 + SPREAD_MID)
+            with self.subTest(economy=name, surplus=share, reserves=reserves, debt=debt):
+                self.assertEqual(values(none, *CURVE), [0.0, 0.0])
+                self.assertAlmostEqual(none.script(), middle.script(), delta=STEP)
+                factor = max(1 + reserves - debt - (0.5 - reserves if at_war and reserves < 0.5 else 0)
+                             - (0.3 - reserves if bubble and reserves < 0.3 else 0), 0.1)
+                whole = min(FLOOR_MAX_POINTS, FLOOR_INCOME_SHARE * fixed_income / price)
+                floor = max(whole * clamp01(reserves / FLOOR_FULL_RESERVES),
+                            min(max(share * fixed_income, 0) / price, whole * FLOOR_MIN_FACTOR))
+                self.assertAlmostEqual(none.script(), min(max(max(share * fixed_income, 0) / price * factor, floor),
+                                                          20.0), delta=STEP)
+
+    def test_the_curve_at_its_ends_and_its_middle(self):
+        for spread, required, allowance in (
+                (-3.0, 0.0, CREDIT_MAX), (SPREAD_LOW, 0.0, CREDIT_MAX), ((SPREAD_LOW + SPREAD_MID) / 2, 0.0, CREDIT_MAX / 2),
+                (SPREAD_MID, 0.0, 0.0), ((SPREAD_MID + SPREAD_HIGH) / 2, RESERVE_MAX / 2, 0.0),
+                (SPREAD_HIGH, RESERVE_MAX, 0.0), (20.0, RESERVE_MAX, 0.0)):
+            for era in (3.0, 2.5, 2.0):
+                with self.subTest(spread=spread, era=era):
+                    got = values(self.rich(spread, era), *CURVE)
+                    self.assertAlmostEqual(got[0], required, delta=0.0001)
+                    self.assertAlmostEqual(got[1], allowance, delta=0.0001)
+
+    def test_it_reads_the_spread_over_the_reference_rate_not_the_rate(self):
+        # The same 4.5% is a low spread when the world's safe rate is 3 and a middling one at 2.
+        self.assertGreater(values(Country(75817.0, 30000.0, rate=4.5, era=3.0), CURVE[1])[0],
+                           values(Country(75817.0, 30000.0, rate=4.5, era=2.0), CURVE[1])[0])
+
+    def test_a_financial_crisis_reads_as_a_high_rate_whatever_the_rate(self):
+        for spread in (-2.0, SPREAD_LOW, SPREAD_MID, 6.0):
+            with self.subTest(spread=spread):
+                self.assertEqual(values(self.rich(spread, crisis=True), *CURVE), [RESERVE_MAX, 0.0])
+                # So a crisis never buys more than the same country outside it.
+                for reserves, debt in ((0.0, 0.0), (0.05, 0.0), (0.0, 0.05)):
+                    calm = Country(75817.0, 20000.0, 1256.0, reserves, debt, rate=2.5 + spread)
+                    hit = Country(75817.0, 20000.0, 1256.0, reserves, debt, rate=2.5 + spread, crisis=True)
+                    self.assertLessEqual(hit.script(), calm.script() + STEP)
+
+    def test_no_credit_at_war(self):
+        self.assertEqual(values(self.rich(-2.0, at_war=True), CURVE[1]), [0.0])
+
+    def test_no_cliff_anywhere_along_the_curve(self):
+        # 0.01 of a point of spread moves the factor by at most RATE_GAIN x CREDIT_MAX / 200 = 0.001 at the credit end
+        # and RATE_GAIN x RESERVE_MAX / 300 at the reserve end.
+        for reserves, debt in ((0.0, 0.0), (0.04, 0.0), (0.0, 0.03)):
+            last = None
+            for step in range(-300, 1300):
+                c = Country(75817.0, 20000.0, 1256.0, reserves, debt, queued=4, weekly_max=200.0,
+                            rate=2.5 + step / 100)
+                now = c.script()
+                if last is not None:
+                    with self.subTest(reserves=reserves, debt=debt, spread=step / 100):
+                        self.assertLessEqual(abs(now - last), 0.0011 * 20000.0 / 1256.0 + 2 * STEP)
+                last = now
+
+    def test_the_allowance_costs_at_most_a_third_of_the_surplus_at_the_rate_high_asks(self):
+        for share, weeks, era in itertools.product((0.001, 0.01, 0.03, 0.1, 0.25, 0.5), (60.0, 120.0, 320.0, 700.0),
+                                                   (3.0, 2.5, 2.0)):
+            c = Country(10000.0, share * 10000.0, rate=era, era=era, credit=weeks * 10000.0)
+            allowance = values(c, CURVE[1])[0]
+            with self.subTest(surplus=share, ceiling_weeks=weeks, era=era):
+                self.assertLessEqual(allowance, CREDIT_MAX)
+                interest = allowance * c.credit * (era + SPREAD_HIGH) / 100
+                # The script's five decimals: an allowance is a multiple of 0.00001 of the ceiling.
+                self.assertLessEqual(interest, share * 10000.0 * 52 / 3 * 1.001 + 0.00001 * c.credit * 0.1)
+        # A country with no surplus may borrow nothing, whatever the rate.
+        self.assertEqual(values(Country(10000.0, 0.0, rate=0.5, era=2.5), CURVE[1]), [0.0])
+        self.assertEqual(values(Country(10000.0, -500.0, rate=0.5, era=2.5), CURVE[1]), [0.0])
+
+    def test_at_a_low_rate_it_borrows_a_fifth_of_its_surplus_at_most_and_none_past_the_allowance(self):
+        surplus = 0.4 * 75817.0
+        self.assertAlmostEqual(self.rich(0.0, queued=9, weekly_max=200.0).script(),
+                               surplus / 1256.0 * (1 + RATE_GAIN * CREDIT_MAX), delta=STEP)
+        for debt in (0.0, 0.03, 0.0667, 0.1, 0.2):
+            c = Country(75817.0, surplus, 1256.0, 0.0, debt, queued=9, weekly_max=200.0, rate=2.5)
+            factor = c.script() / (surplus / 1256.0)
+            with self.subTest(debt=debt):
+                self.assertLessEqual(factor, 1 + RATE_GAIN * CREDIT_MAX + 0.0001)
+                # It spends more than the surplus only under the balance point, two-thirds of the allowance.
+                self.assertEqual(factor > 1 + 0.0001, debt < RATE_GAIN / (1 + RATE_GAIN) * CREDIT_MAX - 0.0001)
+
+    def test_at_a_high_rate_it_saves_toward_the_reserve_and_spends_only_what_is_above_it(self):
+        surplus = 0.25 * 75817.0
+        for reserves, factor in ((0.0, 1 - RATE_GAIN * RESERVE_MAX), (0.05, 1 - RATE_GAIN * 0.05), (RESERVE_MAX, 1.0),
+                                 (0.3, 1 + 0.3 - RESERVE_MAX)):
+            c = Country(75817.0, surplus, 1256.0, reserves, queued=9, weekly_max=200.0, rate=2.5 + 9.0)
+            with self.subTest(reserves=reserves):
+                self.assertAlmostEqual(c.script(), surplus / 1256.0 * factor, delta=STEP)
+        # The floor does not spend the reserve asked for either: with no surplus and reserves of 0.1, nothing.
+        self.assertEqual(Country(75817.0, 0.0, 1256.0, RESERVE_MAX, rate=2.5 + 9.0).script(), 0.0)
+        self.assertGreater(Country(75817.0, 0.0, 1256.0, RESERVE_MAX, rate=2.5 + SPREAD_MID).script(), 0.0)
+
+    def test_when_the_rate_rises_on_its_debt_it_stops_borrowing_and_pays_down_but_goes_on_buying(self):
+        surplus = 0.25 * 75817.0
+        balance = RATE_GAIN / (1 + RATE_GAIN) * CREDIT_MAX
+        for spread in (SPREAD_MID, 5.5, SPREAD_HIGH, 12.0):
+            c = Country(75817.0, surplus, 1256.0, 0.0, balance, queued=9, weekly_max=200.0, rate=2.5 + spread)
+            factor = c.script() / (surplus / 1256.0)
+            with self.subTest(spread=spread):
+                self.assertLess(factor, 1.0)
+                self.assertGreaterEqual(factor, FLOOR_MIN_FACTOR)
+        # At a high rate it keeps 0.73 of what it bought at the middle with no debt.
+        high = Country(75817.0, surplus, 1256.0, 0.0, balance, queued=9, weekly_max=200.0, rate=2.5 + SPREAD_HIGH)
+        self.assertAlmostEqual(high.script() / (surplus / 1256.0), 1 - balance - RATE_GAIN * RESERVE_MAX, delta=0.0002)
+
+
+class TheRateLongRun(unittest.TestCase):
+    """long_run's budget, a level always queued, with the rate read and paid."""
+
+    LOW, HIGH = 2.5 + 1.0, 2.5 + 9.0
+
+    def test_at_a_low_rate_the_debt_settles_at_two_thirds_of_the_allowance_and_never_nears_the_pause(self):
+        for share in (0.06, 0.17, 0.25, 0.5):
+            run = long_run(now, 3000.0, share, 40, rate=self.LOW)
+            with self.subTest(surplus=share):
+                self.assertLessEqual(run.max_debt, RATE_GAIN / (1 + RATE_GAIN) * CREDIT_MAX + 0.001)
+                self.assertEqual(run.paused_weeks, 0)
+                self.assertIsNone(run.default_year)
+
+    def test_at_a_low_rate_it_builds_more_than_at_the_middle_by_about_what_it_borrowed(self):
+        for share in (0.06, 0.17, 0.25, 0.5):
+            low = long_run(now, 3000.0, share, 30, rate=self.LOW)
+            middle = long_run(now, 3000.0, share, 30, rate=2.5 + SPREAD_MID)
+            borrowed = low.debt * CEILING_WEEKS * 3000.0 / PRICE
+            with self.subTest(surplus=share):
+                self.assertGreater(low.by_year[-1], middle.by_year[-1])
+                # The extra points are the debt less thirty years of interest on it, never more than the debt.
+                self.assertLessEqual(low.by_year[-1] - middle.by_year[-1], borrowed + 1)
+                self.assertLess(middle.debt, 1e-6)
+
+    def test_at_a_high_rate_it_holds_the_reserve_and_never_borrows(self):
+        for share in (0.06, 0.17, 0.25):
+            run = long_run(now, 3000.0, share, 30, rate=self.HIGH)
+            with self.subTest(surplus=share):
+                self.assertLess(run.max_debt, 1e-6)
+                self.assertGreater(run.reserves, 0.95 * RESERVE_MAX)
+                self.assertGreater(run.by_year[-1], 0.9 * 30 * share * 3000.0 * 52 / PRICE)
+
+    def test_a_rate_that_climbs_on_its_debt_is_paid_down_while_it_goes_on_building(self):
+        def climbs(year):
+            return self.LOW if year <= 10 else self.HIGH
+        for share in (0.06, 0.17, 0.25):
+            run = long_run(now, 3000.0, share, 30, rate=climbs)
+            with self.subTest(surplus=share):
+                # A thin surplus borrows little: the allowance is what a third of it can carry at the high rate.
+                self.assertGreater(run.debt_by_year[9], 0.005)
+                self.assertLess(run.debt_by_year[-1], run.debt_by_year[9] / 2)
+                self.assertEqual(run.paused_weeks, 0)
+                gains = [b - a for a, b in zip([0.0] + run.by_year, run.by_year)]
+                self.assertTrue(all(g > 0 for g in gains), gains)
 
 
 class Wiring(unittest.TestCase):
