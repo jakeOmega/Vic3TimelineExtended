@@ -26,5 +26,5 @@ te_rgc_surplus_share = {
 te_rgc_watched_g = { value = global_var:te_rgc_watched }
 te_rgc_any_g = { value = global_var:te_rgc_any }
 te_rgc_uni_g = { value = global_var:te_rgc_uni }
-te_rgc_ctrl_watched_g = { value = global_var:te_rgc_ctrl_watched }
+te_rgc_ctrl_queues_g = { value = global_var:te_rgc_ctrl_queues }
 te_rgc_ctrl_uni_g = { value = global_var:te_rgc_ctrl_uni }

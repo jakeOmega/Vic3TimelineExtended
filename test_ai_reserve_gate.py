@@ -127,17 +127,14 @@ class TheSelfCheck(unittest.TestCase):
         self.assertIn("NOT = { has_global_variable = te_rgc_checked }", self.trigger)
         self.assertTrue(self.effect.strip().startswith("set_global_variable = te_rgc_checked"))
 
-    def test_the_low_band_sits_between_the_mods_gate_and_vanillas(self):
-        effect = _block(self.watch, "effect")
-        low, cap, control = 0.03, 0.08, 0.10
+    def test_the_band_sits_between_the_mods_gate_and_vanillas(self):
+        low, cap = 0.03, 0.08
         self.assertGreater(low, _mod_gate(), "room for a building's cost above the mod's gate")
         self.assertLess(cap, VANILLA_GATE, "room for a month's saving below vanilla's gate")
-        self.assertGreaterEqual(control, VANILLA_GATE)
-        sets = effect[effect.rindex("te_rgc_may_queue_a_university = yes") - 200:]
-        self.assertIn("scaled_gold_reserves >= 0.03 scaled_gold_reserves < 0.20 te_rgc_may_queue_a_university = yes",
-                      _norm(sets))
-        self.assertIn("if = { limit = { scaled_gold_reserves < 0.08 } set_variable = te_rgc_watch }", _norm(sets))
-        self.assertIn("else_if = { limit = { scaled_gold_reserves >= 0.10 } set_variable = te_rgc_ctrl }", _norm(sets))
+        effect = _norm(_block(self.watch, "effect"))
+        self.assertIn("if = { limit = { scaled_gold_reserves >= 0.03 scaled_gold_reserves < 0.08 "
+                      "te_rgc_may_queue_a_university = yes }", effect)
+        self.assertTrue(effect.endswith("set_variable = te_rgc_watch }"))
 
     def test_a_low_band_watch_counts_only_if_still_under_the_cap_at_its_read(self):
         read = _norm(_block(self.watch, "effect"))
@@ -147,9 +144,20 @@ class TheSelfCheck(unittest.TestCase):
                       "= te_rgc_any add = 1 } if = { limit = { te_rgc_university_queued = yes } "
                       "change_global_variable = { name = te_rgc_uni add = 1 } } } } }", read)
         # the counters exist before the first one is changed
-        for name in ("te_rgc_watched", "te_rgc_any", "te_rgc_uni", "te_rgc_ctrl_watched", "te_rgc_ctrl_uni"):
+        for name in ("te_rgc_watched", "te_rgc_any", "te_rgc_uni"):
             with self.subTest(counter=name):
                 self.assertIn("set_global_variable = { name = %s value = 0 }" % name, read)
+
+    def test_the_control_is_counted_once_at_the_verdict_before_its_line(self):
+        effect = _norm(self.effect)
+        control = ("set_global_variable = { name = te_rgc_ctrl_queues value = 0 } set_global_variable = { name = "
+                   "te_rgc_ctrl_uni value = 0 } every_country = { limit = { is_ai = yes "
+                   "construction_queue_num_queued_government_levels > 0 } change_global_variable = { name = "
+                   "te_rgc_ctrl_queues add = 1 } if = { limit = { te_rgc_university_queued = yes } "
+                   "change_global_variable = { name = te_rgc_ctrl_uni add = 1 } } }")
+        self.assertIn(control, effect)
+        self.assertLess(effect.index(control), effect.index("TE_SELF_CHECK START"))
+        self.assertNotIn("te_rgc_ctrl", _block(self.watch, "effect"), "the watch walks no control")
 
     def test_a_watch_drops_what_no_gate_would_let_queue_a_university(self):
         may = _norm(_block(self.triggers, "te_rgc_may_queue_a_university"))
@@ -172,8 +180,7 @@ class TheSelfCheck(unittest.TestCase):
     def test_the_verdicts(self):
         self.assertEqual(_norm(self.trigger), _norm(
             "NOT = { has_global_variable = te_rgc_checked } has_global_variable = te_rgc_watched OR = { "
-            "global_var:te_rgc_uni >= 3 AND = { global_var:te_rgc_watched >= 120 global_var:te_rgc_uni < 1 "
-            "global_var:te_rgc_ctrl_uni >= 3 } global_var:te_rgc_watched >= 360 }"))
+            "global_var:te_rgc_uni >= 3 global_var:te_rgc_watched >= 120 }"))
         self.assertEqual(self.branches(), [
             ("if", "te_rgc_uni_g >= 3", "OK"),
             ("else_if", "te_rgc_uni_g < 1 te_rgc_ctrl_uni_g >= 3", "BROKEN"),
@@ -204,8 +211,8 @@ class TheSelfCheck(unittest.TestCase):
 
     def test_every_value_and_trigger_it_reads_is_defined(self):
         used = set(re.findall(r"\bte_rgc_\w+", self.body + self.triggers + self.values))
-        variables = {"te_rgc_checked", "te_rgc_watch", "te_rgc_ctrl", "te_rgc_watched", "te_rgc_any", "te_rgc_uni",
-                     "te_rgc_ctrl_watched", "te_rgc_ctrl_uni"}
+        variables = {"te_rgc_checked", "te_rgc_watch", "te_rgc_watched", "te_rgc_any", "te_rgc_uni",
+                     "te_rgc_ctrl_queues", "te_rgc_ctrl_uni"}
         defined = set(re.findall(r"(?m)^(te_rgc_\w+)\s*=", self.values + self.triggers))
         self.assertEqual(used - variables, defined)
         for name in re.findall(r"ScriptValue\('(\w+)'\)", self.effect):
