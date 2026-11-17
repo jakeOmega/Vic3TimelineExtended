@@ -656,7 +656,8 @@ way (a law test in a scripted trigger; a scripted trigger in a custom localizati
 
 The contagion asked `is_market_reachable_for_trade` of a country that had lost its last state, and the game crashed
 (1.15.1, RVA `0xd63d38`, an observer run in October 1913). The spread now skips a target that holds no state or no
-capital, and a country that holds no state or no market neither rolls a crash nor spreads one.
+capital, and a country that holds no state or no market neither rolls the monthly crash nor spreads a crash
+(item 5 has the one way such a country can still crash).
 
 1. **No market errors from the contagion.** In an observer run long enough for a country to lose every state while
    its war goes on (its probe or snapshot line reads `states=0`), `error.log` has no `Event target link 'market'
@@ -665,3 +666,24 @@ capital, and a country that holds no state or no market neither rolls a crash no
    come; they are registered in `docs/vanilla/vanilla_known_bugs.md`.
 2. **If it crashes there anyway.** With these guards in place, the next suspect is vanilla's Goods Transfer article
    (`vanilla_known_bugs.md` § "Latent crashes the mod does not patch"), or a country with states but no capital.
+3. **Unverified: a living country in a stateless overlord's market** (#1872's review). `exists = market` passes a
+   living origin or target that sits in the market of an overlord with no states, which sends the trigger's route
+   check a market with no capital. The crash dump does not cover that case; a crash at the same RVA with such a
+   subject in the game would point to it.
+4. **Not guarded yet, not known to bite: the rest of the monthly pulse** (#1872's review). Nothing in the script
+   stops the banking journal entry's other monthly effects, or `banking_cycle_random_event_effect` and the events it
+   sends, for a country with no states; only the crash roll and the contagion are guarded. No read in them is known
+   to need a capital or a market. Outside the contagion, the banking files (`je_banking.txt` and the `banking_*`
+   effects, triggers, values and events) read a market once, `banking_external_export_share` for the export
+   surrender tool, behind `exists = market` and with no route search, and read no capital. This is tidiness unless a
+   later change adds such a read.
+5. **Not guarded yet, not known to bite: a target that loses its last state after the spread reaches it** (#1872's
+   review). The guards are read when the spread picks its targets. A target reached while it held land still gets
+   the hidden event .9 six days on and, from it, event .7 a day later: neither event has a trigger, and nothing in
+   the script stops them (whether the engine still delivers a queued event to a country with no states is unread).
+   Its roll there is `banking_contagion_crash_check`, run by .9, not the monthly roll that #1872 put behind
+   `is_country_alive = yes exists = market`, so it can still crash; that roll reads its bubble pressure and the
+   origin's severity, not a market. It cannot spread the crash: .7's `after` makes it the origin, and
+   `banking_cycle_spread_contagion` turns away an origin with no state or no market. It is still counted: the same
+   `after` runs `banking_crisis_wave_increment`, which adds it to the wave's country count toward the Great
+   Depression's ten and its GDP to the wave's, and then checks for a Great Depression.

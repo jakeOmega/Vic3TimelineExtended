@@ -27,7 +27,8 @@ typical country last; its headline compares the 20 largest with the rest.
    of the earlier build then needs its own key: `--key` takes the `ai_probe_key.json` of the build that ran.
 2. Deploy the build (`docs/guides/git_workflow.md` § Play-testing unmerged work). The probe's lines go to
    `debug.log`, which rotates at 512 KB through six generations, so a long run must copy the log as it is written:
-   the QA harness's unattended run does (`fixture_debug.log` in its run folder).
+   the QA harness's unattended run does (`fixture_debug.log` in its run folder), and so does a session (`debug.log`
+   there; "A run from a save", below).
 
 ## An unattended run from 1836 (the usual one)
 
@@ -46,7 +47,9 @@ names its run folder; the log copy is there whether or not the run reached its d
 
 **The harness's estimate is low.** The first long run (2026-11-16) took 6 h 46 min from 1836 to 1925, 0.75 s a
 game day on average, where the harness estimated 4.85 h. At that rate a run takes about 4.9 hours to 1900, 7.6 to
-1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room.
+1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room. The day's
+other two runs took 5 h 05 min from 1836 to October 1913, where the game crashed (a failed run's reply carries no
+`timing`), and 52 min from 1836 to 1850, 0.58 s a game day, where the harness estimated 0.69 h.
 
 **The short check comes first, always.** Nobody had printed most of the probe's lines before it was written, and a
 `debug_log` line the engine cannot render is dropped whole. `check` says whether the probe armed (if not, the
@@ -75,8 +78,12 @@ For a version-2 log `check` also reads each version-2 addition, none of which ha
 | cs_buy, cs_sell above 0 | in most snapshots | `market_goods_buy_orders` or `market_goods_sell_orders` does not read as a value (the price does not depend on them) |
 | Construction Sites under half staffed | some, in a market game | the sites' own staffing (`site_low`, `site_low80`); their levels are `bg_te_construction_market_bg` in G3 |
 
-For a version-3 log `check` also reads version 3's additions. None had printed in a game when they were written
-(2026-11-16), so `check` reports each until one does; none of them fails the verdict.
+For a version-3 log `check` also reads version 3's additions; none of them fails the verdict. `check` still calls
+them unverified, as none had printed in a game when it was written, but run 4 (2026-11-16, below) read each as the
+Good column says: the world line counted 49 decentralized nations holding 58 states in 1925, and `dn_states` equalled
+`states - c_states` in all 24 yearly lines; no country-year held two reports (4,122 reports in the country's own
+month, 140 in the month before and 11 in the month after, none elsewhere); and `bank_phase` was the band of
+`bank_cycle` in all 2,171 snapshots with a cycle running.
 
 | `check` line | Good | If not |
 |---|---|---|
@@ -84,6 +91,29 @@ For a version-3 log `check` also reads version 3's additions. None had printed i
 | reports in the country's own month | every report in its month (serial modulo 12, 0 = January), the month after for a February one, the month before where a pulse on the 1st ran before the global pulse | elsewhere, or a country-year with two reports: the calendar schedule (`te_aip_country_tick`, `te_aip_due`, `te_aip_month_index`) does not work as written |
 | banking cycle running in N snapshots | 0 in 1836, rising once countries research the stock exchange and grow an Urban Center to level 5 | 0 past about 1860 with the banking rule on: `te_banking_cycle_running` does not read in the probe |
 | `bank_phase` is the band of `bank_cycle` | in all | the phase test (`banking_cycle_is_*`) or the variable reads something else |
+
+For a version-4 log `check` also reads version 4's additions (#1877, the fields the first late-game run lacked:
+§ Fields to read with care). None had printed in a game when they were written (2026-11-16), so `check` reports
+each until one does; none of them fails the verdict. The new data functions (X7, X8) have canaries like the others,
+and a version-1 to -3 log is not asked for them.
+
+| `check` line | Good | If not |
+|---|---|---|
+| W: game rules | the settings the run's lobby had (`run_start.json`'s `rules`), each a name | `none (0)`: no `has_game_rule` or trigger test held, so the index reads something else |
+| rt_* | under `no_retooling`, `no_ai_retooling` or `no_maintenance`: "reads 0 by design"; under `enabled`: above 0 in many snapshots | 0 in every snapshot with production-method changes under `enabled`: `has_modifier = pm_retooling` does not read in a building walk |
+| bt_company_headquarter equals bg_company_headquarter | in all | the group read in `BUILDING_TYPE_READS` reads something else |
+| H2: technology flags held | Electrical Generation and Steam Turbine held by most of the 20 largest economies (run 4: 20 of the 21 held every era-3 production technology in 1947) | a flag 0 everywhere where the T line's cell holding it is complete |
+| pp_states at most the states; above 0 where power levels are | all; nearly all | `te_state_has_a_power_plant` does not read from a country's `every_scope_state` |
+| Electricity made where power levels are; price over base where bought | made in nearly all; prices spread around 1, never exactly 1 everywhere | made 0 everywhere: the power grid's state values do not read through `every_scope_state`; price exactly 1: `sg:electricity` reads nothing |
+| street lighting: none + gas + electric = urban centre levels; electric lights without Electrical Generation | all; 0 | a lighting method the generator's catalog lacks (rerun it), or `has_active_production_method` misreads |
+| radios: price, buy and sell orders | a price spread around 1, orders above 0 once radios are made | the market read of `mg:radios` returns nothing |
+| queue by kind: universities + administrations + military <= queue_gov; each kind <= queue_levels | all; all | every kind 0 in every snapshot with a queue: `level_after_queued_constructions` (through `te_construction_market_building_queued_levels`) does not read in a building walk |
+| cost scaling, all modifiers | spread from 1 upward (about 2 to 3.4 for a rich labour-tight country, construction.md), below 1 only under the small-economy rule | 0 everywhere: `te_cc_scaling_factor` does not read in the probe |
+| bureaucracy: the institutions' cost at most bureaucracy used; above 0 with an institution | all; nearly all | the X7 canary missing (take the data function out), or the figure is not the institutions' cost |
+| bureaucracy modifiers non-zero | `bur_inst_mult` in many (37 of the mod's laws move it) | 0 everywhere: the `modifier:` reads return nothing |
+| strata's standard of living: lower <= average <= upper | nearly all | the X8 canary missing (GetTrendValue does not print from a loc string: the line is lost, take it out), or the trends are not what their names say |
+| slack in [0, 1] with peasants <= slack | all, above 0 in most | 0 everywhere: the cost scaling's stored `te_cc_slack` is not there (a direct game, or its walk not run) |
+| army census | `CANARY unit_vars v=1`; battalions counted within 5% of `army_size`; flows from each country's second report | `v=0`: a combat unit holds no variable, the census does not count and recruits cannot be told from upgrades (the report's net change in irregulars still reads); every battalion new at every report: the marks do not last a year |
 
 Two lines read every log, whatever its version:
 
@@ -93,7 +123,7 @@ Two lines read every log, whatever its version:
   are what the engine held that week, not a read the probe got wrong (below), and they are not the year. In runs 1
   and 2 there were 235 and 149 unpaid, 18 and 13 idle; among the 20 largest of their year 49 and 39 together.
 - **spacing**: the months between a country's reports and the country-years holding two. Versions 1 and 2 hold
-  some in every log (280 in run 1); version 3 should hold none.
+  some in every log (280 in run 1); version 3 holds none (run 4, 23 years).
 
 It also prints, for unpaused snapshots, how often `wasted` reads yes against how often `con_unused` is above 0: the
 flag is not a measure of unused points (below).
@@ -102,11 +132,32 @@ flag is not a measure of unused points (below).
 
 ## A run from a save (the late game)
 
-An unattended run from 1836 reaches about 1925 overnight. For the late game, load a late save in debug mode, type
-`event te_debug_ai_probe.1` and then `observe`, and leave it running; a human-played game does not arm the probe by
-itself. Nothing copies the log in this case, so run a follower beside it (the harness's `game_qa.logtail` shows
-how), or keep the run under the six generations the game keeps (about 3 MB: a year or two of the world's
-snapshots).
+An unattended run from 1836 reaches about 1925 overnight, and the harness refuses one on a save by design
+(`handsoff_on_a_save`, `game_qa/__main__.py`: the end date is judged for a new game from 1836). The late game is
+played on in a session, from the dated fixture an unattended run left, with the owner's grant of the launch and of
+the hours (`.claude/skills/game-qa/SKILL.md`):
+
+```bash
+python3 -m game_qa start --as <TAG> --save te_qa_fixture_<key>_d<date> --permission "<the owner's words>"
+python3 -m game_qa enter-game
+python3 -m game_qa console "event te_debug_ai_probe.1"
+python3 -m game_qa advance 300        # again and again, in a loop that always ends with stop
+python3 -m game_qa stop
+```
+
+- **The played country sits idle** while the AI plays the rest: pick a small independent one at peace (run 4 took
+  Bhutan, one state, at peace from 1905 to 1924 in run 1). Its rows have `ai` 0, and the report leaves them out.
+- **The probe runs on.** The save carries the probe's armed flag and its month count, so the count continues (run
+  4's from 1068); the event prints the ARM line and the canaries of the build's version, which `check` reads.
+- **`advance` plays at most about 400 s a call**: `MAX_ROUNDS` (20) rounds of at most `MAX_WAIT_S` (20 s) each,
+  `game_qa/session.py`, after which it answers `stalled`. So N must fit: 300 days did in 1925-1948. The game plays at
+  the speed it loads with; there, a call of 300 days took 337 to 456 s, pauses and reads included, 0.66 to 0.89
+  game days a second, about seven and a half game years an hour.
+- **The run folder's `debug.log` is complete.** The session appends the game's new lines to it every round and
+  follows the game's log rotation; a line `<<game_qa: log lines lost in rotation>>` would mark a loss. `check` and
+  `report` read it as they read `fixture_debug.log`.
+- **A save made by an older build logs a burst of `default_end` events at the load** (run 4: 187 at month 1067,
+  before its first month, Great Britain among them with no debt). Count events from the first month after the load.
 
 ## Reading a run
 
@@ -199,11 +250,72 @@ last report.
   `every_decentralized_country` (version 2's `every_country` never reached them, so its `dn` and `dn_states` are 0),
   and adds `states` (every state in the world) and `c_states` (the states of every other country), so
   `states - c_states` reads the same land a second way.
+- **Retooling (`rt_*`, O1) reads 0 under three of Free Market Construction's five settings.** `no_retooling` and
+  `no_maintenance` remove `pm_retooling` from every building as the engine applies it, `no_ai_retooling` from every
+  AI-owned one (`te_remove_waived_pm_retooling`: at the production-method change, a day later, and in a sweep four
+  times a month), so a yearly snapshot finds none. Every run before version 4 was made under `no_retooling`, the
+  owner's last lobby rules (run 4's `run4_start.json`, `rules`), which is why `rt_*` read 0 in all of them; the
+  2026-11-15 save study's 36-52% of AI manufacturing retooling was a game under `enabled`. The read itself is the
+  one the removal uses (`has_modifier = pm_retooling` in a building's scope). From version 4 the W line names the
+  setting (`r_fmc`, with `r_small`, the Small-Economy Construction rule, and `r_bank`, the banking rule: indexes into
+  the key's `rules`), in the arming month and once a year after, since a rule can be changed in a running game.
+- **`bt_company_headquarter` (B2) read 0 in versions 1 to 3**: it read the template building type, and the engine
+  makes a building type of its own for each company type (`scripting_best_practices.md`, A Company's Headquarters Is
+  a Building Type of Its Own). From version 4 it reads the headquarters' group, the same figure as G2's
+  `bg_company_headquarter`, which read in every snapshot with a company all along.
+- **Electrification** (version 4, P1 and H2): `pp_states` counts the states with any building that makes Electricity,
+  built or under construction (`te_state_has_a_power_plant`); `q_power` the power levels (`bg_power`) in either
+  queue. Electricity is a local good, so `elec_made` and `elec_used` are a week's production and purchases summed
+  over the country's states, and `elec_price` the price over base weighted by what each state buys (0 where none is
+  bought). `uc_gas_light` and `uc_elec_light` (vanilla's electric lights and the mod's three later ones) add up with
+  O1's `uc_no_light` to the urban centres' levels. H2 holds Electrical Generation (the power plant and electric street
+  lights), Steam Turbine (the coal-fired plant), Radio (the radio factory) and Telephone (vanilla's electrics industry,
+  which also makes radios). The units the late-game analysis found never fielded are unlocked by technologies H1
+  already carries (`nco_training`, `mobile_armor`, `defense_in_depth`); what they lack is their upkeep of radios,
+  whose market `radio_price`, `radio_buy` and `radio_sell` read.
+- **The construction queue by kind** (P1): `q_uni`, `q_admin`, `q_mil` (`bg_military` and the military base),
+  `q_infra` (`bg_infrastructure`) and `q_power` are queued levels in either queue. The first three are government
+  buildings, so table 1i sets them against `queue_gov`; infrastructure and power plants can be private, so against
+  `queue_levels`.
+- **The cost of construction** (P1): `cc_scale` is the cost scaling in force (`te_cc_scaling_factor`, its own factor
+  times the small-economy factor) and `cc_total` every construction-cost modifier with it (`te_cc_total_factor`, the
+  Nation tab's total). Times `cs_price` it is the multiple construction.md's power-plant break-even reads (the early
+  plant about 3.4, coal-fired 9.0).
+- **Bureaucracy** (P1, P2, X7): `bur_made` and `bur_used` (F2) are the totals. X7's `bur_inst` is the institutions'
+  cost (the Politics panel's `GetInstitutionInvestmentBureaucracyCost`) and `bur_inst_factor` the panel's figure
+  beside it. The modifiers: `bur_add` and `bur_mult` (production's flat additions and multiplier), `bur_cost_add`
+  (flat costs), `bur_inst_mult` (the institutions' cost, which 37 of the mod's laws move) and `bur_pop_mult` (the
+  states' cost per head, 14). The states' own cost (vanilla's `STATE_BUREAUCRACY_*` defines) has no script read or
+  data function a country can sum, so table 3e gives it as the rest of the use. No read splits laws or trade out of it.
+- **Labour and living standards** (P2, X8): `slack` and `slack_peasants` are the cost scaling's yearly reading of the
+  states' pop walks (`te_cc_slack`, `te_cc_peasants`: the workforce with no market workplace, and the peasants, over
+  the workforce walked), so the unemployed are their difference. X8's `sol_lower`, `sol_middle` and `sol_upper` are
+  the latest values of the Politics panel's standard-of-living trend lines (`GetTrendValue`). No script read or
+  data function gives an average wage. The schools institution against its maximum needed no field: `in_schools`
+  (I1) and `im_schools` (J1, since version 2); table 2 now shows it.
+- **The army census** (P2, `te_aip_unit_census`): no on_action fires when a battalion is recruited or changes type, so
+  each snapshot marks every army battalion with its type (`te_aip_ut`, an index into the key's `unit_type_index`) and
+  counts against the last snapshot's marks: `u_all` battalions, `u_new` with no mark (recruited since, or come with
+  land or a subject), `u_changed` of another type than their mark (upgraded or changed), `u_irr_new` irregulars among
+  the new, `u_from_irr` irregulars at the last report now of another type, and `u_flows` 1 when the counts are flows
+  (the country's second report on). Whether a combat unit holds a variable is undocumented: the first battalion
+  reached tries one (`CANARY unit_vars`) and the census counts only if it held, else every `u_*` is 0. Table 4b's net
+  change in irregular battalions between a country's reports (the army times its irregular share) reads every
+  version, census or not; it nets recruits against upgrades and losses.
 
 Version 3 adds a few fields to two lines and none of its own; in game, one month-index script value a country a
 pulse and, once a year, one pass over every state for the W line.
 
-- **The interest rate and the AI construction pass** (version 4, #1877, line C2): `rate` is the rate the country pays
+Version 4 adds the lines H2, P1, P2, X7 and X8, three fields to the W line, and the scorecard's tables 1i (the
+construction queue by kind), 1j (the cost of construction), 1k (labour and living standards), 2b (electrification,
+with the units that take radios held against unlocked in the last decade read), 3e (bureaucracy) and 4b (where
+the irregulars come from), and a schools column in table 2. A version-1 to -3 log reports with the version-4 key:
+its positional lines are as they were (`test_ai_probe.py` holds every version-3 line to the key), version 4's tables
+are left out or say "not logged", and `check` notes why `rt_*` and `bt_company_headquarter` read 0 in it.
+
+Version 5 adds five fields to C2 and no line of its own:
+
+- **The interest rate and the AI construction pass** (version 5, #1877, line C2): `rate` is the rate the country pays
   (`te_rate_paid_pts`, points a year) and `rate_base` the world reference rate it is read against
   (`te_mon_era_base_now`); `cm_reserve` is the reserve the rate asks the purchase to keep and `cm_credit` the debt
   it lets the purchase run, each a share of its limit (te_construction_market_ai_values.txt, THE RATE); `cm_pass` is
@@ -236,6 +348,30 @@ What the probe cannot see, and where to look instead: which building the AI queu
 construction queues, `scripts/analysis/econ_save_series.py`), production methods in use (`save_world_report.py
 buildings`), pops and wages. The run's last save is kept as the harness's dated fixture.
 
+## Judging a run, and comparing two
+
+Beside the largest economies first (above), the owner (2026-11-16): "a world where both the large ai economies and
+the small ai economies grow is better still, so work that helps small countries is not wasted. Just not *as*
+critical." And on the first comparison of two builds: "There is going to be a lot of noise in the data (e.g. if the
+UK loses India...)... The areas that I expect to have the least noise are tax as a percent of GDP and governments
+buying construction".
+
+- **Two games differ by chance, a lot.** Countries' fortunes part early and stay parted. In the two long games of
+  2026-11-16 China left Traditionalism in 1870 in one and in 1908 in the other, Austria, Spain and Belgium lost
+  territory in one, and the banking crashes fell in different decades; the 20 largest economies' private
+  construction differed by a third in the 1890s for those reasons, not for anything the builds changed
+  (`ai-economy-playtest.md` § The AI's construction purchase fits its budget, "Read 2026-11-16").
+- **Compare the same country**, and for a sum, the same tag-years with the same economic-system law, no banking
+  crash in either game and GDP within 1.5 times (`ai_probe_compare.py paired`, above), before the 20 largest's
+  totals, whose members change between games.
+- **Two or three games per build** where a decision rests on a difference the history alone could make.
+- **Count each country once a year.** In versions 1 and 2 a country's reporting month drifts, so one to six
+  countries a year report twice in one calendar year (China and Spain in 1900 in both games of 2026-11-16);
+  `report` and `ai_probe_compare.py` fold the two into one (§ How the rows are spaced), and version 3 reports once a
+  calendar year.
+- **Read each run with its own build's key** (`--key` with the `ai_probe_key.json` of the commit that ran), even
+  where one key would do.
+
 ## What the first long run taught (1836 to 1925, 2026-11-16)
 
 - **It took 6 h 46 min**, 0.75 s a game day, against the harness's estimate of 4.85 h (above).
@@ -258,6 +394,57 @@ buildings`), pops and wages. The run's last save is kept as the harness's dated 
   under 80% staffed unless it hired the week before (`00_ai.txt`, `PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD`), so
   version 2 logs the sector's staffing against both thresholds (table 1f).
 
+## The runs of 2026-11-16
+
+Runs 1 to 3 were unattended AI-only games from 1836 under the owner's last lobby rules (the replies of runs 1 and 3
+list the same settings, Small-Economy Construction off among them; run 2's, a refusal, lists none). Run 4 was a
+session: run 1's world played on from its 1925 save ("A run from a save", above). Self-checks are counted by check
+(`row_standing_on_creation` logged OK twice in each of runs 1 to 3); run 4's are the session's own, though its
+`summary.md` also lists the fixture's, which are run 1's.
+
+| Run | Build | Reached | Wall time | Self-checks |
+|---|---|---|---|---|
+| 1 | `dab9335f1`: the probe, before the day's AI changes | 1925.1.1 | 6 h 46 min | 68 OK, 5 BROKEN |
+| 2 | `main` at `81b947368`: #1849, #1850, #1851, #1854, #1855, #1856, #1857 | October 1913, where the game crashed (#1871, fixed by #1872) | 5 h 05 min | 71 OK, 4 BROKEN |
+| 3 | `bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in | 1850.1.1 | 52 min | 54 OK, 1 BROKEN |
+| 4 | `main` at `2d26c6b5a`: probe version 3 (#1876), on run 1's 1925 save | 1925.1.6 to 1948.3.10 | 3 h 02 min of play, a session | 7 OK, 1 BROKEN |
+
+- **The readings** are in the lists that asked for them: `ai-economy-playtest.md` § AI law cadence (runs 1 and 2
+  under "First verdict", run 3 under "Second read"), § The AI's construction purchase fits its budget ("Read
+  2026-11-16", runs 1 and 2) and § The Construction Sector's workforce ("First reading", run 3); run 4's cadence
+  self-check is under § AI law cadence's "Second read".
+- **Run 1's BROKEN checks**: `delayed_state_event` (known since 2026-11-08), `ai_law_cadence`, and three that #1866
+  then settled (`cause_tags_read`, `workforce_pull_births`, `cm_conversion_merges_pops`: their rows in
+  `demographics-playtest.md` and `culture-merges-playtest.md`). All three read OK in run 2 and the first two again
+  in run 3, which ended before the third's date.
+- **Run 2's**: `delayed_state_event`; `ai_law_cadence` (`cons=13/106=0.12 rest=19/90=0.21`, the build before
+  #1867); `construction_admin_while_paused` (`country=BIC weeks=14 bought=420.0 wasted_weeks=0 spent=842553
+  repaid=842553`), on which the owner chose to take the purchase through the pause out ("Let's do this.",
+  2026-11-16; done by #1874, `ai-economy-playtest.md`'s "Verdict"); and `tax_light_div_levy` (`levy=0/70 matched,
+  70 at 0; control=5/5 matched; date=July 1, 1881`), on which PR #1873 is open.
+- **Run 3's**: `delayed_state_event` alone; `harvest_tags_read`, #1866's new check, read OK.
+- **Run 4** played Bhutan from run 1's dated fixture of 1925.1.1, so its world's first 89 years were `dab9335f1`'s:
+  after a 30-day trial, 28 calls of `advance 300` from 17:13 to 20:15, each 337 to 456 s, then `stop`, which
+  restored everything and held nothing. No log lines were lost. Its BROKEN check is `tax_light_div_levy` again
+  (`levy=0/92 matched, 92 at 0; control=31/32 matched`, April 1, 1925). `ai_law_cadence` read OK, `cons=55/75=0.73
+  rest=77/113=0.68` on January 1, 1928: its first read on a build with #1867, 36 months after the load, as it was
+  built to read in a save that had logged the earlier verdict. `harvest_tags_read` read OK again (Bhutan, November
+  1926), and its error.log holds no line from `banking_cycle_effects.txt` in 23 years.
+- **What run 4 showed** (one game, whose first 89 years were the build before's; the detail and its evidence are
+  issue #1877). `main`'s repairs showed on the old world: the 20 largest economies of 1924, followed across the
+  change of build, built or expanded 764 to 873 levels a year in 1925-1932 against 536 to 701 in 1918-1924;
+  construction was paused in 60% of AI countries' readings in 1920-1924, 33% in 1925-1929 and 11 to 16% from 1930;
+  and default episodes fell from 6.8 a year in 1920-1924 to 1.6 to 3.0, mostly among small countries. The late-game
+  traps it names: vanilla's reserve gate on government construction, no electrification, research capped by
+  literacy, the mod's law groups taking about half the big economies' law starts, irregular infantry, and
+  bureaucracy deficits.
+- **Version 2's first long read** (run 3's `check`): every version-2 addition read as the table above expects but the
+  world line, whose `dn` and `dn_states` were 0 in all 14 lines; the purchase recomputed from a snapshot matched
+  `cm_target` in 3,943 of 3,946.
+- **A run that crashes keeps its log.** Run 2's `fixture_debug.log` ran to the crash, and the probe's reader parsed it
+  as any other (the comparisons to 1912 came from it). A failed run keeps no `lines.log`, so its self-checks are
+  read from that log (`grep -a TE_SELF_CHECK`); the harness's side is in the game-qa skill.
+
 ## What a run costs
 
 Version 1 wrote 32 lines a country a year (26 snapshot lines and 6 data-function lines), a twelfth of the world
@@ -268,6 +455,14 @@ bytes (some 8 KB a country a year, 165 MB for 1836 to 1925, in the run folder on
 hundred script-value reads a country a year, eleven more passes over its buildings for the Construction Sector and
 its sites, and one global-variable test on each hooked on-action, `on_law_activated` now among them; nothing a
 player would notice, and nothing at all in a played game beyond that test.
+
+Version 3 wrote 36 lines and 8,097 bytes a snapshot (run 4, measured). Version 4 adds 5 lines (H2, P1, P2, X7, X8),
+14% more lines, and about 770 to 850 bytes, 9.5 to 10.5% more (the generator's templates rendered with a small
+country's and a large economy's figures, on run 4's measured line prefix of about 100 bytes); the W line grows by
+about 40 bytes a year. In game, a snapshot makes seven more passes over the country's buildings (the queue by kind,
+the street lighting), six over its states (one testing each state's buildings for a power plant; three for the
+Electricity price, which reads the purchases again) and one over its army's battalions (the census, which sets a
+variable on each).
 
 ## Removing it
 

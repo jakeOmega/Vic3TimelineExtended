@@ -57,7 +57,15 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                `every_country` reaches (WORLD_FIELDS).
 Version 3 also adds the banking cycle to C2 (its phase, `finance_cycle_value`, its momentum, a crash in the last
 365 days; BANK_PHASES) and the months in a panic or downturn to the counters (`n_bank_down`).
-Version 4 (#1877) adds to C2 the interest rate the construction purchase reads (`rate`, the rate paid, and
+Version 4 (2026-11-16) adds what the analysis of the first late-game run (1925 to 1948) could not see (#1877): H2,
+the technologies that gate electricity and radios (TECH_FLAGS_4); P1 and P2 (version_4_fields): electrification
+(states with a power plant, power levels queued, Electricity made, bought and its price, urban centres by street
+lighting, the radios market), the construction queue by kind, the construction cost scaling, what the bureaucracy's
+modifiers add and multiply, the workforce's slack, and a census of the army's battalions (te_aip_unit_census: new
+since the last report, of another type than at the last report); X7 and X8, the institutions' bureaucracy cost and
+the strata's standard of living (DATA_FUNCTIONS); and the W line's three game rules (RULES), so a log says which
+setting its fields ran under. `bt_company_headquarter` reads the headquarters' group from version 4 (BUILDING_TYPE_READS).
+Version 5 (#1877) adds to C2 the interest rate the construction purchase reads (`rate`, the rate paid, and
 `rate_base`, the world reference rate it is read against), what the rate asks of the purchase (`cm_reserve`, the
 reserve it asks the country to keep, and `cm_credit`, the debt it allows, each a share of its limit), and `cm_pass`,
 the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt).
@@ -69,30 +77,32 @@ class, production-method changes, technologies acquired, laws started, plays sta
 
 OLD LOGS. A version-1 log (the first long run, 2026-11-16) must go on parsing with this version's key, so a new
 field or line is only ever added: no line is renamed or renumbered, a field joins the end of its group, and a
-positional group (`POSITIONAL`) never takes another field, since its lines are read by position. New positional
-fields go in a group of their own.
+positional line (`POSITIONAL`) never takes another field, since its lines are read by position. New positional
+fields go on a line of their own: a group of their own, or a later part of the group that starts a new line
+(version 4's H2, `field_groups` giving H twice).
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 4
+VERSION = 5
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
 # Groups whose lines carry bare values, semicolon-separated, in the order ai_probe_key.json gives (`lines`): the bulk
-# of a snapshot, at a third of the bytes of key=value. J, R and H are version 2's.
-POSITIONAL = ("L", "T", "I", "G", "J", "R", "H")
+# of a snapshot, at a third of the bytes of key=value. J, R and H are version 2's, P version 4's.
+POSITIONAL = ("L", "T", "I", "G", "J", "R", "H", "P")
 # Version 2's positional groups each fit one line (test_ai_probe.py holds every line under 1,500 characters);
-# version 1's keep POSITIONAL_PER_LINE, so their lines read as they did.
-LINE_SIZE = {"J": 30, "R": 30, "H": 30}
+# version 1's keep POSITIONAL_PER_LINE, so their lines read as they did. P's fields have long names, so 18 a line.
+LINE_SIZE = {"J": 30, "R": 30, "H": 30, "P": 18}
 # The snapshot lines each version added, so that `check` expects of a log only the lines its version printed.
 # A line a later version adds goes under that version (test_ai_probe.py fails on a line under none).
 LINES_ADDED = {
@@ -100,7 +110,8 @@ LINES_ADDED = {
         "I1", "I2", "G1", "G2", "G3", "B1", "B2", "N1", "N2"],
     2: ["O2", "J1", "R1", "H1"],
     3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
-    4: [],          # version 4 added fields to C2: the interest rate the purchase reads, and the AI construction pass
+    4: ["H2", "P1", "P2"],
+    5: [],          # version 5 added fields to C2: the interest rate the purchase reads, and the AI construction pass
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -158,6 +169,13 @@ BUILDING_TYPES = [
     "building_manor_house", "building_company_headquarter", "building_public_housing", "building_software_industry",
     "building_electronic_components_and_semiconductor_industry",
 ]
+# A building type logged by its group's levels instead. The engine makes a building type of its own for each company
+# type (building_company_basic_fabrics, ...) from vanilla's headquarters template, so the template type is no
+# headquarters in a game: `bt_company_headquarter` read 0 in every snapshot of versions 1 to 3 while
+# `bg_company_headquarter` (G2) read in every snapshot with a company (scripting_best_practices.md, A Company's
+# Headquarters Is a Building Type of Its Own). From version 4 the field reads the group, the same figure as G2's, so
+# that the B line keeps its fields and old logs read as they did.
+BUILDING_TYPE_READS = {"building_company_headquarter": "bg_company_headquarter"}
 
 # The mod's budget mirrors: each system's script-charged expense or income, as the Budget panel itemizes it. The
 # 2026-11-15 save study found script expenses at 2.5% of AI GDP and could name a third of them.
@@ -169,6 +187,14 @@ BUDGET_INCOMES = ["pension_reform", "reserve", "tax_code", "un", "war_tax"]
 # carrying the retooling modifier). The same study read AI manufacturing at 48% staffed and 46% retooling in 1958.
 STAFFING_CLASSES = [("mfg", "bg_manufacturing"), ("infra", "bg_infrastructure"), ("power", "bg_power"),
                     ("mine", "bg_mining")]
+# The rt_* fields (levels carrying pm_retooling) read 0 by design under three of free_market_construction_rule's five
+# settings: no_retooling and no_maintenance remove the modifier from every building as the engine applies it, and
+# no_ai_retooling from every AI-owned one (te_remove_waived_pm_retooling: at the production-method change, a day
+# later, and in a sweep four times a month), so a yearly snapshot finds none. Every run before version 4 was made
+# under no_retooling (the owner's last lobby rules, 2026-11-16), which is why rt_* read 0 in all of them; the save
+# study's 36-52% retooling was of a game under `enabled`. Version 4 logs the setting on the W line (RULES).
+RETOOLING_WAIVED = ["free_market_construction_no_ai_retooling", "free_market_construction_no_retooling",
+                    "free_market_construction_no_maintenance"]
 
 # Production methods a modern economy should have left: (key, building type, method).
 STALE_METHODS = [
@@ -264,9 +290,80 @@ AI_EXPANSION_STAFFING = 0.8
 # later ones are summed (cs_pm_later), so the line keeps its length as methods are added.
 CONSTRUCTION_METHODS_NAMED = 4
 
+# --- Version 4: what the first late-game run's analysis could not see (#1877) ---------------------------------------
+# The technologies behind electricity and radios (the H2 line): Electrical Generation unlocks the power plant and
+# electric street lights (vanilla pm_electric_streetlights, which requires Electricity), Steam Turbine the power
+# plant's coal-fired method, Radio the
+# mod's radio factory (building_electrics_industry_radio) and Telephone vanilla's electrics industry, which also
+# carries the radios group. The units the analysis found blocked (squad infantry, mechanized infantry, siege
+# artillery, light tanks) are unlocked by nco_training, mobile_armor and defense_in_depth, already on H1 (unit_techs);
+# what blocks them is their upkeep of radios, whose market P2 reads. The generator stops on a key no file defines.
+TECH_FLAGS_4 = ["electrical_generation", "steam_turbine", "radio", "telephone"]
+# The urban centre's street lighting (P1): the gas method, and the electric ones, which are every method after it in
+# the group (vanilla's electric street lights and the mod's three later ones). With pm_no_street_lighting (O1's
+# uc_no_light) the three add up to the urban centres' levels.
+STREET_LIGHTING_GROUP = "pmg_street_lighting"
+STREET_LIGHTING_NONE = "pm_no_street_lighting"
+STREET_LIGHTING_GAS = "pm_gas_streetlights"
+# The construction queue by kind (P1, P2): queued levels of each kind's buildings, counted in either queue (a
+# building's levels once its queued constructions finish, less its levels: te_construction_market_building_queued_levels).
+# Universities, administrations and military buildings are government buildings; infrastructure and power plants can
+# be queued by either queue, so the report sets the first three against queue_gov and the last two against the whole
+# queue.
+QUEUE_KINDS = [
+    ("q_power", "is_building_group = bg_power"),
+    ("q_uni", "is_building_type = building_university"),
+    ("q_admin", "is_building_type = building_government_administration"),
+    ("q_mil", "OR = { is_building_group = bg_military is_building_type = building_military_base }"),
+    ("q_infra", "is_building_group = bg_infrastructure"),
+]
+QUEUED_LEVELS = "te_construction_market_building_queued_levels"
+# Electricity is a local good (vanilla goods: local = yes), priced in each state, so it is read through the states,
+# with the power grid's own state values (common/script_values/power_grid_values.txt, which its self-checks read).
+ELECTRICITY_VALUES = {"made": "te_grid_electricity_production", "used": "te_grid_electricity_consumption",
+                      "price": "te_grid_chk_price_now_value"}
+# Game rules the probe's fields depend on (the W line, from version 4): each a 1-based index into its settings, 0
+# for none. has_game_rule on a setting no file defines is TRUE (scripting_best_practices.md), so the generator stops
+# on a setting it does not find in common/game_rules/. A setting's test is the system's own trigger where it has one
+# (the small-economy and banking rules are read only through theirs: test_construction_cost_scaling.py holds the
+# first to it). free_market_construction_rule's triggers tell only market from direct and waived retooling from not,
+# so the probe, alone, reads its five settings by name.
+RULES = [
+    ("r_fmc", "free_market_construction_rule", [
+        "free_market_construction_enabled", "free_market_construction_no_ai_retooling",
+        "free_market_construction_no_retooling", "free_market_construction_no_maintenance",
+        "free_market_construction_disabled"]),
+    ("r_small", "te_small_economy_construction_rule", [
+        "te_small_economy_construction_disabled", "te_small_economy_construction_mild",
+        "te_small_economy_construction_standard", "te_small_economy_construction_enabled"]),
+    ("r_bank", "banking_system_rule", ["banking_system_enabled", "banking_system_simplified",
+                                       "banking_system_disabled"]),
+]
+# The tests of the settings read through a system's triggers, in RULES's order (common/scripted_triggers/
+# te_construction_cost_triggers.txt, banking_policy_triggers.txt, te_monetary_triggers.txt). The others are
+# `has_game_rule = <setting>`.
+RULE_TESTS = {
+    "r_small": ["te_small_economy_construction_on = no", "te_small_economy_construction_mild_on = yes",
+                "te_small_economy_construction_standard_on = yes", "te_small_economy_construction_strong_on = yes"],
+    "r_bank": ["te_mon_full_system = yes", "te_banking_system_on = yes", "te_banking_system_on = no"],
+}
+
+
+def rule_tests(name: str, settings: list[str]) -> list[str]:
+    return RULE_TESTS.get(name) or [f"has_game_rule = {setting}" for setting in settings]
+
+
+# The army census (te_aip_unit_census): no on_action fires when a battalion is recruited or changes type
+# (vanilla's on_actions.log names none), so each snapshot marks every army battalion with its type (a variable on the
+# combat unit) and counts, against the marks of the country's last snapshot, the battalions with no mark (recruited
+# since) and those of another type (upgraded or changed). Whether a combat unit holds a variable is not documented, so
+# the probe tries it once on one battalion (`CANARY unit_vars`) and counts only if it held: otherwise every u_* reads 0.
+IRREGULAR = "combat_unit_type_irregular_infantry"
+UNIT_CENSUS = ["u_all", "u_new", "u_changed", "u_irr_new", "u_from_irr", "u_flows"]
+
 # The interface's data functions, printed with each snapshot (and once each at arming, alone).
 DATA_FUNCTIONS = [
-    # (line, key, accessor after `THIS.GetCountry.`)
+    # (line, key, accessor after `THIS.GetCountry.`, or an expression with `{c}` for the country)
     (1, "subsidies", "GetSubsidiesExpenses|0"),
     (1, "gov_wages", "GetGovernmentWagesExpenses|0"),
     (1, "mil_wages", "GetMilitaryWagesExpenses|0"),
@@ -288,7 +385,26 @@ DATA_FUNCTIONS = [
     (4, "research_speed", "GetWeeklyResearchSpeed|2"),
     (5, "researching", "GetCurrentlyResearchedTechnology.GetNameNoFormatting"),
     (6, "enacting", "GetLawBeingEnacted.GetNameNoFormatting"),
+    # Version 4. The institutions' bureaucracy cost and the panel's factor beside it (vanilla's
+    # politics_panel_institutions.gui), so that the rest of bureaucracy_usage (incorporated states and their people,
+    # modifiers' flat costs) can be told from the institutions. Script has no read of either.
+    (7, "bur_inst", "GetInstitutionInvestmentBureaucracyCost|0"),
+    (7, "bur_inst_factor", "GetInstitutionInvestmentBureaucracyFactor|2"),
+    # The average standard of living of each stratum: the latest value of the Politics panel's trend lines (vanilla's
+    # politics_panel_types.gui reads them through GetTrendValue). Script has no read of either; no data function
+    # gives an average wage.
+    (8, "sol_lower", "GetTrendValue({c}.GetAverageSoLLowerTrend)|1"),
+    (8, "sol_middle", "GetTrendValue({c}.GetAverageSoLMiddleTrend)|1"),
+    (8, "sol_upper", "GetTrendValue({c}.GetAverageSoLUpperTrend)|1"),
 ]
+# The version each data function was added in (older ones from version 1), so that `check` asks a log only for the
+# canaries its version printed.
+DATA_FUNCTIONS_ADDED = {4: ["bur_inst", "bur_inst_factor", "sol_lower", "sol_middle", "sol_upper"]}
+
+
+def data_function_text(accessor: str) -> str:
+    """A DATA_FUNCTIONS accessor as the loc string prints it: after the country, or an expression around it."""
+    return accessor.format(c="THIS.GetCountry") if "{c}" in accessor else f"THIS.GetCountry.{accessor}"
 
 
 def unwrap(value):
@@ -397,9 +513,12 @@ def catalog(mod_state) -> dict:
     unit_line.append(("u_later", later))
     unit_techs = list(dict.fromkeys(t for name in named for t in unit_types[name]["techs"]))
     tech_flags = list(dict.fromkeys(TECH_FLAGS + unit_techs))
-    missing = [t for t in tech_flags if t not in all_techs]
+    tech_flags_4 = [t for t in dict.fromkeys(TECH_FLAGS_4) if t not in tech_flags]
+    missing = [t for t in tech_flags + tech_flags_4 if t not in all_techs]
     if missing:
         raise ValueError(f"TECH_FLAGS names technologies no file defines: {missing}")
+    if IRREGULAR not in unit_types:
+        raise ValueError(f"The army census counts {IRREGULAR}, which no file defines")
 
     # A group counts when a building belongs to it or to a group under it. Vanilla keeps 21 legacy groups
     # (bg_coal_mining, bg_wheat_farms, ...) that no building belongs to; test_no_dead_building_groups.py bars them.
@@ -426,7 +545,14 @@ def catalog(mod_state) -> dict:
     for needed in (CONSTRUCTION_SECTOR, CONSTRUCTION_SITE):
         if needed not in buildings:
             raise ValueError(f"The probe's Construction Sector fields name a building no file defines: {needed}")
+    for name, read_group in BUILDING_TYPE_READS.items():
+        if read_group not in groups:
+            raise ValueError(f"BUILDING_TYPE_READS reads {name} through {read_group}, which no building belongs to")
     return {
+        # Version 4.
+        "tech_flags_4": tech_flags_4,
+        "street_lights": street_lighting_methods(mod_state),
+        "unit_type_index": list(unit_types),
         "law_groups": law_groups,
         "laws": {group: by_group[group] for group in law_groups},
         "all_laws": [law for group in law_groups for law in by_group[group]],
@@ -460,6 +586,31 @@ def sector_methods(mod_state, building_data) -> list[tuple[str, list[str]]]:
         raise ValueError(f"{groups[0]} lists {len(methods)} methods; the probe names {CONSTRUCTION_METHODS_NAMED}")
     named = [("cs_pm_" + short(m, "pm_").removesuffix("_buildings"), [m]) for m in methods[:CONSTRUCTION_METHODS_NAMED]]
     return named + [("cs_pm_later", methods[CONSTRUCTION_METHODS_NAMED:])]
+
+
+def street_lighting_methods(mod_state) -> list[tuple[str, list[str]]]:
+    """The urban centre's street lighting as (field, methods): gas, then every method after it (the electric ones)."""
+    pm_groups = mod_state.get_data("PM Groups")
+    group = next((unwrap(pm_groups[key]) for key in pm_groups if bare(key) == STREET_LIGHTING_GROUP), None)
+    methods = unwrap(group.get("production_methods")) if isinstance(group, dict) else None
+    methods = [m for m in methods if isinstance(m, str)] if isinstance(methods, list) else []
+    if methods[:2] != [STREET_LIGHTING_NONE, STREET_LIGHTING_GAS] or len(methods) < 3:
+        raise ValueError(f"{STREET_LIGHTING_GROUP} lists {methods}: the probe expects none, gas, then electric ones")
+    return [("uc_gas_light", [STREET_LIGHTING_GAS]), ("uc_elec_light", methods[2:])]
+
+
+def check_rules(root: Path = ROOT) -> None:
+    """Stop on a RULES setting no file in common/game_rules/ defines inside its rule's block: has_game_rule on an
+    undefined setting is true, so its index would read 1 in every game."""
+    text = "\n".join(path.read_text(encoding="utf-8-sig") for path in sorted((root / "common/game_rules").glob("*.txt")))
+    for _, rule, settings in RULES:
+        found = re.search(rf"(?ms)^{re.escape(rule)} = \{{\n(.*?)^\}}", text)
+        if not found:
+            raise ValueError(f"RULES names a game rule no file defines: {rule}")
+        defined = set(re.findall(r"(?m)^\t([a-z_]+) = \{", found.group(1)))
+        missing = [s for s in settings if s not in defined]
+        if missing:
+            raise ValueError(f"RULES names settings {rule} does not define: {missing}")
 
 
 class Field:
@@ -632,7 +783,7 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         variable("bank_cycle", "finance_cycle_value", 1),
         variable("bank_momentum", "finance_cycle_momentum", 2),
         flag("bank_crashed", "has_variable = banking_crashed_last_year"),
-        # Version 4 (#1877): the rate the purchase reads, what it asks of the purchase, and the AI construction pass
+        # Version 5 (#1877): the rate the purchase reads, what it asks of the purchase, and the AI construction pass
         # (te_construction_market_ai_values.txt, THE RATE and THE PASS), so purchase_target can be recomputed with the
         # rate's terms and the pass's levels counted.
         variable("rate", "te_rate_paid_pts", 2),
@@ -683,7 +834,8 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         for name in cat["building_groups"]
     ]
     types = [
-        read("bt_" + short(name, "building_"), f'"country_has_building_type_levels(bt:{name})"')
+        read("bt_" + short(name, "building_"), f'"country_has_building_group_levels({BUILDING_TYPE_READS[name]})"'
+             if name in BUILDING_TYPE_READS else f'"country_has_building_type_levels(bt:{name})"')
         for name in cat["building_types"]
     ]
     budget = (
@@ -720,9 +872,84 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
     ]
     tech_flags = [flag("h_" + tech.replace("-", "_"), f"has_technology_researched = {tech}")
                   for tech in cat["tech_flags"]]
-    return [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
-            ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
-            ("N", counters), ("J", institution_max), ("R", units), ("H", tech_flags)]
+    # Version 4: H's second line (a positional line never takes another field) and the P group.
+    tech_flags_4 = [flag("h_" + tech.replace("-", "_"), f"has_technology_researched = {tech}")
+                    for tech in cat.get("tech_flags_4", [])]
+    groups_ = [("A", economy), ("F", finance), ("U", budget), ("C", construction), ("O", staffing), ("M", military),
+               ("Y", strategy), ("L", laws), ("T", techs), ("I", institutions), ("G", groups), ("B", types),
+               ("N", counters), ("J", institution_max), ("R", units), ("H", tech_flags)]
+    if tech_flags_4:
+        groups_.append(("H", tech_flags_4))
+    if cat.get("street_lights"):
+        groups_.append(("P", version_4_fields(cat)))
+    return groups_
+
+
+def queued(key: str, limit: str) -> Field:
+    """The levels of the country's buildings that pass the limit still in a construction queue."""
+    return Field(key, f"\tvalue = 0\n\tevery_scope_building = {{\n\t\tlimit = {{ {limit} }}\n"
+                      f"\t\tadd = {QUEUED_LEVELS}\n\t}}")
+
+
+def market_good(key: str, good: str) -> list[Field]:
+    """A traded good in the country's market (a shared market's, for a country in one): its price over base, as
+    cs_price reads the construction good's, and its buy and sell orders."""
+    market = f"this.market.mg:{good}"
+    return [
+        Field(f"{key}_price", f"\tvalue = 1\n\tadd = {{ value = {market}.market_goods_pricier min = 0 }}\n"
+                              f"\tsubtract = {{ value = {market}.market_goods_cheaper min = 0 }}", 3),
+        read(f"{key}_buy", f"{market}.market_goods_buy_orders", 1),
+        read(f"{key}_sell", f"{market}.market_goods_sell_orders", 1),
+    ]
+
+
+def version_4_fields(cat: dict) -> list[Field]:
+    """The P group (version 4): electrification, the construction queue by kind, the construction cost scaling, the
+    bureaucracy's modifiers, the workforce's slack and the army census, in that order."""
+    kinds = dict(QUEUE_KINDS)
+    lights = [levels(name, "is_building_type = building_urban_center " + (
+        f"has_active_production_method = {methods[0]}" if len(methods) == 1 else
+        "OR = { " + " ".join(f"has_active_production_method = {m}" for m in methods) + " }"))
+        for name, methods in cat["street_lights"]]
+    electricity = [
+        # The states with a building that makes Electricity, built or under construction (te_ai_coverage_triggers.txt).
+        Field("pp_states", "\tvalue = 0\n\tevery_scope_state = {\n\t\tlimit = { te_state_has_a_power_plant = yes }\n"
+                           "\t\tadd = 1\n\t}"),
+        queued("q_power", kinds["q_power"]),
+        # A week's Electricity made and bought, summed over the country's states, and the price over base where it
+        # is bought, weighted by what each state buys (0 where none is bought).
+        Field("elec_made", f"\tvalue = 0\n\tevery_scope_state = {{ add = {ELECTRICITY_VALUES['made']} }}", 0),
+        Field("elec_used", f"\tvalue = 0\n\tevery_scope_state = {{ add = {ELECTRICITY_VALUES['used']} }}", 0),
+        Field("elec_price", "\tvalue = 0\n\tif = {\n\t\tlimit = { te_aip_elec_used > 0 }\n"
+                            "\t\tevery_scope_state = {\n"
+                            f"\t\t\tadd = {{ value = {ELECTRICITY_VALUES['used']} multiply = {ELECTRICITY_VALUES['price']} }}\n"
+                            "\t\t}\n\t\tdivide = te_aip_elec_used\n\t}", 3),
+    ] + lights + market_good("radio", "radios")
+    queue = [queued(name, kinds[name]) for name, _ in QUEUE_KINDS if name != "q_power"]
+    cost = [
+        # A construction point's cost over its base (docs/systems/mod_systems/construction.md, Construction Cost
+        # Scaling): the scaling's own factor in force (te_cc_scaling_factor, S x d) and every construction-cost
+        # modifier with it (te_cc_total_factor, the Nation tab's total).
+        read("cc_scale", "te_cc_scaling_factor", 3),
+        read("cc_total", "te_cc_total_factor", 3),
+    ]
+    bureaucracy = [
+        # Production's flat additions and multiplier; use's flat additions, and the multipliers of the institutions'
+        # cost (37 of the mod's laws move it) and of the states' cost per head (14 of them).
+        read("bur_add", "modifier:country_bureaucracy_add"),
+        read("bur_mult", "modifier:country_bureaucracy_mult", 2),
+        read("bur_cost_add", "modifier:country_bureaucracy_cost_add"),
+        read("bur_inst_mult", "modifier:country_bureaucracy_investment_cost_factor_mult", 2),
+        read("bur_pop_mult", "modifier:state_bureaucracy_population_base_cost_factor_mult", 2),
+    ]
+    labour = [
+        # The workforce with no market workplace (peasants and the unemployed), and the peasants, over the
+        # workforce of the states walked, as the cost scaling's yearly pulse stores them (te_cc_yearly_update).
+        variable("slack", "te_cc_slack", 3),
+        variable("slack_peasants", "te_cc_peasants", 3),
+    ]
+    army = [variable(name, PREFIX + name) for name in UNIT_CENSUS]
+    return electricity + queue + cost + bureaucracy + labour + army
 
 
 def bank_phase_field() -> Field:
@@ -829,6 +1056,14 @@ def render_values(cat: dict) -> str:
     parts.append(index("play_type_index", [f"is_diplomatic_play_type = {play}" for play in cat["play_types"]])
                  .script_value())
     parts.append("\n")
+    if cat.get("unit_type_index"):
+        parts.append("# --- version 4: the army census (te_aip_unit_census). A battalion's type (ai_probe_key.json,\n"
+                     "# unit_type_index), read in the combat unit's scope; whether a combat unit held a variable ---\n")
+        parts.append(index("unit_type_index", [f"has_unit_type = unit_type:{unit}" for unit in cat["unit_type_index"]])
+                     .script_value())
+        parts.append("te_aip_unit_vars_ok = { value = 0 if = { limit = { has_global_variable = te_aip_unit_vars } "
+                     "value = 1 } }\n")
+        parts.append("\n")
     return "".join(parts)
 
 
@@ -838,11 +1073,13 @@ def chunks(items: list, size: int) -> list[list]:
 
 def snapshot_lines(cat: dict) -> list[tuple[str, list[Field]]]:
     """Every line of a snapshot: (its name, `G2`, and the fields it carries, in order)."""
-    lines = []
+    lines, numbered = [], {}
     for group, fields in field_groups(cat):
         size = LINE_SIZE.get(group, POSITIONAL_PER_LINE if group in POSITIONAL else FIELDS_PER_LINE)
-        for n, part in enumerate(chunks(fields, size), 1):
-            lines.append((f"{group}{n}", part))
+        for part in chunks(fields, size):
+            # A group given twice (H from version 4) numbers its second part's lines on from the first's.
+            numbered[group] = numbered.get(group, 0) + 1
+            lines.append((f"{group}{numbered[group]}", part))
     return lines
 
 
@@ -850,12 +1087,90 @@ LINE_HEAD = "[THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THI
 # The W line's fields (te_aip_w_<name>), in the order it prints them: countries that are not decentralized
 # nations, decentralized nations, and the states they hold, which is the land left to colonize; from version 3,
 # every state in the world and the states of the countries that are not decentralized nations, so that
-# `states - c_states` reads the same land a second way (EVENT_VALUES).
-WORLD_FIELDS = ["countries", "dn", "dn_states", "states", "c_states"]
+# `states - c_states` reads the same land a second way (EVENT_VALUES); from version 4, the setting of each of the
+# game rules the probe's fields depend on (RULES), the first W line being the arming month's.
+WORLD_FIELDS = ["countries", "dn", "dn_states", "states", "c_states"] + [name for name, _, _ in RULES]
 LAW_FIELDS = ("law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.ScriptValue('te_aip_ev_enact_chance')|2] "
               "stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]")
 WORLD_LINE = ("TE_AIP W [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0] "
               + " ".join(f"{name}=[THIS.ScriptValue('te_aip_w_{name}')|0]" for name in WORLD_FIELDS))
+
+
+def unit_census_effect(cat: dict) -> str:
+    """te_aip_unit_census (version 4, UNIT_CENSUS): the army's battalions against the marks of the last snapshot."""
+    irregular = cat["unit_type_index"].index(IRREGULAR) + 1
+    counts = [name for name in UNIT_CENSUS if name != "u_flows"]
+    zero = "".join(f"\tset_variable = {{ name = te_aip_{name} value = 0 }}\n" for name in UNIT_CENSUS)
+    local_zero = "".join(f"\t\tset_local_variable = {{ name = te_aip_{name} value = 0 }}\n" for name in counts)
+    store = "".join(f"\t\tset_variable = {{ name = te_aip_{name} value = local_var:te_aip_{name} }}\n" for name in counts)
+    return (
+        "# Version 4's army census, country scope, at each snapshot before its lines print. No on_action fires when a\n"
+        "# battalion is recruited or changes type, so each battalion of the country's armies is marked with its type\n"
+        "# (te_aip_ut, an index into ai_probe_key.json's unit_type_index), and the next snapshot counts the battalions\n"
+        "# with no mark (u_new: recruited since, or come to the country), those whose type is not their mark's\n"
+        "# (u_changed: upgraded or changed), and of those the irregular infantry recruited (u_irr_new) and the\n"
+        "# battalions that were irregular infantry and are now another type (u_from_irr). u_flows is 1 when the\n"
+        "# country's battalions were marked at its last snapshot, so the counts are flows; at its first they are not.\n"
+        "# Whether a combat unit holds a variable is undocumented: the first battalion reached tries one, and the\n"
+        "# census counts only if it held (`TE_AIP CANARY unit_vars v=1`). If not, every u_* field reads 0 and nothing\n"
+        "# is set on a battalion again.\n"
+        "te_aip_unit_census = {\n"
+        "\tif = {\n"
+        "\t\tlimit = { NOT = { has_global_variable = te_aip_unit_vars_tested } }\n"
+        "\t\trandom_military_formation = {\n"
+        "\t\t\tlimit = { is_army = yes }\n"
+        "\t\t\trandom_combat_unit = {\n"
+        "\t\t\t\tset_global_variable = te_aip_unit_vars_tested\n"
+        "\t\t\t\tset_variable = te_aip_unit_var_test\n"
+        "\t\t\t\tif = {\n"
+        "\t\t\t\t\tlimit = { has_variable = te_aip_unit_var_test }\n"
+        "\t\t\t\t\tset_global_variable = te_aip_unit_vars\n"
+        "\t\t\t\t\tremove_variable = te_aip_unit_var_test\n"
+        "\t\t\t\t}\n"
+        "\t\t\t}\n"
+        "\t\t}\n"
+        "\t\tif = {\n"
+        "\t\t\tlimit = { has_global_variable = te_aip_unit_vars_tested }\n"
+        "\t\t\tdebug_log = \"TE_AIP CANARY unit_vars v=[THIS.ScriptValue('te_aip_unit_vars_ok')|0]\"\n"
+        "\t\t}\n"
+        "\t}\n"
+        + zero +
+        "\tif = {\n"
+        "\t\tlimit = { has_global_variable = te_aip_unit_vars }\n"
+        + local_zero +
+        "\t\tevery_military_formation = {\n"
+        "\t\t\tlimit = { is_army = yes }\n"
+        "\t\t\tevery_combat_unit = {\n"
+        "\t\t\t\tchange_local_variable = { name = te_aip_u_all add = 1 }\n"
+        "\t\t\t\tset_local_variable = { name = te_aip_ut_now value = te_aip_unit_type_index }\n"
+        "\t\t\t\tif = {\n"
+        "\t\t\t\t\tlimit = { NOT = { has_variable = te_aip_ut } }\n"
+        "\t\t\t\t\tchange_local_variable = { name = te_aip_u_new add = 1 }\n"
+        "\t\t\t\t\tif = {\n"
+        f"\t\t\t\t\t\tlimit = {{ local_var:te_aip_ut_now = {irregular} }}\n"
+        "\t\t\t\t\t\tchange_local_variable = { name = te_aip_u_irr_new add = 1 }\n"
+        "\t\t\t\t\t}\n"
+        "\t\t\t\t}\n"
+        "\t\t\t\telse_if = {\n"
+        "\t\t\t\t\tlimit = { NOT = { var:te_aip_ut = local_var:te_aip_ut_now } }\n"
+        "\t\t\t\t\tchange_local_variable = { name = te_aip_u_changed add = 1 }\n"
+        "\t\t\t\t\tif = {\n"
+        f"\t\t\t\t\t\tlimit = {{ var:te_aip_ut = {irregular} }}\n"
+        "\t\t\t\t\t\tchange_local_variable = { name = te_aip_u_from_irr add = 1 }\n"
+        "\t\t\t\t\t}\n"
+        "\t\t\t\t}\n"
+        "\t\t\t\tset_variable = { name = te_aip_ut value = local_var:te_aip_ut_now }\n"
+        "\t\t\t}\n"
+        "\t\t}\n"
+        + store +
+        "\t\tif = {\n"
+        "\t\t\tlimit = { has_variable = te_aip_units_marked }\n"
+        "\t\t\tset_variable = { name = te_aip_u_flows value = 1 }\n"
+        "\t\t}\n"
+        "\t\tset_variable = te_aip_units_marked\n"
+        "\t}\n"
+        "}\n\n"
+    )
 
 
 def render_effects(cat: dict) -> str:
@@ -907,7 +1222,7 @@ def render_effects(cat: dict) -> str:
         '\tdebug_log = "TE_AIP CANARY date v=[TimeKeeper.GetCurrentDate.GetString]"\n'
     )
     for _, key, accessor in DATA_FUNCTIONS:
-        out.append(f'\tdebug_log = "TE_AIP CANARY {key} v=[THIS.GetCountry.{accessor}]"\n')
+        out.append(f'\tdebug_log = "TE_AIP CANARY {key} v=[{data_function_text(accessor)}]"\n')
     out.append('\tdebug_log = "TE_AIP CANARY end"\n}\n\n')
 
     out.append(
@@ -976,7 +1291,10 @@ def render_effects(cat: dict) -> str:
         "}\n\n"
     )
 
-    out.append("# The yearly snapshot of the country in scope, then its counters start again.\nte_aip_snapshot = {\n")
+    out.append("# The yearly snapshot of the country in scope, then its counters start again. The army census (version 4)\n"
+               "# runs first: the P line prints what it counted.\nte_aip_snapshot = {\n")
+    if cat.get("unit_type_index"):
+        out.append("\tte_aip_unit_census = yes\n")
     for name, part in snapshot_lines(cat):
         if name[0] in POSITIONAL:
             body = ";".join(field.accessor(keyed=False) for field in part)
@@ -988,10 +1306,12 @@ def render_effects(cat: dict) -> str:
         out.append(f"\tset_variable = {{ name = te_aip_n_{name} value = 0 }}\n")
     out.append("}\n\n")
 
+    if cat.get("unit_type_index"):
+        out.append(unit_census_effect(cat))
     out.append("# The interface's figures (see te_aip_canary).\n"
                "te_aip_snapshot_data_functions = {\n")
     for line in sorted({line for line, _, _ in DATA_FUNCTIONS}):
-        body = " ".join(f"{key}=[THIS.GetCountry.{accessor}]" for n, key, accessor in DATA_FUNCTIONS if n == line)
+        body = " ".join(f"{key}=[{data_function_text(accessor)}]" for n, key, accessor in DATA_FUNCTIONS if n == line)
         out.append(f'\tdebug_log = "TE_AIP X {line} {LINE_HEAD} {body}"\n')
     out.append("}\n\n")
 
@@ -1090,6 +1410,10 @@ EVENT_VALUES = (
     "\tvalue = 0\n"
     "\tevery_country = { limit = { NOT = { is_country_type = decentralized } } add = num_states }\n"
     "}\n"
+    "# --- version 4, the W line: the game rules the probe's fields depend on (RULES), each a 1-based index into its\n"
+    "# settings (ai_probe_key.json, rules). The W line prints in the month the probe arms and once a year after,\n"
+    "# so a log says which setting each year ran under (a rule can be changed in a running game).\n"
+    + "".join(index("w_" + name, rule_tests(name, settings)).script_value() for name, _, settings in RULES)
 )
 
 
@@ -1368,7 +1692,7 @@ def render_key(cat: dict) -> str:
         "level_fields": LEVEL_FIELDS,
         "law_end_how": LAW_END_HOW,
         "play_types": cat["play_types"],
-        "tech_flags": {"h_" + tech.replace("-", "_"): tech for tech in cat["tech_flags"]},
+        "tech_flags": {"h_" + tech.replace("-", "_"): tech for tech in cat["tech_flags"] + cat.get("tech_flags_4", [])},
         # Each R field's unit types; for a field of one type, its group, tier and unlocking technologies.
         "unit_line": {field: members for field, members in cat["unit_line"]},
         "unit_info": {field: cat["unit_types"][members[0]] for field, members in cat["unit_line"]
@@ -1384,6 +1708,18 @@ def render_key(cat: dict) -> str:
         # test below (vanilla's PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD).
         "construction_methods": {name: methods for name, methods in cat["construction_methods"]},
         "ai_expansion_staffing": AI_EXPANSION_STAFFING,
+        # Version 4: the technologies of the H2 line (tech_flags names them all, H1's and H2's); the street
+        # lighting methods each P1 field counts; the unit types a battalion's census mark indexes (1-based) and the
+        # census's fields; the W line's game rules, each field's settings (1-based); the version each data function
+        # was added in; the construction queue's kinds; the settings under which rt_* reads 0 by design.
+        "tech_flags_4": cat.get("tech_flags_4", []),
+        "street_lights": {name: methods for name, methods in cat.get("street_lights", [])},
+        "unit_type_index": cat.get("unit_type_index", []),
+        "unit_census": UNIT_CENSUS,
+        "rules": {name: {"rule": rule, "settings": settings} for name, rule, settings in RULES},
+        "data_functions_added": DATA_FUNCTIONS_ADDED,
+        "queue_kinds": {name: limit for name, limit in QUEUE_KINDS},
+        "retooling_waived": RETOOLING_WAIVED,
     }
     return json.dumps(key, indent=1) + "\n"
 
@@ -1409,9 +1745,12 @@ def catalog_from_key(key: dict) -> dict:
         "institutions": key["institutions"],
         "unit_line": [(name, members) for name, members in key["unit_line"].items()],
         "unit_types": {key["unit_line"][name][0]: info for name, info in key["unit_info"].items()},
-        "tech_flags": list(key["tech_flags"].values()),
+        "tech_flags": [t for t in key["tech_flags"].values() if t not in key.get("tech_flags_4", [])],
         "play_types": key["play_types"],
         "construction_methods": [(name, methods) for name, methods in key["construction_methods"].items()],
+        "tech_flags_4": key.get("tech_flags_4", []),
+        "street_lights": [(name, methods) for name, methods in key.get("street_lights", {}).items()],
+        "unit_type_index": key.get("unit_type_index", []),
     }
 
 
@@ -1429,6 +1768,7 @@ def regenerate(mod_state=None, *, root: Path = ROOT, dry_run: bool = False) -> d
     """Write each file whose content changed; a script file gets exactly one UTF-8 BOM."""
     if mod_state is None:
         mod_state = load_state(root)
+    check_rules(root)
     changed = []
     for relative, (text, bom) in plan_outputs(mod_state).items():
         target = root / relative
