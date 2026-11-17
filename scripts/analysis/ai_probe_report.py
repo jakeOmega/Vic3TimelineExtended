@@ -260,11 +260,15 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
         out.append("  none yet: a country first reports within twelve months of arming")
     data = len(parsed.data_lines)
     out.append(f"data-function (X) records: {data}")
+    out.extend(check_x_construction(records))
+    out.extend(check_spacing(parsed, key, records, version))
     out.append(f"events: {len(parsed.events)} {dict(Counter(e['event'] for e in parsed.events).most_common())}")
     if version >= 2:
         lines, good = check_version_2(parsed, key, records)
         out.extend(lines)
         ok = ok and good
+    if version >= 3:
+        out.extend(check_version_3(parsed, key, records))
     if parsed.k_restarts:
         out.append(f"WARNING: the month count went back {parsed.k_restarts} times: these files hold more than one "
                    "run, whose serials and months collide. Read each run alone.")
@@ -282,6 +286,124 @@ def expected_lines(key: dict, version: int) -> list[str]:
     return [name for name in key["lines"] if name in wanted]
 
 
+MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December"]
+
+
+def month_of(date) -> int | None:
+    """The month (0 = January) of a KDATE line's date, `February 1, 1836`; None when it does not read."""
+    name = str(date or "").split(" ", 1)[0]
+    return MONTHS.index(name) if name in MONTHS else None
+
+
+def check_x_construction(records: list[dict]) -> list[str]:
+    """The X construction readings that do not stand for the country's construction (x_construction), counted: the
+    report leaves them out of its construction figures. Not a verdict: they are the engine's state that week."""
+    rows, _ = once_a_year([r for r in records if "y" in r])
+    top = largest_by_year(rows)
+    kinds, big, named = Counter(), Counter(), []
+    for r in rows:
+        kind = x_construction(r)
+        kinds[kind] += 1
+        if kind in ("unpaid", "idle") and r["id"] in top.get(r["y"], ()):
+            big[kind] += 1
+            named.append(f"{r['tag']} {r['y']} {kind}")
+    if not rows:
+        return []
+    out = [f"X construction readings left out of the report's construction figures: {kinds['unpaid']} unpaid "
+           f"(private points used, no private construction goods booked) and {kinds['idle']} idle (no construction "
+           f"while building: not paused, private levels queued, a pool of {X_BUILDING_POOL:,} or more), of "
+           f"{len(rows) - kinds['none']}; among the 20 largest of their year {big['unpaid']} unpaid, {big['idle']} idle"]
+    if named:
+        out.append(f"  the 20 largest's: {', '.join(named[:24])}" + (" ..." if len(named) > 24 else ""))
+    # `wasted` (has_wasted_construction) is not unused points: in run 2 it held on 11,750 of 16,119 unpaused rows
+    # with con_unused above 0 on 108, and never while paused. Unused points are con_unused.
+    unpaused = [r for r in rows if num(r, "paused") != 1 and x_construction(r) != "none"]
+    if unpaused:
+        out.append(f"  unpaused readings: `wasted` yes in {sum(1 for r in unpaused if num(r, 'wasted') == 1)}, unused "
+                   f"points (con_unused) above 0 in {sum(1 for r in unpaused if num(r.get('x') or {}, 'con_unused') > 0)}"
+                   f" of {len(unpaused)}; paused: `wasted` yes in "
+                   f"{sum(1 for r in rows if num(r, 'paused') == 1 and num(r, 'wasted') == 1)} (the flag is not unused "
+                   "points: read con_unused)")
+    return out
+
+
+def check_spacing(parsed: Parsed, key: dict, records: list[dict], version: int) -> list[str]:
+    """How a log's reports are spaced: the months between a country's reports, the country-years that hold two, and
+    for a version-3 log whether each report fell in the country's own month."""
+    rows = [r for r in records if "y" in r]
+    if not rows:
+        return []
+    _, folded = once_a_year(rows)
+    gaps = Counter(b["k"] - a["k"] for mine in series(rows).values() for a, b in zip(mine, mine[1:]))
+    out = [f"spacing: months between a country's reports {dict(sorted(gaps.items()))}; country-years holding two "
+           f"reports: {folded}"]
+    if version < key.get("calendar_schedule_from", 3):
+        if folded:
+            out.append("  (versions 1 and 2 count twelve 30-day pulses, so a report drifts and now and then falls twice "
+                       "in a year: the report keeps the later and adds the earlier's counters to it)")
+        return out
+    if folded:
+        out.append("  version 3 reports once a calendar year: two in one year means the schedule "
+                   "(te_aip_country_tick, te_aip_due) did not work as written")
+    # The month a report fell in, from the date the global pulse stamped its month count with, against the
+    # country's own (serial modulo 12). A pulse on the 1st may run before the global pulse of that day, so the
+    # month before also counts; a February report moves to March when the country's pulse misses February.
+    offsets = Counter()
+    for r in rows:
+        month = month_of(parsed.ticks.get(r["k"], {}).get("date"))
+        if month is not None:
+            offsets[(month - r["id"] % 12) % 12] += 1
+    if offsets:
+        near = offsets[0] + offsets[1] + offsets[11]
+        out.append(f"  reports in the country's own month: {offsets[0]}, the month after {offsets[1]}, the month before "
+                   f"{offsets[11]}, elsewhere {sum(offsets.values()) - near} (version 3's calendar schedule: "
+                   "unverified until a game prints it)")
+    return out
+
+
+def check_version_3(parsed: Parsed, key: dict, records: list[dict]) -> list[str]:
+    """Version 3's additions, read once each: none of them had printed in a game when written (2026-11-16), so each
+    stays flagged here until one does. Not a verdict."""
+    out = ["version 3 additions (unverified until a game prints them):"]
+    lines = [w for w in parsed.world.values() if "states" in w]
+    if lines:
+        last = parsed.world[max(k for k, w in parsed.world.items() if "states" in w)]
+        agree = sum(1 for w in lines if num(w, "states") - num(w, "c_states") == num(w, "dn_states"))
+        out.append(f"  W: the last line {last}; dn_states equals states - c_states in {agree} of {len(lines)} lines")
+        if all(not w.get("dn") for w in lines):
+            out.append("  W: dn is 0 in every line: every_decentralized_country reaches nothing in a script value; "
+                       "read the land left to colonize as states - c_states")
+        if all(not w.get("states") for w in lines):
+            out.append("  W: states is 0 in every line: every_state in a script value reaches nothing")
+    else:
+        out.append("  W: no line carries version 3's states and c_states yet")
+    rows = [r for r in records if "bank_phase" in r]
+    if not rows:
+        return out + ["  banking cycle: no snapshot carries bank_phase yet"]
+    phases = key.get("bank_phases", [])
+    running = [r for r in rows if num(r, "bank_phase") > 0]
+    counts = Counter(phases[num(r, "bank_phase") - 1] if 0 < num(r, "bank_phase") <= len(phases)
+                     else num(r, "bank_phase") for r in running)
+    out.append(f"  banking cycle running in {len(running)} of {len(rows)} snapshots; phases {dict(counts.most_common())}; "
+               f"a crash in the year before {sum(1 for r in rows if num(r, 'bank_crashed') == 1)}; pulses in a panic or "
+               f"downturn {sum(num(r, 'n_bank_down') for r in rows)}")
+    if not running:
+        out.append("  no cycle running in any snapshot: right before the first stock exchanges and with the banking "
+                   "rule off; past about 1860 with the rule on, te_banking_cycle_running does not read in the probe")
+        return out
+    # The phase is the band of the cycle value (BANK_PHASES); the value prints with one decimal.
+    edges = (10, 25, 40, 60, 75, 88)
+
+    def band(value):
+        return 1 + sum(1 for edge in edges if value >= edge)
+    agree = sum(1 for r in running if num(r, "bank_phase") in (band(num(r, "bank_cycle") - 0.05),
+                                                               band(num(r, "bank_cycle") + 0.05)))
+    out.append(f"  bank_phase is the band of bank_cycle in {agree} of {len(running)}"
+               + ("" if agree == len(running) else " (the phase or the value does not read as written)"))
+    return out
+
+
 def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[list[str], bool]:
     """Version 2's additions, each read here once: none of them had printed when it was written (2026-11-16)."""
     out, ok = ["version 2 additions:"], True
@@ -289,8 +411,9 @@ def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[lis
     if parsed.world:
         first = parsed.world[min(parsed.world)]
         out.append(f"  world (W) lines: {len(parsed.world)}; the first: {first}")
-        if all(not w.get("dn") for w in parsed.world.values()):
-            out.append("  W: dn is 0 in every line (no decentralized nation counted: check the read)")
+        if all(not w.get("dn") for w in parsed.world.values()) and parsed.version() == 2:
+            out.append("  W: dn is 0 in every line, as in every version-2 log: it counted with every_country, which "
+                       "does not reach a decentralized nation (version 3 counts with every_decentralized_country)")
     else:
         out.append("  world (W) lines: NONE (the first prints in the month the probe arms)")
         ok = False
@@ -481,6 +604,77 @@ def series(records: list[dict]) -> dict[int, list[dict]]:
     for rows in by_id.values():
         rows.sort(key=lambda r: r["k"])
     return by_id
+
+
+# --- one row a country a year, and the construction readings to trust ---------------------------------------------
+
+def once_a_year(records: list[dict]) -> tuple[list[dict], int]:
+    """One record for each country object and calendar year (`y`): its later one, carrying the earlier's counters.
+
+    Versions 1 and 2 reported a country at every twelfth of its monthly pulses, which are 30 days apart, so its
+    report drifted five days earlier a year, and every six years or so it reported in January and again in December
+    of one year: 3,237 of the 19,798 gaps between a country's reports in the first long run were 11 months, and 2 to
+    6 countries a year reported twice (China in 1900 in the first two runs). Kept twice, such a country counts twice
+    in that year's sums and cross-sections. The counters (`n_*`) are flows since the country's last report, so the
+    earlier row's are added to the later's and no flow is lost. Version 3 reports each country once a calendar year,
+    so its logs fold nothing. Returns the rows (in month order) and how many were folded into another."""
+    kept: dict[tuple, dict] = {}
+    folded = 0
+    for r in sorted(records, key=lambda r: r["k"]):
+        slot = (r["id"], r.get("y"))
+        held = kept.get(slot)
+        if held is None:
+            kept[slot] = r
+            continue
+        folded += 1
+        merged = dict(r)
+        for name, value in held.items():
+            if name.startswith("n_") and isinstance(value, (int, float)) and isinstance(merged.get(name), (int, float)):
+                merged[name] += value
+        kept[slot] = merged
+    return sorted(kept.values(), key=lambda r: (r["k"], r["id"])), folded
+
+
+# An X reading of construction that does not stand for the country's construction, found by the 2026-11-16 analysis
+# of the first two long runs. Each is what the engine held at the instant of the snapshot, not a read the probe got
+# wrong: every X figure is printed in one effect, with nothing between the reads that changes them, and the S lines
+# printed in the same instant agree (in 95-99% of the unpaid readings the S line's income equals its fixed income, so
+# the budget held no investment-pool transfer either; in 28 of the 31 idle readings `queue_days` reads the engine's
+# "never", 2147483647, so the construction speed was 0 then). A snapshot is one week standing for a year, though,
+# and these weeks are not the year: Great Britain's 1893-95 readings (1,464, 1,089 and 455 private points a week,
+# no goods booked) came in years its counters show building at the usual rate. So they are left out of the
+# construction figures, and `check` counts them.
+X_BUILDING_POOL = 1_000_000          # an investment pool this large is spending: an idle reading is not idleness
+
+
+def x_construction(r: dict) -> str:
+    """'none' (no X construction line), 'unpaid' (private points used, no private construction goods booked), 'idle'
+    (no construction capacity and none used on a country that is building: not paused, private levels queued, a
+    pool of X_BUILDING_POOL or more), or 'ok'."""
+    x = r.get("x") or {}
+    used_priv = x.get("con_used_priv")
+    if not isinstance(used_priv, (int, float)):
+        return "none"
+    if used_priv > 0 and x.get("con_goods_priv") == 0:
+        return "unpaid"
+    if (x.get("con_base") == 0 and not x.get("con_used") and num(r, "paused") != 1 and num(r, "queue_priv") > 0
+            and num(r, "pool") >= X_BUILDING_POOL):
+        return "idle"
+    return "ok"
+
+
+def valid_x(r: dict) -> bool:
+    """An X construction reading to use (x_construction)."""
+    return x_construction(r) == "ok"
+
+
+def largest_by_year(records: list[dict], n: int = 20) -> dict[int, set[int]]:
+    """The n largest economies (by GDP) of each year, as country serials: a set that moves from year to year."""
+    by_year: dict[int, list[dict]] = defaultdict(list)
+    for r in records:
+        if isinstance(r.get("y"), int):
+            by_year[r["y"]].append(r)
+    return {year: {r["id"] for r in sorted(rows, key=lambda r: -num(r, "gdp"))[:n]} for year, rows in by_year.items()}
 
 
 # A default within this many months of the same country's last default ending continues that episode: the engine
@@ -690,7 +884,7 @@ def logged(name: str, fn):
 
 
 def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int = CADENCE_FROM_YEAR) -> str:
-    records = [r for r in parsed.records() if "y" in r]
+    records, folded = once_a_year([r for r in parsed.records() if "y" in r])
     out: list[str] = []
     if not records:
         return "No snapshots with a year yet.\n"
@@ -700,7 +894,10 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
     out.append(f"# AI probe scorecard: {run_years[0]} to {run_years[-1]}")
     out.append("")
     out.append(f"{len(records)} snapshots of {len({r['id'] for r in records})} countries; {len(ai)} are AI countries "
-               "that are not decentralized nations, which is what every table below counts.")
+               "that are not decentralized nations, which is what every table below counts. Each country counts once "
+               "a calendar year"
+               + (f": {folded} reports that fell in a year the country had already reported in (versions 1 and 2 "
+                  "drift) were folded into its later one, their counters added to it." if folded else "."))
     out.append("")
     out.append(f"**A run is judged first by the largest economies.** Every table gives the {TOP_N} largest AI "
                "economies of each decade first, then all AI countries weighted by GDP, and only then the typical "
@@ -958,10 +1155,13 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
     def x_field(name):
         return lambda r: xnum(r, name)
 
-    def of_gdp(name):
-        """A weekly budget line of the X records against yearly GDP, %."""
-        return Col("", ratio=(x_field(name), lambda r: gdp(r) / 52 if xnum(r, name) is not None else None),
-                   digits=1, scale=100)
+    def of_gdp(name, construction=False):
+        """A weekly budget line of the X records against yearly GDP, %; a construction line from the readings
+        valid_x keeps."""
+        col = Col("", ratio=(x_field(name), lambda r: gdp(r) / 52 if xnum(r, name) is not None else None),
+                  digits=1, scale=100)
+        col.among = valid_x if construction else None
+        return col
 
     table("1e. Where the government's money goes (share of GDP, %)", [
         named("Government goods", of_gdp("gov_goods")),
@@ -970,10 +1170,66 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
         named("Military wages", of_gdp("mil_wages")),
         named("Subsidies", of_gdp("subsidies")),
         named("Welfare", of_gdp("welfare")),
-        named("Construction goods, government", of_gdp("con_goods_gov")),
+        named("Construction goods, government", of_gdp("con_goods_gov", construction=True)),
         Col("All expenses", ratio=(field("expenses"), field("gdp")), digits=1, scale=5200),
         Col("All income", ratio=(field("income"), field("gdp")), digits=1, scale=5200),
     ])
+
+    table("1g. Construction points a week (the interface's figures)", [
+        Col("Points used (world: total)", x_field("con_used"), digits=0, total=True, among=valid_x),
+        Col("Private points (world: total)", x_field("con_used_priv"), digits=0, total=True, among=valid_x),
+        Col("Government points (world: total)", x_field("con_used_gov"), digits=0, total=True, among=valid_x),
+        Col("Private points, share of points used, %", ratio=(x_field("con_used_priv"), x_field("con_used")), digits=0,
+            scale=100, among=valid_x),
+        Col("Unused, share of the base, %", ratio=(x_field("con_unused"), x_field("con_base")), digits=0, scale=100,
+            among=valid_x),
+        Col("Private construction goods per private point", ratio=(x_field("con_goods_priv"), x_field("con_used_priv")),
+            digits=0, among=valid_x),
+        Col("Readings left out (unpaid or idle)", test=lambda r: x_construction(r) in ("unpaid", "idle"),
+            among=lambda r: x_construction(r) != "none"),
+    ], note="A snapshot's construction figures are one week's. Two kinds of week are left out of every column but "
+            "the last, which counts them: private points used with no private construction goods booked, and no "
+            "construction at all on a country that is building (not paused, private levels queued, a pool of "
+            f"{X_BUILDING_POOL:,} or more). Both are what the engine held that week, not a failed read, but they are "
+            "not the year (`x_construction`). The world lens's totals are a year's sum over the readings kept.")
+
+    # Version 3: the banking cycle (gen_ai_probe.py, BANK_PHASES). A crash falling in different years in two runs
+    # confounds their comparison, so this table says how much of each lens's GDP was in a crisis.
+    bank_names = key.get("bank_phases", [])
+    if any("bank_phase" in r for r in ai):
+        def banked(r):
+            return "bank_phase" in r
+
+        def in_crisis(r):
+            return num(r, "bank_phase") in (1, 2)
+
+        def gdp_in(test):
+            return Col("", custom=lambda rows: gdp_share(rows, test), world=lambda rows: gdp_share(rows, test),
+                       among=banked)
+
+        def phase_mix(rows):
+            counts = Counter(num(r, "bank_phase") for r in rows if num(r, "bank_phase") > 0)
+            whole = sum(counts.values())
+            return ", ".join(f"{bank_names[p - 1] if 0 < p <= len(bank_names) else p} {100 * n / whole:.0f}%"
+                             for p, n in sorted(counts.items())) if whole else "-"
+        table("1h. The banking cycle", [
+            named("In a panic or downturn at the snapshot, share of GDP", gdp_in(in_crisis)),
+            named("A crash in the year before the snapshot, share of GDP",
+                  gdp_in(lambda r: num(r, "bank_crashed") == 1)),
+            named("A crash, or a panic or downturn, in the year: share of GDP",
+                  gdp_in(lambda r: in_crisis(r) or num(r, "bank_crashed") == 1 or num(r, "n_bank_down") > 0)),
+            Col("Months in a panic or downturn a year, mean", field("n_bank_down"), mean=True, digits=2,
+                among=banked),
+            Col("Cycle running", test=lambda r: num(r, "bank_phase") > 0, among=banked),
+            Col("Cycle value, where running", field("bank_cycle"), digits=0,
+                among=lambda r: banked(r) and num(r, "bank_phase") > 0),
+            Col("Phases, where running", custom=phase_mix, world=phase_mix, among=banked),
+        ], note="From version 3. A cycle runs once a country has a stock exchange and an Urban Center of level 5 "
+                "(te_banking_cycle_unlocked) and the banking rule is on. Panic is a cycle value under 10, downturn "
+                "under 25. A crash marks the country for 365 days (banking_crashed_last_year), and the months count "
+                "the country's monthly pulses in a panic or downturn since its last snapshot, so the third column "
+                "says whether the year held a crisis at all. Every share is of the lens's GDP, the 20 largest's "
+                "first.")
 
     # --- 2. technology ---------------------------------------------------------------------------------------------
     table("2. Technology", [
@@ -1266,16 +1522,23 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
         out.append("")
         out.append("## 5b. The world outside the AI countries: the last reading of each decade")
         out.append("")
-        out.append("| Years | Countries (not decentralized) | Decentralized nations | States they hold |")
-        out.append("|---|---|---|---|")
+        out.append("Version 2 counted the decentralized nations with `every_country`, which does not reach them, so its "
+                   "two columns read 0; version 3 counts them with their own iterator, and reads the same land a "
+                   "second way: every state in the world less the states of the other countries.")
+        out.append("")
+        out.append("| Years | Countries (not decentralized) | Decentralized nations | States they hold | "
+                   "States in the world | Held by the other countries | The difference |")
+        out.append("|---|---|---|---|---|---|---|")
         by_decade = {}
         for k in sorted(parsed.world):
             w = parsed.world[k]
             if isinstance(w.get("y"), int):
                 by_decade[bucket_of(w["y"])] = w
         for start, w in sorted(by_decade.items()):
+            difference = num(w, "states") - num(w, "c_states") if "states" in w else "-"
             out.append(f"| {label_of(start)} | {w.get('countries', '-')} | {w.get('dn', '-')} | "
-                       f"{w.get('dn_states', '-')} |")
+                       f"{w.get('dn_states', '-')} | {w.get('states', '-')} | {w.get('c_states', '-')} | "
+                       f"{difference} |")
 
     # --- the last decade's laws and strategies ---------------------------------------------------------------------
     latest = {}

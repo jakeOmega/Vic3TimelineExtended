@@ -14,6 +14,7 @@ import json
 import re
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -229,6 +230,7 @@ class ParserTest(unittest.TestCase):
         out = ai_probe_report.report(parsed, self.key)
         for heading in ("The headline", "GDP growth by rank band", "1. Economic growth", "1b. Solvency",
                         "1c. Staffing", "1f. The Construction Sector itself", "1d. The government's purchase",
+                        "1g. Construction points a week", "1h. The banking cycle",
                         "1e. Where the government's money goes",
                         "2. Technology", "2a. Specific technologies", "3. Laws", "3a. Law starts per idle month",
                         "3b. How enactments ended", "3c. The old law kept", "3d. Institutions", "4. Military",
@@ -484,6 +486,184 @@ class ReportPartsTest(unittest.TestCase):
                 self.assertAlmostEqual(ai_probe_report.purchase_target(record), c.script(), delta=purchase.STEP)
         self.assertGreater(count, 1000)
         self.assertIsNone(ai_probe_report.purchase_target({"cm_price": 1000}))     # version 1: a term missing
+
+
+def block(name: str, body: str) -> str:
+    """A top-level `name = { ... }` block's body."""
+    return re.search(rf"(?ms)^{name} = \{{\n(.*?)^\}}", body).group(1)
+
+
+class WorldLineTest(unittest.TestCase):
+    """Version 3's W line: every_country does not reach a decentralized nation (version 2's dn read 0 in every line
+    of run 3, while the same game's decentralized_law_baseline self-check found them with
+    any_decentralized_country)."""
+
+    def test_decentralized_nations_are_counted_with_their_own_iterator(self):
+        values = text(VALUES)
+        for name in ("te_aip_w_dn", "te_aip_w_dn_states"):
+            body = block(name, values)
+            self.assertIn("every_decentralized_country = {", body, name)
+            self.assertNotIn("every_country", body, name)
+
+    def test_the_land_is_read_a_second_way(self):
+        values = text(VALUES)
+        self.assertIn("every_state = { add = 1 }", block("te_aip_w_states", values))
+        self.assertIn("add = num_states", block("te_aip_w_c_states", values))
+        self.assertEqual(gen_ai_probe.WORLD_FIELDS[:3], ["countries", "dn", "dn_states"])   # version 2's first
+
+    def test_check_reads_the_two_ways_against_each_other(self):
+        parsed = ai_probe_report.Parsed()
+        parsed.world = {1: {"k": 1, "y": 1836, "countries": 290, "dn": 150, "dn_states": 200, "states": 900,
+                            "c_states": 700}}
+        lines = ai_probe_report.check_version_3(parsed, {}, [])
+        self.assertTrue(any("equals states - c_states in 1 of 1" in line for line in lines), lines)
+        parsed.world[1].update(dn=0, dn_states=0)
+        lines = ai_probe_report.check_version_3(parsed, {}, [])
+        self.assertTrue(any("dn is 0 in every line" in line for line in lines), lines)
+
+
+class ScheduleTest(unittest.TestCase):
+    """Version 3 reports each country once a calendar year, in its own month (te_aip_country_tick)."""
+
+    def test_the_tick_keys_the_report_to_a_calendar_month(self):
+        tick = block("te_aip_country_tick", text(EFFECTS))
+        self.assertNotIn("te_aip_m ", tick.replace("te_aip_m,", ""))      # versions 1 and 2's pulse count
+        self.assertIn("set_variable = { name = te_aip_due value = te_aip_first_due }", tick)
+        self.assertIn("limit = { te_aip_due_in < 0 }", tick)
+        due = tick.index("limit = { te_aip_due_in <= 0 }")
+        self.assertLess(tick.index("set_variable = { name = te_aip_due value = te_aip_next_due }", due),
+                        tick.index("te_aip_snapshot = yes", due))
+        values = text(VALUES)
+        index = block("te_aip_month_index", values)
+        self.assertEqual(re.findall(r"month = (\d+) \} add = (\d+)", index), [(str(m), str(m)) for m in range(1, 12)])
+        self.assertIn("add = 1\n\tmultiply = 12\n\tadd = te_aip_id_phase", block("te_aip_next_due", values))
+
+    def test_the_schedule_as_written_reports_once_a_calendar_year(self):
+        """The tick restated: 30-day pulses at every phase, every reporting month, from a first sight in any month."""
+        for slot in range(12):
+            for first_day in range(0, 365, 7):
+                due, reports = None, Counter()
+                for day in range(first_day, first_day + 365 * 30, 30):
+                    year, day_of_year = 1836 + day // 365, day % 365
+                    month = next(m for m in range(11, -1, -1) if day_of_year >= MONTH_STARTS[m])
+                    now = year * 12 + month
+                    if due is None:
+                        due = year * 12 + slot
+                        if due - now < 0:
+                            due += 12
+                    if due - now <= 0:
+                        due = (year + 1) * 12 + slot
+                        reports[(year, month)] += 1
+                years = Counter(year for year, _ in reports)
+                with self.subTest(slot=slot, first_day=first_day):
+                    self.assertEqual(set(years.values()), {1})
+                    self.assertLessEqual(max(years) - min(years) + 1, 31)
+                    self.assertEqual({(month - slot) % 12 for _, month in reports} - {0, 1}, set())
+                    if slot != 1:                                     # February's pulse can miss February
+                        self.assertEqual({month for _, month in reports}, {slot})
+
+    def test_check_flags_a_doubled_year_in_a_version_3_log(self):
+        key = json.loads(KEY.read_text(encoding="utf-8"))
+        parsed = ai_probe_report.Parsed()
+        parsed.ticks = {1: {"y": 1900, "date": "January 1, 1900"}, 12: {"y": 1900, "date": "December 1, 1900"}}
+        records = [{"tag": "CHI", "id": 12, "k": 1, "y": 1900}, {"tag": "CHI", "id": 12, "k": 12, "y": 1900}]
+        lines = ai_probe_report.check_spacing(parsed, key, records, 3)
+        self.assertTrue(any("did not work as written" in line for line in lines), lines)
+        self.assertTrue(any("own month: 1, the month after 0, the month before 1" in line for line in lines), lines)
+        lines = ai_probe_report.check_spacing(parsed, key, records, 2)
+        self.assertFalse(any("did not work" in line for line in lines), lines)
+
+
+MONTH_STARTS = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]     # the game's year has no leap day
+
+
+class BankingCycleTest(unittest.TestCase):
+    """Version 3's banking fields (gen_ai_probe.py, BANK_PHASES)."""
+
+    def test_the_phases_are_the_bands_the_triggers_test(self):
+        triggers = text(ROOT / "common/scripted_triggers/market_triggers.txt")
+        bands = dict(re.findall(r"(?m)^banking_cycle_is_([a-z]+) = \{ (.*) \}$", triggers))
+        self.assertEqual([phase for phase in bands if phase != "recession"][:7], gen_ai_probe.BANK_PHASES)
+        edges = [int(x) for x in re.findall(r">= (\d+)", " ".join(bands[p] for p in gen_ai_probe.BANK_PHASES))]
+        self.assertEqual(sorted(set(edges)), [10, 25, 40, 60, 75, 88])        # check_version_3's band edges
+
+    def test_every_phase_read_is_guarded_by_the_running_cycle(self):
+        phase = block("te_aip_bank_phase", text(VALUES))
+        tests = re.findall(r"limit = \{ (.*?) \}", phase)
+        self.assertEqual(tests, ["te_banking_cycle_running = yes"]
+                         + [f"banking_cycle_is_{name} = yes" for name in gen_ai_probe.BANK_PHASES])
+        inside = phase.index("te_banking_cycle_running = yes")
+        self.assertTrue(all(phase.index(f"banking_cycle_is_{name}") > inside for name in gen_ai_probe.BANK_PHASES))
+        tick = block("te_aip_country_tick", text(EFFECTS))
+        guard = tick.index("te_banking_cycle_running = yes")
+        self.assertLess(guard, tick.index("banking_cycle_is_recession = yes"))
+        self.assertLess(guard, tick.index("te_aip_count = { N = bank_down }"))
+
+    def test_the_fields_join_existing_lines(self):
+        key = json.loads(KEY.read_text(encoding="utf-8"))
+        self.assertEqual(key["lines"]["C2"][-4:], ["bank_phase", "bank_cycle", "bank_momentum", "bank_crashed"])
+        self.assertEqual(key["lines"]["N2"][-1], "n_bank_down")
+        self.assertEqual(key["lines_added"]["3"], [])
+        crashed = re.search(r"(?m)^te_aip_bank_crashed = \{.*$", text(VALUES)).group(0)
+        self.assertIn("has_variable = banking_crashed_last_year", crashed)
+        marker = text(ROOT / "common/scripted_effects/banking_cycle_effects.txt")
+        self.assertIn("set_variable = { name = banking_crashed_last_year value = 1 days = 365 }", marker)
+
+    def test_check_holds_the_phase_to_the_value(self):
+        key = json.loads(KEY.read_text(encoding="utf-8"))
+        rows = [{"bank_phase": 1, "bank_cycle": 9.9}, {"bank_phase": 4, "bank_cycle": 40.0},
+                {"bank_phase": 0, "bank_cycle": 0}]
+        lines = ai_probe_report.check_version_3(ai_probe_report.Parsed(), key, rows)
+        self.assertTrue(any("band of bank_cycle in 2 of 2" in line for line in lines), lines)
+        rows.append({"bank_phase": 7, "bank_cycle": 50.0})
+        lines = ai_probe_report.check_version_3(ai_probe_report.Parsed(), key, rows)
+        self.assertTrue(any("does not read as written" in line for line in lines), lines)
+
+
+class OnceAYearTest(unittest.TestCase):
+    def test_a_second_report_in_a_year_is_folded_into_the_later_with_its_counters(self):
+        rows = [{"tag": "CHI", "id": 4, "k": 768, "y": 1900, "gdp": 10, "n_built": 3, "n_law_pass": 1},
+                {"tag": "CHI", "id": 4, "k": 779, "y": 1900, "gdp": 12, "n_built": 5, "n_law_pass": 0},
+                {"tag": "CHI", "id": 4, "k": 791, "y": 1901, "gdp": 13, "n_built": 2, "n_law_pass": 2},
+                {"tag": "GBR", "id": 9, "k": 770, "y": 1900, "gdp": 50, "n_built": 1}]
+        kept, folded = ai_probe_report.once_a_year(rows)
+        self.assertEqual(folded, 1)
+        china = [r for r in kept if r["tag"] == "CHI"]
+        self.assertEqual([(r["k"], r["gdp"], r["n_built"], r["n_law_pass"]) for r in china],
+                         [(779, 12, 8, 1), (791, 13, 2, 2)])
+        self.assertEqual(rows[1]["n_built"], 5)                       # the input is not changed
+
+
+class ConstructionReadingTest(unittest.TestCase):
+    """The X construction readings the report leaves out (ai_probe_report.x_construction)."""
+
+    def row(self, paused=0, queue_priv=10, pool=5_000_000, **x):
+        reading = {"con_used": 500.0, "con_used_priv": 400.0, "con_used_gov": 100.0, "con_base": 500.0,
+                   "con_unused": 0.0, "con_goods_priv": 560_000, "con_goods_gov": 140_000}
+        reading.update(x)
+        return {"paused": paused, "queue_priv": queue_priv, "pool": pool, "x": reading}
+
+    def test_the_kinds(self):
+        kind = ai_probe_report.x_construction
+        self.assertEqual(kind(self.row()), "ok")
+        self.assertEqual(kind({"x": {}}), "none")
+        # Great Britain 1893 in run 1: 1,463.5 private points, no private goods booked.
+        self.assertEqual(kind(self.row(con_used_priv=1463.5, con_goods_priv=0)), "unpaid")
+        idle = dict(con_used=0.0, con_used_priv=0.0, con_used_gov=0.0, con_base=0.0, con_goods_priv=0)
+        self.assertEqual(kind(self.row(**idle)), "idle")
+        self.assertEqual(kind(self.row(paused=1, **idle)), "ok")              # paused: rightly no construction
+        self.assertEqual(kind(self.row(queue_priv=0, **idle)), "ok")          # nothing to build
+        self.assertEqual(kind(self.row(pool=10_000, **idle)), "ok")           # no pool to spend
+        self.assertTrue(ai_probe_report.valid_x(self.row()))
+
+    def test_the_report_leaves_them_out_and_check_counts_them(self):
+        good = {"tag": "AAA", "id": 1, "k": 12, "y": 1840, "gdp": 1000, **self.row()}
+        unpaid = {"tag": "BBB", "id": 2, "k": 12, "y": 1840, "gdp": 900,
+                  **self.row(con_used_priv=1463.5, con_goods_priv=0)}
+        lines = ai_probe_report.check_x_construction([good, unpaid])
+        self.assertTrue(lines[0].startswith("X construction readings left out of the report's construction figures: "
+                                            "1 unpaid"), lines)
+        self.assertIn("BBB 1840 unpaid", lines[1])
 
 
 if __name__ == "__main__":
