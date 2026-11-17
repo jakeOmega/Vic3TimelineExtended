@@ -257,15 +257,23 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 # before, the pass queues one level, where the rate allows it the means
 # (te_ai_build_pass_means: its reserves above the reserve asked for, plus the
 # debt it may hold at its rate, less its debt, are not negative). What it
-# queues, in order of what does most good (te_ai_build_pass_triggers.txt has
-# the list and each entry's reason): a Government Administration while net
-# bureaucracy is under BUREAUCRACY_MARGIN of its usage; else a university
-# while innovation is under INNOVATION_SHARE of its cap and the country is not
-# short of bureaucracy; each only where the surplus pays for the level within
-# MAX_WEEKS; else nothing. Owner, 2026-11-16, on the administration: "I think
-# this is mostly not useful - bureaucracy over the requirement is very rarely
-# worth it. I would remove this unless you are close to net zero
-# bureaucracy."
+# queues is the first entry of an ordered list that applies (the list, in one
+# place, is in te_ai_build_pass_effect; each entry's reason is in
+# te_ai_build_pass_triggers.txt): a Government Administration while net
+# bureaucracy is under BUREAUCRACY_MARGIN of its usage; the country's first
+# power plant while nothing of its makes Electricity; a railway where a
+# state's infrastructure is short by more than INFRASTRUCTURE_MARGIN of its
+# usage; a university while innovation is under INNOVATION_SHARE of its cap;
+# a highway, then an airport, in a major industrial state (INDUSTRIAL_SHARE)
+# under the building's level cap; each only where the surplus pays for the
+# level within MAX_WEEKS; else nothing. Owner, 2026-11-16, on the
+# administration: "I think this is mostly not useful - bureaucracy over the
+# requirement is very rarely worth it. I would remove this unless you are
+# close to net zero bureaucracy."; on the power plant: "we should exclude
+# countries that have any building that produces power (e.g. hydro, nuclear,
+# etc.) so the AI isn't forced to have fossil fuel power plants"; and
+# "railroads when infra is below zero, airports and highways in major
+# industrial states below cap".
 #
 #   SURPLUS_SHARE 1/6 of fixed income, or SURPLUS_MIN 15,000 a week: the
 #   engine's own test before it adds should-have spending (income 1.2 times
@@ -304,10 +312,33 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 #   served: docs/vanilla/vanilla_economy_reference.md 9.3). A level that takes
 #   longer than two years of the surplus holds back what the engine queues
 #   behind it for longer than the engine's own budget horizon. At a surplus of
-#   a sixth of fixed income and 1,250 a point a university's 400 points
-#   (construction_cost_medium) fit in 104 weeks from a fixed income of 28,800
-#   a week, an administration's 100 (construction_cost_very_low) from 7,200;
-#   at a surplus of a third, from 14,400 and 3,600.
+#   a sixth of fixed income and 1,250 a point a university's or a power
+#   plant's 400 points (construction_cost_medium) fit in 104 weeks from a fixed
+#   income of 28,800 a week, an administration's 100 (construction_cost_very_low)
+#   from 7,200, a railway's 800 (construction_cost_very_high) from 57,700, and a
+#   highway's or an airport's 2,000 (the mod's construction_cost_super_high)
+#   from 144,200; at a surplus of a third, from half as much.
+#   INFRASTRUCTURE_MARGIN 0.02 of the state's infrastructure usage: "below
+#   zero", less a margin. A state short of infrastructure loses market access
+#   in proportion (access is infrastructure over usage), so a state 2% short
+#   is at 98%; a railway level is 800 points, twice a university, and usage
+#   moves with staffing week to week, so a state at the line would flip in and
+#   out. 0 reads the owner's words exactly. The state picked is the one short
+#   by most, in points of infrastructure: what a state loses is its shortfall's
+#   share of its usage times its output, and output goes with usage, so the
+#   absolute shortfall ranks the loss.
+#   INDUSTRIAL_SHARE 0.1: a major industrial state holds at least a tenth of
+#   the country's manufacturing levels, so at most ten states of a country
+#   count, its industrial core. A highway or an airport is 2,000 points (five
+#   universities) and adds 25 or 50 infrastructure; it goes where the
+#   industry that uses transportation and infrastructure is, the most
+#   industrial such state first. MAX_WEEKS already keeps it to the economies
+#   whose surplus pays 2,000 points in two years.
+#   WAITING (18, 24 or 36 months, by kind; te_ai_build_pass_waiting_months): a
+#   level still queued after this long is counted as waiting, not built or
+#   lost. Eighteen months for a level of 100 or 400 points; a railway's 800 and
+#   a highway's or an airport's 2,000 take 40 and 100 weeks at 20 points a week
+#   (a level's weekly maximum early in the century), so 24 and 36.
 #   BACKOFF_DAYS 365. After a level the pass queued is gone from the queue
 #   unbuilt (dropped, or the state lost) the pass queues no level of that kind
 #   for the country for a year: whatever was bought for it is lost with it
@@ -321,6 +352,8 @@ TE_AI_BUILD_PASS_BUREAUCRACY_MARGIN = 0.02
 TE_AI_BUILD_PASS_DEBT_MAX = 0.1
 TE_AI_BUILD_PASS_MAX_WEEKS = 104
 TE_AI_BUILD_PASS_BACKOFF_DAYS = 365
+TE_AI_BUILD_PASS_INFRASTRUCTURE_MARGIN = 0.02
+TE_AI_BUILD_PASS_INDUSTRIAL_SHARE = 0.1
 
 # The rate the monetary update last wrote, less the world reference rate, in
 # points a year; the curve's middle where the update has not run.

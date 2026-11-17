@@ -72,10 +72,14 @@ FIRST_ERA_BASE = 3.0  # what the stress rate stands on before the monetary updat
 # THE PASS (te_ai_build_pass_effects.txt).
 PASS_SURPLUS_SHARE, PASS_SURPLUS_MIN, PASS_INNOVATION_SHARE = 0.16667, 15000.0, 0.9
 PASS_DEBT_MAX, PASS_MAX_WEEKS, PASS_BACKOFF_DAYS, PASS_BUREAUCRACY_MARGIN = 0.1, 104.0, 365.0, 0.02
+PASS_INFRASTRUCTURE_MARGIN, PASS_INDUSTRIAL_SHARE = 0.02, 0.1
 # The credit's switch at 0, for the tests that read the rule without it.
 NO_CREDIT = {"TE_CONSTRUCTION_MARKET_AI_CREDIT_MAX": 0.0}
-# Vanilla's construction costs of the two buildings the pass queues (construction_cost_medium, _very_low).
+# The construction costs of the buildings the pass queues: vanilla's construction_cost_medium (a university, a power
+# plant), _very_low (an administration) and _very_high (a railway), and the mod's construction_cost_super_high (a
+# highway, an airport). test_ai_build_pass.py holds each building's required_construction to its name.
 UNIVERSITY_POINTS, ADMINISTRATION_POINTS = 400.0, 100.0
+RAILWAY_POINTS, SUPER_HIGH_POINTS = 800.0, 2000.0
 PASS_VALUES = ROOT / "common/script_values/te_ai_build_pass_values.txt"
 
 # The engine's AI defines the constants are taken from, at vanilla's values (1.15.1, common/defines/00_ai.txt);
@@ -177,6 +181,8 @@ class Country:
             "credit": self.credit,
             "construction_cost_medium": UNIVERSITY_POINTS,
             "construction_cost_very_low": ADMINISTRATION_POINTS,
+            "construction_cost_very_high": RAILWAY_POINTS,
+            "construction_cost_super_high": SUPER_HIGH_POINTS,
         }
         # The evaluator fails on a read it has no stub for. There is none for is_ai, for a building or for income
         # that is not fixed: the purchase and the sites' use of it may read none of them.
@@ -327,16 +333,28 @@ class Constants(unittest.TestCase):
         for name, value in (("SURPLUS_SHARE", PASS_SURPLUS_SHARE), ("SURPLUS_MIN", PASS_SURPLUS_MIN),
                             ("INNOVATION_SHARE", PASS_INNOVATION_SHARE), ("DEBT_MAX", PASS_DEBT_MAX),
                             ("MAX_WEEKS", PASS_MAX_WEEKS), ("BACKOFF_DAYS", PASS_BACKOFF_DAYS),
-                            ("BUREAUCRACY_MARGIN", PASS_BUREAUCRACY_MARGIN)):
+                            ("BUREAUCRACY_MARGIN", PASS_BUREAUCRACY_MARGIN),
+                            ("INFRASTRUCTURE_MARGIN", PASS_INFRASTRUCTURE_MARGIN),
+                            ("INDUSTRIAL_SHARE", PASS_INDUSTRIAL_SHARE)):
             self.assertEqual(constants["TE_AI_BUILD_PASS_" + name], value, name)
 
     def test_the_pass_tolerates_the_debt_the_credit_allows_for_the_same_reasons(self):
         # Apart so that the credit's switch at 0 leaves the pass reaching a debtor; equal as built.
         self.assertEqual(PASS_DEBT_MAX, CREDIT_MAX)
-        # Two years, at 1,250 a point and a surplus of a sixth of fixed income: a university from 28,800 a week of
-        # fixed income, an administration from 7,200.
-        for points, income in ((UNIVERSITY_POINTS, 28800.0), (ADMINISTRATION_POINTS, 7200.0)):
+        # Two years, at 1,250 a point and a surplus of a sixth of fixed income: a university or a power plant from
+        # 28,800 a week of fixed income, an administration from 7,200, a railway from 57,700, a highway or an airport
+        # from 144,200 (the values file's figures).
+        for points, income in ((UNIVERSITY_POINTS, 28800.0), (ADMINISTRATION_POINTS, 7200.0),
+                               (RAILWAY_POINTS, 57700.0), (SUPER_HIGH_POINTS, 144200.0)):
             self.assertAlmostEqual(points * 1250.0 / (income / 6), PASS_MAX_WEEKS, delta=0.5)
+        # The points are the game's: vanilla's three and the mod's.
+        vanilla = json.loads((ROOT / "vanilla_parsed/common/script_values.json").read_text(encoding="utf-8"))
+        for name, points in (("construction_cost_medium", UNIVERSITY_POINTS),
+                             ("construction_cost_very_low", ADMINISTRATION_POINTS),
+                             ("construction_cost_very_high", RAILWAY_POINTS)):
+            self.assertEqual(float(vanilla[name][1]), points, name)
+        mod = (ROOT / "common/script_values/extra_script_values.txt").read_text(encoding="utf-8-sig")
+        self.assertRegex(mod, r"(?m)^construction_cost_super_high = 2000$")
 
     def test_the_rates_numbers_stand_where_their_comments_say(self):
         self.assertLess(SPREAD_LOW, SPREAD_MID)

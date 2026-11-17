@@ -34,10 +34,12 @@ te_ai_build_pass_surplus_share = {
 	}
 }
 
-# Weeks the surplus takes to pay for a level at the smoothed price: a university's
-# points (vanilla's construction_cost_medium) and an administration's
-# (construction_cost_very_low). te_ai_build_pass_may_queue holds the price
-# variable and a surplus above 0.
+# Weeks the surplus takes to pay for a level at the smoothed price, by the points
+# of each building's required_construction: a university's and a power plant's
+# (vanilla's construction_cost_medium), an administration's
+# (construction_cost_very_low), a railway's (construction_cost_very_high), a
+# highway's and an airport's (the mod's construction_cost_super_high).
+# te_ai_build_pass_may_queue holds the price variable and a surplus above 0.
 te_ai_build_pass_university_weeks = {
 	value = construction_cost_medium
 	multiply = var:te_construction_market_price_stabilizer
@@ -48,6 +50,38 @@ te_ai_build_pass_university_weeks = {
 }
 te_ai_build_pass_administration_weeks = {
 	value = construction_cost_very_low
+	multiply = var:te_construction_market_price_stabilizer
+	divide = {
+		value = net_fixed_income
+		min = 1
+	}
+}
+te_ai_build_pass_power_plant_weeks = {
+	value = construction_cost_medium
+	multiply = var:te_construction_market_price_stabilizer
+	divide = {
+		value = net_fixed_income
+		min = 1
+	}
+}
+te_ai_build_pass_railway_weeks = {
+	value = construction_cost_very_high
+	multiply = var:te_construction_market_price_stabilizer
+	divide = {
+		value = net_fixed_income
+		min = 1
+	}
+}
+te_ai_build_pass_highway_weeks = {
+	value = construction_cost_super_high
+	multiply = var:te_construction_market_price_stabilizer
+	divide = {
+		value = net_fixed_income
+		min = 1
+	}
+}
+te_ai_build_pass_airport_weeks = {
+	value = construction_cost_super_high
 	multiply = var:te_construction_market_price_stabilizer
 	divide = {
 		value = net_fixed_income
@@ -83,27 +117,181 @@ te_ai_build_pass_tax_shortfall = {
 	subtract = tax_capacity
 }
 
-# The country's levels of the kind the pass last queued (te_ai_build_pass_pending_kind:
-# 1 a university, 2 a Government Administration), built, and still in a queue.
+# State scope: how far its infrastructure falls short of its usage (negative where it has some to spare), and the
+# shortfall under which the railway entry leaves it be (INFRASTRUCTURE_MARGIN of usage).
+te_ai_build_pass_infrastructure_shortfall = {
+	value = infrastructure_usage
+	subtract = infrastructure
+}
+te_ai_build_pass_infrastructure_margin = {
+	value = infrastructure_usage
+	multiply = TE_AI_BUILD_PASS_INFRASTRUCTURE_MARGIN
+}
+
+# State scope: the levels that could buy a first plant's Electricity, what the power plant entry ranks its site by.
+# Urban centres first among them: the plant's own technology (Electrical Generation) unlocks their electric street
+# lights (vanilla pm_electric_streetlights, 3 Electricity a level), the one electric method every city can take up
+# at once; then manufacturing, whose electric methods follow (Electrical Capacitors' sewing machines and power
+# looms in textile mills, the electric arc in steel mills, Electric Railway's electric engines in motor works).
+# Electricity is a local good, so a plant where none of these stand would sell to nobody.
+te_ai_build_pass_power_users = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			OR = {
+				is_building_type = building_urban_center
+				is_building_group = bg_manufacturing
+			}
+		}
+		add = level
+	}
+}
+
+# State scope: its manufacturing levels (light, heavy and military industry: the groups under bg_manufacturing).
+te_ai_build_pass_manufacturing_levels = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_manufacturing
+		}
+		add = level
+	}
+}
+# Country scope: the country's manufacturing levels, which the pass writes once (te_ai_build_pass_industry) before
+# its list, so that each state's test reads one number instead of counting the country again.
+te_ai_build_pass_country_manufacturing = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_manufacturing
+		}
+		add = level
+	}
+}
+# State scope: the manufacturing levels a major industrial state holds at least, INDUSTRIAL_SHARE of its owner's.
+# Above any state's where the pass has not written its owner's count.
+te_ai_build_pass_industrial_floor = {
+	value = 1000000
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_ai_build_pass_industry
+			}
+		}
+		value = owner.var:te_ai_build_pass_industry
+		multiply = TE_AI_BUILD_PASS_INDUSTRIAL_SHARE
+		min = 1
+	}
+}
+
+# State scope: the level cap of a highway and an airport. Both buildings carry has_max_level = yes and no number of
+# their own; the cap is the sum of these state modifiers (technologies give 1 each, from Paved Roads and Commercial
+# Aviation on; power bloc principles, a company and production methods add more).
+te_ai_build_pass_highway_cap = { value = modifier:state_building_highway_max_level_add }
+te_ai_build_pass_airport_cap = { value = modifier:state_building_airport_max_level_add }
+
+# Country scope: how long a level the pass queued may stay queued before it is counted as waiting
+# (te_construction_market_ai_values.txt, THE PASS, WAITING): 24 months for a railway, 36 for a highway or an
+# airport, else 18.
+te_ai_build_pass_waiting_months = {
+	value = 18
+	if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 3
+		}
+		value = 24
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind >= 5
+		}
+		value = 36
+	}
+}
+
+# Country scope: the levels of the kind the pass last queued (te_ai_build_pass_pending_kind: 1 a university, 2 a
+# Government Administration, 3 a railway, 4 a power plant, 5 a highway, 6 an airport) in the state it queued it in
+# (te_ai_build_pass_pending_state), built and still in a queue. Read in that one state: investors build railways,
+# plants, highways and airports too, and a level of theirs elsewhere in the country is not the pass's. A state the
+# country has lost reads what stands there and nothing queued; a state gone reads nothing.
 te_ai_build_pass_tracked_levels = {
 	value = 0
 	if = {
 		limit = {
 			var:te_ai_build_pass_pending_kind = 1
 		}
-		every_scope_building = {
-			limit = {
-				is_building_type = building_university
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_university
+				}
+				add = level
 			}
-			add = level
 		}
 	}
-	else = {
-		every_scope_building = {
-			limit = {
-				is_building_type = building_government_administration
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 2
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_government_administration
+				}
+				add = level
 			}
-			add = level
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 3
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_railway
+				}
+				add = level
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 4
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_power_plant
+				}
+				add = level
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 5
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_highway
+				}
+				add = level
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 6
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_airport
+				}
+				add = level
+			}
 		}
 	}
 }
@@ -113,19 +301,78 @@ te_ai_build_pass_tracked_queued = {
 		limit = {
 			var:te_ai_build_pass_pending_kind = 1
 		}
-		every_scope_building = {
-			limit = {
-				is_building_type = building_university
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_university
+				}
+				add = te_construction_market_building_queued_levels
 			}
-			add = te_construction_market_building_queued_levels
 		}
 	}
-	else = {
-		every_scope_building = {
-			limit = {
-				is_building_type = building_government_administration
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 2
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_government_administration
+				}
+				add = te_construction_market_building_queued_levels
 			}
-			add = te_construction_market_building_queued_levels
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 3
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_railway
+				}
+				add = te_construction_market_building_queued_levels
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 4
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_power_plant
+				}
+				add = te_construction_market_building_queued_levels
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 5
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_highway
+				}
+				add = te_construction_market_building_queued_levels
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 6
+		}
+		var:te_ai_build_pass_pending_state ?= {
+			every_scope_building = {
+				limit = {
+					is_building_type = building_airport
+				}
+				add = te_construction_market_building_queued_levels
+			}
 		}
 	}
 }
@@ -150,3 +397,16 @@ te_ai_build_pass_lost_share = {
 		min = 1
 	}
 }
+# By kind, for the verdict's line: built and lost.
+te_ai_build_pass_built_university_g = { value = global_var:te_ai_build_pass_built_university }
+te_ai_build_pass_lost_university_g = { value = global_var:te_ai_build_pass_lost_university }
+te_ai_build_pass_built_administration_g = { value = global_var:te_ai_build_pass_built_administration }
+te_ai_build_pass_lost_administration_g = { value = global_var:te_ai_build_pass_lost_administration }
+te_ai_build_pass_built_railway_g = { value = global_var:te_ai_build_pass_built_railway }
+te_ai_build_pass_lost_railway_g = { value = global_var:te_ai_build_pass_lost_railway }
+te_ai_build_pass_built_power_plant_g = { value = global_var:te_ai_build_pass_built_power_plant }
+te_ai_build_pass_lost_power_plant_g = { value = global_var:te_ai_build_pass_lost_power_plant }
+te_ai_build_pass_built_highway_g = { value = global_var:te_ai_build_pass_built_highway }
+te_ai_build_pass_lost_highway_g = { value = global_var:te_ai_build_pass_lost_highway }
+te_ai_build_pass_built_airport_g = { value = global_var:te_ai_build_pass_built_airport }
+te_ai_build_pass_lost_airport_g = { value = global_var:te_ai_build_pass_lost_airport }

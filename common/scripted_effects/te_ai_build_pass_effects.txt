@@ -9,21 +9,21 @@
 # may hold at its rate, less its debt), and it has the surplus the engine's own budget AI asks for before adding
 # spending, the pass queues one level as government construction (start_building_construction, as
 # te_grid_ai_build_effect and the Grand Monuments' gm_com_queue_levels do), after the queue has stood empty a month so
-# that the engine has gone first. What does most good, in order (te_ai_build_pass_triggers.txt): a Government
-# Administration while net bureaucracy is close to nothing or below it, in the incorporated state whose taxes come
-# closest to its tax capacity; else a university while innovation is under nine-tenths of its cap, in the most
-# populous incorporated state; each only where the surplus pays for the level within two years; else nothing. One level at a time: the pass follows the level it queued until it is built or gone
-# (te_ai_build_pass_follow) and queues nothing more until then, and no level of a kind for a year after one of that
-# kind was lost. The weekly purchase pays for the level (te_construction_market_ai_purchase_target).
-# The numbers and their reasons: common/script_values/te_construction_market_ai_values.txt, THE RATE and THE PASS.
+# that the engine has gone first. What it queues is the first entry of THE ORDER below that applies; each entry's
+# conditions, site and reason are in te_ai_build_pass_triggers.txt. One level at a time: the pass follows the level it
+# queued, in the state it queued it in, until it is built or gone (te_ai_build_pass_follow) and queues nothing more
+# until then, and no level of a kind for a year after one of that kind was lost. The weekly purchase pays for the
+# level (te_construction_market_ai_purchase_target). The numbers and their reasons:
+# common/script_values/te_construction_market_ai_values.txt, THE RATE and THE PASS.
 #
-# Neither building has a `possible` block; the university's can_build_government (vanilla's Polish universities
-# closure) is copied into te_ai_build_pass_wants_university, since whether start_building_construction honours it is
-# unread.
+# Where a building has a `possible` or a can_build_government (the university's Polish closure, the power plant's
+# banned-industry law and Resource Transition rule), the entry's trigger carries a copy, since whether
+# start_building_construction honours them is unread.
 #
 # TE_SELF_CHECK ai_build_pass reads what became of the levels the pass queued for a government the engine would not
-# queue for (te_ai_build_pass_in_sample): built, still waiting after 18 months, or lost (its own spending AI removes
-# "should-have" spending when income is under 1.05 times expenses). Play-test rows: docs/testing/ai-economy-playtest.md.
+# queue for (te_ai_build_pass_in_sample): built, still waiting after 18 to 36 months, or lost (its own spending AI
+# removes "should-have" spending when income is under 1.05 times expenses), in all and by kind. Play-test rows:
+# docs/testing/ai-economy-playtest.md.
 te_ai_build_pass_effect = {
 	# What became of last month's level, first, so that a level lost this month is backed off before the decision.
 	te_ai_build_pass_follow = yes
@@ -31,39 +31,29 @@ te_ai_build_pass_effect = {
 		limit = {
 			te_ai_build_pass_may_queue = yes
 		}
+		# The country's manufacturing levels, once, for the highway's and the airport's major industrial states.
 		if = {
 			limit = {
-				te_ai_build_pass_wants_administration = yes
-			}
-			te_ai_build_pass_pending_start = { KIND = 2 }
-			ordered_scope_state = {
-				limit = {
-					te_ai_build_pass_administration_site = yes
+				OR = {
+					has_technology_researched = paved_roads
+					has_technology_researched = commercial_aviation
 				}
-				order_by = te_ai_build_pass_tax_shortfall
-				position = 0
-				check_range_bounds = no
-				start_building_construction = building_government_administration
 			}
-			set_variable = { name = te_ai_build_pass_recent value = yes days = 45 }
-			te_ai_build_pass_count_effect = yes
+			set_variable = { name = te_ai_build_pass_industry value = te_ai_build_pass_country_manufacturing }
 		}
-		else_if = {
+		# THE ORDER (owner, 2026-11-16). The one place the list is written: the first entry that applies is queued
+		# and the rest are skipped (te_ai_build_pass_try). To reorder the list, reorder these lines.
+		te_ai_build_pass_try = { KIND = administration }
+		te_ai_build_pass_try = { KIND = power_plant }
+		te_ai_build_pass_try = { KIND = railway }
+		te_ai_build_pass_try = { KIND = university }
+		te_ai_build_pass_try = { KIND = highway }
+		te_ai_build_pass_try = { KIND = airport }
+		if = {
 			limit = {
-				te_ai_build_pass_wants_university = yes
+				has_variable = te_ai_build_pass_industry
 			}
-			te_ai_build_pass_pending_start = { KIND = 1 }
-			ordered_scope_state = {
-				limit = {
-					te_ai_build_pass_university_site = yes
-				}
-				order_by = state_population
-				position = 0
-				check_range_bounds = no
-				start_building_construction = building_university
-			}
-			set_variable = { name = te_ai_build_pass_recent value = yes days = 45 }
-			te_ai_build_pass_count_effect = yes
+			remove_variable = te_ai_build_pass_industry
 		}
 	}
 	# Next month's "already empty a month".
@@ -83,6 +73,110 @@ te_ai_build_pass_effect = {
 	}
 }
 
+# Country scope: one entry of THE ORDER. Skipped once an earlier entry has queued this month (it set the pending
+# kind), else queued if the country wants it.
+te_ai_build_pass_try = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_ai_build_pass_pending_kind }
+			te_ai_build_pass_wants_$KIND$ = yes
+		}
+		te_ai_build_pass_queue_$KIND$ = yes
+	}
+}
+
+# Country scope: each entry's site, the state its trigger's site rule allows that ranks first, then the level.
+# KIND numbers what te_ai_build_pass_follow reads: 1 a university, 2 a Government Administration, 3 a railway, 4 a
+# power plant, 5 a highway, 6 an airport.
+te_ai_build_pass_queue_administration = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_administration_site = yes
+		}
+		order_by = te_ai_build_pass_tax_shortfall
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 2 BUILDING = building_government_administration }
+}
+te_ai_build_pass_queue_power_plant = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_power_plant_site = yes
+		}
+		order_by = te_ai_build_pass_power_users
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 4 BUILDING = building_power_plant }
+}
+te_ai_build_pass_queue_railway = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_railway_site = yes
+		}
+		order_by = te_ai_build_pass_infrastructure_shortfall
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 3 BUILDING = building_railway }
+}
+te_ai_build_pass_queue_university = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_university_site = yes
+		}
+		order_by = state_population
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 1 BUILDING = building_university }
+}
+te_ai_build_pass_queue_highway = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_highway_site = yes
+		}
+		order_by = te_ai_build_pass_manufacturing_levels
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 5 BUILDING = building_highway }
+}
+te_ai_build_pass_queue_airport = {
+	ordered_scope_state = {
+		limit = {
+			te_ai_build_pass_airport_site = yes
+		}
+		order_by = te_ai_build_pass_manufacturing_levels
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_ai_build_pass_site
+	}
+	te_ai_build_pass_queue = { KIND = 6 BUILDING = building_airport }
+}
+
+# Country scope: queues one level of $BUILDING$ in the saved site and starts following it.
+te_ai_build_pass_queue = {
+	if = {
+		limit = {
+			exists = scope:te_ai_build_pass_site
+		}
+		set_variable = { name = te_ai_build_pass_pending_state value = scope:te_ai_build_pass_site }
+		te_ai_build_pass_pending_start = { KIND = $KIND$ }
+		scope:te_ai_build_pass_site = {
+			start_building_construction = $BUILDING$
+		}
+		set_variable = { name = te_ai_build_pass_recent value = yes days = 45 }
+		te_ai_build_pass_count_effect = yes
+	}
+}
+
 # Country scope: the levels the pass has queued for the country since the game began, which the AI probe reads
 # (cm_pass).
 te_ai_build_pass_count_effect = {
@@ -95,11 +189,11 @@ te_ai_build_pass_count_effect = {
 	change_variable = { name = te_ai_build_pass_count add = 1 }
 }
 
-# Country scope, just before the pass queues: what it follows until the level is built or gone. KIND 1 a university,
-# 2 a Government Administration. The base is the country's built levels of that kind; the queue is empty (the pass
-# queues into none other), so the level is the only one of its kind queued. While it is followed the pass queues
-# nothing (te_ai_build_pass_may_queue), and the reserve gate's self-check leaves the country out. A country the engine
-# would not queue for (te_ai_build_pass_in_sample) is also in the self-check's sample until it reads.
+# Country scope, just before the pass queues: what it follows until the level is built or gone. The base is the
+# levels of that kind built in the site (te_ai_build_pass_pending_state, set just before); the government queue is
+# empty (the pass queues into none other). While it is followed the pass queues nothing (te_ai_build_pass_may_queue),
+# and the reserve gate's self-check leaves the country out. A country the engine would not queue for
+# (te_ai_build_pass_in_sample) is also in the self-check's sample until it reads.
 te_ai_build_pass_pending_start = {
 	set_variable = { name = te_ai_build_pass_pending_kind value = $KIND$ }
 	set_variable = { name = te_ai_build_pass_pending_base value = te_ai_build_pass_tracked_levels }
@@ -116,15 +210,27 @@ te_ai_build_pass_pending_start = {
 			set_global_variable = { name = te_ai_build_pass_built value = 0 }
 			set_global_variable = { name = te_ai_build_pass_waiting value = 0 }
 			set_global_variable = { name = te_ai_build_pass_lost value = 0 }
+			te_ai_build_pass_tally_start = { KIND = university }
+			te_ai_build_pass_tally_start = { KIND = administration }
+			te_ai_build_pass_tally_start = { KIND = railway }
+			te_ai_build_pass_tally_start = { KIND = power_plant }
+			te_ai_build_pass_tally_start = { KIND = highway }
+			te_ai_build_pass_tally_start = { KIND = airport }
 		}
 		set_variable = te_ai_build_pass_sampled
 	}
 }
 
-# Country scope, monthly: what became of the level the pass queued. Built: the country holds more levels of the kind
-# than the base. Lost: none of the kind is queued and none more is built (dropped from the queue, or its state lost);
-# the pass then queues no level of that kind for the country for a year (THE PASS's BACKOFF_DAYS, written here as the
-# literal a timed variable takes). A level of the kind taken down elsewhere lowers the base, so it reads as neither.
+te_ai_build_pass_tally_start = {
+	set_global_variable = { name = te_ai_build_pass_built_$KIND$ value = 0 }
+	set_global_variable = { name = te_ai_build_pass_lost_$KIND$ value = 0 }
+}
+
+# Country scope, monthly: what became of the level the pass queued. Built: its state holds more levels of the kind
+# than the base. Lost: none of the kind is queued there and none more is built (dropped from the queue, or the state
+# lost); the pass then queues no level of that kind for the country for a year (THE PASS's BACKOFF_DAYS, written here
+# as the literal a timed variable takes). A level of the kind taken down there lowers the base, so it reads as
+# neither.
 te_ai_build_pass_follow = {
 	if = {
 		limit = {
@@ -146,7 +252,7 @@ te_ai_build_pass_follow = {
 					has_variable = te_ai_build_pass_sampled
 					NOT = { has_global_variable = te_ai_build_pass_checked }
 				}
-				change_global_variable = { name = te_ai_build_pass_built add = 1 }
+				te_ai_build_pass_tally = { OUTCOME = built }
 			}
 			te_ai_build_pass_pending_clear = yes
 		}
@@ -159,25 +265,17 @@ te_ai_build_pass_follow = {
 					has_variable = te_ai_build_pass_sampled
 					NOT = { has_global_variable = te_ai_build_pass_checked }
 				}
-				change_global_variable = { name = te_ai_build_pass_lost add = 1 }
+				te_ai_build_pass_tally = { OUTCOME = lost }
 			}
-			if = {
-				limit = {
-					var:te_ai_build_pass_pending_kind = 1
-				}
-				set_variable = { name = te_ai_build_pass_backoff_university value = yes days = 365 }
-			}
-			else = {
-				set_variable = { name = te_ai_build_pass_backoff_administration value = yes days = 365 }
-			}
+			te_ai_build_pass_backoff = yes
 			te_ai_build_pass_pending_clear = yes
 		}
 		else_if = {
 			limit = {
 				has_variable = te_ai_build_pass_sampled
-				var:te_ai_build_pass_pending_months >= 18
+				var:te_ai_build_pass_pending_months >= te_ai_build_pass_waiting_months
 			}
-			# Still queued after 18 months: counted as waiting, and out of the sample, so its later fate is not
+			# Still queued after 18 to 36 months: counted as waiting, and out of the sample, so its later fate is not
 			# counted too. The pass goes on following it.
 			if = {
 				limit = {
@@ -190,10 +288,97 @@ te_ai_build_pass_follow = {
 	}
 }
 
+# Country scope: $OUTCOME$ (built or lost) for the level followed, in all and for its kind.
+te_ai_build_pass_tally = {
+	change_global_variable = { name = te_ai_build_pass_$OUTCOME$ add = 1 }
+	if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 1
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_university add = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 2
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_administration add = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 3
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_railway add = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 4
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_power_plant add = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 5
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_highway add = 1 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 6
+		}
+		change_global_variable = { name = te_ai_build_pass_$OUTCOME$_airport add = 1 }
+	}
+}
+
+# Country scope: no level of the lost level's kind for a year.
+te_ai_build_pass_backoff = {
+	if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 1
+		}
+		set_variable = { name = te_ai_build_pass_backoff_university value = yes days = 365 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 2
+		}
+		set_variable = { name = te_ai_build_pass_backoff_administration value = yes days = 365 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 3
+		}
+		set_variable = { name = te_ai_build_pass_backoff_railway value = yes days = 365 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 4
+		}
+		set_variable = { name = te_ai_build_pass_backoff_power_plant value = yes days = 365 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 5
+		}
+		set_variable = { name = te_ai_build_pass_backoff_highway value = yes days = 365 }
+	}
+	else_if = {
+		limit = {
+			var:te_ai_build_pass_pending_kind = 6
+		}
+		set_variable = { name = te_ai_build_pass_backoff_airport value = yes days = 365 }
+	}
+}
+
 te_ai_build_pass_pending_clear = {
 	remove_variable = te_ai_build_pass_pending_kind
 	remove_variable = te_ai_build_pass_pending_base
 	remove_variable = te_ai_build_pass_pending_months
+	if = {
+		limit = {
+			has_variable = te_ai_build_pass_pending_state
+		}
+		remove_variable = te_ai_build_pass_pending_state
+	}
 	if = {
 		limit = {
 			has_variable = te_ai_build_pass_sampled
