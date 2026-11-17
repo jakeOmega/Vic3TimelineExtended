@@ -1,6 +1,6 @@
 # Steam Workshop description
 
-The description for the Workshop as of 1.3.2 (2026-11-14), rewritten around six images; what changed from 1.3.1's text is at the end, and that text is in git history at the 1.3.1 tag. Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
+The description for the Workshop as of 1.3.3 (2026-11-17). Its text is 1.3.2's (2026-11-14, rewritten around six images) with the seven links at the 1.3.3 tag, and the six images redrew byte-identical from 1.3.3's files. What changed from 1.3.1's text is at the end, and that text is in git history at the 1.3.1 tag. Paste the contents of the fenced block below into the Steam Workshop description field. Steam Workshop renders BBCode, not Markdown.
 
 - **Length.** Steam caps a description at 8,000 characters. This one is 4,996 characters (5,020 UTF-8 bytes, 5,051 counting each line break as two), so about 2,900 are free. Measure after an edit: `python3 -c "import sys;t=open(sys.argv[1],encoding='utf-8').read().strip();print(len(t),len(t.encode()),len(t)+t.count(chr(10)))" <file>`.
 - **Player guide link and image links.** Point all seven at the release's tag (`/tree/<version>/docs/player_guide/README.md` and `raw.githubusercontent.com/.../<version>/docs/workshop/<image>.jpg`), not `main`, so they show the guide and the images that shipped. They resolve only once the tag is pushed, so tag before pasting. See `docs/guides/release_checklist.md`.
@@ -19,13 +19,13 @@ Steam shows `[img]URL[/img]` in a description, the URL a direct link to the imag
 ```bbcode
 [b]Updated for Victoria 3: 1.15.1.[/b]
 
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_hero_ages.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_hero_ages.jpg[/img]
 
 [i]Extend Victoria 3 past 1936 into the modern era and a speculative future. Banking, climate change, the space race, the UN, and decolonization become playable systems woven into the economy, with game rules to tailor your campaign.[/i]
 
-[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.2/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
+[b]New to the mod?[/b] The [url=https://github.com/jakeOmega/Vic3TimelineExtended/tree/1.3.3/docs/player_guide/README.md]illustrated player guide[/url] explains the mechanics. Read it online by chapter, or download the PDF from the guide page.
 
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_at_a_glance.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_at_a_glance.jpg[/img]
 [list]
 [*]New goods, production chains, companies, combat units, ship classes, treaty articles, and decrees
 [*]A dashboard for each system, a Map Room of more than 40 world maps, and new tabs in the Budget, Society, Diplomacy, Military, and Market panels
@@ -34,9 +34,9 @@ Steam shows `[img]URL[/img]` in a description, the URL a direct link to the imag
 
 Nineteen systems run alongside the base game. In the economy: banking and monetary policy, free market construction, power grids, and a legislated tax code. Between nations: the United Nations, the global commons, decolonization, cultural hegemony, covert warfare, nuclear weapons, a modern military, global warming, and the space race. Within them: demographics, healthcare and biotechnology, courts and judiciary, social movements, internal resettlement, and grand monuments and archaeology.
 
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_systems_1.jpg[/img]
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_systems_2.jpg[/img]
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_systems_3.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_systems_1.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_systems_2.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_systems_3.jpg[/img]
 
 [h1]More ways to shape your country[/h1]
 
@@ -52,7 +52,7 @@ Nineteen systems run alongside the base game. In the economy: banking and moneta
 [b]State Pictures[/b] — The state banner follows technology, city size, and wealth: 356 new pictures of cities, ports, mines, farms, smog, and ruins.
 [b]Rulers and Religion[/b] — Heir education, aptitude traits for all adults, and a custom religion creator.
 
-[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.2/docs/workshop/desc_eras.jpg[/img]
+[img]https://raw.githubusercontent.com/jakeOmega/Vic3TimelineExtended/1.3.3/docs/workshop/desc_eras.jpg[/img]
 
 [h1]Laws and politics[/h1]
 
