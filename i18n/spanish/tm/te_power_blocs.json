@@ -127,10 +127,6 @@
   "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
   "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')|l] puede anexionar de forma pacífica [Concept('concept_subject', '$concept_subjects|q$')|l] sin una [concept_diplomatic_play|l], si el súbdito tiene un [concept_liberty_desire|l] bajo y un [Concept('concept_gdp', 'PIB')] suficientemente bajo."
  },
- "power_bloc_monetary_cooperation_bool": {
-  "en": "The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month",
-  "es": "El banco central del líder respalda a todos los miembros: #G −0,5#! puntos de prima de riesgo y #G +1#! de confianza en la paridad al mes"
- },
  "power_bloc_reserve_currency_bool": {
   "en": "The union’s money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium",
   "es": "El dinero de la unión se atesora en todo el mundo: el líder emite moneda respaldada por esos saldos y puede recortar hasta #G −1#! punto de prima de riesgo, y los países adoptantes obtienen además #G +5%#! de ventaja comercial y #G −0,25#! puntos de prima"
@@ -147,6 +143,10 @@
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "es": "El [concept_power_bloc|l] fomenta la expresión artística y el desarrollo de la cultura."
  },
+ "principle_group_conditionality": {
+  "en": "Conditionality",
+  "es": "Condicionalidad"
+ },
  "principle_group_cultural_plurality": {
   "en": "Cultural Plurality",
   "es": "Pluralidad cultural"
@@ -162,6 +162,10 @@
  "principle_group_cultural_unity_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "es": "El [concept_power_bloc|l] impone la unidad cultural entre sus miembros en la esfera pública."
+ },
+ "principle_group_development_lending": {
+  "en": "Development Lending",
+  "es": "Préstamos para el desarrollo"
  },
  "principle_group_education": {
   "en": "Education",
@@ -234,6 +238,10 @@
  "principle_group_rural_desc": {
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "es": "El [concept_power_bloc|l] fomenta el desarrollo rural y la mejora de las [concept_infrastructure|l] rurales."
+ },
+ "principle_group_technology_controls": {
+  "en": "Technology Controls",
+  "es": "Controles tecnológicos"
  },
  "principle_group_urban_planning": {
   "en": "Urban Planning",

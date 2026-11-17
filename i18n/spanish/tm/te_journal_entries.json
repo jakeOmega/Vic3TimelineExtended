@@ -2123,13 +2123,13 @@
   "en": "A monument says something about the government that raised it. While its crown, republic, revolution or leader still stands, it lends legitimacy; every monument that is not contested lends prestige, and each pleases the interest groups that share its message. When that falls, the next government must decide what to do with it. Everything here grows with [concept_grandeur].",
   "es": "Un monumento dice algo del gobierno que lo erigió. Mientras siga en pie su corona, república, revolución o líder, otorga legitimidad; todo monumento que no es cuestionado otorga prestigio, y cada uno complace a los grupos de interés que comparten su mensaje. Cuando eso cae, el siguiente gobierno debe decidir qué hacer con él. Todo lo que figura aquí crece con la [concept_grandeur|l]."
  },
- "je_group_covert_warfare": {
-  "en": "Covert Warfare",
-  "es": "Guerra encubierta"
+ "je_group_te_rights_and_society": {
+  "en": "Rights and Society",
+  "es": "Derechos y sociedad"
  },
- "je_group_soft_power": {
-  "en": "Soft Power",
-  "es": "Poder blando"
+ "je_group_te_systems": {
+  "en": "Timeline Extended Systems",
+  "es": "Sistemas de Timeline Extended"
  },
  "je_heir_education": {
   "en": "Heir Education",
@@ -3346,6 +3346,10 @@
  "je_post_scarcity_timeout_conclusion_desc": {
   "en": "The $concept_journal_entry$ timed out with the transition #b stalled#!",
   "es": "La $concept_journal_entry$ expiró con la transición #b estancada#!"
+ },
+ "je_research_commons": {
+  "en": "Research Commons",
+  "es": "Comunidad de investigación"
  },
  "je_space_race_interstellar_probe": {
   "en": "Interstellar Probe",
@@ -5524,8 +5528,8 @@
   "es": "Cola ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])"
  },
  "je_space_race_widget_mq_next_full": {
-  "en": "slots full",
-  "es": "cupos llenos"
+  "en": "shipping full",
+  "es": "envíos completos"
  },
  "je_space_race_widget_mq_next_label": {
   "en": "Next module",
@@ -5539,9 +5543,17 @@
   "en": "#R stopped#!",
   "es": "#R detenido#!"
  },
- "je_space_race_widget_mq_next_tt": {
-  "en": "#header Next Module#!\\nWhen the queue's first module is built: the points it still needs, at this month's fabrication. A module past its colony's slots costs more. A built module takes one of the eight shipment slots, so while all eight are taken it waits, its points in stock. With no fabrication (no Module Fabrication method) only what the stock already covers is built; with the launch site lost, nothing is.",
-  "es": "#header Próximo módulo#!\\nCuándo se construye el primer módulo de la cola: los puntos que aún necesita, con la fabricación de este mes. Un módulo que excede los huecos de su colonia cuesta más. Un módulo construido ocupa uno de los ocho huecos de envío, así que, mientras estén ocupados los ocho, espera con sus puntos en reserva. Sin fabricación (sin método de Fabricación de módulos), solo se construye lo que la reserva ya cubre; con el centro de lanzamiento perdido, nada."
+ "je_space_race_widget_mq_tt_full_land": {
+  "en": ", the first landing in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land')|0]#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_month', 'je_space_race_widget_mq_tt_months_word' )]",
+  "es": ", el primero aterriza en #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land')|0]#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_month', 'je_space_race_widget_mq_tt_months_word' )]"
+ },
+ "je_space_race_widget_mq_tt_month": {
+  "en": "month",
+  "es": "mes"
+ },
+ "je_space_race_widget_mq_tt_months_word": {
+  "en": "months",
+  "es": "meses"
  },
  "je_space_race_widget_offworld_label": {
   "en": "People off Earth",

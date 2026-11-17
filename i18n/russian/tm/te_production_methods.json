@@ -5943,6 +5943,10 @@
   "en": "Seat of the Faith",
   "ru": "Престол веры"
  },
+ "pm_hq_research_commons": {
+  "en": "Joint Research Institute",
+  "ru": "Объединённый исследовательский институт"
+ },
  "pm_hq_sovereign_empire": {
   "en": "Seat of the Empire",
   "ru": "Престол империи"
@@ -10754,6 +10758,10 @@
  "pmg_space_program_module_fabrication": {
   "en": "Module Fabrication",
   "ru": "Изготовление модулей"
+ },
+ "pmg_space_program_module_storage": {
+  "en": "Module Storage",
+  "ru": "Склад модулей"
  },
  "pmg_spacex_starbase": {
   "en": "Starbase",

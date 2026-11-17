@@ -5071,14 +5071,6 @@
   "en": "Emergency Trade Restrictions",
   "de": "Handelsbeschränkungen im Notfall"
  },
- "banking_cw_dividend_loyalists_tt": {
-  "en": "[Concept('concept_loyalist', 'Loyalists')] among the [concept_middle_strata], at most once every #v 5#! years.",
-  "de": "[Concept('concept_loyalist', 'Loyalisten')] in der [concept_middle_strata], höchstens einmal alle #v 5#! Jahre."
- },
- "banking_cw_mutual_aid_loyalists_tt": {
-  "en": "[Concept('concept_loyalist', 'Loyalists')] among the [concept_lower_strata], at most once every #v 5#! years.",
-  "de": "[Concept('concept_loyalist', 'Loyalisten')] in der [concept_lower_strata], höchstens einmal alle #v 5#! Jahre."
- },
  "banking_cycle_value_bar_name": {
   "en": "[concept_banking_cycle] Value",
   "de": "[concept_banking_cycle]-Wert"
@@ -7911,9 +7903,17 @@
   "en": "Borrowed Gold",
   "de": "Geliehenes Gold"
  },
+ "concept_banking_common_currency": {
+  "en": "Common Currency",
+  "de": "Gemeinsame Währung"
+ },
  "concept_banking_credit_standing": {
   "en": "Credit Standing",
   "de": "Kreditwürdigkeit"
+ },
+ "concept_banking_currency_reach": {
+  "en": "Currency Reach",
+  "de": "Währungsreichweite"
  },
  "concept_banking_exchange_rate": {
   "en": "Exchange Rate Index",
@@ -32127,6 +32127,14 @@
   "en": "#b See Through#!\\nFades this page so the map behind it shows, the journal entry's own map included: an entry's map shows only while its page is open. It stays faded as you pick maps in the Map Room. Click again to bring the page back; closing it does too. The faded page still takes clicks.",
   "de": "#b Durchsichtig#!\\nMacht diese Seite durchsichtig, sodass die Karte dahinter zu sehen ist, auch die eigene Karte des Journaleintrags: Die Karte eines Eintrags wird nur angezeigt, solange seine Seite geöffnet ist. Sie bleibt durchsichtig, während Sie im Kartenraum Karten auswählen. Erneut klicken, um die Seite zurückzuholen; ein Schließen tut es auch. Die durchsichtige Seite nimmt weiterhin Klicks an."
  },
+ "te_jmap_area_continent": {
+  "en": "Continent",
+  "de": "Kontinent"
+ },
+ "te_jmap_area_world": {
+  "en": "World",
+  "de": "Welt"
+ },
  "te_jmap_banking_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the journal entry, which colors every country by the phase of its financial cycle. The map shows while the entry's page is open; the eye at its top left fades the page so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Journaleintrag, der jedes Land nach der Phase seines Finanzzyklus einfärbt. Die Karte wird angezeigt, solange die Seite des Eintrags geöffnet ist; das Auge oben links macht die Seite durchsichtig, sodass die ganze Karte zu sehen ist."
@@ -32167,6 +32175,22 @@
   "en": "#b Show on the Map#!\\nOpens the Map Room on the political models, each country in its model's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den politischen Modellen, jedes Land in der Farbe seines Modells. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_color_grey": {
+  "en": "Grayscale",
+  "de": "Graustufen"
+ },
+ "te_jmap_color_safe": {
+  "en": "Colorblind-Safe",
+  "de": "Für Farbenblinde"
+ },
+ "te_jmap_color_short_grey": {
+  "en": "Gray",
+  "de": "Grau"
+ },
+ "te_jmap_color_short_safe": {
+  "en": "Colorblind",
+  "de": "Farbenblind"
+ },
  "te_jmap_covert_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on your agent networks, each country colored by the network's strength. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei Ihren Agentennetzwerken, jedes Land nach der Stärke des Netzwerks eingefärbt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
@@ -32190,6 +32214,10 @@
  "te_jmap_nuclear_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on nuclear weapons: the world's nuclear powers, and your deterrent's hosts, umbrella and guarantees. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Nuklearwaffen: die Nuklearmächte der Welt sowie die Gastländer, der Schirm und die Garantien Ihrer Abschreckung. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
+ },
+ "te_jmap_options_heading": {
+  "en": "Map Options",
+  "de": "Kartenoptionen"
  },
  "te_jmap_pick_academics": {
   "en": "Academics",
@@ -32371,9 +32399,41 @@
   "en": "#b Show on the map#!",
   "de": "#b Auf der Karte zeigen#!"
  },
+ "te_jmap_scale_linear": {
+  "en": "Linear",
+  "de": "Linear"
+ },
+ "te_jmap_scale_log": {
+  "en": "Logarithmic",
+  "de": "Logarithmisch"
+ },
+ "te_jmap_scale_own": {
+  "en": "Map Default",
+  "de": "Kartenstandard"
+ },
+ "te_jmap_scale_ranked": {
+  "en": "Ranked",
+  "de": "Nach Rang"
+ },
+ "te_jmap_scale_short_log": {
+  "en": "Log",
+  "de": "Log"
+ },
  "te_jmap_seabed_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the ocean basins, each coastal state in its basin's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Meeresbecken, jeder Küstenstaat in der Farbe seines Beckens. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
+ },
+ "te_jmap_trim_default": {
+  "en": "Trim 4 Each End",
+  "de": "Je Ende 4 abschneiden"
+ },
+ "te_jmap_trim_none": {
+  "en": "Keep All",
+  "de": "Alle behalten"
+ },
+ "te_jmap_trim_percent": {
+  "en": "Trim 5%",
+  "de": "5% abschneiden"
  },
  "te_jmap_tt_academics": {
   "en": "#b [THIS.GetState.GetName]#!\\nAcademics: #v [THIS.GetState.MakeScope.Var('te_dg_academics').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_academics_share')|%1]#! of its people",
@@ -34167,6 +34227,10 @@
   "en": "No one can be told apart by looks: each month, [concept_acceptance] from a shared heritage trait, a shared heritage trait group and no shared heritage is raised to the highest of the three, so every [concept_pop] gets the same heritage figure. Unlike $law_clade_citizenship$, nothing is added on top: the figure is the highest our citizenship law and technologies already give",
   "de": "Niemand lässt sich am Aussehen unterscheiden: Jeden Monat wird die [concept_acceptance] aus einer gemeinsamen Herkunftseigenschaft, einer gemeinsamen Herkunftseigenschaftengruppe und gar keiner gemeinsamen Herkunft auf den höchsten der drei Werte angehoben, sodass alle [Concept('concept_pop','Pops')] denselben Herkunftswert erhalten. Anders als bei $law_clade_citizenship$ kommt nichts obendrauf: Der Wert entspricht dem höchsten, den unser Staatsbürgerschaftsgesetz und unsere Technologien ohnehin schon liefern"
  },
+ "te_rc_technology_embargo": {
+  "en": "Technology Embargo",
+  "de": "Technologieembargo"
+ },
  "te_receivership_pretext_tt": {
   "en": "The receiving country keeps a national bank and outranks the debtor or has the larger economy — and the debtor is #R in default#!. An insolvent government is the only ground for demanding this.",
   "de": "Das übernehmende Land unterhält eine Nationalbank und übertrifft den Schuldner im Rang oder hat die größere Wirtschaft — und der Schuldner befindet sich #R im Zahlungsausfall#!. Eine zahlungsunfähige Regierung ist der einzige Grund, dies zu verlangen."
@@ -34546,6 +34610,10 @@
  "te_seabed_legend_rival_mines": {
   "en": "rivals' mines",
   "de": "Minen der Rivalen"
+ },
+ "te_seabed_local_only": {
+  "en": "Build only on local claims",
+  "de": "Nur auf lokalen Ansprüchen bauen"
  },
  "te_seabed_long_haul": {
   "en": "Long-Haul Seabed Operations",

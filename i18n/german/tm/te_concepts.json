@@ -1704,8 +1704,8 @@
   "de": "Nach dem Schuldenschnitt der Regierung halten Banken und Firmen im Inland weniger Bargeld, und die Regierung kann entsprechend weniger Kredit aufnehmen."
  },
  "banking_sterilize_inflows": {
-  "en": "Inflow Sterilization",
-  "de": "Sterilisierung der Kapitalzuflüsse"
+  "en": "Sterilization",
+  "de": "Sterilisierung"
  },
  "bantu_union": {
   "en": "Bantu Union",
@@ -2954,6 +2954,10 @@
  "concept_combined_arms_desc": {
   "en": "A military doctrine bonus based on [Concept('concept_combat_unit_type', 'unit type')] diversity in formations. Armies that field a mix of infantry, cavalry, artillery, and other unit types receive combat bonuses. Encourages balanced military composition rather than single-type spam.",
   "de": "Ein Bonus der Militärdoktrin, der auf der Vielfalt der [Concept('concept_combat_unit_type', 'Einheitsarten')] in Formationen beruht. Armeen, die eine Mischung aus Infanterie, Kavallerie, Artillerie und anderen Einheitsarten aufstellen, erhalten Kampfboni. Fördert eine ausgewogene militärische Zusammensetzung statt der Häufung eines einzigen Typs."
+ },
+ "concept_consortium_guarantee": {
+  "en": "Consortium Guarantee",
+  "de": "Konsortialgarantie"
  },
  "concept_construction_cost_scaling_desc": {
   "en": "A mechanic where construction costs rise with [Concept('concept_gdp_per_capita', 'GDP per capita')], reflecting higher labor costs and land prices, as far as the country's workforce is in use. The more of its workers are peasants or unemployed, the less of the increase applies, until none does. Rich countries at full employment can't outbuild their population; developing nations, and rich ones with workers to spare, build cheaply.",
@@ -6490,6 +6494,14 @@
  "humanitarian_aid_desc": {
   "en": "Humanitarian Aid is a [concept_diplomatic_action] that allows a country to give money to the poor in another country, increasing influence and relations.",
   "de": "Humanitäre Hilfe ist eine [concept_diplomatic_action], die es einem Land erlaubt, den Armen in einem anderen Land Geld zu geben, was Einfluss und Beziehungen verbessert."
+ },
+ "identity_creditors_consortium": {
+  "en": "Creditors' Consortium",
+  "de": "Gläubigerkonsortium"
+ },
+ "identity_research_commons": {
+  "en": "Research Commons",
+  "de": "Forschungsverbund"
  },
  "ig_approval_negative_modifier_desc": {
   "en": "This [concept_interest_group] disapproves of the government's recent policy decision.",
@@ -11755,6 +11767,18 @@
   "en": "#lore History is kept only for played countries and major powers.#!",
   "de": "#lore Die Geschichte wird nur für gespielte Länder und Mittelmächte geführt.#!"
  },
+ "te_jmap_area": {
+  "en": "Area",
+  "de": "Gebiet"
+ },
+ "te_jmap_color": {
+  "en": "Color",
+  "de": "Farben"
+ },
+ "te_jmap_outliers": {
+  "en": "Outliers",
+  "de": "Ausreißer"
+ },
  "te_jmap_pick_academics_desc": {
   "en": "Color each state by its Academics as a share of its people, against the world as it is now: from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. Universities and a literate, urban people draw them. Counted once a year.",
   "de": "Färbt jeden Staat nach dem Anteil der Akademiker an seiner Bevölkerung, im Vergleich zur Welt, wie sie jetzt ist: von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. Universitäten und ein gebildetes, städtisches Volk ziehen sie an. Einmal im Jahr gezählt."
@@ -11934,6 +11958,10 @@
  "te_jmap_pick_war_dead_desc": {
   "en": "Color each state by its dead to war and devastation last year, from the census's Causes of Death, against the world as it is now: the same share of the color for each doubling from #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. The census shares a country's war dead out to its states by their soldiers, so the map shows where the dead came from, not where they fell; under the Full setting the civilians devastation kills count too. A state that lost none is pale.",
   "de": "Färbt jeden Staat nach seinen Toten durch Krieg und Verwüstung im letzten Jahr, aus den Todesursachen der Volkszählung, im Vergleich zur Welt, wie sie jetzt ist: derselbe Anteil der Farbe für jede Verdopplung von #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! bis #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. Die Volkszählung verteilt die Kriegstoten eines Landes nach der Zahl der Soldaten auf seine Staaten, sodass die Karte zeigt, woher die Toten kamen, nicht, wo sie fielen; in der Einstellung „Voll“ zählen auch die Zivilisten mit, die die Verwüstung tötet. Ein Staat ohne Verluste ist blass."
+ },
+ "te_jmap_scale": {
+  "en": "Scale",
+  "de": "Skala"
  },
  "te_jud_act_upheld_desc": {
   "en": "The courts found the act we forced through lawful, and it carries their approval.",

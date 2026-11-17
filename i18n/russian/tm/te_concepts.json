@@ -2959,6 +2959,10 @@
   "en": "A military doctrine bonus based on [Concept('concept_combat_unit_type', 'unit type')] diversity in formations. Armies that field a mix of infantry, cavalry, artillery, and other unit types receive combat bonuses. Encourages balanced military composition rather than single-type spam.",
   "ru": "Бонус военной доктрины, основанный на разнообразии [Concept('concept_combat_unit_type', 'типов частей')] в соединениях. Армии, выставляющие смесь пехоты, кавалерии, артиллерии и других типов частей, получают боевые бонусы. Поощряет сбалансированный военный состав вместо однотипной массы."
  },
+ "concept_consortium_guarantee": {
+  "en": "Consortium Guarantee",
+  "ru": "Гарантия консорциума"
+ },
  "concept_construction_cost_scaling_desc": {
   "en": "A mechanic where construction costs rise with [Concept('concept_gdp_per_capita', 'GDP per capita')], reflecting higher labor costs and land prices, as far as the country's workforce is in use. The more of its workers are peasants or unemployed, the less of the increase applies, until none does. Rich countries at full employment can't outbuild their population; developing nations, and rich ones with workers to spare, build cheaply.",
   "ru": "Механика, при которой стоимость строительства растёт с [Concept('concept_gdp_per_capita', 'ВВП на душу населения')], отражая более высокие затраты на труд и цены на землю, поскольку рабочая сила страны задействована. Чем больше её работников — крестьяне или безработные, тем меньше применяется увеличение, пока не исчезает совсем. Богатые страны при полной занятости не могут строить больше, чем позволяет население; развивающиеся страны и богатые, у которых есть свободные работники, строят дёшево."
@@ -6494,6 +6498,14 @@
  "humanitarian_aid_desc": {
   "en": "Humanitarian Aid is a [concept_diplomatic_action] that allows a country to give money to the poor in another country, increasing influence and relations.",
   "ru": "Гуманитарная помощь — [concept_diplomatic_action|l], позволяющее стране давать деньги беднякам другой страны, повышая влияние и улучшая отношения."
+ },
+ "identity_creditors_consortium": {
+  "en": "Creditors' Consortium",
+  "ru": "Консорциум кредиторов"
+ },
+ "identity_research_commons": {
+  "en": "Research Commons",
+  "ru": "Научное содружество"
  },
  "ig_approval_negative_modifier_desc": {
   "en": "This [concept_interest_group] disapproves of the government's recent policy decision.",
@@ -11953,7 +11965,7 @@
  },
  "te_jmap_scale": {
   "en": "Scale",
-  "ru": "Масштаб"
+  "ru": "Шкала"
  },
  "te_jud_act_upheld_desc": {
   "en": "The courts found the act we forced through lawful, and it carries their approval.",

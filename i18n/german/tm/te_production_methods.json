@@ -6251,6 +6251,10 @@
   "en": "Seat of the Faith",
   "de": "Sitz des Glaubens"
  },
+ "pm_hq_research_commons": {
+  "en": "Joint Research Institute",
+  "de": "Gemeinsames Forschungsinstitut"
+ },
  "pm_hq_sovereign_empire": {
   "en": "Seat of the Empire",
   "de": "Reichssitz"
@@ -11350,6 +11354,10 @@
  "pmg_space_program_module_fabrication": {
   "en": "Module Fabrication",
   "de": "Modulfertigung"
+ },
+ "pmg_space_program_module_storage": {
+  "en": "Module Storage",
+  "de": "Modullager"
  },
  "pmg_spacex_starbase": {
   "en": "Starbase",

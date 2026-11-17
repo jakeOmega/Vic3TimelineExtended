@@ -3259,6 +3259,10 @@
   "en": "The $concept_journal_entry$ timed out with the transition #b stalled#!",
   "ru": "$concept_journal_entry$ завершилась по истечении срока: переход #b застопорился#!"
  },
+ "je_research_commons": {
+  "en": "Research Commons",
+  "ru": "Научное содружество"
+ },
  "je_space_race_interstellar_probe": {
   "en": "Interstellar Probe",
   "ru": "Межзвёздный зонд"
@@ -5436,8 +5440,8 @@
   "ru": "Очередь ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count')|0])"
  },
  "je_space_race_widget_mq_next_full": {
-  "en": "slots full",
-  "ru": "слоты заполнены"
+  "en": "shipping full",
+  "ru": "отправка заполнена"
  },
  "je_space_race_widget_mq_next_label": {
   "en": "Next module",
@@ -5451,9 +5455,17 @@
   "en": "#R stopped#!",
   "ru": "#R остановлено#!"
  },
- "je_space_race_widget_mq_next_tt": {
-  "en": "#header Next Module#!\\nWhen the queue's first module is built: the points it still needs, at this month's fabrication. A module past its colony's slots costs more. A built module takes one of the eight shipment slots, so while all eight are taken it waits, its points in stock. With no fabrication (no Module Fabrication method) only what the stock already covers is built; with the launch site lost, nothing is.",
-  "ru": "#header Следующий модуль#!\\nКогда будет построен первый модуль очереди: сколько очков ему ещё нужно при изготовлении этого месяца. Модуль сверх ячеек его колонии стоит дороже. Построенный модуль занимает одну из восьми ячеек отправки, так что, пока заняты все восемь, он ждёт, а его очки лежат на складе. Без изготовления (нет метода «Изготовление модулей») строится только то, что уже покрыто запасом; если стартовая площадка потеряна, не строится ничего."
+ "je_space_race_widget_mq_tt_full_land": {
+  "en": ", the first landing in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land')|0]#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_month', 'je_space_race_widget_mq_tt_months_word' )]",
+  "ru": ", первая посадка через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land')|0]#! [SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_first_land'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_month', 'je_space_race_widget_mq_tt_months_word' )]"
+ },
+ "je_space_race_widget_mq_tt_month": {
+  "en": "month",
+  "ru": "месяц"
+ },
+ "je_space_race_widget_mq_tt_months_word": {
+  "en": "months",
+  "ru": "мес."
  },
  "je_space_race_widget_offworld_label": {
   "en": "People off Earth",

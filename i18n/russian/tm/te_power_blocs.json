@@ -167,6 +167,10 @@
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
  },
+ "principle_group_conditionality": {
+  "en": "Conditionality",
+  "ru": "Обусловленность"
+ },
  "principle_group_cultural_plurality": {
   "en": "Cultural Plurality",
   "ru": "Культурный плюрализм"
@@ -182,6 +186,10 @@
  "principle_group_cultural_unity_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_group_development_lending": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
  },
  "principle_group_education": {
   "en": "Education",
@@ -254,6 +262,10 @@
  "principle_group_rural_desc": {
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "principle_group_technology_controls": {
+  "en": "Technology Controls",
+  "ru": "Технологический контроль"
  },
  "principle_group_urban_planning": {
   "en": "Urban Planning",
