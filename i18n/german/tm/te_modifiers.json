@@ -1561,19 +1561,19 @@
  },
  "country_te_mon_adopter_credit_standing_add": {
   "en": "Adopters’ [concept_banking_credit_standing]",
-  "de": "[concept_banking_credit_standing] der Anwender"
+  "de": "[concept_banking_credit_standing] der Teilnehmerländer"
  },
  "country_te_mon_adopter_credit_standing_add_desc": {
   "en": "Points off the credit standing premium of every adopter: it borrows in money the world already holds.",
-  "de": "Punkte Abzug von der Kreditwürdigkeitsprämie jedes Anwenders: Er leiht sich Geld in einer Währung, die die Welt bereits hält."
+  "de": "Punkte Abzug von der Kreditwürdigkeitsprämie jedes Teilnehmerlands: Es leiht sich Geld in einer Währung, die die Welt bereits hält."
  },
  "country_te_mon_adopter_overvaluation_premium_mult": {
   "en": "Adopters’ Overvaluation [concept_banking_risk_premium]",
-  "de": "[concept_banking_risk_premium] für Überbewertung bei Anwendern"
+  "de": "[concept_banking_risk_premium] für Überbewertung bei Teilnehmerländern"
  },
  "country_te_mon_adopter_overvaluation_premium_mult_desc": {
   "en": "An adopter has no peg to break, so an overvalued currency raises its risk premium instead. With the leader behind its debts, that part of the premium is smaller.",
-  "de": "Ein Anwender hat keine Bindung, die brechen könnte, daher erhöht eine überbewertete Währung stattdessen seine Risikoprämie. Steht der Anführer hinter seinen Schulden, fällt dieser Teil der Prämie kleiner aus."
+  "de": "Ein Teilnehmerland hat keine Bindung, die brechen könnte, daher erhöht eine überbewertete Währung stattdessen seine Risikoprämie. Steht der Anführer hinter seinen Schulden, fällt dieser Teil der Prämie kleiner aus."
  },
  "country_te_mon_asset_purchase_pressure_add": {
   "en": "Price Pressure from Asset Purchases",
@@ -1638,6 +1638,10 @@
  "country_te_mon_issuer_interventions_add_desc": {
   "en": "Points added to the leader's intervention budget once a member has adopted its currency, under any banking law but $law_unregulated_banking$. If they go, the tools the budget no longer covers are lifted one a month until the rest fit.",
   "de": "Punkte, die dem Interventionsbudget des Anführers hinzugefügt werden, sobald ein Mitglied seine Währung eingeführt hat, unter jedem Bankengesetz außer $law_unregulated_banking$. Fallen sie weg, werden die Instrumente, die das Budget nicht mehr deckt, einmal im Monat aufgehoben, bis der Rest passt."
+ },
+ "country_te_mon_issuer_premium_add": {
+  "en": "Issuer [concept_banking_risk_premium]",
+  "de": "[concept_banking_risk_premium] des Emittenten"
  },
  "country_te_mon_issuer_premium_add_desc": {
   "en": "Points off the leader's risk premium once a member has adopted its currency: the figure times the currency's [concept_banking_currency_reach]. It is risk premium, not [concept_banking_credit_standing], so it counts for a leader already at its credit floor.",
@@ -1745,7 +1749,7 @@
  },
  "country_wage_pressure_add_desc": {
   "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labor and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarized#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
-  "de": "Dauerhafter Aufwärtsdruck auf die Preise, der von Löhnen ausgeht — wie weit die Inflation über den Erwartungen einpendelt, solange diese Arbeits- und Sozialgesetze bestehen. Arbeiter, die verhandeln können, und Arbeiter mit einer Einkommensuntergrenze unter sich, kosten Arbeitgeber mehr, und Arbeitgeber geben dies weiter. Dies wird getrennt von jeder anderen Inflationsquelle erfasst, weil dieselben Gesetze es zurückzahlen, sobald die Preise unter Kontrolle sind: Solange die Inflation in der #b stabilen Spanne#! liegt, senkt jedes #v 0,1%#! an Lohndruck auch das, was Ihre #b Unterschicht vom Leben erwartet#! — die Lohnerhöhung war real, also fällt die Enttäuschung geringer aus — und erhöht Ihre #b Finanzdynamik#!, weil Geld, das seinen Wert behält, ausgegeben wird. Außerhalb dieser Spanne entfällt die Dividende, und sie wird niemals an eine #b Kommandowirtschaft#! oder ein #b dollarisiertes#! Land gezahlt, da keines der beiden sich die Stabilität verdient hat, für die sie gezahlt würde. Sobald die Gesamtinflation #v 8%#! erreicht, zählen diese Gesetze #b ein zweites Mal#!, da Arbeiter, die mit weiter steigenden Preisen rechnen, bereits im Voraus höhere Löhne fordern. Gesetze, die Löhne unterdrücken, tragen stattdessen einen negativen Wert und erhalten keine Dividende."
+  "de": "Dauerhafter Aufwärtsdruck auf die Preise, der von Löhnen ausgeht — wie weit die Inflation über den Erwartungen einpendelt, solange diese Arbeits- und Sozialgesetze bestehen. Arbeiter, die verhandeln können, und Arbeiter mit einer Einkommensuntergrenze unter sich, kosten Arbeitgeber mehr, und Arbeitgeber geben dies weiter. Dies wird getrennt von jeder anderen Inflationsquelle erfasst, weil dieselben Gesetze es zurückzahlen, sobald die Preise unter Kontrolle sind: Solange die Inflation in der #b stabilen Spanne#! liegt, senkt jedes #v 0,1%#! an Lohndruck auch das, was Ihre #b Unterschicht vom Leben erwartet#! — die Lohnerhöhung war real, also fällt die Enttäuschung geringer aus — und erhöht Ihre #b Finanzdynamik#!, weil Geld, das seinen Wert behält, ausgegeben wird. Außerhalb dieser Spanne entfällt die Dividende, und sie wird niemals an eine #b Planwirtschaft#! oder ein #b dollarisiertes#! Land gezahlt, da keines der beiden sich die Stabilität verdient hat, für die sie gezahlt würde. Sobald die Gesamtinflation #v 8%#! erreicht, zählen diese Gesetze #b ein zweites Mal#!, da Arbeiter, die mit weiter steigenden Preisen rechnen, bereits im Voraus höhere Löhne fordern. Gesetze, die Löhne unterdrücken, tragen stattdessen einen negativen Wert und erhalten keine Dividende."
  },
  "country_wealth_concentration_economy_add": {
   "en": "[concept_inheritance_concentration]: Economic Laws",
@@ -2677,7 +2681,7 @@
  },
  "power_bloc_te_mon_currency_trade_advantage_mult_desc": {
   "en": "Export and import advantage in every state of a country using the currency: each adopter, and the leader once one has adopted.",
-  "de": "Export- und Importvorteil in jedem Staat eines Landes, das die Währung nutzt: jeder Anwender und der Anführer, sobald einer die Währung eingeführt hat."
+  "de": "Export- und Importvorteil in jedem Staat eines Landes, das die Währung nutzt: jedes Teilnehmerland und der Anführer, sobald eines die Währung eingeführt hat."
  },
  "power_bloc_te_mon_currency_volatility_mult": {
   "en": "[concept_banking_common_currency] [concept_banking_cycle] Volatility",

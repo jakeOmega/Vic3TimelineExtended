@@ -5,7 +5,7 @@
  },
  "power_bloc_banking_union_bool_desc": {
   "en": "One supervisor and one deposit guarantee for the banks of every country using the currency, under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter.",
-  "de": "Ein Aufseher und eine Einlagensicherung für die Banken jedes Landes, das die Währung nutzt, unter jedem Bankengesetz außer $law_unregulated_banking$. Ein [concept_banking_crash] breitet sich in der gemeinsamen Währung weit weniger leicht aus, und der Anführer zahlt für jeden Anwender Aufsichtskosten."
+  "de": "Ein Aufseher und eine Einlagensicherung für die Banken jedes Landes, das die Währung nutzt, unter jedem Bankengesetz außer $law_unregulated_banking$. Ein [concept_banking_crash] breitet sich in der gemeinsamen Währung weit weniger leicht aus, und der Anführer zahlt für jedes Teilnehmerland Aufsichtskosten."
  },
  "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
   "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",
@@ -121,11 +121,11 @@
  },
  "power_bloc_fiscal_backstop_bool": {
   "en": "Leader Is Lender of Last Resort to Adopters",
-  "de": "Anführer ist Kreditgeber letzter Instanz für Anwender"
+  "de": "Anführer ist Kreditgeber letzter Instanz für Teilnehmerländer"
  },
  "power_bloc_fiscal_backstop_bool_desc": {
   "en": "The leader backs every adopter's debts: it takes part of each one's debt-load [concept_banking_risk_premium] off it, and pays for that in premium of its own, scaled by the adopter's GDP beside its own. A default calls the guarantee.",
-  "de": "Der Anführer steht für die Schulden jedes Anwenders ein: Er übernimmt einen Teil der [concept_banking_risk_premium] jedes Anwenders für dessen Schuldenlast und bezahlt dies mit eigener Prämie, gestaffelt nach dem BIP des Anwenders im Verhältnis zu seinem eigenen. Ein Zahlungsausfall ruft die Garantie auf."
+  "de": "Der Anführer steht für die Schulden jedes Teilnehmerlands ein: Er übernimmt einen Teil der [concept_banking_risk_premium] jedes Teilnehmerlands für dessen Schuldenlast und bezahlt dies mit eigener Prämie, gestaffelt nach dem BIP des Teilnehmerlands im Verhältnis zu seinem eigenen. Ein Zahlungsausfall ruft die Garantie auf."
  },
  "power_bloc_grid_interconnection_bool": {
   "en": "Members’ Power Grids Interconnect",

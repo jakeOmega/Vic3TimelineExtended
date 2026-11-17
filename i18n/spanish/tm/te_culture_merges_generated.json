@@ -3051,6 +3051,14 @@
   "en": "$dixie$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $dixie$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_american_core_names": {
+  "en": "$yankee$ and $dixie$",
+  "es": "$yankee$ y $dixie$"
+ },
+ "te_cmg_american_core_switched": {
+  "en": "$yankee$ and $dixie$ have all switched",
+  "es": "los colectivos de cultura $yankee$ y $dixie$ han pasado por completo"
+ },
  "te_cmg_american_done_core_tt": {
   "en": "$yankee$ and $dixie$ pops have all switched to $cm_american$.",
   "es": "Los colectivos de cultura $yankee$ y $dixie$ se han pasado todos a la cultura $cm_american$."
@@ -3087,6 +3095,14 @@
   "en": "$bolivian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $bolivian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_andean_core_names": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$",
+  "es": "$north_andean$, $south_andean$, $peruvian$ y $bolivian$"
+ },
+ "te_cmg_andean_core_switched": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ have all switched",
+  "es": "los colectivos de cultura $north_andean$, $south_andean$, $peruvian$ y $bolivian$ han pasado por completo"
+ },
  "te_cmg_andean_done_core_tt": {
   "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ pops have all switched to $cm_andean$.",
   "es": "Los colectivos de cultura $north_andean$, $south_andean$, $peruvian$ y $bolivian$ se han pasado todos a la cultura $cm_andean$."
@@ -3110,6 +3126,14 @@
  "te_cmg_anglophone_core_2_tt": {
   "en": "$yankee$ or $cm_american$ pops are held and very highly accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live accept them at [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] or more, beyond $full_acceptance$.",
   "es": "Los colectivos de cultura $yankee$ o $cm_american$ están controlados y muy bien aceptados durante [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] años: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos los aceptan en [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] o más, por encima de $full_acceptance$."
+ },
+ "te_cmg_anglophone_core_names": {
+  "en": "$british$ and $yankee$ (or $cm_american$)",
+  "es": "$british$ y $yankee$ (o $cm_american$)"
+ },
+ "te_cmg_anglophone_core_switched": {
+  "en": "$british$ and $yankee$ (or $cm_american$) have all switched",
+  "es": "los colectivos de cultura $british$ y $yankee$ (o $cm_american$) han pasado por completo"
  },
  "te_cmg_anglophone_done_core_tt": {
   "en": "$british$ and $yankee$ (or $cm_american$) pops have all switched to $cm_anglophone$.",
@@ -3147,6 +3171,14 @@
   "en": "$yemenite$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $yemenite$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_arab_core_names": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$",
+  "es": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ y $yemenite$"
+ },
+ "te_cmg_arab_core_switched": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ have all switched",
+  "es": "los colectivos de cultura $maghrebi$, $misri$, $mashriqi$, $bedouin$ y $yemenite$ han pasado por completo"
+ },
  "te_cmg_arab_done_core_tt": {
   "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ pops have all switched to $cm_arab$.",
   "es": "Los colectivos de cultura $maghrebi$, $misri$, $mashriqi$, $bedouin$ y $yemenite$ se han pasado todos a la cultura $cm_arab$."
@@ -3183,6 +3215,14 @@
   "en": "$sulista$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $sulista$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_brazilian_core_names": {
+  "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$",
+  "es": "$nordestino$, $paulista$, $amazonic$ y $sulista$"
+ },
+ "te_cmg_brazilian_core_switched": {
+  "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$ have all switched",
+  "es": "los colectivos de cultura $nordestino$, $paulista$, $amazonic$ y $sulista$ han pasado por completo"
+ },
  "te_cmg_brazilian_done_core_tt": {
   "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$ pops have all switched to $brazilian$.",
   "es": "Los colectivos de cultura $nordestino$, $paulista$, $amazonic$ y $sulista$ se han pasado todos a la cultura $brazilian$."
@@ -3206,6 +3246,10 @@
  "te_cmg_british_core_2_tt": {
   "en": "$scottish$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $scottish$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_british_core_switched": {
+  "en": "$scottish$ has switched",
+  "es": "los colectivos de cultura $scottish$ han pasado por completo"
  },
  "te_cmg_british_done_core_tt": {
   "en": "$scottish$ pops have all switched to $british$.",
@@ -3235,6 +3279,14 @@
   "en": "$hakka$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $hakka$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_chinese_core_names": {
+  "en": "$yue$, $min$ and $hakka$",
+  "es": "$yue$, $min$ y $hakka$"
+ },
+ "te_cmg_chinese_core_switched": {
+  "en": "$yue$, $min$ and $hakka$ have all switched",
+  "es": "los colectivos de cultura $yue$, $min$ y $hakka$ han pasado por completo"
+ },
  "te_cmg_chinese_done_core_tt": {
   "en": "$yue$, $min$ and $hakka$ pops have all switched to $han$.",
   "es": "Los colectivos de cultura $yue$, $min$ y $hakka$ se han pasado todos a la cultura $han$."
@@ -3251,6 +3303,14 @@
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_chinese').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_chinese').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_chinese').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_chinese').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_chinese').GetValue|1].",
   "es": "Las culturas centrales viven con niveles de vida similares: la diferencia entre la mejor y la peor situada es inferior a [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] para empezar, y se cuenta cuando todas las culturas centrales están controladas y aceptadas, y una fusión en curso se estanca cuando supera [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. En el último censo, los colectivos de cultura [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_chinese').GetCulture.GetName] eran los mejor situados, con [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_chinese').GetValue|1], y los de cultura [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_chinese').GetCulture.GetName] los peor situados, con [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_chinese').GetValue|1]: una diferencia de [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_chinese').GetValue|1]."
  },
+ "te_cmg_core_names_none": {
+  "en": "its constituent cultures",
+  "es": "sus culturas integrantes"
+ },
+ "te_cmg_core_switched_none": {
+  "en": "its constituent cultures have all switched",
+  "es": "todas sus culturas integrantes han pasado"
+ },
  "te_cmg_czechoslovak_core_1_tt": {
   "en": "$czech$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $czech$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
@@ -3258,6 +3318,14 @@
  "te_cmg_czechoslovak_core_2_tt": {
   "en": "$slovak$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $slovak$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_czechoslovak_core_names": {
+  "en": "$czech$ and $slovak$",
+  "es": "$czech$ y $slovak$"
+ },
+ "te_cmg_czechoslovak_core_switched": {
+  "en": "$czech$ and $slovak$ have all switched",
+  "es": "los colectivos de cultura $czech$ y $slovak$ han pasado por completo"
  },
  "te_cmg_czechoslovak_done_core_tt": {
   "en": "$czech$ and $slovak$ pops have all switched to $cm_czechoslovak$.",
@@ -3287,6 +3355,14 @@
   "en": "$malayalam$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $malayalam$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_dravidian_core_names": {
+  "en": "$tamil$, $kannada$ and $malayalam$",
+  "es": "$tamil$, $kannada$ y $malayalam$"
+ },
+ "te_cmg_dravidian_core_switched": {
+  "en": "$tamil$, $kannada$ and $malayalam$ have all switched",
+  "es": "los colectivos de cultura $tamil$, $kannada$ y $malayalam$ han pasado por completo"
+ },
  "te_cmg_dravidian_done_core_tt": {
   "en": "$tamil$, $kannada$ and $malayalam$ pops have all switched to $cm_dravidian$.",
   "es": "Los colectivos de cultura $tamil$, $kannada$ y $malayalam$ se han pasado todos a la cultura $cm_dravidian$."
@@ -3311,6 +3387,10 @@
   "en": "$flemish$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $flemish$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_dutch_core_switched": {
+  "en": "$flemish$ has switched",
+  "es": "los colectivos de cultura $flemish$ han pasado por completo"
+ },
  "te_cmg_dutch_done_core_tt": {
   "en": "$flemish$ pops have all switched to $dutch$.",
   "es": "Los colectivos de cultura $flemish$ se han pasado todos a la cultura $dutch$."
@@ -3334,6 +3414,14 @@
  "te_cmg_east_african_core_3_tt": {
   "en": "$sukuma$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $sukuma$ están controlados y aceptados durante [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] años: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_east_african_core_names": {
+  "en": "$swahili$, $nyamwezi$ and $sukuma$",
+  "es": "$swahili$, $nyamwezi$ y $sukuma$"
+ },
+ "te_cmg_east_african_core_switched": {
+  "en": "$swahili$, $nyamwezi$ and $sukuma$ have all switched",
+  "es": "los colectivos de cultura $swahili$, $nyamwezi$ y $sukuma$ han pasado por completo"
  },
  "te_cmg_east_african_done_core_tt": {
   "en": "$swahili$, $nyamwezi$ and $sukuma$ pops have all switched to $cm_east_african$.",
@@ -3362,6 +3450,14 @@
  "te_cmg_east_slavic_core_3_tt": {
   "en": "$byelorussian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $byelorussian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_east_slavic_core_names": {
+  "en": "$russian$, $ukrainian$ and $byelorussian$",
+  "es": "$russian$, $ukrainian$ y $byelorussian$"
+ },
+ "te_cmg_east_slavic_core_switched": {
+  "en": "$russian$, $ukrainian$ and $byelorussian$ have all switched",
+  "es": "los colectivos de cultura $russian$, $ukrainian$ y $byelorussian$ han pasado por completo"
  },
  "te_cmg_east_slavic_done_core_tt": {
   "en": "$russian$, $ukrainian$ and $byelorussian$ pops have all switched to $cm_east_slavic$.",
@@ -3399,6 +3495,14 @@
   "en": "$ilocano$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $ilocano$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_filipino_core_names": {
+  "en": "$visayan$, $tagalog$ and $ilocano$",
+  "es": "$visayan$, $tagalog$ y $ilocano$"
+ },
+ "te_cmg_filipino_core_switched": {
+  "en": "$visayan$, $tagalog$ and $ilocano$ have all switched",
+  "es": "los colectivos de cultura $visayan$, $tagalog$ y $ilocano$ han pasado por completo"
+ },
  "te_cmg_filipino_done_core_tt": {
   "en": "$visayan$, $tagalog$ and $ilocano$ pops have all switched to $filipino$.",
   "es": "Los colectivos de cultura $visayan$, $tagalog$ y $ilocano$ se han pasado todos a la cultura $filipino$."
@@ -3423,6 +3527,10 @@
   "en": "$karelian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $karelian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_finnish_core_switched": {
+  "en": "$karelian$ has switched",
+  "es": "los colectivos de cultura $karelian$ han pasado por completo"
+ },
  "te_cmg_finnish_done_core_tt": {
   "en": "$karelian$ pops have all switched to $finnish$.",
   "es": "Los colectivos de cultura $karelian$ se han pasado todos a la cultura $finnish$."
@@ -3442,6 +3550,10 @@
  "te_cmg_french_core_2_tt": {
   "en": "$occitan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $occitan$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_french_core_switched": {
+  "en": "$occitan$ has switched",
+  "es": "los colectivos de cultura $occitan$ han pasado por completo"
  },
  "te_cmg_french_done_core_tt": {
   "en": "$occitan$ pops have all switched to $french$.",
@@ -3466,6 +3578,14 @@
  "te_cmg_german_core_2_tt": {
   "en": "$south_german$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $south_german$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_german_core_names": {
+  "en": "$north_german$ and $south_german$",
+  "es": "$north_german$ y $south_german$"
+ },
+ "te_cmg_german_core_switched": {
+  "en": "$north_german$ and $south_german$ have all switched",
+  "es": "los colectivos de cultura $north_german$ y $south_german$ han pasado por completo"
  },
  "te_cmg_german_done_core_tt": {
   "en": "$north_german$ and $south_german$ pops have all switched to $cm_german$.",
@@ -3494,6 +3614,14 @@
  "te_cmg_gran_colombian_core_3_tt": {
   "en": "$ecuadorian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $ecuadorian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_gran_colombian_core_names": {
+  "en": "$colombian$, $venezuelan$ and $ecuadorian$",
+  "es": "$colombian$, $venezuelan$ y $ecuadorian$"
+ },
+ "te_cmg_gran_colombian_core_switched": {
+  "en": "$colombian$, $venezuelan$ and $ecuadorian$ have all switched",
+  "es": "los colectivos de cultura $colombian$, $venezuelan$ y $ecuadorian$ han pasado por completo"
  },
  "te_cmg_gran_colombian_done_core_tt": {
   "en": "$colombian$, $venezuelan$ and $ecuadorian$ pops have all switched to $cm_gran_colombian$.",
@@ -3531,6 +3659,14 @@
   "en": "$bageli$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $bageli$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_hindustani_core_names": {
+  "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$",
+  "es": "$avadhi$, $bundeli$, $chhattisgarhi$ y $bageli$"
+ },
+ "te_cmg_hindustani_core_switched": {
+  "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$ have all switched",
+  "es": "los colectivos de cultura $avadhi$, $bundeli$, $chhattisgarhi$ y $bageli$ han pasado por completo"
+ },
  "te_cmg_hindustani_done_core_tt": {
   "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$ pops have all switched to $hindustani$.",
   "es": "Los colectivos de cultura $avadhi$, $bundeli$, $chhattisgarhi$ y $bageli$ se han pasado todos a la cultura $hindustani$."
@@ -3554,6 +3690,10 @@
  "te_cmg_hungarian_core_2_tt": {
   "en": "$szekely$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $szekely$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_hungarian_core_switched": {
+  "en": "$szekely$ has switched",
+  "es": "los colectivos de cultura $szekely$ han pasado por completo"
  },
  "te_cmg_hungarian_done_core_tt": {
   "en": "$szekely$ pops have all switched to $hungarian$.",
@@ -3583,6 +3723,14 @@
   "en": "$bornean$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $bornean$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_indonesian_core_names": {
+  "en": "$javan$, $malay$, $sumatran$ and $bornean$",
+  "es": "$javan$, $malay$, $sumatran$ y $bornean$"
+ },
+ "te_cmg_indonesian_core_switched": {
+  "en": "$javan$, $malay$, $sumatran$ and $bornean$ have all switched",
+  "es": "los colectivos de cultura $javan$, $malay$, $sumatran$ y $bornean$ han pasado por completo"
+ },
  "te_cmg_indonesian_done_core_tt": {
   "en": "$javan$, $malay$, $sumatran$ and $bornean$ pops have all switched to $cm_indonesian$.",
   "es": "Los colectivos de cultura $javan$, $malay$, $sumatran$ y $bornean$ se han pasado todos a la cultura $cm_indonesian$."
@@ -3607,6 +3755,14 @@
   "en": "$south_italian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $south_italian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_italian_core_names": {
+  "en": "$north_italian$ and $south_italian$",
+  "es": "$north_italian$ y $south_italian$"
+ },
+ "te_cmg_italian_core_switched": {
+  "en": "$north_italian$ and $south_italian$ have all switched",
+  "es": "los colectivos de cultura $north_italian$ y $south_italian$ han pasado por completo"
+ },
  "te_cmg_italian_done_core_tt": {
   "en": "$north_italian$ and $south_italian$ pops have all switched to $cm_italian$.",
   "es": "Los colectivos de cultura $north_italian$ y $south_italian$ se han pasado todos a la cultura $cm_italian$."
@@ -3630,6 +3786,10 @@
  "te_cmg_japanese_core_2_tt": {
   "en": "$ryukyuan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $ryukyuan$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_japanese_core_switched": {
+  "en": "$ryukyuan$ has switched",
+  "es": "los colectivos de cultura $ryukyuan$ han pasado por completo"
  },
  "te_cmg_japanese_done_core_tt": {
   "en": "$ryukyuan$ pops have all switched to $japanese$.",
@@ -3671,6 +3831,14 @@
   "en": "$portuguese$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $portuguese$ están controlados y aceptados durante [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] años: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_latin_core_names": {
+  "en": "$french$, $cm_italian$, $spanish$ and $portuguese$",
+  "es": "$french$, $cm_italian$, $spanish$ y $portuguese$"
+ },
+ "te_cmg_latin_core_switched": {
+  "en": "$french$, $cm_italian$, $spanish$ and $portuguese$ have all switched",
+  "es": "los colectivos de cultura $french$, $cm_italian$, $spanish$ y $portuguese$ han pasado por completo"
+ },
  "te_cmg_latin_done_core_tt": {
   "en": "$french$, $cm_italian$, $spanish$ and $portuguese$ pops have all switched to $cm_latin$.",
   "es": "Los colectivos de cultura $french$, $cm_italian$, $spanish$ y $portuguese$ se han pasado todos a la cultura $cm_latin$."
@@ -3695,6 +3863,14 @@
   "en": "$xhosa$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $xhosa$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_nguni_core_names": {
+  "en": "$nguni$, $zulu$ and $xhosa$",
+  "es": "$nguni$, $zulu$ y $xhosa$"
+ },
+ "te_cmg_nguni_core_switched": {
+  "en": "$nguni$, $zulu$ and $xhosa$ have all switched",
+  "es": "los colectivos de cultura $nguni$, $zulu$ y $xhosa$ han pasado por completo"
+ },
  "te_cmg_nguni_done_core_tt": {
   "en": "$nguni$, $zulu$ and $xhosa$ pops have all switched to $cm_nguni$.",
   "es": "Los colectivos de cultura $nguni$, $zulu$ y $xhosa$ se han pasado todos a la cultura $cm_nguni$."
@@ -3714,6 +3890,14 @@
  "te_cmg_oghuz_turkic_core_2_tt": {
   "en": "$azerbaijani$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $azerbaijani$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_oghuz_turkic_core_names": {
+  "en": "$turkish$ and $azerbaijani$",
+  "es": "$turkish$ y $azerbaijani$"
+ },
+ "te_cmg_oghuz_turkic_core_switched": {
+  "en": "$turkish$ and $azerbaijani$ have all switched",
+  "es": "los colectivos de cultura $turkish$ y $azerbaijani$ han pasado por completo"
  },
  "te_cmg_oghuz_turkic_done_core_tt": {
   "en": "$turkish$ and $azerbaijani$ pops have all switched to $cm_oghuz_turkic$.",
@@ -3742,6 +3926,14 @@
  "te_cmg_pan_malay_core_2_tt": {
   "en": "$filipino$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $filipino$ están controlados y aceptados durante [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] años: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_pan_malay_core_names": {
+  "en": "$cm_indonesian$ and $filipino$",
+  "es": "$cm_indonesian$ y $filipino$"
+ },
+ "te_cmg_pan_malay_core_switched": {
+  "en": "$cm_indonesian$ and $filipino$ have all switched",
+  "es": "los colectivos de cultura $cm_indonesian$ y $filipino$ han pasado por completo"
  },
  "te_cmg_pan_malay_done_core_tt": {
   "en": "$cm_indonesian$ and $filipino$ pops have all switched to $cm_pan_malay$.",
@@ -3779,6 +3971,14 @@
   "en": "$cm_yugoslav$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $cm_yugoslav$ están controlados y aceptados durante [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] años: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_pan_slavic_core_names": {
+  "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$",
+  "es": "$cm_east_slavic$, $cm_czechoslovak$ y $cm_yugoslav$"
+ },
+ "te_cmg_pan_slavic_core_switched": {
+  "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$ have all switched",
+  "es": "los colectivos de cultura $cm_east_slavic$, $cm_czechoslovak$ y $cm_yugoslav$ han pasado por completo"
+ },
  "te_cmg_pan_slavic_done_core_tt": {
   "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$ pops have all switched to $cm_pan_slavic$.",
   "es": "Los colectivos de cultura $cm_east_slavic$, $cm_czechoslovak$ y $cm_yugoslav$ se han pasado todos a la cultura $cm_pan_slavic$."
@@ -3815,6 +4015,14 @@
   "en": "$kirgiz$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$. They also need $pan-nationalism$.",
   "es": "Los colectivos de cultura $kirgiz$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$. También necesitan $pan-nationalism$."
  },
+ "te_cmg_pan_turkic_core_names": {
+  "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$",
+  "es": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ y $kirgiz$"
+ },
+ "te_cmg_pan_turkic_core_switched": {
+  "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$ have all switched",
+  "es": "los colectivos de cultura $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ y $kirgiz$ han pasado por completo"
+ },
  "te_cmg_pan_turkic_done_core_tt": {
   "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$ pops have all switched to $cm_pan_turkic$.",
   "es": "Los colectivos de cultura $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ y $kirgiz$ se han pasado todos a la cultura $cm_pan_turkic$."
@@ -3834,6 +4042,10 @@
  "te_cmg_persian_core_2_tt": {
   "en": "$luri$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $luri$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_persian_core_switched": {
+  "en": "$luri$ has switched",
+  "es": "los colectivos de cultura $luri$ han pasado por completo"
  },
  "te_cmg_persian_done_core_tt": {
   "en": "$luri$ pops have all switched to $persian$.",
@@ -3863,6 +4075,14 @@
   "en": "$paraguayan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $paraguayan$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
  },
+ "te_cmg_platine_core_names": {
+  "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$",
+  "es": "$platinean$, $argentine$, $uruguayan$ y $paraguayan$"
+ },
+ "te_cmg_platine_core_switched": {
+  "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$ have all switched",
+  "es": "los colectivos de cultura $platinean$, $argentine$, $uruguayan$ y $paraguayan$ han pasado por completo"
+ },
  "te_cmg_platine_done_core_tt": {
   "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$ pops have all switched to $cm_platine$.",
   "es": "Los colectivos de cultura $platinean$, $argentine$, $uruguayan$ y $paraguayan$ se han pasado todos a la cultura $cm_platine$."
@@ -3890,6 +4110,14 @@
  "te_cmg_scandinavian_core_3_tt": {
   "en": "$norwegian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $norwegian$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_scandinavian_core_names": {
+  "en": "$swedish$, $danish$ and $norwegian$",
+  "es": "$swedish$, $danish$ y $norwegian$"
+ },
+ "te_cmg_scandinavian_core_switched": {
+  "en": "$swedish$, $danish$ and $norwegian$ have all switched",
+  "es": "los colectivos de cultura $swedish$, $danish$ y $norwegian$ han pasado por completo"
  },
  "te_cmg_scandinavian_done_core_tt": {
   "en": "$swedish$, $danish$ and $norwegian$ pops have all switched to $cm_scandinavian$.",
@@ -4302,6 +4530,14 @@
  "te_cmg_yugoslav_core_3_tt": {
   "en": "$bosniak$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "es": "Los colectivos de cultura $bosniak$ están controlados y aceptados: nuestra esfera de influencia controla a la mayoría de los colectivos de su tierra natal, y los países donde viven muchos de ellos les dan $full_acceptance$."
+ },
+ "te_cmg_yugoslav_core_names": {
+  "en": "$serb$, $croat$ and $bosniak$",
+  "es": "$serb$, $croat$ y $bosniak$"
+ },
+ "te_cmg_yugoslav_core_switched": {
+  "en": "$serb$, $croat$ and $bosniak$ have all switched",
+  "es": "los colectivos de cultura $serb$, $croat$ y $bosniak$ han pasado por completo"
  },
  "te_cmg_yugoslav_done_core_tt": {
   "en": "$serb$, $croat$ and $bosniak$ pops have all switched to $cm_yugoslav$.",

@@ -1391,6 +1391,14 @@
   "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
   "ru": "Как эта группа оценивает налоговый кодекс: к какому закону о налогообложении он ближе всего или насколько ниже уровня налогов установлены налоги, которые платят её члены."
  },
+ "te_tax_light_levy_div": {
+  "en": "Low $te_tax_inst_div$",
+  "ru": "$te_tax_inst_div$ (низкий)"
+ },
+ "te_tax_light_levy_div_desc": {
+  "en": "The light tax code levies a low dividend tax, which the taxation law does not levy itself.",
+  "ru": "Лёгкий налоговый кодекс вводит низкий налог на дивиденды, которого сам закон о налогообложении не вводит."
+ },
  "te_tax_light_react_armed_forces_neg": {
   "en": "Resents Recent Tax Changes",
   "ru": "Недовольна недавними изменениями налогов"
@@ -1558,6 +1566,10 @@
  "te_tax_light_relief_wage_desc": {
   "en": "The light tax code sets the $te_tax_inst_wage$ below the rate the taxation law sets at the current tax level.",
   "ru": "Лёгкий налоговый кодекс устанавливает ниже ставки, заданной законом о налогообложении при текущем уровне налогов, следующий налог: $te_tax_inst_wage$."
+ },
+ "te_tax_lt_extra_note_div": {
+  "en": "\\n\\nThe taxation law levies no dividend tax, so the tax code may levy only a low one, up to #v 5%#!. The laws that tax dividends in full are $law_proportional_taxation$, up to #v 20%#!, and $law_graduated_taxation$, up to #v 30%#!.",
+  "ru": "\\n\\nЗакон о налогообложении не вводит налога на дивиденды, поэтому налоговый кодекс может ввести лишь низкий, не более #v 5%#!. Законы, облагающие дивиденды полностью: «$law_proportional_taxation$» — до #v 20%#! и «$law_graduated_taxation$» — до #v 30%#!."
  },
  "te_tax_lt_tt_react_cons": {
   "en": "Paid most by $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$, $ig_devout$.",

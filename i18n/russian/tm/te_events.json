@@ -22075,6 +22075,146 @@
   "en": "Inside Our Networks",
   "ru": "Внутри наших сетей"
  },
+ "te_cc.1.a": {
+  "en": "Pay its creditors.",
+  "ru": "Заплатить её кредиторам."
+ },
+ "te_cc.1.b": {
+  "en": "Pay, if it adopts our economic laws.",
+  "ru": "Заплатить, если она примет наши экономические законы."
+ },
+ "te_cc.1.c": {
+  "en": "Pay, for concessions to our investors.",
+  "ru": "Заплатить в обмен на концессии для наших инвесторов."
+ },
+ "te_cc.1.d": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and puts its finances in our receivership until they recover, on terms we set. If we refuse, our guarantee of every other member lapses with it.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] объявила дефолт. Она — член нашего [Concept('concept_power_bloc','силового блока')], и её кредиторы давали ей в долг, полагаясь и на наше имя, и на её собственное: по [Concept('concept_consortium_guarantee','гарантии консорциума')] мы отвечаем по её долгам. Сегодня утром они пришли к нам. Выплата им обойдётся нам в @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#! и поставит её финансы под наше внешнее управление, пока они не восстановятся, на условиях, которые мы определим. Если мы откажемся, наша гарантия всем остальным членам утратит силу вместе с этой."
+ },
+ "te_cc.1.d_plain": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!. If we refuse, our guarantee of every other member lapses with it.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] объявила дефолт. Она — член нашего [Concept('concept_power_bloc','силового блока')], и её кредиторы давали ей в долг, полагаясь и на наше имя, и на её собственное: по [Concept('concept_consortium_guarantee','гарантии консорциума')] мы отвечаем по её долгам. Сегодня утром они пришли к нам. Выплата им обойдётся нам в @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!. Если мы откажемся, наша гарантия всем остальным членам утратит силу вместе с этой."
+ },
+ "te_cc.1.d_receivership": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and puts its finances in our receivership until they recover. If we refuse, our guarantee of every other member lapses with it.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] объявила дефолт. Она — член нашего [Concept('concept_power_bloc','силового блока')], и её кредиторы давали ей в долг, полагаясь и на наше имя, и на её собственное: по [Concept('concept_consortium_guarantee','гарантии консорциума')] мы отвечаем по её долгам. Сегодня утром они пришли к нам. Выплата им обойдётся нам в @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#! и поставит её финансы под наше внешнее управление, пока они не восстановятся. Если мы откажемся, наша гарантия всем остальным членам утратит силу вместе с этой."
+ },
+ "te_cc.1.d_terms": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and lets us ask terms of it in return. If we refuse, our guarantee of every other member lapses with it.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] объявила дефолт. Она — член нашего [Concept('concept_power_bloc','силового блока')], и её кредиторы давали ей в долг, полагаясь и на наше имя, и на её собственное: по [Concept('concept_consortium_guarantee','гарантии консорциума')] мы отвечаем по её долгам. Сегодня утром они пришли к нам. Выплата им обойдётся нам в @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#! и позволит нам потребовать от неё условий взамен. Если мы откажемся, наша гарантия всем остальным членам утратит силу вместе с этой."
+ },
+ "te_cc.1.e": {
+  "en": "Pay, if it sells its state enterprises.",
+  "ru": "Заплатить, если она продаст свои государственные предприятия."
+ },
+ "te_cc.1.f": {
+  "en": "From the treasury's foreign desk, to the government. The creditors of [SCOPE.sCountry('te_cc_debtor').GetName] have sent us their claims with a covering letter, and the claims are in order. The debtor's own officials have asked to see us before we answer. They have brought their accounts, and they say they will take any reasonable terms. The desk has drafted the terms our bloc's rules allow and attached them. The creditors want our answer within the week. The debtor's officials have asked for it sooner.",
+  "ru": "Из внешнего отдела казначейства — правительству. Кредиторы страны [SCOPE.sCountry('te_cc_debtor').GetName] прислали нам свои требования с сопроводительным письмом, и требования в порядке. Должностные лица самого должника просили принять их до нашего ответа. Они принесли свои счета и говорят, что согласятся на любые разумные условия. Отдел составил условия, которые допускают правила нашего блока, и приложил их. Кредиторы ждут нашего ответа в течение недели. Должностные лица должника просят ответить раньше."
+ },
+ "te_cc.1.g": {
+  "en": "Pay, for our laws and concessions.",
+  "ru": "Заплатить в обмен на наши законы и концессии."
+ },
+ "te_cc.1.h": {
+  "en": "Pay, for our laws and its state enterprises.",
+  "ru": "Заплатить в обмен на наши законы и её государственные предприятия."
+ },
+ "te_cc.1.i": {
+  "en": "Pay, for concessions and its state enterprises.",
+  "ru": "Заплатить в обмен на концессии и её государственные предприятия."
+ },
+ "te_cc.1.j": {
+  "en": "Pay, on every term we can set.",
+  "ru": "Заплатить на всех условиях, какие мы можем поставить."
+ },
+ "te_cc.1.t": {
+  "en": "A Member Defaults",
+  "ru": "Дефолт одного из членов"
+ },
+ "te_cc.1.z": {
+  "en": "Its debts are its own.",
+  "ru": "Её долги — её дело."
+ },
+ "te_cc.2.a": {
+  "en": "We accept the terms.",
+  "ru": "Мы принимаем условия."
+ },
+ "te_cc.2.a.tt": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName] pays our creditors, and its terms take effect:",
+  "ru": "Страна [SCOPE.sCountry('te_cc_creditor').GetName] выплачивает долг нашим кредиторам, и её условия вступают в силу:"
+ },
+ "te_cc.2.b": {
+  "en": "We will not be governed from abroad.",
+  "ru": "Нами не будут управлять из-за границы."
+ },
+ "te_cc.2.d": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], will pay our creditors @money!#v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_cost').GetValue|D]#! if we accept its terms. If we refuse, we stay in [concept_default], and for ten years no consortium will stand behind our debts.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_creditor').GetName], лидер нашего [Concept('concept_power_bloc','силового блока')], выплатит нашим кредиторам @money!#v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_cost').GetValue|D]#!, если мы примем её условия. Если мы откажемся, мы останемся в [Concept('concept_default','дефолте')], и десять лет ни один консорциум не будет отвечать по нашим долгам."
+ },
+ "te_cc.2.f": {
+  "en": "\\\"The terms came in a folder with our bloc's seal on it, and I read them aloud to the delegation in the order they were written. The payment comes first, and it is the whole of what we owe this year. The conditions follow, and they run to several pages. Nobody at the table asked for a second reading. Our creditors' agents are waiting in the next room for whatever we decide.\\\"",
+  "ru": "«Условия пришли в папке с печатью нашего блока, и я зачитал их делегации вслух в том порядке, в каком они были написаны. Сначала идёт платёж, и это весь наш долг за этот год. Затем следуют условия, они занимают несколько страниц. Никто за столом не попросил прочесть ещё раз. Агенты наших кредиторов ждут в соседней комнате того, что мы решим.»"
+ },
+ "te_cc.2.t": {
+  "en": "The Consortium's Terms",
+  "ru": "Условия консорциума"
+ },
+ "te_cc.3.a_accepted": {
+  "en": "The commission can begin its work.",
+  "ru": "Комиссия может приступать к работе."
+ },
+ "te_cc.3.a_accepted.tt": {
+  "en": "Each term it accepted is in force.",
+  "ru": "Каждое принятое ею условие вступило в силу."
+ },
+ "te_cc.3.a_refused": {
+  "en": "Then they will settle with their creditors alone.",
+  "ru": "Что ж, пусть сами рассчитываются со своими кредиторами."
+ },
+ "te_cc.3.a_refused.tt": {
+  "en": "We pay nothing, and owe it nothing.",
+  "ru": "Мы ничего не платим и ничего ей не должны."
+ },
+ "te_cc.3.d_accepted": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has accepted our terms. We have paid its creditors @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.Var('te_cred_paid').GetValue|D]#!, and the terms are in force.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] приняла наши условия. Мы выплатили её кредиторам @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.Var('te_cred_paid').GetValue|D]#!, и условия вступили в силу."
+ },
+ "te_cc.3.d_refused": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has refused our terms. It stays in [concept_default], and nothing has been paid. For ten years it cannot count on our guarantee, and it may leave our [concept_power_bloc] when it chooses.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_debtor').GetName] отклонила наши условия. Она остаётся в [Concept('concept_default','дефолте')], и ничего не выплачено. Десять лет она не может рассчитывать на нашу гарантию, а выйти из нашего [Concept('concept_power_bloc','силового блока')] вправе когда пожелает."
+ },
+ "te_cc.3.f": {
+  "en": "Notes from the treasury's foreign desk, for the government's file on the rescue.\\n• The debtor's answer arrived in writing, signed by its treasury.\\n• Its creditors were told the same day.\\n• The desk has kept a copy of the terms as offered.\\n• The bloc's other members have asked for one.",
+  "ru": "Заметки внешнего отдела казначейства для дела правительства о спасении.\\n• Ответ должника пришёл в письменном виде, за подписью его казначейства.\\n• Его кредиторам сообщили в тот же день.\\n• Отдел сохранил копию условий в том виде, в каком они были предложены.\\n• Остальные члены блока просили выслать им копию."
+ },
+ "te_cc.3.t_accepted": {
+  "en": "Our Terms Are Accepted",
+  "ru": "Наши условия приняты"
+ },
+ "te_cc.3.t_refused": {
+  "en": "Our Terms Are Refused",
+  "ru": "Наши условия отклонены"
+ },
+ "te_cc.4.a": {
+  "en": "We will remember this.",
+  "ru": "Мы этого не забудем."
+ },
+ "te_cc.4.a.tt": {
+  "en": "For #b five years#! [SCOPE.sCountry('te_cc_creditor').GetName] stands behind no member's debts.",
+  "ru": "На #b пять лет#! страна [SCOPE.sCountry('te_cc_creditor').GetName] перестаёт отвечать по долгам любого члена."
+ },
+ "te_cc.4.d": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], has refused to pay our creditors. We remain in [concept_default], and our creditors have been told to look to us alone.",
+  "ru": "Страна [SCOPE.sCountry('te_cc_creditor').GetName], лидер нашего [Concept('concept_power_bloc','силового блока')], отказалась платить нашим кредиторам. Мы остаёмся в [Concept('concept_default','дефолте')], а нашим кредиторам велели обращаться только к нам."
+ },
+ "te_cc.4.f": {
+  "en": "The delegation came back from [SCOPE.sCountry('te_cc_creditor').GetName] on the evening train with its papers unsigned. Its head went straight to the treasury and sat with the accounts until late. In the morning the treasury asked every department for a list of what could be cut, and by the end of the week the lists were on its desk.",
+  "ru": "Делегация вернулась из страны [SCOPE.sCountry('te_cc_creditor').GetName] вечерним поездом с неподписанными бумагами. Её глава сразу поехал в казначейство и просидел над счетами допоздна. Утром казначейство потребовало от каждого ведомства список того, что можно сократить, и к концу недели списки лежали у него на столе."
+ },
+ "te_cc.4.t": {
+  "en": "Our Bloc Leaves Us to Our Creditors",
+  "ru": "Наш блок бросил нас на кредиторов"
+ },
  "te_culture_merge.1.a": {
   "en": "One people, at last.",
   "ru": "Наконец-то один народ."
@@ -22154,6 +22294,30 @@
  "te_culture_merge.4.t": {
   "en": "The [SCOPE.sCulture('te_cm_ev_result').GetName] Merge Is Complete",
   "ru": "Слияние в культуру [SCOPE.sCulture('te_cm_ev_result').GetName] завершено"
+ },
+ "te_debug_cc.1.a": {
+  "en": "Close.",
+  "ru": "Закрыть."
+ },
+ "te_debug_cc.1.b": {
+  "en": "Call the guarantee as if we had defaulted.",
+  "ru": "Вызвать гарантию, как если бы мы объявили дефолт."
+ },
+ "te_debug_cc.1.c": {
+  "en": "Run a Development Lending pulse.",
+  "ru": "Запустить импульс Кредитования развития."
+ },
+ "te_debug_cc.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title Membership#!\\nLeader: #v [SCOPE.sCountry('te_debug_cc_leader').GetName]#! (itself = leader or no bloc)   Guarantee in force: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_guarantee')|0]#!   Relief in points: #v [SCOPE.GetRootScope.ScriptValue('te_cred_guarantee_relief')|2]#!\\nCalls on our record: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Next rescue's cost: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_honour_cost_display')|D]#!\\n\\n#title Receivership#!\\nUnder one: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_in_receivership')|0]#!   Receiver: #v [SCOPE.sCountry('te_debug_cc_receiver').GetName]#! (itself = none)   Treaty-less: #v [ROOT.GetVariable('te_cred_direct_receivership').GetValue|0]#!   Months under the exit threshold: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\n\\n#title Development Lending#!\\nPaid last month: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_paid_display')|D]#!   Received: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_received_display')|D]#!   Receiver modifier tier: #v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_receiver_tier')|0]#!\\n\\n#title As leader#!\\nTerms a rescue allows: #v [SCOPE.GetRootScope.ScriptValue('te_cred_terms_allowed')|0]#!   Remittance: #v [SCOPE.GetRootScope.ScriptValue('te_cred_take_share_own')|%2]#!   Months to exit: #v [SCOPE.GetRootScope.ScriptValue('te_cred_exit_months_own')|0]#!   Bloc GDP per head: #v [ROOT.GetVariable('te_cred_dl_bloc_gdppc').GetValue|2]#!",
+  "ru": "#lore Только для консоли. Ничто в моде не запускает это событие.#!\\n\\n#title Членство#!\\nЛидер: #v [SCOPE.sCountry('te_debug_cc_leader').GetName]#! (он сам = лидер или нет блока)   Гарантия действует: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_guarantee')|0]#!   Снижение в пунктах: #v [SCOPE.GetRootScope.ScriptValue('te_cred_guarantee_relief')|2]#!\\nОбращения к нашему послужному списку: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Стоимость следующего спасения: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_honour_cost_display')|D]#!\\n\\n#title Внешнее управление#!\\nПод управлением: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_in_receivership')|0]#!   Управляющий: #v [SCOPE.sCountry('te_debug_cc_receiver').GetName]#! (он сам = нет)   Без договора: #v [ROOT.GetVariable('te_cred_direct_receivership').GetValue|0]#!   Месяцев ниже порога выхода: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\n\\n#title Кредитование развития#!\\nВыплачено в прошлом месяце: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_paid_display')|D]#!   Получено: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_received_display')|D]#!   Уровень модификатора получателя: #v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_receiver_tier')|0]#!\\n\\n#title Как лидер#!\\nУсловий допускает спасение: #v [SCOPE.GetRootScope.ScriptValue('te_cred_terms_allowed')|0]#!   Отчисления: #v [SCOPE.GetRootScope.ScriptValue('te_cred_take_share_own')|%2]#!   Месяцев до выхода: #v [SCOPE.GetRootScope.ScriptValue('te_cred_exit_months_own')|0]#!   ВВП блока на душу населения: #v [ROOT.GetVariable('te_cred_dl_bloc_gdppc').GetValue|2]#!"
+ },
+ "te_debug_cc.1.f": {
+  "en": "Option b sends the default call to our leader as if we had defaulted; option c runs a Development Lending pulse now.",
+  "ru": "Вариант b отправляет нашему лидеру вызов гарантии, как если бы мы объявили дефолт; вариант c сейчас запускает импульс Кредитования развития."
+ },
+ "te_debug_cc.1.t": {
+  "en": "Creditors' Consortium: Test Read-Out",
+  "ru": "Консорциум кредиторов: тестовый вывод"
  },
  "te_debug_ch.1.a": {
   "en": "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running",
@@ -25319,6 +25483,14 @@
   "en": "Convene a conference of ambassadors.",
   "ru": "Созвать конференцию послов."
  },
+ "te_pb_summit.1.p": {
+  "en": "Hold a conference on the members' debts.",
+  "ru": "Провести конференцию по долгам членов."
+ },
+ "te_pb_summit.1.q": {
+  "en": "Convene a scientific congress.",
+  "ru": "Созвать научный конгресс."
+ },
  "te_pb_summit.1.t": {
   "en": "A Summit of the Bloc",
   "ru": "Саммит блока"
@@ -25347,9 +25519,17 @@
   "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and had the members bring their tariffs and customs procedures into line. For ten years our customs houses follow the bloc's common code, as every member's do.",
   "ru": "Страна [SCOPE.sCountry('te_pb_summit_leader').GetName] созвала саммит нашего [Concept('concept_power_bloc','силового блока')] и добилась от членов приведения пошлин и таможенных процедур к единому порядку. В течение десяти лет наши таможни следуют общему кодексу блока, как и таможни каждого члена."
  },
+ "te_pb_summit.2.d_debt_conference": {
+  "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference on its members' debts. The members agreed to coordinate their borrowing, and for ten years every member, ours included, borrows a little more cheaply for it. The delegations left on better terms with one another than they arrived.",
+  "ru": "Страна [SCOPE.sCountry('te_pb_summit_leader').GetName] созвала саммит нашего [Concept('concept_power_bloc','силового блока')] в виде конференции по долгам его членов. Члены договорились согласовывать свои заимствования, и десять лет каждый член, включая нас, занимает чуть дешевле. Делегации разъехались в лучших отношениях друг с другом, чем приехали."
+ },
  "te_pb_summit.2.d_drills": {
   "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and put joint exercises first on its agenda. For ten years every member's army, ours included, will train beside the others under a common program. The delegations left on better terms with one another than they arrived.",
   "ru": "Страна [SCOPE.sCountry('te_pb_summit_leader').GetName] созвала саммит нашего [Concept('concept_power_bloc','силового блока')] и поставила совместные учения первым пунктом повестки. В течение десяти лет армия каждого члена, и наша в том числе, будет обучаться бок о бок с остальными по общей программе. Делегации разъехались в лучших отношениях друг с другом, чем приехали."
+ },
+ "te_pb_summit.2.d_science": {
+  "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a scientific congress. The congress set a common program of research, and for ten years every member's laboratories, ours included, work to it.",
+  "ru": "Страна [SCOPE.sCountry('te_pb_summit_leader').GetName] созвала саммит нашего [Concept('concept_power_bloc','силового блока')] в виде научного конгресса. Конгресс задал общую программу исследований, и десять лет лаборатории каждого члена, включая наши, работают по ней."
  },
  "te_pb_summit.2.f": {
   "en": "From our delegation at the summit, to the government. The host set the agenda before we arrived, and the draft communiqué was on the table at the first session. We secured two changes of wording in the third paragraph and none of substance. Every delegation has signed. The text follows by the next courier, with our notes on what it commits us to and from what date.",

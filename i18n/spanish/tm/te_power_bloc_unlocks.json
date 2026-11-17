@@ -20,16 +20,16 @@
   "es": "Habilita los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de [GetTechnology('automated_surveillance').GetName]"
  },
  "country_auto_surveillance_pb_principles_bool_desc": {
-  "en": "Unlocks tier V [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_police_coordination').GetName] [concept_power_bloc_principle_group] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
-  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel V en el [concept_power_bloc_principle_group|l] [GetPowerBlocPrincipleGroup('principle_group_police_coordination').GetName] para los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
+  "en": "Unlocks tier V [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_police_coordination').GetName] and [GetPowerBlocPrincipleGroup('principle_group_technology_controls').GetName] [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
+  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel V en los [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')|l] [GetPowerBlocPrincipleGroup('principle_group_police_coordination').GetName] y [GetPowerBlocPrincipleGroup('principle_group_technology_controls').GetName] para los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
  },
  "country_cellular_pb_principles_bool": {
   "en": "Enables [GetTechnology('cellular_networks').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]",
   "es": "Habilita los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de [GetTechnology('cellular_networks').GetName]"
  },
  "country_cellular_pb_principles_bool_desc": {
-  "en": "Unlocks tier V [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_external_trade').GetName] [concept_power_bloc_principle_group] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
-  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel V en el [concept_power_bloc_principle_group|l] [GetPowerBlocPrincipleGroup('principle_group_external_trade').GetName] para los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
+  "en": "Unlocks [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] at tier V in the [GetPowerBlocPrincipleGroup('principle_group_external_trade').GetName] and tier IV in the [GetPowerBlocPrincipleGroup('principle_group_technology_controls').GetName] [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
+  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel V en [GetPowerBlocPrincipleGroup('principle_group_external_trade').GetName] y de nivel IV en [GetPowerBlocPrincipleGroup('principle_group_technology_controls').GetName], ambos [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')|l] de los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
  },
  "country_civil_rights_pb_principles_bool": {
   "en": "Enables [GetTechnology('civil_rights_movement').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]",
@@ -132,8 +132,8 @@
   "es": "Habilita los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de [GetTechnology('keynesian_economics').GetName]"
  },
  "country_keynesian_pb_principles_bool_desc": {
-  "en": "Unlocks tier IV [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_internal_trade').GetName], [GetPowerBlocPrincipleGroup('principle_group_foreign_investment').GetName], and [GetPowerBlocPrincipleGroup('principle_group_monetary_union').GetName] [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
-  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel IV en los [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')|l] [GetPowerBlocPrincipleGroup('principle_group_internal_trade').GetName], [GetPowerBlocPrincipleGroup('principle_group_foreign_investment').GetName] y [GetPowerBlocPrincipleGroup('principle_group_monetary_union').GetName] para los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
+  "en": "Unlocks tier IV [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] in the [GetPowerBlocPrincipleGroup('principle_group_internal_trade').GetName], [GetPowerBlocPrincipleGroup('principle_group_foreign_investment').GetName], [GetPowerBlocPrincipleGroup('principle_group_monetary_union').GetName], and [GetPowerBlocPrincipleGroup('principle_group_development_lending').GetName] [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')] for [Concept('concept_power_bloc', '$concept_power_blocs|q$')].",
+  "es": "Desbloquea los [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')|l] de nivel IV en los [Concept('concept_power_bloc_principle_group', '$concept_power_bloc_principle_groups|q$')|l] [GetPowerBlocPrincipleGroup('principle_group_internal_trade').GetName], [GetPowerBlocPrincipleGroup('principle_group_foreign_investment').GetName], [GetPowerBlocPrincipleGroup('principle_group_monetary_union').GetName] y [GetPowerBlocPrincipleGroup('principle_group_development_lending').GetName] para los [Concept('concept_power_bloc', '$concept_power_blocs|q$')|l]."
  },
  "country_knowledge_economy_pb_principles_bool": {
   "en": "Enables [GetTechnology('knowledge_economy').GetName] [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]",

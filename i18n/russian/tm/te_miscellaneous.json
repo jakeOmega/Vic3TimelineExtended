@@ -1411,6 +1411,14 @@
   "en": "Diplomatic Relations",
   "ru": "Дипломатические отношения"
  },
+ "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_GREAT_POWER": {
+  "en": "A great power would give up its own research",
+  "ru": "Великая держава отказалась бы от собственных исследований"
+ },
+ "DIPLOMATIC_ACCEPTANCE_RESEARCH_COMMONS_TECH_GAP": {
+  "en": "Technologies the Research Commons would share",
+  "ru": "Технологии, которыми поделилось бы Научное содружество"
+ },
  "DIPLO_ACTION_GDP_REQUIREMENT": {
   "en": "Requires our subject's [Concept('concept_gdp', 'GDP')] to be less than [SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement_multiplier')|V]% of our GDP (@money![SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement')|D+])",
   "ru": "Требуется, чтобы [Concept('concept_gdp', 'ВВП')] нашего зависимого государства составлял менее [SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement_multiplier')|V]% нашего ВВП (@money![SCOPE.GetRootScope.ScriptValue('peaceful_annex_gdp_requirement')|D+])"
@@ -2151,9 +2159,33 @@
   "en": "The conceding country holds at least one [concept_cultural_community] of the receiving country's [concept_primary_cultures] with [concept_acceptance] below 60. The transfer moves every pop of all the receiving country's primary cultures that the conceding country doesn't share, including well-accepted ones.",
   "ru": "Уступающая страна удерживает хотя бы одну [Concept('concept_cultural_community','культурную общину')] из [Concept('concept_primary_cultures','основных культур')] принимающей страны с [Concept('concept_acceptance','принятием')] ниже 60. Передача перемещает каждую группу населения всех основных культур принимающей страны, которых нет у уступающей страны, включая хорошо принятые."
  },
+ "POWER_BLOC_COHESION_CREDITORS_COMMAND_ECONOMY": {
+  "en": "[concept_power_bloc_member] with $law_command_economy$ ($identity_creditors_consortium$)",
+  "ru": "[concept_power_bloc_member] с законом «$law_command_economy$» ($identity_creditors_consortium$)"
+ },
+ "POWER_BLOC_COHESION_CREDITORS_LEADER_DEBT": {
+  "en": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')] debt ($identity_creditors_consortium$)",
+  "ru": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')]: долг ($identity_creditors_consortium$)"
+ },
+ "POWER_BLOC_COHESION_CREDITORS_LEADER_DEFAULT": {
+  "en": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')] in [concept_default] ($identity_creditors_consortium$)",
+  "ru": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')]: в [Concept('concept_default','дефолте')] ($identity_creditors_consortium$)"
+ },
+ "POWER_BLOC_COHESION_CREDITORS_RECEIVERSHIP": {
+  "en": "[concept_power_bloc_member] under a receivership ($identity_creditors_consortium$)",
+  "ru": "[concept_power_bloc_member] под внешним управлением ($identity_creditors_consortium$)"
+ },
+ "POWER_BLOC_COHESION_CREDITORS_SHARE_GDP": {
+  "en": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')] share of total [concept_gdp] ($identity_creditors_consortium$)",
+  "ru": "[Concept('concept_power_bloc_leader','$concept_power_bloc_leader_extra_short|q$')]: доля в общем [Concept('concept_gdp','ВВП')] ($identity_creditors_consortium$)"
+ },
  "POWER_BLOC_COHESION_LEADER_INFAMY": {
   "en": "[concept_power_bloc_leader]'s [concept_infamy] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!",
   "ru": "[concept_infamy] [Concept('concept_power_bloc_leader','лидера силового блока')] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetName]: #v [SCOPE.GetRootScope.GetCountry.GetInfamy|-0]#!"
+ },
+ "POWER_BLOC_COHESION_RESEARCH_SHARE": {
+  "en": "[concept_power_bloc_leader]'s share of the bloc's [concept_innovation] ($identity_research_commons$)",
+  "ru": "Доля [Concept('concept_power_bloc_leader','лидера')] в [Concept('concept_innovation','инновациях')] блока ($identity_research_commons$)"
  },
  "POWER_BLOC_COHESION_WORST_INFAMY_DIPLOMATIC": {
   "en": "[concept_power_bloc_member] member with highest [concept_infamy] ($identity_diplomatic$)\\n   [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetName] with #v [SCOPE.GetRootScope.GetCountry.GetPowerBloc.GetParticipantWithHighestInfamy.GetInfamy|-0]#!",
@@ -3558,6 +3590,18 @@
  "TE_DC_STAT_SHARE_TT": {
   "en": "#header Private Construction#!\\nAs in the base game, your economic-system [concept_law] sets the share of construction allocated to private projects, funded from the [concept_investment_pool]:\\n$law_traditionalism$: 25%\\n$law_interventionism$, $law_agrarianism$, $law_extraction_economy$, $law_industry_banned$: 50%\\n$law_laissez_faire$: 75%\\n$law_cooperative_ownership$: 35%\\n$law_command_economy$: 10%\\n\\nOther modifiers can add to it. When one queue cannot use its share in a week, the other can use the rest.",
   "ru": "#header Частное строительство#!\\nКак и в базовой игре, ваш [Concept('concept_law','закон')] об экономической системе задаёт долю строительства, отводимую частным проектам, финансируемым из [Concept('concept_investment_pool','инвестиционного фонда')]:\\n$law_traditionalism$: 25%\\n$law_interventionism$, $law_agrarianism$, $law_extraction_economy$, $law_industry_banned$: 50%\\n$law_laissez_faire$: 75%\\n$law_cooperative_ownership$: 35%\\n$law_command_economy$: 10%\\n\\nДругие модификаторы могут её увеличить. Если одна очередь не может использовать свою долю за неделю, другая может использовать остаток."
+ },
+ "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_BACKING": {
+  "en": "Our debts would be guaranteed",
+  "ru": "Наши долги были бы гарантированы"
+ },
+ "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_COMMAND_ECONOMY": {
+  "en": "$law_command_economy$ gets no guarantee",
+  "ru": "При законе «$law_command_economy$» гарантии нет"
+ },
+ "TE_DIPLOMATIC_ACCEPTANCE_CREDITOR_DEVELOPMENT_LENDING": {
+  "en": "Its richer members would invest in us",
+  "ru": "Его более богатые члены инвестировали бы в нас"
  },
  "TE_EA_IR_AGENT_CAUGHT_TT": {
   "en": "The clerk is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with our source, and when we hear of it the reports stop.",
@@ -5252,8 +5296,8 @@
   "ru": "#lore Они откроются, когда начнётся#! #tooltippable Банковский цикл#! #lore вашей страны.#!"
  },
  "banking_dash_how_anchor": {
-  "en": "A [concept_banking_monetary_anchor] buys the anchor's credibility: your expected inflation is pulled toward the anchor's target as firmly as 80% of its central bank's word is worth, if that is more than your own. It costs you the dial: you take the anchor's rate and exchange rate, and cannot print or buy assets. Your inflation, cycle and neutral rate stay your own, so the borrowed rate is the wrong one whenever the two economies part ways, and you cannot devalue your way out. There are three ways to be anchored: a $currency_peg$ treaty (spread +0.5, credit standing −0.5 points, and a peg the markets can break), a power bloc's common currency (no spread and no peg to break: the premium rises instead), and a currency board, by which a puppet, vassal, colony or crown land uses its overlord's money (spread +0.25). As an anchor, every 5% of world GDP pegged to your currency is −0.1 points of credit standing, to −0.5.",
-  "ru": "[concept_banking_monetary_anchor] покупает доверие якоря: ваша ожидаемая инфляция подтягивается к цели якоря с силой, равной 80% веса слова его центрального банка, если это больше вашего собственного. Цена — рычаг управления: вы принимаете ставку и обменный курс якоря и не можете ни печатать деньги, ни покупать активы. Ваша инфляция, цикл и нейтральная ставка остаются вашими, поэтому заимствованная ставка неверна всякий раз, когда две экономики расходятся, и девальвацией не выкрутиться. Есть три способа быть привязанным: договор «$currency_peg$» (спред +0,5, кредитоспособность −0,5 пункта и привязка, которую рынки могут сломать), общая валюта силового блока (без спреда и без привязки, которую можно сломать: вместо этого растёт премия) и валютный совет, при котором марионетка, вассал, колония или коронная земля пользуются деньгами своего сюзерена (спред +0,25). В роли якоря каждые 5% мирового ВВП, привязанные к вашей валюте, дают −0,1 пункта кредитоспособности, до −0,5."
+  "en": "A [concept_banking_monetary_anchor] buys the anchor's credibility: your expected inflation is pulled toward the anchor's target as firmly as 80% of its central bank's word is worth, if that is more than your own. It costs you the dial: you take the anchor's rate and exchange rate, and cannot print or buy assets. Your inflation, cycle and neutral rate stay your own, so the borrowed rate is the wrong one whenever the two economies part ways, and you cannot devalue your way out. There are three ways to be anchored: a $currency_peg$ treaty (spread +0.5, credit standing −0.5 points, and a peg the markets can break), a power bloc's common currency (no spread and no peg to break: the premium rises instead), and a currency board, by which a puppet, vassal, colony or crown land uses its overlord's money (spread +0.25). As an anchor, every 5% of world GDP pegged to your currency is −0.1 points of credit standing, to −0.5. Where your standing is already on its floor, the part the floor would cancel comes off your risk premium instead.",
+  "ru": "[concept_banking_monetary_anchor] покупает доверие якоря: ваша ожидаемая инфляция подтягивается к цели якоря с силой, равной 80% веса слова его центрального банка, если это больше вашего собственного. Цена — рычаг управления: вы принимаете ставку и обменный курс якоря и не можете ни печатать деньги, ни покупать активы. Ваша инфляция, цикл и нейтральная ставка остаются вашими, поэтому заимствованная ставка неверна всякий раз, когда две экономики расходятся, и девальвацией не выкрутиться. Есть три способа быть привязанным: договор «$currency_peg$» (спред +0,5, кредитоспособность −0,5 пункта и привязка, которую рынки могут сломать), общая валюта силового блока (без спреда и без привязки, которую можно сломать: вместо этого растёт премия) и валютный совет, при котором марионетка, вассал, колония или коронная земля пользуются деньгами своего сюзерена (спред +0,25). В роли якоря каждые 5% мирового ВВП, привязанные к вашей валюте, дают −0,1 пункта кредитоспособности, до −0,5. Если ваша кредитоспособность уже на нижнем пределе, часть, которую предел обнулил бы, снимается с вашей премии за риск."
  },
  "banking_dash_how_backstops": {
   "en": "A $swap_line$ you receive takes a point off your risk premium and adds 2 peg confidence a month, and in a panic your borrowed gold leaves at the ordinary speed instead of double. In a slump, a run on your peg or a hyperinflation the provider also lends you 0.1% of your GDP a month, to 2%; a war is not one of those, since a swap line is a central bank's liquidity instrument, not war finance. It is a loan: once the crisis passes the same 0.1% a month flows back, interest-free, and whatever is still owed when the line ends is settled in one payment, into debt if need be. You may hold one line at a time. A $lender_of_last_resort$ takes half of what your debt load adds to your premium, and imported panics start a fifth less deep. It is worth nothing while your guarantor is living down a guarantee it broke, and less every time you call it: half, then 35%, then 20%, then nothing on the third default. Ten quiet years forget one call. What you extend costs you the recipient's benefit × its GDP ÷ yours, never more than the whole: backing a minor is a sliver, backing an equal costs all of it, and a ward that defaults calls the guarantee.",
@@ -5518,6 +5562,18 @@
  "banking_dash_mon_act_tt": {
   "en": "#header Mandate by Law#!\\nUnder $law_central_bank_independence$ the mandate is an act on that law: the $amendment_cb_inflation_targeting$ or the $amendment_cb_dual_mandate$. The bank moves to it #b 12 months#! after it passes, and Takes Effect In counts the months down.\\n$TOOLTIP_DELIMITER$\\nTo change it, repeal the act in the law panel and pass another.",
   "ru": "#header Мандат по закону#!\\nПри законе $law_central_bank_independence$ мандат задаёт поправка к этому закону: $amendment_cb_inflation_targeting$ или $amendment_cb_dual_mandate$. Банк переходит на него через #b 12 месяцев#! после принятия, а строка «Вступает в силу через» отсчитывает месяцы.\\n$TOOLTIP_DELIMITER$\\nЧтобы изменить мандат, отмените поправку на панели закона и примите другую."
+ },
+ "banking_dash_mon_anchor_floor_note": {
+  "en": "\\n$TOOLTIP_DELIMITER$\\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Lenders take #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! points off its [concept_banking_risk_premium] for that instead.",
+  "ru": "\\n$TOOLTIP_DELIMITER$\\nЕё [concept_banking_credit_standing|l] на нижнем пределе, и предел обнуляет часть или всё, что приносит ей её валюта. Вместо этого кредиторы снимают с её [Concept('concept_banking_risk_premium','премии за риск')] #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! п. п."
+ },
+ "banking_dash_mon_anchor_floor_note_issuer": {
+  "en": "\\n$TOOLTIP_DELIMITER$\\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Its cut in [concept_banking_risk_premium] as issuer of the common currency covers part of that, and lenders take #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! points more off its risk premium for the rest.",
+  "ru": "\\n$TOOLTIP_DELIMITER$\\nЕё [concept_banking_credit_standing|l] на нижнем пределе, и предел обнуляет часть или всё, что приносит ей её валюта. Снижение её [Concept('concept_banking_risk_premium','премии за риск')] как эмитента общей валюты покрывает часть этого, а за остальное кредиторы снимают с её премии за риск ещё #G [Country.MakeScope.ScriptValue('te_mon_reserve_floor_display')|2]#! п. п."
+ },
+ "banking_dash_mon_anchor_floor_note_issuer_covered": {
+  "en": "\\n$TOOLTIP_DELIMITER$\\nIts [concept_banking_credit_standing] is on its floor, and the floor cancels part or all of what its currency earns it. Its cut in [concept_banking_risk_premium] as issuer of the common currency already covers that, so lenders take nothing more off for it.",
+  "ru": "\\n$TOOLTIP_DELIMITER$\\nЕё [concept_banking_credit_standing|l] на нижнем пределе, и предел обнуляет часть или всё, что приносит ей её валюта. Снижение её [Concept('concept_banking_risk_premium','премии за риск')] как эмитента общей валюты уже покрывает это, поэтому кредиторы больше ничего за это не снимают."
  },
  "banking_dash_mon_anchor_state_board": {
   "en": "currency board on #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [Country.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!",
@@ -5979,6 +6035,10 @@
   "en": "#header [Country.GetName]#!\\nWhere it stands in the monetary union, and what backing it adds to the leader's [concept_banking_risk_premium]: #R +[Country.MakeScope.ScriptValue('te_mon_bs_union_cost_display')|2]#! points.",
   "ru": "#header [Country.GetName]#!\\nГде она стоит в валютном союзе и какое обеспечение добавляет к [Concept('concept_banking_risk_premium','премии за риск')] лидера: #R +[Country.MakeScope.ScriptValue('te_mon_bs_union_cost_display')|2]#! пп."
  },
+ "banking_dash_mon_union_regulator_note": {
+  "en": "\\n$TOOLTIP_DELIMITER$\\n#b Outside the banking union.#! Under $law_unregulated_banking$ the country has no regulator for the union's supervisor to work through, so it gets neither the union's steadier cycle nor its intervention point. Any other [concept_financial_regulation] law brings both.",
+  "ru": "\\n$TOOLTIP_DELIMITER$\\n#b Вне банковского союза.#! При законе «$law_unregulated_banking$» у страны нет регулятора, через которого мог бы работать надзорный орган союза, поэтому она не получает ни более ровного цикла союза, ни его точки вмешательства. Любой другой закон о [Concept('concept_financial_regulation','финансовом регулировании')] даёт и то и другое."
+ },
  "banking_dash_mon_union_state_adopter": {
   "en": "adopted — overvaluation premium #R +[Country.MakeScope.ScriptValue('te_mon_union_overvaluation_premium_display')|2]#!",
   "ru": "валюта принята — премия за переоценку #R +[Country.MakeScope.ScriptValue('te_mon_union_overvaluation_premium_display')|2]#!"
@@ -6028,8 +6088,8 @@
   "ru": "#header $country_wage_pressure_add$#!\\nНа сколько выше ожиданий устанавливается инфляция, пока действуют трудовые и социальные законы страны. Что они возвращают, пока цены стабильны, — см. [concept_banking_wage_pressure|l].\\n$TOOLTIP_DELIMITER$\\n#title К чему сводятся законы:#!\\n[Country.GetModifier.GetValueWithBreakdownFor('country_wage_pressure_add')]"
  },
  "banking_dash_mon_why_board": {
-  "en": "#lore As a subject without monetary autonomy the country runs a currency board on #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!'s money: the anchor's rate plus a quarter point, its exchange rate, and half the country's minting goes to it. More autonomy would end it.#!",
-  "ru": "#lore Как зависимое государство без денежной автономии, страна ведёт валютный совет на основе денег страны #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!: ставка якоря плюс четверть пункта, его обменный курс, и половина чеканки страны уходит якорю. Большая автономия положила бы этому конец.#!"
+  "en": "#lore As a subject without monetary autonomy the country runs a currency board on #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!'s money: the anchor's rate plus a quarter point, its exchange rate, and half of what the country mints before its bonuses goes to it. More autonomy would end it.#!",
+  "ru": "#lore Как зависимое государство без денежной автономии, страна ведёт валютный совет на основе денег страны #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!: ставка якоря плюс четверть пункта, его обменный курс, и половина того, что страна чеканит до своих бонусов, уходит якорю. Большая автономия положила бы этому конец.#!"
  },
  "banking_dash_mon_why_command": {
   "en": "#lore A command economy allocates credit by plan, not by price. The rate below is administered centrally and there is no dial to turn.#!",
@@ -22499,6 +22559,10 @@
   "en": "We are not already answering for another colony's abandonment",
   "ru": "Мы ещё не отвечаем за отказ от другой колонии"
  },
+ "sr_ai_program_means_tt": {
+  "en": "An AI country builds a Space Program only if Earth Orbit would cost it at most a tenth of its government's income, out of default and bankruptcy, and not within five years of pulling one down.",
+  "ru": "Страна под управлением ИИ создаёт Космическую программу, только если «Околоземная орбита» обойдётся ей не более чем в десятую часть дохода правительства, она вне дефолта и банкротства и не разбирала такую программу в последние пять лет."
+ },
  "sr_approach_cost_ambitious_interstellar_probe": {
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]#! innovation a week, on top of funding (as much as two more funding levels).",
   "ru": "#bold Цена сближения:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]#! инноваций в неделю сверх финансирования (до двух дополнительных уровней финансирования)."
@@ -23823,13 +23887,17 @@
   "en": "Queue an Orbital Yard: #v 4#! more Module Fabrication points a month a staffed level.",
   "ru": "Поставить в очередь Орбитальную верфь: ещё #v 4#! очка изготовления модулей в месяц за укомплектованный уровень."
  },
+ "sr_mod_req_price_fits_tt": {
+  "en": "Our module stock can hold its price",
+  "ru": "Склад наших модулей способен вместить его цену"
+ },
  "sr_mod_req_queue_room_tt": {
   "en": "The module queue has a free place (of 20)",
   "ru": "В очереди модулей есть свободное место (из 20)"
  },
  "sr_mod_req_slot_room_tt": {
-  "en": "It has a slot left, or fewer than four modules past them, counting what is queued and on its way",
-  "ru": "Остался слот, либо менее четырёх модулей сверх них, считая стоящие в очереди и находящиеся в пути"
+  "en": "It has a slot left, or fewer than eight modules past them, counting what is queued and on its way",
+  "ru": "Остался слот, либо менее восьми модулей сверх них, считая стоящие в очереди и находящиеся в пути"
  },
  "sr_mod_req_spec_chosen_tt": {
   "en": "The colony's founding specialization is chosen",
@@ -26683,6 +26751,110 @@
   "en": "Counterintelligence",
   "ru": "Контрразведка"
  },
+ "te_cred_accept_adjustment_tt": {
+  "en": "While the receivership lasts, [SCOPE.sCountry('te_cc_creditor').GetName] may impose its laws of the $lawgroup_economic_system$, $lawgroup_trade_policy$ and $lawgroup_taxation$ groups on us",
+  "ru": "Пока действует внешнее управление, страна [SCOPE.sCountry('te_cc_creditor').GetName] может навязывать нам свои законы из групп $lawgroup_economic_system$, $lawgroup_trade_policy$ и $lawgroup_taxation$"
+ },
+ "te_cred_accept_concessions_plain_tt": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName]'s investors may build here",
+  "ru": "Инвесторы страны [SCOPE.sCountry('te_cc_creditor').GetName] могут строить здесь"
+ },
+ "te_cred_accept_concessions_tt": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName]'s investors may build here, and its [Concept('concept_company', '$concept_companies|q$')] are granted up to #v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_monopolies').GetValue|0]#! [Concept('concept_monopoly', '$concept_monopolies|q$')] in our economy, our largest industries first",
+  "ru": "Инвесторы страны [SCOPE.sCountry('te_cc_creditor').GetName] могут строить здесь, а её [Concept('concept_company', '$concept_companies|q$')|l] получают в нашей экономике [Concept('concept_monopoly', '$concept_monopolies|q$')|l] (до #v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_monopolies').GetValue|0]#!), начиная с наших крупнейших отраслей"
+ },
+ "te_cred_accept_privatization_tt": {
+  "en": "We sell our state enterprises",
+  "ru": "Мы продаём свои государственные предприятия"
+ },
+ "te_cred_accept_receivership_tt": {
+  "en": "Our finances go under [SCOPE.sCountry('te_cc_creditor').GetName]'s receivership: we pay it part of our [concept_gdp] each month until we have been out of [concept_default], with our debt under a quarter of its ceiling, long enough",
+  "ru": "Наши финансы переходят под внешнее управление страны [SCOPE.sCountry('te_cc_creditor').GetName]: мы платим ей часть нашего [Concept('concept_gdp','ВВП')] каждый месяц, пока достаточно долго не пробудем вне [Concept('concept_default','дефолта')] с долгом ниже четверти его потолка"
+ },
+ "te_cred_can_leave_receivership_tt": {
+  "en": "We are not under the [concept_power_bloc_leader]'s receivership, and did not accept its rescue in the last ten days",
+  "ru": "Мы не находимся под внешним управлением [Concept('concept_power_bloc_leader','лидера')] и не принимали его спасение за последние десять дней"
+ },
+ "te_cred_can_leave_refused_tt": {
+  "en": "We refused the bloc's rescue terms in the last ten years",
+  "ru": "Мы отклонили условия спасения от блока за последние десять лет"
+ },
+ "te_cred_direct_binding_over_tt": {
+  "en": "Five years have passed since the receivership began",
+  "ru": "С начала внешнего управления прошло пять лет"
+ },
+ "te_cred_dl_receiver_2": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "te_cred_dl_receiver_3": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "te_cred_dl_receiver_4": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "te_cred_dl_receiver_5": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "te_cred_founder_valid_tt": {
+  "en": "We have a $law_national_bank$, no $law_command_economy$, and are not in [concept_default]",
+  "ru": "У нас действует закон «$law_national_bank$», не действует «$law_command_economy$», и мы не в [Concept('concept_default','дефолте')]"
+ },
+ "te_cred_leader_cannot_enact_tt": {
+  "en": "We do not lead a $identity_creditors_consortium$",
+  "ru": "Мы не возглавляем блок с идентичностью «$identity_creditors_consortium$»"
+ },
+ "te_cred_offer_adjustment_tt": {
+  "en": "Structural adjustment: while the receivership lasts, we may impose our own laws of the $lawgroup_economic_system$, $lawgroup_trade_policy$ and $lawgroup_taxation$ groups on it",
+  "ru": "Структурная перестройка: пока действует внешнее управление, мы можем навязывать ей свои законы из групп $lawgroup_economic_system$, $lawgroup_trade_policy$ и $lawgroup_taxation$"
+ },
+ "te_cred_offer_concessions_0_tt": {
+  "en": "Concessions: our investors may build there, and our [Concept('concept_company', '$concept_companies|q$')] are granted up to #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_0')|0]#! [Concept('concept_monopoly', '$concept_monopolies|q$')] in its economy, its largest industries first",
+  "ru": "Концессии: наши инвесторы могут строить там, а наши [Concept('concept_company', '$concept_companies|q$')|l] получают в её экономике [Concept('concept_monopoly', '$concept_monopolies|q$')|l] (до #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_0')|0]#!), начиная с крупнейших отраслей"
+ },
+ "te_cred_offer_concessions_1_tt": {
+  "en": "Concessions: our investors may build there, and our [Concept('concept_company', '$concept_companies|q$')] are granted up to #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_1')|0]#! [Concept('concept_monopoly', '$concept_monopolies|q$')] in its economy, its largest industries first",
+  "ru": "Концессии: наши инвесторы могут строить там, а наши [Concept('concept_company', '$concept_companies|q$')|l] получают в её экономике [Concept('concept_monopoly', '$concept_monopolies|q$')|l] (до #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_1')|0]#!), начиная с крупнейших отраслей"
+ },
+ "te_cred_offer_concessions_2_tt": {
+  "en": "Concessions: our investors may build there, and our [Concept('concept_company', '$concept_companies|q$')] are granted up to #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_2')|0]#! [Concept('concept_monopoly', '$concept_monopolies|q$')] in its economy, its largest industries first",
+  "ru": "Концессии: наши инвесторы могут строить там, а наши [Concept('concept_company', '$concept_companies|q$')|l] получают в её экономике [Concept('concept_monopoly', '$concept_monopolies|q$')|l] (до #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_offer_monopolies_2')|0]#!), начиная с крупнейших отраслей"
+ },
+ "te_cred_offer_concessions_plain_tt": {
+  "en": "Concessions: our investors may build there",
+  "ru": "Концессии: наши инвесторы могут строить там"
+ },
+ "te_cred_offer_no_receivership_tt": {
+  "en": "No receivership: we need $international_exchange_standards$ for one",
+  "ru": "Без внешнего управления: для него нам нужно «$international_exchange_standards$»"
+ },
+ "te_cred_offer_payment_tt": {
+  "en": "If [SCOPE.sCountry('te_cc_debtor').GetName] accepts, we pay its creditors @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!",
+  "ru": "Если страна [SCOPE.sCountry('te_cc_debtor').GetName] согласится, мы выплатим её кредиторам @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!"
+ },
+ "te_cred_offer_privatization_tt": {
+  "en": "Privatization: it sells its state enterprises",
+  "ru": "Приватизация: она продаёт свои государственные предприятия"
+ },
+ "te_cred_offer_receivership_tt": {
+  "en": "Its finances go under our receivership: it pays us #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_take_share_own')|%2]#! of its [concept_gdp] a month, until it has been out of [concept_default] with its debt under a quarter of its ceiling for #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_exit_months_own')|0]#! months in a row",
+  "ru": "Её финансы переходят под наше внешнее управление: она платит нам #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_take_share_own')|%2]#! своего [Concept('concept_gdp','ВВП')] в месяц, пока не пробудет вне [Concept('concept_default','дефолта')] с долгом ниже четверти его потолка #v [ROOT.GetCountry.MakeScope.ScriptValue('te_cred_exit_months_own')|0]#! мес. подряд"
+ },
+ "te_cred_refuse_cohesion_tt": {
+  "en": "Our [concept_power_bloc] loses #v 20#! [concept_power_bloc_cohesion]",
+  "ru": "Наш [Concept('concept_power_bloc','силовой блок')] теряет #v 20#! ед. [Concept('concept_power_bloc_cohesion','сплочённости')]"
+ },
+ "te_cred_refuse_suspends_tt": {
+  "en": "For #b five years#! we stand behind #b no member's#! debts, and every guarantee we have given by treaty is suspended with them",
+  "ru": "На #b пять лет#! мы не отвечаем по долгам #b ни одного члена#!, и каждая гарантия, данная нами по договору, приостанавливается вместе с ними"
+ },
+ "te_cred_terms_refused_tt": {
+  "en": "We stay in [concept_default], and for #b ten years#! no consortium stands behind our debts. We may leave our [concept_power_bloc] whatever its leverage over us",
+  "ru": "Мы остаёмся в [Concept('concept_default','дефолте')], и на #b десять лет#! ни один консорциум не отвечает по нашим долгам. Мы можем выйти из нашего [Concept('concept_power_bloc','силового блока')], каковы бы ни были его рычаги влияния на нас"
+ },
  "te_currency_peg_already_pegged_tt": {
   "en": "The pegging country has no other $currency_peg$ in force",
   "ru": "У привязывающей страны нет другого действующего соглашения «$currency_peg$»"
@@ -26798,6 +26970,18 @@
  "te_decision_close_antarctic_station_desc": {
   "en": "Bring the wintering party home. The station's research and its upkeep end.",
   "ru": "Вернуть зимовщиков домой. Исследования станции и её содержание прекращаются."
+ },
+ "te_decision_cred_end_receivership": {
+  "en": "End the Consortium's Receivership",
+  "ru": "Прекратить внешнее управление консорциума"
+ },
+ "te_decision_cred_end_receivership_desc": {
+  "en": "Five years have passed since the leader of our [concept_power_bloc] took charge of our finances in return for its rescue, as long as a treaty would have bound us. We may now send its commissioners home.",
+  "ru": "Прошло пять лет с тех пор, как лидер нашего [Concept('concept_power_bloc','силового блока')] взял наши финансы под управление в обмен на спасение, — столько, на сколько связал бы нас договор. Теперь мы можем отправить его комиссаров домой."
+ },
+ "te_decision_cred_end_receivership_tt": {
+  "en": "Our receivership under the leader of our $identity_creditors_consortium$ ends: we no longer pay it a share of our [concept_gdp] each month, the premium relief it gave goes with it, and the leader may no longer impose its laws on us.",
+  "ru": "Наше внешнее управление со стороны лидера блока с идентичностью «$identity_creditors_consortium$» заканчивается: мы больше не платим ему долю нашего [Concept('concept_gdp','ВВП')] каждый месяц, данное им облегчение премии уходит вместе с ним, и лидер больше не вправе навязывать нам свои законы."
  },
  "te_decision_debris_removal": {
   "en": "Begin Orbital Debris Removal",
@@ -32547,6 +32731,14 @@
   "en": "Political Models",
   "ru": "Политические модели"
  },
+ "te_jmap_pick_population_density": {
+  "en": "Population Density",
+  "ru": "Плотность населения"
+ },
+ "te_jmap_pick_population_density_colors": {
+  "en": "$te_jmap_color_text_own$ From pale lemon at the low end to deep wine at the high. A state with no people is pale.",
+  "ru": "$te_jmap_color_text_own$ От бледно-лимонного внизу до тёмно-винного вверху. Область без людей бледная."
+ },
  "te_jmap_pick_population_growth": {
   "en": "Population Growth",
   "ru": "Рост населения"
@@ -32894,6 +33086,18 @@
  "te_jmap_tt_death_rate": {
   "en": "#b [THIS.GetState.GetName]#!\\nDeaths: #v [THIS.GetState.MakeScope.Var('te_dg_cdr').GetValue|1]#! per 1,000 people last year",
   "ru": "#b [THIS.GetState.GetName]#!\\nСмертей: #v [THIS.GetState.MakeScope.Var('te_dg_cdr').GetValue|1]#! на 1 000 человек за прошлый год"
+ },
+ "te_jmap_tt_density": {
+  "en": "#b [THIS.GetState.GetName]#!\\nPopulation density: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|0]#! people per km²\\n#v [THIS.GetState.GetPopulationSize|K]#! people on #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! km² of land",
+  "ru": "#b [THIS.GetState.GetName]#!\\nПлотность населения: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|0]#! чел. на км²\\n#v [THIS.GetState.GetPopulationSize|K]#! чел. на #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! км² суши"
+ },
+ "te_jmap_tt_density_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo one lives here.",
+  "ru": "#b [THIS.GetState.GetName]#!\\nЗдесь никто не живёт."
+ },
+ "te_jmap_tt_density_sparse": {
+  "en": "#b [THIS.GetState.GetName]#!\\nPopulation density: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|2]#! people per km²\\n#v [THIS.GetState.GetPopulationSize|K]#! people on #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! km² of land",
+  "ru": "#b [THIS.GetState.GetName]#!\\nПлотность населения: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|2]#! чел. на км²\\n#v [THIS.GetState.GetPopulationSize|K]#! чел. на #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! км² суши"
  },
  "te_jmap_tt_devastation": {
   "en": "#b [THIS.GetState.GetName]#!\\nDevastation: #v [THIS.GetState.GetDevastationLevel|%r1]#!",
@@ -33532,16 +33736,16 @@
   "ru": "Сеньораж от валютных советов"
  },
  "te_mon_board_seigniorage_desc": {
-  "en": "Half the minting of every subject that runs a currency board on our money. It is worth what their gold mines are worth — for a colony without gold, next to nothing.",
-  "ru": "Половина чеканки каждого зависимого государства, в котором действует валютный совет на наших деньгах. Она стоит столько же, сколько их золотые рудники, — для колонии без золота почти ничего."
+  "en": "Half of what every subject that runs a currency board on our money mints before its own bonuses. The figure is before our bonuses to [concept_budget_minting], which raise it as they raise everything we mint. It grows with a subject's gold mines and, up to a ceiling, with its economy.",
+  "ru": "Половина того, что чеканит каждое зависимое государство, у которого действует валютный совет на наших деньгах, до его собственных бонусов. Цифра дана до наших бонусов к [Concept('concept_budget_minting','чеканке')], которые повышают её, как и всё, что мы чеканим. Растёт с золотыми рудниками зависимого государства и, до потолка, с его экономикой."
  },
  "te_mon_board_subject": {
   "en": "Currency Board",
   "ru": "Валютный совет"
  },
  "te_mon_board_subject_desc": {
-  "en": "We have no money of our own: we issue our overlord's, against their reserves, and half of what our mint earns is theirs. More autonomy would end it.",
-  "ru": "У нас нет собственных денег: мы выпускаем деньги нашего сюзерена против его резервов, и половина доходов нашего монетного двора принадлежит ему. Больше автономии положило бы этому конец."
+  "en": "We have no money of our own: we issue our overlord's, against their reserves, and half of what we mint before our bonuses is theirs. More autonomy would end it.",
+  "ru": "У нас нет собственных денег: мы выпускаем деньги нашего сюзерена против его резервов, и половина того, что мы чеканим до своих бонусов, принадлежит ему. Больше автономии положило бы этому конец."
  },
  "te_mon_board_wrong_stance": {
   "en": "The Overlord’s Rate",
@@ -33560,8 +33764,8 @@
   "ru": "Уже идущие покупки облигаций центральным банком продлеваются ещё на #b 12 мес.#!"
  },
  "te_mon_bond_support_tt": {
-  "en": "The central bank buys government bonds for #b 12 months#!: [Concept('concept_banking_monetisation','Monetize Deficit')] rises one step, worth about #b 1%#! of a year's economic output in new money, #b 2.5%#! on inflation while it runs and #b 0.5%#! on everything we borrow. When the purchases end, it steps back one.",
-  "ru": "Центральный банк покупает государственные облигации в течение #b 12 мес.#!: [Concept('concept_banking_monetisation','монетизация дефицита')] повышается на одну ступень, что даёт около #b 1%#! годового экономического выпуска новыми деньгами, #b 2,5%#! к инфляции на время действия и #b 0,5%#! ко всем нашим заимствованиям. Когда покупки закончатся, она снижается на одну ступень."
+  "en": "The central bank buys government bonds for #b 12 months#!: [Concept('concept_banking_monetisation','Monetize Deficit')] rises one step, worth about #b 1%#! of a year's economic output in new money before our bonuses to [concept_budget_minting], #b 2.5%#! on inflation while it runs and #b 0.5%#! on everything we borrow. When the purchases end, it steps back one.",
+  "ru": "Центральный банк покупает государственные облигации в течение #b 12 мес.#!: [Concept('concept_banking_monetisation','монетизация дефицита')] повышается на одну ступень, что даёт около #b 1%#! годового экономического выпуска новыми деньгами до наших бонусов к [Concept('concept_budget_minting','чеканке')], #b 2,5%#! к инфляции на время действия и #b 0,5%#! ко всем нашим заимствованиям. Когда покупки закончатся, она снижается на одну ступень."
  },
  "te_mon_currency_reform_premium": {
   "en": "Currency Reform",
@@ -33642,6 +33846,14 @@
  "te_mon_real_wage_dividend_desc": {
   "en": "A pay rise is only a pay rise if prices stay still. Organized workers and a welfare floor raise what your lower strata #b expect#! of life; while inflation is in the stable band, the pay rise those same laws won actually arrives, so part of that expectation is met rather than disappointed — fewer people feel cheated at the same standard of living. The money they spend feeds back into the financial cycle as demand as well. Both halves scale with how strong those laws are, and both switch off the moment inflation leaves the stable band, because wages rising into rising prices buy nothing.",
   "ru": "Повышение зарплаты имеет смысл, только если цены не растут. Организованные рабочие и социальный минимум повышают то, что ваши низшие слои #b ожидают#! от жизни; пока инфляция остаётся в стабильном диапазоне, прибавка, завоёванная этими законами, действительно доходит до людей, поэтому часть ожиданий оправдывается, а не обманывается: меньше людей чувствуют себя обделёнными при том же уровне жизни. Деньги, которые они тратят, также возвращаются в финансовый цикл в виде спроса. Обе части зависят от силы этих законов и обе отключаются, как только инфляция выходит из стабильного диапазона, потому что зарплаты, растущие вслед за ценами, ничего не покупают."
+ },
+ "te_mon_reserve_currency_premium": {
+  "en": "Reserve Currency Holdings",
+  "ru": "Запасы в резервной валюте"
+ },
+ "te_mon_reserve_currency_premium_desc": {
+  "en": "Other countries peg their money to ours, and our [concept_banking_credit_standing] is already as good as it can be.",
+  "ru": "Другие страны привязывают свои деньги к нашим, а наша [concept_banking_credit_standing|l] уже и так наилучшая из возможных."
  },
  "te_mon_stance_politics_loose": {
   "en": "Cheap Money Politics",
@@ -33796,8 +34008,8 @@
   "ru": "Монетизация дефицита"
  },
  "te_monetisation_minting_desc": {
-  "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
-  "ru": "Ваше правительство оплачивает счета деньгами, которые для него создаёт национальный банк, а не занятыми или собранными. Монетный двор работает сверх потребностей экономики, и излишек попадает в казну. Это самый быстрый доход, какой может получить государство, и самый дорогой: на каждый профинансированный фунт цены растут примерно в восемь раз сильнее, чем при займе той же суммы, и кредиторы берут с вас плату за это."
+  "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. The figure is before your bonuses to [concept_budget_minting], which raise it as they raise everything you mint. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
+  "ru": "Ваше правительство оплачивает счета деньгами, которые для него создаёт национальный банк, а не занятыми или собранными. Монетный двор работает сверх потребностей экономики, и излишек попадает в казну. Цифра дана до ваших бонусов к [Concept('concept_budget_minting','чеканке')], которые повышают её, как и всё, что вы чеканите. Это самый быстрый доход, какой может получить государство, и самый дорогой: на каждый профинансированный фунт цены растут примерно в восемь раз сильнее, чем при займе той же суммы, и кредиторы берут с вас плату за это."
  },
  "te_nation_all_header": {
   "en": "All Modifiers",
@@ -33828,12 +34040,12 @@
   "ru": "Каждое очко строительства стоит #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! от базовой цены: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! от $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! от остальных модификаторов стоимости строительства.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] Оно стремится к #v [Country.MakeScope.ScriptValue('te_cc_scale_target')|%0]#!, то есть единице плюс доле ВВП, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × применяемая её часть, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, и за год меняется не более чем на [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] от себя.\\n• #b Доля ВВП#!: ВВП на душу населения был #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. Доля равна нулю ниже @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] и растёт по прямой до [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] при @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Применяемая часть#!: вся доля ВВП, пока крестьяне и безработные составляют не более [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] рабочей силы, и ничего при [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0] и более. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]"
  },
  "te_nation_construction_scale_plain": {
-  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost.",
-  "ru": "#b $construction_cost_scaling$#!, устанавливаемое раз в год, составляет #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! от базовой стоимости."
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]",
+  "ru": "#b $construction_cost_scaling$#!, устанавливаемое раз в год, составляет #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! от базовой стоимости.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]"
  },
  "te_nation_construction_scale_small": {
-  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! for a small economy under the $rule_te_small_economy_construction_rule$ game rule: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] with almost no GDP, rising in a straight line to the full cost at a GDP of 10 million.",
-  "ru": "#b $construction_cost_scaling$#!, устанавливаемое раз в год, составляет #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! от базовой стоимости, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! для малой экономики по игровому правилу $rule_te_small_economy_construction_rule$: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] при почти нулевом ВВП, затем растёт по прямой до полной стоимости при ВВП в 10 млн."
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! for a small economy under the $rule_te_small_economy_construction_rule$ game rule: [Country.MakeScope.ScriptValue('te_cc_small_min_now')|%0] with almost no GDP, rising in a straight line to the full cost at a GDP of 10 million.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]",
+  "ru": "#b $construction_cost_scaling$#!, устанавливаемое раз в год, составляет #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! от базовой стоимости, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! для малой экономики по игровому правилу «$rule_te_small_economy_construction_rule$»: [Country.MakeScope.ScriptValue('te_cc_small_min_now')|%0] при почти нулевом ВВП, затем растёт по прямой до полной стоимости при ВВП в 10 млн.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]"
  },
  "te_nation_construction_scaled": {
   "en": "Scaled by wealth",
@@ -33846,6 +34058,10 @@
  "te_nation_construction_slack_unread": {
   "en": "Peasants and unemployed are first counted at the next yearly update; until then the share is the one that matches the scaling already in force.",
   "ru": "Крестьяне и безработные впервые будут подсчитаны при следующем ежегодном обновлении; до тех пор доля соответствует уже действующему масштабированию."
+ },
+ "te_nation_construction_small_pending": {
+  "en": " The $rule_te_small_economy_construction_rule$ game rule has been changed since the last yearly update, and its new setting applies from the next one.",
+  "ru": " Игровое правило «$rule_te_small_economy_construction_rule$» изменено с последнего годового обновления, и его новая настройка применяется со следующего."
  },
  "te_nation_grp_acceptance": {
   "en": "Acceptance and Assimilation",
@@ -34475,6 +34691,10 @@
   "en": "Summit: Harmonized Customs",
   "ru": "Саммит: Согласованные таможни"
  },
+ "te_pb_summit_debt_conference": {
+  "en": "Summit: Debt Conference",
+  "ru": "Саммит: конференция по долгам"
+ },
  "te_pb_summit_drills": {
   "en": "Summit: Joint Exercises",
   "ru": "Саммит: Совместные учения"
@@ -34531,6 +34751,10 @@
   "en": "Relations between every two members of the bloc rise by #v 20#!",
   "ru": "Отношения между каждыми двумя членами блока улучшаются на #v 20#!"
  },
+ "te_pb_summit_science": {
+  "en": "Summit: Scientific Congress",
+  "ru": "Саммит: научный конгресс"
+ },
  "te_political_commissars_indoctrination": {
   "en": "Commissar Indoctrination",
   "ru": "Идеологическая обработка комиссарами"
@@ -34559,7 +34783,79 @@
   "en": "No one can be told apart by looks: each month, [concept_acceptance] from a shared heritage trait, a shared heritage trait group and no shared heritage is raised to the highest of the three, so every [concept_pop] gets the same heritage figure. Unlike $law_clade_citizenship$, nothing is added on top: the figure is the highest our citizenship law and technologies already give",
   "ru": "Никого нельзя отличить по внешности: каждый месяц [concept_acceptance|l] по общей черте наследия, общей группе черт наследия и при отсутствии общего наследия поднимается до наивысшего из трёх, так что у каждой [Concept('concept_pop','группы населения')] один и тот же показатель наследия. В отличие от закона «$law_clade_citizenship$», ничего сверху не добавляется: показатель равен наивысшему из тех, что уже дают наш закон о гражданстве и технологии"
  },
+ "te_rc_institutes_left_behind": {
+  "en": "Institutes Left Behind",
+  "ru": "Оставленные институты"
+ },
+ "te_rc_ministry_law_lock_tt": {
+  "en": "We do not lead a $identity_research_commons$, which keeps its leader's Ministry of Science open",
+  "ru": "Мы не возглавляем блок с идентичностью «$identity_research_commons$», при которой Министерство науки его лидера остаётся открытым"
+ },
+ "te_rc_name_academy_of_nations": {
+  "en": "Academy of Nations",
+  "ru": "Академия наций"
+ },
+ "te_rc_name_joint_research_council": {
+  "en": "Joint Research Council",
+  "ru": "Совместный исследовательский совет"
+ },
+ "te_rc_name_scientific_union": {
+  "en": "Scientific Union",
+  "ru": "Научный союз"
+ },
+ "te_rc_pool_cap": {
+  "en": "Research Commons: Joint Laboratories",
+  "ru": "Научное содружество: совместные лаборатории"
+ },
+ "te_rc_tech_controls_aid_tt": {
+  "en": "Not barred by our [concept_power_bloc]'s $principle_group_technology_controls$, which close this aid to countries outside the bloc",
+  "ru": "Не запрещено принципами группы «$principle_group_technology_controls$» нашего [Concept('concept_power_bloc','силового блока')], закрывающими эту помощь для стран вне блока"
+ },
  "te_rc_technology_embargo": {
+  "en": "Technology Embargo",
+  "ru": "Технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_action_break_name": {
+  "en": "End Technology Embargo",
+  "ru": "Снять технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_action_name": {
+  "en": "Technology Embargo",
+  "ru": "Технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_action_notification_break_name": {
+  "en": "Technology Embargo Ended",
+  "ru": "Технологическое эмбарго снято"
+ },
+ "te_rc_technology_embargo_action_notification_name": {
+  "en": "Technology Embargo",
+  "ru": "Технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_action_notification_third_party_break_name": {
+  "en": "Technology Embargo Ended",
+  "ru": "Технологическое эмбарго снято"
+ },
+ "te_rc_technology_embargo_action_notification_third_party_name": {
+  "en": "Technology Embargo",
+  "ru": "Технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_action_propose_name": {
+  "en": "Technology Embargo",
+  "ru": "Технологическое эмбарго"
+ },
+ "te_rc_technology_embargo_not_member_tt": {
+  "en": "The target is not a member of our [concept_power_bloc]",
+  "ru": "Цель не является членом нашего [Concept('concept_power_bloc','силового блока')]"
+ },
+ "te_rc_technology_embargo_one_tt": {
+  "en": "We have no other $te_rc_technology_embargo$ in place",
+  "ru": "У нас не действует другое «$te_rc_technology_embargo$»"
+ },
+ "te_rc_technology_embargo_tier_tt": {
+  "en": "Our [concept_power_bloc] holds $principle_group_technology_controls$ at tier III or above",
+  "ru": "Наш [Concept('concept_power_bloc','силовой блок')] держит «$principle_group_technology_controls$» на уровне III или выше"
+ },
+ "te_rc_technology_embargoed": {
   "en": "Technology Embargo",
   "ru": "Технологическое эмбарго"
  },
@@ -35908,8 +36204,12 @@
   "ru": "#bold [concept_tourism_throughput]#!\\nИсточники ниже дают в сумме #v [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#!, применяется к области каждый месяц. Полоса под каждым источником показывает, насколько он близок к максимуму."
  },
  "te_subjugation_strength_sufficient_tt": {
-  "en": "Our [concept_subjugation_strength] against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (currently #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• From [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! against #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, a ratio of #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! divided by #V 20#!)\\n• From our [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]",
-  "ru": "Наша [concept_subjugation_strength|l] против страны [SCOPE.sCountry('target_country').GetName] составляет не менее #V 1,0#! (сейчас #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• Источник — [concept_prestige|l]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! против #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, отношение #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#!, делённое на #V 20#!)\\n• Источник — наша [concept_power_bloc_identity|l]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]"
+  "en": "Our [concept_subjugation_strength] against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (currently #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• From [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! against #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, a ratio of #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! divided by #V 20#!)\\n• From our [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)7'), 'te_subjugation_strength_tt_identity_creditor', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]",
+  "ru": "Наша [concept_subjugation_strength|l] против страны [SCOPE.sCountry('target_country').GetName] составляет не менее #V 1,0#! (сейчас #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• Источник — [concept_prestige|l]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! против #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, отношение #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#!, делённое на #V 20#!)\\n• Источник — наша [concept_power_bloc_identity|l]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)7'), 'te_subjugation_strength_tt_identity_creditor', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]"
+ },
+ "te_subjugation_strength_tt_identity_creditor": {
+  "en": " ($identity_creditors_consortium$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member is under our receivership)",
+  "ru": " ($identity_creditors_consortium$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#!, если член находится под нашим внешним управлением)"
  },
  "te_subjugation_strength_tt_identity_cultural": {
   "en": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member shares one of our [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')])",

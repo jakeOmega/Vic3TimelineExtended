@@ -8175,6 +8175,10 @@
   "en": "Diplomatic Framework",
   "de": "Diplomatischer Rahmen"
  },
+ "pm_power_bloc_statue_research_commons": {
+  "en": "Research Commons",
+  "de": "Forschungsverbund"
+ },
  "pm_power_centralized_control_systems": {
   "en": "Power Centralized Control Systems",
   "de": "Zentrale Kraftwerkssteuerungssysteme"
@@ -8975,6 +8979,14 @@
   "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_deep_space_exploration$. It sets the limit each month.",
   "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als $pm_deep_space_exploration$. Sie legt die Grenze jeden Monat fest."
  },
+ "pm_sr_mission_ceiling_earth_orbit": {
+  "en": "Up to $pm_earth_orbit$",
+  "de": "Bis einschließlich $pm_earth_orbit$"
+ },
+ "pm_sr_mission_ceiling_earth_orbit_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_earth_orbit$. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als $pm_earth_orbit$. Sie legt die Grenze jeden Monat fest."
+ },
  "pm_sr_mission_ceiling_interstellar": {
   "en": "Up to the $pm_interstellar_mission$",
   "de": "Bis einschließlich $pm_interstellar_mission$"
@@ -8983,9 +8995,21 @@
   "en": "This country's government keeps its program to missions whose bill its revenue can carry, and its revenue can carry any of them. It sets the limit each month.",
   "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, und ihre Einnahmen können jede davon tragen. Sie legt die Grenze jeden Monat fest."
  },
+ "pm_sr_mission_ceiling_mars": {
+  "en": "Up to the $pm_mars_mission$",
+  "de": "Bis einschließlich $pm_mars_mission$"
+ },
  "pm_sr_mission_ceiling_mars_desc": {
   "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than the $pm_mars_mission$. It sets the limit each month.",
   "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als die $pm_mars_mission$. Sie legt die Grenze jeden Monat fest."
+ },
+ "pm_sr_mission_ceiling_moon": {
+  "en": "Up to the $pm_moon_mission$",
+  "de": "Bis einschließlich $pm_moon_mission$"
+ },
+ "pm_sr_mission_ceiling_moon_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than the $pm_moon_mission$. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als die $pm_moon_mission$. Sie legt die Grenze jeden Monat fest."
  },
  "pm_sr_mission_ceiling_none": {
   "en": "Any Mission",
@@ -8994,6 +9018,14 @@
  "pm_sr_mission_ceiling_none_desc": {
   "en": "The program may fly any mission its technology allows.",
   "de": "Das Programm darf jede Mission fliegen, die seine Technologie erlaubt."
+ },
+ "pm_sr_mission_ceiling_solar": {
+  "en": "Up to $pm_solar_colonization$",
+  "de": "Bis einschließlich $pm_solar_colonization$"
+ },
+ "pm_sr_mission_ceiling_solar_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_solar_colonization$. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als $pm_solar_colonization$. Sie legt die Grenze jeden Monat fest."
  },
  "pm_sr_site_marker": {
   "en": "Colony Record",

@@ -1775,6 +1775,10 @@
   "en": "This country's former ruler held it by force to the end, and the people who took over govern the same way.",
   "ru": "Прежний правитель этой страны удерживал её силой до самого конца, и те, кто пришёл ему на смену, управляют так же."
  },
+ "bondholders_council": {
+  "en": "Council of Bondholders",
+  "ru": "Совет держателей облигаций"
+ },
  "border_dispute_active_modifier_desc": {
   "en": "A territorial dispute with a neighboring nation over colonial-era borders is causing diplomatic tension.",
   "ru": "Территориальный спор с соседней страной из-за границ колониальной эпохи вызывает дипломатическую напряжённость."
@@ -2963,6 +2967,10 @@
   "en": "Consortium Guarantee",
   "ru": "Гарантия консорциума"
  },
+ "concept_consortium_guarantee_desc": {
+  "en": "The [concept_power_bloc_leader] of a $identity_creditors_consortium$ stands behind the debts of every other member, as a Lender of Last Resort treaty would. Each member's [concept_banking_risk_premium] from debt load is cut, half of it at first, less after each rescue it has needed, and the leader pays part of that cut in premium of its own, scaled by the member's [concept_gdp] beside its own. A financial crisis that spreads to a member from abroad starts milder.\\n\\nWhen a member goes into [concept_default], the leader chooses: pay the member's creditors and set a term in return, more than one with $principle_group_conditionality$, or refuse. A refusal ends the guarantee of every member for five years. A member offered terms may refuse them; it then stays in default, loses the guarantee for ten years, and may leave the bloc.\\n\\nThe guarantee needs the Banking System game rule set to Enabled. A member with $law_command_economy$ gets none, nor does one already backed by a treaty or a receivership. One that its currency union backs takes the premium relief from the union, and the consortium's leader still answers its default.",
+  "ru": "[concept_power_bloc_leader] блока с идентичностью «$identity_creditors_consortium$» отвечает по долгам каждого другого члена, как при договоре о кредиторе последней инстанции. [concept_banking_risk_premium] каждого члена от долговой нагрузки снижается: сначала наполовину, затем меньше после каждого понадобившегося ему спасения, а лидер принимает часть этого снижения в виде собственной премии, пропорционально [Concept('concept_gdp','ВВП')] члена по сравнению со своим. Финансовый кризис, перекинувшийся на члена из-за рубежа, начинается мягче.\\n\\nКогда член объявляет [Concept('concept_default','дефолт')], лидер выбирает: заплатить кредиторам члена и выдвинуть взамен условие (при «$principle_group_conditionality$» не одно) либо отказать. Отказ прекращает гарантию для каждого члена на пять лет. Член, которому предложили условия, может их отклонить; тогда он остаётся в дефолте, на десять лет лишается гарантии и может выйти из блока.\\n\\nДля гарантии игровое правило «Банковская система» должно быть включено. Член с законом «$law_command_economy$» её не получает, как и тот, за которого уже отвечает договор или внешнее управление. Тот, кого поддерживает его валютный союз, получает снижение премии от союза, а лидер консорциума по-прежнему отвечает за его дефолт."
+ },
  "concept_construction_cost_scaling_desc": {
   "en": "A mechanic where construction costs rise with [Concept('concept_gdp_per_capita', 'GDP per capita')], reflecting higher labor costs and land prices, as far as the country's workforce is in use. The more of its workers are peasants or unemployed, the less of the increase applies, until none does. Rich countries at full employment can't outbuild their population; developing nations, and rich ones with workers to spare, build cheaply.",
   "ru": "Механика, при которой стоимость строительства растёт с [Concept('concept_gdp_per_capita', 'ВВП на душу населения')], отражая более высокие затраты на труд и цены на землю, поскольку рабочая сила страны задействована. Чем больше её работников — крестьяне или безработные, тем меньше применяется увеличение, пока не исчезает совсем. Богатые страны при полной занятости не могут строить больше, чем позволяет население; развивающиеся страны и богатые, у которых есть свободные работники, строят дёшево."
@@ -3600,8 +3608,8 @@
   "ru": "Колониальный модуль"
  },
  "concept_sr_module_desc": {
-  "en": "A colony's equipment, built in queue order by the Space Program's Module Fabrication method, #v 100#! points a module, and shipped from Earth in its site's [concept_sr_launch_window]; it is installed for whoever holds the site when it lands. A colony's two specializations share four levels, and its Habitats, Spaceports, Defenses and facilities share its slots: #v 1#! to #v 4#! by its size, #v +1#! each with $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ and $molecular_assemblers$, and up to #v 4#! past them at #v 100#! points more than the last. The facilities each give their bonus a staffed level: a Mining Complex (Extraplanetary Base room), an Orbital Yard (fabrication and ships), a Research Station, a Cultural Center, an Off-World Resort, a Black Site, a Training Ground, a Nuclear Command Center, a Materials Foundry and an Administration (less autonomy). Every level past the first needs a crew of 5,000 of the colony's people, except Habitats, which house the crews; an understaffed colony's specializations and facilities give that share of their bonus. Spaceports and Defenses serve and fight [concept_sr_space_fleet]s, so they work only under Full Colonies.",
-  "ru": "Оборудование колонии, которое строится в порядке очереди методом «Изготовление модулей» Космической программы, по #v 100#! очков за модуль, и отправляется с Земли в [Concept('concept_sr_launch_window','стартовом окне')] своего объекта; устанавливается для того, кто владеет объектом на момент посадки. Две специализации колонии делят четыре уровня, а её «Жилые модули», «Космодромы», «Оборонительные сооружения» и объекты делят её слоты: от #v 1#! до #v 4#! по размеру, по #v +1#! с каждой из технологий $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ и $molecular_assemblers$ и до #v 4#! сверх них, по #v 100#! очков больше, чем предыдущий. Каждый объект даёт свой бонус за каждый укомплектованный уровень: «Добывающий комплекс» («Зал внепланетной базы»), «Орбитальная верфь» (производство и корабли), «Исследовательская станция», «Культурный центр», «Внеземной курорт», «Секретный объект», «Учебный полигон», «Ядерный командный центр», «Материаловедческая литейная» и «Администрация» (снижает автономию). Каждый уровень после первого требует экипажа в 5 000 человек из жителей колонии, кроме «Жилых модулей», в которых живут экипажи; специализации и объекты недоукомплектованной колонии дают лишь соответствующую долю своего бонуса. «Космодромы» и «Оборонительные сооружения» обслуживают и поддерживают в бою [Concept('concept_sr_space_fleet','космические флоты')], поэтому работают только при полноценных колониях."
+  "en": "A colony's equipment, built in queue order by the Space Program's Module Fabrication method, #v 100#! points a module, and shipped from Earth in its site's [concept_sr_launch_window], or at once to the Moon; it is installed for whoever holds the site when it lands. A colony's two specializations share four levels, and its Habitats, Spaceports, Defenses and facilities share its slots: #v 1#! to #v 4#! by its size, #v +1#! each with $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ and $molecular_assemblers$, and up to #v 8#! past them at #v 100#! points more than the last, while the module stock can hold the price. The facilities each give their bonus a staffed level: a Mining Complex (Extraplanetary Base room), an Orbital Yard (fabrication and ships), a Research Station, a Cultural Center, an Off-World Resort, a Black Site, a Training Ground, a Nuclear Command Center, a Materials Foundry and an Administration (less autonomy). Every level past the first needs a crew of 5,000 of the colony's people, except Habitats, which house the crews; an understaffed colony's specializations and facilities give that share of their bonus. Spaceports and Defenses serve and fight [concept_sr_space_fleet]s, so they work only under Full Colonies.",
+  "ru": "Оборудование колонии, которое строится в порядке очереди методом «Изготовление модулей» Космической программы, по #v 100#! очков за модуль, и отправляется с Земли в [Concept('concept_sr_launch_window','стартовом окне')] своего объекта или сразу на Луну; устанавливается для того, кто владеет объектом на момент посадки. Две специализации колонии делят четыре уровня, а её «Жилые модули», «Космодромы», «Оборонительные сооружения» и объекты делят её слоты: от #v 1#! до #v 4#! по размеру, по #v +1#! с каждой из технологий $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ и $molecular_assemblers$ и до #v 8#! сверх них, по #v 100#! очков больше, чем предыдущий, пока склад модулей способен вместить цену. Каждый объект даёт свой бонус за каждый укомплектованный уровень: «Добывающий комплекс» («Зал внепланетной базы»), «Орбитальная верфь» (производство и корабли), «Исследовательская станция», «Культурный центр», «Внеземной курорт», «Секретный объект», «Учебный полигон», «Ядерный командный центр», «Материаловедческая литейная» и «Администрация» (снижает автономию). Каждый уровень после первого требует экипажа в 5 000 человек из жителей колонии, кроме «Жилых модулей», в которых живут экипажи; специализации и объекты недоукомплектованной колонии дают лишь соответствующую долю своего бонуса. «Космодромы» и «Оборонительные сооружения» обслуживают и поддерживают в бою [Concept('concept_sr_space_fleet','космические флоты')], поэтому работают только при полноценных колониях."
  },
  "concept_sr_role_carrier_desc": {
   "en": "Troopships: fire #v 0.25#! on fleets and on Defenses, #v 12#! months of supply, and #v 2#! battalions of [concept_sr_marines] for each point of strength, to land at a colony and seize it.",
@@ -3668,8 +3676,8 @@
   "ru": "Сила подчинения"
  },
  "concept_subjugation_strength_desc": {
-  "en": "How far a [concept_power_bloc_leader] stands above a [concept_power_bloc_member]. The $force_become_subject$ action, which makes the member your [concept_subject], needs a Subjugation Strength of at least #v 1.0#! against it.\\n\\nIts base is your [concept_prestige] divided by the member's, then divided by #v 20#!, so without a bonus you need twenty times its prestige. Your bloc's [concept_power_bloc_identity] can add a bonus:\\n• $identity_sovereign_empire$: #v +0.50#! against any member\\n• $identity_religious$: #v +0.40#! if the member shares your [concept_state_religion]\\n• $identity_ideological_union$: #v +0.40#! if it has your $lawgroup_governance_principles$ law\\n• $identity_cultural$: #v +0.40#! if it shares one of your [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')]\\n• $identity_trade_league$: #v +0.40#! if its [concept_economic_dependence] on you is at least #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0.40#! if your [concept_army] is at least five times the size of its army\\n\\n$identity_diplomatic$ gets no bonus. The $force_become_subject$ tooltip shows your current Subjugation Strength against a member, part by part.",
-  "ru": "Насколько [concept_power_bloc_leader|l] стоит выше [Concept('concept_power_bloc_member','члена блока')]. Действие «$force_become_subject$», делающее члена вашим [Concept('concept_subject','зависимым государством')], требует «Силы подчинения» не менее #v 1,0#! против него.\\n\\nЕё основа — ваш [concept_prestige|l], делённый на престиж члена, затем делённый на #v 20#!, так что без бонуса вам нужен престиж в двадцать раз выше его. Бонус может добавить [concept_power_bloc_identity|l] вашего блока:\\n• $identity_sovereign_empire$: #v +0,50#! против любого члена\\n• $identity_religious$: #v +0,40#!, если член исповедует вашу [Concept('concept_state_religion','государственную религию')]\\n• $identity_ideological_union$: #v +0,40#!, если у него такой же закон из группы $lawgroup_governance_principles$, как у вас\\n• $identity_cultural$: #v +0,40#!, если у него общая с вами культура из числа: [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')|l]\\n• $identity_trade_league$: #v +0,40#!, если его [concept_economic_dependence|l] от вас не ниже уровня #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0,40#!, если ваша [concept_army|l] как минимум в пять раз больше его армии\\n\\n$identity_diplomatic$ бонуса не получает. Подсказка действия «$force_become_subject$» показывает вашу текущую «Силу подчинения» против члена по частям."
+  "en": "How far a [concept_power_bloc_leader] stands above a [concept_power_bloc_member]. The $force_become_subject$ action, which makes the member your [concept_subject], needs a Subjugation Strength of at least #v 1.0#! against it.\\n\\nIts base is your [concept_prestige] divided by the member's, then divided by #v 20#!, so without a bonus you need twenty times its prestige. Your bloc's [concept_power_bloc_identity] can add a bonus:\\n• $identity_sovereign_empire$: #v +0.50#! against any member\\n• $identity_religious$: #v +0.40#! if the member shares your [concept_state_religion]\\n• $identity_ideological_union$: #v +0.40#! if it has your $lawgroup_governance_principles$ law\\n• $identity_cultural$: #v +0.40#! if it shares one of your [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')]\\n• $identity_trade_league$: #v +0.40#! if its [concept_economic_dependence] on you is at least #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0.40#! if your [concept_army] is at least five times the size of its army\\n• $identity_creditors_consortium$: #v +0.40#! if it is under your receivership\\n\\n$identity_diplomatic$ gets no bonus. The $force_become_subject$ tooltip shows your current Subjugation Strength against a member, part by part.",
+  "ru": "Насколько [concept_power_bloc_leader|l] стоит выше [Concept('concept_power_bloc_member','члена блока')]. Действие «$force_become_subject$», делающее члена вашим [Concept('concept_subject','зависимым государством')], требует «Силы подчинения» не менее #v 1,0#! против него.\\n\\nЕё основа — ваш [concept_prestige|l], делённый на престиж члена, затем делённый на #v 20#!, так что без бонуса вам нужен престиж в двадцать раз выше его. Бонус может добавить [concept_power_bloc_identity|l] вашего блока:\\n• $identity_sovereign_empire$: #v +0,50#! против любого члена\\n• $identity_religious$: #v +0,40#!, если член исповедует вашу [Concept('concept_state_religion','государственную религию')]\\n• $identity_ideological_union$: #v +0,40#!, если у него такой же закон из группы $lawgroup_governance_principles$, как у вас\\n• $identity_cultural$: #v +0,40#!, если у него общая с вами культура из числа: [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')|l]\\n• $identity_trade_league$: #v +0,40#!, если его [concept_economic_dependence|l] от вас не ниже уровня #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0,40#!, если ваша [concept_army|l] как минимум в пять раз больше его армии\\n• $identity_creditors_consortium$: #v +0,40#!, если он находится под вашим внешним управлением\\n\\n$identity_diplomatic$ бонуса не получает. Подсказка действия «$force_become_subject$» показывает вашу текущую «Силу подчинения» против члена по частям."
  },
  "concept_target_defenses": {
   "en": "Target's Defenses",
@@ -4050,6 +4058,10 @@
  "concert_of_arms": {
   "en": "Concert of Arms",
   "ru": "Военный концерт"
+ },
+ "concert_of_lenders": {
+  "en": "Concert of Lenders",
+  "ru": "Концерт кредиторов"
  },
  "conference_of_ambassadors": {
   "en": "Conference of Ambassadors",
@@ -5140,8 +5152,8 @@
   "ru": "Одна [concept_country|l] привязывает свою валюту к валюте другой, отказываясь от собственной процентной ставки в обмен на доверие к якорю."
  },
  "currency_peg_effects_desc": {
-  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +0.5 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• #G −0.5 percentage points#! of structural risk premium; imports up to #v 80%#! of the anchor’s monetary credibility.\\n• Keeps its own inflation and business cycle. Overvaluation drains Peg Confidence and can force a currency crisis.\\n#b Anchor:#!\\n• Structural risk premium falls by #G 0.1 percentage points#! per #v 5%#! of world GDP anchored to it, normally capped at #v 0.5#! (#v 1.0#! with the tier-5 reserve-currency principle). No bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate, or either country declares war on or expels the other’s diplomats.",
-  "ru": "#b Привязывающая страна:#!\\n• Отказывается от контроля над ключевой ставкой: следует ставке якоря #v +0,5 процентного пункта#!, принимает его обменный курс и не может монетизировать дефициты.\\n• #G −0,5 процентного пункта#! структурной премии за риск; перенимает до #v 80%#! денежно-кредитного доверия якоря.\\n• Сохраняет собственную инфляцию и деловой цикл. Переоценка истощает Доверие к привязке и может вызвать валютный кризис.\\n#b Якорь:#!\\n• Структурная премия за риск падает на #G 0,1 процентного пункта#! на каждые #v 5%#! мирового ВВП, привязанные к нему, обычно не более #v 0,5#! (#v 1,0#! с принципом резервной валюты 5-го уровня). Обязательств по спасению нет.\\n#b Заканчивается, если:#! якорь теряет национальный банк или независимую ключевую ставку или любая из стран объявляет войну дипломатам другой или высылает их."
+  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +0.5 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• #G −0.5 percentage points#! of structural risk premium; imports up to #v 80%#! of the anchor’s monetary credibility.\\n• Keeps its own inflation and business cycle. Overvaluation drains Peg Confidence and can force a currency crisis.\\n#b Anchor:#!\\n• Its credit standing improves by #G 0.1 percentage points#! per #v 5%#! of world GDP anchored to it, normally capped at #v 0.5#! (#v 1.0#! with the tier-5 reserve-currency principle). Where its standing is already on its floor, the part the floor would cancel comes off its risk premium instead. No bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate, or either country declares war on or expels the other’s diplomats.",
+  "ru": "#b Привязывающая страна:#!\\n• Отказывается от контроля над ключевой ставкой: следует ставке якоря #v +0,5 процентного пункта#!, принимает его обменный курс и не может монетизировать дефициты.\\n• #G −0,5 процентного пункта#! структурной премии за риск; перенимает до #v 80%#! денежно-кредитного доверия якоря.\\n• Сохраняет собственную инфляцию и деловой цикл. Переоценка истощает Доверие к привязке и может вызвать валютный кризис.\\n#b Якорь:#!\\n• Его кредитоспособность растёт на #G 0,1 процентного пункта#! на каждые #v 5%#! мирового ВВП, привязанные к нему, обычно не более чем до #v 0,5#! (#v 1,0#! с принципом резервной валюты 5-го уровня). Если она уже на нижнем пределе, часть, которую предел обнулил бы, снимается с его премии за риск. Обязательств по спасению нет.\\n#b Заканчивается, если:#! якорь теряет национальный банк или независимую ключевую ставку или любая из стран объявляет войну дипломатам другой или высылает их."
  },
  "cyber_defense_strengthened_modifier_desc": {
   "en": "Investment in cyber defense capabilities has improved our resilience against foreign digital threats.",
@@ -5168,8 +5180,8 @@
   "ru": "Иностранная комиссия берёт на себя доходы [concept_country|l], объявившей дефолт, и сначала платит её кредиторам. Долг достоверно обслуживается, а заимствование дешевеет — ценой ежемесячного перевода и международного авторитета правительства."
  },
  "debt_receivership_effects_desc": {
-  "en": "#b Debtor:#!\\n• Debt-load risk premium is reduced as under a lender-of-last-resort guarantee; relief shrinks with its past guarantee calls.\\n• #R Pays 0.1% of its GDP every month#! to the receiver. Receives #R no bailout#! on default.\\n#b Receiver:#!\\n• Collects the monthly payment; takes on risk premium equal to the debtor’s saving #v × debtor GDP ÷ receiver GDP#!.\\n#b Ends when:#! the debtor stays below #v 25%#! of its credit limit and out of default for #v 12 consecutive months#!, or the receiver defaults.",
-  "ru": "#b Должник:#!\\n• Премия за риск долговой нагрузки снижается, как при гарантии кредитора последней инстанции; облегчение уменьшается с её прошлыми обращениями за гарантией.\\n• #R Платит 0,1% своего ВВП каждый месяц#! управляющему. При дефолте #R спасения нет#!.\\n#b Управляющий:#!\\n• Получает ежемесячный платёж; принимает премию за риск, равную сбережениям должника #v × ВВП должника ÷ ВВП управляющего#!.\\n#b Заканчивается, когда:#! должник остаётся ниже #v 25%#! своего кредитного лимита и вне дефолта #v 12 месяцев подряд#! или управляющий объявляет дефолт."
+  "en": "#b Debtor:#!\\n• Debt-load risk premium is reduced as under a lender-of-last-resort guarantee; relief shrinks with its past guarantee calls.\\n• #R Pays 0.1% of its GDP every month#! to the receiver, up to #R 0.25%#! for a receiver leading a $identity_creditors_consortium$ with $principle_group_conditionality$. Receives #R no bailout#! on default.\\n#b Receiver:#!\\n• Collects the monthly payment; takes on risk premium equal to the debtor’s saving #v × debtor GDP ÷ receiver GDP#!.\\n#b Ends when:#! the debtor stays below #v 25%#! of its credit limit and out of default for #v 12 consecutive months#! (up to #v 36#! under $principle_group_conditionality$), or the receiver defaults.",
+  "ru": "#b Должник:#!\\n• Премия за риск долговой нагрузки снижается, как при гарантии кредитора последней инстанции; облегчение уменьшается с её прошлыми обращениями за гарантией.\\n• #R Платит 0,1% своего ВВП каждый месяц#! управляющему, до #R 0,25%#! для управляющего, возглавляющего «$identity_creditors_consortium$» с принципом «$principle_group_conditionality$». При дефолте #R спасения нет#!.\\n#b Управляющий:#!\\n• Получает ежемесячный платёж; принимает премию за риск, равную сбережениям должника #v × ВВП должника ÷ ВВП управляющего#!.\\n#b Заканчивается, когда:#! должник остаётся ниже #v 25%#! своего кредитного лимита и вне дефолта #v 12 месяцев подряд#! (до #v 36#! при «$principle_group_conditionality$») или управляющий объявляет дефолт."
  },
  "decol_iw_accords_mandate_modifier_desc": {
   "en": "We ended a war to keep a colony by signing away its independence at the table, under a leader with the mandate to do it.",
@@ -5682,6 +5694,10 @@
  "feminist_literature_funded_modifier_desc": {
   "en": "Government subsidies for feminist literature have fostered intellectual discourse and improved education outcomes.",
   "ru": "Государственные субсидии феминистской литературе способствовали интеллектуальному дискурсу и улучшили результаты образования."
+ },
+ "financial_commission": {
+  "en": "International Financial Commission",
+  "ru": "Международная финансовая комиссия"
  },
  "financial_cycle_government_fiscal_policy_effect_desc": {
   "en": "Represents the effect of current government fiscal policy on the financial cycle.",
@@ -6503,9 +6519,17 @@
   "en": "Creditors' Consortium",
   "ru": "Консорциум кредиторов"
  },
+ "identity_creditors_consortium_desc": {
+  "en": "This $concept_power_bloc_identity_extra_short$ binds its members by credit. The leader stands behind every member's debts, and a member that defaults is rescued on the leader's terms.",
+  "ru": "$concept_power_bloc_identity_extra_short$: членов связывает кредит. Лидер отвечает по долгам каждого члена, а член, объявивший дефолт, спасается на условиях лидера."
+ },
  "identity_research_commons": {
   "en": "Research Commons",
   "ru": "Научное содружество"
+ },
+ "identity_research_commons_desc": {
+  "en": "Members research nothing themselves. Each sends the [concept_power_bloc_leader] 75% of its weekly [concept_innovation] and is given every [concept_technology] another member knows. The bloc holds together while the leader does most of its research. A member that leaves loses half its research speed at first, recovering over ten years.",
+  "ru": "Члены сами ничего не исследуют. Каждый отправляет [Concept('concept_power_bloc_leader','лидеру')] 75% своих еженедельных [Concept('concept_innovation','инноваций')] и получает каждую [Concept('concept_technology','технологию')], известную другому члену. Блок держится, пока лидер выполняет большую часть исследований. Вышедший член сначала теряет половину скорости исследований и восстанавливается десять лет."
  },
  "ig_approval_negative_modifier_desc": {
   "en": "This [concept_interest_group] disapproves of the government's recent policy decision.",
@@ -6572,8 +6596,8 @@
   "ru": "Привязка валюты, которую диктует более сильная держава, а не выбирает более слабая. Привязывающаяся сторона принимает процентную ставку якоря с надбавкой-штрафом, не получает той «Кредитоспособности», какую даёт добровольная дисциплина, и не может просто выйти."
  },
  "imposed_currency_peg_effects_desc": {
-  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +1.0 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• Imports up to #v 80%#! of the anchor’s monetary credibility, but gets #R none#! of a voluntary peg’s #v 0.5-point#! structural risk-premium reduction.\\n• Overvaluation drains Peg Confidence and can force a currency crisis. In that crisis it #R cannot choose to abandon the peg#!: it must defend or devalue it.\\n#b Anchor:#! benefits from reserve-currency risk-premium relief, but has no bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate. War does not automatically end an imposed peg.",
-  "ru": "#b Привязывающаяся страна:#!\\n• Отказывается от контроля над своей ключевой ставкой: следует ставке якоря #v +1,0 процентного пункта#!, принимает его валютный курс и не может монетизировать дефицит.\\n• Импортирует до #v 80%#! денежно-кредитной репутации якоря, но #R не получает#! #v 0,5-пунктного#! структурного снижения «Премии за риск», которое даёт добровольная привязка.\\n• Переоценка валюты истощает «Доверие к привязке» и может вызвать валютный кризис. В этом кризисе она #R не может выбрать отказ от привязки#!: она должна защищать её или девальвировать.\\n#b Якорь:#! получает облегчение «Премии за риск» как резервная валюта, но не обязан спасать.\\n#b Прекращается, если:#! якорь теряет национальный банк или независимую ключевую ставку. Война не прекращает навязанную привязку автоматически."
+  "en": "#b Pegging country:#!\\n• Gives up control of its policy rate: follows the anchor’s rate #v +1.0 percentage points#!, adopts its exchange rate and cannot monetize deficits.\\n• Imports up to #v 80%#! of the anchor’s monetary credibility, but gets #R none#! of a voluntary peg’s #v 0.5-point#! structural risk-premium reduction.\\n• Overvaluation drains Peg Confidence and can force a currency crisis. In that crisis it #R cannot choose to abandon the peg#!: it must defend or devalue it.\\n#b Anchor:#! the pegger counts toward its reserve-currency relief as a voluntary one does: credit standing, or risk premium where its standing is already on its floor. No bailout obligation.\\n#b Ends if:#! the anchor loses its national bank or independent policy rate. War does not automatically end an imposed peg.",
+  "ru": "#b Привязывающаяся страна:#!\\n• Отказывается от контроля над своей ключевой ставкой: следует ставке якоря #v +1,0 процентного пункта#!, принимает его валютный курс и не может монетизировать дефицит.\\n• Импортирует до #v 80%#! денежно-кредитной репутации якоря, но #R не получает#! #v 0,5-пунктного#! структурного снижения «Премии за риск», которое даёт добровольная привязка.\\n• Переоценка валюты истощает «Доверие к привязке» и может вызвать валютный кризис. В этом кризисе она #R не может выбрать отказ от привязки#!: она должна защищать её или девальвировать.\\n#b Якорь:#! привязанная страна учитывается в его облегчении как резервной валюты так же, как добровольная: кредитоспособность, а если она уже на нижнем пределе, то премия за риск. Обязательств по спасению нет.\\n#b Прекращается, если:#! якорь теряет национальный банк или независимую ключевую ставку. Война не прекращает навязанную привязку автоматически."
  },
  "independence_nationalization_modifier": {
   "en": "Independence Nationalization",
@@ -9055,6 +9079,26 @@
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
  },
+ "principle_conditionality_1_desc": {
+  "en": "A rescue carries two terms beside the receivership.",
+  "ru": "Спасение несёт два условия помимо внешнего управления."
+ },
+ "principle_conditionality_2_desc": {
+  "en": "The receivership's remittance rises, and it lasts longer.",
+  "ru": "Отчисления по внешнему управлению растут, и оно длится дольше."
+ },
+ "principle_conditionality_3_desc": {
+  "en": "A rescue carries three terms, with more monopolies demanded.",
+  "ru": "Спасение несёт три условия, с большим числом требуемых монополий."
+ },
+ "principle_conditionality_4_desc": {
+  "en": "The receivership's remittance rises again, and it lasts longer still.",
+  "ru": "Отчисления по внешнему управлению растут снова, и оно длится ещё дольше."
+ },
+ "principle_conditionality_5_desc": {
+  "en": "A rescue carries four terms with more monopolies still, and the receivership takes a quarter of a percent of the debtor's [concept_gdp] each month for three years at least.",
+  "ru": "Спасение несёт четыре условия, с ещё большим числом монополий, а внешнее управление забирает четверть процента [Concept('concept_gdp','ВВП')] должника каждый месяц не менее трёх лет."
+ },
  "principle_cultural_plurality_1_desc": {
   "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
   "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
@@ -9078,6 +9122,26 @@
  "principle_cultural_unity_3_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_development_lending_1_desc": {
+  "en": "Members above the bloc's [concept_gdp_per_capita] pay a share of their [concept_investment_pool] income to members below it.",
+  "ru": "Члены, у которых [Concept('concept_gdp_per_capita','ВВП на душу населения')] выше, чем у блока, отдают часть дохода своего [Concept('concept_investment_pool','инвестиционного фонда')] членам, у которых он ниже."
+ },
+ "principle_development_lending_2_desc": {
+  "en": "The share rises, and the poorer members build faster.",
+  "ru": "Доля растёт, а более бедные члены строят быстрее."
+ },
+ "principle_development_lending_3_desc": {
+  "en": "The share rises again, and the poorer members build faster still.",
+  "ru": "Доля растёт снова, а более бедные члены строят ещё быстрее."
+ },
+ "principle_development_lending_4_desc": {
+  "en": "A tenth and more of the richer members' investment goes to the poorer ones.",
+  "ru": "Десятая часть и более инвестиций более богатых членов идёт более бедным."
+ },
+ "principle_development_lending_5_desc": {
+  "en": "The bloc's development is planned as one program: the largest share, and the fastest building, for its poorer members.",
+  "ru": "Развитие блока планируется как единая программа: наибольшая доля и самое быстрое строительство для его более бедных членов."
  },
  "principle_education_1_desc": {
   "en": "Member states establish basic schools and forbid the abolition of public education.",
@@ -9210,6 +9274,26 @@
  "principle_rural_3_desc": {
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "principle_technology_controls_1_desc": {
+  "en": "Export Licensing: members can't offer $science_aid$ to a [concept_country] outside the [concept_power_bloc], and guard their research against industrial and military espionage.",
+  "ru": "Экспортное лицензирование: члены не могут предлагать «$science_aid$» [Concept('concept_country','стране')] вне [Concept('concept_power_bloc','силового блока')] и защищают свои исследования от промышленного и военного шпионажа."
+ },
+ "principle_technology_controls_2_desc": {
+  "en": "Security Clearances: members guard their research more closely.",
+  "ru": "Допуски безопасности: члены строже защищают свои исследования."
+ },
+ "principle_technology_controls_3_desc": {
+  "en": "Technology Embargo: the [concept_power_bloc_leader] can place one [concept_country] outside the bloc under a $te_rc_technology_embargo$, cutting its [concept_technology_spread] by half the bloc's share of the world's weekly [concept_innovation], in percent.",
+  "ru": "Технологическое эмбарго: [concept_power_bloc_leader|l] может подвергнуть одну [Concept('concept_country','страну')] вне блока действию «$te_rc_technology_embargo$», сократив её [Concept('concept_technology_spread','распространение технологий')] на половину доли блока в мировых еженедельных [Concept('concept_innovation','инновациях')], в процентах."
+ },
+ "principle_technology_controls_4_desc": {
+  "en": "Coordinated Export Controls: an embargo cuts three quarters of the bloc's share, and members guard their research more closely still.",
+  "ru": "Согласованный экспортный контроль: эмбарго сокращает три четверти доли блока, а члены ещё строже защищают свои исследования."
+ },
+ "principle_technology_controls_5_desc": {
+  "en": "Closed Science: an embargo cuts the bloc's whole share, to at most half the target's spread, and members guard their research more closely still.",
+  "ru": "Закрытая наука: эмбарго сокращает всю долю блока, но не более чем наполовину от распространения технологий цели, а члены защищают свои исследования ещё строже."
  },
  "principle_urban_planning_1_desc": {
   "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
@@ -11015,6 +11099,10 @@
   "en": "This hub is releasing tanks from the strategic reserve.",
   "ru": "Этот узел выпускает танки из стратегического резерва."
  },
+ "stabilization_fund": {
+  "en": "Stabilization Fund",
+  "ru": "Стабилизационный фонд"
+ },
  "state_power_grid_connection_bool_desc": {
   "en": "This state is joined to a [concept_power_grid]. Once a month the grid moves $electricity$ through the state's $building_grid_transfer_station$, from states where it is cheap to states where it is expensive.",
   "ru": "Эта область подключена к [Concept('concept_power_grid','энергосети')]. Раз в месяц сеть перемещает товар $electricity$ через здание $building_grid_transfer_station$ области: из областей, где он дёшев, в области, где он дорог."
@@ -11719,6 +11807,10 @@
   "en": "Neural implants let citizens vote the moment a question arises and move their delegations as their trust shifts. The government always knows where the people stand, and can lose them overnight.",
   "ru": "Нейроимпланты позволяют гражданам голосовать в тот миг, когда возникает вопрос, и переносить свои делегации, когда меняется доверие. Правительство всегда знает, на чём стоит народ, и может потерять его за одну ночь."
  },
+ "te_cred_dl_receiver_2_desc": {
+  "en": "Our [concept_power_bloc]'s richer members lend to us, and we build faster for it.",
+  "ru": "Более богатые члены нашего [Concept('concept_power_bloc','силового блока')] кредитуют нас, и благодаря этому мы строим быстрее."
+ },
  "te_debris_cleaner_prestige_desc": {
   "en": "Our Space Program clears debris that every country in orbit would otherwise have to fly through, and the world notices: +1% prestige for every 0.1 point we remove a month.",
   "ru": "Наша космическая программа очищает орбиту от обломков, через которые иначе пришлось бы лететь каждой стране, и мир это замечает: +1% престижа за каждые 0,1 пункта, убранные за месяц."
@@ -11927,6 +12019,10 @@
   "en": "Color each country by its political model at the last census of models, in the colors of the Cultural Hegemony panel's model chart.",
   "ru": "Окрасить каждую страну по её политической модели в последней переписи моделей, в цветах диаграммы моделей панели «Культурная гегемония»."
  },
+ "te_jmap_pick_population_density_desc": {
+  "en": "Color each state by its people per km² of land: its population over its area, where a region split between countries gives each part the region's land in proportion to its provinces.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_lo')|2]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_hi')|0]#! people per km². $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_density_colors', 'te_jmap_color_in_force_none' )]",
+  "ru": "Окрасить каждую область по числу жителей на км² суши: население области, делённое на её площадь; если регион разделён между странами, каждая часть получает землю региона пропорционально числу своих провинций.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_lo')|2]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_hi')|0]#! человек на км². $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_density_colors', 'te_jmap_color_in_force_none' )]"
+ },
  "te_jmap_pick_population_growth_desc": {
   "en": "Color each state by how far its people grew or shrank over the last year, per 1,000. The midpoint is none. Births, deaths and migration all count, and so does land: a state that gained or lost provinces jumps. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid_25_57_40_73', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_growth_colors', 'te_jmap_color_in_force_mid' )]",
   "ru": "Окрасить области по тому, насколько их население выросло или сократилось за последний год, на 1 000. Середина шкалы — ноль. Учитываются рождения, смерти и миграция, а также земля: область, получившая или потерявшая провинции, резко меняется. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid_25_57_40_73', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_growth_colors', 'te_jmap_color_in_force_mid' )]"
@@ -12127,6 +12223,10 @@
   "en": "Our customs procedures follow the bloc's common code, and our traders gain from it.",
   "ru": "Наши таможенные процедуры следуют общему кодексу блока, и наши торговцы выигрывают от этого."
  },
+ "te_pb_summit_debt_conference_desc": {
+  "en": "The bloc has agreed in conference to stand behind its members' debts, and lenders charge every member less for it.",
+  "ru": "Блок на конференции согласился отвечать по долгам своих членов, и из-за этого кредиторы берут со всех членов меньше."
+ },
  "te_pb_summit_drills_desc": {
   "en": "The bloc's armies train side by side under a common exercise program.",
   "ru": "Армии блока тренируются бок о бок по общей программе учений."
@@ -12155,9 +12255,61 @@
   "en": "The bloc's summit agreed to court new members, smoothing the way for countries weighing its invitation.",
   "ru": "Саммит блока договорился привлекать новых членов, облегчая путь странам, раздумывающим над его приглашением."
  },
+ "te_pb_summit_science_desc": {
+  "en": "The bloc's scientific congress set its members' laboratories a common program of research.",
+  "ru": "Научный конгресс блока задал лабораториям его членов общую программу исследований."
+ },
  "te_political_commissars_indoctrination_desc": {
   "en": "Party commissars in every unit school the troops, and through them their families, in loyalty to the government. Scales with the share of your regular battalions trained under $pm_political_commissars$.",
   "ru": "Партийные комиссары в каждой части обучают войска, а через них и их семьи, лояльности правительству. Масштабируется долей ваших регулярных батальонов, обученных по методу $pm_political_commissars$."
+ },
+ "te_rc_contribution": {
+  "en": "Research Commons: Contribution",
+  "ru": "Научное содружество: вклад"
+ },
+ "te_rc_contribution_desc": {
+  "en": "The weekly [concept_innovation] this country sends the [concept_power_bloc_leader] of its Research Commons: 75% of its own, counted before its multipliers and after what its own programs spend. The leader's monthly review sets the figure.",
+  "ru": "Еженедельные [Concept('concept_innovation','инновации')], которые эта страна отправляет [Concept('concept_power_bloc_leader','лидеру')] своего Научного содружества: 75% её собственных, считая до её множителей и после расходов её собственных программ. Размер определяет ежемесячный обзор лидера."
+ },
+ "te_rc_institutes_left_behind_desc": {
+  "en": "This country left a Research Commons, and the joint laboratories its scientists worked in stayed with the bloc. The research speed lost falls from 50% to nothing over ten years, and ends at the leader's next monthly review if it joins a Research Commons again.",
+  "ru": "Эта страна вышла из Научного содружества, и совместные лаборатории, где работали её учёные, остались у блока. Потеря скорости исследований снижается с 50% до нуля за десять лет и прекращается при следующем ежемесячном обзоре лидера, если страна снова вступит в Научное содружество."
+ },
+ "te_rc_pool": {
+  "en": "Research Commons: Members’ Research",
+  "ru": "Научное содружество: исследования членов"
+ },
+ "te_rc_pool_cap_desc": {
+  "en": "The weekly [concept_innovation] cap rises by a tenth of what the members of this country's Research Commons send it, and by more with a $pm_hq_research_commons$ at the bloc's headquarters.",
+  "ru": "Предел еженедельных [Concept('concept_innovation','инноваций')] растёт на десятую часть того, что отправляют этой стране члены её Научного содружества, и на большее — при методе «$pm_hq_research_commons$» в штаб-квартире блока."
+ },
+ "te_rc_pool_desc": {
+  "en": "The weekly [concept_innovation] the members of this country's Research Commons send it. A member that leaves stops sending within days.",
+  "ru": "Еженедельные [Concept('concept_innovation','инновации')], которые отправляют этой стране члены её Научного содружества. Вышедший член прекращает отправку в течение нескольких дней."
+ },
+ "te_rc_technology_embargo_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has lifted its technology embargo on [GetPlayer.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] сняла технологическое эмбарго против страны [GetPlayer.GetName]."
+ },
+ "te_rc_technology_embargo_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has placed [GetPlayer.GetName] under a technology embargo, cutting its [concept_technology_spread].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] наложила на страну [GetPlayer.GetName] технологическое эмбарго, сократив её [Concept('concept_technology_spread','распространение технологий')]."
+ },
+ "te_rc_technology_embargo_action_notification_third_party_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has lifted its technology embargo on [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] сняла технологическое эмбарго против страны [TARGET_COUNTRY.GetName]."
+ },
+ "te_rc_technology_embargo_action_notification_third_party_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has placed [TARGET_COUNTRY.GetName] under a technology embargo.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] наложила на страну [TARGET_COUNTRY.GetName] технологическое эмбарго."
+ },
+ "te_rc_technology_embargo_desc": {
+  "en": "Cuts another [concept_country]'s [concept_technology_spread] by the bloc's share of the world's weekly [concept_innovation] times 50 at $principle_group_technology_controls$ III, 75 at IV and 100 at V, in percent, to at most 50%. A bloc with a third of the world's innovation cuts it by 17%, 25% or 33%. One country at a time.",
+  "ru": "Сокращает [Concept('concept_technology_spread','распространение технологий')] другой [Concept('concept_country','страны')] на долю блока в мировых еженедельных [Concept('concept_innovation','инновациях')], умноженную на 50 при «$principle_group_technology_controls$» III, на 75 при IV и на 100 при V, в процентах, но не более чем на 50%. Блок с третью мировых инноваций сокращает его на 17%, 25% или 33%. Только по одной стране за раз."
+ },
+ "te_rc_technology_embargoed_desc": {
+  "en": "A Research Commons has placed this country under a $te_rc_technology_embargo$. Its [concept_technology_spread] is cut while the embargo lasts, by more the larger the bloc's share of the world's [concept_innovation].",
+  "ru": "Научное содружество наложило на эту страну «$te_rc_technology_embargo$». Пока эмбарго действует, её [Concept('concept_technology_spread','распространение технологий')] сокращено, тем сильнее, чем больше доля блока в мировых [Concept('concept_innovation','инновациях')]."
  },
  "te_renaissance_no_homeland_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended with no homeland of its culture left",

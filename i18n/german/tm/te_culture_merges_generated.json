@@ -3051,6 +3051,14 @@
   "en": "$dixie$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $dixie$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_american_core_names": {
+  "en": "$yankee$ and $dixie$",
+  "de": "$yankee$ und $dixie$"
+ },
+ "te_cmg_american_core_switched": {
+  "en": "$yankee$ and $dixie$ have all switched",
+  "de": "$yankee$ und $dixie$ haben alle gewechselt"
+ },
  "te_cmg_american_done_core_tt": {
   "en": "$yankee$ and $dixie$ pops have all switched to $cm_american$.",
   "de": "Die Pops der Kulturen $yankee$ und $dixie$ sind alle zu $cm_american$ gewechselt."
@@ -3087,6 +3095,14 @@
   "en": "$bolivian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $bolivian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_andean_core_names": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$",
+  "de": "$north_andean$, $south_andean$, $peruvian$ und $bolivian$"
+ },
+ "te_cmg_andean_core_switched": {
+  "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ have all switched",
+  "de": "$north_andean$, $south_andean$, $peruvian$ und $bolivian$ haben alle gewechselt"
+ },
  "te_cmg_andean_done_core_tt": {
   "en": "$north_andean$, $south_andean$, $peruvian$ and $bolivian$ pops have all switched to $cm_andean$.",
   "de": "Die Pops der Kulturen $north_andean$, $south_andean$, $peruvian$ und $bolivian$ sind alle zu $cm_andean$ gewechselt."
@@ -3110,6 +3126,14 @@
  "te_cmg_anglophone_core_2_tt": {
   "en": "$yankee$ or $cm_american$ pops are held and very highly accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live accept them at [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] or more, beyond $full_acceptance$.",
   "de": "Pops der Kultur $yankee$ oder $cm_american$ werden seit [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier2')|0] Jahren gehalten und sehr hoch akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, akzeptieren sie mit [GetPlayer.MakeScope.ScriptValue('te_cm_accept_high_open')|0] oder mehr, jenseits von $full_acceptance$."
+ },
+ "te_cmg_anglophone_core_names": {
+  "en": "$british$ and $yankee$ (or $cm_american$)",
+  "de": "$british$ und $yankee$ (oder $cm_american$)"
+ },
+ "te_cmg_anglophone_core_switched": {
+  "en": "$british$ and $yankee$ (or $cm_american$) have all switched",
+  "de": "$british$ und $yankee$ (oder $cm_american$) haben alle gewechselt"
  },
  "te_cmg_anglophone_done_core_tt": {
   "en": "$british$ and $yankee$ (or $cm_american$) pops have all switched to $cm_anglophone$.",
@@ -3147,6 +3171,14 @@
   "en": "$yemenite$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $yemenite$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_arab_core_names": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$",
+  "de": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ und $yemenite$"
+ },
+ "te_cmg_arab_core_switched": {
+  "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ have all switched",
+  "de": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ und $yemenite$ haben alle gewechselt"
+ },
  "te_cmg_arab_done_core_tt": {
   "en": "$maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$ pops have all switched to $cm_arab$.",
   "de": "Die Pops der Kulturen $maghrebi$, $misri$, $mashriqi$, $bedouin$ und $yemenite$ sind alle zu $cm_arab$ gewechselt."
@@ -3183,6 +3215,14 @@
   "en": "$sulista$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $sulista$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_brazilian_core_names": {
+  "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$",
+  "de": "$nordestino$, $paulista$, $amazonic$ und $sulista$"
+ },
+ "te_cmg_brazilian_core_switched": {
+  "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$ have all switched",
+  "de": "$nordestino$, $paulista$, $amazonic$ und $sulista$ haben alle gewechselt"
+ },
  "te_cmg_brazilian_done_core_tt": {
   "en": "$nordestino$, $paulista$, $amazonic$ and $sulista$ pops have all switched to $brazilian$.",
   "de": "Die Pops der Kulturen $nordestino$, $paulista$, $amazonic$ und $sulista$ sind alle zu $brazilian$ gewechselt."
@@ -3206,6 +3246,10 @@
  "te_cmg_british_core_2_tt": {
   "en": "$scottish$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $scottish$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_british_core_switched": {
+  "en": "$scottish$ has switched",
+  "de": "$scottish$ hat gewechselt"
  },
  "te_cmg_british_done_core_tt": {
   "en": "$scottish$ pops have all switched to $british$.",
@@ -3235,6 +3279,14 @@
   "en": "$hakka$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $hakka$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_chinese_core_names": {
+  "en": "$yue$, $min$ and $hakka$",
+  "de": "$yue$, $min$ und $hakka$"
+ },
+ "te_cmg_chinese_core_switched": {
+  "en": "$yue$, $min$ and $hakka$ have all switched",
+  "de": "$yue$, $min$ und $hakka$ haben alle gewechselt"
+ },
  "te_cmg_chinese_done_core_tt": {
   "en": "$yue$, $min$ and $hakka$ pops have all switched to $han$.",
   "de": "Die Pops der Kulturen $yue$, $min$ und $hakka$ sind alle zu $han$ gewechselt."
@@ -3251,6 +3303,14 @@
   "en": "The core cultures live at similar standards of living: the gap between the best and the worst off is under [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0] to begin, counted once every core culture is held and accepted, and a running merge stalls once it passes [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0]. At the last census, [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_chinese').GetCulture.GetName] pops were the best off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_chinese').GetValue|1], and [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_chinese').GetCulture.GetName] pops the worst off, at [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_chinese').GetValue|1]: a gap of [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_chinese').GetValue|1].",
   "de": "Die Kernkulturen leben auf ähnlichem Lebensstandard: Der Abstand zwischen den am besten und den am schlechtesten gestellten liegt zu Beginn unter [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_open')|0], gezählt wird, sobald jede Kernkultur gehalten und akzeptiert wird, und eine laufende Verschmelzung gerät ins Stocken, sobald er [GetPlayer.MakeScope.ScriptValue('te_cm_sol_gap_close')|0] überschreitet. Bei der letzten Volkszählung standen Pops der Kultur [ROOT.GetCountry.MakeScope.Var('te_cm_sol_best_chinese').GetCulture.GetName] mit [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_chinese').GetValue|1] am besten da und Pops der Kultur [ROOT.GetCountry.MakeScope.Var('te_cm_sol_worst_chinese').GetCulture.GetName] mit [ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_chinese').GetValue|1] am schlechtesten: ein Abstand von [ROOT.GetCountry.MakeScope.Var('te_cm_sol_gap_chinese').GetValue|1]."
  },
+ "te_cmg_core_names_none": {
+  "en": "its constituent cultures",
+  "de": "seine Teilkulturen"
+ },
+ "te_cmg_core_switched_none": {
+  "en": "its constituent cultures have all switched",
+  "de": "seine Teilkulturen haben alle gewechselt"
+ },
  "te_cmg_czechoslovak_core_1_tt": {
   "en": "$czech$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $czech$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
@@ -3258,6 +3318,14 @@
  "te_cmg_czechoslovak_core_2_tt": {
   "en": "$slovak$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $slovak$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_czechoslovak_core_names": {
+  "en": "$czech$ and $slovak$",
+  "de": "$czech$ und $slovak$"
+ },
+ "te_cmg_czechoslovak_core_switched": {
+  "en": "$czech$ and $slovak$ have all switched",
+  "de": "$czech$ und $slovak$ haben alle gewechselt"
  },
  "te_cmg_czechoslovak_done_core_tt": {
   "en": "$czech$ and $slovak$ pops have all switched to $cm_czechoslovak$.",
@@ -3287,6 +3355,14 @@
   "en": "$malayalam$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $malayalam$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_dravidian_core_names": {
+  "en": "$tamil$, $kannada$ and $malayalam$",
+  "de": "$tamil$, $kannada$ und $malayalam$"
+ },
+ "te_cmg_dravidian_core_switched": {
+  "en": "$tamil$, $kannada$ and $malayalam$ have all switched",
+  "de": "$tamil$, $kannada$ und $malayalam$ haben alle gewechselt"
+ },
  "te_cmg_dravidian_done_core_tt": {
   "en": "$tamil$, $kannada$ and $malayalam$ pops have all switched to $cm_dravidian$.",
   "de": "Die Pops der Kulturen $tamil$, $kannada$ und $malayalam$ sind alle zu $cm_dravidian$ gewechselt."
@@ -3311,6 +3387,10 @@
   "en": "$flemish$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $flemish$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_dutch_core_switched": {
+  "en": "$flemish$ has switched",
+  "de": "$flemish$ hat gewechselt"
+ },
  "te_cmg_dutch_done_core_tt": {
   "en": "$flemish$ pops have all switched to $dutch$.",
   "de": "Die Pops der Kultur $flemish$ sind alle zu $dutch$ gewechselt."
@@ -3334,6 +3414,14 @@
  "te_cmg_east_african_core_3_tt": {
   "en": "$sukuma$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $sukuma$ werden seit [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] Jahren gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_east_african_core_names": {
+  "en": "$swahili$, $nyamwezi$ and $sukuma$",
+  "de": "$swahili$, $nyamwezi$ und $sukuma$"
+ },
+ "te_cmg_east_african_core_switched": {
+  "en": "$swahili$, $nyamwezi$ and $sukuma$ have all switched",
+  "de": "$swahili$, $nyamwezi$ und $sukuma$ haben alle gewechselt"
  },
  "te_cmg_east_african_done_core_tt": {
   "en": "$swahili$, $nyamwezi$ and $sukuma$ pops have all switched to $cm_east_african$.",
@@ -3362,6 +3450,14 @@
  "te_cmg_east_slavic_core_3_tt": {
   "en": "$byelorussian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $byelorussian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_east_slavic_core_names": {
+  "en": "$russian$, $ukrainian$ and $byelorussian$",
+  "de": "$russian$, $ukrainian$ und $byelorussian$"
+ },
+ "te_cmg_east_slavic_core_switched": {
+  "en": "$russian$, $ukrainian$ and $byelorussian$ have all switched",
+  "de": "$russian$, $ukrainian$ und $byelorussian$ haben alle gewechselt"
  },
  "te_cmg_east_slavic_done_core_tt": {
   "en": "$russian$, $ukrainian$ and $byelorussian$ pops have all switched to $cm_east_slavic$.",
@@ -3399,6 +3495,14 @@
   "en": "$ilocano$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $ilocano$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_filipino_core_names": {
+  "en": "$visayan$, $tagalog$ and $ilocano$",
+  "de": "$visayan$, $tagalog$ und $ilocano$"
+ },
+ "te_cmg_filipino_core_switched": {
+  "en": "$visayan$, $tagalog$ and $ilocano$ have all switched",
+  "de": "$visayan$, $tagalog$ und $ilocano$ haben alle gewechselt"
+ },
  "te_cmg_filipino_done_core_tt": {
   "en": "$visayan$, $tagalog$ and $ilocano$ pops have all switched to $filipino$.",
   "de": "Die Pops der Kulturen $visayan$, $tagalog$ und $ilocano$ sind alle zu $filipino$ gewechselt."
@@ -3423,6 +3527,10 @@
   "en": "$karelian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $karelian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_finnish_core_switched": {
+  "en": "$karelian$ has switched",
+  "de": "$karelian$ hat gewechselt"
+ },
  "te_cmg_finnish_done_core_tt": {
   "en": "$karelian$ pops have all switched to $finnish$.",
   "de": "Die Pops der Kultur $karelian$ sind alle zu $finnish$ gewechselt."
@@ -3442,6 +3550,10 @@
  "te_cmg_french_core_2_tt": {
   "en": "$occitan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $occitan$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_french_core_switched": {
+  "en": "$occitan$ has switched",
+  "de": "$occitan$ hat gewechselt"
  },
  "te_cmg_french_done_core_tt": {
   "en": "$occitan$ pops have all switched to $french$.",
@@ -3466,6 +3578,14 @@
  "te_cmg_german_core_2_tt": {
   "en": "$south_german$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $south_german$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_german_core_names": {
+  "en": "$north_german$ and $south_german$",
+  "de": "$north_german$ und $south_german$"
+ },
+ "te_cmg_german_core_switched": {
+  "en": "$north_german$ and $south_german$ have all switched",
+  "de": "$north_german$ und $south_german$ haben alle gewechselt"
  },
  "te_cmg_german_done_core_tt": {
   "en": "$north_german$ and $south_german$ pops have all switched to $cm_german$.",
@@ -3494,6 +3614,14 @@
  "te_cmg_gran_colombian_core_3_tt": {
   "en": "$ecuadorian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $ecuadorian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_gran_colombian_core_names": {
+  "en": "$colombian$, $venezuelan$ and $ecuadorian$",
+  "de": "$colombian$, $venezuelan$ und $ecuadorian$"
+ },
+ "te_cmg_gran_colombian_core_switched": {
+  "en": "$colombian$, $venezuelan$ and $ecuadorian$ have all switched",
+  "de": "$colombian$, $venezuelan$ und $ecuadorian$ haben alle gewechselt"
  },
  "te_cmg_gran_colombian_done_core_tt": {
   "en": "$colombian$, $venezuelan$ and $ecuadorian$ pops have all switched to $cm_gran_colombian$.",
@@ -3531,6 +3659,14 @@
   "en": "$bageli$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $bageli$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_hindustani_core_names": {
+  "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$",
+  "de": "$avadhi$, $bundeli$, $chhattisgarhi$ und $bageli$"
+ },
+ "te_cmg_hindustani_core_switched": {
+  "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$ have all switched",
+  "de": "$avadhi$, $bundeli$, $chhattisgarhi$ und $bageli$ haben alle gewechselt"
+ },
  "te_cmg_hindustani_done_core_tt": {
   "en": "$avadhi$, $bundeli$, $chhattisgarhi$ and $bageli$ pops have all switched to $hindustani$.",
   "de": "Die Pops der Kulturen $avadhi$, $bundeli$, $chhattisgarhi$ und $bageli$ sind alle zu $hindustani$ gewechselt."
@@ -3554,6 +3690,10 @@
  "te_cmg_hungarian_core_2_tt": {
   "en": "$szekely$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $szekely$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_hungarian_core_switched": {
+  "en": "$szekely$ has switched",
+  "de": "$szekely$ hat gewechselt"
  },
  "te_cmg_hungarian_done_core_tt": {
   "en": "$szekely$ pops have all switched to $hungarian$.",
@@ -3583,6 +3723,14 @@
   "en": "$bornean$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $bornean$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_indonesian_core_names": {
+  "en": "$javan$, $malay$, $sumatran$ and $bornean$",
+  "de": "$javan$, $malay$, $sumatran$ und $bornean$"
+ },
+ "te_cmg_indonesian_core_switched": {
+  "en": "$javan$, $malay$, $sumatran$ and $bornean$ have all switched",
+  "de": "$javan$, $malay$, $sumatran$ und $bornean$ haben alle gewechselt"
+ },
  "te_cmg_indonesian_done_core_tt": {
   "en": "$javan$, $malay$, $sumatran$ and $bornean$ pops have all switched to $cm_indonesian$.",
   "de": "Die Pops der Kulturen $javan$, $malay$, $sumatran$ und $bornean$ sind alle zu $cm_indonesian$ gewechselt."
@@ -3607,6 +3755,14 @@
   "en": "$south_italian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $south_italian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_italian_core_names": {
+  "en": "$north_italian$ and $south_italian$",
+  "de": "$north_italian$ und $south_italian$"
+ },
+ "te_cmg_italian_core_switched": {
+  "en": "$north_italian$ and $south_italian$ have all switched",
+  "de": "$north_italian$ und $south_italian$ haben alle gewechselt"
+ },
  "te_cmg_italian_done_core_tt": {
   "en": "$north_italian$ and $south_italian$ pops have all switched to $cm_italian$.",
   "de": "Die Pops der Kulturen $north_italian$ und $south_italian$ sind alle zu $cm_italian$ gewechselt."
@@ -3630,6 +3786,10 @@
  "te_cmg_japanese_core_2_tt": {
   "en": "$ryukyuan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $ryukyuan$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_japanese_core_switched": {
+  "en": "$ryukyuan$ has switched",
+  "de": "$ryukyuan$ hat gewechselt"
  },
  "te_cmg_japanese_done_core_tt": {
   "en": "$ryukyuan$ pops have all switched to $japanese$.",
@@ -3671,6 +3831,14 @@
   "en": "$portuguese$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $portuguese$ werden seit [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] Jahren gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_latin_core_names": {
+  "en": "$french$, $cm_italian$, $spanish$ and $portuguese$",
+  "de": "$french$, $cm_italian$, $spanish$ und $portuguese$"
+ },
+ "te_cmg_latin_core_switched": {
+  "en": "$french$, $cm_italian$, $spanish$ and $portuguese$ have all switched",
+  "de": "$french$, $cm_italian$, $spanish$ und $portuguese$ haben alle gewechselt"
+ },
  "te_cmg_latin_done_core_tt": {
   "en": "$french$, $cm_italian$, $spanish$ and $portuguese$ pops have all switched to $cm_latin$.",
   "de": "Die Pops der Kulturen $french$, $cm_italian$, $spanish$ und $portuguese$ sind alle zu $cm_latin$ gewechselt."
@@ -3695,6 +3863,14 @@
   "en": "$xhosa$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $xhosa$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_nguni_core_names": {
+  "en": "$nguni$, $zulu$ and $xhosa$",
+  "de": "$nguni$, $zulu$ und $xhosa$"
+ },
+ "te_cmg_nguni_core_switched": {
+  "en": "$nguni$, $zulu$ and $xhosa$ have all switched",
+  "de": "$nguni$, $zulu$ und $xhosa$ haben alle gewechselt"
+ },
  "te_cmg_nguni_done_core_tt": {
   "en": "$nguni$, $zulu$ and $xhosa$ pops have all switched to $cm_nguni$.",
   "de": "Die Pops der Kulturen $nguni$, $zulu$ und $xhosa$ sind alle zu $cm_nguni$ gewechselt."
@@ -3714,6 +3890,14 @@
  "te_cmg_oghuz_turkic_core_2_tt": {
   "en": "$azerbaijani$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $azerbaijani$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_oghuz_turkic_core_names": {
+  "en": "$turkish$ and $azerbaijani$",
+  "de": "$turkish$ und $azerbaijani$"
+ },
+ "te_cmg_oghuz_turkic_core_switched": {
+  "en": "$turkish$ and $azerbaijani$ have all switched",
+  "de": "$turkish$ und $azerbaijani$ haben alle gewechselt"
  },
  "te_cmg_oghuz_turkic_done_core_tt": {
   "en": "$turkish$ and $azerbaijani$ pops have all switched to $cm_oghuz_turkic$.",
@@ -3742,6 +3926,14 @@
  "te_cmg_pan_malay_core_2_tt": {
   "en": "$filipino$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $filipino$ werden seit [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] Jahren gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_pan_malay_core_names": {
+  "en": "$cm_indonesian$ and $filipino$",
+  "de": "$cm_indonesian$ und $filipino$"
+ },
+ "te_cmg_pan_malay_core_switched": {
+  "en": "$cm_indonesian$ and $filipino$ have all switched",
+  "de": "$cm_indonesian$ und $filipino$ haben alle gewechselt"
  },
  "te_cmg_pan_malay_done_core_tt": {
   "en": "$cm_indonesian$ and $filipino$ pops have all switched to $cm_pan_malay$.",
@@ -3779,6 +3971,14 @@
   "en": "$cm_yugoslav$ pops are held and accepted for [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] years: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $cm_yugoslav$ werden seit [GetPlayer.MakeScope.ScriptValue('te_cm_years_tier3')|0] Jahren gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_pan_slavic_core_names": {
+  "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$",
+  "de": "$cm_east_slavic$, $cm_czechoslovak$ und $cm_yugoslav$"
+ },
+ "te_cmg_pan_slavic_core_switched": {
+  "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$ have all switched",
+  "de": "$cm_east_slavic$, $cm_czechoslovak$ und $cm_yugoslav$ haben alle gewechselt"
+ },
  "te_cmg_pan_slavic_done_core_tt": {
   "en": "$cm_east_slavic$, $cm_czechoslovak$ and $cm_yugoslav$ pops have all switched to $cm_pan_slavic$.",
   "de": "Die Pops der Kulturen $cm_east_slavic$, $cm_czechoslovak$ und $cm_yugoslav$ sind alle zu $cm_pan_slavic$ gewechselt."
@@ -3815,6 +4015,14 @@
   "en": "$kirgiz$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$. They also need $pan-nationalism$.",
   "de": "Pops der Kultur $kirgiz$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$. Sie benötigen außerdem $pan-nationalism$."
  },
+ "te_cmg_pan_turkic_core_names": {
+  "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$",
+  "de": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ und $kirgiz$"
+ },
+ "te_cmg_pan_turkic_core_switched": {
+  "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$ have all switched",
+  "de": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ und $kirgiz$ haben alle gewechselt"
+ },
  "te_cmg_pan_turkic_done_core_tt": {
   "en": "$cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ and $kirgiz$ pops have all switched to $cm_pan_turkic$.",
   "de": "Die Pops der Kulturen $cm_oghuz_turkic$, $uzbek$, $kazak$, $tatar$ und $kirgiz$ sind alle zu $cm_pan_turkic$ gewechselt."
@@ -3834,6 +4042,10 @@
  "te_cmg_persian_core_2_tt": {
   "en": "$luri$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $luri$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_persian_core_switched": {
+  "en": "$luri$ has switched",
+  "de": "$luri$ hat gewechselt"
  },
  "te_cmg_persian_done_core_tt": {
   "en": "$luri$ pops have all switched to $persian$.",
@@ -3863,6 +4075,14 @@
   "en": "$paraguayan$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $paraguayan$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
  },
+ "te_cmg_platine_core_names": {
+  "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$",
+  "de": "$platinean$, $argentine$, $uruguayan$ und $paraguayan$"
+ },
+ "te_cmg_platine_core_switched": {
+  "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$ have all switched",
+  "de": "$platinean$, $argentine$, $uruguayan$ und $paraguayan$ haben alle gewechselt"
+ },
  "te_cmg_platine_done_core_tt": {
   "en": "$platinean$, $argentine$, $uruguayan$ and $paraguayan$ pops have all switched to $cm_platine$.",
   "de": "Die Pops der Kulturen $platinean$, $argentine$, $uruguayan$ und $paraguayan$ sind alle zu $cm_platine$ gewechselt."
@@ -3890,6 +4110,14 @@
  "te_cmg_scandinavian_core_3_tt": {
   "en": "$norwegian$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $norwegian$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_scandinavian_core_names": {
+  "en": "$swedish$, $danish$ and $norwegian$",
+  "de": "$swedish$, $danish$ und $norwegian$"
+ },
+ "te_cmg_scandinavian_core_switched": {
+  "en": "$swedish$, $danish$ and $norwegian$ have all switched",
+  "de": "$swedish$, $danish$ und $norwegian$ haben alle gewechselt"
  },
  "te_cmg_scandinavian_done_core_tt": {
   "en": "$swedish$, $danish$ and $norwegian$ pops have all switched to $cm_scandinavian$.",
@@ -4302,6 +4530,14 @@
  "te_cmg_yugoslav_core_3_tt": {
   "en": "$bosniak$ pops are held and accepted: our sphere holds most of their homeland pops, and the countries where many of them live give them $full_acceptance$.",
   "de": "Pops der Kultur $bosniak$ werden gehalten und akzeptiert: Unsere Einflusssphäre hält den Großteil ihrer Pops im Heimatland, und die Länder, in denen viele von ihnen leben, gewähren ihnen $full_acceptance$."
+ },
+ "te_cmg_yugoslav_core_names": {
+  "en": "$serb$, $croat$ and $bosniak$",
+  "de": "$serb$, $croat$ und $bosniak$"
+ },
+ "te_cmg_yugoslav_core_switched": {
+  "en": "$serb$, $croat$ and $bosniak$ have all switched",
+  "de": "$serb$, $croat$ und $bosniak$ haben alle gewechselt"
  },
  "te_cmg_yugoslav_done_core_tt": {
   "en": "$serb$, $croat$ and $bosniak$ pops have all switched to $cm_yugoslav$.",

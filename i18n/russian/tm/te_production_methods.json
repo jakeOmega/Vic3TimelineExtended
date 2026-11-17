@@ -5923,6 +5923,10 @@
   "en": "HP Labs",
   "ru": "Лаборатории HP"
  },
+ "pm_hq_creditors_consortium": {
+  "en": "Clearing House",
+  "ru": "Расчётная палата"
+ },
  "pm_hq_cultural_coalition": {
   "en": "World Cultural Center",
   "ru": "Всемирный культурный центр"
@@ -7619,6 +7623,10 @@
   "en": "Diplomatic Framework",
   "ru": "Дипломатические рамки"
  },
+ "pm_power_bloc_statue_research_commons": {
+  "en": "Research Commons",
+  "ru": "Научное содружество"
+ },
  "pm_power_centralized_control_systems": {
   "en": "Power Centralized Control Systems",
   "ru": "Централизованные системы управления энергетикой"
@@ -8371,6 +8379,62 @@
   "en": "Modules for our colonies are assembled in Earth orbit from parts lifted one launch at a time. Only under the Simple and Full Colonies settings of the Space Race rule.",
   "ru": "Модули для наших колоний собираются на околоземной орбите из деталей, доставляемых по одному запуску. Только при настройках «Простые колонии» и «Полноценные колонии» правила «Космическая гонка»."
  },
+ "pm_sr_mission_ceiling_deep_space": {
+  "en": "Up to $pm_deep_space_exploration$",
+  "ru": "Не выше: $pm_deep_space_exploration$"
+ },
+ "pm_sr_mission_ceiling_deep_space_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_deep_space_exploration$. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, — не дороже, чем «$pm_deep_space_exploration$». Предел устанавливается каждый месяц."
+ },
+ "pm_sr_mission_ceiling_earth_orbit": {
+  "en": "Up to $pm_earth_orbit$",
+  "ru": "Не выше: $pm_earth_orbit$"
+ },
+ "pm_sr_mission_ceiling_earth_orbit_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_earth_orbit$. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, — не дороже, чем «$pm_earth_orbit$». Предел устанавливается каждый месяц."
+ },
+ "pm_sr_mission_ceiling_interstellar": {
+  "en": "Up to the $pm_interstellar_mission$",
+  "ru": "Не выше: $pm_interstellar_mission$"
+ },
+ "pm_sr_mission_ceiling_interstellar_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, and its revenue can carry any of them. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, и её доходам по силам любая из них. Предел устанавливается каждый месяц."
+ },
+ "pm_sr_mission_ceiling_mars": {
+  "en": "Up to the $pm_mars_mission$",
+  "ru": "Не выше: $pm_mars_mission$"
+ },
+ "pm_sr_mission_ceiling_mars_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than the $pm_mars_mission$. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, — не дороже, чем «$pm_mars_mission$». Предел устанавливается каждый месяц."
+ },
+ "pm_sr_mission_ceiling_moon": {
+  "en": "Up to the $pm_moon_mission$",
+  "ru": "Не выше: $pm_moon_mission$"
+ },
+ "pm_sr_mission_ceiling_moon_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than the $pm_moon_mission$. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, — не дороже, чем «$pm_moon_mission$». Предел устанавливается каждый месяц."
+ },
+ "pm_sr_mission_ceiling_none": {
+  "en": "Any Mission",
+  "ru": "Любая миссия"
+ },
+ "pm_sr_mission_ceiling_none_desc": {
+  "en": "The program may fly any mission its technology allows.",
+  "ru": "Программа может запускать любую миссию, какую позволяют её технологии."
+ },
+ "pm_sr_mission_ceiling_solar": {
+  "en": "Up to $pm_solar_colonization$",
+  "ru": "Не выше: $pm_solar_colonization$"
+ },
+ "pm_sr_mission_ceiling_solar_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_solar_colonization$. It sets the limit each month.",
+  "ru": "Правительство страны ограничивает программу миссиями, счёт которых по силам её доходам, — не дороже, чем «$pm_solar_colonization$». Предел устанавливается каждый месяц."
+ },
  "pm_sr_site_marker": {
   "en": "Colony Record",
   "ru": "Запись колонии"
@@ -8390,6 +8454,30 @@
  "pm_sr_space_command_torch_yards": {
   "en": "Torch Yards",
   "ru": "Факельные верфи"
+ },
+ "pm_sr_storage_component_depot": {
+  "en": "Component Depot",
+  "ru": "Склад компонентов"
+ },
+ "pm_sr_storage_component_depot_desc": {
+  "en": "Climate-controlled hangars at the launch site keep finished module parts until their launch window opens. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "ru": "Климатизированные ангары на стартовой площадке хранят готовые детали модулей, пока не откроется их стартовое окно. Только при настройках «простые колонии» и «полноценные колонии» правила «Космическая гонка»."
+ },
+ "pm_sr_storage_none": {
+  "en": "No Module Storage",
+  "ru": "Без хранения модулей"
+ },
+ "pm_sr_storage_none_desc": {
+  "en": "Finished colony modules wait only in the program's own stores.",
+  "ru": "Готовые модули колонии ждут только на собственных складах программы."
+ },
+ "pm_sr_storage_orbital_depot": {
+  "en": "Orbital Depot",
+  "ru": "Орбитальное хранилище"
+ },
+ "pm_sr_storage_orbital_depot_desc": {
+  "en": "Finished modules wait in a depot in Earth orbit until their launch window opens. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "ru": "Готовые модули ждут на складе на околоземной орбите, пока не откроется их стартовое окно. Только при настройках «простые колонии» и «полноценные колонии» правила «Космическая гонка»."
  },
  "pm_st_res_hub_reserve": {
   "en": "Reserve Control",
@@ -10754,6 +10842,10 @@
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",
   "ru": "Уборка мусора"
+ },
+ "pmg_space_program_mission_ceiling": {
+  "en": "Mission Limit",
+  "ru": "Предел миссий"
  },
  "pmg_space_program_module_fabrication": {
   "en": "Module Fabrication",

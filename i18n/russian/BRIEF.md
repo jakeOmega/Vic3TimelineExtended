@@ -176,6 +176,10 @@ The first run settled these mod words too, which are too short or too common for
 | the Tender ship role | суда снабжения |
 | Grand Monument(s) | великий монумент (великие монументы) |
 | launch window | стартовое окно |
+| receivership (a creditor running a debtor's finances) | внешнее управление; the treaty article Debt Receivership is «Долговое управление» |
+| a rescue of a defaulted member / its terms | спасение / условия |
+| a currency's issuer / adopting it | эмитент / принять валюту |
+| the Map Room's color scale (Linear, Logarithmic, Ranked) | шкала, agreeing in the feminine: Линейная, Логарифмическая, Ранговая |
 
 Level and band names read as their labels do, quoted or agreeing with *уровень*: UN authority — Угасающий / Оспариваемый / Устоявшийся / Сильный / Надгосударственный; tradecraft — Необстрелянный / Новичок / Состоявшийся / Опытный / Ветеран; nuclear readiness — пониженная / обычная / усиленная; colonial stability — Упрочена / Стабильна / Напряжена / Рушится / Разваливается; UN standing — Образцовый / Уважаемый / Нейтральный / Плохой / Опозоренный; the UN authority pillars — Участие / Приверженность / Финансирование / Политика / Доверие / Результативность; seabed regimes — Открытый / Регулируемый / Схватка.
 

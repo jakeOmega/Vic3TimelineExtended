@@ -1639,6 +1639,10 @@
   "en": "Points added to the leader's intervention budget once a member has adopted its currency, under any banking law but $law_unregulated_banking$. If they go, the tools the budget no longer covers are lifted one a month until the rest fit.",
   "es": "Puntos que se suman al presupuesto de intervención del líder cuando un miembro ha adoptado su moneda, con cualquier ley bancaria salvo $law_unregulated_banking$. Si se van, las herramientas que el presupuesto ya no cubre se retiran una al mes hasta que las demás quepan."
  },
+ "country_te_mon_issuer_premium_add": {
+  "en": "Issuer [concept_banking_risk_premium]",
+  "es": "[concept_banking_risk_premium] del emisor"
+ },
  "country_te_mon_issuer_premium_add_desc": {
   "en": "Points off the leader's risk premium once a member has adopted its currency: the figure times the currency's [concept_banking_currency_reach]. It is risk premium, not [concept_banking_credit_standing], so it counts for a leader already at its credit floor.",
   "es": "Puntos que restan de la prima de riesgo del líder cuando un miembro ha adoptado su moneda: la cifra multiplicada por el [concept_banking_currency_reach|l] de la moneda. Es prima de riesgo, no [concept_banking_credit_standing|l], así que cuenta para un líder que ya está en su mínimo de solvencia crediticia."
