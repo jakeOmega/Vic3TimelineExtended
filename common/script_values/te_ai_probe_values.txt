@@ -2786,14 +2786,14 @@ te_aip_w_r_fmc = {
 }
 te_aip_w_r_small = {
 	value = 0
-	if = { limit = { has_game_rule = te_small_economy_construction_disabled } value = 1 }
-	else_if = { limit = { has_game_rule = te_small_economy_construction_mild } value = 2 }
-	else_if = { limit = { has_game_rule = te_small_economy_construction_standard } value = 3 }
-	else_if = { limit = { has_game_rule = te_small_economy_construction_enabled } value = 4 }
+	if = { limit = { te_small_economy_construction_on = no } value = 1 }
+	else_if = { limit = { te_small_economy_construction_mild_on = yes } value = 2 }
+	else_if = { limit = { te_small_economy_construction_standard_on = yes } value = 3 }
+	else_if = { limit = { te_small_economy_construction_strong_on = yes } value = 4 }
 }
 te_aip_w_r_bank = {
 	value = 0
-	if = { limit = { has_game_rule = banking_system_enabled } value = 1 }
-	else_if = { limit = { has_game_rule = banking_system_simplified } value = 2 }
-	else_if = { limit = { has_game_rule = banking_system_disabled } value = 3 }
+	if = { limit = { te_mon_full_system = yes } value = 1 }
+	else_if = { limit = { te_banking_system_on = yes } value = 2 }
+	else_if = { limit = { te_banking_system_on = no } value = 3 }
 }

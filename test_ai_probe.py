@@ -687,11 +687,22 @@ class VersionFourTest(unittest.TestCase):
         rules = "\n".join(text(p) for p in sorted((ROOT / "common/game_rules").glob("*.txt")))
         for name, rule, settings in gen_ai_probe.RULES:
             with self.subTest(rule=rule):
-                block = re.search(rf"(?ms)^{rule} = \{{\n(.*?)^\}}", rules).group(1)
-                self.assertEqual(set(re.findall(r"(?m)^\t([a-z_]+) = \{", block)), set(settings))
+                rule_block = re.search(rf"(?ms)^{rule} = \{{\n(.*?)^\}}", rules).group(1)
+                self.assertEqual(set(re.findall(r"(?m)^\t([a-z_]+) = \{", rule_block)), set(settings))
                 self.assertEqual(self.key["rules"][name]["settings"], settings)
                 body = block_text("te_aip_w_" + name, self.values)
-                self.assertEqual(re.findall(r"has_game_rule = ([a-z_]+)", body), settings)
+                tests = gen_ai_probe.rule_tests(name, settings)
+                self.assertEqual(re.findall(r"limit = \{ (.*?) \}", body), tests)
+                self.assertEqual(len(tests), len(settings))
+        # A setting read through a system's trigger: the trigger is defined and names its rule's settings only.
+        triggers = "\n".join(text(p) for p in (ROOT / "common/scripted_triggers").glob("*.txt"))
+        for name, tests in gen_ai_probe.RULE_TESTS.items():
+            settings = self.key["rules"][name]["settings"]
+            for test in tests:
+                trigger = test.split(" = ")[0]
+                with self.subTest(trigger=trigger):
+                    body = block(trigger, triggers)
+                    self.assertTrue(set(re.findall(r"has_game_rule = ([a-z_]+)", body)) <= set(settings), body)
         self.assertIn("r_fmc", self.key["world_fields"])
         self.assertEqual(set(gen_ai_probe.RETOOLING_WAIVED) - set(self.key["rules"]["r_fmc"]["settings"]), set())
 

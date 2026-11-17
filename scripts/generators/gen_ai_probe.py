@@ -319,7 +319,10 @@ ELECTRICITY_VALUES = {"made": "te_grid_electricity_production", "used": "te_grid
                       "price": "te_grid_chk_price_now_value"}
 # Game rules the probe's fields depend on (the W line, from version 4): each a 1-based index into its settings, 0
 # for none. has_game_rule on a setting no file defines is TRUE (scripting_best_practices.md), so the generator stops
-# on a setting it does not find in common/game_rules/.
+# on a setting it does not find in common/game_rules/. A setting's test is the system's own trigger where it has one
+# (the small-economy and banking rules are read only through theirs: test_construction_cost_scaling.py holds the
+# first to it). free_market_construction_rule's triggers tell only market from direct and waived retooling from not,
+# so the probe, alone, reads its five settings by name.
 RULES = [
     ("r_fmc", "free_market_construction_rule", [
         "free_market_construction_enabled", "free_market_construction_no_ai_retooling",
@@ -331,6 +334,20 @@ RULES = [
     ("r_bank", "banking_system_rule", ["banking_system_enabled", "banking_system_simplified",
                                        "banking_system_disabled"]),
 ]
+# The tests of the settings read through a system's triggers, in RULES's order (common/scripted_triggers/
+# te_construction_cost_triggers.txt, banking_policy_triggers.txt, te_monetary_triggers.txt). The others are
+# `has_game_rule = <setting>`.
+RULE_TESTS = {
+    "r_small": ["te_small_economy_construction_on = no", "te_small_economy_construction_mild_on = yes",
+                "te_small_economy_construction_standard_on = yes", "te_small_economy_construction_strong_on = yes"],
+    "r_bank": ["te_mon_full_system = yes", "te_banking_system_on = yes", "te_banking_system_on = no"],
+}
+
+
+def rule_tests(name: str, settings: list[str]) -> list[str]:
+    return RULE_TESTS.get(name) or [f"has_game_rule = {setting}" for setting in settings]
+
+
 # The army census (te_aip_unit_census): no on_action fires when a battalion is recruited or changes type
 # (vanilla's on_actions.log names none), so each snapshot marks every army battalion with its type (a variable on the
 # combat unit) and counts, against the marks of the country's last snapshot, the battalions with no mark (recruited
@@ -1383,8 +1400,7 @@ EVENT_VALUES = (
     "# --- version 4, the W line: the game rules the probe's fields depend on (RULES), each a 1-based index into its\n"
     "# settings (ai_probe_key.json, rules). The W line prints in the month the probe arms and once a year after,\n"
     "# so a log says which setting each year ran under (a rule can be changed in a running game).\n"
-    + "".join(index("w_" + name, [f"has_game_rule = {setting}" for setting in settings]).script_value()
-              for name, _, settings in RULES)
+    + "".join(index("w_" + name, rule_tests(name, settings)).script_value() for name, _, settings in RULES)
 )
 
 
