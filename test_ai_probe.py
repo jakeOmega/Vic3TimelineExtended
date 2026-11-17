@@ -628,7 +628,8 @@ class BankingCycleTest(unittest.TestCase):
 
     def test_version_5_adds_the_rate_and_the_pass_to_the_end_of_c2(self):
         key = json.loads(KEY.read_text(encoding="utf-8"))
-        self.assertEqual(key["lines"]["C2"][-5:], ["rate", "rate_base", "cm_reserve", "cm_credit", "cm_pass"])
+        self.assertEqual(key["lines"]["C2"][-7:], ["rate", "rate_base", "cm_reserve", "cm_credit", "cm_pass",
+                                                   "inf_short_states", "inf_short"])
         self.assertEqual(key["lines_added"]["5"], [])
         values = text(VALUES)
         for field, source in (("rate", "var:te_rate_paid_pts"), ("rate_base", "var:te_mon_era_base_now"),
@@ -637,6 +638,13 @@ class BankingCycleTest(unittest.TestCase):
                               ("cm_pass", "var:te_ai_build_pass_count")):
             line = re.search(rf"(?m)^te_aip_{field} = \{{.*$", values).group(0)
             self.assertIn(source, line, field)
+        # The railway entry's reading, the pass's own shortfall (te_ai_build_pass_values.txt), summed over the states
+        # short of infrastructure.
+        for field, added in (("inf_short_states", "add = 1"),
+                             ("inf_short", "add = te_ai_build_pass_infrastructure_shortfall")):
+            body = re.search(rf"(?ms)^te_aip_{field} = \{{\n(.*?)^\}}", values).group(1)
+            self.assertIn("limit = { te_ai_build_pass_infrastructure_shortfall > 0 }", body, field)
+            self.assertIn(added, body, field)
         # The report's restatement gains the rate at the script's own gain.
         gain = re.search(r"(?m)^TE_CONSTRUCTION_MARKET_AI_RATE_GAIN = ([0-9.]+)",
                          text(ROOT / "common/script_values/te_construction_market_ai_values.txt")).group(1)

@@ -205,6 +205,20 @@ te_aip_rate_base = { value = 0 if = { limit = { has_variable = te_mon_era_base_n
 te_aip_cm_reserve = { value = te_construction_market_ai_required_reserves }
 te_aip_cm_credit = { value = te_construction_market_ai_credit_allowance }
 te_aip_cm_pass = { value = 0 if = { limit = { has_variable = te_ai_build_pass_count } value = var:te_ai_build_pass_count } }
+te_aip_inf_short_states = {
+	value = 0
+	every_scope_state = {
+		limit = { te_ai_build_pass_infrastructure_shortfall > 0 }
+		add = 1
+	}
+}
+te_aip_inf_short = {
+	value = 0
+	every_scope_state = {
+		limit = { te_ai_build_pass_infrastructure_shortfall > 0 }
+		add = te_ai_build_pass_infrastructure_shortfall
+	}
+}
 
 # --- O ---
 te_aip_low_mfg = {

@@ -1617,7 +1617,9 @@
    "rate_base",
    "cm_reserve",
    "cm_credit",
-   "cm_pass"
+   "cm_pass",
+   "inf_short_states",
+   "inf_short"
   ],
   "O1": [
    "low_mfg",
