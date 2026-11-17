@@ -313,7 +313,7 @@ the irregulars come from), and a schools column in table 2. A version-1 to -3 lo
 its positional lines are as they were (`test_ai_probe.py` holds every version-3 line to the key), version 4's tables
 are left out or say "not logged", and `check` notes why `rt_*` and `bt_company_headquarter` read 0 in it.
 
-Version 5 adds seven fields to C2 and no line of its own:
+Version 5 adds seven fields to C2, one to the end of B2, and no line of its own:
 
 - **The interest rate and the AI construction pass** (version 5, #1877, line C2): `rate` is the rate the country pays
   (`te_rate_paid_pts`, points a year) and `rate_base` the world reference rate it is read against
@@ -321,7 +321,9 @@ Version 5 adds seven fields to C2 and no line of its own:
   it lets the purchase run, each a share of its limit (te_construction_market_ai_values.txt, THE RATE); `cm_pass` is
   the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt);
   `inf_short_states` is the states whose infrastructure is short of their usage and `inf_short` their shortfall in
-  all, in points of infrastructure (te_ai_build_pass_infrastructure_shortfall, what the pass's railway entry reads).
+  all, in points of infrastructure (te_ai_build_pass_infrastructure_shortfall, what the pass's railway entry reads),
+  counting unincorporated states and any shortfall; `rail_sites`, at the end of B2 since C2 is full, is the states
+  the railway entry would act on (te_ai_build_pass_railway_site: incorporated, short by more than 2% of usage).
   `purchase_target` reads `cm_reserve` and `cm_credit`, so the recomputed purchase still matches `cm_target`; a log
   without them is from a build before the rate, whose rule they leave unchanged.
 
