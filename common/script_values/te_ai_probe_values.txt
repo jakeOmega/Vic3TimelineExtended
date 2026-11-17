@@ -2295,7 +2295,7 @@ te_aip_bt_trade_center = { value = "country_has_building_type_levels(bt:building
 te_aip_bt_art_academy = { value = "country_has_building_type_levels(bt:building_art_academy)" }
 te_aip_bt_financial_district = { value = "country_has_building_type_levels(bt:building_financial_district)" }
 te_aip_bt_manor_house = { value = "country_has_building_type_levels(bt:building_manor_house)" }
-te_aip_bt_company_headquarter = { value = "country_has_building_type_levels(bt:building_company_headquarter)" }
+te_aip_bt_company_headquarter = { value = "country_has_building_group_levels(bg_company_headquarter)" }
 te_aip_bt_public_housing = { value = "country_has_building_type_levels(bt:building_public_housing)" }
 te_aip_bt_software_industry = { value = "country_has_building_type_levels(bt:building_software_industry)" }
 te_aip_bt_electronic_components_and_semiconductor_industry = { value = "country_has_building_type_levels(bt:building_electronic_components_and_semiconductor_industry)" }
@@ -2488,6 +2488,110 @@ te_aip_h_defense_in_depth = { value = 0 if = { limit = { has_technology_research
 te_aip_h_motorized_artillery = { value = 0 if = { limit = { has_technology_researched = motorized_artillery } value = 1 } }
 te_aip_h_standing_army = { value = 0 if = { limit = { has_technology_researched = standing_army } value = 1 } }
 
+# --- H ---
+te_aip_h_electrical_generation = { value = 0 if = { limit = { has_technology_researched = electrical_generation } value = 1 } }
+te_aip_h_steam_turbine = { value = 0 if = { limit = { has_technology_researched = steam_turbine } value = 1 } }
+te_aip_h_radio = { value = 0 if = { limit = { has_technology_researched = radio } value = 1 } }
+te_aip_h_telephone = { value = 0 if = { limit = { has_technology_researched = telephone } value = 1 } }
+
+# --- P ---
+te_aip_pp_states = {
+	value = 0
+	every_scope_state = {
+		limit = { te_state_has_a_power_plant = yes }
+		add = 1
+	}
+}
+te_aip_q_power = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_power }
+		add = te_construction_market_building_queued_levels
+	}
+}
+te_aip_elec_made = {
+	value = 0
+	every_scope_state = { add = te_grid_electricity_production }
+}
+te_aip_elec_used = {
+	value = 0
+	every_scope_state = { add = te_grid_electricity_consumption }
+}
+te_aip_elec_price = {
+	value = 0
+	if = {
+		limit = { te_aip_elec_used > 0 }
+		every_scope_state = {
+			add = { value = te_grid_electricity_consumption multiply = te_grid_chk_price_now_value }
+		}
+		divide = te_aip_elec_used
+	}
+}
+te_aip_uc_gas_light = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_urban_center has_active_production_method = pm_gas_streetlights }
+		add = level
+	}
+}
+te_aip_uc_elec_light = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_urban_center OR = { has_active_production_method = pm_electric_streetlights has_active_production_method = pm_high_pressure_sodium_streetlights has_active_production_method = pm_led_streetlights has_active_production_method = pm_smart_led_streetlights } }
+		add = level
+	}
+}
+te_aip_radio_price = {
+	value = 1
+	add = { value = this.market.mg:radios.market_goods_pricier min = 0 }
+	subtract = { value = this.market.mg:radios.market_goods_cheaper min = 0 }
+}
+te_aip_radio_buy = { value = this.market.mg:radios.market_goods_buy_orders }
+te_aip_radio_sell = { value = this.market.mg:radios.market_goods_sell_orders }
+te_aip_q_uni = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_university }
+		add = te_construction_market_building_queued_levels
+	}
+}
+te_aip_q_admin = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_government_administration }
+		add = te_construction_market_building_queued_levels
+	}
+}
+te_aip_q_mil = {
+	value = 0
+	every_scope_building = {
+		limit = { OR = { is_building_group = bg_military is_building_type = building_military_base } }
+		add = te_construction_market_building_queued_levels
+	}
+}
+te_aip_q_infra = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_infrastructure }
+		add = te_construction_market_building_queued_levels
+	}
+}
+te_aip_cc_scale = { value = te_cc_scaling_factor }
+te_aip_cc_total = { value = te_cc_total_factor }
+te_aip_bur_add = { value = modifier:country_bureaucracy_add }
+te_aip_bur_mult = { value = modifier:country_bureaucracy_mult }
+te_aip_bur_cost_add = { value = modifier:country_bureaucracy_cost_add }
+te_aip_bur_inst_mult = { value = modifier:country_bureaucracy_investment_cost_factor_mult }
+te_aip_bur_pop_mult = { value = modifier:state_bureaucracy_population_base_cost_factor_mult }
+te_aip_slack = { value = 0 if = { limit = { has_variable = te_cc_slack } value = var:te_cc_slack } }
+te_aip_slack_peasants = { value = 0 if = { limit = { has_variable = te_cc_peasants } value = var:te_cc_peasants } }
+te_aip_u_all = { value = 0 if = { limit = { has_variable = te_aip_u_all } value = var:te_aip_u_all } }
+te_aip_u_new = { value = 0 if = { limit = { has_variable = te_aip_u_new } value = var:te_aip_u_new } }
+te_aip_u_changed = { value = 0 if = { limit = { has_variable = te_aip_u_changed } value = var:te_aip_u_changed } }
+te_aip_u_irr_new = { value = 0 if = { limit = { has_variable = te_aip_u_irr_new } value = var:te_aip_u_irr_new } }
+te_aip_u_from_irr = { value = 0 if = { limit = { has_variable = te_aip_u_from_irr } value = var:te_aip_u_from_irr } }
+te_aip_u_flows = { value = 0 if = { limit = { has_variable = te_aip_u_flows } value = var:te_aip_u_flows } }
+
 # --- version 2: a diplomatic play's type (ai_probe_key.json, play_types), read in the play's scope ---
 te_aip_play_type_index = {
 	value = 0
@@ -2572,6 +2676,57 @@ te_aip_play_type_index = {
 	else_if = { limit = { is_diplomatic_play_type = dp_leadership_dar_al_islam } value = 79 }
 }
 
+# --- version 4: the army census (te_aip_unit_census). A battalion's type (ai_probe_key.json,
+# unit_type_index), read in the combat unit's scope; whether a combat unit held a variable ---
+te_aip_unit_type_index = {
+	value = 0
+	if = { limit = { has_unit_type = unit_type:combat_unit_type_irregular_infantry } value = 1 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_line_infantry } value = 2 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_skirmish_infantry } value = 3 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_trench_infantry } value = 4 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_squad_infantry } value = 5 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_mechanized_infantry } value = 6 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_cannon_artillery } value = 7 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_mobile_artillery } value = 8 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_shrapnel_artillery } value = 9 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_siege_artillery } value = 10 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_heavy_tank } value = 11 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_hussars } value = 12 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_dragoons } value = 13 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_cuirassiers } value = 14 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_lancers } value = 15 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_light_tanks } value = 16 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_low_tier_marines } value = 17 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_mid_tier_marines } value = 18 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_high_tier_marines } value = 19 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_armored_infantry } value = 20 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_robotic_soldiers } value = 21 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_swarm_bots } value = 22 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_grey_goo } value = 23 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_motorized_artillery } value = 24 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_guided_artillery_projectiles } value = 25 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_networked_guided_artillery_projectiles } value = 26 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_orbital_bombardment } value = 27 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_orbital_precision_antimatter_strikes } value = 28 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_light_scout_tanks } value = 29 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_stealth_reconnaissance_drone_carrier } value = 30 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_holographic_ambush_combat_vehicle } value = 31 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_main_battle_tank } value = 32 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_reactive_armor_tank } value = 33 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_railgun_tank } value = 34 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_DEW_tank } value = 35 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_bomber_aircraft } value = 36 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_jet_powered_fighters } value = 37 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_stealth_aircraft } value = 38 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_orbital_tactical_vehicles } value = 39 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_orbital_weapons_platforms } value = 40 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_combined_arms_marines } value = 41 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_stealth_marines } value = 42 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_networked_marines } value = 43 }
+	else_if = { limit = { has_unit_type = unit_type:combat_unit_type_bioenhanced_marines } value = 44 }
+}
+te_aip_unit_vars_ok = { value = 0 if = { limit = { has_global_variable = te_aip_unit_vars } value = 1 } }
+
 # --- read at a law event ---
 te_aip_ev_enact_chance = { value = enactment_chance }
 te_aip_ev_stall_chance = { value = stall_chance }
@@ -2617,4 +2772,28 @@ te_aip_w_states = {
 te_aip_w_c_states = {
 	value = 0
 	every_country = { limit = { NOT = { is_country_type = decentralized } } add = num_states }
+}
+# --- version 4, the W line: the game rules the probe's fields depend on (RULES), each a 1-based index into its
+# settings (ai_probe_key.json, rules). The W line prints in the month the probe arms and once a year after,
+# so a log says which setting each year ran under (a rule can be changed in a running game).
+te_aip_w_r_fmc = {
+	value = 0
+	if = { limit = { has_game_rule = free_market_construction_enabled } value = 1 }
+	else_if = { limit = { has_game_rule = free_market_construction_no_ai_retooling } value = 2 }
+	else_if = { limit = { has_game_rule = free_market_construction_no_retooling } value = 3 }
+	else_if = { limit = { has_game_rule = free_market_construction_no_maintenance } value = 4 }
+	else_if = { limit = { has_game_rule = free_market_construction_disabled } value = 5 }
+}
+te_aip_w_r_small = {
+	value = 0
+	if = { limit = { has_game_rule = te_small_economy_construction_disabled } value = 1 }
+	else_if = { limit = { has_game_rule = te_small_economy_construction_mild } value = 2 }
+	else_if = { limit = { has_game_rule = te_small_economy_construction_standard } value = 3 }
+	else_if = { limit = { has_game_rule = te_small_economy_construction_enabled } value = 4 }
+}
+te_aip_w_r_bank = {
+	value = 0
+	if = { limit = { has_game_rule = banking_system_enabled } value = 1 }
+	else_if = { limit = { has_game_rule = banking_system_simplified } value = 2 }
+	else_if = { limit = { has_game_rule = banking_system_disabled } value = 3 }
 }
