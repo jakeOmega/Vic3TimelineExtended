@@ -203,6 +203,14 @@ last report.
 Version 3 adds a few fields to two lines and none of its own; in game, one month-index script value a country a
 pulse and, once a year, one pass over every state for the W line.
 
+- **The interest rate and the AI construction pass** (version 4, #1877, line C2): `rate` is the rate the country pays
+  (`te_rate_paid_pts`, points a year) and `rate_base` the world reference rate it is read against
+  (`te_mon_era_base_now`); `cm_reserve` is the reserve the rate asks the purchase to keep and `cm_credit` the debt
+  it lets the purchase run, each a share of its limit (te_construction_market_ai_values.txt, THE RATE); `cm_pass` is
+  the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt).
+  `purchase_target` reads `cm_reserve` and `cm_credit`, so the recomputed purchase still matches `cm_target`; a log
+  without them is from a build before the rate, whose rule they leave unchanged.
+
 The scorecard starts with a headline (the 20 largest economies' growth against the rest's, and their share of AI
 GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has seven: outcomes, the means
 of growth, staffing, the Construction Sector, the construction purchase, solvency, and where the money goes), each

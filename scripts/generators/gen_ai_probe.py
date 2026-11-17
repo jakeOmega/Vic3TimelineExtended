@@ -57,6 +57,10 @@ WHAT THE LOG HOLDS (every line starts `TE_AIP `; `scripts/analysis/ai_probe_repo
                                `every_country` reaches (WORLD_FIELDS).
 Version 3 also adds the banking cycle to C2 (its phase, `finance_cycle_value`, its momentum, a crash in the last
 365 days; BANK_PHASES) and the months in a panic or downturn to the counters (`n_bank_down`).
+Version 4 (#1877) adds to C2 the interest rate the construction purchase reads (`rate`, the rate paid, and
+`rate_base`, the world reference rate it is read against), what the rate asks of the purchase (`cm_reserve`, the
+reserve it asks the country to keep, and `cm_credit`, the debt it allows, each a share of its limit), and `cm_pass`,
+the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt).
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
@@ -79,7 +83,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 3
+VERSION = 4
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
@@ -96,6 +100,7 @@ LINES_ADDED = {
         "I1", "I2", "G1", "G2", "G3", "B1", "B2", "N1", "N2"],
     2: ["O2", "J1", "R1", "H1"],
     3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
+    4: [],          # version 4 added fields to C2: the interest rate the purchase reads, and the AI construction pass
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -627,6 +632,14 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         variable("bank_cycle", "finance_cycle_value", 1),
         variable("bank_momentum", "finance_cycle_momentum", 2),
         flag("bank_crashed", "has_variable = banking_crashed_last_year"),
+        # Version 4 (#1877): the rate the purchase reads, what it asks of the purchase, and the AI construction pass
+        # (te_construction_market_ai_values.txt, THE RATE and THE PASS), so purchase_target can be recomputed with the
+        # rate's terms and the pass's levels counted.
+        variable("rate", "te_rate_paid_pts", 2),
+        variable("rate_base", "te_mon_era_base_now", 1),
+        Field("cm_reserve", "value = te_construction_market_ai_required_reserves", 3),
+        Field("cm_credit", "value = te_construction_market_ai_credit_allowance", 3),
+        variable("cm_pass", "te_ai_build_pass_count"),
     ]
     military = [
         read("army", "army_size"),

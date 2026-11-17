@@ -200,6 +200,11 @@ te_aip_bank_phase = {
 te_aip_bank_cycle = { value = 0 if = { limit = { has_variable = finance_cycle_value } value = var:finance_cycle_value } }
 te_aip_bank_momentum = { value = 0 if = { limit = { has_variable = finance_cycle_momentum } value = var:finance_cycle_momentum } }
 te_aip_bank_crashed = { value = 0 if = { limit = { has_variable = banking_crashed_last_year } value = 1 } }
+te_aip_rate = { value = 0 if = { limit = { has_variable = te_rate_paid_pts } value = var:te_rate_paid_pts } }
+te_aip_rate_base = { value = 0 if = { limit = { has_variable = te_mon_era_base_now } value = var:te_mon_era_base_now } }
+te_aip_cm_reserve = { value = te_construction_market_ai_required_reserves }
+te_aip_cm_credit = { value = te_construction_market_ai_credit_allowance }
+te_aip_cm_pass = { value = 0 if = { limit = { has_variable = te_ai_build_pass_count } value = var:te_ai_build_pass_count } }
 
 # --- O ---
 te_aip_low_mfg = {
