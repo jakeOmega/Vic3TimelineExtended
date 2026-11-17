@@ -46,9 +46,14 @@
 #   Never more than the 10 points it was, so no country's floor rose.
 #
 #   Paid from reserves, not on credit: whole while the reserves are a tenth of
-#   their limit or more, which is what the engine's AI must hold before it may
-#   queue a government building (NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS),
-#   less in a straight line below that, and nothing with none. A floor on
+#   their limit or more, less in a straight line below that, and nothing with
+#   none. The tenth is vanilla's reserve gate on a new construction (NAI
+#   CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS), which the mod lowered to 0.02
+#   on 2026-11-16 (#1877, common/defines/extra_defines.txt) so that a
+#   government with a surplus queues without first saving a tenth. The floor
+#   keeps vanilla's tenth: a government that now queues at reserves of 0.02 to
+#   0.1 draws its floor from them no faster than before, a fifth to all of
+#   the twentieth, and the surplus term (below) pays the rest. A floor on
 #   credit, however small, is the old floor again for a country whose surplus
 #   is under it: a few points now, interest from then on, less built every
 #   year after.

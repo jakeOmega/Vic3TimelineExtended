@@ -1,0 +1,30 @@
+﻿# TE_SELF_CHECK ai_reserve_gate (common/on_actions/te_ai_reserve_gate_selfcheck_on_actions.txt): what it reads a
+# country with, and the counts it stores, read back for its verdict and its log line. Delete with that file.
+
+# The weekly innovation cap is the modifier's sum: 50 base and 150 at full literacy (vanilla's code static
+# modifiers), China's 134.5 at a literacy of 0.56 in the AI-only run of 2026-11-16.
+te_rgc_innovation_cap = { value = modifier:country_weekly_innovation_max_add }
+te_rgc_innovation_share = {
+	value = 1
+	if = {
+		limit = { te_rgc_innovation_cap > 0 }
+		value = country_innovation
+		divide = te_rgc_innovation_cap
+	}
+}
+
+# Net fixed income, and its share of fixed income.
+te_rgc_surplus = { value = net_fixed_income }
+te_rgc_surplus_share = {
+	value = net_fixed_income
+	divide = {
+		value = fixed_income
+		min = 1
+	}
+}
+
+te_rgc_watched_g = { value = global_var:te_rgc_watched }
+te_rgc_any_g = { value = global_var:te_rgc_any }
+te_rgc_uni_g = { value = global_var:te_rgc_uni }
+te_rgc_ctrl_watched_g = { value = global_var:te_rgc_ctrl_watched }
+te_rgc_ctrl_uni_g = { value = global_var:te_rgc_ctrl_uni }

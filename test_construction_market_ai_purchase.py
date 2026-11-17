@@ -22,7 +22,8 @@ Nothing in the engine checks that script, so this runs the script's own text. Wh
   properties the rule must have whatever its wording (what it costs against income, that it never rises above the
   rule before, that a paused country buys nothing, that the probe's sample countries spend no more than they have),
   and a week-by-week budget against the rule before.
-- Constants holds the script's constants to the engine defines they are taken from.
+- Constants holds the script's constants to the engine defines they are taken from, and pins the one of those
+  defines the mod sets (the reserve gate, 0.02 since #1877), which the floor's full reserves no longer follow.
 - TheQueueRead runs the trigger the removed clause read its queue with, which the AI probe still reads.
 
 Run: python3 -m unittest test_construction_market_ai_purchase -v
@@ -54,8 +55,9 @@ FLOOR_FULL_RESERVES = 0.1
 FLOOR_MIN_FACTOR = 0.1
 BUREAUCRACY_INCOME_SHARE = 0.2
 
-# The engine's AI defines the constants are taken from (vanilla 1.15.1, common/defines/00_ai.txt). The mod must leave
-# them alone for the reasoning to hold; test_matches_the_game_files reads them where the game is installed.
+# The engine's AI defines the constants are taken from, at vanilla's values (1.15.1, common/defines/00_ai.txt);
+# test_matches_the_game_files reads them where the game is installed (vanilla_parsed/ holds no defines). The mod
+# leaves them alone for the reasoning to hold, except MOD_NAI's.
 NAI = {
     "CONSTRUCTION_DEBT_PAUSE": 0.4,
     "CONSTRUCTION_DEBT_RESUME": 0.2,
@@ -63,6 +65,13 @@ NAI = {
     "CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS": 0.1,
     "WAGE_CUT_INCOME_RATIO_THRESHOLD": 1.05,
     "MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE": 1.05,
+}
+# The one the mod sets (common/defines/extra_defines.txt, NAI): the reserve gate on a new construction, lowered from
+# vanilla's 0.1 so that a government with a surplus queues without first saving a tenth (#1877; ai.md § AI Government
+# Construction). The floor keeps vanilla's tenth (FLOOR_FULL_RESERVES): what the floor draws from reserves is not
+# what the gate decides.
+MOD_NAI = {
+    "CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS": 0.02,
 }
 
 _PARSED = {}
@@ -198,8 +207,29 @@ class Constants(unittest.TestCase):
         for name in ("WAGE_CUT_INCOME_RATIO_THRESHOLD", "MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE"):
             self.assertAlmostEqual(FLOOR_INCOME_SHARE, 1 - 1 / NAI[name], delta=0.005, msg=name)
 
-    def test_the_floor_is_whole_at_the_reserves_the_engine_asks_before_it_queues(self):
+    def test_the_floor_is_whole_at_vanillas_reserve_gate(self):
+        # Vanilla's tenth, which an AI had to hold before it could queue a government building: the floor was whole
+        # wherever a queue could start. The mod's gate is lower now, so a queue can start where the floor pays a
+        # fifth to all of it; the floor keeps the tenth and so draws reserves no faster than before at any level.
         self.assertEqual(FLOOR_FULL_RESERVES, NAI["CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS"])
+        self.assertLess(MOD_NAI["CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS"], FLOOR_FULL_RESERVES)
+
+    def test_the_mod_sets_the_reserve_gate_once_below_vanillas_and_above_none(self):
+        # Above 0: the engine still asks for reserves past the building's cost. Under vanilla's 0.1: the point.
+        sets = []
+        for path in sorted(DEFINES_DIR.glob("*.txt")):
+            text = "\n".join(line.split("#", 1)[0] for line in path.read_text(encoding="utf-8-sig").splitlines())
+            for name, value in MOD_NAI.items():
+                for m in re.finditer(rf"\b{name}\s*=\s*([0-9.]+)", text):
+                    sets.append((path.name, name, float(m.group(1))))
+        self.assertEqual(sets, [("extra_defines.txt", name, value) for name, value in MOD_NAI.items()])
+        for name, value in MOD_NAI.items():
+            self.assertGreater(value, 0, name)
+            self.assertLess(value, NAI[name], name)
+        nai = re.search(r"(?ms)^NAI\s*=\s*\{(.*?)^\}", (DEFINES_DIR / "extra_defines.txt").read_text(encoding="utf-8-sig"))
+        self.assertIsNotNone(nai)
+        for name in MOD_NAI:
+            self.assertRegex(nai.group(1), rf"(?m)^\t{name}\s*=", f"{name} is not in the NAI block")
 
     def test_the_part_the_surplus_pays_is_a_two_hundredth_of_income(self):
         self.assertAlmostEqual(FLOOR_INCOME_SHARE * FLOOR_MIN_FACTOR, 0.005)
@@ -208,7 +238,7 @@ class Constants(unittest.TestCase):
         # A mod define that moves one of them moves what the formula's constants stand on: revisit both together.
         for path in sorted(DEFINES_DIR.glob("*.txt")):
             text = "\n".join(line.split("#", 1)[0] for line in path.read_text(encoding="utf-8-sig").splitlines())
-            for name in NAI:
+            for name in (n for n in NAI if n not in MOD_NAI):
                 self.assertIsNone(re.search(rf"\b{name}\s*=", text), f"{path.name} sets {name}")
 
     def test_matches_the_game_files(self):
