@@ -8,10 +8,12 @@ bureaucracy is under 2% of its usage; the country's first power plant while noth
 has no grid partner; a railway where a state's infrastructure is short of its usage by more than 2%; a university
 while innovation is under nine-tenths of its cap and bureaucracy is not short; a highway, then an airport, in a major
 industrial state under the building's level cap; each only where the surplus pays for the level within two years;
-else nothing. It follows the level in its state until it is built or gone, queues nothing more meanwhile, and none of
-a kind for a year after one of that kind was lost. The engine itself queues nothing new for a government in debt. The
+else nothing. A university, a highway or an airport goes only beside levels of its kind staffed to 80%. It follows
+the level in its state until it is built or gone, queues nothing more meanwhile, and none of a kind for a year after
+one of that kind was lost, or was built and gone again within two years. The engine itself queues nothing new for a
+government in debt. The
 rate's curve is pinned in test_construction_market_ai_purchase.py (TheRate); this file holds the pass's own text and
-values: its conditions, its order, the means it reads, the follow, the back-off, and its self-check.
+values: its conditions, its order, the means it reads, the follow, the watch, the back-off, and its self-check.
 
 Run: python3 -m pytest test_ai_build_pass.py -q
 """
@@ -88,9 +90,11 @@ class Files(unittest.TestCase):
                      "te_ai_build_pass_pending_kind", "te_ai_build_pass_pending_base", "te_ai_build_pass_pending_months",
                      "te_ai_build_pass_pending_state", "te_ai_build_pass_site", "te_ai_build_pass_industry",
                      "te_ai_build_pass_sampled", "te_ai_build_pass_checked", "te_ai_build_pass_built",
-                     "te_ai_build_pass_waiting", "te_ai_build_pass_lost"}
+                     "te_ai_build_pass_waiting", "te_ai_build_pass_lost", "te_ai_build_pass_cohort",
+                     "te_ai_build_pass_cohort_months", "te_ai_build_pass_watcher"}
         variables |= {f"te_ai_build_pass_backoff_{kind}" for kind in KINDS}
         variables |= {f"te_ai_build_pass_{outcome}_{kind}" for kind in KINDS for outcome in ("built", "lost")}
+        variables |= {f"te_ai_build_pass_down_{kind}" for kind in KINDS}
         used = set()
         for path in FILES:
             # A name built from a parameter (te_ai_build_pass_wants_$KIND$) is read whole by the tests of the order.
@@ -243,28 +247,53 @@ class WhatEachEntryNeeds(unittest.TestCase):
                      "te_ai_build_pass_innovation_share < TE_AI_BUILD_PASS_INNOVATION_SHARE"):
             with self.subTest(part=part):
                 self.assertIn(part, university)
-        for site in ("te_ai_build_pass_administration_site", "te_ai_build_pass_university_site"):
-            self.assertEqual(_norm(_block(self.triggers, site)), "is_incorporated = yes")
+        self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_administration_site")), "is_incorporated = yes")
+        self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_university_site")),
+                         "is_incorporated = yes te_ai_build_pass_staffed = { BUILDING = building_university }")
         self.assertIn("multiply = TE_AI_BUILD_PASS_BUREAUCRACY_MARGIN",
                       _norm(_block(self.values, "te_ai_build_pass_bureaucracy_margin")))
 
+    def test_the_administration_goes_where_taxes_most_outrun_capacity(self):
+        # ordered_scope_state takes the highest first: usage less capacity ranks a state short of capacity above one
+        # with capacity to spare.
+        self.assertEqual(_norm(_block(self.values, "te_ai_build_pass_tax_shortfall")),
+                         "value = tax_capacity_usage subtract = tax_capacity")
+        constants, values = load(VALUES)
+        c = purchase.Country(30000.0, 6000.0)
+        short, spare = [Env.evaluate(c, values, "te_ai_build_pass_tax_shortfall", tax_capacity_usage=usage,
+                                     tax_capacity=100.0) for usage in (130.0, 70.0)]
+        self.assertEqual((short, spare), (30.0, -30.0))
+
     def test_the_polish_closure_is_vanillas_university_rule(self):
-        path = purchase._game_file("buildings/07_government.txt")
-        if path is None:
-            self.skipTest("no Victoria 3 install")
-        body = _block(path.read_text(encoding="utf-8-sig"), "building_university")
-        self.assertIn("poland_universities_closed_var", _block(body, "\tcan_build_government"))
+        rule = self.vanilla["building_university"][1]["can_build_government"]
+        self.assertIn("poland_universities_closed_var", repr(rule))
 
     def test_the_first_plant_only_where_nothing_makes_electricity_and_no_partner_brings_it(self):
         wants = _norm(_block(self.triggers, "te_ai_build_pass_wants_power_plant"))
         self.assertIn("NOT = { any_scope_state = { te_state_has_a_power_plant = yes } }", wants)
-        self.assertIn("NOT = { te_ai_build_pass_has_grid_partner = yes }", wants)
+        self.assertIn("NOT = { te_ai_build_pass_grid_serves = yes }", wants)
+        self.assertNotIn("te_ai_build_pass_has_grid_partner", wants)
         self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_has_grid_partner")),
                          "has_variable_list = te_grid_partners any_in_list = { variable = te_grid_partners count >= 1 }")
-        # The grid's pass queues a station for a country with a partner and no power (power_grid_effects.txt).
+        # Out only where the grid's pass would queue a station: its own technology and site rule.
+        self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_grid_serves")),
+                         "has_technology_researched = electrical_capacitors te_ai_build_pass_has_grid_partner = yes "
+                         "any_scope_state = { te_grid_ai_station_site = yes }")
         grid = _norm(_block(_code(ROOT / "common/scripted_effects/power_grid_effects.txt"), "te_grid_ai_build_effect"))
-        self.assertIn("OR = { any_scope_state = { te_grid_electricity_production > 0 } has_variable_list = "
-                      "te_grid_partners }", grid)
+        self.assertTrue(grid.startswith("if = { limit = { has_technology_researched = electrical_capacitors }"))
+        for part in ("in_default = no", "construction_queue_government_duration < 52",
+                     "OR = { any_scope_state = { te_grid_electricity_production > 0 } has_variable_list = "
+                     "te_grid_partners }", "limit = { te_grid_ai_station_site = yes }",
+                     "start_building_construction = building_grid_transfer_station"):
+            with self.subTest(part=part):
+                self.assertIn(part, grid)
+        # The pass itself holds the grid's other tests: not in default, and an empty government queue.
+        may = _norm(_block(self.triggers, "te_ai_build_pass_may_queue"))
+        self.assertIn("in_default = no", may)
+        self.assertIn("NOT = { construction_queue_num_queued_government_levels > 0 }", may)
+        # For a country with no power the site is a partner's station near (the market-area branch needs power).
+        site = _norm(_block(_code(ROOT / "common/scripted_triggers/power_grid_triggers.txt"), "te_grid_ai_station_site"))
+        self.assertIn("te_grid_ai_partner_near = { ANY = no }", site)
 
     def test_what_counts_as_power_is_every_building_whose_methods_make_electricity(self):
         # Derived from the production methods (test_ai_building_values.electricity_makers), not a hand list; the
@@ -291,8 +320,23 @@ class WhatEachEntryNeeds(unittest.TestCase):
                          ["=", {"owner": ["=", {"NOT": ["=", {"has_law_or_variant": [
                              "=", "law_type:law_industry_banned"]}]}]}])
         self.assertIn("NOT = { has_law_or_variant = law_type:law_industry_banned }", wants)
-        inject = _norm(_block(_code(ROOT / "common/buildings/extra_buildings.txt"), "INJECT:building_power_plant"))
-        self.assertIn("can_build_government = { rt_fossil_construction_allowed_here = yes }", inject)
+        # Every INJECT of the plant in the mod, wherever it is (extra_buildings.txt and zz_te_carbon_capture_injects.txt
+        # today): the one rule any of them adds to a government's construction is the one the pass copies
+        # (can_build_private is the investors').
+        rules = {}
+        for path in sorted((ROOT / "common/buildings").glob("*.txt")):
+            code = _code(path)
+            for match in re.finditer(r"(?m)^INJECT:building_power_plant = \{", code):
+                body = _norm(_block(code[match.start():], "INJECT:building_power_plant"))
+                for rule in ("possible", "can_build_government", "potential"):
+                    if f"{rule} = {{" in body:
+                        rules.setdefault(rule, []).append((path.name, body))
+        self.assertGreaterEqual(sum(1 for path in (ROOT / "common/buildings").glob("*.txt")
+                                    if "INJECT:building_power_plant = {" in _code(path)), 2)
+        self.assertEqual(sorted(rules), ["can_build_government"])
+        self.assertEqual([name for name, _ in rules["can_build_government"]], ["extra_buildings.txt"])
+        self.assertIn("can_build_government = { rt_fossil_construction_allowed_here = yes }",
+                      rules["can_build_government"][0][1])
         self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_power_plant_site")),
                          "is_incorporated = yes has_building = building_urban_center "
                          "rt_fossil_construction_allowed_here = yes")
@@ -340,7 +384,8 @@ class WhatEachEntryNeeds(unittest.TestCase):
                               (ROOT / "common/modifier_type_definitions/mod_entity_modifier_types.txt").read_text(
                                   encoding="utf-8-sig"))
                 site = _norm(_block(self.triggers, f"te_ai_build_pass_{kind}_site"))
-                self.assertEqual(site, f"is_incorporated = yes te_ai_build_pass_major_industrial = yes OR = {{ "
+                self.assertEqual(site, f"is_incorporated = yes te_ai_build_pass_major_industrial = yes "
+                                       f"te_ai_build_pass_staffed = {{ BUILDING = building_{kind} }} OR = {{ "
                                        f"any_scope_building = {{ is_building_type = building_{kind} "
                                        f"can_queue_building_levels = 1 }} AND = {{ NOT = {{ any_scope_building = {{ "
                                        f"is_building_type = building_{kind} }} }} te_ai_build_pass_{kind}_cap >= 1 }} }}")
@@ -353,6 +398,70 @@ class WhatEachEntryNeeds(unittest.TestCase):
         for name in ("te_ai_build_pass_manufacturing_levels", "te_ai_build_pass_country_manufacturing"):
             self.assertEqual(_norm(_block(self.values, name)), "value = 0 every_scope_building = { limit = { "
                                                                "is_building_group = bg_manufacturing } add = level }")
+
+    def test_staffed_is_the_highways_and_the_airports_own_rule_to_expand(self):
+        self.assertEqual(_norm(_block(self.triggers, "te_ai_build_pass_staffed")),
+                         "NOT = { any_scope_building = { is_building_type = $BUILDING$ occupancy < 0.8 } }")
+        for kind in ("highway", "airport"):
+            with self.subTest(kind=kind):
+                rule = _norm(_block(_code(ROOT / "common/buildings/11_zz_te_infrastructure.txt"), f"building_{kind}"))
+                self.assertIn("should_auto_expand = { occupancy >= 0.8 }", rule)
+
+    def methods(self, group):
+        """The methods of a group, vanilla's and the mod's INJECTs, each with its body in the mod (or vanilla's)."""
+        names = list(buildings.vanilla("pm_groups").get(group, ["=", {"production_methods": ["=", []]}])[1]
+                     ["production_methods"][1])
+        groups = _code(ROOT / "common/production_method_groups/extra_pm_groups.txt")
+        for prefix in ("INJECT:", "REPLACE_OR_CREATE:"):
+            if re.search(rf"(?m)^{prefix}{group} = \{{", groups):
+                names += re.findall(r"\b(pm_[a-z_-]+)\b", _block(groups, f"{prefix}{group}"))
+        pms = _code(ROOT / "common/production_methods/extra_pms.txt")
+        bodies = {}
+        for name in dict.fromkeys(names):
+            for form in (f"REPLACE:{name}", name):
+                if re.search(rf"(?m)^{re.escape(form)} = \{{", pms):
+                    bodies[name] = _block(pms, form)
+                    break
+        return names, bodies
+
+    def where_infrastructure(self, body):
+        """Which state_modifiers blocks of a method carry state_infrastructure_add."""
+        state = _block(body, "\tstate_modifiers")
+        return sorted(kind for kind in ("workforce_scaled", "level_scaled", "unscaled")
+                      if re.search(rf"(?m)^\t\t{kind} = \{{", state)
+                      and "state_infrastructure_add" in _block(state, f"\t\t{kind}"))
+
+    def test_a_railway_needs_no_staffing_its_infrastructure_is_per_level(self):
+        # The mod's railway methods all give their infrastructure per level (#1050), so a level nobody staffs still
+        # closes the shortfall: its site has no staffing test.
+        names, bodies = self.methods("pmg_base_building_railway")
+        self.assertGreaterEqual(len(names), 12)
+        self.assertEqual(sorted(names), sorted(bodies))
+        for name in names:
+            with self.subTest(method=name):
+                self.assertEqual(self.where_infrastructure(bodies[name]), ["level_scaled"])
+        self.assertNotIn("te_ai_build_pass_staffed", _block(self.triggers, "te_ai_build_pass_railway_site"))
+
+    def test_an_airports_and_a_highways_state_modifiers_come_with_their_staff(self):
+        # Every state modifier of their methods is per worker: an empty level gives none, the owner's reason to keep
+        # the airport included, so the staffing test keeps a level from joining one that stands empty.
+        for group in ("pmg_base_building_airport", "pmg_base_building_highway"):
+            names, bodies = self.methods(group)
+            self.assertTrue(names, group)
+            for name in names:
+                state = _block(bodies[name], "\tstate_modifiers")
+                with self.subTest(method=name):
+                    self.assertEqual(re.findall(r"(?m)^\t\t([a-z_]+) = \{", state), ["workforce_scaled"])
+                    self.assertEqual(self.where_infrastructure(bodies[name]), ["workforce_scaled"])
+
+    def test_the_two_laws_that_force_a_subsidy_on_both(self):
+        laws = _code(ROOT / "common/laws/construction_system_law_injections.txt")
+        forcing = sorted(re.findall(r"(?m)^INJECT:(law_[a-z_]+) = \{", laws))
+        forced = [law for law in forcing if "country_building_airport_require_subsidies_bool = yes" in _block(
+            laws, f"INJECT:{law}")]
+        self.assertEqual(forced, ["law_command_economy", "law_interventionism"])
+        for law in forced:
+            self.assertIn("country_building_highway_require_subsidies_bool = yes", _block(laws, f"INJECT:{law}"))
 
     def test_manufacturing_is_the_three_industry_groups(self):
         groups = buildings.vanilla("building_groups")
@@ -369,8 +478,12 @@ class Env(unittest.TestCase):
         cls.constants, cls.values = load(VALUES)
 
     def value(self, c, name, **names):
+        return Env.evaluate(c, self.values, name, **names)
+
+    @staticmethod
+    def evaluate(c, values, name, **names):
         env = c.env()
-        env.values = dict(env.values, **self.values)
+        env.values = dict(env.values, **values)
         env.names.update(names)
         return env.value(name)
 
@@ -457,17 +570,27 @@ class TheFollow(unittest.TestCase):
             "set_variable = { name = te_ai_build_pass_pending_kind value = $KIND$ } set_variable = { name = "
             "te_ai_build_pass_pending_base value = te_ai_build_pass_tracked_levels } set_variable = { name = "
             "te_ai_build_pass_pending_months value = 0 }"))
-        self.assertIn("if = { limit = { NOT = { has_global_variable = te_ai_build_pass_checked } "
-                      "te_ai_build_pass_in_sample = yes }", start)
-        for counter in ("built", "waiting", "lost"):
-            self.assertIn(f"set_global_variable = {{ name = te_ai_build_pass_{counter} value = 0 }}", start)
-        # Every kind's counters start with the totals.
+        # The cohort: a sampled government's level of any kind but an administration (2).
+        self.assertEqual(KINDS["administration"][0], 2)
+        self.assertIn("if = { limit = { NOT = { has_global_variable = te_ai_build_pass_checked } NOT = { "
+                      "var:te_ai_build_pass_pending_kind = 2 } te_ai_build_pass_in_sample = yes }", start)
+        init = start.index("if = { limit = { NOT = { has_global_variable = te_ai_build_pass_cohort } }")
+        for counter in ("cohort", "cohort_months", "built", "waiting", "lost"):
+            self.assertIn(f"set_global_variable = {{ name = te_ai_build_pass_{counter} value = 0 }}", start[init:])
+        # Every kind's counters start with the totals; no administration in the cohort's.
         self.assertEqual(sorted(re.findall(r"te_ai_build_pass_tally_start = \{ KIND = ([a-z_]+) \}", start)),
+                         sorted(kind for kind in KINDS if kind != "administration"))
+        self.assertEqual(sorted(re.findall(r"te_ai_build_pass_down_start = \{ KIND = ([a-z_]+) \}", start)),
                          sorted(KINDS))
         self.assertEqual(_norm(_block(_code(EFFECTS), "te_ai_build_pass_tally_start")),
                          "set_global_variable = { name = te_ai_build_pass_built_$KIND$ value = 0 } "
                          "set_global_variable = { name = te_ai_build_pass_lost_$KIND$ value = 0 }")
-        self.assertTrue(start.endswith("set_variable = te_ai_build_pass_sampled }"))
+        # Closed: a level joins only while the cohort has room, counted as it joins.
+        joined = start.index("if = { limit = { te_ai_build_pass_cohort_g < te_ai_build_pass_cohort_size } "
+                             "change_global_variable = { name = te_ai_build_pass_cohort add = 1 } "
+                             "set_variable = te_ai_build_pass_sampled }")
+        self.assertGreater(joined, init)
+        self.assertEqual(start.count("set_variable = te_ai_build_pass_sampled"), 1)
 
     def test_the_sample_is_a_government_the_engine_would_not_queue_for(self):
         self.assertEqual(_norm(_block(_code(TRIGGERS), "te_ai_build_pass_in_sample")),
@@ -476,15 +599,26 @@ class TheFollow(unittest.TestCase):
 
     def test_built_lost_or_waiting_with_the_base_following_a_downsizing(self):
         follow = _norm(_block(_code(EFFECTS), "te_ai_build_pass_follow"))
-        down = follow.index("te_ai_build_pass_tracked_levels < var:te_ai_build_pass_pending_base")
+        self.assertTrue(follow.startswith("te_ai_build_pass_watch = yes if = { limit = { has_variable = "
+                                          "te_ai_build_pass_pending_kind }"))
+        # A level of the kind taken down in the state lowers the base to what stands.
+        down = follow.index("if = { limit = { te_ai_build_pass_tracked_levels < var:te_ai_build_pass_pending_base } "
+                            "set_variable = { name = te_ai_build_pass_pending_base value = "
+                            "te_ai_build_pass_tracked_levels } }")
         built = follow.index("te_ai_build_pass_tracked_levels > var:te_ai_build_pass_pending_base")
-        lost = follow.index("te_ai_build_pass_tracked_queued <= 0")
+        # Lost: none of the kind queued in the state, or (an investor's level of the kind queued there) the
+        # government queue the pass's level was alone in is empty.
+        lost = follow.index("OR = { te_ai_build_pass_tracked_queued <= 0 NOT = { "
+                            "construction_queue_num_queued_government_levels > 0 } }")
         waiting = follow.index("var:te_ai_build_pass_pending_months >= te_ai_build_pass_waiting_months")
         self.assertLess(down, built)
         self.assertLess(built, lost)
         self.assertLess(lost, waiting)
         self.assertLess(built, follow.index("te_ai_build_pass_tally = { OUTCOME = built }"))
-        self.assertLess(follow.index("te_ai_build_pass_tally = { OUTCOME = built }"), lost)
+        self.assertLess(follow.index("te_ai_build_pass_tally = { OUTCOME = built }"),
+                        follow.index("te_ai_build_pass_watch_start = yes"))
+        self.assertLess(follow.index("te_ai_build_pass_watch_start = yes"), lost)
+        self.assertEqual(follow.count("te_ai_build_pass_watch_start = yes"), 1)
         self.assertLess(lost, follow.index("te_ai_build_pass_tally = { OUTCOME = lost }"))
         self.assertLess(follow.index("te_ai_build_pass_tally = { OUTCOME = lost }"),
                         follow.index("te_ai_build_pass_backoff = yes"))
@@ -509,6 +643,41 @@ class TheFollow(unittest.TestCase):
                          {kind: (str(number), str(days)) for kind, (number, _, _) in KINDS.items()})
         # The literal is the values file's number.
         self.assertEqual(purchase._parsed()["constants"]["TE_AI_BUILD_PASS_BACKOFF_DAYS"], days)
+
+    def test_a_level_built_and_gone_again_within_two_years_backs_its_kind_off(self):
+        effects, triggers = _code(EFFECTS), _code(TRIGGERS)
+        start = _norm(_block(effects, "te_ai_build_pass_watch_start"))
+        branches = re.findall(r"limit = \{ var:te_ai_build_pass_pending_kind = (\d) \} te_ai_build_pass_watch_set = "
+                              r"\{ KIND = ([a-z_]+) \}", start)
+        self.assertEqual({kind: int(number) for number, kind in branches},
+                         {kind: number for kind, (number, _, _) in KINDS.items()})
+        days = int(purchase._parsed()["constants"]["TE_AI_BUILD_PASS_WATCH_DAYS"])
+        self.assertEqual(days, 730)
+        self.assertEqual(_norm(_block(effects, "te_ai_build_pass_watch_set")),
+                         f"set_variable = {{ name = te_ai_build_pass_watch_state_$KIND$ value = "
+                         f"var:te_ai_build_pass_pending_state days = {days} }} set_variable = {{ name = "
+                         f"te_ai_build_pass_watch_level_$KIND$ value = te_ai_build_pass_tracked_levels days = {days} }}")
+        watch = _norm(_block(effects, "te_ai_build_pass_watch"))
+        self.assertEqual(dict(re.findall(r"te_ai_build_pass_watch_one = \{ KIND = ([a-z_]+) BUILDING = "
+                                         r"(building_[a-z_]+) \}", watch)),
+                         {kind: building for kind, (_, building, _) in KINDS.items()})
+        one = _norm(_block(effects, "te_ai_build_pass_watch_one"))
+        backoff = int(purchase.PASS_BACKOFF_DAYS)
+        self.assertEqual(one, "if = { limit = { has_variable = te_ai_build_pass_watch_state_$KIND$ has_variable = "
+                              "te_ai_build_pass_watch_level_$KIND$ te_ai_build_pass_watch_fell = { KIND = $KIND$ "
+                              "BUILDING = $BUILDING$ } } set_variable = { name = te_ai_build_pass_backoff_$KIND$ value = "
+                              f"yes days = {backoff} }} te_ai_build_pass_down_start = {{ KIND = $KIND$ }} "
+                              "change_global_variable = { name = te_ai_build_pass_down_$KIND$ add = 1 } "
+                              "remove_variable = te_ai_build_pass_watch_state_$KIND$ remove_variable = "
+                              "te_ai_build_pass_watch_level_$KIND$ }")
+        # Fell: the state holds no building of the kind at the level it had once built, none at all included.
+        self.assertEqual(_norm(_block(triggers, "te_ai_build_pass_watch_fell")),
+                         "save_temporary_scope_as = te_ai_build_pass_watcher var:te_ai_build_pass_watch_state_$KIND$ ?= "
+                         "{ NOT = { any_scope_building = { is_building_type = $BUILDING$ level >= "
+                         "scope:te_ai_build_pass_watcher.var:te_ai_build_pass_watch_level_$KIND$ } } }")
+        self.assertEqual(_norm(_block(effects, "te_ai_build_pass_down_start")),
+                         "if = { limit = { NOT = { has_global_variable = te_ai_build_pass_down_$KIND$ } } "
+                         "set_global_variable = { name = te_ai_build_pass_down_$KIND$ value = 0 } }")
 
     def test_each_level_is_counted_by_its_kind_in_its_state(self):
         values = _code(VALUES)
@@ -538,8 +707,9 @@ class TheFollow(unittest.TestCase):
         self.assertTrue(tally.startswith("change_global_variable = { name = te_ai_build_pass_$OUTCOME$ add = 1 }"))
         branches = re.findall(r"limit = \{ var:te_ai_build_pass_pending_kind = (\d) \} change_global_variable = \{ "
                               r"name = te_ai_build_pass_\$OUTCOME\$_([a-z_]+) add = 1 \}", tally)
+        # No administration: the cohort holds none.
         self.assertEqual({kind: int(number) for number, kind in branches},
-                         {kind: number for kind, (number, _, _) in KINDS.items()})
+                         {kind: number for kind, (number, _, _) in KINDS.items() if kind != "administration"})
 
     def test_the_reserve_gates_check_leaves_out_what_the_pass_queued(self):
         gate = _norm(_code(GATE_CHECK))
@@ -552,14 +722,24 @@ class TheFollow(unittest.TestCase):
 
 
 class TheSelfCheck(unittest.TestCase):
-    def test_the_verdict_once_on_twelve_decided_or_thirty_six_in_all(self):
+    def test_the_verdict_once_every_level_of_a_closed_cohort_is_read(self):
         check = _norm(_block(_code(ON_ACTIONS), "te_ai_build_pass_selfcheck"))
         self.assertIn("trigger = { NOT = { has_global_variable = te_ai_build_pass_checked } has_global_variable = "
-                      "te_ai_build_pass_built OR = { te_ai_build_pass_decided_g >= 12 te_ai_build_pass_sampled_g >= 36 "
-                      "} }", check)
+                      "te_ai_build_pass_cohort te_ai_build_pass_cohort_g >= te_ai_build_pass_cohort_size }", check)
         effect = check[check.index("effect = {"):]
-        self.assertTrue(effect.startswith("effect = { set_global_variable = te_ai_build_pass_checked debug_log = "
-                                          "\"TE_SELF_CHECK START ai_build_pass"))
+        self.assertTrue(effect.startswith(
+            "effect = { change_global_variable = { name = te_ai_build_pass_cohort_months add = 1 } if = { limit = { "
+            "OR = { te_ai_build_pass_sampled_g >= te_ai_build_pass_cohort_g te_ai_build_pass_cohort_months_g >= "
+            "te_ai_build_pass_cohort_wait } } set_global_variable = te_ai_build_pass_checked debug_log = "
+            "\"TE_SELF_CHECK START ai_build_pass"))
+        values = _code(VALUES)
+        self.assertEqual(_norm(_block(values, "te_ai_build_pass_cohort_size")), "value = 36")
+        # The wait outlasts the longest a level can stay unread: waiting at 36 months, read on the follow after.
+        waiting = re.findall(r"value = (\d+)", _block(values, "te_ai_build_pass_waiting_months"))
+        self.assertEqual(_norm(_block(values, "te_ai_build_pass_cohort_wait")),
+                         f"value = {max(int(w) for w in waiting) + 2}")
+        self.assertEqual(_norm(_block(values, "te_ai_build_pass_unread_g")),
+                         "value = te_ai_build_pass_cohort_g subtract = te_ai_build_pass_sampled_g")
         ok = effect.index("te_ai_build_pass_built_g >= 6 te_ai_build_pass_lost_share <= 0.25")
         broken = effect.index("te_ai_build_pass_decided_g >= 6 te_ai_build_pass_lost_share >= 0.5")
         self.assertLess(effect.index("START"), effect.index("random_country"))
@@ -584,10 +764,18 @@ class TheSelfCheck(unittest.TestCase):
         for line in re.findall(r'debug_log = "(TE_SELF_CHECK (?:OK|BROKEN|NO_VERDICT) [^"]+)"', text):
             with self.subTest(line=line[:40]):
                 for kind, short in SHORT.items():
+                    if kind == "administration":
+                        continue
                     self.assertIn(f"{short}=[SCOPE.ScriptValue('te_ai_build_pass_built_{kind}_g')|0]/"
                                   f"[SCOPE.ScriptValue('te_ai_build_pass_lost_{kind}_g')|0]", line)
+                self.assertNotIn("adm=", line)
+                self.assertIn("unread=[SCOPE.ScriptValue('te_ai_build_pass_unread_g')|0]", line)
+                self.assertIn("down uni/adm/rail/power/road/air=" + "/".join(
+                    f"[SCOPE.ScriptValue('te_ai_build_pass_down_{kind}_g')|0]" for kind in (
+                        "university", "administration", "railway", "power_plant", "highway", "airport")), line)
         for kind in KINDS:
-            for outcome in ("built", "lost"):
+            outcomes = ("down",) if kind == "administration" else ("built", "lost", "down")
+            for outcome in outcomes:
                 self.assertIn(f"te_ai_build_pass_{outcome}_{kind}_g = {{ value = "
                               f"global_var:te_ai_build_pass_{outcome}_{kind} }}", values)
 
@@ -606,8 +794,8 @@ class TheSelfCheck(unittest.TestCase):
         self.assertIn("ai_build_pass", doc)
         playtest = PLAYTEST.read_text(encoding="utf-8")
         self.assertIn("TE_SELF_CHECK … ai_build_pass", playtest)
-        for field in ("rate", "cm_reserve", "cm_credit", "cm_pass", "inf_short_states", "inf_short", "pp_states",
-                      "elec_made", "elec_used", "elec_price", "q_power"):
+        for field in ("rate", "cm_reserve", "cm_credit", "cm_pass", "inf_short_states", "inf_short", "rail_sites",
+                      "pp_states", "elec_made", "elec_used", "elec_price", "q_power"):
             self.assertIn(f"`{field}`", playtest)
 
 

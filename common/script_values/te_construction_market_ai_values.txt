@@ -273,7 +273,19 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 # countries that have any building that produces power (e.g. hydro, nuclear,
 # etc.) so the AI isn't forced to have fossil fuel power plants"; and
 # "railroads when infra is below zero, airports and highways in major
-# industrial states below cap".
+# industrial states below cap". Owner, 2026-11-17, on the airport, which
+# loses money at base prices: "I think this is fine, it provides state-level
+# modifiers that make it worth it"; on the first plant, which has no subsidy
+# and few buyers at first: "That's fine, it allows them to build buildings
+# and select PMs that use electricity, and that will in turn spur electricity
+# demand. We'll see if that's good enough in practice with playtesting".
+# Behind the first four entries, a highway or an airport comes only where no
+# incorporated state is short of infrastructure past the margin and
+# innovation is at nine-tenths of its cap; to bring them sooner, move their
+# lines up the order. A university, a highway or an airport goes only beside
+# levels of its kind staffed to 80% (te_ai_build_pass_staffed, the highway's
+# and the airport's own should_auto_expand); a railway needs no such test, as
+# its infrastructure is per level.
 #
 #   SURPLUS_SHARE 1/6 of fixed income, or SURPLUS_MIN 15,000 a week: the
 #   engine's own test before it adds should-have spending (income 1.2 times
@@ -343,8 +355,13 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 #   unbuilt (dropped, or the state lost) the pass queues no level of that kind
 #   for the country for a year: whatever was bought for it is lost with it
 #   (vanilla_economy_reference.md 9.3), so it should not queue it again every
-#   two months. The effect writes the days as a literal (a timed variable's
-#   days); test_ai_build_pass.py holds it to this figure.
+#   two months. The same after a level it built is gone again within
+#   WATCH_DAYS: the engine's budget AI cuts should-have spending (universities
+#   and administrations among it) at thin reserves, which every government the
+#   pass serves in debt has, and a kind it rebuilt at once would be cut again.
+#   The effect writes the days as a literal (a timed variable's days);
+#   test_ai_build_pass.py holds it to this figure.
+#   WATCH_DAYS 730, two years: as long as the pass's own horizon (MAX_WEEKS).
 TE_AI_BUILD_PASS_SURPLUS_SHARE = 0.16667
 TE_AI_BUILD_PASS_SURPLUS_MIN = 15000
 TE_AI_BUILD_PASS_INNOVATION_SHARE = 0.9
@@ -352,6 +369,7 @@ TE_AI_BUILD_PASS_BUREAUCRACY_MARGIN = 0.02
 TE_AI_BUILD_PASS_DEBT_MAX = 0.1
 TE_AI_BUILD_PASS_MAX_WEEKS = 104
 TE_AI_BUILD_PASS_BACKOFF_DAYS = 365
+TE_AI_BUILD_PASS_WATCH_DAYS = 730
 TE_AI_BUILD_PASS_INFRASTRUCTURE_MARGIN = 0.02
 TE_AI_BUILD_PASS_INDUSTRIAL_SHARE = 0.1
 

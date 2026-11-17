@@ -377,7 +377,17 @@ te_ai_build_pass_tracked_queued = {
 	}
 }
 
-# The self-check's reads (TE_SELF_CHECK ai_build_pass).
+# The self-check's reads (TE_SELF_CHECK ai_build_pass). The cohort: the levels it follows, the first this many the
+# pass queues for a government the engine would not queue for (an administration aside); the verdict waits until
+# every one is built, lost or waiting (te_ai_build_pass_on_actions.txt). With 36 decided and each lost at a true rate
+# of 10%, it reads OK in all but a few runs in a thousand, at 20% in about 83%, and BROKEN in under 1% at up to
+# 30% (binomial; the 2026-11-17 review's model, which adds build times, gives the same).
+te_ai_build_pass_cohort_size = { value = 36 }
+# The months after the cohort fills that the verdict waits at most: its last level joins as it fills and is read by
+# the 37th follow after (a highway or an airport counts as waiting at 36), so only a level of a country gone since is
+# still unread by then.
+te_ai_build_pass_cohort_wait = { value = 38 }
+te_ai_build_pass_cohort_g = { value = global_var:te_ai_build_pass_cohort }
 te_ai_build_pass_built_g = { value = global_var:te_ai_build_pass_built }
 te_ai_build_pass_waiting_g = { value = global_var:te_ai_build_pass_waiting }
 te_ai_build_pass_lost_g = { value = global_var:te_ai_build_pass_lost }
@@ -386,10 +396,18 @@ te_ai_build_pass_decided_g = {
 	value = global_var:te_ai_build_pass_built
 	add = global_var:te_ai_build_pass_lost
 }
+# Decided or waiting: the cohort's levels it has read.
 te_ai_build_pass_sampled_g = {
 	value = te_ai_build_pass_decided_g
 	add = global_var:te_ai_build_pass_waiting
 }
+# The cohort's levels never read: the country gone (annexed) while it followed one. The verdict reads without them
+# after te_ai_build_pass_cohort_wait months.
+te_ai_build_pass_unread_g = {
+	value = te_ai_build_pass_cohort_g
+	subtract = te_ai_build_pass_sampled_g
+}
+te_ai_build_pass_cohort_months_g = { value = global_var:te_ai_build_pass_cohort_months }
 te_ai_build_pass_lost_share = {
 	value = global_var:te_ai_build_pass_lost
 	divide = {
@@ -400,8 +418,6 @@ te_ai_build_pass_lost_share = {
 # By kind, for the verdict's line: built and lost.
 te_ai_build_pass_built_university_g = { value = global_var:te_ai_build_pass_built_university }
 te_ai_build_pass_lost_university_g = { value = global_var:te_ai_build_pass_lost_university }
-te_ai_build_pass_built_administration_g = { value = global_var:te_ai_build_pass_built_administration }
-te_ai_build_pass_lost_administration_g = { value = global_var:te_ai_build_pass_lost_administration }
 te_ai_build_pass_built_railway_g = { value = global_var:te_ai_build_pass_built_railway }
 te_ai_build_pass_lost_railway_g = { value = global_var:te_ai_build_pass_lost_railway }
 te_ai_build_pass_built_power_plant_g = { value = global_var:te_ai_build_pass_built_power_plant }
@@ -410,3 +426,11 @@ te_ai_build_pass_built_highway_g = { value = global_var:te_ai_build_pass_built_h
 te_ai_build_pass_lost_highway_g = { value = global_var:te_ai_build_pass_lost_highway }
 te_ai_build_pass_built_airport_g = { value = global_var:te_ai_build_pass_built_airport }
 te_ai_build_pass_lost_airport_g = { value = global_var:te_ai_build_pass_lost_airport }
+# By kind, every country's: the levels the pass built that their state lost again within two years
+# (te_ai_build_pass_watch).
+te_ai_build_pass_down_university_g = { value = global_var:te_ai_build_pass_down_university }
+te_ai_build_pass_down_administration_g = { value = global_var:te_ai_build_pass_down_administration }
+te_ai_build_pass_down_railway_g = { value = global_var:te_ai_build_pass_down_railway }
+te_ai_build_pass_down_power_plant_g = { value = global_var:te_ai_build_pass_down_power_plant }
+te_ai_build_pass_down_highway_g = { value = global_var:te_ai_build_pass_down_highway }
+te_ai_build_pass_down_airport_g = { value = global_var:te_ai_build_pass_down_airport }
