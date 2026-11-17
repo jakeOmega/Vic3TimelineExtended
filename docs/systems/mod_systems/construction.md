@@ -256,7 +256,7 @@ The Nanomaterial copy still cancels its two tiers' whole per-level staff and hir
 
 **The AI's sector value** (`te_construction_sector_ai_value`) is unchanged and reads the construction good's price, not profit. A sector with a margin at base price adds the engine's own profit terms to it: before, they had nothing to add at base price. If the price falls toward base as expected, the script's part falls with it, from about 8,000–10,000 at the baseline's 1.3 to 1.5 times base back to 5,000, so the two move against each other; below base both fall, which is what should stop a glut.
 
-**Unverified:** everything above that happens in the game. That the sectors now staff, the price falls, the sector grows with GDP and investors' points per pound rise is for the next observer run (`docs/testing/ai-economy-playtest.md` § The Construction Sector's workforce).
+**Unverified:** everything above that happens in the game. That the sectors now staff, the price falls, the sector grows with GDP and investors' points per pound rise is for the next observer run (`docs/testing/ai-economy-playtest.md` § The Construction Sector's workforce). The first, one game from 1836 to 1850 (2026-11-16), read the 20 largest economies' sectors still under-staffed (81–93% of their levels under half staffed, a mean staffing of 32–37%) and the good at 1.23 to 1.30 times base, with no earlier reading of the sector's own staffing to set beside it (the list's "First reading").
 
 ### Maintenance tiers
 
