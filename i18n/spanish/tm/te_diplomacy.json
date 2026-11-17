@@ -467,6 +467,10 @@
   "en": "Diplomatic Friction",
   "es": "Fricción diplomática"
  },
+ "te_rc_technology_embargo_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has placed [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] under a technology embargo.",
+  "es": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] ha sometido a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] a un embargo tecnológico."
+ },
  "te_seabed_administer_claims_pact_desc": {
   "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
   "es": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administra las reclamaciones del lecho marino de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]"

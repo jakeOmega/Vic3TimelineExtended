@@ -1335,6 +1335,14 @@
   "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
   "ru": "Очки в месяц на колониальные модули из нашей очереди при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Каждый модуль стоит 100."
  },
+ "country_sr_module_storage_add": {
+  "en": "Colony Module Storage",
+  "ru": "Склад модулей колонии"
+ },
+ "country_sr_module_storage_add_desc": {
+  "en": "Fabrication points our colony module stock holds beyond its base and a year of fabrication, under the Simple and Full Colonies settings of the Space Race rule.",
+  "ru": "Очки изготовления, которые склад модулей нашей колонии вмещает сверх базового и годового изготовления, при настройках «простые колонии» и «полноценные колонии» правила «Космическая гонка»."
+ },
  "country_st_res_aeroplanes_capacity_add": {
   "en": "$aeroplanes$ Reserve Capacity",
   "ru": "$aeroplanes$: вместимость резерва"
@@ -1486,6 +1494,14 @@
  "country_st_res_weekly_rate_cap_add_desc": {
   "en": "Maximum amount of resources that can be added to or removed from the strategic reserve each week, representing logistical constraints on how quickly reserves can be mobilized or replenished.",
   "ru": "Максимальное количество ресурсов, которое можно добавить в стратегический резерв или изъять из него за неделю: отражает логистические ограничения на скорость мобилизации или пополнения резервов."
+ },
+ "country_subjugation_creditor_strength_add": {
+  "en": "Subjugation Strength (Creditor)",
+  "ru": "Сила подчинения (кредитор)"
+ },
+ "country_subjugation_creditor_strength_add_desc": {
+  "en": "Bonus to your [concept_subjugation_strength] when leading a $identity_creditors_consortium$ and the target is under your receivership.",
+  "ru": "Бонус к вашей [Concept('concept_subjugation_strength','силе подчинения')] при руководстве блоком с идентичностью «$identity_creditors_consortium$», если цель находится под вашим внешним управлением."
  },
  "country_subjugation_cultural_strength_add": {
   "en": "Subjugation Strength (Cultural)",
@@ -1644,8 +1660,8 @@
   "ru": "Создаваемые деньги за год, в долях ВВП"
  },
  "country_te_mon_minting_gdp_add_desc": {
-  "en": "Spending your bank pays for with money it creates rather than money you borrow. For a small economy that is a fifth again on top of an ordinary mint, and a good deal more for a large one, since the ordinary mint stops growing past a certain size.",
-  "ru": "Расходы, которые ваш банк оплачивает деньгами, созданными им, а не заёмными. Для малой экономики это ещё пятая часть сверх обычной чеканки, а для крупной намного больше, поскольку обычная чеканка перестаёт расти после определённого размера."
+  "en": "Spending your bank pays for with money it creates rather than money you borrow. The figure is before your bonuses to [concept_budget_minting], which multiply it as they do everything you mint: with $law_digital_currency$ and all five finance technologies you mint #v 75%#! more, and less while your $banking_dash_mon_band_label$ is $banking_dash_price_band_very_high$ or $banking_dash_price_band_hyper$. For a small economy a step is a fifth again on top of an ordinary mint, and a good deal more for a large one, since the ordinary mint stops growing past a certain size.",
+  "ru": "Расходы, которые ваш банк оплачивает деньгами, созданными им, а не заёмными. Цифра дана до ваших бонусов к [Concept('concept_budget_minting','чеканке')], которые умножают её, как и всё, что вы чеканите: при законе «$law_digital_currency$» и всех пяти финансовых технологиях вы чеканите на #v 75%#! больше, и меньше, пока ваш «$banking_dash_mon_band_label$» — «$banking_dash_price_band_very_high$» или «$banking_dash_price_band_hyper$». Для малой экономики ступень — это ещё пятая часть сверх обычной чеканки, а для крупной намного больше, поскольку обычная чеканка перестаёт расти после определённого размера."
  },
  "country_te_mon_printing_pressure_add": {
   "en": "Price Pressure from Printed Money",
@@ -1694,6 +1710,14 @@
  "country_te_pb_principle_slots_add_desc": {
   "en": "Adds this many [concept_power_bloc_principle] slots to a [concept_power_bloc] this country leads, up to #v 8#! in all. The $rule_te_principle_slots_rule$ game rule's $setting_te_principle_slots_four$ setting turns these slots off.",
   "ru": "Добавляет [Concept('concept_power_bloc','силовому блоку')], который возглавляет эта страна, столько ячеек [Concept('concept_power_bloc_principle','принципов')], всего до #v 8#!. Настройка «$setting_te_principle_slots_four$» правила «$rule_te_principle_slots_rule$» отключает эти ячейки."
+ },
+ "country_te_rc_pool_cap_share_add": {
+  "en": "Members’ Research on the [concept_innovation] Cap",
+  "ru": "Исследования членов в пределе [Concept('concept_innovation','инноваций')]"
+ },
+ "country_te_rc_pool_cap_share_add_desc": {
+  "en": "The share of what the members of this country's Research Commons send it that is added to its weekly [concept_innovation] cap, beside the tenth the Commons adds itself.",
+  "ru": "Доля того, что члены Научного содружества этой страны отправляют ей, которая добавляется к её пределу еженедельных [Concept('concept_innovation','инноваций')], помимо десятой части, которую добавляет само Содружество."
  },
  "country_un_authority_target_add": {
   "en": "UN Authority Target",
@@ -2579,6 +2603,62 @@
   "en": "An increase or decrease to the chance for this [concept_interest_group] to select a [concept_leader] with the $ideology_environmentalists$ [concept_ideology]",
   "ru": "Увеличение или уменьшение шанса, что эта [Concept('concept_interest_group','группа интересов')] выберет [Concept('concept_leader','лидером')] персонажа с [Concept('concept_ideology','идеологией')] «$ideology_environmentalists$»"
  },
+ "power_bloc_te_cred_dl_construction_add": {
+  "en": "Development Lending Construction",
+  "ru": "Строительство по Кредитованию развития"
+ },
+ "power_bloc_te_cred_dl_construction_add_desc": {
+  "en": "Added to [concept_construction] in every state of each member below the bloc's [concept_gdp_per_capita], the leader excepted.",
+  "ru": "Добавляется к [Concept('concept_construction','строительству')] в каждой области каждого члена с [Concept('concept_gdp_per_capita','ВВП на душу населения')] ниже, чем у блока, кроме лидера."
+ },
+ "power_bloc_te_cred_dl_invite_add": {
+  "en": "Development Lending Appeal",
+  "ru": "Привлекательность Кредитования развития"
+ },
+ "power_bloc_te_cred_dl_invite_add_desc": {
+  "en": "Added to how readily a country below the bloc's [concept_gdp_per_capita] accepts the bloc's invitation or a treaty to join it, for the lending it would receive.",
+  "ru": "Добавляется к готовности страны с [Concept('concept_gdp_per_capita','ВВП на душу населения')] ниже, чем у блока, принять приглашение блока или договор о вступлении в него — ради кредитов, которые она получит."
+ },
+ "power_bloc_te_cred_dl_share_add": {
+  "en": "Development Lending Share",
+  "ru": "Доля Кредитования развития"
+ },
+ "power_bloc_te_cred_dl_share_add_desc": {
+  "en": "The share of a month of its [concept_investment_pool] income each member above the bloc's [concept_gdp_per_capita] pays each month. Members below it, the leader excepted, divide the sum by population.",
+  "ru": "Доля месячного дохода [Concept('concept_investment_pool','инвестиционного фонда')], которую каждый месяц платит каждый член с [Concept('concept_gdp_per_capita','ВВП на душу населения')] выше, чем у блока. Члены ниже, кроме лидера, делят сумму по числу жителей."
+ },
+ "power_bloc_te_cred_monopolies_add": {
+  "en": "Monopolies Demanded",
+  "ru": "Требуемые монополии"
+ },
+ "power_bloc_te_cred_monopolies_add_desc": {
+  "en": "How many [Concept('concept_monopoly', '$concept_monopolies|q$')] the leader's [Concept('concept_company', '$concept_companies|q$')] are granted in a member for each of a rescue's terms spent on concessions.",
+  "ru": "[Concept('concept_monopoly', '$concept_monopolies|q$')]: сколько их получают [Concept('concept_company', '$concept_companies|q$')|l] лидера у члена за каждое условие спасения, потраченное на концессии."
+ },
+ "power_bloc_te_cred_receivership_months_add": {
+  "en": "Months to Leave Receivership",
+  "ru": "Месяцев до выхода из внешнего управления"
+ },
+ "power_bloc_te_cred_receivership_months_add_desc": {
+  "en": "A member's receivership ends after this many months in a row out of [concept_default] with its debt under a quarter of its ceiling.",
+  "ru": "Внешнее управление члена заканчивается после стольких месяцев подряд вне [Concept('concept_default','дефолта')] с долгом ниже четверти его потолка."
+ },
+ "power_bloc_te_cred_remittance_add": {
+  "en": "Receivership Remittance",
+  "ru": "Отчисления по внешнему управлению"
+ },
+ "power_bloc_te_cred_remittance_add_desc": {
+  "en": "The share of its [concept_gdp] a member under the leader's receivership pays the leader each month.",
+  "ru": "Доля [Concept('concept_gdp','ВВП')], которую член под внешним управлением лидера платит лидеру каждый месяц."
+ },
+ "power_bloc_te_cred_rescue_terms_add": {
+  "en": "Rescue Terms",
+  "ru": "Условия спасения"
+ },
+ "power_bloc_te_cred_rescue_terms_add_desc": {
+  "en": "How many terms the leader sets when it rescues a defaulting member, beside a receivership and the one term every $identity_creditors_consortium$ sets: structural adjustment, concessions or privatization. Concessions can take more than one term, each for more [Concept('concept_monopoly', '$concept_monopolies|q$')].",
+  "ru": "Сколько условий выдвигает лидер, спасая члена, объявившего дефолт, помимо внешнего управления и одного условия, которое выдвигает любой блок с идентичностью «$identity_creditors_consortium$»: структурная перестройка, концессии или приватизация. Концессии могут занимать несколько условий, и каждое увеличивает требуемые [Concept('concept_monopoly', '$concept_monopolies|q$')|l]."
+ },
  "power_bloc_te_mon_currency_crash_chance_mult": {
   "en": "[concept_banking_common_currency] [concept_banking_crash] Likelihood",
   "ru": "[concept_banking_common_currency]: вероятность [Concept('concept_banking_crash','банковского краха')]"
@@ -2588,8 +2668,8 @@
   "ru": "Для каждой страны, использующей валюту, при любом банковском законе, кроме закона «$law_unregulated_banking$»: один надзиратель над каждым банком, использующим валюту."
  },
  "power_bloc_te_mon_currency_interventions_add_desc": {
-  "en": "Points added to the intervention budget of every adopter, and of the leader under any banking law but $law_unregulated_banking$: room to keep one more tool in force.",
-  "ru": "Пункты, добавляемые к бюджету интервенций каждой принявшей валюту страны, а также лидера при любом банковском законе, кроме закона «$law_unregulated_banking$»: запас, чтобы держать в силе ещё один инструмент."
+  "en": "Points added to the intervention budget of every country using the currency: room to keep one more tool in force. None under $law_unregulated_banking$, whose small budget is what keeps its tools few.",
+  "ru": "Пункты, добавляемые к бюджету интервенций каждой страны, использующей валюту: запас, чтобы держать в силе ещё один инструмент. Ничего при законе «$law_unregulated_banking$», небольшой бюджет которого и держит его инструменты малочисленными."
  },
  "power_bloc_te_mon_currency_investment_pool_add": {
   "en": "[concept_banking_common_currency] [concept_investment_pool] Contribution",
@@ -2610,6 +2690,14 @@
  "power_bloc_te_mon_currency_volatility_mult_desc": {
   "en": "How far [concept_banking_momentum] swings at random, for every country using the currency under any banking law but $law_unregulated_banking$: one deposit guarantee across the currency.",
   "ru": "Насколько сильно случайно колеблется [concept_banking_momentum|l], для каждой страны, использующей валюту, при любом банковском законе, кроме закона «$law_unregulated_banking$»: единая гарантия вкладов на всю валюту."
+ },
+ "power_bloc_technology_embargo_strength_add": {
+  "en": "Technology Embargo Strength",
+  "ru": "Сила технологического эмбарго"
+ },
+ "power_bloc_technology_embargo_strength_add_desc": {
+  "en": "A $te_rc_technology_embargo$ cuts its target's [concept_technology_spread] by the bloc's share of the world's weekly [concept_innovation] times this figure, in percent, to at most 50%. At 100, a bloc with a third of the world's innovation cuts it by 33%.",
+  "ru": "«$te_rc_technology_embargo$» сокращает [Concept('concept_technology_spread','распространение технологий')] цели на долю блока в мировых еженедельных [Concept('concept_innovation','инновациях')], умноженную на это число, в процентах, но не более чем на 50%. При 100 блок с третью мировых инноваций сокращает его на 33%."
  },
  "state_ageing_rate_add": {
   "en": "Aging in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

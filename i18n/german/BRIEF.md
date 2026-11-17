@@ -130,6 +130,16 @@ The chunk header lists up to three glossaries. Follow them exactly:
 
 For a term in none of the lists, choose German that fits the official game's register, and list it in your report.
 
+Earlier passes settled these words too, which are too short or too common for the glossaries to catch:
+
+| English | German |
+|---|---|
+| subject (plain text, not a concept link) | Klientelland, Klientelstaat |
+| command economy (the law) | Planwirtschaft |
+| receivership (a creditor running a debtor's finances) / its receiver | Zwangsverwaltung / Verwalter; the treaty article Debt Receivership is *Schuldenverwaltung* |
+| a rescue of a defaulted member / its terms | Rettung / Bedingungen |
+| a common currency's adopter / issuer | Teilnehmerland / Emittent |
+
 Proper names stay as they are: companies, people, places, historical buildings, products, real political parties ("Bharatiya Janata Party", "En Marche!"). A generic descriptive name is not a proper name and is translated, as the official German does ("Communist Party" → „Kommunistische Partei", "Technocratic Party" → „Technokratische Partei"). Use an established German name where one exists ("Eiffelturm", "Vereinte Nationen"), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → „Textilwerke Getzner Bludenz“).
 
 ## Voice and style

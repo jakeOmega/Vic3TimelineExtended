@@ -444,12 +444,28 @@
   "de": "Jedes Land zahlt denselben Preis für den Bau, der nur durch $construction_cost_scaling$ für reiche Länder mit wenigen unbeschäftigten Arbeitskräften erhöht wird."
  },
  "setting_te_small_economy_construction_enabled": {
-  "en": "Cheaper for Small Economies",
-  "de": "Günstiger für kleine Volkswirtschaften"
+  "en": "A Tenth of the Cost for Small Economies",
+  "de": "Ein Zehntel der Kosten für kleine Volkswirtschaften"
  },
  "setting_te_small_economy_construction_enabled_desc": {
-  "en": "Experimental. Construction and construction maintenance cost a small economy less: a tenth of the price for a country with almost no [concept_gdp], rising in a straight line to the full price at a GDP of 10 million. AI countries get the same.",
-  "de": "Experimentell. Bau und Bauunterhalt kosten eine kleine Volkswirtschaft weniger: ein Zehntel des Preises bei einem Land mit fast keinem [concept_gdp], geradlinig steigend bis zum vollen Preis bei einem BIP von 10 Millionen. KI-Länder erhalten dasselbe."
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a tenth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "de": "Experimentell. Bau und Bauunterhalt kosten ein Land mit fast keinem [concept_gdp] ein Zehntel des Preises, geradlinig steigend bis zum vollen Preis bei einem BIP von 10 Millionen. KI-Länder erhalten dasselbe. In einem laufenden Spiel geändert, erreicht es jedes Land bei seiner nächsten jährlichen Aktualisierung."
+ },
+ "setting_te_small_economy_construction_mild": {
+  "en": "Half the Cost for Small Economies",
+  "de": "Die Hälfte der Kosten für kleine Volkswirtschaften"
+ },
+ "setting_te_small_economy_construction_mild_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] half the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "de": "Experimentell. Bau und Bauunterhalt kosten ein Land mit fast keinem [concept_gdp] die Hälfte des Preises, geradlinig steigend bis zum vollen Preis bei einem BIP von 10 Millionen. KI-Länder erhalten dasselbe. In einem laufenden Spiel geändert, erreicht es jedes Land bei seiner nächsten jährlichen Aktualisierung."
+ },
+ "setting_te_small_economy_construction_standard": {
+  "en": "A Fifth of the Cost for Small Economies",
+  "de": "Ein Fünftel der Kosten für kleine Volkswirtschaften"
+ },
+ "setting_te_small_economy_construction_standard_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a fifth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "de": "Experimentell. Bau und Bauunterhalt kosten ein Land mit fast keinem [concept_gdp] ein Fünftel des Preises, geradlinig steigend bis zum vollen Preis bei einem BIP von 10 Millionen. KI-Länder erhalten dasselbe. In einem laufenden Spiel geändert, erreicht es jedes Land bei seiner nächsten jährlichen Aktualisierung."
  },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",

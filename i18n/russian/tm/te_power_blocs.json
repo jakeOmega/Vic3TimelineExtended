@@ -103,6 +103,22 @@
   "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
   "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может добавлять в договоры статью «Требование членства в ООН», вовлекая другую страну в Организацию Объединённых Наций."
  },
+ "power_bloc_can_use_technology_embargo_bool": {
+  "en": "Leader Can Use Technology Embargo [concept_diplomatic_action]",
+  "ru": "Лидер может применять технологическое эмбарго как [Concept('concept_diplomatic_action','дипломатическое действие')]"
+ },
+ "power_bloc_can_use_technology_embargo_bool_desc": {
+  "en": "The [concept_power_bloc_leader] can place one [concept_country] outside the [concept_power_bloc] at a time under a $te_rc_technology_embargo$, cutting its [concept_technology_spread].",
+  "ru": "[concept_power_bloc_leader] может подвергнуть действию «$te_rc_technology_embargo$» одну [Concept('concept_country','страну')] вне [Concept('concept_power_bloc','силового блока')] за раз, сократив её [Concept('concept_technology_spread','распространение технологий')]."
+ },
+ "power_bloc_debt_administration_bool": {
+  "en": "Leader Guarantees Member Debts",
+  "ru": "Лидер гарантирует долги членов"
+ },
+ "power_bloc_debt_administration_bool_desc": {
+  "en": "Under the [concept_consortium_guarantee], the leader takes part of each member's debt-load [concept_banking_risk_premium] off it, and is called on when a member defaults.",
+  "ru": "По [Concept('concept_consortium_guarantee','гарантии консорциума')] лидер снимает с каждого члена часть [Concept('concept_banking_risk_premium','премии за риск')] от долговой нагрузки и привлекается, когда член объявляет дефолт."
+ },
  "power_bloc_fiscal_backstop_bool": {
   "en": "Leader Is Lender of Last Resort to Adopters",
   "ru": "Лидер — кредитор последней инстанции для участников"
@@ -143,6 +159,14 @@
   "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
   "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может мирно аннексировать [Concept('concept_subject', '$concept_subjects|q$')|l] без [Concept('concept_diplomatic_play','дипломатической игры')], если [concept_liberty_desire|l] и [Concept('concept_gdp', 'ВВП')] зависимого государства достаточно низки."
  },
+ "power_bloc_research_pool_bool": {
+  "en": "Members’ Research Goes to the Leader",
+  "ru": "Исследования членов идут лидеру"
+ },
+ "power_bloc_research_pool_bool_desc": {
+  "en": "Members other than the [concept_power_bloc_leader] research nothing themselves. Each sends the leader 75% of its weekly [concept_innovation], counted before its multipliers and after what its own programs spend, and the leader's innovation cap rises by a tenth of what they send. Every member is given each [concept_technology] another member knows, once a month and whenever one acquires a new one.",
+  "ru": "Члены, кроме [Concept('concept_power_bloc_leader','лидера')], сами ничего не исследуют. Каждый отправляет лидеру 75% своих еженедельных [Concept('concept_innovation','инноваций')], считая до своих множителей и после расходов своих собственных программ, а предел инноваций лидера растёт на десятую часть отправленного. Каждый член получает каждую [Concept('concept_technology','технологию')], известную другому члену, раз в месяц и всякий раз, когда кто-то приобретает новую."
+ },
  "power_bloc_reserve_currency_bool": {
   "en": "[concept_banking_common_currency] Is a Reserve Currency",
   "ru": "[concept_banking_common_currency] — резервная валюта"
@@ -159,6 +183,14 @@
   "en": "Any member may give up its own money for the leader's. How Banking Works, in the Banking tab, lists what adopting requires and what leaving costs.",
   "ru": "Любой член может отказаться от своих денег в пользу денег лидера. В разделе «Как работает банкинг» на вкладке «Банкинг» перечислено, что требуется для перехода и чего стоит выход."
  },
+ "power_bloc_technology_controls_bool": {
+  "en": "No $science_aid$ Outside the Bloc",
+  "ru": "Нет «$science_aid$» вне блока"
+ },
+ "power_bloc_technology_controls_bool_desc": {
+  "en": "Members can't propose $science_aid$ or $science_aid_2$ to a [concept_country] outside the [concept_power_bloc]. Treaties already signed are not affected.",
+  "ru": "Члены не могут предлагать «$science_aid$» или «$science_aid_2$» [Concept('concept_country','стране')] вне [Concept('concept_power_bloc','силового блока')]. Уже подписанные договоры не затрагиваются."
+ },
  "principle_group_artistic_expression": {
   "en": "Artistic Expression",
   "ru": "Художественное самовыражение"
@@ -166,6 +198,14 @@
  "principle_group_artistic_expression_desc": {
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
+ },
+ "principle_group_conditionality": {
+  "en": "Conditionality",
+  "ru": "Обусловленность"
+ },
+ "principle_group_conditionality_desc": {
+  "en": "The terms on which the [concept_power_bloc] rescues a member that defaults: how much of its government the leader takes over, and for how long.",
+  "ru": "Условия, на которых [Concept('concept_power_bloc','силовой блок')] спасает объявившего дефолт члена: какую часть его управления берёт на себя лидер и на какой срок."
  },
  "principle_group_cultural_plurality": {
   "en": "Cultural Plurality",
@@ -182,6 +222,14 @@
  "principle_group_cultural_unity_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_group_development_lending": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "principle_group_development_lending_desc": {
+  "en": "The [concept_power_bloc]'s richer members lend to its poorer ones: part of their private investment goes to build up the rest of the bloc.",
+  "ru": "Более богатые члены [Concept('concept_power_bloc','силового блока')] кредитуют более бедных: часть их частных инвестиций идёт на развитие остальной части блока."
  },
  "principle_group_education": {
   "en": "Education",
@@ -254,6 +302,14 @@
  "principle_group_rural_desc": {
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "principle_group_technology_controls": {
+  "en": "Technology Controls",
+  "ru": "Технологический контроль"
+ },
+ "principle_group_technology_controls_desc": {
+  "en": "The [concept_power_bloc] keeps what its members know among its members: no $science_aid$ leaves the bloc, members guard their research against foreign spies, and from tier III the leader can cut a rival's [concept_technology_spread].",
+  "ru": "[concept_power_bloc] оставляет знания своих членов внутри себя: «$science_aid$» не покидает блок, члены защищают свои исследования от иностранных шпионов, а с уровня III лидер может сократить [Concept('concept_technology_spread','распространение технологий')] соперника."
  },
  "principle_group_urban_planning": {
   "en": "Urban Planning",

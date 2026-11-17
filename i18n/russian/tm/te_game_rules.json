@@ -444,12 +444,28 @@
   "ru": "Каждая страна платит за строительство одну и ту же цену, которую повышает только эффект «$construction_cost_scaling$» для богатых стран с малым числом незанятых работников."
  },
  "setting_te_small_economy_construction_enabled": {
-  "en": "Cheaper for Small Economies",
-  "ru": "Дешевле для малых экономик"
+  "en": "A Tenth of the Cost for Small Economies",
+  "ru": "Десятая часть стоимости для малых экономик"
  },
  "setting_te_small_economy_construction_enabled_desc": {
-  "en": "Experimental. Construction and construction maintenance cost a small economy less: a tenth of the price for a country with almost no [concept_gdp], rising in a straight line to the full price at a GDP of 10 million. AI countries get the same.",
-  "ru": "Экспериментально. Строительство и его содержание обходятся малой экономике дешевле: десятая часть цены для страны почти без [Concept('concept_gdp','ВВП')], с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое."
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a tenth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в десятую часть цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
+ },
+ "setting_te_small_economy_construction_mild": {
+  "en": "Half the Cost for Small Economies",
+  "ru": "Половина стоимости для малых экономик"
+ },
+ "setting_te_small_economy_construction_mild_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] half the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в половину цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
+ },
+ "setting_te_small_economy_construction_standard": {
+  "en": "A Fifth of the Cost for Small Economies",
+  "ru": "Пятая часть стоимости для малых экономик"
+ },
+ "setting_te_small_economy_construction_standard_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a fifth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в пятую часть цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
  },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",

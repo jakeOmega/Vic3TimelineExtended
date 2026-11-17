@@ -1391,6 +1391,14 @@
   "en": "How this group judges the tax code: the taxation law it comes closest to, or how far below the tax level the taxes its members pay are set.",
   "de": "Wie diese Gruppe die Steuerordnung beurteilt: nach dem Steuergesetz, dem sie am nächsten kommt, oder danach, wie weit unter der Besteuerungsstufe die Steuern angesetzt sind, die ihre Mitglieder zahlen."
  },
+ "te_tax_light_levy_div": {
+  "en": "Low $te_tax_inst_div$",
+  "de": "Niedrige $te_tax_inst_div$"
+ },
+ "te_tax_light_levy_div_desc": {
+  "en": "The light tax code levies a low dividend tax, which the taxation law does not levy itself.",
+  "de": "Die leichte Steuerordnung erhebt eine niedrige Dividendensteuer, die das Steuergesetz selbst nicht erhebt."
+ },
  "te_tax_light_react_armed_forces_neg": {
   "en": "Resents Recent Tax Changes",
   "de": "Lehnt die jüngsten Steueränderungen ab"
@@ -1558,6 +1566,10 @@
  "te_tax_light_relief_wage_desc": {
   "en": "The light tax code sets the $te_tax_inst_wage$ below the rate the taxation law sets at the current tax level.",
   "de": "Die Leichte Steuerordnung legt die $te_tax_inst_wage$ unterhalb des Satzes fest, den das Steuergesetz bei der aktuellen Besteuerungsstufe vorgibt."
+ },
+ "te_tax_lt_extra_note_div": {
+  "en": "\\n\\nThe taxation law levies no dividend tax, so the tax code may levy only a low one, up to #v 5%#!. The laws that tax dividends in full are $law_proportional_taxation$, up to #v 20%#!, and $law_graduated_taxation$, up to #v 30%#!.",
+  "de": "\\n\\nDas Steuergesetz erhebt keine Dividendensteuer, daher darf die Steuerordnung nur eine niedrige erheben, bis zu #v 5%#!. Die Gesetze, die Dividenden voll besteuern, sind $law_proportional_taxation$, bis zu #v 20%#!, und $law_graduated_taxation$, bis zu #v 30%#!."
  },
  "te_tax_lt_tt_react_cons": {
   "en": "Paid most by $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$, $ig_devout$.",

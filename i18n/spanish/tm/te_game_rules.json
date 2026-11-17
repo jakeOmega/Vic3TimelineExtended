@@ -444,12 +444,28 @@
   "es": "Todos los países pagan el mismo precio por la construcción, que solo sube con $construction_cost_scaling$ en los países ricos con pocos trabajadores ociosos."
  },
  "setting_te_small_economy_construction_enabled": {
-  "en": "Cheaper for Small Economies",
-  "es": "Más barata para las economías pequeñas"
+  "en": "A Tenth of the Cost for Small Economies",
+  "es": "Una décima parte del coste para economías pequeñas"
  },
  "setting_te_small_economy_construction_enabled_desc": {
-  "en": "Experimental. Construction and construction maintenance cost a small economy less: a tenth of the price for a country with almost no [concept_gdp], rising in a straight line to the full price at a GDP of 10 million. AI countries get the same.",
-  "es": "Experimental. La construcción y su mantenimiento cuestan menos a una economía pequeña: una décima parte del precio para un país con un [Concept('concept_gdp', 'PIB')] casi nulo, que sube en línea recta hasta el precio íntegro con un PIB de 10 millones. Los países de la IA reciben lo mismo."
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a tenth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "es": "Experimental. La construcción y su mantenimiento cuestan a un país con un [Concept('concept_gdp', 'PIB')] casi nulo una décima parte del precio, que sube en línea recta hasta el precio íntegro con un PIB de 10 millones. Los países de la IA reciben lo mismo. Si se cambia en una partida en curso, llega a cada país en su siguiente actualización anual."
+ },
+ "setting_te_small_economy_construction_mild": {
+  "en": "Half the Cost for Small Economies",
+  "es": "La mitad del coste para economías pequeñas"
+ },
+ "setting_te_small_economy_construction_mild_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] half the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "es": "Experimental. La construcción y su mantenimiento cuestan a un país con un [Concept('concept_gdp', 'PIB')] casi nulo la mitad del precio, que sube en línea recta hasta el precio íntegro con un PIB de 10 millones. Los países de la IA reciben lo mismo. Si se cambia en una partida en curso, llega a cada país en su siguiente actualización anual."
+ },
+ "setting_te_small_economy_construction_standard": {
+  "en": "A Fifth of the Cost for Small Economies",
+  "es": "Una quinta parte del coste para economías pequeñas"
+ },
+ "setting_te_small_economy_construction_standard_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a fifth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "es": "Experimental. La construcción y su mantenimiento cuestan a un país con un [Concept('concept_gdp', 'PIB')] casi nulo una quinta parte del precio, que sube en línea recta hasta el precio íntegro con un PIB de 10 millones. Los países de la IA reciben lo mismo. Si se cambia en una partida en curso, llega a cada país en su siguiente actualización anual."
  },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",

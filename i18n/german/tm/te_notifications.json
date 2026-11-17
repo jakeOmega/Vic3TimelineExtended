@@ -23,6 +23,14 @@
   "en": "Emergency Liquidity Wound Down",
   "de": "Notliquidität abgewickelt"
  },
+ "notification_banking_overdraft_lift_notice_desc": {
+  "en": "Our [concept_banking_intervention_budget] no longer covers the interventions in force, so #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#! has been lifted.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] While the budget stays overdrawn, one more is lifted each month: crash responses first, then the $banking_dash_cat_external$ tools, then the rest from the cheapest up. To keep a cheap tool, lift a costlier one first.",
+  "de": "Unser [concept_banking_intervention_budget] deckt die in Kraft befindlichen Interventionen nicht mehr, daher wurde #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#! aufgehoben.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] Solange das Budget überzogen bleibt, wird jeden Monat eine weitere aufgehoben: zuerst Crash-Reaktionen, dann die Instrumente aus $banking_dash_cat_external$, dann der Rest, vom billigsten an. Um ein billiges Instrument zu behalten, heben Sie zuerst ein teureres auf."
+ },
+ "notification_banking_overdraft_lift_notice_name": {
+  "en": "Intervention Budget Overdrawn",
+  "de": "Interventionsbudget überzogen"
+ },
  "notification_colonial_ceasefire_granted_notice_desc": {
   "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
   "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat mit unserer Unabhängigkeitsbewegung einen Waffenstillstand vereinbart und uns die Unabhängigkeit gewährt. Wir sind frei."
@@ -1974,6 +1982,30 @@
  "notification_te_antarctic_treaty_lapsed_notice_name": {
   "en": "The Antarctic Treaty Lapses",
   "de": "Der Antarktisvertrag erlischt"
+ },
+ "notification_te_cm_merge_complete_notice_desc": {
+  "en": "The merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began is complete: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName].",
+  "de": "Die Verschmelzung, die [SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')] begonnen hat, ist abgeschlossen: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] zu [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "notification_te_cm_merge_complete_notice_name": {
+  "en": "A Culture Merge Completes",
+  "de": "Eine Kulturverschmelzung wird abgeschlossen"
+ },
+ "notification_te_cm_merge_started_notice_desc": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. None of these is one of our primary cultures or has a homeland in our country, but any of their pops living here will become [SCOPE.sCulture('te_cm_ev_result').GetName] when their culture switches.",
+  "de": "[SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')|U] hat begonnen, [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] in [SCOPE.sCulture('te_cm_ev_result').GetName] zu verschmelzen. Keine davon ist eine unserer Primärkulturen oder hat eine Heimat in unserem Land, aber alle ihre hier lebenden Pops werden zu [SCOPE.sCulture('te_cm_ev_result').GetName], sobald ihre Kultur wechselt."
+ },
+ "notification_te_cm_merge_started_notice_name": {
+  "en": "A Culture Merge Begins",
+  "de": "Eine Kulturverschmelzung beginnt"
+ },
+ "notification_te_cm_merge_started_sphere_notice_desc": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. None of these is one of our primary cultures or has a homeland in our country, but we are its subject or a member of the power bloc it leads, so we are within its sphere: once a culture has joined the merge, a share of our pops of it may take up [SCOPE.sCulture('te_cm_ev_result').GetName] each year, and the rest will become [SCOPE.sCulture('te_cm_ev_result').GetName] when their culture switches.",
+  "de": "[SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')|U] hat begonnen, [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] in [SCOPE.sCulture('te_cm_ev_result').GetName] zu verschmelzen. Keine davon ist eine unserer Primärkulturen oder hat eine Heimat in unserem Land, aber wir sind ein Klientelstaat dieses Landes oder Mitglied des Machtblocks, den es anführt, und liegen daher in seinem Einflussbereich: Sobald eine Kultur an der Verschmelzung beteiligt ist, kann jedes Jahr ein Teil unserer Pops dieser Kultur zu [SCOPE.sCulture('te_cm_ev_result').GetName] übergehen, und der Rest wird zu [SCOPE.sCulture('te_cm_ev_result').GetName], sobald ihre Kultur wechselt."
+ },
+ "notification_te_cm_merge_started_sphere_notice_name": {
+  "en": "A Culture Merge Begins in Our Sphere",
+  "de": "Eine Kulturverschmelzung beginnt in unserem Einflussbereich"
  },
  "notification_te_demog_ms_crash_campaign_over_desc": {
   "en": "The Crash Campaign has run its five years and ended. It can't return for ten years.",

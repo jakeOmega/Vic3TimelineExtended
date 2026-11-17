@@ -467,6 +467,10 @@
   "en": "Diplomatic Friction",
   "ru": "Дипломатическое трение"
  },
+ "te_rc_technology_embargo_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has placed [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] under a technology embargo.",
+  "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] наложила на страну [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] технологическое эмбарго."
+ },
  "te_seabed_administer_claims_pact_desc": {
   "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
   "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] управляет притязаниями на морское дно страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]"

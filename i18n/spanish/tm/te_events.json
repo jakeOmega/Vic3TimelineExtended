@@ -22075,6 +22075,146 @@
   "en": "Inside Our Networks",
   "es": "En el interior de nuestras redes"
  },
+ "te_cc.1.a": {
+  "en": "Pay its creditors.",
+  "es": "Pagaremos a sus acreedores."
+ },
+ "te_cc.1.b": {
+  "en": "Pay, if it adopts our economic laws.",
+  "es": "Pagaremos, si adopta nuestras leyes económicas."
+ },
+ "te_cc.1.c": {
+  "en": "Pay, for concessions to our investors.",
+  "es": "Pagaremos, a cambio de concesiones para nuestros inversores."
+ },
+ "te_cc.1.d": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and puts its finances in our receivership until they recover, on terms we set. If we refuse, our guarantee of every other member lapses with it.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha incurrido en impago. Es miembro de nuestro [concept_power_bloc|l], y sus acreedores le prestaron confiando tanto en nuestro nombre como en el suyo: con la [concept_consortium_guarantee|l] respaldamos sus deudas. Esta mañana acudieron a nosotros. Pagarles nos cuesta @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, y deja sus finanzas bajo nuestra intervención hasta que se recuperen, en las condiciones que fijemos. Si nos negamos, nuestra garantía a todos los demás miembros caduca con ello."
+ },
+ "te_cc.1.d_plain": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!. If we refuse, our guarantee of every other member lapses with it.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha incurrido en impago. Es miembro de nuestro [concept_power_bloc|l], y sus acreedores le prestaron confiando tanto en nuestro nombre como en el suyo: con la [concept_consortium_guarantee|l] respaldamos sus deudas. Esta mañana acudieron a nosotros. Pagarles nos cuesta @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!. Si nos negamos, nuestra garantía a todos los demás miembros caduca con ello."
+ },
+ "te_cc.1.d_receivership": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and puts its finances in our receivership until they recover. If we refuse, our guarantee of every other member lapses with it.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha incurrido en impago. Es miembro de nuestro [concept_power_bloc|l], y sus acreedores le prestaron confiando tanto en nuestro nombre como en el suyo: con la [concept_consortium_guarantee|l] respaldamos sus deudas. Esta mañana acudieron a nosotros. Pagarles nos cuesta @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, y deja sus finanzas bajo nuestra intervención hasta que se recuperen. Si nos negamos, nuestra garantía a todos los demás miembros caduca con ello."
+ },
+ "te_cc.1.d_terms": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has defaulted. It is a member of our [concept_power_bloc], and its creditors lent to it on the strength of our name as well as its own: under the [concept_consortium_guarantee] we stand behind its debts. They came to us this morning. Paying them costs us @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, and lets us ask terms of it in return. If we refuse, our guarantee of every other member lapses with it.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha incurrido en impago. Es miembro de nuestro [concept_power_bloc|l], y sus acreedores le prestaron confiando tanto en nuestro nombre como en el suyo: con la [concept_consortium_guarantee|l] respaldamos sus deudas. Esta mañana acudieron a nosotros. Pagarles nos cuesta @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.ScriptValue('te_mon_lolr_honour_cost')|D]#!, y nos permite pedirle condiciones a cambio. Si nos negamos, nuestra garantía a todos los demás miembros caduca con ello."
+ },
+ "te_cc.1.e": {
+  "en": "Pay, if it sells its state enterprises.",
+  "es": "Pagaremos, si vende sus empresas estatales."
+ },
+ "te_cc.1.f": {
+  "en": "From the treasury's foreign desk, to the government. The creditors of [SCOPE.sCountry('te_cc_debtor').GetName] have sent us their claims with a covering letter, and the claims are in order. The debtor's own officials have asked to see us before we answer. They have brought their accounts, and they say they will take any reasonable terms. The desk has drafted the terms our bloc's rules allow and attached them. The creditors want our answer within the week. The debtor's officials have asked for it sooner.",
+  "es": "De la sección exterior del tesoro, para el gobierno. Los acreedores de [SCOPE.sCountry('te_cc_debtor').GetName] nos han enviado sus reclamaciones con una carta de presentación, y las reclamaciones están en regla. Los propios funcionarios del deudor han pedido vernos antes de que respondamos. Han traído sus cuentas y dicen que aceptarán cualquier condición razonable. La sección ha redactado las condiciones que permiten las normas de nuestro bloque y las ha adjuntado. Los acreedores quieren nuestra respuesta en el plazo de una semana. Los funcionarios del deudor la han pedido antes."
+ },
+ "te_cc.1.g": {
+  "en": "Pay, for our laws and concessions.",
+  "es": "Pagaremos, a cambio de nuestras leyes y concesiones."
+ },
+ "te_cc.1.h": {
+  "en": "Pay, for our laws and its state enterprises.",
+  "es": "Pagaremos, a cambio de nuestras leyes y de sus empresas estatales."
+ },
+ "te_cc.1.i": {
+  "en": "Pay, for concessions and its state enterprises.",
+  "es": "Pagaremos, a cambio de concesiones y de sus empresas estatales."
+ },
+ "te_cc.1.j": {
+  "en": "Pay, on every term we can set.",
+  "es": "Pagaremos, con todas las condiciones que podamos imponer."
+ },
+ "te_cc.1.t": {
+  "en": "A Member Defaults",
+  "es": "Un miembro incurre en impago"
+ },
+ "te_cc.1.z": {
+  "en": "Its debts are its own.",
+  "es": "Sus deudas son suyas."
+ },
+ "te_cc.2.a": {
+  "en": "We accept the terms.",
+  "es": "Aceptamos las condiciones."
+ },
+ "te_cc.2.a.tt": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName] pays our creditors, and its terms take effect:",
+  "es": "[SCOPE.sCountry('te_cc_creditor').GetName] paga a nuestros acreedores, y sus condiciones entran en vigor:"
+ },
+ "te_cc.2.b": {
+  "en": "We will not be governed from abroad.",
+  "es": "No nos gobernarán desde el extranjero."
+ },
+ "te_cc.2.d": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], will pay our creditors @money!#v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_cost').GetValue|D]#! if we accept its terms. If we refuse, we stay in [concept_default], and for ten years no consortium will stand behind our debts.",
+  "es": "[SCOPE.sCountry('te_cc_creditor').GetName], el líder de nuestro [concept_power_bloc|l], pagará a nuestros acreedores @money!#v [ROOT.GetCountry.MakeScope.Var('te_cred_offer_cost').GetValue|D]#! si aceptamos sus condiciones. Si nos negamos, seguiremos en [concept_default|l], y durante diez años ningún consorcio respaldará nuestras deudas."
+ },
+ "te_cc.2.f": {
+  "en": "\\\"The terms came in a folder with our bloc's seal on it, and I read them aloud to the delegation in the order they were written. The payment comes first, and it is the whole of what we owe this year. The conditions follow, and they run to several pages. Nobody at the table asked for a second reading. Our creditors' agents are waiting in the next room for whatever we decide.\\\"",
+  "es": "«Las condiciones llegaron en una carpeta con el sello de nuestro bloque, y se las leí en voz alta a la delegación en el orden en que estaban escritas. El pago va primero, y es la totalidad de lo que debemos este año. Siguen las condiciones, que ocupan varias páginas. Nadie en la mesa pidió una segunda lectura. Los agentes de nuestros acreedores esperan en la sala contigua a lo que decidamos.»"
+ },
+ "te_cc.2.t": {
+  "en": "The Consortium's Terms",
+  "es": "Las condiciones del consorcio"
+ },
+ "te_cc.3.a_accepted": {
+  "en": "The commission can begin its work.",
+  "es": "La comisión puede comenzar su trabajo."
+ },
+ "te_cc.3.a_accepted.tt": {
+  "en": "Each term it accepted is in force.",
+  "es": "Cada condición que aceptó está en vigor."
+ },
+ "te_cc.3.a_refused": {
+  "en": "Then they will settle with their creditors alone.",
+  "es": "Entonces arreglarán cuentas con sus acreedores por su cuenta."
+ },
+ "te_cc.3.a_refused.tt": {
+  "en": "We pay nothing, and owe it nothing.",
+  "es": "No pagamos nada, y no le debemos nada."
+ },
+ "te_cc.3.d_accepted": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has accepted our terms. We have paid its creditors @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.Var('te_cred_paid').GetValue|D]#!, and the terms are in force.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha aceptado nuestras condiciones. Hemos pagado a sus acreedores @money!#v [SCOPE.sCountry('te_cc_debtor').MakeScope.Var('te_cred_paid').GetValue|D]#!, y las condiciones están en vigor."
+ },
+ "te_cc.3.d_refused": {
+  "en": "[SCOPE.sCountry('te_cc_debtor').GetName] has refused our terms. It stays in [concept_default], and nothing has been paid. For ten years it cannot count on our guarantee, and it may leave our [concept_power_bloc] when it chooses.",
+  "es": "[SCOPE.sCountry('te_cc_debtor').GetName] ha rechazado nuestras condiciones. Sigue en [concept_default|l], y no se ha pagado nada. Durante diez años no puede contar con nuestra garantía, y puede abandonar nuestro [concept_power_bloc|l] cuando quiera."
+ },
+ "te_cc.3.f": {
+  "en": "Notes from the treasury's foreign desk, for the government's file on the rescue.\\n• The debtor's answer arrived in writing, signed by its treasury.\\n• Its creditors were told the same day.\\n• The desk has kept a copy of the terms as offered.\\n• The bloc's other members have asked for one.",
+  "es": "Notas de la sección exterior del tesoro, para el expediente del gobierno sobre el rescate.\\n• La respuesta del deudor llegó por escrito, firmada por su tesoro.\\n• A sus acreedores se les informó el mismo día.\\n• La sección ha guardado una copia de las condiciones tal como se ofrecieron.\\n• Los demás miembros del bloque han pedido una."
+ },
+ "te_cc.3.t_accepted": {
+  "en": "Our Terms Are Accepted",
+  "es": "Nuestras condiciones son aceptadas"
+ },
+ "te_cc.3.t_refused": {
+  "en": "Our Terms Are Refused",
+  "es": "Nuestras condiciones son rechazadas"
+ },
+ "te_cc.4.a": {
+  "en": "We will remember this.",
+  "es": "Lo recordaremos."
+ },
+ "te_cc.4.a.tt": {
+  "en": "For #b five years#! [SCOPE.sCountry('te_cc_creditor').GetName] stands behind no member's debts.",
+  "es": "Durante #b cinco años#! [SCOPE.sCountry('te_cc_creditor').GetName] no respalda las deudas de ningún miembro."
+ },
+ "te_cc.4.d": {
+  "en": "[SCOPE.sCountry('te_cc_creditor').GetName], the leader of our [concept_power_bloc], has refused to pay our creditors. We remain in [concept_default], and our creditors have been told to look to us alone.",
+  "es": "[SCOPE.sCountry('te_cc_creditor').GetName], el líder de nuestro [concept_power_bloc|l], se ha negado a pagar a nuestros acreedores. Seguimos en [concept_default|l], y se ha dicho a nuestros acreedores que se dirijan solo a nosotros."
+ },
+ "te_cc.4.f": {
+  "en": "The delegation came back from [SCOPE.sCountry('te_cc_creditor').GetName] on the evening train with its papers unsigned. Its head went straight to the treasury and sat with the accounts until late. In the morning the treasury asked every department for a list of what could be cut, and by the end of the week the lists were on its desk.",
+  "es": "La delegación volvió de [SCOPE.sCountry('te_cc_creditor').GetName] en el tren de la tarde con sus papeles sin firmar. Su jefe fue directo al tesoro y se quedó con las cuentas hasta tarde. Por la mañana el tesoro pidió a cada departamento una lista de lo que podía recortarse, y a finales de semana las listas estaban sobre su mesa."
+ },
+ "te_cc.4.t": {
+  "en": "Our Bloc Leaves Us to Our Creditors",
+  "es": "Nuestro bloque nos deja a merced de nuestros acreedores"
+ },
  "te_culture_merge.1.a": {
   "en": "One people, at last.",
   "es": "Un solo pueblo, por fin."
@@ -22090,6 +22230,94 @@
  "te_culture_merge.1.t": {
   "en": "From [SCOPE.sCulture('te_cm_ev_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]",
   "es": "De [SCOPE.sCulture('te_cm_ev_part').GetName] a [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
+ "te_culture_merge.2.a": {
+  "en": "We will see what our own people make of it.",
+  "es": "Veremos qué opina nuestra propia gente."
+ },
+ "te_culture_merge.2.d": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. We are outside its sphere, neither its subject nor in a power bloc it leads, so while that holds, the merge converts none of our pops as it runs. Once [SCOPE.sCulture('te_cm_ev_result').GetName] holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture, in every country, switches at once, and wherever that culture is a primary culture, [SCOPE.sCulture('te_cm_ev_result').GetName] becomes one too.",
+  "es": "[SCOPE.sCountry('te_cm_ev_starter').GetName] ha empezado a fusionar [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] en [SCOPE.sCulture('te_cm_ev_result').GetName]. Estamos fuera de su esfera: no somos súbditos suyos ni estamos en un bloque de poder que lidere, así que mientras eso siga así, la fusión no convierte ninguno de nuestros colectivos mientras avanza. Cuando [SCOPE.sCulture('te_cm_ev_result').GetName] posea [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] de la tierra natal de una cultura, todos los colectivos restantes de esa cultura, en todos los países, cambian a la vez, y dondequiera que esa cultura sea una cultura primaria, [SCOPE.sCulture('te_cm_ev_result').GetName] pasa a serlo también."
+ },
+ "te_culture_merge.2.d_sphere": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. As its subject or a member of the power bloc it leads, we are within its sphere: once a culture has joined the merge, a share of our pops of it may take up [SCOPE.sCulture('te_cm_ev_result').GetName] each year, at half the pace our own literacy, urbanization and $country_culture_merge_speed_mult$ would give them, and where that culture is one of our primary cultures, [SCOPE.sCulture('te_cm_ev_result').GetName] becomes one too. Once [SCOPE.sCulture('te_cm_ev_result').GetName] holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] of a culture's homeland, every remaining pop of that culture, in every country, switches at once.",
+  "es": "[SCOPE.sCountry('te_cm_ev_starter').GetName] ha empezado a fusionar [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] en [SCOPE.sCulture('te_cm_ev_result').GetName]. Como súbditos suyos o miembros del bloque de poder que lidera, estamos dentro de su esfera: cuando una cultura se ha sumado a la fusión, una parte de nuestros colectivos de ella puede adoptar [SCOPE.sCulture('te_cm_ev_result').GetName] cada año, a la mitad del ritmo que les darían nuestra propia alfabetización, urbanización y $country_culture_merge_speed_mult$, y donde esa cultura sea una de nuestras culturas primarias, [SCOPE.sCulture('te_cm_ev_result').GetName] pasa a serlo también. Cuando [SCOPE.sCulture('te_cm_ev_result').GetName] posea [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] de la tierra natal de una cultura, todos los colectivos restantes de esa cultura, en todos los países, cambian a la vez."
+ },
+ "te_culture_merge.2.f": {
+  "en": "Remarks heard around the country after word came that [SCOPE.sCountry('te_cm_ev_starter').GetName] had begun its merge.\\n\\n\\\"My father gave the old name whenever he was asked, until the day he died. My children answer to whichever name the person asking them uses.\\\"\\n\\n\\\"[SCOPE.sCountry('te_cm_ev_starter').GetName] can decide what its own people are called. I would like to know who asked it to decide for ours.\\\"\\n\\n\\\"I have cousins in [SCOPE.sCountry('te_cm_ev_starter').GetName]. They write that the schools there have begun teaching the children that they are [SCOPE.sCulture('te_cm_ev_result').GetName], and that the older people still talk the way they always did.\\\"",
+  "es": "Comentarios oídos por todo el país tras conocerse que [SCOPE.sCountry('te_cm_ev_starter').GetName] había iniciado su fusión.\\n\\n«Mi padre daba el nombre antiguo siempre que se lo preguntaban, hasta el día en que murió. Mis hijos responden al nombre que use quien se lo pregunta.»\\n\\n«[SCOPE.sCountry('te_cm_ev_starter').GetName] puede decidir cómo se llama su propia gente. Me gustaría saber quién le pidió que decidiera por la nuestra.»\\n\\n«Tengo primos en [SCOPE.sCountry('te_cm_ev_starter').GetName]. Escriben que en las escuelas de allí han empezado a enseñar a los niños que pertenecen a la cultura [SCOPE.sCulture('te_cm_ev_result').GetName], y que los mayores siguen hablando como siempre.»"
+ },
+ "te_culture_merge.2.t": {
+  "en": "The [SCOPE.sCulture('te_cm_ev_result').GetName] Merge Begins",
+  "es": "Comienza la fusión de la cultura [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
+ "te_culture_merge.3.a": {
+  "en": "Let the registers say [SCOPE.sCulture('te_cm_ev_result').GetName] from now on.",
+  "es": "Que los registros digan [SCOPE.sCulture('te_cm_ev_result').GetName] de ahora en adelante."
+ },
+ "te_culture_merge.3.d": {
+  "en": "In the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began, [SCOPE.sCulture('te_cm_ev_result').GetName] has reached [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] of the [SCOPE.sCulture('te_cm_ev_own_part').GetName] homeland, and every remaining [SCOPE.sCulture('te_cm_ev_own_part').GetName] pop, in our country as in every other, has switched to [SCOPE.sCulture('te_cm_ev_result').GetName]. The [SCOPE.sCulture('te_cm_ev_own_part').GetName] homeland states we hold are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland now as well.",
+  "es": "En la fusión que empezó [SCOPE.sCountry('te_cm_ev_starter').GetName], [SCOPE.sCulture('te_cm_ev_result').GetName] ha alcanzado [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] de la tierra natal de [SCOPE.sCulture('te_cm_ev_own_part').GetName], y todos los colectivos restantes de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName], en nuestro país como en todos los demás, han pasado a [SCOPE.sCulture('te_cm_ev_result').GetName]. Los estados de la tierra natal de [SCOPE.sCulture('te_cm_ev_own_part').GetName] que poseemos son ahora también tierra natal de [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "te_culture_merge.3.d_primary": {
+  "en": "In the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began, [SCOPE.sCulture('te_cm_ev_result').GetName] has reached [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] of the [SCOPE.sCulture('te_cm_ev_own_part').GetName] homeland, and every remaining [SCOPE.sCulture('te_cm_ev_own_part').GetName] pop, in our country as in every other, has switched to [SCOPE.sCulture('te_cm_ev_result').GetName]. Those lands are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland now as well. [SCOPE.sCulture('te_cm_ev_own_part').GetName] is one of our primary cultures, so [SCOPE.sCulture('te_cm_ev_result').GetName] is one of ours from now on too.",
+  "es": "En la fusión que empezó [SCOPE.sCountry('te_cm_ev_starter').GetName], [SCOPE.sCulture('te_cm_ev_result').GetName] ha alcanzado [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] de la tierra natal de [SCOPE.sCulture('te_cm_ev_own_part').GetName], y todos los colectivos restantes de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName], en nuestro país como en todos los demás, han pasado a [SCOPE.sCulture('te_cm_ev_result').GetName]. Esas tierras son ahora también tierra natal de [SCOPE.sCulture('te_cm_ev_result').GetName]. [SCOPE.sCulture('te_cm_ev_own_part').GetName] es una de nuestras culturas primarias, así que [SCOPE.sCulture('te_cm_ev_result').GetName] será también una de las nuestras de ahora en adelante."
+ },
+ "te_culture_merge.3.f": {
+  "en": "Instructions from the office that keeps the population register, sent to its officials once the [SCOPE.sCulture('te_cm_ev_own_part').GetName] people had become [SCOPE.sCulture('te_cm_ev_result').GetName]:\\n\\nWhere a household gives its people as [SCOPE.sCulture('te_cm_ev_own_part').GetName], write [SCOPE.sCulture('te_cm_ev_result').GetName]. Everyone who was [SCOPE.sCulture('te_cm_ev_own_part').GetName] counts as [SCOPE.sCulture('te_cm_ev_result').GetName] now, here and in every other country, and our figures must agree with theirs.\\nDo not alter the earlier registers. They were correct when they were taken, and anyone comparing the years will need them as they stood.\\nWhere the members of one household give different answers, write down each answer as it was given. The office will reconcile them, and officials at the door are not to argue with anyone.\\nUntil the new forms arrive, strike out the [SCOPE.sCulture('te_cm_ev_own_part').GetName] line on the old ones by hand and write [SCOPE.sCulture('te_cm_ev_result').GetName] beside it, so that no form is wasted.",
+  "es": "Instrucciones de la oficina que lleva el registro de población, enviadas a sus funcionarios una vez que los colectivos de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName] pasaron a ser de cultura [SCOPE.sCulture('te_cm_ev_result').GetName]:\\n\\nDonde un hogar declare su pueblo como [SCOPE.sCulture('te_cm_ev_own_part').GetName], escríbase [SCOPE.sCulture('te_cm_ev_result').GetName]. Todo el que fuera de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName] cuenta ahora como de cultura [SCOPE.sCulture('te_cm_ev_result').GetName], aquí y en cualquier otro país, y nuestras cifras deben coincidir con las suyas.\\nNo alteren los registros anteriores. Eran correctos cuando se tomaron, y quien compare los años los necesitará tal como estaban.\\nCuando los miembros de un mismo hogar den respuestas distintas, anoten cada respuesta tal como se dio. La oficina las conciliará, y los funcionarios que atienden en la puerta no deben discutir con nadie.\\nHasta que lleguen los nuevos formularios, tachen a mano la línea [SCOPE.sCulture('te_cm_ev_own_part').GetName] en los antiguos y escriban [SCOPE.sCulture('te_cm_ev_result').GetName] al lado, para que no se desperdicie ningún formulario."
+ },
+ "te_culture_merge.3.t": {
+  "en": "From [SCOPE.sCulture('te_cm_ev_own_part').GetName] to [SCOPE.sCulture('te_cm_ev_result').GetName]",
+  "es": "De [SCOPE.sCulture('te_cm_ev_own_part').GetName] a [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
+ "te_culture_merge.4.a": {
+  "en": "Then that question is settled.",
+  "es": "Entonces esa cuestión está zanjada."
+ },
+ "te_culture_merge.4.d": {
+  "en": "This year's census completed the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName].",
+  "es": "El censo de este año completó la fusión que empezó [SCOPE.sCountry('te_cm_ev_starter').GetName]: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] a [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "te_culture_merge.4.d_homeland": {
+  "en": "This year's census completed the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName]. [SCOPE.sCulture('te_cm_ev_own_part').GetName] switched in the same census, and every remaining [SCOPE.sCulture('te_cm_ev_own_part').GetName] pop, in our country as in every other, is [SCOPE.sCulture('te_cm_ev_result').GetName] now. The [SCOPE.sCulture('te_cm_ev_own_part').GetName] homeland states we hold are a [SCOPE.sCulture('te_cm_ev_result').GetName] homeland as well.",
+  "es": "El censo de este año completó la fusión que empezó [SCOPE.sCountry('te_cm_ev_starter').GetName]: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] a [SCOPE.sCulture('te_cm_ev_result').GetName]. La cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName] cambió en el mismo censo, y todos los colectivos restantes de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName], en nuestro país como en todos los demás, son ahora de cultura [SCOPE.sCulture('te_cm_ev_result').GetName]. Los estados de la tierra natal de [SCOPE.sCulture('te_cm_ev_own_part').GetName] que poseemos son también tierra natal de [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "te_culture_merge.4.d_primary": {
+  "en": "This year's census completed the merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName]. [SCOPE.sCulture('te_cm_ev_own_part').GetName] switched in the same census, and every remaining [SCOPE.sCulture('te_cm_ev_own_part').GetName] pop, in our country as in every other, is [SCOPE.sCulture('te_cm_ev_result').GetName] now. [SCOPE.sCulture('te_cm_ev_own_part').GetName] is one of our primary cultures, so [SCOPE.sCulture('te_cm_ev_result').GetName] is one of ours from now on too.",
+  "es": "El censo de este año completó la fusión que empezó [SCOPE.sCountry('te_cm_ev_starter').GetName]: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] a [SCOPE.sCulture('te_cm_ev_result').GetName]. La cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName] cambió en el mismo censo, y todos los colectivos restantes de cultura [SCOPE.sCulture('te_cm_ev_own_part').GetName], en nuestro país como en todos los demás, son ahora de cultura [SCOPE.sCulture('te_cm_ev_result').GetName]. [SCOPE.sCulture('te_cm_ev_own_part').GetName] es una de nuestras culturas primarias, así que [SCOPE.sCulture('te_cm_ev_result').GetName] será también una de las nuestras de ahora en adelante."
+ },
+ "te_culture_merge.4.f": {
+  "en": "A grandmother, to her granddaughter, who had asked what to put on a school form:\\n\\n\\\"Write [SCOPE.sCulture('te_cm_ev_result').GetName]. That is what the form asks for, and it is what your teacher will expect. When I was your age we had more than one name, and each side thought the other talked strangely. Your grandfather and I came from different sides of that, and we married anyway, and our children never cared which side was which. If anyone asks where the family came from, give them the names of the villages. I have written them on the back of the form for you.\\\"",
+  "es": "Una abuela a su nieta, que le había preguntado qué poner en un formulario escolar:\\n\\n«Escribe [SCOPE.sCulture('te_cm_ev_result').GetName]. Eso es lo que pide el formulario, y es lo que esperará tu maestra. Cuando yo tenía tu edad teníamos más de un nombre, y cada bando pensaba que el otro hablaba de forma extraña. Tu abuelo y yo veníamos de lados distintos de aquello, y nos casamos de todos modos, y nuestros hijos nunca se preocuparon por saber qué lado era cuál. Si alguien pregunta de dónde procedía la familia, dales los nombres de los pueblos. Te los he escrito al dorso del formulario.»"
+ },
+ "te_culture_merge.4.t": {
+  "en": "The [SCOPE.sCulture('te_cm_ev_result').GetName] Merge Is Complete",
+  "es": "Se completa la fusión de la cultura [SCOPE.sCulture('te_cm_ev_result').GetName]"
+ },
+ "te_debug_cc.1.a": {
+  "en": "Close.",
+  "es": "Cerrar."
+ },
+ "te_debug_cc.1.b": {
+  "en": "Call the guarantee as if we had defaulted.",
+  "es": "Invocar la garantía como si hubiéramos incurrido en impago."
+ },
+ "te_debug_cc.1.c": {
+  "en": "Run a Development Lending pulse.",
+  "es": "Ejecutar un pulso de Préstamos para el desarrollo."
+ },
+ "te_debug_cc.1.d": {
+  "en": "#lore Console-only. Nothing in the mod fires this event.#!\\n\\n#title Membership#!\\nLeader: #v [SCOPE.sCountry('te_debug_cc_leader').GetName]#! (itself = leader or no bloc)   Guarantee in force: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_guarantee')|0]#!   Relief in points: #v [SCOPE.GetRootScope.ScriptValue('te_cred_guarantee_relief')|2]#!\\nCalls on our record: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Next rescue's cost: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_honour_cost_display')|D]#!\\n\\n#title Receivership#!\\nUnder one: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_in_receivership')|0]#!   Receiver: #v [SCOPE.sCountry('te_debug_cc_receiver').GetName]#! (itself = none)   Treaty-less: #v [ROOT.GetVariable('te_cred_direct_receivership').GetValue|0]#!   Months under the exit threshold: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\n\\n#title Development Lending#!\\nPaid last month: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_paid_display')|D]#!   Received: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_received_display')|D]#!   Receiver modifier tier: #v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_receiver_tier')|0]#!\\n\\n#title As leader#!\\nTerms a rescue allows: #v [SCOPE.GetRootScope.ScriptValue('te_cred_terms_allowed')|0]#!   Remittance: #v [SCOPE.GetRootScope.ScriptValue('te_cred_take_share_own')|%2]#!   Months to exit: #v [SCOPE.GetRootScope.ScriptValue('te_cred_exit_months_own')|0]#!   Bloc GDP per head: #v [ROOT.GetVariable('te_cred_dl_bloc_gdppc').GetValue|2]#!",
+  "es": "#lore Solo para consola. Nada en el mod lanza este evento.#!\\n\\n#title Pertenencia#!\\nLíder: #v [SCOPE.sCountry('te_debug_cc_leader').GetName]#! (él mismo = líder o sin bloque)   Garantía en vigor: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_guarantee')|0]#!   Alivio en puntos: #v [SCOPE.GetRootScope.ScriptValue('te_cred_guarantee_relief')|2]#!\\nLlamadas en nuestro historial: #v [ROOT.GetVariable('te_mon_lolr_calls').GetValue|0]#!   Coste del próximo rescate: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_honour_cost_display')|D]#!\\n\\n#title Intervención#!\\nBajo una: #v [SCOPE.GetRootScope.ScriptValue('te_cred_debug_in_receivership')|0]#!   Administrador: #v [SCOPE.sCountry('te_debug_cc_receiver').GetName]#! (él mismo = ninguno)   Sin tratado: #v [ROOT.GetVariable('te_cred_direct_receivership').GetValue|0]#!   Meses por debajo del umbral de salida: #v [ROOT.GetVariable('te_mon_receivership_clear_months').GetValue|0]#!\\n\\n#title Préstamos para el desarrollo#!\\nPagado el mes pasado: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_paid_display')|D]#!   Recibido: @money!#v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_received_display')|D]#!   Nivel del modificador de receptor: #v [SCOPE.GetRootScope.ScriptValue('te_cred_dl_receiver_tier')|0]#!\\n\\n#title Como líder#!\\nCondiciones que permite un rescate: #v [SCOPE.GetRootScope.ScriptValue('te_cred_terms_allowed')|0]#!   Pago: #v [SCOPE.GetRootScope.ScriptValue('te_cred_take_share_own')|%2]#!   Meses hasta la salida: #v [SCOPE.GetRootScope.ScriptValue('te_cred_exit_months_own')|0]#!   PIB por habitante del bloque: #v [ROOT.GetVariable('te_cred_dl_bloc_gdppc').GetValue|2]#!"
+ },
+ "te_debug_cc.1.f": {
+  "en": "Option b sends the default call to our leader as if we had defaulted; option c runs a Development Lending pulse now.",
+  "es": "La opción b envía la llamada de impago a nuestro líder como si hubiéramos incurrido en impago; la opción c ejecuta ahora un pulso de Préstamos para el desarrollo."
+ },
+ "te_debug_cc.1.t": {
+  "en": "Creditors' Consortium: Test Read-Out",
+  "es": "Consorcio de acreedores: lectura de prueba"
  },
  "te_debug_ch.1.a": {
   "en": "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running",
@@ -25255,6 +25483,14 @@
   "en": "Convene a conference of ambassadors.",
   "es": "Convocar una conferencia de embajadores."
  },
+ "te_pb_summit.1.p": {
+  "en": "Hold a conference on the members' debts.",
+  "es": "Celebrar una conferencia sobre las deudas de los miembros."
+ },
+ "te_pb_summit.1.q": {
+  "en": "Convene a scientific congress.",
+  "es": "Convocar un congreso científico."
+ },
  "te_pb_summit.1.t": {
   "en": "A Summit of the Bloc",
   "es": "Una cumbre del bloque"
@@ -25283,9 +25519,17 @@
   "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and had the members bring their tariffs and customs procedures into line. For ten years our customs houses follow the bloc's common code, as every member's do.",
   "es": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convocó una cumbre de nuestro [concept_power_bloc|l] e hizo que los miembros armonizaran sus aranceles y sus trámites aduaneros. Durante diez años nuestras aduanas siguen el código común del bloque, igual que las de todos los miembros."
  },
+ "te_pb_summit.2.d_debt_conference": {
+  "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a conference on its members' debts. The members agreed to coordinate their borrowing, and for ten years every member, ours included, borrows a little more cheaply for it. The delegations left on better terms with one another than they arrived.",
+  "es": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convocó una cumbre de nuestro [concept_power_bloc|l] como conferencia sobre las deudas de sus miembros. Los miembros acordaron coordinar sus préstamos, y durante diez años todos los miembros, el nuestro incluido, se endeudan algo más barato gracias a ello. Las delegaciones se marcharon en mejores términos entre sí que cuando llegaron."
+ },
  "te_pb_summit.2.d_drills": {
   "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] and put joint exercises first on its agenda. For ten years every member's army, ours included, will train beside the others under a common program. The delegations left on better terms with one another than they arrived.",
   "es": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convocó una cumbre de nuestro [concept_power_bloc|l] y puso los ejercicios conjuntos en primer lugar de su orden del día. Durante diez años el ejército de cada miembro, el nuestro incluido, entrenará junto a los demás con un programa común. Las delegaciones se marcharon en mejores términos entre sí que cuando llegaron."
+ },
+ "te_pb_summit.2.d_science": {
+  "en": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convened a summit of our [concept_power_bloc] as a scientific congress. The congress set a common program of research, and for ten years every member's laboratories, ours included, work to it.",
+  "es": "[SCOPE.sCountry('te_pb_summit_leader').GetName] convocó una cumbre de nuestro [concept_power_bloc|l] como congreso científico. El congreso fijó un programa común de investigación, y durante diez años los laboratorios de todos los miembros, los nuestros incluidos, trabajan con arreglo a él."
  },
  "te_pb_summit.2.f": {
   "en": "From our delegation at the summit, to the government. The host set the agenda before we arrived, and the draft communiqué was on the table at the first session. We secured two changes of wording in the third paragraph and none of substance. Every delegation has signed. The text follows by the next courier, with our notes on what it commits us to and from what date.",
@@ -25488,8 +25732,8 @@
   "es": "[SCOPE.sCountry('te_union_leader').GetName] ha dejado de insinuar. Sus enviados llegan con gráficos: el comercio del bloque, el coste de cambiar dinero en cada frontera, el tipo al que se venden nuestros bonos junto a los suyos. Mientras no se resuelva la cuestión, añaden, se nos niega la cooperación monetaria del bloque. Una moneda única supondría un único tipo de interés, fijado en su capital para su economía."
  },
  "te_union.1.f": {
-  "en": "To the government, from the officials who have studied the proposal of [SCOPE.sCountry('te_union_leader').GetName]. If we adopt the common currency, our traders will no longer pay to change money inside the bloc, and our exports and imports there will gain an advantage. Our policy rate will become theirs, and our exchange rate will move to theirs at once. We will no longer be able to cover a deficit by having money created for the treasury. Our inflation, our banking cycle and our debts would remain ours to manage. We have set out the figures for each in the papers attached, and we ask the government for its decision.",
-  "es": "Al gobierno, de los funcionarios que han estudiado la propuesta de [SCOPE.sCountry('te_union_leader').GetName]. Si adoptamos la moneda común, nuestros comerciantes dejarán de pagar por cambiar dinero dentro del bloque, y nuestras exportaciones e importaciones allí ganarán ventaja. Nuestro tipo de interés oficial pasará a ser el suyo, y nuestro tipo de cambio se moverá al suyo de inmediato. Ya no podremos cubrir un déficit haciendo crear dinero para el tesoro. Nuestra inflación, nuestro ciclo bancario y nuestras deudas seguirían siendo cosa nuestra. Hemos expuesto las cifras de cada uno en los documentos adjuntos, y pedimos la decisión del gobierno."
+  "en": "To the government, from the officials who have studied the proposal of [SCOPE.sCountry('te_union_leader').GetName]. If we adopt the common currency, our traders will no longer pay to change money inside the bloc, and our exports and imports there will gain an advantage. Our policy rate will become theirs, and our exchange rate will move to theirs at once. We will no longer be able to cover a deficit by having money created for the treasury. Our banking cycle and our debts would remain ours to manage. So would our inflation, though with goods bought and sold in one money our prices would be drawn toward theirs. We have set out the figures for each in the papers attached, and we ask the government for its decision.",
+  "es": "Al gobierno, de los funcionarios que han estudiado la propuesta de [SCOPE.sCountry('te_union_leader').GetName]. Si adoptamos la moneda común, nuestros comerciantes dejarán de pagar por cambiar dinero dentro del bloque, y nuestras exportaciones e importaciones allí ganarán ventaja. Nuestro tipo de interés oficial pasará a ser el suyo, y nuestro tipo de cambio se moverá al suyo de inmediato. Ya no podremos cubrir un déficit haciendo crear dinero para el tesoro. Nuestro ciclo bancario y nuestras deudas seguirían siendo cosa nuestra. También nuestra inflación, aunque con los bienes comprados y vendidos en una misma moneda nuestros precios se verían atraídos hacia los suyos. Hemos expuesto las cifras de cada uno en los documentos adjuntos, y pedimos la decisión del gobierno."
  },
  "te_union.1.t": {
   "en": "The Question of the Common Currency",

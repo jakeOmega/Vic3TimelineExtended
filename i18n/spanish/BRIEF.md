@@ -106,6 +106,14 @@ The chunk header lists up to three glossaries. Follow them exactly:
 
 For a term in none of the lists, choose Spanish that fits the official game's register, and list it in your report.
 
+Earlier passes settled these words too, which are too short or too common for the glossaries to catch:
+
+| English | Spanish |
+|---|---|
+| receivership (a creditor running a debtor's finances) / its receiver | intervención («bajo nuestra intervención») / administrador; the treaty article Debt Receivership is *Intervención de la deuda* |
+| a rescue of a defaulted member / its terms | rescate / condiciones |
+| a common currency's adopter / issuer | adoptante, país que la adopta / emisor |
+
 Names and titles take a capital on the first word only, as the official Spanish writes them: «Libre comercio», «Bloque de poder», «Industrias de armamento», «Anotación en el diario». Don't copy English Title Case. Proper names of real organisations keep their capitals («Naciones Unidas», «Banco Mundial»).
 
 Proper names stay as they are: companies, people, places, historical buildings, products, real political parties ("Bharatiya Janata Party", "En Marche!"). A generic descriptive name is not a proper name and is translated, as the official Spanish does ("Communist Party" → «Partido Comunista», "Technocratic Party" → «Partido Tecnocrático»). Use an established Spanish name where one exists («torre Eiffel», «Naciones Unidas»), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → «Fábricas textiles Getzner Bludenz»).
