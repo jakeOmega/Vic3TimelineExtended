@@ -711,6 +711,8 @@ class VersionFourTest(unittest.TestCase):
         named = set(re.findall(r"has_game_rule = (free_market_construction_[a-z_]+)", triggers))
         named.discard("free_market_construction_disabled")
         self.assertEqual(named, set(gen_ai_probe.RETOOLING_WAIVED))
+        # The report's own copy, for a key from before version 4.
+        self.assertEqual(ai_probe_report.RETOOLING_WAIVED_BEFORE_V4, gen_ai_probe.RETOOLING_WAIVED)
 
     def test_the_street_lighting_fields_cover_the_group(self):
         groups = text(ROOT / "common/production_method_groups/extra_pm_groups.txt")
@@ -811,6 +813,10 @@ class VersionFourTest(unittest.TestCase):
         self.assertTrue(any("bg_company_headquarter" in note for note in notes), notes)
         self.assertEqual(ai_probe_report.dead_field_notes(ai_probe_report.Parsed(), self.key,
                                                           ["bt_company_headquarter"], 4), [])
+        # A key from before version 4 lists no waiving settings: the note still names them.
+        old_key = {k: v for k, v in self.key.items() if k != "retooling_waived"}
+        note = ai_probe_report.dead_field_notes(ai_probe_report.Parsed(), old_key, ["rt_all"], 1)[0]
+        self.assertIn("Under free_market_construction_no_ai_retooling", note)
 
 
 def block_text(name: str, body: str) -> str:

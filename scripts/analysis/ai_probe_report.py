@@ -317,12 +317,20 @@ def rule_settings(parsed: Parsed, key: dict) -> dict[str, list[str]]:
 # Every run before version 4 was made under the owner's last lobby rules, which on 2026-11-16 held
 # free_market_construction_no_retooling (the harness's run4_start.json, `rules`).
 RUN_RULE_BEFORE_V4 = "free_market_construction_no_retooling"
+# The settings that remove pm_retooling, for a key from before version 4, which does not list them (the generator's
+# RETOOLING_WAIVED; test_ai_probe.py holds the two equal).
+RETOOLING_WAIVED_BEFORE_V4 = ["free_market_construction_no_ai_retooling", "free_market_construction_no_retooling",
+                              "free_market_construction_no_maintenance"]
+
+
+def retooling_waived(key: dict) -> list[str]:
+    return key.get("retooling_waived") or RETOOLING_WAIVED_BEFORE_V4
 
 
 def dead_field_notes(parsed: Parsed, key: dict, dead: list[str], version: int) -> list[str]:
     """What a field at 0 in every snapshot means where that is known: a rule's doing or a known misread."""
     notes = []
-    waived = key.get("retooling_waived", [])
+    waived = retooling_waived(key)
     if any(f.startswith("rt_") for f in dead):
         settings = rule_settings(parsed, key).get("r_fmc")
         if settings:
@@ -470,7 +478,7 @@ def check_version_4(parsed: Parsed, key: dict, records: list[dict]) -> list[str]
         out.append("  W: game rules " + "; ".join(f"{key['rules'][name]['rule']} {' then '.join(seen)}"
                                                  for name, seen in rules.items()))
         fmc = rules.get("r_fmc", [])
-        if fmc and all(s in key.get("retooling_waived", []) for s in fmc):
+        if fmc and all(s in retooling_waived(key) for s in fmc):
             out.append("  rt_*: this run's setting removes pm_retooling as the engine applies it, so rt_* reads 0 by "
                        "design")
         if any("none" in s for seen in rules.values() for s in seen):
@@ -486,7 +494,7 @@ def check_version_4(parsed: Parsed, key: dict, records: list[dict]) -> list[str]
         return sum(1 for r in rows if test(r))
 
     # Retooling under a setting that leaves it: 0 everywhere while methods change is a read that fails.
-    if rules.get("r_fmc") and not all(s in key.get("retooling_waived", []) for s in rules["r_fmc"]):
+    if rules.get("r_fmc") and not all(s in retooling_waived(key) for s in rules["r_fmc"]):
         changing = [r for r in rows if num(r, "n_pm") > 0]
         if changing and all(not num(r, "rt_all") for r in changing):
             out.append(f"  rt_*: 0 in all {len(changing)} snapshots with production-method changes under a setting "
