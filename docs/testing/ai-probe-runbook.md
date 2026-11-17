@@ -27,7 +27,8 @@ typical country last; its headline compares the 20 largest with the rest.
    of the earlier build then needs its own key: `--key` takes the `ai_probe_key.json` of the build that ran.
 2. Deploy the build (`docs/guides/git_workflow.md` § Play-testing unmerged work). The probe's lines go to
    `debug.log`, which rotates at 512 KB through six generations, so a long run must copy the log as it is written:
-   the QA harness's unattended run does (`fixture_debug.log` in its run folder).
+   the QA harness's unattended run does (`fixture_debug.log` in its run folder), and so does a session (`debug.log`
+   there; "A run from a save", below).
 
 ## An unattended run from 1836 (the usual one)
 
@@ -77,8 +78,12 @@ For a version-2 log `check` also reads each version-2 addition, none of which ha
 | cs_buy, cs_sell above 0 | in most snapshots | `market_goods_buy_orders` or `market_goods_sell_orders` does not read as a value (the price does not depend on them) |
 | Construction Sites under half staffed | some, in a market game | the sites' own staffing (`site_low`, `site_low80`); their levels are `bg_te_construction_market_bg` in G3 |
 
-For a version-3 log `check` also reads version 3's additions. None had printed in a game when they were written
-(2026-11-16), so `check` reports each until one does; none of them fails the verdict.
+For a version-3 log `check` also reads version 3's additions; none of them fails the verdict. `check` still calls
+them unverified, as none had printed in a game when it was written, but run 4 (2026-11-16, below) read each as the
+Good column says: the world line counted 49 decentralized nations holding 58 states in 1925, and `dn_states` equalled
+`states - c_states` in all 24 yearly lines; no country-year held two reports (4,122 reports in the country's own
+month, 140 in the month before and 11 in the month after, none elsewhere); and `bank_phase` was the band of
+`bank_cycle` in all 2,171 snapshots with a cycle running.
 
 | `check` line | Good | If not |
 |---|---|---|
@@ -95,7 +100,7 @@ Two lines read every log, whatever its version:
   are what the engine held that week, not a read the probe got wrong (below), and they are not the year. In runs 1
   and 2 there were 235 and 149 unpaid, 18 and 13 idle; among the 20 largest of their year 49 and 39 together.
 - **spacing**: the months between a country's reports and the country-years holding two. Versions 1 and 2 hold
-  some in every log (280 in run 1); version 3 should hold none.
+  some in every log (280 in run 1); version 3 holds none (run 4, 23 years).
 
 It also prints, for unpaused snapshots, how often `wasted` reads yes against how often `con_unused` is above 0: the
 flag is not a measure of unused points (below).
@@ -104,11 +109,32 @@ flag is not a measure of unused points (below).
 
 ## A run from a save (the late game)
 
-An unattended run from 1836 reaches about 1925 overnight. For the late game, load a late save in debug mode, type
-`event te_debug_ai_probe.1` and then `observe`, and leave it running; a human-played game does not arm the probe by
-itself. Nothing copies the log in this case, so run a follower beside it (the harness's `game_qa.logtail` shows
-how), or keep the run under the six generations the game keeps (about 3 MB: a year or two of the world's
-snapshots).
+An unattended run from 1836 reaches about 1925 overnight, and the harness refuses one on a save by design
+(`handsoff_on_a_save`, `game_qa/__main__.py`: the end date is judged for a new game from 1836). The late game is
+played on in a session, from the dated fixture an unattended run left, with the owner's grant of the launch and of
+the hours (`.claude/skills/game-qa/SKILL.md`):
+
+```bash
+python3 -m game_qa start --as <TAG> --save te_qa_fixture_<key>_d<date> --permission "<the owner's words>"
+python3 -m game_qa enter-game
+python3 -m game_qa console "event te_debug_ai_probe.1"
+python3 -m game_qa advance 300        # again and again, in a loop that always ends with stop
+python3 -m game_qa stop
+```
+
+- **The played country sits idle** while the AI plays the rest: pick a small independent one at peace (run 4 took
+  Bhutan, one state, at peace from 1905 to 1924 in run 1). Its rows have `ai` 0, and the report leaves them out.
+- **The probe runs on.** The save carries the probe's armed flag and its month count, so the count continues (run
+  4's from 1068); the event prints the ARM line and the canaries of the build's version, which `check` reads.
+- **`advance` plays at most about 400 s a call**: `MAX_ROUNDS` (20) rounds of at most `MAX_WAIT_S` (20 s) each,
+  `game_qa/session.py`, after which it answers `stalled`. So N must fit: 300 days did in 1925-1948. The game plays at
+  the speed it loads with; there, a call of 300 days took 337 to 456 s, pauses and reads included, 0.66 to 0.89
+  game days a second, about seven and a half game years an hour.
+- **The run folder's `debug.log` is complete.** The session appends the game's new lines to it every round and
+  follows the game's log rotation; a line `<<game_qa: log lines lost in rotation>>` would mark a loss. `check` and
+  `report` read it as they read `fixture_debug.log`.
+- **A save made by an older build logs a burst of `default_end` events at the load** (run 4: 187 at month 1067,
+  before its first month, Great Britain among them with no debt). Count events from the first month after the load.
 
 ## Reading a run
 
@@ -244,11 +270,13 @@ buying construction".
   construction differed by a third in the 1890s for those reasons, not for anything the builds changed
   (`ai-economy-playtest.md` § The AI's construction purchase fits its budget, "Read 2026-11-16").
 - **Compare the same country**, and for a sum, the same tag-years with the same economic-system law, no banking
-  crash in either game and GDP within 1.5 times, before the 20 largest's totals, whose members change between games.
+  crash in either game and GDP within 1.5 times (`ai_probe_compare.py paired`, above), before the 20 largest's
+  totals, whose members change between games.
 - **Two or three games per build** where a decision rests on a difference the history alone could make.
-- **Count each country once a year.** A country's reporting month drifts, so one to six countries a year report
-  twice in one calendar year (China and Spain in 1900 in both games of 2026-11-16): a yearly sum keeps the later
-  report.
+- **Count each country once a year.** In versions 1 and 2 a country's reporting month drifts, so one to six
+  countries a year report twice in one calendar year (China and Spain in 1900 in both games of 2026-11-16);
+  `report` and `ai_probe_compare.py` fold the two into one (§ How the rows are spaced), and version 3 reports once a
+  calendar year.
 - **Read each run with its own build's key** (`--key` with the `ai_probe_key.json` of the commit that ran), even
   where one key would do.
 
@@ -274,21 +302,25 @@ buying construction".
   under 80% staffed unless it hired the week before (`00_ai.txt`, `PRODUCTION_BUILDING_LOW_EMPLOYMENT_THRESHOLD`), so
   version 2 logs the sector's staffing against both thresholds (table 1f).
 
-## The three runs of 2026-11-16
+## The runs of 2026-11-16
 
-Unattended AI-only games from 1836 under the owner's last lobby rules (the replies of runs 1 and 3 list the same
-settings, Small-Economy Construction off among them; run 2's, a refusal, lists none). Self-checks are counted by
-check (`row_standing_on_creation` logged OK twice in each).
+Runs 1 to 3 were unattended AI-only games from 1836 under the owner's last lobby rules (the replies of runs 1 and 3
+list the same settings, Small-Economy Construction off among them; run 2's, a refusal, lists none). Run 4 was a
+session: run 1's world played on from its 1925 save ("A run from a save", above). Self-checks are counted by check
+(`row_standing_on_creation` logged OK twice in each of runs 1 to 3); run 4's are the session's own, though its
+`summary.md` also lists the fixture's, which are run 1's.
 
 | Run | Build | Reached | Wall time | Self-checks |
 |---|---|---|---|---|
 | 1 | `dab9335f1`: the probe, before the day's AI changes | 1925.1.1 | 6 h 46 min | 68 OK, 5 BROKEN |
 | 2 | `main` at `81b947368`: #1849, #1850, #1851, #1854, #1855, #1856, #1857 | October 1913, where the game crashed (#1871, fixed by #1872) | 5 h 05 min | 71 OK, 4 BROKEN |
 | 3 | `bdc33ca56`: `main` at `bddde7c65`, with #1866, #1867 and #1868 merged in | 1850.1.1 | 52 min | 54 OK, 1 BROKEN |
+| 4 | `main` at `2d26c6b5a`: probe version 3 (#1876), on run 1's 1925 save | 1925.1.6 to 1948.3.10 | 3 h 02 min of play, a session | 7 OK, 1 BROKEN |
 
 - **The readings** are in the lists that asked for them: `ai-economy-playtest.md` § AI law cadence (runs 1 and 2
   under "First verdict", run 3 under "Second read"), § The AI's construction purchase fits its budget ("Read
-  2026-11-16", runs 1 and 2) and § The Construction Sector's workforce ("First reading", run 3).
+  2026-11-16", runs 1 and 2) and § The Construction Sector's workforce ("First reading", run 3); run 4's cadence
+  self-check is under § AI law cadence's "Second read".
 - **Run 1's BROKEN checks**: `delayed_state_event` (known since 2026-11-08), `ai_law_cadence`, and three that #1866
   then settled (`cause_tags_read`, `workforce_pull_births`, `cm_conversion_merges_pops`: their rows in
   `demographics-playtest.md` and `culture-merges-playtest.md`). All three read OK in run 2 and the first two again
@@ -296,9 +328,24 @@ check (`row_standing_on_creation` logged OK twice in each).
 - **Run 2's**: `delayed_state_event`; `ai_law_cadence` (`cons=13/106=0.12 rest=19/90=0.21`, the build before
   #1867); `construction_admin_while_paused` (`country=BIC weeks=14 bought=420.0 wasted_weeks=0 spent=842553
   repaid=842553`), on which the owner chose to take the purchase through the pause out ("Let's do this.",
-  2026-11-16; done by #1874, `ai-economy-playtest.md`'s "Verdict"); and `tax_light_div_levy` (`levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1,
-  1881`), on which PR #1873 is open.
+  2026-11-16; done by #1874, `ai-economy-playtest.md`'s "Verdict"); and `tax_light_div_levy` (`levy=0/70 matched,
+  70 at 0; control=5/5 matched; date=July 1, 1881`), on which PR #1873 is open.
 - **Run 3's**: `delayed_state_event` alone; `harvest_tags_read`, #1866's new check, read OK.
+- **Run 4** played Bhutan from run 1's dated fixture of 1925.1.1, so its world's first 89 years were `dab9335f1`'s:
+  after a 30-day trial, 28 calls of `advance 300` from 17:13 to 20:15, each 337 to 456 s, then `stop`, which
+  restored everything and held nothing. No log lines were lost. Its BROKEN check is `tax_light_div_levy` again
+  (`levy=0/92 matched, 92 at 0; control=31/32 matched`, April 1, 1925). `ai_law_cadence` read OK, `cons=55/75=0.73
+  rest=77/113=0.68` on January 1, 1928: its first read on a build with #1867, 36 months after the load, as it was
+  built to read in a save that had logged the earlier verdict. `harvest_tags_read` read OK again (Bhutan, November
+  1926), and its error.log holds no line from `banking_cycle_effects.txt` in 23 years.
+- **What run 4 showed** (one game, whose first 89 years were the build before's; the detail and its evidence are
+  issue #1877). `main`'s repairs showed on the old world: the 20 largest economies of 1924, followed across the
+  change of build, built or expanded 764 to 873 levels a year in 1925-1932 against 536 to 701 in 1918-1924;
+  construction was paused in 60% of AI countries' readings in 1920-1924, 33% in 1925-1929 and 11 to 16% from 1930;
+  and default episodes fell from 6.8 a year in 1920-1924 to 1.6 to 3.0, mostly among small countries. The late-game
+  traps it names: vanilla's reserve gate on government construction, no electrification, research capped by
+  literacy, the mod's law groups taking about half the big economies' law starts, irregular infantry, and
+  bureaucracy deficits.
 - **Version 2's first long read** (run 3's `check`): every version-2 addition read as the table above expects but the
   world line, whose `dn` and `dn_states` were 0 in all 14 lines; the purchase recomputed from a snapshot matched
   `cm_target` in 3,943 of 3,946.
