@@ -727,27 +727,36 @@ def check_construction_sector(key: dict, records: list[dict]) -> tuple[list[str]
     return out, ok
 
 
+# te_construction_market_ai_values.txt's TE_CONSTRUCTION_MARKET_AI_RATE_GAIN (test_ai_probe.py runs both rules).
+RATE_GAIN = 2.0
+
+
 def purchase_target(r: dict):
     """te_construction_market_ai_purchase_target (common/script_values/te_construction_market_ai_values.txt)
     restated over a snapshot's fields, None where the snapshot lacks a term (version 1). Script `min = X` raises
     the value to X, `max = X` lowers it to X. A paused country buys nothing, whatever `cm_admin` reads: the purchase
     through the pause for a queued administration was removed on 2026-11-16, so a log from a build that still had it
-    differs on the rows of a paused country with `cm_admin` 1."""
+    differs on the rows of a paused country with `cm_admin` 1. From version 5 the rate's terms (THE RATE, #1877) read
+    the snapshot's `cm_reserve` and `cm_credit`; a log without them is from a build before the rate, whose rule they
+    leave unchanged at nothing."""
     if "cm_level_max" not in r or num(r, "cm_price") <= 0:
         return None
     price = num(r, "cm_price")
     fixed, net, gold, debt = num(r, "fixed_income"), num(r, "net_fixed"), num(r, "gold_scaled"), num(r, "debt_scaled")
     queue, level_max = num(r, "queue_gov"), num(r, "cm_level_max")
+    required, allowance = num(r, "cm_reserve"), num(r, "cm_credit")
     bureaucracy_buy = fixed * 0.2 / price
     if num(r, "paused") != 1 and queue > 0:
         factor = 1 + gold - debt
+        factor += RATE_GAIN * max(0.0, allowance - debt)
+        factor -= min(gold, required) + RATE_GAIN * max(0.0, required - gold)
         if num(r, "war") == 1 and gold < 0.5:
             factor -= 0.5 - gold
         if num(r, "bubble") >= 50 and gold < 0.3:
             factor -= 0.3 - gold
         value = max(net, 0) / price * max(factor, 0.1)
         whole = min(fixed * 0.05 / price, 10)
-        floor = whole * min(max(gold / 0.1, 0), 1)
+        floor = whole * min(max((gold - required) / 0.1, 0), 1)
         floor = max(floor, min(max(net, 0) / price, whole * 0.1))
         if num(r, "bur") < 0:
             floor += bureaucracy_buy

@@ -2640,11 +2640,13 @@ Supporting facts (all verified from files unless tagged):
   The last two buckets have no script hook.
 - 88 grant sites touch the two interest modifiers today (46 mod, 42 vanilla). The mod's
   banking sources are **all flat `_mult`** and mostly applied in **JE scope**.
-- No script trigger exposes the effective rate, principal, or credit limit. Readable:
+- No script trigger exposes the effective rate. Readable:
   `scaled_debt`, `in_default`, `taking_loans`, `weeks_until_bankruptcy`, `gold_reserves`,
   `gold_reserves_limit`, `scaled_gold_reserves`, `net_fixed_income`, `total_expenses`,
-  `income`, `gdp`. GUI-only: `Country.GetYearlyInterestRate`, `GetMaxCredit`,
-  `GetCreditRatio`.
+  `income`, `gdp`, and (corrected 2026-11-16) `principal` and `credit`, the debt and the
+  credit limit, as script values: the AI probe logs both, and `principal` / `credit` is
+  `scaled_debt` (`scripting_best_practices.md` § `credit` Reads the Debt Ceiling). GUI-only:
+  `Country.GetYearlyInterestRate`, `GetMaxCredit`, `GetCreditRatio`.
 - The **credit limit** is defines-only (`COUNTRY_MIN_CREDIT_BASE = 100000`,
   `COUNTRY_MIN_CREDIT_SCALED = 0.5`, plus building cash reserves). It can be retuned
   *globally* in `common/defines/extra_defines.txt`, never per country — a blunt but real

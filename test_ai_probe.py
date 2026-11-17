@@ -482,20 +482,24 @@ class ReportPartsTest(unittest.TestCase):
         # cm_admin (short of bureaucracy with an administration queued) is no term of the purchase since the
         # purchase through the engine's pause was removed (2026-11-16): the restatement gives the script's figure
         # whichever way the field reads.
-        for (fixed, price), share, (reserves, debt), bureaucracy, paused, war, bubble, (queued, weekly), admin in \
+        # From version 5 the rate's terms come from the snapshot's cm_reserve and cm_credit, which the probe reads
+        # from the script's own values (te_construction_market_ai_required_reserves, _credit_allowance).
+        for (fixed, price), share, (reserves, debt), bureaucracy, paused, war, bubble, (queued, weekly), admin, rate in \
                 itertools.product(((857.0, 1249.0), (75817.0, 1256.0)), (-0.25, 0.03, 0.33),
-                                  ((0.0, 0.0), (0.04, 0.0), (0.6, 0.0), (0.0, 0.3), (0.0, 0.45)), (50.0, -5.0),
-                                  (False, True), (False, True), (None, 60.0), ((0, 20.0), (1, 10.0), (3, 140.0)),
-                                  (0, 1)):
+                                  ((0.0, 0.0), (0.04, 0.0), (0.6, 0.0), (0.0, 0.03), (0.0, 0.3), (0.0, 0.45)),
+                                  (50.0, -5.0), (False, True), (False, True), (None, 60.0),
+                                  ((0, 20.0), (1, 10.0), (3, 140.0)), (0, 1), (None, 3.5, 6.0, 11.5)):
             c = purchase.Country(fixed, share * fixed, price, reserves, debt, bureaucracy, queued, weekly,
-                                 paused=paused, at_war=war, bubble=bubble)
+                                 paused=paused, at_war=war, bubble=bubble, rate=rate)
             record = {"cm_price": price, "fixed_income": fixed, "net_fixed": share * fixed, "gold_scaled": reserves,
                       "debt_scaled": debt, "queue_gov": queued, "cm_level_max": weekly, "paused": int(paused),
                       "war": int(war), "bubble": bubble or 0, "bur": bureaucracy, "cm_admin": admin}
+            if rate is not None:
+                record["cm_reserve"], record["cm_credit"] = purchase.values(c, *purchase.CURVE)
             count += 1
             with self.subTest(record=record):
                 self.assertAlmostEqual(ai_probe_report.purchase_target(record), c.script(), delta=purchase.STEP)
-        self.assertGreater(count, 1000)
+        self.assertGreater(count, 4000)
         self.assertIsNone(ai_probe_report.purchase_target({"cm_price": 1000}))     # version 1: a term missing
 
 
@@ -612,13 +616,47 @@ class BankingCycleTest(unittest.TestCase):
 
     def test_the_fields_join_existing_lines(self):
         key = json.loads(KEY.read_text(encoding="utf-8"))
-        self.assertEqual(key["lines"]["C2"][-4:], ["bank_phase", "bank_cycle", "bank_momentum", "bank_crashed"])
+        c2 = key["lines"]["C2"]
+        start = c2.index("bank_phase")
+        self.assertEqual(c2[start:start + 4], ["bank_phase", "bank_cycle", "bank_momentum", "bank_crashed"])
         self.assertEqual(key["lines"]["N2"][-1], "n_bank_down")
         self.assertEqual(key["lines_added"]["3"], [])
         crashed = re.search(r"(?m)^te_aip_bank_crashed = \{.*$", text(VALUES)).group(0)
         self.assertIn("has_variable = banking_crashed_last_year", crashed)
         marker = text(ROOT / "common/scripted_effects/banking_cycle_effects.txt")
         self.assertIn("set_variable = { name = banking_crashed_last_year value = 1 days = 365 }", marker)
+
+    def test_version_5_adds_the_rate_and_the_pass_to_the_end_of_c2(self):
+        key = json.loads(KEY.read_text(encoding="utf-8"))
+        self.assertEqual(key["lines"]["C2"][-7:], ["rate", "rate_base", "cm_reserve", "cm_credit", "cm_pass",
+                                                   "inf_short_states", "inf_short"])
+        # C2 is full, so the states the railway entry would act on end B2, the line with room nearest in kind.
+        self.assertEqual(len(key["lines"]["C2"]), gen_ai_probe.FIELDS_PER_LINE)
+        self.assertEqual(key["lines"]["B2"][-1], "rail_sites")
+        self.assertNotIn("C3", key["lines"])
+        self.assertEqual(key["lines_added"]["5"], [])
+        values = text(VALUES)
+        for field, source in (("rate", "var:te_rate_paid_pts"), ("rate_base", "var:te_mon_era_base_now"),
+                              ("cm_reserve", "te_construction_market_ai_required_reserves"),
+                              ("cm_credit", "te_construction_market_ai_credit_allowance"),
+                              ("cm_pass", "var:te_ai_build_pass_count")):
+            line = re.search(rf"(?m)^te_aip_{field} = \{{.*$", values).group(0)
+            self.assertIn(source, line, field)
+        # The railway entry's reading, the pass's own shortfall (te_ai_build_pass_values.txt), summed over the states
+        # short of infrastructure.
+        for field, added in (("inf_short_states", "add = 1"),
+                             ("inf_short", "add = te_ai_build_pass_infrastructure_shortfall")):
+            body = re.search(rf"(?ms)^te_aip_{field} = \{{\n(.*?)^\}}", values).group(1)
+            self.assertIn("limit = { te_ai_build_pass_infrastructure_shortfall > 0 }", body, field)
+            self.assertIn(added, body, field)
+        # The states the entry acts on: its own site test (incorporated, short by more than its margin).
+        body = re.search(r"(?ms)^te_aip_rail_sites = \{\n(.*?)^\}", values).group(1)
+        self.assertIn("limit = { te_ai_build_pass_railway_site = yes }", body)
+        self.assertIn("add = 1", body)
+        # The report's restatement gains the rate at the script's own gain.
+        gain = re.search(r"(?m)^TE_CONSTRUCTION_MARKET_AI_RATE_GAIN = ([0-9.]+)",
+                         text(ROOT / "common/script_values/te_construction_market_ai_values.txt")).group(1)
+        self.assertEqual(ai_probe_report.RATE_GAIN, float(gain))
 
     def test_check_holds_the_phase_to_the_value(self):
         key = json.loads(KEY.read_text(encoding="utf-8"))

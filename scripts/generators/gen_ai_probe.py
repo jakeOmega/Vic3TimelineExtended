@@ -65,6 +65,15 @@ modifiers add and multiply, the workforce's slack, and a census of the army's ba
 since the last report, of another type than at the last report); X7 and X8, the institutions' bureaucracy cost and
 the strata's standard of living (DATA_FUNCTIONS); and the W line's three game rules (RULES), so a log says which
 setting its fields ran under. `bt_company_headquarter` reads the headquarters' group from version 4 (BUILDING_TYPE_READS).
+Version 5 (#1877) adds to C2 the interest rate the construction purchase reads (`rate`, the rate paid, and
+`rate_base`, the world reference rate it is read against), what the rate asks of the purchase (`cm_reserve`, the
+reserve it asks the country to keep, and `cm_credit`, the debt it allows, each a share of its limit), `cm_pass`,
+the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt),
+and what its railway entry reads: `inf_short_states`, the states whose infrastructure is short of its usage, and
+`inf_short`, their shortfall in all, which count unincorporated states and any shortfall; and, at the end of B2,
+`rail_sites`, the states the entry would act on (te_ai_build_pass_railway_site: incorporated, short by more than
+its margin). C2 is full, and a line of its own would take a snapshot past the five lines version 4 allowed it (the
+log rotates every 512 KB), so it joins the line with room nearest in kind: the country's buildings by type.
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
@@ -89,7 +98,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 4
+VERSION = 5
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
@@ -107,6 +116,7 @@ LINES_ADDED = {
     2: ["O2", "J1", "R1", "H1"],
     3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
     4: ["H2", "P1", "P2"],
+    5: [],          # version 5 added fields to C2 (the rate the purchase reads, and the AI construction pass) and B2
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -778,6 +788,21 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         variable("bank_cycle", "finance_cycle_value", 1),
         variable("bank_momentum", "finance_cycle_momentum", 2),
         flag("bank_crashed", "has_variable = banking_crashed_last_year"),
+        # Version 5 (#1877): the rate the purchase reads, what it asks of the purchase, and the AI construction pass
+        # (te_construction_market_ai_values.txt, THE RATE and THE PASS), so purchase_target can be recomputed with the
+        # rate's terms and the pass's levels counted.
+        variable("rate", "te_rate_paid_pts", 2),
+        variable("rate_base", "te_mon_era_base_now", 1),
+        Field("cm_reserve", "value = te_construction_market_ai_required_reserves", 3),
+        Field("cm_credit", "value = te_construction_market_ai_credit_allowance", 3),
+        variable("cm_pass", "te_ai_build_pass_count"),
+        # The pass's railway entry reads each state's infrastructure against its usage
+        # (te_ai_build_pass_infrastructure_shortfall): the states short of it, and by how much in all.
+        Field("inf_short_states", "\tvalue = 0\n\tevery_scope_state = {\n"
+                                  "\t\tlimit = { te_ai_build_pass_infrastructure_shortfall > 0 }\n\t\tadd = 1\n\t}"),
+        Field("inf_short", "\tvalue = 0\n\tevery_scope_state = {\n"
+                           "\t\tlimit = { te_ai_build_pass_infrastructure_shortfall > 0 }\n"
+                           "\t\tadd = te_ai_build_pass_infrastructure_shortfall\n\t}"),
     ]
     military = [
         read("army", "army_size"),
@@ -824,6 +849,11 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         read("bt_" + short(name, "building_"), f'"country_has_building_group_levels({BUILDING_TYPE_READS[name]})"'
              if name in BUILDING_TYPE_READS else f'"country_has_building_type_levels(bt:{name})"')
         for name in cat["building_types"]
+    ] + [
+        # Version 5 (#1877): the states the AI construction pass's railway entry would act on, its own site test
+        # (incorporated, short of infrastructure by more than the margin; the 2026-11-17 review). C2 is full.
+        Field("rail_sites", "\tvalue = 0\n\tevery_scope_state = {\n"
+                            "\t\tlimit = { te_ai_build_pass_railway_site = yes }\n\t\tadd = 1\n\t}"),
     ]
     budget = (
         [read("ux_all", "modifier:country_expenses_add")]

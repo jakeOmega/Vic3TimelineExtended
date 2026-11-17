@@ -1,0 +1,151 @@
+﻿# TEMPORARY self-check (2026-11-16, #1877 trap 1): with NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS lowered from
+# vanilla's 0.1 to 0.02 (common/defines/extra_defines.txt), does an AI government with reserves under 0.1 queue a
+# university?
+#
+# Why a university, and not any government building. In the AI-only run of 2026-11-16 (main 2d26c6b5a, 1925-1947)
+# the engine queued some government buildings with no reserves at all: of 33 AI countries short of bureaucracy, in
+# debt (so holding no reserves) at two yearly rows and with an empty government queue at the first, 27 had a queue a
+# year later, 20 of them a Government Administration; 61 of 220 not short did too. So the gate does not hold what
+# the engine counts critical, and "a queue started under 0.1" would read OK under vanilla's gate as well. What the
+# gate held was the rest: the 20 largest AI economies had nothing queued in 20-36% of their years at reserves of 0.02
+# to 0.10 and none at 0.10 or more, and China built its first university the year its reserves reached 0.10.
+# Vanilla has a second gate of the same 0.1, NAI MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE ("don't
+# increase spending on a 'should-have'"), which the mod leaves alone. The run cannot tell the two apart. This check can:
+# OK says the define the mod lowered was what held universities back; BROKEN says it was not.
+#
+# The watch, monthly for each AI country (te_ai_reserve_gate_selfcheck_watch): a country that may queue a university
+# (te_rgc_may_queue_a_university: it wants one, may build one, passes the budget AI's ratio test, and its government
+# queue is empty) with reserves of 0.03 to 0.08 of their limit is watched for a month. 0.03 is above the mod's 0.02
+# with room for a building's cost; 0.08 is under vanilla's 0.1 with room for a month's saving. At the next month's
+# read, if reserves are still under 0.08: watched +1, any government level queued +1, a university level queued +1.
+# With nothing queued the purchase is 0 and reserves only rise, so a country under 0.08 at both reads queued under 0.1.
+# A watch is not counted when the AI construction pass queued for the country in the last 45 days
+# (te_ai_build_pass_recent) or still follows a level it queued (te_ai_build_pass_pending_kind,
+# te_ai_build_pass_effects.txt): that level is the pass's, not the engine's. Nor is such a country in the control.
+#
+# ai_reserve_gate, once, at the first global monthly pulse with 3 universities counted, or 120 watches ended:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          3 or more universities: a government under vanilla's gate queued one, three times. The lowered define
+#               is what held them back.
+#   BROKEN      none in 120 watches, while 3 or more AI countries hold a queued university at the verdict (ctrl, the
+#               control: the read sees one, and universities are being queued somewhere): something still holds a
+#               should-have building at 0.1. Fallback: lower MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE
+#               to 0.02 too (docs/testing/ai-economy-playtest.md). The AI construction pass already queues for
+#               such a government at a low or middling interest rate, a month after the engine has not.
+#   NO_VERDICT  1 or 2 universities in 120 watches, or fewer than 3 AI countries with a queued university at the
+#               verdict (the read may be blind).
+# The margin: under a gate at 0.1 a university in a watch needs reserves to cross 0.1 and fall back under 0.08 within
+# a month with nothing queued, hence 3 for OK. A year is too long for this: in the run's yearly rows, universities rose
+# in 5 of 16 pairs of rows whose reserves were under 0.08 at both, after an empty queue at the first (reserves cross
+# 0.1 and fall back within a year, and states change hands). If the lowered gate holds, the 20 largest queue within
+# the year at every level past the gate (none of 115 years empty at 0.10-0.20), so 120 watches with none is not chance.
+#
+# Play-test row: docs/testing/ai-economy-playtest.md § The AI's reserve gate. Delete this file,
+# te_ai_reserve_gate_selfcheck_values.txt and te_ai_reserve_gate_selfcheck_triggers.txt once it reads.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ai_reserve_gate_selfcheck_watch
+	}
+}
+
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_reserve_gate_selfcheck
+	}
+}
+
+# Country scope: last month's watch read, then this month's set.
+te_ai_reserve_gate_selfcheck_watch = {
+	trigger = {
+		NOT = { has_global_variable = te_rgc_checked }
+		is_ai = yes
+	}
+	effect = {
+		if = {
+			limit = { has_variable = te_rgc_watch }
+			remove_variable = te_rgc_watch
+			if = {
+				limit = {
+					scaled_gold_reserves < 0.08
+					NOT = { has_variable = te_ai_build_pass_recent }
+					NOT = { has_variable = te_ai_build_pass_pending_kind }
+				}
+				change_global_variable = { name = te_rgc_watched add = 1 }
+				if = {
+					limit = { construction_queue_num_queued_government_levels > 0 }
+					change_global_variable = { name = te_rgc_any add = 1 }
+					if = {
+						limit = { te_rgc_university_queued = yes }
+						change_global_variable = { name = te_rgc_uni add = 1 }
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				scaled_gold_reserves >= 0.03
+				scaled_gold_reserves < 0.08
+				te_rgc_may_queue_a_university = yes
+			}
+			if = {
+				limit = { NOT = { has_global_variable = te_rgc_watched } }
+				set_global_variable = { name = te_rgc_watched value = 0 }
+				set_global_variable = { name = te_rgc_any value = 0 }
+				set_global_variable = { name = te_rgc_uni value = 0 }
+			}
+			set_variable = te_rgc_watch
+		}
+	}
+}
+
+# The verdict, once (the latch is the first thing it sets).
+te_ai_reserve_gate_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_rgc_checked }
+		has_global_variable = te_rgc_watched
+		OR = {
+			global_var:te_rgc_uni >= 3
+			global_var:te_rgc_watched >= 120
+		}
+	}
+	effect = {
+		set_global_variable = te_rgc_checked
+		every_country = {
+			limit = { has_variable = te_rgc_watch }
+			remove_variable = te_rgc_watch
+		}
+		# The control, once: AI countries with a government queue, and those among them holding a university, leaving
+		# out a country whose queued level is the pass's (te_ai_build_pass_pending_kind).
+		set_global_variable = { name = te_rgc_ctrl_queues value = 0 }
+		set_global_variable = { name = te_rgc_ctrl_uni value = 0 }
+		every_country = {
+			limit = {
+				is_ai = yes
+				construction_queue_num_queued_government_levels > 0
+				NOT = { has_variable = te_ai_build_pass_pending_kind }
+			}
+			change_global_variable = { name = te_rgc_ctrl_queues add = 1 }
+			if = {
+				limit = { te_rgc_university_queued = yes }
+				change_global_variable = { name = te_rgc_ctrl_uni add = 1 }
+			}
+		}
+		debug_log = "TE_SELF_CHECK START ai_reserve_gate (the verdict line follows; none after this one means the engine dropped the templated line)"
+		random_country = {
+			if = {
+				limit = { te_rgc_uni_g >= 3 }
+				debug_log = "TE_SELF_CHECK OK ai_reserve_gate uni=[SCOPE.ScriptValue('te_rgc_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_watched_g')|0] any=[SCOPE.ScriptValue('te_rgc_any_g')|0] ctrl=[SCOPE.ScriptValue('te_rgc_ctrl_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_ctrl_queues_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (AI governments with reserves of 0.03-0.08 of their limit and an empty government queue queued a university within a month: under vanilla's 0.1 they could not, so the mod's CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS of 0.02 is what held universities back)"
+			}
+			else_if = {
+				limit = {
+					te_rgc_uni_g < 1
+					te_rgc_ctrl_uni_g >= 3
+				}
+				debug_log = "TE_SELF_CHECK BROKEN ai_reserve_gate uni=[SCOPE.ScriptValue('te_rgc_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_watched_g')|0] any=[SCOPE.ScriptValue('te_rgc_any_g')|0] ctrl=[SCOPE.ScriptValue('te_rgc_ctrl_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_ctrl_queues_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (no university queued at reserves of 0.03-0.08 while other AI countries hold queued ones: something still holds should-have buildings at 0.1; fallback: MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE to 0.02 too, docs/testing/ai-economy-playtest.md)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_reserve_gate uni=[SCOPE.ScriptValue('te_rgc_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_watched_g')|0] any=[SCOPE.ScriptValue('te_rgc_any_g')|0] ctrl=[SCOPE.ScriptValue('te_rgc_ctrl_uni_g')|0]/[SCOPE.ScriptValue('te_rgc_ctrl_queues_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (1 or 2 universities in 120 watches at reserves of 0.03-0.08, or fewer than 3 AI countries holding a queued university, so the read may be blind: read the probe as docs/testing/ai-economy-playtest.md says)"
+			}
+		}
+	}
+}

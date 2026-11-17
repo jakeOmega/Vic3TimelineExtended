@@ -200,6 +200,25 @@ te_aip_bank_phase = {
 te_aip_bank_cycle = { value = 0 if = { limit = { has_variable = finance_cycle_value } value = var:finance_cycle_value } }
 te_aip_bank_momentum = { value = 0 if = { limit = { has_variable = finance_cycle_momentum } value = var:finance_cycle_momentum } }
 te_aip_bank_crashed = { value = 0 if = { limit = { has_variable = banking_crashed_last_year } value = 1 } }
+te_aip_rate = { value = 0 if = { limit = { has_variable = te_rate_paid_pts } value = var:te_rate_paid_pts } }
+te_aip_rate_base = { value = 0 if = { limit = { has_variable = te_mon_era_base_now } value = var:te_mon_era_base_now } }
+te_aip_cm_reserve = { value = te_construction_market_ai_required_reserves }
+te_aip_cm_credit = { value = te_construction_market_ai_credit_allowance }
+te_aip_cm_pass = { value = 0 if = { limit = { has_variable = te_ai_build_pass_count } value = var:te_ai_build_pass_count } }
+te_aip_inf_short_states = {
+	value = 0
+	every_scope_state = {
+		limit = { te_ai_build_pass_infrastructure_shortfall > 0 }
+		add = 1
+	}
+}
+te_aip_inf_short = {
+	value = 0
+	every_scope_state = {
+		limit = { te_ai_build_pass_infrastructure_shortfall > 0 }
+		add = te_ai_build_pass_infrastructure_shortfall
+	}
+}
 
 # --- O ---
 te_aip_low_mfg = {
@@ -2299,6 +2318,13 @@ te_aip_bt_company_headquarter = { value = "country_has_building_group_levels(bg_
 te_aip_bt_public_housing = { value = "country_has_building_type_levels(bt:building_public_housing)" }
 te_aip_bt_software_industry = { value = "country_has_building_type_levels(bt:building_software_industry)" }
 te_aip_bt_electronic_components_and_semiconductor_industry = { value = "country_has_building_type_levels(bt:building_electronic_components_and_semiconductor_industry)" }
+te_aip_rail_sites = {
+	value = 0
+	every_scope_state = {
+		limit = { te_ai_build_pass_railway_site = yes }
+		add = 1
+	}
+}
 
 # --- N ---
 te_aip_n_built = { value = 0 if = { limit = { has_variable = te_aip_n_built } value = var:te_aip_n_built } }

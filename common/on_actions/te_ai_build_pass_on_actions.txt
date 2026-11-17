@@ -1,0 +1,96 @@
+﻿# The AI construction pass, monthly for each AI country (common/scripted_effects/te_ai_build_pass_effects.txt), and
+# its self-check's verdict.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ai_build_pass_on_action
+	}
+}
+
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_build_pass_selfcheck
+	}
+}
+
+te_ai_build_pass_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_ai_build_pass_effect = yes
+	}
+}
+
+# TEMPORARY self-check (2026-11-16, #1877): does a government construction the pass queues for an AI the engine would
+# not queue for get built? The pass is the first thing in the mod that queues government construction (an
+# administration, a power plant, a railway, a university, a highway, an airport) for an AI in debt or under the
+# reserve gate, and the engine's own spending AI cuts "should-have" spending when income is
+# under 1.05 times expenses with under 20 weeks of reserves (NAI MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE and
+# MONEY_SPENDING_MIN_WEEKS_OF_GOLD_RESERVES_TO_NOT_REMOVE_SHOULD_HAVE), and such a government always has under 20
+# weeks. Whether that removes a construction queued by script, or only lowers spending elsewhere, is unread.
+#
+# The cohort, closed: the first 36 levels the pass queues for a country in debt or with reserves under 0.02 when it
+# queues (te_ai_build_pass_in_sample), of every kind but an administration (te_ai_build_pass_pending_start says
+# why). A lost level shows at the next month's follow and a built one only after its build, so a verdict on the first
+# levels decided would count mostly losses (the 2026-11-17 review: BROKEN in 51-73% of its runs at a true loss rate of
+# 15%); this one waits until every level of the cohort is read. The pass queues nothing more for a country while its
+# level is followed, so a re-queue cannot read as built (te_ai_build_pass_follow). Each is read in the state it was
+# queued in: built (the state holds more levels of the kind than when it queued, a level of the kind taken down there
+# lowering the base), lost (unbuilt, and none of the kind queued there any more or the government queue empty) or,
+# still queued after 18 months (24 for a railway, 36 for a highway or an airport), waiting. Judged on the levels whose
+# fate is known, built and lost; the waiting are printed, and `unread`, levels of countries gone before theirs was
+# read, for which the verdict waits at most te_ai_build_pass_cohort_wait months after the cohort fills. Built and
+# lost by kind (uni, rail, power, road, air), and `down`: levels the pass built, of every country and kind, that their
+# state lost again within two years (te_ai_build_pass_watch; the budget AI downsizing what it bought). Once read:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          6 or more built, and lost a quarter or less of built and lost: what the pass queues is kept.
+#   BROKEN      6 or more built or lost, and lost half or more of them: the engine drops what the pass queues.
+#               Fallback: queue through the engine instead, lowering the gates that hold it (NAI
+#               CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS to 0, and MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE),
+#               which still cannot reach a country in debt; or place the level with create_building, as the Strategic
+#               Reserve's decision does.
+#   NO_VERDICT  otherwise. Mostly waiting: the purchase is not paying for the levels (a pause, or no surplus).
+# No line at all: the pass never queued 36 such levels in the run; read the probe's cm_pass. Play-test row:
+# docs/testing/ai-economy-playtest.md § The AI's reserve and credit by interest rate. Delete the verdict, the cohort's
+# lines in te_ai_build_pass_pending_start and te_ai_build_pass_follow, the downsizing count in
+# te_ai_build_pass_watch_one, and the _g values once it reads (the follow and the watch stay: the back-off and the
+# reserve gate's self-check read them).
+te_ai_build_pass_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_ai_build_pass_checked }
+		has_global_variable = te_ai_build_pass_cohort
+		te_ai_build_pass_cohort_g >= te_ai_build_pass_cohort_size
+	}
+	effect = {
+		change_global_variable = { name = te_ai_build_pass_cohort_months add = 1 }
+		if = {
+			limit = {
+				OR = {
+					te_ai_build_pass_sampled_g >= te_ai_build_pass_cohort_g
+					te_ai_build_pass_cohort_months_g >= te_ai_build_pass_cohort_wait
+				}
+			}
+			set_global_variable = te_ai_build_pass_checked
+			debug_log = "TE_SELF_CHECK START ai_build_pass (the verdict line follows; none after this one means the engine dropped the templated line)"
+			random_country = {
+				if = {
+					limit = {
+						te_ai_build_pass_built_g >= 6
+						te_ai_build_pass_lost_share <= 0.25
+					}
+					debug_log = "TE_SELF_CHECK OK ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] unread=[SCOPE.ScriptValue('te_ai_build_pass_unread_g')|0] built/lost uni=[SCOPE.ScriptValue('te_ai_build_pass_built_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_university_g')|0] rail=[SCOPE.ScriptValue('te_ai_build_pass_built_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_railway_g')|0] power=[SCOPE.ScriptValue('te_ai_build_pass_built_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_power_plant_g')|0] road=[SCOPE.ScriptValue('te_ai_build_pass_built_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_highway_g')|0] air=[SCOPE.ScriptValue('te_ai_build_pass_built_airport_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_airport_g')|0] down uni/adm/rail/power/road/air=[SCOPE.ScriptValue('te_ai_build_pass_down_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_administration_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_airport_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (what the pass queued for governments in debt or under 0.02 reserves was built)"
+				}
+				else_if = {
+					limit = {
+						te_ai_build_pass_decided_g >= 6
+						te_ai_build_pass_lost_share >= 0.5
+					}
+					debug_log = "TE_SELF_CHECK BROKEN ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] unread=[SCOPE.ScriptValue('te_ai_build_pass_unread_g')|0] built/lost uni=[SCOPE.ScriptValue('te_ai_build_pass_built_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_university_g')|0] rail=[SCOPE.ScriptValue('te_ai_build_pass_built_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_railway_g')|0] power=[SCOPE.ScriptValue('te_ai_build_pass_built_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_power_plant_g')|0] road=[SCOPE.ScriptValue('te_ai_build_pass_built_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_highway_g')|0] air=[SCOPE.ScriptValue('te_ai_build_pass_built_airport_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_airport_g')|0] down uni/adm/rail/power/road/air=[SCOPE.ScriptValue('te_ai_build_pass_down_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_administration_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_airport_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (half or more was dropped unbuilt: fallback in te_ai_build_pass_on_actions.txt)"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK NO_VERDICT ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] unread=[SCOPE.ScriptValue('te_ai_build_pass_unread_g')|0] built/lost uni=[SCOPE.ScriptValue('te_ai_build_pass_built_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_university_g')|0] rail=[SCOPE.ScriptValue('te_ai_build_pass_built_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_railway_g')|0] power=[SCOPE.ScriptValue('te_ai_build_pass_built_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_power_plant_g')|0] road=[SCOPE.ScriptValue('te_ai_build_pass_built_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_highway_g')|0] air=[SCOPE.ScriptValue('te_ai_build_pass_built_airport_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_lost_airport_g')|0] down uni/adm/rail/power/road/air=[SCOPE.ScriptValue('te_ai_build_pass_down_university_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_administration_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_railway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_power_plant_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_highway_g')|0]/[SCOPE.ScriptValue('te_ai_build_pass_down_airport_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (too few built or lost, or between: read the probe's cm_pass rows)"
+				}
+			}
+		}
+	}
+}

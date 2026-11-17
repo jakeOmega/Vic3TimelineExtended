@@ -30,6 +30,20 @@ NAI = {
 	PRODUCTION_METHOD_STICKINESS_UPGRADE = 0.9		# vanilla 0.95. Score of non-current method is multiplied by this when it produces more goods base value in total
 	PRODUCTION_METHOD_STICKINESS_DOWNGRADE = 0.6	# vanilla 0.75. Score of non-current method is multiplied by this when it produces less (or equal) goods base value in total
 	PRODUCTION_METHOD_CHANCE_TO_CHANGE = 0.05		# vanilla 0.1. Chance that the AI will consider changing a production method when evaluating methods
+
+	# The reserve gate on a new construction (#1877, 2026-11-16): vanilla 0.1, "if gold reserves are less than this
+	# after adding the cost of a new construction, don't queue it". In a market game a tenth held a government with a
+	# surplus idle while it saved: in an AI-only run of 1925-1947 the 20 largest AI economies had nothing queued in 36%
+	# of their years at reserves of 0.02 to 0.05, 20% at 0.05 to 0.10, none at 0.10 or more (China in 1930-1932). 0.02
+	# still asks for a margin past the building's cost. A gate is one figure for every country, so the interest rate
+	# decides the rest (owner, 2026-11-16) in what the mod controls (te_construction_market_ai_values.txt, THE RATE and
+	# THE PASS): at a high rate the AI's purchase holds back until it keeps a reserve of up to vanilla's tenth, at a
+	# low one it may run a small debt, and a monthly pass queues for a government the engine leaves with nothing
+	# queued, in debt among them (no gate reaches a country in debt, which holds no reserves: 82 of those 112 years).
+	# Vanilla's money-spending gate of the same 0.1 (MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE) is
+	# left alone; TE_SELF_CHECK ai_reserve_gate reads which of the two holds universities back. The tables, the risks
+	# and the fallbacks: docs/systems/mod_systems/ai.md § AI Government Construction.
+	CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS = 0.02
 }
 
 NPolitics = {
