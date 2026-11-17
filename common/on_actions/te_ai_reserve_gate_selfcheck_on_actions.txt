@@ -19,6 +19,8 @@
 # with room for a building's cost; 0.08 is under vanilla's 0.1 with room for a month's saving. At the next month's
 # read, if reserves are still under 0.08: watched +1, any government level queued +1, a university level queued +1.
 # With nothing queued the purchase is 0 and reserves only rise, so a country under 0.08 at both reads queued under 0.1.
+# A watch is not counted when the AI construction pass queued for the country in the last 45 days
+# (te_ai_build_pass_recent, te_ai_build_pass_effects.txt): that level is the pass's, not the engine's.
 #
 # ai_reserve_gate, once, at the first global monthly pulse with 3 universities counted, or 120 watches ended:
 #   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
@@ -27,7 +29,8 @@
 #   BROKEN      none in 120 watches, while 3 or more AI countries hold a queued university at the verdict (ctrl, the
 #               control: the read sees one, and universities are being queued somewhere): something still holds a
 #               should-have building at 0.1. Fallback: lower MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE
-#               to 0.02 too; then the yearly scripted pass (docs/testing/ai-economy-playtest.md).
+#               to 0.02 too (docs/testing/ai-economy-playtest.md). The AI construction pass already queues for
+#               such a government at a low or middling interest rate, a month after the engine has not.
 #   NO_VERDICT  1 or 2 universities in 120 watches, or fewer than 3 AI countries with a queued university at the
 #               verdict (the read may be blind).
 # The margin: under a gate at 0.1 a university in a watch needs reserves to cross 0.1 and fall back under 0.08 within
@@ -61,7 +64,10 @@ te_ai_reserve_gate_selfcheck_watch = {
 			limit = { has_variable = te_rgc_watch }
 			remove_variable = te_rgc_watch
 			if = {
-				limit = { scaled_gold_reserves < 0.08 }
+				limit = {
+					scaled_gold_reserves < 0.08
+					NOT = { has_variable = te_ai_build_pass_recent }
+				}
 				change_global_variable = { name = te_rgc_watched add = 1 }
 				if = {
 					limit = { construction_queue_num_queued_government_levels > 0 }

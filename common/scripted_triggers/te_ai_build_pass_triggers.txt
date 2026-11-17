@@ -1,0 +1,49 @@
+﻿# The AI construction pass (common/scripted_effects/te_ai_build_pass_effects.txt):
+# when it queues, and where. Its numbers and their reasons are in
+# common/script_values/te_construction_market_ai_values.txt, THE PASS.
+
+# Country scope. An AI government the engine has left with nothing queued for a
+# month, that the rate lets build, with the surplus the engine's own budget AI
+# asks for before it adds spending.
+te_ai_build_pass_may_queue = {
+	is_ai = yes
+	NOT = { is_country_type = decentralized }
+	te_free_market_construction_on = yes
+	in_default = no
+	is_at_war = no
+	is_construction_paused = no
+	has_variable = te_ai_build_pass_idle
+	NOT = { construction_queue_num_queued_government_levels > 0 }
+	net_fixed_income > 0
+	OR = {
+		net_fixed_income >= TE_AI_BUILD_PASS_SURPLUS_MIN
+		te_ai_build_pass_surplus_share >= TE_AI_BUILD_PASS_SURPLUS_SHARE
+	}
+	te_ai_build_pass_means >= 0
+}
+
+# Country scope. A university does good while innovation is under the cap. The
+# variable is vanilla's (building_university's can_build_government).
+te_ai_build_pass_wants_university = {
+	has_technology_researched = academia
+	NOT = { has_variable = poland_universities_closed_var }
+	te_ai_build_pass_innovation_share < TE_AI_BUILD_PASS_INNOVATION_SHARE
+	any_scope_state = { te_ai_build_pass_university_site = yes }
+}
+
+# Country scope. An administration does good where a state's taxes outrun its
+# tax capacity (vanilla's building_government_administration expands itself
+# there, should_auto_expand).
+te_ai_build_pass_wants_administration = {
+	has_technology_researched = tech_bureaucracy
+	any_scope_state = { te_ai_build_pass_administration_site = yes }
+}
+
+# State scope.
+te_ai_build_pass_university_site = {
+	is_incorporated = yes
+}
+te_ai_build_pass_administration_site = {
+	is_incorporated = yes
+	tax_capacity < tax_capacity_usage
+}

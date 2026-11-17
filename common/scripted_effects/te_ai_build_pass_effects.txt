@@ -1,0 +1,158 @@
+﻿# The AI construction pass (#1877; owner, 2026-11-16: "If low, no need [for a reserve], and you could even allow
+# spending in (small amounts of) debt.")
+#
+# Country scope, an AI country, from the monthly country pulse (te_ai_build_pass_on_actions.txt). The engine queues
+# nothing new for a government in debt: it holds no reserves, and the engine's reserve gate
+# (NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS) asks for some after a building's cost. Below the gate it queues only
+# what it counts critical (a Government Administration while bureaucracy is short). So where the interest rate allows
+# a government the means (te_ai_build_pass_means: its reserves above the reserve the rate asks for, plus the credit
+# allowance it has not used), and it has the surplus the engine's own budget AI asks for before adding spending, the
+# pass queues one level as government construction (start_building_construction, as te_grid_ai_build_effect and the
+# Grand Monuments' gm_com_queue_levels do), after the queue has stood empty a month so that the engine has gone
+# first. A university while innovation is under nine-tenths of its cap, in the most populous incorporated state; else
+# a Government Administration in the incorporated state whose taxes most outrun its tax capacity. One level at a
+# time: the pass waits for the queue to empty again. The weekly purchase pays for the level
+# (te_construction_market_ai_purchase_target), with credit at a low rate and holding a reserve back at a high one.
+# The numbers and their reasons: common/script_values/te_construction_market_ai_values.txt, THE RATE and THE PASS.
+#
+# Neither building has a `possible` block; the university's can_build_government (vanilla's Polish universities
+# closure) is copied into te_ai_build_pass_wants_university, since whether start_building_construction honours it is
+# unread.
+#
+# TE_SELF_CHECK ai_build_pass follows what the pass queued for 18 months (te_ai_build_pass_track_tick): whether the
+# engine builds it, keeps it waiting in the queue, or drops it (its own spending AI removes "should-have" spending
+# when income is under 1.05 times expenses). Play-test rows: docs/testing/ai-economy-playtest.md.
+te_ai_build_pass_effect = {
+	if = {
+		limit = {
+			te_ai_build_pass_may_queue = yes
+		}
+		if = {
+			limit = {
+				te_ai_build_pass_wants_university = yes
+			}
+			te_ai_build_pass_track_start = { KIND = 1 }
+			ordered_scope_state = {
+				limit = {
+					te_ai_build_pass_university_site = yes
+				}
+				order_by = state_population
+				position = 0
+				check_range_bounds = no
+				start_building_construction = building_university
+			}
+			set_variable = { name = te_ai_build_pass_recent value = yes days = 45 }
+			te_ai_build_pass_count_effect = yes
+		}
+		else_if = {
+			limit = {
+				te_ai_build_pass_wants_administration = yes
+			}
+			te_ai_build_pass_track_start = { KIND = 2 }
+			ordered_scope_state = {
+				limit = {
+					te_ai_build_pass_administration_site = yes
+				}
+				order_by = te_ai_build_pass_tax_shortfall
+				position = 0
+				check_range_bounds = no
+				start_building_construction = building_government_administration
+			}
+			set_variable = { name = te_ai_build_pass_recent value = yes days = 45 }
+			te_ai_build_pass_count_effect = yes
+		}
+	}
+	# Next month's "already empty a month".
+	if = {
+		limit = {
+			construction_queue_num_queued_government_levels > 0
+		}
+		if = {
+			limit = {
+				has_variable = te_ai_build_pass_idle
+			}
+			remove_variable = te_ai_build_pass_idle
+		}
+	}
+	else = {
+		set_variable = te_ai_build_pass_idle
+	}
+	te_ai_build_pass_track_tick = yes
+}
+
+# Country scope: the levels the pass has queued for the country since the game began, which the AI probe reads
+# (cm_pass).
+te_ai_build_pass_count_effect = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_ai_build_pass_count }
+		}
+		set_variable = { name = te_ai_build_pass_count value = 0 }
+	}
+	change_variable = { name = te_ai_build_pass_count add = 1 }
+}
+
+# Country scope, just before the pass queues: what the self-check follows. One level at a time, and none once it has
+# read. KIND 1 a university, 2 a Government Administration. The target is the country's levels of that building
+# with those queued, plus the one about to be queued.
+te_ai_build_pass_track_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ai_build_pass_checked }
+			NOT = { has_variable = te_ai_build_pass_track_kind }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_ai_build_pass_resolved }
+			}
+			set_global_variable = { name = te_ai_build_pass_built value = 0 }
+			set_global_variable = { name = te_ai_build_pass_waiting value = 0 }
+			set_global_variable = { name = te_ai_build_pass_lost value = 0 }
+			set_global_variable = { name = te_ai_build_pass_resolved value = 0 }
+		}
+		set_variable = { name = te_ai_build_pass_track_kind value = $KIND$ }
+		set_variable = { name = te_ai_build_pass_track_target value = te_ai_build_pass_tracked_levels_after }
+		change_variable = { name = te_ai_build_pass_track_target add = 1 }
+		set_variable = { name = te_ai_build_pass_track_months value = 0 }
+	}
+}
+
+# Country scope, monthly: 18 months after the pass queued, built (the country holds the levels it aimed for), still
+# waiting in the queue, or lost (neither: dropped from the queue, or built and taken down).
+te_ai_build_pass_track_tick = {
+	if = {
+		limit = {
+			has_variable = te_ai_build_pass_track_kind
+		}
+		change_variable = { name = te_ai_build_pass_track_months add = 1 }
+		if = {
+			limit = {
+				var:te_ai_build_pass_track_months >= 18
+			}
+			if = {
+				limit = {
+					NOT = { has_global_variable = te_ai_build_pass_checked }
+				}
+				change_global_variable = { name = te_ai_build_pass_resolved add = 1 }
+				if = {
+					limit = {
+						te_ai_build_pass_tracked_levels >= var:te_ai_build_pass_track_target
+					}
+					change_global_variable = { name = te_ai_build_pass_built add = 1 }
+				}
+				else_if = {
+					limit = {
+						te_ai_build_pass_tracked_levels_after >= var:te_ai_build_pass_track_target
+					}
+					change_global_variable = { name = te_ai_build_pass_waiting add = 1 }
+				}
+				else = {
+					change_global_variable = { name = te_ai_build_pass_lost add = 1 }
+				}
+			}
+			remove_variable = te_ai_build_pass_track_kind
+			remove_variable = te_ai_build_pass_track_target
+			remove_variable = te_ai_build_pass_track_months
+		}
+	}
+}

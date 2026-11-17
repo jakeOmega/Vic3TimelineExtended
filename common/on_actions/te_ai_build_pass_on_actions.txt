@@ -1,0 +1,67 @@
+﻿# The AI construction pass, monthly for each AI country (common/scripted_effects/te_ai_build_pass_effects.txt), and
+# its self-check's verdict.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ai_build_pass_on_action
+	}
+}
+
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_build_pass_selfcheck
+	}
+}
+
+te_ai_build_pass_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_ai_build_pass_effect = yes
+	}
+}
+
+# TEMPORARY self-check (2026-11-16, #1877): does a government construction the pass queues for an AI get built? The
+# pass is the first thing in the mod that queues a university or an administration for an AI in debt, and the
+# engine's own spending AI cuts "should-have" spending when income is under 1.05 times expenses with under 20 weeks
+# of reserves (NAI MONEY_SPENDING_MAX_RATIO_TO_REMOVE_SHOULD_HAVE and
+# MONEY_SPENDING_MIN_WEEKS_OF_GOLD_RESERVES_TO_NOT_REMOVE_SHOULD_HAVE), and a government at no reserves always has
+# under 20 weeks. Whether that removes a construction queued by script, or only lowers spending elsewhere, is unread.
+#
+# Each level the pass queues is followed for 18 months (te_ai_build_pass_track_tick), one per country at a time:
+# built (the country holds the levels it aimed for), waiting (still queued) or lost (neither: dropped from the
+# queue, or built and downsized). At the first global monthly pulse with 12 followed to the end:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          a quarter of them lost or fewer: what the pass queues is kept.
+#   BROKEN      half or more lost: the engine drops what the pass queues. Fallback: queue through the engine
+#               instead, lowering the gates that hold it (NAI CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS to 0, and
+#               MONEY_SPENDING_MIN_GOLD_RESERVE_FRACTION_TO_ADD_SHOULD_HAVE), which still cannot reach a country in
+#               debt; or place the level with create_building, as the Strategic Reserve's decision does.
+#   NO_VERDICT  between.
+# A level "waiting" after 18 months is the purchase not paying for it (a pause, or no surplus): the line counts them.
+# Play-test row: docs/testing/ai-economy-playtest.md § The AI's reserve and credit by interest rate. Delete the
+# verdict, te_ai_build_pass_track_start and _track_tick, and the tracked values once it reads.
+te_ai_build_pass_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_ai_build_pass_checked }
+		has_global_variable = te_ai_build_pass_resolved
+		global_var:te_ai_build_pass_resolved >= 12
+	}
+	effect = {
+		set_global_variable = te_ai_build_pass_checked
+		debug_log = "TE_SELF_CHECK START ai_build_pass (the verdict line follows; none after this one means the engine dropped the templated line)"
+		random_country = {
+			if = {
+				limit = { te_ai_build_pass_lost_share <= 0.25 }
+				debug_log = "TE_SELF_CHECK OK ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] of=[SCOPE.ScriptValue('te_ai_build_pass_resolved_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the levels the AI construction pass queued were kept, 18 months on)"
+			}
+			else_if = {
+				limit = { te_ai_build_pass_lost_share >= 0.5 }
+				debug_log = "TE_SELF_CHECK BROKEN ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] of=[SCOPE.ScriptValue('te_ai_build_pass_resolved_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (half or more of what the pass queued was gone 18 months on: the engine drops it; fallback in te_ai_build_pass_on_actions.txt)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_build_pass built=[SCOPE.ScriptValue('te_ai_build_pass_built_g')|0] waiting=[SCOPE.ScriptValue('te_ai_build_pass_waiting_g')|0] lost=[SCOPE.ScriptValue('te_ai_build_pass_lost_g')|0] of=[SCOPE.ScriptValue('te_ai_build_pass_resolved_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half of what the pass queued was gone 18 months on: read the probe's cm_pass rows)"
+			}
+		}
+	}
+}

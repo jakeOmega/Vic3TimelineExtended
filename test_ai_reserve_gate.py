@@ -60,9 +60,13 @@ class TheDefine(unittest.TestCase):
     def test_the_comment_gives_vanillas_value_the_reason_and_the_evidence(self):
         text = DEFINES.read_text(encoding="utf-8-sig")
         line = re.search(rf"(?m)^\t{GATE}\s*=", text)
-        comment = "\n".join(l.strip() for l in text[:line.start()].splitlines()[-10:] if l.strip().startswith("#"))
-        for part in ("vanilla 0.1", "#1877", "never on credit", "ai.md § AI Government Construction", SHOULD_HAVE_GATE,
-                     "TE_SELF_CHECK", "ai_reserve_gate", "holds no reserves"):
+        above = text[:line.start()].splitlines()
+        block = []
+        while above and above[-1].strip().startswith("#"):
+            block.insert(0, above.pop().strip())
+        comment = "\n".join(block)
+        for part in ("vanilla 0.1", "#1877", "THE RATE and\n# THE PASS", "ai.md § AI Government Construction",
+                     SHOULD_HAVE_GATE, "TE_SELF_CHECK", "ai_reserve_gate", "holds no reserves"):
             with self.subTest(part=part):
                 self.assertIn(part, comment)
 
@@ -138,8 +142,10 @@ class TheSelfCheck(unittest.TestCase):
 
     def test_a_low_band_watch_counts_only_if_still_under_the_cap_at_its_read(self):
         read = _norm(_block(self.watch, "effect"))
+        # Not counted when the AI construction pass queued for the country in the last 45 days: its level, not the
+        # engine's.
         self.assertIn("if = { limit = { has_variable = te_rgc_watch } remove_variable = te_rgc_watch if = { limit = { "
-                      "scaled_gold_reserves < 0.08 } change_global_variable = { name = te_rgc_watched add = 1 } if = { "
+                      "scaled_gold_reserves < 0.08 NOT = { has_variable = te_ai_build_pass_recent } } change_global_variable = { name = te_rgc_watched add = 1 } if = { "
                       "limit = { construction_queue_num_queued_government_levels > 0 } change_global_variable = { name "
                       "= te_rgc_any add = 1 } if = { limit = { te_rgc_university_queued = yes } "
                       "change_global_variable = { name = te_rgc_uni add = 1 } } } } }", read)
