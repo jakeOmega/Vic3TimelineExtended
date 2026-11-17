@@ -70,7 +70,10 @@ Version 5 (#1877) adds to C2 the interest rate the construction purchase reads (
 reserve it asks the country to keep, and `cm_credit`, the debt it allows, each a share of its limit), `cm_pass`,
 the levels the AI construction pass has queued for the country since the game began (te_ai_build_pass_effects.txt),
 and what its railway entry reads: `inf_short_states`, the states whose infrastructure is short of its usage, and
-`inf_short`, their shortfall in all.
+`inf_short`, their shortfall in all, which count unincorporated states and any shortfall; and, at the end of B2,
+`rail_sites`, the states the entry would act on (te_ai_build_pass_railway_site: incorporated, short by more than
+its margin). C2 is full, and a line of its own would take a snapshot past the five lines version 4 allowed it (the
+log rotates every 512 KB), so it joins the line with room nearest in kind: the country's buildings by type.
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
@@ -113,7 +116,7 @@ LINES_ADDED = {
     2: ["O2", "J1", "R1", "H1"],
     3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
     4: ["H2", "P1", "P2"],
-    5: [],          # version 5 added fields to C2: the interest rate the purchase reads, and the AI construction pass
+    5: [],          # version 5 added fields to C2 (the rate the purchase reads, and the AI construction pass) and B2
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -846,6 +849,11 @@ def field_groups(cat: dict) -> list[tuple[str, list[Field]]]:
         read("bt_" + short(name, "building_"), f'"country_has_building_group_levels({BUILDING_TYPE_READS[name]})"'
              if name in BUILDING_TYPE_READS else f'"country_has_building_type_levels(bt:{name})"')
         for name in cat["building_types"]
+    ] + [
+        # Version 5 (#1877): the states the AI construction pass's railway entry would act on, its own site test
+        # (incorporated, short of infrastructure by more than the margin; the 2026-11-17 review). C2 is full.
+        Field("rail_sites", "\tvalue = 0\n\tevery_scope_state = {\n"
+                            "\t\tlimit = { te_ai_build_pass_railway_site = yes }\n\t\tadd = 1\n\t}"),
     ]
     budget = (
         [read("ux_all", "modifier:country_expenses_add")]

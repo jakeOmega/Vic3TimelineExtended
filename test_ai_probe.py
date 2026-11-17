@@ -630,6 +630,10 @@ class BankingCycleTest(unittest.TestCase):
         key = json.loads(KEY.read_text(encoding="utf-8"))
         self.assertEqual(key["lines"]["C2"][-7:], ["rate", "rate_base", "cm_reserve", "cm_credit", "cm_pass",
                                                    "inf_short_states", "inf_short"])
+        # C2 is full, so the states the railway entry would act on end B2, the line with room nearest in kind.
+        self.assertEqual(len(key["lines"]["C2"]), gen_ai_probe.FIELDS_PER_LINE)
+        self.assertEqual(key["lines"]["B2"][-1], "rail_sites")
+        self.assertNotIn("C3", key["lines"])
         self.assertEqual(key["lines_added"]["5"], [])
         values = text(VALUES)
         for field, source in (("rate", "var:te_rate_paid_pts"), ("rate_base", "var:te_mon_era_base_now"),
@@ -645,6 +649,10 @@ class BankingCycleTest(unittest.TestCase):
             body = re.search(rf"(?ms)^te_aip_{field} = \{{\n(.*?)^\}}", values).group(1)
             self.assertIn("limit = { te_ai_build_pass_infrastructure_shortfall > 0 }", body, field)
             self.assertIn(added, body, field)
+        # The states the entry acts on: its own site test (incorporated, short by more than its margin).
+        body = re.search(r"(?ms)^te_aip_rail_sites = \{\n(.*?)^\}", values).group(1)
+        self.assertIn("limit = { te_ai_build_pass_railway_site = yes }", body)
+        self.assertIn("add = 1", body)
         # The report's restatement gains the rate at the script's own gain.
         gain = re.search(r"(?m)^TE_CONSTRUCTION_MARKET_AI_RATE_GAIN = ([0-9.]+)",
                          text(ROOT / "common/script_values/te_construction_market_ai_values.txt")).group(1)
