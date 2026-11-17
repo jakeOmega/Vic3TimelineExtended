@@ -13,7 +13,8 @@ declares te_tax_light_levy_div (test_tax_code_scaling_modifiers.py). Schema: doc
 - the reactions: the shared dividend tax reaction, once per change, and no relief or band;
 - the rule switched off: the levy stops with the code;
 - civil wars: the rebels and the winner carry the rate;
-- the panel and its text; and the self-check that reads the levy in game.
+- the panel and its text; and the retired self-check (tax_light_div_levy read the declared levy at 0 through
+  modifier:, while the Budget collected it: the owner's reading of 2026-11-16), which must not come back.
 """
 
 import importlib.util
@@ -41,8 +42,8 @@ JE = "common/journal_entries/je_tax_code.txt"
 LIGHT_GUI = "gui/journal_entry_widgets/te_tax_light_widget.gui"
 LOC = "localization/english/te_tax_l_english.yml"
 GEN_LOC = "localization/english/te_tax_generated_l_english.yml"
-SELF_CHECK = "common/on_actions/te_tax_light_div_levy_selfcheck_on_actions.txt"
-SELF_CHECK_VALUES = "common/script_values/te_tax_light_div_levy_selfcheck_values.txt"
+RETIRED_SELF_CHECK = "common/on_actions/te_tax_light_div_levy_selfcheck_on_actions.txt"
+RETIRED_SELF_CHECK_VALUES = "common/script_values/te_tax_light_div_levy_selfcheck_values.txt"
 PLAYTEST = "docs/testing/tax-code-playtest.md"
 
 LEVELS = gen.NATIVE_LEVELS
@@ -420,51 +421,42 @@ class PanelTest(unittest.TestCase):
         self.assertIn("$te_tax_lt_extra_cap_div$", loc(LOC)["te_tax_lt_how_ai"])
 
 
-class SelfCheckTest(unittest.TestCase):
-    """TE_SELF_CHECK tax_light_div_levy reads the levy in game; its play-test row names the fallback."""
+class RetiredSelfCheckTest(unittest.TestCase):
+    """TE_SELF_CHECK tax_light_div_levy is retired (2026-11-16). It read modifier:tax_dividends_add and logged BROKEN in
+    every game (0 of 70 levy countries in July 1881, 0 of 92 in April 1925) while the Budget collected the levy (the
+    owner's reading of PT-47): the read is blind to a tax rate a journal entry declares
+    (scripting_best_practices.md, "A Tax Rate a Journal Entry Declares Is Collected but Invisible to modifier:").
+    The declaration stays, and nothing may name the check, its latch or its values again."""
 
-    def test_it_is_gated_and_latched(self):
-        text = read(SELF_CHECK)
-        self.assertIn("on_monthly_pulse = {", text)
-        for handler in ("te_tax_light_div_levy_selfcheck_settle", "te_tax_light_div_levy_selfcheck"):
-            body = flat(block(text, handler))
-            with self.subTest(handler=handler):
-                self.assertIn("te_tax_code_light_on = yes", body)
-                self.assertIn("NOT = { has_global_variable = te_tldv_checked }", body)
-        verdict = flat(block(text, "te_tax_light_div_levy_selfcheck"))
-        for status in ("START", "OK", "BROKEN", "NO_VERDICT"):
-            self.assertIn(f"TE_SELF_CHECK {status} tax_light_div_levy", verdict)
-        self.assertIn("modifier:tax_dividends_add", read(SELF_CHECK_VALUES))
+    def test_the_declaration_stays_on_the_entry(self):
+        je = flat(block(read(JE), "je_tax_code"))
+        self.assertIn("scaling_modifiers_while_active = { modifier = te_tax_light_levy_div "
+                      "value = { value = te_tax_light_levy_div_value } }", je)
+        self.assertEqual(je.count("modifier = te_tax_light_levy_div "), 1)
 
-    def test_it_waits_for_a_control_and_ok_needs_one(self):
-        # No country starts on Proportional or Graduated, so a verdict at the first run could never be BROKEN
-        # (review of #1855): it counts each month and latches only once the control has 5 countries, or from 1900.
-        verdict = flat(block(read(SELF_CHECK), "te_tax_light_div_levy_selfcheck"))
-        latch = verdict.index("set_global_variable = te_tldv_checked")
-        self.assertIn("limit = { OR = { global_var:te_tldv_cn >= 5 game_date >= 1900.1.1 } } "
-                      "set_global_variable = te_tldv_checked debug_log = \"TE_SELF_CHECK START", verdict)
-        self.assertLess(verdict.index("every_country"), latch)
-        self.assertEqual(verdict.count("set_global_variable = te_tldv_checked"), 1)
-        ok = verdict[verdict.index("random_country = { if = { limit = {"):verdict.index("TE_SELF_CHECK OK")]
-        for condition in ("te_tldv_chk_n_g >= 5", "te_tldv_chk_match_share >= 0.8", "te_tldv_chk_cn_g >= 5",
-                          "te_tldv_chk_cmatch_share >= 0.8"):
-            self.assertIn(condition, ok)
-        # The control is countries on a law that levies the tax; the levy group those where it is open.
-        self.assertIn("te_tax_light_levies_div = yes", verdict)
-        self.assertIn("te_tax_light_extra_div = yes has_journal_entry = je_tax_code", verdict)
+    def test_its_files_are_gone_and_nothing_names_it(self):
+        self.assertFalse((ROOT / RETIRED_SELF_CHECK).exists())
+        self.assertFalse((ROOT / RETIRED_SELF_CHECK_VALUES).exists())
+        names = re.compile(r"te_tldv_|te_tax_light_div_levy_selfcheck|TE_SELF_CHECK \w+ tax_light_div_levy")
+        for directory in ("common", "events", "gui", "localization"):
+            for path in sorted((ROOT / directory).rglob("*")):
+                if path.suffix not in (".txt", ".gui", ".yml"):
+                    continue
+                with self.subTest(path=path.relative_to(ROOT).as_posix()):
+                    self.assertIsNone(names.search(path.read_text("utf-8-sig", "replace")))
 
-    def test_every_value_it_reads_is_defined(self):
-        used = set(re.findall(r"\b(te_tldv_chk_\w+)", strip_comments(read(SELF_CHECK))))
-        defined = set(re.findall(r"(?m)^(te_tldv_chk_\w+) = \{", read(SELF_CHECK_VALUES)))
-        self.assertTrue(used)
-        self.assertLessEqual(used, defined)
-
-    def test_the_play_test_list_names_it_and_its_fallback(self):
-        text = read(PLAYTEST)
-        self.assertIn("tax_light_div_levy", text)
+    def test_the_play_test_list_records_the_outcome(self):
+        text = flat(read(PLAYTEST))
         self.assertIn("The light code's low dividend tax", text)
-        # Script can't see collection: the row says so and points at the Budget line.
+        # Script can't see collection: the Budget line decided, in the owner's words.
         self.assertIn("Script can't measure collection", text)
+        self.assertIn("dividend taxes with the light code (and per capita taxes) appear to be working", text)
+        self.assertIn("tax_light_div_levy` (retired 2026-11-16)", text)
+        for line in ("levy=0/70 matched, 70 at 0; control=5/5 matched; date=July 1, 1881",
+                     "levy=0/92 matched, 92 at 0; control=31/32 matched; date=April 1, 1925"):
+            self.assertIn(line, text)
+        for build in ("81b947368", "2d26c6b5a"):
+            self.assertIn(build, text)
 
 
 if __name__ == "__main__":
