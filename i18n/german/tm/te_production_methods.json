@@ -439,6 +439,18 @@
   "en": "Automated Trading",
   "de": "Automatisierter Handel"
  },
+ "pm_autonomous_harvesters_building_rubber_plantation_desc": {
+  "en": "Tapping robots run along the rows on rails, score each tree and collect the latex, and self-driving carts take it to the collection sheds.",
+  "de": "Zapfroboter laufen auf Schienen an den Reihen entlang, ritzen jeden Baum an und sammeln den Latex, und selbstfahrende Wagen bringen ihn zu den Sammelschuppen."
+ },
+ "pm_autonomous_harvesters_plantation": {
+  "en": "Autonomous Harvesters",
+  "de": "Autonome Erntemaschinen"
+ },
+ "pm_autonomous_harvesters_plantation_desc": {
+  "en": "Self-driving harvesters and picking robots work the rows by camera and satellite positioning, and the staff left on the harvest watch over them and repair what breaks.",
+  "de": "Selbstfahrende Erntemaschinen und Pflückroboter bearbeiten die Reihen per Kamera und Satellitenortung, und das auf der Ernte verbliebene Personal überwacht sie und repariert, was kaputtgeht."
+ },
  "pm_autonomous_highway": {
   "en": "Autonomous Highway",
   "de": "Autonome Autobahn"
@@ -5179,6 +5191,14 @@
   "en": "CSFA Sicilian Sulfur Depot",
   "de": "CSFA-Schwefeldepot Sizilien"
  },
+ "pm_cultured_tobacco_leaf": {
+  "en": "Cultured Tobacco Leaf",
+  "de": "Gezüchtetes Tabakblatt"
+ },
+ "pm_cultured_tobacco_leaf_desc": {
+  "en": "Half the culture vessels grow tobacco leaf tissue instead of fruit. It is pressed and cured into sheets that cigarette and cigar makers buy as leaf.",
+  "de": "Die Hälfte der Kulturgefäße züchtet Tabakblattgewebe statt Früchten. Es wird zu Bögen gepresst und getrocknet, die Zigaretten- und Zigarrenhersteller als Blatt kaufen."
+ },
  "pm_customized_clothing": {
   "en": "Customized Clothing",
   "de": "Maßgeschneiderte Kleidung"
@@ -5787,6 +5807,14 @@
   "en": "GE Schenectady Works",
   "de": "GE-Werke Schenectady"
  },
+ "pm_gene_edited_livestock": {
+  "en": "Gene-Edited Livestock",
+  "de": "Genom-editiertes Vieh"
+ },
+ "pm_gene_edited_livestock_desc": {
+  "en": "The herds are bred from edited embryos: cattle that tolerate heat, pigs immune to the worst swine diseases, and breeds that turn more of their feed into meat. Healthier animals need fewer drugs and foul less water for the meat they give.",
+  "de": "Die Herden stammen aus editierten Embryonen: Rinder, die Hitze vertragen, Schweine, die gegen die schlimmsten Schweinekrankheiten immun sind, und Rassen, die mehr von ihrem Futter in Fleisch umsetzen. Gesündere Tiere brauchen weniger Medikamente und verschmutzen für das Fleisch, das sie liefern, weniger Wasser."
+ },
  "pm_genentech_dna_way_campus": {
   "en": "Genentech DNA Way Campus",
   "de": "Genentech-Campus DNA Way"
@@ -6119,6 +6147,14 @@
   "en": "GWR Swindon Works",
   "de": "GWR-Werke Swindon"
  },
+ "pm_hand_harvesting": {
+  "en": "Hand Harvesting",
+  "de": "Handernte"
+ },
+ "pm_hand_harvesting_desc": {
+  "en": "Crews bring in the crop by hand, with knives, shears and baskets.",
+  "de": "Trupps bringen die Ernte von Hand ein, mit Messern, Scheren und Körben."
+ },
  "pm_hanka_precision_hq": {
   "en": "Hanka Cybernetics Division",
   "de": "Hanka Cybernetics Division"
@@ -6231,6 +6267,10 @@
   "en": "HP Labs",
   "de": "HP Labs"
  },
+ "pm_hq_creditors_consortium": {
+  "en": "Clearing House",
+  "de": "Clearingstelle"
+ },
  "pm_hq_cultural_coalition": {
   "en": "World Cultural Center",
   "de": "Weltkulturzentrum"
@@ -6310,6 +6350,14 @@
  "pm_improved_crop_rotation": {
   "en": "Improved Crop Rotation",
   "de": "Verbesserte Fruchtfolge"
+ },
+ "pm_industrial_feedlots": {
+  "en": "Industrial Feedlots",
+  "de": "Industrielle Mastställe"
+ },
+ "pm_industrial_feedlots_desc": {
+  "en": "Herds are finished in pens on grain rations instead of on open range, and artificial insemination spreads a few high-yielding breeds. Each animal reaches slaughter weight sooner, and runoff from the pens fouls the water nearby.",
+  "de": "Die Herden werden in Pferchen mit Getreiderationen statt auf offener Weide fertig gemästet, und künstliche Besamung verbreitet einige wenige ertragreiche Rassen. Jedes Tier erreicht früher das Schlachtgewicht, und der Abfluss aus den Pferchen verschmutzt das Wasser in der Nähe."
  },
  "pm_industrial_highway": {
   "en": "Industrial Highway",
@@ -6814,6 +6862,22 @@
  "pm_mav_budapest_locomotive_works": {
   "en": "MÁV Budapest Locomotive Works",
   "de": "MÁV-Lokomotivwerke Budapest"
+ },
+ "pm_mechanical_harvesters_plantation": {
+  "en": "Mechanical Harvesters",
+  "de": "Mechanische Erntemaschinen"
+ },
+ "pm_mechanical_harvesters_plantation_desc": {
+  "en": "Machines built for each crop do the picking: cane cutters, cotton pickers, grape shakers and tea shears. Fewer harvest crews are needed, and the machines run on diesel.",
+  "de": "Für jede Kultur gebaute Maschinen übernehmen das Pflücken: Zuckerrohrschneider, Baumwollpflücker, Traubenrüttler und Teeschneider. Es werden weniger Erntetrupps gebraucht, und die Maschinen laufen mit Diesel."
+ },
+ "pm_mechanized_feeding_lines": {
+  "en": "Mechanized Feeding Lines",
+  "de": "Mechanisierte Fütterungsanlagen"
+ },
+ "pm_mechanized_feeding_lines_desc": {
+  "en": "Conveyors and mixer wagons carry rations to the pens, waterers refill themselves and mechanical scrapers clear the barns, in place of the hands who did it with pitchforks and buckets.",
+  "de": "Förderbänder und Mischwagen bringen die Rationen zu den Pferchen, Tränken füllen sich selbst nach und mechanische Schaber räumen die Ställe, anstelle der Hände, die das mit Mistgabeln und Eimern erledigten."
  },
  "pm_media_corporations": {
   "en": "Media Corporations",
@@ -8075,6 +8139,14 @@
   "en": "Pirelli Bicocca Plant",
   "de": "Pirelli-Werk Bicocca"
  },
+ "pm_plain_feed": {
+  "en": "Plain Feed",
+  "de": "Einfaches Futter"
+ },
+ "pm_plain_feed_desc": {
+  "en": "The herds graze and eat hay and grain with nothing mixed in.",
+  "de": "Die Herden weiden und fressen Heu und Getreide ohne Zusätze."
+ },
  "pm_political_commissars": {
   "en": "Political Commissars",
   "de": "Politkommissare"
@@ -8283,6 +8355,14 @@
   "en": "Ramirez Vila Real Cannery",
   "de": "Ramirez-Konservenfabrik Vila Real"
  },
+ "pm_recombinant_growth_hormones": {
+  "en": "Recombinant Growth Hormones",
+  "de": "Rekombinante Wachstumshormone"
+ },
+ "pm_recombinant_growth_hormones_desc": {
+  "en": "Growth hormone brewed by engineered bacteria, given by injection or implant, makes each animal put on more lean meat from the same feed. The herds are also dosed against the diseases that spread through crowded pens.",
+  "de": "Von gentechnisch veränderten Bakterien gebrautes Wachstumshormon, per Spritze oder Implantat verabreicht, lässt jedes Tier aus demselben Futter mehr mageres Fleisch ansetzen. Die Herden werden außerdem gegen die Krankheiten behandelt, die sich in überfüllten Pferchen ausbreiten."
+ },
  "pm_regional_branding_building_furniture_manufactory": {
   "en": "Regional Marketing",
   "de": "Regionales Marketing"
@@ -8474,6 +8554,14 @@
  "pm_robotic_assembly_lines_building_tooling_workshop": {
   "en": "Robotic Assembly Lines",
   "de": "Robotische Montagebänder"
+ },
+ "pm_robotic_barns": {
+  "en": "Robotic Barns",
+  "de": "Roboterställe"
+ },
+ "pm_robotic_barns_desc": {
+  "en": "Robots push feed, clean the stalls and sort the animals, and a collar on each animal reports its health and movements to the barn's computers. The staff who remain watch the herd on screens and treat the animals the sensors flag.",
+  "de": "Roboter schieben Futter, reinigen die Boxen und sortieren die Tiere, und ein Halsband an jedem Tier meldet Gesundheit und Bewegungen an die Computer des Stalls. Das verbliebene Personal beobachtet die Herde auf Bildschirmen und behandelt die Tiere, die die Sensoren melden."
  },
  "pm_robotic_food_processing": {
   "en": "Robotic Food Processing",
@@ -8879,6 +8967,34 @@
   "en": "Modules for our colonies are assembled in Earth orbit from parts lifted one launch at a time. Only under the Simple and Full Colonies settings of the Space Race rule.",
   "de": "Module für unsere Kolonien werden im Erdorbit aus Teilen zusammengebaut, die Start um Start hinaufgebracht werden. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
  },
+ "pm_sr_mission_ceiling_deep_space": {
+  "en": "Up to $pm_deep_space_exploration$",
+  "de": "Bis einschließlich $pm_deep_space_exploration$"
+ },
+ "pm_sr_mission_ceiling_deep_space_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than $pm_deep_space_exploration$. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als $pm_deep_space_exploration$. Sie legt die Grenze jeden Monat fest."
+ },
+ "pm_sr_mission_ceiling_interstellar": {
+  "en": "Up to the $pm_interstellar_mission$",
+  "de": "Bis einschließlich $pm_interstellar_mission$"
+ },
+ "pm_sr_mission_ceiling_interstellar_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, and its revenue can carry any of them. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, und ihre Einnahmen können jede davon tragen. Sie legt die Grenze jeden Monat fest."
+ },
+ "pm_sr_mission_ceiling_mars_desc": {
+  "en": "This country's government keeps its program to missions whose bill its revenue can carry, none costlier than the $pm_mars_mission$. It sets the limit each month.",
+  "de": "Die Regierung dieses Landes beschränkt ihr Programm auf Missionen, deren Rechnung ihre Einnahmen tragen können, keine teurer als die $pm_mars_mission$. Sie legt die Grenze jeden Monat fest."
+ },
+ "pm_sr_mission_ceiling_none": {
+  "en": "Any Mission",
+  "de": "Jede Mission"
+ },
+ "pm_sr_mission_ceiling_none_desc": {
+  "en": "The program may fly any mission its technology allows.",
+  "de": "Das Programm darf jede Mission fliegen, die seine Technologie erlaubt."
+ },
  "pm_sr_site_marker": {
   "en": "Colony Record",
   "de": "Kolonieregister"
@@ -8898,6 +9014,30 @@
  "pm_sr_space_command_torch_yards": {
   "en": "Torch Yards",
   "de": "Fackelwerften"
+ },
+ "pm_sr_storage_component_depot": {
+  "en": "Component Depot",
+  "de": "Komponentenlager"
+ },
+ "pm_sr_storage_component_depot_desc": {
+  "en": "Climate-controlled hangars at the launch site keep finished module parts until their launch window opens. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Klimatisierte Hangars am Startplatz bewahren fertige Modulteile auf, bis ihr Startfenster sich öffnet. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Regel „Wettlauf ins All“."
+ },
+ "pm_sr_storage_none": {
+  "en": "No Module Storage",
+  "de": "Kein Modullager"
+ },
+ "pm_sr_storage_none_desc": {
+  "en": "Finished colony modules wait only in the program's own stores.",
+  "de": "Fertige Koloniemodule warten nur in den eigenen Lagern des Programms."
+ },
+ "pm_sr_storage_orbital_depot": {
+  "en": "Orbital Depot",
+  "de": "Orbitallager"
+ },
+ "pm_sr_storage_orbital_depot_desc": {
+  "en": "Finished modules wait in a depot in Earth orbit until their launch window opens. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Fertige Module warten in einem Lager im Erdorbit, bis ihr Startfenster sich öffnet. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Regel „Wettlauf ins All“."
  },
  "pm_st_res_hub_reserve": {
   "en": "Reserve Control",
@@ -10359,6 +10499,10 @@
   "en": "FCM La Seyne Shipyard",
   "de": "FCM-Werft La Seyne"
  },
+ "pmg_feed_additives_building_livestock_ranch": {
+  "en": "Feed Additives",
+  "de": "Futterzusätze"
+ },
  "pmg_ferranti_hollinwood_works": {
   "en": "Ferranti Hollinwood Works",
   "de": "Ferranti-Werke Hollinwood"
@@ -11350,6 +11494,10 @@
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",
   "de": "Schrottbeseitigung"
+ },
+ "pmg_space_program_mission_ceiling": {
+  "en": "Mission Limit",
+  "de": "Missionsgrenze"
  },
  "pmg_space_program_module_fabrication": {
   "en": "Module Fabrication",

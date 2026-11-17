@@ -31760,16 +31760,28 @@
   "de": "In Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#!"
  },
  "te_grid_ov_agreements_tt": {
-  "en": "#b Grid Interconnection Agreements#!\\nPartners: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, the countries with a $grid_interconnection_agreement$ with this one. Its stations join a partner's where they share a border, and its undersea cables join theirs across the sea.\\nIn reach: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! more countries with no agreement yet, where one side's undersea cables reach the other's. An agreement would join those cables.",
-  "de": "#b Netzverbundabkommen#!\\nPartner: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, die Länder mit einem $grid_interconnection_agreement$ mit diesem. Seine Stationen schließen sich denen eines Partners an, wo sie eine Grenze teilen, und seine Seekabel schließen sich ihren über das Meer hinweg an.\\nIn Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! weitere Länder ohne Abkommen, bei denen die Seekabel der einen Seite die der anderen erreichen. Ein Abkommen würde diese Kabel verbinden."
+  "en": "#b Grid Interconnection Agreements#!\\nSigned: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, the countries with a $grid_interconnection_agreement$ with this one. Its stations join a partner's where they share a border, and its undersea cables join theirs across the sea.\\nIn reach: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! more countries that aren't partners yet, where one side's undersea cables reach the other's. An agreement would join those cables.\\nMembers of a [concept_power_bloc] that holds $principle_group_market_unification$ or $principle_group_internal_trade$ IV or V are partners without one, counted under Bloc partners.",
+  "de": "#b Netzverbundabkommen#!\\nUnterzeichnet: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!, die Länder mit einem $grid_interconnection_agreement$ mit diesem. Seine Stationen schließen sich denen eines Partners an, wo sie eine Grenze teilen, und seine Seekabel schließen sich ihren über das Meer hinweg an.\\nIn Reichweite: #v [Country.MakeScope.ScriptValue('te_grid_tab_reach_disp')|0]#! weitere Länder, die noch keine Partner sind, bei denen die Seekabel der einen Seite die der anderen erreichen. Ein Abkommen würde diese Kabel verbinden.\\nMitglieder eines [Concept('concept_power_bloc','Machtblocks')], der $principle_group_market_unification$ oder $principle_group_internal_trade$ auf Stufe IV oder V hält, sind auch ohne Abkommen Partner und werden unter Blockpartner gezählt."
  },
  "te_grid_ov_agreements_word": {
-  "en": "Partners: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!",
-  "de": "Partner: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!"
+  "en": "Signed: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!",
+  "de": "Unterzeichnet: #v [Country.MakeScope.ScriptValue('te_grid_tab_partners_disp')|0]#!"
  },
  "te_grid_ov_agreements_word_none": {
   "en": "None",
   "de": "Keine"
+ },
+ "te_grid_ov_bloc": {
+  "en": "Bloc partners: #v [Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp')|0]#!, through #v [Country.GetPowerBloc.GetName]#!",
+  "de": "Blockpartner: #v [Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp')|0]#!, über #v [Country.GetPowerBloc.GetName]#!"
+ },
+ "te_grid_ov_bloc_none": {
+  "en": "Bloc partners: none",
+  "de": "Blockpartner: keine"
+ },
+ "te_grid_ov_bloc_tt": {
+  "en": "#b Bloc Partners#!\\nThe other members of [Country.GetPowerBloc.GetName] that this country has no $grid_interconnection_agreement$ with: #v [Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp')|0]#!.\\nWhile the bloc holds $principle_group_market_unification$ or $principle_group_internal_trade$ IV or V, its members' stations join where they border, and their undersea cables where either one's range reaches the other, as if they had signed the agreement. A member at war with this country isn't joined.\\nAn agreement with a member stays in force, and keeps the two joined, if the bloc gives the principle up or either country leaves.",
+  "de": "#b Blockpartner#!\\nDie übrigen Mitglieder von [Country.GetPowerBloc.GetName], mit denen dieses Land kein $grid_interconnection_agreement$ hat: #v [Country.MakeScope.ScriptValue('te_grid_tab_bloc_partners_disp')|0]#!.\\nSolange der Block $principle_group_market_unification$ oder $principle_group_internal_trade$ auf Stufe IV oder V hält, schließen sich die Stationen seiner Mitglieder an der Grenze an und ihre Seekabel dort, wo die Reichweite des einen die des anderen erreicht, als hätten sie das Abkommen unterzeichnet. Ein Mitglied im Krieg mit diesem Land wird nicht angeschlossen.\\nEin Abkommen mit einem Mitglied bleibt in Kraft und hält die beiden verbunden, wenn der Block das Prinzip aufgibt oder eines der Länder austritt."
  },
  "te_grid_ov_efficiency_cap": {
   "en": "Efficiency",
@@ -32127,13 +32139,41 @@
   "en": "#b See Through#!\\nFades this page so the map behind it shows, the journal entry's own map included: an entry's map shows only while its page is open. It stays faded as you pick maps in the Map Room. Click again to bring the page back; closing it does too. The faded page still takes clicks.",
   "de": "#b Durchsichtig#!\\nMacht diese Seite durchsichtig, sodass die Karte dahinter zu sehen ist, auch die eigene Karte des Journaleintrags: Die Karte eines Eintrags wird nur angezeigt, solange seine Seite geöffnet ist. Sie bleibt durchsichtig, während Sie im Kartenraum Karten auswählen. Erneut klicken, um die Seite zurückzuholen; ein Schließen tut es auch. Die durchsichtige Seite nimmt weiterhin Klicks an."
  },
+ "te_jmap_area_bloc_none_tt": {
+  "en": "#b $concept_power_bloc$#!\\nYou are in no [concept_power_bloc], so there is none to draw the maps over.",
+  "de": "#b $concept_power_bloc$#!\\nSie gehören keinem [concept_power_bloc] an, daher gibt es keinen, über dem die Karten gezeichnet werden könnten."
+ },
+ "te_jmap_area_bloc_tt": {
+  "en": "#b $concept_power_bloc$#!\\nDraw the maps over the states of every country in your [concept_power_bloc]. A state outside it is slate and shows no figure, and a map's colors run over the bloc's states alone. A country that joins or leaves follows within a month. If you leave the bloc, the area goes back to the world.",
+  "de": "#b $concept_power_bloc$#!\\nZeichnet die Karten über den Staaten aller Länder Ihres [Concept('concept_power_bloc','Machtblocks')]. Ein Staat außerhalb ist schiefergrau und zeigt keinen Wert, und die Farben einer Karte verlaufen nur über die Staaten des Blocks. Ein Land, das beitritt oder austritt, wird binnen eines Monats berücksichtigt. Verlassen Sie den Block, kehrt das Gebiet zur Welt zurück."
+ },
  "te_jmap_area_continent": {
   "en": "Continent",
   "de": "Kontinent"
  },
+ "te_jmap_area_continent_tt": {
+  "en": "#b $te_jmap_area_continent$#!\\nDraw the maps over one continent, picked in the rows that appear below: at first the one your capital stands in. A state outside it is slate and shows no figure, and a map's colors run over the continent's states alone.",
+  "de": "#b $te_jmap_area_continent$#!\\nZeichnet die Karten über einem Kontinent, der in den darunter erscheinenden Zeilen gewählt wird: zunächst der, in dem Ihre Hauptstadt liegt. Ein Staat außerhalb ist schiefergrau und zeigt keinen Wert, und die Farben einer Karte verlaufen nur über die Staaten des Kontinents."
+ },
+ "te_jmap_area_country_tt": {
+  "en": "#b $concept_country$#!\\nDraw the maps over your own states. Every other state is slate and shows no figure, and a map's colors run over your states alone.",
+  "de": "#b $concept_country$#!\\nZeichnet die Karten über Ihren eigenen Staaten. Jeder andere Staat ist schiefergrau und zeigt keinen Wert, und die Farben einer Karte verlaufen nur über Ihre Staaten."
+ },
+ "te_jmap_area_market_tt": {
+  "en": "#b $concept_market$#!\\nDraw the maps over the states of your [concept_market]. A state outside it is slate and shows no figure, and a map's colors run over the market's states alone. A state that joins or leaves the market follows within a month.",
+  "de": "#b $concept_market$#!\\nZeichnet die Karten über den Staaten Ihres [Concept('concept_market','Marktes')]. Ein Staat außerhalb ist schiefergrau und zeigt keinen Wert, und die Farben einer Karte verlaufen nur über die Staaten des Marktes. Ein Staat, der dem Markt beitritt oder ihn verlässt, wird binnen eines Monats berücksichtigt."
+ },
+ "te_jmap_area_text_world": {
+  "en": "the world",
+  "de": "die Welt"
+ },
  "te_jmap_area_world": {
   "en": "World",
   "de": "Welt"
+ },
+ "te_jmap_area_world_tt": {
+  "en": "#b $te_jmap_area_world$#!\\nDraw the maps over the whole world. A map's colors run from the world's low to its high.",
+  "de": "#b $te_jmap_area_world$#!\\nZeichnet die Karten über der ganzen Welt. Die Farben einer Karte verlaufen vom Tiefst- zum Höchstwert der Welt."
  },
  "te_jmap_banking_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the journal entry, which colors every country by the phase of its financial cycle. The map shows while the entry's page is open; the eye at its top left fades the page so the whole map shows.",
@@ -32179,9 +32219,25 @@
   "en": "Grayscale",
   "de": "Graustufen"
  },
+ "te_jmap_color_grey_tt": {
+  "en": "#b $te_jmap_color_grey$#!\\nPaint every map of figures in grays, light at the low end to dark at the high. A map with a meaningful midpoint puts it at the middle gray. A state with no figure, with none, or off its map's scale is striped: a gray of its own would read as a figure.",
+  "de": "#b $te_jmap_color_grey$#!\\nMalt jede Karte mit Werten in Grautönen, am unteren Ende hell, am oberen dunkel. Eine Karte mit einem sinnvollen Mittelpunkt legt ihn auf das mittlere Grau. Ein Staat ohne Wert, mit keinem oder außerhalb der Skala seiner Karte ist gestreift: Ein eigenes Grau würde wie ein Wert wirken."
+ },
+ "te_jmap_color_no_range_tt": {
+  "en": "#b $te_jmap_color$#!\\nThe map on the page shows categories or a fixed scale, each in colors of its own, so it has no ramp to swap for another. The setting is kept for the next map that has one.",
+  "de": "#b $te_jmap_color$#!\\nDie Karte auf der Seite zeigt Kategorien oder eine feste Skala, jeweils in eigenen Farben, daher hat sie keinen Farbverlauf, der sich austauschen ließe. Die Einstellung bleibt für die nächste Karte erhalten, die einen hat."
+ },
+ "te_jmap_color_own_tt": {
+  "en": "#b $te_jmap_color_own$#!\\nEach map in the colors chosen for it. The map's own tooltip names them.",
+  "de": "#b $te_jmap_color_own$#!\\nJede Karte in den Farben, die für sie gewählt wurden. Der Tooltip der Karte nennt sie."
+ },
  "te_jmap_color_safe": {
   "en": "Colorblind-Safe",
   "de": "Für Farbenblinde"
+ },
+ "te_jmap_color_safe_tt": {
+  "en": "#b $te_jmap_color_safe$#!\\nPaint every map of figures from one ramp that stays readable with red-green or blue-yellow color blindness, and keeps its order in gray: pale yellow at the low end to brown at the high. A map with a meaningful midpoint, such as $te_jmap_pick_fertility$ at replacement, runs orange below it and purple above, near white at it. A state its map paints below its scale, such as a company headquarters at a loss, is blue.",
+  "de": "#b $te_jmap_color_safe$#!\\nMalt jede Karte mit Werten in einem einzigen Farbverlauf, der auch bei Rot-Grün- oder Blau-Gelb-Farbenblindheit lesbar bleibt und in Grau seine Reihenfolge behält: von blassem Gelb am unteren Ende bis Braun am oberen. Eine Karte mit einem sinnvollen Mittelpunkt, etwa $te_jmap_pick_fertility$ beim Bestandserhaltungsniveau, läuft darunter in Orange und darüber in Violett, am Mittelpunkt fast weiß. Ein Staat, den seine Karte unter ihrer Skala malt, etwa ein Hauptsitz mit Verlust, ist blau."
  },
  "te_jmap_color_short_grey": {
   "en": "Gray",
@@ -32191,9 +32247,117 @@
   "en": "Colorblind",
   "de": "Farbenblind"
  },
+ "te_jmap_color_text_grey": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Light gray at the low end to dark gray at the high. A state with no figure is striped.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Von hellem Grau am unteren Ende bis zu dunklem Grau am oberen. Ein Staat ohne Wert ist gestreift."
+ },
+ "te_jmap_color_text_gw_grey": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Light gray at the low end to dark gray at the high. A state that takes more out of the air than it puts in, or with no figure, is striped.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Von hellem Grau am unteren Ende bis zu dunklem Grau am oberen. Ein Staat, der der Luft mehr entzieht, als er ihr zuführt, oder ohne Wert ist gestreift."
+ },
+ "te_jmap_color_text_gw_safe": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Pale yellow at the low end to brown at the high. A state that takes more out of the air than it puts in is blue.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Von blassem Gelb am unteren Ende bis Braun am oberen. Ein Staat, der der Luft mehr entzieht, als er ihr zuführt, ist blau."
+ },
+ "te_jmap_color_text_hq_grey": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Light gray at the low end to dark gray at the high. A state at a loss, or with no headquarters, is striped, and regional headquarters are not marked.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Von hellem Grau am unteren Ende bis zu dunklem Grau am oberen. Ein Staat mit Verlust oder ohne Hauptsitz ist gestreift, und regionale Hauptsitze werden nicht markiert."
+ },
+ "te_jmap_color_text_hq_safe": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Pale yellow at the low end to brown at the high. A loss is blue, and a state with no headquarters is gray. Gold stripes mark a state where a company keeps a regional headquarters.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Von blassem Gelb am unteren Ende bis Braun am oberen. Ein Verlust ist blau, und ein Staat ohne Hauptsitz ist grau. Goldene Streifen markieren einen Staat, in dem ein Unternehmen einen regionalen Hauptsitz unterhält."
+ },
+ "te_jmap_color_text_mid_grey": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Light gray at the low end to dark gray at the high. The midpoint sits at the middle gray. A state with no figure is striped.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Von hellem Grau am unteren Ende bis zu dunklem Grau am oberen. Der Mittelpunkt liegt auf dem mittleren Grau. Ein Staat ohne Wert ist gestreift."
+ },
+ "te_jmap_color_text_mid_safe": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Orange below the midpoint, near white at it, purple above, each deepening toward its end of the range.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Orange unter dem Mittelpunkt, am Mittelpunkt fast weiß, darüber Violett, jeweils satter werdend zum Ende des Bereichs hin."
+ },
+ "te_jmap_color_text_none_grey": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Light gray at the low end to dark gray at the high. A state with none, or with no figure, is striped.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_grey$#!. Von hellem Grau am unteren Ende bis zu dunklem Grau am oberen. Ein Staat mit keinem oder ohne Wert ist gestreift."
+ },
+ "te_jmap_color_text_none_safe": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Pale yellow at the low end to brown at the high. A state with none is pale.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Von blassem Gelb am unteren Ende bis Braun am oberen. Ein Staat mit keinem ist blass."
+ },
+ "te_jmap_color_text_safe": {
+  "en": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Pale yellow at the low end to brown at the high.",
+  "de": "$te_jmap_color$: #b $te_jmap_color_safe$#!. Von blassem Gelb am unteren Ende bis Braun am oberen."
+ },
+ "te_jmap_continent_africa_tt": {
+  "en": "#b $geographic_region_africa$#!\\nDraw the maps over these [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_north_africa$, $region_nile_basin$, $region_west_africa$, $region_equatorial_africa$, $region_east_africa$ and $region_southern_africa$.",
+  "de": "#b $geographic_region_africa$#!\\nZeichnet die Karten über diesen [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_north_africa$, $region_nile_basin$, $region_west_africa$, $region_equatorial_africa$, $region_east_africa$ und $region_southern_africa$."
+ },
+ "te_jmap_continent_asia_tt": {
+  "en": "#b $geographic_region_asia$#!\\nDraw the maps over these [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_near_east$, $region_arabia$, $region_greater_persia$, $region_central_asia$, $region_himalayas$, $region_north_india$, $region_south_india$, $region_north_china$, $region_south_china$, $region_northeast_asia$, $region_siberia$, $region_indochina$ and $region_indonesia$.",
+  "de": "#b $geographic_region_asia$#!\\nZeichnet die Karten über diesen [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_near_east$, $region_arabia$, $region_greater_persia$, $region_central_asia$, $region_himalayas$, $region_north_india$, $region_south_india$, $region_north_china$, $region_south_china$, $region_northeast_asia$, $region_siberia$, $region_indochina$ und $region_indonesia$."
+ },
+ "te_jmap_continent_europe_tt": {
+  "en": "#b $geographic_region_europe$#!\\nDraw the maps over these [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_western_europe$, $region_southern_europe$, $region_central_europe$, $region_northern_europe$, $region_eastern_europe$, $region_balkans$ and $region_russia$.",
+  "de": "#b $geographic_region_europe$#!\\nZeichnet die Karten über diesen [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_western_europe$, $region_southern_europe$, $region_central_europe$, $region_northern_europe$, $region_eastern_europe$, $region_balkans$ und $region_russia$."
+ },
+ "te_jmap_continent_north_america_tt": {
+  "en": "#b $geographic_region_north_america$#!\\nDraw the maps over these [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_canada$, $region_atlantic_coast$, $region_great_plains$, $region_pacific_coast$ and $region_central_america$.",
+  "de": "#b $geographic_region_north_america$#!\\nZeichnet die Karten über diesen [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_canada$, $region_atlantic_coast$, $region_great_plains$, $region_pacific_coast$ und $region_central_america$."
+ },
+ "te_jmap_continent_oceania_tt": {
+  "en": "#b $region_oceania$#!\\nDraw the maps over one [concept_strategic_region], $region_oceania$.",
+  "de": "#b $region_oceania$#!\\nZeichnet die Karten über einer [concept_strategic_region], $region_oceania$."
+ },
+ "te_jmap_continent_south_america_tt": {
+  "en": "#b $geographic_region_south_america$#!\\nDraw the maps over these [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_gran_colombia$, $region_andes$, $region_brazil$ and $region_la_plata$.",
+  "de": "#b $geographic_region_south_america$#!\\nZeichnet die Karten über diesen [Concept('concept_strategic_region', '$concept_strategic_regions|q$')]: $region_gran_colombia$, $region_andes$, $region_brazil$ und $region_la_plata$."
+ },
  "te_jmap_covert_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on your agent networks, each country colored by the network's strength. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei Ihren Agentennetzwerken, jedes Land nach der Stärke des Netzwerks eingefärbt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
+ },
+ "te_jmap_curve_doubling": {
+  "en": "$te_jmap_scale_text_own$ Each doubling of the figure takes the same share of the color, from the range's low to its high.",
+  "de": "$te_jmap_scale_text_own$ Jede Verdopplung des Werts nimmt denselben Anteil der Farbe ein, vom Tiefst- zum Höchstwert des Bereichs."
+ },
+ "te_jmap_curve_knee_20_50": {
+  "en": "$te_jmap_scale_text_own$ Half of the color goes to the first fifth of the range, and the rest to what is left of it.",
+  "de": "$te_jmap_scale_text_own$ Die Hälfte der Farbe geht an das erste Fünftel des Bereichs, der Rest an das, was von ihm übrig ist."
+ },
+ "te_jmap_curve_knee_31_64": {
+  "en": "$te_jmap_scale_text_own$ 64% of the color goes to the first 31% of the range, and the rest to what is left of it.",
+  "de": "$te_jmap_scale_text_own$ 64% der Farbe gehen an die ersten 31% des Bereichs, der Rest an das, was von ihm übrig ist."
+ },
+ "te_jmap_curve_knee_33_67": {
+  "en": "$te_jmap_scale_text_own$ Two-thirds of the color goes to the first third of the range, and the rest to what is left of it.",
+  "de": "$te_jmap_scale_text_own$ Zwei Drittel der Farbe gehen an das erste Drittel des Bereichs, der Rest an das, was von ihm übrig ist."
+ },
+ "te_jmap_curve_knee_37_70": {
+  "en": "$te_jmap_scale_text_own$ 70% of the color goes to the first 37% of the range, and the rest to what is left of it.",
+  "de": "$te_jmap_scale_text_own$ 70% der Farbe gehen an die ersten 37% des Bereichs, der Rest an das, was von ihm übrig ist."
+ },
+ "te_jmap_curve_mid": {
+  "en": "$te_jmap_scale_text_own$ The colors run straight on each side of the midpoint, to the range's end on that side.",
+  "de": "$te_jmap_scale_text_own$ Die Farben verlaufen zu beiden Seiten des Mittelpunkts geradlinig bis zum Ende des Bereichs auf dieser Seite."
+ },
+ "te_jmap_curve_mid_25_57_40_73": {
+  "en": "$te_jmap_scale_text_own$ Below the midpoint, 57% of the color goes to the first quarter of the way to the range's low; above it, 73% goes to the first 40% of the way to its high.",
+  "de": "$te_jmap_scale_text_own$ Unter dem Mittelpunkt gehen 57% der Farbe an das erste Viertel des Wegs zum Tiefstwert des Bereichs; darüber gehen 73% an die ersten 40% des Wegs zu seinem Höchstwert."
+ },
+ "te_jmap_curve_mid_33_67_33_67": {
+  "en": "$te_jmap_scale_text_own$ Below the midpoint, two-thirds of the color goes to the first third of the way to the range's low; above it, two-thirds goes to the first third of the way to its high.",
+  "de": "$te_jmap_scale_text_own$ Unter dem Mittelpunkt gehen zwei Drittel der Farbe an das erste Drittel des Wegs zum Tiefstwert des Bereichs; darüber gehen zwei Drittel an das erste Drittel des Wegs zu seinem Höchstwert."
+ },
+ "te_jmap_curve_mid_38_71_67_89": {
+  "en": "$te_jmap_scale_text_own$ Below the midpoint, 71% of the color goes to the first 38% of the way to the range's low; above it, 89% goes to the first two-thirds of the way to its high.",
+  "de": "$te_jmap_scale_text_own$ Unter dem Mittelpunkt gehen 71% der Farbe an die ersten 38% des Wegs zum Tiefstwert des Bereichs; darüber gehen 89% an die ersten zwei Drittel des Wegs zu seinem Höchstwert."
+ },
+ "te_jmap_curve_mid_s_38_71": {
+  "en": "$te_jmap_scale_text_own$ Below the midpoint, the colors run straight to the range's low; above it, 71% of the color goes to the first 38% of the way to its high.",
+  "de": "$te_jmap_scale_text_own$ Unter dem Mittelpunkt verlaufen die Farben geradlinig zum Tiefstwert des Bereichs; darüber gehen 71% der Farbe an die ersten 38% des Wegs zu seinem Höchstwert."
+ },
+ "te_jmap_curve_straight": {
+  "en": "$te_jmap_scale_text_own$ The colors run straight from the range's low to its high.",
+  "de": "$te_jmap_scale_text_own$ Die Farben verlaufen geradlinig vom Tiefst- zum Höchstwert des Bereichs."
  },
  "te_jmap_demog_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on life expectancy, where the census's other maps are a click away. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
@@ -32211,6 +32375,10 @@
   "en": "#b Show on the Map#!\\nOpens the Map Room on emissions, each state's share of the world's. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Emissionen, dem Anteil jedes Staates an denen der Welt. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
  },
+ "te_jmap_now_none": {
+  "en": "All defaults",
+  "de": "Alles Standard"
+ },
  "te_jmap_nuclear_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on nuclear weapons: the world's nuclear powers, and your deterrent's hosts, umbrella and guarantees. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den Nuklearwaffen: die Nuklearmächte der Welt sowie die Gastländer, der Schirm und die Garantien Ihrer Abschreckung. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
@@ -32219,29 +32387,77 @@
   "en": "Map Options",
   "de": "Kartenoptionen"
  },
+ "te_jmap_options_in_use": {
+  "en": "Map options in use: #b [GetPlayer.GetCustom('te_jmap_now_area')][GetPlayer.GetCustom('te_jmap_now_trim')][GetPlayer.GetCustom('te_jmap_set_scale')][GetPlayer.GetCustom('te_jmap_set_color')]#!",
+  "de": "Kartenoptionen in Verwendung: #b [GetPlayer.GetCustom('te_jmap_now_area')][GetPlayer.GetCustom('te_jmap_now_trim')][GetPlayer.GetCustom('te_jmap_set_scale')][GetPlayer.GetCustom('te_jmap_set_color')]#!"
+ },
+ "te_jmap_options_in_use_tt": {
+  "en": "The maps are drawn with these options, set under $te_jmap_options_heading$ below the maps. A state outside the area is slate, and a map's colors run over the states inside it, on the scale and in the colors set.",
+  "de": "Die Karten werden mit diesen Optionen gezeichnet, die unter $te_jmap_options_heading$ unterhalb der Karten eingestellt werden. Ein Staat außerhalb des Gebiets ist schiefergrau, und die Farben einer Karte verlaufen über die Staaten darin, auf der eingestellten Skala und in den eingestellten Farben."
+ },
+ "te_jmap_options_measured": {
+  "en": "This map is measured over #b [GetPlayer.GetCustom('te_jmap_area_text')]#!: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_states')|0]#! states have a figure, and its colors run between them with the lowest #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_cut')|0]#! and the highest #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_cut')|0]#! left out.",
+  "de": "Diese Karte wird über #b [GetPlayer.GetCustom('te_jmap_area_text')]#! gemessen: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_states')|0]#! Staaten haben einen Wert, und ihre Farben verlaufen zwischen ihnen, wobei die niedrigsten #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_cut')|0]#! und die höchsten #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_cut')|0]#! ausgelassen werden."
+ },
+ "te_jmap_options_measured_ranked": {
+  "en": "This map is ranked over #b [GetPlayer.GetCustom('te_jmap_area_text')]#!: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_states')|0]#! states have a figure, each colored by its place among them. The places were taken at the last measure (your pick, an option change or the turn of the month), so they are a month old at most, and a figure that moves daily leaves its state where it was until the next.",
+  "de": "Diese Karte wird über #b [GetPlayer.GetCustom('te_jmap_area_text')]#! nach Rang geordnet: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_shown_states')|0]#! Staaten haben einen Wert, jeder nach seinem Platz unter ihnen gefärbt. Die Plätze wurden bei der letzten Messung ermittelt (Ihre Auswahl, eine Optionsänderung oder der Monatswechsel), sind also höchstens einen Monat alt, und ein Wert, der sich täglich ändert, lässt seinen Staat bis zur nächsten Messung, wo er war."
+ },
+ "te_jmap_options_no_range": {
+  "en": "This map shows categories or a fixed scale, so $te_jmap_outliers$, $te_jmap_scale$ and $te_jmap_color$ have nothing to act on. $te_jmap_area$ still applies.",
+  "de": "Diese Karte zeigt Kategorien oder eine feste Skala, daher haben $te_jmap_outliers$, $te_jmap_scale$ und $te_jmap_color$ nichts, worauf sie wirken könnten. $te_jmap_area$ gilt weiterhin."
+ },
+ "te_jmap_options_tt": {
+  "en": "#b $te_jmap_options_heading$#!\\nWhere the Map Room draws its maps, how many states each end of a map's color range leaves out, the scale its colors run on and the colors themselves. They apply to every map on this page, and to no system's own journal entry.",
+  "de": "#b $te_jmap_options_heading$#!\\nWo der Kartenraum seine Karten zeichnet, wie viele Staaten jedes Ende des Farbbereichs einer Karte auslässt, auf welcher Skala die Farben verlaufen und welche Farben es sind. Sie gelten für jede Karte auf dieser Seite und für keinen eigenen Journaleintrag eines Systems."
+ },
  "te_jmap_pick_academics": {
   "en": "Academics",
   "de": "Akademiker"
+ },
+ "te_jmap_pick_academics_colors": {
+  "en": "$te_jmap_color_text_own$ From pale aqua at the low end to teal at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Aqua am unteren Ende bis Petrol am oberen."
  },
  "te_jmap_pick_aristocrats": {
   "en": "Aristocrats",
   "de": "Aristokraten"
  },
+ "te_jmap_pick_aristocrats_colors": {
+  "en": "$te_jmap_color_text_own$ From pale lilac at the low end to violet at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Flieder am unteren Ende bis Violett am oberen."
+ },
  "te_jmap_pick_armed_forces": {
   "en": "Armed Forces",
   "de": "Streitkräfte"
+ },
+ "te_jmap_pick_armed_forces_colors": {
+  "en": "$te_jmap_color_text_own$ From pale khaki at the low end to deep olive at the high. A state with none is pale.",
+  "de": "$te_jmap_color_text_own$ Von blassem Khaki am unteren Ende bis tiefem Oliv am oberen. Ein Staat mit keinen ist blass."
  },
  "te_jmap_pick_base_comfort": {
   "en": "Base Comfort",
   "de": "Grundkomfort"
  },
+ "te_jmap_pick_base_comfort_colors": {
+  "en": "$te_jmap_color_text_own$ Green where the climate draws people, cream at none, red where it costs.",
+  "de": "$te_jmap_color_text_own$ Grün, wo das Klima Menschen anzieht, Creme bei keinem, Rot, wo es kostet."
+ },
  "te_jmap_pick_birth_rate": {
   "en": "Birth Rate",
   "de": "Geburtsrate"
  },
+ "te_jmap_pick_birth_rate_colors": {
+  "en": "$te_jmap_color_text_own$ From pale blue at the low end to deep blue at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Blau am unteren Ende bis tiefem Blau am oberen."
+ },
  "te_jmap_pick_capitalists": {
   "en": "Capitalists",
   "de": "Kapitalisten"
+ },
+ "te_jmap_pick_capitalists_colors": {
+  "en": "$te_jmap_color_text_own$ From cream at the low end to gold at the high.",
+  "de": "$te_jmap_color_text_own$ Von Creme am unteren Ende bis Gold am oberen."
  },
  "te_jmap_pick_city_rank": {
   "en": "City Rank",
@@ -32251,6 +32467,10 @@
   "en": "Clergymen",
   "de": "Geistliche"
  },
+ "te_jmap_pick_clergy_colors": {
+  "en": "$te_jmap_color_text_own$ From pale blue at the low end to slate blue at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Blau am unteren Ende bis Schieferblau am oberen."
+ },
  "te_jmap_pick_colonies": {
   "en": "Colonies",
   "de": "Kolonien"
@@ -32259,61 +32479,125 @@
   "en": "Company HQs",
   "de": "Unternehmenshauptsitze"
  },
+ "te_jmap_pick_company_hqs_colors": {
+  "en": "$te_jmap_color_text_own$ From ice blue at the low end to navy at the high. A loss is red, and a state with no headquarters is gray. Gold stripes mark a state where a company keeps a regional headquarters.",
+  "de": "$te_jmap_color_text_own$ Von Eisblau am unteren Ende bis Marineblau am oberen. Ein Verlust ist rot, und ein Staat ohne Hauptsitz ist grau. Goldene Streifen markieren einen Staat, in dem ein Unternehmen einen regionalen Hauptsitz unterhält."
+ },
  "te_jmap_pick_crowding": {
   "en": "Crowding Penalty",
   "de": "Überfüllungsabzug"
+ },
+ "te_jmap_pick_crowding_colors": {
+  "en": "$te_jmap_color_text_own$ From cream at the low end to deep purple at the high.",
+  "de": "$te_jmap_color_text_own$ Von Creme am unteren Ende bis tiefem Purpur am oberen."
  },
  "te_jmap_pick_current_comfort": {
   "en": "Current Comfort",
   "de": "Aktueller Komfort"
  },
+ "te_jmap_pick_current_comfort_colors": {
+  "en": "$te_jmap_color_text_own$ Green where the climate draws people, cream at none, red where it costs, as on $te_jmap_pick_base_comfort$.",
+  "de": "$te_jmap_color_text_own$ Grün, wo das Klima Menschen anzieht, Creme bei keinem, Rot, wo es kostet, wie bei $te_jmap_pick_base_comfort$."
+ },
  "te_jmap_pick_death_rate": {
   "en": "Death Rate",
   "de": "Sterberate"
+ },
+ "te_jmap_pick_death_rate_colors": {
+  "en": "$te_jmap_color_text_own$ From pale peach at the low end to deep red at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Pfirsich am unteren Ende bis tiefem Rot am oberen."
  },
  "te_jmap_pick_devastation": {
   "en": "Devastation",
   "de": "Verwüstung"
  },
+ "te_jmap_pick_devastation_colors": {
+  "en": "$te_jmap_color_text_own$ From pale green at the low end to dark brown at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Grün am unteren Ende bis dunklem Braun am oberen."
+ },
+ "te_jmap_pick_dynastic_wealth_colors": {
+  "en": "$te_jmap_color_text_own$ Teal below 50, cream at it, plum above.",
+  "de": "$te_jmap_color_text_own$ Petrol unter 50, Creme bei 50, Pflaume darüber."
+ },
  "te_jmap_pick_emissions": {
   "en": "Emissions",
   "de": "Emissionen"
+ },
+ "te_jmap_pick_emissions_colors": {
+  "en": "$te_jmap_color_text_own$ From pale sand at the low end to soot brown at the high. A state that takes more out of the air than it puts in is green.",
+  "de": "$te_jmap_color_text_own$ Von blassem Sand am unteren Ende bis Rußbraun am oberen. Ein Staat, der der Luft mehr entzieht, als er ihr zuführt, ist grün."
  },
  "te_jmap_pick_family_planning": {
   "en": "Family Planning",
   "de": "Familienplanung"
  },
+ "te_jmap_pick_family_planning_colors": {
+  "en": "$te_jmap_color_text_own$ From pale sand at the low end to violet at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Sand am unteren Ende bis Violett am oberen."
+ },
  "te_jmap_pick_fertility": {
   "en": "Fertility",
   "de": "Fruchtbarkeit"
+ },
+ "te_jmap_pick_fertility_colors": {
+  "en": "$te_jmap_color_text_own$ Blue below replacement, cream at it, rust above.",
+  "de": "$te_jmap_color_text_own$ Blau unter dem Bestandserhaltungsniveau, Creme bei diesem, Rostrot darüber."
  },
  "te_jmap_pick_fighting_age_men": {
   "en": "Fighting-Age Men",
   "de": "Wehrfähige Männer"
  },
+ "te_jmap_pick_fighting_age_men_colors": {
+  "en": "$te_jmap_color_text_own$ From pale straw at the low end to slate blue at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Stroh am unteren Ende bis Schieferblau am oberen."
+ },
  "te_jmap_pick_gdp_per_capita": {
   "en": "GDP per Capita",
   "de": "BIP pro Kopf"
+ },
+ "te_jmap_pick_gdp_per_capita_colors": {
+  "en": "$te_jmap_color_text_own$ From pale straw at the low end to deep green at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Stroh am unteren Ende bis tiefem Grün am oberen."
  },
  "te_jmap_pick_gini": {
   "en": "Gini Coefficient",
   "de": "Gini-Koeffizient"
  },
+ "te_jmap_pick_gini_colors": {
+  "en": "$te_jmap_color_text_own$ From pale blue at the low end to burnt orange at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Blau am unteren Ende bis Dunkelorange am oberen."
+ },
  "te_jmap_pick_grandeur": {
   "en": "Grandeur",
   "de": "Grandeur"
+ },
+ "te_jmap_pick_grandeur_colors": {
+  "en": "$te_jmap_color_text_own$ From cream at the low end to bronze at the high. A state with no grand monument is pale.",
+  "de": "$te_jmap_color_text_own$ Von Creme am unteren Ende bis Bronze am oberen. Ein Staat ohne Großes Monument ist blass."
  },
  "te_jmap_pick_health_care": {
   "en": "Health Care",
   "de": "Gesundheitsversorgung"
  },
+ "te_jmap_pick_health_care_colors": {
+  "en": "$te_jmap_color_text_own$ From pale sand at the low end to deep green at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Sand am unteren Ende bis tiefem Grün am oberen."
+ },
  "te_jmap_pick_infant_mortality": {
   "en": "Infant Mortality",
   "de": "Säuglingssterblichkeit"
  },
+ "te_jmap_pick_infant_mortality_colors": {
+  "en": "$te_jmap_color_text_own$ From teal at the low end through amber halfway to oxblood at the high.",
+  "de": "$te_jmap_color_text_own$ Von Petrol am unteren Ende über Bernstein in der Mitte bis Ochsenblutrot am oberen."
+ },
  "te_jmap_pick_investment": {
   "en": "Investment",
   "de": "Investitionen"
+ },
+ "te_jmap_pick_investment_colors": {
+  "en": "$te_jmap_color_text_own$ From pale straw at the low end to deep bronze at the high. A state that pays nothing is pale.",
+  "de": "$te_jmap_color_text_own$ Von blassem Stroh am unteren Ende bis tiefem Bronze am oberen. Ein Staat, der nichts zahlt, ist blass."
  },
  "te_jmap_pick_leading_cause": {
   "en": "Leading Cause",
@@ -32323,17 +32607,33 @@
   "en": "Life Expectancy",
   "de": "Lebenserwartung"
  },
+ "te_jmap_pick_life_expectancy_colors": {
+  "en": "$te_jmap_color_text_own$ From oxblood at the low end through amber halfway to teal at the high.",
+  "de": "$te_jmap_color_text_own$ Von Ochsenblutrot am unteren Ende über Bernstein in der Mitte bis Petrol am oberen."
+ },
  "te_jmap_pick_median_age": {
   "en": "Median Age",
   "de": "Medianalter"
+ },
+ "te_jmap_pick_median_age_colors": {
+  "en": "$te_jmap_color_text_own$ From straw at the low end through rose halfway to aubergine at the high.",
+  "de": "$te_jmap_color_text_own$ Von Stroh am unteren Ende über Rosa in der Mitte bis Aubergine am oberen."
  },
  "te_jmap_pick_natural_change": {
   "en": "Natural Change",
   "de": "Natürlicher Saldo"
  },
+ "te_jmap_pick_natural_change_colors": {
+  "en": "$te_jmap_color_text_own$ Violet where the people shrink, cream at none, green where they grow.",
+  "de": "$te_jmap_color_text_own$ Violett, wo die Bevölkerung schrumpft, Creme bei keiner Veränderung, Grün, wo sie wächst."
+ },
  "te_jmap_pick_net_migration": {
   "en": "Net Migration",
   "de": "Wanderungssaldo"
+ },
+ "te_jmap_pick_net_migration_colors": {
+  "en": "$te_jmap_color_text_own$ Orange where people leave, cream at none, blue where they arrive.",
+  "de": "$te_jmap_color_text_own$ Orange, wo Menschen fortziehen, Creme bei keiner, Blau, wo sie ankommen."
  },
  "te_jmap_pick_networks": {
   "en": "Agent Networks",
@@ -32351,6 +32651,10 @@
   "en": "Aged 65 and Over",
   "de": "65 und älter"
  },
+ "te_jmap_pick_old_share_colors": {
+  "en": "$te_jmap_color_text_own$ From pale straw at the low end to plum at the high.",
+  "de": "$te_jmap_color_text_own$ Von blassem Stroh am unteren Ende bis Pflaume am oberen."
+ },
  "te_jmap_pick_ownership": {
   "en": "Ownership",
   "de": "Eigentum"
@@ -32359,9 +32663,21 @@
   "en": "Political Models",
   "de": "Politische Modelle"
  },
+ "te_jmap_pick_population_density": {
+  "en": "Population Density",
+  "de": "Bevölkerungsdichte"
+ },
+ "te_jmap_pick_population_density_colors": {
+  "en": "$te_jmap_color_text_own$ From pale lemon at the low end to deep wine at the high. A state with no people is pale.",
+  "de": "$te_jmap_color_text_own$ Von blassem Zitronengelb am unteren Ende bis tiefem Weinrot am oberen. Ein Staat ohne Einwohner ist blass."
+ },
  "te_jmap_pick_population_growth": {
   "en": "Population Growth",
   "de": "Bevölkerungswachstum"
+ },
+ "te_jmap_pick_population_growth_colors": {
+  "en": "$te_jmap_color_text_own$ Magenta where the people shrank, cream at none, teal where they grew.",
+  "de": "$te_jmap_color_text_own$ Magenta, wo die Bevölkerung geschrumpft ist, Creme bei keinem Wachstum, Petrol, wo sie gewachsen ist."
  },
  "te_jmap_pick_power_grids": {
   "en": "Power Grids",
@@ -32371,17 +32687,33 @@
   "en": "Sex Balance",
   "de": "Geschlechterverhältnis"
  },
+ "te_jmap_pick_sex_balance_colors": {
+  "en": "$te_jmap_color_text_own$ Rose with fewer men, cream at even, blue with more.",
+  "de": "$te_jmap_color_text_own$ Rosa bei weniger Männern, Creme bei Gleichstand, Blau bei mehr."
+ },
  "te_jmap_pick_tourism_appeal": {
   "en": "Tourism Appeal",
   "de": "Tourismusattraktivität"
+ },
+ "te_jmap_pick_tourism_appeal_colors": {
+  "en": "$te_jmap_color_text_own$ From dull sand at the low end to sea blue at the high.",
+  "de": "$te_jmap_color_text_own$ Von mattem Sand am unteren Ende bis Meerblau am oberen."
  },
  "te_jmap_pick_trade_capacity": {
   "en": "Trade Capacity",
   "de": "Handelskapazität"
  },
+ "te_jmap_pick_trade_capacity_colors": {
+  "en": "$te_jmap_color_text_own$ From pale sand at the low end to deep sea green at the high. A state with none is pale.",
+  "de": "$te_jmap_color_text_own$ Von blassem Sand am unteren Ende bis tiefem Meergrün am oberen. Ein Staat mit keiner ist blass."
+ },
  "te_jmap_pick_turmoil": {
   "en": "Turmoil",
   "de": "Aufruhr"
+ },
+ "te_jmap_pick_turmoil_colors": {
+  "en": "$te_jmap_color_text_own$ From gray-green at the low end to red at the high.",
+  "de": "$te_jmap_color_text_own$ Von Graugrün am unteren Ende bis Rot am oberen."
  },
  "te_jmap_pick_united_nations": {
   "en": "United Nations",
@@ -32391,9 +32723,17 @@
   "en": "Urban People",
   "de": "Stadtbevölkerung"
  },
+ "te_jmap_pick_urban_share_colors": {
+  "en": "$te_jmap_color_text_own$ From green at the low end to brick red at the high.",
+  "de": "$te_jmap_color_text_own$ Von Grün am unteren Ende bis Ziegelrot am oberen."
+ },
  "te_jmap_pick_war_dead": {
   "en": "War Dead",
   "de": "Kriegstote"
+ },
+ "te_jmap_pick_war_dead_colors": {
+  "en": "$te_jmap_color_text_own$ From pale rose at the low end to dark red at the high. A state that lost none is pale.",
+  "de": "$te_jmap_color_text_own$ Von blassem Rosa am unteren Ende bis dunklem Rot am oberen. Ein Staat ohne Verluste ist blass."
  },
  "te_jmap_room_pick_heading": {
   "en": "#b Show on the map#!",
@@ -32403,21 +32743,77 @@
   "en": "Linear",
   "de": "Linear"
  },
+ "te_jmap_scale_linear_tt": {
+  "en": "#b $te_jmap_scale_linear$#!\\nRun a map's colors straight from its range's low to its high. A map with a meaningful midpoint, such as $te_jmap_pick_fertility$ at replacement, runs straight on each side of it.",
+  "de": "#b $te_jmap_scale_linear$#!\\nLässt die Farben einer Karte geradlinig von ihrem Tiefst- zum Höchstwert verlaufen. Eine Karte mit einem sinnvollen Mittelpunkt, etwa $te_jmap_pick_fertility$ beim Bestandserhaltungsniveau, verläuft zu beiden Seiten davon geradlinig."
+ },
  "te_jmap_scale_log": {
   "en": "Logarithmic",
   "de": "Logarithmisch"
+ },
+ "te_jmap_scale_log_tt": {
+  "en": "#b $te_jmap_scale_log$#!\\nGive each doubling of the figure the same share of the color, so low figures spread apart and high ones draw together. The scale starts at the range's low, or at a 64th of its high where the low is smaller. A map with a meaningful midpoint doubles by the distance from the midpoint on each side, and runs straight close to it, where a logarithm has no start.",
+  "de": "#b $te_jmap_scale_log$#!\\nGibt jeder Verdopplung des Werts denselben Anteil der Farbe, sodass niedrige Werte auseinandergezogen und hohe zusammengerückt werden. Die Skala beginnt beim Tiefstwert des Bereichs oder bei einem 64stel seines Höchstwerts, wo der Tiefstwert kleiner ist. Eine Karte mit einem sinnvollen Mittelpunkt verdoppelt sich mit dem Abstand vom Mittelpunkt auf jeder Seite und verläuft nahe daran geradlinig, wo ein Logarithmus keinen Anfang hat."
+ },
+ "te_jmap_scale_no_range_tt": {
+  "en": "#b $te_jmap_scale$#!\\nThe map on the page shows categories or a fixed scale, so it has no range for another scale to run over. The setting is kept for the next map that has one.",
+  "de": "#b $te_jmap_scale$#!\\nDie Karte auf der Seite zeigt Kategorien oder eine feste Skala, daher hat sie keinen Bereich, über dem eine andere Skala verlaufen könnte. Die Einstellung bleibt für die nächste Karte erhalten, die einen hat."
  },
  "te_jmap_scale_own": {
   "en": "Map Default",
   "de": "Kartenstandard"
  },
+ "te_jmap_scale_own_tt": {
+  "en": "#b $te_jmap_scale_own$#!\\nEach map on the curve drawn for it: straight for some, most of the color for the common figures on others, a doubling at a time for money and head counts. The map's own tooltip describes it.",
+  "de": "#b $te_jmap_scale_own$#!\\nJede Karte auf der für sie gezeichneten Kurve: bei manchen geradlinig, bei anderen der Großteil der Farbe für die häufigen Werte, bei Geld und Kopfzahlen eine Verdopplung nach der anderen. Der Tooltip der Karte beschreibt sie."
+ },
  "te_jmap_scale_ranked": {
   "en": "Ranked",
   "de": "Nach Rang"
  },
+ "te_jmap_scale_ranked_tt": {
+  "en": "#b $te_jmap_scale_ranked$#!\\nColor each state by its place in line, lowest figure to highest, so the colors spread evenly over the states whatever the figures. States with the same figure share a place. A map with a meaningful midpoint lines up each side of it, outward. Places are taken when the map is measured: at a pick, at an option change and each month. So a $te_jmap_scale_ranked$ map can be a month old, and $te_jmap_outliers$ has nothing to act on.",
+  "de": "#b $te_jmap_scale_ranked$#!\\nFärbt jeden Staat nach seinem Platz in der Reihe, vom niedrigsten Wert zum höchsten, sodass sich die Farben unabhängig von den Werten gleichmäßig über die Staaten verteilen. Staaten mit demselben Wert teilen sich einen Platz. Eine Karte mit einem sinnvollen Mittelpunkt ordnet jede Seite davon nach außen. Die Plätze werden bei der Messung der Karte ermittelt: bei einer Auswahl, bei einer Optionsänderung und jeden Monat. Eine Karte mit der Skala $te_jmap_scale_ranked$ kann also einen Monat alt sein, und $te_jmap_outliers$ hat nichts, worauf es wirken könnte."
+ },
  "te_jmap_scale_short_log": {
   "en": "Log",
   "de": "Log"
+ },
+ "te_jmap_scale_text_linear": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_linear$#!. The colors run straight from the range's low to its high.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_linear$#!. Die Farben verlaufen geradlinig vom Tiefst- zum Höchstwert des Bereichs."
+ },
+ "te_jmap_scale_text_linear_mid": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_linear$#!. The colors run straight on each side of the midpoint, to the range's end on that side.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_linear$#!. Die Farben verlaufen zu beiden Seiten des Mittelpunkts geradlinig bis zum Ende des Bereichs auf dieser Seite."
+ },
+ "te_jmap_scale_text_log": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_log$#!. Each doubling of the figure takes the same share of the color, from the range's low, or from a 64th of its high where the low is smaller.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_log$#!. Jede Verdopplung des Werts nimmt denselben Anteil der Farbe ein, vom Tiefstwert des Bereichs an oder von einem 64stel seines Höchstwerts, wo der Tiefstwert kleiner ist."
+ },
+ "te_jmap_scale_text_log_doubling": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_log$#!, which is this map's default. Each doubling of the figure takes the same share of the color, from the range's low to its high.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_log$#!, der Standard dieser Karte. Jede Verdopplung des Werts nimmt denselben Anteil der Farbe ein, vom Tiefst- zum Höchstwert des Bereichs."
+ },
+ "te_jmap_scale_text_log_mid": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_log$#!. On each side of the midpoint, each doubling of the distance from it takes the same share of the color. Close to the midpoint the colors run straight.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_log$#!. Auf jeder Seite des Mittelpunkts nimmt jede Verdopplung des Abstands von ihm denselben Anteil der Farbe ein. Nahe am Mittelpunkt verlaufen die Farben geradlinig."
+ },
+ "te_jmap_scale_text_ranked": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_ranked$#!. Each state is colored by its place in line, lowest figure to highest, as of the last measure: a month old at most.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_ranked$#!. Jeder Staat wird nach seinem Platz in der Reihe gefärbt, vom niedrigsten Wert zum höchsten, Stand der letzten Messung: höchstens einen Monat alt."
+ },
+ "te_jmap_scale_text_ranked_mid": {
+  "en": "$te_jmap_scale$: #b $te_jmap_scale_ranked$#!. On each side of the midpoint, each state is colored by its place in line outward from it, as of the last measure: a month old at most.",
+  "de": "$te_jmap_scale$: #b $te_jmap_scale_ranked$#!. Auf jeder Seite des Mittelpunkts wird jeder Staat nach seinem Platz in der Reihe von ihm nach außen gefärbt, Stand der letzten Messung: höchstens einen Monat alt."
+ },
+ "te_jmap_scaled_lead_range": {
+  "en": "The range now, over",
+  "de": "Der Bereich jetzt, über"
+ },
+ "te_jmap_scaled_lead_ranked": {
+  "en": "Not read by this scale, the range now over",
+  "de": "Von dieser Skala nicht gelesen, der Bereich jetzt über"
  },
  "te_jmap_seabed_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the ocean basins, each coastal state in its basin's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
@@ -32427,13 +32823,49 @@
   "en": "Trim 4 Each End",
   "de": "Je Ende 4 abschneiden"
  },
+ "te_jmap_trim_default_tt": {
+  "en": "#b $te_jmap_trim_default$#!\\nLeave the 4 lowest and the 4 highest states out of a map's range, so a few extreme states don't flatten the rest. They take the colors' limits. In an area smaller than the world, each end leaves out at most a tenth of the area's states with a figure.",
+  "de": "#b $te_jmap_trim_default$#!\\nLässt die 4 niedrigsten und die 4 höchsten Staaten aus dem Bereich einer Karte heraus, damit einige wenige Extremstaaten nicht den Rest einebnen. Sie nehmen die Grenzfarben an. In einem Gebiet, das kleiner ist als die Welt, lässt jedes Ende höchstens ein Zehntel der Staaten des Gebiets mit einem Wert aus."
+ },
+ "te_jmap_trim_no_range_tt": {
+  "en": "#b $te_jmap_outliers$#!\\nThe map on the page shows categories or a fixed scale, so it has no range to leave states out of. The setting is kept for the next map that has one.",
+  "de": "#b $te_jmap_outliers$#!\\nDie Karte auf der Seite zeigt Kategorien oder eine feste Skala, daher hat sie keinen Bereich, aus dem sich Staaten auslassen ließen. Die Einstellung bleibt für die nächste Karte erhalten, die einen hat."
+ },
  "te_jmap_trim_none": {
   "en": "Keep All",
   "de": "Alle behalten"
  },
+ "te_jmap_trim_none_tt": {
+  "en": "#b $te_jmap_trim_none$#!\\nRun a map's colors from the lowest state in the area to the highest. One extreme state can then leave every other state in a narrow band of color.",
+  "de": "#b $te_jmap_trim_none$#!\\nLässt die Farben einer Karte vom niedrigsten Staat des Gebiets bis zum höchsten verlaufen. Ein einziger Extremstaat kann dann alle anderen Staaten in ein schmales Farbband drücken."
+ },
  "te_jmap_trim_percent": {
   "en": "Trim 5%",
   "de": "5% abschneiden"
+ },
+ "te_jmap_trim_percent_tt": {
+  "en": "#b $te_jmap_trim_percent$#!\\nLeave the lowest 5% and the highest 5% of the states with a figure out of a map's range. They take the colors' limits. Where fewer than 20 states have a figure, none is left out.",
+  "de": "#b $te_jmap_trim_percent$#!\\nLässt die niedrigsten 5% und die höchsten 5% der Staaten mit einem Wert aus dem Bereich einer Karte heraus. Sie nehmen die Grenzfarben an. Haben weniger als 20 Staaten einen Wert, wird keiner ausgelassen."
+ },
+ "te_jmap_trim_ranked_tt": {
+  "en": "#b $te_jmap_outliers$#!\\nThe $te_jmap_scale_ranked$ scale colors each state by its place in line, which no outlier moves. The setting is kept for the next scale that reads a range.",
+  "de": "#b $te_jmap_outliers$#!\\nDie Skala $te_jmap_scale_ranked$ färbt jeden Staat nach seinem Platz in der Reihe, den kein Ausreißer verschiebt. Die Einstellung bleibt für die nächste Skala erhalten, die einen Bereich liest."
+ },
+ "te_jmap_trim_text_default": {
+  "en": "The range leaves out the 4 lowest and the 4 highest states.",
+  "de": "Der Bereich lässt die 4 niedrigsten und die 4 höchsten Staaten aus."
+ },
+ "te_jmap_trim_text_default_area": {
+  "en": "The range leaves out up to 4 states at each end, and never more than a tenth of the area's states with a figure.",
+  "de": "Der Bereich lässt an jedem Ende bis zu 4 Staaten aus, aber nie mehr als ein Zehntel der Staaten des Gebiets mit einem Wert."
+ },
+ "te_jmap_trim_text_none": {
+  "en": "The range runs from the lowest state to the highest.",
+  "de": "Der Bereich reicht vom niedrigsten Staat bis zum höchsten."
+ },
+ "te_jmap_trim_text_percent": {
+  "en": "The range leaves out the lowest 5% and the highest 5% of the states with a figure.",
+  "de": "Der Bereich lässt die niedrigsten 5% und die höchsten 5% der Staaten mit einem Wert aus."
  },
  "te_jmap_tt_academics": {
   "en": "#b [THIS.GetState.GetName]#!\\nAcademics: #v [THIS.GetState.MakeScope.Var('te_dg_academics').GetValue|K]#!, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_academics_share')|%1]#! of its people",
@@ -32587,6 +33019,14 @@
   "en": "#b [THIS.GetState.GetName]#!\\nDeaths: #v [THIS.GetState.MakeScope.Var('te_dg_cdr').GetValue|1]#! per 1,000 people last year",
   "de": "#b [THIS.GetState.GetName]#!\\nTodesfälle: #v [THIS.GetState.MakeScope.Var('te_dg_cdr').GetValue|1]#! pro 1.000 Menschen im Vorjahr"
  },
+ "te_jmap_tt_density": {
+  "en": "#b [THIS.GetState.GetName]#!\\nPopulation density: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|0]#! people per km²\\n#v [THIS.GetState.GetPopulationSize|K]#! people on #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! km² of land",
+  "de": "#b [THIS.GetState.GetName]#!\\nBevölkerungsdichte: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density')|0]#! Einwohner pro km²\\n#v [THIS.GetState.GetPopulationSize|K]#! Einwohner auf #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_density_area')|K]#! km² Land"
+ },
+ "te_jmap_tt_density_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nNo one lives here.",
+  "de": "#b [THIS.GetState.GetName]#!\\nHier lebt niemand."
+ },
  "te_jmap_tt_devastation": {
   "en": "#b [THIS.GetState.GetName]#!\\nDevastation: #v [THIS.GetState.GetDevastationLevel|%r1]#!",
   "de": "#b [THIS.GetState.GetName]#!\\nVerwüstung: #v [THIS.GetState.GetDevastationLevel|%r1]#!"
@@ -32668,8 +33108,8 @@
   "de": "#b [THIS.GetState.GetName]#!\\nKeine Unternehmenshauptsitze."
  },
  "te_jmap_tt_hq_regional": {
-  "en": "Regional headquarters, in the stripes: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!",
-  "de": "Regionale Hauptsitze, in den Streifen: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!"
+  "en": "Regional headquarters here: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!",
+  "de": "Regionale Hauptsitze hier: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_rhq_count')|0]#!"
  },
  "te_jmap_tt_infant_mortality": {
   "en": "#b [THIS.GetState.GetName]#!\\nInfant mortality: #v [THIS.GetState.MakeScope.Var('te_dg_imr').GetValue|1]#! deaths in the first year per 1,000 births",
@@ -32758,6 +33198,10 @@
  "te_jmap_tt_old_share": {
   "en": "#b [THIS.GetState.GetName]#!\\nAged 65 and over: #v [THIS.GetState.MakeScope.Var('te_dg_old_share').GetValue|%0]#!",
   "de": "#b [THIS.GetState.GetName]#!\\n65 und älter: #v [THIS.GetState.MakeScope.Var('te_dg_old_share').GetValue|%0]#!"
+ },
+ "te_jmap_tt_outside": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOutside the area the maps are limited to.",
+  "de": "#b [THIS.GetState.GetName]#!\\nAußerhalb des Gebiets, auf das die Karten beschränkt sind."
  },
  "te_jmap_tt_own": {
   "en": "#b [THIS.GetState.GetName]#!\\nWho holds its capital: #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_priv_share')|%0]#! private owners, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_self_share')|%0]#! its own workers, #v [THIS.GetState.MakeScope.ScriptValue('te_jmap_own_ctry_share')|%0]#! the state",
@@ -33220,16 +33664,16 @@
   "de": "Seigniorage von Currency Boards"
  },
  "te_mon_board_seigniorage_desc": {
-  "en": "Half the minting of every subject that runs a currency board on our money. It is worth what their gold mines are worth — for a colony without gold, next to nothing.",
-  "de": "Die Hälfte der Prägeeinnahmen jedes Subjekts, das ein Currency Board auf unsere Währung betreibt. Sie ist so viel wert wie dessen Goldminen — für eine Kolonie ohne Gold praktisch nichts."
+  "en": "Half of what every subject that runs a currency board on our money mints before its own bonuses. The figure is before our bonuses to [concept_budget_minting], which raise it as they raise everything we mint. It grows with a subject's gold mines and, up to a ceiling, with its economy.",
+  "de": "Die Hälfte dessen, was jedes Subjekt, das ein Currency Board auf unsere Währung betreibt, vor seinen eigenen Boni prägt. Der Wert gilt vor unseren Boni auf [concept_budget_minting], die ihn ebenso steigern wie alles, was wir prägen. Er wächst mit den Goldminen eines Subjekts und, bis zu einer Obergrenze, mit seiner Wirtschaft."
  },
  "te_mon_board_subject": {
   "en": "Currency Board",
   "de": "Currency Board"
  },
  "te_mon_board_subject_desc": {
-  "en": "We have no money of our own: we issue our overlord's, against their reserves, and half of what our mint earns is theirs. More autonomy would end it.",
-  "de": "Wir haben kein eigenes Geld: Wir geben das unseres Suzeräns aus, gedeckt durch dessen Reserven, und die Hälfte dessen, was unsere Prägeanstalt einnimmt, gehört ihm. Mehr Autonomie würde dem ein Ende setzen."
+  "en": "We have no money of our own: we issue our overlord's, against their reserves, and half of what we mint before our bonuses is theirs. More autonomy would end it.",
+  "de": "Wir haben kein eigenes Geld: Wir geben das unseres Suzeräns aus, gedeckt durch dessen Reserven, und die Hälfte dessen, was wir vor unseren Boni prägen, gehört ihm. Mehr Autonomie würde dem ein Ende setzen."
  },
  "te_mon_board_wrong_stance": {
   "en": "The Overlord’s Rate",
@@ -33248,8 +33692,8 @@
   "de": "Die bereits laufenden Anleihekäufe der Zentralbank laufen weitere #b 12 Monate#! lang."
  },
  "te_mon_bond_support_tt": {
-  "en": "The central bank buys government bonds for #b 12 months#!: [Concept('concept_banking_monetisation','Monetize Deficit')] rises one step, worth about #b 1%#! of a year's economic output in new money, #b 2.5%#! on inflation while it runs and #b 0.5%#! on everything we borrow. When the purchases end, it steps back one.",
-  "de": "Die Zentralbank kauft #b 12 Monate#! lang Staatsanleihen: [Concept('concept_banking_monetisation','Monetarisierung des Defizits')] steigt um eine Stufe, was etwa #b 1%#! der Jahreswirtschaftsleistung in neuem Geld entspricht, #b 2,5%#! auf die Inflation, solange sie läuft, und #b 0,5%#! auf alles, was wir uns leihen. Enden die Käufe, geht sie wieder um eine Stufe zurück."
+  "en": "The central bank buys government bonds for #b 12 months#!: [Concept('concept_banking_monetisation','Monetize Deficit')] rises one step, worth about #b 1%#! of a year's economic output in new money before our bonuses to [concept_budget_minting], #b 2.5%#! on inflation while it runs and #b 0.5%#! on everything we borrow. When the purchases end, it steps back one.",
+  "de": "Die Zentralbank kauft #b 12 Monate#! lang Staatsanleihen: [Concept('concept_banking_monetisation','Monetarisierung des Defizits')] steigt um eine Stufe, was etwa #b 1%#! der Jahreswirtschaftsleistung in neuem Geld entspricht, vor unseren Boni auf [concept_budget_minting], #b 2,5%#! auf die Inflation, solange sie läuft, und #b 0,5%#! auf alles, was wir uns leihen. Enden die Käufe, geht sie wieder um eine Stufe zurück."
  },
  "te_mon_currency_reform_premium": {
   "en": "Currency Reform",
@@ -33331,6 +33775,14 @@
   "en": "A pay rise is only a pay rise if prices stay still. Organized workers and a welfare floor raise what your lower strata #b expect#! of life; while inflation is in the stable band, the pay rise those same laws won actually arrives, so part of that expectation is met rather than disappointed — fewer people feel cheated at the same standard of living. The money they spend feeds back into the financial cycle as demand as well. Both halves scale with how strong those laws are, and both switch off the moment inflation leaves the stable band, because wages rising into rising prices buy nothing.",
   "de": "Eine Lohnerhöhung ist nur dann eine Lohnerhöhung, wenn die Preise stillstehen. Organisierte Arbeiter und eine soziale Grundsicherung heben, was Ihre unteren Schichten vom Leben #b erwarten#!; solange die Inflation im stabilen Band liegt, kommt die Lohnerhöhung, die dieselben Gesetze erkämpft haben, tatsächlich an, sodass ein Teil dieser Erwartung erfüllt statt enttäuscht wird — weniger Menschen fühlen sich beim gleichen Lebensstandard betrogen. Das Geld, das sie ausgeben, fließt zudem als Nachfrage in den Finanzzyklus zurück. Beide Hälften skalieren danach, wie stark diese Gesetze sind, und beide schalten sich ab, sobald die Inflation das stabile Band verlässt, denn Löhne, die in steigende Preise hinein wachsen, kaufen nichts."
  },
+ "te_mon_reserve_currency_premium": {
+  "en": "Reserve Currency Holdings",
+  "de": "Reservewährungsbestände"
+ },
+ "te_mon_reserve_currency_premium_desc": {
+  "en": "Other countries peg their money to ours, and our [concept_banking_credit_standing] is already as good as it can be.",
+  "de": "Andere Länder binden ihr Geld an unseres, und unsere [concept_banking_credit_standing] ist bereits so gut, wie sie nur sein kann."
+ },
  "te_mon_stance_politics_loose": {
   "en": "Cheap Money Politics",
   "de": "Politik des billigen Geldes"
@@ -33348,8 +33800,8 @@
   "de": "Seit einem halben Jahr liest Ihre Zentralbank ihren eigenen Zinssatz als #b straff#! — höher, als sie es der Wirtschaft zutraut. Knappes Geld belohnt, wer das Papier hält: Grundbesitzer, die von Mieten und Hypothekenzinsen leben, und Ladenbesitzer, deren Ersparnisse das Kapital der Familie sind. Jeder, der Schulden hat, zahlt dafür. Der Industrielle revolviert sein Betriebskapital zum höheren Satz, der verschuldete Bauer zahlt ihn aus derselben Ernte, und die Arbeitsplätze, die von beidem abhängen, werden knapper. Das spiegelt die Haltung wider, wie die Bank sie #b liest#!, nicht die wahren Kosten des Geldes, die niemand kennt. Es verblasst, sobald die Bank zu einer neutralen Einstellung zurückkehrt — binnen sechs Monaten, und früher, je kürzer die Haltung andauerte — und endet sofort, wenn sie stattdessen zu lockern beginnt."
  },
  "te_mon_union_adopt_effect_tt": {
-  "en": "You #b adopt your bloc leader's currency#!. Your policy rate becomes theirs, your exchange rate jumps to theirs, you can no longer monetize your deficit, and you gain #G +5%#! export and import advantage. Your inflation, your cycle and your debts remain your own.",
-  "de": "Sie #b übernehmen die Währung Ihres Blockanführers#!. Ihr Leitzins wird zu dessen Leitzins, Ihr Wechselkurs springt auf dessen Wert, Sie können Ihr Defizit nicht mehr monetisieren, und Sie erhalten #G +5%#! Export- und Importvorteil. Ihre Inflation, Ihr Zyklus und Ihre Schulden bleiben weiterhin Ihre eigenen."
+  "en": "You #b adopt your bloc leader's currency#!. Your policy rate becomes theirs, your exchange rate jumps to theirs, you can no longer monetize your deficit, and you gain #G +5%#! export and import advantage and at least #G +2%#! $state_capitalists_investment_pool_contribution_add$ (none under $too_much_private_construction$). Your cycle and your debts remain your own, and so does your inflation, but it is pulled toward the leader's.",
+  "de": "Sie #b führen die Währung Ihres Blockanführers ein#!. Ihr Leitzins wird zu dessen Leitzins, Ihr Wechselkurs springt auf dessen Wert, Sie können Ihr Defizit nicht mehr monetisieren, und Sie erhalten #G +5%#! Export- und Importvorteil sowie mindestens #G +2%#! $state_capitalists_investment_pool_contribution_add$ (keine, solange $too_much_private_construction$ gilt). Ihr Zyklus und Ihre Schulden bleiben Ihre eigenen, ebenso Ihre Inflation, die aber zu der des Anführers hingezogen wird."
  },
  "te_mon_union_adopter": {
   "en": "Common Currency",
@@ -33367,6 +33819,14 @@
   "en": "Our banks are supervised, and our depositors guaranteed, by the whole currency union rather than by us alone. Crashes are rarer, the cycle is steadier, and one more intervention is held in reserve for when one comes anyway.",
   "de": "Unsere Banken werden von der gesamten Währungsunion beaufsichtigt, und unsere Einleger sind von ihr abgesichert, statt nur von uns allein. Crashs werden seltener, der Zyklus ruhiger, und ein zusätzliches Eingreifen bleibt in Reserve, falls doch einer kommt."
  },
+ "te_mon_union_credit": {
+  "en": "Common Capital Market",
+  "de": "Gemeinsamer Kapitalmarkt"
+ },
+ "te_mon_union_credit_desc": {
+  "en": "We share a currency with other countries, so savings anywhere among them can be lent here.",
+  "de": "Wir teilen eine Währung mit anderen Ländern, daher können Ersparnisse überall unter ihnen hier verliehen werden."
+ },
  "te_mon_union_exit_premium": {
   "en": "Left the Common Currency",
   "de": "Gemeinsame Währung verlassen"
@@ -33382,6 +33842,22 @@
  "te_mon_union_independence_desc": {
   "en": "We were asked to give up our currency, and refused. A country that will not be leaned on over its money is harder to lean on over anything.",
   "de": "Man hat uns gebeten, unsere Währung aufzugeben, und wir haben abgelehnt. Ein Land, das sich bei seinem Geld nicht unter Druck setzen lässt, lässt sich auch sonst schwerer unter Druck setzen."
+ },
+ "te_mon_union_issuer_bank": {
+  "en": "Central Bank of the Union",
+  "de": "Zentralbank der Union"
+ },
+ "te_mon_union_issuer_bank_desc": {
+  "en": "Our central bank issues the money of every country that has adopted our currency, and has the standing to keep more interventions in force at once.",
+  "de": "Unsere Zentralbank gibt das Geld jedes Landes aus, das unsere Währung eingeführt hat, und hat das Gewicht, mehr Interventionen zugleich in Kraft zu halten."
+ },
+ "te_mon_union_issuer_premium": {
+  "en": "Issuer of the Common Currency",
+  "de": "Emittent der Gemeinsamen Währung"
+ },
+ "te_mon_union_issuer_premium_desc": {
+  "en": "Countries that use our money hold our debt as their safest asset, so lenders ask less of us.",
+  "de": "Länder, die unser Geld nutzen, halten unsere Schulden als ihre sicherste Anlage, daher verlangen Kreditgeber weniger von uns."
  },
  "te_mon_union_leave_effect_tt": {
   "en": "You #b leave the common currency#!. Your exchange rate falls at once to where it would have floated. #R +3#! points of credit standing, decaying over ten years; you lose #v 2%#! of GDP from the investment pool and #R 5%#! of your people turn radical; the leader's relations fall by #R 30#! and the bloc loses #R 5%#! cohesion. You cannot re-adopt for #b ten years#!.",
@@ -33440,12 +33916,12 @@
   "de": "Das Geld, das wir verwenden, wird weltweit gehalten. Unsere Händler stellen Preise auf beiden Seiten eines Geschäfts in dieser Währung, und unsere Kreditgeber wollten die Währung, bevor sie unsere Schulden wollten."
  },
  "te_mon_union_seigniorage": {
-  "en": "Seigniorage from the Reserve Currency",
-  "de": "Seigniorage aus der Reservewährung"
+  "en": "Seigniorage from the Common Currency",
+  "de": "Seigniorage aus der Gemeinsamen Währung"
  },
  "te_mon_union_seigniorage_desc": {
-  "en": "The world parks balances in our money, and issuing them costs us nothing. It is worth whatever share of the world ties its currency to ours.",
-  "de": "Die Welt parkt Guthaben in unserem Geld, und deren Ausgabe kostet uns nichts. Sie ist so viel wert wie der Anteil der Welt, der seine Währung an unsere bindet."
+  "en": "Other countries hold balances in our money, and issuing them costs us nothing. It is worth more the larger their economies are beside ours. The figure is before our bonuses to [concept_budget_minting], which raise it as they raise everything we mint.",
+  "de": "Andere Länder halten Guthaben in unserem Geld, und deren Ausgabe kostet uns nichts. Sie ist umso mehr wert, je größer ihre Volkswirtschaften neben unserer sind. Der Wert gilt vor unseren Boni auf [concept_budget_minting], die ihn ebenso steigern wie alles, was wir prägen."
  },
  "te_monetary_rate_paid": {
   "en": "Monetary Policy: Market Interest Rate",
@@ -33460,8 +33936,8 @@
   "de": "Monetisierung des Defizits"
  },
  "te_monetisation_minting_desc": {
-  "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
-  "de": "Ihre Regierung bezahlt ihre Rechnungen mit Geld, das die Nationalbank für sie schafft, statt mit geliehenem oder eingenommenem Geld. Die Prägeanstalt läuft über das hinaus, was die Wirtschaft braucht, und der Überschuss landet in der Staatskasse. Es ist die schnellste Einnahmequelle, die ein Staat erschließen kann, und die teuerste: Pro finanziertem Pfund treibt sie die Preise etwa achtmal so stark wie das Leihen derselben Summe, und Kreditgeber lassen sich das bezahlen."
+  "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. The figure is before your bonuses to [concept_budget_minting], which raise it as they raise everything you mint. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
+  "de": "Ihre Regierung bezahlt ihre Rechnungen mit Geld, das die Nationalbank für sie schafft, statt mit geliehenem oder eingenommenem Geld. Die Prägeanstalt läuft über das hinaus, was die Wirtschaft braucht, und der Überschuss landet in der Staatskasse. Der Wert gilt vor Ihren Boni auf [concept_budget_minting], die ihn ebenso steigern wie alles, was Sie prägen. Es ist die schnellste Einnahmequelle, die ein Staat erschließen kann, und die teuerste: Pro finanziertem Pfund treibt sie die Preise etwa achtmal so stark wie das Leihen derselben Summe, und Kreditgeber lassen sich das bezahlen."
  },
  "te_nation_all_header": {
   "en": "All Modifiers",
@@ -33492,12 +33968,12 @@
   "de": "Jeder Baupunkt kostet #v [Country.MakeScope.ScriptValue('te_cc_total_factor')|%0]#! seiner Basis: #v [Country.MakeScope.ScriptValue('te_cc_scaling_factor')|%0]#! aus $construction_cost_scaling$ × #v [Country.MakeScope.ScriptValue('te_cc_others_factor')|%0]#! aus den übrigen Baukosten-Modifikatoren.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_factor_applies'), '(CFixedPoint)0' ), 'te_nation_construction_scale_small', 'te_nation_construction_scale_plain' )] Sie strebt #v [Country.MakeScope.ScriptValue('te_cc_scale_target')|%0]#! an, das ist eins plus der BIP-Anteil, #v [Country.MakeScope.ScriptValue('te_cc_gdp_part_now')|+%0]#!, × der Anteil davon, der gilt, #v [Country.MakeScope.ScriptValue('te_cc_slack_factor_now')|%0]#!, und bewegt sich um höchstens [Country.MakeScope.ScriptValue('construction_cost_max_yearly_move')|%0] ihrer selbst pro Jahr.\\n• #b BIP-Anteil#!: Das BIP pro Kopf lag bei #v @money![Country.MakeScope.ScriptValue('te_cc_gdppc_now')|1]#!. Der Anteil ist null unter @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_floor')|0] und steigt geradlinig auf [Country.MakeScope.ScriptValue('construction_cost_max_mult')|+%0] bei @money![Country.MakeScope.ScriptValue('construction_cost_gdppc_ceiling')|0].\\n• #b Anteil, der gilt#!: der gesamte BIP-Anteil, solange Bauern und Arbeitslose höchstens [Country.MakeScope.ScriptValue('construction_cost_slack_full')|%0] der Arbeitskräfte ausmachen, keiner ab [Country.MakeScope.ScriptValue('construction_cost_slack_none')|%0]. [SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_has_reading'), '(CFixedPoint)0' ), 'te_nation_construction_slack_read', 'te_nation_construction_slack_unread' )]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_direct_rule'), '(CFixedPoint)0' ), 'te_nation_construction_breakdown_direct', 'te_nation_construction_breakdown' )]"
  },
  "te_nation_construction_scale_plain": {
-  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost.",
-  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten."
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]",
+  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]"
  },
  "te_nation_construction_scale_small": {
-  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! for a small economy under the $rule_te_small_economy_construction_rule$ game rule: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] with almost no GDP, rising in a straight line to the full cost at a GDP of 10 million.",
-  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! für eine kleine Volkswirtschaft unter der Spielregel $rule_te_small_economy_construction_rule$: [Country.MakeScope.ScriptValue('construction_cost_small_economy_min_factor')|%0] bei fast keinem BIP, geradlinig steigend bis zu den vollen Kosten bei einem BIP von 10 Millionen."
+  "en": "#b $construction_cost_scaling$#!, set once a year, stands at #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! of the base cost, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! for a small economy under the $rule_te_small_economy_construction_rule$ game rule: [Country.MakeScope.ScriptValue('te_cc_small_min_now')|%0] with almost no GDP, rising in a straight line to the full cost at a GDP of 10 million.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]",
+  "de": "#b $construction_cost_scaling$#!, einmal im Jahr festgelegt, steht bei #v [Country.MakeScope.ScriptValue('te_cc_scale_now')|%0]#! der Basiskosten, × #v [Country.MakeScope.ScriptValue('te_cc_small_factor_now')|%0]#! für eine kleine Volkswirtschaft unter der Spielregel $rule_te_small_economy_construction_rule$: [Country.MakeScope.ScriptValue('te_cc_small_min_now')|%0] bei fast keinem BIP, geradlinig steigend bis zu den vollen Kosten bei einem BIP von 10 Millionen.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_cc_small_setting_changed'), '(CFixedPoint)0' ), 'te_nation_construction_small_pending', 'te_nation_construction_small_settled' )]"
  },
  "te_nation_construction_scaled": {
   "en": "Scaled by wealth",
@@ -33510,6 +33986,10 @@
  "te_nation_construction_slack_unread": {
   "en": "Peasants and unemployed are first counted at the next yearly update; until then the share is the one that matches the scaling already in force.",
   "de": "Bauern und Arbeitslose werden erst bei der nächsten Jahresaktualisierung gezählt; bis dahin ist der Anteil der, der zur bereits geltenden Skalierung passt."
+ },
+ "te_nation_construction_small_pending": {
+  "en": " The $rule_te_small_economy_construction_rule$ game rule has been changed since the last yearly update, and its new setting applies from the next one.",
+  "de": " Die Spielregel $rule_te_small_economy_construction_rule$ wurde seit der letzten Jahresaktualisierung geändert, und ihre neue Einstellung gilt ab der nächsten."
  },
  "te_nation_grp_acceptance": {
   "en": "Acceptance and Assimilation",
@@ -34143,6 +34623,10 @@
   "en": "Summit: Harmonized Customs",
   "de": "Gipfel: Harmonisierte Zölle"
  },
+ "te_pb_summit_debt_conference": {
+  "en": "Summit: Debt Conference",
+  "de": "Gipfel: Schuldenkonferenz"
+ },
  "te_pb_summit_drills": {
   "en": "Summit: Joint Exercises",
   "de": "Gipfel: Gemeinsame Übungen"
@@ -34199,6 +34683,10 @@
   "en": "Relations between every two members of the bloc rise by #v 20#!",
   "de": "Die Beziehungen zwischen je zwei Mitgliedern des Blocks verbessern sich um #v 20#!"
  },
+ "te_pb_summit_science": {
+  "en": "Summit: Scientific Congress",
+  "de": "Gipfel: Wissenschaftskongress"
+ },
  "te_political_commissars_indoctrination": {
   "en": "Commissar Indoctrination",
   "de": "Indoktrination durch Kommissare"
@@ -34227,9 +34715,57 @@
   "en": "No one can be told apart by looks: each month, [concept_acceptance] from a shared heritage trait, a shared heritage trait group and no shared heritage is raised to the highest of the three, so every [concept_pop] gets the same heritage figure. Unlike $law_clade_citizenship$, nothing is added on top: the figure is the highest our citizenship law and technologies already give",
   "de": "Niemand lässt sich am Aussehen unterscheiden: Jeden Monat wird die [concept_acceptance] aus einer gemeinsamen Herkunftseigenschaft, einer gemeinsamen Herkunftseigenschaftengruppe und gar keiner gemeinsamen Herkunft auf den höchsten der drei Werte angehoben, sodass alle [Concept('concept_pop','Pops')] denselben Herkunftswert erhalten. Anders als bei $law_clade_citizenship$ kommt nichts obendrauf: Der Wert entspricht dem höchsten, den unser Staatsbürgerschaftsgesetz und unsere Technologien ohnehin schon liefern"
  },
+ "te_rc_institutes_left_behind": {
+  "en": "Institutes Left Behind",
+  "de": "Zurückgelassene Institute"
+ },
+ "te_rc_ministry_law_lock_tt": {
+  "en": "We do not lead a $identity_research_commons$, which keeps its leader's Ministry of Science open",
+  "de": "Wir führen keinen $identity_research_commons$, der das Wissenschaftsministerium seines Anführers offen hält"
+ },
+ "te_rc_name_academy_of_nations": {
+  "en": "Academy of Nations",
+  "de": "Akademie der Nationen"
+ },
+ "te_rc_name_joint_research_council": {
+  "en": "Joint Research Council",
+  "de": "Gemeinsamer Forschungsrat"
+ },
+ "te_rc_name_scientific_union": {
+  "en": "Scientific Union",
+  "de": "Wissenschaftsunion"
+ },
+ "te_rc_pool_cap": {
+  "en": "Research Commons: Joint Laboratories",
+  "de": "Forschungsverbund: Gemeinschaftslabore"
+ },
+ "te_rc_tech_controls_aid_tt": {
+  "en": "Not barred by our [concept_power_bloc]'s $principle_group_technology_controls$, which close this aid to countries outside the bloc",
+  "de": "Nicht gesperrt durch die $principle_group_technology_controls$ unseres [Concept('concept_power_bloc','Machtblocks')], die diese Hilfe für Länder außerhalb des Blocks schließen"
+ },
  "te_rc_technology_embargo": {
   "en": "Technology Embargo",
   "de": "Technologieembargo"
+ },
+ "te_rc_technology_embargo_action_break_name": {
+  "en": "End Technology Embargo",
+  "de": "Technologieembargo beenden"
+ },
+ "te_rc_technology_embargo_action_notification_break_name": {
+  "en": "Technology Embargo Ended",
+  "de": "Technologieembargo beendet"
+ },
+ "te_rc_technology_embargo_not_member_tt": {
+  "en": "The target is not a member of our [concept_power_bloc]",
+  "de": "Das Ziel ist kein Mitglied unseres [Concept('concept_power_bloc','Machtblocks')]"
+ },
+ "te_rc_technology_embargo_one_tt": {
+  "en": "We have no other $te_rc_technology_embargo$ in place",
+  "de": "Wir haben kein anderes $te_rc_technology_embargo$ in Kraft"
+ },
+ "te_rc_technology_embargo_tier_tt": {
+  "en": "Our [concept_power_bloc] holds $principle_group_technology_controls$ at tier III or above",
+  "de": "Unser [concept_power_bloc] hält $principle_group_technology_controls$ auf Stufe III oder höher"
  },
  "te_receivership_pretext_tt": {
   "en": "The receiving country keeps a national bank and outranks the debtor or has the larger economy — and the debtor is #R in default#!. An insolvent government is the only ground for demanding this.",
@@ -34300,8 +34836,8 @@
   "de": "Mehr Ansprüche verlangt, als es entbehren kann"
  },
  "te_seabed_ai_lease_wanted": {
-  "en": "Short of seabed claims, with $tech_metals$ expensive",
-  "de": "Knapp an Meeresbodenansprüchen, bei hohem Preis für $tech_metals$"
+  "en": "Short of seabed claims, with the $building_ocean_mine$'s metals expensive",
+  "de": "Knapp an Meeresbodenansprüchen, bei hohem Preis für die Metalle der $building_ocean_mine$"
  },
  "te_seabed_basin_arctic": {
   "en": "Arctic",
@@ -34487,6 +35023,18 @@
   "en": "#R We defect from the Law of the Sea's regulated seabed#!: no place in the reserved half and no royalties while we license on our own terms. We are a party again #v 5#! years after defecting, once we have left Unilateral Licensing.",
   "de": "#R Wir scheren aus dem regulierten Meeresboden des Seerechtsübereinkommens aus#!: kein Platz in der reservierten Hälfte und keine Förderabgaben, solange wir nach eigenen Bedingungen lizenzieren. #v 5#! Jahre nach dem Ausscheren sind wir wieder Vertragspartei, sofern wir die Einseitige Lizenzvergabe verlassen haben."
  },
+ "te_seabed_gate_local_none_arctic_tt": {
+  "en": "No local [concept_seabed_claim] to spare in the $te_seabed_basin_arctic$ Ocean, and #b $te_seabed_local_only$#! is on. Untick it on the Seabed tab of the $te_systems_window_title$ window to build here on another basin's license",
+  "de": "Kein lokaler [concept_seabed_claim] übrig im Becken $te_seabed_basin_arctic$, und #b $te_seabed_local_only$#! ist aktiviert. Deaktivieren Sie es auf dem Reiter „Meeresboden“ des Fensters $te_systems_window_title$, um hier mit der Lizenz eines anderen Beckens zu bauen"
+ },
+ "te_seabed_gate_local_room_arctic_tt": {
+  "en": "Local [concept_seabed_claim]s to spare in the $te_seabed_basin_arctic$ Ocean: #v [GetPlayer.MakeScope.ScriptValue('te_seabed_local_room_arctic')|0]#! (#b $te_seabed_local_only$#! is on)",
+  "de": "Übrige lokale [Concept('concept_seabed_claim','Meeresbodenansprüche')] im Becken $te_seabed_basin_arctic$: #v [GetPlayer.MakeScope.ScriptValue('te_seabed_local_room_arctic')|0]#! (#b $te_seabed_local_only$#! ist aktiviert)"
+ },
+ "te_seabed_gate_local_unknown_tt": {
+  "en": "This state's ocean basin is set at the next monthly update. Until then #b $te_seabed_local_only$#! lets no level be queued here",
+  "de": "Das Meeresbecken dieses Staates wird mit der nächsten Monatsaktualisierung festgelegt. Bis dahin lässt #b $te_seabed_local_only$#! hier keine Stufe in die Warteschlange"
+ },
  "te_seabed_gate_next_distant_tt": {
   "en": "The next level here takes another basin's license, at #R -25%#! throughput (Long-Haul Seabed Operations) until a local claim frees up; a license on a level still unbuilt after a year costs @money![GetPlayer.MakeScope.ScriptValue('te_seabed_fee_per_level')|0] a week until it is built",
   "de": "Die nächste Stufe hier nutzt die Lizenz eines anderen Beckens, mit #R -25%#! Durchsatz (Tiefseebergbau in fernen Becken), bis ein lokaler Anspruch frei wird; eine Lizenz auf einer Stufe, die nach einem Jahr noch nicht gebaut ist, kostet @money![GetPlayer.MakeScope.ScriptValue('te_seabed_fee_per_level')|0] pro Woche, bis sie gebaut ist"
@@ -34508,8 +35056,8 @@
   "de": "Was uns aufgrund unseres Anteils zusteht und noch keine Stufe belegt, sind unsere [Concept('concept_seabed_claim','Meeresbodenansprüche')]. Jeder Januar teilt sie neu auf, sodass der Ausbau eines Rivalen sie uns abnehmen kann. Auftragnehmer-Sponsoring schützt sie: Jeder Januar lässt uns mindestens drei Viertel der Ansprüche jedes Beckens. Eine Stufe in die Warteschlange zu stellen sichert eine Lizenz dauerhaft, doch für eine Lizenz auf einer Stufe, die ein Jahr nach dem Einreihen noch nicht gebaut ist, fällt eine Vorhaltegebühr von [GetPlayer.MakeScope.ScriptValue('te_seabed_fee_rate')|%0] des Basisproduktionswerts einer Stufe pro Woche an. Mit #b Verzichten#! können wir die Ansprüche eines Beckens aufgeben, um nicht mehr dafür zu zahlen; sie gehen bei der nächsten Aufteilung an die übrigen Anspruchsteller, und #b Erneut beanspruchen#! zählt erst ab der darauffolgenden."
  },
  "te_seabed_how_distant": {
-  "en": "A level takes its own basin's license first. When those claims are used up it takes one from the basin where we have the most to spare, at #R -[GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! throughput (Long-Haul Seabed Operations), and swaps to a local license as soon as we have a local claim to spare.",
-  "de": "Eine Stufe nutzt zuerst die Lizenz ihres eigenen Beckens. Sind diese Ansprüche aufgebraucht, nutzt sie eine aus dem Becken, in dem wir am meisten übrig haben, mit #R -[GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! Durchsatz (Tiefseebergbau in fernen Becken), und wechselt auf eine lokale Lizenz, sobald wir einen lokalen Anspruch übrig haben."
+  "en": "A level takes its own basin's license first. When those claims are used up it takes one from the basin where we have the most to spare, at #R -[GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! throughput (Long-Haul Seabed Operations), and swaps to a local license as soon as we have a local claim to spare. With #b $te_seabed_local_only$#! ticked in the overview, a new level can be queued only where its own basin has one to spare.",
+  "de": "Eine Stufe nutzt zuerst die Lizenz ihres eigenen Beckens. Sind diese Ansprüche aufgebraucht, nutzt sie eine aus dem Becken, in dem wir am meisten übrig haben, mit #R -[GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! Durchsatz (Tiefseebergbau in fernen Becken), und wechselt auf eine lokale Lizenz, sobald wir einen lokalen Anspruch übrig haben. Ist #b $te_seabed_local_only$#! in der Übersicht angehakt, kann eine neue Stufe nur dort in die Warteschlange, wo ihr eigenes Becken einen übrig hat."
  },
  "te_seabed_how_header": {
   "en": "How Seabed Licenses Work",
@@ -34614,6 +35162,14 @@
  "te_seabed_local_only": {
   "en": "Build only on local claims",
   "de": "Nur auf lokalen Ansprüchen bauen"
+ },
+ "te_seabed_local_only_off_tt": {
+  "en": "#b $te_seabed_local_only$#! is on. A $building_ocean_mine$ level can be queued only in a state whose own ocean basin has a [concept_seabed_claim] of ours to spare, so no new level takes another basin's license and loses #R [GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! of its throughput ($te_seabed_long_haul$). Levels private investment queues for us follow it too. Long-haul levels already in a basin take its freed claims first. Untick it to build where only another basin's license is left.",
+  "de": "#b $te_seabed_local_only$#! ist aktiviert. Eine Stufe der $building_ocean_mine$ kann nur in einem Staat in die Warteschlange, dessen eigenes Meeresbecken einen [concept_seabed_claim] von uns übrig hat, sodass keine neue Stufe die Lizenz eines anderen Beckens nutzt und #R [GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! ihres Durchsatzes verliert ($te_seabed_long_haul$). Stufen, die private Investitionen für uns einreihen, folgen ebenfalls dieser Regel. Fernstufen, die bereits in einem Becken sind, nutzen dessen freigewordene Ansprüche zuerst. Deaktivieren Sie es, um dort zu bauen, wo nur die Lizenz eines anderen Beckens übrig ist."
+ },
+ "te_seabed_local_only_on_tt": {
+  "en": "Tick to build only on local claims. A $building_ocean_mine$ level can then be queued only in a state whose own ocean basin has a [concept_seabed_claim] of ours to spare, so no new level takes another basin's license and loses #R [GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! of its throughput ($te_seabed_long_haul$). Levels private investment queues for us follow it too. Levels already built or queued keep their licenses.",
+  "de": "Anhaken, um nur auf lokalen Ansprüchen zu bauen. Eine Stufe der $building_ocean_mine$ kann dann nur in einem Staat in die Warteschlange, dessen eigenes Meeresbecken einen [concept_seabed_claim] von uns übrig hat, sodass keine neue Stufe die Lizenz eines anderen Beckens nutzt und #R [GetPlayer.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! ihres Durchsatzes verliert ($te_seabed_long_haul$). Stufen, die private Investitionen für uns einreihen, folgen ebenfalls dieser Regel. Bereits gebaute oder eingereihte Stufen behalten ihre Lizenzen."
  },
  "te_seabed_long_haul": {
   "en": "Long-Haul Seabed Operations",
@@ -35260,12 +35816,12 @@
   "de": "\\nGelände: städtisch, vom Spiel festgelegt."
  },
  "te_sp_tt_why_affluent_at": {
-  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: an affluent street from #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|0]#!.",
-  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Wohlhabende Straße ab #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|0]#!."
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, against a world average of #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: an affluent street from #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|1]#!, #v [State.MakeScope.ScriptValue('te_state_picture_k_affluent_ratio')|%0]#! of the world's.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, bei einem Weltdurchschnitt von #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: eine Wohlhabende Straße ab #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor')|1]#!, also #v [State.MakeScope.ScriptValue('te_state_picture_k_affluent_ratio')|%0]#! des Weltwerts."
  },
  "te_sp_tt_why_affluent_kept": {
-  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: an affluent street stays affluent down to #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!.",
-  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Wohlhabende Straße bleibt wohlhabend bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!."
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, against a world average of #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: an affluent street stays affluent down to #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, bei einem Weltdurchschnitt von #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: eine Wohlhabende Straße bleibt wohlhabend bis hinunter zu #v [State.MakeScope.ScriptValue('te_state_picture_affluent_floor_keep')|1]#!."
  },
  "te_sp_tt_why_boomtown_at": {
   "en": "Its people have grown about #v [State.MakeScope.ScriptValue('te_state_picture_hover_growth')|%1]#! a year over recent years: a boomtown from #v [State.MakeScope.ScriptValue('te_state_picture_k_boom')|%0]#!.",
@@ -35375,6 +35931,10 @@
   "en": "Its $building_port$ is at level #v [State.MakeScope.ScriptValue('te_state_picture_hover_port_level')|0]#!: a major port from level #v [State.MakeScope.ScriptValue('te_state_picture_k_major_port')|0]#!.",
   "de": "Sein $building_port$ hat Stufe #v [State.MakeScope.ScriptValue('te_state_picture_hover_port_level')|0]#!: ein Großhafen ab Stufe #v [State.MakeScope.ScriptValue('te_state_picture_k_major_port')|0]#!."
  },
+ "te_sp_tt_why_means_unmeasured": {
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at its last yearly count. Its next count sets it against the world's average.",
+  "de": "Sein [concept_sol] lag bei der letzten Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!. Die nächste Zählung setzt es in Bezug zum Weltdurchschnitt."
+ },
  "te_sp_tt_why_megacity_at": {
   "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people: a megacity from #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity')|K]#!.",
   "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner: eine Megastadt ab #v [State.MakeScope.ScriptValue('te_state_picture_k_megacity')|K]#!."
@@ -35412,12 +35972,12 @@
   "de": "Das Spiel gibt diesem Staat das Gelände Plantage. $te_sp_tt_land_city$"
  },
  "te_sp_tt_why_poor_at": {
-  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: under #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|0]#!, the line for a poor street.",
-  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: unter #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|0]#!, der Grenze für eine Arme Straße."
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, against a world average of #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: under #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|1]#!, #v [State.MakeScope.ScriptValue('te_state_picture_k_poor_ratio')|%0]#! of the world's, the line for a poor street.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, bei einem Weltdurchschnitt von #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: unter #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor')|1]#!, also #v [State.MakeScope.ScriptValue('te_state_picture_k_poor_ratio')|%0]#! des Weltwerts, der Grenze für eine Arme Straße."
  },
  "te_sp_tt_why_poor_kept": {
-  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count: a poor street stays poor until #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!.",
-  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!: eine Arme Straße bleibt arm bis #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!."
+  "en": "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, against a world average of #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: a poor street stays poor until #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!.",
+  "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, bei einem Weltdurchschnitt von #v [State.MakeScope.ScriptValue('te_state_picture_hover_world')|1]#!: eine Arme Straße bleibt arm bis #v [State.MakeScope.ScriptValue('te_state_picture_poor_floor_keep')|1]#!."
  },
  "te_sp_tt_why_ranch": {
   "en": "The game gives this state pasture terrain. $te_sp_tt_land_city$",
@@ -35552,8 +36112,12 @@
   "de": "#bold [concept_tourism_throughput]#!\\nDie Quellen unten ergeben zusammen #v [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#! und werden jeden Monat auf den Staat angewendet. Der Balken unter jeder Quelle zeigt, wie nah sie an ihrem Maximum liegt."
  },
  "te_subjugation_strength_sufficient_tt": {
-  "en": "Our [concept_subjugation_strength] against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (currently #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• From [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! against #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, a ratio of #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! divided by #V 20#!)\\n• From our [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]",
-  "de": "Unsere [concept_subjugation_strength] gegenüber [SCOPE.sCountry('target_country').GetAltName('DAT')] beträgt mindestens #V 1,0#! (derzeit #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• Aus [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! gegenüber #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, ein Verhältnis von #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! geteilt durch #V 20#!)\\n• Aus unserer [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]"
+  "en": "Our [concept_subjugation_strength] against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (currently #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• From [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! against #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, a ratio of #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! divided by #V 20#!)\\n• From our [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)7'), 'te_subjugation_strength_tt_identity_creditor', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]",
+  "de": "Unsere [concept_subjugation_strength] gegenüber [SCOPE.sCountry('target_country').GetAltName('DAT')] beträgt mindestens #V 1,0#! (derzeit #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• Aus [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! gegenüber #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, ein Verhältnis von #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! geteilt durch #V 20#!)\\n• Aus unserer [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)7'), 'te_subjugation_strength_tt_identity_creditor', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]"
+ },
+ "te_subjugation_strength_tt_identity_creditor": {
+  "en": " ($identity_creditors_consortium$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member is under our receivership)",
+  "de": " ($identity_creditors_consortium$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#!, wenn das Mitglied unter unserer Zwangsverwaltung steht)"
  },
  "te_subjugation_strength_tt_identity_cultural": {
   "en": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member shares one of our [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')])",
