@@ -22,8 +22,8 @@ namespace = te_cc
 # te_cc.1 - the leader is called
 # ----------------------------------------------------------------------------
 # Options by how many terms beside the receivership the rescue carries
-# (te_cred_terms_to_pick: the bloc's Conditionality tier's figure, or as many
-# as are on offer if fewer), one option for each set of that size the engine
+# (te_cred_terms_to_pick: one, or the bloc's Conditionality tier's figure, or
+# as many as are on offer if fewer), one option for each set of that size the engine
 # allows (te_cred_term_*_available). Exactly one count holds, so the player
 # sees only rescues of the right size, and the leader chooses which.
 #
@@ -41,7 +41,7 @@ te_cc.1 = {
 
 	title = te_cc.1.t
 	# What a rescue buys: a receivership once the leader has its technology,
-	# terms once Conditionality offers any; the text promises only those.
+	# terms where any is on offer; the text promises only those.
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -81,8 +81,8 @@ te_cc.1 = {
 		scope:te_cc_debtor = { is_in_same_power_bloc = root }
 	}
 
-	# Rescue with no term beyond the receivership (no Conditionality, or no
-	# term on offer).
+	# Rescue with no term beyond the receivership: no term is on offer (every
+	# consortium may set one, te_cred_terms_allowed).
 	option = {
 		name = te_cc.1.a
 		trigger = { te_cred_terms_pick_0 = yes }

@@ -9,7 +9,8 @@
 #   on_country_default -> te_monetary_on_country_default (te_monetary_on_actions.txt)
 #     a treaty guarantor first (te_lolr.1); else, for a member whose consortium
 #     guarantee stands (te_cred_guarantee_is_effective), te_cred_call_consortium:
-#   te_cc.1  the leader: rescue on the terms its Conditionality allows, or refuse
+#   te_cc.1  the leader: rescue on one term, or as many as its Conditionality
+#            allows, or refuse
 #   te_cc.2  the member: accept the terms (paid, te_cred_apply_rescue) or refuse
 #   te_cc.3  the leader hears the answer
 #   te_cc.4  the member hears a refusal
@@ -88,7 +89,14 @@ te_cred_offer_rescue_tooltip = {
 	}
 	if = {
 		limit = { always = $CONC$ }
-		custom_tooltip = { text = te_cred_offer_concessions_tt }
+		# Without Conditionality the concessions carry no monopoly.
+		if = {
+			limit = { te_cred_monopolies_allowed > 0 }
+			custom_tooltip = { text = te_cred_offer_concessions_tt }
+		}
+		else = {
+			custom_tooltip = { text = te_cred_offer_concessions_plain_tt }
+		}
 	}
 	if = {
 		limit = { always = $PRIV$ }
@@ -178,10 +186,17 @@ te_cred_apply_rescue = {
 		}
 	}
 
-	# Concessions: Foreign Investment Rights for the leader, then monopolies.
+	# Concessions: Foreign Investment Rights for the leader, then monopolies,
+	# as many as its Conditionality tier gives (none without the group).
 	if = {
 		limit = { var:te_cred_offer_concessions = 1 }
-		custom_tooltip = te_cred_accept_concessions_tt
+		if = {
+			limit = { scope:te_cc_creditor = { te_cred_monopolies_allowed > 0 } }
+			custom_tooltip = te_cred_accept_concessions_tt
+		}
+		else = {
+			custom_tooltip = te_cred_accept_concessions_plain_tt
+		}
 		hidden_effect = {
 			te_cred_grant_investment_rights = yes
 			te_cred_demand_monopolies = yes
@@ -355,7 +370,8 @@ te_cred_grant_investment_rights = {
 }
 
 # Scope: the member. Monopolies for the leader's companies, as many as its
-# Conditionality tier gives (te_cred_monopolies_allowed): each of the leader's
+# Conditionality tier gives (te_cred_monopolies_allowed; none without the
+# group, where this makes nothing): each of the leader's
 # companies in turn, each of its building types the member has a building of
 # (the generated ladder, te_cred_monopoly_ladder_generated), until the count is
 # spent. Each monopoly is its own acquire_monopoly_for_company treaty, which

@@ -236,7 +236,8 @@ te_cred_term_adjustment_available = {
 # monopoly could be demanded: the tier gives one, and the leader has a company
 # whose type has a building in the debtor (te_cred_company_can_take_monopoly_generated).
 # Where the rights stand and no monopoly could be made, the term gives nothing,
-# so it is not offered.
+# so it is not offered: always so for a bloc without Conditionality, whose
+# concessions are the rights alone (te_cred_monopolies_allowed is 0).
 te_cred_term_concessions_available = {
 	OR = {
 		can_create_treaty = {
@@ -287,8 +288,8 @@ te_cred_term_privatization_available = {
 	}
 }
 
-# How many terms beside the receivership this rescue carries: the bloc's
-# Conditionality tier's figure, or as many as are available if fewer
+# How many terms beside the receivership this rescue carries: one, or the
+# bloc's Conditionality tier's figure, or as many as are available if fewer
 # (te_cred_terms_to_pick). One trigger per count, for the options' triggers:
 # comparing a script value with `=` in a trigger is not the mod's practice.
 te_cred_terms_pick_0 = { te_cred_terms_to_pick < 1 }

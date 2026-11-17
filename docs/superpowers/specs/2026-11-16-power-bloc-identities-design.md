@@ -180,8 +180,10 @@ call, `te_cc.1`.
 it stays in default, loses the standing guarantee for ten years and may leave
 the bloc. An AI member accepts unless it is hostile to the leader.
 
-**The terms.** Receivership always; then as many of the others as the bloc's
-Conditionality tier allows (§ 5.4), the leader choosing which.
+**The terms.** Receivership always; then one of the others for any consortium
+(owner, 2026-11-17: before that a bloc without Conditionality set none), or as
+many as the bloc's Conditionality tier allows (§ 5.4), the leader choosing
+which.
 
 | Term | Built from | What it does |
 |---|---|---|
@@ -228,7 +230,8 @@ event that runs `start_enactment` for one law the leader names.
 | Conditionality | new, primary, unlocked by this identity | The Debt Administration. Tier by tier: more terms per rescue, a larger remittance, more monopoly demands, a longer receivership |
 
 A bloc that takes Development Lending and no Conditionality rescues with
-receivership alone and spreads capital; one that takes Conditionality and no
+receivership and one term (concessions without a monopoly, since the monopolies
+are the tier's) and spreads capital; one that takes Conditionality and no
 Development Lending is a collection agency.
 
 ### 5.5 Cohesion, leaving, the AI

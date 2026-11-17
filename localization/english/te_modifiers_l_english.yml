@@ -672,7 +672,7 @@
  power_bloc_te_cred_remittance_add:0 "Receivership Remittance"
  power_bloc_te_cred_remittance_add_desc:0 "The share of its [concept_gdp] a member under the leader's receivership pays the leader each month."
  power_bloc_te_cred_rescue_terms_add:0 "Rescue Terms"
- power_bloc_te_cred_rescue_terms_add_desc:0 "How many terms beside a receivership the leader sets when it rescues a defaulting member: structural adjustment, concessions or privatization. Where fewer are possible, all of them."
+ power_bloc_te_cred_rescue_terms_add_desc:0 "How many terms beside a receivership the leader sets when it rescues a defaulting member: structural adjustment, concessions or privatization. Where fewer are possible, all of them. A [concept_power_bloc] without this principle sets one."
  power_bloc_te_mon_currency_crash_chance_mult:0 "[concept_banking_common_currency] [concept_banking_crash] Likelihood"
  power_bloc_te_mon_currency_crash_chance_mult_desc:0 "For every country using the currency under any banking law but $law_unregulated_banking$: one supervisor over every bank that uses the currency."
  power_bloc_te_mon_currency_interventions_add:0 "[concept_banking_common_currency] [concept_banking_intervention_budget]"

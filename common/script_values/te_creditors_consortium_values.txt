@@ -35,10 +35,13 @@
 
 # --- The rescue (§ 5.3) --------------------------------------------------------
 
-# How many terms beside the receivership the bloc's Conditionality allows a
-# rescue: 0 without the group, then 1, 1, 2, 2, 3. Country scope, the leader.
+# How many terms beside the receivership a rescue carries: 1 for any
+# consortium (owner, 2026-11-17: a leader that pays always asks something
+# back), then 1, 1, 2, 2, 3 by the bloc's Conditionality tier, so the group's
+# first two tiers add no term; they give the first monopoly
+# (te_cred_monopolies_allowed) and the leverage. Country scope, the leader.
 te_cred_terms_allowed = {
-	value = 0
+	value = 1
 	if = {
 		limit = { te_cred_cond_tier_5 = yes }
 		value = 3
@@ -78,8 +81,9 @@ te_cred_terms_to_pick = {
 	min = 0
 }
 
-# Monopolies a concessions term demands: 1, 1, 2, 2, 3 by Conditionality tier
-# (0 without it, but a rescue without it carries no concessions anyway).
+# Monopolies a concessions term demands: 1, 1, 2, 2, 3 by Conditionality tier.
+# 0 without the group: a bloc without it can still ask concessions, as its one
+# term, and they are the investment rights alone (te_cred_offer_concessions_plain_tt).
 # Country scope, the leader.
 te_cred_monopolies_allowed = {
 	value = 0
