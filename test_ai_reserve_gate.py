@@ -142,10 +142,12 @@ class TheSelfCheck(unittest.TestCase):
 
     def test_a_low_band_watch_counts_only_if_still_under_the_cap_at_its_read(self):
         read = _norm(_block(self.watch, "effect"))
-        # Not counted when the AI construction pass queued for the country in the last 45 days: its level, not the
-        # engine's.
+        # Not counted when the AI construction pass queued for the country in the last 45 days, or still follows a
+        # level it queued: its level, not the engine's.
         self.assertIn("if = { limit = { has_variable = te_rgc_watch } remove_variable = te_rgc_watch if = { limit = { "
-                      "scaled_gold_reserves < 0.08 NOT = { has_variable = te_ai_build_pass_recent } } change_global_variable = { name = te_rgc_watched add = 1 } if = { "
+                      "scaled_gold_reserves < 0.08 NOT = { has_variable = te_ai_build_pass_recent } NOT = { "
+                      "has_variable = te_ai_build_pass_pending_kind } } change_global_variable = { name = "
+                      "te_rgc_watched add = 1 } if = { "
                       "limit = { construction_queue_num_queued_government_levels > 0 } change_global_variable = { name "
                       "= te_rgc_any add = 1 } if = { limit = { te_rgc_university_queued = yes } "
                       "change_global_variable = { name = te_rgc_uni add = 1 } } } } }", read)
@@ -158,7 +160,8 @@ class TheSelfCheck(unittest.TestCase):
         effect = _norm(self.effect)
         control = ("set_global_variable = { name = te_rgc_ctrl_queues value = 0 } set_global_variable = { name = "
                    "te_rgc_ctrl_uni value = 0 } every_country = { limit = { is_ai = yes "
-                   "construction_queue_num_queued_government_levels > 0 } change_global_variable = { name = "
+                   "construction_queue_num_queued_government_levels > 0 NOT = { has_variable = "
+                   "te_ai_build_pass_pending_kind } } change_global_variable = { name = "
                    "te_rgc_ctrl_queues add = 1 } if = { limit = { te_rgc_university_queued = yes } "
                    "change_global_variable = { name = te_rgc_ctrl_uni add = 1 } } }")
         self.assertIn(control, effect)

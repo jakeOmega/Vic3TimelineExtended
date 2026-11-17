@@ -4,8 +4,9 @@
 
 # Country scope. An AI government the engine has left with nothing queued for a
 # month, that the rate lets build, with the surplus the engine's own budget AI
-# asks for before it adds spending.
+# asks for before it adds spending, and no level of the pass's still followed.
 te_ai_build_pass_may_queue = {
+	is_country_alive = yes
 	is_ai = yes
 	NOT = { is_country_type = decentralized }
 	te_free_market_construction_on = yes
@@ -13,7 +14,9 @@ te_ai_build_pass_may_queue = {
 	is_at_war = no
 	is_construction_paused = no
 	has_variable = te_ai_build_pass_idle
+	NOT = { has_variable = te_ai_build_pass_pending_kind }
 	NOT = { construction_queue_num_queued_government_levels > 0 }
+	has_variable = te_construction_market_price_stabilizer
 	net_fixed_income > 0
 	OR = {
 		net_fixed_income >= TE_AI_BUILD_PASS_SURPLUS_MIN
@@ -22,28 +25,54 @@ te_ai_build_pass_may_queue = {
 	te_ai_build_pass_means >= 0
 }
 
-# Country scope. A university does good while innovation is under the cap. The
-# variable is vanilla's (building_university's can_build_government).
-te_ai_build_pass_wants_university = {
-	has_technology_researched = academia
-	NOT = { has_variable = poland_universities_closed_var }
-	te_ai_build_pass_innovation_share < TE_AI_BUILD_PASS_INNOVATION_SHARE
-	any_scope_state = { te_ai_build_pass_university_site = yes }
-}
+# What the pass queues, in order of what does most good (owner, 2026-11-16: "bureaucracy over the requirement is
+# very rarely worth it ... This then allows the AI to spend in debt with low interest rates to get the highest
+# leverage government buildings"). The first that applies is queued; if none does, nothing is.
+#   1. A Government Administration, while net bureaucracy is under BUREAUCRACY_MARGIN of its usage (or below
+#      nothing): a shortage puts tax waste on every tax the country collects (up to all of it), so a level that
+#      ends or forestalls one pays for itself many times over; above the margin it would be bureaucracy over the
+#      requirement. First, so that a university never stands ahead of it in the queue.
+#   2. A university, while innovation is under INNOVATION_SHARE of its cap: research, the owner's second priority
+#      after growth (ai.md); past the cap a level is wasted.
+# Each only where the surplus pays for the level within MAX_WEEKS, and none of a kind for a year after one the pass
+# queued of that kind was lost.
 
-# Country scope. An administration does good where a state's taxes outrun its
-# tax capacity (vanilla's building_government_administration expands itself
-# there, should_auto_expand).
+# Country scope. Net bureaucracy close to nothing or below it.
 te_ai_build_pass_wants_administration = {
 	has_technology_researched = tech_bureaucracy
+	NOT = { has_variable = te_ai_build_pass_backoff_administration }
+	bureaucracy < te_ai_build_pass_bureaucracy_margin
+	te_ai_build_pass_administration_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
 	any_scope_state = { te_ai_build_pass_administration_site = yes }
 }
 
-# State scope.
+# Country scope. The variable is vanilla's (building_university's can_build_government). Not short of
+# bureaucracy: the administration the country needs comes first.
+te_ai_build_pass_wants_university = {
+	has_technology_researched = academia
+	NOT = { has_variable = poland_universities_closed_var }
+	NOT = { has_variable = te_ai_build_pass_backoff_university }
+	bureaucracy >= 0
+	te_ai_build_pass_innovation_share < TE_AI_BUILD_PASS_INNOVATION_SHARE
+	te_ai_build_pass_university_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_university_site = yes }
+}
+
+# State scope. The administration goes where taxes come closest to (or most outrun) tax capacity, which its level
+# also raises (vanilla's pm_simple_organization: state_tax_capacity_add); the university to the most populous.
+te_ai_build_pass_administration_site = {
+	is_incorporated = yes
+}
 te_ai_build_pass_university_site = {
 	is_incorporated = yes
 }
-te_ai_build_pass_administration_site = {
-	is_incorporated = yes
-	tax_capacity < tax_capacity_usage
+
+# Country scope: the self-check's sample, read when the pass queues. A government
+# the engine would not queue for: in debt, or under the mod's reserve gate (NAI
+# CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS, 0.02).
+te_ai_build_pass_in_sample = {
+	OR = {
+		scaled_debt > 0
+		scaled_gold_reserves < 0.02
+	}
 }

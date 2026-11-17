@@ -20,7 +20,8 @@
 # read, if reserves are still under 0.08: watched +1, any government level queued +1, a university level queued +1.
 # With nothing queued the purchase is 0 and reserves only rise, so a country under 0.08 at both reads queued under 0.1.
 # A watch is not counted when the AI construction pass queued for the country in the last 45 days
-# (te_ai_build_pass_recent, te_ai_build_pass_effects.txt): that level is the pass's, not the engine's.
+# (te_ai_build_pass_recent) or still follows a level it queued (te_ai_build_pass_pending_kind,
+# te_ai_build_pass_effects.txt): that level is the pass's, not the engine's. Nor is such a country in the control.
 #
 # ai_reserve_gate, once, at the first global monthly pulse with 3 universities counted, or 120 watches ended:
 #   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
@@ -67,6 +68,7 @@ te_ai_reserve_gate_selfcheck_watch = {
 				limit = {
 					scaled_gold_reserves < 0.08
 					NOT = { has_variable = te_ai_build_pass_recent }
+					NOT = { has_variable = te_ai_build_pass_pending_kind }
 				}
 				change_global_variable = { name = te_rgc_watched add = 1 }
 				if = {
@@ -112,13 +114,15 @@ te_ai_reserve_gate_selfcheck = {
 			limit = { has_variable = te_rgc_watch }
 			remove_variable = te_rgc_watch
 		}
-		# The control, once: AI countries with a government queue, and those among them holding a university.
+		# The control, once: AI countries with a government queue, and those among them holding a university, leaving
+		# out a country whose queued level is the pass's (te_ai_build_pass_pending_kind).
 		set_global_variable = { name = te_rgc_ctrl_queues value = 0 }
 		set_global_variable = { name = te_rgc_ctrl_uni value = 0 }
 		every_country = {
 			limit = {
 				is_ai = yes
 				construction_queue_num_queued_government_levels > 0
+				NOT = { has_variable = te_ai_build_pass_pending_kind }
 			}
 			change_global_variable = { name = te_rgc_ctrl_queues add = 1 }
 			if = {

@@ -154,8 +154,18 @@ TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE = 0.2
 # does. It needs saying: in the history store the rate rose above the year
 # before at some month of the year after a panic began in 25 of 33 panics, but
 # its mean over that year was lower than the year before's in 16, the central
-# bank cutting through the panic. No credit at war, where the war brake below
-# already holds the purchase back.
+# bank cutting through the panic. No credit at war or while the banking
+# cycle's bubble pressure is 50 or more, where the war brake and the banking
+# brake below hold the purchase back: the credit must not offset either (the
+# owner's rule of 2026-11-14, nothing softens the cycle).
+#
+# The rate is a real rate: te_rate_paid_pts subtracts headline inflation from
+# the lenders' yield (era base + expected inflation), so inflation above what
+# lenders expected reads as cheaper credit, and only hyperinflation (inflation
+# band 6, te_mon_in_financial_crisis) counts as a crisis. That is what the
+# treasury pays: the mod's interest modifier applies this rate. Reading the
+# nominal rate instead (adding var:te_inflation back) would make an inflation
+# surprise tighten the rule; the owner's choice, not built.
 #
 # The surplus term's factor gains RATE_GAIN times the credit the country has
 # not used, and loses RATE_GAIN times what it lacks of the reserve; only the
@@ -193,7 +203,20 @@ TE_CONSTRUCTION_MARKET_AI_BUREAUCRACY_INCOME_SHARE = 0.2
 #   countries, whose median spread was 9.7. Most small countries borrow dear.
 #   RESERVE_MAX 0.1. Vanilla's reserve gate, which this curve gives back at a
 #   high rate.
-#   CREDIT_MAX 0.1 of the debt ceiling. The debt at which the engine's own AI
+#   CREDIT_MAX 0.1 of the debt ceiling: THE CREDIT'S SWITCH. 0 is no credit,
+#   with nothing else to change: the purchase then never spends past its
+#   surplus at any rate (the rule as it was at a low rate, with no reserve
+#   asked), and the AI construction pass still reaches a government in debt at
+#   a low rate (TE_AI_BUILD_PASS_DEBT_MAX, its own number), which then buys
+#   from its surplus with the debt falling. A standing debt: with a level
+#   always queued a low-rate country settles at two-thirds of the allowance
+#   and stays there, and while it holds debt the engine queues nothing that is
+#   not critical (its reserve gate asks for reserves after the cost), so only
+#   the pass builds for it (ai.md, AI Government Construction: the long run
+#   with and without a return on what is built, and the lock-out a test run
+#   must measure). The owner keeps the credit (2026-11-16: "the whole reason
+#   we are building this is to get the AI to grow faster"). The debt at which
+#   the engine's own AI
 #   starts to call debt significant and raise taxes
 #   (CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD); half the pause's resume line and
 #   a quarter of the pause; under the monetary system's debt-load premium,
@@ -231,11 +254,18 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 # that was 80 of the 112 years in which one of the 20 largest AI economies had
 # nothing queued. So once a month, for an AI government in a market game, at
 # peace, not paused and not in default, whose queue was already empty a month
-# before, the pass queues one level, where the rate allows it the means: its
-# reserves above the reserve asked for, plus the credit allowance not yet
-# used, are not negative. A university while innovation is under
-# INNOVATION_SHARE of its cap, else a Government Administration in the state
-# most short of tax capacity.
+# before, the pass queues one level, where the rate allows it the means
+# (te_ai_build_pass_means: its reserves above the reserve asked for, plus the
+# debt it may hold at its rate, less its debt, are not negative). What it
+# queues, in order of what does most good (te_ai_build_pass_triggers.txt has
+# the list and each entry's reason): a Government Administration while net
+# bureaucracy is under BUREAUCRACY_MARGIN of its usage; else a university
+# while innovation is under INNOVATION_SHARE of its cap and the country is not
+# short of bureaucracy; each only where the surplus pays for the level within
+# MAX_WEEKS; else nothing. Owner, 2026-11-16, on the administration: "I think
+# this is mostly not useful - bureaucracy over the requirement is very rarely
+# worth it. I would remove this unless you are close to net zero
+# bureaucracy."
 #
 #   SURPLUS_SHARE 1/6 of fixed income, or SURPLUS_MIN 15,000 a week: the
 #   engine's own test before it adds should-have spending (income 1.2 times
@@ -247,9 +277,50 @@ TE_CONSTRUCTION_MARKET_AI_CREDIT_SERVICE_SHARE = 0.33333
 #   INNOVATION_SHARE 0.9. The engine's AI wants innovation up to its cap
 #   (MONEY_SPENDING_INNOVATION_DESIRED_THRESHOLD 1.0) and a level past the cap
 #   is wasted, so the pass stops a level short of it.
+#   BUREAUCRACY_MARGIN 0.02 of bureaucracy usage: "close to net zero". Two
+#   years (MAX_WEEKS, the longest a level may take) of the median growth of
+#   bureaucracy usage among the 20 largest AI economies, 0.8% and 0.9% a year
+#   in the 1900-1924 and 1925-1947 runs; and about what one of their
+#   administration levels adds (its output over usage: medians of 2.3% and
+#   1.8%). So under it the country is about a level from a shortage, and a
+#   shortage's tax waste falls on every tax it collects (vanilla: up to all of
+#   it at a full deficit), which a level costing 100 points repays many times
+#   over; above it the level would be bureaucracy over the requirement. Among
+#   the 20 largest, net bureaucracy was under 2% of usage in about a quarter of
+#   their years (1.4% and 1.6% at the 25th percentile), under nothing in 10% and
+#   16%.
+#   DEBT_MAX 0.1 of the debt ceiling: the debt a government may hold at a low
+#   rate and still have the pass queue for it, on the curve's low side as the
+#   credit is (whole at a spread of LOW or less, none at MID, none at war or in
+#   a bubble), and never more than a third of its surplus carries at the rate
+#   HIGH asks (the credit's service cap). The same reasons as CREDIT_MAX, and
+#   apart from it so that the credit's switch at 0 leaves the pass reaching a
+#   low-rate debtor. At 0 the pass reaches no government in debt. What it
+#   costs: while the pass keeps the queue full such a debt is paid down only
+#   by the surplus term's debt pull (1 - debt), slowly, and the engine queues
+#   nothing of its own until it is gone.
+#   MAX_WEEKS 104, two years. The pass queues into an empty queue, so its level
+#   is first in line (the engine fills the government queue first come, first
+#   served: docs/vanilla/vanilla_economy_reference.md 9.3). A level that takes
+#   longer than two years of the surplus holds back what the engine queues
+#   behind it for longer than the engine's own budget horizon. At a surplus of
+#   a sixth of fixed income and 1,250 a point a university's 400 points
+#   (construction_cost_medium) fit in 104 weeks from a fixed income of 28,800
+#   a week, an administration's 100 (construction_cost_very_low) from 7,200;
+#   at a surplus of a third, from 14,400 and 3,600.
+#   BACKOFF_DAYS 365. After a level the pass queued is gone from the queue
+#   unbuilt (dropped, or the state lost) the pass queues no level of that kind
+#   for the country for a year: whatever was bought for it is lost with it
+#   (vanilla_economy_reference.md 9.3), so it should not queue it again every
+#   two months. The effect writes the days as a literal (a timed variable's
+#   days); test_ai_build_pass.py holds it to this figure.
 TE_AI_BUILD_PASS_SURPLUS_SHARE = 0.16667
 TE_AI_BUILD_PASS_SURPLUS_MIN = 15000
 TE_AI_BUILD_PASS_INNOVATION_SHARE = 0.9
+TE_AI_BUILD_PASS_BUREAUCRACY_MARGIN = 0.02
+TE_AI_BUILD_PASS_DEBT_MAX = 0.1
+TE_AI_BUILD_PASS_MAX_WEEKS = 104
+TE_AI_BUILD_PASS_BACKOFF_DAYS = 365
 
 # The rate the monetary update last wrote, less the world reference rate, in
 # points a year; the curve's middle where the update has not run.
@@ -312,8 +383,10 @@ te_construction_market_ai_credit_service_cap = {
 	}
 }
 
-# The debt the rate allows the purchase to run, as a share of the ceiling.
-te_construction_market_ai_credit_allowance = {
+# The low side of the curve, 0 to 1: how far the spread is under the middle,
+# whole at LOW. Nothing at war or while bubble pressure is 50 or more, where the
+# war and banking brakes in the purchase hold it back: no credit offsets them.
+te_construction_market_ai_rate_ease = {
 	value = 0
 	if = {
 		limit = {
@@ -327,9 +400,22 @@ te_construction_market_ai_credit_allowance = {
 		}
 		min = 0
 		max = 1
-		multiply = TE_CONSTRUCTION_MARKET_AI_CREDIT_MAX
-		max = te_construction_market_ai_credit_service_cap
+		if = {
+			limit = {
+				has_variable = bubble_pressure
+				var:bubble_pressure >= 50
+			}
+			value = 0
+		}
 	}
+}
+
+# The debt the rate allows the purchase to run, as a share of the ceiling.
+# CREDIT_MAX is its switch: at 0 there is none.
+te_construction_market_ai_credit_allowance = {
+	value = te_construction_market_ai_rate_ease
+	multiply = TE_CONSTRUCTION_MARKET_AI_CREDIT_MAX
+	max = te_construction_market_ai_credit_service_cap
 }
 
 # What the factor gains from credit not yet used.
