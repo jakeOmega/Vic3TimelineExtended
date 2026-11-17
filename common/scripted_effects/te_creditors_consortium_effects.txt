@@ -43,8 +43,12 @@ te_cred_call_consortium = {
 
 # Scope: the leader. Writes the chosen terms on the member and asks it.
 # $ADJ$, $CONC$, $PRIV$: yes or no, structural adjustment, concessions,
-# privatization, written on the member as 1 or 0. They last 120 days there: an
-# answer that never comes (the event lapses) leaves nothing behind.
+# privatization. Adjustment and privatization are written on the member as 1
+# or 0; concessions as the number of the rescue's terms spent on them, what
+# the other two leave of te_cred_terms_to_pick (te_cred_conc_slots_0 / _1 /
+# _2), with the monopolies those buy beside it (te_cred_offer_monopolies), so
+# the count the leader offered is the count demanded. They last 120 days
+# there: an answer that never comes (the event lapses) leaves nothing behind.
 te_cred_offer_rescue = {
 	te_cred_offer_rescue_tooltip = { ADJ = $ADJ$ CONC = $CONC$ PRIV = $PRIV$ }
 	hidden_effect = {
@@ -56,9 +60,31 @@ te_cred_offer_rescue = {
 				limit = { always = $ADJ$ }
 				set_variable = { name = te_cred_offer_adjustment value = 1 days = 120 }
 			}
+			set_variable = { name = te_cred_offer_monopolies value = 0 days = 120 }
 			if = {
 				limit = { always = $CONC$ }
-				set_variable = { name = te_cred_offer_concessions value = 1 days = 120 }
+				if = {
+					limit = {
+						always = $ADJ$
+						always = $PRIV$
+					}
+					set_variable = { name = te_cred_offer_concessions value = scope:te_cc_creditor.te_cred_conc_slots_2 days = 120 }
+					set_variable = { name = te_cred_offer_monopolies value = scope:te_cc_creditor.te_cred_offer_monopolies_2 days = 120 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							always = $ADJ$
+							always = $PRIV$
+						}
+					}
+					set_variable = { name = te_cred_offer_concessions value = scope:te_cc_creditor.te_cred_conc_slots_1 days = 120 }
+					set_variable = { name = te_cred_offer_monopolies value = scope:te_cc_creditor.te_cred_offer_monopolies_1 days = 120 }
+				}
+				else = {
+					set_variable = { name = te_cred_offer_concessions value = scope:te_cc_creditor.te_cred_conc_slots_0 days = 120 }
+					set_variable = { name = te_cred_offer_monopolies value = scope:te_cc_creditor.te_cred_offer_monopolies_0 days = 120 }
+				}
 			}
 			if = {
 				limit = { always = $PRIV$ }
@@ -87,15 +113,48 @@ te_cred_offer_rescue_tooltip = {
 		limit = { always = $ADJ$ }
 		custom_tooltip = { text = te_cred_offer_adjustment_tt }
 	}
+	# Concessions take the terms the other two leave, and each buys the tier's
+	# monopolies: one line for each count of other terms, since a text reads a
+	# script value and takes no argument. Without Conditionality, or where no
+	# monopoly can be demanded, the concessions are the investment rights alone.
 	if = {
 		limit = { always = $CONC$ }
-		# Without Conditionality the concessions carry no monopoly.
 		if = {
-			limit = { te_cred_monopolies_allowed > 0 }
-			custom_tooltip = { text = te_cred_offer_concessions_tt }
+			limit = {
+				always = $ADJ$
+				always = $PRIV$
+			}
+			if = {
+				limit = { te_cred_offer_monopolies_2 > 0 }
+				custom_tooltip = { text = te_cred_offer_concessions_2_tt }
+			}
+			else = {
+				custom_tooltip = { text = te_cred_offer_concessions_plain_tt }
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					always = $ADJ$
+					always = $PRIV$
+				}
+			}
+			if = {
+				limit = { te_cred_offer_monopolies_1 > 0 }
+				custom_tooltip = { text = te_cred_offer_concessions_1_tt }
+			}
+			else = {
+				custom_tooltip = { text = te_cred_offer_concessions_plain_tt }
+			}
 		}
 		else = {
-			custom_tooltip = { text = te_cred_offer_concessions_plain_tt }
+			if = {
+				limit = { te_cred_offer_monopolies_0 > 0 }
+				custom_tooltip = { text = te_cred_offer_concessions_0_tt }
+			}
+			else = {
+				custom_tooltip = { text = te_cred_offer_concessions_plain_tt }
+			}
 		}
 	}
 	if = {
@@ -186,12 +245,13 @@ te_cred_apply_rescue = {
 		}
 	}
 
-	# Concessions: Foreign Investment Rights for the leader, then monopolies,
-	# as many as its Conditionality tier gives (none without the group).
+	# Concessions: Foreign Investment Rights for the leader, then the
+	# monopolies the leader offered for (te_cred_offer_monopolies: its tier's
+	# figure for each term it spent on concessions, none without the group).
 	if = {
-		limit = { var:te_cred_offer_concessions = 1 }
+		limit = { var:te_cred_offer_concessions >= 1 }
 		if = {
-			limit = { scope:te_cc_creditor = { te_cred_monopolies_allowed > 0 } }
+			limit = { var:te_cred_offer_monopolies >= 1 }
 			custom_tooltip = te_cred_accept_concessions_tt
 		}
 		else = {
@@ -213,6 +273,7 @@ te_cred_apply_rescue = {
 	hidden_effect = {
 		remove_variable = te_cred_offer_adjustment
 		remove_variable = te_cred_offer_concessions
+		remove_variable = te_cred_offer_monopolies
 		remove_variable = te_cred_offer_privatization
 		remove_variable = te_cred_offer_cost
 		trigger_event = { id = te_cc.9 days = 3 }
@@ -238,6 +299,7 @@ te_cred_refuse_terms = {
 		set_variable = { name = te_cred_terms_refused days = 3650 }
 		remove_variable = te_cred_offer_adjustment
 		remove_variable = te_cred_offer_concessions
+		remove_variable = te_cred_offer_monopolies
 		remove_variable = te_cred_offer_privatization
 		remove_variable = te_cred_offer_cost
 		trigger_event = { id = te_monetary_internal.2 days = 1 }
@@ -369,15 +431,26 @@ te_cred_grant_investment_rights = {
 	}
 }
 
-# Scope: the member. Monopolies for the leader's companies, as many as its
-# Conditionality tier gives (te_cred_monopolies_allowed; none without the
-# group, where this makes nothing): each of the leader's
-# companies in turn, each of its building types the member has a building of
-# (the generated ladder, te_cred_monopoly_ladder_generated), until the count is
-# spent. Each monopoly is its own acquire_monopoly_for_company treaty, which
-# vanilla's can_ratify allows with Foreign Investment Rights in force.
+# Scope: the member. Monopolies for the leader's companies, as many as the
+# leader offered for (te_cred_offer_monopolies: its Conditionality tier's
+# figure for each term it spent on concessions; none without the group, where
+# this makes nothing). Each monopoly is its own acquire_monopoly_for_company
+# treaty, which vanilla's can_ratify allows with Foreign Investment Rights in
+# force, and refuses for a building type the member has already granted.
+#
+# WHICH ONES (owner, 2026-11-17): the member's largest industries first. A
+# pair is one of the leader's companies and one building type of its type
+# (the generated ladder, te_cred_monopoly_ladder_generated); its score is the
+# member's levels of that building type. Each round walks every pair twice:
+# once to find the best one left (te_cred_mono_best, te_cred_mono_best_seq,
+# the pair's number in the walk), once more to make it. "Left" is what comes
+# after the last pair taken, by score and then by number
+# (te_cred_mono_last_score, te_cred_mono_last_seq), so no pair is tried twice
+# and the loop ends when a round finds none, whatever the engine does with a
+# treaty made a moment ago. Equal scores go to the company walked first: the
+# leader's most prosperous (te_cred_walk_companies).
 te_cred_demand_monopolies = {
-	set_variable = { name = te_cred_mono_left value = scope:te_cc_creditor.te_cred_monopolies_allowed }
+	set_variable = { name = te_cred_mono_left value = var:te_cred_offer_monopolies }
 	set_variable = { name = te_cred_mono_made value = 0 }
 	# For te_cc.9's self-check: an article from before this rescue can't pass it.
 	if = {
@@ -391,37 +464,214 @@ te_cred_demand_monopolies = {
 		}
 		set_variable = { name = te_cred_mono_prior value = 1 days = 30 }
 	}
-	scope:te_cc_creditor = {
-		every_company = {
+	# Nothing to pick where the leader offered for none.
+	if = {
+		limit = {
+			has_variable = te_cred_mono_left
+			var:te_cred_mono_left > 0
+		}
+		set_variable = { name = te_cred_mono_last_score value = 1000000 }
+		set_variable = { name = te_cred_mono_last_seq value = 0 }
+		set_variable = { name = te_cred_mono_best value = 0 }
+		set_variable = { name = te_cred_mono_best_seq value = 0 }
+		te_cred_check_company_order = yes
+		set_variable = te_cred_mono_more
+		while = {
+			limit = {
+				has_variable = te_cred_mono_more
+				has_variable = te_cred_mono_left
+				var:te_cred_mono_left > 0
+			}
+			remove_variable = te_cred_mono_more
+			# The best pair left.
+			set_variable = { name = te_cred_mono_best value = 0 }
+			set_variable = { name = te_cred_mono_best_seq value = 0 }
+			set_variable = { name = te_cred_mono_seq value = 0 }
+			te_cred_walk_companies = yes
 			if = {
 				limit = {
-					scope:te_cc_debtor = {
-						has_variable = te_cred_mono_left
-						var:te_cred_mono_left > 0
-					}
+					has_variable = te_cred_mono_best
+					var:te_cred_mono_best > 0
 				}
+				# ...and the same walk again, making the pair whose number it is.
+				set_variable = { name = te_cred_mono_last_score value = var:te_cred_mono_best }
+				set_variable = { name = te_cred_mono_last_seq value = var:te_cred_mono_best_seq }
+				set_variable = { name = te_cred_mono_seq value = 0 }
+				set_variable = te_cred_mono_take
+				te_cred_walk_companies = yes
+				remove_variable = te_cred_mono_take
+				set_variable = te_cred_mono_more
+			}
+		}
+		remove_variable = te_cred_mono_best
+		remove_variable = te_cred_mono_best_seq
+		remove_variable = te_cred_mono_last_score
+		remove_variable = te_cred_mono_last_seq
+	}
+	remove_variable = te_cred_mono_left
+	if = {
+		limit = { has_variable = te_cred_mono_more }
+		remove_variable = te_cred_mono_more
+	}
+	if = {
+		limit = { has_variable = te_cred_mono_seq }
+		remove_variable = te_cred_mono_seq
+	}
+	if = {
+		limit = { has_variable = te_cred_mono_score }
+		remove_variable = te_cred_mono_score
+	}
+	if = {
+		limit = { has_variable = te_cred_mono_unordered }
+		remove_variable = te_cred_mono_unordered
+	}
+}
+
+# Scope: the member. One walk of the leader's companies, each trying every
+# building type of its type (te_cred_try_monopoly). The most prosperous
+# company first (ordered_company by prosperity), so two companies of one
+# industry settle a tie the same way every time. Prosperity and not size: it
+# is the one figure of a company's that script reads as a value (its levels
+# are comparison triggers only; scripting_best_practices.md § "Company AI
+# Fields"). Vanilla never uses ordered_company, so te_cred_check_company_order
+# checks it before the first walk and sets te_cred_mono_unordered where it
+# fails: the walk is then every_company's, in the engine's order.
+te_cred_walk_companies = {
+	if = {
+		limit = { has_variable = te_cred_mono_unordered }
+		scope:te_cc_creditor = {
+			every_company = {
 				save_scope_as = te_cred_mono_company
 				scope:te_cc_debtor = { te_cred_monopoly_ladder_generated = yes }
 			}
 		}
 	}
-	remove_variable = te_cred_mono_left
+	else = {
+		scope:te_cc_creditor = {
+			ordered_company = {
+				order_by = prosperity
+				max = 1000
+				check_range_bounds = no
+				save_scope_as = te_cred_mono_company
+				scope:te_cc_debtor = { te_cred_monopoly_ladder_generated = yes }
+			}
+		}
+	}
+}
+
+# Scope: the member. Does ordered_company walk every company of the leader's,
+# the most prosperous first? Counts them both ways and keeps the prosperity of
+# the first and the last it walks. Fewer walked than every_company finds: the ordered
+# walk is not used in this rescue (te_cred_mono_unordered). The self-check is
+# logged once a game, and only where the first and the last differ, so one
+# company, or a value that reads 0 for all of them, can't pass it.
+te_cred_check_company_order = {
+	set_variable = { name = te_cred_mono_companies value = 0 }
+	set_variable = { name = te_cred_mono_walked value = 0 }
+	set_variable = { name = te_cred_mono_pr_first value = 0 }
+	set_variable = { name = te_cred_mono_pr_last value = 0 }
+	scope:te_cc_creditor = {
+		every_company = {
+			scope:te_cc_debtor = { change_variable = { name = te_cred_mono_companies add = 1 } }
+		}
+		ordered_company = {
+			order_by = prosperity
+			max = 1000
+			check_range_bounds = no
+			save_scope_as = te_cred_mono_company
+			scope:te_cc_debtor = {
+				if = {
+					limit = {
+						has_variable = te_cred_mono_walked
+						var:te_cred_mono_walked < 1
+					}
+					set_variable = { name = te_cred_mono_pr_first value = scope:te_cred_mono_company.prosperity }
+				}
+				set_variable = { name = te_cred_mono_pr_last value = scope:te_cred_mono_company.prosperity }
+				change_variable = { name = te_cred_mono_walked add = 1 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_cred_mono_walked
+			has_variable = te_cred_mono_companies
+			var:te_cred_mono_walked < var:te_cred_mono_companies
+		}
+		set_variable = te_cred_mono_unordered
+		if = {
+			limit = { NOT = { has_global_variable = te_cc_sc_company_order_logged } }
+			set_global_variable = te_cc_sc_company_order_logged
+			debug_log = "TE_SELF_CHECK BROKEN cc_company_order (ordered_company by prosperity walked [ROOT.GetCountry.MakeScope.Var('te_cred_mono_walked').GetValue|0] of [SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting]'s [ROOT.GetCountry.MakeScope.Var('te_cred_mono_companies').GetValue|0] companies: the monopolies are picked over every_company instead; see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_variable = te_cc_sc_company_order_logged }
+			has_variable = te_cred_mono_pr_first
+			has_variable = te_cred_mono_pr_last
+			var:te_cred_mono_pr_first > var:te_cred_mono_pr_last
+		}
+		set_global_variable = te_cc_sc_company_order_logged
+		debug_log = "TE_SELF_CHECK OK cc_company_order (ordered_company by prosperity walked all [ROOT.GetCountry.MakeScope.Var('te_cred_mono_companies').GetValue|0] of [SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting]'s companies, the first at prosperity [ROOT.GetCountry.MakeScope.Var('te_cred_mono_pr_first').GetValue|0] and the last at [ROOT.GetCountry.MakeScope.Var('te_cred_mono_pr_last').GetValue|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	else_if = {
+		limit = {
+			NOT = { has_global_variable = te_cc_sc_company_order_logged }
+			has_variable = te_cred_mono_pr_first
+			has_variable = te_cred_mono_pr_last
+			var:te_cred_mono_pr_first < var:te_cred_mono_pr_last
+		}
+		set_global_variable = te_cc_sc_company_order_logged
+		debug_log = "TE_SELF_CHECK BROKEN cc_company_order (ordered_company by prosperity walked [SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting]'s companies least prosperous first: the first is at [ROOT.GetCountry.MakeScope.Var('te_cred_mono_pr_first').GetValue|0] and the last at [ROOT.GetCountry.MakeScope.Var('te_cred_mono_pr_last').GetValue|0]; see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	remove_variable = te_cred_mono_companies
+	remove_variable = te_cred_mono_walked
+	remove_variable = te_cred_mono_pr_first
+	remove_variable = te_cred_mono_pr_last
 }
 
 # Scope: the member, scope:te_cred_mono_company a company of scope:te_cc_creditor.
-# One rung of the ladder: $BT$ a building type of that company's type.
+# One rung of the ladder: $BT$ a building type of that company's type, and one
+# pair of te_cred_demand_monopolies's walk. It numbers itself
+# (te_cred_mono_seq), then either scores (the member's levels of $BT$, kept as
+# the best where it beats the best so far and comes after the last pair taken)
+# or, on the second walk (te_cred_mono_take), makes the treaty if its number
+# is the best one's.
 te_cred_try_monopoly = {
 	if = {
-		limit = {
-			has_variable = te_cred_mono_left
-			var:te_cred_mono_left > 0
-			any_scope_building = { is_building_type = $BT$ }
-			# No company_has_building_type_monopoly here: it names no country, so
-			# it would skip a company that holds the monopoly anywhere. A second
-			# monopoly for the same company and type here is refused by the
-			# article itself (usage_limit once_per_side_with_same_inputs, and
-			# can_ratify's duplicate-inputs check), which can_create_treaty runs.
-			can_create_treaty = {
+		limit = { has_variable = te_cred_mono_seq }
+		change_variable = { name = te_cred_mono_seq add = 1 }
+		if = {
+			limit = {
+				has_variable = te_cred_mono_take
+				has_variable = te_cred_mono_best_seq
+				var:te_cred_mono_seq >= var:te_cred_mono_best_seq
+				var:te_cred_mono_seq <= var:te_cred_mono_best_seq
+				# No company_has_building_type_monopoly here: it names no country, so
+				# it would skip a company that holds the monopoly anywhere. A second
+				# monopoly on the same building type here is refused by the article
+				# itself (can_ratify's duplicate check), which can_create_treaty runs.
+				can_create_treaty = {
+					first_country = root
+					second_country = scope:te_cc_creditor
+					is_draft = no
+					binding_period = { years = 5 }
+					articles_to_create = {
+						{
+							article = acquire_monopoly_for_company
+							source_country = root
+							target_country = scope:te_cc_creditor
+							inputs = {
+								{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
+								{ building_type = bt:$BT$ }
+							}
+						}
+					}
+				}
+			}
+			# Keep identical to the can_create_treaty above.
+			create_treaty = {
 				first_country = root
 				second_country = scope:te_cc_creditor
 				is_draft = no
@@ -438,27 +688,58 @@ te_cred_try_monopoly = {
 					}
 				}
 			}
+			change_variable = { name = te_cred_mono_left add = -1 }
+			change_variable = { name = te_cred_mono_made add = 1 }
 		}
-		# Keep identical to the can_create_treaty above.
-		create_treaty = {
-			first_country = root
-			second_country = scope:te_cc_creditor
-			is_draft = no
-			binding_period = { years = 5 }
-			articles_to_create = {
-				{
-					article = acquire_monopoly_for_company
-					source_country = root
-					target_country = scope:te_cc_creditor
-					inputs = {
-						{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
-						{ building_type = bt:$BT$ }
+		else_if = {
+			limit = { NOT = { has_variable = te_cred_mono_take } }
+			set_variable = {
+				name = te_cred_mono_score
+				value = {
+					value = 0
+					every_scope_building = {
+						limit = { is_building_type = $BT$ }
+						add = level
 					}
 				}
 			}
+			if = {
+				limit = {
+					has_variable = te_cred_mono_score
+					has_variable = te_cred_mono_best
+					has_variable = te_cred_mono_last_score
+					has_variable = te_cred_mono_last_seq
+					var:te_cred_mono_score > var:te_cred_mono_best
+					OR = {
+						var:te_cred_mono_score < var:te_cred_mono_last_score
+						AND = {
+							var:te_cred_mono_score <= var:te_cred_mono_last_score
+							var:te_cred_mono_seq > var:te_cred_mono_last_seq
+						}
+					}
+					# Keep identical to the can_create_treaty above.
+					can_create_treaty = {
+						first_country = root
+						second_country = scope:te_cc_creditor
+						is_draft = no
+						binding_period = { years = 5 }
+						articles_to_create = {
+							{
+								article = acquire_monopoly_for_company
+								source_country = root
+								target_country = scope:te_cc_creditor
+								inputs = {
+									{ company = scope:te_cred_mono_company } # REVIEWED 2026-11-16: a create_treaty input (effects.log § create_treaty), not an effect
+									{ building_type = bt:$BT$ }
+								}
+							}
+						}
+					}
+				}
+				set_variable = { name = te_cred_mono_best value = var:te_cred_mono_score }
+				set_variable = { name = te_cred_mono_best_seq value = var:te_cred_mono_seq }
+			}
 		}
-		change_variable = { name = te_cred_mono_left add = -1 }
-		change_variable = { name = te_cred_mono_made add = 1 }
 	}
 }
 

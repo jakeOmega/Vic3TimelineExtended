@@ -394,8 +394,10 @@ terms, or refuse. A rescue puts the member in a debt receivership (once the
 leader has International Exchange Standards) and carries one further term of
 the leader's choosing, or more with the Conditionality principle: its own
 economic, trade and tax laws imposed on the member while the receivership lasts,
-investment rights, or privatization. Conditionality adds monopolies for the
-leader's companies to the investment rights. A
+investment rights, or privatization. With Conditionality the investment rights
+come with monopolies for the leader's companies in the member's largest
+industries, and the leader can spend more than one term on them for more
+monopolies. A
 refusal costs a fifth of the bloc's cohesion at once and ends the guarantee of
 every member for five years. The member may refuse the terms in turn: it stays
 in default, loses the guarantee for ten years, and may leave the bloc at once.
@@ -459,7 +461,7 @@ other.
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
 | Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
-| Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (two or three, where a bloc without it sets one), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), more monopolies, and a longer receivership (12 to 36 months out of default). |
+| Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (two to four, where a bloc without it sets one), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), one to three monopolies for each term spent on concessions, and a longer receivership (12 to 36 months out of default). |
 | Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. In return the bloc gains 5 to 40 cohesion, the leader 10% to 30% more influence, and countries poorer than its average accept its invitations more readily. |
 | Technology Controls | Nuclear Weapons | No Modernization Aid to countries outside the bloc, and members' research better guarded against espionage. From tier III the leader can place a Technology Embargo. |
 

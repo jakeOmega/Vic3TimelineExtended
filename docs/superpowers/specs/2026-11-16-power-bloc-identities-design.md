@@ -183,7 +183,10 @@ the bloc. An AI member accepts unless it is hostile to the leader.
 **The terms.** Receivership always; then one of the others for any consortium
 (owner, 2026-11-17: before that a bloc without Conditionality set none), and
 as many more as the bloc's Conditionality tier adds (§ 5.4: 1, 1, 2, 2, 3 over
-that base, as before), the leader choosing which.
+that base, as before), the leader choosing which. Concessions may take more
+than one of them, each buying the tier's monopolies (owner, 2026-11-17:
+privatization seldom applies, so the higher tiers had terms with nothing to
+buy), and the monopolies go to the member's largest industries first.
 
 | Term | Built from | What it does |
 |---|---|---|
