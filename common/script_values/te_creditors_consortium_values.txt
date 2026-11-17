@@ -18,10 +18,15 @@
 #                             adjustment from this leader: it may impose its
 #                             economic laws while the receivership stands.
 #                             Removed when the receivership has gone
-#   te_cred_offer_adjustment / _concessions / _privatization  0 or 1, timed
-#                             (120 days), on the debtor: the terms the leader
-#                             chose in te_cc.1, read when the debtor answers
+#   te_cred_offer_adjustment / _privatization  0 or 1, timed (120 days), on
+#                             the debtor: the terms the leader chose in
+#                             te_cc.1, read when the debtor answers
+#   te_cred_offer_concessions  ...and how many of the rescue's terms it spent
+#                             on concessions (0 to 4)
+#   te_cred_offer_monopolies  ...and the monopolies those buy
 #   te_cred_mono_left         the monopolies still to demand in this rescue
+#   te_cred_mono_*            scratch, on the debtor, for the walk that picks
+#                             them (te_cred_demand_monopolies); gone when it ends
 #   te_cred_dl_bloc_gdppc     LEADER: the bloc's GDP per head, last pulse
 #   te_cred_dl_pool           LEADER: what donors paid in last pulse, before
 #                             it was split (a scratch sum)
@@ -35,33 +40,53 @@
 
 # --- The rescue (§ 5.3) --------------------------------------------------------
 
-# How many terms beside the receivership the bloc's Conditionality allows a
-# rescue: 0 without the group, then 1, 1, 2, 2, 3. Country scope, the leader.
+# How many terms beside the receivership a rescue carries: 1 for any
+# consortium (owner, 2026-11-17: a leader that pays always asks something
+# back), and the bloc's Conditionality tier adds 1, 1, 2, 2, 3 to that, the
+# figure its principles print (power_bloc_te_cred_rescue_terms_add). 2, 2, 3,
+# 3 and 4 in all. Adjustment and privatization take one each; concessions take
+# as many as the leader spends on them, each buying the tier's monopolies
+# (te_cred_concession_slots_max), so no tier's terms go unused where the
+# leader has companies to grant. Country scope, the leader.
 te_cred_terms_allowed = {
-	value = 0
+	value = 1
 	if = {
 		limit = { te_cred_cond_tier_5 = yes }
-		value = 3
+		add = 3
 	}
 	else_if = {
 		limit = { te_cred_cond_tier_3_plus = yes }
-		value = 2
+		add = 2
 	}
 	else_if = {
 		limit = { te_cred_cond_tier_1_plus = yes }
+		add = 1
+	}
+}
+
+# How many of a rescue's terms concessions can take (owner, 2026-11-17): none
+# where the term is not on offer; one where it is the investment rights alone
+# (no Conditionality, or no company of the leader's with a building in the
+# debtor); every term the rescue has where a monopoly can be demanded, each
+# one spent buying te_cred_monopolies_allowed more. Leader scope,
+# scope:te_cc_debtor.
+te_cred_concession_slots_max = {
+	value = 0
+	if = {
+		limit = { te_cred_term_concessions_available = yes }
 		value = 1
+		if = {
+			limit = { te_cred_monopolies_possible = yes }
+			value = te_cred_terms_allowed
+		}
 	}
 }
 
 # How many terms are on offer to this debtor. Leader scope, scope:te_cc_debtor.
 te_cred_terms_available = {
-	value = 0
+	value = te_cred_concession_slots_max
 	if = {
 		limit = { te_cred_term_adjustment_available = yes }
-		add = 1
-	}
-	if = {
-		limit = { te_cred_term_concessions_available = yes }
 		add = 1
 	}
 	if = {
@@ -70,17 +95,88 @@ te_cred_terms_available = {
 	}
 }
 
-# ...and how many the leader picks: the tier's figure, or every available one
-# if there are fewer.
+# ...and how many the leader picks: that figure, or every available one if
+# there are fewer.
 te_cred_terms_to_pick = {
 	value = te_cred_terms_allowed
 	max = te_cred_terms_available
 	min = 0
 }
 
-# Monopolies a concessions term demands: 1, 1, 2, 2, 3 by Conditionality tier
-# (0 without it, but a rescue without it carries no concessions anyway).
-# Country scope, the leader.
+# The terms a rescue spends on concessions where it also carries no, one or
+# two of the other terms: what is left of te_cred_terms_to_pick. The options
+# of te_cc.1 show where this is between 1 and te_cred_concession_slots_max
+# (te_cred_rescue_option_*). Leader scope, scope:te_cc_debtor.
+te_cred_conc_slots_0 = {
+	value = te_cred_terms_to_pick
+}
+te_cred_conc_slots_1 = {
+	value = te_cred_terms_to_pick
+	subtract = 1
+	min = 0
+}
+te_cred_conc_slots_2 = {
+	value = te_cred_terms_to_pick
+	subtract = 2
+	min = 0
+}
+
+# ...and the monopolies those terms buy: the tier's figure for each.
+te_cred_offer_monopolies_0 = {
+	value = te_cred_conc_slots_0
+	multiply = te_cred_monopolies_allowed
+}
+te_cred_offer_monopolies_1 = {
+	value = te_cred_conc_slots_1
+	multiply = te_cred_monopolies_allowed
+}
+te_cred_offer_monopolies_2 = {
+	value = te_cred_conc_slots_2
+	multiply = te_cred_monopolies_allowed
+}
+
+# How many rescues te_cc.1 shows at once, for the split of the AI's weight
+# among them (te_cred_rescue_split_*). Leader scope, scope:te_cc_debtor.
+te_cred_rescue_options = {
+	value = 0
+	if = {
+		limit = { te_cred_rescue_option_none = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_adj = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_conc = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_priv = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_adj_conc = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_adj_priv = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_conc_priv = yes }
+		add = 1
+	}
+	if = {
+		limit = { te_cred_rescue_option_all = yes }
+		add = 1
+	}
+}
+
+# Monopolies each term spent on concessions demands: 1, 1, 2, 2, 3 by
+# Conditionality tier. 0 without the group: a bloc without it can still ask
+# concessions, as its one term, and they are the investment rights alone
+# (te_cred_offer_concessions_plain_tt). Country scope, the leader.
 te_cred_monopolies_allowed = {
 	value = 0
 	if = {

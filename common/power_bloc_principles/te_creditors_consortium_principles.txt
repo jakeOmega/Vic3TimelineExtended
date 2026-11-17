@@ -6,8 +6,8 @@
 # both primary for identity_creditors_consortium and unlocked only by it.
 #
 # CONDITIONALITY, the Debt Administration: what a rescue may demand
-# (te_cc.1). By tier: terms beside the receivership 1, 1, 2, 2, 3
-# (te_cred_terms_allowed); the receivership's remittance 0.10, 0.15, 0.15,
+# (te_cc.1). By tier: terms beside the receivership, over the one every
+# consortium sets, 1, 1, 2, 2, 3 (te_cred_terms_allowed); the receivership's remittance 0.10, 0.15, 0.15,
 # 0.20, 0.25% of the debtor's GDP a month (te_cred_receivership_take_extra);
 # monopolies a concessions term demands 1, 1, 2, 2, 3 (te_cred_monopolies_allowed);
 # months out of default under a quarter of the ceiling that end the

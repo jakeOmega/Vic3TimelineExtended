@@ -236,7 +236,8 @@ te_cred_term_adjustment_available = {
 # monopoly could be demanded: the tier gives one, and the leader has a company
 # whose type has a building in the debtor (te_cred_company_can_take_monopoly_generated).
 # Where the rights stand and no monopoly could be made, the term gives nothing,
-# so it is not offered.
+# so it is not offered: always so for a bloc without Conditionality, whose
+# concessions are the rights alone (te_cred_monopolies_allowed is 0).
 te_cred_term_concessions_available = {
 	OR = {
 		can_create_treaty = {
@@ -262,10 +263,19 @@ te_cred_term_concessions_available = {
 					}
 				}
 			}
-			te_cred_monopolies_allowed > 0
-			any_company = { te_cred_company_can_take_monopoly_generated = yes }
+			te_cred_monopolies_possible = yes
 		}
 	}
+}
+
+# Could a monopoly be demanded of this debtor? The leader's tier gives one for
+# each term spent on concessions, and it has a company whose type has a
+# building in the debtor (te_cred_company_can_take_monopoly_generated). Where
+# it holds, concessions can take more than one of a rescue's terms
+# (te_cred_concession_slots_max). Leader scope, scope:te_cc_debtor.
+te_cred_monopolies_possible = {
+	te_cred_monopolies_allowed > 0
+	any_company = { te_cred_company_can_take_monopoly_generated = yes }
 }
 
 # Privatization: article 105's own gates (the debtor holds cooperative
@@ -287,8 +297,8 @@ te_cred_term_privatization_available = {
 	}
 }
 
-# How many terms beside the receivership this rescue carries: the bloc's
-# Conditionality tier's figure, or as many as are available if fewer
+# How many terms beside the receivership this rescue carries: one and the
+# bloc's Conditionality tier's figure, or as many as are available if fewer
 # (te_cred_terms_to_pick). One trigger per count, for the options' triggers:
 # comparing a script value with `=` in a trigger is not the mod's practice.
 te_cred_terms_pick_0 = { te_cred_terms_to_pick < 1 }
@@ -300,27 +310,63 @@ te_cred_terms_pick_2 = {
 	te_cred_terms_to_pick >= 2
 	te_cred_terms_to_pick < 3
 }
-te_cred_terms_pick_3 = { te_cred_terms_to_pick >= 3 }
 
-# How many rescue options te_cc.1 shows at once, for the split of the AI's
-# weight among them: one term to pick of two or three on offer shows two or
-# three; two to pick of three shows three pairs; every other case shows one.
-te_cred_rescue_split_1 = {
-	te_cred_rescue_split_2 = no
-	te_cred_rescue_split_3 = no
-}
-te_cred_rescue_split_2 = {
+# The rescues te_cc.1 offers, one trigger an option. Every rescue spends all
+# of te_cred_terms_to_pick: adjustment and privatization take one term each,
+# and concessions take the rest, which must be between one term and what
+# concessions can take (te_cred_concession_slots_max). So a leader with four
+# terms and both other terms on offer chooses among concessions four times
+# over, either other term with concessions three times, or both with
+# concessions twice; and one whose concessions are the investment rights alone
+# sees what it saw before concessions could repeat. Leader scope,
+# scope:te_cc_debtor.
+te_cred_rescue_option_none = { te_cred_terms_pick_0 = yes }
+te_cred_rescue_option_adj = {
 	te_cred_terms_pick_1 = yes
-	te_cred_terms_available >= 2
-	te_cred_terms_available < 3
+	te_cred_term_adjustment_available = yes
+}
+te_cred_rescue_option_priv = {
+	te_cred_terms_pick_1 = yes
+	te_cred_term_privatization_available = yes
+}
+te_cred_rescue_option_adj_priv = {
+	te_cred_terms_pick_2 = yes
+	te_cred_term_adjustment_available = yes
+	te_cred_term_privatization_available = yes
+}
+te_cred_rescue_option_conc = {
+	te_cred_conc_slots_0 >= 1
+	te_cred_conc_slots_0 <= te_cred_concession_slots_max
+}
+te_cred_rescue_option_adj_conc = {
+	te_cred_term_adjustment_available = yes
+	te_cred_conc_slots_1 >= 1
+	te_cred_conc_slots_1 <= te_cred_concession_slots_max
+}
+te_cred_rescue_option_conc_priv = {
+	te_cred_term_privatization_available = yes
+	te_cred_conc_slots_1 >= 1
+	te_cred_conc_slots_1 <= te_cred_concession_slots_max
+}
+te_cred_rescue_option_all = {
+	te_cred_term_adjustment_available = yes
+	te_cred_term_privatization_available = yes
+	te_cred_conc_slots_2 >= 1
+	te_cred_conc_slots_2 <= te_cred_concession_slots_max
+}
+
+# How many rescue options te_cc.1 shows at once (te_cred_rescue_options), for
+# the split of the AI's weight among them: up to four.
+te_cred_rescue_split_1 = { te_cred_rescue_options < 2 }
+te_cred_rescue_split_2 = {
+	te_cred_rescue_options >= 2
+	te_cred_rescue_options < 3
 }
 te_cred_rescue_split_3 = {
-	te_cred_terms_available >= 3
-	OR = {
-		te_cred_terms_pick_1 = yes
-		te_cred_terms_pick_2 = yes
-	}
+	te_cred_rescue_options >= 3
+	te_cred_rescue_options < 4
 }
+te_cred_rescue_split_4 = { te_cred_rescue_options >= 4 }
 
 # Is the rescue still on? Read when the member answers (te_cc.2) and by the
 # leader's options: the leader still leads the member's consortium and can

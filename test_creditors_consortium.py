@@ -57,7 +57,7 @@ DEVELOPMENT_LENDING_COHESION = {1: 5, 2: 10, 3: 20, 4: 30, 5: 40}
 DEVELOPMENT_LENDING_INFLUENCE = {1: 0.1, 2: 0.15, 3: 0.2, 4: 0.25, 5: 0.3}
 DEVELOPMENT_LENDING_INVITE_PER_TIER = 5
 
-SELF_CHECKS = ("cc_receivership_treaty", "cc_monopoly_treaty", "cc_adjustment_imposition")
+SELF_CHECKS = ("cc_receivership_treaty", "cc_monopoly_treaty", "cc_adjustment_imposition", "cc_company_order")
 
 
 def read(rel: str) -> str:
@@ -222,12 +222,81 @@ class PrincipleGroupsTest(unittest.TestCase):
         share = entity(values, "te_cred_dl_share")
         for tier, (figure, _) in DEVELOPMENT_LENDING.items():
             self.assertIn(f"value = {figure:g}" if figure != 0.10 else "value = 0.10", share)
-        self.assertEqual(re.findall(r"value = (\d)", entity(values, "te_cred_terms_allowed")), ["0", "3", "2", "1"])
+        # One term for any consortium (owner, 2026-11-17), and the tier's
+        # printed figure on top; the monopolies stay the tier's, none without
+        # the group.
+        terms = entity(values, "te_cred_terms_allowed")
+        self.assertEqual(re.findall(r"value = (\d)", terms), ["1"])
+        self.assertEqual(re.findall(r"add = (\d)", terms),
+                         [str(CONDITIONALITY[tier][0]) for tier in (5, 3, 1)])
         self.assertEqual(re.findall(r"value = (\d)", entity(values, "te_cred_monopolies_allowed")), ["0", "3", "2", "1"])
+        # ...so a bloc without the group asks concessions without a monopoly,
+        # and both sides' tooltips say so.
+        effects = strip_comments(read(EFFECTS))
+        for key in ("te_cred_offer_concessions_plain_tt", "te_cred_accept_concessions_plain_tt"):
+            self.assertIn(key, effects)
         take = entity(values, "te_cred_take_extra_own")
         self.assertEqual(re.findall(r"value = ([\d.]+)", take)[2:], ["0.0015", "0.001", "0.0005"])
         exit_ = entity(values, "te_cred_exit_extra_own")
         self.assertEqual(re.findall(r"value = (\d+)", exit_)[2:], ["24", "18", "12", "6"])
+
+    def test_concessions_take_the_terms_the_others_leave(self):
+        """Owner, 2026-11-17: each term spent on concessions buys the tier's monopolies."""
+        values = strip_comments(read(VALUES))
+        slots = entity(values, "te_cred_concession_slots_max")
+        self.assertIn("te_cred_term_concessions_available = yes", slots)
+        self.assertIn("limit = { te_cred_monopolies_possible = yes }", slots)
+        self.assertIn("value = te_cred_terms_allowed", slots)
+        self.assertIn("value = te_cred_concession_slots_max", entity(values, "te_cred_terms_available"))
+        effects = strip_comments(read(EFFECTS))
+        offer = entity(effects, "te_cred_offer_rescue")
+        tooltip = entity(effects, "te_cred_offer_rescue_tooltip")
+        loc = read("localization/english/te_miscellaneous_l_english.yml")
+        for others in (0, 1, 2):
+            with self.subTest(other_terms=others):
+                left = entity(values, f"te_cred_conc_slots_{others}")
+                self.assertIn("value = te_cred_terms_to_pick", left)
+                self.assertEqual(f"subtract = {others}" in left, others > 0)
+                bought = entity(values, f"te_cred_offer_monopolies_{others}")
+                self.assertIn(f"value = te_cred_conc_slots_{others}", bought)
+                self.assertIn("multiply = te_cred_monopolies_allowed", bought)
+                # what the leader reads, what is written on the member, and the text's figure agree
+                self.assertIn(f"te_cred_offer_concessions value = scope:te_cc_creditor.te_cred_conc_slots_{others} ", offer)
+                self.assertIn(f"te_cred_offer_monopolies value = scope:te_cc_creditor.te_cred_offer_monopolies_{others} ", offer)
+                self.assertIn(f"limit = {{ te_cred_offer_monopolies_{others} > 0 }}", tooltip)
+                line = [l for l in loc.splitlines() if l.startswith(f" te_cred_offer_concessions_{others}_tt:")][0]
+                self.assertIn(f"ScriptValue('te_cred_offer_monopolies_{others}')", line)
+        # the member is asked for the count the leader offered for
+        demand = entity(effects, "te_cred_demand_monopolies")
+        self.assertIn("name = te_cred_mono_left value = var:te_cred_offer_monopolies", demand)
+        accept = [l for l in loc.splitlines() if l.startswith(" te_cred_accept_concessions_tt:")][0]
+        self.assertIn("Var('te_cred_offer_monopolies')", accept)
+
+    def test_monopolies_go_to_the_largest_industries_first(self):
+        """Each round scores every pair by the member's levels and makes the best one left."""
+        effects = strip_comments(read(EFFECTS))
+        rung = entity(effects, "te_cred_try_monopoly")
+        self.assertIn("limit = { is_building_type = $BT$ }", rung)
+        self.assertIn("add = level", rung)
+        self.assertIn("var:te_cred_mono_score > var:te_cred_mono_best", rung)
+        # a pair already passed is never tried again, so the loop ends
+        self.assertIn("var:te_cred_mono_score < var:te_cred_mono_last_score", rung)
+        self.assertIn("var:te_cred_mono_seq > var:te_cred_mono_last_seq", rung)
+        demand = entity(effects, "te_cred_demand_monopolies")
+        loop = block_at(demand, demand.index("while = {"))
+        self.assertIn("has_variable = te_cred_mono_more", loop)
+        self.assertLess(loop.index("remove_variable = te_cred_mono_more"), loop.index("te_cred_walk_companies = yes"))
+        self.assertEqual(loop.count("te_cred_walk_companies = yes"), 2)
+        # the same walk both times, or the pair's number names another pair
+        walk = entity(effects, "te_cred_walk_companies")
+        self.assertIn("order_by = prosperity", walk)
+        self.assertIn("every_company = {", walk)
+        self.assertEqual(walk.count("te_cred_monopoly_ladder_generated = yes"), 2)
+        # ordered_company is unverified: the fallback is set where it walks fewer companies
+        check = entity(effects, "te_cred_check_company_order")
+        self.assertIn("var:te_cred_mono_walked < var:te_cred_mono_companies", check)
+        self.assertIn("set_variable = te_cred_mono_unordered", check)
+        self.assertIn("var:te_cred_mono_pr_first > var:te_cred_mono_pr_last", check)
 
     def test_the_invitation_pays_what_the_tiers_print(self):
         # The display field is tier x te_cred_dl_invite_per_tier, and
@@ -351,18 +420,33 @@ class RescueTest(unittest.TestCase):
         self.assertIn("namespace = te_cc", self.events)
         self.assertEqual(re.findall(r"(?m)^namespace = (\w+)", read("events/te_debug_cc_events.txt")), ["te_debug_cc"])
 
-    def test_one_option_set_per_term_count(self):
+    def test_one_option_for_each_way_to_spend_the_terms(self):
+        """Each option shows on its own trigger and offers the kinds of term the trigger names."""
         options = [block_at(self.call, m.start()) for m in re.finditer(r"\boption = \{", self.call)]
-        counts = {}
+        triggers = strip_comments(read(TRIGGERS))
+        seen = {}
         for option in options:
-            m = re.search(r"te_cred_terms_pick_(\d) = yes", option)
+            m = re.search(r"trigger = \{ te_cred_rescue_option_(\w+) = yes \}", option)
             if not m:
                 continue
-            terms = re.search(r"ADJ = (yes|no) CONC = (yes|no) PRIV = (yes|no)", option).groups()
-            self.assertEqual(terms.count("yes"), int(m.group(1)), option)
-            counts.setdefault(int(m.group(1)), set()).add(terms)
-        self.assertEqual(sorted(counts), [0, 1, 2, 3])
-        self.assertEqual([len(counts[n]) for n in range(4)], [1, 3, 3, 1])
+            adj, conc, priv = re.search(r"ADJ = (yes|no) CONC = (yes|no) PRIV = (yes|no)", option).groups()
+            kinds = [k for k, on in (("adj", adj), ("conc", conc), ("priv", priv)) if on == "yes"]
+            name = {0: "none", 3: "all"}.get(len(kinds), "_".join(kinds))
+            self.assertEqual(m.group(1), name, option)
+            seen[name] = entity(triggers, f"te_cred_rescue_option_{name}")
+        self.assertEqual(sorted(seen), ["adj", "adj_conc", "adj_priv", "all", "conc", "conc_priv", "none", "priv"])
+        # Adjustment and privatization take one term each; concessions take
+        # the rest, between one term and what concessions can take.
+        for name, others in (("conc", 0), ("adj_conc", 1), ("conc_priv", 1), ("all", 2)):
+            with self.subTest(option=name):
+                self.assertIn(f"te_cred_conc_slots_{others} >= 1", seen[name])
+                self.assertIn(f"te_cred_conc_slots_{others} <= te_cred_concession_slots_max", seen[name])
+        for name, count in (("none", 0), ("adj", 1), ("priv", 1), ("adj_priv", 2)):
+            with self.subTest(option=name):
+                self.assertIn(f"te_cred_terms_pick_{count} = yes", seen[name])
+        for name, body in seen.items():
+            self.assertEqual("te_cred_term_adjustment_available = yes" in body, "adj" in name or name == "all", name)
+            self.assertEqual("te_cred_term_privatization_available = yes" in body, "priv" in name or name == "all", name)
         refuse = [o for o in options if "te_cred_refuse_rescue = yes" in o]
         self.assertEqual(len(refuse), 1)
         for option in options:
@@ -424,8 +508,10 @@ class GeneratedLadderTest(unittest.TestCase):
         self.assertEqual(text.count("is_company_type = company_type:"),
                          read(str(ladder.OUT)).count("is_company_type = company_type:"))
         concessions = entity(strip_comments(read(TRIGGERS)), "te_cred_term_concessions_available")
-        self.assertIn("any_company = { te_cred_company_can_take_monopoly_generated = yes }", concessions)
-        self.assertIn("te_cred_monopolies_allowed > 0", concessions)
+        self.assertIn("te_cred_monopolies_possible = yes", concessions)
+        possible = entity(strip_comments(read(TRIGGERS)), "te_cred_monopolies_possible")
+        self.assertIn("any_company = { te_cred_company_can_take_monopoly_generated = yes }", possible)
+        self.assertIn("te_cred_monopolies_allowed > 0", possible)
         self.assertNotIn("always = yes", concessions)
 
 
@@ -468,7 +554,8 @@ class ReviewFixesTest(unittest.TestCase):
                 self.assertEqual(base, honour_base)
                 self.assertEqual(sorted((op, n) for _, op, n in rungs if op == "add"), honour_adds)
                 split = {t: n for t, op, n in rungs if op == "factor" and t.startswith("te_cred_rescue_split_") and t.endswith("yes")}
-                self.assertEqual(split, {"te_cred_rescue_split_2 = yes": 0.5, "te_cred_rescue_split_3 = yes": 0.33})
+                self.assertEqual(split, {"te_cred_rescue_split_2 = yes": 0.5, "te_cred_rescue_split_3 = yes": 0.33,
+                                         "te_cred_rescue_split_4 = yes": 0.25})
                 # a lean only where the rescue is split, so it moves the choice, not the odds
                 flavour = [n for t, op, n in rungs if op == "factor" and t not in split]
                 self.assertTrue(all(t.startswith("te_cred_rescue_split_1 = no ") for t, op, n in rungs

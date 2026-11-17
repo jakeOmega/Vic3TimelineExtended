@@ -21,17 +21,19 @@ namespace = te_cc
 # ----------------------------------------------------------------------------
 # te_cc.1 - the leader is called
 # ----------------------------------------------------------------------------
-# Options by how many terms beside the receivership the rescue carries
-# (te_cred_terms_to_pick: the bloc's Conditionality tier's figure, or as many
-# as are on offer if fewer), one option for each set of that size the engine
-# allows (te_cred_term_*_available). Exactly one count holds, so the player
-# sees only rescues of the right size, and the leader chooses which.
+# Every rescue spends all the terms the leader has (te_cred_terms_to_pick: one
+# and the bloc's Conditionality tier's figure, or as many as are on offer if
+# fewer). Adjustment and privatization take one each; concessions take what is
+# left, each term spent on them buying the tier's monopolies (owner,
+# 2026-11-17). One option for each way to spend them that the engine allows
+# (te_cred_rescue_option_*), so the player sees only rescues of the right size
+# and the leader chooses which: at most four at once.
 #
 # THE AI'S ODDS ARE te_lolr.1's. Every rescue option carries te_lolr.1's
 # honour weight in full (10, +3 for a bloc member, -4 at 0.5 and again at 0.9
 # of the leader's ceiling, -3 for each prior call up to three) and Refuse its
-# refusal weight; where two or three rescues show at once
-# (te_cred_rescue_split_2 / _3), each takes a half or a third, so the rescues
+# refusal weight; where two, three or four rescues show at once
+# (te_cred_rescue_split_2 / _3 / _4), each takes a half, a third or a quarter, so the rescues
 # together weigh what te_lolr.1's one Honour does. The split is a factor after
 # the adds: read as (base + adds) x factor, the sum is exact; read the other
 # way it errs toward refusal.
@@ -41,7 +43,7 @@ te_cc.1 = {
 
 	title = te_cc.1.t
 	# What a rescue buys: a receivership once the leader has its technology,
-	# terms once Conditionality offers any; the text promises only those.
+	# terms where any is on offer; the text promises only those.
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -81,11 +83,11 @@ te_cc.1 = {
 		scope:te_cc_debtor = { is_in_same_power_bloc = root }
 	}
 
-	# Rescue with no term beyond the receivership (no Conditionality, or no
-	# term on offer).
+	# Rescue with no term beyond the receivership: no term is on offer (every
+	# consortium may set one, te_cred_terms_allowed).
 	option = {
 		name = te_cc.1.a
-		trigger = { te_cred_terms_pick_0 = yes }
+		trigger = { te_cred_rescue_option_none = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = no CONC = no PRIV = no }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -123,20 +125,23 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 
-	# One term. Where two or three are on offer, a leader whose Trade Unions sit
-	# in government leans to adjustment, its Industrialists to concessions, and
-	# laissez-faire to privatization. The lean moves the choice among the
+	# One kind of term: adjustment or privatization alone where the rescue has
+	# one term, concessions alone with every term it has. Where more than one
+	# rescue shows, a leader whose Trade Unions sit in government leans to
+	# adjustment, its Industrialists to concessions, and laissez-faire to
+	# privatization. The lean moves the choice among the
 	# rescues and the odds of a rescue barely (a factor of 1.25 on one of two
 	# or three adds a twelfth or an eighth to the rescues' sum).
 	option = {
 		name = te_cc.1.b
-		trigger = {
-			te_cred_terms_pick_1 = yes
-			te_cred_term_adjustment_available = yes
-		}
+		trigger = { te_cred_rescue_option_adj = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = yes CONC = no PRIV = no }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -181,14 +186,15 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 	option = {
 		name = te_cc.1.c
-		trigger = {
-			te_cred_terms_pick_1 = yes
-			te_cred_term_concessions_available = yes
-		}
+		trigger = { te_cred_rescue_option_conc = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = no CONC = yes PRIV = no }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -233,14 +239,15 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 	option = {
 		name = te_cc.1.e
-		trigger = {
-			te_cred_terms_pick_1 = yes
-			te_cred_term_privatization_available = yes
-		}
+		trigger = { te_cred_rescue_option_priv = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = no CONC = no PRIV = yes }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -285,17 +292,18 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 
-	# Two terms.
+	# Two kinds: a pair of the single terms where the rescue has two, or one of
+	# them and concessions with the rest.
 	option = {
 		name = te_cc.1.g
-		trigger = {
-			te_cred_terms_pick_2 = yes
-			te_cred_term_adjustment_available = yes
-			te_cred_term_concessions_available = yes
-		}
+		trigger = { te_cred_rescue_option_adj_conc = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = yes CONC = yes PRIV = no }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -333,15 +341,15 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 	option = {
 		name = te_cc.1.h
-		trigger = {
-			te_cred_terms_pick_2 = yes
-			te_cred_term_adjustment_available = yes
-			te_cred_term_privatization_available = yes
-		}
+		trigger = { te_cred_rescue_option_adj_priv = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = yes CONC = no PRIV = yes }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -379,15 +387,15 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 	option = {
 		name = te_cc.1.i
-		trigger = {
-			te_cred_terms_pick_2 = yes
-			te_cred_term_concessions_available = yes
-			te_cred_term_privatization_available = yes
-		}
+		trigger = { te_cred_rescue_option_conc_priv = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = no CONC = yes PRIV = yes }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -425,13 +433,17 @@ te_cc.1 = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
 			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
+			}
 		}
 	}
 
-	# Every term.
+	# Every kind: adjustment, privatization, and concessions with the rest.
 	option = {
 		name = te_cc.1.j
-		trigger = { te_cred_terms_pick_3 = yes }
+		trigger = { te_cred_rescue_option_all = yes }
 		default_option = yes
 		te_cred_offer_rescue = { ADJ = yes CONC = yes PRIV = yes }
 		# te_lolr.1's honour weight, split among the rescues shown together.
@@ -468,6 +480,10 @@ te_cc.1 = {
 			modifier = {
 				trigger = { te_cred_rescue_split_3 = yes }
 				factor = 0.33
+			}
+			modifier = {
+				trigger = { te_cred_rescue_split_4 = yes }
+				factor = 0.25
 			}
 		}
 	}
