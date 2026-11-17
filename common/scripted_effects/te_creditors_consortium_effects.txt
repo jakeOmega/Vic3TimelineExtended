@@ -9,8 +9,8 @@
 #   on_country_default -> te_monetary_on_country_default (te_monetary_on_actions.txt)
 #     a treaty guarantor first (te_lolr.1); else, for a member whose consortium
 #     guarantee stands (te_cred_guarantee_is_effective), te_cred_call_consortium:
-#   te_cc.1  the leader: rescue on one term, or as many as its Conditionality
-#            allows, or refuse
+#   te_cc.1  the leader: rescue on one term, and as many more as its
+#            Conditionality allows, or refuse
 #   te_cc.2  the member: accept the terms (paid, te_cred_apply_rescue) or refuse
 #   te_cc.3  the leader hears the answer
 #   te_cc.4  the member hears a refusal

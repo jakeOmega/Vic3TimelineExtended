@@ -37,22 +37,24 @@
 
 # How many terms beside the receivership a rescue carries: 1 for any
 # consortium (owner, 2026-11-17: a leader that pays always asks something
-# back), then 1, 1, 2, 2, 3 by the bloc's Conditionality tier, so the group's
-# first two tiers add no term; they give the first monopoly
-# (te_cred_monopolies_allowed) and the leverage. Country scope, the leader.
+# back), and the bloc's Conditionality tier adds 1, 1, 2, 2, 3 to that, the
+# figure its principles print (power_bloc_te_cred_rescue_terms_add). 2, 2, 3,
+# 3 and 4 in all; there are three terms, so tier V's 4 is tier III's 3 until a
+# fourth term exists (te_cred_terms_to_pick stops at what is on offer).
+# Country scope, the leader.
 te_cred_terms_allowed = {
 	value = 1
 	if = {
 		limit = { te_cred_cond_tier_5 = yes }
-		value = 3
+		add = 3
 	}
 	else_if = {
 		limit = { te_cred_cond_tier_3_plus = yes }
-		value = 2
+		add = 2
 	}
 	else_if = {
 		limit = { te_cred_cond_tier_1_plus = yes }
-		value = 1
+		add = 1
 	}
 }
 
@@ -73,8 +75,8 @@ te_cred_terms_available = {
 	}
 }
 
-# ...and how many the leader picks: the tier's figure, or every available one
-# if there are fewer.
+# ...and how many the leader picks: that figure, or every available one if
+# there are fewer.
 te_cred_terms_to_pick = {
 	value = te_cred_terms_allowed
 	max = te_cred_terms_available

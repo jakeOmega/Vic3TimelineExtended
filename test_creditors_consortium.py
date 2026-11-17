@@ -222,9 +222,13 @@ class PrincipleGroupsTest(unittest.TestCase):
         share = entity(values, "te_cred_dl_share")
         for tier, (figure, _) in DEVELOPMENT_LENDING.items():
             self.assertIn(f"value = {figure:g}" if figure != 0.10 else "value = 0.10", share)
-        # One term for any consortium (owner, 2026-11-17), so tiers I and II add
-        # none; the monopolies stay the tier's, none without the group.
-        self.assertEqual(re.findall(r"value = (\d)", entity(values, "te_cred_terms_allowed")), ["1", "3", "2", "1"])
+        # One term for any consortium (owner, 2026-11-17), and the tier's
+        # printed figure on top; the monopolies stay the tier's, none without
+        # the group.
+        terms = entity(values, "te_cred_terms_allowed")
+        self.assertEqual(re.findall(r"value = (\d)", terms), ["1"])
+        self.assertEqual(re.findall(r"add = (\d)", terms),
+                         [str(CONDITIONALITY[tier][0]) for tier in (5, 3, 1)])
         self.assertEqual(re.findall(r"value = (\d)", entity(values, "te_cred_monopolies_allowed")), ["0", "3", "2", "1"])
         # ...so a bloc without the group asks concessions without a monopoly,
         # and both sides' tooltips say so.

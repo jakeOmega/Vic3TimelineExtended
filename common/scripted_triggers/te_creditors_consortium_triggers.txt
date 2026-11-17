@@ -288,7 +288,7 @@ te_cred_term_privatization_available = {
 	}
 }
 
-# How many terms beside the receivership this rescue carries: one, or the
+# How many terms beside the receivership this rescue carries: one and the
 # bloc's Conditionality tier's figure, or as many as are available if fewer
 # (te_cred_terms_to_pick). One trigger per count, for the options' triggers:
 # comparing a script value with `=` in a trigger is not the mod's practice.

@@ -22,7 +22,7 @@ namespace = te_cc
 # te_cc.1 - the leader is called
 # ----------------------------------------------------------------------------
 # Options by how many terms beside the receivership the rescue carries
-# (te_cred_terms_to_pick: one, or the bloc's Conditionality tier's figure, or
+# (te_cred_terms_to_pick: one and the bloc's Conditionality tier's figure, or
 # as many as are on offer if fewer), one option for each set of that size the engine
 # allows (te_cred_term_*_available). Exactly one count holds, so the player
 # sees only rescues of the right size, and the leader chooses which.
