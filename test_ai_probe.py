@@ -35,6 +35,8 @@ GAME_STRATEGIES = Path("/mnt/c/Program Files (x86)/Steam/steamapps/common/Victor
 V1_SAMPLE = ROOT / "test_fixtures/ai_probe/run1_v1_sample.txt"
 # That build's snapshot lines, as its ai_probe_key.json gave them.
 V1_LINES = ROOT / "test_fixtures/ai_probe/key_v1_lines.json"
+# Version 3's (build 2d26c6b5a, run 4 of 2026-11-16): the lines a version-3 log carries.
+V3_LINES = ROOT / "test_fixtures/ai_probe/key_v3_lines.json"
 
 _ACCESSOR = re.compile(r"\[[^\]]*\]")
 _SCRIPT_VALUE = re.compile(r"ScriptValue\('([a-z0-9_]+)'\)")
@@ -191,7 +193,8 @@ class ParserTest(unittest.TestCase):
             for field in fields:
                 self.assertEqual(record.get(field), 7, f"{name}: {field}")
         self.assertEqual(set(record["x"]) - {"tag", "id", "k"}, set(self.key["data_functions"]))
-        self.assertEqual(set(parsed.canary), {"start", "date", "end", *self.key["data_functions"]})
+        # unit_vars is the army census's own canary (version 4), printed by the snapshot that first tries it.
+        self.assertEqual(set(parsed.canary), {"start", "date", "end", "unit_vars", *self.key["data_functions"]})
         events = {event["event"] for event in parsed.events}
         self.assertEqual(events, {"law_start", "law_pass", "law_fail", "law_end", "default", "default_end", "play"})
         play = next(event for event in parsed.events if event["event"] == "play")
@@ -232,9 +235,12 @@ class ParserTest(unittest.TestCase):
                         "1c. Staffing", "1f. The Construction Sector itself", "1d. The government's purchase",
                         "1g. Construction points a week", "1h. The banking cycle",
                         "1e. Where the government's money goes",
-                        "2. Technology", "2a. Specific technologies", "3. Laws", "3a. Law starts per idle month",
-                        "3b. How enactments ended", "3c. The old law kept", "3d. Institutions", "4. Military",
-                        "4a. The army by unit type", "5. Expansion", "5a. Diplomatic plays by type",
+                        "1i. The construction queue by kind", "1j. The cost of construction",
+                        "1k. Labour and living standards",
+                        "2. Technology", "2a. Specific technologies", "2b. Electrification", "3. Laws",
+                        "3a. Law starts per idle month", "3b. How enactments ended", "3c. The old law kept",
+                        "3d. Institutions", "3e. Bureaucracy", "4. Military", "4a. The army by unit type",
+                        "4b. Where the irregulars come from", "5. Expansion", "5a. Diplomatic plays by type",
                         "5b. The world outside"):
             self.assertIn(heading, out)
 
@@ -391,13 +397,18 @@ class OldLogTest(unittest.TestCase):
         lines, ok = ai_probe_report.check(self.parsed, self.key)
         self.assertTrue(ok, "\n".join(lines))
         self.assertFalse(any("NEVER" in line for line in lines), "\n".join(lines))
+        self.assertFalse(any("MISSING" in line for line in lines), "\n".join(lines))   # nor version 4's canaries
 
     def test_the_report_renders_it(self):
         out = ai_probe_report.report(self.parsed, self.key)
         self.assertIn("## 1. Economic growth", out)
-        self.assertIn("Not logged by this log's probe version", out)
+        self.assertIn("Not logged by this log's probe version (version 2 adds the H line)", out)
+        self.assertIn("Not logged by this log's probe version (version 4 adds the P and H2 lines)", out)
         self.assertIn("## 3a. Law starts per idle month", out)
         self.assertNotIn("## 4a.", out)                               # no unit line in version 1
+        for heading in ("## 1i.", "## 1j.", "## 1k.", "## 3e."):         # version 4's, not logged then
+            self.assertNotIn(heading, out)
+        self.assertIn("## 4b. Where the irregulars come from", out)   # the net change reads version 1's M line
 
 
 class LawEndTest(unittest.TestCase):
@@ -618,6 +629,200 @@ class BankingCycleTest(unittest.TestCase):
         rows.append({"bank_phase": 7, "bank_cycle": 50.0})
         lines = ai_probe_report.check_version_3(ai_probe_report.Parsed(), key, rows)
         self.assertTrue(any("does not read as written" in line for line in lines), lines)
+
+
+class VersionFourTest(unittest.TestCase):
+    """Version 4's additions (#1877): the H2 and P lines, X7 and X8, the W line's rules, the army census."""
+
+    def setUp(self):
+        self.key = json.loads(KEY.read_text(encoding="utf-8"))
+        self.values = text(VALUES)
+        self.effects = text(EFFECTS)
+
+    def test_version_3_lines_are_unchanged_or_only_extended(self):
+        """A version-3 log (runs 1 to 4 were versions 1 to 3) still parses: its positional lines are read by position."""
+        v3 = json.loads(V3_LINES.read_text(encoding="utf-8"))
+        for name, fields in v3["lines"].items():
+            with self.subTest(line=name):
+                now = self.key["lines"][name]
+                if name[0] in v3["positional_groups"]:
+                    self.assertEqual(now, fields)
+                else:
+                    self.assertEqual(now[:len(fields)], fields)
+        self.assertEqual(self.key["world_fields"][:len(v3["world_fields"])], v3["world_fields"])
+        self.assertEqual(self.key["data_functions"][:len(v3["data_functions"])], v3["data_functions"])
+        self.assertEqual(sorted(set(self.key["lines"]) - set(v3["lines"])), sorted(self.key["lines_added"]["4"]))
+
+    def test_a_snapshot_grows_by_five_lines_at_most(self):
+        """The game rotates its log every 512 KB: version 3 wrote 36 lines a snapshot (8.1 KB in run 4)."""
+        v3 = json.loads(V3_LINES.read_text(encoding="utf-8"))
+        x_lines = {line for line, _, _ in gen_ai_probe.DATA_FUNCTIONS}
+        old_x = {line for line, key, _ in gen_ai_probe.DATA_FUNCTIONS if key in v3["data_functions"]}
+        self.assertLessEqual(len(self.key["lines"]) - len(v3["lines"]) + len(x_lines) - len(old_x), 5)
+
+    def test_the_headquarters_field_reads_the_group(self):
+        body = re.search(r"(?m)^te_aip_bt_company_headquarter = \{(.*)\}$", self.values).group(1)
+        self.assertIn('"country_has_building_group_levels(bg_company_headquarter)"', body)
+        self.assertIn("bg_company_headquarter", self.key["building_groups"])
+        self.assertIn("bt_company_headquarter", self.key["lines"]["B2"])          # the line keeps its field
+
+    def test_h2_carries_the_electricity_technologies_and_h1_is_version_3s(self):
+        v3 = json.loads(V3_LINES.read_text(encoding="utf-8"))
+        self.assertEqual(self.key["lines"]["H1"], v3["lines"]["H1"])
+        self.assertEqual(self.key["lines"]["H2"], ["h_" + t for t in self.key["tech_flags_4"]])
+        for tech in ("electrical_generation", "steam_turbine", "radio"):
+            self.assertIn(tech, self.key["tech_flags_4"])
+            self.assertIn(tech, self.key["all_techs"])
+        self.assertEqual(set(self.key["tech_flags_4"]) - set(self.key["tech_flags"].values()), set())
+
+    def test_the_units_the_analysis_found_blocked_are_unlocked_by_h1_flags(self):
+        flags = set(self.key["tech_flags"].values())
+        for unit in ("u_squad_infantry", "u_mechanized_infantry", "u_siege_artillery", "u_light_tanks"):
+            self.assertTrue(self.key["unit_info"][unit]["techs"], unit)
+            self.assertEqual(set(self.key["unit_info"][unit]["techs"]) - flags, set(), unit)
+
+    def test_the_rules_name_defined_settings_and_every_setting_of_their_rule(self):
+        """has_game_rule on an undefined setting is true, so the index would read 1 in every game."""
+        gen_ai_probe.check_rules(ROOT)
+        rules = "\n".join(text(p) for p in sorted((ROOT / "common/game_rules").glob("*.txt")))
+        for name, rule, settings in gen_ai_probe.RULES:
+            with self.subTest(rule=rule):
+                rule_block = re.search(rf"(?ms)^{rule} = \{{\n(.*?)^\}}", rules).group(1)
+                self.assertEqual(set(re.findall(r"(?m)^\t([a-z_]+) = \{", rule_block)), set(settings))
+                self.assertEqual(self.key["rules"][name]["settings"], settings)
+                body = block_text("te_aip_w_" + name, self.values)
+                tests = gen_ai_probe.rule_tests(name, settings)
+                self.assertEqual(re.findall(r"limit = \{ (.*?) \}", body), tests)
+                self.assertEqual(len(tests), len(settings))
+        # A setting read through a system's trigger: the trigger is defined and names its rule's settings only.
+        triggers = "\n".join(text(p) for p in (ROOT / "common/scripted_triggers").glob("*.txt"))
+        for name, tests in gen_ai_probe.RULE_TESTS.items():
+            settings = self.key["rules"][name]["settings"]
+            for test in tests:
+                trigger = test.split(" = ")[0]
+                with self.subTest(trigger=trigger):
+                    body = block(trigger, triggers)
+                    self.assertTrue(set(re.findall(r"has_game_rule = ([a-z_]+)", body)) <= set(settings), body)
+        self.assertIn("r_fmc", self.key["world_fields"])
+        self.assertEqual(set(gen_ai_probe.RETOOLING_WAIVED) - set(self.key["rules"]["r_fmc"]["settings"]), set())
+
+    def test_the_waived_settings_are_the_ones_the_retooling_removal_reads(self):
+        triggers = text(ROOT / "common/scripted_triggers/te_construction_market_triggers.txt")
+        named = set(re.findall(r"has_game_rule = (free_market_construction_[a-z_]+)", triggers))
+        named.discard("free_market_construction_disabled")
+        self.assertEqual(named, set(gen_ai_probe.RETOOLING_WAIVED))
+        # The report's own copy, for a key from before version 4.
+        self.assertEqual(ai_probe_report.RETOOLING_WAIVED_BEFORE_V4, gen_ai_probe.RETOOLING_WAIVED)
+
+    def test_the_street_lighting_fields_cover_the_group(self):
+        groups = text(ROOT / "common/production_method_groups/extra_pm_groups.txt")
+        later = re.search(r"(?ms)^INJECT:pmg_street_lighting = \{\n(.*?)^\}", groups).group(1)
+        lights = self.key["street_lights"]
+        self.assertEqual(lights["uc_gas_light"], ["pm_gas_streetlights"])
+        self.assertEqual(lights["uc_elec_light"][0], "pm_electric_streetlights")
+        for method in re.findall(r"(?m)^\t\t(pm_[a-z_]+)$", later):
+            self.assertIn(method, lights["uc_elec_light"])
+        self.assertIn("uc_no_light", self.key["lines"]["O1"])                    # the third: no lighting
+
+    def test_the_values_the_p_line_borrows_exist(self):
+        """A script value or trigger that is renamed breaks the read: each borrowed name must stay defined."""
+        defined = ""
+        for folder in ("script_values", "scripted_triggers"):
+            for path in (ROOT / "common" / folder).glob("*.txt"):
+                if path.name != VALUES.name:
+                    defined += text(path)
+        borrowed = [gen_ai_probe.QUEUED_LEVELS, *gen_ai_probe.ELECTRICITY_VALUES.values(), "te_cc_scaling_factor",
+                    "te_cc_total_factor", "te_state_has_a_power_plant"]
+        for name in borrowed:
+            self.assertRegex(defined, rf"(?m)^{name} = \{{", name)
+            self.assertIn(name, self.values)
+        for name in ("te_grid_electricity_production", "te_grid_electricity_consumption"):
+            self.assertIn("sg:electricity ?=", block_text(name, defined))
+        self.assertIn("te_cc_slack", self.values)
+        self.assertIn("set_variable = { name = te_cc_slack value = te_country_slack_share }",
+                      text(ROOT / "common/scripted_effects/te_construction_cost_effects.txt"))
+
+    def test_the_census_runs_before_the_lines_and_only_where_a_unit_held_a_variable(self):
+        snapshot = block_text("te_aip_snapshot", self.effects)
+        self.assertLess(snapshot.index("te_aip_unit_census = yes"), snapshot.index("TE_AIP S A1"))
+        census = block_text("te_aip_unit_census", self.effects)
+        guard = census.index("limit = { has_global_variable = te_aip_unit_vars }")
+        self.assertLess(guard, census.index("every_military_formation"))
+        self.assertLess(census.index("set_global_variable = te_aip_unit_vars_tested"), guard)
+        self.assertIn("TE_AIP CANARY unit_vars", census)
+        # The mark is set after it is read, and the irregular index is the key's.
+        walk = census[census.index("every_combat_unit"):]
+        self.assertLess(walk.index("has_variable = te_aip_ut"), walk.index("set_variable = { name = te_aip_ut "))
+        irregular = self.key["unit_type_index"].index("combat_unit_type_irregular_infantry") + 1
+        self.assertIn(f"local_var:te_aip_ut_now = {irregular}", walk)
+        self.assertIn(f"var:te_aip_ut = {irregular}", walk)
+        index = block_text("te_aip_unit_type_index", self.values)
+        self.assertEqual(re.findall(r"unit_type:([A-Za-z_]+)", index), self.key["unit_type_index"])
+        # Every count is reset at each snapshot, whether or not the census counts.
+        for name in gen_ai_probe.UNIT_CENSUS:
+            self.assertLess(census.index(f"set_variable = {{ name = te_aip_{name} value = 0 }}"), guard, name)
+
+    def test_the_data_functions_of_a_version(self):
+        self.assertEqual(ai_probe_report.data_functions_of(self.key, 3),
+                         json.loads(V3_LINES.read_text(encoding="utf-8"))["data_functions"])
+        self.assertEqual(ai_probe_report.data_functions_of(self.key, 4), self.key["data_functions"])
+        sol = next(a for _, k, a in gen_ai_probe.DATA_FUNCTIONS if k == "sol_lower")
+        self.assertEqual(gen_ai_probe.data_function_text(sol), "GetTrendValue(THIS.GetCountry.GetAverageSoLLowerTrend)|1")
+
+    def row(self, **fields):
+        row = {"tag": "AAA", "id": 1, "k": 13, "y": 1926, "states": 4, "pp_states": 1, "bg_power": 3, "elec_made": 40,
+               "elec_used": 35, "elec_price": 1.4, "bt_urban_center": 10, "uc_no_light": 5, "uc_gas_light": 3,
+               "uc_elec_light": 2, "h_electrical_generation": 1, "radio_price": 1.2, "radio_buy": 5, "radio_sell": 4,
+               "queue_gov": 6, "queue_levels": 20, "q_uni": 2, "q_admin": 1, "q_mil": 1, "q_infra": 3, "q_power": 1,
+               "cc_scale": 2.1, "cc_total": 2.3, "bur_add": 0, "bur_mult": 0.1, "bur_cost_add": 0, "bur_inst_mult": 0.25,
+               "bur_pop_mult": 0, "slack": 0.3, "slack_peasants": 0.2, "army": 20, "u_all": 20, "u_new": 2,
+               "u_changed": 1, "u_irr_new": 1, "u_from_irr": 0, "u_flows": 1, "sol": 12.0, "bur_used": 300,
+               "in_schools": 2, "bt_company_headquarter": 3, "bg_company_headquarter": 3,
+               "x": {"bur_inst": 120, "sol_lower": 9.0, "sol_upper": 25.0}}
+        row.update(fields)
+        return row
+
+    def parsed(self, fmc=3, unit_vars=1):
+        parsed = ai_probe_report.Parsed()
+        parsed.world = {1: {"k": 1, "y": 1925, "r_fmc": fmc, "r_small": 1, "r_bank": 1}}
+        parsed.canary["unit_vars"] = unit_vars
+        return parsed
+
+    def test_check_reads_the_rules_and_each_field_against_the_others(self):
+        lines = ai_probe_report.check_version_4(self.parsed(), self.key, [self.row(), self.row(id=2)])
+        text_ = "\n".join(lines)
+        self.assertIn("free_market_construction_rule free_market_construction_no_retooling", text_)
+        self.assertIn("rt_* reads 0 by design", text_)
+        self.assertIn("none + gas + electric = urban centre levels in 2 of 2", text_)
+        self.assertIn("universities + administrations + military <= queue_gov in 2 of 2", text_)
+        self.assertIn("within 5% of army_size in 2 of 2 armies", text_)
+        self.assertIn("lower <= average <= upper in 2 of 2", text_)
+        lines = ai_probe_report.check_version_4(self.parsed(unit_vars=0), self.key,
+                                                [self.row(uc_elec_light=4, h_electrical_generation=0)])
+        text_ = "\n".join(lines)
+        self.assertIn("a combat unit holds no variable", text_)
+        self.assertIn("in 0 of 1; electric lights without Electrical Generation in 1", text_)
+        # Under `enabled`, retooling at 0 with production methods changing is a read that fails.
+        lines = ai_probe_report.check_version_4(self.parsed(fmc=1), self.key, [self.row(n_pm=5, rt_all=0)])
+        self.assertTrue(any("does not read in a building walk" in line for line in lines), lines)
+
+    def test_a_version_3_log_says_why_rt_and_the_headquarters_type_read_0(self):
+        notes = ai_probe_report.dead_field_notes(ai_probe_report.Parsed(), self.key,
+                                                 ["rt_mfg", "rt_all", "bt_company_headquarter"], 3)
+        self.assertTrue(any("free_market_construction_no_retooling" in note for note in notes), notes)
+        self.assertTrue(any("bg_company_headquarter" in note for note in notes), notes)
+        self.assertEqual(ai_probe_report.dead_field_notes(ai_probe_report.Parsed(), self.key,
+                                                          ["bt_company_headquarter"], 4), [])
+        # A key from before version 4 lists no waiving settings: the note still names them.
+        old_key = {k: v for k, v in self.key.items() if k != "retooling_waived"}
+        note = ai_probe_report.dead_field_notes(ai_probe_report.Parsed(), old_key, ["rt_all"], 1)[0]
+        self.assertIn("Under free_market_construction_no_ai_retooling", note)
+
+
+def block_text(name: str, body: str) -> str:
+    """A top-level `name = { ... }` block's body, one line or many."""
+    one = re.search(rf"(?m)^{name} = \{{ (.*) \}}$", body)
+    return one.group(1) if one else block(name, body)
 
 
 class OnceAYearTest(unittest.TestCase):

@@ -92,6 +92,29 @@ month, 140 in the month before and 11 in the month after, none elsewhere); and `
 | banking cycle running in N snapshots | 0 in 1836, rising once countries research the stock exchange and grow an Urban Center to level 5 | 0 past about 1860 with the banking rule on: `te_banking_cycle_running` does not read in the probe |
 | `bank_phase` is the band of `bank_cycle` | in all | the phase test (`banking_cycle_is_*`) or the variable reads something else |
 
+For a version-4 log `check` also reads version 4's additions (#1877, the fields the first late-game run lacked:
+§ Fields to read with care). None had printed in a game when they were written (2026-11-16), so `check` reports
+each until one does; none of them fails the verdict. The new data functions (X7, X8) have canaries like the others,
+and a version-1 to -3 log is not asked for them.
+
+| `check` line | Good | If not |
+|---|---|---|
+| W: game rules | the settings the run's lobby had (`run_start.json`'s `rules`), each a name | `none (0)`: no `has_game_rule` or trigger test held, so the index reads something else |
+| rt_* | under `no_retooling`, `no_ai_retooling` or `no_maintenance`: "reads 0 by design"; under `enabled`: above 0 in many snapshots | 0 in every snapshot with production-method changes under `enabled`: `has_modifier = pm_retooling` does not read in a building walk |
+| bt_company_headquarter equals bg_company_headquarter | in all | the group read in `BUILDING_TYPE_READS` reads something else |
+| H2: technology flags held | Electrical Generation and Steam Turbine held by most of the 20 largest economies (run 4: 20 of the 21 held every era-3 production technology in 1947) | a flag 0 everywhere where the T line's cell holding it is complete |
+| pp_states at most the states; above 0 where power levels are | all; nearly all | `te_state_has_a_power_plant` does not read from a country's `every_scope_state` |
+| Electricity made where power levels are; price over base where bought | made in nearly all; prices spread around 1, never exactly 1 everywhere | made 0 everywhere: the power grid's state values do not read through `every_scope_state`; price exactly 1: `sg:electricity` reads nothing |
+| street lighting: none + gas + electric = urban centre levels; electric lights without Electrical Generation | all; 0 | a lighting method the generator's catalog lacks (rerun it), or `has_active_production_method` misreads |
+| radios: price, buy and sell orders | a price spread around 1, orders above 0 once radios are made | the market read of `mg:radios` returns nothing |
+| queue by kind: universities + administrations + military <= queue_gov; each kind <= queue_levels | all; all | every kind 0 in every snapshot with a queue: `level_after_queued_constructions` (through `te_construction_market_building_queued_levels`) does not read in a building walk |
+| cost scaling, all modifiers | spread from 1 upward (about 2 to 3.4 for a rich labour-tight country, construction.md), below 1 only under the small-economy rule | 0 everywhere: `te_cc_scaling_factor` does not read in the probe |
+| bureaucracy: the institutions' cost at most bureaucracy used; above 0 with an institution | all; nearly all | the X7 canary missing (take the data function out), or the figure is not the institutions' cost |
+| bureaucracy modifiers non-zero | `bur_inst_mult` in many (37 of the mod's laws move it) | 0 everywhere: the `modifier:` reads return nothing |
+| strata's standard of living: lower <= average <= upper | nearly all | the X8 canary missing (GetTrendValue does not print from a loc string: the line is lost, take it out), or the trends are not what their names say |
+| slack in [0, 1] with peasants <= slack | all, above 0 in most | 0 everywhere: the cost scaling's stored `te_cc_slack` is not there (a direct game, or its walk not run) |
+| army census | `CANARY unit_vars v=1`; battalions counted within 5% of `army_size`; flows from each country's second report | `v=0`: a combat unit holds no variable, the census does not count and recruits cannot be told from upgrades (the report's net change in irregulars still reads); every battalion new at every report: the marks do not last a year |
+
 Two lines read every log, whatever its version:
 
 - **X construction readings left out of the report's construction figures**: the snapshots whose interface figures
@@ -227,9 +250,68 @@ last report.
   `every_decentralized_country` (version 2's `every_country` never reached them, so its `dn` and `dn_states` are 0),
   and adds `states` (every state in the world) and `c_states` (the states of every other country), so
   `states - c_states` reads the same land a second way.
+- **Retooling (`rt_*`, O1) reads 0 under three of Free Market Construction's five settings.** `no_retooling` and
+  `no_maintenance` remove `pm_retooling` from every building as the engine applies it, `no_ai_retooling` from every
+  AI-owned one (`te_remove_waived_pm_retooling`: at the production-method change, a day later, and in a sweep four
+  times a month), so a yearly snapshot finds none. Every run before version 4 was made under `no_retooling`, the
+  owner's last lobby rules (run 4's `run4_start.json`, `rules`), which is why `rt_*` read 0 in all of them; the
+  2026-11-15 save study's 36-52% of AI manufacturing retooling was a game under `enabled`. The read itself is the
+  one the removal uses (`has_modifier = pm_retooling` in a building's scope). From version 4 the W line names the
+  setting (`r_fmc`, with `r_small`, the Small-Economy Construction rule, and `r_bank`, the banking rule: indexes into
+  the key's `rules`), in the arming month and once a year after, since a rule can be changed in a running game.
+- **`bt_company_headquarter` (B2) read 0 in versions 1 to 3**: it read the template building type, and the engine
+  makes a building type of its own for each company type (`scripting_best_practices.md`, A Company's Headquarters Is
+  a Building Type of Its Own). From version 4 it reads the headquarters' group, the same figure as G2's
+  `bg_company_headquarter`, which read in every snapshot with a company all along.
+- **Electrification** (version 4, P1 and H2): `pp_states` counts the states with any building that makes Electricity,
+  built or under construction (`te_state_has_a_power_plant`); `q_power` the power levels (`bg_power`) in either
+  queue. Electricity is a local good, so `elec_made` and `elec_used` are a week's production and purchases summed
+  over the country's states, and `elec_price` the price over base weighted by what each state buys (0 where none is
+  bought). `uc_gas_light` and `uc_elec_light` (vanilla's electric lights and the mod's three later ones) add up with
+  O1's `uc_no_light` to the urban centres' levels. H2 holds Electrical Generation (the power plant and electric street
+  lights), Steam Turbine (the coal-fired plant), Radio (the radio factory) and Telephone (vanilla's electrics industry,
+  which also makes radios). The units the late-game analysis found never fielded are unlocked by technologies H1
+  already carries (`nco_training`, `mobile_armor`, `defense_in_depth`); what they lack is their upkeep of radios,
+  whose market `radio_price`, `radio_buy` and `radio_sell` read.
+- **The construction queue by kind** (P1): `q_uni`, `q_admin`, `q_mil` (`bg_military` and the military base),
+  `q_infra` (`bg_infrastructure`) and `q_power` are queued levels in either queue. The first three are government
+  buildings, so table 1i sets them against `queue_gov`; infrastructure and power plants can be private, so against
+  `queue_levels`.
+- **The cost of construction** (P1): `cc_scale` is the cost scaling in force (`te_cc_scaling_factor`, its own factor
+  times the small-economy factor) and `cc_total` every construction-cost modifier with it (`te_cc_total_factor`, the
+  Nation tab's total). Times `cs_price` it is the multiple construction.md's power-plant break-even reads (the early
+  plant about 3.4, coal-fired 9.0).
+- **Bureaucracy** (P1, P2, X7): `bur_made` and `bur_used` (F2) are the totals. X7's `bur_inst` is the institutions'
+  cost (the Politics panel's `GetInstitutionInvestmentBureaucracyCost`) and `bur_inst_factor` the panel's figure
+  beside it. The modifiers: `bur_add` and `bur_mult` (production's flat additions and multiplier), `bur_cost_add`
+  (flat costs), `bur_inst_mult` (the institutions' cost, which 37 of the mod's laws move) and `bur_pop_mult` (the
+  states' cost per head, 14). The states' own cost (vanilla's `STATE_BUREAUCRACY_*` defines) has no script read or
+  data function a country can sum, so table 3e gives it as the rest of the use. No read splits laws or trade out of it.
+- **Labour and living standards** (P2, X8): `slack` and `slack_peasants` are the cost scaling's yearly reading of the
+  states' pop walks (`te_cc_slack`, `te_cc_peasants`: the workforce with no market workplace, and the peasants, over
+  the workforce walked), so the unemployed are their difference. X8's `sol_lower`, `sol_middle` and `sol_upper` are
+  the latest values of the Politics panel's standard-of-living trend lines (`GetTrendValue`). No script read or
+  data function gives an average wage. The schools institution against its maximum needed no field: `in_schools`
+  (I1) and `im_schools` (J1, since version 2); table 2 now shows it.
+- **The army census** (P2, `te_aip_unit_census`): no on_action fires when a battalion is recruited or changes type, so
+  each snapshot marks every army battalion with its type (`te_aip_ut`, an index into the key's `unit_type_index`) and
+  counts against the last snapshot's marks: `u_all` battalions, `u_new` with no mark (recruited since, or come with
+  land or a subject), `u_changed` of another type than their mark (upgraded or changed), `u_irr_new` irregulars among
+  the new, `u_from_irr` irregulars at the last report now of another type, and `u_flows` 1 when the counts are flows
+  (the country's second report on). Whether a combat unit holds a variable is undocumented: the first battalion
+  reached tries one (`CANARY unit_vars`) and the census counts only if it held, else every `u_*` is 0. Table 4b's net
+  change in irregular battalions between a country's reports (the army times its irregular share) reads every
+  version, census or not; it nets recruits against upgrades and losses.
 
 Version 3 adds a few fields to two lines and none of its own; in game, one month-index script value a country a
 pulse and, once a year, one pass over every state for the W line.
+
+Version 4 adds the lines H2, P1, P2, X7 and X8, three fields to the W line, and the scorecard's tables 1i (the
+construction queue by kind), 1j (the cost of construction), 1k (labour and living standards), 2b (electrification,
+with the units that take radios held against unlocked in the last decade read), 3e (bureaucracy) and 4b (where
+the irregulars come from), and a schools column in table 2. A version-1 to -3 log reports with the version-4 key:
+its positional lines are as they were (`test_ai_probe.py` holds every version-3 line to the key), version 4's tables
+are left out or say "not logged", and `check` notes why `rt_*` and `bt_company_headquarter` read 0 in it.
 
 The scorecard starts with a headline (the 20 largest economies' growth against the rest's, and their share of AI
 GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has seven: outcomes, the means
@@ -363,6 +445,14 @@ bytes (some 8 KB a country a year, 165 MB for 1836 to 1925, in the run folder on
 hundred script-value reads a country a year, eleven more passes over its buildings for the Construction Sector and
 its sites, and one global-variable test on each hooked on-action, `on_law_activated` now among them; nothing a
 player would notice, and nothing at all in a played game beyond that test.
+
+Version 3 wrote 36 lines and 8,097 bytes a snapshot (run 4, measured). Version 4 adds 5 lines (H2, P1, P2, X7, X8),
+14% more lines, and about 770 to 850 bytes, 9.5 to 10.5% more (the generator's templates rendered with a small
+country's and a large economy's figures, on run 4's measured line prefix of about 100 bytes); the W line grows by
+about 40 bytes a year. In game, a snapshot makes seven more passes over the country's buildings (the queue by kind,
+the street lighting), six over its states (one testing each state's buildings for a power plant; three for the
+Electricity price, which reads the purchases again) and one over its army's battalions (the census, which sets a
+variable on each).
 
 ## Removing it
 

@@ -199,7 +199,8 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
         return ["NOT ARMED: no `TE_AIP ARM` line. In an unattended run this means the game counted a human player "
                 "(`any_country = { is_player = yes }`), or the run ended before its first monthly pulse."], False
     out.append(f"armed: {parsed.armed[0]} ({len(parsed.armed)} ARM lines, {parsed.disarmed} DISARM)")
-    wanted = ["start", "date", *key["data_functions"], "end"]
+    version = parsed.version()
+    wanted = ["start", "date", *data_functions_of(key, version), "end"]
     missing = [name for name in wanted if name not in parsed.canary]
     out.append(f"canaries printed: {len(wanted) - len(missing)} of {len(wanted)}")
     for name in wanted:
@@ -213,7 +214,6 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
                f"with a date: {sum(1 for t in parsed.ticks.values() if 'date' in t)}")
     records = parsed.records()
     out.append(f"snapshots: {len(records)} of {len({r['id'] for r in records})} countries")
-    version = parsed.version()
     expected = expected_lines(key, version)
     if len(expected) < len(key["lines"]):
         out.append(f"  a version-{version} log: the {len(key['lines']) - len(expected)} lines later versions added "
@@ -256,6 +256,7 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
                            + (" (ALL: check the read)" if len(dead) == len(fields) else ""))
             else:
                 out.append(f"  {name}: 0 in every snapshot: {', '.join(dead)}")
+            out.extend(f"    {note}" for note in dead_field_notes(parsed, key, dead, version))
     else:
         out.append("  none yet: a country first reports within twelve months of arming")
     data = len(parsed.data_lines)
@@ -269,6 +270,8 @@ def check(parsed: Parsed, key: dict) -> tuple[list[str], bool]:
         ok = ok and good
     if version >= 3:
         out.extend(check_version_3(parsed, key, records))
+    if version >= 4:
+        out.extend(check_version_4(parsed, key, records))
     if parsed.k_restarts:
         out.append(f"WARNING: the month count went back {parsed.k_restarts} times: these files hold more than one "
                    "run, whose serials and months collide. Read each run alone.")
@@ -284,6 +287,68 @@ def expected_lines(key: dict, version: int) -> list[str]:
         return list(key["lines"])
     wanted = {name for v, names in added.items() if int(v) <= version for name in names}
     return [name for name in key["lines"] if name in wanted]
+
+
+def data_functions_of(key: dict, version: int) -> list[str]:
+    """The data functions (X fields and their canaries) a log of this probe version prints."""
+    later = {name for v, names in key.get("data_functions_added", {}).items() if int(v) > version for name in names}
+    return [name for name in key["data_functions"] if name not in later]
+
+
+def rule_settings(parsed: Parsed, key: dict) -> dict[str, list[str]]:
+    """Each W-line game rule (version 4) by the settings its lines read, in month order: {field: [setting, ...]},
+    a setting given once for each run of months it held."""
+    out: dict[str, list[str]] = {}
+    for name, rule in key.get("rules", {}).items():
+        seen: list[str] = []
+        for k in sorted(parsed.world):
+            index = parsed.world[k].get(name)
+            if not isinstance(index, int):
+                continue
+            settings = rule["settings"]
+            setting = settings[index - 1] if 0 < index <= len(settings) else f"none ({index})"
+            if not seen or seen[-1] != setting:
+                seen.append(setting)
+        if seen:
+            out[name] = seen
+    return out
+
+
+# Every run before version 4 was made under the owner's last lobby rules, which on 2026-11-16 held
+# free_market_construction_no_retooling (the harness's run4_start.json, `rules`).
+RUN_RULE_BEFORE_V4 = "free_market_construction_no_retooling"
+# The settings that remove pm_retooling, for a key from before version 4, which does not list them (the generator's
+# RETOOLING_WAIVED; test_ai_probe.py holds the two equal).
+RETOOLING_WAIVED_BEFORE_V4 = ["free_market_construction_no_ai_retooling", "free_market_construction_no_retooling",
+                              "free_market_construction_no_maintenance"]
+
+
+def retooling_waived(key: dict) -> list[str]:
+    return key.get("retooling_waived") or RETOOLING_WAIVED_BEFORE_V4
+
+
+def dead_field_notes(parsed: Parsed, key: dict, dead: list[str], version: int) -> list[str]:
+    """What a field at 0 in every snapshot means where that is known: a rule's doing or a known misread."""
+    notes = []
+    waived = retooling_waived(key)
+    if any(f.startswith("rt_") for f in dead):
+        settings = rule_settings(parsed, key).get("r_fmc")
+        if settings:
+            if all(s in waived for s in settings):
+                notes.append(f"rt_*: 0 by the rule: the run's free_market_construction setting ({', '.join(settings)}) "
+                             "removes pm_retooling as the engine applies it (te_remove_waived_pm_retooling)")
+            else:
+                notes.append(f"rt_*: 0 although the setting ({', '.join(settings)}) leaves AI retooling in place: the "
+                             "read fails, if production methods changed (n_pm) in these snapshots")
+        else:
+            notes.append("rt_*: this log names no rule (the W line carries it from version 4). Under "
+                         f"{', '.join(waived)} the modifier is removed as the engine applies it, so 0 is the rule's "
+                         f"doing; every run before version 4 was under {RUN_RULE_BEFORE_V4}")
+    if "bt_company_headquarter" in dead and version < 4:
+        notes.append("bt_company_headquarter: versions 1 to 3 read the template building type, which no company's "
+                     "headquarters is (each company has a type of its own); read bg_company_headquarter (G2), as "
+                     "version 4's bt_company_headquarter does")
+    return notes
 
 
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
@@ -404,6 +469,130 @@ def check_version_3(parsed: Parsed, key: dict, records: list[dict]) -> list[str]
     return out
 
 
+def check_version_4(parsed: Parsed, key: dict, records: list[dict]) -> list[str]:
+    """Version 4's additions (#1877), read once each against what the other fields say they must be. None had
+    printed in a game when written (2026-11-16), so each stays flagged here until one does. Not a verdict."""
+    out = ["version 4 additions (unverified until a game prints them):"]
+    rules = rule_settings(parsed, key)
+    if rules:
+        out.append("  W: game rules " + "; ".join(f"{key['rules'][name]['rule']} {' then '.join(seen)}"
+                                                 for name, seen in rules.items()))
+        fmc = rules.get("r_fmc", [])
+        if fmc and all(s in retooling_waived(key) for s in fmc):
+            out.append("  rt_*: this run's setting removes pm_retooling as the engine applies it, so rt_* reads 0 by "
+                       "design")
+        if any("none" in s for seen in rules.values() for s in seen):
+            out.append("  W: a rule read no setting (index 0): has_game_rule does not read the setting as written")
+    else:
+        out.append("  W: no line carries version 4's game rules yet")
+    rows = [r for r in records if "pp_states" in r]
+    if not rows:
+        return out + ["  no snapshot carries the P lines yet"]
+    n = len(rows)
+
+    def count(test):
+        return sum(1 for r in rows if test(r))
+
+    # Retooling under a setting that leaves it: 0 everywhere while methods change is a read that fails.
+    if rules.get("r_fmc") and not all(s in retooling_waived(key) for s in rules["r_fmc"]):
+        changing = [r for r in rows if num(r, "n_pm") > 0]
+        if changing and all(not num(r, "rt_all") for r in changing):
+            out.append(f"  rt_*: 0 in all {len(changing)} snapshots with production-method changes under a setting "
+                       "that keeps retooling: `has_modifier = pm_retooling` does not read in a building walk")
+        else:
+            out.append(f"  rt_all above 0 in {count(lambda r: num(r, 'rt_all') > 0)} of {n}")
+    out.append(f"  bt_company_headquarter equals bg_company_headquarter in "
+               f"{count(lambda r: num(r, 'bt_company_headquarter') == num(r, 'bg_company_headquarter'))} of {n}; "
+               f"above 0 in {count(lambda r: num(r, 'bt_company_headquarter') > 0)}")
+    # Electrification.
+    flags = key.get("tech_flags_4", [])
+    held = {t: count(lambda r, t=t: num(r, "h_" + t.replace("-", "_")) == 1) for t in flags}
+    out.append(f"  H2: technology flags held: {held}")
+    gen = "h_electrical_generation"
+    out.append(f"  states with a power plant (pp_states) at most the country's states in "
+               f"{count(lambda r: num(r, 'pp_states') <= num(r, 'states'))} of {n}; above 0 in "
+               f"{count(lambda r: num(r, 'pp_states') > 0)}, of {count(lambda r: num(r, 'bg_power') > 0)} snapshots "
+               "with power levels")
+    plants = [r for r in rows if num(r, "bg_power") > 0]
+    out.append(f"  Electricity made (elec_made) above 0 in {sum(1 for r in plants if num(r, 'elec_made') > 0)} of "
+               f"{len(plants)} snapshots with power levels; bought (elec_used) above 0 in "
+               f"{count(lambda r: num(r, 'elec_used') > 0)} of {n}")
+    priced = [num(r, "elec_price") for r in rows if num(r, "elec_used") > 0]
+    if priced:
+        out.append(f"  Electricity price over base where bought: median {pct(priced, .5):.2f}, 10th-90th "
+                   f"{pct(priced, .1):.2f}-{pct(priced, .9):.2f}"
+                   + (" (exactly 1 everywhere: the state price read returns nothing)"
+                      if all(abs(p - 1) < 0.0005 for p in priced) else ""))
+    out.append(f"  Electricity price 0 where none is bought in {count(lambda r: num(r, 'elec_used') <= 0 and num(r, 'elec_price') == 0)}"
+               f" of {count(lambda r: num(r, 'elec_used') <= 0)}")
+    centres = [r for r in rows if num(r, "bt_urban_center") > 0]
+    summed = sum(1 for r in centres if num(r, "uc_no_light") + num(r, "uc_gas_light") + num(r, "uc_elec_light")
+                 == num(r, "bt_urban_center"))
+    out.append(f"  street lighting: none + gas + electric = urban centre levels in {summed} of {len(centres)}; electric "
+               f"lights without Electrical Generation in {sum(1 for r in centres if num(r, 'uc_elec_light') > 0 and num(r, gen) != 1)}")
+    radios = [num(r, "radio_price") for r in rows]
+    out.append(f"  radios: price over base median {pct(radios, .5):.2f} (10th-90th {pct(radios, .1):.2f}-"
+               f"{pct(radios, .9):.2f}); buy orders above 0 in {count(lambda r: num(r, 'radio_buy') > 0)}, sell orders "
+               f"in {count(lambda r: num(r, 'radio_sell') > 0)}, of {n}")
+    # The queue by kind.
+    gov_kinds = ("q_uni", "q_admin", "q_mil")
+    out.append(f"  queue by kind: universities + administrations + military <= queue_gov in "
+               f"{count(lambda r: sum(num(r, q) for q in gov_kinds) <= num(r, 'queue_gov'))} of {n}; each kind <= "
+               f"queue_levels in {count(lambda r: all(num(r, q) <= num(r, 'queue_levels') for q in (*gov_kinds, 'q_infra', 'q_power')))}"
+               f"; above 0: " + ", ".join(f"{q} {count(lambda r, q=q: num(r, q) > 0)}"
+                                          for q in (*gov_kinds, "q_infra", "q_power")))
+    queued = [r for r in rows if num(r, "queue_levels") > 0]
+    if queued and all(not any(num(r, q) for q in (*gov_kinds, "q_infra", "q_power")) for r in queued):
+        out.append("  queue by kind: every kind is 0 in every snapshot with a queue (level_after_queued_constructions "
+                   "does not read in a building walk)")
+    # Construction cost.
+    scale = [num(r, "cc_scale") for r in rows]
+    total = [num(r, "cc_total") for r in rows]
+    out.append(f"  cost scaling (cc_scale) median {pct(scale, .5):.2f} (10th-90th {pct(scale, .1):.2f}-{pct(scale, .9):.2f}); "
+               f"all modifiers (cc_total) median {pct(total, .5):.2f} (10th-90th {pct(total, .1):.2f}-{pct(total, .9):.2f})"
+               + (" (cc_scale 0 everywhere: te_cc_scaling_factor does not read)" if all(not s for s in scale) else ""))
+    # Bureaucracy.
+    x_rows = [r for r in rows if isinstance((r.get("x") or {}).get("bur_inst"), (int, float))]
+    if x_rows:
+        inst = [r for r in x_rows if any(num(r, f) > 0 for f in r if f.startswith("in_"))]
+        out.append(f"  bureaucracy: the institutions' cost (X7 bur_inst) at most bureaucracy used in "
+                   f"{sum(1 for r in x_rows if r['x']['bur_inst'] <= num(r, 'bur_used') + 1)} of {len(x_rows)}; above 0 "
+                   f"in {sum(1 for r in inst if r['x']['bur_inst'] > 0)} of {len(inst)} with an institution")
+    else:
+        out.append("  bureaucracy: no X7 line (the canary says whether the data function printed)")
+    out.append("  bureaucracy modifiers non-zero: " + ", ".join(
+        f"{f} {count(lambda r, f=f: num(r, f) != 0)}" for f in ("bur_add", "bur_mult", "bur_cost_add", "bur_inst_mult",
+                                                                 "bur_pop_mult")) + f" of {n}")
+    # Living standards and slack.
+    sol_rows = [r for r in rows if isinstance((r.get("x") or {}).get("sol_lower"), (int, float))]
+    if sol_rows:
+        ordered = sum(1 for r in sol_rows
+                      if r["x"]["sol_lower"] - 0.05 <= num(r, "sol") <= num(r["x"], "sol_upper") + 0.05)
+        out.append(f"  strata's standard of living (X8): lower <= average <= upper in {ordered} of {len(sol_rows)}")
+    else:
+        out.append("  strata's standard of living: no X8 line (the canary says whether GetTrendValue printed)")
+    out.append(f"  slack in [0, 1] with peasants <= slack in "
+               f"{count(lambda r: 0 <= num(r, 'slack_peasants') <= num(r, 'slack') <= 1)} of {n}; above 0 in "
+               f"{count(lambda r: num(r, 'slack') > 0)}")
+    # The army census.
+    held_var = parsed.canary.get("unit_vars")
+    armies = [r for r in rows if num(r, "army") > 0]
+    if held_var is None:
+        out.append("  army census: no `CANARY unit_vars` line yet (no country with an army formation reported)")
+    elif held_var != 1:
+        out.append("  army census: `CANARY unit_vars v=0`: a combat unit holds no variable, so the census does not count "
+                   "(every u_* is 0); recruits and upgrades cannot be told apart this way")
+    else:
+        near = sum(1 for r in armies if abs(num(r, "u_all") - num(r, "army")) <= max(1, 0.05 * num(r, "army")))
+        flows = [r for r in armies if num(r, "u_flows") == 1]
+        out.append(f"  army census: battalions counted (u_all) within 5% of army_size in {near} of {len(armies)} armies; "
+                   f"counts are flows in {len(flows)}; new <= all in "
+                   f"{sum(1 for r in armies if num(r, 'u_new') <= num(r, 'u_all'))}")
+        if flows and all(num(r, "u_new") == num(r, "u_all") for r in flows):
+            out.append("  army census: every battalion is new at every report: the marks do not survive a year")
+    return out
+
+
 def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[list[str], bool]:
     """Version 2's additions, each read here once: none of them had printed when it was written (2026-11-16)."""
     out, ok = ["version 2 additions:"], True
@@ -476,7 +665,7 @@ def check_version_2(parsed: Parsed, key: dict, records: list[dict]) -> tuple[lis
             out.append(f"  units: the R line's shares add to 1 (within 0.02) in {near} of {len(sums)} armies; "
                        f"median sum {pct(sums, .5):.3f}")
         # Technologies.
-        flags = list(key.get("tech_flags", {}))
+        flags = [f for f in key.get("tech_flags", {}) if any(f in r for r in new)]
         held_any = Counter(f for r in new for f in flags if num(r, f) == 1)
         out.append(f"  technology flags held at least once: {len(held_any)} of {len(flags)}")
         # The construction purchase, recomputed from the snapshot.
@@ -1231,6 +1420,72 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
                 "says whether the year held a crisis at all. Every share is of the lens's GDP, the 20 largest's "
                 "first.")
 
+    # Version 4 (gen_ai_probe.py, version_4_fields): the queue by kind, the cost of construction, labour.
+    def v4(r):
+        return "pp_states" in r
+
+    if any(v4(r) for r in ai):
+        def of_gov(name):
+            return Col("", ratio=(field(name), field("queue_gov")), digits=0, scale=100, among=v4)
+
+        def gov_rest(r):
+            return max(num(r, "queue_gov") - num(r, "q_uni") - num(r, "q_admin") - num(r, "q_mil"), 0)
+
+        table("1i. The construction queue by kind", [
+            Col("Government levels queued (world: total)", field("queue_gov"), digits=0, total=True, among=v4),
+            Col("No government level queued", test=lambda r: num(r, "queue_gov") == 0, among=v4),
+            named("Universities, % of the government queue", of_gov("q_uni")),
+            named("Administrations, %", of_gov("q_admin")),
+            named("Military buildings, %", of_gov("q_mil")),
+            Col("The rest of the government queue, %", ratio=(gov_rest, field("queue_gov")), digits=0, scale=100,
+                among=v4),
+            Col("Infrastructure, % of all queued levels", ratio=(field("q_infra"), field("queue_levels")), digits=0,
+                scale=100, among=v4),
+            Col("Power plants, % of all queued levels", ratio=(field("q_power"), field("queue_levels")), digits=0,
+                scale=100, among=v4),
+        ], note="From version 4. Each kind is the queued levels of its buildings (their levels once the queued "
+                "constructions finish, less their levels). Universities, administrations and military buildings are "
+                "government buildings, set against the government queue (the rest is what else it queued: "
+                "infrastructure, power plants, anything else). Infrastructure and power plants can be in either queue, "
+                "so they are set against all queued levels. A share is the median of each country's share (the world "
+                "lens: the ratio of the totals), so the columns need not add up.")
+
+        table("1j. The cost of construction", [
+            Col("Cost scaling (S x d)", field("cc_scale"), digits=2, among=v4),
+            Col("All construction-cost modifiers", field("cc_total"), digits=2, among=v4),
+            Col("Construction good, price over base", field("cs_price"), digits=2, among=v4),
+            Col("All cost modifiers x price (the power plant's break-even multiple)",
+                lambda r: num(r, "cc_total") * num(r, "cs_price") if v4(r) and "cs_price" in r else None, digits=2),
+            Col("Above the early plant's break-even (3.4)",
+                test=lambda r: num(r, "cc_total") * num(r, "cs_price") > 3.4, among=v4),
+            Col("Small-economy factor below 1 (cost scaling under 1)", test=lambda r: num(r, "cc_scale") < 0.999,
+                among=v4),
+        ], note="From version 4. A construction point's cost over its base: the cost scaling in force (its own "
+                "factor times the small-economy factor, te_cc_scaling_factor) and every construction-cost modifier "
+                "with it (te_cc_total_factor). docs/systems/mod_systems/construction.md (Maintenance tiers) measures a "
+                "power plant's profit against the multiple of base construction cost, cost scaling times the "
+                "construction price: the early plant breaks even at about 3.4 and the coal-fired plant at 9.0 since "
+                "the graded maintenance tiers. The W line names the small-economy rule's setting.")
+
+        def unemployed(r):
+            return max(num(r, "slack") - num(r, "slack_peasants"), 0) if v4(r) else None
+
+        def x_sol(name):
+            return lambda r: xnum(r, name)
+
+        table("1k. Labour and living standards", [
+            Col("Slack: peasants and unemployed, % of the workforce", field("slack"), digits=1, scale=100, among=v4),
+            Col("Unemployed, % of the workforce", unemployed, digits=1, scale=100),
+            Col("Peasants, % of the workforce", field("slack_peasants"), digits=1, scale=100, among=v4),
+            Col("Standard of living, lower strata", x_sol("sol_lower"), digits=1),
+            Col("Middle strata", x_sol("sol_middle"), digits=1),
+            Col("Upper strata", x_sol("sol_upper"), digits=1),
+            Col("All pops", field("sol"), digits=1, among=v4),
+        ], note="From version 4. The slack is the cost scaling's yearly reading of the states' pop walks "
+                "(te_cc_slack, te_cc_peasants): the workforce with no market workplace over the workforce walked. "
+                "The strata's standard of living is the latest value of the Politics panel's trend lines (X8). No "
+                "script read or data function gives an average wage.")
+
     # --- 2. technology ---------------------------------------------------------------------------------------------
     table("2. Technology", [
         Col("Technologies", field("techs"), digits=0),
@@ -1244,11 +1499,16 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
         Col("No university", test=lambda r: num(r, "bt_university") == 0),
         Col("Researching nothing", test=lambda r: num(r, "researching") == 0),
         Col("Literacy, %", field("lit"), digits=0, scale=100),
-    ])
+        Col("Schools at the maximum it may invest in (those with schools)",
+            test=lambda r: num(r, "in_schools") >= num(r, "im_schools"),
+            among=lambda r: num(r, "im_schools") > 0),
+    ], note="The schools column reads version 2's J line (the institution's maximum investment), so a version-1 "
+            "log shows -.")
 
-    flags = key.get("tech_flags", {})
+    # The flags this log's version printed (version 4's H2 is not in an older log).
+    flags = {name: tech for name, tech in key.get("tech_flags", {}).items() if any(name in r for r in ai)}
     flagged = [r for r in ai if any(f in r for f in flags)]
-    if flags:
+    if key.get("tech_flags"):
         out.append("")
         out.append(f"## 2a. Specific technologies: share holding each, %, the {TOP_N} largest / every AI country")
         out.append("")
@@ -1269,6 +1529,67 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
                     a = f"{100 * sum(num(r, name) for r in biggest) / len(biggest):.0f}" if biggest else "-"
                     cells.append(f"{a} / {100 * sum(num(r, name) for r in rows) / len(rows):.0f}")
                 out.append(f"| {tech} | " + " | ".join(cells) + " |")
+
+    # 2b. Electrification (version 4's P and H2 lines).
+    electrified = [r for r in ai if "pp_states" in r]
+    if not electrified:
+        out.append("")
+        out.append("## 2b. Electrification")
+        out.append("")
+        out.append("Not logged by this log's probe version (version 4 adds the P and H2 lines).")
+    else:
+        def p4(r):
+            return "pp_states" in r
+
+        def has(tech):
+            return Col("", test=lambda r: num(r, "h_" + tech) == 1, among=p4)
+
+        def lit(name):
+            return Col("", ratio=(field(name), field("bt_urban_center")), digits=0, scale=100, among=p4)
+
+        table("2b. Electrification", [
+            Col("Power levels (world: total)", field("bg_power"), digits=0, total=True, among=p4),
+            Col("Power levels queued (world: total)", field("q_power"), digits=0, total=True, among=p4),
+            Col("States with a power plant, %", ratio=(field("pp_states"), field("states")), digits=0, scale=100,
+                among=p4),
+            Col("No power plant", test=lambda r: num(r, "pp_states") == 0, among=p4),
+            Col("Electricity made a week (world: total)", field("elec_made"), digits=0, total=True, among=p4),
+            Col("Electricity price over base, where bought", lambda r: num(r, "elec_price") if p4(r) and
+                num(r, "elec_used") > 0 else None, digits=2),
+            named("Holding Electrical Generation", has("electrical_generation")),
+            named("Holding Steam Turbine", has("steam_turbine")),
+            named("Holding Radio", has("radio")),
+            named("Urban centres unlit, % of levels", lit("uc_no_light")),
+            named("On gas, %", lit("uc_gas_light")),
+            named("On electric, %", lit("uc_elec_light")),
+            Col("Radios, price over base", field("radio_price"), digits=2, among=p4),
+            Col("Radios, sell orders / buy orders", ratio=(field("radio_sell"), field("radio_buy")), digits=2,
+                among=p4),
+        ], note="From version 4. Power levels are bg_power's (the coal and oil plant, hydro, nuclear, renewable and "
+                "fusion plants), queued levels in either queue. A state has a power plant when any building that "
+                "makes Electricity stands there or is being built (te_state_has_a_power_plant). Electricity is a "
+                "local good, so it is read in each state and summed, its price weighted by what each state buys. "
+                "Electric street lights take Electricity (vanilla's required_input_goods) and Electrical Generation; "
+                "electric counts the mod's later lights too. The radios market is the country's (a shared market's "
+                "for a country in one): the units below take radios as upkeep.")
+        blocked = [f for f in ("u_squad_infantry", "u_mechanized_infantry", "u_siege_artillery", "u_light_tanks")
+                   if f in key.get("unit_info", {})]
+        latest_p = {}
+        for r in bucket_rows[max(bucket_rows)]:
+            if p4(r) and num(r, "army") > 0 and (r["id"] not in latest_p or r["k"] > latest_p[r["id"]]["k"]):
+                latest_p[r["id"]] = r
+        if blocked and latest_p:
+            def unlocked(r, name):
+                techs = ["h_" + t.replace("-", "_") for t in key["unit_info"][name].get("techs", [])]
+                return all(num(r, t) == 1 for t in techs)
+
+            for heading, chosen in ((f"the {TOP_N} largest", top(list(latest_p.values()))),
+                                    ("every AI country", list(latest_p.values()))):
+                cells = [f"{name[2:]} {sum(1 for r in chosen if num(r, name) > 0)}/"
+                         f"{sum(1 for r in chosen if unlocked(r, name))}" for name in blocked]
+                out.append("")
+                out.append(f"The units that take radios, held by / unlocked for, in the last decade read ({heading}, "
+                           f"{len(chosen)} armies, each country's last report): " + ", ".join(cells) + ".")
 
     # --- 3. laws ---------------------------------------------------------------------------------------------------
     table("3. Laws", [
@@ -1422,6 +1743,42 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
                        f"{statistics.median(num(r, 'im_' + short_name) for r in have):.0f} | "
                        f"{share(top(have), at_max)} | {share(have, at_max)} |")
 
+    # 3e. Bureaucracy: what makes it and what uses it, as far as script and the interface split it (version 4).
+    if any("bur_inst_mult" in r for r in ai):
+        def b4(r):
+            return "bur_inst_mult" in r
+
+        def inst_cost(r):
+            return xnum(r, "bur_inst") if b4(r) else None
+
+        def rest_of_use(r):
+            cost = xnum(r, "bur_inst")
+            return max(num(r, "bur_used") - cost - max(num(r, "bur_cost_add"), 0), 0) if b4(r) and cost is not None \
+                else None
+
+        table("3e. Bureaucracy: production and use", [
+            Col("In deficit", test=lambda r: num(r, "bur") < 0, among=b4),
+            Col("Used / produced", ratio=(field("bur_used"), field("bur_made")), digits=2, among=b4),
+            Col("Institutions, % of use", ratio=(inst_cost, field("bur_used")), digits=0, scale=100, among=b4),
+            Col("Flat costs (modifiers), % of use", ratio=(field("bur_cost_add"), field("bur_used")), digits=0,
+                scale=100, among=b4),
+            Col("The rest: incorporated states and their people, %", ratio=(rest_of_use, field("bur_used")),
+                digits=0, scale=100, among=b4),
+            Col("Institution cost multiplier, %", field("bur_inst_mult"), digits=0, scale=100, among=b4),
+            Col("Cost per head multiplier, %", field("bur_pop_mult"), digits=0, scale=100, among=b4),
+            Col("Production multiplier, %", field("bur_mult"), digits=0, scale=100, among=b4),
+            Col("Flat production (modifiers), % of produced", ratio=(field("bur_add"), field("bur_made")), digits=0,
+                scale=100, among=b4),
+            Col("Administration levels per 100 used", ratio=(field("bt_government_administration"), field("bur_used")),
+                digits=2, scale=100, among=b4),
+        ], note="From version 4. Bureaucracy is made by Government Administrations and flat modifiers, times the "
+                "production multiplier; it is used by the institutions (X7: the Politics panel's figure), by flat "
+                "costs (country_bureaucracy_cost_add) and by each incorporated state and its people (vanilla's "
+                "STATE_BUREAUCRACY_* defines), which no script read or data function gives, so the rest is that and "
+                "whatever else the engine counts. The institutions' cost multiplier is "
+                "country_bureaucracy_investment_cost_factor_mult (37 of the mod's laws move it), the cost per head's "
+                "state_bureaucracy_population_base_cost_factor_mult (14).")
+
     # --- 4. military -----------------------------------------------------------------------------------------------
     def armed(r):
         return num(r, "army") > 0
@@ -1477,6 +1834,52 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
         out.append(f"In the last decade read, of {len(latest)} armies, each type held by / unlocked for: "
                    + ", ".join(f"{name[2:]} {held[name]}/{unlocked[name]}" for name in unit_info
                                if held[name] or unlocked[name]))
+
+    # 4b. Where irregulars come from. Every version: the net change in irregular battalions between a country's
+    # reports (army x the irregular share); version 4's census tells recruits from type changes where it counts.
+    previous = {}
+    for rows_ in by_id.values():
+        for a, b in zip(rows_, rows_[1:]):
+            previous[id(b)] = a
+
+    def irregulars(r):
+        return num(r, "army") * num(r, "irregular")
+
+    def net_irregular(r):
+        a = previous.get(id(r))
+        if a is None or num(r, "army") <= 0 or r["k"] <= a["k"]:
+            return None
+        return (irregulars(r) - irregulars(a)) * 12 / (r["k"] - a["k"])
+
+    def counted(r):
+        return num(r, "u_flows") == 1 and num(r, "u_all") > 0
+
+    def share_of_army(name):
+        return Col("", ratio=(field(name), field("u_all")), digits=1, scale=100, among=counted)
+
+    columns = [
+        Col("Irregular battalions, net change a year (world: total)", net_irregular, digits=1, total=True),
+        Col("Irregular battalions, net change a year, % of the army",
+            lambda r: (net_irregular(r) / num(r, "army") if net_irregular(r) is not None else None), digits=1,
+            scale=100),
+    ]
+    if any(counted(r) for r in ai):
+        columns += [
+            named("New battalions since the last report, % of the army", share_of_army("u_new")),
+            named("Battalions of another type than at the last report, %", share_of_army("u_changed")),
+            Col("Irregulars among the new battalions, %", ratio=(field("u_irr_new"), field("u_new")), digits=0,
+                scale=100, among=counted),
+            Col("Irregulars at the last report now of another type, % of the army",
+                ratio=(field("u_from_irr"), field("u_all")), digits=1, scale=100, among=counted),
+        ]
+    if any(num(r, "army") > 0 for r in ai):
+        table("4b. Where the irregulars come from", columns,
+              note="The net change is the irregular battalions (the army times its irregular share) at a report less "
+                   "at the country's last, a year's worth: it nets recruits against upgrades and losses. Version 4's "
+                   "census, where it counts (`check`: CANARY unit_vars), marks each battalion with its type at each "
+                   "report: a battalion with no mark at the next is new (recruited, or come with land or a subject), "
+                   "one whose type changed was upgraded or changed. Its columns appear once a country has been "
+                   "censused twice.")
 
     # --- 5. expansion ----------------------------------------------------------------------------------------------
     plays = [e for e in parsed.events if e["event"] == "play"]
