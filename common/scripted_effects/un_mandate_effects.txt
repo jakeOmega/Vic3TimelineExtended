@@ -720,7 +720,8 @@ un_mandate_strike_goal_type = {
 # once a game for each kind of strike, read the holder's
 # play_participant_has_war_goal_of_type_against against $TARGET$ again, in the
 # same block. OK when it finds no goal and the loop stopped before its cap of
-# 30 calls: the play test saw each remove_war_goal at once. The verdict reads
+# 30 calls (un_strike_goals_loop_clean): the play test saw each remove_war_goal
+# at once. The verdict reads
 # the play test itself, not only the count, because the Force's loop also
 # stops when has_play_goal goes false, which would read OK whether or not the
 # play test saw the removals. A marker for each kind, so a Force strike's
@@ -736,10 +737,7 @@ un_strike_goals_self_check = {
 			limit = { NOT = { has_global_variable = un_strike_goals_self_check_done_$STRIKE$ } }
 			set_global_variable = un_strike_goals_self_check_done_$STRIKE$
 			if = {
-				limit = {
-					var:un_strike_chk_calls < 30
-					NOT = { play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } }
-				}
+				limit = { un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = $TARGET$ } }
 				debug_log = "TE_SELF_CHECK OK un_strike_goals: strike=$STRIKE$ type=$TYPE$ calls=[THIS.Var('un_strike_chk_calls').GetValue|0] holder=[THIS.GetCountry.GetTagName] (the holder's play test, read again after the loop, finds no goal of the type against the protected country, and the loop stopped before its cap) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {

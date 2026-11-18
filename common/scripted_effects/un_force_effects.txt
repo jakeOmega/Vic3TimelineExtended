@@ -88,9 +88,11 @@ un_standing_force_chamber_preview = {
 # Targets"), so un_force_strike_goal repeats it while a goal of the type
 # against the host is left, as un_mandate_strike_goal_type does. A goal of the
 # same type against another country in the play that comes first goes too, and
-# the notice says so. Before #1892 there was one call per type: an initiator
-# holding two goals of a type against the host kept the second, and one holding
-# a goal against the host's ally first kept every goal against the host.
+# the notice says so; the surcharge paid for it is given back (#1896), or an AI
+# that re-adds it would pay again each time. Before #1892 there was one call
+# per type: an initiator holding two goals of a type against the host kept the
+# second, and one holding a goal against the host's ally first kept every goal
+# against the host.
 # Scope: diplomatic play; expects scope:actor, the initiator (on_wargoal_added)
 un_force_strike_war_goals = {
 	target ?= { save_scope_as = un_force_protected }
@@ -186,6 +188,22 @@ un_force_strike_goal = {
 				limit = { un_force_goal_held = { TYPE = $TYPE$ } }
 				remove_war_goal = { who = scope:actor type = $TYPE$ }
 				scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }
+			}
+		}
+		# Give back the surcharge paid for the goals the loop took against other
+		# countries (#1896; un_force_collateral_refund_value says how they are
+		# counted). Only when the loop is known to have stopped where it should:
+		# otherwise its count may be mostly calls that found nothing.
+		scope:actor = {
+			if = {
+				limit = {
+					var:un_strike_chk_calls > 1
+					un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = scope:un_force_protected }
+				}
+				change_infamy = {
+					value = un_force_collateral_refund_value
+					multiply = -1
+				}
 			}
 		}
 		un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ TARGET = scope:un_force_protected }

@@ -23,6 +23,8 @@ import unittest
 REPO = os.path.dirname(os.path.abspath(__file__))
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_force_triggers.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_force_effects.txt")
+VALUES = os.path.join(REPO, "common", "script_values", "un_force_values.txt")
+NOTICES = os.path.join(REPO, "localization", "english", "te_notifications_l_english.yml")
 
 # Goals no play is listed for on purpose: a play that opens with one is never
 # struck (every formable adds such a play), and the mandate's own goal.
@@ -163,6 +165,29 @@ class StrikeLoopTests(unittest.TestCase):
         strikes = self.effects[self.effects.index("un_force_strike_war_goals = {"):]
         self.assertLess(strikes.index("target ?= { save_scope_as = un_force_protected }"),
                         strikes.index("un_force_strike_goal_type = {"))
+
+    def test_the_collateral_gets_its_surcharge_back_after_a_clean_loop(self):
+        # #1896: a goal against another country that the loop took had paid the
+        # doubled surcharge; without the refund an AI re-adding it paid each time.
+        loop_end = self.goal.index("un_strike_chk_calls add = 1 } } } }")
+        refund = self.goal.index("change_infamy = { value = un_force_collateral_refund_value multiply = -1 }")
+        check = self.goal.index("un_strike_goals_self_check")
+        self.assertLess(loop_end, refund)
+        self.assertLess(refund, check, "the self-check drops the count the refund reads")
+        self.assertIn("scope:actor = { if = { limit = { var:un_strike_chk_calls > 1 "
+                      "un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = scope:un_force_protected } } "
+                      "change_infamy", self.goal)
+        self.assertEqual(self.effects.count("change_infamy"), 1)
+
+    def test_the_refund_is_the_doubled_surcharge_for_each_call_but_one(self):
+        value = _squash(_block(_read(VALUES), "un_force_collateral_refund_value"))
+        self.assertEqual(value, "{ value = var:un_strike_chk_calls subtract = 1 "
+                                "multiply = un_war_surcharge_value multiply = 2 min = 0 }")
+
+    def test_the_notice_says_the_infamy_comes_back(self):
+        with open(NOTICES, encoding="utf-8-sig") as f:
+            line = next(x for x in f if x.lstrip().startswith("notification_un_force_war_goal_struck_notice_desc:"))
+        self.assertIn("may have gone with them, and if so the [concept_infamy] we paid for it has been returned", line)
 
     def test_no_call_outside_the_loop(self):
         self.assertEqual(self.effects.count("remove_war_goal"), 1)

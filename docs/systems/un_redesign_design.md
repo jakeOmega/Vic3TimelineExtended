@@ -903,7 +903,9 @@ the classification and the loc.
    notice to a human), except a goal of the type the play opened with. Each call takes the
    holder's first goal of the type, whatever it targets, so `un_force_strike_goal` repeats it,
    at most 30 times, while one against the host is left, and a goal of that type against another
-   country that comes first goes too (#1892; until then one call per type left the rest). A
+   country that comes first goes too (#1892; until then one call per type left the rest). Such a
+   goal gets back the doubled surcharge it paid, counted as the loop's calls less one
+   (`un_force_collateral_refund_value`, #1896); without that, an AI re-adding it paid each time. A
    play opens with its type's `war_goal`, so `is_diplomatic_play_type` tells which
    (`un_force_has_strikeable_goal`;
    `test_un_force_play_types.py` pins the lists to vanilla's and the mod's plays). That goal, a

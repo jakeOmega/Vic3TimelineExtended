@@ -168,8 +168,7 @@ class StrikeSelfCheckTest(unittest.TestCase):
                       "set_global_variable = un_strike_goals_self_check_done_$STRIKE$", self.check)
 
     def test_ok_below_the_cap_broken_at_it(self):
-        self.assertIn("if = { limit = { var:un_strike_chk_calls < 30 "
-                      "NOT = { play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } } "
+        self.assertIn("if = { limit = { un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = $TARGET$ } } "
                       "debug_log = \"TE_SELF_CHECK OK un_strike_goals:", self.check)
         self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN un_strike_goals:", self.check)
         for verdict in ("OK", "BROKEN"):
@@ -179,6 +178,11 @@ class StrikeSelfCheckTest(unittest.TestCase):
                 for field in ("strike=$STRIKE$", "type=$TYPE$",
                               "calls=[THIS.Var('un_strike_chk_calls').GetValue|0]"):
                     self.assertIn(field, line)
+
+    def test_clean_means_no_goal_left_by_the_play_test_and_below_the_cap(self):
+        clean = _squash(_block(_read(TRIGGERS), "un_strike_goals_loop_clean"))
+        self.assertEqual(clean.strip(), "var:un_strike_chk_calls < 30 NOT = { "
+                         "play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } }")
 
     def test_the_count_goes_whether_or_not_the_check_reads(self):
         self.assertTrue(self.check.rstrip().endswith("remove_variable = un_strike_chk_calls }"),
