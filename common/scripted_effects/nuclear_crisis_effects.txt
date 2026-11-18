@@ -2042,16 +2042,16 @@ nd_crisis_concede_play = {
 # Only wars the two fight on opposite sides: a country can be an ally of the
 # other side in one war and its enemy in another.
 # The Suez model (rework spec §8.1, owner call 9): when the target leads its
-# side, that side drops the war goals it holds against the other side (the
-# issuer, or the protégé it shields). A co-belligerent that yields loses only
-# war support, so threatening a coalition's weakest member does not strip its
-# leader's goals (phase 2 final review). remove_war_goal addresses a side and a
-# type, so a goal of the same type against another country in the war goes too
-# (the tooltip says so). It removes the AI's own goals and the opening goal but
-# not ones script added (probed 2026-10-28); a once-a-game self-check, a day
-# later (nuclear_crisis.25), says whether anything was left. A target that
-# holds no goal against us is the defender of our attack: only its war support
-# falls.
+# side, every country on that side drops the war goals it holds against the
+# other side (the issuer, or the protégé it shields), and those to liberate or
+# take its subjects (nd_crisis_drop_goals). A co-belligerent that yields loses
+# only war support, so threatening a coalition's weakest member does not strip
+# its leader's goals (phase 2 final review). remove_war_goal takes one
+# holder's first goal of a type, whatever it targets, so a goal of the same
+# type against another country in the war can go too (the tooltip says so).
+# A once-a-game self-check, a day later (nuclear_crisis.25), says whether
+# anything was left. A target that holds no goal against us is the defender
+# of our attack: only its war support falls.
 nd_crisis_concede_war = {
 	scope:nd_target = {
 		every_scope_war = {
@@ -2073,17 +2073,12 @@ nd_crisis_concede_war = {
 					is_warleader = scope:nd_target
 					scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
 				}
+				nd_crisis_drop_goals = yes
 				if = {
-					limit = { is_on_defending_side = scope:nd_target }
-					nd_crisis_drop_goals = { WHO = target }
-				}
-				else = {
-					nd_crisis_drop_goals = { WHO = initiator }
-				}
-				if = {
-					# _v2 since 2026-11-17: re-armed for the line that counts the wars
-					limit = { NOT = { has_global_variable = nd_suez_self_check_v2_done } }
-					set_global_variable = nd_suez_self_check_v2_done
+					# _v3 since 2026-11-18: re-armed for the removal that names
+					# each holder and repeats per type
+					limit = { NOT = { has_global_variable = nd_suez_self_check_v3_done } }
+					set_global_variable = nd_suez_self_check_v3_done
 					scope:nd_target = {
 						set_variable = { name = nd_suez_check_other value = scope:nd_crisis_other_side days = 10 }
 						trigger_event = { id = nuclear_crisis.25 days = 1 }
@@ -2263,185 +2258,122 @@ nd_crisis_concede_orbital = {
 	}
 }
 
-# War scope, in nd_crisis_concede_war: remove, through the war's play, every
-# goal type the target's side (WHO = target or initiator, the play's side it
-# is on) holds against scope:nd_crisis_other_side.
+# War scope, in nd_crisis_concede_war, when scope:nd_target leads its side:
+# every country on that side drops every goal it holds against
+# scope:nd_crisis_other_side, and every goal to liberate or take one of the
+# other side's direct subjects. remove_war_goal names one holder (who = a
+# country) and a type, and takes that holder's first goal of the type,
+# whatever it targets (in game on a 1962 save, 2026-11-18): one call per type
+# took France's opening goal against Brazil and left its goal against the
+# United States, and an ally's goal stayed because only the leader was named.
+# So each holder is named, and nd_crisis_strike_goals repeats the call while a
+# goal against the other side is left; a goal of the same type against a third
+# country that the engine reaches first goes too (the tooltip says so).
 nd_crisis_drop_goals = {
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = annex_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = annex_country } }
+	save_scope_as = nd_crisis_war
+	diplomatic_play = { save_scope_as = nd_crisis_war_play }
+	every_war_participant = {
+		limit = {
+			save_temporary_scope_as = nd_crisis_holder_t
+			scope:nd_crisis_war = {
+				OR = {
+					AND = {
+						is_on_defending_side = scope:nd_target
+						is_on_defending_side = scope:nd_crisis_holder_t
+					}
+					AND = {
+						NOT = { is_on_defending_side = scope:nd_target }
+						NOT = { is_on_defending_side = scope:nd_crisis_holder_t }
+					}
+				}
+			}
+		}
+		save_scope_as = nd_crisis_holder
+		scope:nd_crisis_war_play = { nd_crisis_drop_holder_goals = yes }
 	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = ban_slavery target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = ban_slavery } }
+}
+
+# Play scope; scope:nd_crisis_holder, scope:nd_crisis_other_side and
+# scope:nd_crisis_war_play saved: the holder's goals of every type against the
+# other side (the types nd_side_holds_any_goal_against tests), then its goals
+# to liberate or take one of the other side's direct subjects, which target
+# the subject, not its overlord (targets_enemy_subject: France's goal to
+# liberate Cuba reads as against Cuba, not the United States).
+nd_crisis_drop_holder_goals = {
+	nd_crisis_strike_goals = { TYPE = annex_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = ban_slavery TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = colonization_rights TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = conquer_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = contain_threat TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = enforce_treaty_article TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = force_nationalization TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = foreign_investment_rights TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = humiliation TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = increase_autonomy TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = independence TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = join_power_bloc TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = leave_power_bloc TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = liberate_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_dominion TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_protectorate TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_tributary TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = open_market TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = reduce_autonomy TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = regime_change TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = return_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = revoke_all_claims TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = revoke_claim TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = secession TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = take_treaty_port TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = unification TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = unification_leadership TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = restore_union TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_strait_access TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_toll_exemption TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_no_tolls TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_no_strait_closure TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_personal_union TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_chartered_company TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_crown_land TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = break_enforced_treaties TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = release_as_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_reunify_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_colonial_independence TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_colonial_reconquest TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_un_mandate_restore_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_seize_strait TARGET = scope:nd_crisis_other_side }
+	scope:nd_crisis_other_side = {
+		every_direct_subject = {
+			save_scope_as = nd_crisis_goal_subject
+			scope:nd_crisis_war_play = {
+				nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_goal_subject }
+				nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_goal_subject }
+			}
+		}
 	}
+}
+
+# Play scope, scope:nd_crisis_holder saved: remove the holder's goals of
+# $TYPE$ until none against $TARGET$ is left. Each call takes the holder's
+# first goal of the type, whatever it targets, so goals of $TYPE$ against
+# other countries that come first go too. The trigger reads the removal at
+# once, inside this block (in game, 2026-11-18), so the loop stops when the
+# last goal against $TARGET$ goes; it makes at most 30 calls, which also
+# bounds it when the goal against $TARGET$ is in another war between the two
+# (war_participant_has_war_goal_of_type_against reads every war).
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the country the goals target
+nd_crisis_strike_goals = {
 	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = colonization_rights target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = colonization_rights } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = conquer_state } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = contain_threat target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = contain_threat } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = enforce_treaty_article target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = enforce_treaty_article } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = force_nationalization target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = force_nationalization } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = foreign_investment_rights target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = foreign_investment_rights } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = humiliation target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = humiliation } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = increase_autonomy target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = increase_autonomy } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = independence target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = independence } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = join_power_bloc target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = join_power_bloc } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = leave_power_bloc target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = leave_power_bloc } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = liberate_country } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = liberate_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_dominion target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_dominion } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_protectorate target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_protectorate } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_tributary target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_tributary } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = open_market target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = open_market } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = reduce_autonomy target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = reduce_autonomy } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = regime_change target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = regime_change } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = return_state } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = revoke_all_claims target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = revoke_all_claims } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = revoke_claim target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = revoke_claim } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = secession target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = secession } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = take_treaty_port } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = transfer_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = unification target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = unification } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = unification_leadership target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = unification_leadership } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = restore_union target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = restore_union } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_strait_access target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_strait_access } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_toll_exemption target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_toll_exemption } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_no_tolls target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_no_tolls } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_no_strait_closure target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_no_strait_closure } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_personal_union target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_personal_union } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_chartered_company target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_chartered_company } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_crown_land target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_crown_land } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = break_enforced_treaties target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = break_enforced_treaties } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = release_as_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = release_as_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_reunify_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_reunify_country } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_colonial_independence target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_colonial_independence } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_colonial_reconquest target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_colonial_reconquest } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_un_mandate_restore_state } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_seize_strait target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_seize_strait } }
+		limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
+		while = {
+			count = 30
+			if = {
+				limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
+				remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+			}
+		}
 	}
 }
 

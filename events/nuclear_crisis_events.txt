@@ -1579,11 +1579,14 @@ nuclear_crisis.24 = {
 # side? Read a day later, as the probe read its removals (2026-10-28), not in
 # the block that removed them. If the war is already over, nothing is judged
 # and the next concession checks again, so an ended war cannot read as OK. A
-# goal script added stays (the probe), and a goal from another war between the
-# two counts too, so read a BROKEN line against the war it names
-# (docs/testing/nuclear-playtest.md). The line counts the wars the two fight
-# on opposite sides (wars=) and how many of them this country leads (led=):
-# wars=1 led=1 leaves only a goal remove_war_goal kept, or one script added.
+# goal from another war between the two counts too, so read a BROKEN line
+# against the war it names (docs/testing/nuclear-playtest.md). The line counts
+# the wars the two fight on opposite sides (wars=) and how many of them this
+# country leads (led=): wars=1 led=1 leaves a goal the removal missed. Before
+# 2026-11-18 the removal named only the leader and removed one goal per type,
+# and read BROKEN twice (Great Britain, 2026-11-17; France, in a war on
+# Brazil the United States had joined, 2026-11-18); _v3 re-arms it for the
+# removal that names each holder and repeats.
 # The other country is named from its own scope on the TE_NUCLEAR
 # suez_check_other line just before: the saved scope's name printed blank in
 # the verdict line (2026-11-17), though it is kept there in case it prints.
@@ -1635,7 +1638,7 @@ nuclear_crisis.25 = {
 			remove_variable = nd_suez_chk_led
 		}
 		else = {
-			remove_global_variable = nd_suez_self_check_v2_done
+			remove_global_variable = nd_suez_self_check_v3_done
 		}
 		remove_variable = nd_suez_check_other
 	}

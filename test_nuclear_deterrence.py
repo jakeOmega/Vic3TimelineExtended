@@ -800,12 +800,57 @@ class TestSuezConcession(unittest.TestCase):
         body = block(self.crisis, "nd_crisis_concede_war")
         self.assertIn("value = -15", body)
         self.assertNotIn("value = -35", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = target }", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = initiator }", body)
-        drop = block(self.crisis, "nd_crisis_drop_goals")
-        for typ in ("conquer_state", "annex_country", "humiliation", "make_protectorate", "te_reunify_country"):
-            self.assertIn(f"remove_war_goal = {{ who = $WHO$ type = {typ} }}", drop, typ)
-        self.assertIn("diplomatic_play = {", drop)
+        self.assertIn("nd_crisis_drop_goals = yes", body)
+        self.assertNotIn("WHO =", body)
+
+    # remove_war_goal takes one holder's first goal of a type, whatever it
+    # targets (in game, 2026-11-18): one call per type, naming only the
+    # leader, took France's opening goal against Brazil and left its goal
+    # against the United States.
+    def test_every_holder_on_the_side_is_named(self):
+        drop = squash(block(self.crisis, "nd_crisis_drop_goals"))
+        self.assertIn("save_scope_as = nd_crisis_war", drop)
+        self.assertIn("diplomatic_play = { save_scope_as = nd_crisis_war_play }", drop)
+        self.assertIn("every_war_participant = {", drop)
+        self.assertIn("AND = { is_on_defending_side = scope:nd_target"
+                      " is_on_defending_side = scope:nd_crisis_holder_t }", drop)
+        self.assertIn("AND = { NOT = { is_on_defending_side = scope:nd_target }"
+                      " NOT = { is_on_defending_side = scope:nd_crisis_holder_t } }", drop)
+        self.assertIn("save_scope_as = nd_crisis_holder scope:nd_crisis_war_play = { nd_crisis_drop_holder_goals = yes }",
+                      drop)
+        self.assertNotIn("remove_war_goal = { who = $WHO$", self.crisis)
+
+    def test_each_type_repeats_until_none_against_the_target_is_left(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        held = ("scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against ="
+                " { type = $TYPE$ target = $TARGET$ } }")
+        self.assertIn(f"while = {{ count = 30 if = {{ limit = {{ {held} }}"
+                      " remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ } } }", strike)
+        self.assertTrue(strike.startswith(f"if = {{ limit = {{ {held} }}"), strike[:120])
+
+    def test_holder_ladder_covers_every_type_the_trigger_tests(self):
+        trig = block(self.triggers, "nd_side_holds_any_goal_against")
+        tested = re.findall(r"type = ([a-z_]+) target = \$TARGET\$", trig)
+        self.assertEqual(len(tested), 44)
+        holder = block(self.crisis, "nd_crisis_drop_holder_goals")
+        struck = re.findall(r"nd_crisis_strike_goals = \{ TYPE = ([a-z_]+) TARGET = scope:nd_crisis_other_side \}", holder)
+        self.assertEqual(struck, tested)
+
+    # A goal to liberate or take a subject targets the subject, not its
+    # overlord (targets_enemy_subject; in game, 2026-11-18).
+    def test_goals_against_the_other_sides_subjects(self):
+        holder = squash(block(self.crisis, "nd_crisis_drop_holder_goals"))
+        self.assertIn("scope:nd_crisis_other_side = { every_direct_subject = {"
+                      " save_scope_as = nd_crisis_goal_subject scope:nd_crisis_war_play = {"
+                      " nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_goal_subject }"
+                      " nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_goal_subject } } } }",
+                      holder)
+        trig = squash(block(self.triggers, "nd_side_holds_any_goal_against"))
+        self.assertIn("$TARGET$ = { any_direct_subject = { save_temporary_scope_as = nd_side_goal_subject_t"
+                      " scope:nd_side_goal_holder_t = { OR = {"
+                      " war_side_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_side_goal_subject_t }"
+                      " war_side_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_side_goal_subject_t }"
+                      " } } } }", trig)
 
     def wars_loop(self):
         return block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
@@ -816,11 +861,6 @@ class TestSuezConcession(unittest.TestCase):
         loop = self.wars_loop()
         support = loop.index("add_war_war_support")
         self.assertEqual(loop[:support].count("{") - loop[:support].count("}"), 0)
-
-    def test_concession_side_from_defending_side(self):
-        goals = " ".join(block(self.wars_loop(), "if").split())
-        self.assertIn("if = { limit = { is_on_defending_side = scope:nd_target } nd_crisis_drop_goals = { WHO = target } }"
-                      " else = { nd_crisis_drop_goals = { WHO = initiator } }", goals)
 
     def test_suez_self_check_line(self):
         ev = block(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.25")
@@ -1175,9 +1215,10 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("type=suez_check_other", other)
         self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", other)
         # Re-armed under a new marker: the old one is set in saves that read it.
-        self.assertIn("set_global_variable = nd_suez_self_check_v2_done", concede)
-        self.assertIn("remove_global_variable = nd_suez_self_check_v2_done", ev)
-        self.assertNotIn("nd_suez_self_check_done", self.crisis + self.crisis_events)
+        self.assertIn("set_global_variable = nd_suez_self_check_v3_done", concede)
+        self.assertIn("remove_global_variable = nd_suez_self_check_v3_done", ev)
+        for old in ("nd_suez_self_check_done", "nd_suez_self_check_v2_done"):
+            self.assertNotIn(old, self.crisis + self.crisis_events)
 
     # A crisis their strike ended (outcome 7) leaves a cooldown that must not
     # outlast the grievance it ended over.
